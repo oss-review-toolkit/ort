@@ -23,7 +23,6 @@ import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.config.Options
 
 import org.semver4j.Semver
-import org.semver4j.Semver.VersionDiff
 
 /**
  * A data class defining selection criteria for scanners.
@@ -86,28 +85,6 @@ data class ScannerCriteria(
          * [scanner details][ScannerDetails] of the corresponding scanner must match the criteria.
          */
         const val PROP_CRITERIA_CONFIGURATION = "configuration"
-
-        /**
-         * Generate a [ScannerCriteria] instance that is compatible with the given [details] and versions that differ
-         * only in the provided [versionDiff].
-         */
-        fun forDetails(details: ScannerDetails, versionDiff: VersionDiff = VersionDiff.NONE): ScannerCriteria {
-            val minVersion = Semver(details.version)
-
-            val maxVersion = when (versionDiff) {
-                VersionDiff.NONE, VersionDiff.PRE_RELEASE, VersionDiff.BUILD -> minVersion.nextPatch()
-                VersionDiff.PATCH -> minVersion.nextMinor()
-                VersionDiff.MINOR -> minVersion.nextMajor()
-                else -> throw IllegalArgumentException("Invalid version difference $versionDiff")
-            }
-
-            return ScannerCriteria(
-                regScannerName = details.name,
-                minVersion = minVersion,
-                maxVersion = maxVersion,
-                configuration = details.configuration
-            )
-        }
 
         /**
          * Return a [ScannerCriteria] instance that is to be used when looking up existing scan results from a
