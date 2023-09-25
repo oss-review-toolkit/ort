@@ -129,7 +129,7 @@ data class ScannerCriteria(
         /**
          * Return a [ScannerCriteria] instance that is to be used when looking up existing scan results from a
          * [ScanResultsStorage]. By default, the properties of this instance are initialized to match the scanner
-         * [details]. These default can be overridden by the [ScannerConfiguration.options] property in the provided
+         * [details]. These defaults can be overridden by the [ScannerConfiguration.options] property in the provided
          * [config]: Use properties of the form `scannerName.property`, where `scannerName` is the name of the scanner
          * the configuration applies to, and `property` is the name of a property of the [ScannerCriteria] class. For
          * instance, to specify that a specific minimum version of ScanCode is allowed, set this property:
