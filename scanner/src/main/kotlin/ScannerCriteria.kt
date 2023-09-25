@@ -20,7 +20,7 @@
 package org.ossreviewtoolkit.scanner
 
 import org.ossreviewtoolkit.model.ScannerDetails
-import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.config.Options
 
 import org.semver4j.Semver
 import org.semver4j.Semver.VersionDiff
@@ -129,14 +129,11 @@ data class ScannerCriteria(
         /**
          * Return a [ScannerCriteria] instance that is to be used when looking up existing scan results from a
          * [ScanResultsStorage]. By default, the properties of this instance are initialized to match the scanner
-         * [details]. These defaults can be overridden by the [ScannerConfiguration.options] property in the provided
-         * [config]: Use properties of the form `scannerName.property`, where `scannerName` is the name of the scanner
-         * the configuration applies to, and `property` is the name of a property of the [ScannerCriteria] class. For
-         * instance, to specify that a specific minimum version of ScanCode is allowed, set this property:
-         * `options.ScanCode.minVersion=3.0.2`.
+         * [details]. These defaults can be overridden by the provided [options]. The keys of the option map must match
+         * names of the [ScannerCriteria] class. For example, to specify that a specific minimum version of the scanner
+         * is allowed, set this option: `minVersion=3.0.2`.
          */
-        fun create(details: ScannerDetails, config: ScannerConfiguration): ScannerCriteria {
-            val options = config.options?.get(details.name).orEmpty()
+        fun create(details: ScannerDetails, options: Options = emptyMap()): ScannerCriteria {
             val scannerVersion = Semver(normalizeVersion(details.version))
             val minVersion = parseVersion(options[PROP_CRITERIA_MIN_VERSION]) ?: scannerVersion
             val maxVersion = parseVersion(options[PROP_CRITERIA_MAX_VERSION]) ?: minVersion.nextMinor()

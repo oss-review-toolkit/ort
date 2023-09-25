@@ -23,8 +23,6 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.ScannerDetails
-import org.ossreviewtoolkit.model.config.Options
-import org.ossreviewtoolkit.model.config.ScannerConfiguration
 
 import org.semver4j.Semver
 
@@ -70,9 +68,7 @@ class ScannerCriteriaTest : WordSpec({
 
     "ScannerCriteria.create()" should {
         "obtain default values from the scanner details" {
-            val config = createScannerConfig(emptyMap())
-
-            val criteria = ScannerCriteria.create(testDetails, config)
+            val criteria = ScannerCriteria.create(testDetails)
 
             criteria.regScannerName shouldBe SCANNER_NAME
             criteria.minVersion.version shouldBe SCANNER_VERSION
@@ -80,15 +76,13 @@ class ScannerCriteriaTest : WordSpec({
         }
 
         "obtain values from the configuration" {
-            val config = createScannerConfig(
-                mapOf(
-                    ScannerCriteria.PROP_CRITERIA_NAME to "foo",
-                    ScannerCriteria.PROP_CRITERIA_MIN_VERSION to "1.2.3",
-                    ScannerCriteria.PROP_CRITERIA_MAX_VERSION to "4.5.6"
-                )
+            val options = mapOf(
+                ScannerCriteria.PROP_CRITERIA_NAME to "foo",
+                ScannerCriteria.PROP_CRITERIA_MIN_VERSION to "1.2.3",
+                ScannerCriteria.PROP_CRITERIA_MAX_VERSION to "4.5.6"
             )
 
-            val criteria = ScannerCriteria.create(testDetails, config)
+            val criteria = ScannerCriteria.create(testDetails, options)
 
             criteria.regScannerName shouldBe "foo"
             criteria.minVersion.version shouldBe "1.2.3"
@@ -96,23 +90,19 @@ class ScannerCriteriaTest : WordSpec({
         }
 
         "parse versions in a lenient way" {
-            val config = createScannerConfig(
-                mapOf(
-                    ScannerCriteria.PROP_CRITERIA_MIN_VERSION to "1",
-                    ScannerCriteria.PROP_CRITERIA_MAX_VERSION to "3.7"
-                )
+            val options = mapOf(
+                ScannerCriteria.PROP_CRITERIA_MIN_VERSION to "1",
+                ScannerCriteria.PROP_CRITERIA_MAX_VERSION to "3.7"
             )
 
-            val criteria = ScannerCriteria.create(testDetails, config)
+            val criteria = ScannerCriteria.create(testDetails, options)
 
             criteria.minVersion.version shouldBe "1.0.0"
             criteria.maxVersion.version shouldBe "3.7.0"
         }
 
         "use an exact configuration matcher" {
-            val config = createScannerConfig(emptyMap())
-
-            val criteria = ScannerCriteria.create(testDetails, config)
+            val criteria = ScannerCriteria.create(testDetails)
 
             criteria.configMatcher(testDetails.configuration) shouldBe true
             criteria.configMatcher(testDetails.configuration + "_other") shouldBe false
@@ -177,11 +167,3 @@ private val matchingCriteria = ScannerCriteria(
     maxVersion = Semver(testDetails.version).nextPatch(),
     configMatcher = ScannerCriteria.exactConfigMatcher(testDetails.configuration)
 )
-
-/**
- * Creates a [ScannerConfiguration] with the given properties for the test scanner.
- */
-private fun createScannerConfig(properties: Options): ScannerConfiguration {
-    val options = mapOf(SCANNER_NAME to properties)
-    return ScannerConfiguration(options = options)
-}
