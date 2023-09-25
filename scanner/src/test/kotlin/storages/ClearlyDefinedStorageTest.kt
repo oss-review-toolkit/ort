@@ -106,11 +106,7 @@ private val TEST_PACKAGE =
     )
 
 /** The scanner details used by tests. */
-private val SCANNER_CRITERIA =
-    ScannerCriteria(
-        "aScanner", Semver("1.0.0"), Semver("2.0.0"),
-        ScannerCriteria.exactConfigMatcher("aConfig")
-    )
+private val SCANNER_CRITERIA = ScannerCriteria("aScanner", Semver("1.0.0"), Semver("2.0.0"), "aConfig")
 
 /** The template for a ClearlyDefined definitions request. */
 private val DEFINITIONS_TEMPLATE = readDefinitionsTemplate()
