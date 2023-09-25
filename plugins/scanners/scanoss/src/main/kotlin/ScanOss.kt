@@ -74,7 +74,7 @@ class ScanOss internal constructor(
 
     override val configuration = ""
 
-    override val criteria by lazy { ScannerCriteria.fromConfig(details, scannerConfig) }
+    override val criteria by lazy { ScannerCriteria.create(details, scannerConfig) }
 
     /**
      * The name of the file corresponding to the fingerprints can be sent to SCANOSS for more precise matches.

@@ -60,7 +60,7 @@ class BoyterLc internal constructor(
 
     override val configuration = CONFIGURATION_OPTIONS.joinToString(" ")
 
-    override val criteria by lazy { ScannerCriteria.fromConfig(details, scannerConfig) }
+    override val criteria by lazy { ScannerCriteria.create(details, scannerConfig) }
 
     override fun command(workingDir: File?) =
         listOfNotNull(workingDir, if (Os.isWindows) "lc.exe" else "lc").joinToString(File.separator)

@@ -68,11 +68,11 @@ class ScannerCriteriaTest : WordSpec({
         }
     }
 
-    "ScannerCriteria.fromConfig()" should {
+    "ScannerCriteria.create()" should {
         "obtain default values from the scanner details" {
             val config = createScannerConfig(emptyMap())
 
-            val criteria = ScannerCriteria.fromConfig(testDetails, config)
+            val criteria = ScannerCriteria.create(testDetails, config)
 
             criteria.regScannerName shouldBe SCANNER_NAME
             criteria.minVersion.version shouldBe SCANNER_VERSION
@@ -88,7 +88,7 @@ class ScannerCriteriaTest : WordSpec({
                 )
             )
 
-            val criteria = ScannerCriteria.fromConfig(testDetails, config)
+            val criteria = ScannerCriteria.create(testDetails, config)
 
             criteria.regScannerName shouldBe "foo"
             criteria.minVersion.version shouldBe "1.2.3"
@@ -103,7 +103,7 @@ class ScannerCriteriaTest : WordSpec({
                 )
             )
 
-            val criteria = ScannerCriteria.fromConfig(testDetails, config)
+            val criteria = ScannerCriteria.create(testDetails, config)
 
             criteria.minVersion.version shouldBe "1.0.0"
             criteria.maxVersion.version shouldBe "3.7.0"
@@ -112,7 +112,7 @@ class ScannerCriteriaTest : WordSpec({
         "use an exact configuration matcher" {
             val config = createScannerConfig(emptyMap())
 
-            val criteria = ScannerCriteria.fromConfig(testDetails, config)
+            val criteria = ScannerCriteria.create(testDetails, config)
 
             criteria.configMatcher(testDetails.configuration) shouldBe true
             criteria.configMatcher(testDetails.configuration + "_other") shouldBe false
