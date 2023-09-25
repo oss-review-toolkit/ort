@@ -114,6 +114,10 @@ const config = {
                 label: 'Tutorial',
                 to: '/tutorial/intro',
               },
+              {
+                label: 'Search',
+                to: '/search',
+              },
             ],
           },
           {
