@@ -32,7 +32,6 @@ import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
@@ -52,8 +51,7 @@ class Askalono internal constructor(
     private companion object : Logging
 
     class Factory : AbstractScannerWrapperFactory<Askalono>("Askalono") {
-        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            Askalono(type, scannerConfig)
+        override fun create(scannerConfig: ScannerConfiguration) = Askalono(type, scannerConfig)
     }
 
     override val configuration = ""

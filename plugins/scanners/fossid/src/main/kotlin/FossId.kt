@@ -72,7 +72,6 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
@@ -171,7 +170,7 @@ class FossId internal constructor(
     }
 
     class Factory : AbstractScannerWrapperFactory<FossId>("FossId") {
-        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
+        override fun create(scannerConfig: ScannerConfiguration) =
             FossId(type, scannerConfig, FossIdConfig.create(scannerConfig))
     }
 
