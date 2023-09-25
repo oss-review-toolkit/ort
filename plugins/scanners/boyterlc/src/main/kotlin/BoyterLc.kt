@@ -31,7 +31,6 @@ import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
@@ -56,8 +55,7 @@ class BoyterLc internal constructor(
     }
 
     class Factory : AbstractScannerWrapperFactory<BoyterLc>("BoyterLc") {
-        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            BoyterLc(type, scannerConfig)
+        override fun create(scannerConfig: ScannerConfiguration) = BoyterLc(type, scannerConfig)
     }
 
     override val configuration = CONFIGURATION_OPTIONS.joinToString(" ")

@@ -38,7 +38,6 @@ import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.clients.scanoss.ScanOssService
 import org.ossreviewtoolkit.model.ScanSummary
-import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.PathScannerWrapper
@@ -57,8 +56,7 @@ class ScanOss internal constructor(
     private companion object : Logging
 
     class Factory : AbstractScannerWrapperFactory<ScanOss>("SCANOSS") {
-        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            ScanOss(type, scannerConfig)
+        override fun create(scannerConfig: ScannerConfiguration) = ScanOss(type, scannerConfig)
     }
 
     private val config = ScanOssConfig.create(scannerConfig).also {

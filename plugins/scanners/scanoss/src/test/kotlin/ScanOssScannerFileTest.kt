@@ -36,7 +36,6 @@ import java.util.UUID
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.ScanContext
 
@@ -58,7 +57,7 @@ class ScanOssScannerFileTest : StringSpec({
         server.start()
         val scannerOptions = mapOf(ScanOssConfig.API_URL_PROPERTY to "http://localhost:${server.port()}")
         val configuration = ScannerConfiguration(options = mapOf("ScanOss" to scannerOptions))
-        scanner = spyk(ScanOss.Factory().create(configuration, DownloaderConfiguration()))
+        scanner = spyk(ScanOss.Factory().create(configuration))
     }
 
     afterSpec {

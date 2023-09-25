@@ -32,7 +32,6 @@ import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
@@ -55,8 +54,7 @@ class Licensee internal constructor(
     }
 
     class Factory : AbstractScannerWrapperFactory<Licensee>("Licensee") {
-        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            Licensee(type, scannerConfig)
+        override fun create(scannerConfig: ScannerConfiguration) = Licensee(type, scannerConfig)
     }
 
     override val configuration = CONFIGURATION_OPTIONS.joinToString(" ")
