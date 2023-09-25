@@ -56,7 +56,9 @@ class Askalono internal constructor(
 
     override val configuration = ""
 
-    override val criteria by lazy { ScannerCriteria.create(details, scannerConfig) }
+    override val criteria by lazy {
+        ScannerCriteria.create(details, scannerConfig.options?.get(details.name).orEmpty())
+    }
 
     override fun command(workingDir: File?) =
         listOfNotNull(workingDir, if (Os.isWindows) "askalono.exe" else "askalono").joinToString(File.separator)

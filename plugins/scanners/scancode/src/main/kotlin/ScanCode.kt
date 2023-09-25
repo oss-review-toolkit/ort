@@ -97,7 +97,9 @@ class ScanCode internal constructor(
         override fun create(scannerConfig: ScannerConfiguration) = ScanCode(type, scannerConfig)
     }
 
-    override val criteria by lazy { ScannerCriteria.create(details, scannerConfig) }
+    override val criteria by lazy {
+        ScannerCriteria.create(details, scannerConfig.options?.get(details.name).orEmpty())
+    }
 
     override val configuration by lazy {
         buildList {
