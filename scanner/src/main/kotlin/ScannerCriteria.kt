@@ -135,7 +135,7 @@ data class ScannerCriteria(
          * instance, to specify that a specific minimum version of ScanCode is allowed, set this property:
          * `options.ScanCode.minVersion=3.0.2`.
          */
-        fun fromConfig(details: ScannerDetails, config: ScannerConfiguration): ScannerCriteria {
+        fun create(details: ScannerDetails, config: ScannerConfiguration): ScannerCriteria {
             val options = config.options?.get(details.name).orEmpty()
             val scannerVersion = Semver(normalizeVersion(details.version))
             val minVersion = parseVersion(options[PROP_CRITERIA_MIN_VERSION]) ?: scannerVersion
