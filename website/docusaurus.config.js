@@ -146,6 +146,17 @@ const config = {
         darkTheme: darkCodeTheme,
         additionalLanguages: ['kotlin'],
       },
+      algolia: {
+        // The application ID provided by Algolia.
+        appId: 'GBVAB0K8M8',
+
+        // The public API key, safe to commit.
+        apiKey: '4f04967a5a1f4b277d59d741a077affd',
+
+        indexName: 'oss-review-toolkit',
+        contextualSearch: true,
+        searchPagePath: 'search',
+      },
     }),
 };
 
