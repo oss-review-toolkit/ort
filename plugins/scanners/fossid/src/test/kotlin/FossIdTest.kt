@@ -1152,7 +1152,7 @@ private val DEFAULT_IGNORE_RULE_SCOPE = RuleScope.SCAN
 /**
  * Create a new [FossId] instance with the specified [config].
  */
-private fun createFossId(config: FossIdConfig): FossId = FossId("FossId", emptyMap(), config)
+private fun createFossId(config: FossIdConfig): FossId = FossId("FossId", config)
 
 /**
  * Create a standard [FossIdConfig] whose properties can be partly specified.

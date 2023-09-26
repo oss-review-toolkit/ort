@@ -96,7 +96,6 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
  */
 class FossId internal constructor(
     override val name: String,
-    private val options: Options,
     private val config: FossIdConfig
 ) : PackageScannerWrapper {
     companion object : Logging {
@@ -170,7 +169,7 @@ class FossId internal constructor(
     }
 
     class Factory : ScannerWrapperFactory<FossId>("FossId") {
-        override fun create(options: Options) = FossId(type, options, FossIdConfig.create(options))
+        override fun create(options: Options) = FossId(type, FossIdConfig.create(options))
     }
 
     /**
