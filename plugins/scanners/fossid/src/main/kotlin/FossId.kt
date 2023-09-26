@@ -310,7 +310,15 @@ class FossId internal constructor(
 
                     if (config.waitForResult) {
                         val rawResults = getRawResults(scanCode)
-                        createResultSummary(startTime, provenance, rawResults, scanCode, scanId, issues)
+                        createResultSummary(
+                            startTime,
+                            provenance,
+                            rawResults,
+                            scanCode,
+                            scanId,
+                            issues,
+                            context.detectedLicenseMapping
+                        )
                     } else {
                         val issue = createAndLogIssue(
                             source = name,
@@ -857,7 +865,8 @@ class FossId internal constructor(
         rawResults: RawResults,
         scanCode: String,
         scanId: String,
-        additionalIssues: MutableList<Issue>
+        additionalIssues: MutableList<Issue>,
+        detectedLicenseMapping: Map<String, String>
     ): ScanResult {
         // TODO: Maybe get issues from FossID (see has_failed_scan_files, get_failed_files and maybe get_scan_log).
 
@@ -875,7 +884,7 @@ class FossId internal constructor(
 
         val (licenseFindings, copyrightFindings) = rawResults.markedAsIdentifiedFiles.ifEmpty {
             rawResults.identifiedFiles
-        }.mapSummary(ignoredFiles, issues, scannerConfig.detectedLicenseMapping)
+        }.mapSummary(ignoredFiles, issues, detectedLicenseMapping)
 
         val summary = ScanSummary(
             startTime = startTime,
