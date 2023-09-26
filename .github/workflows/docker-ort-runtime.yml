@@ -177,6 +177,12 @@ jobs:
                 run: |
                     cat .versions >> $GITHUB_ENV
 
+            -   name: Get ORT current version
+                run: |
+                    ORT_VERSION=$(./gradlew --no-daemon -q properties --property version | sed -nr "s/version: (.+)/\1/p"))
+                    echo "ORT_VERSION=${ORT_VERSION}" >> $GITHUB_ENV
+                    env
+
             -   name: Set up Docker build
                 uses: docker/setup-buildx-action@v2
 
@@ -194,7 +200,8 @@ jobs:
                     images: |
                         ${{ env.REGISTRY }}/${{ github.repository_owner }}/ort
                     tags: |
-                        type=raw,sha,enable=true,format=short
+                        type=schedule,pattern={{date 'YYYYMMDD'}}
+                        type=semver,pattern={{version}},value=v1.0.0
 
             -   name: Build ORT runtime image
                 if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
