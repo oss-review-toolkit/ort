@@ -15,7 +15,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-name: MegaDocker Runtime Image
+name: Mega Docker runtime image
 
 on:
     workflow_dispatch:
@@ -36,7 +36,7 @@ permissions: write-all
 
 jobs:
     base_image:
-        name: Base Image
+        name: Base image
         runs-on: ubuntu-22.04
         steps:
             -   name: Checkout default branch
@@ -44,7 +44,7 @@ jobs:
             -   name: Set environment variables
                 run: |
                     cat .versions >> $GITHUB_ENV
-            -   name: Build Base Image
+            -   name: Build base image
                 uses: ./.github/actions/ortdocker
                 with:
                     name: base
@@ -55,7 +55,7 @@ jobs:
                         UBUNTU_VERSION=${{ env.UBUNTU_VERSION }}
 
     nodejs_image:
-        name: NodeJS Image
+        name: NodeJS image
         needs: [base_image]
         runs-on: ubuntu-22.04
         steps:
@@ -64,7 +64,7 @@ jobs:
             -   name: Set environment variables
                 run: |
                     cat .versions >> $GITHUB_ENV
-            -   name: Build NodeJS Image
+            -   name: Build NodeJS image
                 uses: ./.github/actions/ortdocker
                 with:
                     name: nodejs
@@ -77,7 +77,7 @@ jobs:
                         YARN_VERSION=${{ env.YARN_VERSION }}
 
     python_image:
-        name: Python Image
+        name: Python image
         needs: [base_image]
         runs-on: ubuntu-22.04
         steps:
@@ -86,7 +86,7 @@ jobs:
             -   name: Set environment variables
                 run: |
                     cat .versions >> $GITHUB_ENV
-            -   name: Build Python Image
+            -   name: Build Python image
                 uses: ./.github/actions/ortdocker
                 with:
                     name: python
@@ -103,7 +103,7 @@ jobs:
                         SCANCODE_VERSION=${{ env.SCANCODE_VERSION }}
 
     rust_image:
-        name: Rust Image
+        name: Rust image
         needs: [base_image]
         runs-on: ubuntu-22.04
         steps:
@@ -112,7 +112,7 @@ jobs:
             -   name: Set environment variables
                 run: |
                     cat .versions >> $GITHUB_ENV
-            -   name: Build Rust Image
+            -   name: Build Rust image
                 uses: ./.github/actions/ortdocker
                 with:
                     name: rust
@@ -122,7 +122,7 @@ jobs:
                         RUST_VERSION=${{ env.RUST_VERSION }}
 
     ruby_image:
-        name: Ruby Image
+        name: Ruby image
         needs: [base_image]
         runs-on: ubuntu-22.04
         steps:
@@ -131,7 +131,7 @@ jobs:
             -   name: Set environment variables
                 run: |
                     cat .versions >> $GITHUB_ENV
-            -   name: Build Ruby Image
+            -   name: Build Ruby image
                 uses: ./.github/actions/ortdocker
                 with:
                     name: ruby
@@ -142,7 +142,7 @@ jobs:
                         COCOAPODS_VERSION=${{ env.COCOAPODS_VERSION }}
 
     golang_image:
-        name: Golang Image
+        name: Golang image
         needs: [base_image]
         runs-on: ubuntu-22.04
         steps:
@@ -151,7 +151,7 @@ jobs:
             -   name: Set environment variables
                 run: |
                     cat .versions >> $GITHUB_ENV
-            -   name: Build Golang Image
+            -   name: Build Golang image
                 uses: ./.github/actions/ortdocker
                 with:
                     name: golang
@@ -163,7 +163,7 @@ jobs:
 
     runtime_image:
         needs: [base_image, nodejs_image, python_image, rust_image, ruby_image, golang_image]
-        name: Build ORT runtime Image
+        name: Build ORT runtime image
         runs-on: ubuntu-22.04
         permissions:
             contents: read
@@ -177,17 +177,17 @@ jobs:
                 run: |
                     cat .versions >> $GITHUB_ENV
 
-            -   name: Set up Docker Buildx
+            -   name: Set up Docker build
                 uses: docker/setup-buildx-action@v2
 
-            -   name: Login to GitHub Container Registry
+            -   name: Login to GitHub container registry
                 uses: docker/login-action@v2
                 with:
                     registry: ${{ env.REGISTRY }}
                     username: ${{ github.actor }}
                     password: ${{ secrets.GITHUB_TOKEN }}
 
-            -   name: Extract components metadata (tags, labels) for Ort runtime image
+            -   name: Extract components metadata (tags, labels)
                 id: meta-ort
                 uses: docker/metadata-action@v4
                 with:
@@ -196,7 +196,7 @@ jobs:
                     tags: |
                         type=raw,sha,enable=true,format=short
 
-            -   name: Build ORT runtime container
+            -   name: Build ORT runtime image
                 if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
                 uses: docker/build-push-action@v4
                 with:

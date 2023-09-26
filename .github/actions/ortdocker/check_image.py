@@ -19,6 +19,10 @@ import os
 
 import requests
 
+""" Use current GitHub API to check if a container image with the
+    given name and version exists.
+"""
+
 token = os.getenv("INPUT_TOKEN")
 org = os.getenv("GITHUB_REPOSITORY_OWNER")
 name = os.getenv("INPUT_NAME")
