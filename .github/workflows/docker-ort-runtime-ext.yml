@@ -175,7 +175,7 @@ jobs:
 
       - name: Extract components metadata (tags, labels)
         id: meta-ort
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
           images: |
             ${{ env.REGISTRY }}/${{ github.repository_owner }}/ort-extended
