@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.scanner.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
@@ -43,10 +43,7 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 
 private val JSON = Json { ignoreUnknownKeys = true }
 
-class BoyterLc internal constructor(
-    name: String,
-    private val scannerConfig: ScannerConfiguration
-) : CommandLinePathScannerWrapper(name) {
+class BoyterLc internal constructor(name: String, private val options: Options) : CommandLinePathScannerWrapper(name) {
     companion object : Logging {
         val CONFIGURATION_OPTIONS = listOf(
             "--confidence", "0.95", // Cut-off value to only get most relevant matches.
@@ -55,14 +52,12 @@ class BoyterLc internal constructor(
     }
 
     class Factory : AbstractScannerWrapperFactory<BoyterLc>("BoyterLc") {
-        override fun create(scannerConfig: ScannerConfiguration) = BoyterLc(type, scannerConfig)
+        override fun create(options: Options) = BoyterLc(type, options)
     }
 
     override val configuration = CONFIGURATION_OPTIONS.joinToString(" ")
 
-    override val criteria by lazy {
-        ScannerCriteria.create(details, scannerConfig.options?.get(details.name).orEmpty())
-    }
+    override val criteria by lazy { ScannerCriteria.create(details, options) }
 
     override fun command(workingDir: File?) =
         listOfNotNull(workingDir, if (Os.isWindows) "lc.exe" else "lc").joinToString(File.separator)

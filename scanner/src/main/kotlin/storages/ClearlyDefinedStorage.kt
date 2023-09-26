@@ -47,7 +47,6 @@ import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.ClearlyDefinedStorageConfiguration
-import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedCoordinates
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedSourceLocation
@@ -125,7 +124,7 @@ class ClearlyDefinedStorage(
             val supportedScanners = toolVersionsByName.mapNotNull { (name, versions) ->
                 // For the ClearlyDefined tool names see https://github.com/clearlydefined/service#tool-name-registry.
                 ScannerWrapper.ALL[name]?.let { factory ->
-                    val scanner = factory.create(ScannerConfiguration())
+                    val scanner = factory.create(emptyMap())
                     (scanner as? CommandLinePathScannerWrapper)?.let { cliScanner -> cliScanner to versions.last() }
                 }.also {
                     if (it == null) logger.debug { "Unsupported tool '$name' for coordinates '$coordinates'." }
