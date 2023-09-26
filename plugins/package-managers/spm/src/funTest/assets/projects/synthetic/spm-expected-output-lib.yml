@@ -90,7 +90,7 @@ project:
         dependencies:
         - id: "SPM:apple:swift-atomics:1.1.0"
         - id: "SPM:apple:swift-collections:1.0.4"
-    - id: "SPM:vapor:console-kit:4.8.0"
+    - id: "SPM:vapor:console-kit:4.8.1"
       dependencies:
       - id: "SPM:apple:swift-log:1.5.3"
       - id: "SPM:apple:swift-nio:2.59.0"
@@ -554,8 +554,8 @@ packages:
     url: "https://github.com/vapor/async-kit.git"
     revision: "1.18.0"
     path: ""
-- id: "SPM:vapor:console-kit:4.8.0"
-  purl: "pkg:swift/vapor/console-kit@4.8.0"
+- id: "SPM:vapor:console-kit:4.8.1"
+  purl: "pkg:swift/vapor/console-kit@4.8.1"
   authors:
   - "vapor"
   declared_licenses: []
@@ -575,12 +575,12 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/vapor/console-kit.git"
-    revision: "4.8.0"
+    revision: "4.8.1"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/vapor/console-kit.git"
-    revision: "4.8.0"
+    revision: "4.8.1"
     path: ""
 - id: "SPM:vapor:multipart-kit:4.5.4"
   purl: "pkg:swift/vapor/multipart-kit@4.5.4"
