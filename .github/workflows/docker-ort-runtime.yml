@@ -15,7 +15,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-name: Mega Docker runtime image
+name: Docker runtime image
 
 on:
   workflow_dispatch:
