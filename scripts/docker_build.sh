@@ -30,7 +30,7 @@ echo "Setting ORT_VERSION to $GIT_REVISION."
 
 # ---------------------------
 # image_build function
-# Usage ( position paramenters):
+# Usage ( position parameters):
 # image_build <target_name> <tag_name> <version> <extra_args...>
 
 image_build() {
