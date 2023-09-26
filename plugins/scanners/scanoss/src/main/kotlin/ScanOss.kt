@@ -38,7 +38,7 @@ import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.clients.scanoss.ScanOssService
 import org.ossreviewtoolkit.model.ScanSummary
-import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.scanner.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
@@ -49,17 +49,14 @@ import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 private const val FAKE_WFP_FILE_NAME = "fake.wfp"
 private const val ARG_FIELD_NAME = "file"
 
-class ScanOss internal constructor(
-    override val name: String,
-    private val scannerConfig: ScannerConfiguration
-) : PathScannerWrapper {
+class ScanOss internal constructor(override val name: String, private val options: Options) : PathScannerWrapper {
     private companion object : Logging
 
     class Factory : AbstractScannerWrapperFactory<ScanOss>("SCANOSS") {
-        override fun create(scannerConfig: ScannerConfiguration) = ScanOss(type, scannerConfig)
+        override fun create(options: Options) = ScanOss(type, options)
     }
 
-    private val config = ScanOssConfig.create(scannerConfig).also {
+    private val config = ScanOssConfig.create(options).also {
         logger.info { "The $name API URL is ${it.apiUrl}." }
     }
 
@@ -74,9 +71,7 @@ class ScanOss internal constructor(
 
     override val configuration = ""
 
-    override val criteria by lazy {
-        ScannerCriteria.create(details, scannerConfig.options?.get(details.name).orEmpty())
-    }
+    override val criteria by lazy { ScannerCriteria.create(details, options) }
 
     /**
      * The name of the file corresponding to the fingerprints can be sent to SCANOSS for more precise matches.

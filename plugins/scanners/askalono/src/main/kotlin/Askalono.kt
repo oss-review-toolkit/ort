@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.scanner.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
@@ -44,21 +44,16 @@ private const val CONFIDENCE_NOTICE = "Confidence threshold not high enough for 
 
 private val JSON = Json { ignoreUnknownKeys = true }
 
-class Askalono internal constructor(
-    name: String,
-    private val scannerConfig: ScannerConfiguration
-) : CommandLinePathScannerWrapper(name) {
+class Askalono internal constructor(name: String, private val options: Options) : CommandLinePathScannerWrapper(name) {
     private companion object : Logging
 
     class Factory : AbstractScannerWrapperFactory<Askalono>("Askalono") {
-        override fun create(scannerConfig: ScannerConfiguration) = Askalono(type, scannerConfig)
+        override fun create(options: Options) = Askalono(type, options)
     }
 
     override val configuration = ""
 
-    override val criteria by lazy {
-        ScannerCriteria.create(details, scannerConfig.options?.get(details.name).orEmpty())
-    }
+    override val criteria by lazy { ScannerCriteria.create(details, options) }
 
     override fun command(workingDir: File?) =
         listOfNotNull(workingDir, if (Os.isWindows) "askalono.exe" else "askalono").joinToString(File.separator)

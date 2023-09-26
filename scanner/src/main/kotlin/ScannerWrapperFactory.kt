@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.scanner
 
 import java.util.ServiceLoader
 
-import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.utils.common.Plugin
 
 /**
@@ -29,9 +29,9 @@ import org.ossreviewtoolkit.utils.common.Plugin
  */
 interface ScannerWrapperFactory : Plugin {
     /**
-     * Create a [ScannerWrapper] using the specified [scannerConfig].
+     * Create a [ScannerWrapper] using the provided [options].
      */
-    fun create(scannerConfig: ScannerConfiguration): ScannerWrapper
+    fun create(options: Options): ScannerWrapper
 }
 
 /**
@@ -40,7 +40,7 @@ interface ScannerWrapperFactory : Plugin {
 abstract class AbstractScannerWrapperFactory<out T : ScannerWrapper>(
     override val type: String
 ) : ScannerWrapperFactory {
-    abstract override fun create(scannerConfig: ScannerConfiguration): T
+    abstract override fun create(options: Options): T
 
     /**
      * Return the scanner wrapper's name here to allow Clikt to display something meaningful when listing the scanners

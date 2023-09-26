@@ -25,25 +25,22 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.beEmpty
 
 import org.ossreviewtoolkit.clients.scanoss.ScanOssService
-import org.ossreviewtoolkit.model.config.ScannerConfiguration
 
 class ScanOssConfigTest : StringSpec({
     "Default values are used" {
-        with(ScanOssConfig.create(ScannerConfiguration())) {
+        with(ScanOssConfig.create(emptyMap())) {
             apiUrl shouldBe ScanOssService.DEFAULT_API_URL
             apiKey should beEmpty()
         }
     }
 
     "Default values can be overridden" {
-        val scanOssOptions = mapOf(
+        val options = mapOf(
             ScanOssConfig.API_URL_PROPERTY to "url",
             ScanOssConfig.API_KEY_PROPERTY to "key"
         )
 
-        val config = ScannerConfiguration(options = mapOf("ScanOss" to scanOssOptions))
-
-        with(ScanOssConfig.create(config)) {
+        with(ScanOssConfig.create(options)) {
             apiUrl shouldBe "url"
             apiKey shouldBe "key"
         }
