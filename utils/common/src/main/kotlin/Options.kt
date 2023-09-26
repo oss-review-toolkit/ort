@@ -17,25 +17,9 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.scanner
-
-import java.util.ServiceLoader
-
-import org.ossreviewtoolkit.utils.common.Options
-import org.ossreviewtoolkit.utils.common.Plugin
+package org.ossreviewtoolkit.utils.common
 
 /**
- * A common abstract class for use with [ServiceLoader] that all [ScannerWrapperFactory] classes need to implement.
+ * A typealias for key-value pairs, used in several configuration classes.
  */
-abstract class ScannerWrapperFactory<out T : ScannerWrapper>(override val type: String) : Plugin {
-    /**
-     * Create a [ScannerWrapper] using the provided [options].
-     */
-    abstract fun create(options: Options): T
-
-    /**
-     * Return the scanner wrapper's name here to allow Clikt to display something meaningful when listing the scanners
-     * wrapper factories which are enabled by default.
-     */
-    override fun toString() = type
-}
+typealias Options = Map<String, String>

@@ -20,8 +20,8 @@
 package org.ossreviewtoolkit.plugins.scanners.scanoss
 
 import org.ossreviewtoolkit.clients.scanoss.ScanOssService
-import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.utils.common.Options
 
 /**
  * A data class that holds the configuration options supported by the [ScanOss] scanner. An instance of this class is

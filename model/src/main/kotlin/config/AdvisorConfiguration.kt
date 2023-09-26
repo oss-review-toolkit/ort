@@ -22,6 +22,8 @@ package org.ossreviewtoolkit.model.config
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 
+import org.ossreviewtoolkit.utils.common.Options
+
 /**
  * The base configuration model of the advisor.
  */

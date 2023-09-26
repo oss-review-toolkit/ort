@@ -21,8 +21,8 @@ package org.ossreviewtoolkit.plugins.scanners.fossid
 
 import org.apache.logging.log4j.kotlin.Logging
 
-import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.utils.common.Options
 
 /**
  * A data class that holds the configuration options supported by the [FossId] scanner. An instance of this class is
