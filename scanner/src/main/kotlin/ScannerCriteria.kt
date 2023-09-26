@@ -20,7 +20,7 @@
 package org.ossreviewtoolkit.scanner
 
 import org.ossreviewtoolkit.model.ScannerDetails
-import org.ossreviewtoolkit.model.config.Options
+import org.ossreviewtoolkit.utils.common.Options
 
 import org.semver4j.Semver
 

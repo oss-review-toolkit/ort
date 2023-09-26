@@ -38,11 +38,11 @@ import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.clients.scanoss.ScanOssService
 import org.ossreviewtoolkit.model.ScanSummary
-import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.scanner.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
+import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 
 // An arbitrary name to use for the multipart body being sent.

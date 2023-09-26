@@ -21,6 +21,8 @@ package org.ossreviewtoolkit.model.config
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
+import org.ossreviewtoolkit.utils.common.Options
+
 /**
  * The base configuration model of the reporter.
  */
