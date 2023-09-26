@@ -103,8 +103,8 @@ COPY "$CRT_FILES" /tmp/certificates/
 RUN /etc/scripts/export_proxy_certificates.sh /tmp/certificates/ \
     &&  /etc/scripts/import_certificates.sh /tmp/certificates/
 
-# Add syft to use as primary spdx docker scanner
-# Create docs dir to store future spdxs
+# Add Syft to use as primary SPDX Docker scanner
+# Create docs dir to store future SPDX files
 RUN curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sudo sh -s -- -b /usr/local/bin \
     && mkdir -p /usr/share/doc/ort \
     && chown $USER:$USER /usr/share/doc/ort
@@ -434,7 +434,7 @@ FROM base as run
 # Remove ort build scripts
 RUN [ -d /etc/scripts ] && sudo rm -rf /etc/scripts
 
-# Minor requirements
+#  Install optional tool subversion for ORT analyzer
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     sudo apt-get update && \
