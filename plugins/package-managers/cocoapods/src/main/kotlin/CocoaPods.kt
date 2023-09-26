@@ -304,8 +304,11 @@ private fun parseLockfile(podfileLock: File): LockfileData {
             dependencies = dependenciesForName[name].orEmpty().mapTo(mutableSetOf()) { createPackageReference(it) }
         )
 
+    // The "DEPENDENCIES" section lists direct dependencies, but only along with version constraints, not with their
+    // resolved versions, and eventually additional information about the source.
     val dependencies = root.get("DEPENDENCIES").mapTo(mutableSetOf()) { node ->
-        val name = node.textValue().substringBefore(" ")
+        // Discard the version (which is only a constraint in this case) and just take the name.
+        val (name, _) = parseNameAndVersion(node.textValue())
         createPackageReference(name)
     }
 
