@@ -30,6 +30,7 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.PackageConfigurationProviderFactory
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.SimplePackageConfigurationProvider
+import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.getDuplicates
 import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CONFIGURATIONS_DIRNAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
@@ -52,17 +53,17 @@ open class DirPackageConfigurationProviderFactory :
 
     override fun create(config: DirPackageConfigurationProviderConfig) = DirPackageConfigurationProvider(config)
 
-    override fun parseConfig(config: Map<String, String>) =
+    override fun parseOptions(options: Options) =
         DirPackageConfigurationProviderConfig(
-            path = File(config.getValue("path")),
-            mustExist = config["mustExist"]?.toBooleanStrict() ?: true
+            path = File(options.getValue("path")),
+            mustExist = options["mustExist"]?.toBooleanStrict() ?: true
         )
 }
 
 class DefaultDirPackageConfigurationProviderFactory : DirPackageConfigurationProviderFactory() {
     override val type = "DefaultDir"
 
-    override fun parseConfig(config: Map<String, String>) =
+    override fun parseOptions(options: Options) =
         DirPackageConfigurationProviderConfig(
             path = ortConfigDirectory.resolve(ORT_PACKAGE_CONFIGURATIONS_DIRNAME),
             mustExist = false

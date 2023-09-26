@@ -43,6 +43,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.utils.PackageCurationProvider
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedCoordinates
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProviderFactory
+import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.showStackTrace
@@ -70,10 +71,10 @@ class ClearlyDefinedPackageCurationProviderFactory :
     override fun create(config: ClearlyDefinedPackageCurationProviderConfig) =
         ClearlyDefinedPackageCurationProvider(config)
 
-    override fun parseConfig(config: Map<String, String>) =
+    override fun parseOptions(options: Options) =
         ClearlyDefinedPackageCurationProviderConfig(
-            serverUrl = config["serverUrl"] ?: Server.PRODUCTION.apiUrl,
-            minTotalLicenseScore = config["minTotalLicenseScore"]?.toInt() ?: 0
+            serverUrl = options["serverUrl"] ?: Server.PRODUCTION.apiUrl,
+            minTotalLicenseScore = options["minTotalLicenseScore"]?.toInt() ?: 0
         )
 }
 
