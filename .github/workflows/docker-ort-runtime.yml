@@ -198,7 +198,7 @@ jobs:
 
       - name: Build ORT runtime image
         if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           context: .
           target: run
