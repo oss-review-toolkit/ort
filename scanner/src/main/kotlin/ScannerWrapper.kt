@@ -39,7 +39,7 @@ sealed interface ScannerWrapper {
         /**
          * All [scanner wrapper factories][ScannerWrapperFactory] available in the classpath, associated by their names.
          */
-        val ALL by lazy { Plugin.getAll<ScannerWrapperFactory>() }
+        val ALL by lazy { Plugin.getAll<ScannerWrapperFactory<*>>() }
     }
 
     /**

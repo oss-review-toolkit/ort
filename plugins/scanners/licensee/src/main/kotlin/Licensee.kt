@@ -33,11 +33,11 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.Options
-import org.ossreviewtoolkit.scanner.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScannerCriteria
+import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.utils.common.Os
 
 private val JSON = Json {
@@ -50,7 +50,7 @@ class Licensee internal constructor(name: String, private val options: Options) 
         val CONFIGURATION_OPTIONS = listOf("--json")
     }
 
-    class Factory : AbstractScannerWrapperFactory<Licensee>("Licensee") {
+    class Factory : ScannerWrapperFactory<Licensee>("Licensee") {
         override fun create(options: Options) = Licensee(type, options)
     }
 
