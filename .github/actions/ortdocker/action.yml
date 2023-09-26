@@ -40,63 +40,61 @@ runs:
   using: "composite"
 
   steps:
-    -   name: Install Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-          cache: 'pip'
+    - name: Install Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        cache: 'pip'
 
-    -   name: Check if Docker image tag exists
-        id: check_image
-        shell: bash
-        env:
-          INPUT_REGISTRY: ${{ inputs.registry }}
-          INPUT_TOKEN: ${{ inputs.token }}
-          INPUT_NAME: ${{ inputs.name }}
-          INPUT_VERSION:  ${{ inputs.version }}
-        run: |
-          pip install -q -U pip requests
+    - name: Check if Docker image tag exists
+      id: check_image
+      shell: bash
+      env:
+        INPUT_REGISTRY: ${{ inputs.registry }}
+        INPUT_TOKEN: ${{ inputs.token }}
+        INPUT_NAME: ${{ inputs.name }}
+        INPUT_VERSION: ${{ inputs.version }}
+      run: |
+        pip install -q -U pip requests
 
-          result=$(python ./.github/actions/ortdocker/check_image.py)
-          echo $result
-          echo "result=$result" >> $GITHUB_OUTPUT
+        result=$(python ./.github/actions/ortdocker/check_image.py)
+        echo $result
+        echo "result=$result" >> $GITHUB_OUTPUT
 
-    -   name: Set up Docker build
-        if: steps.check_image.outputs.result != 'found'
-        uses: docker/setup-buildx-action@v2
+    - name: Set up Docker build
+      if: steps.check_image.outputs.result != 'found'
+      uses: docker/setup-buildx-action@v2
 
-    -   name: Login to GitHub container registry
-        if: steps.check_image.outputs.result != 'found'
-        uses: docker/login-action@v2
-        with:
-            registry: ${{ inputs.registry }}
-            username: ${{ github.actor }}
-            password: ${{ inputs.token }}
+    - name: Login to GitHub container registry
+      if: steps.check_image.outputs.result != 'found'
+      uses: docker/login-action@v2
+      with:
+        registry: ${{ inputs.registry }}
+        username: ${{ github.actor }}
+        password: ${{ inputs.token }}
 
-    -   name: Extract components metadata (tags, labels)
-        if: steps.check_image.outputs.result != 'found'
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-            images: |
-                ${{ env.REGISTRY }}/${{ github.repository }}/${{ inputs.name }}
-            tags:
-                type=raw,value=${{ inputs.version }}
+    - name: Extract components metadata (tags, labels)
+      if: steps.check_image.outputs.result != 'found'
+      id: meta
+      uses: docker/metadata-action@v4
+      with:
+        images: |
+          ${{ env.REGISTRY }}/${{ github.repository }}/${{ inputs.name }}
+        tags:
+          type=raw,value=${{ inputs.version }}
 
-    -   name: Build image
-        if: steps.check_image.outputs.result != 'found'
-        uses: docker/build-push-action@v4
-        with:
-            context: .
-            target: ${{ inputs.name }}
-            push: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
-            load: false
-            build-args: ${{ inputs.build-args }}
-            tags: |
-                ${{ steps.meta.outputs.tags }}
-                ${{ env.REGISTRY }}/${{ github.repository }}/${{ inputs.name }}:latest
-            labels: ${{ steps.meta.outputs.labels }}
-            build-contexts: |
-              base=docker-image://${{ inputs.registry }}/${{ github.repository }}/base:latest
-
-
+    - name: Build image
+      if: steps.check_image.outputs.result != 'found'
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        target: ${{ inputs.name }}
+        push: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
+        load: false
+        build-args: ${{ inputs.build-args }}
+        tags: |
+          ${{ steps.meta.outputs.tags }}
+          ${{ env.REGISTRY }}/${{ github.repository }}/${{ inputs.name }}:latest
+        labels: ${{ steps.meta.outputs.labels }}
+        build-contexts: |
+          base=docker-image://${{ inputs.registry }}/${{ github.repository }}/base:latest
