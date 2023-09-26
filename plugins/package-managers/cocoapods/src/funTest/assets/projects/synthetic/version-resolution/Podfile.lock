@@ -1,0 +1,246 @@
+PODS:
+  - AFNetworking (4.0.1):
+    - AFNetworking/NSURLSession (= 4.0.1)
+    - AFNetworking/Reachability (= 4.0.1)
+    - AFNetworking/Security (= 4.0.1)
+    - AFNetworking/Serialization (= 4.0.1)
+    - AFNetworking/UIKit (= 4.0.1)
+  - AFNetworking/NSURLSession (4.0.1):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (4.0.1)
+  - AFNetworking/Security (4.0.1)
+  - AFNetworking/Serialization (4.0.1)
+  - AFNetworking/UIKit (4.0.1):
+    - AFNetworking/NSURLSession
+  - AnalyticsEvents (0.1.0)
+  - BlueCryptor (1.0.32)
+  - BlueECC (1.2.5)
+  - BlueRSA (1.0.200)
+  - Down (0.11.0)
+  - DSBottomSheet (0.3.0)
+  - DSWaveformImage (6.1.1)
+  - DTCoreText (1.6.26):
+    - DTCoreText/Core (= 1.6.26)
+    - DTFoundation/Core (~> 1.7.5)
+    - DTFoundation/DTAnimatedGIF (~> 1.7.5)
+    - DTFoundation/DTHTMLParser (~> 1.7.5)
+    - DTFoundation/UIKit (~> 1.7.5)
+  - DTCoreText/Core (1.6.26):
+    - DTFoundation/Core (~> 1.7.5)
+    - DTFoundation/DTAnimatedGIF (~> 1.7.5)
+    - DTFoundation/DTHTMLParser (~> 1.7.5)
+    - DTFoundation/UIKit (~> 1.7.5)
+  - DTFoundation/Core (1.7.18)
+  - DTFoundation/DTAnimatedGIF (1.7.18)
+  - DTFoundation/DTHTMLParser (1.7.18):
+    - DTFoundation/Core
+  - DTFoundation/UIKit (1.7.18):
+    - DTFoundation/Core
+  - ffmpeg-kit-ios-audio (4.5.1)
+  - FLEX (4.5.0)
+  - FlowCommoniOS (1.12.2)
+  - GBDeviceInfo (6.6.0):
+    - GBDeviceInfo/Core (= 6.6.0)
+  - GBDeviceInfo/Core (6.6.0)
+  - GZIP (1.3.0)
+  - Introspect (0.1.4)
+  - JitsiMeetSDK (5.0.2)
+  - KeychainAccess (4.2.2)
+  - KituraContracts (1.2.1):
+    - LoggerAPI (~> 1.7)
+  - KTCenterFlowLayout (1.3.1)
+  - libbase58 (0.1.4)
+  - libPhoneNumber-iOS (0.9.15)
+  - LoggerAPI (1.9.200):
+    - Logging (~> 1.1)
+  - Logging (1.4.0)
+  - MatrixSDK (0.23.18):
+    - MatrixSDK/Core (= 0.23.18)
+  - MatrixSDK/Core (0.23.18):
+    - AFNetworking (~> 4.0.0)
+    - GZIP (~> 1.3.0)
+    - libbase58 (~> 0.1.4)
+    - MatrixSDK/CryptoSDK
+    - OLMKit (~> 3.2.5)
+    - Realm (= 10.27.0)
+    - SwiftyBeaver (= 1.9.5)
+  - MatrixSDK/CryptoSDK (0.23.18):
+    - MatrixSDKCrypto (= 0.1.0)
+  - MatrixSDK/JingleCallStack (0.23.18):
+    - JitsiMeetSDK (= 5.0.2)
+    - MatrixSDK/Core
+  - MatrixSDKCrypto (0.1.0)
+  - OLMKit (3.2.12):
+    - OLMKit/olmc (= 3.2.12)
+    - OLMKit/olmcpp (= 3.2.12)
+  - OLMKit/olmc (3.2.12)
+  - OLMKit/olmcpp (3.2.12)
+  - PostHog (1.4.4)
+  - ReadMoreTextView (3.0.1)
+  - Realm (10.27.0):
+    - Realm/Headers (= 10.27.0)
+  - Realm/Headers (10.27.0)
+  - Reusable (4.1.2):
+    - Reusable/Storyboard (= 4.1.2)
+    - Reusable/View (= 4.1.2)
+  - Reusable/Storyboard (4.1.2)
+  - Reusable/View (4.1.2)
+  - Sentry (7.15.0):
+    - Sentry/Core (= 7.15.0)
+  - Sentry/Core (7.15.0)
+  - SideMenu (6.5.0)
+  - SwiftBase32 (0.9.0)
+  - SwiftGen (6.6.2)
+  - SwiftJWT (3.6.200):
+    - BlueCryptor (~> 1.0)
+    - BlueECC (~> 1.1)
+    - BlueRSA (~> 1.0)
+    - KituraContracts (~> 1.2)
+    - LoggerAPI (~> 1.7)
+  - SwiftLint (0.44.0)
+  - SwiftyBeaver (1.9.5)
+  - UICollectionViewLeftAlignedLayout (1.0.2)
+  - UICollectionViewRightAlignedLayout (0.0.3)
+  - WeakDictionary (2.0.2)
+  - zxcvbn-ios (1.0.4)
+  - ZXingObjC (3.6.5):
+    - ZXingObjC/All (= 3.6.5)
+  - ZXingObjC/All (3.6.5)
+
+DEPENDENCIES:
+  - AnalyticsEvents (from `https://github.com/matrix-org/matrix-analytics-events.git`, branch `release/swift`)
+  - Down (~> 0.11.0)
+  - DSBottomSheet (~> 0.3)
+  - DSWaveformImage (~> 6.1.1)
+  - DTCoreText (~> 1.6.25)
+  - ffmpeg-kit-ios-audio (= 4.5.1)
+  - FLEX (~> 4.5.0)
+  - FlowCommoniOS (~> 1.12.0)
+  - GBDeviceInfo (~> 6.6.0)
+  - Introspect (~> 0.1)
+  - KeychainAccess (~> 4.2.2)
+  - KTCenterFlowLayout (~> 1.3.1)
+  - libPhoneNumber-iOS (~> 0.9.13)
+  - MatrixSDK (= 0.23.18)
+  - MatrixSDK/JingleCallStack (= 0.23.18)
+  - OLMKit
+  - PostHog (~> 1.4.4)
+  - ReadMoreTextView (~> 3.0.1)
+  - Reusable (~> 4.1)
+  - Sentry (~> 7.15.0)
+  - SideMenu (~> 6.5)
+  - SwiftBase32 (~> 0.9.0)
+  - SwiftGen (~> 6.3)
+  - SwiftJWT (~> 3.6.200)
+  - SwiftLint (~> 0.44.0)
+  - UICollectionViewLeftAlignedLayout (~> 1.0.2)
+  - UICollectionViewRightAlignedLayout (~> 0.0.3)
+  - WeakDictionary (~> 2.0)
+  - zxcvbn-ios
+  - ZXingObjC (~> 3.6.5)
+
+SPEC REPOS:
+  trunk:
+    - AFNetworking
+    - BlueCryptor
+    - BlueECC
+    - BlueRSA
+    - Down
+    - DSBottomSheet
+    - DSWaveformImage
+    - DTCoreText
+    - DTFoundation
+    - ffmpeg-kit-ios-audio
+    - FLEX
+    - FlowCommoniOS
+    - GBDeviceInfo
+    - GZIP
+    - Introspect
+    - JitsiMeetSDK
+    - KeychainAccess
+    - KituraContracts
+    - KTCenterFlowLayout
+    - libbase58
+    - libPhoneNumber-iOS
+    - LoggerAPI
+    - Logging
+    - MatrixSDK
+    - MatrixSDKCrypto
+    - OLMKit
+    - PostHog
+    - ReadMoreTextView
+    - Realm
+    - Reusable
+    - Sentry
+    - SideMenu
+    - SwiftBase32
+    - SwiftGen
+    - SwiftJWT
+    - SwiftLint
+    - SwiftyBeaver
+    - UICollectionViewLeftAlignedLayout
+    - UICollectionViewRightAlignedLayout
+    - WeakDictionary
+    - zxcvbn-ios
+    - ZXingObjC
+
+EXTERNAL SOURCES:
+  AnalyticsEvents:
+    :branch: release/swift
+    :git: https://github.com/matrix-org/matrix-analytics-events.git
+
+CHECKOUT OPTIONS:
+  AnalyticsEvents:
+    :commit: 53ad46ba1ea1ee8f21139dda3c351890846a202f
+    :git: https://github.com/matrix-org/matrix-analytics-events.git
+
+SPEC CHECKSUMS:
+  AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
+  AnalyticsEvents: 0cc8cf52da2fd464a2f39b788a295988151116ce
+  BlueCryptor: b0aee3d9b8f367b49b30de11cda90e1735571c24
+  BlueECC: 0d18e93347d3ec6d41416de21c1ffa4d4cd3c2cc
+  BlueRSA: dfeef51db96bcc4edec654956c1581adbda4e6a3
+  Down: b6ba1bc985c9d2f4e15e3b293d2207766fa12612
+  DSBottomSheet: ca0ac37eb5af2dd54663f86b84382ed90a59be2a
+  DSWaveformImage: 3c718a0cf99291887ee70d1d0c18d80101d3d9ce
+  DTCoreText: ec749e013f2e1f76de5e7c7634642e600a7467ce
+  DTFoundation: a53f8cda2489208cbc71c648be177f902ee17536
+  ffmpeg-kit-ios-audio: 662ce2064e56733ca7d8216705efbc38d9e1c3fe
+  FLEX: e51461dd6f0bfb00643c262acdfea5d5d12c596b
+  FlowCommoniOS: ca92071ab526dc89905495a37844fd7e78d1a7f2
+  GBDeviceInfo: ed0db16230d2fa280e1cbb39a5a7f60f6946aaec
+  GZIP: 416858efbe66b41b206895ac6dfd5493200d95b3
+  Introspect: b62c4dd2063072327c21d618ef2bedc3c87bc366
+  JitsiMeetSDK: edcac8e2b92ee0c7f3e75bd0aefefbe9faccfc93
+  KeychainAccess: c0c4f7f38f6fc7bbe58f5702e25f7bd2f65abf51
+  KituraContracts: e845e60dc8627ad0a76fa55ef20a45451d8f830b
+  KTCenterFlowLayout: 6e02b50ab2bd865025ae82fe266ed13b6d9eaf97
+  libbase58: 7c040313537b8c44b6e2d15586af8e21f7354efd
+  libPhoneNumber-iOS: 0a32a9525cf8744fe02c5206eb30d571e38f7d75
+  LoggerAPI: ad9c4a6f1e32f518fdb43a1347ac14d765ab5e3d
+  Logging: beeb016c9c80cf77042d62e83495816847ef108b
+  MatrixSDK: 26da2e3a9f3b02fc6ea67f5bc311d30f06f9ffba
+  MatrixSDKCrypto: 4b9146d5ef484550341be056a164c6930038028e
+  OLMKit: da115f16582e47626616874e20f7bb92222c7a51
+  PostHog: 4b6321b521569092d4ef3a02238d9435dbaeb99f
+  ReadMoreTextView: 19147adf93abce6d7271e14031a00303fe28720d
+  Realm: 9ca328bd7e700cc19703799785e37f77d1a130f2
+  Reusable: 6bae6a5e8aa793c9c441db0213c863a64bce9136
+  Sentry: 63ca44f5e0c8cea0ee5a07686b02e56104f41ef7
+  SideMenu: f583187d21c5b1dd04c72002be544b555a2627a2
+  SwiftBase32: 9399c25a80666dc66b51e10076bf591e3bbb8f17
+  SwiftGen: 1366a7f71aeef49954ca5a63ba4bef6b0f24138c
+  SwiftJWT: 88c412708f58c169d431d344c87bc79a87c830ae
+  SwiftLint: e96c0a8c770c7ebbc4d36c55baf9096bb65c4584
+  SwiftyBeaver: 84069991dd5dca07d7069100985badaca7f0ce82
+  UICollectionViewLeftAlignedLayout: 830bf6fa5bab9f9b464f62e3384f9d2e00b3c0f6
+  UICollectionViewRightAlignedLayout: 823eef8c567eba4a44c21bc2ffcb0d0d5f361e2d
+  WeakDictionary: 8cd038acd77e5d54ca4ebaec3d20853d732b45e0
+  zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
+  ZXingObjC: fdbb269f25dd2032da343e06f10224d62f537bdb
+
+PODFILE CHECKSUM: 45176df406c18b0c23321a308f58535fbe425a93
+
+COCOAPODS: 1.11.2

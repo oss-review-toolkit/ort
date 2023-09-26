@@ -1,0 +1,2011 @@
+---
+project:
+  id: "CocoaPods::src/funTest/assets/projects/synthetic/version-resolution/Podfile:"
+  definition_file_path: "plugins/package-managers/cocoapods/src/funTest/assets/projects/synthetic/version-resolution/Podfile"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "Pod::AnalyticsEvents:0.1.0-53ad46ba1ea1ee8f21139dda3c351890846a202f"
+    - id: "Pod::DSBottomSheet:0.3.0"
+    - id: "Pod::DSWaveformImage:6.1.1"
+    - id: "Pod::DTCoreText:1.6.26"
+      dependencies:
+      - id: "Pod::DTCoreText/Core:1.6.26"
+        dependencies:
+        - id: "Pod::DTFoundation/Core:1.7.18"
+        - id: "Pod::DTFoundation/DTAnimatedGIF:1.7.18"
+        - id: "Pod::DTFoundation/DTHTMLParser:1.7.18"
+          dependencies:
+          - id: "Pod::DTFoundation/Core:1.7.18"
+        - id: "Pod::DTFoundation/UIKit:1.7.18"
+          dependencies:
+          - id: "Pod::DTFoundation/Core:1.7.18"
+      - id: "Pod::DTFoundation/Core:1.7.18"
+      - id: "Pod::DTFoundation/DTAnimatedGIF:1.7.18"
+      - id: "Pod::DTFoundation/DTHTMLParser:1.7.18"
+        dependencies:
+        - id: "Pod::DTFoundation/Core:1.7.18"
+      - id: "Pod::DTFoundation/UIKit:1.7.18"
+        dependencies:
+        - id: "Pod::DTFoundation/Core:1.7.18"
+    - id: "Pod::Down:0.11.0"
+    - id: "Pod::FLEX:4.5.0"
+    - id: "Pod::FlowCommoniOS:1.12.2"
+    - id: "Pod::GBDeviceInfo:6.6.0"
+      dependencies:
+      - id: "Pod::GBDeviceInfo/Core:6.6.0"
+    - id: "Pod::Introspect:0.1.4"
+    - id: "Pod::KTCenterFlowLayout:1.3.1"
+    - id: "Pod::KeychainAccess:4.2.2"
+    - id: "Pod::MatrixSDK:0.23.18"
+      dependencies:
+      - id: "Pod::MatrixSDK/Core:0.23.18"
+        dependencies:
+        - id: "Pod::AFNetworking:4.0.1"
+          dependencies:
+          - id: "Pod::AFNetworking/NSURLSession:4.0.1"
+            dependencies:
+            - id: "Pod::AFNetworking/Reachability:4.0.1"
+            - id: "Pod::AFNetworking/Security:4.0.1"
+            - id: "Pod::AFNetworking/Serialization:4.0.1"
+          - id: "Pod::AFNetworking/Reachability:4.0.1"
+          - id: "Pod::AFNetworking/Security:4.0.1"
+          - id: "Pod::AFNetworking/Serialization:4.0.1"
+          - id: "Pod::AFNetworking/UIKit:4.0.1"
+            dependencies:
+            - id: "Pod::AFNetworking/NSURLSession:4.0.1"
+              dependencies:
+              - id: "Pod::AFNetworking/Reachability:4.0.1"
+              - id: "Pod::AFNetworking/Security:4.0.1"
+              - id: "Pod::AFNetworking/Serialization:4.0.1"
+        - id: "Pod::GZIP:1.3.0"
+        - id: "Pod::MatrixSDK/CryptoSDK:0.23.18"
+          dependencies:
+          - id: "Pod::MatrixSDKCrypto:0.1.0"
+        - id: "Pod::OLMKit:3.2.12"
+          dependencies:
+          - id: "Pod::OLMKit/olmc:3.2.12"
+          - id: "Pod::OLMKit/olmcpp:3.2.12"
+        - id: "Pod::Realm:10.27.0"
+          dependencies:
+          - id: "Pod::Realm/Headers:10.27.0"
+        - id: "Pod::SwiftyBeaver:1.9.5"
+        - id: "Pod::libbase58:0.1.4"
+    - id: "Pod::MatrixSDK/JingleCallStack:0.23.18"
+      dependencies:
+      - id: "Pod::JitsiMeetSDK:5.0.2"
+      - id: "Pod::MatrixSDK/Core:0.23.18"
+        dependencies:
+        - id: "Pod::AFNetworking:4.0.1"
+          dependencies:
+          - id: "Pod::AFNetworking/NSURLSession:4.0.1"
+            dependencies:
+            - id: "Pod::AFNetworking/Reachability:4.0.1"
+            - id: "Pod::AFNetworking/Security:4.0.1"
+            - id: "Pod::AFNetworking/Serialization:4.0.1"
+          - id: "Pod::AFNetworking/Reachability:4.0.1"
+          - id: "Pod::AFNetworking/Security:4.0.1"
+          - id: "Pod::AFNetworking/Serialization:4.0.1"
+          - id: "Pod::AFNetworking/UIKit:4.0.1"
+            dependencies:
+            - id: "Pod::AFNetworking/NSURLSession:4.0.1"
+              dependencies:
+              - id: "Pod::AFNetworking/Reachability:4.0.1"
+              - id: "Pod::AFNetworking/Security:4.0.1"
+              - id: "Pod::AFNetworking/Serialization:4.0.1"
+        - id: "Pod::GZIP:1.3.0"
+        - id: "Pod::MatrixSDK/CryptoSDK:0.23.18"
+          dependencies:
+          - id: "Pod::MatrixSDKCrypto:0.1.0"
+        - id: "Pod::OLMKit:3.2.12"
+          dependencies:
+          - id: "Pod::OLMKit/olmc:3.2.12"
+          - id: "Pod::OLMKit/olmcpp:3.2.12"
+        - id: "Pod::Realm:10.27.0"
+          dependencies:
+          - id: "Pod::Realm/Headers:10.27.0"
+        - id: "Pod::SwiftyBeaver:1.9.5"
+        - id: "Pod::libbase58:0.1.4"
+    - id: "Pod::OLMKit:3.2.12"
+      dependencies:
+      - id: "Pod::OLMKit/olmc:3.2.12"
+      - id: "Pod::OLMKit/olmcpp:3.2.12"
+    - id: "Pod::PostHog:1.4.4"
+    - id: "Pod::ReadMoreTextView:3.0.1"
+    - id: "Pod::Reusable:4.1.2"
+      dependencies:
+      - id: "Pod::Reusable/Storyboard:4.1.2"
+      - id: "Pod::Reusable/View:4.1.2"
+    - id: "Pod::Sentry:7.15.0"
+      dependencies:
+      - id: "Pod::Sentry/Core:7.15.0"
+    - id: "Pod::SideMenu:6.5.0"
+    - id: "Pod::SwiftBase32:0.9.0"
+    - id: "Pod::SwiftGen:6.6.2"
+    - id: "Pod::SwiftJWT:3.6.200"
+      dependencies:
+      - id: "Pod::BlueCryptor:1.0.32"
+      - id: "Pod::BlueECC:1.2.5"
+      - id: "Pod::BlueRSA:1.0.200"
+      - id: "Pod::KituraContracts:1.2.1"
+        dependencies:
+        - id: "Pod::LoggerAPI:1.9.200"
+          dependencies:
+          - id: "Pod::Logging:1.4.0"
+      - id: "Pod::LoggerAPI:1.9.200"
+        dependencies:
+        - id: "Pod::Logging:1.4.0"
+    - id: "Pod::SwiftLint:0.44.0"
+    - id: "Pod::UICollectionViewLeftAlignedLayout:1.0.2"
+    - id: "Pod::UICollectionViewRightAlignedLayout:0.0.3"
+    - id: "Pod::WeakDictionary:2.0.2"
+    - id: "Pod::ZXingObjC:3.6.5"
+      dependencies:
+      - id: "Pod::ZXingObjC/All:3.6.5"
+    - id: "Pod::ffmpeg-kit-ios-audio:4.5.1"
+    - id: "Pod::libPhoneNumber-iOS:0.9.15"
+    - id: "Pod::zxcvbn-ios:1.0.4"
+packages:
+- id: "Pod::AFNetworking:4.0.1"
+  purl: "pkg:cocoapods/AFNetworking@4.0.1"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A delightful networking framework for Apple platforms."
+  homepage_url: "https://github.com/AFNetworking/AFNetworking"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/AFNetworking/AFNetworking.git"
+    revision: "4.0.1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/AFNetworking/AFNetworking.git"
+    revision: "4.0.1"
+    path: ""
+- id: "Pod::AFNetworking/NSURLSession:4.0.1"
+  purl: "pkg:cocoapods/AFNetworking%2FNSURLSession@4.0.1"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A delightful networking framework for Apple platforms."
+  homepage_url: "https://github.com/AFNetworking/AFNetworking"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/AFNetworking/AFNetworking.git"
+    revision: "4.0.1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/AFNetworking/AFNetworking.git"
+    revision: "4.0.1"
+    path: ""
+- id: "Pod::AFNetworking/Reachability:4.0.1"
+  purl: "pkg:cocoapods/AFNetworking%2FReachability@4.0.1"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A delightful networking framework for Apple platforms."
+  homepage_url: "https://github.com/AFNetworking/AFNetworking"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/AFNetworking/AFNetworking.git"
+    revision: "4.0.1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/AFNetworking/AFNetworking.git"
+    revision: "4.0.1"
+    path: ""
+- id: "Pod::AFNetworking/Security:4.0.1"
+  purl: "pkg:cocoapods/AFNetworking%2FSecurity@4.0.1"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A delightful networking framework for Apple platforms."
+  homepage_url: "https://github.com/AFNetworking/AFNetworking"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/AFNetworking/AFNetworking.git"
+    revision: "4.0.1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/AFNetworking/AFNetworking.git"
+    revision: "4.0.1"
+    path: ""
+- id: "Pod::AFNetworking/Serialization:4.0.1"
+  purl: "pkg:cocoapods/AFNetworking%2FSerialization@4.0.1"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A delightful networking framework for Apple platforms."
+  homepage_url: "https://github.com/AFNetworking/AFNetworking"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/AFNetworking/AFNetworking.git"
+    revision: "4.0.1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/AFNetworking/AFNetworking.git"
+    revision: "4.0.1"
+    path: ""
+- id: "Pod::AFNetworking/UIKit:4.0.1"
+  purl: "pkg:cocoapods/AFNetworking%2FUIKit@4.0.1"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A delightful networking framework for Apple platforms."
+  homepage_url: "https://github.com/AFNetworking/AFNetworking"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/AFNetworking/AFNetworking.git"
+    revision: "4.0.1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/AFNetworking/AFNetworking.git"
+    revision: "4.0.1"
+    path: ""
+- id: "Pod::AnalyticsEvents:0.1.0-53ad46ba1ea1ee8f21139dda3c351890846a202f"
+  purl: "pkg:cocoapods/AnalyticsEvents@0.1.0-53ad46ba1ea1ee8f21139dda3c351890846a202f"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/matrix-org/matrix-analytics-events.git"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/matrix-org/matrix-analytics-events.git"
+    revision: "53ad46ba1ea1ee8f21139dda3c351890846a202f"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/matrix-org/matrix-analytics-events.git"
+    revision: "53ad46ba1ea1ee8f21139dda3c351890846a202f"
+    path: ""
+- id: "Pod::BlueCryptor:1.0.32"
+  purl: "pkg:cocoapods/BlueCryptor@1.0.32"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License, Version 2.0: "Apache-2.0"
+  description: "Swift cross-platform crypto library using CommonCrypto/libcrypto via\
+    \ Package Manager."
+  homepage_url: "https://github.com/IBM-Swift/BlueCryptor"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/IBM-Swift/BlueCryptor.git"
+    revision: "1.0.32"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/IBM-Swift/BlueCryptor.git"
+    revision: "1.0.32"
+    path: ""
+- id: "Pod::BlueECC:1.2.5"
+  purl: "pkg:cocoapods/BlueECC@1.2.5"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License, Version 2.0: "Apache-2.0"
+  description: "Swift cross-platform ECC crypto library using CommonCrypto/libcrypto\
+    \ via Package Manager."
+  homepage_url: "https://github.com/IBM-Swift/BlueECC"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/IBM-Swift/BlueECC.git"
+    revision: "1.2.5"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/IBM-Swift/BlueECC.git"
+    revision: "1.2.5"
+    path: ""
+- id: "Pod::BlueRSA:1.0.200"
+  purl: "pkg:cocoapods/BlueRSA@1.0.200"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License, Version 2.0: "Apache-2.0"
+  description: "Swift cross-platform RSA crypto library using CommonCrypto/libcrypto\
+    \ via Package Manager."
+  homepage_url: "https://github.com/Kitura/BlueRSA"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/Kitura/BlueRSA.git"
+    revision: "1.0.200"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/Kitura/BlueRSA.git"
+    revision: "1.0.200"
+    path: ""
+- id: "Pod::DSBottomSheet:0.3.0"
+  purl: "pkg:cocoapods/DSBottomSheet@0.3.0"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "DSBottomSheet makes it easy to add custom bottom sheets to your SwiftUI\
+    \ apps."
+  homepage_url: "https://github.com/danielsaidi"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/danielsaidi/BottomSheet.git"
+    revision: "0.3.0"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/danielsaidi/BottomSheet.git"
+    revision: "0.3.0"
+    path: ""
+- id: "Pod::DSWaveformImage:6.1.1"
+  purl: "pkg:cocoapods/DSWaveformImage@6.1.1"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "generate waveform images from audio files in iOS"
+  homepage_url: "https://github.com/dmrschmidt/DSWaveformImage"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/dmrschmidt/DSWaveformImage.git"
+    revision: "6.1.1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dmrschmidt/DSWaveformImage.git"
+    revision: "6.1.1"
+    path: ""
+- id: "Pod::DTCoreText:1.6.26"
+  purl: "pkg:cocoapods/DTCoreText@1.6.26"
+  declared_licenses:
+  - "BSD"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD: "BSD-3-Clause"
+  description: "Methods to allow using HTML code with CoreText."
+  homepage_url: "https://github.com/Cocoanetics/DTCoreText"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/Cocoanetics/DTCoreText.git"
+    revision: "1.6.26"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/Cocoanetics/DTCoreText.git"
+    revision: "1.6.26"
+    path: ""
+- id: "Pod::DTCoreText/Core:1.6.26"
+  purl: "pkg:cocoapods/DTCoreText%2FCore@1.6.26"
+  declared_licenses:
+  - "BSD"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD: "BSD-3-Clause"
+  description: "Methods to allow using HTML code with CoreText."
+  homepage_url: "https://github.com/Cocoanetics/DTCoreText"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/Cocoanetics/DTCoreText.git"
+    revision: "1.6.26"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/Cocoanetics/DTCoreText.git"
+    revision: "1.6.26"
+    path: ""
+- id: "Pod::DTFoundation/Core:1.7.18"
+  purl: "pkg:cocoapods/DTFoundation%2FCore@1.7.18"
+  declared_licenses:
+  - "BSD"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD: "BSD-3-Clause"
+  description: "Standard toolset classes and categories."
+  homepage_url: "https://github.com/Cocoanetics/DTFoundation"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/Cocoanetics/DTFoundation.git"
+    revision: "1.7.18"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/Cocoanetics/DTFoundation.git"
+    revision: "1.7.18"
+    path: ""
+- id: "Pod::DTFoundation/DTAnimatedGIF:1.7.18"
+  purl: "pkg:cocoapods/DTFoundation%2FDTAnimatedGIF@1.7.18"
+  declared_licenses:
+  - "BSD"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD: "BSD-3-Clause"
+  description: "Standard toolset classes and categories."
+  homepage_url: "https://github.com/Cocoanetics/DTFoundation"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/Cocoanetics/DTFoundation.git"
+    revision: "1.7.18"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/Cocoanetics/DTFoundation.git"
+    revision: "1.7.18"
+    path: ""
+- id: "Pod::DTFoundation/DTHTMLParser:1.7.18"
+  purl: "pkg:cocoapods/DTFoundation%2FDTHTMLParser@1.7.18"
+  declared_licenses:
+  - "BSD"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD: "BSD-3-Clause"
+  description: "Standard toolset classes and categories."
+  homepage_url: "https://github.com/Cocoanetics/DTFoundation"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/Cocoanetics/DTFoundation.git"
+    revision: "1.7.18"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/Cocoanetics/DTFoundation.git"
+    revision: "1.7.18"
+    path: ""
+- id: "Pod::DTFoundation/UIKit:1.7.18"
+  purl: "pkg:cocoapods/DTFoundation%2FUIKit@1.7.18"
+  declared_licenses:
+  - "BSD"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD: "BSD-3-Clause"
+  description: "Standard toolset classes and categories."
+  homepage_url: "https://github.com/Cocoanetics/DTFoundation"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/Cocoanetics/DTFoundation.git"
+    revision: "1.7.18"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/Cocoanetics/DTFoundation.git"
+    revision: "1.7.18"
+    path: ""
+- id: "Pod::Down:0.11.0"
+  purl: "pkg:cocoapods/Down@0.11.0"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Blazing fast Markdown rendering in Swift, built upon cmark."
+  homepage_url: "https://github.com/johnxnguyen/Down"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/johnxnguyen/Down.git"
+    revision: "v0.11.0"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/johnxnguyen/Down.git"
+    revision: "v0.11.0"
+    path: ""
+- id: "Pod::FLEX:4.5.0"
+  purl: "pkg:cocoapods/FLEX@4.5.0"
+  declared_licenses:
+  - "BSD"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD: "BSD-3-Clause"
+  description: "A set of in-app debugging and exploration tools for iOS"
+  homepage_url: "https://github.com/Flipboard/FLEX"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/Flipboard/FLEX.git"
+    revision: "4.5.0"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/Flipboard/FLEX.git"
+    revision: "4.5.0"
+    path: ""
+- id: "Pod::FlowCommoniOS:1.12.2"
+  purl: "pkg:cocoapods/FlowCommoniOS@1.12.2"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Common files required for running any iOS project that uses Flow timelines."
+  homepage_url: "https://github.com/createwithflow/FlowCommoniOS.git"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/createwithflow/FlowCommoniOS.git"
+    revision: "1.12.2"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/createwithflow/FlowCommoniOS.git"
+    revision: "1.12.2"
+    path: ""
+- id: "Pod::GBDeviceInfo:6.6.0"
+  purl: "pkg:cocoapods/GBDeviceInfo@6.6.0"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License, Version 2.0: "Apache-2.0"
+  description: "Detects the hardware, software and display of the current iOS or Mac\
+    \ OS X device at runtime."
+  homepage_url: "https://github.com/lmirosevic/GBDeviceInfo"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/lmirosevic/GBDeviceInfo.git"
+    revision: "6.6.0"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/lmirosevic/GBDeviceInfo.git"
+    revision: "6.6.0"
+    path: ""
+- id: "Pod::GBDeviceInfo/Core:6.6.0"
+  purl: "pkg:cocoapods/GBDeviceInfo%2FCore@6.6.0"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License, Version 2.0: "Apache-2.0"
+  description: "Detects the hardware, software and display of the current iOS or Mac\
+    \ OS X device at runtime."
+  homepage_url: "https://github.com/lmirosevic/GBDeviceInfo"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/lmirosevic/GBDeviceInfo.git"
+    revision: "6.6.0"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/lmirosevic/GBDeviceInfo.git"
+    revision: "6.6.0"
+    path: ""
+- id: "Pod::GZIP:1.3.0"
+  purl: "pkg:cocoapods/GZIP@1.3.0"
+  declared_licenses:
+  - "zlib"
+  declared_licenses_processed:
+    spdx_expression: "Zlib"
+    mapped:
+      zlib: "Zlib"
+  description: "GZIP is category on NSData that provides simple gzip compression and\
+    \ decompression functionality."
+  homepage_url: "https://github.com/nicklockwood/GZIP"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/nicklockwood/GZIP.git"
+    revision: "1.3.0"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/nicklockwood/GZIP.git"
+    revision: "1.3.0"
+    path: ""
+- id: "Pod::Introspect:0.1.4"
+  purl: "pkg:cocoapods/Introspect@0.1.4"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Introspect the underlying UIKit element of a SwiftUI view."
+  homepage_url: "https://github.com/siteline/SwiftUI-Introspect.git"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/siteline/SwiftUI-Introspect.git"
+    revision: "0.1.4"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/siteline/SwiftUI-Introspect.git"
+    revision: "0.1.4"
+    path: ""
+- id: "Pod::JitsiMeetSDK:5.0.2"
+  purl: "pkg:cocoapods/JitsiMeetSDK@5.0.2"
+  declared_licenses:
+  - "Apache 2"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache 2: "Apache-2.0"
+  description: "Jitsi Meet iOS SDK"
+  homepage_url: "https://github.com/jitsi/jitsi-meet-ios-sdk-releases"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/jitsi/jitsi-meet-ios-sdk-releases.git"
+    revision: "5.0.2"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jitsi/jitsi-meet-ios-sdk-releases.git"
+    revision: "5.0.2"
+    path: ""
+- id: "Pod::KTCenterFlowLayout:1.3.1"
+  purl: "pkg:cocoapods/KTCenterFlowLayout@1.3.1"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Aligns cells to the center of a collection view."
+  homepage_url: "https://github.com/keighl/KTCenterFlowLayout"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/keighl/KTCenterFlowLayout.git"
+    revision: "1.3.1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/keighl/KTCenterFlowLayout.git"
+    revision: "1.3.1"
+    path: ""
+- id: "Pod::KeychainAccess:4.2.2"
+  purl: "pkg:cocoapods/KeychainAccess@4.2.2"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "KeychainAccess is a simple Swift wrapper for Keychain that works on\
+    \ iOS and OS X."
+  homepage_url: "https://github.com/kishikawakatsumi/KeychainAccess"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/kishikawakatsumi/KeychainAccess.git"
+    revision: "v4.2.2"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/kishikawakatsumi/KeychainAccess.git"
+    revision: "v4.2.2"
+    path: ""
+- id: "Pod::KituraContracts:1.2.1"
+  purl: "pkg:cocoapods/KituraContracts@1.2.1"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License, Version 2.0: "Apache-2.0"
+  description: "KituraContracts is a library containing type definitions shared by\
+    \ client and server code."
+  homepage_url: "https://github.com/IBM-Swift/KituraContracts"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/IBM-Swift/KituraContracts.git"
+    revision: "1.2.1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/IBM-Swift/KituraContracts.git"
+    revision: "1.2.1"
+    path: ""
+- id: "Pod::LoggerAPI:1.9.200"
+  purl: "pkg:cocoapods/LoggerAPI@1.9.200"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License, Version 2.0: "Apache-2.0"
+  description: "A logger protocol that provides a common logging interface for different\
+    \ kinds of loggers."
+  homepage_url: "https://github.com/Kitura/LoggerAPI"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/Kitura/LoggerAPI.git"
+    revision: "1.9.200"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/Kitura/LoggerAPI.git"
+    revision: "1.9.200"
+    path: ""
+- id: "Pod::Logging:1.4.0"
+  purl: "pkg:cocoapods/Logging@1.4.0"
+  declared_licenses:
+  - "Apache 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache 2.0: "Apache-2.0"
+  description: "A Logging API for Swift."
+  homepage_url: "https://github.com/apple/swift-log"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/apple/swift-log.git"
+    revision: "1.4.0"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/apple/swift-log.git"
+    revision: "1.4.0"
+    path: ""
+- id: "Pod::MatrixSDK:0.23.18"
+  purl: "pkg:cocoapods/MatrixSDK@0.23.18"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License, Version 2.0: "Apache-2.0"
+  description: "The iOS SDK to build apps compatible with Matrix (https://www.matrix.org)"
+  homepage_url: "https://www.matrix.org"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/matrix-org/matrix-ios-sdk.git"
+    revision: "v0.23.18"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/matrix-org/matrix-ios-sdk.git"
+    revision: "v0.23.18"
+    path: ""
+- id: "Pod::MatrixSDK/Core:0.23.18"
+  purl: "pkg:cocoapods/MatrixSDK%2FCore@0.23.18"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License, Version 2.0: "Apache-2.0"
+  description: "The iOS SDK to build apps compatible with Matrix (https://www.matrix.org)"
+  homepage_url: "https://www.matrix.org"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/matrix-org/matrix-ios-sdk.git"
+    revision: "v0.23.18"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/matrix-org/matrix-ios-sdk.git"
+    revision: "v0.23.18"
+    path: ""
+- id: "Pod::MatrixSDK/CryptoSDK:0.23.18"
+  purl: "pkg:cocoapods/MatrixSDK%2FCryptoSDK@0.23.18"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License, Version 2.0: "Apache-2.0"
+  description: "The iOS SDK to build apps compatible with Matrix (https://www.matrix.org)"
+  homepage_url: "https://www.matrix.org"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/matrix-org/matrix-ios-sdk.git"
+    revision: "v0.23.18"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/matrix-org/matrix-ios-sdk.git"
+    revision: "v0.23.18"
+    path: ""
+- id: "Pod::MatrixSDK/JingleCallStack:0.23.18"
+  purl: "pkg:cocoapods/MatrixSDK%2FJingleCallStack@0.23.18"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License, Version 2.0: "Apache-2.0"
+  description: "The iOS SDK to build apps compatible with Matrix (https://www.matrix.org)"
+  homepage_url: "https://www.matrix.org"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/matrix-org/matrix-ios-sdk.git"
+    revision: "v0.23.18"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/matrix-org/matrix-ios-sdk.git"
+    revision: "v0.23.18"
+    path: ""
+- id: "Pod::MatrixSDKCrypto:0.1.0"
+  purl: "pkg:cocoapods/MatrixSDKCrypto@0.1.0"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License, Version 2.0: "Apache-2.0"
+  description: "Uniffi based bindings for the Rust SDK crypto crate."
+  homepage_url: "https://github.com/matrix-org/matrix-rust-sdk"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/matrix-org/matrix-rust-sdk/releases/download/matrix-sdk-crypto-ffi-0.1.0/MatrixSDKCryptoFFI.zip"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/matrix-org/matrix-rust-sdk.git"
+    revision: ""
+    path: ""
+- id: "Pod::OLMKit:3.2.12"
+  purl: "pkg:cocoapods/OLMKit@3.2.12"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License, Version 2.0: "Apache-2.0"
+  description: "An Objective-C wrapper of olm (http://matrix.org/git/olm)"
+  homepage_url: "https://gitlab.matrix.org/matrix-org/olm"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://gitlab.matrix.org/matrix-org/olm.git"
+    revision: "3.2.12"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://gitlab.matrix.org/matrix-org/olm.git"
+    revision: "3.2.12"
+    path: ""
+- id: "Pod::OLMKit/olmc:3.2.12"
+  purl: "pkg:cocoapods/OLMKit%2Folmc@3.2.12"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License, Version 2.0: "Apache-2.0"
+  description: "An Objective-C wrapper of olm (http://matrix.org/git/olm)"
+  homepage_url: "https://gitlab.matrix.org/matrix-org/olm"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://gitlab.matrix.org/matrix-org/olm.git"
+    revision: "3.2.12"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://gitlab.matrix.org/matrix-org/olm.git"
+    revision: "3.2.12"
+    path: ""
+- id: "Pod::OLMKit/olmcpp:3.2.12"
+  purl: "pkg:cocoapods/OLMKit%2Folmcpp@3.2.12"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License, Version 2.0: "Apache-2.0"
+  description: "An Objective-C wrapper of olm (http://matrix.org/git/olm)"
+  homepage_url: "https://gitlab.matrix.org/matrix-org/olm"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://gitlab.matrix.org/matrix-org/olm.git"
+    revision: "3.2.12"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://gitlab.matrix.org/matrix-org/olm.git"
+    revision: "3.2.12"
+    path: ""
+- id: "Pod::PostHog:1.4.4"
+  purl: "pkg:cocoapods/PostHog@1.4.4"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "The hassle-free way to add posthog to your iOS app."
+  homepage_url: "http://posthog.com/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/PostHog/posthog-ios.git"
+    revision: "1.4.4"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/PostHog/posthog-ios.git"
+    revision: "1.4.4"
+    path: ""
+- id: "Pod::ReadMoreTextView:3.0.1"
+  purl: "pkg:cocoapods/ReadMoreTextView@3.0.1"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "UITextView subclass with \"read more\"/\"read less\" capabilities\
+    \ and UITextView extensions to handle touches in characters range."
+  homepage_url: "http://ilya.puchka.me/custom-uitextview-in-swift/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/ilyapuchka/ReadMoreTextView.git"
+    revision: "3.0.1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/ilyapuchka/ReadMoreTextView.git"
+    revision: "3.0.1"
+    path: ""
+- id: "Pod::Realm:10.27.0"
+  purl: "pkg:cocoapods/Realm@10.27.0"
+  declared_licenses:
+  - "Apache 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache 2.0: "Apache-2.0"
+  description: "Realm is a modern data framework & database for iOS, macOS, tvOS &\
+    \ watchOS."
+  homepage_url: "https://realm.io"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/realm/realm-swift.git"
+    revision: "v10.27.0"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/realm/realm-swift.git"
+    revision: "v10.27.0"
+    path: ""
+- id: "Pod::Realm/Headers:10.27.0"
+  purl: "pkg:cocoapods/Realm%2FHeaders@10.27.0"
+  declared_licenses:
+  - "Apache 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache 2.0: "Apache-2.0"
+  description: "Realm is a modern data framework & database for iOS, macOS, tvOS &\
+    \ watchOS."
+  homepage_url: "https://realm.io"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/realm/realm-swift.git"
+    revision: "v10.27.0"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/realm/realm-swift.git"
+    revision: "v10.27.0"
+    path: ""
+- id: "Pod::Reusable:4.1.2"
+  purl: "pkg:cocoapods/Reusable@4.1.2"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A Swift Mixin to deal with reusable UITableView & UICollectionView\
+    \ cells and XIB-based views"
+  homepage_url: "https://github.com/AliSoftware/Reusable"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/AliSoftware/Reusable.git"
+    revision: "4.1.2"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/AliSoftware/Reusable.git"
+    revision: "4.1.2"
+    path: ""
+- id: "Pod::Reusable/Storyboard:4.1.2"
+  purl: "pkg:cocoapods/Reusable%2FStoryboard@4.1.2"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A Swift Mixin to deal with reusable UITableView & UICollectionView\
+    \ cells and XIB-based views"
+  homepage_url: "https://github.com/AliSoftware/Reusable"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/AliSoftware/Reusable.git"
+    revision: "4.1.2"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/AliSoftware/Reusable.git"
+    revision: "4.1.2"
+    path: ""
+- id: "Pod::Reusable/View:4.1.2"
+  purl: "pkg:cocoapods/Reusable%2FView@4.1.2"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A Swift Mixin to deal with reusable UITableView & UICollectionView\
+    \ cells and XIB-based views"
+  homepage_url: "https://github.com/AliSoftware/Reusable"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/AliSoftware/Reusable.git"
+    revision: "4.1.2"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/AliSoftware/Reusable.git"
+    revision: "4.1.2"
+    path: ""
+- id: "Pod::Sentry:7.15.0"
+  purl: "pkg:cocoapods/Sentry@7.15.0"
+  declared_licenses:
+  - "mit"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+    mapped:
+      mit: "MIT"
+  description: "Sentry client for cocoa"
+  homepage_url: "https://github.com/getsentry/sentry-cocoa"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/getsentry/sentry-cocoa.git"
+    revision: "7.15.0"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/getsentry/sentry-cocoa.git"
+    revision: "7.15.0"
+    path: ""
+- id: "Pod::Sentry/Core:7.15.0"
+  purl: "pkg:cocoapods/Sentry%2FCore@7.15.0"
+  declared_licenses:
+  - "mit"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+    mapped:
+      mit: "MIT"
+  description: "Sentry client for cocoa"
+  homepage_url: "https://github.com/getsentry/sentry-cocoa"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/getsentry/sentry-cocoa.git"
+    revision: "7.15.0"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/getsentry/sentry-cocoa.git"
+    revision: "7.15.0"
+    path: ""
+- id: "Pod::SideMenu:6.5.0"
+  purl: "pkg:cocoapods/SideMenu@6.5.0"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Simple side menu control for iOS in Swift inspired by Facebook. Right\
+    \ and Left sides. No coding required."
+  homepage_url: "https://github.com/jonkykong/SideMenu"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonkykong/SideMenu.git"
+    revision: "6.5.0"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonkykong/SideMenu.git"
+    revision: "6.5.0"
+    path: ""
+- id: "Pod::SwiftBase32:0.9.0"
+  purl: "pkg:cocoapods/SwiftBase32@0.9.0"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Base32 implementation for Swift."
+  homepage_url: "https://github.com/norio-nomura/Base32"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/norio-nomura/Base32.git"
+    revision: "0.9.0"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/norio-nomura/Base32.git"
+    revision: "0.9.0"
+    path: ""
+- id: "Pod::SwiftGen:6.6.2"
+  purl: "pkg:cocoapods/SwiftGen@6.6.2"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A collection of Swift tools to generate Swift code for your assets,\
+    \ storyboards, strings, …"
+  homepage_url: "https://github.com/SwiftGen/SwiftGen"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/SwiftGen/SwiftGen/releases/download/6.6.2/swiftgen-6.6.2.zip"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/SwiftGen/SwiftGen.git"
+    revision: ""
+    path: ""
+- id: "Pod::SwiftJWT:3.6.200"
+  purl: "pkg:cocoapods/SwiftJWT@3.6.200"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License, Version 2.0: "Apache-2.0"
+  description: "An implementation of JSON Web Token using Swift."
+  homepage_url: "https://github.com/Kitura/Swift-JWT"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/Kitura/Swift-JWT.git"
+    revision: "3.6.200"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/Kitura/Swift-JWT.git"
+    revision: "3.6.200"
+    path: ""
+- id: "Pod::SwiftLint:0.44.0"
+  purl: "pkg:cocoapods/SwiftLint@0.44.0"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A tool to enforce Swift style and conventions."
+  homepage_url: "https://github.com/realm/SwiftLint"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/realm/SwiftLint/releases/download/0.44.0/portable_swiftlint.zip"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/realm/SwiftLint.git"
+    revision: ""
+    path: ""
+- id: "Pod::SwiftyBeaver:1.9.5"
+  purl: "pkg:cocoapods/SwiftyBeaver@1.9.5"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Convenient logging during development & release in Swift 4 & 5."
+  homepage_url: "https://github.com/SwiftyBeaver/SwiftyBeaver"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/SwiftyBeaver/SwiftyBeaver.git"
+    revision: "1.9.5"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/SwiftyBeaver/SwiftyBeaver.git"
+    revision: "1.9.5"
+    path: ""
+- id: "Pod::UICollectionViewLeftAlignedLayout:1.0.2"
+  purl: "pkg:cocoapods/UICollectionViewLeftAlignedLayout@1.0.2"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A layout for UICollectionView that aligns the cells to the left"
+  homepage_url: "https://github.com/mokagio/UICollectionViewLeftAlignedLayout"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/mokagio/UICollectionViewLeftAlignedLayout.git"
+    revision: "1.0.2"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/mokagio/UICollectionViewLeftAlignedLayout.git"
+    revision: "1.0.2"
+    path: ""
+- id: "Pod::UICollectionViewRightAlignedLayout:0.0.3"
+  purl: "pkg:cocoapods/UICollectionViewRightAlignedLayout@0.0.3"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A layout for UICollectionView that aligns the cells to the right."
+  homepage_url: "https://github.com/mokagio/UICollectionViewRightAlignedLayout"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/mokagio/UICollectionViewRightAlignedLayout.git"
+    revision: "0.0.3"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/mokagio/UICollectionViewRightAlignedLayout.git"
+    revision: "0.0.3"
+    path: ""
+- id: "Pod::WeakDictionary:2.0.2"
+  purl: "pkg:cocoapods/WeakDictionary@2.0.2"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A naive (strong key/weak value) dictionary & (weak key/weak value)\
+    \ dictionary implementations in swift"
+  homepage_url: "https://github.com/nicholascross/WeakDictionary"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/nicholascross/WeakDictionary.git"
+    revision: "2.0.2"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/nicholascross/WeakDictionary.git"
+    revision: "2.0.2"
+    path: ""
+- id: "Pod::ZXingObjC:3.6.5"
+  purl: "pkg:cocoapods/ZXingObjC@3.6.5"
+  declared_licenses:
+  - "Apache License 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License 2.0: "Apache-2.0"
+  description: "An Objective-C Port of the ZXing barcode framework."
+  homepage_url: "https://github.com/zxingify/zxingify-objc"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/zxingify/zxingify-objc.git"
+    revision: "3.6.5"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/zxingify/zxingify-objc.git"
+    revision: "3.6.5"
+    path: ""
+- id: "Pod::ZXingObjC/All:3.6.5"
+  purl: "pkg:cocoapods/ZXingObjC%2FAll@3.6.5"
+  declared_licenses:
+  - "Apache License 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License 2.0: "Apache-2.0"
+  description: "An Objective-C Port of the ZXing barcode framework."
+  homepage_url: "https://github.com/zxingify/zxingify-objc"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/zxingify/zxingify-objc.git"
+    revision: "3.6.5"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/zxingify/zxingify-objc.git"
+    revision: "3.6.5"
+    path: ""
+- id: "Pod::ffmpeg-kit-ios-audio:4.5.1"
+  purl: "pkg:cocoapods/ffmpeg-kit-ios-audio@4.5.1"
+  declared_licenses:
+  - "LGPL-3.0"
+  declared_licenses_processed:
+    spdx_expression: "LGPL-3.0-only"
+    mapped:
+      LGPL-3.0: "LGPL-3.0-only"
+  description: "FFmpeg Kit iOS Audio Shared Framework"
+  homepage_url: "https://github.com/tanersener/ffmpeg-kit"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/tanersener/ffmpeg-kit/releases/download/v4.5.1/ffmpeg-kit-audio-4.5.1-ios-xcframework.zip"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/tanersener/ffmpeg-kit.git"
+    revision: ""
+    path: ""
+- id: "Pod::libPhoneNumber-iOS:0.9.15"
+  purl: "pkg:cocoapods/libPhoneNumber-iOS@0.9.15"
+  declared_licenses:
+  - "Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0)"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0): "Apache-2.0"
+  description: "iOS library for parsing, formatting, storing and validating international\
+    \ phone numbers from libphonenumber library."
+  homepage_url: "https://github.com/iziz/libPhoneNumber-iOS.git"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/iziz/libPhoneNumber-iOS.git"
+    revision: "0.9.15"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/iziz/libPhoneNumber-iOS.git"
+    revision: "0.9.15"
+    path: ""
+- id: "Pod::libbase58:0.1.4"
+  purl: "pkg:cocoapods/libbase58@0.1.4"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "C library for Bitcoin's base58 encoding"
+  homepage_url: "https://github.com/luke-jr/libbase58"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/luke-jr/libbase58.git"
+    revision: "v0.1.4"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/luke-jr/libbase58.git"
+    revision: "v0.1.4"
+    path: ""
+- id: "Pod::zxcvbn-ios:1.0.4"
+  purl: "pkg:cocoapods/zxcvbn-ios@1.0.4"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A realistic password strength estimator."
+  homepage_url: "https://github.com/dropbox/zxcvbn-ios"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/dropbox/zxcvbn-ios.git"
+    revision: "v1.0.4"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dropbox/zxcvbn-ios.git"
+    revision: "v1.0.4"
+    path: ""
