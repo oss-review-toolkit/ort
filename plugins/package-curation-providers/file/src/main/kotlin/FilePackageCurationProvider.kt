@@ -30,6 +30,7 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.PackageCurationProvider
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProviderFactory
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.SimplePackageCurationProvider
+import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.getDuplicates
 import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CURATIONS_DIRNAME
 import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CURATIONS_FILENAME
@@ -52,17 +53,17 @@ open class FilePackageCurationProviderFactory : PackageCurationProviderFactory<F
 
     override fun create(config: FilePackageCurationProviderConfig) = FilePackageCurationProvider(config)
 
-    override fun parseConfig(config: Map<String, String>) =
+    override fun parseOptions(options: Options) =
         FilePackageCurationProviderConfig(
-            path = File(config.getValue("path")),
-            mustExist = config["mustExist"]?.toBooleanStrict() ?: true
+            path = File(options.getValue("path")),
+            mustExist = options["mustExist"]?.toBooleanStrict() ?: true
         )
 }
 
 class DefaultFilePackageCurationProviderFactory : FilePackageCurationProviderFactory() {
     override val type = "DefaultFile"
 
-    override fun parseConfig(config: Map<String, String>) =
+    override fun parseOptions(options: Options) =
         FilePackageCurationProviderConfig(
             path = ortConfigDirectory.resolve(ORT_PACKAGE_CURATIONS_FILENAME),
             mustExist = false
@@ -72,7 +73,7 @@ class DefaultFilePackageCurationProviderFactory : FilePackageCurationProviderFac
 class DefaultDirPackageCurationProviderFactory : FilePackageCurationProviderFactory() {
     override val type = "DefaultDir"
 
-    override fun parseConfig(config: Map<String, String>) =
+    override fun parseOptions(options: Options) =
         FilePackageCurationProviderConfig(
             path = ortConfigDirectory.resolve(ORT_PACKAGE_CURATIONS_DIRNAME),
             mustExist = false
