@@ -22,14 +22,14 @@ package org.ossreviewtoolkit.plugins.packagecurationproviders.api
 import org.ossreviewtoolkit.model.ResolvedPackageCurations.Companion.REPOSITORY_CONFIGURATION_PROVIDER_ID
 import org.ossreviewtoolkit.model.config.ProviderPluginConfiguration
 import org.ossreviewtoolkit.model.utils.PackageCurationProvider
-import org.ossreviewtoolkit.utils.common.ConfigurablePluginFactory
 import org.ossreviewtoolkit.utils.common.Plugin
+import org.ossreviewtoolkit.utils.common.TypedConfigurablePluginFactory
 import org.ossreviewtoolkit.utils.common.getDuplicates
 
 /**
  * The extension point for [PackageCurationProvider]s.
  */
-interface PackageCurationProviderFactory<CONFIG> : ConfigurablePluginFactory<PackageCurationProvider> {
+interface PackageCurationProviderFactory<CONFIG> : TypedConfigurablePluginFactory<CONFIG, PackageCurationProvider> {
     companion object {
         val ALL = Plugin.getAll<PackageCurationProviderFactory<*>>()
 
@@ -60,16 +60,4 @@ interface PackageCurationProviderFactory<CONFIG> : ConfigurablePluginFactory<Pac
                 }
             }
     }
-
-    override fun create(config: Map<String, String>): PackageCurationProvider = create(parseConfig(config))
-
-    /**
-     * Create a new [PackageCurationProvider] with [config].
-     */
-    fun create(config: CONFIG): PackageCurationProvider
-
-    /**
-     * Parse the [config] map into an object.
-     */
-    fun parseConfig(config: Map<String, String>): CONFIG
 }

@@ -21,14 +21,15 @@ package org.ossreviewtoolkit.plugins.packageconfigurationproviders.api
 
 import org.ossreviewtoolkit.model.config.ProviderPluginConfiguration
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
-import org.ossreviewtoolkit.utils.common.ConfigurablePluginFactory
 import org.ossreviewtoolkit.utils.common.Plugin
+import org.ossreviewtoolkit.utils.common.TypedConfigurablePluginFactory
 import org.ossreviewtoolkit.utils.common.getDuplicates
 
 /**
  * The extension point for [PackageConfigurationProvider]s.
  */
-interface PackageConfigurationProviderFactory<CONFIG> : ConfigurablePluginFactory<PackageConfigurationProvider> {
+interface PackageConfigurationProviderFactory<CONFIG> :
+    TypedConfigurablePluginFactory<CONFIG, PackageConfigurationProvider> {
     companion object {
         val ALL = Plugin.getAll<PackageConfigurationProviderFactory<*>>()
 
@@ -56,16 +57,4 @@ interface PackageConfigurationProviderFactory<CONFIG> : ConfigurablePluginFactor
                     }
                 }
     }
-
-    override fun create(config: Map<String, String>): PackageConfigurationProvider = create(parseConfig(config))
-
-    /**
-     * Create a new [PackageConfigurationProvider] with [config].
-     */
-    fun create(config: CONFIG): PackageConfigurationProvider
-
-    /**
-     * Parse the [config] map into a [CONFIG] instance.
-     */
-    fun parseConfig(config: Map<String, String>): CONFIG
 }
