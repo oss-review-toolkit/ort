@@ -65,3 +65,22 @@ interface ConfigurablePluginFactory<out PLUGIN> : Plugin {
      */
     fun create(config: Map<String, String>): PLUGIN
 }
+
+/**
+ * An interface to be implemented by [configurable plugin factories][ConfigurablePluginFactory] that provide a
+ * [typed configuration class][CONFIG]. The benefit of implementing this interface over [ConfigurablePluginFactory] is
+ * that it enforces the separation of parsing the config map and creating the plugin.
+ */
+interface TypedConfigurablePluginFactory<CONFIG, out PLUGIN> : ConfigurablePluginFactory<PLUGIN> {
+    override fun create(config: Map<String, String>): PLUGIN = create(parseConfig(config))
+
+    /**
+     * Create a new instance of [PLUGIN] from [config].
+     */
+    fun create(config: CONFIG): PLUGIN
+
+    /**
+     * Parse the [config] map into a [CONFIG] object.
+     */
+    fun parseConfig(config: Map<String, String>): CONFIG
+}
