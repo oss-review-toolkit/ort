@@ -33,11 +33,11 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.Options
-import org.ossreviewtoolkit.scanner.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScannerCriteria
+import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.utils.common.Os
 
 private const val CONFIDENCE_NOTICE = "Confidence threshold not high enough for any known license"
@@ -47,7 +47,7 @@ private val JSON = Json { ignoreUnknownKeys = true }
 class Askalono internal constructor(name: String, private val options: Options) : CommandLinePathScannerWrapper(name) {
     private companion object : Logging
 
-    class Factory : AbstractScannerWrapperFactory<Askalono>("Askalono") {
+    class Factory : ScannerWrapperFactory<Askalono>("Askalono") {
         override fun create(options: Options) = Askalono(type, options)
     }
 

@@ -173,8 +173,8 @@ class ScannerCommand : OrtCommand(
     }
 
     private fun runScanners(
-        scannerWrapperFactories: List<ScannerWrapperFactory>,
-        projectScannerWrapperFactories: List<ScannerWrapperFactory>,
+        scannerWrapperFactories: List<ScannerWrapperFactory<*>>,
+        projectScannerWrapperFactories: List<ScannerWrapperFactory<*>>,
         ortConfig: OrtConfiguration
     ): OrtResult {
         val packageScannerWrappers = scannerWrapperFactories

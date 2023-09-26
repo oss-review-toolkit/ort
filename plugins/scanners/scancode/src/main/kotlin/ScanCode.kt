@@ -30,11 +30,11 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.scanner.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.ScannerCriteria
+import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
@@ -91,7 +91,7 @@ class ScanCode internal constructor(name: String, private val options: Options) 
         }
     }
 
-    class Factory : AbstractScannerWrapperFactory<ScanCode>(SCANNER_NAME) {
+    class Factory : ScannerWrapperFactory<ScanCode>(SCANNER_NAME) {
         override fun create(options: Options) = ScanCode(type, options)
     }
 
