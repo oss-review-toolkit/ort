@@ -248,8 +248,8 @@ private data class LockfileData(
 )
 
 private fun parseLockfile(podfileLock: File): LockfileData {
-    val versionForName = mutableMapOf<String, String>()
-    val dependenciesForName = mutableMapOf<String, MutableSet<String>>()
+    val resolvedVersions = mutableMapOf<String, String>()
+    val dependencyConstraints = mutableMapOf<String, MutableSet<String>>()
     val root = yamlMapper.readTree(podfileLock)
 
     // The "PODS" section lists the direct dependencies and, if applicable, their direct dependencies each. That is, the
@@ -262,14 +262,14 @@ private fun parseLockfile(podfileLock: File): LockfileData {
         }
 
         val (name, version) = parseNameAndVersion(entry)
-        versionForName[name] = checkNotNull(version)
+        resolvedVersions[name] = checkNotNull(version)
 
         val dependencies = node[entry]?.map { depNode ->
             val (depName, depVersion) = parseNameAndVersion(depNode.textValue())
-            depName.also { if (depVersion != null) versionForName[it] = depVersion }
+            depName.also { if (depVersion != null) resolvedVersions[it] = depVersion }
         }.orEmpty()
 
-        dependenciesForName.getOrPut(name) { mutableSetOf() } += dependencies
+        dependencyConstraints.getOrPut(name) { mutableSetOf() } += dependencies
     }
 
     val externalSources = root.get("CHECKOUT OPTIONS")?.fields()?.asSequence()?.mapNotNull {
@@ -280,12 +280,12 @@ private fun parseLockfile(podfileLock: File): LockfileData {
         // The version written to the lockfile matches the version specified in the project's ".podspec" file at the
         // given revision, so the same version might be used in different revisions. To still get a unique identifier,
         // append the revision to the version.
-        val versionFromPodspec = checkNotNull(versionForName[it.key])
+        val versionFromPodspec = checkNotNull(resolvedVersions[it.key])
         val uniqueVersion = "$versionFromPodspec-$revision"
         val id = Identifier("Pod", "", it.key, uniqueVersion)
 
         // Write the unique version back for correctly associating dependencies below.
-        versionForName[it.key] = uniqueVersion
+        resolvedVersions[it.key] = uniqueVersion
 
         id to Package(
             id = id,
@@ -300,8 +300,8 @@ private fun parseLockfile(podfileLock: File): LockfileData {
 
     fun createPackageReference(name: String): PackageReference =
         PackageReference(
-            id = Identifier("Pod", "", name, versionForName.getValue(name)),
-            dependencies = dependenciesForName[name].orEmpty().mapTo(mutableSetOf()) { createPackageReference(it) }
+            id = Identifier("Pod", "", name, resolvedVersions.getValue(name)),
+            dependencies = dependencyConstraints[name].orEmpty().mapTo(mutableSetOf()) { createPackageReference(it) }
         )
 
     // The "DEPENDENCIES" section lists direct dependencies, but only along with version constraints, not with their
