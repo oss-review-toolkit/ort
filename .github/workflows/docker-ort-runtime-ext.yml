@@ -24,6 +24,8 @@ on:
       - '.versions'
       - 'Dockerfile'
       - 'Dockerfile-extended'
+      - '.github/workflows/docker-ort-runtime.yml'
+      - '.github/workflows/docker-ort-runtime-ext.yml'
   push:
     branches:
       - main
@@ -162,6 +164,13 @@ jobs:
     steps:
       - name: Checkout default branch
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get ORT current version
+        run: |
+          ORT_VERSION=$(./gradlew -q properties --property version | sed -nr "s/version: (.+)/\1/p")
+          echo "ORT_VERSION=${ORT_VERSION}" >> $GITHUB_ENV
 
       - name: Set up Docker build
         uses: docker/setup-buildx-action@v3
@@ -180,7 +189,9 @@ jobs:
           images: |
             ${{ env.REGISTRY }}/${{ github.repository_owner }}/ort-extended
           tags: |
-            type=raw,sha,enable=true,format=short
+            type=schedule,pattern={{date 'YYYYMMDD'}}
+            type=pep440,pattern={{version}}
+            type=raw,value=${{ env.ORT_VERSION }}
 
       - name: Build ORT extended runtime image
         uses: docker/build-push-action@v5
