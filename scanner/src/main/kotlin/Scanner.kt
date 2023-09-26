@@ -124,7 +124,8 @@ class Scanner(
                 ScanContext(
                     ortResult.labels + labels,
                     PackageType.PROJECT,
-                    ortResult.repository.config.excludes
+                    ortResult.repository.config.excludes,
+                    scannerConfig.detectedLicenseMapping
                 )
             )
         } else {
@@ -139,7 +140,15 @@ class Scanner(
 
             logger.info { "Scanning ${packages.size} package(s) with ${packageScannerWrappers.size} scanner(s)." }
 
-            scan(packages, ScanContext(ortResult.labels, PackageType.PACKAGE, ortResult.repository.config.excludes))
+            scan(
+                packages,
+                ScanContext(
+                    ortResult.labels,
+                    PackageType.PACKAGE,
+                    ortResult.repository.config.excludes,
+                    scannerConfig.detectedLicenseMapping
+                )
+            )
         } else {
             logger.info { "Skipping package scan as no package scanner is configured." }
 
