@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout default branch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Set environment variables
         run: |
           cat .versions >> $GITHUB_ENV
@@ -60,7 +60,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout default branch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Set environment variables
         run: |
           cat .versions >> $GITHUB_ENV
@@ -82,7 +82,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout default branch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Set environment variables
         run: |
           cat .versions >> $GITHUB_ENV
@@ -108,7 +108,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout default branch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Set environment variables
         run: |
           cat .versions >> $GITHUB_ENV
@@ -127,7 +127,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout default branch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Set environment variables
         run: |
           cat .versions >> $GITHUB_ENV
@@ -147,7 +147,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout default branch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Set environment variables
         run: |
           cat .versions >> $GITHUB_ENV
@@ -171,7 +171,7 @@ jobs:
 
     steps:
       - name: Checkout default branch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set environment variables
         run: |
