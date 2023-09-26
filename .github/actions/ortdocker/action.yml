@@ -76,7 +76,7 @@ runs:
     - name: Extract components metadata (tags, labels)
       if: steps.check_image.outputs.result != 'found'
       id: meta
-      uses: docker/metadata-action@v4
+      uses: docker/metadata-action@v5
       with:
         images: |
           ${{ env.REGISTRY }}/${{ github.repository }}/${{ inputs.name }}
