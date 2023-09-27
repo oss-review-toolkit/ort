@@ -88,7 +88,6 @@ fun Package.toClearlyDefinedSourceLocation(): SourceLocation? {
     val coordinates = toClearlyDefinedCoordinates() ?: return null
 
     return when {
-        // TODO: Find out how to handle VCS curations without a revision.
         vcsProcessed != VcsInfo.EMPTY -> {
             SourceLocation(
                 type = ComponentType.GIT,
