@@ -25,6 +25,8 @@ import org.ossreviewtoolkit.clients.clearlydefined.Provider
 import org.ossreviewtoolkit.clients.clearlydefined.SourceLocation
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageCuration
+import org.ossreviewtoolkit.model.PackageCurationData
 import org.ossreviewtoolkit.model.PackageProvider
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
@@ -50,71 +52,78 @@ fun Identifier.toClearlyDefinedType(): ComponentType? =
     }
 
 /**
- * Determine the ClearlyDefined [Provider] based on a [Package]'s location as defined by the [RemoteArtifact] URLs or
- * the [VcsInfo] URL. Return null if a mapping is not possible.
+ * Determine the ClearlyDefined [Provider] based on a URL represented as a [String], or return null if the provider
+ * could not be determined.
  */
-fun Package.toClearlyDefinedProvider(): Provider? =
-    sequenceOf(
-        binaryArtifact.url,
-        sourceArtifact.url,
-        vcsProcessed.url
-    ).firstNotNullOfOrNull { url ->
-        PackageProvider.get(url)?.let { provider ->
-            Provider.entries.find { it.name == provider.name }
-        }
+fun String.toClearlyDefinedProvider(): Provider? =
+    PackageProvider.get(this)?.let { provider ->
+        // The ClearlyDefined and ORT provider enums use the same names for their entries, so they can be matched.
+        Provider.entries.find { it.name == provider.name }
     }
 
 /**
  * Map an ORT [Package] to ClearlyDefined [Coordinates], or to null if a mapping is not possible.
  */
-fun Package.toClearlyDefinedCoordinates(): Coordinates? {
-    val type = id.toClearlyDefinedType() ?: return null
-    val provider = toClearlyDefinedProvider() ?: type.defaultProvider ?: return null
+fun Identifier.toClearlyDefinedCoordinates(provider: Provider?): Coordinates? {
+    val type = toClearlyDefinedType() ?: return null
 
     return Coordinates(
         type = type,
-        provider = provider,
-        namespace = id.namespace.takeUnless { it.isEmpty() },
-        name = id.name,
-        revision = id.version.takeUnless { it.isEmpty() }
+        provider = provider ?: type.defaultProvider ?: return null,
+        namespace = namespace.takeUnless { it.isEmpty() },
+        name = name,
+        revision = version.takeUnless { it.isEmpty() }
     )
 }
 
 /**
- * Create a ClearlyDefined [SourceLocation] from a [Package]. Prefer [VcsInfo], but eventually fall back to the
- * [RemoteArtifact] for the source code, or return null if not enough information is available.
+ * Create ClearlyDefined [SourceLocation]s from a [Package]'s [source artifact][Package.sourceArtifact] and / or
+ * [VCS information][Package.vcsProcessed].
  */
-fun Package.toClearlyDefinedSourceLocation(): SourceLocation? {
-    val coordinates = toClearlyDefinedCoordinates() ?: return null
+fun Package.toClearlyDefinedSourceLocations(): Set<SourceLocation> =
+    buildSet {
+        sourceArtifact.url.toClearlyDefinedProvider()?.let { provider ->
+            id.toClearlyDefinedCoordinates(provider)?.let { coordinates ->
+                SourceLocation(
+                    type = ComponentType.SOURCE_ARCHIVE,
 
-    return when {
-        vcsProcessed != VcsInfo.EMPTY -> {
-            SourceLocation(
-                type = ComponentType.GIT,
-                provider = coordinates.provider,
-                namespace = coordinates.namespace,
-                name = coordinates.name,
+                    provider = coordinates.provider,
+                    namespace = coordinates.namespace,
+                    name = coordinates.name,
 
-                revision = vcsProcessed.revision,
+                    revision = id.version,
+                    url = sourceArtifact.url
+                )
+            }
+        }?.also { add(it) }
 
-                path = vcsProcessed.path,
-                url = vcsProcessed.url
-            )
-        }
+        vcsProcessed.url.toClearlyDefinedProvider()?.let { provider ->
+            id.toClearlyDefinedCoordinates(provider)?.let { coordinates ->
+                SourceLocation(
+                    type = ComponentType.GIT,
 
-        sourceArtifact != RemoteArtifact.EMPTY -> {
-            SourceLocation(
-                type = ComponentType.SOURCE_ARCHIVE,
-                provider = coordinates.provider,
-                namespace = coordinates.namespace,
-                name = coordinates.name,
+                    provider = coordinates.provider,
+                    namespace = coordinates.namespace,
+                    name = coordinates.name,
 
-                revision = id.version,
-
-                url = sourceArtifact.url
-            )
-        }
-
-        else -> null
+                    revision = vcsProcessed.revision,
+                    path = vcsProcessed.path,
+                    url = vcsProcessed.url
+                )
+            }
+        }?.also { add(it) }
     }
-}
+
+/**
+ * Create ClearlyDefined [SourceLocation]s from a [Package]'s [source artifact][Package.sourceArtifact] and / or
+ * [VCS information][Package.vcsProcessed].
+ */
+fun PackageCuration.toClearlyDefinedCoordinates(): Set<Coordinates> =
+    setOfNotNull(
+        data.sourceArtifact?.url?.toClearlyDefinedProvider()?.let { provider ->
+            id.toClearlyDefinedCoordinates(provider)
+        },
+        data.vcs?.url?.toClearlyDefinedProvider()?.let { provider ->
+            id.toClearlyDefinedCoordinates(provider)
+        }
+    )

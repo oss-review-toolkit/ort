@@ -49,7 +49,7 @@ import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.PackageCurationData
 import org.ossreviewtoolkit.model.readValueOrDefault
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedCoordinates
-import org.ossreviewtoolkit.model.utils.toClearlyDefinedSourceLocation
+import org.ossreviewtoolkit.model.utils.toClearlyDefinedSourceLocations
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
 import org.ossreviewtoolkit.plugins.commands.api.utils.inputGroup
 import org.ossreviewtoolkit.utils.common.expandTilde
@@ -89,39 +89,46 @@ class UploadCurationsCommand : OrtCommand(
         }.values
 
         val curationsToCoordinates = curations.mapNotNull { curation ->
-            val pkg = Package.EMPTY.copy(id = curation.id)
-            pkg.toClearlyDefinedCoordinates()?.let { curation to it }
+            val coordinates = curation.toClearlyDefinedCoordinates()
+
+            if (coordinates.isNotEmpty()) {
+                curation to coordinates
+            } else {
+                logger.warn { "Unable to get ClearlyDefined coordinates for $curation." }
+
+                null
+            }
         }.toMap()
 
-        val definitions = service.getDefinitionsChunked(curationsToCoordinates.values)
+        val allCoordinates = curationsToCoordinates.values.flatten()
+        val definitions = service.getDefinitionsChunked(allCoordinates)
 
-        val curationsByHarvestStatus = curations.groupBy { curation ->
-            definitions[curationsToCoordinates[curation]]?.getHarvestStatus() ?: logger.warn {
-                "No definition data available for package '${curation.id.toCoordinates()}', cannot request a harvest " +
-                    "or upload curations for it."
+        val coordinatesByHarvestStatus = allCoordinates.groupBy { coordinates ->
+            definitions[coordinates]?.getHarvestStatus() ?: logger.warn {
+                "No definition data available for $coordinates, cannot request a harvest or upload curations for it."
             }
         }
 
-        val unharvestedCurations = curationsByHarvestStatus[HarvestStatus.NOT_HARVESTED].orEmpty()
+        val unharvestedCoordinates = coordinatesByHarvestStatus[HarvestStatus.NOT_HARVESTED].orEmpty()
 
-        unharvestedCurations.forEach { curation ->
-            val definitionUrl = "${server.webUrl}/definitions/${curationsToCoordinates[curation]}"
+        unharvestedCoordinates.forEach { coordinates ->
+            val definitionUrl = "${server.webUrl}/definitions/$coordinates"
 
             echo(
-                "Package '${curation.id.toCoordinates()}' was not harvested until now, but harvesting was requested. " +
-                    "Check $definitionUrl for the harvesting status."
+                "$coordinates was not harvested until now, but harvesting was requested. Check " +
+                    "$definitionUrl for the harvesting status."
             )
         }
 
         var uploadedCurationsCount = 0
-        val uploadableCurations = curationsByHarvestStatus[HarvestStatus.HARVESTED].orEmpty() +
-            curationsByHarvestStatus[HarvestStatus.PARTIALLY_HARVESTED].orEmpty()
+        val uploadableCurations = coordinatesByHarvestStatus[HarvestStatus.HARVESTED].orEmpty() +
+            coordinatesByHarvestStatus[HarvestStatus.PARTIALLY_HARVESTED].orEmpty()
         val count = uploadableCurations.size
 
         uploadableCurations.forEachIndexed { index, curation ->
-            val patch = curation.toContributionPatch()
+            val patches = curation.toPatches()
 
-            if (patch == null) {
+            if (patches.isEmpty()) {
                 echo("Unable to convert $curation (${index + 1} of $count) to a contribution patch.")
             } else {
                 echo(
@@ -130,9 +137,26 @@ class UploadCurationsCommand : OrtCommand(
                 )
 
                 runCatching {
-                    service.callBlocking { putCuration(patch) }
-                }.onSuccess {
-                    echo("was uploaded successfully:\n${it.url}")
+                    patches.map { patch ->
+                        val info = ContributionInfo(
+                            // The exact values to use here are unclear; use what is mostly used at
+                            // https://github.com/clearlydefined/curated-data/pulls.
+                            type = ContributionType.OTHER,
+                            summary = "Curation for component ${patch.coordinates}.",
+                            details = "Imported from curation data of the " +
+                                "[OSS Review Toolkit](https://github.com/oss-review-toolkit/ort) via the " +
+                                "[clearly-defined](https://github.com/oss-review-toolkit/ort/tree/main/clients/clearly-defined) " +
+                                "module.",
+                            resolution = curation.data.comment ?: "Unknown, original data contains no comment.",
+                            removedDefinitions = false
+                        )
+
+                        service.callBlocking { putCuration(ContributionPatch(info, listOf(patch))) }
+                    }
+                }.onSuccess { summaries ->
+                    val urls = summaries.joinToString("\n") { it.url }
+                    echo("was uploaded successfully:\n$urls")
+
                     ++uploadedCurationsCount
                 }.onFailure {
                     echo("failed to be uploaded.")
@@ -149,45 +173,29 @@ class UploadCurationsCommand : OrtCommand(
     }
 }
 
-private fun PackageCuration.toContributionPatch(): ContributionPatch? {
+private fun PackageCuration.toPatches(): List<Patch> {
     // In ORT's own PackageCuration format, the Package that the PackageCurationData should apply to is solely
     // identified by the Identifier. That is, there is no PackageProvider information available in PackageCuration for
     // ClearlyDefined to use. So simply construct an empty Package and rely on the default Provider per ComponentType.
     val pkg = Package.EMPTY.copy(id = id)
 
     // TODO: Find out how to handle VCS curations without a revision.
-    val sourceLocation = pkg.toClearlyDefinedSourceLocation() ?: return null
-    val coordinates = sourceLocation.toCoordinates()
+    return pkg.toClearlyDefinedSourceLocations().map { sourceLocation ->
+        val described = CurationDescribed(
+            projectWebsite = data.homepageUrl?.let { URI(it) },
+            sourceLocation = sourceLocation
+        )
 
-    val info = ContributionInfo(
-        // The exact values to use here are unclear; use what is mostly used at
-        // https://github.com/clearlydefined/curated-data/pulls.
-        type = ContributionType.OTHER,
-        summary = "Curation for component $coordinates.",
-        details = "Imported from curation data of the " +
-            "[OSS Review Toolkit](https://github.com/oss-review-toolkit/ort) via the " +
-            "[clearly-defined](https://github.com/oss-review-toolkit/ort/tree/main/clients/clearly-defined) " +
-            "module.",
-        resolution = data.comment ?: "Unknown, original data contains no comment.",
-        removedDefinitions = false
-    )
+        val licenseExpression = data.concludedLicense?.toString()
 
-    val licenseExpression = data.concludedLicense?.toString()
+        val curation = Curation(
+            described = described.takeIf { it != CurationDescribed() },
+            licensed = licenseExpression?.let { CurationLicensed(declared = it) }
+        )
 
-    val described = CurationDescribed(
-        projectWebsite = data.homepageUrl?.let { URI(it) },
-        sourceLocation = sourceLocation
-    )
-
-    val curation = Curation(
-        described = described.takeIf { it != CurationDescribed() },
-        licensed = licenseExpression?.let { CurationLicensed(declared = it) }
-    )
-
-    val patch = Patch(
-        coordinates = coordinates,
-        revisions = mapOf(id.version to curation)
-    )
-
-    return ContributionPatch(info, listOf(patch))
+        Patch(
+            coordinates = sourceLocation.toCoordinates(),
+            revisions = mapOf(id.version to curation)
+        )
+    }
 }
