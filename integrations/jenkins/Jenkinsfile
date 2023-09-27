@@ -57,7 +57,7 @@ pipeline {
         string(
             name: 'PROJECT_VCS_REVISION',
             description: 'Optional VCS revision of the project (prefix Git tags with "refs/tags/").',
-            defaultValue: ''
+            defaultValue: 'refs/tags/v3.1.0'
         )
 
         credentials(
