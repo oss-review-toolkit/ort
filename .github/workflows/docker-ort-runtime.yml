@@ -221,6 +221,7 @@ jobs:
             ${{ env.REGISTRY }}/${{ github.repository_owner }}/ort:latest
           labels: ${{ steps.meta.outputs.labels }}
           build-contexts: |
+            base=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/base:latest
             nodejs=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/nodejs:latest
             python=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/python:latest
             rust=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/rust:latest
