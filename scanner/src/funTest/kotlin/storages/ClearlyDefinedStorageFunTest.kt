@@ -54,7 +54,7 @@ class ClearlyDefinedStorageFunTest : StringSpec({
                     provenance = RepositoryProvenance(
                         vcsInfo = VcsInfo(
                             type = VcsType.GIT,
-                            url = "https://github.com/vdurmont/semver4j/tree/88912638db3f6112a2b345f1638ced33a0a606e1",
+                            url = "https://github.com/vdurmont/semver4j.git",
                             revision = "88912638db3f6112a2b345f1638ced33a0a606e1"
                         ),
                         resolvedRevision = "88912638db3f6112a2b345f1638ced33a0a606e1"
@@ -108,7 +108,7 @@ class ClearlyDefinedStorageFunTest : StringSpec({
                     provenance = RepositoryProvenance(
                         vcsInfo = VcsInfo(
                             type = VcsType.GIT,
-                            url = "https://github.com/sksamuel/hoplite/tree/b3bf5d7bd3814cb7576091acfecd097cb3a79e72",
+                            url = "https://github.com/sksamuel/hoplite.git",
                             revision = "b3bf5d7bd3814cb7576091acfecd097cb3a79e72"
                         ),
                         resolvedRevision = "b3bf5d7bd3814cb7576091acfecd097cb3a79e72"
@@ -141,7 +141,7 @@ class ClearlyDefinedStorageFunTest : StringSpec({
                 result.map { it.provenance } shouldContain RepositoryProvenance(
                     vcsInfo = VcsInfo(
                         type = VcsType.GIT,
-                        url = "https://github.com/bropat/ioBroker.eusec/tree/327b125548c9b806490085a2dacfdfc6e7776803",
+                        url = "https://github.com/bropat/ioBroker.eusec.git",
                         revision = "327b125548c9b806490085a2dacfdfc6e7776803"
                     ),
                     resolvedRevision = "327b125548c9b806490085a2dacfdfc6e7776803"
