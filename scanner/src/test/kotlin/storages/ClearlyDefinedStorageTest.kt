@@ -61,10 +61,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.ClearlyDefinedStorageConfiguration
 import org.ossreviewtoolkit.scanner.ScanStorageException
-import org.ossreviewtoolkit.scanner.ScannerMatcher
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
-
-import org.semver4j.Semver
 
 class ClearlyDefinedStorageTest : WordSpec({
     val server = WireMockServer(
@@ -97,7 +94,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage("http://localhost:${server.port()}", client)
 
-            storage.read(TEST_PACKAGE, SCANNER_MATCHER).shouldBeFailure<ScanStorageException>()
+            storage.read(TEST_PACKAGE).shouldBeFailure<ScanStorageException>()
         }
 
         "load existing scan results for a package from ClearlyDefined" {
@@ -110,7 +107,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
-            storage.read(TEST_PACKAGE, SCANNER_MATCHER).shouldBeValid()
+            storage.read(TEST_PACKAGE).shouldBeValid()
         }
 
         "load existing scan results for an identifier from ClearlyDefined" {
@@ -138,7 +135,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
-            storage.read(TEST_PACKAGE, SCANNER_MATCHER).shouldBeValid()
+            storage.read(TEST_PACKAGE).shouldBeValid()
         }
 
         "set correct metadata in the package scan result" {
@@ -193,7 +190,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
-            storage.read(TEST_PACKAGE, SCANNER_MATCHER).shouldBeFailure {
+            storage.read(TEST_PACKAGE).shouldBeFailure {
                 it.message shouldContain "HttpException"
             }
         }
@@ -213,7 +210,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
-            storage.read(pkg, SCANNER_MATCHER).shouldBeValid()
+            storage.read(pkg).shouldBeValid()
         }
 
         "use information from a source artifact if available" {
@@ -227,7 +224,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
-            storage.read(pkg, SCANNER_MATCHER).shouldBeValid()
+            storage.read(pkg).shouldBeValid()
         }
 
         "return a failure if the coordinates are not supported by ClearlyDefined" {
@@ -325,9 +322,6 @@ private val TEST_PACKAGE =
         sourceArtifact = RemoteArtifact.EMPTY,
         binaryArtifact = RemoteArtifact.EMPTY
     )
-
-/** The scanner details used by tests. */
-private val SCANNER_MATCHER = ScannerMatcher("aScanner", Semver("1.0.0"), Semver("2.0.0"), "aConfig")
 
 /** The template for a ClearlyDefined definitions request. */
 private val DEFINITIONS_TEMPLATE = readDefinitionsTemplate()
