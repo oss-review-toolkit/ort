@@ -155,6 +155,7 @@ private fun PackageCuration.toContributionPatch(): ContributionPatch? {
     // ClearlyDefined to use. So simply construct an empty Package and rely on the default Provider per ComponentType.
     val pkg = Package.EMPTY.copy(id = id)
 
+    // TODO: Find out how to handle VCS curations without a revision.
     val sourceLocation = pkg.toClearlyDefinedSourceLocation() ?: return null
     val coordinates = sourceLocation.toCoordinates()
 
