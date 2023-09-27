@@ -144,7 +144,7 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
 
     /**
      * Internal version of [read]. Implementations may want to override this function if they can filter for the wanted
-     * [scannerMatcher] in a more efficient way.
+     * [scannerMatcher] in a more efficient way than this default implementation.
      */
     protected open fun readInternal(pkg: Package, scannerMatcher: ScannerMatcher): Result<List<ScanResult>> =
         readInternal(pkg).map { results ->
