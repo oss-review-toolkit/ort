@@ -53,7 +53,6 @@ import org.ossreviewtoolkit.model.utils.toClearlyDefinedSourceLocation
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.ScanStorageException
-import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.scanner.ScannerWrapper
 import org.ossreviewtoolkit.scanner.storages.utils.getScanCodeDetails
 import org.ossreviewtoolkit.utils.common.AlphaNumericComparator
@@ -88,9 +87,6 @@ class ClearlyDefinedStorage(
 
     override fun readInternal(id: Identifier): Result<List<ScanResult>> =
         runBlocking(Dispatchers.IO) { readFromClearlyDefined(Package.EMPTY.copy(id = id)) }
-
-    override fun readInternal(pkg: Package, scannerCriteria: ScannerCriteria): Result<List<ScanResult>> =
-        runBlocking(Dispatchers.IO) { readFromClearlyDefined(pkg) }
 
     override fun addInternal(id: Identifier, scanResult: ScanResult): Result<Unit> =
         Result.failure(ScanStorageException("Adding scan results directly to ClearlyDefined is not supported."))
