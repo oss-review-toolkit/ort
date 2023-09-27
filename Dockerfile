@@ -43,6 +43,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     dirmngr \
     gcc \
     git \
+    git-lfs \
     g++ \
     gnupg2 \
     iproute2 \
@@ -64,7 +65,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     unzip \
     wget \
     xz-utils \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && git lfs install
 
 RUN echo $LANG > /etc/locale.gen \
     && locale-gen $LANG \
