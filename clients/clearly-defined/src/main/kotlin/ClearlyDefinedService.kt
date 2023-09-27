@@ -63,6 +63,11 @@ interface ClearlyDefinedService {
         val JSON = Json { encodeDefaults = false }
 
         /**
+         * The JSON (de-)serialization object used by this service for errors.
+         */
+        val JSON_FOR_ERRORS = Json(JSON) { ignoreUnknownKeys = true }
+
+        /**
          * Create a ClearlyDefined service instance for communicating with the given [server], optionally using a
          * pre-built OkHttp [client].
          */
@@ -287,7 +292,7 @@ suspend fun <T> ClearlyDefinedService.call(block: suspend ClearlyDefinedService.
         block()
     } catch (e: HttpException) {
         val errorMessage = e.response()?.errorBody()?.let {
-            val errorResponse = ClearlyDefinedService.JSON.decodeFromString<ErrorResponse>(it.string())
+            val errorResponse = ClearlyDefinedService.JSON_FOR_ERRORS.decodeFromString<ErrorResponse>(it.string())
             val innerError = errorResponse.error.innererror
 
             "The ClearlyDefined service call failed with: ${innerError.message}"
