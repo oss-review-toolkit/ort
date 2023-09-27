@@ -84,8 +84,8 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
 
         result.onSuccess { results ->
             logger.info {
-                "Read ${results.size} scan result(s) for '${pkg.id.toCoordinates()}' from ${javaClass.simpleName} in " +
-                    "$duration."
+                "Read ${results.size} matching scan result(s) for '${pkg.id.toCoordinates()}' from " +
+                    "${javaClass.simpleName} in $duration."
             }
         }
 
@@ -108,7 +108,8 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
 
         result.onSuccess { results ->
             logger.info {
-                "Read ${results.values.sumOf { it.size }} scan result(s) from ${javaClass.simpleName} in $duration."
+                val count = results.values.sumOf { it.size }
+                "Read $count matching scan result(s) from ${javaClass.simpleName} in $duration."
             }
         }
 
