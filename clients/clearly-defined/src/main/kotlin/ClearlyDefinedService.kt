@@ -295,7 +295,7 @@ suspend fun <T> ClearlyDefinedService.call(block: suspend ClearlyDefinedService.
             val errorResponse = ClearlyDefinedService.JSON_FOR_ERRORS.decodeFromString<ErrorResponse>(it.string())
             val innerError = errorResponse.error.innererror
 
-            "The ClearlyDefined service call failed with: ${innerError.message}"
+            "The ClearlyDefined service call failed. ${innerError.name}: ${innerError.message}"
         } ?: "The ClearlyDefined service call failed with code ${e.code()}: ${e.message()}"
 
         throw IOException(errorMessage, e)
