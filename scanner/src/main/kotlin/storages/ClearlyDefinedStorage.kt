@@ -34,6 +34,7 @@ import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
 import org.ossreviewtoolkit.clients.clearlydefined.ComponentType
 import org.ossreviewtoolkit.clients.clearlydefined.Coordinates
 import org.ossreviewtoolkit.clients.clearlydefined.toCoordinates
+import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
@@ -44,8 +45,6 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.UnknownProvenance
-import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.ClearlyDefinedStorageConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedCoordinates
@@ -210,12 +209,7 @@ class ClearlyDefinedStorage(
 
             sourceLocation.type == ComponentType.GIT -> {
                 RepositoryProvenance(
-                    vcsInfo = VcsInfo(
-                        type = VcsType.GIT,
-                        url = sourceLocation.url.orEmpty(),
-                        revision = sourceLocation.revision,
-                        path = sourceLocation.path.orEmpty()
-                    ),
+                    vcsInfo = VcsHost.parseUrl(sourceLocation.url.orEmpty()),
                     resolvedRevision = sourceLocation.revision
                 )
             }
