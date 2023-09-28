@@ -63,7 +63,7 @@ runs:
 
     - name: Set up Docker build
       if: steps.check_image.outputs.result != 'found'
-      uses: docker/setup-buildx-action@v2
+      uses: docker/setup-buildx-action@v3
 
     - name: Login to GitHub container registry
       if: steps.check_image.outputs.result != 'found'
