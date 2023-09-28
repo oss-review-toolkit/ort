@@ -19,14 +19,14 @@ name: Mega Docker extended image
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '0 4 * * *'
   pull_request:
     paths:
       - '.versions'
       - 'Dockerfile'
       - 'Dockerfile-extended'
   push:
-    branches:
-      - main
     tags:
       - '*'
   workflow_run:

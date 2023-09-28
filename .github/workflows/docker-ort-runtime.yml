@@ -19,13 +19,13 @@ name: Mega Docker runtime image
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '0 4 * * *'
   pull_request:
     paths:
       - '.versions'
       - 'Dockerfile'
   push:
-    branches:
-      - main
     tags:
       - '*'
 
