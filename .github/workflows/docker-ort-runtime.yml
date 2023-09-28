@@ -19,14 +19,14 @@ name: Docker runtime image
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '0 4 * * *'
   pull_request:
     paths:
       - '.versions'
       - 'Dockerfile'
       - '.github/workflows/docker-ort-runtime.yml'
   push:
-    branches:
-      - main
     tags:
       - '*'
 

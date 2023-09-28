@@ -19,6 +19,8 @@ name: Docker extended runtime image
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '0 4 * * *'
   pull_request:
     paths:
       - '.versions'
@@ -27,8 +29,6 @@ on:
       - '.github/workflows/docker-ort-runtime.yml'
       - '.github/workflows/docker-ort-runtime-ext.yml'
   push:
-    branches:
-      - main
     tags:
       - '*'
   workflow_run:
