@@ -286,11 +286,13 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
 
                     VcsHost.fromUrl(trimmedUrl)?.let { host ->
                         host.toVcsInfo(trimmedUrl)?.let { vcsInfo ->
-                            // Fixup paths that are specified as part of the URL and contain the project name as
-                            // a prefix.
-                            val projectPrefix = "${host.getProject(trimmedUrl)}-"
-                            vcsInfo.path.withoutPrefix(projectPrefix)?.let { path ->
-                                vcsInfo.copy(path = path)
+                            vcsInfo.takeIf { "/" in it.path } ?: run {
+                                // Fixup a single directory that is specified as part of the URL and contains the
+                                // project name as a prefix.
+                                val projectPrefix = "${host.getProject(trimmedUrl)}-"
+                                vcsInfo.path.withoutPrefix(projectPrefix)?.let { path ->
+                                    vcsInfo.copy(path = path)
+                                }
                             }
                         }
                     } ?: VcsInfo(type = VcsType.forName(type), url = trimmedUrl, revision = tag)
