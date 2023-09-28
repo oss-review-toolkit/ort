@@ -20,10 +20,10 @@
 set -e -o pipefail
 
 GIT_ROOT=$(git rev-parse --show-toplevel)
-GIT_REVISION=$("$GIT_ROOT/gradlew" -q properties --property version | sed -nr "s/version: (.+)/\1/p")
+ORT_VERSION=$("$GIT_ROOT/gradlew" -q properties --property version | sed -nr "s/version: (.+)/\1/p")
 DOCKER_IMAGE_ROOT="${DOCKER_IMAGE_ROOT:-ghcr.io/oss-review-toolkit}"
 
-echo "Setting ORT_VERSION to $GIT_REVISION."
+echo "Setting ORT_VERSION to $ORT_VERSION."
 
 # shellcheck disable=SC1091
 . .versions
@@ -101,8 +101,8 @@ image_build golang ort/golang "$GO_VERSION" \
     "$@"
 
 # Runtime ORT image
-image_build run ort "$GIT_REVISION" \
-    --build-arg NODEJS_VERSION="$NODEJS_VERSION" \
+image_build run ort "$ORT_VERSION" \
+    --build-arg ORT_VERSION="$ORT_VERSION" \
     --build-context "base=docker-image://${DOCKER_IMAGE_ROOT}/ort/base:latest" \
     --build-context "python=docker-image://${DOCKER_IMAGE_ROOT}/ort/python:latest" \
     --build-context "nodejs=docker-image://${DOCKER_IMAGE_ROOT}/ort/nodejs:latest" \
@@ -155,9 +155,10 @@ image_build haskell ort/haskell "$HASKELL_STACK_VERSION" \
 # Runtime extended ORT image
 docker buildx build \
     --file Dockerfile-extended \
-    --tag "${DOCKER_IMAGE_ROOT}/ort-extended:$GIT_REVISION" \
+    --tag "${DOCKER_IMAGE_ROOT}/ort-extended:$ORT_VERSION" \
     --tag "${DOCKER_IMAGE_ROOT}/ort-extended:latest" \
-    --build-context "ort=docker-image://${DOCKER_IMAGE_ROOT}/ort:latest" \
+    --build-arg ORT_VERSION="$ORT_VERSION" \
+    --build-context "ort=docker-image://${DOCKER_IMAGE_ROOT}/ort:${ORT_VERSION}" \
     --build-context "sbt=docker-image://${DOCKER_IMAGE_ROOT}/ort/sbt:latest" \
     --build-context "dotnet=docker-image://${DOCKER_IMAGE_ROOT}/ort/dotnet:latest" \
     --build-context "swift=docker-image://${DOCKER_IMAGE_ROOT}/ort/swift:latest" \

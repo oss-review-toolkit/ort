@@ -205,7 +205,7 @@ jobs:
             ${{ env.REGISTRY }}/${{ github.repository_owner }}/ort-extended:latest
           labels: ${{ steps.meta.outputs.labels }}
           build-contexts: |
-            ort=docker-image://${{ env.REGISTRY }}/${{ github.repository_owner }}/ort:latest
+            ort=docker-image://${{ env.REGISTRY }}/${{ github.repository_owner }}/ort:${{ env.ORT_VERSION }}
             android=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/android:latest
             swift=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/swift:latest
             scala=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/scala:latest
