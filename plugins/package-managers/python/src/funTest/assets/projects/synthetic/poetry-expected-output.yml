@@ -19,7 +19,7 @@ project:
   - name: "install"
     dependencies:
     - id: "PyPI::graphviz:0.19.1"
-    - id: "PyPI::jinja2:3.0.1"
+    - id: "PyPI::jinja2:3.0.3"
       dependencies:
       - id: "PyPI::markupsafe:2.0.1"
 packages:
@@ -56,8 +56,8 @@ packages:
     url: "https://github.com/xflr6/graphviz.git"
     revision: ""
     path: ""
-- id: "PyPI::jinja2:3.0.1"
-  purl: "pkg:pypi/jinja2@3.0.1"
+- id: "PyPI::jinja2:3.0.3"
+  purl: "pkg:pypi/jinja2@3.0.3"
   authors:
   - "Armin Ronacher <armin.ronacher@active-4.com>"
   declared_licenses:
@@ -70,14 +70,14 @@ packages:
   description: "A very fast and expressive template engine."
   homepage_url: "https://palletsprojects.com/p/jinja/"
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/80/21/ae597efc7ed8caaa43fb35062288baaf99a7d43ff0cf66452ddf47604ee6/Jinja2-3.0.1-py3-none-any.whl"
+    url: "https://files.pythonhosted.org/packages/20/9a/e5d9ec41927401e41aea8af6d16e78b5e612bca4699d417f646a9610a076/Jinja2-3.0.3-py3-none-any.whl"
     hash:
-      value: "1f06f2da51e7b56b8f238affdd6b4e2c61e39598a378cc49345bc1bd42a978a4"
+      value: "077ce6014f7b40d03b47d1f1ca4b0fc8328a692bd284016f806ed0eaca390ad8"
       algorithm: "SHA-256"
   source_artifact:
-    url: "https://files.pythonhosted.org/packages/39/11/8076571afd97303dfeb6e466f27187ca4970918d4b36d5326725514d3ed3/Jinja2-3.0.1.tar.gz"
+    url: "https://files.pythonhosted.org/packages/91/a5/429efc6246119e1e3fbf562c00187d04e83e54619249eb732bb423efa6c6/Jinja2-3.0.3.tar.gz"
     hash:
-      value: "703f484b47a6af502e743c9122595cc812b0271f661722403114f71a79d0f5a4"
+      value: "611bb273cd68f3b993fabdc4064fc858c5b47a973cb5aa7999ec1ba405c87cd7"
       algorithm: "SHA-256"
   vcs:
     type: ""
