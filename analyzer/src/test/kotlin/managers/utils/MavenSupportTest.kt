@@ -126,7 +126,7 @@ class MavenSupportTest : WordSpec({
             )
         }
 
-        "handle GitHub URLs with the project name as a path prefix" {
+        "handle GitHub URLs with the project name as a directory prefix" {
             val mavenProject = MavenProject().apply {
                 scm = Scm().apply {
                     connection = "scm:git:git://github.com/netty/netty-tcnative.git/netty-tcnative-boringssl-static"
@@ -138,6 +138,22 @@ class MavenSupportTest : WordSpec({
                 url = "git://github.com/netty/netty-tcnative.git",
                 revision = "",
                 path = "boringssl-static"
+            )
+        }
+
+        "handle GitHub URLs with the project name as a deeper path prefix" {
+            val mavenProject = MavenProject().apply {
+                scm = Scm().apply {
+                    connection = "scm:git:https://github.com/spring-projects/spring-modulith/" +
+                        "spring-modulith-starters/spring-modulith-starter-mongodb"
+                }
+            }
+
+            MavenSupport.parseVcsInfo(mavenProject) shouldBe VcsInfo(
+                type = VcsType.GIT,
+                url = "https://github.com/spring-projects/spring-modulith.git",
+                revision = "",
+                path = "spring-modulith-starters/spring-modulith-starter-mongodb"
             )
         }
 
