@@ -135,7 +135,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     tk-dev \
     && sudo rm -rf /var/lib/apt/lists/*
 
-ARG PYTHON_VERSION=3.10.13
+ARG PYTHON_VERSION=3.11.5
 ARG PYENV_GIT_TAG=v2.3.25
 
 ENV PYENV_ROOT=/opt/python
