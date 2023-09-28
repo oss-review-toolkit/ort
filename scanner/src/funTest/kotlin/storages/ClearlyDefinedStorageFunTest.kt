@@ -29,12 +29,8 @@ import java.time.Instant
 import kotlin.time.Duration.Companion.seconds
 
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
-import org.ossreviewtoolkit.model.ArtifactProvenance
-import org.ossreviewtoolkit.model.Hash
-import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
-import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
@@ -47,7 +43,7 @@ import org.ossreviewtoolkit.model.config.ClearlyDefinedStorageConfiguration
 class ClearlyDefinedStorageFunTest : StringSpec({
     val storage = ClearlyDefinedStorage(ClearlyDefinedStorageConfiguration(Server.PRODUCTION.apiUrl))
 
-    "Scan results for ScanCode 3.0.2 should be read correctly" {
+    "Scan results for 'semver4j' from ScanCode should be read correctly" {
         val id = Identifier("Maven:com.vdurmont:semver4j:3.1.0")
 
         withRetry {
@@ -55,29 +51,36 @@ class ClearlyDefinedStorageFunTest : StringSpec({
 
             results.shouldBeSuccess {
                 it shouldContain ScanResult(
-                    provenance = ArtifactProvenance(
-                        sourceArtifact = RemoteArtifact(
-                            url = "https://search.maven.org/remotecontent" +
-                                "?filepath=com/vdurmont/semver4j/3.1.0/semver4j-3.1.0-sources.jar",
-                            hash = Hash(
-                                value = "0de1248f09dfe8df3b021c84e0642ee222cceb13",
-                                algorithm = HashAlgorithm.SHA1
-                            )
-                        )
+                    provenance = RepositoryProvenance(
+                        vcsInfo = VcsInfo(
+                            type = VcsType.GIT,
+                            url = "https://github.com/vdurmont/semver4j.git",
+                            revision = "88912638db3f6112a2b345f1638ced33a0a606e1"
+                        ),
+                        resolvedRevision = "88912638db3f6112a2b345f1638ced33a0a606e1"
                     ),
                     scanner = ScannerDetails(
                         name = "ScanCode",
-                        version = "3.0.2",
-                        configuration = "input /tmp/cd-2rGiCR --classify true --copyright true --email true " +
-                            "--generated true --info true --is-license-text true --json-pp /tmp/cd-0EjTZ7 " +
-                            "--license true --license-clarity-score true --license-diag true --license-text true " +
-                            "--package true --processes 2 --strip-root true --summary true --summary-key-files " +
-                            "true --timeout 1000.0 --url true"
+                        version = "30.1.0",
+                        configuration = "input /tmp/cd-BxlI4n --classify true --copyright true --email true " +
+                            "--generated true --info true --is-license-text true --json-pp /tmp/cd-d8WH1p " +
+                            "--license true --license-clarity-score true --license-text true " +
+                            "--license-text-diagnostics true --package true --processes 2 --strip-root true " +
+                            "--summary true --summary-key-files true --timeout 1000.0 --url true"
                     ),
                     summary = ScanSummary.EMPTY.copy(
-                        startTime = Instant.parse("2020-02-14T00:36:14.000335513Z"),
-                        endTime = Instant.parse("2020-02-14T00:36:37.000492119Z"),
+                        startTime = Instant.parse("2023-09-27T08:28:44.000244665Z"),
+                        endTime = Instant.parse("2023-09-27T08:29:22.000369368Z"),
                         licenseFindings = setOf(
+                            LicenseFinding(
+                                license = "BSD-3-Clause",
+                                location = TextLocation(
+                                    path = "META-INF/maven/com.vdurmont/semver4j/pom.xml",
+                                    startLine = 28,
+                                    endLine = 34
+                                ),
+                                score = 75.0f
+                            ),
                             LicenseFinding(
                                 license = "MIT",
                                 location = TextLocation(
@@ -85,7 +88,7 @@ class ClearlyDefinedStorageFunTest : StringSpec({
                                     startLine = 30,
                                     endLine = 31
                                 ),
-                                score = 60.87f
+                                score = 83.33f
                             )
                         )
                     )
@@ -94,7 +97,7 @@ class ClearlyDefinedStorageFunTest : StringSpec({
         }
     }
 
-    "Scan results for ScanCode 30.1.0 should be read correctly" {
+    "Scan results for 'hoplite-core' from ScanCode should be read correctly" {
         val id = Identifier("Maven:com.sksamuel.hoplite:hoplite-core:2.1.3")
 
         withRetry {
@@ -105,7 +108,7 @@ class ClearlyDefinedStorageFunTest : StringSpec({
                     provenance = RepositoryProvenance(
                         vcsInfo = VcsInfo(
                             type = VcsType.GIT,
-                            url = "https://github.com/sksamuel/hoplite/tree/b3bf5d7bd3814cb7576091acfecd097cb3a79e72",
+                            url = "https://github.com/sksamuel/hoplite.git",
                             revision = "b3bf5d7bd3814cb7576091acfecd097cb3a79e72"
                         ),
                         resolvedRevision = "b3bf5d7bd3814cb7576091acfecd097cb3a79e72"
@@ -138,7 +141,7 @@ class ClearlyDefinedStorageFunTest : StringSpec({
                 result.map { it.provenance } shouldContain RepositoryProvenance(
                     vcsInfo = VcsInfo(
                         type = VcsType.GIT,
-                        url = "https://github.com/bropat/ioBroker.eusec/tree/327b125548c9b806490085a2dacfdfc6e7776803",
+                        url = "https://github.com/bropat/ioBroker.eusec.git",
                         revision = "327b125548c9b806490085a2dacfdfc6e7776803"
                     ),
                     resolvedRevision = "327b125548c9b806490085a2dacfdfc6e7776803"

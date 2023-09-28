@@ -102,7 +102,6 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
-import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.plugins.scanners.fossid.FossId.Companion.SCAN_CODE_KEY
 import org.ossreviewtoolkit.plugins.scanners.fossid.FossId.Companion.SCAN_ID_KEY
 import org.ossreviewtoolkit.plugins.scanners.fossid.FossId.Companion.SERVER_URL_KEY
@@ -1153,7 +1152,7 @@ private val DEFAULT_IGNORE_RULE_SCOPE = RuleScope.SCAN
 /**
  * Create a new [FossId] instance with the specified [config].
  */
-private fun createFossId(config: FossIdConfig): FossId = FossId("FossId", ScannerConfiguration(), config)
+private fun createFossId(config: FossIdConfig): FossId = FossId("FossId", config)
 
 /**
  * Create a standard [FossIdConfig] whose properties can be partly specified.

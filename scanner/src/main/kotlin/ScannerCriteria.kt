@@ -20,22 +20,9 @@
 package org.ossreviewtoolkit.scanner
 
 import org.ossreviewtoolkit.model.ScannerDetails
-import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.utils.common.Options
 
 import org.semver4j.Semver
-import org.semver4j.Semver.VersionDiff
-
-/**
- * Definition of a predicate to check whether the configuration of a scanner is compatible with the requirements
- * specified by a [ScannerCriteria].
- *
- * When testing whether a scan result is compatible with specific criteria this function is invoked on the
- * scanner configuration data stored in the result. By having different, scanner-specific matcher functions, this
- * compatibility check can be made very flexible.
- *
- * TODO: Switch to a more advanced type than String to represent the scanner configuration.
- */
-typealias ScannerConfigMatcher = (String) -> Boolean
 
 /**
  * A data class defining selection criteria for scanners.
@@ -69,17 +56,12 @@ data class ScannerCriteria(
     val maxVersion: Semver,
 
     /**
-     * A function to check whether the configuration of a scanner is compatible with this [ScannerCriteria].
+     * Criterion to match the [configuration][ScannerDetails.configuration] of the scanner. If `null`, all
+     * configurations are matched.
      */
-    val configMatcher: ScannerConfigMatcher
+    val configuration: String?
 ) {
     companion object {
-        /**
-         * A matcher for scanner configurations that accepts all configurations passed in. This function can be
-         * used if the concrete configuration of a scanner is irrelevant.
-         */
-        val ALL_CONFIG_MATCHER: ScannerConfigMatcher = { true }
-
         /**
          * The name of the property defining the regular expression for the scanner name as part of [ScannerCriteria].
          * The [scanner details][ScannerDetails] of the corresponding scanner must match the criteria.
@@ -99,50 +81,26 @@ data class ScannerCriteria(
         const val PROP_CRITERIA_MAX_VERSION = "maxVersion"
 
         /**
-         * A matcher for scanner configurations that accepts only exact matches of the [originalConfig]. This
-         * function can be used by scanners that are extremely sensitive about their configuration.
+         * The name of the property defining the configuration of the scanner as part of [ScannerCriteria]. The
+         * [scanner details][ScannerDetails] of the corresponding scanner must match the criteria.
          */
-        fun exactConfigMatcher(originalConfig: String): ScannerConfigMatcher = { config -> originalConfig == config }
-
-        /**
-         * Generate a [ScannerCriteria] instance that is compatible with the given [details] and versions that differ
-         * only in the provided [versionDiff].
-         */
-        fun forDetails(details: ScannerDetails, versionDiff: VersionDiff = VersionDiff.NONE): ScannerCriteria {
-            val minVersion = Semver(details.version)
-
-            val maxVersion = when (versionDiff) {
-                VersionDiff.NONE, VersionDiff.PRE_RELEASE, VersionDiff.BUILD -> minVersion.nextPatch()
-                VersionDiff.PATCH -> minVersion.nextMinor()
-                VersionDiff.MINOR -> minVersion.nextMajor()
-                else -> throw IllegalArgumentException("Invalid version difference $versionDiff")
-            }
-
-            return ScannerCriteria(
-                regScannerName = details.name,
-                minVersion = minVersion,
-                maxVersion = maxVersion,
-                configMatcher = exactConfigMatcher(details.configuration)
-            )
-        }
+        const val PROP_CRITERIA_CONFIGURATION = "configuration"
 
         /**
          * Return a [ScannerCriteria] instance that is to be used when looking up existing scan results from a
          * [ScanResultsStorage]. By default, the properties of this instance are initialized to match the scanner
-         * [details]. These default can be overridden by the [ScannerConfiguration.options] property in the provided
-         * [config]: Use properties of the form `scannerName.property`, where `scannerName` is the name of the scanner
-         * the configuration applies to, and `property` is the name of a property of the [ScannerCriteria] class. For
-         * instance, to specify that a specific minimum version of ScanCode is allowed, set this property:
-         * `options.ScanCode.minVersion=3.0.2`.
+         * [details]. These defaults can be overridden by the provided [options]. The keys of the option map must match
+         * names of the [ScannerCriteria] class. For example, to specify that a specific minimum version of the scanner
+         * is allowed, set this option: `minVersion=3.0.2`.
          */
-        fun fromConfig(details: ScannerDetails, config: ScannerConfiguration): ScannerCriteria {
-            val options = config.options?.get(details.name).orEmpty()
+        fun create(details: ScannerDetails, options: Options = emptyMap()): ScannerCriteria {
             val scannerVersion = Semver(normalizeVersion(details.version))
             val minVersion = parseVersion(options[PROP_CRITERIA_MIN_VERSION]) ?: scannerVersion
             val maxVersion = parseVersion(options[PROP_CRITERIA_MAX_VERSION]) ?: minVersion.nextMinor()
             val name = options[PROP_CRITERIA_NAME] ?: details.name
+            val configuration = options[PROP_CRITERIA_CONFIGURATION] ?: details.configuration
 
-            return ScannerCriteria(name, minVersion, maxVersion, exactConfigMatcher(details.configuration))
+            return ScannerCriteria(name, minVersion, maxVersion, configuration)
         }
     }
 
@@ -163,7 +121,8 @@ data class ScannerCriteria(
         if (!nameRegex.matches(details.name)) return false
 
         val version = Semver(details.version)
-        return minVersion <= version && version < maxVersion && configMatcher(details.configuration)
+        return minVersion <= version && version < maxVersion &&
+            (configuration == null || configuration == details.configuration)
     }
 }
 

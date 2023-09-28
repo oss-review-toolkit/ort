@@ -66,145 +66,6 @@ import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 
 import org.semver4j.Semver
 
-private const val PACKAGE_TYPE = "Maven"
-private const val NAMESPACE = "someNamespace"
-private const val NAME = "somePackage"
-private const val VERSION = "0.1.8"
-private const val COMMIT = "02b7f3d06fcbbedb44563aaa88ab62db3669946e"
-private const val SCANCODE_VERSION = "3.2.2"
-
-private const val TEST_FILES_ROOT = "src/test/assets"
-private const val TEST_FILES_DIRECTORY = "clearly-defined"
-
-/** The name of the file with the test response from ClearlyDefined. */
-private const val RESPONSE_FILE = "scancode-$SCANCODE_VERSION.json"
-
-/** The ClearlyDefined coordinates referencing the test package. */
-private val COORDINATES = Coordinates(ComponentType.MAVEN, Provider.MAVEN_CENTRAL, NAMESPACE, NAME, VERSION)
-
-/** Path to a file contained in the test ClearlyDefined result. */
-private const val TEST_PATH =
-    "src/main/java/org/apache/commons/configuration2/tree/DefaultExpressionEngine.java"
-
-private val TEST_IDENTIFIER =
-    Identifier(
-        type = PACKAGE_TYPE,
-        namespace = NAMESPACE,
-        name = NAME,
-        version = VERSION
-    )
-
-private val TEST_PACKAGE =
-    Package(
-        id = TEST_IDENTIFIER,
-        declaredLicenses = emptySet(),
-        description = "test package description",
-        homepageUrl = "https://www.test-package.com",
-        vcs = VcsInfo.EMPTY,
-        sourceArtifact = RemoteArtifact.EMPTY,
-        binaryArtifact = RemoteArtifact.EMPTY
-    )
-
-/** The scanner details used by tests. */
-private val SCANNER_CRITERIA =
-    ScannerCriteria(
-        "aScanner", Semver("1.0.0"), Semver("2.0.0"),
-        ScannerCriteria.exactConfigMatcher("aConfig")
-    )
-
-/** The template for a ClearlyDefined definitions request. */
-private val DEFINITIONS_TEMPLATE = readDefinitionsTemplate()
-
-/** The template variable with the coordinates of the package that is requested. */
-private const val PACKAGE_VARIABLE = "<<package>>"
-
-/**
- * Return a storage configuration that points to the mock [server].
- */
-private fun storageConfiguration(server: WireMockServer): ClearlyDefinedStorageConfiguration {
-    val url = "http://localhost:${server.port()}"
-    return ClearlyDefinedStorageConfiguration(url)
-}
-
-/**
- * Generate the URL used by ClearlyDefined to reference the results for a package with the given [coordinates]
- * produced by the tool with the [toolName] and [toolVersion].
- */
-private fun toolUrl(coordinates: Coordinates, toolName: String, toolVersion: String): String =
-    "$coordinates/$toolName/$toolVersion"
-
-/**
- * Stub a request for the available harvest tools on the [server] server for the package with the given [coordinates]
- * to return the specified [tools].
- */
-private fun stubHarvestTools(server: WireMockServer, coordinates: Coordinates, tools: List<String>) {
-    val urlPath = "/harvest/$coordinates"
-    val response = tools.joinToString(separator = ",", prefix = "[", postfix = "]") { "\"$it\"" }
-    server.stubFor(
-        get(urlPathEqualTo(urlPath))
-            .withQueryParam("form", equalTo("list"))
-            .willReturn(
-                aResponse().withStatus(200)
-                    .withBody(response)
-            )
-    )
-}
-
-/**
- * Stub a request for the harvested data from ScanCode for the given [coordinates] on the [server] server.
- */
-private fun stubHarvestToolResponse(server: WireMockServer, coordinates: Coordinates) {
-    val urlPath = "/harvest/${toolUrl(coordinates, "scancode", SCANCODE_VERSION)}"
-    server.stubFor(
-        get(urlPathEqualTo(urlPath))
-            .withQueryParam("form", equalTo("streamed"))
-            .willReturn(
-                aResponse().withStatus(200)
-                    .withBodyFile("$TEST_FILES_DIRECTORY/$RESPONSE_FILE")
-            )
-    )
-}
-
-/**
- * Stub a request for the definition's endpoint for the given [coordinates] on the [server] server.
- */
-private fun stubDefinitions(server: WireMockServer, coordinates: Coordinates = COORDINATES) {
-    val coordinatesList = listOf(coordinates)
-    val expectedBody = ClearlyDefinedService.JSON.encodeToString(coordinatesList)
-    server.stubFor(
-        post(urlPathEqualTo("/definitions"))
-            .withRequestBody(equalToJson(expectedBody))
-            .willReturn(
-                aResponse().withStatus(200)
-                    .withBody(DEFINITIONS_TEMPLATE.replace(PACKAGE_VARIABLE, coordinates.toString()))
-            )
-    )
-}
-
-/**
- * Check that this [Result] contains the expected data and return the first scan result from the list on success.
- */
-private fun Result<List<ScanResult>>.shouldBeValid(block: (ScanResult.() -> Unit)? = null) {
-    shouldBeSuccess {
-        it shouldHaveSize 1
-
-        val scanResult = it.first()
-        scanResult.summary.licenseFindings.find { finding ->
-            finding.location.path == TEST_PATH && "Apache-2.0" in finding.license.licenses()
-        } shouldNot beNull()
-
-        if (block != null) scanResult.block()
-    }
-}
-
-/**
- * Read the template for a ClearlyDefines definitions request from the test file.
- */
-private fun readDefinitionsTemplate(): String {
-    val templateFile = File("$TEST_FILES_ROOT/cd_definitions.json")
-    return templateFile.readText()
-}
-
 class ClearlyDefinedStorageTest : WordSpec({
     val server = WireMockServer(
         WireMockConfiguration.options()
@@ -425,3 +286,138 @@ class ClearlyDefinedStorageTest : WordSpec({
         }
     }
 })
+
+private const val PACKAGE_TYPE = "Maven"
+private const val NAMESPACE = "someNamespace"
+private const val NAME = "somePackage"
+private const val VERSION = "0.1.8"
+private const val COMMIT = "02b7f3d06fcbbedb44563aaa88ab62db3669946e"
+private const val SCANCODE_VERSION = "3.2.2"
+
+private const val TEST_FILES_ROOT = "src/test/assets"
+private const val TEST_FILES_DIRECTORY = "clearly-defined"
+
+/** The name of the file with the test response from ClearlyDefined. */
+private const val RESPONSE_FILE = "scancode-$SCANCODE_VERSION.json"
+
+/** The ClearlyDefined coordinates referencing the test package. */
+private val COORDINATES = Coordinates(ComponentType.MAVEN, Provider.MAVEN_CENTRAL, NAMESPACE, NAME, VERSION)
+
+/** Path to a file contained in the test ClearlyDefined result. */
+private const val TEST_PATH =
+    "src/main/java/org/apache/commons/configuration2/tree/DefaultExpressionEngine.java"
+
+private val TEST_IDENTIFIER =
+    Identifier(
+        type = PACKAGE_TYPE,
+        namespace = NAMESPACE,
+        name = NAME,
+        version = VERSION
+    )
+
+private val TEST_PACKAGE =
+    Package(
+        id = TEST_IDENTIFIER,
+        declaredLicenses = emptySet(),
+        description = "test package description",
+        homepageUrl = "https://www.test-package.com",
+        vcs = VcsInfo.EMPTY,
+        sourceArtifact = RemoteArtifact.EMPTY,
+        binaryArtifact = RemoteArtifact.EMPTY
+    )
+
+/** The scanner details used by tests. */
+private val SCANNER_CRITERIA = ScannerCriteria("aScanner", Semver("1.0.0"), Semver("2.0.0"), "aConfig")
+
+/** The template for a ClearlyDefined definitions request. */
+private val DEFINITIONS_TEMPLATE = readDefinitionsTemplate()
+
+/** The template variable with the coordinates of the package that is requested. */
+private const val PACKAGE_VARIABLE = "<<package>>"
+
+/**
+ * Return a storage configuration that points to the mock [server].
+ */
+private fun storageConfiguration(server: WireMockServer): ClearlyDefinedStorageConfiguration {
+    val url = "http://localhost:${server.port()}"
+    return ClearlyDefinedStorageConfiguration(url)
+}
+
+/**
+ * Generate the URL used by ClearlyDefined to reference the results for a package with the given [coordinates]
+ * produced by the tool with the [toolName] and [toolVersion].
+ */
+private fun toolUrl(coordinates: Coordinates, toolName: String, toolVersion: String): String =
+    "$coordinates/$toolName/$toolVersion"
+
+/**
+ * Stub a request for the available harvest tools on the [server] server for the package with the given [coordinates]
+ * to return the specified [tools].
+ */
+private fun stubHarvestTools(server: WireMockServer, coordinates: Coordinates, tools: List<String>) {
+    val urlPath = "/harvest/$coordinates"
+    val response = tools.joinToString(separator = ",", prefix = "[", postfix = "]") { "\"$it\"" }
+    server.stubFor(
+        get(urlPathEqualTo(urlPath))
+            .withQueryParam("form", equalTo("list"))
+            .willReturn(
+                aResponse().withStatus(200)
+                    .withBody(response)
+            )
+    )
+}
+
+/**
+ * Stub a request for the harvested data from ScanCode for the given [coordinates] on the [server] server.
+ */
+private fun stubHarvestToolResponse(server: WireMockServer, coordinates: Coordinates) {
+    val urlPath = "/harvest/${toolUrl(coordinates, "scancode", SCANCODE_VERSION)}"
+    server.stubFor(
+        get(urlPathEqualTo(urlPath))
+            .withQueryParam("form", equalTo("streamed"))
+            .willReturn(
+                aResponse().withStatus(200)
+                    .withBodyFile("$TEST_FILES_DIRECTORY/$RESPONSE_FILE")
+            )
+    )
+}
+
+/**
+ * Stub a request for the definition's endpoint for the given [coordinates] on the [server] server.
+ */
+private fun stubDefinitions(server: WireMockServer, coordinates: Coordinates = COORDINATES) {
+    val coordinatesList = listOf(coordinates)
+    val expectedBody = ClearlyDefinedService.JSON.encodeToString(coordinatesList)
+    server.stubFor(
+        post(urlPathEqualTo("/definitions"))
+            .withRequestBody(equalToJson(expectedBody))
+            .willReturn(
+                aResponse().withStatus(200)
+                    .withBody(DEFINITIONS_TEMPLATE.replace(PACKAGE_VARIABLE, coordinates.toString()))
+            )
+    )
+}
+
+/**
+ * Check that this [Result] contains the expected data and return the first scan result from the list on success.
+ */
+private fun Result<List<ScanResult>>.shouldBeValid(block: (ScanResult.() -> Unit)? = null) {
+    shouldBeSuccess {
+        it shouldHaveSize 1
+
+        val scanResult = it.first()
+        scanResult.summary.licenseFindings.find { finding ->
+            finding.location.path == TEST_PATH && "Apache-2.0" in finding.license.licenses()
+        } shouldNot beNull()
+
+        if (block != null) scanResult.block()
+    }
+}
+
+/**
+ * Read the template for a ClearlyDefines definitions request from the test file.
+ */
+private fun readDefinitionsTemplate(): String {
+    val templateFile = File("$TEST_FILES_ROOT/cd_definitions.json")
+    return templateFile.readText()
+}

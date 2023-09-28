@@ -72,15 +72,14 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.model.config.DownloaderConfiguration
-import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
-import org.ossreviewtoolkit.scanner.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.PackageScannerWrapper
 import org.ossreviewtoolkit.scanner.ProvenanceScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScannerCriteria
+import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
+import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.ort.showStackTrace
@@ -97,7 +96,6 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
  */
 class FossId internal constructor(
     override val name: String,
-    private val scannerConfig: ScannerConfiguration,
     private val config: FossIdConfig
 ) : PackageScannerWrapper {
     companion object : Logging {
@@ -170,9 +168,8 @@ class FossId internal constructor(
             )
     }
 
-    class Factory : AbstractScannerWrapperFactory<FossId>("FossId") {
-        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            FossId(type, scannerConfig, FossIdConfig.create(scannerConfig))
+    class Factory : ScannerWrapperFactory<FossId>("FossId") {
+        override fun create(options: Options) = FossId(type, FossIdConfig.create(options))
     }
 
     /**
@@ -311,7 +308,15 @@ class FossId internal constructor(
 
                     if (config.waitForResult) {
                         val rawResults = getRawResults(scanCode)
-                        createResultSummary(startTime, provenance, rawResults, scanCode, scanId, issues)
+                        createResultSummary(
+                            startTime,
+                            provenance,
+                            rawResults,
+                            scanCode,
+                            scanId,
+                            issues,
+                            context.detectedLicenseMapping
+                        )
                     } else {
                         val issue = createAndLogIssue(
                             source = name,
@@ -858,7 +863,8 @@ class FossId internal constructor(
         rawResults: RawResults,
         scanCode: String,
         scanId: String,
-        additionalIssues: MutableList<Issue>
+        additionalIssues: MutableList<Issue>,
+        detectedLicenseMapping: Map<String, String>
     ): ScanResult {
         // TODO: Maybe get issues from FossID (see has_failed_scan_files, get_failed_files and maybe get_scan_log).
 
@@ -876,7 +882,7 @@ class FossId internal constructor(
 
         val (licenseFindings, copyrightFindings) = rawResults.markedAsIdentifiedFiles.ifEmpty {
             rawResults.identifiedFiles
-        }.mapSummary(ignoredFiles, issues, scannerConfig.detectedLicenseMapping)
+        }.mapSummary(ignoredFiles, issues, detectedLicenseMapping)
 
         val summary = ScanSummary(
             startTime = startTime,

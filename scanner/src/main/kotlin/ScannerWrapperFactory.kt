@@ -21,31 +21,21 @@ package org.ossreviewtoolkit.scanner
 
 import java.util.ServiceLoader
 
-import org.ossreviewtoolkit.model.config.DownloaderConfiguration
-import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.Plugin
 
 /**
- * A common interface for use with [ServiceLoader] that all [ScannerWrapperFactory] classes need to implement.
+ * A common abstract class for use with [ServiceLoader] that all [ScannerWrapperFactory] classes need to implement.
  */
-interface ScannerWrapperFactory : Plugin {
+abstract class ScannerWrapperFactory<out T : ScannerWrapper>(override val type: String) : Plugin {
     /**
-     * Create a [ScannerWrapper] using the specified [scannerConfig] and [downloaderConfig].
+     * Create a [ScannerWrapper] using the provided [options].
      */
-    fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration): ScannerWrapper
-}
-
-/**
- * A generic factory class for a [ScannerWrapper].
- */
-abstract class AbstractScannerWrapperFactory<out T : ScannerWrapper>(
-    override val type: String
-) : ScannerWrapperFactory {
-    abstract override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration): T
+    abstract fun create(options: Options): T
 
     /**
      * Return the scanner wrapper's name here to allow Clikt to display something meaningful when listing the scanners
-     * which are enabled by default via their factories.
+     * wrapper factories which are enabled by default.
      */
     override fun toString() = type
 }

@@ -19,9 +19,10 @@
 
 # Set this to the Java version to use in the base image (and to build and run ORT with).
 ARG JAVA_VERSION=17
+ARG UBUNTU_VERSION=jammy
 
 # Use OpenJDK Eclipe Temurin Ubuntu LTS
-FROM eclipse-temurin:$JAVA_VERSION-jdk-jammy as ort-base-image
+FROM eclipse-temurin:$JAVA_VERSION-jdk-$UBUNTU_VERSION as base
 
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
@@ -42,6 +43,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     dirmngr \
     gcc \
     git \
+    git-lfs \
     g++ \
     gnupg2 \
     iproute2 \
@@ -63,7 +65,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     unzip \
     wget \
     xz-utils \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && git lfs install
 
 RUN echo $LANG > /etc/locale.gen \
     && locale-gen $LANG \
@@ -102,6 +105,12 @@ COPY "$CRT_FILES" /tmp/certificates/
 RUN /etc/scripts/export_proxy_certificates.sh /tmp/certificates/ \
     &&  /etc/scripts/import_certificates.sh /tmp/certificates/
 
+# Add Syft to use as primary SPDX Docker scanner
+# Create docs dir to store future SPDX files
+RUN curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sudo sh -s -- -b /usr/local/bin \
+    && mkdir -p /usr/share/doc/ort \
+    && chown $USER:$USER /usr/share/doc/ort
+
 USER $USER
 WORKDIR $HOME
 
@@ -109,7 +118,7 @@ ENTRYPOINT [ "/bin/bash" ]
 
 #------------------------------------------------------------------------
 # PYTHON - Build Python as a separate component with pyenv
-FROM ort-base-image as pythonbuild
+FROM base AS pythonbuild
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -148,59 +157,26 @@ RUN pip install --no-cache-dir -U \
     && pip install --no-cache-dir -U \
     Mercurial \
     conan=="$CONAN_VERSION" \
+    pip \
     pipenv=="$PYTHON_PIPENV_VERSION" \
     poetry=="$PYTHON_POETRY_VERSION" \
     python-inspector=="$PYTHON_INSPECTOR_VERSION"
 
 RUN ARCH=$(arch | sed s/aarch64/arm64/) \
     &&  if [ "$ARCH" == "arm64" ]; then \
-            pip install -U scancode-toolkit-mini==$SCANCODE_VERSION; \
-        else \
-            curl -Os https://raw.githubusercontent.com/nexB/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt; \
-            pip install -U --constraint requirements.txt scancode-toolkit==$SCANCODE_VERSION; \
-            rm requirements.txt; \
-        fi
+    pip install -U scancode-toolkit-mini==$SCANCODE_VERSION; \
+    else \
+    curl -Os https://raw.githubusercontent.com/nexB/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt; \
+    pip install -U --constraint requirements.txt scancode-toolkit==$SCANCODE_VERSION; \
+    rm requirements.txt; \
+    fi
 
 FROM scratch AS python
 COPY --from=pythonbuild /opt/python /opt/python
 
 #------------------------------------------------------------------------
-# RUBY - Build Ruby as a separate component with rbenv
-FROM ort-base-image AS rubybuild
-
-# hadolint ignore=DL3004
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt,sharing=locked \
-    sudo apt-get update -qq \
-    && DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends \
-    libreadline6-dev \
-    libssl-dev \
-    libz-dev \
-    make \
-    xvfb \
-    zlib1g-dev \
-    && sudo rm -rf /var/lib/apt/lists/*
-
-ARG COCOAPODS_VERSION=1.11.2
-ARG RUBY_VERSION=3.1.2
-ENV RBENV_ROOT=/opt/rbenv
-ENV PATH=$RBENV_ROOT/bin:$RBENV_ROOT/shims/:$RBENV_ROOT/plugins/ruby-build/bin:$PATH
-
-RUN git clone --depth 1 https://github.com/rbenv/rbenv.git $RBENV_ROOT
-RUN git clone --depth 1 https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
-WORKDIR $RBENV_ROOT
-RUN src/configure \
-    && make -C src
-RUN rbenv install $RUBY_VERSION -v \
-    && rbenv global $RUBY_VERSION \
-    && gem install bundler cocoapods:$COCOAPODS_VERSION
-
-FROM scratch AS ruby
-COPY --from=rubybuild /opt/rbenv /opt/rbenv
-
-#------------------------------------------------------------------------
 # NODEJS - Build NodeJS as a separate component with nvm
-FROM ort-base-image AS nodebuild
+FROM base AS nodejsbuild
 
 ARG BOWER_VERSION=1.8.12
 ARG NODEJS_VERSION=18.14.2
@@ -218,17 +194,53 @@ RUN . $NVM_DIR/nvm.sh \
     && nvm use default \
     && npm install --global npm@$NPM_VERSION bower@$BOWER_VERSION pnpm@$PNPM_VERSION yarn@$YARN_VERSION
 
-FROM scratch AS node
-COPY --from=nodebuild /opt/nvm /opt/nvm
+FROM scratch AS nodejs
+COPY --from=nodejsbuild /opt/nvm /opt/nvm
+
+#------------------------------------------------------------------------
+# RUBY - Build Ruby as a separate component with rbenv
+FROM base AS rubybuild
+
+# hadolint ignore=DL3004
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    sudo apt-get update -qq \
+    && DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends \
+    libreadline6-dev \
+    libssl-dev \
+    libz-dev \
+    make \
+    xvfb \
+    zlib1g-dev \
+    && sudo rm -rf /var/lib/apt/lists/*
+
+ARG COCOAPODS_VERSION=1.11.2
+ARG RUBY_VERSION=3.1.2
+
+ENV RBENV_ROOT=/opt/rbenv
+ENV PATH=$RBENV_ROOT/bin:$RBENV_ROOT/shims/:$RBENV_ROOT/plugins/ruby-build/bin:$PATH
+
+RUN git clone --depth 1 https://github.com/rbenv/rbenv.git $RBENV_ROOT
+RUN git clone --depth 1 https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
+WORKDIR $RBENV_ROOT
+RUN src/configure \
+    && make -C src
+RUN rbenv install $RUBY_VERSION -v \
+    && rbenv global $RUBY_VERSION \
+    && gem install bundler cocoapods:$COCOAPODS_VERSION
+
+FROM scratch AS ruby
+COPY --from=rubybuild /opt/rbenv /opt/rbenv
 
 #------------------------------------------------------------------------
 # RUST - Build as a separate component
-FROM ort-base-image AS rustbuild
+FROM base AS rustbuild
 
-ARG RUST_HOME=/opt/rust
-ARG CARGO_HOME=$RUST_HOME/cargo
-ARG RUSTUP_HOME=$RUST_HOME/rustup
-ARG RUST_VERSION=1.64.0
+ARG RUST_VERSION=1.72.0
+
+ENV RUST_HOME=/opt/rust
+ENV CARGO_HOME=$RUST_HOME/cargo
+ENV RUSTUP_HOME=$RUST_HOME/rustup
 RUN curl -ksSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain $RUST_VERSION
 
 FROM scratch AS rust
@@ -236,7 +248,7 @@ COPY --from=rustbuild /opt/rust /opt/rust
 
 #------------------------------------------------------------------------
 # GOLANG - Build as a separate component
-FROM ort-base-image AS gobuild
+FROM base AS gobuild
 
 ARG GO_DEP_VERSION=0.5.4
 ARG GO_VERSION=1.20.5
@@ -253,7 +265,7 @@ COPY --from=gobuild /opt/go /opt/go
 
 #------------------------------------------------------------------------
 # HASKELL STACK
-FROM ort-base-image AS haskellbuild
+FROM base AS haskellbuild
 
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
@@ -274,7 +286,7 @@ COPY --from=haskellbuild /opt/haskell /opt/haskell
 
 #------------------------------------------------------------------------
 # REPO / ANDROID SDK
-FROM ort-base-image AS androidbuild
+FROM base AS androidbuild
 
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
@@ -293,8 +305,8 @@ RUN --mount=type=tmpfs,target=/android \
     && PROXY_HOST_AND_PORT=${https_proxy#*://} \
     && PROXY_HOST_AND_PORT=${PROXY_HOST_AND_PORT%/} \
     && if [ -n "$PROXY_HOST_AND_PORT" ]; then \
-        # While sdkmanager uses HTTPS by default, the proxy type is still called "http".
-        SDK_MANAGER_PROXY_OPTIONS="--proxy=http --proxy_host=${PROXY_HOST_AND_PORT%:*} --proxy_port=${PROXY_HOST_AND_PORT##*:}"; \
+    # While sdkmanager uses HTTPS by default, the proxy type is still called "http".
+    SDK_MANAGER_PROXY_OPTIONS="--proxy=http --proxy_host=${PROXY_HOST_AND_PORT%:*} --proxy_port=${PROXY_HOST_AND_PORT##*:}"; \
     fi \
     && yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager $SDK_MANAGER_PROXY_OPTIONS --sdk_root=$ANDROID_HOME "platform-tools" "cmdline-tools;latest"
 
@@ -306,7 +318,7 @@ COPY --from=androidbuild /opt/android-sdk /opt/android-sdk
 
 #------------------------------------------------------------------------
 #  Dart
-FROM ort-base-image AS dartbuild
+FROM base AS dartbuild
 
 ARG DART_VERSION=2.18.4
 WORKDIR /opt/
@@ -326,7 +338,7 @@ COPY --from=dartbuild /opt/dart-sdk /opt/dart-sdk
 
 #------------------------------------------------------------------------
 # SBT
-FROM ort-base-image AS sbtbuild
+FROM base AS scalabuild
 
 ARG SBT_VERSION=1.6.1
 
@@ -335,28 +347,63 @@ ENV PATH=$PATH:$SBT_HOME/bin
 
 RUN curl -L https://github.com/sbt/sbt/releases/download/v$SBT_VERSION/sbt-$SBT_VERSION.tgz | tar -C /opt -xz
 
-FROM scratch AS sbt
-COPY --from=sbtbuild /opt/sbt /opt/sbt
+FROM scratch AS scala
+COPY --from=scalabuild /opt/sbt /opt/sbt
 
 #------------------------------------------------------------------------
-# SPM
-FROM ort-base-image AS spmbuild
+# SWIFT
+FROM base AS swiftbuild
 
 ARG SWIFT_VERSION=5.8.1
 
 ENV SWIFT_HOME=/opt/swift
 ENV PATH=$PATH:$SWIFT_HOME/bin
 
-RUN mkdir $SWIFT_HOME \
-    && curl -L https://download.swift.org/swift-$SWIFT_VERSION-release/ubuntu2204/swift-$SWIFT_VERSION-RELEASE/swift-$SWIFT_VERSION-RELEASE-ubuntu22.04.tar.gz \
+RUN mkdir -p $SWIFT_HOME \
+    && echo $SWIFT_VERSION \
+    && if [ "$(arch)" = "aarch64" ]; then \
+    SWIFT_PACKAGE="ubuntu2204-aarch64/swift-$SWIFT_VERSION-RELEASE/swift-$SWIFT_VERSION-RELEASE-ubuntu22.04-aarch64.tar.gz"; \
+    else \
+    SWIFT_PACKAGE="ubuntu2204/swift-$SWIFT_VERSION-RELEASE/swift-$SWIFT_VERSION-RELEASE-ubuntu22.04.tar.gz"; \
+    fi \
+    && curl -L https://download.swift.org/swift-$SWIFT_VERSION-release/$SWIFT_PACKAGE \
     | tar -xz -C $SWIFT_HOME --strip-components=2
 
-FROM scratch AS spm
-COPY --from=spmbuild /opt/swift /opt/swift
+FROM scratch AS swift
+COPY --from=swiftbuild /opt/swift /opt/swift
+
+#------------------------------------------------------------------------
+# DOTNET
+FROM base AS dotnetbuild
+
+ARG DOTNET_VERSION=6.0
+ARG NUGET_INSPECTOR_VERSION=0.9.12
+
+ENV DOTNET_HOME=/opt/dotnet
+ENV NUGET_INSPECTOR_HOME=$DOTNET_HOME
+ENV PATH=$PATH:$DOTNET_HOME:$DOTNET_HOME/tools:$DOTNET_HOME/bin
+
+# Note: We are not installing a dotnet package directly because
+# debian packages from Ubuntu and Microsoft are incomplete
+
+RUN mkdir -p $DOTNET_HOME \
+    && echo $SWIFT_VERSION \
+    && if [ "$(arch)" = "aarch64" ]; then \
+    curl -L https://aka.ms/dotnet/$DOTNET_VERSION/dotnet-sdk-linux-arm64.tar.gz | tar -C $DOTNET_HOME -xz; \
+    else \
+    curl -L https://aka.ms/dotnet/$DOTNET_VERSION/dotnet-sdk-linux-x64.tar.gz | tar -C $DOTNET_HOME -xz; \
+    fi
+
+RUN mkdir -p $DOTNET_HOME/bin \
+    && curl -L https://github.com/nexB/nuget-inspector/releases/download/v$NUGET_INSPECTOR_VERSION/nuget-inspector-v$NUGET_INSPECTOR_VERSION-linux-x64.tar.gz \
+    | tar --strip-components=1 -C $DOTNET_HOME/bin -xz
+
+FROM scratch AS dotnet
+COPY --from=dotnetbuild /opt/dotnet /opt/dotnet
 
 #------------------------------------------------------------------------
 # ORT
-FROM ort-base-image as ortbuild
+FROM base as ortbuild
 
 # Set this to the version ORT should report.
 ARG ORT_VERSION="DOCKER-SNAPSHOT"
@@ -370,61 +417,47 @@ RUN --mount=type=cache,target=/var/tmp/gradle \
     && sudo chown -R "$USER". $HOME/src/ort /var/tmp/gradle \
     && scripts/set_gradle_proxy.sh \
     && ./gradlew --no-daemon --stacktrace \
-        -Pversion=$ORT_VERSION \
-        :cli:installDist \
-        :helper-cli:startScripts \
+    -Pversion=$ORT_VERSION \
+    :cli:installDist \
+    :helper-cli:startScripts \
     && mkdir /opt/ort \
     && cp -a $HOME/src/ort/cli/build/install/ort /opt/ \
     && cp -a $HOME/src/ort/scripts/*.sh /opt/ort/bin/ \
     && cp -a $HOME/src/ort/helper-cli/build/scripts/orth /opt/ort/bin/ \
     && cp -a $HOME/src/ort/helper-cli/build/libs/helper-cli-*.jar /opt/ort/lib/
 
-FROM scratch AS ort
-COPY --from=ortbuild /opt/ort /opt/ort 
+FROM scratch AS ortbin
+COPY --from=ortbuild /opt/ort /opt/ort
 
 #------------------------------------------------------------------------
-# Components container
-FROM ort-base-image as components
+# Main Minimal Runtime container
+FROM base as run
 
 # Remove ort build scripts
 RUN [ -d /etc/scripts ] && sudo rm -rf /etc/scripts
 
-# Apt install commands.
+#  Install optional tool subversion for ORT analyzer
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     sudo apt-get update && \
     DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends \
-        php \
-        subversion \
-        # dotnet requirements
-        libc6 \
-        libgcc1 \
-        libgcc-s1 \
-        libgssapi-krb5-2 \
-        libicu70 \
-        liblttng-ust1 \
-        libssl3 \
-        libstdc++6 \
-        libunwind8 \
-        zlib1g \
+    subversion \
     && sudo rm -rf /var/lib/apt/lists/*
+
+RUN syft / --exclude '*/usr/share/doc' --exclude '*/etc' -o spdx-json --file /usr/share/doc/ort/ort-base.spdx.json
 
 # Python
 ENV PYENV_ROOT=/opt/python
 ENV PATH=$PATH:$PYENV_ROOT/shims:$PYENV_ROOT/bin
 COPY --from=python --chown=$USER:$USER $PYENV_ROOT $PYENV_ROOT
-
-# Ruby
-ENV RBENV_ROOT=/opt/rbenv/
-ENV GEM_HOME=/var/tmp/gem
-ENV PATH=$PATH:$RBENV_ROOT/bin:$RBENV_ROOT/shims:$RBENV_ROOT/plugins/ruby-install/bin
-COPY --from=ruby --chown=$USER:$USER $RBENV_ROOT $RBENV_ROOT
+RUN syft $PYENV_ROOT -o spdx-json --file /usr/share/doc/ort/ort-python.spdx.json
 
 # NodeJS
 ARG NODEJS_VERSION=18.14.2
 ENV NVM_DIR=/opt/nvm
 ENV PATH=$PATH:$NVM_DIR/versions/node/v$NODEJS_VERSION/bin
-COPY --from=node --chown=$USER:$USER $NVM_DIR $NVM_DIR
+COPY --from=nodejs --chown=$USER:$USER $NVM_DIR $NVM_DIR
+RUN syft $NVM_DIR  -o spdx-json --file /usr/share/doc/ort/ort-nodejs.spdx.json
 
 # Rust
 ENV RUST_HOME=/opt/rust
@@ -433,78 +466,28 @@ ENV RUSTUP_HOME=$RUST_HOME/rustup
 ENV PATH=$PATH:$CARGO_HOME/bin:$RUSTUP_HOME/bin
 COPY --from=rust --chown=$USER:$USER $RUST_HOME $RUST_HOME
 RUN chmod o+rwx $CARGO_HOME
+RUN syft $RUST_HOME -o spdx-json --file /usr/share/doc/ort/ort-rust.spdx.json
 
 # Golang
 ENV PATH=$PATH:/opt/go/bin
 COPY --from=golang --chown=$USER:$USER /opt/go /opt/go
+RUN syft /opt/go -o spdx-json --file /usr/share/doc/ort/ort-golang.spdx.json
 
-# Haskell
-ENV HASKELL_HOME=/opt/haskell
-ENV PATH=$PATH:$HASKELL_HOME/bin
-COPY --from=haskell --chown=$USER:$USER $HASKELL_HOME $HASKELL_HOME
-
-# Repo and Android
-ENV ANDROID_HOME=/opt/android-sdk
-ENV ANDROID_USER_HOME=$HOME/.android
-ENV PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/cmdline-tools/bin
-ENV PATH=$PATH:$ANDROID_HOME/platform-tools
-COPY --from=android --chown=$USER:$USER $ANDROID_HOME $ANDROID_HOME
-RUN chmod -R o+rw $ANDROID_HOME
-
-# Dart
-ENV DART_SDK=/opt/dart-sdk
-ENV PATH=$PATH:$DART_SDK/bin
-COPY --from=dart --chown=$USER:$USER $DART_SDK $DART_SDK
-
-# SBT
-ENV SBT_HOME=/opt/sbt
-ENV PATH=$PATH:$SBT_HOME/bin
-COPY --from=sbt --chown=$USER:$USER $SBT_HOME $SBT_HOME
-
-# SPM
-ENV SWIFT_HOME=/opt/swift
-ENV PATH=$PATH:$SWIFT_HOME/bin
-COPY --from=spm --chown=$USER:$USER $SWIFT_HOME $SWIFT_HOME
-
-# PHP composer
-ARG COMPOSER_VERSION=2.2
-
-ENV PATH=$PATH:/opt/php/bin
-RUN mkdir -p /opt/php/bin \
-    && curl -ksS https://getcomposer.org/installer | php -- --install-dir=/opt/php/bin --filename=composer --$COMPOSER_VERSION
-
-# nuget-inspector
-ENV NUGET_INSPECTOR_HOME=/opt/nuget-inspector
-ENV NUGET_INSPECTOR_BIN=$NUGET_INSPECTOR_HOME/bin
-ENV DOTNET_HOME=$NUGET_INSPECTOR_HOME/dotnet
-
-ENV PATH=$PATH:$DOTNET_HOME:$DOTNET_HOME/tools:$NUGET_INSPECTOR_BIN
-
-# Note: We are not installing a dotnet package directly because
-# debian packages from Ubuntu and Microsoft are incomplete
-RUN mkdir -p $DOTNET_HOME \
-    && curl -L https://aka.ms/dotnet/6.0/dotnet-sdk-linux-x64.tar.gz \
-    | tar -C $DOTNET_HOME -xz
-
-ARG NUGET_INSPECTOR_VERSION=0.9.12
-RUN mkdir -p $NUGET_INSPECTOR_BIN \
-    && curl -L https://github.com/nexB/nuget-inspector/releases/download/v$NUGET_INSPECTOR_VERSION/nuget-inspector-v$NUGET_INSPECTOR_VERSION-linux-x64.tar.gz \
-    | tar --strip-components=1 -C $NUGET_INSPECTOR_BIN -xz
-
-ENTRYPOINT ["/bin/bash"]
-
-#------------------------------------------------------------------------
-# Main Runtime container
-FROM components AS run
+# Ruby
+ENV RBENV_ROOT=/opt/rbenv/
+ENV GEM_HOME=/var/tmp/gem
+ENV PATH=$PATH:$RBENV_ROOT/bin:$RBENV_ROOT/shims:$RBENV_ROOT/plugins/ruby-install/bin
+COPY --from=ruby --chown=$USER:$USER $RBENV_ROOT $RBENV_ROOT
+RUN syft $RBENV_ROOT -o spdx-json --file /usr/share/doc/ort/ort-ruby.spdx.json
 
 # ORT
-COPY --from=ort --chown=$USER:$USER /opt/ort /opt/ort
+COPY --from=ortbin --chown=$USER:$USER /opt/ort /opt/ort
 ENV PATH=$PATH:/opt/ort/bin
 
 USER $USER
 WORKDIR $HOME
 
 # Ensure that the ORT data directory exists to be able to mount the config into it with correct permissions.
-RUN mkdir -p "$HOMEDIR/.ort"
+RUN mkdir -p "$HOME/.ort"
 
 ENTRYPOINT ["/opt/ort/bin/ort"]

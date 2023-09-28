@@ -173,16 +173,16 @@ class ScannerCommand : OrtCommand(
     }
 
     private fun runScanners(
-        scannerWrapperFactories: List<ScannerWrapperFactory>,
-        projectScannerWrapperFactories: List<ScannerWrapperFactory>,
+        scannerWrapperFactories: List<ScannerWrapperFactory<*>>,
+        projectScannerWrapperFactories: List<ScannerWrapperFactory<*>>,
         ortConfig: OrtConfiguration
     ): OrtResult {
         val packageScannerWrappers = scannerWrapperFactories
             .takeIf { PackageType.PACKAGE in packageTypes }.orEmpty()
-            .map { it.create(ortConfig.scanner, ortConfig.downloader) }
+            .map { it.create(ortConfig.scanner.options?.get(it.type).orEmpty()) }
         val projectScannerWrappers = projectScannerWrapperFactories
             .takeIf { PackageType.PROJECT in packageTypes }.orEmpty()
-            .map { it.create(ortConfig.scanner, ortConfig.downloader) }
+            .map { it.create(ortConfig.scanner.options?.get(it.type).orEmpty()) }
 
         if (projectScannerWrappers.isNotEmpty()) {
             echo("Scanning projects with:")
@@ -200,6 +200,16 @@ class ScannerCommand : OrtCommand(
 
         val scanStorages = ScanStorages.createFromConfig(ortConfig.scanner)
         val workingTreeCache = DefaultWorkingTreeCache()
+
+        logger.info {
+            val readers = scanStorages.readers.map { it.javaClass.simpleName }
+            "Using the following scan storages for reading results: $readers"
+        }
+
+        logger.info {
+            val writers = scanStorages.writers.map { it.javaClass.simpleName }
+            "Using the following scan storages for writing results: $writers"
+        }
 
         try {
             val scanner = Scanner(

@@ -21,6 +21,8 @@ package org.ossreviewtoolkit.model.config
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import org.ossreviewtoolkit.utils.common.Options
+
 /**
  * The configuration for a package manager.
  */

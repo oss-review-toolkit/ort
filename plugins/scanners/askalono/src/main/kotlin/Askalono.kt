@@ -32,33 +32,28 @@ import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.model.config.DownloaderConfiguration
-import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.scanner.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScannerCriteria
+import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
+import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.Os
 
 private const val CONFIDENCE_NOTICE = "Confidence threshold not high enough for any known license"
 
 private val JSON = Json { ignoreUnknownKeys = true }
 
-class Askalono internal constructor(
-    name: String,
-    private val scannerConfig: ScannerConfiguration
-) : CommandLinePathScannerWrapper(name) {
+class Askalono internal constructor(name: String, private val options: Options) : CommandLinePathScannerWrapper(name) {
     private companion object : Logging
 
-    class Factory : AbstractScannerWrapperFactory<Askalono>("Askalono") {
-        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            Askalono(type, scannerConfig)
+    class Factory : ScannerWrapperFactory<Askalono>("Askalono") {
+        override fun create(options: Options) = Askalono(type, options)
     }
 
     override val configuration = ""
 
-    override val criteria by lazy { ScannerCriteria.fromConfig(details, scannerConfig) }
+    override val criteria by lazy { ScannerCriteria.create(details, options) }
 
     override fun command(workingDir: File?) =
         listOfNotNull(workingDir, if (Os.isWindows) "askalono.exe" else "askalono").joinToString(File.separator)

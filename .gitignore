@@ -6,6 +6,7 @@ build/
 out/
 /local.properties
 /*.iml
+Dockerfile.custom
 
 # Kotest temporary directory
 .kotest/

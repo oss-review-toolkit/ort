@@ -58,6 +58,15 @@ class CocoaPodsFunTest : WordSpec({
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
+        "determine dependencies from a Podfile that upgrades a version during resolution" {
+            val definitionFile = getAssetFile("projects/synthetic/version-resolution/Podfile")
+            val expectedResultFile = getAssetFile("projects/synthetic/version-resolution-expected-output.yml")
+
+            val result = create("CocoaPods").resolveSingleProject(definitionFile)
+
+            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+        }
+
         "return no dependencies along with an issue if the lockfile is absent" {
             val definitionFile = getAssetFile("projects/synthetic/no-lockfile/Podfile")
             val expectedResultFile = getAssetFile("projects/synthetic/no-lockfile-expected-output.yml")

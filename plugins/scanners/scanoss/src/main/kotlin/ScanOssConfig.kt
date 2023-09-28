@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.scanners.scanoss
 
 import org.ossreviewtoolkit.clients.scanoss.ScanOssService
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.utils.common.Options
 
 /**
  * A data class that holds the configuration options supported by the [ScanOss] scanner. An instance of this class is
@@ -41,11 +42,9 @@ internal data class ScanOssConfig(
         /** Name of the configuration property for the API key. */
         const val API_KEY_PROPERTY = "apiKey"
 
-        fun create(scannerConfig: ScannerConfiguration): ScanOssConfig {
-            val scanOssOptions = scannerConfig.options?.get("ScanOss")
-
-            val apiUrl = scanOssOptions?.get(API_URL_PROPERTY) ?: ScanOssService.DEFAULT_API_URL
-            val apiKey = scanOssOptions?.get(API_KEY_PROPERTY).orEmpty()
+        fun create(options: Options): ScanOssConfig {
+            val apiUrl = options[API_URL_PROPERTY] ?: ScanOssService.DEFAULT_API_URL
+            val apiKey = options[API_KEY_PROPERTY].orEmpty()
 
             return ScanOssConfig(apiUrl, apiKey)
         }

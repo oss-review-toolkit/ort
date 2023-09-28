@@ -28,13 +28,13 @@ import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
-import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.scanner.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.ScannerCriteria
+import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
+import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
@@ -57,10 +57,7 @@ import org.semver4j.Semver
  * * **"commandLineNonConfig":** Command line options that do not modify the result and should therefore not be
  *   considered in [configuration], like "--processes". Defaults to [DEFAULT_NON_CONFIGURATION_OPTIONS].
  */
-class ScanCode internal constructor(
-    name: String,
-    private val scannerConfig: ScannerConfiguration
-) : CommandLinePathScannerWrapper(name) {
+class ScanCode internal constructor(name: String, private val options: Options) : CommandLinePathScannerWrapper(name) {
     companion object : Logging {
         const val SCANNER_NAME = "ScanCode"
 
@@ -94,12 +91,11 @@ class ScanCode internal constructor(
         }
     }
 
-    class Factory : AbstractScannerWrapperFactory<ScanCode>(SCANNER_NAME) {
-        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            ScanCode(type, scannerConfig)
+    class Factory : ScannerWrapperFactory<ScanCode>(SCANNER_NAME) {
+        override fun create(options: Options) = ScanCode(type, options)
     }
 
-    override val criteria by lazy { ScannerCriteria.fromConfig(details, scannerConfig) }
+    override val criteria by lazy { ScannerCriteria.create(details, options) }
 
     override val configuration by lazy {
         buildList {
@@ -108,11 +104,8 @@ class ScanCode internal constructor(
         }.joinToString(" ")
     }
 
-    private val scanCodeConfiguration = scannerConfig.options?.get("ScanCode").orEmpty()
-
-    private val configurationOptions = scanCodeConfiguration["commandLine"]?.splitOnWhitespace()
-        ?: DEFAULT_CONFIGURATION_OPTIONS
-    private val nonConfigurationOptions = scanCodeConfiguration["commandLineNonConfig"]?.splitOnWhitespace()
+    private val configurationOptions = options["commandLine"]?.splitOnWhitespace() ?: DEFAULT_CONFIGURATION_OPTIONS
+    private val nonConfigurationOptions = options["commandLineNonConfig"]?.splitOnWhitespace()
         ?: DEFAULT_NON_CONFIGURATION_OPTIONS
 
     internal fun getCommandLineOptions(version: String) =

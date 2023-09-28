@@ -22,10 +22,11 @@ package org.ossreviewtoolkit.plugins.scanners.fossid
 import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.utils.common.Options
 
 /**
  * A data class that holds the configuration options supported by the [FossId] scanner. An instance of this class is
- * created from the options contained in a [ScannerConfiguration] object under the key _FossId_. It offers the
+ * created from the [Options] contained in a [ScannerConfiguration] object under the key _FossId_. It offers the
  * following configuration options:
  *
  * * **"serverUrl":** The URL of the FossID server.
@@ -160,32 +161,28 @@ internal data class FossIdConfig(
         @JvmStatic
         private val DEFAULT_TIMEOUT = 60
 
-        fun create(scannerConfig: ScannerConfiguration): FossIdConfig {
-            val fossIdScannerOptions = scannerConfig.options?.get("FossId")
+        fun create(options: Options): FossIdConfig {
+            require(options.isNotEmpty()) { "No FossID Scanner configuration found." }
 
-            requireNotNull(fossIdScannerOptions) { "No FossID Scanner configuration found." }
-
-            val serverUrl = fossIdScannerOptions[SERVER_URL_PROPERTY]
+            val serverUrl = options[SERVER_URL_PROPERTY]
                 ?: throw IllegalArgumentException("No FossID server URL configuration found.")
-            val user = fossIdScannerOptions[USER_PROPERTY]
+            val user = options[USER_PROPERTY]
                 ?: throw IllegalArgumentException("No FossID User configuration found.")
-            val apiKey = fossIdScannerOptions[API_KEY_PROPERTY]
+            val apiKey = options[API_KEY_PROPERTY]
                 ?: throw IllegalArgumentException("No FossID API Key configuration found.")
 
-            val waitForResult = fossIdScannerOptions[WAIT_FOR_RESULT_PROPERTY]?.toBoolean() ?: true
+            val waitForResult = options[WAIT_FOR_RESULT_PROPERTY]?.toBoolean() ?: true
 
-            val keepFailedScans = fossIdScannerOptions[KEEP_FAILED_SCANS_PROPERTY]?.toBoolean() ?: false
-            val deltaScans = fossIdScannerOptions[DELTA_SCAN_PROPERTY]?.toBoolean() ?: false
-            val deltaScanLimit = fossIdScannerOptions[DELTA_SCAN_LIMIT_PROPERTY]?.toInt() ?: Int.MAX_VALUE
+            val keepFailedScans = options[KEEP_FAILED_SCANS_PROPERTY]?.toBoolean() ?: false
+            val deltaScans = options[DELTA_SCAN_PROPERTY]?.toBoolean() ?: false
+            val deltaScanLimit = options[DELTA_SCAN_LIMIT_PROPERTY]?.toInt() ?: Int.MAX_VALUE
 
-            val detectLicenseDeclarations =
-                fossIdScannerOptions[DETECT_LICENSE_DECLARATIONS_PROPERTY]?.toBoolean() ?: false
-            val detectCopyrightStatements =
-                fossIdScannerOptions[DETECT_COPYRIGHT_STATEMENTS_PROPERTY]?.toBoolean() ?: false
+            val detectLicenseDeclarations = options[DETECT_LICENSE_DECLARATIONS_PROPERTY]?.toBoolean() ?: false
+            val detectCopyrightStatements = options[DETECT_COPYRIGHT_STATEMENTS_PROPERTY]?.toBoolean() ?: false
 
-            val timeout = fossIdScannerOptions[TIMEOUT]?.toInt() ?: DEFAULT_TIMEOUT
+            val timeout = options[TIMEOUT]?.toInt() ?: DEFAULT_TIMEOUT
 
-            val fetchSnippetMatchedLines = fossIdScannerOptions[FETCH_SNIPPET_MATCHED_LINES]?.toBoolean() ?: false
+            val fetchSnippetMatchedLines = options[FETCH_SNIPPET_MATCHED_LINES]?.toBoolean() ?: false
 
             require(deltaScanLimit > 0) {
                 "deltaScanLimit must be > 0, current value is $deltaScanLimit."
@@ -205,7 +202,7 @@ internal data class FossIdConfig(
                 detectCopyrightStatements = detectCopyrightStatements,
                 timeout = timeout,
                 fetchSnippetMatchedLines = fetchSnippetMatchedLines,
-                options = fossIdScannerOptions
+                options = options
             )
         }
     }

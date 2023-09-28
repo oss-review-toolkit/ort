@@ -237,7 +237,7 @@ private fun parseNameAndVersion(entry: String): Pair<String, String?> {
 
     // A version entry could look something like "(6.3.0)", "(= 2021.06.28.00-v2)", "(~> 8.15.0)", etc. Also see
     // https://guides.cocoapods.org/syntax/podfile.html#pod.
-    val version = info.getOrNull(1)?.removeSurrounding("(", ")")?.substringAfterLast(' ')
+    val version = info.getOrNull(1)?.removeSurrounding("(", ")")
 
     return name to version
 }
@@ -248,28 +248,28 @@ private data class LockfileData(
 )
 
 private fun parseLockfile(podfileLock: File): LockfileData {
-    val versionForName = mutableMapOf<String, String>()
-    val dependenciesForName = mutableMapOf<String, MutableSet<String>>()
+    val resolvedVersions = mutableMapOf<String, String>()
+    val dependencyConstraints = mutableMapOf<String, MutableSet<String>>()
     val root = yamlMapper.readTree(podfileLock)
 
-    // The "PODS" section lists the direct dependencies and, if applicable, their direct dependencies each. That is, the
-    // nesting never goes deeper than two levels, and in order to build up a full dependency tree, one needs to
-    // recursively step through all direct dependencies.
-    root.get("PODS").asIterable().forEach { node ->
-        val entry = when (node) {
-            is ObjectNode -> node.fieldNames().asSequence().first()
-            else -> node.textValue()
+    // The "PODS" section lists the resolved dependencies and, nested by one level, any version constraints of their
+    // direct dependencies. That is, the nesting never goes deeper than two levels.
+    root.get("PODS").forEach { node ->
+        when (node) {
+            is ObjectNode -> {
+                val (name, version) = parseNameAndVersion(node.fieldNames().asSequence().single())
+                resolvedVersions[name] = checkNotNull(version)
+                dependencyConstraints[name] = node.single().mapTo(mutableSetOf()) {
+                    // Discard the version (which is only a constraint in this case) and just take the name.
+                    parseNameAndVersion(it.textValue()).first
+                }
+            }
+
+            else -> {
+                val (name, version) = parseNameAndVersion(node.textValue())
+                resolvedVersions[name] = checkNotNull(version)
+            }
         }
-
-        val (name, version) = parseNameAndVersion(entry)
-        versionForName[name] = checkNotNull(version)
-
-        val dependencies = node[entry]?.map { depNode ->
-            val (depName, depVersion) = parseNameAndVersion(depNode.textValue())
-            depName.also { if (depVersion != null) versionForName[it] = depVersion }
-        }.orEmpty()
-
-        dependenciesForName.getOrPut(name) { mutableSetOf() } += dependencies
     }
 
     val externalSources = root.get("CHECKOUT OPTIONS")?.fields()?.asSequence()?.mapNotNull {
@@ -280,12 +280,12 @@ private fun parseLockfile(podfileLock: File): LockfileData {
         // The version written to the lockfile matches the version specified in the project's ".podspec" file at the
         // given revision, so the same version might be used in different revisions. To still get a unique identifier,
         // append the revision to the version.
-        val versionFromPodspec = checkNotNull(versionForName[it.key])
+        val versionFromPodspec = checkNotNull(resolvedVersions[it.key])
         val uniqueVersion = "$versionFromPodspec-$revision"
         val id = Identifier("Pod", "", it.key, uniqueVersion)
 
         // Write the unique version back for correctly associating dependencies below.
-        versionForName[it.key] = uniqueVersion
+        resolvedVersions[it.key] = uniqueVersion
 
         id to Package(
             id = id,
@@ -300,12 +300,20 @@ private fun parseLockfile(podfileLock: File): LockfileData {
 
     fun createPackageReference(name: String): PackageReference =
         PackageReference(
-            id = Identifier("Pod", "", name, versionForName.getValue(name)),
-            dependencies = dependenciesForName[name].orEmpty().mapTo(mutableSetOf()) { createPackageReference(it) }
+            id = Identifier("Pod", "", name, resolvedVersions.getValue(name)),
+            dependencies = dependencyConstraints[name].orEmpty().filter {
+                // Only use a constraint as a dependency if it has a resolved version.
+                it in resolvedVersions
+            }.mapTo(mutableSetOf()) {
+                createPackageReference(it)
+            }
         )
 
+    // The "DEPENDENCIES" section lists direct dependencies, but only along with version constraints, not with their
+    // resolved versions, and eventually additional information about the source.
     val dependencies = root.get("DEPENDENCIES").mapTo(mutableSetOf()) { node ->
-        val name = node.textValue().substringBefore(" ")
+        // Discard the version (which is only a constraint in this case) and just take the name.
+        val (name, _) = parseNameAndVersion(node.textValue())
         createPackageReference(name)
     }
 

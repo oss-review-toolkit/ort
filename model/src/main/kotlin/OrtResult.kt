@@ -188,17 +188,19 @@ data class OrtResult(
     /**
      * Return the dependencies of the given [id] (which can refer to a [Project] or a [Package]), up to and including a
      * depth of [maxLevel] where counting starts at 0 (for the [Project] or [Package] itself) and 1 are direct
-     * dependencies etc. A value below 0 means to not limit the depth.
+     * dependencies etc. A value below 0 means to not limit the depth. If [omitExcluded] is set to true, identifiers of
+     * excluded projects / packages are omitted from the result.
      */
-    fun getDependencies(id: Identifier, maxLevel: Int = -1): Set<Identifier> {
+    fun getDependencies(id: Identifier, maxLevel: Int = -1, omitExcluded: Boolean = false): Set<Identifier> {
         val dependencies = mutableSetOf<Identifier>()
+        val matcher = DependencyNavigator.MATCH_ALL.takeUnless { omitExcluded } ?: { !isExcluded(it.id) }
 
         getProjects().forEach { project ->
             if (project.id == id) {
-                dependencies += dependencyNavigator.projectDependencies(project, maxLevel)
+                dependencies += dependencyNavigator.projectDependencies(project, maxLevel, matcher)
             }
 
-            dependencies += dependencyNavigator.packageDependencies(project, id, maxLevel)
+            dependencies += dependencyNavigator.packageDependencies(project, id, maxLevel, matcher)
         }
 
         return dependencies

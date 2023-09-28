@@ -84,8 +84,8 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
 
         result.onSuccess { results ->
             logger.info {
-                "Read ${results.size} scan result(s) for '${pkg.id.toCoordinates()}' from ${javaClass.simpleName} in " +
-                    "$duration."
+                "Read ${results.size} matching scan result(s) for '${pkg.id.toCoordinates()}' from " +
+                    "${javaClass.simpleName} in $duration."
             }
         }
 
@@ -108,7 +108,8 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
 
         result.onSuccess { results ->
             logger.info {
-                "Read ${results.values.sumOf { it.size }} scan result(s) from ${javaClass.simpleName} in $duration."
+                val count = results.values.sumOf { it.size }
+                "Read $count matching scan result(s) from ${javaClass.simpleName} in $duration."
             }
         }
 
@@ -153,27 +154,30 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
             if (results.isEmpty()) {
                 results
             } else {
-                val scanResults = results.toMutableList()
+                val (matchingProvenance, nonMatchingProvenance) = results.partition { it.provenance.matches(pkg) }
 
-                // Only keep scan results whose provenance information matches the package information.
-                scanResults.retainAll { it.provenance.matches(pkg) }
-                if (scanResults.isEmpty()) {
+                if (matchingProvenance.isEmpty()) {
                     logger.debug {
                         "No stored scan results found for $pkg. The following entries with non-matching provenance " +
-                            "have been ignored: ${scanResults.map { it.provenance }}"
+                            "have been ignored: ${nonMatchingProvenance.map { it.provenance }}"
                     }
+
+                    matchingProvenance
                 } else {
-                    // Only keep scan results from compatible scanners.
-                    scanResults.retainAll { scannerCriteria.matches(it.scanner) }
-                    if (scanResults.isEmpty()) {
+                    val (matchingCriteria, nonMatchingCriteria) = matchingProvenance.partition {
+                        scannerCriteria.matches(it.scanner)
+                    }
+
+                    if (matchingCriteria.isEmpty()) {
                         logger.debug {
-                            "No stored scan results found for $scannerCriteria. The following entries with " +
-                                "incompatible scanners have been ignored: ${scanResults.map { it.scanner }}"
+                            "No stored scan results for '${pkg.id.toCoordinates()}' match $scannerCriteria. The " +
+                                "following entries with non-matching criteria have been ignored: " +
+                                nonMatchingCriteria.map { it.scanner }
                         }
                     }
-                }
 
-                scanResults
+                    matchingCriteria
+                }
             }
         }
 

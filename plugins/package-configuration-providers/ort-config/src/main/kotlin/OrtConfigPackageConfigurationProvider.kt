@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.PackageConfigurationProviderFactory
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.dir.DirPackageConfigurationProvider
+import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 
@@ -44,7 +45,7 @@ class OrtConfigPackageConfigurationProviderFactory : PackageConfigurationProvide
 
     override fun create(config: Unit): PackageConfigurationProvider = OrtConfigPackageConfigurationProvider()
 
-    override fun parseConfig(config: Map<String, String>) = Unit
+    override fun parseOptions(options: Options) = Unit
 }
 
 /**

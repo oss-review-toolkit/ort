@@ -49,7 +49,6 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
-import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.model.config.createStorage
@@ -65,6 +64,7 @@ import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceScanResult
 import org.ossreviewtoolkit.scanner.provenance.PackageProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.ProvenanceDownloader
 import org.ossreviewtoolkit.scanner.utils.FileListResolver
+import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.Environment
@@ -124,7 +124,8 @@ class Scanner(
                 ScanContext(
                     ortResult.labels + labels,
                     PackageType.PROJECT,
-                    ortResult.repository.config.excludes
+                    ortResult.repository.config.excludes,
+                    scannerConfig.detectedLicenseMapping
                 )
             )
         } else {
@@ -139,7 +140,15 @@ class Scanner(
 
             logger.info { "Scanning ${packages.size} package(s) with ${packageScannerWrappers.size} scanner(s)." }
 
-            scan(packages, ScanContext(ortResult.labels, PackageType.PACKAGE, ortResult.repository.config.excludes))
+            scan(
+                packages,
+                ScanContext(
+                    ortResult.labels,
+                    PackageType.PACKAGE,
+                    ortResult.repository.config.excludes,
+                    scannerConfig.detectedLicenseMapping
+                )
+            )
         } else {
             logger.info { "Skipping package scan as no package scanner is configured." }
 

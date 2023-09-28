@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.model.config
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.model.utils.FileArchiver
+import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants

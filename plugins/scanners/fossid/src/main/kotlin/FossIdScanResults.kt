@@ -85,7 +85,9 @@ internal fun <T : Summarizable> List<T>.mapSummary(
 
         summary.licences.forEach {
             runCatching {
-                // TODO: The license mapping should be moved to a central place.
+                // TODO: The detected license mapping must be applied here, because FossID can return license strings
+                //       which cannot be parsed to an SpdxExpression. A better solution could be to automatically
+                //       convert the strings into a form that can be parsed, then the mapping could be applied globally.
                 LicenseFinding(it.identifier.mapLicense(detectedLicenseMapping), location)
             }.onSuccess { licenseFinding ->
                 licenseFindings += licenseFinding.copy(license = licenseFinding.license.normalize())

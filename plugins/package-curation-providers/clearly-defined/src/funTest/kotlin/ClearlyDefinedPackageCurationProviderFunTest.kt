@@ -70,30 +70,6 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
         }
     }
 
-    "The development server" should {
-        val provider = ClearlyDefinedPackageCurationProvider(Server.DEVELOPMENT)
-
-        "return an existing curation for the platform-express NPM package" {
-            val packages = createPackagesFromIds("NPM:@nestjs:platform-express:6.2.3")
-
-            withRetry {
-                val curations = provider.getCurationsFor(packages)
-
-                curations.map { it.data.concludedLicense } shouldHaveSingleElement "Apache-1.0".toSpdx()
-            }
-        }
-
-        "return no curation for a non-existing dummy Maven package" {
-            val packages = createPackagesFromIds("Maven:group:name:1.2.3")
-
-            withRetry {
-                val curations = provider.getCurationsFor(packages)
-
-                curations should beEmpty()
-            }
-        }
-    }
-
     "Curations" should {
         "get filtered by score" {
             val config = ClearlyDefinedPackageCurationProviderConfig(
