@@ -20,4 +20,5 @@
 plugins {
     // Apply precompiled plugins.
     id("ort-kotlin-conventions")
+    id("ort-publication-conventions")
 }
