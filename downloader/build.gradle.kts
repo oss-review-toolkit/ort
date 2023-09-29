@@ -28,7 +28,10 @@ dependencies {
     implementation(project(":utils:ort-utils"))
 
     implementation(libs.jgit)
-    implementation(libs.jgitSshApacheAgent)
+    implementation(libs.jgitSshApacheAgent) {
+        exclude(group = "org.apache.sshd", module = "sshd-sftp")
+            .because("it is not required for cloning via SSH and causes issues with GraalVM native images")
+    }
     implementation(libs.svnkit) {
         exclude(group = "org.apache.sshd", module = "sshd-core")
             .because("it is included in JGit's sshd-osgi dependency")
