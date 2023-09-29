@@ -41,6 +41,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     coreutils \
     curl \
     dirmngr \
+    file \
     gcc \
     git \
     git-lfs \
@@ -50,6 +51,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     libarchive-tools \
     libffi-dev \
     libgmp-dev \
+    libmagic1 \
     libz-dev \
     locales \
     lzma \
