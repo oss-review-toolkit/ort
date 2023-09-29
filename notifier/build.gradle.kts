@@ -34,6 +34,7 @@ dependencies {
     implementation(libs.jiraRestClientApi)
     implementation(libs.jiraRestClientApp) {
         exclude("org.slf4j", "slf4j-log4j12")
+            .because("the SLF4J implementation from Log4j 2 is used")
     }
 
     testImplementation(libs.greenmail)
