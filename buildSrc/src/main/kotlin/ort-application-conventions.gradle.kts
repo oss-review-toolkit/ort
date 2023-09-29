@@ -47,7 +47,7 @@ graalvmNative {
     // For options see https://graalvm.github.io/native-build-tools/latest/gradle-plugin.html.
     binaries {
         named("main") {
-            imageName = application.applicationName
+            imageName = provider { application.applicationName }
 
             val initializeAtBuildTime = listOf(
                 "ch.qos.logback.classic.Level",
