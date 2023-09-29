@@ -215,6 +215,7 @@ jobs:
           push: true
           load: false
           build-args: |
+            NODEJS_VERSION=${{ env.NODEJS_VERSION }}
             ORT_VERSION=${{ env.ORT_VERSION }}
           tags: |
             ${{ steps.meta-ort.outputs.tags }}
