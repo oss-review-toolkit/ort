@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+package org.ossreviewtoolkit.clients.scanoss
+
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
@@ -34,7 +36,6 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 
-import org.ossreviewtoolkit.clients.scanoss.ScanOssService
 import org.ossreviewtoolkit.clients.scanoss.model.Source
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 

@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+package org.ossreviewtoolkit.clients.osv
+
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.result.shouldBeSuccess
@@ -26,11 +28,6 @@ import java.time.Instant
 
 import kotlinx.serialization.json.JsonObject
 
-import org.ossreviewtoolkit.clients.osv.OsvApiClient
-import org.ossreviewtoolkit.clients.osv.OsvService
-import org.ossreviewtoolkit.clients.osv.Package
-import org.ossreviewtoolkit.clients.osv.VulnerabilitiesForPackageRequest
-import org.ossreviewtoolkit.clients.osv.Vulnerability
 import org.ossreviewtoolkit.utils.test.getAssetAsString
 
 private val VULNERABILITY_FOR_PACKAGE_BY_COMMIT_REQUEST = VulnerabilitiesForPackageRequest(

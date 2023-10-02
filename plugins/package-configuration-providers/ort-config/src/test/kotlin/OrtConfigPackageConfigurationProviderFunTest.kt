@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+package org.ossreviewtoolkit.plugins.packageconfigurationproviders.ortconfig
+
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.haveSize
@@ -26,7 +28,6 @@ import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.RemoteArtifact
-import org.ossreviewtoolkit.plugins.packageconfigurationproviders.ortconfig.OrtConfigPackageConfigurationProvider
 
 class OrtConfigPackageConfigurationProviderFunTest : StringSpec({
     "provider can load package-configurations from the ort-config repository" {
