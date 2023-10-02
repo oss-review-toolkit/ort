@@ -94,6 +94,11 @@ style:
       - kotlinx.html.*
       - kotlinx.html.dom.*
 
+potential-bugs:
+  MissingPackageDeclaration:
+    active: true
+    excludes: ["**/GradleModel.kt", "**/build.gradle.kts"]
+
 ORT:
   OrtImportOrder:
     active: true
