@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
-import org.ossreviewtoolkit.scanner.ScannerCriteria
+import org.ossreviewtoolkit.scanner.ScannerMatcher
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.Os
@@ -95,7 +95,7 @@ class ScanCode internal constructor(name: String, private val options: Options) 
         override fun create(options: Options) = ScanCode(type, options)
     }
 
-    override val criteria by lazy { ScannerCriteria.create(details, options) }
+    override val matcher by lazy { ScannerMatcher.create(details, options) }
 
     override val configuration by lazy {
         buildList {

@@ -94,8 +94,8 @@ class Scanner(
         }
 
         scannerWrappers.values.flatten().distinct().forEach { scannerWrapper ->
-            scannerWrapper.criteria?.let { criteria ->
-                require(criteria.matches(scannerWrapper.details)) {
+            scannerWrapper.matcher?.let { matcher ->
+                require(matcher.matches(scannerWrapper.details)) {
                     "The scanner details of scanner '${scannerWrapper.details.name}' must satisfy the configured " +
                         "criteria for looking up scan storage entries."
                 }
@@ -382,8 +382,8 @@ class Scanner(
                     "Scan of '${referencePackage.id.toCoordinates()}' with package scanner '${scanner.name} started."
                 }
 
-                // Filter the scan context to hide the excludes from scanner with scan criteria.
-                val filteredContext = if (scanner.criteria == null) context else context.copy(excludes = null)
+                // Filter the scan context to hide the excludes from scanner with scan matcher.
+                val filteredContext = if (scanner.matcher == null) context else context.copy(excludes = null)
                 val scanResult = scanner.scanPackage(referencePackage, filteredContext)
 
                 logger.info {
@@ -396,7 +396,7 @@ class Scanner(
                     controller.addNestedScanResult(scanner, nestedProvenanceScanResult)
 
                     // TODO: Run in coroutine.
-                    if (scanner.criteria != null) {
+                    if (scanner.matcher != null) {
                         storeNestedScanResult(pkg, nestedProvenanceScanResult)
                     }
                 }
@@ -427,8 +427,8 @@ class Scanner(
                         "'${scanner.name}'."
                 }
 
-                // Filter the scan context to hide the excludes from scanner with scan criteria.
-                val filteredContext = if (scanner.criteria == null) context else context.copy(excludes = null)
+                // Filter the scan context to hide the excludes from scanner with scan matcher.
+                val filteredContext = if (scanner.matcher == null) context else context.copy(excludes = null)
                 val scanResult = scanner.scanProvenance(provenance, filteredContext)
 
                 val completedPackages = controller.getPackagesCompletedByProvenance(scanner, provenance)
@@ -528,7 +528,7 @@ class Scanner(
 
     private fun readStoredPackageResults(controller: ScanController) {
         controller.scanners.forEach { scanner ->
-            val scannerCriteria = scanner.criteria ?: return@forEach
+            val scannerMatcher = scanner.matcher ?: return@forEach
 
             controller.packages.forEach pkg@{ pkg ->
                 val nestedProvenance = controller.findNestedProvenance(pkg.id) ?: return@pkg
@@ -537,7 +537,7 @@ class Scanner(
                     if (controller.hasCompleteScanResult(scanner, pkg)) return@pkg
 
                     runCatching {
-                        reader.read(pkg, nestedProvenance, scannerCriteria)
+                        reader.read(pkg, nestedProvenance, scannerMatcher)
                     }.onSuccess { results ->
                         results.forEach { result ->
                             controller.addNestedScanResult(scanner, result)
@@ -557,14 +557,14 @@ class Scanner(
 
     private fun readStoredProvenanceResults(controller: ScanController) {
         controller.scanners.forEach { scanner ->
-            val scannerCriteria = scanner.criteria ?: return@forEach
+            val scannerMatcher = scanner.matcher ?: return@forEach
 
             controller.getAllProvenances().forEach provenance@{ provenance ->
                 if (controller.hasScanResult(scanner, provenance)) return@provenance
 
                 storageReaders.filterIsInstance<ProvenanceBasedScanStorageReader>().forEach { reader ->
                     runCatching {
-                        reader.read(provenance, scannerCriteria)
+                        reader.read(provenance, scannerMatcher)
                     }.onSuccess { results ->
                         controller.addScanResults(scanner, provenance, results)
                     }.onFailure { e ->
@@ -611,8 +611,8 @@ class Scanner(
             scanners.associateWith { scanner ->
                 logger.info { "Scan of $provenance with path scanner '${scanner.name}' started." }
 
-                // Filter the scan context to hide the excludes from scanner with scan criteria.
-                val filteredContext = if (scanner.criteria == null) context else context.copy(excludes = null)
+                // Filter the scan context to hide the excludes from scanner with scan matcher.
+                val filteredContext = if (scanner.matcher == null) context else context.copy(excludes = null)
                 val summary = scanner.scanPath(downloadDir, filteredContext)
 
                 logger.info { "Scan of $provenance with path scanner '${scanner.name}' finished." }

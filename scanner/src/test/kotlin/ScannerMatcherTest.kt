@@ -26,96 +26,96 @@ import org.ossreviewtoolkit.model.ScannerDetails
 
 import org.semver4j.Semver
 
-class ScannerCriteriaTest : WordSpec({
-    "ScannerCriteria.create()" should {
+class ScannerMatcherTest : WordSpec({
+    "ScannerMatcher.create()" should {
         "obtain default values from the scanner details" {
-            val criteria = ScannerCriteria.create(testDetails)
+            val matcher = ScannerMatcher.create(testDetails)
 
-            criteria.regScannerName shouldBe SCANNER_NAME
-            criteria.minVersion.version shouldBe SCANNER_VERSION
-            criteria.maxVersion shouldBe Semver(SCANNER_VERSION).nextMinor()
-            criteria.configuration shouldBe SCANNER_CONFIGURATION
+            matcher.regScannerName shouldBe SCANNER_NAME
+            matcher.minVersion.version shouldBe SCANNER_VERSION
+            matcher.maxVersion shouldBe Semver(SCANNER_VERSION).nextMinor()
+            matcher.configuration shouldBe SCANNER_CONFIGURATION
         }
 
         "obtain values from the configuration" {
             val options = mapOf(
-                ScannerCriteria.PROP_CRITERIA_NAME to "foo",
-                ScannerCriteria.PROP_CRITERIA_MIN_VERSION to "1.2.3",
-                ScannerCriteria.PROP_CRITERIA_MAX_VERSION to "4.5.6",
-                ScannerCriteria.PROP_CRITERIA_CONFIGURATION to "config"
+                ScannerMatcher.PROP_CRITERIA_NAME to "foo",
+                ScannerMatcher.PROP_CRITERIA_MIN_VERSION to "1.2.3",
+                ScannerMatcher.PROP_CRITERIA_MAX_VERSION to "4.5.6",
+                ScannerMatcher.PROP_CRITERIA_CONFIGURATION to "config"
             )
 
-            val criteria = ScannerCriteria.create(testDetails, options)
+            val matcher = ScannerMatcher.create(testDetails, options)
 
-            criteria.regScannerName shouldBe "foo"
-            criteria.minVersion.version shouldBe "1.2.3"
-            criteria.maxVersion.version shouldBe "4.5.6"
-            criteria.configuration shouldBe "config"
+            matcher.regScannerName shouldBe "foo"
+            matcher.minVersion.version shouldBe "1.2.3"
+            matcher.maxVersion.version shouldBe "4.5.6"
+            matcher.configuration shouldBe "config"
         }
 
         "parse versions in a lenient way" {
             val options = mapOf(
-                ScannerCriteria.PROP_CRITERIA_MIN_VERSION to "1",
-                ScannerCriteria.PROP_CRITERIA_MAX_VERSION to "3.7"
+                ScannerMatcher.PROP_CRITERIA_MIN_VERSION to "1",
+                ScannerMatcher.PROP_CRITERIA_MAX_VERSION to "3.7"
             )
 
-            val criteria = ScannerCriteria.create(testDetails, options)
+            val matcher = ScannerMatcher.create(testDetails, options)
 
-            criteria.minVersion.version shouldBe "1.0.0"
-            criteria.maxVersion.version shouldBe "3.7.0"
+            matcher.minVersion.version shouldBe "1.0.0"
+            matcher.maxVersion.version shouldBe "3.7.0"
         }
     }
 
-    "ScannerCriteria.matches()" should {
+    "ScannerMatcher.matches()" should {
         "accept matching details" {
             matchingCriteria.matches(testDetails) shouldBe true
         }
 
         "detect a different name" {
-            val criteria = matchingCriteria.copy(regScannerName = testDetails.name + "_other")
+            val matcher = matchingCriteria.copy(regScannerName = testDetails.name + "_other")
 
-            criteria.matches(testDetails) shouldBe false
+            matcher.matches(testDetails) shouldBe false
         }
 
         "use a regular expression to match the scanner name" {
-            val criteria = matchingCriteria.copy(regScannerName = "Sc.*Cr.+Te.t")
+            val matcher = matchingCriteria.copy(regScannerName = "Sc.*Ma.+Te.t")
 
-            criteria.matches(testDetails) shouldBe true
+            matcher.matches(testDetails) shouldBe true
         }
 
         "detect a scanner version that is too old" {
-            val criteria = matchingCriteria.copy(
+            val matcher = matchingCriteria.copy(
                 minVersion = matchingCriteria.maxVersion,
                 maxVersion = Semver("4.0.0")
             )
 
-            criteria.matches(testDetails) shouldBe false
+            matcher.matches(testDetails) shouldBe false
         }
 
         "detect a scanner version that is too new" {
-            val criteria = matchingCriteria.copy(
+            val matcher = matchingCriteria.copy(
                 minVersion = Semver("1.0.0"),
                 maxVersion = Semver(testDetails.version)
             )
 
-            criteria.matches(testDetails) shouldBe false
+            matcher.matches(testDetails) shouldBe false
         }
 
         "detect a scanner configuration that does not match" {
-            val criteria = matchingCriteria.copy(configuration = "${testDetails.configuration}_other")
+            val matcher = matchingCriteria.copy(configuration = "${testDetails.configuration}_other")
 
-            criteria.matches(testDetails) shouldBe false
+            matcher.matches(testDetails) shouldBe false
         }
 
         "ignore the scanner configuration if it is null" {
-            val criteria = matchingCriteria.copy(configuration = null)
+            val matcher = matchingCriteria.copy(configuration = null)
 
-            criteria.matches(testDetails) shouldBe true
+            matcher.matches(testDetails) shouldBe true
         }
     }
 })
 
-private const val SCANNER_NAME = "ScannerCriteriaTest"
+private const val SCANNER_NAME = "ScannerMatcherTest"
 private const val SCANNER_VERSION = "3.2.1-rc2"
 private const val SCANNER_CONFIGURATION = "--command-line-option"
 
@@ -123,7 +123,7 @@ private const val SCANNER_CONFIGURATION = "--command-line-option"
 private val testDetails = ScannerDetails(SCANNER_NAME, SCANNER_VERSION, SCANNER_CONFIGURATION)
 
 /** A test instance which should accept the test details. */
-private val matchingCriteria = ScannerCriteria(
+private val matchingCriteria = ScannerMatcher(
     regScannerName = testDetails.name,
     minVersion = Semver(testDetails.version),
     maxVersion = Semver(testDetails.version).nextPatch(),

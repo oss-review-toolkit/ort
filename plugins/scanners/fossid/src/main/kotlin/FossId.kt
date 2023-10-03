@@ -77,7 +77,7 @@ import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.scanner.PackageScannerWrapper
 import org.ossreviewtoolkit.scanner.ProvenanceScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
-import org.ossreviewtoolkit.scanner.ScannerCriteria
+import org.ossreviewtoolkit.scanner.ScannerMatcher
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.enumSetOf
@@ -202,7 +202,7 @@ class FossId internal constructor(
     override val version = service.version
     override val configuration = ""
 
-    override val criteria: ScannerCriteria? = null
+    override val matcher: ScannerMatcher? = null
 
     override fun filterSecretOptions(options: Options) =
         options.mapValues { (k, v) ->
