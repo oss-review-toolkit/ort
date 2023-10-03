@@ -1,16 +1,19 @@
 {
   "bomFormat": "CycloneDX",
-  "specVersion": "1.4",
+  "specVersion": "1.5",
   "serialNumber": "urn:uuid:01234567-0123-0123-0123-01234567",
   "version": 1,
   "metadata": {
     "timestamp": "1970-01-01T00:00:00Z",
-    "tools": [
-      {
-        "name": "OSS Review Toolkit",
-        "version": "deadbeef"
-      }
-    ],
+    "tools": {
+      "components": [
+        {
+          "name": "OSS Review Toolkit",
+          "version": "deadbeef",
+          "type": "application"
+        }
+      ]
+    },
     "licenses": [
       {
         "expression": "CC0-1.0"

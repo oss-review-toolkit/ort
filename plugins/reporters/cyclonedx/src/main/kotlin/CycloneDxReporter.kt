@@ -36,7 +36,7 @@ import org.cyclonedx.model.Hash
 import org.cyclonedx.model.License
 import org.cyclonedx.model.LicenseChoice
 import org.cyclonedx.model.Metadata
-import org.cyclonedx.model.Tool
+import org.cyclonedx.model.metadata.ToolInformation
 
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.LicenseSource
@@ -66,7 +66,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicense
  */
 class CycloneDxReporter : Reporter {
     companion object {
-        val DEFAULT_SCHEMA_VERSION = CycloneDxSchema.Version.VERSION_14
+        val DEFAULT_SCHEMA_VERSION = CycloneDxSchema.Version.VERSION_15
         val DEFAULT_DATA_LICENSE = SpdxLicense.CC0_1_0
 
         const val REPORT_BASE_FILENAME = "bom.cyclonedx"
@@ -155,12 +155,15 @@ class CycloneDxReporter : Reporter {
 
         val metadata = Metadata().apply {
             timestamp = Date()
-            tools = listOf(
-                Tool().apply {
-                    name = ORT_FULL_NAME
-                    version = Environment.ORT_VERSION
-                }
-            )
+            toolChoice = ToolInformation().apply {
+                components = listOf(
+                    Component().apply {
+                        type = Component.Type.APPLICATION
+                        name = ORT_FULL_NAME
+                        version = Environment.ORT_VERSION
+                    }
+                )
+            }
             licenseChoice = LicenseChoice().apply { expression = dataLicense }
         }
 
