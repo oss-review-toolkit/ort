@@ -76,7 +76,7 @@ project:
           dependencies:
           - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:meta:meta:1.10.0"
-    - id: "Pub:test:test:1.24.6"
+    - id: "Pub:test:test:1.24.7"
       dependencies:
       - id: "Pub:analyzer:analyzer:6.2.0"
         dependencies:
@@ -168,7 +168,7 @@ project:
             - id: "Pub:path:path:1.8.3"
             - id: "Pub:term_glyph:term_glyph:1.2.1"
       - id: "Pub:collection:collection:1.18.0"
-      - id: "Pub:coverage:coverage:1.6.3"
+      - id: "Pub:coverage:coverage:1.6.4"
         dependencies:
         - id: "Pub:args:args:2.4.2"
         - id: "Pub:logging:logging:1.2.0"
@@ -186,7 +186,7 @@ project:
         - id: "Pub:stack_trace:stack_trace:1.11.1"
           dependencies:
           - id: "Pub:path:path:1.8.3"
-        - id: "Pub:vm_service:vm_service:11.10.0"
+        - id: "Pub:vm_service:vm_service:12.0.0"
       - id: "Pub:http_multi_server:http_multi_server:3.2.1"
         dependencies:
         - id: "Pub:async:async:2.11.0"
@@ -591,7 +591,7 @@ project:
             - id: "Pub:path:path:1.8.3"
             - id: "Pub:term_glyph:term_glyph:1.2.1"
         - id: "Pub:term_glyph:term_glyph:1.2.1"
-      - id: "Pub:test_core:test_core:0.5.6"
+      - id: "Pub:test_core:test_core:0.5.7"
         dependencies:
         - id: "Pub:analyzer:analyzer:6.2.0"
           dependencies:
@@ -684,7 +684,7 @@ project:
               - id: "Pub:path:path:1.8.3"
               - id: "Pub:term_glyph:term_glyph:1.2.1"
         - id: "Pub:collection:collection:1.18.0"
-        - id: "Pub:coverage:coverage:1.6.3"
+        - id: "Pub:coverage:coverage:1.6.4"
           dependencies:
           - id: "Pub:args:args:2.4.2"
           - id: "Pub:logging:logging:1.2.0"
@@ -702,7 +702,7 @@ project:
           - id: "Pub:stack_trace:stack_trace:1.11.1"
             dependencies:
             - id: "Pub:path:path:1.8.3"
-          - id: "Pub:vm_service:vm_service:11.10.0"
+          - id: "Pub:vm_service:vm_service:12.0.0"
         - id: "Pub:frontend_server_client:frontend_server_client:3.2.0"
           dependencies:
           - id: "Pub:async:async:2.11.0"
@@ -832,7 +832,7 @@ project:
               - id: "Pub:path:path:1.8.3"
               - id: "Pub:term_glyph:term_glyph:1.2.1"
           - id: "Pub:term_glyph:term_glyph:1.2.1"
-        - id: "Pub:vm_service:vm_service:11.10.0"
+        - id: "Pub:vm_service:vm_service:12.0.0"
         - id: "Pub:yaml:yaml:3.1.2"
           dependencies:
           - id: "Pub:collection:collection:1.18.0"
@@ -1073,8 +1073,8 @@ packages:
     url: "https://github.com/dart-lang/convert.git"
     revision: ""
     path: ""
-- id: "Pub:coverage:coverage:1.6.3"
-  purl: "pkg:pub/coverage/coverage@1.6.3"
+- id: "Pub:coverage:coverage:1.6.4"
+  purl: "pkg:pub/coverage/coverage@1.6.4"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "Coverage data manipulation and formatting"
@@ -1870,8 +1870,8 @@ packages:
     url: "https://github.com/dart-lang/term_glyph.git"
     revision: ""
     path: ""
-- id: "Pub:test:test:1.24.6"
-  purl: "pkg:pub/test/test@1.24.6"
+- id: "Pub:test:test:1.24.7"
+  purl: "pkg:pub/test/test@1.24.7"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "A full featured library for writing and running Dart tests across\
@@ -1923,8 +1923,8 @@ packages:
     url: "https://github.com/dart-lang/test.git"
     revision: "master"
     path: "pkgs/test_api"
-- id: "Pub:test_core:test_core:0.5.6"
-  purl: "pkg:pub/test_core/test_core@0.5.6"
+- id: "Pub:test_core:test_core:0.5.7"
+  purl: "pkg:pub/test_core/test_core@0.5.7"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "A basic library for writing tests and running them on the VM."
@@ -1975,8 +1975,8 @@ packages:
     url: "https://github.com/dart-lang/typed_data.git"
     revision: ""
     path: ""
-- id: "Pub:vm_service:vm_service:11.10.0"
-  purl: "pkg:pub/vm_service/vm_service@11.10.0"
+- id: "Pub:vm_service:vm_service:12.0.0"
+  purl: "pkg:pub/vm_service/vm_service@12.0.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "A library to communicate with a service implementing the Dart VM service\
