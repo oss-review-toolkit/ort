@@ -64,16 +64,16 @@ sealed interface ScannerWrapper {
         get() = ScannerDetails(name, version, configuration)
 
     /**
-     * The [ScannerCriteria] object to be used when looking up existing scan results from a scan storage. By default,
+     * The [ScannerMatcher] object to be used when looking up existing scan results from a scan storage. By default,
      * the properties of this object are initialized by the scanner implementation. These defaults can be overridden
      * with the [ScannerConfiguration.options] property: Use properties of the form _scannerName.criteria.property_,
-     * where _scannerName_ is the name of the scanner and _property_ is the name of a property of the [ScannerCriteria]
+     * where _scannerName_ is the name of the scanner and _property_ is the name of a property of the [ScannerMatcher]
      * class. For instance, to specify that a specific minimum version of ScanCode is allowed, set this property:
      * `options.ScanCode.criteria.minScannerVersion=3.0.2`.
      *
      * If this property is null it means that the results of this [ScannerWrapper] cannot be stored in a scan storage.
      */
-    val criteria: ScannerCriteria?
+    val matcher: ScannerMatcher?
 
     /**
      * Filter the scanner-specific options to remove / obfuscate any secrets, like credentials.

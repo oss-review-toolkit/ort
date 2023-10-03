@@ -763,12 +763,12 @@ class ScannerTest : WordSpec({
         }
     }
 
-    "scanning with a scanner that does not provide criteria" should {
+    "scanning with a scanner that does not provide a matcher" should {
         "not store the scan results" {
             val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
 
             val scannerWrapper = spyk(FakePackageScannerWrapper()) {
-                every { criteria } returns null
+                every { matcher } returns null
             }
 
             val writer = spyk(FakeProvenanceBasedStorageWriter())
@@ -808,7 +808,7 @@ private class FakePackageScannerWrapper(
     override val configuration = "config"
 
     // Explicit nullability is required here for a mock response.
-    override val criteria: ScannerCriteria? = ScannerCriteria.create(details)
+    override val matcher: ScannerMatcher? = ScannerMatcher.create(details)
 
     override fun scanPackage(pkg: Package, context: ScanContext): ScanResult =
         createScanResult(packageProvenanceResolver.resolveProvenance(pkg, sourceCodeOriginPriority), details)
@@ -822,7 +822,7 @@ private class FakeProvenanceScannerWrapper : ProvenanceScannerWrapper {
     override val version = "1.0.0"
     override val configuration = "config"
 
-    override val criteria = ScannerCriteria.create(details)
+    override val matcher = ScannerMatcher.create(details)
 
     override fun scanProvenance(provenance: KnownProvenance, context: ScanContext): ScanResult =
         createScanResult(provenance, details)
@@ -836,7 +836,7 @@ private class FakePathScannerWrapper : PathScannerWrapper {
     override val version = "1.0.0"
     override val configuration = "config"
 
-    override val criteria = ScannerCriteria.create(details)
+    override val matcher = ScannerMatcher.create(details)
 
     override fun scanPath(path: File, context: ScanContext): ScanSummary {
         val licenseFindings = path.walk().filter { it.isFile }.mapTo(mutableSetOf()) { file ->
@@ -903,7 +903,7 @@ private class FakePackageBasedStorageReader(val scannerDetails: ScannerDetails) 
     override fun read(
         pkg: Package,
         nestedProvenance: NestedProvenance,
-        scannerCriteria: ScannerCriteria
+        scannerMatcher: ScannerMatcher
     ): List<NestedProvenanceScanResult> = read(pkg, nestedProvenance)
 }
 
@@ -911,8 +911,7 @@ private class FakeProvenanceBasedStorageReader(val scannerDetails: ScannerDetail
     override fun read(provenance: KnownProvenance): List<ScanResult> =
         listOf(createStoredScanResult(provenance, scannerDetails))
 
-    override fun read(provenance: KnownProvenance, scannerCriteria: ScannerCriteria): List<ScanResult> =
-        read(provenance)
+    override fun read(provenance: KnownProvenance, scannerMatcher: ScannerMatcher): List<ScanResult> = read(provenance)
 }
 
 private class FakePackageBasedStorageWriter : PackageBasedScanStorageWriter {

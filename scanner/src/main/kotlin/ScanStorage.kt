@@ -48,7 +48,7 @@ interface PackageBasedScanStorageReader : ScanStorageReader {
 
     /**
      * Read all [ScanResult]s for the provided [package][pkg] matching the [provenance][KnownProvenance.matches] and the
-     * [scannerCriteria]. The package scan results are converted to a [NestedProvenanceScanResult] using the provided
+     * [scannerMatcher]. The package scan results are converted to a [NestedProvenanceScanResult] using the provided
      * [nestedProvenance].
      *
      * Throws a [ScanStorageException] if an error occurs while reading from the storage.
@@ -56,7 +56,7 @@ interface PackageBasedScanStorageReader : ScanStorageReader {
     fun read(
         pkg: Package,
         nestedProvenance: NestedProvenance,
-        scannerCriteria: ScannerCriteria
+        scannerMatcher: ScannerMatcher
     ): List<NestedProvenanceScanResult>
 }
 
@@ -77,10 +77,10 @@ interface ProvenanceBasedScanStorageReader : ScanStorageReader {
     fun read(provenance: KnownProvenance): List<ScanResult>
 
     /**
-     * Like [read], but also filters by the provided [scannerCriteria].
+     * Like [read], but also filters by the provided [scannerMatcher].
      */
-    fun read(provenance: KnownProvenance, scannerCriteria: ScannerCriteria): List<ScanResult> =
-        read(provenance).filter { scannerCriteria.matches(it.scanner) }
+    fun read(provenance: KnownProvenance, scannerMatcher: ScannerMatcher): List<ScanResult> =
+        read(provenance).filter { scannerMatcher.matches(it.scanner) }
 }
 
 /**

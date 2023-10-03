@@ -40,7 +40,7 @@ import org.ossreviewtoolkit.clients.scanoss.ScanOssService
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.scanner.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
-import org.ossreviewtoolkit.scanner.ScannerCriteria
+import org.ossreviewtoolkit.scanner.ScannerMatcher
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
@@ -69,7 +69,7 @@ class ScanOss internal constructor(override val name: String, private val option
 
     override val configuration = ""
 
-    override val criteria by lazy { ScannerCriteria.create(details, options) }
+    override val matcher by lazy { ScannerMatcher.create(details, options) }
 
     /**
      * The name of the file corresponding to the fingerprints can be sent to SCANOSS for more precise matches.

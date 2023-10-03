@@ -52,7 +52,7 @@ import org.ossreviewtoolkit.model.utils.toClearlyDefinedSourceLocation
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.ScanStorageException
-import org.ossreviewtoolkit.scanner.ScannerCriteria
+import org.ossreviewtoolkit.scanner.ScannerMatcher
 import org.ossreviewtoolkit.scanner.ScannerWrapper
 import org.ossreviewtoolkit.scanner.storages.utils.getScanCodeDetails
 import org.ossreviewtoolkit.utils.common.AlphaNumericComparator
@@ -86,7 +86,7 @@ class ClearlyDefinedStorage(
     override fun readInternal(pkg: Package): Result<List<ScanResult>> =
         runBlocking(Dispatchers.IO) { readFromClearlyDefined(pkg) }
 
-    override fun readInternal(pkg: Package, scannerCriteria: ScannerCriteria): Result<List<ScanResult>> =
+    override fun readInternal(pkg: Package, scannerMatcher: ScannerMatcher): Result<List<ScanResult>> =
         runBlocking(Dispatchers.IO) { readFromClearlyDefined(pkg) }
 
     override fun addInternal(id: Identifier, scanResult: ScanResult): Result<Unit> =

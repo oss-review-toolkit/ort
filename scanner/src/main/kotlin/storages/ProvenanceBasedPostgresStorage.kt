@@ -125,7 +125,7 @@ class ProvenanceBasedPostgresStorage(
         }
     }
 
-    // TODO: Override read(provenance, scannerCriteria) to make it more efficient by matching the scanner details in the
+    // TODO: Override read(provenance, scannerMatcher) to make it more efficient by matching the scanner details in the
     //       query.
 
     override fun write(scanResult: ScanResult) {

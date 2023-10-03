@@ -73,14 +73,14 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
 
     /**
      * Return all [ScanResult]s contained in this [ScanResultsStorage] corresponding to the given [package][pkg] that
-     * are [compatible][ScannerCriteria.matches] with the provided [scannerCriteria] wrapped in a [Result]. Also,
+     * are [compatible][ScannerMatcher.matches] with the provided [scannerMatcher] wrapped in a [Result]. Also,
      * [Package.sourceArtifact], [Package.vcs], and [Package.vcsProcessed] are used to check if the scan result matches
      * the expected source code location. That check is important to find the correct results when different revisions
      * of a package using the same version name are used (e.g. multiple scans of a "1.0-SNAPSHOT" version during
      * development).
      */
-    fun read(pkg: Package, scannerCriteria: ScannerCriteria): Result<List<ScanResult>> {
-        val (result, duration) = measureTimedValue { readInternal(pkg, scannerCriteria) }
+    fun read(pkg: Package, scannerMatcher: ScannerMatcher): Result<List<ScanResult>> {
+        val (result, duration) = measureTimedValue { readInternal(pkg, scannerMatcher) }
 
         result.onSuccess { results ->
             logger.info {
@@ -94,17 +94,14 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
 
     /**
      * Return all [ScanResult]s contained in this [ScanResultsStorage] corresponding to the given [packages] that
-     * are [compatible][ScannerCriteria.matches] with the provided [scannerCriteria] wrapped in a [Result]. Also,
+     * are [compatible][ScannerMatcher.matches] with the provided [scannerMatcher] wrapped in a [Result]. Also,
      * [Package.sourceArtifact], [Package.vcs], and [Package.vcsProcessed] are used to check if the scan result matches
      * the expected source code location. That check is important to find the correct results when different revisions
      * of a package using the same version name are used (e.g. multiple scans of a "1.0-SNAPSHOT" version during
      * development).
      */
-    fun read(
-        packages: Collection<Package>,
-        scannerCriteria: ScannerCriteria
-    ): Result<Map<Identifier, List<ScanResult>>> {
-        val (result, duration) = measureTimedValue { readInternal(packages, scannerCriteria) }
+    fun read(packages: Collection<Package>, scannerMatcher: ScannerMatcher): Result<Map<Identifier, List<ScanResult>>> {
+        val (result, duration) = measureTimedValue { readInternal(packages, scannerMatcher) }
 
         result.onSuccess { results ->
             logger.info {
@@ -147,9 +144,9 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
 
     /**
      * Internal version of [read]. Implementations may want to override this function if they can filter for the wanted
-     * [scannerCriteria] in a more efficient way.
+     * [scannerMatcher] in a more efficient way.
      */
-    protected open fun readInternal(pkg: Package, scannerCriteria: ScannerCriteria): Result<List<ScanResult>> =
+    protected open fun readInternal(pkg: Package, scannerMatcher: ScannerMatcher): Result<List<ScanResult>> =
         readInternal(pkg).map { results ->
             if (results.isEmpty()) {
                 results
@@ -165,12 +162,12 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
                     matchingProvenance
                 } else {
                     val (matchingCriteria, nonMatchingCriteria) = matchingProvenance.partition {
-                        scannerCriteria.matches(it.scanner)
+                        scannerMatcher.matches(it.scanner)
                     }
 
                     if (matchingCriteria.isEmpty()) {
                         logger.debug {
-                            "No stored scan results for '${pkg.id.toCoordinates()}' match $scannerCriteria. The " +
+                            "No stored scan results for '${pkg.id.toCoordinates()}' match $scannerMatcher. The " +
                                 "following entries with non-matching criteria have been ignored: " +
                                 nonMatchingCriteria.map { it.scanner }
                         }
@@ -184,14 +181,14 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
     /**
      * Internal version of [read]. The default implementation uses [Dispatchers.IO] to run requests for individual
      * packages in parallel. Implementations may want to override this function if they can filter for the wanted
-     * [scannerCriteria] or fetch results for multiple packages in a more efficient way.
+     * [scannerMatcher] or fetch results for multiple packages in a more efficient way.
      */
     protected open fun readInternal(
         packages: Collection<Package>,
-        scannerCriteria: ScannerCriteria
+        scannerMatcher: ScannerMatcher
     ): Result<Map<Identifier, List<ScanResult>>> {
         val results = runBlocking(Dispatchers.IO) {
-            packages.map { async { it.id to readInternal(it, scannerCriteria) } }.awaitAll()
+            packages.map { async { it.id to readInternal(it, scannerMatcher) } }.awaitAll()
         }.associate { it }
 
         val successfulResults = results.mapNotNull { (id, scanResults) ->
@@ -216,8 +213,8 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
     override fun read(
         pkg: Package,
         nestedProvenance: NestedProvenance,
-        scannerCriteria: ScannerCriteria
-    ): List<NestedProvenanceScanResult> = read(pkg, scannerCriteria).toNestedProvenanceScanResult(nestedProvenance)
+        scannerMatcher: ScannerMatcher
+    ): List<NestedProvenanceScanResult> = read(pkg, scannerMatcher).toNestedProvenanceScanResult(nestedProvenance)
 
     private fun Result<List<ScanResult>>.toNestedProvenanceScanResult(nestedProvenance: NestedProvenance) =
         map { scanResults ->

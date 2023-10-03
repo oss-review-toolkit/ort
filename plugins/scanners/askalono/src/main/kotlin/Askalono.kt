@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScanException
-import org.ossreviewtoolkit.scanner.ScannerCriteria
+import org.ossreviewtoolkit.scanner.ScannerMatcher
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.Os
@@ -51,7 +51,7 @@ class Askalono internal constructor(name: String, private val options: Options) 
 
     override val configuration = ""
 
-    override val criteria by lazy { ScannerCriteria.create(details, options) }
+    override val matcher by lazy { ScannerMatcher.create(details, options) }
 
     override fun command(workingDir: File?) =
         listOfNotNull(workingDir, if (Os.isWindows) "askalono.exe" else "askalono").joinToString(File.separator)

@@ -51,7 +51,7 @@ import org.ossreviewtoolkit.model.utils.rawParam
 import org.ossreviewtoolkit.model.utils.tilde
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.ScanStorageException
-import org.ossreviewtoolkit.scanner.ScannerCriteria
+import org.ossreviewtoolkit.scanner.ScannerMatcher
 import org.ossreviewtoolkit.scanner.storages.utils.ScanResultDao
 import org.ossreviewtoolkit.scanner.storages.utils.ScanResults
 import org.ossreviewtoolkit.utils.common.collectMessages
@@ -149,15 +149,15 @@ class PostgresStorage(
             }
         }
 
-    override fun readInternal(pkg: Package, scannerCriteria: ScannerCriteria): Result<List<ScanResult>> {
-        val minVersionArray = with(scannerCriteria.minVersion) { intArrayOf(major, minor, patch) }
-        val maxVersionArray = with(scannerCriteria.maxVersion) { intArrayOf(major, minor, patch) }
+    override fun readInternal(pkg: Package, scannerMatcher: ScannerMatcher): Result<List<ScanResult>> {
+        val minVersionArray = with(scannerMatcher.minVersion) { intArrayOf(major, minor, patch) }
+        val maxVersionArray = with(scannerMatcher.maxVersion) { intArrayOf(major, minor, patch) }
 
         return runCatching {
             database.transaction {
                 ScanResultDao.find {
                     (ScanResults.identifier eq pkg.id.toCoordinates()) and
-                        (rawParam("scan_result->'scanner'->>'name'") tilde scannerCriteria.regScannerName) and
+                        (rawParam("scan_result->'scanner'->>'name'") tilde scannerMatcher.regScannerName) and
                         (rawParam(VERSION_EXPRESSION) greaterEq arrayParam(minVersionArray)) and
                         (rawParam(VERSION_EXPRESSION) less arrayParam(maxVersionArray))
                 }.map { it.scanResult }
@@ -166,14 +166,14 @@ class PostgresStorage(
                     .filter { it.provenance.matches(pkg) }
                     // The scanner compatibility is already checked in the query, but filter here again to be on the
                     // safe side.
-                    .filter { scannerCriteria.matches(it.scanner) }
+                    .filter { scannerMatcher.matches(it.scanner) }
             }
         }.onFailure {
             if (it is JsonProcessingException || it is SQLException) {
                 it.showStackTrace()
 
                 val message = "Could not read scan results for '${pkg.id.toCoordinates()}' with " +
-                    "$scannerCriteria from database: ${it.collectMessages()}"
+                    "$scannerMatcher from database: ${it.collectMessages()}"
 
                 logger.info { message }
 
@@ -184,12 +184,12 @@ class PostgresStorage(
 
     override fun readInternal(
         packages: Collection<Package>,
-        scannerCriteria: ScannerCriteria
+        scannerMatcher: ScannerMatcher
     ): Result<Map<Identifier, List<ScanResult>>> {
         if (packages.isEmpty()) return Result.success(emptyMap())
 
-        val minVersionArray = with(scannerCriteria.minVersion) { intArrayOf(major, minor, patch) }
-        val maxVersionArray = with(scannerCriteria.maxVersion) { intArrayOf(major, minor, patch) }
+        val minVersionArray = with(scannerMatcher.minVersion) { intArrayOf(major, minor, patch) }
+        val maxVersionArray = with(scannerMatcher.maxVersion) { intArrayOf(major, minor, patch) }
 
         return runCatching {
             runBlocking(Dispatchers.IO) {
@@ -198,7 +198,7 @@ class PostgresStorage(
                         @Suppress("MaxLineLength")
                         ScanResultDao.find {
                             (ScanResults.identifier inList chunk.map { it.id.toCoordinates() }) and
-                                (rawParam("scan_result->'scanner'->>'name'") tilde scannerCriteria.regScannerName) and
+                                (rawParam("scan_result->'scanner'->>'name'") tilde scannerMatcher.regScannerName) and
                                 (rawParam(VERSION_EXPRESSION) greaterEq arrayParam(minVersionArray)) and
                                 (rawParam(VERSION_EXPRESSION) less arrayParam(maxVersionArray))
                         }.map { it.identifier to it.scanResult }
@@ -215,14 +215,14 @@ class PostgresStorage(
                             .filter { it.provenance.matches(pkg) }
                             // The scanner compatibility is already checked in the query, but filter here again to be on
                             // the safe side.
-                            .filter { scannerCriteria.matches(it.scanner) }
+                            .filter { scannerMatcher.matches(it.scanner) }
                     }
             }
         }.onFailure {
             if (it is JsonProcessingException || it is SQLException) {
                 it.showStackTrace()
 
-                val message = "Could not read scan results with $scannerCriteria from database: " +
+                val message = "Could not read scan results with $scannerMatcher from database: " +
                     it.collectMessages()
 
                 logger.info { message }
