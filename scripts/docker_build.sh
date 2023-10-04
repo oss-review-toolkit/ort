@@ -103,6 +103,7 @@ image_build golang ort/golang "$GO_VERSION" \
 # Runtime ORT image
 image_build run ort "$ORT_VERSION" \
     --build-arg ORT_VERSION="$ORT_VERSION" \
+    --build-arg NODEJS_VERSION="$NODEJS_VERSION" \
     --build-context "base=docker-image://${DOCKER_IMAGE_ROOT}/ort/base:latest" \
     --build-context "python=docker-image://${DOCKER_IMAGE_ROOT}/ort/python:latest" \
     --build-context "nodejs=docker-image://${DOCKER_IMAGE_ROOT}/ort/nodejs:latest" \
@@ -158,7 +159,6 @@ docker buildx build \
     --tag "${DOCKER_IMAGE_ROOT}/ort-extended:$ORT_VERSION" \
     --tag "${DOCKER_IMAGE_ROOT}/ort-extended:latest" \
     --build-arg ORT_VERSION="$ORT_VERSION" \
-    --build-arg NODEJS_VERSION="$NODEJS_VERSION" \
     --build-context "ort=docker-image://${DOCKER_IMAGE_ROOT}/ort:${ORT_VERSION}" \
     --build-context "sbt=docker-image://${DOCKER_IMAGE_ROOT}/ort/sbt:latest" \
     --build-context "dotnet=docker-image://${DOCKER_IMAGE_ROOT}/ort/dotnet:latest" \
