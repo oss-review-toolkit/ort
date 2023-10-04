@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.PythonInspector
 import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.toOrtPackages
 import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.toPackageReferences
 import org.ossreviewtoolkit.utils.common.CommandLineTool
@@ -61,21 +62,7 @@ class Poetry(
     override fun transformVersion(output: String) = output.substringAfter("version ").removeSuffix(")")
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
-        // For an overview, dependency resolution involves the following steps:
-        // 1. Generate "requirements.txt" file with `poetry` command.
-        // 2. Use Python inspector via "Pip" to do the actual dependency resolution.
-
-        val workingDir = definitionFile.parentFile
-        val requirementsFile = workingDir.resolve("requirements-from-poetry.txt")
-
-        logger.info { "Generating '${requirementsFile.name}' file in '$workingDir' directory..." }
-
-        val req = ProcessCapture(workingDir, command(), "export", "--without-hashes", "--format=requirements.txt")
-            .requireSuccess().stdout
-        requirementsFile.writeText(req)
-
-        val result = Pip(managerName, analysisRoot, analyzerConfig, repoConfig).runPythonInspector(requirementsFile)
-        requirementsFile.delete()
+        val result = inspectLockfile(definitionFile)
 
         val packages = result.packages.toOrtPackages()
         val project = Project.EMPTY.copy(
@@ -91,5 +78,24 @@ class Poetry(
         )
 
         return listOf(ProjectAnalyzerResult(project, packages))
+    }
+
+    private fun inspectLockfile(lockfile: File): PythonInspector.Result {
+        // For an overview, dependency resolution involves the following steps:
+        // 1. Generate "requirements.txt" file with `poetry` command.
+        // 2. Use Python inspector via "Pip" to do the actual dependency resolution.
+
+        val workingDir = lockfile.parentFile
+        val requirementsFile = workingDir.resolve("requirements-from-poetry.txt")
+
+        logger.info { "Generating '${requirementsFile.name}' file in '$workingDir' directory..." }
+
+        val req = ProcessCapture(workingDir, command(), "export", "--without-hashes", "--format=requirements.txt")
+            .requireSuccess().stdout
+        requirementsFile.writeText(req)
+
+        return Pip(managerName, analysisRoot, analyzerConfig, repoConfig).runPythonInspector(requirementsFile).also {
+            requirementsFile.delete()
+        }
     }
 }
