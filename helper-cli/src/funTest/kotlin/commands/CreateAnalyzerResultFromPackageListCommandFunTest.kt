@@ -40,13 +40,11 @@ class CreateAnalyzerResultFromPackageListCommandFunTest : WordSpec({
             val expectedOutputFile = getAssetFile("create-analyzer-result-from-pkg-list-expected-output.yml")
 
             HelperMain().test(
-                listOf(
-                    "create-analyzer-result-from-package-list",
-                    "--package-list-file",
-                    inputFile.absolutePath,
-                    "--ort-file",
-                    outputFile.absolutePath
-                )
+                "create-analyzer-result-from-package-list",
+                "--package-list-file",
+                inputFile.absolutePath,
+                "--ort-file",
+                outputFile.absolutePath
             )
 
             outputFile.readValue<OrtResult>().patchAnalyzerResult() shouldBe
