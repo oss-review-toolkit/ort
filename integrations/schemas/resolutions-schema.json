@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://oss-review-toolkit.org/resolutions.yml",
   "title": "ORT resolutions",
-  "description": "The OSS-Review-Toolkit (ORT) provides a possibility to resolve issues, rule violations and security vulnerabilities in a resolutions file. A full list of all available options can be found at https://github.com/oss-review-toolkit/ort/blob/main/docs/config-file-resolutions-yml.md.",
+  "description": "The OSS-Review-Toolkit (ORT) provides a possibility to resolve issues, rule violations and security vulnerabilities in a resolutions file. A full list of all available options can be found at https://oss-review-toolkit.org/ort/docs/configuration/resolutions.",
   "type": "object",
   "properties": {
     "issues": {

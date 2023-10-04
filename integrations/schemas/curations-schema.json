@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://oss-review-toolkit.org/curations.yml",
   "title": "ORT curations",
-  "description": "The OSS-Review-Toolkit (ORT) provides a possibility to correct metadata and set the concluded license for a specific packages (dependencies) in curation files. A full list of all available options can be found at https://github.com/oss-review-toolkit/ort/blob/main/docs/config-file-curations-yml.md.",
+  "description": "The OSS-Review-Toolkit (ORT) provides a possibility to correct metadata and set the concluded license for a specific packages (dependencies) in curation files. A full list of all available options can be found at https://oss-review-toolkit.org/ort/docs/configuration/package-curations.",
   "type": "array",
   "items": {
     "type": "object",
