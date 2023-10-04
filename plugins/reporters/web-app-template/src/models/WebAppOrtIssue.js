@@ -126,11 +126,7 @@ class WebAppOrtIssue {
     }
 
     get isResolved() {
-        if (this.#resolutionIndexes && this.#resolutionIndexes.size > 0) {
-            return true;
-        }
-
-        return false;
+        return this.#resolutionIndexes && this.#resolutionIndexes.size > 0;
     }
 
     get message() {
