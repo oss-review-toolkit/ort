@@ -25,6 +25,7 @@ import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -72,6 +73,13 @@ class Poetry(
 
         return Pip(managerName, analysisRoot, analyzerConfig, repoConfig)
             .resolveDependencies(requirementsFile, labels)
+            .map { projectAnalyzerResult ->
+                projectAnalyzerResult.copy(
+                    project = projectAnalyzerResult.project.copy(
+                        definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path
+                    )
+                )
+            }
             .also { requirementsFile.delete() }
     }
 }
