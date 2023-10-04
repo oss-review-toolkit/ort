@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://oss-review-toolkit.org/license-classifications.yml",
   "title": "ORT license classifications",
-  "description": "Configuration file for user-defined classifications of licenses, used by the OSS-Review-Toolkit (ORT). A full list of all available options can be found at https://github.com/oss-review-toolkit/ort/blob/main/docs/config-file-license-classifications-yml.md.",
+  "description": "Configuration file for user-defined classifications of licenses, used by the OSS-Review-Toolkit (ORT). A full list of all available options can be found at https://oss-review-toolkit.org/ort/docs/configuration/license-classifications.",
   "type": "object",
   "additionalProperties": false,
   "properties": {
