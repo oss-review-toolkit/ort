@@ -26,6 +26,7 @@ import org.apache.logging.log4j.kotlin.Logging
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -76,6 +77,12 @@ class Poetry(
             .map { projectAnalyzerResult ->
                 projectAnalyzerResult.copy(
                     project = projectAnalyzerResult.project.copy(
+                        id = Identifier(
+                            type = managerName,
+                            namespace = "",
+                            name = definitionFile.relativeTo(analysisRoot).path,
+                            version = VersionControlSystem.getCloneInfo(definitionFile.parentFile).revision
+                        ),
                         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path
                     )
                 )
