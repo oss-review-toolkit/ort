@@ -59,7 +59,7 @@ val processResources = tasks.named<Copy>("processResources") {
     from(gradlePluginJarFile)
 
     // Ensure a constant file name without a version suffix.
-    rename(gradlePluginJarFile.name, "gradle-plugin.jar")
+    rename(Regex.escape(gradlePluginJarFile.name), "gradle-plugin.jar")
 }
 
 // Work around https://youtrack.jetbrains.com/issue/IDEA-173367.
