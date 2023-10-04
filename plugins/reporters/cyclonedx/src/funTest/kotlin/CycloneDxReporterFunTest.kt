@@ -180,7 +180,7 @@ private fun String.patchCycloneDxResult(): String {
             "$11970-01-01T00:00:00Z"
         )
         .replaceFirst(
-            """(version[>"](\s*:\s*")?)[\w.-]+""".toRegex(),
+            """(version[>"](\s*:\s*")?)[\w.+-]+""".toRegex(),
             "$1deadbeef"
         ) + substring(headerEnd)
 }
