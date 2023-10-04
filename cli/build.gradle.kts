@@ -38,6 +38,8 @@ dependencies {
     implementation(libs.clikt)
     implementation(libs.log4jApiKotlin)
     implementation(libs.logbackClassic)
+    implementation(libs.mordant)
+    implementation(libs.slf4j)
 
     runtimeOnly(libs.log4jApiToSlf4j)
 
