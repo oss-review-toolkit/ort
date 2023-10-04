@@ -62,9 +62,14 @@ class Poetry(
     override fun transformVersion(output: String) = output.substringAfter("version ").removeSuffix(")")
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
-        val result = inspectLockfile(definitionFile, "main")
+        val mainDependenciesResult = inspectLockfile(definitionFile, "main")
+        val devDependenciesResult = inspectLockfile(definitionFile, "dev")
 
-        val packages = result.packages.toOrtPackages()
+        val packages = (mainDependenciesResult.packages + devDependenciesResult.packages)
+            .toOrtPackages()
+            .distinctBy { it.id }
+            .toSet()
+
         val project = Project.EMPTY.copy(
             id = Identifier(
                 type = managerName,
@@ -73,7 +78,10 @@ class Poetry(
                 version = VersionControlSystem.getCloneInfo(definitionFile.parentFile).revision
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-            scopeDependencies = setOf(Scope("main", result.resolvedDependenciesGraph.toPackageReferences())),
+            scopeDependencies = setOf(
+                Scope("main", mainDependenciesResult.resolvedDependenciesGraph.toPackageReferences()),
+                Scope("dev", devDependenciesResult.resolvedDependenciesGraph.toPackageReferences())
+            ),
             vcsProcessed = processProjectVcs(definitionFile.parentFile)
         )
 
