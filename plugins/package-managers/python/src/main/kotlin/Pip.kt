@@ -98,7 +98,7 @@ class Pip(
         return listOf(ProjectAnalyzerResult(project, packages))
     }
 
-    private fun runPythonInspector(definitionFile: File): PythonInspector.Result {
+    internal fun runPythonInspector(definitionFile: File): PythonInspector.Result {
         val workingDir = definitionFile.parentFile
 
         logger.info {

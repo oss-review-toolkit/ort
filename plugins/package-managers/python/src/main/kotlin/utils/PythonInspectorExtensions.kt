@@ -172,7 +172,7 @@ private fun List<PythonInspector.Party>.toAuthors(): Set<String> =
         }.takeIf { it.isNotBlank() }
     }
 
-private fun List<PythonInspector.ResolvedDependency>.toPackageReferences(): Set<PackageReference> =
+internal fun List<PythonInspector.ResolvedDependency>.toPackageReferences(): Set<PackageReference> =
     mapTo(mutableSetOf()) { it.toPackageReference() }
 
 private fun PythonInspector.ResolvedDependency.toPackageReference() =
