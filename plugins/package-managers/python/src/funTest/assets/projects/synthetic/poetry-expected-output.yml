@@ -16,6 +16,39 @@ project:
     path: "<REPLACE_PATH>"
   homepage_url: ""
   scopes:
+  - name: "dev"
+    dependencies:
+    - id: "PyPI::black:19.10b0"
+      dependencies:
+      - id: "PyPI::appdirs:1.4.4"
+      - id: "PyPI::attrs:22.2.0"
+      - id: "PyPI::click:8.0.4"
+      - id: "PyPI::pathspec:0.9.0"
+      - id: "PyPI::regex:2023.8.8"
+      - id: "PyPI::toml:0.10.2"
+      - id: "PyPI::typed-ast:1.5.5"
+    - id: "PyPI::pylint:2.12.0"
+      dependencies:
+      - id: "PyPI::astroid:2.9.0"
+        dependencies:
+        - id: "PyPI::lazy-object-proxy:1.7.1"
+        - id: "PyPI::setuptools:59.6.0"
+        - id: "PyPI::wrapt:1.13.3"
+      - id: "PyPI::isort:4.3.21"
+      - id: "PyPI::mccabe:0.6.1"
+      - id: "PyPI::platformdirs:2.4.0"
+      - id: "PyPI::toml:0.10.2"
+    - id: "PyPI::pytest:6.2.5"
+      dependencies:
+      - id: "PyPI::attrs:22.2.0"
+      - id: "PyPI::iniconfig:1.1.1"
+      - id: "PyPI::packaging:21.3"
+        dependencies:
+        - id: "PyPI::pyparsing:3.0.7"
+      - id: "PyPI::pluggy:1.0.0"
+      - id: "PyPI::py:1.11.0"
+      - id: "PyPI::toml:0.10.2"
+    - id: "PyPI::rope:0.14.0"
   - name: "main"
     dependencies:
     - id: "PyPI::graphviz:0.19.1"
@@ -23,6 +56,172 @@ project:
       dependencies:
       - id: "PyPI::markupsafe:2.0.1"
 packages:
+- id: "PyPI::appdirs:1.4.4"
+  purl: "pkg:pypi/appdirs@1.4.4"
+  authors:
+  - "Trent Mick <trentm@gmail.com>"
+  declared_licenses:
+  - "MIT"
+  - "MIT License"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+    mapped:
+      MIT License: "MIT"
+  description: "A small Python module for determining appropriate platform-specific\
+    \ dirs, e.g. a \"user data dir\"."
+  homepage_url: "http://github.com/ActiveState/appdirs"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/3b/00/2344469e2084fb287c2e0b57b72910309874c3245463acd6cf5e3db69324/appdirs-1.4.4-py2.py3-none-any.whl"
+    hash:
+      value: "a841dacd6b99318a741b166adb07e19ee71a274450e68237b4650ca1055ab128"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/d7/d8/05696357e0311f5b5c316d7b95f46c669dd9c15aaeecbb48c7d0aeb88c40/appdirs-1.4.4.tar.gz"
+    hash:
+      value: "7d5d0167b2b1ba821647616af46a749d1c653740dd0d2415100fe26e27afdf41"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/ActiveState/appdirs.git"
+    revision: ""
+    path: ""
+- id: "PyPI::astroid:2.9.0"
+  purl: "pkg:pypi/astroid@2.9.0"
+  authors:
+  - "Python Code Quality Authority <code-quality@python.org>"
+  declared_licenses:
+  - "GNU Lesser General Public License v2 (LGPLv2)"
+  - "LGPL-2.1-or-later"
+  declared_licenses_processed:
+    spdx_expression: "LGPL-2.0-only AND LGPL-2.1-or-later"
+    mapped:
+      GNU Lesser General Public License v2 (LGPLv2): "LGPL-2.0-only"
+  description: "An abstract syntax tree for Python with inference support."
+  homepage_url: "https://github.com/PyCQA/astroid"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/4e/2a/5a57f56b244193be67d95b07a0f243cf555c8a604561600d6fd441622bcf/astroid-2.9.0-py3-none-any.whl"
+    hash:
+      value: "776ca0b748b4ad69c00bfe0fff38fa2d21c338e12c84aa9715ee0d473c422778"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/ee/9b/b1d4515d1a969e96954d888df4e274d487c277812573ccbbb137109b066e/astroid-2.9.0.tar.gz"
+    hash:
+      value: "5939cf55de24b92bda00345d4d0659d01b3c7dafb5055165c330bc7c568ba273"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/PyCQA/astroid.git"
+    revision: ""
+    path: ""
+- id: "PyPI::attrs:22.2.0"
+  purl: "pkg:pypi/attrs@22.2.0"
+  authors:
+  - "Hynek Schlawack <hs@ox.cx>"
+  declared_licenses:
+  - "MIT"
+  - "MIT License"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+    mapped:
+      MIT License: "MIT"
+  description: "Classes Without Boilerplate"
+  homepage_url: "https://www.attrs.org/"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/fb/6e/6f83bf616d2becdf333a1640f1d463fef3150e2e926b7010cb0f81c95e88/attrs-22.2.0-py3-none-any.whl"
+    hash:
+      value: "29e95c7f6778868dbd49170f98f8818f78f3dc5e0e37c0b1f474e3561b240836"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/21/31/3f468da74c7de4fcf9b25591e682856389b3400b4b62f201e65f15ea3e07/attrs-22.2.0.tar.gz"
+    hash:
+      value: "c9227bfc2f01993c03f68db37d1d15c9690188323c067c641f1a35ca58185f99"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/python-attrs/attrs.git"
+    revision: ""
+    path: ""
+- id: "PyPI::black:19.10b0"
+  purl: "pkg:pypi/black@19.10b0"
+  authors:
+  - "Łukasz Langa <lukasz@langa.pl>"
+  declared_licenses:
+  - "MIT"
+  - "MIT License"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+    mapped:
+      MIT License: "MIT"
+  description: "The uncompromising code formatter."
+  homepage_url: "https://github.com/psf/black"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/fd/bb/ad34bbc93d1bea3de086d7c59e528d4a503ac8fe318bd1fa48605584c3d2/black-19.10b0-py36-none-any.whl"
+    hash:
+      value: "1b30e59be925fafc1ee4565e5e08abef6b03fe455102883820fe5ee2e4734e0b"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/b0/dc/ecd83b973fb7b82c34d828aad621a6e5865764d52375b8ac1d7a45e23c8d/black-19.10b0.tar.gz"
+    hash:
+      value: "c2edb73a08e9e0e6f65a0e6af18b059b8b1cdd5bef997d7a0b181df93dc81539"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/psf/black.git"
+    revision: ""
+    path: ""
+- id: "PyPI::click:8.0.4"
+  purl: "pkg:pypi/click@8.0.4"
+  authors:
+  - "Armin Ronacher <armin.ronacher@active-4.com>"
+  declared_licenses:
+  - "BSD License"
+  - "BSD-3-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD License: "BSD-3-Clause"
+  description: "Composable command line interface toolkit"
+  homepage_url: "https://palletsprojects.com/p/click/"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/4a/a8/0b2ced25639fb20cc1c9784de90a8c25f9504a7f18cd8b5397bd61696d7d/click-8.0.4-py3-none-any.whl"
+    hash:
+      value: "6a7a62563bbfabfda3a38f3023a1db4a35978c0abd76f6c9605ecd6554d6d9b1"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/dd/cf/706c1ad49ab26abed0b77a2f867984c1341ed7387b8030a6aa914e2942a0/click-8.0.4.tar.gz"
+    hash:
+      value: "8458d7b1287c5fb128c90e23381cf99dcde74beaf6c7ff6384ce84d6fe090adb"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/pallets/click.git"
+    revision: ""
+    path: ""
 - id: "PyPI::graphviz:0.19.1"
   purl: "pkg:pypi/graphviz@0.19.1"
   authors:
@@ -54,6 +253,71 @@ packages:
   vcs_processed:
     type: "Git"
     url: "https://github.com/xflr6/graphviz.git"
+    revision: ""
+    path: ""
+- id: "PyPI::iniconfig:1.1.1"
+  purl: "pkg:pypi/iniconfig@1.1.1"
+  authors:
+  - "Ronny Pfannschmidt, Holger Krekel <opensource@ronnypfannschmidt.de, holger.krekel@gmail.com>"
+  declared_licenses:
+  - "MIT License"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+    mapped:
+      MIT License: "MIT"
+  description: "iniconfig: brain-dead simple config-ini parsing"
+  homepage_url: "http://github.com/RonnyPfannschmidt/iniconfig"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/9b/dd/b3c12c6d707058fa947864b67f0c4e0c39ef8610988d7baea9578f3c48f3/iniconfig-1.1.1-py2.py3-none-any.whl"
+    hash:
+      value: "011e24c64b7f47f6ebd835bb12a743f2fbe9a26d4cecaa7f53bc4f35ee9da8b3"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/23/a2/97899f6bd0e873fed3a7e67ae8d3a08b21799430fb4da15cfedf10d6e2c2/iniconfig-1.1.1.tar.gz"
+    hash:
+      value: "bc3af051d7d14b2ee5ef9969666def0cd1a000e121eaea580d4a313df4b37f32"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/RonnyPfannschmidt/iniconfig.git"
+    revision: ""
+    path: ""
+- id: "PyPI::isort:4.3.21"
+  purl: "pkg:pypi/isort@4.3.21"
+  authors:
+  - "Timothy Crosley <timothy.crosley@gmail.com>"
+  declared_licenses:
+  - "MIT"
+  - "MIT License"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+    mapped:
+      MIT License: "MIT"
+  description: "A Python utility / library to sort Python imports."
+  homepage_url: "https://github.com/timothycrosley/isort"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/e5/b0/c121fd1fa3419ea9bfd55c7f9c4fedfec5143208d8c7ad3ce3db6c623c21/isort-4.3.21-py2.py3-none-any.whl"
+    hash:
+      value: "6e811fcb295968434526407adb8796944f1988c5b65e8139058f2014cbe100fd"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/43/00/8705e8d0c05ba22f042634f791a61f4c678c32175763dcf2ca2a133f4739/isort-4.3.21.tar.gz"
+    hash:
+      value: "54da7e92468955c4fceacd0c86bd0ec997b0e1ee80d97f67c35a78b719dccab1"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/timothycrosley/isort.git"
     revision: ""
     path: ""
 - id: "PyPI::jinja2:3.0.3"
@@ -89,6 +353,39 @@ packages:
     url: "https://github.com/pallets/jinja.git"
     revision: ""
     path: ""
+- id: "PyPI::lazy-object-proxy:1.7.1"
+  purl: "pkg:pypi/lazy-object-proxy@1.7.1"
+  authors:
+  - "Ionel Cristian Mărieș <contact@ionelmc.ro>"
+  declared_licenses:
+  - "BSD License"
+  - "BSD-2-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-2-Clause"
+    mapped:
+      BSD License: "BSD-2-Clause"
+  description: "========"
+  homepage_url: "https://github.com/ionelmc/python-lazy-object-proxy"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/75/93/3fc1cc28f71dd10b87a53b9d809602d7730e84cc4705a062def286232a9c/lazy-object-proxy-1.7.1.tar.gz"
+    hash:
+      value: "d609c75b986def706743cdebe5e47553f4a5a1da9c5ff66d76013ef396b5a8a4"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/ionelmc/python-lazy-object-proxy.git"
+    revision: ""
+    path: ""
 - id: "PyPI::markupsafe:2.0.1"
   purl: "pkg:pypi/markupsafe@2.0.1"
   authors:
@@ -120,5 +417,504 @@ packages:
   vcs_processed:
     type: "Git"
     url: "https://github.com/pallets/markupsafe.git"
+    revision: ""
+    path: ""
+- id: "PyPI::mccabe:0.6.1"
+  purl: "pkg:pypi/mccabe@0.6.1"
+  authors:
+  - "Ian Cordasco <graffatcolmingov@gmail.com>"
+  declared_licenses:
+  - "Expat license"
+  - "MIT License"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+    mapped:
+      Expat license: "MIT"
+      MIT License: "MIT"
+  description: "McCabe checker, plugin for flake8"
+  homepage_url: "https://github.com/pycqa/mccabe"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/87/89/479dc97e18549e21354893e4ee4ef36db1d237534982482c3681ee6e7b57/mccabe-0.6.1-py2.py3-none-any.whl"
+    hash:
+      value: "ab8a6258860da4b6677da4bd2fe5dc2c659cff31b3ee4f7f5d64e79735b80d42"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/06/18/fa675aa501e11d6d6ca0ae73a101b2f3571a565e0f7d38e062eec18a91ee/mccabe-0.6.1.tar.gz"
+    hash:
+      value: "dd8d182285a0fe56bace7f45b5e7d1a6ebcbf524e8f3bd87eb0f125271b8831f"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/pycqa/mccabe.git"
+    revision: ""
+    path: ""
+- id: "PyPI::packaging:21.3"
+  purl: "pkg:pypi/packaging@21.3"
+  authors:
+  - "Donald Stufft and individual contributors <donald@stufft.io>"
+  declared_licenses:
+  - "Apache Software License"
+  - "BSD License"
+  - "BSD-2-Clause or Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0 AND (Apache-2.0 OR BSD-2-Clause)"
+    mapped:
+      Apache Software License: "Apache-2.0"
+      BSD License: "BSD-2-Clause"
+      BSD-2-Clause or Apache-2.0: "BSD-2-Clause OR Apache-2.0"
+  description: "Core utilities for Python packages"
+  homepage_url: "https://github.com/pypa/packaging"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/05/8e/8de486cbd03baba4deef4142bd643a3e7bbe954a784dc1bb17142572d127/packaging-21.3-py3-none-any.whl"
+    hash:
+      value: "ef103e05f519cdc783ae24ea4e2e0f508a9c99b2d4969652eed6a2e1ea5bd522"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/df/9e/d1a7217f69310c1db8fdf8ab396229f55a699ce34a203691794c5d1cad0c/packaging-21.3.tar.gz"
+    hash:
+      value: "dd47c42927d89ab911e606518907cc2d3a1f38bbd026385970643f9c5b8ecfeb"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/pypa/packaging.git"
+    revision: ""
+    path: ""
+- id: "PyPI::pathspec:0.9.0"
+  purl: "pkg:pypi/pathspec@0.9.0"
+  authors:
+  - "Caleb P. Burns <cpburnz@gmail.com>"
+  declared_licenses:
+  - "MPL 2.0"
+  - "Mozilla Public License 2.0 (MPL 2.0)"
+  declared_licenses_processed:
+    spdx_expression: "MPL-2.0"
+    mapped:
+      MPL 2.0: "MPL-2.0"
+      Mozilla Public License 2.0 (MPL 2.0): "MPL-2.0"
+  description: "Utility library for gitignore style pattern matching of file paths."
+  homepage_url: "https://github.com/cpburnz/python-path-specification"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/42/ba/a9d64c7bcbc7e3e8e5f93a52721b377e994c22d16196e2b0f1236774353a/pathspec-0.9.0-py2.py3-none-any.whl"
+    hash:
+      value: "7d15c4ddb0b5c802d161efc417ec1a2558ea2653c2e8ad9c19098201dc1c993a"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/f6/33/436c5cb94e9f8902e59d1d544eb298b83c84b9ec37b5b769c5a0ad6edb19/pathspec-0.9.0.tar.gz"
+    hash:
+      value: "e564499435a2673d586f6b2130bb5b95f04a3ba06f81b8f895b651a3c76aabb1"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/cpburnz/python-path-specification.git"
+    revision: ""
+    path: ""
+- id: "PyPI::platformdirs:2.4.0"
+  purl: "pkg:pypi/platformdirs@2.4.0"
+  declared_licenses:
+  - "MIT"
+  - "MIT License"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+    mapped:
+      MIT License: "MIT"
+  description: "A small Python module for determining appropriate platform-specific\
+    \ dirs, e.g. a \"user data dir\"."
+  homepage_url: "https://github.com/platformdirs/platformdirs"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/b1/78/dcfd84d3aabd46a9c77260fb47ea5d244806e4daef83aa6fe5d83adb182c/platformdirs-2.4.0-py3-none-any.whl"
+    hash:
+      value: "8868bbe3c3c80d42f20156f22e7131d2fb321f5bc86a2a345375c6481a67021d"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/4b/96/d70b9462671fbeaacba4639ff866fb4e9e558580853fc5d6e698d0371ad4/platformdirs-2.4.0.tar.gz"
+    hash:
+      value: "367a5e80b3d04d2428ffa76d33f124cf11e8fff2acdaa9b43d545f5c7d661ef2"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/platformdirs/platformdirs.git"
+    revision: ""
+    path: ""
+- id: "PyPI::pluggy:1.0.0"
+  purl: "pkg:pypi/pluggy@1.0.0"
+  authors:
+  - "Holger Krekel <holger@merlinux.eu>"
+  declared_licenses:
+  - "MIT"
+  - "MIT License"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+    mapped:
+      MIT License: "MIT"
+  description: "plugin and hook calling mechanisms for python"
+  homepage_url: "https://github.com/pytest-dev/pluggy"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/9e/01/f38e2ff29715251cf25532b9082a1589ab7e4f571ced434f98d0139336dc/pluggy-1.0.0-py2.py3-none-any.whl"
+    hash:
+      value: "74134bbf457f031a36d68416e1509f34bd5ccc019f0bcc952c7b909d06b37bd3"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/a1/16/db2d7de3474b6e37cbb9c008965ee63835bba517e22cdb8c35b5116b5ce1/pluggy-1.0.0.tar.gz"
+    hash:
+      value: "4224373bacce55f955a878bf9cfa763c1e360858e330072059e10bad68531159"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/pytest-dev/pluggy.git"
+    revision: ""
+    path: ""
+- id: "PyPI::py:1.11.0"
+  purl: "pkg:pypi/py@1.11.0"
+  authors:
+  - "holger krekel, Ronny Pfannschmidt, Benjamin Peterson and others <pytest-dev@python.org>"
+  declared_licenses:
+  - "MIT License"
+  - "MIT license"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+    mapped:
+      MIT License: "MIT"
+      MIT license: "MIT"
+  description: "library with cross-python path, ini-parsing, io, code, log facilities"
+  homepage_url: "https://py.readthedocs.io/"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/f6/f0/10642828a8dfb741e5f3fbaac830550a518a775c7fff6f04a007259b0548/py-1.11.0-py2.py3-none-any.whl"
+    hash:
+      value: "607c53218732647dff4acdfcd50cb62615cedf612e72d1724fb1a0cc6405b378"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/98/ff/fec109ceb715d2a6b4c4a85a61af3b40c723a961e8828319fbcb15b868dc/py-1.11.0.tar.gz"
+    hash:
+      value: "51c75c4126074b472f746a24399ad32f6053d1b34b68d2fa41e558e6f4a98719"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "PyPI::pylint:2.12.0"
+  purl: "pkg:pypi/pylint@2.12.0"
+  authors:
+  - "Python Code Quality Authority <code-quality@python.org>"
+  declared_licenses:
+  - "GNU General Public License v2 (GPLv2)"
+  - "GPL-2.0-or-later"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-only AND GPL-2.0-or-later"
+    mapped:
+      GNU General Public License v2 (GPLv2): "GPL-2.0-only"
+  description: "python code static checker"
+  homepage_url: ""
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/9f/12/e8d2c14a59c8e0045a2efd8d1ef774fd93e8b94ddc987aa8402b94efd21d/pylint-2.12.0-py3-none-any.whl"
+    hash:
+      value: "ba00afcb1550bc217bbcb0eb76c10cb8335f7417a3323bdd980c29fb5b59f8d2"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/54/ba/8a6d70d630a7f95c38c763c2482db76e68fab5d31d210059a2dc30167d56/pylint-2.12.0.tar.gz"
+    hash:
+      value: "245c87e5da54c35b623c21b35debf87d93b18bf9e0229515cc172d0b83d627cd"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/PyCQA/pylint.git"
+    revision: ""
+    path: ""
+- id: "PyPI::pyparsing:3.0.7"
+  purl: "pkg:pypi/pyparsing@3.0.7"
+  authors:
+  - "Paul McGuire <ptmcg.gm+pyparsing@gmail.com>"
+  declared_licenses:
+  - "MIT License"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+    mapped:
+      MIT License: "MIT"
+  description: "Python parsing module"
+  homepage_url: "https://github.com/pyparsing/pyparsing/"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/80/c1/23fd82ad3121656b585351aba6c19761926bb0db2ebed9e4ff09a43a3fcc/pyparsing-3.0.7-py3-none-any.whl"
+    hash:
+      value: "a6c06a88f252e6c322f65faf8f418b16213b51bdfaece0524c1c1bc30c63c484"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/d6/60/9bed18f43275b34198eb9720d4c1238c68b3755620d20df0afd89424d32b/pyparsing-3.0.7.tar.gz"
+    hash:
+      value: "18ee9022775d270c55187733956460083db60b37d0d0fb357445f3094eed3eea"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/pyparsing/pyparsing.git"
+    revision: ""
+    path: ""
+- id: "PyPI::pytest:6.2.5"
+  purl: "pkg:pypi/pytest@6.2.5"
+  authors:
+  - "Holger Krekel, Bruno Oliveira, Ronny Pfannschmidt, Floris Bruynooghe, Brianna\
+    \ Laugher, Florian Bruhin and others"
+  declared_licenses:
+  - "MIT"
+  - "MIT License"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+    mapped:
+      MIT License: "MIT"
+  description: "pytest: simple powerful testing with Python"
+  homepage_url: "https://docs.pytest.org/en/latest/"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/40/76/86f886e750b81a4357b6ed606b2bcf0ce6d6c27ad3c09ebf63ed674fc86e/pytest-6.2.5-py3-none-any.whl"
+    hash:
+      value: "7310f8d27bc79ced999e760ca304d69f6ba6c6649c0b60fb0e04a4a77cacc134"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/4b/24/7d1f2d2537de114bdf1e6875115113ca80091520948d370c964b88070af2/pytest-6.2.5.tar.gz"
+    hash:
+      value: "131b36680866a76e6781d13f101efb86cf674ebb9762eb70d3082b6f29889e89"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/pytest-dev/pytest.git"
+    revision: ""
+    path: ""
+- id: "PyPI::regex:2023.8.8"
+  purl: "pkg:pypi/regex@2023.8.8"
+  authors:
+  - "Matthew Barnett <regex@mrabarnett.plus.com>"
+  declared_licenses:
+  - "Apache Software License"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache Software License: "Apache-2.0"
+  description: "Alternative regular expression module, to replace re."
+  homepage_url: "https://github.com/mrabarnett/mrab-regex"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/2c/8d/3a99825e156744b85b031c1ea966051b85422d13972ed7cd2cd440e0c6c4/regex-2023.8.8-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+    hash:
+      value: "14dc6f2d88192a67d708341f3085df6a4f5a0c7b03dec08d763ca2cd86e9f559"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/4f/1d/6998ba539616a4c8f58b07fd7c9b90c6b0f0c0ecbe8db69095a6079537a7/regex-2023.8.8.tar.gz"
+    hash:
+      value: "fcbdc5f2b0f1cd0f6a56cdb46fe41d2cce1e644e3b68832f3eeebc5fb0f7712e"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/mrabarnett/mrab-regex.git"
+    revision: ""
+    path: ""
+- id: "PyPI::rope:0.14.0"
+  purl: "pkg:pypi/rope@0.14.0"
+  authors:
+  - "Ali Gholami Rudi <aligrudi@users.sourceforge.net>"
+  declared_licenses:
+  - "GNU GPL"
+  - "GNU Lesser General Public License v3 or later (LGPLv3+)"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-or-later AND LGPL-3.0-or-later"
+    mapped:
+      GNU GPL: "GPL-2.0-or-later"
+      GNU Lesser General Public License v3 or later (LGPLv3+): "LGPL-3.0-or-later"
+  description: "a python refactoring library..."
+  homepage_url: "https://github.com/python-rope/rope"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/69/b7/4802c5736b70fc7b7ace5d4f81355fae72702e1da0675e3a305959fdb9ce/rope-0.14.0-py3-none-any.whl"
+    hash:
+      value: "f0dcf719b63200d492b85535ebe5ea9b29e0d0b8aebeb87fe03fc1a65924fdaf"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/fc/18/df49bd6937eb20c90d69292120d6228b509e8e2d2107bd5755ec4c259de3/rope-0.14.0.tar.gz"
+    hash:
+      value: "c5c5a6a87f7b1a2095fb311135e2a3d1f194f5ecb96900fdd0a9100881f48aaf"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/python-rope/rope.git"
+    revision: ""
+    path: ""
+- id: "PyPI::setuptools:59.6.0"
+  purl: "pkg:pypi/setuptools@59.6.0"
+  authors:
+  - "Python Packaging Authority <distutils-sig@python.org>"
+  declared_licenses:
+  - "MIT License"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+    mapped:
+      MIT License: "MIT"
+  description: "Easily download, build, install, upgrade, and uninstall Python packages"
+  homepage_url: "https://github.com/pypa/setuptools"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/b0/3a/88b210db68e56854d0bcf4b38e165e03be377e13907746f825790f3df5bf/setuptools-59.6.0-py3-none-any.whl"
+    hash:
+      value: "4ce92f1e1f8f01233ee9952c04f6b81d1e02939d6e1b488428154974a4d0783e"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/6a/fa/5ec0fa9095c9b72cb1c31a8175c4c6745bf5927d1045d7a70df35d54944f/setuptools-59.6.0.tar.gz"
+    hash:
+      value: "22c7348c6d2976a52632c67f7ab0cdf40147db7789f9aed18734643fe9cf3373"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/pypa/setuptools.git"
+    revision: ""
+    path: ""
+- id: "PyPI::toml:0.10.2"
+  purl: "pkg:pypi/toml@0.10.2"
+  authors:
+  - "William Pearson <uiri@xqz.ca>"
+  declared_licenses:
+  - "MIT"
+  - "MIT License"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+    mapped:
+      MIT License: "MIT"
+  description: "Python Library for Tom's Obvious, Minimal Language"
+  homepage_url: "https://github.com/uiri/toml"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/44/6f/7120676b6d73228c96e17f1f794d8ab046fc910d781c8d151120c3f1569e/toml-0.10.2-py2.py3-none-any.whl"
+    hash:
+      value: "806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/be/ba/1f744cdc819428fc6b5084ec34d9b30660f6f9daaf70eead706e3203ec3c/toml-0.10.2.tar.gz"
+    hash:
+      value: "b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/uiri/toml.git"
+    revision: ""
+    path: ""
+- id: "PyPI::typed-ast:1.5.5"
+  purl: "pkg:pypi/typed-ast@1.5.5"
+  authors:
+  - "David Fisher"
+  declared_licenses:
+  - "Apache License 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License 2.0: "Apache-2.0"
+  description: "a fork of Python 2 and 3 ast modules with type comment support"
+  homepage_url: "https://github.com/python/typed_ast"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/60/ca/765e8bf8b24d0ed7b9fc669f6826c5bc3eb7412fc765691f59b83ae195b2/typed_ast-1.5.5-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+    hash:
+      value: "61443214d9b4c660dcf4b5307f15c12cb30bdfe9588ce6158f4a005baeb167b2"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/f9/7e/a424029f350aa8078b75fd0d360a787a273ca753a678d1104c5fa4f3072a/typed_ast-1.5.5.tar.gz"
+    hash:
+      value: "94282f7a354f36ef5dbce0ef3467ebf6a258e370ab33d5b40c249fa996e590dd"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/python/typed_ast.git"
+    revision: ""
+    path: ""
+- id: "PyPI::wrapt:1.13.3"
+  purl: "pkg:pypi/wrapt@1.13.3"
+  authors:
+  - "Graham Dumpleton <Graham.Dumpleton@gmail.com>"
+  declared_licenses:
+  - "BSD"
+  - "BSD License"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD: "BSD-3-Clause"
+      BSD License: "BSD-3-Clause"
+  description: "Module for decorators, wrappers and monkey patching."
+  homepage_url: "https://github.com/GrahamDumpleton/wrapt"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/eb/f6/d81ccf43ac2a3c80ddb6647653ac8b53ce2d65796029369923be06b815b8/wrapt-1.13.3.tar.gz"
+    hash:
+      value: "1fea9cd438686e6682271d36f3481a9f3636195578bab9ca3382e2f5f01fc185"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/GrahamDumpleton/wrapt.git"
     revision: ""
     path: ""
