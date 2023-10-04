@@ -65,6 +65,7 @@ enum class PurlType(private val value: String) {
 fun Identifier.getPurlType() =
     when (type.lowercase()) {
         "bower" -> PurlType.BOWER
+        "deb" -> PurlType.DEBIAN
         "carthage" -> PurlType.CARTHAGE
         "composer" -> PurlType.COMPOSER
         "conan" -> PurlType.CONAN
