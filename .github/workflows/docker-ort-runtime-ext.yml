@@ -19,18 +19,6 @@ name: Docker extended runtime image
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '0 4 * * *'
-  pull_request:
-    paths:
-      - '.versions'
-      - 'Dockerfile'
-      - 'Dockerfile-extended'
-      - '.github/workflows/docker-ort-runtime.yml'
-      - '.github/workflows/docker-ort-runtime-ext.yml'
-  push:
-    tags:
-      - '*'
   workflow_run:
     workflows:
       - 'Docker runtime image'
@@ -153,7 +141,6 @@ jobs:
             SWIFT_VERSION=${{ env.SWIFT_VERSION }}
 
   runtime_extended_image:
-    if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
     name: Build ORT extended image
     needs: [ android_image, dart_image, dotnet_image, haskell_image, scala_image, swift_image ]
     runs-on: ubuntu-22.04
@@ -198,7 +185,7 @@ jobs:
         with:
           context: .
           file: Dockerfile-extended
-          push: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
+          push: true
           load: false
           tags: |
             ${{ steps.meta-ort.outputs.tags }}
