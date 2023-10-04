@@ -43,6 +43,7 @@ logback = "1.4.11"
 maven = "3.9.4"
 mavenResolver = "1.9.16"
 mockk = "1.13.8"
+mordant = "2.2.0"
 okhttp = "4.11.0"
 postgres = "42.6.0"
 postgresEmbedded = "1.0.2"
@@ -52,6 +53,7 @@ retrofitConverterKotlinxSerialization = "1.0.0"
 saxonHe = "12.3"
 scanoss = "1.1.6"
 semver4j = "5.2.1"
+slf4j = "2.0.9"
 springCore = "5.3.30"
 svnkit = "1.10.11"
 sw360Client = "17.0.0-m1"
@@ -137,6 +139,7 @@ mavenResolverTransportFile = { module = "org.apache.maven.resolver:maven-resolve
 mavenResolverTransportHttp = { module = "org.apache.maven.resolver:maven-resolver-transport-http", version.ref = "mavenResolver" }
 mavenResolverTransportWagon = { module = "org.apache.maven.resolver:maven-resolver-transport-wagon", version.ref = "mavenResolver" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+mordant = { module = "com.github.ajalt.mordant:mordant", version.ref = "mordant" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 postgres = { module = "org.postgresql:postgresql", version.ref = "postgres" }
 postgresEmbedded = { module = "com.opentable.components:otj-pg-embedded", version.ref = "postgresEmbedded" }
@@ -148,6 +151,7 @@ retrofitConverterScalars = { module = "com.squareup.retrofit2:converter-scalars"
 saxonHe = { module = "net.sf.saxon:Saxon-HE", version.ref = "saxonHe" }
 scanoss = { module = "com.scanoss:scanner", version.ref = "scanoss" }
 semver4j = { module = "org.semver4j:semver4j", version.ref = "semver4j" }
+slf4j = { module = "org.slf4j:slf4j-api ", version.ref = "slf4j" }
 springCore = { module = "org.springframework:spring-core", version.ref = "springCore" }
 svnkit = { module = "org.tmatesoft.svnkit:svnkit", version.ref = "svnkit" }
 sw360Client = { module = "org.eclipse.sw360:client", version.ref = "sw360Client" }
