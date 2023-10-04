@@ -43,7 +43,7 @@ semver {
 
 // Only override a default version (which usually is "unspecified"), but not a custom version.
 if (version == Project.DEFAULT_VERSION) {
-    version = semver.version
+    version = semver.semVersion.takeIf { it.isPreRelease } ?: semver.version
 }
 
 logger.lifecycle("Building ORT version $version.")
