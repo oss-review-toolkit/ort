@@ -27,9 +27,13 @@ import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.toOrtPackages
+import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.toPackageReferences
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 
@@ -59,7 +63,7 @@ class Poetry(
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         // For an overview, dependency resolution involves the following steps:
         // 1. Generate "requirements.txt" file with `poetry` command.
-        // 2. Use existing "Pip" PackageManager to do the actual dependency resolution.
+        // 2. Use Python inspector via "Pip" to do the actual dependency resolution.
 
         val workingDir = definitionFile.parentFile
         val requirementsFile = workingDir.resolve("requirements-from-poetry.txt")
@@ -70,21 +74,22 @@ class Poetry(
             .requireSuccess().stdout
         requirementsFile.writeText(req)
 
-        return Pip(managerName, analysisRoot, analyzerConfig, repoConfig)
-            .resolveDependencies(requirementsFile, labels)
-            .map { projectAnalyzerResult ->
-                projectAnalyzerResult.copy(
-                    project = projectAnalyzerResult.project.copy(
-                        id = Identifier(
-                            type = managerName,
-                            namespace = "",
-                            name = definitionFile.relativeTo(analysisRoot).path,
-                            version = VersionControlSystem.getCloneInfo(definitionFile.parentFile).revision
-                        ),
-                        definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path
-                    )
-                )
-            }
-            .also { requirementsFile.delete() }
+        val result = Pip(managerName, analysisRoot, analyzerConfig, repoConfig).runPythonInspector(requirementsFile)
+        requirementsFile.delete()
+
+        val packages = result.packages.toOrtPackages()
+        val project = Project.EMPTY.copy(
+            id = Identifier(
+                type = managerName,
+                namespace = "",
+                name = definitionFile.relativeTo(analysisRoot).path,
+                version = VersionControlSystem.getCloneInfo(definitionFile.parentFile).revision
+            ),
+            definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+            scopeDependencies = setOf(Scope("install", result.resolvedDependenciesGraph.toPackageReferences())),
+            vcsProcessed = processProjectVcs(definitionFile.parentFile)
+        )
+
+        return listOf(ProjectAnalyzerResult(project, packages))
     }
 }
