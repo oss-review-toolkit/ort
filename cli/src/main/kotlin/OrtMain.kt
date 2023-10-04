@@ -83,7 +83,8 @@ private val ORT_LOGO = """
     \________/ |____|___/ |____|
 """.trimIndent()
 
-private val ORT_LOGO_WIDTH = ORT_LOGO.lines().maxOf { it.length }
+// A priority value that is higher than any Clikt built-in value for allocating width.
+private const val HIGHEST_PRIORITY_FOR_WIDTH = 100
 
 class OrtMain : CliktCommand(
     name = ORT_NAME,
@@ -171,7 +172,10 @@ class OrtMain : CliktCommand(
 
     private fun getOrtHeader(version: String): Widget =
         grid {
-            column(0) { width = ColumnWidth.Fixed(ORT_LOGO_WIDTH) }
+            column(0) {
+                width = ColumnWidth.Custom(width = null, expandWeight = null, priority = HIGHEST_PRIORITY_FOR_WIDTH)
+            }
+
             column(1) { verticalAlign = VerticalAlign.BOTTOM }
             padding { bottom = 1 }
 
