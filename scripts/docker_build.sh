@@ -20,7 +20,7 @@
 set -e -o pipefail
 
 GIT_ROOT=$(git rev-parse --show-toplevel)
-ORT_VERSION=$("$GIT_ROOT/gradlew" -q properties --property version | sed -nr "s/version: (.+)/\1/p")
+ORT_VERSION=$("$GIT_ROOT/gradlew" -q printSemVersion)
 DOCKER_IMAGE_ROOT="${DOCKER_IMAGE_ROOT:-ghcr.io/oss-review-toolkit}"
 
 echo "Setting ORT_VERSION to $ORT_VERSION."
