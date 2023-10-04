@@ -97,6 +97,7 @@ graalvmNative {
                 "ch.qos.logback.core.util.COWArrayList",
                 "ch.qos.logback.core.util.CachingDateFormatter",
                 "ch.qos.logback.core.util.CachingDateFormatter\$CacheTuple",
+                "com.github.ajalt.mordant.internal.nativeimage.NativeImagePosixMppImpls",
                 "org.apache.sshd.common.file.root.RootedFileSystemProvider"
             ).joinToString(separator = ",", prefix = "--initialize-at-build-time=")
 
