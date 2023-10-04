@@ -80,13 +80,11 @@ class OrtMainFunTest : StringSpec() {
             val inputDir = tempdir()
 
             val stdout = OrtMain().test(
-                listOf(
-                    "-c", configFile.path,
-                    "-P", "ort.analyzer.enabledPackageManagers=Gradle",
-                    "analyze",
-                    "-i", inputDir.path,
-                    "-o", outputDir.path
-                )
+                "-c", configFile.path,
+                "-P", "ort.analyzer.enabledPackageManagers=Gradle",
+                "analyze",
+                "-i", inputDir.path,
+                "-o", outputDir.path
             ).stdout.lineSequence()
             val iterator = stdout.iterator()
             while (iterator.hasNext()) {
@@ -103,13 +101,11 @@ class OrtMainFunTest : StringSpec() {
             val inputDir = tempdir()
 
             val stdout = OrtMain().test(
-                listOf(
-                    "-c", configFile.path,
-                    "-P", "ort.analyzer.disabledPackageManagers=Gradle",
-                    "analyze",
-                    "-i", inputDir.path,
-                    "-o", outputDir.path
-                )
+                "-c", configFile.path,
+                "-P", "ort.analyzer.disabledPackageManagers=Gradle",
+                "analyze",
+                "-i", inputDir.path,
+                "-o", outputDir.path
             ).stdout.lineSequence()
             val iterator = stdout.iterator()
             while (iterator.hasNext()) {
@@ -124,14 +120,12 @@ class OrtMainFunTest : StringSpec() {
             val inputDir = tempdir()
 
             val stdout = OrtMain().test(
-                listOf(
-                    "-c", configFile.path,
-                    "-P", "ort.analyzer.enabledPackageManagers=Gradle,NPM",
-                    "-P", "ort.analyzer.disabledPackageManagers=Gradle",
-                    "analyze",
-                    "-i", inputDir.path,
-                    "-o", outputDir.path
-                )
+                "-c", configFile.path,
+                "-P", "ort.analyzer.enabledPackageManagers=Gradle,NPM",
+                "-P", "ort.analyzer.disabledPackageManagers=Gradle",
+                "analyze",
+                "-i", inputDir.path,
+                "-o", outputDir.path
             ).stdout.lineSequence()
             val iterator = stdout.iterator()
             while (iterator.hasNext()) {
@@ -147,12 +141,10 @@ class OrtMainFunTest : StringSpec() {
             inputDir.resolve("test").writeText("test")
 
             OrtMain().test(
-                listOf(
-                    "-c", configFile.path,
-                    "analyze",
-                    "-i", inputDir.path,
-                    "-o", outputDir.path
-                )
+                "-c", configFile.path,
+                "analyze",
+                "-i", inputDir.path,
+                "-o", outputDir.path
             )
 
             val ortResult = outputDir.resolve("analyzer-result.yml").readValue<OrtResult>()
@@ -168,13 +160,11 @@ class OrtMainFunTest : StringSpec() {
             inputDir.resolve("test").writeText("test")
 
             OrtMain().test(
-                listOf(
-                    "-c", configFile.path,
-                    "-P", "ort.analyzer.enabledPackageManagers=Gradle,NPM",
-                    "analyze",
-                    "-i", inputDir.path,
-                    "-o", outputDir.path
-                )
+                "-c", configFile.path,
+                "-P", "ort.analyzer.enabledPackageManagers=Gradle,NPM",
+                "analyze",
+                "-i", inputDir.path,
+                "-o", outputDir.path
             )
 
             val ortResult = outputDir.resolve("analyzer-result.yml").readValue<OrtResult>()
@@ -188,14 +178,12 @@ class OrtMainFunTest : StringSpec() {
             val inputDir = tempdir()
 
             val stdout = OrtMain().test(
-                listOf(
-                    "-c", configFile.path,
-                    "-P", "ort.analyzer.enabledPackageManagers=Gradle",
-                    "analyze",
-                    "-i", inputDir.path,
-                    "-o", outputDir.path,
-                    "-f", "json,yaml,json"
-                )
+                "-c", configFile.path,
+                "-P", "ort.analyzer.enabledPackageManagers=Gradle",
+                "analyze",
+                "-i", inputDir.path,
+                "-o", outputDir.path,
+                "-f", "json,yaml,json"
             ).stdout.lineSequence()
             val lines = stdout.filter { it.startsWith("Writing analyzer result to ") }
 
@@ -210,13 +198,11 @@ class OrtMainFunTest : StringSpec() {
             val expectedResult = matchExpectedResult(expectedResultFile, definitionFile)
 
             OrtMain().test(
-                listOf(
-                    "-c", configFile.path,
-                    "-P", "ort.analyzer.enabledPackageManagers=Gradle",
-                    "analyze",
-                    "-i", definitionFile.parentFile.absolutePath,
-                    "-o", outputDir.path
-                )
+                "-c", configFile.path,
+                "-P", "ort.analyzer.enabledPackageManagers=Gradle",
+                "analyze",
+                "-i", definitionFile.parentFile.absolutePath,
+                "-o", outputDir.path
             )
 
             val ortResult = outputDir.resolve("analyzer-result.yml").readValue<OrtResult>().withResolvedScopes()
@@ -228,10 +214,8 @@ class OrtMainFunTest : StringSpec() {
             val referenceConfigFile = File("../model/src/main/resources/$REFERENCE_CONFIG_FILENAME").absolutePath
 
             OrtMain().test(
-                listOf(
-                    "-c", referenceConfigFile,
-                    "config"
-                )
+                "-c", referenceConfigFile,
+                "config"
             )
 
             EnvironmentVariableFilter.isAllowed("PASSPORT") shouldBe true
