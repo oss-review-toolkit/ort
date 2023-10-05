@@ -70,7 +70,7 @@ class Pnpm(
 
     override fun command(workingDir: File?) = if (Os.isWindows) "pnpm.cmd" else "pnpm"
 
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create("5.* - 7.*")
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create("5.* - 8.*")
 
     override fun mapDefinitionFiles(definitionFiles: List<File>) = mapDefinitionFilesForPnpm(definitionFiles).toList()
 
