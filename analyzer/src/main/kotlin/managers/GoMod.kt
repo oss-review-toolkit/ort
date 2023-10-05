@@ -182,7 +182,13 @@ class GoMod(
             val columns = line.splitOnWhitespace()
             require(columns.size == 2) { "Expected exactly one occurrence of ' ' on any non-blank line." }
 
-            val parent = parseModuleEntry(columns[0])
+            val parent = parseModuleEntry(columns[0]).apply {
+                // As of go version 1.21.1 the module graph contains a version constraint for the go version for
+                // the main project. The edge would be filtered out below by getVendorModules(). However, ignore
+                // it already here as there is no module info for 'go', so parseModuleEntry() would fail.
+                if (moduleInfo(name).main && columns[1].startsWith("go@")) return@forEach
+            }
+
             val child = parseModuleEntry(columns[1])
 
             if (moduleInfo(parent.name).main && moduleInfo(child.name).indirect) {
