@@ -48,9 +48,9 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://curl.se/download/curl-7.85.0.tar.xz"
+    url: "https://curl.se/download/curl-7.85.0.tar.gz"
     hash:
-      value: "88b54a6d4b9a48cb4d873c7056dcba997ddd5b7be5a2d537a4acb55c20b04be6"
+      value: "78a06f918bd5fde3c4573ef4f9806f56372b32ec1829c9ec474799eeee641c27"
       algorithm: "SHA-256"
   vcs:
     type: ""
