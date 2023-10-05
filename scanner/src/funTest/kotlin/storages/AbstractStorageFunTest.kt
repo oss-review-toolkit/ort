@@ -128,7 +128,7 @@ abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec
                 val scanResult = ScanResult(provenanceWithSourceArtifact1, scannerDetails1, scanSummaryWithFiles)
 
                 val addResult = storage.add(id1, scanResult)
-                val readResult = storage.read(id1)
+                val readResult = storage.read(pkg1)
 
                 addResult.shouldBeSuccess()
                 readResult.shouldBeSuccess {
@@ -140,7 +140,7 @@ abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec
                 val scanResult = ScanResult(provenanceEmpty, scannerDetails1, scanSummaryWithFiles)
 
                 val addResult = storage.add(id1, scanResult)
-                val readResult = storage.read(id1)
+                val readResult = storage.read(pkg1)
 
                 addResult.shouldBeFailure {
                     it.message shouldBe "Not storing scan result for '${id1.toCoordinates()}' because no provenance " +
@@ -167,7 +167,7 @@ abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec
                 addResult1.shouldBeSuccess()
                 addResult2.shouldBeFailure()
 
-                val readResult = storage.read(id1)
+                val readResult = storage.read(pkg1)
                 readResult.shouldBeSuccess {
                     it should containExactly(scanResult1)
                 }
@@ -181,7 +181,7 @@ abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec
 
                 storage.add(id1, scanResult1).shouldBeSuccess()
                 storage.add(id1, scanResult2).shouldBeSuccess()
-                val readResult = storage.read(id1)
+                val readResult = storage.read(pkg1)
 
                 readResult.shouldBeSuccess {
                     it should containExactlyInAnyOrder(scanResult1, scanResult2)

@@ -131,16 +131,16 @@ class PostgresStorage(
             """.trimIndent()
         )
 
-    override fun readInternal(id: Identifier): Result<List<ScanResult>> =
+    override fun readInternal(pkg: Package): Result<List<ScanResult>> =
         runCatching {
             database.transaction {
-                ScanResultDao.find { ScanResults.identifier eq id.toCoordinates() }.map { it.scanResult }
+                ScanResultDao.find { ScanResults.identifier eq pkg.id.toCoordinates() }.map { it.scanResult }
             }
         }.onFailure {
             if (it is JsonProcessingException || it is SQLException) {
                 it.showStackTrace()
 
-                val message = "Could not read scan results for '${id.toCoordinates()}' from database: " +
+                val message = "Could not read scan results for '${pkg.id.toCoordinates()}' from database: " +
                     it.collectMessages()
 
                 logger.info { message }

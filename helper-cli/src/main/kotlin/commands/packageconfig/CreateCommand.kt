@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.helper.utils.sortPathExcludes
 import org.ossreviewtoolkit.helper.utils.write
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.config.PackageConfiguration
@@ -119,7 +120,7 @@ internal class CreateCommand : CliktCommand(
         outputDir.safeMkdirs()
 
         val scanResultsStorage = FileBasedStorage(LocalFileStorage(scanResultsStorageDir))
-        val scanResults = scanResultsStorage.read(packageId).getOrThrow().run {
+        val scanResults = scanResultsStorage.read(Package.EMPTY.copy(id = packageId)).getOrThrow().run {
             listOfNotNull(
                 find { it.provenance is RepositoryProvenance },
                 find { it.provenance is ArtifactProvenance }

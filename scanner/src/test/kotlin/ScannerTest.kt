@@ -324,7 +324,7 @@ class ScannerTest : WordSpec({
             val scannerWrapper = spyk(FakePackageScannerWrapper())
 
             val reader = spyk(FakePackageBasedStorageReader(scannerWrapper.details)) {
-                every { read(pkgWithArtifact.id, any()) } returns listOf(
+                every { read(pkgWithArtifact, any()) } returns listOf(
                     createStoredNestedScanResult(pkgWithArtifact.artifactProvenance(), scannerWrapper.details)
                 )
             }
@@ -374,7 +374,7 @@ class ScannerTest : WordSpec({
             )
 
             verify(exactly = 1) {
-                reader.read(pkgWithArtifact.id, any())
+                reader.read(pkgWithArtifact, any())
                 scannerWrapper.scanPackage(pkgWithArtifact, any())
             }
         }
@@ -431,7 +431,7 @@ class ScannerTest : WordSpec({
             }
 
             val reader = spyk(FakePackageBasedStorageReader(scannerWrapper.details)) {
-                every { read(pkgCompletelyScanned.id, any()) } returns listOf(nestedScanResultCompletelyScanned)
+                every { read(pkgCompletelyScanned, any()) } returns listOf(nestedScanResultCompletelyScanned)
             }
 
             val scanner = createScanner(
@@ -897,14 +897,14 @@ private class FakeNestedProvenanceResolver : NestedProvenanceResolver {
  * with a single license finding for the provided [scannerDetails].
  */
 private class FakePackageBasedStorageReader(val scannerDetails: ScannerDetails) : PackageBasedScanStorageReader {
-    override fun read(id: Identifier, nestedProvenance: NestedProvenance): List<NestedProvenanceScanResult> =
+    override fun read(pkg: Package, nestedProvenance: NestedProvenance): List<NestedProvenanceScanResult> =
         listOf(createStoredNestedScanResult(nestedProvenance.root, scannerDetails))
 
     override fun read(
         pkg: Package,
         nestedProvenance: NestedProvenance,
         scannerCriteria: ScannerCriteria
-    ): List<NestedProvenanceScanResult> = read(pkg.id, nestedProvenance)
+    ): List<NestedProvenanceScanResult> = read(pkg, nestedProvenance)
 }
 
 private class FakeProvenanceBasedStorageReader(val scannerDetails: ScannerDetails) : ProvenanceBasedScanStorageReader {
