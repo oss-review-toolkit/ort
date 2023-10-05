@@ -67,14 +67,15 @@ Note:
 ### Prerequisites
 
 In order to be able to use SW360 data in the ORT *analyzer*, first set the connection parameters for your SW360
-instance. You can do this by defining a `sw360Configuration` within the `analyzer` section of your
+instance. You can do this by adding an entry of type `SW360` to the list of `packageCurationProviders` in your
 [config.yml](../getting-started/usage.md#ort-configuration-file) (e.g. in `$HOME/.ort/config`) or pass it to the ORT
 command with the `--config` option as shown below.
 
 ```yaml
 ort:
-  analyzer:
-    sw360Configuration:
+  packageCurationProviders:
+  - type: SW360
+    config:
       restUrl: "https://your-sw360-rest-url"
       authUrl: "https://your-authentication-url"
       username: username
@@ -86,13 +87,13 @@ ort:
 
 ### Command Line
 
-To use SW360 curation, pass it to the `--sw360-curations` option of the *analyzer*:
+Apart from configuring your `config.yml` to use the SW360 curation provider, no specific option needs to be passed to
+the *analyzer*:
 
 ```shell
 cli/build/install/ort/bin/ort analyze
   -i [source-code-of-project-dir]
   -o [analyzer-output-dir]
-  --sw360-curations
 ```
 
 ## Store ORT Scanner Results in SW360
