@@ -172,7 +172,7 @@ internal class ScanController(
      * Return all [KnownProvenance]s contained in [nestedProvenances].
      */
     fun getAllProvenances(): Set<KnownProvenance> =
-        nestedProvenances.values.flatMapTo(mutableSetOf()) { it.getProvenances() }
+        nestedProvenances.values.flatMapTo(mutableSetOf()) { it.allProvenances }
 
     /**
      * Return all scan results.
@@ -186,7 +186,7 @@ internal class ScanController(
     fun getIdsByProvenance(): Map<KnownProvenance, Set<Identifier>> =
         buildMap<_, MutableSet<Identifier>> {
             getNestedProvenancesByPackage().forEach { (pkg, nestedProvenance) ->
-                nestedProvenance.getProvenances().forEach { provenance ->
+                nestedProvenance.allProvenances.forEach { provenance ->
                     getOrPut(provenance) { mutableSetOf() } += pkg.id
                 }
             }
@@ -196,7 +196,7 @@ internal class ScanController(
      * Get all provenances for which no scan result for the provided [scanner] is available.
      */
     private fun getMissingProvenanceScans(scanner: ScannerWrapper, nestedProvenance: NestedProvenance) =
-        nestedProvenance.getProvenances().filter { hasScanResult(scanner, it) }
+        nestedProvenance.allProvenances.filter { hasScanResult(scanner, it) }
 
     /**
      * Return the nested provenance resolution issues associated with the given [provenance].
@@ -310,7 +310,7 @@ internal class ScanController(
      * Return true if [ScanResult]s for the complete [NestedProvenance] of the package are available.
      */
     fun hasCompleteScanResult(scanner: ScannerWrapper, pkg: Package): Boolean =
-        getNestedProvenance(pkg.id)?.getProvenances()?.all { provenance -> hasScanResult(scanner, provenance) } ?: false
+        getNestedProvenance(pkg.id)?.allProvenances?.all { provenance -> hasScanResult(scanner, provenance) } ?: false
 
     /**
      * Return true if a [ScanResult] for the provided [scanner] and [provenance] is available.
@@ -324,7 +324,7 @@ internal class ScanController(
     ): NestedProvenanceScanResult? {
         val nestedProvenance = nestedProvenances[root] ?: return null
 
-        val scanResults = nestedProvenance.getProvenances().associateWith { provenance ->
+        val scanResults = nestedProvenance.allProvenances.associateWith { provenance ->
             getScanResults(provenance).map { it.copy(summary = it.summary.copy(issues = it.summary.issues + issues)) }
         }
 

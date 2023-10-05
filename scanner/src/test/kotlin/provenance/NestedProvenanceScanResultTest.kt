@@ -167,4 +167,4 @@ private val nestedProvenanceScanResult = NestedProvenanceScanResult(
     )
 )
 
-private fun NestedProvenance.getRepositoryUrls() = getProvenances().map { (it as RepositoryProvenance).vcsInfo.url }
+private fun NestedProvenance.getRepositoryUrls() = allProvenances.map { (it as RepositoryProvenance).vcsInfo.url }
