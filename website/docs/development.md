@@ -47,7 +47,7 @@ created run configuration to your needs, e.g. by adding an argument and options 
 ## Testing
 
 ORT uses [Kotest](https://github.com/kotest/kotest) as the test framework. For running tests and individual test cases
-from the IDE, the [Kotest plugin](https://plugins.jetbrains.com/plugin/14080-kotest) needs to be installed. Afterwards,
+from the IDE, the [Kotest plugin](https://plugins.jetbrains.com/plugin/14080-kotest) needs to be installed. Afterward,
 tests can be run via the green "Play" icon from the gutter as described above.
 
 When running functional tests (for package managers) from the command line, ORT supports the special value "unified" for

@@ -6,7 +6,7 @@ sidebar_position: 4
 
 This tool wraps underlying license / copyright scanners with a common API so all supported scanners can be used in the
 same way to easily run them and compare their results. If passed an ORT result file with an analyzer result (`-i`), the
-*scanner* will automatically download the sources of the dependencies via the *downloader* and scan them afterwards.
+*scanner* will automatically download the sources of the dependencies via the *downloader* and scan them afterward.
 
 We recommend to use ORT with any of the following scanners as their integrations have been thoroughly tested (in
 alphabetical order):
@@ -29,7 +29,7 @@ For a comparison of some of these, see this
 In order to not download or scan any previously scanned sources again, or to reuse scan results generated via other
 services, the *scanner* can be configured to use so-called storage backends. Before processing a package, it checks
 whether compatible scan results are already available in one of the storages declared; if this is the case, they
-are fetched and reused. Otherwise, the package's source code is downloaded and scanned. Afterwards, the new scan
+are fetched and reused. Otherwise, the package's source code is downloaded and scanned. Afterward, the new scan
 results can be put into a storage for later reuse.
 
 This reuse of scan results can actually happen on a per-repository (`type: "PROVENANCE_BASED"`) or per-package
