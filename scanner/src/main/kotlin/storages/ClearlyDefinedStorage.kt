@@ -85,8 +85,8 @@ class ClearlyDefinedStorage(
         ClearlyDefinedService.create(config.serverUrl, client ?: OkHttpClientHelper.buildClient())
     }
 
-    override fun readInternal(id: Identifier): Result<List<ScanResult>> =
-        runBlocking(Dispatchers.IO) { readFromClearlyDefined(Package.EMPTY.copy(id = id)) }
+    override fun readInternal(pkg: Package): Result<List<ScanResult>> =
+        runBlocking(Dispatchers.IO) { readFromClearlyDefined(pkg) }
 
     override fun readInternal(pkg: Package, scannerCriteria: ScannerCriteria): Result<List<ScanResult>> =
         runBlocking(Dispatchers.IO) { readFromClearlyDefined(pkg) }

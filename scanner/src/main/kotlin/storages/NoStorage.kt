@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.scanner.ScannerCriteria
  * errors.
  */
 class NoStorage : ScanResultsStorage() {
-    override fun readInternal(id: Identifier) = EMPTY_RESULT
+    override fun readInternal(pkg: Package) = EMPTY_RESULT
     override fun readInternal(pkg: Package, scannerCriteria: ScannerCriteria) = EMPTY_RESULT
     override fun addInternal(id: Identifier, scanResult: ScanResult) = Result.success(Unit)
 }

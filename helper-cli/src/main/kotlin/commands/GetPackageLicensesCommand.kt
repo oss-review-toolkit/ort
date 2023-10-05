@@ -29,6 +29,7 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
@@ -73,7 +74,7 @@ internal class GetPackageLicensesCommand : CliktCommand(
         .convert { it.expandTilde() }
 
     override fun run() {
-        val scanResults = getStoredScanResults(packageId)
+        val scanResults = getStoredScanResults(Package.EMPTY.copy(id = packageId))
         val packageConfigurationProvider = DirPackageConfigurationProvider(packageConfigurationsDir)
 
         val result = scanResults.firstOrNull()?.let { scanResult ->
@@ -104,10 +105,10 @@ internal class GetPackageLicensesCommand : CliktCommand(
         println(result.toYaml())
     }
 
-    private fun getStoredScanResults(id: Identifier): List<ScanResult> {
+    private fun getStoredScanResults(pkg: Package): List<ScanResult> {
         val ortConfiguration = OrtConfiguration.load(configArguments, configFile)
         val scanStorages = ScanStorages.createFromConfig(ortConfiguration.scanner)
-        return runCatching { scanStorages.read(id) }.getOrDefault(emptyList())
+        return runCatching { scanStorages.read(pkg) }.getOrDefault(emptyList())
     }
 }
 

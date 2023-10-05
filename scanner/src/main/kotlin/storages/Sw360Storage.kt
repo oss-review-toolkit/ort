@@ -37,6 +37,7 @@ import org.eclipse.sw360.http.HttpClientFactoryImpl
 import org.eclipse.sw360.http.config.HttpClientConfig
 
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
@@ -85,11 +86,11 @@ class Sw360Storage(
     private val connectionFactory = createConnection(configuration)
     private val releaseClient = connectionFactory.releaseAdapter
 
-    override fun readInternal(id: Identifier): Result<List<ScanResult>> {
-        val tempScanResultFile = createTempFileForUpload(id)
+    override fun readInternal(pkg: Package): Result<List<ScanResult>> {
+        val tempScanResultFile = createTempFileForUpload(pkg.id)
 
         val result = runCatching {
-            releaseClient.getSparseReleaseByNameAndVersion(createReleaseName(id), id.version)
+            releaseClient.getSparseReleaseByNameAndVersion(createReleaseName(pkg.id), pkg.id.version)
                 .flatMap { releaseClient.getReleaseById(it.releaseId) }
                 .map { getScanResultOfRelease(it, tempScanResultFile.toPath()) }
                 .orElse(emptyList())
@@ -97,7 +98,7 @@ class Sw360Storage(
                     path.toFile().readValue<ScanResult>()
                 }
         }.recoverCatching {
-            val message = "Could not read scan results for '${id.toCoordinates()}' in SW360: ${it.message}"
+            val message = "Could not read scan results for '${pkg.id.toCoordinates()}' in SW360: ${it.message}"
 
             logger.info { message }
 

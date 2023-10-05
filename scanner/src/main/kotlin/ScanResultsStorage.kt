@@ -55,15 +55,15 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
     open val name: String = javaClass.simpleName
 
     /**
-     * Return all [ScanResult]s contained in this [ScanResultsStorage] corresponding to the package denoted by the given
-     * [id] wrapped in a [Result].
+     * Return all [ScanResult]s contained in this [ScanResultsStorage] corresponding to the [package][pkg] wrapped in a
+     * [Result].
      */
-    fun read(id: Identifier): Result<List<ScanResult>> {
-        val (result, duration) = measureTimedValue { readInternal(id) }
+    fun read(pkg: Package): Result<List<ScanResult>> {
+        val (result, duration) = measureTimedValue { readInternal(pkg) }
 
         result.onSuccess { results ->
             logger.info {
-                "Read ${results.size} scan result(s) for '${id.toCoordinates()}' from ${javaClass.simpleName} in " +
+                "Read ${results.size} scan result(s) for '${pkg.id.toCoordinates()}' from ${javaClass.simpleName} in " +
                     "$duration."
             }
         }
@@ -143,14 +143,14 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
     /**
      * Internal version of [read].
      */
-    protected abstract fun readInternal(id: Identifier): Result<List<ScanResult>>
+    protected abstract fun readInternal(pkg: Package): Result<List<ScanResult>>
 
     /**
      * Internal version of [read]. Implementations may want to override this function if they can filter for the wanted
      * [scannerCriteria] in a more efficient way.
      */
     protected open fun readInternal(pkg: Package, scannerCriteria: ScannerCriteria): Result<List<ScanResult>> =
-        readInternal(pkg.id).map { results ->
+        readInternal(pkg).map { results ->
             if (results.isEmpty()) {
                 results
             } else {
@@ -210,8 +210,8 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
      */
     protected abstract fun addInternal(id: Identifier, scanResult: ScanResult): Result<Unit>
 
-    override fun read(id: Identifier, nestedProvenance: NestedProvenance): List<NestedProvenanceScanResult> =
-        read(id).toNestedProvenanceScanResult(nestedProvenance)
+    override fun read(pkg: Package, nestedProvenance: NestedProvenance): List<NestedProvenanceScanResult> =
+        read(pkg).toNestedProvenanceScanResult(nestedProvenance)
 
     override fun read(
         pkg: Package,

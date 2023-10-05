@@ -123,7 +123,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
-            storage.read(TEST_IDENTIFIER).shouldBeValid()
+            storage.read(TEST_PACKAGE).shouldBeValid()
         }
 
         "choose the correct tool URL if there are multiple" {
@@ -151,7 +151,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
-            storage.read(TEST_IDENTIFIER).shouldBeValid {
+            storage.read(TEST_PACKAGE).shouldBeValid {
                 scanner.name shouldBe "ScanCode"
                 scanner.version shouldBe "3.0.2"
             }
@@ -165,7 +165,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
-            val result = storage.read(TEST_IDENTIFIER)
+            val result = storage.read(TEST_PACKAGE)
 
             result.shouldBeFailure {
                 it.message shouldContain "HttpException"
@@ -178,7 +178,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
-            storage.read(TEST_IDENTIFIER).shouldBeSuccess {
+            storage.read(TEST_PACKAGE).shouldBeSuccess {
                 it should beEmpty()
             }
         }
@@ -234,7 +234,7 @@ class ClearlyDefinedStorageTest : WordSpec({
             val id = TEST_IDENTIFIER.copy(type = "unknown")
             val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
-            val result = storage.read(id)
+            val result = storage.read(TEST_PACKAGE.copy(id = id))
 
             result.shouldBeFailure<ScanStorageException>()
         }
@@ -249,7 +249,7 @@ class ClearlyDefinedStorageTest : WordSpec({
             )
             val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
-            val result = storage.read(TEST_IDENTIFIER)
+            val result = storage.read(TEST_PACKAGE)
 
             result.shouldBeFailure<ScanStorageException>()
         }
@@ -266,7 +266,7 @@ class ClearlyDefinedStorageTest : WordSpec({
             )
             val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
-            val result = storage.read(TEST_IDENTIFIER)
+            val result = storage.read(TEST_PACKAGE)
 
             result.shouldBeFailure<ScanStorageException>()
         }
@@ -278,7 +278,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(ClearlyDefinedStorageConfiguration((serverUrl)))
 
-            val result = storage.read(TEST_IDENTIFIER)
+            val result = storage.read(TEST_PACKAGE)
 
             result.shouldBeFailure {
                 it.message shouldContain "Connection refused"

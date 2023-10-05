@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.scanner
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
-import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Provenance
@@ -40,12 +39,12 @@ sealed interface ScanStorageReader
  */
 interface PackageBasedScanStorageReader : ScanStorageReader {
     /**
-     * Read all [ScanResult]s for the provided [id]. The package scan results are converted to a
+     * Read all [ScanResult]s for the provided [package][pkg]. The package scan results are converted to a
      * [NestedProvenanceScanResult] using the provided [nestedProvenance].
      *
      * Throws a [ScanStorageException] if an error occurs while reading from the storage.
      */
-    fun read(id: Identifier, nestedProvenance: NestedProvenance): List<NestedProvenanceScanResult>
+    fun read(pkg: Package, nestedProvenance: NestedProvenance): List<NestedProvenanceScanResult>
 
     /**
      * Read all [ScanResult]s for the provided [package][pkg] matching the [provenance][KnownProvenance.matches] and the

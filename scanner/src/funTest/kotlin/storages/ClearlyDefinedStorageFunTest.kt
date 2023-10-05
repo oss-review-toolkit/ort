@@ -29,8 +29,12 @@ import java.time.Instant
 import kotlin.time.Duration.Companion.seconds
 
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
+import org.ossreviewtoolkit.model.Hash
+import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
@@ -44,10 +48,19 @@ class ClearlyDefinedStorageFunTest : StringSpec({
     val storage = ClearlyDefinedStorage(ClearlyDefinedStorageConfiguration(Server.PRODUCTION.apiUrl))
 
     "Scan results for 'semver4j' from ScanCode should be read correctly" {
-        val id = Identifier("Maven:com.vdurmont:semver4j:3.1.0")
+        val pkg = Package.EMPTY.copy(
+            id = Identifier("Maven:com.vdurmont:semver4j:3.1.0"),
+            binaryArtifact = RemoteArtifact(
+                url = "https://repo1.maven.org/maven2/com/vdurmont/semver4j/3.1.0/semver4j-3.1.0.jar",
+                hash = Hash(
+                    value = "0de1248f09dfe8df3b021c84e0642ee222cceb13",
+                    algorithm = HashAlgorithm.SHA1
+                )
+            )
+        )
 
         withRetry {
-            val results = storage.read(id)
+            val results = storage.read(pkg)
 
             results.shouldBeSuccess {
                 it shouldContain ScanResult(
@@ -98,10 +111,19 @@ class ClearlyDefinedStorageFunTest : StringSpec({
     }
 
     "Scan results for 'hoplite-core' from ScanCode should be read correctly" {
-        val id = Identifier("Maven:com.sksamuel.hoplite:hoplite-core:2.1.3")
+        val pkg = Package.EMPTY.copy(
+            id = Identifier("Maven:com.sksamuel.hoplite:hoplite-core:2.1.3"),
+            binaryArtifact = RemoteArtifact(
+                url = "https://repo1.maven.org/maven2/com/sksamuel/hoplite/hoplite-core/2.1.3/hoplite-core-2.1.3.jar",
+                hash = Hash(
+                    value = "143f3c28ac4987907473fb608bce1fe317663ba8",
+                    algorithm = HashAlgorithm.SHA1
+                )
+            )
+        )
 
         withRetry {
-            val results = storage.read(id)
+            val results = storage.read(pkg)
 
             results.shouldBeSuccess {
                 it shouldContain ScanResult(
@@ -132,10 +154,19 @@ class ClearlyDefinedStorageFunTest : StringSpec({
     }
 
     "Scan results for packages without a namespace should be present" {
-        val id = Identifier("NPM::iobroker.eusec:0.9.9")
+        val pkg = Package.EMPTY.copy(
+            id = Identifier("NPM::iobroker.eusec:0.9.9"),
+            binaryArtifact = RemoteArtifact(
+                url = "https://registry.npmjs.org/iobroker.eusec/-/iobroker.eusec-0.9.9.tgz",
+                hash = Hash(
+                    value = "b3cf4aeefd31f64907cab7ea7a419f1054137a09",
+                    algorithm = HashAlgorithm.SHA1
+                )
+            )
+        )
 
         withRetry {
-            val results = storage.read(id)
+            val results = storage.read(pkg)
 
             results.shouldBeSuccess { result ->
                 result.map { it.provenance } shouldContain RepositoryProvenance(
