@@ -42,6 +42,16 @@ data class NestedProvenance(
     val subRepositories: Map<String, RepositoryProvenance>
 ) {
     /**
+     * The set of all contained [KnownProvenance]s.
+     */
+    @JsonIgnore
+    val allProvenances: Set<KnownProvenance> =
+        buildSet {
+            add(root)
+            addAll(subRepositories.values)
+        }
+
+    /**
      * Return path of the provided [provenance] within this [NestedProvenance]. Throws an [IllegalArgumentException] if
      * the provided [provenance] cannot be found.
      */
@@ -52,14 +62,4 @@ data class NestedProvenance(
 
         throw IllegalArgumentException("Could not find entry for $provenance.")
     }
-
-    /**
-     * Return a set of all contained [KnownProvenance]s.
-     */
-    @JsonIgnore
-    fun getProvenances(): Set<KnownProvenance> =
-        buildSet {
-            add(root)
-            addAll(subRepositories.values)
-        }
 }

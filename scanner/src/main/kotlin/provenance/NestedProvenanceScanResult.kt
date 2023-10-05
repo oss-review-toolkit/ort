@@ -43,7 +43,7 @@ data class NestedProvenanceScanResult(
     /**
      * Return a set of all [KnownProvenance]s contained in [nestedProvenance].
      */
-    fun getProvenances(): Set<KnownProvenance> = nestedProvenance.getProvenances()
+    fun getProvenances(): Set<KnownProvenance> = nestedProvenance.allProvenances
 
     /**
      * Return true if [scanResults] contains at least one scan result for each of the [KnownProvenance]s contained in
