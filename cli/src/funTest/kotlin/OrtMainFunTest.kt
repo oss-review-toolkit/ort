@@ -113,7 +113,7 @@ class OrtMainFunTest : StringSpec() {
             }
 
             iterator.hasNext() shouldBe true
-            iterator.next().trim() shouldBe "${expectedPackageManagers.joinToString { it.type }}"
+            iterator.next().trim() shouldBe expectedPackageManagers.joinToString { it.type }
         }
 
         "Disabling a package manager overrides enabling it" {
