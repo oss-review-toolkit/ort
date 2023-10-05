@@ -41,15 +41,10 @@ data class NestedProvenanceScanResult(
     val scanResults: Map<KnownProvenance, List<ScanResult>>
 ) {
     /**
-     * Return a set of all [KnownProvenance]s contained in [nestedProvenance].
-     */
-    fun getProvenances(): Set<KnownProvenance> = nestedProvenance.allProvenances
-
-    /**
      * Return true if [scanResults] contains at least one scan result for each of the [KnownProvenance]s contained in
      * [nestedProvenance].
      */
-    fun isComplete(): Boolean = getProvenances().all { scanResults[it]?.isNotEmpty() == true }
+    fun isComplete(): Boolean = nestedProvenance.allProvenances.all { scanResults[it]?.isNotEmpty() == true }
 
     /**
      * Filter the contained [ScanResult]s using the [predicate].
@@ -85,8 +80,9 @@ data class NestedProvenanceScanResult(
     fun filterByVcsPath(path: String): NestedProvenanceScanResult {
         if (path.isEmpty()) return this
 
-        val provenances = getProvenances()
-        val provenancesWithVcsPath = provenances.filter { it is RepositoryProvenance && it.vcsInfo.path.isNotBlank() }
+        val provenancesWithVcsPath = nestedProvenance.allProvenances.filter {
+            it is RepositoryProvenance && it.vcsInfo.path.isNotBlank()
+        }
 
         require(provenancesWithVcsPath.isEmpty()) {
             "Cannot filter scan results by VCS path that have a repository provenance with a non-blank VCS path " +
@@ -94,7 +90,7 @@ data class NestedProvenanceScanResult(
                 "provenances have a non-blank VCS path: ${provenancesWithVcsPath.joinToString("\n") { "\t$it" }}."
         }
 
-        val pathsWithinProvenances = provenances.filter {
+        val pathsWithinProvenances = nestedProvenance.allProvenances.filter {
             val provenancePath = getPath(it)
             // Return true if the provenance is on the same branch as the filter path. Otherwise it can be discarded,
             // because all findings would be filtered anyway.

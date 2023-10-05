@@ -66,7 +66,7 @@ class NestedProvenanceScanResultTest : WordSpec({
             (filteredResult.nestedProvenance.root as RepositoryProvenance).vcsInfo.path shouldBe "submodules/a/dir"
             filteredResult.nestedProvenance.subRepositories.getValue("submodules/a").vcsInfo.path shouldBe "dir"
 
-            filteredResult.getProvenances().forEach {
+            filteredResult.nestedProvenance.allProvenances.forEach {
                 filteredResult.scanResults.getValue(it).single().provenance shouldBe it
             }
         }
