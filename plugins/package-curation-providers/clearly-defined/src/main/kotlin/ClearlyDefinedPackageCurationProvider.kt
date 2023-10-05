@@ -52,7 +52,7 @@ import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 import retrofit2.HttpException
 
-class ClearlyDefinedPackageCurationProviderConfig(
+data class ClearlyDefinedPackageCurationProviderConfig(
     /**
      * The URL of the ClearlyDefined server to use.
      */

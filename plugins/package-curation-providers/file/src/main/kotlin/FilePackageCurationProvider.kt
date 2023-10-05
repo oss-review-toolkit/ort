@@ -36,7 +36,7 @@ import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CURATIONS_DIRNAME
 import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CURATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
-class FilePackageCurationProviderConfig(
+data class FilePackageCurationProviderConfig(
     /**
      * The path of the package curation file or directory.
      */

@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.utils.common.getDuplicates
 import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CONFIGURATIONS_DIRNAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
-class DirPackageConfigurationProviderConfig(
+data class DirPackageConfigurationProviderConfig(
     /**
      * The path of the package configuration directory.
      */
