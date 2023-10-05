@@ -43,7 +43,12 @@ semver {
 
 // Only override a default version (which usually is "unspecified"), but not a custom version.
 if (version == Project.DEFAULT_VERSION) {
-    version = semver.semVersion.takeIf { it.isPreRelease } ?: semver.version
+    version = semver.semVersion.takeIf { it.isPreRelease }
+        // To get rid of a build part's "+" prefix because Docker tags do not support it, use only the original "build"
+        // part as the "pre-release" part.
+        ?.toString()?.replace("${semver.defaultPreRelease}+", "")
+        // Fall back to a plain version without pre-release or build parts.
+        ?: semver.version
 }
 
 logger.lifecycle("Building ORT version $version.")
