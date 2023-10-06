@@ -81,7 +81,7 @@ project:
     - id: "SPM:swift-server:swift-backtrace:1.3.4"
     - id: "SPM:vapor:async-kit:1.18.0"
       dependencies:
-      - id: "SPM:apple:swift-algorithms:1.0.0"
+      - id: "SPM:apple:swift-algorithms:1.1.0"
         dependencies:
         - id: "SPM:apple:swift-numerics:1.0.2"
       - id: "SPM:apple:swift-collections:1.0.5"
@@ -134,8 +134,8 @@ project:
           - id: "SPM:apple:swift-atomics:1.2.0"
           - id: "SPM:apple:swift-collections:1.0.5"
 packages:
-- id: "SPM:apple:swift-algorithms:1.0.0"
-  purl: "pkg:swift/apple/swift-algorithms@1.0.0"
+- id: "SPM:apple:swift-algorithms:1.1.0"
+  purl: "pkg:swift/apple/swift-algorithms@1.1.0"
   authors:
   - "apple"
   declared_licenses: []
@@ -155,12 +155,12 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/apple/swift-algorithms.git"
-    revision: "1.0.0"
+    revision: "1.1.0"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/apple/swift-algorithms.git"
-    revision: "1.0.0"
+    revision: "1.1.0"
     path: ""
 - id: "SPM:apple:swift-atomics:1.2.0"
   purl: "pkg:swift/apple/swift-atomics@1.2.0"
