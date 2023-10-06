@@ -120,6 +120,6 @@ private fun Identifier.toPackageManagerName(): String =
         "PIP" -> "pip"
         "Yarn" -> "yarn"
         else -> type.lowercase().also {
-            logger.info { "No mapping defined for package manager '$type', guessing '$it'." }
+            logger.info { "No GitLab mapping defined for package manager '$type', guessing '$it'." }
         }
     }
