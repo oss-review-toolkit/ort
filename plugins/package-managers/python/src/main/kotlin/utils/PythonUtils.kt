@@ -19,10 +19,16 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.python.utils
 
+import java.lang.invoke.MethodHandles
+
+import org.apache.logging.log4j.kotlin.loggerOf
+
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
+
+private val logger = loggerOf(MethodHandles.lookup().lookupClass())
 
 private const val GENERIC_BSD_LICENSE = "BSD License"
 private const val SHORT_STRING_MAX_CHARS = 200
@@ -56,7 +62,7 @@ internal fun processDeclaredLicenses(id: Identifier, declaredLicenses: Set<Strin
         declaredLicensesProcessed.spdxExpression?.decompose()?.singleOrNull {
             it is SpdxLicenseIdExpression && it.isValid() && it.toString().startsWith("BSD-")
         }?.let { license ->
-            PythonInspector.logger.debug { "Mapping '$GENERIC_BSD_LICENSE' to '$license' for '${id.toCoordinates()}'." }
+            logger.debug { "Mapping '$GENERIC_BSD_LICENSE' to '$license' for '${id.toCoordinates()}'." }
 
             declaredLicensesProcessed = declaredLicensesProcessed.copy(
                 mapped = declaredLicensesProcessed.mapped + mapOf(GENERIC_BSD_LICENSE to license),

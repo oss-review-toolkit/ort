@@ -29,7 +29,7 @@ import java.nio.file.StandardCopyOption
 import kotlin.io.path.createTempDirectory
 import kotlin.io.path.moveTo
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 /**
  * A convenience function that stashes directories using a [DirectoryStash] instance.
@@ -42,8 +42,6 @@ fun stashDirectories(vararg directories: File): Closeable = DirectoryStash(setOf
  * directory did not exist on initialization, it will also not exist on close.
  */
 private class DirectoryStash(directories: Set<File>) : Closeable {
-    private companion object : Logging
-
     private val stashedDirectories: Map<File, File?> = directories.associateWith { originalDir ->
         // We need to check this on each iteration instead of filtering beforehand to properly handle parent / child
         // directories.

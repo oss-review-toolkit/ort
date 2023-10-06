@@ -30,7 +30,7 @@ import kotlin.math.max
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.DatabaseConfig
@@ -73,7 +73,7 @@ class PostgresStorage(
      */
     private val parallelTransactions: Int
 ) : ScanResultsStorage() {
-    companion object : Logging {
+    companion object {
         /** Expression to reference the scanner version as an array. */
         private const val VERSION_ARRAY =
             "string_to_array(regexp_replace(scan_result->'scanner'->>'version', '[^0-9.]', '', 'g'), '.')"

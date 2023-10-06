@@ -25,7 +25,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.AdvisorRecord
 import org.ossreviewtoolkit.model.AdvisorResult
@@ -45,7 +45,7 @@ class Advisor(
     private val providerFactories: List<AdviceProviderFactory>,
     private val config: AdvisorConfiguration
 ) {
-    companion object : Logging {
+    companion object {
         /**
          * All [advice provider factories][AdviceProviderFactory] available in the classpath, associated by their names.
          */

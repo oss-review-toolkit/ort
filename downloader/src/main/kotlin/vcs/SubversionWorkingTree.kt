@@ -21,6 +21,8 @@ package org.ossreviewtoolkit.downloader.vcs
 
 import java.io.File
 
+import org.apache.logging.log4j.kotlin.logger
+
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.ort.showStackTrace
@@ -83,7 +85,7 @@ class SubversionWorkingTree(
         } catch (e: SVNException) {
             e.showStackTrace()
 
-            Subversion.logger.info { "Unable to list remote refs for $vcsType repository at $remoteUrl." }
+            logger.info { "Unable to list remote refs for $vcsType repository at $remoteUrl." }
         }
 
         return refs

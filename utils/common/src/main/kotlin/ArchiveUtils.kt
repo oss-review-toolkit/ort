@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-@file:Suppress("TooManyFunctions")
+@file:Suppress("MatchingDeclarationName", "TooManyFunctions")
 
 package org.ossreviewtoolkit.utils.common
 
@@ -45,9 +45,7 @@ import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream
 import org.apache.commons.compress.compressors.xz.XZCompressorInputStream
 import org.apache.commons.compress.utils.SeekableInMemoryByteChannel
-import org.apache.logging.log4j.kotlin.Logging
-
-object ArchiveUtils : Logging
+import org.apache.logging.log4j.kotlin.logger
 
 enum class ArchiveType(extension: String, vararg aliases: String) {
     SEVENZIP(".7z"),
@@ -114,7 +112,7 @@ fun File.unpackTryAllTypes(targetDirectory: File, filter: (ArchiveEntry) -> Bool
         runCatching {
             unpack(targetDirectory, forceArchiveType = archiveType, filter)
         }.onSuccess {
-            ArchiveUtils.logger.debug { "Unpacked stream as $archiveType to '$targetDirectory'." }
+            logger.debug { "Unpacked stream as $archiveType to '$targetDirectory'." }
         }.onFailure {
             suppressedExceptions += IOException("Unpacking '$this' as $archiveType failed.", it)
         }.isSuccess
@@ -142,7 +140,7 @@ fun File.unpack7Zip(targetDirectory: File, filter: (ArchiveEntry) -> Boolean = {
             val target = targetDirectory.resolve(entry.name)
 
             if (!target.canonicalFile.startsWith(canonicalTargetDirectory)) {
-                ArchiveUtils.logger.warn {
+                logger.warn {
                     "Skipping entry '${entry.name}' which points to outside of '$targetDirectory'."
                 }
 
@@ -192,7 +190,7 @@ private fun ZipFile.unpack(targetDirectory: File, filter: (ArchiveEntry) -> Bool
             val target = targetDirectory.resolve(entry.name)
 
             if (!target.canonicalFile.startsWith(canonicalTargetDirectory)) {
-                ArchiveUtils.logger.warn {
+                logger.warn {
                     "Skipping entry '${entry.name}' which points to outside of '$targetDirectory'."
                 }
 
@@ -285,7 +283,7 @@ private fun ArchiveInputStream.unpack(
         val target = targetDirectory.resolve(entry.name)
 
         if (!target.canonicalFile.startsWith(canonicalTargetDirectory)) {
-            ArchiveUtils.logger.warn {
+            logger.warn {
                 "Skipping entry '${entry.name}' which points to outside of '$targetDirectory'."
             }
 

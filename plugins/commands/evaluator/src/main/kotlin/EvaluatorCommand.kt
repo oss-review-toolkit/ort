@@ -37,7 +37,7 @@ import java.time.Duration
 
 import kotlin.time.toKotlinDuration
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.evaluator.Evaluator
 import org.ossreviewtoolkit.model.FileFormat
@@ -84,8 +84,6 @@ class EvaluatorCommand : OrtCommand(
     name = "evaluate",
     help = "Evaluate ORT result files against policy rules."
 ) {
-    private companion object : Logging
-
     private val ortFile by option(
         "--ort-file", "-i",
         help = "The ORT result file to read as input."

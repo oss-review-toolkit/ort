@@ -31,14 +31,12 @@ import kotlin.time.measureTimedValue
 
 import kotlinx.coroutines.runBlocking
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 /**
  * A class providing the framework to run Kotlin scripts.
  */
 abstract class ScriptRunner {
-    private companion object : Logging
-
     /** The scripting host instance. */
     private val scriptingHost = BasicJvmScriptingHost()
 

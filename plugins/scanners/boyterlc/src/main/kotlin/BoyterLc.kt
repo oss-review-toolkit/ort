@@ -24,7 +24,7 @@ import java.time.Instant
 
 import kotlinx.serialization.json.Json
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.LicenseFinding
@@ -44,7 +44,7 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 private val JSON = Json { ignoreUnknownKeys = true }
 
 class BoyterLc internal constructor(name: String, private val options: Options) : CommandLinePathScannerWrapper(name) {
-    companion object : Logging {
+    companion object {
         val CONFIGURATION_OPTIONS = listOf(
             "--confidence", "0.95", // Cut-off value to only get most relevant matches.
             "--format", "json"

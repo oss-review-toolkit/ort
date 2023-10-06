@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.evaluator
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
@@ -44,8 +44,6 @@ abstract class Rule(
      */
     val name: String
 ) {
-    private companion object : Logging
-
     private val ruleMatcherManager = RuleMatcherManager()
 
     /**

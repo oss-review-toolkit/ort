@@ -31,7 +31,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.model.FileList
@@ -86,8 +86,6 @@ class Scanner(
     private val archiver: FileArchiver? = scannerConfig.archive.createFileArchiver(),
     fileListStorage: ProvenanceFileStorage = scannerConfig.fileListStorage.createStorage()
 ) {
-    private companion object : Logging
-
     init {
         require(scannerWrappers.isNotEmpty() && scannerWrappers.any { it.value.isNotEmpty() }) {
             "At least one ScannerWrapper must be provided."

@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.plugins.packageconfigurationproviders.ortconfig
 
 import java.io.File
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.downloader.vcs.Git
 import org.ossreviewtoolkit.model.Identifier
@@ -53,8 +53,6 @@ class OrtConfigPackageConfigurationProviderFactory : PackageConfigurationProvide
  * [ort-config repository](https://github.com/oss-review-toolkit/ort-config).
  */
 class OrtConfigPackageConfigurationProvider : PackageConfigurationProvider {
-    internal companion object : Logging
-
     private val configurationsDir by lazy {
         ortDataDirectory.resolve("ort-config").also {
             updateOrtConfig(it)
@@ -74,7 +72,7 @@ private fun updateOrtConfig(dir: File) {
     Git().apply {
         val workingTree = initWorkingTree(dir, VcsInfo.EMPTY.copy(type = VcsType.GIT, url = ORT_CONFIG_REPOSITORY_URL))
         val revision = updateWorkingTree(workingTree, ORT_CONFIG_REPOSITORY_BRANCH).getOrThrow()
-        OrtConfigPackageConfigurationProvider.logger.info {
+        logger.info {
             "Successfully cloned $revision from $ORT_CONFIG_REPOSITORY_URL."
         }
     }

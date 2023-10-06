@@ -21,15 +21,13 @@ package org.ossreviewtoolkit.plugins.reporters.fossid
 
 import java.io.File
 
-import org.apache.logging.log4j.kotlin.Logging
-
 import org.ossreviewtoolkit.plugins.reporters.asciidoc.HtmlTemplateReporter
 import org.ossreviewtoolkit.plugins.reporters.freemarker.FreemarkerTemplateProcessor
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 
 class FossIdSnippetReporter : Reporter by delegateReporter {
-    companion object : Logging {
+    companion object {
         private const val TEMPLATE_NAME = "fossid_snippet"
 
         val delegateReporter = HtmlTemplateReporter()

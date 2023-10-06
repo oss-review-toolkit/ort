@@ -27,7 +27,7 @@ import freemarker.template.TemplateExceptionHandler
 
 import java.io.File
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.AdvisorCapability
 import org.ossreviewtoolkit.model.AdvisorRecord
@@ -67,7 +67,7 @@ class FreemarkerTemplateProcessor(
     private val filePrefix: String = "",
     private val fileExtension: String = ""
 ) {
-    companion object : Logging {
+    companion object {
         const val OPTION_TEMPLATE_ID = "template.id"
         const val OPTION_TEMPLATE_PATH = "template.path"
     }

@@ -26,7 +26,7 @@ import java.io.File
 import java.util.Properties
 import java.util.concurrent.TimeUnit
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.eclipse.aether.artifact.Artifact
 import org.eclipse.aether.repository.RemoteRepository
@@ -81,7 +81,7 @@ class Gradle(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
-    companion object : Logging {
+    companion object {
         /**
          * The name of the option to specify the Gradle version.
          */

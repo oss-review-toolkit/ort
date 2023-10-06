@@ -24,7 +24,7 @@ import java.net.URI
 
 import kotlin.time.Duration.Companion.hours
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 import org.apache.maven.artifact.repository.LegacyLocalRepositoryManager
 import org.apache.maven.bridge.MavenRepositorySystem
 import org.apache.maven.execution.DefaultMavenExecutionRequest
@@ -109,7 +109,7 @@ private val File?.safePath: String
     get() = this?.invariantSeparatorsPath ?: "<unknown file>"
 
 class MavenSupport(private val workspaceReader: WorkspaceReader) {
-    companion object : Logging {
+    companion object {
         private val PACKAGING_TYPES = setOf(
             // Core packaging types, see https://maven.apache.org/pom.html#packaging.
             "pom", "jar", "maven-plugin", "ejb", "war", "ear", "rar",
@@ -137,7 +137,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
 
             return DefaultPlexusContainer(configuration).apply {
                 loggerManager = object : BaseLoggerManager() {
-                    override fun createLogger(name: String) = MavenLogger(MavenSupport.logger.delegate.level)
+                    override fun createLogger(name: String) = MavenLogger(logger.delegate.level)
                 }
             }
         }
@@ -584,13 +584,13 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             artifactDownload.isExistenceCheck = true
             artifactDownload.listener = object : AbstractTransferListener() {
                 override fun transferFailed(event: TransferEvent?) {
-                    MavenSupport.logger.debug {
+                    logger.debug {
                         "Transfer failed for repository with ID '${info.repository.id}': $event"
                     }
                 }
 
                 override fun transferSucceeded(event: TransferEvent?) {
-                    MavenSupport.logger.debug { "Transfer succeeded: $event" }
+                    logger.debug { "Transfer succeeded: $event" }
                 }
             }
 
@@ -828,7 +828,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
  * [Medium article](https://medium.com/p/d069d253fe23)
  */
 private class HttpsMirrorSelector(private val originalMirrorSelector: MirrorSelector?) : MirrorSelector {
-    companion object : Logging {
+    companion object {
         private val DISABLED_HTTP_REPOSITORY_URLS = listOf(
             "http://jcenter.bintray.com",
             "http://repo.maven.apache.org",

@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.evaluator
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.DependencyNode
 import org.ossreviewtoolkit.model.OrtResult
@@ -40,8 +40,6 @@ class RuleSet(
     val resolutionProvider: ResolutionProvider,
     val projectSourceResolver: SourceTreeResolver
 ) {
-    private companion object : Logging
-
     /**
      * The set of all issues created by the rules of this [RuleSet].
      */

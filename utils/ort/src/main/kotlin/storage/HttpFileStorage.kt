@@ -30,7 +30,7 @@ import okhttp3.Headers.Companion.toHeaders
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.execute
@@ -67,8 +67,6 @@ class HttpFileStorage(
      */
     private val cacheMaxAgeInSeconds: Int = 0
 ) : FileStorage {
-    private companion object : Logging
-
     private val httpClient by lazy {
         OkHttpClientHelper.buildClient {
             val connectionPool = ConnectionPool(

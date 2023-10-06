@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.utils.common
 
 import java.io.File
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
@@ -31,7 +31,7 @@ import org.semver4j.Semver
  * An interface to implement by classes that are backed by a command line tool.
  */
 interface CommandLineTool {
-    companion object : Logging {
+    companion object {
         /**
          * A convenience property to require any version.
          */

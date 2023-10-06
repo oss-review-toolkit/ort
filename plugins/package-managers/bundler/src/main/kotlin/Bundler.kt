@@ -29,7 +29,7 @@ import java.net.HttpURLConnection
 
 import kotlin.time.measureTime
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.jruby.embed.LocalContextScope
 import org.jruby.embed.PathType
@@ -138,7 +138,7 @@ class Bundler(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
-    companion object : Logging {
+    companion object {
         /**
          * The name of the option to specify the Bundler version.
          */

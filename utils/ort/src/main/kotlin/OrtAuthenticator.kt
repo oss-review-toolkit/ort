@@ -26,14 +26,14 @@ import java.net.Proxy
 import java.net.ProxySelector
 import java.util.concurrent.ConcurrentHashMap
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 /**
  * A caching authenticator that chains other authenticators. For proxy authentication, the [OrtProxySelector] is
  * required to also be installed.
  */
 class OrtAuthenticator(private val original: Authenticator? = null) : Authenticator() {
-    companion object : Logging {
+    companion object {
         /**
          * Install this authenticator as the global default.
          */

@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.advisor
 
-import org.apache.logging.log4j.kotlin.Logging
-
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.Package
@@ -31,8 +29,6 @@ import org.ossreviewtoolkit.model.Package
  * or code analysis results.
  */
 abstract class AdviceProvider(val providerName: String) {
-    private companion object : Logging
-
     /**
      * For a given set of [Package]s, retrieve findings and return a map that associates packages with [AdvisorResult]s.
      */

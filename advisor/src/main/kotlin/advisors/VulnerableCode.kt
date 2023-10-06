@@ -22,8 +22,6 @@ package org.ossreviewtoolkit.advisor.advisors
 import java.net.URI
 import java.time.Instant
 
-import org.apache.logging.log4j.kotlin.Logging
-
 import org.ossreviewtoolkit.advisor.AbstractAdviceProviderFactory
 import org.ossreviewtoolkit.advisor.AdviceProvider
 import org.ossreviewtoolkit.clients.vulnerablecode.VulnerableCodeService
@@ -56,8 +54,6 @@ private const val BULK_REQUEST_SIZE = 100
  * [VulnerableCode][https://github.com/nexB/vulnerablecode] instance.
  */
 class VulnerableCode(name: String, config: VulnerableCodeConfiguration) : AdviceProvider(name) {
-    private companion object : Logging
-
     class Factory : AbstractAdviceProviderFactory<VulnerableCode>("VulnerableCode") {
         override fun create(config: AdvisorConfiguration) = VulnerableCode(type, config.forProvider { vulnerableCode })
     }

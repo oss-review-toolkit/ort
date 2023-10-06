@@ -19,13 +19,15 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.spm
 
+import java.lang.invoke.MethodHandles
 import java.net.URI
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
-import org.ossreviewtoolkit.analyzer.PackageManager
+import org.apache.logging.log4j.kotlin.loggerOf
+
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
@@ -146,6 +148,8 @@ data class AppDependency(
         }
 }
 
+private val logger = loggerOf(MethodHandles.lookup().lookupClass())
+
 internal fun parseAuthorAndProjectFromRepo(repositoryURL: String): Pair<String?, String?> {
     val normalizedURL = normalizeVcsUrl(repositoryURL)
     val vcsHost = VcsHost.fromUrl(URI(normalizedURL))
@@ -153,13 +157,13 @@ internal fun parseAuthorAndProjectFromRepo(repositoryURL: String): Pair<String?,
     val author = vcsHost?.getUserOrOrganization(normalizedURL)
 
     if (author.isNullOrBlank()) {
-        PackageManager.logger.warn {
+        logger.warn {
             "Unable to parse the author from VCS URL $repositoryURL, results might be incomplete."
         }
     }
 
     if (project.isNullOrBlank()) {
-        PackageManager.logger.warn {
+        logger.warn {
             "Unable to parse the project from VCS URL $repositoryURL, results might be incomplete."
         }
     }

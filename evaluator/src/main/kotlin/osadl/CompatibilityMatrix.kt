@@ -26,13 +26,13 @@ import java.time.format.DateTimeFormatter
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 /**
  * An object that represents the OSADL compliance matrix. For details see
  * https://www.osadl.org/Access-to-raw-data.oss-compliance-raw-data-access.0.html.
  */
-object CompatibilityMatrix : Logging {
+object CompatibilityMatrix {
     /**
      * A class to represent the information contained in a cell of the matrix, i.e. the result of a lookup.
      */

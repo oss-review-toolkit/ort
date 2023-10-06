@@ -22,8 +22,6 @@ package org.ossreviewtoolkit.scanner
 import java.io.File
 import java.time.Instant
 
-import org.apache.logging.log4j.kotlin.Logging
-
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 
@@ -31,8 +29,6 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
  * A [PathScannerWrapper] that is executed as a [CommandLineTool] on the local machine.
  */
 abstract class CommandLinePathScannerWrapper(override val name: String) : PathScannerWrapper, CommandLineTool {
-    private companion object : Logging
-
     override val version by lazy { getVersion() }
 
     final override fun scanPath(path: File, context: ScanContext): ScanSummary {

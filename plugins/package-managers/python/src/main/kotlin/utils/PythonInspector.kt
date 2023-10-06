@@ -27,8 +27,6 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
 import kotlinx.serialization.json.decodeFromStream
 
-import org.apache.logging.log4j.kotlin.Logging
-
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 
@@ -40,7 +38,7 @@ private val json = Json {
     namingStrategy = JsonNamingStrategy.SnakeCase
 }
 
-internal object PythonInspector : CommandLineTool, Logging {
+internal object PythonInspector : CommandLineTool {
     override fun command(workingDir: File?) = "python-inspector"
 
     override fun transformVersion(output: String) = output.removePrefix("Python-inspector version: ")

@@ -26,7 +26,7 @@ import com.sksamuel.hoplite.fp.getOrElse
 
 import java.io.File
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.utils.common.EnvironmentVariableFilter
@@ -139,7 +139,7 @@ data class OrtConfiguration(
      */
     val notifier: NotifierConfiguration = NotifierConfiguration()
 ) {
-    companion object : Logging {
+    companion object {
         /**
          * Load the [OrtConfiguration]. The different sources are used with this priority:
          *

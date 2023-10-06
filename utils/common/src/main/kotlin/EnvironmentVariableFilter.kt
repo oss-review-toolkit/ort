@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.utils.common
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 /**
  * An object providing functionality to filter environments that are passed to newly created processes.
@@ -43,7 +43,7 @@ import org.apache.logging.log4j.kotlin.Logging
  * TODO: Find an alternative mechanism to initialize this object from the ORT configuration (maybe using dependency
  *       injection) which does not require this object to be public.
  */
-object EnvironmentVariableFilter : Logging {
+object EnvironmentVariableFilter {
     /**
      * A set with substrings contained in variable names that are denied by default. All variables containing one of
      * these strings (ignoring case) are not propagated to child processes.

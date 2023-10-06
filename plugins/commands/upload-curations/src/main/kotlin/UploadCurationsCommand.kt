@@ -29,7 +29,7 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.net.URI
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionInfo
@@ -59,8 +59,6 @@ class UploadCurationsCommand : OrtCommand(
     name = "upload-curations",
     help = "Upload ORT package curations to ClearlyDefined."
 ) {
-    private companion object : Logging
-
     private val inputFile by option(
         "--input-file", "-i",
         help = "The file with package curations to upload."

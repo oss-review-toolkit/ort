@@ -23,7 +23,7 @@ import java.net.HttpURLConnection
 
 import okhttp3.OkHttpClient
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
@@ -85,8 +85,6 @@ class ClearlyDefinedPackageCurationProvider(
     private val config: ClearlyDefinedPackageCurationProviderConfig,
     client: OkHttpClient? = null
 ) : PackageCurationProvider {
-    private companion object : Logging
-
     constructor(serverUrl: String, client: OkHttpClient? = null) : this(
         ClearlyDefinedPackageCurationProviderConfig(serverUrl, minTotalLicenseScore = 0), client
     )

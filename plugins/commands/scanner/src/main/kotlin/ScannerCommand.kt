@@ -42,7 +42,7 @@ import kotlin.time.toKotlinDuration
 
 import kotlinx.coroutines.runBlocking
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.OrtResult
@@ -75,8 +75,6 @@ class ScannerCommand : OrtCommand(
     name = "scan",
     help = "Run external license / copyright scanners."
 ) {
-    private companion object : Logging
-
     private val input by mutuallyExclusiveOptions(
         option(
             "--ort-file", "-i",

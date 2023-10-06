@@ -25,7 +25,7 @@ import java.time.Instant
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeToSequence
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.LicenseFinding
@@ -45,8 +45,6 @@ private const val CONFIDENCE_NOTICE = "Confidence threshold not high enough for 
 private val JSON = Json { ignoreUnknownKeys = true }
 
 class Askalono internal constructor(name: String, private val options: Options) : CommandLinePathScannerWrapper(name) {
-    private companion object : Logging
-
     class Factory : ScannerWrapperFactory<Askalono>("Askalono") {
         override fun create(options: Options) = Askalono(type, options)
     }

@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.model.config
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.utils.DatabaseUtils
 import org.ossreviewtoolkit.model.utils.FileProvenanceFileStorage
@@ -43,8 +43,6 @@ data class FileListStorageConfiguration(
      */
     val postgresStorage: PostgresStorageConfiguration? = null
 ) {
-    private companion object : Logging
-
     init {
         if (fileStorage != null && postgresStorage != null) {
             logger.warn {

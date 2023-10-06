@@ -23,7 +23,7 @@ package org.ossreviewtoolkit.plugins.packagemanagers.spdx
 
 import java.io.File
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -133,7 +133,7 @@ private fun SpdxPackage.getRemoteArtifact(): RemoteArtifact? =
         SPDX_VCS_PREFIXES.any { (prefix, _) -> downloadLocation.startsWith(prefix) } -> null
         else -> {
             if (downloadLocation.endsWith(".git")) {
-                SpdxDocumentFile.logger.warn {
+                logger.warn {
                     "The download location $downloadLocation of SPDX package '$spdxId' looks like a Git repository " +
                         "URL but it lacks the 'git+' prefix and thus will be treated as an artifact URL."
                 }
@@ -267,8 +267,6 @@ class SpdxDocumentFile(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(managerName, analysisRoot, analyzerConfig, repoConfig) {
-    internal companion object : Logging
-
     class Factory : AbstractPackageManagerFactory<SpdxDocumentFile>(MANAGER_NAME) {
         override val globsForDefinitionFiles = listOf("*.spdx.yml", "*.spdx.yaml", "*.spdx.json")
 

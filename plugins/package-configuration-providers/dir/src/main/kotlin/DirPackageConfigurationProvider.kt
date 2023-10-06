@@ -22,8 +22,6 @@ package org.ossreviewtoolkit.plugins.packageconfigurationproviders.dir
 import java.io.File
 import java.io.IOException
 
-import org.apache.logging.log4j.kotlin.Logging
-
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.readValue
@@ -81,7 +79,7 @@ class DirPackageConfigurationProvider(
         config.path.takeUnless { !it.exists() && !config.mustExist }
     )
 
-    companion object : Logging {
+    companion object {
         fun readConfigurationFiles(paths: Collection<File>): List<PackageConfiguration> {
             val allConfigurations = mutableListOf<Pair<PackageConfiguration, File>>()
 

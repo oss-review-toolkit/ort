@@ -24,8 +24,6 @@ import java.time.temporal.ChronoUnit
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicInteger
 
-import org.apache.logging.log4j.kotlin.Logging
-
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.SourceCodeOrigin.ARTIFACT
 import org.ossreviewtoolkit.model.SourceCodeOrigin.VCS
@@ -44,7 +42,7 @@ import org.ossreviewtoolkit.utils.spdx.model.SpdxRelationship
 /**
  * A class for mapping [OrtResult]s to [SpdxDocument]s.
  */
-internal object SpdxDocumentModelMapper : Logging {
+internal object SpdxDocumentModelMapper {
     data class SpdxDocumentParams(
         val documentName: String,
         val documentComment: String,

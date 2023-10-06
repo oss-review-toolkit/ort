@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.plugins.reporters.spdx
 
 import java.io.File
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
@@ -48,7 +48,7 @@ import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
  *                               about files containing findings.
  */
 class SpdxDocumentReporter : Reporter {
-    companion object : Logging {
+    companion object {
         const val REPORT_BASE_FILENAME = "bom.spdx"
 
         const val OPTION_CREATION_INFO_COMMENT = "creationInfo.comment"

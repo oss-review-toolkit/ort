@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.model.utils
 
 import java.util.LinkedList
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.DependencyGraphEdge
@@ -104,8 +104,6 @@ class DependencyGraphBuilder<D>(
      */
     private val dependencyHandler: DependencyHandler<D>
 ) {
-    private companion object : Logging
-
     /**
      * A list storing the identifiers of all dependencies added to this builder. This list is then used to resolve
      * dependencies based on their indices.

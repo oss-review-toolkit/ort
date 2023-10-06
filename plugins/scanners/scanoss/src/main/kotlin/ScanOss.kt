@@ -34,7 +34,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.clients.scanoss.ScanOssService
 import org.ossreviewtoolkit.model.ScanSummary
@@ -50,8 +50,6 @@ private const val FAKE_WFP_FILE_NAME = "fake.wfp"
 private const val ARG_FIELD_NAME = "file"
 
 class ScanOss internal constructor(override val name: String, private val options: Options) : PathScannerWrapper {
-    private companion object : Logging
-
     class Factory : ScannerWrapperFactory<ScanOss>("SCANOSS") {
         override fun create(options: Options) = ScanOss(type, options)
     }

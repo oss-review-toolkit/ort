@@ -24,7 +24,7 @@ import java.net.InetSocketAddress
 import java.net.URI
 import java.nio.file.Paths
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -53,8 +53,6 @@ import org.tmatesoft.svn.core.wc.SVNRevision
 import org.tmatesoft.svn.util.Version
 
 class Subversion : VersionControlSystem() {
-    internal companion object : Logging
-
     private val ortAuthManager = OrtSVNAuthenticationManager()
     private val clientManager = SVNClientManager.newInstance().apply {
         setAuthenticationManager(ortAuthManager)

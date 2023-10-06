@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.reporters.gitlab
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
@@ -34,7 +34,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 /**
  * Maps an [OrtResult] to a [GitLabLicenseModel].
  */
-internal object GitLabLicenseModelMapper : Logging {
+internal object GitLabLicenseModelMapper {
     fun map(ortResult: OrtResult, skipExcluded: Boolean): GitLabLicenseModel {
         val packagesWithDefinitionFilePaths = ortResult.getTargetPackagesWithDefinitionFiles(skipExcluded)
 
@@ -120,6 +120,6 @@ private fun Identifier.toPackageManagerName(): String =
         "PIP" -> "pip"
         "Yarn" -> "yarn"
         else -> type.lowercase().also {
-            GitLabLicenseModelMapper.logger.info { "No mapping defined for package manager '$type', guessing '$it'." }
+            logger.info { "No mapping defined for package manager '$type', guessing '$it'." }
         }
     }

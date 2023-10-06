@@ -34,7 +34,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.PackageManager.Companion.excludes
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -57,8 +57,6 @@ import org.ossreviewtoolkit.utils.ort.Environment
  * The class to run the analysis. The signatures of public functions in this class define the library API.
  */
 class Analyzer(private val config: AnalyzerConfiguration, private val labels: Map<String, String> = emptyMap()) {
-    internal companion object : Logging
-
     data class ManagedFileInfo(
         val absoluteProjectPath: File,
         val managedFiles: Map<PackageManager, List<File>>,
@@ -303,7 +301,7 @@ private class PackageManagerRunner(
                 val remaining = mustRunAfter - finishedPackageManagers
 
                 if (remaining.isNotEmpty()) {
-                    Analyzer.logger.info {
+                    logger.info {
                         "${manager.managerName} is waiting for the following package managers to complete: " +
                             remaining.joinToString(postfix = ".")
                     }
@@ -317,12 +315,12 @@ private class PackageManagerRunner(
     }
 
     private suspend fun run() {
-        Analyzer.logger.info { "Starting ${manager.managerName} analysis." }
+        logger.info { "Starting ${manager.managerName} analysis." }
 
         withContext(Dispatchers.IO) {
             val result = manager.resolveDependencies(definitionFiles, labels)
 
-            Analyzer.logger.info { "Finished ${manager.managerName} analysis." }
+            logger.info { "Finished ${manager.managerName} analysis." }
 
             onResult(result)
         }

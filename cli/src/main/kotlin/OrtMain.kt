@@ -44,7 +44,7 @@ import com.github.ajalt.mordant.table.grid
 
 import kotlin.system.exitProcess
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.config.OrtConfiguration
@@ -91,8 +91,6 @@ class OrtMain : CliktCommand(
     epilog = "$REQUIRED_OPTION_MARKER denotes required options.",
     invokeWithoutSubcommand = true
 ) {
-    private companion object : Logging
-
     private val configFile by option("--config", "-c", help = "The path to a configuration file.")
         .convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)

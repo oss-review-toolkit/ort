@@ -23,8 +23,6 @@ import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
 
-import org.apache.logging.log4j.kotlin.Logging
-
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 
 /**
@@ -37,8 +35,6 @@ open class LocalFileStorage(
      */
     val directory: File
 ) : FileStorage {
-    private companion object : Logging
-
     /**
      * Return the internally used path, which might differ from the provided [path] e.g. in case a suffix is added to
      * denote a compression scheme.

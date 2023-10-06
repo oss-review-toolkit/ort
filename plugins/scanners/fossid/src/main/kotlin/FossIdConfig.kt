@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.scanners.fossid
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.utils.common.Options
@@ -112,7 +112,7 @@ internal data class FossIdConfig(
     /** Stores the map with FossID-specific configuration options. */
     private val options: Map<String, String>
 ) {
-    companion object : Logging {
+    companion object {
         /** Name of the configuration property for the server URL. */
         private const val SERVER_URL_PROPERTY = "serverUrl"
 

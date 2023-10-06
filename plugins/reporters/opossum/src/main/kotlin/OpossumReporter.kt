@@ -30,7 +30,7 @@ import java.util.UUID
 
 import kotlin.math.min
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.model.CuratedPackage
@@ -80,7 +80,7 @@ internal fun resolvePath(pieces: List<String>) = pieces.reduce { right, left -> 
  * - *scanner.maxDepth*: The depth to which the full file level scanner information is added
  */
 class OpossumReporter : Reporter {
-    companion object : Logging {
+    companion object {
         const val OPTION_SCANNER_MAX_DEPTH = "scanner.maxDepth"
     }
 
@@ -210,8 +210,6 @@ class OpossumReporter : Reporter {
         val baseUrlsForSources: SortedMap<String, String> = sortedMapOf(),
         val externalAttributionSources: SortedMap<String, OpossumExternalAttributionSource> = sortedMapOf()
     ) {
-        private companion object : Logging
-
         fun toJson(): Map<*, *> =
             sortedMapOf(
                 "metadata" to sortedMapOf(

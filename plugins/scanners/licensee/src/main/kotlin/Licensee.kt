@@ -25,7 +25,7 @@ import java.time.Instant
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.LicenseFinding
@@ -46,7 +46,7 @@ private val JSON = Json {
 }
 
 class Licensee internal constructor(name: String, private val options: Options) : CommandLinePathScannerWrapper(name) {
-    companion object : Logging {
+    companion object {
         val CONFIGURATION_OPTIONS = listOf("--json")
     }
 

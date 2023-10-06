@@ -24,7 +24,7 @@ import java.time.Instant
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.contentOrNull
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.advisor.AbstractAdviceProviderFactory
 import org.ossreviewtoolkit.advisor.AdviceProvider
@@ -53,8 +53,6 @@ import us.springett.cvss.Cvss
  * An advice provider that obtains vulnerability information from Open Source Vulnerabilities (https://osv.dev/).
  */
 class Osv(name: String, config: OsvConfiguration) : AdviceProvider(name) {
-    internal companion object : Logging
-
     class Factory : AbstractAdviceProviderFactory<Osv>("OSV") {
         override fun create(config: AdvisorConfiguration) =
             // OSV does not require any dedicated configuration to be present.
@@ -184,7 +182,7 @@ private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.Vulne
             // Work around for https://github.com/stevespringett/cvss-calculator/issues/56.
             it.score.substringBefore("/") to "${cvss.calculateScore().baseScore}"
         } ?: run {
-            Osv.logger.debug { "Could not parse CVSS vector '${it.score}'." }
+            logger.debug { "Could not parse CVSS vector '${it.score}'." }
             null to it.score
         }
     } ?: (null to null)
@@ -202,7 +200,7 @@ private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.Vulne
         val url = reference.url.trim().let { if (it.startsWith("://")) "https$it" else it }
 
         url.toUri().onFailure {
-            Osv.logger.debug { "Could not parse reference URL for vulnerability '$id': ${it.message}." }
+            logger.debug { "Could not parse reference URL for vulnerability '$id': ${it.message}." }
         }.map {
             VulnerabilityReference(
                 url = it,

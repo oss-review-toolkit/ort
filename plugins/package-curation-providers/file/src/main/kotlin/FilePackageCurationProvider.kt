@@ -22,8 +22,6 @@ package org.ossreviewtoolkit.plugins.packagecurationproviders.file
 import java.io.File
 import java.io.IOException
 
-import org.apache.logging.log4j.kotlin.Logging
-
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.readValue
@@ -91,7 +89,7 @@ class FilePackageCurationProvider(
         config.path.takeUnless { !it.exists() && !config.mustExist }
     )
 
-    companion object : Logging {
+    companion object {
         /**
          * Read a list of [PackageCuration]s from existing [paths], which can either point to files or directories. In
          * the latter case, the directory is searched recursively for deserializable files (according to their

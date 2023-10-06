@@ -25,7 +25,7 @@ import java.io.ByteArrayInputStream
 import java.io.FileNotFoundException
 import java.io.IOException
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.yamlMapper
@@ -35,8 +35,6 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 
 class FileBasedNestedProvenanceStorage(private val backend: FileStorage) : NestedProvenanceStorage {
-    private companion object : Logging
-
     override fun readNestedProvenance(root: RepositoryProvenance): NestedProvenanceResolutionResult? =
         readResults(root).find { it.nestedProvenance.root == root }
 

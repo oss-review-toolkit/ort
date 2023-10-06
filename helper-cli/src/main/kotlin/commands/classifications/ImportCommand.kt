@@ -31,7 +31,7 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.net.URI
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.licenses.LicenseCategorization
@@ -81,7 +81,7 @@ private data class EclipseLicenses(
     val restricted: Map<String, String>
 )
 
-private enum class LicenseClassificationProvider(val url: String) : Logging {
+private enum class LicenseClassificationProvider(val url: String) {
     DOUBLE_OPEN("https://github.com/doubleopen-project/policy-configuration/raw/main/license-classifications.yml") {
         override fun getClassifications(): LicenseClassifications = yamlMapper.readValue(URI.create(url).toURL())
     },

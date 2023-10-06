@@ -27,7 +27,7 @@ import java.io.File
 import java.util.Properties
 import java.util.concurrent.TimeUnit
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.gradle.tooling.GradleConnector
 import org.gradle.tooling.events.ProgressListener
@@ -99,8 +99,6 @@ class GradleInspector(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
-    internal companion object : Logging
-
     class Factory : AbstractPackageManagerFactory<GradleInspector>("GradleInspector", isEnabledByDefault = false) {
         // Gradle prefers Groovy ".gradle" files over Kotlin ".gradle.kts" files, but "build" files have to come before
         // "settings" files as we should consider "settings" files only if the same directory does not also contain a
@@ -428,7 +426,7 @@ private fun OrtDependency.handleValidScmInfo(type: String, url: String, tag: Str
 
             // Try to detect the Maven SCM provider from the URL only, e.g. by looking at the host or special URL paths.
             VcsHost.parseUrl(fixedUrl).copy(revision = tag).also {
-                GradleInspector.logger.info {
+                logger.info {
                     "Fixed up invalid SCM connection without a provider in '$groupId:$artifactId:$version' to $it."
                 }
             }
@@ -468,14 +466,14 @@ private fun OrtDependency.handleInvalidScmInfo(connection: String, tag: String) 
         if (connection.startsWith("git://") || connection.endsWith(".git")) {
             // It is a common mistake to omit the "scm:[provider]:" prefix. Add fall-backs for nevertheless clear
             // cases.
-            GradleInspector.logger.info {
+            logger.info {
                 "Maven SCM connection '$connection' in '$dep' lacks the required 'scm' prefix."
             }
 
             VcsInfo(type = VcsType.GIT, url = connection, revision = tag)
         } else {
             if (connection.isNotEmpty()) {
-                GradleInspector.logger.info {
+                logger.info {
                     "Ignoring Maven SCM connection '$connection' in '$dep' due to an unexpected format."
                 }
             }
