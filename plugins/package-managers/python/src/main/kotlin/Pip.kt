@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.plugins.packagemanagers.python
 
 import java.io.File
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -58,7 +58,7 @@ class Pip(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
-    companion object : Logging {
+    companion object {
         const val OPTION_OPERATING_SYSTEM = "operatingSystem"
         const val OPTION_PYTHON_VERSION = "pythonVersion"
     }

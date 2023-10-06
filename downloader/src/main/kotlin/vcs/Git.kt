@@ -25,7 +25,7 @@ import java.net.Authenticator
 import java.net.InetSocketAddress
 import java.security.PublicKey
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.LsRemoteCommand
@@ -66,7 +66,7 @@ private val REPOSITORY_URL_PREFIX_REPLACEMENTS = mapOf(
 )
 
 class Git : VersionControlSystem(), CommandLineTool {
-    companion object : Logging {
+    companion object {
         init {
             // Make sure that JGit uses the exact same authentication information as ORT itself. This addresses
             // discrepancies in the way .netrc files are interpreted between JGit's and ORT's implementation.
@@ -274,7 +274,7 @@ class Git : VersionControlSystem(), CommandLineTool {
  * [Authenticator]. An instance of this class is installed by [Git], making sure that JGit uses the exact same
  * authentication mechanism as ORT.
  */
-internal object AuthenticatorCredentialsProvider : CredentialsProvider(), Logging {
+internal object AuthenticatorCredentialsProvider : CredentialsProvider() {
     override fun isInteractive(): Boolean = false
 
     override fun supports(vararg items: CredentialItem): Boolean =

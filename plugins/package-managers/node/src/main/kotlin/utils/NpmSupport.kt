@@ -27,10 +27,11 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ArrayNode
 
 import java.io.File
+import java.lang.invoke.MethodHandles
 import java.nio.file.FileSystems
 import java.nio.file.PathMatcher
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.loggerOf
 
 import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.model.VcsInfo
@@ -44,12 +45,7 @@ import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 
-/**
- * A dummy object to provide a logger for top-level functions.
- *
- * TODO: Remove this once https://youtrack.jetbrains.com/issue/KT-21599 is implemented.
- */
-internal object NpmSupport : Logging
+private val logger = loggerOf(MethodHandles.lookup().lookupClass())
 
 /**
  * Expand an NPM shortcut [url] to a regular URL as used for dependencies, see
@@ -196,7 +192,7 @@ private fun getPackageJsonInfo(definitionFiles: Set<File>): Collection<PackageJs
         } catch (e: JsonProcessingException) {
             e.showStackTrace()
 
-            NpmSupport.logger.error {
+            logger.error {
                 "Could not parse '${definitionFile.invariantSeparatorsPath}': ${e.collectMessages()}"
             }
 
@@ -278,9 +274,7 @@ private fun getYarnWorkspaceSubmodules(definitionFiles: Set<File>): Set<File> {
         } catch (e: JsonProcessingException) {
             e.showStackTrace()
 
-            NpmSupport.logger.error {
-                "Could not parse '${definitionFile.invariantSeparatorsPath}': ${e.collectMessages()}"
-            }
+            logger.error { "Could not parse '${definitionFile.invariantSeparatorsPath}': ${e.collectMessages()}" }
 
             null
         }

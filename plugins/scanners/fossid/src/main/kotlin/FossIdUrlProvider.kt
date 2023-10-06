@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.plugins.scanners.fossid
 import java.net.Authenticator
 import java.net.PasswordAuthentication
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.utils.common.percentEncode
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
@@ -43,7 +43,7 @@ internal class FossIdUrlProvider private constructor(
      */
     private val urlMapping: Map<Regex, String>
 ) {
-    companion object : Logging {
+    companion object {
         /** The prefix of option keys that define a URL mapping. */
         internal const val PREFIX_URL_MAPPING = "urlMapping"
 

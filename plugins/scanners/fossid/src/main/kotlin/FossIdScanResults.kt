@@ -19,6 +19,10 @@
 
 package org.ossreviewtoolkit.plugins.scanners.fossid
 
+import java.lang.invoke.MethodHandles
+
+import org.apache.logging.log4j.kotlin.loggerOf
+
 import org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.IdentifiedFile
 import org.ossreviewtoolkit.clients.fossid.model.identification.ignored.IgnoredFile
 import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.MarkedAsIdentifiedFile
@@ -46,6 +50,8 @@ import org.ossreviewtoolkit.utils.common.prettyPrintRanges
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.toSpdx
+
+private val logger = loggerOf(MethodHandles.lookup().lookupClass())
 
 /**
  * A data class to hold FossID raw results.
@@ -214,7 +220,7 @@ private fun urlToPackageType(url: String): PurlType =
 
         else -> {
             PurlType.GENERIC.also {
-                FossId.logger.warn {
+                logger.warn {
                     "Cannot determine PURL type for url '$url' and provider '$provider'. Falling back to '$it'."
                 }
             }

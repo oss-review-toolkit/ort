@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.plugins.packagecurationproviders.ortconfig
 import java.io.File
 import java.io.IOException
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.downloader.vcs.Git
 import org.ossreviewtoolkit.model.Identifier
@@ -54,8 +54,6 @@ class OrtConfigPackageCurationProviderFactory : PackageCurationProviderFactory<U
  * [ort-config repository](https://github.com/oss-review-toolkit/ort-config).
  */
 open class OrtConfigPackageCurationProvider : PackageCurationProvider {
-    internal companion object : Logging
-
     private val curationsDir by lazy {
         ortDataDirectory.resolve("ort-config").also {
             updateOrtConfig(it)
@@ -90,7 +88,7 @@ private fun updateOrtConfig(dir: File) {
     Git().apply {
         val workingTree = initWorkingTree(dir, VcsInfo.EMPTY.copy(type = VcsType.GIT, url = ORT_CONFIG_REPOSITORY_URL))
         val revision = updateWorkingTree(workingTree, ORT_CONFIG_REPOSITORY_BRANCH).getOrThrow()
-        OrtConfigPackageCurationProvider.logger.info {
+        logger.info {
             "Successfully cloned $revision from $ORT_CONFIG_REPOSITORY_URL."
         }
     }

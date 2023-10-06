@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.analyzer.managers.utils
 
 import java.util.LinkedList
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageLinkage
@@ -32,8 +32,6 @@ import org.ossreviewtoolkit.model.PackageReference
  * map whose keys are package identifiers and whose values are the identifiers of packages these packages depend on.
  */
 internal class Graph private constructor(private val nodeMap: MutableMap<Identifier, MutableSet<Identifier>>) {
-    private companion object : Logging
-
     constructor() : this(mutableMapOf())
 
     /**

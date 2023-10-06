@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.downloader.vcs
 import java.io.File
 import java.io.IOException
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.eclipse.jgit.api.LsRemoteCommand
 import org.eclipse.jgit.lib.BranchConfig
@@ -55,8 +55,6 @@ open class GitWorkingTree(
     vcsType: VcsType,
     private val repositoryUrlPrefixReplacements: Map<String, String> = emptyMap()
 ) : WorkingTree(workingDir, vcsType) {
-    private companion object : Logging
-
     fun <T> useRepo(block: Repository.() -> T): T = findGitOrSubmoduleDir(workingDir).use(block)
 
     override fun isValid(): Boolean = useRepo { objectDatabase?.exists() == true }

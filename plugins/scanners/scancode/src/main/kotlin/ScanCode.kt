@@ -24,7 +24,7 @@ import java.time.Instant
 
 import kotlin.math.max
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
@@ -58,7 +58,7 @@ import org.semver4j.Semver
  *   considered in [configuration], like "--processes". Defaults to [DEFAULT_NON_CONFIGURATION_OPTIONS].
  */
 class ScanCode internal constructor(name: String, private val options: Options) : CommandLinePathScannerWrapper(name) {
-    companion object : Logging {
+    companion object {
         const val SCANNER_NAME = "ScanCode"
 
         private const val LICENSE_REFERENCES_OPTION_VERSION = "32.0.0"

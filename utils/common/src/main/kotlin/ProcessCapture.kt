@@ -24,7 +24,7 @@ import java.io.IOException
 
 import kotlin.io.path.createTempDirectory
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 /**
  * An (almost) drop-in replacement for ProcessBuilder that is able to capture huge outputs to the standard output and
@@ -40,7 +40,7 @@ class ProcessCapture(
     // vararg parameters, see https://stackoverflow.com/a/46456379/1127485.
     constructor(workingDir: File?, vararg command: CharSequence) : this(*command, workingDir = workingDir)
 
-    companion object : Logging {
+    companion object {
         private const val MAX_OUTPUT_LINES = 20
         private const val MAX_OUTPUT_FOOTER =
             "(Above output is limited to each $MAX_OUTPUT_LINES heading and tailing lines.)"

@@ -47,7 +47,7 @@ class OrtImportOrderTest : WordSpec({
                 import kotlinx.coroutines.sync.Mutex
                 import kotlinx.coroutines.withContext
                 
-                import org.apache.logging.log4j.kotlin.Logging
+                import org.apache.logging.log4j.kotlin.logger
                 
                 import org.ossreviewtoolkit.analyzer.PackageManager.Companion.excludes
                 import org.ossreviewtoolkit.analyzer.managers.Unmanaged

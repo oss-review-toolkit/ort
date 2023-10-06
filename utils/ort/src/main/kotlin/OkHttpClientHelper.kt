@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.utils.ort
 
 import java.io.File
 import java.io.IOException
+import java.lang.invoke.MethodHandles
 import java.time.Duration
 import java.util.concurrent.ConcurrentHashMap
 
@@ -43,7 +44,8 @@ import okhttp3.ResponseBody
 import okio.buffer
 import okio.sink
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
+import org.apache.logging.log4j.kotlin.loggerOf
 
 import org.ossreviewtoolkit.utils.common.ArchiveType
 import org.ossreviewtoolkit.utils.common.collectMessages
@@ -61,7 +63,7 @@ class HttpDownloadError(val code: Int, message: String) : IOException("$message 
 /**
  * A helper class to manage OkHttp instances backed by distinct cache directories.
  */
-object OkHttpClientHelper : Logging {
+object OkHttpClientHelper {
     /**
      * A constant for the "too many requests" HTTP code as HttpURLConnection has none.
      */
@@ -78,6 +80,8 @@ object OkHttpClientHelper : Logging {
             clients.getOrPut(it) { okHttpClient.newBuilder().apply(block).build() }
         } ?: okHttpClient
 }
+
+private val logger = loggerOf(MethodHandles.lookup().lookupClass())
 
 private const val CACHE_DIRECTORY = "cache/http"
 private val MAX_CACHE_SIZE_IN_BYTES = 1.gibibytes
@@ -110,7 +114,7 @@ val okHttpClient: OkHttpClient by lazy {
             }.onFailure {
                 it.showStackTrace()
 
-                OkHttpClientHelper.logger.error {
+                logger.error {
                     "HTTP request to '${request.url}' failed with an exception: ${it.collectMessages()}"
                 }
             }.getOrThrow()
@@ -230,7 +234,7 @@ fun OkHttpClient.ping(url: String): Response =
  */
 fun OkHttpClient.execute(request: Request): Response =
     newCall(request).execute().also { response ->
-        OkHttpClientHelper.logger.debug {
+        logger.debug {
             if (response.cacheResponse != null) {
                 "Retrieved ${response.request.url} from local cache."
             } else {

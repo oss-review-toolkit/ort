@@ -36,7 +36,7 @@ import java.time.Duration
 
 import kotlin.time.toKotlinDuration
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.analyzer.determineEnabledPackageManagers
@@ -64,8 +64,6 @@ class AnalyzerCommand : OrtCommand(
     name = "analyze",
     help = "Determine dependencies of a software project."
 ) {
-    private companion object : Logging
-
     private val inputDir by option(
         "--input-dir", "-i",
         help = "The project directory to analyze. As a special case, if only one package manager is enabled, this " +

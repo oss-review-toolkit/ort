@@ -23,7 +23,7 @@ import java.io.File
 import java.io.IOException
 import java.util.ServiceLoader
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
@@ -45,7 +45,7 @@ abstract class VersionControlSystem(
      */
     private val commandLineTool: CommandLineTool? = null
 ) {
-    companion object : Logging {
+    companion object {
         private val LOADER = ServiceLoader.load(VersionControlSystem::class.java)
 
         /**

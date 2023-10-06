@@ -44,7 +44,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.downloader.Downloader
@@ -87,8 +87,6 @@ class DownloaderCommand : OrtCommand(
     name = "download",
     help = "Fetch source code from a remote location."
 ) {
-    private companion object : Logging
-
     private val input by mutuallyExclusiveOptions(
         option(
             "--ort-file", "-i",

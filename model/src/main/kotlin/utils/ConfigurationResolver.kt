@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.model.utils
 
 import kotlin.time.measureTimedValue
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.Identifier
@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
 
-object ConfigurationResolver : Logging {
+object ConfigurationResolver {
     /**
      * Resolved the [PackageConfiguration]s that match the [scan results][scanResultProvider] for the provided
      * [identifiers].

@@ -41,7 +41,7 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.clients.fossid.model.Project
 import org.ossreviewtoolkit.clients.fossid.model.Scan
@@ -67,7 +67,7 @@ import retrofit2.http.POST
 private const val READ_TIMEOUT_HEADER = "READ_TIMEOUT"
 
 interface FossIdRestService {
-    companion object : Logging {
+    companion object {
         /**
          * The mapper for JSON (de-)serialization used by this service.
          */

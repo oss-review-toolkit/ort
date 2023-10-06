@@ -23,8 +23,6 @@ import java.io.InputStream
 
 import javax.sql.DataSource
 
-import org.apache.logging.log4j.kotlin.Logging
-
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Database
@@ -59,8 +57,6 @@ class PostgresProvenanceFileStorage(
      */
     tableName: String
 ) : ProvenanceFileStorage {
-    private companion object : Logging
-
     private val table = ProvenanceFileTable(tableName)
 
     /** Stores the database connection used by this object. */

@@ -34,7 +34,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeoutOrNull
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.clients.fossid.FossIdRestService
 import org.ossreviewtoolkit.clients.fossid.checkDownloadStatus
@@ -98,7 +98,7 @@ class FossId internal constructor(
     override val name: String,
     private val config: FossIdConfig
 ) : PackageScannerWrapper {
-    companion object : Logging {
+    companion object {
         @JvmStatic
         private val PROJECT_NAME_REGEX = Regex("""^.*/([\w.\-]+?)(?:\.git)?$""")
 

@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.JsonNode
 
 import java.io.File
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.plugins.packagemanagers.pub.flutterHome
@@ -37,8 +37,6 @@ import org.ossreviewtoolkit.utils.common.textValueOrEmpty
  * installation directory.
  */
 internal class PubCacheReader {
-    private companion object : Logging
-
     private val pubCacheRoot by lazy {
         Os.env["PUB_CACHE"]?.let { return@lazy File(it) }
 

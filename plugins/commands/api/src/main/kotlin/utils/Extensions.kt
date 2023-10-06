@@ -23,17 +23,20 @@ import com.github.ajalt.clikt.core.GroupableOption
 import com.github.ajalt.mordant.terminal.Terminal
 
 import java.io.File
+import java.lang.invoke.MethodHandles
 
 import kotlin.time.measureTime
 import kotlin.time.measureTimedValue
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.loggerOf
 
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.utils.common.formatSizeInMib
+
+private val logger = loggerOf(MethodHandles.lookup().lookupClass())
 
 fun <T : GroupableOption> T.group(name: String): T = apply { groupName = name }
 
@@ -46,7 +49,7 @@ fun <T : GroupableOption> T.configurationGroup(): T = group(OPTION_GROUP_CONFIGU
 /**
  * Read [ortFile] into an [OrtResult] and return it.
  */
-fun Logging.readOrtResult(ortFile: File): OrtResult {
+fun readOrtResult(ortFile: File): OrtResult {
     logger.debug { "Input ORT result file has SHA-1 hash ${HashAlgorithm.SHA1.calculate(ortFile)}." }
 
     val (ortResult, duration) = measureTimedValue { ortFile.readValue<OrtResult>() }
@@ -59,7 +62,7 @@ fun Logging.readOrtResult(ortFile: File): OrtResult {
 /**
  * Write the [ortResult] to all [outputFiles].
  */
-fun Logging.writeOrtResult(ortResult: OrtResult, outputFiles: Collection<File>, terminal: Terminal) {
+fun writeOrtResult(ortResult: OrtResult, outputFiles: Collection<File>, terminal: Terminal) {
     outputFiles.forEach { file ->
         val resultName = file.name.substringBefore('-')
         terminal.println("Writing $resultName result to '$file'.")

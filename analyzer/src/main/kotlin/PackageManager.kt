@@ -30,7 +30,7 @@ import java.nio.file.attribute.BasicFileAttributes
 import kotlin.io.path.invariantSeparatorsPathString
 import kotlin.time.measureTime
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 import org.apache.maven.project.ProjectBuildingException
 
 import org.ossreviewtoolkit.downloader.VcsHost
@@ -69,7 +69,7 @@ abstract class PackageManager(
     val analyzerConfig: AnalyzerConfiguration,
     val repoConfig: RepositoryConfiguration
 ) {
-    companion object : Logging {
+    companion object {
         /**
          * All [package manager factories][PackageManagerFactory] available in the classpath, associated by their names.
          */

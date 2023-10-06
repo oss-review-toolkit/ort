@@ -25,7 +25,7 @@ import java.io.File
 
 import kotlin.time.Duration.Companion.days
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
@@ -56,8 +56,6 @@ class Yarn(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : Npm(name, analysisRoot, analyzerConfig, repoConfig) {
-    private companion object : Logging
-
     class Factory : AbstractPackageManagerFactory<Yarn>("Yarn") {
         override val globsForDefinitionFiles = listOf("package.json")
 

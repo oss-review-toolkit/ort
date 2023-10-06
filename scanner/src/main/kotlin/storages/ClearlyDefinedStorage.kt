@@ -28,7 +28,7 @@ import kotlinx.coroutines.runBlocking
 
 import okhttp3.OkHttpClient
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
 import org.ossreviewtoolkit.clients.clearlydefined.ComponentType
@@ -74,8 +74,6 @@ class ClearlyDefinedStorage(
     config: ClearlyDefinedStorageConfiguration,
     client: OkHttpClient? = null
 ) : ScanResultsStorage() {
-    private companion object : Logging
-
     constructor(serverUrl: String, client: OkHttpClient? = null) : this(
         ClearlyDefinedStorageConfiguration(serverUrl), client
     )

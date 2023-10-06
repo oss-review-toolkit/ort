@@ -21,8 +21,6 @@ package org.ossreviewtoolkit.plugins.packagemanagers.nuget
 
 import java.io.File
 
-import org.apache.logging.log4j.kotlin.Logging
-
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.model.Issue
@@ -44,7 +42,7 @@ class NuGet(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
-    companion object : Logging {
+    companion object {
         const val OPTION_NUGET_CONFIG = "nugetConfigFile"
     }
 

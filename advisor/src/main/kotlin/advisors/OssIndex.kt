@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.advisor.advisors
 import java.net.URI
 import java.time.Instant
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.advisor.AbstractAdviceProviderFactory
 import org.ossreviewtoolkit.advisor.AdviceProvider
@@ -53,8 +53,6 @@ private const val BULK_REQUEST_SIZE = 128
  * A wrapper for Sonatype's [OSS Index](https://ossindex.sonatype.org/) security vulnerability data.
  */
 class OssIndex(name: String, config: OssIndexConfiguration) : AdviceProvider(name) {
-    private companion object : Logging
-
     class Factory : AbstractAdviceProviderFactory<OssIndex>("OssIndex") {
         override fun create(config: AdvisorConfiguration) =
             OssIndex(type, config.forProvider { ossIndex ?: OssIndexConfiguration() })

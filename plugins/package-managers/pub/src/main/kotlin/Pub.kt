@@ -25,7 +25,7 @@ import com.fasterxml.jackson.dataformat.yaml.JacksonYAMLParseException
 import java.io.File
 import java.io.IOException
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -107,7 +107,7 @@ class Pub(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
-    companion object : Logging {
+    companion object {
         const val OPTION_PUB_DEPENDENCIES_ONLY = "pubDependenciesOnly"
     }
 

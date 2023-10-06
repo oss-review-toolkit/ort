@@ -26,7 +26,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.clients.fossid.FossIdRestService
 import org.ossreviewtoolkit.clients.fossid.generateReport
@@ -39,7 +39,7 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 class FossIdReporter : Reporter {
-    companion object : Logging {
+    companion object {
         /** Name of the configuration property for the server URL. */
         const val SERVER_URL_PROPERTY = "serverUrl"
 

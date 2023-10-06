@@ -25,7 +25,7 @@ import com.github.ajalt.mordant.rendering.Theme
 import java.io.File
 import java.lang.reflect.Modifier
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -48,8 +48,6 @@ class RequirementsCommand : OrtCommand(
     name = "requirements",
     help = "Check for the command line tools required by ORT."
 ) {
-    private companion object : Logging
-
     override fun run() {
         val reflections = Reflections("org.ossreviewtoolkit")
         val classes = reflections.getSubTypesOf(CommandLineTool::class.java)

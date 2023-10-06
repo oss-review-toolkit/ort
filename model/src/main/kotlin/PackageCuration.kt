@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
@@ -53,8 +53,6 @@ data class PackageCuration(
     @JsonProperty("curations")
     val data: PackageCurationData
 ) {
-    private companion object : Logging
-
     /**
      * Return true if this [PackageCuration] is applicable to the package with the given [identifier][pkgId],
      * disregarding the version.

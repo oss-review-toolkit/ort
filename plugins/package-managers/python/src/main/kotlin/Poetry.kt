@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.plugins.packagemanagers.python
 
 import java.io.File
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -42,8 +42,6 @@ class Poetry(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
-    private companion object : Logging
-
     class Factory : AbstractPackageManagerFactory<Poetry>("Poetry") {
         override val globsForDefinitionFiles = listOf("poetry.lock")
 

@@ -21,12 +21,14 @@ package org.ossreviewtoolkit.analyzer.managers
 
 import java.io.File
 import java.io.IOException
+import java.lang.invoke.MethodHandles
 import java.nio.file.StandardCopyOption
 import java.util.Properties
 
 import kotlin.io.path.moveTo
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
+import org.apache.logging.log4j.kotlin.loggerOf
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -53,7 +55,7 @@ class Sbt(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
-    companion object : Logging {
+    companion object {
         // See https://github.com/sbt/sbt/blob/v1.5.1/launcher-package/integration-test/src/test/scala/RunnerTest.scala#L9.
         private const val SBT_VERSION_PATTERN = "\\d(\\.\\d+){2}(-\\w+)?"
 
@@ -232,13 +234,15 @@ class Sbt(
         throw NotImplementedError()
 }
 
+private val logger = loggerOf(MethodHandles.lookup().lookupClass())
+
 private fun moveGeneratedPom(pomFile: File): File {
     val targetDirParent = pomFile.absoluteFile.parentFile.searchUpwardsForSubdirectory("target") ?: return pomFile
     val targetFilename = pomFile.relativeTo(targetDirParent).invariantSeparatorsPath.replace('/', '-')
     val targetFile = targetDirParent.resolve(targetFilename)
 
     if (runCatching { pomFile.toPath().moveTo(targetFile.toPath(), StandardCopyOption.ATOMIC_MOVE) }.isFailure) {
-        Sbt.logger.error { "Moving '${pomFile.absolutePath}' to '${targetFile.absolutePath}' failed." }
+        logger.error { "Moving '${pomFile.absolutePath}' to '${targetFile.absolutePath}' failed." }
         return pomFile
     }
 

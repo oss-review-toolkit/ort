@@ -27,7 +27,7 @@ import java.time.Instant
 
 import kotlin.time.measureTimedValue
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.utils.FileListSortedSetConverter
@@ -89,7 +89,7 @@ data class ScannerRun(
     @JsonSerialize(converter = FileListSortedSetConverter::class)
     val files: Set<FileList>
 ) {
-    companion object : Logging {
+    companion object {
         /**
          * A constant for a [ScannerRun] where all properties are empty.
          */

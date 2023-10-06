@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.evaluator
 
 import java.io.File
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.downloader.Downloader
 import org.ossreviewtoolkit.model.Package
@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 
 class SourceTreeResolver private constructor(getRepositoryRoot: () -> File) {
-    companion object : Logging {
+    companion object {
         fun forRemoteRepository(vcsInfo: VcsInfo) =
             SourceTreeResolver {
                 val downloadDir = createOrtTempDir()

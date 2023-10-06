@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.analyzer.managers.utils
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 import org.apache.maven.project.MavenProject
 
 import org.eclipse.aether.graph.DependencyNode
@@ -55,8 +55,6 @@ class MavenDependencyHandler(
      */
     private val sbtMode: Boolean
 ) : DependencyHandler<DependencyNode> {
-    private companion object : Logging
-
     /**
      * A set of identifiers that are known to point to local projects. This is updated for packages that are resolved
      * to projects.

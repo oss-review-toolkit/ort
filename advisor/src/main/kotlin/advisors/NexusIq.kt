@@ -23,7 +23,7 @@ import java.net.URI
 import java.time.Duration
 import java.time.Instant
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.advisor.AbstractAdviceProviderFactory
 import org.ossreviewtoolkit.advisor.AdviceProvider
@@ -65,8 +65,6 @@ private val READ_TIMEOUT = Duration.ofSeconds(60)
  * A wrapper for [Nexus IQ Server](https://help.sonatype.com/iqserver) security vulnerability data.
  */
 class NexusIq(name: String, private val config: NexusIqConfiguration) : AdviceProvider(name) {
-    private companion object : Logging
-
     class Factory : AbstractAdviceProviderFactory<NexusIq>("NexusIQ") {
         override fun create(config: AdvisorConfiguration) = NexusIq(type, config.forProvider { nexusIq })
     }

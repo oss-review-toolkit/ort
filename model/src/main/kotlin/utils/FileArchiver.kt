@@ -24,7 +24,7 @@ import java.io.File
 import kotlin.time.measureTime
 import kotlin.time.measureTimedValue
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.utils.common.FileMatcher
@@ -50,7 +50,7 @@ class FileArchiver(
      */
     private val storage: ProvenanceFileStorage
 ) {
-    companion object : Logging {
+    companion object {
         val DEFAULT_ARCHIVE_DIR by lazy { ortDataDirectory.resolve("scanner/archive") }
     }
 

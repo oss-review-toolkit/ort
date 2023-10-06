@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 
 import java.nio.file.Path
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.eclipse.sw360.clients.adapter.AttachmentUploadRequest
 import org.eclipse.sw360.clients.adapter.SW360Connection
@@ -56,7 +56,7 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 class Sw360Storage(
     configuration: Sw360StorageConfiguration
 ) : ScanResultsStorage() {
-    companion object : Logging {
+    companion object {
         val JSON_MAPPER: ObjectMapper = jsonMapper.copy()
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 

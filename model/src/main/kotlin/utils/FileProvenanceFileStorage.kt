@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.model.utils
 
 import java.io.InputStream
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.HashAlgorithm
@@ -45,8 +45,6 @@ class FileProvenanceFileStorage(
      */
     private val filename: String
 ) : ProvenanceFileStorage {
-    private companion object : Logging
-
     init {
         require(filename.isNotEmpty()) {
             "The filename must not be empty."

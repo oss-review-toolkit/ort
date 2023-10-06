@@ -27,6 +27,8 @@ import java.util.Base64
 import okio.buffer
 import okio.sink
 
+import org.apache.logging.log4j.kotlin.logger
+
 import org.ossreviewtoolkit.clients.fossid.model.identification.common.LicenseMatchType
 import org.ossreviewtoolkit.clients.fossid.model.report.ReportType
 import org.ossreviewtoolkit.clients.fossid.model.report.SelectionType
@@ -424,7 +426,7 @@ suspend fun FossIdRestService.generateReport(
             contentDisposition?.split(';')?.firstNotNullOfOrNull {
                 it.trim().withoutPrefix("filename=")?.removeSurrounding("\"")
             } ?: return Result.failure<File>(IllegalStateException("Cannot determine name of the report")).also {
-                FossIdRestService.logger.error {
+                logger.error {
                     "Cannot determine name of the report with raw headers '$contentDisposition'."
                 }
             }

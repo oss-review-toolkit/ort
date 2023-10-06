@@ -24,7 +24,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import java.io.File
 import java.io.IOException
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.eclipse.jgit.lib.SymbolicRef
 
@@ -67,8 +67,6 @@ private data class Include(
 )
 
 class GitRepo : VersionControlSystem(), CommandLineTool {
-    private companion object : Logging
-
     override val type = VcsType.GIT_REPO
     override val priority = 50
     override val latestRevisionNames = listOf("HEAD", "@")

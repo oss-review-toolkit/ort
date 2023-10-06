@@ -23,7 +23,7 @@ import java.sql.SQLException
 
 import javax.sql.DataSource
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.Database
@@ -61,8 +61,6 @@ class ProvenanceBasedPostgresStorage(
      */
     private val tableName: String = "provenance_scan_results"
 ) : ProvenanceBasedScanStorage {
-    private companion object : Logging
-
     private val table = ProvenanceScanResults(tableName)
 
     /** The [Database] instance on which all operations are executed. */

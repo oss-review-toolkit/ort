@@ -22,7 +22,9 @@ package org.ossreviewtoolkit.model
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import org.apache.logging.log4j.kotlin.Logging
+import java.lang.invoke.MethodHandles
+
+import org.apache.logging.log4j.kotlin.loggerOf
 
 import org.ossreviewtoolkit.model.ResolvedPackageCurations.Companion.REPOSITORY_CONFIGURATION_PROVIDER_ID
 import org.ossreviewtoolkit.model.config.Excludes
@@ -81,7 +83,7 @@ data class OrtResult(
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val labels: Map<String, String> = emptyMap()
 ) {
-    companion object : Logging {
+    companion object {
         /**
          * A constant for an [OrtResult] with an empty repository and all other properties `null`.
          */
@@ -557,6 +559,8 @@ data class OrtResult(
         )
 }
 
+private val logger = loggerOf(MethodHandles.lookup().lookupClass())
+
 /**
  * Return a set containing exactly one [CuratedPackage] for each given [Package], derived from applying all
  * given [curations] to the packages they apply to. The given [curations] must be ordered highest-priority-first, which
@@ -577,7 +581,7 @@ private fun applyPackageCurations(
 
     return packages.mapTo(mutableSetOf()) { pkg ->
         curationsForId[pkg.id].orEmpty().asReversed().fold(pkg.toCuratedPackage()) { cur, packageCuration ->
-            OrtResult.logger.debug {
+            logger.debug {
                 "Applying curation '$packageCuration' to package '${pkg.id.toCoordinates()}'."
             }
 

@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.analyzer.managers.utils
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.DependencyGraphNavigator
@@ -113,8 +113,6 @@ private data class PackageManagerDependency(
     val scope: String,
     val linkage: PackageLinkage
 ) {
-    private companion object : Logging
-
     fun findProjects(analyzerResult: AnalyzerResult): List<Project> =
         analyzerResult.projects.filter { it.definitionFilePath == definitionFile }.also { projects ->
             if (projects.isEmpty()) {

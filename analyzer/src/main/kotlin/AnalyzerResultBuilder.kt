@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.analyzer
 
-import org.apache.logging.log4j.kotlin.Logging
-
 import org.ossreviewtoolkit.analyzer.managers.utils.PackageManagerDependencyHandler
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.DependencyGraph
@@ -37,8 +35,6 @@ import org.ossreviewtoolkit.model.utils.convertToDependencyGraph
 import org.ossreviewtoolkit.utils.common.getDuplicates
 
 class AnalyzerResultBuilder {
-    private companion object : Logging
-
     private val projects = mutableSetOf<Project>()
     private val packages = mutableSetOf<Package>()
     private val issues = mutableMapOf<Identifier, List<Issue>>()

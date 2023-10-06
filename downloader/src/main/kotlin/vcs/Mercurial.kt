@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.downloader.vcs
 
 import java.io.File
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.WorkingTree
@@ -47,8 +47,6 @@ object MercurialCommand : CommandLineTool {
 }
 
 class Mercurial : VersionControlSystem(MercurialCommand) {
-    private companion object : Logging
-
     override val type = VcsType.MERCURIAL
     override val priority = 20
     override val latestRevisionNames = listOf("tip")

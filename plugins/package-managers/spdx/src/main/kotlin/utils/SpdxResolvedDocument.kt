@@ -24,7 +24,7 @@ package org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils
 import java.io.File
 import java.net.URI
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Issue
@@ -86,7 +86,7 @@ internal data class SpdxResolvedDocument(
      */
     private val issuesByReferenceId: Map<String, Issue>
 ) {
-    companion object : Logging {
+    companion object {
         fun load(cache: SpdxDocumentCache, rootDocumentFile: File, managerName: String): SpdxResolvedDocument {
             val rootDocument = cache.load(rootDocumentFile).getOrThrow()
 
@@ -335,7 +335,7 @@ private fun SpdxExternalDocumentReference.resolveFromDownload(
     baseUri: URI,
     managerName: String
 ): ResolutionResult {
-    SpdxResolvedDocument.logger.info {
+    logger.info {
         "Downloading SPDX document from $uri (referred from $baseUri as part of '$externalDocumentId')."
     }
 

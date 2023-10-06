@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.model.config
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.utils.DatabaseUtils
 import org.ossreviewtoolkit.model.utils.FileArchiver
@@ -47,7 +47,7 @@ data class FileArchiverConfiguration(
      */
     val postgresStorage: PostgresStorageConfiguration? = null
 ) {
-    companion object : Logging {
+    companion object {
         const val ARCHIVE_FILENAME = "archive.zip"
         const val TABLE_NAME = "file_archives"
     }

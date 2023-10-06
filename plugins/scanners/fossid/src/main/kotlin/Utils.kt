@@ -19,12 +19,18 @@
 
 package org.ossreviewtoolkit.plugins.scanners.fossid
 
+import java.lang.invoke.MethodHandles
+
+import org.apache.logging.log4j.kotlin.loggerOf
+
 import org.ossreviewtoolkit.clients.fossid.model.rules.IgnoreRule
 import org.ossreviewtoolkit.clients.fossid.model.rules.RuleType
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PathExclude
+
+private val logger = loggerOf(MethodHandles.lookup().lookupClass())
 
 private val DIRECTORY_REGEX = "(?<directory>.+)/(?<starstar>\\*\\*)?".toRegex()
 private val EXTENSION_REGEX = "\\*\\.(?<extension>\\w+)".toRegex()
@@ -43,7 +49,8 @@ internal fun convertRules(excludes: Excludes, issues: MutableList<Issue>): List<
                     message = "Path exclude '${it.pattern}' cannot be converted to an ignore rule.",
                     severity = Severity.HINT
                 )
-                FossId.logger.warn {
+
+                logger.warn {
                     "Path exclude  '${it.pattern}' cannot be converted to an ignore rule."
                 }
             }
