@@ -82,4 +82,13 @@ class GoModFunTest : StringSpec({
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
+
+    "Source files with dangling embed directives do not yield issues" {
+        val definitionFile = testDir.resolve("gomod-dangling-embed/go.mod")
+        val expectedResultFile = testDir.resolve("gomod-dangling-embed-expected-output.yml")
+
+        val result = create("GoMod").resolveSingleProject(definitionFile)
+
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
 })
