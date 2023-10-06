@@ -56,11 +56,6 @@ import org.ossreviewtoolkit.utils.common.withoutPrefix
 typealias BuilderConfiguration = OkHttpClient.Builder.() -> Unit
 
 /**
- * An HTTP-specific download error that enriches an [IOException] with an additional HTTP error code.
- */
-class HttpDownloadError(val code: Int, message: String) : IOException("$message (HTTP code $code)")
-
-/**
  * A helper class to manage OkHttp instances backed by distinct cache directories.
  */
 object OkHttpClientHelper {
@@ -80,6 +75,11 @@ object OkHttpClientHelper {
             clients.getOrPut(it) { okHttpClient.newBuilder().apply(block).build() }
         } ?: okHttpClient
 }
+
+/**
+ * An HTTP-specific download error that enriches an [IOException] with an additional HTTP error code.
+ */
+class HttpDownloadError(val code: Int, message: String) : IOException("$message (HTTP code $code)")
 
 private val logger = loggerOf(MethodHandles.lookup().lookupClass())
 
