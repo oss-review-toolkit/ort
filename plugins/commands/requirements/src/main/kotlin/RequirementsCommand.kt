@@ -31,7 +31,6 @@ import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.utils.common.CommandLineTool
@@ -91,8 +90,8 @@ class RequirementsCommand : OrtCommand(
                         logger.debug { "$it is a $category." }
                         it.getDeclaredConstructor(
                             String::class.java,
-                            ScannerConfiguration::class.java
-                        ).newInstance("", ScannerConfiguration())
+                            Map::class.java
+                        ).newInstance("", emptyMap<String, String>())
                     }
 
                     VersionControlSystem::class.java.isAssignableFrom(it) -> {
