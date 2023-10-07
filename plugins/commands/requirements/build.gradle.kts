@@ -39,4 +39,7 @@ dependencies {
     implementation(libs.log4jApiKotlin)
     implementation(libs.reflections)
     implementation(libs.semver4j)
+
+    funTestImplementation(platform(project(":plugins:package-managers")))
+    funTestImplementation(platform(project(":plugins:scanners")))
 }
