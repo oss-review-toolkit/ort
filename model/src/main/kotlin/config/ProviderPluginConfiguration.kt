@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.model.config
 
 import com.sksamuel.hoplite.ConfigAlias
 
+import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.Plugin
 
 /**
@@ -47,5 +48,5 @@ data class ProviderPluginConfiguration(
      * The configuration options of the provider. See the specific implementation for available configuration options.
      */
     @ConfigAlias("config")
-    val options: Map<String, String> = emptyMap()
+    val options: Options = emptyMap()
 )
