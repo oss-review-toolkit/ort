@@ -71,7 +71,7 @@ class ClearlyDefinedPackageCurationProviderFactory :
     override fun create(config: ClearlyDefinedPackageCurationProviderConfig) =
         ClearlyDefinedPackageCurationProvider(config)
 
-    override fun parseOptions(options: Options) =
+    override fun parseConfig(options: Options) =
         ClearlyDefinedPackageCurationProviderConfig(
             serverUrl = options["serverUrl"] ?: Server.PRODUCTION.apiUrl,
             minTotalLicenseScore = options["minTotalLicenseScore"]?.toInt() ?: 0
