@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.model.config
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+
 import com.sksamuel.hoplite.ConfigAlias
 
 import org.ossreviewtoolkit.utils.common.Options
@@ -48,5 +50,19 @@ data class ProviderPluginConfiguration(
      * The configuration options of the provider. See the specific implementation for available configuration options.
      */
     @ConfigAlias("config")
-    val options: Options = emptyMap()
-)
+    val options: Options = emptyMap(),
+
+    /**
+     * The configuration secrets of the provider. See the specific implementation for available secret options.
+     *
+     * This property is not serialized to ensure that secrets do not appear in serialized output.
+     */
+    @JsonIgnore
+    val secrets: Options = emptyMap()
+) {
+    override fun toString(): String {
+        // Do not use the generated toString function for the data class to ensure that the output does not contain the
+        // secret options.
+        return "${this::class.simpleName}(type=$type, id=$id, enabled=$enabled, options=$options)"
+    }
+}

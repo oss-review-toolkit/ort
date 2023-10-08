@@ -51,7 +51,7 @@ open class DirPackageConfigurationProviderFactory :
 
     override fun create(config: DirPackageConfigurationProviderConfig) = DirPackageConfigurationProvider(config)
 
-    override fun parseConfig(options: Options) =
+    override fun parseConfig(options: Options, secrets: Options) =
         DirPackageConfigurationProviderConfig(
             path = File(options.getValue("path")),
             mustExist = options["mustExist"]?.toBooleanStrict() ?: true
@@ -61,7 +61,7 @@ open class DirPackageConfigurationProviderFactory :
 class DefaultDirPackageConfigurationProviderFactory : DirPackageConfigurationProviderFactory() {
     override val type = "DefaultDir"
 
-    override fun parseConfig(options: Options) =
+    override fun parseConfig(options: Options, secrets: Options) =
         DirPackageConfigurationProviderConfig(
             path = ortConfigDirectory.resolve(ORT_PACKAGE_CONFIGURATIONS_DIRNAME),
             mustExist = false

@@ -53,7 +53,7 @@ class Sw360PackageCurationProviderFactory : PackageCurationProviderFactory<Sw360
 
     override fun create(config: Sw360StorageConfiguration) = Sw360PackageCurationProvider(config)
 
-    override fun parseConfig(options: Options) =
+    override fun parseConfig(options: Options, secrets: Options) =
         Sw360StorageConfiguration(
             restUrl = options.getValue("restUrl"),
             authUrl = options.getValue("authUrl"),

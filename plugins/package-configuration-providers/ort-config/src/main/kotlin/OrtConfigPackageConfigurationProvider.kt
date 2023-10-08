@@ -45,7 +45,7 @@ class OrtConfigPackageConfigurationProviderFactory : PackageConfigurationProvide
 
     override fun create(config: Unit): PackageConfigurationProvider = OrtConfigPackageConfigurationProvider()
 
-    override fun parseConfig(options: Options) = Unit
+    override fun parseConfig(options: Options, secrets: Options) = Unit
 }
 
 /**

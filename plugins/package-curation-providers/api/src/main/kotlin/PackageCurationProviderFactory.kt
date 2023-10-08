@@ -42,7 +42,7 @@ interface PackageCurationProviderFactory<CONFIG> : TypedConfigurablePluginFactor
             configurations.filter {
                 it.enabled
             }.map {
-                it.id to ALL.getValue(it.type).create(it.options)
+                it.id to ALL.getValue(it.type).create(it.options, it.secrets)
             }.apply {
                 require(none { (id, _) -> id.isBlank() }) {
                     "The configuration contains a package curations provider with a blank ID which is not allowed."
