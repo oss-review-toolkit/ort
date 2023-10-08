@@ -85,7 +85,9 @@ class OrtConfigurationTest : WordSpec({
                     type = "SW360",
                     options = mapOf(
                         "restUrl" to "https://your-sw360-rest-url",
-                        "authUrl" to "https://your-authentication-url",
+                        "authUrl" to "https://your-authentication-url"
+                    ),
+                    secrets = mapOf(
                         "username" to "username",
                         "password" to "password",
                         "clientId" to "clientId",
