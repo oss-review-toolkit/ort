@@ -72,6 +72,7 @@ ort:
     options:
       restUrl: 'https://your-sw360-rest-url'
       authUrl: 'https://your-authentication-url'
+    secrets:
       username: username
       password: password
       clientId: clientId

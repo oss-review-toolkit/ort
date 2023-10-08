@@ -57,11 +57,11 @@ class Sw360PackageCurationProviderFactory : PackageCurationProviderFactory<Sw360
         Sw360StorageConfiguration(
             restUrl = options.getValue("restUrl"),
             authUrl = options.getValue("authUrl"),
-            username = options.getValue("username"),
-            password = options["password"].orEmpty(),
-            clientId = options.getValue("clientId"),
-            clientPassword = options["clientPassword"].orEmpty(),
-            token = options["token"].orEmpty()
+            username = secrets.getValue("username"),
+            password = secrets["password"].orEmpty(),
+            clientId = secrets.getValue("clientId"),
+            clientPassword = secrets["clientPassword"].orEmpty(),
+            token = secrets["token"].orEmpty()
         )
 }
 
