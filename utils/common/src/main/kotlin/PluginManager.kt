@@ -61,9 +61,9 @@ interface Plugin {
  */
 interface ConfigurablePluginFactory<out PLUGIN> : Plugin {
     /**
-     * Create a new instance of [PLUGIN] from [options].
+     * Create a new instance of [PLUGIN] from [options] and [secrets].
      */
-    fun create(options: Options): PLUGIN
+    fun create(options: Options, secrets: Options): PLUGIN
 }
 
 /**
@@ -72,7 +72,7 @@ interface ConfigurablePluginFactory<out PLUGIN> : Plugin {
  * that it enforces the separation of parsing the config map and creating the plugin.
  */
 interface TypedConfigurablePluginFactory<CONFIG, out PLUGIN> : ConfigurablePluginFactory<PLUGIN> {
-    override fun create(options: Options): PLUGIN = create(parseConfig(options))
+    override fun create(options: Options, secrets: Options): PLUGIN = create(parseConfig(options, secrets))
 
     /**
      * Create a new instance of [PLUGIN] from [config].
@@ -80,7 +80,7 @@ interface TypedConfigurablePluginFactory<CONFIG, out PLUGIN> : ConfigurablePlugi
     fun create(config: CONFIG): PLUGIN
 
     /**
-     * Parse the [options] map into a [CONFIG] object.
+     * Parse the [options] and [secrets] map into a [CONFIG] object.
      */
-    fun parseConfig(options: Options): CONFIG
+    fun parseConfig(options: Options, secrets: Options): CONFIG
 }

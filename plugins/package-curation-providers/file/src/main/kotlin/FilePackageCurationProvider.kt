@@ -51,7 +51,7 @@ open class FilePackageCurationProviderFactory : PackageCurationProviderFactory<F
 
     override fun create(config: FilePackageCurationProviderConfig) = FilePackageCurationProvider(config)
 
-    override fun parseConfig(options: Options) =
+    override fun parseConfig(options: Options, secrets: Options) =
         FilePackageCurationProviderConfig(
             path = File(options.getValue("path")),
             mustExist = options["mustExist"]?.toBooleanStrict() ?: true
@@ -61,7 +61,7 @@ open class FilePackageCurationProviderFactory : PackageCurationProviderFactory<F
 class DefaultFilePackageCurationProviderFactory : FilePackageCurationProviderFactory() {
     override val type = "DefaultFile"
 
-    override fun parseConfig(options: Options) =
+    override fun parseConfig(options: Options, secrets: Options) =
         FilePackageCurationProviderConfig(
             path = ortConfigDirectory.resolve(ORT_PACKAGE_CURATIONS_FILENAME),
             mustExist = false
@@ -71,7 +71,7 @@ class DefaultFilePackageCurationProviderFactory : FilePackageCurationProviderFac
 class DefaultDirPackageCurationProviderFactory : FilePackageCurationProviderFactory() {
     override val type = "DefaultDir"
 
-    override fun parseConfig(options: Options) =
+    override fun parseConfig(options: Options, secrets: Options) =
         FilePackageCurationProviderConfig(
             path = ortConfigDirectory.resolve(ORT_PACKAGE_CURATIONS_DIRNAME),
             mustExist = false
