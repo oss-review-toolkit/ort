@@ -495,7 +495,7 @@ class OrtConfigurationTest : WordSpec({
             }
         }
 
-        "support environmental variables" {
+        "support environment variables" {
             val user = "user"
             val password = "password"
             val url = "url"
