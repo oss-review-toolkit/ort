@@ -63,7 +63,7 @@ class OrtMainFunTest : StringSpec() {
                     packageCurationProviders = listOf(
                         ProviderPluginConfiguration(
                             type = "File",
-                            config = mapOf("path" to getAssetFile("gradle-curations.yml").path)
+                            options = mapOf("path" to getAssetFile("gradle-curations.yml").path)
                         )
                     )
                 )
