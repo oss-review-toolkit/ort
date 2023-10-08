@@ -42,7 +42,7 @@ ort:
   - type: DefaultDir
   - type: Dir
     id: SomeConfigDir
-    config:
+    options:
       path: '/some-path/'
       mustExist: true
   - type: OrtConfig
@@ -54,22 +54,22 @@ ort:
   - type: DefaultDir
   - type: File
     id: SomeCurationsFile
-    config:
+    options:
       path: '/some-path/curations.yml'
       mustExist: true
   - type: File
     id: SomeCurationsDir
-    config:
+    options:
       path: '/some-path/curations-dir'
       mustExist: false
   - type: OrtConfig
     enabled: '${USE_ORT_CONFIG_CURATIONS:-true}'
   - type: ClearlyDefined
-    config:
+    options:
       serverUrl: 'https://api.clearlydefined.io'
       minTotalLicenseScore: 80
   - type: SW360
-    config:
+    options:
       restUrl: 'https://your-sw360-rest-url'
       authUrl: 'https://your-authentication-url'
       username: username

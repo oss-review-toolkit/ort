@@ -69,21 +69,21 @@ class OrtConfigurationTest : WordSpec({
                 ProviderPluginConfiguration(
                     type = "File",
                     id = "SomeCurationsFile",
-                    config = mapOf("path" to "/some-path/curations.yml", "mustExist" to "true")
+                    options = mapOf("path" to "/some-path/curations.yml", "mustExist" to "true")
                 ),
                 ProviderPluginConfiguration(
                     type = "File",
                     id = "SomeCurationsDir",
-                    config = mapOf("path" to "/some-path/curations-dir", "mustExist" to "false")
+                    options = mapOf("path" to "/some-path/curations-dir", "mustExist" to "false")
                 ),
                 ProviderPluginConfiguration(type = "OrtConfig", enabled = true),
                 ProviderPluginConfiguration(
                     type = "ClearlyDefined",
-                    config = mapOf("serverUrl" to "https://api.clearlydefined.io", "minTotalLicenseScore" to "80")
+                    options = mapOf("serverUrl" to "https://api.clearlydefined.io", "minTotalLicenseScore" to "80")
                 ),
                 ProviderPluginConfiguration(
                     type = "SW360",
-                    config = mapOf(
+                    options = mapOf(
                         "restUrl" to "https://your-sw360-rest-url",
                         "authUrl" to "https://your-authentication-url",
                         "username" to "username",

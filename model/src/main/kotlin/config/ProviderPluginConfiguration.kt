@@ -44,8 +44,8 @@ data class ProviderPluginConfiguration(
     val enabled: Boolean = true,
 
     /**
-     * The configuration of the provider. See the specific implementation for available configuration
-     * options.
+     * The configuration options of the provider. See the specific implementation for available configuration options.
      */
-    val config: Map<String, String> = emptyMap()
+    @ConfigAlias("config")
+    val options: Map<String, String> = emptyMap()
 )

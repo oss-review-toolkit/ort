@@ -42,7 +42,7 @@ interface PackageConfigurationProviderFactory<CONFIG> :
             configurations: List<ProviderPluginConfiguration>
         ): List<Pair<String, PackageConfigurationProvider>> =
             configurations.filter { it.enabled }
-                .map { it.id to ALL.getValue(it.type).create(it.config) }
+                .map { it.id to ALL.getValue(it.type).create(it.options) }
                 .apply {
                     require(none { (id, _) -> id.isBlank() }) {
                         "The configuration contains a package configuration provider with a blank ID which is not " +
