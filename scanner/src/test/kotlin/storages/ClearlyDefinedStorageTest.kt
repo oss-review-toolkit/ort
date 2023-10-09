@@ -305,9 +305,9 @@ private val TEST_PACKAGE =
         declaredLicenses = emptySet(),
         description = "test package description",
         homepageUrl = "https://www.test-package.com",
-        vcs = VcsInfo.EMPTY,
+        binaryArtifact = RemoteArtifact.EMPTY,
         sourceArtifact = RemoteArtifact.EMPTY,
-        binaryArtifact = RemoteArtifact.EMPTY
+        vcs = VcsInfo.EMPTY
     )
 
 /** The template for a ClearlyDefined definitions request. */
