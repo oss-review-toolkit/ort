@@ -124,15 +124,15 @@ internal fun <T : Summarizable> List<T>.mapSummary(
 
 /**
  * Map the raw snippets to ORT [SnippetFinding]s. If a snippet license cannot be parsed, an issues is added to [issues].
+ * [LicenseFinding]s due to chosen snippets will be added to [snippetLicenseFindings].
  */
 internal fun mapSnippetFindings(
     rawResults: RawResults,
     issues: MutableList<Issue>,
-    snippetChoices: List<SnippetChoice>
+    snippetChoices: List<SnippetChoice>,
+    snippetLicenseFindings: MutableSet<LicenseFinding>
 ): Set<SnippetFinding> {
-    val locationsWithFalsePositives = snippetChoices.filter {
-        it.choice.reason == SnippetChoiceReason.NO_RELEVANT_FINDING
-    }
+    val remainingSnippetChoices = snippetChoices.toMutableList()
 
     return rawResults.listSnippets.flatMap { (file, rawSnippets) ->
         val findings = mutableMapOf<TextLocation, MutableSet<OrtSnippet>>()
@@ -221,25 +221,68 @@ internal fun mapSnippetFindings(
                     else -> false
                 }
 
-                val isLocationsWithFalsePositives = locationsWithFalsePositives.any {
-                    it.given.sourceLocation == sourceLocation
+                val isLocationWithFalsePositives = remainingSnippetChoices.removeIf {
+                    it.given.sourceLocation == sourceLocation &&
+                        it.choice.reason == SnippetChoiceReason.NO_RELEVANT_FINDING
                 }
 
-                if (isLocationsWithFalsePositives) {
+                if (isLocationWithFalsePositives) {
                     logger.info {
                         "Ignoring snippet $purl for file ${sourceLocation.prettyPrint()}, " +
                             "as this is a location with only false positives."
                     }
                 }
 
-                if (!isSnippetChoice && !isLocationsWithFalsePositives) {
+                if (!isSnippetChoice && !isLocationWithFalsePositives) {
                     findings.getOrPut(sourceLocation) { mutableSetOf(ortSnippet) } += ortSnippet
                 }
+
+                getLicenseFindingFromSnippetChoice(
+                    remainingSnippetChoices,
+                    sourceLocation,
+                    ortSnippet
+                )?.let { finding -> snippetLicenseFindings += finding }
             }
         }
 
         findings.map { SnippetFinding(it.key, it.value) }
-    }.toSet()
+    }.toSet().also {
+        remainingSnippetChoices.forEach { snippetChoice ->
+            val message = "The configuration contains a snippet choice for the snippet ${snippetChoice.choice.purl} " +
+                "at ${snippetChoice.given.sourceLocation.prettyPrint()}, but the FossID result contains no such " +
+                "snippet."
+            logger.warn(message)
+            issues += Issue(
+                source = "FossId",
+                message = message,
+                severity = Severity.WARNING
+            )
+        }
+    }
+}
+
+/**
+ * Check if [snippet] is a chosen snippet for the given [sourceLocation]. If it is, remove it from
+ * [remainingSnippetChoices] and return a [LicenseFinding]. Otherwise, return null.
+ */
+private fun getLicenseFindingFromSnippetChoice(
+    remainingSnippetChoices: MutableList<SnippetChoice>,
+    sourceLocation: TextLocation,
+    snippet: OrtSnippet
+): LicenseFinding? {
+    val isSnippetChoice = remainingSnippetChoices.removeIf { snippetChoice ->
+        snippetChoice.given.sourceLocation == sourceLocation && snippetChoice.choice.purl == snippet.purl
+    }
+
+    return if (isSnippetChoice) {
+        logger.info {
+            "Adding snippet choice for ${sourceLocation.prettyPrint()} " +
+                "with license ${snippet.licenses} to the license findings."
+        }
+        LicenseFinding(snippet.licenses, sourceLocation)
+    } else {
+        null
+    }
 }
 
 /**
@@ -269,7 +312,7 @@ private fun urlToPackageType(url: String): PurlType =
         }
     }
 
-private fun TextLocation.prettyPrint(): String =
+internal fun TextLocation.prettyPrint(): String =
     if (startLine == TextLocation.UNKNOWN_LINE && endLine == TextLocation.UNKNOWN_LINE) {
         "$path#FULL"
     } else {
