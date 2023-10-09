@@ -62,7 +62,7 @@ class Poetry(
     override fun transformVersion(output: String) = output.substringAfter("version ").removeSuffix(")")
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
-        val result = inspectLockfile(definitionFile)
+        val result = inspectLockfile(definitionFile, "main")
 
         val packages = result.packages.toOrtPackages()
         val project = Project.EMPTY.copy(
@@ -80,7 +80,7 @@ class Poetry(
         return listOf(ProjectAnalyzerResult(project, packages))
     }
 
-    private fun inspectLockfile(lockfile: File): PythonInspector.Result {
+    private fun inspectLockfile(lockfile: File, scopeName: String): PythonInspector.Result {
         // For an overview, dependency resolution involves the following steps:
         // 1. Generate "requirements.txt" file with `poetry` command.
         // 2. Use Python inspector via "Pip" to do the actual dependency resolution.
@@ -90,8 +90,15 @@ class Poetry(
 
         logger.info { "Generating '${requirementsFile.name}' file in '$workingDir' directory..." }
 
-        val req = ProcessCapture(workingDir, command(), "export", "--without-hashes", "--format=requirements.txt")
-            .requireSuccess().stdout
+        val command = listOfNotNull(
+            command(),
+            "export",
+            "--without-hashes",
+            "--format=requirements.txt",
+            "--only=$scopeName"
+        )
+
+        val req = ProcessCapture(workingDir, *command.toTypedArray()).requireSuccess().stdout
         requirementsFile.writeText(req)
 
         return Pip(managerName, analysisRoot, analyzerConfig, repoConfig).runPythonInspector(requirementsFile).also {
