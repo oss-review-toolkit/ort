@@ -40,9 +40,6 @@ import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 fun Collection<ReportTableModel.ResolvableIssue>.containsUnresolved() = any { !it.isResolved }
 
-fun <K> Map<K, Collection<ReportTableModel.ResolvableIssue>>.containsUnresolved() =
-    any { it.value.containsUnresolved() }
-
 data class ReportTableModel(
     /**
      * The [VcsInfo] for the scanned project.
