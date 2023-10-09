@@ -62,7 +62,7 @@ class FossIdLicenseMappingTest : WordSpec({
             val rawResults = createSnippet("Apache 2.0")
             val issues = mutableListOf<Issue>()
 
-            val findings = mapSnippetFindings(rawResults, issues, emptyList())
+            val findings = mapSnippetFindings(rawResults, issues, emptyList(), mutableSetOf())
 
             issues should beEmpty()
             findings should haveSize(1)
@@ -77,7 +77,7 @@ class FossIdLicenseMappingTest : WordSpec({
             val rawResults = createSnippet("Apache-2.0")
             val issues = mutableListOf<Issue>()
 
-            val findings = mapSnippetFindings(rawResults, issues, emptyList())
+            val findings = mapSnippetFindings(rawResults, issues, emptyList(), mutableSetOf())
 
             issues should beEmpty()
             findings should haveSize(1)
@@ -92,7 +92,7 @@ class FossIdLicenseMappingTest : WordSpec({
             val rawResults = createSnippet("invalid license")
             val issues = mutableListOf<Issue>()
 
-            val findings = mapSnippetFindings(rawResults, issues, emptyList())
+            val findings = mapSnippetFindings(rawResults, issues, emptyList(), mutableSetOf())
 
             issues should haveSize(1)
             issues.first() shouldNotBeNull {
