@@ -73,7 +73,7 @@ class Poetry(
                 version = VersionControlSystem.getCloneInfo(definitionFile.parentFile).revision
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-            scopeDependencies = setOf(Scope("install", result.resolvedDependenciesGraph.toPackageReferences())),
+            scopeDependencies = setOf(Scope("main", result.resolvedDependenciesGraph.toPackageReferences())),
             vcsProcessed = processProjectVcs(definitionFile.parentFile)
         )
 

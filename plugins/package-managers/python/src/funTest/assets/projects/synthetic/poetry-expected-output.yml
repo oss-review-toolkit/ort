@@ -16,7 +16,7 @@ project:
     path: "<REPLACE_PATH>"
   homepage_url: ""
   scopes:
-  - name: "install"
+  - name: "main"
     dependencies:
     - id: "PyPI::graphviz:0.19.1"
     - id: "PyPI::jinja2:3.0.3"
