@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.toOrtPackages
 import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.toPackageReferences
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.ProcessCapture
+import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 
 /**
  * [Poetry](https://python-poetry.org/) package manager for Python.
@@ -93,7 +94,7 @@ class Poetry(
      */
     private fun inspectLockfile(lockfile: File, scopeName: String): PythonInspector.Result {
         val workingDir = lockfile.parentFile
-        val requirementsFile = workingDir.resolve("requirements-from-poetry.txt")
+        val requirementsFile = createOrtTempFile("requirements.txt")
 
         logger.info { "Generating '${requirementsFile.name}' file in '$workingDir' directory..." }
 
