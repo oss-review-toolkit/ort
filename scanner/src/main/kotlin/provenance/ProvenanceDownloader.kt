@@ -78,7 +78,7 @@ class DefaultProvenanceDownloader(
 
     private suspend fun downloadFromVcs(provenance: RepositoryProvenance, downloadDir: File) {
         workingTreeCache.use(provenance.vcsInfo) { vcs, workingTree ->
-            vcs.updateWorkingTree(workingTree, provenance.resolvedRevision, recursive = false)
+            vcs.updateWorkingTree(workingTree, provenance.resolvedRevision)
 
             val root = workingTree.getRootPath()
 

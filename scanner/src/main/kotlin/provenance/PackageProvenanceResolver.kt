@@ -224,7 +224,7 @@ class DefaultPackageProvenanceResolver(
 
             revisionCandidates.forEachIndexed { index, revision ->
                 logger.info { "Trying revision candidate '$revision' (${index + 1} of ${revisionCandidates.size})." }
-                val result = vcs.updateWorkingTree(workingTree, revision, recursive = false)
+                val result = vcs.updateWorkingTree(workingTree, revision)
 
                 if (pkg.vcsProcessed.path.isNotBlank() &&
                     !workingTree.workingDir.resolve(pkg.vcsProcessed.path).exists()
