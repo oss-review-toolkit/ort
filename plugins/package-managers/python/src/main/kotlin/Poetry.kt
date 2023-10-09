@@ -105,8 +105,8 @@ class Poetry(
             "--only=$scopeName"
         )
 
-        val req = ProcessCapture(workingDir, *command.toTypedArray()).requireSuccess().stdout
-        requirementsFile.writeText(req)
+        val requirements = ProcessCapture(workingDir, *command.toTypedArray()).requireSuccess().stdout
+        requirementsFile.writeText(requirements)
 
         return Pip(managerName, analysisRoot, analyzerConfig, repoConfig).runPythonInspector(requirementsFile).also {
             requirementsFile.delete()
