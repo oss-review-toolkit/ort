@@ -110,19 +110,6 @@ class ClearlyDefinedStorageTest : WordSpec({
             storage.read(TEST_PACKAGE).shouldBeValid()
         }
 
-        "load existing scan results for an identifier from ClearlyDefined" {
-            stubHarvestTools(
-                server, COORDINATES,
-                listOf(toolUrl(COORDINATES, "scancode", SCANCODE_VERSION))
-            )
-            stubHarvestToolResponse(server, COORDINATES)
-            stubDefinitions(server)
-
-            val storage = ClearlyDefinedStorage(storageConfiguration(server))
-
-            storage.read(TEST_PACKAGE).shouldBeValid()
-        }
-
         "choose the correct tool URL if there are multiple" {
             val tools = listOf(
                 toolUrl(COORDINATES, "someOtherTool", "08-15"),
