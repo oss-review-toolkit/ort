@@ -33,6 +33,8 @@ import org.apache.logging.log4j.kotlin.logger
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
 import org.ossreviewtoolkit.clients.clearlydefined.ComponentType
 import org.ossreviewtoolkit.clients.clearlydefined.Coordinates
+import org.ossreviewtoolkit.clients.clearlydefined.harvestToolData
+import org.ossreviewtoolkit.clients.clearlydefined.harvestTools
 import org.ossreviewtoolkit.clients.clearlydefined.toCoordinates
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.model.ArtifactProvenance
@@ -102,13 +104,7 @@ class ClearlyDefinedStorage(
         return runCatching {
             logger.debug { "Looking up ClearlyDefined scan results for '$coordinates'." }
 
-            val tools = service.harvestTools(
-                coordinates.type,
-                coordinates.provider,
-                coordinates.namespace ?: "-",
-                coordinates.name,
-                coordinates.revision.orEmpty()
-            )
+            val tools = service.harvestTools(coordinates)
 
             val toolVersionsByName = tools.mapNotNull { it.withoutPrefix("$coordinates/") }
                 .groupBy({ it.substringBefore('/') }, { it.substringAfter('/') })
@@ -181,16 +177,7 @@ class ClearlyDefinedStorage(
      * and return it as a [JsonNode].
      */
     private suspend fun loadToolData(coordinates: Coordinates, name: String, version: String): JsonNode {
-        val toolData = service.harvestToolData(
-            coordinates.type,
-            coordinates.provider,
-            coordinates.namespace ?: "-",
-            coordinates.name,
-            coordinates.revision.orEmpty(),
-            name,
-            version
-        )
-
+        val toolData = service.harvestToolData(coordinates, name, version)
         return toolData.use { jsonMapper.readTree(it.byteStream()) }
     }
 

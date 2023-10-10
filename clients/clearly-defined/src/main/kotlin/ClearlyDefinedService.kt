@@ -289,6 +289,28 @@ interface ClearlyDefinedService {
     ): ResponseBody
 }
 
+suspend fun ClearlyDefinedService.getCuration(coordinates: Coordinates): Curation =
+    @Suppress("DestructuringDeclarationWithTooManyEntries")
+    coordinates.strings.let { (_, _, namespace, name, revision) ->
+        getCuration(coordinates.type, coordinates.provider, namespace, name, revision)
+    }
+
+suspend fun ClearlyDefinedService.harvestTools(coordinates: Coordinates): List<String> =
+    @Suppress("DestructuringDeclarationWithTooManyEntries")
+    coordinates.strings.let { (_, _, namespace, name, revision) ->
+        harvestTools(coordinates.type, coordinates.provider, namespace, name, revision)
+    }
+
+suspend fun ClearlyDefinedService.harvestToolData(
+    coordinates: Coordinates,
+    tool: String,
+    toolVersion: String
+): ResponseBody =
+    @Suppress("DestructuringDeclarationWithTooManyEntries")
+    coordinates.strings.let { (_, _, namespace, name, revision) ->
+        harvestToolData(coordinates.type, coordinates.provider, namespace, name, revision, tool, toolVersion)
+    }
+
 suspend fun <T> ClearlyDefinedService.call(block: suspend ClearlyDefinedService.() -> T): T =
     try {
         block()
