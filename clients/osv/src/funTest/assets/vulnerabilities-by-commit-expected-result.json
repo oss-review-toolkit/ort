@@ -1,6 +1,459 @@
 [
     {
         "schema_version": "1.6.0",
+        "id": "CVE-2021-45931",
+        "modified": "2023-10-10T14:23:02.867166Z",
+        "published": "2022-01-01T01:15:00Z",
+        "details": "HarfBuzz 2.9.0 has an out-of-bounds write in hb_bit_set_invertible_t::set (called from hb_sparseset_t<hb_bit_set_invertible_t>::set and hb_set_copy).",
+        "severity": [
+            {
+                "type": "CVSS_V3",
+                "score": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H"
+            }
+        ],
+        "affected": [
+            {
+                "ranges": [
+                    {
+                        "type": "GIT",
+                        "repo": "https://github.com/behdad/harfbuzz",
+                        "events": [
+                            {
+                                "introduced": "0"
+                            },
+                            {
+                                "last_affected": "9aa6f8a93f035dd0a1e3978da495d830049480c8"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "GIT",
+                        "repo": "https://github.com/harfbuzz/harfbuzz",
+                        "events": [
+                            {
+                                "introduced": "0"
+                            },
+                            {
+                                "fixed": "d3e09bf4654fe5478b6dbf2b26ebab6271317d81"
+                            }
+                        ]
+                    }
+                ],
+                "versions": [
+                    "0.6.0",
+                    "0.9.1",
+                    "0.9.10",
+                    "0.9.11",
+                    "0.9.12",
+                    "0.9.13",
+                    "0.9.14",
+                    "0.9.15",
+                    "0.9.16",
+                    "0.9.17",
+                    "0.9.18",
+                    "0.9.19",
+                    "0.9.2",
+                    "0.9.20",
+                    "0.9.21",
+                    "0.9.22",
+                    "0.9.23",
+                    "0.9.24",
+                    "0.9.25",
+                    "0.9.26",
+                    "0.9.27",
+                    "0.9.28",
+                    "0.9.29",
+                    "0.9.3",
+                    "0.9.30",
+                    "0.9.31",
+                    "0.9.32",
+                    "0.9.33",
+                    "0.9.34",
+                    "0.9.35",
+                    "0.9.36",
+                    "0.9.37",
+                    "0.9.38",
+                    "0.9.39",
+                    "0.9.4",
+                    "0.9.40",
+                    "0.9.41",
+                    "0.9.42",
+                    "0.9.5",
+                    "0.9.6",
+                    "0.9.7",
+                    "0.9.8",
+                    "0.9.9",
+                    "1.0.0",
+                    "1.0.1",
+                    "1.0.2",
+                    "1.0.3",
+                    "1.0.4",
+                    "1.0.5",
+                    "1.0.6",
+                    "1.1.0",
+                    "1.1.1",
+                    "1.1.2",
+                    "1.1.3",
+                    "1.2.0",
+                    "1.2.1",
+                    "1.2.2",
+                    "1.2.3",
+                    "1.2.4",
+                    "1.2.5",
+                    "1.2.6",
+                    "1.2.7",
+                    "1.3.0",
+                    "1.3.1",
+                    "1.3.2",
+                    "1.3.3",
+                    "1.3.4",
+                    "1.4.0",
+                    "1.4.1",
+                    "1.4.2",
+                    "1.4.3",
+                    "1.4.4",
+                    "1.4.5",
+                    "1.4.6",
+                    "1.4.7",
+                    "1.4.8",
+                    "1.5.0",
+                    "1.5.1",
+                    "1.6.0",
+                    "1.6.1",
+                    "1.6.2",
+                    "1.6.3",
+                    "1.7.0",
+                    "1.7.1",
+                    "1.7.2",
+                    "1.7.3",
+                    "1.7.4",
+                    "1.7.5",
+                    "1.7.6",
+                    "1.7.7",
+                    "1.8.0",
+                    "1.8.1",
+                    "1.8.2",
+                    "1.8.3",
+                    "1.8.4",
+                    "1.8.5",
+                    "1.8.6",
+                    "1.8.7",
+                    "1.8.8",
+                    "1.9.0",
+                    "2.0.0",
+                    "2.0.1",
+                    "2.0.2",
+                    "2.1.0",
+                    "2.1.1",
+                    "2.1.2",
+                    "2.1.3",
+                    "2.2.0",
+                    "2.3.0",
+                    "2.3.1",
+                    "2.4.0",
+                    "2.5.0",
+                    "2.5.1",
+                    "2.5.2",
+                    "2.5.3",
+                    "2.6.0",
+                    "2.6.1",
+                    "2.6.2",
+                    "2.6.3",
+                    "2.6.4",
+                    "2.6.5",
+                    "2.6.6",
+                    "2.6.7",
+                    "2.6.8",
+                    "2.7.0",
+                    "2.7.1",
+                    "2.7.2",
+                    "2.7.3",
+                    "2.7.4",
+                    "2.8.0",
+                    "2.8.1",
+                    "2.8.2",
+                    "2.9.0",
+                    "hb-rename",
+                    "ng-mergepoint",
+                    "ng-start",
+                    "pango-extractpoint",
+                    "pango-start"
+                ],
+                "database_specific": {
+                    "source": "https://storage.googleapis.com/cve-osv-conversion/osv-output/CVE-2021-45931.json"
+                }
+            }
+        ],
+        "references": [
+            {
+                "type": "WEB",
+                "url": "https://github.com/google/oss-fuzz-vulns/blob/main/vulns/harfbuzz/OSV-2021-1159.yaml"
+            },
+            {
+                "type": "FIX",
+                "url": "https://github.com/harfbuzz/harfbuzz/commit/d3e09bf4654fe5478b6dbf2b26ebab6271317d81"
+            },
+            {
+                "type": "WEB",
+                "url": "https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=37425"
+            },
+            {
+                "type": "WEB",
+                "url": "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/5A7TCR2MY46YK3NHQZB3SLESUH354IEA/"
+            },
+            {
+                "type": "WEB",
+                "url": "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/DI6247WOAKB46CZZ6SCDSJVWWCW3GMZH/"
+            },
+            {
+                "type": "WEB",
+                "url": "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/4EAIZKL4O67FN2CWJYHYKZEMNYWNWO3D/"
+            },
+            {
+                "type": "ADVISORY",
+                "url": "https://security.gentoo.org/glsa/202209-11"
+            }
+        ]
+    },
+    {
+        "schema_version": "1.6.0",
+        "id": "CVE-2023-25193",
+        "modified": "2023-10-10T13:47:25.839003Z",
+        "published": "2023-02-04T20:15:00Z",
+        "details": "hb-ot-layout-gsubgpos.hh in HarfBuzz through 6.0.0 allows attackers to trigger O(n^2) growth via consecutive marks during the process of looking back for base glyphs when attaching marks.",
+        "severity": [
+            {
+                "type": "CVSS_V3",
+                "score": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+            }
+        ],
+        "affected": [
+            {
+                "ranges": [
+                    {
+                        "type": "GIT",
+                        "repo": "https://github.com/behdad/harfbuzz",
+                        "events": [
+                            {
+                                "introduced": "0"
+                            },
+                            {
+                                "last_affected": "afcae83a064843d71d47624bc162e121cc56c08b"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "GIT",
+                        "repo": "https://github.com/harfbuzz/harfbuzz",
+                        "events": [
+                            {
+                                "introduced": "0"
+                            },
+                            {
+                                "fixed": "85be877925ddbf34f74a1229f3ca1716bb6170dc"
+                            }
+                        ]
+                    }
+                ],
+                "versions": [
+                    "0.6.0",
+                    "0.9.1",
+                    "0.9.10",
+                    "0.9.11",
+                    "0.9.12",
+                    "0.9.13",
+                    "0.9.14",
+                    "0.9.15",
+                    "0.9.16",
+                    "0.9.17",
+                    "0.9.18",
+                    "0.9.19",
+                    "0.9.2",
+                    "0.9.20",
+                    "0.9.21",
+                    "0.9.22",
+                    "0.9.23",
+                    "0.9.24",
+                    "0.9.25",
+                    "0.9.26",
+                    "0.9.27",
+                    "0.9.28",
+                    "0.9.29",
+                    "0.9.3",
+                    "0.9.30",
+                    "0.9.31",
+                    "0.9.32",
+                    "0.9.33",
+                    "0.9.34",
+                    "0.9.35",
+                    "0.9.36",
+                    "0.9.37",
+                    "0.9.38",
+                    "0.9.39",
+                    "0.9.4",
+                    "0.9.40",
+                    "0.9.41",
+                    "0.9.42",
+                    "0.9.5",
+                    "0.9.6",
+                    "0.9.7",
+                    "0.9.8",
+                    "0.9.9",
+                    "1.0.0",
+                    "1.0.1",
+                    "1.0.2",
+                    "1.0.3",
+                    "1.0.4",
+                    "1.0.5",
+                    "1.0.6",
+                    "1.1.0",
+                    "1.1.1",
+                    "1.1.2",
+                    "1.1.3",
+                    "1.2.0",
+                    "1.2.1",
+                    "1.2.2",
+                    "1.2.3",
+                    "1.2.4",
+                    "1.2.5",
+                    "1.2.6",
+                    "1.2.7",
+                    "1.3.0",
+                    "1.3.1",
+                    "1.3.2",
+                    "1.3.3",
+                    "1.3.4",
+                    "1.4.0",
+                    "1.4.1",
+                    "1.4.2",
+                    "1.4.3",
+                    "1.4.4",
+                    "1.4.5",
+                    "1.4.6",
+                    "1.4.7",
+                    "1.4.8",
+                    "1.5.0",
+                    "1.5.1",
+                    "1.6.0",
+                    "1.6.1",
+                    "1.6.2",
+                    "1.6.3",
+                    "1.7.0",
+                    "1.7.1",
+                    "1.7.2",
+                    "1.7.3",
+                    "1.7.4",
+                    "1.7.5",
+                    "1.7.6",
+                    "1.7.7",
+                    "1.8.0",
+                    "1.8.1",
+                    "1.8.2",
+                    "1.8.3",
+                    "1.8.4",
+                    "1.8.5",
+                    "1.8.6",
+                    "1.8.7",
+                    "1.8.8",
+                    "1.9.0",
+                    "2.0.0",
+                    "2.0.1",
+                    "2.0.2",
+                    "2.1.0",
+                    "2.1.1",
+                    "2.1.2",
+                    "2.1.3",
+                    "2.2.0",
+                    "2.3.0",
+                    "2.3.1",
+                    "2.4.0",
+                    "2.5.0",
+                    "2.5.1",
+                    "2.5.2",
+                    "2.5.3",
+                    "2.6.0",
+                    "2.6.1",
+                    "2.6.2",
+                    "2.6.3",
+                    "2.6.4",
+                    "2.6.5",
+                    "2.6.6",
+                    "2.6.7",
+                    "2.6.8",
+                    "2.7.0",
+                    "2.7.1",
+                    "2.7.2",
+                    "2.7.3",
+                    "2.7.4",
+                    "2.8.0",
+                    "2.8.1",
+                    "2.8.2",
+                    "2.9.0",
+                    "2.9.1",
+                    "3.0.0",
+                    "3.1.0",
+                    "3.1.1",
+                    "3.1.2",
+                    "3.2.0",
+                    "3.3.0",
+                    "3.3.1",
+                    "3.3.2",
+                    "3.4.0",
+                    "4.0.0",
+                    "4.0.1",
+                    "4.1.0",
+                    "4.2.0",
+                    "4.2.1",
+                    "4.3.0",
+                    "4.4.0",
+                    "4.4.1",
+                    "5.0.0",
+                    "5.0.1",
+                    "5.1.0",
+                    "5.2.0",
+                    "5.3.0",
+                    "5.3.1",
+                    "6.0.0",
+                    "hb-rename",
+                    "ng-mergepoint",
+                    "ng-start",
+                    "pango-extractpoint",
+                    "pango-start"
+                ],
+                "database_specific": {
+                    "source": "https://storage.googleapis.com/cve-osv-conversion/osv-output/CVE-2023-25193.json"
+                }
+            }
+        ],
+        "references": [
+            {
+                "type": "FIX",
+                "url": "https://github.com/harfbuzz/harfbuzz/commit/85be877925ddbf34f74a1229f3ca1716bb6170dc"
+            },
+            {
+                "type": "WEB",
+                "url": "https://github.com/harfbuzz/harfbuzz/blob/2822b589bc837fae6f66233e2cf2eef0f6ce8470/src/hb-ot-layout-gsubgpos.hh"
+            },
+            {
+                "type": "WEB",
+                "url": "https://chromium.googlesource.com/chromium/src/+/e1f324aa681af54101c1f2d173d92adb80e37088/DEPS#361"
+            },
+            {
+                "type": "WEB",
+                "url": "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/KWCHWSICWVZSAXP2YAXM65JC2GR53547/"
+            },
+            {
+                "type": "WEB",
+                "url": "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/YZ5M2GSAIHFPLHYJXUPQ2QDJCLWXUGO3/"
+            },
+            {
+                "type": "ADVISORY",
+                "url": "https://security.netapp.com/advisory/ntap-20230725-0006/"
+            }
+        ]
+    },
+    {
+        "schema_version": "1.6.0",
         "id": "OSV-2020-484",
         "modified": "2022-04-13T03:04:32.842142Z",
         "published": "2020-07-01T00:00:12.297418Z",
