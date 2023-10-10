@@ -64,13 +64,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
         "return single curation data" {
             val service = ClearlyDefinedService.create()
 
-            val curation = service.getCuration(
-                coordinates.type,
-                coordinates.provider,
-                coordinates.namespace ?: "-",
-                coordinates.name,
-                coordinates.revision.orEmpty()
-            )
+            val curation = service.getCuration(coordinates)
 
             curation.licensed?.declared shouldBe "CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0"
         }
