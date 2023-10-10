@@ -112,22 +112,6 @@ data class LicensedScore(
 )
 
 /**
- * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L211-L235.
- */
-@Serializable
-data class SourceLocation(
-    // The following properties match those of Coordinates, except that the revision is mandatory here.
-    val type: ComponentType,
-    val provider: Provider,
-    val namespace: String? = null,
-    val name: String,
-    val revision: String,
-
-    val path: String? = null,
-    val url: String? = null
-)
-
-/**
  * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L236-L253.
  */
 @Serializable
