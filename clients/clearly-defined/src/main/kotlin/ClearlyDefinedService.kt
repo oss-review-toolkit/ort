@@ -223,7 +223,7 @@ interface ClearlyDefinedService {
 
     /**
      * Get the curation for the component described by [type], [provider], [namespace] (use "-" if not applicable),
-     * [name] and [revision], see
+     * [name] and [revision] (when empty, the latest revision will be used if that makes sense for the provider), see
      * https://api.clearlydefined.io/api-docs/#/curations/get_curations__type___provider___namespace___name___revision_.
      */
     @GET("curations/{type}/{provider}/{namespace}/{name}/{revision}")
@@ -257,7 +257,8 @@ interface ClearlyDefinedService {
 
     /**
      * Get information about the harvest tools that have produced data for the component described by [type],
-     * [provider], [namespace] (use "-" if not applicable), [name], and [revision], see
+     * [provider], [namespace] (use "-" if not applicable), [name], and [revision] (when empty, the latest revision will
+     * be used if that makes sense for the provider), see
      * https://api.clearlydefined.io/api-docs/#/harvest/get_harvest__type___provider___namespace___name___revision_.
      * This can be used to quickly find out whether results of a specific tool are already available.
      */
@@ -272,7 +273,8 @@ interface ClearlyDefinedService {
 
     /**
      * Get the harvested data for the component described by [type], [provider], [namespace] (use "-" if not
-     * applicable), [name], and [revision] that was produced by [tool] with version [toolVersion], see
+     * applicable), [name], and [revision] (when empty, the latest revision will be used if that makes sense for the
+     * provider) that was produced by [tool] with version [toolVersion], see
      * https://api.clearlydefined.io/api-docs/#/harvest/get_harvest__type___provider___namespace___name___revision___tool___toolVersion_
      */
     @GET("harvest/{type}/{provider}/{namespace}/{name}/{revision}/{tool}/{toolVersion}?form=streamed")
