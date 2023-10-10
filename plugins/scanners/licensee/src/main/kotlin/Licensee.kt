@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScannerMatcher
+import org.ossreviewtoolkit.scanner.ScannerMatcherConfig
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.Os
@@ -45,18 +46,21 @@ private val JSON = Json {
     namingStrategy = JsonNamingStrategy.SnakeCase
 }
 
-class Licensee internal constructor(name: String, private val options: Options) : CommandLinePathScannerWrapper(name) {
+class Licensee internal constructor(name: String, private val matcherConfig: ScannerMatcherConfig) :
+    CommandLinePathScannerWrapper(name) {
     companion object {
         val CONFIGURATION_OPTIONS = listOf("--json")
     }
 
-    class Factory : ScannerWrapperFactory<Licensee>("Licensee") {
-        override fun create(options: Options) = Licensee(type, options)
+    class Factory : ScannerWrapperFactory<Unit>("Licensee") {
+        override fun create(config: Unit, matcherConfig: ScannerMatcherConfig) = Licensee(type, matcherConfig)
+
+        override fun parseConfig(options: Options, secrets: Options) = Unit
     }
 
     override val configuration = CONFIGURATION_OPTIONS.joinToString(" ")
 
-    override val matcher by lazy { ScannerMatcher.create(details, options) }
+    override val matcher by lazy { ScannerMatcher.create(details, matcherConfig) }
 
     override fun command(workingDir: File?) =
         listOfNotNull(workingDir, if (Os.isWindows) "licensee.bat" else "licensee").joinToString(File.separator)

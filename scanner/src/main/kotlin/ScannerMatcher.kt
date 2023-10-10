@@ -62,43 +62,18 @@ data class ScannerMatcher(
     val configuration: String?
 ) {
     companion object {
-        /**
-         * The name of the property defining the regular expression for the scanner name as part of [ScannerMatcher].
-         * The [scanner details][ScannerDetails] of the corresponding scanner must match the criteria.
-         */
-        const val PROP_CRITERIA_NAME = "regScannerName"
-
-        /**
-         * The name of the property defining the minimum version of the scanner as part of [ScannerMatcher]. The
-         * [scanner details][ScannerDetails] of the corresponding scanner must match the criteria.
-         */
-        const val PROP_CRITERIA_MIN_VERSION = "minVersion"
-
-        /**
-         * The name of the property defining the maximum version of the scanner as part of [ScannerMatcher]. The
-         * [scanner details][ScannerDetails] of the corresponding scanner must match the criteria.
-         */
-        const val PROP_CRITERIA_MAX_VERSION = "maxVersion"
-
-        /**
-         * The name of the property defining the configuration of the scanner as part of [ScannerMatcher]. The
-         * [scanner details][ScannerDetails] of the corresponding scanner must match the criteria.
-         */
-        const val PROP_CRITERIA_CONFIGURATION = "configuration"
 
         /**
          * Return a [ScannerMatcher] instance that is to be used when looking up existing scan results from a
          * [ScanResultsStorage]. By default, the properties of this instance are initialized to match the scanner
-         * [details]. These defaults can be overridden by the provided [options]. The keys of the option map must match
-         * names of the [ScannerMatcher] class. For example, to specify that a specific minimum version of the scanner
-         * is allowed, set this option: `minVersion=3.0.2`.
+         * [details]. These defaults can be overridden by the provided [config].
          */
-        fun create(details: ScannerDetails, options: Options = emptyMap()): ScannerMatcher {
+        fun create(details: ScannerDetails, config: ScannerMatcherConfig = ScannerMatcherConfig.EMPTY): ScannerMatcher {
             val scannerVersion = Semver(normalizeVersion(details.version))
-            val minVersion = parseVersion(options[PROP_CRITERIA_MIN_VERSION]) ?: scannerVersion
-            val maxVersion = parseVersion(options[PROP_CRITERIA_MAX_VERSION]) ?: minVersion.nextMinor()
-            val name = options[PROP_CRITERIA_NAME] ?: details.name
-            val configuration = options[PROP_CRITERIA_CONFIGURATION] ?: details.configuration
+            val minVersion = parseVersion(config.minVersion) ?: scannerVersion
+            val maxVersion = parseVersion(config.maxVersion) ?: minVersion.nextMinor()
+            val name = config.regScannerName ?: details.name
+            val configuration = config.configuration ?: details.configuration
 
             return ScannerMatcher(name, minVersion, maxVersion, configuration)
         }
@@ -123,6 +98,65 @@ data class ScannerMatcher(
         val version = Semver(details.version)
         return minVersion <= version && version < maxVersion &&
             (configuration == null || configuration == details.configuration)
+    }
+}
+
+/**
+ * A holder class for the [ScannerMatcher] configuration.
+ */
+data class ScannerMatcherConfig(
+    val regScannerName: String? = null,
+    val minVersion: String? = null,
+    val maxVersion: String? = null,
+    val configuration: String? = null
+) {
+    companion object {
+        val EMPTY = ScannerMatcherConfig(null, null, null, null)
+
+        /**
+         * The name of the property defining the regular expression for the scanner name as part of [ScannerMatcher].
+         * The [scanner details][ScannerDetails] of the corresponding scanner must match the criteria.
+         */
+        internal const val PROP_CRITERIA_NAME = "regScannerName"
+
+        /**
+         * The name of the property defining the minimum version of the scanner as part of [ScannerMatcher]. The
+         * [scanner details][ScannerDetails] of the corresponding scanner must match the criteria.
+         */
+        internal const val PROP_CRITERIA_MIN_VERSION = "minVersion"
+
+        /**
+         * The name of the property defining the maximum version of the scanner as part of [ScannerMatcher]. The
+         * [scanner details][ScannerDetails] of the corresponding scanner must match the criteria.
+         */
+        internal const val PROP_CRITERIA_MAX_VERSION = "maxVersion"
+
+        /**
+         * The name of the property defining the configuration of the scanner as part of [ScannerMatcher]. The
+         * [scanner details][ScannerDetails] of the corresponding scanner must match the criteria.
+         */
+        internal const val PROP_CRITERIA_CONFIGURATION = "configuration"
+
+        private val properties = listOf(
+            PROP_CRITERIA_NAME, PROP_CRITERIA_MIN_VERSION, PROP_CRITERIA_MAX_VERSION, PROP_CRITERIA_CONFIGURATION
+        )
+
+        /**
+         * Create a [ScannerMatcherConfig] from the provided options. Return the created config and the options without
+         * the properties that are used to configure the matcher.
+         */
+        fun create(options: Options): Pair<ScannerMatcherConfig, Options> {
+            val filteredOptions = options.filterKeys { it !in properties }
+
+            val matcherConfig = ScannerMatcherConfig(
+                regScannerName = options[PROP_CRITERIA_NAME],
+                minVersion = options[PROP_CRITERIA_MIN_VERSION],
+                maxVersion = options[PROP_CRITERIA_MAX_VERSION],
+                configuration = options[PROP_CRITERIA_CONFIGURATION]
+            )
+
+            return matcherConfig to filteredOptions
+        }
     }
 }
 

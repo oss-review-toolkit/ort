@@ -43,6 +43,7 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.scanner.ScanContext
+import org.ossreviewtoolkit.scanner.ScannerMatcherConfig
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 private val TEST_DIRECTORY_TO_SCAN = File("src/test/assets/filesToScan")
@@ -61,8 +62,8 @@ class ScanOssScannerDirectoryTest : StringSpec({
 
     beforeSpec {
         server.start()
-        val options = mapOf(ScanOssConfig.API_URL_PROPERTY to "http://localhost:${server.port()}")
-        scanner = spyk(ScanOss.Factory().create(options))
+        val config = ScanOssConfig(apiUrl = "http://localhost:${server.port()}", apiKey = "")
+        scanner = spyk(ScanOss.Factory().create(config, ScannerMatcherConfig.EMPTY))
     }
 
     afterSpec {

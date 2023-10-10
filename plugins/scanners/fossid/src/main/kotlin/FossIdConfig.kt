@@ -73,7 +73,7 @@ import org.ossreviewtoolkit.utils.common.Options
  *
  * every repository URL would be added credentials. Mappings are applied in the order they are defined.
  */
-internal data class FossIdConfig(
+data class FossIdConfig(
     /** The URL where the FossID service is running. */
     val serverUrl: String,
 

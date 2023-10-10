@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
+import org.ossreviewtoolkit.scanner.ScannerMatcherConfig
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.spdx.scanCodeLicenseTextDir
 
@@ -88,8 +89,8 @@ class RequirementsCommand : OrtCommand(
                         logger.debug { "$it is a $category." }
                         it.getDeclaredConstructor(
                             String::class.java,
-                            Map::class.java
-                        ).newInstance("", emptyMap<String, String>())
+                            ScannerMatcherConfig::class.java
+                        ).newInstance("", ScannerMatcherConfig.EMPTY)
                     }
 
                     VersionControlSystem::class.java.isAssignableFrom(it) -> {

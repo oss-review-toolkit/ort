@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.ScannerMatcher
+import org.ossreviewtoolkit.scanner.ScannerMatcherConfig
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.Os
@@ -57,7 +58,14 @@ import org.semver4j.Semver
  * * **"commandLineNonConfig":** Command line options that do not modify the result and should therefore not be
  *   considered in [configuration], like "--processes". Defaults to [DEFAULT_NON_CONFIGURATION_OPTIONS].
  */
-class ScanCode internal constructor(name: String, private val options: Options) : CommandLinePathScannerWrapper(name) {
+class ScanCode internal constructor(
+    name: String,
+    config: ScanCodeConfig,
+    private val matcherConfig: ScannerMatcherConfig
+) : CommandLinePathScannerWrapper(name) {
+    // This constructor is required by the `RequirementsCommand`.
+    constructor(name: String, matcherConfig: ScannerMatcherConfig) : this(name, ScanCodeConfig.EMPTY, matcherConfig)
+
     companion object {
         const val SCANNER_NAME = "ScanCode"
 
@@ -91,11 +99,14 @@ class ScanCode internal constructor(name: String, private val options: Options) 
         }
     }
 
-    class Factory : ScannerWrapperFactory<ScanCode>(SCANNER_NAME) {
-        override fun create(options: Options) = ScanCode(type, options)
+    class Factory : ScannerWrapperFactory<ScanCodeConfig>(SCANNER_NAME) {
+        override fun create(config: ScanCodeConfig, matcherConfig: ScannerMatcherConfig) =
+            ScanCode(type, config, matcherConfig)
+
+        override fun parseConfig(options: Options, secrets: Options) = ScanCodeConfig.create(options)
     }
 
-    override val matcher by lazy { ScannerMatcher.create(details, options) }
+    override val matcher by lazy { ScannerMatcher.create(details, matcherConfig) }
 
     override val configuration by lazy {
         buildList {
@@ -104,8 +115,8 @@ class ScanCode internal constructor(name: String, private val options: Options) 
         }.joinToString(" ")
     }
 
-    private val configurationOptions = options["commandLine"]?.splitOnWhitespace() ?: DEFAULT_CONFIGURATION_OPTIONS
-    private val nonConfigurationOptions = options["commandLineNonConfig"]?.splitOnWhitespace()
+    private val configurationOptions = config.commandLine?.splitOnWhitespace() ?: DEFAULT_CONFIGURATION_OPTIONS
+    private val nonConfigurationOptions = config.commandLineNonConfig?.splitOnWhitespace()
         ?: DEFAULT_NON_CONFIGURATION_OPTIONS
 
     internal fun getCommandLineOptions(version: String) =

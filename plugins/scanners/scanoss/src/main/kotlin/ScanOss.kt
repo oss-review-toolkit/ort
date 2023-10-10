@@ -41,6 +41,7 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.scanner.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScannerMatcher
+import org.ossreviewtoolkit.scanner.ScannerMatcherConfig
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
@@ -49,13 +50,17 @@ import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 private const val FAKE_WFP_FILE_NAME = "fake.wfp"
 private const val ARG_FIELD_NAME = "file"
 
-class ScanOss internal constructor(override val name: String, private val options: Options) : PathScannerWrapper {
-    class Factory : ScannerWrapperFactory<ScanOss>("SCANOSS") {
-        override fun create(options: Options) = ScanOss(type, options)
-    }
+class ScanOss internal constructor(
+    override val name: String,
+    config: ScanOssConfig,
+    private val matcherConfig: ScannerMatcherConfig
+) : PathScannerWrapper {
+    class Factory : ScannerWrapperFactory<ScanOssConfig>("SCANOSS") {
+        override fun create(config: ScanOssConfig, matcherConfig: ScannerMatcherConfig) =
+            ScanOss(type, config, matcherConfig)
 
-    private val config = ScanOssConfig.create(options).also {
-        logger.info { "The $name API URL is ${it.apiUrl}." }
+        override fun parseConfig(options: Options, secrets: Options) =
+            ScanOssConfig.create(options).also { logger.info { "The $type API URL is ${it.apiUrl}." } }
     }
 
     private val service = ScanOssService.create(config.apiUrl)
@@ -69,7 +74,7 @@ class ScanOss internal constructor(override val name: String, private val option
 
     override val configuration = ""
 
-    override val matcher by lazy { ScannerMatcher.create(details, options) }
+    override val matcher by lazy { ScannerMatcher.create(details, matcherConfig) }
 
     /**
      * The name of the file corresponding to the fingerprints can be sent to SCANOSS for more precise matches.
