@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.model.utils
 import kotlin.time.measureTimedValue
 
 import org.apache.logging.log4j.kotlin.logger
-import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
