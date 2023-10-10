@@ -177,10 +177,10 @@ class ScannerCommand : OrtCommand(
     ): OrtResult {
         val packageScannerWrappers = scannerWrapperFactories
             .takeIf { PackageType.PACKAGE in packageTypes }.orEmpty()
-            .map { it.create(ortConfig.scanner.options?.get(it.type).orEmpty()) }
+            .map { it.create(ortConfig.scanner.options?.get(it.type).orEmpty(), emptyMap()) }
         val projectScannerWrappers = projectScannerWrapperFactories
             .takeIf { PackageType.PROJECT in packageTypes }.orEmpty()
-            .map { it.create(ortConfig.scanner.options?.get(it.type).orEmpty()) }
+            .map { it.create(ortConfig.scanner.options?.get(it.type).orEmpty(), emptyMap()) }
 
         if (projectScannerWrappers.isNotEmpty()) {
             echo("Scanning projects with:")

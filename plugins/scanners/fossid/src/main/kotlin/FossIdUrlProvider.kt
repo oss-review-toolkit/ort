@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
  * The URLs used by FossId can sometimes be different from the normal package URLs. For instance, credentials may need
  * to be added, or a different protocol may be used. This class takes care of such mappings.
  */
-internal class FossIdUrlProvider private constructor(
+class FossIdUrlProvider private constructor(
     /**
      * The URL mapping. URLs matched by a key [Regex] are replaced by the URL in the value. The replacement string can
      * refer to matched groups of the [Regex]. It can also contain the variables [VAR_USERNAME] and [VAR_PASSWORD] to

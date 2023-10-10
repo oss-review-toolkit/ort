@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.utils.common.Options
  * created from the options contained in a [ScannerConfiguration] object under the key _ScanOss_. It offers the
  * following configuration options:
  */
-internal data class ScanOssConfig(
+data class ScanOssConfig(
     /** URL of the ScanOSS server. */
     val apiUrl: String,
 

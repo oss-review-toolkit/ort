@@ -38,7 +38,7 @@ import org.apache.logging.log4j.kotlin.logger
  * * **deltaTag** (scan code only): If delta scans is enabled, this qualifies the scan as an *origin* scan or a *delta*
  * scan.
  */
-internal class FossIdNamingProvider(
+class FossIdNamingProvider(
     private val namingProjectPattern: String?,
     private val namingScanPattern: String?,
     private val namingConventionVariables: Map<String, String>
