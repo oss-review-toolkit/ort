@@ -91,7 +91,11 @@ class OsvServiceFunTest : StringSpec({
 
         result.shouldBeSuccess {
             it shouldBe listOf(
-                listOf("OSV-2020-484"),
+                listOf(
+                    "CVE-2021-45931",
+                    "CVE-2023-25193",
+                    "OSV-2020-484"
+                ),
                 emptyList(),
                 listOf(
                     "GHSA-462w-v97r-4m45",
