@@ -78,7 +78,7 @@ object ConfigurationResolver {
 
             packageCurations[id] = applicableCurations
 
-            logger().info { "Getting ${curations.size} package curation(s) from provider '$id' took $duration." }
+            logger.info { "Getting ${curations.size} package curation(s) from provider '$id' took $duration." }
         }
 
         return packageCurations.map { (providerId, curations) ->
