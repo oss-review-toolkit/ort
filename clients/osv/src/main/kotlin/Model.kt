@@ -73,7 +73,7 @@ data class Vulnerability(
 @Serializable
 data class Affected(
     @SerialName("package")
-    val pkg: Package,
+    val pkg: Package? = null,
     val ranges: List<Range> = emptyList(),
     val severity: Set<Severity> = emptySet(),
     val versions: List<String> = emptyList(),
