@@ -19,15 +19,6 @@
 
 package org.ossreviewtoolkit.clients.clearlydefined
 
-import okhttp3.RequestBody
-
-import okio.Buffer
-
-/**
- * Return the request body as a string, see https://github.com/square/okhttp/issues/1891.
- */
-fun RequestBody.string() = Buffer().also { writeTo(it) }.readUtf8()
-
 /**
  * Convert a [SourceLocation] to a [Coordinates] object.
  */
