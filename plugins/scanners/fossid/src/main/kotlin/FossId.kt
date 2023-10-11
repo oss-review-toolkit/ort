@@ -172,7 +172,7 @@ class FossId internal constructor(
     class Factory : ScannerWrapperFactory<FossIdConfig>("FossId") {
         override fun create(config: FossIdConfig, matcherConfig: ScannerMatcherConfig) = FossId(type, config)
 
-        override fun parseConfig(options: Options, secrets: Options) = FossIdConfig.create(options)
+        override fun parseConfig(options: Options, secrets: Options) = FossIdConfig.create(options, secrets)
     }
 
     /**
@@ -190,7 +190,6 @@ class FossId internal constructor(
         DELTA
     }
 
-    private val secretKeys = listOf("apiKey", "user")
     private val namingProvider = config.createNamingProvider()
     private val urlProvider = config.createUrlProvider()
 
@@ -206,11 +205,6 @@ class FossId internal constructor(
     override val configuration = ""
 
     override val matcher: ScannerMatcher? = null
-
-    override fun filterSecretOptions(options: Options) =
-        options.mapValues { (k, v) ->
-            v.takeUnless { k in secretKeys }.orEmpty()
-        }
 
     private suspend fun getProject(projectCode: String): Project? =
         service.getProject(config.user, config.apiKey, projectCode).run {

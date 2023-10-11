@@ -37,14 +37,12 @@ import org.ossreviewtoolkit.clients.fossid.FossIdRestService
 class FossIdConfigTest : WordSpec({
     "create" should {
         "throw if no options for FossID are provided in the scanner configuration" {
-            shouldThrow<IllegalArgumentException> { FossIdConfig.create(emptyMap()) }
+            shouldThrow<IllegalArgumentException> { FossIdConfig.create(emptyMap(), emptyMap()) }
         }
 
         "read all properties from the scanner configuration" {
             val options = mapOf(
                 "serverUrl" to SERVER_URL,
-                "user" to USER,
-                "apiKey" to API_KEY,
                 "waitForResult" to "false",
                 "keepFailedScans" to "true",
                 "deltaScans" to "true",
@@ -55,7 +53,12 @@ class FossIdConfigTest : WordSpec({
                 "fetchSnippetMatchedLines" to "true"
             )
 
-            val fossIdConfig = FossIdConfig.create(options)
+            val secrets = mapOf(
+                "user" to USER,
+                "apiKey" to API_KEY
+            )
+
+            val fossIdConfig = FossIdConfig.create(options, secrets)
 
             fossIdConfig shouldBe FossIdConfig(
                 serverUrl = SERVER_URL,
@@ -74,13 +77,14 @@ class FossIdConfigTest : WordSpec({
         }
 
         "set default values for optional properties" {
-            val options = mapOf(
-                "serverUrl" to SERVER_URL,
+            val options = mapOf("serverUrl" to SERVER_URL)
+
+            val secrets = mapOf(
                 "user" to USER,
                 "apiKey" to API_KEY
             )
 
-            val fossIdConfig = FossIdConfig.create(options)
+            val fossIdConfig = FossIdConfig.create(options, secrets)
 
             fossIdConfig shouldBe FossIdConfig(
                 serverUrl = SERVER_URL,
@@ -99,41 +103,40 @@ class FossIdConfigTest : WordSpec({
         }
 
         "throw if the server URL is missing" {
-            val options = mapOf(
+            val secrets = mapOf(
                 "user" to USER,
                 "apiKey" to API_KEY
             )
 
-            shouldThrow<IllegalArgumentException> { FossIdConfig.create(options) }
+            shouldThrow<IllegalArgumentException> { FossIdConfig.create(emptyMap(), secrets) }
         }
 
         "throw if the API key is missing" {
-            val options = mapOf(
-                "serverUrl" to SERVER_URL,
-                "user" to USER
-            )
+            val options = mapOf("serverUrl" to SERVER_URL)
+            val secrets = mapOf("user" to USER)
 
-            shouldThrow<IllegalArgumentException> { FossIdConfig.create(options) }
+            shouldThrow<IllegalArgumentException> { FossIdConfig.create(options, secrets) }
         }
 
         "throw if the user name is missing" {
-            val options = mapOf(
-                "serverUrl" to SERVER_URL,
-                "apiKey" to API_KEY
-            )
+            val options = mapOf("serverUrl" to SERVER_URL)
+            val secrets = mapOf("apiKey" to API_KEY)
 
-            shouldThrow<IllegalArgumentException> { FossIdConfig.create(options) }
+            shouldThrow<IllegalArgumentException> { FossIdConfig.create(options, secrets) }
         }
 
         "throw if the deltaScanLimit is invalid" {
             val options = mapOf(
                 "serverUrl" to SERVER_URL,
-                "user" to USER,
-                "apiKey" to API_KEY,
                 "deltaScanLimit" to "0"
             )
 
-            shouldThrow<IllegalArgumentException> { FossIdConfig.create(options) }
+            val secrets = mapOf(
+                "user" to USER,
+                "apiKey" to API_KEY
+            )
+
+            shouldThrow<IllegalArgumentException> { FossIdConfig.create(options, secrets) }
         }
     }
 
@@ -141,14 +144,17 @@ class FossIdConfigTest : WordSpec({
         "create a naming provider with a correct project naming convention" {
             val options = mapOf(
                 "serverUrl" to SERVER_URL,
-                "user" to USER,
-                "apiKey" to API_KEY,
                 "namingProjectPattern" to "#projectName_\$Org_\$Unit",
                 "namingVariableOrg" to "TestOrganization",
                 "namingVariableUnit" to "TestUnit"
             )
 
-            val fossIdConfig = FossIdConfig.create(options)
+            val secrets = mapOf(
+                "user" to USER,
+                "apiKey" to API_KEY
+            )
+
+            val fossIdConfig = FossIdConfig.create(options, secrets)
             val namingProvider = fossIdConfig.createNamingProvider()
 
             val projectName = namingProvider.createProjectCode("TestProject")
@@ -159,14 +165,17 @@ class FossIdConfigTest : WordSpec({
         "create a naming provider with a correct scan naming convention" {
             val options = mapOf(
                 "serverUrl" to SERVER_URL,
-                "user" to USER,
-                "apiKey" to API_KEY,
                 "namingScanPattern" to "#projectName_\$Org_\$Unit_#deltaTag",
                 "namingVariableOrg" to "TestOrganization",
                 "namingVariableUnit" to "TestUnit"
             )
 
-            val fossIdConfig = FossIdConfig.create(options)
+            val secrets = mapOf(
+                "user" to USER,
+                "apiKey" to API_KEY
+            )
+
+            val fossIdConfig = FossIdConfig.create(options, secrets)
             val namingProvider = fossIdConfig.createNamingProvider()
 
             val scanCode = namingProvider.createScanCode("TestProject", FossId.DeltaTag.DELTA)
@@ -180,12 +189,15 @@ class FossIdConfigTest : WordSpec({
             val url = "https://changeit.example.org/foo"
             val options = mapOf(
                 "serverUrl" to SERVER_URL,
-                "user" to USER,
-                "apiKey" to API_KEY,
                 "urlMappingChangeHost" to "$url -> $SERVER_URL"
             )
 
-            val fossIdConfig = FossIdConfig.create(options)
+            val secrets = mapOf(
+                "user" to USER,
+                "apiKey" to API_KEY
+            )
+
+            val fossIdConfig = FossIdConfig.create(options, secrets)
             val urlProvider = fossIdConfig.createUrlProvider()
 
             urlProvider.getUrl(url) shouldBe SERVER_URL
@@ -201,8 +213,9 @@ class FossIdConfigTest : WordSpec({
 
             try {
                 val serverUrl = "http://localhost:${server.port()}"
-                val options = mapOf(
-                    "serverUrl" to serverUrl,
+                val options = mapOf("serverUrl" to serverUrl)
+
+                val secrets = mapOf(
                     "user" to USER,
                     "apiKey" to API_KEY
                 )
@@ -216,7 +229,7 @@ class FossIdConfigTest : WordSpec({
                         )
                 )
 
-                val fossIdConfig = FossIdConfig.create(options)
+                val fossIdConfig = FossIdConfig.create(options, secrets)
                 val service = FossIdRestService.create(fossIdConfig.serverUrl)
 
                 service.getLoginPage().string() shouldBe loginPage

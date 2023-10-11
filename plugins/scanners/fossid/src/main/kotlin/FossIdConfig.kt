@@ -29,27 +29,28 @@ import org.ossreviewtoolkit.utils.common.Options
  * created from the [Options] contained in a [ScannerConfiguration] object under the key _FossId_. It offers the
  * following configuration options:
  *
- * * **"serverUrl":** The URL of the FossID server.
- * * **"user":** The user to connect to the FossID server.
- * * **"apiKey":** The API key of the user which connects to the FossID server.
- * * **"waitForResult":** When set to false, ORT does not wait for repositories to be downloaded nor scans to be
+ * * **"options.serverUrl":** The URL of the FossID server.
+ * * **"secrets.user":** The user to connect to the FossID server.
+ * * **"secrets.apiKey":** The API key of the user which connects to the FossID server.
+ * * **"options.waitForResult":** When set to false, ORT does not wait for repositories to be downloaded nor scans to be
  *   completed. As a consequence, scan results won't be available in ORT result.
- * * **"deltaScans":** If set, ORT will create delta scans. When only changes in a repository need to be scanned,
- *   delta scans reuse the identifications of the latest scan on this repository to reduce the amount of findings. If
- *   *deltaScans* is set and no scan exist yet, an initial scan called "origin" scan will be created.
- * * **"deltaScanLimit":** This setting can be used to limit the number of delta scans to keep for a given repository.
- *   So if another delta scan is created, older delta scans are deleted until this number is reached. If unspecified, no
- *   limit is enforced on the number of delta scans to keep. This property is evaluated only if *deltaScans* is enabled.
- * * **"detectLicenseDeclaration":** When set, the FossID scan is configured to automatically detect file license
- *   declarations.
- * * **"detectCopyrightStatements":** When set, the FossID scan is configured to automatically detect copyright
+ * * **"options.deltaScans":** If set, ORT will create delta scans. When only changes in a repository need to be
+ *   scanned, delta scans reuse the identifications of the latest scan on this repository to reduce the amount of
+ *   findings. If *deltaScans* is set and no scan exist yet, an initial scan called "origin" scan will be created.
+ * * **"options.deltaScanLimit":** This setting can be used to limit the number of delta scans to keep for a given
+ *   repository. So if another delta scan is created, older delta scans are deleted until this number is reached. If
+ *   unspecified, no limit is enforced on the number of delta scans to keep. This property is evaluated only if
+ *   *deltaScans* is enabled.
+ * * **"options.detectLicenseDeclaration":** When set, the FossID scan is configured to automatically detect file
+ *   license declarations.
+ * * **"options.detectCopyrightStatements":** When set, the FossID scan is configured to automatically detect copyright
  *   statements.
  *
  * Naming conventions options. If they are not set, default naming conventions are used.
- * * **"namingProjectPattern":** A pattern for project names when projects are created on the FossID instance. Contains
- *   variables prefixed by "$" e.g. "$Var1_$Var2". Variables are also passed as options and are prefixed by
+ * * **"options.namingProjectPattern":** A pattern for project names when projects are created on the FossID instance.
+ *   Contains variables prefixed by "$" e.g. "$Var1_$Var2". Variables are also passed as options and are prefixed by
  *   [NAMING_CONVENTION_VARIABLE_PREFIX] e.g. namingVariableVar1 = "foo".
- * * **"namingScanPattern":** A pattern for scan names when scans are created on the FossID instance.
+ * * **"options.namingScanPattern":** A pattern for scan names when scans are created on the FossID instance.
  *
  * URL mapping options. These options allow transforming the URLs of specific repositories before they are passed to
  * the FossID service. This may be necessary if FossID uses a different mechanism to clone a repository, e.g. via SSH
@@ -161,14 +162,14 @@ data class FossIdConfig(
         @JvmStatic
         private val DEFAULT_TIMEOUT = 60
 
-        fun create(options: Options): FossIdConfig {
+        fun create(options: Options, secrets: Options): FossIdConfig {
             require(options.isNotEmpty()) { "No FossID Scanner configuration found." }
 
             val serverUrl = options[SERVER_URL_PROPERTY]
                 ?: throw IllegalArgumentException("No FossID server URL configuration found.")
-            val user = options[USER_PROPERTY]
+            val user = secrets[USER_PROPERTY]
                 ?: throw IllegalArgumentException("No FossID User configuration found.")
-            val apiKey = options[API_KEY_PROPERTY]
+            val apiKey = secrets[API_KEY_PROPERTY]
                 ?: throw IllegalArgumentException("No FossID API Key configuration found.")
 
             val waitForResult = options[WAIT_FOR_RESULT_PROPERTY]?.toBoolean() ?: true
