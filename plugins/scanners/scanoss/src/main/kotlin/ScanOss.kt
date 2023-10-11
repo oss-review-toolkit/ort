@@ -60,7 +60,7 @@ class ScanOss internal constructor(
             ScanOss(type, config, matcherConfig)
 
         override fun parseConfig(options: Options, secrets: Options) =
-            ScanOssConfig.create(options).also { logger.info { "The $type API URL is ${it.apiUrl}." } }
+            ScanOssConfig.create(options, secrets).also { logger.info { "The $type API URL is ${it.apiUrl}." } }
     }
 
     private val service = ScanOssService.create(config.apiUrl)
