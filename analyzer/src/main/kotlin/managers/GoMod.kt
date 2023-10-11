@@ -171,7 +171,7 @@ class GoMod(
                 moduleInfo(moduleName).toId()
             }
 
-        val mainModuleId = moduleInfoForModuleName.values.single { it.main }.toId()
+        val mainModuleId = moduleInfoForModuleName.getMainModuleId()
         var graph = Graph().apply { addNode(mainModuleId) }
 
         val edges = runGo("mod", "graph", workingDir = projectDir)
@@ -333,6 +333,8 @@ class GoMod(
 
     private fun runGo(vararg args: CharSequence, workingDir: File? = null) =
         run(args = args, workingDir = workingDir, environment = environment)
+
+    private fun Map<String, ModuleInfo>.getMainModuleId(): Identifier = values.single { it.main }.toId()
 }
 
 /** Separator string indicating that data of a new package follows in the output of the go mod why command. */
