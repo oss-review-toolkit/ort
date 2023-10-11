@@ -64,9 +64,8 @@ data class ProviderPluginConfiguration(
     @JsonIgnore
     val secrets: Options = emptyMap()
 ) {
-    override fun toString(): String {
-        // Do not use the generated toString function for the data class to ensure that the output does not contain the
-        // secret options.
-        return "${this::class.simpleName}(type=$type, id=$id, enabled=$enabled, options=$options)"
-    }
+    /**
+     * Return a string representation of the object that does not contain the [secrets].
+     */
+    override fun toString() = "${this::class.simpleName}(type=$type, id=$id, enabled=$enabled, options=$options)"
 }
