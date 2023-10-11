@@ -28,6 +28,7 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
+import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
@@ -50,8 +51,8 @@ import org.semver4j.Semver
 /**
  * A wrapper for [ScanCode](https://github.com/nexB/scancode-toolkit).
  *
- * This scanner can be configured in [ScannerConfiguration.options] using the key "ScanCode". It offers the following
- * configuration options:
+ * This scanner can be configured in [ScannerConfiguration.config] using the key "ScanCode". It offers the following
+ * configuration [options][PluginConfiguration.options]:
  *
  * * **"commandLine":** Command line options that modify the result. These are added to the [ScannerDetails] when
  *   looking up results from the [ScanResultsStorage]. Defaults to [DEFAULT_CONFIGURATION_OPTIONS].

@@ -49,6 +49,7 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
+import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.model.config.createStorage
@@ -64,7 +65,6 @@ import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceScanResult
 import org.ossreviewtoolkit.scanner.provenance.PackageProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.ProvenanceDownloader
 import org.ossreviewtoolkit.scanner.utils.FileListResolver
-import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.Environment
@@ -155,21 +155,23 @@ class Scanner(
 
         val endTime = Instant.now()
 
-        val filteredScannerOptions = mutableMapOf<String, Options>()
+        val filteredScannerConfigs = mutableMapOf<String, PluginConfiguration>()
 
         projectScannerWrappers.forEach { scannerWrapper ->
-            scannerConfig.options?.get(scannerWrapper.name)?.let { options ->
-                filteredScannerOptions[scannerWrapper.name] = scannerWrapper.filterSecretOptions(options)
+            scannerConfig.config?.get(scannerWrapper.name)?.let { config ->
+                filteredScannerConfigs[scannerWrapper.name] =
+                    config.copy(options = scannerWrapper.filterSecretOptions(config.options))
             }
         }
 
         packageScannerWrappers.forEach { scannerWrapper ->
-            scannerConfig.options?.get(scannerWrapper.name)?.let { options ->
-                filteredScannerOptions[scannerWrapper.name] = scannerWrapper.filterSecretOptions(options)
+            scannerConfig.config?.get(scannerWrapper.name)?.let { config ->
+                filteredScannerConfigs[scannerWrapper.name] =
+                    config.copy(options = scannerWrapper.filterSecretOptions(config.options))
             }
         }
 
-        val filteredScannerConfig = scannerConfig.copy(options = filteredScannerOptions)
+        val filteredScannerConfig = scannerConfig.copy(config = filteredScannerConfigs)
 
         val scannerRun = ScannerRun(
             startTime = startTime,

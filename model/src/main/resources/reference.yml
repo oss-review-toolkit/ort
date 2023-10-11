@@ -202,44 +202,46 @@ ort:
           sslrootcert: /defaultdir/root.crt
           parallelTransactions: 5
 
-    options:
-      # A map of maps from scanner class names to scanner-specific key-value pairs.
+    config:
+      # A map from scanner plugin types to the plugin configuration.
       ScanCode:
-        # Command line options that affect the ScanCode output. If changed, stored scan results that were created with
-        # different options are not reused.
-        commandLine: '--copyright --license --info --strip-root --timeout 300'
+        options:
+          # Command line options that affect the ScanCode output. If changed, stored scan results that were created with
+          # different options are not reused.
+          commandLine: '--copyright --license --info --strip-root --timeout 300'
 
-        # Command line options that do not affect the ScanCode output.
-        commandLineNonConfig: '--processes 4'
+          # Command line options that do not affect the ScanCode output.
+          commandLineNonConfig: '--processes 4'
 
-        # Criteria for matching stored scan results. These can be configured for any scanner that uses semantic
-        # versioning. Note that the 'maxVersion' is exclusive and not part of the range of accepted versions.
-        minVersion: '3.2.1-rc2'
-        maxVersion: '32.0.0'
+          # Criteria for matching stored scan results. These can be configured for any scanner that uses semantic
+          # versioning. Note that the 'maxVersion' is exclusive and not part of the range of accepted versions.
+          minVersion: '3.2.1-rc2'
+          maxVersion: '32.0.0'
 
       FossId:
-        serverUrl: 'https://fossid.example.com/instance/'
-        user: user
-        apiKey: XYZ
+        options:
+          serverUrl: 'https://fossid.example.com/instance/'
+          user: user
+          apiKey: XYZ
 
-        namingProjectPattern: '$Var1_$Var2'
-        namingScanPattern: '$Var1_#projectBaseCode_$Var3'
-        namingVariableVar1: myOrg
-        namingVariableVar2: myTeam
-        namingVariableVar3: myUnit
+          namingProjectPattern: '$Var1_$Var2'
+          namingScanPattern: '$Var1_#projectBaseCode_$Var3'
+          namingVariableVar1: myOrg
+          namingVariableVar2: myTeam
+          namingVariableVar3: myUnit
 
-        waitForResult: false
+          waitForResult: false
 
-        keepFailedScans: false
-        deltaScans: true
-        deltaScanLimit: 10
+          keepFailedScans: false
+          deltaScans: true
+          deltaScanLimit: 10
 
-        detectLicenseDeclarations: true
-        detectCopyrightStatements: true
+          detectLicenseDeclarations: true
+          detectCopyrightStatements: true
 
-        timeout: 60
+          timeout: 60
 
-        urlMappingExample: "https://my-repo.example.org(?<repoPath>.*) -> ssh://my-mapped-repo.example.org${repoPath}"
+          urlMappingExample: "https://my-repo.example.org(?<repoPath>.*) -> ssh://my-mapped-repo.example.org${repoPath}"
 
     storages:
       local:

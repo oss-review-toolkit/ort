@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.model.config
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.model.utils.FileArchiver
-import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
@@ -84,7 +83,7 @@ data class ScannerConfiguration(
      * Scanner specific configuration options. The key needs to match the name of the scanner class, e.g. "ScanCode"
      * for the ScanCode wrapper. See the documentation of the scanner for available options.
      */
-    val options: Map<String, Options>? = null,
+    val config: Map<String, PluginConfiguration>? = null,
 
     /**
      * A map with the configurations of the scan result storages available. Based on this information the actual
