@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "example"
+version = "1.0.0"
+description = "example project"
+authors = ["author name <author@example.com>"]
+packages = [
+    {include = "example"}
+]
+include = [
+    {path = "example/py.typed"},
+]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+graphviz = ">=0.13.2,<0.20.0"
+jinja2 = ">=2.10,<4.0"
+contextvars = { version = "^2.4", python = "~3.6" }
+
