@@ -99,15 +99,15 @@ class Poetry(
 
         logger.info { "Generating '${requirementsFile.name}' file in '$workingDir' directory..." }
 
-        val command = listOfNotNull(
+        val requirements = ProcessCapture(
+            workingDir,
             command(),
             "export",
             "--without-hashes",
             "--format=requirements.txt",
             "--only=$dependencyGroupName"
-        )
+        ).requireSuccess().stdout
 
-        val requirements = ProcessCapture(workingDir, *command.toTypedArray()).requireSuccess().stdout
         requirementsFile.writeText(requirements)
 
         return Pip(managerName, analysisRoot, analyzerConfig, repoConfig).runPythonInspector(requirementsFile).also {
