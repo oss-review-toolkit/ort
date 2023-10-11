@@ -117,7 +117,7 @@ class GoMod(
         stashDirectories(projectDir.resolve("vendor")).use { _ ->
             val moduleInfoForModuleName = getModuleInfos(projectDir)
             val graph = getModuleGraph(projectDir, moduleInfoForModuleName)
-            val projectId = graph.projectId()
+            val projectId = moduleInfoForModuleName.getMainModuleId()
             val packageIds = graph.nodes - projectId
             val packages = packageIds.mapTo(mutableSetOf()) { moduleInfoForModuleName.getValue(it.name).toPackage() }
             val projectVcs = processProjectVcs(projectDir)
@@ -202,11 +202,12 @@ class GoMod(
             graph.addEdge(parent, child)
         }
 
+        val mainModuleName = moduleInfoForModuleName.getMainModuleId().name
         val replacedModules = moduleInfoForModuleName.mapNotNull { (name, info) ->
             (info.path to name).takeIf { name != info.path }
         }.toMap()
 
-        val vendorModules = getVendorModules(graph, projectDir, replacedModules)
+        val vendorModules = getVendorModules(graph, projectDir, mainModuleName, replacedModules)
         if (vendorModules.size < graph.size) {
             logger.debug {
                 "Removing ${graph.size - vendorModules.size} non-vendor modules from the dependency graph."
@@ -257,9 +258,10 @@ class GoMod(
     private fun getVendorModules(
         graph: Graph,
         projectDir: File,
+        mainModuleName: String,
         replacedModules: Map<String, String>
     ): Set<Identifier> {
-        val vendorModuleNames = mutableSetOf(graph.projectId().name)
+        val vendorModuleNames = mutableSetOf(mainModuleName)
 
         graph.nodes.chunked(WHY_CHUNK_SIZE).forEach { ids ->
             // Use the names of replaced modules, because `go mod why` returns only results for those.
@@ -395,19 +397,6 @@ private data class ModuleInfoFile(
         val subdir: String? = null
     )
 }
-
-/**
- * Search for the single package that represents the main project. This is the only package without a version. Fail
- * if no single package with this criterion can be found.
- */
-private fun Graph.projectId(): Identifier =
-    nodes.filter { it.version.isBlank() }.let { idsWithoutVersion ->
-        require(idsWithoutVersion.size == 1) {
-            "Expected exactly one unique package without version but got ${idsWithoutVersion.joinToString()}."
-        }
-
-        idsWithoutVersion.first()
-    }
 
 private fun ModuleInfo.toVcsInfo(): VcsInfo? {
     val infoFile = goMod?.let { File(it).resolveSibling("$version.info") } ?: return null
