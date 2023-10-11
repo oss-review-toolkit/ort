@@ -28,19 +28,17 @@ import org.ossreviewtoolkit.clients.scanoss.ScanOssService
 
 class ScanOssConfigTest : StringSpec({
     "Default values are used" {
-        with(ScanOssConfig.create(emptyMap())) {
+        with(ScanOssConfig.create(emptyMap(), emptyMap())) {
             apiUrl shouldBe ScanOssService.DEFAULT_API_URL
             apiKey should beEmpty()
         }
     }
 
     "Default values can be overridden" {
-        val options = mapOf(
-            ScanOssConfig.API_URL_PROPERTY to "url",
-            ScanOssConfig.API_KEY_PROPERTY to "key"
-        )
+        val options = mapOf(ScanOssConfig.API_URL_PROPERTY to "url")
+        val secrets = mapOf(ScanOssConfig.API_KEY_PROPERTY to "key")
 
-        with(ScanOssConfig.create(options)) {
+        with(ScanOssConfig.create(options, secrets)) {
             apiUrl shouldBe "url"
             apiKey shouldBe "key"
         }

@@ -25,8 +25,11 @@ import org.ossreviewtoolkit.utils.common.Options
 
 /**
  * A data class that holds the configuration options supported by the [ScanOss] scanner. An instance of this class is
- * created from the options contained in a [ScannerConfiguration] object under the key _ScanOss_. It offers the
+ * created from the [scanner config][ScannerConfiguration.config] object under the key _ScanOss_. It offers the
  * following configuration options:
+ *
+ * **"options.apiUrl":** The URL of the ScanOSS server.
+ * **"secrets.apiKey":** The API key to authenticate with the ScanOSS server.
  */
 data class ScanOssConfig(
     /** URL of the ScanOSS server. */
@@ -42,9 +45,9 @@ data class ScanOssConfig(
         /** Name of the configuration property for the API key. */
         const val API_KEY_PROPERTY = "apiKey"
 
-        fun create(options: Options): ScanOssConfig {
+        fun create(options: Options, secrets: Options): ScanOssConfig {
             val apiUrl = options[API_URL_PROPERTY] ?: ScanOssService.DEFAULT_API_URL
-            val apiKey = options[API_KEY_PROPERTY].orEmpty()
+            val apiKey = secrets[API_KEY_PROPERTY].orEmpty()
 
             return ScanOssConfig(apiUrl, apiKey)
         }
