@@ -51,132 +51,16 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
-                "nexusIq": {
-                    "$ref": "#/definitions/NexusIq"
-                },
-                "ossIndex": {
-                    "$ref": "#/definitions/OssIndex"
-                },
-                "vulnerableCode": {
-                    "$ref": "#/definitions/VulnerableCode"
-                },
-                "gitHubDefects": {
-                    "$ref": "#/definitions/GitHubDefects"
-                },
-                "osv": {
-                    "$ref": "#/definitions/Osv"
-                },
-                "options": {
-                    "$ref": "#/definitions/AdvisorOptions"
+                "config": {
+                    "$ref": "#/definitions/AdvisorConfig"
                 }
             }
         },
-        "GitHubDefects": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "token": {
-                    "type": "string"
-                },
-                "labelFilter": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "maxNumberOfIssuesPerRepository": {
-                    "type": "integer"
-                },
-                "parallelRequests": {
-                    "type": "integer"
-                }
-            },
-            "required": [
-                "labelFilter"
-            ]
-        },
-        "NexusIq": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "serverUrl": {
-                    "type": "string",
-                    "format": "uri"
-                },
-                "browseUrl": {
-                    "type": "string",
-                    "format": "uri"
-                },
-                "username": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "serverUrl"
-            ]
-        },
-        "OssIndex": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "serverUrl": {
-                    "type": "string",
-                    "format": "uri"
-                },
-                "username": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                }
-            }
-        },
-        "AdvisorOptions": {
+        "AdvisorConfig": {
             "type": "object",
             "additionalProperties": {
                 "type": "object"
             }
-        },
-        "CustomAdvisor": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "apiKey": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "apiKey"
-            ]
-        },
-        "Osv": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "serverUrl": {
-                    "type": "string",
-                    "format": "uri"
-                }
-            }
-        },
-        "VulnerableCode": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "serverUrl": {
-                    "type": "string",
-                    "format": "uri"
-                },
-                "apiKey": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "serverUrl"
-            ]
         },
         "Analyzer": {
             "$ref": "https://raw.githubusercontent.com/oss-review-toolkit/ort/main/integrations/schemas/analyzer-configuration-schema.json"

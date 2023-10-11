@@ -125,38 +125,58 @@ class OrtConfigurationTest : WordSpec({
             }
 
             with(ortConfig.advisor) {
-                nexusIq shouldNotBeNull {
-                    serverUrl shouldBe "https://rest-api-url-of-your-nexus-iq-server"
-                    browseUrl shouldBe "https://web-browsing-url-of-your-nexus-iq-server"
-                    username shouldBe "username"
-                    password shouldBe "password"
-                }
+                config shouldNotBeNull {
+                    get("GitHubDefects") shouldNotBeNull {
+                        options shouldContainExactly mapOf(
+                            "endpointUrl" to "https://api.github.com/graphql",
+                            "labelFilter" to "!duplicate, !enhancement, !invalid, !question, !documentation, *",
+                            "maxNumberOfIssuesPerRepository" to "50",
+                            "parallelRequests" to "5"
+                        )
 
-                vulnerableCode shouldNotBeNull {
-                    serverUrl shouldBe "http://localhost:8000"
-                    apiKey shouldBe "0123456789012345678901234567890123456789"
-                }
+                        secrets shouldContainExactly mapOf(
+                            "token" to "githubAccessToken"
+                        )
+                    }
 
-                gitHubDefects shouldNotBeNull {
-                    token shouldBe "githubAccessToken"
-                    labelFilter shouldContainExactlyInAnyOrder listOf(
-                        "!duplicate",
-                        "!enhancement",
-                        "!invalid",
-                        "!question",
-                        "!documentation",
-                        "*"
-                    )
-                    maxNumberOfIssuesPerRepository shouldBe 50
-                    parallelRequests shouldBe 5
-                }
+                    get("NexusIQ") shouldNotBeNull {
+                        options shouldContainExactly mapOf(
+                            "serverUrl" to "https://rest-api-url-of-your-nexus-iq-server",
+                            "browseUrl" to "https://web-browsing-url-of-your-nexus-iq-server"
+                        )
 
-                osv shouldNotBeNull {
-                    serverUrl shouldBe "https://api.osv.dev"
-                }
+                        secrets shouldContainExactly mapOf(
+                            "username" to "username",
+                            "password" to "password"
+                        )
+                    }
 
-                options shouldNotBeNull {
-                    this["CustomAdvisor"]?.get("apiKey") shouldBe "<some_api_key>"
+                    get("OssIndex") shouldNotBeNull {
+                        options shouldContainExactly mapOf(
+                            "serverUrl" to "https://ossindex.sonatype.org/"
+                        )
+
+                        secrets shouldContainExactly mapOf(
+                            "username" to "username",
+                            "password" to "password"
+                        )
+                    }
+
+                    get("OSV") shouldNotBeNull {
+                        options shouldContainExactly mapOf(
+                            "serverUrl" to "https://api.osv.dev"
+                        )
+                    }
+
+                    get("VulnerableCode") shouldNotBeNull {
+                        options shouldContainExactly mapOf(
+                            "serverUrl" to "http://localhost:8000"
+                        )
+
+                        secrets shouldContainExactly mapOf(
+                            "apiKey" to "0123456789012345678901234567890123456789"
+                        )
+                    }
                 }
             }
 

@@ -114,34 +114,40 @@ ort:
           lockfileName: "lockfile.lock"
 
   advisor:
-    nexusIq:
-      serverUrl: 'https://rest-api-url-of-your-nexus-iq-server'
-      browseUrl: 'https://web-browsing-url-of-your-nexus-iq-server'
-      username: username
-      password: password
+    config:
+      GitHubDefects:
+        options:
+          endpointUrl: 'https://api.github.com/graphql'
+          labelFilter: '!duplicate, !enhancement, !invalid, !question, !documentation, *'
+          maxNumberOfIssuesPerRepository: 50
+          parallelRequests: 5
+        secrets:
+          token: githubAccessToken
 
-    ossIndex:
-      username: username
-      password: password
+      NexusIQ:
+        options:
+          serverUrl: 'https://rest-api-url-of-your-nexus-iq-server'
+          browseUrl: 'https://web-browsing-url-of-your-nexus-iq-server'
+        secrets:
+          username: username
+          password: password
 
-    vulnerableCode:
-      serverUrl: 'http://localhost:8000'
-      apiKey: 0123456789012345678901234567890123456789
+      OssIndex:
+        options:
+          serverUrl: 'https://ossindex.sonatype.org/'
+        secrets:
+          username: username
+          password: password
 
-    gitHubDefects:
-      token: githubAccessToken
-      labelFilter: ['!duplicate', '!enhancement', '!invalid', '!question', '!documentation', '*']
-      maxNumberOfIssuesPerRepository: 50
-      parallelRequests: 5
+      OSV:
+        options:
+          serverUrl: 'https://api.osv.dev'
 
-    osv:
-      serverUrl: 'https://api.osv.dev'
-
-    options:
-      # A map of maps from advice provider names to provider-specific key-value pairs. This map can be used to provide
-      # configuration information for external advisor plugins.
-      CustomAdvisor:
-        apiKey: '<some_api_key>'
+      VulnerableCode:
+        options:
+          serverUrl: 'http://localhost:8000'
+        secrets:
+          apiKey: 0123456789012345678901234567890123456789
 
   downloader:
     allowMovingRevisions: true

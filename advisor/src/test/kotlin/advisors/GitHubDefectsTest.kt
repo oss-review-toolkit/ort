@@ -58,7 +58,6 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.GitHubDefectsConfiguration
 import org.ossreviewtoolkit.utils.common.enumSetOf
 
@@ -431,10 +430,9 @@ private fun createAdvisor(
     val githubConfig = GitHubDefectsConfiguration(token = GITHUB_TOKEN, endpointUrl = url)
         .run { labelFilter?.let { copy(labelFilter = it) } ?: this }
         .run { maxDefectsCount?.let { copy(maxNumberOfIssuesPerRepository = it) } ?: this }
-    val advisorConfig = AdvisorConfiguration(gitHubDefects = githubConfig)
 
     val factory = GitHubDefects.Factory()
-    return factory.create(advisorConfig)
+    return factory.create(githubConfig)
 }
 
 /**

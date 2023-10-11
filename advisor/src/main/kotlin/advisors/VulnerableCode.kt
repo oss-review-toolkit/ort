@@ -22,8 +22,8 @@ package org.ossreviewtoolkit.advisor.advisors
 import java.net.URI
 import java.time.Instant
 
-import org.ossreviewtoolkit.advisor.AbstractAdviceProviderFactory
 import org.ossreviewtoolkit.advisor.AdviceProvider
+import org.ossreviewtoolkit.advisor.AdviceProviderFactory
 import org.ossreviewtoolkit.clients.vulnerablecode.VulnerableCodeService
 import org.ossreviewtoolkit.clients.vulnerablecode.VulnerableCodeService.PackagesWrapper
 import org.ossreviewtoolkit.model.AdvisorCapability
@@ -35,10 +35,11 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.VulnerabilityReference
-import org.ossreviewtoolkit.model.config.AdvisorConfiguration
+import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.config.VulnerableCodeConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
@@ -52,10 +53,27 @@ private const val BULK_REQUEST_SIZE = 100
 /**
  * An [AdviceProvider] implementation that obtains security vulnerability information from a
  * [VulnerableCode][https://github.com/nexB/vulnerablecode] instance.
+ *
+ * This [AdviceProvider] offers the following configuration options:
+ *
+ * #### [Options][PluginConfiguration.options]
+ *
+ * * **`serverUrl`:** The base URL of the VulnerableCode REST API. By default, the public VulnerableCode instance is
+ *   used.
+ *
+ * #### [Secrets][PluginConfiguration.secrets]
+ *
+ * * **`apiKey`:** The optional API key to use.
  */
 class VulnerableCode(name: String, config: VulnerableCodeConfiguration) : AdviceProvider(name) {
-    class Factory : AbstractAdviceProviderFactory<VulnerableCode>("VulnerableCode") {
-        override fun create(config: AdvisorConfiguration) = VulnerableCode(type, config.forProvider { vulnerableCode })
+    class Factory : AdviceProviderFactory<VulnerableCodeConfiguration>("VulnerableCode") {
+        override fun create(config: VulnerableCodeConfiguration) = VulnerableCode(type, config)
+
+        override fun parseConfig(options: Options, secrets: Options) =
+            VulnerableCodeConfiguration(
+                serverUrl = options["serverUrl"],
+                apiKey = secrets["apiKey"]
+            )
     }
 
     /**
