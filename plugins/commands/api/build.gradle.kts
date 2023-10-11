@@ -27,7 +27,6 @@ dependencies {
     api(project(":utils:common-utils"))
 
     api(libs.clikt)
-    api(libs.log4jApiKotlin)
 
     implementation(project(":utils:ort-utils"))
 

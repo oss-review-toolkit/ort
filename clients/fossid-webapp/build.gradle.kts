@@ -23,7 +23,6 @@ plugins {
 }
 
 dependencies {
-    api(libs.log4jApiKotlin)
     api(libs.okhttp)
     api(libs.retrofit)
 
