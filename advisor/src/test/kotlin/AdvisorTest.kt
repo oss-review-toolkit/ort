@@ -117,8 +117,8 @@ private fun createAdvisor(providers: List<AdviceProvider>): Advisor {
     val advisorConfig = AdvisorConfiguration()
 
     val factories = providers.map { provider ->
-        val factory = mockk<AdviceProviderFactory>()
-        every { factory.create(advisorConfig) } returns provider
+        val factory = mockk<AdviceProviderFactory<*>>()
+        every { factory.create(emptyMap(), emptyMap()) } returns provider
         factory
     }
 

@@ -33,8 +33,8 @@ import kotlinx.coroutines.withContext
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.advisor.AbstractAdviceProviderFactory
 import org.ossreviewtoolkit.advisor.AdviceProvider
+import org.ossreviewtoolkit.advisor.AdviceProviderFactory
 import org.ossreviewtoolkit.clients.github.DateTime
 import org.ossreviewtoolkit.clients.github.GitHubService
 import org.ossreviewtoolkit.clients.github.Paging
@@ -50,9 +50,10 @@ import org.ossreviewtoolkit.model.Defect
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Severity
-import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.GitHubDefectsConfiguration
+import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.ort.filterVersionNames
@@ -79,6 +80,23 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
  *
  * For these reasons, this advisor is more a reference implementation for ORT's defects model and not necessarily
  * suitable for production usage.
+ *
+ * This [AdviceProvider] offers the following configuration options:
+ *
+ * #### [Options][PluginConfiguration.options]
+ *
+ * * **`endpointUrl`:** The URL of the GraphQL endpoint to be accessed by the service. If undefined, default is the
+ *   endpoint of the official GitHub GraphQL API.
+ * * **`labelFilter`:** A list with labels to be used for filtering GitHub issues. See
+ *   [GitHubDefectsConfiguration.labelFilter] for details.
+ * * **`maxNumberOfIssuesPerRepository`:** The maximum number of defects that are retrieved from a single repository.
+ *   See [GitHubDefectsConfiguration.maxNumberOfIssuesPerRepository] for details.
+ * * **`parallelRequests`:** Determines the number of requests to the GitHub GraphQL API that are executed in parallel.
+ *   See [GitHubDefectsConfiguration.parallelRequests] for details.
+ *
+ * #### [Secrets][PluginConfiguration.secrets]
+ *
+ * * **`token`:** The access token to authenticate against the GitHub GraphQL endpoint.
  */
 class GitHubDefects(name: String, config: GitHubDefectsConfiguration) : AdviceProvider(name) {
     companion object {
@@ -89,8 +107,18 @@ class GitHubDefects(name: String, config: GitHubDefectsConfiguration) : AdvicePr
         const val DEFAULT_PARALLEL_REQUESTS = 4
     }
 
-    class Factory : AbstractAdviceProviderFactory<GitHubDefects>("GitHubDefects") {
-        override fun create(config: AdvisorConfiguration) = GitHubDefects(type, config.forProvider { gitHubDefects })
+    class Factory : AdviceProviderFactory<GitHubDefectsConfiguration>("GitHubDefects") {
+        override fun create(config: GitHubDefectsConfiguration) = GitHubDefects(type, config)
+
+        override fun parseConfig(options: Options, secrets: Options) =
+            GitHubDefectsConfiguration(
+                token = secrets["token"],
+                endpointUrl = options["endpointUrl"],
+                labelFilter = options["labelFilter"]?.split(",")?.map { it.trim() }
+                    ?: listOf("!duplicate", "!enhancement", "!invalid", "!question", "*"),
+                maxNumberOfIssuesPerRepository = options["maxNumberOfIssuesPerRepository"]?.toInt(),
+                parallelRequests = options["parallelRequests"]?.toInt()
+            )
     }
 
     /**

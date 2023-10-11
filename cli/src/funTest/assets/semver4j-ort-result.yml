@@ -373,10 +373,13 @@ advisor:
       GOPATH: "/go"
     tool_versions: {}
   config:
-    nexus_iq:
-      server_url: "https://oss-review-toolkit.org"
-      browse_url: "https://oss-review-toolkit.org"
-      username: "user"
+    config:
+      NexusIQ:
+        options:
+          server_url: "https://oss-review-toolkit.org"
+          browse_url: "https://oss-review-toolkit.org"
+        secrets:
+          username: "user"
   results:
     advisor_results:
       Maven:junit:junit:4.12:

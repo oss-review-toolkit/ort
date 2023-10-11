@@ -42,14 +42,14 @@ import org.ossreviewtoolkit.utils.ort.Environment
  * [OrtResult].
  */
 class Advisor(
-    private val providerFactories: List<AdviceProviderFactory>,
+    private val providerFactories: List<AdviceProviderFactory<*>>,
     private val config: AdvisorConfiguration
 ) {
     companion object {
         /**
          * All [advice provider factories][AdviceProviderFactory] available in the classpath, associated by their names.
          */
-        val ALL by lazy { Plugin.getAll<AdviceProviderFactory>() }
+        val ALL by lazy { Plugin.getAll<AdviceProviderFactory<*>>() }
     }
 
     /**
@@ -83,7 +83,10 @@ class Advisor(
             if (packages.isEmpty()) {
                 logger.info { "There are no packages to give advice for." }
             } else {
-                val providers = providerFactories.map { it.create(config) }
+                val providers = providerFactories.map {
+                    val providerConfig = config.config?.get(it.type)
+                    it.create(providerConfig?.options.orEmpty(), providerConfig?.secrets.orEmpty())
+                }
 
                 providers.map { provider ->
                     async {

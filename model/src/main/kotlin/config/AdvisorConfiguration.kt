@@ -22,26 +22,18 @@ package org.ossreviewtoolkit.model.config
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 
-import org.ossreviewtoolkit.utils.common.Options
+import org.ossreviewtoolkit.utils.common.Plugin
 
 /**
  * The base configuration model of the advisor.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class AdvisorConfiguration(
-    val gitHubDefects: GitHubDefectsConfiguration? = null,
-    val nexusIq: NexusIqConfiguration? = null,
-    val ossIndex: OssIndexConfiguration? = null,
-    val osv: OsvConfiguration? = null,
-    val vulnerableCode: VulnerableCodeConfiguration? = null,
-
     /**
-     * A map with generic options for advice providers using the provider name as key. While the advice providers
-     * shipped with ORT can access their configuration in a type-safe way via the other properties in this class,
-     * this map offers a way for external advisor plugins to query configuration information.
+     * A map with [configuration][PluginConfiguration] for advice providers using the [provider type][Plugin.type] as
+     * key.
      */
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    val options: Map<String, Options>? = null
+    val config: Map<String, PluginConfiguration>? = null
 )
 
 /**

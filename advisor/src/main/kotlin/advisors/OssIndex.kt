@@ -24,8 +24,8 @@ import java.time.Instant
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.advisor.AbstractAdviceProviderFactory
 import org.ossreviewtoolkit.advisor.AdviceProvider
+import org.ossreviewtoolkit.advisor.AdviceProviderFactory
 import org.ossreviewtoolkit.clients.ossindex.OssIndexService
 import org.ossreviewtoolkit.clients.ossindex.OssIndexService.ComponentReport
 import org.ossreviewtoolkit.clients.ossindex.OssIndexService.ComponentReportRequest
@@ -37,15 +37,30 @@ import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.VulnerabilityReference
-import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.OssIndexConfiguration
+import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 
 /**
  * The number of packages to request from Sonatype OSS Index in one request.
+ *
+ * This [AdviceProvider] offers the following configuration options:
+ *
+ * #### [Options][PluginConfiguration.options]
+ *
+ * * **`serverUrl`:** The base URL of the OSS Index REST API. If undefined, the default base URL for the REST API of the
+ *   public OSS Index service is used.
+ *
+ * #### [Secrets][PluginConfiguration.secrets]
+ *
+ * * **`username`:** The username to use for authentication.
+ * * **`password`:** The password to use for authentication.
+ *
+ * If not both `username` and `password` are provided, authentication is disabled.
  */
 private const val BULK_REQUEST_SIZE = 128
 
@@ -53,9 +68,15 @@ private const val BULK_REQUEST_SIZE = 128
  * A wrapper for Sonatype's [OSS Index](https://ossindex.sonatype.org/) security vulnerability data.
  */
 class OssIndex(name: String, config: OssIndexConfiguration) : AdviceProvider(name) {
-    class Factory : AbstractAdviceProviderFactory<OssIndex>("OssIndex") {
-        override fun create(config: AdvisorConfiguration) =
-            OssIndex(type, config.forProvider { ossIndex ?: OssIndexConfiguration() })
+    class Factory : AdviceProviderFactory<OssIndexConfiguration>("OssIndex") {
+        override fun create(config: OssIndexConfiguration) = OssIndex(type, config)
+
+        override fun parseConfig(options: Options, secrets: Options) =
+            OssIndexConfiguration(
+                serverUrl = options["serverUrl"],
+                username = secrets["username"],
+                password = secrets["password"]
+            )
     }
 
     override val details = AdvisorDetails(providerName, enumSetOf(AdvisorCapability.VULNERABILITIES))

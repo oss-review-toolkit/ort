@@ -25,8 +25,8 @@ import java.time.Instant
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.advisor.AbstractAdviceProviderFactory
 import org.ossreviewtoolkit.advisor.AdviceProvider
+import org.ossreviewtoolkit.advisor.AdviceProviderFactory
 import org.ossreviewtoolkit.clients.nexusiq.NexusIqService
 import org.ossreviewtoolkit.clients.nexusiq.NexusIqService.Component
 import org.ossreviewtoolkit.clients.nexusiq.NexusIqService.ComponentDetails
@@ -41,11 +41,12 @@ import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.VulnerabilityReference
-import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.NexusIqConfiguration
+import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.utils.PurlType
 import org.ossreviewtoolkit.model.utils.getPurlType
 import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
@@ -63,10 +64,35 @@ private val READ_TIMEOUT = Duration.ofSeconds(60)
 
 /**
  * A wrapper for [Nexus IQ Server](https://help.sonatype.com/iqserver) security vulnerability data.
+ *
+ * This [AdviceProvider] offers the following configuration options:
+ *
+ * #### [Options][PluginConfiguration.options]
+ *
+ * * **`serverUrl`:** The URL to use for REST API requests against the server.
+ * * **`browseUrl`:** The URL to use as a base for browsing vulnerability details. Defaults to the server URL.
+ *
+ * #### [Secrets][PluginConfiguration.secrets]
+ *
+ * * **`username`:** The username to use for authentication.
+ * * **`password`:** The password to use for authentication.
+ *
+ * If not both `username` and `password` are provided, authentication is disabled.
  */
 class NexusIq(name: String, private val config: NexusIqConfiguration) : AdviceProvider(name) {
-    class Factory : AbstractAdviceProviderFactory<NexusIq>("NexusIQ") {
-        override fun create(config: AdvisorConfiguration) = NexusIq(type, config.forProvider { nexusIq })
+    class Factory : AdviceProviderFactory<NexusIqConfiguration>("NexusIQ") {
+        override fun create(config: NexusIqConfiguration) = NexusIq(type, config)
+
+        override fun parseConfig(options: Options, secrets: Options): NexusIqConfiguration {
+            val serverUrl = options.getValue("serverUrl")
+
+            return NexusIqConfiguration(
+                serverUrl = serverUrl,
+                browseUrl = options["browseUrl"] ?: serverUrl,
+                username = secrets["username"],
+                password = secrets["password"]
+            )
+        }
     }
 
     override val details: AdvisorDetails = AdvisorDetails(providerName, enumSetOf(AdvisorCapability.VULNERABILITIES))

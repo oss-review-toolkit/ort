@@ -26,8 +26,8 @@ import kotlinx.serialization.json.contentOrNull
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.advisor.AbstractAdviceProviderFactory
 import org.ossreviewtoolkit.advisor.AdviceProvider
+import org.ossreviewtoolkit.advisor.AdviceProviderFactory
 import org.ossreviewtoolkit.clients.osv.Ecosystem
 import org.ossreviewtoolkit.clients.osv.OsvService
 import org.ossreviewtoolkit.clients.osv.Severity
@@ -40,8 +40,9 @@ import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VulnerabilityReference
-import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.OsvConfiguration
+import org.ossreviewtoolkit.model.config.PluginConfiguration
+import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.common.toUri
@@ -51,12 +52,20 @@ import us.springett.cvss.Cvss
 
 /**
  * An advice provider that obtains vulnerability information from Open Source Vulnerabilities (https://osv.dev/).
+ *
+ * This [AdviceProvider] offers the following configuration options:
+ *
+ * #### [Options][PluginConfiguration.options]
+ *
+ * * **`serverUrl`:** The base URL of the OSV REST API. If undefined, default is the production endpoint of the official
+ *   OSV.dev API.
  */
 class Osv(name: String, config: OsvConfiguration) : AdviceProvider(name) {
-    class Factory : AbstractAdviceProviderFactory<Osv>("OSV") {
-        override fun create(config: AdvisorConfiguration) =
-            // OSV does not require any dedicated configuration to be present.
-            Osv(type, config.forProvider { osv ?: OsvConfiguration() })
+    class Factory : AdviceProviderFactory<OsvConfiguration>("OSV") {
+        override fun create(config: OsvConfiguration) = Osv(type, config)
+
+        override fun parseConfig(options: Options, secrets: Options) =
+            OsvConfiguration(serverUrl = options["serverUrl"])
     }
 
     override val details: AdvisorDetails = AdvisorDetails(providerName, enumSetOf(AdvisorCapability.VULNERABILITIES))
