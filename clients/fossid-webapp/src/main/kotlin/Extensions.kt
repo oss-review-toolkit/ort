@@ -535,6 +535,45 @@ suspend fun FossIdRestService.addLicenseIdentification(
 }
 
 /**
+ * Add component identification for component [componentName]/[componentVersion] to file with [path] for the given
+ * [scanCode]. If [preserveExistingIdentifications] is true, identification is appended, otherwise it replaces existing
+ * identifications.
+ *
+ * The HTTP request is sent with [user] and [apiKey] as credentials.
+ */
+@Suppress("LongParameterList")
+suspend fun FossIdRestService.addComponentIdentification(
+    user: String,
+    apiKey: String,
+    scanCode: String,
+    path: String,
+    componentName: String,
+    componentVersion: String,
+    isDirectory: Boolean,
+    preserveExistingIdentifications: Boolean = true
+): EntityResponseBody<Nothing> {
+    val base64Path = base64Encoder.encodeToString(path.toByteArray())
+    val directoryFlag = if (isDirectory) "1" else "0"
+    val preserveExistingIdentificationsFlag = if (preserveExistingIdentifications) "1" else "0"
+    return addComponentIdentification(
+        PostRequestBody(
+            "set_identification_component",
+            FILES_AND_FOLDERS_GROUP,
+            user,
+            apiKey,
+            mapOf(
+                "scan_code" to scanCode,
+                "path" to base64Path,
+                "is_directory" to directoryFlag,
+                "component_name" to componentName,
+                "component_version" to componentVersion,
+                "preserve_existing_identifications" to preserveExistingIdentificationsFlag
+            )
+        )
+    )
+}
+
+/**
  * Add a [comment] to file with [path] for the given [scanCode].
  *
  * The HTTP request is sent with [user] and [apiKey] as credentials.

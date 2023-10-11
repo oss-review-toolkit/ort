@@ -290,6 +290,9 @@ interface FossIdRestService {
     suspend fun addLicenseIdentification(@Body body: PostRequestBody): EntityResponseBody<Nothing>
 
     @POST("api.php")
+    suspend fun addComponentIdentification(@Body body: PostRequestBody): EntityResponseBody<Nothing>
+
+    @POST("api.php")
     suspend fun addFileComment(@Body body: PostRequestBody): EntityResponseBody<Nothing>
 
     @GET("index.php?form=login")

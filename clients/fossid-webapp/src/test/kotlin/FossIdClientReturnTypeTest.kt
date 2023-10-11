@@ -294,6 +294,21 @@ class FossIdClientReturnTypeTest : StringSpec({
         }
     }
 
+    "A component identification can be added to a file" {
+        service.addComponentIdentification(
+            "",
+            "",
+            SCAN_CODE_1,
+            "src/main/java/com/vdurmont/semver4j/Range.java",
+            "semver4j",
+            "3.0.0",
+            isDirectory = false,
+            preserveExistingIdentifications = false
+        ).shouldNotBeNull().run {
+            checkResponse("add component identification")
+        }
+    }
+
     "A comment can be added to a file" {
         service.addFileComment(
             "",
