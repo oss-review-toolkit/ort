@@ -78,9 +78,9 @@ project:
           - id: "Pub:meta:meta:1.11.0"
     - id: "Pub:test:test:1.24.7"
       dependencies:
-      - id: "Pub:analyzer:analyzer:6.2.0"
+      - id: "Pub:analyzer:analyzer:6.3.0"
         dependencies:
-        - id: "Pub:_fe_analyzer_shared:_fe_analyzer_shared:64.0.0"
+        - id: "Pub:_fe_analyzer_shared:_fe_analyzer_shared:65.0.0"
           dependencies:
           - id: "Pub:meta:meta:1.11.0"
         - id: "Pub:collection:collection:1.18.0"
@@ -593,9 +593,9 @@ project:
         - id: "Pub:term_glyph:term_glyph:1.2.1"
       - id: "Pub:test_core:test_core:0.5.7"
         dependencies:
-        - id: "Pub:analyzer:analyzer:6.2.0"
+        - id: "Pub:analyzer:analyzer:6.3.0"
           dependencies:
-          - id: "Pub:_fe_analyzer_shared:_fe_analyzer_shared:64.0.0"
+          - id: "Pub:_fe_analyzer_shared:_fe_analyzer_shared:65.0.0"
             dependencies:
             - id: "Pub:meta:meta:1.11.0"
           - id: "Pub:collection:collection:1.18.0"
@@ -887,8 +887,8 @@ project:
             - id: "Pub:path:path:1.8.3"
             - id: "Pub:term_glyph:term_glyph:1.2.1"
 packages:
-- id: "Pub:_fe_analyzer_shared:_fe_analyzer_shared:64.0.0"
-  purl: "pkg:pub/_fe_analyzer_shared/_fe_analyzer_shared@64.0.0"
+- id: "Pub:_fe_analyzer_shared:_fe_analyzer_shared:65.0.0"
+  purl: "pkg:pub/_fe_analyzer_shared/_fe_analyzer_shared@65.0.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "Logic that is shared between the front_end and analyzer packages."
@@ -913,8 +913,8 @@ packages:
     url: "https://github.com/dart-lang/sdk.git"
     revision: "main"
     path: "pkg/_fe_analyzer_shared"
-- id: "Pub:analyzer:analyzer:6.2.0"
-  purl: "pkg:pub/analyzer/analyzer@6.2.0"
+- id: "Pub:analyzer:analyzer:6.3.0"
+  purl: "pkg:pub/analyzer/analyzer@6.3.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "This package provides a library that performs static analysis of Dart\
