@@ -177,8 +177,10 @@ jobs:
             ${{ env.REGISTRY }}/${{ github.repository_owner }}/ort-extended
           tags: |
             type=schedule,pattern={{date 'YYYYMMDD'}}
+            type=schedule,pattern=snapshot
             type=pep440,pattern={{version}}
             type=raw,value=${{ env.ORT_VERSION }}
+            type=ref,event=tag
 
       - name: Build ORT extended runtime image
         uses: docker/build-push-action@v5
@@ -189,7 +191,6 @@ jobs:
           load: false
           tags: |
             ${{ steps.meta-ort.outputs.tags }}
-            ${{ env.REGISTRY }}/${{ github.repository_owner }}/ort-extended:latest
           labels: ${{ steps.meta.outputs.labels }}
           build-contexts: |
             ort=docker-image://${{ env.REGISTRY }}/${{ github.repository_owner }}/ort:${{ env.ORT_VERSION }}
