@@ -34,7 +34,6 @@ dependencies {
     }
 
     api(libs.jacksonDatabind)
-    api(libs.log4jApiKotlin)
 
     implementation(project(":downloader"))
     implementation(project(":utils:ort-utils"))
