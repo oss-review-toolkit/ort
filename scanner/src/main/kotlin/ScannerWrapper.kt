@@ -27,6 +27,7 @@ import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
+import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.Plugin
@@ -66,10 +67,10 @@ sealed interface ScannerWrapper {
     /**
      * The [ScannerMatcher] object to be used when looking up existing scan results from a scan storage. By default,
      * the properties of this object are initialized by the scanner implementation. These defaults can be overridden
-     * with the [ScannerConfiguration.options] property: Use properties of the form `scannerName.property`, where
-     * `scannerName` is the name of the scanner and `property` is the name of a property of the [ScannerMatcher]
-     * class. For instance, to specify that a specific minimum version of ScanCode is allowed, set this property:
-     * `options.ScanCode.minScannerVersion=3.0.2`.
+     * with the scanner specific [options][PluginConfiguration.options] in [ScannerConfiguration.config]: Use properties
+     * of the form `scannerName.options.property`, where `scannerName` is the name of the scanner and `property` is the
+     * name of a property of the [ScannerMatcher] class. For instance, to specify that a specific minimum version of
+     * ScanCode is allowed, set this property: `config.ScanCode.options.minVersion=3.0.2`.
      *
      * If this property is null, it means that the results of this [ScannerWrapper] cannot be stored in a scan storage.
      */

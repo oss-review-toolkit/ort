@@ -88,7 +88,7 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 /**
  * A wrapper for [FossID](https://fossid.com/).
  *
- * This scanner can be configured in [ScannerConfiguration.options]. For the options available and their documentation
+ * This scanner can be configured in [ScannerConfiguration.config]. For the options available and their documentation
  * refer to [FossIdConfig].
  *
  * This scanner was implemented before the introduction of [provenance based scanning][ProvenanceScannerWrapper].

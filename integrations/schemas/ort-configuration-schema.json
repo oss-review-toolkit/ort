@@ -314,8 +314,8 @@
                 "fileListStorage": {
                     "$ref": "#/definitions/FileListStorage"
                 },
-                "options": {
-                    "$ref": "#/definitions/ScannerOptions"
+                "config": {
+                    "$ref": "#/definitions/ScannerConfig"
                 },
                 "storages": {
                     "$ref": "#/definitions/Storages"
@@ -474,7 +474,7 @@
                 "type": "string"
             }
         },
-        "ScannerOptions": {
+        "ScannerConfig": {
             "type": "object",
             "additionalProperties": {
                 "type": "object"

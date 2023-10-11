@@ -169,7 +169,7 @@ scanner:
     tool_versions: {}
   config:
     archive: null
-    options: null
+    config: null
     storages:
       postgresStorage: !<.PostgresStorageConfiguration>
         connection:

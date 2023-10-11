@@ -211,7 +211,6 @@ scanner:
       LicenseRef-scancode-unknown: "NOASSERTION"
       LicenseRef-scancode-unknown-license-reference: "NOASSERTION"
       LicenseRef-scancode-unknown-spdx: "NOASSERTION"
-    options: {}
     ignore_patterns:
     - "**/*.ort.yml"
     - "**/*.spdx.yml"

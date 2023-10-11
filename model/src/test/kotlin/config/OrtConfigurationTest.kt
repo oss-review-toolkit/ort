@@ -226,9 +226,9 @@ class OrtConfigurationTest : WordSpec({
                     }
                 }
 
-                options shouldNotBeNull {
+                config shouldNotBeNull {
                     get("ScanCode") shouldNotBeNull {
-                        this shouldContainExactly mapOf(
+                        options shouldContainExactly mapOf(
                             "commandLine" to "--copyright --license --info --strip-root --timeout 300",
                             "commandLineNonConfig" to "--processes 4",
                             "minVersion" to "3.2.1-rc2",
@@ -240,7 +240,7 @@ class OrtConfigurationTest : WordSpec({
                         val urlMapping = "https://my-repo.example.org(?<repoPath>.*) -> " +
                             "ssh://my-mapped-repo.example.org\${repoPath}"
 
-                        this shouldContainExactly mapOf(
+                        options shouldContainExactly mapOf(
                             "serverUrl" to "https://fossid.example.com/instance/",
                             "user" to "user",
                             "apiKey" to "XYZ",
