@@ -49,7 +49,6 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
-import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.model.config.createStorage
@@ -155,29 +154,11 @@ class Scanner(
 
         val endTime = Instant.now()
 
-        val filteredScannerConfigs = mutableMapOf<String, PluginConfiguration>()
-
-        projectScannerWrappers.forEach { scannerWrapper ->
-            scannerConfig.config?.get(scannerWrapper.name)?.let { config ->
-                filteredScannerConfigs[scannerWrapper.name] =
-                    config.copy(options = scannerWrapper.filterSecretOptions(config.options))
-            }
-        }
-
-        packageScannerWrappers.forEach { scannerWrapper ->
-            scannerConfig.config?.get(scannerWrapper.name)?.let { config ->
-                filteredScannerConfigs[scannerWrapper.name] =
-                    config.copy(options = scannerWrapper.filterSecretOptions(config.options))
-            }
-        }
-
-        val filteredScannerConfig = scannerConfig.copy(config = filteredScannerConfigs)
-
         val scannerRun = ScannerRun(
             startTime = startTime,
             endTime = endTime,
             environment = Environment(),
-            config = filteredScannerConfig,
+            config = scannerConfig,
             provenances = projectResults.provenances + packageResults.provenances,
             scanResults = projectResults.scanResults + packageResults.scanResults,
             files = projectResults.files + packageResults.files,

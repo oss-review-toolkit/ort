@@ -29,7 +29,6 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.Plugin
 
 /**
@@ -75,11 +74,6 @@ sealed interface ScannerWrapper {
      * If this property is null, it means that the results of this [ScannerWrapper] cannot be stored in a scan storage.
      */
     val matcher: ScannerMatcher?
-
-    /**
-     * Filter the scanner-specific options to remove / obfuscate any secrets, like credentials.
-     */
-    fun filterSecretOptions(options: Options): Options = options
 }
 
 /**
