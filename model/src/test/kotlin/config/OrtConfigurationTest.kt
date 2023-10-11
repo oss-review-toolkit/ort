@@ -242,8 +242,6 @@ class OrtConfigurationTest : WordSpec({
 
                         options shouldContainExactly mapOf(
                             "serverUrl" to "https://fossid.example.com/instance/",
-                            "user" to "user",
-                            "apiKey" to "XYZ",
                             "namingProjectPattern" to "\$Var1_\$Var2",
                             "namingScanPattern" to "\$Var1_#projectBaseCode_\$Var3",
                             "namingVariableVar1" to "myOrg",
@@ -257,6 +255,11 @@ class OrtConfigurationTest : WordSpec({
                             "detectCopyrightStatements" to "true",
                             "timeout" to "60",
                             "urlMappingExample" to urlMapping
+                        )
+
+                        secrets shouldContainExactly mapOf(
+                            "user" to "user",
+                            "apiKey" to "XYZ"
                         )
                     }
                 }
