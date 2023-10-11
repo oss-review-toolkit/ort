@@ -245,6 +245,12 @@ ort:
           user: user
           apiKey: XYZ
 
+      SCANOSS:
+        options:
+          apiUrl: 'https://osskb.org/api/'
+        secrets:
+          apiKey: 'your API key'
+
     storages:
       local:
         backend:
