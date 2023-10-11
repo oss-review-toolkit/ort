@@ -182,8 +182,8 @@ jobs:
 
       - name: Get ORT current version
         run: |
-          ORT_VERSION=$(./gradlew -q properties --property version | sed -nr "s/version: (.+)/\1/p")
-          echo "ORT_VERSION=${ORT_VERSION}" >> $GITHUB_ENV
+          # ORT_VERSION=$(./gradlew -q properties --property version | sed -nr "s/version: (.+)/\1/p")
+          echo "ORT_VERSION=3.0.99" >> $GITHUB_ENV
 
       - name: Set up Docker build
         uses: docker/setup-buildx-action@v3
@@ -205,6 +205,7 @@ jobs:
             type=schedule,pattern={{date 'YYYYMMDD'}}
             type=pep440,pattern={{version}}
             type=raw,value=${{ env.ORT_VERSION }}
+            type=raw,value=snapshot,event=push
 
       - name: Build ORT runtime image
         uses: docker/build-push-action@v5
@@ -218,7 +219,6 @@ jobs:
             ORT_VERSION=${{ env.ORT_VERSION }}
           tags: |
             ${{ steps.meta-ort.outputs.tags }}
-            ${{ env.REGISTRY }}/${{ github.repository_owner }}/ort:latest
           labels: ${{ steps.meta.outputs.labels }}
           build-contexts: |
             base=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/base:latest
