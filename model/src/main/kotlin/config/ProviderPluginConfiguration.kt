@@ -23,11 +23,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 
 import com.sksamuel.hoplite.ConfigAlias
 
+import org.ossreviewtoolkit.utils.common.ConfigurablePluginFactory
 import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.Plugin
 
 /**
- * The configuration of provider plugins.
+ * The configuration of provider [plugins][ConfigurablePluginFactory]. This class is used when multiple instances of the
+ * same type of plugin should be configurable, like it is for example possible for package curation providers.
+ * Therefore, each configured plugin gets a unique [id] in addition to the plugin [type] to be able to distinguish
+ * different configurations for the same plugin type.
  */
 data class ProviderPluginConfiguration(
     /**
