@@ -41,7 +41,6 @@ dependencies {
     implementation(libs.jacksonCore)
     implementation(libs.jacksonDatabind)
     implementation(libs.jacksonModuleKotlin)
-    implementation(libs.log4jApiKotlin)
 
     funTestImplementation(testFixtures(project(":analyzer")))
 }

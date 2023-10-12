@@ -29,7 +29,5 @@ dependencies {
     implementation(project(":downloader"))
     implementation(project(":utils:ort-utils"))
 
-    implementation(libs.log4jApiKotlin)
-
     funTestImplementation(testFixtures(project(":analyzer")))
 }

@@ -101,6 +101,8 @@ dependencies {
     "detektPlugins"(project(":detekt-rules"))
 
     "detektPlugins"("io.gitlab.arturbosch.detekt:detekt-formatting:${libs.versions.detektPlugin.get()}")
+
+    implementation(libs.log4jApiKotlin)
 }
 
 detekt {

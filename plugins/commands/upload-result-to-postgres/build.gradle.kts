@@ -32,7 +32,6 @@ dependencies {
 
     implementation(libs.bundles.exposed)
     implementation(libs.clikt)
-    implementation(libs.log4jApiKotlin)
 
     runtimeOnly(libs.postgres)
 }

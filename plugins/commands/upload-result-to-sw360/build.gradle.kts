@@ -33,6 +33,5 @@ dependencies {
     implementation(project(":utils:spdx-utils"))
 
     implementation(libs.clikt)
-    implementation(libs.log4jApiKotlin)
     implementation(libs.sw360Client)
 }

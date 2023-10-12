@@ -36,7 +36,6 @@ dependencies {
     implementation(project(":utils:spdx-utils"))
 
     implementation(libs.bundles.kotlinxSerialization)
-    implementation(libs.log4jApiKotlin)
 }
 
 tasks.withType<KotlinCompile>().configureEach {
