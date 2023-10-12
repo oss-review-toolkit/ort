@@ -37,6 +37,8 @@ import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.toOrtPackages
 import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.toPackageReferences
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.ProcessCapture
+import org.ossreviewtoolkit.utils.common.withoutPrefix
+import org.ossreviewtoolkit.utils.common.withoutSuffix
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 
 /**
@@ -63,7 +65,8 @@ class Poetry(
     override fun transformVersion(output: String) = output.substringAfter("version ").removeSuffix(")")
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
-        val resultsForScopeName = SCOPES_NAMES.associateWith { inspectLockfile(definitionFile, it) }
+        val scopeName = parseScopeNamesFromPyproject(definitionFile.resolveSibling(Pip.PYPROJECT_FILENAME))
+        val resultsForScopeName = scopeName.associateWith { inspectLockfile(definitionFile, it) }
 
         val packages = resultsForScopeName
             .flatMap { (_, results) -> results.packages }
@@ -115,4 +118,20 @@ class Poetry(
     }
 }
 
-private val SCOPES_NAMES = listOf("main", "dev")
+internal fun parseScopeNamesFromPyproject(pyprojectFile: File): Set<String> {
+    // The implicit "main" scope is always present.
+    val scopes = mutableSetOf("main")
+
+    if (!pyprojectFile.isFile) return scopes
+
+    pyprojectFile.readLines().mapNotNullTo(scopes) { line ->
+        // Handle both "[tool.poetry.<scope>-dependencies]" and "[tool.poetry.group.<scope>.dependencies]" syntax.
+        val poetryEntry = line.withoutPrefix("[tool.poetry.")
+        poetryEntry.withoutPrefix("group.") { poetryEntry }
+            .withoutSuffix("dependencies]")
+            ?.trimEnd('-', '.')
+            ?.takeUnless { it.isEmpty() }
+    }
+
+    return scopes
+}
