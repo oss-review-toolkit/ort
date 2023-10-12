@@ -38,7 +38,6 @@ dependencies {
     implementation(project(":utils:spdx-utils"))
 
     implementation(libs.jacksonDatabind)
-    implementation(libs.log4jApi)
     implementation(libs.log4jApiKotlin)
 
     funTestImplementation(testFixtures(project(":analyzer")))

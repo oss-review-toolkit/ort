@@ -40,7 +40,6 @@ dependencies {
 
     implementation(libs.jacksonDatabind)
     implementation(libs.jacksonDataformatYaml)
-    implementation(libs.log4jApi)
 
     funTestImplementation(project(":plugins:package-managers:gradle-package-manager"))
 

@@ -29,6 +29,7 @@ dependencies {
     api(libs.semver4j)
 
     implementation(libs.diskLruCache)
+    implementation(libs.log4jApi)
     implementation(libs.springCore)
 
     runtimeOnly(libs.xz)
