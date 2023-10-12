@@ -1,6 +1,6 @@
 ---
 project:
-  id: "GoMod::gomod_dangling_embed:<REPLACE_REVISION>"
+  id: "GoMod::gomod_dangling_embed:"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gomod-dangling-embed/go.mod"
   declared_licenses: []
   declared_licenses_processed: {}

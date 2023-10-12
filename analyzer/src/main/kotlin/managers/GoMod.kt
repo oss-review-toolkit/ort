@@ -144,7 +144,7 @@ class GoMod(
                             type = managerName,
                             namespace = "",
                             name = projectId.name,
-                            version = projectVcs.revision
+                            version = ""
                         ),
                         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                         authors = emptySet(), // Go mod doesn't support author information.

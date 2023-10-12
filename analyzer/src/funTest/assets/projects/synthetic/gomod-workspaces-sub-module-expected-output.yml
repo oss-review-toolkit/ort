@@ -1,6 +1,6 @@
 ---
 project:
-  id: "GoMod::github.com/oss-review-toolkit/ort/gomod-workspaces/other-module:<REPLACE_REVISION>"
+  id: "GoMod::github.com/oss-review-toolkit/ort/gomod-workspaces/other-module:"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gomod-workspaces/other-module/go.mod"
   declared_licenses: []
   declared_licenses_processed: {}
