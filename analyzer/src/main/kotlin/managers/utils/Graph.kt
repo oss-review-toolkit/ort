@@ -24,8 +24,6 @@ import java.util.LinkedList
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.PackageLinkage
-import org.ossreviewtoolkit.model.PackageReference
 
 /**
  * A class to represent a graph with dependencies. This representation is basically an adjacency list implemented by a
@@ -116,29 +114,9 @@ internal class Graph private constructor(private val nodeMap: MutableMap<Identif
     }
 
     /**
-     * Convert this [Graph] to a set of [PackageReference]s that spawn the dependency trees of the direct dependencies
-     * of the given [root] package. The graph must not contain any cycles, so [breakCycles] should be called before.
-     */
-    fun toPackageReferenceForest(root: Identifier): Set<PackageReference> {
-        fun getPackageReference(id: Identifier): PackageReference {
-            val dependencies = getDependencies(id).mapTo(mutableSetOf()) {
-                getPackageReference(it)
-            }
-
-            return PackageReference(
-                id = id,
-                linkage = PackageLinkage.PROJECT_STATIC,
-                dependencies = dependencies
-            )
-        }
-
-        return getDependencies(root).mapTo(mutableSetOf()) { getPackageReference(it) }
-    }
-
-    /**
      * Return the identifiers of the direct dependencies of the package denoted by [id].
      */
-    private fun getDependencies(id: Identifier): Set<Identifier> = nodeMap[id].orEmpty()
+    fun getDependencies(id: Identifier): Set<Identifier> = nodeMap[id].orEmpty()
 }
 
 private enum class NodeColor { WHITE, GRAY, BLACK }
