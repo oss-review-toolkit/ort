@@ -222,18 +222,12 @@ interface ClearlyDefinedService {
     suspend fun searchDefinitions(@Query("pattern") pattern: String): List<String>
 
     /**
-     * Get the curation for the component described by [type], [provider], [namespace] (use "-" if not applicable),
-     * [name] and [revision] (when empty, the latest revision will be used if that makes sense for the provider), see
+     * Get the curation for the component with the given [coordinates]. If the [revision][Coordinates.revision] is
+     * empty, the latest revision will be used (if that makes sense for the provider), see
      * https://api.clearlydefined.io/api-docs/#/curations/get_curations__type___provider___namespace___name___revision_.
      */
-    @GET("curations/{type}/{provider}/{namespace}/{name}/{revision}")
-    suspend fun getCuration(
-        @Path("type") type: ComponentType,
-        @Path("provider") provider: Provider,
-        @Path("namespace") namespace: String,
-        @Path("name") name: String,
-        @Path("revision") revision: String
-    ): Curation
+    @GET("curations/{coordinates}")
+    suspend fun getCuration(@Path("coordinates", encoded = true) coordinates: Coordinates): Curation
 
     /**
      * Return a batch of curations for the components given as [coordinates], see
@@ -256,60 +250,28 @@ interface ClearlyDefinedService {
     suspend fun harvest(@Body request: Collection<HarvestRequest>): String
 
     /**
-     * Get information about the harvest tools that have produced data for the component described by [type],
-     * [provider], [namespace] (use "-" if not applicable), [name], and [revision] (when empty, the latest revision will
-     * be used if that makes sense for the provider), see
+     * Get information about the harvest tools that have produced data for the component with the given [coordinates].
+     * If the [revision][Coordinates.revision] is empty, the latest revision will be used (if that makes sense for the
+     * provider), see
      * https://api.clearlydefined.io/api-docs/#/harvest/get_harvest__type___provider___namespace___name___revision_.
      * This can be used to quickly find out whether results of a specific tool are already available.
      */
-    @GET("harvest/{type}/{provider}/{namespace}/{name}/{revision}?form=list")
-    suspend fun harvestTools(
-        @Path("type") type: ComponentType,
-        @Path("provider") provider: Provider,
-        @Path("namespace") namespace: String,
-        @Path("name") name: String,
-        @Path("revision") revision: String
-    ): List<String>
+    @GET("harvest/{coordinates}?form=list")
+    suspend fun harvestTools(@Path("coordinates", encoded = true) coordinates: Coordinates): List<String>
 
     /**
-     * Get the harvested data for the component described by [type], [provider], [namespace] (use "-" if not
-     * applicable), [name], and [revision] (when empty, the latest revision will be used if that makes sense for the
-     * provider) that was produced by [tool] with version [toolVersion], see
+     * Get the harvested data for the component with the given [coordinates] that was produced by [tool] with version
+     * [toolVersion]. If the [revision][Coordinates.revision] is empty, the latest revision will be used (if that makes
+     * sense for the provider), see
      * https://api.clearlydefined.io/api-docs/#/harvest/get_harvest__type___provider___namespace___name___revision___tool___toolVersion_
      */
-    @GET("harvest/{type}/{provider}/{namespace}/{name}/{revision}/{tool}/{toolVersion}?form=streamed")
+    @GET("harvest/{coordinates}/{tool}/{toolVersion}?form=streamed")
     suspend fun harvestToolData(
-        @Path("type") type: ComponentType,
-        @Path("provider") provider: Provider,
-        @Path("namespace") namespace: String,
-        @Path("name") name: String,
-        @Path("revision") revision: String,
+        @Path("coordinates", encoded = true) coordinates: Coordinates,
         @Path("tool") tool: String,
         @Path("toolVersion") toolVersion: String
     ): ResponseBody
 }
-
-suspend fun ClearlyDefinedService.getCuration(coordinates: Coordinates): Curation =
-    @Suppress("DestructuringDeclarationWithTooManyEntries")
-    coordinates.strings.let { (_, _, namespace, name, revision) ->
-        getCuration(coordinates.type, coordinates.provider, namespace, name, revision)
-    }
-
-suspend fun ClearlyDefinedService.harvestTools(coordinates: Coordinates): List<String> =
-    @Suppress("DestructuringDeclarationWithTooManyEntries")
-    coordinates.strings.let { (_, _, namespace, name, revision) ->
-        harvestTools(coordinates.type, coordinates.provider, namespace, name, revision)
-    }
-
-suspend fun ClearlyDefinedService.harvestToolData(
-    coordinates: Coordinates,
-    tool: String,
-    toolVersion: String
-): ResponseBody =
-    @Suppress("DestructuringDeclarationWithTooManyEntries")
-    coordinates.strings.let { (_, _, namespace, name, revision) ->
-        harvestToolData(coordinates.type, coordinates.provider, namespace, name, revision, tool, toolVersion)
-    }
 
 suspend fun <T> ClearlyDefinedService.call(block: suspend ClearlyDefinedService.() -> T): T =
     try {
