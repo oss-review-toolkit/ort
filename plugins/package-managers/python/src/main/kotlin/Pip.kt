@@ -61,6 +61,11 @@ class Pip(
     companion object {
         const val OPTION_OPERATING_SYSTEM = "operatingSystem"
         const val OPTION_PYTHON_VERSION = "pythonVersion"
+
+        /**
+         * The name of the build system requirements and information file used by modern Python packages.
+         */
+        const val PYPROJECT_FILENAME = "pyproject.toml"
     }
 
     class Factory : AbstractPackageManagerFactory<Pip>("PIP") {
