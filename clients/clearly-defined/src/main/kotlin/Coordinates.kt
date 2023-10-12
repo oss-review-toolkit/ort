@@ -65,7 +65,8 @@ data class Coordinates(
         revision = parts[4].takeUnless { it.isEmpty() }
     )
 
-    val strings: List<String> = listOf(type.toString(), provider.toString(), namespace ?: "-", name, revision.orEmpty())
+    private val strings: List<String> =
+        listOf(type.toString(), provider.toString(), namespace ?: "-", name, revision.orEmpty())
 
     override fun toString() = strings.joinToString("/")
 }
