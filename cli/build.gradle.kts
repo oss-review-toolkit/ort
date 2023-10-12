@@ -36,11 +36,8 @@ dependencies {
     implementation(project(":utils:ort-utils"))
 
     implementation(libs.clikt)
-    implementation(libs.logbackClassic)
     implementation(libs.mordant)
     implementation(libs.slf4j)
-
-    runtimeOnly(libs.log4jApiToSlf4j)
 
     funTestImplementation(project(":downloader"))
     funTestImplementation(project(":evaluator"))

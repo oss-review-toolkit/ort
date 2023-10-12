@@ -22,6 +22,11 @@ import java.nio.file.Files
 
 import org.graalvm.buildtools.gradle.tasks.BuildNativeImageTask
 
+import org.gradle.accessors.dm.LibrariesForLibs
+
+private val Project.libs: LibrariesForLibs
+    get() = extensions.getByType()
+
 plugins {
     // Apply core plugins.
     application
@@ -113,6 +118,12 @@ graalvmNative {
     metadataRepository {
         enabled = true
     }
+}
+
+dependencies {
+    implementation(libs.logbackClassic)
+
+    runtimeOnly(libs.log4jApiToSlf4j)
 }
 
 tasks.named<BuildNativeImageTask>("nativeCompile") {
