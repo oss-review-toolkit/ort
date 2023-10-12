@@ -29,6 +29,8 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.apache.logging.log4j.kotlin.logger
+
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.isNotNull
@@ -40,7 +42,6 @@ import org.jetbrains.exposed.sql.select
 
 import org.ossreviewtoolkit.helper.utils.ORTH_NAME
 import org.ossreviewtoolkit.helper.utils.execAndMap
-import org.ossreviewtoolkit.helper.utils.logger
 import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration
