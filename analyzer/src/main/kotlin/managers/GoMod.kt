@@ -37,6 +37,8 @@ import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageLinkage
+import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
@@ -337,6 +339,27 @@ class GoMod(
         run(args = args, workingDir = workingDir, environment = environment)
 
     private fun Map<String, ModuleInfo>.getMainModuleId(): Identifier = values.single { it.main }.toId()
+
+    /**
+     * Convert this [Graph] to a set of [PackageReference]s that spawn the dependency trees of the direct dependencies
+     * of the given [root] package. The graph must not contain any cycles, so [Graph.breakCycles] should be called
+     * before.
+     */
+    private fun Graph.toPackageReferenceForest(root: Identifier): Set<PackageReference> {
+        fun getPackageReference(id: Identifier): PackageReference {
+            val dependencies = getDependencies(id).mapTo(mutableSetOf()) {
+                getPackageReference(it)
+            }
+
+            return PackageReference(
+                id = id,
+                linkage = PackageLinkage.PROJECT_STATIC,
+                dependencies = dependencies
+            )
+        }
+
+        return getDependencies(root).mapTo(mutableSetOf()) { getPackageReference(it) }
+    }
 }
 
 /** Separator string indicating that data of a new package follows in the output of the go mod why command. */
