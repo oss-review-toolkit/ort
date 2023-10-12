@@ -48,7 +48,6 @@ dependencies {
 
     implementation(libs.bundles.kotlinxSerialization)
     implementation(libs.graphQlKtorClient)
-    implementation(libs.log4jApiKotlin)
 
     testImplementation(libs.wiremock)
 }

@@ -36,7 +36,6 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
     implementation(libs.clikt)
-    implementation(libs.log4jApiKotlin)
     implementation(libs.reflections)
     implementation(libs.semver4j)
 

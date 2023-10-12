@@ -38,7 +38,6 @@ dependencies {
     implementation(project(":utils:spdx-utils"))
 
     implementation(libs.jacksonDatabind)
-    implementation(libs.log4jApiKotlin)
     implementation(libs.toml4j)
     constraints {
         implementation("com.google.code.gson:gson:2.10.1") {
