@@ -44,7 +44,7 @@ private fun toPlexusLoggerLevel(level: Level) =
  * Implementation of the Plexus [Logger] that forwards all logs to [org.apache.logging.log4j.kotlin.KotlinLogger] using
  * the appropriate log levels.
  */
-class MavenLogger(level: Level) : AbstractLogger(toPlexusLoggerLevel(level), "MavenLogger") {
+internal class MavenLogger(level: Level) : AbstractLogger(toPlexusLoggerLevel(level), "MavenLogger") {
     override fun getChildLogger(name: String?) = this
 
     override fun debug(message: String, throwable: Throwable?) = logger.debug(message, throwable)
