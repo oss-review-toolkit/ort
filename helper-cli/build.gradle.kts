@@ -42,4 +42,5 @@ dependencies {
     implementation(libs.jacksonModuleKotlin)
     implementation(libs.jslt)
     implementation(libs.log4jApi)
+    implementation(libs.slf4j)
 }
