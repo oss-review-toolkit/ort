@@ -35,7 +35,8 @@ dependencies {
     implementation(libs.jacksonModuleKotlin)
     implementation(libs.kotestExtensionsJunitXml)
     implementation(libs.kotestFrameworkEngine)
-    implementation(libs.log4jApiToSlf4j)
-    implementation(libs.logbackClassic)
     implementation(libs.postgresEmbedded)
+
+    runtimeOnly(libs.log4jApiToSlf4j)
+    runtimeOnly(libs.logbackClassic)
 }
