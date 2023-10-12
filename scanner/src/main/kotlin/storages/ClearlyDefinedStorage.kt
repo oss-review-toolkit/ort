@@ -33,8 +33,6 @@ import org.apache.logging.log4j.kotlin.logger
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
 import org.ossreviewtoolkit.clients.clearlydefined.ComponentType
 import org.ossreviewtoolkit.clients.clearlydefined.Coordinates
-import org.ossreviewtoolkit.clients.clearlydefined.harvestToolData
-import org.ossreviewtoolkit.clients.clearlydefined.harvestTools
 import org.ossreviewtoolkit.clients.clearlydefined.toCoordinates
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.model.ArtifactProvenance
