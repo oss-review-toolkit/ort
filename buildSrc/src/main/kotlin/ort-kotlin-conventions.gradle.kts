@@ -87,9 +87,6 @@ configurations.all {
         // Ensure all JRuby versions match our version to avoid Psych YAML library issues.
         force(libs.jruby)
 
-        // Ensure all Log4j API versions match our version.
-        force(libs.log4jApi)
-
         // Ensure that all transitive versions of Kotlin libraries match our version of Kotlin.
         force("org.jetbrains.kotlin:kotlin-reflect:${libs.versions.kotlinPlugin.get()}")
     }
