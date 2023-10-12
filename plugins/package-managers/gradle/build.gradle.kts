@@ -34,7 +34,6 @@ dependencies {
     implementation(project(":utils:ort-utils"))
 
     implementation("org.gradle:gradle-tooling-api:${gradle.gradleVersion}")
-    implementation(libs.log4jApi)
     implementation(libs.mavenCore)
     implementation(libs.mavenResolverApi)
 

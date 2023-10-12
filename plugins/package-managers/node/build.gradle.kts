@@ -45,7 +45,6 @@ dependencies {
     implementation(libs.jacksonDataformatYaml)
     implementation(libs.jacksonModuleKotlin)
     implementation(libs.kotlinxCoroutines)
-    implementation(libs.log4jApi)
 
     funTestImplementation(testFixtures(project(":analyzer")))
 

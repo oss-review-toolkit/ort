@@ -48,6 +48,7 @@ dependencies {
 
     implementation(libs.bundles.kotlinxSerialization)
     implementation(libs.kotlinxCoroutines)
+    implementation(libs.log4jApi)
     implementation(libs.semver4j)
 
     implementation(libs.toml4j)

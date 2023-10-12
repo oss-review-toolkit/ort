@@ -37,7 +37,6 @@ dependencies {
     implementation(libs.jacksonDatabind)
     implementation(libs.jacksonDataformatYaml)
     implementation(libs.jruby)
-    implementation(libs.log4jApi)
 
     funTestImplementation(testFixtures(project(":analyzer")))
 }

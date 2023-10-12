@@ -33,7 +33,6 @@ dependencies {
 
     implementation(libs.jacksonCore)
     implementation(libs.jacksonDatabind)
-    implementation(libs.log4jApi)
     implementation(libs.log4jApiKotlin)
     implementation(libs.okhttp)
 
