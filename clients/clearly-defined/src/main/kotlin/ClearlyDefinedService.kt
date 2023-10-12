@@ -254,7 +254,6 @@ interface ClearlyDefinedService {
      * If the [revision][Coordinates.revision] is empty, the latest revision will be used (if that makes sense for the
      * provider), see
      * https://api.clearlydefined.io/api-docs/#/harvest/get_harvest__type___provider___namespace___name___revision_.
-     * This can be used to quickly find out whether results of a specific tool are already available.
      */
     @GET("harvest/{coordinates}?form=list")
     suspend fun harvestTools(@Path("coordinates", encoded = true) coordinates: Coordinates): List<String>
