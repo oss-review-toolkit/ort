@@ -58,7 +58,6 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.model.config.GitHubDefectsConfiguration
 import org.ossreviewtoolkit.utils.common.enumSetOf
 
 class GitHubDefectsTest : WordSpec({

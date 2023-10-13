@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+ * Copyright (C) 2021 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,20 +17,22 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.model.config
+package org.ossreviewtoolkit.advisor.advisors
 
-import com.fasterxml.jackson.annotation.JsonInclude
-
-import org.ossreviewtoolkit.utils.common.Plugin
+import com.fasterxml.jackson.annotation.JsonProperty
 
 /**
- * The base configuration model of the advisor.
+ * The configuration for VulnerableCode as security vulnerability provider.
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
-data class AdvisorConfiguration(
+data class VulnerableCodeConfiguration(
     /**
-     * A map with [configuration][PluginConfiguration] for advice providers using the [provider type][Plugin.type] as
-     * key.
+     * The base URL of the VulnerableCode REST API. By default, the public VulnerableCode instance is used.
      */
-    val config: Map<String, PluginConfiguration>? = null
+    val serverUrl: String? = null,
+
+    /**
+     * The optional API key to use.
+     */
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    val apiKey: String? = null
 )

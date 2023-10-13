@@ -26,10 +26,10 @@ import io.kotest.matchers.shouldBe
 import java.time.Instant
 
 import org.ossreviewtoolkit.advisor.advisors.Osv
+import org.ossreviewtoolkit.advisor.advisors.OsvConfiguration
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.config.OsvConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.test.getAssetFile
