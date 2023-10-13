@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.advisor.advisors
 
-import com.fasterxml.jackson.annotation.JsonProperty
-
 /**
  * The configuration for the OSS Index provider.
  */
@@ -41,6 +39,5 @@ data class OssIndexConfiguration(
      * The password to use for authentication. If not both [username] and [password] are provided, authentication is
      * disabled.
      */
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     val password: String? = null
 )
