@@ -163,7 +163,8 @@ RUN /opt/ort/bin/export_proxy_certificates.sh /tmp/certificates/ && \
     # Install golang in order to have `go mod` as package manager.
     curl -ksS https://dl.google.com/go/go$GO_VERSION.linux-amd64.tar.gz | tar -C /opt -xz && \
     curl -ksS https://raw.githubusercontent.com/golang/dep/v$GO_DEP_VERSION/install.sh | sh && \
-    curl -ksS https://raw.githubusercontent.com/commercialhaskell/stack/v$HASKELL_STACK_VERSION/etc/scripts/get-stack.sh | sh && \
+    # Temporarily disable installation of Stack as GitHub runners are running out of disk space.
+    #curl -ksS https://raw.githubusercontent.com/commercialhaskell/stack/v$HASKELL_STACK_VERSION/etc/scripts/get-stack.sh | sh && \
     mkdir -p $SWIFT_HOME && \
     curl -L https://download.swift.org/swift-$SWIFT_VERSION-release/ubuntu2204/swift-$SWIFT_VERSION-RELEASE/swift-$SWIFT_VERSION-RELEASE-ubuntu22.04.tar.gz \
         | tar -xz -C $SWIFT_HOME --strip-components=2 && \
