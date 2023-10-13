@@ -31,7 +31,9 @@ import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
 class StackFunTest : WordSpec({
     "Resolving project dependencies" should {
-        "succeed for quickcheck-state-machine" {
+        // TODO: Tests are temporarily disabled as GitHub runners are running out of disk space. Enable them again once
+        //       a better solution was implemented.
+        "succeed for quickcheck-state-machine".config(enabled = false) {
             val definitionFile = getAssetFile("projects/external/quickcheck-state-machine/stack.yaml")
             val suffix = "-windows".takeIf { Os.isWindows }.orEmpty()
             val expectedResultFile = getAssetFile(
@@ -43,7 +45,7 @@ class StackFunTest : WordSpec({
             result.toYaml() should matchExpectedResult(expectedResultFile)
         }
 
-        "succeed for stack-yesodweb-simple" {
+        "succeed for stack-yesodweb-simple".config(enabled = false) {
             val definitionFile = getAssetFile("projects/synthetic/stack-yesodweb-simple/stack.yaml")
             val expectedResultFile = getAssetFile("projects/synthetic/stack-yesodweb-simple-expected-output.yml")
 
