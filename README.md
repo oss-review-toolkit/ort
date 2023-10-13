@@ -237,7 +237,7 @@ To print the active configuration use:
 ort config --show-active
 ```
 
-#### [Copyright garbage file](./docs/config-file-copyright-garbage-yml.md)
+#### [Copyright garbage file](./website/docs/configuration/copyright-garbage.md)
 
 A list of copyright statements that are considered garbage, for example statements that were incorrectly classified as
 copyrights by the scanner.
@@ -246,7 +246,7 @@ copyrights by the scanner.
 |-------------|--------|-----------------------------------------|
 | YAML / JSON | Global | `$ORT_CONFIG_DIR/copyright-garbage.yml` |
 
-#### [Curations file](./docs/config-file-curations-yml.md)
+#### [Curations file](./website/docs/configuration/package-curations.md)
 
 A file to correct invalid or missing package metadata, and to set the concluded license for packages.
 
@@ -254,7 +254,7 @@ A file to correct invalid or missing package metadata, and to set the concluded 
 |-------------|--------|---------------------------------|
 | YAML / JSON | Global | `$ORT_CONFIG_DIR/curations.yml` |
 
-#### [Custom license texts dir](./docs/dir-custom-license-texts.md)
+#### [Custom license texts dir](./website/docs/configuration/license-texts.md)
 
 A directory that contains license texts which are not provided by ORT.
 
@@ -262,7 +262,7 @@ A directory that contains license texts which are not provided by ORT.
 |--------|--------|-----------------------------------------|
 | Text   | Global | `$ORT_CONFIG_DIR/custom-license-texts/` |
 
-#### [How to fix text provider script](./docs/scripts/how-to-fix-text-provider-kts.md)
+#### [How to fix text provider script](./website/docs/configuration/how-to-fix-text-provider.md)
 
 A Kotlin script that enables the injection of how-to-fix texts in Markdown format for ORT issues into the reports.
 
@@ -270,7 +270,7 @@ A Kotlin script that enables the injection of how-to-fix texts in Markdown forma
 |---------------|--------|---------------------------------------------------------|
 | Kotlin script | Global | `$ORT_CONFIG_DIR/reporter.how-to-fix-text-provider.kts` |
 
-#### [License classifications file](docs/config-file-license-classifications-yml.md)
+#### [License classifications file](./website/docs/configuration/license-classifications.md)
 
 A file that contains user-defined categorization of licenses.
 
@@ -278,7 +278,7 @@ A file that contains user-defined categorization of licenses.
 |-------------|--------|-----------------------------------------------|
 | YAML / JSON | Global | `$ORT_CONFIG_DIR/license-classifications.yml` |
 
-#### [Resolution file](./docs/config-file-resolutions-yml.md)
+#### [Resolution file](./website/docs/configuration/resolutions.md)
 
 Configurations to resolve any issues or rule violations by providing a mandatory reason, and an optional comment to
 justify the resolution on a global scale.
@@ -287,7 +287,7 @@ justify the resolution on a global scale.
 |-------------|--------|-----------------------------------|
 | YAML / JSON | Global | `$ORT_CONFIG_DIR/resolutions.yml` |
 
-#### [Repository configuration file](./docs/config-file-ort-yml.md)
+#### [Repository configuration file](./website/docs/configuration/ort-yml.md)
 
 A configuration file, usually stored in the project's repository, for license finding curations, exclusions, and issues
 or rule violations resolutions in the context of the repository.
@@ -296,7 +296,7 @@ or rule violations resolutions in the context of the repository.
 |-------------|----------------------|---------------------------------|
 | YAML / JSON | Repository (project) | `[analyzer-input-dir]/.ort.yml` |
 
-#### [Package configuration file / directory](./docs/config-file-package-configuration-yml.md)
+#### [Package configuration file / directory](./website/docs/configuration/package-configurations.md)
 
 A single file or a directory with multiple files containing configurations to set provenance-specific path excludes and
 license finding curations for dependency packages to address issues found within a scan result. `helper-cli`'s
@@ -307,7 +307,7 @@ can be used to populate a directory with template package configuration files.
 |-------------|----------------------|-------------------------------------------|
 | YAML / JSON | Package (dependency) | `$ORT_CONFIG_DIR/package-configurations/` |
 
-#### [Policy rules file](./docs/scripts/rules-kts.md)
+#### [Policy rules file](./website/docs/configuration/evaluator-rules.md)
 
 The file containing any policy rule implementations to be used with the *evaluator*.
 
