@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+ * Copyright (C) 2022 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,20 +17,14 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.model.config
-
-import com.fasterxml.jackson.annotation.JsonInclude
-
-import org.ossreviewtoolkit.utils.common.Plugin
+package org.ossreviewtoolkit.advisor.advisors
 
 /**
- * The base configuration model of the advisor.
+ * The configuration for the Google OSV vulnerability provider.
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
-data class AdvisorConfiguration(
+data class OsvConfiguration(
     /**
-     * A map with [configuration][PluginConfiguration] for advice providers using the [provider type][Plugin.type] as
-     * key.
+     * The base URL of the OSV REST API. If undefined, default is the production endpoint of the official OSV.dev API.
      */
-    val config: Map<String, PluginConfiguration>? = null
+    val serverUrl: String? = null
 )
