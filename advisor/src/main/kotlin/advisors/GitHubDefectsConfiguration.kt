@@ -19,9 +19,6 @@
 
 package org.ossreviewtoolkit.advisor.advisors
 
-import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.annotation.JsonProperty
-
 /**
  * The configuration for the GitHub Defects advisor.
  */
@@ -29,14 +26,12 @@ data class GitHubDefectsConfiguration(
     /**
      * The access token to authenticate against the GitHub GraphQL endpoint.
      */
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     val token: String? = null,
 
     /**
      * The URL of the GraphQL endpoint to be accessed by the service. If undefined, default is the endpoint of the
      * official GitHub GraphQL API.
      */
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     val endpointUrl: String? = null,
 
     /**
@@ -59,7 +54,6 @@ data class GitHubDefectsConfiguration(
      * Per default, some of GitHub's default labels are excluded that typically indicate that an issue is not a defect
      * (see https://docs.github.com/en/issues/using-labels-and-milestones-to-track-work/managing-labels#about-default-labels)
      */
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     val labelFilter: List<String> = listOf("!duplicate", "!enhancement", "!invalid", "!question", "*"),
 
     /**

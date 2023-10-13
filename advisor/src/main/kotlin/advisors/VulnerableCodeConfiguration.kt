@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.advisor.advisors
 
-import com.fasterxml.jackson.annotation.JsonProperty
-
 /**
  * The configuration for VulnerableCode as security vulnerability provider.
  */
@@ -33,6 +31,5 @@ data class VulnerableCodeConfiguration(
     /**
      * The optional API key to use.
      */
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     val apiKey: String? = null
 )

@@ -19,9 +19,6 @@
 
 package org.ossreviewtoolkit.advisor.advisors
 
-import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.annotation.JsonProperty
-
 /**
  * The configuration for Nexus IQ as a security vulnerability provider.
  */
@@ -34,7 +31,6 @@ data class NexusIqConfiguration(
     /**
      * A URL to use as a base for browsing vulnerability details. Defaults to the server URL.
      */
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     val browseUrl: String = serverUrl,
 
     /**
@@ -47,6 +43,5 @@ data class NexusIqConfiguration(
      * The password to use for authentication. If not both [username] and [password] are provided, authentication is
      * disabled.
      */
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     val password: String? = null
 )
