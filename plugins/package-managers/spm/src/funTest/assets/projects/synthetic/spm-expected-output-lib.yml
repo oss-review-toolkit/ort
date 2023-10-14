@@ -104,7 +104,7 @@ project:
         dependencies:
         - id: "SPM:apple:swift-atomics:1.2.0"
         - id: "SPM:apple:swift-collections:1.0.5"
-    - id: "SPM:vapor:routing-kit:4.8.0"
+    - id: "SPM:vapor:routing-kit:4.8.1"
       dependencies:
       - id: "SPM:apple:swift-log:1.5.3"
     - id: "SPM:vapor:websocket-kit:2.14.0"
@@ -610,8 +610,8 @@ packages:
     url: "https://github.com/vapor/multipart-kit.git"
     revision: "4.5.4"
     path: ""
-- id: "SPM:vapor:routing-kit:4.8.0"
-  purl: "pkg:swift/vapor/routing-kit@4.8.0"
+- id: "SPM:vapor:routing-kit:4.8.1"
+  purl: "pkg:swift/vapor/routing-kit@4.8.1"
   authors:
   - "vapor"
   declared_licenses: []
@@ -631,12 +631,12 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/vapor/routing-kit.git"
-    revision: "4.8.0"
+    revision: "4.8.1"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/vapor/routing-kit.git"
-    revision: "4.8.0"
+    revision: "4.8.1"
     path: ""
 - id: "SPM:vapor:websocket-kit:2.14.0"
   purl: "pkg:swift/vapor/websocket-kit@2.14.0"
