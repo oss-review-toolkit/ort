@@ -16,8 +16,6 @@ project:
     path: "<REPLACE_PATH>"
   homepage_url: ""
   scopes:
-  - name: "dev"
-    dependencies: []
   - name: "main"
     dependencies:
     - id: "PyPI::graphviz:0.19.1"
