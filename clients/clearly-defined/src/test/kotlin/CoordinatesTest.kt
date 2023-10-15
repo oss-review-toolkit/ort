@@ -23,7 +23,7 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
 class CoordinatesTest : WordSpec({
-    "Reconstructing corrdinates from their string representation" should {
+    "Reconstructing coordinates from their string representation" should {
         "work for full coordinates" {
             val coords = Coordinates(
                 type = ComponentType.MAVEN,
