@@ -58,8 +58,8 @@ integrations. It consists of the following tools which can be combined into a *h
   gathered in preceding stages and returns a list of policy violations, e.g. to flag license findings.
 * [*Reporter*](#reporter) - presents results in various formats such as visual reports, Open Source notices or
   Bill-Of-Materials (BOMs) to easily identify dependencies, licenses, copyrights or policy rule violations.
-* [*Notifier*](./notifier) - sends result notifications via different channels (like
-  [emails](./examples/example.notifications.kts) and / or JIRA tickets).
+* *Notifier* - sends result notifications via different channels (like [emails](./examples/example.notifications.kts)
+  and / or JIRA tickets).
 
 Also see the [list of related tools](#related-tools) that help with running ORT.
 
