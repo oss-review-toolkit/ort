@@ -116,7 +116,7 @@ Depending on how ORT was installed, it can be run in the following ways:
   docker run ort --help
   ```
 
-  You can find further hints for using ORT with Docker in the [documentation](./docs/hints-for-use-with-docker.md).
+  You can find further hints for using ORT with Docker in the [documentation](./website/docs/guides/docker.md).
 
 * If the ORT distribution was built from sources, use
 
@@ -157,7 +157,7 @@ ort --info analyze -f JSON -i /project -o /project/ort/analyzer
 Just the like top-level `ort` command, the subcommands for all tools provide a `--help` option for detailed usage help.
 Use it like `ort analyze --help`.
 
-Please see [Getting Started](./docs/getting-started.md) for an introduction to the individual tools.
+Please see [Getting Started](./website/docs/getting-started/installation.md) for an introduction to the individual tools.
 
 ## Running on CI
 
@@ -708,7 +708,7 @@ implemented as Kotlin scripts with a dedicated DSL. See
 The *reporter* generates a wide variety of documents in different formats from ORT result files. Currently, the
 following formats are supported (reporter names are case-insensitive):
 
-* [AsciiDoc Template](docs/reporters/asciidoc-templates.md) (`-f AsciiDocTemplate`)
+* [AsciiDoc Template](website/docs/configuration/reporter-templates.md#asciidoc-templates) (`-f AsciiDocTemplate`)
   * Content customizable with [Apache Freemarker](https://freemarker.apache.org/) templates and
     [AsciiDoc](https://asciidoc.org/)
   * PDF style customizable with Asciidoctor
