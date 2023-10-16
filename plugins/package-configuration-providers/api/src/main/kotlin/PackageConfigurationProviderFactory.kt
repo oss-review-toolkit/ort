@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.utils.common.getDuplicates
 interface PackageConfigurationProviderFactory<CONFIG> :
     TypedConfigurablePluginFactory<CONFIG, PackageConfigurationProvider> {
     companion object {
-        val ALL = Plugin.getAll<PackageConfigurationProviderFactory<*>>()
+        val ALL by lazy { Plugin.getAll<PackageConfigurationProviderFactory<*>>() }
 
         /**
          * Create a new (identifier, provider instance) tuple for each
