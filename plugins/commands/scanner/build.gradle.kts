@@ -25,8 +25,6 @@ plugins {
 dependencies {
     api(project(":plugins:commands:command-api"))
 
-    implementation(platform(project(":plugins:scanners")))
-
     implementation(project(":scanner"))
     implementation(project(":model"))
     implementation(project(":utils:common-utils"))
