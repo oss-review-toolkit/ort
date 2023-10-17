@@ -22,14 +22,22 @@ plugins {
     id("ort-application-conventions")
 }
 
+configurations {
+    create("pluginClasspath")
+}
+
 application {
     applicationName = "ort"
     mainClass = "org.ossreviewtoolkit.cli.OrtMainKt"
+
+    applicationDistribution.from(configurations["pluginClasspath"]) {
+        // Copy to "lib" instead of "plugin" to avoid duplicate dependency artifacts for core plugins.
+        into("lib")
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
 }
 
 dependencies {
-    implementation(platform(project(":plugins:commands")))
-
     implementation(project(":model"))
     implementation(project(":plugins:commands:command-api"))
     implementation(project(":utils:common-utils"))
@@ -39,6 +47,16 @@ dependencies {
     implementation(libs.mordant)
     implementation(libs.slf4j)
 
+    "pluginClasspath"(platform(project(":plugins:commands")))
+    "pluginClasspath"(platform(project(":plugins:package-configuration-providers")))
+    "pluginClasspath"(platform(project(":plugins:package-curation-providers")))
+    "pluginClasspath"(platform(project(":plugins:package-managers")))
+    "pluginClasspath"(platform(project(":plugins:reporters")))
+    "pluginClasspath"(platform(project(":plugins:scanners")))
+
+    funTestImplementation(platform(project(":plugins:commands")))
+    funTestImplementation(platform(project(":plugins:package-managers")))
+    funTestImplementation(platform(project(":plugins:reporters")))
     funTestImplementation(project(":downloader"))
     funTestImplementation(project(":evaluator"))
     funTestImplementation(project(":notifier"))
