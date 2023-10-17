@@ -57,7 +57,6 @@ import org.ossreviewtoolkit.plugins.commands.api.utils.configurationGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.outputGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.readOrtResult
 import org.ossreviewtoolkit.plugins.commands.api.utils.writeOrtResult
-import org.ossreviewtoolkit.plugins.scanners.scancode.ScanCode
 import org.ossreviewtoolkit.scanner.ScanStorages
 import org.ossreviewtoolkit.scanner.Scanner
 import org.ossreviewtoolkit.scanner.ScannerWrapper
@@ -115,7 +114,7 @@ class ScannerCommand : OrtCommand(
     private val scanners by option(
         "--scanners", "-s",
         help = "A comma-separated list of scanners to use.\nPossible values are: ${ScannerWrapper.ALL.keys}"
-    ).convertToScannerWrapperFactories().default(listOf(ScanCode.Factory()))
+    ).convertToScannerWrapperFactories().default(listOfNotNull(ScannerWrapper.ALL["ScanCode"]))
 
     private val projectScanners by option(
         "--project-scanners",
