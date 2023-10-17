@@ -25,8 +25,10 @@ plugins {
 dependencies {
     api(project(":plugins:commands:command-api"))
 
-    implementation(platform(project(":plugins:package-configuration-providers")))
-    implementation(platform(project(":plugins:reporters")))
+    implementation(project(":plugins:package-configuration-providers:package-configuration-provider-api"))
+
+    // TODO: Get rid of these hard-coded dependencies on plugins.
+    implementation(project(":plugins:package-configuration-providers:dir-package-configuration-provider"))
 
     implementation(project(":reporter"))
     implementation(project(":model"))
