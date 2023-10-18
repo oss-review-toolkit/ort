@@ -38,7 +38,7 @@ packages:
   description: "A macro to ergonomically define an item depending on a large number\
     \ of #[cfg]\nparameters. Structured like an if-else chain, the first matching\
     \ branch is the\nitem that gets emitted.\n"
-  homepage_url: ""
+  homepage_url: "https://github.com/alexcrichton/cfg-if"
   binary_artifact:
     url: ""
     hash:

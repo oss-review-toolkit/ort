@@ -270,7 +270,7 @@ private fun parsePackage(pkg: CargoMetadata.Package, hashes: Map<String, String>
         description = pkg.description.orEmpty(),
         binaryArtifact = RemoteArtifact.EMPTY,
         sourceArtifact = parseSourceArtifact(pkg, hashes).orEmpty(),
-        homepageUrl = "",
+        homepageUrl = pkg.homepage.orEmpty(),
         vcs = VcsHost.parseUrl(pkg.repository.orEmpty())
     )
 }

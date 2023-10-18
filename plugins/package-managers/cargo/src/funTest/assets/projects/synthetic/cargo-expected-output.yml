@@ -169,7 +169,7 @@ packages:
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 OR MIT"
   description: "A macro to generate structures which behave like bitflags.\n"
-  homepage_url: ""
+  homepage_url: "https://github.com/bitflags/bitflags"
   binary_artifact:
     url: ""
     hash:
@@ -202,7 +202,7 @@ packages:
   description: "A macro to ergonomically define an item depending on a large number\
     \ of #[cfg]\nparameters. Structured like an if-else chain, the first matching\
     \ branch is the\nitem that gets emitted.\n"
-  homepage_url: ""
+  homepage_url: "https://github.com/alexcrichton/cfg-if"
   binary_artifact:
     url: ""
     hash:
@@ -233,7 +233,7 @@ packages:
     spdx_expression: "BSD-2-Clause"
   description: "Low level interface to CloudABI. Contains all syscalls and related\
     \ types."
-  homepage_url: ""
+  homepage_url: "https://nuxi.nl/cloudabi/"
   binary_artifact:
     url: ""
     hash:
@@ -294,7 +294,7 @@ packages:
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 OR MIT"
   description: "Raw FFI bindings to platform libraries like libc.\n"
-  homepage_url: ""
+  homepage_url: "https://github.com/rust-lang/libc"
   binary_artifact:
     url: ""
     hash:
@@ -326,7 +326,7 @@ packages:
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 OR MIT"
   description: "Random number generators and other randomness functionality.\n"
-  homepage_url: ""
+  homepage_url: "https://crates.io/crates/rand"
   binary_artifact:
     url: ""
     hash:
@@ -358,7 +358,7 @@ packages:
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 OR MIT"
   description: "ChaCha random number generator\n"
-  homepage_url: ""
+  homepage_url: "https://crates.io/crates/rand_chacha"
   binary_artifact:
     url: ""
     hash:
@@ -390,7 +390,7 @@ packages:
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 OR MIT"
   description: "Core random number generator traits and tools for implementation.\n"
-  homepage_url: ""
+  homepage_url: "https://crates.io/crates/rand_core"
   binary_artifact:
     url: ""
     hash:
@@ -422,7 +422,7 @@ packages:
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 OR MIT"
   description: "Core random number generator traits and tools for implementation.\n"
-  homepage_url: ""
+  homepage_url: "https://crates.io/crates/rand_core"
   binary_artifact:
     url: ""
     hash:
@@ -453,7 +453,7 @@ packages:
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 OR MIT"
   description: "HC128 random number generator\n"
-  homepage_url: ""
+  homepage_url: "https://crates.io/crates/rand_hc"
   binary_artifact:
     url: ""
     hash:
@@ -485,7 +485,7 @@ packages:
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 OR MIT"
   description: "ISAAC random number generator\n"
-  homepage_url: ""
+  homepage_url: "https://crates.io/crates/rand_isaac"
   binary_artifact:
     url: ""
     hash:
@@ -546,7 +546,7 @@ packages:
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 OR MIT"
   description: "OS backed Random Number Generator"
-  homepage_url: ""
+  homepage_url: "https://crates.io/crates/rand_os"
   binary_artifact:
     url: ""
     hash:
@@ -577,7 +577,7 @@ packages:
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 OR MIT"
   description: "Selected PCG random number generators\n"
-  homepage_url: ""
+  homepage_url: "https://crates.io/crates/rand_pcg"
   binary_artifact:
     url: ""
     hash:
@@ -609,7 +609,7 @@ packages:
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 OR MIT"
   description: "Xorshift random number generator\n"
-  homepage_url: ""
+  homepage_url: "https://crates.io/crates/rand_xorshift"
   binary_artifact:
     url: ""
     hash:
