@@ -23,9 +23,10 @@ package org.ossreviewtoolkit.plugins.packagemanagers.cargo
 
 import com.fasterxml.jackson.module.kotlin.readValue
 
-import com.moandjiezana.toml.Toml
-
 import java.io.File
+
+import net.peanuuutz.tomlkt.Toml
+import net.peanuuutz.tomlkt.decodeFromNativeReader
 
 import org.apache.logging.log4j.kotlin.logger
 
@@ -54,6 +55,8 @@ import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxOperator
+
+private val toml = Toml { ignoreUnknownKeys = true }
 
 /**
  * The [Cargo](https://doc.rust-lang.org/cargo/) package manager for Rust.
@@ -100,20 +103,19 @@ class Cargo(
             return emptyMap()
         }
 
-        val contents = Toml().read(lockfile)
-        return when (contents.getLong("version")) {
-            3L -> {
-                contents.getTables("package").orEmpty().mapNotNull { pkg ->
-                    pkg.getString("checksum")?.let { checksum ->
-                        val key = "${pkg.getString("name")} ${pkg.getString("version")} (${pkg.getString("source")})"
+        val contents = lockfile.reader().use { toml.decodeFromNativeReader<CargoLockFile>(it) }
+        return when (contents.version) {
+            3 -> {
+                contents.packages.mapNotNull { pkg ->
+                    pkg.checksum?.let { checksum ->
+                        val key = "${pkg.name} ${pkg.version} (${pkg.source})"
                         key to checksum
                     }
                 }
             }
 
             else -> {
-                val metadata = contents.getTable("metadata")?.toMap().orEmpty()
-                metadata.mapNotNull { (k, v) ->
+                contents.metadata.mapNotNull { (k, v) ->
                     (v as? String)?.let { k.unquote().removePrefix("checksum ") to v }
                 }
             }
@@ -158,9 +160,7 @@ class Cargo(
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         // Get the project name and version. If one of them is missing return null, because this is a workspace
         // definition file that does not contain a project.
-        val pkgDefinition = Toml().read(definitionFile)
-        val projectName = pkgDefinition.getString("package.name") ?: return emptyList()
-        val projectVersion = pkgDefinition.getString("package.version") ?: return emptyList()
+        val pkgDefinition = definitionFile.reader().use { toml.decodeFromNativeReader<CargoManifest>(it) }
 
         val workingDir = definitionFile.parentFile
         val metadataProcess = run(workingDir, "metadata", "--format-version=1")
@@ -172,7 +172,9 @@ class Cargo(
             { parsePackage(it, hashes) }
         )
 
-        val projectId = metadata.workspaceMembers.single { it.startsWith("$projectName $projectVersion") }
+        val projectId = metadata.workspaceMembers.single {
+            it.startsWith("${pkgDefinition.pkg.name} ${pkgDefinition.pkg.version}")
+        }
 
         val projectNode = metadata.packages.single { it.id == projectId }
         val groupedDependencies = projectNode.dependencies.groupBy { it.kind.orEmpty() }
@@ -182,7 +184,8 @@ class Cargo(
 
             val transitiveDependencies = directDependencies
                 .mapNotNull { dependency ->
-                    val version = getResolvedVersion(projectName, projectVersion, dependency.name, metadata)
+                    val version =
+                        getResolvedVersion(pkgDefinition.pkg.name, pkgDefinition.pkg.version, dependency.name, metadata)
                     version?.let { Pair(dependency.name, it) }
                 }
                 .mapTo(mutableSetOf()) {
@@ -199,12 +202,11 @@ class Cargo(
         )
 
         val projectPkg = packages.values.single { pkg ->
-            pkg.id.name == projectName && pkg.id.version == projectVersion
+            pkg.id.name == pkgDefinition.pkg.name && pkg.id.version == pkgDefinition.pkg.version
         }.let { it.copy(id = it.id.copy(type = managerName)) }
 
-        val homepageUrl = pkgDefinition.getString("package.homepage").orEmpty()
-        val authors = pkgDefinition.getList("package.authors", emptyList<String>())
-            .mapNotNullTo(mutableSetOf(), ::parseAuthorString)
+        val homepageUrl = pkgDefinition.pkg.homepage.orEmpty()
+        val authors = pkgDefinition.pkg.authors.mapNotNullTo(mutableSetOf(), ::parseAuthorString)
 
         val project = Project(
             id = projectPkg.id,

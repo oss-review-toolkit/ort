@@ -20,6 +20,9 @@
 plugins {
     // Apply precompiled plugins.
     id("ort-library-conventions")
+
+    // Apply third-party plugins.
+    alias(libs.plugins.kotlinSerialization)
 }
 
 dependencies {
@@ -39,12 +42,8 @@ dependencies {
 
     implementation(libs.jacksonDatabind)
     implementation(libs.jacksonModuleKotlin)
-    implementation(libs.toml4j)
-    constraints {
-        implementation("com.google.code.gson:gson:2.10.1") {
-            because("Earlier versions have vulnerabilities.")
-        }
-    }
+    implementation(libs.kotlinxSerializationCore)
+    implementation(libs.tomlkt)
 
     funTestImplementation(testFixtures(project(":analyzer")))
 }
