@@ -132,13 +132,13 @@ internal class Graph private constructor(private val nodeMap: MutableMap<Identif
             )
         }
 
-        return dependencies(root).mapTo(mutableSetOf()) { getPackageReference(it) }
+        return getDependencies(root).mapTo(mutableSetOf()) { getPackageReference(it) }
     }
 
     /**
      * Return the identifiers of the direct dependencies of the package denoted by [id].
      */
-    private fun dependencies(id: Identifier): Set<Identifier> = nodeMap[id].orEmpty()
+    private fun getDependencies(id: Identifier): Set<Identifier> = nodeMap[id].orEmpty()
 }
 
 private enum class NodeColor { WHITE, GRAY, BLACK }
