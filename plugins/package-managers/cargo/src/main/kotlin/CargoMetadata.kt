@@ -19,45 +19,46 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.cargo
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import kotlinx.serialization.Serializable
 
 /**
  * See https://doc.rust-lang.org/cargo/commands/cargo-metadata.html.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Serializable
 internal data class CargoMetadata(
     val packages: List<Package>,
     val workspaceMembers: List<String>,
     val resolve: Resolve,
     val workspaceRoot: String
 ) {
-    @JsonIgnoreProperties(ignoreUnknown = true)
+    @Serializable
     data class Package(
         val name: String,
         val version: String,
         val id: String,
-        val license: String?,
-        val licenseFile: String?,
-        val description: String?,
-        val source: String?,
-        val dependencies: List<Dependency>,
-        val authors: List<String>,
-        val repository: String?,
-        val homepage: String?
+        val license: String? = null,
+        val licenseFile: String? = null,
+        val description: String? = null,
+        val source: String? = null,
+        val dependencies: List<Dependency> = emptyList(),
+        val authors: List<String> = emptyList(),
+        val repository: String? = null,
+        val homepage: String? = null
     )
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
+    @Serializable
     data class Dependency(
         val name: String,
-        val kind: String?
+        val kind: String? = null
     )
 
+    @Serializable
     data class Resolve(
         val nodes: List<Node>,
-        val root: String?
+        val root: String? = null
     )
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
+    @Serializable
     data class Node(
         val id: String,
         val dependencies: List<String>

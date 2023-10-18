@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     // Apply precompiled plugins.
     id("ort-library-conventions")
@@ -40,10 +42,18 @@ dependencies {
     implementation(project(":utils:ort-utils"))
     implementation(project(":utils:spdx-utils"))
 
-    implementation(libs.jacksonDatabind)
-    implementation(libs.jacksonModuleKotlin)
-    implementation(libs.kotlinxSerializationCore)
+    implementation(libs.bundles.kotlinxSerialization)
     implementation(libs.tomlkt)
 
     funTestImplementation(testFixtures(project(":analyzer")))
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+    val customCompilerArgs = listOf(
+        "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"
+    )
+
+    compilerOptions {
+        freeCompilerArgs.addAll(customCompilerArgs)
+    }
 }
