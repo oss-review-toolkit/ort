@@ -42,7 +42,8 @@ internal data class CargoMetadata(
         val source: String?,
         val dependencies: List<Dependency>,
         val authors: List<String>,
-        val repository: String?
+        val repository: String?,
+        val homepage: String?
     )
 
     @JsonIgnoreProperties(ignoreUnknown = true)
