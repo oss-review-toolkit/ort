@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.cli
 
 import com.github.ajalt.clikt.testing.test
 
+import io.kotest.assertions.withClue
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
@@ -79,20 +80,24 @@ class OrtMainFunTest : StringSpec() {
         "Enabling only Gradle works" {
             val inputDir = tempdir()
 
-            val stdout = OrtMain().test(
+            val result = OrtMain().test(
                 "-c", configFile.path,
                 "-P", "ort.analyzer.enabledPackageManagers=Gradle",
                 "analyze",
                 "-i", inputDir.path,
                 "-o", outputDir.path
-            ).stdout.lineSequence()
+            )
+
+            val stdout = result.stdout.lineSequence()
             val iterator = stdout.iterator()
             while (iterator.hasNext()) {
                 if (iterator.next() == "The following 1 package manager(s) are enabled:") break
             }
 
-            iterator.hasNext() shouldBe true
-            iterator.next().trim() shouldBe "Gradle"
+            withClue(result.stderr) {
+                iterator.hasNext() shouldBe true
+                iterator.next().trim() shouldBe "Gradle"
+            }
         }
 
         "Disabling only Gradle works" {
@@ -100,40 +105,48 @@ class OrtMainFunTest : StringSpec() {
             val markerLine = "The following ${expectedPackageManagers.size} package manager(s) are enabled:"
             val inputDir = tempdir()
 
-            val stdout = OrtMain().test(
+            val result = OrtMain().test(
                 "-c", configFile.path,
                 "-P", "ort.analyzer.disabledPackageManagers=Gradle",
                 "analyze",
                 "-i", inputDir.path,
                 "-o", outputDir.path
-            ).stdout.lineSequence()
+            )
+
+            val stdout = result.stdout.lineSequence()
             val iterator = stdout.iterator()
             while (iterator.hasNext()) {
                 if (iterator.next() == markerLine) break
             }
 
-            iterator.hasNext() shouldBe true
-            iterator.next().trim() shouldBe expectedPackageManagers.joinToString { it.type }
+            withClue(result.stderr) {
+                iterator.hasNext() shouldBe true
+                iterator.next().trim() shouldBe expectedPackageManagers.joinToString { it.type }
+            }
         }
 
         "Disabling a package manager overrides enabling it" {
             val inputDir = tempdir()
 
-            val stdout = OrtMain().test(
+            val result = OrtMain().test(
                 "-c", configFile.path,
                 "-P", "ort.analyzer.enabledPackageManagers=Gradle,NPM",
                 "-P", "ort.analyzer.disabledPackageManagers=Gradle",
                 "analyze",
                 "-i", inputDir.path,
                 "-o", outputDir.path
-            ).stdout.lineSequence()
+            )
+
+            val stdout = result.stdout.lineSequence()
             val iterator = stdout.iterator()
             while (iterator.hasNext()) {
                 if (iterator.next() == "The following 1 package manager(s) are enabled:") break
             }
 
-            iterator.hasNext() shouldBe true
-            iterator.next().trim() shouldBe "NPM"
+            withClue(result.stderr) {
+                iterator.hasNext() shouldBe true
+                iterator.next().trim() shouldBe "NPM"
+            }
         }
 
         "An Unmanaged project is created if no definition files are found" {
@@ -177,17 +190,21 @@ class OrtMainFunTest : StringSpec() {
         "Output formats are deduplicated" {
             val inputDir = tempdir()
 
-            val stdout = OrtMain().test(
+            val result = OrtMain().test(
                 "-c", configFile.path,
                 "-P", "ort.analyzer.enabledPackageManagers=Gradle",
                 "analyze",
                 "-i", inputDir.path,
                 "-o", outputDir.path,
                 "-f", "json,yaml,json"
-            ).stdout.lineSequence()
+            )
+
+            val stdout = result.stdout.lineSequence()
             val lines = stdout.filter { it.startsWith("Writing analyzer result to ") }
 
-            lines.count() shouldBe 2
+            withClue(result.stderr) {
+                lines.count() shouldBe 2
+            }
         }
 
         "Analyzer creates correct output" {
