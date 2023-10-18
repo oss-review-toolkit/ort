@@ -165,7 +165,7 @@ class GoMod(
     /**
      * Return the module graph output from `go mod graph` with non-vendor dependencies removed.
      */
-    private fun getModuleGraph(projectDir: File, moduleInfoForModuleName: Map<String, ModuleInfo>): Graph {
+    private fun getModuleGraph(projectDir: File, moduleInfoForModuleName: Map<String, ModuleInfo>): Graph<Identifier> {
         fun moduleInfo(moduleName: String): ModuleInfo = moduleInfoForModuleName.getValue(moduleName)
 
         fun parseModuleEntry(entry: String): Identifier =
@@ -174,7 +174,7 @@ class GoMod(
             }
 
         val mainModuleId = moduleInfoForModuleName.getMainModuleId()
-        var graph = Graph().apply { addNode(mainModuleId) }
+        var graph = Graph<Identifier>().apply { addNode(mainModuleId) }
 
         val edges = runGo("mod", "graph", workingDir = projectDir)
 
@@ -258,7 +258,7 @@ class GoMod(
      * dependencies of dependencies are filtered out.
      */
     private fun getVendorModules(
-        graph: Graph,
+        graph: Graph<Identifier>,
         projectDir: File,
         mainModuleName: String,
         replacedModules: Map<String, String>
@@ -345,7 +345,7 @@ class GoMod(
      * of the given [root] package. The graph must not contain any cycles, so [Graph.breakCycles] should be called
      * before.
      */
-    private fun Graph.toPackageReferenceForest(root: Identifier): Set<PackageReference> {
+    private fun Graph<Identifier>.toPackageReferenceForest(root: Identifier): Set<PackageReference> {
         fun getPackageReference(id: Identifier): PackageReference {
             val dependencies = getDependencies(id).mapTo(mutableSetOf()) {
                 getPackageReference(it)
