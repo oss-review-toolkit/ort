@@ -82,8 +82,6 @@ class Cargo(
         // cargo 1.35.0 (6f3e9c367 2019-04-04)
         output.removePrefix("cargo ").substringBefore(' ')
 
-    private fun runMetadata(workingDir: File): String = run(workingDir, "metadata", "--format-version=1").stdout
-
     /**
      * Cargo.lock is located next to Cargo.toml or in one of the parent directories. The latter is the case when the
      * project is part of a workspace. Cargo.lock is then located next to the Cargo.toml file defining the workspace.
@@ -173,8 +171,8 @@ class Cargo(
         val projectVersion = pkgDefinition.getString("package.version") ?: return emptyList()
 
         val workingDir = definitionFile.parentFile
-        val metadataJson = runMetadata(workingDir)
-        val metadata = jsonMapper.readTree(metadataJson)
+        val metadataProcess = run(workingDir, "metadata", "--format-version=1")
+        val metadata = jsonMapper.readTree(metadataProcess.stdout)
         val hashes = readHashes(resolveLockfile(metadata))
 
         val packages = metadata["packages"].associateBy(
