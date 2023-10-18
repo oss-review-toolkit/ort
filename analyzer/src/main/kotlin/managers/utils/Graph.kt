@@ -121,7 +121,7 @@ internal class Graph private constructor(private val nodeMap: MutableMap<Identif
      */
     fun toPackageReferenceForest(root: Identifier): Set<PackageReference> {
         fun getPackageReference(id: Identifier): PackageReference {
-            val dependencies = nodeMap.getValue(id).mapTo(mutableSetOf()) {
+            val dependencies = getDependencies(id).mapTo(mutableSetOf()) {
                 getPackageReference(it)
             }
 
