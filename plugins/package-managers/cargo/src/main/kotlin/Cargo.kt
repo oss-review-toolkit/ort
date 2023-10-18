@@ -21,9 +21,10 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.cargo
 
-import com.fasterxml.jackson.module.kotlin.readValue
-
 import java.io.File
+
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonNamingStrategy
 
 import net.peanuuutz.tomlkt.Toml
 import net.peanuuutz.tomlkt.decodeFromNativeReader
@@ -46,7 +47,6 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
@@ -55,6 +55,11 @@ import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxOperator
+
+private val json = Json {
+    ignoreUnknownKeys = true
+    namingStrategy = JsonNamingStrategy.SnakeCase
+}
 
 private val toml = Toml { ignoreUnknownKeys = true }
 
@@ -164,7 +169,7 @@ class Cargo(
 
         val workingDir = definitionFile.parentFile
         val metadataProcess = run(workingDir, "metadata", "--format-version=1")
-        val metadata = jsonMapper.readValue<CargoMetadata>(metadataProcess.stdout)
+        val metadata = json.decodeFromString<CargoMetadata>(metadataProcess.stdout)
         val hashes = readHashes(resolveLockfile(metadata))
 
         val packages = metadata.packages.associateBy(
