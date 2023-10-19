@@ -131,11 +131,11 @@ class GoMod(
             val scopes = setOf(
                 Scope(
                     name = "main",
-                    dependencies = graph.subgraph(mainScopeModules).toPackageReferenceForest(moduleInfoForModuleName)
+                    dependencies = graph.subgraph(mainScopeModules).toPackageReferences(moduleInfoForModuleName)
                 ),
                 Scope(
                     name = "vendor",
-                    dependencies = graph.toPackageReferenceForest(moduleInfoForModuleName)
+                    dependencies = graph.toPackageReferences(moduleInfoForModuleName)
                 )
             )
 
@@ -344,7 +344,7 @@ class GoMod(
      * of the given [root] package. The graph must not contain any cycles, so [Graph.breakCycles] should be called
      * before.
      */
-    private fun Graph<GoModule>.toPackageReferenceForest(
+    private fun Graph<GoModule>.toPackageReferences(
         moduleInfoForModuleName: Map<String, ModuleInfo>
     ): Set<PackageReference> {
         fun getPackageReference(module: GoModule): PackageReference {
