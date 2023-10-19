@@ -177,3 +177,7 @@ tasks.named<CreateStartScripts>("startScripts") {
         )
     }
 }
+
+tasks.withType<Jar>().configureEach {
+    manifest.attributes["Main-Class"] = application.mainClass
+}
