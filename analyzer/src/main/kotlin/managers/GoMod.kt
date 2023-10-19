@@ -389,7 +389,10 @@ private data class ModuleInfo(
     val main: Boolean = false,
 
     @SerialName("GoMod")
-    val goMod: String? = null
+    val goMod: String? = null,
+
+    @SerialName("Dir")
+    val dir: String? = null
 )
 
 @Serializable
