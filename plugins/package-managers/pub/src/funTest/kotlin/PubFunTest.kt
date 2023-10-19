@@ -21,8 +21,8 @@ package org.ossreviewtoolkit.plugins.packagemanagers.pub
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
-import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.haveSubstring
 
 import org.ossreviewtoolkit.analyzer.managers.analyze
@@ -99,7 +99,7 @@ class PubFunTest : WordSpec({
 
             with(result) {
                 packages should beEmpty()
-                issues.size shouldBe 1
+                issues shouldHaveSize 1
                 issues.first().message should haveSubstring("IllegalArgumentException: No lockfile found in")
             }
         }

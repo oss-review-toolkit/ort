@@ -27,8 +27,8 @@ import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.maps.beEmpty
+import io.kotest.matchers.maps.shouldHaveSize
 import io.kotest.matchers.should
-import io.kotest.matchers.shouldBe
 
 import java.io.File
 
@@ -150,7 +150,7 @@ class PackageManagerFunTest : WordSpec({
                 )
             )
 
-            managedFiles.size shouldBe 3
+            managedFiles shouldHaveSize 3
 
             val managedFilesByName = managedFiles.groupByName(projectDir)
 

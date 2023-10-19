@@ -23,6 +23,7 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldContain
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.collections.shouldNotContain
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
@@ -150,7 +151,7 @@ class OpossumReporterTest : WordSpec({
             val signals = opossumInput.getSignalsForFile(
                 "/pom.xml/compile/first-package-group/first-package@0.0.1/LICENSE"
             )
-            signals.size shouldBe 2
+            signals shouldHaveSize 2
             signals.find { it.source == "ORT-Scanner-SCANNER@1.2.3" } shouldNotBeNull {
                 license.toString() shouldBe "Apache-2.0"
             }
@@ -161,7 +162,7 @@ class OpossumReporterTest : WordSpec({
                 "/pom.xml/compile/first-package-group/first-package@0.0.1/project-path/some/file"
             )
 
-            signals.size shouldBe 2
+            signals shouldHaveSize 2
             signals.find { it.source == "ORT-Scanner-SCANNER@1.2.3" } shouldNotBeNull {
                 copyright shouldContain "Copyright 2020 Some copyright holder in source artifact"
                 copyright shouldContain "Copyright 2020 Some other copyright holder in source artifact"
@@ -212,14 +213,14 @@ class OpossumReporterTest : WordSpec({
             val issuesFromFirstPackage =
                 opossumInput.getSignalsForFile("/pom.xml/compile/first-package-group/first-package@0.0.1")
                     .filter { it.comment?.contains(Regex("Source-.*Message-")) == true }
-            issuesFromFirstPackage.size shouldBe 4
+            issuesFromFirstPackage shouldHaveSize 4
             issuesFromFirstPackage.forAll {
                 it.followUp shouldBe true
                 it.excludeFromNotice shouldBe true
             }
 
             val issuesAttachedToFallbackPath = opossumInput.getSignalsForFile("/")
-            issuesAttachedToFallbackPath.size shouldBe 1
+            issuesAttachedToFallbackPath shouldHaveSize 1
             issuesAttachedToFallbackPath.forAll {
                 it.followUp shouldBe true
                 it.excludeFromNotice shouldBe true
