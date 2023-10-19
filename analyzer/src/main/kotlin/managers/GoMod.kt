@@ -119,30 +119,30 @@ class GoMod(
         stashDirectories(projectDir.resolve("vendor")).use { _ ->
             val moduleInfoForModuleName = getModuleInfos(projectDir)
             val graph = getModuleGraph(projectDir, moduleInfoForModuleName)
-            val projectId = moduleInfoForModuleName.getMainModuleId()
-            val packageIds = graph.nodes - projectId
-            val packages = packageIds.mapTo(mutableSetOf()) { moduleInfoForModuleName.getValue(it.name).toPackage() }
-            val projectVcs = processProjectVcs(projectDir)
+            val packages = graph.nodes.mapNotNullTo(mutableSetOf()) {
+                moduleInfoForModuleName.getValue(it.name).toPackage()
+            }
 
-            val dependenciesScopePackageIds = getTransitiveMainModuleDependencies(projectDir).let { moduleNames ->
+            val projectVcs = processProjectVcs(projectDir)
+            val mainScopeModules = getTransitiveMainModuleDependencies(projectDir).let { moduleNames ->
                 graph.nodes.filterTo(mutableSetOf()) { it.name in moduleNames }
             }
 
             val scopes = setOf(
                 Scope(
                     name = "main",
-                    dependencies = graph.subgraph(dependenciesScopePackageIds).toPackageReferenceForest(projectId)
+                    dependencies = graph.subgraph(mainScopeModules).toPackageReferenceForest(moduleInfoForModuleName)
                 ),
                 Scope(
                     name = "vendor",
-                    dependencies = graph.toPackageReferenceForest(projectId)
+                    dependencies = graph.toPackageReferenceForest(moduleInfoForModuleName)
                 )
             )
 
             return listOf(
                 ProjectAnalyzerResult(
                     project = Project(
-                        id = projectId,
+                        id = moduleInfoForModuleName.values.single { it.main }.toId(),
                         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                         authors = emptySet(), // Go mod doesn't support author information.
                         declaredLicenses = emptySet(), // Go mod doesn't support declared licenses.
@@ -160,16 +160,20 @@ class GoMod(
     /**
      * Return the module graph output from `go mod graph` with non-vendor dependencies removed.
      */
-    private fun getModuleGraph(projectDir: File, moduleInfoForModuleName: Map<String, ModuleInfo>): Graph<Identifier> {
+    private fun getModuleGraph(projectDir: File, moduleInfoForModuleName: Map<String, ModuleInfo>): Graph<GoModule> {
         fun moduleInfo(moduleName: String): ModuleInfo = moduleInfoForModuleName.getValue(moduleName)
 
-        fun parseModuleEntry(entry: String): Identifier =
-            entry.substringBefore('@').let { moduleName ->
-                moduleInfo(moduleName).toId()
-            }
+        fun parseModuleEntry(entry: String): GoModule =
+            GoModule(
+                name = entry.substringBefore('@'),
+                version = entry.substringAfter('@', "")
+            )
 
-        val mainModuleId = moduleInfoForModuleName.getMainModuleId()
-        var graph = Graph<Identifier>().apply { addNode(mainModuleId) }
+        val mainModule = moduleInfoForModuleName.values.single { it.main }.run {
+            GoModule(path, normalizeModuleVersion(version))
+        }
+
+        var graph = Graph<GoModule>().apply { addNode(mainModule) }
 
         val edges = runGo("mod", "graph", workingDir = projectDir)
 
@@ -199,12 +203,7 @@ class GoMod(
             graph.addEdge(parent, child)
         }
 
-        val mainModuleName = moduleInfoForModuleName.getMainModuleId().name
-        val replacedModules = moduleInfoForModuleName.mapNotNull { (name, info) ->
-            (info.path to name).takeIf { name != info.path }
-        }.toMap()
-
-        val vendorModules = getVendorModules(graph, projectDir, mainModuleName, replacedModules)
+        val vendorModules = getVendorModules(graph, projectDir, mainModule.name)
         if (vendorModules.size < graph.size) {
             logger.debug {
                 "Removing ${graph.size - vendorModules.size} non-vendor modules from the dependency graph."
@@ -216,8 +215,10 @@ class GoMod(
         return graph.breakCycles()
     }
 
-    private fun ModuleInfo.toId(): Identifier =
-        if (version.isBlank()) {
+    private fun ModuleInfo.toId(): Identifier {
+        if (replace != null) return replace.toId() // Apply replace directive.
+
+        return if (version.isBlank()) {
             // If the version is blank, it is a project in ORT speak.
             check(main) { "Found a local module dependency which is not supported." }
 
@@ -238,6 +239,7 @@ class GoMod(
                 version = normalizeModuleVersion(version)
             )
         }
+    }
 
     /**
      * Return the list of all modules contained in the dependency tree with resolved versions and the 'replace'
@@ -248,36 +250,19 @@ class GoMod(
 
         val moduleInfos = list.stdout.byteInputStream().use { JSON.decodeToSequence<ModuleInfo>(it) }
 
-        return buildMap {
-            moduleInfos.forEach { moduleInfo ->
-                if (moduleInfo.replace != null) {
-                    // The `replace` object in the output of `go list` does not have the `indirect` flag, so copy it
-                    // from the replaced module.
-                    val replace = moduleInfo.replace.copy(indirect = moduleInfo.indirect)
-                    put(moduleInfo.path, replace)
-                    put(moduleInfo.replace.path, replace)
-                } else {
-                    put(moduleInfo.path, moduleInfo)
-                }
-            }
-        }
+        return moduleInfos.associateBy { it.path }
     }
 
     /**
      * Return the subset of the modules in [graph] required for building and testing the main module. So, test
      * dependencies of dependencies are filtered out.
      */
-    private fun getVendorModules(
-        graph: Graph<Identifier>,
-        projectDir: File,
-        mainModuleName: String,
-        replacedModules: Map<String, String>
-    ): Set<Identifier> {
+    private fun getVendorModules(graph: Graph<GoModule>, projectDir: File, mainModuleName: String): Set<GoModule> {
         val vendorModuleNames = mutableSetOf(mainModuleName)
 
         graph.nodes.chunked(WHY_CHUNK_SIZE).forEach { ids ->
             // Use the names of replaced modules, because `go mod why` returns only results for those.
-            val moduleNames = ids.map { replacedModules[it.name] ?: it.name }.toTypedArray()
+            val moduleNames = ids.map { it.name }.toTypedArray()
             // Use the ´-m´ switch to use module names because the graph also uses module names, not package names.
             // This fixes the accidental dropping of some modules.
             val why = runGo("mod", "why", "-m", "-vendor", *moduleNames, workingDir = projectDir)
@@ -285,7 +270,7 @@ class GoMod(
             vendorModuleNames += parseWhyOutput(why.stdout)
         }
 
-        return graph.nodes.filterTo(mutableSetOf()) { (replacedModules[it.name] ?: it.name) in vendorModuleNames }
+        return graph.nodes.filterTo(mutableSetOf()) { it.name in vendorModuleNames }
     }
 
     /**
@@ -302,7 +287,13 @@ class GoMod(
         }
     }
 
-    private fun ModuleInfo.toPackage(): Package {
+    private fun ModuleInfo.toPackage(): Package? {
+        // A ModuleInfo with blank version should be represented by a Project:
+        if (version.isBlank()) return null
+
+        // Apply the replace directive:
+        if (replace != null) return replace.toPackage()
+
         val vcsInfo = toVcsInfo().orEmpty()
 
         return Package(
@@ -348,27 +339,31 @@ class GoMod(
     private fun runGo(vararg args: CharSequence, workingDir: File? = null) =
         run(args = args, workingDir = workingDir, environment = environment)
 
-    private fun Map<String, ModuleInfo>.getMainModuleId(): Identifier = values.single { it.main }.toId()
-
     /**
      * Convert this [Graph] to a set of [PackageReference]s that spawn the dependency trees of the direct dependencies
      * of the given [root] package. The graph must not contain any cycles, so [Graph.breakCycles] should be called
      * before.
      */
-    private fun Graph<Identifier>.toPackageReferenceForest(root: Identifier): Set<PackageReference> {
-        fun getPackageReference(id: Identifier): PackageReference {
-            val dependencies = getDependencies(id).mapTo(mutableSetOf()) {
+    private fun Graph<GoModule>.toPackageReferenceForest(
+        moduleInfoForModuleName: Map<String, ModuleInfo>
+    ): Set<PackageReference> {
+        fun getPackageReference(module: GoModule): PackageReference {
+            val dependencies = getDependencies(module).mapTo(mutableSetOf()) {
                 getPackageReference(it)
             }
 
             return PackageReference(
-                id = id,
+                id = moduleInfoForModuleName.getValue(module.name).toId(),
                 linkage = PackageLinkage.PROJECT_STATIC,
                 dependencies = dependencies
             )
         }
 
-        return getDependencies(root).mapTo(mutableSetOf()) { getPackageReference(it) }
+        val mainModule = moduleInfoForModuleName.values.single { it.main }.run {
+            GoModule(path, version)
+        }
+
+        return getDependencies(mainModule).mapTo(mutableSetOf()) { getPackageReference(it) }
     }
 }
 
@@ -410,6 +405,18 @@ private data class DepInfo(
     @SerialName("Module")
     val module: ModuleInfo? = null
 )
+
+private data class GoModule(
+    val name: String,
+    val version: String
+) {
+    override fun toString(): String =
+        if (version.isBlank()) {
+            name
+        } else {
+            "$name@$version"
+        }
+}
 
 /**
  * The format of `.info` the Go command line tools cache under '$GOPATH/pkg/mod'.
