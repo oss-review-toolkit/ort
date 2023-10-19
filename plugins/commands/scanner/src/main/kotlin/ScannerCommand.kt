@@ -114,7 +114,8 @@ class ScannerCommand : OrtCommand(
     private val scanners by option(
         "--scanners", "-s",
         help = "A comma-separated list of scanners to use.\nPossible values are: ${ScannerWrapper.ALL.keys}"
-    ).convertToScannerWrapperFactories().default(listOfNotNull(ScannerWrapper.ALL["ScanCode"]))
+    ).convertToScannerWrapperFactories()
+        .default(listOfNotNull(ScannerWrapper.ALL.values.singleOrNull() ?: ScannerWrapper.ALL["ScanCode"]))
 
     private val projectScanners by option(
         "--project-scanners",
