@@ -107,10 +107,9 @@ class S3FileStorage(
         }.build()
 
         return try {
-            s3Client.getObjectAsBytes(request).let { resp ->
-                val stream = ByteArrayInputStream(resp?.asByteArray())
-                if (compression) XZCompressorInputStream(stream) else stream
-            }
+            val response = s3Client.getObjectAsBytes(request)
+            val stream = ByteArrayInputStream(response.asByteArray())
+            if (compression) XZCompressorInputStream(stream) else stream
         } catch (e: NoSuchKeyException) {
             throw NoSuchFileException(File(path))
         }
