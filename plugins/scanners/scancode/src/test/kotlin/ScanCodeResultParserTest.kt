@@ -24,8 +24,8 @@ import io.kotest.matchers.Matcher
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSingleElement
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
-import io.kotest.matchers.shouldBe
 
 import java.io.File
 import java.time.Instant
@@ -45,8 +45,8 @@ class ScanCodeResultParserTest : FreeSpec({
 
                 val summary = parseResult(resultFile).toScanSummary()
 
-                summary.licenseFindings.size shouldBe 4
-                summary.copyrightFindings.size shouldBe 4
+                summary.licenseFindings shouldHaveSize 4
+                summary.copyrightFindings shouldHaveSize 4
                 summary.issues should beEmpty()
             }
         }
@@ -80,8 +80,8 @@ class ScanCodeResultParserTest : FreeSpec({
 
                     val summary = parseResult(resultFile).toScanSummary()
 
-                    summary.licenseFindings.size shouldBe 5
-                    summary.copyrightFindings.size shouldBe 4
+                    summary.licenseFindings shouldHaveSize 5
+                    summary.copyrightFindings shouldHaveSize 4
                     summary.issues should beEmpty()
                 }
 

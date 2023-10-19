@@ -20,8 +20,8 @@
 package org.ossreviewtoolkit.analyzer.managers
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
-import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
@@ -99,6 +99,6 @@ class GoModFunTest : StringSpec({
 
         val result = create("GoMod").resolveSingleProject(definitionFile)
 
-        result.issues.size shouldBe 1
+        result.issues shouldHaveSize 1
     }
 })

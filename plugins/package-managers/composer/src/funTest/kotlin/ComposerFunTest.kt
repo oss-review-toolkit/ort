@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.packagemanagers.composer
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.haveSubstring
@@ -53,7 +54,7 @@ class ComposerFunTest : StringSpec({
             project.definitionFilePath shouldBe "plugins/package-managers/composer/src/funTest/assets/projects/" +
                 "synthetic/no-lockfile/composer.json"
             packages should beEmpty()
-            issues.size shouldBe 1
+            issues shouldHaveSize 1
             issues.first().message should haveSubstring("IllegalArgumentException: No lockfile found in")
         }
     }

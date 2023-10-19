@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.analyzer.managers
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -57,7 +58,7 @@ class GoDepFunTest : WordSpec({
                 project.definitionFilePath shouldBe
                     "analyzer/src/funTest/assets/projects/synthetic/godep/no-lockfile/Gopkg.toml"
                 packages should beEmpty()
-                issues.size shouldBe 1
+                issues shouldHaveSize 1
                 issues.first().message should haveSubstring("IllegalArgumentException: No lockfile found in")
             }
         }

@@ -23,6 +23,7 @@ import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.maps.beEmpty
 import io.kotest.matchers.maps.shouldContainExactly
 import io.kotest.matchers.should
@@ -101,7 +102,7 @@ class PackageCurationTest : WordSpec({
                 isModified shouldBe true
             }
 
-            curatedPkg.curations.size shouldBe 1
+            curatedPkg.curations shouldHaveSize 1
             curatedPkg.curations.first().base shouldBe pkg.diff(curatedPkg.metadata)
             curatedPkg.curations.first().curation shouldBe curation.data
         }
@@ -164,7 +165,7 @@ class PackageCurationTest : WordSpec({
                 isModified shouldBe false
             }
 
-            curatedPkg.curations.size shouldBe 1
+            curatedPkg.curations shouldHaveSize 1
             curatedPkg.curations.first().base shouldBe pkg.diff(curatedPkg.metadata)
             curatedPkg.curations.first().curation shouldBe curation.data
         }
@@ -205,7 +206,7 @@ class PackageCurationTest : WordSpec({
 
             val curatedPkg = curation.apply(pkg.toCuratedPackage())
 
-            curatedPkg.curations.size shouldBe 1
+            curatedPkg.curations shouldHaveSize 1
             curatedPkg.metadata.vcsProcessed shouldBe VcsInfo.EMPTY
         }
 
@@ -350,19 +351,19 @@ class PackageCurationTest : WordSpec({
             val result3 = curation3.apply(result2)
 
             result1.metadata.description shouldBe "description 1"
-            result1.curations.size shouldBe 1
+            result1.curations shouldHaveSize 1
             result1.curations[0].base shouldBe PackageCurationData(description = "")
             result1.curations[0].curation shouldBe curation1.data
 
             result2.metadata.description shouldBe "description 2"
-            result2.curations.size shouldBe 2
+            result2.curations shouldHaveSize 2
             result2.curations[0].base shouldBe PackageCurationData(description = "")
             result2.curations[0].curation shouldBe curation1.data
             result2.curations[1].base shouldBe PackageCurationData(description = "description 1")
             result2.curations[1].curation shouldBe curation2.data
 
             result3.metadata.description shouldBe "description 3"
-            result3.curations.size shouldBe 3
+            result3.curations shouldHaveSize 3
             result3.curations[0].base shouldBe PackageCurationData(description = "")
             result3.curations[0].curation shouldBe curation1.data
             result3.curations[1].base shouldBe PackageCurationData(description = "description 1")
