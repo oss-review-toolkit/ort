@@ -45,7 +45,6 @@ import software.amazon.awssdk.services.s3.model.S3Exception
  * blocking, but the [write] operation is asynchronous unless a [customEndpoint] is provided. Contents are compressed
  * before store if the [compression] flag is set to true.
  */
-@Suppress("SwallowedException")
 class S3FileStorage(
     /** The AWS access key */
     private val accessKeyId: String? = null,
@@ -106,13 +105,13 @@ class S3FileStorage(
             bucket(bucketName)
         }.build()
 
-        return try {
+        return runCatching {
             val response = s3Client.getObjectAsBytes(request)
             val stream = ByteArrayInputStream(response.asByteArray())
             if (compression) XZCompressorInputStream(stream) else stream
-        } catch (e: NoSuchKeyException) {
-            throw NoSuchFileException(File(path))
-        }
+        }.onFailure { exception ->
+            if (exception is NoSuchKeyException) throw NoSuchFileException(File(path))
+        }.getOrThrow()
     }
 
     override fun write(path: String, inputStream: InputStream) {
@@ -121,7 +120,7 @@ class S3FileStorage(
             bucket(bucketName)
         }.build()
 
-        inputStream.use {
+        val body = inputStream.use {
             if (compression) {
                 val stream = ByteArrayOutputStream()
                 XZCompressorOutputStream(stream).write(it.readBytes())
@@ -129,12 +128,12 @@ class S3FileStorage(
             } else {
                 RequestBody.fromBytes(it.readBytes())
             }
-        }.let {
-            try {
-                s3Client.putObject(request, it)
-            } catch (e: S3Exception) {
-                logger.warn { "Can not write $path to S3 bucket $bucketName" }
-            }
+        }
+
+        runCatching {
+            s3Client.putObject(request, body)
+        }.onFailure { exception ->
+            if (exception is S3Exception) logger.warn { "Can not write '$path' to S3 bucket '$bucketName'." }
         }
     }
 }
