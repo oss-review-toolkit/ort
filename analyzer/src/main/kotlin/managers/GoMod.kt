@@ -220,15 +220,20 @@ class GoMod(
 
         return if (version.isBlank()) {
             // If the version is blank, it is a project in ORT speak.
-            check(main) { "Found a local module dependency which is not supported." }
-
             checkNotNull(dir) { "For projects, the directory is expected to not be null." }
+
+            val projectDir = File(dir).absoluteFile
+
+            require(projectDir.startsWith(analysisRoot)) {
+                "A replace directive references a module in '$projectDir' outside of analysis root which is not " +
+                    "supported."
+            }
 
             Identifier(
                 type = managerName,
                 namespace = "",
-                name = path,
-                version = processProjectVcs(File(dir)).revision
+                name = getProjectName(projectDir),
+                version = processProjectVcs(projectDir).revision
             )
         } else {
             // If the version is not blank, it is a package in ORT speak.
@@ -239,6 +244,18 @@ class GoMod(
                 version = normalizeModuleVersion(version)
             )
         }
+    }
+
+    private fun getProjectName(projectDir: File): String {
+        projectDir.resolve("go.mod").also { goModFile ->
+            require(goModFile.isFile) {
+                "Expected file '$goModFile' which does not exist."
+            }
+        }
+
+        val list = runGo("list", "-m", "-json", "-buildvcs=false", workingDir = projectDir)
+
+        return list.stdout.byteInputStream().use { JSON.decodeToSequence<ModuleInfo>(it) }.single().path
     }
 
     /**
