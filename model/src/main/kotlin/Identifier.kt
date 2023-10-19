@@ -124,4 +124,6 @@ data class Identifier(
      */
     fun toPath(separator: String = "/", emptyValue: String = "unknown"): String =
         sanitizedComponents.joinToString(separator) { it.encodeOr(emptyValue) }
+
+    override fun toString(): String = toCoordinates()
 }
