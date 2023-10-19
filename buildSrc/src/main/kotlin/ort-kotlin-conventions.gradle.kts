@@ -125,7 +125,7 @@ val mergeDetektReports = if (rootProject.tasks.findByName(mergeDetektReportsTask
     }
 }
 
-tasks.withType<Detekt> detekt@{
+tasks.withType<Detekt>().configureEach detekt@{
     jvmTarget = maxKotlinJvmTarget.target
 
     dependsOn(":detekt-rules:assemble")
