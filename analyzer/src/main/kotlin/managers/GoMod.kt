@@ -142,12 +142,7 @@ class GoMod(
             return listOf(
                 ProjectAnalyzerResult(
                     project = Project(
-                        id = Identifier(
-                            type = managerName,
-                            namespace = "",
-                            name = projectId.name,
-                            version = projectVcs.revision
-                        ),
+                        id = projectId,
                         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                         authors = emptySet(), // Go mod doesn't support author information.
                         declaredLicenses = emptySet(), // Go mod doesn't support declared licenses.
@@ -222,12 +217,27 @@ class GoMod(
     }
 
     private fun ModuleInfo.toId(): Identifier =
-        Identifier(
-            type = managerName.takeIf { main } ?: "Go",
-            namespace = "",
-            name = path,
-            version = normalizeModuleVersion(version)
-        )
+        if (version.isBlank()) {
+            // If the version is blank, it is a project in ORT speak.
+            check(main) { "Found a local module dependency which is not supported." }
+
+            checkNotNull(dir) { "For projects, the directory is expected to not be null." }
+
+            Identifier(
+                type = managerName,
+                namespace = "",
+                name = path,
+                version = processProjectVcs(File(dir)).revision
+            )
+        } else {
+            // If the version is not blank, it is a package in ORT speak.
+            Identifier(
+                type = "Go",
+                namespace = "",
+                name = path,
+                version = normalizeModuleVersion(version)
+            )
+        }
 
     /**
      * Return the list of all modules contained in the dependency tree with resolved versions and the 'replace'
