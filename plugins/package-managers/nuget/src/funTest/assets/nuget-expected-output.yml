@@ -27,11 +27,7 @@ project:
       - timestamp: "1970-01-01T00:00:00Z"
         source: "NuGet"
         message: "Failed to get remote metadata for name: 'foobar' version: '1.2.3'.\
-          \ System.Exception: No package metadata found for foobar.1.2.3.\n   at NugetInspector.NugetApi.FindPackageVersion(PackageIdentity\
-          \ pid) in ./nuget-inspector/NugetApi.cs:line 173\n   at NugetInspector.BasePackage.UpdateWithRemoteMetadata(NugetApi\
-          \ nugetApi, Boolean with_details) in ./nuget-inspector/Models.cs:line 342\n\
-          \   at NugetInspector.BasePackage.Update(NugetApi nugetApi, Boolean with_details)\
-          \ in ./nuget-inspector/Models.cs:line 321"
+          \ System.Exception: No package metadata found for foobar.1.2.3."
         severity: "WARNING"
     - id: "NuGet:System:Globalization:4.3.0"
       dependencies:
