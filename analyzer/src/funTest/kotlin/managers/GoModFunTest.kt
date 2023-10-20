@@ -98,7 +98,7 @@ class GoModFunTest : StringSpec({
     "Project dependencies with a (relative) local module dependency are detected correctly" {
         val definitionFileApp = testDir.resolve("gomod-submodules/app/go.mod")
         val definitionFileUtils = testDir.resolve("gomod-submodules/utils/go.mod")
-        val expectedResultFile = testDir.resolve("gomod-submodules-embed-expected-output.yml")
+        val expectedResultFile = testDir.resolve("gomod-submodules-expected-output.yml")
         val expectedDefinitionFilePathUtils = getDefinitionFilePath(definitionFileUtils)
 
         val result = create("GoMod").collateMultipleProjects(definitionFileApp, definitionFileUtils)
