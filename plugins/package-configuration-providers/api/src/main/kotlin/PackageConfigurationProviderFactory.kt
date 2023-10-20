@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.plugins.packageconfigurationproviders.api
 
+import org.apache.logging.log4j.kotlin.logger
+
 import org.ossreviewtoolkit.model.config.ProviderPluginConfiguration
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.utils.common.Plugin
@@ -43,8 +45,15 @@ interface PackageConfigurationProviderFactory<CONFIG> :
         ): List<Pair<String, PackageConfigurationProvider>> =
             configurations.filter {
                 it.enabled
-            }.map {
-                it.id to ALL.getValue(it.type).create(it.options, it.secrets)
+            }.mapNotNull {
+                ALL[it.type]?.let { factory ->
+                    it.id to factory.create(it.options, it.secrets)
+                }.also { factory ->
+                    factory ?: logger.error {
+                        "Configuration provider of type '${it.type}' is enabled in configuration but not available " +
+                            "in the classpath."
+                    }
+                }
             }.apply {
                 require(none { (id, _) -> id.isBlank() }) {
                     "The configuration contains a package configuration provider with a blank ID which is not allowed."
