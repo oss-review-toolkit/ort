@@ -259,8 +259,7 @@ class GoMod(
     }
 
     /**
-     * Return the list of all modules contained in the dependency tree with resolved versions and the 'replace'
-     * directive applied.
+     * Return the list of all modules available via the `go list` command.
      */
     private fun getModuleInfos(projectDir: File): List<ModuleInfo> {
         val list = runGo("list", "-m", "-json", "-buildvcs=false", "all", workingDir = projectDir)
