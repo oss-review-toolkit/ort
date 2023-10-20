@@ -114,7 +114,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
             val unmanagedPackageManagerFactory = PackageManager.ALL["Unmanaged"]
             distinctPackageManagers.find { it == unmanagedPackageManagerFactory }
                 ?.create(absoluteProjectPath, config, repositoryConfiguration)
-                ?.run { managedFiles[this] = listOf(absoluteProjectPath) }
+                ?.also { managedFiles[it] = listOf(absoluteProjectPath) }
         }
 
         return ManagedFileInfo(absoluteProjectPath, managedFiles, repositoryConfiguration)
