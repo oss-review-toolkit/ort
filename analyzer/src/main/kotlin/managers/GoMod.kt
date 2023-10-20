@@ -117,7 +117,7 @@ class GoMod(
         val projectDir = definitionFile.parentFile
 
         stashDirectories(projectDir.resolve("vendor")).use { _ ->
-            val moduleInfoForModuleName = getModuleInfos(projectDir)
+            val moduleInfoForModuleName = getModuleInfos(projectDir).associateBy { it.path }
             val graph = getModuleGraph(projectDir, moduleInfoForModuleName)
             val packages = graph.nodes.mapNotNullTo(mutableSetOf()) {
                 moduleInfoForModuleName.getValue(it.name).toPackage()
@@ -262,12 +262,10 @@ class GoMod(
      * Return the list of all modules contained in the dependency tree with resolved versions and the 'replace'
      * directive applied.
      */
-    private fun getModuleInfos(projectDir: File): Map<String, ModuleInfo> {
+    private fun getModuleInfos(projectDir: File): List<ModuleInfo> {
         val list = runGo("list", "-m", "-json", "-buildvcs=false", "all", workingDir = projectDir)
 
-        val moduleInfos = list.stdout.byteInputStream().use { JSON.decodeToSequence<ModuleInfo>(it) }
-
-        return moduleInfos.associateBy { it.path }
+        return list.stdout.byteInputStream().use { JSON.decodeToSequence<ModuleInfo>(it) }.toList()
     }
 
     /**
