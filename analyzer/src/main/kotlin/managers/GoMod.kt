@@ -355,7 +355,7 @@ class GoMod(
 
     /**
      * Convert this [Graph] to a set of [PackageReference]s that spawn the dependency trees of the direct dependencies
-     * of the given [root] package. The graph must not contain any cycles, so [Graph.breakCycles] should be called
+     * of the main module. The graph must not contain any cycles, so [Graph.breakCycles] should be called
      * before.
      */
     private fun Graph<GoModule>.toPackageReferences(
