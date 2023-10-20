@@ -29,10 +29,11 @@ DOCKER_ARGS=$1
 shift 2> /dev/null
 ORT_ARGS=$@
 
+DOCKER_IMAGE_ROOT="${DOCKER_IMAGE_ROOT:-ghcr.io/oss-review-toolkit}"
 DOCKER_RUN_AS_USER="-v /etc/group:/etc/group:ro -v /etc/passwd:/etc/passwd:ro -v $HOME:$HOME -u $(id -u):$(id -g)"
 
 [ -n "$http_proxy" ] && HTTP_PROXY_ENV="-e http_proxy"
 [ -n "$https_proxy" ] && HTTPS_PROXY_ENV="-e https_proxy"
 
 # Mount the project root into the image to run the command task from there.
-docker run $DOCKER_ARGS $DOCKER_RUN_AS_USER $HTTP_PROXY_ENV $HTTPS_PROXY_ENV -v $PWD:/workdir -w /workdir ort $ORT_ARGS
+docker run $DOCKER_ARGS $DOCKER_RUN_AS_USER $HTTP_PROXY_ENV $HTTPS_PROXY_ENV -v $PWD:/workdir -w /workdir ${DOCKER_IMAGE_ROOT}/ort $ORT_ARGS
