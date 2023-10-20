@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.plugins.packagecurationproviders.api
 
+import org.apache.logging.log4j.kotlin.logger
+
 import org.ossreviewtoolkit.model.ResolvedPackageCurations.Companion.REPOSITORY_CONFIGURATION_PROVIDER_ID
 import org.ossreviewtoolkit.model.config.ProviderPluginConfiguration
 import org.ossreviewtoolkit.model.utils.PackageCurationProvider
@@ -41,8 +43,15 @@ interface PackageCurationProviderFactory<CONFIG> : TypedConfigurablePluginFactor
         fun create(configurations: List<ProviderPluginConfiguration>): List<Pair<String, PackageCurationProvider>> =
             configurations.filter {
                 it.enabled
-            }.map {
-                it.id to ALL.getValue(it.type).create(it.options, it.secrets)
+            }.mapNotNull {
+                ALL[it.type]?.let { factory ->
+                    it.id to factory.create(it.options, it.secrets)
+                }.also { factory ->
+                    factory ?: logger.error {
+                        "Curation provider of type '${it.type}' is enabled in configuration but not available in the " +
+                            "classpath."
+                    }
+                }
             }.apply {
                 require(none { (id, _) -> id.isBlank() }) {
                     "The configuration contains a package curations provider with a blank ID which is not allowed."
