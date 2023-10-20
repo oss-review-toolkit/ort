@@ -85,7 +85,7 @@ class PackageManagerFunTest : WordSpec({
 
             // The test project contains at least one file per package manager, so the result should also contain an
             // entry for each package manager.
-            val unmanagedPackageManagerFactory = PackageManager.ALL["Unmanaged"]
+            val unmanagedPackageManagerFactory = PackageManager.ALL.getValue("Unmanaged")
             managedFiles.keys shouldContainExactlyInAnyOrder PackageManager.ENABLED_BY_DEFAULT.filterNot {
                 it == unmanagedPackageManagerFactory
             }
