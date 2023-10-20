@@ -113,8 +113,8 @@ class ClearlyDefinedStorage(
                 ScannerWrapper.ALL[name]?.let { factory ->
                     val scanner = factory.create(emptyMap(), emptyMap())
                     (scanner as? CommandLinePathScannerWrapper)?.let { cliScanner -> cliScanner to versions.last() }
-                }.also {
-                    if (it == null) logger.debug { "Unsupported tool '$name' for coordinates '$coordinates'." }
+                }.also { factory ->
+                    factory ?: logger.debug { "Unsupported tool '$name' for coordinates '$coordinates'." }
                 }
             }
 
