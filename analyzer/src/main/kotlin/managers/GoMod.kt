@@ -269,13 +269,13 @@ class GoMod(
 
     /**
      * Return the subset of the modules in [graph] required for building and testing the main module. So, test
-     * dependencies of dependencies are filtered out.
+     * dependencies of dependencies are filtered out. The [GoModule]s in [Graph] must not have the replace directive
+     * applied.
      */
     private fun getVendorModules(graph: Graph<GoModule>, projectDir: File, mainModuleName: String): Set<GoModule> {
         val vendorModuleNames = mutableSetOf(mainModuleName)
 
         graph.nodes.chunked(WHY_CHUNK_SIZE).forEach { ids ->
-            // Use the names of replaced modules, because `go mod why` returns only results for those.
             val moduleNames = ids.map { it.name }.toTypedArray()
             // Use the ´-m´ switch to use module names because the graph also uses module names, not package names.
             // This fixes the accidental dropping of some modules.
