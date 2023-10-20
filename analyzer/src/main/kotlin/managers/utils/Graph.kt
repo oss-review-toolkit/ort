@@ -70,9 +70,10 @@ internal class Graph<T> private constructor(private val nodeMap: MutableMap<T, M
 
     /**
      * Return a copy of this Graph with edges removed so that no circle remains.
+     *
      * TODO: The code has been copied from DependencyGraphBuilder as a temporary solutions. Once GoMod is migrated to
-     * use the dependency graph, this function can be dropped and the one from DependencyGraphBuilder can be re-used,
-     * see also https://github.com/oss-review-toolkit/ort/issues/4249.
+     *       use the dependency graph, this function can be dropped and the one from DependencyGraphBuilder can be
+     *       re-used, see also https://github.com/oss-review-toolkit/ort/issues/4249.
      */
     fun breakCycles(): Graph<T> {
         val outgoingEdgesForNodes = nodeMap.mapValuesTo(mutableMapOf()) { it.value.toMutableSet() }
