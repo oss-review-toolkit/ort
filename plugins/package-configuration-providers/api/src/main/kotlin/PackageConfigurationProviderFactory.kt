@@ -41,20 +41,20 @@ interface PackageConfigurationProviderFactory<CONFIG> :
         fun create(
             configurations: List<ProviderPluginConfiguration>
         ): List<Pair<String, PackageConfigurationProvider>> =
-            configurations.filter { it.enabled }
-                .map { it.id to ALL.getValue(it.type).create(it.options, it.secrets) }
-                .apply {
-                    require(none { (id, _) -> id.isBlank() }) {
-                        "The configuration contains a package configuration provider with a blank ID which is not " +
-                            "allowed."
-                    }
-
-                    val duplicateIds = getDuplicates { (id, _) -> id }.keys
-                    require(duplicateIds.isEmpty()) {
-                        "Found multiple package configuration providers for the IDs ${duplicateIds.joinToString()}, " +
-                            "which is not allowed. Please configure a unique ID for each package configuration " +
-                            "provider."
-                    }
+            configurations.filter {
+                it.enabled
+            }.map {
+                it.id to ALL.getValue(it.type).create(it.options, it.secrets)
+            }.apply {
+                require(none { (id, _) -> id.isBlank() }) {
+                    "The configuration contains a package configuration provider with a blank ID which is not allowed."
                 }
+
+                val duplicateIds = getDuplicates { (id, _) -> id }.keys
+                require(duplicateIds.isEmpty()) {
+                    "Found multiple package configuration providers for the IDs ${duplicateIds.joinToString()}, " +
+                        "which is not allowed. Please configure a unique ID for each package configuration provider."
+                }
+            }
     }
 }
