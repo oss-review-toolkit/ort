@@ -22,19 +22,12 @@ plugins {
     id("ort-application-conventions")
 }
 
-configurations {
-    create("pluginClasspath")
-}
+configurations.dependencyScope("pluginClasspath")
+configurations["runtimeClasspath"].extendsFrom(configurations["pluginClasspath"])
 
 application {
     applicationName = "ort"
     mainClass = "org.ossreviewtoolkit.cli.OrtMainKt"
-
-    applicationDistribution.from(configurations["pluginClasspath"]) {
-        // Copy to "lib" instead of "plugin" to avoid duplicate dependency artifacts for core plugins.
-        into("lib")
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    }
 }
 
 dependencies {
