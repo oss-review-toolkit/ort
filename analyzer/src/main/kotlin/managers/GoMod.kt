@@ -433,7 +433,7 @@ private data class GoModule(
 }
 
 /**
- * The format of `.info` the Go command line tools cache under '$GOPATH/pkg/mod'.
+ * The format of `.info` files the Go command line tools cache under '$GOPATH/pkg/mod'.
  */
 @Serializable
 private data class ModuleInfoFile(
