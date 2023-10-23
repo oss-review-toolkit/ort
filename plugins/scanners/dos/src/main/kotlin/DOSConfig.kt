@@ -27,6 +27,9 @@ data class DOSConfig(
     /** Backend REST messaging timeout **/
     val restTimeout: Int,
 
+    /** Use license conclusions as detected licenses when they exist? **/
+    val fetchConcluded: Boolean,
+
     /** The URL where the DOS / package curation front-end is running. **/
     val frontendUrl: String,
 
@@ -43,6 +46,9 @@ data class DOSConfig(
         /** Name of the configuration property for the REST timeout. **/
         private const val REST_TIMEOUT_PROPERTY = "restTimeout"
 
+        /** Name of the configuration property for fetching license conclusions. **/
+        private const val FETCH_CONCLUDED_PROPERTY = "fetchConcluded"
+
         /** Name of the configuration property for the curation front-end URL. **/
         private const val FRONT_END_URL_PROPERTY = "frontendUrl"
 
@@ -50,6 +56,7 @@ data class DOSConfig(
         private const val DEFAULT_FRONT_END_URL = "http://localhost:3000"
         private const val DEFAULT_POLLING_INTERVAL = 5
         private const val DEFAULT_REST_TIMEOUT = 60
+        private const val DEFAULT_FETCH_CONCLUDED = false
 
         fun create(options: Options): DOSConfig {
             require(options.isNotEmpty()) { "No DOS Scanner configuration found." }
@@ -71,6 +78,8 @@ data class DOSConfig(
                 "REST timeout must be >= $DEFAULT_REST_TIMEOUT, current value is $restTimeout"
             }
 
+            val fetchConcluded = options[FETCH_CONCLUDED_PROPERTY]?.toBoolean() ?: DEFAULT_FETCH_CONCLUDED
+
             val frontendUrl = options[FRONT_END_URL_PROPERTY] ?: DEFAULT_FRONT_END_URL
 
             return DOSConfig(
@@ -78,6 +87,7 @@ data class DOSConfig(
                 serverToken = serverToken,
                 pollInterval = pollInterval,
                 restTimeout = restTimeout,
+                fetchConcluded = fetchConcluded,
                 frontendUrl = frontendUrl,
                 options = options
             )
