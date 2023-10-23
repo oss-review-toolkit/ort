@@ -84,19 +84,25 @@ class DOSRepository(private val dosService: DOSService) {
      *   being scanned, return "pending" message
      * - otherwise, return "null"
      */
-    suspend fun getScanResults(purl: String): DOSService.ScanResultsResponseBody? {
+    suspend fun getScanResults(purl: String, fetchConcluded: Boolean): DOSService.ScanResultsResponseBody? {
         if (purl.isEmpty()) {
             logger.error { "Need the package URL to check for scan results" }
             return null
         }
-        val requestBody = DOSService.ScanResultsRequestBody(purl)
+        val options = DOSService.ScanResultsRequestBody.ReqOptions(fetchConcluded)
+        val requestBody = DOSService.ScanResultsRequestBody(purl, options)
         val response = dosService.postScanResults(requestBody)
 
         return if (response.isSuccessful) {
             when (response.body()?.state?.status) {
                 "no-results" -> logger.info { "No scan results found from DOS API for $purl" }
                 "pending" -> logger.info { "Pending scan for $purl" }
-                "ready" -> logger.info { "Scan results found from DOS API for $purl" }
+                "ready" -> {
+                    logger.info { "Scan results found from DOS API for $purl" }
+                    if (fetchConcluded) {
+                        logger.info { "Using license conclusions instead of detected licenses" }
+                    }
+                }
             }
             response.body()
         } else {

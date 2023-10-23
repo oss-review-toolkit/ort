@@ -40,22 +40,36 @@ private fun getLicenseFindings(result: JsonNode): Set<LicenseFinding> {
         val license = licenseNode["license"].asText()
         val location = licenseNode["location"]
         val path = location["path"].asText()
-        val startLine = location["start_line"].asInt()
-        val endLine = location["end_line"].asInt()
-        val score = licenseNode["score"].asDouble()
-        licenseFindings.add(
-            LicenseFinding(
-                license,
-                TextLocation(
-                    path,
-                    startLine,
-                    endLine
-                ),
-                score.toFloat()
+        val startLine = location["start_line"]?.asInt()
+        val endLine = location["end_line"]?.asInt()
+        val score = licenseNode["score"]?.asDouble()
+        if (startLine != null && endLine != null && score != null) {
+            licenseFindings.add(
+                LicenseFinding(
+                    license,
+                    TextLocation(
+                        path,
+                        startLine,
+                        endLine
+                    ),
+                    score.toFloat()
+                )
             )
-        )
-    }
 
+        } else {
+            licenseFindings.add(
+                LicenseFinding(
+                    license,
+                    TextLocation(
+                        path,
+                        1,
+                        1
+                    ),
+                    100.0f
+                )
+            )
+        }
+    }
     return licenseFindings.toSet()
 }
 

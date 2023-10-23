@@ -75,7 +75,7 @@ class DOS internal constructor(
 
         runBlocking {
             // Ask for scan results from DOS API
-            scanResults = repository.getScanResults(pkg.purl)
+            scanResults = repository.getScanResults(pkg.purl, config.fetchConcluded)
             if (scanResults == null) {
                 issues.add(createAndLogIssue(name, "Could not request scan results from DOS API", Severity.ERROR))
                 return@runBlocking
@@ -204,7 +204,7 @@ class DOS internal constructor(
                 when (jobState.state.status) {
                     "completed" -> {
                         logger.info { "Scan completed" }
-                        return repository.getScanResults(pkg.purl)
+                        return repository.getScanResults(pkg.purl, config.fetchConcluded)
                     }
                     "failed" -> {
                         logger.error { "Scan failed" }
