@@ -86,8 +86,14 @@ interface DOSService {
 
     @Serializable
     data class ScanResultsRequestBody(
-        val purl: String? = null
-    )
+        val purl: String? = null,
+        val options: ReqOptions? = null
+    ) {
+        @Serializable
+        data class ReqOptions(
+            val fetchConcluded: Boolean? = false
+        )
+    }
 
     @Serializable
     data class ScanResultsResponseBody(
