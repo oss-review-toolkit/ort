@@ -9,11 +9,12 @@ package org.ossreviewtoolkit.plugins.scanners.dos
 import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.utils.common.Options
 
 /**
  * This is the configuration class for DOS Scanner.
  */
-internal data class DOSConfig(
+data class DOSConfig(
     /** The URL where the DOS service is running. **/
     val serverUrl: String,
 
@@ -27,11 +28,14 @@ internal data class DOSConfig(
     val restTimeout: Int,
 
     /** The URL where the DOS / package curation front-end is running. **/
-    val frontendUrl: String
+    val frontendUrl: String,
+
+    /** Stores the map with DOS-specific configuration options. */
+    private val options: Map<String, String>
 ) {
     companion object: Logging {
         /** Name of the configuration property for the server URL. **/
-        const val SERVER_URL_PROPERTY = "serverUrl"
+        private const val SERVER_URL_PROPERTY = "serverUrl"
 
         /** Name of the configuration property for the polling interval. **/
         private const val POLLING_INTERVAL_PROPERTY = "pollInterval"
@@ -42,40 +46,40 @@ internal data class DOSConfig(
         /** Name of the configuration property for the curation front-end URL. **/
         private const val FRONT_END_URL_PROPERTY = "frontendUrl"
 
-        private const val DEFAULT_SERVER_URL = "https://double-open-server.herokuapp.com/api/"
+        private const val DEFAULT_SERVER_URL = "https://app-28ea69c2-39bc-4f55-a7e8-5cab18fedc35.cleverapps.io/api/"
+        private const val DEFAULT_FRONT_END_URL = "http://localhost:3000"
         private const val DEFAULT_POLLING_INTERVAL = 5
         private const val DEFAULT_REST_TIMEOUT = 60
 
-        fun create(scannerConfig: ScannerConfiguration): DOSConfig {
-            val dosScannerOptions = scannerConfig.options?.get("DOS")
+        fun create(options: Options): DOSConfig {
+            require(options.isNotEmpty()) { "No DOS Scanner configuration found." }
 
-            //requireNotNull(DOSScannerOptions) { "No DOS Scanner configuration found." }
-
-            val serverUrl = dosScannerOptions?.get(SERVER_URL_PROPERTY) ?: DEFAULT_SERVER_URL
+            val serverUrl = options[SERVER_URL_PROPERTY] ?: DEFAULT_SERVER_URL
 
             val serverToken = System.getenv("SERVER_TOKEN") ?:
                 throw IllegalStateException("Server token not set!")
 
-            val pollInterval = dosScannerOptions?.get(POLLING_INTERVAL_PROPERTY)?.toInt() ?: DEFAULT_POLLING_INTERVAL
+            val pollInterval = options[POLLING_INTERVAL_PROPERTY]?.toInt() ?: DEFAULT_POLLING_INTERVAL
 
             require(pollInterval >= DEFAULT_POLLING_INTERVAL) {
                 "Polling interval must be >= $DEFAULT_POLLING_INTERVAL, current value is $pollInterval"
             }
 
-            val restTimeout = dosScannerOptions?.get(REST_TIMEOUT_PROPERTY)?.toInt() ?: DEFAULT_REST_TIMEOUT
+            val restTimeout = options[REST_TIMEOUT_PROPERTY]?.toInt() ?: DEFAULT_REST_TIMEOUT
 
             require(restTimeout >= DEFAULT_REST_TIMEOUT) {
                 "REST timeout must be >= $DEFAULT_REST_TIMEOUT, current value is $restTimeout"
             }
 
-            val frontendUrl = dosScannerOptions?.get(FRONT_END_URL_PROPERTY) ?: ""
+            val frontendUrl = options[FRONT_END_URL_PROPERTY] ?: DEFAULT_FRONT_END_URL
 
             return DOSConfig(
-                serverUrl,
-                serverToken,
-                pollInterval,
-                restTimeout,
-                frontendUrl
+                serverUrl = serverUrl,
+                serverToken = serverToken,
+                pollInterval = pollInterval,
+                restTimeout = restTimeout,
+                frontendUrl = frontendUrl,
+                options = options
             )
         }
     }

@@ -20,6 +20,7 @@ import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.*
 import org.ossreviewtoolkit.downloader.Downloader
+import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 
 /**
@@ -30,20 +31,21 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempDir
  */
 class DOS internal constructor(
     override val name: String,
-    private val scannerConfig: ScannerConfiguration,
     private val config: DOSConfig
 ) : PackageScannerWrapper {
     private companion object : Logging
     private val downloaderConfig = DownloaderConfiguration()
 
-    class Factory : AbstractScannerWrapperFactory<DOS>("DOS") {
-        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            DOS(type, scannerConfig, DOSConfig.create(scannerConfig))
+    class Factory : ScannerWrapperFactory<DOSConfig>("DOS") {
+        override fun create(config: DOSConfig, matcherConfig: ScannerMatcherConfig) =
+            DOS(type, config)
+
+        override fun parseConfig(options: Options, secrets: Options) = DOSConfig.create(options)
     }
 
     override val details: ScannerDetails
         get() = ScannerDetails(name, version, configuration)
-    override val criteria: ScannerCriteria? = null
+    override val matcher: ScannerMatcher? = null
     override val configuration = ""
     override val version = "1.0"
 

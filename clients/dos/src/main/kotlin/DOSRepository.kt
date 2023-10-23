@@ -6,12 +6,15 @@
 
 package org.ossreviewtoolkit.clients.dos
 
-import java.io.File
-
+import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-
+import okio.BufferedSink
 import org.ossreviewtoolkit.clients.dos.DOSService.Companion.logger
+import java.io.File
+import java.io.FileInputStream
 
 /**
  * This class implements the data layer of the DOS client.
@@ -49,7 +52,21 @@ class DOSRepository(private val dosService: DOSService) {
      */
     suspend fun uploadFile(presignedUrl: String, filePath: String): Boolean {
         val file = File(filePath)
-        val requestBody = file.readBytes().toRequestBody("application/zip".toMediaType())
+        val fileSize = (file.length() / 1024).toString().toInt()
+        logger.info("Uploading file $filePath of size $fileSize kB to S3")
+
+        val mediaType = "application/zip".toMediaType()
+        val maxSizeForDirectRequestBody = 512 * 1024 // 512 MB
+        val requestBody = if (fileSize > maxSizeForDirectRequestBody) {
+            logger.info { "Big file: using Multipart upload to S3" }
+            MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("file", file.name, createRequestBody(file, mediaType))
+                .build()
+        } else {
+            logger.info { "Small file: Using direct upload to S3" }
+            file.readBytes().toRequestBody(mediaType)
+        }
         val response = dosService.putS3File(presignedUrl, requestBody)
 
         return if (response.isSuccessful) {
@@ -127,5 +144,30 @@ class DOSRepository(private val dosService: DOSService) {
             logger.error { "$response" }
             null
         }
+    }
+
+    // Handle requests for very large packages, like pkg:npm/%40fontsource/open-sans@5.0.12
+    private fun createRequestBody(file: File, mediaType: MediaType): RequestBody {
+        return object : RequestBody() {
+            override fun contentType(): MediaType = mediaType
+            override fun contentLength(): Long = file.length()
+
+            override fun writeTo(sink: BufferedSink) {
+                val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
+                val inputStream = FileInputStream(file)
+                try {
+                    var bytesRead: Int
+                    while (inputStream.read(buffer).also { bytesRead = it } != -1) {
+                        sink.write(buffer, 0, bytesRead)
+                    }
+                } finally {
+                    inputStream.close()
+                }
+            }
+        }
+    }
+
+    companion object {
+        private const val DEFAULT_BUFFER_SIZE = 2048
     }
 }
