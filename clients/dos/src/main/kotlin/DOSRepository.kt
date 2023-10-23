@@ -58,15 +58,12 @@ class DOSRepository(private val dosService: DOSService) {
         val mediaType = "application/zip".toMediaType()
         val maxSizeForDirectRequestBody = 512 * 1024 // 512 MB
         val requestBody = if (fileSize > maxSizeForDirectRequestBody) {
-            logger.info { "Big file: using Multipart upload to S3" }
-            MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("file", file.name, createRequestBody(file, mediaType))
-                .build()
+            logger.info { "Big file: using buffered copy" }
+            createRequestBody(file, mediaType)
         } else {
-            logger.info { "Small file: Using direct upload to S3" }
             file.readBytes().toRequestBody(mediaType)
         }
+
         val response = dosService.putS3File(presignedUrl, requestBody)
 
         return if (response.isSuccessful) {
@@ -146,7 +143,11 @@ class DOSRepository(private val dosService: DOSService) {
         }
     }
 
-    // Handle requests for very large packages, like pkg:npm/%40fontsource/open-sans@5.0.12
+    /**
+     * Handle requests for very large packages, like pkg:npm/%40fontsource/open-sans@5.0.12
+     * by using a buffered copy of the file instead of a direct copy, in order to avoid
+     * OutOfMemoryError.
+     */
     private fun createRequestBody(file: File, mediaType: MediaType): RequestBody {
         return object : RequestBody() {
             override fun contentType(): MediaType = mediaType
