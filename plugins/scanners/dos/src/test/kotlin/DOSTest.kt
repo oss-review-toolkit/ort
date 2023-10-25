@@ -22,6 +22,7 @@ import org.ossreviewtoolkit.model.*
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.ScanContext
+import org.ossreviewtoolkit.scanner.ScannerMatcherConfig
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import java.time.Instant
 
@@ -46,7 +47,7 @@ class DOSTest {
         server.start()
         val scannerOptions = mapOf(DOSConfig.SERVER_URL_PROPERTY to "http://localhost:${server.port()}/api/")
         val configuration = ScannerConfiguration(options = mapOf("DOS" to scannerOptions))
-        dos = DOS.Factory().create(configuration, DownloaderConfiguration())
+        dos = DOS.Factory().create(configuration, ScannerMatcherConfig())
     }
 
     @AfterEach
@@ -64,7 +65,7 @@ class DOSTest {
                 )
         )
         runBlocking {
-            dos.repository.getScanResults("purl") shouldBe null
+            dos.repository.getScanResults("purl", false) shouldBe null
         }
     }
 
@@ -79,7 +80,7 @@ class DOSTest {
                 )
         )
         runBlocking {
-            val status = dos.repository.getScanResults("purl")?.state?.status
+            val status = dos.repository.getScanResults("purl", false)?.state?.status
             status shouldBe "no-results"
         }
     }
@@ -95,7 +96,7 @@ class DOSTest {
                 )
         )
         runBlocking {
-            val response = dos.repository.getScanResults("purl")
+            val response = dos.repository.getScanResults("purl", false)
             val status = response?.state?.status
             val id = response?.state?.id
             status shouldBe "pending"
@@ -114,7 +115,7 @@ class DOSTest {
                 )
         )
         runBlocking {
-            val response = dos.repository.getScanResults("pkg:npm/mime-types@2.1.18")
+            val response = dos.repository.getScanResults("pkg:npm/mime-types@2.1.18", false)
             val status = response?.state?.status
             val id = response?.state?.id
 

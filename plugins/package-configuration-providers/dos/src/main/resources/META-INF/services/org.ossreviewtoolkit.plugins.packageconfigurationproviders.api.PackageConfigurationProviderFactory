@@ -1,2 +1,2 @@
-org.ossreviewtoolkit.plugins.packageconfigurationproviders.dos.DoubleOpenServerPackageConfigurationProviderFactory
+org.ossreviewtoolkit.plugins.packageconfigurationproviders.dos.DosPackageConfigurationProviderFactory
 

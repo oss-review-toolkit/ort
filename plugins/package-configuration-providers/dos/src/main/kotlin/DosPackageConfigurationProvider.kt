@@ -16,109 +16,45 @@
  * SPDX-License-Identifier: Apache-2.0
  * License-Filename: LICENSE
  */
+package org.ossreviewtoolkit.plugins.packageconfigurationproviders.dos
 
-import java.io.File
-import java.io.IOException
+import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.model.FileFormat
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.config.PackageConfiguration
-import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
+import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.PackageConfigurationProviderFactory
-import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.SimplePackageConfigurationProvider
 import org.ossreviewtoolkit.utils.common.Options
-import org.ossreviewtoolkit.utils.common.getDuplicates
-import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CONFIGURATIONS_DIRNAME
-import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
-data class DirPackageConfigurationProviderConfig(
-    /**
-     * The path of the package configuration directory.
-     */
-    val path: File,
-
-    /**
-     * A flag to denote whether the path is required to exist.
-     */
-    val mustExist: Boolean
+data class DosPackageConfigurationProviderConfig(
+    /** The URL where the DOS service is running. */
+    val serverUrl: String
 )
 
-open class DirPackageConfigurationProviderFactory :
-    PackageConfigurationProviderFactory<DirPackageConfigurationProviderConfig> {
-    override val type = "Dir"
+open class DosPackageConfigurationProviderFactory :
+    PackageConfigurationProviderFactory<DosPackageConfigurationProviderConfig> {
+    override val type = "DOS"
 
-    override fun create(config: DirPackageConfigurationProviderConfig) = DirPackageConfigurationProvider(config)
-
-    override fun parseConfig(options: Options, secrets: Options) =
-        DirPackageConfigurationProviderConfig(
-            path = File(options.getValue("path")),
-            mustExist = options["mustExist"]?.toBooleanStrict() ?: true
-        )
-}
-
-class DefaultDirPackageConfigurationProviderFactory : DirPackageConfigurationProviderFactory() {
-    override val type = "DefaultDir"
+    override fun create(config: DosPackageConfigurationProviderConfig) = DosPackageConfigurationProvider(config)
 
     override fun parseConfig(options: Options, secrets: Options) =
-        DirPackageConfigurationProviderConfig(
-            path = ortConfigDirectory.resolve(ORT_PACKAGE_CONFIGURATIONS_DIRNAME),
-            mustExist = false
+        DosPackageConfigurationProviderConfig(
+            serverUrl = options.getValue("serverUrl").toString()
         )
 }
-
 /**
  * A [PackageConfigurationProvider] that loads [PackageConfiguration]s from all given package configuration files.
  * Supports all file formats specified in [FileFormat].
  */
-class DirPackageConfigurationProvider(
-    vararg paths: File?
-) : SimplePackageConfigurationProvider(readConfigurationFiles(paths.filterNotNull())) {
-    constructor(config: DirPackageConfigurationProviderConfig) : this(
-        config.path.takeUnless { !it.exists() && !config.mustExist }
-    )
-
-    companion object {
-        fun readConfigurationFiles(paths: Collection<File>): List<PackageConfiguration> {
-            val allConfigurations = mutableListOf<Pair<PackageConfiguration, File>>()
-
-            val configurationFiles = paths.flatMap {
-                require(it.exists()) {
-                    "The path '$it' does not exist."
-                }
-
-                if (it.isDirectory) FileFormat.findFilesWithKnownExtensions(it) else listOf(it)
-            }.filterNot { it.length() == 0L }
-
-            configurationFiles.map { configurationFile ->
-                val configuration = runCatching {
-                    configurationFile.readValue<PackageConfiguration>()
-                }.getOrElse {
-                    throw IOException(
-                        "Failed parsing package configuration(s) from '${configurationFile.absolutePath}'.",
-                        it
-                    )
-                }
-
-                allConfigurations += configuration to configurationFile
-            }
-
-            val duplicates = allConfigurations.getDuplicates { it.first }
-            if (duplicates.isNotEmpty()) {
-                val duplicatesInfo = buildString {
-                    duplicates.forEach { (packageConfiguration, origins) ->
-                        appendLine("Configurations for '${packageConfiguration.id.toCoordinates()}' found in all of:")
-                        val files = origins.joinToString(separator = "\n") { (_, file) -> file.absolutePath }
-                        appendLine(files.prependIndent())
-                    }
-                }
-                throw DuplicatedConfigurationException(
-                    "Duplicate package configuration found:\n${duplicatesInfo.prependIndent()}"
-                )
-            }
-
-            return allConfigurations.unzip().first
-        }
+class DosPackageConfigurationProvider(config: DosPackageConfigurationProviderConfig) : PackageConfigurationProvider {
+    private companion object : Logging
+    private val serverUrl = config.serverUrl
+    override fun getPackageConfigurations(packageId: Identifier, provenance: Provenance): List<PackageConfiguration> {
+        logger.info { "Loading package configuration for ${packageId.toPurl()},  $serverUrl." }
+        return emptyList()
     }
 }
 
-private class DuplicatedConfigurationException(message: String?) : Exception(message)

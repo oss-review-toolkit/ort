@@ -17,7 +17,6 @@ import org.jetbrains.annotations.VisibleForTesting
 import org.ossreviewtoolkit.clients.dos.*
 import org.ossreviewtoolkit.model.*
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
-import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.*
 import org.ossreviewtoolkit.downloader.Downloader
 import org.ossreviewtoolkit.utils.common.Options
