@@ -143,7 +143,7 @@ data class FossIdConfig(
 
         private const val DETECT_LICENSE_DECLARATIONS_PROPERTY = "detectLicenseDeclarations"
 
-        private const val DETECT_COPYRIGHT_STATEMENTS_PROPERTY = "detectLicenseDeclarations"
+        private const val DETECT_COPYRIGHT_STATEMENTS_PROPERTY = "detectCopyrightStatements"
 
         /** Name of the configuration property defining the timeout in minutes for communication with FossID. */
         private const val TIMEOUT = "timeout"
