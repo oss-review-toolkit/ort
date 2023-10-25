@@ -53,7 +53,7 @@ class DosPackageConfigurationProvider(config: DosPackageConfigurationProviderCon
     private companion object : Logging
     private val serverUrl = config.serverUrl
     override fun getPackageConfigurations(packageId: Identifier, provenance: Provenance): List<PackageConfiguration> {
-        logger.info { "Loading package configuration for ${packageId.toPurl()},  $serverUrl." }
+        logger.info { "Loading package configuration for ${packageId.toPurl()} from $serverUrl." }
         return emptyList()
     }
 }

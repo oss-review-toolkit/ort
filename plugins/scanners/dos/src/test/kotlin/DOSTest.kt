@@ -46,8 +46,16 @@ class DOSTest {
     fun setup() {
         server.start()
         val scannerOptions = mapOf(DOSConfig.SERVER_URL_PROPERTY to "http://localhost:${server.port()}/api/")
-        val configuration = ScannerConfiguration(options = mapOf("DOS" to scannerOptions))
-        dos = DOS.Factory().create(configuration, ScannerMatcherConfig())
+        val config = DOSConfig(
+            serverUrl = "http://localhost:${server.port()}/api/",
+            serverToken = System.getenv("SERVER_TOKEN"),
+            pollInterval = 5,
+            restTimeout = 60,
+            fetchConcluded = false,
+            frontendUrl = "http://localhost:3000",
+            options = scannerOptions
+        )
+        dos = DOS.Factory().create(config, ScannerMatcherConfig())
     }
 
     @AfterEach
