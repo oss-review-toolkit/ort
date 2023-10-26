@@ -150,6 +150,25 @@ class DOSRepository(private val dosService: DOSService) {
     }
 
     /**
+     * Request package configuration from DOS API.
+     */
+    suspend fun postPackageConfiguration(purl: String): DOSService.PackageConfigurationResponseBody? {
+        if (purl.isEmpty()) {
+            logger.error { "Need the package URL to check for package configuration" }
+            return null
+        }
+        val requestBody = DOSService.PackageConfigurationRequestBody(purl)
+        val response = dosService.postPackageConfiguration(requestBody)
+
+        return if (response.isSuccessful) {
+            response.body()
+        } else {
+            logger.error { "$response" }
+            null
+        }
+    }
+
+    /**
      * Handle requests for very large packages, like pkg:npm/%40fontsource/open-sans@5.0.12
      * by using a buffered copy of the file instead of a direct copy, in order to avoid
      * OutOfMemoryError.

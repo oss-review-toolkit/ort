@@ -131,6 +131,32 @@ interface DOSService {
         )
     }
 
+    @Serializable
+    data class PackageConfigurationRequestBody(
+        val purl: String? = null
+    )
+
+    @Serializable
+    data class PackageConfigurationResponseBody(
+        val licenseFindingCurations: List<LicenseFindingCuration>? = emptyList(),
+        val pathExcludes: List<PathExclude>? = emptyList()
+    ) {
+        @Serializable
+        data class LicenseFindingCuration(
+            val path: String,
+            val detectedLicenseExpressionSPDX: String? = null,
+            val concludedLicenseExpressionSPDX: String? = null,
+            val comment: String? = null
+        )
+
+        @Serializable
+        data class PathExclude(
+            val pattern: String,
+            val reason: String,
+            val comment: String? = null
+        )
+    }
+
     /**
      * Custom annotation for skipping the Authorization Interceptor for certain network calls
      */
@@ -157,6 +183,9 @@ interface DOSService {
 
     @GET("job-state/{id}")
     suspend fun getJobState(@Path("id") id: String): Response<JobStateResponseBody>
+
+    @POST("package-configuration")
+    suspend fun postPackageConfiguration(@Body body: PackageConfigurationRequestBody): Response<PackageConfigurationResponseBody>
 
     /**
      * Authorization Interceptor

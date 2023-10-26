@@ -1,48 +1,50 @@
 /*
- * Copyright (C) 2023 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+ * SPDX-FileCopyrightText: 2023 Double Open Oy
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * SPDX-License-Identifier: Apache-2.0
- * License-Filename: LICENSE
+ * SPDX-License-Identifier: MIT
  */
 package org.ossreviewtoolkit.plugins.packageconfigurationproviders.dos
 
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.ObjectMapper
+
 import org.apache.logging.log4j.kotlin.Logging
 
+import kotlinx.coroutines.runBlocking
+
+import org.ossreviewtoolkit.clients.dos.*
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Provenance
-import org.ossreviewtoolkit.model.config.PackageConfiguration
+import org.ossreviewtoolkit.model.config.*
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.PackageConfigurationProviderFactory
 import org.ossreviewtoolkit.utils.common.Options
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 data class DosPackageConfigurationProviderConfig(
     /** The URL where the DOS service is running. */
-    val serverUrl: String
+    val serverUrl: String,
+
+    /** Backend REST messaging timeout **/
+    val restTimeout: Int,
+
+    /** The secret token to use with the DOS service **/
+    val serverToken: String
 )
 
 open class DosPackageConfigurationProviderFactory :
     PackageConfigurationProviderFactory<DosPackageConfigurationProviderConfig> {
     override val type = "DOS"
-
+    
     override fun create(config: DosPackageConfigurationProviderConfig) = DosPackageConfigurationProvider(config)
 
     override fun parseConfig(options: Options, secrets: Options) =
         DosPackageConfigurationProviderConfig(
-            serverUrl = options.getValue("serverUrl").toString()
+            serverUrl = options.getValue("serverUrl").toString(),
+            restTimeout = options["restTimeout"]?.toInt() ?: 60,
+            serverToken = System.getenv("SERVER_TOKEN") ?: throw Exception("SERVER_TOKEN not set")
         )
 }
 /**
@@ -52,9 +54,91 @@ open class DosPackageConfigurationProviderFactory :
 class DosPackageConfigurationProvider(config: DosPackageConfigurationProviderConfig) : PackageConfigurationProvider {
     private companion object : Logging
     private val serverUrl = config.serverUrl
+    private val restTimeout = config.restTimeout
+    private val service = DOSService.create(serverUrl, config.serverToken, restTimeout)
+    private var repository = DOSRepository(service)
+    private var packageResults: DOSService.PackageConfigurationResponseBody? = null
+
     override fun getPackageConfigurations(packageId: Identifier, provenance: Provenance): List<PackageConfiguration> {
-        logger.info { "Loading package configuration for ${packageId.toPurl()} from $serverUrl." }
-        return emptyList()
+        val purl = packageId.toPurl()
+        logger.info { "Loading package configuration for ${packageId.toPurl()} from $serverUrl with timeout = $restTimeout" }
+
+        runBlocking {
+            packageResults = repository.postPackageConfiguration(purl)
+            logger.info { "Configuration results for this package: $packageResults" }
+        }
+
+        if (packageResults != null) {
+            val packageConfiguration = generatePackageConfiguration(
+                id = packageId,
+                sourceArtifactUrl = null,
+                vcs = null,
+                jsonString = packageResults.toString()
+            )
+            return listOf(packageConfiguration)
+        } else {
+            logger.info { "No package configuration found for $purl" }
+            return emptyList()
+        }
     }
 }
 
+internal fun generatePackageConfiguration(
+    id: Identifier,
+    sourceArtifactUrl: String?,
+    vcs: VcsMatcher?,
+    jsonString: String): PackageConfiguration {
+
+    val mapper = ObjectMapper()
+    val result: JsonNode = mapper.readTree(jsonString)
+    val pathExcludes = getPathExcludes(result)
+    val licenseFindingCurations = getLicenseFindingCurations(result)
+    return PackageConfiguration(
+        id = id,
+        sourceArtifactUrl = sourceArtifactUrl,
+        vcs = vcs,
+        pathExcludes = pathExcludes,
+        licenseFindingCurations = licenseFindingCurations
+    )
+}
+
+private fun getLicenseFindingCurations(result: JsonNode): List<LicenseFindingCuration> {
+    val licenseFindingCurations = mutableListOf<LicenseFindingCuration>()
+    // For safety, do an early return when no curations are defined
+    val licenseFindingCurationsNode = result["licenseFindingCurations"] ?: return emptyList()
+
+    licenseFindingCurationsNode.forEach { licenseFindingCurationNode ->
+        val licenseFindingCuration = LicenseFindingCuration(
+            path = licenseFindingCurationNode["path"].asText(),
+            startLines = emptyList(),
+            detectedLicense = licenseFindingCurationNode["detectedLicenseExpressionSPDX"].asText().let {
+                SpdxExpression.Companion.parse(it)
+            },
+            concludedLicense = licenseFindingCurationNode["concludedLicenseExpressionSPDX"].asText().let {
+                SpdxExpression.Companion.parse(it)
+            },
+            reason = LicenseFindingCurationReason.INCORRECT,
+            comment = licenseFindingCurationNode["comment"].asText()
+        )
+        licenseFindingCurations.add(licenseFindingCuration)
+    }
+    return licenseFindingCurations
+}
+
+private fun getPathExcludes(result: JsonNode): List<PathExclude> {
+    val pathExcludes = mutableListOf<PathExclude>()
+    // For safety, do an early return when no path excludes are defined
+    val pathExcludesNode = result["pathExcludes"] ?: return emptyList()
+
+    pathExcludesNode.forEach { pathExcludeNode ->
+        val pathExclude = PathExclude(
+            pattern = pathExcludeNode["pattern"].asText(),
+            reason = pathExcludeNode["reason"].asText().let {
+                PathExcludeReason.valueOf(it)
+            },
+            comment = pathExcludeNode["comment"].asText()
+        )
+        pathExcludes.add(pathExclude)
+    }
+    return pathExcludes
+}
