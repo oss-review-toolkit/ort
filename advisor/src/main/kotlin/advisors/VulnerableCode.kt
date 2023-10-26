@@ -41,6 +41,7 @@ import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.enumSetOf
+import org.ossreviewtoolkit.utils.common.percentEncode
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 
 /**
@@ -140,7 +141,7 @@ class VulnerableCode(name: String, config: VulnerableCodeConfiguration) : Advice
         issues: MutableList<Issue>
     ): List<VulnerabilityReference> =
         runCatching {
-            val sourceUri = URI(url)
+            val sourceUri = URI(url.fixupUrlEscaping())
             if (scores.isEmpty()) return listOf(VulnerabilityReference(sourceUri, null, null))
             return scores.map {
                 // VulnerableCode returns MODERATE instead of MEDIUM in case of cvssv3.1_qr, see:
@@ -167,3 +168,10 @@ class VulnerableCode(name: String, config: VulnerableCodeConfiguration) : Advice
         return aliases.firstOrNull { it.startsWith("cve", ignoreCase = true) } ?: aliases.first()
     }
 }
+
+private val BACKSLASH_ESCAPE_REGEX = Regex("\\\\\\\\(.)")
+
+internal fun String.fixupUrlEscaping(): String =
+    replace(BACKSLASH_ESCAPE_REGEX) {
+        it.groupValues[1].percentEncode()
+    }

@@ -276,6 +276,17 @@ class VulnerableCodeTest : WordSpec({
             )
         }
     }
+
+    "fixupUrlEscaping()" should {
+        "fixup a wrongly escaped ampersand" {
+            "https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true" +
+                "&query=cpe:2.3:a:oracle:retail_category_management_planning_" +
+                "\\\\&_optimization:16.0.3:*:*:*:*:*:*:*".fixupUrlEscaping() shouldBe
+                "https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true" +
+                "&query=cpe:2.3:a:oracle:retail_category_management_planning_" +
+                "%26_optimization:16.0.3:*:*:*:*:*:*:*"
+        }
+    }
 })
 
 private const val ADVISOR_NAME = "VulnerableCodeTestAdvisor"
