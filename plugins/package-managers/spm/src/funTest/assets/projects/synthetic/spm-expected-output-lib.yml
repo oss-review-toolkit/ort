@@ -25,12 +25,20 @@ project:
       dependencies:
       - id: "SPM:apple:swift-atomics:1.2.0"
       - id: "SPM:apple:swift-collections:1.0.5"
-    - id: "SPM:apple:swift-nio-extras:1.19.1"
+    - id: "SPM:apple:swift-nio-extras:1.20.0"
       dependencies:
+      - id: "SPM:apple:swift-http-types:1.0.0"
       - id: "SPM:apple:swift-nio:2.60.0"
         dependencies:
         - id: "SPM:apple:swift-atomics:1.2.0"
         - id: "SPM:apple:swift-collections:1.0.5"
+      - id: "SPM:apple:swift-nio-http2:1.29.0"
+        dependencies:
+        - id: "SPM:apple:swift-atomics:1.2.0"
+        - id: "SPM:apple:swift-nio:2.60.0"
+          dependencies:
+          - id: "SPM:apple:swift-atomics:1.2.0"
+          - id: "SPM:apple:swift-collections:1.0.5"
     - id: "SPM:apple:swift-nio-http2:1.29.0"
       dependencies:
       - id: "SPM:apple:swift-atomics:1.2.0"
@@ -52,12 +60,20 @@ project:
         dependencies:
         - id: "SPM:apple:swift-atomics:1.2.0"
         - id: "SPM:apple:swift-collections:1.0.5"
-      - id: "SPM:apple:swift-nio-extras:1.19.1"
+      - id: "SPM:apple:swift-nio-extras:1.20.0"
         dependencies:
+        - id: "SPM:apple:swift-http-types:1.0.0"
         - id: "SPM:apple:swift-nio:2.60.0"
           dependencies:
           - id: "SPM:apple:swift-atomics:1.2.0"
           - id: "SPM:apple:swift-collections:1.0.5"
+        - id: "SPM:apple:swift-nio-http2:1.29.0"
+          dependencies:
+          - id: "SPM:apple:swift-atomics:1.2.0"
+          - id: "SPM:apple:swift-nio:2.60.0"
+            dependencies:
+            - id: "SPM:apple:swift-atomics:1.2.0"
+            - id: "SPM:apple:swift-collections:1.0.5"
       - id: "SPM:apple:swift-nio-http2:1.29.0"
         dependencies:
         - id: "SPM:apple:swift-atomics:1.2.0"
@@ -114,12 +130,20 @@ project:
         dependencies:
         - id: "SPM:apple:swift-atomics:1.2.0"
         - id: "SPM:apple:swift-collections:1.0.5"
-      - id: "SPM:apple:swift-nio-extras:1.19.1"
+      - id: "SPM:apple:swift-nio-extras:1.20.0"
         dependencies:
+        - id: "SPM:apple:swift-http-types:1.0.0"
         - id: "SPM:apple:swift-nio:2.60.0"
           dependencies:
           - id: "SPM:apple:swift-atomics:1.2.0"
           - id: "SPM:apple:swift-collections:1.0.5"
+        - id: "SPM:apple:swift-nio-http2:1.29.0"
+          dependencies:
+          - id: "SPM:apple:swift-atomics:1.2.0"
+          - id: "SPM:apple:swift-nio:2.60.0"
+            dependencies:
+            - id: "SPM:apple:swift-atomics:1.2.0"
+            - id: "SPM:apple:swift-collections:1.0.5"
       - id: "SPM:apple:swift-nio-ssl:2.25.0"
         dependencies:
         - id: "SPM:apple:swift-nio:2.60.0"
@@ -246,6 +270,34 @@ packages:
     url: "https://github.com/apple/swift-crypto.git"
     revision: "2.6.0"
     path: ""
+- id: "SPM:apple:swift-http-types:1.0.0"
+  purl: "pkg:swift/apple/swift-http-types@1.0.0"
+  authors:
+  - "apple"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/apple/swift-http-types"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/apple/swift-http-types.git"
+    revision: "1.0.0"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/apple/swift-http-types.git"
+    revision: "1.0.0"
+    path: ""
 - id: "SPM:apple:swift-log:1.5.3"
   purl: "pkg:swift/apple/swift-log@1.5.3"
   authors:
@@ -330,8 +382,8 @@ packages:
     url: "https://github.com/apple/swift-nio.git"
     revision: "2.60.0"
     path: ""
-- id: "SPM:apple:swift-nio-extras:1.19.1"
-  purl: "pkg:swift/apple/swift-nio-extras@1.19.1"
+- id: "SPM:apple:swift-nio-extras:1.20.0"
+  purl: "pkg:swift/apple/swift-nio-extras@1.20.0"
   authors:
   - "apple"
   declared_licenses: []
@@ -351,12 +403,12 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/apple/swift-nio-extras.git"
-    revision: "1.19.1"
+    revision: "1.20.0"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/apple/swift-nio-extras.git"
-    revision: "1.19.1"
+    revision: "1.20.0"
     path: ""
 - id: "SPM:apple:swift-nio-http2:1.29.0"
   purl: "pkg:swift/apple/swift-nio-http2@1.29.0"
