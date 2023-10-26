@@ -251,6 +251,17 @@ class SpdxExpressionTest : WordSpec({
         }
     }
 
+    "An SpdxExpression with SPDX constants" should {
+        "parse NONE correctly" {
+            SpdxExpression.parse(SpdxConstants.NONE, Strictness.ALLOW_CURRENT).toString() shouldBe SpdxConstants.NONE
+        }
+
+        "parse NOASSERTION correctly" {
+            SpdxExpression.parse(SpdxConstants.NOASSERTION, Strictness.ALLOW_CURRENT).toString() shouldBe
+                SpdxConstants.NOASSERTION
+        }
+    }
+
     "The expression parser" should {
         "work for deprecated license identifiers" {
             assertSoftly {
