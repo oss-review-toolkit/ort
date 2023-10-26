@@ -138,11 +138,11 @@ interface DOSService {
 
     @Serializable
     data class PackageConfigurationResponseBody(
-        val licenseFindingCurations: List<LicenseFindingCuration>? = emptyList(),
-        val pathExcludes: List<PathExclude>? = emptyList()
+        val licenseConclusions: List<LicenseConclusion>,
+        val pathExclusions: List<PathExclusion>
     ) {
         @Serializable
-        data class LicenseFindingCuration(
+        data class LicenseConclusion(
             val path: String,
             val detectedLicenseExpressionSPDX: String? = null,
             val concludedLicenseExpressionSPDX: String? = null,
@@ -150,7 +150,7 @@ interface DOSService {
         )
 
         @Serializable
-        data class PathExclude(
+        data class PathExclusion(
             val pattern: String,
             val reason: String,
             val comment: String? = null
