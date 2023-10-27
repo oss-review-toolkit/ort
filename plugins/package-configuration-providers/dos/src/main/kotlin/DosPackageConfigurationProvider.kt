@@ -13,9 +13,7 @@ import org.apache.logging.log4j.kotlin.Logging
 import kotlinx.coroutines.runBlocking
 
 import org.ossreviewtoolkit.clients.dos.*
-import org.ossreviewtoolkit.model.FileFormat
-import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.*
 import org.ossreviewtoolkit.model.config.*
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.toPurl
@@ -50,8 +48,7 @@ open class DosPackageConfigurationProviderFactory :
         )
 }
 /**
- * A [PackageConfigurationProvider] that loads [PackageConfiguration]s from all given package configuration files.
- * Supports all file formats specified in [FileFormat].
+ * A [PackageConfigurationProvider] that loads [PackageConfiguration]s from a DOS service.
  */
 class DosPackageConfigurationProvider(config: DosPackageConfigurationProviderConfig) : PackageConfigurationProvider {
     private companion object : Logging
@@ -70,7 +67,6 @@ class DosPackageConfigurationProvider(config: DosPackageConfigurationProviderCon
                 logger.info { "Could not request package configurations for this package" }
                 return@runBlocking
             }
-            logger.info { "Configuration results for this package: $packageResults" }
         }
 
         return if (packageResults?.licenseConclusions?.isEmpty() == true && packageResults?.pathExclusions?.isEmpty() == true) {
@@ -79,10 +75,10 @@ class DosPackageConfigurationProvider(config: DosPackageConfigurationProviderCon
         } else {
             val packageConfiguration = generatePackageConfiguration(
                 id = packageId,
-                sourceArtifactUrl = null,
-                vcs = null,
+                provenance = provenance,
                 packageResults = packageResults!!
             )
+            logger.info { "Found package configuration for $purl: $packageConfiguration" }
             listOf(packageConfiguration)
         }
     }
@@ -90,12 +86,26 @@ class DosPackageConfigurationProvider(config: DosPackageConfigurationProviderCon
 
 internal fun generatePackageConfiguration(
     id: Identifier,
-    sourceArtifactUrl: String?,
-    vcs: VcsMatcher?,
+    provenance: Provenance,
     packageResults: DOSService.PackageConfigurationResponseBody): PackageConfiguration {
 
+    val sourceArtifactUrl = if (provenance is ArtifactProvenance) {
+        provenance.sourceArtifact.url
+    } else {
+        null
+    }
+    val vcs = if (provenance is RepositoryProvenance) {
+        VcsMatcher(
+            type = provenance.vcsInfo.type,
+            url = provenance.vcsInfo.url,
+            revision = provenance.resolvedRevision
+        )
+    } else {
+        null
+    }
+
     val licenseFindingCurations = packageResults.licenseConclusions.map {
-        val detected = if (it.detectedLicenseExpressionSPDX == null) {
+        val detected = if (it.detectedLicenseExpressionSPDX == "") {
             SpdxExpression.parse("NONE")
         } else {
             SpdxExpression.parse(it.detectedLicenseExpressionSPDX!!)
