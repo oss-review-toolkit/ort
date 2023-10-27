@@ -79,7 +79,8 @@
           "url": "https://github.com/oss-review-toolkit/ort"
         }
       ],
-      "type": "library"
+      "type": "library",
+      "bom-ref": "NPM:@ort:concluded-license:1.0"
     },
     {
       "group": "@ort",
@@ -124,7 +125,8 @@
           "url": "https://github.com/oss-review-toolkit/ort"
         }
       ],
-      "type": "library"
+      "type": "library",
+      "bom-ref": "NPM:@ort:declared-license:1.0"
     },
     {
       "group": "@ort",
@@ -159,7 +161,8 @@
           "url": "https://github.com/oss-review-toolkit/ort"
         }
       ],
-      "type": "library"
+      "type": "library",
+      "bom-ref": "NPM:@ort:license-file:1.0"
     },
     {
       "group": "@ort",
@@ -204,7 +207,8 @@
           "url": "https://github.com/oss-review-toolkit/ort"
         }
       ],
-      "type": "library"
+      "type": "library",
+      "bom-ref": "NPM:@ort:license-file-and-additional-licenses:1.0"
     },
     {
       "group": "@ort",
@@ -233,7 +237,28 @@
           "url": "https://github.com/oss-review-toolkit/ort"
         }
       ],
-      "type": "library"
+      "type": "library",
+      "bom-ref": "NPM:@ort:no-license-file:1.0"
+    }
+  ],
+  "vulnerabilities": [
+    {
+      "id": "CVE-2021-1234",
+      "ratings": [
+        {
+          "source": {
+            "url": "https://cves.example.org/cve1"
+          },
+          "severity": "medium"
+        }
+      ],
+      "description": "A vulnerability description",
+      "detail": "A vulnerability summary",
+      "affects": [
+        {
+          "ref": "NPM:@ort:declared-license:1.0"
+        }
+      ]
     }
   ]
 }

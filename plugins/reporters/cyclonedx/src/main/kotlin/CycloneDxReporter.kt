@@ -39,11 +39,13 @@ import org.cyclonedx.model.Metadata
 import org.cyclonedx.model.metadata.ToolInformation
 
 import org.ossreviewtoolkit.model.FileFormat
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.isFalse
@@ -202,6 +204,8 @@ class CycloneDxReporter : Reporter {
                 addPackageToBom(input, pkg, bom, dependencyType)
             }
 
+            addVulnerabilitiesToBom(input.ortResult.getVulnerabilities(), bom)
+
             outputFiles += writeBom(bom, schemaVersion, outputDir, REPORT_BASE_FILENAME, outputFileFormats)
         } else {
             projects.forEach { project ->
@@ -244,12 +248,42 @@ class CycloneDxReporter : Reporter {
                     addPackageToBom(input, pkg, bom, dependencyType)
                 }
 
+                addVulnerabilitiesToBom(input.ortResult.getVulnerabilities(), bom)
+
                 val reportName = "$REPORT_BASE_FILENAME-${project.id.toPath("-")}"
                 outputFiles += writeBom(bom, schemaVersion, outputDir, reportName, outputFileFormats)
             }
         }
 
         return outputFiles
+    }
+
+    private fun addVulnerabilitiesToBom(advisorVulnerabilities: Map<Identifier, List<Vulnerability>>, bom: Bom) {
+        val vulnerabilities = mutableListOf<org.cyclonedx.model.vulnerability.Vulnerability>()
+        advisorVulnerabilities.forEach {
+            val vulnerabilityBomRef = it.key.toCoordinates()
+            it.value.forEach {
+                val vulnerability = org.cyclonedx.model.vulnerability.Vulnerability().apply {
+                    id = it.id
+                    description = it.description
+                    detail = it.summary
+                    ratings = it.references.map { reference ->
+                        org.cyclonedx.model.vulnerability.Vulnerability.Rating().apply {
+                            source = org.cyclonedx.model.vulnerability.Vulnerability.Source()
+                                .apply { url = reference.url.toString() }
+                            severity = org.cyclonedx.model.vulnerability.Vulnerability.Rating.Severity
+                                .fromString(reference.severityRating.lowercase())
+                        }
+                    }
+                    affects = mutableListOf(
+                        org.cyclonedx.model.vulnerability.Vulnerability.Affect()
+                            .apply { ref = vulnerabilityBomRef }
+                    )
+                }
+                vulnerabilities.add(vulnerability)
+            }
+            bom.vulnerabilities = vulnerabilities
+        }
     }
 
     private fun addPackageToBom(input: ReporterInput, pkg: Package, bom: Bom, dependencyType: String) {
@@ -280,6 +314,7 @@ class CycloneDxReporter : Reporter {
             name = pkg.id.name
             version = pkg.id.version
             description = pkg.description
+            bomRef = pkg.id.toCoordinates()
 
             // TODO: Map package-manager-specific OPTIONAL scopes.
             scope = if (input.ortResult.isExcluded(pkg.id)) {
