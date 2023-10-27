@@ -6,8 +6,10 @@ increased degree of automation and local configurations should only be done if t
 
 * [excludes](#excludes) - Mark [files, directories](#excluding-paths) or [package manager scopes](#excluding-scopes) as
   not included in released artifacts.
-* [curations](#curations) - Overwrite package metadata, set a concluded license or correct license findings.
 * [resolutions](#resolutions) - Resolve any issues or policy rule violations.
+* [curations](#curations) - Overwrite package metadata, set a concluded license, or correct license findings in the
+  project.
+* [package configurations](#package-configurations) - Define path excludes or correct license findings in dependencies.
 * [license choices](#license-choices) - Select a license for packages which offer a license choice.
 
 The sections below explain each in further detail. Prefer to learn by example? See the
@@ -158,87 +160,6 @@ import Yarn from '!!raw-loader!@site/../examples/yarn.ort.yml'
 <CodeBlock language="yml" title="yarn.ort.yml">{Yarn}</CodeBlock>
 ```
 
-## Curations
-
-### When to Use Curations
-
-License finding curations should be used when you want to correct the licenses detected in the source code of the
-project. To define curations on global level for third-party packages, please use
-[curations](package-curations.md) or [package configurations](package-configurations.md).
-
-### Curating Project License Findings
-
-An `ort scan` result represents the detected licenses as a collection of license findings. A single `LicenseFinding` is
-represented as a tuple: `(license id, file path, start line, end line)`. Applying a `LicenseFindingCuration` changes the
-license-Id of any `LicenseFinding` or eliminates the `LicenseFinding` in case the license is set to `NONE`.
-
-As an example, the following curation would replace similar findings of `GPL-2.0-only` with `Apache-2.0` in all `.cpp`
-files in the `src` directory:
-
-```yaml
-curations:
-  license_findings:
-  - path: "src/**/*.cpp"
-    start_lines: "3"
-    line_count: 11
-    detected_license: "GPL-2.0-only"
-    reason: "CODE"
-    comment: "The scanner matches a variable named `gpl`."
-    concluded_license: "Apache-2.0"
- ```
-
-To correct identified licenses in a dependency you can use a package configuration to overwrite scanner findings. Note
-that this feature requires `enableRepositoryPackageConfigurations` to be enabled in the
-[config.yml](../getting-started/usage.md#ort-configuration-file).
-
-```yaml
-package_configurations:
-- id: 'Maven:com.example:package:1.2.3'
-  source_artifact_url: "https://repo.maven.apache.org/maven2/com/example/package/1.2.3/package-1.2.3-sources.jar"
-  license_finding_curations:
-  - path: "path/to/problematic/file.java"
-    start_lines: 22
-    line_count: 1
-    detected_license: "GPL-2.0-only"
-    reason: "CODE"
-    comment: "The scanner matches a variable named `gpl`."
-    concluded_license: "Apache-2.0"
-```
-
-For details of the specification, see
-[LicenseFindingCuration.kt](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/config/LicenseFindingCuration.kt).
-The list of available options for `reason` are defined in
-[LicenseFindingCurationReason.kt](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/config/LicenseFindingCurationReason.kt).
-
-### Curating Metadata
-
-Package curations can be added if you want to correct metadata of third-party dependencies.
-
-The following example corrects the source-artifact URL of the package with the id `Maven:com.example:dummy:0.0.1`.  Note
-that this feature requires `enableRepositoryPackageCurations` to be enabled in the
-[config.yml](../getting-started/usage.md#ort-configuration-file).
-
-```yaml
-curations:
-  packages:
-  - id: "Maven:com.example:dummy:0.0.1"
-    curations:
-      comment: "An explanation why the curation is needed."
-      source_artifact:
-        url: "https://example.com/sources.zip"
-```
-
-For more information about package curations see
-[the documentation for the curations.yml file](package-curations.md).
-
-### Example
-
-```mdx-code-block
-import Curations from '!!raw-loader!@site/../examples/curations.ort.yml'
-
-<CodeBlock language="yml" title="curations.ort.yml">{Curations}</CodeBlock>
-```
-
 ## Resolutions
 
 ### When to Use Resolutions
@@ -355,6 +276,103 @@ import Resolutions from '!!raw-loader!@site/../examples/resolutions.ort.yml'
 
 <CodeBlock language="yml" title="resolutions.ort.yml">{Resolutions}</CodeBlock>
 ```
+
+## Curations
+
+:::note
+
+This feature requires `enableRepositoryPackageCurations` to be enabled in the
+[config.yml](../getting-started/usage.md#ort-configuration-file).
+
+:::
+
+### When to Use Curations
+
+Similar to global [package curations](package-curations.md), curations can be used to correct metadata of dependencies
+specific to the projects in the repository. Additionally, license findings curations may be used to correct the licenses
+detected in the source code of the project. To correct license findings detected in dependencies, use global
+[package configurations](package-configurations.md) instead.
+
+### Curating Package Metadata
+
+The following example corrects the source-artifact URL of the package with the id `Maven:com.example:dummy:0.0.1`:
+
+```yaml
+curations:
+  packages:
+  - id: "Maven:com.example:dummy:0.0.1"
+    curations:
+      comment: "An explanation why the curation is needed."
+      source_artifact:
+        url: "https://example.com/sources.zip"
+```
+
+### Curating Project License Findings
+
+An `ort scan` result represents the detected licenses as a collection of license findings. A single `LicenseFinding` is
+represented as a tuple: `(license id, file path, start line, end line)`. Applying a `LicenseFindingCuration` changes the
+license-Id of any `LicenseFinding` or eliminates the `LicenseFinding` in case the license is set to `NONE`.
+
+As an example, the following curation would replace similar findings of `GPL-2.0-only` with `Apache-2.0` in all `.cpp`
+files in the `src` directory:
+
+```yaml
+curations:
+  license_findings:
+  - path: "src/**/*.cpp"
+    start_lines: "3"
+    line_count: 11
+    detected_license: "GPL-2.0-only"
+    reason: "CODE"
+    comment: "The scanner matches a variable named `gpl`."
+    concluded_license: "Apache-2.0"
+ ```
+
+For details of the specification, see
+[LicenseFindingCuration.kt](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/config/LicenseFindingCuration.kt).
+The list of available options for `reason` are defined in
+[LicenseFindingCurationReason.kt](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/config/LicenseFindingCurationReason.kt).
+
+### Full Example
+
+```mdx-code-block
+import Curations from '!!raw-loader!@site/../examples/curations.ort.yml'
+
+<CodeBlock language="yml" title="curations.ort.yml">{Curations}</CodeBlock>
+```
+
+## Package Configurations
+
+:::note
+
+This feature requires `enableRepositoryPackageConfigurations` to be enabled in the
+[config.yml](../getting-started/usage.md#ort-configuration-file).
+
+:::
+
+### When to Use Package Configurations
+
+You can use a package configuration to set path excludes or correct detected licenses in a dependency. The following
+overwrites a license finding that a scanner found in a source artifact:
+
+```yaml
+package_configurations:
+- id: 'Maven:com.example:package:1.2.3'
+  source_artifact_url: "https://repo.maven.apache.org/maven2/com/example/package/1.2.3/package-1.2.3-sources.jar"
+  license_finding_curations:
+  - path: "path/to/problematic/file.java"
+    start_lines: 22
+    line_count: 1
+    detected_license: "GPL-2.0-only"
+    reason: "CODE"
+    comment: "The scanner matches a variable named `gpl`."
+    concluded_license: "Apache-2.0"
+```
+
+For details of the specification, see
+[LicenseFindingCuration.kt](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/config/LicenseFindingCuration.kt).
+The list of available options for `reason` are defined in
+[LicenseFindingCurationReason.kt](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/config/LicenseFindingCurationReason.kt).
 
 ## License Choices
 
