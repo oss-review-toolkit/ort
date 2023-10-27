@@ -70,7 +70,6 @@ class DosPackageConfigurationProvider(config: DosPackageConfigurationProviderCon
         }
 
         return if (packageResults?.licenseConclusions?.isEmpty() == true && packageResults?.pathExclusions?.isEmpty() == true) {
-            logger.info { "No package configuration found for $purl" }
             emptyList()
         } else {
             val packageConfiguration = generatePackageConfiguration(
@@ -78,7 +77,9 @@ class DosPackageConfigurationProvider(config: DosPackageConfigurationProviderCon
                 provenance = provenance,
                 packageResults = packageResults!!
             )
-            logger.info { "Found package configuration for $purl: $packageConfiguration" }
+            logger.info { "Found package configuration for $purl:" }
+            logger.info { "License conclusions: ${packageResults?.licenseConclusions.toString()}" }
+            logger.info { "Path exclusions: ${packageResults?.pathExclusions.toString()}" }
             listOf(packageConfiguration)
         }
     }
