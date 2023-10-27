@@ -15,7 +15,7 @@
     </licenses>
   </metadata>
   <components>
-    <component type="library">
+    <component type="library" bom-ref="NPM:@ort:concluded-license:1.0">
       <group>@ort</group>
       <name>concluded-license</name>
       <version>1.0</version>
@@ -49,7 +49,7 @@
       <modified>false</modified>
       <externalReferences><reference type="website"><url>https://github.com/oss-review-toolkit/ort</url></reference></externalReferences><ort:dependencyType xmlns:ort="http://www.w3.org/1999/xhtml">direct</ort:dependencyType>
     </component>
-    <component type="library">
+    <component type="library" bom-ref="NPM:@ort:declared-license:1.0">
       <group>@ort</group>
       <name>declared-license</name>
       <version>1.0</version>
@@ -72,7 +72,7 @@
       <modified>false</modified>
       <externalReferences><reference type="website"><url>https://github.com/oss-review-toolkit/ort</url></reference></externalReferences><ort:dependencyType xmlns:ort="http://www.w3.org/1999/xhtml">direct</ort:dependencyType>
     </component>
-    <component type="library">
+    <component type="library" bom-ref="NPM:@ort:license-file:1.0">
       <group>@ort</group>
       <name>license-file</name>
       <version>1.0</version>
@@ -91,7 +91,7 @@
       <modified>false</modified>
       <externalReferences><reference type="website"><url>https://github.com/oss-review-toolkit/ort</url></reference></externalReferences><ort:dependencyType xmlns:ort="http://www.w3.org/1999/xhtml">direct</ort:dependencyType>
     </component>
-    <component type="library">
+    <component type="library" bom-ref="NPM:@ort:license-file-and-additional-licenses:1.0">
       <group>@ort</group>
       <name>license-file-and-additional-licenses</name>
       <version>1.0</version>
@@ -114,7 +114,7 @@
       <modified>false</modified>
       <externalReferences><reference type="website"><url>https://github.com/oss-review-toolkit/ort</url></reference></externalReferences><ort:dependencyType xmlns:ort="http://www.w3.org/1999/xhtml">direct</ort:dependencyType>
     </component>
-    <component type="library">
+    <component type="library" bom-ref="NPM:@ort:no-license-file:1.0">
       <group>@ort</group>
       <name>no-license-file</name>
       <version>1.0</version>
@@ -131,4 +131,24 @@
       <externalReferences><reference type="website"><url>https://github.com/oss-review-toolkit/ort</url></reference></externalReferences><ort:dependencyType xmlns:ort="http://www.w3.org/1999/xhtml">direct</ort:dependencyType>
     </component>
   </components>
+  <vulnerabilities>
+    <vulnerability>
+      <id>CVE-2021-1234</id>
+      <ratings>
+        <rating>
+          <source>
+            <url>https://cves.example.org/cve1</url>
+          </source>
+          <severity>medium</severity>
+        </rating>
+      </ratings>
+      <description>A vulnerability description</description>
+      <detail>A vulnerability summary</detail>
+      <affects>
+        <target>
+          <ref>NPM:@ort:declared-license:1.0</ref>
+        </target>
+      </affects>
+    </vulnerability>
+  </vulnerabilities>
 </bom>

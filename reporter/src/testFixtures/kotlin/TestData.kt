@@ -405,8 +405,10 @@ val ORT_RESULT = OrtResult(
 
 val VULNERABILITY = Vulnerability(
     id = "CVE-2021-1234",
+    summary = "A vulnerability summary",
+    description = "A vulnerability description",
     references = listOf(
-        VulnerabilityReference(URI("https://cves.example.org/cve1"), "Cvss2", "MEDIUM")
+        VulnerabilityReference(URI("https://cves.example.org/cve1"), "Cvss2", "6.0")
     )
 )
 
