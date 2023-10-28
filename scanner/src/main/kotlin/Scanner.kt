@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.scanner
 
 import java.io.File
+import java.io.IOException
 import java.nio.file.StandardCopyOption
 import java.time.Instant
 
@@ -714,20 +715,23 @@ class Scanner(
 
         val duration = measureTime {
             provenancesWithMissingArchives.forEach { (pkg, nestedProvenance) ->
-                runCatching {
-                    downloadRecursively(nestedProvenance)
-                }.onSuccess { dir ->
+                var dir: File? = null
+
+                // runCatching has a bug with smart-cast, see https://youtrack.jetbrains.com/issue/KT-62938.
+                try {
+                    dir = downloadRecursively(nestedProvenance)
                     archiver.archive(dir, nestedProvenance.root)
-                    dir.safeDeleteRecursively(force = true)
-                }.onFailure {
+                } catch (e: IOException) {
                     controller.addIssue(
                         pkg.id,
                         Issue(
-                            source = "Downloader",
+                            source = "Scanner",
                             message = "Could not create file archive for " +
-                                "'${pkg.id.toCoordinates()}': ${it.collectMessages()}"
+                                "'${pkg.id.toCoordinates()}': ${e.collectMessages()}"
                         )
                     )
+                } finally {
+                    dir?.safeDeleteRecursively(force = true)
                 }
             }
         }
