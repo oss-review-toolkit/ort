@@ -2,7 +2,7 @@
     {
         "schema_version": "1.6.0",
         "id": "GHSA-462w-v97r-4m45",
-        "modified": "2023-08-30T21:16:22.456465Z",
+        "modified": "2023-10-29T05:22:14.414170Z",
         "published": "2019-04-10T14:30:24Z",
         "aliases": [
             "CVE-2019-10906"
@@ -68,11 +68,6 @@
                     "2.9.5",
                     "2.9.6"
                 ],
-                "ecosystem_specific": {
-                    "affected_functions": [
-                        ""
-                    ]
-                },
                 "database_specific": {
                     "source": "https://github.com/github/advisory-database/blob/main/advisories/github-reviewed/2019/04/GHSA-462w-v97r-4m45/GHSA-462w-v97r-4m45.json"
                 }
