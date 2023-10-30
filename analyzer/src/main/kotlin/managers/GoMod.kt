@@ -72,8 +72,6 @@ class GoMod(
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
     companion object {
         const val DEFAULT_GO_PROXY = "https://proxy.golang.org"
-
-        val JSON = Json { ignoreUnknownKeys = true }
     }
 
     class Factory : AbstractPackageManagerFactory<GoMod>("GoMod") {
@@ -390,6 +388,8 @@ private const val PACKAGE_SEPARATOR = "# "
  */
 private const val WHY_CHUNK_SIZE = 32
 
+private val JSON = Json { ignoreUnknownKeys = true }
+
 @Serializable
 private data class ModuleInfo(
     @SerialName("Path")
@@ -457,7 +457,7 @@ private data class ModuleInfoFile(
 
 private fun ModuleInfo.toVcsInfo(): VcsInfo? {
     val infoFile = goMod?.let { File(it).resolveSibling("$version.info") } ?: return null
-    val info = infoFile.inputStream().use { GoMod.JSON.decodeFromStream<ModuleInfoFile>(it) }
+    val info = infoFile.inputStream().use { JSON.decodeFromStream<ModuleInfoFile>(it) }
     val type = info.origin.vcs?.let { VcsType.forName(it) }.takeIf { it == VcsType.GIT } ?: return null
 
     return VcsInfo(
