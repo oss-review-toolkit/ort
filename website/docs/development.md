@@ -74,4 +74,4 @@ a commit to accept the new expected result.
 All contributions are welcome. If you are interested in contributing, please read our
 [contributing guide](https://github.com/oss-review-toolkit/.github/blob/main/CONTRIBUTING.md), and to get quick answers
 to any of your questions we recommend you
-[join our Slack community](https://join.slack.com/t/ort-talk/shared_invite/zt-1c7yi4sj6-mk7R1fAa6ZdW5MQ6DfAVRg).
+[join our Slack community](http://slack.oss-review-toolkit.org).

@@ -11,7 +11,7 @@
 [![TODOs][13]][14] [![REUSE status][15]][16] [![CII][17]][18]
 
 [1]: https://img.shields.io/badge/Join_us_on_Slack!-ort--talk-blue.svg?longCache=true&logo=slack
-[2]: https://join.slack.com/t/ort-talk/shared_invite/zt-1c7yi4sj6-mk7R1fAa6ZdW5MQ6DfAVRg
+[2]: http://slack.oss-review-toolkit.org
 [3]: https://github.com/oss-review-toolkit/ort/actions/workflows/wrapper-validation.yml/badge.svg
 [4]: https://github.com/oss-review-toolkit/ort/actions/workflows/wrapper-validation.yml
 [5]: https://github.com/oss-review-toolkit/ort/actions/workflows/static-analysis.yml/badge.svg
