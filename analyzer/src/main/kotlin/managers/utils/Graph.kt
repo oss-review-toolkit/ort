@@ -26,7 +26,7 @@ import org.apache.logging.log4j.kotlin.logger
 /**
  * A class to represent a graph with dependencies between nodes of type [T]. The representation is an adjacency list
  * implemented by a map whose keys are nodes and whose values are the target nodes of the outgoing edges for the
- * repective key.
+ * respective key.
  */
 internal class Graph<T> private constructor(private val nodeMap: MutableMap<T, MutableSet<T>>) {
     constructor() : this(mutableMapOf())
