@@ -397,12 +397,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         val resolutions = addResolutions(vulnerability)
 
         val evaluatedReferences = vulnerability.references.map {
-            EvaluatedVulnerabilityReference(
-                it.url,
-                it.scoringSystem,
-                it.severity,
-                VulnerabilityReference.getSeverityString(it.scoringSystem, it.severity)
-            )
+            EvaluatedVulnerabilityReference(it.url, it.scoringSystem, it.severity, it.severityRating)
         }
 
         vulnerabilities += EvaluatedVulnerability(
