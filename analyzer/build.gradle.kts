@@ -17,17 +17,12 @@
  * License-Filename: LICENSE
  */
 
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     // Apply core plugins.
     `java-test-fixtures`
 
     // Apply precompiled plugins.
     id("ort-library-conventions")
-
-    // Apply third-party plugins.
-    alias(libs.plugins.kotlinSerialization)
 }
 
 dependencies {
@@ -46,17 +41,9 @@ dependencies {
     // container automatically. They are required on the classpath for Maven dependency resolution to work.
     implementation(libs.bundles.mavenResolver)
 
-    implementation(libs.bundles.kotlinxSerialization)
     implementation(libs.kotlinxCoroutines)
     implementation(libs.log4jApi)
     implementation(libs.semver4j)
-
-    implementation(libs.toml4j)
-    constraints {
-        implementation("com.google.code.gson:gson:2.10.1") {
-            because("Earlier versions have vulnerabilities.")
-        }
-    }
 
     funTestImplementation(platform(project(":plugins:package-managers")))
 
@@ -69,17 +56,4 @@ dependencies {
     testFixturesImplementation(libs.kotestRunnerJunit5)
 
     testImplementation(libs.mockk)
-}
-
-// Must not opt-in for "compileTestFixturesKotlin" as it does not have kotlinx-serialization in the classpath.
-listOf("compileKotlin", "compileTestKotlin").forEach {
-    tasks.named<KotlinCompile>(it) {
-        val customCompilerArgs = listOf(
-            "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"
-        )
-
-        compilerOptions {
-            freeCompilerArgs.addAll(customCompilerArgs)
-        }
-    }
 }

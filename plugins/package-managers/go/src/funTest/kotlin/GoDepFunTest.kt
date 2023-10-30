@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.analyzer.managers
+package org.ossreviewtoolkit.plugins.packagemanagers.go
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
@@ -29,6 +29,8 @@ import io.kotest.matchers.string.haveSubstring
 
 import java.io.File
 
+import org.ossreviewtoolkit.analyzer.managers.create
+import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.VcsInfo
@@ -56,7 +58,7 @@ class GoDepFunTest : WordSpec({
                 project.id shouldBe
                     Identifier("GoDep::src/funTest/assets/projects/synthetic/godep/no-lockfile/Gopkg.toml:")
                 project.definitionFilePath shouldBe
-                    "analyzer/src/funTest/assets/projects/synthetic/godep/no-lockfile/Gopkg.toml"
+                    "plugins/package-managers/go/src/funTest/assets/projects/synthetic/godep/no-lockfile/Gopkg.toml"
                 packages should beEmpty()
                 issues shouldHaveSize 1
                 issues.first().message should haveSubstring("IllegalArgumentException: No lockfile found in")

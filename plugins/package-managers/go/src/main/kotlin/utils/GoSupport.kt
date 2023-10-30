@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.analyzer.managers.utils
+package org.ossreviewtoolkit.plugins.packagemanagers.go.utils
 
 /**
  * Return the given [moduleVersion] normalized to a Semver compliant version. The `v` prefix gets stripped and
