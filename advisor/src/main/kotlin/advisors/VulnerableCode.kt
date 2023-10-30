@@ -99,10 +99,10 @@ class VulnerableCode(name: String, config: VulnerableCodeConfiguration) : Advice
         purls.chunked(BULK_REQUEST_SIZE).forEach { chunk ->
             runCatching {
                 val chunkVulnerabilities = service.getPackageVulnerabilities(PackagesWrapper(chunk)).filter {
-                    it.unresolvedVulnerabilities.isNotEmpty()
+                    it.affectedByVulnerabilities.isNotEmpty()
                 }
 
-                allVulnerabilities += chunkVulnerabilities.associate { it.purl to it.unresolvedVulnerabilities }
+                allVulnerabilities += chunkVulnerabilities.associate { it.purl to it.affectedByVulnerabilities }
             }.onFailure {
                 // Create dummy entries for all packages in the chunk as the current data model does not allow to return
                 // issues that are not associated to any package.
