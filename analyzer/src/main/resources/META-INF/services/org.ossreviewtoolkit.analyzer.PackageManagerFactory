@@ -1,4 +1,2 @@
-org.ossreviewtoolkit.analyzer.managers.GoDep$Factory
-org.ossreviewtoolkit.analyzer.managers.GoMod$Factory
 org.ossreviewtoolkit.analyzer.managers.Maven$Factory
 org.ossreviewtoolkit.analyzer.managers.Sbt$Factory

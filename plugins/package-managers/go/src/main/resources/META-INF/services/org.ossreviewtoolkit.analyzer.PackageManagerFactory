@@ -1,0 +1,2 @@
+org.ossreviewtoolkit.plugins.packagemanagers.go.GoDep$Factory
+org.ossreviewtoolkit.plugins.packagemanagers.go.GoMod$Factory

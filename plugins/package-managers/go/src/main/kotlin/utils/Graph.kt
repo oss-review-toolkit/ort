@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.analyzer.managers.utils
+package org.ossreviewtoolkit.plugins.packagemanagers.go.utils
 
 import java.util.LinkedList
 
