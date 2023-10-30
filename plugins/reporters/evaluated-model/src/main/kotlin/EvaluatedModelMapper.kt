@@ -45,7 +45,6 @@ import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.FindingsMatcher
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
-import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.StatisticsCalculator.getStatistics
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
@@ -396,16 +395,12 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     private fun addVulnerability(pkg: EvaluatedPackage, vulnerability: Vulnerability) {
         val resolutions = addResolutions(vulnerability)
 
-        val evaluatedReferences = vulnerability.references.map {
-            EvaluatedVulnerabilityReference(it.url, it.scoringSystem, it.severity, it.severityRating)
-        }
-
         vulnerabilities += EvaluatedVulnerability(
             pkg = pkg,
             id = vulnerability.id,
             summary = vulnerability.summary,
             description = vulnerability.description,
-            references = evaluatedReferences,
+            references = vulnerability.references,
             resolutions = resolutions
         )
     }
