@@ -5,12 +5,9 @@
  */
 package org.ossreviewtoolkit.plugins.packageconfigurationproviders.dos
 
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.ObjectMapper
-
-import org.apache.logging.log4j.kotlin.Logging
-
 import kotlinx.coroutines.runBlocking
+
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.clients.dos.*
 import org.ossreviewtoolkit.model.*
@@ -19,8 +16,6 @@ import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.PackageConfigurationProviderFactory
 import org.ossreviewtoolkit.utils.common.Options
-import org.ossreviewtoolkit.utils.spdx.SpdxConstants
-import org.ossreviewtoolkit.utils.spdx.SpdxConstants.NONE
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 data class DosPackageConfigurationProviderConfig(
@@ -42,16 +37,15 @@ open class DosPackageConfigurationProviderFactory :
 
     override fun parseConfig(options: Options, secrets: Options) =
         DosPackageConfigurationProviderConfig(
-            serverUrl = options.getValue("serverUrl").toString(),
-            restTimeout = options["restTimeout"]?.toInt() ?: 60,
-            serverToken = System.getenv("SERVER_TOKEN") ?: throw Exception("SERVER_TOKEN not set")
+            serverUrl = options.getValue("serverUrl"),
+            restTimeout = options["restTimeout"]?.toIntOrNull() ?: 60,
+            serverToken = secrets.getValue("serverToken")
         )
 }
 /**
  * A [PackageConfigurationProvider] that loads [PackageConfiguration]s from a DOS service.
  */
 class DosPackageConfigurationProvider(config: DosPackageConfigurationProviderConfig) : PackageConfigurationProvider {
-    private companion object : Logging
     private val serverUrl = config.serverUrl
     private val restTimeout = config.restTimeout
     private val service = DOSService.create(serverUrl, config.serverToken, restTimeout)
@@ -59,27 +53,24 @@ class DosPackageConfigurationProvider(config: DosPackageConfigurationProviderCon
 
     override fun getPackageConfigurations(packageId: Identifier, provenance: Provenance): List<PackageConfiguration> {
         val purl = packageId.toPurl()
-        var packageResults: DOSService.PackageConfigurationResponseBody?
 
-        runBlocking {
-            packageResults = repository.postPackageConfiguration(purl)
-            if (packageResults == null) {
-                logger.info { "Could not request package configurations for this package" }
-                return@runBlocking
-            }
+        val packageResults = runBlocking { repository.postPackageConfiguration(purl) }
+        if (packageResults == null) {
+            logger.error { "Could not request package configurations for $purl" }
+            return emptyList()
         }
 
-        return if (packageResults?.licenseConclusions?.isEmpty() == true && packageResults?.pathExclusions?.isEmpty() == true) {
+        return if (packageResults.licenseConclusions.isEmpty() && packageResults.pathExclusions.isEmpty()) {
             emptyList()
         } else {
             val packageConfiguration = generatePackageConfiguration(
                 id = packageId,
                 provenance = provenance,
-                packageResults = packageResults!!
+                packageResults = packageResults
             )
             logger.info { "Found package configuration for $purl:" }
-            logger.info { "License conclusions: ${packageResults?.licenseConclusions.toString()}" }
-            logger.info { "Path exclusions: ${packageResults?.pathExclusions.toString()}" }
+            logger.info { "License conclusions: ${packageResults.licenseConclusions}" }
+            logger.info { "Path exclusions: ${packageResults.pathExclusions}" }
             listOf(packageConfiguration)
         }
     }
@@ -88,8 +79,8 @@ class DosPackageConfigurationProvider(config: DosPackageConfigurationProviderCon
 internal fun generatePackageConfiguration(
     id: Identifier,
     provenance: Provenance,
-    packageResults: DOSService.PackageConfigurationResponseBody): PackageConfiguration {
-
+    packageResults: DOSService.PackageConfigurationResponseBody
+): PackageConfiguration {
     val sourceArtifactUrl = if (provenance is ArtifactProvenance) {
         provenance.sourceArtifact.url
     } else {
@@ -105,26 +96,26 @@ internal fun generatePackageConfiguration(
         null
     }
 
-    val licenseFindingCurations = packageResults.licenseConclusions.map {
-        val detected = if (it.detectedLicenseExpressionSPDX == "") {
-            SpdxExpression.parse("NONE")
-        } else {
-            SpdxExpression.parse(it.detectedLicenseExpressionSPDX!!)
-        }
+    val licenseFindingCurations = packageResults.licenseConclusions.map { licenseConclusion ->
+        val detected = licenseConclusion.detectedLicenseExpressionSPDX?.takeUnless { it.isEmpty() }
+            ?.let { SpdxExpression.parse(it) }
+
+        check(licenseConclusion.concludedLicenseExpressionSPDX.isNotEmpty())
+        val concluded = SpdxExpression.parse(licenseConclusion.concludedLicenseExpressionSPDX)
+
         LicenseFindingCuration(
-            path = it.path,
-            startLines = emptyList(),
+            path = licenseConclusion.path,
             detectedLicense = detected,
-            concludedLicense = SpdxExpression.parse(it.concludedLicenseExpressionSPDX ?: NONE),
+            concludedLicense = concluded,
             reason = LicenseFindingCurationReason.INCORRECT,
-            comment = it.comment ?: ""
+            comment = licenseConclusion.comment.orEmpty()
         )
     }
     val pathExcludes = packageResults.pathExclusions.map {
         PathExclude(
             pattern = it.pattern,
             reason = PathExcludeReason.valueOf(it.reason),
-            comment = it.comment ?: ""
+            comment = it.comment.orEmpty()
         )
     }
     return PackageConfiguration(

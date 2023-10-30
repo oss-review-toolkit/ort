@@ -145,7 +145,7 @@ interface DOSService {
         data class LicenseConclusion(
             val path: String,
             val detectedLicenseExpressionSPDX: String? = null,
-            val concludedLicenseExpressionSPDX: String? = null,
+            val concludedLicenseExpressionSPDX: String,
             val comment: String? = null
         )
 
