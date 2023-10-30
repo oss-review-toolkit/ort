@@ -209,6 +209,64 @@ class GoMod(
         return graph.breakCycles()
     }
 
+    /**
+     * Return the list of all modules available via the `go list` command.
+     */
+    private fun getModuleInfos(projectDir: File): List<ModuleInfo> {
+        val list = runGo("list", "-m", "-json", "-buildvcs=false", "all", workingDir = projectDir)
+
+        return list.stdout.byteInputStream().use { JSON.decodeToSequence<ModuleInfo>(it) }.toList()
+    }
+
+    /**
+     * Return the module names of all transitive main module dependencies. This excludes test-only dependencies.
+     */
+    private fun getTransitiveMainModuleDependencies(projectDir: File): Set<String> {
+        // See https://pkg.go.dev/text/template for the format syntax.
+        val list = runGo("list", "-deps", "-json=Module", "-buildvcs=false", "./...", workingDir = projectDir)
+
+        val depInfos = list.stdout.byteInputStream().use { JSON.decodeToSequence<DepInfo>(it) }
+
+        return depInfos.mapNotNullTo(mutableSetOf()) { depInfo ->
+            depInfo.module?.path
+        }
+    }
+
+    /**
+     * Return the subset of the modules in [graph] required for building and testing the main module. So, test
+     * dependencies of dependencies are filtered out. The [GoModule]s in [Graph] must not have the replace directive
+     * applied.
+     */
+    private fun getVendorModules(graph: Graph<GoModule>, projectDir: File, mainModuleName: String): Set<GoModule> {
+        val vendorModuleNames = mutableSetOf(mainModuleName)
+
+        graph.nodes.chunked(WHY_CHUNK_SIZE).forEach { ids ->
+            val moduleNames = ids.map { it.name }.toTypedArray()
+            // Use the ´-m´ switch to use module names because the graph also uses module names, not package names.
+            // This fixes the accidental dropping of some modules.
+            val why = runGo("mod", "why", "-m", "-vendor", *moduleNames, workingDir = projectDir)
+
+            vendorModuleNames += parseWhyOutput(why.stdout)
+        }
+
+        return graph.nodes.filterTo(mutableSetOf()) { it.name in vendorModuleNames }
+    }
+
+    private fun runGo(vararg args: CharSequence, workingDir: File? = null) =
+        run(args = args, workingDir = workingDir, environment = environment)
+
+    private fun getProjectName(projectDir: File): String {
+        projectDir.resolve("go.mod").also { goModFile ->
+            require(goModFile.isFile) {
+                "Expected file '$goModFile' which does not exist."
+            }
+        }
+
+        val list = runGo("list", "-m", "-json", "-buildvcs=false", workingDir = projectDir)
+
+        return list.stdout.byteInputStream().use { JSON.decodeToSequence<ModuleInfo>(it) }.single().path
+    }
+
     private fun ModuleInfo.toId(): Identifier {
         if (replace != null) return replace.toId() // Apply replace directive.
 
@@ -240,61 +298,6 @@ class GoMod(
         }
     }
 
-    private fun getProjectName(projectDir: File): String {
-        projectDir.resolve("go.mod").also { goModFile ->
-            require(goModFile.isFile) {
-                "Expected file '$goModFile' which does not exist."
-            }
-        }
-
-        val list = runGo("list", "-m", "-json", "-buildvcs=false", workingDir = projectDir)
-
-        return list.stdout.byteInputStream().use { JSON.decodeToSequence<ModuleInfo>(it) }.single().path
-    }
-
-    /**
-     * Return the list of all modules available via the `go list` command.
-     */
-    private fun getModuleInfos(projectDir: File): List<ModuleInfo> {
-        val list = runGo("list", "-m", "-json", "-buildvcs=false", "all", workingDir = projectDir)
-
-        return list.stdout.byteInputStream().use { JSON.decodeToSequence<ModuleInfo>(it) }.toList()
-    }
-
-    /**
-     * Return the subset of the modules in [graph] required for building and testing the main module. So, test
-     * dependencies of dependencies are filtered out. The [GoModule]s in [Graph] must not have the replace directive
-     * applied.
-     */
-    private fun getVendorModules(graph: Graph<GoModule>, projectDir: File, mainModuleName: String): Set<GoModule> {
-        val vendorModuleNames = mutableSetOf(mainModuleName)
-
-        graph.nodes.chunked(WHY_CHUNK_SIZE).forEach { ids ->
-            val moduleNames = ids.map { it.name }.toTypedArray()
-            // Use the ´-m´ switch to use module names because the graph also uses module names, not package names.
-            // This fixes the accidental dropping of some modules.
-            val why = runGo("mod", "why", "-m", "-vendor", *moduleNames, workingDir = projectDir)
-
-            vendorModuleNames += parseWhyOutput(why.stdout)
-        }
-
-        return graph.nodes.filterTo(mutableSetOf()) { it.name in vendorModuleNames }
-    }
-
-    /**
-     * Return the module names of all transitive main module dependencies. This excludes test-only dependencies.
-     */
-    private fun getTransitiveMainModuleDependencies(projectDir: File): Set<String> {
-        // See https://pkg.go.dev/text/template for the format syntax.
-        val list = runGo("list", "-deps", "-json=Module", "-buildvcs=false", "./...", workingDir = projectDir)
-
-        val depInfos = list.stdout.byteInputStream().use { JSON.decodeToSequence<DepInfo>(it) }
-
-        return depInfos.mapNotNullTo(mutableSetOf()) { depInfo ->
-            depInfo.module?.path
-        }
-    }
-
     private fun ModuleInfo.toPackage(): Package? {
         // A ModuleInfo with blank version should be represented by a Project:
         if (version.isBlank()) return null
@@ -319,9 +322,6 @@ class GoMod(
             vcs = vcsInfo
         )
     }
-
-    private fun runGo(vararg args: CharSequence, workingDir: File? = null) =
-        run(args = args, workingDir = workingDir, environment = environment)
 
     /**
      * Convert this [Graph] to a set of [PackageReference]s that spawn the dependency trees of the direct dependencies
