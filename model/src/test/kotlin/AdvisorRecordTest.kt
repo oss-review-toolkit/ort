@@ -29,6 +29,8 @@ import io.kotest.matchers.should
 import java.net.URI
 import java.time.Instant
 
+import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
+import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
 import org.ossreviewtoolkit.utils.common.enumSetOf
 
 class AdvisorRecordTest : WordSpec({

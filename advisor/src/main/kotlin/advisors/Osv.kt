@@ -39,8 +39,8 @@ import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.VulnerabilityReference
 import org.ossreviewtoolkit.model.config.PluginConfiguration
+import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
 import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.enumSetOf
@@ -176,7 +176,7 @@ private fun createRequest(pkg: Package): VulnerabilitiesForPackageRequest? {
     return null
 }
 
-private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.Vulnerability {
+private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.vulnerabilities.Vulnerability {
     // OSV uses a list in order to support multiple representations of the severity using different scoring systems.
     // However, only one representation is actually possible currently, because the enum 'Severity.Type' contains just a
     // single element / scoring system. So, picking first severity is fine, in particular because ORT only supports a
@@ -218,7 +218,7 @@ private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.Vulne
         }.getOrNull()
     }
 
-    return org.ossreviewtoolkit.model.Vulnerability(
+    return org.ossreviewtoolkit.model.vulnerabilities.Vulnerability(
         id = id,
         summary = summary,
         description = details,

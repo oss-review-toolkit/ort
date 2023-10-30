@@ -49,8 +49,6 @@ import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.model.Vulnerability
-import org.ossreviewtoolkit.model.VulnerabilityReference
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PathExclude
@@ -58,6 +56,8 @@ import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
+import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
+import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.spdx.toSpdx

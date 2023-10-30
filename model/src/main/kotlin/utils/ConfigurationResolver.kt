@@ -30,9 +30,9 @@ import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.ResolvedPackageCurations
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.ScanResult
-import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
+import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 
 object ConfigurationResolver {
     /**
