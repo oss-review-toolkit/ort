@@ -70,10 +70,6 @@ class GoMod(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
-    companion object {
-        const val DEFAULT_GO_PROXY = "https://proxy.golang.org"
-    }
-
     class Factory : AbstractPackageManagerFactory<GoMod>("GoMod") {
         override val globsForDefinitionFiles = listOf("go.mod")
 
@@ -324,30 +320,6 @@ class GoMod(
         )
     }
 
-    private fun ModuleInfo.toSourceArtifact(): RemoteArtifact {
-        /**
-         * The below construction of the remote artifact URL makes several simplifying assumptions, and it is still
-         * questionable whether those assumptions are ok:
-         *
-         *   1. GOPROXY in general can hold a list of (fallback) proxy URLs.
-         *   2. There are special values like 'direct' and 'off'.
-         *   3. GOPRIVATE variable can specify glob expression against paths for which the proxy should be bypassed.
-         */
-        val goProxy = getGoProxy()
-
-        return RemoteArtifact(url = "$goProxy/$path/@v/$version.zip", hash = Hash.NONE)
-    }
-
-    private fun getGoProxy(): String {
-        val firstProxy = Os.env["GOPROXY"].orEmpty()
-            .split(',')
-            .filterNot { it == "direct" || it == "off" }
-            .firstOrNull()
-            .orEmpty()
-
-        return firstProxy.ifBlank { DEFAULT_GO_PROXY }
-    }
-
     private fun runGo(vararg args: CharSequence, workingDir: File? = null) =
         run(args = args, workingDir = workingDir, environment = environment)
 
@@ -389,6 +361,18 @@ private const val PACKAGE_SEPARATOR = "# "
 private const val WHY_CHUNK_SIZE = 32
 
 private val JSON = Json { ignoreUnknownKeys = true }
+
+private const val DEFAULT_GO_PROXY = "https://proxy.golang.org"
+
+private fun getGoProxy(): String {
+    val firstProxy = Os.env["GOPROXY"].orEmpty()
+        .split(',')
+        .filterNot { it == "direct" || it == "off" }
+        .firstOrNull()
+        .orEmpty()
+
+    return firstProxy.ifBlank { DEFAULT_GO_PROXY }
+}
 
 @Serializable
 private data class ModuleInfo(
@@ -453,6 +437,20 @@ private data class ModuleInfoFile(
         @SerialName("Subdir")
         val subdir: String? = null
     )
+}
+
+private fun ModuleInfo.toSourceArtifact(): RemoteArtifact {
+    /**
+     * The below construction of the remote artifact URL makes several simplifying assumptions, and it is still
+     * questionable whether those assumptions are ok:
+     *
+     *   1. GOPROXY in general can hold a list of (fallback) proxy URLs.
+     *   2. There are special values like 'direct' and 'off'.
+     *   3. GOPRIVATE variable can specify glob expression against paths for which the proxy should be bypassed.
+     */
+    val goProxy = getGoProxy()
+
+    return RemoteArtifact(url = "$goProxy/$path/@v/$version.zip", hash = Hash.NONE)
 }
 
 private fun ModuleInfo.toVcsInfo(): VcsInfo? {
