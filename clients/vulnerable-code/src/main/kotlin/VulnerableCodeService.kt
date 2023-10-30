@@ -23,6 +23,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonNames
 import kotlinx.serialization.json.JsonNamingStrategy
 
 import okhttp3.MediaType.Companion.toMediaType
@@ -139,10 +140,12 @@ interface VulnerableCodeService {
         val purl: String,
 
         /** An optional list with vulnerabilities that have not yet been resolved. */
-        val unresolvedVulnerabilities: List<Vulnerability> = emptyList(),
+        @JsonNames("unresolved_vulnerabilities")
+        val affectedByVulnerabilities: List<Vulnerability> = emptyList(),
 
         /** An optional list with vulnerabilities that have already been resolved. */
-        val resolvedVulnerabilities: List<Vulnerability> = emptyList()
+        @JsonNames("resolved_vulnerabilities")
+        val fixingVulnerabilities: List<Vulnerability> = emptyList()
     )
 
     /**

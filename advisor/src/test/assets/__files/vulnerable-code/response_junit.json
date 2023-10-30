@@ -13,21 +13,6 @@
         "url": "http://public.vulnerablecode.io/api/vulnerabilities/1265",
         "vulnerability_id": "VCID-e1bu-4uh4-aaac",
         "summary": "",
-        "fixed_packages": [
-          {
-            "url": "http://public.vulnerablecode.io/api/packages/99502",
-            "purl": "pkg:maven/junit/junit@4.13.1",
-            "is_vulnerable": false
-          }
-        ]
-      }
-    ],
-    "fixing_vulnerabilities": [],
-    "unresolved_vulnerabilities": [
-      {
-        "url": "http://public.vulnerablecode.io/api/vulnerabilities/1265",
-        "vulnerability_id": "VCID-e1bu-4uh4-aaac",
-        "summary": "",
         "references": [
           {
             "reference_url": "http://people.canonical.com/~ubuntu-security/cve/2020/CVE-2020-15250.html",
@@ -55,8 +40,8 @@
           }
         ],
         "aliases": [
-           "CVE-2020-15250",
-            "GHSA-269g-pwp5-87pp"
+          "CVE-2020-15250",
+          "GHSA-269g-pwp5-87pp"
         ],
         "fixed_packages": [
           {
@@ -66,6 +51,7 @@
           }
         ]
       }
-    ]
+    ],
+    "fixing_vulnerabilities": []
   }
 ]
