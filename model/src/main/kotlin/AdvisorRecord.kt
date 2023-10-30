@@ -22,6 +22,8 @@ package org.ossreviewtoolkit.model
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
 
+import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
+
 /**
  * Type alias for a function that allows filtering of [AdvisorResult]s.
  */

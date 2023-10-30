@@ -33,8 +33,6 @@ import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.model.Vulnerability
-import org.ossreviewtoolkit.model.VulnerabilityReference
 import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.PathExclude
@@ -46,6 +44,8 @@ import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.FindingsMatcher
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
+import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
+import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.StatisticsCalculator.getStatistics
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense

@@ -25,12 +25,12 @@ import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Severity
-import org.ossreviewtoolkit.model.Vulnerability
-import org.ossreviewtoolkit.model.VulnerabilityReference
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.licenses.ResolvedLicense
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
+import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
+import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseReferenceExpression
 

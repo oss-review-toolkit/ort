@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.model
 
+import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
+
 /**
  * The result of a specific advisor execution for a single package.
  *

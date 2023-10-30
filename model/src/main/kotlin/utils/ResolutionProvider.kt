@@ -21,10 +21,10 @@ package org.ossreviewtoolkit.model.utils
 
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.RuleViolation
-import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.VulnerabilityResolution
+import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 
 /**
  * An interface to provide resolutions for [Issue]s, [RuleViolation]s and [Vulnerability]s .

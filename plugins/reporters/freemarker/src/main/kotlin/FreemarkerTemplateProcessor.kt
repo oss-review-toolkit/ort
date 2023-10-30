@@ -41,8 +41,6 @@ import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.SnippetFinding
 import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.model.Vulnerability
-import org.ossreviewtoolkit.model.VulnerabilityReference
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.VulnerabilityResolution
 import org.ossreviewtoolkit.model.licenses.LicenseView
@@ -50,6 +48,8 @@ import org.ossreviewtoolkit.model.licenses.ResolvedLicense
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseFileInfo
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.model.licenses.filterExcluded
+import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
+import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.expandTilde

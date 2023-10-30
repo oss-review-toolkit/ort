@@ -24,9 +24,9 @@ import java.io.File
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RuleViolation
-import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 
 /**
  * A [ResolutionProvider] that provides the given [resolutions].

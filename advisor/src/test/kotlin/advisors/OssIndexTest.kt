@@ -43,9 +43,9 @@ import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Severity
-import org.ossreviewtoolkit.model.Vulnerability
-import org.ossreviewtoolkit.model.VulnerabilityReference
 import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
+import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 

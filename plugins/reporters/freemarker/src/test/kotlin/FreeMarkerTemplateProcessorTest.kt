@@ -57,7 +57,6 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.config.LicenseChoices
 import org.ossreviewtoolkit.model.config.PackageLicenseChoice
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -65,6 +64,7 @@ import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.licenses.ResolvedLicense
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.model.licenses.ResolvedOriginalExpression
+import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants

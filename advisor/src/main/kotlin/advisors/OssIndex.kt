@@ -35,10 +35,10 @@ import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.Vulnerability
-import org.ossreviewtoolkit.model.VulnerabilityReference
 import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
+import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
 import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.enumSetOf

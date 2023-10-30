@@ -29,7 +29,6 @@ import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.Severity
-import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.LicenseChoices
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
@@ -37,6 +36,7 @@ import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.VulnerabilityResolution
+import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.utils.common.StringSortedSetConverter
 
 /**
