@@ -19,14 +19,15 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.go
 
-import com.moandjiezana.toml.Toml
-
 import java.io.File
 import java.io.IOException
 import java.net.URI
 
 import kotlin.io.path.copyToRecursively
 import kotlin.io.path.createDirectories
+
+import net.peanuuutz.tomlkt.Toml
+import net.peanuuutz.tomlkt.decodeFromNativeReader
 
 import org.apache.logging.log4j.kotlin.logger
 
@@ -58,6 +59,8 @@ import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.ort.showStackTrace
+
+private val toml = Toml { ignoreUnknownKeys = true }
 
 /**
  * A map of legacy package manager file names "dep" can import, and their respective lock file names, if any.
@@ -227,26 +230,17 @@ class GoDep(
             run("ensure", workingDir = workingDir, environment = mapOf("GOPATH" to gopath.path))
         }
 
-        val entries = Toml().read(lockfile).toMap()["projects"]
-        if (entries == null) {
-            logger.warn { "${lockfile.name} is missing any [[projects]] entries" }
+        val contents = lockfile.reader().use { toml.decodeFromNativeReader<GoDepLockFile>(it) }
+        if (contents.projects.isEmpty()) {
+            logger.warn { "The lockfile '$lockfile' does not contain any projects." }
             return emptyList()
         }
 
         val projects = mutableListOf<Map<String, String>>()
 
-        for (entry in entries as List<*>) {
-            val project = entry as? Map<*, *> ?: continue
-            val name = project["name"]
-            val revision = project["revision"]
-
-            if (name !is String || revision !is String) {
-                logger.warn { "Invalid [[projects]] entry in $lockfile: $entry" }
-                continue
-            }
-
-            val version = project["version"] as? String ?: revision
-            projects += mapOf("name" to name, "revision" to revision, "version" to version)
+        contents.projects.forEach { project ->
+            val version = project.version ?: project.revision
+            projects += mapOf("name" to project.name, "revision" to project.revision, "version" to version)
         }
 
         return projects
