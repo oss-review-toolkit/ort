@@ -39,10 +39,12 @@ import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
 class GoDepFunTest : WordSpec({
+    val testDir = getAssetFile("projects/synthetic/godep")
+
     "GoDep" should {
         "resolve dependencies from a lockfile correctly" {
-            val definitionFile = getAssetFile("projects/synthetic/godep/lockfile/Gopkg.toml")
-            val expectedResultFile = getAssetFile("projects/synthetic/godep/lockfile-expected-output.yml")
+            val definitionFile = testDir.resolve("lockfile/Gopkg.toml")
+            val expectedResultFile = testDir.resolve("lockfile-expected-output.yml")
 
             val result = create("GoDep").resolveSingleProject(definitionFile)
 
@@ -50,7 +52,7 @@ class GoDepFunTest : WordSpec({
         }
 
         "show error if no lockfile is present" {
-            val definitionFile = getAssetFile("projects/synthetic/godep/no-lockfile/Gopkg.toml")
+            val definitionFile = testDir.resolve("no-lockfile/Gopkg.toml")
 
             val result = create("GoDep").resolveSingleProject(definitionFile)
 
@@ -66,7 +68,7 @@ class GoDepFunTest : WordSpec({
         }
 
         "invoke the dependency solver if no lockfile is present and allowDynamicVersions is set" {
-            val definitionFile = getAssetFile("projects/synthetic/godep/no-lockfile/Gopkg.toml")
+            val definitionFile = testDir.resolve("no-lockfile/Gopkg.toml")
 
             val result = create("GoDep", allowDynamicVersions = true).resolveSingleProject(definitionFile)
 
@@ -77,8 +79,8 @@ class GoDepFunTest : WordSpec({
         }
 
         "import dependencies from Glide" {
-            val definitionFile = getAssetFile("projects/synthetic/godep/glide/glide.yaml")
-            val expectedResultFile = getAssetFile("projects/synthetic/godep/glide-expected-output.yml")
+            val definitionFile = testDir.resolve("glide/glide.yaml")
+            val expectedResultFile = testDir.resolve("glide-expected-output.yml")
 
             val result = create("GoDep").resolveSingleProject(definitionFile)
 
@@ -86,8 +88,8 @@ class GoDepFunTest : WordSpec({
         }
 
         "import dependencies from godeps" {
-            val definitionFile = getAssetFile("projects/synthetic/godep/godeps/Godeps/Godeps.json")
-            val expectedResultFile = getAssetFile("projects/synthetic/godep/godeps-expected-output.yml")
+            val definitionFile = testDir.resolve("godeps/Godeps/Godeps.json")
+            val expectedResultFile = testDir.resolve("godeps-expected-output.yml")
 
             val result = create("GoDep").resolveSingleProject(definitionFile)
 
