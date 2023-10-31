@@ -35,9 +35,9 @@ import org.ossreviewtoolkit.utils.test.matchExpectedResult
 class GoModFunTest : StringSpec({
     val testDir = getAssetFile("projects/synthetic/gomod")
 
-    "Project dependencies are detected correctly" {
-        val definitionFile = testDir.resolve("gomod/go.mod")
-        val expectedResultFile = testDir.resolve("gomod-expected-output.yml")
+    "Project dependencies are detected correctly given a project with test dependencies" {
+        val definitionFile = testDir.resolve("project-with-tests/go.mod")
+        val expectedResultFile = testDir.resolve("project-with-tests-expected-output.yml")
 
         val result = create("GoMod").resolveSingleProject(definitionFile)
 
