@@ -16,7 +16,7 @@
             "pattern": "^https://source.android.com/setup/develop/repo$"
         },
         {
-            "pattern": "^../../tutorial/intro$"
+            "pattern": "^../../tutorial/intro(#.+)?$"
         }
     ]
 }
