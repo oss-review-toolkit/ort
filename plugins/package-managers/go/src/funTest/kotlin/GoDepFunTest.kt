@@ -42,7 +42,7 @@ class GoDepFunTest : WordSpec({
     "GoDep" should {
         "resolve dependencies from a lockfile correctly" {
             val definitionFile = getAssetFile("projects/synthetic/godep/lockfile/Gopkg.toml")
-            val expectedResultFile = getAssetFile("projects/synthetic/godep-expected-output.yml")
+            val expectedResultFile = getAssetFile("projects/synthetic/lockfile-expected-output.yml")
 
             val result = create("GoDep").resolveSingleProject(definitionFile)
 
