@@ -42,7 +42,7 @@ class GoDepFunTest : WordSpec({
     "GoDep" should {
         "resolve dependencies from a lockfile correctly" {
             val definitionFile = getAssetFile("projects/synthetic/godep/lockfile/Gopkg.toml")
-            val expectedResultFile = getAssetFile("projects/synthetic/lockfile-expected-output.yml")
+            val expectedResultFile = getAssetFile("projects/synthetic/godep/lockfile-expected-output.yml")
 
             val result = create("GoDep").resolveSingleProject(definitionFile)
 
@@ -78,7 +78,7 @@ class GoDepFunTest : WordSpec({
 
         "import dependencies from Glide" {
             val definitionFile = getAssetFile("projects/synthetic/godep/glide/glide.yaml")
-            val expectedResultFile = getAssetFile("projects/synthetic/glide-expected-output.yml")
+            val expectedResultFile = getAssetFile("projects/synthetic/godep/glide-expected-output.yml")
 
             val result = create("GoDep").resolveSingleProject(definitionFile)
 
@@ -87,7 +87,7 @@ class GoDepFunTest : WordSpec({
 
         "import dependencies from godeps" {
             val definitionFile = getAssetFile("projects/synthetic/godep/godeps/Godeps/Godeps.json")
-            val expectedResultFile = getAssetFile("projects/synthetic/godeps-expected-output.yml")
+            val expectedResultFile = getAssetFile("projects/synthetic/godep/godeps-expected-output.yml")
 
             val result = create("GoDep").resolveSingleProject(definitionFile)
 
