@@ -21,12 +21,14 @@ package org.ossreviewtoolkit.advisor
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContainAll
+import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.advisor.advisors.VulnerableCode
 import org.ossreviewtoolkit.advisor.advisors.VulnerableCodeConfiguration
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class VulnerableCodeFunTest : StringSpec({
     // Enter an API key to enable the test.
@@ -39,10 +41,19 @@ class VulnerableCodeFunTest : StringSpec({
 
         val findings = vc.retrievePackageFindings(setOf(pkg))
 
-        findings.values.flatMap { it.vulnerabilities }.map { it.id } shouldContainAll setOf(
-            "CVE-2018-10237",
-            "CVE-2020-8908",
-            "CVE-2023-2976"
-        )
+        with(findings.values.flatMap { it.vulnerabilities }.associateBy { it.id }) {
+            keys shouldContainAll setOf(
+                "CVE-2018-10237",
+                "CVE-2020-8908",
+                "CVE-2023-2976"
+            )
+
+            getValue("CVE-2023-2976").references.find {
+                it.url.toString() == "https://nvd.nist.gov/vuln/detail/CVE-2023-2976"
+            } shouldNotBeNull {
+                severity shouldBe "7.1"
+                severityRating shouldBe "HIGH"
+            }
+        }
     }
 })
