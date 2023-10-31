@@ -1,6 +1,6 @@
 [versions]
 dependencyAnalysisPlugin = "1.25.0"
-detektPlugin = "1.23.2"
+detektPlugin = "1.23.3"
 dokkatooPlugin = "2.0.0"
 downloadPlugin = "5.5.0"
 gitSemverPlugin = "0.10.1"
