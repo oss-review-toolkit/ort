@@ -37,7 +37,7 @@ class GoModFunTest : StringSpec({
 
     "Project dependencies are detected correctly" {
         val definitionFile = testDir.resolve("gomod/gomod/go.mod")
-        val expectedResultFile = testDir.resolve("gomod-expected-output.yml")
+        val expectedResultFile = testDir.resolve("gomod/gomod-expected-output.yml")
 
         val result = create("GoMod").resolveSingleProject(definitionFile)
 
@@ -46,7 +46,7 @@ class GoModFunTest : StringSpec({
 
     "Project dependencies are detected correctly if the main package does not contain any code" {
         val definitionFile = testDir.resolve("gomod/subpkg/go.mod")
-        val expectedResultFile = testDir.resolve("gomod-subpkg-expected-output.yml")
+        val expectedResultFile = testDir.resolve("gomod/subpkg-expected-output.yml")
 
         val result = create("GoMod").resolveSingleProject(definitionFile)
 
@@ -55,7 +55,7 @@ class GoModFunTest : StringSpec({
 
     "Project dependencies are detected correctly if there are no dependencies" {
         val definitionFile = testDir.resolve("gomod/no-deps/go.mod")
-        val expectedResultFile = testDir.resolve("gomod-no-deps-expected-output.yml")
+        val expectedResultFile = testDir.resolve("gomod/no-deps-expected-output.yml")
 
         val result = create("GoMod").resolveSingleProject(definitionFile)
 
@@ -64,7 +64,7 @@ class GoModFunTest : StringSpec({
 
     "Project dependencies of a main module in a multi-module workspaces are detected correctly" {
         val definitionFile = testDir.resolve("gomod/workspaces/go.mod")
-        val expectedResultFile = testDir.resolve("gomod-workspaces-main-module-expected-output.yml")
+        val expectedResultFile = testDir.resolve("gomod/workspaces-main-module-expected-output.yml")
 
         val result = create("GoMod").resolveSingleProject(definitionFile)
 
@@ -73,7 +73,7 @@ class GoModFunTest : StringSpec({
 
     "Project dependencies of a submodule in a multi-module workspaces are detected correctly" {
         val definitionFile = testDir.resolve("gomod/workspaces/other-module/go.mod")
-        val expectedResultFile = testDir.resolve("gomod-workspaces-sub-module-expected-output.yml")
+        val expectedResultFile = testDir.resolve("gomod/workspaces-sub-module-expected-output.yml")
 
         val result = create("GoMod").resolveSingleProject(definitionFile)
 
@@ -82,7 +82,7 @@ class GoModFunTest : StringSpec({
 
     "Unused dependencies are not contained in the result" {
         val definitionFile = testDir.resolve("gomod/unused-deps/go.mod")
-        val expectedResultFile = testDir.resolve("gomod-unused-deps-expected-output.yml")
+        val expectedResultFile = testDir.resolve("gomod/unused-deps-expected-output.yml")
 
         val result = create("GoMod").resolveSingleProject(definitionFile)
 
@@ -91,7 +91,7 @@ class GoModFunTest : StringSpec({
 
     "Source files with dangling embed directives do not yield issues" {
         val definitionFile = testDir.resolve("gomod/dangling-embed/go.mod")
-        val expectedResultFile = testDir.resolve("gomod-dangling-embed-expected-output.yml")
+        val expectedResultFile = testDir.resolve("gomod/dangling-embed-expected-output.yml")
 
         val result = create("GoMod").resolveSingleProject(definitionFile)
 
@@ -101,7 +101,7 @@ class GoModFunTest : StringSpec({
     "Project dependencies with a (relative) local module dependency are detected correctly" {
         val definitionFileApp = testDir.resolve("gomod/submodules/app/go.mod")
         val definitionFileUtils = testDir.resolve("gomod/submodules/utils/go.mod")
-        val expectedResultFile = testDir.resolve("gomod-submodules-expected-output.yml")
+        val expectedResultFile = testDir.resolve("gomod/submodules-expected-output.yml")
         val expectedDefinitionFilePathUtils = getDefinitionFilePath(definitionFileUtils)
 
         val result = create("GoMod").collateMultipleProjects(definitionFileApp, definitionFileUtils)
