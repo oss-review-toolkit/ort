@@ -65,6 +65,7 @@ import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceScanResult
 import org.ossreviewtoolkit.scanner.provenance.PackageProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.ProvenanceDownloader
 import org.ossreviewtoolkit.scanner.utils.FileListResolver
+import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.Environment
@@ -134,10 +135,18 @@ class Scanner(
 
         val endTime = Instant.now()
 
+        val toolVersions = mutableMapOf<String, String>()
+
+        scannerWrappers.values.flatten().forEach { scanner ->
+            if (scanner is CommandLineTool) {
+                toolVersions[scanner.name] = scanner.getVersion()
+            }
+        }
+
         val scannerRun = ScannerRun(
             startTime = startTime,
             endTime = endTime,
-            environment = Environment(),
+            environment = Environment(toolVersions = toolVersions),
             config = scannerConfig,
             provenances = projectResults.provenances + packageResults.provenances,
             scanResults = projectResults.scanResults + packageResults.scanResults,
