@@ -227,7 +227,7 @@ open class Npm(
             )
         )
 
-        // TODO: add support for peerDependencies and bundledDependencies.
+        // TODO: Add support for bundledDependencies.
 
         return listOf(
             ProjectAnalyzerResult(
