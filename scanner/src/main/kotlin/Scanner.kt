@@ -115,8 +115,6 @@ class Scanner(
         val projectResults = if (projectScannerWrappers.isNotEmpty()) {
             val packages = ortResult.getProjects(skipExcluded).mapTo(mutableSetOf()) { it.toPackage() }
 
-            logger.info { "Scanning ${packages.size} project(s) with ${projectScannerWrappers.size} scanner(s)." }
-
             scan(
                 packages,
                 ScanContext(
@@ -127,16 +125,12 @@ class Scanner(
                 )
             )
         } else {
-            logger.info { "Skipping project scan as no project scanner is configured." }
-
             ScannerRun.EMPTY
         }
 
         val packageResults = if (packageScannerWrappers.isNotEmpty()) {
             val packages = ortResult.getPackages(skipExcluded).map { it.metadata }.filterNotConcluded()
                 .filterNotMetadataOnly().toSet()
-
-            logger.info { "Scanning ${packages.size} package(s) with ${packageScannerWrappers.size} scanner(s)." }
 
             scan(
                 packages,
@@ -148,8 +142,6 @@ class Scanner(
                 )
             )
         } else {
-            logger.info { "Skipping package scan as no package scanner is configured." }
-
             ScannerRun.EMPTY
         }
 
@@ -171,7 +163,12 @@ class Scanner(
 
     suspend fun scan(packages: Set<Package>, context: ScanContext): ScannerRun {
         val scannerWrappers = scannerWrappers[context.packageType]
-        if (scannerWrappers.isNullOrEmpty()) return ScannerRun.EMPTY
+        if (scannerWrappers.isNullOrEmpty()) {
+            logger.info { "Skipping ${context.packageType} scan as no according scanner is configured." }
+            return ScannerRun.EMPTY
+        }
+
+        logger.info { "Scanning ${packages.size} ${context.packageType}(s) with ${scannerWrappers.size} scanner(s)." }
 
         val controller = ScanController(packages, scannerWrappers, scannerConfig)
 
