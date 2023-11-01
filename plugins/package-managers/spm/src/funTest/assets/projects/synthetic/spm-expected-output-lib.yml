@@ -95,7 +95,7 @@ project:
           - id: "SPM:apple:swift-atomics:1.2.0"
           - id: "SPM:apple:swift-collections:1.0.5"
     - id: "SPM:swift-server:swift-backtrace:1.3.4"
-    - id: "SPM:vapor:async-kit:1.18.0"
+    - id: "SPM:vapor:async-kit:1.19.0"
       dependencies:
       - id: "SPM:apple:swift-algorithms:1.1.0"
         dependencies:
@@ -578,8 +578,8 @@ packages:
     url: "https://github.com/swift-server/swift-backtrace.git"
     revision: "1.3.4"
     path: ""
-- id: "SPM:vapor:async-kit:1.18.0"
-  purl: "pkg:swift/vapor/async-kit@1.18.0"
+- id: "SPM:vapor:async-kit:1.19.0"
+  purl: "pkg:swift/vapor/async-kit@1.19.0"
   authors:
   - "vapor"
   declared_licenses: []
@@ -599,12 +599,12 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/vapor/async-kit.git"
-    revision: "1.18.0"
+    revision: "1.19.0"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/vapor/async-kit.git"
-    revision: "1.18.0"
+    revision: "1.19.0"
     path: ""
 - id: "SPM:vapor:console-kit:4.9.0"
   purl: "pkg:swift/vapor/console-kit@4.9.0"
