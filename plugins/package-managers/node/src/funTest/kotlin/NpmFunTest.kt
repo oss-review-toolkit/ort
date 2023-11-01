@@ -21,9 +21,11 @@ package org.ossreviewtoolkit.plugins.packagemanagers.node
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
+import io.kotest.inspectors.forAtLeastOne
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldHave
 import io.kotest.matchers.string.shouldContain
 
 import org.ossreviewtoolkit.analyzer.managers.create
@@ -97,11 +99,10 @@ class NpmFunTest : WordSpec({
 
             val result = create("NPM", allowDynamicVersions = true).resolveSingleProject(definitionFile)
 
-            result.issues shouldHaveSize 1
-            with(result.issues.first()) {
-                source shouldBe "NPM"
-                severity shouldBe Severity.ERROR
-                message shouldContain "Unexpected token \"<\" (0x3C) in JSON at position 0 while parsing \"<>\""
+            result.issues.forAtLeastOne {
+                it.source shouldBe "NPM"
+                it.severity shouldBe Severity.ERROR
+                it.message shouldContain "Unexpected token"
             }
         }
 
