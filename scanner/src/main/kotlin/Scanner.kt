@@ -109,41 +109,28 @@ class Scanner(
     suspend fun scan(ortResult: OrtResult, skipExcluded: Boolean, labels: Map<String, String>): OrtResult {
         val startTime = Instant.now()
 
-        val projectScannerWrappers = scannerWrappers[PackageType.PROJECT].orEmpty()
-        val packageScannerWrappers = scannerWrappers[PackageType.PACKAGE].orEmpty()
-
-        val projectResults = if (projectScannerWrappers.isNotEmpty()) {
-            val packages = ortResult.getProjects(skipExcluded).mapTo(mutableSetOf()) { it.toPackage() }
-
-            scan(
-                packages,
-                ScanContext(
-                    ortResult.labels + labels,
-                    PackageType.PROJECT,
-                    ortResult.repository.config.excludes,
-                    scannerConfig.detectedLicenseMapping
-                )
+        val projectPackages = ortResult.getProjects(skipExcluded).mapTo(mutableSetOf()) { it.toPackage() }
+        val projectResults = scan(
+            projectPackages,
+            ScanContext(
+                ortResult.labels + labels,
+                PackageType.PROJECT,
+                ortResult.repository.config.excludes,
+                scannerConfig.detectedLicenseMapping
             )
-        } else {
-            ScannerRun.EMPTY
-        }
+        )
 
-        val packageResults = if (packageScannerWrappers.isNotEmpty()) {
-            val packages = ortResult.getPackages(skipExcluded).map { it.metadata }.filterNotConcluded()
-                .filterNotMetadataOnly().toSet()
-
-            scan(
-                packages,
-                ScanContext(
-                    ortResult.labels,
-                    PackageType.PACKAGE,
-                    ortResult.repository.config.excludes,
-                    scannerConfig.detectedLicenseMapping
-                )
+        val packages = ortResult.getPackages(skipExcluded).map { it.metadata }.filterNotConcluded()
+            .filterNotMetadataOnly().toSet()
+        val packageResults = scan(
+            packages,
+            ScanContext(
+                ortResult.labels,
+                PackageType.PACKAGE,
+                ortResult.repository.config.excludes,
+                scannerConfig.detectedLicenseMapping
             )
-        } else {
-            ScannerRun.EMPTY
-        }
+        )
 
         val endTime = Instant.now()
 
