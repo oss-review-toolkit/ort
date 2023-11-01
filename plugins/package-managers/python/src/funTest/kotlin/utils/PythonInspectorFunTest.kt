@@ -46,6 +46,6 @@ class PythonInspectorFunTest : StringSpec({
 
         result.projects should haveSize(2)
         result.resolvedDependenciesGraph should haveSize(1)
-        result.packages should haveSize(10)
+        result.packages should haveSize(11)
     }
 })
