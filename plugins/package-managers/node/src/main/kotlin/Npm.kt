@@ -159,7 +159,7 @@ open class Npm(
 
     override fun command(workingDir: File?) = if (Os.isWindows) "npm.cmd" else "npm"
 
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create("6.* - 8.*")
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create("6.* - 10.*")
 
     override fun mapDefinitionFiles(definitionFiles: List<File>) = mapDefinitionFilesForNpm(definitionFiles).toList()
 
