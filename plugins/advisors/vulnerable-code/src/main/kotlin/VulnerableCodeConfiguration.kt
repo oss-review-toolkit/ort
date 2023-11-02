@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+ * Copyright (C) 2021 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,18 +17,19 @@
  * License-Filename: LICENSE
  */
 
-plugins {
-    // Apply precompiled plugins.
-    id("ort-library-conventions")
-}
+package org.ossreviewtoolkit.plugins.advisors.vulnerablecode
 
-dependencies {
-    api(project(":model"))
-    api(project(":utils:common-utils"))
+/**
+ * The configuration for VulnerableCode as security vulnerability provider.
+ */
+data class VulnerableCodeConfiguration(
+    /**
+     * The base URL of the VulnerableCode REST API. By default, the public VulnerableCode instance is used.
+     */
+    val serverUrl: String? = null,
 
-    implementation(project(":utils:ort-utils"))
-
-    implementation(libs.kotlinxCoroutines)
-
-    testImplementation(libs.mockk)
-}
+    /**
+     * The optional API key to use.
+     */
+    val apiKey: String? = null
+)

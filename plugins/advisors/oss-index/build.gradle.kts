@@ -23,12 +23,12 @@ plugins {
 }
 
 dependencies {
+    api(project(":advisor"))
     api(project(":model"))
-    api(project(":utils:common-utils"))
 
+    implementation(project(":clients:oss-index-client"))
+    implementation(project(":utils:common-utils"))
     implementation(project(":utils:ort-utils"))
 
-    implementation(libs.kotlinxCoroutines)
-
-    testImplementation(libs.mockk)
+    testImplementation(libs.wiremock)
 }
