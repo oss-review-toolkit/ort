@@ -47,6 +47,11 @@ enum class ScopeExcludeReason {
     DEV_DEPENDENCY_OF,
 
     /**
+     * The scope only contains packages used for building the documentation.
+     */
+    DOCUMENTATION_DEPENDENCY_OF,
+
+    /**
      * The scope only contains packages that have to be provided by the user of distributed build artifacts.
      */
     @Deprecated(
