@@ -408,7 +408,7 @@ val VULNERABILITY = Vulnerability(
     summary = "A vulnerability summary",
     description = "A vulnerability description",
     references = listOf(
-        VulnerabilityReference(URI("https://cves.example.org/cve1"), "Cvss2", "6.0")
+        VulnerabilityReference(URI("https://cves.example.org/cve1"), "CVSSv2", "6.0")
     )
 )
 
