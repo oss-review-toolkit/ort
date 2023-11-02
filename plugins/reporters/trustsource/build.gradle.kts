@@ -37,6 +37,10 @@ dependencies {
     implementation(project(":utils:spdx-utils"))
 
     implementation(libs.bundles.kotlinxSerialization)
+
+    funTestImplementation(testFixtures(project(":reporter")))
+
+    funTestImplementation(libs.kotestAssertionsJson)
 }
 
 tasks.withType<KotlinCompile>().configureEach {

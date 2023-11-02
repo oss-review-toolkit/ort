@@ -1,0 +1,164 @@
+[
+  {
+    "module": "project-with-findings",
+    "dependencies": [
+      {
+        "name": "no-license-file",
+        "purl": "pkg:npm/%40ort/no-license-file@1.0",
+        "dependencies": [
+        ],
+        "homepageUrl": "https://github.com/oss-review-toolkit/ort",
+        "checksum": {
+          "NONE": ""
+        },
+        "licenses": [
+          {
+            "name": "MIT",
+            "url": "https://spdx.org/licenses/MIT"
+          }
+        ],
+        "package": {
+          "sourcesChecksum": {
+            "NONE": ""
+          }
+        }
+      },
+      {
+        "name": "license-file",
+        "purl": "pkg:npm/%40ort/license-file@1.0",
+        "dependencies": [
+        ],
+        "homepageUrl": "https://github.com/oss-review-toolkit/ort",
+        "checksum": {
+          "NONE": ""
+        },
+        "licenses": [
+          {
+            "name": "MIT",
+            "url": "https://spdx.org/licenses/MIT"
+          }
+        ],
+        "package": {
+          "sourcesUrl": "https://example.com/license-file-1.0.tgz",
+          "sourcesChecksum": {
+            "SHA1": "0000000000000000000000000000000000000000"
+          }
+        }
+      },
+      {
+        "name": "license-file-and-additional-licenses",
+        "purl": "pkg:npm/%40ort/license-file-and-additional-licenses@1.0",
+        "dependencies": [
+        ],
+        "homepageUrl": "https://github.com/oss-review-toolkit/ort",
+        "checksum": {
+          "NONE": ""
+        },
+        "licenses": [
+          {
+            "name": "MIT",
+            "url": "https://spdx.org/licenses/MIT"
+          },
+          {
+            "name": "BSD-3-Clause",
+            "url": "https://spdx.org/licenses/BSD-3-Clause"
+          }
+        ],
+        "package": {
+          "sourcesUrl": "https://example.com/license-file-and-additional-licenses-1.0.tgz",
+          "sourcesChecksum": {
+            "SHA1": "0000000000000000000000000000000000000000"
+          }
+        }
+      },
+      {
+        "name": "concluded-license",
+        "purl": "pkg:npm/%40ort/concluded-license@1.0",
+        "dependencies": [
+        ],
+        "homepageUrl": "https://github.com/oss-review-toolkit/ort",
+        "checksum": {
+          "NONE": ""
+        },
+        "licenses": [
+          {
+            "name": "MIT",
+            "url": "https://spdx.org/licenses/MIT"
+          },
+          {
+            "name": "MIT WITH Libtool-exception",
+            "url": "https://spdx.org/licenses/MIT"
+          }
+        ],
+        "package": {
+          "sourcesUrl": "https://example.com/concluded-license-1.0.tgz",
+          "sourcesChecksum": {
+            "SHA1": "0000000000000000000000000000000000000000"
+          }
+        }
+      },
+      {
+        "name": "declared-license",
+        "purl": "pkg:npm/%40ort/declared-license@1.0",
+        "dependencies": [
+        ],
+        "homepageUrl": "https://github.com/oss-review-toolkit/ort",
+        "checksum": {
+          "NONE": ""
+        },
+        "licenses": [
+          {
+            "name": "MIT",
+            "url": "https://spdx.org/licenses/MIT"
+          },
+          {
+            "name": "BSD-3-Clause",
+            "url": "https://spdx.org/licenses/BSD-3-Clause"
+          }
+        ],
+        "package": {
+          "sourcesUrl": "https://example.com/declared-license-1.0.tgz",
+          "sourcesChecksum": {
+            "SHA1": "0000000000000000000000000000000000000000"
+          }
+        }
+      },
+      {
+        "name": "declared-license",
+        "purl": "pkg:npm/%40ort/declared-license@1.0",
+        "dependencies": [
+        ],
+        "homepageUrl": "https://github.com/oss-review-toolkit/ort",
+        "checksum": {
+          "NONE": ""
+        },
+        "licenses": [
+          {
+            "name": "MIT",
+            "url": "https://spdx.org/licenses/MIT"
+          },
+          {
+            "name": "BSD-3-Clause",
+            "url": "https://spdx.org/licenses/BSD-3-Clause"
+          }
+        ],
+        "package": {
+          "sourcesUrl": "https://example.com/declared-license-1.0.tgz",
+          "sourcesChecksum": {
+            "SHA1": "0000000000000000000000000000000000000000"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "module": "project-without-findings",
+    "dependencies": [
+    ]
+  },
+  {
+    "module": "excluded-project",
+    "dependencies": [
+    ]
+  }
+]
