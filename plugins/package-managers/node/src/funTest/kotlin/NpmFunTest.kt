@@ -22,10 +22,8 @@ package org.ossreviewtoolkit.plugins.packagemanagers.node
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.inspectors.forAtLeastOne
-import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldHave
 import io.kotest.matchers.string.shouldContain
 
 import org.ossreviewtoolkit.analyzer.managers.create
