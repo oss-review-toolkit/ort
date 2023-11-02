@@ -195,17 +195,16 @@ class Git : VersionControlSystem(), CommandLineTool {
 
             // See https://git-scm.com/docs/gitrevisions#_specifying_revisions for how Git resolves ambiguous
             // names. In particular, tag names have higher precedence than branch names.
-            runCatching { fetch.setRefSpecs(revision).call() }
-                .recoverCatching {
-                    // Note that in contrast to branches / heads, Git does not namespace tags per remote.
-                    val tagRefSpec = "+${Constants.R_TAGS}$revision:${Constants.R_TAGS}$revision"
-                    fetch.setRefSpecs(tagRefSpec).call()
-                }
-                .recoverCatching {
-                    val branchRefSpec = "+${Constants.R_HEADS}$revision:${Constants.R_REMOTES}origin/$revision"
-                    fetch.setRefSpecs(branchRefSpec).call()
-                }
-                .getOrThrow()
+            runCatching {
+                fetch.setRefSpecs(revision).call()
+            }.recoverCatching {
+                // Note that in contrast to branches / heads, Git does not namespace tags per remote.
+                val tagRefSpec = "+${Constants.R_TAGS}$revision:${Constants.R_TAGS}$revision"
+                fetch.setRefSpecs(tagRefSpec).call()
+            }.recoverCatching {
+                val branchRefSpec = "+${Constants.R_HEADS}$revision:${Constants.R_REMOTES}origin/$revision"
+                fetch.setRefSpecs(branchRefSpec).call()
+            }.getOrThrow()
         }.recoverCatching {
             it.showStackTrace()
 
