@@ -59,7 +59,7 @@ slf4j = "2.0.9"
 springCore = "5.3.30"
 svnkit = "1.10.11"
 sw360Client = "17.0.1-m2"
-wiremock = "3.0.1"
+wiremock = "3.2.0"
 xz = "1.9"
 
 [plugins]
@@ -158,7 +158,7 @@ slf4j = { module = "org.slf4j:slf4j-api ", version.ref = "slf4j" }
 springCore = { module = "org.springframework:spring-core", version.ref = "springCore" }
 svnkit = { module = "org.tmatesoft.svnkit:svnkit", version.ref = "svnkit" }
 sw360Client = { module = "org.eclipse.sw360:client", version.ref = "sw360Client" }
-wiremock = { module = "com.github.tomakehurst:wiremock", version.ref = "wiremock" }
+wiremock = { module = "org.wiremock:wiremock", version.ref = "wiremock" }
 xz = { module = "org.tukaani:xz", version.ref = "xz" }
 
 [bundles]
