@@ -249,7 +249,9 @@
           "source": {
             "url": "https://cves.example.org/cve1"
           },
-          "severity": "medium"
+          "score": 6.0,
+          "severity": "medium",
+          "method": "CVSSv2"
         }
       ],
       "description": "A vulnerability description",

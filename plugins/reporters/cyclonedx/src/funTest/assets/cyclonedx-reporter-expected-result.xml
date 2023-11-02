@@ -139,7 +139,9 @@
           <source>
             <url>https://cves.example.org/cve1</url>
           </source>
+          <score>6.0</score>
           <severity>medium</severity>
+          <method>CVSSv2</method>
         </rating>
       </ratings>
       <description>A vulnerability description</description>

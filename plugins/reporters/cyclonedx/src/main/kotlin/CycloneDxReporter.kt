@@ -273,6 +273,9 @@ class CycloneDxReporter : Reporter {
                                 .apply { url = reference.url.toString() }
                             severity = org.cyclonedx.model.vulnerability.Vulnerability.Rating.Severity
                                 .fromString(reference.severityRating.lowercase())
+                            score = reference.severity?.toDoubleOrNull()
+                            method = org.cyclonedx.model.vulnerability.Vulnerability.Rating.Method
+                                .fromString(reference.scoringSystem)
                         }
                     }
                     affects = mutableListOf(
