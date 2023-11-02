@@ -29,9 +29,11 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.LsRemoteCommand
+import org.eclipse.jgit.api.ResetCommand
 import org.eclipse.jgit.api.errors.GitAPIException
 import org.eclipse.jgit.errors.UnsupportedCredentialItem
 import org.eclipse.jgit.lib.Constants
+import org.eclipse.jgit.lib.ObjectIdRef
 import org.eclipse.jgit.lib.SymbolicRef
 import org.eclipse.jgit.transport.CredentialItem
 import org.eclipse.jgit.transport.CredentialsProvider
@@ -51,6 +53,7 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeMkdirs
+import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
@@ -230,11 +233,14 @@ class Git : VersionControlSystem(), CommandLineTool {
             } else {
                 workingTree.runGit("fetch", "--tags", "origin")
             }
+
+            // Do a dummy fetch call to create a JGit FetchResult based on the Git CLI call.
+            git.fetch().call()
         }.onFailure {
             it.showStackTrace()
 
             logger.warn { "Failed to fetch everything: ${it.collectMessages()}" }
-        }.mapCatching {
+        }.mapCatching { fetchResult ->
             // TODO: Migrate this to JGit once sparse checkout (https://bugs.eclipse.org/bugs/show_bug.cgi?id=383772) is
             //       implemented.
             run("checkout", revision, workingDir = workingTree.workingDir)
@@ -242,7 +248,26 @@ class Git : VersionControlSystem(), CommandLineTool {
             // In case of a non-fixed revision (branch or tag) reset the working tree to ensure that the previously
             // fetched changes are applied.
             if (!isFixedRevision(workingTree, revision).getOrThrow()) {
-                run("reset", "--hard", "FETCH_HEAD", workingDir = workingTree.workingDir)
+                val refs = fetchResult.advertisedRefs.filterIsInstance<ObjectIdRef>()
+
+                val tags = refs.mapNotNull { ref ->
+                    ref.name.withoutPrefix(Constants.R_TAGS)?.let { it to ref.objectId.name }
+                }.toMap()
+
+                logger.debug { "Tags fetched: ${tags.keys.joinToString()}" }
+
+                val branches = refs.mapNotNull { ref ->
+                    ref.name.withoutPrefix(Constants.R_HEADS)?.let { it to ref.objectId.name }
+                }.toMap()
+
+                logger.debug { "Branches fetched: ${branches.keys.joinToString()}" }
+
+                // Tag names have higher precedence than branch names in case of ambiguity.
+                val resolvedRevision = checkNotNull(tags[revision] ?: branches[revision]) {
+                    "Requested revision '$revision' not found in refs advertised by the server."
+                }
+
+                git.reset().setMode(ResetCommand.ResetType.HARD).setRef(resolvedRevision).call()
             }
 
             revision
