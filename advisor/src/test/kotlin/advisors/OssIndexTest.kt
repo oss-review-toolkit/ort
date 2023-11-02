@@ -28,13 +28,12 @@ import com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
-import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.maps.beEmpty as beEmptyMap
+import io.kotest.matchers.collections.shouldHaveSingleElement
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNot
 
 import java.net.URI
 
@@ -78,7 +77,6 @@ class OssIndexTest : WordSpec({
 
             val result = ossIndex.retrievePackageFindings(packages).mapKeys { it.key.id }
 
-            result shouldNot beEmptyMap()
             result.keys should containExactly(ID_JUNIT)
             result[ID_JUNIT] shouldNotBeNull {
                 advisor shouldBe ossIndex.details
@@ -123,17 +121,11 @@ class OssIndexTest : WordSpec({
 
             val result = ossIndex.retrievePackageFindings(packages).mapKeys { it.key.id }
 
-            result shouldNotBeNull {
-                keys should containExactly(COMPONENTS_REQUEST_IDS)
-
-                COMPONENTS_REQUEST_IDS.forEach { pkg ->
-                    val pkgResult = getValue(pkg)
-                    pkgResult.advisor shouldBe ossIndex.details
-                    pkgResult.vulnerabilities should beEmpty()
-                    pkgResult.summary.issues shouldHaveSize 1
-                    val issue = pkgResult.summary.issues.first()
-                    issue.severity shouldBe Severity.ERROR
-                }
+            result.keys shouldBe COMPONENTS_REQUEST_IDS
+            result.forAll { (_, advisorResult) ->
+                advisorResult.advisor shouldBe ossIndex.details
+                advisorResult.vulnerabilities should beEmpty()
+                advisorResult.summary.issues shouldHaveSingleElement { it.severity == Severity.ERROR }
             }
         }
 
