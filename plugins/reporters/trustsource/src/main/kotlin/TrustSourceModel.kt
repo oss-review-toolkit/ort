@@ -19,37 +19,68 @@
 
 package org.ossreviewtoolkit.plugins.reporters.trustsource
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+import org.ossreviewtoolkit.model.Project
+
+/**
+ * This class holds information about what dependencies have been "scanned", i.e. information that the ORT analyzer
+ * (not the ORT scanner) provides.
+ */
 @Serializable
-data class TrustSourceModule(
+data class NewScan(
+    /** Name of the TrustSource module, corresponds to an ORT [Project]. May be customized by the user. */
     val module: String,
-    val moduleId: String,
-
-    val dependencies: List<TrustSourceDependency>
+    /** SCM tag of the module, if known. */
+    val tag: String = "",
+    /** SCM branch of the module, if known. */
+    val branch: String = "",
+    /** SCM commit hash of the module, if known. */
+    val commit: String = "",
+    /** List of the module's dependencies. */
+    val dependencies: List<Dependency>
 )
 
 @Serializable
-data class TrustSourceDependency(
-    val key: String,
+data class Dependency(
+    /** The package manager specific name of the dependency. */
     val name: String,
-    val repoUrl: String,
-    val homepageUrl: String,
-    val description: String,
-    val checksum: String,
-    val private: Boolean,
-    val versions: List<String>,
-
-    val dependencies: List<TrustSourceDependency>,
-    val licenses: List<TrustSourceLicense>,
-    val meta: TrustSourceMeta
+    /** The Package URL of the dependency. */
+    val purl: String,
+    /** List of the dependency's dependencies. */
+    val dependencies: List<Dependency>,
+    /** The dependency's description as provided by metadata. */
+    val description: String = "",
+    /** Dependency's homepage, may differ from or be the same as [repositoryUrl]. */
+    val homepageUrl: String = "",
+    /** Repository with the dependency's source code. */
+    val repositoryUrl: String = "",
+    /** A map of "free text" checksum algorithm names and their values. */
+    val checksum: Map<String, String> = emptyMap(),
+    /** The list of declared licenses as read from metadata. */
+    val licenses: List<License> = emptyList(),
+    /** The TrustSource [Package] for this dependency's source, if available. */
+    @SerialName("package")
+    val pkg: Package? = null,
+    /** Indicates whether the dependency is publicly available in a package management system. */
+    val private: Boolean = false
 )
 
 @Serializable
-data class TrustSourceLicense(
+data class License(
+    /** SPDX license identifier / expression. */
     val name: String,
-    val url: String
+    /** License text URL, if known. */
+    val url: String = ""
 )
 
 @Serializable
-class TrustSourceMeta
+data class Package(
+    /** Relative path to the license file within the source code, if available. */
+    val licenseFile: String = "",
+    /** Download URL to the source code of the package, e.g. a Maven sources JAR. */
+    val sourcesUrl: String = "",
+    /** A map of "free text" checksum algorithm names and their values. */
+    val sourcesChecksum: Map<String, String> = emptyMap()
+)
