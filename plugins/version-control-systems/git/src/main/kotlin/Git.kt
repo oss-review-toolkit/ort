@@ -194,7 +194,7 @@ class Git : VersionControlSystem(), CommandLineTool {
             val fetch = git.fetch().setDepth(GIT_HISTORY_DEPTH)
 
             // See https://git-scm.com/docs/gitrevisions#_specifying_revisions for how Git resolves ambiguous
-            // names.
+            // names. In particular, tag names have higher precedence than branch names.
             runCatching { fetch.setRefSpecs(revision).call() }
                 .recoverCatching {
                     // Note that in contrast to branches / heads, Git does not namespace tags per remote.
@@ -236,7 +236,8 @@ class Git : VersionControlSystem(), CommandLineTool {
 
             logger.warn { "Failed to fetch everything: ${it.collectMessages()}" }
         }.mapCatching {
-            // TODO: Migrate this to JGit once https://bugs.eclipse.org/bugs/show_bug.cgi?id=383772 is implemented.
+            // TODO: Migrate this to JGit once sparse checkout (https://bugs.eclipse.org/bugs/show_bug.cgi?id=383772) is
+            //       implemented.
             run("checkout", revision, workingDir = workingTree.workingDir)
 
             // In case of a non-fixed revision (branch or tag) reset the working tree to ensure that the previously
