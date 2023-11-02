@@ -17,18 +17,31 @@
  * License-Filename: LICENSE
  */
 
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     // Apply precompiled plugins.
     id("ort-library-conventions")
 }
 
 dependencies {
+    api(project(":advisor"))
     api(project(":model"))
-    api(project(":utils:common-utils"))
 
+    implementation(project(":clients:osv-client"))
+    implementation(project(":utils:common-utils"))
     implementation(project(":utils:ort-utils"))
 
-    implementation(libs.kotlinxCoroutines)
+    implementation(libs.cvssCalculator)
+    implementation(libs.bundles.kotlinxSerialization)
+}
 
-    testImplementation(libs.mockk)
+tasks.withType<KotlinCompile>().configureEach {
+    val customCompilerArgs = listOf(
+        "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"
+    )
+
+    compilerOptions {
+        freeCompilerArgs.addAll(customCompilerArgs)
+    }
 }

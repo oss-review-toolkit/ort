@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+ * Copyright (C) 2022 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,18 +17,14 @@
  * License-Filename: LICENSE
  */
 
-plugins {
-    // Apply precompiled plugins.
-    id("ort-library-conventions")
-}
+package org.ossreviewtoolkit.plugins.advisors.osv
 
-dependencies {
-    api(project(":model"))
-    api(project(":utils:common-utils"))
-
-    implementation(project(":utils:ort-utils"))
-
-    implementation(libs.kotlinxCoroutines)
-
-    testImplementation(libs.mockk)
-}
+/**
+ * The configuration for the Google OSV vulnerability provider.
+ */
+data class OsvConfiguration(
+    /**
+     * The base URL of the OSV REST API. If undefined, default is the production endpoint of the official OSV.dev API.
+     */
+    val serverUrl: String? = null
+)

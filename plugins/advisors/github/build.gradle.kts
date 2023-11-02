@@ -23,12 +23,15 @@ plugins {
 }
 
 dependencies {
+    api(project(":advisor"))
     api(project(":model"))
-    api(project(":utils:common-utils"))
 
+    implementation(project(":clients:github-graphql-client"))
+    implementation(project(":utils:common-utils"))
     implementation(project(":utils:ort-utils"))
 
     implementation(libs.kotlinxCoroutines)
+    implementation(libs.ktorClientOkHttp)
 
     testImplementation(libs.mockk)
 }
