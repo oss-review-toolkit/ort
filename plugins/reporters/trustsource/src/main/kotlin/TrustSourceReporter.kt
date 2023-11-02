@@ -43,16 +43,12 @@ class TrustSourceReporter : Reporter {
 
         val nav = input.ortResult.dependencyNavigator
         val scans = input.ortResult.getProjects().map { project ->
-            val deps = nav.scopeNames(project)
-                .flatMap { traverseDeps(input, nav.directDependencies(project, it)) }
-
-            NewScan(
-                module = project.id.name,
-                dependencies = deps
-            )
+            val deps = nav.scopeNames(project).flatMap { traverseDeps(input, nav.directDependencies(project, it)) }
+            NewScan(module = project.id.name, dependencies = deps)
         }
 
         outputFile.outputStream().use { JSON.encodeToStream(scans, it) }
+
         return listOf(outputFile)
     }
 }
@@ -71,7 +67,6 @@ private fun traverseDeps(input: ReporterInput, deps: Sequence<DependencyNode>): 
         val licenses = effectiveLicense?.decompose()?.map {
             val name = it.toString()
             val url = it.getLicenseUrl().orEmpty()
-
             License(name, url)
         }
 
@@ -91,7 +86,6 @@ private fun traverseDeps(input: ReporterInput, deps: Sequence<DependencyNode>): 
             homepageUrl = pkg?.metadata?.homepageUrl.orEmpty(),
             description = pkg?.metadata?.description.orEmpty(),
             checksum = checksum.orEmpty(),
-
             dependencies = dep.visitDependencies { traverseDeps(input, it) },
             licenses = licenses.orEmpty(),
             pkg = depPkg
