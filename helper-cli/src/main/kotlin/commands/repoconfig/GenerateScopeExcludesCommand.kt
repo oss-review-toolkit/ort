@@ -245,6 +245,21 @@ private fun getScopeExcludesForPackageManager(packageManagerName: String): List<
                 pattern = "dev",
                 reason = ScopeExcludeReason.DEV_DEPENDENCY_OF,
                 comment = "Packages for development only."
+            ),
+            ScopeExclude(
+                pattern = "docs",
+                reason = ScopeExcludeReason.DOCUMENTATION_DEPENDENCY_OF,
+                comment = "Packages for building the documentation only."
+            ),
+            ScopeExclude(
+                pattern = "lint",
+                reason = ScopeExcludeReason.DEV_DEPENDENCY_OF,
+                comment = "Packages for static code analysis only."
+            ),
+            ScopeExclude(
+                pattern = "test",
+                reason = ScopeExcludeReason.TEST_DEPENDENCY_OF,
+                comment = "Packages for testing only."
             )
         )
         "SBT" -> listOf(
