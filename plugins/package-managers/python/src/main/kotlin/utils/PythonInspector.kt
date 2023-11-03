@@ -28,6 +28,7 @@ import kotlinx.serialization.json.JsonNamingStrategy
 import kotlinx.serialization.json.decodeFromStream
 
 import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 
 import org.semver4j.RangesList
@@ -84,7 +85,7 @@ internal object PythonInspector : CommandLineTool {
             run(workingDir, *commandLineOptions.toTypedArray())
             outputFile.inputStream().use { json.decodeFromStream(it) }
         } finally {
-            outputFile.delete()
+            outputFile.parentFile.safeDeleteRecursively(force = true)
         }
     }
 
