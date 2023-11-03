@@ -31,7 +31,6 @@ import kotlin.io.path.invariantSeparatorsPathString
 import kotlin.time.measureTime
 
 import org.apache.logging.log4j.kotlin.logger
-import org.apache.maven.project.ProjectBuildingException
 
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -320,12 +319,7 @@ abstract class PackageManager(
                 }.onFailure {
                     it.showStackTrace()
 
-                    // In case of Maven we might be able to do better than inferring the name from the path.
-                    val id = if (it is ProjectBuildingException && it.projectId?.isEmpty() == false) {
-                        Identifier("Maven:${it.projectId}")
-                    } else {
-                        Identifier.EMPTY.copy(type = managerName, name = relativePath)
-                    }
+                    val id = Identifier.EMPTY.copy(type = managerName, name = relativePath)
 
                     val projectWithIssues = Project.EMPTY.copy(
                         id = id,
