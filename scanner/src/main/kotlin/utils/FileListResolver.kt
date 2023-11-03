@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.scanner.provenance.ProvenanceDownloader
 import org.ossreviewtoolkit.utils.common.FileMatcher
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
+import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 
 internal class FileListResolver(
     private val storage: ProvenanceFileStorage,
@@ -43,8 +44,14 @@ internal class FileListResolver(
     fun resolve(provenance: KnownProvenance): FileList {
         storage.getFileList(provenance)?.let { return it }
 
-        return provenanceDownloader.download(provenance).let { dir ->
-            createFileList(dir).also { storage.putFileList(provenance, it) }
+        val dir = provenanceDownloader.download(provenance)
+
+        return createFileList(dir).also {
+            try {
+                storage.putFileList(provenance, it)
+            } finally {
+                dir.safeDeleteRecursively(force = true)
+            }
         }
     }
 
