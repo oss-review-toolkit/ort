@@ -69,7 +69,7 @@ internal object NuGetInspector : CommandLineTool {
             outputFile.inputStream().use { json.decodeFromStream(it) }
         } finally {
             workingDir.resolve(".cache").safeDeleteRecursively(force = true)
-            outputFile.delete()
+            outputFile.parentFile.safeDeleteRecursively(force = true)
         }
     }
 

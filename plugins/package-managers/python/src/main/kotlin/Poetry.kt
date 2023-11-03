@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.toOrtPackages
 import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.toPackageReferences
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.ProcessCapture
+import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.common.withoutSuffix
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
@@ -113,7 +114,7 @@ class Poetry(
         requirementsFile.writeText(requirements)
 
         return Pip(managerName, analysisRoot, analyzerConfig, repoConfig).runPythonInspector(requirementsFile).also {
-            requirementsFile.delete()
+            requirementsFile.parentFile.safeDeleteRecursively(force = true)
         }
     }
 }

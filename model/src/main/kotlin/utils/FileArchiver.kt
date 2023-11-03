@@ -30,6 +30,7 @@ import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.utils.common.FileMatcher
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.packZip
+import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.unpackZip
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
@@ -94,7 +95,7 @@ class FileArchiver(
 
         logger.info { "Wrote archive of directory '$directory' to storage in $writeDuration." }
 
-        zipFile.delete()
+        zipFile.parentFile.safeDeleteRecursively(force = true)
     }
 
     /**

@@ -56,6 +56,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.temporaryProperties
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
@@ -232,9 +233,7 @@ class Gradle(
                     }
                 }
 
-                if (!initScriptFile.delete()) {
-                    logger.warn { "Init script file '$initScriptFile' could not be deleted." }
-                }
+                initScriptFile.parentFile.safeDeleteRecursively(force = true)
 
                 val repositories = dependencyTreeModel.repositories.map {
                     // TODO: Also handle authentication and snapshot policy.
