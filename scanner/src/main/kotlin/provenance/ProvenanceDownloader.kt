@@ -41,8 +41,8 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempDir
  */
 fun interface ProvenanceDownloader {
     /**
-     * Download the source code specified by the provided [provenance] and return the path to the directory that
-     * contains the downloaded source code.
+     * Download the source code specified by the provided [provenance] and return the path to the temporary directory
+     * that contains the downloaded source code. The caller is responsible for deleting the directory.
      *
      * Throws a [DownloadException] if the download fails.
      */
