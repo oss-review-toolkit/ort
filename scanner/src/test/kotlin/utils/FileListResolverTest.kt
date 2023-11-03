@@ -19,17 +19,25 @@
 
 package org.ossreviewtoolkit.scanner.utils
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.engine.spec.tempdir
+import io.kotest.matchers.file.aDirectory
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 
 import java.io.File
+import java.io.IOException
+import java.io.InputStream
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
+import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.model.utils.FileProvenanceFileStorage
+import org.ossreviewtoolkit.model.utils.ProvenanceFileStorage
+import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 
 class FileListResolverTest : StringSpec({
@@ -40,7 +48,7 @@ class FileListResolverTest : StringSpec({
                 filename = "bytes"
             ),
             provenanceDownloader = {
-                createTestTempDirWithFiles(
+                createTempDirWithFiles(
                     ".git/index",
                     "LICENSE",
                     "src/cli/main.cpp"
@@ -52,10 +60,28 @@ class FileListResolverTest : StringSpec({
 
         fileList.toYaml() shouldBe File("src/test/assets/expected-file-list.yml").readText()
     }
+
+    "resolve() should delete the temporary directory even on an exception" {
+        val dir = createTempDirWithFiles(".git/index", "LICENSE", "src/cli/main.cpp")
+        val resolver = FileListResolver(
+            storage = object : ProvenanceFileStorage {
+                override fun hasData(provenance: KnownProvenance) = true
+                override fun getData(provenance: KnownProvenance) = null
+                override fun putData(provenance: KnownProvenance, data: InputStream, size: Long) = throw IOException()
+            },
+            provenanceDownloader = { dir }
+        )
+
+        shouldThrow<IOException> {
+            resolver.resolve(ArtifactProvenance(sourceArtifact = RemoteArtifact.EMPTY))
+        }
+
+        dir shouldNotBe aDirectory()
+    }
 })
 
-private fun Spec.createTestTempDirWithFiles(vararg paths: String) =
-    tempdir().apply {
+private fun Spec.createTempDirWithFiles(vararg paths: String) =
+    createOrtTempDir().apply {
         paths.forEachIndexed { index, path ->
             resolve(path).apply {
                 parentFile.mkdirs()
