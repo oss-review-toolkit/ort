@@ -26,7 +26,6 @@ import org.ossreviewtoolkit.utils.test.readOrtResult
 
 class DependencyGraphNavigatorTest : AbstractDependencyNavigatorTest() {
     override val resultFileName = "src/test/assets/sbt-multi-project-example-graph.yml"
-
     override val resultWithIssuesFileName = "src/test/assets/result-with-issues-graph.yml"
 
     init {

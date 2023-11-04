@@ -24,9 +24,8 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 class DependencyTreeNavigatorTest : AbstractDependencyNavigatorTest() {
-    override val resultFileName: String = RESULT_FILE
-
-    override val resultWithIssuesFileName: String = RESULT_WITH_ISSUES_FILE
+    override val resultFileName = "src/test/assets/sbt-multi-project-example-expected-output.yml"
+    override val resultWithIssuesFileName = "src/test/assets/result-with-issues-scopes.yml"
 
     init {
         "getShortestPaths" should {
@@ -136,13 +135,6 @@ class DependencyTreeNavigatorTest : AbstractDependencyNavigatorTest() {
         }
     }
 }
-
-/** Name of a file with a more complex ORT result that is used by multiple test cases. */
-private const val RESULT_FILE =
-    "../analyzer/src/funTest/assets/projects/external/sbt-multi-project-example-expected-output.yml"
-
-/** Name of the file with a result that contains some issues. */
-private const val RESULT_WITH_ISSUES_FILE = "src/test/assets/result-with-issues-scopes.yml"
 
 private class PackageRefBuilder(id: String) {
     private val id = Identifier(id)
