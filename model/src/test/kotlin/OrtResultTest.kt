@@ -46,11 +46,9 @@ import org.ossreviewtoolkit.utils.test.readOrtResult
 class OrtResultTest : WordSpec({
     "collectDependencies" should {
         "be able to get all direct dependencies of a package" {
-            val ortResult = readOrtResult(
-                "../analyzer/src/funTest/assets/projects/external/sbt-multi-project-example-expected-output.yml"
-            )
-
+            val ortResult = readOrtResult("src/test/assets/sbt-multi-project-example-expected-output.yml")
             val id = Identifier("Maven:com.typesafe.akka:akka-stream_2.12:2.5.6")
+
             val dependencies = ortResult.getDependencies(id, 1).map { it.toCoordinates() }
 
             dependencies should containExactlyInAnyOrder(
@@ -262,9 +260,7 @@ class OrtResultTest : WordSpec({
 
     "dependencyNavigator" should {
         "return a navigator for the dependency tree" {
-            val ortResult = readOrtResult(
-                "../analyzer/src/funTest/assets/projects/external/sbt-multi-project-example-expected-output.yml"
-            )
+            val ortResult = readOrtResult("src/test/assets/sbt-multi-project-example-expected-output.yml")
 
             ortResult.dependencyNavigator shouldBe DependencyTreeNavigator
         }

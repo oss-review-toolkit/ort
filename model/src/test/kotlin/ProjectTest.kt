@@ -34,7 +34,7 @@ import io.mockk.mockk
 import java.io.File
 
 private fun readAnalyzerResult(analyzerResultFilename: String): Project =
-    File("../analyzer/src/funTest/assets/projects/synthetic")
+    File("src/test/assets")
         .resolve(analyzerResultFilename)
         .readValue<ProjectAnalyzerResult>().project
 

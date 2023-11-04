@@ -25,6 +25,5 @@ package org.ossreviewtoolkit.model
  */
 class DependencyGraphNavigatorLegacyTest : AbstractDependencyNavigatorTest() {
     override val resultFileName = "src/test/assets/sbt-multi-project-example-graph-old.yml"
-
     override val resultWithIssuesFileName = "src/test/assets/result-with-issues-graph-old.yml"
 }
