@@ -26,19 +26,20 @@ dependencies {
     api(project(":analyzer"))
     api(project(":model"))
 
-    implementation(project(":downloader"))
-    implementation(project(":plugins:package-managers:gradle-model"))
-    implementation(project(":plugins:package-managers:maven-package-manager"))
-    implementation(project(":utils:common-utils"))
-    implementation(project(":utils:ort-utils"))
+    api(libs.mavenCore)
+    api(libs.mavenResolverApi)
 
-    implementation("org.gradle:gradle-tooling-api:${gradle.gradleVersion}")
-    implementation(libs.mavenCore)
-    implementation(libs.mavenResolverApi)
+    implementation(project(":downloader"))
+    implementation(project(":utils:common-utils"))
+
+    // The classes from the maven-resolver dependencies are not used directly but initialized by the Plexus IoC
+    // container automatically. They are required on the classpath for Maven dependency resolution to work.
+    runtimeOnly(libs.bundles.mavenResolver)
+
+    // TODO: Remove this once https://issues.apache.org/jira/browse/MNG-6561 is resolved.
+    runtimeOnly(libs.mavenCompat)
 
     funTestImplementation(testFixtures(project(":analyzer")))
-
-    testImplementation(project(":utils:spdx-utils"))
 
     testImplementation(libs.mockk)
 }
