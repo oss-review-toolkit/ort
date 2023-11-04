@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+ * Copyright (C) 2023 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,28 +18,24 @@
  */
 
 plugins {
-    // Apply core plugins.
-    `java-test-fixtures`
-
     // Apply precompiled plugins.
     id("ort-library-conventions")
 }
 
 dependencies {
+    api(project(":analyzer"))
     api(project(":model"))
+    api(project(":utils:common-utils")) {
+        because("This is a CommandLineTool.")
+    }
 
-    implementation(project(":downloader"))
+    api(libs.semver4j) {
+        because("This is a CommandLineTool.")
+    }
+
+    implementation(project(":plugins:package-managers:maven-package-manager"))
     implementation(project(":utils:ort-utils"))
 
-    implementation(libs.kotlinxCoroutines)
-
-    funTestImplementation(platform(project(":plugins:package-managers")))
-
-    // Only the Java plugin's built-in "test" source set automatically depends on the test fixtures.
-    funTestImplementation(testFixtures(project))
-
-    testFixturesImplementation(project(":utils:test-utils"))
-
-    testFixturesImplementation(libs.kotestAssertionsCore)
-    testFixturesImplementation(libs.kotestRunnerJunit5)
+    funTestImplementation(project(":downloader"))
+    funTestImplementation(testFixtures(project(":analyzer")))
 }
