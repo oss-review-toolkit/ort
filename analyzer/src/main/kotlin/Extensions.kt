@@ -19,7 +19,10 @@
 
 package org.ossreviewtoolkit.analyzer
 
+import org.apache.logging.log4j.kotlin.logger
+
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.utils.common.alsoIfNull
 
 /**
  * Return the list of enabled [PackageManager]s based on the [AnalyzerConfiguration.enabledPackageManagers] and
@@ -27,8 +30,22 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
  * [default][PackageManagerFactory.isEnabledByDefault] of the [PackageManager]s.
  */
 fun AnalyzerConfiguration.determineEnabledPackageManagers(): Set<PackageManagerFactory> {
-    val enabled = enabledPackageManagers?.mapNotNull { PackageManager.ALL[it] } ?: PackageManager.ENABLED_BY_DEFAULT
-    val disabled = disabledPackageManagers?.mapNotNull { PackageManager.ALL[it] }.orEmpty()
+    val enabled = enabledPackageManagers?.mapNotNull { name ->
+        PackageManager.ALL[name].alsoIfNull {
+            logger.error {
+                "Package manager '$name' is configured to be enabled but is not available in the classpath. It must " +
+                    "be one of: ${PackageManager.ALL.keys.joinToString()}."
+            }
+        }
+    } ?: PackageManager.ENABLED_BY_DEFAULT
+
+    val disabled = disabledPackageManagers?.mapNotNull { name ->
+        PackageManager.ALL[name].alsoIfNull {
+            logger.warn {
+                "Package manager '$name' is configured to be disabled but is not available in the classpath."
+            }
+        }
+    }.orEmpty()
 
     return enabled.toSet() - disabled.toSet()
 }
