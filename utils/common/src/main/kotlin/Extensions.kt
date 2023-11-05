@@ -34,6 +34,11 @@ import java.util.EnumSet
 import java.util.Locale
 
 /**
+ * Call [also] only if the receiver is null, e.g. for error handling, and return the receiver in any case.
+ */
+inline fun <T> T.alsoIfNull(block: (T) -> Unit): T = this ?: also(block)
+
+/**
  * Return a string of hexadecimal digits representing the bytes in the array.
  */
 fun ByteArray.encodeHex(): String = joinToString("") { String.format(Locale.ROOT, "%02x", it) }
