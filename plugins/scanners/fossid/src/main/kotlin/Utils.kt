@@ -29,6 +29,7 @@ import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.utils.common.alsoIfNull
 
 private val logger = loggerOf(MethodHandles.lookup().lookupClass())
 
@@ -41,18 +42,16 @@ private val FILE_REGEX = "(?<file>[^/]+)".toRegex()
  * during the mapping, an issue is added to [issues].
  */
 internal fun convertRules(excludes: Excludes, issues: MutableList<Issue>): List<IgnoreRule> {
-    return excludes.paths.mapNotNull {
-        it.mapToRule().also { mappedRule ->
-            if (mappedRule == null) {
-                issues += Issue(
-                    source = "FossID.convertRules",
-                    message = "Path exclude '${it.pattern}' cannot be converted to an ignore rule.",
-                    severity = Severity.HINT
-                )
+    return excludes.paths.mapNotNull { pathExclude ->
+        pathExclude.mapToRule().alsoIfNull {
+            issues += Issue(
+                source = "FossID.convertRules",
+                message = "Path exclude '${pathExclude.pattern}' cannot be converted to an ignore rule.",
+                severity = Severity.HINT
+            )
 
-                logger.warn {
-                    "Path exclude  '${it.pattern}' cannot be converted to an ignore rule."
-                }
+            logger.warn {
+                "Path exclude  '${pathExclude.pattern}' cannot be converted to an ignore rule."
             }
         }
     }

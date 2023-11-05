@@ -44,6 +44,7 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.mapLicense
 import org.ossreviewtoolkit.model.utils.PurlType
+import org.ossreviewtoolkit.utils.common.alsoIfNull
 import org.ossreviewtoolkit.utils.common.collapseToRanges
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.prettyPrintRanges
@@ -127,15 +128,13 @@ internal fun mapSnippetFindings(rawResults: RawResults, issues: MutableList<Issu
         val findings = mutableMapOf<TextLocation, MutableSet<OrtSnippet>>()
 
         rawSnippets.forEach { snippet ->
-            val license = snippet.artifactLicense?.let {
-                DeclaredLicenseProcessor.process(it).also { expression ->
-                    if (expression == null) {
-                        issues += FossId.createAndLogIssue(
-                            source = "FossId",
-                            message = "Failed to map license '$it' as an SPDX expression.",
-                            severity = Severity.HINT
-                        )
-                    }
+            val license = snippet.artifactLicense?.let { artifactLicense ->
+                DeclaredLicenseProcessor.process(artifactLicense).alsoIfNull {
+                    issues += FossId.createAndLogIssue(
+                        source = "FossId",
+                        message = "Failed to map license '$artifactLicense' as an SPDX expression.",
+                        severity = Severity.HINT
+                    )
                 }
             } ?: SpdxConstants.NOASSERTION.toSpdx()
 
