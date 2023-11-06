@@ -30,10 +30,10 @@ import java.io.File
 import java.io.IOException
 import java.lang.UnsupportedOperationException
 
-import org.ossreviewtoolkit.downloader.vcs.Git
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.Git
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 
 class VersionControlSystemTest : WordSpec({

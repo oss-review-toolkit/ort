@@ -45,6 +45,7 @@ dependencies {
     funTestApi(testFixtures(project(":scanner")))
 
     funTestImplementation(platform(project(":plugins:scanners")))
+    funTestImplementation(platform(project(":plugins:version-control-systems")))
 
     testImplementation(platform(project(":plugins:scanners")))
 

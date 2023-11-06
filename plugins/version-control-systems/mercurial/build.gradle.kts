@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+ * Copyright (C) 2023 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,11 +23,15 @@ plugins {
 }
 
 dependencies {
+    api(project(":downloader"))
     api(project(":model"))
+    api(project(":utils:common-utils")) {
+        because("This is a CommandLineTool.")
+    }
+
+    api(libs.semver4j) {
+        because("This is a CommandLineTool.")
+    }
 
     implementation(project(":utils:ort-utils"))
-
-    funTestImplementation(platform(project(":plugins:version-control-systems")))
-
-    testImplementation(libs.mockk)
 }

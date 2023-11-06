@@ -47,6 +47,7 @@ dependencies {
     "pluginClasspath"(platform(project(":plugins:package-managers")))
     "pluginClasspath"(platform(project(":plugins:reporters")))
     "pluginClasspath"(platform(project(":plugins:scanners")))
+    "pluginClasspath"(platform(project(":plugins:version-control-systems")))
 
     funTestImplementation(platform(project(":plugins:commands")))
     funTestImplementation(platform(project(":plugins:package-managers")))
