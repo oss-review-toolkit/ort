@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+ * Copyright (C) 2023 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,15 +19,5 @@
 
 plugins {
     // Apply precompiled plugins.
-    id("ort-library-conventions")
-}
-
-dependencies {
-    api(project(":model"))
-
-    implementation(project(":utils:ort-utils"))
-
-    funTestImplementation(platform(project(":plugins:version-control-systems")))
-
-    testImplementation(libs.mockk)
+    id("ort-plugins-conventions")
 }

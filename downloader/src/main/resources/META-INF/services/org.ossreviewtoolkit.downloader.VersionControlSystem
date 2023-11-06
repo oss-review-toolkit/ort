@@ -1,4 +1,0 @@
-org.ossreviewtoolkit.downloader.vcs.Git
-org.ossreviewtoolkit.downloader.vcs.GitRepo
-org.ossreviewtoolkit.downloader.vcs.Mercurial
-org.ossreviewtoolkit.downloader.vcs.Subversion

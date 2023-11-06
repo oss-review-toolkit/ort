@@ -24,6 +24,7 @@ plugins {
 
 dependencies {
     api(project(":model"))
+    api(project(":plugins:version-control-systems:git-version-control-system"))
 
     api(libs.kotestAssertionsCore)
     api(libs.kotestFrameworkApi)

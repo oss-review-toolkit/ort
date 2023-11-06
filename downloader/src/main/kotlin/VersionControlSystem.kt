@@ -156,7 +156,7 @@ abstract class VersionControlSystem(
         /**
          * Return glob patterns for files that should be checkout out in addition to explicit sparse checkout paths.
          */
-        internal fun getSparseCheckoutGlobPatterns(): List<String> {
+        fun getSparseCheckoutGlobPatterns(): List<String> {
             val globPatterns = mutableListOf("*$ORT_REPO_CONFIG_FILENAME")
             val licensePatterns = LicenseFilePatterns.getInstance()
             return licensePatterns.allLicenseFilenames.generateCapitalizationVariants().mapTo(globPatterns) { "**/$it" }
