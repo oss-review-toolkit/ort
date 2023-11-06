@@ -40,6 +40,7 @@ dependencies {
     implementation(libs.mordant)
     implementation(libs.slf4j)
 
+    "pluginClasspath"(platform(project(":plugins:advisors")))
     "pluginClasspath"(platform(project(":plugins:commands")))
     "pluginClasspath"(platform(project(":plugins:package-configuration-providers")))
     "pluginClasspath"(platform(project(":plugins:package-curation-providers")))
