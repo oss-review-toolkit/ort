@@ -39,7 +39,7 @@ class DOS internal constructor(
         override fun create(config: DOSConfig, matcherConfig: ScannerMatcherConfig) =
             DOS(type, config)
 
-        override fun parseConfig(options: Options, secrets: Options) = DOSConfig.create(options)
+        override fun parseConfig(options: Options, secrets: Options) = DOSConfig.create(options, secrets)
     }
 
     override val details: ScannerDetails

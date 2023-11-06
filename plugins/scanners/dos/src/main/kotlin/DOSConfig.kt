@@ -8,7 +8,6 @@ package org.ossreviewtoolkit.plugins.scanners.dos
 
 import org.apache.logging.log4j.kotlin.Logging
 
-import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.utils.common.Options
 
 /**
@@ -40,6 +39,9 @@ data class DOSConfig(
         /** Name of the configuration property for the server URL. **/
         internal const val SERVER_URL_PROPERTY = "serverUrl"
 
+        /** Secret server token needed for communicating to DOS API */
+        private const val SERVER_TOKEN = "serverToken"
+
         /** Name of the configuration property for the polling interval. **/
         private const val POLLING_INTERVAL_PROPERTY = "pollInterval"
 
@@ -58,12 +60,12 @@ data class DOSConfig(
         private const val DEFAULT_REST_TIMEOUT = 60
         private const val DEFAULT_FETCH_CONCLUDED = false
 
-        fun create(options: Options): DOSConfig {
+        fun create(options: Options, secrets: Options): DOSConfig {
             require(options.isNotEmpty()) { "No DOS Scanner configuration found." }
 
             val serverUrl = options[SERVER_URL_PROPERTY] ?: DEFAULT_SERVER_URL
 
-            val serverToken = System.getenv("SERVER_TOKEN") ?:
+            val serverToken = secrets[SERVER_TOKEN] ?:
                 throw IllegalStateException("Server token not set!")
 
             val pollInterval = options[POLLING_INTERVAL_PROPERTY]?.toInt() ?: DEFAULT_POLLING_INTERVAL
