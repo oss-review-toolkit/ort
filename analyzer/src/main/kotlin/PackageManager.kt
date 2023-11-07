@@ -21,11 +21,7 @@ package org.ossreviewtoolkit.analyzer
 
 import java.io.File
 import java.nio.file.FileSystems
-import java.nio.file.FileVisitResult
-import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.SimpleFileVisitor
-import java.nio.file.attribute.BasicFileAttributes
 
 import kotlin.io.path.invariantSeparatorsPathString
 import kotlin.time.measureTime
@@ -115,63 +111,53 @@ abstract class PackageManager(
 
             val result = mutableMapOf<PackageManagerFactory, MutableList<File>>()
             val rootPath = directory.toPath()
+            val distinctPackageManagers = packageManagers.distinct()
 
-            Files.walkFileTree(
-                rootPath,
-                object : SimpleFileVisitor<Path>() {
-                    override fun preVisitDirectory(dir: Path, attributes: BasicFileAttributes): FileVisitResult {
-                        if (IGNORED_DIRECTORY_MATCHERS.any { it.matches(dir) }) {
-                            logger.info {
-                                "Not analyzing directory '$dir' as it is hard-coded to be ignored."
-                            }
+            directory.walk().onEnter { dir ->
+                val dirAsPath = dir.toPath()
 
-                            return FileVisitResult.SKIP_SUBTREE
-                        }
+                when {
+                    IGNORED_DIRECTORY_MATCHERS.any { it.matches(dirAsPath) } -> {
+                        logger.info { "Not analyzing directory '$dir' as it is hard-coded to be ignored." }
+                        false
+                    }
 
-                        if (excludes.isPathExcluded(rootPath, dir)) {
-                            logger.info {
-                                "Not analyzing directory '$dir' as it is excluded."
-                            }
+                    excludes.isPathExcluded(rootPath, dirAsPath) -> {
+                        logger.info { "Not analyzing directory '$dir' as it is excluded." }
+                        false
+                    }
 
-                            return FileVisitResult.SKIP_SUBTREE
-                        }
+                    dir.isSymbolicLink() -> {
+                        logger.info { "Not following symbolic link to directory '$dir'." }
+                        false
+                    }
 
-                        val dirAsFile = dir.toFile()
+                    else -> true
+                }
+            }.filter { it.isDirectory }.forEach { dir ->
+                val filesInCurrentDir = dir.walk().maxDepth(1).filter {
+                    it.isFile && !excludes.isPathExcluded(rootPath, it.toPath())
+                }.toList()
 
-                        // Note that although FileVisitOption.FOLLOW_LINKS is not set, this would still follow junctions
-                        // on Windows, so do a better check here.
-                        if (dirAsFile.isSymbolicLink()) {
-                            logger.info { "Not following symbolic link to directory '$dir'." }
-                            return FileVisitResult.SKIP_SUBTREE
-                        }
+                distinctPackageManagers.forEach { manager ->
+                    // Create a list of lists of matching files per glob.
+                    val matchesPerGlob = manager.matchersForDefinitionFiles.mapNotNull { glob ->
+                        // Create a list of files in the current directory that match the current glob.
+                        val filesMatchingGlob = filesInCurrentDir.filter { glob.matches(it.toPath()) }
+                        filesMatchingGlob.takeIf { it.isNotEmpty() }
+                    }
 
-                        val filesInDir = dirAsFile.walk().maxDepth(1).filter {
-                            it.isFile && !excludes.isPathExcluded(rootPath, it.toPath())
-                        }.toList()
-
-                        packageManagers.distinct().forEach { manager ->
-                            // Create a list of lists of matching files per glob.
-                            val matchesPerGlob = manager.matchersForDefinitionFiles.mapNotNull { glob ->
-                                // Create a list of files in the current directory that match the current glob.
-                                val filesMatchingGlob = filesInDir.filter { glob.matches(it.toPath()) }
-                                filesMatchingGlob.takeIf { it.isNotEmpty() }
-                            }
-
-                            if (matchesPerGlob.isNotEmpty()) {
-                                // Only consider all matches for the first glob that has matches. This is because globs
-                                // are defined in order of priority, and multiple globs may just be alternative ways to
-                                // detect the exact same project.
-                                // That is, at the example of a PIP project, if a directory contains all three files
-                                // "requirements-py2.txt", "requirements-py3.txt" and "setup.py", only consider the
-                                // former two as they match the glob with the highest priority, but ignore "setup.py".
-                                result.getOrPut(manager) { mutableListOf() } += matchesPerGlob.first()
-                            }
-                        }
-
-                        return FileVisitResult.CONTINUE
+                    if (matchesPerGlob.isNotEmpty()) {
+                        // Only consider all matches for the first glob that has matches. This is because globs
+                        // are defined in order of priority, and multiple globs may just be alternative ways to
+                        // detect the exact same project.
+                        // That is, at the example of a PIP project, if a directory contains all three files
+                        // "requirements-py2.txt", "requirements-py3.txt" and "setup.py", only consider the
+                        // former two as they match the glob with the highest priority, but ignore "setup.py".
+                        result.getOrPut(manager) { mutableListOf() } += matchesPerGlob.first()
                     }
                 }
-            )
+            }
 
             return result
         }
