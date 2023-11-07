@@ -455,7 +455,7 @@ COPY --from=python --chown=$USER:$USER $PYENV_ROOT $PYENV_ROOT
 RUN syft $PYENV_ROOT -o spdx-json --file /usr/share/doc/ort/ort-python.spdx.json
 
 # NodeJS
-ARG NODEJS_VERSION=18.14.2
+ARG NODEJS_VERSION=20.9.0
 ENV NVM_DIR=/opt/nvm
 ENV PATH=$PATH:$NVM_DIR/versions/node/v$NODEJS_VERSION/bin
 COPY --from=nodejs --chown=$USER:$USER $NVM_DIR $NVM_DIR
