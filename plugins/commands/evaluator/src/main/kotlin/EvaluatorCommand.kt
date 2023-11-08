@@ -149,7 +149,7 @@ class EvaluatorCommand : OrtCommand(
     private val packageCurationsFile by option(
         "--package-curations-file",
         help = "A file containing package curations. This replaces all package curations contained in the given ORT " +
-            "result file with the ones present in the given file and, if enabled, those from the package " +
+            "result file with the ones present in the given file and, if enabled, those from the repository " +
             "configuration."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
@@ -160,7 +160,7 @@ class EvaluatorCommand : OrtCommand(
         "--package-curations-dir",
         help = "A directory containing package curation files. This replaces all package curations contained in the " +
             "given ORT result file with the ones present in the given directory and, if enabled, those from the " +
-            "package configuration file."
+            "repository configuration."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
