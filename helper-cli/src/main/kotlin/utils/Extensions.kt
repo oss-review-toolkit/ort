@@ -66,6 +66,7 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
+import org.ossreviewtoolkit.model.utils.filterByVcsPath
 import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.safeMkdirs
@@ -179,7 +180,13 @@ internal fun OrtResult.getLicenseFindingsById(
             packageConfigurationProvider.getPackageConfigurations(id, provenance).flatMap { it.licenseFindingCurations }
         }
 
-    getScanResultsForId(id).forEach { scanResult ->
+    getScanResultsForId(id).map {
+        // If a VCS path curation has been applied after the scanning stage, it is possible to apply that
+        // curation without re-scanning in case the new VCS path is a subdirectory of the scanned VCS path.
+        // So, filter by VCS path to enable the user to see the effect on the detected license with a shorter
+        // turn around time / without re-scanning.
+        it.filterByVcsPath(getPackage(id)?.metadata?.vcsProcessed?.path.orEmpty())
+    }.forEach { scanResult ->
         val findingsForProvenance = result.getOrPut(scanResult.provenance) { mutableMapOf() }
 
         scanResult.summary.licenseFindings.let { findings ->
