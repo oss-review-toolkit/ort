@@ -19,12 +19,14 @@
 
 package org.ossreviewtoolkit.model.utils
 
+import java.io.File
 import java.time.Instant
 
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.SnippetFinding
@@ -117,4 +119,11 @@ private fun Map<String, List<ScanResult>>.mergeSnippetFindings(): Set<SnippetFin
     }
 
     return findings
+}
+
+fun ScanResult.filterByVcsPath(path: String): ScanResult {
+    if (provenance !is RepositoryProvenance) return this
+
+    return takeUnless { provenance.vcsInfo.path != path && File(path).startsWith(File(provenance.vcsInfo.path)) }
+        ?: filterByPath(path)
 }

@@ -19,18 +19,16 @@
 
 package org.ossreviewtoolkit.model.licenses
 
-import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Provenance
-import org.ossreviewtoolkit.model.RepositoryProvenance
-import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
+import org.ossreviewtoolkit.model.utils.filterByVcsPath
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 
 /**
@@ -124,11 +122,4 @@ class DefaultLicenseInfoProvider(
                 ""
             )
         }
-}
-
-internal fun ScanResult.filterByVcsPath(path: String): ScanResult {
-    if (provenance !is RepositoryProvenance) return this
-
-    return takeUnless { provenance.vcsInfo.path != path && File(path).startsWith(File(provenance.vcsInfo.path)) }
-        ?: filterByPath(path)
 }
