@@ -32,7 +32,7 @@ internal data class CargoLockFile(
     @SerialName("package")
     val packages: List<Package>,
 
-    val metadata: Map<String, String>
+    val metadata: Map<String, String> = emptyMap()
 ) {
     /**
      * See https://docs.rs/cargo-lock/latest/cargo_lock/package/struct.Package.html.
