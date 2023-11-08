@@ -23,7 +23,7 @@ import java.io.File
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.downloader.vcs.Git
+import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.VcsInfo
@@ -68,9 +68,15 @@ class OrtConfigPackageConfigurationProvider : PackageConfigurationProvider {
 }
 
 private fun updateOrtConfig(dir: File) {
+    val vcsInfo = VcsInfo.EMPTY.copy(type = VcsType.GIT, url = ORT_CONFIG_REPOSITORY_URL)
+    val vcs = checkNotNull(VersionControlSystem.forType(vcsInfo.type)) {
+        "No applicable VersionControlSystem implementation found for ${vcsInfo.type}."
+    }
+
     dir.safeMkdirs()
-    Git().apply {
-        val workingTree = initWorkingTree(dir, VcsInfo.EMPTY.copy(type = VcsType.GIT, url = ORT_CONFIG_REPOSITORY_URL))
+
+    vcs.apply {
+        val workingTree = initWorkingTree(dir, vcsInfo)
         val revision = updateWorkingTree(workingTree, ORT_CONFIG_REPOSITORY_BRANCH).getOrThrow()
         logger.info {
             "Successfully cloned $revision from $ORT_CONFIG_REPOSITORY_URL."
