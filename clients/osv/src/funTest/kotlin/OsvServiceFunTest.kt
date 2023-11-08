@@ -93,6 +93,7 @@ class OsvServiceFunTest : StringSpec({
             it shouldBe listOf(
                 listOf(
                     "CVE-2021-45931",
+                    "CVE-2022-33068",
                     "CVE-2023-25193",
                     "OSV-2020-484"
                 ),
