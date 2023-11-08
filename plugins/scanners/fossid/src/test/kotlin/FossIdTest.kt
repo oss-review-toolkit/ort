@@ -82,7 +82,6 @@ import org.ossreviewtoolkit.clients.fossid.model.status.ScanStatus
 import org.ossreviewtoolkit.clients.fossid.model.status.UnversionedScanDescription
 import org.ossreviewtoolkit.clients.fossid.runScan
 import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.downloader.vcs.Git
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.Hash
@@ -1221,7 +1220,7 @@ private fun createServiceMock(): FossIdServiceWithVersion {
  * name.
  */
 private fun createVersionControlSystemMock(): VersionControlSystem {
-    val vcs = mockk<Git>()
+    val vcs = mockk<VersionControlSystem>()
 
     coEvery { vcs.getDefaultBranchName(any()) } returns "master"
 
