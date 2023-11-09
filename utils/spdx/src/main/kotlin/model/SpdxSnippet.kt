@@ -113,6 +113,10 @@ data class SpdxSnippet(
             }
         }
 
+        require(name.isNotBlank()) {
+            "The name must not be blank."
+        }
+
         require(snippetFromFile.isNotBlank()) {
             "The snippet from file must not be blank."
         }
