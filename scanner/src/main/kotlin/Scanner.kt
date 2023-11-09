@@ -346,10 +346,9 @@ class Scanner(
 
                 if (packagesWithIncompleteScanResult.size > 1) {
                     logger.info {
-                        val packageIds = packagesWithIncompleteScanResult.drop(1)
-                            .joinToString("\n") { "\t${it.id.toCoordinates()}" }
-                        "Scanning package '${referencePackage.id.toCoordinates()}' as reference for these packages " +
-                            "with the same provenance:\n$packageIds"
+                        "Consolidating the following packages with the same provenance to a single repository scan " +
+                            "associated with the first package ('${referencePackage.id.toCoordinates()}'): " +
+                            packagesWithIncompleteScanResult.joinToString("\n") { "\t${it.id.toCoordinates()}" }
                     }
                 }
 
