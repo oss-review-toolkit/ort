@@ -84,10 +84,52 @@ data class SpdxSnippet(
     val name: String = "",
 
     /**
+     * The ranges in the original host file that the snippet information applies to.
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val ranges: List<Range> = emptyList(),
+
+    /**
      * The SPDX reference referencing the document within the SpdxDocument containing the snippet.
      */
     val snippetFromFile: String
 ) {
+    data class Range(
+        /** The start of the snippet range. */
+        val startPointer: Pointer,
+
+        /** The end of the snippet range. */
+        val endPointer: Pointer
+    ) {
+        init {
+            require(
+                (startPointer.lineNumber != null && endPointer.lineNumber != null) ||
+                    (startPointer.offset != null && endPointer.offset != null)
+            ) {
+                "Start and end pointers need to be of the same type (line number or byte offset)."
+            }
+        }
+    }
+
+    data class Pointer(
+        /** SPDX ID of the file. */
+        val reference: String,
+
+        /** Line number in the (text) file. */
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        val lineNumber: Int? = null,
+
+        /** Byte offset in the (binary) file. */
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        val offset: Int? = null
+    ) {
+        init {
+            require((lineNumber != null) xor (offset != null)) {
+                "Either 'lineNumber' or 'offset' must be set for the '$reference' pointer."
+            }
+        }
+    }
+
     init {
         require(spdxId.startsWith(SpdxConstants.REF_PREFIX)) {
             "The SPDX ID '$spdxId' has to start with '${SpdxConstants.REF_PREFIX}'."
