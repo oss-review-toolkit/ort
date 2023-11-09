@@ -45,12 +45,15 @@ image_build() {
     shift
 
     docker buildx build \
-        -f "$GIT_ROOT/Dockerfile" \
         --target "$target" \
         --tag "${DOCKER_IMAGE_ROOT}/$name:$version" \
         --tag "${DOCKER_IMAGE_ROOT}/$name:latest" \
         "$@" .
 }
+
+# Minimimal ORT image
+# This is the base image for ORT and contains the minimal
+# set of tools required to run ORT including main binaries.
 
 # Base
 image_build base ort/base "${JAVA_VERSION}-jdk-${UBUNTU_VERSION}" \
@@ -101,7 +104,7 @@ image_build golang ort/golang "$GO_VERSION" \
     "$@"
 
 # Runtime ORT image
-image_build run ort "$ORT_VERSION" \
+image_build minimal ort-minimal "$ORT_VERSION" \
     --build-arg ORT_VERSION="$ORT_VERSION" \
     --build-arg NODEJS_VERSION="$NODEJS_VERSION" \
     --build-context "base=docker-image://${DOCKER_IMAGE_ROOT}/ort/base:latest" \
@@ -111,9 +114,6 @@ image_build run ort "$ORT_VERSION" \
     --build-context "golang=docker-image://${DOCKER_IMAGE_ROOT}/ort/golang:latest" \
     --build-context "ruby=docker-image://${DOCKER_IMAGE_ROOT}/ort/ruby:latest" \
     "$@"
-
-# Build adjacent language containers if ALL_LANGUAGES is set.
-[ -z "$ALL_LANGUAGES" ] && exit 0
 
 # Android
 # shellcheck disable=SC1091
@@ -153,13 +153,10 @@ image_build haskell ort/haskell "$HASKELL_STACK_VERSION" \
     --build-context "base=docker-image://${DOCKER_IMAGE_ROOT}/ort/base:latest" \
     "$@"
 
-# Runtime extended ORT image
-docker buildx build \
-    --file Dockerfile-extended \
-    --tag "${DOCKER_IMAGE_ROOT}/ort-extended:$ORT_VERSION" \
-    --tag "${DOCKER_IMAGE_ROOT}/ort-extended:latest" \
+# Main runtime ORT image
+image_build run ort "$ORT_VERSION" \
     --build-arg ORT_VERSION="$ORT_VERSION" \
-    --build-context "ort=docker-image://${DOCKER_IMAGE_ROOT}/ort:${ORT_VERSION}" \
+    --build-context "minimal=docker-image://${DOCKER_IMAGE_ROOT}/ort-minimal:${ORT_VERSION}" \
     --build-context "sbt=docker-image://${DOCKER_IMAGE_ROOT}/ort/sbt:latest" \
     --build-context "dotnet=docker-image://${DOCKER_IMAGE_ROOT}/ort/dotnet:latest" \
     --build-context "swift=docker-image://${DOCKER_IMAGE_ROOT}/ort/swift:latest" \
@@ -167,5 +164,4 @@ docker buildx build \
     --build-context "dart=docker-image://${DOCKER_IMAGE_ROOT}/ort/dart:latest" \
     --build-context "haskell=docker-image://${DOCKER_IMAGE_ROOT}/ort/haskell:latest" \
     --build-context "scala=docker-image://${DOCKER_IMAGE_ROOT}/ort/scala:latest" \
-    "$@" .
-
+    "$@"
