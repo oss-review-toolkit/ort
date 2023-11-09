@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.downloader.Downloader
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
+import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCuration
@@ -180,7 +181,7 @@ internal fun OrtResult.getLicenseFindingsById(
             packageConfigurationProvider.getPackageConfigurations(id, provenance).flatMap { it.licenseFindingCurations }
         }
 
-    getScanResultsForId(id).map {
+    getScanResultsForId(id).filter { it.provenance is KnownProvenance }.map {
         // If a VCS path curation has been applied after the scanning stage, it is possible to apply that
         // curation without re-scanning in case the new VCS path is a subdirectory of the scanned VCS path.
         // So, filter by VCS path to enable the user to see the effect on the detected license with a shorter
