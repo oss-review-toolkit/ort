@@ -25,7 +25,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 
 /**
  * An annotation which can relate to [SpdxDocument]s, [SpdxFile]s, or [SpdxPackage]s.
- * See https://spdx.github.io/spdx-spec/v2.2.2/annotations/.
+ * See https://spdx.github.io/spdx-spec/v2.3/annotations/.
  */
 data class SpdxAnnotation(
     /**

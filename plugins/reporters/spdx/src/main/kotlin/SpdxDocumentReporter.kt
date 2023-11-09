@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.plugins.reporters.spdx
 
+import com.fasterxml.jackson.databind.node.ObjectNode
+
 import java.io.File
 
 import org.apache.logging.log4j.kotlin.logger
@@ -134,9 +136,8 @@ class SpdxDocumentReporter(
         return outputFileFormats.map { fileFormat ->
             runCatching {
                 outputDir.resolve("$REPORT_BASE_FILENAME.${fileFormat.fileExtension}").apply {
-                    bufferedWriter().use { writer ->
-                        fileFormat.mapper.writeValue(writer, spdxDocument)
-                    }
+                    val spdxNode = fileFormat.mapper.valueToTree<ObjectNode>(spdxDocument)
+                    fileFormat.mapper.writeValue(this, spdxNode.patchSpdx23To22())
                 }
             }
         }
@@ -166,4 +167,24 @@ private fun SpdxExpression.getLicenseRefExceptions(result: MutableSet<String>) {
 
         else -> {}
     }
+}
+
+private fun ObjectNode.patchSpdx23To22(): ObjectNode {
+    put("spdxVersion", "SPDX-2.2")
+    val packages = get("packages") ?: return this
+
+    packages.forEach { pkg ->
+        val extRefs = pkg.get("externalRefs") ?: return@forEach
+
+        extRefs.forEach { ref ->
+            val refCat = ref.get("referenceCategory") ?: return@forEach
+
+            val refCatText = refCat.textValue()
+            if (refCatText != null && "-" in refCatText) {
+                (ref as ObjectNode).put("referenceCategory", refCatText.replace("-", "_"))
+            }
+        }
+    }
+
+    return this
 }

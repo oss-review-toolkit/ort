@@ -63,14 +63,17 @@ import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxPackageVerificationCode
 /**
  * Convert an ORT [Hash] to an [SpdxChecksum], or return null if a conversion is not possible.
  */
-private fun Hash.toSpdxChecksum(): SpdxChecksum? =
-    // The SPDX checksum algorithm names are simple and assumed to be part of ORT's HashAlgorithm aliases.
-    SpdxChecksum.Algorithm.entries.find { it.name in algorithm.aliases }?.let {
-        SpdxChecksum(
-            algorithm = it,
-            checksumValue = value
-        )
-    }
+private fun Hash.toSpdxChecksum(wantSpdx23: Boolean = false): SpdxChecksum? =
+    SpdxChecksum.Algorithm.entries
+        .filter { !it.isSpdx23 || wantSpdx23 }
+        // The SPDX checksum algorithm names are simple and assumed to be part of ORT's HashAlgorithm aliases.
+        .find { it.name in algorithm.aliases }
+        ?.let {
+            SpdxChecksum(
+                algorithm = it,
+                checksumValue = value
+            )
+        }
 
 /**
  * Convert an [Identifier]'s coordinates to an SPDX reference ID with the specified [infix] and [suffix].

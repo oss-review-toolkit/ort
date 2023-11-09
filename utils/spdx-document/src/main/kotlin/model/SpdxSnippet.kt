@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.utils.spdx.isSpdxExpressionOrNotPresent
 
 /**
  * Information about a snippet that has different licenses and / or copyright than the containing file.
- * See https://spdx.github.io/spdx-spec/v2.2.2/snippet-information/.
+ * See https://spdx.github.io/spdx-spec/v2.3/snippet-information/.
  */
 @JsonIgnoreProperties("ranges") // TODO: Implement ranges which is broken in the specification examples.
 data class SpdxSnippet(

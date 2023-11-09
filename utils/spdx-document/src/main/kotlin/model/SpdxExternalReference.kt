@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.utils.spdxdocument.model
 
 import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonValue
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
@@ -30,7 +31,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 
 /**
  *  A reference to an external source of additional information for an [SpdxPackage].
- *  See https://spdx.github.io/spdx-spec/v2.2.2/package-information/#721-external-reference-field.
+ *  See https://spdx.github.io/spdx-spec/v2.3/package-information/#721-external-reference-field.
  */
 data class SpdxExternalReference(
     /**
@@ -46,7 +47,7 @@ data class SpdxExternalReference(
 
     /**
      * The references type as specified by
-     * https://github.com/spdx/spdx-spec/blob/v2.2.2/chapters/appendix-VI-external-repository-identifiers.md.
+     * https://github.com/spdx/spdx-spec/blob/v2.3/chapters/external-repository-identifiers.md.
      */
     @JsonDeserialize(using = ReferenceTypeDeserializer::class)
     val referenceType: Type,
@@ -58,17 +59,19 @@ data class SpdxExternalReference(
     val referenceLocator: String
 ) {
     /**
-     * See https://spdx.github.io/spdx-spec/v2.2.2/package-information/#721-external-reference-field for valid category
+     * See https://spdx.github.io/spdx-spec/v2.3/package-information/#721-external-reference-field for valid category
      * values. Note that early versions of the version 2.2 JSON schema erroneously used underscores instead of dashes.
      * Follow the proposed practice to support both for compatibility.
      */
     enum class Category {
         SECURITY,
 
-        @JsonAlias("PACKAGE-MANAGER")
+        @JsonAlias("PACKAGE_MANAGER")
+        @JsonProperty("PACKAGE-MANAGER")
         PACKAGE_MANAGER,
 
-        @JsonAlias("PERSISTENT-ID")
+        @JsonAlias("PERSISTENT_ID")
+        @JsonProperty("PERSISTENT-ID")
         PERSISTENT_ID,
 
         OTHER

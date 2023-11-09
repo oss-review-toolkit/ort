@@ -58,7 +58,8 @@ class SpdxDocumentTest : WordSpec({
                 SpdxModelMapper.toYaml(it)
             }
 
-            reSerializedYaml lenientShouldEqualYaml yaml
+            // Account for the fact that ORT serializes SPDX 2.3 now.
+            reSerializedYaml.replace("PACKAGE-MANAGER", "PACKAGE_MANAGER") lenientShouldEqualYaml yaml
         }
     }
 
@@ -78,7 +79,8 @@ class SpdxDocumentTest : WordSpec({
                 SpdxModelMapper.toJson(it)
             }
 
-            reSerializedJson lenientShouldEqualJson json
+            // Account for the fact that ORT serializes SPDX 2.3 now.
+            reSerializedJson.replace("PACKAGE-MANAGER", "PACKAGE_MANAGER") lenientShouldEqualJson json
         }
     }
 

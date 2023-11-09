@@ -25,7 +25,7 @@ import java.time.Instant
 
 /**
  * Creation information for an [SpdxDocument].
- * See https://spdx.github.io/spdx-spec/v2.2.2/document-creation-information/.
+ * See https://spdx.github.io/spdx-spec/v2.3/document-creation-information/.
  */
 data class SpdxCreationInfo(
     /**
