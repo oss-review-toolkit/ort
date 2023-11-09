@@ -30,7 +30,7 @@ valid_components=("android" "swift" "sbt" "dart" "dotnet" "php" "haskell")
 dockerfile_template="FROM ${DOCKER_IMAGE_ROOT}/ort-minimal\n"
 
 # Default output file
-output_file="Dockerfile.custom"
+output_file="Dockerfile-custom"
 
 function usage() {
     echo "Usage: $0 -c <component1> [<component2> ...] -o <output_file>"
