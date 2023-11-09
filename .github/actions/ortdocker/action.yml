@@ -85,8 +85,26 @@ runs:
           type=raw,value=${{ inputs.version }}
           type=raw,value=${{ steps.check_image.outputs.result }}
 
+    - name: Build base image
+      if: >
+        steps.check_image.outputs.result != 'found' &&
+        inputs.name == 'base'
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        target: ${{ inputs.name }}
+        push: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
+        load: false
+        build-args: ${{ inputs.build-args }}
+        tags: |
+          ${{ steps.meta.outputs.tags }}
+          ${{ env.REGISTRY }}/${{ github.repository }}/${{ inputs.name }}:latest
+        labels: ${{ steps.meta.outputs.labels }}
+
     - name: Build image
-      if: steps.check_image.outputs.result != 'found'
+      if: >
+        steps.check_image.outputs.result != 'found' &&
+        inputs.name != 'base'
       uses: docker/build-push-action@v5
       with:
         context: .
