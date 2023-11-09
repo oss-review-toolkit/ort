@@ -27,7 +27,7 @@ DOCKER_IMAGE_ROOT="${DOCKER_IMAGE_ROOT:-ghcr.io/oss-review-toolkit}"
 valid_components=("android" "swift" "sbt" "dart" "dotnet" "php" "haskell")
 
 # Define the Dockerfile template
-dockerfile_template="FROM ghcr.io/oss-review-toolkit/ort\n"
+dockerfile_template="FROM ${DOCKER_IMAGE_ROOT}/ort-minimal\n"
 
 # Default output file
 output_file="Dockerfile.custom"
