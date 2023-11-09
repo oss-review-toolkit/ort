@@ -66,7 +66,8 @@ class Subversion : VersionControlSystem() {
 
     override fun getDefaultBranchName(url: String) = "trunk"
 
-    override fun getWorkingTree(vcsDirectory: File) = SubversionWorkingTree(vcsDirectory, type, clientManager)
+    override fun getWorkingTree(vcsDirectory: File): WorkingTree =
+        SubversionWorkingTree(vcsDirectory, type, clientManager)
 
     override fun isApplicableUrlInternal(vcsUrl: String) =
         try {

@@ -25,7 +25,7 @@ import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 
-class MercurialWorkingTree(workingDir: File, vcsType: VcsType) : WorkingTree(workingDir, vcsType) {
+internal class MercurialWorkingTree(workingDir: File, vcsType: VcsType) : WorkingTree(workingDir, vcsType) {
     override fun isValid(): Boolean {
         if (!workingDir.isDirectory) return false
 

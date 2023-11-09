@@ -55,7 +55,7 @@ class Mercurial : VersionControlSystem(MercurialCommand) {
 
     override fun getDefaultBranchName(url: String) = "default"
 
-    override fun getWorkingTree(vcsDirectory: File) = MercurialWorkingTree(vcsDirectory, type)
+    override fun getWorkingTree(vcsDirectory: File): WorkingTree = MercurialWorkingTree(vcsDirectory, type)
 
     override fun isApplicableUrlInternal(vcsUrl: String) = ProcessCapture("hg", "identify", vcsUrl).isSuccess
 

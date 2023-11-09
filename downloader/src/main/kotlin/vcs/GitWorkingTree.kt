@@ -50,7 +50,7 @@ private fun findGitOrSubmoduleDir(workingDirOrFile: File): Repository {
     }.getOrThrow()
 }
 
-open class GitWorkingTree(
+internal open class GitWorkingTree(
     workingDir: File,
     vcsType: VcsType,
     private val repositoryUrlPrefixReplacements: Map<String, String> = emptyMap()
