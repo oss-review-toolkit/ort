@@ -108,6 +108,7 @@ jacksonDatatypeJsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datat
 jacksonModuleKotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
 jakartaMail = { module = "com.sun.mail:jakarta.mail", version.ref = "jakartaMail" }
 jgit = { module = "org.eclipse.jgit:org.eclipse.jgit", version.ref = "jgit" }
+jgitSshApache = { module = "org.eclipse.jgit:org.eclipse.jgit.ssh.apache", version.ref = "jgit" }
 jgitSshApacheAgent = { module = "org.eclipse.jgit:org.eclipse.jgit.ssh.apache.agent", version.ref = "jgit" }
 jiraRestClientApi = { module = "com.atlassian.jira:jira-rest-java-client-api", version.ref = "jiraRestClient" }
 jiraRestClientApp = { module = "com.atlassian.jira:jira-rest-java-client-app", version.ref = "jiraRestClient" }
