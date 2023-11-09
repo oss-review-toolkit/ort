@@ -35,6 +35,9 @@ dependencies {
 
     implementation(project(":utils:ort-utils"))
 
+    implementation(libs.jacksonCore)
+    implementation(libs.jacksonDatabind)
+    implementation(libs.jacksonDataformatXml)
     implementation(libs.jgit)
     implementation(libs.jgitSshApache)
 
