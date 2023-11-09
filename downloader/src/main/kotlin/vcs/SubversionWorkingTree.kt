@@ -32,7 +32,7 @@ import org.tmatesoft.svn.core.SVNURL
 import org.tmatesoft.svn.core.wc.SVNClientManager
 import org.tmatesoft.svn.core.wc.SVNRevision
 
-class SubversionWorkingTree(
+internal class SubversionWorkingTree(
     workingDir: File,
     vcsType: VcsType,
     private val clientManager: SVNClientManager
