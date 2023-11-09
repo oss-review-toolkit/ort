@@ -25,6 +25,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToStream
 
 import org.ossreviewtoolkit.model.DependencyNode
+import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
@@ -38,7 +39,7 @@ class TrustSourceReporter : Reporter {
 
     private val reportFilename = "trustsource-report.json"
 
-    override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
+    override fun generateReport(input: ReporterInput, outputDir: File, config: PluginConfiguration): List<File> {
         val outputFile = outputDir.resolve(reportFilename)
 
         val nav = input.ortResult.dependencyNavigator

@@ -25,6 +25,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
 
+import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.isTrue
@@ -54,8 +55,8 @@ class GitLabLicenseModelReporter : Reporter {
 
     private val reportFilename = "gl-license-scanning-report.json"
 
-    override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
-        val skipExcluded = options[OPTION_SKIP_EXCLUDED].isTrue()
+    override fun generateReport(input: ReporterInput, outputDir: File, config: PluginConfiguration): List<File> {
+        val skipExcluded = config.options[OPTION_SKIP_EXCLUDED].isTrue()
 
         val licenseModel = GitLabLicenseModelMapper.map(input.ortResult, skipExcluded)
         val licenseModelJson = JSON.encodeToString(licenseModel)

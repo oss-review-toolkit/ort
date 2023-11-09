@@ -26,6 +26,7 @@ import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
@@ -71,5 +72,6 @@ private fun TestConfiguration.generateReport(ortResult: OrtResult, options: Map<
 
     val outputDir = tempdir()
 
-    return EvaluatedModelReporter().generateReport(input, outputDir, options).single().readText().normalizeLineBreaks()
+    return EvaluatedModelReporter().generateReport(input, outputDir, PluginConfiguration(options))
+        .single().readText().normalizeLineBreaks()
 }

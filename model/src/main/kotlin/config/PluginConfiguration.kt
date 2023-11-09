@@ -41,6 +41,14 @@ data class PluginConfiguration(
     @JsonIgnore
     val secrets: Options = emptyMap()
 ) {
+    companion object {
+        /**
+         * Constant for an empty [PluginConfiguration] that contains no options and no secrets. This constant can be
+         * used as a default if no configuration was provided.
+         */
+        val EMPTY = PluginConfiguration()
+    }
+
     /**
      * Return a string representation of the object that does not contain the [secrets].
      */

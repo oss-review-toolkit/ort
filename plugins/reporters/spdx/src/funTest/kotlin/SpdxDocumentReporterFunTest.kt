@@ -50,6 +50,7 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
@@ -136,7 +137,9 @@ private fun TestConfiguration.generateReport(
         SpdxDocumentReporter.OPTION_OUTPUT_FILE_FORMATS to format.toString()
     ) + extraReporterOptions
 
-    return SpdxDocumentReporter().generateReport(input, outputDir, reportOptions).single().readText()
+    return SpdxDocumentReporter().generateReport(input, outputDir, PluginConfiguration(reportOptions))
+        .single()
+        .readText()
         .normalizeLineBreaks()
 }
 

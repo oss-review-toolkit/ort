@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.clients.fossid.generateReport
 import org.ossreviewtoolkit.clients.fossid.model.report.ReportType
 import org.ossreviewtoolkit.clients.fossid.model.report.SelectionType
 import org.ossreviewtoolkit.model.ScanResult
+import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.collectMessages
@@ -68,23 +69,23 @@ class FossIdReporter : Reporter {
 
     override val type = "FossId"
 
-    override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
-        val serverUrl = requireNotNull(options[SERVER_URL_PROPERTY]) {
+    override fun generateReport(input: ReporterInput, outputDir: File, config: PluginConfiguration): List<File> {
+        val serverUrl = requireNotNull(config.options[SERVER_URL_PROPERTY]) {
             "No FossID server URL configuration found."
         }
-        val apiKey = requireNotNull(options[API_KEY_PROPERTY]) {
+        val apiKey = requireNotNull(config.options[API_KEY_PROPERTY]) {
             "No FossID API Key configuration found."
         }
-        val user = requireNotNull(options[USER_PROPERTY]) {
+        val user = requireNotNull(config.options[USER_PROPERTY]) {
             "No FossID User configuration found."
         }
-        val reportType = options[REPORT_TYPE_PROPERTY]?.let {
+        val reportType = config.options[REPORT_TYPE_PROPERTY]?.let {
             runCatching {
                 ReportType.valueOf(it)
             }.getOrNull()
         } ?: ReportType.HTML_DYNAMIC
 
-        val selectionType = options[SELECTION_TYPE_PROPERTY]?.let {
+        val selectionType = config.options[SELECTION_TYPE_PROPERTY]?.let {
             runCatching {
                 SelectionType.valueOf(it)
             }.getOrNull()

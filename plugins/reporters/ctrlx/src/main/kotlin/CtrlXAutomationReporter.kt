@@ -24,6 +24,7 @@ import java.io.File
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToStream
 
+import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
@@ -44,7 +45,7 @@ class CtrlXAutomationReporter : Reporter {
 
     override val type = "CtrlXAutomation"
 
-    override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
+    override fun generateReport(input: ReporterInput, outputDir: File, config: PluginConfiguration): List<File> {
         val reportFile = outputDir.resolve(REPORT_FILENAME)
 
         val packages = input.ortResult.getPackages(omitExcluded = true)

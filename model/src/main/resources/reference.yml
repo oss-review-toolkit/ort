@@ -333,11 +333,13 @@ ort:
           sslrootcert: /defaultdir/root.crt
 
   reporter:
-    options:
+    config:
       FossId:
-        serverUrl: 'https://fossid.example.com/instance/'
-        user: user
-        apiKey: XYZ
+        options:
+          serverUrl: 'https://fossid.example.com/instance/'
+        secrets:
+          user: user
+          apiKey: XYZ
 
   notifier:
     mail:

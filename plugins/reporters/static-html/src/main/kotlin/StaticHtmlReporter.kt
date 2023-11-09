@@ -43,6 +43,7 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseLocation
@@ -82,7 +83,7 @@ class StaticHtmlReporter : Reporter {
     private val css = javaClass.getResource("/static-html-reporter.css").readText()
     private val licensesSha1 = mutableMapOf<String, String>()
 
-    override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
+    override fun generateReport(input: ReporterInput, outputDir: File, config: PluginConfiguration): List<File> {
         val reportTableModel = ReportTableModelMapper.map(
             input.ortResult,
             input.licenseInfoResolver,

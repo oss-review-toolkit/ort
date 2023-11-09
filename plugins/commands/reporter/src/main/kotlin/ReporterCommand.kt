@@ -42,6 +42,7 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
+import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.model.config.orEmpty
@@ -262,16 +263,18 @@ class ReporterCommand : OrtCommand(
             howToFixTextProvider
         )
 
-        val reportOptionsMap = sortedMapOf<String, MutableMap<String, String>>(String.CASE_INSENSITIVE_ORDER)
+        val reportConfigMap = sortedMapOf<String, PluginConfiguration>(String.CASE_INSENSITIVE_ORDER)
 
-        ortConfig.reporter.options?.forEach { (reporterName, option) ->
-            val reportSpecificOptionsMap = reportOptionsMap.getOrPut(reporterName) { mutableMapOf() }
-            reportSpecificOptionsMap += option
+        // Obtain reporter-specific options defined in ORT's configuration.
+        ortConfig.reporter.config?.forEach { (reporterName, config) ->
+            reportConfigMap[reporterName] = config
         }
 
+        // Allow overwriting reporter-specific options via the command line.
         reportOptions.forEach { (reporterName, option) ->
-            val reportSpecificOptionsMap = reportOptionsMap.getOrPut(reporterName) { mutableMapOf() }
-            reportSpecificOptionsMap[option.first] = option.second
+            val reportSpecificConfig = reportConfigMap.getOrPut(reporterName) { PluginConfiguration.EMPTY }
+            val updatedConfig = reportSpecificConfig.copy(options = reportSpecificConfig.options + option)
+            reportConfigMap[reporterName] = updatedConfig
         }
 
         val reportDurationMap = measureTimedValue {
@@ -282,7 +285,7 @@ class ReporterCommand : OrtCommand(
                         echo("Generating the '${reporter.type}' report in thread '$threadName'...")
 
                         reporter to measureTimedValue {
-                            val options = reportOptionsMap[reporter.type].orEmpty()
+                            val options = reportConfigMap[reporter.type] ?: PluginConfiguration.EMPTY
                             runCatching { reporter.generateReport(input, outputDir, options) }
                         }
                     }

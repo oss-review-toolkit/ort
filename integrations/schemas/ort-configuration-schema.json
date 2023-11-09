@@ -165,12 +165,12 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
-                "options": {
+                "config": {
                     "$ref": "#/definitions/ReporterOptions"
                 }
             },
             "required": [
-                "options"
+                "config"
             ]
         },
         "ReporterOptions": {

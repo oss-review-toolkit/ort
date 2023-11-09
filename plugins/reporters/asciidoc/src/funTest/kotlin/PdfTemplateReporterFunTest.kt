@@ -27,6 +27,7 @@ import io.kotest.matchers.longs.beInRange
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ORT_RESULT_WITH_VULNERABILITIES
 import org.ossreviewtoolkit.reporter.ReporterInput
@@ -48,7 +49,7 @@ class PdfTemplateReporterFunTest : StringSpec({
             PdfTemplateReporter().generateReport(
                 ReporterInput(ORT_RESULT),
                 tempdir(),
-                mapOf("pdf.theme.file" to "dummy.file")
+                PluginConfiguration(mapOf("pdf.theme.file" to "dummy.file"))
             )
         }
     }
@@ -58,7 +59,7 @@ class PdfTemplateReporterFunTest : StringSpec({
             PdfTemplateReporter().generateReport(
                 ReporterInput(ORT_RESULT),
                 tempdir(),
-                mapOf("pdf.fonts.dir" to "fake.path")
+                PluginConfiguration(mapOf("pdf.fonts.dir" to "fake.path"))
             )
         }
     }
