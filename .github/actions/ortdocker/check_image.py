@@ -15,6 +15,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
+import hashlib
 import os
 
 import requests
@@ -26,7 +27,11 @@ import requests
 token = os.getenv("INPUT_TOKEN")
 org = os.getenv("GITHUB_REPOSITORY_OWNER")
 name = os.getenv("INPUT_NAME")
-version = os.getenv("INPUT_VERSION")
+base_version = os.getenv("INPUT_VERSION")
+unique_id = hashlib.sha256(os.getenv("BUILD_ARGS").encode()).hexdigest()
+
+# We base the version on the base_version and the unique_id
+version = f"{base_version}-sha.{unique_id[:8]}"
 
 url = f"https://api.github.com/orgs/{org}/packages/container/ort%2F{name}/versions"
 
@@ -47,4 +52,4 @@ else:
     if version in versions:
         print("found")
     else:
-        print("none")
+        print(version)

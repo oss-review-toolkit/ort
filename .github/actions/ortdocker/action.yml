@@ -54,6 +54,7 @@ runs:
         INPUT_TOKEN: ${{ inputs.token }}
         INPUT_NAME: ${{ inputs.name }}
         INPUT_VERSION: ${{ inputs.version }}
+        BUILD_ARGS: ${{ inputs.build-args }}
       run: |
         pip install -q -U pip requests
 
@@ -80,8 +81,9 @@ runs:
       with:
         images: |
           ${{ env.REGISTRY }}/${{ github.repository }}/${{ inputs.name }}
-        tags:
+        tags: |
           type=raw,value=${{ inputs.version }}
+          type=raw,value=${{ steps.check_image.outputs.result }}
 
     - name: Build image
       if: steps.check_image.outputs.result != 'found'
