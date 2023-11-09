@@ -190,6 +190,11 @@ internal class ListLicensesCommand : CliktCommand(
                 }
             }
 
+        if (findingsByProvenance.isEmpty()) {
+            println("No scan results available.")
+            return
+        }
+
         buildString {
             appendLine("  scan results:")
             findingsByProvenance.keys.forEachIndexed { i, provenance ->
