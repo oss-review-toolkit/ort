@@ -43,6 +43,7 @@ dependencies {
     implementation(libs.bundles.kotlinxSerialization)
 
     testImplementation(libs.mockk)
+    implementation(kotlin("script-runtime"))
 }
 
 tasks.withType<KotlinCompile>().configureEach {

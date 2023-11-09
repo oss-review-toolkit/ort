@@ -12,7 +12,8 @@ import java.time.Instant
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 
-import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
+
 import org.jetbrains.annotations.VisibleForTesting
 import org.ossreviewtoolkit.clients.dos.*
 import org.ossreviewtoolkit.model.*
@@ -32,7 +33,6 @@ class DOS internal constructor(
     override val name: String,
     private val config: DOSConfig
 ) : PackageScannerWrapper {
-    private companion object : Logging
     private val downloaderConfig = DownloaderConfiguration()
 
     class Factory : ScannerWrapperFactory<DOSConfig>("DOS") {
@@ -42,10 +42,9 @@ class DOS internal constructor(
         override fun parseConfig(options: Options, secrets: Options) = DOSConfig.create(options, secrets)
     }
 
-    override val details: ScannerDetails
-        get() = ScannerDetails(name, version, configuration)
     override val matcher: ScannerMatcher? = null
     override val configuration = ""
+    // Later on, use DOS API to return API's version and use it here
     override val version = "1.0"
 
     private val service = DOSService.create(config.serverUrl, config.serverToken, config.restTimeout)
@@ -61,13 +60,12 @@ class DOS internal constructor(
         var scanResults: DOSService.ScanResultsResponseBody?
 
         // Decide which provenance type this package is
-        val provenance: Provenance
-        if (pkg.vcsProcessed != VcsInfo.EMPTY && pkg.vcsProcessed.revision != "") {
-            provenance = RepositoryProvenance(pkg.vcsProcessed, pkg.vcsProcessed.revision)
+        val provenance = if (pkg.vcsProcessed != VcsInfo.EMPTY && pkg.vcsProcessed.revision != "") {
+            RepositoryProvenance(pkg.vcsProcessed, pkg.vcsProcessed.revision)
         } else if (pkg.sourceArtifact != RemoteArtifact.EMPTY) {
-            provenance = ArtifactProvenance(pkg.sourceArtifact)
+            ArtifactProvenance(pkg.sourceArtifact)
         } else {
-            provenance = UnknownProvenance
+            UnknownProvenance
         }
 
         logger.info { "Package to scan: ${pkg.purl}" }

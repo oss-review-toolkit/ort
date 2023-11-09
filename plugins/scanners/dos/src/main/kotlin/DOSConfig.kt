@@ -30,10 +30,7 @@ data class DOSConfig(
     val fetchConcluded: Boolean,
 
     /** The URL where the DOS / package curation front-end is running. **/
-    val frontendUrl: String,
-
-    /** Stores the map with DOS-specific configuration options. */
-    private val options: Map<String, String>
+    val frontendUrl: String
 ) {
     companion object: Logging {
         /** Name of the configuration property for the server URL. **/
@@ -65,8 +62,9 @@ data class DOSConfig(
 
             val serverUrl = options[SERVER_URL_PROPERTY] ?: DEFAULT_SERVER_URL
 
-            val serverToken = secrets[SERVER_TOKEN] ?:
-                throw IllegalStateException("Server token not set!")
+            val serverToken = requireNotNull(secrets[SERVER_TOKEN]) {
+                "Server token not set!"
+            }
 
             val pollInterval = options[POLLING_INTERVAL_PROPERTY]?.toInt() ?: DEFAULT_POLLING_INTERVAL
 
@@ -90,8 +88,7 @@ data class DOSConfig(
                 pollInterval = pollInterval,
                 restTimeout = restTimeout,
                 fetchConcluded = fetchConcluded,
-                frontendUrl = frontendUrl,
-                options = options
+                frontendUrl = frontendUrl
             )
         }
     }
