@@ -51,10 +51,12 @@ import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.test.scannerRunOf
 
 private const val SERVER_URL_SAMPLE = "https://fossid.example.com/instance/"
@@ -87,7 +89,6 @@ class FossIdReporterTest : WordSpec({
                 val input = createReporterInput()
                 reporter.generateReport(
                     input,
-                    DIRECTORY_SAMPLE,
                     DEFAULT_OPTIONS.filterNot { it.key == FossIdReporter.SERVER_URL_PROPERTY }
                 )
             }
@@ -100,7 +101,6 @@ class FossIdReporterTest : WordSpec({
                 val input = createReporterInput()
                 reporter.generateReport(
                     input,
-                    DIRECTORY_SAMPLE,
                     DEFAULT_OPTIONS.filterNot { it.key == FossIdReporter.API_KEY_PROPERTY }
                 )
             }
@@ -113,7 +113,6 @@ class FossIdReporterTest : WordSpec({
                 val input = createReporterInput()
                 reporter.generateReport(
                     input,
-                    DIRECTORY_SAMPLE,
                     DEFAULT_OPTIONS.filterNot { it.key == FossIdReporter.USER_PROPERTY }
                 )
             }
@@ -124,7 +123,7 @@ class FossIdReporterTest : WordSpec({
             val (serviceMock, reporterMock) = createReporterMock()
             val input = createReporterInput()
 
-            reporterMock.generateReport(input, DIRECTORY_SAMPLE, DEFAULT_OPTIONS)
+            reporterMock.generateReport(input)
 
             coVerify(exactly = 0) {
                 serviceMock.generateReport(any(), any(), any(), any(), any(), any())
@@ -135,7 +134,7 @@ class FossIdReporterTest : WordSpec({
             val (serviceMock, reporterMock) = createReporterMock()
             val input = createReporterInput(SCANCODE_1)
 
-            reporterMock.generateReport(input, DIRECTORY_SAMPLE, DEFAULT_OPTIONS)
+            reporterMock.generateReport(input)
 
             coVerify(exactly = 1) {
                 serviceMock.generateReport(
@@ -154,7 +153,7 @@ class FossIdReporterTest : WordSpec({
             val input = createReporterInput(SCANCODE_1)
 
             reporterMock.generateReport(
-                input, DIRECTORY_SAMPLE,
+                input,
                 DEFAULT_OPTIONS + (FossIdReporter.REPORT_TYPE_PROPERTY to ReportType.XLSX.name)
             )
 
@@ -174,7 +173,7 @@ class FossIdReporterTest : WordSpec({
             val (serviceMock, reporterMock) = createReporterMock()
             val input = createReporterInput(SCANCODE_1)
 
-            reporterMock.generateReport(input, DIRECTORY_SAMPLE, DEFAULT_OPTIONS)
+            reporterMock.generateReport(input)
 
             coVerify(exactly = 1) {
                 serviceMock.generateReport(
@@ -193,7 +192,7 @@ class FossIdReporterTest : WordSpec({
             val input = createReporterInput(SCANCODE_1)
 
             reporterMock.generateReport(
-                input, DIRECTORY_SAMPLE,
+                input,
                 DEFAULT_OPTIONS + (FossIdReporter.SELECTION_TYPE_PROPERTY to SelectionType.INCLUDE_COPYLEFT.name)
             )
 
@@ -213,7 +212,7 @@ class FossIdReporterTest : WordSpec({
             val (serviceMock, reporterMock) = createReporterMock()
             val input = createReporterInput(SCANCODE_1, SCANCODE_2)
 
-            reporterMock.generateReport(input, DIRECTORY_SAMPLE, DEFAULT_OPTIONS)
+            reporterMock.generateReport(input)
 
             coVerifyAll {
                 serviceMock.generateReport(USER_KEY_SAMPLE, API_KEY_SAMPLE, SCANCODE_1, any(), any(), any())
@@ -225,7 +224,7 @@ class FossIdReporterTest : WordSpec({
             val (serviceMock, reporterMock) = createReporterMock()
             val input = createReporterInput("$SCANCODE_1,$SCANCODE_2")
 
-            reporterMock.generateReport(input, DIRECTORY_SAMPLE, DEFAULT_OPTIONS)
+            reporterMock.generateReport(input)
 
             coVerifyAll {
                 serviceMock.generateReport(USER_KEY_SAMPLE, API_KEY_SAMPLE, SCANCODE_1, any(), any(), any())
@@ -237,12 +236,15 @@ class FossIdReporterTest : WordSpec({
             val (_, reporterMock) = createReporterMock()
             val input = createReporterInput(SCANCODE_1)
 
-            val result = reporterMock.generateReport(input, DIRECTORY_SAMPLE, DEFAULT_OPTIONS)
+            val result = reporterMock.generateReport(input)
 
             result shouldContainExactly listOf(FILE_SAMPLE)
         }
     }
 })
+
+private fun FossIdReporter.generateReport(input: ReporterInput, options: Options = DEFAULT_OPTIONS) =
+    generateReport(input, DIRECTORY_SAMPLE, PluginConfiguration(options))
 
 private fun createReporterMock(): Pair<FossIdRestService, FossIdReporter> {
     mockkObject(FossIdRestService)

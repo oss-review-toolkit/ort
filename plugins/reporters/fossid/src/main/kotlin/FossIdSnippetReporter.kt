@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.reporters.fossid
 
 import java.io.File
 
+import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.plugins.reporters.asciidoc.HtmlTemplateReporter
 import org.ossreviewtoolkit.plugins.reporters.freemarker.FreemarkerTemplateProcessor
 import org.ossreviewtoolkit.reporter.Reporter
@@ -35,11 +36,13 @@ class FossIdSnippetReporter : Reporter by delegateReporter {
 
     override val type = "FossIdSnippet"
 
-    override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
+    override fun generateReport(input: ReporterInput, outputDir: File, config: PluginConfiguration): List<File> {
         val hasFossIdResults = input.ortResult.scanner?.scanResults?.any { it.scanner.name == "FossId" } ?: false
         require(hasFossIdResults) { "No FossID scan results have been found." }
 
-        val extendedOptions = options + (FreemarkerTemplateProcessor.OPTION_TEMPLATE_ID to TEMPLATE_NAME)
+        val extendedOptions = config.copy(
+            options = config.options + (FreemarkerTemplateProcessor.OPTION_TEMPLATE_ID to TEMPLATE_NAME)
+        )
         return delegateReporter.generateReport(input, outputDir, extendedOptions)
     }
 }

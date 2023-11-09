@@ -27,6 +27,7 @@ import java.util.zip.Deflater
 import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream
 import org.apache.commons.compress.compressors.gzip.GzipParameters
 
+import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.plugins.reporters.evaluatedmodel.EvaluatedModel
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
@@ -49,9 +50,12 @@ class WebAppReporter : Reporter {
 
     private val reportFilename = "scan-report-web-app.html"
 
-    override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
+    override fun generateReport(input: ReporterInput, outputDir: File, config: PluginConfiguration): List<File> {
         val template = javaClass.getResource("/scan-report-template.html").readText()
-        val evaluatedModel = EvaluatedModel.create(input, options[OPTION_DEDUPLICATE_DEPENDENCY_TREE].toBoolean())
+        val evaluatedModel = EvaluatedModel.create(
+            input,
+            config.options[OPTION_DEDUPLICATE_DEPENDENCY_TREE].toBoolean()
+        )
 
         val index = template.indexOf(PLACEHOLDER)
         val prefix = template.substring(0, index)

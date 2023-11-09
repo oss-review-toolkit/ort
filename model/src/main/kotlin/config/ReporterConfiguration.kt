@@ -19,18 +19,16 @@
 
 package org.ossreviewtoolkit.model.config
 
-import com.fasterxml.jackson.annotation.JsonProperty
-
-import org.ossreviewtoolkit.utils.common.Options
+import com.fasterxml.jackson.annotation.JsonInclude
 
 /**
  * The base configuration model of the reporter.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 data class ReporterConfiguration(
     /**
      * Reporter specific configuration options. The key needs to match the name of the reporter class, e.g. "FossId"
      * for the FossId reporter. See the documentation of the reporter for available options.
      */
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    val options: Map<String, Options>? = null
+    val config: Map<String, PluginConfiguration>? = null
 )

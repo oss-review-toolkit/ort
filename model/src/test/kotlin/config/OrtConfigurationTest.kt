@@ -381,12 +381,14 @@ class OrtConfigurationTest : WordSpec({
             }
 
             with(ortConfig.reporter) {
-                options shouldNotBeNull {
+                config shouldNotBeNull {
                     keys shouldContainExactlyInAnyOrder setOf("FossId")
 
                     get("FossId") shouldNotBeNull {
-                        this shouldContainExactly mapOf(
-                            "serverUrl" to "https://fossid.example.com/instance/",
+                        options shouldContainExactly mapOf(
+                            "serverUrl" to "https://fossid.example.com/instance/"
+                        )
+                        secrets shouldContainExactly mapOf(
                             "user" to "user",
                             "apiKey" to "XYZ"
                         )

@@ -23,6 +23,7 @@ import java.io.File
 
 import org.apache.logging.log4j.kotlin.logger
 
+import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.spdx.SpdxCompoundExpression
@@ -62,17 +63,17 @@ class SpdxDocumentReporter : Reporter {
 
     override val type = "SpdxDocument"
 
-    override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
-        val outputFileFormats = options[OPTION_OUTPUT_FILE_FORMATS]
+    override fun generateReport(input: ReporterInput, outputDir: File, config: PluginConfiguration): List<File> {
+        val outputFileFormats = config.options[OPTION_OUTPUT_FILE_FORMATS]
             ?.split(',')
             ?.mapTo(mutableSetOf()) { FileFormat.valueOf(it.uppercase()) }
             ?: setOf(FileFormat.YAML)
 
         val params = SpdxDocumentModelMapper.SpdxDocumentParams(
-            documentName = options.getOrDefault(OPTION_DOCUMENT_NAME, DOCUMENT_NAME_DEFAULT_VALUE),
-            documentComment = options.getOrDefault(OPTION_DOCUMENT_COMMENT, ""),
-            creationInfoComment = options.getOrDefault(OPTION_CREATION_INFO_COMMENT, ""),
-            fileInformationEnabled = options.getOrDefault(OPTION_FILE_INFORMATION_ENABLED, "true").toBoolean()
+            documentName = config.options.getOrDefault(OPTION_DOCUMENT_NAME, DOCUMENT_NAME_DEFAULT_VALUE),
+            documentComment = config.options.getOrDefault(OPTION_DOCUMENT_COMMENT, ""),
+            creationInfoComment = config.options.getOrDefault(OPTION_CREATION_INFO_COMMENT, ""),
+            fileInformationEnabled = config.options.getOrDefault(OPTION_FILE_INFORMATION_ENABLED, "true").toBoolean()
         )
 
         val spdxDocument = SpdxDocumentModelMapper.map(

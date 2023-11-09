@@ -42,6 +42,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.utils.getPurlType
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.reporter.Reporter
@@ -533,8 +534,8 @@ class OpossumReporter : Reporter {
         return opossumInput
     }
 
-    override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
-        val maxDepth = options.getOrDefault(OPTION_SCANNER_MAX_DEPTH, "3").toInt()
+    override fun generateReport(input: ReporterInput, outputDir: File, config: PluginConfiguration): List<File> {
+        val maxDepth = config.options.getOrDefault(OPTION_SCANNER_MAX_DEPTH, "3").toInt()
         val opossumInput = generateOpossumInput(input.ortResult, maxDepth)
         val outputFile = outputDir.resolve("report.opossum")
 

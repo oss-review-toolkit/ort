@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.reporters.evaluatedmodel
 import java.io.File
 
 import org.ossreviewtoolkit.model.FileFormat
+import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 
@@ -42,11 +43,14 @@ class EvaluatedModelReporter : Reporter {
 
     override val type = "EvaluatedModel"
 
-    override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
-        val evaluatedModel = EvaluatedModel.create(input, options[OPTION_DEDUPLICATE_DEPENDENCY_TREE].toBoolean())
+    override fun generateReport(input: ReporterInput, outputDir: File, config: PluginConfiguration): List<File> {
+        val evaluatedModel = EvaluatedModel.create(
+            input,
+            config.options[OPTION_DEDUPLICATE_DEPENDENCY_TREE].toBoolean()
+        )
 
         val outputFiles = mutableListOf<File>()
-        val outputFileFormats = options[OPTION_OUTPUT_FILE_FORMATS]
+        val outputFileFormats = config.options[OPTION_OUTPUT_FILE_FORMATS]
             ?.split(',')
             ?.mapTo(mutableSetOf()) { FileFormat.forExtension(it) }
             ?: setOf(FileFormat.JSON)

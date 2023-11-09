@@ -29,6 +29,7 @@ import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
 import org.ossreviewtoolkit.model.config.FileStorageConfiguration
 import org.ossreviewtoolkit.model.config.LocalFileStorageConfiguration
 import org.ossreviewtoolkit.model.config.OrtConfiguration
+import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.licenses.LicenseCategorization
 import org.ossreviewtoolkit.model.licenses.LicenseCategory
@@ -94,8 +95,9 @@ private fun TestConfiguration.generateReport(
     )
 
     val outputDir = tempdir()
+    val reporterConfig = PluginConfiguration(options)
 
-    return PlainTextTemplateReporter().generateReport(input, outputDir, options).single().readText()
+    return PlainTextTemplateReporter().generateReport(input, outputDir, reporterConfig).single().readText()
 }
 
 private fun createLicenseClassifications(): LicenseClassifications {

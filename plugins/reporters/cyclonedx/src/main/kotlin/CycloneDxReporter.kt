@@ -43,6 +43,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
@@ -137,20 +138,20 @@ class CycloneDxReporter : Reporter {
             }
         }
 
-    override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
+    override fun generateReport(input: ReporterInput, outputDir: File, config: PluginConfiguration): List<File> {
         val outputFiles = mutableListOf<File>()
 
         val projects = input.ortResult.getProjects(omitExcluded = true).sortedBy { it.id }
         val packages = input.ortResult.getPackages(omitExcluded = true).sortedBy { it.metadata.id }
 
         val schemaVersion = CycloneDxSchema.Version.entries.find {
-            it.versionString == options[OPTION_SCHEMA_VERSION]
+            it.versionString == config.options[OPTION_SCHEMA_VERSION]
         } ?: DEFAULT_SCHEMA_VERSION
 
-        val dataLicense = options[OPTION_DATA_LICENSE] ?: DEFAULT_DATA_LICENSE.id
-        val createSingleBom = !options[OPTION_SINGLE_BOM].isFalse()
+        val dataLicense = config.options[OPTION_DATA_LICENSE] ?: DEFAULT_DATA_LICENSE.id
+        val createSingleBom = !config.options[OPTION_SINGLE_BOM].isFalse()
 
-        val outputFileFormats = options[OPTION_OUTPUT_FILE_FORMATS]
+        val outputFileFormats = config.options[OPTION_OUTPUT_FILE_FORMATS]
             ?.split(",")
             ?.mapTo(mutableSetOf()) { FileFormat.valueOf(it.uppercase()) }
             ?: setOf(FileFormat.XML)
