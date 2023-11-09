@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.utils.spdx.isSpdxExpressionOrNotPresent
 
 /**
  * Information about a package used in an [SpdxDocument].
- * See https://spdx.github.io/spdx-spec/v2.2.2/package-information/.
+ * See https://spdx.github.io/spdx-spec/v2.3/package-information/.
  */
 data class SpdxPackage(
     /**
@@ -51,6 +51,12 @@ data class SpdxPackage(
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val attributionTexts: List<String> = emptyList(),
+
+    /**
+     * The actual date the package was built in "YYYY-MM-DDThh:mm:ssZ" format.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val builtDate: String? = null,
 
     /**
      * Checksums of the package.
@@ -163,6 +169,18 @@ data class SpdxPackage(
     val packageVerificationCode: SpdxPackageVerificationCode? = null,
 
     /**
+     * This field provides information about the primary purpose of the identified package.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val primaryPackagePurpose: Purpose? = null,
+
+    /**
+     * The date the package was released in "YYYY-MM-DDThh:mm:ssZ" format.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val releaseDate: String? = null,
+
+    /**
      * Any relevant background information or additional comments about the origin of the package.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -185,11 +203,35 @@ data class SpdxPackage(
     val supplier: String? = null,
 
     /**
+     * The end of the support period for a package from the supplier in "YYYY-MM-DDThh:mm:ssZ" format.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val validUntilDate: String? = null,
+
+    /**
      * The version of the package.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val versionInfo: String = ""
 ) {
+    /**
+     * The primary purpose how the package is being used (rather than the content of the package).
+     */
+    enum class Purpose {
+        APPLICATION,
+        ARCHIVE,
+        CONTAINER,
+        DEVICE,
+        FILE,
+        FIRMWARE,
+        FRAMEWORK,
+        INSTALL,
+        LIBRARY,
+        OPERATING_SYSTEM,
+        SOURCE,
+        OTHER
+    }
+
     fun validate(): SpdxPackage =
         apply {
             require(spdxId.startsWith(SpdxConstants.REF_PREFIX)) {
