@@ -195,6 +195,12 @@ data class SpdxRelationship(
         OPTIONAL_DEPENDENCY_OF,
 
         /**
+         * Is to be used for a relationship which has not been defined in the formal SPDX specification. A description
+         * of the relationship should be included in the Relationship comments field.
+         */
+        OTHER,
+
+        /**
          * Is to be used when SPDXRef-A is used as a package as part of SPDXRef-B.
          */
         PACKAGE_OF,
