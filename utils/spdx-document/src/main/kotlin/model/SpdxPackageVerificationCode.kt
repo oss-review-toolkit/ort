@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 
 /**
  * An identifier for an [SpdxPackage] based on its file contents.
- * See https://spdx.github.io/spdx-spec/v2.2.2/package-information/#79-package-verification-code-field.
+ * See https://spdx.github.io/spdx-spec/v2.3/package-information/#79-package-verification-code-field.
  */
 data class SpdxPackageVerificationCode(
     /**

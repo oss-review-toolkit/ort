@@ -27,12 +27,12 @@ import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper
 
 class SpdxExternalReferenceTest : WordSpec({
     "Serializing categories" should {
-        "use underscores in names" {
+        "use dashes in names" {
             SpdxModelMapper.toJson(SpdxExternalReference.Category.entries) shouldEqualJson """
                 [
                   "SECURITY",
-                  "PACKAGE_MANAGER",
-                  "PERSISTENT_ID",
+                  "PACKAGE-MANAGER",
+                  "PERSISTENT-ID",
                   "OTHER"
                 ]
             """.trimIndent()

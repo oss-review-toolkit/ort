@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.utils.spdxdocument.model
 
 /**
  * A checksum for an [SpdxFile].
- * See https://spdx.github.io/spdx-spec/v2.2.2/file-information/#84-file-checksum-field.
+ * See https://spdx.github.io/spdx-spec/v2.3/file-information/#84-file-checksum-field.
  */
 data class SpdxChecksum(
     /**
@@ -38,7 +38,12 @@ data class SpdxChecksum(
         internal val HEX_SYMBOLS_REGEX = "^[0-9a-f]+$".toRegex()
     }
 
-    enum class Algorithm(val checksumHexDigits: Int) {
+    enum class Algorithm(val checksumHexDigits: Int, val isSpdx23: Boolean = false) {
+        ADLER32(8, true),
+        BLAKE2B_256(64, true),
+        BLAKE2B_384(96, true),
+        BLAKE2B_512(128, true),
+        BLAKE3(64, true),
         MD2(32),
         MD4(32),
         MD5(32),
@@ -47,7 +52,10 @@ data class SpdxChecksum(
         SHA224(56),
         SHA256(64),
         SHA384(96),
-        SHA512(128)
+        SHA512(128),
+        SHA3_256(64, true),
+        SHA3_384(96, true),
+        SHA3_512(128, true)
     }
 
     init {

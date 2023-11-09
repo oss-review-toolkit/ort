@@ -22,13 +22,15 @@ package org.ossreviewtoolkit.utils.spdxdocument.model
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 
+import java.time.Instant
+
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression.Strictness.ALLOW_LICENSEREF_EXCEPTIONS
 import org.ossreviewtoolkit.utils.spdx.isSpdxExpressionOrNotPresent
 
 /**
  * Information about a package used in an [SpdxDocument].
- * See https://spdx.github.io/spdx-spec/v2.2.2/package-information/.
+ * See https://spdx.github.io/spdx-spec/v2.3/package-information/.
  */
 data class SpdxPackage(
     /**
@@ -51,6 +53,13 @@ data class SpdxPackage(
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val attributionTexts: List<String> = emptyList(),
+
+    /**
+     * The actual date the package was built.
+     * Format: YYYY-MM-DDThh:mm:ssZ
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val builtDate: Instant? = null,
 
     /**
      * Checksums of the package.
@@ -163,6 +172,19 @@ data class SpdxPackage(
     val packageVerificationCode: SpdxPackageVerificationCode? = null,
 
     /**
+     * This field provides information about the primary purpose of the identified package.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val primaryPackagePurpose: Purpose? = null,
+
+    /**
+     * The date the package was released.
+     * Format: YYYY-MM-DDThh:mm:ssZ
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val releaseDate: Instant? = null,
+
+    /**
      * Any relevant background information or additional comments about the origin of the package.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -185,11 +207,37 @@ data class SpdxPackage(
     val supplier: String? = null,
 
     /**
+     * The end of the support period for a package from the supplier.
+     * Format: YYYY-MM-DDThh:mm:ssZ
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val validUntilDate: Instant? = null,
+
+    /**
      * The version of the package.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val versionInfo: String = ""
 ) {
+    /**
+     * The primary purpose how the package is being used (rather than the content of the package).
+     * See https://spdx.github.io/spdx-spec/v2.3/package-information/#724-primary-package-purpose-field.
+     */
+    enum class Purpose {
+        APPLICATION,
+        ARCHIVE,
+        CONTAINER,
+        DEVICE,
+        FILE,
+        FIRMWARE,
+        FRAMEWORK,
+        INSTALL,
+        LIBRARY,
+        OPERATING_SYSTEM,
+        SOURCE,
+        OTHER
+    }
+
     fun validate(): SpdxPackage =
         apply {
             require(spdxId.startsWith(SpdxConstants.REF_PREFIX)) {
