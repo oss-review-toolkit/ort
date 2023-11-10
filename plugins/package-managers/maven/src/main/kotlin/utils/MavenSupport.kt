@@ -509,10 +509,10 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             val artifactDescriptorRequest = ArtifactDescriptorRequest(artifact, repositories, "project")
             val artifactDescriptorResult = repoSystem
                 .readArtifactDescriptor(repositorySystemSession, artifactDescriptorRequest)
-            (repositories + artifactDescriptorResult.repositories).distinct()
+            repositories + artifactDescriptorResult.repositories
         } else {
             repositories
-        }
+        }.toSet()
 
         val cacheKey = "$artifact@$allRepositories"
 
@@ -529,7 +529,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             val proxy = repositorySystemSession.proxySelector.getProxy(repository)
             val authentication = repositorySystemSession.authenticationSelector.getAuthentication(repository)
             RemoteRepository.Builder(repository).setAuthentication(authentication).setProxy(proxy).build()
-        }
+        }.toSet()
 
         if (allRepositories.size > remoteRepositories.size) {
             logger.debug { "Ignoring local repositories ${allRepositories - remoteRepositories}." }
