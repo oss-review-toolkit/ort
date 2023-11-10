@@ -39,7 +39,7 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
  */
 class MavenDependencyHandler(
     /** The name of the associated package manager. */
-    val managerName: String,
+    private val managerName: String,
 
     /** The helper object to invoke Maven-related functionality. */
     val support: MavenSupport,
