@@ -403,7 +403,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
     /**
      * Looks up an instance of the class provided from the Maven Plexus container.
      */
-    inline fun <reified T> containerLookup(hint: String = "default"): T = container.lookup(T::class.java, hint)
+    private inline fun <reified T> containerLookup(hint: String = "default"): T = container.lookup(T::class.java, hint)
 
     /**
      * Build the Maven projects defined in the provided [pomFiles] without resolving dependencies. The result can later
@@ -487,7 +487,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
         }
     }
 
-    fun createProjectBuildingRequest(resolveDependencies: Boolean): ProjectBuildingRequest {
+    private fun createProjectBuildingRequest(resolveDependencies: Boolean): ProjectBuildingRequest {
         val projectBuildingRequest = createMavenExecutionRequest().projectBuildingRequest
 
         return projectBuildingRequest.apply {
