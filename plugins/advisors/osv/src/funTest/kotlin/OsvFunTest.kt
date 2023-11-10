@@ -43,6 +43,7 @@ class OsvFunTest : StringSpec({
             "Composer:thorsten:phpmyfaq:3.0.7",
             "Gem::rack:2.0.4",
             "Go::github.com/nats-io/nats-server/v2:2.1.0",
+            "Hackage::xml-conduit:0.5.0",
             "Maven:com.jfinal:jfinal:1.4",
             "NPM::rebber:1.0.0",
             "NuGet::Bunkum:4.0.0",
