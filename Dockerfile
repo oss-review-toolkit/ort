@@ -276,7 +276,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     zlib1g-dev \
     && sudo rm -rf /var/lib/apt/lists/*
 
-ARG HASKELL_STACK_VERSION=2.7.5
+ARG HASKELL_STACK_VERSION=2.13.1
 
 ENV HASKELL_HOME=/opt/haskell
 ENV PATH=$PATH:$HASKELL_HOME/bin
