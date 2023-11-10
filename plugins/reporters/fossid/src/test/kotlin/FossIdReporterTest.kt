@@ -63,7 +63,9 @@ private const val SERVER_URL_SAMPLE = "https://fossid.example.com/instance/"
 private const val API_KEY_SAMPLE = "XYZ"
 private const val USER_KEY_SAMPLE = "user"
 private val DEFAULT_OPTIONS = mapOf(
-    FossIdReporter.SERVER_URL_PROPERTY to SERVER_URL_SAMPLE,
+    FossIdReporter.SERVER_URL_PROPERTY to SERVER_URL_SAMPLE
+)
+private val DEFAULT_SECRETS = mapOf(
     FossIdReporter.API_KEY_PROPERTY to API_KEY_SAMPLE,
     FossIdReporter.USER_PROPERTY to USER_KEY_SAMPLE
 )
@@ -101,7 +103,7 @@ class FossIdReporterTest : WordSpec({
                 val input = createReporterInput()
                 reporter.generateReport(
                     input,
-                    DEFAULT_OPTIONS.filterNot { it.key == FossIdReporter.API_KEY_PROPERTY }
+                    secrets = DEFAULT_SECRETS.filterNot { it.key == FossIdReporter.API_KEY_PROPERTY }
                 )
             }
             exception shouldHaveMessage "No FossID API Key configuration found."
@@ -113,7 +115,7 @@ class FossIdReporterTest : WordSpec({
                 val input = createReporterInput()
                 reporter.generateReport(
                     input,
-                    DEFAULT_OPTIONS.filterNot { it.key == FossIdReporter.USER_PROPERTY }
+                    secrets = DEFAULT_SECRETS.filterNot { it.key == FossIdReporter.USER_PROPERTY }
                 )
             }
             exception shouldHaveMessage "No FossID User configuration found."
@@ -243,8 +245,11 @@ class FossIdReporterTest : WordSpec({
     }
 })
 
-private fun FossIdReporter.generateReport(input: ReporterInput, options: Options = DEFAULT_OPTIONS) =
-    generateReport(input, DIRECTORY_SAMPLE, PluginConfiguration(options))
+private fun FossIdReporter.generateReport(
+    input: ReporterInput,
+    options: Options = DEFAULT_OPTIONS,
+    secrets: Options = DEFAULT_SECRETS
+) = generateReport(input, DIRECTORY_SAMPLE, PluginConfiguration(options, secrets))
 
 private fun createReporterMock(): Pair<FossIdRestService, FossIdReporter> {
     mockkObject(FossIdRestService)
