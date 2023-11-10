@@ -20,8 +20,11 @@
 package org.ossreviewtoolkit.plugins.advisors.osv
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.inspectors.forAll
+import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNot
 
 import java.time.Instant
 
@@ -52,6 +55,9 @@ class OsvFunTest : StringSpec({
         val packageFindings = osv.retrievePackageFindings(packages)
 
         packageFindings.keys shouldContainExactlyInAnyOrder packages
+        packageFindings.keys.forAll { pkg ->
+            packageFindings.getValue(pkg).vulnerabilities shouldNot beEmpty()
+        }
     }
 
     "retrievePackageFindings() returns the expected result for the given package(s)" {
