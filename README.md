@@ -429,7 +429,7 @@ or [packages](./plugins/package-managers/spdx/src/funTest/assets/projects/synthe
 
 Taking an ORT result file with an *analyzer* result as the input (`-i`), the *downloader* retrieves the source code of
 all contained packages to the specified output directory (`-o`). The *downloader* takes care of things like normalizing
-URLs and using the [appropriate VCS tool](./downloader/src/main/kotlin/vcs) to check out source code from version
+URLs and using the [appropriate VCS tool](./plugins/version-control-systems) to check out source code from version
 control.
 
 Currently, the following Version Control Systems (VCS) are supported:
