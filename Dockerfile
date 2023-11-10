@@ -216,7 +216,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     zlib1g-dev \
     && sudo rm -rf /var/lib/apt/lists/*
 
-ARG COCOAPODS_VERSION=1.11.2
+ARG COCOAPODS_VERSION=1.14.2
 ARG RUBY_VERSION=3.1.2
 
 ENV RBENV_ROOT=/opt/rbenv
