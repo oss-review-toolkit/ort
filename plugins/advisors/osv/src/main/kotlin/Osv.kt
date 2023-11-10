@@ -150,6 +150,7 @@ private fun createRequest(pkg: Package): VulnerabilitiesForPackageRequest? {
         "Crate" -> Ecosystem.CRATES_IO
         "Gem" -> Ecosystem.RUBY_GEMS
         "Go" -> Ecosystem.GO
+        "Hackage" -> Ecosystem.HACKAGE
         "NPM" -> Ecosystem.NPM
         "NuGet" -> Ecosystem.NUGET
         "Maven" -> Ecosystem.MAVEN

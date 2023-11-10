@@ -111,6 +111,7 @@ object Ecosystem {
     const val DEBIAN = "Debian"
     const val GIHUB_ACTIONS = "GitHub Actions"
     const val GO = "Go"
+    const val HACKAGE = "Hackage"
     const val HEX = "Hex"
     const val LINUX = "Linux"
     const val MAVEN = "Maven"
