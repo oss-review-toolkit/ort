@@ -1,0 +1,6 @@
+{
+  "ruff.format.args": [
+    "--verbose"
+  ],
+  "python.analysis.typeCheckingMode": "basic"
+}
