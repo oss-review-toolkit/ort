@@ -342,7 +342,7 @@ COPY --from=dartbuild /opt/dart-sdk /opt/dart-sdk
 # SBT
 FROM base AS scalabuild
 
-ARG SBT_VERSION=1.6.1
+ARG SBT_VERSION=1.9.7
 
 ENV SBT_HOME=/opt/sbt
 ENV PATH=$PATH:$SBT_HOME/bin
