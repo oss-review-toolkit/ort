@@ -90,10 +90,6 @@ License: Apache-2.0
 
 # Third-party files.
 
-Files: batect*
-Copyright: 2017-2021 Charles Korn <me@charleskorn.com>
-License: Apache-2.0
-
 Files: gradlew*
 Copyright: 2007-2020 The original author or authors <info@gradle.com>
 License: Apache-2.0

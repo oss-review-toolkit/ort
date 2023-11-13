@@ -7,9 +7,6 @@
     ":semanticCommitTypeAll(deps)"
   ],
   "dependencyDashboard": false,
-  "batect": {
-    "enabled": false
-  },
   "ignoreDeps": [
     "org.eclipse.sw360:client"
   ],

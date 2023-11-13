@@ -9,13 +9,6 @@ on:
       - main
 
 jobs:
-  batect-wrapper:
-    runs-on: ubuntu-22.04
-    steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
-    - name: Validate Wrapper
-      uses: batect/batect-wrapper-validation-action@v0.4
   gradle-wrapper:
     runs-on: ubuntu-22.04
     steps:
