@@ -139,6 +139,9 @@ jobs:
         flags: funTest-non-docker
   funTest-docker:
     runs-on: ubuntu-22.04
+    container:
+      image: ghcr.io/oss-review-toolkit/ort:snapshot
+      options: --user 1001
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
@@ -149,18 +152,11 @@ jobs:
       with:
         distribution: temurin
         java-version: 17
-    - name: Setup Gradle
+    - name: Run functional tests that do require external tools
       uses: gradle/gradle-build-action@v2
       with:
         gradle-home-cache-cleanup: true
-    - name: Run functional tests that do require external tools
-      run: |
-          echo "Running as $(id)."
-          BATECT_QUIET_DOWNLOAD=true ./batect --enable-buildkit \
-              --config-var docker_build_user_id=1001 \
-              --config-var gradle_build_scan=true \
-              --config-var gradle_console=plain \
-              runFunTest
+        arguments: --scan -Ptests.include=org.ossreviewtoolkit.plugins.packagemanagers.* funTest jacocoFunTestReport
     - name: Upload code coverage data
       uses: codecov/codecov-action@v3
       with:
