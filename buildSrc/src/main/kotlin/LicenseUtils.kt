@@ -25,7 +25,6 @@ object CopyrightableFiles {
     private val excludedPaths = listOf(
         "LICENSE",
         "NOTICE",
-        "batect",
         "website/babel.config.js",
         "website/docusaurus.config.js",
         "website/docs/configuration/_category_.yml",
