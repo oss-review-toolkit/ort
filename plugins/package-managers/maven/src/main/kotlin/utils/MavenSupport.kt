@@ -330,7 +330,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             }
     }
 
-    val container = createContainer()
+    private val container = createContainer()
     private val repositorySystemSession = createRepositorySystemSession(workspaceReader)
 
     // The MavenSettingsBuilder class is deprecated, but internally it uses its successor SettingsBuilder. Calling
