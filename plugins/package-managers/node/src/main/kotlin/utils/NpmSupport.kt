@@ -221,7 +221,7 @@ private fun getPackageJsonInfo(definitionFiles: Set<File>): Collection<PackageJs
 
 private fun getPnpmWorkspaceMatchers(definitionFile: File): List<PathMatcher> {
     @JsonIgnoreProperties(ignoreUnknown = true)
-    data class PnpmWorkspaces(val packages: List<String>)
+    data class PnpmWorkspaces(val packages: List<String> = emptyList())
 
     fun String.isComment() = trim().startsWith("#")
 
