@@ -36,7 +36,7 @@ ARG NUGET_INSPECTOR_VERSION=0.9.12
 ARG PYTHON_INSPECTOR_VERSION="0.10.0"
 
 # Set this to the ScanCode version to use.
-ARG SCANCODE_VERSION="32.0.6"
+ARG SCANCODE_VERSION="32.0.8"
 
 FROM eclipse-temurin:$JAVA_VERSION-jdk-jammy AS build
 
