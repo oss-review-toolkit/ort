@@ -28,18 +28,54 @@ data class ScannerWrapperConfig(
     /**
      * The configuration for the [ScannerMatcher].
      */
-    val matcherConfig: ScannerMatcherConfig
+    val matcherConfig: ScannerMatcherConfig,
+
+    /**
+     * If `true`, scan results of this scanner shall be read from the configured scan storages. If `null`, the default
+     * value of the [ScannerWrapper] implementation will be used.
+     */
+    val readFromStorage: Boolean?,
+
+    /**
+     * If `true`, scan results for this scanner shall be written to the configured scan storages. If `null`, the default
+     * value of the [ScannerWrapper] implementation will be used.
+     */
+    val writeToStorage: Boolean?
 ) {
     companion object {
-        val EMPTY = ScannerWrapperConfig(ScannerMatcherConfig.EMPTY)
+        val EMPTY = ScannerWrapperConfig(
+            matcherConfig = ScannerMatcherConfig.EMPTY,
+            readFromStorage = null,
+            writeToStorage = null
+        )
+
+        /**
+         * The name of the boolean property to configure if scan results shall be read from the configured scan
+         * storages.
+         */
+        internal const val PROP_READ_FROM_STORAGE = "readFromStorage"
+
+        /**
+         * The name of the boolean property to configure if scan results shall be written to the configured scan
+         * storages.
+         */
+        internal const val PROP_WRITE_TO_STORAGE = "writeToStorage"
+
+        private val properties = listOf(PROP_READ_FROM_STORAGE, PROP_WRITE_TO_STORAGE)
 
         /**
          * Create a [ScannerWrapperConfig] from the provided [options]. Return the created config and the options
          * without the properties that were used to create the [ScannerWrapperConfig].
          */
         fun create(options: Options): Pair<ScannerWrapperConfig, Options> {
-            val (matcherConfig, filteredOptions) = ScannerMatcherConfig.create(options)
-            return ScannerWrapperConfig(matcherConfig) to filteredOptions
+            val (matcherConfig, filteredOptionsFromMatcher) = ScannerMatcherConfig.create(options)
+            val filteredOptions = filteredOptionsFromMatcher.filterKeys { it !in properties }
+
+            return ScannerWrapperConfig(
+                matcherConfig = matcherConfig,
+                readFromStorage = options[PROP_READ_FROM_STORAGE]?.toBooleanStrict(),
+                writeToStorage = options[PROP_WRITE_TO_STORAGE]?.toBooleanStrict()
+            ) to filteredOptions
         }
     }
 }

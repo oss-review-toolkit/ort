@@ -30,7 +30,9 @@ class ScannerWrapperConfigTest : WordSpec({
                 ScannerMatcherConfig.PROP_CRITERIA_NAME to "foo",
                 ScannerMatcherConfig.PROP_CRITERIA_MIN_VERSION to "1.2.3",
                 ScannerMatcherConfig.PROP_CRITERIA_MAX_VERSION to "4.5.6",
-                ScannerMatcherConfig.PROP_CRITERIA_CONFIGURATION to "config"
+                ScannerMatcherConfig.PROP_CRITERIA_CONFIGURATION to "config",
+                ScannerWrapperConfig.PROP_READ_FROM_STORAGE to "false",
+                ScannerWrapperConfig.PROP_WRITE_TO_STORAGE to "true"
             )
 
             with(ScannerWrapperConfig.create(options).first) {
@@ -40,6 +42,9 @@ class ScannerWrapperConfigTest : WordSpec({
                     maxVersion shouldBe "4.5.6"
                     configuration shouldBe "config"
                 }
+
+                readFromStorage shouldBe false
+                writeToStorage shouldBe true
             }
         }
 
