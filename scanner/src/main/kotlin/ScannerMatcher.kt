@@ -62,7 +62,6 @@ data class ScannerMatcher(
     val configuration: String?
 ) {
     companion object {
-
         /**
          * Return a [ScannerMatcher] instance that is to be used when looking up existing scan results from a
          * [ScanResultsStorage]. By default, the properties of this instance are initialized to match the scanner
