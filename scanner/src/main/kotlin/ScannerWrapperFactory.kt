@@ -44,7 +44,7 @@ abstract class ScannerWrapperFactory<CONFIG>(override val type: String) :
     abstract fun create(config: CONFIG, matcherConfig: ScannerMatcherConfig): ScannerWrapper
 
     /**
-     * Return the scanner wrapper's name here to allow Clikt to display something meaningful when listing the scanners
+     * Return the scanner wrapper's name here to allow Clikt to display something meaningful when listing the scanner
      * wrapper factories which are enabled by default.
      */
     override fun toString() = type
