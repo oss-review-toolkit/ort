@@ -63,6 +63,10 @@ class BoyterLc internal constructor(name: String, private val wrapperConfig: Sca
 
     override val matcher by lazy { ScannerMatcher.create(details, wrapperConfig.matcherConfig) }
 
+    override val readFromStorage by lazy { wrapperConfig.readFromStorageWithDefault(matcher) }
+
+    override val writeToStorage by lazy { wrapperConfig.writeToStorageWithDefault(matcher) }
+
     override fun command(workingDir: File?) =
         listOfNotNull(workingDir, if (Os.isWindows) "lc.exe" else "lc").joinToString(File.separator)
 

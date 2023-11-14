@@ -97,7 +97,8 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
  */
 class FossId internal constructor(
     override val name: String,
-    private val config: FossIdConfig
+    private val config: FossIdConfig,
+    private val wrapperConfig: ScannerWrapperConfig
 ) : PackageScannerWrapper {
     companion object {
         @JvmStatic
@@ -170,7 +171,8 @@ class FossId internal constructor(
     }
 
     class Factory : ScannerWrapperFactory<FossIdConfig>("FossId") {
-        override fun create(config: FossIdConfig, wrapperConfig: ScannerWrapperConfig) = FossId(type, config)
+        override fun create(config: FossIdConfig, wrapperConfig: ScannerWrapperConfig) =
+            FossId(type, config, wrapperConfig)
 
         override fun parseConfig(options: Options, secrets: Options) = FossIdConfig.create(options, secrets)
     }
@@ -205,6 +207,10 @@ class FossId internal constructor(
     override val configuration = ""
 
     override val matcher: ScannerMatcher? = null
+
+    override val readFromStorage by lazy { wrapperConfig.readFromStorageWithDefault(matcher) }
+
+    override val writeToStorage by lazy { wrapperConfig.writeToStorageWithDefault(matcher) }
 
     private suspend fun getProject(projectCode: String): Project? =
         service.getProject(config.user, config.apiKey, projectCode).run {

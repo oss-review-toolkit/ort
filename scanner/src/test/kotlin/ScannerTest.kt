@@ -809,6 +809,8 @@ private class FakePackageScannerWrapper(
 
     // Explicit nullability is required here for a mock response.
     override val matcher: ScannerMatcher? = ScannerMatcher.create(details)
+    override val readFromStorage = true
+    override val writeToStorage = true
 
     override fun scanPackage(pkg: Package, context: ScanContext): ScanResult =
         createScanResult(packageProvenanceResolver.resolveProvenance(pkg, sourceCodeOriginPriority), details)
@@ -823,6 +825,8 @@ private class FakeProvenanceScannerWrapper : ProvenanceScannerWrapper {
     override val configuration = "config"
 
     override val matcher = ScannerMatcher.create(details)
+    override val readFromStorage = true
+    override val writeToStorage = true
 
     override fun scanProvenance(provenance: KnownProvenance, context: ScanContext): ScanResult =
         createScanResult(provenance, details)
@@ -837,6 +841,8 @@ private class FakePathScannerWrapper : PathScannerWrapper {
     override val configuration = "config"
 
     override val matcher = ScannerMatcher.create(details)
+    override val readFromStorage = true
+    override val writeToStorage = true
 
     override fun scanPath(path: File, context: ScanContext): ScanSummary {
         val licenseFindings = path.walk().filter { it.isFile }.mapTo(mutableSetOf()) { file ->
