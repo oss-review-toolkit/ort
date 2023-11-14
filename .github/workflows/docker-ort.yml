@@ -27,6 +27,8 @@ on:
       - 'Dockerfile'
       - '.github/workflows/docker-ort.yml'
   push:
+    branches:
+      - 'main'
     tags:
       - '*'
 
@@ -331,7 +333,7 @@ jobs:
         with:
           context: .
           target: minimal
-          push: true
+          push: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
           load: false
           build-args: |
             NODEJS_VERSION=${{ env.NODEJS_VERSION }}
@@ -397,7 +399,7 @@ jobs:
         with:
           context: .
           target: run
-          push: true
+          push: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
           load: false
           tags: |
             ${{ steps.meta-ort.outputs.tags }}
