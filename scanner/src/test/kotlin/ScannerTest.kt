@@ -66,6 +66,7 @@ import org.ossreviewtoolkit.scanner.provenance.ProvenanceDownloader
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
+@Suppress("LargeClass")
 class ScannerTest : WordSpec({
     "Creating the scanner" should {
         "throw an exception if no scanner wrappers are provided" {
@@ -763,12 +764,31 @@ class ScannerTest : WordSpec({
         }
     }
 
-    "scanning with a scanner that does not provide a matcher" should {
-        "not store the scan results" {
+    "scanning with a storage writer" should {
+        "store the scan results if writeToStorage is set to true" {
+            val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
+
+            val scannerWrapper = FakePackageScannerWrapper()
+
+            val writer = spyk(FakeProvenanceBasedStorageWriter())
+
+            val scanner = createScanner(
+                storageWriters = listOf(writer),
+                packageScannerWrappers = listOf(scannerWrapper)
+            )
+
+            scanner.scan(setOf(pkgWithArtifact), createContext())
+
+            verify(exactly = 1) {
+                writer.write(any())
+            }
+        }
+
+        "not store the scan results if writeToStorage is set to false" {
             val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
 
             val scannerWrapper = spyk(FakePackageScannerWrapper()) {
-                every { matcher } returns null
+                every { writeToStorage } returns false
             }
 
             val writer = spyk(FakeProvenanceBasedStorageWriter())
@@ -782,6 +802,72 @@ class ScannerTest : WordSpec({
 
             verify(exactly = 0) {
                 writer.write(any())
+            }
+        }
+    }
+
+    "scanning with a storage reader" should {
+        "read the scan results if the matcher is not null and readFromStorage is set to true" {
+            val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
+
+            val scannerWrapper = FakePackageScannerWrapper()
+
+            val reader = spyk(FakeProvenanceBasedStorageReader(scannerWrapper.details))
+
+            val scanner = createScanner(
+                storageReaders = listOf(reader),
+                packageScannerWrappers = listOf(scannerWrapper)
+            )
+
+            scanner.scan(setOf(pkgWithArtifact), createContext())
+
+            verify(exactly = 1) {
+                reader.read(any())
+                reader.read(any(), any())
+            }
+        }
+
+        "not read the scan results if the matcher is null" {
+            val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
+
+            val scannerWrapper = spyk(FakePackageScannerWrapper()) {
+                every { matcher } returns null
+            }
+
+            val reader = spyk(FakeProvenanceBasedStorageReader(scannerWrapper.details))
+
+            val scanner = createScanner(
+                storageReaders = listOf(reader),
+                packageScannerWrappers = listOf(scannerWrapper)
+            )
+
+            scanner.scan(setOf(pkgWithArtifact), createContext())
+
+            verify(exactly = 0) {
+                reader.read(any())
+                reader.read(any(), any())
+            }
+        }
+
+        "not read the scan results if readFromStorage is set to false" {
+            val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
+
+            val scannerWrapper = spyk(FakePackageScannerWrapper()) {
+                every { readFromStorage } returns false
+            }
+
+            val reader = spyk(FakeProvenanceBasedStorageReader(scannerWrapper.details))
+
+            val scanner = createScanner(
+                storageReaders = listOf(reader),
+                packageScannerWrappers = listOf(scannerWrapper)
+            )
+
+            scanner.scan(setOf(pkgWithArtifact), createContext())
+
+            verify(exactly = 0) {
+                reader.read(any())
+                reader.read(any(), any())
             }
         }
     }
