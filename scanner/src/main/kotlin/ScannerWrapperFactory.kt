@@ -30,8 +30,8 @@ import org.ossreviewtoolkit.utils.common.TypedConfigurablePluginFactory
 abstract class ScannerWrapperFactory<CONFIG>(override val type: String) :
     TypedConfigurablePluginFactory<CONFIG, ScannerWrapper> {
     override fun create(options: Options, secrets: Options): ScannerWrapper {
-        val (matcherConfig, filteredOptions) = ScannerMatcherConfig.create(options)
-        return create(parseConfig(filteredOptions, secrets), matcherConfig)
+        val (wrapperConfig, filteredOptions) = ScannerWrapperConfig.create(options)
+        return create(parseConfig(filteredOptions, secrets), wrapperConfig)
     }
 
     final override fun create(config: CONFIG): ScannerWrapper {
@@ -39,9 +39,9 @@ abstract class ScannerWrapperFactory<CONFIG>(override val type: String) :
     }
 
     /**
-     * Create a [ScannerWrapper] from the provided [config] and [matcherConfig].
+     * Create a [ScannerWrapper] from the provided [config] and [wrapperConfig].
      */
-    abstract fun create(config: CONFIG, matcherConfig: ScannerMatcherConfig): ScannerWrapper
+    abstract fun create(config: CONFIG, wrapperConfig: ScannerWrapperConfig): ScannerWrapper
 
     /**
      * Return the scanner wrapper's name here to allow Clikt to display something meaningful when listing the scanner

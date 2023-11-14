@@ -78,7 +78,7 @@ import org.ossreviewtoolkit.scanner.PackageScannerWrapper
 import org.ossreviewtoolkit.scanner.ProvenanceScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScannerMatcher
-import org.ossreviewtoolkit.scanner.ScannerMatcherConfig
+import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.enumSetOf
@@ -170,7 +170,7 @@ class FossId internal constructor(
     }
 
     class Factory : ScannerWrapperFactory<FossIdConfig>("FossId") {
-        override fun create(config: FossIdConfig, matcherConfig: ScannerMatcherConfig) = FossId(type, config)
+        override fun create(config: FossIdConfig, wrapperConfig: ScannerWrapperConfig) = FossId(type, config)
 
         override fun parseConfig(options: Options, secrets: Options) = FossIdConfig.create(options, secrets)
     }

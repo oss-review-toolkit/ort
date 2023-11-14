@@ -31,6 +31,8 @@ data class ScannerWrapperConfig(
     val matcherConfig: ScannerMatcherConfig
 ) {
     companion object {
+        val EMPTY = ScannerWrapperConfig(ScannerMatcherConfig.EMPTY)
+
         /**
          * Create a [ScannerWrapperConfig] from the provided [options]. Return the created config and the options
          * without the properties that were used to create the [ScannerWrapperConfig].
