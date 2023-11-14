@@ -36,7 +36,7 @@ import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScannerMatcher
-import org.ossreviewtoolkit.scanner.ScannerMatcherConfig
+import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.Os
@@ -45,17 +45,17 @@ private const val CONFIDENCE_NOTICE = "Confidence threshold not high enough for 
 
 private val JSON = Json { ignoreUnknownKeys = true }
 
-class Askalono internal constructor(name: String, private val matcherConfig: ScannerMatcherConfig) :
+class Askalono internal constructor(name: String, private val wrapperConfig: ScannerWrapperConfig) :
     CommandLinePathScannerWrapper(name) {
     class Factory : ScannerWrapperFactory<Unit>("Askalono") {
-        override fun create(config: Unit, matcherConfig: ScannerMatcherConfig) = Askalono(type, matcherConfig)
+        override fun create(config: Unit, wrapperConfig: ScannerWrapperConfig) = Askalono(type, wrapperConfig)
 
         override fun parseConfig(options: Options, secrets: Options) = Unit
     }
 
     override val configuration = ""
 
-    override val matcher by lazy { ScannerMatcher.create(details, matcherConfig) }
+    override val matcher by lazy { ScannerMatcher.create(details, wrapperConfig.matcherConfig) }
 
     override fun command(workingDir: File?) =
         listOfNotNull(workingDir, if (Os.isWindows) "askalono.exe" else "askalono").joinToString(File.separator)

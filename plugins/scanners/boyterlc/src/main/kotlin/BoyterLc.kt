@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScannerMatcher
-import org.ossreviewtoolkit.scanner.ScannerMatcherConfig
+import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.Os
@@ -44,7 +44,7 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 
 private val JSON = Json { ignoreUnknownKeys = true }
 
-class BoyterLc internal constructor(name: String, private val matcherConfig: ScannerMatcherConfig) :
+class BoyterLc internal constructor(name: String, private val wrapperConfig: ScannerWrapperConfig) :
     CommandLinePathScannerWrapper(name) {
     companion object {
         val CONFIGURATION_OPTIONS = listOf(
@@ -54,14 +54,14 @@ class BoyterLc internal constructor(name: String, private val matcherConfig: Sca
     }
 
     class Factory : ScannerWrapperFactory<Unit>("BoyterLc") {
-        override fun create(config: Unit, matcherConfig: ScannerMatcherConfig) = BoyterLc(type, matcherConfig)
+        override fun create(config: Unit, wrapperConfig: ScannerWrapperConfig) = BoyterLc(type, wrapperConfig)
 
         override fun parseConfig(options: Options, secrets: Options) = Unit
     }
 
     override val configuration = CONFIGURATION_OPTIONS.joinToString(" ")
 
-    override val matcher by lazy { ScannerMatcher.create(details, matcherConfig) }
+    override val matcher by lazy { ScannerMatcher.create(details, wrapperConfig.matcherConfig) }
 
     override fun command(workingDir: File?) =
         listOfNotNull(workingDir, if (Os.isWindows) "lc.exe" else "lc").joinToString(File.separator)

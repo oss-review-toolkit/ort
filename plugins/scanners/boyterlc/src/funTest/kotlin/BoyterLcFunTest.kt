@@ -21,11 +21,11 @@ package org.ossreviewtoolkit.plugins.scanners.boyterlc
 
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.scanner.ScannerMatcherConfig
+import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
 import org.ossreviewtoolkit.scanner.scanners.AbstractPathScannerWrapperFunTest
 
 class BoyterLcFunTest : AbstractPathScannerWrapperFunTest() {
-    override val scanner = BoyterLc("BoyterLc", ScannerMatcherConfig.EMPTY)
+    override val scanner = BoyterLc("BoyterLc", ScannerWrapperConfig.EMPTY)
 
     override val expectedFileLicenses = listOf(
         LicenseFinding("Apache-2.0", TextLocation("LICENSE", TextLocation.UNKNOWN_LINE), 0.98388565f),

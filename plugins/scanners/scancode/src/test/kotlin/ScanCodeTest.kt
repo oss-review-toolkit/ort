@@ -35,11 +35,11 @@ import java.io.File
 
 import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.scanner.ScanContext
-import org.ossreviewtoolkit.scanner.ScannerMatcherConfig
+import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 
 class ScanCodeTest : WordSpec({
-    val scanner = ScanCode("ScanCode", ScanCodeConfig.EMPTY, ScannerMatcherConfig.EMPTY)
+    val scanner = ScanCode("ScanCode", ScanCodeConfig.EMPTY, ScannerWrapperConfig.EMPTY)
 
     "configuration" should {
         "return the default values if the scanner configuration is empty" {
@@ -53,7 +53,7 @@ class ScanCodeTest : WordSpec({
                     commandLine = "--command --line",
                     commandLineNonConfig = "--commandLineNonConfig"
                 ),
-                ScannerMatcherConfig.EMPTY
+                ScannerWrapperConfig.EMPTY
             )
 
             scannerWithConfig.configuration shouldBe "--command --line --json-pp"
@@ -75,7 +75,7 @@ class ScanCodeTest : WordSpec({
                     commandLine = "--command --line",
                     commandLineNonConfig = "--commandLineNonConfig"
                 ),
-                ScannerMatcherConfig.EMPTY
+                ScannerWrapperConfig.EMPTY
             )
 
             scannerWithConfig.getCommandLineOptions("31.2.4").joinToString(" ") shouldBe
@@ -89,7 +89,7 @@ class ScanCodeTest : WordSpec({
                     commandLine = " --command  --line  ",
                     commandLineNonConfig = "  -n -c "
                 ),
-                ScannerMatcherConfig.EMPTY
+                ScannerWrapperConfig.EMPTY
             )
 
             scannerWithConfig.getCommandLineOptions("31.2.4") shouldBe listOf("--command", "--line", "-n", "-c")

@@ -34,7 +34,7 @@ import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.ScannerMatcher
-import org.ossreviewtoolkit.scanner.ScannerMatcherConfig
+import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.Os
@@ -62,10 +62,10 @@ import org.semver4j.Semver
 class ScanCode internal constructor(
     name: String,
     config: ScanCodeConfig,
-    private val matcherConfig: ScannerMatcherConfig
+    private val wrapperConfig: ScannerWrapperConfig
 ) : CommandLinePathScannerWrapper(name) {
     // This constructor is required by the `RequirementsCommand`.
-    constructor(name: String, matcherConfig: ScannerMatcherConfig) : this(name, ScanCodeConfig.EMPTY, matcherConfig)
+    constructor(name: String, wrapperConfig: ScannerWrapperConfig) : this(name, ScanCodeConfig.EMPTY, wrapperConfig)
 
     companion object {
         const val SCANNER_NAME = "ScanCode"
@@ -101,13 +101,13 @@ class ScanCode internal constructor(
     }
 
     class Factory : ScannerWrapperFactory<ScanCodeConfig>(SCANNER_NAME) {
-        override fun create(config: ScanCodeConfig, matcherConfig: ScannerMatcherConfig) =
-            ScanCode(type, config, matcherConfig)
+        override fun create(config: ScanCodeConfig, wrapperConfig: ScannerWrapperConfig) =
+            ScanCode(type, config, wrapperConfig)
 
         override fun parseConfig(options: Options, secrets: Options) = ScanCodeConfig.create(options)
     }
 
-    override val matcher by lazy { ScannerMatcher.create(details, matcherConfig) }
+    override val matcher by lazy { ScannerMatcher.create(details, wrapperConfig.matcherConfig) }
 
     override val configuration by lazy {
         buildList {

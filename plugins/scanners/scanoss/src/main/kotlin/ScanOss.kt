@@ -41,7 +41,7 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.scanner.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScannerMatcher
-import org.ossreviewtoolkit.scanner.ScannerMatcherConfig
+import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
@@ -53,11 +53,11 @@ private const val ARG_FIELD_NAME = "file"
 class ScanOss internal constructor(
     override val name: String,
     config: ScanOssConfig,
-    private val matcherConfig: ScannerMatcherConfig
+    private val wrapperConfig: ScannerWrapperConfig
 ) : PathScannerWrapper {
     class Factory : ScannerWrapperFactory<ScanOssConfig>("SCANOSS") {
-        override fun create(config: ScanOssConfig, matcherConfig: ScannerMatcherConfig) =
-            ScanOss(type, config, matcherConfig)
+        override fun create(config: ScanOssConfig, wrapperConfig: ScannerWrapperConfig) =
+            ScanOss(type, config, wrapperConfig)
 
         override fun parseConfig(options: Options, secrets: Options) =
             ScanOssConfig.create(options, secrets).also { logger.info { "The $type API URL is ${it.apiUrl}." } }
@@ -74,7 +74,7 @@ class ScanOss internal constructor(
 
     override val configuration = ""
 
-    override val matcher by lazy { ScannerMatcher.create(details, matcherConfig) }
+    override val matcher by lazy { ScannerMatcher.create(details, wrapperConfig.matcherConfig) }
 
     /**
      * The name of the file corresponding to the fingerprints can be sent to SCANOSS for more precise matches.

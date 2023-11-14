@@ -21,12 +21,12 @@ package org.ossreviewtoolkit.plugins.scanners.licensee
 
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.scanner.ScannerMatcherConfig
+import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
 import org.ossreviewtoolkit.scanner.scanners.AbstractPathScannerWrapperFunTest
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
 
 class LicenseeFunTest : AbstractPathScannerWrapperFunTest(setOf(ExpensiveTag)) {
-    override val scanner = Licensee("Licensee", ScannerMatcherConfig.EMPTY)
+    override val scanner = Licensee("Licensee", ScannerWrapperConfig.EMPTY)
 
     override val expectedFileLicenses = listOf(
         LicenseFinding("Apache-2.0", TextLocation("LICENSE", TextLocation.UNKNOWN_LINE), 100.0f)
