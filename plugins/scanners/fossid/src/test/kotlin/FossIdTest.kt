@@ -106,6 +106,7 @@ import org.ossreviewtoolkit.plugins.scanners.fossid.FossId.Companion.SCAN_ID_KEY
 import org.ossreviewtoolkit.plugins.scanners.fossid.FossId.Companion.SERVER_URL_KEY
 import org.ossreviewtoolkit.plugins.scanners.fossid.FossId.Companion.convertGitUrlToProjectName
 import org.ossreviewtoolkit.scanner.ScanContext
+import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 @Suppress("LargeClass")
@@ -1151,7 +1152,7 @@ private val DEFAULT_IGNORE_RULE_SCOPE = RuleScope.SCAN
 /**
  * Create a new [FossId] instance with the specified [config].
  */
-private fun createFossId(config: FossIdConfig): FossId = FossId("FossId", config)
+private fun createFossId(config: FossIdConfig): FossId = FossId("FossId", config, ScannerWrapperConfig.EMPTY)
 
 /**
  * Create a standard [FossIdConfig] whose properties can be partly specified.

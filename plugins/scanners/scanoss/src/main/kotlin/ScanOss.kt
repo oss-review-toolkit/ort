@@ -76,6 +76,10 @@ class ScanOss internal constructor(
 
     override val matcher by lazy { ScannerMatcher.create(details, wrapperConfig.matcherConfig) }
 
+    override val readFromStorage by lazy { wrapperConfig.readFromStorageWithDefault(matcher) }
+
+    override val writeToStorage by lazy { wrapperConfig.writeToStorageWithDefault(matcher) }
+
     /**
      * The name of the file corresponding to the fingerprints can be sent to SCANOSS for more precise matches.
      * However, for anonymity, a unique identifier should be generated and used instead. This property holds the

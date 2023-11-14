@@ -71,9 +71,20 @@ sealed interface ScannerWrapper {
      * name of a property of the [ScannerMatcher] class. For instance, to specify that a specific minimum version of
      * ScanCode is allowed, set this property: `config.ScanCode.options.minVersion=3.0.2`.
      *
-     * If this property is null, it means that the results of this [ScannerWrapper] cannot be stored in a scan storage.
+     * If this property is null, it means that the results of this [ScannerWrapper] cannot be read from a scan storage.
      */
     val matcher: ScannerMatcher?
+
+    /**
+     * If `true`, scan results for this scanner shall be read from the configured scan storages. Enabling this option
+     * requires that the [matcher] is not `null`.
+     */
+    val readFromStorage: Boolean
+
+    /**
+     * If `true`, scan results for this scanner shall be written to the configured scan storages.
+     */
+    val writeToStorage: Boolean
 }
 
 /**

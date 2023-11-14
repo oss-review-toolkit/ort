@@ -78,4 +78,14 @@ data class ScannerWrapperConfig(
             ) to filteredOptions
         }
     }
+
+    /**
+     * Return [readFromStorage] if it is not `null`, otherwise return `true` if the provided [matcher] is not `null`.
+     */
+    fun readFromStorageWithDefault(matcher: ScannerMatcher?) = readFromStorage ?: (matcher != null)
+
+    /**
+     * Return [writeToStorage] if it is not `null`, otherwise return `true` if the provided [matcher] is not `null`.
+     */
+    fun writeToStorageWithDefault(matcher: ScannerMatcher?) = writeToStorage ?: (matcher != null)
 }

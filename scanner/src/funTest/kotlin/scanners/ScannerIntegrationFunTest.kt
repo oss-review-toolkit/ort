@@ -216,6 +216,8 @@ internal class DummyScanner(override val name: String = "Dummy") : PathScannerWr
     override val configuration = ""
 
     override val matcher = ScannerMatcher.create(details)
+    override val readFromStorage = true
+    override val writeToStorage = true
 
     override fun scanPath(path: File, context: ScanContext): ScanSummary {
         val relevantFiles = path.walk()
