@@ -370,7 +370,7 @@ class Scanner(
                     controller.addNestedScanResult(scanner, nestedProvenanceScanResult)
 
                     // TODO: Run in coroutine.
-                    if (scanner.matcher != null) {
+                    if (scanner.writeToStorage) {
                         storeNestedScanResult(pkg, nestedProvenanceScanResult)
                     }
                 }
@@ -503,6 +503,7 @@ class Scanner(
     private fun readStoredPackageResults(controller: ScanController) {
         controller.scanners.forEach { scanner ->
             val scannerMatcher = scanner.matcher ?: return@forEach
+            if (!scanner.readFromStorage) return@forEach
 
             controller.packages.forEach pkg@{ pkg ->
                 val nestedProvenance = controller.findNestedProvenance(pkg.id) ?: return@pkg
@@ -532,6 +533,7 @@ class Scanner(
     private fun readStoredProvenanceResults(controller: ScanController) {
         controller.scanners.forEach { scanner ->
             val scannerMatcher = scanner.matcher ?: return@forEach
+            if (!scanner.readFromStorage) return@forEach
 
             controller.getAllProvenances().forEach provenance@{ provenance ->
                 if (controller.hasScanResult(scanner, provenance)) return@provenance
