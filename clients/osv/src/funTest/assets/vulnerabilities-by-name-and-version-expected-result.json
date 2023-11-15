@@ -2,10 +2,11 @@
     {
         "schema_version": "1.6.0",
         "id": "GHSA-462w-v97r-4m45",
-        "modified": "2023-10-29T05:22:14.414170Z",
+        "modified": "2023-11-08T04:00:58.644982Z",
         "published": "2019-04-10T14:30:24Z",
         "aliases": [
-            "CVE-2019-10906"
+            "CVE-2019-10906",
+            "PYSEC-2019-217"
         ],
         "summary": "Jinja2 sandbox escape via string formatting",
         "details": "In Pallets Jinja before 2.10.1, `str.format_map` allows a sandbox escape.\n\nThe sandbox is used to restrict what code can be evaluated when rendering untrusted, user-provided templates. Due to the way string formatting works in Python, the `str.format_map` method could be used to escape the sandbox.\n\nThis issue was previously addressed for the `str.format` method in Jinja 2.8.1, which discusses the issue in detail. However, the less-common `str.format_map` method was overlooked. This release applies the same sandboxing to both methods.\n\nIf you cannot upgrade Jinja, you can override the `is_safe_attribute` method on the sandbox and explicitly disallow the `format_map` method on string objects.",
@@ -172,10 +173,11 @@
     {
         "schema_version": "1.6.0",
         "id": "GHSA-8r7q-cvjq-x353",
-        "modified": "2023-04-11T01:29:39.253214Z",
+        "modified": "2023-11-08T03:57:34.512953Z",
         "published": "2022-05-14T04:04:14Z",
         "aliases": [
-            "CVE-2014-1402"
+            "CVE-2014-1402",
+            "PYSEC-2014-8"
         ],
         "summary": "Incorrect Privilege Assignment in Jinja2",
         "details": "The default configuration for bccache.FileSystemBytecodeCache in Jinja2 before 2.7.2 does not properly create temporary files, which allows local users to gain privileges via a crafted .cache file with a name starting with __jinja2_ in /tmp.",
@@ -320,10 +322,11 @@
     {
         "schema_version": "1.6.0",
         "id": "GHSA-fqh9-2qgg-h84h",
-        "modified": "2023-04-11T01:29:34.742416Z",
+        "modified": "2023-11-08T03:57:29.971954Z",
         "published": "2022-05-17T04:01:00Z",
         "aliases": [
-            "CVE-2014-0012"
+            "CVE-2014-0012",
+            "PYSEC-2014-82"
         ],
         "summary": "Insecure Temporary File in Jinja2",
         "details": "FileSystemBytecodeCache in Jinja2 2.7.2 does not properly create temporary directories, which allows local users to gain privileges by pre-creating a temporary directory with a user's uid.  NOTE: this vulnerability exists because of an incomplete fix for CVE-2014-1402.",
@@ -420,10 +423,12 @@
     {
         "schema_version": "1.6.0",
         "id": "GHSA-g3rq-g295-4j3m",
-        "modified": "2023-04-11T01:27:03.685024Z",
+        "modified": "2023-11-08T04:03:28.543308Z",
         "published": "2021-03-19T21:28:05Z",
         "aliases": [
-            "CVE-2020-28493"
+            "CVE-2020-28493",
+            "PYSEC-2021-66",
+            "SNYK-PYTHON-JINJA2-1012994"
         ],
         "summary": "Regular Expression Denial of Service (ReDoS) in Jinja2",
         "details": "This affects the package jinja2 from 0.0.0 and before 2.11.3. The ReDOS vulnerability of the regex is mainly due to the sub-pattern [a-zA-Z0-9._-]+.[a-zA-Z0-9._-]+ This issue can be mitigated by Markdown to format user content instead of the urlize filter, or by implementing request timeouts and limiting process memory.",
@@ -549,10 +554,11 @@
     {
         "schema_version": "1.6.0",
         "id": "GHSA-hj2j-77xm-mc5v",
-        "modified": "2023-04-11T01:41:57.013215Z",
+        "modified": "2023-11-08T03:58:21.453618Z",
         "published": "2019-04-10T14:30:13Z",
         "aliases": [
-            "CVE-2016-10745"
+            "CVE-2016-10745",
+            "PYSEC-2019-220"
         ],
         "summary": "High severity vulnerability that affects Jinja2",
         "details": "In Pallets Jinja before 2.8.1, str.format allows a sandbox escape.",
@@ -682,7 +688,7 @@
     {
         "schema_version": "1.6.0",
         "id": "PYSEC-2014-8",
-        "modified": "2021-07-05T00:01:22.043149Z",
+        "modified": "2023-11-08T03:57:34.512953Z",
         "published": "2014-05-19T14:55:00Z",
         "aliases": [
             "CVE-2014-1402",
@@ -813,10 +819,11 @@
     {
         "schema_version": "1.6.0",
         "id": "PYSEC-2014-82",
-        "modified": "2021-08-27T03:22:05.027573Z",
+        "modified": "2023-11-08T03:57:29.971954Z",
         "published": "2014-05-19T14:55:00Z",
         "aliases": [
-            "CVE-2014-0012"
+            "CVE-2014-0012",
+            "GHSA-fqh9-2qgg-h84h"
         ],
         "details": "FileSystemBytecodeCache in Jinja2 2.7.2 does not properly create temporary directories, which allows local users to gain privileges by pre-creating a temporary directory with a user's uid.  NOTE: this vulnerability exists because of an incomplete fix for CVE-2014-1402.",
         "affected": [
@@ -916,7 +923,7 @@
     {
         "schema_version": "1.6.0",
         "id": "PYSEC-2019-217",
-        "modified": "2021-11-22T04:57:52.862665Z",
+        "modified": "2023-11-08T04:00:58.644982Z",
         "published": "2019-04-07T00:29:00Z",
         "aliases": [
             "CVE-2019-10906",
@@ -1067,7 +1074,7 @@
     {
         "schema_version": "1.6.0",
         "id": "PYSEC-2019-220",
-        "modified": "2021-11-22T04:57:52.929678Z",
+        "modified": "2023-11-08T03:58:21.453618Z",
         "published": "2019-04-08T13:29:00Z",
         "aliases": [
             "CVE-2016-10745",
@@ -1189,12 +1196,12 @@
     {
         "schema_version": "1.6.0",
         "id": "PYSEC-2021-66",
-        "modified": "2021-03-22T16:34:00Z",
+        "modified": "2023-11-08T04:03:28.543308Z",
         "published": "2021-02-01T20:15:00Z",
         "aliases": [
             "CVE-2020-28493",
-            "SNYK-PYTHON-JINJA2-1012994",
-            "GHSA-g3rq-g295-4j3m"
+            "GHSA-g3rq-g295-4j3m",
+            "SNYK-PYTHON-JINJA2-1012994"
         ],
         "details": "This affects the package jinja2 from 0.0.0 and before 2.11.3. The ReDoS vulnerability is mainly due to the `_punctuation_re regex` operator and its use of multiple wildcards. The last wildcard is the most exploitable as it searches for trailing punctuation. This issue can be mitigated by Markdown to format user content instead of the urlize filter, or by implementing request timeouts and limiting process memory.",
         "affected": [
