@@ -77,6 +77,7 @@ ENV \
     HASKELL_STACK_VERSION=2.13.1 \
     NPM_VERSION=10.1.0 \
     PNPM_VERSION=8.10.3 \
+    PIPTOOL_VERSION=22.2.2 \
     PYTHON_PIPENV_VERSION=2022.9.24 \
     PYTHON_POETRY_VERSION=1.6.1 \
     SBT_VERSION=1.9.7 \
@@ -159,6 +160,8 @@ RUN /opt/ort/bin/export_proxy_certificates.sh /tmp/certificates/ && \
     # Install package managers (in versions known to work).
     gem install cocoapods -v $COCOAPODS_VERSION && \
     npm install --location=global npm@$NPM_VERSION bower@$BOWER_VERSION pnpm@$PNPM_VERSION yarn@$YARN_VERSION && \
+    # Install the configured version of pip.
+    pip install --no-cache-dir -U pip=="$PIPTOOL_VERSION" && \
     pip install --no-cache-dir wheel && \
     pip install --no-cache-dir conan==$CONAN_VERSION poetry==$PYTHON_POETRY_VERSION pipenv==$PYTHON_PIPENV_VERSION && \
     # Install golang in order to have `go mod` as package manager.
