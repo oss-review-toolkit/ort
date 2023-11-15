@@ -56,7 +56,7 @@ class DosPackageConfigurationProvider(config: DosPackageConfigurationProviderCon
 
         val packageResults = runBlocking { repository.postPackageConfiguration(purl) }
         if (packageResults == null) {
-            logger.error { "Could not request package configurations for $purl" }
+            logger.info { "Package $purl was scanned as part of another package" }
             return emptyList()
         }
 

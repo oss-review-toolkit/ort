@@ -163,7 +163,8 @@ class DOSRepository(private val dosService: DOSService) {
         return if (response.isSuccessful) {
             response.body()
         } else {
-            logger.error { "$response" }
+            // For now, skip putting these message to logs so as not to alarm users
+            //logger.error { "$response" }
             null
         }
     }
