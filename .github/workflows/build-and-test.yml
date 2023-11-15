@@ -134,7 +134,7 @@ jobs:
       uses: gradle/gradle-build-action@v2
       with:
         gradle-home-cache-cleanup: true
-        arguments: --scan -Ptests.exclude=org.ossreviewtoolkit.cli.*,org.ossreviewtoolkit.analyzer.*,org.ossreviewtoolkit.plugins.packagemanagers.* funTest jacocoFunTestReport
+        arguments: --scan -Ptests.exclude=org.ossreviewtoolkit.cli.*,org.ossreviewtoolkit.plugins.packagemanagers.* funTest jacocoFunTestReport
     - name: Upload code coverage data
       uses: codecov/codecov-action@v3
       with:
