@@ -19,7 +19,9 @@
 
 package org.ossreviewtoolkit.scanner
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.inspectors.forAll
 import io.kotest.matchers.maps.shouldContainExactly
 import io.kotest.matchers.shouldBe
 
@@ -58,6 +60,21 @@ class ScannerWrapperConfigTest : WordSpec({
             )
 
             ScannerWrapperConfig.create(options).second shouldContainExactly mapOf("other" to "value")
+        }
+
+        "set storage properties not contained in the options map to null" {
+            with(ScannerWrapperConfig.create(emptyMap()).first) {
+                readFromStorage shouldBe null
+                writeToStorage shouldBe null
+            }
+        }
+
+        "fail if storage options are invalid" {
+            listOf("1", "tru", "null").forAll {
+                shouldThrow<IllegalArgumentException> {
+                    ScannerWrapperConfig.create(mapOf(ScannerWrapperConfig.PROP_READ_FROM_STORAGE to it))
+                }
+            }
         }
     }
 })
