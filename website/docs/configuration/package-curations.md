@@ -68,12 +68,12 @@ The structure of the curations file consist of one or more `id` entries:
     homepage_url: "http://example.com"
     binary_artifact:
       url: "http://example.com/binary.zip"
-      hash: 
+      hash:
         value: "ddce269a1e3d054cae349621c198dd52"
         algorithm: "MD5"
     source_artifact:
       url: "http://example.com/sources.zip"
-      hash: 
+      hash:
         value: "ddce269a1e3d054cae349621c198dd52"
         algorithm: "MD5"
     vcs:
