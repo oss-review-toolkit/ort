@@ -85,7 +85,7 @@ ENV \
     SWIFT_VERSION=5.8.1 \
     YARN_VERSION=1.22.19 \
     # SDK versions.
-    ANDROID_CMD_VERSION=9477386 \
+    ANDROID_CMD_VERSION=10406996 \
     # Installation directories.
     ANDROID_HOME=/opt/android-sdk \
     GOBIN=/opt/go/bin \
