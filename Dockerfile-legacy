@@ -84,7 +84,7 @@ ENV \
     SWIFT_VERSION=5.8.1 \
     YARN_VERSION=1.22.19 \
     # SDK versions.
-    ANDROID_SDK_VERSION=9477386 \
+    ANDROID_CMD_VERSION=9477386 \
     # Installation directories.
     ANDROID_HOME=/opt/android-sdk \
     GOBIN=/opt/go/bin \
@@ -173,9 +173,9 @@ RUN /opt/ort/bin/export_proxy_certificates.sh /tmp/certificates/ && \
     curl -L https://download.swift.org/swift-$SWIFT_VERSION-release/ubuntu2204/swift-$SWIFT_VERSION-RELEASE/swift-$SWIFT_VERSION-RELEASE-ubuntu22.04.tar.gz \
         | tar -xz -C $SWIFT_HOME --strip-components=2 && \
     # Install SDKs required for analysis.
-    curl -Os https://dl.google.com/android/repository/commandlinetools-linux-${ANDROID_SDK_VERSION}_latest.zip && \
-    unzip -q commandlinetools-linux-${ANDROID_SDK_VERSION}_latest.zip -d $ANDROID_HOME && \
-    rm commandlinetools-linux-${ANDROID_SDK_VERSION}_latest.zip && \
+    curl -Os https://dl.google.com/android/repository/commandlinetools-linux-${ANDROID_CMD_VERSION}_latest.zip && \
+    unzip -q commandlinetools-linux-${ANDROID_CMD_VERSION}_latest.zip -d $ANDROID_HOME && \
+    rm commandlinetools-linux-${ANDROID_CMD_VERSION}_latest.zip && \
     PROXY_HOST_AND_PORT=${https_proxy#*://} && \
     PROXY_HOST_AND_PORT=${PROXY_HOST_AND_PORT%/} && \
     if [ -n "$PROXY_HOST_AND_PORT" ]; then \
