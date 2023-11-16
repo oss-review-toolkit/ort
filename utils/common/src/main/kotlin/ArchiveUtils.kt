@@ -266,7 +266,7 @@ fun InputStream.unpackTar(targetDirectory: File, filter: (ArchiveEntry) -> Boole
  * Unpack this [ArchiveInputStream] to the [targetDirectory], skipping all entries for which [shouldSkip] returns true,
  * and using what [mode] returns as the file mode bits.
  */
-private fun ArchiveInputStream.unpack(
+private fun <E : ArchiveEntry> ArchiveInputStream<E>.unpack(
     targetDirectory: File,
     shouldSkip: (ArchiveEntry) -> Boolean,
     mode: (ArchiveEntry) -> Int
