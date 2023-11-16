@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression.Strictness.ALLOW_LICENSEREF_EXCEPTIONS
 import org.ossreviewtoolkit.utils.spdx.isSpdxExpressionOrNotPresent
 
 /**
@@ -103,10 +104,12 @@ data class SpdxSnippet(
 
         // TODO: The check for [licenseInfoInSnippets] can be made more strict, but the SPDX specification is not exact
         //       enough yet to do this safely.
-        licenseInfoInSnippets.filterNot { it.isSpdxExpressionOrNotPresent() }.let { invalidEntries ->
-            require(invalidEntries.isEmpty()) {
-                "The entries in licenseInfoInSnippets must each be either an SpdxExpression, 'NONE' or " +
-                    "'NOASSERTION', but found ${invalidEntries.joinToString()}."
+        licenseInfoInSnippets.filterNot {
+            it.isSpdxExpressionOrNotPresent(ALLOW_LICENSEREF_EXCEPTIONS)
+        }.let { nonSpdxLicenses ->
+            require(nonSpdxLicenses.isEmpty()) {
+                "The entries in 'licenseInfoInSnippets' must each be either an SPDX expression, 'NONE' or " +
+                    "'NOASSERTION', but found ${nonSpdxLicenses.joinToString { "'$it'" }}."
             }
         }
 
