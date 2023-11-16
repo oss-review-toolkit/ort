@@ -219,10 +219,12 @@ data class SpdxPackage(
 
         // TODO: The check for [licenseInfoFromFiles] can be made more strict, but the SPDX specification is not exact
         //       enough yet to do this safely.
-        licenseInfoFromFiles.filterNot { it.isSpdxExpressionOrNotPresent(ALLOW_LICENSEREF_EXCEPTIONS) }.let {
-            require(it.isEmpty()) {
-                "The entries in licenseInfoFromFiles must each be either an SpdxExpression, 'NONE' or 'NOASSERTION', " +
-                    "but found ${it.joinToString()}."
+        licenseInfoFromFiles.filterNot {
+            it.isSpdxExpressionOrNotPresent(ALLOW_LICENSEREF_EXCEPTIONS)
+        }.let { nonSpdxLicenses ->
+            require(nonSpdxLicenses.isEmpty()) {
+                "The entries in 'licenseInfoFromFiles' must each be either an SPDX expression, 'NONE' or " +
+                    "'NOASSERTION', but found ${nonSpdxLicenses.joinToString { "'$it'" }}."
             }
         }
     }
