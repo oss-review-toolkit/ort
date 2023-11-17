@@ -212,11 +212,13 @@ class EvaluatorCommand : OrtCommand(
             repositoryConfigurationFile
         )
 
-        val configurationInfo = configurationFiles.joinToString("\n\t") { file ->
+        val configurationInfo = configurationFiles.joinToString("\n\t", postfix = "\n\t") { file ->
             file.absolutePath + " (does not exist)".takeIf { !file.exists() }.orEmpty()
+        } + scriptUris.joinToString("\n\t") {
+            runCatching { File(it).absolutePath }.getOrDefault(it.toString())
         }
 
-        echo("Looking for evaluator-specific configuration in the following files and directories:")
+        echo("Looking for evaluator-specific configuration in the following files, directories and resources:")
         echo("\t" + configurationInfo)
 
         // Fail early if output files exist and must not be overwritten.
