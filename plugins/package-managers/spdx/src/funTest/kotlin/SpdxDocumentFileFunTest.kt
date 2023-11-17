@@ -28,6 +28,7 @@ import io.kotest.matchers.maps.haveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.analyzer.managers.analyze
 import org.ossreviewtoolkit.analyzer.managers.create
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -171,6 +172,19 @@ class SpdxDocumentFileFunTest : WordSpec({
 
                     packages.map { it.id } should containExactlyInAnyOrder(idZlib, idMyLib, idCurl, idOpenSsl)
                 }
+            }
+        }
+
+        "resolve dependencies from the Conan package manager" {
+            val definitionFile = projectDir.resolve("subproject-conan/project-xyz.spdx.yml")
+            val expectedResultFile = getAssetFile(
+                "projects/synthetic/spdx-project-xyz-expected-output-subproject-conan.yml"
+            )
+
+            val ortResult = analyze(definitionFile.parentFile, allowDynamicVersions = true)
+
+            ortResult.analyzer.shouldNotBeNull {
+                result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
             }
         }
     }

@@ -40,7 +40,6 @@ import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.GitRepo
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class AnalyzerFunTest : WordSpec({
     "An analysis" should {
@@ -58,19 +57,6 @@ class AnalyzerFunTest : WordSpec({
             val result = analyze(outputDir).toYaml()
 
             patchActualResult(result, patchStartAndEndTime = true) should matchExpectedResult(expectedResultFile)
-        }
-
-        "resolve dependencies from other package managers" {
-            val definitionFile = getAssetFile("projects/synthetic/spdx-subproject-conan/project-xyz.spdx.yml")
-            val expectedResultFile = getAssetFile(
-                "projects/synthetic/spdx-project-xyz-expected-output-subproject-conan.yml"
-            )
-
-            val ortResult = analyze(definitionFile.parentFile, allowDynamicVersions = true)
-
-            ortResult.analyzer.shouldNotBeNull {
-                result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
-            }
         }
     }
 

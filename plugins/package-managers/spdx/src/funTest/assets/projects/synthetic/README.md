@@ -8,5 +8,6 @@ declare the project's metadata and its used packages.
 * [subproject-dependencies](subproject-dependencies): A test project to verify that subprojects are handled correctly.
 * [transitive-dependencies](transitive-dependencies): A test project to verify that transitive dependencies are resolved
   correctly.
+* [subproject-conan](subproject-conan): An SPDX project that refers to Conan packages.
 
 The [libs](libs) directory contains SPDX packages that can be used by all test projects.
