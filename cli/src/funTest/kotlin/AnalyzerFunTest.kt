@@ -54,7 +54,7 @@ class AnalyzerFunTest : WordSpec({
             )
             val outputDir = tempdir().also { GitRepo().download(pkg, it) }
 
-            val result = analyze(outputDir).toYaml()
+            val result = analyze(outputDir, packageManagers = emptySet()).toYaml()
 
             patchActualResult(result, patchStartAndEndTime = true) should matchExpectedResult(expectedResultFile)
         }
