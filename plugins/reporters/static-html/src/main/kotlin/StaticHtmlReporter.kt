@@ -67,14 +67,6 @@ import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseWithExceptionExpression
 
-private val SCOPE_EXCLUDE_LIST_COMPARATOR = compareBy<Map.Entry<String, List<ScopeExclude>>>(
-    { it.value.isNotEmpty() }, { it.key }
-)
-
-private val PathExclude.description: String get() = joinNonBlank(reason.toString(), comment)
-
-private val ScopeExclude.description: String get() = joinNonBlank(reason.toString(), comment)
-
 @Suppress("LargeClass", "TooManyFunctions")
 class StaticHtmlReporter : Reporter {
     override val type = "StaticHtml"
@@ -737,3 +729,11 @@ private fun ResolvedLicenseLocation.permalink(id: Identifier): String? {
 
     return null
 }
+
+private val SCOPE_EXCLUDE_LIST_COMPARATOR = compareBy<Map.Entry<String, List<ScopeExclude>>>(
+    { it.value.isNotEmpty() }, { it.key }
+)
+
+private val PathExclude.description: String get() = joinNonBlank(reason.toString(), comment)
+
+private val ScopeExclude.description: String get() = joinNonBlank(reason.toString(), comment)
