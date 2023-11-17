@@ -35,6 +35,7 @@ dependencies {
     implementation(libs.jacksonDatabind)
     implementation(libs.okhttp)
 
+    funTestImplementation(project(":plugins:package-managers:conan-package-manager"))
     funTestImplementation(testFixtures(project(":analyzer")))
 
     testImplementation(libs.mockk)
