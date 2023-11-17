@@ -131,6 +131,11 @@ private fun getScopeExcludesForPackageManager(packageManagerName: String): List<
         )
         "Gradle" -> listOf(
             ScopeExclude(
+                pattern = "annotationProcessor",
+                reason = ScopeExcludeReason.BUILD_DEPENDENCY_OF,
+                comment = "Packages to process code annotations only."
+            ),
+            ScopeExclude(
                 pattern = ".*AnnotationProcessor.*",
                 reason = ScopeExcludeReason.BUILD_DEPENDENCY_OF,
                 comment = "Packages to process code annotations only."
