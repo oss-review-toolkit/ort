@@ -196,13 +196,13 @@ class EvaluatorCommand : OrtCommand(
     ).flag()
 
     override fun run() {
-        val scriptUrls = mutableSetOf<URI>()
+        val scriptUris = mutableSetOf<URI>()
 
-        rulesFile.mapTo(scriptUrls) { it.toURI() }
-        rulesResource.mapTo(scriptUrls) { javaClass.getResource(it).toURI() }
+        rulesFile.mapTo(scriptUris) { it.toURI() }
+        rulesResource.mapTo(scriptUris) { javaClass.getResource(it).toURI() }
 
-        if (scriptUrls.isEmpty()) {
-            scriptUrls += ortConfigDirectory.resolve(ORT_EVALUATOR_RULES_FILENAME).toURI()
+        if (scriptUris.isEmpty()) {
+            scriptUris += ortConfigDirectory.resolve(ORT_EVALUATOR_RULES_FILENAME).toURI()
         }
 
         val configurationFiles = listOfNotNull(
@@ -235,7 +235,7 @@ class EvaluatorCommand : OrtCommand(
 
             var allChecksSucceeded = true
 
-            scriptUrls.forEach {
+            scriptUris.forEach {
                 if (evaluator.checkSyntax(it.toURL().readText())) {
                     echo("Syntax check for $it succeeded.")
                 } else {
@@ -310,11 +310,11 @@ class EvaluatorCommand : OrtCommand(
             licenseClassificationsFile.takeIf { it.isFile }?.readValue<LicenseClassifications>().orEmpty()
         val evaluator = Evaluator(ortResultInput, licenseInfoResolver, resolutionProvider, licenseClassifications)
 
-        val scripts = scriptUrls.map { it.toURL().readText() }
+        val scripts = scriptUris.map { it.toURL().readText() }
         val evaluatorRun = evaluator.run(*scripts.toTypedArray())
 
         val duration = with(evaluatorRun) { Duration.between(startTime, endTime).toKotlinDuration() }
-        echo("The evaluation of ${scriptUrls.size} script(s) took $duration.")
+        echo("The evaluation of ${scriptUris.size} script(s) took $duration.")
 
         evaluatorRun.violations.forEach { violation ->
             echo(violation.format())
