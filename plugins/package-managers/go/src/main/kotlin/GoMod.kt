@@ -454,7 +454,8 @@ private fun ModuleInfo.toSourceArtifact(): RemoteArtifact {
 }
 
 private fun ModuleInfo.toVcsInfo(): VcsInfo? {
-    val infoFile = goMod?.let { File(it).resolveSibling("$version.info") } ?: return null
+    val escapedVersion = escapeVersion(version)
+    val infoFile = goMod?.let { File(it).resolveSibling("$escapedVersion.info") } ?: return null
     val info = infoFile.inputStream().use { JSON.decodeFromStream<ModuleInfoFile>(it) }
     val type = info.origin.vcs?.let { VcsType.forName(it) }.takeIf { it == VcsType.GIT } ?: return null
 
@@ -484,3 +485,19 @@ internal fun parseWhyOutput(output: String): Set<String> {
 
     return usedModules
 }
+
+/**
+ * Module paths appear as substrings of file system paths in the module cache on the file system.
+ * Go does not rely on the file system to be case-sensitive. For this reason, Go has decided to
+ * replace every uppercase letter in file system paths with an exclamation mark followed by the
+ * letter's lowercase equivalent.
+ *
+ * Details behind the reasoning and implementation in Go can be found in the Go source code at
+ * [module.go](https://github.com/golang/go/blob/5b6d3dea8744311825fd544a73edb8d26d9c7e98/src/cmd/vendor/golang.org/x/mod/module/module.go#L33-L42C64)
+ */
+internal fun escapeVersion(version: String): String {
+    require("!" !in version) { "Module versions must not contain exclamation marks: $version" }
+    return version.replace(upperCaseCharRegex) { "!${it.value.lowercase()}" }
+}
+
+private val upperCaseCharRegex = Regex("[A-Z]")
