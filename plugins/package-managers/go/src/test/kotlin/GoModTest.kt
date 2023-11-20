@@ -19,10 +19,12 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.go
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
 
 class GoModTest : WordSpec({
     "parseWhyOutput" should {
@@ -67,6 +69,23 @@ class GoModTest : WordSpec({
                 "cloud.google.com/go",
                 "github.com/fatih/color"
             )
+        }
+    }
+
+    "escapeVersion" should {
+        "escape uppercase letters" {
+            val version = "v0.1.0-MS4.0.20231102094829-08e0c3cd016c"
+            val escapedVersion = escapeVersion(version)
+
+            escapedVersion shouldBe "v0.1.0-!m!s4.0.20231102094829-08e0c3cd016c"
+        }
+
+        "throw exception if version string contains an exclamation mark" {
+            val version = "v1.0.0!"
+
+            shouldThrow<IllegalArgumentException> {
+                escapeVersion(version)
+            }
         }
     }
 })
