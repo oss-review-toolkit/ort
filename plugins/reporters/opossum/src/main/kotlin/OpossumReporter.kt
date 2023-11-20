@@ -51,7 +51,6 @@ import org.ossreviewtoolkit.utils.common.packZip
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
-import org.ossreviewtoolkit.utils.spdx.getLicenseText
 
 private const val ISSUE_PRIORITY = 900
 
@@ -497,25 +496,25 @@ class OpossumReporter : Reporter {
         jsonFile.delete()
     }
 
-    internal fun generateOpossumInput(ortResult: OrtResult, maxDepth: Int = Int.MAX_VALUE): OpossumInput {
+    internal fun generateOpossumInput(input: ReporterInput, maxDepth: Int = Int.MAX_VALUE): OpossumInput {
         val opossumInput = OpossumInput()
 
-        opossumInput.addBaseUrl("/", ortResult.repository.vcs)
+        opossumInput.addBaseUrl("/", input.ortResult.repository.vcs)
 
         SpdxLicense.entries.forEach {
-            val licenseText = getLicenseText(it.id)
+            val licenseText = input.licenseTextProvider.getLicenseText(it.id)
             opossumInput.frequentLicenses += OpossumFrequentLicense(it.id, it.fullName, licenseText)
         }
 
-        ortResult.getProjects().forEach { project ->
-            opossumInput.addProject(project, ortResult)
+        input.ortResult.getProjects().forEach { project ->
+            opossumInput.addProject(project, input.ortResult)
         }
 
-        if (ortResult.getExcludes().scopes.isEmpty()) {
-            opossumInput.addPackagesThatAreRootless(ortResult.getPackages())
+        if (input.ortResult.getExcludes().scopes.isEmpty()) {
+            opossumInput.addPackagesThatAreRootless(input.ortResult.getPackages())
         }
 
-        ortResult.analyzer?.result?.issues.orEmpty().forEach { (id, issues) ->
+        input.ortResult.analyzer?.result?.issues.orEmpty().forEach { (id, issues) ->
             issues.forEach { issue ->
                 val source = opossumInput.addExternalAttributionSource(
                     key = "ORT-Analyzer-Issues",
@@ -527,7 +526,7 @@ class OpossumReporter : Reporter {
             }
         }
 
-        ortResult.getScanResults().forEach { (id, results) ->
+        input.ortResult.getScanResults().forEach { (id, results) ->
             opossumInput.addScannerResults(id, results, maxDepth)
         }
 
@@ -536,7 +535,7 @@ class OpossumReporter : Reporter {
 
     override fun generateReport(input: ReporterInput, outputDir: File, config: PluginConfiguration): List<File> {
         val maxDepth = config.options.getOrDefault(OPTION_SCANNER_MAX_DEPTH, "3").toInt()
-        val opossumInput = generateOpossumInput(input.ortResult, maxDepth)
+        val opossumInput = generateOpossumInput(input, maxDepth)
         val outputFile = outputDir.resolve("report.opossum")
 
         writeReport(outputFile, opossumInput)
