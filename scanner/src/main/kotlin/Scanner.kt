@@ -353,7 +353,7 @@ class Scanner(
                 }
 
                 logger.info {
-                    "Scan of '${referencePackage.id.toCoordinates()}' with package scanner '${scanner.name} started."
+                    "Starting scan of '${referencePackage.id.toCoordinates()}' with package scanner '${scanner.name}."
                 }
 
                 // Filter the scan context to hide the excludes from scanner with scan matcher.
@@ -361,7 +361,7 @@ class Scanner(
                 val scanResult = scanner.scanPackage(referencePackage, filteredContext)
 
                 logger.info {
-                    "Scan of '${referencePackage.id.toCoordinates()}' with package scanner '${scanner.name}' finished."
+                    "Finished scan of '${referencePackage.id.toCoordinates()}' with package scanner '${scanner.name}'."
                 }
 
                 packagesWithIncompleteScanResult.forEach processResults@{ pkg ->
