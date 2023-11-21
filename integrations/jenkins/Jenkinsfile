@@ -62,6 +62,7 @@ pipeline {
 
         credentials(
             name: 'PROJECT_VCS_CREDENTIALS',
+            credentialType: 'com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl',
             description: 'Optional HTTP credentials to use for the VCS checkout.',
             defaultValue: ''
         )
@@ -84,6 +85,7 @@ pipeline {
 
         credentials(
             name: 'ORT_CONFIG_VCS_CREDENTIALS',
+            credentialType: 'com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl',
             description: 'Optional HTTP credentials to use for the VCS checkout.',
             defaultValue: ''
         )
