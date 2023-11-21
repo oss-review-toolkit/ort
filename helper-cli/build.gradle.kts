@@ -30,6 +30,9 @@ application {
 dependencies {
     implementation(project(":analyzer"))
     implementation(project(":downloader"))
+    implementation(project(":plugins:version-control-systems:git-version-control-system"))
+    implementation(project(":plugins:version-control-systems:mercurial-version-control-system"))
+    implementation(project(":plugins:version-control-systems:subversion-version-control-system"))
     implementation(project(":plugins:package-configuration-providers:dir-package-configuration-provider"))
     implementation(project(":plugins:package-curation-providers:file-package-curation-provider"))
     implementation(project(":scanner"))
