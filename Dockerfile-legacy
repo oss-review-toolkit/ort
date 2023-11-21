@@ -29,6 +29,9 @@ ARG JAVA_VERSION=17
 # Set this to the version ORT should report.
 ARG ORT_VERSION="DOCKER-SNAPSHOT"
 
+# Set this to the Android SDK version to use.
+ARG ANDROID_CMD_VERSION=10406996
+
 # Set this to the NuGet Inspector version to use.
 ARG NUGET_INSPECTOR_VERSION=0.9.12
 
@@ -60,6 +63,7 @@ RUN --mount=type=cache,target=/tmp/.gradle/ \
 FROM eclipse-temurin:$JAVA_VERSION-jdk-jammy AS run
 
 # Repeat global arguments used in this stage.
+ARG ANDROID_CMD_VERSION
 ARG CRT_FILES
 ARG NUGET_INSPECTOR_VERSION
 ARG PYTHON_INSPECTOR_VERSION
@@ -84,8 +88,6 @@ ENV \
     SBT_VERSION=1.9.7 \
     SWIFT_VERSION=5.8.1 \
     YARN_VERSION=1.22.19 \
-    # SDK versions.
-    ANDROID_CMD_VERSION=10406996 \
     # Installation directories.
     ANDROID_HOME=/opt/android-sdk \
     GOBIN=/opt/go/bin \
