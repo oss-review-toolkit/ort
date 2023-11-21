@@ -24,44 +24,10 @@ import java.net.Authenticator
 import java.net.PasswordAuthentication
 import java.net.URI
 
-import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.toSafeUri
 import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.common.withoutSuffix
-
-/**
- * The directory to store ORT (read-only) configuration in.
- */
-val ortConfigDirectory by lazy {
-    Os.env[ORT_CONFIG_DIR_ENV_NAME]?.takeUnless {
-        it.isEmpty()
-    }?.let {
-        File(it)
-    } ?: ortDataDirectory.resolve("config")
-}
-
-/**
- * The directory to store ORT (read-write) tools in.
- */
-val ortToolsDirectory by lazy {
-    Os.env[ORT_TOOLS_DIR_ENV_NAME]?.takeUnless {
-        it.isEmpty()
-    }?.let {
-        File(it)
-    } ?: ortDataDirectory.resolve("tools")
-}
-
-/**
- * The directory to store ORT (read-write) data in, like caches and archives.
- */
-val ortDataDirectory by lazy {
-    Os.env[ORT_DATA_DIR_ENV_NAME]?.takeUnless {
-        it.isEmpty()
-    }?.let {
-        File(it)
-    } ?: Os.userHomeDirectory.resolve(".ort")
-}
 
 /**
  * Global variable that gets toggled by a command line parameter parsed in the main entry points of the modules.
