@@ -22,6 +22,9 @@ plugins {
     id("ort-application-conventions")
 }
 
+configurations.dependencyScope("pluginClasspath")
+configurations["runtimeClasspath"].extendsFrom(configurations["pluginClasspath"])
+
 application {
     applicationName = "orth"
     mainClass = "org.ossreviewtoolkit.helper.HelperMainKt"
@@ -30,8 +33,11 @@ application {
 dependencies {
     implementation(project(":analyzer"))
     implementation(project(":downloader"))
+
+    // There are commands with a hard-coded compile-time dependency on these plugins.
     implementation(project(":plugins:package-configuration-providers:dir-package-configuration-provider"))
     implementation(project(":plugins:package-curation-providers:file-package-curation-provider"))
+
     implementation(project(":scanner"))
     implementation(project(":utils:ort-utils"))
 
@@ -43,4 +49,6 @@ dependencies {
     implementation(libs.jslt)
     implementation(libs.log4jApi)
     implementation(libs.slf4j)
+
+    "pluginClasspath"(platform(project(":plugins:version-control-systems")))
 }
