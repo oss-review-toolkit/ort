@@ -83,6 +83,12 @@ pipeline {
             defaultValue: ''
         )
 
+        string(
+                name: 'ORT_CONFIG_VCS_PATH',
+                description: 'Optional VCS path of the ORT configuration.',
+                defaultValue: ''
+        )
+
         credentials(
             name: 'ORT_CONFIG_VCS_CREDENTIALS',
             credentialType: 'com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl',
@@ -334,25 +340,31 @@ pipeline {
                     rm -fr $ORT_DATA_DIR/config
                     /opt/ort/bin/ort $ORT_OPTIONS download --project-url $ORT_CONFIG_VCS_URL $VCS_REVISION_OPTION -o $ORT_DATA_DIR/config
 
-                    if [ -f "$ORT_DATA_DIR/config/config.yml" ]; then
-                        echo "Not creating '$ORT_DATA_DIR/config/config.yml' as it already exists."
-                    else
-                        echo "Creating '$ORT_DATA_DIR/config/config.yml' template for job parameters."
-                        cat >$ORT_DATA_DIR/config/config.yml <<EOF
-                    ort:
-                      packageCurationProviders:
-                        - name: DefaultFile
-                        - name: DefaultDir
-                        - name: OrtConfig
-                          enabled: ${USE_ORT_CONFIG_CURATIONS}
-                        - name: ClearlyDefined
-                          enabled: ${USE_CLEARLY_DEFINED_CURATIONS}
-                    EOF
-                    fi
-
                     rm -f $HOME/.netrc
                     '''.stripIndent().trim()
                 }
+
+                script {
+                    env.ORT_CONFIG_DIR = "${env.ORT_DATA_DIR}/config/${env.ORT_CONFIG_VCS_PATH}"
+                }
+
+                sh '''
+                if [ -f "$ORT_CONFIG_DIR/config.yml" ]; then
+                    echo "Not creating '$ORT_CONFIG_DIR/config.yml' as it already exists."
+                else
+                    echo "Creating '$ORT_CONFIG_DIR/config.yml' template for job parameters."
+                    cat >$ORT_CONFIG_DIR/config.yml <<EOF
+                ort:
+                  packageCurationProviders:
+                    - name: DefaultFile
+                    - name: DefaultDir
+                    - name: OrtConfig
+                      enabled: ${USE_ORT_CONFIG_CURATIONS}
+                    - name: ClearlyDefined
+                      enabled: ${USE_CLEARLY_DEFINED_CURATIONS}
+                EOF
+                fi
+                '''.stripIndent().trim()
             }
         }
 
