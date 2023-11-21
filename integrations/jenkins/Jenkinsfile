@@ -413,7 +413,7 @@ pipeline {
 
                             currentBuild.displayName += ": $rootProjectId"
                         }
-                    } catch (IOException e) {
+                    } catch (IOException ignored) {
                         // Ignore and just skip setting a custom display name.
                     }
                 }
