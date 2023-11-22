@@ -247,6 +247,7 @@ pipeline {
 
             environment {
                 HOME = "${env.WORKSPACE}@tmp"
+                JAVA_OPTS = "-Duser.home=${env.HOME}"
             }
 
             steps {
@@ -273,6 +274,7 @@ pipeline {
 
             environment {
                 HOME = "${env.WORKSPACE}@tmp"
+                JAVA_OPTS = "-Duser.home=${env.HOME}"
                 PROJECT_DIR = "${env.HOME}/project"
             }
 
@@ -319,6 +321,7 @@ pipeline {
 
             environment {
                 HOME = "${env.WORKSPACE}@tmp"
+                JAVA_OPTS = "-Duser.home=${env.HOME}"
                 ORT_DATA_DIR = "${env.HOME}/.ort"
             }
 
@@ -379,6 +382,7 @@ pipeline {
 
             environment {
                 HOME = "${env.WORKSPACE}@tmp"
+                JAVA_OPTS = "-Duser.home=${env.HOME}"
                 PROJECT_DIR = "${env.HOME}/project"
             }
 
@@ -460,6 +464,7 @@ pipeline {
 
             environment {
                 HOME = "${env.WORKSPACE}@tmp"
+                JAVA_OPTS = "-Duser.home=${env.HOME}"
             }
 
             steps {
@@ -573,6 +578,7 @@ pipeline {
 
             environment {
                 HOME = "${env.WORKSPACE}@tmp"
+                JAVA_OPTS = "-Duser.home=${env.HOME}"
             }
 
             steps {
@@ -632,6 +638,7 @@ pipeline {
 
             environment {
                 HOME = "${env.WORKSPACE}@tmp"
+                JAVA_OPTS = "-Duser.home=${env.HOME}"
             }
 
             steps {
@@ -684,6 +691,7 @@ pipeline {
 
             environment {
                 HOME = "${env.WORKSPACE}@tmp"
+                JAVA_OPTS = "-Duser.home=${env.HOME}"
             }
 
             steps {
