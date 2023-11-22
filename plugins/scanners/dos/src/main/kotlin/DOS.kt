@@ -31,13 +31,13 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempDir
  */
 class DOS internal constructor(
     override val name: String,
-    private val config: DOSConfig
+    private val config: DOSConfig, override val readFromStorage: Boolean, override val writeToStorage: Boolean
 ) : PackageScannerWrapper {
     private val downloaderConfig = DownloaderConfiguration()
 
     class Factory : ScannerWrapperFactory<DOSConfig>("DOS") {
-        override fun create(config: DOSConfig, matcherConfig: ScannerMatcherConfig) =
-            DOS(type, config)
+        override fun create(config: DOSConfig, wrapperConfig: ScannerWrapperConfig) =
+            DOS(type, config, readFromStorage = false, writeToStorage = false)
 
         override fun parseConfig(options: Options, secrets: Options) = DOSConfig.create(options, secrets)
     }
