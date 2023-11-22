@@ -356,9 +356,14 @@ class Scanner(
                     "Starting scan of '${referencePackage.id.toCoordinates()}' with package scanner '${scanner.name}."
                 }
 
-                // Filter the scan context to hide the excludes from scanner with scan matcher.
-                val filteredContext = if (scanner.matcher == null) context else context.copy(excludes = null)
-                val scanResult = scanner.scanPackage(referencePackage, filteredContext)
+                val adjustedContext = context.copy(
+                    // Hide excludes from scanners with a scanner matcher.
+                    excludes = context.excludes.takeUnless { scanner.matcher != null },
+                    // Tell scanners also about the non-reference packages.
+                    coveredPackages = packagesWithIncompleteScanResult
+                )
+
+                val scanResult = scanner.scanPackage(referencePackage, adjustedContext)
 
                 logger.info {
                     "Finished scan of '${referencePackage.id.toCoordinates()}' with package scanner '${scanner.name}'."

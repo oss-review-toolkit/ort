@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.scanner
 
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
@@ -53,5 +54,11 @@ data class ScanContext(
      * be used by scanners where scan results are stored, because then changes in the mapping would not be applied to
      * stored results.
      */
-    val detectedLicenseMapping: Map<String, String> = emptyMap()
+    val detectedLicenseMapping: Map<String, String> = emptyMap(),
+
+    /**
+     * The packages known to be covered in the context of this scan. For package scanners, this is the list of packages
+     * that have the same provenance as the reference package.
+     */
+    val coveredPackages: List<Package> = emptyList()
 )
