@@ -195,7 +195,7 @@ data class ReportTableModel(
                 scopes = scopes.zipWithDefault(other.scopes, sortedMapOf()) { left, right ->
                     left.zipWithCollections(right).toSortedMap()
                 }.toSortedMap(),
-                concludedLicenses = (concludedLicenses + other.concludedLicenses),
+                concludedLicenses = concludedLicenses + other.concludedLicenses,
                 declaredLicenses = declaredLicenses + other.declaredLicenses,
                 detectedLicenses = (detectedLicenses + other.detectedLicenses).toSortedSet(),
                 analyzerIssues = analyzerIssues.zipWithCollections(other.analyzerIssues).toSortedMap(),
