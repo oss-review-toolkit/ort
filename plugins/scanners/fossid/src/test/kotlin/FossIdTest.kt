@@ -1601,4 +1601,4 @@ private fun FossId.scan(
     pkg: Package,
     labels: Map<String, String> = emptyMap(),
     excludes: Excludes = Excludes()
-): ScanResult = scanPackage(pkg, ScanContext(labels = labels, packageType = PackageType.PACKAGE, excludes))
+): ScanResult = scanPackage(pkg, ScanContext(labels, PackageType.PACKAGE, excludes))
