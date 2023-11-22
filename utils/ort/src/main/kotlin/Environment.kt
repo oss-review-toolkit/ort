@@ -78,9 +78,11 @@ data class Environment(
 
         private val RELEVANT_VARIABLES = listOf(
             // Windows variables.
+            "USERPROFILE",
             "OS",
             "COMSPEC",
             // Unix variables.
+            "HOME",
             "OSTYPE",
             "HOSTTYPE",
             "SHELL",
