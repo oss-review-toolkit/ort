@@ -84,7 +84,7 @@ object ReportTableModelMapper {
 
                 val packageForId = ortResult.getPackage(id)?.metadata ?: ortResult.getProject(id)?.toPackage()
 
-                DependencyRow(
+                val row = DependencyRow(
                     id = id,
                     sourceArtifact = packageForId?.sourceArtifact.orEmpty(),
                     vcsInfo = packageForId?.vcsProcessed.orEmpty(),
@@ -101,56 +101,58 @@ object ReportTableModelMapper {
                         it.toResolvableIssue(resolutionProvider, howToFixTextProvider)
                     },
                     scanIssues = scanIssues.map { it.toResolvableIssue(resolutionProvider, howToFixTextProvider) }
-                ).also { row ->
-                    val isRowExcluded = pathExcludes.isNotEmpty()
-                        || (row.scopes.isNotEmpty() && row.scopes.all { it.value.isNotEmpty() })
+                )
 
-                    val nonExcludedAnalyzerIssues = if (isRowExcluded) emptyList() else row.analyzerIssues
-                    val nonExcludedScanIssues = if (isRowExcluded) emptyList() else row.scanIssues
+                val isRowExcluded = pathExcludes.isNotEmpty()
+                    || (row.scopes.isNotEmpty() && row.scopes.all { it.value.isNotEmpty() })
 
-                    val summaryRow = SummaryRow(
+                val nonExcludedAnalyzerIssues = if (isRowExcluded) emptyList() else row.analyzerIssues
+                val nonExcludedScanIssues = if (isRowExcluded) emptyList() else row.scanIssues
+
+                val summaryRow = SummaryRow(
+                    id = row.id,
+                    scopes = sortedMapOf(project.id to row.scopes),
+                    concludedLicenses = row.concludedLicense?.let { setOf(it) }.orEmpty(),
+                    declaredLicenses = row.declaredLicenses.mapTo(mutableSetOf()) { it.license.toString() },
+                    detectedLicenses = row.detectedLicenses.mapTo(sortedSetOf()) { it.license.toString() },
+                    analyzerIssues = if (nonExcludedAnalyzerIssues.isNotEmpty()) {
+                        sortedMapOf(project.id to nonExcludedAnalyzerIssues)
+                    } else {
+                        sortedMapOf()
+                    },
+                    scanIssues = if (nonExcludedScanIssues.isNotEmpty()) {
+                        sortedMapOf(project.id to nonExcludedScanIssues)
+                    } else {
+                        sortedMapOf()
+                    }
+                )
+
+                summaryRows[row.id] = summaryRows[row.id]?.merge(summaryRow) ?: summaryRow
+
+                val unresolvedAnalyzerIssues = row.analyzerIssues.filterUnresolved()
+                val unresolvedScanIssues = row.scanIssues.filterUnresolved()
+
+                if ((unresolvedAnalyzerIssues.isNotEmpty() || unresolvedScanIssues.isNotEmpty())
+                    && !isRowExcluded
+                ) {
+                    val issueRow = IssueRow(
                         id = row.id,
-                        scopes = sortedMapOf(project.id to row.scopes),
-                        concludedLicenses = row.concludedLicense?.let { setOf(it) }.orEmpty(),
-                        declaredLicenses = row.declaredLicenses.mapTo(mutableSetOf()) { it.license.toString() },
-                        detectedLicenses = row.detectedLicenses.mapTo(sortedSetOf()) { it.license.toString() },
-                        analyzerIssues = if (nonExcludedAnalyzerIssues.isNotEmpty()) {
-                            sortedMapOf(project.id to nonExcludedAnalyzerIssues)
+                        analyzerIssues = if (unresolvedAnalyzerIssues.isNotEmpty()) {
+                            sortedMapOf(project.id to unresolvedAnalyzerIssues)
                         } else {
                             sortedMapOf()
                         },
-                        scanIssues = if (nonExcludedScanIssues.isNotEmpty()) {
-                            sortedMapOf(project.id to nonExcludedScanIssues)
+                        scanIssues = if (unresolvedScanIssues.isNotEmpty()) {
+                            sortedMapOf(project.id to unresolvedScanIssues)
                         } else {
                             sortedMapOf()
                         }
                     )
 
-                    summaryRows[row.id] = summaryRows[row.id]?.merge(summaryRow) ?: summaryRow
-
-                    val unresolvedAnalyzerIssues = row.analyzerIssues.filterUnresolved()
-                    val unresolvedScanIssues = row.scanIssues.filterUnresolved()
-
-                    if ((unresolvedAnalyzerIssues.isNotEmpty() || unresolvedScanIssues.isNotEmpty())
-                        && !isRowExcluded
-                    ) {
-                        val issueRow = IssueRow(
-                            id = row.id,
-                            analyzerIssues = if (unresolvedAnalyzerIssues.isNotEmpty()) {
-                                sortedMapOf(project.id to unresolvedAnalyzerIssues)
-                            } else {
-                                sortedMapOf()
-                            },
-                            scanIssues = if (unresolvedScanIssues.isNotEmpty()) {
-                                sortedMapOf(project.id to unresolvedScanIssues)
-                            } else {
-                                sortedMapOf()
-                            }
-                        )
-
-                        issueSummaryRows[row.id] = issueSummaryRows[issueRow.id]?.merge(issueRow) ?: issueRow
-                    }
+                    issueSummaryRows[row.id] = issueSummaryRows[issueRow.id]?.merge(issueRow) ?: issueRow
                 }
+
+                row
             }
 
             ProjectTable(
