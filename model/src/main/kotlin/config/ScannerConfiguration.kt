@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.model.config
 
 import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonPropertyOrder
 
 import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
@@ -52,6 +53,7 @@ data class ScannerConfiguration(
      * Mappings from licenses returned by the scanner to valid SPDX licenses. Note that these mappings are only applied
      * in new scans, stored scan results are not affected.
      */
+    @JsonPropertyOrder(alphabetic = true)
     val detectedLicenseMapping: Map<String, String> = mapOf(
         // https://scancode-licensedb.aboutcode.org/?search=generic
         "LicenseRef-scancode-agpl-generic-additional-terms" to SpdxConstants.NOASSERTION,
