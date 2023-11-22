@@ -47,6 +47,8 @@ class NetRcAuthenticator : Authenticator() {
                 val netrcText = netrcFile.readText()
 
                 return getNetrcAuthentication(netrcText, requestingHost)?.let { return it }
+            } else {
+                logger.debug { "No netrc file found at '$netrcFile'." }
             }
         }
 
