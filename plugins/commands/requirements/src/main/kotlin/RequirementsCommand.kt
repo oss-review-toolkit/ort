@@ -26,6 +26,8 @@ import java.io.File
 import java.lang.reflect.Modifier
 import java.util.EnumSet
 
+import kotlin.reflect.full.companionObjectInstance
+
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -36,6 +38,7 @@ import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
 import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.utils.common.Plugin
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.spdx.scanCodeLicenseTextDir
 
@@ -54,7 +57,11 @@ class RequirementsCommand : OrtCommand(
 ) {
     private enum class VersionStatus { SATISFIED, UNSATISFIED, UNAVAILABLE }
 
+    private val reflections by lazy { Reflections("org.ossreviewtoolkit", Scanners.SubTypes) }
+
     override fun run() {
+        listPlugins()
+
         val status = checkToolVersions()
 
         echo("Prefix legend:")
@@ -88,6 +95,26 @@ class RequirementsCommand : OrtCommand(
         }
     }
 
+    private fun listPlugins() {
+        val pluginClasses = reflections.getSubTypesOf(Plugin::class.java)
+
+        val pluginTypes = pluginClasses.mapNotNull { clazz ->
+            val companion = clazz.declaredClasses.find { it.name.endsWith("\$Companion") }
+            val all = runCatching { companion?.getDeclaredMethod("getALL") }.getOrNull()
+
+            all?.let {
+                @Suppress("UNCHECKED_CAST")
+                val plugins = all.invoke(clazz.kotlin.companionObjectInstance) as Map<String, *>
+                clazz.simpleName to plugins.keys
+            }
+        }
+
+        pluginTypes.sortedBy { it.first }.forEach { (name, all) ->
+            echo(Theme.Default.info("$name plugins:"))
+            echo(all.joinToString("\n", postfix = "\n") { "${SUCCESS_PREFIX}$it" })
+        }
+    }
+
     private fun checkToolVersions(): EnumSet<VersionStatus> {
         // Toggle bits in here to denote the kind of error. Skip the first bit as status code 1 is already used above.
         val overallStatus = enumSetOf<VersionStatus>()
@@ -108,7 +135,6 @@ class RequirementsCommand : OrtCommand(
     }
 
     private fun getToolsByCategory(): Map<String, List<CommandLineTool>> {
-        val reflections = Reflections("org.ossreviewtoolkit", Scanners.SubTypes)
         val classes = reflections.getSubTypesOf(CommandLineTool::class.java)
 
         val tools = mutableMapOf<String, MutableList<CommandLineTool>>()
