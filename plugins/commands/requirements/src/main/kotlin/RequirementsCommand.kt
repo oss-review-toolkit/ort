@@ -38,6 +38,7 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.spdx.scanCodeLicenseTextDir
 
 import org.reflections.Reflections
+import org.reflections.scanners.Scanners
 
 import org.semver4j.Semver
 
@@ -141,7 +142,7 @@ class RequirementsCommand : OrtCommand(
     }
 
     private fun getToolsByCategory(): Map<String, List<CommandLineTool>> {
-        val reflections = Reflections("org.ossreviewtoolkit")
+        val reflections = Reflections("org.ossreviewtoolkit", Scanners.SubTypes)
         val classes = reflections.getSubTypesOf(CommandLineTool::class.java)
 
         val tools = mutableMapOf<String, MutableList<CommandLineTool>>()
