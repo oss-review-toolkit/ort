@@ -242,6 +242,7 @@ formats/protobuf/jvmTest/**
 formats/protobuf/nativeTest/**
 fragment/tests/**
 framework-test/**
+fuzz/**
 generator/graphql-kotlin-federation/src/test/**
 generator/graphql-kotlin-schema-generator/src/test/**
 generators/analysis-api-generator/tests/**
@@ -706,6 +707,7 @@ packages/create-react-app/__tests__/**
 packages/create-subscription/src/__tests__/**
 packages/cssnano-preset-advanced/src/__tests__/**
 packages/cssnano-preset-default/src/__tests__/**
+packages/diff-sequences/perf/**
 packages/diff-sequences/src/__tests__/**
 packages/dom-event-testing-library/**
 packages/eslint-plugin-react-hooks/__tests__/**
@@ -765,6 +767,7 @@ packages/jest-worker/src/__tests__/**
 packages/jest-worker/src/base/__tests__/**
 packages/jest-worker/src/workers/__tests__/**
 packages/legacy-events/__tests__/**
+packages/pretty-format/perf/**
 packages/pretty-format/src/__tests__/**
 packages/react-art/src/__tests__/**
 packages/react-cache/src/__tests__/**
@@ -812,6 +815,7 @@ paging/common/src/test/**
 paging/integration-tests/**
 paging/runtime/src/androidTest/**
 percent/tests/**
+perf/**
 pgjdbc-osgi-test/**
 pgjdbc/src/test/**
 platform-tests/**

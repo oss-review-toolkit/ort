@@ -68,11 +68,14 @@ curl-7.79.1/packages/OS400/make-tests.sh
 curl-7.79.1/projects/checksrc.bat
 dataflow/manual/**
 e2e/**
+fuzz/**
 googlemock/**
 gradlew.bat
+icu4c/source/.clang-format
 jitpack.yml
 lib/rspec/core/mocking_adapters/**
 libiconv-1.17/srcm4/**
+libxml2-2.9.14/fuzz/**
 libxml2-2.9.14/runsuite.c
 libxml2-2.9.14/runtest.c
 maven-resolver-demos/**
@@ -81,6 +84,7 @@ native/libffi/libtool-ldflags
 objectivec/DevTools/**
 org.abego.treelayout.demo/**
 package-lock.json
+perf/**
 runtime/Perl5/Build.PL
 samples/SupportLeanbackDemos/**
 setup.cfg
