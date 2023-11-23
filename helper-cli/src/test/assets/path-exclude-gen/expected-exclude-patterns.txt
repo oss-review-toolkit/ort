@@ -81,7 +81,6 @@ native/libffi/libtool-ldflags
 objectivec/DevTools/**
 org.abego.treelayout.demo/**
 package-lock.json
-package.json
 runtime/Perl5/Build.PL
 samples/SupportLeanbackDemos/**
 setup.cfg

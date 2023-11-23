@@ -66,7 +66,6 @@ libxml2-2.9.14/runtest.c
 mkdocs.yml
 native/libffi/libtool-ldflags
 package-lock.json
-package.json
 runtime/Perl5/Build.PL
 setup.cfg
 setup.py
