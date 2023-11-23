@@ -263,7 +263,6 @@ private val PATH_EXCLUDE_REASON_FOR_FILENAME = listOf(
     "makefile.*" to BUILD_TOOL_OF,
     "mkdocs.yml" to BUILD_TOOL_OF,
     "package-lock.json" to BUILD_TOOL_OF,
-    "package.json" to BUILD_TOOL_OF,
     "proguard-rules.pro" to BUILD_TOOL_OF,
     "runsuite.c" to TEST_OF,
     "runtest.c" to TEST_OF,
