@@ -50,74 +50,32 @@ class RequirementsCommand : OrtCommand(
     help = "Check for the command line tools required by ORT."
 ) {
     override fun run() {
-        val reflections = Reflections("org.ossreviewtoolkit")
-        val classes = reflections.getSubTypesOf(CommandLineTool::class.java)
+        val statusCode = checkToolVersions()
 
-        val allTools = mutableMapOf<String, MutableList<CommandLineTool>>()
+        echo("Prefix legend:")
+        echo("${DANGER_PREFIX}The tool was not found in the PATH environment.")
+        echo("${WARNING_PREFIX}The tool was found in the PATH environment, but not in the required version.")
+        echo("${SUCCESS_PREFIX}The tool was found in the PATH environment in the required version.")
 
-        classes.filterNot {
-            Modifier.isAbstract(it.modifiers) || it.isAnonymousClass || it.isLocalClass
-        }.sortedBy { it.simpleName }.forEach {
-            runCatching {
-                val kotlinObject = it.kotlin.objectInstance
-
-                var category = "Other tool"
-                val instance = when {
-                    kotlinObject != null -> {
-                        logger.debug { "$it is a Kotlin object." }
-                        kotlinObject
-                    }
-
-                    PackageManager::class.java.isAssignableFrom(it) -> {
-                        category = "PackageManager"
-                        logger.debug { "$it is a $category." }
-                        it.getDeclaredConstructor(
-                            String::class.java,
-                            File::class.java,
-                            AnalyzerConfiguration::class.java,
-                            RepositoryConfiguration::class.java
-                        ).newInstance(
-                            "",
-                            File(""),
-                            AnalyzerConfiguration(),
-                            RepositoryConfiguration()
-                        )
-                    }
-
-                    CommandLinePathScannerWrapper::class.java.isAssignableFrom(it) -> {
-                        category = "Scanner"
-                        logger.debug { "$it is a $category." }
-                        it.getDeclaredConstructor(
-                            String::class.java,
-                            ScannerWrapperConfig::class.java
-                        ).newInstance("", ScannerWrapperConfig.EMPTY)
-                    }
-
-                    VersionControlSystem::class.java.isAssignableFrom(it) -> {
-                        category = "VersionControlSystem"
-                        logger.debug { "$it is a $category." }
-                        it.getDeclaredConstructor().newInstance()
-                    }
-
-                    else -> {
-                        logger.debug { "Trying to instantiate $it without any arguments." }
-                        it.getDeclaredConstructor().newInstance()
-                    }
-                }
-
-                if (instance.command().isNotEmpty()) {
-                    allTools.getOrPut(category) { mutableListOf() } += instance
-                }
-            }.onFailure { e ->
-                logger.error { "There was an error instantiating $it: $e." }
-                throw ProgramResult(1)
-            }
+        echo()
+        if (scanCodeLicenseTextDir != null) {
+            echo(Theme.Default.info("ScanCode license texts found in '$scanCodeLicenseTextDir'."))
+        } else {
+            echo(Theme.Default.warning("ScanCode license texts not found."))
         }
 
+        if (statusCode != 0) {
+            echo()
+            echo(Theme.Default.warning("Not all tools were found in their required versions."))
+            throw ProgramResult(statusCode)
+        }
+    }
+
+    private fun checkToolVersions(): Int {
         // Toggle bits in here to denote the kind of error. Skip the first bit as status code 1 is already used above.
         var statusCode = 0
 
-        allTools.forEach { (category, tools) ->
+        getToolsByCategory().forEach { (category, tools) ->
             echo(Theme.Default.info("${category}s:"))
 
             tools.forEach { tool ->
@@ -179,22 +137,74 @@ class RequirementsCommand : OrtCommand(
             echo()
         }
 
-        echo("Prefix legend:")
-        echo("${DANGER_PREFIX}The tool was not found in the PATH environment.")
-        echo("${WARNING_PREFIX}The tool was found in the PATH environment, but not in the required version.")
-        echo("${SUCCESS_PREFIX}The tool was found in the PATH environment in the required version.")
+        return statusCode
+    }
 
-        echo()
-        if (scanCodeLicenseTextDir != null) {
-            echo(Theme.Default.info("ScanCode license texts found in '$scanCodeLicenseTextDir'."))
-        } else {
-            echo(Theme.Default.warning("ScanCode license texts not found."))
+    private fun getToolsByCategory(): Map<String, List<CommandLineTool>> {
+        val reflections = Reflections("org.ossreviewtoolkit")
+        val classes = reflections.getSubTypesOf(CommandLineTool::class.java)
+
+        val tools = mutableMapOf<String, MutableList<CommandLineTool>>()
+
+        classes.filterNot {
+            Modifier.isAbstract(it.modifiers) || it.isAnonymousClass || it.isLocalClass
+        }.sortedBy { it.simpleName }.forEach {
+            runCatching {
+                val kotlinObject = it.kotlin.objectInstance
+
+                var category = "Other tool"
+                val instance = when {
+                    kotlinObject != null -> {
+                        logger.debug { "$it is a Kotlin object." }
+                        kotlinObject
+                    }
+
+                    PackageManager::class.java.isAssignableFrom(it) -> {
+                        category = "PackageManager"
+                        logger.debug { "$it is a $category." }
+                        it.getDeclaredConstructor(
+                            String::class.java,
+                            File::class.java,
+                            AnalyzerConfiguration::class.java,
+                            RepositoryConfiguration::class.java
+                        ).newInstance(
+                            "",
+                            File(""),
+                            AnalyzerConfiguration(),
+                            RepositoryConfiguration()
+                        )
+                    }
+
+                    CommandLinePathScannerWrapper::class.java.isAssignableFrom(it) -> {
+                        category = "Scanner"
+                        logger.debug { "$it is a $category." }
+                        it.getDeclaredConstructor(
+                            String::class.java,
+                            ScannerWrapperConfig::class.java
+                        ).newInstance("", ScannerWrapperConfig.EMPTY)
+                    }
+
+                    VersionControlSystem::class.java.isAssignableFrom(it) -> {
+                        category = "VersionControlSystem"
+                        logger.debug { "$it is a $category." }
+                        it.getDeclaredConstructor().newInstance()
+                    }
+
+                    else -> {
+                        logger.debug { "Trying to instantiate $it without any arguments." }
+                        it.getDeclaredConstructor().newInstance()
+                    }
+                }
+
+                if (instance.command().isNotEmpty()) {
+                    tools.getOrPut(category) { mutableListOf() } += instance
+                }
+            }.onFailure { e ->
+                logger.error { "There was an error instantiating $it: $e." }
+                throw ProgramResult(1)
+            }
         }
 
-        if (statusCode != 0) {
-            echo()
-            echo(Theme.Default.warning("Not all tools were found in their required versions."))
-            throw ProgramResult(statusCode)
-        }
+        return tools
     }
 }
