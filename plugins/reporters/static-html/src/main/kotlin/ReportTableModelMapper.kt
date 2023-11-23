@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter
+package org.ossreviewtoolkit.plugins.reporters.statichtml
 
 import org.ossreviewtoolkit.model.DependencyNavigator
 import org.ossreviewtoolkit.model.Identifier
@@ -32,12 +32,13 @@ import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.utils.ResolutionProvider
-import org.ossreviewtoolkit.reporter.ReportTableModel.DependencyRow
-import org.ossreviewtoolkit.reporter.ReportTableModel.IssueRow
-import org.ossreviewtoolkit.reporter.ReportTableModel.IssueTable
-import org.ossreviewtoolkit.reporter.ReportTableModel.ProjectTable
-import org.ossreviewtoolkit.reporter.ReportTableModel.ResolvableIssue
-import org.ossreviewtoolkit.reporter.ReportTableModel.ResolvableViolation
+import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTableModel.DependencyRow
+import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTableModel.IssueRow
+import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTableModel.IssueTable
+import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTableModel.ProjectTable
+import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTableModel.ResolvableIssue
+import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTableModel.ResolvableViolation
+import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 
 /**
  * A mapper which converts an [OrtResult] to a [ReportTableModel].

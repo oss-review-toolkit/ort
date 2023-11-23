@@ -48,14 +48,11 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseLocation
 import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.reporter.ReportTableModel
-import org.ossreviewtoolkit.reporter.ReportTableModel.IssueTable
-import org.ossreviewtoolkit.reporter.ReportTableModel.ProjectTable
-import org.ossreviewtoolkit.reporter.ReportTableModel.ResolvableIssue
-import org.ossreviewtoolkit.reporter.ReportTableModelMapper
+import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTableModel.IssueTable
+import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTableModel.ProjectTable
+import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTableModel.ResolvableIssue
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.reporter.containsUnresolved
 import org.ossreviewtoolkit.utils.common.isValidUri
 import org.ossreviewtoolkit.utils.common.joinNonBlank
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
