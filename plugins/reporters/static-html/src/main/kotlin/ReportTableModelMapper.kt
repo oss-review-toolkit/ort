@@ -43,7 +43,7 @@ import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 /**
  * A mapper which converts an [OrtResult] to a [ReportTableModel].
  */
-object ReportTableModelMapper {
+internal object ReportTableModelMapper {
     fun map(
         ortResult: OrtResult,
         licenseInfoResolver: LicenseInfoResolver,
