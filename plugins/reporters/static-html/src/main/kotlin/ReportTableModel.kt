@@ -36,9 +36,9 @@ import org.ossreviewtoolkit.model.licenses.ResolvedLicense
 import org.ossreviewtoolkit.utils.common.zipWithCollections
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
-fun Collection<ReportTableModel.ResolvableIssue>.containsUnresolved() = any { !it.isResolved }
+internal fun Collection<ReportTableModel.ResolvableIssue>.containsUnresolved() = any { !it.isResolved }
 
-data class ReportTableModel(
+internal data class ReportTableModel(
     /**
      * The [VcsInfo] for the scanned project.
      */
