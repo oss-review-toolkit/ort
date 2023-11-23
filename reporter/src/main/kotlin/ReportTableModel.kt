@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.reporter
 
 import java.util.SortedMap
-import java.util.SortedSet
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
@@ -35,7 +34,6 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.licenses.ResolvedLicense
 import org.ossreviewtoolkit.utils.common.zipWithCollections
-import org.ossreviewtoolkit.utils.common.zipWithDefault
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 fun Collection<ReportTableModel.ResolvableIssue>.containsUnresolved() = any { !it.isResolved }
@@ -60,11 +58,6 @@ data class ReportTableModel(
      * A [IssueTable] containing all dependencies that caused issues.
      */
     val issueSummary: IssueTable,
-
-    /**
-     * A [SummaryTable] containing the dependencies of all [Project]s.
-     */
-    val summary: SummaryTable,
 
     /**
      * The [ProjectTable]s containing the dependencies for each [Project].
@@ -148,60 +141,6 @@ data class ReportTableModel(
          */
         val scanIssues: List<ResolvableIssue>
     )
-
-    data class SummaryTable(
-        val rows: List<SummaryRow>
-    )
-
-    data class SummaryRow(
-        /**
-         * The identifier of the package.
-         */
-        val id: Identifier,
-
-        /**
-         * The scopes the package is used in, grouped by the [Identifier] of the [Project] they appear in.
-         */
-        val scopes: SortedMap<Identifier, SortedMap<String, List<ScopeExclude>>>,
-
-        /**
-         * The concluded licenses of the package.
-         */
-        val concludedLicenses: Set<SpdxExpression>,
-
-        /**
-         * The licenses declared by the package.
-         */
-        val declaredLicenses: Set<String>,
-
-        /**
-         * The detected licenses aggregated from all [ScanResult]s for this package.
-         */
-        val detectedLicenses: SortedSet<String>,
-
-        /**
-         * All analyzer issues related to this package, grouped by the [Identifier] of the [Project] they appear in.
-         */
-        val analyzerIssues: SortedMap<Identifier, List<ResolvableIssue>>,
-
-        /**
-         * All scan issues related to this package, grouped by the [Identifier] of the [Project] they appear in.
-         */
-        val scanIssues: SortedMap<Identifier, List<ResolvableIssue>>
-    ) {
-        fun merge(other: SummaryRow) =
-            SummaryRow(
-                id = id,
-                scopes = scopes.zipWithDefault(other.scopes, sortedMapOf()) { left, right ->
-                    left.zipWithCollections(right).toSortedMap()
-                }.toSortedMap(),
-                concludedLicenses = concludedLicenses + other.concludedLicenses,
-                declaredLicenses = declaredLicenses + other.declaredLicenses,
-                detectedLicenses = (detectedLicenses + other.detectedLicenses).toSortedSet(),
-                analyzerIssues = analyzerIssues.zipWithCollections(other.analyzerIssues).toSortedMap(),
-                scanIssues = scanIssues.zipWithCollections(other.scanIssues).toSortedMap()
-            )
-    }
 
     data class IssueTable(
         val rows: List<IssueRow>

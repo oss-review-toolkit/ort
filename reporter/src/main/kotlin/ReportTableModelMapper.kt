@@ -38,8 +38,6 @@ import org.ossreviewtoolkit.reporter.ReportTableModel.IssueTable
 import org.ossreviewtoolkit.reporter.ReportTableModel.ProjectTable
 import org.ossreviewtoolkit.reporter.ReportTableModel.ResolvableIssue
 import org.ossreviewtoolkit.reporter.ReportTableModel.ResolvableViolation
-import org.ossreviewtoolkit.reporter.ReportTableModel.SummaryRow
-import org.ossreviewtoolkit.reporter.ReportTableModel.SummaryTable
 
 /**
  * A mapper which converts an [OrtResult] to a [ReportTableModel].
@@ -52,7 +50,6 @@ object ReportTableModelMapper {
         howToFixTextProvider: HowToFixTextProvider
     ): ReportTableModel {
         val issueSummaryRows = mutableMapOf<Identifier, IssueRow>()
-        val summaryRows = mutableMapOf<Identifier, SummaryRow>()
 
         val analyzerResult = ortResult.analyzer?.result
         val excludes = ortResult.getExcludes()
@@ -104,30 +101,6 @@ object ReportTableModelMapper {
                 )
 
                 val isRowExcluded = ortResult.isExcluded(row.id)
-
-                val nonExcludedAnalyzerIssues = if (isRowExcluded) emptyList() else row.analyzerIssues
-                val nonExcludedScanIssues = if (isRowExcluded) emptyList() else row.scanIssues
-
-                val summaryRow = SummaryRow(
-                    id = row.id,
-                    scopes = sortedMapOf(project.id to row.scopes),
-                    concludedLicenses = row.concludedLicense?.let { setOf(it) }.orEmpty(),
-                    declaredLicenses = row.declaredLicenses.mapTo(mutableSetOf()) { it.license.toString() },
-                    detectedLicenses = row.detectedLicenses.mapTo(sortedSetOf()) { it.license.toString() },
-                    analyzerIssues = if (nonExcludedAnalyzerIssues.isNotEmpty()) {
-                        sortedMapOf(project.id to nonExcludedAnalyzerIssues)
-                    } else {
-                        sortedMapOf()
-                    },
-                    scanIssues = if (nonExcludedScanIssues.isNotEmpty()) {
-                        sortedMapOf(project.id to nonExcludedScanIssues)
-                    } else {
-                        sortedMapOf()
-                    }
-                )
-
-                summaryRows[row.id] = summaryRows[row.id]?.merge(summaryRow) ?: summaryRow
-
                 val unresolvedAnalyzerIssues = row.analyzerIssues.filterUnresolved()
                 val unresolvedScanIssues = row.scanIssues.filterUnresolved()
 
@@ -163,11 +136,6 @@ object ReportTableModelMapper {
 
         val issueSummaryTable = IssueTable(issueSummaryRows.values.sortedBy { it.id })
 
-        val summaryTable = SummaryTable(
-            // Sort excluded rows to the end of the list.
-            summaryRows.values.sortedWith(compareBy({ ortResult.isExcluded(it.id) }, { it.id }))
-        )
-
         // TODO: Use the prefixes up until the first '.' (which below get discarded) for some visual grouping in the
         //       report.
         val labels = ortResult.labels.mapKeys { it.key.substringAfter(".") }
@@ -181,7 +149,6 @@ object ReportTableModelMapper {
             ortResult.repository.config,
             ruleViolations,
             issueSummaryTable,
-            summaryTable,
             projectTables,
             labels
         )
