@@ -67,7 +67,7 @@ private data class Include(
 )
 
 class GitRepo : VersionControlSystem(), CommandLineTool {
-    override val type = VcsType.GIT_REPO
+    override val type = VcsType.GIT_REPO.toString()
     override val priority = 50
     override val latestRevisionNames = listOf("HEAD", "@")
 
@@ -91,16 +91,17 @@ class GitRepo : VersionControlSystem(), CommandLineTool {
 
     override fun getWorkingTree(vcsDirectory: File): WorkingTree {
         val repoRoot = vcsDirectory.searchUpwardsForSubdirectory(".repo")
+        val vcsType = VcsType.forName(type)
 
         return if (repoRoot == null) {
-            object : GitWorkingTree(vcsDirectory, type) {
+            object : GitWorkingTree(vcsDirectory, vcsType) {
                 override fun isValid() = false
             }
         } else {
             // GitRepo is special in that the workingDir points to the Git working tree of the manifest files, yet
             // the root path is the directory containing the ".repo" directory. This way Git operations work on a valid
             // Git repository, but path operations work relative to the path GitRepo was initialized in.
-            object : GitWorkingTree(repoRoot.resolve(".repo/manifests"), type) {
+            object : GitWorkingTree(repoRoot.resolve(".repo/manifests"), vcsType) {
                 // Return the path to the manifest as part of the VCS information, as that is required to recreate the
                 // working tree.
                 override fun getInfo(): VcsInfo {

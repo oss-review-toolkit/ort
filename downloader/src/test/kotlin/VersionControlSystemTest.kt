@@ -151,7 +151,7 @@ class VersionControlSystemTest : WordSpec({
  */
 private class VersionControlSystemTestImpl(
     tool: CommandLineTool?,
-    override val type: VcsType = VcsType.UNKNOWN,
+    override val type: String = VcsType.UNKNOWN.toString(),
     override val latestRevisionNames: List<String> = emptyList()
 ) : VersionControlSystem(tool) {
     override fun getVersion(): String = "0"

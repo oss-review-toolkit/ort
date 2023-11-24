@@ -47,7 +47,7 @@ object MercurialCommand : CommandLineTool {
 }
 
 class Mercurial : VersionControlSystem(MercurialCommand) {
-    override val type = VcsType.MERCURIAL
+    override val type = VcsType.MERCURIAL.toString()
     override val priority = 20
     override val latestRevisionNames = listOf("tip")
 
@@ -55,7 +55,8 @@ class Mercurial : VersionControlSystem(MercurialCommand) {
 
     override fun getDefaultBranchName(url: String) = "default"
 
-    override fun getWorkingTree(vcsDirectory: File): WorkingTree = MercurialWorkingTree(vcsDirectory, type)
+    override fun getWorkingTree(vcsDirectory: File): WorkingTree =
+        MercurialWorkingTree(vcsDirectory, VcsType.forName(type))
 
     override fun isApplicableUrlInternal(vcsUrl: String) = ProcessCapture("hg", "identify", vcsUrl).isSuccess
 

@@ -21,7 +21,6 @@ package org.ossreviewtoolkit.downloader
 
 import java.io.File
 import java.io.IOException
-import java.util.ServiceLoader
 
 import org.apache.logging.log4j.kotlin.logger
 
@@ -31,6 +30,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.utils.common.Plugin
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.uppercaseFirstChar
 import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
@@ -44,23 +44,20 @@ abstract class VersionControlSystem(
      * the version control system is available.
      */
     private val commandLineTool: CommandLineTool? = null
-) {
+) : Plugin {
     companion object {
-        private val LOADER = ServiceLoader.load(VersionControlSystem::class.java)
-
         /**
-         * The set of all available [Version Control Systems][VersionControlSystem] in the classpath, sorted by
-         * priority.
+         * All [version control systems][VersionControlSystem] available in the classpath, sorted by their priority.
          */
-        val ALL: Set<VersionControlSystem> by lazy {
-            LOADER.iterator().asSequence().toSortedSet(compareByDescending { it.priority })
+        val ALL by lazy {
+            Plugin.getAll<VersionControlSystem>().toList().sortedByDescending { (_, vcs) -> vcs.priority }.toMap()
         }
 
         /**
          * Return the applicable VCS for the given [vcsType], or null if none is applicable.
          */
         fun forType(vcsType: VcsType) =
-            ALL.find {
+            ALL.values.find {
                 it.isAvailable() && it.isApplicableType(vcsType)
             }
 
@@ -85,7 +82,7 @@ abstract class VersionControlSystem(
                 when (val type = VcsHost.parseUrl(vcsUrl).type) {
                     VcsType.UNKNOWN -> {
                         // ...then eventually try to determine the type also dynamically.
-                        ALL.find {
+                        ALL.values.find {
                             it.isAvailable() && it.isApplicableUrl(vcsUrl)
                         }
                     }
@@ -111,7 +108,7 @@ abstract class VersionControlSystem(
             return if (absoluteVcsDirectory in dirToVcsMap) {
                 dirToVcsMap[absoluteVcsDirectory]
             } else {
-                ALL.asSequence().mapNotNull {
+                ALL.values.asSequence().mapNotNull {
                     if (it is CommandLineTool && !it.isInPath()) {
                         null
                     } else {
@@ -167,11 +164,6 @@ abstract class VersionControlSystem(
     }
 
     /**
-     * The [VcsType] of this [VersionControlSystem].
-     */
-    abstract val type: VcsType
-
-    /**
      * The priority in which this VCS should be probed. A higher value means a higher priority.
      */
     protected open val priority: Int = 0
@@ -199,7 +191,7 @@ abstract class VersionControlSystem(
     /**
      * Return true if this VCS can handle the given [vcsType].
      */
-    fun isApplicableType(vcsType: VcsType) = vcsType == type
+    fun isApplicableType(vcsType: VcsType) = type in vcsType.aliases
 
     /**
      * Return true if this [VersionControlSystem] can be used to download from the provided [vcsUrl]. First, try to find
@@ -209,7 +201,7 @@ abstract class VersionControlSystem(
     fun isApplicableUrl(vcsUrl: String): Boolean {
         if (vcsUrl.isBlank() || vcsUrl.endsWith(".html")) return false
 
-        return VcsHost.parseUrl(vcsUrl).type == type || isApplicableUrlInternal(vcsUrl)
+        return isApplicableType(VcsHost.parseUrl(vcsUrl).type) || isApplicableUrlInternal(vcsUrl)
     }
 
     /**
@@ -363,7 +355,7 @@ abstract class VersionControlSystem(
 
         addMetadataRevision(pkg.vcsProcessed.revision)
 
-        if (type == VcsType.GIT && pkg.vcsProcessed.revision == "master") {
+        if (type in VcsType.GIT.aliases && pkg.vcsProcessed.revision == "master") {
             // Also try with Git's upcoming default branch name in case the repository is already using it.
             addMetadataRevision("main")
         }
