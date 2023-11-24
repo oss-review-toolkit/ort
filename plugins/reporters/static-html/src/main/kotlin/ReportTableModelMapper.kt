@@ -28,7 +28,6 @@ import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.ScopeExclude
-import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.utils.ResolutionProvider
@@ -39,34 +38,30 @@ import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTableModel.Projec
 import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTableModel.ResolvableIssue
 import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTableModel.ResolvableViolation
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
+import org.ossreviewtoolkit.reporter.ReporterInput
 
 /**
  * A mapper which converts an [OrtResult] to a [ReportTableModel].
  */
 internal object ReportTableModelMapper {
-    fun map(
-        ortResult: OrtResult,
-        licenseInfoResolver: LicenseInfoResolver,
-        resolutionProvider: ResolutionProvider,
-        howToFixTextProvider: HowToFixTextProvider
-    ): ReportTableModel {
+    fun map(input: ReporterInput): ReportTableModel {
         val issueSummaryRows = mutableMapOf<Identifier, IssueRow>()
 
-        val analyzerResult = ortResult.analyzer?.result
-        val excludes = ortResult.getExcludes()
+        val analyzerResult = input.ortResult.analyzer?.result
+        val excludes = input.ortResult.getExcludes()
 
         val projectTables = analyzerResult?.projects?.associateWith { project ->
-            val scopesForDependencies = project.getScopesForDependencies(excludes, ortResult.dependencyNavigator)
-            val pathExcludes = excludes.findPathExcludes(project, ortResult)
+            val scopesForDependencies = project.getScopesForDependencies(excludes, input.ortResult.dependencyNavigator)
+            val pathExcludes = excludes.findPathExcludes(project, input.ortResult)
 
             val allIds = sortedSetOf(project.id)
-            allIds += ortResult.dependencyNavigator.projectDependencies(project)
+            allIds += input.ortResult.dependencyNavigator.projectDependencies(project)
 
-            val projectIssues = ortResult.dependencyNavigator.projectIssues(project)
+            val projectIssues = input.ortResult.dependencyNavigator.projectIssues(project)
             val tableRows = allIds.map { id ->
-                val scanResults = ortResult.getScanResultsForId(id)
+                val scanResults = input.ortResult.getScanResultsForId(id)
 
-                val resolvedLicenseInfo = licenseInfoResolver.resolveLicenseInfo(id)
+                val resolvedLicenseInfo = input.licenseInfoResolver.resolveLicenseInfo(id)
 
                 val concludedLicense = resolvedLicenseInfo.licenseInfo.concludedLicenseInfo.concludedLicense
                 val declaredLicenses = resolvedLicenseInfo.filter { LicenseSource.DECLARED in it.sources }
@@ -80,7 +75,7 @@ internal object ReportTableModelMapper {
                     it.summary.issues
                 }
 
-                val pkg = ortResult.getPackageOrProject(id)?.metadata
+                val pkg = input.ortResult.getPackageOrProject(id)?.metadata
 
                 val row = DependencyRow(
                     id = id,
@@ -92,16 +87,18 @@ internal object ReportTableModelMapper {
                     detectedLicenses = detectedLicenses,
                     effectiveLicense = resolvedLicenseInfo.filterExcluded().effectiveLicense(
                         LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED,
-                        ortResult.getPackageLicenseChoices(id),
-                        ortResult.getRepositoryLicenseChoices()
+                        input.ortResult.getPackageLicenseChoices(id),
+                        input.ortResult.getRepositoryLicenseChoices()
                     )?.sorted(),
                     analyzerIssues = analyzerIssues.map {
-                        it.toResolvableIssue(resolutionProvider, howToFixTextProvider)
+                        it.toResolvableIssue(input.resolutionProvider, input.howToFixTextProvider)
                     },
-                    scanIssues = scanIssues.map { it.toResolvableIssue(resolutionProvider, howToFixTextProvider) }
+                    scanIssues = scanIssues.map {
+                        it.toResolvableIssue(input.resolutionProvider, input.howToFixTextProvider)
+                    }
                 )
 
-                val isRowExcluded = ortResult.isExcluded(row.id)
+                val isRowExcluded = input.ortResult.isExcluded(row.id)
                 val unresolvedAnalyzerIssues = row.analyzerIssues.filterUnresolved()
                 val unresolvedScanIssues = row.scanIssues.filterUnresolved()
 
@@ -130,7 +127,7 @@ internal object ReportTableModelMapper {
 
             ProjectTable(
                 tableRows,
-                ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(project),
+                input.ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(project),
                 pathExcludes
             )
         }.orEmpty().toSortedMap(compareBy { it.id })
@@ -139,15 +136,15 @@ internal object ReportTableModelMapper {
 
         // TODO: Use the prefixes up until the first '.' (which below get discarded) for some visual grouping in the
         //       report.
-        val labels = ortResult.labels.mapKeys { it.key.substringAfter(".") }
+        val labels = input.ortResult.labels.mapKeys { it.key.substringAfter(".") }
 
-        val ruleViolations = ortResult.getRuleViolations()
-            .map { it.toResolvableViolation(resolutionProvider) }
+        val ruleViolations = input.ortResult.getRuleViolations()
+            .map { it.toResolvableViolation(input.resolutionProvider) }
             .sortedWith(VIOLATION_COMPARATOR)
 
         return ReportTableModel(
-            ortResult.repository.vcsProcessed,
-            ortResult.repository.config,
+            input.ortResult.repository.vcsProcessed,
+            input.ortResult.repository.config,
             ruleViolations,
             issueSummaryTable,
             projectTables,
