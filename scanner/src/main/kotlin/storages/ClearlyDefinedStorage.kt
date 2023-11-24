@@ -52,7 +52,7 @@ import org.ossreviewtoolkit.model.utils.toClearlyDefinedSourceLocation
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.ScanStorageException
-import org.ossreviewtoolkit.scanner.ScannerWrapper
+import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.storages.utils.getScanCodeDetails
 import org.ossreviewtoolkit.utils.common.AlphaNumericComparator
 import org.ossreviewtoolkit.utils.common.collectMessages
@@ -110,7 +110,7 @@ class ClearlyDefinedStorage(
 
             val supportedScanners = toolVersionsByName.mapNotNull { (name, versions) ->
                 // For the ClearlyDefined tool names see https://github.com/clearlydefined/service#tool-name-registry.
-                ScannerWrapper.ALL[name]?.let { factory ->
+                ScannerWrapperFactory.ALL[name]?.let { factory ->
                     val scanner = factory.create(emptyMap(), emptyMap())
                     (scanner as? CommandLinePathScannerWrapper)?.let { cliScanner -> cliScanner to versions.last() }
                 }.also { factory ->

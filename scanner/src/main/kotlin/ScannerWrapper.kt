@@ -29,19 +29,11 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.utils.common.Plugin
 
 /**
  * The base interface for all types of scanners.
  */
 sealed interface ScannerWrapper {
-    companion object {
-        /**
-         * All [scanner wrapper factories][ScannerWrapperFactory] available in the classpath, associated by their names.
-         */
-        val ALL by lazy { Plugin.getAll<ScannerWrapperFactory<*>>() }
-    }
-
     /**
      * The name of the scanner.
      */

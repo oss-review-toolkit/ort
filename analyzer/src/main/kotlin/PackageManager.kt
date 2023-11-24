@@ -42,7 +42,6 @@ import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.utils.common.Options
-import org.ossreviewtoolkit.utils.common.Plugin
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
@@ -65,16 +64,6 @@ abstract class PackageManager(
     val repoConfig: RepositoryConfiguration
 ) {
     companion object {
-        /**
-         * All [package manager factories][PackageManagerFactory] available in the classpath, associated by their names.
-         */
-        val ALL by lazy { Plugin.getAll<PackageManagerFactory>() }
-
-        /**
-         * The available [package manager factories][PackageManagerFactory] that are enabled by default.
-         */
-        val ENABLED_BY_DEFAULT by lazy { ALL.values.filter { it.isEnabledByDefault } }
-
         private val PACKAGE_MANAGER_DIRECTORIES = setOf(
             // Ignore intermediate build system directories.
             ".gradle",
@@ -100,7 +89,7 @@ abstract class PackageManager(
          */
         fun findManagedFiles(
             directory: File,
-            packageManagers: Collection<PackageManagerFactory> = ENABLED_BY_DEFAULT,
+            packageManagers: Collection<PackageManagerFactory> = PackageManagerFactory.ENABLED_BY_DEFAULT,
             excludes: Excludes = Excludes.EMPTY
         ): ManagedProjectFiles {
             require(directory.isDirectory) {

@@ -59,7 +59,6 @@ import org.ossreviewtoolkit.plugins.commands.api.utils.readOrtResult
 import org.ossreviewtoolkit.plugins.commands.api.utils.writeOrtResult
 import org.ossreviewtoolkit.scanner.ScanStorages
 import org.ossreviewtoolkit.scanner.Scanner
-import org.ossreviewtoolkit.scanner.ScannerWrapper
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.provenance.DefaultNestedProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.DefaultPackageProvenanceResolver
@@ -113,15 +112,15 @@ class ScannerCommand : OrtCommand(
 
     private val scanners by option(
         "--scanners", "-s",
-        help = "A comma-separated list of scanners to use.\nPossible values are: ${ScannerWrapper.ALL.keys}"
+        help = "A comma-separated list of scanners to use.\nPossible values are: ${ScannerWrapperFactory.ALL.keys}"
     ).convertToScannerWrapperFactories()
-        .default(listOfNotNull(ScannerWrapper.ALL.values.singleOrNull() ?: ScannerWrapper.ALL["ScanCode"]))
+        .default(listOfNotNull(ScannerWrapperFactory.ALL.let { it.values.singleOrNull() ?: it["ScanCode"] }))
 
     private val projectScanners by option(
         "--project-scanners",
         help = "A comma-separated list of scanners to use for scanning the source code of projects. By default, " +
             "projects and packages are scanned with the same scanners as specified by '--scanners'.\n" +
-            "Possible values are: ${ScannerWrapper.ALL.keys}"
+            "Possible values are: ${ScannerWrapperFactory.ALL.keys}"
     ).convertToScannerWrapperFactories()
 
     private val packageTypes by option(
@@ -249,7 +248,7 @@ class ScannerCommand : OrtCommand(
 private fun RawOption.convertToScannerWrapperFactories() =
     convert { scannerNames ->
         scannerNames.split(",").map { name ->
-            ScannerWrapper.ALL[name]
-                ?: throw BadParameterValue("Scanner '$name' is not one of ${ScannerWrapper.ALL.keys}.")
+            ScannerWrapperFactory.ALL[name]
+                ?: throw BadParameterValue("Scanner '$name' is not one of ${ScannerWrapperFactory.ALL.keys}.")
         }
     }

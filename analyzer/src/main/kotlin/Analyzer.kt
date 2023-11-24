@@ -71,7 +71,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
     @JvmOverloads
     fun findManagedFiles(
         absoluteProjectPath: File,
-        packageManagers: Collection<PackageManagerFactory> = PackageManager.ENABLED_BY_DEFAULT,
+        packageManagers: Collection<PackageManagerFactory> = PackageManagerFactory.ENABLED_BY_DEFAULT,
         repositoryConfiguration: RepositoryConfiguration = RepositoryConfiguration()
     ): ManagedFileInfo {
         require(absoluteProjectPath.isAbsolute)
@@ -111,7 +111,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
         }
 
         if (!hasOnlyManagedDirs) {
-            val unmanagedPackageManagerFactory = PackageManager.ALL["Unmanaged"]
+            val unmanagedPackageManagerFactory = PackageManagerFactory.ALL["Unmanaged"]
             distinctPackageManagers.find { it == unmanagedPackageManagerFactory }
                 ?.create(absoluteProjectPath, config, repositoryConfiguration)
                 ?.also { managedFiles[it] = listOf(absoluteProjectPath) }

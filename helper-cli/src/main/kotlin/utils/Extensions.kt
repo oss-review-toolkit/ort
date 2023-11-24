@@ -32,7 +32,7 @@ import kotlin.io.path.createTempDirectory
 
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 
-import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.downloader.Downloader
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Identifier
@@ -254,7 +254,7 @@ internal fun OrtResult.getScanIssues(omitExcluded: Boolean = false): List<Issue>
  */
 internal fun OrtResult.getRepositoryPathExcludes(): RepositoryPathExcludes {
     fun isDefinitionsFile(pathExclude: PathExclude) =
-        PackageManager.ENABLED_BY_DEFAULT.any {
+        PackageManagerFactory.ENABLED_BY_DEFAULT.any {
             it.matchersForDefinitionFiles.any { matcher ->
                 pathExclude.pattern.endsWith(matcher.toString())
             }

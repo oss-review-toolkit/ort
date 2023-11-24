@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.scanner
 import java.util.ServiceLoader
 
 import org.ossreviewtoolkit.utils.common.Options
+import org.ossreviewtoolkit.utils.common.Plugin
 import org.ossreviewtoolkit.utils.common.TypedConfigurablePluginFactory
 
 /**
@@ -29,6 +30,13 @@ import org.ossreviewtoolkit.utils.common.TypedConfigurablePluginFactory
  */
 abstract class ScannerWrapperFactory<CONFIG>(override val type: String) :
     TypedConfigurablePluginFactory<CONFIG, ScannerWrapper> {
+    companion object {
+        /**
+         * All [scanner wrapper factories][ScannerWrapperFactory] available in the classpath, associated by their names.
+         */
+        val ALL by lazy { Plugin.getAll<ScannerWrapperFactory<*>>() }
+    }
+
     override fun create(options: Options, secrets: Options): ScannerWrapper {
         val (wrapperConfig, filteredOptions) = ScannerWrapperConfig.create(options)
         return create(parseConfig(filteredOptions, secrets), wrapperConfig)

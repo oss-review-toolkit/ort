@@ -27,7 +27,7 @@ import io.kotest.matchers.should
 import java.util.concurrent.TimeUnit
 
 import org.ossreviewtoolkit.analyzer.Analyzer
-import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.analyzer.managers.analyze
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
@@ -70,7 +70,7 @@ class AnalyzerFunTest : WordSpec({
             val repoConfig = RepositoryConfiguration()
 
             val analyzer = Analyzer(analyzerConfig)
-            val gradleFactory = PackageManager.ALL.getValue("Gradle")
+            val gradleFactory = PackageManagerFactory.ALL.getValue("Gradle")
             val gradle = gradleFactory.create(inputDir, analyzerConfig, repoConfig)
             val info = Analyzer.ManagedFileInfo(
                 inputDir,

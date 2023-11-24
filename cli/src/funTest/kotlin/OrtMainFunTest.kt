@@ -34,7 +34,7 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
-import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.OrtConfigurationWrapper
@@ -101,7 +101,7 @@ class OrtMainFunTest : StringSpec() {
         }
 
         "Disabling only Gradle works" {
-            val expectedPackageManagers = PackageManager.ENABLED_BY_DEFAULT.filterNot { it.type == "Gradle" }
+            val expectedPackageManagers = PackageManagerFactory.ENABLED_BY_DEFAULT.filterNot { it.type == "Gradle" }
             val markerLine = "The following ${expectedPackageManagers.size} package manager(s) are enabled:"
             val inputDir = tempdir()
 
