@@ -80,12 +80,12 @@ internal object ReportTableModelMapper {
                     it.summary.issues
                 }
 
-                val packageForId = ortResult.getPackageOrProject(id)?.metadata
+                val pkg = ortResult.getPackageOrProject(id)?.metadata
 
                 val row = DependencyRow(
                     id = id,
-                    sourceArtifact = packageForId?.sourceArtifact.orEmpty(),
-                    vcsInfo = packageForId?.vcsProcessed.orEmpty(),
+                    sourceArtifact = pkg?.sourceArtifact.orEmpty(),
+                    vcsInfo = pkg?.vcsProcessed.orEmpty(),
                     scopes = scopesForDependencies[id].orEmpty().toSortedMap(),
                     concludedLicense = concludedLicense,
                     declaredLicenses = declaredLicenses,
