@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
 abstract class OrtCommand(name: String, help: String) : CliktCommand(name = name, help = help), Plugin {
     companion object {
         /**
-         * All ORT commands available in the classpath, associated by their names.
+         * All [ORT commands][OrtCommand] available in the classpath, associated by their names.
          */
         val ALL by lazy { Plugin.getAll<OrtCommand>() }
     }
