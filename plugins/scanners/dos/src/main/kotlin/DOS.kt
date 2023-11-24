@@ -87,7 +87,7 @@ class DOS internal constructor(
 
                     // Start backend scanning
                     scanResults = runBackendScan(
-                        pkg,
+                        pkg.purl,
                         dosDir,
                         tmpDir,
                         thisScanStartTime,
@@ -98,7 +98,7 @@ class DOS internal constructor(
                         return@runBlocking
                     }
                 }
-                "pending" -> scanResults?.state?.id?.let { waitForPendingScan(pkg, it, thisScanStartTime) }
+                "pending" -> scanResults?.state?.id?.let { waitForPendingScan(pkg.purl, it, thisScanStartTime) }
                 "ready" -> { /* Results exist, form an ORT result and move on to the next package */ }
             }
         }
@@ -127,7 +127,7 @@ class DOS internal constructor(
 
     @VisibleForTesting
     internal suspend fun runBackendScan(
-        pkg: Package,
+        purl: String,
         dosDir: File,
         tmpDir: String,
         thisScanStartTime: Instant,
@@ -159,11 +159,11 @@ class DOS internal constructor(
         deleteFileOrDir(targetZipFile)  // make sure the zipped packet is always deleted locally
 
         // Send the scan job to DOS API to start the backend scanning and do local cleanup
-        val jobResponse = repository.postScanJob(zipName, pkg.purl)
+        val jobResponse = repository.postScanJob(zipName, purl)
         val id = jobResponse?.scannerJobId
 
         if (jobResponse != null) {
-            logger.info { "New scan request: Package = ${pkg.purl}, Zip file = $zipName" }
+            logger.info { "New scan request: Package = $purl, Zip file = $zipName" }
             if (jobResponse.message == "Adding job to queue was unsuccessful") {
                 issues.add(createAndLogIssue(name, "DOS API: 'unsuccessful' response to the scan job request", Severity.ERROR))
                 return DOSService.ScanResultsResponseBody(DOSService.ScanResultsResponseBody.State("failed"))
@@ -173,18 +173,18 @@ class DOS internal constructor(
             return DOSService.ScanResultsResponseBody(DOSService.ScanResultsResponseBody.State("failed"))
         }
 
-        return id?.let { pollForCompletion(pkg, it, "New scan", thisScanStartTime) }
+        return id?.let { pollForCompletion(purl, it, "New scan", thisScanStartTime) }
     }
 
     private suspend fun waitForPendingScan(
-        pkg: Package,
+        purl: String,
         id: String,
         thisScanStartTime: Instant): DOSService.ScanResultsResponseBody? {
-        return pollForCompletion(pkg, id, "Pending scan", thisScanStartTime)
+        return pollForCompletion(purl, id, "Pending scan", thisScanStartTime)
     }
 
     private suspend fun pollForCompletion(
-        pkg: Package,
+        purl: String,
         jobId: String,
         logMessagePrefix: String,
         thisScanStartTime: Instant): DOSService.ScanResultsResponseBody? {
@@ -201,7 +201,7 @@ class DOS internal constructor(
                 when (jobState.state.status) {
                     "completed" -> {
                         logger.info { "Scan completed" }
-                        return repository.getScanResults(pkg.purl, config.fetchConcluded)
+                        return repository.getScanResults(purl, config.fetchConcluded)
                     }
                     "failed" -> {
                         logger.error { "Scan failed" }

@@ -151,7 +151,7 @@ class DOSTest {
         )
         val result = runBlocking {
             dos.runBackendScan(
-                pkg,
+                pkg.purl,
                 dosDir,
                 tmpDir,
                 thisScanStartTime,
