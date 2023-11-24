@@ -32,6 +32,18 @@ import org.ossreviewtoolkit.utils.common.Plugin
  * A common interface for use with [ServiceLoader] that all [AbstractPackageManagerFactory] classes need to implement.
  */
 interface PackageManagerFactory : Plugin {
+    companion object {
+        /**
+         * All [package manager factories][PackageManagerFactory] available in the classpath, associated by their names.
+         */
+        val ALL by lazy { Plugin.getAll<PackageManagerFactory>() }
+
+        /**
+         * The available [package manager factories][PackageManagerFactory] that are enabled by default.
+         */
+        val ENABLED_BY_DEFAULT by lazy { ALL.values.filter { it.isEnabledByDefault } }
+    }
+
     /**
      * The glob matchers for all definition files.
      */

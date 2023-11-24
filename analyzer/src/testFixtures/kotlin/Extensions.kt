@@ -128,7 +128,7 @@ fun ProjectAnalyzerResult.withInvariantIssues() = copy(
 fun Spec.analyze(
     projectDir: File,
     allowDynamicVersions: Boolean = false,
-    packageManagers: Collection<PackageManagerFactory> = PackageManager.ENABLED_BY_DEFAULT
+    packageManagers: Collection<PackageManagerFactory> = PackageManagerFactory.ENABLED_BY_DEFAULT
 ): OrtResult {
     val config = AnalyzerConfiguration(allowDynamicVersions)
     val analyzer = Analyzer(config)
@@ -141,7 +141,7 @@ fun Spec.create(
     managerName: String,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration = RepositoryConfiguration()
-) = PackageManager.ALL.getValue(managerName).create(USER_DIR, analyzerConfig, repoConfig)
+) = PackageManagerFactory.ALL.getValue(managerName).create(USER_DIR, analyzerConfig, repoConfig)
 
 fun Spec.create(
     managerName: String,
