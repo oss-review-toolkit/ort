@@ -80,7 +80,7 @@ internal object ReportTableModelMapper {
                     it.summary.issues
                 }
 
-                val packageForId = ortResult.getPackage(id)?.metadata ?: ortResult.getProject(id)?.toPackage()
+                val packageForId = ortResult.getPackageOrProject(id)?.metadata
 
                 val row = DependencyRow(
                     id = id,
