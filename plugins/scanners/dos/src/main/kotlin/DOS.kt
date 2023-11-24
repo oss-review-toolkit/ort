@@ -21,6 +21,7 @@ import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.scanner.*
 import org.ossreviewtoolkit.downloader.Downloader
 import org.ossreviewtoolkit.utils.common.Options
+import org.ossreviewtoolkit.utils.common.percentEncode
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 
 /**
@@ -85,9 +86,15 @@ class DOS internal constructor(
                     downloader.download(pkg, dosDir)
                     logger.info { "Package downloaded to: $dosDir" }
 
+                    val purls = context.coveredPackages.map { pkg ->
+                        pkg.purl.takeUnless { pkg.vcsProcessed.path.isNotEmpty() }
+                            // Encode a path within the source code to the PURL.
+                            ?: "${pkg.purl}#${pkg.vcsProcessed.path.percentEncode()}"
+                    }
+
                     // Start backend scanning
                     scanResults = runBackendScan(
-                        pkg.purl,
+                        purls,
                         dosDir,
                         tmpDir,
                         thisScanStartTime,
@@ -127,7 +134,7 @@ class DOS internal constructor(
 
     @VisibleForTesting
     internal suspend fun runBackendScan(
-        purl: String,
+        purls: List<String>,
         dosDir: File,
         tmpDir: String,
         thisScanStartTime: Instant,
@@ -159,11 +166,11 @@ class DOS internal constructor(
         deleteFileOrDir(targetZipFile)  // make sure the zipped packet is always deleted locally
 
         // Send the scan job to DOS API to start the backend scanning and do local cleanup
-        val jobResponse = repository.postScanJob(zipName, purl)
+        val jobResponse = repository.postScanJob(zipName, purls.first()) // TODO: Pass in the whole list once supported by the client / backend.
         val id = jobResponse?.scannerJobId
 
         if (jobResponse != null) {
-            logger.info { "New scan request: Package = $purl, Zip file = $zipName" }
+            logger.info { "New scan request: Packages = ${purls.joinToString()}, Zip file = $zipName" }
             if (jobResponse.message == "Adding job to queue was unsuccessful") {
                 issues.add(createAndLogIssue(name, "DOS API: 'unsuccessful' response to the scan job request", Severity.ERROR))
                 return DOSService.ScanResultsResponseBody(DOSService.ScanResultsResponseBody.State("failed"))
@@ -173,7 +180,12 @@ class DOS internal constructor(
             return DOSService.ScanResultsResponseBody(DOSService.ScanResultsResponseBody.State("failed"))
         }
 
-        return id?.let { pollForCompletion(purl, it, "New scan", thisScanStartTime) }
+        return id?.let {
+            // In case of multiple PURLs, they all point to packages with the same provenance. So if one package scan is
+            // complete, all package scans are complete, which is why it is enough to arbitrarily pool for the first
+            // package here.
+            pollForCompletion(purls.first(), it, "New scan", thisScanStartTime)
+        }
     }
 
     private suspend fun waitForPendingScan(
