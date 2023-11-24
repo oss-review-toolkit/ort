@@ -73,12 +73,7 @@ class StaticHtmlReporter : Reporter {
     private val licensesSha1 = mutableMapOf<String, String>()
 
     override fun generateReport(input: ReporterInput, outputDir: File, config: PluginConfiguration): List<File> {
-        val reportTableModel = ReportTableModelMapper.map(
-            input.ortResult,
-            input.licenseInfoResolver,
-            input.resolutionProvider,
-            input.howToFixTextProvider
-        )
+        val reportTableModel = ReportTableModelMapper.map(input)
 
         val html = renderHtml(reportTableModel)
         val outputFile = outputDir.resolve(reportFilename)
