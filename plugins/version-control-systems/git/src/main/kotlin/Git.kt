@@ -99,7 +99,7 @@ class Git : VersionControlSystem(), CommandLineTool {
 
     private val versionRegex = Regex("[Gg]it [Vv]ersion (?<version>[\\d.a-z-]+)(\\s.+)?")
 
-    override val type = VcsType.GIT
+    override val type = VcsType.GIT.toString()
     override val priority = 100
     override val latestRevisionNames = listOf("HEAD", "@")
 
@@ -123,7 +123,7 @@ class Git : VersionControlSystem(), CommandLineTool {
     override fun getWorkingTree(vcsDirectory: File): WorkingTree =
         GitWorkingTree(
             workingDir = vcsDirectory,
-            vcsType = type,
+            vcsType = VcsType.forName(type),
             repositoryUrlPrefixReplacements = REPOSITORY_URL_PREFIX_REPLACEMENTS
         )
 
