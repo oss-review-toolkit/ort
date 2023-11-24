@@ -33,6 +33,10 @@ import org.ossreviewtoolkit.utils.common.getDuplicates
 interface PackageConfigurationProviderFactory<CONFIG> :
     TypedConfigurablePluginFactory<CONFIG, PackageConfigurationProvider> {
     companion object {
+        /**
+         * All [package configuration provider factories][PackageConfigurationProviderFactory] available in the
+         * classpath, associated by their names.
+         */
         val ALL by lazy { Plugin.getAll<PackageConfigurationProviderFactory<*>>() }
 
         /**
