@@ -15,14 +15,11 @@ import org.apache.logging.log4j.kotlin.Logging
 
 import org.junit.jupiter.api.*
 
-import org.junit.jupiter.api.Assertions.*
 import org.ossreviewtoolkit.clients.dos.DOSService
 
 import org.ossreviewtoolkit.model.*
-import org.ossreviewtoolkit.model.config.DownloaderConfiguration
-import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.ScanContext
-import org.ossreviewtoolkit.scanner.ScannerMatcherConfig
+import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import java.time.Instant
 
@@ -45,17 +42,15 @@ class DOSTest {
     @BeforeEach
     fun setup() {
         server.start()
-        val scannerOptions = mapOf(DOSConfig.SERVER_URL_PROPERTY to "http://localhost:${server.port()}/api/")
         val config = DOSConfig(
             serverUrl = "http://localhost:${server.port()}/api/",
             serverToken = System.getenv("SERVER_TOKEN"),
             pollInterval = 5,
             restTimeout = 60,
             fetchConcluded = false,
-            frontendUrl = "http://localhost:3000",
-            options = scannerOptions
+            frontendUrl = "http://localhost:3000"
         )
-        dos = DOS.Factory().create(config, ScannerMatcherConfig())
+        dos = DOS.Factory().create(config, ScannerWrapperConfig.EMPTY)
     }
 
     @AfterEach
