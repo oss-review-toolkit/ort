@@ -49,7 +49,6 @@ import {
 } from '../reducers/selectors';
 import store from '../store';
 
-const { Panel } = Collapse;
 const { Search } = Input;
 
 class TreeView extends React.Component {
@@ -267,70 +266,85 @@ class TreeView extends React.Component {
                                 placement="right"
                                 closable
                                 onClose={this.onCloseDrawer}
-                                visible={showDrawer}
+                                open={showDrawer}
                                 width="65%"
                             >
                                 <Collapse
                                     className="ort-package-collapse"
                                     bordered={false}
                                     defaultActiveKey={[0, 1]}
-                                >
-                                    <Panel header="Details" key="0">
-                                        <PackageDetails
-                                            webAppPackage={selectedWebAppTreeNode.package}
-                                        />
-                                    </Panel>
-                                    {
-                                        selectedWebAppTreeNode.package.hasLicenses()
-                                        && (
-                                            <Panel header="Licenses" key="1">
-                                                <PackageLicenses
-                                                    webAppPackage={selectedWebAppTreeNode.package}
-                                                />
-                                            </Panel>
-                                        )
-                                    }
-                                    {
-                                        selectedWebAppTreeNode.hasWebAppPath()
-                                        && (
-                                            <Panel header="Path" key="2">
-                                                <PackagePaths
-                                                    paths={[selectedWebAppTreeNode.webAppPath]}
-                                                />
-                                            </Panel>
-                                        )
-                                    }
-                                    {
-                                        selectedWebAppTreeNode.package.hasFindings()
-                                        && (
-                                            <Panel header="Scan Results" key="3">
-                                                <PackageFindingsTable
-                                                    webAppPackage={selectedWebAppTreeNode.package}
-                                                />
-                                            </Panel>
-                                        )
-                                    }
-                                    {
-                                        selectedWebAppTreeNode.package.hasPathExcludes()
-                                        && (
-                                            <Panel header="Path Excludes" key="4">
-                                                <PathExcludesTable
-                                                    excludes={selectedWebAppTreeNode.package.pathExcludes}
-                                                />
-                                            </Panel>
-                                        )
-                                    }
-                                    {
-                                        selectedWebAppTreeNode.package.hasScopeExcludes()
-                                        && (
-                                            <Panel header="Scope Excludes" key="5">
-                                                <ScopeExcludesTable
-                                                    excludes={selectedWebAppTreeNode.package.scopeExcludes}
-                                                />
-                                            </Panel>
-                                        )
-                                    }
-                                </Collapse>
+                                    items={(() => {
+                                        var collapseItems = [
+                                            {
+                                                label: 'Details',
+                                                key: 'package-details',
+                                                children: (
+                                                    <PackageDetails webAppPackage={selectedWebAppTreeNode.package} />
+                                                )
+                                            }
+                                        ];
+    
+                                        if (selectedWebAppTreeNode.package.hasLicenses()) {
+                                            collapseItems.push({
+                                                label: 'Licenses',
+                                                key: 'package-licenses',
+                                                children: (
+                                                    <PackageLicenses webAppPackage={selectedWebAppTreeNode.package} />
+                                                )
+                                            });
+                                        }
+    
+                                        if (selectedWebAppTreeNode.package.hasPaths()) {
+                                            collapseItems.push({
+                                                label: 'Paths',
+                                                key: 'package-paths',
+                                                children: (
+                                                    <PackagePaths
+                                                        paths={[selectedWebAppTreeNode.webAppPath]}
+                                                    />
+                                                )
+                                            });
+                                        }
+    
+                                        if (selectedWebAppTreeNode.package.hasFindings()) {
+                                            collapseItems.push({
+                                                label: 'Scan Results',
+                                                key: 'package-scan-results',
+                                                children: (
+                                                    <PackageFindingsTable
+                                                        webAppPackage={selectedWebAppTreeNode.package}
+                                                    />
+                                                )
+                                            });
+                                        }
+    
+                                        if (selectedWebAppTreeNode.package.hasPathExcludes()) {
+                                            collapseItems.push({
+                                                label: 'Path Excludes',
+                                                key: 'package-path-excludes',
+                                                children: (
+                                                    <PathExcludesTable
+                                                        excludes={selectedWebAppTreeNode.package.pathExcludes}
+                                                    />
+                                                )
+                                            });
+                                        }
+    
+                                        if (selectedWebAppTreeNode.package.hasScopeExcludes()) {
+                                            collapseItems.push({
+                                                label: 'Scope Excludes',
+                                                key: 'package-scope-excludes',
+                                                children: (
+                                                    <ScopeExcludesTable
+                                                        excludes={selectedWebAppTreeNode.package.scopeExcludes}
+                                                    />
+                                                )
+                                            });
+                                        }
+    
+                                        return collapseItems;
+                                    })()}
+                                />
                             </Drawer>
                         </div>
                     )

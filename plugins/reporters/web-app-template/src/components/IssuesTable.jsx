@@ -39,8 +39,6 @@ import ResolutionTable from './ResolutionTable';
 import ScopeExcludesTable from './ScopeExcludesTable';
 import { getColumnSearchProps } from './Shared';
 
-const { Panel } = Collapse;
-
 // Generates the HTML to display violations as a Table
 class IssuesTable extends React.Component {
     render () {
@@ -215,96 +213,114 @@ class IssuesTable extends React.Component {
                 className="ort-table-issues"
                 columns={columns}
                 dataSource={issues}
-                expandedRowRender={
-                    (webAppOrtIssue) => {
-                        const defaultActiveKey = [1];
+                expandable={{
+                    expandedRowRender: (webAppOrtIssue) => {
+                        const defaultActiveKey = webAppOrtIssue.isResolved
+                            ? 'issue-how-to-fix' : 'issue-package-details';
                         const webAppPackage = webAppOrtIssue.package;
-
-                        if (webAppOrtIssue.isResolved) {
-                            defaultActiveKey.unshift(0);
-                        }
 
                         return (
                             <Collapse
                                 className="ort-package-collapse"
                                 bordered={false}
                                 defaultActiveKey={defaultActiveKey}
-                            >
-                                {
-                                    webAppOrtIssue.hasHowToFix()
-                                    && (
-                                        <Panel header="How to fix" key="0">
-                                            <Markdown
-                                                className="ort-how-to-fix"
-                                            >
-                                                {webAppOrtIssue.howToFix}
-                                            </Markdown>
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppOrtIssue.isResolved
-                                    && (
-                                        <Panel header="Resolutions" key="1">
-                                            <ResolutionTable
-                                                resolutions={webAppOrtIssue.resolutions}
-                                            />
-                                        </Panel>
-                                    )
-                                }
-                                <Panel header="Details" key="2">
-                                    <PackageDetails webAppPackage={webAppPackage} />
-                                </Panel>
-                                {
-                                    webAppPackage.hasLicenses()
-                                    && (
-                                        <Panel header="Licenses" key="3">
-                                            <PackageLicenses webAppPackage={webAppPackage} />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppPackage.hasPaths()
-                                    && (
-                                        <Panel header="Paths" key="4">
-                                            <PackagePaths paths={webAppPackage.paths} />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppPackage.hasFindings()
-                                    && (
-                                        <Panel header="Scan Results" key="5">
-                                            <PackageFindingsTable
-                                                webAppPackage={webAppPackage}
-                                            />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppPackage.hasPathExcludes()
-                                    && (
-                                        <Panel header="Path Excludes" key="6">
-                                            <PathExcludesTable
-                                                excludes={webAppPackage.pathExcludes}
-                                            />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppPackage.hasScopeExcludes()
-                                    && (
-                                        <Panel header="Scope Excludes" key="7">
-                                            <ScopeExcludesTable
-                                                excludes={webAppPackage.scopeExcludes}
-                                            />
-                                        </Panel>
-                                    )
-                                }
-                            </Collapse>
+                                items={(() => {
+                                    var collapseItems = [];
+
+                                    if (webAppOrtIssue.hasHowToFix()) {
+                                        collapseItems.push({
+                                            label: 'How to fix',
+                                            key: 'issue-how-to-fix',
+                                            children: (
+                                                <Markdown className="ort-how-to-fix">
+                                                    {webAppOrtIssue.howToFix}
+                                                </Markdown>
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppOrtIssue.isResolved) {
+                                        collapseItems.push({
+                                            label: 'Resolutions',
+                                            key: 'issue-resolutions',
+                                            children: (
+                                                <ResolutionTable
+                                                    resolutions={webAppOrtIssue.resolutions}
+                                                />
+                                            )
+                                        });
+                                    }
+
+                                    collapseItems.push({
+                                        label: 'Details',
+                                        key: 'issue-package-details',
+                                        children: (
+                                            <PackageDetails webAppPackage={webAppPackage} />
+                                        )
+                                    });
+
+                                    if (webAppPackage.hasLicenses()) {
+                                        collapseItems.push({
+                                            label: 'Licenses',
+                                            key: 'issue-package-licenses',
+                                            children: (
+                                                <PackageLicenses webAppPackage={webAppPackage} />
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppPackage.hasPaths()) {
+                                        collapseItems.push({
+                                            label: 'Paths',
+                                            key: 'issue-package-paths',
+                                            children: (
+                                                <PackagePaths paths={webAppPackage.paths} />
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppPackage.hasFindings()) {
+                                        collapseItems.push({
+                                            label: 'Scan Results',
+                                            key: 'issue-package-scan-results',
+                                            children: (
+                                                <PackageFindingsTable
+                                                    webAppPackage={webAppPackage}
+                                                />
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppPackage.hasPathExcludes()) {
+                                        collapseItems.push({
+                                            label: 'Path Excludes',
+                                            key: 'issue-package-path-excludes',
+                                            children: (
+                                                <PathExcludesTable
+                                                    excludes={webAppPackage.pathExcludes}
+                                                />
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppPackage.hasScopeExcludes()) {
+                                        collapseItems.push({
+                                            label: 'Scope Excludes',
+                                            key: 'issue-package-scope-excludes',
+                                            children: (
+                                                <ScopeExcludesTable
+                                                    excludes={webAppPackage.scopeExcludes}
+                                                />
+                                            )
+                                        });
+                                    }
+
+                                    return collapseItems;
+                                })()}
+                            />
                         );
                     }
-                }
+                }}
                 locale={{
                     emptyText: 'No issues'
                 }}

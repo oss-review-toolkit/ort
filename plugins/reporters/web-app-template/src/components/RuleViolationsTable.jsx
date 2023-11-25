@@ -39,9 +39,6 @@ import ResolutionTable from './ResolutionTable';
 import ScopeExcludesTable from './ScopeExcludesTable';
 import { getColumnSearchProps } from './Shared';
 
-
-const { Panel } = Collapse;
-
 // Generates the HTML to display violations as a Table
 class RuleViolationsTable extends React.Component {
     render () {
@@ -227,8 +224,8 @@ class RuleViolationsTable extends React.Component {
                 className="ort-table-rule-violations"
                 columns={columns}
                 dataSource={ruleViolations}
-                expandedRowRender={
-                    (webAppRuleViolation) => {
+                expandable={{
+                    expandedRowRender: (webAppRuleViolation) => {
                         let defaultActiveKey = [0];
                         const webAppPackage = webAppRuleViolation.package;
 
@@ -241,92 +238,104 @@ class RuleViolationsTable extends React.Component {
                                 className="ort-package-collapse"
                                 bordered={false}
                                 defaultActiveKey={defaultActiveKey}
-                            >
-                                {
-                                    webAppRuleViolation.hasHowToFix()
-                                    && (
-                                        <Panel header="How to fix" key="0">
-                                            <Markdown
-                                                className="ort-how-to-fix"
-                                            >
-                                                {webAppRuleViolation.howToFix}
-                                            </Markdown>
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppRuleViolation.isResolved
-                                    && (
-                                        <Panel header="Resolutions" key="1">
-                                            <ResolutionTable
-                                                resolutions={webAppRuleViolation.resolutions}
-                                            />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppRuleViolation.hasPackage()
-                                    && (
-                                        <Panel header="Details" key="2">
-                                            <PackageDetails webAppPackage={webAppPackage} />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppRuleViolation.hasPackage()
-                                    && webAppPackage.hasLicenses()
-                                    && (
-                                        <Panel header="Licenses" key="3">
-                                            <PackageLicenses webAppPackage={webAppPackage} />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppRuleViolation.hasPackage()
-                                    && webAppPackage.hasPaths()
-                                    && (
-                                        <Panel header="Paths" key="4">
-                                            <PackagePaths paths={webAppPackage.paths} />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppRuleViolation.hasPackage()
-                                    && webAppPackage.hasFindings()
-                                    && (
-                                        <Panel header="Scan Results" key="5">
-                                            <PackageFindingsTable
-                                                webAppPackage={webAppPackage}
-                                            />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppRuleViolation.hasPackage()
-                                    && webAppPackage.hasPathExcludes()
-                                    && (
-                                        <Panel header="Path Excludes" key="6">
-                                            <PathExcludesTable
-                                                excludes={webAppPackage.pathExcludes}
-                                            />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppRuleViolation.hasPackage()
-                                    && webAppPackage.hasScopeExcludes()
-                                    && (
-                                        <Panel header="Scope Excludes" key="7">
-                                            <ScopeExcludesTable
-                                                excludes={webAppPackage.scopeExcludes}
-                                            />
-                                        </Panel>
-                                    )
-                                }
-                            </Collapse>
+                                items={(() => {
+                                    var collapseItems = [];
+
+                                    if (webAppRuleViolation.hasHowToFix()) {
+                                        collapseItems.push({
+                                            label: 'How to fix',
+                                            key: 'rule-violation-how-to-fix',
+                                            children: (
+                                                <Markdown className="ort-how-to-fix">
+                                                    {webAppRuleViolation.howToFix}
+                                                </Markdown>
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppRuleViolation.isResolved) {
+                                        collapseItems.push({
+                                            label: 'Resolutions',
+                                            key: 'rule-violation-resolutions',
+                                            children: (
+                                                <ResolutionTable
+                                                    resolutions={webAppRuleViolation.resolutions}
+                                                />
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppRuleViolation.hasPackage()) {
+                                        collapseItems.push({
+                                            label: 'Details',
+                                            key: 'rule-violation-package-details',
+                                            children: (
+                                                <PackageDetails webAppPackage={webAppPackage} />
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppRuleViolation.hasPackage() && webAppPackage.hasLicenses()) {
+                                        collapseItems.push({
+                                            label: 'Licenses',
+                                            key: 'rule-violation-package-licenses',
+                                            children: (
+                                                <PackageLicenses webAppPackage={webAppPackage} />
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppRuleViolation.hasPackage() && webAppPackage.hasPaths()) {
+                                        collapseItems.push({
+                                            label: 'Paths',
+                                            key: 'rule-violation-package-paths',
+                                            children: (
+                                                <PackagePaths paths={webAppPackage.paths} />
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppRuleViolation.hasPackage() && webAppPackage.hasFindings()) {
+                                        collapseItems.push({
+                                            label: 'Scan Results',
+                                            key: 'rule-violation-package-scan-results',
+                                            children: (
+                                                <PackageFindingsTable
+                                                    webAppPackage={webAppPackage}
+                                                />
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppRuleViolation.hasPackage() && webAppPackage.hasPathExcludes()) {
+                                        collapseItems.push({
+                                            label: 'Path Excludes',
+                                            key: 'rule-violation-package-path-excludes',
+                                            children: (
+                                                <PathExcludesTable
+                                                    excludes={webAppPackage.pathExcludes}
+                                                />
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppRuleViolation.hasPackage() && webAppPackage.hasScopeExcludes()) {
+                                        collapseItems.push({
+                                            label: 'Scope Excludes',
+                                            key: 'rule-violation-package-scope-excludes',
+                                            children: (
+                                                <ScopeExcludesTable
+                                                    excludes={webAppPackage.scopeExcludes}
+                                                />
+                                            )
+                                        });
+                                    }
+                                    return collapseItems;
+                                })()}
+                            />
                         );
                     }
-                }
+                }}
                 locale={{
                     emptyText: 'No violations'
                 }}
