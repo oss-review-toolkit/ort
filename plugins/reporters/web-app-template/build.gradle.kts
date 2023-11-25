@@ -103,13 +103,12 @@ tasks {
         description = "Use Yarn to build the Node.js application."
         group = "Node"
 
-        inputs.files(".rescriptsrc.js")
         inputs.files(project.tasks["yarnInstall"].outputs)
-        inputs.dir("public")
+        inputs.files("index.html")
         inputs.dir("src")
 
         outputs.cacheIf { true }
-        outputs.dir("build")
+        outputs.dir("dist")
     }
 
     "yarnLint" {
@@ -133,7 +132,7 @@ tasks.register("check") {
 }
 
 tasks.register<Delete>("clean") {
-    delete("build")
+    delete("dist")
     delete("node_modules")
     delete("yarn-error.log")
 }
