@@ -45,13 +45,6 @@ import {
     getOrtResult
 } from './reducers/selectors';
 
-const { TabPane } = Tabs;
-
-/* TODO for combine CSS, JS and fonts into single HTML file look into https://webpack.js.org
- * combined with https://www.npmjs.com/package/html-webpack-inline-source-plugin or
- * https://www.npmjs.com/package/miku-html-webpack-inline-source-plugin
- */
-
 class ReporterApp extends Component {
     constructor(props) {
         super(props);
@@ -94,6 +87,45 @@ class ReporterApp extends Component {
                         <Tabs
                             activeKey={showKey}
                             animated={false}
+                            items={[
+                                {
+                                    label: (
+                                        <span>
+                                            <PieChartOutlined />
+                                            Summary
+                                        </span>
+                                    ),
+                                    key: "ort-tabs-summary",
+                                    children: (
+                                        <SummaryView />
+                                    )
+                                },
+                                {
+                                    label: (
+                                        <span>
+                                            <TableOutlined />
+                                            Table
+                                        </span>
+                                    ),
+                                    key: "ort-tabs-table",
+                                    children: (
+                                        <TableView />
+                                    )
+                                },
+                                {
+                                    label: (
+                                        <span>
+                                        <PartitionOutlined />
+                                        Tree
+                                        </span>
+                                    ),
+                                    key: "ort-tabs-tree",
+                                    children: (
+                                        <TreeView />
+                                    )
+                                }
+
+                            ]}
                             onChange={this.onChangeTab}
                             tabBarExtraContent={(
                                 <ControlOutlined
@@ -101,41 +133,7 @@ class ReporterApp extends Component {
                                     onClick={this.onClickAbout}
                                 />
                             )}
-                        >
-                            <TabPane
-                                tab={(
-                                    <span>
-                                        <PieChartOutlined />
-                                        Summary
-                                    </span>
-                                )}
-                                key="ort-tabs-summary"
-                            >
-                                <SummaryView />
-                            </TabPane>
-                            <TabPane
-                                tab={(
-                                    <span>
-                                        <TableOutlined />
-                                        Table
-                                    </span>
-                                )}
-                                key="ort-tabs-table"
-                            >
-                                <TableView />
-                            </TabPane>
-                            <TabPane
-                                tab={(
-                                    <span>
-                                        <PartitionOutlined />
-                                        Tree
-                                    </span>
-                                )}
-                                key="ort-tabs-tree"
-                            >
-                                <TreeView />
-                            </TabPane>
-                        </Tabs>
+                        />
                     </Col>
                 </Row>
             );

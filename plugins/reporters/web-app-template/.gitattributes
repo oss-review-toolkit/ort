@@ -2,4 +2,4 @@
 **/*.js	text eol=lf
 
 # Fix GitHub language statistics, see https://github.com/github/linguist#using-gitattributes.
-public/index.html	linguist-generated=true
+index.html	linguist-generated=true
