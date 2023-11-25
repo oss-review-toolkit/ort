@@ -80,7 +80,7 @@ internal fun fixNpmDownloadUrl(downloadUrl: String): String {
         .replace(ARTIFACTORY_API_PATH_PATTERN, "$1/$2")
 }
 
-private val ARTIFACTORY_API_PATH_PATTERN = Regex("(.*artifactory.*)(?:/api/npm/)(.*)")
+private val ARTIFACTORY_API_PATH_PATTERN = Regex("(.*artifactory.*)/api/npm/(.*)")
 
 /**
  * Parse information about the author from the [package.json][json] file of a module. According to
