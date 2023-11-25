@@ -37,6 +37,14 @@ https://ant.design/docs/react/customize-theme
     width: 94.16666667%;
 }
 
+.ant-descriptions .ant-descriptions-item-label {
+    color: rgba(0, 0, 0, 0.88);
+}
+
+.ant-steps-dot .ant-steps-item-content {
+    width: auto;
+}
+
 .ant-table-small > .ant-table-content > .ant-table-body {
     margin: 0px;
 }
@@ -46,8 +54,8 @@ tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
     background: #fff;
 }
 
-.ant-steps-dot .ant-steps-item-content {
-    width: auto;
+.ant-tabs-tab .anticon {
+    margin-right: 4px;
 }
 
 /* Styling specific for last item in SummaryView Timeline */
@@ -196,7 +204,11 @@ tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
 /* === Styling for TableView  === */
 
 /* Styling for 'Clear filters' and 'Show / Hide Columns' buttons in TableView */
-.ort-table-buttons .ant-btn-group {
+.ort-table-buttons .ant-dropdown-button {
+    overflow: auto;
+}
+
+.ort-table-buttons .ant-dropdown-button .ant-btn {
     float: right;
     margin-bottom: 5px;
     z-index: 999;
