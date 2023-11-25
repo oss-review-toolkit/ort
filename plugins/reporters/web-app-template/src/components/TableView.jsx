@@ -20,9 +20,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
+    Col,
     Collapse,
     Dropdown,
-    Menu,
+    Row,
     Table,
     Tooltip
 } from 'antd';
@@ -54,8 +55,6 @@ import PackagePaths from './PackagePaths';
 import PathExcludesTable from './PathExcludesTable';
 import ScopeExcludesTable from './ScopeExcludesTable';
 import { getColumnSearchProps } from './Shared';
-
-const { Panel } = Collapse;
 
 class TableView extends React.Component {
     shouldComponentUpdate() {
@@ -385,21 +384,16 @@ class TableView extends React.Component {
 
         return (
             <div>
-                <div className="ort-table-buttons">
-                    <Dropdown.Button
-                        onClick={() => {
-                            store.dispatch({ type: 'TABLE::RESET_COLUMNS_TABLE' });
-                        }}
-                        overlay={(
-                            <Menu
-                                className="ort-table-toggle-columns"
-                                onClick={this.onClickToggleColumnsMenu}
-                                selectedKeys={showKeys}
-                            >
-                                {
-                                    toggleColumnMenuItems.map(
-                                        (item) => (
-                                            <Menu.Item key={item.value}>
+                <Row justify="end">
+                    <Col>
+                        <Dropdown.Button
+                            menu={{
+                                className: "ort-table-toggle-columns",
+                                items: toggleColumnMenuItems.map(
+                                    (item) => ({
+                                        key: item.value,
+                                        label: (
+                                            <span>
                                                 {
                                                     showKeys.includes(item.value)
                                                         ? <EyeOutlined />
@@ -407,80 +401,104 @@ class TableView extends React.Component {
                                                 }
                                                 {' '}
                                                 {item.text}
-                                            </Menu.Item>
+                                            </span>
                                         )
-                                    )
-                                }
-                            </Menu>
-                        )}
-                        size="small"
-                    >
-                        Clear filters
-                    </Dropdown.Button>
-                </div>
+                                    })
+                                ),
+                                onClick: this.onClickToggleColumnsMenu,
+                                selectedKeys: showKeys 
+                            }}
+                            onClick={() => {
+                                store.dispatch({ type: 'TABLE::RESET_COLUMNS_TABLE' });
+                            }}
+                            size="small"
+                        >
+                            Clear filters
+                        </Dropdown.Button>
+                    </Col>
+                </Row>
                 <Table
                     columns={columns}
-                    expandedRowRender={
-                        (webAppPackage) => (
+                    expandable={{
+                        expandedRowRender: (webAppPackage) => (
                             <Collapse
                                 className="ort-package-collapse"
                                 bordered={false}
                                 defaultActiveKey={[0, 1]}
-                            >
-                                <Panel header="Details" key="0">
-                                    <PackageDetails webAppPackage={webAppPackage} />
-                                </Panel>
-                                {
-                                    webAppPackage.hasLicenses()
-                                    && (
-                                        <Panel header="Licenses" key="1">
-                                            <PackageLicenses webAppPackage={webAppPackage} />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppPackage.hasPaths()
-                                    && (
-                                        <Panel header="Paths" key="2">
-                                            <PackagePaths paths={webAppPackage.paths} />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppPackage.hasFindings()
-                                    && (
-                                        <Panel header="Scan Results" key="3">
-                                            <PackageFindingsTable
-                                                webAppPackage={webAppPackage}
-                                            />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppPackage.hasPathExcludes()
-                                    && (
-                                        <Panel header="Path Excludes" key="4">
-                                            <PathExcludesTable
-                                                excludes={webAppPackage.pathExcludes}
-                                            />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppPackage.hasScopeExcludes()
-                                    && (
-                                        <Panel header="Scope Excludes" key="5">
-                                            <ScopeExcludesTable
-                                                excludes={webAppPackage.scopeExcludes}
-                                            />
-                                        </Panel>
-                                    )
-                                }
-                            </Collapse>
-                        )
-                    }
+                                items={(() => {
+                                    var collapseItems = [
+                                        {
+                                            label: 'Details',
+                                            key: 'package-details',
+                                            children: (
+                                                <PackageDetails webAppPackage={webAppPackage} />
+                                            )
+                                        }
+                                    ];
+
+                                    if (webAppPackage.hasLicenses()) {
+                                        collapseItems.push({
+                                            label: 'Licenses',
+                                            key: 'package-licenses',
+                                            children: (
+                                                <PackageLicenses webAppPackage={webAppPackage} />
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppPackage.hasPaths()) {
+                                        collapseItems.push({
+                                            label: 'Paths',
+                                            key: 'package-paths',
+                                            children: (
+                                                <PackagePaths paths={webAppPackage.paths} />
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppPackage.hasFindings()) {
+                                        collapseItems.push({
+                                            label: 'Scan Results',
+                                            key: 'package-scan-results',
+                                            children: (
+                                                <PackageFindingsTable
+                                                    webAppPackage={webAppPackage}
+                                                />
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppPackage.hasPathExcludes()) {
+                                        collapseItems.push({
+                                            label: 'Path Excludes',
+                                            key: 'package-path-excludes',
+                                            children: (
+                                                <PathExcludesTable
+                                                    excludes={webAppPackage.pathExcludes}
+                                                />
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppPackage.hasScopeExcludes()) {
+                                        collapseItems.push({
+                                            label: 'Scope Excludes',
+                                            key: 'package-scope-excludes',
+                                            children: (
+                                                <ScopeExcludesTable
+                                                    excludes={webAppPackage.scopeExcludes}
+                                                />
+                                            )
+                                        });
+                                    }
+
+                                    return collapseItems;
+                                })()}
+                            />
+                        ),
+                        expandRowByClick: true
+                    }}
                     dataSource={webAppOrtResult.packages}
-                    expandRowByClick
                     indentSize={0}
                     locale={{
                         emptyText: 'No packages'
@@ -501,7 +519,7 @@ class TableView extends React.Component {
                         {
                             defaultPageSize: 100,
                             hideOnSinglePage: true,
-                            pageSizeOptions: ['50', '100', '250', '500', '1000', '5000'],
+                            pageSizeOptions: ['50', '100', '250', '500'],
                             position: 'both',
                             showSizeChanger: true
                         }

@@ -39,10 +39,10 @@ const LicenseStatsTable = (props) => {
         {
             title: 'License',
             dataIndex: 'name',
+            filteredValue: filteredInfo.name || null,
             filters: (
                 () => licenses.map((license) => ({ text: license, value: license }))
             )(),
-            filteredValue: filteredInfo.name || null,
             onFilter: (license, row) => row.name === license,
             sorter: (a, b) => a.name.localeCompare(b.name),
             sortOrder: sortedInfo.columnKey === 'name' && sortedInfo.order,
