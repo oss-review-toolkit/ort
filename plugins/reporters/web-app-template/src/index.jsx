@@ -17,19 +17,17 @@
  * License-Filename: LICENSE
  */
 
-import React from 'react';
-import { Provider } from 'react-redux';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App.jsx'
+import './index.css'
 import store from './store';
+import { Provider } from 'react-redux';
 
-ReactDOM.render(
-    (
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <React.StrictMode>
         <Provider store={store}>
             <App />
         </Provider>
-    ),
-    document.getElementById('root')
-);
+    </React.StrictMode>
+)

@@ -87,9 +87,7 @@ tasks {
         description = "Use Yarn to build the Node.js application."
         group = "Node"
 
-        inputs.files(".rescriptsrc.js")
         inputs.files(project.tasks["yarnInstall"].outputs.files)
-        inputs.dir("public")
         inputs.dir("src")
 
         outputs.cacheIf { true }
