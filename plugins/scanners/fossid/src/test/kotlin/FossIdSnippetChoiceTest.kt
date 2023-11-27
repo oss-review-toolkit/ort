@@ -52,6 +52,7 @@ import org.ossreviewtoolkit.clients.fossid.model.result.MatchType
 import org.ossreviewtoolkit.clients.fossid.model.result.MatchedLines
 import org.ossreviewtoolkit.clients.fossid.model.result.Snippet
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanStatus
+import org.ossreviewtoolkit.clients.fossid.unmarkAsIdentified
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
@@ -289,6 +290,10 @@ class FossIdSnippetChoiceTest : WordSpec({
                 val comment = jsonMapper.writeValueAsString(OrtComment(payload))
                 service.addFileComment(USER, API_KEY, scanCode, FILE_1, comment)
             }
+
+            summary.issues.forAtLeastOne {
+                it.message shouldBe "This scan has 0 file(s) pending identification in FossID."
+            }
         }
 
         "mark a file with only non relevant snippets for a given snippet location as identified" {
@@ -330,6 +335,10 @@ class FossIdSnippetChoiceTest : WordSpec({
                 service.markAsIdentified(USER, API_KEY, scanCode, FILE_1, any())
             }
             summary.issues.filter { it.severity > Severity.HINT } should beEmpty()
+
+            summary.issues.forAtLeastOne {
+                it.message shouldBe "This scan has 0 file(s) pending identification in FossID."
+            }
         }
 
         "not mark a file with some non relevant snippets for a given snippet location as identified" {
@@ -379,6 +388,10 @@ class FossIdSnippetChoiceTest : WordSpec({
                 service.markAsIdentified(USER, API_KEY, scanCode, FILE_1, any())
             }
             summary.issues.filter { it.severity > Severity.HINT } should beEmpty()
+
+            summary.issues.forAtLeastOne {
+                it.message shouldBe "This scan has 1 file(s) pending identification in FossID."
+            }
         }
 
         "mark a file with only chosen and non relevant snippets for a given snippet location as identified" {
@@ -587,6 +600,124 @@ class FossIdSnippetChoiceTest : WordSpec({
             summary.issues.filter { it.severity > Severity.HINT } should beEmpty()
             summary.snippetFindings should beEmpty()
         }
+
+        "put a marked as identified file back to pending if it has no snippet choice" {
+            val projectCode = projectCode(PROJECT)
+            val scanCode = scanCode(PROJECT, null)
+            val config = createConfig(deltaScans = false, fetchSnippetMatchedLines = true)
+            val vcsInfo = createVcsInfo()
+            val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
+            val pkgId = createIdentifier(index = 42)
+
+            val choiceLocation = TextLocation(FILE_1, 10, 20)
+            val payload = OrtCommentPayload(mapOf("MIT" to listOf(choiceLocation)), 1, 0)
+            val comment = jsonMapper.writeValueAsString(mapOf(ORT_NAME to payload))
+            val markedAsIdentifiedFile = createMarkAsIdentifiedFile("MIT", FILE_1, comment)
+            val service = FossIdRestService.create(config.serverUrl)
+                .expectProjectRequest(projectCode)
+                .expectListScans(projectCode, listOf(scan))
+                .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
+                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
+                .expectDownload(scanCode)
+                .mockFiles(
+                    scanCode,
+                    markedFiles = listOf(markedAsIdentifiedFile),
+                    snippets = listOf(
+                        createSnippet(0, FILE_1, PURL_1),
+                        createSnippet(1, FILE_1, PURL_2),
+                        createSnippet(2, FILE_1, PURL_3)
+                    ),
+                    matchedLines = mapOf(
+                        0 to MatchedLines.create((10..20).toList(), (10..20).toList()),
+                        1 to MatchedLines.create((10..20).toList(), (10..20).toList()),
+                        2 to MatchedLines.create((20..30).toList(), (20..30).toList())
+                    )
+                )
+                .expectUnmarkAsIdentified(scanCode, FILE_1)
+
+            val fossId = createFossId(config)
+
+            val summary = fossId.scan(createPackage(pkgId, vcsInfo), snippetChoices = emptyList()).summary
+
+            summary.issues.forAtLeastOne {
+                it.message shouldBe "This scan has 1 file(s) pending identification in FossID."
+            }
+            summary.issues.filter { it.severity > Severity.HINT } should beEmpty()
+            summary.snippetFindings shouldHaveSize 2
+            summary.snippetFindings.first().apply {
+                sourceLocation.path shouldBe FILE_1
+                snippets shouldHaveSize 2
+                snippets.map { it.purl } shouldBe listOf(PURL_1, PURL_2)
+            }
+            summary.snippetFindings.last().apply {
+                sourceLocation.path shouldBe FILE_1
+                snippets shouldHaveSize 1
+                snippets.map { it.purl } shouldBe listOf(PURL_3)
+            }
+            coVerify {
+                service.unmarkAsIdentified(USER, API_KEY, scanCode, FILE_1, any())
+            }
+        }
+
+        "put a marked as identified file back to pending if some of its snippet choices have been deleted" {
+            val projectCode = projectCode(PROJECT)
+            val scanCode = scanCode(PROJECT, null)
+            val config = createConfig(deltaScans = false, fetchSnippetMatchedLines = true)
+            val vcsInfo = createVcsInfo()
+            val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
+            val pkgId = createIdentifier(index = 42)
+
+            val choiceLocation = TextLocation(FILE_1, 10, 20)
+            val payload = OrtCommentPayload(mapOf("MIT" to listOf(choiceLocation)), 2, 0)
+            val comment = jsonMapper.writeValueAsString(mapOf(ORT_NAME to payload))
+            val markedAsIdentifiedFile = createMarkAsIdentifiedFile("MIT", FILE_1, comment)
+            val service = FossIdRestService.create(config.serverUrl)
+                .expectProjectRequest(projectCode)
+                .expectListScans(projectCode, listOf(scan))
+                .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
+                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
+                .expectDownload(scanCode)
+                .mockFiles(
+                    scanCode,
+                    markedFiles = listOf(markedAsIdentifiedFile),
+                    snippets = listOf(
+                        createSnippet(0, FILE_1, PURL_1),
+                        createSnippet(1, FILE_1, PURL_2),
+                        createSnippet(2, FILE_1, PURL_3)
+                    ),
+                    matchedLines = mapOf(
+                        0 to MatchedLines.create((10..20).toList(), (10..20).toList()),
+                        1 to MatchedLines.create((10..20).toList(), (10..20).toList()),
+                        2 to MatchedLines.create((20..30).toList(), (20..30).toList())
+                    )
+                )
+                .expectUnmarkAsIdentified(scanCode, FILE_1)
+
+            val snippetChoices = createSnippetChoices(
+                vcsInfo.url,
+                createSnippetChoice(choiceLocation, PURL_1, "")
+            )
+            val fossId = createFossId(config)
+
+            val summary = fossId.scan(createPackage(pkgId, vcsInfo), snippetChoices = snippetChoices).summary
+
+            summary.issues.forAtLeastOne {
+                it.message shouldBe "This scan has 1 file(s) pending identification in FossID."
+            }
+            summary.issues.filter { it.severity > Severity.HINT } should beEmpty()
+            // Two snippets have been chosen according to the count in the comment. However, the .ort.yml file contains
+            // only one snippet choice: Therefore, the file should be 'pending' again and the remaining snippet should
+            // be returned.
+            summary.snippetFindings shouldHaveSize 1
+            summary.snippetFindings.last().apply {
+                sourceLocation.path shouldBe FILE_1
+                snippets shouldHaveSize 1
+                snippets.map { it.purl } shouldBe listOf(PURL_3)
+            }
+            coVerify {
+                service.unmarkAsIdentified(USER, API_KEY, scanCode, FILE_1, any())
+            }
+        }
     }
 })
 
@@ -647,6 +778,15 @@ fun FossIdServiceWithVersion.expectMarkAsIdentified(scanCode: String, path: Stri
         addComponentIdentification(USER, API_KEY, scanCode, path, any(), any(), false)
     } returns EntityResponseBody(status = 1)
     coEvery { addFileComment(USER, API_KEY, scanCode, path, any()) } returns
+        EntityResponseBody(status = 1)
+    return this
+}
+
+/**
+ * Prepare this service mock to expect an unmark as identified call for the given [scanCode] and [path].
+ */
+fun FossIdServiceWithVersion.expectUnmarkAsIdentified(scanCode: String, path: String): FossIdServiceWithVersion {
+    coEvery { unmarkAsIdentified(USER, API_KEY, scanCode, path, any()) } returns
         EntityResponseBody(status = 1)
     return this
 }

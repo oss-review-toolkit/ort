@@ -327,6 +327,46 @@ private fun getLicenseFindingFromSnippetChoice(
 }
 
 /**
+ * Check all [markedAsIdentifiedFiles] if their snippet choices locations count or non-relevant snippets locations count
+ * matches the ones stored in the [OrtComment]: When not, it means some of this configuration has been removed and the
+ * files should be considered as pending again. Such files are returned.
+ */
+internal fun listUnmatchedSnippetChoices(
+    markedAsIdentifiedFiles: List<MarkedAsIdentifiedFile>,
+    snippetChoices: List<SnippetChoice>
+): List<String> =
+    markedAsIdentifiedFiles.filterNot { markedAsIdentifiedFile ->
+        val markedFileName = markedAsIdentifiedFile.getFileName()
+        val snippetChoicesByName = snippetChoices.filter {
+            it.given.sourceLocation.path == markedFileName
+        }
+        val comment = markedAsIdentifiedFile.comments.values.firstOrNull {
+            it.comment.contains(ORT_NAME)
+        }?.runCatching {
+            jsonMapper.readValue(this.comment, OrtComment::class.java)
+        }?.onFailure {
+            logger.warn {
+                "File $markedFileName is marked as identified but it does not have a valid comment. " +
+                    "It will be ignored. Exception: ${it.message}."
+            }
+        }?.getOrDefault(null)
+
+        when {
+            comment != null -> {
+                val snippetChoicesCount = snippetChoicesByName.count {
+                    it.choice.reason == SnippetChoiceReason.ORIGINAL_FINDING
+                }
+                val notRelevantSnippetsCount = snippetChoicesByName.count {
+                    it.choice.reason == SnippetChoiceReason.NO_RELEVANT_FINDING
+                }
+                snippetChoicesCount == comment.ort.snippetChoicesCount &&
+                    notRelevantSnippetsCount == comment.ort.notRelevantSnippetsCount
+            }
+            else -> true
+        }
+    }.map { it.getFileName() }
+
+/**
  * Return the [PurlType] as determined from the given [url], or [PurlType.GENERIC] if there is no match.
  */
 private fun urlToPackageType(url: String): PurlType =
