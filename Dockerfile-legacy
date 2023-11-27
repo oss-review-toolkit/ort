@@ -72,7 +72,7 @@ ARG SCANCODE_VERSION
 ENV \
     # Package manager versions.
     BOWER_VERSION=1.8.12 \
-    CARGO_VERSION=1.70.0+dfsg0ubuntu1~bpo2-0ubuntu0.22.04.1 \
+    CARGO_VERSION=1.70.0+dfsg0ubuntu1~bpo2-0ubuntu0.22.04.2 \
     COCOAPODS_VERSION=1.14.2 \
     COMPOSER_VERSION=2.2.6-2ubuntu4 \
     CONAN_VERSION=1.61.0 \
