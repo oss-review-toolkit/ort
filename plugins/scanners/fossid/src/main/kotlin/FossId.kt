@@ -66,6 +66,7 @@ import org.ossreviewtoolkit.clients.fossid.model.rules.RuleType
 import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanStatus
 import org.ossreviewtoolkit.clients.fossid.runScan
+import org.ossreviewtoolkit.clients.fossid.unmarkAsIdentified
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.LicenseFinding
@@ -328,7 +329,7 @@ class FossId internal constructor(
                             "false positives."
                     }
 
-                    val rawResults = getRawResults(scanCode)
+                    val rawResults = getRawResults(scanCode, snippetChoices?.choices.orEmpty())
                     createResultSummary(
                         startTime,
                         provenance,
@@ -820,7 +821,7 @@ class FossId internal constructor(
      * Get the different kind of results from the scan with [scanCode]
      */
     @Suppress("UnsafeCallOnNullableType")
-    private suspend fun getRawResults(scanCode: String): RawResults {
+    private suspend fun getRawResults(scanCode: String, snippetChoices: List<SnippetChoice>): RawResults {
         val identifiedFiles = service.listIdentifiedFiles(config.user, config.apiKey, scanCode)
             .checkResponse("list identified files")
             .data!!
@@ -840,9 +841,19 @@ class FossId internal constructor(
 
         val pendingFiles = service.listPendingFiles(config.user, config.apiKey, scanCode)
             .checkResponse("list pending files")
-            .data!!
+            .data!!.toMutableList()
         logger.info {
             "${pendingFiles.size} pending files have been returned for scan '$scanCode'."
+        }
+
+        pendingFiles += listUnmatchedSnippetChoices(markedAsIdentifiedFiles, snippetChoices).also { newPendingFiles ->
+            newPendingFiles.map {
+                logger.info {
+                    "Marked as identified file '$it' is not in .ort.yml anymore or its configuration has been " +
+                        "altered: putting it again as 'pending'."
+                }
+                service.unmarkAsIdentified(config.user, config.apiKey, scanCode, it, false)
+            }
         }
 
         val matchedLines = mutableMapOf<Int, MatchedLines>()
@@ -904,13 +915,7 @@ class FossId internal constructor(
     ): ScanResult {
         // TODO: Maybe get issues from FossID (see has_failed_scan_files, get_failed_files and maybe get_scan_log).
 
-        val issues = mutableListOf(
-            Issue(
-                source = name,
-                message = "This scan has ${rawResults.listPendingFiles.size} file(s) pending identification in FossID.",
-                severity = Severity.HINT
-            )
-        )
+        val issues = mutableListOf<Issue>()
 
         val snippetLicenseFindings = mutableSetOf<LicenseFinding>()
         val snippetFindings = mapSnippetFindings(
@@ -920,12 +925,23 @@ class FossId internal constructor(
             snippetChoices,
             snippetLicenseFindings
         )
-        markFilesWithChosenSnippetsAsIdentified(
+        val newlyMarkedFiles = markFilesWithChosenSnippetsAsIdentified(
             scanCode,
             snippetChoices,
             snippetFindings,
             rawResults.listPendingFiles,
             snippetLicenseFindings
+        )
+
+        val pendingFilesCount = (rawResults.listPendingFiles - newlyMarkedFiles.toSet()).size
+
+        issues.add(
+            0,
+            Issue(
+                source = name,
+                message = "This scan has $pendingFilesCount file(s) pending identification in FossID.",
+                severity = Severity.HINT
+            )
         )
 
         val ignoredFiles = rawResults.listIgnoredFiles.associateBy { it.path }
@@ -956,6 +972,7 @@ class FossId internal constructor(
      * non-chosen source location remaining. Only files in [listPendingFiles] are marked.
      * Files marked as identified have a license identification and a source location (stored in a comment), using
      * [licenseFindings] as reference.
+     * Returns the list of files that have been marked as identified.
      */
     private fun markFilesWithChosenSnippetsAsIdentified(
         scanCode: String,
@@ -963,8 +980,9 @@ class FossId internal constructor(
         snippetFindings: Set<SnippetFinding>,
         pendingFiles: List<String>,
         licenseFindings: Set<LicenseFinding>
-    ) {
+    ): List<String> {
         val licenseFindingsByPath = licenseFindings.groupBy { it.location.path }
+        val result = mutableListOf<String>()
 
         runBlocking(Dispatchers.IO) {
             val candidatePathsToMark = snippetChoices.groupBy({ it.given.sourceLocation.path }) {
@@ -987,6 +1005,7 @@ class FossId internal constructor(
 
                         requests += async {
                             service.markAsIdentified(config.user, config.apiKey, scanCode, path, false)
+                            result += path
                         }
 
                         val filteredSnippetChoicesByPath = snippetChoices.filter {
@@ -1053,5 +1072,6 @@ class FossId internal constructor(
 
             requests.awaitAll()
         }
+        return result
     }
 }
