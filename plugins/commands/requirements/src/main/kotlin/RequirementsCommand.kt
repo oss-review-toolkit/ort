@@ -24,6 +24,7 @@ import com.github.ajalt.mordant.rendering.Theme
 
 import java.io.File
 import java.lang.reflect.Modifier
+import java.util.EnumSet
 
 import org.apache.logging.log4j.kotlin.logger
 
@@ -35,6 +36,7 @@ import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
 import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.spdx.scanCodeLicenseTextDir
 
 import org.reflections.Reflections
@@ -50,8 +52,10 @@ class RequirementsCommand : OrtCommand(
     name = "requirements",
     help = "Check for the command line tools required by ORT."
 ) {
+    private enum class VersionStatus { SATISFIED, UNSATISFIED, UNAVAILABLE }
+
     override fun run() {
-        val statusCode = checkToolVersions()
+        val status = checkToolVersions()
 
         echo("Prefix legend:")
         echo("${DANGER_PREFIX}The tool was not found in the PATH environment.")
@@ -65,80 +69,42 @@ class RequirementsCommand : OrtCommand(
             echo(Theme.Default.warning("ScanCode license texts not found."))
         }
 
-        if (statusCode != 0) {
+        if (status.singleOrNull() != VersionStatus.SATISFIED) {
             echo()
-            echo(Theme.Default.warning("Not all tools were found in their required versions."))
-            throw ProgramResult(statusCode)
+
+            val summary = buildString {
+                appendLine("Not all tools requirements were satisfied:")
+
+                if (VersionStatus.UNSATISFIED in status) {
+                    appendLine("\tSome tools were not found in their required versions.")
+                }
+
+                if (VersionStatus.UNAVAILABLE in status) appendLine("\tSome tools were not found at all.")
+            }
+
+            echo(Theme.Default.warning(summary))
+
+            throw ProgramResult(2)
         }
     }
 
-    private fun checkToolVersions(): Int {
+    private fun checkToolVersions(): EnumSet<VersionStatus> {
         // Toggle bits in here to denote the kind of error. Skip the first bit as status code 1 is already used above.
-        var statusCode = 0
+        val overallStatus = enumSetOf<VersionStatus>()
 
         getToolsByCategory().forEach { (category, tools) ->
             echo(Theme.Default.info("${category}s:"))
 
             tools.forEach { tool ->
-                val message = buildString {
-                    val (prefix, suffix) = if (tool.isInPath() || File(tool.command()).isFile) {
-                        runCatching {
-                            val actualVersion = tool.getVersion()
-                            runCatching {
-                                val isRequiredVersion = tool.getVersionRequirement().let {
-                                    Semver.coerce(actualVersion)?.satisfies(it) == true
-                                }
-
-                                if (isRequiredVersion) {
-                                    Pair(SUCCESS_PREFIX, "Found version $actualVersion.")
-                                } else {
-                                    statusCode = statusCode or 2
-                                    Pair(WARNING_PREFIX, "Found version $actualVersion.")
-                                }
-                            }.getOrElse {
-                                statusCode = statusCode or 2
-                                Pair(WARNING_PREFIX, "Found version '$actualVersion'.")
-                            }
-                        }.getOrElse {
-                            if (!tool.getVersionRequirement().isSatisfiedByAny) {
-                                statusCode = statusCode or 2
-                            }
-
-                            Pair(WARNING_PREFIX, "Could not determine the version.")
-                        }
-                    } else {
-                        // Tolerate the following to be missing when determining the status code:
-                        // - Pub, as it can be bootstrapped as part of the Flutter SDK,
-                        // - Yarn 2+, as it is provided with the code that uses it,
-                        // - scanners, as scanning is basically optional and one scanner would be enough.
-                        if (category != "Scanner" && tool.javaClass.simpleName != "Pub"
-                            && tool.javaClass.simpleName != "Yarn2"
-                        ) {
-                            statusCode = statusCode or 4
-                        }
-
-                        Pair(DANGER_PREFIX, "Tool not found.")
-                    }
-
-                    append(prefix)
-                    append("${tool.javaClass.simpleName}: Requires '${tool.command()}' in ")
-
-                    if (tool.getVersionRequirement().isSatisfiedByAny) {
-                        append("no specific version. ")
-                    } else {
-                        append("version ${tool.getVersionRequirement()}. ")
-                    }
-
-                    append(suffix)
-                }
-
-                echo(message)
+                val (status, info) = getToolInfo(category, tool)
+                overallStatus += status
+                echo(info)
             }
 
             echo()
         }
 
-        return statusCode
+        return overallStatus
     }
 
     private fun getToolsByCategory(): Map<String, List<CommandLineTool>> {
@@ -207,5 +173,59 @@ class RequirementsCommand : OrtCommand(
         }
 
         return tools
+    }
+
+    private fun getToolInfo(category: String, tool: CommandLineTool): Pair<VersionStatus, String> {
+        val (status, prefix, suffix) = if (tool.isInPath() || File(tool.command()).isFile) {
+            runCatching {
+                val actualVersion = tool.getVersion()
+                runCatching {
+                    val isRequiredVersion = tool.getVersionRequirement().let {
+                        Semver.coerce(actualVersion)?.satisfies(it) == true
+                    }
+
+                    if (isRequiredVersion) {
+                        Triple(VersionStatus.SATISFIED, SUCCESS_PREFIX, "Found version $actualVersion.")
+                    } else {
+                        Triple(VersionStatus.UNSATISFIED, WARNING_PREFIX, "Found version $actualVersion.")
+                    }
+                }.getOrElse {
+                    Triple(VersionStatus.UNSATISFIED, WARNING_PREFIX, "Found version '$actualVersion'.")
+                }
+            }.getOrElse {
+                val status = if (tool.getVersionRequirement().isSatisfiedByAny) {
+                    VersionStatus.SATISFIED
+                } else {
+                    VersionStatus.UNSATISFIED
+                }
+
+                Triple(status, WARNING_PREFIX, "Could not determine the version.")
+            }
+        } else {
+            // Tolerate the following to be missing when determining the status code:
+            // - Pub, as it can be bootstrapped as part of the Flutter SDK,
+            // - Yarn 2+, as it is provided with the code that uses it,
+            // - scanners, as scanning is basically optional and one scanner would be enough.
+            val status = if (tool.javaClass.simpleName in listOf("Pub", "Yarn2") || category == "Scanner") {
+                VersionStatus.SATISFIED
+            } else {
+                VersionStatus.UNAVAILABLE
+            }
+
+            Triple(status, DANGER_PREFIX, "Tool not found.")
+        }
+
+        return status to buildString {
+            append(prefix)
+            append("${tool.javaClass.simpleName}: Requires '${tool.command()}' in ")
+
+            if (tool.getVersionRequirement().isSatisfiedByAny) {
+                append("no specific version. ")
+            } else {
+                append("version ${tool.getVersionRequirement()}. ")
+            }
+
+            append(suffix)
+        }
     }
 }
