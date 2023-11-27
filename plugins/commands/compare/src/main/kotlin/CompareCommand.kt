@@ -34,6 +34,7 @@ import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
+import com.github.ajalt.mordant.rendering.Theme
 import com.github.difflib.DiffUtils
 import com.github.difflib.UnifiedDiffUtils
 
@@ -105,6 +106,22 @@ class CompareCommand : OrtCommand(
         val resultB = deserializer.readValue<OrtResult>(fileB)
 
         when (method) {
+            CompareMethod.SEMANTIC_DIFF -> {
+                echo(
+                    Theme.Default.warning(
+                        "The '${CompareMethod.SEMANTIC_DIFF}' compare method is not fully implemented. Some " +
+                            "properties may not be taken into account in the comparison."
+                    )
+                )
+
+                if (resultA == resultB) {
+                    echo("The ORT results are the same.")
+                    throw ProgramResult(0)
+                }
+
+                throw ProgramResult(1)
+            }
+
             CompareMethod.TEXT_DIFF -> {
                 val textA = deserializer.writeValueAsString(resultA)
                 val textB = deserializer.writeValueAsString(resultB)
@@ -149,6 +166,7 @@ class CompareCommand : OrtCommand(
 }
 
 private enum class CompareMethod {
+    SEMANTIC_DIFF,
     TEXT_DIFF
 }
 
