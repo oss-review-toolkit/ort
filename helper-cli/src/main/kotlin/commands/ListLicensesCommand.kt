@@ -33,8 +33,10 @@ import com.github.ajalt.clikt.parameters.types.file
 import java.io.File
 import java.lang.IllegalArgumentException
 
-import org.ossreviewtoolkit.helper.utils.fetchScannedSources
+import org.ossreviewtoolkit.helper.utils.downloadSources
 import org.ossreviewtoolkit.helper.utils.getLicenseFindingsById
+import org.ossreviewtoolkit.helper.utils.getScannedProvenance
+import org.ossreviewtoolkit.helper.utils.getSourceCodeOrigin
 import org.ossreviewtoolkit.helper.utils.getViolatedRulesByLicense
 import org.ossreviewtoolkit.helper.utils.readOrtResult
 import org.ossreviewtoolkit.helper.utils.replaceConfig
@@ -146,9 +148,14 @@ internal class ListLicensesCommand : CliktCommand(
             throw UsageError("Could not find the package for the given id '${packageId.toCoordinates()}'.")
         }
 
+        val sourceCodeOrigin = ortResult.getScannedProvenance(packageId).getSourceCodeOrigin() ?: run {
+            println("No scan results available.")
+            return
+        }
+
         val sourcesDir = sourceCodeDir ?: run {
             println("Downloading sources for package '${packageId.toCoordinates()}'...")
-            ortResult.fetchScannedSources(packageId)
+            ortResult.downloadSources(packageId, sourceCodeOrigin)
         }
 
         val packageConfigurationProvider = DirPackageConfigurationProvider(packageConfigurationsDir)
@@ -189,11 +196,6 @@ internal class ListLicensesCommand : CliktCommand(
                     licenseAllowlist.isEmpty() || license.decompose().any { it.simpleLicense() in licenseAllowlist }
                 }
             }
-
-        if (findingsByProvenance.isEmpty()) {
-            println("No scan results available.")
-            return
-        }
 
         buildString {
             appendLine("  scan results:")
