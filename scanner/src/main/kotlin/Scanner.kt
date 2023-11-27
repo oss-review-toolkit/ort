@@ -30,6 +30,8 @@ import kotlin.time.measureTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
 import org.apache.logging.log4j.kotlin.logger
@@ -540,20 +542,25 @@ class Scanner(
             val scannerMatcher = scanner.matcher ?: return@forEach
             if (!scanner.readFromStorage) return@forEach
 
-            controller.getAllProvenances().forEach provenance@{ provenance ->
-                if (controller.hasScanResult(scanner, provenance)) return@provenance
 
-                storageReaders.filterIsInstance<ProvenanceBasedScanStorageReader>().forEach { reader ->
-                    runCatching {
-                        reader.read(provenance, scannerMatcher)
-                    }.onSuccess { results ->
-                        controller.addScanResults(scanner, provenance, results)
-                    }.onFailure { e ->
-                        e.showStackTrace()
+            runBlocking(Dispatchers.IO) {
+                controller.getAllProvenances().forEach provenance@{ provenance ->
+                    if (controller.hasScanResult(scanner, provenance)) return@provenance
 
-                        logger.warn {
-                            "Could not read scan result for $provenance from ${reader.javaClass.simpleName}: " +
-                                e.collectMessages()
+                    launch {
+                        storageReaders.filterIsInstance<ProvenanceBasedScanStorageReader>().map { reader ->
+                            async { reader to runCatching { reader.read(provenance, scannerMatcher) } }
+                        }.awaitAll().forEach { (reader, results) ->
+                            results.onSuccess {
+                                controller.addScanResults(scanner, provenance, it)
+                            }.onFailure { e ->
+                                e.showStackTrace()
+
+                                logger.warn {
+                                    "Could not read scan result for $provenance from ${reader.javaClass.simpleName}: " +
+                                        e.collectMessages()
+                                }
+                            }
                         }
                     }
                 }
