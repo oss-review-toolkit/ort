@@ -19,10 +19,11 @@
 
 package org.ossreviewtoolkit.plugins.commands.compare
 
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.databind.SerializerProvider
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.databind.DeserializationContext
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.databind.module.SimpleModule
-import com.fasterxml.jackson.databind.ser.std.StdSerializer
 import com.fasterxml.jackson.module.kotlin.readValue
 
 import com.github.ajalt.clikt.core.ProgramResult
@@ -92,22 +93,21 @@ class CompareCommand : OrtCommand(
             throw ProgramResult(2)
         }
 
-        val deserializer = fileA.mapper()
+        val deserializer = fileA.mapper().registerModule(
+            SimpleModule().apply {
+                // TODO: Find a way to also ignore temporary directories.
+                if (ignoreTime) addDeserializer(Instant::class.java, EpochInstantDeserializer())
+                if (ignoreEnvironment) addDeserializer(Environment::class.java, DefaultEnvironmentDeserializer())
+            }
+        )
+
         val resultA = deserializer.readValue<OrtResult>(fileA)
         val resultB = deserializer.readValue<OrtResult>(fileB)
 
         when (method) {
             CompareMethod.TEXT_DIFF -> {
-                // Reserialize file contents with some data types replaced by invariant strings.
-                val serializer = deserializer.copy().registerModule(
-                    SimpleModule().apply {
-                        if (ignoreTime) addSerializer(InvariantInstantSerializer())
-                        if (ignoreEnvironment) addSerializer(InvariantEnvironmentSerializer())
-                    }
-                )
-
-                val textA = serializer.writeValueAsString(resultA)
-                val textB = serializer.writeValueAsString(resultB)
+                val textA = deserializer.writeValueAsString(resultA)
+                val textB = deserializer.writeValueAsString(resultB)
 
                 // Apply data type independent replacements in the texts.
                 val replacements = buildMap {
@@ -152,16 +152,14 @@ private enum class CompareMethod {
     TEXT_DIFF
 }
 
-private class InvariantInstantSerializer : StdSerializer<Instant>(Instant::class.java) {
-    override fun serialize(value: Instant, gen: JsonGenerator, provider: SerializerProvider) {
-        gen.writeString("invariant")
-    }
+private class EpochInstantDeserializer : StdDeserializer<Instant>(Instant::class.java) {
+    override fun deserialize(parser: JsonParser, context: DeserializationContext): Instant =
+        Instant.EPOCH.also { parser.codec.readTree<JsonNode>(parser) }
 }
 
-private class InvariantEnvironmentSerializer : StdSerializer<Environment>(Environment::class.java) {
-    override fun serialize(value: Environment, gen: JsonGenerator, provider: SerializerProvider) {
-        gen.writeString("invariant")
-    }
+private class DefaultEnvironmentDeserializer : StdDeserializer<Environment>(Environment::class.java) {
+    override fun deserialize(parser: JsonParser, context: DeserializationContext): Environment =
+        Environment().also { parser.codec.readTree<JsonNode>(parser) }
 }
 
 private fun Map<Regex, String>.replaceIn(text: String) =
