@@ -92,19 +92,19 @@ class CompareCommand : OrtCommand(
             throw ProgramResult(2)
         }
 
+        val deserializer = fileA.mapper()
+        val resultA = deserializer.readValue<OrtResult>(fileA)
+        val resultB = deserializer.readValue<OrtResult>(fileB)
+
         when (method) {
             CompareMethod.TEXT_DIFF -> {
                 // Reserialize file contents with some data types replaced by invariant strings.
-                val deserializer = fileA.mapper()
                 val serializer = deserializer.copy().registerModule(
                     SimpleModule().apply {
                         if (ignoreTime) addSerializer(InvariantInstantSerializer())
                         if (ignoreEnvironment) addSerializer(InvariantEnvironmentSerializer())
                     }
                 )
-
-                val resultA = deserializer.readValue<OrtResult>(fileA)
-                val resultB = deserializer.readValue<OrtResult>(fileB)
 
                 val textA = serializer.writeValueAsString(resultA)
                 val textB = serializer.writeValueAsString(resultB)
