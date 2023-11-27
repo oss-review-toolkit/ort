@@ -43,13 +43,13 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Provenance
-import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.Curations
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
@@ -88,21 +88,14 @@ internal fun List<ScopeExclude>.minimize(projectScopes: List<String>): List<Scop
 }
 
 /**
- * Fetches the sources from either the VCS or source artifact for the package denoted by
- * the given [id] depending on whether a scan result is present with matching [Provenance].
+ * Download the sources corresponding to the given [Identifier][id] and [source code origin][sourceCodeOrigin].
  */
-internal fun OrtResult.fetchScannedSources(id: Identifier): File {
+internal fun OrtResult.downloadSources(id: Identifier, sourceCodeOrigin: SourceCodeOrigin): File {
     val tempDir = createTempDirectory(Paths.get("."), ORTH_NAME).toFile()
+    val pkg = getPackageOrProject(id)!!.metadata
+    val config = DownloaderConfiguration(sourceCodeOrigins = listOf(sourceCodeOrigin))
 
-    val pkg = getPackageOrProject(id)!!.metadata.let {
-        if (getScannedProvenance(id) is ArtifactProvenance) {
-            it.copy(vcs = VcsInfo.EMPTY, vcsProcessed = VcsInfo.EMPTY)
-        } else {
-            it.copy(sourceArtifact = RemoteArtifact.EMPTY)
-        }
-    }
-
-    Downloader(DownloaderConfiguration()).download(pkg, tempDir)
+    Downloader(config).download(pkg, tempDir)
 
     return tempDir
 }
@@ -231,6 +224,16 @@ internal fun OrtResult.getViolatedRulesByLicense(
  */
 internal fun OrtResult.getScannedProvenance(id: Identifier): KnownProvenance? =
     getScanResultsForId(id).firstNotNullOfOrNull { it.provenance as? KnownProvenance }
+
+/**
+ * Return the [SourceCodeOrigin] for this provenance.
+ */
+internal fun KnownProvenance?.getSourceCodeOrigin(): SourceCodeOrigin? =
+    when (this) {
+        is ArtifactProvenance -> SourceCodeOrigin.ARTIFACT
+        is RepositoryProvenance -> SourceCodeOrigin.VCS
+        else -> null
+    }
 
 /**
  * Return all issues from scan results. Issues for excludes [Project]s or [Package]s are not returned if and only if
