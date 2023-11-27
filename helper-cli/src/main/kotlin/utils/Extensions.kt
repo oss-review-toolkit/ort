@@ -95,7 +95,7 @@ internal fun OrtResult.fetchScannedSources(id: Identifier): File {
     val tempDir = createTempDirectory(Paths.get("."), ORTH_NAME).toFile()
 
     val pkg = getPackageOrProject(id)!!.metadata.let {
-        if (getProvenance(id) is ArtifactProvenance) {
+        if (getScannedProvenance(id) is ArtifactProvenance) {
             it.copy(vcs = VcsInfo.EMPTY, vcsProcessed = VcsInfo.EMPTY)
         } else {
             it.copy(sourceArtifact = RemoteArtifact.EMPTY)
@@ -229,7 +229,8 @@ internal fun OrtResult.getViolatedRulesByLicense(
 /**
  * Return the [Provenance] of the first scan result matching the given [id] or null if there is no match.
  */
-internal fun OrtResult.getProvenance(id: Identifier): Provenance? = getScanResultsForId(id).firstOrNull()?.provenance
+internal fun OrtResult.getScannedProvenance(id: Identifier): Provenance? =
+    getScanResultsForId(id).firstOrNull()?.provenance
 
 /**
  * Return all issues from scan results. Issues for excludes [Project]s or [Package]s are not returned if and only if
