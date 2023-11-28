@@ -94,9 +94,10 @@ class CompareCommand : OrtCommand(
             throw ProgramResult(2)
         }
 
+        // Arbitrarily determine the mapper from the first file as the file extensions are ensured to be the same.
         val deserializer = fileA.mapper().registerModule(
             SimpleModule().apply {
-                // TODO: Find a way to also ignore temporary directories.
+                // TODO: Find a way to also ignore temporary directories (when diffing semantically).
                 if (ignoreTime) addDeserializer(Instant::class.java, EpochInstantDeserializer())
                 if (ignoreEnvironment) addDeserializer(Environment::class.java, DefaultEnvironmentDeserializer())
             }
@@ -172,12 +173,18 @@ private enum class CompareMethod {
 
 private class EpochInstantDeserializer : StdDeserializer<Instant>(Instant::class.java) {
     override fun deserialize(parser: JsonParser, context: DeserializationContext): Instant =
-        Instant.EPOCH.also { parser.codec.readTree<JsonNode>(parser) }
+        Instant.EPOCH.also {
+            // Just consume the JSON text node without actually using it.
+            parser.codec.readTree<JsonNode>(parser)
+        }
 }
 
 private class DefaultEnvironmentDeserializer : StdDeserializer<Environment>(Environment::class.java) {
     override fun deserialize(parser: JsonParser, context: DeserializationContext): Environment =
-        Environment().also { parser.codec.readTree<JsonNode>(parser) }
+        Environment().also {
+            // Just consume the JSON object node without actually using it.
+            parser.codec.readTree<JsonNode>(parser)
+        }
 }
 
 private fun Map<Regex, String>.replaceIn(text: String) =
