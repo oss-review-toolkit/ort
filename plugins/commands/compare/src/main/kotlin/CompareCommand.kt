@@ -51,6 +51,8 @@ class CompareCommand : OrtCommand(
     name = "compare",
     help = "Compare two ORT results with various methods."
 ) {
+    private enum class CompareMethod { SEMANTIC_DIFF, TEXT_DIFF }
+
     private val fileA by argument(help = "The first ORT result file to compare.")
         .convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
@@ -164,11 +166,6 @@ class CompareCommand : OrtCommand(
             }
         }
     }
-}
-
-private enum class CompareMethod {
-    SEMANTIC_DIFF,
-    TEXT_DIFF
 }
 
 private class EpochInstantDeserializer : StdDeserializer<Instant>(Instant::class.java) {
