@@ -47,6 +47,7 @@ import org.ossreviewtoolkit.model.AdvisorRun
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.DependencyGraph
+import org.ossreviewtoolkit.model.EvaluatorRun
 import org.ossreviewtoolkit.model.FileList
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
@@ -56,6 +57,7 @@ import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProvenanceResolutionResult
 import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.VcsInfo
@@ -216,7 +218,8 @@ private fun OrtResult.diff(other: OrtResult) =
         repositoryDiff = repository.diff(other.repository),
         analyzerRunDiff = analyzer.diff(other.analyzer),
         scannerRunDiff = scanner.diff(other.scanner),
-        advisorRunDiff = advisor.diff(other.advisor)
+        advisorRunDiff = advisor.diff(other.advisor),
+        evaluatorRunDiff = evaluator.diff(other.evaluator)
     )
 
 private fun Repository.diff(other: Repository): RepositoryDiff? =
@@ -561,6 +564,33 @@ private fun ScannerConfiguration?.diff(other: ScannerConfiguration?): ScannerCon
     }
 }
 
+private fun EvaluatorRun?.diff(other: EvaluatorRun?): EvaluatorRunDiff? {
+    if (this == other) return null
+
+    return if (this == null) {
+        EvaluatorRunDiff(
+            startTimeB = other?.startTime,
+            endTimeB = other?.endTime,
+            violationsB = other?.violations
+        )
+    } else if (other == null) {
+        EvaluatorRunDiff(
+            startTimeA = startTime,
+            endTimeA = endTime,
+            violationsA = violations
+        )
+    } else {
+        EvaluatorRunDiff(
+            startTimeA = startTime.takeIf { it != other.startTime },
+            startTimeB = other.startTime.takeIf { it != startTime },
+            endTimeA = endTime.takeIf { it != other.endTime },
+            endTimeB = other.endTime.takeIf { it != endTime },
+            violationsA = (violations - other.violations.toSet()).takeUnless { it.isEmpty() },
+            violationsB = (other.violations - violations.toSet()).takeUnless { it.isEmpty() }
+        )
+    }
+}
+
 private fun AdvisorRun?.diff(other: AdvisorRun?): AdvisorRunDiff? {
     if (this == other) return null
 
@@ -620,7 +650,8 @@ private data class OrtResultDiff(
     val repositoryDiff: RepositoryDiff? = null,
     val analyzerRunDiff: AnalyzerRunDiff? = null,
     val scannerRunDiff: ScannerRunDiff? = null,
-    val advisorRunDiff: AdvisorRunDiff? = null
+    val advisorRunDiff: AdvisorRunDiff? = null,
+    val evaluatorRunDiff: EvaluatorRunDiff? = null
 )
 
 private data class RepositoryDiff(
@@ -761,4 +792,13 @@ private data class AdvisorRunDiff(
     val configB: AdvisorConfiguration? = null,
     val resultsA: AdvisorRecord? = null,
     val resultsB: AdvisorRecord? = null
+)
+
+private data class EvaluatorRunDiff(
+    val startTimeA: Instant? = null,
+    val startTimeB: Instant? = null,
+    val endTimeA: Instant? = null,
+    val endTimeB: Instant? = null,
+    val violationsA: List<RuleViolation>? = null,
+    val violationsB: List<RuleViolation>? = null
 )
