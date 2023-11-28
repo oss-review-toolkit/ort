@@ -57,6 +57,8 @@ import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProvenanceResolutionResult
 import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.ResolvedConfiguration
+import org.ossreviewtoolkit.model.ResolvedPackageCurations
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScannerRun
@@ -219,7 +221,8 @@ private fun OrtResult.diff(other: OrtResult) =
         analyzerRunDiff = analyzer.diff(other.analyzer),
         scannerRunDiff = scanner.diff(other.scanner),
         advisorRunDiff = advisor.diff(other.advisor),
-        evaluatorRunDiff = evaluator.diff(other.evaluator)
+        evaluatorRunDiff = evaluator.diff(other.evaluator),
+        resolvedConfigurationDiff = resolvedConfiguration.diff(other.resolvedConfiguration)
     )
 
 private fun Repository.diff(other: Repository): RepositoryDiff? =
@@ -626,6 +629,21 @@ private fun AdvisorRun?.diff(other: AdvisorRun?): AdvisorRunDiff? {
     }
 }
 
+private fun ResolvedConfiguration.diff(other: ResolvedConfiguration): ResolvedConfigurationDiff? =
+    if (this == other) {
+        null
+    } else {
+        ResolvedConfigurationDiff(
+            packageConfigurationsA = (packageConfigurations.orEmpty() - other.packageConfigurations.orEmpty().toSet())
+                .takeUnless { it.isEmpty() },
+            packageConfigurationsB = (other.packageConfigurations.orEmpty() - packageConfigurations.orEmpty().toSet())
+                .takeUnless { it.isEmpty() },
+            packageCurationsA = (packageCurations - other.packageCurations.toSet()).takeUnless { it.isEmpty() },
+            packageCurationsB = (other.packageCurations - packageCurations.toSet()).takeUnless { it.isEmpty() },
+            resolutionsDiff = resolutions?.diff(other.resolutions)
+        )
+    }
+
 private enum class CompareMethod {
     SEMANTIC_DIFF,
     TEXT_DIFF
@@ -651,7 +669,8 @@ private data class OrtResultDiff(
     val analyzerRunDiff: AnalyzerRunDiff? = null,
     val scannerRunDiff: ScannerRunDiff? = null,
     val advisorRunDiff: AdvisorRunDiff? = null,
-    val evaluatorRunDiff: EvaluatorRunDiff? = null
+    val evaluatorRunDiff: EvaluatorRunDiff? = null,
+    val resolvedConfigurationDiff: ResolvedConfigurationDiff? = null
 )
 
 private data class RepositoryDiff(
@@ -801,4 +820,12 @@ private data class EvaluatorRunDiff(
     val endTimeB: Instant? = null,
     val violationsA: List<RuleViolation>? = null,
     val violationsB: List<RuleViolation>? = null
+)
+
+private data class ResolvedConfigurationDiff(
+    val packageConfigurationsA: List<PackageConfiguration>? = null,
+    val packageConfigurationsB: List<PackageConfiguration>? = null,
+    val packageCurationsA: List<ResolvedPackageCurations>? = null,
+    val packageCurationsB: List<ResolvedPackageCurations>? = null,
+    val resolutionsDiff: ResolutionsDiff? = null
 )
