@@ -42,6 +42,8 @@ import com.github.difflib.UnifiedDiffUtils
 
 import java.time.Instant
 
+import org.ossreviewtoolkit.model.AdvisorRecord
+import org.ossreviewtoolkit.model.AdvisorRun
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.DependencyGraph
@@ -57,6 +59,7 @@ import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Curations
 import org.ossreviewtoolkit.model.config.Excludes
@@ -212,7 +215,8 @@ private fun OrtResult.diff(other: OrtResult) =
     OrtResultDiff(
         repositoryDiff = repository.diff(other.repository),
         analyzerRunDiff = analyzer.diff(other.analyzer),
-        scannerRunDiff = scanner.diff(other.scanner)
+        scannerRunDiff = scanner.diff(other.scanner),
+        advisorRunDiff = advisor.diff(other.advisor)
     )
 
 private fun Repository.diff(other: Repository): RepositoryDiff? =
@@ -557,6 +561,41 @@ private fun ScannerConfiguration?.diff(other: ScannerConfiguration?): ScannerCon
     }
 }
 
+private fun AdvisorRun?.diff(other: AdvisorRun?): AdvisorRunDiff? {
+    if (this == other) return null
+
+    return if (this == null) {
+        AdvisorRunDiff(
+            startTimeB = other?.startTime,
+            endTimeB = other?.endTime,
+            environmentB = other?.environment,
+            configB = other?.config,
+            resultsB = other?.results
+        )
+    } else if (other == null) {
+        AdvisorRunDiff(
+            startTimeA = startTime,
+            endTimeA = endTime,
+            environmentA = environment,
+            configA = config,
+            resultsA = results
+        )
+    } else {
+        AdvisorRunDiff(
+            startTimeA = startTime.takeIf { it != other.startTime },
+            startTimeB = other.startTime.takeIf { it != startTime },
+            endTimeA = endTime.takeIf { it != other.endTime },
+            endTimeB = other.endTime.takeIf { it != endTime },
+            environmentA = environment.takeIf { it != other.environment },
+            environmentB = other.environment.takeIf { it != environment },
+            configA = config.takeIf { it != other.config },
+            configB = other.config.takeIf { it != config },
+            resultsA = results.takeIf { it != other.results },
+            resultsB = other.results.takeIf { it != results }
+        )
+    }
+}
+
 private enum class CompareMethod {
     SEMANTIC_DIFF,
     TEXT_DIFF
@@ -580,7 +619,8 @@ private fun Map<Regex, String>.replaceIn(text: String) =
 private data class OrtResultDiff(
     val repositoryDiff: RepositoryDiff? = null,
     val analyzerRunDiff: AnalyzerRunDiff? = null,
-    val scannerRunDiff: ScannerRunDiff? = null
+    val scannerRunDiff: ScannerRunDiff? = null,
+    val advisorRunDiff: AdvisorRunDiff? = null
 )
 
 private data class RepositoryDiff(
@@ -708,4 +748,17 @@ private data class ScannerConfigurationDiff(
     val ignorePatternsB: List<String>? = null,
     val provenanceStorageA: ProvenanceStorageConfiguration? = null,
     val provenanceStorageB: ProvenanceStorageConfiguration? = null
+)
+
+private data class AdvisorRunDiff(
+    val startTimeA: Instant? = null,
+    val startTimeB: Instant? = null,
+    val endTimeA: Instant? = null,
+    val endTimeB: Instant? = null,
+    val environmentA: Environment? = null,
+    val environmentB: Environment? = null,
+    val configA: AdvisorConfiguration? = null,
+    val configB: AdvisorConfiguration? = null,
+    val resultsA: AdvisorRecord? = null,
+    val resultsB: AdvisorRecord? = null
 )
