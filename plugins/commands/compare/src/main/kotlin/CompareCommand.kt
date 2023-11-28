@@ -97,7 +97,7 @@ class CompareCommand : OrtCommand(
         }
 
         // Arbitrarily determine the mapper from the first file as the file extensions are ensured to be the same.
-        val deserializer = fileA.mapper().registerModule(
+        val mapper = fileA.mapper().registerModule(
             SimpleModule().apply {
                 // TODO: Find a way to also ignore temporary directories (when diffing semantically).
                 if (ignoreTime) addDeserializer(Instant::class.java, EpochInstantDeserializer())
@@ -105,8 +105,8 @@ class CompareCommand : OrtCommand(
             }
         )
 
-        val resultA = deserializer.readValue<OrtResult>(fileA)
-        val resultB = deserializer.readValue<OrtResult>(fileB)
+        val resultA = mapper.readValue<OrtResult>(fileA)
+        val resultB = mapper.readValue<OrtResult>(fileB)
 
         when (method) {
             CompareMethod.SEMANTIC_DIFF -> {
@@ -126,8 +126,8 @@ class CompareCommand : OrtCommand(
             }
 
             CompareMethod.TEXT_DIFF -> {
-                val textA = deserializer.writeValueAsString(resultA)
-                val textB = deserializer.writeValueAsString(resultB)
+                val textA = mapper.writeValueAsString(resultA)
+                val textB = mapper.writeValueAsString(resultB)
 
                 // Apply data type independent replacements in the texts.
                 val replacements = buildMap {
