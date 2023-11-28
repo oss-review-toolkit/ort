@@ -93,7 +93,7 @@ class CompareCommand : OrtCommand(
 
         if (fileA.extension != fileB.extension) {
             echo("The file arguments need to be of the same type.")
-            throw ProgramResult(2)
+            throw ProgramResult(1)
         }
 
         // Arbitrarily determine the mapper from the first file as the file extensions are ensured to be the same.
@@ -122,7 +122,7 @@ class CompareCommand : OrtCommand(
                     throw ProgramResult(0)
                 }
 
-                throw ProgramResult(1)
+                throw ProgramResult(2)
             }
 
             CompareMethod.TEXT_DIFF -> {
@@ -162,7 +162,7 @@ class CompareCommand : OrtCommand(
                     echo(it)
                 }
 
-                throw ProgramResult(1)
+                throw ProgramResult(2)
             }
         }
     }
