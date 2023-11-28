@@ -45,17 +45,23 @@ import java.time.Instant
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.DependencyGraph
+import org.ossreviewtoolkit.model.FileList
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.ProvenanceResolutionResult
 import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.ScanResult
+import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Curations
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
+import org.ossreviewtoolkit.model.config.FileListStorageConfiguration
 import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.LicenseChoices
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
@@ -63,10 +69,14 @@ import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.PackageLicenseChoice
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.model.config.PluginConfiguration
+import org.ossreviewtoolkit.model.config.ProvenanceStorageConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryAnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
+import org.ossreviewtoolkit.model.config.ScanStorageConfiguration
+import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.VulnerabilityResolution
 import org.ossreviewtoolkit.model.mapper
@@ -201,7 +211,8 @@ class CompareCommand : OrtCommand(
 private fun OrtResult.diff(other: OrtResult) =
     OrtResultDiff(
         repositoryDiff = repository.diff(other.repository),
-        analyzerRunDiff = analyzer.diff(other.analyzer)
+        analyzerRunDiff = analyzer.diff(other.analyzer),
+        scannerRunDiff = scanner.diff(other.scanner)
     )
 
 private fun Repository.diff(other: Repository): RepositoryDiff? =
@@ -437,6 +448,115 @@ private fun AnalyzerResult?.diff(other: AnalyzerResult?): AnalyzerResultDiff? {
     }
 }
 
+private fun ScannerRun?.diff(other: ScannerRun?): ScannerRunDiff? {
+    if (this == other) return null
+
+    return if (this == null) {
+        ScannerRunDiff(
+            startTimeB = other?.startTime,
+            endTimeB = other?.endTime,
+            environmentB = other?.environment,
+            config = diff(other?.config),
+            provenancesB = other?.provenances,
+            scanResultsB = other?.scanResults,
+            scannersB = other?.scanners,
+            filesB = other?.files
+        )
+    } else if (other == null) {
+        ScannerRunDiff(
+            startTimeA = startTime,
+            endTimeA = endTime,
+            environmentA = environment,
+            config = config.diff(null),
+            provenancesA = provenances,
+            scanResultsA = scanResults,
+            scannersA = scanners,
+            filesA = files
+        )
+    } else {
+        ScannerRunDiff(
+            startTimeA = startTime.takeIf { it != other.startTime },
+            startTimeB = other.startTime.takeIf { it != startTime },
+            endTimeA = endTime.takeIf { it != other.endTime },
+            endTimeB = other.endTime.takeIf { it != endTime },
+            environmentA = environment.takeIf { it != other.environment },
+            environmentB = other.environment.takeIf { it != environment },
+            config = config.diff(other.config),
+            provenancesA = (provenances - other.provenances).takeUnless { it.isEmpty() },
+            provenancesB = (other.provenances - provenances).takeUnless { it.isEmpty() },
+            scanResultsA = (scanResults - other.scanResults).takeUnless { it.isEmpty() },
+            scanResultsB = (other.scanResults - scanResults).takeUnless { it.isEmpty() },
+            scannersA = scanners.takeIf { it != other.scanners },
+            scannersB = other.scanners.takeIf { it != scanners },
+            filesA = (files - other.files).takeUnless { it.isEmpty() },
+            filesB = (other.files - files).takeUnless { it.isEmpty() }
+        )
+    }
+}
+
+private fun ScannerConfiguration?.diff(other: ScannerConfiguration?): ScannerConfigurationDiff? {
+    if (this == other) return null
+
+    return if (this == null) {
+        ScannerConfigurationDiff(
+            skipConcludedB = other?.skipConcluded,
+            archiveB = other?.archive,
+            createMissingArchivesB = other?.createMissingArchives,
+            detectedLicenseMappingB = other?.detectedLicenseMapping,
+            fileListStorageB = other?.fileListStorage,
+            configB = other?.config,
+            storagesB = other?.storages,
+            storageReadersB = other?.storageReaders,
+            storageWritersB = other?.storageWriters,
+            ignorePatternsB = other?.ignorePatterns,
+            provenanceStorageB = other?.provenanceStorage
+        )
+    } else if (other == null) {
+        ScannerConfigurationDiff(
+            skipConcludedA = skipConcluded,
+            archiveA = archive,
+            createMissingArchivesA = createMissingArchives,
+            detectedLicenseMappingA = detectedLicenseMapping,
+            fileListStorageA = fileListStorage,
+            configA = config,
+            storagesA = storages,
+            storageReadersA = storageReaders,
+            storageWritersA = storageWriters,
+            ignorePatternsA = ignorePatterns,
+            provenanceStorageA = provenanceStorage
+        )
+    } else {
+        ScannerConfigurationDiff(
+            skipConcludedA = skipConcluded.takeIf { it != other.skipConcluded },
+            skipConcludedB = other.skipConcluded.takeIf { it != skipConcluded },
+            archiveA = archive.takeIf { it != other.archive },
+            archiveB = other.archive.takeIf { it != archive },
+            createMissingArchivesA = createMissingArchives.takeIf { it != other.createMissingArchives },
+            createMissingArchivesB = other.createMissingArchives.takeIf { it != createMissingArchives },
+            detectedLicenseMappingA = detectedLicenseMapping.takeIf { it != other.detectedLicenseMapping },
+            detectedLicenseMappingB = other.detectedLicenseMapping.takeIf { it != detectedLicenseMapping },
+            fileListStorageA = fileListStorage.takeIf { it != other.fileListStorage },
+            fileListStorageB = other.fileListStorage.takeIf { it != fileListStorage },
+            configA = config.takeIf { it != other.config },
+            configB = other.config.takeIf { it != config },
+            storagesA = storages.takeIf { it != other.storages },
+            storagesB = other.storages.takeIf { it != storages },
+            storageReadersA = (storageReaders.orEmpty() - other.storageReaders.orEmpty().toSet())
+                .takeUnless { it.isEmpty() },
+            storageReadersB = (other.storageReaders.orEmpty() - storageReaders.orEmpty().toSet())
+                .takeUnless { it.isEmpty() },
+            storageWritersA = (storageWriters.orEmpty() - other.storageWriters.orEmpty().toSet())
+                .takeUnless { it.isEmpty() },
+            storageWritersB = (other.storageWriters.orEmpty() - storageWriters.orEmpty().toSet())
+                .takeUnless { it.isEmpty() },
+            ignorePatternsA = (ignorePatterns - other.ignorePatterns.toSet()).takeUnless { it.isEmpty() },
+            ignorePatternsB = (other.ignorePatterns - ignorePatterns.toSet()).takeUnless { it.isEmpty() },
+            provenanceStorageA = provenanceStorage.takeIf { it != other.provenanceStorage },
+            provenanceStorageB = other.provenanceStorage.takeIf { it != provenanceStorage }
+        )
+    }
+}
+
 private enum class CompareMethod {
     SEMANTIC_DIFF,
     TEXT_DIFF
@@ -459,7 +579,8 @@ private fun Map<Regex, String>.replaceIn(text: String) =
 
 private data class OrtResultDiff(
     val repositoryDiff: RepositoryDiff? = null,
-    val analyzerRunDiff: AnalyzerRunDiff? = null
+    val analyzerRunDiff: AnalyzerRunDiff? = null,
+    val scannerRunDiff: ScannerRunDiff? = null
 )
 
 private data class RepositoryDiff(
@@ -544,4 +665,47 @@ private data class AnalyzerResultDiff(
     val issuesB: Map<Identifier, List<Issue>>? = null,
     val dependencyGraphA: Map<String, DependencyGraph>? = null,
     val dependencyGraphB: Map<String, DependencyGraph>? = null
+)
+
+private data class ScannerRunDiff(
+    val startTimeA: Instant? = null,
+    val startTimeB: Instant? = null,
+    val endTimeA: Instant? = null,
+    val endTimeB: Instant? = null,
+    val environmentA: Environment? = null,
+    val environmentB: Environment? = null,
+    val config: ScannerConfigurationDiff? = null,
+    val provenancesA: Set<ProvenanceResolutionResult>? = null,
+    val provenancesB: Set<ProvenanceResolutionResult>? = null,
+    val scanResultsA: Set<ScanResult>? = null,
+    val scanResultsB: Set<ScanResult>? = null,
+    val scannersA: Map<Identifier, Set<String>>? = null,
+    val scannersB: Map<Identifier, Set<String>>? = null,
+    val filesA: Set<FileList>? = null,
+    val filesB: Set<FileList>? = null
+)
+
+private data class ScannerConfigurationDiff(
+    val skipConcludedA: Boolean? = null,
+    val skipConcludedB: Boolean? = null,
+    val archiveA: FileArchiverConfiguration? = null,
+    val archiveB: FileArchiverConfiguration? = null,
+    val createMissingArchivesA: Boolean? = null,
+    val createMissingArchivesB: Boolean? = null,
+    val detectedLicenseMappingA: Map<String, String>? = null,
+    val detectedLicenseMappingB: Map<String, String>? = null,
+    val fileListStorageA: FileListStorageConfiguration? = null,
+    val fileListStorageB: FileListStorageConfiguration? = null,
+    val configA: Map<String, PluginConfiguration>? = null,
+    val configB: Map<String, PluginConfiguration>? = null,
+    val storagesA: Map<String, ScanStorageConfiguration>? = null,
+    val storagesB: Map<String, ScanStorageConfiguration>? = null,
+    val storageReadersA: List<String>? = null,
+    val storageReadersB: List<String>? = null,
+    val storageWritersA: List<String>? = null,
+    val storageWritersB: List<String>? = null,
+    val ignorePatternsA: List<String>? = null,
+    val ignorePatternsB: List<String>? = null,
+    val provenanceStorageA: ProvenanceStorageConfiguration? = null,
+    val provenanceStorageB: ProvenanceStorageConfiguration? = null
 )
