@@ -106,6 +106,13 @@ class RequirementsCommand : OrtCommand(
     }
 
     private fun listPlugins() {
+        getPluginsByType().toSortedMap().forEach { (name, all) ->
+            echo(Theme.Default.info("$name plugins:"))
+            echo(all.joinToString("\n", postfix = "\n") { "${SUCCESS_PREFIX}$it" })
+        }
+    }
+
+    private fun getPluginsByType(): Map<String, Set<String>> {
         val pluginClasses = reflections.getSubTypesOf(Plugin::class.java)
 
         val pluginTypes = pluginClasses.mapNotNull { clazz ->
@@ -119,10 +126,7 @@ class RequirementsCommand : OrtCommand(
             }
         }
 
-        pluginTypes.sortedBy { it.first }.forEach { (name, all) ->
-            echo(Theme.Default.info("$name plugins:"))
-            echo(all.joinToString("\n", postfix = "\n") { "${SUCCESS_PREFIX}$it" })
-        }
+        return pluginTypes.toMap()
     }
 
     private fun checkToolVersions(): EnumSet<VersionStatus> {
