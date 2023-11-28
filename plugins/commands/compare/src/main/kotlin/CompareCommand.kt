@@ -34,6 +34,7 @@ import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
+import com.github.ajalt.clikt.parameters.types.int
 import com.github.ajalt.mordant.rendering.Theme
 import com.github.difflib.DiffUtils
 import com.github.difflib.UnifiedDiffUtils
@@ -69,6 +70,13 @@ class CompareCommand : OrtCommand(
             "${CompareMethod.entries.map { it.name }}."
     ).enum<CompareMethod>()
         .default(CompareMethod.TEXT_DIFF)
+
+    private val contextSize by option(
+        "--context-size", "-C",
+        help = "The number of unmodified lines to display in the context of a modified line. Only applies to unified " +
+            "diff output."
+    ).int()
+        .default(7)
 
     private val ignoreTime by option(
         "--ignore-time", "-t",
@@ -148,7 +156,7 @@ class CompareCommand : OrtCommand(
                     "b/${fileB.relativeTo(commonParent).invariantSeparatorsPath}",
                     linesA,
                     DiffUtils.diff(linesA, linesB),
-                    /* contextSize = */ 7
+                    contextSize
                 )
 
                 if (diff.isEmpty()) {
