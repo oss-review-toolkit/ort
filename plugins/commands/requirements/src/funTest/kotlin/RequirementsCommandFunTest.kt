@@ -22,11 +22,20 @@ package org.ossreviewtoolkit.plugins.commands.requirements
 import com.github.ajalt.clikt.testing.test
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.shouldNot
 import io.kotest.matchers.shouldNotBe
 
 class RequirementsCommandFunTest : StringSpec({
     "All tool classes can be instantiated via reflection" {
         // Status code 1 is only returned if there was an error while instantiating a class via reflection.
         RequirementsCommand().test().statusCode shouldNotBe 1
+    }
+
+    "Core plugins are found" {
+        val plugins = RequirementsCommand().getPluginsByType()
+
+        plugins.keys shouldNot beEmpty()
+        plugins.values.flatten() shouldNot beEmpty()
     }
 })

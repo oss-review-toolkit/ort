@@ -112,7 +112,7 @@ class RequirementsCommand : OrtCommand(
         }
     }
 
-    private fun getPluginsByType(): Map<String, Set<String>> {
+    internal fun getPluginsByType(): Map<String, Set<String>> {
         val pluginClasses = reflections.getSubTypesOf(Plugin::class.java)
 
         val pluginTypes = pluginClasses.mapNotNull { clazz ->
