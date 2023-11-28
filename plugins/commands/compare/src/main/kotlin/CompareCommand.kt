@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+@file:Suppress("TooManyFunctions")
+
 package org.ossreviewtoolkit.plugins.commands.compare
 
 import com.fasterxml.jackson.core.JsonParser
@@ -40,10 +42,18 @@ import com.github.difflib.UnifiedDiffUtils
 
 import java.time.Instant
 
+import org.ossreviewtoolkit.model.AnalyzerResult
+import org.ossreviewtoolkit.model.AnalyzerRun
+import org.ossreviewtoolkit.model.DependencyGraph
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCuration
+import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Curations
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.IssueResolution
@@ -190,7 +200,8 @@ class CompareCommand : OrtCommand(
 
 private fun OrtResult.diff(other: OrtResult) =
     OrtResultDiff(
-        repositoryDiff = repository.diff(other.repository)
+        repositoryDiff = repository.diff(other.repository),
+        analyzerRunDiff = analyzer.diff(other.analyzer)
     )
 
 private fun Repository.diff(other: Repository): RepositoryDiff? =
@@ -327,6 +338,105 @@ private fun RepositoryAnalyzerConfiguration?.diff(other: RepositoryAnalyzerConfi
     }
 }
 
+private fun AnalyzerRun?.diff(other: AnalyzerRun?): AnalyzerRunDiff? {
+    if (this == other) return null
+
+    return if (this == null) {
+        AnalyzerRunDiff(
+            startTimeB = other?.startTime,
+            endTimeB = other?.endTime,
+            environmentB = other?.environment,
+            configDiff = diff(other?.config),
+            resultDiff = diff(other?.result)
+        )
+    } else if (other == null) {
+        AnalyzerRunDiff(
+            startTimeA = startTime,
+            endTimeA = endTime,
+            environmentA = environment,
+            configDiff = config.diff(null),
+            resultDiff = result.diff(null)
+        )
+    } else {
+        AnalyzerRunDiff(
+            startTimeA = startTime.takeIf { it != other.startTime },
+            startTimeB = other.startTime.takeIf { it != startTime },
+            endTimeA = endTime.takeIf { it != other.endTime },
+            endTimeB = other.endTime.takeIf { it != endTime },
+            environmentA = environment.takeIf { it != other.environment },
+            environmentB = other.environment.takeIf { it != environment },
+            configDiff = config.diff(other.config),
+            resultDiff = result.diff(other.result)
+        )
+    }
+}
+
+private fun AnalyzerConfiguration?.diff(other: AnalyzerConfiguration?): AnalyzerConfigurationDiff? {
+    if (this == other) return null
+
+    return if (this == null) {
+        AnalyzerConfigurationDiff(
+            allowDynamicVersionsB = other?.allowDynamicVersions,
+            enabledPackageManagersB = other?.enabledPackageManagers,
+            disabledPackageManagersB = other?.disabledPackageManagers,
+            packageManagersB = other?.packageManagers,
+            skipExcludedB = other?.skipExcluded
+        )
+    } else if (other == null) {
+        AnalyzerConfigurationDiff(
+            allowDynamicVersionsA = allowDynamicVersions,
+            enabledPackageManagersA = enabledPackageManagers,
+            disabledPackageManagersA = disabledPackageManagers,
+            packageManagersA = packageManagers,
+            skipExcludedA = skipExcluded
+        )
+    } else {
+        AnalyzerConfigurationDiff(
+            allowDynamicVersionsA = allowDynamicVersions.takeIf { it != other.allowDynamicVersions },
+            allowDynamicVersionsB = other.allowDynamicVersions.takeIf { it != allowDynamicVersions },
+            enabledPackageManagersA = enabledPackageManagers.takeIf { it != other.enabledPackageManagers },
+            enabledPackageManagersB = other.enabledPackageManagers.takeIf { it != enabledPackageManagers },
+            disabledPackageManagersA = disabledPackageManagers.takeIf { it != other.disabledPackageManagers },
+            disabledPackageManagersB = other.disabledPackageManagers.takeIf { it != disabledPackageManagers },
+            packageManagersA = packageManagers.takeIf { it != other.packageManagers },
+            packageManagersB = other.packageManagers.takeIf { it != packageManagers },
+            skipExcludedA = skipExcluded.takeIf { it != other.skipExcluded },
+            skipExcludedB = other.skipExcluded.takeIf { it != skipExcluded }
+        )
+    }
+}
+
+private fun AnalyzerResult?.diff(other: AnalyzerResult?): AnalyzerResultDiff? {
+    if (this == other) return null
+
+    return if (this == null) {
+        AnalyzerResultDiff(
+            projectsB = other?.projects,
+            packagesB = other?.packages,
+            issuesB = other?.issues,
+            dependencyGraphB = other?.dependencyGraphs
+        )
+    } else if (other == null) {
+        AnalyzerResultDiff(
+            projectsA = projects,
+            packagesA = packages,
+            issuesA = issues,
+            dependencyGraphA = dependencyGraphs
+        )
+    } else {
+        AnalyzerResultDiff(
+            projectsA = (projects - other.projects).takeUnless { it.isEmpty() },
+            projectsB = (other.projects - projects).takeUnless { it.isEmpty() },
+            packagesA = (packages - other.packages).takeUnless { it.isEmpty() },
+            packagesB = (other.packages - packages).takeUnless { it.isEmpty() },
+            issuesA = issues.takeIf { it != other.issues },
+            issuesB = other.issues.takeIf { it != issues },
+            dependencyGraphA = dependencyGraphs.takeIf { it != other.dependencyGraphs },
+            dependencyGraphB = other.dependencyGraphs.takeIf { it != dependencyGraphs }
+        )
+    }
+}
+
 private enum class CompareMethod {
     SEMANTIC_DIFF,
     TEXT_DIFF
@@ -348,7 +458,8 @@ private fun Map<Regex, String>.replaceIn(text: String) =
     }
 
 private data class OrtResultDiff(
-    val repositoryDiff: RepositoryDiff? = null
+    val repositoryDiff: RepositoryDiff? = null,
+    val analyzerRunDiff: AnalyzerRunDiff? = null
 )
 
 private data class RepositoryDiff(
@@ -412,4 +523,25 @@ private data class AnalyzerConfigurationDiff(
     val packageManagersB: Map<String, PackageManagerConfiguration>? = null,
     val skipExcludedA: Boolean? = false,
     val skipExcludedB: Boolean? = false
+)
+private data class AnalyzerRunDiff(
+    val startTimeA: Instant? = null,
+    val startTimeB: Instant? = null,
+    val endTimeA: Instant? = null,
+    val endTimeB: Instant? = null,
+    val environmentA: Environment? = null,
+    val environmentB: Environment? = null,
+    val configDiff: AnalyzerConfigurationDiff? = null,
+    val resultDiff: AnalyzerResultDiff? = null
+)
+
+private data class AnalyzerResultDiff(
+    val projectsA: Set<Project>? = null,
+    val projectsB: Set<Project>? = null,
+    val packagesA: Set<Package>? = null,
+    val packagesB: Set<Package>? = null,
+    val issuesA: Map<Identifier, List<Issue>>? = null,
+    val issuesB: Map<Identifier, List<Issue>>? = null,
+    val dependencyGraphA: Map<String, DependencyGraph>? = null,
+    val dependencyGraphB: Map<String, DependencyGraph>? = null
 )
