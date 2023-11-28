@@ -19,9 +19,15 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.node.utils
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.TextNode
+
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.shouldBe
+
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
 
 class NpmSupportTest : WordSpec({
     "expandNpmShortcutUrl" should {
@@ -70,6 +76,144 @@ class NpmSupportTest : WordSpec({
             packages.entries.forAll { (actualUrl, expectedUrl) ->
                 expandNpmShortcutUrl(actualUrl) shouldBe expectedUrl
             }
+        }
+    }
+
+    "fixNpmDownloadUrl" should {
+        "replace HTTP with HTTPS for the NPM registry only" {
+            fixNpmDownloadUrl("http://registry.npmjs.org/babel-cli/-/babel-cli-6.26.0.tgz") shouldBe
+                "https://registry.npmjs.org/babel-cli/-/babel-cli-6.26.0.tgz"
+            fixNpmDownloadUrl("http://oss-review-toolkit.org/") shouldBe "http://oss-review-toolkit.org/"
+        }
+
+        "correct Artifactory API URLS" {
+            fixNpmDownloadUrl("http://my.repo/artifactory/api/npm/npm/all") shouldBe
+                "http://my.repo/artifactory/npm/all"
+        }
+    }
+
+    "parseNpmAuthors" should {
+        "get authors from a text node" {
+            val node = ObjectMapper().run {
+                createObjectNode().apply {
+                    replace("author", TextNode("Jane Doe <jane.doe@example.com>"))
+                }
+            }
+
+            parseNpmAuthors(node) shouldBe setOf("Jane Doe")
+        }
+
+        "get authors from an object node" {
+            @Suppress("Wrapping")
+            val node = ObjectMapper().run {
+                createObjectNode().apply {
+                    replace("author", createObjectNode().apply {
+                        replace("name", TextNode("John Doe"))
+                    })
+                }
+            }
+
+            parseNpmAuthors(node) shouldBe setOf("John Doe")
+        }
+    }
+
+    "parseNpmLicenses" should {
+        "get a singular 'license' from a text node" {
+            val node = ObjectMapper().run {
+                createObjectNode().apply {
+                    replace("license", TextNode("Apache-2.0"))
+                }
+            }
+
+            parseNpmLicenses(node) shouldBe setOf("Apache-2.0")
+        }
+
+        "get a singular 'license' from an array node" {
+            @Suppress("Wrapping")
+            val node = ObjectMapper().run {
+                createObjectNode().apply {
+                    replace("license", createArrayNode().apply {
+                        add("Apache-2.0")
+                    })
+                }
+            }
+
+            parseNpmLicenses(node) shouldBe setOf("Apache-2.0")
+        }
+
+        "get a singular 'license' from an object node" {
+            @Suppress("Wrapping")
+            val node = ObjectMapper().run {
+                createObjectNode().apply {
+                    replace("license", createObjectNode().apply {
+                        replace("type", TextNode("Apache-2.0"))
+                    })
+                }
+            }
+
+            parseNpmLicenses(node) shouldBe setOf("Apache-2.0")
+        }
+
+        "get plural 'licenses' from an object node" {
+            @Suppress("Wrapping")
+            val node = ObjectMapper().run {
+                createObjectNode().apply {
+                    replace("licenses", createArrayNode().apply {
+                        add(createObjectNode().apply {
+                            replace("type", TextNode("Apache-2.0"))
+                        })
+                    })
+                }
+            }
+
+            parseNpmLicenses(node) shouldBe setOf("Apache-2.0")
+        }
+
+        "map 'UNLICENSED' to 'NONE'" {
+            val node = ObjectMapper().run {
+                createObjectNode().apply {
+                    replace("license", TextNode("UNLICENSED"))
+                }
+            }
+
+            parseNpmLicenses(node) shouldBe setOf("NONE")
+        }
+
+        "map 'SEE LICENSE IN ...' to 'NOASSERTION'" {
+            val node = ObjectMapper().run {
+                createObjectNode().apply {
+                    replace("license", TextNode("SEE LICENSE IN LICENSE"))
+                }
+            }
+
+            parseNpmLicenses(node) shouldBe setOf("NOASSERTION")
+        }
+    }
+
+    "parseNpmVcsInfo" should {
+        "get VCS information from an object node" {
+            val emptyTree = "4b825dc642cb6eb9a060e54bf8d69288fbee4904"
+
+            @Suppress("Wrapping")
+            val node = ObjectMapper().run {
+                createObjectNode().apply {
+                    replace("gitHead", TextNode(emptyTree))
+                    replace("repository", createObjectNode().apply {
+                        replace("type", TextNode("Git"))
+                        replace("url", TextNode("https://example.com/"))
+                        replace("directory", TextNode("foo"))
+                    })
+                }
+            }
+
+            parseNpmVcsInfo(node) shouldBe VcsInfo(VcsType.GIT, "https://example.com/", emptyTree, "foo")
+        }
+    }
+
+    "splitNpmNamespaceAndName" should {
+        "return the namespace and name separately" {
+            splitNpmNamespaceAndName("@babel/core") shouldBe Pair("@babel", "core")
+            splitNpmNamespaceAndName("check-if-windows") shouldBe Pair("", "check-if-windows")
         }
     }
 })
