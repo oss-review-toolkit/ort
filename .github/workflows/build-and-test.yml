@@ -18,7 +18,7 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
     - name: Setup Java
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v4
       with:
         distribution: temurin
         java-version: 17
@@ -34,7 +34,7 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
     - name: Setup Java
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v4
       with:
         distribution: temurin
         java-version: 17
@@ -57,7 +57,7 @@ jobs:
         languages: java
         tools: latest
     - name: Setup Java
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v4
       with:
         distribution: temurin
         java-version: 17
@@ -75,7 +75,7 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
     - name: Setup Java
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v4
       with:
         distribution: temurin
         java-version: 17
@@ -124,7 +124,7 @@ jobs:
           curl -Os https://raw.githubusercontent.com/nexB/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt
           pip install --no-cache-dir --constraint requirements.txt scancode-toolkit==$SCANCODE_VERSION
     - name: Setup Java
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v4
       with:
         distribution: temurin
         java-version: 17
@@ -145,7 +145,7 @@ jobs:
       with:
         submodules: recursive
     - name: Setup Java
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v4
       with:
         distribution: temurin
         java-version: 17

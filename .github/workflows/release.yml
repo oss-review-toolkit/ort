@@ -25,7 +25,7 @@ jobs:
           ref: ${{ env.ORT_VERSION }}
           fetch-depth: 0
       - name: Setup Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
