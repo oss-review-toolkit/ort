@@ -84,9 +84,9 @@ pipeline {
         )
 
         string(
-                name: 'ORT_CONFIG_VCS_PATH',
-                description: 'Optional VCS path of the ORT configuration.',
-                defaultValue: ''
+            name: 'ORT_CONFIG_VCS_PATH',
+            description: 'Optional VCS path of the ORT configuration.',
+            defaultValue: ''
         )
 
         credentials(
