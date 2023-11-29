@@ -96,6 +96,12 @@ pipeline {
             defaultValue: ''
         )
 
+        string(
+            name: 'ENVIRONMENT_VARIABLES',
+            description: 'Optional list of comma-separated key=value pairs of environment variables to set.',
+            defaultValue: ''
+        )
+
         choice(
             name: 'LOG_LEVEL',
             description: 'The logging level.',
@@ -388,6 +394,13 @@ pipeline {
 
             steps {
                 script {
+                    params.ENVIRONMENT_VARIABLES.tokenize(',').each {
+                        def (key, value) = it.split('=', limit = 2)
+                        env."${key.trim()}" = value.trim()
+                    }
+                }
+
+                script {
                     def status = sh returnStatus: true, script: '''
                     ORT_OPTIONS="$LOG_LEVEL -P ort.analyzer.allowDynamicVersions=$ALLOW_DYNAMIC_VERSIONS"
 
@@ -468,6 +481,13 @@ pipeline {
             }
 
             steps {
+                script {
+                    params.ENVIRONMENT_VARIABLES.tokenize(',').each {
+                        def (key, value) = it.split('=', limit = 2)
+                        env."${key.trim()}" = value.trim()
+                    }
+                }
+
                 withCredentials(projectVcsCredentials) {
                     script {
                         def status = sh returnStatus: true, script: '''
@@ -582,6 +602,13 @@ pipeline {
             }
 
             steps {
+                script {
+                    params.ENVIRONMENT_VARIABLES.tokenize(',').each {
+                        def (key, value) = it.split('=', limit = 2)
+                        env."${key.trim()}" = value.trim()
+                    }
+                }
+
                 withCredentials(projectVcsCredentials) {
                     script {
                         def status = sh returnStatus: true, script: '''
@@ -642,6 +669,13 @@ pipeline {
             }
 
             steps {
+                script {
+                    params.ENVIRONMENT_VARIABLES.tokenize(',').each {
+                        def (key, value) = it.split('=', limit = 2)
+                        env."${key.trim()}" = value.trim()
+                    }
+                }
+
                 withCredentials(projectVcsCredentials) {
                     script {
                         def status = sh returnStatus: true, script: '''
@@ -695,6 +729,13 @@ pipeline {
             }
 
             steps {
+                script {
+                    params.ENVIRONMENT_VARIABLES.tokenize(',').each {
+                        def (key, value) = it.split('=', limit = 2)
+                        env."${key.trim()}" = value.trim()
+                    }
+                }
+
                 sh '''
                 ORT_OPTIONS="$LOG_LEVEL"
 
