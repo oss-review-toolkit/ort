@@ -87,7 +87,6 @@ style:
   WildcardImport:
     excludes: ''
     excludeImports:
-      - org.ossreviewtoolkit.analyzer.managers.*
       - org.ossreviewtoolkit.helper.commands.*
       - org.ossreviewtoolkit.utils.spdx.SpdxLicense.*
       - org.ossreviewtoolkit.utils.spdx.SpdxLicenseException.*
