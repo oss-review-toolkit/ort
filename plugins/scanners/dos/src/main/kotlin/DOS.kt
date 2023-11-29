@@ -73,7 +73,9 @@ class DOS internal constructor(
 
         runBlocking {
             // Ask for scan results from DOS API
-            scanResults = repository.getScanResults(pkg.purl, config.fetchConcluded)
+            // TODO: Pass in the whole list once supported by the client / backend
+            // When ready, remove .first() from the following line
+            scanResults = repository.getScanResults(context.coveredPackages.getDosPurls().first(), config.fetchConcluded)
             if (scanResults == null) {
                 issues.add(createAndLogIssue(name, "Could not request scan results from DOS API", Severity.ERROR))
                 return@runBlocking
@@ -86,15 +88,9 @@ class DOS internal constructor(
                     downloader.download(pkg, dosDir)
                     logger.info { "Package downloaded to: $dosDir" }
 
-                    val purls = context.coveredPackages.map { pkg ->
-                        pkg.purl.takeUnless { pkg.vcsProcessed.path.isNotEmpty() }
-                            // Encode a path within the source code to the PURL.
-                            ?: "${pkg.purl}#${pkg.vcsProcessed.path.percentEncode()}"
-                    }
-
                     // Start backend scanning
                     scanResults = runBackendScan(
-                        purls,
+                        context.coveredPackages.getDosPurls(),
                         dosDir,
                         tmpDir,
                         thisScanStartTime,
@@ -225,3 +221,10 @@ class DOS internal constructor(
         }
     }
 }
+
+private fun Collection<Package>.getDosPurls(): List<String> =
+    map { pkg ->
+        pkg.purl.takeUnless { pkg.vcsProcessed.path.isNotEmpty() }
+            // Encode a path within the source code to the PURL.
+            ?: "${pkg.purl}#${pkg.vcsProcessed.path.percentEncode()}"
+    }

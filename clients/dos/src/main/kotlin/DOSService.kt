@@ -107,6 +107,7 @@ interface DOSService {
         )
     }
 
+    // When backend is ready, change the purl to a list of purls
     @Serializable
     data class JobRequestBody(
         val zipFileKey: String? = null,
