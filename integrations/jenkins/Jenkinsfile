@@ -192,12 +192,6 @@ pipeline {
             defaultValue: true
         )
 
-        string(
-            name: 'VULNERABLE_CODE_API_KEY',
-            description: 'Optional API key to enable VulnerableCode (see https://public.vulnerablecode.io/account/request_api_key/).',
-            defaultValue: ''
-        )
-
         /*
          * ORT evaluator tool parameters.
          */
@@ -618,12 +612,7 @@ pipeline {
                             ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
                         fi
 
-                        ADVISOR_OPTIONS="-a OSV"
-
-                        if [ -n "$VULNERABLE_CODE_API_KEY" ]; then
-                            ORT_OPTIONS="$ORT_OPTIONS -P ort.advisor.vulnerableCode.apiKey=$VULNERABLE_CODE_API_KEY"
-                            ADVISOR_OPTIONS="$ADVISOR_OPTIONS,VulnerableCode"
-                        fi
+                        ADVISOR_OPTIONS="-a OSV,VulnerableCode"
 
                         /opt/ort/bin/ort $ORT_OPTIONS advise $ADVISOR_OPTIONS -i out/results/current-result.yml -o out/results/advisor
                         '''.stripIndent().trim()
