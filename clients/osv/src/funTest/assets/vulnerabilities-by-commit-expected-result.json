@@ -2,8 +2,8 @@
     {
         "schema_version": "1.6.0",
         "id": "CVE-2021-45931",
-        "modified": "2023-11-07T21:52:22.012770Z",
-        "published": "2022-01-01T01:15:00Z",
+        "modified": "2023-11-29T09:07:42.148466Z",
+        "published": "2022-01-01T01:15:08Z",
         "details": "HarfBuzz 2.9.0 has an out-of-bounds write in hb_bit_set_invertible_t::set (called from hb_sparseset_t<hb_bit_set_invertible_t>::set and hb_set_copy).",
         "severity": [
             {
@@ -186,6 +186,14 @@
         ],
         "references": [
             {
+                "type": "ADVISORY",
+                "url": "https://security.gentoo.org/glsa/202209-11"
+            },
+            {
+                "type": "WEB",
+                "url": "https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=37425"
+            },
+            {
                 "type": "WEB",
                 "url": "https://github.com/google/oss-fuzz-vulns/blob/main/vulns/harfbuzz/OSV-2021-1159.yaml"
             },
@@ -195,11 +203,7 @@
             },
             {
                 "type": "WEB",
-                "url": "https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=37425"
-            },
-            {
-                "type": "ADVISORY",
-                "url": "https://security.gentoo.org/glsa/202209-11"
+                "url": "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/4EAIZKL4O67FN2CWJYHYKZEMNYWNWO3D/"
             },
             {
                 "type": "WEB",
@@ -208,18 +212,14 @@
             {
                 "type": "WEB",
                 "url": "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/DI6247WOAKB46CZZ6SCDSJVWWCW3GMZH/"
-            },
-            {
-                "type": "WEB",
-                "url": "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/4EAIZKL4O67FN2CWJYHYKZEMNYWNWO3D/"
             }
         ]
     },
     {
         "schema_version": "1.6.0",
         "id": "CVE-2022-33068",
-        "modified": "2023-11-07T21:57:21.064398Z",
-        "published": "2022-06-23T17:15:00Z",
+        "modified": "2023-11-29T09:34:42.527802Z",
+        "published": "2022-06-23T17:15:14Z",
         "related": [
             "ALSA-2022:8384",
             "RLSA-2022:8384"
@@ -694,16 +694,16 @@
         ],
         "references": [
             {
-                "type": "FIX",
+                "type": "ADVISORY",
+                "url": "https://security.gentoo.org/glsa/202209-11"
+            },
+            {
+                "type": "REPORT",
                 "url": "https://github.com/harfbuzz/harfbuzz/issues/3557"
             },
             {
                 "type": "FIX",
                 "url": "https://github.com/harfbuzz/harfbuzz/commit/62e803b36173fd096d7ad460dd1d1db9be542593"
-            },
-            {
-                "type": "ADVISORY",
-                "url": "https://security.gentoo.org/glsa/202209-11"
             },
             {
                 "type": "WEB",
@@ -722,8 +722,8 @@
     {
         "schema_version": "1.6.0",
         "id": "CVE-2023-25193",
-        "modified": "2023-11-07T21:59:51.567838Z",
-        "published": "2023-02-04T20:15:00Z",
+        "modified": "2023-11-29T09:54:33.044682Z",
+        "published": "2023-02-04T20:15:08Z",
         "related": [
             "ALSA-2023:4158",
             "ALSA-2023:4159",
@@ -937,20 +937,20 @@
         ],
         "references": [
             {
-                "type": "FIX",
-                "url": "https://github.com/harfbuzz/harfbuzz/commit/85be877925ddbf34f74a1229f3ca1716bb6170dc"
-            },
-            {
-                "type": "WEB",
-                "url": "https://github.com/harfbuzz/harfbuzz/blob/2822b589bc837fae6f66233e2cf2eef0f6ce8470/src/hb-ot-layout-gsubgpos.hh"
+                "type": "ADVISORY",
+                "url": "https://security.netapp.com/advisory/ntap-20230725-0006/"
             },
             {
                 "type": "WEB",
                 "url": "https://chromium.googlesource.com/chromium/src/+/e1f324aa681af54101c1f2d173d92adb80e37088/DEPS#361"
             },
             {
-                "type": "ADVISORY",
-                "url": "https://security.netapp.com/advisory/ntap-20230725-0006/"
+                "type": "FIX",
+                "url": "https://github.com/harfbuzz/harfbuzz/commit/85be877925ddbf34f74a1229f3ca1716bb6170dc"
+            },
+            {
+                "type": "WEB",
+                "url": "https://github.com/harfbuzz/harfbuzz/blob/2822b589bc837fae6f66233e2cf2eef0f6ce8470/src/hb-ot-layout-gsubgpos.hh"
             },
             {
                 "type": "WEB",
