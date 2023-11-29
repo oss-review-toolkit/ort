@@ -226,5 +226,5 @@ private fun Collection<Package>.getDosPurls(): List<String> =
     map { pkg ->
         pkg.purl.takeUnless { pkg.vcsProcessed.path.isNotEmpty() }
             // Encode a path within the source code to the PURL.
-            ?: "${pkg.purl}#${pkg.vcsProcessed.path.percentEncode()}"
+            ?: "${pkg.purl}#${pkg.vcsProcessed.path}"
     }
