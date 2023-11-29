@@ -31,11 +31,8 @@ import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class VulnerableCodeFunTest : StringSpec({
-    // Enter an API key to enable the test.
-    val apiKey = ""
-
-    "Findings should be returned for a vulnerable package".config(enabledIf = { apiKey.isNotEmpty() }) {
-        val vc = VulnerableCode("VulnerableCode", VulnerableCodeConfiguration(apiKey = apiKey))
+    "Findings should be returned for a vulnerable package" {
+        val vc = VulnerableCode("VulnerableCode", VulnerableCodeConfiguration())
         val id = Identifier("Maven:com.google.guava:guava:19.0")
         val pkg = Package.EMPTY.copy(id, purl = id.toPurl())
 
