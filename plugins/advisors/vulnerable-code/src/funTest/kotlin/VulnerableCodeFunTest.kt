@@ -20,7 +20,9 @@
 package org.ossreviewtoolkit.plugins.advisors.vulnerablecode
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldContainAll
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.Identifier
@@ -39,6 +41,7 @@ class VulnerableCodeFunTest : StringSpec({
 
         val findings = vc.retrievePackageFindings(setOf(pkg))
 
+        findings.values.flatMap { it.summary.issues } should beEmpty()
         with(findings.values.flatMap { it.vulnerabilities }.associateBy { it.id }) {
             keys shouldContainAll setOf(
                 "CVE-2018-10237",
