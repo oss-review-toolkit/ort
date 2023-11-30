@@ -44,6 +44,7 @@ dependencies {
     implementation(libs.graalVmNativeImagePlugin)
     implementation(libs.jgit)
     implementation(libs.kotlinPlugin)
+    implementation(libs.mavenPublishPlugin)
 }
 
 val javaVersion = JavaVersion.current()

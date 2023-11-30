@@ -8,6 +8,7 @@ graalVmNativeImagePlugin = "0.9.28"
 graphQlPlugin = "6.5.6"
 ideaExtPlugin = "1.1.7"
 kotlinPlugin = "1.9.21"
+mavenPublishPlugin = "0.26.0"
 versionsPlugin = "0.50.0"
 
 antlr = "4.13.1"
@@ -137,6 +138,7 @@ mavenCompat = { module = "org.apache.maven:maven-compat", version.ref = "maven" 
 mavenCore = { module = "org.apache.maven:maven-core", version.ref = "maven" }
 mavenModel = { module = "org.apache.maven:maven-model", version.ref = "maven" }
 mavenModelBuilder = { module = "org.apache.maven:maven-model-builder", version.ref = "maven" }
+mavenPublishPlugin = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "mavenPublishPlugin" }
 mavenResolverApi = { module = "org.apache.maven.resolver:maven-resolver-api", version.ref = "mavenResolver" }
 mavenResolverConnectorBasic = { module = "org.apache.maven.resolver:maven-resolver-connector-basic", version.ref = "mavenResolver" }
 mavenResolverTransportFile = { module = "org.apache.maven.resolver:maven-resolver-transport-file", version.ref = "mavenResolver" }
