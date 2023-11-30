@@ -367,6 +367,14 @@ pipeline {
                       enabled: ${USE_CLEARLY_DEFINED_CURATIONS}
                 EOF
                 fi
+
+                ORT_OPTIONS="$LOG_LEVEL"
+
+                if [ "$STACKTRACE" = "true" ]; then
+                    ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
+                fi
+
+                /opt/ort/bin/ort $ORT_OPTIONS config --show-active
                 '''.stripIndent().trim()
             }
         }
