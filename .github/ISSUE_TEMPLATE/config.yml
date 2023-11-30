@@ -1,0 +1,10 @@
+contact_links:
+    - name: ORT Discussion Forum
+      url: https://github.com/oss-review-toolkit/ort/discussions
+      about: You did not find a bug but have a more open question or want to discuss support-style questions? Please be welcome to our discussion forum!
+    - name: ORT FAQ (Frequently Asked Questions)
+      url: https://github.com/oss-review-toolkit/ort/discussions/categories/q-a
+      about: This is our interactive FAQ section in the discussion forum. Think Stack Overflow meets Wiki.
+    - name: ORT Slack channel
+      url: https://ort-talk.slack.com/join/shared_invite/zt-1c7yi4sj6-mk7R1fAa6ZdW5MQ6DfAVRg#/shared-invite/email
+      about: Do you need a more sync & interactive discussion medium (chat)? Please sign up for our Slack channel.
