@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.model
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
@@ -53,7 +54,13 @@ data class Issue(
     /**
      * The issue's severity.
      */
-    val severity: Severity = Severity.ERROR
+    val severity: Severity = Severity.ERROR,
+
+    /**
+     * The affected file or directory the issue is limited to, if any.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val affectedPath: String? = null
 ) {
     override fun toString(): String {
         val time = if (timestamp == Instant.EPOCH) "Unknown time" else timestamp.toString()
