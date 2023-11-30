@@ -20,6 +20,7 @@ import org.ossreviewtoolkit.model.*
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.scanner.*
 import org.ossreviewtoolkit.downloader.Downloader
+import org.ossreviewtoolkit.model.utils.associateLicensesWithExceptions
 import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.percentEncode
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
@@ -125,7 +126,12 @@ class DOS internal constructor(
                 emptySet(),
                 issues)
         }
-        return ScanResult(provenance, details, summary)
+
+        return ScanResult(
+            provenance,
+            details,
+            summary.copy(licenseFindings = associateLicensesWithExceptions(summary.licenseFindings))
+        )
     }
 
     @VisibleForTesting
