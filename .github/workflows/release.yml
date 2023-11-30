@@ -39,7 +39,7 @@ jobs:
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
           SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
-        run: ./gradlew publishAllPublicationsToOSSRHRepository
+        run: ./gradlew --no-parallel publishAllPublicationsToOSSRHRepository
       - name: Build ORT Distributions
         run: ./gradlew :cli:distZip :helper-cli:distZip
       - name: Generate Release Notes
