@@ -17,8 +17,6 @@
  * License-Filename: LICENSE
  */
 
-/* eslint import/prefer-default-export: 0 */
-
 /* Utility function to generate random numbers and letters string
  * Based on vjt@openssl.it public domain code, see
  * https://gist.github.com/vjt/2239787
