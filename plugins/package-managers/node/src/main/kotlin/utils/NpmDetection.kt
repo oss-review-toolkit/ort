@@ -17,237 +17,227 @@
  * License-Filename: LICENSE
  */
 
-@file:Suppress("TooManyFunctions")
-
 package org.ossreviewtoolkit.plugins.packagemanagers.node.utils
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.core.JsonProcessingException
-import com.fasterxml.jackson.databind.node.ArrayNode
-
 import java.io.File
-import java.lang.invoke.MethodHandles
 import java.nio.file.FileSystems
 import java.nio.file.PathMatcher
 
-import org.apache.logging.log4j.kotlin.loggerOf
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.readTree
-import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.plugins.packagemanagers.node.Yarn2
 import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.ort.showStackTrace
-
-private val logger = loggerOf(MethodHandles.lookup().lookupClass())
 
 /**
- * Return whether the [directory] contains an NPM lock file.
+ * A class to detect the package managers used for the give [definitionFiles].
  */
-internal fun hasNpmLockFile(directory: File) =
-    NPM_LOCK_FILES.any { lockfile ->
-        File(directory, lockfile).isFile
+class NpmDetection(private val definitionFiles: Collection<File>) {
+    /**
+     * A map of project directories to the set of package managers that are most likely responsible for the project. If
+     * the set is empty, none of the package managers is responsible.
+     */
+    private val projectDirManagers: Map<File, Set<NodePackageManager>> by lazy {
+        definitionFiles.associate { file ->
+            val projectDir = file.parentFile
+            projectDir to NodePackageManager.forDirectory(projectDir)
+        }
     }
 
-private val NPM_LOCK_FILES = listOf("npm-shrinkwrap.json", "package-lock.json")
-
-/**
- * Return whether the [directory] contains a PNPM lock file.
- */
-internal fun hasPnpmLockFile(directory: File) =
-    PNPM_LOCK_FILES.any { lockfile ->
-        File(directory, lockfile).isFile
+    /**
+     * A map of project directories to the set of workspace patterns for the project. If a project directory does not
+     * define a workspace, the list of patterns is empty.
+     */
+    private val workspacePatterns: Map<File, List<PathMatcher>> by lazy {
+        definitionFiles.associate { file ->
+            val projectDir = file.parentFile
+            val patterns = NodePackageManager.entries.mapNotNull { it.getWorkspaces(projectDir) }.flatten()
+            projectDir to patterns.map { FileSystems.getDefault().getPathMatcher("glob:$it") }
+        }
     }
 
-private val PNPM_LOCK_FILES = listOf("pnpm-lock.yaml")
+    /**
+     * Return the roots of the workspace that [projectDir] is part of. It could be multiple roots if multiple package
+     * managers define overlapping workspaces. If [projectDir] does not belong to any workspace, the empty set is
+     * returned.
+     */
+    private fun getWorkspaceRoots(projectDir: File): Set<File> =
+        workspacePatterns.filter { (_, patterns) ->
+            patterns.any { it.matches(projectDir.toPath()) }
+        }.keys
 
-/**
- * Return whether the [directory] contains a Yarn lock file.
- */
-internal fun hasYarnLockFile(directory: File) =
-    YARN_LOCK_FILES.any { lockfile ->
-        File(directory, lockfile).isFile
-    }
+    /**
+     * Return those [definitionFiles] that define root projects for the given [manager].
+     */
+    fun filterApplicable(manager: NodePackageManager): List<File> =
+        definitionFiles.filter { file ->
+            val projectDir = file.parentFile
 
-private val YARN_LOCK_FILES = listOf("yarn.lock")
+            // Try to clearly determine the package manager from specific files.
+            val managersFromFiles = projectDirManagers[projectDir].orEmpty()
+            when {
+                manager !in managersFromFiles -> return@filter false
+                managersFromFiles.size == 1 -> {
+                    logger.info { "Detected '$file' to be the root of a(n) $manager project." }
+                    return@filter true
+                }
+            }
 
-/**
- * Return whether the [directory] contains a Yarn resource file in YAML format, specific to Yarn 2+.
- * Yarn1 has a non-YAML `.yarnrc` configuration file.
- */
-internal fun hasYarn2ResourceFile(directory: File) = directory.resolve(Yarn2.YARN2_RESOURCE_FILE).isFile
+            // Fall back to determining the package manager from workspaces.
+            val managersFromWorkspaces = getWorkspaceRoots(projectDir).mapNotNull {
+                projectDirManagers[it]
+            }.flatten()
 
-/**
- * Map [definitionFiles] to contain only files handled by NPM.
- */
-internal fun mapDefinitionFilesForNpm(definitionFiles: Collection<File>): Set<File> =
-    getPackageJsonInfo(definitionFiles.toSet())
-        .filter { !it.isHandledByYarn && !it.isHandledByPnpm }
-        .mapTo(mutableSetOf()) { it.definitionFile }
+            when {
+                manager !in managersFromWorkspaces -> return@filter false
+                managersFromWorkspaces.size == 1 -> {
+                    logger.info { "Skipping '$file' as it is part of an implicitly handled $manager workspace." }
+                    return@filter false
+                }
+            }
 
-/**
- * Map [definitionFiles] to contain only files handled by PNPM.
- */
-internal fun mapDefinitionFilesForPnpm(definitionFiles: Collection<File>): Set<File> =
-    getPackageJsonInfo(definitionFiles.toSet())
-        .filter { it.isHandledByPnpm && !it.isPnpmWorkspaceSubmodule }
-        .mapTo(mutableSetOf()) { it.definitionFile }
-
-/**
- * Map [definitionFiles] to contain only files handled by Yarn.
- */
-internal fun mapDefinitionFilesForYarn(definitionFiles: Collection<File>): Set<File> =
-    getPackageJsonInfo(definitionFiles.toSet())
-        .filter { it.isHandledByYarn && !it.isYarnWorkspaceSubmodule && !it.hasYarn2ResourceFile }
-        .mapTo(mutableSetOf()) { it.definitionFile }
-
-/**
- * Map [definitionFiles] to contain only files handled by Yarn 2+.
- */
-internal fun mapDefinitionFilesForYarn2(definitionFiles: Collection<File>): Set<File> =
-    getPackageJsonInfo(definitionFiles.toSet())
-        .filter { it.isHandledByYarn && !it.isYarnWorkspaceSubmodule && it.hasYarn2ResourceFile }
-        .mapTo(mutableSetOf()) { it.definitionFile }
-
-private data class PackageJsonInfo(
-    val definitionFile: File,
-    val hasYarnLockfile: Boolean = false,
-    val hasYarn2ResourceFile: Boolean = false,
-    val hasNpmLockfile: Boolean = false,
-    val hasPnpmLockfile: Boolean = false,
-    val isPnpmWorkspaceRoot: Boolean = false,
-    val isPnpmWorkspaceSubmodule: Boolean = false,
-    val isYarnWorkspaceRoot: Boolean = false,
-    val isYarnWorkspaceSubmodule: Boolean = false
-) {
-    val isHandledByPnpm = isPnpmWorkspaceRoot || isPnpmWorkspaceSubmodule || hasPnpmLockfile
-    val isHandledByYarn = isYarnWorkspaceRoot || isYarnWorkspaceSubmodule || hasYarnLockfile
-}
-
-private fun getPackageJsonInfo(definitionFiles: Set<File>): Collection<PackageJsonInfo> {
-    fun isPnpmWorkspaceRoot(directory: File) = directory.resolve("pnpm-workspace.yaml").isFile
-
-    fun isYarnWorkspaceRoot(definitionFile: File) =
-        try {
-            definitionFile.readTree().has("workspaces")
-        } catch (e: JsonProcessingException) {
-            e.showStackTrace()
-
-            logger.error {
-                "Could not parse '${definitionFile.invariantSeparatorsPath}': ${e.collectMessages()}"
+            logger.warn {
+                val managers = managersFromFiles + managersFromWorkspaces
+                "Ignoring '$file' directory as the package manager is unclear. It could be any of " +
+                    "${managers.joinToString()}."
             }
 
             false
         }
-
-    val pnpmWorkspaceSubmodules = getPnpmWorkspaceSubmodules(definitionFiles)
-    val yarnWorkspaceSubmodules = getYarnWorkspaceSubmodules(definitionFiles)
-
-    return definitionFiles.map { definitionFile ->
-        PackageJsonInfo(
-            definitionFile = definitionFile,
-            isPnpmWorkspaceRoot = isPnpmWorkspaceRoot(definitionFile.parentFile),
-            isYarnWorkspaceRoot = isYarnWorkspaceRoot(definitionFile) &&
-                !isPnpmWorkspaceRoot(definitionFile.parentFile),
-            hasYarnLockfile = hasYarnLockFile(definitionFile.parentFile),
-            hasNpmLockfile = hasNpmLockFile(definitionFile.parentFile),
-            hasPnpmLockfile = hasPnpmLockFile(definitionFile.parentFile),
-            hasYarn2ResourceFile = hasYarn2ResourceFile(definitionFile.parentFile),
-            isPnpmWorkspaceSubmodule = definitionFile in pnpmWorkspaceSubmodules,
-            isYarnWorkspaceSubmodule = definitionFile in yarnWorkspaceSubmodules &&
-                definitionFile !in pnpmWorkspaceSubmodules
-        )
-    }
 }
 
-private fun getPnpmWorkspaceMatchers(definitionFile: File): List<PathMatcher> {
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    data class PnpmWorkspaces(val packages: List<String> = emptyList())
+/**
+ * An enum of all supported Node package managers.
+ */
+enum class NodePackageManager(
+    val lockFileName: String,
+    val markerFileName: String? = null,
+    val workspaceFileName: String = NodePackageManager.DEFINITION_FILE
+) {
+    NPM("package-lock.json", markerFileName = "npm-shrinkwrap.json") {
+        override fun hasLockFile(projectDir: File): Boolean =
+            super.hasLockFile(projectDir) || hasNonEmptyFile(projectDir, markerFileName)
+    },
 
-    fun String.isComment() = trim().startsWith("#")
+    PNPM("pnpm-lock.yaml", workspaceFileName = "pnpm-workspace.yaml") {
+        override fun getWorkspaces(projectDir: File): List<String>? {
+            val workspaceFile = projectDir.resolve(workspaceFileName)
+            if (!workspaceFile.isFile) return null
 
-    val pnpmWorkspaceFile = definitionFile.resolveSibling("pnpm-workspace.yaml")
+            val packages = runCatching {
+                workspaceFile.readTree().get("packages")
+            }.onFailure {
+                logger.error { "Failed to parse '$workspaceFile': ${it.collectMessages()}" }
+            }.getOrNull() ?: return null
 
-    return if (pnpmWorkspaceFile.isFile && pnpmWorkspaceFile.readLines().any { !it.isComment() }) {
-        val workspaceMatchers = pnpmWorkspaceFile.readValue<PnpmWorkspaces>().packages
-
-        workspaceMatchers.map { matcher ->
-            val pattern = "glob:${definitionFile.parentFile.invariantSeparatorsPath}/${matcher.removeSuffix("/")}"
-            FileSystems.getDefault().getPathMatcher(pattern)
+            return packages.map { "${workspaceFile.parentFile.invariantSeparatorsPath}/${it.textValue()}" }
         }
-    } else {
-        // Empty "pnpm-workspace.yaml" files can be used for regular projects within a workspace setup, see
-        // https://github.com/pnpm/pnpm/issues/2412.
-        emptyList()
-    }
-}
+    },
 
-private fun getPnpmWorkspaceSubmodules(definitionFiles: Set<File>): Set<File> {
-    val result = mutableSetOf<File>()
+    YARN("yarn.lock") {
+        private val lockFileMarker = "# yarn lockfile v1"
 
-    definitionFiles.forEach { definitionFile ->
-        val pnpmWorkspacesFile = definitionFile.resolveSibling("pnpm-workspace.yaml")
+        override fun hasLockFile(projectDir: File): Boolean {
+            val lockFile = projectDir.resolve(lockFileName)
+            if (!lockFile.isFile) return false
 
-        if (pnpmWorkspacesFile.isFile) {
-            val pathMatchers = getPnpmWorkspaceMatchers(definitionFile)
-
-            pathMatchers.forEach { matcher ->
-                definitionFiles.forEach inner@{ other ->
-                    val projectDir = other.parentFile.toPath()
-                    if (other != definitionFile && matcher.matches(projectDir)) {
-                        result += other
-                        return@inner
-                    }
-                }
-            }
-        } else {
-            return@forEach
-        }
-    }
-
-    return result
-}
-
-private fun getYarnWorkspaceSubmodules(definitionFiles: Set<File>): Set<File> {
-    fun getWorkspaceMatchers(definitionFile: File): List<PathMatcher> {
-        var workspaces = try {
-            definitionFile.readTree().get("workspaces")
-        } catch (e: JsonProcessingException) {
-            e.showStackTrace()
-
-            logger.error { "Could not parse '${definitionFile.invariantSeparatorsPath}': ${e.collectMessages()}" }
-
-            null
-        }
-
-        if (workspaces != null && workspaces !is ArrayNode) {
-            workspaces = workspaces["packages"]
-        }
-
-        return workspaces?.map {
-            val pattern = "glob:${definitionFile.parentFile.invariantSeparatorsPath}/${it.textValue()}"
-            FileSystems.getDefault().getPathMatcher(pattern)
-        }.orEmpty()
-    }
-
-    val result = mutableSetOf<File>()
-
-    definitionFiles.forEach { definitionFile ->
-        val workspaceMatchers = getWorkspaceMatchers(definitionFile)
-        workspaceMatchers.forEach { matcher ->
-            definitionFiles.forEach inner@{ other ->
-                // Since yarn workspaces matchers support '*' and '**' to match multiple directories the matcher
-                // cannot be used as is for matching the 'package.json' file. Thus matching against the project
-                // directory since this works out of the box. See also:
-                //   https://github.com/yarnpkg/yarn/issues/3986
-                //   https://github.com/yarnpkg/yarn/pull/5607
-                val projectDir = other.parentFile.toPath()
-                if (other != definitionFile && matcher.matches(projectDir)) {
-                    result += other
-                    return@inner
-                }
+            return lockFile.useLines { lines ->
+                lines.take(2).lastOrNull() == lockFileMarker
             }
         }
+    },
+
+    YARN2("yarn.lock", markerFileName = ".yarnrc.yml") {
+        private val lockFileMarker = "__metadata:"
+
+        override fun hasLockFile(projectDir: File): Boolean {
+            val lockFile = projectDir.resolve(lockFileName)
+            if (!lockFile.isFile) return false
+
+            return lockFile.useLines { lines ->
+                lines.take(4).lastOrNull() == lockFileMarker
+            }
+        }
+    };
+
+    companion object {
+        /**
+         * The name of the definition file used by all Node package managers.
+         */
+        const val DEFINITION_FILE = "package.json"
+
+        /**
+         * A regular expression to find an asterisk that is not surrounded by another asterisk.
+         */
+        private val WORKSPACES_SINGLE_ASTERISK_REGEX = Regex("(?<!\\*)\\*(?!\\*)")
+
+        /**
+         * Return the set of package managers that are most likely responsible for the given [projectDir].
+         */
+        fun forDirectory(projectDir: File): Set<NodePackageManager> {
+            val scores = NodePackageManager.entries.associateWith {
+                it.getFileScore(projectDir)
+            }
+
+            // Get the overall maximum score.
+            val maxScore = scores.maxBy { it.value }
+
+            // Get all package managers with the maximum score.
+            return scores.filter { it.value == maxScore.value }.keys
+        }
     }
 
-    return result
+    /**
+     * Return true if the [projectDir] contains a lock file for this package manager, or return false otherwise.
+     */
+    open fun hasLockFile(projectDir: File): Boolean = hasNonEmptyFile(projectDir, lockFileName)
+
+    /**
+     * If the [projectDir] contains a workspace file for this package manager, return the list of package patterns, or
+     * return null otherwise.
+     */
+    open fun getWorkspaces(projectDir: File): List<String>? {
+        val workspaceFile = projectDir.resolve(workspaceFileName)
+        if (!workspaceFile.isFile) return null
+
+        val workspaces = runCatching {
+            workspaceFile.readTree().get("workspaces")
+        }.onFailure {
+            logger.error { "Failed to parse '$workspaceFile': ${it.collectMessages()}" }
+        }.getOrNull() ?: return null
+
+        val packages = when {
+            workspaces.isArray -> workspaces
+            workspaces.isObject -> workspaces["packages"]
+            else -> null
+        } ?: run {
+            logger.warn { "Unable to read workspaces from '$workspaceFile'." }
+            return null
+        }
+
+        return packages.map {
+            val pattern = "${workspaceFile.parentFile.invariantSeparatorsPath}/${it.textValue()}"
+
+            // NPM and Yarn treat "*" as an alias for "**", so replace any single "*" with "**".
+            pattern.replace(WORKSPACES_SINGLE_ASTERISK_REGEX, "**")
+        }
+    }
+
+    /**
+     * Return a score for the [projectDir] based on the presence of files specific to this package manager.
+     * The higher the score, the more likely it is that the [projectDir] is managed by this package manager.
+     */
+    fun getFileScore(projectDir: File): Int =
+        listOf(
+            hasLockFile(projectDir),
+            hasNonEmptyFile(projectDir, markerFileName),
+            // Only count the presence of an additional workspace file if it is not the definition file.
+            workspaceFileName != DEFINITION_FILE && hasNonEmptyFile(projectDir, workspaceFileName)
+        ).count { it }
 }
+
+/**
+ * Return true if [fileName] is not null and the [projectDir] contains a non-empty file named [fileName], or return
+ * false otherwise.
+ */
+private fun hasNonEmptyFile(projectDir: File, fileName: String?): Boolean =
+    fileName != null && projectDir.resolve(fileName).let { it.isFile && it.length() > 0 }

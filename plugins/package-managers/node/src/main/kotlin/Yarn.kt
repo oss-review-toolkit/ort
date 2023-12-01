@@ -31,8 +31,8 @@ import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
-import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.hasYarnLockFile
-import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.mapDefinitionFilesForYarn
+import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NodePackageManager
+import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NpmDetection
 import org.ossreviewtoolkit.utils.common.DiskCache
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.mebibytes
@@ -66,13 +66,14 @@ class Yarn(
         ) = Yarn(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
-    override fun hasLockFile(projectDir: File) = hasYarnLockFile(projectDir)
+    override fun hasLockFile(projectDir: File) = NodePackageManager.YARN.hasLockFile(projectDir)
 
     override fun command(workingDir: File?) = if (Os.isWindows) "yarn.cmd" else "yarn"
 
     override fun getVersionRequirement(): RangesList = RangesListFactory.create("1.3.* - 1.22.*")
 
-    override fun mapDefinitionFiles(definitionFiles: List<File>) = mapDefinitionFilesForYarn(definitionFiles).toList()
+    override fun mapDefinitionFiles(definitionFiles: List<File>) =
+        NpmDetection(definitionFiles).filterApplicable(NodePackageManager.YARN)
 
     override fun beforeResolution(definitionFiles: List<File>) =
         // We do not actually depend on any features specific to a Yarn version, but we still want to stick to a

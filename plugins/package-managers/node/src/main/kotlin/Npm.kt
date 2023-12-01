@@ -59,12 +59,12 @@ import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.readTree
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
+import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NpmDependencyHandler
+import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NpmDetection
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NpmModuleInfo
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.expandNpmShortcutUrl
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.fixNpmDownloadUrl
-import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.hasNpmLockFile
-import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.mapDefinitionFilesForNpm
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.parseNpmAuthors
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.parseNpmLicenses
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.parseNpmVcsInfo
@@ -134,7 +134,7 @@ open class Npm(
      */
     protected open val modulesSearchDepth = Int.MAX_VALUE
 
-    protected open fun hasLockFile(projectDir: File) = hasNpmLockFile(projectDir)
+    protected open fun hasLockFile(projectDir: File) = NodePackageManager.NPM.hasLockFile(projectDir)
 
     /**
      * Check if [this] represents a workspace within a `node_modules` directory.
@@ -161,7 +161,8 @@ open class Npm(
 
     override fun getVersionRequirement(): RangesList = RangesListFactory.create("6.* - 10.*")
 
-    override fun mapDefinitionFiles(definitionFiles: List<File>) = mapDefinitionFilesForNpm(definitionFiles).toList()
+    override fun mapDefinitionFiles(definitionFiles: List<File>) =
+        NpmDetection(definitionFiles).filterApplicable(NodePackageManager.NPM)
 
     override fun beforeResolution(definitionFiles: List<File>) {
         // We do not actually depend on any features specific to an NPM version, but we still want to stick to a
