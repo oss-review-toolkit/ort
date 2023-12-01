@@ -84,10 +84,9 @@ interface DOSService {
         val message: String? = null
     )
 
-    // TODO: When backend is ready, change the purl to a list of purls
     @Serializable
     data class ScanResultsRequestBody(
-        val purl: String? = null,
+        val purls: List<String>? = null,
         val options: ReqOptions? = null
     ) {
         @Serializable
@@ -99,12 +98,13 @@ interface DOSService {
     @Serializable
     data class ScanResultsResponseBody(
         var state: State,
+        val purls: List<String>? = null,
         val results: JsonElement? = null
     ) {
         @Serializable
         data class State(
             var status: String,
-            val id: String? = null
+            val jobId: String? = null
         )
     }
 
@@ -112,7 +112,7 @@ interface DOSService {
     @Serializable
     data class JobRequestBody(
         val zipFileKey: String? = null,
-        val purl: String? = null
+        val purls: List<String>? = null
     )
 
     @Serializable
