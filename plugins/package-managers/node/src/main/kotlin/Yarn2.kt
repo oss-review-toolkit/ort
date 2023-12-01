@@ -58,8 +58,9 @@ import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NodePackageManager
+import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NpmDetection
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.fixNpmDownloadUrl
-import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.mapDefinitionFilesForYarn2
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.parseNpmAuthors
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.parseNpmLicenses
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.parseNpmVcsInfo
@@ -195,7 +196,8 @@ class Yarn2(
 
     override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=2.0.0")
 
-    override fun mapDefinitionFiles(definitionFiles: List<File>) = mapDefinitionFilesForYarn2(definitionFiles).toList()
+    override fun mapDefinitionFiles(definitionFiles: List<File>) =
+        NpmDetection(definitionFiles).filterApplicable(NodePackageManager.YARN2)
 
     override fun beforeResolution(definitionFiles: List<File>) =
         // We depend on a version >= 2, so we check the version for safety.

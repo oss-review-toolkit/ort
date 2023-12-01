@@ -20,252 +20,256 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.node.utils
 
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.core.test.TestCase
-import io.kotest.core.test.TestResult
 import io.kotest.engine.spec.tempdir
 import io.kotest.inspectors.forAll
-import io.kotest.matchers.collections.beEmpty
-import io.kotest.matchers.collections.containExactly
-import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-import java.io.File
+import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NodePackageManager.NPM
+import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NodePackageManager.PNPM
+import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NodePackageManager.YARN
+import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NodePackageManager.YARN2
+import org.ossreviewtoolkit.utils.common.withoutPrefix
+import org.ossreviewtoolkit.utils.test.getAssetFile
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
-import org.ossreviewtoolkit.utils.common.safeMkdirs
-
-class NpmDetectionTest : WordSpec() {
-    companion object {
-        private fun createPackageJson(matchers: List<String>, flattenWorkspaceDefinition: Boolean) =
-            if (matchers.isNotEmpty()) {
-                val workspaces = matchers.joinToString(prefix = "[\"", separator = "\",\"", postfix = "\"]")
-                if (flattenWorkspaceDefinition) {
-                    "{ \"workspaces\": $workspaces }"
-                } else {
-                    "{ \"workspaces\": { \"packages\": $workspaces } }"
+class NpmDetectionTest : WordSpec({
+    "All Node package manager detections" should {
+        "ignore empty lock files" {
+            NodePackageManager.entries.forAll {
+                val lockFile = tempdir().resolve(it.lockFileName).apply {
+                    writeText("")
                 }
-            } else {
-                "{}"
-            }
 
-        private fun mapDefinitionFiles(definitionFiles: Collection<File>) =
-            mapDefinitionFilesForNpm(definitionFiles) + mapDefinitionFilesForYarn(definitionFiles)
-    }
-
-    init {
-        "hasNpmLockFile" should {
-            "return false if no NPM lockfile is present" {
-                setupProject(path = "a")
-
-                hasNpmLockFile("a") shouldBe false
-            }
-
-            "return true if an NPM lockfile present" {
-                setupProject(path = "a", hasNpmLockFile = true)
-
-                hasNpmLockFile("a") shouldBe true
+                it.hasLockFile(lockFile.parentFile) shouldBe false
             }
         }
 
-        "hasYarnLockFile" should {
-            "return false if no Yarn lockfile is present" {
-                setupProject(path = "a")
-
-                hasNpmLockFile("a") shouldBe false
-            }
-
-            "return true if a Yarn lockfile is present" {
-                setupProject(path = "a", hasYarnLockFile = true)
-
-                hasYarnLockFile("a") shouldBe true
-            }
-        }
-
-        "hasYarn2ResourceFile" should {
-            "return false if no Yarn 2+ resource file is present" {
-                setupProject(path = "a")
-
-                hasYarn2ResourceFile("a") shouldBe false
-            }
-
-            "return true if a Yarn 2+ resource file is present" {
-                setupProject(path = "a", hasYarn2ResourceFile = true)
-
-                hasYarn2ResourceFile("a") shouldBe true
-            }
-        }
-
-        "Definition file mapping" should {
-            "happen for Yarn 1 only if both Yarn and NPM lockfiles are present, but without a Yarn 2+ resource file" {
-                setupProject(path = "a", hasNpmLockFile = true, hasYarnLockFile = true)
-
-                mapDefinitionFilesForNpm(definitionFiles) should beEmpty()
-                mapDefinitionFilesForYarn(definitionFiles) should containExactly(absolutePaths("a/package.json"))
-                mapDefinitionFilesForYarn2(definitionFiles) should beEmpty()
-            }
-
-            "happen for Yarn 2+ only if both Yarn 2+ resource file and Yarn lockfile are present" {
-                setupProject(path = "a", hasYarnLockFile = true, hasYarn2ResourceFile = true)
-
-                mapDefinitionFilesForNpm(definitionFiles) should beEmpty()
-                mapDefinitionFilesForYarn(definitionFiles) should beEmpty()
-                mapDefinitionFilesForYarn2(definitionFiles) should containExactly(absolutePaths("a/package.json"))
-            }
-
-            "happen for NPM only if no lockfile is present" {
-                setupProject(path = "a")
-
-                mapDefinitionFilesForNpm(definitionFiles) should containExactly(absolutePaths("a/package.json"))
-                mapDefinitionFilesForYarn(definitionFiles) should beEmpty()
-                mapDefinitionFilesForYarn2(definitionFiles) should beEmpty()
-            }
-        }
-
-        "Workspace projects" should {
-            "not be mapped if the project path matches literally" {
-                setupProject(path = "a", matchers = listOf("b"))
-                setupProject(path = "a/b")
-                setupProject(path = "a/c")
-
-                mapDefinitionFiles(definitionFiles) should containExactlyInAnyOrder(
-                    absolutePaths("a/package.json", "a/c/package.json")
-                )
-            }
-
-            "not be mapped if * matches the project path" {
-                setupProject(path = "a", matchers = listOf("*", "*/f"))
-                setupProject(path = "a/b")
-                setupProject(path = "a/c")
-                setupProject(path = "a/d/e")
-                setupProject(path = "a/d/f")
-
-                mapDefinitionFiles(definitionFiles) should containExactlyInAnyOrder(
-                    absolutePaths("a/package.json", "a/d/e/package.json")
-                )
-            }
-
-            "not be mapped if * matches the project path (non-flattened workspace definition)" {
-                setupProject(path = "a", matchers = listOf("*", "*/f"), flattenWorkspaceDefinition = false)
-                setupProject(path = "a/b")
-                setupProject(path = "a/c")
-                setupProject(path = "a/d/e")
-                setupProject(path = "a/d/f")
-
-                mapDefinitionFiles(definitionFiles) should containExactlyInAnyOrder(
-                    absolutePaths("a/package.json", "a/d/e/package.json")
-                )
-            }
-
-            "not be mapped if ** matches the project name" {
-                setupProject(path = "a", matchers = listOf("**/d"))
-                setupProject(path = "a/b/c/d")
-                setupProject(path = "a/b/c/e")
-
-                mapDefinitionFiles(definitionFiles) should containExactlyInAnyOrder(
-                    absolutePaths("a/package.json", "a/b/c/e/package.json")
-                )
-            }
-
-            "not be mapped if ** matches the project name (non-flattened workspace definition)" {
-                setupProject(path = "a", matchers = listOf("**/d"), flattenWorkspaceDefinition = false)
-                setupProject(path = "a/b/c/d")
-                setupProject(path = "a/b/c/e")
-
-                mapDefinitionFiles(definitionFiles) should containExactlyInAnyOrder(
-                    absolutePaths("a/package.json", "a/b/c/e/package.json")
-                )
-            }
-        }
-
-        "expandNpmShortcutUrl" should {
-            "do nothing for empty URLs" {
-                expandNpmShortcutUrl("") shouldBe ""
-            }
-
-            "return valid URLs unmodified" {
-                expandNpmShortcutUrl("https://github.com/oss-review-toolkit/ort") shouldBe
-                    "https://github.com/oss-review-toolkit/ort"
-            }
-
-            "properly handle NPM shortcut URLs" {
-                val packages = mapOf(
-                    "npm/npm"
-                        to "https://github.com/npm/npm.git",
-                    "mochajs/mocha#4727d357ea"
-                        to "https://github.com/mochajs/mocha.git#4727d357ea",
-                    "user/repo#feature/branch"
-                        to "https://github.com/user/repo.git#feature/branch",
-                    "github:snyk/node-tap#540c9e00f52809cb7fbfd80463578bf9d08aad50"
-                        to "https://github.com/snyk/node-tap.git#540c9e00f52809cb7fbfd80463578bf9d08aad50",
-                    "gist:11081aaa281"
-                        to "https://gist.github.com/11081aaa281",
-                    "bitbucket:example/repo"
-                        to "https://bitbucket.org/example/repo.git",
-                    "gitlab:another/repo"
-                        to "https://gitlab.com/another/repo.git"
-                )
-
-                packages.entries.forAll { (actualUrl, expectedUrl) ->
-                    expandNpmShortcutUrl(actualUrl) shouldBe expectedUrl
+        "ignore empty workspace files" {
+            NodePackageManager.entries.forAll {
+                val workspaceFile = tempdir().resolve(it.workspaceFileName).apply {
+                    writeText("")
                 }
-            }
 
-            "not mess with crazy URLs" {
-                val packages = mapOf(
-                    "git@github.com/cisco/node-jose.git"
-                        to "git@github.com/cisco/node-jose.git",
-                    "https://git@github.com:hacksparrow/node-easyimage.git"
-                        to "https://git@github.com:hacksparrow/node-easyimage.git",
-                    "github.com/improbable-eng/grpc-web"
-                        to "github.com/improbable-eng/grpc-web"
-                )
-
-                packages.entries.forAll { (actualUrl, expectedUrl) ->
-                    expandNpmShortcutUrl(actualUrl) shouldBe expectedUrl
-                }
+                it.getWorkspaces(workspaceFile) should beNull()
             }
         }
     }
 
-    private lateinit var tempDir: File
-    private val definitionFiles = mutableSetOf<File>()
+    "Detection for directories" should {
+        "return all managers if only the definition file is present" {
+            val projectDir = tempdir().apply {
+                resolve("package.json").writeText("{}")
+            }
 
-    override suspend fun beforeEach(testCase: TestCase) {
-        tempDir = tempdir()
-        definitionFiles.clear()
+            NodePackageManager.forDirectory(projectDir) shouldContainExactlyInAnyOrder NodePackageManager.entries
+        }
+
+        "return only those managers whose lock files are present" {
+            val projectDir = tempdir().apply {
+                resolve("package.json").writeText("{}")
+                resolve(NPM.lockFileName).writeText("{}")
+                resolve(PNPM.lockFileName).writeText("#")
+            }
+
+            NodePackageManager.forDirectory(projectDir).shouldContainExactlyInAnyOrder(NPM, PNPM)
+        }
+
+        "return only NPM if distinguished by lock file" {
+            val projectDir = tempdir().apply {
+                resolve("package.json").writeText("{}")
+                resolve(NPM.lockFileName).writeText("{}")
+            }
+
+            NodePackageManager.forDirectory(projectDir).shouldContainExactlyInAnyOrder(NPM)
+        }
+
+        "return only NPM if distinguished by other file" {
+            val projectDir = tempdir().apply {
+                resolve("package.json").writeText("{}")
+                NPM.markerFileName?.also { resolve(it).writeText("{}") }
+            }
+
+            NodePackageManager.forDirectory(projectDir).shouldContainExactlyInAnyOrder(NPM)
+        }
+
+        "return only PNPM if distinguished by lock file" {
+            val projectDir = tempdir().apply {
+                resolve("package.json").writeText("{}")
+                resolve(PNPM.lockFileName).writeText("#")
+            }
+
+            NodePackageManager.forDirectory(projectDir).shouldContainExactlyInAnyOrder(PNPM)
+        }
+
+        "return only PNPM if distinguished by workspace file" {
+            val projectDir = tempdir().apply {
+                resolve("package.json").writeText("{}")
+                resolve(PNPM.workspaceFileName).writeText("#")
+            }
+
+            NodePackageManager.forDirectory(projectDir).shouldContainExactlyInAnyOrder(PNPM)
+        }
+
+        "return only YARN if distinguished by lock file" {
+            val projectDir = tempdir().apply {
+                resolve("package.json").writeText("{}")
+                resolve(YARN.lockFileName).writeText(YARN_LOCK_FILE_HEADER)
+            }
+
+            NodePackageManager.forDirectory(projectDir).shouldContainExactlyInAnyOrder(YARN)
+        }
+
+        "return only YARN2 if distinguished by lock file" {
+            val projectDir = tempdir().apply {
+                resolve("package.json").writeText("{}")
+                resolve(YARN2.lockFileName).writeText(YARN2_LOCK_FILE_HEADER)
+            }
+
+            NodePackageManager.forDirectory(projectDir).shouldContainExactlyInAnyOrder(YARN2)
+        }
     }
 
-    override suspend fun afterEach(testCase: TestCase, result: TestResult) {
-        definitionFiles.clear()
+    "NPM detection" should {
+        "recognize lock files" {
+            val lockFile = tempdir().resolve(NPM.lockFileName).apply {
+                writeText("{}")
+            }
+
+            NPM.hasLockFile(lockFile.parentFile) shouldBe true
+        }
+
+        "parse workspace files" {
+            val projectDir = getAssetFile("projects/synthetic/npm-workspaces")
+
+            NPM.getWorkspaces(projectDir) shouldNotBeNull {
+                mapNotNull { it.withoutPrefix(projectDir.path) }.shouldContainExactly("/packages/**", "/apps/**")
+            }
+        }
+
+        "filter definition files correctly" {
+            val projectDir = getAssetFile("projects/synthetic")
+            val definitionFiles = PackageManager.findManagedFiles(projectDir).values.flatten().toSet()
+
+            val filteredFiles = NpmDetection(definitionFiles).filterApplicable(NPM)
+
+            filteredFiles.map { it.toRelativeString(projectDir) } shouldContainExactlyInAnyOrder listOf(
+                "npm/node-modules/package.json",
+                "npm/package-lock/package.json",
+                "npm/shrinkwrap/package.json",
+                "npm-babel/package.json",
+                "npm-version-urls/package.json",
+                "npm-workspaces/package.json"
+            )
+        }
     }
 
-    private fun setupProject(
-        path: String,
-        matchers: List<String> = emptyList(),
-        hasNpmLockFile: Boolean = false,
-        hasYarnLockFile: Boolean = false,
-        hasYarn2ResourceFile: Boolean = false,
-        flattenWorkspaceDefinition: Boolean = true
-    ) {
-        val projectDir = tempDir.resolve(path)
+    "PNPM detection" should {
+        "recognize lock files" {
+            val lockFile = tempdir().resolve(PNPM.lockFileName).apply {
+                writeText("lockfileVersion: '6.0'")
+            }
 
-        require(!projectDir.exists())
-        projectDir.safeMkdirs()
+            PNPM.hasLockFile(lockFile.parentFile) shouldBe true
+        }
 
-        val definitionFile = projectDir.resolve("package.json")
-        definitionFile.writeText(createPackageJson(matchers, flattenWorkspaceDefinition))
-        definitionFiles += definitionFile
+        "parse workspace files" {
+            val projectDir = getAssetFile("projects/synthetic/pnpm-workspaces")
 
-        if (hasNpmLockFile) projectDir.resolve("package-lock.json").createNewFile()
-        if (hasYarnLockFile) projectDir.resolve("yarn.lock").createNewFile()
-        if (hasYarn2ResourceFile) projectDir.resolve(".yarnrc.yml").createNewFile()
+            PNPM.getWorkspaces(projectDir) shouldNotBeNull {
+                mapNotNull {
+                    it.withoutPrefix(projectDir.path)
+                }.shouldContainExactly("/src/packages/**", "/src/app/**")
+            }
+        }
+
+        "filter definition files correctly" {
+            val projectDir = getAssetFile("projects/synthetic")
+            val definitionFiles = PackageManager.findManagedFiles(projectDir).values.flatten().toSet()
+
+            val filteredFiles = NpmDetection(definitionFiles).filterApplicable(PNPM)
+
+            filteredFiles.map { it.toRelativeString(projectDir) } shouldContainExactlyInAnyOrder listOf(
+                "pnpm/package.json",
+                "pnpm-workspaces/package.json",
+                "pnpm-workspaces/src/non-workspace/package-c/package.json"
+            )
+        }
     }
 
-    private fun absolutePaths(vararg files: String): Collection<File> = files.map { tempDir.resolve(it) }
+    "Yarn detection" should {
+        "recognize lock files" {
+            val lockFile = tempdir().resolve(YARN.lockFileName).apply {
+                writeText(YARN_LOCK_FILE_HEADER)
+            }
 
-    private fun hasNpmLockFile(path: String) = hasNpmLockFile(tempDir.resolve(path))
+            YARN.hasLockFile(lockFile.parentFile) shouldBe true
+        }
 
-    private fun hasYarnLockFile(path: String) = hasYarnLockFile(tempDir.resolve(path))
+        "parse workspace files" {
+            val projectDir = getAssetFile("projects/synthetic/yarn-workspaces")
 
-    private fun hasYarn2ResourceFile(path: String) = hasYarn2ResourceFile(tempDir.resolve(path))
-}
+            YARN.getWorkspaces(projectDir) shouldNotBeNull {
+                mapNotNull { it.withoutPrefix(projectDir.path) }.shouldContainExactly("/packages/**")
+            }
+        }
+
+        "filter definition files correctly" {
+            val projectDir = getAssetFile("projects/synthetic")
+            val definitionFiles = PackageManager.findManagedFiles(projectDir).values.flatten().toSet()
+
+            val filteredFiles = NpmDetection(definitionFiles).filterApplicable(YARN)
+
+            filteredFiles.map { it.toRelativeString(projectDir) } shouldContainExactlyInAnyOrder listOf(
+                "yarn/package.json",
+                "yarn-workspaces/package.json"
+            )
+        }
+    }
+
+    "Yarn2 detection" should {
+        "recognize lock files" {
+            val lockFile = tempdir().resolve(YARN2.lockFileName).apply {
+                writeText(YARN2_LOCK_FILE_HEADER)
+            }
+
+            YARN2.hasLockFile(lockFile.parentFile) shouldBe true
+        }
+
+        "parse workspace files" {
+            val projectDir = getAssetFile("projects/synthetic/yarn2-workspaces")
+
+            YARN2.getWorkspaces(projectDir) shouldNotBeNull {
+                mapNotNull { it.withoutPrefix(projectDir.path) }.shouldContainExactly("/packages/**")
+            }
+        }
+
+        "filter definition files correctly" {
+            val projectDir = getAssetFile("projects/synthetic")
+            val definitionFiles = PackageManager.findManagedFiles(projectDir).values.flatten().toSet()
+
+            val filteredFiles = NpmDetection(definitionFiles).filterApplicable(YARN2)
+
+            filteredFiles.map { it.toRelativeString(projectDir) } shouldContainExactlyInAnyOrder listOf(
+                "yarn2/package.json",
+                "yarn2-workspaces/package.json"
+            )
+        }
+    }
+})
+
+private val YARN_LOCK_FILE_HEADER = """
+    # THIS IS AN AUTOGENERATED FILE. DO NOT EDIT THIS FILE DIRECTLY.
+    # yarn lockfile v1
+""".trimIndent()
+
+private val YARN2_LOCK_FILE_HEADER = """
+    # This file is generated by running "yarn install" inside your project.
+    # Manual changes might be lost - proceed with caution!
+
+    __metadata:
+""".trimIndent()

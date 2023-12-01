@@ -1,0 +1,17 @@
+{
+    "name": "dos-monorepo",
+    "version": "0.0.0",
+    "license": "MIT",
+    "workspaces": [
+        "packages/*",
+        "apps/*"
+    ],
+    "devDependencies": {
+        "rimraf": "5.0.5"
+    },
+    "engines": {
+        "node": "18.15.0",
+        "npm": "9.5.0"
+    },
+    "packageManager": "npm@9.5.0"
+}

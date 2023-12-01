@@ -24,8 +24,8 @@ import java.io.File
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.hasPnpmLockFile
-import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.mapDefinitionFilesForPnpm
+import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NodePackageManager
+import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NpmDetection
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.realFile
 
@@ -58,7 +58,7 @@ class Pnpm(
      */
     override val modulesSearchDepth = 2
 
-    override fun hasLockFile(projectDir: File) = hasPnpmLockFile(projectDir)
+    override fun hasLockFile(projectDir: File) = NodePackageManager.PNPM.hasLockFile(projectDir)
 
     override fun File.isWorkspaceDir() = realFile() in findWorkspaceSubmodules(analysisRoot)
 
@@ -72,7 +72,8 @@ class Pnpm(
 
     override fun getVersionRequirement(): RangesList = RangesListFactory.create("5.* - 8.*")
 
-    override fun mapDefinitionFiles(definitionFiles: List<File>) = mapDefinitionFilesForPnpm(definitionFiles).toList()
+    override fun mapDefinitionFiles(definitionFiles: List<File>) =
+        NpmDetection(definitionFiles).filterApplicable(NodePackageManager.PNPM)
 
     override fun runInstall(workingDir: File) =
         run(
