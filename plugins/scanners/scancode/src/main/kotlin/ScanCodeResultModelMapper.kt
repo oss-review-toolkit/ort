@@ -177,10 +177,12 @@ private fun mapTimeoutErrors(issues: MutableList<Issue>): Boolean {
 
     val mappedIssues = issues.map { fullError ->
         val match = TIMEOUT_ERROR_REGEX.matchEntire(fullError.message)
-        if (match?.groups?.get("timeout")?.value == ScanCode.TIMEOUT.toString()) {
+        if (match != null) {
             val file = match.groups["file"]!!.value
+            val timeout = match.groups["timeout"]!!.value
+
             fullError.copy(
-                message = "ERROR: Timeout after ${ScanCode.TIMEOUT} seconds while scanning file '$file'."
+                message = "ERROR: Timeout after $timeout seconds while scanning file '$file'."
             )
         } else {
             onlyTimeoutErrors = false
