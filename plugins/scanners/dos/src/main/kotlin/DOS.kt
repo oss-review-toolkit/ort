@@ -60,6 +60,7 @@ class DOS internal constructor(
         val summary: ScanSummary
         val issues = mutableListOf<Issue>()
         var scanResults: DOSService.ScanResultsResponseBody?
+        val purls = context.coveredPackages.getDosPurls()
 
         // Decide which provenance type this package is
         val provenance = if (pkg.vcsProcessed != VcsInfo.EMPTY && pkg.vcsProcessed.revision != "") {
@@ -74,9 +75,7 @@ class DOS internal constructor(
 
         runBlocking {
             // Ask for scan results from DOS API
-            // TODO: Pass in the whole list once supported by the client / backend
-            // When ready, remove .first() from the following line
-            scanResults = repository.getScanResults(context.coveredPackages.getDosPurls().first(), config.fetchConcluded)
+            scanResults = repository.getScanResults(purls, config.fetchConcluded)
             if (scanResults == null) {
                 issues.add(createAndLogIssue(name, "Could not request scan results from DOS API", Severity.ERROR))
                 return@runBlocking
@@ -91,7 +90,7 @@ class DOS internal constructor(
 
                     // Start backend scanning
                     scanResults = runBackendScan(
-                        context.coveredPackages.getDosPurls(),
+                        purls,
                         dosDir,
                         tmpDir,
                         thisScanStartTime,
@@ -102,7 +101,7 @@ class DOS internal constructor(
                         return@runBlocking
                     }
                 }
-                "pending" -> scanResults?.state?.id?.let { waitForPendingScan(pkg.purl, it, thisScanStartTime) }
+                "pending" -> scanResults?.state?.jobId?.let { waitForPendingScan(purls.first(), it, thisScanStartTime) }
                 "ready" -> { /* Results exist, form an ORT result and move on to the next package */ }
             }
         }
@@ -168,7 +167,7 @@ class DOS internal constructor(
         deleteFileOrDir(targetZipFile)  // make sure the zipped packet is always deleted locally
 
         // Send the scan job to DOS API to start the backend scanning and do local cleanup
-        val jobResponse = repository.postScanJob(zipName, purls.first()) // TODO: Pass in the whole list once supported by the client / backend.
+        val jobResponse = repository.postScanJob(zipName, purls)
         val id = jobResponse?.scannerJobId
 
         if (jobResponse != null) {
@@ -215,7 +214,7 @@ class DOS internal constructor(
                 when (jobState.state.status) {
                     "completed" -> {
                         logger.info { "Scan completed" }
-                        return repository.getScanResults(purl, config.fetchConcluded)
+                        return repository.getScanResults(listOf(purl), config.fetchConcluded)
                     }
                     "failed" -> {
                         logger.error { "Scan failed" }
