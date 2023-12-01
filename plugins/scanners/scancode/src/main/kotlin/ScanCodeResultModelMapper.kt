@@ -19,7 +19,29 @@
 
 package org.ossreviewtoolkit.plugins.scanners.scancode
 
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+
+import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.Issue
+import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.model.mapLicense
+import org.ossreviewtoolkit.model.utils.associateLicensesWithExceptions
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
+import org.ossreviewtoolkit.utils.spdx.toSpdxId
+
+import org.semver4j.Semver
+
+const val MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION = 3
+
+private val LICENSE_REF_PREFIX_SCAN_CODE = "${SpdxConstants.LICENSE_REF_PREFIX}${ScanCode.SCANNER_NAME.lowercase()}-"
+
+private val TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HHmmss.n").withZone(ZoneId.of("UTC"))
 
 // Note: The "(File: ...)" part in the patterns below is actually added by our own getRawResult() function.
 private val UNKNOWN_ERROR_REGEX = Regex(
@@ -33,10 +55,100 @@ private val TIMEOUT_ERROR_REGEX = Regex(
         "ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds. \\(File: (?<file>.+)\\)"
 )
 
+private data class LicenseMatch(
+    val expression: String,
+    val startLine: Int,
+    val endLine: Int,
+    val score: Float
+)
+
+fun ScanCodeResult.toScanSummary(): ScanSummary {
+    val licenseFindings = mutableSetOf<LicenseFinding>()
+    val copyrightFindings = mutableSetOf<CopyrightFinding>()
+    val issues = mutableListOf<Issue>()
+
+    val header = headers.single()
+
+    val outputFormatVersion = header.outputFormatVersion?.let { Semver(it) }
+    if (outputFormatVersion != null && outputFormatVersion.major > MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION) {
+        issues += ScanCode.createAndLogIssue(
+            source = ScanCode.SCANNER_NAME,
+            message = "The output format version $outputFormatVersion exceeds the supported major version " +
+                "$MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION. Results may be incomplete or incorrect.",
+            severity = Severity.WARNING
+        )
+    }
+
+    val filesOfTypeFile = files.filter { it.type == "file" }
+
+    // Build a map of all ScanCode license keys in the result associated with their corresponding SPDX ID.
+    val scanCodeKeyToSpdxIdMappings = licenseReferences?.associate { it.key to it.spdxLicenseKey }
+        ?: files.flatMap { file ->
+            file.licenses.filterIsInstance<LicenseEntry.Version1>().map { license ->
+                license.key to getSpdxId(license.spdxLicenseKey, license.key)
+            }
+        }.toMap()
+
+    filesOfTypeFile.forEach { file ->
+        // ScanCode creates separate license entries for each license in an expression. Deduplicate these by grouping by
+        // the same expression.
+        val licenses = file.licenses.groupBy {
+            LicenseMatch(it.licenseExpression, it.startLine, it.endLine, it.score)
+        }.map {
+            // Arbitrarily take the first of the duplicate license entries.
+            it.value.first()
+        }
+
+        licenses.mapTo(licenseFindings) { license ->
+            // ScanCode uses its own license keys as identifiers in license expressions.
+            val spdxLicenseExpression = license.licenseExpression.mapLicense(scanCodeKeyToSpdxIdMappings)
+
+            LicenseFinding(
+                license = spdxLicenseExpression,
+                location = TextLocation(
+                    path = file.path,
+                    startLine = license.startLine,
+                    endLine = license.endLine
+                ),
+                score = license.score
+            )
+        }
+
+        file.copyrights.mapTo(copyrightFindings) { copyright ->
+            CopyrightFinding(
+                statement = copyright.statement,
+                location = TextLocation(
+                    path = file.path,
+                    startLine = copyright.startLine,
+                    endLine = copyright.endLine
+                )
+            )
+        }
+    }
+
+    return ScanSummary(
+        startTime = TIMESTAMP_FORMATTER.parse(header.startTimestamp).query(Instant::from),
+        endTime = TIMESTAMP_FORMATTER.parse(header.endTimestamp).query(Instant::from),
+        licenseFindings = associateLicensesWithExceptions(licenseFindings),
+        copyrightFindings = copyrightFindings,
+        issues = issues + mapScanErrors(this)
+    )
+}
+
+private fun getSpdxId(spdxLicenseKey: String?, key: String): String {
+    // There is a bug in ScanCode 3.0.2 that returns an empty string instead of null for licenses unknown to SPDX.
+    val spdxId = spdxLicenseKey.orEmpty().toSpdxId(allowPlusSuffix = true)
+
+    if (spdxId.isNotEmpty()) return spdxId
+
+    // Fall back to building an ID based on the ScanCode-specific "key".
+    return "$LICENSE_REF_PREFIX_SCAN_CODE${key.toSpdxId(allowPlusSuffix = true)}"
+}
+
 /**
  * Map scan errors for all files using messages that contain the relative file path.
  */
-internal fun mapScanErrors(result: ScanCodeResult): List<Issue> {
+private fun mapScanErrors(result: ScanCodeResult): List<Issue> {
     val input = result.headers.single().options.input.single()
     return result.files.flatMap { file ->
         val path = file.path.removePrefix(input).removePrefix("/")
