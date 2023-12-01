@@ -36,7 +36,7 @@ fun parseResult(result: File) = parseResult(result.readText())
 
 fun parseResult(result: String) = parseResult(Json.parseToJsonElement(result))
 
-fun parseResult(result: JsonElement): ScanCodeResult {
+private fun parseResult(result: JsonElement): ScanCodeResult {
     // As even the structure of the header itself may change with the output format version, first operate on raw JSON
     // elements to get the version, and then parse the JSON elements into the appropriate data classes.
     val header = result.jsonObject.getValue("headers").jsonArray.single().jsonObject
