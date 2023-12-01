@@ -73,22 +73,17 @@ class ScanCodeResultParserTest : FreeSpec({
         }
 
         for (version in 1..MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION) {
+            val resultFile = getAssetFile("scancode-output-format-$version.0.0_mime-types-2.1.18.json")
+            val summary = parseResult(resultFile).toScanSummary()
+
             "for output format $version.0.0 should" - {
                 "get correct counts" {
-                    val resultFile = getAssetFile("scancode-output-format-$version.0.0_mime-types-2.1.18.json")
-
-                    val summary = parseResult(resultFile).toScanSummary()
-
                     summary.licenseFindings shouldHaveSize 5
                     summary.copyrightFindings shouldHaveSize 4
                     summary.issues shouldHaveSize 1
                 }
 
                 "properly summarize license findings" {
-                    val resultFile = getAssetFile("/scancode-output-format-$version.0.0_mime-types-2.1.18.json")
-
-                    val summary = parseResult(resultFile).toScanSummary()
-
                     summary should containLicensesExactly("MIT")
                     summary should containLocationsForLicenseExactly(
                         "MIT",
@@ -101,10 +96,6 @@ class ScanCodeResultParserTest : FreeSpec({
                 }
 
                 "properly summarize copyright findings" {
-                    val resultFile = getAssetFile("/scancode-output-format-$version.0.0_mime-types-2.1.18.json")
-
-                    val summary = parseResult(resultFile).toScanSummary()
-
                     summary should containCopyrightsExactly(
                         "Copyright (c) 2014 Jonathan Ong" to
                             listOf(TextLocation("index.js", 3)),
