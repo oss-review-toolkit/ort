@@ -14,6 +14,7 @@ import org.ossreviewtoolkit.model.*
 import org.ossreviewtoolkit.model.config.*
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.model.utils.vcsPath
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.PackageConfigurationProviderFactory
 import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
@@ -52,7 +53,7 @@ class DosPackageConfigurationProvider(config: DosPackageConfigurationProviderCon
     private var repository = DOSRepository(service)
 
     override fun getPackageConfigurations(packageId: Identifier, provenance: Provenance): List<PackageConfiguration> {
-        val purl = packageId.toPurl()
+        val purl = packageId.toPurl(subpath = provenance.vcsPath)
 
         val packageResults = runBlocking { repository.postPackageConfiguration(purl) }
         if (packageResults == null) {

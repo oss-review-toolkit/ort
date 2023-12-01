@@ -84,6 +84,7 @@ class DOSRepository(private val dosService: DOSService) {
      *   being scanned, return "pending" message
      * - otherwise, return "null"
      */
+    // TODO: When backend is ready, change the purl to a list of purls
     suspend fun getScanResults(purl: String, fetchConcluded: Boolean): DOSService.ScanResultsResponseBody? {
         if (purl.isEmpty()) {
             logger.error { "Need the package URL to check for scan results" }
@@ -114,6 +115,7 @@ class DOSRepository(private val dosService: DOSService) {
     /**
      * Post a new scan job to DOS API for [zipFileKey] and [purl].
      */
+    // TODO: When backend is ready, change the purl to a list of purls
     suspend fun postScanJob(zipFileKey: String, purl: String): DOSService.JobResponseBody? {
         if (zipFileKey.isEmpty() || purl.isEmpty()) {
             logger.error { "Need the Zip filename and package URL to send the scan job" }

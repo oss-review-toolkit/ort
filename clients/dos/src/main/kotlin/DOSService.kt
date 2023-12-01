@@ -84,6 +84,7 @@ interface DOSService {
         val message: String? = null
     )
 
+    // TODO: When backend is ready, change the purl to a list of purls
     @Serializable
     data class ScanResultsRequestBody(
         val purl: String? = null,
@@ -107,7 +108,7 @@ interface DOSService {
         )
     }
 
-    // When backend is ready, change the purl to a list of purls
+    // TODO: When backend is ready, change the purl to a list of purls
     @Serializable
     data class JobRequestBody(
         val zipFileKey: String? = null,
