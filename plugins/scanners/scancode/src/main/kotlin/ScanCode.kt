@@ -178,16 +178,8 @@ class ScanCode internal constructor(
         }
     }
 
-    override fun createSummary(result: String, startTime: Instant, endTime: Instant): ScanSummary {
-        val summary = parseResult(result).toScanSummary()
-
-        val issues = summary.issues.toMutableList()
-
-        mapUnknownErrors(issues)
-        mapTimeoutErrors(issues)
-
-        return summary.copy(issues = issues)
-    }
+    override fun createSummary(result: String, startTime: Instant, endTime: Instant): ScanSummary =
+        parseResult(result).toScanSummary()
 
     /**
      * Execute ScanCode with the configured arguments to scan the given [path] and produce [resultFile].

@@ -126,12 +126,17 @@ fun ScanCodeResult.toScanSummary(): ScanSummary {
         }
     }
 
+    issues += mapScanErrors(this)
+
+    mapUnknownErrors(issues)
+    mapTimeoutErrors(issues)
+
     return ScanSummary(
         startTime = TIMESTAMP_FORMATTER.parse(header.startTimestamp).query(Instant::from),
         endTime = TIMESTAMP_FORMATTER.parse(header.endTimestamp).query(Instant::from),
         licenseFindings = associateLicensesWithExceptions(licenseFindings),
         copyrightFindings = copyrightFindings,
-        issues = issues + mapScanErrors(this)
+        issues = issues
     )
 }
 
@@ -165,7 +170,7 @@ private fun mapScanErrors(result: ScanCodeResult): List<Issue> {
  * Map messages about timeout errors to a more compact form. Return true if solely timeout errors occurred, return false
  * otherwise.
  */
-internal fun mapTimeoutErrors(issues: MutableList<Issue>): Boolean {
+private fun mapTimeoutErrors(issues: MutableList<Issue>): Boolean {
     if (issues.isEmpty()) return false
 
     var onlyTimeoutErrors = true
@@ -193,7 +198,7 @@ internal fun mapTimeoutErrors(issues: MutableList<Issue>): Boolean {
  * Map messages about unknown errors to a more compact form. Return true if solely memory errors occurred, return false
  * otherwise.
  */
-internal fun mapUnknownErrors(issues: MutableList<Issue>): Boolean {
+private fun mapUnknownErrors(issues: MutableList<Issue>): Boolean {
     if (issues.isEmpty()) return false
 
     var onlyMemoryErrors = true
