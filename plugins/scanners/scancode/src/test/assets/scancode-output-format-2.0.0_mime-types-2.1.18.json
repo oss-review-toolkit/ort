@@ -2,7 +2,7 @@
   "headers": [
     {
       "tool_name": "scancode-toolkit",
-      "tool_version": "31.2.1",
+      "tool_version": "31.2.3",
       "options": {
         "input": [
           "."
@@ -13,25 +13,27 @@
         "--license": true,
         "--processes": "3",
         "--strip-root": true,
-        "--timeout": "300.0"
+        "--timeout": "0.09"
       },
       "notice": "Generated with ScanCode and provided on an \"AS IS\" BASIS, WITHOUT WARRANTIES\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\nScanCode should be considered or used as legal advice. Consult an Attorney\nfor any legal advice.\nScanCode is a free software code scanning tool from nexB Inc. and others.\nVisit https://github.com/nexB/scancode-toolkit/ for support and download.",
-      "start_timestamp": "2022-12-12T065635.691832",
-      "end_timestamp": "2022-12-12T065637.770792",
+      "start_timestamp": "2023-12-01T135217.841476",
+      "end_timestamp": "2023-12-01T135219.797072",
       "output_format_version": "2.0.0",
-      "duration": 2.078967332839966,
+      "duration": 1.9556057453155518,
       "message": null,
-      "errors": [],
+      "errors": [
+        "Path: mime-types/.eslintignore"
+      ],
       "warnings": [],
       "extra_data": {
         "system_environment": {
           "operating_system": "linux",
           "cpu_architecture": "64",
-          "platform": "Linux-6.0.11-200.fc36.x86_64-x86_64-with-glibc2.35",
-          "platform_version": "#1 SMP PREEMPT_DYNAMIC Fri Dec 2 20:38:11 UTC 2022",
-          "python_version": "3.10.8 (main, Nov 14 2022, 00:00:00) [GCC 12.2.1 20220819 (Red Hat 12.2.1-2)]"
+          "platform": "Linux-6.2.0-37-generic-x86_64-with-glibc2.35",
+          "platform_version": "#38~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Thu Nov  2 18:01:13 UTC 2",
+          "python_version": "3.10.12 (main, Nov 20 2023, 15:14:05) [GCC 11.4.0]"
         },
-        "spdx_license_list_version": "3.17",
+        "spdx_license_list_version": "3.18",
         "files_count": 10
       }
     }
@@ -43,16 +45,16 @@
       "name": ".eslintignore",
       "base_name": ".eslintignore",
       "extension": "",
-      "size": 22,
-      "date": "2022-12-12",
-      "sha1": "6acc65c0437c4dfee46393694d82032ec55e250a",
-      "md5": "38bfc956dbeb91a5fc2770d67e51490a",
-      "sha256": "0b2e7bd6fe8e195b1b6eea336b8bf52a906125a75a799e1bfa3b7cf6d918efe7",
-      "mime_type": "text/plain",
-      "file_type": "ASCII text",
+      "size": 0,
+      "date": null,
+      "sha1": null,
+      "md5": null,
+      "sha256": null,
+      "mime_type": null,
+      "file_type": null,
       "programming_language": null,
       "is_binary": false,
-      "is_text": true,
+      "is_text": false,
       "is_archive": false,
       "is_media": false,
       "is_source": false,
@@ -66,7 +68,9 @@
       "files_count": 0,
       "dirs_count": 0,
       "size_count": 0,
-      "scan_errors": []
+      "scan_errors": [
+        "ERROR: for scanner: info:\nERROR: Processing interrupted: timeout after 0 seconds."
+      ]
     },
     {
       "path": ".eslintrc",
@@ -75,7 +79,7 @@
       "base_name": ".eslintrc",
       "extension": "",
       "size": 28,
-      "date": "2022-12-12",
+      "date": "2023-12-01",
       "sha1": "96be83d7bb17676e365d625ed72a3206968d9eb6",
       "md5": "58e33291e06991fe8d46686f0ed04f45",
       "sha256": "f12764948fdb96693910f1abeaf19c808be30c034406bccc08394aa3c80a68cd",
@@ -106,7 +110,7 @@
       "base_name": ".travis",
       "extension": ".yml",
       "size": 1128,
-      "date": "2022-12-12",
+      "date": "2023-12-01",
       "sha1": "a56bb611572c8932bb34412e90724977d6422af9",
       "md5": "8171613679d8f14acc1b60563fce4770",
       "sha256": "f8f51d063ab08f7f04cff73be7cbbee8be5a2ea95bf9e0c14dcebc3911760bc0",
@@ -137,7 +141,7 @@
       "base_name": "HISTORY",
       "extension": ".md",
       "size": 5193,
-      "date": "2022-12-12",
+      "date": "2023-12-01",
       "sha1": "cde432c1ca703b4d0782e98491fc6249d6a6554d",
       "md5": "482dda4ec77788258aee5469ad331f84",
       "sha256": "7d5946b10e82242de82848f1095f4e2b440bb4195ebd5892dd9a2c14ccd9ba1f",
@@ -168,7 +172,7 @@
       "base_name": "index",
       "extension": ".js",
       "size": 3663,
-      "date": "2022-12-12",
+      "date": "2023-12-01",
       "sha1": "8d1f07ae6192c4dd6bc08a9247a91af4a0a51eca",
       "md5": "bf015bb6811afc5c98e3e5f7072fdc79",
       "sha256": "8cfccaac306beb650d60c7f069ae0f4b39d648f1e3914696b18c133ab33e6419",
@@ -262,7 +266,7 @@
       "base_name": "LICENSE",
       "extension": "",
       "size": 1167,
-      "date": "2022-12-12",
+      "date": "2023-12-01",
       "sha1": "f027af3e61af3880fd7f7b8ba9452a85dd215738",
       "md5": "bf1f9ad1e2e1d507aef4883fff7103de",
       "sha256": "71f83c4c0621102a56d9853812777b85751bce7e9726f686f5b056c1f8a4b0e6",
@@ -395,7 +399,7 @@
       "base_name": "package",
       "extension": ".json",
       "size": 1198,
-      "date": "2022-12-12",
+      "date": "2023-12-01",
       "sha1": "24a84da16e7d0bdc3f64f7a1adadcabfb7cb6731",
       "md5": "ecee7be49e1352af8b37966b45b89e42",
       "sha256": "d87d3aeb7c81341a2df51e0f7853113a349e62d103f96968501bc4332c6da445",
@@ -467,7 +471,7 @@
       "base_name": "README",
       "extension": ".md",
       "size": 3120,
-      "date": "2022-12-12",
+      "date": "2023-12-01",
       "sha1": "3f25621607960c6e73fc4f9b8bf97327e210a9f2",
       "md5": "40f806a97b423ce26a485afe986fb151",
       "sha256": "b66ddab5ca562f3bcb6580a7d9d1e78bd755503210762d3530fad80366b1b8b2",
@@ -570,7 +574,7 @@
       "base_name": ".eslintrc",
       "extension": "",
       "size": 37,
-      "date": "2022-12-12",
+      "date": "2023-12-01",
       "sha1": "fab2c62ea27ead3a21414082be68afa90b51cbb2",
       "md5": "134d3e9b8b48a3f1296a2241efc9fb97",
       "sha256": "df3b8c89895282ef450ed682e2c6a66c6cce2bc8a02998020be6e6052cda65d2",
@@ -601,7 +605,7 @@
       "base_name": "test",
       "extension": ".js",
       "size": 8675,
-      "date": "2022-12-12",
+      "date": "2023-12-01",
       "sha1": "2135e026ffb360520d296ae170fe36113606e6fc",
       "md5": "d3ffdd77f2eced26602895f9e4b60966",
       "sha256": "600ac210b84288ea57738851c5d5b394c5e07c4df470e0d69dfe5638ac0e3e7c",

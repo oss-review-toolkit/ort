@@ -82,7 +82,7 @@ class ScanCodeResultParserTest : FreeSpec({
 
                     summary.licenseFindings shouldHaveSize 5
                     summary.copyrightFindings shouldHaveSize 4
-                    summary.issues should beEmpty()
+                    summary.issues shouldHaveSize 1
                 }
 
                 "properly summarize license findings" {
