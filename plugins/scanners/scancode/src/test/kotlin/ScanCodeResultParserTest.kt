@@ -41,7 +41,7 @@ class ScanCodeResultParserTest : FreeSpec({
     "generateSummary()" - {
         "for ScanCode 3.0.2 should" - {
             "get correct counts" {
-                val resultFile = File("src/test/assets/scancode-3.0.2_mime-types-2.1.18.json")
+                val resultFile = getAssetFile("scancode-3.0.2_mime-types-2.1.18.json")
 
                 val summary = parseResult(resultFile).toScanSummary()
 
@@ -53,7 +53,7 @@ class ScanCodeResultParserTest : FreeSpec({
 
         "for ScanCode 3.2.1rc2 should" - {
             "properly parse license expressions" {
-                val resultFile = File("src/test/assets/scancode-3.2.1rc2_h2database-1.4.200.json")
+                val resultFile = getAssetFile("scancode-3.2.1rc2_h2database-1.4.200.json")
 
                 val summary = parseResult(resultFile).toScanSummary()
 
@@ -75,8 +75,7 @@ class ScanCodeResultParserTest : FreeSpec({
         for (version in 1..MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION) {
             "for output format $version.0.0 should" - {
                 "get correct counts" {
-                    val filename = "scancode-output-format-$version.0.0_mime-types-2.1.18.json"
-                    val resultFile = File("src/test/assets/$filename")
+                    val resultFile = getAssetFile("scancode-output-format-$version.0.0_mime-types-2.1.18.json")
 
                     val summary = parseResult(resultFile).toScanSummary()
 
@@ -86,7 +85,7 @@ class ScanCodeResultParserTest : FreeSpec({
                 }
 
                 "properly summarize license findings" {
-                    val resultFile = File("src/test/assets/scancode-output-format-$version.0.0_mime-types-2.1.18.json")
+                    val resultFile = getAssetFile("/scancode-output-format-$version.0.0_mime-types-2.1.18.json")
 
                     val summary = parseResult(resultFile).toScanSummary()
 
@@ -102,7 +101,7 @@ class ScanCodeResultParserTest : FreeSpec({
                 }
 
                 "properly summarize copyright findings" {
-                    val resultFile = File("src/test/assets/scancode-output-format-$version.0.0_mime-types-2.1.18.json")
+                    val resultFile = getAssetFile("/scancode-output-format-$version.0.0_mime-types-2.1.18.json")
 
                     val summary = parseResult(resultFile).toScanSummary()
 
@@ -179,3 +178,5 @@ private fun containCopyrightsExactly(vararg copyrights: Pair<String, List<TextLo
         summary.copyrightFindings.groupBy { it.statement }.entries
             .map { (key, value) -> key to value.map { it.location } }
     }
+
+private fun getAssetFile(path: String): File = File("src/test/assets", path).absoluteFile
