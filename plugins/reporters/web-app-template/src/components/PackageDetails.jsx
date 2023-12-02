@@ -17,16 +17,14 @@
  * License-Filename: LICENSE
  */
 
-import React from 'react';
-import PropTypes from 'prop-types';
 import { Descriptions } from 'antd';
+import PropTypes from 'prop-types';
 
 const { Item } = Descriptions;
 
 // Generates the HTML for packages details like
 // description, source code location(s), etc.
-const PackageDetails = (props) => {
-    const { webAppPackage } = props;
+const PackageDetails = ({ webAppPackage }) => {
     const {
         id,
         isProject,
@@ -40,7 +38,7 @@ const PackageDetails = (props) => {
         vcs: {
             path: vcsPath,
             revision: vcsRevision = webAppPackage.vcs.resolvedRevision,
-            url: vcsUrl,
+            url: vcsUrl
         },
         vcsProcessed: {
             path: vcsProcessedPath,
@@ -80,15 +78,12 @@ const PackageDetails = (props) => {
                 )
             }
             {
-                isProject
-                && (
-                    <Item
+                !!isProject && <Item
                         label="Defined in"
                         key="ort-package-definition-file-path"
                     >
                         {definitionFilePath}
                     </Item>
-                )
             }
             {
                 webAppPackage.hasAuthors()
@@ -102,26 +97,20 @@ const PackageDetails = (props) => {
                 )
             }
             {
-                description
-                && (
-                    <Item
+                !!description && <Item
                         label="Description"
                         key="ort-package-description"
                     >
                         {description}
                     </Item>
-                )
             }
             {
-                homepageUrl
-                && (
-                    <Item
+                !!homepageUrl && <Item
                         label="Homepage"
                         key="ort-package-homepage"
                     >
                         {renderAhref(homepageUrl)}
                     </Item>
-                )
             }
             {
                 !!vcsUrl

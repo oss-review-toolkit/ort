@@ -17,10 +17,11 @@
  * License-Filename: LICENSE
  */
 
+import { randomStringGenerator } from '../utils';
+
 import RemoteArtifact from './RemoteArtifact';
 import VcsInfo from './VcsInfo';
 import WebAppFinding from './WebAppFinding';
-import { randomStringGenerator } from '../utils';
 
 class WebAppPackage {
     #_id;
@@ -221,7 +222,7 @@ class WebAppPackage {
             if (obj.findings && webAppOrtResult) {
                 setTimeout(() => {
                     for (let i = 0, len = obj.findings.length; i < len; i++) {
-                        if (obj.findings[i]['path_excludes'] || obj.findings[i]['pathExcludes']) {
+                        if (obj.findings[i].path_excludes || obj.findings[i].pathExcludes) {
                             this.#excludedFindingsIndexes.push(i);
                         }
 

@@ -17,22 +17,23 @@
  * License-Filename: LICENSE
  */
 
-import React from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import {
-    Descriptions,
-    Modal,
-    Tabs
-} from 'antd';
 import {
     FileTextOutlined,
     InfoCircleOutlined,
     TagsOutlined
 } from '@ant-design/icons';
-import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
-import lioshi from 'react-syntax-highlighter/dist/esm/styles/hljs/lioshi';
+import {
+    Descriptions,
+    Modal,
+    Tabs
+} from 'antd';
+import PropTypes from 'prop-types';
 import yaml from 'react-syntax-highlighter/dist/esm/languages/hljs/yaml';
+import lioshi from 'react-syntax-highlighter/dist/esm/styles/hljs/lioshi';
+
+import { connect } from 'react-redux';
+import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
+
 import {
     getOrtResult
 } from '../reducers/selectors';
@@ -42,8 +43,7 @@ const { Item } = Descriptions;
 
 SyntaxHighlighter.registerLanguage('yaml', yaml);
 
-const AboutModal = (props) => {
-    const { webAppOrtResult } = props;
+const AboutModal = ({ webAppOrtResult }) => {
     const { repositoryConfiguration } = webAppOrtResult;
     const {
         labels,
@@ -76,7 +76,7 @@ const AboutModal = (props) => {
             <Tabs
                 animated={false}
                 items={(() => {
-                    var tabItems = [];
+                    const tabItems = [];
 
                     if (webAppOrtResult.hasRepositoryConfiguration()) {
                         tabItems.push({
@@ -86,11 +86,11 @@ const AboutModal = (props) => {
                                     Excludes (.ort.yml)
                                 </span>
                             ),
-                            key: "ort-tabs-excludes",
+                            key: 'ort-tabs-excludes',
                             children: (
                                 <SyntaxHighlighter
                                     language="yaml"
-                                    showLineNumbers
+                                    showLineNumbers={true}
                                     style={lioshi}
                                 >
                                     {repositoryConfiguration}
@@ -107,10 +107,10 @@ const AboutModal = (props) => {
                                     Labels
                                 </span>
                             ),
-                            key: "ort-tabs-labels",
+                            key: 'ort-tabs-labels',
                             children: (
                                 <Descriptions
-                                    bordered
+                                    bordered={true}
                                     column={1}
                                     size="small"
                                 >
@@ -130,7 +130,7 @@ const AboutModal = (props) => {
                                                             >
                                                                 {value}
                                                             </a>
-                                                        )
+                                                            )
                                                         : value
                                                 }
                                             </Item>
@@ -148,7 +148,7 @@ const AboutModal = (props) => {
                                 About
                             </span>
                         ),
-                        key: "ort-tabs-about",
+                        key: 'ort-tabs-about',
                         children: (
                             <span>
                                 <a

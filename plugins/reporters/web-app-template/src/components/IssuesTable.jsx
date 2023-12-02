@@ -18,8 +18,7 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import { Collapse, Table, Tooltip } from 'antd';
+
 import {
     ExclamationCircleOutlined,
     FileAddOutlined,
@@ -28,12 +27,14 @@ import {
     IssuesCloseOutlined,
     WarningOutlined
 } from '@ant-design/icons';
-
+import { Collapse, Table, Tooltip } from 'antd';
 import Markdown from 'markdown-to-jsx';
+import PropTypes from 'prop-types';
+
 import PackageDetails from './PackageDetails';
+import PackageFindingsTable from './PackageFindingsTable';
 import PackageLicenses from './PackageLicenses';
 import PackagePaths from './PackagePaths';
-import PackageFindingsTable from './PackageFindingsTable';
 import PathExcludesTable from './PathExcludesTable';
 import ResolutionTable from './ResolutionTable';
 import ScopeExcludesTable from './ScopeExcludesTable';
@@ -41,14 +42,14 @@ import { getColumnSearchProps } from './Shared';
 
 // Generates the HTML to display violations as a Table
 class IssuesTable extends React.Component {
-    render () {
+    render() {
         const {
             issues,
             onChange,
             showExcludesColumn,
             state: {
                 filteredInfo = {},
-                sortedInfo =  {}
+                sortedInfo = {}
             }
         } = this.props;
 
@@ -62,7 +63,7 @@ class IssuesTable extends React.Component {
                 align: 'center',
                 dataIndex: 'severityIndex',
                 filters: [
-                    { 
+                    {
                         text: 'Errors',
                         value: 0
                     },
@@ -92,7 +93,8 @@ class IssuesTable extends React.Component {
                                     className="ort-ok"
                                 />
                             </Tooltip>
-                        ) : (
+                            )
+                        : (
                             <span>
                                 {
                                     webAppOrtIssue.severity === 'ERROR'
@@ -119,7 +121,7 @@ class IssuesTable extends React.Component {
                                     )
                                 }
                             </span>
-                        )
+                            )
                 ),
                 sorter: (a, b) => a.severityIndex - b.severityIndex,
                 sortOrder: sortedInfo.field === 'severityIndex' && sortedInfo.order,
@@ -170,7 +172,8 @@ class IssuesTable extends React.Component {
                 render: (webAppOrtIssue) => {
                     const webAppPackage = webAppOrtIssue.package;
 
-                    return webAppPackage.isExcluded ? (
+                    return webAppPackage.isExcluded
+                        ? (
                         <span className="ort-excludes">
                             <Tooltip
                                 placement="right"
@@ -179,9 +182,10 @@ class IssuesTable extends React.Component {
                                 <FileExcelOutlined className="ort-excluded" />
                             </Tooltip>
                         </span>
-                    ) : (
+                            )
+                        : (
                         <FileAddOutlined />
-                    );
+                            );
                 },
                 width: '2em'
             });
@@ -212,10 +216,13 @@ class IssuesTable extends React.Component {
                 className="ort-table-issues"
                 columns={columns}
                 dataSource={issues}
+                rowKey="key"
+                size="small"
                 expandable={{
                     expandedRowRender: (webAppOrtIssue) => {
                         const defaultActiveKey = webAppOrtIssue.isResolved
-                            ? 'issue-how-to-fix' : 'issue-package-details';
+                            ? 'issue-how-to-fix'
+                            : 'issue-package-details';
                         const webAppPackage = webAppOrtIssue.package;
 
                         return (
@@ -224,7 +231,7 @@ class IssuesTable extends React.Component {
                                 bordered={false}
                                 defaultActiveKey={defaultActiveKey}
                                 items={(() => {
-                                    var collapseItems = [];
+                                    const collapseItems = [];
 
                                     if (webAppOrtIssue.hasHowToFix()) {
                                         collapseItems.push({
@@ -323,7 +330,6 @@ class IssuesTable extends React.Component {
                 locale={{
                     emptyText: 'No issues'
                 }}
-                onChange={onChange}
                 pagination={
                     {
                         defaultPageSize: 25,
@@ -335,12 +341,11 @@ class IssuesTable extends React.Component {
                         showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} issues`
                     }
                 }
-                rowKey="key"
-                size="small"
+                onChange={onChange}
             />
         );
     }
-};
+}
 
 IssuesTable.propTypes = {
     issues: PropTypes.array.isRequired,

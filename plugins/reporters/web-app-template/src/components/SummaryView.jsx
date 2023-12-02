@@ -18,11 +18,7 @@
  */
 
 import React from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import {
-    Col, Row, Tabs, Timeline
-} from 'antd';
+
 import {
     BugOutlined,
     CodeOutlined,
@@ -32,11 +28,13 @@ import {
     SecurityScanOutlined,
     TagsOutlined
 } from '@ant-design/icons';
-import IssuesTable from './IssuesTable';
-import LicenseChart from './LicenseChart';
-import LicenseStatsTable from './LicenseStatsTable';
-import RuleViolationsTable from './RuleViolationsTable';
-import VulnerabilitiesTable from './VulnerabilitiesTable';
+import {
+    Col, Row, Tabs, Timeline
+} from 'antd';
+import PropTypes from 'prop-types';
+
+import { connect } from 'react-redux';
+
 import {
     getOrtResult,
     getSummaryCharts,
@@ -46,13 +44,19 @@ import {
 } from '../reducers/selectors';
 import store from '../store';
 
+import IssuesTable from './IssuesTable';
+import LicenseChart from './LicenseChart';
+import LicenseStatsTable from './LicenseStatsTable';
+import RuleViolationsTable from './RuleViolationsTable';
+import VulnerabilitiesTable from './VulnerabilitiesTable';
+
 class SummaryView extends React.Component {
     static onChangeDeclaredLicensesTable(pagination, filters, sorter, extra) {
         store.dispatch({
             type: 'SUMMARY::CHANGE_DECLARED_LICENSES_TABLE',
             payload: {
                 charts: {
-                    declaredLicenses: extra.currentDataSource,
+                    declaredLicenses: extra.currentDataSource
                 },
                 columns: {
                     declaredLicenses: {
@@ -69,7 +73,7 @@ class SummaryView extends React.Component {
             type: 'SUMMARY::CHANGE_DETECTED_LICENSES_TABLE',
             payload: {
                 charts: {
-                    detectedLicensesProcessed: extra.currentDataSource,
+                    detectedLicensesProcessed: extra.currentDataSource
                 },
                 columns: {
                     detectedLicensesProcessed: {
@@ -171,7 +175,7 @@ class SummaryView extends React.Component {
                             className="ort-summary-timeline"
                             items={ (
                                 () => {
-                                    var timelineItems = [
+                                    const timelineItems = [
                                         {
                                             children: (
                                                 <span>
@@ -216,9 +220,7 @@ class SummaryView extends React.Component {
                                                     {' '}
                                                     scopes
                                                     {
-                                                        scopes && scopes.length > 0
-                                                        && (
-                                                            <span>
+                                                        !!scopes && scopes.length > 0 && <span>
                                                                 {' '}
                                                                 and
                                                                 {' '}
@@ -228,17 +230,16 @@ class SummaryView extends React.Component {
                                                                 {' '}
                                                                 dependency levels
                                                             </span>
-                                                        )
                                                     }
                                                 </span>
                                             )
                                         }
                                     ];
 
-                                    if (declaredLicensesProcessed.length !== 0 
-                                        && detectedLicensesProcessed.length === 0 ) {
+                                    if (declaredLicensesProcessed.length !== 0
+                                        && detectedLicensesProcessed.length === 0) {
                                         timelineItems.push({
-                                                children: (
+                                            children: (
                                                     <span>
                                                         {' '}
                                                         Detected
@@ -249,7 +250,7 @@ class SummaryView extends React.Component {
                                                         {' '}
                                                         declared licenses
                                                     </span>
-                                                )
+                                            )
                                         });
                                     } else if (declaredLicensesProcessed.length === 0
                                         && detectedLicensesProcessed.length !== 0) {
@@ -297,9 +298,9 @@ class SummaryView extends React.Component {
                                         children: (
                                             <span>
                                                 {
-                                                    hasUnresolvedIssues && !hasUnresolvedRuleViolations
-                                                    && (
-                                                        <span className="ort-error">
+                                                    !!hasUnresolvedIssues
+                                                    && !hasUnresolvedRuleViolations
+                                                    && <span className="ort-error">
                                                             <b>
                                                                 Completed scan with
                                                                 {' '}
@@ -318,12 +319,11 @@ class SummaryView extends React.Component {
                                                                 }
                                                             </b>
                                                         </span>
-                                                    )
                                                 }
                                                 {
-                                                    !hasUnresolvedIssues && hasUnresolvedRuleViolations
-                                                    && (
-                                                        <span className="ort-error">
+                                                    !hasUnresolvedIssues
+                                                    && !!hasUnresolvedRuleViolations
+                                                    && <span className="ort-error">
                                                             <b>
                                                                 Completed scan with
                                                                 {' '}
@@ -342,12 +342,11 @@ class SummaryView extends React.Component {
                                                                 }
                                                             </b>
                                                         </span>
-                                                    )
                                                 }
                                                 {
-                                                    hasUnresolvedIssues && hasUnresolvedRuleViolations
-                                                    && (
-                                                        <span className="ort-error">
+                                                    !!hasUnresolvedIssues
+                                                    && !!hasUnresolvedRuleViolations
+                                                    && <span className="ort-error">
                                                             <b>
                                                                 Completed scan with
                                                                 {' '}
@@ -373,7 +372,6 @@ class SummaryView extends React.Component {
                                                                 }
                                                             </b>
                                                         </span>
-                                                    )
                                                 }
                                                 {
                                                     !hasUnresolvedIssues && !hasUnresolvedRuleViolations
@@ -389,7 +387,7 @@ class SummaryView extends React.Component {
                                         ),
                                         color: (hasUnresolvedIssues || hasUnresolvedRuleViolations) ? 'red' : 'green'
                                     });
-                                    
+
                                     return timelineItems;
                                 })()
                             }
@@ -405,11 +403,11 @@ class SummaryView extends React.Component {
                     && (
                         <Row>
                             <Col span={22} offset={1}>
-                                <Tabs 
+                                <Tabs
                                     className="ort-tabs-summary-overview"
-                                    tabPosition="top" 
+                                    tabPosition="top"
                                     items={ (() => {
-                                        var tabItems = [
+                                        const tabItems = [
                                             {
                                                 label: (
                                                     <span>
@@ -423,15 +421,15 @@ class SummaryView extends React.Component {
                                                         )
                                                     </span>
                                                 ),
-                                                key: "ort-summary-rule-violations-table",
+                                                key: 'ort-summary-rule-violations-table',
                                                 children: (
                                                     <RuleViolationsTable
-                                                        onChange={
-                                                            SummaryView.onChangeRuleViolationsTable
-                                                        }
                                                         ruleViolations={webAppOrtResult.ruleViolations}
                                                         showExcludesColumn={webAppOrtResult.hasExcludes()}
                                                         state={columns.ruleViolations}
+                                                        onChange={
+                                                            SummaryView.onChangeRuleViolationsTable
+                                                        }
                                                     />
                                                 )
                                             }, {
@@ -447,15 +445,15 @@ class SummaryView extends React.Component {
                                                         )
                                                     </span>
                                                 ),
-                                                key: "ort-summary-issues-table",
+                                                key: 'ort-summary-issues-table',
                                                 children: (
                                                     <IssuesTable
                                                         issues={webAppOrtResult.issues}
+                                                        showExcludesColumn={webAppOrtResult.hasExcludes()}
+                                                        state={columns.issues}
                                                         onChange={
                                                             SummaryView.onChangeIssuesTable
                                                         }
-                                                        showExcludesColumn={webAppOrtResult.hasExcludes()}
-                                                        state={columns.issues}
                                                     />
                                                 )
                                             }, {
@@ -467,15 +465,15 @@ class SummaryView extends React.Component {
                                                         )
                                                     </span>
                                                 ),
-                                                key: "ort-summary-vulnerabilities-table",
+                                                key: 'ort-summary-vulnerabilities-table',
                                                 children: (
                                                     <VulnerabilitiesTable
-                                                        onChange={
-                                                            SummaryView.onChangeVulnerabilitiesTable
-                                                        }
                                                         vulnerabilities={webAppOrtResult.vulnerabilities}
                                                         showExcludesColumn={webAppOrtResult.hasExcludes()}
                                                         state={columns.vulnerabilities}
+                                                        onChange={
+                                                            SummaryView.onChangeVulnerabilitiesTable
+                                                        }
                                                     />
                                                 )
                                             }
@@ -491,7 +489,7 @@ class SummaryView extends React.Component {
                                                         )
                                                     </span>
                                                 ),
-                                                key: "ort-summary-declared-licenses-table",
+                                                key: 'ort-summary-declared-licenses-table',
                                                 children: (
                                                     <Row>
                                                         <Col xs={24} sm={24} md={24} lg={24} xl={9}>
@@ -523,7 +521,7 @@ class SummaryView extends React.Component {
                                                         )
                                                     </span>
                                                 ),
-                                                key: "ort-summary-detected-licenses-table",
+                                                key: 'ort-summary-detected-licenses-table',
                                                 children: (
                                                     <Row>
                                                         <Col xs={24} sm={24} md={24} lg={24} xl={9}>

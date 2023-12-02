@@ -18,7 +18,13 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
+
+import {
+    ArrowDownOutlined,
+    ArrowUpOutlined,
+    FileAddOutlined,
+    FileExcelOutlined
+} from '@ant-design/icons';
 import {
     Button,
     Collapse,
@@ -28,26 +34,24 @@ import {
     Row,
     Tree
 } from 'antd';
-import {
-    ArrowDownOutlined,
-    ArrowUpOutlined,
-    FileAddOutlined,
-    FileExcelOutlined
-} from '@ant-design/icons';
-import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import scrollIntoView from 'scroll-into-view-if-needed';
-import PackageDetails from './PackageDetails';
-import PackageFindingsTable from './PackageFindingsTable';
-import PackageLicenses from './PackageLicenses';
-import PackagePaths from './PackagePaths';
-import PathExcludesTable from './PathExcludesTable';
-import ScopeExcludesTable from './ScopeExcludesTable';
+
+import { connect } from 'react-redux';
+
 import {
     getOrtResult,
     getTreeView,
     getTreeViewShouldComponentUpdate
 } from '../reducers/selectors';
 import store from '../store';
+
+import PackageDetails from './PackageDetails';
+import PackageFindingsTable from './PackageFindingsTable';
+import PackageLicenses from './PackageLicenses';
+import PackagePaths from './PackagePaths';
+import PathExcludesTable from './PathExcludesTable';
+import ScopeExcludesTable from './ScopeExcludesTable';
 
 const { Search } = Input;
 
@@ -71,17 +75,19 @@ class TreeView extends React.Component {
         const { value } = e.target;
         const searchValue = value.trim();
         const { webAppOrtResult } = this.props;
-        const searchPackageTreeNodeKeys = (searchValue === '') ? [] : webAppOrtResult.packages
-            .reduce((acc, webAppPackage) => {
-                if (webAppPackage.id.indexOf(searchValue) > -1) {
-                    const treeNodeKeys = webAppOrtResult.getTreeNodeParentKeysByIndex(webAppPackage.packageIndex);
-                    if (treeNodeKeys) {
-                        acc.push(treeNodeKeys);
+        const searchPackageTreeNodeKeys = (searchValue === '')
+            ? []
+            : webAppOrtResult.packages
+                .reduce((acc, webAppPackage) => {
+                    if (webAppPackage.id.indexOf(searchValue) > -1) {
+                        const treeNodeKeys = webAppOrtResult.getTreeNodeParentKeysByIndex(webAppPackage.packageIndex);
+                        if (treeNodeKeys) {
+                            acc.push(treeNodeKeys);
+                        }
                     }
-                }
 
-                return acc;
-            }, []);
+                    return acc;
+                }, []);
 
         const expandedKeys = Array.from(searchPackageTreeNodeKeys
             .reduce(
@@ -193,7 +199,8 @@ class TreeView extends React.Component {
                         onPressEnter={this.onChangeSearch}
                     />
                     {
-                        matchedKeys.length ? (
+                        matchedKeys.length
+                            ? (
                             <Row
                                 type="flex"
                                 align="middle"
@@ -212,26 +219,28 @@ class TreeView extends React.Component {
                                     {matchedKeys.length}
                                 </span>
                             </Row>
-                        ) : null
+                                )
+                            : null
                     }
                 </div>
                 <div className="ort-tree-wrapper">
                     <Tree
                         autoExpandParent={autoExpandParent}
                         expandedKeys={expandedKeys}
-                        onExpand={this.onExpandTreeNode}
-                        onSelect={this.onSelectTreeNode}
-                        showLine
+                        showLine={true}
                         selectedKeys={selectedKeys}
                         treeData={dependencyTrees}
+                        onExpand={this.onExpandTreeNode}
+                        onSelect={this.onSelectTreeNode}
                     />
                 </div>
                 {
-                    selectedWebAppTreeNode
-                    && !selectedWebAppTreeNode.isScope
-                    && (
-                        <div className="ort-tree-drawer">
+                    !!selectedWebAppTreeNode && !selectedWebAppTreeNode.isScope && <div className="ort-tree-drawer">
                             <Drawer
+                                placement="right"
+                                closable={true}
+                                open={showDrawer}
+                                width="65%"
                                 title={
                                     (() => {
                                         if (webAppOrtResult.hasExcludes()) {
@@ -263,18 +272,14 @@ class TreeView extends React.Component {
                                         );
                                     })()
                                 }
-                                placement="right"
-                                closable
                                 onClose={this.onCloseDrawer}
-                                open={showDrawer}
-                                width="65%"
                             >
                                 <Collapse
                                     className="ort-package-collapse"
                                     bordered={false}
                                     defaultActiveKey={[0, 1]}
                                     items={(() => {
-                                        var collapseItems = [
+                                        const collapseItems = [
                                             {
                                                 label: 'Details',
                                                 key: 'package-details',
@@ -283,7 +288,7 @@ class TreeView extends React.Component {
                                                 )
                                             }
                                         ];
-    
+
                                         if (selectedWebAppTreeNode.package.hasLicenses()) {
                                             collapseItems.push({
                                                 label: 'Licenses',
@@ -293,7 +298,7 @@ class TreeView extends React.Component {
                                                 )
                                             });
                                         }
-    
+
                                         if (selectedWebAppTreeNode.package.hasPaths()) {
                                             collapseItems.push({
                                                 label: 'Paths',
@@ -305,7 +310,7 @@ class TreeView extends React.Component {
                                                 )
                                             });
                                         }
-    
+
                                         if (selectedWebAppTreeNode.package.hasFindings()) {
                                             collapseItems.push({
                                                 label: 'Scan Results',
@@ -317,7 +322,7 @@ class TreeView extends React.Component {
                                                 )
                                             });
                                         }
-    
+
                                         if (selectedWebAppTreeNode.package.hasPathExcludes()) {
                                             collapseItems.push({
                                                 label: 'Path Excludes',
@@ -329,7 +334,7 @@ class TreeView extends React.Component {
                                                 )
                                             });
                                         }
-    
+
                                         if (selectedWebAppTreeNode.package.hasScopeExcludes()) {
                                             collapseItems.push({
                                                 label: 'Scope Excludes',
@@ -341,13 +346,12 @@ class TreeView extends React.Component {
                                                 )
                                             });
                                         }
-    
+
                                         return collapseItems;
                                     })()}
                                 />
                             </Drawer>
                         </div>
-                    )
                 }
             </div>
         );
@@ -368,5 +372,5 @@ const mapStateToProps = (state) => ({
 
 export default connect(
     mapStateToProps,
-    () => ({}),
+    () => ({})
 )(TreeView);

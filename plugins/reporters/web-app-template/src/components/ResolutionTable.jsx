@@ -17,13 +17,11 @@
  * License-Filename: LICENSE
  */
 
-import React from 'react';
-import PropTypes from 'prop-types';
 import { Table } from 'antd';
+import PropTypes from 'prop-types';
 
 // Generates the HTML to display webAppResolution(s) as a Table
-const ResolutionTable = (props) => {
-    const { resolutions } = props;
+const ResolutionTable = ({ resolutions }) => {
     const columns = [
         {
             dataIndex: 'reason',
@@ -48,6 +46,8 @@ const ResolutionTable = (props) => {
         <Table
             columns={columns}
             dataSource={resolutions}
+            rowKey="key"
+            size="small"
             locale={{
                 emptyText: 'No resolutions'
             }}
@@ -62,8 +62,6 @@ const ResolutionTable = (props) => {
                     showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} results`
                 }
             }
-            rowKey="key"
-            size="small"
         />
     );
 };

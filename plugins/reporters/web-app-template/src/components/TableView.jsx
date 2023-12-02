@@ -18,15 +18,7 @@
  */
 
 import React from 'react';
-import { connect } from 'react-redux';
-import {
-    Col,
-    Collapse,
-    Dropdown,
-    Row,
-    Table,
-    Tooltip
-} from 'antd';
+
 import {
     CloudDownloadOutlined,
     EyeOutlined,
@@ -35,7 +27,18 @@ import {
     FileExcelOutlined,
     LaptopOutlined
 } from '@ant-design/icons';
+import {
+    Col,
+    Collapse,
+    Dropdown,
+    Row,
+    Table,
+    Tooltip
+} from 'antd';
 import PropTypes from 'prop-types';
+
+import { connect } from 'react-redux';
+
 import {
     getOrtResult,
     getTableView,
@@ -48,6 +51,7 @@ import {
     getTableViewScopeFilterSelections
 } from '../reducers/selectors';
 import store from '../store';
+
 import PackageDetails from './PackageDetails';
 import PackageFindingsTable from './PackageFindingsTable';
 import PackageLicenses from './PackageLicenses';
@@ -125,10 +129,10 @@ class TableView extends React.Component {
                     const { isExcluded } = webAppPackage;
 
                     return (isExcluded && value === 'excluded') || (!isExcluded && value === 'included');
-
                 },
                 render: (webAppPackage) => (
-                    webAppPackage.isExcluded ? (
+                    webAppPackage.isExcluded
+                        ? (
                         <span className="ort-excludes">
                             <Tooltip
                                 placement="right"
@@ -137,9 +141,10 @@ class TableView extends React.Component {
                                 <FileExcelOutlined className="ort-excluded" />
                             </Tooltip>
                         </span>
-                    ) : (
+                            )
+                        : (
                         <FileAddOutlined />
-                    )
+                            )
                 ),
                 width: '2em'
             });
@@ -364,16 +369,18 @@ class TableView extends React.Component {
                 filteredValue: filteredInfo.projectIndexes || null,
                 onFilter: (value, webAppPackage) => webAppPackage.projectIndexes.has(value),
                 render: (text, webAppPackage) => (
-                    webAppPackage.isProject ? (
+                    webAppPackage.isProject
+                        ? (
                         <Tooltip
                             placement="right"
                             title={webAppPackage.definitionFilePath}
                         >
                             <LaptopOutlined />
                         </Tooltip>
-                    ) : (
+                            )
+                        : (
                         <CloudDownloadOutlined />
-                    )
+                            )
                 ),
                 title: 'Project',
                 width: 85
@@ -387,8 +394,9 @@ class TableView extends React.Component {
                 <Row justify="end">
                     <Col>
                         <Dropdown.Button
+                            size="small"
                             menu={{
-                                className: "ort-table-toggle-columns",
+                                className: 'ort-table-toggle-columns',
                                 items: toggleColumnMenuItems.map(
                                     (item) => ({
                                         key: item.value,
@@ -406,12 +414,11 @@ class TableView extends React.Component {
                                     })
                                 ),
                                 onClick: this.onClickToggleColumnsMenu,
-                                selectedKeys: showKeys 
+                                selectedKeys: showKeys
                             }}
                             onClick={() => {
                                 store.dispatch({ type: 'TABLE::RESET_COLUMNS_TABLE' });
                             }}
-                            size="small"
                         >
                             Clear filters
                         </Dropdown.Button>
@@ -419,6 +426,11 @@ class TableView extends React.Component {
                 </Row>
                 <Table
                     columns={columns}
+                    dataSource={webAppOrtResult.packages}
+                    indentSize={0}
+                    size="small"
+                    rowClassName="ort-package"
+                    rowKey="key"
                     expandable={{
                         expandedRowRender: (webAppPackage) => (
                             <Collapse
@@ -426,7 +438,7 @@ class TableView extends React.Component {
                                 bordered={false}
                                 defaultActiveKey={[0, 1]}
                                 items={(() => {
-                                    var collapseItems = [
+                                    const collapseItems = [
                                         {
                                             label: 'Details',
                                             key: 'package-details',
@@ -498,11 +510,18 @@ class TableView extends React.Component {
                         ),
                         expandRowByClick: true
                     }}
-                    dataSource={webAppOrtResult.packages}
-                    indentSize={0}
                     locale={{
                         emptyText: 'No packages'
                     }}
+                    pagination={
+                        {
+                            defaultPageSize: 100,
+                            hideOnSinglePage: true,
+                            pageSizeOptions: ['50', '100', '250', '500'],
+                            position: 'both',
+                            showSizeChanger: true
+                        }
+                    }
                     onChange={(pagination, filters, sorter, extra) => {
                         store.dispatch({
                             type: 'TABLE::CHANGE_PACKAGES_TABLE',
@@ -515,18 +534,6 @@ class TableView extends React.Component {
                             }
                         });
                     }}
-                    pagination={
-                        {
-                            defaultPageSize: 100,
-                            hideOnSinglePage: true,
-                            pageSizeOptions: ['50', '100', '250', '500'],
-                            position: 'both',
-                            showSizeChanger: true
-                        }
-                    }
-                    size="small"
-                    rowClassName="ort-package"
-                    rowKey="key"
                 />
             </div>
         );
