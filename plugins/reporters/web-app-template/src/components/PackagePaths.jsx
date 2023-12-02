@@ -17,15 +17,13 @@
  * License-Filename: LICENSE
  */
 
-import React from 'react';
 import { Descriptions, List, Steps } from 'antd';
 import PropTypes from 'prop-types';
 
 const { Item } = Descriptions;
 
 // Generates the HTML for packages issues
-const PackagePaths = (props) => {
-    const { paths } = props;
+const PackagePaths = ({ paths }) => {
     let grid;
 
     // Change layout grid to use all available width for single path
@@ -56,12 +54,12 @@ const PackagePaths = (props) => {
             grid={grid}
             itemLayout="vertical"
             size="small"
+            dataSource={paths}
             pagination={{
                 hideOnSinglePage: true,
                 pageSize: 2,
                 size: 'small'
             }}
-            dataSource={paths}
             renderItem={
                 (webAppPath) => {
                     const stepItems = [
@@ -106,7 +104,7 @@ const PackagePaths = (props) => {
                                 current={stepItems.length - 1}
                                 direction="vertical"
                                 items={stepItems}
-                                progressDot
+                                progressDot={true}
                                 size="small"
                             />
                         </List.Item>
