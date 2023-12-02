@@ -17,13 +17,11 @@
  * License-Filename: LICENSE
  */
 
-import React from 'react';
-import PropTypes from 'prop-types';
 import { Table } from 'antd';
+import PropTypes from 'prop-types';
 
 // Generates the HTML to display webAppPathExclude(s) as a Table
-const PathExcludesTable = (props) => {
-    const { excludes } = props;
+const PathExcludesTable = ({ excludes }) => {
     const columns = [
         {
             dataIndex: 'reason',
@@ -48,6 +46,8 @@ const PathExcludesTable = (props) => {
         <Table
             columns={columns}
             dataSource={excludes}
+            rowKey="key"
+            size="small"
             locale={{
                 emptyText: 'No path excludes'
             }}
@@ -62,8 +62,6 @@ const PathExcludesTable = (props) => {
                     showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} results`
                 }
             }
-            rowKey="key"
-            size="small"
         />
     );
 };

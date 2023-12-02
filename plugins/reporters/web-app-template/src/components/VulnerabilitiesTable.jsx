@@ -18,8 +18,7 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import { Collapse, Table, Tooltip } from 'antd';
+
 import {
     CloseCircleOutlined,
     ExclamationCircleOutlined,
@@ -31,6 +30,8 @@ import {
     QuestionCircleOutlined,
     WarningOutlined
 } from '@ant-design/icons';
+import { Collapse, Table, Tooltip } from 'antd';
+import PropTypes from 'prop-types';
 
 import PackageDetails from './PackageDetails';
 import PackagePaths from './PackagePaths';
@@ -41,7 +42,7 @@ import { getColumnSearchProps } from './Shared';
 
 // Generates the HTML to display vulnerabilities as a Table
 class VulnerabilitiesTable extends React.Component {
-    render () {
+    render() {
         const {
             onChange,
             vulnerabilities,
@@ -55,12 +56,12 @@ class VulnerabilitiesTable extends React.Component {
 
         const renderAhref = (element, href, key, target = '_blank') => (
             <a
-                children={element}
                 href={href}
                 key={key}
                 rel="noopener noreferrer"
                 target={target}
             >
+                {element}
             </a>
         );
 
@@ -75,7 +76,7 @@ class VulnerabilitiesTable extends React.Component {
                 dataIndex: 'severityIndex',
                 key: 'severityIndex',
                 filters: [
-                    { 
+                    {
                         text: 'Critical',
                         value: 0
                     },
@@ -113,7 +114,8 @@ class VulnerabilitiesTable extends React.Component {
                                     className="ort-ok"
                                 />
                             </Tooltip>
-                        ) : (
+                            )
+                        : (
                             <span>
                                 {
                                     webAppVulnerability.severityIndex === 0
@@ -156,7 +158,7 @@ class VulnerabilitiesTable extends React.Component {
                                     )
                                 }
                             </span>
-                        )
+                            )
                 ),
                 sorter: (a, b) => a.severityIndex - b.severityIndex,
                 sortOrder: sortedInfo.field === 'severityIndex' && sortedInfo.order,
@@ -200,7 +202,8 @@ class VulnerabilitiesTable extends React.Component {
                     const webAppPackage = webAppVulnerability.package;
 
                     if (webAppPackage) {
-                        return webAppPackage.isExcluded ? (
+                        return webAppPackage.isExcluded
+                            ? (
                             <span className="ort-excludes">
                                 <Tooltip
                                     placement="right"
@@ -209,9 +212,10 @@ class VulnerabilitiesTable extends React.Component {
                                     <FileExcelOutlined className="ort-excluded" />
                                 </Tooltip>
                             </span>
-                        ) : (
+                                )
+                            : (
                             <FileAddOutlined />
-                        );
+                                );
                     }
 
                     return null;
@@ -249,12 +253,12 @@ class VulnerabilitiesTable extends React.Component {
                         return null;
                     }
 
-                    var domainRegex = /(?:[\w-]+\.)+[\w-]+/;
+                    const domainRegex = /(?:[\w-]+\.)+[\w-]+/;
 
                     return (
                         <span>
                             {
-                                references.map((reference, index) => 
+                                references.map((reference, index) =>
                                     renderAhref(
                                         (
                                             <Tooltip
@@ -282,6 +286,8 @@ class VulnerabilitiesTable extends React.Component {
                 className="ort-table-rule-violations"
                 columns={columns}
                 dataSource={vulnerabilities}
+                rowKey="key"
+                size="small"
                 expandable={{
                     expandedRowRender: (webAppVulnerability) => {
                         const defaultActiveKey = webAppVulnerability.isResolved
@@ -295,7 +301,7 @@ class VulnerabilitiesTable extends React.Component {
                                 bordered={false}
                                 defaultActiveKey={defaultActiveKey}
                                 items={(() => {
-                                    var collapseItems = [];
+                                    const collapseItems = [];
 
                                     if (webAppVulnerability.isResolved) {
                                         collapseItems.push({
@@ -360,7 +366,6 @@ class VulnerabilitiesTable extends React.Component {
                 locale={{
                     emptyText: 'No violations'
                 }}
-                onChange={onChange}
                 pagination={
                     {
                         defaultPageSize: 25,
@@ -372,11 +377,10 @@ class VulnerabilitiesTable extends React.Component {
                         showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} violations`
                     }
                 }
-                rowKey="key"
-                size="small"
+                onChange={onChange}
             />
         );
-    };
+    }
 }
 
 VulnerabilitiesTable.propTypes = {

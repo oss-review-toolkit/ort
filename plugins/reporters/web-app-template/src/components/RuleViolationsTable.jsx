@@ -18,8 +18,7 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import { Collapse, Table, Tooltip } from 'antd';
+
 import {
     ExclamationCircleOutlined,
     FileAddOutlined,
@@ -28,12 +27,14 @@ import {
     IssuesCloseOutlined,
     WarningOutlined
 } from '@ant-design/icons';
-
+import { Collapse, Table, Tooltip } from 'antd';
 import Markdown from 'markdown-to-jsx';
+import PropTypes from 'prop-types';
+
 import PackageDetails from './PackageDetails';
+import PackageFindingsTable from './PackageFindingsTable';
 import PackageLicenses from './PackageLicenses';
 import PackagePaths from './PackagePaths';
-import PackageFindingsTable from './PackageFindingsTable';
 import PathExcludesTable from './PathExcludesTable';
 import ResolutionTable from './ResolutionTable';
 import ScopeExcludesTable from './ScopeExcludesTable';
@@ -41,7 +42,7 @@ import { getColumnSearchProps } from './Shared';
 
 // Generates the HTML to display violations as a Table
 class RuleViolationsTable extends React.Component {
-    render () {
+    render() {
         const {
             onChange,
             ruleViolations,
@@ -64,7 +65,7 @@ class RuleViolationsTable extends React.Component {
                 dataIndex: 'severityIndex',
                 key: 'severityIndex',
                 filters: [
-                    { 
+                    {
                         text: 'Errors',
                         value: 0
                     },
@@ -94,7 +95,8 @@ class RuleViolationsTable extends React.Component {
                                     className="ort-ok"
                                 />
                             </Tooltip>
-                        ) : (
+                            )
+                        : (
                             <span>
                                 {
                                     webAppRuleViolation.severity === 'ERROR'
@@ -121,7 +123,7 @@ class RuleViolationsTable extends React.Component {
                                     )
                                 }
                             </span>
-                        )
+                            )
                 ),
                 sorter: (a, b) => a.severityIndex - b.severityIndex,
                 sortOrder: sortedInfo.field === 'severityIndex' && sortedInfo.order,
@@ -167,7 +169,8 @@ class RuleViolationsTable extends React.Component {
                     const webAppPackage = webAppRuleViolation.package;
 
                     if (webAppPackage) {
-                        return webAppPackage.isExcluded ? (
+                        return webAppPackage.isExcluded
+                            ? (
                             <span className="ort-excludes">
                                 <Tooltip
                                     placement="right"
@@ -176,9 +179,10 @@ class RuleViolationsTable extends React.Component {
                                     <FileExcelOutlined className="ort-excluded" />
                                 </Tooltip>
                             </span>
-                        ) : (
+                                )
+                            : (
                             <FileAddOutlined />
-                        );
+                                );
                     }
 
                     return null;
@@ -224,6 +228,8 @@ class RuleViolationsTable extends React.Component {
                 className="ort-table-rule-violations"
                 columns={columns}
                 dataSource={ruleViolations}
+                rowKey="key"
+                size="small"
                 expandable={{
                     expandedRowRender: (webAppRuleViolation) => {
                         let defaultActiveKey = [0];
@@ -239,7 +245,7 @@ class RuleViolationsTable extends React.Component {
                                 bordered={false}
                                 defaultActiveKey={defaultActiveKey}
                                 items={(() => {
-                                    var collapseItems = [];
+                                    const collapseItems = [];
 
                                     if (webAppRuleViolation.hasHowToFix()) {
                                         collapseItems.push({
@@ -339,7 +345,6 @@ class RuleViolationsTable extends React.Component {
                 locale={{
                     emptyText: 'No violations'
                 }}
-                onChange={onChange}
                 pagination={
                     {
                         defaultPageSize: 25,
@@ -351,11 +356,10 @@ class RuleViolationsTable extends React.Component {
                         showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} violations`
                     }
                 }
-                rowKey="key"
-                size="small"
+                onChange={onChange}
             />
         );
-    };
+    }
 }
 
 RuleViolationsTable.propTypes = {

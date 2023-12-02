@@ -17,7 +17,14 @@
  * License-Filename: LICENSE
  */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
+
+import {
+    ControlOutlined,
+    PartitionOutlined,
+    PieChartOutlined,
+    TableOutlined
+} from '@ant-design/icons';
 import {
     Alert,
     Col,
@@ -25,24 +32,20 @@ import {
     Row,
     Tabs
 } from 'antd';
-import {
-    ControlOutlined,
-    PartitionOutlined,
-    PieChartOutlined,
-    TableOutlined
-} from '@ant-design/icons';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+
+import { connect } from 'react-redux';
+
 import AboutModal from './components/AboutModal';
 import SummaryView from './components/SummaryView';
 import TableView from './components/TableView';
 import TreeView from './components/TreeView';
 import './App.css';
-import store from './store';
 import {
     getAppView,
     getOrtResult
 } from './reducers/selectors';
+import store from './store';
 
 class ReporterApp extends Component {
     constructor(props) {
@@ -70,18 +73,18 @@ class ReporterApp extends Component {
         } = this.props;
 
         switch (showKey) {
-        case 'ort-tabs-summary':
-        case 'ort-tabs-table':
-        case 'ort-tabs-tree':
-        case 'ort-tabs': {
-            return (
+            case 'ort-tabs-summary':
+            case 'ort-tabs-table':
+            case 'ort-tabs-tree':
+            case 'ort-tabs': {
+                return (
                 <Row
                     className="ort-app"
                     key="ort-tabs"
                 >
                     <Col span={24}>
                         {
-                            showAboutModal && (<AboutModal webAppOrtResult={webAppOrtResult} />)
+                            !!showAboutModal && <AboutModal webAppOrtResult={webAppOrtResult} />
                         }
                         <Tabs
                             activeKey={showKey}
@@ -94,7 +97,7 @@ class ReporterApp extends Component {
                                             Summary
                                         </span>
                                     ),
-                                    key: "ort-tabs-summary",
+                                    key: 'ort-tabs-summary',
                                     children: (
                                         <SummaryView />
                                     )
@@ -106,7 +109,7 @@ class ReporterApp extends Component {
                                             Table
                                         </span>
                                     ),
-                                    key: "ort-tabs-table",
+                                    key: 'ort-tabs-table',
                                     children: (
                                         <TableView />
                                     )
@@ -118,31 +121,31 @@ class ReporterApp extends Component {
                                         Tree
                                         </span>
                                     ),
-                                    key: "ort-tabs-tree",
+                                    key: 'ort-tabs-tree',
                                     children: (
                                         <TreeView />
                                     )
                                 }
                             ]}
-                            onChange={this.onChangeTab}
                             tabBarExtraContent={(
                                 <ControlOutlined
                                     className="ort-control"
                                     onClick={this.onClickAbout}
                                 />
                             )}
+                            onChange={this.onChangeTab}
                         />
                     </Col>
                 </Row>
-            );
-        }
-        case 'ort-loading': {
-            const {
-                percentage: loadingPercentage,
-                text: loadingText
-            } = loading;
+                );
+            }
+            case 'ort-loading': {
+                const {
+                    percentage: loadingPercentage,
+                    text: loadingText
+                } = loading;
 
-            return (
+                return (
                 <Row
                     align="middle"
                     justify="space-around"
@@ -161,17 +164,19 @@ class ReporterApp extends Component {
                         <span>
                             {loadingText}
                         </span>
-                        {loadingPercentage === 100 ? (
+                        {loadingPercentage === 100
+                            ? (
                             <Progress percent={100} />
-                        ) : (
+                                )
+                            : (
                             <Progress percent={loadingPercentage} status="active" />
-                        )}
+                                )}
                     </Col>
                 </Row>
-            );
-        }
-        case 'ort-no-report-data':
-            return (
+                );
+            }
+            case 'ort-no-report-data':
+                return (
                 <Row
                     align="middle"
                     className="ort-app"
@@ -182,6 +187,7 @@ class ReporterApp extends Component {
                     <Col span={8}>
                         <Alert
                             message="No review results could be loaded..."
+                            type="error"
                             description={(
                                 <div>
                                     <p>
@@ -201,13 +207,12 @@ class ReporterApp extends Component {
                                     </p>
                                 </div>
                             )}
-                            type="error"
                         />
                     </Col>
                 </Row>
-            );
-        default:
-            return (
+                );
+            default:
+                return (
                 <Row
                     align="middle"
                     className="ort-app"
@@ -218,6 +223,7 @@ class ReporterApp extends Component {
                     <Col span={8}>
                         <Alert
                             message="Oops, something went wrong..."
+                            type="error"
                             description={(
                                 <div>
                                     <p>
@@ -238,11 +244,10 @@ class ReporterApp extends Component {
                                     </p>
                                 </div>
                             )}
-                            type="error"
                         />
                     </Col>
                 </Row>
-            );
+                );
         }
     }
 }
