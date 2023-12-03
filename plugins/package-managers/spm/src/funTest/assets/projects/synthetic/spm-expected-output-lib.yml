@@ -27,7 +27,7 @@ project:
       - id: "SPM:apple:swift-collections:1.0.5"
     - id: "SPM:apple:swift-nio-extras:1.20.0"
       dependencies:
-      - id: "SPM:apple:swift-http-types:1.0.0"
+      - id: "SPM:apple:swift-http-types:1.0.2"
       - id: "SPM:apple:swift-nio:2.62.0"
         dependencies:
         - id: "SPM:apple:swift-atomics:1.2.0"
@@ -62,7 +62,7 @@ project:
         - id: "SPM:apple:swift-collections:1.0.5"
       - id: "SPM:apple:swift-nio-extras:1.20.0"
         dependencies:
-        - id: "SPM:apple:swift-http-types:1.0.0"
+        - id: "SPM:apple:swift-http-types:1.0.2"
         - id: "SPM:apple:swift-nio:2.62.0"
           dependencies:
           - id: "SPM:apple:swift-atomics:1.2.0"
@@ -132,7 +132,7 @@ project:
         - id: "SPM:apple:swift-collections:1.0.5"
       - id: "SPM:apple:swift-nio-extras:1.20.0"
         dependencies:
-        - id: "SPM:apple:swift-http-types:1.0.0"
+        - id: "SPM:apple:swift-http-types:1.0.2"
         - id: "SPM:apple:swift-nio:2.62.0"
           dependencies:
           - id: "SPM:apple:swift-atomics:1.2.0"
@@ -270,8 +270,8 @@ packages:
     url: "https://github.com/apple/swift-crypto.git"
     revision: "2.6.0"
     path: ""
-- id: "SPM:apple:swift-http-types:1.0.0"
-  purl: "pkg:swift/apple/swift-http-types@1.0.0"
+- id: "SPM:apple:swift-http-types:1.0.2"
+  purl: "pkg:swift/apple/swift-http-types@1.0.2"
   authors:
   - "apple"
   declared_licenses: []
@@ -291,12 +291,12 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/apple/swift-http-types.git"
-    revision: "1.0.0"
+    revision: "1.0.2"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/apple/swift-http-types.git"
-    revision: "1.0.0"
+    revision: "1.0.2"
     path: ""
 - id: "SPM:apple:swift-log:1.5.3"
   purl: "pkg:swift/apple/swift-log@1.5.3"
