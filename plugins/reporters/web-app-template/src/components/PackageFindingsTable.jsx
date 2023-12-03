@@ -30,6 +30,30 @@ import PropTypes from 'prop-types';
 
 import PathExcludesTable from './PathExcludesTable';
 
+const packageFindingsTableExpandedRow = (webAppFinding) => (
+    <PathExcludesTable
+        excludes={webAppFinding.pathExcludes}
+    />
+);
+
+const packageFindingsTableExpandedIcon = (obj) => {
+    const { expanded, onExpand, record } = obj;
+
+    if (record.isExcluded === false) {
+        return null;
+    }
+
+    return (
+        expanded
+            ? (
+            <MinusSquareOutlined onClick={(e) => onExpand(record, e)} />
+                )
+            : (
+            <PlusSquareOutlined onClick={(e) => onExpand(record, e)} />
+                )
+    );
+};
+
 // Generates the HTML to display scanFindings as a Table
 const PackageFindingsTable = ({ webAppPackage }) => {
     const { findings } = webAppPackage;
@@ -93,28 +117,8 @@ const PackageFindingsTable = ({ webAppPackage }) => {
         });
 
         expandable = {
-            expandedRowRender: (webAppFinding) => (
-                <PathExcludesTable
-                    excludes={webAppFinding.pathExcludes}
-                />
-            ),
-            expandIcon: (obj) => {
-                const { expanded, onExpand, record } = obj;
-
-                if (record.isExcluded === false) {
-                    return null;
-                }
-
-                return (
-                    expanded
-                        ? (
-                        <MinusSquareOutlined onClick={(e) => onExpand(record, e)} />
-                            )
-                        : (
-                        <PlusSquareOutlined onClick={(e) => onExpand(record, e)} />
-                            )
-                );
-            },
+            expandedRowRender: (webAppFinding) => packageFindingsTableExpandedRow(webAppFinding),
+            expandIcon: (obj) => packageFindingsTableExpandedIcon(obj),
             indentSize: 0
         };
     }

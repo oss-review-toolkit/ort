@@ -60,6 +60,83 @@ import PathExcludesTable from './PathExcludesTable';
 import ScopeExcludesTable from './ScopeExcludesTable';
 import { getColumnSearchProps } from './Shared';
 
+const tableViewExpandedRow = (webAppPackage) => (
+    <Collapse
+        className="ort-package-collapse"
+        bordered={false}
+        defaultActiveKey={[0, 1]}
+        items={(() => {
+            const collapseItems = [
+                {
+                    label: 'Details',
+                    key: 'package-details',
+                    children: (
+                        <PackageDetails webAppPackage={webAppPackage} />
+                    )
+                }
+            ];
+
+            if (webAppPackage.hasLicenses()) {
+                collapseItems.push({
+                    label: 'Licenses',
+                    key: 'package-licenses',
+                    children: (
+                        <PackageLicenses webAppPackage={webAppPackage} />
+                    )
+                });
+            }
+
+            if (webAppPackage.hasPaths()) {
+                collapseItems.push({
+                    label: 'Paths',
+                    key: 'package-paths',
+                    children: (
+                        <PackagePaths paths={webAppPackage.paths} />
+                    )
+                });
+            }
+
+            if (webAppPackage.hasFindings()) {
+                collapseItems.push({
+                    label: 'Scan Results',
+                    key: 'package-scan-results',
+                    children: (
+                        <PackageFindingsTable
+                            webAppPackage={webAppPackage}
+                        />
+                    )
+                });
+            }
+
+            if (webAppPackage.hasPathExcludes()) {
+                collapseItems.push({
+                    label: 'Path Excludes',
+                    key: 'package-path-excludes',
+                    children: (
+                        <PathExcludesTable
+                            excludes={webAppPackage.pathExcludes}
+                        />
+                    )
+                });
+            }
+
+            if (webAppPackage.hasScopeExcludes()) {
+                collapseItems.push({
+                    label: 'Scope Excludes',
+                    key: 'package-scope-excludes',
+                    children: (
+                        <ScopeExcludesTable
+                            excludes={webAppPackage.scopeExcludes}
+                        />
+                    )
+                });
+            }
+
+            return collapseItems;
+        })()}
+    />
+);
+
 class TableView extends React.Component {
     shouldComponentUpdate() {
         const { shouldComponentUpdate } = this.props;
@@ -133,17 +210,17 @@ class TableView extends React.Component {
                 render: (webAppPackage) => (
                     webAppPackage.isExcluded
                         ? (
-                        <span className="ort-excludes">
-                            <Tooltip
-                                placement="right"
-                                title={Array.from(webAppPackage.excludeReasons).join(', ')}
-                            >
-                                <FileExcelOutlined className="ort-excluded" />
-                            </Tooltip>
-                        </span>
+                            <span className="ort-excludes">
+                                <Tooltip
+                                    placement="right"
+                                    title={Array.from(webAppPackage.excludeReasons).join(', ')}
+                                >
+                                    <FileExcelOutlined className="ort-excluded" />
+                                </Tooltip>
+                            </span>
                             )
                         : (
-                        <FileAddOutlined />
+                            <FileAddOutlined />
                             )
                 ),
                 width: '2em'
@@ -371,15 +448,15 @@ class TableView extends React.Component {
                 render: (text, webAppPackage) => (
                     webAppPackage.isProject
                         ? (
-                        <Tooltip
-                            placement="right"
-                            title={webAppPackage.definitionFilePath}
-                        >
-                            <LaptopOutlined />
-                        </Tooltip>
+                            <Tooltip
+                                placement="right"
+                                title={webAppPackage.definitionFilePath}
+                            >
+                                <LaptopOutlined />
+                            </Tooltip>
                             )
                         : (
-                        <CloudDownloadOutlined />
+                            <CloudDownloadOutlined />
                             )
                 ),
                 title: 'Project',
@@ -432,82 +509,7 @@ class TableView extends React.Component {
                     rowClassName="ort-package"
                     rowKey="key"
                     expandable={{
-                        expandedRowRender: (webAppPackage) => (
-                            <Collapse
-                                className="ort-package-collapse"
-                                bordered={false}
-                                defaultActiveKey={[0, 1]}
-                                items={(() => {
-                                    const collapseItems = [
-                                        {
-                                            label: 'Details',
-                                            key: 'package-details',
-                                            children: (
-                                                <PackageDetails webAppPackage={webAppPackage} />
-                                            )
-                                        }
-                                    ];
-
-                                    if (webAppPackage.hasLicenses()) {
-                                        collapseItems.push({
-                                            label: 'Licenses',
-                                            key: 'package-licenses',
-                                            children: (
-                                                <PackageLicenses webAppPackage={webAppPackage} />
-                                            )
-                                        });
-                                    }
-
-                                    if (webAppPackage.hasPaths()) {
-                                        collapseItems.push({
-                                            label: 'Paths',
-                                            key: 'package-paths',
-                                            children: (
-                                                <PackagePaths paths={webAppPackage.paths} />
-                                            )
-                                        });
-                                    }
-
-                                    if (webAppPackage.hasFindings()) {
-                                        collapseItems.push({
-                                            label: 'Scan Results',
-                                            key: 'package-scan-results',
-                                            children: (
-                                                <PackageFindingsTable
-                                                    webAppPackage={webAppPackage}
-                                                />
-                                            )
-                                        });
-                                    }
-
-                                    if (webAppPackage.hasPathExcludes()) {
-                                        collapseItems.push({
-                                            label: 'Path Excludes',
-                                            key: 'package-path-excludes',
-                                            children: (
-                                                <PathExcludesTable
-                                                    excludes={webAppPackage.pathExcludes}
-                                                />
-                                            )
-                                        });
-                                    }
-
-                                    if (webAppPackage.hasScopeExcludes()) {
-                                        collapseItems.push({
-                                            label: 'Scope Excludes',
-                                            key: 'package-scope-excludes',
-                                            children: (
-                                                <ScopeExcludesTable
-                                                    excludes={webAppPackage.scopeExcludes}
-                                                />
-                                            )
-                                        });
-                                    }
-
-                                    return collapseItems;
-                                })()}
-                            />
-                        ),
+                        expandedRowRender: (webAppPackage) => tableViewExpandedRow(webAppPackage),
                         expandRowByClick: true
                     }}
                     locale={{

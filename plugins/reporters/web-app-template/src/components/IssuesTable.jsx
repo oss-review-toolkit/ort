@@ -40,6 +40,114 @@ import ResolutionTable from './ResolutionTable';
 import ScopeExcludesTable from './ScopeExcludesTable';
 import { getColumnSearchProps } from './Shared';
 
+const issuesTableExpandedRow = (webAppOrtIssue) => {
+    const defaultActiveKey = webAppOrtIssue.isResolved
+        ? 'issue-how-to-fix'
+        : 'issue-package-details';
+    const webAppPackage = webAppOrtIssue.package;
+
+    return (
+        <Collapse
+            className="ort-package-collapse"
+            bordered={false}
+            defaultActiveKey={defaultActiveKey}
+            items={(() => {
+                const collapseItems = [];
+
+                if (webAppOrtIssue.hasHowToFix()) {
+                    collapseItems.push({
+                        label: 'How to fix',
+                        key: 'issue-how-to-fix',
+                        children: (
+                            <Markdown className="ort-how-to-fix">
+                                {webAppOrtIssue.howToFix}
+                            </Markdown>
+                        )
+                    });
+                }
+
+                if (webAppOrtIssue.isResolved) {
+                    collapseItems.push({
+                        label: 'Resolutions',
+                        key: 'issue-resolutions',
+                        children: (
+                            <ResolutionTable
+                                resolutions={webAppOrtIssue.resolutions}
+                            />
+                        )
+                    });
+                }
+
+                collapseItems.push({
+                    label: 'Details',
+                    key: 'issue-package-details',
+                    children: (
+                        <PackageDetails webAppPackage={webAppPackage} />
+                    )
+                });
+
+                if (webAppPackage.hasLicenses()) {
+                    collapseItems.push({
+                        label: 'Licenses',
+                        key: 'issue-package-licenses',
+                        children: (
+                            <PackageLicenses webAppPackage={webAppPackage} />
+                        )
+                    });
+                }
+
+                if (webAppPackage.hasPaths()) {
+                    collapseItems.push({
+                        label: 'Paths',
+                        key: 'issue-package-paths',
+                        children: (
+                            <PackagePaths paths={webAppPackage.paths} />
+                        )
+                    });
+                }
+
+                if (webAppPackage.hasFindings()) {
+                    collapseItems.push({
+                        label: 'Scan Results',
+                        key: 'issue-package-scan-results',
+                        children: (
+                            <PackageFindingsTable
+                                webAppPackage={webAppPackage}
+                            />
+                        )
+                    });
+                }
+
+                if (webAppPackage.hasPathExcludes()) {
+                    collapseItems.push({
+                        label: 'Path Excludes',
+                        key: 'issue-package-path-excludes',
+                        children: (
+                            <PathExcludesTable
+                                excludes={webAppPackage.pathExcludes}
+                            />
+                        )
+                    });
+                }
+
+                if (webAppPackage.hasScopeExcludes()) {
+                    collapseItems.push({
+                        label: 'Scope Excludes',
+                        key: 'issue-package-scope-excludes',
+                        children: (
+                            <ScopeExcludesTable
+                                excludes={webAppPackage.scopeExcludes}
+                            />
+                        )
+                    });
+                }
+
+                return collapseItems;
+            })()}
+        />
+    );
+};
+
 // Generates the HTML to display violations as a Table
 class IssuesTable extends React.Component {
     render() {
@@ -174,17 +282,17 @@ class IssuesTable extends React.Component {
 
                     return webAppPackage.isExcluded
                         ? (
-                        <span className="ort-excludes">
-                            <Tooltip
-                                placement="right"
-                                title={Array.from(webAppPackage.excludeReasons).join(', ')}
-                            >
-                                <FileExcelOutlined className="ort-excluded" />
-                            </Tooltip>
-                        </span>
+                            <span className="ort-excludes">
+                                <Tooltip
+                                    placement="right"
+                                    title={Array.from(webAppPackage.excludeReasons).join(', ')}
+                                >
+                                    <FileExcelOutlined className="ort-excluded" />
+                                </Tooltip>
+                            </span>
                             )
                         : (
-                        <FileAddOutlined />
+                            <FileAddOutlined />
                             );
                 },
                 width: '2em'
@@ -219,113 +327,7 @@ class IssuesTable extends React.Component {
                 rowKey="key"
                 size="small"
                 expandable={{
-                    expandedRowRender: (webAppOrtIssue) => {
-                        const defaultActiveKey = webAppOrtIssue.isResolved
-                            ? 'issue-how-to-fix'
-                            : 'issue-package-details';
-                        const webAppPackage = webAppOrtIssue.package;
-
-                        return (
-                            <Collapse
-                                className="ort-package-collapse"
-                                bordered={false}
-                                defaultActiveKey={defaultActiveKey}
-                                items={(() => {
-                                    const collapseItems = [];
-
-                                    if (webAppOrtIssue.hasHowToFix()) {
-                                        collapseItems.push({
-                                            label: 'How to fix',
-                                            key: 'issue-how-to-fix',
-                                            children: (
-                                                <Markdown className="ort-how-to-fix">
-                                                    {webAppOrtIssue.howToFix}
-                                                </Markdown>
-                                            )
-                                        });
-                                    }
-
-                                    if (webAppOrtIssue.isResolved) {
-                                        collapseItems.push({
-                                            label: 'Resolutions',
-                                            key: 'issue-resolutions',
-                                            children: (
-                                                <ResolutionTable
-                                                    resolutions={webAppOrtIssue.resolutions}
-                                                />
-                                            )
-                                        });
-                                    }
-
-                                    collapseItems.push({
-                                        label: 'Details',
-                                        key: 'issue-package-details',
-                                        children: (
-                                            <PackageDetails webAppPackage={webAppPackage} />
-                                        )
-                                    });
-
-                                    if (webAppPackage.hasLicenses()) {
-                                        collapseItems.push({
-                                            label: 'Licenses',
-                                            key: 'issue-package-licenses',
-                                            children: (
-                                                <PackageLicenses webAppPackage={webAppPackage} />
-                                            )
-                                        });
-                                    }
-
-                                    if (webAppPackage.hasPaths()) {
-                                        collapseItems.push({
-                                            label: 'Paths',
-                                            key: 'issue-package-paths',
-                                            children: (
-                                                <PackagePaths paths={webAppPackage.paths} />
-                                            )
-                                        });
-                                    }
-
-                                    if (webAppPackage.hasFindings()) {
-                                        collapseItems.push({
-                                            label: 'Scan Results',
-                                            key: 'issue-package-scan-results',
-                                            children: (
-                                                <PackageFindingsTable
-                                                    webAppPackage={webAppPackage}
-                                                />
-                                            )
-                                        });
-                                    }
-
-                                    if (webAppPackage.hasPathExcludes()) {
-                                        collapseItems.push({
-                                            label: 'Path Excludes',
-                                            key: 'issue-package-path-excludes',
-                                            children: (
-                                                <PathExcludesTable
-                                                    excludes={webAppPackage.pathExcludes}
-                                                />
-                                            )
-                                        });
-                                    }
-
-                                    if (webAppPackage.hasScopeExcludes()) {
-                                        collapseItems.push({
-                                            label: 'Scope Excludes',
-                                            key: 'issue-package-scope-excludes',
-                                            children: (
-                                                <ScopeExcludesTable
-                                                    excludes={webAppPackage.scopeExcludes}
-                                                />
-                                            )
-                                        });
-                                    }
-
-                                    return collapseItems;
-                                })()}
-                            />
-                        );
-                    }
+                    expandedRowRender: (webAppOrtIssue) => issuesTableExpandedRow(webAppOrtIssue)
                 }}
                 locale={{
                     emptyText: 'No issues'
