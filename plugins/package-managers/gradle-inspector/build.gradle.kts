@@ -38,8 +38,7 @@ dependencies {
     implementation(project(":utils:ort-utils"))
     implementation(project(":utils:spdx-utils"))
 
-    // Use the latest version that is not affected by https://github.com/gradle/gradle/issues/23208.
-    implementation("org.gradle:gradle-tooling-api:7.4.2")
+    implementation("org.gradle:gradle-tooling-api:${gradle.gradleVersion}")
 
     funTestImplementation(testFixtures(project(":analyzer")))
 }
