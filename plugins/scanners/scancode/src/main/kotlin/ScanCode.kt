@@ -72,7 +72,7 @@ class ScanCode internal constructor(
 
         private const val LICENSE_REFERENCES_OPTION_VERSION = "32.0.0"
         private const val OUTPUT_FORMAT = "json-pp"
-        internal const val TIMEOUT = 300
+        private const val TIMEOUT = 300
 
         /**
          * Configuration options that are relevant for [configuration] because they change the result file.
