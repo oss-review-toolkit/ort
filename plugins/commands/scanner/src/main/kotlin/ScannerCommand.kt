@@ -22,9 +22,6 @@ package org.ossreviewtoolkit.plugins.commands.scanner
 import com.github.ajalt.clikt.core.BadParameterValue
 import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.core.terminal
-import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
-import com.github.ajalt.clikt.parameters.groups.required
-import com.github.ajalt.clikt.parameters.groups.single
 import com.github.ajalt.clikt.parameters.options.RawOption
 import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
@@ -51,7 +48,6 @@ import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
-import org.ossreviewtoolkit.plugins.commands.api.utils.OPTION_GROUP_INPUT
 import org.ossreviewtoolkit.plugins.commands.api.utils.SeverityStatsPrinter
 import org.ossreviewtoolkit.plugins.commands.api.utils.configurationGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.outputGroup
@@ -73,22 +69,13 @@ class ScannerCommand : OrtCommand(
     name = "scan",
     help = "Run external license / copyright scanners."
 ) {
-    private val input by mutuallyExclusiveOptions(
-        option(
-            "--ort-file", "-i",
-            help = "An ORT result file with an analyzer result to use. Source code is downloaded automatically if " +
-                "needed. Must not be used together with '--input-path'."
-        ).convert { it.expandTilde() }
-            .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
-            .convert { it.absoluteFile.normalize() },
-        option(
-            "--input-path", "-p",
-            help = "An input directory or file to scan. Must not be used together with '--ort-file'."
-        ).convert { it.expandTilde() }
-            .file(mustExist = true, canBeFile = true, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
-            .convert { it.absoluteFile.normalize() },
-        name = OPTION_GROUP_INPUT
-    ).single().required()
+    private val input by option(
+        "--ort-file", "-i",
+        help = "An ORT result file with an analyzer result to use. Source code is downloaded automatically if needed."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
+        .required()
 
     private val outputDir by option(
         "--output-dir", "-o",
