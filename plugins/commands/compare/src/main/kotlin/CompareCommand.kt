@@ -46,22 +46,28 @@ import org.ossreviewtoolkit.model.AdvisorRecord
 import org.ossreviewtoolkit.model.AdvisorRun
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
+import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.EvaluatorRun
 import org.ossreviewtoolkit.model.FileList
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
+import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.ProvenanceResolutionResult
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.ResolvedConfiguration
 import org.ossreviewtoolkit.model.ResolvedPackageCurations
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.ScanResult
+import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.ScannerRun
+import org.ossreviewtoolkit.model.SnippetFinding
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
@@ -129,6 +135,16 @@ class CompareCommand : OrtCommand(
         help = "Ignore temporary directory differences."
     ).flag()
 
+    private val ignoreConfig by option(
+        "--ignore-config", "-c",
+        help = "Ignore configuration options."
+    ).flag()
+
+    private val ignoreResultsFromDifferentScannerVersions by option(
+        "--ignore-version-mismatch", "-v",
+        help = "Ignore scan results if they have been created by different scanner versions."
+    ).flag()
+
     override fun run() {
         if (fileA == fileB) {
             echo("The arguments point to the same file.")
@@ -165,7 +181,14 @@ class CompareCommand : OrtCommand(
                     throw ProgramResult(0)
                 }
 
-                val diff = resultA.diff(resultB)
+                val context = SemanticDiffContext(
+                    ignoreConfig = ignoreConfig,
+                    ignoreResultsFromDifferentScannerVersions = ignoreResultsFromDifferentScannerVersions,
+                    packageConfigMapper = ::lenientPackageConfigurationMapper,
+                    scanResultMapper = ::lenientScanResultMapper
+                )
+
+                val diff = resultA.diff(resultB, context)
 
                 echo(deserializer.writeValueAsString(diff))
 
@@ -215,17 +238,17 @@ class CompareCommand : OrtCommand(
     }
 }
 
-private fun OrtResult.diff(other: OrtResult) =
+private fun OrtResult.diff(other: OrtResult, context: SemanticDiffContext) =
     OrtResultDiff(
-        repositoryDiff = repository.diff(other.repository),
+        repositoryDiff = repository.diff(other.repository, context),
         analyzerRunDiff = analyzer.diff(other.analyzer),
-        scannerRunDiff = scanner.diff(other.scanner),
+        scannerRunDiff = scanner.diff(other.scanner, context),
         advisorRunDiff = advisor.diff(other.advisor),
         evaluatorRunDiff = evaluator.diff(other.evaluator),
         resolvedConfigurationDiff = resolvedConfiguration.diff(other.resolvedConfiguration)
     )
 
-private fun Repository.diff(other: Repository): RepositoryDiff? =
+private fun Repository.diff(other: Repository, context: SemanticDiffContext): RepositoryDiff? =
     if (this == other) {
         null
     } else {
@@ -236,11 +259,14 @@ private fun Repository.diff(other: Repository): RepositoryDiff? =
             vcsProcessedB = other.vcsProcessed.takeIf { it != vcsProcessed },
             nestedRepositoriesA = nestedRepositories.takeIf { it != other.nestedRepositories },
             nestedRepositoriesB = other.nestedRepositories.takeIf { it != nestedRepositories },
-            configDiff = config.diff(other.config)
+            configDiff = config.diff(other.config, context)
         )
     }
 
-private fun RepositoryConfiguration.diff(other: RepositoryConfiguration): RepositoryConfigurationDiff? =
+private fun RepositoryConfiguration.diff(
+    other: RepositoryConfiguration,
+    context: SemanticDiffContext
+): RepositoryConfigurationDiff? =
     if (this == other) {
         null
     } else {
@@ -249,10 +275,16 @@ private fun RepositoryConfiguration.diff(other: RepositoryConfiguration): Reposi
             excludeDiff = excludes.diff(other.excludes),
             resolutionsDiff = resolutions.diff(other.resolutions),
             curationsDiff = curations.diff(other.curations),
-            packageConfigurationsA = (packageConfigurations - other.packageConfigurations.toSet())
-                .takeUnless { it.isEmpty() },
-            packageConfigurationsB = (other.packageConfigurations - packageConfigurations.toSet())
-                .takeUnless { it.isEmpty() },
+            packageConfigurationsA = mappedDiff(
+                packageConfigurations,
+                other.packageConfigurations,
+                context.packageConfigMapper
+            ),
+            packageConfigurationsB = mappedDiff(
+                other.packageConfigurations,
+                packageConfigurations.toSet(),
+                context.packageConfigMapper
+            ),
             licenseChoicesDiff = licenseChoices.diff(other.licenseChoices)
         )
     }
@@ -458,7 +490,7 @@ private fun AnalyzerResult?.diff(other: AnalyzerResult?): AnalyzerResultDiff? {
     }
 }
 
-private fun ScannerRun?.diff(other: ScannerRun?): ScannerRunDiff? {
+private fun ScannerRun?.diff(other: ScannerRun?, context: SemanticDiffContext): ScannerRunDiff? {
     if (this == other) return null
 
     return if (this == null) {
@@ -468,9 +500,9 @@ private fun ScannerRun?.diff(other: ScannerRun?): ScannerRunDiff? {
             environmentB = other?.environment,
             config = diff(other?.config),
             provenancesB = other?.provenances,
-            scanResultsB = other?.scanResults,
             scannersB = other?.scanners,
-            filesB = other?.files
+            filesB = other?.files,
+            scanResultDiff = other?.scanResults?.mapNotNullTo(mutableSetOf()) { null.diff(it, context) }
         )
     } else if (other == null) {
         ScannerRunDiff(
@@ -479,11 +511,22 @@ private fun ScannerRun?.diff(other: ScannerRun?): ScannerRunDiff? {
             environmentA = environment,
             config = config.diff(null),
             provenancesA = provenances,
-            scanResultsA = scanResults,
             scannersA = scanners,
-            filesA = files
+            filesA = files,
+            scanResultDiff = scanResults.mapNotNullTo(mutableSetOf()) { it.diff(null, context) }
         )
     } else {
+        val scanResultsA = scanResults.map(context.scanResultMapper)
+        val scanResultsAMapping = scanResultsA.associateBy { result -> (result.provenance to result.scanner.name) }
+        val scanResultsB = other.scanResults.map(context.scanResultMapper)
+        val scanResultsBMapping = scanResultsB.associateBy { result -> (result.provenance to result.scanner.name) }
+
+        val differentResults = scanResultsA.mapNotNullTo(mutableSetOf()) {
+            it.diff(scanResultsBMapping[it.provenance to it.scanner.name], context)
+        } + scanResultsB.mapNotNullTo(mutableSetOf()) {
+            scanResultsAMapping[it.provenance to it.scanner.name].diff(it, context)
+        }
+
         ScannerRunDiff(
             startTimeA = startTime.takeIf { it != other.startTime },
             startTimeB = other.startTime.takeIf { it != startTime },
@@ -491,15 +534,14 @@ private fun ScannerRun?.diff(other: ScannerRun?): ScannerRunDiff? {
             endTimeB = other.endTime.takeIf { it != endTime },
             environmentA = environment.takeIf { it != other.environment },
             environmentB = other.environment.takeIf { it != environment },
-            config = config.diff(other.config),
+            config = if (context.ignoreConfig) null else config.diff(other.config),
             provenancesA = (provenances - other.provenances).takeUnless { it.isEmpty() },
             provenancesB = (other.provenances - provenances).takeUnless { it.isEmpty() },
-            scanResultsA = (scanResults - other.scanResults).takeUnless { it.isEmpty() },
-            scanResultsB = (other.scanResults - scanResults).takeUnless { it.isEmpty() },
             scannersA = scanners.takeIf { it != other.scanners },
             scannersB = other.scanners.takeIf { it != scanners },
             filesA = (files - other.files).takeUnless { it.isEmpty() },
-            filesB = (other.files - files).takeUnless { it.isEmpty() }
+            filesB = (other.files - files).takeUnless { it.isEmpty() },
+            scanResultDiff = differentResults.takeUnless { it.isEmpty() }
         )
     }
 }
@@ -567,6 +609,91 @@ private fun ScannerConfiguration?.diff(other: ScannerConfiguration?): ScannerCon
     }
 }
 
+private fun ScanResult?.diff(other: ScanResult?, context: SemanticDiffContext): ScanResultDiff? {
+    val thisMapped = this?.let { context.scanResultMapper(it) }
+    val otherMapped = other?.let { context.scanResultMapper(it) }
+    if (thisMapped == otherMapped) return null
+
+    return if (thisMapped == null) {
+        ScanResultDiff(
+            provenance = other?.provenance,
+            scanner = other?.scanner,
+            summaryDiff = null.diff(other?.summary)
+        )
+    } else if (otherMapped == null) {
+        ScanResultDiff(
+            provenance = thisMapped.provenance,
+            scanner = thisMapped.scanner,
+            summaryDiff = thisMapped.summary.diff(null)
+        )
+    } else {
+        if (context.ignoreResultsFromDifferentScannerVersions &&
+            thisMapped.scanner.version != otherMapped.scanner.version
+        ) {
+            null
+        } else {
+            ScanResultDiff(
+                provenance = thisMapped.provenance,
+                scanner = thisMapped.scanner,
+                summaryDiff = thisMapped.summary.diff(otherMapped.summary)
+            )
+        }
+    }
+}
+
+private fun ScanSummary?.diff(other: ScanSummary?): ScanSummaryDiff? {
+    if (this == other) return null
+
+    return if (this == null) {
+        ScanSummaryDiff(
+            licenseFindingsB = other?.licenseFindings,
+            copyrightFindingsB = other?.copyrightFindings,
+            snippetFindingsB = other?.snippetFindings,
+            issuesB = other?.issues?.toSet()
+        )
+    } else if (other == null) {
+        ScanSummaryDiff(
+            licenseFindingsA = licenseFindings,
+            copyrightFindingsA = copyrightFindings,
+            snippetFindingsA = snippetFindings,
+            issuesA = issues.toSet()
+        )
+    } else {
+        val lenientSnippets = snippetFindings.map(::lenientSnippetFindingMapper)
+        val otherLenientSnippets = other.snippetFindings.map(::lenientSnippetFindingMapper)
+        val snippetFindingsA = mappedDiff(lenientSnippets, otherLenientSnippets, identityMapper())
+        val reducedSnippetFindingsA = snippetFindingsA?.mapTo(mutableSetOf()) {
+            reduceSnippedFindingDelta(it, otherLenientSnippets)
+        }
+
+        val snippetFindingsB = mappedDiff(otherLenientSnippets, lenientSnippets, identityMapper())
+        val reducedSnippedFindingsB = snippetFindingsB?.mapTo(mutableSetOf()) {
+            reduceSnippedFindingDelta(it, lenientSnippets)
+        }
+
+        ScanSummaryDiff(
+            licenseFindingsA = mappedDiff(licenseFindings, other.licenseFindings, identityMapper()),
+            licenseFindingsB = mappedDiff(other.licenseFindings, licenseFindings, identityMapper()),
+            copyrightFindingsA = mappedDiff(copyrightFindings, other.copyrightFindings, identityMapper()),
+            copyrightFindingsB = mappedDiff(other.copyrightFindings, copyrightFindings, identityMapper()),
+            snippetFindingsA = reducedSnippetFindingsA,
+            snippetFindingsB = reducedSnippedFindingsB,
+            issuesA = mappedDiff(issues, other.issues, identityMapper()),
+            issuesB = mappedDiff(other.issues, issues, identityMapper())
+        )
+    }
+}
+
+private fun reduceSnippedFindingDelta(
+    finding: SnippetFinding,
+    otherFindings: Collection<SnippetFinding>
+): SnippetFinding =
+    otherFindings.filter { it.sourceLocation == finding.sourceLocation }
+        .map { it to it.snippets.subtract(finding.snippets) }
+        .minByOrNull { it.second.size }?.first?.let { other ->
+            finding.copy(snippets = finding.snippets - other.snippets)
+        } ?: finding
+
 private fun EvaluatorRun?.diff(other: EvaluatorRun?): EvaluatorRunDiff? {
     if (this == other) return null
 
@@ -588,8 +715,8 @@ private fun EvaluatorRun?.diff(other: EvaluatorRun?): EvaluatorRunDiff? {
             startTimeB = other.startTime.takeIf { it != startTime },
             endTimeA = endTime.takeIf { it != other.endTime },
             endTimeB = other.endTime.takeIf { it != endTime },
-            violationsA = (violations - other.violations.toSet()).takeUnless { it.isEmpty() },
-            violationsB = (other.violations - violations.toSet()).takeUnless { it.isEmpty() }
+            violationsA = mappedDiff(violations, other.violations.toSet(), ::lenientViolationMapper)?.toList(),
+            violationsB = mappedDiff(other.violations, violations.toSet(), ::lenientViolationMapper)?.toList()
         )
     }
 }
@@ -634,10 +761,16 @@ private fun ResolvedConfiguration.diff(other: ResolvedConfiguration): ResolvedCo
         null
     } else {
         ResolvedConfigurationDiff(
-            packageConfigurationsA = (packageConfigurations.orEmpty() - other.packageConfigurations.orEmpty().toSet())
-                .takeUnless { it.isEmpty() },
-            packageConfigurationsB = (other.packageConfigurations.orEmpty() - packageConfigurations.orEmpty().toSet())
-                .takeUnless { it.isEmpty() },
+            packageConfigurationsA = mappedDiff(
+                packageConfigurations.orEmpty(),
+                other.packageConfigurations.orEmpty(),
+                ::lenientPackageConfigurationMapper
+            )?.toList(),
+            packageConfigurationsB = mappedDiff(
+                other.packageConfigurations.orEmpty(),
+                packageConfigurations.orEmpty(),
+                ::lenientPackageConfigurationMapper
+            )?.toList(),
             packageCurationsA = (packageCurations - other.packageCurations.toSet()).takeUnless { it.isEmpty() },
             packageCurationsB = (other.packageCurations - packageCurations.toSet()).takeUnless { it.isEmpty() },
             resolutionsDiff = resolutions?.diff(other.resolutions)
@@ -664,6 +797,45 @@ private fun Map<Regex, String>.replaceIn(text: String) =
         currentText.replace(from, to)
     }
 
+typealias DiffMapper<T> = (T) -> T
+
+private fun lenientPackageConfigurationMapper(configuration: PackageConfiguration): PackageConfiguration =
+    configuration.copy(
+        pathExcludes = configuration.pathExcludes.distinct().sortedBy { it.pattern },
+        licenseFindingCurations = configuration.licenseFindingCurations.distinct().sortedBy { it.path }
+    )
+
+private fun lenientScanResultMapper(scanResult: ScanResult): ScanResult =
+    scanResult.copy(
+        scanner = scanResult.scanner.copy(configuration = "")
+    )
+
+private fun lenientViolationMapper(violation: RuleViolation): RuleViolation =
+    violation.copy(
+        message = violation.message.substringBefore('\n')
+    )
+
+private fun lenientSnippetFindingMapper(snippetFinding: SnippetFinding): SnippetFinding {
+    val lenientSnippets = snippetFinding.snippets.mapTo(mutableSetOf()) { it.copy(additionalData = emptyMap()) }
+    return snippetFinding.copy(snippets = lenientSnippets)
+}
+
+private fun <T> identityMapper(): DiffMapper<T> = { it }
+
+private fun <T> mappedDiff(itemsA: Collection<T>, itemsB: Collection<T>, mapper: DiffMapper<T>): Set<T>? {
+    val mappedA = itemsA.mapTo(mutableSetOf(), mapper)
+    val mappedB = itemsB.mapTo(mutableSetOf(), mapper)
+
+    return (mappedA - mappedB).takeUnless { it.isEmpty() }
+}
+
+private data class SemanticDiffContext(
+    val ignoreConfig: Boolean = false,
+    val ignoreResultsFromDifferentScannerVersions: Boolean = false,
+    val packageConfigMapper: DiffMapper<PackageConfiguration> = identityMapper(),
+    val scanResultMapper: DiffMapper<ScanResult> = identityMapper()
+)
+
 private data class OrtResultDiff(
     val repositoryDiff: RepositoryDiff? = null,
     val analyzerRunDiff: AnalyzerRunDiff? = null,
@@ -688,8 +860,8 @@ private data class RepositoryConfigurationDiff(
     val excludeDiff: ExcludesDiff? = null,
     val resolutionsDiff: ResolutionsDiff? = null,
     val curationsDiff: CurationsDiff? = null,
-    val packageConfigurationsA: List<PackageConfiguration>? = null,
-    val packageConfigurationsB: List<PackageConfiguration>? = null,
+    val packageConfigurationsA: Set<PackageConfiguration>? = null,
+    val packageConfigurationsB: Set<PackageConfiguration>? = null,
     val licenseChoicesDiff: LicenseChoicesDiff? = null
 )
 
@@ -735,6 +907,7 @@ private data class AnalyzerConfigurationDiff(
     val skipExcludedA: Boolean? = false,
     val skipExcludedB: Boolean? = false
 )
+
 private data class AnalyzerRunDiff(
     val startTimeA: Instant? = null,
     val startTimeB: Instant? = null,
@@ -767,12 +940,11 @@ private data class ScannerRunDiff(
     val config: ScannerConfigurationDiff? = null,
     val provenancesA: Set<ProvenanceResolutionResult>? = null,
     val provenancesB: Set<ProvenanceResolutionResult>? = null,
-    val scanResultsA: Set<ScanResult>? = null,
-    val scanResultsB: Set<ScanResult>? = null,
     val scannersA: Map<Identifier, Set<String>>? = null,
     val scannersB: Map<Identifier, Set<String>>? = null,
     val filesA: Set<FileList>? = null,
-    val filesB: Set<FileList>? = null
+    val filesB: Set<FileList>? = null,
+    val scanResultDiff: Set<ScanResultDiff>? = null
 )
 
 private data class ScannerConfigurationDiff(
@@ -798,6 +970,23 @@ private data class ScannerConfigurationDiff(
     val ignorePatternsB: List<String>? = null,
     val provenanceStorageA: ProvenanceStorageConfiguration? = null,
     val provenanceStorageB: ProvenanceStorageConfiguration? = null
+)
+
+private data class ScanResultDiff(
+    val provenance: Provenance? = null,
+    val scanner: ScannerDetails? = null,
+    val summaryDiff: ScanSummaryDiff? = null
+)
+
+private data class ScanSummaryDiff(
+    val licenseFindingsA: Set<LicenseFinding>? = null,
+    val licenseFindingsB: Set<LicenseFinding>? = null,
+    val copyrightFindingsA: Set<CopyrightFinding>? = null,
+    val copyrightFindingsB: Set<CopyrightFinding>? = null,
+    val snippetFindingsA: Set<SnippetFinding>? = null,
+    val snippetFindingsB: Set<SnippetFinding>? = null,
+    val issuesA: Set<Issue>? = null,
+    val issuesB: Set<Issue>? = null
 )
 
 private data class AdvisorRunDiff(
