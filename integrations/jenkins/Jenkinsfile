@@ -158,14 +158,24 @@ pipeline {
 
         choice(
             name: 'PROJECT_SCANNER',
-            description: 'The scanner to use for project source code.',
+            description: 'The built-in scanner to use for project source code.',
             choices: ['ScanCode', 'Askalono', 'BoyterLc', 'Licensee', 'ScanOSS', '<NONE>']
+        )
+
+        string(
+            name: 'PROJECT_SCANNER_PLUGIN',
+            description: 'The scanner plugin to use for project source code. Overrides any built-in scanner.'
         )
 
         choice(
             name: 'PACKAGE_SCANNER',
             description: 'The scanner to use for package source code.',
             choices: ['ScanCode', 'Askalono', 'BoyterLc', 'Licensee', 'ScanOSS', '<NONE>']
+        )
+
+        string(
+            name: 'PACKAGE_SCANNER_PLUGIN',
+            description: 'The scanner plugin to use for package source code. Overrides any built-in scanner.'
         )
 
         booleanParam(
@@ -507,10 +517,18 @@ pipeline {
 
                         PACKAGE_TYPES=(project package)
 
+                        if [ -n "$PROJECT_SCANNER_PLUGIN" ]; then
+                            PROJECT_SCANNER="$PROJECT_SCANNER_PLUGIN"
+                        fi
+
                         if [ "$PROJECT_SCANNER" = "<NONE>" ]; then
                             PACKAGE_TYPES=(${PACKAGE_TYPES[@]/project})
                         else
                             PROJECT_SCANNERS_OPTION="--project-scanners $PROJECT_SCANNER"
+                        fi
+
+                        if [ -n "$PACKAGE_SCANNER_PLUGIN" ]; then
+                            PACKAGE_SCANNER="$PACKAGE_SCANNER_PLUGIN"
                         fi
 
                         if [ "$PACKAGE_SCANNER" = "<NONE>" ]; then
