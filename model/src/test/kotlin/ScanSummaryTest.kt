@@ -27,7 +27,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 class ScanSummaryTest : WordSpec({
     "filterByPaths()" should {
-        val summary = createSummaryWithFindingPaths(
+        val summary = createSummaryWithFindingAndIssuePaths(
             "a/file.txt",
             "b/c/file.txt",
             "d/file.txt"
@@ -49,10 +49,15 @@ class ScanSummaryTest : WordSpec({
             filteredSummary.snippetFindings.map { it.sourceLocation.path } should
                 containExactly("a/file.txt", "b/c/file.txt")
         }
+
+        "filter issues" {
+            filteredSummary.issues.map { it.affectedPath } should
+                containExactly("a/file.txt", "b/c/file.txt")
+        }
     }
 })
 
-private fun createSummaryWithFindingPaths(vararg paths: String): ScanSummary {
+private fun createSummaryWithFindingAndIssuePaths(vararg paths: String): ScanSummary {
     fun textLocation(path: String) = TextLocation(path = path, startLine = 1, endLine = 2)
 
     return ScanSummary.EMPTY.copy(
@@ -72,6 +77,13 @@ private fun createSummaryWithFindingPaths(vararg paths: String): ScanSummary {
             SnippetFinding(
                 sourceLocation = textLocation(path),
                 snippets = emptySet()
+            )
+        },
+        issues = paths.map { path ->
+            Issue(
+                source = "Some source",
+                message = "Some message.",
+                affectedPath = path
             )
         }
     )
