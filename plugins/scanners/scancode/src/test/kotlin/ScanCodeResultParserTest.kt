@@ -111,7 +111,7 @@ class ScanCodeResultParserTest : FreeSpec({
 
                 "properly map the timeout issue" {
                     summary.issues.single().message shouldStartWith
-                        "ERROR: Timeout after (?<timeout>\\d+) seconds while scanning file 'eslintignore'\\.".toRegex()
+                        "ERROR: Timeout after (?<timeout>\\d+) seconds while scanning file '.eslintignore'\\.".toRegex()
                 }
             }
         }

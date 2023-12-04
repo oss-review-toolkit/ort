@@ -153,18 +153,15 @@ private fun getSpdxId(spdxLicenseKey: String?, key: String): String {
 /**
  * Map scan errors for all files using messages that contain the relative file path.
  */
-private fun mapScanErrors(result: ScanCodeResult): List<Issue> {
-    val input = result.headers.single().options.input.single()
-    return result.files.flatMap { file ->
-        val path = file.path.removePrefix(input).removePrefix("/")
+private fun mapScanErrors(result: ScanCodeResult): List<Issue> =
+    result.files.flatMap { file ->
         file.scanErrors.map { error ->
             Issue(
                 source = ScanCode.SCANNER_NAME,
-                message = "$error (File: $path)"
+                message = "$error (File: ${file.path})"
             )
         }
     }
-}
 
 /**
  * Map messages about timeout errors to a more compact form. Return true if solely timeout errors occurred, return false
