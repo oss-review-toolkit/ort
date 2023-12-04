@@ -56,15 +56,13 @@ pipeline {
 
         string(
             name: 'PROJECT_VCS_REVISION',
-            description: 'Optional VCS revision of the project (prefix Git tags with "refs/tags/").',
-            defaultValue: ''
+            description: 'Optional VCS revision of the project (prefix Git tags with "refs/tags/").'
         )
 
         credentials(
             name: 'PROJECT_VCS_CREDENTIALS',
             credentialType: 'com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl',
-            description: 'Optional HTTP credentials to use for the VCS checkout.',
-            defaultValue: ''
+            description: 'Optional HTTP credentials to use for the VCS checkout.'
         )
 
         /*
@@ -79,27 +77,23 @@ pipeline {
 
         string(
             name: 'ORT_CONFIG_VCS_REVISION',
-            description: 'Optional VCS revision of the ORT configuration (prefix Git tags with "refs/tags/").',
-            defaultValue: ''
+            description: 'Optional VCS revision of the ORT configuration (prefix Git tags with "refs/tags/").'
         )
 
         string(
             name: 'ORT_CONFIG_VCS_PATH',
-            description: 'Optional VCS path of the ORT configuration.',
-            defaultValue: ''
+            description: 'Optional VCS path of the ORT configuration.'
         )
 
         credentials(
             name: 'ORT_CONFIG_VCS_CREDENTIALS',
             credentialType: 'com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl',
-            description: 'Optional HTTP credentials to use for the VCS checkout.',
-            defaultValue: ''
+            description: 'Optional HTTP credentials to use for the VCS checkout.'
         )
 
         string(
             name: 'ENVIRONMENT_VARIABLES',
-            description: 'Optional list of comma-separated key=value pairs of environment variables to set.',
-            defaultValue: ''
+            description: 'Optional list of comma-separated key=value pairs of environment variables to set.'
         )
 
         choice(
@@ -138,14 +132,12 @@ pipeline {
 
         string(
             name: 'ENABLED_PACKAGE_MANAGERS',
-            description: 'A comma-separated list of package managers to enable. By default all package managers are enabled.',
-            defaultValue: ''
+            description: 'A comma-separated list of package managers to enable. By default all package managers are enabled.'
         )
 
         string(
             name: 'DISABLED_PACKAGE_MANAGERS',
-            description: 'A comma-separated list of package managers to disable. By default no package manager is disabled.',
-            defaultValue: ''
+            description: 'A comma-separated list of package managers to disable. By default no package manager is disabled.'
         )
 
         /*
