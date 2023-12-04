@@ -290,4 +290,9 @@ class Gradle(
             }
         }
     }
+
+    override fun close() {
+        // Silently close the [MvnSupport] instance.
+        maven.use {}
+    }
 }

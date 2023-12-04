@@ -228,5 +228,9 @@ class AnalyzerCommand : OrtCommand(
         val issues = analyzerRun.result.getAllIssues().flatMap { it.value }
         SeverityStatsPrinter(terminal, resolutionProvider).stats(issues)
             .print().conclude(ortConfig.severeIssueThreshold, 2)
+
+        for (packageManager in info.managedFiles.keys) {
+            packageManager.close()
+        }
     }
 }

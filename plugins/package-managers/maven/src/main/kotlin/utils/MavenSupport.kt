@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.maven.utils
 
+import java.io.Closeable
 import java.io.File
 import java.net.URI
 
@@ -108,7 +109,7 @@ fun Artifact.identifier() = "$groupId:$artifactId:$version"
 private val File?.safePath: String
     get() = this?.invariantSeparatorsPath ?: "<unknown file>"
 
-class MavenSupport(private val workspaceReader: WorkspaceReader) {
+class MavenSupport(private val workspaceReader: WorkspaceReader) : Closeable {
     companion object {
         private val PACKAGING_TYPES = setOf(
             // Core packaging types, see https://maven.apache.org/pom.html#packaging.
@@ -813,6 +814,10 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             sessionScope.exit()
             legacySupport.session = null
         }
+    }
+
+    override fun close() {
+        remoteArtifactCache.close()
     }
 }
 
