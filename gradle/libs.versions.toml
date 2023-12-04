@@ -1,5 +1,5 @@
 [versions]
-dependencyAnalysisPlugin = "1.26.0"
+dependencyAnalysisPlugin = "1.27.0"
 detektPlugin = "1.23.4"
 dokkatooPlugin = "2.0.0"
 downloadPlugin = "5.5.0"
