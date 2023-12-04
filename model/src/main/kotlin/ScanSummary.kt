@@ -114,15 +114,18 @@ data class ScanSummary(
             directories = paths
         ).values.flatten().mapTo(mutableSetOf()) { it.location.path }
 
-        fun TextLocation.matchesPaths() =
+        fun String.matchesPaths() =
             paths.any { filterPath ->
-                this.path.startsWith("$filterPath/") || this.path in applicableLicenseFiles
+                startsWith("$filterPath/") || this in applicableLicenseFiles
             }
+
+        fun TextLocation.matchesPaths() = path.matchesPaths()
 
         return copy(
             licenseFindings = licenseFindings.filterTo(mutableSetOf()) { it.location.matchesPaths() },
             copyrightFindings = copyrightFindings.filterTo(mutableSetOf()) { it.location.matchesPaths() },
-            snippetFindings = snippetFindings.filterTo(mutableSetOf()) { it.sourceLocation.matchesPaths() }
+            snippetFindings = snippetFindings.filterTo(mutableSetOf()) { it.sourceLocation.matchesPaths() },
+            issues = issues.filter { it.affectedPath?.matchesPaths() ?: true }
         )
     }
 
@@ -136,7 +139,8 @@ data class ScanSummary(
         return copy(
             licenseFindings = licenseFindings.filterTo(mutableSetOf()) { !matcher.matches(it.location.path) },
             copyrightFindings = copyrightFindings.filterTo(mutableSetOf()) { !matcher.matches(it.location.path) },
-            snippetFindings = snippetFindings.filterTo(mutableSetOf()) { !matcher.matches(it.sourceLocation.path) }
+            snippetFindings = snippetFindings.filterTo(mutableSetOf()) { !matcher.matches(it.sourceLocation.path) },
+            issues = issues.filter { it.affectedPath == null || !matcher.matches(it.affectedPath) }
         )
     }
 }
