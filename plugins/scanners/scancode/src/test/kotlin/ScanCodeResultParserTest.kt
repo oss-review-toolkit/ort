@@ -26,6 +26,7 @@ import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSingleElement
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldStartWith
 
 import java.io.File
@@ -110,8 +111,11 @@ class ScanCodeResultParserTest : FreeSpec({
                 }
 
                 "properly map the timeout issue" {
-                    summary.issues.single().message shouldStartWith
+                    val issue = summary.issues.single()
+
+                    issue.message shouldStartWith
                         "ERROR: Timeout after (?<timeout>\\d+) seconds while scanning file '.eslintignore'\\.".toRegex()
+                    issue.affectedPath shouldBe ".eslintignore"
                 }
             }
         }
