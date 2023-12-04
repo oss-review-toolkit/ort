@@ -59,6 +59,7 @@ import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.readTree
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
+import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NON_EXISTING_SEMVER
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NpmDependencyHandler
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NpmDetection
@@ -297,12 +298,16 @@ open class Npm(
 
         logger.debug { "Found a 'package.json' file in '$packageDir'." }
 
-        // The "name" and "version" are the only required fields, see:
-        // https://docs.npmjs.com/creating-a-package-json-file#required-name-and-version-fields
         val json = packageFile.readValue<ObjectNode>()
-        val rawName = json["name"].textValue()
+
+        // The "name" and "version" fields are only required if the package is going to be published, otherwise they are
+        // optional, see
+        // - https://docs.npmjs.com/cli/v10/configuring-npm/package-json#name
+        // - https://docs.npmjs.com/cli/v10/configuring-npm/package-json#version
+        // So, projects analyzed by ORT might not have these fields set.
+        val rawName = json["name"].textValue() // TODO: Fall back to a generated name if the name is unset.
         val (namespace, name) = splitNpmNamespaceAndName(rawName)
-        val version = json["version"].textValue()
+        val version = json["version"]?.textValue() ?: NON_EXISTING_SEMVER
 
         val declaredLicenses = parseNpmLicenses(json)
         val authors = parseNpmAuthors(json)
