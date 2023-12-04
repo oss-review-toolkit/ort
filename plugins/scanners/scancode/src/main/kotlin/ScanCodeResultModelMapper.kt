@@ -179,7 +179,8 @@ private fun mapTimeoutErrors(issues: MutableList<Issue>): Boolean {
             val timeout = match.groups["timeout"]!!.value
 
             fullError.copy(
-                message = "ERROR: Timeout after $timeout seconds while scanning file '$file'."
+                message = "ERROR: Timeout after $timeout seconds while scanning file '$file'.",
+                affectedPath = file
             )
         } else {
             onlyTimeoutErrors = false
