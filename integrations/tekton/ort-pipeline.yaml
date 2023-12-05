@@ -77,7 +77,7 @@ spec:
             value: "/workspace/ort-data-dir/data"
       - name: "scan"
         image: ort:latest
-        args: ["scan", "-i", "/workspace/shared/results/analyzer/analyzer-result.yml", "-o", "/workspace/shared/results/scanner", "--skip-excluded"]
+        args: ["scan", "-i", "/workspace/shared/results/analyzer/analyzer-result.yml", "-o", "/workspace/shared/results/scanner"]
         resources:
           requests:
             memory: 4Gi

@@ -40,6 +40,11 @@ data class ScannerConfiguration(
     val skipConcluded: Boolean = false,
 
     /**
+     * A flag to control whether excluded scopes and paths should be skipped during the scan.
+     */
+    val skipExcluded: Boolean = false,
+
+    /**
      * Configuration of a [FileArchiver] that archives certain scanned files in an external [FileStorage].
      */
     val archive: FileArchiverConfiguration? = null,

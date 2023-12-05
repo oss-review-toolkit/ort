@@ -279,10 +279,10 @@ scanner on the `dependencies` scope in this tutorial. If you also want to scan t
 advised to configure a [scan storage](../docs/tools/scanner#storage-backends) for the scan results to speed up repeated scans.
 
 As during the *analyzer* step an `.ort.yml` configuration file was provided to exclude `devDependencies`,
-the `--skip-excluded` option can be used to avoid the download and scanning of that scope.
+the `-P ort.scanner.skipExcluded=true` option can be used to avoid the download and scanning of that scope.
 
 ```shell
-$ cli/build/install/ort/bin/ort scan -i [analyzer-output-dir]/analyzer-result.yml -o [scanner-output-dir] --skip-excluded
+$ cli/build/install/ort/bin/ort -P ort.scanner.skipExcluded=true scan -i [analyzer-output-dir]/analyzer-result.yml -o [scanner-output-dir]
 Using scanner 'ScanCode'.
 Limiting scan to scopes: [dependencies]
 Bootstrapping scanner 'ScanCode' as required version 2.9.2 was not found in PATH.

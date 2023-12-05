@@ -238,13 +238,17 @@ class DownloaderCommand : OrtCommand(
 
         val packages = mutableListOf<Package>().apply {
             if (PackageType.PROJECT in packageTypes) {
-                val projects = consolidateProjectPackagesByVcs(ortResult.getProjects(skipExcluded)).keys
-                echo("Found ${projects.size} project(s) in the ORT result.")
-                addAll(projects)
+                val projects = ortResult.getProjects(skipExcluded || ortConfig.downloader.skipExcluded)
+                val consolidatedProjects = consolidateProjectPackagesByVcs(projects).keys
+                echo("Found ${consolidatedProjects.size} project(s) in the ORT result.")
+                addAll(consolidatedProjects)
             }
 
             if (PackageType.PACKAGE in packageTypes) {
-                val packages = ortResult.getPackages(skipExcluded).map { it.metadata }
+                val packages = ortResult.getPackages(skipExcluded || ortConfig.downloader.skipExcluded).map {
+                    it.metadata
+                }
+
                 echo("Found ${packages.size} packages(s) the ORT result.")
                 addAll(packages)
             }

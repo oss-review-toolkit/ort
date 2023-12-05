@@ -36,6 +36,11 @@ data class DownloaderConfiguration(
     val includedLicenseCategories: List<String> = emptyList(),
 
     /**
+     * A flag to control whether excluded scopes and paths should be skipped during the download.
+     */
+    val skipExcluded: Boolean = false,
+
+    /**
      * Configuration of the considered source code origins and their priority order.
      */
     val sourceCodeOrigins: List<SourceCodeOrigin> = listOf(SourceCodeOrigin.VCS, SourceCodeOrigin.ARTIFACT)
