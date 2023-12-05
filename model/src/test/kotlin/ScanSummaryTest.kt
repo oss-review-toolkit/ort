@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.model
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
@@ -53,6 +54,18 @@ class ScanSummaryTest : WordSpec({
         "filter issues" {
             filteredSummary.issues.map { it.affectedPath } should
                 containExactly("a/file.txt", "b/c/file.txt")
+        }
+    }
+
+    "deserializing an old scan result()" should {
+        "set the affected path of issues which represent a scan timeout error" {
+            val summary = createSummaryWithIssue(
+                "ERROR: Timeout after 300 seconds while scanning file 'some-path/some-file.txt'."
+            )
+
+            val deserializedSummary = summary.toYaml().fromYaml<ScanSummary>()
+
+            deserializedSummary.issues.single().affectedPath shouldBe "some-path/some-file.txt"
         }
     }
 })
@@ -87,4 +100,13 @@ private fun createSummaryWithFindingAndIssuePaths(vararg paths: String): ScanSum
             )
         }
     )
+}
+
+private fun createSummaryWithIssue(message: String): ScanSummary {
+    val issue = Issue(
+        source = "some source",
+        message = message
+    )
+
+    return ScanSummary.EMPTY.copy(issues = listOf(issue))
 }
