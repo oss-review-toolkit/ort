@@ -56,13 +56,15 @@ pipeline {
 
         string(
             name: 'PROJECT_VCS_REVISION',
-            description: 'Optional VCS revision of the project (prefix Git tags with "refs/tags/").'
+            description: 'Optional VCS revision of the project (prefix Git tags with "refs/tags/").',
+            defaultValue: ''
         )
 
         credentials(
             name: 'PROJECT_VCS_CREDENTIALS',
             credentialType: 'com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl',
-            description: 'Optional HTTP credentials to use for the VCS checkout.'
+            description: 'Optional HTTP credentials to use for the VCS checkout.',
+            defaultValue: ''
         )
 
         /*
@@ -77,23 +79,27 @@ pipeline {
 
         string(
             name: 'ORT_CONFIG_VCS_REVISION',
-            description: 'Optional VCS revision of the ORT configuration (prefix Git tags with "refs/tags/").'
+            description: 'Optional VCS revision of the ORT configuration (prefix Git tags with "refs/tags/").',
+            defaultValue: ''
         )
 
         string(
             name: 'ORT_CONFIG_VCS_PATH',
-            description: 'Optional VCS path of the ORT configuration.'
+            description: 'Optional VCS path of the ORT configuration.',
+            defaultValue: ''
         )
 
         credentials(
             name: 'ORT_CONFIG_VCS_CREDENTIALS',
             credentialType: 'com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl',
-            description: 'Optional HTTP credentials to use for the VCS checkout.'
+            description: 'Optional HTTP credentials to use for the VCS checkout.',
+            defaultValue: ''
         )
 
         string(
             name: 'ENVIRONMENT_VARIABLES',
-            description: 'Optional list of comma-separated key=value pairs of environment variables to set.'
+            description: 'Optional list of comma-separated key=value pairs of environment variables to set.',
+            defaultValue: ''
         )
 
         choice(
@@ -132,12 +138,14 @@ pipeline {
 
         string(
             name: 'ENABLED_PACKAGE_MANAGERS',
-            description: 'A comma-separated list of package managers to enable. By default all package managers are enabled.'
+            description: 'A comma-separated list of package managers to enable. By default all package managers are enabled.',
+            defaultValue: ''
         )
 
         string(
             name: 'DISABLED_PACKAGE_MANAGERS',
-            description: 'A comma-separated list of package managers to disable. By default no package manager is disabled.'
+            description: 'A comma-separated list of package managers to disable. By default no package manager is disabled.',
+            defaultValue: ''
         )
 
         /*
@@ -164,7 +172,8 @@ pipeline {
 
         string(
             name: 'PROJECT_SCANNER_PLUGIN',
-            description: 'The scanner plugin to use for project source code. Overrides any built-in scanner.'
+            description: 'The scanner plugin to use for project source code. Overrides any built-in scanner.',
+            defaultValue: ''
         )
 
         choice(
@@ -175,7 +184,8 @@ pipeline {
 
         string(
             name: 'PACKAGE_SCANNER_PLUGIN',
-            description: 'The scanner plugin to use for package source code. Overrides any built-in scanner.'
+            description: 'The scanner plugin to use for package source code. Overrides any built-in scanner.',
+            defaultValue: ''
         )
 
         booleanParam(
