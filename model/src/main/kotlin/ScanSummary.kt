@@ -23,7 +23,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.databind.util.StdConverter
 
 import java.time.Instant
 
@@ -79,6 +81,7 @@ data class ScanSummary(
      * the size of the result file.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonDeserialize(converter = IssueListConverter::class)
     val issues: List<Issue> = emptyList()
 ) {
     companion object {
@@ -144,3 +147,19 @@ data class ScanSummary(
         )
     }
 }
+
+/**
+ * Set the `affectedPath` for scan timeout errors if otherwise it would have been unset. This way scan results which
+ * have been created before `affectedPath` was introduced will still have that property set.
+ */
+
+internal class IssueListConverter : StdConverter<List<Issue>, List<Issue>>() {
+    override fun convert(issues: List<Issue>): List<Issue> =
+        issues.map { issue ->
+            if (issue.affectedPath != null) return@map issue
+            val match = TIMEOUT_ERROR_REGEX.matchEntire(issue.message) ?: return@map issue
+            issue.copy(affectedPath = match.groups["file"]!!.value)
+        }
+}
+
+private val TIMEOUT_ERROR_REGEX = Regex("ERROR: Timeout after (\\d+) seconds while scanning file '(?<file>.+)'.")
