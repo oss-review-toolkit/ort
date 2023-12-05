@@ -50,7 +50,7 @@ class SeverityStatsPrinter(private val terminal: Terminal, private val resolutio
                     Theme.Default.success(text)
                 }
 
-                terminal.println("${Theme.Default.info("Resolved $name:")} ${resolved.joinToString()}.")
+                terminal.println("${Theme.Default.info("Resolved ${name}s:")} ${resolved.joinToString()}.")
 
                 val unresolved = Severity.entries.toTypedArray().sortedArrayDescending().map {
                     val count = unresolvedCounts.getOrDefault(it, 0)
@@ -58,7 +58,7 @@ class SeverityStatsPrinter(private val terminal: Terminal, private val resolutio
                     if (count == 0) Theme.Default.success(text) else Theme.Default.danger(text)
                 }
 
-                terminal.println("${Theme.Default.warning("Unresolved $name:")} ${unresolved.joinToString()}.")
+                terminal.println("${Theme.Default.warning("Unresolved ${name}s:")} ${unresolved.joinToString()}.")
             }
 
         /**
@@ -86,11 +86,11 @@ class SeverityStatsPrinter(private val terminal: Terminal, private val resolutio
 
     @JvmName("statsForIssues")
     fun stats(issues: Collection<Issue>) =
-        stats("issues", issues.partition { resolutionProvider.isResolved(it) }) { severity }
+        stats("issue", issues.partition { resolutionProvider.isResolved(it) }) { severity }
 
     @JvmName("statsForRuleViolations")
     fun stats(ruleViolations: Collection<RuleViolation>) =
-        stats("rule violations", ruleViolations.partition { resolutionProvider.isResolved(it) }) { severity }
+        stats("rule violation", ruleViolations.partition { resolutionProvider.isResolved(it) }) { severity }
 
     private fun <T> stats(name: String, thingsWithSeverities: Pair<List<T>, List<T>>, selector: T.() -> Severity) =
         Entry(
