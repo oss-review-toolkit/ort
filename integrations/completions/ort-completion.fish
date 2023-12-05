@@ -164,7 +164,7 @@ complete -c ort -n "__fish_seen_subcommand_from requirements" -s h -l help -d 'S
 complete -c ort -f -n __fish_use_subcommand -a scan -d 'Run external license / copyright scanners.'
 
 ## Options for scan
-complete -c ort -n "__fish_seen_subcommand_from scan" -l ort-file -s i -r -F -d 'An ORT result file with an analyzer result to use. Source code is downloaded automatically if needed. Must not be used together with \'--input-path\'.'
+complete -c ort -n "__fish_seen_subcommand_from scan" -l ort-file -s i -r -F -d 'An ORT result file with an analyzer result to use. Source code is downloaded automatically if needed.'
 complete -c ort -n "__fish_seen_subcommand_from scan" -l output-dir -s o -r -F -d 'The directory to write the ORT result file with scan results to.'
 complete -c ort -n "__fish_seen_subcommand_from scan" -l output-formats -s f -r -fa "JSON XML YAML" -d 'The list of output formats to be used for the ORT result file(s).'
 complete -c ort -n "__fish_seen_subcommand_from scan" -l label -s l -r -d 'Set a label in the ORT result, overwriting any existing label of the same name. Can be used multiple times. For example: --label distribution=external'
