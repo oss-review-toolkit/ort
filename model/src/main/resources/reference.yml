@@ -114,6 +114,9 @@ ort:
           lockfileName: "lockfile.lock"
 
   advisor:
+    # A flag to control whether excluded scopes and paths should be skipped when giving the advice.
+    skipExcluded: true
+
     config:
       GitHubDefects:
         options:
@@ -157,10 +160,14 @@ ort:
       - 'category-a'
       - 'category-b'
 
+    # A flag to control whether excluded scopes and paths should be skipped during the download.
+    skipExcluded: true
+
     sourceCodeOrigins: [VCS, ARTIFACT]
 
   scanner:
     skipConcluded: true
+    skipExcluded: true
 
     archive:
       enabled: true

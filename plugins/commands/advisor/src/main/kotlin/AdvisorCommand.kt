@@ -123,7 +123,7 @@ class AdvisorCommand : OrtCommand(
 
         val ortResultInput = readOrtResult(ortFile)
         val ortResultOutput = runBlocking {
-            advisor.advise(ortResultInput, skipExcluded).mergeLabels(labels)
+            advisor.advise(ortResultInput, skipExcluded || ortConfig.advisor.skipExcluded).mergeLabels(labels)
         }
 
         outputDir.safeMkdirs()

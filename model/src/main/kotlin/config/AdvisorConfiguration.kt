@@ -29,6 +29,11 @@ import org.ossreviewtoolkit.utils.common.Plugin
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class AdvisorConfiguration(
     /**
+     * A flag to control whether excluded scopes and paths should be skipped when giving the advice.
+     */
+    val skipExcluded: Boolean = false,
+
+    /**
      * A map with [configuration][PluginConfiguration] for advice providers using the [provider type][Plugin.type] as
      * key.
      */

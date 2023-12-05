@@ -51,6 +51,9 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
+                "skipExcluded": {
+                    "type": "boolean"
+                },
                 "config": {
                     "$ref": "#/definitions/AdvisorConfig"
                 }
@@ -77,6 +80,9 @@
                     "items": {
                         "type": "string"
                     }
+                },
+                "skipExcluded": {
+                    "type": "boolean"
                 },
                 "sourceCodeOrigins": {
                     "type": "array",
@@ -184,6 +190,9 @@
             "additionalProperties": false,
             "properties": {
                 "skipConcluded": {
+                    "type": "boolean"
+                },
+                "skipExcluded": {
                     "type": "boolean"
                 },
                 "archive": {
