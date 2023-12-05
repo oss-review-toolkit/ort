@@ -64,16 +64,10 @@ import org.ossreviewtoolkit.utils.ort.printStackTrace
 
 import org.slf4j.LoggerFactory
 
-/**
- * The entry point for the application with [args] being the list of arguments.
- */
-fun main(args: Array<String>) {
-    Os.fixupUserHomeProperty()
-    OrtMain().main(args)
-    exitProcess(0)
-}
-
 private const val REQUIRED_OPTION_MARKER = "*"
+
+// A priority value that is higher than any Clikt built-in value for allocating width.
+private const val HIGHEST_PRIORITY_FOR_WIDTH = 100
 
 private val ORT_LOGO = """
      ______________________________
@@ -83,8 +77,14 @@ private val ORT_LOGO = """
     \________/ |____|___/ |____|
 """.trimIndent()
 
-// A priority value that is higher than any Clikt built-in value for allocating width.
-private const val HIGHEST_PRIORITY_FOR_WIDTH = 100
+/**
+ * The entry point for the application with [args] being the list of arguments.
+ */
+fun main(args: Array<String>) {
+    Os.fixupUserHomeProperty()
+    OrtMain().main(args)
+    exitProcess(0)
+}
 
 class OrtMain : CliktCommand(
     name = ORT_NAME,
