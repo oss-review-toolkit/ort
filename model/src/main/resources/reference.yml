@@ -19,6 +19,8 @@
 # exclusive, so this file is only used to show all options and to validate the configuration.
 
 ort:
+  # To overwrite if the reports (analyzer-result.yml) already exists
+  forceOverwrite: true
   allowedProcessEnvironmentVariableNames:
     - PASSPORT
     - USER_HOME
