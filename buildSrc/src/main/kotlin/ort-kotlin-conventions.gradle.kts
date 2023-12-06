@@ -175,7 +175,7 @@ tasks.register<Jar>("sourcesJar") {
     from(sourceSets.main.get().allSource)
 }
 
-tasks.register<Jar>("docsJavadocJar") {
+tasks.register<Jar>("javadocJar") {
     description = "Assembles a JAR containing the Javadoc documentation."
     group = "Documentation"
 
