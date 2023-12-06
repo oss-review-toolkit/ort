@@ -104,6 +104,18 @@ pipeline {
         )
 
         string(
+            name: 'PLUGIN_JOB_NAME',
+            description: 'The name of the job to copy plugins from. The distribution must be at "build/distributions/*.tar".',
+            defaultValue: ''
+        )
+
+        buildSelector(
+            name: 'PLUGIN_BUILD_SELECTOR',
+            description: 'The selector for the build of the plugin job to copy plugins from.',
+            defaultSelector: lastSuccessful()
+        )
+
+        string(
             name: 'ENVIRONMENT_VARIABLES',
             description: 'Optional list of comma-separated key=value pairs of environment variables to set.',
             defaultValue: ''
@@ -265,6 +277,32 @@ pipeline {
 
                     ortVersion = env.GIT_COMMIT.take(10)
                 }
+
+                sh '''
+                rm -fr cli/src/main/dist/plugin
+                '''.stripIndent().trim()
+            }
+        }
+
+        stage('Install plugins') {
+            agent any
+
+            when {
+                beforeAgent true
+
+                expression {
+                    !params.PLUGIN_JOB_NAME.allWhitespace
+                }
+            }
+
+            steps {
+                script {
+                    copyArtifacts(projectName: params.PLUGIN_JOB_NAME, selector: buildParameter(params.PLUGIN_BUILD_SELECTOR), filter: 'build/distributions/*.tar')
+                }
+
+                sh '''
+                tar -C cli/src/main/dist/plugin --strip-components=1 -xf build/distributions/*.tar && rm build/distributions/*.tar
+                '''.stripIndent().trim()
             }
         }
 
@@ -294,7 +332,7 @@ pipeline {
                     ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
                 fi
 
-                /opt/ort/bin/ort $ORT_OPTIONS --version
+                /opt/ort/bin/ort $ORT_OPTIONS requirements --list plugins
                 '''.stripIndent().trim()
             }
         }
