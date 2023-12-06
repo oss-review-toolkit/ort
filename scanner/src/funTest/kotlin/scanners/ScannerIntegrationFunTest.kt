@@ -225,7 +225,7 @@ internal class DummyScanner(override val name: String = "Dummy") : PathScannerWr
 
         val licenseFindings = relevantFiles.mapTo(mutableSetOf()) { file ->
             LicenseFinding(
-                license = SpdxConstants.NONE,
+                license = SpdxConstants.NOASSERTION,
                 location = TextLocation(file.relativeTo(path).invariantSeparatorsPath, TextLocation.UNKNOWN_LINE)
             )
         }

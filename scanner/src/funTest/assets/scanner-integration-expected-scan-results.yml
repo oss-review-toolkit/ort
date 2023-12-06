@@ -15,67 +15,67 @@ Dummy::pkg0:1.0.0:
     start_time: "1970-01-01T00:00:00Z"
     end_time: "1970-01-01T00:00:00Z"
     licenses:
-    - license: "NONE"
+    - license: "NOASSERTION"
       location:
         path: ".gitmodules"
         start_line: -1
         end_line: -1
-    - license: "NONE"
+    - license: "NOASSERTION"
       location:
         path: "LICENSE"
         start_line: -1
         end_line: -1
-    - license: "NONE"
+    - license: "NOASSERTION"
       location:
         path: "README"
         start_line: -1
         end_line: -1
-    - license: "NONE"
+    - license: "NOASSERTION"
       location:
         path: "pkg1/pkg1.txt"
         start_line: -1
         end_line: -1
-    - license: "NONE"
+    - license: "NOASSERTION"
       location:
         path: "pkg2/pkg2.txt"
         start_line: -1
         end_line: -1
-    - license: "NONE"
+    - license: "NOASSERTION"
       location:
         path: "pkg3/pkg3.txt"
         start_line: -1
         end_line: -1
-    - license: "NONE"
+    - license: "NOASSERTION"
       location:
         path: "pkg3/subrepo/LICENSE"
         start_line: -1
         end_line: -1
-    - license: "NONE"
+    - license: "NOASSERTION"
       location:
         path: "pkg3/subrepo/README"
         start_line: -1
         end_line: -1
-    - license: "NONE"
+    - license: "NOASSERTION"
       location:
         path: "pkg3/subrepo/pkg-s1/pkg-s1.txt"
         start_line: -1
         end_line: -1
-    - license: "NONE"
+    - license: "NOASSERTION"
       location:
         path: "pkg4/pkg4.txt"
         start_line: -1
         end_line: -1
-    - license: "NONE"
+    - license: "NOASSERTION"
       location:
         path: "pkg4/subrepo/LICENSE"
         start_line: -1
         end_line: -1
-    - license: "NONE"
+    - license: "NOASSERTION"
       location:
         path: "pkg4/subrepo/README"
         start_line: -1
         end_line: -1
-    - license: "NONE"
+    - license: "NOASSERTION"
       location:
         path: "pkg4/subrepo/pkg-s2/pkg-s2.txt"
         start_line: -1
@@ -96,12 +96,12 @@ Dummy::pkg1:1.0.0:
     start_time: "1970-01-01T00:00:00Z"
     end_time: "1970-01-01T00:00:00Z"
     licenses:
-    - license: "NONE"
+    - license: "NOASSERTION"
       location:
         path: "LICENSE"
         start_line: -1
         end_line: -1
-    - license: "NONE"
+    - license: "NOASSERTION"
       location:
         path: "pkg1/pkg1.txt"
         start_line: -1
@@ -122,12 +122,12 @@ Dummy::pkg2:1.0.0:
     start_time: "1970-01-01T00:00:00Z"
     end_time: "1970-01-01T00:00:00Z"
     licenses:
-    - license: "NONE"
+    - license: "NOASSERTION"
       location:
         path: "LICENSE"
         start_line: -1
         end_line: -1
-    - license: "NONE"
+    - license: "NOASSERTION"
       location:
         path: "pkg2/pkg2.txt"
         start_line: -1
@@ -148,27 +148,27 @@ Dummy::pkg3:1.0.0:
     start_time: "1970-01-01T00:00:00Z"
     end_time: "1970-01-01T00:00:00Z"
     licenses:
-    - license: "NONE"
+    - license: "NOASSERTION"
       location:
         path: "LICENSE"
         start_line: -1
         end_line: -1
-    - license: "NONE"
+    - license: "NOASSERTION"
       location:
         path: "pkg3/pkg3.txt"
         start_line: -1
         end_line: -1
-    - license: "NONE"
+    - license: "NOASSERTION"
       location:
         path: "pkg3/subrepo/LICENSE"
         start_line: -1
         end_line: -1
-    - license: "NONE"
+    - license: "NOASSERTION"
       location:
         path: "pkg3/subrepo/README"
         start_line: -1
         end_line: -1
-    - license: "NONE"
+    - license: "NOASSERTION"
       location:
         path: "pkg3/subrepo/pkg-s1/pkg-s1.txt"
         start_line: -1
@@ -189,27 +189,27 @@ Dummy::pkg4:1.0.0:
     start_time: "1970-01-01T00:00:00Z"
     end_time: "1970-01-01T00:00:00Z"
     licenses:
-    - license: "NONE"
+    - license: "NOASSERTION"
       location:
         path: "LICENSE"
         start_line: -1
         end_line: -1
-    - license: "NONE"
+    - license: "NOASSERTION"
       location:
         path: "pkg4/pkg4.txt"
         start_line: -1
         end_line: -1
-    - license: "NONE"
+    - license: "NOASSERTION"
       location:
         path: "pkg4/subrepo/LICENSE"
         start_line: -1
         end_line: -1
-    - license: "NONE"
+    - license: "NOASSERTION"
       location:
         path: "pkg4/subrepo/README"
         start_line: -1
         end_line: -1
-    - license: "NONE"
+    - license: "NOASSERTION"
       location:
         path: "pkg4/subrepo/pkg-s2/pkg-s2.txt"
         start_line: -1
