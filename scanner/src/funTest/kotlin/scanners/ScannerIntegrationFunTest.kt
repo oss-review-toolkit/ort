@@ -221,7 +221,7 @@ internal class DummyScanner(override val name: String = "Dummy") : PathScannerWr
     override fun scanPath(path: File, context: ScanContext): ScanSummary {
         val relevantFiles = path.walk()
             .onEnter { it.name !in VCS_DIRECTORIES }
-            .filterTo(mutableSetOf()) { it.isFile }
+            .filter { it.isFile }
 
         val licenseFindings = relevantFiles.mapTo(mutableSetOf()) { file ->
             LicenseFinding(
