@@ -72,7 +72,7 @@ class NpmDetection(private val definitionFiles: Collection<File>) {
         definitionFiles.filter { file ->
             val projectDir = file.parentFile
 
-            // Try to clearly determine the package manager from specific files.
+            // Try to clearly determine the package manager from files specific to it.
             val managersFromFiles = projectDirManagers[projectDir].orEmpty()
             when {
                 manager !in managersFromFiles -> return@filter false
@@ -82,26 +82,25 @@ class NpmDetection(private val definitionFiles: Collection<File>) {
                 }
             }
 
-            // Fall back to determining the package manager from workspaces.
+            // There is ambiguity when only looking at the files, so also look at any workspaces to clearly determine
+            // the package manager.
             val managersFromWorkspaces = getWorkspaceRoots(projectDir).mapNotNull {
                 projectDirManagers[it]
             }.flatten()
 
-            when {
-                manager !in managersFromWorkspaces -> return@filter false
-                managersFromWorkspaces.size == 1 -> {
-                    logger.info { "Skipping '$file' as it is part of an implicitly handled $manager workspace." }
-                    return@filter false
+            if (managersFromWorkspaces.isNotEmpty()) {
+                logger.info {
+                    "Skipping '$file' as it is part of a workspace implicitly handled by $managersFromWorkspaces."
                 }
+                return@filter false
             }
 
+            // Looking at the workspaces did not bring any clarity, so assume the package manager is NPM.
             logger.warn {
-                val managers = managersFromFiles + managersFromWorkspaces
-                "Ignoring '$file' directory as the package manager is unclear. It could be any of " +
-                    "${managers.joinToString()}."
+                "Any of $managersFromFiles could be the package manager for '$file'. Assuming it is an NPM project."
             }
 
-            false
+            manager == NodePackageManager.NPM
         }
 }
 
