@@ -44,7 +44,6 @@ import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.scanner.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.Scanner
-import org.ossreviewtoolkit.scanner.ScannerMatcher
 import org.ossreviewtoolkit.scanner.ScannerWrapper
 import org.ossreviewtoolkit.scanner.provenance.DefaultNestedProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.DefaultPackageProvenanceResolver
@@ -215,9 +214,9 @@ internal class DummyScanner(override val name: String = "Dummy") : PathScannerWr
     override val version = "1.0.0"
     override val configuration = ""
 
-    override val matcher = ScannerMatcher.create(details)
-    override val readFromStorage = true
-    override val writeToStorage = true
+    override val matcher = null
+    override val readFromStorage = false
+    override val writeToStorage = false
 
     override fun scanPath(path: File, context: ScanContext): ScanSummary {
         val relevantFiles = path.walk()
