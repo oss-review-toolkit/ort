@@ -158,6 +158,7 @@ class NpmDetectionTest : WordSpec({
             val filteredFiles = NpmDetection(definitionFiles).filterApplicable(NPM)
 
             filteredFiles.map { it.toRelativeString(projectDir) } shouldContainExactlyInAnyOrder listOf(
+                "npm/no-lockfile/package.json",
                 "npm/node-modules/package.json",
                 "npm/package-lock/package.json",
                 "npm/shrinkwrap/package.json",
