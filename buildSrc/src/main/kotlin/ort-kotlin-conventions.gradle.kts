@@ -175,15 +175,6 @@ tasks.register<Jar>("sourcesJar") {
     from(sourceSets.main.get().allSource)
 }
 
-tasks.register<Jar>("docsHtmlJar") {
-    description = "Assembles a JAR containing the HTML documentation."
-    group = "Documentation"
-
-    dependsOn(tasks.dokkatooGeneratePublicationHtml)
-    from(tasks.dokkatooGeneratePublicationHtml.flatMap { it.outputDirectory })
-    archiveClassifier = "htmldoc"
-}
-
 tasks.register<Jar>("docsJavadocJar") {
     description = "Assembles a JAR containing the Javadoc documentation."
     group = "Documentation"
