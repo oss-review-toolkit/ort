@@ -771,8 +771,7 @@ private fun ResolvedConfiguration.diff(other: ResolvedConfiguration): ResolvedCo
                 packageConfigurations.orEmpty(),
                 ::lenientPackageConfigurationMapper
             )?.toList(),
-            packageCurationsA = (packageCurations - other.packageCurations.toSet()).takeUnless { it.isEmpty() },
-            packageCurationsB = (other.packageCurations - packageCurations.toSet()).takeUnless { it.isEmpty() },
+            packageCurations = packageCurations.diff(other.packageCurations),
             resolutionsDiff = resolutions?.diff(other.resolutions)
         )
     }
@@ -780,6 +779,22 @@ private fun ResolvedConfiguration.diff(other: ResolvedConfiguration): ResolvedCo
 private enum class CompareMethod {
     SEMANTIC_DIFF,
     TEXT_DIFF
+}
+
+private fun List<ResolvedPackageCurations>.diff(other: List<ResolvedPackageCurations>): Map<String, PackageCurationDiff>? {
+    val providers = (map { it.provider.id } + other.map { it.provider.id }).toSortedSet()
+
+    return providers.associateWith { provider ->
+        val curationsA = find { it.provider.id == provider }?.curations.orEmpty()
+        val curationsB = other.find { it.provider.id == provider }?.curations.orEmpty()
+
+        PackageCurationDiff(
+            packageCurationsA = (curationsA - curationsB).sortedBy { it.id },
+            packageCurationsB = (curationsB - curationsA).sortedBy { it.id }
+        )
+    }.takeIf { it.isNotEmpty() }?.filter {
+        it.value.packageCurationsA?.isNotEmpty() == true || it.value.packageCurationsB?.isNotEmpty() == true
+    }
 }
 
 private class EpochInstantDeserializer : StdDeserializer<Instant>(Instant::class.java) {
@@ -1014,7 +1029,11 @@ private data class EvaluatorRunDiff(
 private data class ResolvedConfigurationDiff(
     val packageConfigurationsA: List<PackageConfiguration>? = null,
     val packageConfigurationsB: List<PackageConfiguration>? = null,
-    val packageCurationsA: List<ResolvedPackageCurations>? = null,
-    val packageCurationsB: List<ResolvedPackageCurations>? = null,
+    val packageCurations: Map<String, PackageCurationDiff>? = null,
     val resolutionsDiff: ResolutionsDiff? = null
+)
+
+private data class PackageCurationDiff(
+    val packageCurationsA: List<PackageCuration>? = null,
+    val packageCurationsB: List<PackageCuration>? = null
 )
