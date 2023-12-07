@@ -38,7 +38,7 @@ data class Project(
     val productName: String?,
 
     val description: String?,
-    val comment: String,
+    val comment: String?,
 
     val isArchived: Int,
     val jiraProjectKey: String?,
