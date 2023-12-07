@@ -60,8 +60,7 @@ data class SpdxExtractedLicenseInfo(
     val seeAlsos: List<String> = emptyList()
 ) {
     init {
-        require(extractedText.isNotBlank()) { "The extracted text must not be blank." }
-
-        require(licenseId.isNotBlank()) { "The license ID must not be blank." }
+        require(licenseId.isNotBlank()) { "The license ID must not be blank (the optional name is '$name')." }
+        require(extractedText.isNotBlank()) { "The extracted text must not be blank (the license ID is '$licenseId')." }
     }
 }
