@@ -117,12 +117,6 @@ fun getLicenseText(
     licenseTextDirectories: List<File> = emptyList()
 ): String? = getLicenseTextReader(id, handleExceptions, addScanCodeLicenseTextsDir(licenseTextDirectories))?.invoke()
 
-fun hasLicenseText(
-    id: String,
-    handleExceptions: Boolean = false,
-    licenseTextDirectories: List<File> = emptyList()
-): Boolean = getLicenseTextReader(id, handleExceptions, addScanCodeLicenseTextsDir(licenseTextDirectories)) != null
-
 fun getLicenseTextReader(
     id: String,
     handleExceptions: Boolean = false,

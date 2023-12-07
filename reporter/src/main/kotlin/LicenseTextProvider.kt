@@ -26,7 +26,7 @@ interface LicenseTextProvider {
     /**
      * Return the license text for the license identified by [licenseId] or null if the license text is not available.
      */
-    fun getLicenseText(licenseId: String): String?
+    fun getLicenseText(licenseId: String): String? = getLicenseTextReader(licenseId)?.invoke()
 
     /**
      * Return a lambda that can read the license text for the license identified by [licenseId] or null if no license
@@ -37,5 +37,5 @@ interface LicenseTextProvider {
     /**
      * Return true if a license text for the license identified by [licenseId] is available.
      */
-    fun hasLicenseText(licenseId: String): Boolean
+    fun hasLicenseText(licenseId: String): Boolean = getLicenseTextReader(licenseId) != null
 }
