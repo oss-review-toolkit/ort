@@ -149,10 +149,9 @@ data class ScanSummary(
 }
 
 /**
- * Set the `affectedPath` for scan timeout errors if otherwise it would have been unset. This way scan results which
- * have been created before `affectedPath` was introduced will still have that property set.
+ * Set the `affectedPath` for scan timeout errors if it is null. This way scan results which have been created before
+ * the `affectedPath` was introduced will still have that property set.
  */
-
 internal class IssueListConverter : StdConverter<List<Issue>, List<Issue>>() {
     override fun convert(issues: List<Issue>): List<Issue> =
         issues.map { issue ->
