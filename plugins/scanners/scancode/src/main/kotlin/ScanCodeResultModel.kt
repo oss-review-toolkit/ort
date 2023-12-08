@@ -26,6 +26,12 @@ import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonTransformingSerializer
 
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxLicenseWithExceptionExpression
+import org.ossreviewtoolkit.utils.spdx.toSpdx
+import org.ossreviewtoolkit.utils.spdx.toSpdxId
+
 @Serializable
 data class ScanCodeResult(
     val headers: List<HeaderEntry>,
@@ -56,24 +62,70 @@ sealed interface FileEntry {
     val copyrights: List<CopyrightEntry>
     val scanErrors: List<String>
 
+    // A map of ScanCode license keys associated with their corresponding SPDX license ID.
+    val scanCodeKeyToSpdxIdMappings: List<Pair<String, String>>
+
     @Serializable
     data class Version1(
         override val path: String,
         override val type: String,
-        override val licenses: List<LicenseEntry>,
+        override val licenses: List<LicenseEntry.Version1>,
         override val copyrights: List<CopyrightEntry>,
         override val scanErrors: List<String>
-    ) : FileEntry
+    ) : FileEntry {
+        companion object {
+            private val LICENSE_REF_PREFIX_SCAN_CODE = SpdxConstants.LICENSE_REF_PREFIX +
+                "${ScanCode.SCANNER_NAME.lowercase()}-"
+
+            private fun getSpdxId(spdxLicenseKey: String?, key: String): String {
+                // There is a bug in ScanCode 3.0.2 that returns an empty string instead of null for licenses unknown to
+                // SPDX.
+                val spdxId = spdxLicenseKey.orEmpty().toSpdxId(allowPlusSuffix = true)
+
+                if (spdxId.isNotEmpty()) return spdxId
+
+                // Fall back to building an ID based on the ScanCode-specific "key".
+                return "$LICENSE_REF_PREFIX_SCAN_CODE${key.toSpdxId(allowPlusSuffix = true)}"
+            }
+        }
+
+        override val scanCodeKeyToSpdxIdMappings by lazy {
+            licenses.map { license ->
+                license.key to getSpdxId(license.spdxLicenseKey, license.key)
+            }
+        }
+    }
 
     @Serializable
     data class Version3(
         override val path: String,
         override val type: String,
+        val detectedLicenseExpression: String? = null, // This might be explicitly set to null in JSON.
+        val detectedLicenseExpressionSpdx: String? = null, // This might be explicitly set to null in JSON.
         val licenseDetections: List<LicenseDetection>,
         override val copyrights: List<CopyrightEntry>,
         override val scanErrors: List<String>
     ) : FileEntry {
+        companion object {
+            private fun SpdxExpression?.licensesAndExceptions(): List<String> =
+                this?.decompose().orEmpty().flatMap {
+                    when (it) {
+                        is SpdxLicenseWithExceptionExpression -> listOf(it.license.toString(), it.exception)
+                        else -> listOf(it.toString())
+                    }
+                }
+        }
+
         override val licenses = licenseDetections.flatMap { it.matches }
+
+        override val scanCodeKeyToSpdxIdMappings by lazy {
+            val keyNames = detectedLicenseExpression?.toSpdx().licensesAndExceptions()
+            val spdxNames = detectedLicenseExpressionSpdx?.toSpdx().licensesAndExceptions()
+
+            check(keyNames.size == spdxNames.size)
+
+            keyNames.zip(spdxNames)
+        }
     }
 }
 
