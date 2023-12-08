@@ -543,13 +543,17 @@ private fun ScannerRun?.diff(other: ScannerRun?, context: SemanticDiffContext): 
             config = if (context.ignoreConfig) null else config.diff(other.config),
             provenancesA = (provenances - other.provenances).takeUnless { it.isEmpty() },
             provenancesB = (other.provenances - provenances).takeUnless { it.isEmpty() },
-            scannersA = scanners.takeIf { it != other.scanners },
-            scannersB = other.scanners.takeIf { it != scanners },
+            scannersA = scanners.diff(other.scanners).takeUnless { it.isEmpty() },
+            scannersB = other.scanners.diff(scanners).takeUnless { it.isEmpty() },
             filesA = if (context.ignoreFileList) null else (files - other.files).takeUnless { it.isEmpty() },
             filesB = if (context.ignoreFileList) null else (other.files - files).takeUnless { it.isEmpty() },
             scanResultDiff = differentResults.takeUnless { it.isEmpty() }
         )
     }
+}
+
+private fun Map<Identifier, Set<String>>.diff(other: Map<Identifier, Set<String>>): Map<Identifier, Set<String>> {
+    return filter { (id, values) -> other[id] != values }
 }
 
 private fun ScannerConfiguration?.diff(other: ScannerConfiguration?): ScannerConfigurationDiff? {
