@@ -130,6 +130,11 @@ class CompareCommand : OrtCommand(
         help = "Ignore environment differences."
     ).flag()
 
+    private val ignoreFileList by option(
+        "--ignore-file-list", "-f",
+        help = "Ignore environment differences."
+    ).flag()
+
     private val ignoreTmpDir by option(
         "--ignore-tmp-dir", "-d",
         help = "Ignore temporary directory differences."
@@ -183,6 +188,7 @@ class CompareCommand : OrtCommand(
 
                 val context = SemanticDiffContext(
                     ignoreConfig = ignoreConfig,
+                    ignoreFileList = ignoreFileList,
                     ignoreResultsFromDifferentScannerVersions = ignoreResultsFromDifferentScannerVersions,
                     packageConfigMapper = ::lenientPackageConfigurationMapper,
                     scanResultMapper = ::lenientScanResultMapper
@@ -539,8 +545,8 @@ private fun ScannerRun?.diff(other: ScannerRun?, context: SemanticDiffContext): 
             provenancesB = (other.provenances - provenances).takeUnless { it.isEmpty() },
             scannersA = scanners.takeIf { it != other.scanners },
             scannersB = other.scanners.takeIf { it != scanners },
-            filesA = (files - other.files).takeUnless { it.isEmpty() },
-            filesB = (other.files - files).takeUnless { it.isEmpty() },
+            filesA = if (context.ignoreFileList) null else (files - other.files).takeUnless { it.isEmpty() },
+            filesB = if (context.ignoreFileList) null else (other.files - files).takeUnless { it.isEmpty() },
             scanResultDiff = differentResults.takeUnless { it.isEmpty() }
         )
     }
@@ -846,6 +852,7 @@ private fun <T> mappedDiff(itemsA: Collection<T>, itemsB: Collection<T>, mapper:
 
 private data class SemanticDiffContext(
     val ignoreConfig: Boolean = false,
+    val ignoreFileList: Boolean = false,
     val ignoreResultsFromDifferentScannerVersions: Boolean = false,
     val packageConfigMapper: DiffMapper<PackageConfiguration> = identityMapper(),
     val scanResultMapper: DiffMapper<ScanResult> = identityMapper()
