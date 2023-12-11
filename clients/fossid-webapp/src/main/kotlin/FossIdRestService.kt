@@ -254,6 +254,7 @@ interface FossIdRestService {
     suspend fun listSnippets(@Body body: PostRequestBody): PolymorphicResponseBody<Snippet>
 
     @POST("api.php")
+    @Headers("$READ_TIMEOUT_HEADER:${5 * 60 * 1000}")
     suspend fun listMatchedLines(@Body body: PostRequestBody): EntityResponseBody<MatchedLines>
 
     @POST("api.php")
