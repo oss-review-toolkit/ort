@@ -67,7 +67,7 @@ The applicable license information is listed below:
 
 [#assign copyrights = resolvedLicense.getCopyrights(true)]
 [#list copyrights as copyright]
-** +${copyright}+
+** `+${copyright}+`
 [#else]
 ** No copyright found.
 [/#list]
@@ -97,7 +97,7 @@ License File: <<${PurlUtils.toPurl(package.id)} ${licenseFile.path}, ${licenseFi
 
 [#assign copyrights = licenseFile.getCopyrights()]
 [#list copyrights as copyright]
-** +${copyright}+
+** `+${copyright}+`
 [#else]
 ** No copyright found.
 [/#list]
@@ -129,7 +129,7 @@ The following licenses and copyrights were found in the source code of this pack
 
 [#assign copyrights = resolvedLicense.getCopyrights(true)]
 [#list copyrights as copyright]
-** +${copyright}+
+** `+${copyright}+`
 [#else]
 ** No copyright found.
 [/#list]

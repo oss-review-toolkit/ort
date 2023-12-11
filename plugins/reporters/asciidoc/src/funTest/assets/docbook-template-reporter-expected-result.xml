@@ -25,7 +25,7 @@ The applicable license information is listed below:</simpara>
 <simpara>License: <link linkend="_mit">MIT</link></simpara>
 <itemizedlist>
 <listitem>
-<simpara>Copyright 1</simpara>
+<simpara><literal>Copyright 1</literal></simpara>
 </listitem>
 </itemizedlist>
 </listitem>
@@ -44,7 +44,7 @@ The applicable license information is listed below:</simpara>
 <simpara>License: <link linkend="_mit">MIT</link></simpara>
 <itemizedlist>
 <listitem>
-<simpara>Copyright 1</simpara>
+<simpara><literal>Copyright 1</literal></simpara>
 </listitem>
 </itemizedlist>
 </listitem>
@@ -65,7 +65,7 @@ The applicable license information is listed below:</simpara>
 <simpara>License: <link linkend="_bsd_3_clause">BSD-3-Clause</link></simpara>
 <itemizedlist>
 <listitem>
-<simpara>Copyright 1</simpara>
+<simpara><literal>Copyright 1</literal></simpara>
 </listitem>
 </itemizedlist>
 </listitem>
@@ -86,10 +86,10 @@ The applicable license information is listed below:</simpara>
 <simpara>License: <link linkend="_mit">MIT</link></simpara>
 <itemizedlist>
 <listitem>
-<simpara>Copyright 1</simpara>
+<simpara><literal>Copyright 1</literal></simpara>
 </listitem>
 <listitem>
-<simpara>Copyright 2</simpara>
+<simpara><literal>Copyright 2</literal></simpara>
 </listitem>
 </itemizedlist>
 </listitem>
@@ -102,7 +102,7 @@ The applicable license information is listed below:</simpara>
 <simpara>License: <link linkend="_bsd_3_clause">BSD-3-Clause</link></simpara>
 <itemizedlist>
 <listitem>
-<simpara>Copyright 3</simpara>
+<simpara><literal>Copyright 3</literal></simpara>
 </listitem>
 </itemizedlist>
 </listitem>
@@ -110,10 +110,10 @@ The applicable license information is listed below:</simpara>
 <simpara>License: <link linkend="_mit">MIT</link></simpara>
 <itemizedlist>
 <listitem>
-<simpara>Copyright 1</simpara>
+<simpara><literal>Copyright 1</literal></simpara>
 </listitem>
 <listitem>
-<simpara>Copyright 2</simpara>
+<simpara><literal>Copyright 2</literal></simpara>
 </listitem>
 </itemizedlist>
 </listitem>
@@ -126,7 +126,7 @@ The applicable license information is listed below:</simpara>
 <simpara>License: <link linkend="_mit">MIT</link></simpara>
 <itemizedlist>
 <listitem>
-<simpara>Copyright 1</simpara>
+<simpara><literal>Copyright 1</literal></simpara>
 </listitem>
 </itemizedlist>
 </listitem>
