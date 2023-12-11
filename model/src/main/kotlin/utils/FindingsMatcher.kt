@@ -255,7 +255,7 @@ fun associateLicensesWithExceptions(
         if (associatedLicenseFinding != null) {
             // Add the fixed-up license with the exception.
             fixedLicenses += associatedLicenseFinding.copy(
-                license = "${associatedLicenseFinding.license} WITH ${exception.license}".toSpdx(),
+                license = "${associatedLicenseFinding.license} ${SpdxExpression.WITH} ${exception.license}".toSpdx(),
                 location = associatedLicenseFinding.location.copy(
                     startLine = min(associatedLicenseFinding.location.startLine, exception.location.startLine),
                     endLine = max(associatedLicenseFinding.location.endLine, exception.location.endLine)
@@ -271,7 +271,7 @@ fun associateLicensesWithExceptions(
     // Associate remaining "orphan" exceptions with "NOASSERTION" to turn them into valid SPDX expressions and at the
     // same time "marking" them for review as "NOASSERTION" is not a real license.
     remainingExceptions.mapTo(fixedLicenses) { exception ->
-        exception.copy(license = "${SpdxConstants.NOASSERTION} WITH ${exception.license}".toSpdx())
+        exception.copy(license = "${SpdxConstants.NOASSERTION} ${SpdxExpression.WITH} ${exception.license}".toSpdx())
     }
 
     return fixedLicenses
