@@ -27,9 +27,15 @@ import kotlin.math.min
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.utils.spdx.SpdxCompoundExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseException
+import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseWithExceptionExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxOperator
+import org.ossreviewtoolkit.utils.spdx.SpdxSimpleExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 /**
@@ -274,5 +280,72 @@ fun associateLicensesWithExceptions(
         exception.copy(license = "${SpdxConstants.NOASSERTION} ${SpdxExpression.WITH} ${exception.license}".toSpdx())
     }
 
-    return fixedLicenses
+    return fixedLicenses.mapTo(mutableSetOf()) { it.copy(license = associateLicensesWithExceptions(it.license)) }
+}
+
+/**
+ * Process [license] for stand-alone license exceptions as part of compound expressions and associate them with
+ * applicable licenses. Orphan license exceptions will get associated by [SpdxConstants.NOASSERTION]. Return a new
+ * expression that does not contain stand-alone license exceptions anymore.
+ */
+internal fun associateLicensesWithExceptions(license: SpdxExpression): SpdxExpression {
+    // If this is not a compound expression, there can be no stand-alone license exceptions with belonging licenses.
+    if (license !is SpdxCompoundExpression) return license
+
+    // Exclusively operate on AND-only expressions without further nested expressions.
+    val hasOnlyAndOperator = license.operator == SpdxOperator.AND && "(" !in license.toString()
+    if (!hasOnlyAndOperator) {
+        return SpdxCompoundExpression(
+            associateLicensesWithExceptions(license.left),
+            license.operator,
+            associateLicensesWithExceptions(license.right)
+        )
+    }
+
+    val handledLicenses = mutableSetOf<SpdxSingleLicenseExpression>()
+    val simpleLicenses = mutableSetOf<SpdxSimpleExpression>()
+    val associatedLicenses = mutableSetOf<SpdxSimpleExpression>()
+    val remainingExceptions = mutableSetOf<SpdxSingleLicenseExpression>()
+
+    // Divide the AND-operands into exceptions, simple expressions, and licenses than cannot be used with an exception.
+    license.decompose().forEach {
+        when {
+            SpdxLicenseException.forId(it.toString()) != null -> remainingExceptions += it
+            it is SpdxSimpleExpression -> simpleLicenses += it
+            else -> handledLicenses += it
+        }
+    }
+
+    val i = remainingExceptions.iterator()
+
+    while (i.hasNext()) {
+        val exception = i.next()
+        val exceptionString = exception.toString()
+
+        // Determine all licenses the exception is applicable to.
+        val applicableLicenses = SpdxLicenseException.mapping[exceptionString].orEmpty().mapTo(mutableSetOf()) {
+            SpdxLicenseIdExpression(it.id)
+        }
+
+        // Associate all remaining licenses that are applicable with the exception and remove the exception.
+        val licenses = simpleLicenses.intersect(applicableLicenses)
+        if (licenses.isEmpty()) continue
+
+        licenses.forEach {
+            handledLicenses += SpdxLicenseWithExceptionExpression(it, exceptionString)
+        }
+
+        associatedLicenses += licenses
+        i.remove()
+    }
+
+    handledLicenses += simpleLicenses - associatedLicenses
+
+    // Associate remaining "orphan" exceptions with "NOASSERTION" to turn them into valid SPDX expressions.
+    handledLicenses += remainingExceptions.map {
+        SpdxLicenseWithExceptionExpression(SpdxLicenseIdExpression(SpdxConstants.NOASSERTION), it.toString())
+    }
+
+    // Recreate the compound AND-expression from the associated licenses.
+    return handledLicenses.reduce(SpdxExpression::and)
 }
