@@ -263,7 +263,7 @@ data class OrtResult(
         }
 
     /**
-     * Retrieve non-excluded issues which are not resolved by resolutions in the repository configuration of this
+     * Return all non-excluded issues which are not resolved by resolutions in the repository configuration of this
      * [OrtResult] with severities equal to or over [minSeverity].
      */
     @JsonIgnore
