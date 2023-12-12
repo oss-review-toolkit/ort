@@ -257,7 +257,6 @@ class ReporterCommand : OrtCommand(
             ortResult,
             ortConfig,
             packageConfigurationProvider,
-            DefaultResolutionProvider(ortResult.getResolutions()),
             DefaultLicenseTextProvider(licenseTextDirectories),
             copyrightGarbage,
             licenseInfoResolver,
