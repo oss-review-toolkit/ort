@@ -388,6 +388,18 @@ data class OrtResult(
     fun getResolutions(): Resolutions = resolvedConfiguration.resolutions.orEmpty()
 
     /**
+     * Return true if and only if [ruleViolation] is resolved in this [OrtResult].
+     */
+    fun isResolved(ruleViolation: RuleViolation): Boolean =
+        getResolutions().ruleViolations.any { it.matches(ruleViolation) }
+
+    /**
+     * Return true if and only if [vulnerability] is resolved in this [OrtResult].
+     */
+    fun isResolved(vulnerability: Vulnerability): Boolean =
+        getResolutions().vulnerabilities.any { it.matches(vulnerability) }
+
+    /**
      * Return all [RuleViolation]s contained in this [OrtResult]. Optionally exclude resolved violations with
      * [omitResolved] and remove violations below the [minSeverity].
      */
