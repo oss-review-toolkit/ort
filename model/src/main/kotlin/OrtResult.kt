@@ -28,9 +28,12 @@ import org.apache.logging.log4j.kotlin.loggerOf
 
 import org.ossreviewtoolkit.model.ResolvedPackageCurations.Companion.REPOSITORY_CONFIGURATION_PROVIDER_ID
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
+import org.ossreviewtoolkit.model.config.RuleViolationResolution
+import org.ossreviewtoolkit.model.config.VulnerabilityResolution
 import org.ossreviewtoolkit.model.config.orEmpty
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.utils.common.zipWithCollections
@@ -398,6 +401,23 @@ data class OrtResult(
      */
     fun isResolved(vulnerability: Vulnerability): Boolean =
         getResolutions().vulnerabilities.any { it.matches(vulnerability) }
+
+    /**
+     * Return the resolutions matching [issue].
+     */
+    fun getResolutionsFor(issue: Issue): List<IssueResolution> = getResolutions().issues.filter { it.matches(issue) }
+
+    /**
+     * Return the resolutions matching [ruleViolation].
+     */
+    fun getResolutionsFor(ruleViolation: RuleViolation): List<RuleViolationResolution> =
+        getResolutions().ruleViolations.filter { it.matches(ruleViolation) }
+
+    /**
+     * Return the resolutions matching [vulnerability].
+     */
+    fun getResolutionsFor(vulnerability: Vulnerability): List<VulnerabilityResolution> =
+        getResolutions().vulnerabilities.filter { it.matches(vulnerability) }
 
     /**
      * Return all [RuleViolation]s contained in this [OrtResult]. Optionally exclude resolved violations with
