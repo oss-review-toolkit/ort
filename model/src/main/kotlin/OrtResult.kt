@@ -263,7 +263,7 @@ data class OrtResult(
         }
 
     /**
-     * Return all non-excluded issues which are not resolved by resolutions in the repository configuration of this
+     * Return all non-excluded issues which are not resolved by resolutions in the resolved configuration of this
      * [OrtResult] with severities equal to or over [minSeverity].
      */
     @JsonIgnore
@@ -272,7 +272,7 @@ data class OrtResult(
             .mapNotNull { (id, issues) -> issues.takeUnless { isExcluded(id) } }
             .flatten()
             .filter { issue ->
-                issue.severity >= minSeverity && getRepositoryConfigResolutions().issues.none { it.matches(issue) }
+                issue.severity >= minSeverity && getResolutions().issues.none { it.matches(issue) }
             }
 
     /**
@@ -401,7 +401,7 @@ data class OrtResult(
         }
 
         return if (omitResolved) {
-            val resolutions = getRepositoryConfigResolutions().ruleViolations
+            val resolutions = getResolutions().ruleViolations
 
             severeViolations.filter { violation ->
                 resolutions.none { resolution ->
@@ -460,7 +460,7 @@ data class OrtResult(
             .filterKeys { !omitExcluded || !isExcluded(it) }
 
         return if (omitResolved) {
-            val resolutions = getRepositoryConfigResolutions().vulnerabilities
+            val resolutions = getResolutions().vulnerabilities
 
             allVulnerabilities.mapValues { (_, vulnerabilities) ->
                 vulnerabilities.filter { vulnerability ->
