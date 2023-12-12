@@ -54,6 +54,7 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.readValueOrDefault
 import org.ossreviewtoolkit.model.utils.CompositePackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
+import org.ossreviewtoolkit.model.utils.setResolutions
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
 import org.ossreviewtoolkit.plugins.commands.api.utils.configurationGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.inputGroup
@@ -204,10 +205,10 @@ class ReporterCommand : OrtCommand(
             ortResult = ortResult.replaceConfig(config)
         }
 
-        val resolutionProvider =
-            ortResult.resolvedConfiguration.resolutions.takeUnless { refreshResolutions }?.let { resolutions ->
-                DefaultResolutionProvider(resolutions)
-            } ?: DefaultResolutionProvider.create(ortResult, resolutionsFile)
+        if (refreshResolutions || ortResult.resolvedConfiguration.resolutions == null) {
+            val resolutionProvider = DefaultResolutionProvider.create(ortResult, resolutionsFile)
+            ortResult = ortResult.setResolutions(resolutionProvider)
+        }
 
         val licenseTextDirectories = listOfNotNull(customLicenseTextsDir.takeIf { it.isDirectory })
 
@@ -256,7 +257,7 @@ class ReporterCommand : OrtCommand(
             ortResult,
             ortConfig,
             packageConfigurationProvider,
-            resolutionProvider,
+            DefaultResolutionProvider(ortResult.getResolutions()),
             DefaultLicenseTextProvider(licenseTextDirectories),
             copyrightGarbage,
             licenseInfoResolver,
