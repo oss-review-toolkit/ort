@@ -271,7 +271,9 @@ data class OrtResult(
         getIssues()
             .mapNotNull { (id, issues) -> issues.takeUnless { isExcluded(id) } }
             .flatten()
-            .filter { issue -> issue.severity >= minSeverity && getResolutions().issues.none { it.matches(issue) } }
+            .filter { issue ->
+                issue.severity >= minSeverity && getRepositoryConfigResolutions().issues.none { it.matches(issue) }
+            }
 
     /**
      * Return all projects and packages that are likely to belong to one of the organizations of the given [names]. If
@@ -377,7 +379,7 @@ data class OrtResult(
      * Return the [Resolutions] contained in the repository configuration of this [OrtResult].
      */
     @JsonIgnore
-    fun getResolutions(): Resolutions = repository.config.resolutions.orEmpty()
+    fun getRepositoryConfigResolutions(): Resolutions = repository.config.resolutions.orEmpty()
 
     /**
      * Return all [RuleViolation]s contained in this [OrtResult]. Optionally exclude resolved violations with
@@ -393,7 +395,7 @@ data class OrtResult(
         }
 
         return if (omitResolved) {
-            val resolutions = getResolutions().ruleViolations
+            val resolutions = getRepositoryConfigResolutions().ruleViolations
 
             severeViolations.filter { violation ->
                 resolutions.none { resolution ->
@@ -452,7 +454,7 @@ data class OrtResult(
             .filterKeys { !omitExcluded || !isExcluded(it) }
 
         return if (omitResolved) {
-            val resolutions = getResolutions().vulnerabilities
+            val resolutions = getRepositoryConfigResolutions().vulnerabilities
 
             allVulnerabilities.mapValues { (_, vulnerabilities) ->
                 vulnerabilities.filter { vulnerability ->

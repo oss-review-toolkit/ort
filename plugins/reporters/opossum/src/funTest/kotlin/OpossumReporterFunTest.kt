@@ -61,7 +61,7 @@ class OpossumReporterFunTest : WordSpec({
 private fun TestConfiguration.generateReport(ortResult: OrtResult): String {
     val input = ReporterInput(
         ortResult = ortResult,
-        resolutionProvider = DefaultResolutionProvider(ortResult.getResolutions())
+        resolutionProvider = DefaultResolutionProvider(ortResult.getRepositoryConfigResolutions())
     )
 
     val outputDir = tempdir()

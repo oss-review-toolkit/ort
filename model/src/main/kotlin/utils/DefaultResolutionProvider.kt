@@ -38,7 +38,7 @@ class DefaultResolutionProvider(private val resolutions: Resolutions = Resolutio
          * [ortResult] and the [resolutionsFile].
          */
         fun create(ortResult: OrtResult? = null, resolutionsFile: File? = null): DefaultResolutionProvider {
-            val resolutionsFromOrtResult = ortResult?.getResolutions() ?: Resolutions()
+            val resolutionsFromOrtResult = ortResult?.getRepositoryConfigResolutions() ?: Resolutions()
             val resolutionsFromFile = resolutionsFile?.takeIf { it.isFile }?.readValue() ?: Resolutions()
 
             return DefaultResolutionProvider(resolutionsFromOrtResult.merge(resolutionsFromFile))
