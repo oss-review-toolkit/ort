@@ -34,7 +34,8 @@ import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 class DefaultResolutionProvider(private val resolutions: Resolutions = Resolutions()) : ResolutionProvider {
     companion object {
         /**
-         * Create a [DefaultResolutionProvider] and add the resolutions from the [ortResult] and the [resolutionsFile].
+         * Create a [DefaultResolutionProvider] and add the resolutions from the repository configuration of
+         * [ortResult] and the [resolutionsFile].
          */
         fun create(ortResult: OrtResult? = null, resolutionsFile: File? = null): DefaultResolutionProvider {
             val resolutionsFromOrtResult = ortResult?.getResolutions() ?: Resolutions()
