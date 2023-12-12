@@ -27,7 +27,6 @@ import io.kotest.matchers.shouldBe
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.PluginConfiguration
-import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.test.getAssetAsString
@@ -66,7 +65,6 @@ class EvaluatedModelReporterFunTest : WordSpec({
 private fun TestConfiguration.generateReport(ortResult: OrtResult, options: Map<String, String> = emptyMap()): String {
     val input = ReporterInput(
         ortResult = ortResult,
-        resolutionProvider = DefaultResolutionProvider.create(ortResult),
         howToFixTextProvider = { "Some how to fix text." }
     )
 
