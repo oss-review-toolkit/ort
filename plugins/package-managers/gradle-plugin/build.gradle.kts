@@ -17,6 +17,10 @@
  * License-Filename: LICENSE
  */
 
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     // Apply core plugins.
     `java-gradle-plugin`
@@ -37,6 +41,19 @@ dependencies {
 
     api(libs.mavenModel)
     api(libs.mavenModelBuilder)
+}
+
+tasks.withType<JavaCompile>().configureEach {
+    sourceCompatibility = JavaVersion.VERSION_1_8.toString()
+    targetCompatibility = JavaVersion.VERSION_1_8.toString()
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+    compilerOptions {
+        apiVersion = KotlinVersion.KOTLIN_1_6
+        languageVersion = KotlinVersion.KOTLIN_1_6
+        jvmTarget = JvmTarget.JVM_1_8
+    }
 }
 
 tasks.register<Jar>("fatJar") {
