@@ -27,7 +27,7 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 class GoModTest : WordSpec({
-    "parseWhyOutput" should {
+    "parseWhyOutput()" should {
         "detect packages that are used" {
             val output = """
                 # cloud.google.com/go
@@ -72,7 +72,7 @@ class GoModTest : WordSpec({
         }
     }
 
-    "escapeModuleVersion" should {
+    "escapeModuleVersion()" should {
         "escape uppercase letters" {
             val version = "v0.1.0-MS4.0.20231102094829-08e0c3cd016c"
             val escapedVersion = escapeModuleVersion(version)
