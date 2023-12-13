@@ -28,7 +28,7 @@ import com.github.ajalt.clikt.parameters.types.file
 import org.ossreviewtoolkit.helper.utils.readOrtResult
 import org.ossreviewtoolkit.helper.utils.writeOrtResult
 import org.ossreviewtoolkit.model.ResolvedPackageCurations.Companion.REPOSITORY_CONFIGURATION_PROVIDER_ID
-import org.ossreviewtoolkit.model.utils.addPackageCurations
+import org.ossreviewtoolkit.model.utils.setPackageCurations
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.SimplePackageCurationProvider
 import org.ossreviewtoolkit.plugins.packagecurationproviders.file.FilePackageCurationProvider
 import org.ossreviewtoolkit.utils.common.expandTilde
@@ -75,7 +75,7 @@ internal class SetCommand : CliktCommand(
             add("SetCommandOption" to FilePackageCurationProvider(packageCurationsFile, packageCurationsDir))
         }
 
-        val ortResultOutput = ortResultInput.addPackageCurations(packageCurationProviders)
+        val ortResultOutput = ortResultInput.setPackageCurations(packageCurationProviders)
 
         writeOrtResult(ortResultOutput, ortFile)
     }
