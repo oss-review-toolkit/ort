@@ -155,6 +155,7 @@ class GoMod(
      * Return the module graph output from `go mod graph` with non-vendor dependencies removed.
      */
     private fun getModuleGraph(projectDir: File, moduleInfoForModuleName: Map<String, ModuleInfo>): Graph<GoModule> {
+        fun GoModule.hasModuleInfo() = name in moduleInfoForModuleName
         fun moduleInfo(moduleName: String): ModuleInfo = moduleInfoForModuleName.getValue(moduleName)
 
         fun parseModuleEntry(entry: String): GoModule =
@@ -177,14 +178,20 @@ class GoMod(
             val columns = line.splitOnWhitespace()
             require(columns.size == 2) { "Expected exactly one occurrence of ' ' on any non-blank line." }
 
-            val parent = parseModuleEntry(columns[0]).apply {
+            val parent = parseModuleEntry(columns[0])
+            val child = parseModuleEntry(columns[1])
+
+            if (!parent.hasModuleInfo() || !child.hasModuleInfo()) {
                 // As of go version 1.21.1 the module graph contains a version constraint for the go version for
                 // the main project. The edge would be filtered out below by getVendorModules(). However, ignore
-                // it already here as there is no module info for 'go', so parseModuleEntry() would fail.
-                if (moduleInfo(name).main && columns[1].startsWith("go@")) return@forEach
-            }
+                // it already here as there is no module info for 'go' and potentially also for 'go's transitive
+                // dependencies, so parseModuleEntry() would fail.
+                logger.debug {
+                    "Skip edge from '${parent.name}' to '${child.name}' due to missing module info."
+                }
 
-            val child = parseModuleEntry(columns[1])
+                return@forEach
+            }
 
             if (moduleInfo(parent.name).main && moduleInfo(child.name).indirect) {
                 logger.debug {
