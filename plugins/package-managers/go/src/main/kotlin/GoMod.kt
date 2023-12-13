@@ -49,7 +49,6 @@ import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.plugins.packagemanagers.go.utils.Graph
 import org.ossreviewtoolkit.plugins.packagemanagers.go.utils.normalizeModuleVersion
 import org.ossreviewtoolkit.utils.common.CommandLineTool
-import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
@@ -371,16 +370,6 @@ private val JSON = Json { ignoreUnknownKeys = true }
 
 private const val DEFAULT_GO_PROXY = "https://proxy.golang.org"
 
-private fun getGoProxy(): String {
-    val firstProxy = Os.env["GOPROXY"].orEmpty()
-        .split(',')
-        .filterNot { it == "direct" || it == "off" }
-        .firstOrNull()
-        .orEmpty()
-
-    return firstProxy.ifBlank { DEFAULT_GO_PROXY }
-}
-
 @Serializable
 private data class ModuleInfo(
     @SerialName("Path")
@@ -455,9 +444,7 @@ private fun ModuleInfo.toSourceArtifact(): RemoteArtifact {
      *   2. There are special values like 'direct' and 'off'.
      *   3. GOPRIVATE variable can specify glob expression against paths for which the proxy should be bypassed.
      */
-    val goProxy = getGoProxy()
-
-    return RemoteArtifact(url = "$goProxy/$path/@v/$version.zip", hash = Hash.NONE)
+    return RemoteArtifact(url = "$DEFAULT_GO_PROXY/$path/@v/$version.zip", hash = Hash.NONE)
 }
 
 private fun ModuleInfo.toVcsInfo(): VcsInfo? {
