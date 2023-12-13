@@ -414,9 +414,9 @@ license_choices:
 
 To globally select a license from an SPDX expression, that offers a choice, an SPDX expression for a `given` and a
 `choice` must be provided. The `choice` is applied to the whole `given` SPDX expression. With a repository license
-choice, the license choice is applied to each package that offers this license as a choice. Not allowing `given` to be
-null helps only applying the choice to a wanted `given` as opposed to all licenses with that choice, which could lead to
-unwanted choices. The license choices for a project can be overwritten by applying a
+choice, the license choice is applied to each project or package that offers this specific license choice. Not allowing
+`given` to be null helps only applying the choice to a wanted `given` as opposed to all licenses with that choice, which
+could lead to unwanted choices. The license choices for a project can be overwritten by applying a
 [license choice to a package](#license-choice-by-package).
 
 ```yaml
