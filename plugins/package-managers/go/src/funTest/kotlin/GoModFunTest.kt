@@ -115,6 +115,15 @@ class GoModFunTest : StringSpec({
             )
         )
     }
+
+    "Project with 'go' as dependency along with transitive dependencies" {
+        val definitionFile = testDir.resolve("go-as-dep-with-transitive-deps/go.mod")
+        val expectedResultFile = testDir.resolve("go-as-dep-with-transitive-deps-expected-output.yml")
+
+        val result = create("GoMod").resolveSingleProject(definitionFile)
+
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
 })
 
 private fun getDefinitionFilePath(definitionFile: File): String {
