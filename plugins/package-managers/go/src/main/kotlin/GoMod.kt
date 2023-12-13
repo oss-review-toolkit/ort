@@ -436,14 +436,8 @@ private data class ModuleInfoFile(
 }
 
 private fun ModuleInfo.toSourceArtifact(): RemoteArtifact {
-    /**
-     * The below construction of the remote artifact URL makes several simplifying assumptions, and it is still
-     * questionable whether those assumptions are ok:
-     *
-     *   1. GOPROXY in general can hold a list of (fallback) proxy URLs.
-     *   2. There are special values like 'direct' and 'off'.
-     *   3. GOPRIVATE variable can specify glob expression against paths for which the proxy should be bypassed.
-     */
+    // The below construction of the remote artifact URL simply assumes the module to be available at Go's default
+    // proxy, which might not always hold.
     return RemoteArtifact(url = "$DEFAULT_GO_PROXY/$path/@v/$version.zip", hash = Hash.NONE)
 }
 
