@@ -72,10 +72,10 @@ class GoModTest : WordSpec({
         }
     }
 
-    "escapeVersion" should {
+    "escapeModuleVersion" should {
         "escape uppercase letters" {
             val version = "v0.1.0-MS4.0.20231102094829-08e0c3cd016c"
-            val escapedVersion = escapeVersion(version)
+            val escapedVersion = escapeModuleVersion(version)
 
             escapedVersion shouldBe "v0.1.0-!m!s4.0.20231102094829-08e0c3cd016c"
         }
@@ -84,7 +84,7 @@ class GoModTest : WordSpec({
             val version = "v1.0.0!"
 
             shouldThrow<IllegalArgumentException> {
-                escapeVersion(version)
+                escapeModuleVersion(version)
             }
         }
     }
