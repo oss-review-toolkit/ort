@@ -253,6 +253,16 @@ class UtilsTest : WordSpec({
 
             filterVersionNames("3.9.0.99", names).shouldContainExactly("3.9.0.99-a3d9827", "sdk-3.9.0.99", "v3.9.0.99")
         }
+
+        "find names that match the version without an ignorable suffix" {
+            val names = listOf(
+                "6.2.8",
+                "6.2.9",
+                "6.2.10"
+            )
+
+            filterVersionNames("6.2.9.Final", names).shouldContainExactly("6.2.9")
+        }
     }
 
     "normalizeVcsUrl" should {

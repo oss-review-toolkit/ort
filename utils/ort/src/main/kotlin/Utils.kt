@@ -37,7 +37,8 @@ var printStackTrace = false
 private val versionSeparators = listOf('-', '_', '.')
 private val versionSeparatorsPattern = versionSeparators.joinToString("", "[", "]")
 
-private val ignorablePrefixSuffixPattern = listOf("rel", "release", "final").joinToString("|", "(", ")")
+private val ignorablePrefixSuffix = listOf("rel", "release", "final")
+private val ignorablePrefixSuffixPattern = ignorablePrefixSuffix.joinToString("|", "(", ")")
 private val ignorablePrefixSuffixRegex = Regex(
     "(^$ignorablePrefixSuffixPattern$versionSeparatorsPattern|$versionSeparatorsPattern$ignorablePrefixSuffixPattern$)"
 )
@@ -61,6 +62,10 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
     val separatorRegex = Regex(versionSeparatorsPattern)
     versionSeparators.mapTo(versionVariants) {
         VersionVariant(versionLower.replace(separatorRegex, it.toString()), listOf(it))
+    }
+
+    ignorablePrefixSuffix.mapTo(versionVariants) {
+        VersionVariant(versionLower.removeSuffix(it).trimEnd(*versionSeparators.toCharArray()), versionSeparators)
     }
 
     // The list of supported version separators.
