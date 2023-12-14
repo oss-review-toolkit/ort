@@ -54,6 +54,7 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.readValueOrDefault
 import org.ossreviewtoolkit.model.utils.CompositePackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
+import org.ossreviewtoolkit.model.utils.setPackageConfigurations
 import org.ossreviewtoolkit.model.utils.setResolutions
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
 import org.ossreviewtoolkit.plugins.commands.api.utils.configurationGroup
@@ -234,6 +235,8 @@ class ReporterCommand : OrtCommand(
             }
         }
 
+        ortResult = ortResult.setPackageConfigurations(packageConfigurationProvider)
+
         val copyrightGarbage = copyrightGarbageFile.takeIf { it.isFile }?.readValue<CopyrightGarbage>().orEmpty()
 
         val licenseInfoResolver = LicenseInfoResolver(
@@ -256,7 +259,7 @@ class ReporterCommand : OrtCommand(
         val input = ReporterInput(
             ortResult,
             ortConfig,
-            packageConfigurationProvider,
+            ortResult,
             DefaultLicenseTextProvider(licenseTextDirectories),
             copyrightGarbage,
             licenseInfoResolver,
