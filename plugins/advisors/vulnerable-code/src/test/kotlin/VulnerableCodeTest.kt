@@ -279,12 +279,15 @@ class VulnerableCodeTest : WordSpec({
 
     "fixupUrlEscaping()" should {
         "fixup a wrongly escaped ampersand" {
-            "https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true" +
+            val brokenUrl = "https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true" +
                 "&query=cpe:2.3:a:oracle:retail_category_management_planning_" +
-                "\\\\&_optimization:16.0.3:*:*:*:*:*:*:*".fixupUrlEscaping() shouldBe
+                "\\\\&_optimization:16.0.3:*:*:*:*:*:*:*"
+
+            URI.create(brokenUrl.fixupUrlEscaping()) shouldBe URI(
                 "https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true" +
-                "&query=cpe:2.3:a:oracle:retail_category_management_planning_" +
-                "%26_optimization:16.0.3:*:*:*:*:*:*:*"
+                    "&query=cpe:2.3:a:oracle:retail_category_management_planning_" +
+                    "%26_optimization:16.0.3:*:*:*:*:*:*:*"
+            )
         }
     }
 })
