@@ -289,6 +289,16 @@ class VulnerableCodeTest : WordSpec({
                     "%26_optimization:16.0.3:*:*:*:*:*:*:*"
             )
         }
+
+        "fixup a wrongly escaped slash" {
+            val brokenUrl = "https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true" +
+                "&query=cpe:2.3:a:apple:swiftnio_http\\/2:*:*:*:*:*:swift:*:*"
+
+            URI.create(brokenUrl.fixupUrlEscaping()) shouldBe URI(
+                "https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true&" +
+                    "query=cpe:2.3:a:apple:swiftnio_http/2:*:*:*:*:*:swift:*:*"
+            )
+        }
     }
 })
 
