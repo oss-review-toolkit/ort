@@ -26,6 +26,7 @@ import com.github.ajalt.clikt.parameters.options.RawOption
 import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
+import com.github.ajalt.clikt.parameters.options.deprecated
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
@@ -118,7 +119,7 @@ class ScannerCommand : OrtCommand(
     private val skipExcluded by option(
         "--skip-excluded",
         help = "Do not scan excluded projects or packages. Works only with the '--ort-file' parameter."
-    ).flag()
+    ).flag().deprecated("Use the global option 'ort -P ort.scanner.skipExcluded=... scan' instead.")
 
     private val resolutionsFile by option(
         "--resolutions-file",
