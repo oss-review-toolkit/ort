@@ -26,6 +26,7 @@ import com.github.ajalt.clikt.parameters.groups.required
 import com.github.ajalt.clikt.parameters.groups.single
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
+import com.github.ajalt.clikt.parameters.options.deprecated
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
@@ -190,7 +191,7 @@ class DownloaderCommand : OrtCommand(
     private val skipExcluded by option(
         "--skip-excluded",
         help = "Do not download excluded projects or packages. Works only with the '--ort-file' parameter."
-    ).flag()
+    ).flag().deprecated("Use the global option 'ort -P ort.downloader.skipExcluded=... download' instead.")
 
     private val dryRun by option(
         "--dry-run",
