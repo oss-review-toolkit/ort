@@ -24,6 +24,7 @@ import org.ossreviewtoolkit.model.utils.associateLicensesWithExceptions
 import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.percentEncode
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
+import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 /**
  * DOS scanner is the ORT implementation of a ScanCode-based backend scanner, and it is a part of
@@ -126,10 +127,20 @@ class DOS internal constructor(
                 issues)
         }
 
+        val fixedUpLicenses = associateLicensesWithExceptions(summary.licenseFindings).mapTo(mutableSetOf()) {
+            // TODO: Remove this again once fixed upstream in ORT.
+            it.copy(
+                license = it.license.toString().replace(
+                    "GPL-2.0-only AND Classpath-exception-2.0",
+                    "GPL-2.0-only WITH Classpath-exception-2.0"
+                ).toSpdx()
+            )
+        }
+
         return ScanResult(
             provenance,
             details,
-            summary.copy(licenseFindings = associateLicensesWithExceptions(summary.licenseFindings))
+            summary.copy(licenseFindings = fixedUpLicenses)
         )
     }
 
