@@ -114,7 +114,7 @@ class DOS internal constructor(
             generateSummary(
                 thisScanStartTime,
                 thisScanEndTime,
-                scanResults?.results.toString()
+                scanResults?.results!!
             )
         } else {
             ScanSummary(

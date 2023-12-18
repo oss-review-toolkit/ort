@@ -10,15 +10,23 @@
  */
 package org.ossreviewtoolkit.plugins.scanners.dos
 
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.ObjectMapper
-import org.ossreviewtoolkit.model.*
-
 import java.time.Instant
 
-internal fun generateSummary(startTime: Instant, endTime: Instant, jsonString: String): ScanSummary {
-    val mapper = ObjectMapper()
-    val result: JsonNode = mapper.readTree(jsonString)
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.float
+import kotlinx.serialization.json.int
+import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
+
+import org.ossreviewtoolkit.model.CopyrightFinding
+import org.ossreviewtoolkit.model.Issue
+import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.TextLocation
+
+internal fun generateSummary(startTime: Instant, endTime: Instant, result: JsonObject): ScanSummary {
     val licenseFindings = getLicenseFindings(result)
     val copyrightFindings = getCopyrightFindings(result)
     val issues = getIssues(result)
@@ -32,91 +40,51 @@ internal fun generateSummary(startTime: Instant, endTime: Instant, jsonString: S
         issues
     )
 }
-private fun getLicenseFindings(result: JsonNode): Set<LicenseFinding> {
-    val licenseFindings = mutableListOf<LicenseFinding>()
-    val licenses = result["licenses"] ?: return emptySet()
+private fun getLicenseFindings(result: JsonObject): Set<LicenseFinding> {
+    val licenses = result["licenses"]?.jsonArray ?: return emptySet()
 
-    licenses.forEach { licenseNode ->
-        val license = licenseNode["license"].asText()
-        val location = licenseNode["location"]
-        val path = location["path"].asText()
-        val startLine = location["start_line"]?.asInt()
-        val endLine = location["end_line"]?.asInt()
-        val score = licenseNode["score"]?.asDouble()
-        if (startLine != null && endLine != null && score != null) {
-            licenseFindings.add(
-                LicenseFinding(
-                    license,
-                    TextLocation(
-                        path,
-                        startLine,
-                        endLine
-                    ),
-                    score.toFloat()
-                )
-            )
+    return licenses.mapTo(mutableSetOf()) {
+        val licenseNode = it.jsonObject
 
-        } else {
-            licenseFindings.add(
-                LicenseFinding(
-                    license,
-                    TextLocation(
-                        path,
-                        1,
-                        1
-                    ),
-                    100.0f
-                )
-            )
-        }
+        val license = licenseNode.getValue("license").jsonPrimitive.content
+        val location = licenseNode.getValue("location").jsonObject
+
+        val path = location.getValue("path").jsonPrimitive.content
+        val startLine = location.getValue("start_line").jsonPrimitive.int
+        val endLine = location.getValue("end_line").jsonPrimitive.int
+        val score = licenseNode.getValue("score").jsonPrimitive.float
+
+        LicenseFinding(license, TextLocation(path, startLine, endLine), score)
     }
-    return licenseFindings.toSet()
 }
 
-private fun getCopyrightFindings(result: JsonNode): Set<CopyrightFinding> {
-    val copyrightFindings = mutableListOf<CopyrightFinding>()
-    val copyrights = result["copyrights"] ?: return emptySet()
+private fun getCopyrightFindings(result: JsonObject): Set<CopyrightFinding> {
+    val copyrights = result["copyrights"]?.jsonArray ?: return emptySet()
 
-    copyrights.forEach { copyrightNode ->
-        val statement = copyrightNode["statement"].asText()
-        val location = copyrightNode["location"]
-        val path = location["path"].asText()
-        val startLine = location["start_line"].asInt()
-        val endLine = location["end_line"].asInt()
-        copyrightFindings.add(
-            CopyrightFinding(
-                statement,
-                TextLocation(
-                    path,
-                    startLine,
-                    endLine
-                )
-            )
-        )
+    return copyrights.mapTo(mutableSetOf()) {
+        val copyrightNode = it.jsonObject
+
+        val statement = copyrightNode.getValue("statement").jsonPrimitive.content
+        val location = copyrightNode.getValue("location").jsonObject
+
+        val path = location.getValue("path").jsonPrimitive.content
+        val startLine = location.getValue("start_line").jsonPrimitive.int
+        val endLine = location.getValue("end_line").jsonPrimitive.int
+
+        CopyrightFinding(statement, TextLocation(path, startLine, endLine))
     }
-
-    return copyrightFindings.toSet()
 }
 
-private fun getIssues(result: JsonNode): List<Issue> {
-    val issueFindings = mutableListOf<Issue>()
-    val issues = result["issues"] ?: return emptyList()
+private fun getIssues(result: JsonObject): List<Issue> {
+    val issues = result["issues"]?.jsonArray ?: return emptyList()
 
-    issues.forEach { issueNode ->
-        val timestamp = Instant.parse(issueNode["timestamp"].asText())
-        val source = issueNode["source"].asText()
-        val message = issueNode["message"].asText()
-        val severity = Severity.valueOf(issueNode["severity"].asText().uppercase())
+    return issues.map {
+        val issueNode = it.jsonObject
+        val timestamp = Instant.parse(issueNode.getValue("timestamp").jsonPrimitive.content)
+        val source = issueNode.getValue("source").jsonPrimitive.content
+        val message = issueNode.getValue("message").jsonPrimitive.content
+        val severity = Severity.valueOf(issueNode.getValue("severity").jsonPrimitive.content.uppercase())
 
-        issueFindings.add(
-            Issue(
-                timestamp,
-                source,
-                message,
-                severity
-            )
-        )
+        Issue(timestamp, source, message, severity)
     }
-
-    return issueFindings
 }
