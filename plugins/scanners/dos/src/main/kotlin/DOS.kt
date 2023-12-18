@@ -77,7 +77,7 @@ class DOS internal constructor(
             // Ask for scan results from DOS API
             scanResults = repository.getScanResults(purls, config.fetchConcluded)
             if (scanResults == null) {
-                issues.add(createAndLogIssue(name, "Could not request scan results from DOS API", Severity.ERROR))
+                issues += createAndLogIssue(name, "Could not request scan results from DOS API")
                 return@runBlocking
             }
             when (scanResults?.state?.status) {
@@ -162,7 +162,7 @@ class DOS internal constructor(
         // Request presigned URL from DOS API
         val presignedUrl = repository.getPresignedUrl(zipName)
         if (presignedUrl == null) {
-            issues.add(createAndLogIssue(name, "Could not get a presigned URL for this package", Severity.ERROR))
+            issues += createAndLogIssue(name, "Could not get a presigned URL for this package")
             deleteFileOrDir(targetZipFile)  // local cleanup before returning
             return DOSService.ScanResultsResponseBody(DOSService.ScanResultsResponseBody.State("failed"))
         }
@@ -170,7 +170,7 @@ class DOS internal constructor(
         // Transfer the zipped packet to S3 Object Storage and do local cleanup
         val uploadSuccessful = repository.uploadFile(presignedUrl, tmpDir + zipName)
         if (!uploadSuccessful) {
-            issues.add(createAndLogIssue(name, "Could not upload the packet to S3", Severity.ERROR))
+            issues += createAndLogIssue(name, "Could not upload the packet to S3")
             deleteFileOrDir(targetZipFile)  // local cleanup before returning
             return DOSService.ScanResultsResponseBody(DOSService.ScanResultsResponseBody.State("failed"))
         }
@@ -183,11 +183,11 @@ class DOS internal constructor(
         if (jobResponse != null) {
             logger.info { "New scan request: Packages = ${purls.joinToString()}, Zip file = $zipName" }
             if (jobResponse.message == "Adding job to queue was unsuccessful") {
-                issues.add(createAndLogIssue(name, "DOS API: 'unsuccessful' response to the scan job request", Severity.ERROR))
+                issues += createAndLogIssue(name, "DOS API: 'unsuccessful' response to the scan job request")
                 return DOSService.ScanResultsResponseBody(DOSService.ScanResultsResponseBody.State("failed"))
             }
         } else {
-            issues.add(createAndLogIssue(name, "Could not create a new scan job at DOS API", Severity.ERROR))
+            issues += createAndLogIssue(name, "Could not create a new scan job at DOS API")
             return DOSService.ScanResultsResponseBody(DOSService.ScanResultsResponseBody.State("failed"))
         }
 
