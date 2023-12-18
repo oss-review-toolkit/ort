@@ -35,9 +35,8 @@ class DOSTest {
         .notifier(ConsoleNotifier(false))
     )
 
-    private fun getResourceAsString(resourceName: String): String {
-        return DOSTest::class.java.getResource(resourceName)?.readText(Charsets.UTF_8) ?: "xxx"
-    }
+    private fun getResourceAsString(resourceName: String): String =
+        checkNotNull(javaClass.getResource(resourceName)).readText()
 
     @BeforeEach
     fun setup() {
