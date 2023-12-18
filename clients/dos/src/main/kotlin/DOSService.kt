@@ -97,13 +97,13 @@ interface DOSService {
 
     @Serializable
     data class ScanResultsResponseBody(
-        var state: State,
+        val state: State,
         val purls: List<String>? = null,
         val results: JsonElement? = null
     ) {
         @Serializable
         data class State(
-            var status: String,
+            val status: String,
             val jobId: String? = null
         )
     }
@@ -123,12 +123,12 @@ interface DOSService {
 
     @Serializable
     data class JobStateResponseBody(
-        var state: State,
+        val state: State,
         val results: JsonElement? = null
     ) {
         @Serializable
         data class State(
-            var status: String? = null,
+            val status: String? = null,
             val message: String? = null
         )
     }
