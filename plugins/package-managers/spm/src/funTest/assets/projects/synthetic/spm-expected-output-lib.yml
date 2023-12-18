@@ -113,7 +113,7 @@ project:
         dependencies:
         - id: "SPM:apple:swift-atomics:1.2.0"
         - id: "SPM:apple:swift-collections:1.0.5"
-    - id: "SPM:vapor:multipart-kit:4.5.4"
+    - id: "SPM:vapor:multipart-kit:4.6.0"
       dependencies:
       - id: "SPM:apple:swift-collections:1.0.5"
       - id: "SPM:apple:swift-nio:2.62.0"
@@ -634,8 +634,8 @@ packages:
     url: "https://github.com/vapor/console-kit.git"
     revision: "4.14.0"
     path: ""
-- id: "SPM:vapor:multipart-kit:4.5.4"
-  purl: "pkg:swift/vapor/multipart-kit@4.5.4"
+- id: "SPM:vapor:multipart-kit:4.6.0"
+  purl: "pkg:swift/vapor/multipart-kit@4.6.0"
   authors:
   - "vapor"
   declared_licenses: []
@@ -655,12 +655,12 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/vapor/multipart-kit.git"
-    revision: "4.5.4"
+    revision: "4.6.0"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/vapor/multipart-kit.git"
-    revision: "4.5.4"
+    revision: "4.6.0"
     path: ""
 - id: "SPM:vapor:routing-kit:4.8.2"
   purl: "pkg:swift/vapor/routing-kit@4.8.2"
