@@ -95,11 +95,9 @@ object ConfigurationResolver {
         vulnerabilities: List<Vulnerability>,
         resolutionProvider: ResolutionProvider
     ): Resolutions {
-        val issueResolutions = issues.flatMap { resolutionProvider.getIssueResolutionsFor(it) }.distinct()
-        val ruleViolationResolutions =
-            ruleViolations.flatMap { resolutionProvider.getRuleViolationResolutionsFor(it) }.distinct()
-        val vulnerabilityResolutions =
-            vulnerabilities.flatMap { resolutionProvider.getVulnerabilityResolutionsFor(it) }.distinct()
+        val issueResolutions = issues.flatMap { resolutionProvider.getResolutionsFor(it) }.distinct()
+        val ruleViolationResolutions = ruleViolations.flatMap { resolutionProvider.getResolutionsFor(it) }.distinct()
+        val vulnerabilityResolutions = vulnerabilities.flatMap { resolutionProvider.getResolutionsFor(it) }.distinct()
 
         return Resolutions(issueResolutions, ruleViolationResolutions, vulnerabilityResolutions)
     }
