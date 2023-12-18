@@ -22,7 +22,6 @@ import org.ossreviewtoolkit.scanner.*
 import org.ossreviewtoolkit.downloader.Downloader
 import org.ossreviewtoolkit.model.utils.associateLicensesWithExceptions
 import org.ossreviewtoolkit.utils.common.Options
-import org.ossreviewtoolkit.utils.common.percentEncode
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
