@@ -43,7 +43,7 @@ class DOSTest {
         server.start()
         val config = DOSConfig(
             serverUrl = "http://localhost:${server.port()}/api/",
-            serverToken = System.getenv("SERVER_TOKEN"),
+            serverToken = "",
             pollInterval = 5,
             restTimeout = 60,
             fetchConcluded = false,
