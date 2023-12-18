@@ -10,7 +10,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
 import okhttp3.Interceptor
 
 import okhttp3.logging.HttpLoggingInterceptor
@@ -99,7 +99,7 @@ interface DOSService {
     data class ScanResultsResponseBody(
         val state: State,
         val purls: List<String>? = null,
-        val results: JsonElement? = null
+        val results: JsonObject? = null
     ) {
         @Serializable
         data class State(
@@ -124,7 +124,7 @@ interface DOSService {
     @Serializable
     data class JobStateResponseBody(
         val state: State,
-        val results: JsonElement? = null
+        val results: JsonObject? = null
     ) {
         @Serializable
         data class State(
