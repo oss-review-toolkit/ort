@@ -68,7 +68,7 @@ class DOSTest {
                 )
         )
         runBlocking {
-            dos.repository.getScanResults("purl", false) shouldBe null
+            dos.repository.getScanResults(emptyList(), false) shouldBe null
         }
     }
 
@@ -83,7 +83,7 @@ class DOSTest {
                 )
         )
         runBlocking {
-            val status = dos.repository.getScanResults("purl", false)?.state?.status
+            val status = dos.repository.getScanResults(emptyList(), false)?.state?.status
             status shouldBe "no-results"
         }
     }
@@ -99,9 +99,9 @@ class DOSTest {
                 )
         )
         runBlocking {
-            val response = dos.repository.getScanResults("purl", false)
+            val response = dos.repository.getScanResults(emptyList(), false)
             val status = response?.state?.status
-            val id = response?.state?.id
+            val id = response?.state?.jobId
             status shouldBe "pending"
             id shouldBe "dj34eh4h65"
         }
@@ -118,9 +118,9 @@ class DOSTest {
                 )
         )
         runBlocking {
-            val response = dos.repository.getScanResults("pkg:npm/mime-types@2.1.18", false)
+            val response = dos.repository.getScanResults(listOf("pkg:npm/mime-types@2.1.18"), false)
             val status = response?.state?.status
-            val id = response?.state?.id
+            val id = response?.state?.jobId
 
             val resultsJson = json.encodeToString(response?.results)
             val readyResponse = json.decodeFromString<DOSService.ScanResultsResponseBody>(getResourceAsString("/ready.json"))
@@ -151,7 +151,7 @@ class DOSTest {
         )
         val result = runBlocking {
             dos.runBackendScan(
-                pkg.purl,
+                listOf(pkg.purl),
                 dosDir,
                 tmpDir,
                 thisScanStartTime,
