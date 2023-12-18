@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.VulnerabilityResolution
 import org.ossreviewtoolkit.model.config.orEmpty
+import org.ossreviewtoolkit.model.utils.ResolutionProvider
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.utils.common.zipWithCollections
 import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
@@ -86,7 +87,7 @@ data class OrtResult(
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val labels: Map<String, String> = emptyMap()
-) {
+) : ResolutionProvider {
     companion object {
         /**
          * A constant for an [OrtResult] with an empty repository and all other properties `null`.
@@ -391,32 +392,33 @@ data class OrtResult(
     fun getResolutions(): Resolutions = resolvedConfiguration.resolutions.orEmpty()
 
     /**
-     * Return true if and only if [ruleViolation] is resolved in this [OrtResult].
+     * Return true if and only if [violation] is resolved in this [OrtResult].
      */
-    fun isResolved(ruleViolation: RuleViolation): Boolean =
-        getResolutions().ruleViolations.any { it.matches(ruleViolation) }
+    override fun isResolved(violation: RuleViolation): Boolean =
+        getResolutions().ruleViolations.any { it.matches(violation) }
 
     /**
      * Return true if and only if [vulnerability] is resolved in this [OrtResult].
      */
-    fun isResolved(vulnerability: Vulnerability): Boolean =
+    override fun isResolved(vulnerability: Vulnerability): Boolean =
         getResolutions().vulnerabilities.any { it.matches(vulnerability) }
 
     /**
      * Return the resolutions matching [issue].
      */
-    fun getResolutionsFor(issue: Issue): List<IssueResolution> = getResolutions().issues.filter { it.matches(issue) }
+    override fun getResolutionsFor(issue: Issue): List<IssueResolution> =
+        getResolutions().issues.filter { it.matches(issue) }
 
     /**
-     * Return the resolutions matching [ruleViolation].
+     * Return the resolutions matching [violation].
      */
-    fun getResolutionsFor(ruleViolation: RuleViolation): List<RuleViolationResolution> =
-        getResolutions().ruleViolations.filter { it.matches(ruleViolation) }
+    override fun getResolutionsFor(violation: RuleViolation): List<RuleViolationResolution> =
+        getResolutions().ruleViolations.filter { it.matches(violation) }
 
     /**
      * Return the resolutions matching [vulnerability].
      */
-    fun getResolutionsFor(vulnerability: Vulnerability): List<VulnerabilityResolution> =
+    override fun getResolutionsFor(vulnerability: Vulnerability): List<VulnerabilityResolution> =
         getResolutions().vulnerabilities.filter { it.matches(vulnerability) }
 
     /**
