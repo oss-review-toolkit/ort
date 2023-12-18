@@ -113,7 +113,10 @@ class Downloader(private val config: DownloaderConfiguration) {
 
                 return result
             } else {
-                logger.info { "Skipping VCS download for Cargo package '${pkg.id.toCoordinates()}'." }
+                logger.info {
+                    "Skipping VCS download for Cargo package '${pkg.id.toCoordinates()}' as it has a source artifact " +
+                        "at ${pkg.sourceArtifact}."
+                }
             }
         } catch (e: DownloadException) {
             logger.debug { "VCS download failed for '${pkg.id.toCoordinates()}': ${e.collectMessages()}" }
