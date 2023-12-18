@@ -45,11 +45,11 @@ class DefaultResolutionProvider(private val resolutions: Resolutions = Resolutio
         }
     }
 
-    override fun getIssueResolutionsFor(issue: Issue) = resolutions.issues.filter { it.matches(issue) }
+    override fun getResolutionsFor(issue: Issue) = resolutions.issues.filter { it.matches(issue) }
 
-    override fun getRuleViolationResolutionsFor(violation: RuleViolation) =
+    override fun getResolutionsFor(violation: RuleViolation) =
         resolutions.ruleViolations.filter { it.matches(violation) }
 
-    override fun getVulnerabilityResolutionsFor(vulnerability: Vulnerability) =
+    override fun getResolutionsFor(vulnerability: Vulnerability) =
         resolutions.vulnerabilities.filter { it.matches(vulnerability) }
 }
