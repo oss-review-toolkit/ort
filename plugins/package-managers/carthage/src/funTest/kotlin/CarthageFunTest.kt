@@ -35,6 +35,10 @@ class CarthageFunTest : StringSpec({
 
         val result = create("Carthage").resolveSingleProject(definitionFile)
 
-        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+        result.toYaml() should matchExpectedResult(
+            expectedResultFile,
+            definitionFile,
+            mapOf("<REPLACE_GITHUB_ORGANIZATION>" to "oss-review-toolkit")
+        )
     }
 })

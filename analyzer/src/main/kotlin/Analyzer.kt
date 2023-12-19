@@ -48,7 +48,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.model.utils.PackageCurationProvider
-import org.ossreviewtoolkit.model.utils.addPackageCurations
+import org.ossreviewtoolkit.model.utils.setPackageCurations
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.ort.Environment
@@ -154,7 +154,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
 
         val run = AnalyzerRun(startTime, endTime, Environment(toolVersions = toolVersions), config, analyzerResult)
 
-        return OrtResult(repository = repository, analyzer = run).addPackageCurations(packageCurationProviders)
+        return OrtResult(repository = repository, analyzer = run).setPackageCurations(packageCurationProviders)
     }
 
     private fun analyzeInParallel(managedFiles: Map<PackageManager, List<File>>): AnalyzerResult {

@@ -26,7 +26,8 @@ interface LicenseTextProvider {
     /**
      * Return the license text for the license identified by [licenseId] or null if the license text is not available.
      */
-    fun getLicenseText(licenseId: String): String?
+    fun getLicenseText(licenseId: String): String? =
+        getLicenseTextReader(licenseId)?.invoke()?.takeUnless { it.isBlank() }
 
     /**
      * Return a lambda that can read the license text for the license identified by [licenseId] or null if no license
@@ -35,7 +36,8 @@ interface LicenseTextProvider {
     fun getLicenseTextReader(licenseId: String): (() -> String)?
 
     /**
-     * Return true if a license text for the license identified by [licenseId] is available.
+     * Return true if a license text for the license identified by [licenseId] is generally available. Note that this
+     * does not necessarily mean that the text is meaningful (i.e. non-blank).
      */
-    fun hasLicenseText(licenseId: String): Boolean
+    fun hasLicenseText(licenseId: String): Boolean = getLicenseTextReader(licenseId) != null
 }

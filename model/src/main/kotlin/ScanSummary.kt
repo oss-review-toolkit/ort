@@ -23,7 +23,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.databind.util.StdConverter
 
 import java.time.Instant
 
@@ -79,6 +81,7 @@ data class ScanSummary(
      * the size of the result file.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonDeserialize(converter = IssueListConverter::class)
     val issues: List<Issue> = emptyList()
 ) {
     companion object {
@@ -114,15 +117,18 @@ data class ScanSummary(
             directories = paths
         ).values.flatten().mapTo(mutableSetOf()) { it.location.path }
 
-        fun TextLocation.matchesPaths() =
+        fun String.matchesPaths() =
             paths.any { filterPath ->
-                this.path.startsWith("$filterPath/") || this.path in applicableLicenseFiles
+                startsWith("$filterPath/") || this in applicableLicenseFiles
             }
+
+        fun TextLocation.matchesPaths() = path.matchesPaths()
 
         return copy(
             licenseFindings = licenseFindings.filterTo(mutableSetOf()) { it.location.matchesPaths() },
             copyrightFindings = copyrightFindings.filterTo(mutableSetOf()) { it.location.matchesPaths() },
-            snippetFindings = snippetFindings.filterTo(mutableSetOf()) { it.sourceLocation.matchesPaths() }
+            snippetFindings = snippetFindings.filterTo(mutableSetOf()) { it.sourceLocation.matchesPaths() },
+            issues = issues.filter { it.affectedPath?.matchesPaths() ?: true }
         )
     }
 
@@ -136,7 +142,23 @@ data class ScanSummary(
         return copy(
             licenseFindings = licenseFindings.filterTo(mutableSetOf()) { !matcher.matches(it.location.path) },
             copyrightFindings = copyrightFindings.filterTo(mutableSetOf()) { !matcher.matches(it.location.path) },
-            snippetFindings = snippetFindings.filterTo(mutableSetOf()) { !matcher.matches(it.sourceLocation.path) }
+            snippetFindings = snippetFindings.filterTo(mutableSetOf()) { !matcher.matches(it.sourceLocation.path) },
+            issues = issues.filter { it.affectedPath == null || !matcher.matches(it.affectedPath) }
         )
     }
 }
+
+/**
+ * Set the `affectedPath` for scan timeout errors if it is null. This way scan results which have been created before
+ * the `affectedPath` was introduced will still have that property set.
+ */
+internal class IssueListConverter : StdConverter<List<Issue>, List<Issue>>() {
+    override fun convert(issues: List<Issue>): List<Issue> =
+        issues.map { issue ->
+            if (issue.affectedPath != null) return@map issue
+            val match = TIMEOUT_ERROR_REGEX.matchEntire(issue.message) ?: return@map issue
+            issue.copy(affectedPath = match.groups["file"]!!.value)
+        }
+}
+
+private val TIMEOUT_ERROR_REGEX = Regex("ERROR: Timeout after (\\d+) seconds while scanning file '(?<file>.+)'.")

@@ -21,6 +21,8 @@ ulist:
       content: "\u2022"
     square:
       content: "\u2022"
+literal:
+  font_color: $base_font_color
 role:
   alert:
     font-color: #cc0000

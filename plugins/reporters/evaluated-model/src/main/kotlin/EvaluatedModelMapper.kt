@@ -604,19 +604,19 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     }
 
     private fun addResolutions(issue: Issue): List<IssueResolution> {
-        val matchingResolutions = input.resolutionProvider.getIssueResolutionsFor(issue)
+        val matchingResolutions = input.resolutionProvider.getResolutionsFor(issue)
 
         return issueResolutions.addIfRequired(matchingResolutions)
     }
 
     private fun addResolutions(ruleViolation: RuleViolation): List<RuleViolationResolution> {
-        val matchingResolutions = input.resolutionProvider.getRuleViolationResolutionsFor(ruleViolation)
+        val matchingResolutions = input.resolutionProvider.getResolutionsFor(ruleViolation)
 
         return ruleViolationResolutions.addIfRequired(matchingResolutions)
     }
 
     private fun addResolutions(vulnerability: Vulnerability): List<VulnerabilityResolution> {
-        val matchingResolutions = input.resolutionProvider.getVulnerabilityResolutionsFor(vulnerability)
+        val matchingResolutions = input.resolutionProvider.getResolutionsFor(vulnerability)
 
         return vulnerabilitiesResolutions.addIfRequired(matchingResolutions)
     }

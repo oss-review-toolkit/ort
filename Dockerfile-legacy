@@ -86,7 +86,7 @@ ENV \
     PYTHON_PIPENV_VERSION=2023.10.24 \
     PYTHON_POETRY_VERSION=1.7.0 \
     SBT_VERSION=1.9.7 \
-    SWIFT_VERSION=5.8.1 \
+    SWIFT_VERSION=5.9.2 \
     YARN_VERSION=1.22.19 \
     # Installation directories.
     ANDROID_HOME=/opt/android-sdk \

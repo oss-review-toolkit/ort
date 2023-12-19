@@ -26,6 +26,7 @@ import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSingleElement
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldStartWith
 
 import java.io.File
@@ -73,6 +74,18 @@ class ScanCodeResultParserTest : FreeSpec({
             }
         }
 
+        "for ScanCode 32.0.8 should" - {
+            "get license mappings even without '--license-references'" {
+                val resultFile = getAssetFile("scancode-32.0.8_spdx-expression-parse_no-license-references.json")
+
+                val summary = parseResult(resultFile).toScanSummary()
+
+                summary.licenseFindings.find {
+                    it.location == TextLocation("README.md", 100) && it.score == 100.0f
+                }?.license.toString() shouldBe "GPL-2.0-only WITH GCC-exception-2.0"
+            }
+        }
+
         for (version in 1..MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION) {
             val resultFile = getAssetFile("scancode-output-format-$version.0.0_mime-types-2.1.18.json")
             val summary = parseResult(resultFile).toScanSummary()
@@ -110,8 +123,11 @@ class ScanCodeResultParserTest : FreeSpec({
                 }
 
                 "properly map the timeout issue" {
-                    summary.issues.single().message shouldStartWith
+                    val issue = summary.issues.single()
+
+                    issue.message shouldStartWith
                         "ERROR: Timeout after (?<timeout>\\d+) seconds while scanning file '.eslintignore'\\.".toRegex()
+                    issue.affectedPath shouldBe ".eslintignore"
                 }
             }
         }

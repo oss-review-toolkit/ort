@@ -214,6 +214,18 @@ pipeline {
             defaultValue: true
         )
 
+        booleanParam(
+            name: 'USE_OSADL_RULES',
+            description: 'Use built-in rules based on the OSADL license compliance matrix.',
+            defaultValue: true
+        )
+
+        booleanParam(
+            name: 'USE_CONFIG_RULES',
+            description: 'Use rules from the ORT configuration, if present.',
+            defaultValue: true
+        )
+
         /*
          * ORT reporter tool parameters.
          */
@@ -668,7 +680,7 @@ pipeline {
                 beforeAgent true
 
                 expression {
-                    params.RUN_EVALUATOR
+                    params.RUN_EVALUATOR && (params.USE_OSADL_RULES || params.USE_CONFIG_RULES)
                 }
             }
 
@@ -702,7 +714,17 @@ pipeline {
                             ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
                         fi
 
-                        /opt/ort/bin/ort $ORT_OPTIONS evaluate -i out/results/current-result.yml --rules-resource /rules/osadl.rules.kts -o out/results/evaluator
+                        RULES_OPTIONS=""
+
+                        if [ "$USE_OSADL_RULES" = "true" ]; then
+                            RULES_OPTIONS="$RULES_OPTIONS --rules-resource /rules/osadl.rules.kts"
+                        fi
+
+                        if [ "$USE_CONFIG_RULES" = "true" -a -f "$ORT_CONFIG_DIR/evaluator.rules.kts" ]; then
+                            RULES_OPTIONS="$RULES_OPTIONS --rules-file $ORT_CONFIG_DIR/evaluator.rules.kts"
+                        fi
+
+                        /opt/ort/bin/ort $ORT_OPTIONS evaluate -i out/results/current-result.yml $RULES_OPTIONS -o out/results/evaluator
                         '''.stripIndent().trim()
 
                         if (status >= ORT_FAILURE_STATUS_CODE) unstable('Rule violations found.')

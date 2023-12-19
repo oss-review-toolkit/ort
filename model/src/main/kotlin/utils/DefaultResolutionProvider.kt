@@ -34,7 +34,8 @@ import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 class DefaultResolutionProvider(private val resolutions: Resolutions = Resolutions()) : ResolutionProvider {
     companion object {
         /**
-         * Create a [DefaultResolutionProvider] and add the resolutions from the [ortResult] and the [resolutionsFile].
+         * Create a [DefaultResolutionProvider] and add the resolutions from the repository configuration of
+         * [ortResult] and the [resolutionsFile].
          */
         fun create(ortResult: OrtResult? = null, resolutionsFile: File? = null): DefaultResolutionProvider {
             val resolutionsFromOrtResult = ortResult?.getResolutions() ?: Resolutions()
@@ -44,11 +45,11 @@ class DefaultResolutionProvider(private val resolutions: Resolutions = Resolutio
         }
     }
 
-    override fun getIssueResolutionsFor(issue: Issue) = resolutions.issues.filter { it.matches(issue) }
+    override fun getResolutionsFor(issue: Issue) = resolutions.issues.filter { it.matches(issue) }
 
-    override fun getRuleViolationResolutionsFor(violation: RuleViolation) =
+    override fun getResolutionsFor(violation: RuleViolation) =
         resolutions.ruleViolations.filter { it.matches(violation) }
 
-    override fun getVulnerabilityResolutionsFor(vulnerability: Vulnerability) =
+    override fun getResolutionsFor(vulnerability: Vulnerability) =
         resolutions.vulnerabilities.filter { it.matches(vulnerability) }
 }

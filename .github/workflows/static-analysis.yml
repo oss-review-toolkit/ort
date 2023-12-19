@@ -54,7 +54,7 @@ jobs:
         gradle-home-cache-cleanup: true
         arguments: detekt detektTest detektFunTest
     - name: Upload SARIF File
-      uses: github/codeql-action/upload-sarif@v2
+      uses: github/codeql-action/upload-sarif@v3
       if: ${{ always() }} # Upload even if the previous step failed.
       with:
         sarif_file: build/reports/detekt/merged.sarif
@@ -87,11 +87,11 @@ jobs:
       with:
         fetch-depth: 0
     - name: Qodana Scan
-      uses: JetBrains/qodana-action@v2023.2.9
+      uses: JetBrains/qodana-action@v2023.3.0
       with:
         post-pr-comment: false
         use-caches: false
-    - uses: github/codeql-action/upload-sarif@v2
+    - uses: github/codeql-action/upload-sarif@v3
       with:
         sarif_file: ${{runner.temp}}/qodana/results/qodana.sarif.json
   reuse-tool:

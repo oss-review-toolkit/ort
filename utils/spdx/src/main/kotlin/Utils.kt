@@ -117,12 +117,6 @@ fun getLicenseText(
     licenseTextDirectories: List<File> = emptyList()
 ): String? = getLicenseTextReader(id, handleExceptions, addScanCodeLicenseTextsDir(licenseTextDirectories))?.invoke()
 
-fun hasLicenseText(
-    id: String,
-    handleExceptions: Boolean = false,
-    licenseTextDirectories: List<File> = emptyList()
-): Boolean = getLicenseTextReader(id, handleExceptions, addScanCodeLicenseTextsDir(licenseTextDirectories)) != null
-
 fun getLicenseTextReader(
     id: String,
     handleExceptions: Boolean = false,
@@ -145,13 +139,13 @@ fun getLicenseTextReader(
 
 private fun getLicenseTextResource(id: String): URL? = object {}.javaClass.getResource("/licenserefs/$id")
 
-private val LICENSE_REF_FILENAME_REGEX by lazy { Regex("^LicenseRef-\\w+-") }
+private val LICENSE_REF_FILENAME_REGEX by lazy { Regex("^$LICENSE_REF_PREFIX\\w+-") }
 
 private fun getLicenseTextFile(id: String, dir: File): File? =
     id.replace(LICENSE_REF_FILENAME_REGEX, "").let { idWithoutLicenseRefNamespace ->
         listOfNotNull(
             id,
-            id.removePrefix("LicenseRef-"),
+            id.removePrefix(LICENSE_REF_PREFIX),
             idWithoutLicenseRefNamespace,
             "$idWithoutLicenseRefNamespace.LICENSE",
             "x11-xconsortium_veillard.LICENSE".takeIf {

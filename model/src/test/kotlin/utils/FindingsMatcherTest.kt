@@ -27,6 +27,7 @@ import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.maps.haveSize
 import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
 
 import kotlin.random.Random
 
@@ -286,6 +287,30 @@ class FindingsMatcherTest : WordSpec() {
                     LicenseFinding("Apache-2.0", TextLocation("fileA", 1)),
                     LicenseFinding("NOASSERTION WITH LLVM-exception", TextLocation("fileB", 5))
                 )
+            }
+
+            "associate licenses and exceptions from the same expression" {
+                associateLicensesWithExceptions(
+                    "MIT OR (GPL-2.0-only AND CC-BY-3.0 AND GCC-exception-2.0)".toSpdx()
+                ) shouldBe "MIT OR (GPL-2.0-only WITH GCC-exception-2.0 AND CC-BY-3.0)".toSpdx()
+
+                associateLicensesWithExceptions(
+                    "MIT OR (0BSD AND CC-BY-3.0 AND GCC-exception-2.0)".toSpdx()
+                ) shouldBe "MIT OR (0BSD AND CC-BY-3.0 AND NOASSERTION WITH GCC-exception-2.0)".toSpdx()
+
+                associateLicensesWithExceptions(
+                    "(BSD-3-Clause AND GPL-2.0-only WITH GCC-exception-2.0) AND (GPL-2.0-only AND GCC-exception-2.0)"
+                        .toSpdx()
+                ) shouldBe "BSD-3-Clause AND GPL-2.0-only WITH GCC-exception-2.0".toSpdx()
+
+                associateLicensesWithExceptions(
+                    "GPL-2.0-only AND GPL-3.0-only AND Bootloader-exception AND Classpath-exception-2.0".toSpdx()
+                ) shouldBe (
+                    "GPL-2.0-only WITH Bootloader-exception AND " +
+                        "GPL-3.0-only WITH Bootloader-exception AND " +
+                        "GPL-2.0-only WITH Classpath-exception-2.0 AND " +
+                        "GPL-3.0-only WITH Classpath-exception-2.0"
+                    ).toSpdx()
             }
         }
     }

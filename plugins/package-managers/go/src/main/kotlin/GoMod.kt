@@ -49,7 +49,6 @@ import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.plugins.packagemanagers.go.utils.Graph
 import org.ossreviewtoolkit.plugins.packagemanagers.go.utils.normalizeModuleVersion
 import org.ossreviewtoolkit.utils.common.CommandLineTool
-import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
@@ -155,6 +154,7 @@ class GoMod(
      * Return the module graph output from `go mod graph` with non-vendor dependencies removed.
      */
     private fun getModuleGraph(projectDir: File, moduleInfoForModuleName: Map<String, ModuleInfo>): Graph<GoModule> {
+        fun GoModule.hasModuleInfo() = name in moduleInfoForModuleName
         fun moduleInfo(moduleName: String): ModuleInfo = moduleInfoForModuleName.getValue(moduleName)
 
         fun parseModuleEntry(entry: String): GoModule =
@@ -177,14 +177,20 @@ class GoMod(
             val columns = line.splitOnWhitespace()
             require(columns.size == 2) { "Expected exactly one occurrence of ' ' on any non-blank line." }
 
-            val parent = parseModuleEntry(columns[0]).apply {
+            val parent = parseModuleEntry(columns[0])
+            val child = parseModuleEntry(columns[1])
+
+            if (!parent.hasModuleInfo() || !child.hasModuleInfo()) {
                 // As of go version 1.21.1 the module graph contains a version constraint for the go version for
                 // the main project. The edge would be filtered out below by getVendorModules(). However, ignore
-                // it already here as there is no module info for 'go', so parseModuleEntry() would fail.
-                if (moduleInfo(name).main && columns[1].startsWith("go@")) return@forEach
-            }
+                // it already here as there is no module info for 'go' and potentially also for 'go's transitive
+                // dependencies, so parseModuleEntry() would fail.
+                logger.debug {
+                    "Skip edge from '${parent.name}' to '${child.name}' due to missing module info."
+                }
 
-            val child = parseModuleEntry(columns[1])
+                return@forEach
+            }
 
             if (moduleInfo(parent.name).main && moduleInfo(child.name).indirect) {
                 logger.debug {
@@ -364,16 +370,6 @@ private val JSON = Json { ignoreUnknownKeys = true }
 
 private const val DEFAULT_GO_PROXY = "https://proxy.golang.org"
 
-private fun getGoProxy(): String {
-    val firstProxy = Os.env["GOPROXY"].orEmpty()
-        .split(',')
-        .filterNot { it == "direct" || it == "off" }
-        .firstOrNull()
-        .orEmpty()
-
-    return firstProxy.ifBlank { DEFAULT_GO_PROXY }
-}
-
 @Serializable
 private data class ModuleInfo(
     @SerialName("Path")
@@ -440,21 +436,13 @@ private data class ModuleInfoFile(
 }
 
 private fun ModuleInfo.toSourceArtifact(): RemoteArtifact {
-    /**
-     * The below construction of the remote artifact URL makes several simplifying assumptions, and it is still
-     * questionable whether those assumptions are ok:
-     *
-     *   1. GOPROXY in general can hold a list of (fallback) proxy URLs.
-     *   2. There are special values like 'direct' and 'off'.
-     *   3. GOPRIVATE variable can specify glob expression against paths for which the proxy should be bypassed.
-     */
-    val goProxy = getGoProxy()
-
-    return RemoteArtifact(url = "$goProxy/$path/@v/$version.zip", hash = Hash.NONE)
+    // The below construction of the remote artifact URL simply assumes the module to be available at Go's default
+    // proxy, which might not always hold.
+    return RemoteArtifact(url = "$DEFAULT_GO_PROXY/$path/@v/$version.zip", hash = Hash.NONE)
 }
 
 private fun ModuleInfo.toVcsInfo(): VcsInfo? {
-    val escapedVersion = escapeVersion(version)
+    val escapedVersion = escapeModuleVersion(version)
     val infoFile = goMod?.let { File(it).resolveSibling("$escapedVersion.info") } ?: return null
     val info = infoFile.inputStream().use { JSON.decodeFromStream<ModuleInfoFile>(it) }
     val type = info.origin.vcs?.let { VcsType.forName(it) }.takeIf { it == VcsType.GIT } ?: return null
@@ -495,7 +483,7 @@ internal fun parseWhyOutput(output: String): Set<String> {
  * Details behind the reasoning and implementation in Go can be found in the Go source code at
  * [module.go](https://github.com/golang/go/blob/5b6d3dea8744311825fd544a73edb8d26d9c7e98/src/cmd/vendor/golang.org/x/mod/module/module.go#L33-L42C64)
  */
-internal fun escapeVersion(version: String): String {
+internal fun escapeModuleVersion(version: String): String {
     require("!" !in version) { "Module versions must not contain exclamation marks: $version" }
     return version.replace(upperCaseCharRegex) { "!${it.value.lowercase()}" }
 }

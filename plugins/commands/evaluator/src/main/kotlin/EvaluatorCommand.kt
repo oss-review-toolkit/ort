@@ -56,10 +56,10 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.readValueOrDefault
 import org.ossreviewtoolkit.model.utils.CompositePackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
-import org.ossreviewtoolkit.model.utils.addPackageConfigurations
-import org.ossreviewtoolkit.model.utils.addPackageCurations
-import org.ossreviewtoolkit.model.utils.addResolutions
 import org.ossreviewtoolkit.model.utils.mergeLabels
+import org.ossreviewtoolkit.model.utils.setPackageConfigurations
+import org.ossreviewtoolkit.model.utils.setPackageCurations
+import org.ossreviewtoolkit.model.utils.setResolutions
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
 import org.ossreviewtoolkit.plugins.commands.api.utils.SeverityStatsPrinter
 import org.ossreviewtoolkit.plugins.commands.api.utils.configurationGroup
@@ -271,7 +271,7 @@ class EvaluatorCommand : OrtCommand(
                 add("EvaluatorCommandOption" to providerFromOption)
             }
 
-            ortResultInput = ortResultInput.addPackageCurations(packageCurationProviders)
+            ortResultInput = ortResultInput.setPackageCurations(packageCurationProviders)
         }
 
         val enabledPackageConfigurationProviders = buildList {
@@ -325,8 +325,8 @@ class EvaluatorCommand : OrtCommand(
         // Note: This overwrites any existing EvaluatorRun from the input file.
         val ortResultOutput = ortResultInput.copy(evaluator = evaluatorRun)
             .mergeLabels(labels)
-            .addPackageConfigurations(packageConfigurationProvider)
-            .addResolutions(resolutionProvider)
+            .setPackageConfigurations(packageConfigurationProvider)
+            .setResolutions(resolutionProvider)
 
         outputDir?.let { absoluteOutputDir ->
             absoluteOutputDir.safeMkdirs()

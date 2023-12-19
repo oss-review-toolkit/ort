@@ -21,27 +21,11 @@ package org.ossreviewtoolkit.reporter
 
 import java.io.File
 
-import org.ossreviewtoolkit.utils.spdx.getLicenseText
 import org.ossreviewtoolkit.utils.spdx.getLicenseTextReader
-import org.ossreviewtoolkit.utils.spdx.hasLicenseText
 
 class DefaultLicenseTextProvider(private val licenseTextDirectories: List<File> = emptyList()) : LicenseTextProvider {
-    override fun getLicenseText(licenseId: String): String? =
-        getLicenseText(
-            id = licenseId,
-            handleExceptions = true,
-            licenseTextDirectories = licenseTextDirectories
-        )
-
     override fun getLicenseTextReader(licenseId: String): (() -> String)? =
         getLicenseTextReader(
-            id = licenseId,
-            handleExceptions = true,
-            licenseTextDirectories = licenseTextDirectories
-        )
-
-    override fun hasLicenseText(licenseId: String): Boolean =
-        hasLicenseText(
             id = licenseId,
             handleExceptions = true,
             licenseTextDirectories = licenseTextDirectories

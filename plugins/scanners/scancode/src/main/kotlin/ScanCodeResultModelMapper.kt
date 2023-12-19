@@ -32,14 +32,10 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.mapLicense
 import org.ossreviewtoolkit.model.utils.associateLicensesWithExceptions
-import org.ossreviewtoolkit.utils.spdx.SpdxConstants
-import org.ossreviewtoolkit.utils.spdx.toSpdxId
 
 import org.semver4j.Semver
 
 const val MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION = 3
-
-private val LICENSE_REF_PREFIX_SCAN_CODE = "${SpdxConstants.LICENSE_REF_PREFIX}${ScanCode.SCANNER_NAME.lowercase()}-"
 
 private val TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HHmmss.n").withZone(ZoneId.of("UTC"))
 
@@ -83,11 +79,7 @@ fun ScanCodeResult.toScanSummary(): ScanSummary {
 
     // Build a map of all ScanCode license keys in the result associated with their corresponding SPDX ID.
     val scanCodeKeyToSpdxIdMappings = licenseReferences?.associate { it.key to it.spdxLicenseKey }
-        ?: files.flatMap { file ->
-            file.licenses.filterIsInstance<LicenseEntry.Version1>().map { license ->
-                license.key to getSpdxId(license.spdxLicenseKey, license.key)
-            }
-        }.toMap()
+        ?: files.flatMap { it.scanCodeKeyToSpdxIdMappings }.toMap()
 
     filesOfTypeFile.forEach { file ->
         // ScanCode creates separate license entries for each license in an expression. Deduplicate these by grouping by
@@ -140,16 +132,6 @@ fun ScanCodeResult.toScanSummary(): ScanSummary {
     )
 }
 
-private fun getSpdxId(spdxLicenseKey: String?, key: String): String {
-    // There is a bug in ScanCode 3.0.2 that returns an empty string instead of null for licenses unknown to SPDX.
-    val spdxId = spdxLicenseKey.orEmpty().toSpdxId(allowPlusSuffix = true)
-
-    if (spdxId.isNotEmpty()) return spdxId
-
-    // Fall back to building an ID based on the ScanCode-specific "key".
-    return "$LICENSE_REF_PREFIX_SCAN_CODE${key.toSpdxId(allowPlusSuffix = true)}"
-}
-
 /**
  * Map scan errors for all files using messages that contain the relative file path.
  */
@@ -179,7 +161,8 @@ private fun mapTimeoutErrors(issues: MutableList<Issue>): Boolean {
             val timeout = match.groups["timeout"]!!.value
 
             fullError.copy(
-                message = "ERROR: Timeout after $timeout seconds while scanning file '$file'."
+                message = "ERROR: Timeout after $timeout seconds while scanning file '$file'.",
+                affectedPath = file
             )
         } else {
             onlyTimeoutErrors = false
