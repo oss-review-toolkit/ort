@@ -82,7 +82,7 @@ class DOSTest {
                 )
         )
         runBlocking {
-            val status = dos.repository.getScanResults(emptyList(), false)?.state?.status
+            val status = dos.repository.getScanResults(listOf("purl"), false)?.state?.status
             status shouldBe "no-results"
         }
     }
@@ -98,7 +98,7 @@ class DOSTest {
                 )
         )
         runBlocking {
-            val response = dos.repository.getScanResults(emptyList(), false)
+            val response = dos.repository.getScanResults(listOf("purl"), false)
             val status = response?.state?.status
             val id = response?.state?.jobId
             status shouldBe "pending"
@@ -188,7 +188,7 @@ class DOSTest {
         val scanResult = dos.scanPackage(pkg, ScanContext(
             labels = emptyMap(),
             packageType = PackageType.PROJECT,
-            excludes = null
+            coveredPackages = listOf(pkg)
         ))
         scanResult.summary.licenseFindings.size shouldBe 4
         scanResult.summary.copyrightFindings.size shouldBe 2
@@ -225,7 +225,7 @@ class DOSTest {
         val scanResult = dos.scanPackage(pkg, ScanContext(
             labels = emptyMap(),
             packageType = PackageType.PROJECT,
-            excludes = null
+            coveredPackages = listOf(pkg)
         ))
 
         scanResult.summary.licenseFindings.size shouldBe 0
