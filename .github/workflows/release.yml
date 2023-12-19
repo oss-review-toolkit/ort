@@ -11,6 +11,9 @@ on:
         required: true
         type: string
 
+env:
+  GRADLE_OPTS: -Dorg.gradle.daemon=false
+
 jobs:
   publish:
     env:
