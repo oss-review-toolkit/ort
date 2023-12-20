@@ -39,6 +39,7 @@ import org.ossreviewtoolkit.model.config.PathExcludeReason
 class PackageManagerFunTest : WordSpec({
     val definitionFiles = listOf(
         "bazel/MODULE.bazel",
+        "bitbake/recipe.bb",
         "bower/bower.json",
         "bundler/Gemfile",
         "cargo/Cargo.toml",
