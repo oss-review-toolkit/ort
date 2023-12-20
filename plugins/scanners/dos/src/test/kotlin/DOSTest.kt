@@ -176,11 +176,11 @@ class DOSTest {
                 )
         )
         val pkg = Package.EMPTY.copy(
-            purl = "pkg:npm/mime-types@2.1.18",
+            purl = "pkg:npm/mime-db@1.33.0",
             vcsProcessed = VcsInfo(
                 type = VcsType.GIT,
-                url = "https://github.com/jshttp/mime-types.git",
-                revision = "076f7902e3a730970ea96cd0b9c09bb6110f1127",
+                url = "https://github.com/jshttp/mime-db.git",
+                revision = "e7c849b1c70ff745a4ae456a0cd5e6be8b05c2fb",
                 path = ""
             )
         )
@@ -190,7 +190,7 @@ class DOSTest {
             packageType = PackageType.PROJECT,
             coveredPackages = listOf(pkg)
         ))
-        scanResult.summary.licenseFindings.size shouldBe 4
+        scanResult.summary.licenseFindings.size shouldBe 3
         scanResult.summary.copyrightFindings.size shouldBe 2
         scanResult.summary.issues.size shouldBe 0
     }
@@ -213,11 +213,11 @@ class DOSTest {
                 )
         )
         val pkg = Package.EMPTY.copy(
-            purl = "pkg:npm/mime-types@2.1.18",
+            purl = "pkg:npm/mime-db@1.33.0",
             vcsProcessed = VcsInfo(
                 type = VcsType.GIT,
-                url = "https://github.com/jshttp/mime-types.git",
-                revision = "076f7902e3a730970ea96cd0b9c09bb6110f1127",
+                url = "https://github.com/jshttp/mime-db.git",
+                revision = "e7c849b1c70ff745a4ae456a0cd5e6be8b05c2fb",
                 path = ""
             )
         )

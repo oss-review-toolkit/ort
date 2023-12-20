@@ -1,4 +1,7 @@
 {
+  "purls": [
+    "pkg:npm/mime-db@1.33.0"
+  ],
   "state": {
     "status": "no-results",
     "jobId": null

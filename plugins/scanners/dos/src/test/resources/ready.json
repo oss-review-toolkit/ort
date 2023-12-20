@@ -1,4 +1,7 @@
 {
+  "purls": [
+    "pkg:npm/mime-db@1.33.0"
+  ],
   "state": {
     "status": "ready",
     "jobId": null
@@ -6,25 +9,16 @@
   "results": {
     "licenses": [
       {
-        "license": "mit",
+        "license": "MIT",
         "location": {
           "path": "LICENSE",
           "start_line": 2,
-          "end_line": 2
-        },
-        "score": 100
-      },
-      {
-        "license": "mit",
-        "location": {
-          "path": "LICENSE",
-          "start_line": 6,
           "end_line": 22
         },
         "score": 100
       },
       {
-        "license": "mit",
+        "license": "MIT",
         "location": {
           "path": "index.js",
           "start_line": 4,
@@ -33,7 +27,7 @@
         "score": 100
       },
       {
-        "license": "mit",
+        "license": "MIT",
         "location": {
           "path": "package.json",
           "start_line": 10,
@@ -59,6 +53,7 @@
           "end_line": 3
         }
       }
-    ]
+    ],
+    "issues": []
   }
 }
