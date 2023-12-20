@@ -107,7 +107,7 @@ class DOSTest {
     }
 
     @Test
-    fun `getScanResults() should return 'ready' plus the results for results in db`() {
+    fun `getScanResults() should return 'ready' plus the results when results in db`() {
         server.stubFor(
             post(urlEqualTo("/api/scan-results"))
                 .willReturn(
@@ -196,7 +196,7 @@ class DOSTest {
     }
 
     @Test
-    fun `scanPackage() should abort and log an issue when backend fails`() {
+    fun `scanPackage() should abort and log an issue when fetching presigned URL fails`() {
         server.stubFor(
             post(urlEqualTo("/api/scan-results"))
                 .willReturn(
