@@ -95,7 +95,7 @@ class AnalyzerCommand : OrtCommand(
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
-        .defaultLazy { inputDir.resolve(ORT_REPO_CONFIG_FILENAME) }
+        .defaultLazy { (inputDir.takeUnless { it.isFile } ?: inputDir.parentFile).resolve(ORT_REPO_CONFIG_FILENAME) }
         .configurationGroup()
 
     private val resolutionsFile by option(
