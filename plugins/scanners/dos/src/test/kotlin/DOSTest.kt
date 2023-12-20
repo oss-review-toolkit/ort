@@ -100,9 +100,9 @@ class DOSTest {
         runBlocking {
             val response = dos.repository.getScanResults(listOf("purl"), false)
             val status = response?.state?.status
-            val id = response?.state?.jobId
+            val jobId = response?.state?.jobId
             status shouldBe "pending"
-            id shouldBe "dj34eh4h65"
+            jobId shouldBe "dj34eh4h65"
         }
     }
 
@@ -119,14 +119,14 @@ class DOSTest {
         runBlocking {
             val response = dos.repository.getScanResults(listOf("pkg:npm/mime-types@2.1.18"), false)
             val status = response?.state?.status
-            val id = response?.state?.jobId
+            val jobId = response?.state?.jobId
 
             val resultsJson = json.encodeToString(response?.results)
             val readyResponse = json.decodeFromString<DOSService.ScanResultsResponseBody>(getResourceAsString("/ready.json"))
             val expectedJson = json.encodeToString(readyResponse.results)
 
             status shouldBe "ready"
-            id shouldBe null
+            jobId shouldBe null
             resultsJson shouldBe expectedJson
         }
     }
