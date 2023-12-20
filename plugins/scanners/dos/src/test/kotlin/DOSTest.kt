@@ -117,7 +117,7 @@ class DOSTest {
                 )
         )
         runBlocking {
-            val response = dos.repository.getScanResults(listOf("pkg:npm/mime-types@2.1.18"), false)
+            val response = dos.repository.getScanResults(listOf("purl"), false)
             val status = response?.state?.status
             val jobId = response?.state?.jobId
 
