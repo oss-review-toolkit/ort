@@ -139,8 +139,8 @@ class DOS internal constructor(
         dosDir: File,
         tmpDir: String,
         thisScanStartTime: Instant,
-        issues: MutableList<Issue>): DOSService.ScanResultsResponseBody? {
-
+        issues: MutableList<Issue>
+    ): DOSService.ScanResultsResponseBody? {
         logger.info { "Initiating a backend scan" }
 
         // Zip the packet to scan and do local cleanup
@@ -193,7 +193,8 @@ class DOS internal constructor(
         purl: String,
         jobId: String,
         logMessagePrefix: String,
-        thisScanStartTime: Instant): DOSService.ScanResultsResponseBody? {
+        thisScanStartTime: Instant
+    ): DOSService.ScanResultsResponseBody? {
         while (true) {
             val jobState = repository.getJobState(jobId)
             if (jobState != null) {
