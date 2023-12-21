@@ -94,8 +94,12 @@ class DOS internal constructor(
                         return@runBlocking
                     }
                 }
-                "pending" -> scanResults?.state?.jobId?.let {
-                    pollForCompletion(purls.first(), it, "Pending scan", startTime)
+                "pending" -> {
+                    val jobId = checkNotNull(scanResults?.state?.jobId) {
+                        "The job ID must not be null for 'pending' status."
+                    }
+
+                    pollForCompletion(purls.first(), jobId, "Pending scan", startTime)
                 }
                 "ready" -> { /* Results exist, form an ORT result and move on to the next package */ }
             }
