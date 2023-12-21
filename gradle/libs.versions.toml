@@ -7,7 +7,7 @@ gitSemverPlugin = "0.11.0"
 graalVmNativeImagePlugin = "0.9.28"
 graphQlPlugin = "6.5.6"
 ideaExtPlugin = "1.1.7"
-kotlinPlugin = "1.9.21"
+kotlinPlugin = "1.9.22"
 mavenPublishPlugin = "0.26.0"
 versionsPlugin = "0.50.0"
 
