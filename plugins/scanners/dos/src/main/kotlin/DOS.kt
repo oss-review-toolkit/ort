@@ -57,7 +57,6 @@ class DOS internal constructor(
         val startTime = Instant.now()
         val tmpDir = "/tmp/"
 
-        val summary: ScanSummary
         val issues = mutableListOf<Issue>()
         var scanResults: DOSService.ScanResultsResponseBody?
         val purls = context.coveredPackages.getDosPurls()
@@ -112,7 +111,7 @@ class DOS internal constructor(
         /**
          * Handle gracefully non-successful calls to DOS backend and log issues for failing tasks
          */
-        summary = if (scanResults?.results != null) {
+        val summary = if (scanResults?.results != null) {
             val parsedSummary = generateSummary(startTime, endTime, scanResults?.results!!)
             parsedSummary.copy(issues = parsedSummary.issues + issues)
         } else {
