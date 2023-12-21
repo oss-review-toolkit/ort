@@ -88,13 +88,7 @@ class DOS internal constructor(
                     logger.info { "Package downloaded to: $dosDir" }
 
                     // Start backend scanning
-                    scanResults = runBackendScan(
-                        purls,
-                        dosDir,
-                        tmpDir,
-                        startTime,
-                        issues
-                    )
+                    scanResults = runBackendScan(purls, dosDir, tmpDir, startTime, issues)
                     if (scanResults == null || scanResults!!.state.status == "failed") {
                         logger.error { "Something went wrong at DOS backend, exiting scan of this package" }
                         return@runBlocking
