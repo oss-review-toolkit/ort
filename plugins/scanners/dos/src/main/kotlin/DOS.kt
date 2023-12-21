@@ -54,7 +54,7 @@ class DOS internal constructor(
     private val totalScanStartTime = Instant.now()
 
     override fun scanPackage(pkg: Package, context: ScanContext): ScanResult {
-        val thisScanStartTime = Instant.now()
+        val startTime = Instant.now()
         val tmpDir = "/tmp/"
 
         val summary: ScanSummary
@@ -93,7 +93,7 @@ class DOS internal constructor(
                         purls,
                         dosDir,
                         tmpDir,
-                        thisScanStartTime,
+                        startTime,
                         issues
                     )
                     if (scanResults == null || scanResults!!.state.status == "failed") {
@@ -101,25 +101,25 @@ class DOS internal constructor(
                         return@runBlocking
                     }
                 }
-                "pending" -> scanResults?.state?.jobId?.let { waitForPendingScan(purls.first(), it, thisScanStartTime) }
+                "pending" -> scanResults?.state?.jobId?.let { waitForPendingScan(purls.first(), it, startTime) }
                 "ready" -> { /* Results exist, form an ORT result and move on to the next package */ }
             }
         }
-        val thisScanEndTime = Instant.now()
+        val endTime = Instant.now()
 
         /**
          * Handle gracefully non-successful calls to DOS backend and log issues for failing tasks
          */
         summary = if (scanResults?.results != null) {
             generateSummary(
-                thisScanStartTime,
-                thisScanEndTime,
+                startTime,
+                endTime,
                 scanResults?.results!!
             )
         } else {
             ScanSummary(
-                thisScanStartTime,
-                thisScanEndTime,
+                startTime,
+                endTime,
                 emptySet(),
                 emptySet(),
                 emptySet(),
