@@ -58,7 +58,6 @@ class DOS internal constructor(
         val tmpDir = "/tmp/"
 
         val issues = mutableListOf<Issue>()
-        var scanResults: DOSService.ScanResultsResponseBody?
         val purls = context.coveredPackages.getDosPurls()
 
         // Decide which provenance type this package is
@@ -72,14 +71,11 @@ class DOS internal constructor(
 
         logger.info { "Package to scan: ${pkg.purl}" }
 
-        runBlocking {
+        val scanResults = runBlocking {
             // Ask for scan results from DOS API
-            scanResults = repository.getScanResults(purls, config.fetchConcluded)
-            if (scanResults == null) {
-                issues += createAndLogIssue(name, "Could not request scan results from DOS API")
-                return@runBlocking
-            }
-            when (scanResults?.state?.status) {
+            val existingScanResults = repository.getScanResults(purls, config.fetchConcluded)
+
+            when (existingScanResults?.state?.status) {
                 "no-results" -> {
                     // Download the package to an ORT specific local file structure
                     val dosDir = createOrtTempDir()
@@ -88,29 +84,42 @@ class DOS internal constructor(
                     logger.info { "Package downloaded to: $dosDir" }
 
                     // Start backend scanning
-                    scanResults = runBackendScan(purls, dosDir, tmpDir, startTime, issues)
-                    if (scanResults == null || scanResults!!.state.status == "failed") {
-                        logger.error { "Something went wrong at DOS backend, exiting scan of this package" }
-                        return@runBlocking
-                    }
+                    runBackendScan(purls, dosDir, tmpDir, startTime, issues)
                 }
+
                 "pending" -> {
-                    val jobId = checkNotNull(scanResults?.state?.jobId) {
+                    val jobId = checkNotNull(existingScanResults.state.jobId) {
                         "The job ID must not be null for 'pending' status."
                     }
 
                     pollForCompletion(purls.first(), jobId, "Pending scan", startTime)
                 }
-                "ready" -> { /* Results exist, form an ORT result and move on to the next package */ }
+
+                "ready" -> existingScanResults
+
+                "failed" -> {
+                    issues += createAndLogIssue(
+                        name,
+                        "Something went wrong at DOS backend, exiting scan of this package"
+                    )
+
+                    null
+                }
+
+                else -> {
+                    issues += createAndLogIssue(name, "Could not request scan results from DOS API")
+                    null
+                }
             }
         }
+
         val endTime = Instant.now()
 
         /**
          * Handle gracefully non-successful calls to DOS backend and log issues for failing tasks
          */
         val summary = if (scanResults?.results != null) {
-            val parsedSummary = generateSummary(startTime, endTime, scanResults?.results!!)
+            val parsedSummary = generateSummary(startTime, endTime, scanResults.results!!)
             parsedSummary.copy(issues = parsedSummary.issues + issues)
         } else {
             ScanSummary.EMPTY.copy(startTime = startTime, endTime = endTime, issues = issues)
