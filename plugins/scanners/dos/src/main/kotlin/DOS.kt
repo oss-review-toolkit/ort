@@ -119,13 +119,7 @@ class DOS internal constructor(
                 scanResults?.results!!
             )
         } else {
-            ScanSummary(
-                startTime,
-                endTime,
-                emptySet(),
-                emptySet(),
-                emptySet(),
-                issues)
+            ScanSummary.EMPTY.copy(startTime = startTime, endTime = endTime, issues = issues)
         }
 
         val fixedUpLicenses = associateLicensesWithExceptions(summary.licenseFindings).mapTo(mutableSetOf()) {
