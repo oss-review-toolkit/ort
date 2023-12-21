@@ -11,8 +11,6 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-import org.apache.logging.log4j.kotlin.Logging
-
 import org.junit.jupiter.api.*
 
 import org.ossreviewtoolkit.clients.dos.DOSService
@@ -24,9 +22,7 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import java.time.Instant
 
 class DOSTest {
-
     private lateinit var dos: DOS
-    private companion object : Logging
     private val json = Json { prettyPrint = true }
 
     private val server = WireMockServer(WireMockConfiguration
