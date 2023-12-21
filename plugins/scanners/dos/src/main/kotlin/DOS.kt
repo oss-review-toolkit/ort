@@ -142,7 +142,6 @@ class DOS internal constructor(
         )
     }
 
-    @VisibleForTesting
     internal suspend fun runBackendScan(
         purls: List<String>,
         dosDir: File,

@@ -1,41 +1,48 @@
 package org.ossreviewtoolkit.plugins.scanners.dos
 
 import com.github.tomakehurst.wiremock.WireMockServer
-import com.github.tomakehurst.wiremock.client.WireMock.*
+import com.github.tomakehurst.wiremock.client.WireMock.aResponse
+import com.github.tomakehurst.wiremock.client.WireMock.post
+import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 import com.github.tomakehurst.wiremock.common.ConsoleNotifier
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
+import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
+
+import java.time.Instant
 
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-import org.junit.jupiter.api.*
-
 import org.ossreviewtoolkit.clients.dos.DOSService
-
-import org.ossreviewtoolkit.model.*
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Issue
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageType
+import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
-import java.time.Instant
 
-class DOSTest {
-    private lateinit var dos: DOS
-    private val json = Json { prettyPrint = true }
+class DOSTest : StringSpec({
+    lateinit var dos: DOS
+    val json = Json { prettyPrint = true }
 
-    private val server = WireMockServer(WireMockConfiguration
+    val server = WireMockServer(WireMockConfiguration
         .options()
         .dynamicPort()
         .notifier(ConsoleNotifier(false))
     )
 
-    private fun getResourceAsString(resourceName: String): String =
+    fun getResourceAsString(resourceName: String): String =
         checkNotNull(javaClass.getResource(resourceName)).readText()
 
-    @BeforeEach
-    fun setup() {
+    beforeTest {
         server.start()
         val config = DOSConfig(
             serverUrl = "http://localhost:${server.port()}/api/",
@@ -48,13 +55,11 @@ class DOSTest {
         dos = DOS.Factory().create(config, ScannerWrapperConfig.EMPTY)
     }
 
-    @AfterEach
-    fun teardown() {
+    afterTest {
         server.stop()
     }
 
-    @Test
-    fun `getScanResults() should return null when service unavailable`() {
+    "getScanResults() should return null when service unavailable" {
         server.stubFor(
             post(urlEqualTo("/api/scan-results"))
                 .willReturn(
@@ -67,8 +72,7 @@ class DOSTest {
         }
     }
 
-    @Test
-    fun `getScanResults() should return 'no-results' when no results in db`() {
+    "getScanResults() should return 'no-results' when no results in db" {
         server.stubFor(
             post(urlEqualTo("/api/scan-results"))
                 .willReturn(
@@ -83,8 +87,7 @@ class DOSTest {
         }
     }
 
-    @Test
-    fun `getScanResults() should return 'pending' when scan ongoing`() {
+    "getScanResults() should return 'pending' when scan ongoing" {
         server.stubFor(
             post(urlEqualTo("/api/scan-results"))
                 .willReturn(
@@ -102,8 +105,7 @@ class DOSTest {
         }
     }
 
-    @Test
-    fun `getScanResults() should return 'ready' plus the results when results in db`() {
+    "getScanResults() should return 'ready' plus the results when results in db" {
         server.stubFor(
             post(urlEqualTo("/api/scan-results"))
                 .willReturn(
@@ -127,8 +129,7 @@ class DOSTest {
         }
     }
 
-    @Test
-    fun `runBackendScan() with failing presigned URL retrieval should abort and log an issue`() {
+    "runBackendScan() with failing presigned URL retrieval should abort and log an issue" {
         server.stubFor(
             post(urlEqualTo("/api/upload-url"))
                 .willReturn(
@@ -161,8 +162,7 @@ class DOSTest {
         }
     }
 
-    @Test
-    fun `scanPackage() should return existing results`() {
+    "scanPackage() should return existing results" {
         server.stubFor(
             post(urlEqualTo("/api/scan-results"))
                 .willReturn(
@@ -191,8 +191,7 @@ class DOSTest {
         scanResult.summary.issues.size shouldBe 0
     }
 
-    @Test
-    fun `scanPackage() should abort and log an issue when fetching presigned URL fails`() {
+    "scanPackage() should abort and log an issue when fetching presigned URL fails" {
         server.stubFor(
             post(urlEqualTo("/api/scan-results"))
                 .willReturn(
@@ -230,4 +229,4 @@ class DOSTest {
         scanResult.summary.issues[0].message shouldBe "Could not get a presigned URL for this package"
         scanResult.summary.issues[0].severity shouldBe Severity.ERROR
     }
-}
+})
