@@ -113,11 +113,8 @@ class DOS internal constructor(
          * Handle gracefully non-successful calls to DOS backend and log issues for failing tasks
          */
         summary = if (scanResults?.results != null) {
-            generateSummary(
-                startTime,
-                endTime,
-                scanResults?.results!!
-            )
+            val parsedSummary = generateSummary(startTime, endTime, scanResults?.results!!)
+            parsedSummary.copy(issues = parsedSummary.issues + issues)
         } else {
             ScanSummary.EMPTY.copy(startTime = startTime, endTime = endTime, issues = issues)
         }
