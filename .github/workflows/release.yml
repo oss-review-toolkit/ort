@@ -42,6 +42,7 @@ jobs:
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.OSSRH_PASSWORD }}
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
+          ORG_GRADLE_PROJECT_SONATYPE_AUTOMATIC_RELEASE: true
         run: ./gradlew publishAllPublicationsToMavenCentralRepository
       - name: Build ORT Distributions
         run: ./gradlew :cli:distZip :helper-cli:distZip
