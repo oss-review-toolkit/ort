@@ -101,7 +101,9 @@ class DOS internal constructor(
                         return@runBlocking
                     }
                 }
-                "pending" -> scanResults?.state?.jobId?.let { waitForPendingScan(purls.first(), it, startTime) }
+                "pending" -> scanResults?.state?.jobId?.let {
+                    pollForCompletion(purls.first(), it, "Pending scan", startTime)
+                }
                 "ready" -> { /* Results exist, form an ORT result and move on to the next package */ }
             }
         }
@@ -197,13 +199,6 @@ class DOS internal constructor(
             // package here.
             pollForCompletion(purls.first(), it, "New scan", thisScanStartTime)
         }
-    }
-
-    private suspend fun waitForPendingScan(
-        purl: String,
-        id: String,
-        thisScanStartTime: Instant): DOSService.ScanResultsResponseBody? {
-        return pollForCompletion(purl, id, "Pending scan", thisScanStartTime)
     }
 
     private suspend fun pollForCompletion(
