@@ -14,7 +14,6 @@ import kotlinx.coroutines.runBlocking
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.jetbrains.annotations.VisibleForTesting
 import org.ossreviewtoolkit.clients.dos.*
 import org.ossreviewtoolkit.model.*
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
