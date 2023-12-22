@@ -77,16 +77,3 @@ fun deleteFileOrDir(file: File) {
         }
     }
 }
-
-/**
- * Elapsed time for a scanjob.
- */
-fun elapsedTime(startTime: Instant): String {
-    val currentTime = Instant.now()
-    val duration = Duration.between(startTime, currentTime)
-    val hours = duration.toHours()
-    val minutes = duration.toMinutesPart()
-    val seconds = duration.toSecondsPart()
-
-    return String.format("%02d:%02d:%02d", hours, minutes, seconds)
-}

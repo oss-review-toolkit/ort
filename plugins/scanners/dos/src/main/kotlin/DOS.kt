@@ -16,7 +16,6 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.clients.dos.DOSRepository
 import org.ossreviewtoolkit.clients.dos.DOSService
-import org.ossreviewtoolkit.clients.dos.elapsedTime
 import org.ossreviewtoolkit.downloader.Downloader
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Issue
