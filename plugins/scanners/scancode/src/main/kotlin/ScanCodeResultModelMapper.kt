@@ -55,7 +55,8 @@ private data class LicenseMatch(
     val expression: String,
     val startLine: Int,
     val endLine: Int,
-    val score: Float
+    val score: Float,
+    val matchedText: String,
 )
 
 fun ScanCodeResult.toScanSummary(): ScanSummary {
@@ -85,7 +86,7 @@ fun ScanCodeResult.toScanSummary(): ScanSummary {
         // ScanCode creates separate license entries for each license in an expression. Deduplicate these by grouping by
         // the same expression.
         val licenses = file.licenses.groupBy {
-            LicenseMatch(it.licenseExpression, it.startLine, it.endLine, it.score)
+            LicenseMatch(it.licenseExpression, it.startLine, it.endLine, it.score, it.matchedText)
         }.map {
             // Arbitrarily take the first of the duplicate license entries.
             it.value.first()
