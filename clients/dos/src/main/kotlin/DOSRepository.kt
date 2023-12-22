@@ -16,7 +16,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 
 import okio.BufferedSink
 
-import org.ossreviewtoolkit.clients.dos.DOSService.Companion.logger
+import org.apache.logging.log4j.kotlin.logger
 
 /**
  * This class implements the data layer of the DOS client.
