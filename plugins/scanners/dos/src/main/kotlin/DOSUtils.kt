@@ -28,5 +28,5 @@ internal fun elapsedTime(startTime: Instant): String {
     val minutes = duration.toMinutesPart()
     val seconds = duration.toSecondsPart()
 
-    return String.format("%02d:%02d:%02d", hours, minutes, seconds)
+    return "%02d:%02d:%02d".format(hours, minutes, seconds)
 }
