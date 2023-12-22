@@ -42,7 +42,7 @@ data class DosPackageConfigurationProviderConfig(
 open class DosPackageConfigurationProviderFactory :
     PackageConfigurationProviderFactory<DosPackageConfigurationProviderConfig> {
     override val type = "DOS"
-    
+
     override fun create(config: DosPackageConfigurationProviderConfig) = DosPackageConfigurationProvider(config)
 
     override fun parseConfig(options: Options, secrets: Options) =
@@ -52,6 +52,7 @@ open class DosPackageConfigurationProviderFactory :
             serverToken = secrets.getValue("serverToken")
         )
 }
+
 /**
  * A [PackageConfigurationProvider] that loads [PackageConfiguration]s from a DOS service.
  */

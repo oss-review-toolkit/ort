@@ -33,14 +33,11 @@ class DOSTest : StringSpec({
     lateinit var dos: DOS
     val json = Json { prettyPrint = true }
 
-    val server = WireMockServer(WireMockConfiguration
-        .options()
-        .dynamicPort()
-        .notifier(ConsoleNotifier(false))
+    val server = WireMockServer(
+        WireMockConfiguration.options().dynamicPort().notifier(ConsoleNotifier(false))
     )
 
-    fun getResourceAsString(resourceName: String): String =
-        checkNotNull(javaClass.getResource(resourceName)).readText()
+    fun getResourceAsString(resourceName: String): String = checkNotNull(javaClass.getResource(resourceName)).readText()
 
     beforeTest {
         server.start()
@@ -120,7 +117,9 @@ class DOSTest : StringSpec({
             val jobId = response?.state?.jobId
 
             val resultsJson = json.encodeToString(response?.results)
-            val readyResponse = json.decodeFromString<DOSService.ScanResultsResponseBody>(getResourceAsString("/ready.json"))
+            val readyResponse = json.decodeFromString<DOSService.ScanResultsResponseBody>(
+                getResourceAsString("/ready.json")
+            )
             val expectedJson = json.encodeToString(readyResponse.results)
 
             status shouldBe "ready"
@@ -181,11 +180,15 @@ class DOSTest : StringSpec({
             )
         )
 
-        val scanResult = dos.scanPackage(pkg, ScanContext(
-            labels = emptyMap(),
-            packageType = PackageType.PROJECT,
-            coveredPackages = listOf(pkg)
-        ))
+        val scanResult = dos.scanPackage(
+            pkg,
+            ScanContext(
+                labels = emptyMap(),
+                packageType = PackageType.PROJECT,
+                coveredPackages = listOf(pkg)
+            )
+        )
+
         scanResult.summary.licenseFindings.size shouldBe 3
         scanResult.summary.copyrightFindings.size shouldBe 2
         scanResult.summary.issues.size shouldBe 0
@@ -217,11 +220,14 @@ class DOSTest : StringSpec({
             )
         )
 
-        val scanResult = dos.scanPackage(pkg, ScanContext(
-            labels = emptyMap(),
-            packageType = PackageType.PROJECT,
-            coveredPackages = listOf(pkg)
-        ))
+        val scanResult = dos.scanPackage(
+            pkg,
+            ScanContext(
+                labels = emptyMap(),
+                packageType = PackageType.PROJECT,
+                coveredPackages = listOf(pkg)
+            )
+        )
 
         scanResult.summary.licenseFindings.size shouldBe 0
         scanResult.summary.copyrightFindings.size shouldBe 0

@@ -166,7 +166,7 @@ class DOSRepository(private val dosService: DOSService) {
             response.body()
         } else {
             // For now, skip putting these message to logs so as not to alarm users
-            //logger.error { "$response" }
+            // logger.error { "$response" }
             null
         }
     }

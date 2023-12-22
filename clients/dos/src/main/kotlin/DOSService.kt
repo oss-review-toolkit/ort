@@ -190,12 +190,14 @@ interface DOSService {
     suspend fun getJobState(@Path("id") id: String): Response<JobStateResponseBody>
 
     @POST("package-configuration")
-    suspend fun postPackageConfiguration(@Body body: PackageConfigurationRequestBody): Response<PackageConfigurationResponseBody>
+    suspend fun postPackageConfiguration(
+        @Body body: PackageConfigurationRequestBody
+    ): Response<PackageConfigurationResponseBody>
 
     /**
      * Authorization Interceptor
      */
-    class AuthInterceptor(private val token: String): Interceptor {
+    class AuthInterceptor(private val token: String) : Interceptor {
         override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
             val original = chain.request()
 

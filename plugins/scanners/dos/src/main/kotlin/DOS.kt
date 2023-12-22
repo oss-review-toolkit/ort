@@ -61,6 +61,7 @@ class DOS internal constructor(
 
     override val matcher: ScannerMatcher? = null
     override val configuration = ""
+
     // Later on, use DOS API to return API's version and use it here
     override val version = "1.0"
 
@@ -170,13 +171,13 @@ class DOS internal constructor(
         val zipName = dosDir.name + ".zip"
         val targetZipFile = File("$tmpDir$zipName")
         dosDir.packZip(targetZipFile)
-        dosDir.safeDeleteRecursively()  // ORT temp directory not needed anymore
+        dosDir.safeDeleteRecursively() // ORT temp directory not needed anymore
 
         // Request presigned URL from DOS API
         val presignedUrl = repository.getPresignedUrl(zipName)
         if (presignedUrl == null) {
             issues += createAndLogIssue(name, "Could not get a presigned URL for this package")
-            targetZipFile.delete()  // local cleanup before returning
+            targetZipFile.delete() // local cleanup before returning
             return DOSService.ScanResultsResponseBody(DOSService.ScanResultsResponseBody.State("failed"))
         }
 
@@ -184,10 +185,10 @@ class DOS internal constructor(
         val uploadSuccessful = repository.uploadFile(presignedUrl, tmpDir + zipName)
         if (!uploadSuccessful) {
             issues += createAndLogIssue(name, "Could not upload the packet to S3")
-            targetZipFile.delete()  // local cleanup before returning
+            targetZipFile.delete() // local cleanup before returning
             return DOSService.ScanResultsResponseBody(DOSService.ScanResultsResponseBody.State("failed"))
         }
-        targetZipFile.delete()  // make sure the zipped packet is always deleted locally
+        targetZipFile.delete() // make sure the zipped packet is always deleted locally
 
         // Send the scan job to DOS API to start the backend scanning and do local cleanup
         val jobResponse = repository.postScanJob(zipName, purls)
@@ -223,8 +224,8 @@ class DOS internal constructor(
             if (jobState != null) {
                 logger.info {
                     "$logMessagePrefix: ${elapsedTime(thisScanStartTime)}/${elapsedTime(totalScanStartTime)}, " +
-                            "state = ${jobState.state.status}, " +
-                            "message = ${jobState.state.message}"
+                        "state = ${jobState.state.status}, " +
+                        "message = ${jobState.state.message}"
                 }
             }
             if (jobState != null) {
