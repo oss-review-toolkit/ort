@@ -16,7 +16,6 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.clients.dos.DOSRepository
 import org.ossreviewtoolkit.clients.dos.DOSService
-import org.ossreviewtoolkit.clients.dos.deleteFileOrDir
 import org.ossreviewtoolkit.clients.dos.elapsedTime
 import org.ossreviewtoolkit.downloader.Downloader
 import org.ossreviewtoolkit.model.ArtifactProvenance
@@ -38,6 +37,7 @@ import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.packZip
+import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
@@ -171,13 +171,13 @@ class DOS internal constructor(
         val zipName = dosDir.name + ".zip"
         val targetZipFile = File("$tmpDir$zipName")
         dosDir.packZip(targetZipFile)
-        deleteFileOrDir(dosDir)  // ORT temp directory not needed anymore
+        dosDir.safeDeleteRecursively()  // ORT temp directory not needed anymore
 
         // Request presigned URL from DOS API
         val presignedUrl = repository.getPresignedUrl(zipName)
         if (presignedUrl == null) {
             issues += createAndLogIssue(name, "Could not get a presigned URL for this package")
-            deleteFileOrDir(targetZipFile)  // local cleanup before returning
+            targetZipFile.delete()  // local cleanup before returning
             return DOSService.ScanResultsResponseBody(DOSService.ScanResultsResponseBody.State("failed"))
         }
 
@@ -185,10 +185,10 @@ class DOS internal constructor(
         val uploadSuccessful = repository.uploadFile(presignedUrl, tmpDir + zipName)
         if (!uploadSuccessful) {
             issues += createAndLogIssue(name, "Could not upload the packet to S3")
-            deleteFileOrDir(targetZipFile)  // local cleanup before returning
+            targetZipFile.delete()  // local cleanup before returning
             return DOSService.ScanResultsResponseBody(DOSService.ScanResultsResponseBody.State("failed"))
         }
-        deleteFileOrDir(targetZipFile)  // make sure the zipped packet is always deleted locally
+        targetZipFile.delete()  // make sure the zipped packet is always deleted locally
 
         // Send the scan job to DOS API to start the backend scanning and do local cleanup
         val jobResponse = repository.postScanJob(zipName, purls)
