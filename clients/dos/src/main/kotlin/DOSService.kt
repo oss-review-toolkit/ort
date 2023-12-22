@@ -8,23 +8,29 @@ package org.ossreviewtoolkit.clients.dos
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonObject
-import okhttp3.Interceptor
+import java.time.Duration
 
-import okhttp3.logging.HttpLoggingInterceptor
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
+
+import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
+import okhttp3.logging.HttpLoggingInterceptor
 
 import org.apache.logging.log4j.kotlin.Logging
-import retrofit2.Invocation
 
-import retrofit2.http.*
+import retrofit2.Invocation
 import retrofit2.Response
 import retrofit2.Retrofit
-import java.time.Duration
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Path
+import retrofit2.http.Url
 
 /**
  * A Retrofit2 interface to define the network layer of the DOS client.

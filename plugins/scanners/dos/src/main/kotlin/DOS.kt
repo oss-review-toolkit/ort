@@ -14,12 +14,29 @@ import kotlinx.coroutines.runBlocking
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.clients.dos.*
-import org.ossreviewtoolkit.model.*
-import org.ossreviewtoolkit.model.config.DownloaderConfiguration
-import org.ossreviewtoolkit.scanner.*
+import org.ossreviewtoolkit.clients.dos.DOSRepository
+import org.ossreviewtoolkit.clients.dos.DOSService
+import org.ossreviewtoolkit.clients.dos.deleteFileOrDir
+import org.ossreviewtoolkit.clients.dos.elapsedTime
+import org.ossreviewtoolkit.clients.dos.packZip
 import org.ossreviewtoolkit.downloader.Downloader
+import org.ossreviewtoolkit.model.ArtifactProvenance
+import org.ossreviewtoolkit.model.Issue
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RepositoryProvenance
+import org.ossreviewtoolkit.model.ScanResult
+import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.UnknownProvenance
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.config.DownloaderConfiguration
+import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.associateLicensesWithExceptions
+import org.ossreviewtoolkit.scanner.PackageScannerWrapper
+import org.ossreviewtoolkit.scanner.ScanContext
+import org.ossreviewtoolkit.scanner.ScannerMatcher
+import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
+import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.spdx.toSpdx

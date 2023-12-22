@@ -6,15 +6,17 @@
 
 package org.ossreviewtoolkit.clients.dos
 
-import okhttp3.MediaType
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
-import okio.BufferedSink
-import org.ossreviewtoolkit.clients.dos.DOSService.Companion.logger
 import java.io.File
 import java.io.FileInputStream
+
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+
+import okio.BufferedSink
+
+import org.ossreviewtoolkit.clients.dos.DOSService.Companion.logger
 
 /**
  * This class implements the data layer of the DOS client.
