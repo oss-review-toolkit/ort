@@ -6,8 +6,6 @@
 
 package org.ossreviewtoolkit.plugins.scanners.dos
 
-import org.apache.logging.log4j.kotlin.Logging
-
 import org.ossreviewtoolkit.utils.common.Options
 
 /**
@@ -32,7 +30,7 @@ data class DOSConfig(
     /** The URL where the DOS / package curation front-end is running. **/
     val frontendUrl: String
 ) {
-    companion object: Logging {
+    companion object {
         /** Name of the configuration property for the server URL. **/
         internal const val SERVER_URL_PROPERTY = "serverUrl"
 

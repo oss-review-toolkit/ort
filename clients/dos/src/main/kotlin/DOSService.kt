@@ -20,8 +20,6 @@ import okhttp3.OkHttpClient
 import okhttp3.RequestBody
 import okhttp3.logging.HttpLoggingInterceptor
 
-import org.apache.logging.log4j.kotlin.Logging
-
 import retrofit2.Invocation
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -36,8 +34,7 @@ import retrofit2.http.Url
  * A Retrofit2 interface to define the network layer of the DOS client.
  */
 interface DOSService {
-
-    companion object: Logging {
+    companion object {
         /**
          * The JSON (de-)serialization object used by this service.
          */
