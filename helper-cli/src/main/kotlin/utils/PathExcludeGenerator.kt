@@ -292,7 +292,8 @@ private val PATH_EXCLUDE_REASON_FOR_FILENAME = listOf(
     "setup.py" to BUILD_TOOL_OF,
     "test.js" to TEST_OF,
     "test.py" to TEST_OF,
-    "test_*.c" to BUILD_TOOL_OF
+    "test_*.c" to BUILD_TOOL_OF,
+    "versioneer.py" to BUILD_TOOL_OF
 ).checkPatterns { it.first }
 
 /** Prefer filename patterns with fewer wildcards, then shorter ones. **/
