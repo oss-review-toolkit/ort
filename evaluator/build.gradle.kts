@@ -31,12 +31,12 @@ plugins {
 }
 
 dependencies {
-    api(project(":model"))
-    api(project(":utils:scripting-utils"))
+    api(projects.model)
+    api(projects.utils.scriptingUtils)
 
-    implementation(project(":downloader"))
-    implementation(project(":utils:ort-utils"))
-    implementation(project(":utils:spdx-utils"))
+    implementation(projects.downloader)
+    implementation(projects.utils.ortUtils)
+    implementation(projects.utils.spdxUtils)
 
     implementation("org.jetbrains.kotlin:kotlin-scripting-common")
     implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")

@@ -24,9 +24,9 @@ plugins {
 
 val generatedResourcesDir = layout.buildDirectory.dir("generated-resources/main")
 val copyWebAppTemplate by tasks.registering(Copy::class) {
-    dependsOn(":plugins:reporters:web-app-template:yarnBuild")
+    dependsOn(projects.plugins.reporters.webAppTemplate.dependencyProject.tasks["yarnBuild"])
 
-    from(project(":plugins:reporters:web-app-template").file("build")) {
+    from(projects.plugins.reporters.webAppTemplate.dependencyProject.file("build")) {
         include("scan-report-template.html")
     }
 
@@ -37,9 +37,9 @@ val copyWebAppTemplate by tasks.registering(Copy::class) {
 sourceSets.main.get().output.dir(mapOf("builtBy" to copyWebAppTemplate), generatedResourcesDir)
 
 dependencies {
-    api(project(":reporter"))
+    api(projects.reporter)
 
-    implementation(project(":plugins:reporters:evaluated-model-reporter"))
+    implementation(projects.plugins.reporters.evaluatedModelReporter)
 
     implementation(libs.commonsCompress)
 }

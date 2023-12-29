@@ -23,20 +23,20 @@ plugins {
 }
 
 dependencies {
-    api(project(":plugins:commands:command-api"))
+    api(projects.plugins.commands.commandApi)
 
-    implementation(project(":plugins:package-configuration-providers:package-configuration-provider-api"))
-    implementation(project(":plugins:package-curation-providers:package-curation-provider-api"))
+    implementation(projects.plugins.packageConfigurationProviders.packageConfigurationProviderApi)
+    implementation(projects.plugins.packageCurationProviders.packageCurationProviderApi)
 
     // TODO: Get rid of these hard-coded dependencies on plugins.
-    implementation(project(":plugins:package-configuration-providers:dir-package-configuration-provider"))
-    implementation(project(":plugins:package-curation-providers:file-package-curation-provider"))
+    implementation(projects.plugins.packageConfigurationProviders.dirPackageConfigurationProvider)
+    implementation(projects.plugins.packageCurationProviders.filePackageCurationProvider)
 
-    implementation(project(":evaluator"))
-    implementation(project(":model"))
-    implementation(project(":utils:common-utils"))
-    implementation(project(":utils:ort-utils"))
-    implementation(project(":utils:spdx-utils"))
+    implementation(projects.evaluator)
+    implementation(projects.model)
+    implementation(projects.utils.commonUtils)
+    implementation(projects.utils.ortUtils)
+    implementation(projects.utils.spdxUtils)
 
     implementation(libs.clikt)
 }

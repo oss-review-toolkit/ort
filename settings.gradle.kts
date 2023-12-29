@@ -17,6 +17,10 @@
  * License-Filename: LICENSE
  */
 
+// Enable type-safe project accessors, see:
+// https://docs.gradle.org/current/userguide/declaring_dependencies.html#sec:type-safe-project-accessors
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 rootProject.name = "oss-review-toolkit"
 
 include(":advisor")

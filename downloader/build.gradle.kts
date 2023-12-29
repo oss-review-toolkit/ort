@@ -23,11 +23,11 @@ plugins {
 }
 
 dependencies {
-    api(project(":model"))
+    api(projects.model)
 
-    implementation(project(":utils:ort-utils"))
+    implementation(projects.utils.ortUtils)
 
-    funTestImplementation(platform(project(":plugins:version-control-systems")))
+    funTestImplementation(platform(projects.plugins.versionControlSystems))
 
     testImplementation(libs.mockk)
 }

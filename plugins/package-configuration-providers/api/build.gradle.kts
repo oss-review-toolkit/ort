@@ -23,5 +23,5 @@ plugins {
 }
 
 dependencies {
-    api(project(":model"))
+    api(projects.model)
 }

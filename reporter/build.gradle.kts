@@ -26,10 +26,10 @@ plugins {
 }
 
 dependencies {
-    api(project(":model"))
+    api(projects.model)
 
-    implementation(project(":utils:scripting-utils"))
-    implementation(project(":utils:spdx-utils"))
+    implementation(projects.utils.scriptingUtils)
+    implementation(projects.utils.spdxUtils)
 
     implementation("org.jetbrains.kotlin:kotlin-scripting-common")
     implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
@@ -38,5 +38,6 @@ dependencies {
     funTestImplementation(testFixtures(project))
 
     funTestImplementation(libs.kotestAssertionsJson)
-    testFixturesImplementation(project(":utils:test-utils"))
+
+    testFixturesImplementation(projects.utils.testUtils)
 }

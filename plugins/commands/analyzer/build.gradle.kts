@@ -23,14 +23,14 @@ plugins {
 }
 
 dependencies {
-    api(project(":plugins:commands:command-api"))
+    api(projects.plugins.commands.commandApi)
 
-    implementation(project(":plugins:package-curation-providers:package-curation-provider-api"))
+    implementation(projects.plugins.packageCurationProviders.packageCurationProviderApi)
 
-    implementation(project(":analyzer"))
-    implementation(project(":model"))
-    implementation(project(":utils:common-utils"))
-    implementation(project(":utils:ort-utils"))
+    implementation(projects.analyzer)
+    implementation(projects.model)
+    implementation(projects.utils.commonUtils)
+    implementation(projects.utils.ortUtils)
 
     implementation(libs.clikt)
 }
