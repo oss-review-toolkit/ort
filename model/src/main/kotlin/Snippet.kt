@@ -25,7 +25,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 data class Snippet(
     /**
-     * The matching score between the code being scanned and the code snippet. This is scanner specific (e.g. for
+     * The matching score between the code being scanned and the code snippet. This is scanner-specific (e.g. for
      * ScanOSS this is a percentage).
      */
     val score: Float,
@@ -52,7 +52,7 @@ data class Snippet(
     val licenses: SpdxExpression,
 
     /**
-     * A map for scanner specific snippet data that cannot be mapped into any generalized property, but still needs to
+     * A map for scanner-specific snippet data that cannot be mapped into any generalized property, but still needs to
      * be made available in the scan summary.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
