@@ -23,14 +23,14 @@ plugins {
 }
 
 dependencies {
-    api(project(":model"))
-    api(project(":scanner"))
+    api(projects.model)
+    api(projects.scanner)
 
-    implementation(project(":clients:fossid-webapp-client"))
-    implementation(project(":downloader"))
-    implementation(project(":utils:common-utils"))
-    implementation(project(":utils:ort-utils"))
-    implementation(project(":utils:spdx-utils"))
+    implementation(projects.clients.fossidWebappClient)
+    implementation(projects.downloader)
+    implementation(projects.utils.commonUtils)
+    implementation(projects.utils.ortUtils)
+    implementation(projects.utils.spdxUtils)
 
     implementation(libs.kotlinxCoroutines)
 

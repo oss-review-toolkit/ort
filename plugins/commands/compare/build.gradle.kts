@@ -23,10 +23,10 @@ plugins {
 }
 
 dependencies {
-    api(project(":plugins:commands:command-api"))
+    api(projects.plugins.commands.commandApi)
 
-    implementation(project(":model"))
-    implementation(project(":utils:common-utils"))
+    implementation(projects.model)
+    implementation(projects.utils.commonUtils)
 
     implementation(libs.clikt)
     implementation(libs.diffUtils)

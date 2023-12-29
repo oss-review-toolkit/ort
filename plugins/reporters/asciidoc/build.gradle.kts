@@ -23,16 +23,16 @@ plugins {
 }
 
 dependencies {
-    api(project(":reporter"))
+    api(projects.reporter)
 
-    implementation(project(":model"))
-    implementation(project(":plugins:reporters:freemarker-reporter"))
-    implementation(project(":utils:common-utils"))
-    implementation(project(":utils:ort-utils"))
+    implementation(projects.model)
+    implementation(projects.plugins.reporters.freemarkerReporter)
+    implementation(projects.utils.commonUtils)
+    implementation(projects.utils.ortUtils)
 
     implementation(libs.asciidoctorj)
 
     runtimeOnly(libs.asciidoctorjPdf)
 
-    funTestImplementation(testFixtures(project(":reporter")))
+    funTestImplementation(testFixtures(projects.reporter))
 }

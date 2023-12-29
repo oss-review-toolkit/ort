@@ -23,10 +23,10 @@ plugins {
 }
 
 dependencies {
-    api(project(":advisor"))
-    api(project(":model"))
+    api(projects.advisor)
+    api(projects.model)
 
-    implementation(project(":clients:nexus-iq-client"))
-    implementation(project(":utils:common-utils"))
-    implementation(project(":utils:ort-utils"))
+    implementation(projects.clients.nexusIqClient)
+    implementation(projects.utils.commonUtils)
+    implementation(projects.utils.ortUtils)
 }

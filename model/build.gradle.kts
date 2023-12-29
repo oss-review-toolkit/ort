@@ -23,9 +23,9 @@ plugins {
 }
 
 dependencies {
-    api(project(":clients:clearly-defined-client"))
-    api(project(":utils:ort-utils"))
-    api(project(":utils:spdx-utils"))
+    api(projects.clients.clearlyDefinedClient)
+    api(projects.utils.ortUtils)
+    api(projects.utils.spdxUtils)
 
     api(libs.jacksonDatabind)
     api(libs.jacksonDataformatXml)

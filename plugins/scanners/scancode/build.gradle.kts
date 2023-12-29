@@ -28,20 +28,20 @@ plugins {
 }
 
 dependencies {
-    api(project(":model"))
-    api(project(":scanner"))
+    api(projects.model)
+    api(projects.scanner)
 
     api(libs.semver4j) {
         because("This is a CommandLineTool.")
     }
 
-    implementation(project(":utils:common-utils"))
-    implementation(project(":utils:ort-utils"))
-    implementation(project(":utils:spdx-utils"))
+    implementation(projects.utils.commonUtils)
+    implementation(projects.utils.ortUtils)
+    implementation(projects.utils.spdxUtils)
 
     implementation(libs.bundles.kotlinxSerialization)
 
-    funTestApi(testFixtures(project(":scanner")))
+    funTestApi(testFixtures(projects.scanner))
 
     testImplementation(libs.mockk)
 }

@@ -74,7 +74,7 @@ dependencies {
 
     api(libs.jacksonDatabind)
 
-    implementation(project(":utils:common-utils"))
+    implementation(projects.utils.commonUtils)
 
     implementation(libs.jacksonDataformatYaml)
     implementation(libs.jacksonDatatypeJsr310)

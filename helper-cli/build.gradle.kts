@@ -31,15 +31,15 @@ application {
 }
 
 dependencies {
-    implementation(project(":analyzer"))
-    implementation(project(":downloader"))
+    implementation(projects.analyzer)
+    implementation(projects.downloader)
 
     // There are commands with a hard-coded compile-time dependency on these plugins.
-    implementation(project(":plugins:package-configuration-providers:dir-package-configuration-provider"))
-    implementation(project(":plugins:package-curation-providers:file-package-curation-provider"))
+    implementation(projects.plugins.packageConfigurationProviders.dirPackageConfigurationProvider)
+    implementation(projects.plugins.packageCurationProviders.filePackageCurationProvider)
 
-    implementation(project(":scanner"))
-    implementation(project(":utils:ort-utils"))
+    implementation(projects.scanner)
+    implementation(projects.utils.ortUtils)
 
     implementation(libs.clikt)
     implementation(libs.commonsCompress)
@@ -50,5 +50,5 @@ dependencies {
     implementation(libs.log4jApi)
     implementation(libs.slf4j)
 
-    "pluginClasspath"(platform(project(":plugins:version-control-systems")))
+    "pluginClasspath"(platform(projects.plugins.versionControlSystems))
 }

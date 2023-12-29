@@ -23,8 +23,8 @@ plugins {
 }
 
 dependencies {
-    api(project(":clients:clearly-defined-client"))
-    api(project(":plugins:package-curation-providers:package-curation-provider-api"))
+    api(projects.clients.clearlyDefinedClient)
+    api(projects.plugins.packageCurationProviders.packageCurationProviderApi)
 
     testImplementation(libs.wiremock)
 }
