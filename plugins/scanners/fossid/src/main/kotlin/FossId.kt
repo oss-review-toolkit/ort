@@ -253,35 +253,23 @@ class FossId internal constructor(
             val provenance = pkg.vcsProcessed.revision.takeUnless { it.isBlank() }
                 ?.let { RepositoryProvenance(pkg.vcsProcessed, it) } ?: UnknownProvenance
 
-            if (pkg.vcsProcessed.type != VcsType.GIT) {
-                val issue = createAndLogIssue(
-                    source = name,
-                    message = "Package '${pkg.id.toCoordinates()}' uses VCS type '${pkg.vcsProcessed.type}', but " +
-                        "only ${VcsType.GIT} is supported.",
-                    severity = Severity.WARNING
-                )
+            val issueMessage = when {
+                pkg.vcsProcessed.type != VcsType.GIT ->
+                    "Package '${pkg.id.toCoordinates()}' uses VCS type '${pkg.vcsProcessed.type}', but only " +
+                        "${VcsType.GIT} is supported."
 
-                return createSingleIssueResult(issue, provenance)
+                pkg.vcsProcessed.revision.isEmpty() ->
+                    "Package '${pkg.id.toCoordinates()}' has an empty VCS revision and cannot be scanned."
+
+                pkg.vcsProcessed.path.isNotEmpty() ->
+                    "Ignoring package '${pkg.id.toCoordinates()}' from '${pkg.vcsProcessed.url}' as it has path " +
+                        "'${pkg.vcsProcessed.path}' set and scanning cannot be limited to paths."
+
+                else -> null
             }
 
-            if (pkg.vcsProcessed.revision.isEmpty()) {
-                val issue = createAndLogIssue(
-                    source = name,
-                    message = "Package '${pkg.id.toCoordinates()}' has an empty VCS revision and cannot be scanned.",
-                    severity = Severity.WARNING
-                )
-
-                return createSingleIssueResult(issue, provenance)
-            }
-
-            if (pkg.vcsProcessed.path.isNotEmpty()) {
-                val issue = createAndLogIssue(
-                    source = name,
-                    message = "Ignoring package '${pkg.id.toCoordinates()}' from '${pkg.vcsProcessed.url}' as it has " +
-                        "path '${pkg.vcsProcessed.path}' set and scanning cannot be limited to paths.",
-                    severity = Severity.WARNING
-                )
-
+            if (issueMessage != null) {
+                val issue = createAndLogIssue(name, issueMessage, Severity.WARNING)
                 return createSingleIssueResult(issue, provenance)
             }
 
