@@ -248,6 +248,11 @@ class FossId internal constructor(
                 return ScanResult(provenance, details, summary)
             }
 
+            // FossId actually never uses the provenance determined by the scanner, but determines the source code to
+            // download itself based on the passed VCS information.
+            val provenance = pkg.vcsProcessed.revision.takeUnless { it.isBlank() }
+                ?.let { RepositoryProvenance(pkg.vcsProcessed, it) } ?: UnknownProvenance
+
             if (pkg.vcsProcessed.type != VcsType.GIT) {
                 val issue = createAndLogIssue(
                     source = name,
@@ -256,7 +261,7 @@ class FossId internal constructor(
                     severity = Severity.WARNING
                 )
 
-                return createSingleIssueResult(issue, UnknownProvenance)
+                return createSingleIssueResult(issue, provenance)
             }
 
             if (pkg.vcsProcessed.revision.isEmpty()) {
@@ -266,7 +271,7 @@ class FossId internal constructor(
                     severity = Severity.WARNING
                 )
 
-                return createSingleIssueResult(issue, UnknownProvenance)
+                return createSingleIssueResult(issue, provenance)
             }
 
             if (pkg.vcsProcessed.path.isNotEmpty()) {
@@ -276,7 +281,6 @@ class FossId internal constructor(
                         "path '${pkg.vcsProcessed.path}' set and scanning cannot be limited to paths.",
                     severity = Severity.WARNING
                 )
-                val provenance = RepositoryProvenance(pkg.vcsProcessed, pkg.vcsProcessed.revision)
 
                 return createSingleIssueResult(issue, provenance)
             }
@@ -285,7 +289,6 @@ class FossId internal constructor(
             val url = pkg.vcsProcessed.url
             val revision = pkg.vcsProcessed.revision
             val projectName = convertGitUrlToProjectName(url)
-            val provenance = RepositoryProvenance(pkg.vcsProcessed, revision)
 
             runBlocking {
                 try {
