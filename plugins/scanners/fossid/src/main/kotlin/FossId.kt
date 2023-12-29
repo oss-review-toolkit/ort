@@ -242,12 +242,6 @@ class FossId internal constructor(
 
     override fun scanPackage(pkg: Package, nestedProvenance: NestedProvenance?, context: ScanContext): ScanResult {
         val (result, duration) = measureTimedValue {
-            fun createSingleIssueResult(issue: Issue, provenance: Provenance): ScanResult {
-                val time = Instant.now()
-                val summary = createSingleIssueSummary(time, time, issue)
-                return ScanResult(provenance, details, summary)
-            }
-
             // FossId actually never uses the provenance determined by the scanner, but determines the source code to
             // download itself based on the passed VCS information.
             val provenance = pkg.vcsProcessed.revision.takeUnless { it.isBlank() }
@@ -270,7 +264,9 @@ class FossId internal constructor(
 
             if (issueMessage != null) {
                 val issue = createAndLogIssue(name, issueMessage, Severity.WARNING)
-                return createSingleIssueResult(issue, provenance)
+                val time = Instant.now()
+                val summary = createSingleIssueSummary(time, time, issue)
+                return ScanResult(provenance, details, summary)
             }
 
             val startTime = Instant.now()
