@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 
 /**
- * The base interface for all types of scanners.
+ * The base interface for all types of wrappers for scanners.
  */
 sealed interface ScannerWrapper {
     /**
