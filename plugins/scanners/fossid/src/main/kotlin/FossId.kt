@@ -231,17 +231,15 @@ class FossId internal constructor(
         }
 
     /**
-     * Create a [ScanSummary] containing a single [issue], started at [startTime] and finished at [endTime].
+     * Create a [ScanSummary] containing a single [issue] started at [startTime] and ended now.
      */
-    private fun createSingleIssueSummary(startTime: Instant, endTime: Instant = Instant.now(), issue: Issue) =
-        ScanSummary.EMPTY.copy(
-            startTime = startTime,
-            endTime = endTime,
-            issues = listOf(issue)
-        )
+    private fun createSingleIssueSummary(startTime: Instant, issue: Issue) =
+        ScanSummary.EMPTY.copy(startTime = startTime, endTime = Instant.now(), issues = listOf(issue))
 
     override fun scanPackage(pkg: Package, nestedProvenance: NestedProvenance?, context: ScanContext): ScanResult {
         val (result, duration) = measureTimedValue {
+            val startTime = Instant.now()
+
             // FossId actually never uses the provenance determined by the scanner, but determines the source code to
             // download itself based on the passed VCS information.
             val provenance = pkg.vcsProcessed.revision.takeUnless { it.isBlank() }
@@ -264,12 +262,10 @@ class FossId internal constructor(
 
             if (issueMessage != null) {
                 val issue = createAndLogIssue(name, issueMessage, Severity.WARNING)
-                val time = Instant.now()
-                val summary = createSingleIssueSummary(time, time, issue)
+                val summary = createSingleIssueSummary(startTime, issue = issue)
                 return ScanResult(provenance, details, summary)
             }
 
-            val startTime = Instant.now()
             val url = pkg.vcsProcessed.url
             val revision = pkg.vcsProcessed.revision
             val projectName = convertGitUrlToProjectName(url)
