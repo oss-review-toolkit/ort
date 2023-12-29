@@ -36,10 +36,10 @@ dependencies {
 
     implementation(libs.bundles.exposed)
     implementation(libs.hikari)
-    implementation(libs.jacksonModuleKotlin)
-    implementation(libs.kotlinxCoroutines)
+    implementation(libs.jackson.module.kotlin)
+    implementation(libs.kotlinx.coroutines)
     implementation(libs.postgres)
-    implementation(libs.retrofitConverterJackson)
+    implementation(libs.retrofit.converter.jackson)
     implementation(libs.sw360Client)
 
     funTestApi(testFixtures(projects.scanner))
@@ -51,11 +51,11 @@ dependencies {
 
     testImplementation(libs.bundles.kotlinxSerialization)
     testImplementation(libs.mockk)
-    testImplementation(libs.retrofitConverterKotlinxSerialization)
+    testImplementation(libs.retrofit.converter.kotlinxSerialization)
     testImplementation(libs.wiremock)
 
-    testFixturesImplementation(libs.kotestAssertionsCore)
-    testFixturesImplementation(libs.kotestRunnerJunit5)
+    testFixturesImplementation(libs.kotest.assertions.core)
+    testFixturesImplementation(libs.kotest.runner.junit5)
 }
 
 tasks.named<KotlinCompile>("compileTestKotlin") {

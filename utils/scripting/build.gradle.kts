@@ -30,5 +30,5 @@ dependencies {
 
     implementation("org.jetbrains.kotlin:kotlin-scripting-jvm")
     implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
-    implementation(libs.kotlinxCoroutines)
+    implementation(libs.kotlinx.coroutines)
 }

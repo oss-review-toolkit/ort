@@ -30,6 +30,6 @@ dependencies {
 
     implementation(libs.clikt)
     implementation(libs.diffUtils)
-    implementation(libs.jacksonDataformatYaml)
-    implementation(libs.jacksonModuleKotlin)
+    implementation(libs.jackson.dataformat.yaml)
+    implementation(libs.jackson.module.kotlin)
 }

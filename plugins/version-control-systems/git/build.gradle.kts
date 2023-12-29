@@ -35,13 +35,13 @@ dependencies {
 
     implementation(projects.utils.ortUtils)
 
-    implementation(libs.jacksonCore)
-    implementation(libs.jacksonDatabind)
-    implementation(libs.jacksonDataformatXml)
+    implementation(libs.jackson.core)
+    implementation(libs.jackson.databind)
+    implementation(libs.jackson.dataformat.xml)
     implementation(libs.jgit)
-    implementation(libs.jgitSshApache)
+    implementation(libs.jgit.ssh.apache)
 
-    runtimeOnly(libs.jgitSshApacheAgent) {
+    runtimeOnly(libs.jgit.ssh.apache.agent) {
         exclude(group = "org.apache.sshd", module = "sshd-sftp")
             .because("it is not required for cloning via SSH and causes issues with GraalVM native images")
     }

@@ -31,8 +31,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-scripting-common")
     implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
     implementation(libs.jakartaMail)
-    implementation(libs.jiraRestClientApi)
-    implementation(libs.jiraRestClientApp) {
+    implementation(libs.jiraRestClient.api)
+    implementation(libs.jiraRestClient.app) {
         exclude("org.slf4j", "slf4j-log4j12")
             .because("the SLF4J implementation from Log4j 2 is used")
     }

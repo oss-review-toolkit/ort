@@ -26,8 +26,8 @@ dependencies {
     api(projects.analyzer)
     api(projects.model)
 
-    api(libs.mavenCore)
-    api(libs.mavenResolverApi)
+    api(libs.maven.core)
+    api(libs.maven.resolver.api)
 
     implementation(projects.downloader)
     implementation(projects.utils.commonUtils)
@@ -37,7 +37,7 @@ dependencies {
     runtimeOnly(libs.bundles.mavenResolver)
 
     // TODO: Remove this once https://issues.apache.org/jira/browse/MNG-6561 is resolved.
-    runtimeOnly(libs.mavenCompat)
+    runtimeOnly(libs.maven.compat)
 
     funTestImplementation(testFixtures(projects.analyzer))
 

@@ -32,9 +32,9 @@ dependencies {
     api(libs.retrofit)
 
     implementation(libs.bundles.kotlinxSerialization)
-    implementation(libs.kotlinxCoroutines)
-    implementation(libs.retrofitConverterKotlinxSerialization)
-    implementation(libs.retrofitConverterScalars)
+    implementation(libs.kotlinx.coroutines)
+    implementation(libs.retrofit.converter.kotlinxSerialization)
+    implementation(libs.retrofit.converter.scalars)
 }
 
 tasks.withType<KotlinCompile>().configureEach {

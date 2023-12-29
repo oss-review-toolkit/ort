@@ -61,8 +61,8 @@ testing {
             dependencies {
                 implementation(project(":utils:test-utils"))
 
-                implementation(libs.kotestAssertionsCore)
-                implementation(libs.kotestRunnerJunit5)
+                implementation(libs.kotest.assertions.core)
+                implementation(libs.kotest.runner.junit5)
             }
         }
 
@@ -99,7 +99,7 @@ dependencies {
 
     "detektPlugins"("io.gitlab.arturbosch.detekt:detekt-formatting:${libs.versions.detektPlugin.get()}")
 
-    implementation(libs.log4jApiKotlin)
+    implementation(libs.log4j.api.kotlin)
 }
 
 detekt {

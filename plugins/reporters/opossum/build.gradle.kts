@@ -31,6 +31,6 @@ dependencies {
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxUtils)
 
-    implementation(libs.jacksonAnnotations)
-    implementation(libs.jacksonDatabind)
+    implementation(libs.jackson.annotations)
+    implementation(libs.jackson.databind)
 }

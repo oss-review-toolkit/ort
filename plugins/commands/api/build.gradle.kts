@@ -30,6 +30,6 @@ dependencies {
 
     implementation(projects.utils.ortUtils)
 
-    implementation(libs.jacksonCore)
-    implementation(libs.jacksonDatabind)
+    implementation(libs.jackson.core)
+    implementation(libs.jackson.databind)
 }

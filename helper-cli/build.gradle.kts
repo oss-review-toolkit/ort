@@ -43,11 +43,11 @@ dependencies {
 
     implementation(libs.clikt)
     implementation(libs.commonsCompress)
-    implementation(libs.exposedCore)
+    implementation(libs.exposed.core)
     implementation(libs.hikari)
-    implementation(libs.jacksonModuleKotlin)
+    implementation(libs.jackson.module.kotlin)
     implementation(libs.jslt)
-    implementation(libs.log4jApi)
+    implementation(libs.log4j.api)
     implementation(libs.slf4j)
 
     "pluginClasspath"(platform(projects.plugins.versionControlSystems))

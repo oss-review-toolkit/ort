@@ -27,13 +27,13 @@ dependencies {
     api(projects.reporter)
     api(projects.utils.spdxUtils)
 
-    api(libs.jacksonAnnotations)
-    api(libs.jacksonDatabind)
+    api(libs.jackson.annotations)
+    api(libs.jackson.databind)
 
     implementation(projects.utils.ortUtils)
 
-    implementation(libs.jacksonCore)
-    implementation(libs.jacksonDataformatYaml)
+    implementation(libs.jackson.core)
+    implementation(libs.jackson.dataformat.yaml)
 
     funTestImplementation(testFixtures(projects.reporter))
 }
