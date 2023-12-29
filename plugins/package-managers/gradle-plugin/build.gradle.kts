@@ -35,8 +35,8 @@ gradlePlugin {
 dependencies {
     api(projects.plugins.packageManagers.gradleModel)
 
-    api(libs.mavenModel)
-    api(libs.mavenModelBuilder)
+    api(libs.maven.model)
+    api(libs.maven.model.builder)
 }
 
 tasks.register<Jar>("fatJar") {

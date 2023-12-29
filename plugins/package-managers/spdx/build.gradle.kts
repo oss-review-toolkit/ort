@@ -31,8 +31,8 @@ dependencies {
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxUtils)
 
-    implementation(libs.jacksonCore)
-    implementation(libs.jacksonDatabind)
+    implementation(libs.jackson.core)
+    implementation(libs.jackson.databind)
     implementation(libs.okhttp)
 
     funTestImplementation(projects.plugins.packageManagers.conanPackageManager)

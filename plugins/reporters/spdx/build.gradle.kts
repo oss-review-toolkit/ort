@@ -30,7 +30,7 @@ dependencies {
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxUtils)
 
-    implementation(libs.jacksonDatabind)
+    implementation(libs.jackson.databind)
 
     funTestImplementation(libs.jsonSchemaValidator)
 }

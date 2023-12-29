@@ -29,7 +29,7 @@ dependencies {
     implementation(projects.utils.commonUtils)
 
     implementation(libs.clikt)
-    implementation(libs.jacksonDatabind)
-    implementation(libs.jacksonDataformatYaml)
-    implementation(libs.jacksonModuleKotlin)
+    implementation(libs.jackson.databind)
+    implementation(libs.jackson.dataformat.yaml)
+    implementation(libs.jackson.module.kotlin)
 }

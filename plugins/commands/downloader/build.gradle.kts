@@ -32,5 +32,5 @@ dependencies {
     implementation(projects.utils.spdxUtils)
 
     implementation(libs.clikt)
-    implementation(libs.kotlinxCoroutines)
+    implementation(libs.kotlinx.coroutines)
 }

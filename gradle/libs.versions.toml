@@ -73,77 +73,79 @@ kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", versio
 versions = { id = "com.github.ben-manes.versions", version.ref = "versionsPlugin" }
 
 [libraries]
+# These are Maven coordinates for Gradle plugins, which is necessary to use them in precompiled plugin scripts.
+plugin-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detektPlugin" }
+plugin-dokkatoo = { module = "dev.adamko.dokkatoo:dokkatoo-plugin", version.ref = "dokkatooPlugin" }
+plugin-graalVmNativeImage = { module = "org.graalvm.buildtools:native-gradle-plugin", version.ref = "graalVmNativeImagePlugin" }
+plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlinPlugin" }
+plugin-mavenPublish = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "mavenPublishPlugin" }
+
 antlr = { module = "org.antlr:antlr4", version.ref = "antlr" }
 asciidoctorj = { module = "org.asciidoctor:asciidoctorj", version.ref = "asciidoctorj" }
-asciidoctorjPdf = { module = "org.asciidoctor:asciidoctorj-pdf", version.ref = "asciidoctorjPdf" }
+asciidoctorj-pdf = { module = "org.asciidoctor:asciidoctorj-pdf", version.ref = "asciidoctorjPdf" }
 awsS3 = { module = "software.amazon.awssdk:s3", version.ref = "s3" }
 clikt = { module = "com.github.ajalt.clikt:clikt", version.ref = "clikt" }
 commonsCompress = { module = "org.apache.commons:commons-compress", version.ref = "commonsCompress" }
 cvssCalculator = { module = "us.springett:cvss-calculator", version.ref = "cvssCalculator" }
 cyclonedx = { module = "org.cyclonedx:cyclonedx-core-java", version.ref = "cyclonedx" }
-detektPlugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detektPlugin" }
-detektApi = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detektPlugin" }
-detektTest = { module = "io.gitlab.arturbosch.detekt:detekt-test", version.ref = "detektPlugin" }
+detekt-api = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detektPlugin" }
+detekt-test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version.ref = "detektPlugin" }
 diffUtils = { module = "io.github.java-diff-utils:java-diff-utils", version.ref = "diffUtils" }
 diskLruCache = { module = "com.jakewharton:disklrucache", version.ref = "diskLruCache" }
-dokkatooPlugin = { module = "dev.adamko.dokkatoo:dokkatoo-plugin", version.ref = "dokkatooPlugin" }
-exposedCore = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
-exposedDao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed" }
-exposedJavaTime = { module = "org.jetbrains.exposed:exposed-java-time", version.ref = "exposed" }
-exposedJdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
-exposedJson = { module = "org.jetbrains.exposed:exposed-json", version.ref = "exposed" }
+exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
+exposed-dao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed" }
+exposed-javaTime = { module = "org.jetbrains.exposed:exposed-java-time", version.ref = "exposed" }
+exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
+exposed-json = { module = "org.jetbrains.exposed:exposed-json", version.ref = "exposed" }
 flexmark = { module = "com.vladsch.flexmark:flexmark", version.ref = "flexmark" }
 freemarker = { module = "org.freemarker:freemarker", version.ref = "freemarker" }
-graalVmNativeImagePlugin = { module = "org.graalvm.buildtools:native-gradle-plugin", version.ref = "graalVmNativeImagePlugin" }
 graphQlKtorClient = { module = "com.expediagroup:graphql-kotlin-ktor-client", version.ref = "graphQlPlugin" }
 greenmail = { module = "com.icegreen:greenmail", version.ref = "greenmail" }
 hikari = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }
-hopliteCore = { module = "com.sksamuel.hoplite:hoplite-core", version.ref = "hoplite" }
-hopliteYaml = { module = "com.sksamuel.hoplite:hoplite-yaml", version.ref = "hoplite" }
-jacksonAnnotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref = "jackson" }
-jacksonCore = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jackson" }
-jacksonDatabind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
-jacksonDataformatXml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-xml", version.ref = "jackson" }
-jacksonDataformatYaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml", version.ref = "jackson" }
-jacksonDatatypeJsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson" }
-jacksonModuleKotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
+hoplite-core = { module = "com.sksamuel.hoplite:hoplite-core", version.ref = "hoplite" }
+hoplite-yaml = { module = "com.sksamuel.hoplite:hoplite-yaml", version.ref = "hoplite" }
+jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref = "jackson" }
+jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jackson" }
+jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
+jackson-dataformat-xml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-xml", version.ref = "jackson" }
+jackson-dataformat-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml", version.ref = "jackson" }
+jackson-datatype-jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson" }
+jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
 jakartaMail = { module = "com.sun.mail:jakarta.mail", version.ref = "jakartaMail" }
 jgit = { module = "org.eclipse.jgit:org.eclipse.jgit", version.ref = "jgit" }
-jgitSshApache = { module = "org.eclipse.jgit:org.eclipse.jgit.ssh.apache", version.ref = "jgit" }
-jgitSshApacheAgent = { module = "org.eclipse.jgit:org.eclipse.jgit.ssh.apache.agent", version.ref = "jgit" }
-jiraRestClientApi = { module = "com.atlassian.jira:jira-rest-java-client-api", version.ref = "jiraRestClient" }
-jiraRestClientApp = { module = "com.atlassian.jira:jira-rest-java-client-app", version.ref = "jiraRestClient" }
+jgit-ssh-apache = { module = "org.eclipse.jgit:org.eclipse.jgit.ssh.apache", version.ref = "jgit" }
+jgit-ssh-apache-agent = { module = "org.eclipse.jgit:org.eclipse.jgit.ssh.apache.agent", version.ref = "jgit" }
+jiraRestClient-api = { module = "com.atlassian.jira:jira-rest-java-client-api", version.ref = "jiraRestClient" }
+jiraRestClient-app = { module = "com.atlassian.jira:jira-rest-java-client-app", version.ref = "jiraRestClient" }
 jruby = { module = "org.jruby:jruby", version.ref = "jruby" }
 jslt = { module = "com.schibsted.spt.data:jslt", version.ref = "jslt" }
 jsonSchemaValidator = { module = "com.networknt:json-schema-validator", version.ref = "jsonSchemaValidator" }
-kotestAssertionsCore = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
-kotestAssertionsJson = { module = "io.kotest:kotest-assertions-json", version.ref = "kotest" }
-kotestExtensionsJunitXml = { module = "io.kotest:kotest-extensions-junitxml", version.ref = "kotest" }
-kotestFrameworkApi = { module = "io.kotest:kotest-framework-api", version.ref = "kotest" }
-kotestFrameworkEngine = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
-kotestRunnerJunit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
-kotlinPlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlinPlugin" }
-kotlinxCoroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
-kotlinxHtml = { module = "org.jetbrains.kotlinx:kotlinx-html-jvm", version.ref = "kotlinxHtml" }
-kotlinxSerializationCore = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerialization" }
-kotlinxSerializationJson = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
+kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+kotest-assertions-json = { module = "io.kotest:kotest-assertions-json", version.ref = "kotest" }
+kotest-extensions-junitXml = { module = "io.kotest:kotest-extensions-junitxml", version.ref = "kotest" }
+kotest-framework-api = { module = "io.kotest:kotest-framework-api", version.ref = "kotest" }
+kotest-framework-engine = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
+kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
+kotlinx-html = { module = "org.jetbrains.kotlinx:kotlinx-html-jvm", version.ref = "kotlinxHtml" }
+kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerialization" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 tomlkt = { module = "net.peanuuutz.tomlkt:tomlkt", version.ref = "tomlkt" }
-ktorClientCore = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
-ktorClientOkHttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
-log4jApi = { module = "org.apache.logging.log4j:log4j-api", version.ref = "log4jApi" }
-log4jApiKotlin = { module = "org.apache.logging.log4j:log4j-api-kotlin", version.ref = "log4jApiKotlin" }
-log4jApiToSlf4j = { module = "org.apache.logging.log4j:log4j-to-slf4j", version.ref = "log4jApi" }
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-okHttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+log4j-api = { module = "org.apache.logging.log4j:log4j-api", version.ref = "log4jApi" }
+log4j-api-kotlin = { module = "org.apache.logging.log4j:log4j-api-kotlin", version.ref = "log4jApiKotlin" }
+log4j-api-slf4j = { module = "org.apache.logging.log4j:log4j-to-slf4j", version.ref = "log4jApi" }
 logbackClassic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
-mavenCompat = { module = "org.apache.maven:maven-compat", version.ref = "maven" }
-mavenCore = { module = "org.apache.maven:maven-core", version.ref = "maven" }
-mavenModel = { module = "org.apache.maven:maven-model", version.ref = "maven" }
-mavenModelBuilder = { module = "org.apache.maven:maven-model-builder", version.ref = "maven" }
-mavenPublishPlugin = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "mavenPublishPlugin" }
-mavenResolverApi = { module = "org.apache.maven.resolver:maven-resolver-api", version.ref = "mavenResolver" }
-mavenResolverConnectorBasic = { module = "org.apache.maven.resolver:maven-resolver-connector-basic", version.ref = "mavenResolver" }
-mavenResolverTransportFile = { module = "org.apache.maven.resolver:maven-resolver-transport-file", version.ref = "mavenResolver" }
-mavenResolverTransportHttp = { module = "org.apache.maven.resolver:maven-resolver-transport-http", version.ref = "mavenResolver" }
-mavenResolverTransportWagon = { module = "org.apache.maven.resolver:maven-resolver-transport-wagon", version.ref = "mavenResolver" }
+maven-compat = { module = "org.apache.maven:maven-compat", version.ref = "maven" }
+maven-core = { module = "org.apache.maven:maven-core", version.ref = "maven" }
+maven-model = { module = "org.apache.maven:maven-model", version.ref = "maven" }
+maven-model-builder = { module = "org.apache.maven:maven-model-builder", version.ref = "maven" }
+maven-resolver-api = { module = "org.apache.maven.resolver:maven-resolver-api", version.ref = "mavenResolver" }
+maven-resolver-connector-basic = { module = "org.apache.maven.resolver:maven-resolver-connector-basic", version.ref = "mavenResolver" }
+maven-resolver-transport-file = { module = "org.apache.maven.resolver:maven-resolver-transport-file", version.ref = "mavenResolver" }
+maven-resolver-transport-http = { module = "org.apache.maven.resolver:maven-resolver-transport-http", version.ref = "mavenResolver" }
+maven-resolver-transport-wagon = { module = "org.apache.maven.resolver:maven-resolver-transport-wagon", version.ref = "mavenResolver" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 mordant = { module = "com.github.ajalt.mordant:mordant", version.ref = "mordant" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
@@ -151,9 +153,9 @@ postgres = { module = "org.postgresql:postgresql", version.ref = "postgres" }
 postgresEmbedded = { module = "com.opentable.components:otj-pg-embedded", version.ref = "postgresEmbedded" }
 reflections = { module = "org.reflections:reflections", version.ref = "reflections" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
-retrofitConverterJackson = { module = "com.squareup.retrofit2:converter-jackson", version.ref = "retrofit" }
-retrofitConverterKotlinxSerialization = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofitConverterKotlinxSerialization" }
-retrofitConverterScalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "retrofit" }
+retrofit-converter-jackson = { module = "com.squareup.retrofit2:converter-jackson", version.ref = "retrofit" }
+retrofit-converter-kotlinxSerialization = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofitConverterKotlinxSerialization" }
+retrofit-converter-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "retrofit" }
 saxonHe = { module = "net.sf.saxon:Saxon-HE", version.ref = "saxonHe" }
 scanoss = { module = "com.scanoss:scanner", version.ref = "scanoss" }
 semver4j = { module = "org.semver4j:semver4j", version.ref = "semver4j" }
@@ -165,7 +167,7 @@ wiremock = { module = "org.wiremock:wiremock", version.ref = "wiremock" }
 xz = { module = "org.tukaani:xz", version.ref = "xz" }
 
 [bundles]
-exposed = ["exposedCore", "exposedDao", "exposedJdbc", "exposedJavaTime", "exposedJson"]
-hoplite = ["hopliteCore", "hopliteYaml"]
-kotlinxSerialization = ["kotlinxSerializationCore", "kotlinxSerializationJson"]
-mavenResolver = ["mavenResolverConnectorBasic", "mavenResolverTransportFile", "mavenResolverTransportHttp", "mavenResolverTransportWagon"]
+exposed = ["exposed-core", "exposed-dao", "exposed-jdbc", "exposed-javaTime", "exposed-json"]
+hoplite = ["hoplite-core", "hoplite-yaml"]
+kotlinxSerialization = ["kotlinx-serialization-core", "kotlinx-serialization-json"]
+mavenResolver = ["maven-resolver-connector-basic", "maven-resolver-transport-file", "maven-resolver-transport-http", "maven-resolver-transport-wagon"]

@@ -30,5 +30,5 @@ dependencies {
     implementation(projects.utils.commonUtils)
 
     implementation(libs.clikt)
-    implementation(libs.jacksonModuleKotlin)
+    implementation(libs.jackson.module.kotlin)
 }

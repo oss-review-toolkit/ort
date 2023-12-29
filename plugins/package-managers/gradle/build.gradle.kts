@@ -33,8 +33,8 @@ dependencies {
     implementation(projects.utils.ortUtils)
 
     implementation("org.gradle:gradle-tooling-api:${gradle.gradleVersion}")
-    implementation(libs.mavenCore)
-    implementation(libs.mavenResolverApi)
+    implementation(libs.maven.core)
+    implementation(libs.maven.resolver.api)
 
     funTestImplementation(testFixtures(projects.analyzer))
 

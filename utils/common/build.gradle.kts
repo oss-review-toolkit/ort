@@ -24,11 +24,11 @@ plugins {
 
 dependencies {
     api(libs.commonsCompress)
-    api(libs.jacksonDatabind)
+    api(libs.jackson.databind)
     api(libs.semver4j)
 
     implementation(libs.diskLruCache)
-    implementation(libs.log4jApi)
+    implementation(libs.log4j.api)
     implementation(libs.springCore)
 
     runtimeOnly(libs.xz)

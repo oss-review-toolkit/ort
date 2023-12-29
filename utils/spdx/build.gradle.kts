@@ -72,15 +72,15 @@ sourceSets.configureEach {
 dependencies {
     antlr(libs.antlr)
 
-    api(libs.jacksonDatabind)
+    api(libs.jackson.databind)
 
     implementation(projects.utils.commonUtils)
 
-    implementation(libs.jacksonDataformatYaml)
-    implementation(libs.jacksonDatatypeJsr310)
-    implementation(libs.jacksonModuleKotlin)
+    implementation(libs.jackson.dataformat.yaml)
+    implementation(libs.jackson.datatype.jsr310)
+    implementation(libs.jackson.module.kotlin)
 
-    testImplementation(libs.kotestAssertionsJson)
+    testImplementation(libs.kotest.assertions.json)
 }
 
 if (Authenticator.getDefault() == null) {

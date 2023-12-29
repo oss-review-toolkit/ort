@@ -26,10 +26,10 @@ plugins {
 }
 
 dependencies {
-    compileOnly(libs.detektApi)
+    compileOnly(libs.detekt.api)
 
-    testImplementation(libs.detektApi)
-    testImplementation(libs.detektTest)
+    testImplementation(libs.detekt.api)
+    testImplementation(libs.detekt.test)
 }
 
 configurations.all {

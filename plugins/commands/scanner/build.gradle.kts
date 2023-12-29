@@ -31,5 +31,5 @@ dependencies {
     implementation(projects.utils.ortUtils)
 
     implementation(libs.clikt)
-    implementation(libs.kotlinxCoroutines)
+    implementation(libs.kotlinx.coroutines)
 }

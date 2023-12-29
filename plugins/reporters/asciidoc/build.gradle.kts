@@ -32,7 +32,7 @@ dependencies {
 
     implementation(libs.asciidoctorj)
 
-    runtimeOnly(libs.asciidoctorjPdf)
+    runtimeOnly(libs.asciidoctorj.pdf)
 
     funTestImplementation(testFixtures(projects.reporter))
 }

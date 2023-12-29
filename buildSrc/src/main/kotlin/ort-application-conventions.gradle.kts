@@ -130,7 +130,7 @@ graalvmNative {
 dependencies {
     implementation(libs.logbackClassic)
 
-    runtimeOnly(libs.log4jApiToSlf4j)
+    runtimeOnly(libs.log4j.api.slf4j)
 }
 
 tasks.named<BuildNativeImageTask>("nativeCompile") {

@@ -31,9 +31,9 @@ dependencies {
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxUtils)
 
-    implementation(libs.jacksonCore)
-    implementation(libs.jacksonDatabind)
-    implementation(libs.jacksonDataformatYaml)
+    implementation(libs.jackson.core)
+    implementation(libs.jackson.databind)
+    implementation(libs.jackson.dataformat.yaml)
     implementation(libs.jruby)
 
     funTestImplementation(testFixtures(projects.analyzer))

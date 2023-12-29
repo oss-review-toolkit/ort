@@ -30,7 +30,7 @@ dependencies {
 
     implementation(libs.awsS3)
     implementation(libs.commonsCompress)
-    implementation(libs.kotlinxCoroutines)
+    implementation(libs.kotlinx.coroutines)
 
     testImplementation(libs.mockk)
 }

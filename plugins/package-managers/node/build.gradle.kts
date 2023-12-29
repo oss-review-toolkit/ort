@@ -33,17 +33,17 @@ dependencies {
         because("This is a CommandLineTool.")
     }
 
-    api(libs.jacksonDatabind)
+    api(libs.jackson.databind)
 
     implementation(projects.downloader)
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxUtils)
 
-    implementation(libs.jacksonAnnotations)
-    implementation(libs.jacksonCore)
-    implementation(libs.jacksonDataformatYaml)
-    implementation(libs.jacksonModuleKotlin)
-    implementation(libs.kotlinxCoroutines)
+    implementation(libs.jackson.annotations)
+    implementation(libs.jackson.core)
+    implementation(libs.jackson.dataformat.yaml)
+    implementation(libs.jackson.module.kotlin)
+    implementation(libs.kotlinx.coroutines)
 
     funTestImplementation(testFixtures(projects.analyzer))
 

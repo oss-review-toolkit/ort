@@ -32,10 +32,10 @@ dependencies {
     api(libs.retrofit)
 
     implementation(libs.bundles.kotlinxSerialization)
-    implementation(libs.retrofitConverterKotlinxSerialization)
-    implementation(libs.retrofitConverterScalars)
+    implementation(libs.retrofit.converter.kotlinxSerialization)
+    implementation(libs.retrofit.converter.scalars)
 
-    testImplementation(libs.kotestAssertionsJson)
+    testImplementation(libs.kotest.assertions.json)
 }
 
 tasks.withType<KotlinCompile>().configureEach {
