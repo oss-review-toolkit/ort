@@ -42,6 +42,9 @@ import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.common.withoutSuffix
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 
+import org.semver4j.RangesListFactory
+import org.semver4j.Semver
+
 /**
  * [Poetry](https://python-poetry.org/) package manager for Python.
  */
@@ -120,8 +123,18 @@ class Poetry(
         val requirements = ProcessCapture(workingDir, *command.toTypedArray()).requireSuccess().stdout
         requirementsFile.writeText(requirements)
 
-        return Pip(managerName, analysisRoot, analyzerConfig, repoConfig).runPythonInspector(requirementsFile).also {
+        return Pip(managerName, analysisRoot, analyzerConfig, repoConfig).runPythonInspector(requirementsFile) {
+            detectPythonVersion(workingDir)
+        }.also {
             requirementsFile.parentFile.safeDeleteRecursively(force = true)
+        }
+    }
+
+    private fun detectPythonVersion(workingDir: File): String? {
+        val pyprojectFile = workingDir.resolve(PYPROJECT_FILENAME)
+        val constraint = getPythonVersionConstraint(pyprojectFile) ?: return null
+        return getPythonVersion(constraint)?.also {
+            logger.info { "Detected Python version '$it' from '$constraint'." }
         }
     }
 }
@@ -142,4 +155,36 @@ internal fun parseScopeNamesFromPyproject(pyprojectFile: File): Set<String> {
     }
 
     return scopes
+}
+
+internal fun getPythonVersion(constraint: String): String? {
+    val rangeLists = constraint.split(',')
+        .map { RangesListFactory.create(it) }
+        .takeIf { it.isNotEmpty() } ?: return null
+
+    return PYTHON_VERSIONS.lastOrNull { version ->
+        rangeLists.all { rangeList ->
+            val semver = Semver.coerce(version)
+            semver != null && rangeList.isSatisfiedBy(semver)
+        }
+    }
+}
+
+internal fun getPythonVersionConstraint(pyprojectTomlFile: File): String? {
+    val dependenciesSection = getTomlSectionContent(pyprojectTomlFile, "tool.poetry.dependencies")
+        ?: return null
+
+    return dependenciesSection.split("\n").firstNotNullOfOrNull {
+        it.trim().withoutPrefix("python = ")
+    }?.removeSurrounding("\"")
+}
+
+private fun getTomlSectionContent(tomlFile: File, sectionName: String): String? {
+    val lines = tomlFile.takeIf { it.isFile }?.readLines() ?: return null
+
+    val sectionHeaderIndex = lines.indexOfFirst { it.trim() == "[$sectionName]" }
+    if (sectionHeaderIndex == -1) return null
+
+    val sectionLines = lines.subList(sectionHeaderIndex + 1, lines.size).takeWhile { !it.trim().startsWith('[') }
+    return sectionLines.joinToString("\n")
 }

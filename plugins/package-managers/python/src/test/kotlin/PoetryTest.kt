@@ -61,4 +61,49 @@ class PoetryTest : WordSpec({
             parseScopeNamesFromPyproject(pyprojectFile) shouldBe setOf("main")
         }
     }
+
+    "getPythonVersion()" should {
+        "return the expected python version" {
+            getPythonVersion("~3.10") shouldBe "3.10"
+            getPythonVersion("^3.10,<3.11") shouldBe "3.10"
+            getPythonVersion("^3.10") shouldBe "3.11"
+            getPythonVersion("^3.11,<4.0") shouldBe "3.11"
+            getPythonVersion("^3.10,<4.0") shouldBe "3.11"
+        }
+
+        "return null if constraint cannot be satisfied" {
+            getPythonVersion("^3.10,<3.10") shouldBe null
+        }
+    }
+
+    "getPythonVersionConstraint()" should {
+        "return the Python version constraint from the pyproject.toml" {
+            val pyprojectFile = tempdir().resolve(PYPROJECT_FILENAME)
+
+            pyprojectFile.writeText(
+                """
+                    [tool.poetry.dependencies]
+                    aiohttp = "3.9.0"
+                    python = "~3.10"
+                    fastapi = "0.97.0"
+                """.trimIndent()
+            )
+
+            getPythonVersionConstraint(pyprojectFile) shouldBe "~3.10"
+        }
+
+        "return null if there is no such constraint in pyproject.toml" {
+            val pyprojectFile = tempdir().resolve(PYPROJECT_FILENAME)
+
+            pyprojectFile.writeText(
+                """
+                    [tool.poetry.dependencies]
+                    aiohttp = "3.9.0"
+                    fastapi = "0.97.0"
+                """.trimIndent()
+            )
+
+            getPythonVersionConstraint(pyprojectFile) shouldBe null
+        }
+    }
 })

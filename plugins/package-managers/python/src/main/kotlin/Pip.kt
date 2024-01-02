@@ -40,7 +40,7 @@ private const val OPTION_OPERATING_SYSTEM_DEFAULT = "linux"
 private val OPERATING_SYSTEMS = listOf(OPTION_OPERATING_SYSTEM_DEFAULT, "macos", "windows")
 
 private const val OPTION_PYTHON_VERSION_DEFAULT = "3.11"
-private val PYTHON_VERSIONS = listOf("2.7", "3.6", "3.7", "3.8", "3.9", "3.10", OPTION_PYTHON_VERSION_DEFAULT)
+internal val PYTHON_VERSIONS = listOf("2.7", "3.6", "3.7", "3.8", "3.9", "3.10", OPTION_PYTHON_VERSION_DEFAULT)
 
 /**
  * The [PIP](https://pip.pypa.io/) package manager for Python. Also see
@@ -96,9 +96,12 @@ class Pip(
         return listOf(ProjectAnalyzerResult(project, packages))
     }
 
-    internal fun runPythonInspector(definitionFile: File): PythonInspector.Result {
+    internal fun runPythonInspector(
+        definitionFile: File,
+        detectPythonVersion: () -> String? = { null }
+    ): PythonInspector.Result {
         val operatingSystem = operatingSystemOption ?: OPTION_OPERATING_SYSTEM_DEFAULT
-        val pythonVersion = pythonVersionOption ?: OPTION_PYTHON_VERSION_DEFAULT
+        val pythonVersion = pythonVersionOption ?: detectPythonVersion() ?: OPTION_PYTHON_VERSION_DEFAULT
 
         val workingDir = definitionFile.parentFile
 
