@@ -73,21 +73,19 @@ class Pip(
         ) = Pip(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
-    private val operatingSystemOption = (options[OPTION_OPERATING_SYSTEM] ?: OPTION_OPERATING_SYSTEM_DEFAULT)
-        .also { os ->
-            require(os.isEmpty() || os in OPERATING_SYSTEMS) {
-                val acceptedValues = OPERATING_SYSTEMS.joinToString { "'$it'" }
-                "The '$OPTION_OPERATING_SYSTEM' option must be one of $acceptedValues, but was '$os'."
-            }
+    private val operatingSystemOption = options[OPTION_OPERATING_SYSTEM]?.also { os ->
+        require(os.isEmpty() || os in OPERATING_SYSTEMS) {
+            val acceptedValues = OPERATING_SYSTEMS.joinToString { "'$it'" }
+            "The '$OPTION_OPERATING_SYSTEM' option must be one of $acceptedValues, but was '$os'."
         }
+    }
 
-    private val pythonVersionOption = (options[OPTION_PYTHON_VERSION] ?: OPTION_PYTHON_VERSION_DEFAULT)
-        .also { pythonVersion ->
-            require(pythonVersion in PYTHON_VERSIONS) {
-                val acceptedValues = PYTHON_VERSIONS.joinToString { "'$it'" }
-                "The '$OPTION_PYTHON_VERSION' option must be one of $acceptedValues, but was '$pythonVersion'."
-            }
+    private val pythonVersionOption = options[OPTION_PYTHON_VERSION]?.also { pythonVersion ->
+        require(pythonVersion in PYTHON_VERSIONS) {
+            val acceptedValues = PYTHON_VERSIONS.joinToString { "'$it'" }
+            "The '$OPTION_PYTHON_VERSION' option must be one of $acceptedValues, but was '$pythonVersion'."
         }
+    }
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val result = runPythonInspector(definitionFile)
@@ -99,11 +97,14 @@ class Pip(
     }
 
     internal fun runPythonInspector(definitionFile: File): PythonInspector.Result {
+        val operatingSystem = operatingSystemOption ?: OPTION_OPERATING_SYSTEM_DEFAULT
+        val pythonVersion = pythonVersionOption ?: OPTION_PYTHON_VERSION_DEFAULT
+
         val workingDir = definitionFile.parentFile
 
         logger.info {
-            "Resolving dependencies for '${definitionFile.absolutePath}' with Python version '$pythonVersionOption' " +
-                "and operating system '$operatingSystemOption'."
+            "Resolving dependencies for '${definitionFile.absolutePath}' with Python version '$pythonVersion' " +
+                "and operating system '$operatingSystem'."
         }
 
         return runCatching {
@@ -111,8 +112,8 @@ class Pip(
                 PythonInspector.inspect(
                     workingDir = workingDir,
                     definitionFile = definitionFile,
-                    pythonVersion = pythonVersionOption.replace(".", ""),
-                    operatingSystem = operatingSystemOption
+                    pythonVersion = pythonVersion.replace(".", ""),
+                    operatingSystem = operatingSystem
                 )
             } finally {
                 workingDir.resolve(".cache").safeDeleteRecursively(force = true)
