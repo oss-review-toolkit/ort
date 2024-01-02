@@ -25,7 +25,7 @@ import io.kotest.matchers.file.aFile
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
-import org.ossreviewtoolkit.plugins.packagemanagers.python.Pip.Companion.PYPROJECT_FILENAME
+import org.ossreviewtoolkit.plugins.packagemanagers.python.Poetry.Companion.PYPROJECT_FILENAME
 
 class PoetryTest : WordSpec({
     "parseScopeNamesFromPyProject()" should {
