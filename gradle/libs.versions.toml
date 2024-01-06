@@ -8,7 +8,7 @@ graalVmNativeImagePlugin = "0.9.28"
 graphQlPlugin = "6.5.7"
 ideaExtPlugin = "1.1.7"
 kotlinPlugin = "1.9.22"
-mavenPublishPlugin = "0.26.0"
+mavenPublishPlugin = "0.27.0"
 versionsPlugin = "0.50.0"
 
 antlr = "4.13.1"
