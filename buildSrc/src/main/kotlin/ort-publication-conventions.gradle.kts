@@ -28,7 +28,7 @@ mavenPublishing {
     fun getGroupId(parent: Project?): String =
         parent?.let { "${getGroupId(it.parent)}.${it.name.replace("-", "")}" }.orEmpty()
 
-    coordinates("org${getGroupId(parent)}", name, version.toString())
+    coordinates(groupId = "org${getGroupId(parent)}")
     publishToMavenCentral(SonatypeHost.DEFAULT)
     signAllPublications()
 
