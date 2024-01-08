@@ -47,14 +47,16 @@ data class LicenseFinding(
      * the finding can be relied on / how confident the scanner is to be right. In most cases this is a percentage where
      * 100.0 means that the scanner is 100% confident that the finding is correct.
      */
-    val score: Float? = null
+    val score: Float? = null,
+
+    val matchedText: String? = null
 ) {
     companion object {
         val COMPARATOR = compareBy<LicenseFinding>({ it.license.toString() }, { it.location })
-            .thenByDescending { it.score }
+            .thenByDescending { it.score; it.matchedText }
     }
 
-    constructor(license: String, location: TextLocation, score: Float? = null) : this(license.toSpdx(), location, score)
+    constructor(license: String, location: TextLocation, score: Float? = null, matchedText: String? = null) : this(license.toSpdx(), location, score, matchedText)
 }
 
 /**

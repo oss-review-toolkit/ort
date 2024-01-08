@@ -61,8 +61,6 @@ sealed interface FileEntry {
     val licenses: List<LicenseEntry>
     val copyrights: List<CopyrightEntry>
     val scanErrors: List<String>
-    val matchedText: String
-
     // A map of ScanCode license keys associated with their corresponding SPDX license ID.
     val scanCodeKeyToSpdxIdMappings: List<Pair<String, String>>
 
@@ -70,7 +68,6 @@ sealed interface FileEntry {
     data class Version1(
         override val path: String,
         override val type: String,
-        override val matchedText: String,
         override val licenses: List<LicenseEntry.Version1>,
         override val copyrights: List<CopyrightEntry>,
         override val scanErrors: List<String>
@@ -102,7 +99,7 @@ sealed interface FileEntry {
     data class Version3(
         override val path: String,
         override val type: String,
-        override val matchedText: String,
+        val matchedText: String? = null, // This might be explicitly set to null in JSON.
         val detectedLicenseExpression: String? = null, // This might be explicitly set to null in JSON.
         val detectedLicenseExpressionSpdx: String? = null, // This might be explicitly set to null in JSON.
         val licenseDetections: List<LicenseDetection>,
@@ -138,21 +135,22 @@ data class LicenseDetection(
 )
 
 sealed interface LicenseEntry {
+    val matchedText: String
     val licenseExpression: String
     val startLine: Int
     val endLine: Int
     val score: Float
-    val matchedText: String
 
     @Serializable
     data class Version1(
         val key: String,
-        override  val matchedText: String,
         override val score: Float,
         val spdxLicenseKey: String? = null, // This might be explicitly set to null in JSON.
         override val startLine: Int,
         override val endLine: Int,
-        val matchedRule: LicenseRule
+        val matchedRule: LicenseRule,
+        override val matchedText: String // This might be explicitly set to null in JSON.
+
     ) : LicenseEntry {
         override val licenseExpression = matchedRule.licenseExpression
     }
@@ -160,7 +158,7 @@ sealed interface LicenseEntry {
     @Serializable
     data class Version3(
         override val score: Float,
-        override  val matchedText: String,
+        override val matchedText: String, // This might be explicitly set to null in JSON.
         override val startLine: Int,
         override val endLine: Int,
         override val licenseExpression: String
@@ -182,7 +180,6 @@ sealed interface CopyrightEntry {
         val value: String,
         override val startLine: Int,
         override val endLine: Int,
-        val matchedText: String
     ) : CopyrightEntry {
         override val statement = value
     }
@@ -192,7 +189,7 @@ sealed interface CopyrightEntry {
         val copyright: String,
         override val startLine: Int,
         override val endLine: Int,
-        val matchedText: String
+        val matchedText: String? = null
     ) : CopyrightEntry {
         override val statement = copyright
     }

@@ -56,7 +56,7 @@ private data class LicenseMatch(
     val startLine: Int,
     val endLine: Int,
     val score: Float,
-    val matchedText: String,
+    val matchedText: String
 )
 
 fun ScanCodeResult.toScanSummary(): ScanSummary {
@@ -101,9 +101,10 @@ fun ScanCodeResult.toScanSummary(): ScanSummary {
                 location = TextLocation(
                     path = file.path,
                     startLine = license.startLine,
-                    endLine = license.endLine
+                    endLine = license.endLine,
                 ),
-                score = license.score
+                score = license.score,
+                matchedText = license.matchedText
             )
         }
 

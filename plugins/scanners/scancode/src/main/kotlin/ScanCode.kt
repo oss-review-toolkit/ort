@@ -82,6 +82,7 @@ class ScanCode internal constructor(
             "--license",
             "--info",
             "--strip-root",
+            "--license-text",
             "--timeout", TIMEOUT.toString()
         )
 
