@@ -711,9 +711,9 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         )
 
     /**
-     * Adds the [value] to this list if the list does not already contain an equal item. Returns the item that is
-     * contained in the list. This is important to make sure that there is only one instance of equal items used in the
-     * model, because when Jackson generates IDs each instance gets a new ID, no matter if they are equal or not.
+     * Add the [value] to this list if the list does not already contain an equal item. Return the item contained in the
+     * list. This is important to make sure that there is only one instance of equal items used in the model, because
+     * when Jackson generates IDs each instance gets a new ID, no matter if they are equal or not.
      */
     private fun <T> MutableList<T>.addIfRequired(value: T): T = find { it == value } ?: value.also { add(it) }
 
