@@ -26,12 +26,12 @@ import WebAppOrtIssue from './WebAppOrtIssue';
 import WebAppPackage from './WebAppPackage';
 import WebAppPath from './WebAppPath';
 import WebAppPathExclude from './WebAppPathExclude';
+import WebAppResolution from './WebAppResolution';
+import WebAppRuleViolation from './WebAppRuleViolation';
 import WebAppScanResult from './WebAppScanResult';
 import WebAppScope from './WebAppScope';
 import WebAppScopeExclude from './WebAppScopeExclude';
 import WebAppTreeNode from './WebAppTreeNode';
-import WebAppRuleViolation from './WebAppRuleViolation';
-import WebAppResolution from './WebAppResolution';
 import WebAppVulnerability from './WebAppVulnerability';
 
 class WebAppOrtResult {

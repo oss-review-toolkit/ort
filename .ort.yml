@@ -148,7 +148,7 @@ curations:
     reason: "DOCUMENTATION_OF"
     comment: >-
       Documentation contains examples mentioning various licenses.
-  - path: "plugins/reporters/web-app-template/public/index.html"
+  - path: "plugins/reporters/web-app-template/index.html"
     concluded_license: "Apache-2.0"
     reason: "DATA_OF"
     comment: >-

@@ -17,13 +17,11 @@
  * License-Filename: LICENSE
  */
 
-import React from 'react';
-import PropTypes from 'prop-types';
 import { Table } from 'antd';
+import PropTypes from 'prop-types';
 
-// Generates the HTML to display webAppScopeExclude(s) as a Table
-const ScopeExcludesTable = (props) => {
-    const { excludes } = props;
+// Generates the HTML to display webAppResolution(s) as a Table
+const ResolutionTable = ({ resolutions }) => {
     const columns = [
         {
             dataIndex: 'reason',
@@ -31,9 +29,9 @@ const ScopeExcludesTable = (props) => {
             title: 'Reason'
         },
         {
-            dataIndex: 'name',
-            key: 'name',
-            title: 'Name'
+            dataIndex: 'message',
+            key: 'message',
+            title: 'Message'
         },
         {
             dataIndex: 'comment',
@@ -47,9 +45,11 @@ const ScopeExcludesTable = (props) => {
     return (
         <Table
             columns={columns}
-            dataSource={excludes}
+            dataSource={resolutions}
+            rowKey="key"
+            size="small"
             locale={{
-                emptyText: 'No path excludes'
+                emptyText: 'No resolutions'
             }}
             pagination={
                 {
@@ -62,14 +62,12 @@ const ScopeExcludesTable = (props) => {
                     showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} results`
                 }
             }
-            rowKey="key"
-            size="small"
         />
     );
 };
 
-ScopeExcludesTable.propTypes = {
-    excludes: PropTypes.array.isRequired
+ResolutionTable.propTypes = {
+    resolutions: PropTypes.array.isRequired
 };
 
-export default ScopeExcludesTable;
+export default ResolutionTable;

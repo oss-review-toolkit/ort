@@ -18,10 +18,11 @@
  */
 
 import { delay, put, select } from 'redux-saga/effects';
-import { getOrtResult } from '../reducers/selectors';
-import WebAppOrtResult from '../models/WebAppOrtResult';
 
-function* processOrtResultData() {
+import WebAppOrtResult from '../models/WebAppOrtResult';
+import { getOrtResult } from '../reducers/selectors';
+
+function * processOrtResultData() {
     const ortResultData = yield select(getOrtResult);
     yield delay(200);
 

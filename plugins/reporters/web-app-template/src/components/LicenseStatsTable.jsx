@@ -17,32 +17,29 @@
  * License-Filename: LICENSE
  */
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Table } from 'antd';
 import { FileTextOutlined } from '@ant-design/icons';
+import { Table } from 'antd';
+import PropTypes from 'prop-types';
 
 // Generates the HTML to display license stats as a Table
-const LicenseStatsTable = (props) => {
-    const {
-        emptyText,
-        filter: {
-            sortedInfo = {},
-            filteredInfo = {}
-        },
-        licenses,
-        licenseStats,
-        onChange
-    } = props;
-
+const LicenseStatsTable = ({
+    emptyText,
+    filter: {
+        sortedInfo = {},
+        filteredInfo = {}
+    },
+    licenses,
+    licenseStats,
+    onChange
+}) => {
     const columns = [
         {
             title: 'License',
             dataIndex: 'name',
+            filteredValue: filteredInfo.name || null,
             filters: (
                 () => licenses.map((license) => ({ text: license, value: license }))
             )(),
-            filteredValue: filteredInfo.name || null,
             onFilter: (license, row) => row.name === license,
             sorter: (a, b) => a.name.localeCompare(b.name),
             sortOrder: sortedInfo.columnKey === 'name' && sortedInfo.order,
@@ -69,10 +66,11 @@ const LicenseStatsTable = (props) => {
         <Table
             columns={columns}
             dataSource={licenseStats}
+            rowKey="name"
+            size="small"
             locale={{
                 emptyText: { emptyText }
             }}
-            onChange={onChange}
             pagination={
                 {
                     defaultPageSize: 50,
@@ -81,8 +79,7 @@ const LicenseStatsTable = (props) => {
                     showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} results`
                 }
             }
-            rowKey="name"
-            size="small"
+            onChange={onChange}
         />
     );
 };

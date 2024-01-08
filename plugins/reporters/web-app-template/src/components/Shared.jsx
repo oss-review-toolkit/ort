@@ -18,15 +18,13 @@
  */
 
 import {
-    Button,
-    Input,
-    Space,
-} from 'antd';
-import {
     SearchOutlined
 } from '@ant-design/icons';
-
-/* eslint import/prefer-default-export: 0 */
+import {
+    Button,
+    Input,
+    Space
+} from 'antd';
 
 // Implements a customized Ant Design table column search
 const getColumnSearchProps = (dataIndex, filteredInfo, that) => ({
@@ -35,41 +33,41 @@ const getColumnSearchProps = (dataIndex, filteredInfo, that) => ({
     }) => (
         <div style={{ padding: 8 }}>
             <Input
+                placeholder="Search..."
+                value={selectedKeys[0]}
+                style={{ width: 188, marginBottom: 8, display: 'block' }}
                 ref={(node) => {
                     that.searchInput = node;
                 }}
-                placeholder="Search..."
-                value={selectedKeys[0]}
                 onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
                 onPressEnter={() => confirm()}
-                style={{ width: 188, marginBottom: 8, display: 'block' }}
             />
             <Space>
                 <Button
-                    onClick={() => clearFilters()}
                     size="small"
                     style={{ width: 90 }}
+                    onClick={() => clearFilters()}
                 >
                     Reset
                 </Button>
                 <Button
                     icon={<SearchOutlined />}
-                    onClick={() => confirm()}
                     size="small"
                     style={{ width: 90 }}
                     type="primary"
+                    onClick={() => confirm()}
                 >
                     Search
                 </Button>
             </Space>
         </div>
     ),
-    filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
-    filteredValue: filteredInfo ? filteredInfo[dataIndex] : '',
+    filterIcon: (filtered) => (<SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />),
+    filteredValue: filteredInfo[dataIndex] || null,
     onFilter: (value, record) => (record[dataIndex]
         ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
         : false),
-    onFilterDropdownVisibleChange: (visible) => {
+    onFilterDropdownOpenChange: (visible) => {
         if (visible) {
             setTimeout(() => that.searchInput.select());
         }

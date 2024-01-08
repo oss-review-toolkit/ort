@@ -18,14 +18,7 @@
  */
 
 import React from 'react';
-import { connect } from 'react-redux';
-import {
-    Collapse,
-    Dropdown,
-    Menu,
-    Table,
-    Tooltip
-} from 'antd';
+
 import {
     CloudDownloadOutlined,
     EyeOutlined,
@@ -34,7 +27,18 @@ import {
     FileExcelOutlined,
     LaptopOutlined
 } from '@ant-design/icons';
+import {
+    Col,
+    Collapse,
+    Dropdown,
+    Row,
+    Table,
+    Tooltip
+} from 'antd';
 import PropTypes from 'prop-types';
+
+import { connect } from 'react-redux';
+
 import {
     getOrtResult,
     getTableView,
@@ -47,6 +51,7 @@ import {
     getTableViewScopeFilterSelections
 } from '../reducers/selectors';
 import store from '../store';
+
 import PackageDetails from './PackageDetails';
 import PackageFindingsTable from './PackageFindingsTable';
 import PackageLicenses from './PackageLicenses';
@@ -54,8 +59,6 @@ import PackagePaths from './PackagePaths';
 import PathExcludesTable from './PathExcludesTable';
 import ScopeExcludesTable from './ScopeExcludesTable';
 import { getColumnSearchProps } from './Shared';
-
-const { Panel } = Collapse;
 
 class TableView extends React.Component {
     shouldComponentUpdate() {
@@ -126,10 +129,10 @@ class TableView extends React.Component {
                     const { isExcluded } = webAppPackage;
 
                     return (isExcluded && value === 'excluded') || (!isExcluded && value === 'included');
-
                 },
                 render: (webAppPackage) => (
-                    webAppPackage.isExcluded ? (
+                    webAppPackage.isExcluded
+                        ? (
                         <span className="ort-excludes">
                             <Tooltip
                                 placement="right"
@@ -138,9 +141,10 @@ class TableView extends React.Component {
                                 <FileExcelOutlined className="ort-excluded" />
                             </Tooltip>
                         </span>
-                    ) : (
+                            )
+                        : (
                         <FileAddOutlined />
-                    )
+                            )
                 ),
                 width: '2em'
             });
@@ -365,16 +369,18 @@ class TableView extends React.Component {
                 filteredValue: filteredInfo.projectIndexes || null,
                 onFilter: (value, webAppPackage) => webAppPackage.projectIndexes.has(value),
                 render: (text, webAppPackage) => (
-                    webAppPackage.isProject ? (
+                    webAppPackage.isProject
+                        ? (
                         <Tooltip
                             placement="right"
                             title={webAppPackage.definitionFilePath}
                         >
                             <LaptopOutlined />
                         </Tooltip>
-                    ) : (
+                            )
+                        : (
                         <CloudDownloadOutlined />
-                    )
+                            )
                 ),
                 title: 'Project',
                 width: 85
@@ -385,21 +391,17 @@ class TableView extends React.Component {
 
         return (
             <div>
-                <div className="ort-table-buttons">
-                    <Dropdown.Button
-                        onClick={() => {
-                            store.dispatch({ type: 'TABLE::RESET_COLUMNS_TABLE' });
-                        }}
-                        overlay={(
-                            <Menu
-                                className="ort-table-toggle-columns"
-                                onClick={this.onClickToggleColumnsMenu}
-                                selectedKeys={showKeys}
-                            >
-                                {
-                                    toggleColumnMenuItems.map(
-                                        (item) => (
-                                            <Menu.Item key={item.value}>
+                <Row justify="end">
+                    <Col>
+                        <Dropdown.Button
+                            size="small"
+                            menu={{
+                                className: 'ort-table-toggle-columns',
+                                items: toggleColumnMenuItems.map(
+                                    (item) => ({
+                                        key: item.value,
+                                        label: (
+                                            <span>
                                                 {
                                                     showKeys.includes(item.value)
                                                         ? <EyeOutlined />
@@ -407,84 +409,119 @@ class TableView extends React.Component {
                                                 }
                                                 {' '}
                                                 {item.text}
-                                            </Menu.Item>
+                                            </span>
                                         )
-                                    )
-                                }
-                            </Menu>
-                        )}
-                        size="small"
-                    >
-                        Clear filters
-                    </Dropdown.Button>
-                </div>
+                                    })
+                                ),
+                                onClick: this.onClickToggleColumnsMenu,
+                                selectedKeys: showKeys
+                            }}
+                            onClick={() => {
+                                store.dispatch({ type: 'TABLE::RESET_COLUMNS_TABLE' });
+                            }}
+                        >
+                            Clear filters
+                        </Dropdown.Button>
+                    </Col>
+                </Row>
                 <Table
                     columns={columns}
-                    expandedRowRender={
-                        (webAppPackage) => (
+                    dataSource={webAppOrtResult.packages}
+                    indentSize={0}
+                    size="small"
+                    rowClassName="ort-package"
+                    rowKey="key"
+                    expandable={{
+                        expandedRowRender: (webAppPackage) => (
                             <Collapse
                                 className="ort-package-collapse"
                                 bordered={false}
                                 defaultActiveKey={[0, 1]}
-                            >
-                                <Panel header="Details" key="0">
-                                    <PackageDetails webAppPackage={webAppPackage} />
-                                </Panel>
-                                {
-                                    webAppPackage.hasLicenses()
-                                    && (
-                                        <Panel header="Licenses" key="1">
-                                            <PackageLicenses webAppPackage={webAppPackage} />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppPackage.hasPaths()
-                                    && (
-                                        <Panel header="Paths" key="2">
-                                            <PackagePaths paths={webAppPackage.paths} />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppPackage.hasFindings()
-                                    && (
-                                        <Panel header="Scan Results" key="3">
-                                            <PackageFindingsTable
-                                                webAppPackage={webAppPackage}
-                                            />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppPackage.hasPathExcludes()
-                                    && (
-                                        <Panel header="Path Excludes" key="4">
-                                            <PathExcludesTable
-                                                excludes={webAppPackage.pathExcludes}
-                                            />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppPackage.hasScopeExcludes()
-                                    && (
-                                        <Panel header="Scope Excludes" key="5">
-                                            <ScopeExcludesTable
-                                                excludes={webAppPackage.scopeExcludes}
-                                            />
-                                        </Panel>
-                                    )
-                                }
-                            </Collapse>
-                        )
-                    }
-                    dataSource={webAppOrtResult.packages}
-                    expandRowByClick
-                    indentSize={0}
+                                items={(() => {
+                                    const collapseItems = [
+                                        {
+                                            label: 'Details',
+                                            key: 'package-details',
+                                            children: (
+                                                <PackageDetails webAppPackage={webAppPackage} />
+                                            )
+                                        }
+                                    ];
+
+                                    if (webAppPackage.hasLicenses()) {
+                                        collapseItems.push({
+                                            label: 'Licenses',
+                                            key: 'package-licenses',
+                                            children: (
+                                                <PackageLicenses webAppPackage={webAppPackage} />
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppPackage.hasPaths()) {
+                                        collapseItems.push({
+                                            label: 'Paths',
+                                            key: 'package-paths',
+                                            children: (
+                                                <PackagePaths paths={webAppPackage.paths} />
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppPackage.hasFindings()) {
+                                        collapseItems.push({
+                                            label: 'Scan Results',
+                                            key: 'package-scan-results',
+                                            children: (
+                                                <PackageFindingsTable
+                                                    webAppPackage={webAppPackage}
+                                                />
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppPackage.hasPathExcludes()) {
+                                        collapseItems.push({
+                                            label: 'Path Excludes',
+                                            key: 'package-path-excludes',
+                                            children: (
+                                                <PathExcludesTable
+                                                    excludes={webAppPackage.pathExcludes}
+                                                />
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppPackage.hasScopeExcludes()) {
+                                        collapseItems.push({
+                                            label: 'Scope Excludes',
+                                            key: 'package-scope-excludes',
+                                            children: (
+                                                <ScopeExcludesTable
+                                                    excludes={webAppPackage.scopeExcludes}
+                                                />
+                                            )
+                                        });
+                                    }
+
+                                    return collapseItems;
+                                })()}
+                            />
+                        ),
+                        expandRowByClick: true
+                    }}
                     locale={{
                         emptyText: 'No packages'
                     }}
+                    pagination={
+                        {
+                            defaultPageSize: 100,
+                            hideOnSinglePage: true,
+                            pageSizeOptions: ['50', '100', '250', '500'],
+                            position: 'both',
+                            showSizeChanger: true
+                        }
+                    }
                     onChange={(pagination, filters, sorter, extra) => {
                         store.dispatch({
                             type: 'TABLE::CHANGE_PACKAGES_TABLE',
@@ -497,18 +534,6 @@ class TableView extends React.Component {
                             }
                         });
                     }}
-                    pagination={
-                        {
-                            defaultPageSize: 100,
-                            hideOnSinglePage: true,
-                            pageSizeOptions: ['50', '100', '250', '500', '1000', '5000'],
-                            position: 'both',
-                            showSizeChanger: true
-                        }
-                    }
-                    size="small"
-                    rowClassName="ort-package"
-                    rowKey="key"
                 />
             </div>
         );

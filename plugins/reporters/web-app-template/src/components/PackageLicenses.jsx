@@ -17,16 +17,13 @@
  * License-Filename: LICENSE
  */
 
-import React from 'react';
-import PropTypes from 'prop-types';
 import { Descriptions } from 'antd';
+import PropTypes from 'prop-types';
 
 const { Item } = Descriptions;
 
 // Generates the HTML for licenses declared or detected in a package
-const PackageLicenses = (props) => {
-    const { webAppPackage } = props;
-
+const PackageLicenses = ({ webAppPackage }) => {
     return (
         <Descriptions
             className="ort-package-details"

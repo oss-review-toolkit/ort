@@ -19,9 +19,10 @@
 
 import pako from 'pako';
 import { all, put, takeEvery } from 'redux-saga/effects';
+
 import processOrtResultData from './processOrtResultData';
 
-export function* loadOrtResultData() {
+export function * loadOrtResultData() {
     yield put({ type: 'APP::SHOW_LOAD_VIEW' });
     yield put({ type: 'APP::LOADING_ORT_RESULT_DATA_START' });
 
@@ -62,16 +63,16 @@ export function* loadOrtResultData() {
         }
     }
 }
-export function* watchProcessOrtResultData() {
+export function * watchProcessOrtResultData() {
     yield takeEvery('APP::LOADING_PROCESS_ORT_RESULT_DATA_START', processOrtResultData);
 }
 
-export function* watchLoadOrtResultData() {
+export function * watchLoadOrtResultData() {
     yield takeEvery('APP::LOADING_START', loadOrtResultData);
 }
 
 // single entry point to start all Sagas at once
-export default function* rootSaga() {
+export default function * rootSaga() {
     yield all([
         watchLoadOrtResultData(),
         watchProcessOrtResultData()

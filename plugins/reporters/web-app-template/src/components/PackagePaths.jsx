@@ -17,16 +17,13 @@
  * License-Filename: LICENSE
  */
 
-import React from 'react';
 import { Descriptions, List, Steps } from 'antd';
 import PropTypes from 'prop-types';
 
 const { Item } = Descriptions;
-const { Step } = Steps;
 
 // Generates the HTML for packages issues
-const PackagePaths = (props) => {
-    const { paths } = props;
+const PackagePaths = ({ paths }) => {
     let grid;
 
     // Change layout grid to use all available width for single path
@@ -57,18 +54,17 @@ const PackagePaths = (props) => {
             grid={grid}
             itemLayout="vertical"
             size="small"
+            dataSource={paths}
             pagination={{
                 hideOnSinglePage: true,
                 pageSize: 2,
                 size: 'small'
             }}
-            dataSource={paths}
             renderItem={
                 (webAppPath) => {
-                    const steps = [];
-                    steps.push(
-                        <Step
-                            description={(
+                    const stepItems = [
+                        {
+                            description: (
                                 <Descriptions
                                     className="ort-package-path-description"
                                     column={1}
@@ -87,31 +83,30 @@ const PackagePaths = (props) => {
                                         {webAppPath.scopeName}
                                     </Item>
                                 </Descriptions>
-                            )}
-                            key={webAppPath.projectName}
-                            title={webAppPath.projectName}
-                        />
-                    );
+                            ),
+                            key: webAppPath.projectName,
+                            title: webAppPath.projectName
+                        }
+                    ];
 
                     webAppPath.path.forEach(
                         (pathWebAppPackage) => {
-                            steps.push(<Step key={pathWebAppPackage.id} title={pathWebAppPackage.id} />);
+                            stepItems.push({ title: pathWebAppPackage.id });
                         }
                     );
 
-                    steps.push(<Step key={webAppPath.packageName} title={webAppPath.packageName} />);
+                    stepItems.push({ title: webAppPath.packageName });
 
                     return (
                         <List.Item>
                             <Steps
                                 className="ort-package-path"
-                                current={steps.length - 1}
+                                current={stepItems.length - 1}
                                 direction="vertical"
-                                progressDot
+                                items={stepItems}
+                                progressDot={true}
                                 size="small"
-                            >
-                                {steps}
-                            </Steps>
+                            />
                         </List.Item>
                     );
                 }

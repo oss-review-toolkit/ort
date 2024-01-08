@@ -17,8 +17,6 @@
  * License-Filename: LICENSE
  */
 
-/* eslint import/prefer-default-export: 0 */
-
 /* Utility function to generate random numbers and letters string
  * Based on vjt@openssl.it public domain code, see
  * https://gist.github.com/vjt/2239787
@@ -40,10 +38,10 @@ const randomStringGenerator = (length = (Math.floor(Math.random() * 501) + 20)) 
     return alpha(l, symbol(1, alpha(r, []))).join('');
 };
 
-// Utility function to generate color for given license string 
+// Utility function to generate color for given license string
 const licenseToHslColor = (license) => {
     let hash = 0;
-    let random = Math.floor(Math.random() * 20 + 5);
+    const random = Math.floor(Math.random() * 20 + 5);
 
     for (let i = 0; i < license.length; i++) {
         hash = license.charCodeAt(i) + ((hash << 5) - hash);
@@ -51,7 +49,7 @@ const licenseToHslColor = (license) => {
     }
 
     return 'hsl(' + ((Math.abs(hash) % 320) + random) + ',' +
-        (25 + 70 * Math.random()) + '%,' + 
+        (25 + 70 * Math.random()) + '%,' +
         (55 + 10 * Math.random()) + '%)';
 }
 

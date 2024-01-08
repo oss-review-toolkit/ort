@@ -1,5 +1,3 @@
-@import '~antd/dist/antd.css';
-
 body {
     background: #fafafa;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -198,7 +196,11 @@ tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
 /* === Styling for TableView  === */
 
 /* Styling for 'Clear filters' and 'Show / Hide Columns' buttons in TableView */
-.ort-table-buttons .ant-btn-group {
+.ort-table-buttons .ant-dropdown-button {
+    overflow: auto;
+}
+
+.ort-table-buttons .ant-dropdown-button .ant-btn {
     float: right;
     margin-bottom: 5px;
     z-index: 999;

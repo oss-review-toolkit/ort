@@ -28,8 +28,8 @@ import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnSetupTask
 
 // The Kotlin/JS plugins are only applied programmatically for Kotlin projects that target JavaScript. As we do not
 // directly target JavaScript from Kotlin, manually apply the plugins and configure the tool versions.
-NodeJsRootPlugin.apply(rootProject).nodeVersion = "16.13.0"
-YarnPlugin.apply(rootProject).version = "1.22.17"
+NodeJsRootPlugin.apply(rootProject).nodeVersion = "20.9.0"
+YarnPlugin.apply(rootProject).version = "1.22.19"
 
 // The Yarn plugin registers tasks always on the root project, see
 // https://github.com/JetBrains/kotlin/blob/1.4.0/libraries/tools/kotlin-gradle-plugin/src/main/kotlin/org/jetbrains/kotlin/gradle/targets/js/yarn/YarnPlugin.kt#L53-L57
@@ -103,13 +103,12 @@ tasks {
         description = "Use Yarn to build the Node.js application."
         group = "Node"
 
-        inputs.files(".rescriptsrc.js")
         inputs.files(project.tasks["yarnInstall"].outputs)
-        inputs.dir("public")
+        inputs.files("index.html")
         inputs.dir("src")
 
         outputs.cacheIf { true }
-        outputs.dir("build")
+        outputs.dir("dist")
     }
 
     "yarnLint" {
@@ -133,7 +132,7 @@ tasks.register("check") {
 }
 
 tasks.register<Delete>("clean") {
-    delete("build")
+    delete("dist")
     delete("node_modules")
     delete("yarn-error.log")
 }

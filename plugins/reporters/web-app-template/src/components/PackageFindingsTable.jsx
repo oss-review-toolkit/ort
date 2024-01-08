@@ -17,9 +17,6 @@
  * License-Filename: LICENSE
  */
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Table, Tooltip } from 'antd';
 import {
     CopyrightOutlined,
     FileAddOutlined,
@@ -28,11 +25,13 @@ import {
     MinusSquareOutlined,
     PlusSquareOutlined
 } from '@ant-design/icons';
+import { Table, Tooltip } from 'antd';
+import PropTypes from 'prop-types';
+
 import PathExcludesTable from './PathExcludesTable';
 
 // Generates the HTML to display scanFindings as a Table
-const PackageFindingsTable = (props) => {
-    const { webAppPackage } = props;
+const PackageFindingsTable = ({ webAppPackage }) => {
     const { findings } = webAppPackage;
     const columns = [];
     let expandable = null;
@@ -75,7 +74,8 @@ const PackageFindingsTable = (props) => {
                 return false;
             },
             render: (webAppFinding) => (
-                webAppFinding.isExcluded ? (
+                webAppFinding.isExcluded
+                    ? (
                     <span className="ort-excludes">
                         <Tooltip
                             placement="right"
@@ -84,9 +84,10 @@ const PackageFindingsTable = (props) => {
                             <FileExcelOutlined className="ort-excluded" />
                         </Tooltip>
                     </span>
-                ) : (
+                        )
+                    : (
                     <FileAddOutlined />
-                )
+                        )
             ),
             width: '2em'
         });
@@ -105,11 +106,13 @@ const PackageFindingsTable = (props) => {
                 }
 
                 return (
-                    expanded ? (
+                    expanded
+                        ? (
                         <MinusSquareOutlined onClick={(e) => onExpand(record, e)} />
-                    ) : (
+                            )
+                        : (
                         <PlusSquareOutlined onClick={(e) => onExpand(record, e)} />
-                    )
+                            )
                 );
             },
             indentSize: 0
@@ -229,6 +232,8 @@ const PackageFindingsTable = (props) => {
             columns={columns}
             dataSource={findings}
             expandable={expandable}
+            rowKey="key"
+            size="small"
             pagination={
                 {
                     defaultPageSize: 250,
@@ -240,8 +245,6 @@ const PackageFindingsTable = (props) => {
                     showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} results`
                 }
             }
-            rowKey="key"
-            size="small"
         />
     );
 };

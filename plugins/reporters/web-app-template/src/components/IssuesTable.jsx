@@ -18,8 +18,7 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import { Collapse, Table, Tooltip } from 'antd';
+
 import {
     ExclamationCircleOutlined,
     FileAddOutlined,
@@ -28,29 +27,29 @@ import {
     IssuesCloseOutlined,
     WarningOutlined
 } from '@ant-design/icons';
-
+import { Collapse, Table, Tooltip } from 'antd';
 import Markdown from 'markdown-to-jsx';
+import PropTypes from 'prop-types';
+
 import PackageDetails from './PackageDetails';
+import PackageFindingsTable from './PackageFindingsTable';
 import PackageLicenses from './PackageLicenses';
 import PackagePaths from './PackagePaths';
-import PackageFindingsTable from './PackageFindingsTable';
 import PathExcludesTable from './PathExcludesTable';
 import ResolutionTable from './ResolutionTable';
 import ScopeExcludesTable from './ScopeExcludesTable';
 import { getColumnSearchProps } from './Shared';
 
-const { Panel } = Collapse;
-
 // Generates the HTML to display violations as a Table
 class IssuesTable extends React.Component {
-    render () {
+    render() {
         const {
             issues,
             onChange,
             showExcludesColumn,
             state: {
                 filteredInfo = {},
-                sortedInfo =  {}
+                sortedInfo = {}
             }
         } = this.props;
 
@@ -64,7 +63,7 @@ class IssuesTable extends React.Component {
                 align: 'center',
                 dataIndex: 'severityIndex',
                 filters: [
-                    { 
+                    {
                         text: 'Errors',
                         value: 0
                     },
@@ -94,7 +93,8 @@ class IssuesTable extends React.Component {
                                     className="ort-ok"
                                 />
                             </Tooltip>
-                        ) : (
+                            )
+                        : (
                             <span>
                                 {
                                     webAppOrtIssue.severity === 'ERROR'
@@ -121,7 +121,7 @@ class IssuesTable extends React.Component {
                                     )
                                 }
                             </span>
-                        )
+                            )
                 ),
                 sorter: (a, b) => a.severityIndex - b.severityIndex,
                 sortOrder: sortedInfo.field === 'severityIndex' && sortedInfo.order,
@@ -172,7 +172,8 @@ class IssuesTable extends React.Component {
                 render: (webAppOrtIssue) => {
                     const webAppPackage = webAppOrtIssue.package;
 
-                    return webAppPackage.isExcluded ? (
+                    return webAppPackage.isExcluded
+                        ? (
                         <span className="ort-excludes">
                             <Tooltip
                                 placement="right"
@@ -181,9 +182,10 @@ class IssuesTable extends React.Component {
                                 <FileExcelOutlined className="ort-excluded" />
                             </Tooltip>
                         </span>
-                    ) : (
+                            )
+                        : (
                         <FileAddOutlined />
-                    );
+                            );
                 },
                 width: '2em'
             });
@@ -214,100 +216,120 @@ class IssuesTable extends React.Component {
                 className="ort-table-issues"
                 columns={columns}
                 dataSource={issues}
-                expandedRowRender={
-                    (webAppOrtIssue) => {
-                        const defaultActiveKey = [1];
+                rowKey="key"
+                size="small"
+                expandable={{
+                    expandedRowRender: (webAppOrtIssue) => {
+                        const defaultActiveKey = webAppOrtIssue.isResolved
+                            ? 'issue-how-to-fix'
+                            : 'issue-package-details';
                         const webAppPackage = webAppOrtIssue.package;
-
-                        if (webAppOrtIssue.isResolved) {
-                            defaultActiveKey.unshift(0);
-                        }
 
                         return (
                             <Collapse
                                 className="ort-package-collapse"
                                 bordered={false}
                                 defaultActiveKey={defaultActiveKey}
-                            >
-                                {
-                                    webAppOrtIssue.hasHowToFix()
-                                    && (
-                                        <Panel header="How to fix" key="0">
-                                            <Markdown
-                                                className="ort-how-to-fix"
-                                            >
-                                                {webAppOrtIssue.howToFix}
-                                            </Markdown>
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppOrtIssue.isResolved
-                                    && (
-                                        <Panel header="Resolutions" key="1">
-                                            <ResolutionTable
-                                                resolutions={webAppOrtIssue.resolutions}
-                                            />
-                                        </Panel>
-                                    )
-                                }
-                                <Panel header="Details" key="2">
-                                    <PackageDetails webAppPackage={webAppPackage} />
-                                </Panel>
-                                {
-                                    webAppPackage.hasLicenses()
-                                    && (
-                                        <Panel header="Licenses" key="3">
-                                            <PackageLicenses webAppPackage={webAppPackage} />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppPackage.hasPaths()
-                                    && (
-                                        <Panel header="Paths" key="4">
-                                            <PackagePaths paths={webAppPackage.paths} />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppPackage.hasFindings()
-                                    && (
-                                        <Panel header="Scan Results" key="5">
-                                            <PackageFindingsTable
-                                                webAppPackage={webAppPackage}
-                                            />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppPackage.hasPathExcludes()
-                                    && (
-                                        <Panel header="Path Excludes" key="6">
-                                            <PathExcludesTable
-                                                excludes={webAppPackage.pathExcludes}
-                                            />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppPackage.hasScopeExcludes()
-                                    && (
-                                        <Panel header="Scope Excludes" key="7">
-                                            <ScopeExcludesTable
-                                                excludes={webAppPackage.scopeExcludes}
-                                            />
-                                        </Panel>
-                                    )
-                                }
-                            </Collapse>
+                                items={(() => {
+                                    const collapseItems = [];
+
+                                    if (webAppOrtIssue.hasHowToFix()) {
+                                        collapseItems.push({
+                                            label: 'How to fix',
+                                            key: 'issue-how-to-fix',
+                                            children: (
+                                                <Markdown className="ort-how-to-fix">
+                                                    {webAppOrtIssue.howToFix}
+                                                </Markdown>
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppOrtIssue.isResolved) {
+                                        collapseItems.push({
+                                            label: 'Resolutions',
+                                            key: 'issue-resolutions',
+                                            children: (
+                                                <ResolutionTable
+                                                    resolutions={webAppOrtIssue.resolutions}
+                                                />
+                                            )
+                                        });
+                                    }
+
+                                    collapseItems.push({
+                                        label: 'Details',
+                                        key: 'issue-package-details',
+                                        children: (
+                                            <PackageDetails webAppPackage={webAppPackage} />
+                                        )
+                                    });
+
+                                    if (webAppPackage.hasLicenses()) {
+                                        collapseItems.push({
+                                            label: 'Licenses',
+                                            key: 'issue-package-licenses',
+                                            children: (
+                                                <PackageLicenses webAppPackage={webAppPackage} />
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppPackage.hasPaths()) {
+                                        collapseItems.push({
+                                            label: 'Paths',
+                                            key: 'issue-package-paths',
+                                            children: (
+                                                <PackagePaths paths={webAppPackage.paths} />
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppPackage.hasFindings()) {
+                                        collapseItems.push({
+                                            label: 'Scan Results',
+                                            key: 'issue-package-scan-results',
+                                            children: (
+                                                <PackageFindingsTable
+                                                    webAppPackage={webAppPackage}
+                                                />
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppPackage.hasPathExcludes()) {
+                                        collapseItems.push({
+                                            label: 'Path Excludes',
+                                            key: 'issue-package-path-excludes',
+                                            children: (
+                                                <PathExcludesTable
+                                                    excludes={webAppPackage.pathExcludes}
+                                                />
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppPackage.hasScopeExcludes()) {
+                                        collapseItems.push({
+                                            label: 'Scope Excludes',
+                                            key: 'issue-package-scope-excludes',
+                                            children: (
+                                                <ScopeExcludesTable
+                                                    excludes={webAppPackage.scopeExcludes}
+                                                />
+                                            )
+                                        });
+                                    }
+
+                                    return collapseItems;
+                                })()}
+                            />
                         );
                     }
-                }
+                }}
                 locale={{
                     emptyText: 'No issues'
                 }}
-                onChange={onChange}
                 pagination={
                     {
                         defaultPageSize: 25,
@@ -319,12 +341,11 @@ class IssuesTable extends React.Component {
                         showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} issues`
                     }
                 }
-                rowKey="key"
-                size="small"
+                onChange={onChange}
             />
         );
     }
-};
+}
 
 IssuesTable.propTypes = {
     issues: PropTypes.array.isRequired,

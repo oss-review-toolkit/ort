@@ -18,8 +18,7 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import { Collapse, Table, Tooltip } from 'antd';
+
 import {
     ExclamationCircleOutlined,
     FileAddOutlined,
@@ -28,23 +27,22 @@ import {
     IssuesCloseOutlined,
     WarningOutlined
 } from '@ant-design/icons';
-
+import { Collapse, Table, Tooltip } from 'antd';
 import Markdown from 'markdown-to-jsx';
+import PropTypes from 'prop-types';
+
 import PackageDetails from './PackageDetails';
+import PackageFindingsTable from './PackageFindingsTable';
 import PackageLicenses from './PackageLicenses';
 import PackagePaths from './PackagePaths';
-import PackageFindingsTable from './PackageFindingsTable';
 import PathExcludesTable from './PathExcludesTable';
 import ResolutionTable from './ResolutionTable';
 import ScopeExcludesTable from './ScopeExcludesTable';
 import { getColumnSearchProps } from './Shared';
 
-
-const { Panel } = Collapse;
-
 // Generates the HTML to display violations as a Table
 class RuleViolationsTable extends React.Component {
-    render () {
+    render() {
         const {
             onChange,
             ruleViolations,
@@ -67,7 +65,7 @@ class RuleViolationsTable extends React.Component {
                 dataIndex: 'severityIndex',
                 key: 'severityIndex',
                 filters: [
-                    { 
+                    {
                         text: 'Errors',
                         value: 0
                     },
@@ -97,7 +95,8 @@ class RuleViolationsTable extends React.Component {
                                     className="ort-ok"
                                 />
                             </Tooltip>
-                        ) : (
+                            )
+                        : (
                             <span>
                                 {
                                     webAppRuleViolation.severity === 'ERROR'
@@ -124,7 +123,7 @@ class RuleViolationsTable extends React.Component {
                                     )
                                 }
                             </span>
-                        )
+                            )
                 ),
                 sorter: (a, b) => a.severityIndex - b.severityIndex,
                 sortOrder: sortedInfo.field === 'severityIndex' && sortedInfo.order,
@@ -170,7 +169,8 @@ class RuleViolationsTable extends React.Component {
                     const webAppPackage = webAppRuleViolation.package;
 
                     if (webAppPackage) {
-                        return webAppPackage.isExcluded ? (
+                        return webAppPackage.isExcluded
+                            ? (
                             <span className="ort-excludes">
                                 <Tooltip
                                     placement="right"
@@ -179,9 +179,10 @@ class RuleViolationsTable extends React.Component {
                                     <FileExcelOutlined className="ort-excluded" />
                                 </Tooltip>
                             </span>
-                        ) : (
+                                )
+                            : (
                             <FileAddOutlined />
-                        );
+                                );
                     }
 
                     return null;
@@ -227,8 +228,10 @@ class RuleViolationsTable extends React.Component {
                 className="ort-table-rule-violations"
                 columns={columns}
                 dataSource={ruleViolations}
-                expandedRowRender={
-                    (webAppRuleViolation) => {
+                rowKey="key"
+                size="small"
+                expandable={{
+                    expandedRowRender: (webAppRuleViolation) => {
                         let defaultActiveKey = [0];
                         const webAppPackage = webAppRuleViolation.package;
 
@@ -241,96 +244,107 @@ class RuleViolationsTable extends React.Component {
                                 className="ort-package-collapse"
                                 bordered={false}
                                 defaultActiveKey={defaultActiveKey}
-                            >
-                                {
-                                    webAppRuleViolation.hasHowToFix()
-                                    && (
-                                        <Panel header="How to fix" key="0">
-                                            <Markdown
-                                                className="ort-how-to-fix"
-                                            >
-                                                {webAppRuleViolation.howToFix}
-                                            </Markdown>
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppRuleViolation.isResolved
-                                    && (
-                                        <Panel header="Resolutions" key="1">
-                                            <ResolutionTable
-                                                resolutions={webAppRuleViolation.resolutions}
-                                            />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppRuleViolation.hasPackage()
-                                    && (
-                                        <Panel header="Details" key="2">
-                                            <PackageDetails webAppPackage={webAppPackage} />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppRuleViolation.hasPackage()
-                                    && webAppPackage.hasLicenses()
-                                    && (
-                                        <Panel header="Licenses" key="3">
-                                            <PackageLicenses webAppPackage={webAppPackage} />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppRuleViolation.hasPackage()
-                                    && webAppPackage.hasPaths()
-                                    && (
-                                        <Panel header="Paths" key="4">
-                                            <PackagePaths paths={webAppPackage.paths} />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppRuleViolation.hasPackage()
-                                    && webAppPackage.hasFindings()
-                                    && (
-                                        <Panel header="Scan Results" key="5">
-                                            <PackageFindingsTable
-                                                webAppPackage={webAppPackage}
-                                            />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppRuleViolation.hasPackage()
-                                    && webAppPackage.hasPathExcludes()
-                                    && (
-                                        <Panel header="Path Excludes" key="6">
-                                            <PathExcludesTable
-                                                excludes={webAppPackage.pathExcludes}
-                                            />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppRuleViolation.hasPackage()
-                                    && webAppPackage.hasScopeExcludes()
-                                    && (
-                                        <Panel header="Scope Excludes" key="7">
-                                            <ScopeExcludesTable
-                                                excludes={webAppPackage.scopeExcludes}
-                                            />
-                                        </Panel>
-                                    )
-                                }
-                            </Collapse>
+                                items={(() => {
+                                    const collapseItems = [];
+
+                                    if (webAppRuleViolation.hasHowToFix()) {
+                                        collapseItems.push({
+                                            label: 'How to fix',
+                                            key: 'rule-violation-how-to-fix',
+                                            children: (
+                                                <Markdown className="ort-how-to-fix">
+                                                    {webAppRuleViolation.howToFix}
+                                                </Markdown>
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppRuleViolation.isResolved) {
+                                        collapseItems.push({
+                                            label: 'Resolutions',
+                                            key: 'rule-violation-resolutions',
+                                            children: (
+                                                <ResolutionTable
+                                                    resolutions={webAppRuleViolation.resolutions}
+                                                />
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppRuleViolation.hasPackage()) {
+                                        collapseItems.push({
+                                            label: 'Details',
+                                            key: 'rule-violation-package-details',
+                                            children: (
+                                                <PackageDetails webAppPackage={webAppPackage} />
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppRuleViolation.hasPackage() && webAppPackage.hasLicenses()) {
+                                        collapseItems.push({
+                                            label: 'Licenses',
+                                            key: 'rule-violation-package-licenses',
+                                            children: (
+                                                <PackageLicenses webAppPackage={webAppPackage} />
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppRuleViolation.hasPackage() && webAppPackage.hasPaths()) {
+                                        collapseItems.push({
+                                            label: 'Paths',
+                                            key: 'rule-violation-package-paths',
+                                            children: (
+                                                <PackagePaths paths={webAppPackage.paths} />
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppRuleViolation.hasPackage() && webAppPackage.hasFindings()) {
+                                        collapseItems.push({
+                                            label: 'Scan Results',
+                                            key: 'rule-violation-package-scan-results',
+                                            children: (
+                                                <PackageFindingsTable
+                                                    webAppPackage={webAppPackage}
+                                                />
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppRuleViolation.hasPackage() && webAppPackage.hasPathExcludes()) {
+                                        collapseItems.push({
+                                            label: 'Path Excludes',
+                                            key: 'rule-violation-package-path-excludes',
+                                            children: (
+                                                <PathExcludesTable
+                                                    excludes={webAppPackage.pathExcludes}
+                                                />
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppRuleViolation.hasPackage() && webAppPackage.hasScopeExcludes()) {
+                                        collapseItems.push({
+                                            label: 'Scope Excludes',
+                                            key: 'rule-violation-package-scope-excludes',
+                                            children: (
+                                                <ScopeExcludesTable
+                                                    excludes={webAppPackage.scopeExcludes}
+                                                />
+                                            )
+                                        });
+                                    }
+                                    return collapseItems;
+                                })()}
+                            />
                         );
                     }
-                }
+                }}
                 locale={{
                     emptyText: 'No violations'
                 }}
-                onChange={onChange}
                 pagination={
                     {
                         defaultPageSize: 25,
@@ -342,11 +356,10 @@ class RuleViolationsTable extends React.Component {
                         showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} violations`
                     }
                 }
-                rowKey="key"
-                size="small"
+                onChange={onChange}
             />
         );
-    };
+    }
 }
 
 RuleViolationsTable.propTypes = {

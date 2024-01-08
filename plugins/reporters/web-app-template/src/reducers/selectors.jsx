@@ -17,7 +17,6 @@
  * License-Filename: LICENSE
  */
 
-import React from 'react';
 import {
     FileAddOutlined,
     FileExcelOutlined
@@ -74,7 +73,7 @@ export const getSummaryDeclaredLicensesProcessed = memoizeOne(
 export const getSummaryCharts = (state) => {
     const declaredLicensesProcessed = getSummaryDeclaredLicensesProcessed(state);
     const detectedLicensesProcessed = getSummaryDetectedLicensesProcessed(state);
-    let charts = state.summary.charts;
+    const charts = state.summary.charts;
 
     if (state.summary.charts.declaredLicensesProcessed.length === 0 && declaredLicensesProcessed.length !== 0) {
         charts.declaredLicensesProcessed = declaredLicensesProcessed;
@@ -201,7 +200,8 @@ export const getTableViewProjectFilterSelections = memoizeOne(
             .map(
                 (webAppPackage) => {
                     const text = webAppPackage.definitionFilePath
-                        ? webAppPackage.definitionFilePath : webAppPackage.id;
+                        ? webAppPackage.definitionFilePath
+                        : webAppPackage.id;
 
                     if (webAppOrtResult.hasPathExcludes()) {
                         if (webAppPackage.isExcluded) {

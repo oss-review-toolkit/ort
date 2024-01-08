@@ -18,8 +18,7 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import { Collapse, Table, Tooltip } from 'antd';
+
 import {
     CloseCircleOutlined,
     ExclamationCircleOutlined,
@@ -31,6 +30,8 @@ import {
     QuestionCircleOutlined,
     WarningOutlined
 } from '@ant-design/icons';
+import { Collapse, Table, Tooltip } from 'antd';
+import PropTypes from 'prop-types';
 
 import PackageDetails from './PackageDetails';
 import PackagePaths from './PackagePaths';
@@ -39,12 +40,9 @@ import ResolutionTable from './ResolutionTable';
 import ScopeExcludesTable from './ScopeExcludesTable';
 import { getColumnSearchProps } from './Shared';
 
-
-const { Panel } = Collapse;
-
 // Generates the HTML to display vulnerabilities as a Table
 class VulnerabilitiesTable extends React.Component {
-    render () {
+    render() {
         const {
             onChange,
             vulnerabilities,
@@ -58,12 +56,12 @@ class VulnerabilitiesTable extends React.Component {
 
         const renderAhref = (element, href, key, target = '_blank') => (
             <a
-                children={element}
                 href={href}
                 key={key}
                 rel="noopener noreferrer"
                 target={target}
             >
+                {element}
             </a>
         );
 
@@ -78,7 +76,7 @@ class VulnerabilitiesTable extends React.Component {
                 dataIndex: 'severityIndex',
                 key: 'severityIndex',
                 filters: [
-                    { 
+                    {
                         text: 'Critical',
                         value: 0
                     },
@@ -116,7 +114,8 @@ class VulnerabilitiesTable extends React.Component {
                                     className="ort-ok"
                                 />
                             </Tooltip>
-                        ) : (
+                            )
+                        : (
                             <span>
                                 {
                                     webAppVulnerability.severityIndex === 0
@@ -159,7 +158,7 @@ class VulnerabilitiesTable extends React.Component {
                                     )
                                 }
                             </span>
-                        )
+                            )
                 ),
                 sorter: (a, b) => a.severityIndex - b.severityIndex,
                 sortOrder: sortedInfo.field === 'severityIndex' && sortedInfo.order,
@@ -203,7 +202,8 @@ class VulnerabilitiesTable extends React.Component {
                     const webAppPackage = webAppVulnerability.package;
 
                     if (webAppPackage) {
-                        return webAppPackage.isExcluded ? (
+                        return webAppPackage.isExcluded
+                            ? (
                             <span className="ort-excludes">
                                 <Tooltip
                                     placement="right"
@@ -212,9 +212,10 @@ class VulnerabilitiesTable extends React.Component {
                                     <FileExcelOutlined className="ort-excluded" />
                                 </Tooltip>
                             </span>
-                        ) : (
+                                )
+                            : (
                             <FileAddOutlined />
-                        );
+                                );
                     }
 
                     return null;
@@ -252,12 +253,12 @@ class VulnerabilitiesTable extends React.Component {
                         return null;
                     }
 
-                    var domainRegex = /(?:[\w-]+\.)+[\w-]+/;
+                    const domainRegex = /(?:[\w-]+\.)+[\w-]+/;
 
                     return (
                         <span>
                             {
-                                references.map((reference, index) => 
+                                references.map((reference, index) =>
                                     renderAhref(
                                         (
                                             <Tooltip
@@ -285,72 +286,86 @@ class VulnerabilitiesTable extends React.Component {
                 className="ort-table-rule-violations"
                 columns={columns}
                 dataSource={vulnerabilities}
-                expandedRowRender={
-                    (webAppVulnerability) => {
-                        let defaultActiveKey = [0];
+                rowKey="key"
+                size="small"
+                expandable={{
+                    expandedRowRender: (webAppVulnerability) => {
+                        const defaultActiveKey = webAppVulnerability.isResolved
+                            ? 'vulnerability-resolutions'
+                            : 'vulnerability-package-details';
                         const webAppPackage = webAppVulnerability.package;
-
-                        if (webAppVulnerability.isResolved) {
-                            defaultActiveKey = [1];
-                        }
 
                         return (
                             <Collapse
                                 className="ort-package-collapse"
                                 bordered={false}
                                 defaultActiveKey={defaultActiveKey}
-                            >
-                                {
-                                    webAppVulnerability.isResolved
-                                    && (
-                                        <Panel header="Resolutions" key="1">
-                                            <ResolutionTable
-                                                resolutions={webAppVulnerability.resolutions}
-                                            />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    <Panel header="Details" key="2">
-                                        <PackageDetails webAppPackage={webAppPackage} />
-                                    </Panel>
-                                }
-                                {
-                                    webAppPackage.hasPaths()
-                                    && (
-                                        <Panel header="Paths" key="4">
-                                            <PackagePaths paths={webAppPackage.paths} />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppPackage.hasPathExcludes()
-                                    && (
-                                        <Panel header="Path Excludes" key="6">
-                                            <PathExcludesTable
-                                                excludes={webAppPackage.pathExcludes}
-                                            />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppPackage.hasScopeExcludes()
-                                    && (
-                                        <Panel header="Scope Excludes" key="7">
-                                            <ScopeExcludesTable
-                                                excludes={webAppPackage.scopeExcludes}
-                                            />
-                                        </Panel>
-                                    )
-                                }
-                            </Collapse>
+                                items={(() => {
+                                    const collapseItems = [];
+
+                                    if (webAppVulnerability.isResolved) {
+                                        collapseItems.push({
+                                            label: 'Resolutions',
+                                            key: 'vulnerability-resolutions',
+                                            children: (
+                                                <ResolutionTable
+                                                    resolutions={webAppVulnerability.resolutions}
+                                                />
+                                            )
+                                        });
+                                    }
+
+                                    collapseItems.push({
+                                        label: 'Details',
+                                        key: 'vulnerability-package-details',
+                                        children: (
+                                            <PackageDetails webAppPackage={webAppPackage} />
+                                        )
+                                    });
+
+                                    if (webAppPackage.hasPaths()) {
+                                        collapseItems.push({
+                                            label: 'Paths',
+                                            key: 'vulnerability-package-path',
+                                            children: (
+                                                <PackagePaths paths={webAppPackage.paths} />
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppPackage.hasPathExcludes()) {
+                                        collapseItems.push({
+                                            label: 'Path Excludes',
+                                            key: 'vulnerability-package-path-excludes',
+                                            children: (
+                                                <PathExcludesTable
+                                                    excludes={webAppPackage.pathExcludes}
+                                                />
+                                            )
+                                        });
+                                    }
+
+                                    if (webAppPackage.hasScopeExcludes()) {
+                                        collapseItems.push({
+                                            label: 'Scope Excludes',
+                                            key: 'vulnerability-package-scope-excludes',
+                                            children: (
+                                                <ScopeExcludesTable
+                                                    excludes={webAppPackage.scopeExcludes}
+                                                />
+                                            )
+                                        });
+                                    }
+
+                                    return collapseItems;
+                                })()}
+                            />
                         );
                     }
-                }
+                }}
                 locale={{
                     emptyText: 'No violations'
                 }}
-                onChange={onChange}
                 pagination={
                     {
                         defaultPageSize: 25,
@@ -362,11 +377,10 @@ class VulnerabilitiesTable extends React.Component {
                         showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} violations`
                     }
                 }
-                rowKey="key"
-                size="small"
+                onChange={onChange}
             />
         );
-    };
+    }
 }
 
 VulnerabilitiesTable.propTypes = {
