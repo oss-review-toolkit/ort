@@ -511,7 +511,7 @@ class Scanner(
             if (!scanner.readFromStorage) return@forEach
 
             controller.packages.forEach pkg@{ pkg ->
-                val nestedProvenance = controller.findNestedProvenance(pkg.id) ?: return@pkg
+                val nestedProvenance = controller.getNestedProvenance(pkg.id) ?: return@pkg
 
                 storageReaders.filterIsInstance<PackageBasedScanStorageReader>().forEach { reader ->
                     if (controller.hasCompleteScanResult(scanner, pkg)) return@pkg

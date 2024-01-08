@@ -163,12 +163,6 @@ internal class ScanController(
     }
 
     /**
-     * Find the [NestedProvenance] for the provided [id].
-     */
-    fun findNestedProvenance(id: Identifier): NestedProvenance? =
-        nestedProvenances[packageProvenancesWithoutVcsPath[id]]
-
-    /**
      * Return all [KnownProvenance]s contained in [nestedProvenances].
      */
     fun getAllProvenances(): Set<KnownProvenance> =
