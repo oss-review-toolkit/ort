@@ -118,6 +118,11 @@ pipeline {
          * ORT analyzer tool parameters.
          */
 
+        stashedFile(
+            name: 'ANALYZER_RESULT',
+            description: 'An optional existing analyzer result file to use instead of running the analyzer.'
+        )
+
         booleanParam(
             name: 'ALLOW_DYNAMIC_VERSIONS',
             description: 'Allow dynamic versions of dependencies (support projects without lock files).',
@@ -403,12 +408,49 @@ pipeline {
             }
         }
 
+        stage('Unstash ORT analyzer result') {
+            agent {
+                dockerfile {
+                    filename 'Dockerfile-legacy'
+                    additionalBuildArgs DOCKER_BUILD_ARGS + ortVersion
+                    args DOCKER_RUN_ARGS
+                }
+            }
+
+            when {
+                beforeAgent true
+
+                expression {
+                    env.ANALYZER_RESULT_FILENAME
+                }
+            }
+
+            steps {
+                // Note: This unstashes the named file parameter to a file named after the parameter. In particular,
+                // the original file name is not maintained automatically.
+                unstash('ANALYZER_RESULT')
+
+                sh '''
+                mkdir -p out/results
+                ln -frs ANALYZER_RESULT out/results/current-result.yml
+                '''.stripIndent().trim()
+            }
+        }
+
         stage('Run ORT analyzer') {
             agent {
                 dockerfile {
                     filename 'Dockerfile-legacy'
                     additionalBuildArgs DOCKER_BUILD_ARGS + ortVersion
                     args DOCKER_RUN_ARGS
+                }
+            }
+
+            when {
+                beforeAgent true
+
+                expression {
+                    !env.ANALYZER_RESULT_FILENAME
                 }
             }
 
