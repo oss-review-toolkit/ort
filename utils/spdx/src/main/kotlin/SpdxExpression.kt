@@ -116,7 +116,11 @@ sealed class SpdxExpression {
      * are split, omitting the operator, and exceptions to licenses are dropped. As a result, the returned strings do
      * not contain any spaces each.
      */
-    abstract fun licenses(): List<String>
+    fun licenses(): List<String> =
+        decompose().map {
+            val simpleExpression = if (it is SpdxLicenseWithExceptionExpression) it.license else it
+            simpleExpression.toString()
+        }
 
     /**
      * Return the [disjunctive normal form][1] of this expression.
@@ -245,8 +249,6 @@ class SpdxCompoundExpression(
     val right: SpdxExpression
 ) : SpdxExpression() {
     override fun decompose() = left.decompose() + right.decompose()
-
-    override fun licenses() = left.licenses() + right.licenses()
 
     override fun disjunctiveNormalForm(): SpdxExpression {
         val leftDnf = left.disjunctiveNormalForm()
@@ -463,8 +465,6 @@ class SpdxLicenseWithExceptionExpression(
 
     override fun decompose() = setOf(this)
 
-    override fun licenses() = license.licenses()
-
     override fun simpleLicense() = license.toString()
 
     override fun exception() = exception
@@ -559,8 +559,6 @@ class SpdxLicenseIdExpression(
 
     override fun decompose() = setOf(this)
 
-    override fun licenses() = listOf(toString())
-
     override fun simpleLicense() = toString()
 
     override fun exception(): String? = null
@@ -614,8 +612,6 @@ data class SpdxLicenseReferenceExpression(
     val id: String
 ) : SpdxSimpleExpression() {
     override fun decompose() = setOf(this)
-
-    override fun licenses() = listOf(id)
 
     override fun simpleLicense() = id
 
