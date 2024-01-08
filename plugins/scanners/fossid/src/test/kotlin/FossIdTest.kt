@@ -588,6 +588,7 @@ class FossIdTest : WordSpec({
                 runInterruptible {
                     fossId.scanPackage(
                         createPackage(createIdentifier(index = 1), vcsInfo),
+                        null,
                         ScanContext(
                             labels = emptyMap(),
                             packageType = PackageType.PACKAGE,
@@ -1601,4 +1602,4 @@ private fun FossId.scan(
     pkg: Package,
     labels: Map<String, String> = emptyMap(),
     excludes: Excludes = Excludes()
-): ScanResult = scanPackage(pkg, ScanContext(labels, PackageType.PACKAGE, excludes))
+): ScanResult = scanPackage(pkg, null, ScanContext(labels, PackageType.PACKAGE, excludes))

@@ -80,6 +80,7 @@ import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScannerMatcher
 import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
+import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
 import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
@@ -239,7 +240,7 @@ class FossId internal constructor(
             issues = listOf(issue)
         )
 
-    override fun scanPackage(pkg: Package, context: ScanContext): ScanResult {
+    override fun scanPackage(pkg: Package, nestedProvenance: NestedProvenance?, context: ScanContext): ScanResult {
         val (result, duration) = measureTimedValue {
             fun createSingleIssueResult(issue: Issue, provenance: Provenance): ScanResult {
                 val time = Instant.now()

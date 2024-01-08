@@ -363,7 +363,11 @@ class Scanner(
                     coveredPackages = packagesWithIncompleteScanResult
                 )
 
-                val scanResult = scanner.scanPackage(referencePackage, adjustedContext)
+                val scanResult = scanner.scanPackage(
+                    referencePackage,
+                    controller.getNestedProvenance(referencePackage.id),
+                    adjustedContext
+                )
 
                 logger.info {
                     "Finished scan of '${referencePackage.id.toCoordinates()}' with package scanner '${scanner.name}'."
