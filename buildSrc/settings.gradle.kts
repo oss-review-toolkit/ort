@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+rootProject.name = "buildSrc"
+
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {

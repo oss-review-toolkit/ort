@@ -23,10 +23,10 @@ plugins {
 }
 
 dependencies {
-    api(project(":model"))
-    api(project(":utils:scripting-utils"))
+    api(projects.model)
+    api(projects.utils.scriptingUtils)
 
-    implementation(project(":utils:ort-utils"))
+    implementation(projects.utils.ortUtils)
 
     implementation("org.jetbrains.kotlin:kotlin-scripting-common")
     implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")

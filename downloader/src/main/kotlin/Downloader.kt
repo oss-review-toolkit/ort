@@ -95,7 +95,7 @@ class Downloader(private val config: DownloaderConfiguration) {
         outputDirectory: File,
         dryRun: Boolean,
         exception: DownloadException
-    ): Provenance? {
+    ): RepositoryProvenance? {
         val vcsMark = TimeSource.Monotonic.markNow()
 
         try {
@@ -105,15 +105,18 @@ class Downloader(private val config: DownloaderConfiguration) {
 
             if (!isCargoPackageWithSourceArtifact) {
                 val result = downloadFromVcs(pkg, outputDirectory, dryRun = dryRun)
-                val vcsInfo = (result as RepositoryProvenance).vcsInfo
 
                 logger.info {
-                    "Downloaded source code for '${pkg.id.toCoordinates()}' from $vcsInfo in ${vcsMark.elapsedNow()}."
+                    "Downloaded source code for '${pkg.id.toCoordinates()}' from ${result.vcsInfo} in " +
+                        "${vcsMark.elapsedNow()}."
                 }
 
                 return result
             } else {
-                logger.info { "Skipping VCS download for Cargo package '${pkg.id.toCoordinates()}'." }
+                logger.info {
+                    "Skipping VCS download for Cargo package '${pkg.id.toCoordinates()}' as it has a source artifact " +
+                        "at ${pkg.sourceArtifact}."
+                }
             }
         } catch (e: DownloadException) {
             logger.debug { "VCS download failed for '${pkg.id.toCoordinates()}': ${e.collectMessages()}" }
@@ -141,7 +144,7 @@ class Downloader(private val config: DownloaderConfiguration) {
         outputDirectory: File,
         dryRun: Boolean,
         exception: DownloadException
-    ): Provenance? {
+    ): ArtifactProvenance? {
         val sourceArtifactMark = TimeSource.Monotonic.markNow()
 
         try {
@@ -176,7 +179,7 @@ class Downloader(private val config: DownloaderConfiguration) {
      * Download the source code of the [package][pkg] to the [outputDirectory] using its VCS information. If [recursive]
      * is `true`, any nested repositories (like Git submodules or Mercurial subrepositories) are downloaded, too. If
      * [dryRun] is `true`, no actual download happens but the source code is only checked to be available. A
-     * [Provenance] is returned on success or a [DownloadException] is thrown in case of failure.
+     * [RepositoryProvenance] is returned on success or a [DownloadException] is thrown in case of failure.
      */
     @JvmOverloads
     fun downloadFromVcs(
@@ -184,7 +187,7 @@ class Downloader(private val config: DownloaderConfiguration) {
         outputDirectory: File,
         recursive: Boolean = true,
         dryRun: Boolean = false
-    ): Provenance {
+    ): RepositoryProvenance {
         if (pkg.vcsProcessed.url.isBlank()) {
             val hint = when (pkg.id.type) {
                 "Bundler", "Gem" ->
@@ -297,14 +300,14 @@ class Downloader(private val config: DownloaderConfiguration) {
 
     /**
      * Download the [sourceArtifact] and unpack it to the [outputDirectory]. If [dryRun] is `true`, no actual download
-     * happens but the source code is only checked to be available. A [Provenance] is returned on success or a
+     * happens but the source code is only checked to be available. An [ArtifactProvenance] is returned on success or a
      * [DownloadException] is thrown in case of failure.
      */
     fun downloadSourceArtifact(
         sourceArtifact: RemoteArtifact,
         outputDirectory: File,
         dryRun: Boolean = false
-    ): Provenance {
+    ): ArtifactProvenance {
         if (sourceArtifact.url.isBlank()) {
             throw DownloadException("No source artifact URL provided.")
         }

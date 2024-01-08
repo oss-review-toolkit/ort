@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 
 /**
- * The base interface for all types of scanners.
+ * The base interface for all types of wrappers for scanners.
  */
 sealed interface ScannerWrapper {
     /**
@@ -58,7 +58,7 @@ sealed interface ScannerWrapper {
     /**
      * The [ScannerMatcher] object to be used when looking up existing scan results from a scan storage. By default,
      * the properties of this object are initialized by the scanner implementation. These defaults can be overridden
-     * with the scanner specific [options][PluginConfiguration.options] in [ScannerConfiguration.config]: Use properties
+     * with the scanner-specific [options][PluginConfiguration.options] in [ScannerConfiguration.config]: Use properties
      * of the form `scannerName.options.property`, where `scannerName` is the name of the scanner and `property` is the
      * name of a property of the [ScannerMatcher] class. For instance, to specify that a specific minimum version of
      * ScanCode is allowed, set this property: `config.ScanCode.options.minVersion=3.0.2`.

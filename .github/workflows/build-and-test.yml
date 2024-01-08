@@ -52,7 +52,7 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@v2
+      uses: github/codeql-action/init@v3
       with:
         languages: java
         tools: latest
@@ -67,7 +67,7 @@ jobs:
         gradle-home-cache-cleanup: true
         arguments: -Dorg.gradle.jvmargs=-Xmx1g classes -x :plugins:reporters:web-app-template:yarnBuild
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v2
+      uses: github/codeql-action/analyze@v3
   test:
     needs: build
     runs-on: ubuntu-22.04

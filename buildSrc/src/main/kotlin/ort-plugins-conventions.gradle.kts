@@ -20,7 +20,6 @@
 plugins {
     // Apply core plugins.
     `java-platform`
-    `maven-publish`
 
     // Apply precompiled plugins.
     id("ort-base-conventions")

@@ -1,6 +1,6 @@
 ---
 project:
-  id: "Carthage:oss-review-toolkit:ort:<REPLACE_REVISION>"
+  id: "Carthage:<REPLACE_GITHUB_ORGANIZATION>:ort:<REPLACE_REVISION>"
   definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
   declared_licenses: []
   declared_licenses_processed: {}

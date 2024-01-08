@@ -96,7 +96,7 @@ class FossIdReporter : Reporter {
         return runBlocking(Dispatchers.IO) {
             val scanResults = input.ortResult.getScanResults().values.flatten()
             val scanCodes = scanResults.flatMapTo(mutableSetOf()) {
-                it.additionalData[SCAN_CODE_KEY].orEmpty().split(',')
+                it.additionalData[SCAN_CODE_KEY]?.split(',').orEmpty()
             }
 
             scanCodes.map { scanCode ->

@@ -1,49 +1,50 @@
 [versions]
-dependencyAnalysisPlugin = "1.27.0"
+dependencyAnalysisPlugin = "1.28.0"
 detektPlugin = "1.23.4"
 dokkatooPlugin = "2.0.0"
 downloadPlugin = "5.5.0"
 gitSemverPlugin = "0.11.0"
 graalVmNativeImagePlugin = "0.9.28"
-graphQlPlugin = "6.5.6"
+graphQlPlugin = "6.5.7"
 ideaExtPlugin = "1.1.7"
-kotlinPlugin = "1.9.21"
+kotlinPlugin = "1.9.22"
+mavenPublishPlugin = "0.27.0"
 versionsPlugin = "0.50.0"
 
 antlr = "4.13.1"
-asciidoctorj = "2.5.10"
-asciidoctorjPdf = "2.3.9"
-clikt = "4.2.1"
+asciidoctorj = "2.5.11"
+asciidoctorjPdf = "2.3.10"
+clikt = "4.2.2"
 commonsCompress = "1.25.0"
 cvssCalculator = "1.4.2"
 cyclonedx = "8.0.3"
 diffUtils = "4.12"
 diskLruCache = "2.0.2"
-exposed = "0.45.0"
+exposed = "0.46.0"
 flexmark = "0.64.8"
 freemarker = "2.3.32"
 greenmail = "2.0.1"
 hikari = "5.1.0"
 hoplite = "2.7.5"
-jackson = "2.16.0"
+jackson = "2.16.1"
 jakartaMail = "2.0.1"
 jgit = "6.8.0.202311291450-r"
 jiraRestClient = "5.2.7"
 jruby = "9.4.5.0"
 jslt = "0.1.14"
-jsonSchemaValidator = "1.0.88"
+jsonSchemaValidator = "1.1.0"
 kotest = "5.8.0"
 kotlinxCoroutines = "1.7.3"
 kotlinxHtml = "0.10.1"
 kotlinxSerialization = "1.6.2"
 tomlkt = "0.3.7"
 ktor = "2.3.7"
-log4jApi = "2.22.0"
-log4jApiKotlin = "1.3.0"
+log4jApi = "2.22.1"
+log4jApiKotlin = "1.4.0"
 logback = "1.4.14"
 maven = "3.9.6"
 mavenResolver = "1.9.18"
-mockk = "1.13.8"
+mockk = "1.13.9"
 mordant = "2.2.0"
 okhttp = "4.12.0"
 postgres = "42.7.1"
@@ -51,11 +52,11 @@ postgresEmbedded = "1.0.2"
 reflections = "0.10.2"
 retrofit = "2.9.0"
 retrofitConverterKotlinxSerialization = "1.0.0"
-s3 = "2.21.13"
+s3 = "2.22.0"
 saxonHe = "12.4"
 scanoss = "1.1.6"
 semver4j = "5.2.2"
-slf4j = "2.0.9"
+slf4j = "2.0.10"
 springCore = "5.3.31"
 svnkit = "1.10.11"
 sw360Client = "17.0.1-m2"
@@ -80,12 +81,12 @@ clikt = { module = "com.github.ajalt.clikt:clikt", version.ref = "clikt" }
 commonsCompress = { module = "org.apache.commons:commons-compress", version.ref = "commonsCompress" }
 cvssCalculator = { module = "us.springett:cvss-calculator", version.ref = "cvssCalculator" }
 cyclonedx = { module = "org.cyclonedx:cyclonedx-core-java", version.ref = "cyclonedx" }
-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detektPlugin" }
+detektPlugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detektPlugin" }
 detektApi = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detektPlugin" }
 detektTest = { module = "io.gitlab.arturbosch.detekt:detekt-test", version.ref = "detektPlugin" }
 diffUtils = { module = "io.github.java-diff-utils:java-diff-utils", version.ref = "diffUtils" }
 diskLruCache = { module = "com.jakewharton:disklrucache", version.ref = "diskLruCache" }
-dokkatoo = { module = "dev.adamko.dokkatoo:dokkatoo-plugin", version.ref = "dokkatooPlugin" }
+dokkatooPlugin = { module = "dev.adamko.dokkatoo:dokkatoo-plugin", version.ref = "dokkatooPlugin" }
 exposedCore = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
 exposedDao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed" }
 exposedJavaTime = { module = "org.jetbrains.exposed:exposed-java-time", version.ref = "exposed" }
@@ -93,7 +94,7 @@ exposedJdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "ex
 exposedJson = { module = "org.jetbrains.exposed:exposed-json", version.ref = "exposed" }
 flexmark = { module = "com.vladsch.flexmark:flexmark", version.ref = "flexmark" }
 freemarker = { module = "org.freemarker:freemarker", version.ref = "freemarker" }
-graalVmNativeImage = { module = "org.graalvm.buildtools:native-gradle-plugin", version.ref = "graalVmNativeImagePlugin" }
+graalVmNativeImagePlugin = { module = "org.graalvm.buildtools:native-gradle-plugin", version.ref = "graalVmNativeImagePlugin" }
 graphQlKtorClient = { module = "com.expediagroup:graphql-kotlin-ktor-client", version.ref = "graphQlPlugin" }
 greenmail = { module = "com.icegreen:greenmail", version.ref = "greenmail" }
 hikari = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }
@@ -121,7 +122,7 @@ kotestExtensionsJunitXml = { module = "io.kotest:kotest-extensions-junitxml", ve
 kotestFrameworkApi = { module = "io.kotest:kotest-framework-api", version.ref = "kotest" }
 kotestFrameworkEngine = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
 kotestRunnerJunit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlinPlugin" }
+kotlinPlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlinPlugin" }
 kotlinxCoroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinxHtml = { module = "org.jetbrains.kotlinx:kotlinx-html-jvm", version.ref = "kotlinxHtml" }
 kotlinxSerializationCore = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerialization" }
@@ -137,6 +138,7 @@ mavenCompat = { module = "org.apache.maven:maven-compat", version.ref = "maven" 
 mavenCore = { module = "org.apache.maven:maven-core", version.ref = "maven" }
 mavenModel = { module = "org.apache.maven:maven-model", version.ref = "maven" }
 mavenModelBuilder = { module = "org.apache.maven:maven-model-builder", version.ref = "maven" }
+mavenPublishPlugin = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "mavenPublishPlugin" }
 mavenResolverApi = { module = "org.apache.maven.resolver:maven-resolver-api", version.ref = "mavenResolver" }
 mavenResolverConnectorBasic = { module = "org.apache.maven.resolver:maven-resolver-connector-basic", version.ref = "mavenResolver" }
 mavenResolverTransportFile = { module = "org.apache.maven.resolver:maven-resolver-transport-file", version.ref = "mavenResolver" }

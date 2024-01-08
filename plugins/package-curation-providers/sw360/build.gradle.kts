@@ -23,7 +23,7 @@ plugins {
 }
 
 dependencies {
-    api(project(":plugins:package-curation-providers:package-curation-provider-api"))
+    api(projects.plugins.packageCurationProviders.packageCurationProviderApi)
 
     implementation(libs.sw360Client)
 }

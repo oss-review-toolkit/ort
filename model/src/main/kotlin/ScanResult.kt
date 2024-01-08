@@ -43,7 +43,7 @@ data class ScanResult(
     val summary: ScanSummary,
 
     /**
-     * A map for scanner specific data that cannot be mapped into any generalized property, but still needs to be
+     * A map for scanner-specific data that cannot be mapped into any generalized property, but still needs to be
      * stored in the scan result.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)

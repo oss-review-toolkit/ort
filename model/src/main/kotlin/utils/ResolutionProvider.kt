@@ -33,30 +33,30 @@ interface ResolutionProvider {
     /**
      * Get all issue resolutions that match [issue].
      */
-    fun getIssueResolutionsFor(issue: Issue): List<IssueResolution>
+    fun getResolutionsFor(issue: Issue): List<IssueResolution>
 
     /**
      * Get all rule violation resolutions that match [violation].
      */
-    fun getRuleViolationResolutionsFor(violation: RuleViolation): List<RuleViolationResolution>
+    fun getResolutionsFor(violation: RuleViolation): List<RuleViolationResolution>
 
     /**
      * Get all vulnerability resolutions that match [vulnerability].
      */
-    fun getVulnerabilityResolutionsFor(vulnerability: Vulnerability): List<VulnerabilityResolution>
+    fun getResolutionsFor(vulnerability: Vulnerability): List<VulnerabilityResolution>
 
     /**
      * Return true if there is at least one issue resolution that matches [issue].
      */
-    fun isResolved(issue: Issue): Boolean = getIssueResolutionsFor(issue).isNotEmpty()
+    fun isResolved(issue: Issue): Boolean = getResolutionsFor(issue).isNotEmpty()
 
     /**
      * Return true if there is at least one rule violation resolution that matches [violation].
      */
-    fun isResolved(violation: RuleViolation): Boolean = getRuleViolationResolutionsFor(violation).isNotEmpty()
+    fun isResolved(violation: RuleViolation): Boolean = getResolutionsFor(violation).isNotEmpty()
 
     /**
      * Return true if there is at least one vulnerability resolution that matches [vulnerability].
      */
-    fun isResolved(vulnerability: Vulnerability): Boolean = getVulnerabilityResolutionsFor(vulnerability).isNotEmpty()
+    fun isResolved(vulnerability: Vulnerability): Boolean = getResolutionsFor(vulnerability).isNotEmpty()
 }

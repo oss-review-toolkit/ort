@@ -54,6 +54,7 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.readValueOrDefault
 import org.ossreviewtoolkit.model.utils.CompositePackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
+import org.ossreviewtoolkit.model.utils.setResolutions
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
 import org.ossreviewtoolkit.plugins.commands.api.utils.configurationGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.inputGroup
@@ -75,6 +76,7 @@ import org.ossreviewtoolkit.utils.ort.ORT_LICENSE_CLASSIFICATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 import org.ossreviewtoolkit.utils.ort.showStackTrace
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants.LICENSE_REF_PREFIX
 
 class ReporterCommand : OrtCommand(
     name = "report",
@@ -119,7 +121,7 @@ class ReporterCommand : OrtCommand(
         "--custom-license-texts-dir",
         help = "A directory which maps custom license IDs to license texts. It should contain one text file per " +
             "license with the license ID as the filename. A custom license text is used only if its ID has a " +
-            "'LicenseRef-' prefix and if the respective license text is not known by ORT."
+            "'$LICENSE_REF_PREFIX' prefix and if the respective license text is not known by ORT."
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
         .convert { it.absoluteFile.normalize() }
@@ -203,10 +205,10 @@ class ReporterCommand : OrtCommand(
             ortResult = ortResult.replaceConfig(config)
         }
 
-        val resolutionProvider =
-            ortResult.resolvedConfiguration.resolutions.takeUnless { refreshResolutions }?.let { resolutions ->
-                DefaultResolutionProvider(resolutions)
-            } ?: DefaultResolutionProvider.create(ortResult, resolutionsFile)
+        if (refreshResolutions || ortResult.resolvedConfiguration.resolutions == null) {
+            val resolutionProvider = DefaultResolutionProvider.create(ortResult, resolutionsFile)
+            ortResult = ortResult.setResolutions(resolutionProvider)
+        }
 
         val licenseTextDirectories = listOfNotNull(customLicenseTextsDir.takeIf { it.isDirectory })
 
@@ -255,7 +257,7 @@ class ReporterCommand : OrtCommand(
             ortResult,
             ortConfig,
             packageConfigurationProvider,
-            resolutionProvider,
+            DefaultResolutionProvider(ortResult.getResolutions()),
             DefaultLicenseTextProvider(licenseTextDirectories),
             copyrightGarbage,
             licenseInfoResolver,

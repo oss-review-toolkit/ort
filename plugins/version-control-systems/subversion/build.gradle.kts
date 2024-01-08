@@ -23,11 +23,11 @@ plugins {
 }
 
 dependencies {
-    api(project(":downloader"))
-    api(project(":model"))
+    api(projects.downloader)
+    api(projects.model)
 
-    implementation(project(":utils:common-utils"))
-    implementation(project(":utils:ort-utils"))
+    implementation(projects.utils.commonUtils)
+    implementation(projects.utils.ortUtils)
 
     implementation(libs.svnkit) {
         exclude(group = "org.apache.sshd", module = "sshd-core")

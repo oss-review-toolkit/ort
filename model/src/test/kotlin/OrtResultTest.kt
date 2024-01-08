@@ -146,29 +146,26 @@ class OrtResultTest : WordSpec({
     "getOpenIssues" should {
         "omit resolved issues" {
             val ortResult = OrtResult.EMPTY.copy(
-                repository = Repository.EMPTY.copy(
-                    config = RepositoryConfiguration(
-                        resolutions = Resolutions(
-                            issues = listOf(
-                                IssueResolution(
-                                    "Issue message to resolve",
-                                    IssueResolutionReason.CANT_FIX_ISSUE,
-                                    "comment"
-                                )
-                            )
-                        )
-                    )
-                ),
                 analyzer = AnalyzerRun.EMPTY.copy(
                     result = AnalyzerResult(
                         projects = emptySet(),
                         packages = emptySet(),
                         issues = mapOf(
-                            Identifier("Maven:org.oss-review-toolkit:example:1.0") to
-                                listOf(
-                                    Issue(message = "Issue message to resolve", source = ""),
-                                    Issue(message = "Non-resolved issue", source = "")
-                                )
+                            Identifier("Maven:org.oss-review-toolkit:example:1.0") to listOf(
+                                Issue(message = "Issue message to resolve", source = ""),
+                                Issue(message = "Non-resolved issue", source = "")
+                            )
+                        )
+                    )
+                ),
+                resolvedConfiguration = ResolvedConfiguration(
+                    resolutions = Resolutions(
+                        issues = listOf(
+                            IssueResolution(
+                                "Issue message to resolve",
+                                IssueResolutionReason.CANT_FIX_ISSUE,
+                                "comment"
+                            )
                         )
                     )
                 )
@@ -309,19 +306,6 @@ class OrtResultTest : WordSpec({
 
         "drop resolved rule violations if omitResolved is true" {
             val ortResult = OrtResult.EMPTY.copy(
-                repository = Repository.EMPTY.copy(
-                    config = RepositoryConfiguration(
-                        resolutions = Resolutions(
-                            ruleViolations = listOf(
-                                RuleViolationResolution(
-                                    "Rule violation message to resolve",
-                                    RuleViolationResolutionReason.EXAMPLE_OF_EXCEPTION,
-                                    "comment"
-                                )
-                            )
-                        )
-                    )
-                ),
                 evaluator = EvaluatorRun.EMPTY.copy(
                     violations = listOf(
                         RuleViolation(
@@ -350,6 +334,17 @@ class OrtResultTest : WordSpec({
                             severity = Severity.HINT,
                             message = "Message without any resolution",
                             howToFix = ""
+                        )
+                    )
+                ),
+                resolvedConfiguration = ResolvedConfiguration(
+                    resolutions = Resolutions(
+                        ruleViolations = listOf(
+                            RuleViolationResolution(
+                                "Rule violation message to resolve",
+                                RuleViolationResolutionReason.EXAMPLE_OF_EXCEPTION,
+                                "comment"
+                            )
                         )
                     )
                 )

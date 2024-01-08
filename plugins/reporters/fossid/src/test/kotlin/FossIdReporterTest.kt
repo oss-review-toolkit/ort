@@ -242,6 +242,17 @@ class FossIdReporterTest : WordSpec({
 
             result shouldContainExactly listOf(FILE_SAMPLE)
         }
+
+        "ignore scan results without a scancode" {
+            val (serviceMock, reporterMock) = createReporterMock()
+            val input = createReporterInput(SCANCODE_1)
+
+            reporterMock.generateReport(input)
+
+            coVerify(exactly = 1) {
+                serviceMock.generateReport(any(), any(), any(), any(), any(), any())
+            }
+        }
     }
 })
 
@@ -275,7 +286,14 @@ private fun createReporterInput(vararg scanCodes: String): ReporterInput {
     val results = scanCodes.associateByTo(
         destination = sortedMapOf(),
         keySelector = { Identifier.EMPTY.copy(name = it) },
-        valueTransform = { listOf(createScanResult(it)) }
+        valueTransform = { code ->
+            val unmatchedScanResult = ScanResult(
+                provenance = UnknownProvenance,
+                scanner = ScannerDetails.EMPTY.copy(name = "otherScanner"),
+                summary = ScanSummary.EMPTY
+            )
+            listOf(createScanResult(code), unmatchedScanResult)
+        }
     )
 
     return ReporterInput(

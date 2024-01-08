@@ -25,17 +25,19 @@ import io.kotest.matchers.file.aFile
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
+import org.ossreviewtoolkit.plugins.packagemanagers.python.Poetry.Companion.PYPROJECT_FILENAME
+
 class PoetryTest : WordSpec({
     "parseScopeNamesFromPyProject()" should {
         "return the 'main' scope even for a non-existing file" {
-            val pyprojectFile = tempdir().resolve(Pip.PYPROJECT_FILENAME)
+            val pyprojectFile = tempdir().resolve(PYPROJECT_FILENAME)
 
             pyprojectFile shouldNotBe aFile()
             parseScopeNamesFromPyproject(pyprojectFile) shouldBe setOf("main")
         }
 
         "parse scope names with different syntax" {
-            val pyprojectFile = tempdir().resolve(Pip.PYPROJECT_FILENAME)
+            val pyprojectFile = tempdir().resolve(PYPROJECT_FILENAME)
 
             pyprojectFile.writeText(
                 """
@@ -48,7 +50,7 @@ class PoetryTest : WordSpec({
         }
 
         "not return empty scope names" {
-            val pyprojectFile = tempdir().resolve(Pip.PYPROJECT_FILENAME)
+            val pyprojectFile = tempdir().resolve(PYPROJECT_FILENAME)
 
             pyprojectFile.writeText(
                 """

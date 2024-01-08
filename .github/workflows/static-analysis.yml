@@ -8,6 +8,9 @@ on:
     branches:
       - main
 
+env:
+  GRADLE_OPTS: -Dorg.gradle.daemon=false
+
 jobs:
   commit-lint:
     runs-on: ubuntu-22.04
@@ -21,8 +24,6 @@ jobs:
           configFile: .commitlintrc.yml
   code-base-checks:
     runs-on: ubuntu-22.04
-    env:
-      GRADLE_OPTS: -Dorg.gradle.daemon=false
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
@@ -38,8 +39,6 @@ jobs:
         arguments: checkCopyrightsInNoticeFile checkLicenseHeaders checkGitAttributes
   detekt-issues:
     runs-on: ubuntu-22.04
-    env:
-      GRADLE_OPTS: -Dorg.gradle.daemon=false
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
@@ -54,7 +53,7 @@ jobs:
         gradle-home-cache-cleanup: true
         arguments: detekt detektTest detektFunTest
     - name: Upload SARIF File
-      uses: github/codeql-action/upload-sarif@v2
+      uses: github/codeql-action/upload-sarif@v3
       if: ${{ always() }} # Upload even if the previous step failed.
       with:
         sarif_file: build/reports/detekt/merged.sarif
@@ -91,7 +90,7 @@ jobs:
       with:
         post-pr-comment: false
         use-caches: false
-    - uses: github/codeql-action/upload-sarif@v2
+    - uses: github/codeql-action/upload-sarif@v3
       with:
         sarif_file: ${{runner.temp}}/qodana/results/qodana.sarif.json
   reuse-tool:

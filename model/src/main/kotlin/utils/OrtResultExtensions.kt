@@ -27,10 +27,10 @@ import org.ossreviewtoolkit.model.licenses.DefaultLicenseInfoProvider
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 
 /**
- * Add all package configurations from [packageConfigurationProvider] that match any scan result in this [OrtResult] to
- * [OrtResult.resolvedConfiguration], overwriting any previously contained package configurations.
+ * Replace the package configurations in [OrtResult.resolvedConfiguration] with the ones obtained from
+ * [packageConfigurationProvider].
  */
-fun OrtResult.addPackageConfigurations(packageConfigurationProvider: PackageConfigurationProvider): OrtResult {
+fun OrtResult.setPackageConfigurations(packageConfigurationProvider: PackageConfigurationProvider): OrtResult {
     val packageConfigurations = ConfigurationResolver.resolvePackageConfigurations(
         identifiers = getUncuratedPackages().mapTo(mutableSetOf()) { it.id },
         scanResultProvider = { id -> getScanResultsForId(id) },
@@ -41,11 +41,10 @@ fun OrtResult.addPackageConfigurations(packageConfigurationProvider: PackageConf
 }
 
 /**
- * Add all package curations from [packageCurationProviders] that match any packages in this [OrtResult] to
- * [OrtResult.resolvedConfiguration], overwriting any previously contained package curations. The
- * [packageCurationProviders] must be ordered highest-priority-first.
+ * Replace the package curations in [OrtResult.resolvedConfiguration] with the ones obtained from
+ * [packageCurationProviders]. The [packageCurationProviders] must be ordered highest-priority-first.
  */
-fun OrtResult.addPackageCurations(packageCurationProviders: List<Pair<String, PackageCurationProvider>>): OrtResult {
+fun OrtResult.setPackageCurations(packageCurationProviders: List<Pair<String, PackageCurationProvider>>): OrtResult {
     val packageCurations =
         ConfigurationResolver.resolvePackageCurations(getUncuratedPackages(), packageCurationProviders)
 
@@ -53,10 +52,9 @@ fun OrtResult.addPackageCurations(packageCurationProviders: List<Pair<String, Pa
 }
 
 /**
- * Add all resolutions from [resolutionProvider] that match the content of this [OrtResult] to
- * [OrtResult.resolvedConfiguration], overwriting any previously contained resolutions.
+ * Replace the resolutions in [OrtResult.resolvedConfiguration] with the ones obtained from [resolutionProvider].
  */
-fun OrtResult.addResolutions(resolutionProvider: ResolutionProvider): OrtResult {
+fun OrtResult.setResolutions(resolutionProvider: ResolutionProvider): OrtResult {
     val resolutions = ConfigurationResolver.resolveResolutions(
         issues = getIssues().values.flatten(),
         ruleViolations = getRuleViolations(),
