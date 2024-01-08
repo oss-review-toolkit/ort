@@ -29,6 +29,7 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
 
 /**
  * The base interface for all types of wrappers for scanners.
@@ -83,7 +84,7 @@ sealed interface ScannerWrapper {
  * A wrapper interface for scanners that operate on [Package]s and download the package source code themselves.
  */
 interface PackageScannerWrapper : ScannerWrapper {
-    fun scanPackage(pkg: Package, context: ScanContext): ScanResult
+    fun scanPackage(pkg: Package, nestedProvenance: NestedProvenance?, context: ScanContext): ScanResult
 }
 
 /**
