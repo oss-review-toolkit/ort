@@ -17,7 +17,7 @@
     License-Filename: LICENSE
 --]
 
-[#assign PurlUtils = statics['org.ossreviewtoolkit.model.utils.PurlUtilsKt']]
+[#assign PurlUtils = statics['org.ossreviewtoolkit.model.utils.PurlExtensionsKt']]
 
 :title-page:
 :sectnums:
