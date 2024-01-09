@@ -74,6 +74,8 @@ fun Identifier.getPurlType() =
 fun Identifier.toPurl(qualifiers: Map<String, String> = emptyMap(), subpath: String = "") =
     if (this == Identifier.EMPTY) "" else createPurl(getPurlType(), namespace, name, version, qualifiers, subpath)
 
+fun Identifier.toPurl(extras: PurlExtras) = toPurl(extras.qualifiers, extras.subpath)
+
 /**
  * Encode a [KnownProvenance] to extra qualifying data / a subpath of PURL.
  */
