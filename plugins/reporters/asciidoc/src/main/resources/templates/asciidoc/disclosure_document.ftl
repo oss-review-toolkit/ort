@@ -27,7 +27,7 @@
     Excluded projects and packages are ignored.
 --]
 
-[#assign PurlUtils = statics['org.ossreviewtoolkit.model.utils.PurlUtilsKt']]
+[#assign PurlUtils = statics['org.ossreviewtoolkit.model.utils.PurlExtensionsKt']]
 
 [#-- Add the licenses of the projects. --]
 :title-page:
