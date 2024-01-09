@@ -79,7 +79,7 @@ fun Identifier.toPurl(extras: PurlExtras) = toPurl(extras.qualifiers, extras.sub
 /**
  * Encode a [KnownProvenance] to extra qualifying data / a subpath of PURL.
  */
-internal fun KnownProvenance.toPurlExtras(): PurlExtras =
+fun KnownProvenance.toPurlExtras(): PurlExtras =
     when (this) {
         is ArtifactProvenance -> with(sourceArtifact) {
             val checksum = "${hash.algorithm.name.lowercase()}:${hash.value}"
@@ -104,7 +104,7 @@ internal fun KnownProvenance.toPurlExtras(): PurlExtras =
  * Decode [Provenance] from extra qualifying data / a subpath of the PURL represented by this [String]. Return
  * [UnknownProvenance] if extra data is not present.
  */
-internal fun String.toProvenance(): Provenance {
+fun String.toProvenance(): Provenance {
     val extras = substringAfter('?')
 
     fun getQualifierValue(name: String) = extras.substringAfter("$name=").substringBefore('&')
