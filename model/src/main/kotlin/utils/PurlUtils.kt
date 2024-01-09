@@ -57,6 +57,23 @@ enum class PurlType(private val value: String) {
 }
 
 /**
+ * Extra data than can be appended to a "clean" PURL via qualifiers or a subpath.
+ */
+data class PurlExtras(
+    /**
+     * Extra qualifying data as key / value pairs. Needs to be percent-encoded when used in a query string.
+     */
+    val qualifiers: Map<String, String>,
+
+    /**
+     * A subpath relative to the root of the package.
+     */
+    val subpath: String
+) {
+    constructor(vararg qualifiers: Pair<String, String>, subpath: String = "") : this(qualifiers.toMap(), subpath)
+}
+
+/**
  * Create the canonical [package URL](https://github.com/package-url/purl-spec) ("purl") based on given properties:
  * [type] (which must be a String representation of a [PurlType] instance, [namespace], [name] and [version].
  * Optional [qualifiers] may be given and will be appended to the purl as query parameters e.g.

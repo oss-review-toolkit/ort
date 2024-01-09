@@ -19,8 +19,19 @@
 
 package org.ossreviewtoolkit.model.utils
 
+import java.net.URLDecoder
+
+import org.ossreviewtoolkit.model.ArtifactProvenance
+import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RepositoryProvenance
+import org.ossreviewtoolkit.model.UnknownProvenance
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
 
 /**
  * Map a [Package]'s type to the string representation of the respective [PurlType], or fall back to [PurlType.GENERIC]
@@ -62,3 +73,69 @@ fun Identifier.getPurlType() =
 @JvmOverloads
 fun Identifier.toPurl(qualifiers: Map<String, String> = emptyMap(), subpath: String = "") =
     if (this == Identifier.EMPTY) "" else createPurl(getPurlType(), namespace, name, version, qualifiers, subpath)
+
+/**
+ * Encode a [KnownProvenance] to extra qualifying data / a subpath of PURL.
+ */
+internal fun KnownProvenance.toPurlExtras(): PurlExtras =
+    when (this) {
+        is ArtifactProvenance -> with(sourceArtifact) {
+            val checksum = "${hash.algorithm.name.lowercase()}:${hash.value}"
+            PurlExtras(
+                "download_url" to url,
+                "checksum" to checksum
+            )
+        }
+
+        is RepositoryProvenance -> with(vcsInfo) {
+            PurlExtras(
+                "vcs_type" to type.toString(),
+                "vcs_url" to url,
+                "vcs_revision" to revision,
+                "resolved_revision" to resolvedRevision,
+                subpath = vcsInfo.path
+            )
+        }
+    }
+
+/**
+ * Decode [Provenance] from extra qualifying data / a subpath of the PURL represented by this [String]. Return
+ * [UnknownProvenance] if extra data is not present.
+ */
+internal fun String.toProvenance(): Provenance {
+    val extras = substringAfter('?')
+
+    fun getQualifierValue(name: String) = extras.substringAfter("$name=").substringBefore('&')
+
+    return when {
+        "download_url=" in extras -> {
+            val encodedUrl = getQualifierValue("download_url")
+
+            val percentEncodedColon = "%3A"
+            val checksum = getQualifierValue("checksum")
+            val (algorithm, value) = checksum.split(percentEncodedColon, limit = 2)
+
+            ArtifactProvenance(
+                sourceArtifact = RemoteArtifact(
+                    url = URLDecoder.decode(encodedUrl, "UTF-8"),
+                    hash = Hash.create(value, algorithm)
+                )
+            )
+        }
+
+        "vcs_url=" in extras -> {
+            val encodedUrl = getQualifierValue("vcs_url")
+
+            RepositoryProvenance(
+                vcsInfo = VcsInfo(
+                    type = VcsType.forName(getQualifierValue("vcs_type")),
+                    url = URLDecoder.decode(encodedUrl, "UTF-8"),
+                    revision = getQualifierValue("vcs_revision")
+                ),
+                resolvedRevision = getQualifierValue("resolved_revision")
+            )
+        }
+
+        else -> UnknownProvenance
+    }
+}
