@@ -184,7 +184,7 @@ class NpmDetectionTest : WordSpec({
             PNPM.getWorkspaces(projectDir) shouldNotBeNull {
                 mapNotNull {
                     it.withoutPrefix(projectDir.path)
-                }.shouldContainExactly("/src/packages/**", "/src/app/**")
+                }.shouldContainExactly("/src/app/", "/src/packages/**")
             }
         }
 
