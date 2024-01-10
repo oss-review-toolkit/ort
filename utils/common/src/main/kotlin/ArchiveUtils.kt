@@ -258,7 +258,9 @@ fun InputStream.unpackZip(targetDirectory: File) =
 fun InputStream.unpackTar(targetDirectory: File, filter: (ArchiveEntry) -> Boolean = { true }) =
     TarArchiveInputStream(this).unpack(
         targetDirectory,
-        { entry -> !(entry as TarArchiveEntry).isFile || File(entry.name).isAbsolute || !filter(entry) },
+        { entry ->
+            (entry as TarArchiveEntry).isDirectory || !entry.isFile || File(entry.name).isAbsolute || !filter(entry)
+        },
         { entry -> (entry as TarArchiveEntry).mode }
     )
 
