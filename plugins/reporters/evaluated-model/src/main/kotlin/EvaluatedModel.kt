@@ -53,9 +53,9 @@ import org.ossreviewtoolkit.reporter.Statistics
  * information contained in the [ReporterInput] is applied to the [OrtResult]:
  *
  * * [PathExclude]s and [ScopeExclude]s from the [RepositoryConfiguration] are applied.
- * * [IssueResolution]s from the [ReporterInput.resolutionProvider] are matched against all [Issue]s contained in the
+ * * [IssueResolution]s from the [OrtResult.resolvedConfiguration] are matched against all [Issue]s contained in the
  *   result.
- * * [RuleViolationResolution]s from the [ReporterInput.resolutionProvider] are matched against all [RuleViolation]s.
+ * * [RuleViolationResolution]s from the [OrtResult.resolvedConfiguration] are matched against all [RuleViolation]s.
  *
  * The current implementation is missing these features:
  *
