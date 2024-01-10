@@ -40,7 +40,7 @@ class CopyrightStatementsProcessorTest : WordSpec({
             actualResult shouldBe expectedResult
         }
 
-        "group statements with uppercase (C)" {
+        "group statements with upper-case (C)" {
             val statements = listOf(
                 "Copyright (C) 2017 The ORT Project Authors",
                 "Copyright (C) 2022 The ORT Project Authors"
@@ -50,6 +50,33 @@ class CopyrightStatementsProcessorTest : WordSpec({
 
             actualResult.processedStatements shouldHaveSize 1
             actualResult.processedStatements.keys.first() shouldBe "Copyright (C) 2017, 2022 The ORT Project Authors"
+            actualResult.unprocessedStatements should beEmpty()
+        }
+
+        "group statements with lower-case (c)" {
+            val statements = listOf(
+                "Copyright (c) 2017 The ORT Project Authors",
+                "Copyright (c) 2022 The ORT Project Authors"
+            )
+
+            val actualResult = CopyrightStatementsProcessor.process(statements)
+
+            actualResult.processedStatements shouldHaveSize 1
+            actualResult.processedStatements.keys.first() shouldBe "Copyright (c) 2017, 2022 The ORT Project Authors"
+            actualResult.unprocessedStatements should beEmpty()
+        }
+
+        "not group statements with mixed-case (C) and (c)" {
+            val statements = listOf(
+                "Copyright (C) 2017 The ORT Project Authors",
+                "Copyright (c) 2022 The ORT Project Authors"
+            )
+
+            val actualResult = CopyrightStatementsProcessor.process(statements)
+
+            actualResult.processedStatements shouldHaveSize 2
+            actualResult.processedStatements.keys.first() shouldBe "Copyright (C) 2017 The ORT Project Authors"
+            actualResult.processedStatements.keys.last() shouldBe "Copyright (c) 2022 The ORT Project Authors"
             actualResult.unprocessedStatements should beEmpty()
         }
     }
