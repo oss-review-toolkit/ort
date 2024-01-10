@@ -59,7 +59,8 @@ class PurlExtensionsTest : StringSpec({
             vcsInfo = VcsInfo(
                 type = VcsType.GIT,
                 url = "https://github.com/apache/commons-text.git",
-                revision = "7643b12421100d29fd2b78053e77bcb04a251b2e"
+                revision = "7643b12421100d29fd2b78053e77bcb04a251b2e",
+                path = "subpath"
             ),
             resolvedRevision = "7643b12421100d29fd2b78053e77bcb04a251b2e"
         )
@@ -72,7 +73,8 @@ class PurlExtensionsTest : StringSpec({
             "vcs_type=Git&" +
             "vcs_url=https%3A%2F%2Fgithub.com%2Fapache%2Fcommons-text.git&" +
             "vcs_revision=7643b12421100d29fd2b78053e77bcb04a251b2e&" +
-            "resolved_revision=7643b12421100d29fd2b78053e77bcb04a251b2e"
+            "resolved_revision=7643b12421100d29fd2b78053e77bcb04a251b2e" +
+            "#subpath"
         purl.toProvenance() shouldBe provenance
     }
 
