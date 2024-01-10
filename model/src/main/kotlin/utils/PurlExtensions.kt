@@ -107,7 +107,7 @@ fun KnownProvenance.toPurlExtras(): PurlExtras =
 fun String.toProvenance(): Provenance {
     val extras = substringAfter('?')
 
-    fun getQualifierValue(name: String) = extras.substringAfter("$name=").substringBefore('&')
+    fun getQualifierValue(name: String) = extras.substringAfter("$name=").takeWhile { it != '&' && it != '#' }
 
     return when {
         "download_url=" in extras -> {
@@ -132,7 +132,8 @@ fun String.toProvenance(): Provenance {
                 vcsInfo = VcsInfo(
                     type = VcsType.forName(getQualifierValue("vcs_type")),
                     url = URLDecoder.decode(encodedUrl, "UTF-8"),
-                    revision = getQualifierValue("vcs_revision")
+                    revision = getQualifierValue("vcs_revision"),
+                    path = extras.substringAfterLast('#', "")
                 ),
                 resolvedRevision = getQualifierValue("resolved_revision")
             )
