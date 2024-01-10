@@ -24,7 +24,6 @@ import java.net.URLDecoder
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
@@ -77,9 +76,9 @@ fun Identifier.toPurl(qualifiers: Map<String, String> = emptyMap(), subpath: Str
 fun Identifier.toPurl(extras: PurlExtras) = toPurl(extras.qualifiers, extras.subpath)
 
 /**
- * Encode a [KnownProvenance] to extra qualifying data / a subpath of PURL.
+ * Encode a [Provenance] to extra qualifying data / a subpath of PURL.
  */
-fun KnownProvenance.toPurlExtras(): PurlExtras =
+fun Provenance.toPurlExtras(): PurlExtras =
     when (this) {
         is ArtifactProvenance -> with(sourceArtifact) {
             val checksum = "${hash.algorithm.name.lowercase()}:${hash.value}"
@@ -98,6 +97,8 @@ fun KnownProvenance.toPurlExtras(): PurlExtras =
                 subpath = vcsInfo.path
             )
         }
+
+        is UnknownProvenance -> PurlExtras()
     }
 
 /**
