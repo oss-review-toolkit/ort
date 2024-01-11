@@ -159,7 +159,7 @@ sealed class SpdxExpression {
     /**
      * Internal implementation of [validChoices], assuming that this expression is already in disjunctive normal form.
      */
-    protected open fun validChoicesForDnf(): Set<SpdxExpression> = setOf(this)
+    internal open fun validChoicesForDnf(): Set<SpdxExpression> = setOf(this)
 
     /**
      * Return whether this expression contains [present][SpdxConstants.isPresent] licenses, i.e. not all licenses in
@@ -315,20 +315,7 @@ class SpdxCompoundExpression(
     override fun validChoicesForDnf(): Set<SpdxExpression> =
         when (operator) {
             SpdxOperator.AND -> setOf(decompose().reduce(SpdxExpression::and))
-
-            SpdxOperator.OR -> {
-                val validChoicesLeft = when (left) {
-                    is SpdxCompoundExpression -> left.validChoicesForDnf()
-                    else -> left.validChoices()
-                }
-
-                val validChoicesRight = when (right) {
-                    is SpdxCompoundExpression -> right.validChoicesForDnf()
-                    else -> right.validChoices()
-                }
-
-                validChoicesLeft + validChoicesRight
-            }
+            SpdxOperator.OR -> left.validChoicesForDnf() + right.validChoicesForDnf()
         }
 
     override fun offersChoice(): Boolean =
