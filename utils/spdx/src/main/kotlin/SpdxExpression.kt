@@ -324,7 +324,18 @@ class SpdxCompoundExpression(
 
     override fun validChoicesForDnf(): Set<SpdxExpression> =
         when (operator) {
-            SpdxOperator.AND -> setOf(decompose().reduce(SpdxExpression::and))
+            SpdxOperator.AND -> {
+                val leftChoices = left.validChoicesForDnf()
+                val rightChoices = right.validChoicesForDnf()
+
+                // Cartesian product of choices on the left and right.
+                leftChoices.flatMapTo(mutableSetOf()) { leftChoice ->
+                    rightChoices.map { rightChoice ->
+                        leftChoice and rightChoice
+                    }
+                }
+            }
+
             SpdxOperator.OR -> left.validChoicesForDnf() + right.validChoicesForDnf()
         }
 
