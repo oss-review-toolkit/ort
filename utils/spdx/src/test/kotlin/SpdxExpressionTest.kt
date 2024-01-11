@@ -422,8 +422,10 @@ class SpdxExpressionTest : WordSpec({
     }
 
     "validChoices()" should {
-        "list the valid choices for a complex expression" {
-            "(a OR b) AND c AND (d OR e)".toSpdx().validChoices().map { it.toString() } should containExactlyInAnyOrder(
+        "return the valid choices for a complex expression" {
+            val choices = "(a OR b) AND c AND (d OR e)".toSpdx().validChoices()
+
+            choices.map { it.toString() } should containExactlyInAnyOrder(
                 "a AND c AND d",
                 "a AND c AND e",
                 "b AND c AND d",
@@ -431,20 +433,27 @@ class SpdxExpressionTest : WordSpec({
             )
         }
 
-        "not contain a duplicate valid choice for a simple expression" {
-            "a AND a".toSpdx().validChoices().map { it.toString() } should containExactly("a")
-        }
+        "return the valid choices for a nested expression" {
+            val choices = "(a OR (b AND (c OR d))) AND (e OR f)".toSpdx().validChoices()
 
-        "not contain duplicate valid choice for a complex expression" {
-            "(a OR b) AND (a OR b)".toSpdx().validChoices().map { it.toString() } should containExactlyInAnyOrder(
-                "a",
-                "b",
-                "a AND b"
+            choices.map { it.toString() } should containExactlyInAnyOrder(
+                "a AND e",
+                "a AND f",
+                "b AND c AND e",
+                "b AND c AND f",
+                "b AND d AND e",
+                "b AND d AND f"
             )
         }
 
-        "not contain duplicate valid choice different left and right expressions" {
-            "a AND a AND b".toSpdx().validChoices().map { it.toString() } should containExactly("a AND b")
+        "be explicit about the choices even if they could be simplified" {
+            val choices = "(a OR b) AND (a OR b)".toSpdx().validChoices()
+
+            choices.map { it.toString() } should containExactlyInAnyOrder(
+                "a AND a",
+                "a AND b",
+                "b AND b"
+            )
         }
     }
 
