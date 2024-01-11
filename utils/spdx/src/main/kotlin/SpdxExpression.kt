@@ -23,6 +23,8 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer
 
+import kotlin.contracts.contract
+
 import org.antlr.v4.runtime.CharStreams
 import org.antlr.v4.runtime.CommonTokenStream
 
@@ -248,6 +250,13 @@ class SpdxCompoundExpression(
     val operator: SpdxOperator,
     val right: SpdxExpression
 ) : SpdxExpression() {
+    companion object {
+        private fun hasOrOperand(e: SpdxExpression): Boolean {
+            contract { returns(true) implies (e is SpdxCompoundExpression) }
+            return e is SpdxCompoundExpression && e.operator == SpdxOperator.OR
+        }
+    }
+
     override fun decompose() = left.decompose() + right.decompose()
 
     override fun disjunctiveNormalForm(): SpdxExpression {
@@ -258,16 +267,17 @@ class SpdxCompoundExpression(
             SpdxOperator.OR -> SpdxCompoundExpression(leftDnf, SpdxOperator.OR, rightDnf)
 
             SpdxOperator.AND -> when {
-                leftDnf is SpdxCompoundExpression && leftDnf.operator == SpdxOperator.OR &&
-                    rightDnf is SpdxCompoundExpression && rightDnf.operator == SpdxOperator.OR ->
+                // This is an optimization that covers the below two cases at once if both operands are compound
+                // expressions with OR: (a OR b) AND (c OR d) -> (a AND c) OR (a AND d) OR (b AND c) OR (b AND d)
+                hasOrOperand(leftDnf) && hasOrOperand(rightDnf) ->
                     ((leftDnf.left and rightDnf.left) or (leftDnf.left and rightDnf.right)) or
                         ((leftDnf.right and rightDnf.left) or (leftDnf.right and rightDnf.right))
 
-                leftDnf is SpdxCompoundExpression && leftDnf.operator == SpdxOperator.OR ->
-                    (leftDnf.left and rightDnf) or (leftDnf.right and rightDnf)
+                // Distributive law: (a OR b) AND c -> (a AND c) OR (b AND c)
+                hasOrOperand(leftDnf) -> (leftDnf.left and rightDnf) or (leftDnf.right and rightDnf)
 
-                rightDnf is SpdxCompoundExpression && rightDnf.operator == SpdxOperator.OR ->
-                    (leftDnf and rightDnf.left) or (leftDnf and rightDnf.right)
+                // Distributive law: a AND (b OR c) -> (a AND b) OR (a AND c)
+                hasOrOperand(rightDnf) -> (leftDnf and rightDnf.left) or (leftDnf and rightDnf.right)
 
                 else -> SpdxCompoundExpression(leftDnf, operator, rightDnf)
             }
