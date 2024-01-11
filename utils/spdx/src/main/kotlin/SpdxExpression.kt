@@ -161,7 +161,7 @@ sealed class SpdxExpression {
     /**
      * Internal implementation of [validChoices], assuming that this expression is already in disjunctive normal form.
      */
-    protected open fun validChoicesForDnf(): Set<SpdxExpression> = setOf(this)
+    internal open fun validChoicesForDnf(): Set<SpdxExpression> = setOf(this)
 
     /**
      * Return whether this expression contains [present][SpdxConstants.isPresent] licenses, i.e. not all licenses in

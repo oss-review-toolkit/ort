@@ -26,6 +26,7 @@ import io.kotest.matchers.Matcher
 import io.kotest.matchers.be
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.neverNullMatcher
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -400,6 +401,30 @@ class SpdxExpressionTest : WordSpec({
         "correctly convert a complex expression" {
             "(a OR b) AND c AND (d OR e)".toSpdx().disjunctiveNormalForm() should
                 beString("(a AND c AND d) OR (a AND c AND e) OR (b AND c AND d) OR (b AND c AND e)")
+        }
+    }
+
+    "validChoicesForDnf()" should {
+        "correctly work for the DNF for one nested OR operator" {
+            // DNF for: a AND (b OR c)
+            "(a AND b) OR (a AND c)".toSpdx().validChoicesForDnf().map {
+                it.toString()
+            }.shouldContainExactlyInAnyOrder(
+                "a AND b",
+                "a AND c"
+            )
+        }
+
+        "correctly work for the DNF for two nested OR operators" {
+            // DNF for: (a OR b) AND (c OR d)
+            "(a AND c) OR (a AND d) OR (b AND c) OR (b AND d)".toSpdx().validChoicesForDnf().map {
+                it.toString()
+            }.shouldContainExactlyInAnyOrder(
+                "a AND c",
+                "a AND d",
+                "b AND c",
+                "b AND d"
+            )
         }
     }
 
