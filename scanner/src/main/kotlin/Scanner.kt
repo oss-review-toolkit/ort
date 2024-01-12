@@ -335,14 +335,7 @@ class Scanner(
                     return@scanner
                 }
 
-                // Create a reference package with any VCS path removed, to ensure the full repository is scanned.
-                val referencePackage = packagesWithIncompleteScanResult.first().let { pkg ->
-                    if (provenance is RepositoryProvenance) {
-                        pkg.copy(vcsProcessed = pkg.vcsProcessed.copy(path = ""))
-                    } else {
-                        pkg
-                    }
-                }
+                val referencePackage = packagesWithIncompleteScanResult.first()
 
                 if (packagesWithIncompleteScanResult.size > 1) {
                     logger.info {
