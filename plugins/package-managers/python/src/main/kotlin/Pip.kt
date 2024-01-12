@@ -112,12 +112,7 @@ class Pip(
 
         return runCatching {
             try {
-                PythonInspector.inspect(
-                    workingDir = workingDir,
-                    definitionFile = definitionFile,
-                    pythonVersion = pythonVersion,
-                    operatingSystem = operatingSystem
-                )
+                PythonInspector.inspect(workingDir, definitionFile, pythonVersion, operatingSystem)
             } finally {
                 workingDir.resolve(".cache").safeDeleteRecursively(force = true)
             }
