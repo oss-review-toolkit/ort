@@ -51,6 +51,7 @@ import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.unquote
+import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
@@ -121,7 +122,7 @@ class Cargo(
 
             else -> {
                 contents.metadata.mapNotNull { (k, v) ->
-                    (v as? String)?.let { k.unquote().removePrefix("checksum ") to v }
+                    k.unquote().withoutPrefix("checksum ")?.let { it to v }
                 }
             }
         }.toMap()
