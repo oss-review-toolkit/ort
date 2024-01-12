@@ -476,6 +476,13 @@ class SpdxExpressionTest : WordSpec({
             spdxExpression.isValidChoice("a AND b AND d".toSpdx()) shouldBe false
             spdxExpression.isValidChoice("a AND b AND c AND d".toSpdx()) shouldBe false
         }
+
+        "return true for a simplified choice for a complex expression" {
+            val license = "(MIT OR GPL-2.0-only) AND (MIT OR BSD-3-Clause OR GPL-1.0-or-later) AND " +
+                "(MIT OR BSD-3-Clause OR GPL-2.0-only)"
+
+            license.toSpdx().isValidChoice("MIT".toSpdx()) shouldBe true
+        }
     }
 
     "applyChoice()" should {
