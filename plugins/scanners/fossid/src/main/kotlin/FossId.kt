@@ -252,10 +252,6 @@ class FossId internal constructor(
             pkg.vcsProcessed.revision.isEmpty() ->
                 "Package '${pkg.id.toCoordinates()}' has an empty VCS revision and cannot be scanned."
 
-            pkg.vcsProcessed.path.isNotEmpty() ->
-                "Ignoring package '${pkg.id.toCoordinates()}' from '${pkg.vcsProcessed.url}' as it has path " +
-                    "'${pkg.vcsProcessed.path}' set and scanning cannot be limited to paths."
-
             else -> null
         }
 
