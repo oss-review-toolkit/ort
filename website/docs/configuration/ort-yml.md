@@ -85,8 +85,8 @@ The path exclude above has the following effects:
 
 * All projects found below the `test-data` directory are marked as excluded.
 * License findings in files below the `test-data` directory are marked as excluded. This can be used in
-  [evaluator rules](../../tutorial/intro#6-running-the-evaluator) to for instance change the severity from error to
-  warning.
+  [evaluator rules](../getting-started/tutorial.md#6-running-the-evaluator) to for instance change the severity from
+  error to warning.
 
 ```yaml
 excludes:
