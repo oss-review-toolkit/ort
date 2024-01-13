@@ -338,18 +338,6 @@ class Scanner(
                 val referencePackage = packagesWithIncompleteScanResult.first()
                 val nestedProvenance = controller.getNestedProvenance(referencePackage.id) ?: return@scanner
 
-                if (packagesWithIncompleteScanResult.size > 1) {
-                    logger.info {
-                        "Consolidating the following packages with the same provenance to a single repository scan " +
-                            "associated with the first package ('${referencePackage.id.toCoordinates()}'): " +
-                            packagesWithIncompleteScanResult.joinToString("\n") { "\t${it.id.toCoordinates()}" }
-                    }
-                }
-
-                logger.info {
-                    "Starting scan of '${referencePackage.id.toCoordinates()}' with package scanner '${scanner.name}."
-                }
-
                 val adjustedContext = context.copy(
                     // Hide excludes from scanners with a scanner matcher.
                     excludes = context.excludes.takeUnless { scanner.matcher != null },
@@ -357,14 +345,16 @@ class Scanner(
                     coveredPackages = packagesWithIncompleteScanResult
                 )
 
-                val scanResult = scanner.scanPackage(
-                    referencePackage,
-                    controller.getNestedProvenance(referencePackage.id),
-                    adjustedContext
-                )
+                logger.info {
+                    val coveredCoordinates = adjustedContext.coveredPackages.joinToString { it.id.toCoordinates() }
+                    "Starting scan of ${nestedProvenance.root} with package scanner '${scanner.name} which covers " +
+                        "the following packages: $coveredCoordinates"
+                }
+
+                val scanResult = scanner.scanPackage(nestedProvenance, adjustedContext)
 
                 logger.info {
-                    "Finished scan of '${referencePackage.id.toCoordinates()}' with package scanner '${scanner.name}'."
+                    "Finished scan of ${nestedProvenance.root} with package scanner '${scanner.name}'."
                 }
 
                 packagesWithIncompleteScanResult.forEach processResults@{ pkg ->
