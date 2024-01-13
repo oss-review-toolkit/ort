@@ -1,5 +1,5 @@
 ---
-sidebar_position: 1
+sidebar_position: 4
 ---
 
 # Tutorial
@@ -33,7 +33,7 @@ tools need to be installed. In the context of this tutorial the following tools 
 * [NPM](https://www.npmjs.com) 6.4.* or higher.
 * [Yarn](https://yarnpkg.com) 1.9.* or higher.
 
-For the full list of supported package managers and Version Control Systems see the [README](../docs/tools/analyzer).
+For the full list of supported package managers and Version Control Systems see the [README](../tools/analyzer.md).
 
 ## 2. Download & Install ORT
 
@@ -122,7 +122,7 @@ Note that the `analyzer-result.yml` is supposed to capture all known information
 "filtered" in later steps. For example, scopes which are not relevant for the distribution will still be listed,
 but can be configured to get excluded so that they e.g. do not get downloaded and scanned by the *scanner* step.
 To specify which scopes should be excluded, add an `.ort.yml` configuration file to the input directory of the
-*analyzer*. For more details see [Configuration File](../docs/configuration/ort-yml).
+*analyzer*. For more details see [Configuration File](../configuration/ort-yml.md).
 
 For this guide, `[mime-types-dir]/.ort.yml` can be created with following content:
 
@@ -257,7 +257,7 @@ needs to be downloaded. The *downloader* tool could be used for this, but it is 
 so the scanner will automatically download the source code if the required VCS metadata could be obtained.
 
 Note that if the *downloader* is unable to download the source code due to say a missing source code location in the
-package metadata then you can use [curations](../docs/configuration/package-curations) to fix up the package's metadata.
+package metadata then you can use [curations](../configuration/package-curations.md) to fix up the package's metadata.
 
 ORT is designed to integrate lots of different scanners and is not limited to license scanners, technically any tool
 that explores the source code of a software package could be integrated. The actual scanner does not have to run on the
@@ -276,7 +276,8 @@ cli/build/install/ort/bin/ort scan --help
 The `mime-types` package has only one dependency in the `dependencies` scope, but a lot of dependencies in the
 `devDependencies` scope. Scanning all of the `devDependencies` would take a lot of time, so we will only run the
 scanner on the `dependencies` scope in this tutorial. If you also want to scan the `devDependencies` it is strongly
-advised to configure a [scan storage](../docs/tools/scanner#storage-backends) for the scan results to speed up repeated scans.
+advised to configure a [scan storage](../tools/scanner.md#storage-backends) for the scan results to speed up repeated
+scans.
 
 As during the *analyzer* step an `.ort.yml` configuration file was provided to exclude `devDependencies`,
 the `-P ort.scanner.skipExcluded=true` option can be used to avoid the download and scanning of that scope.
@@ -306,9 +307,9 @@ on a bigger project you will see that `ScanCode` often finds more licenses than 
 ## 6. Running the evaluator
 
 The evaluator can apply a set of rules against the scan result created above. ORT provides examples for the policy rules
-file ([example.rules.kts](../docs/configuration/evaluator-rules#example)), user-defined categorization of licenses
-([license-classifications.yml](../docs/configuration/license-classifications)) and user-defined package curations
-([curations.yml](../docs/configuration/package-curations)) that can be used for testing the *evaluator*.
+file ([example.rules.kts](../configuration/evaluator-rules.md#example)), user-defined categorization of licenses
+([license-classifications.yml](../configuration/license-classifications.md)) and user-defined package curations
+([curations.yml](../configuration/package-curations.md)) that can be used for testing the *evaluator*.
 
 To run the example rules use:
 
@@ -321,10 +322,10 @@ cli/build/install/ort/bin/ort evaluate
   -o [evaluator-output-dir]/mime-types
 ```
 
-See the [curations.yml documentation](../docs/configuration/package-curations) to learn more about using curations to correct
-invalid or missing package metadata and the
-[license-classifications.yml documentation](../docs/configuration/license-classifications) on how you can classify licenses
-to simplify writing the policy rules.
+See the [curations.yml documentation](../configuration/package-curations.md) to learn more about using curations to
+correct invalid or missing package metadata and the
+[license-classifications.yml documentation](../configuration/license-classifications.md) on how you can classify
+licenses to simplify writing the policy rules.
 
 It is possible to write your own evaluator rules as a Kotlin script and pass it to the *evaluator* using `--rules-file`.
 Note that detailed documentation for writing custom rules is not yet available.
@@ -348,9 +349,9 @@ Created 'PlainTextTemplate' report: [reporter-output-dir]/NOTICE_DEFAULT
 
 If you do not want to run the *evaluator* you can pass the *scanner* result e.g. `[scanner-output-dir]/scan-result.yml`
 to the `reporter` instead. To learn how you can customize generated notices see
-[Reporter Templates](../docs/configuration/reporter-templates#plain-text-templates). To learn how to customize the
+[Reporter Templates](../configuration/reporter-templates.md#plain-text-templates). To learn how to customize the
 how-to-fix texts for scanner and analyzer issues see
-[how-to-fix-text-provider-kts.md](../docs/configuration/how-to-fix-text-provider).
+[how-to-fix-text-provider-kts.md](../configuration/how-to-fix-text-provider.md).
 
 ## 8. Curating Package Metadata or License Findings
 
@@ -360,11 +361,11 @@ repositories are not correctly tagged.
 
 ORT provides a variety of mechanisms to fix a variety of issues, for details see:
 
-* [The .ort.yml file](../docs/configuration/ort-yml) - project-specific license finding curations, exclusions and resolutions
-  to address issues found within a project's code repository.
-* [The package configuration file](../docs/configuration/package-configurations) - package (dependency) and provenance
+* [The .ort.yml file](../configuration/ort-yml.md) - project-specific license finding curations, exclusions and
+  resolutions to address issues found within a project's code repository.
+* [The package configuration file](../configuration/package-configurations.md) - package (dependency) and provenance
   specific license finding curations and exclusions to address issues found within a scan result for a package.
-* [The curations.yml file](../docs/configuration/package-curations) - curations correct invalid or missing package
+* [The curations.yml file](../configuration/package-curations.md) - curations correct invalid or missing package
   metadata and set the concluded license for packages.
-* [The resolutions.yml file](../docs/configuration/resolutions) - resolutions allow *resolving* any issues or policy rule
+* [The resolutions.yml file](../configuration/resolutions.md) - resolutions allow *resolving* any issues or policy rule
   violations by providing a reason why they are acceptable and can be ignored.

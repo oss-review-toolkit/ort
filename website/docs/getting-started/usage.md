@@ -1,3 +1,7 @@
+---
+sidebar_position: 3
+---
+
 # Usage
 
 ## Running the Tools
@@ -22,7 +26,7 @@ ort --info analyze -f JSON -i /project -o /project/ort/analyzer
 Just the like top-level `ort` command, the subcommands for all tools provide a `--help` option for detailed usage help.
 Use it like `ort analyze --help`.
 
-Please see [Getting Started](../../tutorial/intro) for an introduction to the individual tools.
+Please see [Getting Started](../getting-started/tutorial.md) for an introduction to the individual tools.
 
 ## Running on CI
 
