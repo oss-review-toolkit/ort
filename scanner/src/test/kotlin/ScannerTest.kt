@@ -133,9 +133,9 @@ class ScannerTest : WordSpec({
             val pkgWithVcs = Package.new(name = "repository").withValidVcs()
 
             val scannerWrapper = spyk(FakePackageScannerWrapper()) {
-                every { scanPackage(pkgWithArtifact, any(), any()) } returns
+                every { scanPackage(any(), any()) } returns
                     createScanResult(pkgWithArtifact.artifactProvenance(), details)
-                every { scanPackage(pkgWithVcs, any(), any()) } returns
+                every { scanPackage(any(), any()) } returns
                     createScanResult(pkgWithVcs.repositoryProvenance(), details)
             }
 
@@ -159,8 +159,8 @@ class ScannerTest : WordSpec({
             )
 
             verify(exactly = 1) {
-                scannerWrapper.scanPackage(pkgWithArtifact, any(), any())
-                scannerWrapper.scanPackage(pkgWithVcs, any(), any())
+                scannerWrapper.scanPackage(any(), createContext().copy(coveredPackages = listOf(pkgWithArtifact)))
+                scannerWrapper.scanPackage(any(), createContext().copy(coveredPackages = listOf(pkgWithVcs)))
             }
         }
 
@@ -348,7 +348,7 @@ class ScannerTest : WordSpec({
             )
 
             verify(exactly = 0) {
-                scannerWrapper.scanPackage(pkgWithArtifact, any(), any())
+                scannerWrapper.scanPackage(any(), createContext().copy(coveredPackages = listOf(pkgWithArtifact)))
             }
         }
 
@@ -377,7 +377,7 @@ class ScannerTest : WordSpec({
 
             verify(exactly = 1) {
                 reader.read(pkgWithArtifact, any())
-                scannerWrapper.scanPackage(pkgWithArtifact, any(), any())
+                scannerWrapper.scanPackage(any(), createContext().copy(coveredPackages = listOf(pkgWithArtifact)))
             }
         }
 
@@ -895,7 +895,7 @@ private class FakePackageScannerWrapper(override val name: String = "fake") : Pa
     override val readFromStorage = true
     override val writeToStorage = true
 
-    override fun scanPackage(pkg: Package, nestedProvenance: NestedProvenance?, context: ScanContext): ScanResult =
+    override fun scanPackage(nestedProvenance: NestedProvenance?, context: ScanContext): ScanResult =
         createScanResult(nestedProvenance?.root ?: UnknownProvenance, details)
 }
 

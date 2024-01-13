@@ -84,7 +84,7 @@ sealed interface ScannerWrapper {
  * A wrapper interface for scanners that operate on [Package]s and download the package source code themselves.
  */
 interface PackageScannerWrapper : ScannerWrapper {
-    fun scanPackage(pkg: Package, nestedProvenance: NestedProvenance?, context: ScanContext): ScanResult
+    fun scanPackage(nestedProvenance: NestedProvenance?, context: ScanContext): ScanResult
 }
 
 /**
