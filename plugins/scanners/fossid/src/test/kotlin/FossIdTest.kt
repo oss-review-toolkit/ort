@@ -560,6 +560,7 @@ class FossIdTest : WordSpec({
             val projectCode = projectCode(PROJECT)
             val scanCode = scanCode(PROJECT, null)
             val config = createConfig(deltaScans = false)
+            val pkgId = createIdentifier(index = 1)
             val vcsInfo = createVcsInfo()
 
             val service = FossIdRestService.create(config.serverUrl)
@@ -586,15 +587,7 @@ class FossIdTest : WordSpec({
 
             shouldTimeout(1000.milliseconds) {
                 runInterruptible {
-                    fossId.scanPackage(
-                        createPackage(createIdentifier(index = 1), vcsInfo),
-                        null,
-                        ScanContext(
-                            labels = emptyMap(),
-                            packageType = PackageType.PACKAGE,
-                            Excludes()
-                        )
-                    )
+                    fossId.scan(createPackage(pkgId, vcsInfo))
                 }
             }
 
