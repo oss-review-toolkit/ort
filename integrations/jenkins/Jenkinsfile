@@ -205,7 +205,7 @@ pipeline {
 
         booleanParam(
             name: 'RUN_ADVISOR',
-            description: 'Run the advisor tool. The OSV provider (https://osv.dev/) is enabled by default.',
+            description: 'Run the advisor tool. Both the OSV and VulnerableCode providers will be used by default.',
             defaultValue: true
         )
 
