@@ -218,13 +218,15 @@ class Composer(
         val json = definitionFile.readTree()
         val homepageUrl = json["homepage"].textValueOrEmpty()
         val vcs = parseVcsInfo(json)
-        val rawName = json["name"]?.textValue() ?: definitionFile.parentFile.name
+        val rawName = json["name"]?.textValue()
+        val namespace = rawName?.substringBefore("/", missingDelimiterValue = "").orEmpty()
+        val name = rawName?.substringAfter("/") ?: getFallbackProjectName(analysisRoot, definitionFile)
 
         return Project(
             id = Identifier(
                 type = managerName,
-                namespace = rawName.substringBefore('/'),
-                name = rawName.substringAfter('/'),
+                namespace = namespace,
+                name = name,
                 version = json["version"].textValueOrEmpty()
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
