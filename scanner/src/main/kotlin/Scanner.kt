@@ -21,10 +21,8 @@ package org.ossreviewtoolkit.scanner
 
 import java.io.File
 import java.io.IOException
-import java.nio.file.StandardCopyOption
 import java.time.Instant
 
-import kotlin.io.path.moveTo
 import kotlin.time.measureTime
 
 import kotlinx.coroutines.Dispatchers
@@ -705,7 +703,7 @@ class Scanner(
 
                 // runCatching has a bug with smart-cast, see https://youtrack.jetbrains.com/issue/KT-62938.
                 try {
-                    dir = downloadRecursively(nestedProvenance)
+                    dir = provenanceDownloader.downloadRecursively(nestedProvenance)
                     archiver.archive(dir, nestedProvenance.root)
                 } catch (e: IOException) {
                     controller.addIssue(
@@ -723,21 +721,6 @@ class Scanner(
         }
 
         logger.info { "Created file archives for ${provenancesWithMissingArchives.size} package(s) in $duration." }
-    }
-
-    private fun downloadRecursively(nestedProvenance: NestedProvenance): File {
-        // Use the provenanceDownloader to download each provenance from nestedProvenance separately, because they are
-        // likely already cached if a path scanner wrapper is used.
-
-        val root = provenanceDownloader.download(nestedProvenance.root)
-
-        nestedProvenance.subRepositories.forEach { (path, provenance) ->
-            val tempDir = provenanceDownloader.download(provenance)
-            val targetDir = root.resolve(path)
-            tempDir.toPath().moveTo(targetDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
-        }
-
-        return root
     }
 }
 
