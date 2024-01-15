@@ -35,9 +35,9 @@ class CopyrightStatementsProcessorTest : WordSpec({
             val statements = File("src/test/assets/copyright-statements.txt").readLines()
             val expectedResult = File("src/test/assets/copyright-statements-expected-output.yml").readText()
 
-            val actualResult = CopyrightStatementsProcessor.process(statements.shuffled()).toYaml()
+            val result = CopyrightStatementsProcessor.process(statements.shuffled()).toYaml()
 
-            actualResult shouldBe expectedResult
+            result shouldBe expectedResult
         }
 
         "group statements with upper-case (C)" {
@@ -46,12 +46,12 @@ class CopyrightStatementsProcessorTest : WordSpec({
                 "Copyright (C) 2022 The ORT Project Authors"
             )
 
-            val actualResult = CopyrightStatementsProcessor.process(statements)
+            val result = CopyrightStatementsProcessor.process(statements)
 
-            actualResult.processedStatements.keys should containExactlyInAnyOrder(
+            result.processedStatements.keys should containExactlyInAnyOrder(
                 "Copyright (C) 2017, 2022 The ORT Project Authors"
             )
-            actualResult.unprocessedStatements should beEmpty()
+            result.unprocessedStatements should beEmpty()
         }
 
         "group statements with lower-case (c)" {
@@ -60,12 +60,12 @@ class CopyrightStatementsProcessorTest : WordSpec({
                 "Copyright (c) 2022 The ORT Project Authors"
             )
 
-            val actualResult = CopyrightStatementsProcessor.process(statements)
+            val result = CopyrightStatementsProcessor.process(statements)
 
-            actualResult.processedStatements.keys should containExactlyInAnyOrder(
+            result.processedStatements.keys should containExactlyInAnyOrder(
                 "Copyright (c) 2017, 2022 The ORT Project Authors"
             )
-            actualResult.unprocessedStatements should beEmpty()
+            result.unprocessedStatements should beEmpty()
         }
 
         "not group statements with mixed-case (C) and (c)" {
@@ -74,13 +74,13 @@ class CopyrightStatementsProcessorTest : WordSpec({
                 "Copyright (c) 2022 The ORT Project Authors"
             )
 
-            val actualResult = CopyrightStatementsProcessor.process(statements)
+            val result = CopyrightStatementsProcessor.process(statements)
 
-            actualResult.processedStatements.keys should containExactlyInAnyOrder(
+            result.processedStatements.keys should containExactlyInAnyOrder(
                 "Copyright (C) 2017 The ORT Project Authors",
                 "Copyright (c) 2022 The ORT Project Authors"
             )
-            actualResult.unprocessedStatements should beEmpty()
+            result.unprocessedStatements should beEmpty()
         }
     }
 })
