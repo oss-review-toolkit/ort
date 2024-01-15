@@ -336,6 +336,7 @@ class Scanner(
                 }
 
                 val referencePackage = packagesWithIncompleteScanResult.first()
+                val nestedProvenance = controller.getNestedProvenance(referencePackage.id) ?: return@scanner
 
                 if (packagesWithIncompleteScanResult.size > 1) {
                     logger.info {
@@ -367,7 +368,6 @@ class Scanner(
                 }
 
                 packagesWithIncompleteScanResult.forEach processResults@{ pkg ->
-                    val nestedProvenance = controller.getNestedProvenance(pkg.id) ?: return@processResults
                     val nestedProvenanceScanResult = scanResult.toNestedProvenanceScanResult(nestedProvenance)
                     controller.addNestedScanResult(scanner, nestedProvenanceScanResult)
 
