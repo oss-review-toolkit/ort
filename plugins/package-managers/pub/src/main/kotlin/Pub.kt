@@ -484,7 +484,7 @@ class Pub(
 
     private fun parseProject(definitionFile: File, pubspec: JsonNode, scopes: Set<Scope>): Project {
         // See https://dart.dev/tools/pub/pubspec for supported fields.
-        val rawName = pubspec["name"]?.textValue() ?: definitionFile.parentFile.name
+        val rawName = pubspec["name"]?.textValue() ?: getFallbackProjectName(analysisRoot, definitionFile)
         val homepageUrl = pubspec["homepage"].textValueOrEmpty()
         val repositoryUrl = pubspec["repository"].textValueOrEmpty()
         val authors = parseAuthors(pubspec)
