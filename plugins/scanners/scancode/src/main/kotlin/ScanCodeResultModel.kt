@@ -158,7 +158,7 @@ sealed interface LicenseEntry {
     @Serializable
     data class Version3(
         override val score: Float,
-        override val matchedText: String, // This might be explicitly set to null in JSON.
+        override val matchedText: String,
         override val startLine: Int,
         override val endLine: Int,
         override val licenseExpression: String
