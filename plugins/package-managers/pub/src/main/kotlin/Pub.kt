@@ -361,8 +361,8 @@ class Pub(
 
             val id = Identifier(
                 type = managerName,
-                namespace = packageName.substringBefore('/'),
-                name = packageName.substringAfter('/'),
+                namespace = "",
+                name = packageName,
                 version = pkgInfoFromLockFile["version"].textValueOrEmpty()
             )
 
@@ -494,8 +494,8 @@ class Pub(
         return Project(
             id = Identifier(
                 type = managerName,
-                namespace = rawName.substringBefore('/'),
-                name = rawName.substringAfter('/'),
+                namespace = "",
+                name = rawName,
                 version = pubspec["version"].textValueOrEmpty()
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
@@ -597,8 +597,8 @@ class Pub(
 
                     val id = Identifier(
                         type = managerName,
-                        namespace = rawName.substringBefore('/'),
-                        name = rawName.substringAfter('/'),
+                        namespace = "",
+                        name = rawName,
                         version = version
                     )
 

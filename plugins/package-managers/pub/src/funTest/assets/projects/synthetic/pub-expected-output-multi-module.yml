@@ -1,6 +1,6 @@
 ---
 projects:
-- id: "Pub:multimodule:multimodule:1.0.0"
+- id: "Pub::multimodule:1.0.0"
   definition_file_path: "plugins/package-managers/pub/src/funTest/assets/projects/synthetic/multi-module/pubspec.yaml"
   authors:
   - "The ORT Project Authors"
@@ -20,12 +20,12 @@ projects:
   scopes:
   - name: "dependencies"
     dependencies:
-    - id: "Pub:subproject:subproject:1.0.0"
+    - id: "Pub::subproject:1.0.0"
       dependencies:
-      - id: "Pub:typed_data:typed_data:1.3.1"
+      - id: "Pub::typed_data:1.3.1"
         dependencies:
-        - id: "Pub:collection:collection:1.16.0"
-- id: "Pub:subproject:subproject:1.0.0"
+        - id: "Pub::collection:1.16.0"
+- id: "Pub::subproject:1.0.0"
   definition_file_path: "plugins/package-managers/pub/src/funTest/assets/projects/synthetic/multi-module/subproject/pubspec.yaml"
   authors:
   - "The ORT Project Authors"
@@ -38,19 +38,19 @@ projects:
     path: ""
   vcs_processed:
     type: "Git"
-    url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REVISION>"
-    path: "<REPLACE_PATH>/subproject"
+    url: "ssh://git@github.com/oss-review-toolkit/ort.git"
+    revision: "10242bd48f0ebcf37ac3c1d50b69236b144a97e4"
+    path: "plugins/package-managers/pub/src/funTest/assets/projects/synthetic/multi-module/subproject"
   homepage_url: "https://ossreviewtoolkit.org/"
   scopes:
   - name: "dependencies"
     dependencies:
-    - id: "Pub:typed_data:typed_data:1.3.1"
+    - id: "Pub::typed_data:1.3.1"
       dependencies:
-      - id: "Pub:collection:collection:1.16.0"
+      - id: "Pub::collection:1.16.0"
 packages:
-- id: "Pub:collection:collection:1.16.0"
-  purl: "pkg:pub/collection/collection@1.16.0"
+- id: "Pub::collection:1.16.0"
+  purl: "pkg:pub/collection@1.16.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "Collections and utilities functions and classes related to collections."
@@ -75,8 +75,8 @@ packages:
     url: "https://github.com/dart-lang/collection.git"
     revision: ""
     path: ""
-- id: "Pub:typed_data:typed_data:1.3.1"
-  purl: "pkg:pub/typed_data/typed_data@1.3.1"
+- id: "Pub::typed_data:1.3.1"
+  purl: "pkg:pub/typed_data@1.3.1"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "Utility functions and classes related to the dart:typed_data library."
