@@ -53,8 +53,10 @@ data class LicenseFinding(
 ) {
     companion object {
         val COMPARATOR = compareBy<LicenseFinding>({ it.license.toString() }, { it.location })
-            .thenByDescending { it.score;
-                it.matchedText }
+            .thenByDescending {
+                it.score;
+                it.matchedText
+            }
     }
 
     constructor(license: String, location: TextLocation, score: Float? = null, matchedText: String? = null) :
