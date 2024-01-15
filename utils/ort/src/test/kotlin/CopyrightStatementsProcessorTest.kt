@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.utils.ort
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
-import io.kotest.matchers.maps.shouldHaveSize
+import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -48,8 +48,9 @@ class CopyrightStatementsProcessorTest : WordSpec({
 
             val actualResult = CopyrightStatementsProcessor.process(statements)
 
-            actualResult.processedStatements shouldHaveSize 1
-            actualResult.processedStatements.keys.first() shouldBe "Copyright (C) 2017, 2022 The ORT Project Authors"
+            actualResult.processedStatements.keys should containExactlyInAnyOrder(
+                "Copyright (C) 2017, 2022 The ORT Project Authors"
+            )
             actualResult.unprocessedStatements should beEmpty()
         }
 
@@ -61,8 +62,9 @@ class CopyrightStatementsProcessorTest : WordSpec({
 
             val actualResult = CopyrightStatementsProcessor.process(statements)
 
-            actualResult.processedStatements shouldHaveSize 1
-            actualResult.processedStatements.keys.first() shouldBe "Copyright (c) 2017, 2022 The ORT Project Authors"
+            actualResult.processedStatements.keys should containExactlyInAnyOrder(
+                "Copyright (c) 2017, 2022 The ORT Project Authors"
+            )
             actualResult.unprocessedStatements should beEmpty()
         }
 
@@ -74,9 +76,10 @@ class CopyrightStatementsProcessorTest : WordSpec({
 
             val actualResult = CopyrightStatementsProcessor.process(statements)
 
-            actualResult.processedStatements shouldHaveSize 2
-            actualResult.processedStatements.keys.first() shouldBe "Copyright (C) 2017 The ORT Project Authors"
-            actualResult.processedStatements.keys.last() shouldBe "Copyright (c) 2022 The ORT Project Authors"
+            actualResult.processedStatements.keys should containExactlyInAnyOrder(
+                "Copyright (C) 2017 The ORT Project Authors",
+                "Copyright (c) 2022 The ORT Project Authors"
+            )
             actualResult.unprocessedStatements should beEmpty()
         }
     }
