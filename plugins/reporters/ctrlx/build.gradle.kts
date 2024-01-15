@@ -28,15 +28,15 @@ plugins {
 }
 
 dependencies {
-    api(project(":reporter"))
-    api(project(":utils:spdx-utils"))
+    api(projects.reporter)
+    api(projects.utils.spdxUtils)
 
-    implementation(project(":model"))
-    implementation(project(":utils:common-utils"))
+    implementation(projects.model)
+    implementation(projects.utils.commonUtils)
 
     implementation(libs.bundles.kotlinxSerialization)
 
-    funTestImplementation(testFixtures(project(":reporter")))
+    funTestImplementation(testFixtures(projects.reporter))
 }
 
 tasks.withType<KotlinCompile>().configureEach {

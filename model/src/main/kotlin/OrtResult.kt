@@ -263,7 +263,7 @@ data class OrtResult(
         }
 
     /**
-     * Retrieve non-excluded issues which are not resolved by resolutions in the repository configuration of this
+     * Return all non-excluded issues which are not resolved by resolutions in the resolved configuration of this
      * [OrtResult] with severities equal to or over [minSeverity].
      */
     @JsonIgnore
@@ -271,7 +271,9 @@ data class OrtResult(
         getIssues()
             .mapNotNull { (id, issues) -> issues.takeUnless { isExcluded(id) } }
             .flatten()
-            .filter { issue -> issue.severity >= minSeverity && getResolutions().issues.none { it.matches(issue) } }
+            .filter { issue ->
+                issue.severity >= minSeverity && getResolutions().issues.none { it.matches(issue) }
+            }
 
     /**
      * Return all projects and packages that are likely to belong to one of the organizations of the given [names]. If
@@ -377,7 +379,13 @@ data class OrtResult(
      * Return the [Resolutions] contained in the repository configuration of this [OrtResult].
      */
     @JsonIgnore
-    fun getResolutions(): Resolutions = repository.config.resolutions.orEmpty()
+    fun getRepositoryConfigResolutions(): Resolutions = repository.config.resolutions.orEmpty()
+
+    /**
+     * Return the [Resolutions] contained in the resolved configuration of this [OrtResult].
+     */
+    @JsonIgnore
+    fun getResolutions(): Resolutions = resolvedConfiguration.resolutions.orEmpty()
 
     /**
      * Return all [RuleViolation]s contained in this [OrtResult]. Optionally exclude resolved violations with

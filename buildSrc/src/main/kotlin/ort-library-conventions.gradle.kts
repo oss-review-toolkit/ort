@@ -17,6 +17,9 @@
  * License-Filename: LICENSE
  */
 
+import com.vanniktech.maven.publish.JavadocJar
+import com.vanniktech.maven.publish.KotlinJvm
+
 plugins {
     // Apply core plugins.
     `java-library`
@@ -24,4 +27,8 @@ plugins {
     // Apply precompiled plugins.
     id("ort-kotlin-conventions")
     id("ort-publication-conventions")
+}
+
+mavenPublishing {
+    configure(KotlinJvm(JavadocJar.Dokka("dokkatooGeneratePublicationJavadoc")))
 }

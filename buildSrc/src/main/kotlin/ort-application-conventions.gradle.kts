@@ -17,6 +17,9 @@
  * License-Filename: LICENSE
  */
 
+import com.vanniktech.maven.publish.JavadocJar
+import com.vanniktech.maven.publish.KotlinJvm
+
 import java.nio.charset.Charset
 import java.nio.file.Files
 
@@ -44,6 +47,10 @@ application {
         "--add-opens", "java.base/sun.nio.ch=ALL-UNNAMED",
         "--add-opens", "java.base/java.io=ALL-UNNAMED"
     )
+}
+
+mavenPublishing {
+    configure(KotlinJvm(JavadocJar.Dokka("dokkatooGeneratePublicationJavadoc")))
 }
 
 graalvmNative {

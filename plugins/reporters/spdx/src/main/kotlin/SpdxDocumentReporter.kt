@@ -86,10 +86,10 @@ class SpdxDocumentReporter : Reporter {
         val licenseRefExceptions = spdxDocument.getLicenseRefExceptions()
         if (licenseRefExceptions.isNotEmpty()) {
             logger.warn {
-                "The SPDX document contains the following ${licenseRefExceptions.size} LicenseRef- exceptions " +
-                    "used by a WITH operator, which does not conform with SPDX specification version 2: \n" +
-                    "finding ${licenseRefExceptions.joinToString("\n")}\n You may be able to use "
-                "license curations to fix up these exceptions into valid SPDX v2 license expressions."
+                "The SPDX document contains the following ${licenseRefExceptions.size} '$LICENSE_REF_PREFIX' " +
+                    "exceptions used by a '${SpdxExpression.WITH}' operator which does not conform with SPDX " +
+                    "specification version 2:\n${licenseRefExceptions.joinToString("\n")}\nYou may be able to use " +
+                    "license curations to fix up these exceptions into valid SPDX v2 license expressions."
             }
         }
 

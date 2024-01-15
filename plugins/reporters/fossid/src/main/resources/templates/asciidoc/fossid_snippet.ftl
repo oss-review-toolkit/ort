@@ -87,7 +87,7 @@ ${sourceLocation.startLine}-${sourceLocation.endLine}
 [#list snippetFinding.snippets as snippet ]
 [#assign matchType = snippet.additionalData["matchType"]]
 [#assign snippetFilePath = snippet.location.path!""]
-[#if matchType == "PARTIAL" && snippetFilePath?has_content]
+[#if matchType == "PARTIAL" && snippetFilePath?has_content && snippet.additionalData['matchedLinesSnipped']?has_content]
     [#assign snippetFilePath = "${snippetFilePath}#${snippet.additionalData['matchedLinesSnippet']}"]
 [/#if]
 

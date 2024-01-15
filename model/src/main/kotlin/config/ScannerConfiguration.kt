@@ -88,7 +88,7 @@ data class ScannerConfiguration(
     val fileListStorage: FileListStorageConfiguration? = null,
 
     /**
-     * Scanner specific configuration options. The key needs to match the name of the scanner class, e.g. "ScanCode"
+     * Scanner-specific configuration options. The key needs to match the name of the scanner class, e.g. "ScanCode"
      * for the ScanCode wrapper. See the documentation of the scanner for available options.
      */
     @JsonAlias("options")

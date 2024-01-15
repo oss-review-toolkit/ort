@@ -25,6 +25,7 @@ import com.github.ajalt.clikt.core.terminal
 import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
+import com.github.ajalt.clikt.parameters.options.deprecated
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
@@ -106,7 +107,7 @@ class AdvisorCommand : OrtCommand(
     private val skipExcluded by option(
         "--skip-excluded",
         help = "Do not check excluded projects or packages."
-    ).flag()
+    ).flag().deprecated("Use the global option 'ort -P ort.advisor.skipExcluded=... advise' instead.")
 
     override fun run() {
         val outputFiles = outputFormats.mapTo(mutableSetOf()) { format ->

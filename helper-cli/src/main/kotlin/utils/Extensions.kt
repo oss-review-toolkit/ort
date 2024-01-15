@@ -308,18 +308,6 @@ internal fun <T : Any> String.execAndMap(transform: (ResultSet) -> T): List<T> {
 }
 
 /**
- * Return all unresolved rule violations.
- */
-internal fun OrtResult.getUnresolvedRuleViolations(): List<RuleViolation> {
-    val resolutions = getResolutions().ruleViolations
-    val violations = evaluator?.violations.orEmpty()
-
-    return violations.filter { violation ->
-        !resolutions.any { it.matches(violation) }
-    }
-}
-
-/**
  * Return a copy of this [OrtResult] with the [Repository.config] with the content of the given
  * [repositoryConfigurationFile].
  */

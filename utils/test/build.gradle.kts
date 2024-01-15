@@ -23,14 +23,14 @@ plugins {
 }
 
 dependencies {
-    api(project(":model"))
-    api(project(":plugins:version-control-systems:git-version-control-system"))
+    api(projects.model)
+    api(projects.plugins.versionControlSystems.gitVersionControlSystem)
 
     api(libs.kotestAssertionsCore)
     api(libs.kotestFrameworkApi)
 
-    implementation(project(":downloader"))
-    implementation(project(":utils:ort-utils"))
+    implementation(projects.downloader)
+    implementation(projects.utils.ortUtils)
 
     implementation(libs.diffUtils)
     implementation(libs.jacksonModuleKotlin)

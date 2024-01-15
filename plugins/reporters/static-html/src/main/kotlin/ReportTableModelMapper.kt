@@ -183,7 +183,7 @@ private fun Issue.toResolvableIssue(
     resolutionProvider: ResolutionProvider,
     howToFixTextProvider: HowToFixTextProvider
 ): ResolvableIssue {
-    val resolutions = resolutionProvider.getIssueResolutionsFor(this)
+    val resolutions = resolutionProvider.getResolutionsFor(this)
     return ResolvableIssue(
         source = source,
         description = toString(),
@@ -203,7 +203,7 @@ private fun Issue.toResolvableIssue(
 }
 
 private fun RuleViolation.toResolvableViolation(resolutionProvider: ResolutionProvider): ResolvableViolation {
-    val resolutions = resolutionProvider.getRuleViolationResolutionsFor(this)
+    val resolutions = resolutionProvider.getResolutionsFor(this)
     return ResolvableViolation(
         violation = this,
         resolutionDescription = buildString {

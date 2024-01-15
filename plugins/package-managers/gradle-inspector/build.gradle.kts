@@ -29,22 +29,22 @@ plugins {
 }
 
 dependencies {
-    api(project(":analyzer"))
-    api(project(":model"))
+    api(projects.analyzer)
+    api(projects.model)
 
-    implementation(project(":downloader"))
-    implementation(project(":plugins:package-managers:gradle-model"))
-    implementation(project(":utils:common-utils"))
-    implementation(project(":utils:ort-utils"))
-    implementation(project(":utils:spdx-utils"))
+    implementation(projects.downloader)
+    implementation(projects.plugins.packageManagers.gradleModel)
+    implementation(projects.utils.commonUtils)
+    implementation(projects.utils.ortUtils)
+    implementation(projects.utils.spdxUtils)
 
     implementation("org.gradle:gradle-tooling-api:${gradle.gradleVersion}")
 
-    funTestImplementation(testFixtures(project(":analyzer")))
+    funTestImplementation(testFixtures(projects.analyzer))
 }
 
 val processResources = tasks.named<Copy>("processResources") {
-    val gradlePluginProject = project(":plugins:package-managers:gradle-plugin")
+    val gradlePluginProject = projects.plugins.packageManagers.gradlePlugin.dependencyProject
     val gradlePluginJarTask = gradlePluginProject.tasks.named<Jar>("fatJar")
     val gradlePluginJarFile = gradlePluginJarTask.get().outputs.files.singleFile
 
@@ -75,7 +75,7 @@ tasks.named<JacocoReport>("jacocoFunTestReport") {
 }
 
 tasks.named<Test>("funTest") {
-    val gradlePackageManagerProject = project(":plugins:package-managers:gradle-package-manager")
+    val gradlePackageManagerProject = projects.plugins.packageManagers.gradlePackageManager.dependencyProject
     val gradlePackageManagerFunTestTask = gradlePackageManagerProject.tasks.named<Test>("funTest")
 
     // Enforce ordering to avoid conflicts e.g. during Android SDK component installation.

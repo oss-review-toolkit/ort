@@ -51,6 +51,13 @@ class Poetry(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+    companion object {
+        /**
+         * The name of the build system requirements and information file used by modern Python packages.
+         */
+        internal const val PYPROJECT_FILENAME = "pyproject.toml"
+    }
+
     class Factory : AbstractPackageManagerFactory<Poetry>("Poetry") {
         override val globsForDefinitionFiles = listOf("poetry.lock")
 
@@ -66,7 +73,7 @@ class Poetry(
     override fun transformVersion(output: String) = output.substringAfter("version ").removeSuffix(")")
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
-        val scopeName = parseScopeNamesFromPyproject(definitionFile.resolveSibling(Pip.PYPROJECT_FILENAME))
+        val scopeName = parseScopeNamesFromPyproject(definitionFile.resolveSibling(PYPROJECT_FILENAME))
         val resultsForScopeName = scopeName.associateWith { inspectLockfile(definitionFile, it) }
 
         val packages = resultsForScopeName

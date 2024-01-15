@@ -647,7 +647,7 @@ class StaticHtmlReporter : Reporter {
             }
             is SpdxLicenseWithExceptionExpression -> {
                 licenseLink(expression.simpleLicense())
-                +" WITH "
+                +" ${SpdxExpression.WITH} "
                 licenseLink(expression.exception)
             }
             is SpdxCompoundExpression -> {

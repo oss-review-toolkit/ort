@@ -23,9 +23,9 @@ plugins {
 }
 
 dependencies {
-    api(project(":analyzer"))
-    api(project(":model"))
-    api(project(":utils:common-utils")) {
+    api(projects.analyzer)
+    api(projects.model)
+    api(projects.utils.commonUtils) {
         because("This is a CommandLineTool.")
     }
 
@@ -33,9 +33,9 @@ dependencies {
         because("This is a CommandLineTool.")
     }
 
-    implementation(project(":plugins:package-managers:maven-package-manager"))
-    implementation(project(":utils:ort-utils"))
+    implementation(projects.plugins.packageManagers.mavenPackageManager)
+    implementation(projects.utils.ortUtils)
 
-    funTestImplementation(project(":downloader"))
-    funTestImplementation(testFixtures(project(":analyzer")))
+    funTestImplementation(projects.downloader)
+    funTestImplementation(testFixtures(projects.analyzer))
 }

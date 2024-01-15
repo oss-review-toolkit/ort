@@ -23,10 +23,10 @@ plugins {
 }
 
 dependencies {
-    api(project(":model"))
-    api(project(":utils:common-utils"))
+    api(projects.model)
+    api(projects.utils.commonUtils)
 
-    implementation(project(":utils:ort-utils"))
+    implementation(projects.utils.ortUtils)
 
     implementation(libs.kotlinxCoroutines)
 

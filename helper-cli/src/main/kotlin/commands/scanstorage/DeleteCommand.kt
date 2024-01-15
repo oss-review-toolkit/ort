@@ -38,7 +38,7 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.regexp
 import org.jetbrains.exposed.sql.compoundAnd
 import org.jetbrains.exposed.sql.compoundOr
 import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 
 import org.ossreviewtoolkit.helper.utils.ORTH_NAME
 import org.ossreviewtoolkit.helper.utils.execAndMap
@@ -135,14 +135,14 @@ internal class DeleteCommand : CliktCommand(
 
         if (dryRun) {
             val count = database.transaction {
-                ScanResults.select { condition }.count()
+                ScanResults.selectAll().where { condition }.count()
             }
 
             println("Would delete $count scan result(s).")
 
             if (logger.delegate.isDebugEnabled) {
                 database.transaction {
-                    ScanResults.slice(ScanResults.identifier).select { condition }
+                    ScanResults.select(ScanResults.identifier).where { condition }
                         .forEach(logger::debug)
                 }
             }

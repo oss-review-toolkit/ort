@@ -23,8 +23,8 @@ plugins {
 }
 
 dependencies {
-    api(project(":utils:common-utils"))
-    api(project(":utils:spdx-utils"))
+    api(projects.utils.commonUtils)
+    api(projects.utils.spdxUtils)
 
     api(libs.okhttp)
 

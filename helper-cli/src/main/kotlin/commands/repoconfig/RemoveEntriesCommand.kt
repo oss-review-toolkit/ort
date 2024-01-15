@@ -103,7 +103,7 @@ internal class RemoveEntriesCommand : CliktCommand(
         }
 
         val ruleViolationResolutions = ortResult.getRuleViolations().let { ruleViolations ->
-            ortResult.getResolutions().ruleViolations.filter { resolution ->
+            ortResult.getRepositoryConfigResolutions().ruleViolations.filter { resolution ->
                 ruleViolations.any { resolution.matches(it) }
             }
         }
@@ -112,7 +112,7 @@ internal class RemoveEntriesCommand : CliktCommand(
         val notGloballyResolvedIssues = ortResult.getIssues().values.flatten().filterNot {
             resolutionProvider.isResolved(it)
         }
-        val issueResolutions = ortResult.getResolutions().issues.filter { resolution ->
+        val issueResolutions = ortResult.getRepositoryConfigResolutions().issues.filter { resolution ->
             notGloballyResolvedIssues.any { resolution.matches(it) }
         }
 
