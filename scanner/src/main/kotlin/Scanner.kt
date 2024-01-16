@@ -345,7 +345,7 @@ class Scanner(
 
                 logger.info {
                     val coveredCoordinates = adjustedContext.coveredPackages.joinToString { it.id.toCoordinates() }
-                    "Starting scan of ${nestedProvenance.root} with package scanner '${scanner.name} which covers " +
+                    "Starting scan of ${nestedProvenance.root} with package scanner '${scanner.name}' which covers " +
                         "the following packages: $coveredCoordinates"
                 }
 
