@@ -240,7 +240,7 @@ class ReporterCommand : OrtCommand(
         val copyrightGarbage = copyrightGarbageFile.takeIf { it.isFile }?.readValue<CopyrightGarbage>().orEmpty()
 
         val licenseInfoResolver = LicenseInfoResolver(
-            provider = DefaultLicenseInfoProvider(ortResult, packageConfigurationProvider),
+            provider = DefaultLicenseInfoProvider(ortResult),
             copyrightGarbage = copyrightGarbage,
             addAuthorsToCopyrights = ortConfig.addAuthorsToCopyrights,
             archiver = ortConfig.scanner.archive.createFileArchiver(),

@@ -29,14 +29,13 @@ import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.utils.FileArchiver
-import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.test.createDefault
 import org.ossreviewtoolkit.utils.test.transformingCollectionMatcher
 
 class LicenseViewTest : WordSpec() {
     private val licenseInfoResolver = LicenseInfoResolver(
-        provider = DefaultLicenseInfoProvider(ortResult, PackageConfigurationProvider.EMPTY),
+        provider = DefaultLicenseInfoProvider(ortResult),
         copyrightGarbage = CopyrightGarbage(),
         addAuthorsToCopyrights = false,
         archiver = FileArchiver.createDefault()
