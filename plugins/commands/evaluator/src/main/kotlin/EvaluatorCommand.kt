@@ -302,10 +302,7 @@ class EvaluatorCommand : OrtCommand(
         val copyrightGarbage = copyrightGarbageFile.takeIf { it.isFile }?.readValue<CopyrightGarbage>().orEmpty()
 
         val licenseInfoResolver = LicenseInfoResolver(
-            provider = DefaultLicenseInfoProvider(
-                ortResult = ortResultInput,
-                packageConfigurationProvider = ortResultInput
-            ),
+            provider = DefaultLicenseInfoProvider(ortResultInput),
             copyrightGarbage = copyrightGarbage,
             addAuthorsToCopyrights = ortConfig.addAuthorsToCopyrights,
             archiver = ortConfig.scanner.archive.createFileArchiver(),

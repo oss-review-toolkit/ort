@@ -113,7 +113,6 @@ internal fun OrtResult.processAllCopyrightStatements(
     val result = mutableListOf<ProcessedCopyrightStatement>()
 
     val licenseInfoResolver = createLicenseInfoResolver(
-        packageConfigurationProvider = this,
         copyrightGarbage = CopyrightGarbage(copyrightGarbage.toSortedSet()),
         addAuthorsToCopyrights = addAuthorsToCopyrights
     )

@@ -64,7 +64,7 @@ data class ReporterInput(
      * A resolver for license information for the projects and packages contained in [ortResult].
      */
     val licenseInfoResolver: LicenseInfoResolver = LicenseInfoResolver(
-        provider = DefaultLicenseInfoProvider(ortResult, packageConfigurationProvider),
+        provider = DefaultLicenseInfoProvider(ortResult),
         copyrightGarbage = copyrightGarbage,
         addAuthorsToCopyrights = ortConfig.addAuthorsToCopyrights,
         archiver = ortConfig.scanner.archive.createFileArchiver(),

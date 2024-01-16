@@ -27,17 +27,13 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.PathExclude
-import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.filterByVcsPath
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 
 /**
  * The default [LicenseInfoProvider] that collects license information from an [ortResult].
  */
-class DefaultLicenseInfoProvider(
-    val ortResult: OrtResult,
-    private val packageConfigurationProvider: PackageConfigurationProvider
-) : LicenseInfoProvider {
+class DefaultLicenseInfoProvider(val ortResult: OrtResult) : LicenseInfoProvider {
     private val licenseInfo: ConcurrentMap<Identifier, LicenseInfo> = ConcurrentHashMap()
 
     override fun get(id: Identifier) = licenseInfo.getOrPut(id) { createLicenseInfo(id) }
@@ -112,7 +108,7 @@ class DefaultLicenseInfoProvider(
                 ortResult.repository.config.excludes.paths,
                 ortResult.repository.getRelativePath(project.vcsProcessed).orEmpty()
             )
-        } ?: packageConfigurationProvider.getPackageConfigurations(id, provenance).let { packageConfigurations ->
+        } ?: ortResult.getPackageConfigurations(id, provenance).let { packageConfigurations ->
             Configuration(
                 packageConfigurations.flatMap { it.licenseFindingCurations },
                 packageConfigurations.flatMap { it.pathExcludes },
