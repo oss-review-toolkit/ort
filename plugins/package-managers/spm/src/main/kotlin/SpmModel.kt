@@ -52,7 +52,7 @@ abstract class SpmDependency {
             sourceArtifact = RemoteArtifact.EMPTY,
             authors = setOfNotNull(author),
             declaredLicenses = emptySet(), // SPM files do not declare any licenses.
-            homepageUrl = repositoryUrl.removeSuffix(".git")
+            homepageUrl = ""
         )
     }
 }

@@ -23,7 +23,7 @@ packages:
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/apple/swift-argument-parser"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -51,7 +51,7 @@ packages:
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/apple/swift-crypto"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -79,7 +79,7 @@ packages:
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/apple/swift-llbuild"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -107,7 +107,7 @@ packages:
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/braze-inc/braze-ios-sdk"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -135,7 +135,7 @@ packages:
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/grpc/grpc-swift"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:

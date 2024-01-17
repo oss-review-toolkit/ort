@@ -168,7 +168,7 @@ packages:
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/apple/swift-algorithms"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -196,7 +196,7 @@ packages:
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/apple/swift-atomics"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -224,7 +224,7 @@ packages:
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/apple/swift-collections"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -252,7 +252,7 @@ packages:
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/apple/swift-crypto"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -280,7 +280,7 @@ packages:
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/apple/swift-http-types"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -308,7 +308,7 @@ packages:
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/apple/swift-log"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -336,7 +336,7 @@ packages:
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/apple/swift-metrics"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -364,7 +364,7 @@ packages:
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/apple/swift-nio"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -392,7 +392,7 @@ packages:
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/apple/swift-nio-extras"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -420,7 +420,7 @@ packages:
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/apple/swift-nio-http2"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -448,7 +448,7 @@ packages:
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/apple/swift-nio-ssl"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -476,7 +476,7 @@ packages:
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/apple/swift-nio-transport-services"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -504,7 +504,7 @@ packages:
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/apple/swift-numerics"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -532,7 +532,7 @@ packages:
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/swift-server/async-http-client"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -560,7 +560,7 @@ packages:
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/swift-server/swift-backtrace"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -588,7 +588,7 @@ packages:
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/vapor/async-kit"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -616,7 +616,7 @@ packages:
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/vapor/console-kit"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -644,7 +644,7 @@ packages:
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/vapor/multipart-kit"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -672,7 +672,7 @@ packages:
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/vapor/routing-kit"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -700,7 +700,7 @@ packages:
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/vapor/websocket-kit"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
