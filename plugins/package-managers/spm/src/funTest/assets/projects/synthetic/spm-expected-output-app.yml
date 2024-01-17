@@ -16,6 +16,34 @@ project:
     path: "<REPLACE_PATH>"
   homepage_url: "<REPLACE_URL_PROCESSED>"
 packages:
+- id: "SPM:apple:llbuild:9.0.8"
+  purl: "pkg:swift/apple/llbuild@9.0.8"
+  authors:
+  - "apple"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/apple/swift-llbuild.git"
+    revision: "9.0.8"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/apple/swift-llbuild.git"
+    revision: "9.0.8"
+    path: ""
 - id: "SPM:apple:swift-argument-parser:0.2.0"
   purl: "pkg:swift/apple/swift-argument-parser@0.2.0"
   authors:
@@ -72,36 +100,8 @@ packages:
     url: "https://github.com/apple/swift-crypto.git"
     revision: ""
     path: ""
-- id: "SPM:apple:swift-llbuild:9.0.8"
-  purl: "pkg:swift/apple/swift-llbuild@9.0.8"
-  authors:
-  - "apple"
-  declared_licenses: []
-  declared_licenses_processed: {}
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  vcs:
-    type: "Git"
-    url: "https://github.com/apple/swift-llbuild.git"
-    revision: "9.0.8"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/apple/swift-llbuild.git"
-    revision: "9.0.8"
-    path: ""
-- id: "SPM:braze-inc:braze-ios-sdk:branch-master"
-  purl: "pkg:swift/braze-inc/braze-ios-sdk@branch-master"
+- id: "SPM:braze-inc:Appboy_iOS_SDK:branch-master"
+  purl: "pkg:swift/braze-inc/Appboy_iOS_SDK@branch-master"
   authors:
   - "braze-inc"
   declared_licenses: []
