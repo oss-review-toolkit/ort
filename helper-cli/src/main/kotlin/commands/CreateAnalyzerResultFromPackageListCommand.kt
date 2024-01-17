@@ -79,7 +79,7 @@ internal class CreateAnalyzerResultFromPackageListCommand : CliktCommand(
 
     private val configFile by option(
         "--config",
-        help = "The path to the ORT configuration file that configures the scan results storage."
+        help = "The path to the ORT configuration file that configures the package curation providers."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
