@@ -548,7 +548,7 @@ class Pub(
                         pkgInfoFromLockFile["source"].textValueOrEmpty() == "git" -> {
                             val pkgInfoFromYamlFile = readPackageInfoFromCache(pkgInfoFromLockFile, workingDir)
 
-                            rawName = pkgInfoFromYamlFile["name"].textValue() ?: packageName
+                            rawName = pkgInfoFromYamlFile["name"]?.textValue() ?: packageName
                             description = pkgInfoFromYamlFile["description"].textValueOrEmpty().trim()
                             homepageUrl = pkgInfoFromYamlFile["homepage"].textValueOrEmpty()
                             authors = parseAuthors(pkgInfoFromYamlFile)
