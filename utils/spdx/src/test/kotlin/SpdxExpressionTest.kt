@@ -423,28 +423,28 @@ class SpdxExpressionTest : WordSpec({
 
     "validChoices()" should {
         "list the valid choices for a complex expression" {
-            "(a OR b) AND c AND (d OR e)".toSpdx().validChoices() should containExactlyInAnyOrder(
-                "a AND c AND d".toSpdx(),
-                "a AND c AND e".toSpdx(),
-                "b AND c AND d".toSpdx(),
-                "b AND c AND e".toSpdx()
+            "(a OR b) AND c AND (d OR e)".toSpdx().validChoices().map { it.toString() } should containExactlyInAnyOrder(
+                "a AND c AND d",
+                "a AND c AND e",
+                "b AND c AND d",
+                "b AND c AND e"
             )
         }
 
         "not contain a duplicate valid choice for a simple expression" {
-            "a AND a".toSpdx().validChoices() should containExactly("a".toSpdx())
+            "a AND a".toSpdx().validChoices().map { it.toString() } should containExactly("a")
         }
 
         "not contain duplicate valid choice for a complex expression" {
-            "(a OR b) AND (a OR b)".toSpdx().validChoices() should containExactlyInAnyOrder(
-                "a".toSpdx(),
-                "b".toSpdx(),
-                "a AND b".toSpdx()
+            "(a OR b) AND (a OR b)".toSpdx().validChoices().map { it.toString() } should containExactlyInAnyOrder(
+                "a",
+                "b",
+                "a AND b"
             )
         }
 
         "not contain duplicate valid choice different left and right expressions" {
-            "a AND a AND b".toSpdx().validChoices() should containExactly("a AND b".toSpdx())
+            "a AND a AND b".toSpdx().validChoices().map { it.toString() } should containExactly("a AND b")
         }
     }
 
