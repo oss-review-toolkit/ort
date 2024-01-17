@@ -74,7 +74,8 @@ data class SpmDependenciesOutput(
 data class LibraryDependency(
     val name: String,
     val version: String,
-    @SerialName("url") override val repositoryUrl: String,
+    @SerialName("url")
+    override val repositoryUrl: String,
     val dependencies: Set<LibraryDependency>
 ) : SpmDependency() {
     override val vcs: VcsInfo
@@ -97,15 +98,18 @@ data class LibraryDependency(
 
 @Serializable
 data class PackageResolved(
-    @SerialName("object") val objects: Map<String, List<AppDependency>>,
+    @SerialName("object")
+    val objects: Map<String, List<AppDependency>>,
     val version: Int
 )
 
 @Serializable
 data class AppDependency(
-    @SerialName("package") val packageName: String,
+    @SerialName("package")
+    val packageName: String,
     val state: AppDependencyState?,
-    @SerialName("repositoryURL") override val repositoryUrl: String
+    @SerialName("repositoryURL")
+    override val repositoryUrl: String
 ) : SpmDependency() {
     @Serializable
     data class AppDependencyState(

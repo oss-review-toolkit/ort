@@ -24,13 +24,18 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class BoyterLcResult(
-    @SerialName("Directory") val directory: String,
-    @SerialName("Filename") val filename: String,
-    @SerialName("LicenseGuesses") val licenseGuesses: List<LicenseGuess>
+    @SerialName("Directory")
+    val directory: String,
+    @SerialName("Filename")
+    val filename: String,
+    @SerialName("LicenseGuesses")
+    val licenseGuesses: List<LicenseGuess>
 )
 
 @Serializable
 data class LicenseGuess(
-    @SerialName("LicenseId") val licenseId: String,
-    @SerialName("Percentage") val percentage: Float
+    @SerialName("LicenseId")
+    val licenseId: String,
+    @SerialName("Percentage")
+    val percentage: Float
 )

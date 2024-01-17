@@ -91,7 +91,8 @@ internal object PythonInspector : CommandLineTool {
 
     @Serializable
     internal data class Result(
-        @SerialName("files") val projects: List<Project>,
+        @SerialName("files")
+        val projects: List<Project>,
         val resolvedDependenciesGraph: List<ResolvedDependency>,
         val packages: List<Package>
     )
