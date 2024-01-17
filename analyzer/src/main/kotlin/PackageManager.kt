@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.analyzer
 
+import java.io.Closeable
 import java.io.File
 import java.nio.file.FileSystems
 import java.nio.file.Path
@@ -62,7 +63,7 @@ abstract class PackageManager(
     val analysisRoot: File,
     val analyzerConfig: AnalyzerConfiguration,
     val repoConfig: RepositoryConfiguration
-) {
+) : Closeable {
     companion object {
         private val PACKAGE_MANAGER_DIRECTORIES = setOf(
             // Ignore intermediate build system directories.
@@ -361,6 +362,11 @@ abstract class PackageManager(
             }
         }
     }
+
+    /**
+     * [PackageManager] implementations should override this method if they need to close resources.
+     */
+    override fun close() = Unit
 }
 
 /**

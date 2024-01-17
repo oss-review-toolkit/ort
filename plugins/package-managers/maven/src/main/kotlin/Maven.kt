@@ -164,6 +164,11 @@ class Maven(
 
         return listOf(ProjectAnalyzerResult(project, emptySet(), issues))
     }
+
+    override fun close() {
+        // Silently close the [MvnSupport] instance.
+        mvn.use {}
+    }
 }
 
 /**
