@@ -43,14 +43,12 @@ abstract class SpmDependency {
     abstract val id: Identifier
 
     fun toPackage(): Package {
-        val (author, _) = parseAuthorAndProjectFromRepo(repositoryUrl)
         return Package(
             vcs = vcs,
             description = "",
             id = id,
             binaryArtifact = RemoteArtifact.EMPTY,
             sourceArtifact = RemoteArtifact.EMPTY,
-            authors = setOfNotNull(author),
             declaredLicenses = emptySet(), // SPM files do not declare any licenses.
             homepageUrl = ""
         )
