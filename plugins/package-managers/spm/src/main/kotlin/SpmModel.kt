@@ -85,11 +85,11 @@ data class LibraryDependency(
 
     override val id: Identifier
         get() {
-            val (author, project) = parseAuthorAndProjectFromRepo(repositoryUrl)
+            val (author, _) = parseAuthorAndProjectFromRepo(repositoryUrl)
             return Identifier(
                 type = PACKAGE_TYPE,
                 namespace = author.orEmpty(),
-                name = project ?: name,
+                name = name,
                 version = version
             )
         }
@@ -138,11 +138,11 @@ data class AppDependency(
 
     override val id: Identifier
         get() {
-            val (author, project) = parseAuthorAndProjectFromRepo(repositoryUrl)
+            val (author, _) = parseAuthorAndProjectFromRepo(repositoryUrl)
             return Identifier(
                 type = PACKAGE_TYPE,
                 namespace = author.orEmpty(),
-                name = project ?: packageName,
+                name = packageName,
                 version = state?.toString().orEmpty()
             )
         }
