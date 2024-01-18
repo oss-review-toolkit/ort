@@ -56,6 +56,12 @@ class MigrateCommand : OrtCommand(
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = true, mustBeReadable = true)
 
+    private val pubIds by option(
+        "--pub-ids",
+        help = "Convert Pub package IDs in curations and configurations to the new format that has no namespace."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = true, mustBeReadable = true)
+
     override fun run() {
         hoconToYaml?.run {
             echo(convertHoconToYaml(readText()))
@@ -64,12 +70,25 @@ class MigrateCommand : OrtCommand(
         nuGetIds?.run {
             migrateNuGetIds(this)
         }
+
+        pubIds?.run {
+            migratePubIds(this)
+        }
     }
 
     private fun migrateNuGetIds(configDir: File) =
         migrateIds(configDir) { id ->
             if (id.type == "NuGet") {
                 getIdentifierWithNamespace(id.type, id.name, id.version)
+            } else {
+                id
+            }
+        }
+
+    private fun migratePubIds(configDir: File) =
+        migrateIds(configDir) { id ->
+            if (id.type == "Pub") {
+                id.copy(namespace = "")
             } else {
                 id
             }
