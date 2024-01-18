@@ -77,7 +77,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Check for Markdown issues
-        uses: DavidAnson/markdownlint-cli2-action@v14
+        uses: DavidAnson/markdownlint-cli2-action@v15
   qodana-scan:
     runs-on: ubuntu-22.04
     steps:
