@@ -28,6 +28,7 @@ import com.github.ajalt.clikt.parameters.types.file
 import java.io.File
 
 import org.ossreviewtoolkit.model.FileFormat
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.readValue
@@ -65,7 +66,16 @@ class MigrateCommand : OrtCommand(
         }
     }
 
-    private fun migrateNuGetIds(configDir: File) {
+    private fun migrateNuGetIds(configDir: File) =
+        migrateIds(configDir) { id ->
+            if (id.type == "NuGet") {
+                getIdentifierWithNamespace(id.type, id.name, id.version)
+            } else {
+                id
+            }
+        }
+
+    private fun migrateIds(configDir: File, transformId: (Identifier) -> Identifier) {
         val configYamlMapper = yamlMapper.copy()
             .enable(YAMLGenerator.Feature.LITERAL_BLOCK_STYLE)
             .disable(YAMLGenerator.Feature.SPLIT_LINES)
@@ -99,11 +109,7 @@ class MigrateCommand : OrtCommand(
         echo("Processing ${pkgCurationFiles.size} package curation files...")
         pkgCurationFiles.forEach { (file, curations) ->
             val curationsWithFixedIds = curations.map {
-                if (it.id.type == "NuGet") {
-                    it.copy(id = getIdentifierWithNamespace(it.id.type, it.id.name, it.id.version))
-                } else {
-                    it
-                }
+                it.copy(id = transformId(it.id))
             }
 
             if (curationsWithFixedIds != curations) {
@@ -123,11 +129,7 @@ class MigrateCommand : OrtCommand(
 
         echo("Processing ${pkgConfigFiles.size} package configuration files...")
         pkgConfigFiles.forEach { (file, config) ->
-            val configWithFixedId = if (config.id.type == "NuGet") {
-                config.copy(id = getIdentifierWithNamespace(config.id.type, config.id.name, config.id.version))
-            } else {
-                config
-            }
+            val configWithFixedId = config.copy(id = transformId(config.id))
 
             if (configWithFixedId != config) {
                 val oldPath = file.relativeTo(configsDir).path
