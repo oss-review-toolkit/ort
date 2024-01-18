@@ -141,12 +141,11 @@ class Spm(
 
     private fun projectFromDefinitionFile(definitionFile: File): Project {
         val vcsInfo = VersionControlSystem.forDirectory(definitionFile.parentFile)?.getInfo().orEmpty()
-        val (author, _) = parseAuthorAndProjectFromRepo(repositoryURL = vcsInfo.url)
 
         val projectIdentifier = Identifier(
             type = managerName,
             version = vcsInfo.revision,
-            namespace = author.orEmpty(),
+            namespace = "",
             name = getFallbackProjectName(analysisRoot, definitionFile)
         )
 
