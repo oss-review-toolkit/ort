@@ -83,14 +83,12 @@
 "BSD - See ndg/httpsclient/LICENCE file for details": BSD-3-Clause
 "BSD License for HSQL": BSD-3-Clause
 "BSD-Style + Attribution": BSD-3-Clause-Attribution
-"BSD-derived (http://www.repoze.org/LICENSE.txt)": LicenseRef-scancode-repoze
 "Berkeley Software Distribution (BSD) License": BSD-2-Clause
 "Bouncy Castle Licence": MIT
 "Bouncy Castle License": MIT
 "CDDL v1.1 / GPL v2 dual license": CDDL-1.0 OR GPL-2.0-only
 "CUP Parser Generator Copyright Notice, License, and Disclaimer": HPND
 "CeCILL Licence française de logiciel libre": CECILL-2.0
-"Commons Clause": LicenseRef-scancode-commons-clause
 "Eiffel Forum License (EFL)": EFL-2.0
 "Eiffel Forum License": EFL-2.0
 "Expat (MIT/X11)": MIT
@@ -99,7 +97,6 @@
 "Free For Home Use": LicenseRef-scancode-proprietary-license
 "Free To Use But Restricted": LicenseRef-scancode-proprietary-license
 "Free for non-commercial use": LicenseRef-scancode-proprietary-license
-"Freely Distributable": LicenseRef-scancode-free-unknown
 "Freeware": LicenseRef-scancode-proprietary-license
 "GNU General Public Library": GPL-3.0-or-later
 "GNU LGPL v2+": LGPL-2.1-or-later
@@ -130,11 +127,6 @@
 "GWT Terms": Apache-2.0 AND BSD-3-Clause AND CC0-1.0 AND EPL-1.0 AND LGPL-2.1-only AND MPL-1.1
 "Go license": BSD-3-Clause
 "Google Maps Platform Terms of Service": LicenseRef-ort-google-maps-tos
-"HERE Proprietary License": LicenseRef-scancode-here-proprietary
-"Indiana University Extreme! Lab Software License 1.1.1": LicenseRef-scancode-indiana-extreme
-"Indiana University Extreme! Lab Software License, version 1.1.1": LicenseRef-scancode-indiana-extreme
-"Indiana University Extreme! Lab Software License, vesion 1.1.1": LicenseRef-scancode-indiana-extreme
-"Jabber Open Source License": LicenseRef-scancode-josl-1.0
 "OSI Approved": NONE
 "The Go license": BSD-3-Clause
 "Trilead Library License (BSD-Like)": BSD-3-Clause AND MIT
@@ -160,12 +152,9 @@
 "http://www.scala-lang.org/node/146": Apache-2.0 AND BSD-3-Clause AND MIT
 "public domain, Python, 2-Clause BSD, GPL 3 (see COPYING.txt)": LicenseRef-scancode-public-domain-disclaimer AND Python-2.0 AND BSD-2-Clause AND GPL-3.0-only
 "bzip2 license": bzip2-1.0.6
-"Zlib / Libpng License": zlib-acknowledgement
-"Zlib/Libpng License": zlib-acknowledgement
 "Zope Public License": ZPL-2.1
 "Zope Public": ZPL-2.1
 "Similar to Apache License but with the acknowledgment clause removed": LicenseRef-scancode-jdom
-"SOLACE CORPORATION LICENSE AGREEMENT": LicenseRef-scancode-solace-software-eula-2020
 "Scala License": Apache-2.0 AND BSD-3-Clause AND MIT
 "Sequence Library License (BSD-like)": BSD-3-Clause
 "Revised BSD License": BSD-3-Clause
@@ -176,7 +165,6 @@
 "Perl Artistic v2": Artistic-1.0-Perl
 "PSF License": PSF-2.0
 "Oracle Free Use Terms and Conditions (FUTC)": LicenseRef-ort-oracle-futc
-"Other/Proprietary License": LicenseRef-scancode-proprietary-license
 
 # Non-ambiguous mappings
 "(MIT-style) netCDF C library license": NetCDF
@@ -250,6 +238,7 @@
 "BSD Three Clause License": BSD-3-Clause
 "BSD Two Clause License": BSD-2-Clause
 "BSD-3 Clause": BSD-3-Clause
+"BSD-derived (http://www.repoze.org/LICENSE.txt)": LicenseRef-scancode-repoze
 "Boost License v1.0": BSL-1.0
 "Boost License": BSL-1.0
 "Boost Software License 1.0 (BSL-1.0)": BSL-1.0
@@ -277,6 +266,7 @@
 "Common Public License - v 1.0": CPL-1.0
 "Common Public License Version 1.0": CPL-1.0
 "Common Public License": CPL-1.0
+"Commons Clause": LicenseRef-scancode-commons-clause
 "Creative Commons - Attribution 4.0 International License": CC-BY-4.0
 "Creative Commons 3.0 BY-SA": CC-BY-SA-3.0
 "Creative Commons 3.0": CC-BY-3.0
@@ -326,6 +316,7 @@
 "European Union Public Licence 1.2": EUPL-1.2
 "European Union Public Licence, Version 1.1": EUPL-1.1
 "European Union Public License v. 1.2": EUPL-1.2
+"Freely Distributable": LicenseRef-scancode-free-unknown
 "GNU Affero General Public License v3 (AGPL-3.0)": AGPL-3.0-only
 "GNU Affero General Public License v3 (AGPLv3)": AGPL-3.0-only
 "GNU Affero General Public License v3 or later (AGPL3+)": AGPL-3.0-or-later
@@ -390,9 +381,14 @@
 "GPLv2 license, includes the CLASSPATH exception": GPL-2.0-only WITH Classpath-exception-2.0
 "GPLv2+CE": GPL-2.0-only WITH Classpath-exception-2.0
 "General Public License 2.0 (GPL)": GPL-2.0-only
+"HERE Proprietary License": LicenseRef-scancode-here-proprietary
 "Historical Permission Notice and Disclaimer (HPND)": HPND
 "IBM Public License": IPL-1.0
 "ISC License (ISCL)": ISC
+"Indiana University Extreme! Lab Software License 1.1.1": LicenseRef-scancode-indiana-extreme
+"Indiana University Extreme! Lab Software License, version 1.1.1": LicenseRef-scancode-indiana-extreme
+"Indiana University Extreme! Lab Software License, vesion 1.1.1": LicenseRef-scancode-indiana-extreme
+"Jabber Open Source License": LicenseRef-scancode-josl-1.0
 "LGPL 2.1": LGPL-2.1-only
 "LGPL 3": LGPL-3.0-only
 "LGPL 3.0 license": LGPL-3.0-only
@@ -441,6 +437,7 @@
 "ODbL v1.0": ODbL-1.0
 "Open Software License 3.0 (OSL-3.0)": OSL-3.0
 "Open Software License v. 3.0": OSL-3.0
+"Other/Proprietary License": LicenseRef-scancode-proprietary-license
 "Public Domain, per Creative Commons CC0": CC0-1.0
 "Public domain (CC0-1.0)": CC0-1.0
 "Python License (CNRI Python License)": CNRI-Python
@@ -453,6 +450,7 @@
 "Ruby's": Ruby
 "SIL OPEN FONT LICENSE Version 1.1": OFL-1.1
 "SIL Open Font License 1.1 (OFL-1.1)": OFL-1.1
+"SOLACE CORPORATION LICENSE AGREEMENT": LicenseRef-scancode-solace-software-eula-2020
 "Simplified BSD License": BSD-2-Clause
 "Simplified BSD Liscence": BSD-2-Clause
 "Simplified BSD": BSD-2-Clause
@@ -497,6 +495,8 @@
 "Vovida Software License": VSL-1.0
 "W3C License": W3C
 "ZPL 2.1": ZPL-2.1
+"Zlib / Libpng License": zlib-acknowledgement
+"Zlib/Libpng License": zlib-acknowledgement
 "['MIT']": MIT
 "artistic license v2.0": Artistic-2.0
 "cc by-nc-sa 2.0": CC-BY-NC-SA-2.0
