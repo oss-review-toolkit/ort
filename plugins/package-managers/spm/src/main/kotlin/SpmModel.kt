@@ -90,35 +90,35 @@ data class AppDependency(
         val revision: String? = null,
         val branch: String? = null
     )
+}
 
-    fun toPackage(): Package {
-        val id = Identifier(
-            type = PACKAGE_TYPE,
-            namespace = "",
-            name = getCanonicalName(repositoryUrl),
-            version = state?.run {
-                when {
-                    !version.isNullOrBlank() -> version
-                    !revision.isNullOrBlank() -> "revision-$revision"
-                    !branch.isNullOrBlank() -> "branch-$branch"
-                    else -> ""
-                }
-            }.orEmpty()
-        )
-
-        val vcsInfoFromUrl = VcsHost.parseUrl(repositoryUrl)
-        val vcsInfo = if (vcsInfoFromUrl.revision.isBlank() && state != null) {
+internal fun AppDependency.toPackage(): Package {
+    val id = Identifier(
+        type = PACKAGE_TYPE,
+        namespace = "",
+        name = getCanonicalName(repositoryUrl),
+        version = state?.run {
             when {
-                !state.revision.isNullOrBlank() -> vcsInfoFromUrl.copy(revision = state.revision)
-                !state.version.isNullOrBlank() -> vcsInfoFromUrl.copy(revision = state.version)
-                else -> vcsInfoFromUrl
+                !version.isNullOrBlank() -> version
+                !revision.isNullOrBlank() -> "revision-$revision"
+                !branch.isNullOrBlank() -> "branch-$branch"
+                else -> ""
             }
-        } else {
-            vcsInfoFromUrl
-        }
+        }.orEmpty()
+    )
 
-        return createPackage(id, vcsInfo)
+    val vcsInfoFromUrl = VcsHost.parseUrl(repositoryUrl)
+    val vcsInfo = if (vcsInfoFromUrl.revision.isBlank() && state != null) {
+        when {
+            !state.revision.isNullOrBlank() -> vcsInfoFromUrl.copy(revision = state.revision)
+            !state.version.isNullOrBlank() -> vcsInfoFromUrl.copy(revision = state.version)
+            else -> vcsInfoFromUrl
+        }
+    } else {
+        vcsInfoFromUrl
     }
+
+    return createPackage(id, vcsInfo)
 }
 
 private fun createPackage(id: Identifier, vcsInfo: VcsInfo) =
