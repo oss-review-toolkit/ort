@@ -84,7 +84,7 @@ class Spm(
 
         return when (definitionFile.name) {
             PACKAGE_SWIFT_NAME -> resolveLibraryDependencies(definitionFile)
-            else -> resolveAppDependencies(definitionFile)
+            else -> resolveLockfileDependencies(definitionFile)
         }
     }
 
@@ -92,12 +92,12 @@ class Spm(
      * Resolves dependencies when only a lockfile aka `Package.Resolved` is available. This commonly applies to e.g.
      * Xcode projects which only have a lockfile, but no `Package.swift` file.
      */
-    private fun resolveAppDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
-        val resolved = definitionFile.inputStream().use { json.decodeFromStream<PackageResolved>(it) }
+    private fun resolveLockfileDependencies(packageResolvedFile: File): List<ProjectAnalyzerResult> {
+        val resolved = packageResolvedFile.inputStream().use { json.decodeFromStream<PackageResolved>(it) }
 
         return listOf(
             ProjectAnalyzerResult(
-                project = projectFromDefinitionFile(definitionFile),
+                project = projectFromDefinitionFile(packageResolvedFile),
                 packages = resolved.objects["pins"].orEmpty().mapTo(mutableSetOf()) { it.toPackage() }
             )
         )
