@@ -33,14 +33,6 @@ import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 
 val json = Json { ignoreUnknownKeys = true }
 
-abstract class SpmDependency {
-    abstract val repositoryUrl: String
-    abstract val vcs: VcsInfo
-    abstract val id: Identifier
-
-    fun toPackage(): Package = createPackage(id, vcs)
-}
-
 /**
  * The output of the `spm dependencies` command.
  */
@@ -58,16 +50,16 @@ data class SpmDependenciesOutput(
 data class LibraryDependency(
     val name: String,
     val version: String,
-    @SerialName("url") override val repositoryUrl: String,
+    @SerialName("url") val repositoryUrl: String,
     val dependencies: Set<LibraryDependency>
-) : SpmDependency() {
-    override val vcs: VcsInfo
+) {
+    val vcs: VcsInfo
         get() {
             val vcsInfoFromUrl = VcsHost.parseUrl(repositoryUrl)
             return vcsInfoFromUrl.takeUnless { it.revision.isBlank() } ?: vcsInfoFromUrl.copy(revision = version)
         }
 
-    override val id: Identifier
+    val id: Identifier
         get() {
             return Identifier(
                 type = PACKAGE_TYPE,
@@ -76,6 +68,8 @@ data class LibraryDependency(
                 version = version
             )
         }
+
+    fun toPackage(): Package = createPackage(id, vcs)
 }
 
 @Serializable
@@ -88,8 +82,8 @@ data class PackageResolved(
 data class AppDependency(
     @SerialName("package") val packageName: String,
     val state: AppDependencyState?,
-    @SerialName("repositoryURL") override val repositoryUrl: String
-) : SpmDependency() {
+    @SerialName("repositoryURL") val repositoryUrl: String
+) {
     @Serializable
     data class AppDependencyState(
         val version: String? = null,
@@ -105,7 +99,7 @@ data class AppDependency(
             }
     }
 
-    override val vcs: VcsInfo
+    val vcs: VcsInfo
         get() {
             val vcsInfoFromUrl = VcsHost.parseUrl(repositoryUrl)
 
@@ -119,7 +113,7 @@ data class AppDependency(
             return vcsInfoFromUrl
         }
 
-    override val id: Identifier
+    val id: Identifier
         get() {
             return Identifier(
                 type = PACKAGE_TYPE,
@@ -128,6 +122,8 @@ data class AppDependency(
                 version = state?.toString().orEmpty()
             )
         }
+
+    fun toPackage(): Package = createPackage(id, vcs)
 }
 
 private fun createPackage(id: Identifier, vcsInfo: VcsInfo) =
