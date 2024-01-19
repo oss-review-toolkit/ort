@@ -88,23 +88,22 @@ data class AppDependency(
     data class AppDependencyState(
         val version: String? = null,
         val revision: String? = null,
-        private val branch: String? = null
-    ) {
-        override fun toString(): String =
-            when {
-                !version.isNullOrBlank() -> version
-                !revision.isNullOrBlank() -> "revision-$revision"
-                !branch.isNullOrBlank() -> "branch-$branch"
-                else -> ""
-            }
-    }
+        val branch: String? = null
+    )
 
     fun toPackage(): Package {
         val id = Identifier(
             type = PACKAGE_TYPE,
             namespace = "",
             name = getCanonicalName(repositoryUrl),
-            version = state?.toString().orEmpty()
+            version = state?.run {
+                when {
+                    !version.isNullOrBlank() -> version
+                    !revision.isNullOrBlank() -> "revision-$revision"
+                    !branch.isNullOrBlank() -> "branch-$branch"
+                    else -> ""
+                }
+            }.orEmpty()
         )
 
         val vcsInfoFromUrl = VcsHost.parseUrl(repositoryUrl)
