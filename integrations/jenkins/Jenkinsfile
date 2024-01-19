@@ -487,7 +487,7 @@ pipeline {
                     /opt/ort/bin/set_gradle_proxy.sh
 
                     rm -fr out/results
-                    /opt/ort/bin/ort $ORT_OPTIONS analyze -i "$PROJECT_DIR/source" -o out/results/analyzer
+                    /opt/ort/bin/ort $ORT_OPTIONS analyze -i "$PROJECT_DIR/source" -o out/results/analyzer -l JENKINS_BUILD_URL=$BUILD_URL
                     '''.stripIndent().trim()
 
                     if (status >= ORT_FAILURE_STATUS_CODE) unstable('Analyzer issues found.')
