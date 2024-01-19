@@ -150,6 +150,6 @@ data class AppDependency(
 internal fun getCanonicalName(repositoryUrl: String): String {
     val normalizedUrl = normalizeVcsUrl(repositoryUrl)
     return normalizedUrl.toUri {
-        "${it.host}${it.path.removeSuffix(".git")}"
+        it.host + it.path.removeSuffix(".git")
     }.getOrDefault(normalizedUrl).lowercase()
 }
