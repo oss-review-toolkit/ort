@@ -23,12 +23,10 @@ import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.OrtConfiguration
-import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.model.licenses.DefaultLicenseInfoProvider
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
-import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.reporter.StatisticsCalculator.getStatistics
 
 /**
@@ -46,11 +44,6 @@ data class ReporterInput(
     val ortConfig: OrtConfiguration = OrtConfiguration(),
 
     /**
-     * A [PackageConfigurationProvider], can be used to obtain [PackageConfiguration]s for packages.
-     */
-    val packageConfigurationProvider: PackageConfigurationProvider = PackageConfigurationProvider.EMPTY,
-
-    /**
      * A [LicenseTextProvider], can be used to integrate licenses texts into reports.
      */
     val licenseTextProvider: LicenseTextProvider = DefaultLicenseTextProvider(),
@@ -64,7 +57,7 @@ data class ReporterInput(
      * A resolver for license information for the projects and packages contained in [ortResult].
      */
     val licenseInfoResolver: LicenseInfoResolver = LicenseInfoResolver(
-        provider = DefaultLicenseInfoProvider(ortResult, packageConfigurationProvider),
+        provider = DefaultLicenseInfoProvider(ortResult),
         copyrightGarbage = copyrightGarbage,
         addAuthorsToCopyrights = ortConfig.addAuthorsToCopyrights,
         archiver = ortConfig.scanner.archive.createFileArchiver(),

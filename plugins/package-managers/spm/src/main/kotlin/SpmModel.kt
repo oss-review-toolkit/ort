@@ -19,20 +19,16 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.spm
 
-import java.lang.invoke.MethodHandles
-import java.net.URI
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-
-import org.apache.logging.log4j.kotlin.loggerOf
 
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 
 val json = Json { ignoreUnknownKeys = true }
@@ -43,16 +39,14 @@ abstract class SpmDependency {
     abstract val id: Identifier
 
     fun toPackage(): Package {
-        val (author, _) = parseAuthorAndProjectFromRepo(repositoryUrl)
         return Package(
             vcs = vcs,
             description = "",
             id = id,
             binaryArtifact = RemoteArtifact.EMPTY,
             sourceArtifact = RemoteArtifact.EMPTY,
-            authors = setOfNotNull(author),
             declaredLicenses = emptySet(), // SPM files do not declare any licenses.
-            homepageUrl = repositoryUrl.removeSuffix(".git")
+            homepageUrl = ""
         )
     }
 }
@@ -85,11 +79,10 @@ data class LibraryDependency(
 
     override val id: Identifier
         get() {
-            val (author, project) = parseAuthorAndProjectFromRepo(repositoryUrl)
             return Identifier(
                 type = PACKAGE_TYPE,
-                namespace = author.orEmpty(),
-                name = project ?: name,
+                namespace = "",
+                name = getCanonicalName(repositoryUrl),
                 version = version
             )
         }
@@ -138,35 +131,25 @@ data class AppDependency(
 
     override val id: Identifier
         get() {
-            val (author, project) = parseAuthorAndProjectFromRepo(repositoryUrl)
             return Identifier(
                 type = PACKAGE_TYPE,
-                namespace = author.orEmpty(),
-                name = project ?: packageName,
+                namespace = "",
+                name = getCanonicalName(repositoryUrl),
                 version = state?.toString().orEmpty()
             )
         }
 }
 
-private val logger = loggerOf(MethodHandles.lookup().lookupClass())
-
-internal fun parseAuthorAndProjectFromRepo(repositoryURL: String): Pair<String?, String?> {
-    val normalizedURL = normalizeVcsUrl(repositoryURL)
-    val vcsHost = VcsHost.fromUrl(URI(normalizedURL))
-    val project = vcsHost?.getProject(normalizedURL)
-    val author = vcsHost?.getUserOrOrganization(normalizedURL)
-
-    if (author.isNullOrBlank()) {
-        logger.warn {
-            "Unable to parse the author from VCS URL $repositoryURL, results might be incomplete."
-        }
-    }
-
-    if (project.isNullOrBlank()) {
-        logger.warn {
-            "Unable to parse the project from VCS URL $repositoryURL, results might be incomplete."
-        }
-    }
-
-    return author to project
+/**
+ * Return the canonical name for a package based on the given [repositoryUrl].
+ * The algorithm assumes that the repository URL does not point to the local file
+ * system, as support for local dependencies is not implemented yet in ORT. Otherwise,
+ * the algorithm tries to effectively mimic the algorithm described in
+ * https://github.com/apple/swift-package-manager/blob/24bfdd180afdf78160e7a2f6f6deb2c8249d40d3/Sources/PackageModel/PackageIdentity.swift#L345-L415.
+ */
+internal fun getCanonicalName(repositoryUrl: String): String {
+    val normalizedUrl = normalizeVcsUrl(repositoryUrl)
+    return normalizedUrl.toUri {
+        it.host + it.path.removeSuffix(".git")
+    }.getOrDefault(normalizedUrl).lowercase()
 }

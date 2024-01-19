@@ -1,6 +1,6 @@
 ---
 projects:
-- id: "Pub:flutter_example:flutter_example:1.0.0+1"
+- id: "Pub::flutter_example:1.0.0+1"
   definition_file_path: "plugins/package-managers/pub/src/funTest/assets/projects/synthetic/flutter-project-with-android-and-cocoapods/pubspec.yaml"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -300,12 +300,12 @@ projects:
           - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.5.31"
   - name: "dependencies"
     dependencies:
-    - id: "Pub:cupertino_icons:cupertino_icons:1.0.3"
+    - id: "Pub::cupertino_icons:1.0.3"
   - name: "dev_dependencies"
     dependencies:
-    - id: "Pub:flutter_lints:flutter_lints:1.0.4"
+    - id: "Pub::flutter_lints:1.0.4"
       dependencies:
-      - id: "Pub:lints:lints:1.0.1"
+      - id: "Pub::lints:1.0.1"
 packages:
 - id: "Maven:androidx.activity:activity:1.0.0"
   purl: "pkg:maven/androidx.activity/activity@1.0.0"
@@ -1394,8 +1394,8 @@ packages:
     url: "https://github.com/Kotlin/kotlinx.coroutines.git"
     revision: ""
     path: ""
-- id: "Pub:cupertino_icons:cupertino_icons:1.0.3"
-  purl: "pkg:pub/cupertino_icons/cupertino_icons@1.0.3"
+- id: "Pub::cupertino_icons:1.0.3"
+  purl: "pkg:pub/cupertino_icons@1.0.3"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "Default icons asset for Cupertino widgets based on Apple styled icons"
@@ -1420,8 +1420,8 @@ packages:
     url: "https://github.com/flutter/packages.git"
     revision: "master"
     path: "third_party/packages/cupertino_icons"
-- id: "Pub:flutter_lints:flutter_lints:1.0.4"
-  purl: "pkg:pub/flutter_lints/flutter_lints@1.0.4"
+- id: "Pub::flutter_lints:1.0.4"
+  purl: "pkg:pub/flutter_lints@1.0.4"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "Recommended lints for Flutter apps, packages, and plugins to encourage\
@@ -1447,8 +1447,8 @@ packages:
     url: "https://github.com/flutter/packages.git"
     revision: "master"
     path: "packages/flutter_lints"
-- id: "Pub:lints:lints:1.0.1"
-  purl: "pkg:pub/lints/lints@1.0.1"
+- id: "Pub::lints:1.0.1"
+  purl: "pkg:pub/lints@1.0.1"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "Official Dart lint rules. Defines the 'core' and 'recommended' set\

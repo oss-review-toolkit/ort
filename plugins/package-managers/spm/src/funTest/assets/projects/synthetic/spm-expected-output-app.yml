@@ -1,6 +1,6 @@
 ---
 project:
-  id: "SPM:oss-review-toolkit:ort:<REPLACE_REVISION>"
+  id: "SPM::src/funTest/assets/projects/synthetic/spm-app/Package.resolved:<REPLACE_REVISION>"
   definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -16,14 +16,12 @@ project:
     path: "<REPLACE_PATH>"
   homepage_url: "<REPLACE_URL_PROCESSED>"
 packages:
-- id: "SPM:apple:swift-argument-parser:0.2.0"
-  purl: "pkg:swift/apple/swift-argument-parser@0.2.0"
-  authors:
-  - "apple"
+- id: "SPM::github.com/apple/swift-argument-parser:0.2.0"
+  purl: "pkg:swift/github.com%2Fapple%2Fswift-argument-parser@0.2.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/apple/swift-argument-parser"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -44,14 +42,12 @@ packages:
     url: "https://github.com/apple/swift-argument-parser.git"
     revision: "eb51f949cdd0c9d88abba9ce79d37eb7ea1231d0"
     path: ""
-- id: "SPM:apple:swift-crypto:"
-  purl: "pkg:swift/apple/swift-crypto@"
-  authors:
-  - "apple"
+- id: "SPM::github.com/apple/swift-crypto:"
+  purl: "pkg:swift/github.com%2Fapple%2Fswift-crypto@"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/apple/swift-crypto"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -72,14 +68,12 @@ packages:
     url: "https://github.com/apple/swift-crypto.git"
     revision: ""
     path: ""
-- id: "SPM:apple:swift-llbuild:9.0.8"
-  purl: "pkg:swift/apple/swift-llbuild@9.0.8"
-  authors:
-  - "apple"
+- id: "SPM::github.com/apple/swift-llbuild:9.0.8"
+  purl: "pkg:swift/github.com%2Fapple%2Fswift-llbuild@9.0.8"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/apple/swift-llbuild"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -100,14 +94,12 @@ packages:
     url: "https://github.com/apple/swift-llbuild.git"
     revision: "9.0.8"
     path: ""
-- id: "SPM:braze-inc:braze-ios-sdk:branch-master"
-  purl: "pkg:swift/braze-inc/braze-ios-sdk@branch-master"
-  authors:
-  - "braze-inc"
+- id: "SPM::github.com/braze-inc/braze-ios-sdk:branch-master"
+  purl: "pkg:swift/github.com%2Fbraze-inc%2Fbraze-ios-sdk@branch-master"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/braze-inc/braze-ios-sdk"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -128,14 +120,12 @@ packages:
     url: "https://github.com/braze-inc/braze-ios-sdk.git"
     revision: ""
     path: ""
-- id: "SPM:grpc:grpc-swift:revision-efb67a324eaf1696b50e66bc471a53690e41fbf6"
-  purl: "pkg:swift/grpc/grpc-swift@revision-efb67a324eaf1696b50e66bc471a53690e41fbf6"
-  authors:
-  - "grpc"
+- id: "SPM::github.com/grpc/grpc-swift:revision-efb67a324eaf1696b50e66bc471a53690e41fbf6"
+  purl: "pkg:swift/github.com%2Fgrpc%2Fgrpc-swift@revision-efb67a324eaf1696b50e66bc471a53690e41fbf6"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/grpc/grpc-swift"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:

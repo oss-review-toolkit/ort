@@ -30,11 +30,13 @@ import org.ossreviewtoolkit.model.ResolvedPackageCurations.Companion.REPOSITORY_
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
+import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.VulnerabilityResolution
 import org.ossreviewtoolkit.model.config.orEmpty
+import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.ResolutionProvider
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.utils.common.zipWithCollections
@@ -87,7 +89,7 @@ data class OrtResult(
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val labels: Map<String, String> = emptyMap()
-) : ResolutionProvider {
+) : ResolutionProvider, PackageConfigurationProvider {
     companion object {
         /**
          * A constant for an [OrtResult] with an empty repository and all other properties `null`.
@@ -145,6 +147,10 @@ data class OrtResult(
                 isExcluded = id !in includedDependencies
             )
         }
+    }
+
+    private val packageConfigurationsById: Map<Identifier, List<PackageConfiguration>> by lazy {
+        resolvedConfiguration.packageConfigurations.orEmpty().groupBy { it.id }
     }
 
     /**
@@ -278,6 +284,12 @@ data class OrtResult(
             .filter { issue ->
                 issue.severity >= minSeverity && getResolutions().issues.none { it.matches(issue) }
             }
+
+    /**
+     * Return a list of [PackageConfiguration]s for the given [packageId] and [provenance].
+     */
+    override fun getPackageConfigurations(packageId: Identifier, provenance: Provenance): List<PackageConfiguration> =
+        packageConfigurationsById[packageId].orEmpty().filter { it.matches(packageId, provenance) }
 
     /**
      * Return all projects and packages that are likely to belong to one of the organizations of the given [names]. If

@@ -1,8 +1,9 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const lightCodeTheme = require('prism-react-renderer/themes/github');
-const darkCodeTheme = require('prism-react-renderer/themes/dracula');
+const {themes} = require('prism-react-renderer');
+const lightCodeTheme = themes.github;
+const darkCodeTheme = themes.dracula;
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -54,21 +55,6 @@ const config = {
     ],
   ],
 
-  plugins: [
-    [
-      'content-docs',
-      /** @type {import('@docusaurus/plugin-content-docs').Options} */
-      ({
-        id: 'tutorial',
-        path: 'tutorial',
-        routeBasePath: '/tutorial/',
-        sidebarPath: require.resolve('./sidebars.js'),
-        editUrl:
-          'https://github.com/oss-review-toolkit/ort/tree/main/docusaurus/',
-      }),
-    ]
-  ],
-
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
@@ -88,10 +74,10 @@ const config = {
             label: 'Docs',
           },
           {
-            to: '/tutorial/intro',
+            to: '/docs/getting-started/tutorial',
             label: 'Tutorial',
             position: 'left',
-            activeBaseRegex: `/tutorial/`,
+            activeBaseRegex: `/docs/`,
           },
           {
             href: 'https://github.com/oss-review-toolkit/ort',
@@ -112,7 +98,7 @@ const config = {
               },
               {
                 label: 'Tutorial',
-                to: '/tutorial/intro',
+                to: '/docs/getting-started/tutorial',
               },
               {
                 label: 'Search',

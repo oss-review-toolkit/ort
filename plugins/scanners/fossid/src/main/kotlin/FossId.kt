@@ -64,7 +64,6 @@ import org.ossreviewtoolkit.clients.fossid.model.status.ScanStatus
 import org.ossreviewtoolkit.clients.fossid.runScan
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Issue
-import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
@@ -236,11 +235,12 @@ class FossId internal constructor(
     private fun createSingleIssueSummary(startTime: Instant, issue: Issue) =
         ScanSummary.EMPTY.copy(startTime = startTime, endTime = Instant.now(), issues = listOf(issue))
 
-    override fun scanPackage(pkg: Package, nestedProvenance: NestedProvenance?, context: ScanContext): ScanResult {
+    override fun scanPackage(nestedProvenance: NestedProvenance?, context: ScanContext): ScanResult {
         val startTime = Instant.now()
 
         // FossId actually never uses the provenance determined by the scanner, but determines the source code to
-        // download itself based on the passed VCS information.
+        // download itself based on the passed VCS URL and revision, disregarding any VCS path.
+        val pkg = context.coveredPackages.first()
         val provenance = pkg.vcsProcessed.revision.takeUnless { it.isBlank() }
             ?.let { RepositoryProvenance(pkg.vcsProcessed, it) } ?: UnknownProvenance
 
@@ -251,10 +251,6 @@ class FossId internal constructor(
 
             pkg.vcsProcessed.revision.isEmpty() ->
                 "Package '${pkg.id.toCoordinates()}' has an empty VCS revision and cannot be scanned."
-
-            pkg.vcsProcessed.path.isNotEmpty() ->
-                "Ignoring package '${pkg.id.toCoordinates()}' from '${pkg.vcsProcessed.url}' as it has path " +
-                    "'${pkg.vcsProcessed.path}' set and scanning cannot be limited to paths."
 
             else -> null
         }

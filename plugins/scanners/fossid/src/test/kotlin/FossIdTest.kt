@@ -91,6 +91,7 @@ import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.Snippet as OrtSnippet
@@ -107,6 +108,7 @@ import org.ossreviewtoolkit.plugins.scanners.fossid.FossId.Companion.SERVER_URL_
 import org.ossreviewtoolkit.plugins.scanners.fossid.FossId.Companion.convertGitUrlToProjectName
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
+import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 @Suppress("LargeClass")
@@ -560,6 +562,7 @@ class FossIdTest : WordSpec({
             val projectCode = projectCode(PROJECT)
             val scanCode = scanCode(PROJECT, null)
             val config = createConfig(deltaScans = false)
+            val pkgId = createIdentifier(index = 1)
             val vcsInfo = createVcsInfo()
 
             val service = FossIdRestService.create(config.serverUrl)
@@ -586,15 +589,7 @@ class FossIdTest : WordSpec({
 
             shouldTimeout(1000.milliseconds) {
                 runInterruptible {
-                    fossId.scanPackage(
-                        createPackage(createIdentifier(index = 1), vcsInfo),
-                        null,
-                        ScanContext(
-                            labels = emptyMap(),
-                            packageType = PackageType.PACKAGE,
-                            Excludes()
-                        )
-                    )
+                    fossId.scan(createPackage(pkgId, vcsInfo))
                 }
             }
 
@@ -1135,8 +1130,8 @@ private const val API_KEY = "fossId-API-key"
 /** A test project name. */
 private const val PROJECT = "fossId-test-project"
 
-/** A test revision. */
-private const val REVISION = "test-revision"
+/** A (resolved) test revision. */
+private const val REVISION = "0123456789012345678901234567890123456789"
 
 /** The version to be reported by the FossID server. */
 private const val FOSSID_VERSION = "2021.2.2"
@@ -1602,4 +1597,19 @@ private fun FossId.scan(
     pkg: Package,
     labels: Map<String, String> = emptyMap(),
     excludes: Excludes = Excludes()
-): ScanResult = scanPackage(pkg, null, ScanContext(labels, PackageType.PACKAGE, excludes))
+): ScanResult =
+    scanPackage(
+        nestedProvenance = NestedProvenance(
+            root = RepositoryProvenance(
+                vcsInfo = pkg.vcsProcessed,
+                resolvedRevision = pkg.vcsProcessed.revision
+            ),
+            subRepositories = emptyMap()
+        ),
+        context = ScanContext(
+            labels = labels,
+            packageType = PackageType.PACKAGE,
+            excludes = excludes,
+            coveredPackages = listOf(pkg)
+        )
+    )

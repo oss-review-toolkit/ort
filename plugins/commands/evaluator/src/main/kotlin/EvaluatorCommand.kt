@@ -297,10 +297,12 @@ class EvaluatorCommand : OrtCommand(
         val packageConfigurationProvider =
             CompositePackageConfigurationProvider(*enabledPackageConfigurationProviders.toTypedArray())
 
+        ortResultInput = ortResultInput.setPackageConfigurations(packageConfigurationProvider)
+
         val copyrightGarbage = copyrightGarbageFile.takeIf { it.isFile }?.readValue<CopyrightGarbage>().orEmpty()
 
         val licenseInfoResolver = LicenseInfoResolver(
-            provider = DefaultLicenseInfoProvider(ortResultInput, packageConfigurationProvider),
+            provider = DefaultLicenseInfoProvider(ortResultInput),
             copyrightGarbage = copyrightGarbage,
             addAuthorsToCopyrights = ortConfig.addAuthorsToCopyrights,
             archiver = ortConfig.scanner.archive.createFileArchiver(),
@@ -325,7 +327,6 @@ class EvaluatorCommand : OrtCommand(
         // Note: This overwrites any existing EvaluatorRun from the input file.
         val ortResultOutput = ortResultInput.copy(evaluator = evaluatorRun)
             .mergeLabels(labels)
-            .setPackageConfigurations(packageConfigurationProvider)
             .setResolutions(resolutionProvider)
 
         outputDir?.let { absoluteOutputDir ->

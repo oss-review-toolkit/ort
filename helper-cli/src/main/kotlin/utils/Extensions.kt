@@ -108,13 +108,11 @@ internal fun OrtResult.downloadSources(id: Identifier, sourceCodeOrigin: SourceC
 internal fun OrtResult.processAllCopyrightStatements(
     omitExcluded: Boolean = true,
     copyrightGarbage: Set<String> = emptySet(),
-    addAuthorsToCopyrights: Boolean = false,
-    packageConfigurationProvider: PackageConfigurationProvider = PackageConfigurationProvider.EMPTY
+    addAuthorsToCopyrights: Boolean = false
 ): List<ProcessedCopyrightStatement> {
     val result = mutableListOf<ProcessedCopyrightStatement>()
 
     val licenseInfoResolver = createLicenseInfoResolver(
-        packageConfigurationProvider = packageConfigurationProvider,
         copyrightGarbage = CopyrightGarbage(copyrightGarbage.toSortedSet()),
         addAuthorsToCopyrights = addAuthorsToCopyrights
     )

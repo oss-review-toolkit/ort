@@ -34,47 +34,47 @@ data class ProvenanceResolutionResult(
     val id: Identifier,
 
     /**
-     * The resolved provenance of the package.
+     * The resolved provenance of the package. Can only be null if a [packageProvenanceResolutionIssue] occurred.
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val packageProvenance: KnownProvenance? = null,
 
     /**
-     * The (recursive) sub-repositories of [packageProvenance]. The listing is only empty if a
-     * [packageProvenanceResolutionIssue] or a [nestedProvenanceResolutionIssue] happened.
+     * The (recursive) sub-repositories of [packageProvenance]. The map can only be empty if a
+     * [packageProvenanceResolutionIssue] or a [nestedProvenanceResolutionIssue] occurred.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val subRepositories: Map<String, VcsInfo> = emptyMap(),
 
     /**
-     * The issue which happened during package provenance resolution.
+     * The issue which happened during package provenance resolution, if any.
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val packageProvenanceResolutionIssue: Issue? = null,
 
     /**
-     * The issue which happened during nested provenance resolution.
+     * The issue which happened during nested provenance resolution, if any.
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val nestedProvenanceResolutionIssue: Issue? = null
 ) {
     init {
         require((packageProvenance != null).xor(packageProvenanceResolutionIssue != null)) {
-            "Either package provenance or package provenance resolution issue must be null, but not neither or both."
+            "Either the package provenance must be known, or a resolution issue must have occurred."
         }
 
         subRepositories.forEach { (path, vcsInfo) ->
             // TODO: Check if Git-Repo allows to include sub directories of repositories.
             require(vcsInfo.path.isEmpty()) {
-                "The resolved sub-repository for package ${id.toCoordinates()} under path '$path' has a non-empty " +
-                    "VCS path which is not allowed."
+                "The resolved sub-repository for package '${id.toCoordinates()}' at '$path' has a non-empty VCS path " +
+                    "which is not allowed."
             }
         }
 
         if (packageProvenanceResolutionIssue != null) {
             require(nestedProvenanceResolutionIssue == null) {
-                "Nested provenance resolution issue is not null, even though nested provenance resolution was not " +
-                    "executed."
+                "Nested provenance resolution was not executed as already the (root) provenance resolution had an " +
+                    "issue, but still the nested provenance resolution also has an issue."
             }
         }
     }

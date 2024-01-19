@@ -361,8 +361,8 @@ class Pub(
 
             val id = Identifier(
                 type = managerName,
-                namespace = packageName.substringBefore('/'),
-                name = packageName.substringAfter('/'),
+                namespace = "",
+                name = packageName,
                 version = pkgInfoFromLockFile["version"].textValueOrEmpty()
             )
 
@@ -484,7 +484,7 @@ class Pub(
 
     private fun parseProject(definitionFile: File, pubspec: JsonNode, scopes: Set<Scope>): Project {
         // See https://dart.dev/tools/pub/pubspec for supported fields.
-        val rawName = pubspec["name"]?.textValue() ?: definitionFile.parentFile.name
+        val rawName = pubspec["name"]?.textValue() ?: getFallbackProjectName(analysisRoot, definitionFile)
         val homepageUrl = pubspec["homepage"].textValueOrEmpty()
         val repositoryUrl = pubspec["repository"].textValueOrEmpty()
         val authors = parseAuthors(pubspec)
@@ -494,8 +494,8 @@ class Pub(
         return Project(
             id = Identifier(
                 type = managerName,
-                namespace = rawName.substringBefore('/'),
-                name = rawName.substringAfter('/'),
+                namespace = "",
+                name = rawName,
                 version = pubspec["version"].textValueOrEmpty()
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
@@ -597,8 +597,8 @@ class Pub(
 
                     val id = Identifier(
                         type = managerName,
-                        namespace = rawName.substringBefore('/'),
-                        name = rawName.substringAfter('/'),
+                        namespace = "",
+                        name = rawName,
                         version = version
                     )
 

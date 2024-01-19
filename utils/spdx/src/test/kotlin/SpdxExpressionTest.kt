@@ -379,30 +379,6 @@ class SpdxExpressionTest : WordSpec({
         }
     }
 
-    "disjunctiveNormalForm()" should {
-        "not change an expression already in DNF" {
-            "a AND b OR c AND d".toSpdx().disjunctiveNormalForm() should beString("(a AND b) OR (c AND d)")
-        }
-
-        "correctly convert an OR on the left side of an AND expression" {
-            "(a OR b) AND c".toSpdx().disjunctiveNormalForm() should beString("(a AND c) OR (b AND c)")
-        }
-
-        "correctly convert an OR on the right side of an AND expression" {
-            "a AND (b OR c)".toSpdx().disjunctiveNormalForm() should beString("(a AND b) OR (a AND c)")
-        }
-
-        "correctly convert ORs on both sides of an AND expression" {
-            "(a OR b) AND (c OR d)".toSpdx().disjunctiveNormalForm() should
-                beString("(a AND c) OR (a AND d) OR (b AND c) OR (b AND d)")
-        }
-
-        "correctly convert a complex expression" {
-            "(a OR b) AND c AND (d OR e)".toSpdx().disjunctiveNormalForm() should
-                beString("(a AND c AND d) OR (a AND c AND e) OR (b AND c AND d) OR (b AND c AND e)")
-        }
-    }
-
     "sort()" should {
         "not change already sorted expressions" {
             "a AND b".toSpdx().sorted() should beString("a AND b")
@@ -422,29 +398,38 @@ class SpdxExpressionTest : WordSpec({
     }
 
     "validChoices()" should {
-        "list the valid choices for a complex expression" {
-            "(a OR b) AND c AND (d OR e)".toSpdx().validChoices() should containExactlyInAnyOrder(
-                "a AND c AND d".toSpdx(),
-                "a AND c AND e".toSpdx(),
-                "b AND c AND d".toSpdx(),
-                "b AND c AND e".toSpdx()
+        "return the valid choices for a complex expression" {
+            val choices = "(a OR b) AND c AND (d OR e)".toSpdx().validChoices()
+
+            choices.map { it.toString() } should containExactlyInAnyOrder(
+                "a AND c AND d",
+                "a AND c AND e",
+                "b AND c AND d",
+                "b AND c AND e"
             )
         }
 
-        "not contain a duplicate valid choice for a simple expression" {
-            "a AND a".toSpdx().validChoices() should containExactly("a".toSpdx())
-        }
+        "return the valid choices for a nested expression" {
+            val choices = "(a OR (b AND (c OR d))) AND (e OR f)".toSpdx().validChoices()
 
-        "not contain duplicate valid choice for a complex expression" {
-            "(a OR b) AND (a OR b)".toSpdx().validChoices() should containExactlyInAnyOrder(
-                "a".toSpdx(),
-                "b".toSpdx(),
-                "a AND b".toSpdx()
+            choices.map { it.toString() } should containExactlyInAnyOrder(
+                "a AND e",
+                "a AND f",
+                "b AND c AND e",
+                "b AND c AND f",
+                "b AND d AND e",
+                "b AND d AND f"
             )
         }
 
-        "not contain duplicate valid choice different left and right expressions" {
-            "a AND a AND b".toSpdx().validChoices() should containExactly("a AND b".toSpdx())
+        "be explicit about the choices even if they could be simplified" {
+            val choices = "(a OR b) AND (a OR b)".toSpdx().validChoices()
+
+            choices.map { it.toString() } should containExactlyInAnyOrder(
+                "a AND a",
+                "a AND b",
+                "b AND b"
+            )
         }
     }
 
@@ -490,6 +475,13 @@ class SpdxExpressionTest : WordSpec({
             spdxExpression.isValidChoice("a AND b AND c".toSpdx()) shouldBe false
             spdxExpression.isValidChoice("a AND b AND d".toSpdx()) shouldBe false
             spdxExpression.isValidChoice("a AND b AND c AND d".toSpdx()) shouldBe false
+        }
+
+        "return true for a simplified choice for a complex expression" {
+            val license = "(MIT OR GPL-2.0-only) AND (MIT OR BSD-3-Clause OR GPL-1.0-or-later) AND " +
+                "(MIT OR BSD-3-Clause OR GPL-2.0-only)"
+
+            license.toSpdx().isValidChoice("MIT".toSpdx()) shouldBe true
         }
     }
 
@@ -546,7 +538,7 @@ class SpdxExpressionTest : WordSpec({
             shouldThrow<InvalidLicenseChoiceException> { expression.applyChoice(choice) }
         }
 
-        "apply the choice if the expression is not in DNF" {
+        "apply the choice even if not literally contained in the expression" {
             val expression = "(a OR b) AND c".toSpdx()
             val choice = "a AND c".toSpdx()
 
@@ -555,7 +547,7 @@ class SpdxExpressionTest : WordSpec({
             result shouldBe "a AND c".toSpdx()
         }
 
-        "return the reduced subExpression in DNF if the choice was valid" {
+        "return the reduced subExpression if the choice was valid" {
             val expression = "(a OR b) AND c AND (d OR e)".toSpdx()
             val choice = "a AND c AND d".toSpdx()
             val subExpression = "a AND c AND d OR a AND c AND e".toSpdx()
@@ -581,7 +573,7 @@ class SpdxExpressionTest : WordSpec({
             shouldThrow<InvalidSubExpressionException> { expression.applyChoice(choice, subExpression) }
         }
 
-        "throw an exception if the subExpression does not match and needs to be converted to a DNF" {
+        "throw an exception if the subExpression does not match" {
             val expression = "(a OR b) AND c AND (d OR e)".toSpdx()
             val choice = "a AND c AND d".toSpdx()
             val subExpression = "(a AND c AND d) OR (x AND y AND z)".toSpdx()
