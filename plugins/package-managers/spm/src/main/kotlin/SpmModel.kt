@@ -74,25 +74,25 @@ data class LibraryDependency(
 
 @Serializable
 data class PackageResolved(
-    @SerialName("object") val objects: Map<String, List<AppDependency>>,
+    @SerialName("object") val objects: Map<String, List<Pin>>,
     val version: Int
 )
 
 @Serializable
-data class AppDependency(
+data class Pin(
     @SerialName("package") val packageName: String,
-    val state: AppDependencyState?,
+    val state: State?,
     @SerialName("repositoryURL") val repositoryUrl: String
 ) {
     @Serializable
-    data class AppDependencyState(
+    data class State(
         val version: String? = null,
         val revision: String? = null,
         val branch: String? = null
     )
 }
 
-internal fun AppDependency.toPackage(): Package {
+internal fun Pin.toPackage(): Package {
     val id = Identifier(
         type = PACKAGE_TYPE,
         namespace = "",
