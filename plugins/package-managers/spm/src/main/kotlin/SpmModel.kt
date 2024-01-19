@@ -38,17 +38,7 @@ abstract class SpmDependency {
     abstract val vcs: VcsInfo
     abstract val id: Identifier
 
-    fun toPackage(): Package {
-        return Package(
-            vcs = vcs,
-            description = "",
-            id = id,
-            binaryArtifact = RemoteArtifact.EMPTY,
-            sourceArtifact = RemoteArtifact.EMPTY,
-            declaredLicenses = emptySet(), // SPM files do not declare any licenses.
-            homepageUrl = ""
-        )
-    }
+    fun toPackage(): Package = createPackage(id, vcs)
 }
 
 /**
@@ -139,6 +129,17 @@ data class AppDependency(
             )
         }
 }
+
+private fun createPackage(id: Identifier, vcsInfo: VcsInfo) =
+    Package(
+        vcs = vcsInfo,
+        description = "",
+        id = id,
+        binaryArtifact = RemoteArtifact.EMPTY,
+        sourceArtifact = RemoteArtifact.EMPTY,
+        declaredLicenses = emptySet(), // SPM files do not declare any licenses.
+        homepageUrl = ""
+    )
 
 /**
  * Return the canonical name for a package based on the given [repositoryUrl].
