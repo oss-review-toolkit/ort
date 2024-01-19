@@ -89,8 +89,8 @@ class Spm(
     }
 
     /**
-     * Resolves dependencies when the final build target is an app and no Package.swift is available.
-     * This method parses dependencies from the Package.resolved file.
+     * Resolves dependencies when only a lockfile aka `Package.Resolved` is available. This commonly applies to e.g.
+     * Xcode projects which only have a lockfile, but no `Package.swift` file.
      */
     private fun resolveAppDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val resolved = definitionFile.inputStream().use { json.decodeFromStream<PackageResolved>(it) }
