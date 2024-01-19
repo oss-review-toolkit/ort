@@ -651,7 +651,7 @@ class Scanner(
                 provenances.mapIndexed { index, provenance ->
                     async {
                         logger.info {
-                            "Creating file list for provenance $index of ${provenances.size}."
+                            "Creating file list for provenance ${index + 1} of ${provenances.size}."
                         }
 
                         runCatching {
