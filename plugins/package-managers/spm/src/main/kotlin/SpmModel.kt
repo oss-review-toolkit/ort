@@ -99,31 +99,27 @@ data class AppDependency(
             }
     }
 
-    val vcs: VcsInfo
-        get() {
-            val vcsInfoFromUrl = VcsHost.parseUrl(repositoryUrl)
+    fun toPackage(): Package {
+        val id = Identifier(
+            type = PACKAGE_TYPE,
+            namespace = "",
+            name = getCanonicalName(repositoryUrl),
+            version = state?.toString().orEmpty()
+        )
 
-            if (vcsInfoFromUrl.revision.isBlank() && state != null) {
-                when {
-                    !state.revision.isNullOrBlank() -> return vcsInfoFromUrl.copy(revision = state.revision)
-                    !state.version.isNullOrBlank() -> return vcsInfoFromUrl.copy(revision = state.version)
-                }
+        val vcsInfoFromUrl = VcsHost.parseUrl(repositoryUrl)
+        val vcsInfo = if (vcsInfoFromUrl.revision.isBlank() && state != null) {
+            when {
+                !state.revision.isNullOrBlank() -> vcsInfoFromUrl.copy(revision = state.revision)
+                !state.version.isNullOrBlank() -> vcsInfoFromUrl.copy(revision = state.version)
+                else -> vcsInfoFromUrl
             }
-
-            return vcsInfoFromUrl
+        } else {
+            vcsInfoFromUrl
         }
 
-    val id: Identifier
-        get() {
-            return Identifier(
-                type = PACKAGE_TYPE,
-                namespace = "",
-                name = getCanonicalName(repositoryUrl),
-                version = state?.toString().orEmpty()
-            )
-        }
-
-    fun toPackage(): Package = createPackage(id, vcs)
+        return createPackage(id, vcsInfo)
+    }
 }
 
 private fun createPackage(id: Identifier, vcsInfo: VcsInfo) =
