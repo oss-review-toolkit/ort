@@ -83,7 +83,7 @@ class Spm(
         requireLockfile(definitionFile.parentFile) { definitionFile.name != PACKAGE_SWIFT_NAME }
 
         return when (definitionFile.name) {
-            PACKAGE_SWIFT_NAME -> resolveLibraryDependencies(definitionFile)
+            PACKAGE_SWIFT_NAME -> resolveDefinitionFileDependencies(definitionFile)
             else -> resolveLockfileDependencies(definitionFile)
         }
     }
@@ -108,11 +108,11 @@ class Spm(
      * This method parses dependencies from `swift package show-dependencies --format json` output.
      * Also, this method provides parent-child associations for parsed dependencies.
      */
-    private fun resolveLibraryDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
-        val project = projectFromDefinitionFile(definitionFile)
+    private fun resolveDefinitionFileDependencies(packageSwiftFile: File): List<ProjectAnalyzerResult> {
+        val project = projectFromDefinitionFile(packageSwiftFile)
 
         val result = run(
-            definitionFile.parentFile,
+            packageSwiftFile.parentFile,
             "package",
             "show-dependencies",
             "--format",
