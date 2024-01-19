@@ -104,11 +104,9 @@ class Spm(
     }
 
     /**
-     * Resolves dependencies when the final build target is a library and Package.swift is available.
+     * Resolves dependencies of a `Package.swift` file.
      * This method parses dependencies from `swift package show-dependencies --format json` output.
      * Also, this method provides parent-child associations for parsed dependencies.
-     *
-     * Only used when analyzerConfig.allowDynamicVersions is set to true.
      */
     private fun resolveLibraryDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val project = projectFromDefinitionFile(definitionFile)
