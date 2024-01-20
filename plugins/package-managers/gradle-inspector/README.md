@@ -23,15 +23,6 @@ In contrast to the "legacy" [Gradle] analyzer which is fully implemented as an [
 registering the [OrtModelBuilder] for the ORT-specific [data model for Gradle projects]. The [GradleInspector] then
 injects both the [init.gradle] and a fat-JAR for the [Gradle plugin] into the project to analyze.
 
-## Limitations
-
-The retrieval of the checksum values for remote artifacts is currently done via plain OkHttp calls, which means it will
-not work out of the box for private repositories. To work around this, credentials need to be configured in `.netrc`
-additionally to in Gradle. This is similar to how the "legacy" [Gradle] analyzer required to additionally configure
-credentials in Maven.
-
-Also, the `isModified` check which compares with artifacts of the same name in Maven Central is not implemented yet.
-
 ## Debugging
 
 Due to the implementation of the [GradleInspector], the [OrtModelBuilder] can actually be debugged. To do so, create the
@@ -43,6 +34,15 @@ following run configuration in IntelliJ IDEA:
 Now, when debugging the first run configuration, wait until the ORT analyzer reaches the point of resolving Gradle
 dependencies. Execution of the Gradle plugin will be blocked until the remote debugger is attached by debugging the
 second run configuration, and any breakpoints in the [OrtModelBuilder] will be hit.
+
+## Limitations
+
+The retrieval of the checksum values for remote artifacts is currently done via plain OkHttp calls, which means it will
+not work out of the box for private repositories. To work around this, credentials need to be configured in `.netrc`
+additionally to in Gradle. This is similar to how the "legacy" [Gradle] analyzer required to additionally configure
+credentials in Maven.
+
+Also, the `isModified` check which compares with artifacts of the same name in Maven Central is not implemented yet.
 
 [GradleInspector]: ./src/main/kotlin/GradleInspector.kt
 [several]: https://github.com/oss-review-toolkit/ort/issues/4694
