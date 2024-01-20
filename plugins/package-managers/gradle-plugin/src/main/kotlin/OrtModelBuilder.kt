@@ -32,7 +32,6 @@ import org.gradle.api.artifacts.component.ComponentIdentifier
 import org.gradle.api.artifacts.component.ModuleComponentIdentifier
 import org.gradle.api.artifacts.component.ProjectComponentIdentifier
 import org.gradle.api.artifacts.component.ProjectComponentSelector
-import org.gradle.api.artifacts.repositories.UrlArtifactRepository
 import org.gradle.api.artifacts.result.DependencyResult
 import org.gradle.api.artifacts.result.ResolvedArtifactResult
 import org.gradle.api.artifacts.result.ResolvedDependencyResult
@@ -48,7 +47,7 @@ import org.gradle.tooling.provider.model.ToolingModelBuilder
 import org.gradle.util.GradleVersion
 
 internal class OrtModelBuilder : ToolingModelBuilder {
-    private lateinit var repositories: Map<String, String?>
+    private val repositories = mutableMapOf<String, String?>()
 
     private val platformCategories = setOf("platform", "enforced-platform")
 
@@ -62,7 +61,7 @@ internal class OrtModelBuilder : ToolingModelBuilder {
     override fun canBuild(modelName: String): Boolean = modelName == OrtDependencyTreeModel::class.java.name
 
     override fun buildAll(modelName: String, project: Project): OrtDependencyTreeModel {
-        repositories = project.repositories.associate { it.name to (it as? UrlArtifactRepository)?.url?.toString() }
+        project.repositories.associateNamesWithUrlsTo(repositories)
 
         val relevantConfigurations = project.configurations.filter { it.isRelevant() }
 
