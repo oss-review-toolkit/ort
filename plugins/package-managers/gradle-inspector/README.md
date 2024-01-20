@@ -1,8 +1,8 @@
 # GradleInspector
 
 The [GradleInspector] is an alternative analyzer for projects that use the Gradle package manager. It is supposed to
-address [several][] [shortcomings][] of the "legacy" [Gradle] analyzer, but in order to not interfere with it, the
-[GradleInspector] is disabled by default.
+address [several] [shortcomings] of the "legacy" [Gradle] analyzer, but to not interfere with it, the [GradleInspector]
+is disabled by default.
 
 ## Usage
 
@@ -34,10 +34,14 @@ Also, the `isModified` check which compares with artifacts of the same name in M
 
 ## Debugging
 
-Due to this setup of the [GradleInspector], the [OrtModelBuilder] can actually be debugged. To do so, create a run
-configuration in IntelliJ IDEA that runs `ort analyze` and sets the *VM options* to `-Dorg.gradle.debug=true`. Also,
-create another *Remote JVM Debug* run configuration with default settings. Now, when debugging the first run
-configuration, it will block execution of the Gradle plugin until the remote debugger is attached by debugging the
+Due to the implementation of the [GradleInspector], the [OrtModelBuilder] can actually be debugged. To do so, create the
+following run configuration in IntelliJ IDEA:
+
+1. A *Kotlin* configuration that runs `ort analyze` and sets the *VM options* to `-Dorg.gradle.debug=true`.
+2. A *Remote JVM Debug* configuration with default settings.
+
+Now, when debugging the first run configuration, wait until the ORT analyzer reaches the point of resolving Gradle
+dependencies. Execution of the Gradle plugin will be blocked until the remote debugger is attached by debugging the
 second run configuration, and any breakpoints in the [OrtModelBuilder] will be hit.
 
 [GradleInspector]: ./src/main/kotlin/GradleInspector.kt
