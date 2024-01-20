@@ -36,6 +36,7 @@ import org.gradle.api.artifacts.result.DependencyResult
 import org.gradle.api.artifacts.result.ResolvedArtifactResult
 import org.gradle.api.artifacts.result.ResolvedDependencyResult
 import org.gradle.api.artifacts.result.UnresolvedDependencyResult
+import org.gradle.api.internal.GradleInternal
 import org.gradle.api.internal.artifacts.DefaultModuleIdentifier
 import org.gradle.api.internal.artifacts.result.ResolvedComponentResultInternal
 import org.gradle.api.logging.Logging
@@ -61,6 +62,11 @@ internal class OrtModelBuilder : ToolingModelBuilder {
     override fun canBuild(modelName: String): Boolean = modelName == OrtDependencyTreeModel::class.java.name
 
     override fun buildAll(modelName: String, project: Project): OrtDependencyTreeModel {
+        // There currently is no way to access Gradle settings without using internal API, see
+        // https://github.com/gradle/gradle/issues/18616.
+        val settings = (project.gradle as GradleInternal).settings
+
+        settings.dependencyResolutionManagement.repositories.associateNamesWithUrlsTo(repositories)
         project.repositories.associateNamesWithUrlsTo(repositories)
 
         val relevantConfigurations = project.configurations.filter { it.isRelevant() }
