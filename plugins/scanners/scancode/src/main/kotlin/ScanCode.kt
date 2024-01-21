@@ -22,9 +22,6 @@ package org.ossreviewtoolkit.plugins.scanners.scancode
 import java.io.File
 import java.time.Instant
 
-import kotlin.math.max
-import kotlin.time.Duration.Companion.minutes
-
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.ScanSummary
@@ -41,7 +38,6 @@ import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 
@@ -56,44 +52,24 @@ import org.semver4j.Semver
  * configuration [options][PluginConfiguration.options]:
  *
  * * **"commandLine":** Command line options that modify the result. These are added to the [ScannerDetails] when
- *   looking up results from the [ScanResultsStorage]. Defaults to [DEFAULT_CONFIGURATION_OPTIONS].
+ *   looking up results from the [ScanResultsStorage]. Defaults to [ScanCodeConfig.DEFAULT_COMMAND_LINE_OPTIONS].
  * * **"commandLineNonConfig":** Command line options that do not modify the result and should therefore not be
- *   considered in [configuration], like "--processes". Defaults to [DEFAULT_NON_CONFIGURATION_OPTIONS].
+ *   considered in [configuration], like "--processes". Defaults to
+ *   [ScanCodeConfig.DEFAULT_COMMAND_LINE_NON_CONFIG_OPTIONS].
  */
 class ScanCode internal constructor(
     name: String,
-    config: ScanCodeConfig,
+    private val config: ScanCodeConfig,
     private val wrapperConfig: ScannerWrapperConfig
 ) : CommandLinePathScannerWrapper(name) {
     // This constructor is required by the `RequirementsCommand`.
-    constructor(name: String, wrapperConfig: ScannerWrapperConfig) : this(name, ScanCodeConfig.EMPTY, wrapperConfig)
+    constructor(name: String, wrapperConfig: ScannerWrapperConfig) : this(name, ScanCodeConfig.DEFAULT, wrapperConfig)
 
     companion object {
         const val SCANNER_NAME = "ScanCode"
 
         private const val LICENSE_REFERENCES_OPTION_VERSION = "32.0.0"
         private const val OUTPUT_FORMAT = "json-pp"
-
-        private val TIMEOUT = 5.minutes
-
-        /**
-         * Configuration options that are relevant for [configuration] because they change the result file.
-         */
-        private val DEFAULT_CONFIGURATION_OPTIONS = listOf(
-            "--copyright",
-            "--license",
-            "--info",
-            "--strip-root",
-            "--timeout", "${TIMEOUT.inWholeSeconds}"
-        )
-
-        /**
-         * Configuration options that are not relevant for [configuration] because they do not change the result
-         * file.
-         */
-        private val DEFAULT_NON_CONFIGURATION_OPTIONS = listOf(
-            "--processes", max(1, Runtime.getRuntime().availableProcessors() - 1).toString()
-        )
 
         private val OUTPUT_FORMAT_OPTION = if (OUTPUT_FORMAT.startsWith("json")) {
             "--$OUTPUT_FORMAT"
@@ -117,19 +93,15 @@ class ScanCode internal constructor(
 
     override val configuration by lazy {
         buildList {
-            addAll(configurationOptions)
+            addAll(config.commandLine)
             add(OUTPUT_FORMAT_OPTION)
         }.joinToString(" ")
     }
 
-    private val configurationOptions = config.commandLine?.splitOnWhitespace() ?: DEFAULT_CONFIGURATION_OPTIONS
-    private val nonConfigurationOptions = config.commandLineNonConfig?.splitOnWhitespace()
-        ?: DEFAULT_NON_CONFIGURATION_OPTIONS
-
     internal fun getCommandLineOptions(version: String) =
         buildList {
-            addAll(configurationOptions)
-            addAll(nonConfigurationOptions)
+            addAll(config.commandLine)
+            addAll(config.commandLineNonConfig)
 
             if (Semver(version).isGreaterThanOrEqualTo(LICENSE_REFERENCES_OPTION_VERSION)) {
                 // Required to be able to map ScanCode license keys to SPDX IDs.
