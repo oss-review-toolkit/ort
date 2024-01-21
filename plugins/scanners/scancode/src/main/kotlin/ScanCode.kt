@@ -97,7 +97,7 @@ class ScanCode internal constructor(
             }
         }
 
-    val commandLineOptions by lazy { getCommandLineOptions(version) }
+    private val commandLineOptions by lazy { getCommandLineOptions(version) }
 
     override fun command(workingDir: File?) =
         listOfNotNull(workingDir, if (Os.isWindows) "scancode.bat" else "scancode").joinToString(File.separator)
