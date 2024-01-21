@@ -52,9 +52,21 @@ docker run --rm ghcr.io/oss-review-toolkit/ort [command]
 
 ## From binaries
 
-Preliminary binary artifacts for ORT are currently available via
-[JitPack](https://jitpack.io/#oss-review-toolkit/ort). Please note that due to limitations with the JitPack build
-environment, the reporter is not able to create the Web App report.
+A binary distribution of ORT can be downloaded from the
+[latest GitHub release](https://github.com/oss-review-toolkit/ort/releases/latest). The `ort-[version].zip` file
+contains binaries to run ORT in the `bin` folder.
+
+For Linux:
+
+```shell
+bin/ort [command]
+```
+
+For Windows:
+
+```batch
+bin\ort.bat [command]
+```
 
 ## From sources
 
