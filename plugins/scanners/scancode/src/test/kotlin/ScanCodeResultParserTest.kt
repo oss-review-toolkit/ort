@@ -23,6 +23,7 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.Matcher
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSingleElement
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
@@ -85,6 +86,20 @@ class ScanCodeResultParserTest : FreeSpec({
                     find { it.location == TextLocation("README.md", 100) && it.score == 100.0f }
                         ?.license.toString() shouldBe "GPL-2.0-only WITH GCC-exception-2.0"
                 }
+            }
+
+            "get file-level findings with the 'preferFileLicense' option" {
+                val resultFile = getAssetFile("scancode-32.0.8_spdx-expression-parse_no-license-references.json")
+
+                val summary = parseResult(resultFile).toScanSummary(preferFileLicense = true)
+
+                summary.licenseFindings.map { it.license.toString() }.shouldContainExactlyInAnyOrder(
+                    "LicenseRef-scancode-generic-cla AND MIT",
+                    "MIT",
+                    "MIT",
+                    "GPL-2.0-only WITH GCC-exception-2.0 AND JSON AND BSD-2-Clause AND CC-BY-3.0 AND MIT",
+                    "GPL-2.0-only WITH GCC-exception-2.0 AND BSD-3-Clause"
+                )
             }
         }
 

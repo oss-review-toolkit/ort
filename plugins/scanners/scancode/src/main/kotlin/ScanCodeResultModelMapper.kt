@@ -58,7 +58,7 @@ private data class LicenseMatch(
     val score: Float
 )
 
-fun ScanCodeResult.toScanSummary(): ScanSummary {
+fun ScanCodeResult.toScanSummary(preferFileLicense: Boolean = false): ScanSummary {
     val licenseFindings = mutableSetOf<LicenseFinding>()
     val copyrightFindings = mutableSetOf<CopyrightFinding>()
     val issues = mutableListOf<Issue>()
@@ -91,19 +91,31 @@ fun ScanCodeResult.toScanSummary(): ScanSummary {
             it.value.first()
         }
 
-        licenses.mapTo(licenseFindings) { license ->
-            // ScanCode uses its own license keys as identifiers in license expressions.
-            val spdxLicenseExpression = license.licenseExpression.mapLicense(scanCodeKeyToSpdxIdMappings)
-
-            LicenseFinding(
-                license = spdxLicenseExpression,
+        if (preferFileLicense && file is FileEntry.Version3 && file.detectedLicenseExpressionSpdx != null) {
+            licenseFindings += LicenseFinding(
+                license = file.detectedLicenseExpressionSpdx,
                 location = TextLocation(
                     path = file.path,
-                    startLine = license.startLine,
-                    endLine = license.endLine
+                    startLine = licenses.minOf { it.startLine },
+                    endLine = licenses.maxOf { it.endLine }
                 ),
-                score = license.score
+                score = licenses.map { it.score }.average().toFloat()
             )
+        } else {
+            licenses.mapTo(licenseFindings) { license ->
+                // ScanCode uses its own license keys as identifiers in license expressions.
+                val spdxLicenseExpression = license.licenseExpression.mapLicense(scanCodeKeyToSpdxIdMappings)
+
+                LicenseFinding(
+                    license = spdxLicenseExpression,
+                    location = TextLocation(
+                        path = file.path,
+                        startLine = license.startLine,
+                        endLine = license.endLine
+                    ),
+                    score = license.score
+                )
+            }
         }
 
         file.copyrights.mapTo(copyrightFindings) { copyright ->

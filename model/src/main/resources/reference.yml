@@ -229,6 +229,9 @@ ort:
           # Command line options that do not affect the ScanCode output.
           commandLineNonConfig: '--processes 4'
 
+          # Use per-file license findings instead of per-line ones.
+          preferFileLicense: false
+
           # Criteria for matching stored scan results. These can be configured for any scanner that uses semantic
           # versioning. Note that the 'maxVersion' is exclusive and not part of the range of accepted versions.
           minVersion: '3.2.1-rc2'

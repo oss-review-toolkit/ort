@@ -256,6 +256,7 @@ class OrtConfigurationTest : WordSpec({
                         options shouldContainExactly mapOf(
                             "commandLine" to "--copyright --license --info --strip-root --timeout 300",
                             "commandLineNonConfig" to "--processes 4",
+                            "preferFileLicense" to "false",
                             "minVersion" to "3.2.1-rc2",
                             "maxVersion" to "32.0.0"
                         )
