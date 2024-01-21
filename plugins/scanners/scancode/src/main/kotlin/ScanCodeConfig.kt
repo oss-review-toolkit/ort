@@ -19,19 +19,47 @@
 
 package org.ossreviewtoolkit.plugins.scanners.scancode
 
+import kotlin.math.max
+import kotlin.time.Duration.Companion.minutes
+
 import org.ossreviewtoolkit.utils.common.Options
+import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 
 data class ScanCodeConfig(
-    val commandLine: String?,
-    val commandLineNonConfig: String?
+    val commandLine: List<String>,
+    val commandLineNonConfig: List<String>
 ) {
     companion object {
-        val EMPTY = ScanCodeConfig(null, null)
+        /**
+         * The default time after which scanning a file is aborted.
+         */
+        private val DEFAULT_TIMEOUT = 5.minutes
 
-        private const val COMMAND_LINE_PROPERTY = "commandLine"
-        private const val COMMAND_LINE_NON_CONFIG_PROPERTY = "commandLineNonConfig"
+        /**
+         * The default list of command line options that might have an impact on the scan results.
+         */
+        private val DEFAULT_COMMAND_LINE_OPTIONS = listOf(
+            "--copyright",
+            "--license",
+            "--info",
+            "--strip-root",
+            "--timeout", "${DEFAULT_TIMEOUT.inWholeSeconds}"
+        )
+
+        /**
+         * The default list of command line options that cannot have an impact on the scan results.
+         */
+        private val DEFAULT_COMMAND_LINE_NON_CONFIG_OPTIONS = listOf(
+            "--processes", max(1, Runtime.getRuntime().availableProcessors() - 1).toString()
+        )
+
+        val DEFAULT = create(emptyMap())
 
         fun create(options: Options) =
-            ScanCodeConfig(options[COMMAND_LINE_PROPERTY], options[COMMAND_LINE_NON_CONFIG_PROPERTY])
+            ScanCodeConfig(
+                options["commandLine"]?.splitOnWhitespace() ?: DEFAULT_COMMAND_LINE_OPTIONS,
+                options["commandLineNonConfig"]?.splitOnWhitespace()
+                    ?: DEFAULT_COMMAND_LINE_NON_CONFIG_OPTIONS
+            )
     }
 }

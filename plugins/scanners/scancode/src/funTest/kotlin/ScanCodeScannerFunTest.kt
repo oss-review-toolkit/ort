@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.utils.spdx.getLicenseText
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
 
 class ScanCodeScannerFunTest : AbstractPathScannerWrapperFunTest(setOf(ExpensiveTag)) {
-    override val scanner = ScanCode("ScanCode", ScanCodeConfig.EMPTY, ScannerWrapperConfig.EMPTY)
+    override val scanner = ScanCode("ScanCode", ScanCodeConfig.DEFAULT, ScannerWrapperConfig.EMPTY)
 
     override val expectedFileLicenses = listOf(
         LicenseFinding("Apache-2.0", TextLocation("LICENSE", 1, 187), 100.0f),
