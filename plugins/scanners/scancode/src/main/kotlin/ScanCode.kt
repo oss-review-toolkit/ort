@@ -69,13 +69,6 @@ class ScanCode internal constructor(
         const val SCANNER_NAME = "ScanCode"
 
         private const val LICENSE_REFERENCES_OPTION_VERSION = "32.0.0"
-        private const val OUTPUT_FORMAT = "json-pp"
-
-        private val OUTPUT_FORMAT_OPTION = if (OUTPUT_FORMAT.startsWith("json")) {
-            "--$OUTPUT_FORMAT"
-        } else {
-            "--output-$OUTPUT_FORMAT"
-        }
     }
 
     class Factory : ScannerWrapperFactory<ScanCodeConfig>(SCANNER_NAME) {
@@ -158,7 +151,7 @@ class ScanCode internal constructor(
             command(),
             *commandLineOptions.toTypedArray(),
             // The output format option needs to directly precede the result file path.
-            OUTPUT_FORMAT_OPTION, resultFile.absolutePath,
+            "--json-pp", resultFile.absolutePath,
             path.absolutePath
         )
 }
