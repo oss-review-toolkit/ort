@@ -78,13 +78,7 @@ class ScanCode internal constructor(
         override fun parseConfig(options: Options, secrets: Options) = ScanCodeConfig.create(options)
     }
 
-    override val matcher by lazy { ScannerMatcher.create(details, wrapperConfig.matcherConfig) }
-
-    override val readFromStorage by lazy { wrapperConfig.readFromStorageWithDefault(matcher) }
-
-    override val writeToStorage by lazy { wrapperConfig.writeToStorageWithDefault(matcher) }
-
-    override val configuration by lazy { config.commandLine.joinToString(" ") }
+    private val commandLineOptions by lazy { getCommandLineOptions(version) }
 
     internal fun getCommandLineOptions(version: String) =
         buildList {
@@ -97,7 +91,13 @@ class ScanCode internal constructor(
             }
         }
 
-    private val commandLineOptions by lazy { getCommandLineOptions(version) }
+    override val configuration by lazy { config.commandLine.joinToString(" ") }
+
+    override val matcher by lazy { ScannerMatcher.create(details, wrapperConfig.matcherConfig) }
+
+    override val readFromStorage by lazy { wrapperConfig.readFromStorageWithDefault(matcher) }
+
+    override val writeToStorage by lazy { wrapperConfig.writeToStorageWithDefault(matcher) }
 
     override fun command(workingDir: File?) =
         listOfNotNull(workingDir, if (Os.isWindows) "scancode.bat" else "scancode").joinToString(File.separator)
