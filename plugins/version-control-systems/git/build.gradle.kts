@@ -23,9 +23,9 @@ plugins {
 }
 
 dependencies {
-    api(project(":downloader"))
-    api(project(":model"))
-    api(project(":utils:common-utils")) {
+    api(projects.downloader)
+    api(projects.model)
+    api(projects.utils.commonUtils) {
         because("This is a CommandLineTool.")
     }
 
@@ -33,15 +33,15 @@ dependencies {
         because("This is a CommandLineTool.")
     }
 
-    implementation(project(":utils:ort-utils"))
+    implementation(projects.utils.ortUtils)
 
-    implementation(libs.jacksonCore)
-    implementation(libs.jacksonDatabind)
-    implementation(libs.jacksonDataformatXml)
+    implementation(libs.jackson.core)
+    implementation(libs.jackson.databind)
+    implementation(libs.jackson.dataformat.xml)
     implementation(libs.jgit)
-    implementation(libs.jgitSshApache)
+    implementation(libs.jgit.ssh.apache)
 
-    runtimeOnly(libs.jgitSshApacheAgent) {
+    runtimeOnly(libs.jgit.ssh.apache.agent) {
         exclude(group = "org.apache.sshd", module = "sshd-sftp")
             .because("it is not required for cloning via SSH and causes issues with GraalVM native images")
     }

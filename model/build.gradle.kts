@@ -23,20 +23,20 @@ plugins {
 }
 
 dependencies {
-    api(project(":clients:clearly-defined-client"))
-    api(project(":utils:ort-utils"))
-    api(project(":utils:spdx-utils"))
+    api(projects.clients.clearlyDefinedClient)
+    api(projects.utils.ortUtils)
+    api(projects.utils.spdxUtils)
 
-    api(libs.jacksonDatabind)
-    api(libs.jacksonDataformatXml)
-    api(libs.jacksonDataformatYaml)
-    api(libs.log4jApi)
+    api(libs.jackson.databind)
+    api(libs.jackson.dataformat.xml)
+    api(libs.jackson.dataformat.yaml)
+    api(libs.log4j.api)
 
     implementation(libs.bundles.exposed)
     implementation(libs.bundles.hoplite)
     implementation(libs.hikari)
-    implementation(libs.jacksonDatatypeJsr310)
-    implementation(libs.jacksonModuleKotlin)
+    implementation(libs.jackson.datatype.jsr310)
+    implementation(libs.jackson.module.kotlin)
     implementation(libs.postgres)
     implementation(libs.semver4j)
 

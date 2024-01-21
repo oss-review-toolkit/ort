@@ -30,7 +30,6 @@ import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.orEmpty
-import org.ossreviewtoolkit.model.utils.ResolutionProvider
 import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTableModel.DependencyRow
 import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTableModel.IssueRow
 import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTableModel.IssueTable
@@ -91,10 +90,10 @@ internal object ReportTableModelMapper {
                         input.ortResult.getRepositoryLicenseChoices()
                     )?.sorted(),
                     analyzerIssues = analyzerIssues.map {
-                        it.toResolvableIssue(input.resolutionProvider, input.howToFixTextProvider)
+                        it.toResolvableIssue(input.ortResult, input.howToFixTextProvider)
                     },
                     scanIssues = scanIssues.map {
-                        it.toResolvableIssue(input.resolutionProvider, input.howToFixTextProvider)
+                        it.toResolvableIssue(input.ortResult, input.howToFixTextProvider)
                     }
                 )
 
@@ -139,7 +138,7 @@ internal object ReportTableModelMapper {
         val labels = input.ortResult.labels.mapKeys { it.key.substringAfter(".") }
 
         val ruleViolations = input.ortResult.getRuleViolations()
-            .map { it.toResolvableViolation(input.resolutionProvider) }
+            .map { it.toResolvableViolation(input.ortResult) }
             .sortedWith(VIOLATION_COMPARATOR)
 
         return ReportTableModel(
@@ -179,11 +178,8 @@ private fun Project.getScopesForDependencies(
     return result
 }
 
-private fun Issue.toResolvableIssue(
-    resolutionProvider: ResolutionProvider,
-    howToFixTextProvider: HowToFixTextProvider
-): ResolvableIssue {
-    val resolutions = resolutionProvider.getResolutionsFor(this)
+private fun Issue.toResolvableIssue(ortResult: OrtResult, howToFixTextProvider: HowToFixTextProvider): ResolvableIssue {
+    val resolutions = ortResult.getResolutionsFor(this)
     return ResolvableIssue(
         source = source,
         description = toString(),
@@ -202,8 +198,8 @@ private fun Issue.toResolvableIssue(
     )
 }
 
-private fun RuleViolation.toResolvableViolation(resolutionProvider: ResolutionProvider): ResolvableViolation {
-    val resolutions = resolutionProvider.getResolutionsFor(this)
+private fun RuleViolation.toResolvableViolation(ortResult: OrtResult): ResolvableViolation {
+    val resolutions = ortResult.getResolutionsFor(this)
     return ResolvableViolation(
         violation = this,
         resolutionDescription = buildString {

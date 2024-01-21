@@ -17,6 +17,10 @@
  * License-Filename: LICENSE
  */
 
+// Enable type-safe project accessors, see:
+// https://docs.gradle.org/current/userguide/declaring_dependencies.html#sec:type-safe-project-accessors
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 rootProject.name = "oss-review-toolkit"
 
 include(":advisor")
@@ -91,5 +95,5 @@ pluginManagement {
 
 plugins {
     // Gradle cannot access the version catalog from here, so hard-code the dependency.
-    id("org.gradle.toolchains.foojay-resolver-convention").version("0.7.0")
+    id("org.gradle.toolchains.foojay-resolver-convention").version("0.8.0")
 }

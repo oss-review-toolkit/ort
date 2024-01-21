@@ -23,12 +23,12 @@ plugins {
 }
 
 dependencies {
-    api(project(":plugins:commands:command-api"))
+    api(projects.plugins.commands.commandApi)
 
-    implementation(project(":model"))
-    implementation(project(":scanner"))
-    implementation(project(":utils:common-utils"))
-    implementation(project(":utils:ort-utils"))
+    implementation(projects.model)
+    implementation(projects.scanner)
+    implementation(projects.utils.commonUtils)
+    implementation(projects.utils.ortUtils)
 
     implementation(libs.bundles.exposed)
     implementation(libs.clikt)

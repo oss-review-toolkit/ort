@@ -21,8 +21,6 @@
 
 package org.ossreviewtoolkit.model.utils
 
-import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.utils.common.percentEncode
 
 /**
@@ -59,45 +57,21 @@ enum class PurlType(private val value: String) {
 }
 
 /**
- * Map a [Package]'s type to the string representation of the respective [PurlType], or fall back to [PurlType.GENERIC]
- * if the [Package]'s type has no direct equivalent.
+ * Extra data than can be appended to a "clean" PURL via qualifiers or a subpath.
  */
-fun Identifier.getPurlType() =
-    when (type.lowercase()) {
-        "bower" -> PurlType.BOWER
-        "carthage" -> PurlType.CARTHAGE
-        "composer" -> PurlType.COMPOSER
-        "conan" -> PurlType.CONAN
-        "crate" -> PurlType.CARGO
-        "go" -> PurlType.GOLANG
-        "gem" -> PurlType.GEM
-        "hackage" -> PurlType.HACKAGE
-        "maven" -> PurlType.MAVEN
-        "npm" -> PurlType.NPM
-        "nuget" -> PurlType.NUGET
-        "pod" -> PurlType.COCOAPODS
-        "pub" -> PurlType.PUB
-        "pypi" -> PurlType.PYPI
-        "spm" -> PurlType.SWIFT
-        else -> PurlType.GENERIC
-    }.toString()
+data class PurlExtras(
+    /**
+     * Extra qualifying data as key / value pairs. Needs to be percent-encoded when used in a query string.
+     */
+    val qualifiers: Map<String, String>,
 
-/**
- * Create the canonical [package URL](https://github.com/package-url/purl-spec) ("purl") based on the properties of
- * the [Identifier]. Some issues remain with this specification
- * (see e.g. https://github.com/package-url/purl-spec/issues/33).
- * Optional [qualifiers] may be given and will be appended to the purl as query parameters e.g.
- * pkg:deb/debian/curl@7.50.3-1?arch=i386&distro=jessie
- * Optional [subpath] may be given and will be appended to the purl e.g.
- * pkg:golang/google.golang.org/genproto#googleapis/api/annotations
- *
- * This implementation uses the package type as 'type' purl element as it is used
- * [in the documentation](https://github.com/package-url/purl-spec/blob/master/README.rst#purl).
- * E.g. 'maven' for Gradle projects.
- */
-@JvmOverloads
-fun Identifier.toPurl(qualifiers: Map<String, String> = emptyMap(), subpath: String = "") =
-    if (this == Identifier.EMPTY) "" else createPurl(getPurlType(), namespace, name, version, qualifiers, subpath)
+    /**
+     * A subpath relative to the root of the package.
+     */
+    val subpath: String
+) {
+    constructor(vararg qualifiers: Pair<String, String>, subpath: String = "") : this(qualifiers.toMap(), subpath)
+}
 
 /**
  * Create the canonical [package URL](https://github.com/package-url/purl-spec) ("purl") based on given properties:

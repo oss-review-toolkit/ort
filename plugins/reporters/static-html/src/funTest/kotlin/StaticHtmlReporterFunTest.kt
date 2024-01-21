@@ -27,7 +27,6 @@ import io.kotest.matchers.shouldBe
 import javax.xml.transform.TransformerFactory
 
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.ort.Environment
@@ -70,7 +69,6 @@ class StaticHtmlReporterFunTest : WordSpec({
 private fun TestConfiguration.generateReport(ortResult: OrtResult): String {
     val input = ReporterInput(
         ortResult = ortResult,
-        resolutionProvider = DefaultResolutionProvider.create(ortResult),
         howToFixTextProvider = HOW_TO_FIX_TEXT_PROVIDER
     )
 

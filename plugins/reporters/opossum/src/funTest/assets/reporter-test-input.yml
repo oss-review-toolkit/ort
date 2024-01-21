@@ -30,6 +30,10 @@ repository:
         reason: "TEST_DEPENDENCY_OF"
         comment: "The scope only contains test dependencies."
     resolutions:
+      issues:
+      - message: "A test issue\\."
+        reason: "CANT_FIX_ISSUE"
+        comment: "A comment explaining why the issue can be ignored."
       rule_violations:
       - message: "Apache-2.0 hint"
         reason: "CANT_FIX_EXCEPTION"
@@ -758,6 +762,15 @@ resolved_configuration:
       curations:
         comment: "H2 database offers a license choice"
         concluded_license: "MPL-2.0 OR EPL-1.0"
+  resolutions:
+    issues:
+    - message: "A test issue\\."
+      reason: "CANT_FIX_ISSUE"
+      comment: "A comment explaining why the issue can be ignored."
+    rule_violations:
+    - message: "Apache-2.0 hint"
+      reason: "CANT_FIX_EXCEPTION"
+      comment: "Apache-2 is not an issue."
 labels:
   job_parameters.JOB_PARAM_1: "label job param 1"
   job_parameters.JOB_PARAM_2: "label job param 2"

@@ -29,6 +29,8 @@ import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.ResolvedConfiguration
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.TextLocation
@@ -36,6 +38,8 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.VulnerabilityResolution
@@ -142,8 +146,8 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             ruleViolations = ruleViolations,
             vulnerabilitiesResolutions = vulnerabilitiesResolutions,
             vulnerabilities = vulnerabilities,
-            statistics = with(input) { getStatistics(ortResult, resolutionProvider, licenseInfoResolver, ortConfig) },
-            repository = input.ortResult.repository,
+            statistics = with(input) { getStatistics(ortResult, licenseInfoResolver, ortConfig) },
+            repository = input.ortResult.repository.deduplicateResolutions(),
             severeIssueThreshold = input.ortConfig.severeIssueThreshold,
             severeRuleViolationThreshold = input.ortConfig.severeRuleViolationThreshold,
             repositoryConfiguration = input.ortResult.repository.config.toYaml(),
@@ -218,7 +222,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         if (input.ortResult.isProject(id)) {
             input.ortResult.repository.config.curations.licenseFindings
         } else {
-            input.packageConfigurationProvider.getPackageConfigurations(id, provenance)
+            input.ortResult.getPackageConfigurations(id, provenance)
                 .flatMap { it.licenseFindingCurations }
         }
 
@@ -226,7 +230,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         if (input.ortResult.isProject(id)) {
             input.ortResult.getExcludes().paths
         } else {
-            input.packageConfigurationProvider.getPackageConfigurations(id, provenance)
+            input.ortResult.getPackageConfigurations(id, provenance)
                 .flatMap { it.pathExcludes }
         }
 
@@ -604,19 +608,19 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     }
 
     private fun addResolutions(issue: Issue): List<IssueResolution> {
-        val matchingResolutions = input.resolutionProvider.getResolutionsFor(issue)
+        val matchingResolutions = input.ortResult.getResolutionsFor(issue)
 
         return issueResolutions.addIfRequired(matchingResolutions)
     }
 
     private fun addResolutions(ruleViolation: RuleViolation): List<RuleViolationResolution> {
-        val matchingResolutions = input.resolutionProvider.getResolutionsFor(ruleViolation)
+        val matchingResolutions = input.ortResult.getResolutionsFor(ruleViolation)
 
         return ruleViolationResolutions.addIfRequired(matchingResolutions)
     }
 
     private fun addResolutions(vulnerability: Vulnerability): List<VulnerabilityResolution> {
-        val matchingResolutions = input.resolutionProvider.getResolutionsFor(vulnerability)
+        val matchingResolutions = input.ortResult.getResolutionsFor(vulnerability)
 
         return vulnerabilitiesResolutions.addIfRequired(matchingResolutions)
     }
@@ -707,9 +711,9 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         )
 
     /**
-     * Adds the [value] to this list if the list does not already contain an equal item. Returns the item that is
-     * contained in the list. This is important to make sure that there is only one instance of equal items used in the
-     * model, because when Jackson generates IDs each instance gets a new ID, no matter if they are equal or not.
+     * Add the [value] to this list if the list does not already contain an equal item. Return the item contained in the
+     * list. This is important to make sure that there is only one instance of equal items used in the model, because
+     * when Jackson generates IDs each instance gets a new ID, no matter if they are equal or not.
      */
     private fun <T> MutableList<T>.addIfRequired(value: T): T = find { it == value } ?: value.also { add(it) }
 
@@ -718,4 +722,25 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
      */
     private fun <T> MutableList<T>.addIfRequired(values: Collection<T>): List<T> =
         values.map { addIfRequired(it) }.distinct()
+
+    /**
+     * Return a copy of the [RepositoryConfiguration] with [Resolutions] that refer to the same instances as the
+     * [ResolvedConfiguration] for equal [Resolutions]. This is required for the [EvaluatedModel] to contained indexed
+     * references instead of duplicate [Resolutions].
+     */
+    private fun Repository.deduplicateResolutions(): Repository {
+        val resolutions = with(config.resolutions) {
+            copy(
+                issues = issues.map { resolution -> issueResolutions.find { resolution == it } ?: resolution },
+                ruleViolations = ruleViolations.map { resolution ->
+                    ruleViolationResolutions.find { resolution == it } ?: resolution
+                },
+                vulnerabilities = vulnerabilities.map { resolution ->
+                    vulnerabilitiesResolutions.find { resolution == it } ?: resolution
+                }
+            )
+        }
+
+        return copy(config = config.copy(resolutions = resolutions))
+    }
 }

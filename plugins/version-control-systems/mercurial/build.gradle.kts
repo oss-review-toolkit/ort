@@ -23,9 +23,9 @@ plugins {
 }
 
 dependencies {
-    api(project(":downloader"))
-    api(project(":model"))
-    api(project(":utils:common-utils")) {
+    api(projects.downloader)
+    api(projects.model)
+    api(projects.utils.commonUtils) {
         because("This is a CommandLineTool.")
     }
 
@@ -33,5 +33,5 @@ dependencies {
         because("This is a CommandLineTool.")
     }
 
-    implementation(project(":utils:ort-utils"))
+    implementation(projects.utils.ortUtils)
 }

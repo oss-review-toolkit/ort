@@ -8,6 +8,9 @@ on:
     branches:
       - main
 
+env:
+  GRADLE_OPTS: -Dorg.gradle.daemon=false
+
 jobs:
   commit-lint:
     runs-on: ubuntu-22.04
@@ -21,8 +24,6 @@ jobs:
           configFile: .commitlintrc.yml
   code-base-checks:
     runs-on: ubuntu-22.04
-    env:
-      GRADLE_OPTS: -Dorg.gradle.daemon=false
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
@@ -38,8 +39,6 @@ jobs:
         arguments: checkCopyrightsInNoticeFile checkLicenseHeaders checkGitAttributes
   detekt-issues:
     runs-on: ubuntu-22.04
-    env:
-      GRADLE_OPTS: -Dorg.gradle.daemon=false
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
@@ -78,7 +77,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Check for Markdown issues
-        uses: DavidAnson/markdownlint-cli2-action@v14
+        uses: DavidAnson/markdownlint-cli2-action@v15
   qodana-scan:
     runs-on: ubuntu-22.04
     steps:

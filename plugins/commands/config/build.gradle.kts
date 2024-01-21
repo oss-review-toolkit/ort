@@ -23,13 +23,13 @@ plugins {
 }
 
 dependencies {
-    api(project(":plugins:commands:command-api"))
+    api(projects.plugins.commands.commandApi)
 
-    implementation(project(":model"))
-    implementation(project(":utils:common-utils"))
+    implementation(projects.model)
+    implementation(projects.utils.commonUtils)
 
     implementation(libs.clikt)
-    implementation(libs.jacksonDatabind)
-    implementation(libs.jacksonDataformatYaml)
-    implementation(libs.jacksonModuleKotlin)
+    implementation(libs.jackson.databind)
+    implementation(libs.jackson.dataformat.yaml)
+    implementation(libs.jackson.module.kotlin)
 }

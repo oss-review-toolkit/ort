@@ -70,12 +70,11 @@ fun OrtResult.setResolutions(resolutionProvider: ResolutionProvider): OrtResult 
  * instead of calling this function multiple times for better performance.
  */
 fun OrtResult.createLicenseInfoResolver(
-    packageConfigurationProvider: PackageConfigurationProvider = PackageConfigurationProvider.EMPTY,
     copyrightGarbage: CopyrightGarbage = CopyrightGarbage(),
     addAuthorsToCopyrights: Boolean = false,
     archiver: FileArchiver? = null
 ) = LicenseInfoResolver(
-    DefaultLicenseInfoProvider(this, packageConfigurationProvider),
+    DefaultLicenseInfoProvider(this),
     copyrightGarbage,
     addAuthorsToCopyrights,
     archiver,

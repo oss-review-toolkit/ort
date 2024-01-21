@@ -553,6 +553,129 @@
     },
     {
         "schema_version": "1.6.0",
+        "id": "GHSA-h5c8-rqwp-cp95",
+        "modified": "2024-01-11T15:41:33.766359Z",
+        "published": "2024-01-11T15:20:48Z",
+        "aliases": [
+            "CVE-2024-22195"
+        ],
+        "summary": "Jinja vulnerable to HTML attribute injection when passing user input as keys to xmlattr filter",
+        "details": "The `xmlattr` filter in affected versions of Jinja accepts keys containing spaces. XML/HTML attributes cannot contain spaces, as each would then be interpreted as a separate attribute. If an application accepts keys (as opposed to only values) as user input, and renders these in pages that other users see as well, an attacker could use this to inject other attributes and perform XSS. Note that accepting keys as user input is not common or a particularly intended use case of the `xmlattr` filter, and an application doing so should already be verifying what keys are provided regardless of this fix.",
+        "severity": [
+            {
+                "type": "CVSS_V3",
+                "score": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:N"
+            }
+        ],
+        "affected": [
+            {
+                "package": {
+                    "ecosystem": "PyPI",
+                    "name": "jinja2",
+                    "purl": "pkg:pypi/jinja2"
+                },
+                "ranges": [
+                    {
+                        "type": "ECOSYSTEM",
+                        "events": [
+                            {
+                                "introduced": "0"
+                            },
+                            {
+                                "fixed": "3.1.3"
+                            }
+                        ]
+                    }
+                ],
+                "versions": [
+                    "2.0",
+                    "2.0rc1",
+                    "2.1",
+                    "2.1.1",
+                    "2.10",
+                    "2.10.1",
+                    "2.10.2",
+                    "2.10.3",
+                    "2.11.0",
+                    "2.11.1",
+                    "2.11.2",
+                    "2.11.3",
+                    "2.2",
+                    "2.2.1",
+                    "2.3",
+                    "2.3.1",
+                    "2.4",
+                    "2.4.1",
+                    "2.5",
+                    "2.5.1",
+                    "2.5.2",
+                    "2.5.3",
+                    "2.5.4",
+                    "2.5.5",
+                    "2.6",
+                    "2.7",
+                    "2.7.1",
+                    "2.7.2",
+                    "2.7.3",
+                    "2.8",
+                    "2.8.1",
+                    "2.9",
+                    "2.9.1",
+                    "2.9.2",
+                    "2.9.3",
+                    "2.9.4",
+                    "2.9.5",
+                    "2.9.6",
+                    "3.0.0",
+                    "3.0.0a1",
+                    "3.0.0rc1",
+                    "3.0.0rc2",
+                    "3.0.1",
+                    "3.0.2",
+                    "3.0.3",
+                    "3.1.0",
+                    "3.1.1",
+                    "3.1.2"
+                ],
+                "database_specific": {
+                    "source": "https://github.com/github/advisory-database/blob/main/advisories/github-reviewed/2024/01/GHSA-h5c8-rqwp-cp95/GHSA-h5c8-rqwp-cp95.json"
+                }
+            }
+        ],
+        "references": [
+            {
+                "type": "WEB",
+                "url": "https://github.com/pallets/jinja/security/advisories/GHSA-h5c8-rqwp-cp95"
+            },
+            {
+                "type": "ADVISORY",
+                "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-22195"
+            },
+            {
+                "type": "WEB",
+                "url": "https://github.com/pallets/jinja/commit/716795349a41d4983a9a4771f7d883c96ea17be7"
+            },
+            {
+                "type": "PACKAGE",
+                "url": "https://github.com/pallets/jinja"
+            },
+            {
+                "type": "WEB",
+                "url": "https://github.com/pallets/jinja/releases/tag/3.1.3"
+            }
+        ],
+        "database_specific": {
+            "github_reviewed_at": "2024-01-11T15:20:48Z",
+            "github_reviewed": true,
+            "severity": "MODERATE",
+            "cwe_ids": [
+                "CWE-79"
+            ],
+            "nvd_published_at": "2024-01-11T03:15:11Z"
+        }
+    },
+    {
+        "schema_version": "1.6.0",
         "id": "GHSA-hj2j-77xm-mc5v",
         "modified": "2023-11-08T03:58:21.453618Z",
         "published": "2019-04-10T14:30:13Z",

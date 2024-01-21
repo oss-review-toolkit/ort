@@ -23,18 +23,18 @@ plugins {
 }
 
 dependencies {
-    api(project(":analyzer"))
-    api(project(":model"))
+    api(projects.analyzer)
+    api(projects.model)
 
-    implementation(project(":downloader"))
-    implementation(project(":utils:common-utils"))
-    implementation(project(":utils:ort-utils"))
-    implementation(project(":utils:spdx-utils"))
+    implementation(projects.downloader)
+    implementation(projects.utils.commonUtils)
+    implementation(projects.utils.ortUtils)
+    implementation(projects.utils.spdxUtils)
 
-    implementation(libs.jacksonCore)
-    implementation(libs.jacksonDatabind)
-    implementation(libs.jacksonDataformatYaml)
+    implementation(libs.jackson.core)
+    implementation(libs.jackson.databind)
+    implementation(libs.jackson.dataformat.yaml)
     implementation(libs.jruby)
 
-    funTestImplementation(testFixtures(project(":analyzer")))
+    funTestImplementation(testFixtures(projects.analyzer))
 }

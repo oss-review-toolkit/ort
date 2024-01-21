@@ -22,10 +22,8 @@ package org.ossreviewtoolkit.model.licenses
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
-
 class DefaultLicenseInfoProviderTest : WordSpec({
-    val defaultLicenseInfoProvider = DefaultLicenseInfoProvider(ortResult, PackageConfigurationProvider.EMPTY)
+    val defaultLicenseInfoProvider = DefaultLicenseInfoProvider(ortResult)
 
     "declaredLicenseInfo" should {
         "contain author information for package" {

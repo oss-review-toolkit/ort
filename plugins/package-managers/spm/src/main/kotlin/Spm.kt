@@ -83,38 +83,36 @@ class Spm(
         requireLockfile(definitionFile.parentFile) { definitionFile.name != PACKAGE_SWIFT_NAME }
 
         return when (definitionFile.name) {
-            PACKAGE_SWIFT_NAME -> resolveLibraryDependencies(definitionFile)
-            else -> resolveAppDependencies(definitionFile)
+            PACKAGE_SWIFT_NAME -> resolveDefinitionFileDependencies(definitionFile)
+            else -> resolveLockfileDependencies(definitionFile)
         }
     }
 
     /**
-     * Resolves dependencies when the final build target is an app and no Package.swift is available.
-     * This method parses dependencies from the Package.resolved file.
+     * Resolves dependencies when only a lockfile aka `Package.Resolved` is available. This commonly applies to e.g.
+     * Xcode projects which only have a lockfile, but no `Package.swift` file.
      */
-    private fun resolveAppDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
-        val resolved = definitionFile.inputStream().use { json.decodeFromStream<PackageResolved>(it) }
+    private fun resolveLockfileDependencies(packageResolvedFile: File): List<ProjectAnalyzerResult> {
+        val resolved = packageResolvedFile.inputStream().use { json.decodeFromStream<PackageResolved>(it) }
 
         return listOf(
             ProjectAnalyzerResult(
-                project = projectFromDefinitionFile(definitionFile),
+                project = projectFromDefinitionFile(packageResolvedFile),
                 packages = resolved.objects["pins"].orEmpty().mapTo(mutableSetOf()) { it.toPackage() }
             )
         )
     }
 
     /**
-     * Resolves dependencies when the final build target is a library and Package.swift is available.
+     * Resolves dependencies of a `Package.swift` file.
      * This method parses dependencies from `swift package show-dependencies --format json` output.
      * Also, this method provides parent-child associations for parsed dependencies.
-     *
-     * Only used when analyzerConfig.allowDynamicVersions is set to true.
      */
-    private fun resolveLibraryDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
-        val project = projectFromDefinitionFile(definitionFile)
+    private fun resolveDefinitionFileDependencies(packageSwiftFile: File): List<ProjectAnalyzerResult> {
+        val project = projectFromDefinitionFile(packageSwiftFile)
 
         val result = run(
-            definitionFile.parentFile,
+            packageSwiftFile.parentFile,
             "package",
             "show-dependencies",
             "--format",
@@ -141,13 +139,12 @@ class Spm(
 
     private fun projectFromDefinitionFile(definitionFile: File): Project {
         val vcsInfo = VersionControlSystem.forDirectory(definitionFile.parentFile)?.getInfo().orEmpty()
-        val (author, project) = parseAuthorAndProjectFromRepo(repositoryURL = vcsInfo.url)
 
         val projectIdentifier = Identifier(
             type = managerName,
             version = vcsInfo.revision,
-            namespace = author.orEmpty(),
-            name = project ?: definitionFile.parentFile.relativeTo(analysisRoot).invariantSeparatorsPath
+            namespace = "",
+            name = getFallbackProjectName(analysisRoot, definitionFile)
         )
 
         return Project(

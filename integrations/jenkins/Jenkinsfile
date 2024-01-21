@@ -118,6 +118,11 @@ pipeline {
          * ORT analyzer tool parameters.
          */
 
+        stashedFile(
+            name: 'ANALYZER_RESULT',
+            description: 'An optional existing analyzer result file to use instead of running the analyzer.'
+        )
+
         booleanParam(
             name: 'ALLOW_DYNAMIC_VERSIONS',
             description: 'Allow dynamic versions of dependencies (support projects without lock files).',
@@ -200,7 +205,7 @@ pipeline {
 
         booleanParam(
             name: 'RUN_ADVISOR',
-            description: 'Run the advisor tool. The OSV provider (https://osv.dev/) is enabled by default.',
+            description: 'Run the advisor tool. Both the OSV and VulnerableCode providers will be used by default.',
             defaultValue: true
         )
 
@@ -403,12 +408,49 @@ pipeline {
             }
         }
 
+        stage('Unstash ORT analyzer result') {
+            agent {
+                dockerfile {
+                    filename 'Dockerfile-legacy'
+                    additionalBuildArgs DOCKER_BUILD_ARGS + ortVersion
+                    args DOCKER_RUN_ARGS
+                }
+            }
+
+            when {
+                beforeAgent true
+
+                expression {
+                    env.ANALYZER_RESULT_FILENAME
+                }
+            }
+
+            steps {
+                // Note: This unstashes the named file parameter to a file named after the parameter. In particular,
+                // the original file name is not maintained automatically.
+                unstash('ANALYZER_RESULT')
+
+                sh '''
+                mkdir -p out/results
+                ln -frs ANALYZER_RESULT out/results/current-result.yml
+                '''.stripIndent().trim()
+            }
+        }
+
         stage('Run ORT analyzer') {
             agent {
                 dockerfile {
                     filename 'Dockerfile-legacy'
                     additionalBuildArgs DOCKER_BUILD_ARGS + ortVersion
                     args DOCKER_RUN_ARGS
+                }
+            }
+
+            when {
+                beforeAgent true
+
+                expression {
+                    !env.ANALYZER_RESULT_FILENAME
                 }
             }
 
@@ -445,7 +487,7 @@ pipeline {
                     /opt/ort/bin/set_gradle_proxy.sh
 
                     rm -fr out/results
-                    /opt/ort/bin/ort $ORT_OPTIONS analyze -i "$PROJECT_DIR/source" -o out/results/analyzer
+                    /opt/ort/bin/ort $ORT_OPTIONS analyze -i "$PROJECT_DIR/source" -o out/results/analyzer -l JENKINS_BUILD_URL=$BUILD_URL
                     '''.stripIndent().trim()
 
                     if (status >= ORT_FAILURE_STATUS_CODE) unstable('Analyzer issues found.')

@@ -52,6 +52,7 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
@@ -132,9 +133,9 @@ class ScannerTest : WordSpec({
             val pkgWithVcs = Package.new(name = "repository").withValidVcs()
 
             val scannerWrapper = spyk(FakePackageScannerWrapper()) {
-                every { scanPackage(pkgWithArtifact, any()) } returns
+                every { scanPackage(any(), any()) } returns
                     createScanResult(pkgWithArtifact.artifactProvenance(), details)
-                every { scanPackage(pkgWithVcs, any()) } returns
+                every { scanPackage(any(), any()) } returns
                     createScanResult(pkgWithVcs.repositoryProvenance(), details)
             }
 
@@ -158,8 +159,8 @@ class ScannerTest : WordSpec({
             )
 
             verify(exactly = 1) {
-                scannerWrapper.scanPackage(pkgWithArtifact, any())
-                scannerWrapper.scanPackage(pkgWithVcs, any())
+                scannerWrapper.scanPackage(any(), createContext().copy(coveredPackages = listOf(pkgWithArtifact)))
+                scannerWrapper.scanPackage(any(), createContext().copy(coveredPackages = listOf(pkgWithVcs)))
             }
         }
 
@@ -347,7 +348,7 @@ class ScannerTest : WordSpec({
             )
 
             verify(exactly = 0) {
-                scannerWrapper.scanPackage(pkgWithArtifact, any())
+                scannerWrapper.scanPackage(any(), createContext().copy(coveredPackages = listOf(pkgWithArtifact)))
             }
         }
 
@@ -376,7 +377,7 @@ class ScannerTest : WordSpec({
 
             verify(exactly = 1) {
                 reader.read(pkgWithArtifact, any())
-                scannerWrapper.scanPackage(pkgWithArtifact, any())
+                scannerWrapper.scanPackage(any(), createContext().copy(coveredPackages = listOf(pkgWithArtifact)))
             }
         }
 
@@ -885,11 +886,7 @@ class ScannerTest : WordSpec({
  * An implementation of [PackageScannerWrapper] that creates empty scan results.
  */
 @Suppress("RedundantNullableReturnType")
-private class FakePackageScannerWrapper(
-    val packageProvenanceResolver: PackageProvenanceResolver = FakePackageProvenanceResolver(),
-    val sourceCodeOriginPriority: List<SourceCodeOrigin> = listOf(SourceCodeOrigin.VCS, SourceCodeOrigin.ARTIFACT),
-    override val name: String = "fake"
-) : PackageScannerWrapper {
+private class FakePackageScannerWrapper(override val name: String = "fake") : PackageScannerWrapper {
     override val version = "1.0.0"
     override val configuration = "config"
 
@@ -898,8 +895,8 @@ private class FakePackageScannerWrapper(
     override val readFromStorage = true
     override val writeToStorage = true
 
-    override fun scanPackage(pkg: Package, context: ScanContext): ScanResult =
-        createScanResult(packageProvenanceResolver.resolveProvenance(pkg, sourceCodeOriginPriority), details)
+    override fun scanPackage(nestedProvenance: NestedProvenance?, context: ScanContext): ScanResult =
+        createScanResult(nestedProvenance?.root ?: UnknownProvenance, details)
 }
 
 /**

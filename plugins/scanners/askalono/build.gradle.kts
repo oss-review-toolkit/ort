@@ -28,12 +28,12 @@ plugins {
 }
 
 dependencies {
-    api(project(":model"))
-    api(project(":scanner"))
+    api(projects.model)
+    api(projects.scanner)
 
     implementation(libs.bundles.kotlinxSerialization)
 
-    funTestApi(testFixtures(project(":scanner")))
+    funTestApi(testFixtures(projects.scanner))
 }
 
 tasks.withType<KotlinCompile>().configureEach {

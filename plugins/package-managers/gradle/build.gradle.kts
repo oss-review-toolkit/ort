@@ -23,22 +23,22 @@ plugins {
 }
 
 dependencies {
-    api(project(":analyzer"))
-    api(project(":model"))
+    api(projects.analyzer)
+    api(projects.model)
 
-    implementation(project(":downloader"))
-    implementation(project(":plugins:package-managers:gradle-model"))
-    implementation(project(":plugins:package-managers:maven-package-manager"))
-    implementation(project(":utils:common-utils"))
-    implementation(project(":utils:ort-utils"))
+    implementation(projects.downloader)
+    implementation(projects.plugins.packageManagers.gradleModel)
+    implementation(projects.plugins.packageManagers.mavenPackageManager)
+    implementation(projects.utils.commonUtils)
+    implementation(projects.utils.ortUtils)
 
     implementation("org.gradle:gradle-tooling-api:${gradle.gradleVersion}")
-    implementation(libs.mavenCore)
-    implementation(libs.mavenResolverApi)
+    implementation(libs.maven.core)
+    implementation(libs.maven.resolver.api)
 
-    funTestImplementation(testFixtures(project(":analyzer")))
+    funTestImplementation(testFixtures(projects.analyzer))
 
-    testImplementation(project(":utils:spdx-utils"))
+    testImplementation(projects.utils.spdxUtils)
 
     testImplementation(libs.mockk)
 }

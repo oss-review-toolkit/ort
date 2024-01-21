@@ -23,12 +23,12 @@ plugins {
 }
 
 dependencies {
-    api(project(":advisor"))
-    api(project(":model"))
+    api(projects.advisor)
+    api(projects.model)
 
-    implementation(project(":clients:oss-index-client"))
-    implementation(project(":utils:common-utils"))
-    implementation(project(":utils:ort-utils"))
+    implementation(projects.clients.ossIndexClient)
+    implementation(projects.utils.commonUtils)
+    implementation(projects.utils.ortUtils)
 
     testImplementation(libs.wiremock)
 }

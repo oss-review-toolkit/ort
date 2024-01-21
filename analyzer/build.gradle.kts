@@ -26,20 +26,20 @@ plugins {
 }
 
 dependencies {
-    api(project(":model"))
+    api(projects.model)
 
-    implementation(project(":downloader"))
-    implementation(project(":utils:ort-utils"))
+    implementation(projects.downloader)
+    implementation(projects.utils.ortUtils)
 
-    implementation(libs.kotlinxCoroutines)
+    implementation(libs.kotlinx.coroutines)
 
-    funTestImplementation(platform(project(":plugins:package-managers")))
+    funTestImplementation(platform(projects.plugins.packageManagers))
 
     // Only the Java plugin's built-in "test" source set automatically depends on the test fixtures.
     funTestImplementation(testFixtures(project))
 
-    testFixturesImplementation(project(":utils:test-utils"))
+    testFixturesImplementation(projects.utils.testUtils)
 
-    testFixturesImplementation(libs.kotestAssertionsCore)
-    testFixturesImplementation(libs.kotestRunnerJunit5)
+    testFixturesImplementation(libs.kotest.assertions.core)
+    testFixturesImplementation(libs.kotest.runner.junit5)
 }

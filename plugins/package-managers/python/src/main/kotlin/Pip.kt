@@ -40,7 +40,7 @@ private const val OPTION_OPERATING_SYSTEM_DEFAULT = "linux"
 private val OPERATING_SYSTEMS = listOf(OPTION_OPERATING_SYSTEM_DEFAULT, "macos", "windows")
 
 private const val OPTION_PYTHON_VERSION_DEFAULT = "3.11"
-private val PYTHON_VERSIONS = listOf("2.7", "3.6", "3.7", "3.8", "3.9", "3.10", OPTION_PYTHON_VERSION_DEFAULT)
+internal val PYTHON_VERSIONS = listOf("2.7", "3.6", "3.7", "3.8", "3.9", "3.10", OPTION_PYTHON_VERSION_DEFAULT)
 
 /**
  * The [PIP](https://pip.pypa.io/) package manager for Python. Also see
@@ -61,11 +61,6 @@ class Pip(
     companion object {
         const val OPTION_OPERATING_SYSTEM = "operatingSystem"
         const val OPTION_PYTHON_VERSION = "pythonVersion"
-
-        /**
-         * The name of the build system requirements and information file used by modern Python packages.
-         */
-        const val PYPROJECT_FILENAME = "pyproject.toml"
     }
 
     class Factory : AbstractPackageManagerFactory<Pip>("PIP") {
@@ -78,21 +73,19 @@ class Pip(
         ) = Pip(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
-    private val operatingSystemOption = (options[OPTION_OPERATING_SYSTEM] ?: OPTION_OPERATING_SYSTEM_DEFAULT)
-        .also { os ->
-            require(os.isEmpty() || os in OPERATING_SYSTEMS) {
-                val acceptedValues = OPERATING_SYSTEMS.joinToString { "'$it'" }
-                "The '$OPTION_OPERATING_SYSTEM' option must be one of $acceptedValues, but was '$os'."
-            }
+    private val operatingSystemOption = options[OPTION_OPERATING_SYSTEM]?.also { os ->
+        require(os.isEmpty() || os in OPERATING_SYSTEMS) {
+            val acceptedValues = OPERATING_SYSTEMS.joinToString { "'$it'" }
+            "The '$OPTION_OPERATING_SYSTEM' option must be one of $acceptedValues, but was '$os'."
         }
+    }
 
-    private val pythonVersionOption = (options[OPTION_PYTHON_VERSION] ?: OPTION_PYTHON_VERSION_DEFAULT)
-        .also { pythonVersion ->
-            require(pythonVersion in PYTHON_VERSIONS) {
-                val acceptedValues = PYTHON_VERSIONS.joinToString { "'$it'" }
-                "The '$OPTION_PYTHON_VERSION' option must be one of $acceptedValues, but was '$pythonVersion'."
-            }
+    private val pythonVersionOption = options[OPTION_PYTHON_VERSION]?.also { pythonVersion ->
+        require(pythonVersion in PYTHON_VERSIONS) {
+            val acceptedValues = PYTHON_VERSIONS.joinToString { "'$it'" }
+            "The '$OPTION_PYTHON_VERSION' option must be one of $acceptedValues, but was '$pythonVersion'."
         }
+    }
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val result = runPythonInspector(definitionFile)
@@ -103,12 +96,18 @@ class Pip(
         return listOf(ProjectAnalyzerResult(project, packages))
     }
 
-    internal fun runPythonInspector(definitionFile: File): PythonInspector.Result {
+    internal fun runPythonInspector(
+        definitionFile: File,
+        detectPythonVersion: () -> String? = { null }
+    ): PythonInspector.Result {
+        val operatingSystem = operatingSystemOption ?: OPTION_OPERATING_SYSTEM_DEFAULT
+        val pythonVersion = pythonVersionOption ?: detectPythonVersion() ?: OPTION_PYTHON_VERSION_DEFAULT
+
         val workingDir = definitionFile.parentFile
 
         logger.info {
-            "Resolving dependencies for '${definitionFile.absolutePath}' with Python version '$pythonVersionOption' " +
-                "and operating system '$operatingSystemOption'."
+            "Resolving dependencies for '${definitionFile.absolutePath}' with Python version '$pythonVersion' " +
+                "and operating system '$operatingSystem'."
         }
 
         return runCatching {
@@ -116,8 +115,8 @@ class Pip(
                 PythonInspector.inspect(
                     workingDir = workingDir,
                     definitionFile = definitionFile,
-                    pythonVersion = pythonVersionOption.replace(".", ""),
-                    operatingSystem = operatingSystemOption
+                    pythonVersion = pythonVersion.replace(".", ""),
+                    operatingSystem = operatingSystem
                 )
             } finally {
                 workingDir.resolve(".cache").safeDeleteRecursively(force = true)

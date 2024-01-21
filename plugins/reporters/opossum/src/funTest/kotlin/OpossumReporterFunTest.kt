@@ -29,7 +29,6 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.common.unpackZip
@@ -59,12 +58,9 @@ class OpossumReporterFunTest : WordSpec({
 })
 
 private fun TestConfiguration.generateReport(ortResult: OrtResult): String {
-    val input = ReporterInput(
-        ortResult = ortResult,
-        resolutionProvider = DefaultResolutionProvider(ortResult.getResolutions())
-    )
-
+    val input = ReporterInput(ortResult)
     val outputDir = tempdir()
+
     OpossumReporter().generateReport(input, outputDir).single().unpackZip(outputDir)
 
     return outputDir.resolve("input.json").readText()

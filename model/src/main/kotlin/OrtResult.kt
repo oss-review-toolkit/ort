@@ -28,10 +28,16 @@ import org.apache.logging.log4j.kotlin.loggerOf
 
 import org.ossreviewtoolkit.model.ResolvedPackageCurations.Companion.REPOSITORY_CONFIGURATION_PROVIDER_ID
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
+import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
+import org.ossreviewtoolkit.model.config.RuleViolationResolution
+import org.ossreviewtoolkit.model.config.VulnerabilityResolution
 import org.ossreviewtoolkit.model.config.orEmpty
+import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
+import org.ossreviewtoolkit.model.utils.ResolutionProvider
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.utils.common.zipWithCollections
 import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
@@ -83,7 +89,7 @@ data class OrtResult(
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val labels: Map<String, String> = emptyMap()
-) {
+) : ResolutionProvider, PackageConfigurationProvider {
     companion object {
         /**
          * A constant for an [OrtResult] with an empty repository and all other properties `null`.
@@ -141,6 +147,10 @@ data class OrtResult(
                 isExcluded = id !in includedDependencies
             )
         }
+    }
+
+    private val packageConfigurationsById: Map<Identifier, List<PackageConfiguration>> by lazy {
+        resolvedConfiguration.packageConfigurations.orEmpty().groupBy { it.id }
     }
 
     /**
@@ -263,7 +273,7 @@ data class OrtResult(
         }
 
     /**
-     * Return all non-excluded issues which are not resolved by resolutions in the repository configuration of this
+     * Return all non-excluded issues which are not resolved by resolutions in the resolved configuration of this
      * [OrtResult] with severities equal to or over [minSeverity].
      */
     @JsonIgnore
@@ -271,7 +281,15 @@ data class OrtResult(
         getIssues()
             .mapNotNull { (id, issues) -> issues.takeUnless { isExcluded(id) } }
             .flatten()
-            .filter { issue -> issue.severity >= minSeverity && getResolutions().issues.none { it.matches(issue) } }
+            .filter { issue ->
+                issue.severity >= minSeverity && getResolutions().issues.none { it.matches(issue) }
+            }
+
+    /**
+     * Return a list of [PackageConfiguration]s for the given [packageId] and [provenance].
+     */
+    override fun getPackageConfigurations(packageId: Identifier, provenance: Provenance): List<PackageConfiguration> =
+        packageConfigurationsById[packageId].orEmpty().filter { it.matches(packageId, provenance) }
 
     /**
      * Return all projects and packages that are likely to belong to one of the organizations of the given [names]. If
@@ -377,7 +395,43 @@ data class OrtResult(
      * Return the [Resolutions] contained in the repository configuration of this [OrtResult].
      */
     @JsonIgnore
-    fun getResolutions(): Resolutions = repository.config.resolutions.orEmpty()
+    fun getRepositoryConfigResolutions(): Resolutions = repository.config.resolutions.orEmpty()
+
+    /**
+     * Return the [Resolutions] contained in the resolved configuration of this [OrtResult].
+     */
+    @JsonIgnore
+    fun getResolutions(): Resolutions = resolvedConfiguration.resolutions.orEmpty()
+
+    /**
+     * Return true if and only if [violation] is resolved in this [OrtResult].
+     */
+    override fun isResolved(violation: RuleViolation): Boolean =
+        getResolutions().ruleViolations.any { it.matches(violation) }
+
+    /**
+     * Return true if and only if [vulnerability] is resolved in this [OrtResult].
+     */
+    override fun isResolved(vulnerability: Vulnerability): Boolean =
+        getResolutions().vulnerabilities.any { it.matches(vulnerability) }
+
+    /**
+     * Return the resolutions matching [issue].
+     */
+    override fun getResolutionsFor(issue: Issue): List<IssueResolution> =
+        getResolutions().issues.filter { it.matches(issue) }
+
+    /**
+     * Return the resolutions matching [violation].
+     */
+    override fun getResolutionsFor(violation: RuleViolation): List<RuleViolationResolution> =
+        getResolutions().ruleViolations.filter { it.matches(violation) }
+
+    /**
+     * Return the resolutions matching [vulnerability].
+     */
+    override fun getResolutionsFor(vulnerability: Vulnerability): List<VulnerabilityResolution> =
+        getResolutions().vulnerabilities.filter { it.matches(vulnerability) }
 
     /**
      * Return all [RuleViolation]s contained in this [OrtResult]. Optionally exclude resolved violations with

@@ -108,13 +108,11 @@ internal fun OrtResult.downloadSources(id: Identifier, sourceCodeOrigin: SourceC
 internal fun OrtResult.processAllCopyrightStatements(
     omitExcluded: Boolean = true,
     copyrightGarbage: Set<String> = emptySet(),
-    addAuthorsToCopyrights: Boolean = false,
-    packageConfigurationProvider: PackageConfigurationProvider = PackageConfigurationProvider.EMPTY
+    addAuthorsToCopyrights: Boolean = false
 ): List<ProcessedCopyrightStatement> {
     val result = mutableListOf<ProcessedCopyrightStatement>()
 
     val licenseInfoResolver = createLicenseInfoResolver(
-        packageConfigurationProvider = packageConfigurationProvider,
         copyrightGarbage = CopyrightGarbage(copyrightGarbage.toSortedSet()),
         addAuthorsToCopyrights = addAuthorsToCopyrights
     )
@@ -305,18 +303,6 @@ internal fun <T : Any> String.execAndMap(transform: (ResultSet) -> T): List<T> {
     }
 
     return result
-}
-
-/**
- * Return all unresolved rule violations.
- */
-internal fun OrtResult.getUnresolvedRuleViolations(): List<RuleViolation> {
-    val resolutions = getResolutions().ruleViolations
-    val violations = evaluator?.violations.orEmpty()
-
-    return violations.filter { violation ->
-        !resolutions.any { it.matches(violation) }
-    }
 }
 
 /**

@@ -205,6 +205,7 @@ class IssuesTable extends React.Component {
                 key: 'message',
                 textWrap: 'word-break',
                 title: 'Message',
+                render: (text) => <pre>{text}</pre>,
                 ...getColumnSearchProps('message', filteredInfo, this)
             }
         );

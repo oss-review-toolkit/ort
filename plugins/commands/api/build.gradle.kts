@@ -23,13 +23,13 @@ plugins {
 }
 
 dependencies {
-    api(project(":model"))
-    api(project(":utils:common-utils"))
+    api(projects.model)
+    api(projects.utils.commonUtils)
 
     api(libs.clikt)
 
-    implementation(project(":utils:ort-utils"))
+    implementation(projects.utils.ortUtils)
 
-    implementation(libs.jacksonCore)
-    implementation(libs.jacksonDatabind)
+    implementation(libs.jackson.core)
+    implementation(libs.jackson.databind)
 }

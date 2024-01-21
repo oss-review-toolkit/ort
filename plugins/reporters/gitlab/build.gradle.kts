@@ -28,12 +28,12 @@ plugins {
 }
 
 dependencies {
-    api(project(":reporter"))
+    api(projects.reporter)
 
-    implementation(project(":model"))
-    implementation(project(":utils:common-utils"))
-    implementation(project(":utils:ort-utils"))
-    implementation(project(":utils:spdx-utils"))
+    implementation(projects.model)
+    implementation(projects.utils.commonUtils)
+    implementation(projects.utils.ortUtils)
+    implementation(projects.utils.spdxUtils)
 
     implementation(libs.bundles.kotlinxSerialization)
 }

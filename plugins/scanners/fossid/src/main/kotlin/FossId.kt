@@ -25,7 +25,7 @@ import java.time.Instant
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
-import kotlin.time.measureTimedValue
+import kotlin.time.toKotlinDuration
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -64,7 +64,6 @@ import org.ossreviewtoolkit.clients.fossid.model.status.ScanStatus
 import org.ossreviewtoolkit.clients.fossid.runScan
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Issue
-import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
@@ -80,6 +79,7 @@ import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScannerMatcher
 import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
+import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
 import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
@@ -230,134 +230,115 @@ class FossId internal constructor(
         }
 
     /**
-     * Create a [ScanSummary] containing a single [issue], started at [startTime] and finished at [endTime].
+     * Create a [ScanSummary] containing a single [issue] started at [startTime] and ended now.
      */
-    private fun createSingleIssueSummary(startTime: Instant, endTime: Instant = Instant.now(), issue: Issue) =
-        ScanSummary.EMPTY.copy(
-            startTime = startTime,
-            endTime = endTime,
-            issues = listOf(issue)
-        )
+    private fun createSingleIssueSummary(startTime: Instant, issue: Issue) =
+        ScanSummary.EMPTY.copy(startTime = startTime, endTime = Instant.now(), issues = listOf(issue))
 
-    override fun scanPackage(pkg: Package, context: ScanContext): ScanResult {
-        val (result, duration) = measureTimedValue {
-            fun createSingleIssueResult(issue: Issue, provenance: Provenance): ScanResult {
-                val time = Instant.now()
-                val summary = createSingleIssueSummary(time, time, issue)
-                return ScanResult(provenance, details, summary)
-            }
+    override fun scanPackage(nestedProvenance: NestedProvenance?, context: ScanContext): ScanResult {
+        val startTime = Instant.now()
 
-            if (pkg.vcsProcessed.type != VcsType.GIT) {
-                val issue = createAndLogIssue(
-                    source = name,
-                    message = "Package '${pkg.id.toCoordinates()}' uses VCS type '${pkg.vcsProcessed.type}', but " +
-                        "only ${VcsType.GIT} is supported.",
-                    severity = Severity.WARNING
-                )
+        // FossId actually never uses the provenance determined by the scanner, but determines the source code to
+        // download itself based on the passed VCS URL and revision, disregarding any VCS path.
+        val pkg = context.coveredPackages.first()
+        val provenance = pkg.vcsProcessed.revision.takeUnless { it.isBlank() }
+            ?.let { RepositoryProvenance(pkg.vcsProcessed, it) } ?: UnknownProvenance
 
-                return createSingleIssueResult(issue, UnknownProvenance)
-            }
+        val issueMessage = when {
+            pkg.vcsProcessed.type != VcsType.GIT ->
+                "Package '${pkg.id.toCoordinates()}' uses VCS type '${pkg.vcsProcessed.type}', but only " +
+                    "${VcsType.GIT} is supported."
 
-            if (pkg.vcsProcessed.revision.isEmpty()) {
-                val issue = createAndLogIssue(
-                    source = name,
-                    message = "Package '${pkg.id.toCoordinates()}' has an empty VCS revision and cannot be scanned.",
-                    severity = Severity.WARNING
-                )
+            pkg.vcsProcessed.revision.isEmpty() ->
+                "Package '${pkg.id.toCoordinates()}' has an empty VCS revision and cannot be scanned."
 
-                return createSingleIssueResult(issue, UnknownProvenance)
-            }
+            else -> null
+        }
 
-            if (pkg.vcsProcessed.path.isNotEmpty()) {
-                val issue = createAndLogIssue(
-                    source = name,
-                    message = "Ignoring package '${pkg.id.toCoordinates()}' from '${pkg.vcsProcessed.url}' as it has " +
-                        "path '${pkg.vcsProcessed.path}' set and scanning cannot be limited to paths.",
-                    severity = Severity.WARNING
-                )
-                val provenance = RepositoryProvenance(pkg.vcsProcessed, pkg.vcsProcessed.revision)
+        if (issueMessage != null) {
+            val issue = createAndLogIssue(name, issueMessage, Severity.WARNING)
+            val summary = createSingleIssueSummary(startTime, issue = issue)
+            return ScanResult(provenance, details, summary)
+        }
 
-                return createSingleIssueResult(issue, provenance)
-            }
+        val url = pkg.vcsProcessed.url
+        val revision = pkg.vcsProcessed.revision
+        val projectName = convertGitUrlToProjectName(url)
 
-            val startTime = Instant.now()
-            val url = pkg.vcsProcessed.url
-            val revision = pkg.vcsProcessed.revision
-            val projectName = convertGitUrlToProjectName(url)
-            val provenance = RepositoryProvenance(pkg.vcsProcessed, revision)
+        val result = runBlocking {
+            try {
+                val projectCode = namingProvider.createProjectCode(projectName)
 
-            runBlocking {
-                try {
-                    val projectCode = namingProvider.createProjectCode(projectName)
+                if (getProject(projectCode) == null) {
+                    logger.info { "Creating project '$projectCode'..." }
 
-                    if (getProject(projectCode) == null) {
-                        logger.info { "Creating project '$projectCode'..." }
+                    service.createProject(config.user, config.apiKey, projectCode, projectCode)
+                        .checkResponse("create project")
+                }
 
-                        service.createProject(config.user, config.apiKey, projectCode, projectCode)
-                            .checkResponse("create project")
-                    }
+                val scans = service.listScansForProject(config.user, config.apiKey, projectCode)
+                    .checkResponse("list scans for project").data
+                checkNotNull(scans)
 
-                    val scans = service.listScansForProject(config.user, config.apiKey, projectCode)
-                        .checkResponse("list scans for project").data
-                    checkNotNull(scans)
+                val issues = mutableListOf<Issue>()
 
-                    val issues = mutableListOf<Issue>()
+                val (scanCode, scanId) = if (config.deltaScans) {
+                    checkAndCreateDeltaScan(scans, url, revision, projectCode, projectName, context, issues)
+                } else {
+                    checkAndCreateScan(scans, url, revision, projectCode, projectName)
+                }
 
-                    val (scanCode, scanId) = if (config.deltaScans) {
-                        checkAndCreateDeltaScan(scans, url, revision, projectCode, projectName, context, issues)
-                    } else {
-                        checkAndCreateScan(scans, url, revision, projectCode, projectName)
-                    }
-
-                    if (config.waitForResult) {
-                        val rawResults = getRawResults(scanCode)
-                        createResultSummary(
-                            startTime,
-                            provenance,
-                            rawResults,
-                            scanCode,
-                            scanId,
-                            issues,
-                            context.detectedLicenseMapping
-                        )
-                    } else {
-                        val issue = createAndLogIssue(
-                            source = name,
-                            message = "Package '${pkg.id.toCoordinates()}' has been scanned in asynchronous mode. " +
-                                "Scan results need to be inspected on the server instance.",
-                            severity = Severity.HINT
-                        )
-                        val summary = createSingleIssueSummary(startTime, issue = issue)
-
-                        ScanResult(
-                            provenance,
-                            details,
-                            summary,
-                            mapOf(SCAN_CODE_KEY to scanCode, SCAN_ID_KEY to scanId, SERVER_URL_KEY to config.serverUrl)
-                        )
-                    }
-                } catch (e: IllegalStateException) {
-                    e.showStackTrace()
-
+                if (config.waitForResult) {
+                    val rawResults = getRawResults(scanCode)
+                    createResultSummary(
+                        startTime,
+                        provenance,
+                        rawResults,
+                        scanCode,
+                        scanId,
+                        issues,
+                        context.detectedLicenseMapping
+                    )
+                } else {
                     val issue = createAndLogIssue(
                         source = name,
-                        message = "Failed to scan package '${pkg.id.toCoordinates()}' from $url."
+                        message = "Package '${pkg.id.toCoordinates()}' has been scanned in asynchronous mode. " +
+                            "Scan results need to be inspected on the server instance.",
+                        severity = Severity.HINT
                     )
                     val summary = createSingleIssueSummary(startTime, issue = issue)
 
-                    if (!config.keepFailedScans) {
-                        createdScans.forEach { code ->
-                            logger.warn { "Deleting scan '$code' during exception cleanup." }
-                            deleteScan(code)
-                        }
-                    }
-
-                    ScanResult(provenance, details, summary)
+                    ScanResult(
+                        provenance,
+                        details,
+                        summary,
+                        mapOf(SCAN_CODE_KEY to scanCode, SCAN_ID_KEY to scanId, SERVER_URL_KEY to config.serverUrl)
+                    )
                 }
+            } catch (e: IllegalStateException) {
+                e.showStackTrace()
+
+                val issue = createAndLogIssue(
+                    source = name,
+                    message = "Failed to scan package '${pkg.id.toCoordinates()}' from $url."
+                )
+                val summary = createSingleIssueSummary(startTime, issue = issue)
+
+                if (!config.keepFailedScans) {
+                    createdScans.forEach { code ->
+                        logger.warn { "Deleting scan '$code' during exception cleanup." }
+                        deleteScan(code)
+                    }
+                }
+
+                ScanResult(provenance, details, summary)
             }
         }
 
-        logger.info { "Scan has been performed. Total time was $duration." }
+        logger.info {
+            val duration = with(result.summary) { java.time.Duration.between(startTime, endTime).toKotlinDuration() }
+            "Scan has been performed. Total time was $duration."
+        }
 
         return result
     }

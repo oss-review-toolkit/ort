@@ -19,43 +19,19 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.spm
 
-import java.lang.invoke.MethodHandles
-import java.net.URI
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-
-import org.apache.logging.log4j.kotlin.loggerOf
 
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 
 val json = Json { ignoreUnknownKeys = true }
-
-abstract class SpmDependency {
-    abstract val repositoryUrl: String
-    abstract val vcs: VcsInfo
-    abstract val id: Identifier
-
-    fun toPackage(): Package {
-        val (author, _) = parseAuthorAndProjectFromRepo(repositoryUrl)
-        return Package(
-            vcs = vcs,
-            description = "",
-            id = id,
-            binaryArtifact = RemoteArtifact.EMPTY,
-            sourceArtifact = RemoteArtifact.EMPTY,
-            authors = setOfNotNull(author),
-            declaredLicenses = emptySet(), // SPM files do not declare any licenses.
-            homepageUrl = repositoryUrl.removeSuffix(".git")
-        )
-    }
-}
 
 /**
  * The output of the `spm dependencies` command.
@@ -74,99 +50,98 @@ data class SpmDependenciesOutput(
 data class LibraryDependency(
     val name: String,
     val version: String,
-    @SerialName("url") override val repositoryUrl: String,
+    @SerialName("url") val repositoryUrl: String,
     val dependencies: Set<LibraryDependency>
-) : SpmDependency() {
-    override val vcs: VcsInfo
+) {
+    val vcs: VcsInfo
         get() {
             val vcsInfoFromUrl = VcsHost.parseUrl(repositoryUrl)
             return vcsInfoFromUrl.takeUnless { it.revision.isBlank() } ?: vcsInfoFromUrl.copy(revision = version)
         }
 
-    override val id: Identifier
+    val id: Identifier
         get() {
-            val (author, project) = parseAuthorAndProjectFromRepo(repositoryUrl)
             return Identifier(
                 type = PACKAGE_TYPE,
-                namespace = author.orEmpty(),
-                name = project ?: name,
+                namespace = "",
+                name = getCanonicalName(repositoryUrl),
                 version = version
             )
         }
+
+    fun toPackage(): Package = createPackage(id, vcs)
 }
 
 @Serializable
 data class PackageResolved(
-    @SerialName("object") val objects: Map<String, List<AppDependency>>,
+    @SerialName("object") val objects: Map<String, List<Pin>>,
     val version: Int
 )
 
 @Serializable
-data class AppDependency(
+data class Pin(
     @SerialName("package") val packageName: String,
-    val state: AppDependencyState?,
-    @SerialName("repositoryURL") override val repositoryUrl: String
-) : SpmDependency() {
+    val state: State?,
+    @SerialName("repositoryURL") val repositoryUrl: String
+) {
     @Serializable
-    data class AppDependencyState(
+    data class State(
         val version: String? = null,
         val revision: String? = null,
-        private val branch: String? = null
-    ) {
-        override fun toString(): String =
+        val branch: String? = null
+    )
+}
+
+internal fun Pin.toPackage(): Package {
+    val id = Identifier(
+        type = PACKAGE_TYPE,
+        namespace = "",
+        name = getCanonicalName(repositoryUrl),
+        version = state?.run {
             when {
                 !version.isNullOrBlank() -> version
                 !revision.isNullOrBlank() -> "revision-$revision"
                 !branch.isNullOrBlank() -> "branch-$branch"
                 else -> ""
             }
+        }.orEmpty()
+    )
+
+    val vcsInfoFromUrl = VcsHost.parseUrl(repositoryUrl)
+    val vcsInfo = if (vcsInfoFromUrl.revision.isBlank() && state != null) {
+        when {
+            !state.revision.isNullOrBlank() -> vcsInfoFromUrl.copy(revision = state.revision)
+            !state.version.isNullOrBlank() -> vcsInfoFromUrl.copy(revision = state.version)
+            else -> vcsInfoFromUrl
+        }
+    } else {
+        vcsInfoFromUrl
     }
 
-    override val vcs: VcsInfo
-        get() {
-            val vcsInfoFromUrl = VcsHost.parseUrl(repositoryUrl)
-
-            if (vcsInfoFromUrl.revision.isBlank() && state != null) {
-                when {
-                    !state.revision.isNullOrBlank() -> return vcsInfoFromUrl.copy(revision = state.revision)
-                    !state.version.isNullOrBlank() -> return vcsInfoFromUrl.copy(revision = state.version)
-                }
-            }
-
-            return vcsInfoFromUrl
-        }
-
-    override val id: Identifier
-        get() {
-            val (author, project) = parseAuthorAndProjectFromRepo(repositoryUrl)
-            return Identifier(
-                type = PACKAGE_TYPE,
-                namespace = author.orEmpty(),
-                name = project ?: packageName,
-                version = state?.toString().orEmpty()
-            )
-        }
+    return createPackage(id, vcsInfo)
 }
 
-private val logger = loggerOf(MethodHandles.lookup().lookupClass())
+private fun createPackage(id: Identifier, vcsInfo: VcsInfo) =
+    Package(
+        vcs = vcsInfo,
+        description = "",
+        id = id,
+        binaryArtifact = RemoteArtifact.EMPTY,
+        sourceArtifact = RemoteArtifact.EMPTY,
+        declaredLicenses = emptySet(), // SPM files do not declare any licenses.
+        homepageUrl = ""
+    )
 
-internal fun parseAuthorAndProjectFromRepo(repositoryURL: String): Pair<String?, String?> {
-    val normalizedURL = normalizeVcsUrl(repositoryURL)
-    val vcsHost = VcsHost.fromUrl(URI(normalizedURL))
-    val project = vcsHost?.getProject(normalizedURL)
-    val author = vcsHost?.getUserOrOrganization(normalizedURL)
-
-    if (author.isNullOrBlank()) {
-        logger.warn {
-            "Unable to parse the author from VCS URL $repositoryURL, results might be incomplete."
-        }
-    }
-
-    if (project.isNullOrBlank()) {
-        logger.warn {
-            "Unable to parse the project from VCS URL $repositoryURL, results might be incomplete."
-        }
-    }
-
-    return author to project
+/**
+ * Return the canonical name for a package based on the given [repositoryUrl].
+ * The algorithm assumes that the repository URL does not point to the local file
+ * system, as support for local dependencies is not implemented yet in ORT. Otherwise,
+ * the algorithm tries to effectively mimic the algorithm described in
+ * https://github.com/apple/swift-package-manager/blob/24bfdd180afdf78160e7a2f6f6deb2c8249d40d3/Sources/PackageModel/PackageIdentity.swift#L345-L415.
+ */
+internal fun getCanonicalName(repositoryUrl: String): String {
+    val normalizedUrl = normalizeVcsUrl(repositoryUrl)
+    return normalizedUrl.toUri {
+        it.host + it.path.removeSuffix(".git")
+    }.getOrDefault(normalizedUrl).lowercase()
 }

@@ -23,16 +23,16 @@ plugins {
 }
 
 dependencies {
-    api(project(":reporter"))
+    api(projects.reporter)
 
-    implementation(project(":clients:fossid-webapp-client"))
-    implementation(project(":model"))
-    implementation(project(":plugins:reporters:asciidoc-reporter"))
-    implementation(project(":plugins:reporters:freemarker-reporter"))
-    implementation(project(":utils:common-utils"))
-    implementation(project(":utils:ort-utils"))
+    implementation(projects.clients.fossidWebappClient)
+    implementation(projects.model)
+    implementation(projects.plugins.reporters.asciidocReporter)
+    implementation(projects.plugins.reporters.freemarkerReporter)
+    implementation(projects.utils.commonUtils)
+    implementation(projects.utils.ortUtils)
 
-    implementation(libs.kotlinxCoroutines)
+    implementation(libs.kotlinx.coroutines)
 
     testImplementation(libs.mockk)
 }

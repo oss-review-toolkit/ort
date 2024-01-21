@@ -23,14 +23,14 @@ plugins {
 }
 
 dependencies {
-    api(project(":plugins:commands:command-api"))
+    api(projects.plugins.commands.commandApi)
 
-    implementation(project(":analyzer"))
-    implementation(project(":downloader"))
-    implementation(project(":model"))
-    implementation(project(":scanner"))
-    implementation(project(":utils:common-utils"))
-    implementation(project(":utils:spdx-utils"))
+    implementation(projects.analyzer)
+    implementation(projects.downloader)
+    implementation(projects.model)
+    implementation(projects.scanner)
+    implementation(projects.utils.commonUtils)
+    implementation(projects.utils.spdxUtils)
 
     // Changing this to "runtimeOnly" triggers "Call uses reflection API which is not found in compilation classpath".
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -39,6 +39,6 @@ dependencies {
     implementation(libs.reflections)
     implementation(libs.semver4j)
 
-    funTestImplementation(platform(project(":plugins:package-managers")))
-    funTestImplementation(platform(project(":plugins:scanners")))
+    funTestImplementation(platform(projects.plugins.packageManagers))
+    funTestImplementation(platform(projects.plugins.scanners))
 }

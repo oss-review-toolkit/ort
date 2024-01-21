@@ -23,20 +23,20 @@ plugins {
 }
 
 dependencies {
-    api(project(":analyzer"))
-    api(project(":model"))
+    api(projects.analyzer)
+    api(projects.model)
 
-    implementation(project(":downloader"))
-    implementation(project(":utils:common-utils"))
-    implementation(project(":utils:ort-utils"))
-    implementation(project(":utils:spdx-utils"))
+    implementation(projects.downloader)
+    implementation(projects.utils.commonUtils)
+    implementation(projects.utils.ortUtils)
+    implementation(projects.utils.spdxUtils)
 
-    implementation(libs.jacksonCore)
-    implementation(libs.jacksonDatabind)
+    implementation(libs.jackson.core)
+    implementation(libs.jackson.databind)
     implementation(libs.okhttp)
 
-    funTestImplementation(project(":plugins:package-managers:conan-package-manager"))
-    funTestImplementation(testFixtures(project(":analyzer")))
+    funTestImplementation(projects.plugins.packageManagers.conanPackageManager)
+    funTestImplementation(testFixtures(projects.analyzer))
 
     testImplementation(libs.mockk)
     testImplementation(libs.wiremock)

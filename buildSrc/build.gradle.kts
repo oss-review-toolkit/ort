@@ -39,11 +39,12 @@ repositories {
 dependencies {
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
 
-    implementation(libs.detekt)
-    implementation(libs.dokkatoo)
-    implementation(libs.graalVmNativeImage)
     implementation(libs.jgit)
-    implementation(libs.kotlin)
+    implementation(libs.plugin.detekt)
+    implementation(libs.plugin.dokkatoo)
+    implementation(libs.plugin.graalVmNativeImage)
+    implementation(libs.plugin.kotlin)
+    implementation(libs.plugin.mavenPublish)
 }
 
 val javaVersion = JavaVersion.current()

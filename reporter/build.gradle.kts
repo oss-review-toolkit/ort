@@ -26,10 +26,10 @@ plugins {
 }
 
 dependencies {
-    api(project(":model"))
+    api(projects.model)
 
-    implementation(project(":utils:scripting-utils"))
-    implementation(project(":utils:spdx-utils"))
+    implementation(projects.utils.scriptingUtils)
+    implementation(projects.utils.spdxUtils)
 
     implementation("org.jetbrains.kotlin:kotlin-scripting-common")
     implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
@@ -37,6 +37,7 @@ dependencies {
     // Only the Java plugin's built-in "test" source set automatically depends on the test fixtures.
     funTestImplementation(testFixtures(project))
 
-    funTestImplementation(libs.kotestAssertionsJson)
-    testFixturesImplementation(project(":utils:test-utils"))
+    funTestImplementation(libs.kotest.assertions.json)
+
+    testFixturesImplementation(projects.utils.testUtils)
 }

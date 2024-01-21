@@ -25,17 +25,17 @@ plugins {
 }
 
 dependencies {
-    api(project(":model"))
-    api(project(":scanner"))
+    api(projects.model)
+    api(projects.scanner)
 
-    implementation(project(":clients:scanoss-client"))
-    implementation(project(":utils:common-utils"))
-    implementation(project(":utils:spdx-utils"))
+    implementation(projects.clients.scanossClient)
+    implementation(projects.utils.commonUtils)
+    implementation(projects.utils.spdxUtils)
 
-    implementation(libs.kotlinxCoroutines)
+    implementation(libs.kotlinx.coroutines)
     implementation(libs.scanoss)
 
-    funTestApi(testFixtures(project(":scanner")))
+    funTestApi(testFixtures(projects.scanner))
 
     testImplementation(libs.bundles.kotlinxSerialization)
     testImplementation(libs.mockk)

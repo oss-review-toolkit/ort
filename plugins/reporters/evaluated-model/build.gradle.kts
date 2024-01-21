@@ -23,17 +23,17 @@ plugins {
 }
 
 dependencies {
-    api(project(":model"))
-    api(project(":reporter"))
-    api(project(":utils:spdx-utils"))
+    api(projects.model)
+    api(projects.reporter)
+    api(projects.utils.spdxUtils)
 
-    api(libs.jacksonAnnotations)
-    api(libs.jacksonDatabind)
+    api(libs.jackson.annotations)
+    api(libs.jackson.databind)
 
-    implementation(project(":utils:ort-utils"))
+    implementation(projects.utils.ortUtils)
 
-    implementation(libs.jacksonCore)
-    implementation(libs.jacksonDataformatYaml)
+    implementation(libs.jackson.core)
+    implementation(libs.jackson.dataformat.yaml)
 
-    funTestImplementation(testFixtures(project(":reporter")))
+    funTestImplementation(testFixtures(projects.reporter))
 }

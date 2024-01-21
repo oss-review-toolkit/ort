@@ -23,12 +23,12 @@ plugins {
 }
 
 dependencies {
-    api(project(":plugins:commands:command-api"))
+    api(projects.plugins.commands.commandApi)
 
-    implementation(project(":plugins:package-curation-providers:ort-config-package-curation-provider"))
-    implementation(project(":plugins:package-managers:nuget-package-manager"))
-    implementation(project(":utils:common-utils"))
+    implementation(projects.plugins.packageCurationProviders.ortConfigPackageCurationProvider)
+    implementation(projects.plugins.packageManagers.nugetPackageManager)
+    implementation(projects.utils.commonUtils)
 
     implementation(libs.clikt)
-    implementation(libs.jacksonModuleKotlin)
+    implementation(libs.jackson.module.kotlin)
 }

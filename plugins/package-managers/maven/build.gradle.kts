@@ -23,23 +23,23 @@ plugins {
 }
 
 dependencies {
-    api(project(":analyzer"))
-    api(project(":model"))
+    api(projects.analyzer)
+    api(projects.model)
 
-    api(libs.mavenCore)
-    api(libs.mavenResolverApi)
+    api(libs.maven.core)
+    api(libs.maven.resolver.api)
 
-    implementation(project(":downloader"))
-    implementation(project(":utils:common-utils"))
+    implementation(projects.downloader)
+    implementation(projects.utils.commonUtils)
 
     // The classes from the maven-resolver dependencies are not used directly but initialized by the Plexus IoC
     // container automatically. They are required on the classpath for Maven dependency resolution to work.
     runtimeOnly(libs.bundles.mavenResolver)
 
     // TODO: Remove this once https://issues.apache.org/jira/browse/MNG-6561 is resolved.
-    runtimeOnly(libs.mavenCompat)
+    runtimeOnly(libs.maven.compat)
 
-    funTestImplementation(testFixtures(project(":analyzer")))
+    funTestImplementation(testFixtures(projects.analyzer))
 
     testImplementation(libs.mockk)
 }

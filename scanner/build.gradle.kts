@@ -28,34 +28,34 @@ plugins {
 }
 
 dependencies {
-    api(project(":model"))
+    api(projects.model)
 
-    implementation(project(":clients:clearly-defined-client"))
-    implementation(project(":downloader"))
-    implementation(project(":utils:ort-utils"))
+    implementation(projects.clients.clearlyDefinedClient)
+    implementation(projects.downloader)
+    implementation(projects.utils.ortUtils)
 
     implementation(libs.bundles.exposed)
     implementation(libs.hikari)
-    implementation(libs.jacksonModuleKotlin)
-    implementation(libs.kotlinxCoroutines)
+    implementation(libs.jackson.module.kotlin)
+    implementation(libs.kotlinx.coroutines)
     implementation(libs.postgres)
-    implementation(libs.retrofitConverterJackson)
+    implementation(libs.retrofit.converter.jackson)
     implementation(libs.sw360Client)
 
-    funTestApi(testFixtures(project(":scanner")))
+    funTestApi(testFixtures(projects.scanner))
 
-    funTestImplementation(platform(project(":plugins:scanners")))
-    funTestImplementation(platform(project(":plugins:version-control-systems")))
+    funTestImplementation(platform(projects.plugins.scanners))
+    funTestImplementation(platform(projects.plugins.versionControlSystems))
 
-    testImplementation(platform(project(":plugins:scanners")))
+    testImplementation(platform(projects.plugins.scanners))
 
     testImplementation(libs.bundles.kotlinxSerialization)
     testImplementation(libs.mockk)
-    testImplementation(libs.retrofitConverterKotlinxSerialization)
+    testImplementation(libs.retrofit.converter.kotlinxSerialization)
     testImplementation(libs.wiremock)
 
-    testFixturesImplementation(libs.kotestAssertionsCore)
-    testFixturesImplementation(libs.kotestRunnerJunit5)
+    testFixturesImplementation(libs.kotest.assertions.core)
+    testFixturesImplementation(libs.kotest.runner.junit5)
 }
 
 tasks.named<KotlinCompile>("compileTestKotlin") {

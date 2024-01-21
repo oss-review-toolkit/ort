@@ -28,7 +28,6 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.utils.getUnresolvedRuleViolations
 import org.ossreviewtoolkit.helper.utils.readOrtResult
 import org.ossreviewtoolkit.helper.utils.replaceRuleViolationResolutions
 import org.ossreviewtoolkit.helper.utils.write
@@ -70,7 +69,7 @@ internal class GenerateRuleViolationResolutionsCommand : CliktCommand(
         val ortResult = readOrtResult(ortFile).replaceConfig(repositoryConfiguration)
 
         val generatedResolutions = ortResult
-            .getUnresolvedRuleViolations()
+            .getRuleViolations(omitResolved = true)
             .filter { it.severity in severity }
             .map {
                 RuleViolationResolution(

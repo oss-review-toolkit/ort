@@ -275,14 +275,7 @@ class FreemarkerTemplateProcessor(
         @JvmOverloads
         @Suppress("UNUSED") // This function is used in the templates.
         fun hasUnresolvedIssues(threshold: Severity = input.ortConfig.severeIssueThreshold) =
-            input.ortResult.getIssues().any { (identifier, issues) ->
-                issues.any { issue ->
-                    val isResolved = input.resolutionProvider.isResolved(issue)
-                    val isExcluded = input.ortResult.isExcluded(identifier)
-
-                    issue.severity >= threshold && !isResolved && !isExcluded
-                }
-            }
+            input.ortResult.getOpenIssues(minSeverity = threshold).isNotEmpty()
 
         /**
          * Return `true` if there are any unresolved and non-excluded [RuleViolation]s whose severity is equal to or
@@ -291,26 +284,23 @@ class FreemarkerTemplateProcessor(
         @JvmOverloads
         @Suppress("UNUSED") // This function is used in the templates.
         fun hasUnresolvedRuleViolations(threshold: Severity = input.ortConfig.severeRuleViolationThreshold) =
-            input.ortResult.evaluator?.violations?.any { violation ->
-                val isResolved = input.resolutionProvider.isResolved(violation)
-                val isExcluded = violation.pkg?.let { input.ortResult.isExcluded(it) } ?: false
-
-                violation.severity >= threshold && !isResolved && !isExcluded
-            } ?: false
+            input.ortResult.getRuleViolations(omitResolved = true, minSeverity = threshold).any { violation ->
+                violation.pkg?.let { input.ortResult.isExcluded(it) } ?: false
+            }
 
         /**
          * Return a list of [RuleViolation]s for which no [RuleViolationResolution] is provided.
          */
         @Suppress("UNUSED") // This function is used in the templates.
         fun filterForUnresolvedRuleViolations(ruleViolation: List<RuleViolation>): List<RuleViolation> =
-            ruleViolation.filterNot { input.resolutionProvider.isResolved(it) }
+            ruleViolation.filterNot { input.ortResult.isResolved(it) }
 
         /**
          * Return a list of [Vulnerability]s for which no [VulnerabilityResolution] is provided.
          */
         @Suppress("UNUSED") // This function is used in the templates.
         fun filterForUnresolvedVulnerabilities(vulnerabilities: List<Vulnerability>): List<Vulnerability> =
-            vulnerabilities.filterNot { input.resolutionProvider.isResolved(it) }
+            vulnerabilities.filterNot { input.ortResult.isResolved(it) }
 
         /**
          * Return a list of [SnippetFinding]s grouped by the source file being matched by those snippets.

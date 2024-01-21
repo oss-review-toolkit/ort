@@ -23,5 +23,5 @@ plugins {
 }
 
 dependencies {
-    api(project(":plugins:package-configuration-providers:package-configuration-provider-api"))
+    api(projects.plugins.packageConfigurationProviders.packageConfigurationProviderApi)
 }

@@ -51,7 +51,9 @@ class NpmDetection(private val definitionFiles: Collection<File>) {
         definitionFiles.associate { file ->
             val projectDir = file.parentFile
             val patterns = NodePackageManager.entries.mapNotNull { it.getWorkspaces(projectDir) }.flatten()
-            projectDir to patterns.map { FileSystems.getDefault().getPathMatcher("glob:$it") }
+            projectDir to patterns.map {
+                FileSystems.getDefault().getPathMatcher("glob:${it.removeSuffix("/")}")
+            }
         }
     }
 

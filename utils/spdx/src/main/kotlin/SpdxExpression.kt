@@ -116,14 +116,11 @@ sealed class SpdxExpression {
      * are split, omitting the operator, and exceptions to licenses are dropped. As a result, the returned strings do
      * not contain any spaces each.
      */
-    abstract fun licenses(): List<String>
-
-    /**
-     * Return the [disjunctive normal form][1] of this expression.
-     *
-     * [1]: https://en.wikipedia.org/wiki/Disjunctive_normal_form
-     */
-    open fun disjunctiveNormalForm(): SpdxExpression = this
+    fun licenses(): List<String> =
+        decompose().map {
+            val simpleExpression = if (it is SpdxLicenseWithExceptionExpression) it.license else it
+            simpleExpression.toString()
+        }
 
     /**
      * Normalize all license IDs using a mapping containing common misspellings of license IDs. If [mapDeprecated] is
@@ -147,15 +144,9 @@ sealed class SpdxExpression {
     abstract fun validate(strictness: Strictness)
 
     /**
-     * Return all valid license choices for this SPDX expression, by converting it to the
-     * [disjunctive normal form][disjunctiveNormalForm] and collecting all disjunct expressions.
+     * Return all valid license choices for this SPDX expression by collecting all disjunct expressions.
      */
-    fun validChoices(): Set<SpdxExpression> = disjunctiveNormalForm().validChoicesForDnf()
-
-    /**
-     * Internal implementation of [validChoices], assuming that this expression is already in disjunctive normal form.
-     */
-    protected open fun validChoicesForDnf(): Set<SpdxExpression> = setOf(this)
+    open fun validChoices(): Set<SpdxExpression> = setOf(this)
 
     /**
      * Return whether this expression contains [present][SpdxConstants.isPresent] licenses, i.e. not all licenses in
@@ -246,32 +237,6 @@ class SpdxCompoundExpression(
 ) : SpdxExpression() {
     override fun decompose() = left.decompose() + right.decompose()
 
-    override fun licenses() = left.licenses() + right.licenses()
-
-    override fun disjunctiveNormalForm(): SpdxExpression {
-        val leftDnf = left.disjunctiveNormalForm()
-        val rightDnf = right.disjunctiveNormalForm()
-
-        return when (operator) {
-            SpdxOperator.OR -> SpdxCompoundExpression(leftDnf, SpdxOperator.OR, rightDnf)
-
-            SpdxOperator.AND -> when {
-                leftDnf is SpdxCompoundExpression && leftDnf.operator == SpdxOperator.OR &&
-                    rightDnf is SpdxCompoundExpression && rightDnf.operator == SpdxOperator.OR ->
-                    ((leftDnf.left and rightDnf.left) or (leftDnf.left and rightDnf.right)) or
-                        ((leftDnf.right and rightDnf.left) or (leftDnf.right and rightDnf.right))
-
-                leftDnf is SpdxCompoundExpression && leftDnf.operator == SpdxOperator.OR ->
-                    (leftDnf.left and rightDnf) or (leftDnf.right and rightDnf)
-
-                rightDnf is SpdxCompoundExpression && rightDnf.operator == SpdxOperator.OR ->
-                    (leftDnf and rightDnf.left) or (leftDnf and rightDnf.right)
-
-                else -> SpdxCompoundExpression(leftDnf, operator, rightDnf)
-            }
-        }
-    }
-
     override fun normalize(mapDeprecated: Boolean) =
         SpdxCompoundExpression(left.normalize(mapDeprecated), operator, right.normalize(mapDeprecated))
 
@@ -310,23 +275,21 @@ class SpdxCompoundExpression(
         right.validate(strictness)
     }
 
-    override fun validChoicesForDnf(): Set<SpdxExpression> =
+    override fun validChoices(): Set<SpdxExpression> =
         when (operator) {
-            SpdxOperator.AND -> setOf(decompose().reduce(SpdxExpression::and))
+            SpdxOperator.AND -> {
+                val leftChoices = left.validChoices()
+                val rightChoices = right.validChoices()
 
-            SpdxOperator.OR -> {
-                val validChoicesLeft = when (left) {
-                    is SpdxCompoundExpression -> left.validChoicesForDnf()
-                    else -> left.validChoices()
+                // Cartesian product of choices on the left and right.
+                leftChoices.flatMapTo(mutableSetOf()) { leftChoice ->
+                    rightChoices.map { rightChoice ->
+                        leftChoice and rightChoice
+                    }
                 }
-
-                val validChoicesRight = when (right) {
-                    is SpdxCompoundExpression -> right.validChoicesForDnf()
-                    else -> right.validChoices()
-                }
-
-                validChoicesLeft + validChoicesRight
             }
+
+            SpdxOperator.OR -> left.validChoices() + right.validChoices()
         }
 
     override fun offersChoice(): Boolean =
@@ -463,8 +426,6 @@ class SpdxLicenseWithExceptionExpression(
 
     override fun decompose() = setOf(this)
 
-    override fun licenses() = license.licenses()
-
     override fun simpleLicense() = license.toString()
 
     override fun exception() = exception
@@ -559,8 +520,6 @@ class SpdxLicenseIdExpression(
 
     override fun decompose() = setOf(this)
 
-    override fun licenses() = listOf(toString())
-
     override fun simpleLicense() = toString()
 
     override fun exception(): String? = null
@@ -614,8 +573,6 @@ data class SpdxLicenseReferenceExpression(
     val id: String
 ) : SpdxSimpleExpression() {
     override fun decompose() = setOf(this)
-
-    override fun licenses() = listOf(id)
 
     override fun simpleLicense() = id
 

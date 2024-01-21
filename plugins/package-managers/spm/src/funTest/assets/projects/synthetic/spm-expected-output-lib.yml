@@ -1,6 +1,6 @@
 ---
 project:
-  id: "SPM:oss-review-toolkit:ort:<REPLACE_REVISION>"
+  id: "SPM::src/funTest/assets/projects/synthetic/spm-lib/Package.swift:<REPLACE_REVISION>"
   definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -18,154 +18,155 @@ project:
   scopes:
   - name: "dependencies"
     dependencies:
-    - id: "SPM:apple:swift-crypto:2.6.0"
-    - id: "SPM:apple:swift-log:1.5.3"
-    - id: "SPM:apple:swift-metrics:2.4.1"
-    - id: "SPM:apple:swift-nio:2.62.0"
+    - id: "SPM::github.com/apple/swift-crypto:2.6.0"
+    - id: "SPM::github.com/apple/swift-log:1.5.3"
+    - id: "SPM::github.com/apple/swift-metrics:2.4.1"
+    - id: "SPM::github.com/apple/swift-nio:2.62.0"
       dependencies:
-      - id: "SPM:apple:swift-atomics:1.2.0"
-      - id: "SPM:apple:swift-collections:1.0.5"
-    - id: "SPM:apple:swift-nio-extras:1.20.0"
+      - id: "SPM::github.com/apple/swift-atomics:1.2.0"
+      - id: "SPM::github.com/apple/swift-collections:1.0.6"
+    - id: "SPM::github.com/apple/swift-nio-extras:1.20.0"
       dependencies:
-      - id: "SPM:apple:swift-http-types:1.0.2"
-      - id: "SPM:apple:swift-nio:2.62.0"
+      - id: "SPM::github.com/apple/swift-http-types:1.0.3"
+      - id: "SPM::github.com/apple/swift-nio:2.62.0"
         dependencies:
-        - id: "SPM:apple:swift-atomics:1.2.0"
-        - id: "SPM:apple:swift-collections:1.0.5"
-      - id: "SPM:apple:swift-nio-http2:1.29.0"
+        - id: "SPM::github.com/apple/swift-atomics:1.2.0"
+        - id: "SPM::github.com/apple/swift-collections:1.0.6"
+      - id: "SPM::github.com/apple/swift-nio-http2:1.29.0"
         dependencies:
-        - id: "SPM:apple:swift-atomics:1.2.0"
-        - id: "SPM:apple:swift-nio:2.62.0"
+        - id: "SPM::github.com/apple/swift-atomics:1.2.0"
+        - id: "SPM::github.com/apple/swift-nio:2.62.0"
           dependencies:
-          - id: "SPM:apple:swift-atomics:1.2.0"
-          - id: "SPM:apple:swift-collections:1.0.5"
-    - id: "SPM:apple:swift-nio-http2:1.29.0"
+          - id: "SPM::github.com/apple/swift-atomics:1.2.0"
+          - id: "SPM::github.com/apple/swift-collections:1.0.6"
+    - id: "SPM::github.com/apple/swift-nio-http2:1.29.0"
       dependencies:
-      - id: "SPM:apple:swift-atomics:1.2.0"
-      - id: "SPM:apple:swift-nio:2.62.0"
+      - id: "SPM::github.com/apple/swift-atomics:1.2.0"
+      - id: "SPM::github.com/apple/swift-nio:2.62.0"
         dependencies:
-        - id: "SPM:apple:swift-atomics:1.2.0"
-        - id: "SPM:apple:swift-collections:1.0.5"
-    - id: "SPM:apple:swift-nio-ssl:2.25.0"
+        - id: "SPM::github.com/apple/swift-atomics:1.2.0"
+        - id: "SPM::github.com/apple/swift-collections:1.0.6"
+    - id: "SPM::github.com/apple/swift-nio-ssl:2.25.0"
       dependencies:
-      - id: "SPM:apple:swift-nio:2.62.0"
+      - id: "SPM::github.com/apple/swift-nio:2.62.0"
         dependencies:
-        - id: "SPM:apple:swift-atomics:1.2.0"
-        - id: "SPM:apple:swift-collections:1.0.5"
-    - id: "SPM:swift-server:async-http-client:1.19.0"
+        - id: "SPM::github.com/apple/swift-atomics:1.2.0"
+        - id: "SPM::github.com/apple/swift-collections:1.0.6"
+    - id: "SPM::github.com/swift-server/async-http-client:1.20.1"
       dependencies:
-      - id: "SPM:apple:swift-atomics:1.2.0"
-      - id: "SPM:apple:swift-log:1.5.3"
-      - id: "SPM:apple:swift-nio:2.62.0"
+      - id: "SPM::github.com/apple/swift-algorithms:1.2.0"
         dependencies:
-        - id: "SPM:apple:swift-atomics:1.2.0"
-        - id: "SPM:apple:swift-collections:1.0.5"
-      - id: "SPM:apple:swift-nio-extras:1.20.0"
+        - id: "SPM::github.com/apple/swift-numerics:1.0.2"
+      - id: "SPM::github.com/apple/swift-atomics:1.2.0"
+      - id: "SPM::github.com/apple/swift-log:1.5.3"
+      - id: "SPM::github.com/apple/swift-nio:2.62.0"
         dependencies:
-        - id: "SPM:apple:swift-http-types:1.0.2"
-        - id: "SPM:apple:swift-nio:2.62.0"
+        - id: "SPM::github.com/apple/swift-atomics:1.2.0"
+        - id: "SPM::github.com/apple/swift-collections:1.0.6"
+      - id: "SPM::github.com/apple/swift-nio-extras:1.20.0"
+        dependencies:
+        - id: "SPM::github.com/apple/swift-http-types:1.0.3"
+        - id: "SPM::github.com/apple/swift-nio:2.62.0"
           dependencies:
-          - id: "SPM:apple:swift-atomics:1.2.0"
-          - id: "SPM:apple:swift-collections:1.0.5"
-        - id: "SPM:apple:swift-nio-http2:1.29.0"
+          - id: "SPM::github.com/apple/swift-atomics:1.2.0"
+          - id: "SPM::github.com/apple/swift-collections:1.0.6"
+        - id: "SPM::github.com/apple/swift-nio-http2:1.29.0"
           dependencies:
-          - id: "SPM:apple:swift-atomics:1.2.0"
-          - id: "SPM:apple:swift-nio:2.62.0"
+          - id: "SPM::github.com/apple/swift-atomics:1.2.0"
+          - id: "SPM::github.com/apple/swift-nio:2.62.0"
             dependencies:
-            - id: "SPM:apple:swift-atomics:1.2.0"
-            - id: "SPM:apple:swift-collections:1.0.5"
-      - id: "SPM:apple:swift-nio-http2:1.29.0"
+            - id: "SPM::github.com/apple/swift-atomics:1.2.0"
+            - id: "SPM::github.com/apple/swift-collections:1.0.6"
+      - id: "SPM::github.com/apple/swift-nio-http2:1.29.0"
         dependencies:
-        - id: "SPM:apple:swift-atomics:1.2.0"
-        - id: "SPM:apple:swift-nio:2.62.0"
+        - id: "SPM::github.com/apple/swift-atomics:1.2.0"
+        - id: "SPM::github.com/apple/swift-nio:2.62.0"
           dependencies:
-          - id: "SPM:apple:swift-atomics:1.2.0"
-          - id: "SPM:apple:swift-collections:1.0.5"
-      - id: "SPM:apple:swift-nio-ssl:2.25.0"
+          - id: "SPM::github.com/apple/swift-atomics:1.2.0"
+          - id: "SPM::github.com/apple/swift-collections:1.0.6"
+      - id: "SPM::github.com/apple/swift-nio-ssl:2.25.0"
         dependencies:
-        - id: "SPM:apple:swift-nio:2.62.0"
+        - id: "SPM::github.com/apple/swift-nio:2.62.0"
           dependencies:
-          - id: "SPM:apple:swift-atomics:1.2.0"
-          - id: "SPM:apple:swift-collections:1.0.5"
-      - id: "SPM:apple:swift-nio-transport-services:1.20.0"
+          - id: "SPM::github.com/apple/swift-atomics:1.2.0"
+          - id: "SPM::github.com/apple/swift-collections:1.0.6"
+      - id: "SPM::github.com/apple/swift-nio-transport-services:1.20.0"
         dependencies:
-        - id: "SPM:apple:swift-atomics:1.2.0"
-        - id: "SPM:apple:swift-nio:2.62.0"
+        - id: "SPM::github.com/apple/swift-atomics:1.2.0"
+        - id: "SPM::github.com/apple/swift-nio:2.62.0"
           dependencies:
-          - id: "SPM:apple:swift-atomics:1.2.0"
-          - id: "SPM:apple:swift-collections:1.0.5"
-    - id: "SPM:swift-server:swift-backtrace:1.3.4"
-    - id: "SPM:vapor:async-kit:1.19.0"
+          - id: "SPM::github.com/apple/swift-atomics:1.2.0"
+          - id: "SPM::github.com/apple/swift-collections:1.0.6"
+    - id: "SPM::github.com/swift-server/swift-backtrace:1.3.4"
+    - id: "SPM::github.com/vapor/async-kit:1.19.0"
       dependencies:
-      - id: "SPM:apple:swift-algorithms:1.2.0"
+      - id: "SPM::github.com/apple/swift-algorithms:1.2.0"
         dependencies:
-        - id: "SPM:apple:swift-numerics:1.0.2"
-      - id: "SPM:apple:swift-collections:1.0.5"
-      - id: "SPM:apple:swift-log:1.5.3"
-      - id: "SPM:apple:swift-nio:2.62.0"
+        - id: "SPM::github.com/apple/swift-numerics:1.0.2"
+      - id: "SPM::github.com/apple/swift-collections:1.0.6"
+      - id: "SPM::github.com/apple/swift-log:1.5.3"
+      - id: "SPM::github.com/apple/swift-nio:2.62.0"
         dependencies:
-        - id: "SPM:apple:swift-atomics:1.2.0"
-        - id: "SPM:apple:swift-collections:1.0.5"
-    - id: "SPM:vapor:console-kit:4.14.0"
+        - id: "SPM::github.com/apple/swift-atomics:1.2.0"
+        - id: "SPM::github.com/apple/swift-collections:1.0.6"
+    - id: "SPM::github.com/vapor/console-kit:4.14.1"
       dependencies:
-      - id: "SPM:apple:swift-log:1.5.3"
-      - id: "SPM:apple:swift-nio:2.62.0"
+      - id: "SPM::github.com/apple/swift-log:1.5.3"
+      - id: "SPM::github.com/apple/swift-nio:2.62.0"
         dependencies:
-        - id: "SPM:apple:swift-atomics:1.2.0"
-        - id: "SPM:apple:swift-collections:1.0.5"
-    - id: "SPM:vapor:multipart-kit:4.6.0"
+        - id: "SPM::github.com/apple/swift-atomics:1.2.0"
+        - id: "SPM::github.com/apple/swift-collections:1.0.6"
+    - id: "SPM::github.com/vapor/multipart-kit:4.6.0"
       dependencies:
-      - id: "SPM:apple:swift-collections:1.0.5"
-      - id: "SPM:apple:swift-nio:2.62.0"
+      - id: "SPM::github.com/apple/swift-collections:1.0.6"
+      - id: "SPM::github.com/apple/swift-nio:2.62.0"
         dependencies:
-        - id: "SPM:apple:swift-atomics:1.2.0"
-        - id: "SPM:apple:swift-collections:1.0.5"
-    - id: "SPM:vapor:routing-kit:4.8.2"
+        - id: "SPM::github.com/apple/swift-atomics:1.2.0"
+        - id: "SPM::github.com/apple/swift-collections:1.0.6"
+    - id: "SPM::github.com/vapor/routing-kit:4.9.0"
       dependencies:
-      - id: "SPM:apple:swift-log:1.5.3"
-    - id: "SPM:vapor:websocket-kit:2.14.0"
+      - id: "SPM::github.com/apple/swift-log:1.5.3"
+    - id: "SPM::github.com/vapor/websocket-kit:2.14.0"
       dependencies:
-      - id: "SPM:apple:swift-atomics:1.2.0"
-      - id: "SPM:apple:swift-nio:2.62.0"
+      - id: "SPM::github.com/apple/swift-atomics:1.2.0"
+      - id: "SPM::github.com/apple/swift-nio:2.62.0"
         dependencies:
-        - id: "SPM:apple:swift-atomics:1.2.0"
-        - id: "SPM:apple:swift-collections:1.0.5"
-      - id: "SPM:apple:swift-nio-extras:1.20.0"
+        - id: "SPM::github.com/apple/swift-atomics:1.2.0"
+        - id: "SPM::github.com/apple/swift-collections:1.0.6"
+      - id: "SPM::github.com/apple/swift-nio-extras:1.20.0"
         dependencies:
-        - id: "SPM:apple:swift-http-types:1.0.2"
-        - id: "SPM:apple:swift-nio:2.62.0"
+        - id: "SPM::github.com/apple/swift-http-types:1.0.3"
+        - id: "SPM::github.com/apple/swift-nio:2.62.0"
           dependencies:
-          - id: "SPM:apple:swift-atomics:1.2.0"
-          - id: "SPM:apple:swift-collections:1.0.5"
-        - id: "SPM:apple:swift-nio-http2:1.29.0"
+          - id: "SPM::github.com/apple/swift-atomics:1.2.0"
+          - id: "SPM::github.com/apple/swift-collections:1.0.6"
+        - id: "SPM::github.com/apple/swift-nio-http2:1.29.0"
           dependencies:
-          - id: "SPM:apple:swift-atomics:1.2.0"
-          - id: "SPM:apple:swift-nio:2.62.0"
+          - id: "SPM::github.com/apple/swift-atomics:1.2.0"
+          - id: "SPM::github.com/apple/swift-nio:2.62.0"
             dependencies:
-            - id: "SPM:apple:swift-atomics:1.2.0"
-            - id: "SPM:apple:swift-collections:1.0.5"
-      - id: "SPM:apple:swift-nio-ssl:2.25.0"
+            - id: "SPM::github.com/apple/swift-atomics:1.2.0"
+            - id: "SPM::github.com/apple/swift-collections:1.0.6"
+      - id: "SPM::github.com/apple/swift-nio-ssl:2.25.0"
         dependencies:
-        - id: "SPM:apple:swift-nio:2.62.0"
+        - id: "SPM::github.com/apple/swift-nio:2.62.0"
           dependencies:
-          - id: "SPM:apple:swift-atomics:1.2.0"
-          - id: "SPM:apple:swift-collections:1.0.5"
-      - id: "SPM:apple:swift-nio-transport-services:1.20.0"
+          - id: "SPM::github.com/apple/swift-atomics:1.2.0"
+          - id: "SPM::github.com/apple/swift-collections:1.0.6"
+      - id: "SPM::github.com/apple/swift-nio-transport-services:1.20.0"
         dependencies:
-        - id: "SPM:apple:swift-atomics:1.2.0"
-        - id: "SPM:apple:swift-nio:2.62.0"
+        - id: "SPM::github.com/apple/swift-atomics:1.2.0"
+        - id: "SPM::github.com/apple/swift-nio:2.62.0"
           dependencies:
-          - id: "SPM:apple:swift-atomics:1.2.0"
-          - id: "SPM:apple:swift-collections:1.0.5"
+          - id: "SPM::github.com/apple/swift-atomics:1.2.0"
+          - id: "SPM::github.com/apple/swift-collections:1.0.6"
 packages:
-- id: "SPM:apple:swift-algorithms:1.2.0"
-  purl: "pkg:swift/apple/swift-algorithms@1.2.0"
-  authors:
-  - "apple"
+- id: "SPM::github.com/apple/swift-algorithms:1.2.0"
+  purl: "pkg:swift/github.com%2Fapple%2Fswift-algorithms@1.2.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/apple/swift-algorithms"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -186,14 +187,12 @@ packages:
     url: "https://github.com/apple/swift-algorithms.git"
     revision: "1.2.0"
     path: ""
-- id: "SPM:apple:swift-atomics:1.2.0"
-  purl: "pkg:swift/apple/swift-atomics@1.2.0"
-  authors:
-  - "apple"
+- id: "SPM::github.com/apple/swift-atomics:1.2.0"
+  purl: "pkg:swift/github.com%2Fapple%2Fswift-atomics@1.2.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/apple/swift-atomics"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -214,14 +213,12 @@ packages:
     url: "https://github.com/apple/swift-atomics.git"
     revision: "1.2.0"
     path: ""
-- id: "SPM:apple:swift-collections:1.0.5"
-  purl: "pkg:swift/apple/swift-collections@1.0.5"
-  authors:
-  - "apple"
+- id: "SPM::github.com/apple/swift-collections:1.0.6"
+  purl: "pkg:swift/github.com%2Fapple%2Fswift-collections@1.0.6"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/apple/swift-collections"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -235,21 +232,19 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/apple/swift-collections.git"
-    revision: "1.0.5"
+    revision: "1.0.6"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/apple/swift-collections.git"
-    revision: "1.0.5"
+    revision: "1.0.6"
     path: ""
-- id: "SPM:apple:swift-crypto:2.6.0"
-  purl: "pkg:swift/apple/swift-crypto@2.6.0"
-  authors:
-  - "apple"
+- id: "SPM::github.com/apple/swift-crypto:2.6.0"
+  purl: "pkg:swift/github.com%2Fapple%2Fswift-crypto@2.6.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/apple/swift-crypto"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -270,14 +265,12 @@ packages:
     url: "https://github.com/apple/swift-crypto.git"
     revision: "2.6.0"
     path: ""
-- id: "SPM:apple:swift-http-types:1.0.2"
-  purl: "pkg:swift/apple/swift-http-types@1.0.2"
-  authors:
-  - "apple"
+- id: "SPM::github.com/apple/swift-http-types:1.0.3"
+  purl: "pkg:swift/github.com%2Fapple%2Fswift-http-types@1.0.3"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/apple/swift-http-types"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -291,21 +284,19 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/apple/swift-http-types.git"
-    revision: "1.0.2"
+    revision: "1.0.3"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/apple/swift-http-types.git"
-    revision: "1.0.2"
+    revision: "1.0.3"
     path: ""
-- id: "SPM:apple:swift-log:1.5.3"
-  purl: "pkg:swift/apple/swift-log@1.5.3"
-  authors:
-  - "apple"
+- id: "SPM::github.com/apple/swift-log:1.5.3"
+  purl: "pkg:swift/github.com%2Fapple%2Fswift-log@1.5.3"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/apple/swift-log"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -326,14 +317,12 @@ packages:
     url: "https://github.com/apple/swift-log.git"
     revision: "1.5.3"
     path: ""
-- id: "SPM:apple:swift-metrics:2.4.1"
-  purl: "pkg:swift/apple/swift-metrics@2.4.1"
-  authors:
-  - "apple"
+- id: "SPM::github.com/apple/swift-metrics:2.4.1"
+  purl: "pkg:swift/github.com%2Fapple%2Fswift-metrics@2.4.1"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/apple/swift-metrics"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -354,14 +343,12 @@ packages:
     url: "https://github.com/apple/swift-metrics.git"
     revision: "2.4.1"
     path: ""
-- id: "SPM:apple:swift-nio:2.62.0"
-  purl: "pkg:swift/apple/swift-nio@2.62.0"
-  authors:
-  - "apple"
+- id: "SPM::github.com/apple/swift-nio:2.62.0"
+  purl: "pkg:swift/github.com%2Fapple%2Fswift-nio@2.62.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/apple/swift-nio"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -382,14 +369,12 @@ packages:
     url: "https://github.com/apple/swift-nio.git"
     revision: "2.62.0"
     path: ""
-- id: "SPM:apple:swift-nio-extras:1.20.0"
-  purl: "pkg:swift/apple/swift-nio-extras@1.20.0"
-  authors:
-  - "apple"
+- id: "SPM::github.com/apple/swift-nio-extras:1.20.0"
+  purl: "pkg:swift/github.com%2Fapple%2Fswift-nio-extras@1.20.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/apple/swift-nio-extras"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -410,14 +395,12 @@ packages:
     url: "https://github.com/apple/swift-nio-extras.git"
     revision: "1.20.0"
     path: ""
-- id: "SPM:apple:swift-nio-http2:1.29.0"
-  purl: "pkg:swift/apple/swift-nio-http2@1.29.0"
-  authors:
-  - "apple"
+- id: "SPM::github.com/apple/swift-nio-http2:1.29.0"
+  purl: "pkg:swift/github.com%2Fapple%2Fswift-nio-http2@1.29.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/apple/swift-nio-http2"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -438,14 +421,12 @@ packages:
     url: "https://github.com/apple/swift-nio-http2.git"
     revision: "1.29.0"
     path: ""
-- id: "SPM:apple:swift-nio-ssl:2.25.0"
-  purl: "pkg:swift/apple/swift-nio-ssl@2.25.0"
-  authors:
-  - "apple"
+- id: "SPM::github.com/apple/swift-nio-ssl:2.25.0"
+  purl: "pkg:swift/github.com%2Fapple%2Fswift-nio-ssl@2.25.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/apple/swift-nio-ssl"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -466,14 +447,12 @@ packages:
     url: "https://github.com/apple/swift-nio-ssl.git"
     revision: "2.25.0"
     path: ""
-- id: "SPM:apple:swift-nio-transport-services:1.20.0"
-  purl: "pkg:swift/apple/swift-nio-transport-services@1.20.0"
-  authors:
-  - "apple"
+- id: "SPM::github.com/apple/swift-nio-transport-services:1.20.0"
+  purl: "pkg:swift/github.com%2Fapple%2Fswift-nio-transport-services@1.20.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/apple/swift-nio-transport-services"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -494,14 +473,12 @@ packages:
     url: "https://github.com/apple/swift-nio-transport-services.git"
     revision: "1.20.0"
     path: ""
-- id: "SPM:apple:swift-numerics:1.0.2"
-  purl: "pkg:swift/apple/swift-numerics@1.0.2"
-  authors:
-  - "apple"
+- id: "SPM::github.com/apple/swift-numerics:1.0.2"
+  purl: "pkg:swift/github.com%2Fapple%2Fswift-numerics@1.0.2"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/apple/swift-numerics"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -522,14 +499,12 @@ packages:
     url: "https://github.com/apple/swift-numerics.git"
     revision: "1.0.2"
     path: ""
-- id: "SPM:swift-server:async-http-client:1.19.0"
-  purl: "pkg:swift/swift-server/async-http-client@1.19.0"
-  authors:
-  - "swift-server"
+- id: "SPM::github.com/swift-server/async-http-client:1.20.1"
+  purl: "pkg:swift/github.com%2Fswift-server%2Fasync-http-client@1.20.1"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/swift-server/async-http-client"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -543,21 +518,19 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/swift-server/async-http-client.git"
-    revision: "1.19.0"
+    revision: "1.20.1"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/swift-server/async-http-client.git"
-    revision: "1.19.0"
+    revision: "1.20.1"
     path: ""
-- id: "SPM:swift-server:swift-backtrace:1.3.4"
-  purl: "pkg:swift/swift-server/swift-backtrace@1.3.4"
-  authors:
-  - "swift-server"
+- id: "SPM::github.com/swift-server/swift-backtrace:1.3.4"
+  purl: "pkg:swift/github.com%2Fswift-server%2Fswift-backtrace@1.3.4"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/swift-server/swift-backtrace"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -578,14 +551,12 @@ packages:
     url: "https://github.com/swift-server/swift-backtrace.git"
     revision: "1.3.4"
     path: ""
-- id: "SPM:vapor:async-kit:1.19.0"
-  purl: "pkg:swift/vapor/async-kit@1.19.0"
-  authors:
-  - "vapor"
+- id: "SPM::github.com/vapor/async-kit:1.19.0"
+  purl: "pkg:swift/github.com%2Fvapor%2Fasync-kit@1.19.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/vapor/async-kit"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -606,14 +577,12 @@ packages:
     url: "https://github.com/vapor/async-kit.git"
     revision: "1.19.0"
     path: ""
-- id: "SPM:vapor:console-kit:4.14.0"
-  purl: "pkg:swift/vapor/console-kit@4.14.0"
-  authors:
-  - "vapor"
+- id: "SPM::github.com/vapor/console-kit:4.14.1"
+  purl: "pkg:swift/github.com%2Fvapor%2Fconsole-kit@4.14.1"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/vapor/console-kit"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -627,21 +596,19 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/vapor/console-kit.git"
-    revision: "4.14.0"
+    revision: "4.14.1"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/vapor/console-kit.git"
-    revision: "4.14.0"
+    revision: "4.14.1"
     path: ""
-- id: "SPM:vapor:multipart-kit:4.6.0"
-  purl: "pkg:swift/vapor/multipart-kit@4.6.0"
-  authors:
-  - "vapor"
+- id: "SPM::github.com/vapor/multipart-kit:4.6.0"
+  purl: "pkg:swift/github.com%2Fvapor%2Fmultipart-kit@4.6.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/vapor/multipart-kit"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -662,14 +629,12 @@ packages:
     url: "https://github.com/vapor/multipart-kit.git"
     revision: "4.6.0"
     path: ""
-- id: "SPM:vapor:routing-kit:4.8.2"
-  purl: "pkg:swift/vapor/routing-kit@4.8.2"
-  authors:
-  - "vapor"
+- id: "SPM::github.com/vapor/routing-kit:4.9.0"
+  purl: "pkg:swift/github.com%2Fvapor%2Frouting-kit@4.9.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/vapor/routing-kit"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
@@ -683,21 +648,19 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/vapor/routing-kit.git"
-    revision: "4.8.2"
+    revision: "4.9.0"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/vapor/routing-kit.git"
-    revision: "4.8.2"
+    revision: "4.9.0"
     path: ""
-- id: "SPM:vapor:websocket-kit:2.14.0"
-  purl: "pkg:swift/vapor/websocket-kit@2.14.0"
-  authors:
-  - "vapor"
+- id: "SPM::github.com/vapor/websocket-kit:2.14.0"
+  purl: "pkg:swift/github.com%2Fvapor%2Fwebsocket-kit@2.14.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
-  homepage_url: "https://github.com/vapor/websocket-kit"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:

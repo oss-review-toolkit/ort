@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.orEmpty
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.model.utils.setPackageConfigurations
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.dir.DirPackageConfigurationProvider
 import org.ossreviewtoolkit.utils.common.expandTilde
 
@@ -77,13 +78,11 @@ internal class ListCopyrightsCommand : CliktCommand(
 
     override fun run() {
         val ortResult = readOrtResult(ortFile)
+            .setPackageConfigurations(DirPackageConfigurationProvider(packageConfigurationsDir))
         val copyrightGarbage = copyrightGarbageFile?.readValue<CopyrightGarbage>().orEmpty()
-        val packageConfigurationProvider = DirPackageConfigurationProvider(packageConfigurationsDir)
 
-        val copyrightStatements = ortResult.processAllCopyrightStatements(
-            copyrightGarbage = copyrightGarbage.items,
-            packageConfigurationProvider = packageConfigurationProvider
-        ).filter { packageId == null || it.packageId == packageId }
+        val copyrightStatements = ortResult.processAllCopyrightStatements(copyrightGarbage = copyrightGarbage.items)
+            .filter { packageId == null || it.packageId == packageId }
             .filter { licenseId == null || it.license.toString() == licenseId }
             .groupBy({ it.statement }, { it.rawStatements })
             .mapValues { it.value.flatten().toSortedSet() }

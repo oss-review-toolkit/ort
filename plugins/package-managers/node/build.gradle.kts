@@ -23,9 +23,9 @@ plugins {
 }
 
 dependencies {
-    api(project(":analyzer"))
-    api(project(":model"))
-    api(project(":utils:common-utils")) {
+    api(projects.analyzer)
+    api(projects.model)
+    api(projects.utils.commonUtils) {
         because("This is a CommandLineTool.")
     }
 
@@ -33,19 +33,19 @@ dependencies {
         because("This is a CommandLineTool.")
     }
 
-    api(libs.jacksonDatabind)
+    api(libs.jackson.databind)
 
-    implementation(project(":downloader"))
-    implementation(project(":utils:ort-utils"))
-    implementation(project(":utils:spdx-utils"))
+    implementation(projects.downloader)
+    implementation(projects.utils.ortUtils)
+    implementation(projects.utils.spdxUtils)
 
-    implementation(libs.jacksonAnnotations)
-    implementation(libs.jacksonCore)
-    implementation(libs.jacksonDataformatYaml)
-    implementation(libs.jacksonModuleKotlin)
-    implementation(libs.kotlinxCoroutines)
+    implementation(libs.jackson.annotations)
+    implementation(libs.jackson.core)
+    implementation(libs.jackson.dataformat.yaml)
+    implementation(libs.jackson.module.kotlin)
+    implementation(libs.kotlinx.coroutines)
 
-    funTestImplementation(testFixtures(project(":analyzer")))
+    funTestImplementation(testFixtures(projects.analyzer))
 
     testImplementation(libs.mockk)
 }
