@@ -91,12 +91,7 @@ class ScanCode internal constructor(
 
     override val writeToStorage by lazy { wrapperConfig.writeToStorageWithDefault(matcher) }
 
-    override val configuration by lazy {
-        buildList {
-            addAll(config.commandLine)
-            add(OUTPUT_FORMAT_OPTION)
-        }.joinToString(" ")
-    }
+    override val configuration by lazy { config.commandLine.joinToString(" ") }
 
     internal fun getCommandLineOptions(version: String) =
         buildList {
