@@ -56,6 +56,13 @@ import org.semver4j.Semver
  * * **"commandLineNonConfig":** Command line options that do not modify the result and should therefore not be
  *   considered in [configuration], like "--processes". Defaults to
  *   [ScanCodeConfig.DEFAULT_COMMAND_LINE_NON_CONFIG_OPTIONS].
+ * * **preferFileLicense**: A flag to indicate whether the "high-level" per-file license reported by ScanCode starting
+ *   with version 32 should be used instead of the individual "low-level" per-line license findings. The per-file
+ *   license may be different from the conjunction of per-line licenses and is supposed to contain fewer
+ *   false-positives. However, no exact line numbers can be associated to the per-file license anymore. If enabled, the
+ *   start line of the per-file license finding is set to the minimum of all start lines for per-line findings in that
+ *   file, the end line is set to the maximum of all end lines for per-line findings in that file, and the score is set
+ *   to the arithmetic average of the scores of all per-line findings in that file.
  */
 class ScanCode internal constructor(
     name: String,
@@ -91,7 +98,14 @@ class ScanCode internal constructor(
             }
         }
 
-    override val configuration by lazy { config.commandLine.joinToString(" ") }
+    override val configuration by lazy {
+        buildList {
+            addAll(config.commandLine)
+
+            // Add this in the style of a fake command line option for consistency with the above.
+            if (config.preferFileLicense) add("--prefer-file-license")
+        }.joinToString(" ")
+    }
 
     override val matcher by lazy { ScannerMatcher.create(details, wrapperConfig.matcherConfig) }
 
@@ -141,7 +155,7 @@ class ScanCode internal constructor(
     }
 
     override fun createSummary(result: String, startTime: Instant, endTime: Instant): ScanSummary =
-        parseResult(result).toScanSummary()
+        parseResult(result).toScanSummary(config.preferFileLicense)
 
     /**
      * Execute ScanCode with the configured arguments to scan the given [path] and produce [resultFile].

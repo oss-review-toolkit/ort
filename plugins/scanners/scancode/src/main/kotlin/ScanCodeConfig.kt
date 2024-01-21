@@ -27,7 +27,8 @@ import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 
 data class ScanCodeConfig(
     val commandLine: List<String>,
-    val commandLineNonConfig: List<String>
+    val commandLineNonConfig: List<String>,
+    val preferFileLicense: Boolean
 ) {
     companion object {
         /**
@@ -59,7 +60,8 @@ data class ScanCodeConfig(
             ScanCodeConfig(
                 options["commandLine"]?.splitOnWhitespace() ?: DEFAULT_COMMAND_LINE_OPTIONS,
                 options["commandLineNonConfig"]?.splitOnWhitespace()
-                    ?: DEFAULT_COMMAND_LINE_NON_CONFIG_OPTIONS
+                    ?: DEFAULT_COMMAND_LINE_NON_CONFIG_OPTIONS,
+                options["preferFileLicense"].toBoolean()
             )
     }
 }
