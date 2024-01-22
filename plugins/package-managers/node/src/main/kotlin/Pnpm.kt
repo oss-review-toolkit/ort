@@ -51,13 +51,6 @@ class Pnpm(
         ) = Pnpm(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
-    /**
-     * PNPM symlinks workspace modules in the `node_modules` directory, which will result in cyclic symlinks of
-     * `node_module` directories. Limit the search depth to '2' in this case as all packages are in a direct
-     * subdirectory of the `node_modules` directory, thanks to the `--shamefully-hoist` install option.
-     */
-    override val modulesSearchDepth = 2
-
     override fun hasLockFile(projectDir: File) = NodePackageManager.PNPM.hasLockFile(projectDir)
 
     override fun File.isWorkspaceDir() = realFile() in findWorkspaceSubmodules(analysisRoot)

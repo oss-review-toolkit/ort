@@ -129,12 +129,6 @@ open class Npm(
 
     private val npmViewCache = ConcurrentHashMap<String, Deferred<JsonNode>>()
 
-    /**
-     * Search depth in the `node_modules` directory for `package.json` files used for collecting all packages of the
-     * projects.
-     */
-    protected open val modulesSearchDepth = Int.MAX_VALUE
-
     protected open fun hasLockFile(projectDir: File) = NodePackageManager.NPM.hasLockFile(projectDir)
 
     /**
@@ -246,7 +240,11 @@ open class Npm(
 
         logger.info { "Searching for 'package.json' files in '$nodeModulesDir'..." }
 
-        val nodeModulesFiles = nodeModulesDir.walk().maxDepth(modulesSearchDepth).filter {
+        val visitedDirs = mutableSetOf<File>()
+
+        val nodeModulesFiles = nodeModulesDir.walk().onEnter { dir ->
+            !dir.isSymbolicLink() || visitedDirs.add(dir.realFile())
+        }.filter {
             it.isFile && it.name == "package.json" &&
                 isValidNodeModulesDirectory(nodeModulesDir, nodeModulesDirForPackageJson(it))
         }
