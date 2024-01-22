@@ -52,7 +52,7 @@ fun Identifier.getPurlType() =
         "pod" -> PurlType.COCOAPODS
         "pub" -> PurlType.PUB
         "pypi" -> PurlType.PYPI
-        "spm" -> PurlType.SWIFT
+        "swift" -> PurlType.SWIFT
         else -> PurlType.GENERIC
     }.toString()
 
