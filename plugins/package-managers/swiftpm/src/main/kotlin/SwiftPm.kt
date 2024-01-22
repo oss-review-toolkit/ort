@@ -38,7 +38,6 @@ import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 
 private const val PACKAGE_SWIFT_NAME = "Package.swift"
 private const val PACKAGE_RESOLVED_NAME = "Package.resolved"
@@ -153,7 +152,7 @@ class SwiftPm(
             id = projectIdentifier,
             authors = emptySet(),
             declaredLicenses = emptySet(),
-            homepageUrl = normalizeVcsUrl(vcsInfo.url),
+            homepageUrl = "",
             vcsProcessed = processProjectVcs(definitionFile.parentFile),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path
         )

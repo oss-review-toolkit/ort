@@ -14,7 +14,7 @@ project:
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
     path: "<REPLACE_PATH>"
-  homepage_url: "<REPLACE_URL_PROCESSED>"
+  homepage_url: ""
   scopes:
   - name: "dependencies"
     dependencies:
