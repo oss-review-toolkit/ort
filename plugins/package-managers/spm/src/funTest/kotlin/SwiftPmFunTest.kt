@@ -36,7 +36,7 @@ class SwiftPmFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/spm-app/Package.resolved")
             val expectedResultFile = getAssetFile("projects/synthetic/spm-expected-output-app.yml")
 
-            val result = create("SPM").resolveSingleProject(definitionFile)
+            val result = create(PROJECT_TYPE).resolveSingleProject(definitionFile)
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -47,7 +47,7 @@ class SwiftPmFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/spm-lib/Package.swift")
             val expectedResultFile = getAssetFile("projects/synthetic/spm-expected-output-lib.yml")
 
-            val result = create("SPM", AnalyzerConfiguration(allowDynamicVersions = true))
+            val result = create(PROJECT_TYPE, AnalyzerConfiguration(allowDynamicVersions = true))
                 .resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
@@ -57,7 +57,7 @@ class SwiftPmFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/spm-lib/Package.swift")
             val expectedResultFile = getAssetFile("projects/synthetic/spm-expected-output-lib-no-lockfile.yml")
 
-            val result = create("SPM").resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = create(PROJECT_TYPE).resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.withInvariantIssues().toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }

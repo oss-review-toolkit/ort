@@ -1,6 +1,6 @@
 ---
 project:
-  id: "SPM::src/funTest/assets/projects/synthetic/spm-lib/Package.swift:"
+  id: "SwiftPM::src/funTest/assets/projects/synthetic/spm-lib/Package.swift:"
   definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -19,8 +19,8 @@ project:
 packages: []
 issues:
 - timestamp: "1970-01-01T00:00:00Z"
-  source: "SPM"
-  message: "SPM failed to resolve dependencies for path 'src/funTest/assets/projects/synthetic/spm-lib/Package.swift':\
+  source: "SwiftPM"
+  message: "SwiftPM failed to resolve dependencies for path 'src/funTest/assets/projects/synthetic/spm-lib/Package.swift':\
     \ IllegalArgumentException: No lockfile found in 'src/funTest/assets/projects/synthetic/spm-lib'.\
     \ This potentially results in unstable versions of dependencies. To support this,\
     \ enable the 'allowDynamicVersions' option in 'config.yml'."

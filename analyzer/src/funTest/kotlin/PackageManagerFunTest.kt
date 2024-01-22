@@ -131,7 +131,7 @@ class PackageManagerFunTest : WordSpec({
                     "spdx-package/package.spdx.yml",
                     "spdx-project/project.spdx.yml"
                 )
-                managedFilesByName["SPM"] should containExactlyInAnyOrder(
+                managedFilesByName["SwiftPM"] should containExactlyInAnyOrder(
                     "spm-app/Package.resolved",
                     "spm-lib/Package.swift"
                 )

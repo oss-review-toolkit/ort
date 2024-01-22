@@ -1,6 +1,6 @@
 ---
 project:
-  id: "SPM::src/funTest/assets/projects/synthetic/spm-app/Package.resolved:<REPLACE_REVISION>"
+  id: "SwiftPM::src/funTest/assets/projects/synthetic/spm-app/Package.resolved:<REPLACE_REVISION>"
   definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -16,7 +16,7 @@ project:
     path: "<REPLACE_PATH>"
   homepage_url: "<REPLACE_URL_PROCESSED>"
 packages:
-- id: "SPM::github.com/apple/swift-argument-parser:0.2.0"
+- id: "Swift::github.com/apple/swift-argument-parser:0.2.0"
   purl: "pkg:swift/github.com%2Fapple%2Fswift-argument-parser@0.2.0"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -42,7 +42,7 @@ packages:
     url: "https://github.com/apple/swift-argument-parser.git"
     revision: "eb51f949cdd0c9d88abba9ce79d37eb7ea1231d0"
     path: ""
-- id: "SPM::github.com/apple/swift-crypto:"
+- id: "Swift::github.com/apple/swift-crypto:"
   purl: "pkg:swift/github.com%2Fapple%2Fswift-crypto@"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -68,7 +68,7 @@ packages:
     url: "https://github.com/apple/swift-crypto.git"
     revision: ""
     path: ""
-- id: "SPM::github.com/apple/swift-llbuild:9.0.8"
+- id: "Swift::github.com/apple/swift-llbuild:9.0.8"
   purl: "pkg:swift/github.com%2Fapple%2Fswift-llbuild@9.0.8"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -94,7 +94,7 @@ packages:
     url: "https://github.com/apple/swift-llbuild.git"
     revision: "9.0.8"
     path: ""
-- id: "SPM::github.com/braze-inc/braze-ios-sdk:branch-master"
+- id: "Swift::github.com/braze-inc/braze-ios-sdk:branch-master"
   purl: "pkg:swift/github.com%2Fbraze-inc%2Fbraze-ios-sdk@branch-master"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -120,7 +120,7 @@ packages:
     url: "https://github.com/braze-inc/braze-ios-sdk.git"
     revision: ""
     path: ""
-- id: "SPM::github.com/grpc/grpc-swift:revision-efb67a324eaf1696b50e66bc471a53690e41fbf6"
+- id: "Swift::github.com/grpc/grpc-swift:revision-efb67a324eaf1696b50e66bc471a53690e41fbf6"
   purl: "pkg:swift/github.com%2Fgrpc%2Fgrpc-swift@revision-efb67a324eaf1696b50e66bc471a53690e41fbf6"
   declared_licenses: []
   declared_licenses_processed: {}
