@@ -47,17 +47,17 @@ class SwiftPmFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/spm-lib/Package.swift")
             val expectedResultFile = getAssetFile("projects/synthetic/spm-expected-output-lib.yml")
 
-            val result = create(PROJECT_TYPE, AnalyzerConfiguration(allowDynamicVersions = true))
-                .resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = create(PROJECT_TYPE).resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "show an error if 'allowDynamicVersions' is disabled" {
-            val definitionFile = getAssetFile("projects/synthetic/spm-lib/Package.swift")
+            val definitionFile = getAssetFile("projects/synthetic/spm-lib-no-lockfile/Package.swift")
             val expectedResultFile = getAssetFile("projects/synthetic/spm-expected-output-lib-no-lockfile.yml")
 
-            val result = create(PROJECT_TYPE).resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = create(PROJECT_TYPE, AnalyzerConfiguration(allowDynamicVersions = false))
+                .resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.withInvariantIssues().toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
