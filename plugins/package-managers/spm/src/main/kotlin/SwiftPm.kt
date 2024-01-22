@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packagemanagers.spm
+package org.ossreviewtoolkit.plugins.packagemanagers.swiftpm
 
 import java.io.File
 
@@ -50,22 +50,22 @@ private const val DEPENDENCIES_SCOPE_NAME = "dependencies"
 /**
  * The [Swift Package Manager](https://github.com/apple/swift-package-manager).
  */
-class Spm(
+class SwiftPm(
     name: String,
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
-    private val graphBuilder = DependencyGraphBuilder(SpmDependencyHandler())
+    private val graphBuilder = DependencyGraphBuilder(SwiftPmDependencyHandler())
 
-    class Factory : AbstractPackageManagerFactory<Spm>(PACKAGE_TYPE) {
+    class Factory : AbstractPackageManagerFactory<SwiftPm>(PACKAGE_TYPE) {
         override val globsForDefinitionFiles = listOf(PACKAGE_SWIFT_NAME, PACKAGE_RESOLVED_NAME)
 
         override fun create(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Spm(type, analysisRoot, analyzerConfig, repoConfig)
+        ) = SwiftPm(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) = if (Os.isWindows) "swift.exe" else "swift"

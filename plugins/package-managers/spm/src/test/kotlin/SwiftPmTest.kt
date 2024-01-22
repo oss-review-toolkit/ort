@@ -17,13 +17,13 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packagemanagers.spm
+package org.ossreviewtoolkit.plugins.packagemanagers.swiftpm
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.shouldBe
 
-class SpmTest : WordSpec({
+class SwiftPmTest : WordSpec({
     "getCanonicalName()" should {
         "return the expected canonical name" {
             listOf(

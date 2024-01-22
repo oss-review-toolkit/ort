@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packagemanagers.spm
+package org.ossreviewtoolkit.plugins.packagemanagers.swiftpm
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.should
@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
-class SpmFunTest : WordSpec({
+class SwiftPmFunTest : WordSpec({
     "Parsing 'Package.resolved' dependencies" should {
         "return the correct result" {
             val definitionFile = getAssetFile("projects/synthetic/spm-app/Package.resolved")
