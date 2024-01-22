@@ -19,7 +19,7 @@ project:
   - name: "dependencies"
     dependencies:
     - id: "SPM::github.com/apple/swift-crypto:2.6.0"
-    - id: "SPM::github.com/apple/swift-log:1.5.3"
+    - id: "SPM::github.com/apple/swift-log:1.5.4"
     - id: "SPM::github.com/apple/swift-metrics:2.4.1"
     - id: "SPM::github.com/apple/swift-nio:2.62.0"
       dependencies:
@@ -58,7 +58,7 @@ project:
         dependencies:
         - id: "SPM::github.com/apple/swift-numerics:1.0.2"
       - id: "SPM::github.com/apple/swift-atomics:1.2.0"
-      - id: "SPM::github.com/apple/swift-log:1.5.3"
+      - id: "SPM::github.com/apple/swift-log:1.5.4"
       - id: "SPM::github.com/apple/swift-nio:2.62.0"
         dependencies:
         - id: "SPM::github.com/apple/swift-atomics:1.2.0"
@@ -104,14 +104,14 @@ project:
         dependencies:
         - id: "SPM::github.com/apple/swift-numerics:1.0.2"
       - id: "SPM::github.com/apple/swift-collections:1.0.6"
-      - id: "SPM::github.com/apple/swift-log:1.5.3"
+      - id: "SPM::github.com/apple/swift-log:1.5.4"
       - id: "SPM::github.com/apple/swift-nio:2.62.0"
         dependencies:
         - id: "SPM::github.com/apple/swift-atomics:1.2.0"
         - id: "SPM::github.com/apple/swift-collections:1.0.6"
     - id: "SPM::github.com/vapor/console-kit:4.14.1"
       dependencies:
-      - id: "SPM::github.com/apple/swift-log:1.5.3"
+      - id: "SPM::github.com/apple/swift-log:1.5.4"
       - id: "SPM::github.com/apple/swift-nio:2.62.0"
         dependencies:
         - id: "SPM::github.com/apple/swift-atomics:1.2.0"
@@ -125,7 +125,7 @@ project:
         - id: "SPM::github.com/apple/swift-collections:1.0.6"
     - id: "SPM::github.com/vapor/routing-kit:4.9.0"
       dependencies:
-      - id: "SPM::github.com/apple/swift-log:1.5.3"
+      - id: "SPM::github.com/apple/swift-log:1.5.4"
     - id: "SPM::github.com/vapor/websocket-kit:2.14.0"
       dependencies:
       - id: "SPM::github.com/apple/swift-atomics:1.2.0"
@@ -291,8 +291,8 @@ packages:
     url: "https://github.com/apple/swift-http-types.git"
     revision: "1.0.3"
     path: ""
-- id: "SPM::github.com/apple/swift-log:1.5.3"
-  purl: "pkg:swift/github.com%2Fapple%2Fswift-log@1.5.3"
+- id: "SPM::github.com/apple/swift-log:1.5.4"
+  purl: "pkg:swift/github.com%2Fapple%2Fswift-log@1.5.4"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -310,12 +310,12 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/apple/swift-log.git"
-    revision: "1.5.3"
+    revision: "1.5.4"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/apple/swift-log.git"
-    revision: "1.5.3"
+    revision: "1.5.4"
     path: ""
 - id: "SPM::github.com/apple/swift-metrics:2.4.1"
   purl: "pkg:swift/github.com%2Fapple%2Fswift-metrics@2.4.1"
