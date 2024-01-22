@@ -80,9 +80,11 @@ class ScanCodeResultParserTest : FreeSpec({
 
                 val summary = parseResult(resultFile).toScanSummary()
 
-                summary.licenseFindings.find {
-                    it.location == TextLocation("README.md", 100) && it.score == 100.0f
-                }?.license.toString() shouldBe "GPL-2.0-only WITH GCC-exception-2.0"
+                with(summary.licenseFindings) {
+                    shouldHaveSize(18)
+                    find { it.location == TextLocation("README.md", 100) && it.score == 100.0f }
+                        ?.license.toString() shouldBe "GPL-2.0-only WITH GCC-exception-2.0"
+                }
             }
         }
 
