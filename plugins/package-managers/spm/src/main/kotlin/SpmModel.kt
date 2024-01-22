@@ -34,10 +34,10 @@ import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 val json = Json { ignoreUnknownKeys = true }
 
 /**
- * The output of the `spm dependencies` command.
+ * The data model for the output of the command `swift package show-dependencies --format json`.
  */
 @Serializable
-data class SpmDependenciesOutput(
+data class SwiftPackage(
     val identity: String,
     val name: String,
     val url: String,

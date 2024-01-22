@@ -119,10 +119,10 @@ class Spm(
             "json"
         ).stdout
 
-        val spmOutput = json.decodeFromString<SpmDependenciesOutput>(result)
+        val swiftPackage = json.decodeFromString<SwiftPackage>(result)
         val qualifiedScopeName = DependencyGraph.qualifyScope(scopeName = DEPENDENCIES_SCOPE_NAME, project = project)
 
-        spmOutput.dependencies.onEach { graphBuilder.addDependency(qualifiedScopeName, it) }
+        swiftPackage.dependencies.onEach { graphBuilder.addDependency(qualifiedScopeName, it) }
             .map { libraryDependency -> libraryDependency.toPackage() }
             .also { graphBuilder.addPackages(it) }
 
