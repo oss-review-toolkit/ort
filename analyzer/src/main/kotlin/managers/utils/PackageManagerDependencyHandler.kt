@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.analyzer.managers.utils
 
-import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
 import org.apache.logging.log4j.kotlin.logger
@@ -122,7 +121,6 @@ private data class PackageManagerDependency(
             projects.forEach { verify(it) }
         }
 
-    @ExperimentalContracts
     fun verify(project: Project?) {
         contract {
             returns() implies (project != null)
