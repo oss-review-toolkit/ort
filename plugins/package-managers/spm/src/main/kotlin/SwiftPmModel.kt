@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packagemanagers.spm
+package org.ossreviewtoolkit.plugins.packagemanagers.swiftpm
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

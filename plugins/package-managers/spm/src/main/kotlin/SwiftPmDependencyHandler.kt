@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packagemanagers.spm
+package org.ossreviewtoolkit.plugins.packagemanagers.swiftpm
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
@@ -25,12 +25,12 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.PackageLinkage.DYNAMIC
 import org.ossreviewtoolkit.model.utils.DependencyHandler
-import org.ossreviewtoolkit.plugins.packagemanagers.spm.SwiftPackage.Dependency
+import org.ossreviewtoolkit.plugins.packagemanagers.swiftpm.SwiftPackage.Dependency
 
 /**
  * A specialized [DependencyHandler] implementation for SPM.
  */
-class SpmDependencyHandler : DependencyHandler<Dependency> {
+class SwiftPmDependencyHandler : DependencyHandler<Dependency> {
     override fun identifierFor(dependency: Dependency): Identifier = dependency.id
 
     override fun dependenciesFor(dependency: Dependency): Collection<Dependency> = dependency.dependencies
