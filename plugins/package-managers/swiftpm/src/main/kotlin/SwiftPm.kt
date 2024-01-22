@@ -80,7 +80,9 @@ class SwiftPm(
     }
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
-        requireLockfile(definitionFile.parentFile) { definitionFile.name != PACKAGE_SWIFT_NAME }
+        if (definitionFile.name != PACKAGE_RESOLVED_NAME) {
+            requireLockfile(definitionFile.parentFile) { definitionFile.resolveSibling(PACKAGE_RESOLVED_NAME).isFile }
+        }
 
         return when (definitionFile.name) {
             PACKAGE_SWIFT_NAME -> resolveDefinitionFileDependencies(definitionFile)
