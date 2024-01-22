@@ -43,16 +43,16 @@ data class SwiftPackage(
     val url: String,
     val version: String,
     val path: String,
-    val dependencies: List<LibraryDependency>
-)
-
-@Serializable
-data class LibraryDependency(
-    val name: String,
-    val version: String,
-    @SerialName("url") val repositoryUrl: String,
-    val dependencies: Set<LibraryDependency>
-)
+    val dependencies: List<Dependency>
+) {
+    @Serializable
+    data class Dependency(
+        val name: String,
+        val version: String,
+        @SerialName("url") val repositoryUrl: String,
+        val dependencies: Set<Dependency>
+    )
+}
 
 @Serializable
 data class PackageResolved(
@@ -74,7 +74,7 @@ data class Pin(
     )
 }
 
-internal val LibraryDependency.id: Identifier
+internal val SwiftPackage.Dependency.id: Identifier
     get() = Identifier(
         type = PACKAGE_TYPE,
         namespace = "",
@@ -82,7 +82,7 @@ internal val LibraryDependency.id: Identifier
         version = version
     )
 
-internal fun LibraryDependency.toPackage(): Package {
+internal fun SwiftPackage.Dependency.toPackage(): Package {
     val vcsInfoFromUrl = VcsHost.parseUrl(repositoryUrl)
     val vcsInfo = vcsInfoFromUrl.takeUnless { it.revision.isBlank() } ?: vcsInfoFromUrl.copy(revision = version)
 
