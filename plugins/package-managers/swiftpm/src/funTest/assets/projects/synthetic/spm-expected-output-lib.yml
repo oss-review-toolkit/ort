@@ -25,28 +25,28 @@ project:
       dependencies:
       - id: "Swift::github.com/apple/swift-atomics:1.2.0"
       - id: "Swift::github.com/apple/swift-collections:1.0.6"
-    - id: "Swift::github.com/apple/swift-nio-extras:1.20.0"
+    - id: "Swift::github.com/apple/swift-nio-extras:1.21.0"
       dependencies:
       - id: "Swift::github.com/apple/swift-http-types:1.0.3"
       - id: "Swift::github.com/apple/swift-nio:2.62.0"
         dependencies:
         - id: "Swift::github.com/apple/swift-atomics:1.2.0"
         - id: "Swift::github.com/apple/swift-collections:1.0.6"
-      - id: "Swift::github.com/apple/swift-nio-http2:1.29.0"
+      - id: "Swift::github.com/apple/swift-nio-http2:1.30.0"
         dependencies:
         - id: "Swift::github.com/apple/swift-atomics:1.2.0"
         - id: "Swift::github.com/apple/swift-nio:2.62.0"
           dependencies:
           - id: "Swift::github.com/apple/swift-atomics:1.2.0"
           - id: "Swift::github.com/apple/swift-collections:1.0.6"
-    - id: "Swift::github.com/apple/swift-nio-http2:1.29.0"
+    - id: "Swift::github.com/apple/swift-nio-http2:1.30.0"
       dependencies:
       - id: "Swift::github.com/apple/swift-atomics:1.2.0"
       - id: "Swift::github.com/apple/swift-nio:2.62.0"
         dependencies:
         - id: "Swift::github.com/apple/swift-atomics:1.2.0"
         - id: "Swift::github.com/apple/swift-collections:1.0.6"
-    - id: "Swift::github.com/apple/swift-nio-ssl:2.25.0"
+    - id: "Swift::github.com/apple/swift-nio-ssl:2.26.0"
       dependencies:
       - id: "Swift::github.com/apple/swift-nio:2.62.0"
         dependencies:
@@ -63,34 +63,34 @@ project:
         dependencies:
         - id: "Swift::github.com/apple/swift-atomics:1.2.0"
         - id: "Swift::github.com/apple/swift-collections:1.0.6"
-      - id: "Swift::github.com/apple/swift-nio-extras:1.20.0"
+      - id: "Swift::github.com/apple/swift-nio-extras:1.21.0"
         dependencies:
         - id: "Swift::github.com/apple/swift-http-types:1.0.3"
         - id: "Swift::github.com/apple/swift-nio:2.62.0"
           dependencies:
           - id: "Swift::github.com/apple/swift-atomics:1.2.0"
           - id: "Swift::github.com/apple/swift-collections:1.0.6"
-        - id: "Swift::github.com/apple/swift-nio-http2:1.29.0"
+        - id: "Swift::github.com/apple/swift-nio-http2:1.30.0"
           dependencies:
           - id: "Swift::github.com/apple/swift-atomics:1.2.0"
           - id: "Swift::github.com/apple/swift-nio:2.62.0"
             dependencies:
             - id: "Swift::github.com/apple/swift-atomics:1.2.0"
             - id: "Swift::github.com/apple/swift-collections:1.0.6"
-      - id: "Swift::github.com/apple/swift-nio-http2:1.29.0"
+      - id: "Swift::github.com/apple/swift-nio-http2:1.30.0"
         dependencies:
         - id: "Swift::github.com/apple/swift-atomics:1.2.0"
         - id: "Swift::github.com/apple/swift-nio:2.62.0"
           dependencies:
           - id: "Swift::github.com/apple/swift-atomics:1.2.0"
           - id: "Swift::github.com/apple/swift-collections:1.0.6"
-      - id: "Swift::github.com/apple/swift-nio-ssl:2.25.0"
+      - id: "Swift::github.com/apple/swift-nio-ssl:2.26.0"
         dependencies:
         - id: "Swift::github.com/apple/swift-nio:2.62.0"
           dependencies:
           - id: "Swift::github.com/apple/swift-atomics:1.2.0"
           - id: "Swift::github.com/apple/swift-collections:1.0.6"
-      - id: "Swift::github.com/apple/swift-nio-transport-services:1.20.0"
+      - id: "Swift::github.com/apple/swift-nio-transport-services:1.20.1"
         dependencies:
         - id: "Swift::github.com/apple/swift-atomics:1.2.0"
         - id: "Swift::github.com/apple/swift-nio:2.62.0"
@@ -133,27 +133,27 @@ project:
         dependencies:
         - id: "Swift::github.com/apple/swift-atomics:1.2.0"
         - id: "Swift::github.com/apple/swift-collections:1.0.6"
-      - id: "Swift::github.com/apple/swift-nio-extras:1.20.0"
+      - id: "Swift::github.com/apple/swift-nio-extras:1.21.0"
         dependencies:
         - id: "Swift::github.com/apple/swift-http-types:1.0.3"
         - id: "Swift::github.com/apple/swift-nio:2.62.0"
           dependencies:
           - id: "Swift::github.com/apple/swift-atomics:1.2.0"
           - id: "Swift::github.com/apple/swift-collections:1.0.6"
-        - id: "Swift::github.com/apple/swift-nio-http2:1.29.0"
+        - id: "Swift::github.com/apple/swift-nio-http2:1.30.0"
           dependencies:
           - id: "Swift::github.com/apple/swift-atomics:1.2.0"
           - id: "Swift::github.com/apple/swift-nio:2.62.0"
             dependencies:
             - id: "Swift::github.com/apple/swift-atomics:1.2.0"
             - id: "Swift::github.com/apple/swift-collections:1.0.6"
-      - id: "Swift::github.com/apple/swift-nio-ssl:2.25.0"
+      - id: "Swift::github.com/apple/swift-nio-ssl:2.26.0"
         dependencies:
         - id: "Swift::github.com/apple/swift-nio:2.62.0"
           dependencies:
           - id: "Swift::github.com/apple/swift-atomics:1.2.0"
           - id: "Swift::github.com/apple/swift-collections:1.0.6"
-      - id: "Swift::github.com/apple/swift-nio-transport-services:1.20.0"
+      - id: "Swift::github.com/apple/swift-nio-transport-services:1.20.1"
         dependencies:
         - id: "Swift::github.com/apple/swift-atomics:1.2.0"
         - id: "Swift::github.com/apple/swift-nio:2.62.0"
@@ -369,8 +369,8 @@ packages:
     url: "https://github.com/apple/swift-nio.git"
     revision: "2.62.0"
     path: ""
-- id: "Swift::github.com/apple/swift-nio-extras:1.20.0"
-  purl: "pkg:swift/github.com%2Fapple%2Fswift-nio-extras@1.20.0"
+- id: "Swift::github.com/apple/swift-nio-extras:1.21.0"
+  purl: "pkg:swift/github.com%2Fapple%2Fswift-nio-extras@1.21.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -388,15 +388,15 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/apple/swift-nio-extras.git"
-    revision: "1.20.0"
+    revision: "1.21.0"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/apple/swift-nio-extras.git"
-    revision: "1.20.0"
+    revision: "1.21.0"
     path: ""
-- id: "Swift::github.com/apple/swift-nio-http2:1.29.0"
-  purl: "pkg:swift/github.com%2Fapple%2Fswift-nio-http2@1.29.0"
+- id: "Swift::github.com/apple/swift-nio-http2:1.30.0"
+  purl: "pkg:swift/github.com%2Fapple%2Fswift-nio-http2@1.30.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -414,15 +414,15 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/apple/swift-nio-http2.git"
-    revision: "1.29.0"
+    revision: "1.30.0"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/apple/swift-nio-http2.git"
-    revision: "1.29.0"
+    revision: "1.30.0"
     path: ""
-- id: "Swift::github.com/apple/swift-nio-ssl:2.25.0"
-  purl: "pkg:swift/github.com%2Fapple%2Fswift-nio-ssl@2.25.0"
+- id: "Swift::github.com/apple/swift-nio-ssl:2.26.0"
+  purl: "pkg:swift/github.com%2Fapple%2Fswift-nio-ssl@2.26.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -440,15 +440,15 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/apple/swift-nio-ssl.git"
-    revision: "2.25.0"
+    revision: "2.26.0"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/apple/swift-nio-ssl.git"
-    revision: "2.25.0"
+    revision: "2.26.0"
     path: ""
-- id: "Swift::github.com/apple/swift-nio-transport-services:1.20.0"
-  purl: "pkg:swift/github.com%2Fapple%2Fswift-nio-transport-services@1.20.0"
+- id: "Swift::github.com/apple/swift-nio-transport-services:1.20.1"
+  purl: "pkg:swift/github.com%2Fapple%2Fswift-nio-transport-services@1.20.1"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -466,12 +466,12 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/apple/swift-nio-transport-services.git"
-    revision: "1.20.0"
+    revision: "1.20.1"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/apple/swift-nio-transport-services.git"
-    revision: "1.20.0"
+    revision: "1.20.1"
     path: ""
 - id: "Swift::github.com/apple/swift-numerics:1.0.2"
   purl: "pkg:swift/github.com%2Fapple%2Fswift-numerics@1.0.2"
