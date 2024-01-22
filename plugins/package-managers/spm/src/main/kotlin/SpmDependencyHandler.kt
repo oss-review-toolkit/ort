@@ -25,17 +25,17 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.PackageLinkage.DYNAMIC
 import org.ossreviewtoolkit.model.utils.DependencyHandler
+import org.ossreviewtoolkit.plugins.packagemanagers.spm.SwiftPackage.Dependency
 
 /**
  * A specialized [DependencyHandler] implementation for SPM.
  */
-class SpmDependencyHandler : DependencyHandler<LibraryDependency> {
-    override fun identifierFor(dependency: LibraryDependency): Identifier = dependency.id
+class SpmDependencyHandler : DependencyHandler<Dependency> {
+    override fun identifierFor(dependency: Dependency): Identifier = dependency.id
 
-    override fun dependenciesFor(dependency: LibraryDependency): Collection<LibraryDependency> = dependency.dependencies
+    override fun dependenciesFor(dependency: Dependency): Collection<Dependency> = dependency.dependencies
 
-    override fun linkageFor(dependency: LibraryDependency): PackageLinkage = DYNAMIC
+    override fun linkageFor(dependency: Dependency): PackageLinkage = DYNAMIC
 
-    override fun createPackage(dependency: LibraryDependency, issues: MutableList<Issue>): Package =
-        dependency.toPackage()
+    override fun createPackage(dependency: Dependency, issues: MutableList<Issue>): Package = dependency.toPackage()
 }
