@@ -57,6 +57,8 @@ class OrtConfigurationTest : WordSpec({
             ortConfig.enableRepositoryPackageConfigurations shouldBe true
             ortConfig.enableRepositoryPackageCurations shouldBe true
 
+            ortConfig.forceOverwrite shouldBe true
+
             with(ortConfig.licenseFilePatterns) {
                 licenseFilenames shouldContainExactly listOf("license*")
                 patentFilenames shouldContainExactly listOf("patents")

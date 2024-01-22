@@ -31,6 +31,9 @@ ort:
   enableRepositoryPackageConfigurations: true
   enableRepositoryPackageCurations: true
 
+  # Force overwriting of any existing output files.
+  forceOverwrite: true
+
   licenseFilePatterns:
     licenseFilenames: ['license*']
     patentFilenames: ['patents']
