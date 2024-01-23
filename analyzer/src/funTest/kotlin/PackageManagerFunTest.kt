@@ -38,6 +38,7 @@ import org.ossreviewtoolkit.model.config.PathExcludeReason
 
 class PackageManagerFunTest : WordSpec({
     val definitionFiles = listOf(
+        "bazel/MODULE.bazel",
         "bower/bower.json",
         "bundler/Gemfile",
         "cargo/Cargo.toml",
@@ -93,6 +94,7 @@ class PackageManagerFunTest : WordSpec({
             val managedFilesByName = managedFiles.groupByName(projectDir)
 
             assertSoftly {
+                managedFilesByName["Bazel"] should containExactly("bazel/MODULE.bazel")
                 managedFilesByName["Bower"] should containExactly("bower/bower.json")
                 managedFilesByName["Bundler"] should containExactly("bundler/Gemfile")
                 managedFilesByName["Cargo"] should containExactly("cargo/Cargo.toml")

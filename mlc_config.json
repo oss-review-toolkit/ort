@@ -4,6 +4,9 @@
             "pattern": "^#.*$"
         },
         {
+            "pattern": "^https://bazel.build/$"
+        },
+        {
             "pattern": "^https?://localhost.*$"
         },
         {
