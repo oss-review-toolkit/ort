@@ -29,6 +29,7 @@ import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.VcsInfo
@@ -94,16 +95,13 @@ class SwiftPm(
      * Resolves dependencies when only a lockfile aka `Package.Resolved` is available. This commonly applies to e.g.
      * Xcode projects which only have a lockfile, but no `Package.swift` file.
      */
-    private fun resolveLockfileDependencies(packageResolvedFile: File): List<ProjectAnalyzerResult> {
-        val resolved = packageResolvedFile.inputStream().use { json.decodeFromStream<PackageResolved>(it) }
-
-        return listOf(
+    private fun resolveLockfileDependencies(packageResolvedFile: File): List<ProjectAnalyzerResult> =
+        listOf(
             ProjectAnalyzerResult(
                 project = projectFromDefinitionFile(packageResolvedFile),
-                packages = resolved.objects["pins"].orEmpty().mapTo(mutableSetOf()) { it.toPackage() }
+                packages = parseLockfile(packageResolvedFile)
             )
         )
-    }
 
     /**
      * Resolves dependencies of a `Package.swift` file.
@@ -159,4 +157,9 @@ class SwiftPm(
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path
         )
     }
+}
+
+private fun parseLockfile(packageResolvedFile: File): Set<Package> {
+    val resolved = packageResolvedFile.inputStream().use { json.decodeFromStream<PackageResolved>(it) }
+    return resolved.objects["pins"].orEmpty().mapTo(mutableSetOf()) { it.toPackage() }
 }
