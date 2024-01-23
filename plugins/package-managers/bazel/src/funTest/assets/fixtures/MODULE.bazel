@@ -1,0 +1,5 @@
+module(name="bazel-test-module", version="0.42.23", compatibility_level=0)
+
+bazel_dep(name = "glog", version = "0.5.0", repo_name = "com_github_google_glog")
+bazel_dep(name = "googletest", version = "1.14.0", repo_name = "com_google_googletest", dev_dependency = True)
+

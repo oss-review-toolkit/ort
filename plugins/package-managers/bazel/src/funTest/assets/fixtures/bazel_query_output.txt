@@ -1,0 +1,720 @@
+{
+  "type": "RULE",
+  "rule": {
+    "name": "//lib:cookie-jar",
+    "ruleClass": "cc_library",
+    "location": "/src/lib/BUILD:1:11",
+    "attribute": [
+      {
+        "name": "$cc_toolchain",
+        "type": "LABEL",
+        "stringValue": "@bazel_tools//tools/cpp:current_cc_toolchain",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "$config_dependencies",
+        "type": "LABEL_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "$def_parser",
+        "type": "LABEL",
+        "stringValue": "@bazel_tools//tools/def_parser:def_parser",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "$stl",
+        "type": "LABEL",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "$use_auto_exec_groups",
+        "type": "BOOLEAN",
+        "intValue": 1,
+        "stringValue": "true",
+        "explicitlySpecified": false,
+        "booleanValue": true
+      },
+      {
+        "name": ":action_listener",
+        "type": "LABEL_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "additional_compiler_inputs",
+        "type": "LABEL_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "additional_linker_inputs",
+        "type": "LABEL_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "alwayslink",
+        "type": "BOOLEAN",
+        "intValue": 0,
+        "stringValue": "false",
+        "explicitlySpecified": false,
+        "booleanValue": false
+      },
+      {
+        "name": "applicable_licenses",
+        "type": "LABEL_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "aspect_hints",
+        "type": "LABEL_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "compatible_with",
+        "type": "LABEL_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "copts",
+        "type": "STRING_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "data",
+        "type": "LABEL_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "defines",
+        "type": "STRING_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "deprecation",
+        "type": "STRING",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "deps",
+        "type": "LABEL_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "exec_compatible_with",
+        "type": "LABEL_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "exec_properties",
+        "type": "STRING_DICT",
+        "explicitlySpecified": false
+      },
+      {
+        "name": "expect_failure",
+        "type": "STRING",
+        "stringValue": "",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "features",
+        "type": "STRING_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "generator_function",
+        "type": "STRING",
+        "stringValue": "",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "generator_location",
+        "type": "STRING",
+        "stringValue": "",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "generator_name",
+        "type": "STRING",
+        "stringValue": "",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "hdrs",
+        "type": "LABEL_LIST",
+        "stringListValue": [
+          "//lib:cookie-jar.h"
+        ],
+        "explicitlySpecified": true,
+        "nodep": false
+      },
+      {
+        "name": "hdrs_check",
+        "type": "STRING",
+        "stringValue": "",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "implementation_deps",
+        "type": "LABEL_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "include_prefix",
+        "type": "STRING",
+        "stringValue": "",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "includes",
+        "type": "STRING_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "licenses",
+        "type": "STRING_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "linkopts",
+        "type": "STRING_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "linkstamp",
+        "type": "LABEL",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "linkstatic",
+        "type": "BOOLEAN",
+        "intValue": 0,
+        "stringValue": "false",
+        "explicitlySpecified": false,
+        "booleanValue": false
+      },
+      {
+        "name": "local_defines",
+        "type": "STRING_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "name",
+        "type": "STRING",
+        "stringValue": "cookie-jar",
+        "explicitlySpecified": true,
+        "nodep": false
+      },
+      {
+        "name": "restricted_to",
+        "type": "LABEL_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "srcs",
+        "type": "LABEL_LIST",
+        "stringListValue": [
+          "//lib:cookie-jar.cc"
+        ],
+        "explicitlySpecified": true,
+        "nodep": false
+      },
+      {
+        "name": "strip_include_prefix",
+        "type": "STRING",
+        "stringValue": "",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "tags",
+        "type": "STRING_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "target_compatible_with",
+        "type": "LABEL_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "testonly",
+        "type": "BOOLEAN",
+        "intValue": 0,
+        "stringValue": "false",
+        "explicitlySpecified": false,
+        "booleanValue": false
+      },
+      {
+        "name": "textual_hdrs",
+        "type": "LABEL_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "toolchains",
+        "type": "LABEL_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "transitive_configs",
+        "type": "STRING_LIST",
+        "explicitlySpecified": false,
+        "nodep": true
+      },
+      {
+        "name": "visibility",
+        "type": "STRING_LIST",
+        "stringListValue": [
+          "//main:__pkg__"
+        ],
+        "explicitlySpecified": true,
+        "nodep": true
+      },
+      {
+        "name": "win_def_file",
+        "type": "LABEL",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "$rule_implementation_hash",
+        "type": "STRING",
+        "stringValue": "5b22d6bbd0748dc1626ce0e835a0fcea3cf11b07a4307f0380a182863470feba"
+      }
+    ],
+    "ruleInput": [
+      "//lib:cookie-jar.cc",
+      "//lib:cookie-jar.h",
+      "@bazel_tools//tools/cpp:current_cc_toolchain",
+      "@bazel_tools//tools/def_parser:def_parser"
+    ]
+  }
+}
+{
+  "type": "RULE",
+  "rule": {
+    "name": "//main:main",
+    "ruleClass": "cc_binary",
+    "location": "/src/main/BUILD:1:10",
+    "attribute": [
+      {
+        "name": "$cc_binary",
+        "type": "BOOLEAN",
+        "intValue": 0,
+        "stringValue": "false",
+        "explicitlySpecified": false,
+        "booleanValue": false
+      },
+      {
+        "name": "$cc_toolchain",
+        "type": "LABEL",
+        "stringValue": "@bazel_tools//tools/cpp:current_cc_toolchain",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "$cc_toolchain_type",
+        "type": "LABEL",
+        "stringValue": "@bazel_tools//tools/cpp:toolchain_type",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "$config_dependencies",
+        "type": "LABEL_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "$def_parser",
+        "type": "LABEL",
+        "stringValue": "@bazel_tools//tools/def_parser:def_parser",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "$deps_analyzed_by_graph_structure_aspect",
+        "type": "LABEL_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "$is_executable",
+        "type": "BOOLEAN",
+        "intValue": 1,
+        "stringValue": "true",
+        "explicitlySpecified": false,
+        "booleanValue": true
+      },
+      {
+        "name": "$is_test",
+        "type": "BOOLEAN",
+        "intValue": 0,
+        "stringValue": "false",
+        "explicitlySpecified": false,
+        "booleanValue": false
+      },
+      {
+        "name": "$stl",
+        "type": "LABEL",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "$use_auto_exec_groups",
+        "type": "BOOLEAN",
+        "intValue": 1,
+        "stringValue": "true",
+        "explicitlySpecified": false,
+        "booleanValue": true
+      },
+      {
+        "name": ":action_listener",
+        "type": "LABEL_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": ":default_malloc",
+        "type": "LABEL",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "additional_linker_inputs",
+        "type": "LABEL_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "applicable_licenses",
+        "type": "LABEL_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "args",
+        "type": "STRING_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "aspect_hints",
+        "type": "LABEL_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "compatible_with",
+        "type": "LABEL_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "copts",
+        "type": "STRING_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "data",
+        "type": "LABEL_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "defines",
+        "type": "STRING_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "deprecation",
+        "type": "STRING",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "deps",
+        "type": "LABEL_LIST",
+        "stringListValue": [
+          "//lib:cookie-jar",
+          "@com_github_google_glog//:glog"
+        ],
+        "explicitlySpecified": true,
+        "nodep": false
+      },
+      {
+        "name": "distribs",
+        "type": "STRING_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "dynamic_deps",
+        "type": "LABEL_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "env",
+        "type": "STRING_DICT",
+        "explicitlySpecified": false
+      },
+      {
+        "name": "exec_compatible_with",
+        "type": "LABEL_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "exec_properties",
+        "type": "STRING_DICT",
+        "explicitlySpecified": false
+      },
+      {
+        "name": "expect_failure",
+        "type": "STRING",
+        "stringValue": "",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "features",
+        "type": "STRING_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "generator_function",
+        "type": "STRING",
+        "stringValue": "",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "generator_location",
+        "type": "STRING",
+        "stringValue": "",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "generator_name",
+        "type": "STRING",
+        "stringValue": "",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "hdrs_check",
+        "type": "STRING",
+        "stringValue": "",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "includes",
+        "type": "STRING_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "licenses",
+        "type": "STRING_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "link_extra_lib",
+        "type": "LABEL",
+        "stringValue": "@bazel_tools//tools/cpp:link_extra_lib",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "linkopts",
+        "type": "STRING_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "linkshared",
+        "type": "BOOLEAN",
+        "intValue": 0,
+        "stringValue": "false",
+        "explicitlySpecified": false,
+        "booleanValue": false
+      },
+      {
+        "name": "linkstatic",
+        "type": "BOOLEAN",
+        "intValue": 1,
+        "stringValue": "true",
+        "explicitlySpecified": false,
+        "booleanValue": true
+      },
+      {
+        "name": "local_defines",
+        "type": "STRING_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "malloc",
+        "type": "LABEL",
+        "stringValue": "@bazel_tools//tools/cpp:malloc",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "name",
+        "type": "STRING",
+        "stringValue": "main",
+        "explicitlySpecified": true,
+        "nodep": false
+      },
+      {
+        "name": "nocopts",
+        "type": "STRING",
+        "stringValue": "",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "output_licenses",
+        "type": "LICENSE",
+        "license": {
+          "licenseType": [
+            "NONE"
+          ]
+        },
+        "explicitlySpecified": false
+      },
+      {
+        "name": "reexport_deps",
+        "type": "LABEL_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "restricted_to",
+        "type": "LABEL_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "srcs",
+        "type": "LABEL_LIST",
+        "stringListValue": [
+          "//main:main.cc"
+        ],
+        "explicitlySpecified": true,
+        "nodep": false
+      },
+      {
+        "name": "stamp",
+        "type": "INTEGER",
+        "intValue": -1,
+        "explicitlySpecified": false
+      },
+      {
+        "name": "tags",
+        "type": "STRING_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "target_compatible_with",
+        "type": "LABEL_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "testonly",
+        "type": "BOOLEAN",
+        "intValue": 0,
+        "stringValue": "false",
+        "explicitlySpecified": false,
+        "booleanValue": false
+      },
+      {
+        "name": "toolchains",
+        "type": "LABEL_LIST",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "transitive_configs",
+        "type": "STRING_LIST",
+        "explicitlySpecified": false,
+        "nodep": true
+      },
+      {
+        "name": "visibility",
+        "type": "STRING_LIST",
+        "stringListValue": [
+          "//visibility:private"
+        ],
+        "explicitlySpecified": false,
+        "nodep": true
+      },
+      {
+        "name": "win_def_file",
+        "type": "LABEL",
+        "explicitlySpecified": false,
+        "nodep": false
+      },
+      {
+        "name": "$rule_implementation_hash",
+        "type": "STRING",
+        "stringValue": "8d21926243b25c836337203ae3766e2fa80bea7568d8e2f7eedf646cce29d678"
+      }
+    ],
+    "ruleInput": [
+      "//lib:cookie-jar",
+      "//main:main.cc",
+      "@bazel_tools//tools/cpp:current_cc_toolchain",
+      "@bazel_tools//tools/cpp:link_extra_lib",
+      "@bazel_tools//tools/cpp:malloc",
+      "@bazel_tools//tools/cpp:toolchain_type",
+      "@bazel_tools//tools/def_parser:def_parser",
+      "@com_github_google_glog//:glog"
+    ],
+    "ruleOutput": [
+      "//main:main.stripped",
+      "//main:main.dwp"
+    ]
+  }
+}
