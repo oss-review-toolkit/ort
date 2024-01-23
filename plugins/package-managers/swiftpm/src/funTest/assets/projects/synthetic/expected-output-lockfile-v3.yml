@@ -19,6 +19,6 @@ packages: []
 issues:
 - timestamp: "1970-01-01T00:00:00Z"
   source: "SwiftPM"
-  message: "Could not parse lockfile '/workspace/plugins/package-managers/swiftpm/src/funTest/assets/projects/synthetic/lockfile-v3/Package.resolved'.\
+  message: "Could not parse lockfile '<REPLACE_ABSOLUTE_DEFINITION_FILE_PATH>'.\
     \ Unknown file format version '3'."
   severity: "ERROR"

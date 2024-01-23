@@ -102,7 +102,7 @@ fun patchExpectedResult(
             val path = vcsDir.getPathToRoot(projectDir)
 
             put("<REPLACE_DEFINITION_FILE_PATH>", "$path/${definitionFile.name}")
-            put("<REPLACE_ABSOLUTE_DEFINITION_FILE_PATH>", definitionFile.absolutePath)
+            put("<REPLACE_ABSOLUTE_DEFINITION_FILE_PATH>", definitionFile.absoluteFile.invariantSeparatorsPath)
             put("<REPLACE_URL>", url)
             put("<REPLACE_REVISION>", vcsDir.getRevision())
             put("<REPLACE_PATH>", path)
