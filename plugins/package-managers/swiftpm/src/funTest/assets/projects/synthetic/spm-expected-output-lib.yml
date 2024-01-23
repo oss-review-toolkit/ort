@@ -21,37 +21,42 @@ project:
     - id: "Swift::github.com/apple/swift-crypto:2.6.0"
     - id: "Swift::github.com/apple/swift-log:1.5.4"
     - id: "Swift::github.com/apple/swift-metrics:2.4.1"
-    - id: "Swift::github.com/apple/swift-nio:2.62.0"
+    - id: "Swift::github.com/apple/swift-nio:2.63.0"
       dependencies:
       - id: "Swift::github.com/apple/swift-atomics:1.2.0"
       - id: "Swift::github.com/apple/swift-collections:1.0.6"
+      - id: "Swift::github.com/apple/swift-system:1.2.1"
     - id: "Swift::github.com/apple/swift-nio-extras:1.21.0"
       dependencies:
       - id: "Swift::github.com/apple/swift-http-types:1.0.3"
-      - id: "Swift::github.com/apple/swift-nio:2.62.0"
+      - id: "Swift::github.com/apple/swift-nio:2.63.0"
         dependencies:
         - id: "Swift::github.com/apple/swift-atomics:1.2.0"
         - id: "Swift::github.com/apple/swift-collections:1.0.6"
+        - id: "Swift::github.com/apple/swift-system:1.2.1"
       - id: "Swift::github.com/apple/swift-nio-http2:1.30.0"
         dependencies:
         - id: "Swift::github.com/apple/swift-atomics:1.2.0"
-        - id: "Swift::github.com/apple/swift-nio:2.62.0"
+        - id: "Swift::github.com/apple/swift-nio:2.63.0"
           dependencies:
           - id: "Swift::github.com/apple/swift-atomics:1.2.0"
           - id: "Swift::github.com/apple/swift-collections:1.0.6"
+          - id: "Swift::github.com/apple/swift-system:1.2.1"
     - id: "Swift::github.com/apple/swift-nio-http2:1.30.0"
       dependencies:
       - id: "Swift::github.com/apple/swift-atomics:1.2.0"
-      - id: "Swift::github.com/apple/swift-nio:2.62.0"
+      - id: "Swift::github.com/apple/swift-nio:2.63.0"
         dependencies:
         - id: "Swift::github.com/apple/swift-atomics:1.2.0"
         - id: "Swift::github.com/apple/swift-collections:1.0.6"
+        - id: "Swift::github.com/apple/swift-system:1.2.1"
     - id: "Swift::github.com/apple/swift-nio-ssl:2.26.0"
       dependencies:
-      - id: "Swift::github.com/apple/swift-nio:2.62.0"
+      - id: "Swift::github.com/apple/swift-nio:2.63.0"
         dependencies:
         - id: "Swift::github.com/apple/swift-atomics:1.2.0"
         - id: "Swift::github.com/apple/swift-collections:1.0.6"
+        - id: "Swift::github.com/apple/swift-system:1.2.1"
     - id: "Swift::github.com/swift-server/async-http-client:1.20.1"
       dependencies:
       - id: "Swift::github.com/apple/swift-algorithms:1.2.0"
@@ -59,44 +64,50 @@ project:
         - id: "Swift::github.com/apple/swift-numerics:1.0.2"
       - id: "Swift::github.com/apple/swift-atomics:1.2.0"
       - id: "Swift::github.com/apple/swift-log:1.5.4"
-      - id: "Swift::github.com/apple/swift-nio:2.62.0"
+      - id: "Swift::github.com/apple/swift-nio:2.63.0"
         dependencies:
         - id: "Swift::github.com/apple/swift-atomics:1.2.0"
         - id: "Swift::github.com/apple/swift-collections:1.0.6"
+        - id: "Swift::github.com/apple/swift-system:1.2.1"
       - id: "Swift::github.com/apple/swift-nio-extras:1.21.0"
         dependencies:
         - id: "Swift::github.com/apple/swift-http-types:1.0.3"
-        - id: "Swift::github.com/apple/swift-nio:2.62.0"
+        - id: "Swift::github.com/apple/swift-nio:2.63.0"
           dependencies:
           - id: "Swift::github.com/apple/swift-atomics:1.2.0"
           - id: "Swift::github.com/apple/swift-collections:1.0.6"
+          - id: "Swift::github.com/apple/swift-system:1.2.1"
         - id: "Swift::github.com/apple/swift-nio-http2:1.30.0"
           dependencies:
           - id: "Swift::github.com/apple/swift-atomics:1.2.0"
-          - id: "Swift::github.com/apple/swift-nio:2.62.0"
+          - id: "Swift::github.com/apple/swift-nio:2.63.0"
             dependencies:
             - id: "Swift::github.com/apple/swift-atomics:1.2.0"
             - id: "Swift::github.com/apple/swift-collections:1.0.6"
+            - id: "Swift::github.com/apple/swift-system:1.2.1"
       - id: "Swift::github.com/apple/swift-nio-http2:1.30.0"
         dependencies:
         - id: "Swift::github.com/apple/swift-atomics:1.2.0"
-        - id: "Swift::github.com/apple/swift-nio:2.62.0"
+        - id: "Swift::github.com/apple/swift-nio:2.63.0"
           dependencies:
           - id: "Swift::github.com/apple/swift-atomics:1.2.0"
           - id: "Swift::github.com/apple/swift-collections:1.0.6"
+          - id: "Swift::github.com/apple/swift-system:1.2.1"
       - id: "Swift::github.com/apple/swift-nio-ssl:2.26.0"
         dependencies:
-        - id: "Swift::github.com/apple/swift-nio:2.62.0"
+        - id: "Swift::github.com/apple/swift-nio:2.63.0"
           dependencies:
           - id: "Swift::github.com/apple/swift-atomics:1.2.0"
           - id: "Swift::github.com/apple/swift-collections:1.0.6"
+          - id: "Swift::github.com/apple/swift-system:1.2.1"
       - id: "Swift::github.com/apple/swift-nio-transport-services:1.20.1"
         dependencies:
         - id: "Swift::github.com/apple/swift-atomics:1.2.0"
-        - id: "Swift::github.com/apple/swift-nio:2.62.0"
+        - id: "Swift::github.com/apple/swift-nio:2.63.0"
           dependencies:
           - id: "Swift::github.com/apple/swift-atomics:1.2.0"
           - id: "Swift::github.com/apple/swift-collections:1.0.6"
+          - id: "Swift::github.com/apple/swift-system:1.2.1"
     - id: "Swift::github.com/swift-server/swift-backtrace:1.3.4"
     - id: "Swift::github.com/vapor/async-kit:1.19.0"
       dependencies:
@@ -105,61 +116,69 @@ project:
         - id: "Swift::github.com/apple/swift-numerics:1.0.2"
       - id: "Swift::github.com/apple/swift-collections:1.0.6"
       - id: "Swift::github.com/apple/swift-log:1.5.4"
-      - id: "Swift::github.com/apple/swift-nio:2.62.0"
+      - id: "Swift::github.com/apple/swift-nio:2.63.0"
         dependencies:
         - id: "Swift::github.com/apple/swift-atomics:1.2.0"
         - id: "Swift::github.com/apple/swift-collections:1.0.6"
+        - id: "Swift::github.com/apple/swift-system:1.2.1"
     - id: "Swift::github.com/vapor/console-kit:4.14.1"
       dependencies:
       - id: "Swift::github.com/apple/swift-log:1.5.4"
-      - id: "Swift::github.com/apple/swift-nio:2.62.0"
+      - id: "Swift::github.com/apple/swift-nio:2.63.0"
         dependencies:
         - id: "Swift::github.com/apple/swift-atomics:1.2.0"
         - id: "Swift::github.com/apple/swift-collections:1.0.6"
+        - id: "Swift::github.com/apple/swift-system:1.2.1"
     - id: "Swift::github.com/vapor/multipart-kit:4.6.0"
       dependencies:
       - id: "Swift::github.com/apple/swift-collections:1.0.6"
-      - id: "Swift::github.com/apple/swift-nio:2.62.0"
+      - id: "Swift::github.com/apple/swift-nio:2.63.0"
         dependencies:
         - id: "Swift::github.com/apple/swift-atomics:1.2.0"
         - id: "Swift::github.com/apple/swift-collections:1.0.6"
+        - id: "Swift::github.com/apple/swift-system:1.2.1"
     - id: "Swift::github.com/vapor/routing-kit:4.9.0"
       dependencies:
       - id: "Swift::github.com/apple/swift-log:1.5.4"
     - id: "Swift::github.com/vapor/websocket-kit:2.14.0"
       dependencies:
       - id: "Swift::github.com/apple/swift-atomics:1.2.0"
-      - id: "Swift::github.com/apple/swift-nio:2.62.0"
+      - id: "Swift::github.com/apple/swift-nio:2.63.0"
         dependencies:
         - id: "Swift::github.com/apple/swift-atomics:1.2.0"
         - id: "Swift::github.com/apple/swift-collections:1.0.6"
+        - id: "Swift::github.com/apple/swift-system:1.2.1"
       - id: "Swift::github.com/apple/swift-nio-extras:1.21.0"
         dependencies:
         - id: "Swift::github.com/apple/swift-http-types:1.0.3"
-        - id: "Swift::github.com/apple/swift-nio:2.62.0"
+        - id: "Swift::github.com/apple/swift-nio:2.63.0"
           dependencies:
           - id: "Swift::github.com/apple/swift-atomics:1.2.0"
           - id: "Swift::github.com/apple/swift-collections:1.0.6"
+          - id: "Swift::github.com/apple/swift-system:1.2.1"
         - id: "Swift::github.com/apple/swift-nio-http2:1.30.0"
           dependencies:
           - id: "Swift::github.com/apple/swift-atomics:1.2.0"
-          - id: "Swift::github.com/apple/swift-nio:2.62.0"
+          - id: "Swift::github.com/apple/swift-nio:2.63.0"
             dependencies:
             - id: "Swift::github.com/apple/swift-atomics:1.2.0"
             - id: "Swift::github.com/apple/swift-collections:1.0.6"
+            - id: "Swift::github.com/apple/swift-system:1.2.1"
       - id: "Swift::github.com/apple/swift-nio-ssl:2.26.0"
         dependencies:
-        - id: "Swift::github.com/apple/swift-nio:2.62.0"
+        - id: "Swift::github.com/apple/swift-nio:2.63.0"
           dependencies:
           - id: "Swift::github.com/apple/swift-atomics:1.2.0"
           - id: "Swift::github.com/apple/swift-collections:1.0.6"
+          - id: "Swift::github.com/apple/swift-system:1.2.1"
       - id: "Swift::github.com/apple/swift-nio-transport-services:1.20.1"
         dependencies:
         - id: "Swift::github.com/apple/swift-atomics:1.2.0"
-        - id: "Swift::github.com/apple/swift-nio:2.62.0"
+        - id: "Swift::github.com/apple/swift-nio:2.63.0"
           dependencies:
           - id: "Swift::github.com/apple/swift-atomics:1.2.0"
           - id: "Swift::github.com/apple/swift-collections:1.0.6"
+          - id: "Swift::github.com/apple/swift-system:1.2.1"
 packages:
 - id: "Swift::github.com/apple/swift-algorithms:1.2.0"
   purl: "pkg:swift/github.com%2Fapple%2Fswift-algorithms@1.2.0"
@@ -343,8 +362,8 @@ packages:
     url: "https://github.com/apple/swift-metrics.git"
     revision: "2.4.1"
     path: ""
-- id: "Swift::github.com/apple/swift-nio:2.62.0"
-  purl: "pkg:swift/github.com%2Fapple%2Fswift-nio@2.62.0"
+- id: "Swift::github.com/apple/swift-nio:2.63.0"
+  purl: "pkg:swift/github.com%2Fapple%2Fswift-nio@2.63.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -362,12 +381,12 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/apple/swift-nio.git"
-    revision: "2.62.0"
+    revision: "2.63.0"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/apple/swift-nio.git"
-    revision: "2.62.0"
+    revision: "2.63.0"
     path: ""
 - id: "Swift::github.com/apple/swift-nio-extras:1.21.0"
   purl: "pkg:swift/github.com%2Fapple%2Fswift-nio-extras@1.21.0"
@@ -498,6 +517,32 @@ packages:
     type: "Git"
     url: "https://github.com/apple/swift-numerics.git"
     revision: "1.0.2"
+    path: ""
+- id: "Swift::github.com/apple/swift-system:1.2.1"
+  purl: "pkg:swift/github.com%2Fapple%2Fswift-system@1.2.1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/apple/swift-system.git"
+    revision: "1.2.1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/apple/swift-system.git"
+    revision: "1.2.1"
     path: ""
 - id: "Swift::github.com/swift-server/async-http-client:1.20.1"
   purl: "pkg:swift/github.com%2Fswift-server%2Fasync-http-client@1.20.1"
