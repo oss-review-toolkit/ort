@@ -19,6 +19,8 @@
 389-exception:
 - GPL-2.0-only
 - GPL-2.0-or-later
+Asterisk-exception:
+- GPL-2.0-only
 Autoconf-exception-2.0:
 - GPL-2.0-only
 - GPL-2.0-or-later
