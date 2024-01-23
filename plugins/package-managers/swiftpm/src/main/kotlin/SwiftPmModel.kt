@@ -54,14 +54,11 @@ data class SwiftPackage(
     )
 }
 
+/**
+ * See https://github.com/apple/swift-package-manager/blob/3ef830dddff459e569d6e49c186c3ded33c39bcc/Sources/PackageGraph/PinsStore.swift#L285-L384.
+ */
 @Serializable
-data class PackageResolved(
-    @SerialName("object") val objects: Map<String, List<Pin>>,
-    val version: Int
-)
-
-@Serializable
-data class Pin(
+data class PinV1(
     @SerialName("package") val packageName: String,
     val state: State?,
     @SerialName("repositoryURL") val repositoryUrl: String
@@ -89,7 +86,7 @@ internal fun SwiftPackage.Dependency.toPackage(): Package {
     return createPackage(id, vcsInfo)
 }
 
-internal fun Pin.toPackage(): Package {
+internal fun PinV1.toPackage(): Package {
     val id = Identifier(
         type = PACKAGE_TYPE,
         namespace = "",

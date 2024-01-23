@@ -20,8 +20,11 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.swiftpm
 
 import java.io.File
+import java.io.IOException
 
-import kotlinx.serialization.json.decodeFromStream
+import kotlinx.serialization.json.decodeFromJsonElement
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -29,6 +32,7 @@ import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
@@ -95,13 +99,21 @@ class SwiftPm(
      * Resolves dependencies when only a lockfile aka `Package.Resolved` is available. This commonly applies to e.g.
      * Xcode projects which only have a lockfile, but no `Package.swift` file.
      */
-    private fun resolveLockfileDependencies(packageResolvedFile: File): List<ProjectAnalyzerResult> =
-        listOf(
+    private fun resolveLockfileDependencies(packageResolvedFile: File): List<ProjectAnalyzerResult> {
+        val issues = mutableListOf<Issue>()
+
+        val packages = parseLockfile(packageResolvedFile).onFailure {
+            issues += Issue(source = managerName, message = it.message.orEmpty())
+        }.getOrNull() ?: emptySet()
+
+        return listOf(
             ProjectAnalyzerResult(
                 project = projectFromDefinitionFile(packageResolvedFile),
-                packages = parseLockfile(packageResolvedFile)
+                packages = packages,
+                issues = issues
             )
         )
+    }
 
     /**
      * Resolves dependencies of a `Package.swift` file.
@@ -159,7 +171,22 @@ class SwiftPm(
     }
 }
 
-private fun parseLockfile(packageResolvedFile: File): Set<Package> {
-    val resolved = packageResolvedFile.inputStream().use { json.decodeFromStream<PackageResolved>(it) }
-    return resolved.objects["pins"].orEmpty().mapTo(mutableSetOf()) { it.toPackage() }
-}
+private fun parseLockfile(packageResolvedFile: File): Result<Set<Package>> =
+    runCatching {
+        val root = json.parseToJsonElement(packageResolvedFile.readText()).jsonObject
+
+        when (val version = root.getValue("version").jsonPrimitive.content) {
+            "1" -> {
+                val pinsJson = root["object"]?.jsonObject?.get("pins")
+                val pins = pinsJson?.let { json.decodeFromJsonElement<List<PinV1>>(it) }.orEmpty()
+                pins.mapTo(mutableSetOf()) { it.toPackage() }
+            }
+
+            else -> {
+                throw IOException(
+                    "Could not parse lockfile '${packageResolvedFile.invariantSeparatorsPath}'. Unknown file format " +
+                        "version '$version'."
+                )
+            }
+        }
+    }
