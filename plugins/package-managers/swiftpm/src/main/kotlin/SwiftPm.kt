@@ -182,6 +182,12 @@ private fun parseLockfile(packageResolvedFile: File): Result<Set<Package>> =
                 pins.mapTo(mutableSetOf()) { it.toPackage() }
             }
 
+            "2" -> {
+                val pinsJson = root["pins"]
+                val pins = pinsJson?.let { json.decodeFromJsonElement<List<PinV2>>(it) }.orEmpty()
+                pins.mapTo(mutableSetOf()) { it.toPackage() }
+            }
+
             else -> {
                 throw IOException(
                     "Could not parse lockfile '${packageResolvedFile.invariantSeparatorsPath}'. Unknown file format " +
