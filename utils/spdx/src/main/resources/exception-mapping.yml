@@ -27,6 +27,12 @@ Autoconf-exception-2.0:
 Autoconf-exception-3.0:
 - GPL-3.0-only
 - GPL-3.0-or-later
+Autoconf-exception-generic:
+- GPL-2.0-only
+- GPL-2.0-or-later
+Autoconf-exception-generic-3.0:
+- GPL-3.0-only
+- GPL-3.0-or-later
 Bison-exception-2.2:
 - GPL-2.0-only
 - GPL-2.0-or-later
