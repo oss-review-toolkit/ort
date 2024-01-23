@@ -15,7 +15,6 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-# Sort the entries below via IntelliJ's "Edit" -> "Sort Lines".
 ---
 389-exception:
 - GPL-2.0-only
