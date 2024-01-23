@@ -31,10 +31,10 @@ import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
 class SwiftPmFunTest : WordSpec({
-    "Parsing 'Package.resolved' dependencies" should {
+    "Analyzing a lockfile with file format version 1" should {
         "return the correct result" {
-            val definitionFile = getAssetFile("projects/synthetic/spm-app/Package.resolved")
-            val expectedResultFile = getAssetFile("projects/synthetic/spm-expected-output-app.yml")
+            val definitionFile = getAssetFile("projects/synthetic/lockfile-v1/Package.resolved")
+            val expectedResultFile = getAssetFile("projects/synthetic/expected-output-lockfile-v1.yml")
 
             val result = create(PROJECT_TYPE).resolveSingleProject(definitionFile)
 
@@ -42,19 +42,23 @@ class SwiftPmFunTest : WordSpec({
         }
     }
 
-    "Parsing 'Package.swift' dependencies" should {
+    "Analyzing a definition file with a sibling lockfile" should {
         "return the correct result" {
-            val definitionFile = getAssetFile("projects/synthetic/spm-lib/Package.swift")
-            val expectedResultFile = getAssetFile("projects/synthetic/spm-expected-output-lib.yml")
+            val definitionFile = getAssetFile("projects/synthetic/project-with-lockfile/Package.swift")
+            val expectedResultFile = getAssetFile("projects/synthetic/expected-output-project.yml")
 
             val result = create(PROJECT_TYPE).resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
+    }
 
-        "show an error if 'allowDynamicVersions' is disabled" {
-            val definitionFile = getAssetFile("projects/synthetic/spm-lib-no-lockfile/Package.swift")
-            val expectedResultFile = getAssetFile("projects/synthetic/spm-expected-output-lib-no-lockfile.yml")
+    "Analyzing a definition file without a lockfile" should {
+        "return an issue if 'allowDynamicVersions' is disabled" {
+            val definitionFile = getAssetFile("projects/synthetic/project-without-lockfile/Package.swift")
+            val expectedResultFile = getAssetFile(
+                "projects/synthetic/expected-output-project-without-lockfile.yml"
+            )
 
             val result = create(PROJECT_TYPE, AnalyzerConfiguration(allowDynamicVersions = false))
                 .resolveSingleProject(definitionFile, resolveScopes = true)
