@@ -123,6 +123,7 @@ class SwiftPm(
     private fun resolveDefinitionFileDependencies(packageSwiftFile: File): List<ProjectAnalyzerResult> {
         val project = projectFromDefinitionFile(packageSwiftFile)
 
+        // TODO: Issues might be thrown into stderr. Parse them and add it them to the result as well.
         val result = run(
             packageSwiftFile.parentFile,
             "package",
@@ -143,7 +144,6 @@ class SwiftPm(
                 project = project.copy(scopeNames = setOf(DEPENDENCIES_SCOPE_NAME)),
                 // Packages are set by the dependency handler.
                 packages = emptySet(),
-                // TODO: Issues might be thrown into stderr. Parse them and add it them to the result as well.
                 issues = emptyList()
             )
         )
