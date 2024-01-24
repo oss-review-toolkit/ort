@@ -104,7 +104,7 @@ class SwiftPm(
 
         val packages = parseLockfile(packageResolvedFile).onFailure {
             issues += Issue(source = managerName, message = it.message.orEmpty())
-        }.getOrNull() ?: emptySet()
+        }.getOrDefault(emptySet())
 
         return listOf(
             ProjectAnalyzerResult(
