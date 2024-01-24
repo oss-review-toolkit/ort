@@ -23,6 +23,7 @@ import java.io.File
 import java.time.Instant
 
 import kotlin.math.max
+import kotlin.time.Duration.Companion.minutes
 
 import org.apache.logging.log4j.kotlin.logger
 
@@ -72,7 +73,8 @@ class ScanCode internal constructor(
 
         private const val LICENSE_REFERENCES_OPTION_VERSION = "32.0.0"
         private const val OUTPUT_FORMAT = "json-pp"
-        private const val TIMEOUT = 300
+
+        private val TIMEOUT = 5.minutes
 
         /**
          * Configuration options that are relevant for [configuration] because they change the result file.
@@ -82,7 +84,7 @@ class ScanCode internal constructor(
             "--license",
             "--info",
             "--strip-root",
-            "--timeout", TIMEOUT.toString()
+            "--timeout", "${TIMEOUT.inWholeSeconds}"
         )
 
         /**
