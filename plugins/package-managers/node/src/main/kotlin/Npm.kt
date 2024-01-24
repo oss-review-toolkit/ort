@@ -247,7 +247,8 @@ open class Npm(
         logger.info { "Searching for 'package.json' files in '$nodeModulesDir'..." }
 
         val nodeModulesFiles = nodeModulesDir.walk().maxDepth(modulesSearchDepth).filter {
-            it.name == "package.json" && isValidNodeModulesDirectory(nodeModulesDir, nodeModulesDirForPackageJson(it))
+            it.isFile && it.name == "package.json" &&
+                isValidNodeModulesDirectory(nodeModulesDir, nodeModulesDirForPackageJson(it))
         }
 
         return runBlocking(Dispatchers.IO) {
