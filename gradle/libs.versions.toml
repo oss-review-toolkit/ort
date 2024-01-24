@@ -8,6 +8,7 @@ graalVmNativeImagePlugin = "0.9.28"
 graphQlPlugin = "6.5.7"
 ideaExtPlugin = "1.1.7"
 kotlinPlugin = "1.9.22"
+loggingCapabilitiesPlugin = "0.11.1"
 mavenPublishPlugin = "0.27.0"
 versionsPlugin = "0.51.0"
 
@@ -78,6 +79,7 @@ plugin-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", v
 plugin-dokkatoo = { module = "dev.adamko.dokkatoo:dokkatoo-plugin", version.ref = "dokkatooPlugin" }
 plugin-graalVmNativeImage = { module = "org.graalvm.buildtools:native-gradle-plugin", version.ref = "graalVmNativeImagePlugin" }
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlinPlugin" }
+plugin-loggingCapabilities = { module = "dev.jacomet.gradle.plugins:logging-capabilities", version.ref = "loggingCapabilitiesPlugin" }
 plugin-mavenPublish = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "mavenPublishPlugin" }
 
 antlr = { module = "org.antlr:antlr4", version.ref = "antlr" }

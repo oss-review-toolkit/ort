@@ -44,6 +44,7 @@ dependencies {
     implementation(libs.plugin.dokkatoo)
     implementation(libs.plugin.graalVmNativeImage)
     implementation(libs.plugin.kotlin)
+    implementation(libs.plugin.loggingCapabilities)
     implementation(libs.plugin.mavenPublish)
 }
 

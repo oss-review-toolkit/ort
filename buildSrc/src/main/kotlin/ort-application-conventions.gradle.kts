@@ -39,6 +39,7 @@ plugins {
     id("ort-publication-conventions")
 
     // Apply third-party plugins.
+    id("dev.jacomet.logging-capabilities")
     id("org.graalvm.buildtools.native")
 }
 
@@ -47,6 +48,10 @@ application {
         "--add-opens", "java.base/sun.nio.ch=ALL-UNNAMED",
         "--add-opens", "java.base/java.io=ALL-UNNAMED"
     )
+}
+
+loggingCapabilities {
+    enforceLogback()
 }
 
 mavenPublishing {
