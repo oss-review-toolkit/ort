@@ -37,5 +37,8 @@ class SwiftPmDependencyHandler : DependencyHandler<Dependency> {
 
     override fun linkageFor(dependency: Dependency): PackageLinkage = DYNAMIC
 
-    override fun createPackage(dependency: Dependency, issues: MutableList<Issue>): Package = dependency.toPackage()
+    override fun createPackage(dependency: Dependency, issues: MutableList<Issue>): Package? =
+        packages.find { pkg -> pkg.id.copy(version = "") == dependency.id.copy(version = "") }
+
+    var packages: Set<Package> = emptySet()
 }

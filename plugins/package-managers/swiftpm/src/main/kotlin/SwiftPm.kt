@@ -61,7 +61,8 @@ class SwiftPm(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
-    private val graphBuilder = DependencyGraphBuilder(SwiftPmDependencyHandler())
+    private val dependencyHandler = SwiftPmDependencyHandler()
+    private val graphBuilder = DependencyGraphBuilder(dependencyHandler)
 
     class Factory : AbstractPackageManagerFactory<SwiftPm>(PROJECT_TYPE) {
         override val globsForDefinitionFiles = listOf(PACKAGE_SWIFT_NAME, PACKAGE_RESOLVED_NAME)
@@ -135,16 +136,22 @@ class SwiftPm(
         val swiftPackage = json.decodeFromString<SwiftPackage>(result)
         val qualifiedScopeName = DependencyGraph.qualifyScope(scopeName = DEPENDENCIES_SCOPE_NAME, project = project)
 
+        val issues = mutableListOf<Issue>()
+
+        dependencyHandler.packages = parseLockfile(packageSwiftFile.resolveSibling(PACKAGE_RESOLVED_NAME)).onFailure {
+            issues += Issue(source = managerName, message = it.message.orEmpty())
+        }.getOrDefault(emptySet())
+
         swiftPackage.dependencies.onEach { graphBuilder.addDependency(qualifiedScopeName, it) }
-            .map { libraryDependency -> libraryDependency.toPackage() }
-            .also { graphBuilder.addPackages(it) }
+
+        graphBuilder.addPackages(dependencyHandler.packages)
 
         return listOf(
             ProjectAnalyzerResult(
                 project = project.copy(scopeNames = setOf(DEPENDENCIES_SCOPE_NAME)),
                 // Packages are set by the dependency handler.
                 packages = emptySet(),
-                issues = emptyList()
+                issues = issues
             )
         )
     }

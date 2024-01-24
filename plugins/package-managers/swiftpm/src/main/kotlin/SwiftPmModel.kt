@@ -93,7 +93,7 @@ internal val SwiftPackage.Dependency.id: Identifier
         type = PACKAGE_TYPE,
         namespace = "",
         name = getCanonicalName(repositoryUrl),
-        version = version
+        version = version.takeUnless { it == "unspecified" }.orEmpty()
     )
 
 internal fun SwiftPackage.Dependency.toPackage(): Package {
