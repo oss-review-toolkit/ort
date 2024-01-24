@@ -33,8 +33,8 @@ import org.ossreviewtoolkit.utils.test.matchExpectedResult
 class SwiftPmFunTest : WordSpec({
     "Analyzing a lockfile with file format version 1" should {
         "return the correct result" {
-            val definitionFile = getAssetFile("projects/synthetic/lockfile-v1/Package.resolved")
-            val expectedResultFile = getAssetFile("projects/synthetic/expected-output-lockfile-v1.yml")
+            val definitionFile = getAssetFile("projects/synthetic/only-lockfile-v1/Package.resolved")
+            val expectedResultFile = getAssetFile("projects/synthetic/expected-output-only-lockfile-v1.yml")
 
             val result = create(PROJECT_TYPE).resolveSingleProject(definitionFile)
 
@@ -44,8 +44,8 @@ class SwiftPmFunTest : WordSpec({
 
     "Analyzing a lockfile with file format version 2" should {
         "return the correct result" {
-            val definitionFile = getAssetFile("projects/synthetic/lockfile-v2/Package.resolved")
-            val expectedResultFile = getAssetFile("projects/synthetic/expected-output-lockfile-v2.yml")
+            val definitionFile = getAssetFile("projects/synthetic/only-lockfile-v2/Package.resolved")
+            val expectedResultFile = getAssetFile("projects/synthetic/expected-output-only-lockfile-v2.yml")
 
             val result = create(PROJECT_TYPE).resolveSingleProject(definitionFile)
 
@@ -55,8 +55,8 @@ class SwiftPmFunTest : WordSpec({
 
     "Analyzing a lockfile with unsupported file format version 3" should {
         "return " {
-            val definitionFile = getAssetFile("projects/synthetic/lockfile-v3/Package.resolved")
-            val expectedResultFile = getAssetFile("projects/synthetic/expected-output-lockfile-v3.yml")
+            val definitionFile = getAssetFile("projects/synthetic/only-lockfile-v3/Package.resolved")
+            val expectedResultFile = getAssetFile("projects/synthetic/expected-output-only-lockfile-v3.yml")
 
             val result = create(PROJECT_TYPE).resolveSingleProject(definitionFile)
 
