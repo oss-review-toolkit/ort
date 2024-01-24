@@ -121,7 +121,7 @@ project:
         - id: "Swift::github.com/apple/swift-atomics:1.2.0"
         - id: "Swift::github.com/apple/swift-collections:1.0.6"
         - id: "Swift::github.com/apple/swift-system:1.2.1"
-    - id: "Swift::github.com/vapor/console-kit:4.14.1"
+    - id: "Swift::github.com/vapor/console-kit:unspecified"
       dependencies:
       - id: "Swift::github.com/apple/swift-log:1.5.4"
       - id: "Swift::github.com/apple/swift-nio:2.63.0"
@@ -622,8 +622,8 @@ packages:
     url: "https://github.com/vapor/async-kit.git"
     revision: "1.19.0"
     path: ""
-- id: "Swift::github.com/vapor/console-kit:4.14.1"
-  purl: "pkg:swift/github.com%2Fvapor%2Fconsole-kit@4.14.1"
+- id: "Swift::github.com/vapor/console-kit:unspecified"
+  purl: "pkg:swift/github.com%2Fvapor%2Fconsole-kit@unspecified"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -641,12 +641,12 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/vapor/console-kit.git"
-    revision: "4.14.1"
+    revision: "unspecified"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/vapor/console-kit.git"
-    revision: "4.14.1"
+    revision: "unspecified"
     path: ""
 - id: "Swift::github.com/vapor/multipart-kit:4.6.0"
   purl: "pkg:swift/github.com%2Fvapor%2Fmultipart-kit@4.6.0"
