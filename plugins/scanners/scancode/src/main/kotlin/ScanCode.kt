@@ -157,8 +157,8 @@ class ScanCode internal constructor(
         ProcessCapture(
             command(),
             *commandLineOptions.toTypedArray(),
-            path.absolutePath,
-            OUTPUT_FORMAT_OPTION,
-            resultFile.absolutePath
+            // The output format option needs to directly precede the result file path.
+            OUTPUT_FORMAT_OPTION, resultFile.absolutePath,
+            path.absolutePath
         )
 }
