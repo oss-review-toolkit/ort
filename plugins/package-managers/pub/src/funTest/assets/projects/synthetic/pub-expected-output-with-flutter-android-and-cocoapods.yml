@@ -1406,10 +1406,10 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: ""
+    url: "https://pub.dev/packages/cupertino_icons/versions/1.0.3.tar.gz"
     hash:
-      value: ""
-      algorithm: ""
+      value: "486b7bc707424572cdf7bd7e812a0c146de3fd47ecadf070254cc60383f21dd8"
+      algorithm: "SHA-256"
   vcs:
     type: ""
     url: ""
@@ -1433,10 +1433,10 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: ""
+    url: "https://pub.dev/packages/flutter_lints/versions/1.0.4.tar.gz"
     hash:
-      value: ""
-      algorithm: ""
+      value: "b543301ad291598523947dc534aaddc5aaad597b709d2426d3a0e0d44c5cb493"
+      algorithm: "SHA-256"
   vcs:
     type: "Git"
     url: "https://github.com/flutter/packages.git"
@@ -1460,10 +1460,10 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: ""
+    url: "https://pub.dev/packages/lints/versions/1.0.1.tar.gz"
     hash:
-      value: ""
-      algorithm: ""
+      value: "a2c3d198cb5ea2e179926622d433331d8b58374ab8f29cdda6e863bd62fd369c"
+      algorithm: "SHA-256"
   vcs:
     type: "Git"
     url: "https://github.com/dart-lang/lints.git"
