@@ -17,6 +17,7 @@
 
 import hashlib
 import os
+import sys
 
 import requests
 
@@ -28,10 +29,17 @@ token = os.getenv("INPUT_TOKEN")
 org = os.getenv("GITHUB_REPOSITORY_OWNER")
 name = os.getenv("INPUT_NAME")
 base_version = os.getenv("INPUT_VERSION")
-unique_id = hashlib.sha256(os.getenv("BUILD_ARGS").encode()).hexdigest()
+build_args = os.getenv("BUILD_ARGS")
+invalidate_cache = True if os.getenv("INVALIDATE_CACHE") else False
+unique_id = hashlib.sha256(build_args.encode()).hexdigest() if build_args else "uniq"
 
 # We base the version on the base_version and the unique_id
 version = f"{base_version}-sha.{unique_id[:8]}"
+
+# In case of need invalidate the cache from images we just return the version
+if invalidate_cache:
+    print(version)
+    sys.exit(0)
 
 url = f"https://api.github.com/orgs/{org}/packages/container/ort%2F{name}/versions"
 
