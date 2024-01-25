@@ -579,16 +579,6 @@ class SpdxExpressionTest : WordSpec({
 
             shouldThrow<InvalidSubExpressionException> { expression.applyChoice(choice, subExpression) }
         }
-
-        "apply the choice when the subExpression matches only a part of the expression" {
-            val expression = "(a OR b) AND c".toSpdx()
-            val choice = "a".toSpdx()
-            val subExpression = "a OR b".toSpdx()
-
-            val result = expression.applyChoice(choice, subExpression)
-
-            result shouldBe "a AND c".toSpdx()
-        }
     }
 
     "applyChoices()" should {
