@@ -54,7 +54,7 @@ class SwiftPmFunTest : WordSpec({
     }
 
     "Analyzing a lockfile with unsupported file format version 3" should {
-        "return " {
+        "return the correct result" {
             val definitionFile = getAssetFile("projects/synthetic/only-lockfile-v3/Package.resolved")
             val expectedResultFile = getAssetFile("projects/synthetic/expected-output-only-lockfile-v3.yml")
 
