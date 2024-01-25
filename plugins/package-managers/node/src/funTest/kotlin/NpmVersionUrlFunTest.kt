@@ -27,6 +27,7 @@ import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
 import org.ossreviewtoolkit.analyzer.managers.withInvariantIssues
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.fromYaml
+import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
@@ -41,7 +42,7 @@ class NpmVersionUrlFunTest : WordSpec({
             val actualResult = create("NPM", allowDynamicVersions = true)
                 .resolveSingleProject(definitionFile, resolveScopes = true)
 
-            actualResult.withInvariantIssues() shouldBe expectedResult.withInvariantIssues()
+            actualResult.withInvariantIssues().toYaml() shouldBe expectedResult.withInvariantIssues().toYaml()
         }
     }
 })
