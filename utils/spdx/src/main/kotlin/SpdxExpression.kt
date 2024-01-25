@@ -336,7 +336,7 @@ class SpdxCompoundExpression(
         val expressionString = toString()
         val subExpressionString = subExpression.toString()
 
-        return validChoices().containsAll(subExpression.validChoices()) || subExpressionString in expressionString
+        return subExpressionString in expressionString || validChoices().containsAll(subExpression.validChoices())
     }
 
     override fun equals(other: Any?): Boolean {
