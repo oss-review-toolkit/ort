@@ -643,6 +643,18 @@ class SpdxExpressionTest : WordSpec({
 
             result shouldBe "a AND (c OR d) AND a".toSpdx()
         }
+
+        "given expressions should match semantically equivalent license expressions" {
+            val expression = "a OR b".toSpdx()
+
+            val choices = listOf(
+                SpdxLicenseChoice("b OR a".toSpdx(), "a".toSpdx())
+            )
+
+            val result = expression.applyChoices(choices)
+
+            result shouldBe "a".toSpdx()
+        }
     }
 
     "equals()" should {
