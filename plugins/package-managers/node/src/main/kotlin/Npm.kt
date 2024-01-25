@@ -612,7 +612,7 @@ open class Npm(
 
         fun mapLinesToIssues(prefix: String, severity: Severity) {
             val ignorablePrefixes = setOf("code ", "errno ", "path ", "syscall ")
-            val singleLinePrefixes = setOf("deprecated ")
+            val singleLinePrefixes = setOf("deprecated ", "skipping integrity check for git dependency ")
             val minSecondaryPrefixLength = 5
 
             val issueLines = lines.mapNotNull { line ->
