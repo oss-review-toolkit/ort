@@ -36,7 +36,6 @@ import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression.Strictness
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense.*
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseException.*
-import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
 
 class SpdxExpressionTest : WordSpec({
     "toString()" should {

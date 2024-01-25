@@ -17,10 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.utils.spdx.model
-
-import org.ossreviewtoolkit.utils.spdx.InvalidLicenseChoiceException
-import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+package org.ossreviewtoolkit.utils.spdx
 
 /**
  * An individual license choice.
