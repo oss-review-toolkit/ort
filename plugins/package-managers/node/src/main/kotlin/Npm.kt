@@ -622,7 +622,7 @@ open class Npm(
             var commonPrefix: String
             var previousPrefix = ""
 
-            val collapsedLines = issueLines.fold(mutableListOf<String>()) { messages, line ->
+            val collapsedLines = issueLines.distinct().fold(mutableListOf<String>()) { messages, line ->
                 if (messages.isEmpty()) {
                     // The first line is always added including the prefix. The prefix will be removed later.
                     messages += line
