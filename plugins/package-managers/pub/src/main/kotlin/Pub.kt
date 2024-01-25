@@ -532,8 +532,10 @@ class Pub(
                     var vcs = VcsInfo.EMPTY
                     var authors = emptySet<String>()
 
+                    val source = pkgInfoFromLockFile["source"].textValueOrEmpty()
+
                     when {
-                        pkgInfoFromLockFile["source"].textValueOrEmpty() == "path" -> {
+                        source == "path" -> {
                             rawName = packageName
                             val path = pkgInfoFromLockFile["description"]["path"].textValueOrEmpty()
                             vcs = VersionControlSystem.forDirectory(workingDir.resolve(path))?.getInfo() ?: run {
@@ -545,7 +547,7 @@ class Pub(
                             }
                         }
 
-                        pkgInfoFromLockFile["source"].textValueOrEmpty() == "git" -> {
+                        source == "git" -> {
                             val pkgInfoFromYamlFile = readPackageInfoFromCache(pkgInfoFromLockFile, workingDir)
 
                             rawName = pkgInfoFromYamlFile["name"]?.textValue() ?: packageName
@@ -562,7 +564,7 @@ class Pub(
                         }
 
                         // For now, we ignore SDKs like the Dart SDK and the Flutter SDK in the analyzer.
-                        pkgInfoFromLockFile["source"].textValueOrEmpty() != "sdk" -> {
+                        source != "sdk" -> {
                             val pkgInfoFromYamlFile = readPackageInfoFromCache(pkgInfoFromLockFile, workingDir)
 
                             rawName = pkgInfoFromYamlFile["name"].textValueOrEmpty()
