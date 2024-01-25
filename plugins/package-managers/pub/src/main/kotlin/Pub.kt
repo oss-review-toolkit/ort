@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
+import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
@@ -597,6 +598,19 @@ class Pub(
                         logger.warn { "No version information found for package $rawName." }
                     }
 
+                    val hostUrl = pkgInfoFromLockFile["description"]["url"].textValueOrEmpty()
+
+                    val sourceArtifact = if (source == "hosted" && hostUrl.isNotEmpty() && version.isNotEmpty()) {
+                        val sha256 = pkgInfoFromLockFile["description"]["sha256"].textValueOrEmpty()
+
+                        RemoteArtifact(
+                            url = "$hostUrl/packages/$rawName/versions/$version.tar.gz",
+                            hash = Hash.create(sha256)
+                        )
+                    } else {
+                        RemoteArtifact.EMPTY
+                    }
+
                     val id = Identifier(
                         type = managerName,
                         namespace = "",
@@ -613,8 +627,7 @@ class Pub(
                         homepageUrl = homepageUrl,
                         // Pub does not create binary artifacts, therefore use any empty artifact.
                         binaryArtifact = RemoteArtifact.EMPTY,
-                        // Pub does not create source artifacts, therefore use any empty artifact.
-                        sourceArtifact = RemoteArtifact.EMPTY,
+                        sourceArtifact = sourceArtifact,
                         vcs = vcs,
                         vcsProcessed = processPackageVcs(vcs, homepageUrl)
                     )
