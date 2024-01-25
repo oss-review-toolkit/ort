@@ -76,11 +76,11 @@ project:
           dependencies:
           - id: "Pub::collection:1.18.0"
           - id: "Pub::meta:1.11.0"
-    - id: "Pub::test:1.25.1"
+    - id: "Pub::test:1.25.2"
       dependencies:
-      - id: "Pub::analyzer:6.3.0"
+      - id: "Pub::analyzer:6.4.0"
         dependencies:
-        - id: "Pub::_fe_analyzer_shared:65.0.0"
+        - id: "Pub::_fe_analyzer_shared:66.0.0"
           dependencies:
           - id: "Pub::meta:1.11.0"
         - id: "Pub::collection:1.18.0"
@@ -591,9 +591,9 @@ project:
         - id: "Pub::term_glyph:1.2.1"
       - id: "Pub::test_core:0.6.0"
         dependencies:
-        - id: "Pub::analyzer:6.3.0"
+        - id: "Pub::analyzer:6.4.0"
           dependencies:
-          - id: "Pub::_fe_analyzer_shared:65.0.0"
+          - id: "Pub::_fe_analyzer_shared:66.0.0"
             dependencies:
             - id: "Pub::meta:1.11.0"
           - id: "Pub::collection:1.18.0"
@@ -885,8 +885,8 @@ project:
             - id: "Pub::path:1.9.0"
             - id: "Pub::term_glyph:1.2.1"
 packages:
-- id: "Pub::_fe_analyzer_shared:65.0.0"
-  purl: "pkg:pub/_fe_analyzer_shared@65.0.0"
+- id: "Pub::_fe_analyzer_shared:66.0.0"
+  purl: "pkg:pub/_fe_analyzer_shared@66.0.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "Logic that is shared between the front_end and analyzer packages."
@@ -911,8 +911,8 @@ packages:
     url: "https://github.com/dart-lang/sdk.git"
     revision: "main"
     path: "pkg/_fe_analyzer_shared"
-- id: "Pub::analyzer:6.3.0"
-  purl: "pkg:pub/analyzer@6.3.0"
+- id: "Pub::analyzer:6.4.0"
+  purl: "pkg:pub/analyzer@6.4.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "This package provides a library that performs static analysis of Dart\
@@ -1868,8 +1868,8 @@ packages:
     url: "https://github.com/dart-lang/term_glyph.git"
     revision: ""
     path: ""
-- id: "Pub::test:1.25.1"
-  purl: "pkg:pub/test@1.25.1"
+- id: "Pub::test:1.25.2"
+  purl: "pkg:pub/test@1.25.2"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "A full featured library for writing and running Dart tests across\
