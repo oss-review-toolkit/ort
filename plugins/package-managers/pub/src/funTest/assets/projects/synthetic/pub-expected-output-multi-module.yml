@@ -38,9 +38,9 @@ projects:
     path: ""
   vcs_processed:
     type: "Git"
-    url: "ssh://git@github.com/oss-review-toolkit/ort.git"
-    revision: "10242bd48f0ebcf37ac3c1d50b69236b144a97e4"
-    path: "plugins/package-managers/pub/src/funTest/assets/projects/synthetic/multi-module/subproject"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>/subproject"
   homepage_url: "https://ossreviewtoolkit.org/"
   scopes:
   - name: "dependencies"
