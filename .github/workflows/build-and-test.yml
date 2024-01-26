@@ -23,7 +23,7 @@ jobs:
         distribution: temurin
         java-version: 17
     - name: Build all classes
-      uses: gradle/gradle-build-action@v2
+      uses: gradle/gradle-build-action@v3
       with:
         gradle-home-cache-cleanup: true
         arguments: --scan classes -x :plugins:reporters:web-app-template:yarnBuild
@@ -39,7 +39,7 @@ jobs:
         distribution: temurin
         java-version: 17
     - name: Build the web-app-reporter
-      uses: gradle/gradle-build-action@v2
+      uses: gradle/gradle-build-action@v3
       with:
         gradle-home-cache-cleanup: true
         arguments: --scan :plugins:reporters:web-app-template:yarnBuild
@@ -62,7 +62,7 @@ jobs:
         distribution: temurin
         java-version: 17
     - name: Build all classes
-      uses: gradle/gradle-build-action@v2
+      uses: gradle/gradle-build-action@v3
       with:
         gradle-home-cache-cleanup: true
         arguments: -Dorg.gradle.jvmargs=-Xmx1g classes -x :plugins:reporters:web-app-template:yarnBuild
@@ -80,7 +80,7 @@ jobs:
         distribution: temurin
         java-version: 17
     - name: Run unit tests
-      uses: gradle/gradle-build-action@v2
+      uses: gradle/gradle-build-action@v3
       with:
         gradle-home-cache-cleanup: true
         arguments: --scan test jacocoTestReport -x :plugins:reporters:web-app-template:yarnBuild
@@ -129,7 +129,7 @@ jobs:
         distribution: temurin
         java-version: 17
     - name: Run functional tests that do not require external tools
-      uses: gradle/gradle-build-action@v2
+      uses: gradle/gradle-build-action@v3
       with:
         gradle-home-cache-cleanup: true
         arguments: --scan -Ptests.exclude=org.ossreviewtoolkit.plugins.packagemanagers.* funTest jacocoFunTestReport
@@ -153,7 +153,7 @@ jobs:
         distribution: temurin
         java-version: 17
     - name: Run functional tests that do require external tools
-      uses: gradle/gradle-build-action@v2
+      uses: gradle/gradle-build-action@v3
       with:
         gradle-home-cache-cleanup: true
         arguments: --scan -Ptests.include=org.ossreviewtoolkit.plugins.packagemanagers.* funTest jacocoFunTestReport
