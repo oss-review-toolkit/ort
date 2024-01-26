@@ -574,7 +574,11 @@ class Pub(
                             authors = parseAuthors(pkgInfoFromYamlFile)
 
                             val repositoryUrl = pkgInfoFromYamlFile["repository"].textValueOrEmpty()
-                            vcs = VcsHost.parseUrl(repositoryUrl)
+
+                            // Ignore the revision parsed from the repositoryUrl because the URL often points to the
+                            // main or master branch of the repository but never to the correct revision that matches
+                            // the version of the package.
+                            vcs = VcsHost.parseUrl(repositoryUrl).copy(revision = "")
                         }
 
                         pkgInfoFromLockFile["description"].textValueOrEmpty() == "flutter" -> {
