@@ -46,8 +46,8 @@ data class Hash(
         val NONE = Hash(HashAlgorithm.NONE.toString(), HashAlgorithm.NONE)
 
         /**
-         * Create a [Hash] instance from a known hash [value]. If the [HashAlgorithm] cannot be determined,
-         * [HashAlgorithm.UNKNOWN] along with the original [value] is returned.
+         * Create a [Hash] instance from a known hash [value]. If the [HashAlgorithm] cannot be determined, the original
+         * [value] is returned with [HashAlgorithm.UNKNOWN], or with [HashAlgorithm.NONE] if the value is blank.
          */
         fun create(value: String): Hash {
             val splitValue = value.split('-')
