@@ -356,7 +356,7 @@ COPY --from=scalabuild /opt/sbt /opt/sbt
 # SWIFT
 FROM base AS swiftbuild
 
-ARG SWIFT_VERSION=5.8.1
+ARG SWIFT_VERSION=5.9.2
 
 ENV SWIFT_HOME=/opt/swift
 ENV PATH=$PATH:$SWIFT_HOME/bin
