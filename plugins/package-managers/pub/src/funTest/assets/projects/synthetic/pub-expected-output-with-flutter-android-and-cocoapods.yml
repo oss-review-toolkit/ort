@@ -1440,12 +1440,12 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/flutter/packages.git"
-    revision: "master"
+    revision: ""
     path: "packages/flutter_lints"
   vcs_processed:
     type: "Git"
     url: "https://github.com/flutter/packages.git"
-    revision: "master"
+    revision: ""
     path: "packages/flutter_lints"
 - id: "Pub::lints:1.0.1"
   purl: "pkg:pub/lints@1.0.1"
