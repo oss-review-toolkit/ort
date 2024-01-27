@@ -108,3 +108,9 @@ const val ORT_EVALUATOR_RULES_FILENAME = "evaluator.rules.kts"
  * The name of the ORT notifier script.
  */
 const val ORT_NOTIFIER_SCRIPT_FILENAME = "notifier.notifications.kts"
+
+/**
+ * The minimum status code ORT CLI commands return on exit for failures (like rule violations), not errors (like
+ * existing output files).
+ */
+const val ORT_FAILURE_STATUS_CODE = 2

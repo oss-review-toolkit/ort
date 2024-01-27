@@ -63,6 +63,7 @@ import org.ossreviewtoolkit.scanner.provenance.DefaultProvenanceDownloader
 import org.ossreviewtoolkit.scanner.utils.DefaultWorkingTreeCache
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.safeMkdirs
+import org.ossreviewtoolkit.utils.ort.ORT_FAILURE_STATUS_CODE
 import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
@@ -154,7 +155,7 @@ class ScannerCommand : OrtCommand(
         val resolutionProvider = DefaultResolutionProvider.create(ortResult, resolutionsFile)
         val issues = scannerRun.getIssues().flatMap { it.value }
         SeverityStatsPrinter(terminal, resolutionProvider).stats(issues)
-            .print().conclude(ortConfig.severeIssueThreshold, 2)
+            .print().conclude(ortConfig.severeIssueThreshold, ORT_FAILURE_STATUS_CODE)
     }
 
     private fun runScanners(

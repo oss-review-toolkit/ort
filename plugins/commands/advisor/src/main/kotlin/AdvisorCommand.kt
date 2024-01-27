@@ -52,6 +52,7 @@ import org.ossreviewtoolkit.plugins.commands.api.utils.readOrtResult
 import org.ossreviewtoolkit.plugins.commands.api.utils.writeOrtResult
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.safeMkdirs
+import org.ossreviewtoolkit.utils.ort.ORT_FAILURE_STATUS_CODE
 import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
@@ -156,6 +157,6 @@ class AdvisorCommand : OrtCommand(
         val resolutionProvider = DefaultResolutionProvider.create(ortResultOutput, resolutionsFile)
         val issues = advisorRun.results.getIssues().flatMap { it.value }
         SeverityStatsPrinter(terminal, resolutionProvider).stats(issues)
-            .print().conclude(ortConfig.severeIssueThreshold, 2)
+            .print().conclude(ortConfig.severeIssueThreshold, ORT_FAILURE_STATUS_CODE)
     }
 }
