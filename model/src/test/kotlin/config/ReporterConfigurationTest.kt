@@ -26,6 +26,7 @@ import java.io.File
 
 import org.ossreviewtoolkit.model.fromYaml
 import org.ossreviewtoolkit.model.toYaml
+import org.ossreviewtoolkit.utils.ort.ORT_REFERENCE_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class ReporterConfigurationTest : WordSpec({
@@ -42,7 +43,7 @@ class ReporterConfigurationTest : WordSpec({
  * Load the ORT reference configuration and extract the reporter configuration.
  */
 private fun loadReporterConfig(): ReporterConfiguration =
-    OrtConfiguration.load(file = File("src/main/resources/$REFERENCE_CONFIG_FILENAME")).reporter
+    OrtConfiguration.load(file = File("src/main/resources/$ORT_REFERENCE_CONFIG_FILENAME")).reporter
 
 /**
  * Perform a serialization round-trip of the given reporter [config] and return the result. This is used to check

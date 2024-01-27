@@ -41,12 +41,13 @@ import java.lang.IllegalArgumentException
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.utils.common.EnvironmentVariableFilter
+import org.ossreviewtoolkit.utils.ort.ORT_REFERENCE_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class OrtConfigurationTest : WordSpec({
     "OrtConfiguration" should {
         "be deserializable from YAML" {
-            val refConfig = File("src/main/resources/$REFERENCE_CONFIG_FILENAME")
+            val refConfig = File("src/main/resources/$ORT_REFERENCE_CONFIG_FILENAME")
             val ortConfig = OrtConfiguration.load(file = refConfig)
 
             ortConfig.allowedProcessEnvironmentVariableNames should containExactlyInAnyOrder("PASSPORT", "USER_HOME")

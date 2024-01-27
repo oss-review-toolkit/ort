@@ -30,10 +30,10 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.OrtConfigurationWrapper
-import org.ossreviewtoolkit.model.config.REFERENCE_CONFIG_FILENAME
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.expandTilde
+import org.ossreviewtoolkit.utils.ort.ORT_REFERENCE_CONFIG_FILENAME
 
 class ConfigCommand : OrtCommand(
     name = "config",
@@ -84,7 +84,7 @@ class ConfigCommand : OrtCommand(
         if (showReference) {
             echo("The reference configuration is:")
             echo()
-            echo(javaClass.getResource("/$REFERENCE_CONFIG_FILENAME").readText())
+            echo(javaClass.getResource("/$ORT_REFERENCE_CONFIG_FILENAME").readText())
         }
 
         checkSyntax?.run {

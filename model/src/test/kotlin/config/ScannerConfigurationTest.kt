@@ -31,11 +31,12 @@ import java.io.File
 
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.writeValue
+import org.ossreviewtoolkit.utils.ort.ORT_REFERENCE_CONFIG_FILENAME
 
 class ScannerConfigurationTest : WordSpec({
     "ScannerConfiguration" should {
         "support a serialization round-trip via an ObjectMapper" {
-            val ortConfig = OrtConfiguration.load(file = File("src/main/resources/$REFERENCE_CONFIG_FILENAME"))
+            val ortConfig = OrtConfiguration.load(file = File("src/main/resources/$ORT_REFERENCE_CONFIG_FILENAME"))
             val rereadOrtConfig = tempfile(null, ".yml").run {
                 writeValue(ortConfig)
                 readValue<OrtConfiguration>()
