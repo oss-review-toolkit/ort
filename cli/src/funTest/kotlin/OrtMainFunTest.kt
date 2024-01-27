@@ -39,11 +39,11 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.OrtConfigurationWrapper
 import org.ossreviewtoolkit.model.config.ProviderPluginConfiguration
-import org.ossreviewtoolkit.model.config.REFERENCE_CONFIG_FILENAME
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.utils.common.EnvironmentVariableFilter
+import org.ossreviewtoolkit.utils.ort.ORT_REFERENCE_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
@@ -228,7 +228,7 @@ class OrtMainFunTest : StringSpec() {
         }
 
         "EnvironmentVariableFilter is correctly initialized" {
-            val referenceConfigFile = File("../model/src/main/resources/$REFERENCE_CONFIG_FILENAME").absolutePath
+            val referenceConfigFile = File("../model/src/main/resources/$ORT_REFERENCE_CONFIG_FILENAME").absolutePath
 
             OrtMain().test(
                 "-c", referenceConfigFile,

@@ -50,6 +50,11 @@ const val ORT_DATA_DIR_ENV_NAME = "ORT_DATA_DIR"
 const val ORT_CONFIG_FILENAME = "config.yml"
 
 /**
+ * The filename of the reference configuration file.
+ */
+const val ORT_REFERENCE_CONFIG_FILENAME = "reference.yml"
+
+/**
  * The name of the ORT copyright garbage configuration file.
  */
 const val ORT_COPYRIGHT_GARBAGE_FILENAME = "copyright-garbage.yml"

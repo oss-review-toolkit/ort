@@ -195,8 +195,3 @@ data class OrtConfiguration(
 data class OrtConfigurationWrapper(
     val ort: OrtConfiguration
 )
-
-/**
- * The filename of the reference configuration file.
- */
-const val REFERENCE_CONFIG_FILENAME = "reference.yml"
