@@ -107,7 +107,7 @@ class JsonSchemaTest : StringSpec({
 
 private val schemaV7 = JsonSchemaFactory
     .builder(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7))
-    .objectMapper(yamlMapper)
+    .yamlMapper(yamlMapper)
     .build()
 
 private val repositoryConfigurationSchema =
