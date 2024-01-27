@@ -73,7 +73,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
             val jsonMapper = FileFormat.JSON.mapper
             val schema = JsonSchemaFactory
                 .builder(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7))
-                .objectMapper(FileFormat.JSON.mapper)
+                .jsonMapper(FileFormat.JSON.mapper)
                 .build()
                 .getSchema(getAssetFile("spdx-schema.json").toURI())
 
