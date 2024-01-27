@@ -28,7 +28,8 @@ final DOCKER_BUILD_ARGS = '--build-arg http_proxy=$http_proxy --build-arg https_
 // Disable the entry point to work around https://issues.jenkins-ci.org/browse/JENKINS-51307.
 final DOCKER_RUN_ARGS = '-e http_proxy -e https_proxy --entrypoint=""'
 
-// The status code ORT commands return for failures (like rule violations), not errors (like existing output files).
+// The minimum status code ORT CLI commands return on exit for failures (like rule violations), not errors (like
+// existing output files).
 final ORT_FAILURE_STATUS_CODE = 2
 
 @NonCPS
