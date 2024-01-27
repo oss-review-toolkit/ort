@@ -30,6 +30,7 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.utils.common.EnvironmentVariableFilter
+import org.ossreviewtoolkit.utils.ort.ORT_FAILURE_STATUS_CODE
 import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CONFIGURATIONS_DIRNAME
 import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CURATIONS_DIRNAME
 import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CURATIONS_FILENAME
@@ -100,12 +101,14 @@ data class OrtConfiguration(
     ),
 
     /**
-     * The threshold from which on issues count as severe.
+     * The threshold from which on issues count as severe. Severe issues cause the status code on exit of the CLI
+     * commands to be at least [ORT_FAILURE_STATUS_CODE].
      */
     val severeIssueThreshold: Severity = Severity.WARNING,
 
     /**
-     * The threshold from which on rule violations count as severe.
+     * The threshold from which on rule violations count as severe. Severe rule violations cause the status code on exit
+     * of the CLI commands to be at least [ORT_FAILURE_STATUS_CODE].
      */
     val severeRuleViolationThreshold: Severity = Severity.WARNING,
 
