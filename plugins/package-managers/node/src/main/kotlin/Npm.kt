@@ -573,7 +573,7 @@ open class Npm(
         val issues = mutableListOf<Issue>()
 
         lines.groupLines("npm WARN ").mapTo(issues) {
-            Issue(source = managerName, message = it, severity = Severity.WARNING)
+            Issue(source = managerName, message = it, severity = Severity.HINT)
         }
 
         lines.groupLines("npm ERR! ").mapTo(issues) {
