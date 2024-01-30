@@ -67,7 +67,7 @@ class SwiftPmFunTest : WordSpec({
     "Analyzing a definition file with a sibling lockfile" should {
         "return the correct result" {
             val definitionFile = getAssetFile("projects/synthetic/project-with-lockfile/Package.swift")
-            val expectedResultFile = getAssetFile("projects/synthetic/expected-output-project.yml")
+            val expectedResultFile = getAssetFile("projects/synthetic/expected-output-project-with-lockfile.yml")
 
             val result = create(PROJECT_TYPE).resolveSingleProject(definitionFile, resolveScopes = true)
 
