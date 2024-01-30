@@ -572,10 +572,13 @@ open class Npm(
         val lines = process.stderr.lines()
         val issues = mutableListOf<Issue>()
 
+        // Generally forward issues from the NPM CLI to the ORT NPM package manager. Lower the severity of warnings to
+        // hints, as warnings usually do not prevent the ORT NPM package manager from getting the dependencies right.
         lines.groupLines("npm WARN ").mapTo(issues) {
             Issue(source = managerName, message = it, severity = Severity.HINT)
         }
 
+        // For errors, however, something clearly went wrong, so keep the severity here.
         lines.groupLines("npm ERR! ").mapTo(issues) {
             Issue(source = managerName, message = it, severity = Severity.ERROR)
         }
