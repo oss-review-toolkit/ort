@@ -39,6 +39,15 @@ class OrtConfigPackageCurationProviderFunTest : StringSpec({
         curations.filter { it.isApplicable(azureCoreAmqp) } shouldNot beEmpty()
     }
 
+    "The provider returns curations that match the namespace of a package" {
+        val xrd4j = Identifier("Maven:org.niis.xrd4j:foo:0.0.0")
+        val packages = createPackagesFromIds(xrd4j)
+
+        val curations = OrtConfigPackageCurationProvider().getCurationsFor(packages)
+
+        curations.filter { it.isApplicable(xrd4j) } shouldNot beEmpty()
+    }
+
     "The provider does not fail for packages which have no curations" {
         val packages = createPackagesFromIds(Identifier("Some:Bogus:Package:Id"))
 
