@@ -64,15 +64,19 @@ open class OrtConfigPackageCurationProvider : PackageCurationProvider {
         packages.flatMapTo(mutableSetOf()) { pkg -> getCurationsFor(pkg.id) }
 
     private fun getCurationsFor(pkgId: Identifier): List<PackageCuration> {
-        val file = curationsDir.resolve("curations").resolve(pkgId.toCurationPath())
-        return if (file.isFile) {
+        // The ORT config repository follows path layout conventions, so curations can be looked up directly.
+        val packageCurationsFile = curationsDir.resolve("curations").resolve(pkgId.toCurationPath())
+
+        // Also consider curations for all packages in a namespace.
+        val namespaceCurationsFile = packageCurationsFile.resolveSibling("_.yml")
+
+        // Return namespace-level curations before package-level curations to allow overriding the former.
+        return listOf(namespaceCurationsFile, packageCurationsFile).filter { it.isFile }.flatMap { file ->
             runCatching {
                 file.readValue<List<PackageCuration>>().filter { it.isApplicable(pkgId) }
             }.getOrElse {
                 throw IOException("Failed parsing package curation from '${file.absolutePath}'.", it)
             }
-        } else {
-            emptyList()
         }
     }
 }
