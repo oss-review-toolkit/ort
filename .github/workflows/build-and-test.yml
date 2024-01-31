@@ -85,7 +85,7 @@ jobs:
         gradle-home-cache-cleanup: true
         arguments: --scan test jacocoTestReport -x :plugins:reporters:web-app-template:yarnBuild
     - name: Upload code coverage data
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
       with:
         flags: test
   funTest-non-docker:
@@ -134,7 +134,7 @@ jobs:
         gradle-home-cache-cleanup: true
         arguments: --scan -Ptests.exclude=org.ossreviewtoolkit.plugins.packagemanagers.* funTest jacocoFunTestReport
     - name: Upload code coverage data
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
       with:
         flags: funTest-non-docker
   funTest-docker:
@@ -158,6 +158,6 @@ jobs:
         gradle-home-cache-cleanup: true
         arguments: --scan -Ptests.include=org.ossreviewtoolkit.plugins.packagemanagers.* funTest jacocoFunTestReport
     - name: Upload code coverage data
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
       with:
         flags: funTest-docker
