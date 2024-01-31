@@ -30,7 +30,6 @@ mavenPublishing {
 
     coordinates(groupId = "org${getGroupId(parent)}")
     publishToMavenCentral(SonatypeHost.DEFAULT)
-    signAllPublications()
 
     pom {
         name = project.name
