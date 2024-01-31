@@ -29,7 +29,6 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.LsRemoteCommand
-import org.eclipse.jgit.api.ResetCommand
 import org.eclipse.jgit.api.errors.GitAPIException
 import org.eclipse.jgit.errors.UnsupportedCredentialItem
 import org.eclipse.jgit.lib.Constants
@@ -242,7 +241,7 @@ class Git : VersionControlSystem(), CommandLineTool {
             logger.warn { "Failed to fetch everything: ${it.collectMessages()}" }
         }.mapCatching { fetchResult ->
             // TODO: Migrate this to JGit once sparse checkout (https://bugs.eclipse.org/bugs/show_bug.cgi?id=383772) is
-            //       implemented.
+            //       implemented. Also see the "reset" call below.
             run("checkout", revision, workingDir = workingTree.workingDir)
 
             // In case of a non-fixed revision (branch or tag) reset the working tree to ensure that the previously
@@ -267,7 +266,7 @@ class Git : VersionControlSystem(), CommandLineTool {
                     "Requested revision '$revision' not found in refs advertised by the server."
                 }
 
-                git.reset().setMode(ResetCommand.ResetType.HARD).setRef(resolvedRevision).call()
+                run("reset", "--hard", resolvedRevision, workingDir = workingTree.workingDir)
             }
 
             revision
