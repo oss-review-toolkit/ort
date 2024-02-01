@@ -174,7 +174,7 @@ class Git : VersionControlSystem(), CommandLineTool {
     ): Result<String> =
         (workingTree as GitWorkingTree).useRepo {
             Git(this).use { git ->
-                logger.info { "Updating working tree from '${workingTree.getRemoteUrl()}'." }
+                logger.info { "Updating working tree from ${workingTree.getRemoteUrl()}." }
 
                 updateWorkingTreeWithoutSubmodules(workingTree, git, revision).mapCatching {
                     // In case this throws the exception gets encapsulated as a failure.

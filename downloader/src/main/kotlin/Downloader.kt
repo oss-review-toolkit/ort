@@ -242,8 +242,8 @@ class Downloader(private val config: DownloaderConfiguration) {
             applicableVcs = VersionControlSystem.forUrl(pkg.vcsProcessed.url)
             logger.info {
                 applicableVcs?.let {
-                    "Detected VCS type '${it.type}' from URL '${pkg.vcsProcessed.url}'."
-                } ?: "Could not detect VCS type from URL '${pkg.vcsProcessed.url}'."
+                    "Detected VCS type '${it.type}' from URL ${pkg.vcsProcessed.url}."
+                } ?: "Could not detect VCS type from URL ${pkg.vcsProcessed.url}."
             }
         }
 

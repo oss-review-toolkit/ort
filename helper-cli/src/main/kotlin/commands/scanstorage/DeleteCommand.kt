@@ -160,7 +160,7 @@ internal class DeleteCommand : CliktCommand(
             ?: throw IllegalArgumentException("postgresStorage not configured.")
 
         logger.info {
-            "Using Postgres storage with URL '${storageConfig.connection.url}' and schema " +
+            "Using Postgres storage with URL ${storageConfig.connection.url} and schema " +
                 "'${storageConfig.connection.schema}'."
         }
 

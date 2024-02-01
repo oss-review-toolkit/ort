@@ -112,7 +112,7 @@ class HttpFileStorage(
         }
 
         response.close()
-        throw IOException("Could not read from '${request.url}': ${response.code} - ${response.message}")
+        throw IOException("Could not read from ${request.url}: ${response.code} - ${response.message}")
     }
 
     override fun write(path: String, inputStream: InputStream) {
@@ -128,7 +128,7 @@ class HttpFileStorage(
             return httpClient.execute(request).use { response ->
                 if (!response.isSuccessful) {
                     throw IOException(
-                        "Could not store file at '${request.url}': ${response.code} - ${response.message}"
+                        "Could not store file at ${request.url}: ${response.code} - ${response.message}"
                     )
                 }
             }

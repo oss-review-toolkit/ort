@@ -220,7 +220,7 @@ private fun urlToPackageType(url: String): PurlType =
         else -> {
             PurlType.GENERIC.also {
                 logger.warn {
-                    "Cannot determine PURL type for url '$url' and provider '$provider'. Falling back to '$it'."
+                    "Cannot determine PURL type for URL $url and provider '$provider'. Falling back to '$it'."
                 }
             }
         }
