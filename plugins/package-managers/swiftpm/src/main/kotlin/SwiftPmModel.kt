@@ -55,21 +55,25 @@ data class SwiftPackage(
 }
 
 /**
+ * See https://github.com/apple/swift-package-manager/blob/3ef830dddff459e569d6e49c186c3ded33c39bcc/Sources/PackageGraph/PinsStore.swift#L351-L373
+ * and https://github.com/apple/swift-package-manager/blob/3ef830dddff459e569d6e49c186c3ded33c39bcc/Sources/PackageGraph/PinsStore.swift#L440-L461.
+ */
+@Serializable
+data class PinState(
+    val version: String? = null,
+    val revision: String? = null,
+    val branch: String? = null
+)
+
+/**
  * See https://github.com/apple/swift-package-manager/blob/3ef830dddff459e569d6e49c186c3ded33c39bcc/Sources/PackageGraph/PinsStore.swift#L285-L384.
  */
 @Serializable
 data class PinV1(
     @SerialName("package") val packageName: String,
-    val state: State?,
+    val state: PinState?,
     @SerialName("repositoryURL") val repositoryUrl: String
-) {
-    @Serializable
-    data class State(
-        val version: String? = null,
-        val revision: String? = null,
-        val branch: String? = null
-    )
-}
+)
 
 /**
  * See https://github.com/apple/swift-package-manager/blob/3ef830dddff459e569d6e49c186c3ded33c39bcc/Sources/PackageGraph/PinsStore.swift#L387-L462.
@@ -77,17 +81,10 @@ data class PinV1(
 @Serializable
 data class PinV2(
     val identity: String,
-    val state: State?,
+    val state: PinState?,
     val location: String,
     val kind: Kind
 ) {
-    @Serializable
-    data class State(
-        val version: String? = null,
-        val revision: String? = null,
-        val branch: String? = null
-    )
-
     enum class Kind {
         @SerialName("localSourceControl")
         LOCAL_SOURCE_CONTROL,
