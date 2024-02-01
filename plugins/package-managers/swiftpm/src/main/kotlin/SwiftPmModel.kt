@@ -78,7 +78,8 @@ data class PinV1(
 data class PinV2(
     val identity: String,
     val state: State?,
-    val location: String
+    val location: String,
+    val kind: Kind
 ) {
     @Serializable
     data class State(
@@ -86,6 +87,15 @@ data class PinV2(
         val revision: String? = null,
         val branch: String? = null
     )
+
+    enum class Kind {
+        @SerialName("localSourceControl")
+        LOCAL_SOURCE_CONTROL,
+        @SerialName("registry")
+        REGISTRY,
+        @SerialName("remoteSourceControl")
+        REMOTE_SOURCE_CONTROL
+    }
 }
 
 internal val SwiftPackage.Dependency.id: Identifier
