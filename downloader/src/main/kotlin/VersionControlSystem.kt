@@ -239,7 +239,7 @@ abstract class VersionControlSystem(
         }
 
         val revisionCandidates = getRevisionCandidates(workingTree, pkg, allowMovingRevisions).getOrElse {
-            throw DownloadException("$type failed to get revisions from URL '${pkg.vcsProcessed.url}'.", it)
+            throw DownloadException("$type failed to get revisions from URL ${pkg.vcsProcessed.url}.", it)
         }
 
         val results = mutableListOf<Result<String>>()
@@ -251,7 +251,7 @@ abstract class VersionControlSystem(
         }
 
         val workingTreeRevision = results.last().getOrElse {
-            throw DownloadException("$type failed to download from URL '${pkg.vcsProcessed.url}'.", it)
+            throw DownloadException("$type failed to download from URL ${pkg.vcsProcessed.url}.", it)
         }
 
         pkg.vcsProcessed.path.let {

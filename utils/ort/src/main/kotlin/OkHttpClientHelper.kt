@@ -115,7 +115,7 @@ val okHttpClient: OkHttpClient by lazy {
                 it.showStackTrace()
 
                 logger.error {
-                    "HTTP request to '${request.url}' failed with an exception: ${it.collectMessages()}"
+                    "HTTP request to ${request.url} failed with an exception: ${it.collectMessages()}"
                 }
             }.getOrThrow()
         }

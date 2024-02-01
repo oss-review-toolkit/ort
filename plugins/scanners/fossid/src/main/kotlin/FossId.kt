@@ -150,11 +150,11 @@ class FossId internal constructor(
         fun convertGitUrlToProjectName(gitRepoUrl: String): String {
             val projectNameMatcher = PROJECT_NAME_REGEX.matchEntire(gitRepoUrl)
 
-            requireNotNull(projectNameMatcher) { "Git repository URL '$gitRepoUrl' does not contain a project name." }
+            requireNotNull(projectNameMatcher) { "Git repository URL $gitRepoUrl does not contain a project name." }
 
             val projectName = projectNameMatcher.groupValues[1]
 
-            logger.info { "Found project name '$projectName' in URL '$gitRepoUrl'." }
+            logger.info { "Found project name '$projectName' in URL $gitRepoUrl." }
 
             return projectName
         }

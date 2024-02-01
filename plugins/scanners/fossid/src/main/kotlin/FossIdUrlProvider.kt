@@ -86,7 +86,7 @@ class FossIdUrlProvider private constructor(
          */
         private fun queryAuthenticator(repoUrl: String): PasswordAuthentication? {
             val repoUri = repoUrl.toUri().getOrElse {
-                logger.warn { "The repository URL '$repoUrl' is not valid." }
+                logger.warn { "The repository URL $repoUrl is not valid." }
                 return null
             }
 
@@ -154,7 +154,7 @@ class FossIdUrlProvider private constructor(
             }
         }
 
-        logger.info { "No matching URL mapping could be found for '$repoUrl'." }
+        logger.info { "No matching URL mapping could be found for $repoUrl." }
 
         return repoUrl
     }
