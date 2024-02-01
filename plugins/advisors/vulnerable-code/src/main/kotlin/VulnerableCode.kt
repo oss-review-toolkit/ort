@@ -23,6 +23,8 @@ import java.net.URI
 import java.time.Instant
 import java.util.concurrent.TimeUnit
 
+import org.apache.logging.log4j.kotlin.logger
+
 import org.ossreviewtoolkit.advisor.AdviceProvider
 import org.ossreviewtoolkit.advisor.AdviceProviderFactory
 import org.ossreviewtoolkit.clients.vulnerablecode.VulnerableCodeService
@@ -96,11 +98,12 @@ class VulnerableCode(name: String, config: VulnerableCodeConfiguration) : Advice
         val startTime = Instant.now()
 
         val purls = packages.mapNotNull { pkg -> pkg.purl.takeUnless { it.isEmpty() } }
+        val chunks = purls.chunked(BULK_REQUEST_SIZE)
 
         val allVulnerabilities = mutableMapOf<String, List<VulnerableCodeService.Vulnerability>>()
         val issues = mutableListOf<Issue>()
 
-        purls.chunked(BULK_REQUEST_SIZE).forEach { chunk ->
+        chunks.forEachIndexed { index, chunk ->
             runCatching {
                 val chunkVulnerabilities = service.getPackageVulnerabilities(PackagesWrapper(chunk)).filter {
                     it.affectedByVulnerabilities.isNotEmpty()
@@ -113,6 +116,12 @@ class VulnerableCode(name: String, config: VulnerableCodeConfiguration) : Advice
                 allVulnerabilities += chunk.associateWith { emptyList() }
 
                 issues += Issue(source = providerName, message = it.collectMessages())
+
+                logger.error {
+                    "The request of chunk ${index + 1} of ${chunks.size} failed for the following ${chunk.size} " +
+                        "PURL(s):"
+                }
+                chunk.forEach(logger::error)
             }
         }
 
