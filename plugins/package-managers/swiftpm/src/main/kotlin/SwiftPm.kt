@@ -177,9 +177,10 @@ private fun parseLockfile(packageResolvedFile: File): Result<Set<Package>> =
 
         when (val version = root.getValue("version").jsonPrimitive.content) {
             "1" -> {
+                val projectDir = packageResolvedFile.parentFile
                 val pinsJson = root["object"]?.jsonObject?.get("pins")
                 val pins = pinsJson?.let { json.decodeFromJsonElement<List<PinV1>>(it) }.orEmpty()
-                pins.mapTo(mutableSetOf()) { it.toPackage() }
+                pins.mapTo(mutableSetOf()) { it.toPinV2(projectDir).toPackage() }
             }
 
             "2" -> {
