@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.swiftpm
 
+import java.io.File
+
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -110,34 +112,19 @@ internal fun SwiftPackage.Dependency.toPackage(): Package {
     return createPackage(id, vcsInfo)
 }
 
-internal fun PinV1.toPackage(): Package {
-    val id = Identifier(
-        type = PACKAGE_TYPE,
-        namespace = "",
-        name = getCanonicalName(repositoryUrl),
-        version = state?.run {
-            when {
-                !version.isNullOrBlank() -> version
-                !revision.isNullOrBlank() -> "revision-$revision"
-                !branch.isNullOrBlank() -> "branch-$branch"
-                else -> ""
-            }
-        }.orEmpty()
-    )
-
-    val vcsInfoFromUrl = VcsHost.parseUrl(repositoryUrl)
-    val vcsInfo = if (vcsInfoFromUrl.revision.isBlank() && state != null) {
-        when {
-            !state.revision.isNullOrBlank() -> vcsInfoFromUrl.copy(revision = state.revision)
-            !state.version.isNullOrBlank() -> vcsInfoFromUrl.copy(revision = state.version)
-            else -> vcsInfoFromUrl
+internal fun PinV1.toPinV2(projectDir: File): PinV2 =
+    PinV2(
+        identity = packageName,
+        state = state,
+        location = repositoryUrl,
+        // Map the 'kind' analog to
+        // https://github.com/apple/swift-package-manager/blob/3ef830dddff459e569d6e49c186c3ded33c39bcc/Sources/PackageGraph/PinsStore.swift#L492-L496:
+        kind = if (projectDir.resolve(repositoryUrl).isDirectory) {
+            PinV2.Kind.LOCAL_SOURCE_CONTROL
+        } else {
+            PinV2.Kind.REMOTE_SOURCE_CONTROL
         }
-    } else {
-        vcsInfoFromUrl
-    }
-
-    return createPackage(id, vcsInfo)
-}
+    )
 
 internal fun PinV2.toPackage(): Package {
     val id = Identifier(
