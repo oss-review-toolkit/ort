@@ -20,10 +20,14 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.swiftpm
 
 import java.io.File
+import java.io.IOException
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromJsonElement
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.model.Identifier
@@ -71,7 +75,7 @@ data class PinState(
  * See https://github.com/apple/swift-package-manager/blob/3ef830dddff459e569d6e49c186c3ded33c39bcc/Sources/PackageGraph/PinsStore.swift#L285-L384.
  */
 @Serializable
-data class PinV1(
+private data class PinV1(
     @SerialName("package") val packageName: String,
     val state: PinState?,
     @SerialName("repositoryURL") val repositoryUrl: String
@@ -97,6 +101,31 @@ data class PinV2(
     }
 }
 
+internal fun parseLockfile(packageResolvedFile: File): Result<Set<PinV2>> =
+    runCatching {
+        val root = json.parseToJsonElement(packageResolvedFile.readText()).jsonObject
+
+        when (val version = root.getValue("version").jsonPrimitive.content) {
+            "1" -> {
+                val projectDir = packageResolvedFile.parentFile
+                val pinsJson = root["object"]?.jsonObject?.get("pins")
+                pinsJson?.let { json.decodeFromJsonElement<List<PinV1>>(it) }.orEmpty().map { it.toPinV2(projectDir) }
+            }
+
+            "2" -> {
+                val pinsJson = root["pins"]
+                pinsJson?.let { json.decodeFromJsonElement<List<PinV2>>(it) }.orEmpty()
+            }
+
+            else -> {
+                throw IOException(
+                    "Could not parse lockfile '${packageResolvedFile.invariantSeparatorsPath}'. Unknown file format " +
+                        "version '$version'."
+                )
+            }
+        }.toSet()
+    }
+
 internal val SwiftPackage.Dependency.id: Identifier
     get() = Identifier(
         type = PACKAGE_TYPE,
@@ -112,7 +141,7 @@ internal fun SwiftPackage.Dependency.toPackage(): Package {
     return createPackage(id, vcsInfo)
 }
 
-internal fun PinV1.toPinV2(projectDir: File): PinV2 =
+private fun PinV1.toPinV2(projectDir: File): PinV2 =
     PinV2(
         identity = packageName,
         state = state,

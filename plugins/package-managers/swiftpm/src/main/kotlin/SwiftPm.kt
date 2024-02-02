@@ -20,11 +20,6 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.swiftpm
 
 import java.io.File
-import java.io.IOException
-
-import kotlinx.serialization.json.decodeFromJsonElement
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -169,28 +164,3 @@ class SwiftPm(
         )
     }
 }
-
-private fun parseLockfile(packageResolvedFile: File): Result<Set<PinV2>> =
-    runCatching {
-        val root = json.parseToJsonElement(packageResolvedFile.readText()).jsonObject
-
-        when (val version = root.getValue("version").jsonPrimitive.content) {
-            "1" -> {
-                val projectDir = packageResolvedFile.parentFile
-                val pinsJson = root["object"]?.jsonObject?.get("pins")
-                pinsJson?.let { json.decodeFromJsonElement<List<PinV1>>(it) }.orEmpty().map { it.toPinV2(projectDir) }
-            }
-
-            "2" -> {
-                val pinsJson = root["pins"]
-                pinsJson?.let { json.decodeFromJsonElement<List<PinV2>>(it) }.orEmpty()
-            }
-
-            else -> {
-                throw IOException(
-                    "Could not parse lockfile '${packageResolvedFile.invariantSeparatorsPath}'. Unknown file format " +
-                        "version '$version'."
-                )
-            }
-        }.toSet()
-    }
