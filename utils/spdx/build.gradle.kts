@@ -81,6 +81,7 @@ dependencies {
     implementation(libs.jackson.module.kotlin)
 
     testImplementation(libs.kotest.assertions.json)
+    testImplementation(libs.kotest.framework.datatest)
 }
 
 if (Authenticator.getDefault() == null) {
