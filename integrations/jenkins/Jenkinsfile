@@ -97,6 +97,12 @@ pipeline {
             defaultValue: ''
         )
 
+        booleanParam(
+            name: 'SKIP_EXCLUDED',
+            description: 'Enable to skip scopes and paths that have been configured to be excluded, where supported.',
+            defaultValue: true
+        )
+
         string(
             name: 'ENVIRONMENT_VARIABLES',
             description: 'Optional list of comma-separated key=value pairs of environment variables to set.',
@@ -311,7 +317,7 @@ pipeline {
             steps {
                 withCredentials(projectVcsCredentials) {
                     sh '''
-                    ORT_OPTIONS="$LOG_LEVEL"
+                    ORT_OPTIONS="$LOG_LEVEL -P ort.downloader.skipExcluded=$SKIP_EXCLUDED"
 
                     if [ "$STACKTRACE" = "true" ]; then
                         ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
@@ -471,7 +477,7 @@ pipeline {
 
                 script {
                     def status = sh returnStatus: true, script: '''
-                    ORT_OPTIONS="$LOG_LEVEL -P ort.analyzer.allowDynamicVersions=$ALLOW_DYNAMIC_VERSIONS"
+                    ORT_OPTIONS="$LOG_LEVEL -P ort.analyzer.allowDynamicVersions=$ALLOW_DYNAMIC_VERSIONS -P ort.analyzer.skipExcluded=$SKIP_EXCLUDED"
 
                     if [ -n "$ENABLED_PACKAGE_MANAGERS" ]; then
                         ORT_OPTIONS="$ORT_OPTIONS -P ort.analyzer.enabledPackageManagers=$ENABLED_PACKAGE_MANAGERS"
@@ -562,7 +568,7 @@ pipeline {
                         def status = sh returnStatus: true, script: '''
                         #!/usr/bin/env bash
 
-                        ORT_OPTIONS="$LOG_LEVEL -P ort.scanner.skipConcluded=$SKIP_CONCLUDED"
+                        ORT_OPTIONS="$LOG_LEVEL -P ort.scanner.skipExcluded=$SKIP_EXCLUDED -P ort.scanner.skipConcluded=$SKIP_CONCLUDED"
 
                         if [ "$USE_CLEARLY_DEFINED_SCAN_STORAGE" = "true" ]; then
                             # Configure the default local file storage explicitly to be able to refer to it.
@@ -689,7 +695,7 @@ pipeline {
                 withCredentials(projectVcsCredentials) {
                     script {
                         def status = sh returnStatus: true, script: '''
-                        ORT_OPTIONS="$LOG_LEVEL"
+                        ORT_OPTIONS="$LOG_LEVEL -P ort.advisor.skipExcluded=$SKIP_EXCLUDED"
 
                         if [ "$STACKTRACE" = "true" ]; then
                             ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
