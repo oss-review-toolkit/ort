@@ -165,7 +165,7 @@ packages:
   source_artifact:
     url: "https://www.openssl.org/source/openssl-3.2.1.tar.gz"
     hash:
-      value: "83C7329FE52C850677D75E5D0B0CA245309B97E8ECBCFDC1DFDC4AB9FAC35B39"
+      value: "83c7329fe52c850677d75e5d0b0ca245309b97e8ecbcfdc1dfdc4ab9fac35b39"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
