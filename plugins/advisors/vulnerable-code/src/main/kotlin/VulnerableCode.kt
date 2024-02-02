@@ -173,9 +173,9 @@ class VulnerableCode(name: String, config: VulnerableCodeConfiguration) : Advice
     }
 }
 
-private val BACKSLASH_ESCAPE_REGEX = Regex("\\\\\\\\(.)")
+private val BACKSLASH_ESCAPE_REGEX = """\\\\(.)""".toRegex()
 
 internal fun String.fixupUrlEscaping(): String =
-    replace("\\/", "/").replace(BACKSLASH_ESCAPE_REGEX) {
+    replace("""\/""", "/").replace(BACKSLASH_ESCAPE_REGEX) {
         it.groupValues[1].percentEncode()
     }

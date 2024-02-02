@@ -277,26 +277,21 @@ class VulnerableCodeTest : WordSpec({
         }
     }
 
+    @Suppress("MaxLineLength")
     "fixupUrlEscaping()" should {
         "fixup a wrongly escaped ampersand" {
-            val brokenUrl = "https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true" +
-                "&query=cpe:2.3:a:oracle:retail_category_management_planning_" +
-                "\\\\&_optimization:16.0.3:*:*:*:*:*:*:*"
+            val u = """https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true&query=cpe:2.3:a:oracle:retail_category_management_planning_\\&_optimization:16.0.3:*:*:*:*:*:*:*"""
 
-            URI.create(brokenUrl.fixupUrlEscaping()) shouldBe URI(
-                "https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true" +
-                    "&query=cpe:2.3:a:oracle:retail_category_management_planning_" +
-                    "%26_optimization:16.0.3:*:*:*:*:*:*:*"
+            URI.create(u.fixupUrlEscaping()) shouldBe URI(
+                """https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true&query=cpe:2.3:a:oracle:retail_category_management_planning_%26_optimization:16.0.3:*:*:*:*:*:*:*"""
             )
         }
 
         "fixup a wrongly escaped slash" {
-            val brokenUrl = "https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true" +
-                "&query=cpe:2.3:a:apple:swiftnio_http\\/2:*:*:*:*:*:swift:*:*"
+            val u = """https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true&query=cpe:2.3:a:apple:swiftnio_http\/2:*:*:*:*:*:swift:*:*"""
 
-            URI.create(brokenUrl.fixupUrlEscaping()) shouldBe URI(
-                "https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true&" +
-                    "query=cpe:2.3:a:apple:swiftnio_http/2:*:*:*:*:*:swift:*:*"
+            URI.create(u.fixupUrlEscaping()) shouldBe URI(
+                """https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true&query=cpe:2.3:a:apple:swiftnio_http/2:*:*:*:*:*:swift:*:*"""
             )
         }
     }
