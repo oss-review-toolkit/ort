@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
+import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
@@ -415,7 +416,7 @@ class Conan(
             val url = artifactEntry["url"].let { urlNode ->
                 (urlNode.takeIf { it.isTextual } ?: urlNode.first()).textValueOrEmpty()
             }
-            val hash = Hash.create(artifactEntry["sha256"].textValueOrEmpty())
+            val hash = Hash.create(artifactEntry["sha256"].textValueOrEmpty(), HashAlgorithm.SHA256.name)
 
             RemoteArtifact(url, hash)
         }.getOrElse {
