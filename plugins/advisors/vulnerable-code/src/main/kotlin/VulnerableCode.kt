@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.advisors.vulnerablecode
 
 import java.net.URI
 import java.time.Instant
+import java.util.concurrent.TimeUnit
 
 import org.ossreviewtoolkit.advisor.AdviceProvider
 import org.ossreviewtoolkit.advisor.AdviceProviderFactory
@@ -72,7 +73,8 @@ class VulnerableCode(name: String, config: VulnerableCodeConfiguration) : Advice
         override fun parseConfig(options: Options, secrets: Options) =
             VulnerableCodeConfiguration(
                 serverUrl = options["serverUrl"],
-                apiKey = secrets["apiKey"]
+                apiKey = secrets["apiKey"],
+                readTimeout = options["readTimeout"]?.toLongOrNull()
             )
     }
 
@@ -83,7 +85,11 @@ class VulnerableCode(name: String, config: VulnerableCodeConfiguration) : Advice
     override val details = AdvisorDetails(providerName, enumSetOf(AdvisorCapability.VULNERABILITIES))
 
     private val service by lazy {
-        VulnerableCodeService.create(config.serverUrl, config.apiKey, OkHttpClientHelper.buildClient())
+        val client = OkHttpClientHelper.buildClient {
+            if (config.readTimeout != null) readTimeout(config.readTimeout, TimeUnit.SECONDS)
+        }
+
+        VulnerableCodeService.create(config.serverUrl, config.apiKey, client)
     }
 
     override suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, AdvisorResult> {

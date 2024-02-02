@@ -152,6 +152,7 @@ ort:
       VulnerableCode:
         options:
           serverUrl: 'http://localhost:8000'
+          readTimeout: 40
         secrets:
           apiKey: 0123456789012345678901234567890123456789
 
