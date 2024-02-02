@@ -19,6 +19,9 @@
 
 package org.ossreviewtoolkit.model
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.databind.util.StdConverter
+
 import java.io.File
 import java.util.Base64
 
@@ -32,6 +35,7 @@ data class Hash(
     /**
      * The value calculated using the hash algorithm.
      */
+    @JsonSerialize(converter = StringLowercaseConverter::class)
     val value: String,
 
     /**
@@ -95,4 +99,8 @@ data class Hash(
      * Verify that the provided [hash] matches this hash.
      */
     fun verify(hash: Hash): Boolean = algorithm == hash.algorithm && value.equals(hash.value, ignoreCase = true)
+}
+
+private class StringLowercaseConverter : StdConverter<String, String>() {
+    override fun convert(value: String): String = value.lowercase()
 }
