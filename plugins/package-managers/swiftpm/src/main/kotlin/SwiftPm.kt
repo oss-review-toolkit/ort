@@ -33,7 +33,6 @@ import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
-import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.VcsInfo
@@ -102,14 +101,14 @@ class SwiftPm(
     private fun resolveLockfileDependencies(packageResolvedFile: File): List<ProjectAnalyzerResult> {
         val issues = mutableListOf<Issue>()
 
-        val packages = parseLockfile(packageResolvedFile).onFailure {
+        val pins = parseLockfile(packageResolvedFile).onFailure {
             issues += Issue(source = managerName, message = it.message.orEmpty())
         }.getOrDefault(emptySet())
 
         return listOf(
             ProjectAnalyzerResult(
                 project = projectFromDefinitionFile(packageResolvedFile),
-                packages = packages,
+                packages = pins.mapTo(mutableSetOf()) { it.toPackage() },
                 issues = issues
             )
         )
@@ -171,7 +170,7 @@ class SwiftPm(
     }
 }
 
-private fun parseLockfile(packageResolvedFile: File): Result<Set<Package>> =
+private fun parseLockfile(packageResolvedFile: File): Result<Set<PinV2>> =
     runCatching {
         val root = json.parseToJsonElement(packageResolvedFile.readText()).jsonObject
 
@@ -179,14 +178,12 @@ private fun parseLockfile(packageResolvedFile: File): Result<Set<Package>> =
             "1" -> {
                 val projectDir = packageResolvedFile.parentFile
                 val pinsJson = root["object"]?.jsonObject?.get("pins")
-                val pins = pinsJson?.let { json.decodeFromJsonElement<List<PinV1>>(it) }.orEmpty()
-                pins.mapTo(mutableSetOf()) { it.toPinV2(projectDir).toPackage() }
+                pinsJson?.let { json.decodeFromJsonElement<List<PinV1>>(it) }.orEmpty().map { it.toPinV2(projectDir) }
             }
 
             "2" -> {
                 val pinsJson = root["pins"]
-                val pins = pinsJson?.let { json.decodeFromJsonElement<List<PinV2>>(it) }.orEmpty()
-                pins.mapTo(mutableSetOf()) { it.toPackage() }
+                pinsJson?.let { json.decodeFromJsonElement<List<PinV2>>(it) }.orEmpty()
             }
 
             else -> {
@@ -195,5 +192,5 @@ private fun parseLockfile(packageResolvedFile: File): Result<Set<Package>> =
                         "version '$version'."
                 )
             }
-        }
+        }.toSet()
     }
