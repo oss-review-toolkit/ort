@@ -35,7 +35,7 @@ private val json = Json { ignoreUnknownKeys = true }
  * The data model for the output of the command `swift package show-dependencies --format json`.
  */
 @Serializable
-data class SwiftPackage(
+internal data class SwiftPackage(
     val identity: String,
     val name: String,
     val url: String,
@@ -56,7 +56,7 @@ data class SwiftPackage(
  * See https://github.com/apple/swift-package-manager/blob/3ef830dddff459e569d6e49c186c3ded33c39bcc/Sources/PackageGraph/PinsStore.swift#L387-L462.
  */
 @Serializable
-data class PinV2(
+internal data class PinV2(
     val identity: String,
     val state: PinState?,
     val location: String,
@@ -77,7 +77,7 @@ data class PinV2(
  * and https://github.com/apple/swift-package-manager/blob/3ef830dddff459e569d6e49c186c3ded33c39bcc/Sources/PackageGraph/PinsStore.swift#L440-L461.
  */
 @Serializable
-data class PinState(
+internal data class PinState(
     val version: String? = null,
     val revision: String? = null,
     val branch: String? = null
