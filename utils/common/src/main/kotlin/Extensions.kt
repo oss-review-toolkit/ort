@@ -39,7 +39,7 @@ import java.util.Locale
 inline fun <T> T.alsoIfNull(block: (T) -> Unit): T = this ?: also(block)
 
 /**
- * Return a string of hexadecimal digits representing the bytes in the array.
+ * Return a string of lowercase hexadecimal digits representing the bytes in the array.
  */
 fun ByteArray.encodeHex(): String = joinToString("") { String.format(Locale.ROOT, "%02x", it) }
 
