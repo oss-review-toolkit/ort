@@ -99,7 +99,7 @@ pipeline {
 
         booleanParam(
             name: 'SKIP_EXCLUDED',
-            description: 'Enable to skip scopes and paths that have been configured to be excluded, where supported.',
+            description: 'Enable to skip scopes and paths (and affected packages / projects) that have been configured to be excluded.',
             defaultValue: true
         )
 
