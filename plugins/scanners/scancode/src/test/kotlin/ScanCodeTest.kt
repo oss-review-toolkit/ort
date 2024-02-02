@@ -43,7 +43,7 @@ class ScanCodeTest : WordSpec({
 
     "configuration" should {
         "return the default values if the scanner configuration is empty" {
-            scanner.configuration shouldBe "--copyright --license --info --strip-root --timeout 300"
+            scanner.configuration shouldBe "--copyright --license --info --strip-root --timeout 300 --json-pp"
         }
 
         "return the non-config values from the scanner configuration" {
@@ -56,7 +56,7 @@ class ScanCodeTest : WordSpec({
 
             val scannerWithConfig = ScanCode("ScanCode", config, ScannerWrapperConfig.EMPTY)
 
-            scannerWithConfig.configuration shouldBe "--command --line"
+            scannerWithConfig.configuration shouldBe "--command --line --json-pp"
         }
     }
 

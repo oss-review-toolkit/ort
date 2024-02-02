@@ -76,6 +76,7 @@ class ScanCode internal constructor(
         const val SCANNER_NAME = "ScanCode"
 
         private const val LICENSE_REFERENCES_OPTION_VERSION = "32.0.0"
+        private const val OUTPUT_FORMAT_OPTION = "--json-pp"
     }
 
     class Factory : ScannerWrapperFactory<ScanCodeConfig>(SCANNER_NAME) {
@@ -101,6 +102,7 @@ class ScanCode internal constructor(
     override val configuration by lazy {
         buildList {
             addAll(config.commandLine)
+            add(OUTPUT_FORMAT_OPTION)
 
             // Add this in the style of a fake command line option for consistency with the above.
             if (config.preferFileLicense) add("--prefer-file-license")
@@ -165,7 +167,7 @@ class ScanCode internal constructor(
             command(),
             *commandLineOptions.toTypedArray(),
             // The output format option needs to directly precede the result file path.
-            "--json-pp", resultFile.absolutePath,
+            OUTPUT_FORMAT_OPTION, resultFile.absolutePath,
             path.absolutePath
         )
 }
