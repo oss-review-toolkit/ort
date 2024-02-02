@@ -173,7 +173,8 @@ class OrtConfigurationTest : WordSpec({
 
                     get("VulnerableCode") shouldNotBeNull {
                         options shouldContainExactly mapOf(
-                            "serverUrl" to "http://localhost:8000"
+                            "serverUrl" to "http://localhost:8000",
+                            "readTimeout" to "40"
                         )
 
                         secrets shouldContainExactly mapOf(

@@ -31,5 +31,10 @@ data class VulnerableCodeConfiguration(
     /**
      * The optional API key to use.
      */
-    val apiKey: String? = null
+    val apiKey: String? = null,
+
+    /**
+     * The read timeout for the server connection in seconds. Defaults to whatever is the HTTP client's default value.
+     */
+    val readTimeout: Long? = null
 )
