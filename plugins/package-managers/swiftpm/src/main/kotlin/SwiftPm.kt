@@ -30,6 +30,7 @@ import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
@@ -38,6 +39,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
+import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.toUri
@@ -170,7 +172,7 @@ class SwiftPm(
     }
 }
 
-internal val SwiftPackage.Dependency.id: Identifier
+private val SwiftPackage.Dependency.id: Identifier
     get() = Identifier(
         type = PACKAGE_TYPE,
         namespace = "",
@@ -178,7 +180,7 @@ internal val SwiftPackage.Dependency.id: Identifier
         version = version
     )
 
-internal fun SwiftPackage.Dependency.toPackage(): Package {
+private fun SwiftPackage.Dependency.toPackage(): Package {
     val vcsInfoFromUrl = VcsHost.parseUrl(repositoryUrl)
     val vcsInfo = vcsInfoFromUrl.takeUnless { it.revision.isBlank() } ?: vcsInfoFromUrl.copy(revision = version)
 
@@ -237,4 +239,16 @@ internal fun getCanonicalName(repositoryUrl: String): String {
     return normalizedUrl.toUri {
         it.host + it.path.removeSuffix(".git")
     }.getOrDefault(normalizedUrl).lowercase()
+}
+
+private class SwiftPmDependencyHandler : DependencyHandler<SwiftPackage.Dependency> {
+    override fun identifierFor(dependency: SwiftPackage.Dependency): Identifier = dependency.id
+
+    override fun dependenciesFor(dependency: SwiftPackage.Dependency): Collection<SwiftPackage.Dependency> =
+        dependency.dependencies
+
+    override fun linkageFor(dependency: SwiftPackage.Dependency): PackageLinkage = PackageLinkage.DYNAMIC
+
+    override fun createPackage(dependency: SwiftPackage.Dependency, issues: MutableList<Issue>): Package =
+        dependency.toPackage()
 }
