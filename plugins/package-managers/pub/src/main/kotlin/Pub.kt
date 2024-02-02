@@ -38,6 +38,7 @@ import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
 import org.ossreviewtoolkit.model.Hash
+import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
@@ -609,7 +610,7 @@ class Pub(
 
                         RemoteArtifact(
                             url = "$hostUrl/packages/$rawName/versions/$version.tar.gz",
-                            hash = Hash.create(sha256)
+                            hash = Hash.create(sha256, HashAlgorithm.SHA256.name)
                         )
                     } else {
                         RemoteArtifact.EMPTY
