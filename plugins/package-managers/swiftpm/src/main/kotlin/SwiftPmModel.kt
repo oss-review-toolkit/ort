@@ -53,6 +53,26 @@ data class SwiftPackage(
 }
 
 /**
+ * See https://github.com/apple/swift-package-manager/blob/3ef830dddff459e569d6e49c186c3ded33c39bcc/Sources/PackageGraph/PinsStore.swift#L387-L462.
+ */
+@Serializable
+data class PinV2(
+    val identity: String,
+    val state: PinState?,
+    val location: String,
+    val kind: Kind
+) {
+    enum class Kind {
+        @SerialName("localSourceControl")
+        LOCAL_SOURCE_CONTROL,
+        @SerialName("registry")
+        REGISTRY,
+        @SerialName("remoteSourceControl")
+        REMOTE_SOURCE_CONTROL
+    }
+}
+
+/**
  * See https://github.com/apple/swift-package-manager/blob/3ef830dddff459e569d6e49c186c3ded33c39bcc/Sources/PackageGraph/PinsStore.swift#L351-L373
  * and https://github.com/apple/swift-package-manager/blob/3ef830dddff459e569d6e49c186c3ded33c39bcc/Sources/PackageGraph/PinsStore.swift#L440-L461.
  */
@@ -72,26 +92,6 @@ private data class PinV1(
     val state: PinState?,
     @SerialName("repositoryURL") val repositoryUrl: String
 )
-
-/**
- * See https://github.com/apple/swift-package-manager/blob/3ef830dddff459e569d6e49c186c3ded33c39bcc/Sources/PackageGraph/PinsStore.swift#L387-L462.
- */
-@Serializable
-data class PinV2(
-    val identity: String,
-    val state: PinState?,
-    val location: String,
-    val kind: Kind
-) {
-    enum class Kind {
-        @SerialName("localSourceControl")
-        LOCAL_SOURCE_CONTROL,
-        @SerialName("registry")
-        REGISTRY,
-        @SerialName("remoteSourceControl")
-        REMOTE_SOURCE_CONTROL
-    }
-}
 
 internal fun parseLockfile(packageResolvedFile: File): Result<Set<PinV2>> =
     runCatching {
