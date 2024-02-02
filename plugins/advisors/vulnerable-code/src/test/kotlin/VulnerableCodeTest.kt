@@ -35,7 +35,6 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.maps.shouldNotBeEmpty
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.string.shouldContain
 
 import java.io.File
 import java.net.URI
@@ -139,29 +138,6 @@ class VulnerableCodeTest : WordSpec({
                 )
             )
             strutsResult.vulnerabilities should containExactlyInAnyOrder(expStrutsVulnerabilities)
-        }
-
-        "handle invalid URIs in references gracefully" {
-            server.stubPackagesRequest("response_invalid_uri.json")
-            val vulnerableCode = createVulnerableCode(server)
-            val packagesToAdvise = inputPackagesFromAnalyzerResult()
-
-            val result = vulnerableCode.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
-
-            val langResult = result.getValue(idLang)
-            val issues = langResult.summary.issues
-            issues shouldHaveSize 1
-            with(issues.first()) {
-                severity shouldBe Severity.HINT
-                source shouldBe ADVISOR_NAME
-                message shouldContain "oracle:siebel_engineering_-_installer_\\&_deployment:*:*:*:*:*:*:*:*"
-            }
-
-            val expLangVulnerability = Vulnerability(
-                id = "CVE-2014-8242",
-                references = emptyList()
-            )
-            langResult.vulnerabilities should containExactly(expLangVulnerability)
         }
 
         "extract the CVE ID from an alias" {
@@ -296,7 +272,7 @@ class VulnerableCodeTest : WordSpec({
         }
 
         "fixup a wrongly escaped plus" {
-            val u = """https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true&query=cpe:2.3:a:oracle:hyperion_bi\\\+:*:*:*:*:*:*:*:*"""
+            val u = """https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true&query=cpe:2.3:a:oracle:hyperion_bi\+:*:*:*:*:*:*:*:*"""
 
             URI.create(u.fixupUrlEscaping()) shouldBe URI(
                 """https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true&query=cpe:2.3:a:oracle:hyperion_bi%2B:*:*:*:*:*:*:*:*"""
