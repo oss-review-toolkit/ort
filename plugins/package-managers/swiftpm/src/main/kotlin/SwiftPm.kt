@@ -24,12 +24,15 @@ import java.io.File
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
+import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
+import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -37,12 +40,14 @@ import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.toUri
+import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 
 private const val PACKAGE_SWIFT_NAME = "Package.swift"
 private const val PACKAGE_RESOLVED_NAME = "Package.resolved"
 
 internal const val PROJECT_TYPE = "SwiftPM"
-internal const val PACKAGE_TYPE = "Swift"
+private const val PACKAGE_TYPE = "Swift"
 
 private const val DEPENDENCIES_SCOPE_NAME = "dependencies"
 
@@ -163,4 +168,73 @@ class SwiftPm(
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path
         )
     }
+}
+
+internal val SwiftPackage.Dependency.id: Identifier
+    get() = Identifier(
+        type = PACKAGE_TYPE,
+        namespace = "",
+        name = getCanonicalName(repositoryUrl),
+        version = version
+    )
+
+internal fun SwiftPackage.Dependency.toPackage(): Package {
+    val vcsInfoFromUrl = VcsHost.parseUrl(repositoryUrl)
+    val vcsInfo = vcsInfoFromUrl.takeUnless { it.revision.isBlank() } ?: vcsInfoFromUrl.copy(revision = version)
+
+    return createPackage(id, vcsInfo)
+}
+
+private fun PinV2.toPackage(): Package {
+    val id = Identifier(
+        type = PACKAGE_TYPE,
+        namespace = "",
+        name = getCanonicalName(location),
+        version = state?.run {
+            when {
+                !version.isNullOrBlank() -> version
+                !revision.isNullOrBlank() -> "revision-$revision"
+                !branch.isNullOrBlank() -> "branch-$branch"
+                else -> ""
+            }
+        }.orEmpty()
+    )
+
+    val vcsInfoFromUrl = VcsHost.parseUrl(location)
+    val vcsInfo = if (vcsInfoFromUrl.revision.isBlank() && state != null) {
+        when {
+            !state.revision.isNullOrBlank() -> vcsInfoFromUrl.copy(revision = state.revision)
+            !state.version.isNullOrBlank() -> vcsInfoFromUrl.copy(revision = state.version)
+            else -> vcsInfoFromUrl
+        }
+    } else {
+        vcsInfoFromUrl
+    }
+
+    return createPackage(id, vcsInfo)
+}
+
+private fun createPackage(id: Identifier, vcsInfo: VcsInfo) =
+    Package(
+        vcs = vcsInfo,
+        description = "",
+        id = id,
+        binaryArtifact = RemoteArtifact.EMPTY,
+        sourceArtifact = RemoteArtifact.EMPTY,
+        declaredLicenses = emptySet(), // SPM files do not declare any licenses.
+        homepageUrl = ""
+    )
+
+/**
+ * Return the canonical name for a package based on the given [repositoryUrl].
+ * The algorithm assumes that the repository URL does not point to the local file
+ * system, as support for local dependencies is not implemented yet in ORT. Otherwise,
+ * the algorithm tries to effectively mimic the algorithm described in
+ * https://github.com/apple/swift-package-manager/blob/24bfdd180afdf78160e7a2f6f6deb2c8249d40d3/Sources/PackageModel/PackageIdentity.swift#L345-L415.
+ */
+internal fun getCanonicalName(repositoryUrl: String): String {
+    val normalizedUrl = normalizeVcsUrl(repositoryUrl)
+    return normalizedUrl.toUri {
+        it.host + it.path.removeSuffix(".git")
+    }.getOrDefault(normalizedUrl).lowercase()
 }
