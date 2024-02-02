@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 
-val json = Json { ignoreUnknownKeys = true }
+private val json = Json { ignoreUnknownKeys = true }
 
 /**
  * The data model for the output of the command `swift package show-dependencies --format json`.
@@ -125,6 +125,8 @@ internal fun parseLockfile(packageResolvedFile: File): Result<Set<PinV2>> =
             }
         }.toSet()
     }
+
+internal fun parseSwiftPackage(string: String): SwiftPackage = json.decodeFromString<SwiftPackage>(string)
 
 internal val SwiftPackage.Dependency.id: Identifier
     get() = Identifier(

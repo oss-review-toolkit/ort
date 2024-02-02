@@ -126,7 +126,7 @@ class SwiftPm(
             "json"
         ).stdout
 
-        val swiftPackage = json.decodeFromString<SwiftPackage>(result)
+        val swiftPackage = parseSwiftPackage(result)
         val qualifiedScopeName = DependencyGraph.qualifyScope(scopeName = DEPENDENCIES_SCOPE_NAME, project = project)
 
         swiftPackage.dependencies.onEach { graphBuilder.addDependency(qualifiedScopeName, it) }
