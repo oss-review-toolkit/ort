@@ -28,8 +28,12 @@ import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.containADigit
+import io.kotest.matchers.types.beOfType
 
 import org.ossreviewtoolkit.utils.common.titlecase
+import org.ossreviewtoolkit.utils.spdx.parser.SpdxExpressionLexer
+import org.ossreviewtoolkit.utils.spdx.parser.SpdxExpressionParser
+import org.ossreviewtoolkit.utils.spdx.parser.Token
 
 class SpdxSimpleLicenseMappingTest : WordSpec({
     "The raw map" should {
@@ -59,14 +63,15 @@ class SpdxSimpleLicenseMappingTest : WordSpec({
     "The mapping" should {
         "contain only single ID strings" {
             SpdxSimpleLicenseMapping.mapping.keys.forAll { declaredLicense ->
-                val tokens = getTokensByTypeForExpression(declaredLicense)
-                val types = tokens.map { (type, _) -> type }
+                val tokens = SpdxExpressionLexer(declaredLicense).tokens().toList()
 
                 tokens shouldHaveAtLeastSize 1
                 tokens shouldHaveAtMostSize 2
-                tokens.joinToString("") { (_, text) -> text } shouldBe declaredLicense
-                types.first() shouldBe SpdxExpressionLexer.IDSTRING
-                types.getOrElse(1) { SpdxExpressionLexer.PLUS } shouldBe SpdxExpressionLexer.PLUS
+
+                tokens.first() should beOfType<Token.IDENTIFIER>()
+                tokens.getOrNull(1)?.let { it should beOfType<Token.PLUS>() }
+
+                SpdxExpressionParser(tokens.asSequence()).parse().toString() shouldBe declaredLicense
             }
         }
 

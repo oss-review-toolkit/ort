@@ -28,9 +28,6 @@ import java.net.URI
 val spdxLicenseListVersion: String by project
 
 plugins {
-    // Apply core plugins.
-    antlr
-
     // Apply precompiled plugins.
     id("ort-library-conventions")
 
@@ -38,40 +35,7 @@ plugins {
     alias(libs.plugins.download)
 }
 
-tasks.withType<AntlrTask>().configureEach {
-    arguments = arguments + listOf("-visitor")
-
-    doLast {
-        // Work around https://github.com/antlr/antlr4/issues/4128.
-        outputDirectory.walk()
-            .filter { it.isFile && it.extension == "java" }
-            .forEach { javaFile ->
-                val lines = javaFile.readLines()
-
-                val text = buildString {
-                    lines.mapIndexed { index, line ->
-                        val patchedLine = when {
-                            index == 0 && line.startsWith("// Generated from ") -> line.replace('\\', '/')
-                            else -> line
-                        }
-
-                        appendLine(patchedLine)
-                    }
-                }
-
-                javaFile.writeText(text)
-            }
-    }
-}
-
-sourceSets.configureEach {
-    val generateGrammarSource = tasks.named(getTaskName("generate", "GrammarSource"))
-    java.srcDir(generateGrammarSource.map { files() })
-}
-
 dependencies {
-    antlr(libs.antlr)
-
     api(libs.jackson.databind)
 
     implementation(projects.utils.commonUtils)
