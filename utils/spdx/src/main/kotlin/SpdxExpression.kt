@@ -23,11 +23,9 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer
 
-import org.antlr.v4.runtime.CharStreams
-import org.antlr.v4.runtime.CommonTokenStream
-
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants.DOCUMENT_REF_PREFIX
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants.LICENSE_REF_PREFIX
+import org.ossreviewtoolkit.utils.spdx.parser.SpdxExpressionParser
 
 /**
  * An SPDX expression as defined by version 2.1 of the [SPDX specification, appendix IV][1].
@@ -86,21 +84,8 @@ sealed class SpdxExpression {
          * allowed ([ALLOW_DEPRECATED][Strictness.ALLOW_DEPRECATED]) or only current license identifiers are allowed
          * ([ALLOW_CURRENT][Strictness.ALLOW_CURRENT]). Throws an [SpdxException] if the string cannot be parsed.
          */
-        fun parse(expression: String, strictness: Strictness): SpdxExpression {
-            val charStream = CharStreams.fromString(expression)
-            val lexer = SpdxExpressionLexer(charStream).apply {
-                removeErrorListeners()
-                addErrorListener(SpdxErrorListener())
-            }
-
-            val tokenStream = CommonTokenStream(lexer)
-            val parser = SpdxExpressionParser(tokenStream).apply {
-                removeErrorListeners()
-                addErrorListener(SpdxErrorListener())
-            }
-
-            return SpdxExpressionDefaultVisitor(strictness).visit(parser.licenseExpression())
-        }
+        fun parse(expression: String, strictness: Strictness): SpdxExpression =
+            SpdxExpressionParser(expression, strictness).parse()
     }
 
     /**
