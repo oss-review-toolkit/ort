@@ -11,7 +11,6 @@ kotlinPlugin = "1.9.22"
 mavenPublishPlugin = "0.27.0"
 versionsPlugin = "0.51.0"
 
-antlr = "4.13.1"
 asciidoctorj = "2.5.11"
 asciidoctorjPdf = "2.3.12"
 clikt = "4.2.2"
@@ -80,7 +79,6 @@ plugin-graalVmNativeImage = { module = "org.graalvm.buildtools:native-gradle-plu
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlinPlugin" }
 plugin-mavenPublish = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "mavenPublishPlugin" }
 
-antlr = { module = "org.antlr:antlr4", version.ref = "antlr" }
 asciidoctorj = { module = "org.asciidoctor:asciidoctorj", version.ref = "asciidoctorj" }
 asciidoctorj-pdf = { module = "org.asciidoctor:asciidoctorj-pdf", version.ref = "asciidoctorjPdf" }
 awsS3 = { module = "software.amazon.awssdk:s3", version.ref = "s3" }

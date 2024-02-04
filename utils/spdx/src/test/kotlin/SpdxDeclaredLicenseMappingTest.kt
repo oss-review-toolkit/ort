@@ -30,6 +30,7 @@ import io.kotest.matchers.string.containADigit
 import io.kotest.matchers.string.shouldContain
 
 import org.ossreviewtoolkit.utils.common.titlecase
+import org.ossreviewtoolkit.utils.spdx.parser.SpdxExpressionLexer
 
 class SpdxDeclaredLicenseMappingTest : WordSpec({
     "The list" should {
@@ -76,7 +77,7 @@ class SpdxDeclaredLicenseMappingTest : WordSpec({
             licenseIdMapping.keys.forAll { declaredLicense ->
                 @Suppress("SwallowedException")
                 try {
-                    val tokens = getTokensByTypeForExpression(declaredLicense)
+                    val tokens = SpdxExpressionLexer(declaredLicense).tokens().toList()
 
                     tokens.size shouldBeGreaterThanOrEqual 2
 
