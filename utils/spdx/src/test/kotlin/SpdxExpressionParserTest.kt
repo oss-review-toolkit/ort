@@ -176,7 +176,7 @@ class SpdxExpressionParserTest : WordSpec({
                 SpdxExpression.parse("license WITH exception+")
             }
 
-            exception.message shouldBe "extraneous input '+' expecting <EOF>"
+            exception.message shouldBe "Unexpected token 'PLUS(position=23)'."
         }
 
         "fail if a compound expression is used before WITH" {
@@ -184,7 +184,7 @@ class SpdxExpressionParserTest : WordSpec({
                 SpdxExpression.parse("(license1 AND license2) WITH exception")
             }
 
-            exception.message shouldBe "mismatched input 'WITH' expecting {AND, OR, ')', '+'}"
+            exception.message shouldBe "Unexpected token 'WITH(position=25)'."
         }
 
         "fail on an invalid symbol" {
@@ -192,7 +192,7 @@ class SpdxExpressionParserTest : WordSpec({
                 SpdxExpression.parse("/")
             }
 
-            exception.message shouldBe "token recognition error at: '/'"
+            exception.message shouldBe "Unexpected character '/' at position 1."
         }
 
         "fail on a syntax error" {
@@ -200,8 +200,7 @@ class SpdxExpressionParserTest : WordSpec({
                 SpdxExpression.parse("((")
             }
 
-            exception.message shouldBe
-                "mismatched input '<EOF>' expecting {'(', DOCUMENTREFERENCE, LICENSEREFERENCE, IDSTRING}"
+            exception.message shouldBe "Unexpected token 'null'."
         }
     }
 })
