@@ -41,16 +41,8 @@ internal data class SwiftPackage(
     val url: String,
     val version: String,
     val path: String,
-    val dependencies: List<Dependency>
-) {
-    @Serializable
-    data class Dependency(
-        val name: String,
-        val version: String,
-        @SerialName("url") val repositoryUrl: String,
-        val dependencies: Set<Dependency>
-    )
-}
+    val dependencies: List<SwiftPackage>
+)
 
 /**
  * See https://github.com/apple/swift-package-manager/blob/3ef830dddff459e569d6e49c186c3ded33c39bcc/Sources/PackageGraph/PinsStore.swift#L387-L462.
