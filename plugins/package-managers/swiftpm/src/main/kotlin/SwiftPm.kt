@@ -172,16 +172,16 @@ class SwiftPm(
     }
 }
 
-private val SwiftPackage.Dependency.id: Identifier
+private val SwiftPackage.id: Identifier
     get() = Identifier(
         type = PACKAGE_TYPE,
         namespace = "",
-        name = getCanonicalName(repositoryUrl),
+        name = getCanonicalName(url),
         version = version
     )
 
-private fun SwiftPackage.Dependency.toPackage(): Package {
-    val vcsInfoFromUrl = VcsHost.parseUrl(repositoryUrl)
+private fun SwiftPackage.toPackage(): Package {
+    val vcsInfoFromUrl = VcsHost.parseUrl(url)
     val vcsInfo = vcsInfoFromUrl.takeUnless { it.revision.isBlank() } ?: vcsInfoFromUrl.copy(revision = version)
 
     return createPackage(id, vcsInfo)
@@ -241,14 +241,12 @@ internal fun getCanonicalName(repositoryUrl: String): String {
     }.getOrDefault(normalizedUrl).lowercase()
 }
 
-private class SwiftPmDependencyHandler : DependencyHandler<SwiftPackage.Dependency> {
-    override fun identifierFor(dependency: SwiftPackage.Dependency): Identifier = dependency.id
+private class SwiftPmDependencyHandler : DependencyHandler<SwiftPackage> {
+    override fun identifierFor(dependency: SwiftPackage): Identifier = dependency.id
 
-    override fun dependenciesFor(dependency: SwiftPackage.Dependency): Collection<SwiftPackage.Dependency> =
-        dependency.dependencies
+    override fun dependenciesFor(dependency: SwiftPackage): Collection<SwiftPackage> = dependency.dependencies
 
-    override fun linkageFor(dependency: SwiftPackage.Dependency): PackageLinkage = PackageLinkage.DYNAMIC
+    override fun linkageFor(dependency: SwiftPackage): PackageLinkage = PackageLinkage.DYNAMIC
 
-    override fun createPackage(dependency: SwiftPackage.Dependency, issues: MutableList<Issue>): Package =
-        dependency.toPackage()
+    override fun createPackage(dependency: SwiftPackage, issues: MutableList<Issue>): Package = dependency.toPackage()
 }
