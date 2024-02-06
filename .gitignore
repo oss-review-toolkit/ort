@@ -12,3 +12,6 @@ Dockerfile.custom
 
 # Mac
 .DS_Store
+
+# Generated binaries
+**/bin/*
