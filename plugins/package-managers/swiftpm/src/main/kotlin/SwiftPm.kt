@@ -28,6 +28,7 @@ import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
@@ -94,15 +95,23 @@ class SwiftPm(
      */
     private fun resolveLockfileDependencies(packageResolvedFile: File): List<ProjectAnalyzerResult> {
         val issues = mutableListOf<Issue>()
+        val packages = mutableSetOf<Package>()
+        val scopeDependencies = mutableSetOf<Scope>()
 
-        val pins = parseLockfile(packageResolvedFile).onFailure {
+        parseLockfile(packageResolvedFile).onSuccess { pins ->
+            pins.mapTo(packages) { it.toPackage() }
+            scopeDependencies += Scope(
+                name = DEPENDENCIES_SCOPE_NAME,
+                dependencies = packages.mapTo(mutableSetOf()) { it.toReference(linkage = PackageLinkage.DYNAMIC) }
+            )
+        }.onFailure {
             issues += Issue(source = managerName, message = it.message.orEmpty())
         }.getOrDefault(emptySet())
 
         return listOf(
             ProjectAnalyzerResult(
-                project = projectFromDefinitionFile(packageResolvedFile, emptySet()),
-                packages = pins.mapTo(mutableSetOf()) { it.toPackage() },
+                project = projectFromDefinitionFile(packageResolvedFile, scopeDependencies),
+                packages = packages,
                 issues = issues
             )
         )
