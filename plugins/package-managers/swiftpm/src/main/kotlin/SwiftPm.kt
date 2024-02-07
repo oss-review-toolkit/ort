@@ -141,7 +141,7 @@ class SwiftPm(
     }
 
     private fun getSwiftPackage(packageSwiftFile: File): SwiftPackage {
-        // TODO: Issues might be thrown into stderr. Parse them and add it them to the result as well.
+        // TODO: Handle errors from stderr.
         val result = run(
             packageSwiftFile.parentFile,
             "package",
