@@ -15,6 +15,14 @@ project:
     revision: "<REPLACE_REVISION>"
     path: "<REPLACE_PATH>"
   homepage_url: ""
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "Swift::github.com/apple/swift-argument-parser:0.2.0"
+    - id: "Swift::github.com/apple/swift-crypto:"
+    - id: "Swift::github.com/apple/swift-llbuild:9.0.8"
+    - id: "Swift::github.com/braze-inc/braze-ios-sdk:branch-master"
+    - id: "Swift::github.com/grpc/grpc-swift:revision-efb67a324eaf1696b50e66bc471a53690e41fbf6"
 packages:
 - id: "Swift::github.com/apple/swift-argument-parser:0.2.0"
   purl: "pkg:swift/github.com%2Fapple%2Fswift-argument-parser@0.2.0"
