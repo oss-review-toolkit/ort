@@ -194,10 +194,7 @@ private fun SwiftPackage.toId(pinsByIdentity: Map<String, PinV2>): Identifier =
     )
 
 private fun SwiftPackage.toVcsInfo(pinsByIdentity: Map<String, PinV2>): VcsInfo =
-    pinsByIdentity[identity]?.toVcsInfo() ?: run {
-        val vcsInfoFromUrl = VcsHost.parseUrl(url)
-        return vcsInfoFromUrl.takeUnless { it.revision.isBlank() } ?: vcsInfoFromUrl.copy(revision = version)
-    }
+    pinsByIdentity[identity]?.toVcsInfo() ?: VcsHost.parseUrl(url)
 
 private fun SwiftPackage.toPackage(pinsByIdentity: Map<String, PinV2>): Package =
     createPackage(toId(pinsByIdentity), toVcsInfo(pinsByIdentity))
@@ -241,7 +238,6 @@ private fun PinV2.toVcsInfo(): VcsInfo {
     return if (vcsInfoFromUrl.revision.isBlank() && state != null) {
         when {
             !state.revision.isNullOrBlank() -> vcsInfoFromUrl.copy(revision = state.revision)
-            !state.version.isNullOrBlank() -> vcsInfoFromUrl.copy(revision = state.version)
             else -> vcsInfoFromUrl
         }
     } else {
