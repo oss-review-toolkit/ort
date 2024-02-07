@@ -173,12 +173,12 @@ private val SwiftPackage.id: Identifier
         version = version
     )
 
-private fun SwiftPackage.toPackage(): Package {
+private fun SwiftPackage.toVcsInfo(): VcsInfo {
     val vcsInfoFromUrl = VcsHost.parseUrl(url)
-    val vcsInfo = vcsInfoFromUrl.takeUnless { it.revision.isBlank() } ?: vcsInfoFromUrl.copy(revision = version)
-
-    return createPackage(id, vcsInfo)
+    return vcsInfoFromUrl.takeUnless { it.revision.isBlank() } ?: vcsInfoFromUrl.copy(revision = version)
 }
+
+private fun SwiftPackage.toPackage(): Package = createPackage(id, toVcsInfo())
 
 private fun SwiftPackage.toPackageReference(): PackageReference =
     PackageReference(
