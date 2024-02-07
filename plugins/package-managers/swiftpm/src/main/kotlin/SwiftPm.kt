@@ -123,17 +123,7 @@ class SwiftPm(
      */
     private fun resolveDefinitionFileDependencies(packageSwiftFile: File): List<ProjectAnalyzerResult> {
         val project = projectFromDefinitionFile(packageSwiftFile)
-
-        // TODO: Issues might be thrown into stderr. Parse them and add it them to the result as well.
-        val result = run(
-            packageSwiftFile.parentFile,
-            "package",
-            "show-dependencies",
-            "--format",
-            "json"
-        ).stdout
-
-        val swiftPackage = parseSwiftPackage(result)
+        val swiftPackage = getSwiftPackage(packageSwiftFile)
         val qualifiedScopeName = DependencyGraph.qualifyScope(scopeName = DEPENDENCIES_SCOPE_NAME, project = project)
 
         swiftPackage.dependencies.onEach { graphBuilder.addDependency(qualifiedScopeName, it) }
@@ -148,6 +138,19 @@ class SwiftPm(
                 issues = emptyList()
             )
         )
+    }
+
+    private fun getSwiftPackage(packageSwiftFile: File): SwiftPackage {
+        // TODO: Issues might be thrown into stderr. Parse them and add it them to the result as well.
+        val result = run(
+            packageSwiftFile.parentFile,
+            "package",
+            "show-dependencies",
+            "--format",
+            "json"
+        ).stdout
+
+        return parseSwiftPackage(result)
     }
 
     private fun projectFromDefinitionFile(definitionFile: File): Project {
