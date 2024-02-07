@@ -101,7 +101,7 @@ class SwiftPm(
 
         return listOf(
             ProjectAnalyzerResult(
-                project = projectFromDefinitionFile(packageResolvedFile),
+                project = projectFromDefinitionFile(packageResolvedFile, emptySet()),
                 packages = pins.mapTo(mutableSetOf()) { it.toPackage() },
                 issues = issues
             )
@@ -114,7 +114,6 @@ class SwiftPm(
      * Also, this method provides parent-child associations for parsed dependencies.
      */
     private fun resolveDefinitionFileDependencies(packageSwiftFile: File): List<ProjectAnalyzerResult> {
-        val project = projectFromDefinitionFile(packageSwiftFile)
         val swiftPackage = getSwiftPackage(packageSwiftFile)
 
         val issues = mutableListOf<Issue>()
@@ -135,7 +134,7 @@ class SwiftPm(
 
         return listOf(
             ProjectAnalyzerResult(
-                project = project.copy(scopeDependencies = scopeDependencies),
+                project = projectFromDefinitionFile(packageSwiftFile, scopeDependencies),
                 packages = packages,
                 issues = issues
             )
@@ -155,7 +154,7 @@ class SwiftPm(
         return parseSwiftPackage(result)
     }
 
-    private fun projectFromDefinitionFile(definitionFile: File): Project {
+    private fun projectFromDefinitionFile(definitionFile: File, scopeDependencies: Set<Scope>): Project {
         val vcsInfo = VersionControlSystem.forDirectory(definitionFile.parentFile)?.getInfo().orEmpty()
 
         val projectIdentifier = Identifier(
@@ -170,6 +169,7 @@ class SwiftPm(
             id = projectIdentifier,
             declaredLicenses = emptySet(),
             homepageUrl = "",
+            scopeDependencies = scopeDependencies,
             vcsProcessed = processProjectVcs(definitionFile.parentFile),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path
         )
