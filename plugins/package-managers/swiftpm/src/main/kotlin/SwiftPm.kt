@@ -166,7 +166,6 @@ class SwiftPm(
         return Project(
             vcs = VcsInfo.EMPTY,
             id = projectIdentifier,
-            authors = emptySet(),
             declaredLicenses = emptySet(),
             homepageUrl = "",
             vcsProcessed = processProjectVcs(definitionFile.parentFile),
