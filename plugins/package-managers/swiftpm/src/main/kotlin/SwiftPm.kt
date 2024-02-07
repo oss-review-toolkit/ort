@@ -23,23 +23,20 @@ import java.io.File
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
-import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.PackageLinkage
+import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.orEmpty
-import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
-import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.toUri
@@ -62,8 +59,6 @@ class SwiftPm(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
-    private val graphBuilder = DependencyGraphBuilder(SwiftPmDependencyHandler())
-
     class Factory : AbstractPackageManagerFactory<SwiftPm>(PROJECT_TYPE) {
         override val globsForDefinitionFiles = listOf(PACKAGE_SWIFT_NAME, PACKAGE_RESOLVED_NAME)
 
@@ -77,9 +72,6 @@ class SwiftPm(
     override fun command(workingDir: File?) = if (Os.isWindows) "swift.exe" else "swift"
 
     override fun transformVersion(output: String) = output.substringAfter("version ").substringBefore(" (")
-
-    override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =
-        PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
 
     override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> {
         return definitionFiles.filterNot { file -> file.path.contains(".build/checkouts") }
@@ -124,17 +116,16 @@ class SwiftPm(
     private fun resolveDefinitionFileDependencies(packageSwiftFile: File): List<ProjectAnalyzerResult> {
         val project = projectFromDefinitionFile(packageSwiftFile)
         val swiftPackage = getSwiftPackage(packageSwiftFile)
-        val qualifiedScopeName = DependencyGraph.qualifyScope(scopeName = DEPENDENCIES_SCOPE_NAME, project = project)
 
-        swiftPackage.dependencies.onEach { graphBuilder.addDependency(qualifiedScopeName, it) }
-            .map { libraryDependency -> libraryDependency.toPackage() }
-            .also { graphBuilder.addPackages(it) }
+        val scope = Scope(
+            name = DEPENDENCIES_SCOPE_NAME,
+            dependencies = swiftPackage.dependencies.mapTo(mutableSetOf()) { it.toPackageReference() }
+        )
 
         return listOf(
             ProjectAnalyzerResult(
-                project = project.copy(scopeNames = setOf(DEPENDENCIES_SCOPE_NAME)),
-                // Packages are set by the dependency handler.
-                packages = emptySet(),
+                project = project.copy(scopeDependencies = setOf(scope)),
+                packages = swiftPackage.getTransitiveDependencies().mapTo(mutableSetOf()) { it.toPackage() },
                 issues = emptyList()
             )
         )
@@ -189,6 +180,25 @@ private fun SwiftPackage.toPackage(): Package {
     return createPackage(id, vcsInfo)
 }
 
+private fun SwiftPackage.toPackageReference(): PackageReference =
+    PackageReference(
+        id = id,
+        dependencies = dependencies.mapTo(mutableSetOf()) { it.toPackageReference() }
+    )
+
+private fun SwiftPackage.getTransitiveDependencies(): Set<SwiftPackage> {
+    val queue = dependencies.toMutableList()
+    val result = mutableSetOf<SwiftPackage>()
+
+    while (queue.isNotEmpty()) {
+        val swiftPackage = queue.removeFirst()
+        result += swiftPackage
+        queue += swiftPackage.dependencies
+    }
+
+    return result
+}
+
 private fun PinV2.toPackage(): Package {
     val id = Identifier(
         type = PACKAGE_TYPE,
@@ -241,14 +251,4 @@ internal fun getCanonicalName(repositoryUrl: String): String {
     return normalizedUrl.toUri {
         it.host + it.path.removeSuffix(".git")
     }.getOrDefault(normalizedUrl).lowercase()
-}
-
-private class SwiftPmDependencyHandler : DependencyHandler<SwiftPackage> {
-    override fun identifierFor(dependency: SwiftPackage): Identifier = dependency.id
-
-    override fun dependenciesFor(dependency: SwiftPackage): Collection<SwiftPackage> = dependency.dependencies
-
-    override fun linkageFor(dependency: SwiftPackage): PackageLinkage = PackageLinkage.DYNAMIC
-
-    override fun createPackage(dependency: SwiftPackage, issues: MutableList<Issue>): Package = dependency.toPackage()
 }
