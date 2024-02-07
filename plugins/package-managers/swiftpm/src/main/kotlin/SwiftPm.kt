@@ -165,8 +165,8 @@ class SwiftPm(
     }
 }
 
-private val SwiftPackage.id: Identifier
-    get() = Identifier(
+private fun SwiftPackage.toId(): Identifier =
+    Identifier(
         type = PACKAGE_TYPE,
         namespace = "",
         name = getCanonicalName(url),
@@ -178,11 +178,11 @@ private fun SwiftPackage.toVcsInfo(): VcsInfo {
     return vcsInfoFromUrl.takeUnless { it.revision.isBlank() } ?: vcsInfoFromUrl.copy(revision = version)
 }
 
-private fun SwiftPackage.toPackage(): Package = createPackage(id, toVcsInfo())
+private fun SwiftPackage.toPackage(): Package = createPackage(toId(), toVcsInfo())
 
 private fun SwiftPackage.toPackageReference(): PackageReference =
     PackageReference(
-        id = id,
+        id = toId(),
         dependencies = dependencies.mapTo(mutableSetOf()) { it.toPackageReference() }
     )
 
