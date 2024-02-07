@@ -199,8 +199,8 @@ private fun SwiftPackage.getTransitiveDependencies(): Set<SwiftPackage> {
     return result
 }
 
-private fun PinV2.toPackage(): Package {
-    val id = Identifier(
+private fun PinV2.toId(): Identifier =
+    Identifier(
         type = PACKAGE_TYPE,
         namespace = "",
         name = getCanonicalName(location),
@@ -214,8 +214,9 @@ private fun PinV2.toPackage(): Package {
         }.orEmpty()
     )
 
+private fun PinV2.toVcsInfo(): VcsInfo {
     val vcsInfoFromUrl = VcsHost.parseUrl(location)
-    val vcsInfo = if (vcsInfoFromUrl.revision.isBlank() && state != null) {
+    return if (vcsInfoFromUrl.revision.isBlank() && state != null) {
         when {
             !state.revision.isNullOrBlank() -> vcsInfoFromUrl.copy(revision = state.revision)
             !state.version.isNullOrBlank() -> vcsInfoFromUrl.copy(revision = state.version)
@@ -224,9 +225,9 @@ private fun PinV2.toPackage(): Package {
     } else {
         vcsInfoFromUrl
     }
-
-    return createPackage(id, vcsInfo)
 }
+
+private fun PinV2.toPackage(): Package = createPackage(toId(), toVcsInfo())
 
 private fun createPackage(id: Identifier, vcsInfo: VcsInfo) =
     Package(
