@@ -95,12 +95,12 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/apple/swift-llbuild.git"
-    revision: "9.0.8"
+    revision: ""
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/apple/swift-llbuild.git"
-    revision: "9.0.8"
+    revision: ""
     path: ""
 - id: "Swift::github.com/braze-inc/braze-ios-sdk:branch-master"
   purl: "pkg:swift/github.com%2Fbraze-inc%2Fbraze-ios-sdk@branch-master"
