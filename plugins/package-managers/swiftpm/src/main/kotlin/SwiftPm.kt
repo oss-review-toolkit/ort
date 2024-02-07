@@ -117,16 +117,27 @@ class SwiftPm(
         val project = projectFromDefinitionFile(packageSwiftFile)
         val swiftPackage = getSwiftPackage(packageSwiftFile)
 
-        val scope = Scope(
-            name = DEPENDENCIES_SCOPE_NAME,
-            dependencies = swiftPackage.dependencies.mapTo(mutableSetOf()) { it.toPackageReference() }
-        )
+        val issues = mutableListOf<Issue>()
+        val packages = mutableSetOf<Package>()
+        val scopeDependencies = mutableSetOf<Scope>()
+
+        parseLockfile(packageSwiftFile.resolveSibling(PACKAGE_RESOLVED_NAME)).onSuccess { pins ->
+            val pinsByIdentity = pins.associateBy { it.identity }
+
+            swiftPackage.getTransitiveDependencies().mapTo(packages) { it.toPackage(pinsByIdentity) }
+            scopeDependencies += Scope(
+                name = DEPENDENCIES_SCOPE_NAME,
+                dependencies = swiftPackage.dependencies.mapTo(mutableSetOf()) { it.toPackageReference(pinsByIdentity) }
+            )
+        }.onFailure {
+            issues += Issue(source = managerName, message = it.message.orEmpty())
+        }
 
         return listOf(
             ProjectAnalyzerResult(
-                project = project.copy(scopeDependencies = setOf(scope)),
-                packages = swiftPackage.getTransitiveDependencies().mapTo(mutableSetOf()) { it.toPackage() },
-                issues = emptyList()
+                project = project.copy(scopeDependencies = scopeDependencies),
+                packages = packages,
+                issues = issues
             )
         )
     }
@@ -165,25 +176,27 @@ class SwiftPm(
     }
 }
 
-private fun SwiftPackage.toId(): Identifier =
-    Identifier(
+private fun SwiftPackage.toId(pinsByIdentity: Map<String, PinV2>): Identifier =
+    pinsByIdentity[identity]?.toId() ?: Identifier(
         type = PACKAGE_TYPE,
         namespace = "",
         name = getCanonicalName(url),
         version = version
     )
 
-private fun SwiftPackage.toVcsInfo(): VcsInfo {
-    val vcsInfoFromUrl = VcsHost.parseUrl(url)
-    return vcsInfoFromUrl.takeUnless { it.revision.isBlank() } ?: vcsInfoFromUrl.copy(revision = version)
-}
+private fun SwiftPackage.toVcsInfo(pinsByIdentity: Map<String, PinV2>): VcsInfo =
+    pinsByIdentity[identity]?.toVcsInfo() ?: run {
+        val vcsInfoFromUrl = VcsHost.parseUrl(url)
+        return vcsInfoFromUrl.takeUnless { it.revision.isBlank() } ?: vcsInfoFromUrl.copy(revision = version)
+    }
 
-private fun SwiftPackage.toPackage(): Package = createPackage(toId(), toVcsInfo())
+private fun SwiftPackage.toPackage(pinsByIdentity: Map<String, PinV2>): Package =
+    createPackage(toId(pinsByIdentity), toVcsInfo(pinsByIdentity))
 
-private fun SwiftPackage.toPackageReference(): PackageReference =
+private fun SwiftPackage.toPackageReference(pinsByIdentity: Map<String, PinV2>): PackageReference =
     PackageReference(
-        id = toId(),
-        dependencies = dependencies.mapTo(mutableSetOf()) { it.toPackageReference() }
+        id = toId(pinsByIdentity),
+        dependencies = dependencies.mapTo(mutableSetOf()) { it.toPackageReference(pinsByIdentity) }
     )
 
 private fun SwiftPackage.getTransitiveDependencies(): Set<SwiftPackage> {
