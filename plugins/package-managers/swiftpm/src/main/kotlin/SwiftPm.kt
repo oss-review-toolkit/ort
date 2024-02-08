@@ -190,7 +190,7 @@ private fun SwiftPackage.toId(pinsByIdentity: Map<String, PinV2>): Identifier =
         type = PACKAGE_TYPE,
         namespace = "",
         name = getCanonicalName(url),
-        version = version
+        version = version.takeUnless { it == "unspecified" }.orEmpty()
     )
 
 private fun SwiftPackage.toVcsInfo(pinsByIdentity: Map<String, PinV2>): VcsInfo =
