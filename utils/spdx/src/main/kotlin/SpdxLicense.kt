@@ -340,6 +340,7 @@ enum class SpdxLicense(
     HP_1989("HP-1989", "Hewlett-Packard 1989 License"),
     HTMLTIDY("HTMLTIDY", "HTML Tidy License"),
     IBM_PIBS("IBM-pibs", "IBM PowerPC Initialization and Boot Software"),
+    ICON_SCOUT_SIMPLE("IconScoutSimple", "IconScout Simple License"),
     ICU("ICU", "ICU License"),
     IEC_CODE_COMPONENTS_EULA("IEC-Code-Components-EULA", "IEC    Code Components End-user licence agreement"),
     IJG("IJG", "Independent JPEG Group License"),
