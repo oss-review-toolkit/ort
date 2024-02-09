@@ -103,7 +103,9 @@ class Askalono internal constructor(name: String, private val wrapperConfig: Sca
                     location = TextLocation(it.path, TextLocation.UNKNOWN_LINE),
                     score = it.result.score
                 )
-            } else if (it.error != null) {
+            }
+
+            if (it.error != null) {
                 issues += Issue(
                     source = name,
                     message = it.error,
