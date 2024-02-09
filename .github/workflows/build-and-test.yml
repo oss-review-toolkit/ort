@@ -21,7 +21,7 @@ jobs:
       uses: actions/setup-java@v4
       with:
         distribution: temurin
-        java-version: 17
+        java-version: 21
     - name: Build all classes
       uses: gradle/gradle-build-action@v3
       with:
@@ -37,7 +37,7 @@ jobs:
       uses: actions/setup-java@v4
       with:
         distribution: temurin
-        java-version: 17
+        java-version: 21
     - name: Build the web-app-reporter
       uses: gradle/gradle-build-action@v3
       with:
@@ -60,7 +60,7 @@ jobs:
       uses: actions/setup-java@v4
       with:
         distribution: temurin
-        java-version: 17
+        java-version: 21
     - name: Build all classes
       uses: gradle/gradle-build-action@v3
       with:
@@ -78,7 +78,7 @@ jobs:
       uses: actions/setup-java@v4
       with:
         distribution: temurin
-        java-version: 17
+        java-version: 21
     - name: Run unit tests
       uses: gradle/gradle-build-action@v3
       with:
@@ -127,7 +127,7 @@ jobs:
       uses: actions/setup-java@v4
       with:
         distribution: temurin
-        java-version: 17
+        java-version: 21
     - name: Run functional tests that do not require external tools
       uses: gradle/gradle-build-action@v3
       with:
@@ -151,7 +151,7 @@ jobs:
       uses: actions/setup-java@v4
       with:
         distribution: temurin
-        java-version: 17
+        java-version: 21
     - name: Run functional tests that do require external tools
       uses: gradle/gradle-build-action@v3
       with:
