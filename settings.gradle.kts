@@ -26,6 +26,7 @@ rootProject.name = "oss-review-toolkit"
 include(":advisor")
 include(":analyzer")
 include(":cli")
+include(":clients:bazel-module-registry")
 include(":clients:clearly-defined")
 include(":clients:fossid-webapp")
 include(":clients:github-graphql")
@@ -48,6 +49,7 @@ include(":utils:scripting")
 include(":utils:spdx")
 include(":utils:test")
 
+project(":clients:bazel-module-registry").name = "bazel-module-registry-client"
 project(":clients:clearly-defined").name = "clearly-defined-client"
 project(":clients:fossid-webapp").name = "fossid-webapp-client"
 project(":clients:github-graphql").name = "github-graphql-client"
