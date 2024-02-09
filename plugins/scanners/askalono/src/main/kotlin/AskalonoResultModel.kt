@@ -24,7 +24,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class AskalonoResult(
     val path: String,
-    val result: PathResult,
+    val result: PathResult? = null,
     val error: String? = null
 )
 

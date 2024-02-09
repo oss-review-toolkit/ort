@@ -97,13 +97,13 @@ class Askalono internal constructor(name: String, private val wrapperConfig: Sca
         )
 
         results.forEach {
-            if (it.error == null) {
+            if (it.result != null) {
                 licenseFindings += LicenseFinding(
                     license = it.result.license.name,
                     location = TextLocation(it.path, TextLocation.UNKNOWN_LINE),
                     score = it.result.score
                 )
-            } else {
+            } else if (it.error != null) {
                 issues += Issue(
                     source = name,
                     message = it.error,
