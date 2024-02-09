@@ -13,7 +13,7 @@ versionsPlugin = "0.51.0"
 
 antlr = "4.13.1"
 asciidoctorj = "2.5.11"
-asciidoctorjPdf = "2.3.10"
+asciidoctorjPdf = "2.3.12"
 clikt = "4.2.2"
 commonsCompress = "1.25.0"
 cvssCalculator = "1.4.2"
