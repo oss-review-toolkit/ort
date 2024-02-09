@@ -18,7 +18,7 @@
 # License-Filename: LICENSE
 
 # Set this to the Java version to use in the base image (and to build and run ORT with).
-ARG JAVA_VERSION=17
+ARG JAVA_VERSION=21
 ARG UBUNTU_VERSION=jammy
 
 # Use OpenJDK Eclipe Temurin Ubuntu LTS
