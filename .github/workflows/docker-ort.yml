@@ -401,6 +401,16 @@ jobs:
             type=raw,value=${{ env.ORT_VERSION }}
             type=ref,event=tag
 
+      - name: Print disk usage
+        run: |
+          echo "Disk use for current dir"
+          df -h
+          pwd
+          du -cBM --max-depth=1 2>/dev/null . | sort -n
+          echo "Disk use for parent dir"
+          du -cBM --max-depth=2 2>/dev/null `realpath ..` | sort -n 
+          echo "End disk use"      
+
       - name: Build ORT image
         uses: docker/build-push-action@v5
         with:
