@@ -305,9 +305,6 @@ jobs:
           ORT_VERSION=$(./gradlew -q properties --property version | sed -nr "s/version: (.+)/\1/p")
           echo "ORT_VERSION=${ORT_VERSION}" >> $GITHUB_ENV
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
       - name: Set up Docker build
         uses: docker/setup-buildx-action@v3
 
@@ -335,7 +332,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          platforms: linux/amd64,linux/arm64
           target: minimal
           push: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
           load: false
@@ -356,6 +352,7 @@ jobs:
   # Full Runtime ORT image
   # ----------------------
   ort_image:
+    if: ${{ github.event_name != 'pull_request' }}
     name: Build ORT image
     needs:
       [ minimal_image, android_image, dart_image, dotnet_image, haskell_image, scala_image, swift_image ]
@@ -374,9 +371,6 @@ jobs:
         run: |
           ORT_VERSION=$(./gradlew -q properties --property version | sed -nr "s/version: (.+)/\1/p")
           echo "ORT_VERSION=${ORT_VERSION}" >> $GITHUB_ENV
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker build
         uses: docker/setup-buildx-action@v3
@@ -405,7 +399,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          platforms: linux/amd64,linux/arm64
           target: run
           push: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
           load: false
