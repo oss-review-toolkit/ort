@@ -104,7 +104,7 @@ tasks {
         group = "Node"
 
         inputs.files(".rescriptsrc.js")
-        inputs.files(project.tasks["yarnInstall"].outputs)
+        inputs.files(project.tasks["yarnInstall"].outputs.files)
         inputs.dir("public")
         inputs.dir("src")
 
