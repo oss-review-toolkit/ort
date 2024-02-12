@@ -128,18 +128,24 @@ class SwiftPm(
         val issues = mutableListOf<Issue>()
         val packages = mutableSetOf<Package>()
         val scopeDependencies = mutableSetOf<Scope>()
+        val pinsByIdentity = mutableMapOf<String, PinV2>()
 
-        parseLockfile(packageSwiftFile.resolveSibling(PACKAGE_RESOLVED_NAME)).onSuccess { pins ->
-            val pinsByIdentity = pins.associateBy { it.identity }
-
-            swiftPackage.getTransitiveDependencies().mapTo(packages) { it.toPackage(pinsByIdentity) }
-            scopeDependencies += Scope(
-                name = DEPENDENCIES_SCOPE_NAME,
-                dependencies = swiftPackage.dependencies.mapTo(mutableSetOf()) { it.toPackageReference(pinsByIdentity) }
-            )
-        }.onFailure {
-            issues += Issue(source = managerName, message = it.message.orEmpty())
+        val lockfile = packageSwiftFile.resolveSibling(PACKAGE_RESOLVED_NAME)
+        if (lockfile.isFile) {
+            // The command `swift package show-dependencies` does not create a (non-existing) lockfile in case there
+            // are no non-local dependencies.
+            parseLockfile(lockfile).onSuccess { pins ->
+                pins.associateByTo(pinsByIdentity) { it.identity }
+            }.onFailure {
+                issues += Issue(source = managerName, message = it.message.orEmpty())
+            }
         }
+
+        swiftPackage.getTransitiveDependencies().mapTo(packages) { it.toPackage(pinsByIdentity) }
+        scopeDependencies += Scope(
+            name = DEPENDENCIES_SCOPE_NAME,
+            dependencies = swiftPackage.dependencies.mapTo(mutableSetOf()) { it.toPackageReference(pinsByIdentity) }
+        )
 
         return listOf(
             ProjectAnalyzerResult(
