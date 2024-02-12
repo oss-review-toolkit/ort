@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.orEmpty
@@ -242,15 +243,11 @@ private fun PinV2.toId(): Identifier =
 private fun PinV2.toVcsInfo(): VcsInfo {
     if (kind != PinV2.Kind.REMOTE_SOURCE_CONTROL) return VcsInfo.EMPTY
 
-    val vcsInfoFromUrl = VcsHost.parseUrl(location)
-    return if (vcsInfoFromUrl.revision.isBlank() && state != null) {
-        when {
-            !state.revision.isNullOrBlank() -> vcsInfoFromUrl.copy(revision = state.revision)
-            else -> vcsInfoFromUrl
-        }
-    } else {
-        vcsInfoFromUrl
-    }
+    return VcsInfo(
+        type = VcsType.GIT,
+        url = normalizeVcsUrl(location),
+        revision = state?.revision.orEmpty()
+    )
 }
 
 private fun PinV2.toPackage(): Package = createPackage(toId(), toVcsInfo())
