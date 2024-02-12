@@ -26,35 +26,35 @@ import io.kotest.matchers.shouldBe
 class SpdxExpressionParserTest : WordSpec({
     "SpdxExpressionParser" should {
         "parse a license id correctly" {
-            val actualExpression = SpdxExpression.parse("spdx.license-id")
+            val actualExpression = "spdx.license-id".toSpdx()
             val expectedExpression = SpdxLicenseIdExpression("spdx.license-id")
 
             actualExpression shouldBe expectedExpression
         }
 
         "parse a license id starting with a digit correctly" {
-            val actualExpression = SpdxExpression.parse("0license")
+            val actualExpression = "0license".toSpdx()
             val expectedExpression = SpdxLicenseIdExpression("0license")
 
             actualExpression shouldBe expectedExpression
         }
 
         "parse a license id with any later version correctly" {
-            val actualExpression = SpdxExpression.parse("license+")
+            val actualExpression = "license+".toSpdx()
             val expectedExpression = SpdxLicenseIdExpression("license", orLaterVersion = true)
 
             actualExpression shouldBe expectedExpression
         }
 
         "parse a document ref correctly" {
-            val actualExpression = SpdxExpression.parse("DocumentRef-document:LicenseRef-license")
+            val actualExpression = "DocumentRef-document:LicenseRef-license".toSpdx()
             val expectedExpression = SpdxLicenseReferenceExpression("DocumentRef-document:LicenseRef-license")
 
             actualExpression shouldBe expectedExpression
         }
 
         "parse a license ref correctly" {
-            val actualExpression = SpdxExpression.parse("LicenseRef-license")
+            val actualExpression = "LicenseRef-license".toSpdx()
             val expectedExpression = SpdxLicenseReferenceExpression("LicenseRef-license")
 
             actualExpression shouldBe expectedExpression
@@ -88,7 +88,7 @@ class SpdxExpressionParserTest : WordSpec({
         }
 
         "bind + stronger than WITH" {
-            val actualExpression = SpdxExpression.parse("license+ WITH exception")
+            val actualExpression = "license+ WITH exception".toSpdx()
             val expectedExpression = SpdxLicenseWithExceptionExpression(
                 SpdxLicenseIdExpression("license", orLaterVersion = true),
                 "exception"
@@ -98,7 +98,7 @@ class SpdxExpressionParserTest : WordSpec({
         }
 
         "bind WITH stronger than AND" {
-            val actualExpression = SpdxExpression.parse("license1 AND license2 WITH exception")
+            val actualExpression = "license1 AND license2 WITH exception".toSpdx()
             val expectedExpression = SpdxCompoundExpression(
                 SpdxLicenseIdExpression("license1"),
                 SpdxOperator.AND,
@@ -112,7 +112,7 @@ class SpdxExpressionParserTest : WordSpec({
         }
 
         "bind AND stronger than OR" {
-            val actualExpression = SpdxExpression.parse("license1 OR license2 AND license3")
+            val actualExpression = "license1 OR license2 AND license3".toSpdx()
             val expectedExpression = SpdxCompoundExpression(
                 SpdxLicenseIdExpression("license1"),
                 SpdxOperator.OR,
@@ -127,7 +127,7 @@ class SpdxExpressionParserTest : WordSpec({
         }
 
         "bind the and operator left associative" {
-            val actualExpression = SpdxExpression.parse("license1 AND license2 AND license3")
+            val actualExpression = "license1 AND license2 AND license3".toSpdx()
             val expectedExpression = SpdxCompoundExpression(
                 SpdxCompoundExpression(
                     SpdxLicenseIdExpression("license1"),
@@ -142,7 +142,7 @@ class SpdxExpressionParserTest : WordSpec({
         }
 
         "bind the or operator left associative" {
-            val actualExpression = SpdxExpression.parse("license1 OR license2 OR license3")
+            val actualExpression = "license1 OR license2 OR license3".toSpdx()
             val expectedExpression = SpdxCompoundExpression(
                 SpdxCompoundExpression(
                     SpdxLicenseIdExpression("license1"),
@@ -157,7 +157,7 @@ class SpdxExpressionParserTest : WordSpec({
         }
 
         "respect parentheses for binding strength of operators" {
-            val actualExpression = SpdxExpression.parse("(license1 OR license2) AND license3")
+            val actualExpression = "(license1 OR license2) AND license3".toSpdx()
             val expectedExpression = SpdxCompoundExpression(
                 SpdxCompoundExpression(
                     SpdxLicenseIdExpression("license1"),
@@ -173,7 +173,7 @@ class SpdxExpressionParserTest : WordSpec({
 
         "fail if + is used in an exception expression" {
             val exception = shouldThrow<SpdxException> {
-                SpdxExpression.parse("license WITH exception+")
+                "license WITH exception+".toSpdx()
             }
 
             exception.message shouldBe "Unexpected token 'PLUS(position=23)'."
@@ -181,7 +181,7 @@ class SpdxExpressionParserTest : WordSpec({
 
         "fail if a compound expression is used before WITH" {
             val exception = shouldThrow<SpdxException> {
-                SpdxExpression.parse("(license1 AND license2) WITH exception")
+                "(license1 AND license2) WITH exception".toSpdx()
             }
 
             exception.message shouldBe "Unexpected token 'WITH(position=25)'."
@@ -189,7 +189,7 @@ class SpdxExpressionParserTest : WordSpec({
 
         "fail on an invalid symbol" {
             val exception = shouldThrow<SpdxException> {
-                SpdxExpression.parse("/")
+                "/".toSpdx()
             }
 
             exception.message shouldBe "Unexpected character '/' at position 1."
@@ -197,7 +197,7 @@ class SpdxExpressionParserTest : WordSpec({
 
         "fail on a syntax error" {
             val exception = shouldThrow<SpdxException> {
-                SpdxExpression.parse("((")
+                "((".toSpdx()
             }
 
             exception.message shouldBe "Unexpected token 'null'."
