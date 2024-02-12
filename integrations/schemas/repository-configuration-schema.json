@@ -142,6 +142,84 @@
           }
         }
       }
+    },
+    "snippet_choices": {
+      "type": "array",
+      "description": "A configuration to select a snippet from a package with multiple snippet findings.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "provenance": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "url"
+            ]
+          },
+          "choices": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "given": {
+                  "type": "object",
+                  "properties": {
+                    "sourceLocation": {
+                      "type": "object",
+                      "properties": {
+                        "path": {
+                          "type": "string"
+                        },
+                        "lineStart": {
+                          "type": "integer"
+                        },
+                        "lineEnd": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "path",
+                        "lineStart",
+                        "lineEnd"
+                      ]
+                    }
+                  }
+                },
+                "choice": {
+                  "type": "object",
+                  "properties": {
+                    "purl": {
+                      "type": "string"
+                    },
+                    "reason": {
+                      "$ref": "#/definitions/snippetChoiceReason"
+                    },
+                    "comment": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "reason",
+                    "reasoning"
+                  ]
+                }
+              },
+              "required": [
+                "given",
+                "choice"
+              ]
+            }
+          }
+        },
+        "required": [
+          "provenance",
+          "choices"
+        ]
+      }
     }
   },
   "definitions": {
@@ -209,6 +287,13 @@
         "INCORRECT",
         "NOT_DETECTED",
         "REFERENCE"
+      ]
+    },
+    "snippetChoiceReason": {
+      "enum": [
+        "NO_RELEVANT_FINDING",
+        "ORIGINAL_FINDING",
+        "OTHER"
       ]
     }
   }
