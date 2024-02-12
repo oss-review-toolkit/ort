@@ -106,7 +106,7 @@ class SwiftPm(
             )
         }.onFailure {
             issues += Issue(source = managerName, message = it.message.orEmpty())
-        }.getOrDefault(emptySet())
+        }
 
         return listOf(
             ProjectAnalyzerResult(
