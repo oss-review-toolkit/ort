@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.advisors.vulnerablecode
 
-import io.kotest.core.spec.style.StringSpec
+import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.should
@@ -30,27 +30,51 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
-class VulnerableCodeFunTest : StringSpec({
-    "Findings should be returned for a vulnerable package" {
-        val vc = VulnerableCode("VulnerableCode", VulnerableCodeConfiguration())
-        val id = Identifier("Maven:com.google.guava:guava:19.0")
-        val pkg = Package.EMPTY.copy(id, purl = id.toPurl())
+class VulnerableCodeFunTest : WordSpec({
+    "Vulnerable Maven packages" should {
+        "return findings for Guava" {
+            val vc = VulnerableCode("VulnerableCode", VulnerableCodeConfiguration())
+            val id = Identifier("Maven:com.google.guava:guava:19.0")
+            val pkg = Package.EMPTY.copy(id, purl = id.toPurl())
 
-        val findings = vc.retrievePackageFindings(setOf(pkg))
+            val findings = vc.retrievePackageFindings(setOf(pkg))
 
-        findings.values.flatMap { it.summary.issues } should beEmpty()
-        with(findings.values.flatMap { it.vulnerabilities }.associateBy { it.id }) {
-            keys shouldContainAll setOf(
-                "CVE-2018-10237",
-                "CVE-2020-8908",
-                "CVE-2023-2976"
-            )
+            findings.values.flatMap { it.summary.issues } should beEmpty()
+            with(findings.values.flatMap { it.vulnerabilities }.associateBy { it.id }) {
+                keys shouldContainAll setOf(
+                    "CVE-2018-10237",
+                    "CVE-2020-8908",
+                    "CVE-2023-2976"
+                )
 
-            getValue("CVE-2023-2976").references.find {
-                it.url.toString() == "https://nvd.nist.gov/vuln/detail/CVE-2023-2976"
-            } shouldNotBeNull {
-                severity shouldBe "7.1"
-                severityRating shouldBe "HIGH"
+                getValue("CVE-2023-2976").references.find {
+                    it.url.toString() == "https://nvd.nist.gov/vuln/detail/CVE-2023-2976"
+                } shouldNotBeNull {
+                    severity shouldBe "7.1"
+                    severityRating shouldBe "HIGH"
+                }
+            }
+        }
+
+        "return findings for Commons-Compress" {
+            val vc = VulnerableCode("VulnerableCode", VulnerableCodeConfiguration())
+            val id = Identifier("Maven:org.apache.commons:commons-compress:1.23.0")
+            val pkg = Package.EMPTY.copy(id, purl = id.toPurl())
+
+            val findings = vc.retrievePackageFindings(setOf(pkg))
+
+            findings.values.flatMap { it.summary.issues } should beEmpty()
+            with(findings.values.flatMap { it.vulnerabilities }.associateBy { it.id }) {
+                keys shouldContainAll setOf(
+                    "CVE-2023-42503"
+                )
+
+                getValue("CVE-2023-42503").references.find {
+                    it.url.toString() == "https://nvd.nist.gov/vuln/detail/CVE-2023-42503"
+                } shouldNotBeNull {
+                    severity shouldBe "5.5"
+                    severityRating shouldBe "MEDIUM"
+                }
             }
         }
     }
