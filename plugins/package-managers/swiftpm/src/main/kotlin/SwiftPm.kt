@@ -240,6 +240,8 @@ private fun PinV2.toId(): Identifier =
     )
 
 private fun PinV2.toVcsInfo(): VcsInfo {
+    if (kind != PinV2.Kind.REMOTE_SOURCE_CONTROL) return VcsInfo.EMPTY
+
     val vcsInfoFromUrl = VcsHost.parseUrl(location)
     return if (vcsInfoFromUrl.revision.isBlank() && state != null) {
         when {
