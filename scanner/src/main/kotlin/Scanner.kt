@@ -114,7 +114,8 @@ class Scanner(
                 ortResult.labels + labels,
                 PackageType.PROJECT,
                 ortResult.repository.config.excludes,
-                scannerConfig.detectedLicenseMapping
+                scannerConfig.detectedLicenseMapping,
+                snippetChoices = ortResult.repository.config.snippetChoices
             )
         )
 
@@ -126,7 +127,8 @@ class Scanner(
                 ortResult.labels,
                 PackageType.PACKAGE,
                 ortResult.repository.config.excludes,
-                scannerConfig.detectedLicenseMapping
+                scannerConfig.detectedLicenseMapping,
+                snippetChoices = ortResult.repository.config.snippetChoices
             )
         )
 
