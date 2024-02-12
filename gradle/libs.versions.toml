@@ -1,7 +1,7 @@
 [versions]
 dependencyAnalysisPlugin = "1.29.0"
 detektPlugin = "1.23.5"
-dokkatooPlugin = "2.0.0"
+dokkatooPlugin = "2.1.0"
 downloadPlugin = "5.5.0"
 gitSemverPlugin = "0.12.2"
 graalVmNativeImagePlugin = "0.10.0"
