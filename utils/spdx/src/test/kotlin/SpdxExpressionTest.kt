@@ -270,7 +270,9 @@ class SpdxExpressionTest : WordSpec({
                 "wxWindows".toSpdx() shouldBe SpdxLicenseIdExpression("wxWindows")
             }
         }
+    }
 
+    "normalize()" should {
         "normalize the case of SPDX licenses" {
             SpdxLicense.entries.filterNot { it.deprecated }.forEach {
                 it.id.lowercase().toSpdx().normalize() shouldBe it.toExpression()
