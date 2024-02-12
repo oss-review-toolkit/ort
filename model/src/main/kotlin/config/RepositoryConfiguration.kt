@@ -68,5 +68,11 @@ data class RepositoryConfiguration(
      * Defines license choices within this repository.
      */
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = LicenseChoicesFilter::class)
-    val licenseChoices: LicenseChoices = LicenseChoices()
+    val licenseChoices: LicenseChoices = LicenseChoices(),
+
+    /**
+     * Defines snippet choices for projects in this repository.
+     */
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+    val snippetChoices: List<SnippetChoices> = emptyList()
 )

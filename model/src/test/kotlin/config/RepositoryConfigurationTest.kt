@@ -24,12 +24,15 @@ import com.fasterxml.jackson.databind.exc.ValueInstantiationException
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.haveSize
+import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldNotContain
 
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.config.snippet.SnippetChoiceReason
 import org.ossreviewtoolkit.model.fromYaml
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
@@ -121,6 +124,18 @@ class RepositoryConfigurationTest : WordSpec({
                     - given: MPL-2.0 or EPL-1.0
                       choice: MPL-2.0
                     - choice: MPL-2.0 AND MIT
+                snippet_choices:
+                   - provenance:
+                        url: "https://github.com/vdurmont/semver4j.git"
+                     choices:
+                        - given:
+                             source_location:
+                                path: "CHANGELOG.md"
+                                start_line: 2
+                                end_line: 5
+                          choice:
+                             reason: "NO_RELEVANT_FINDING"
+                             comment: "Explain why this location has only false positive snippets"
             """.trimIndent()
 
             val repositoryConfiguration = configuration.fromYaml<RepositoryConfiguration>()
@@ -195,6 +210,20 @@ class RepositoryConfigurationTest : WordSpec({
                 with(licenseChoices[1]) {
                     given shouldBe null
                     choice shouldBe "MPL-2.0 AND MIT".toSpdx()
+                }
+            }
+
+            val snippetChoices = repositoryConfiguration.snippetChoices
+            snippetChoices should haveSize(1)
+
+            with(snippetChoices.first()) {
+                provenance.url shouldBe "https://github.com/vdurmont/semver4j.git"
+                with(choices.first()) {
+                    given.sourceLocation shouldBe TextLocation("CHANGELOG.md", 2, 5)
+
+                    choice.purl should beNull()
+                    choice.reason shouldBe SnippetChoiceReason.NO_RELEVANT_FINDING
+                    choice.comment shouldBe "Explain why this location has only false positive snippets"
                 }
             }
         }
