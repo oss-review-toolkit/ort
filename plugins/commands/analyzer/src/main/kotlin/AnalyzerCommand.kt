@@ -67,8 +67,8 @@ class AnalyzerCommand : OrtCommand(
 ) {
     private val inputDir by option(
         "--input-dir", "-i",
-        help = "The project directory to analyze. As a special case, if only one package manager is enabled, this " +
-            "may point to a definition file for that package manager to only analyze that single project."
+        help = "The project directory to analyze. May point to a definition file if only a single package manager is " +
+            "enabled."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
