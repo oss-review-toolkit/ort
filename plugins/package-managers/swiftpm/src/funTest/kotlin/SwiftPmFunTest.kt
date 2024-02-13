@@ -25,7 +25,6 @@ import io.kotest.matchers.should
 import org.ossreviewtoolkit.analyzer.managers.create
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
 import org.ossreviewtoolkit.analyzer.managers.withInvariantIssues
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
@@ -82,8 +81,7 @@ class SwiftPmFunTest : WordSpec({
                 "projects/synthetic/expected-output-project-without-lockfile.yml"
             )
 
-            val result = create(PROJECT_TYPE, AnalyzerConfiguration(allowDynamicVersions = false))
-                .resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = create(PROJECT_TYPE).resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.withInvariantIssues().toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
