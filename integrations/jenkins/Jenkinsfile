@@ -25,9 +25,6 @@ import java.io.IOException
 
 import org.jenkinsci.plugins.pipeline.modeldefinition.Utils
 
-@Field
-final DOCKER_BUILD_ARGS = '--build-arg http_proxy=$http_proxy --build-arg https_proxy=$https_proxy --build-arg ORT_VERSION='
-
 // Disable the entry point to work around https://issues.jenkins-ci.org/browse/JENKINS-51307.
 final DOCKER_RUN_ARGS = '-e http_proxy -e https_proxy --entrypoint=""'
 
@@ -43,7 +40,9 @@ def ortVersion = 'JENKINS-SNAPSHOT'
 
 @NonCPS
 def getDockerBuildArgs() {
-    return DOCKER_BUILD_ARGS + ortVersion
+    def defaultArgs = ['http_proxy=$http_proxy', 'https_proxy=$https_proxy', "ORT_VERSION=$ortVersion"]
+    def customArgs = params.CUSTOM_DOCKER_BUILD_ARGS.tokenize(',')
+    return (defaultArgs + customArgs).collect { "--build-arg ${it.trim()}" }.join(' ')
 }
 
 @NonCPS
@@ -55,6 +54,16 @@ pipeline {
     agent none
 
     parameters {
+        /*
+         * Parameters about the project to run ORT on.
+         */
+
+        string(
+            name: 'CUSTOM_DOCKER_BUILD_ARGS',
+            description: 'A comma-separated list of arguments to pass to the Docker build, e.g. "JAVA_VERSION=17,SCANCODE_VERSION=32.0.8".',
+            defaultValue: ''
+        )
+
         /*
          * Parameters about the project to run ORT on.
          */
