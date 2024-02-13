@@ -1,0 +1,21 @@
+---
+project:
+  id: "SwiftPM::src/funTest/assets/projects/synthetic/project-without-deps/Package.swift:<REPLACE_REVISION>"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "dependencies"
+    dependencies: []
+packages: []
