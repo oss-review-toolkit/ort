@@ -19,10 +19,13 @@
 
 import com.cloudbees.groovy.cps.NonCPS
 
+import groovy.transform.Field
+
 import java.io.IOException
 
 import org.jenkinsci.plugins.pipeline.modeldefinition.Utils
 
+@Field
 final DOCKER_BUILD_ARGS = '--build-arg http_proxy=$http_proxy --build-arg https_proxy=$https_proxy --build-arg ORT_VERSION='
 
 // Disable the entry point to work around https://issues.jenkins-ci.org/browse/JENKINS-51307.
@@ -34,7 +37,14 @@ final ORT_FAILURE_STATUS_CODE = 2
 
 def projectVcsCredentials = []
 def ortConfigVcsCredentials = []
+
+@Field
 def ortVersion = 'JENKINS-SNAPSHOT'
+
+@NonCPS
+def getDockerBuildArgs() {
+    return DOCKER_BUILD_ARGS + ortVersion
+}
 
 @NonCPS
 static sortProjectsByPathDepth(projects) {
@@ -320,7 +330,7 @@ pipeline {
             agent {
                 dockerfile {
                     filename 'Dockerfile-legacy'
-                    additionalBuildArgs DOCKER_BUILD_ARGS + ortVersion
+                    additionalBuildArgs getDockerBuildArgs()
                     args DOCKER_RUN_ARGS
                 }
             }
@@ -347,7 +357,7 @@ pipeline {
             agent {
                 dockerfile {
                     filename 'Dockerfile-legacy'
-                    additionalBuildArgs DOCKER_BUILD_ARGS + ortVersion
+                    additionalBuildArgs getDockerBuildArgs()
                     args DOCKER_RUN_ARGS
                 }
             }
@@ -386,7 +396,7 @@ pipeline {
             agent {
                 dockerfile {
                     filename 'Dockerfile-legacy'
-                    additionalBuildArgs DOCKER_BUILD_ARGS + ortVersion
+                    additionalBuildArgs getDockerBuildArgs()
                     args DOCKER_RUN_ARGS
                 }
             }
@@ -463,7 +473,7 @@ pipeline {
             agent {
                 dockerfile {
                     filename 'Dockerfile-legacy'
-                    additionalBuildArgs DOCKER_BUILD_ARGS + ortVersion
+                    additionalBuildArgs getDockerBuildArgs()
                     args DOCKER_RUN_ARGS
                 }
             }
@@ -492,7 +502,7 @@ pipeline {
             agent {
                 dockerfile {
                     filename 'Dockerfile-legacy'
-                    additionalBuildArgs DOCKER_BUILD_ARGS + ortVersion
+                    additionalBuildArgs getDockerBuildArgs()
                     args DOCKER_RUN_ARGS
                 }
             }
@@ -589,7 +599,7 @@ pipeline {
             agent {
                 dockerfile {
                     filename 'Dockerfile-legacy'
-                    additionalBuildArgs DOCKER_BUILD_ARGS + ortVersion
+                    additionalBuildArgs getDockerBuildArgs()
                     args DOCKER_RUN_ARGS
                 }
             }
@@ -718,7 +728,7 @@ pipeline {
             agent {
                 dockerfile {
                     filename 'Dockerfile-legacy'
-                    additionalBuildArgs DOCKER_BUILD_ARGS + ortVersion
+                    additionalBuildArgs getDockerBuildArgs()
                     args DOCKER_RUN_ARGS
                 }
             }
@@ -780,7 +790,7 @@ pipeline {
             agent {
                 dockerfile {
                     filename 'Dockerfile-legacy'
-                    additionalBuildArgs DOCKER_BUILD_ARGS + ortVersion
+                    additionalBuildArgs getDockerBuildArgs()
                     args DOCKER_RUN_ARGS
                 }
             }
@@ -850,7 +860,7 @@ pipeline {
             agent {
                 dockerfile {
                     filename 'Dockerfile-legacy'
-                    additionalBuildArgs DOCKER_BUILD_ARGS + ortVersion
+                    additionalBuildArgs getDockerBuildArgs()
                     args DOCKER_RUN_ARGS
                 }
             }
