@@ -88,4 +88,17 @@ class SwiftPmFunTest : WordSpec({
             result.withInvariantIssues().toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
     }
+
+    "Analyzing a definition file without dependencies" should {
+        "return the correct result" {
+            // Note: SwiftPM does not create a lockfile if there are no dependencies which is a corner case.
+            val definitionFile = getAssetFile("projects/synthetic/project-without-deps/Package.swift")
+            val expectedResultFile = getAssetFile("projects/synthetic/expected-output-project-without-deps.yml")
+
+            val result = create(PROJECT_TYPE, allowDynamicVersions = true)
+                .resolveSingleProject(definitionFile, resolveScopes = true)
+
+            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+        }
+    }
 })
