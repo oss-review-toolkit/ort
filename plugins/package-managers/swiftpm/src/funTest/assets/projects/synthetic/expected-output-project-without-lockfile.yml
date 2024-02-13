@@ -1,7 +1,7 @@
 ---
 project:
   id: "SwiftPM::src/funTest/assets/projects/synthetic/project-without-lockfile/Package.swift:"
-  definition_file_path: "plugins/package-managers/swiftpm/src/funTest/assets/projects/synthetic/project-without-lockfile/Package.swift"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
   declared_licenses: []
   declared_licenses_processed: {}
   vcs:
