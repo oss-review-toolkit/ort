@@ -32,14 +32,14 @@ final DOCKER_RUN_ARGS = '-e http_proxy -e https_proxy --entrypoint=""'
 // existing output files).
 final ORT_FAILURE_STATUS_CODE = 2
 
+def projectVcsCredentials = []
+def ortConfigVcsCredentials = []
+def ortVersion = 'JENKINS-SNAPSHOT'
+
 @NonCPS
 static sortProjectsByPathDepth(projects) {
     return projects.toSorted { it.definition_file_path.count("/") }
 }
-
-def projectVcsCredentials = []
-def ortConfigVcsCredentials = []
-def ortVersion = 'JENKINS-SNAPSHOT'
 
 pipeline {
     agent none
