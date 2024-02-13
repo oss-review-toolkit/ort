@@ -248,7 +248,7 @@ internal data class ResolutionResult(
 )
 
 /**
- * Return a flag whether this URI points to a local definition file.
+ * Check whether this URI points to a local definition file.
  */
 private fun URI.isLocalDefinitionFile(): Boolean = scheme.equals("file", ignoreCase = true) || !isAbsolute
 
