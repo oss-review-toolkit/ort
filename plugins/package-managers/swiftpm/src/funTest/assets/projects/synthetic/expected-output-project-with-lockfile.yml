@@ -57,6 +57,9 @@ project:
         - id: "Swift::github.com/apple/swift-atomics:1.2.0"
         - id: "Swift::github.com/apple/swift-collections:1.1.0"
         - id: "Swift::github.com/apple/swift-system:1.2.1"
+    - id: "Swift::github.com/oss-review-toolkit/ort:690a5087534c202b395d65f3262f52c98251c647"
+      dependencies:
+      - id: "Swift::github.com/alamofire/alamofire:5.8.1"
     - id: "Swift::github.com/swift-server/async-http-client:1.20.1"
       dependencies:
       - id: "Swift::github.com/apple/swift-algorithms:1.2.0"
@@ -180,6 +183,32 @@ project:
           - id: "Swift::github.com/apple/swift-collections:1.1.0"
           - id: "Swift::github.com/apple/swift-system:1.2.1"
 packages:
+- id: "Swift::github.com/alamofire/alamofire:5.8.1"
+  purl: "pkg:swift/github.com%2Falamofire%2Falamofire@5.8.1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/Alamofire/Alamofire.git"
+    revision: "3dc6a42c7727c49bf26508e29b0a0b35f9c7e1ad"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/Alamofire/Alamofire.git"
+    revision: "3dc6a42c7727c49bf26508e29b0a0b35f9c7e1ad"
+    path: ""
 - id: "Swift::github.com/apple/swift-algorithms:1.2.0"
   purl: "pkg:swift/github.com%2Fapple%2Fswift-algorithms@1.2.0"
   declared_licenses: []
@@ -544,6 +573,32 @@ packages:
     url: "https://github.com/apple/swift-system.git"
     revision: "025bcb1165deab2e20d4eaba79967ce73013f496"
     path: ""
+- id: "Swift::github.com/oss-review-toolkit/ort:690a5087534c202b395d65f3262f52c98251c647"
+  purl: "pkg:swift/github.com%2Foss-review-toolkit%2Fort@690a5087534c202b395d65f3262f52c98251c647"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "plugins/package-managers/swiftpm/src/funTest/assets/packages/synthetic/package-with-dependency"
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "plugins/package-managers/swiftpm/src/funTest/assets/packages/synthetic/package-with-dependency"
 - id: "Swift::github.com/swift-server/async-http-client:1.20.1"
   purl: "pkg:swift/github.com%2Fswift-server%2Fasync-http-client@1.20.1"
   declared_licenses: []

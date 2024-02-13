@@ -55,6 +55,8 @@ let package = Package(
 
         // MultipartKit, Multipart encoding and decoding
         .package(url: "https://github.com/vapor/multipart-kit.git", from: "4.2.1"),
+
+        .package(path: "../../../packages/synthetic/package-with-dependency"),
     ],
     targets: [
         // C helpers
@@ -88,6 +90,7 @@ let package = Package(
             .product(name: "RoutingKit", package: "routing-kit"),
             .product(name: "WebSocketKit", package: "websocket-kit"),
             .product(name: "MultipartKit", package: "multipart-kit"),
+            .product(name: "PackageWithDep", package: "package-with-dependency"),
         ]),
 
         // Development
