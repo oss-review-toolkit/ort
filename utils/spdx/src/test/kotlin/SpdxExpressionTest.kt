@@ -39,30 +39,6 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicenseException.*
 
 @Suppress("LargeClass")
 class SpdxExpressionTest : WordSpec({
-    "toString()" should {
-        "return the textual SPDX expression" {
-            val expression = "a+ AND (b WITH exception1 OR c+) AND d WITH exception2"
-
-            expression.toSpdx() should beString(expression)
-        }
-
-        "not include unnecessary parenthesis" {
-            val expression = "(a AND (b AND c) AND (d OR (e WITH exception)))"
-
-            expression.toSpdx() should beString("a AND b AND c AND (d OR e WITH exception)")
-        }
-
-        "always add parentheses around groups with different operators" {
-            val expression1 = "a AND b AND c OR d AND e AND f"
-            val expression2 = "(a OR b OR c) AND (d OR e OR f)"
-            val expression3 = "(a OR b AND c) AND (d AND e OR f)"
-
-            expression1.toSpdx() should beString("(a AND b AND c) OR (d AND e AND f)")
-            expression2.toSpdx() should beString("(a OR b OR c) AND (d OR e OR f)")
-            expression3.toSpdx() should beString("(a OR (b AND c)) AND ((d AND e) OR f)")
-        }
-    }
-
     "A dummy SpdxExpression" should {
         val dummyExpression = "a+ AND (b WITH exception1 OR c+) AND d WITH exception2"
 
@@ -868,6 +844,30 @@ class SpdxExpressionTest : WordSpec({
             "a AND b".toSpdx().hashCode() shouldBe "b AND a".toSpdx().hashCode()
             "a OR b".toSpdx().hashCode() shouldBe "b OR a".toSpdx().hashCode()
             "a AND (b OR c)".toSpdx().hashCode() shouldBe "(a AND b) OR (a AND c)".toSpdx().hashCode()
+        }
+    }
+
+    "toString()" should {
+        "return the textual SPDX expression" {
+            val expression = "a+ AND (b WITH exception1 OR c+) AND d WITH exception2"
+
+            expression.toSpdx() should beString(expression)
+        }
+
+        "not include unnecessary parenthesis" {
+            val expression = "(a AND (b AND c) AND (d OR (e WITH exception)))"
+
+            expression.toSpdx() should beString("a AND b AND c AND (d OR e WITH exception)")
+        }
+
+        "always add parentheses around groups with different operators" {
+            val expression1 = "a AND b AND c OR d AND e AND f"
+            val expression2 = "(a OR b OR c) AND (d OR e OR f)"
+            val expression3 = "(a OR b AND c) AND (d AND e OR f)"
+
+            expression1.toSpdx() should beString("(a AND b AND c) OR (d AND e AND f)")
+            expression2.toSpdx() should beString("(a OR b OR c) AND (d OR e OR f)")
+            expression3.toSpdx() should beString("(a OR (b AND c)) AND ((d AND e) OR f)")
         }
     }
 })
