@@ -94,7 +94,7 @@ class UploadResultToSw360Command : OrtCommand(
                     .orElseGet { createSw360Release(pkg, sw360ReleaseClient) }
 
                 if (attachSources) {
-                    val tempDirectory = createOrtTempDir(pkg.id.toPath())
+                    val tempDirectory = createOrtTempDir()
                     try {
                         // First, download the sources of the package into a source directory, whose parent directory
                         // is temporary.
