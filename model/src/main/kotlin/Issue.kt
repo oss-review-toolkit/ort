@@ -77,7 +77,7 @@ class NormalizeLineBreaksSerializer : StdSerializer<String>(String::class.java) 
 /**
  * Create an [Issue] and log the message. The log level is aligned with the [severity].
  */
-fun Any.createAndLogIssue(source: String, message: String, severity: Severity? = null): Issue {
+inline fun <reified T : Any> T.createAndLogIssue(source: String, message: String, severity: Severity? = null): Issue {
     val issue = severity?.let { Issue(source = source, message = message, severity = it) }
         ?: Issue(source = source, message = message)
     logger.log(issue.severity.toLog4jLevel()) { message }
