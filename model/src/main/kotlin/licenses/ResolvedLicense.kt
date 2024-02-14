@@ -26,22 +26,23 @@ import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 
 /**
- * Resolved information for a single license.
+ * Resolved information for a single [license], documenting the [sources] and original license expressions it is
+ * contained in.
  */
 data class ResolvedLicense(
     /**
-     * The license.
+     * The license for which original license [sources] are documented.
      */
     val license: SpdxSingleLicenseExpression,
 
     /**
-     * The set of original declared license that were [processed][DeclaredLicenseProcessor] to this [license], or an
-     * empty list, if this [license] was not modified during processing.
+     * The set of original declared license that were [processed][DeclaredLicenseProcessor] to the [license], or an
+     * empty list if this [license] was not modified during processing.
      */
     val originalDeclaredLicenses: Set<String>,
 
     /**
-     * The original SPDX expressions of this license.
+     * The original SPDX expressions that contains the [license].
      */
     val originalExpressions: Set<ResolvedOriginalExpression>,
 
