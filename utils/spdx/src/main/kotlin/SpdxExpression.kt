@@ -152,9 +152,9 @@ sealed class SpdxExpression {
     fun isValidChoice(choice: SpdxExpression): Boolean = !choice.offersChoice() && choice in validChoices()
 
     /**
-     * Return true if [subExpression] is a valid sub-expression of [this][SpdxExpression].
+     * Return true if [subExpression] is semantically contained in [this][SpdxExpression] expression.
      */
-    open fun isSubExpression(subExpression: SpdxExpression?): Boolean = false
+    open fun isSubExpression(subExpression: SpdxExpression?): Boolean = this == subExpression
 
     /**
      * Return true if this expression offers a license choice. This can only be true if this expression contains the
