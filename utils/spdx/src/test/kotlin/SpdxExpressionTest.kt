@@ -657,6 +657,21 @@ class SpdxExpressionTest : WordSpec({
 
             mit.isSubExpression(mit) shouldBe true
         }
+
+        "work correctly for compound expressions with exceptions" {
+            val gplWithException = "CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0".toSpdx()
+            val gpl = "CDDL-1.1 OR GPL-2.0-only".toSpdx()
+
+            gplWithException.isSubExpression(gpl) shouldBe false
+        }
+
+        "work correctly for nested compound expressions" {
+            val expression = "(CDDL-1.1 OR GPL-2.0-only) AND (CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0)"
+                .toSpdx()
+            val subExpression = "CDDL-1.1 OR GPL-2.0-only".toSpdx()
+
+            expression.isSubExpression(subExpression) shouldBe true
+        }
     }
 
     "applyChoice()" should {
