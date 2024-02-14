@@ -123,6 +123,18 @@ class SpdxExpressionChoiceTest : WordSpec({
 
             shouldThrow<InvalidSubExpressionException> { expression.applyChoice(choice, subExpression) }
         }
+
+        "resolve the choice for a sub-expression in a compound expression".config(enabled = false) {
+            val expression = "(CDDL-1.1 OR GPL-2.0-only) AND (CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0)"
+                .toSpdx()
+            val choice = "CDDL-1.1".toSpdx()
+            val subExpression = "CDDL-1.1 OR GPL-2.0-only".toSpdx()
+
+            val result = expression.applyChoice(choice, subExpression)
+
+            // TODO: Currently results in the wrong "CDDL-1.1 AND CDDL-1.1 WITH Classpath-exception-2.0".
+            result shouldBe "CDDL-1.1 AND (CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0)".toSpdx()
+        }
     }
 
     "applyChoices()" should {
