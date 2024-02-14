@@ -176,7 +176,7 @@ private fun getScopeExcludesForPackageManager(packageManagerName: String): List<
                 comment = "Packages for code coverage (testing) only."
             ),
             ScopeExclude(
-                pattern = "kapt.*",
+                pattern = ".*kapt.*",
                 reason = ScopeExcludeReason.BUILD_DEPENDENCY_OF,
                 comment = "Packages to process code annotations only."
             ),
