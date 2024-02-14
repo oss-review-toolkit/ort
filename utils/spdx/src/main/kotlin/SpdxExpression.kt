@@ -318,10 +318,11 @@ class SpdxCompoundExpression(
     override fun isSubExpression(subExpression: SpdxExpression?): Boolean {
         if (subExpression == null) return false
 
-        val expressionString = toString()
-        val subExpressionString = subExpression.toString()
+        if (operator == SpdxOperator.AND) {
+            if (left.isSubExpression(subExpression) || right.isSubExpression(subExpression)) return true
+        }
 
-        return subExpressionString in expressionString || validChoices().containsAll(subExpression.validChoices())
+        return validChoices().containsAll(subExpression.validChoices())
     }
 
     override fun equals(other: Any?): Boolean {
