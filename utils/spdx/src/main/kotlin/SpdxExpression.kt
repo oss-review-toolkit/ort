@@ -290,7 +290,7 @@ class SpdxCompoundExpression(
         }
 
         if (!isSubExpression(subExpression)) {
-            throw InvalidSubExpressionException("$subExpression is not not a valid subExpression of $this")
+            throw InvalidSubExpressionException("$subExpression is not a valid subExpression of $this")
         }
 
         return replaceSubexpressionWithChoice(subExpression, choice)
