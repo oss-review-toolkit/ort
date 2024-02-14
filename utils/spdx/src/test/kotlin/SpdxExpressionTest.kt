@@ -640,6 +640,18 @@ class SpdxExpressionTest : WordSpec({
     }
 
     "isSubExpression()" should {
+        "return true for the same simple expression" {
+            val mit = "MIT".toSpdx() as SpdxSimpleExpression
+
+            mit.isSubExpression(mit) shouldBe true
+        }
+
+        "return true for the same single expression" {
+            val mit = "GPL-2.0-only WITH Classpath-exception-2.0".toSpdx() as SpdxSingleLicenseExpression
+
+            mit.isSubExpression(mit) shouldBe true
+        }
+
         "return true for the same compound expression" {
             val mit = "CDDL-1.1 OR GPL-2.0-only".toSpdx() as SpdxCompoundExpression
 
