@@ -274,7 +274,7 @@ internal fun SpdxExternalDocumentReference.resolve(
         return ResolutionResult(
             document = null,
             uri = baseUri,
-            issue = SpdxResolvedDocument.createAndLogIssue(
+            issue = createAndLogIssue(
                 source = managerName,
                 message = "The SPDX document at '$spdxDocument' cannot be resolved as a URI (referred from $baseUri " +
                     "as part of '$externalDocumentId')."
@@ -303,7 +303,7 @@ private fun SpdxExternalDocumentReference.resolveFromFile(
     val file = uri.toDefinitionFile() ?: return ResolutionResult(
         document = null,
         uri = baseUri,
-        issue = SpdxResolvedDocument.createAndLogIssue(
+        issue = createAndLogIssue(
             source = managerName,
             message = "The file pointed to by '$uri' in reference '$externalDocumentId' does not exist."
         )
@@ -313,7 +313,7 @@ private fun SpdxExternalDocumentReference.resolveFromFile(
         return ResolutionResult(
             document = null,
             uri = uri,
-            issue = SpdxResolvedDocument.createAndLogIssue(
+            issue = createAndLogIssue(
                 source = managerName,
                 message = "Failed to parse the SPDX document pointed to by '$uri' in reference " +
                     "'$externalDocumentId': ${it.message}"
@@ -354,7 +354,7 @@ private fun SpdxExternalDocumentReference.resolveFromDownload(
             return ResolutionResult(
                 document = null,
                 uri = uri,
-                issue = SpdxResolvedDocument.createAndLogIssue(
+                issue = createAndLogIssue(
                     source = managerName,
                     message = "Failed to download SPDX document from $uri (referred from $baseUri as part of " +
                         "'$externalDocumentId'): ${it.collectMessages()}"
@@ -366,7 +366,7 @@ private fun SpdxExternalDocumentReference.resolveFromDownload(
             return ResolutionResult(
                 document = null,
                 uri = uri,
-                issue = SpdxResolvedDocument.createAndLogIssue(
+                issue = createAndLogIssue(
                     source = managerName,
                     message = "Failed to parse SPDX document from $uri (referred from $baseUri as part of " +
                         "'$externalDocumentId'): ${it.message}"
