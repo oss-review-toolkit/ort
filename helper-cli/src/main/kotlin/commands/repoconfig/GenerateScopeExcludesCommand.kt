@@ -146,6 +146,16 @@ private fun getScopeExcludesForPackageManager(packageManagerName: String): List<
                 comment = "Packages for static code analysis only."
             ),
             ScopeExclude(
+                pattern = ".*debug.*",
+                reason = ScopeExcludeReason.DEV_DEPENDENCY_OF,
+                comment = "Packages for debug builds."
+            ),
+            ScopeExclude(
+                pattern = ".*Debug.*",
+                reason = ScopeExcludeReason.DEV_DEPENDENCY_OF,
+                comment = "Packages for debug builds."
+            ),
+            ScopeExclude(
                 pattern = "detekt",
                 reason = ScopeExcludeReason.DEV_DEPENDENCY_OF,
                 comment = "Packages for static code analysis (testing) only."
