@@ -262,7 +262,7 @@ class SpdxExpressionTest : WordSpec({
         }
     }
 
-    "The expression parser" should {
+    "parse()" should {
         "parse a license id correctly" {
             val actualExpression = "spdx.license-id".toSpdx()
             val expectedExpression = SpdxLicenseIdExpression("spdx.license-id")
