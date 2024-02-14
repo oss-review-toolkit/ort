@@ -251,7 +251,7 @@ class SpdxExpressionTest : WordSpec({
         }
     }
 
-    "An SpdxExpression with SPDX constants" should {
+    "parse()" should {
         "parse NONE correctly" {
             SpdxExpression.parse(SpdxConstants.NONE, Strictness.ALLOW_CURRENT).toString() shouldBe SpdxConstants.NONE
         }
@@ -260,9 +260,7 @@ class SpdxExpressionTest : WordSpec({
             SpdxExpression.parse(SpdxConstants.NOASSERTION, Strictness.ALLOW_CURRENT).toString() shouldBe
                 SpdxConstants.NOASSERTION
         }
-    }
 
-    "parse()" should {
         "parse a license id correctly" {
             val actualExpression = "spdx.license-id".toSpdx()
             val expectedExpression = SpdxLicenseIdExpression("spdx.license-id")
