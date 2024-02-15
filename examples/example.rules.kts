@@ -108,7 +108,7 @@ fun RuleSet.unhandledLicenseRule() = packageRule("UNHANDLED_LICENSE") {
         error(
             "The license $license is currently not covered by policy rules. " +
                     "The license was ${licenseSource.name.lowercase()} in package " +
-                    "${pkg.metadata.id.toCoordinates()}",
+                    "${pkg.metadata.id.toCoordinates()}.",
             howToFixDefault()
         )
     }
