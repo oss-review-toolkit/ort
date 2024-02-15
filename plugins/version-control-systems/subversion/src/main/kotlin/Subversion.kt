@@ -20,13 +20,13 @@
 package org.ossreviewtoolkit.plugins.versioncontrolsystems.subversion
 
 import java.io.File
+import java.io.IOException
 import java.net.InetSocketAddress
 import java.net.URI
 import java.nio.file.Paths
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
@@ -97,7 +97,7 @@ class Subversion : VersionControlSystem() {
         } catch (e: SVNException) {
             e.showStackTrace()
 
-            throw DownloadException("Unable to initialize a $type working tree in '$targetDir' from ${vcs.url}.", e)
+            throw IOException("Unable to initialize a $type working tree in '$targetDir' from ${vcs.url}.", e)
         }
 
         return getWorkingTree(targetDir)
