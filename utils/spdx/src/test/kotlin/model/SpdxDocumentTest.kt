@@ -33,10 +33,10 @@ import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper
 import org.ossreviewtoolkit.utils.spdx.yamlMapper
 
 /**
- * This test uses the following test assets copied from the SPDX 2.2.1 specification examples.
+ * This test uses the following test assets copied from the SPDX 2.2.2 specification examples.
  *
- * 1. https://github.com/spdx/spdx-spec/blob/development/v2.2.1/examples/SPDXYAMLExample-2.2.spdx.yaml
- * 2. https://github.com/spdx/spdx-spec/blob/development/v2.2.1/examples/SPDXJSONExample-v2.2.spdx.json
+ * 1. https://github.com/spdx/spdx-spec/blob/development/v2.2.2/examples/SPDXYAMLExample-2.2.spdx.yaml
+ * 2. https://github.com/spdx/spdx-spec/blob/development/v2.2.2/examples/SPDXJSONExample-v2.2.spdx.json
  *
  * The "*-no-ranges.spdx.*" resource files have the "ranges" property removed, which is actually broken in the
  * specification and impossible to implement.
