@@ -43,7 +43,7 @@ jobs:
           ORG_GRADLE_PROJECT_RELEASE_SIGNING_ENABLED: true
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
-        run: ./gradlew publishAndReleaseToMavenCentral
+        run: ./gradlew -Porg.gradle.configuration-cache=false publishAndReleaseToMavenCentral
       - name: Build ORT Distributions
         run: ./gradlew :cli:distZip :helper-cli:distZip
       - name: Generate Release Notes
