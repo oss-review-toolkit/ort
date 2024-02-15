@@ -50,6 +50,7 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.fieldNamesOrEmpty
+import org.ossreviewtoolkit.utils.common.isNotEmpty
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.ort.showStackTrace
@@ -117,7 +118,7 @@ class Composer(
 
         val manifest = definitionFile.readTree()
         val hasDependencies = manifest.fields().asSequence().any { (key, value) ->
-            key.startsWith("require") && value.count() > 0
+            key.startsWith("require") && value.isNotEmpty()
         }
 
         if (!hasDependencies) {
