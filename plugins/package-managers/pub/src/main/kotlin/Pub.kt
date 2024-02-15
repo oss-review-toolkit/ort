@@ -61,6 +61,7 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.isNotEmpty
 import org.ossreviewtoolkit.utils.common.realFile
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
@@ -253,7 +254,7 @@ class Pub(
         val manifest = yamlMapper.readTree(definitionFile)
 
         val hasDependencies = manifest.fields().asSequence().any { (key, value) ->
-            key.startsWith("dependencies") && value.count() > 0
+            key.startsWith("dependencies") && value.isNotEmpty()
         }
 
         val packages = mutableMapOf<Identifier, Package>()

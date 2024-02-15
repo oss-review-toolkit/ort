@@ -228,6 +228,11 @@ fun JsonNode?.fieldNamesOrEmpty(): Iterator<String> = this?.fieldNames() ?: Clas
 fun JsonNode?.fieldsOrEmpty(): Iterator<Map.Entry<String, JsonNode>> = this?.fields() ?: ClassUtil.emptyIterator()
 
 /**
+ * Return true if and only if this [JsonNode]
+ */
+fun JsonNode.isNotEmpty(): Boolean = !isEmpty
+
+/**
  * Convenience function for [JsonNode] that returns an empty string if [JsonNode.textValue] is called on a null object,
  * or the text value is null.
  */
