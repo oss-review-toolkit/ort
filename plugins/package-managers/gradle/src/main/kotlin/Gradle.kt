@@ -59,6 +59,7 @@ import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.temporaryProperties
+import org.ossreviewtoolkit.utils.common.unquote
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 
 private val GRADLE_USER_HOME = Os.env["GRADLE_USER_HOME"]?.let { File(it) } ?: Os.userHomeDirectory.resolve(".gradle")
@@ -194,7 +195,7 @@ class Gradle(
         // Set the value to empirically determined 8 GiB if no value is set in "~/.gradle/gradle.properties".
         val jvmArgs = gradleProperties.find { (key, _) ->
             key == "org.gradle.jvmargs"
-        }?.second?.splitOnWhitespace().orEmpty().toMutableList()
+        }?.second?.splitOnWhitespace().orEmpty().mapTo(mutableListOf()) { it.unquote() }
 
         if (jvmArgs.none { it.contains(JAVA_MAX_HEAP_SIZE_OPTION, ignoreCase = true) }) {
             jvmArgs += "$JAVA_MAX_HEAP_SIZE_OPTION$JAVA_MAX_HEAP_SIZE_VALUE"
