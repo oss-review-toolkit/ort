@@ -693,7 +693,7 @@
     {
         "schema_version": "1.6.0",
         "id": "GHSA-hj2j-77xm-mc5v",
-        "modified": "2023-11-08T03:58:21.453618Z",
+        "modified": "2024-02-16T05:33:43.078754Z",
         "published": "2019-04-10T14:30:13Z",
         "aliases": [
             "CVE-2016-10745",
@@ -795,15 +795,15 @@
             },
             {
                 "type": "WEB",
-                "url": "https://palletsprojects.com/blog/jinja-281-released/"
+                "url": "https://palletsprojects.com/blog/jinja-281-released"
             },
             {
                 "type": "WEB",
-                "url": "https://usn.ubuntu.com/4011-1/"
+                "url": "https://usn.ubuntu.com/4011-1"
             },
             {
                 "type": "WEB",
-                "url": "https://usn.ubuntu.com/4011-2/"
+                "url": "https://usn.ubuntu.com/4011-2"
             },
             {
                 "type": "WEB",
@@ -815,12 +815,12 @@
             }
         ],
         "database_specific": {
+            "github_reviewed_at": "2020-06-16T21:40:24Z",
+            "github_reviewed": true,
+            "severity": "HIGH",
             "cwe_ids": [
                 "CWE-134"
             ],
-            "github_reviewed": true,
-            "severity": "HIGH",
-            "github_reviewed_at": "2020-06-16T21:40:24Z",
             "nvd_published_at": null
         }
     },
