@@ -59,6 +59,7 @@ import org.ossreviewtoolkit.model.utils.parseRepoManifestPath
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
+import org.ossreviewtoolkit.utils.common.unquote
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.downloadText
@@ -152,6 +153,7 @@ class GradleInspector(
             val jvmArgs = gradleProperties["org.gradle.jvmargs"].orEmpty()
                 .replace("MaxPermSize", "MaxMetaspaceSize") // Replace a deprecated JVM argument.
                 .splitOnWhitespace()
+                .map { it.unquote() }
 
             // In order to debug the plugin, pass the "-Dorg.gradle.debug=true" option to the JVM running ORT. This will
             // then block execution of the plugin until a remote debug session is attached to port 5005 (by default),
