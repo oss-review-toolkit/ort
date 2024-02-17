@@ -20,13 +20,14 @@ import os
 import sys
 
 import requests
+from requests import Response
 
 """ Use current GitHub API to check if a container image with the
     given name and version exists.
 """
 
 token = os.getenv("INPUT_TOKEN")
-org = os.getenv("GITHUB_REPOSITORY_OWNER")
+owner = os.getenv("GITHUB_REPOSITORY_OWNER")
 name = os.getenv("INPUT_NAME")
 base_version = os.getenv("INPUT_VERSION")
 build_args = os.getenv("BUILD_ARGS")
@@ -41,19 +42,31 @@ if invalidate_cache:
     print(version)
     sys.exit(0)
 
-url = f"https://api.github.com/orgs/{org}/packages/container/ort%2F{name}/versions"
-
-headers = {
+headers: dict[str, str] = {
     "Accept": "application/vnd.github+json",
     "Authorization": f"Bearer {token}",
+    "X-GitHub-Api-Version": "2022-11-28",
 }
+
+url: str = f"https://api.github.com/users/{owner}"
+response = requests.get(url, headers=headers)
+data: Response = response.json()
+
+if data.get("type") == "Organization":
+    url = (
+        f"https://api.github.com/orgs/{owner}/packages/container/ort%2F{name}/versions"
+    )
+else:
+    url = f"https://api.github.com/user/packages/container/ort%2F{name}/versions"
+
 response = requests.get(url, headers=headers)
 if response.status_code == 404:
     print("none")
 else:
+    data = response.json()
     versions = [
         item
-        for sublist in [v["metadata"]["container"]["tags"] for v in response.json()]
+        for sublist in [v["metadata"]["container"]["tags"] for v in data]
         if sublist
         for item in sublist
     ]
