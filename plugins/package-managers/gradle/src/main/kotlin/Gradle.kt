@@ -193,9 +193,10 @@ class Gradle(
         // Gradle's default maximum heap is 512 MiB which is too low for bigger projects,
         // see https://docs.gradle.org/current/userguide/build_environment.html#sec:configuring_jvm_memory.
         // Set the value to empirically determined 8 GiB if no value is set in "~/.gradle/gradle.properties".
-        val jvmArgs = gradleProperties.find { (key, _) ->
-            key == "org.gradle.jvmargs"
-        }?.second?.splitOnWhitespace().orEmpty().mapTo(mutableListOf()) { it.unquote() }
+        val jvmArgs = gradleProperties.toMap().get("org.gradle.jvmargs").orEmpty()
+            .replace("MaxPermSize", "MaxMetaspaceSize") // Replace a deprecated JVM argument.
+            .splitOnWhitespace()
+            .mapTo(mutableListOf()) { it.unquote() }
 
         if (jvmArgs.none { it.contains(JAVA_MAX_HEAP_SIZE_OPTION, ignoreCase = true) }) {
             jvmArgs += "$JAVA_MAX_HEAP_SIZE_OPTION$JAVA_MAX_HEAP_SIZE_VALUE"
