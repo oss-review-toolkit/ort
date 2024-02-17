@@ -87,6 +87,7 @@ jobs:
     - name: Upload code coverage data
       uses: codecov/codecov-action@v4
       with:
+        token: ${{ secrets.CODECOV_TOKEN }}
         flags: test
   funTest-non-docker:
     needs: build-web-app-reporter
@@ -136,6 +137,7 @@ jobs:
     - name: Upload code coverage data
       uses: codecov/codecov-action@v4
       with:
+        token: ${{ secrets.CODECOV_TOKEN }}
         flags: funTest-non-docker
   funTest-docker:
     runs-on: ubuntu-22.04
@@ -160,4 +162,5 @@ jobs:
     - name: Upload code coverage data
       uses: codecov/codecov-action@v4
       with:
+        token: ${{ secrets.CODECOV_TOKEN }}
         flags: funTest-docker
