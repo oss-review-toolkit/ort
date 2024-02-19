@@ -350,15 +350,15 @@ private fun Collection<OrtDependency>.toPackageRefs(
     }
 
 /**
- * Create a [RemoteArtifact] based on the given [pomUrl], [classifier], [extension] and hash [algorithm]. The hash value
- * is retrieved remotely.
+ * Create a [RemoteArtifact] based on the given [pomUrl], [classifier] and [extension]. The hash value is retrieved
+ * remotely.
  */
 private fun createRemoteArtifact(
     pomUrl: String?,
     classifier: String? = null,
-    extension: String? = null,
-    algorithm: String = "sha1"
+    extension: String? = null
 ): RemoteArtifact {
+    val algorithm = "sha1"
     val artifactBaseUrl = pomUrl?.removeSuffix(".pom") ?: return RemoteArtifact.EMPTY
 
     val artifactUrl = buildString {
