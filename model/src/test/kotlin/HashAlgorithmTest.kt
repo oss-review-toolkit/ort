@@ -37,6 +37,12 @@ class HashAlgorithmTest : WordSpec({
                 it.toString() shouldStartWith "SHA-"
             }
         }
+
+        "match the empty value for 0-byte input" {
+            HashAlgorithm.entries.filter { it.verifiable }.forAll {
+                it.calculate(byteArrayOf()) shouldBe it.emptyValue
+            }
+        }
     }
 
     "Calculating the SHA1" should {
