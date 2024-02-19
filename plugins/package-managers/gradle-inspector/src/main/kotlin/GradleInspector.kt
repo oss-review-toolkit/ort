@@ -88,6 +88,11 @@ private val GRADLE_USER_HOME = Os.env["GRADLE_USER_HOME"]?.let { File(it) } ?: O
 const val OPTION_GRADLE_VERSION = "gradleVersion"
 
 /**
+ * The sha1 sum for a zero by size file.
+ */
+private const val ZERO_BYTES_FILE_SHA1 = "da39a3ee5e6b4b0d3255bfef95601890afd80709"
+
+/**
  * The [Gradle](https://gradle.org/) package manager for Java.
  *
  * This package manager supports the following [options][PackageManagerConfiguration.options]:
@@ -353,7 +358,7 @@ private fun Collection<OrtDependency>.toPackageRefs(
  * Create a [RemoteArtifact] based on the given [pomUrl], [classifier] and [extension]. The hash value is retrieved
  * remotely.
  */
-private fun createRemoteArtifact(
+private fun GradleInspector.createRemoteArtifact(
     pomUrl: String?,
     classifier: String? = null,
     extension: String? = null
@@ -371,7 +376,14 @@ private fun createRemoteArtifact(
     val checksum = okHttpClient.downloadText("$artifactUrl.$algorithm")
         .getOrElse { return RemoteArtifact.EMPTY }
 
-    return RemoteArtifact(artifactUrl, parseChecksum(checksum, algorithm))
+    // Ignore file with zero byte size, because it cannot be a valid archive.
+    val hash = parseChecksum(checksum, algorithm).takeUnless { it.value == ZERO_BYTES_FILE_SHA1 }
+        ?: run {
+            logger.info("Ignoring zero byte size artifact: $artifactUrl.")
+            return RemoteArtifact.EMPTY
+        }
+
+    return RemoteArtifact(artifactUrl, hash)
 }
 
 /**
