@@ -259,9 +259,9 @@ class Downloader(private val config: DownloaderConfiguration) {
             val url = VcsHost.fromUrl(pkg.vcsProcessed.url)?.toArchiveDownloadUrl(pkg.vcsProcessed)
                 ?: throw DownloadException("Unhandled VCS URL ${pkg.vcsProcessed.url}.")
 
-            val response = okHttpClient.ping(url)
+            val response = runCatching { okHttpClient.ping(url) }
 
-            if (response.code != HttpURLConnection.HTTP_OK) {
+            if (response.getOrNull()?.code != HttpURLConnection.HTTP_OK) {
                 throw DownloadException("Cannot verify existence of ${pkg.vcsProcessed}.")
             }
 
