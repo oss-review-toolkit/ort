@@ -709,8 +709,8 @@ class Scanner(
                         pkg.id,
                         Issue(
                             source = "Scanner",
-                            message = "Could not create file archive for " +
-                                "'${pkg.id.toCoordinates()}': ${e.collectMessages()}"
+                            message = "Could not create file archive for '${pkg.id.toCoordinates()}': "
+                                + e.collectMessages()
                         )
                     )
                 } finally {
