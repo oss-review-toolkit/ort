@@ -425,6 +425,7 @@ enum class VcsHost(
          */
         fun toArchiveDownloadUrl(vcsInfo: VcsInfo): String? {
             val normalizedVcsInfo = vcsInfo.normalize()
+            if (normalizedVcsInfo.revision.isEmpty()) return null
             val host = entries.find { it.isApplicable(normalizedVcsInfo) } ?: return null
 
             return normalizedVcsInfo.url.toUri {
@@ -518,7 +519,7 @@ enum class VcsHost(
      */
     fun toArchiveDownloadUrl(vcsInfo: VcsInfo): String? {
         val normalizedVcsInfo = vcsInfo.normalize()
-        if (!isApplicable(normalizedVcsInfo)) return null
+        if (normalizedVcsInfo.revision.isEmpty() || !isApplicable(normalizedVcsInfo)) return null
 
         return normalizedVcsInfo.url.toUri {
             val userOrOrg = getUserOrOrgInternal(it) ?: return@toUri null
