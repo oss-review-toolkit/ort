@@ -33,16 +33,16 @@ import org.ossreviewtoolkit.utils.common.encodeHex
  * An enum of supported hash algorithms. Each algorithm has one or more [aliases] associated to it, where the first
  * alias is the definite name.
  */
-enum class HashAlgorithm(vararg val aliases: String, val emptyValue: String, val verifiable: Boolean = true) {
+enum class HashAlgorithm(vararg val aliases: String, val emptyValue: String, val isVerifiable: Boolean = true) {
     /**
      * No hash algorithm.
      */
-    NONE("", emptyValue = "", verifiable = false),
+    NONE("", emptyValue = "", isVerifiable = false),
 
     /**
      * An unknown hash algorithm.
      */
-    UNKNOWN("UNKNOWN", emptyValue = "", verifiable = false),
+    UNKNOWN("UNKNOWN", emptyValue = "", isVerifiable = false),
 
     /**
      * The Message-Digest 5 hash algorithm, see [MD5](http://en.wikipedia.org/wiki/MD5).
@@ -96,7 +96,7 @@ enum class HashAlgorithm(vararg val aliases: String, val emptyValue: String, val
         /**
          * The list of algorithms that can be verified.
          */
-        val VERIFIABLE = HashAlgorithm.entries.filter { it.verifiable }
+        val VERIFIABLE = HashAlgorithm.entries.filter { it.isVerifiable }
 
         /**
          * Create a hash algorithm from one of its [alias] names.

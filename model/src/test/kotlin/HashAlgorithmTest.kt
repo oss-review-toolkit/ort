@@ -39,7 +39,7 @@ class HashAlgorithmTest : WordSpec({
         }
 
         "match the empty value for 0-byte input" {
-            HashAlgorithm.entries.filter { it.verifiable }.forAll {
+            HashAlgorithm.entries.filter { it.isVerifiable }.forAll {
                 it.calculate(byteArrayOf()) shouldBe it.emptyValue
             }
         }
