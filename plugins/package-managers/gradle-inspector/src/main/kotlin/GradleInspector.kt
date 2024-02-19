@@ -376,12 +376,13 @@ private fun GradleInspector.createRemoteArtifact(
     val checksum = okHttpClient.downloadText("$artifactUrl.$algorithm")
         .getOrElse { return RemoteArtifact.EMPTY }
 
+    val hash = parseChecksum(checksum, algorithm)
+
     // Ignore file with zero byte size, because it cannot be a valid archive.
-    val hash = parseChecksum(checksum, algorithm).takeUnless { it.value == ZERO_BYTES_FILE_SHA1 }
-        ?: run {
-            logger.info("Ignoring zero byte size artifact: $artifactUrl.")
-            return RemoteArtifact.EMPTY
-        }
+    if (hash.value == ZERO_BYTES_FILE_SHA1) {
+        logger.info("Ignoring zero byte size artifact: $artifactUrl.")
+        return RemoteArtifact.EMPTY
+    }
 
     return RemoteArtifact(artifactUrl, hash)
 }
