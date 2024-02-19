@@ -126,7 +126,7 @@ fun File.unpackTryAllTypes(targetDirectory: File, filter: (ArchiveEntry) -> Bool
  * and all entries not matched by the given [filter].
  */
 fun File.unpack7Zip(targetDirectory: File, filter: (ArchiveEntry) -> Boolean = { true }) {
-    SevenZFile(this).use { zipFile ->
+    SevenZFile.Builder().setFile(this).get().use { zipFile ->
         val canonicalTargetDirectory = targetDirectory.canonicalFile
 
         while (true) {
@@ -162,13 +162,13 @@ fun File.unpack7Zip(targetDirectory: File, filter: (ArchiveEntry) -> Boolean = {
  * Unpack the [ByteArray] assuming it is a Zip archive, ignoring entries not matched by [filter].
  */
 fun ByteArray.unpackZip(targetDirectory: File, filter: (ArchiveEntry) -> Boolean = { true }) =
-    ZipFile(SeekableInMemoryByteChannel(this)).unpack(targetDirectory, filter)
+    ZipFile.Builder().setSeekableByteChannel(SeekableInMemoryByteChannel(this)).get().unpack(targetDirectory, filter)
 
 /**
  * Unpack the [File] assuming it is a Zip archive ignoring all entries not matched by [filter].
  */
 fun File.unpackZip(targetDirectory: File, filter: (ArchiveEntry) -> Boolean = { true }) =
-    ZipFile(this).unpack(targetDirectory, filter)
+    ZipFile.Builder().setFile(this).get().unpack(targetDirectory, filter)
 
 /**
  * Unpack the [ZipFile]. In contrast to [InputStream.unpackZip] this properly parses the ZIP's central directory, see
