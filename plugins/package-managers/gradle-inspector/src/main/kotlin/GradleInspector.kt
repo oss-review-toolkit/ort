@@ -380,7 +380,7 @@ private fun GradleInspector.createRemoteArtifact(
 
     // Ignore file with zero byte size, because it cannot be a valid archive.
     if (hash.value == ZERO_BYTES_FILE_SHA1) {
-        logger.info("Ignoring zero byte size artifact: $artifactUrl.")
+        logger.info { "Ignoring zero byte size artifact: $artifactUrl" }
         return RemoteArtifact.EMPTY
     }
 
