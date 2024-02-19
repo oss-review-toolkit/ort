@@ -46,6 +46,7 @@ dependencies {
 
     testImplementation(libs.kotest.assertions.json)
     testImplementation(libs.kotest.framework.datatest)
+    testImplementation(projects.model)
 }
 
 if (Authenticator.getDefault() == null) {

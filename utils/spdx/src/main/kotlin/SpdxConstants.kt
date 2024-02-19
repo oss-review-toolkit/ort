@@ -78,11 +78,6 @@ object SpdxConstants {
      */
     const val LICENSE_LIST_URL = "https://spdx.org/licenses/"
 
-    /**
-     * The package verification code for no input.
-     */
-    const val EMPTY_PACKAGE_VERIFICATION_CODE = "da39a3ee5e6b4b0d3255bfef95601890afd80709"
-
     private val NOT_PRESENT_VALUES = setOf(null, NONE, NOASSERTION)
 
     /**

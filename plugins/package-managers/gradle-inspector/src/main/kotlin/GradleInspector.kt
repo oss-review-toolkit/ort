@@ -38,6 +38,7 @@ import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
+import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
@@ -86,11 +87,6 @@ private val GRADLE_USER_HOME = Os.env["GRADLE_USER_HOME"]?.let { File(it) } ?: O
  * The name of the option to specify the Gradle version.
  */
 const val OPTION_GRADLE_VERSION = "gradleVersion"
-
-/**
- * The sha1 sum for a zero by size file.
- */
-private const val ZERO_BYTES_FILE_SHA1 = "da39a3ee5e6b4b0d3255bfef95601890afd80709"
 
 /**
  * The [Gradle](https://gradle.org/) package manager for Java.
@@ -379,7 +375,7 @@ private fun GradleInspector.createRemoteArtifact(
     val hash = parseChecksum(checksum, algorithm)
 
     // Ignore file with zero byte size, because it cannot be a valid archive.
-    if (hash.value == ZERO_BYTES_FILE_SHA1) {
+    if (hash.value == HashAlgorithm.SHA1.emptyValue) {
         logger.info { "Ignoring zero byte size artifact: $artifactUrl" }
         return RemoteArtifact.EMPTY
     }

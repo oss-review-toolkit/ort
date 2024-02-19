@@ -26,6 +26,7 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 
@@ -192,12 +193,10 @@ class NpmSupportTest : WordSpec({
 
     "parseNpmVcsInfo" should {
         "get VCS information from an object node" {
-            val emptyTree = "4b825dc642cb6eb9a060e54bf8d69288fbee4904"
-
             @Suppress("Wrapping")
             val node = ObjectMapper().run {
                 createObjectNode().apply {
-                    replace("gitHead", TextNode(emptyTree))
+                    replace("gitHead", TextNode(HashAlgorithm.SHA1GIT.emptyValue))
                     replace("repository", createObjectNode().apply {
                         replace("type", TextNode("Git"))
                         replace("url", TextNode("https://example.com/"))
@@ -206,7 +205,12 @@ class NpmSupportTest : WordSpec({
                 }
             }
 
-            parseNpmVcsInfo(node) shouldBe VcsInfo(VcsType.GIT, "https://example.com/", emptyTree, "foo")
+            parseNpmVcsInfo(node) shouldBe VcsInfo(
+                VcsType.GIT,
+                "https://example.com/",
+                HashAlgorithm.SHA1GIT.emptyValue,
+                "foo"
+            )
         }
     }
 
