@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.scanner
 
 import java.io.File
-import java.io.IOException
 import java.time.Instant
 
 import kotlin.time.measureTime
@@ -705,7 +704,7 @@ class Scanner(
                 try {
                     dir = provenanceDownloader.downloadRecursively(nestedProvenance)
                     archiver.archive(dir, nestedProvenance.root)
-                } catch (e: IOException) {
+                } catch (e: DownloadException) {
                     controller.addIssue(
                         pkg.id,
                         Issue(
