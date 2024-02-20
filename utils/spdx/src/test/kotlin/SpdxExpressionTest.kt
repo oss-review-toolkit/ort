@@ -392,6 +392,18 @@ class SpdxExpressionTest : WordSpec({
         }
     }
 
+    "creating a compound expression" should {
+        "fail if the expression has less than two children" {
+            shouldThrow<IllegalArgumentException> {
+                SpdxCompoundExpression(SpdxOperator.AND, emptyList())
+            }
+
+            shouldThrow<IllegalArgumentException> {
+                SpdxCompoundExpression(SpdxOperator.AND, listOf(SpdxLicenseIdExpression("license")))
+            }
+        }
+    }
+
     "normalize()" should {
         "normalize the case of SPDX licenses" {
             SpdxLicense.entries.filterNot { it.deprecated }.forEach {

@@ -232,6 +232,12 @@ class SpdxCompoundExpression(
     constructor(operator: SpdxOperator, first: SpdxExpression, second: SpdxExpression, vararg other: SpdxExpression) :
         this(operator, listOf(first, second, *other))
 
+    init {
+        require(children.size > 1) {
+            "A compound expression must have at least two children, but has only ${children.size}."
+        }
+    }
+
     override fun decompose(): Set<SpdxSingleLicenseExpression> = children.flatMapTo(mutableSetOf()) { it.decompose() }
 
     override fun normalize(mapDeprecated: Boolean) =
