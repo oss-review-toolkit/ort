@@ -17,8 +17,6 @@
  * License-Filename: LICENSE
  */
 
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     // Apply core plugins.
     `java-test-fixtures`
@@ -56,14 +54,4 @@ dependencies {
 
     testFixturesImplementation(libs.kotest.assertions.core)
     testFixturesImplementation(libs.kotest.runner.junit5)
-}
-
-tasks.named<KotlinCompile>("compileTestKotlin") {
-    val customCompilerArgs = listOf(
-        "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"
-    )
-
-    compilerOptions {
-        freeCompilerArgs.addAll(customCompilerArgs)
-    }
 }

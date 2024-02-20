@@ -157,11 +157,14 @@ tasks.withType<JavaCompile>().configureEach {
 }
 
 tasks.withType<KotlinCompile>().configureEach {
-    val customCompilerArgs = listOf(
-        "-opt-in=kotlin.contracts.ExperimentalContracts",
-        "-opt-in=kotlin.io.path.ExperimentalPathApi",
-        "-opt-in=kotlin.time.ExperimentalTime"
-    )
+    val hasSerialization = plugins.hasPlugin(libs.plugins.kotlinSerialization.get().pluginId)
+
+    val customCompilerArgs = buildList {
+        add("-opt-in=kotlin.contracts.ExperimentalContracts")
+        add("-opt-in=kotlin.io.path.ExperimentalPathApi")
+        add("-opt-in=kotlin.time.ExperimentalTime")
+        if (hasSerialization) add("-opt-in=kotlinx.serialization.ExperimentalSerializationApi")
+    }
 
     compilerOptions {
         allWarningsAsErrors = true
