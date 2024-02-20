@@ -136,4 +136,16 @@ class HttpFileStorage(
     }
 
     private fun urlForPath(path: String) = "$url/$path$query"
+
+    override fun delete(path: String): Boolean {
+        val request = requestBuilder()
+            .delete()
+            .url(urlForPath(path))
+            .build()
+
+        logger.debug { "Deleting file from storage: ${request.url}" }
+
+        val response = httpClient.execute(request)
+        return response.isSuccessful
+    }
 }

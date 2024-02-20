@@ -87,6 +87,11 @@ interface PackageProvenanceStorage {
      * for [id] and [vcs] it is overwritten.
      */
     fun writeProvenance(id: Identifier, vcs: VcsInfo, result: PackageProvenanceResolutionResult)
+
+    /**
+     * Delete all [PackageProvenanceResolutionResult]s for the [id].
+     */
+    fun deleteProvenances(id: Identifier)
 }
 
 /**

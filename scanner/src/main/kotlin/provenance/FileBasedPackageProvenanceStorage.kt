@@ -112,6 +112,13 @@ class FileBasedPackageProvenanceStorage(val backend: FileStorage) : PackageProve
             }
         }
     }
+
+    override fun deleteProvenances(id: Identifier) {
+        val path = storagePath(id)
+        if (!backend.delete(path)) {
+            logger.warn { "Could not delete resolved provenances for '${id.toCoordinates()}' at path '$path'." }
+        }
+    }
 }
 
 private const val FILE_NAME = "resolved_provenance.yml"

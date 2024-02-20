@@ -41,4 +41,9 @@ interface FileStorage {
      * provided [inputStream] is closed after writing it to the file.
      */
     fun write(path: String, inputStream: InputStream)
+
+    /**
+     * Delete the file at the given [path] and return whether the operation was successful.
+     */
+    fun delete(path: String): Boolean
 }

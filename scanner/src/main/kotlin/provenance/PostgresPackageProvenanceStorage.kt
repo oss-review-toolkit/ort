@@ -134,6 +134,14 @@ class PostgresPackageProvenanceStorage(
             }
         }
     }
+
+    override fun deleteProvenances(id: Identifier) {
+        database.transaction {
+            table.deleteWhere {
+                table.identifier eq id.toCoordinates()
+            }
+        }
+    }
 }
 
 private class PackageProvenances(tableName: String) : IntIdTable(tableName) {
