@@ -76,4 +76,7 @@ open class LocalFileStorage(
             inputStream.use { it.copyTo(outputStream) }
         }
     }
+
+    @Synchronized
+    override fun delete(path: String): Boolean = directory.resolve(path).delete()
 }

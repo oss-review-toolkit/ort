@@ -211,4 +211,6 @@ internal class DummyProvenanceStorage : PackageProvenanceStorage {
         sourceArtifact: RemoteArtifact,
         result: PackageProvenanceResolutionResult
     ) { /* no-op */ }
+
+    override fun deleteProvenances(id: Identifier) { /* no-op */ }
 }

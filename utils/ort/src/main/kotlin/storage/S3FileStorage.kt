@@ -34,6 +34,7 @@ import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider
 import software.amazon.awssdk.core.sync.RequestBody
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.s3.S3Client
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest
 import software.amazon.awssdk.services.s3.model.GetObjectRequest
 import software.amazon.awssdk.services.s3.model.HeadObjectRequest
 import software.amazon.awssdk.services.s3.model.NoSuchKeyException
@@ -135,5 +136,15 @@ class S3FileStorage(
         }.onFailure { exception ->
             if (exception is S3Exception) logger.warn { "Can not write '$path' to S3 bucket '$bucketName'." }
         }
+    }
+
+    override fun delete(path: String): Boolean {
+        val request = DeleteObjectRequest.builder()
+            .key(path)
+            .bucket(bucketName)
+            .build()
+
+        val response = s3Client.deleteObject(request)
+        return response.sdkHttpResponse().isSuccessful
     }
 }
