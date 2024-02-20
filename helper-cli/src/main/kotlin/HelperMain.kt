@@ -38,6 +38,7 @@ import org.ossreviewtoolkit.helper.commands.classifications.LicenseClassificatio
 import org.ossreviewtoolkit.helper.commands.dev.DevCommand
 import org.ossreviewtoolkit.helper.commands.packageconfig.PackageConfigurationCommand
 import org.ossreviewtoolkit.helper.commands.packagecuration.PackageCurationsCommand
+import org.ossreviewtoolkit.helper.commands.provenancestorage.ProvenanceStorageCommand
 import org.ossreviewtoolkit.helper.commands.repoconfig.RepositoryConfigurationCommand
 import org.ossreviewtoolkit.helper.commands.scanstorage.ScanStorageCommand
 import org.ossreviewtoolkit.helper.utils.ORTH_NAME
@@ -97,6 +98,7 @@ internal class HelperMain : CliktCommand(
             MergeRepositoryConfigurationsCommand(),
             PackageConfigurationCommand(),
             PackageCurationsCommand(),
+            ProvenanceStorageCommand(),
             RepositoryConfigurationCommand(),
             ScanStorageCommand(),
             SetDependencyRepresentationCommand(),
