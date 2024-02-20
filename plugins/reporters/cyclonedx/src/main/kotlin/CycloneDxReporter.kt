@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.plugins.reporters.cyclonedx
 
 import java.io.File
-import java.util.Base64
 import java.util.Date
 import java.util.SortedSet
 import java.util.UUID
@@ -82,8 +81,6 @@ class CycloneDxReporter : Reporter {
 
     override val type = "CycloneDx"
 
-    private val base64Encoder = Base64.getEncoder()
-
     // Ensure that JSON comes last due to a work-around in writeBom() below.
     private val supportedOutputFileFormats = listOf(FileFormat.XML, FileFormat.JSON)
 
@@ -130,8 +127,7 @@ class CycloneDxReporter : Reporter {
                     setLicenseText(
                         AttachmentText().apply {
                             contentType = "plain/text"
-                            encoding = "base64"
-                            text = base64Encoder.encodeToString(licenseText.toByteArray())
+                            text = licenseText
                         }
                     )
                 }
