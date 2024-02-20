@@ -22,7 +22,8 @@
 package org.ossreviewtoolkit.clients.fossid
 
 import java.io.File
-import java.util.Base64
+
+import kotlin.io.encoding.Base64
 
 import okio.buffer
 import okio.sink
@@ -40,8 +41,6 @@ import org.ossreviewtoolkit.clients.fossid.model.rules.RuleType
 internal const val SCAN_GROUP = "scans"
 private const val FILES_AND_FOLDERS_GROUP = "files_and_folders"
 private const val PROJECT_GROUP = "projects"
-
-private val base64Encoder = Base64.getEncoder()
 
 /**
  * Verify that a request for the given [operation] was successful. [operation] is a free label describing the operation.
@@ -260,7 +259,7 @@ suspend fun FossIdRestService.listSnippets(
     scanCode: String,
     path: String
 ): PolymorphicResponseBody<Snippet> {
-    val base64Path = base64Encoder.encodeToString(path.toByteArray())
+    val base64Path = Base64.encode(path.toByteArray())
     return listSnippets(
         PostRequestBody(
             "get_fossid_results",
@@ -285,7 +284,7 @@ suspend fun FossIdRestService.listMatchedLines(
     path: String,
     snippetId: Int
 ): EntityResponseBody<MatchedLines> {
-    val base64Path = base64Encoder.encodeToString(path.toByteArray())
+    val base64Path = Base64.encode(path.toByteArray())
     return listMatchedLines(
         PostRequestBody(
             "get_matched_lines",
@@ -463,7 +462,7 @@ suspend fun FossIdRestService.markAsIdentified(
     path: String,
     isDirectory: Boolean
 ): EntityResponseBody<Nothing> {
-    val base64Path = base64Encoder.encodeToString(path.toByteArray())
+    val base64Path = Base64.encode(path.toByteArray())
     val directoryFlag = if (isDirectory) "1" else "0"
     return markAsIdentified(
         PostRequestBody(
@@ -488,7 +487,7 @@ suspend fun FossIdRestService.unmarkAsIdentified(
     path: String,
     isDirectory: Boolean
 ): EntityResponseBody<Nothing> {
-    val base64Path = base64Encoder.encodeToString(path.toByteArray())
+    val base64Path = Base64.encode(path.toByteArray())
     val directoryFlag = if (isDirectory) "1" else "0"
     return unmarkAsIdentified(
         PostRequestBody(
@@ -515,7 +514,7 @@ suspend fun FossIdRestService.addLicenseIdentification(
     identificationOn: LicenseMatchType,
     isDirectory: Boolean
 ): EntityResponseBody<Nothing> {
-    val base64Path = base64Encoder.encodeToString(path.toByteArray())
+    val base64Path = Base64.encode(path.toByteArray())
     val directoryFlag = if (isDirectory) "1" else "0"
     return addLicenseIdentification(
         PostRequestBody(
@@ -552,7 +551,7 @@ suspend fun FossIdRestService.addComponentIdentification(
     isDirectory: Boolean,
     preserveExistingIdentifications: Boolean = true
 ): EntityResponseBody<Nothing> {
-    val base64Path = base64Encoder.encodeToString(path.toByteArray())
+    val base64Path = Base64.encode(path.toByteArray())
     val directoryFlag = if (isDirectory) "1" else "0"
     val preserveExistingIdentificationsFlag = if (preserveExistingIdentifications) "1" else "0"
     return addComponentIdentification(
@@ -587,7 +586,7 @@ suspend fun FossIdRestService.addFileComment(
     isImportant: Boolean = false,
     includeInReport: Boolean = false
 ): EntityResponseBody<Nothing> {
-    val base64Path = base64Encoder.encodeToString(path.toByteArray())
+    val base64Path = Base64.encode(path.toByteArray())
     val isImportantFlag = if (isImportant) "1" else "0"
     val includeInReportFlag = if (includeInReport) "1" else "0"
     return addFileComment(

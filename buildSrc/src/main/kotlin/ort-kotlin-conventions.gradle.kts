@@ -161,6 +161,7 @@ tasks.withType<KotlinCompile>().configureEach {
 
     val customCompilerArgs = buildList {
         add("-opt-in=kotlin.contracts.ExperimentalContracts")
+        add("-opt-in=kotlin.io.encoding.ExperimentalEncodingApi")
         add("-opt-in=kotlin.io.path.ExperimentalPathApi")
         add("-opt-in=kotlin.time.ExperimentalTime")
         if (hasSerialization) add("-opt-in=kotlinx.serialization.ExperimentalSerializationApi")
