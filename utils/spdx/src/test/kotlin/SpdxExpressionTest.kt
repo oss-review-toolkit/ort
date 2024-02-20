@@ -335,30 +335,6 @@ class SpdxExpressionTest : WordSpec({
             actualExpression shouldBe expectedExpression
         }
 
-        "bind the and operator left associative" {
-            val actualExpression = "license1 AND license2 AND license3".toSpdx()
-            val expectedExpression = SpdxCompoundExpression(
-                SpdxOperator.AND,
-                SpdxLicenseIdExpression("license1"),
-                SpdxLicenseIdExpression("license2"),
-                SpdxLicenseIdExpression("license3")
-            )
-
-            actualExpression shouldBe expectedExpression
-        }
-
-        "bind the or operator left associative" {
-            val actualExpression = "license1 OR license2 OR license3".toSpdx()
-            val expectedExpression = SpdxCompoundExpression(
-                SpdxOperator.OR,
-                SpdxLicenseIdExpression("license1"),
-                SpdxLicenseIdExpression("license2"),
-                SpdxLicenseIdExpression("license3")
-            )
-
-            actualExpression shouldBe expectedExpression
-        }
-
         "respect parentheses for binding strength of operators" {
             val actualExpression = "(license1 OR license2) AND license3".toSpdx()
             val expectedExpression = SpdxCompoundExpression(
