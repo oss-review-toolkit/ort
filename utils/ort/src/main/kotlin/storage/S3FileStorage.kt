@@ -72,11 +72,11 @@ class S3FileStorage(
         }
 
         if (awsRegion != null && provider != null) {
-            S3Client.builder().apply {
-                region(Region.of(awsRegion))
-                credentialsProvider(provider)
-                endpointOverride(if (customEndpoint != null) URI.create(customEndpoint) else null)
-            }.build()
+            S3Client.builder()
+                .region(Region.of(awsRegion))
+                .credentialsProvider(provider)
+                .endpointOverride(if (customEndpoint != null) URI.create(customEndpoint) else null)
+                .build()
         } else {
             if (awsRegion != null) {
                 S3Client.builder().region(Region.of(awsRegion)).build()
@@ -87,10 +87,10 @@ class S3FileStorage(
     }
 
     override fun exists(path: String): Boolean {
-        val request = HeadObjectRequest.builder().apply {
-            key(path)
-            bucket(bucketName)
-        }.build()
+        val request = HeadObjectRequest.builder()
+            .key(path)
+            .bucket(bucketName)
+            .build()
 
         return runCatching { s3Client.headObject(request) }.onFailure { exception ->
             if (exception !is NoSuchKeyException) {
@@ -100,10 +100,10 @@ class S3FileStorage(
     }
 
     override fun read(path: String): InputStream {
-        val request = GetObjectRequest.builder().apply {
-            key(path)
-            bucket(bucketName)
-        }.build()
+        val request = GetObjectRequest.builder()
+            .key(path)
+            .bucket(bucketName)
+            .build()
 
         return runCatching {
             val response = s3Client.getObjectAsBytes(request)
@@ -115,10 +115,10 @@ class S3FileStorage(
     }
 
     override fun write(path: String, inputStream: InputStream) {
-        val request = PutObjectRequest.builder().apply {
-            key(path)
-            bucket(bucketName)
-        }.build()
+        val request = PutObjectRequest.builder()
+            .key(path)
+            .bucket(bucketName)
+            .build()
 
         val body = inputStream.use {
             if (compression) {
