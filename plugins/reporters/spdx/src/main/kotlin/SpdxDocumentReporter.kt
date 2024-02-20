@@ -118,10 +118,7 @@ private fun SpdxDocument.getLicenseRefExceptions(): Set<String> {
 
 private fun SpdxExpression.getLicenseRefExceptions(result: MutableSet<String>) {
     when (this) {
-        is SpdxCompoundExpression -> {
-            left.getLicenseRefExceptions(result)
-            right.getLicenseRefExceptions(result)
-        }
+        is SpdxCompoundExpression -> children.forEach { it.getLicenseRefExceptions(result) }
         is SpdxLicenseWithExceptionExpression -> if (isPresent() && exception.startsWith(LICENSE_REF_PREFIX)) {
             result.add(exception)
         }

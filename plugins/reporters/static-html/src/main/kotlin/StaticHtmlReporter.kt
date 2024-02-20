@@ -651,9 +651,10 @@ class StaticHtmlReporter : Reporter {
                 licenseLink(expression.exception)
             }
             is SpdxCompoundExpression -> {
-                licensesLink(expression.left)
-                +" ${expression.operator} "
-                licensesLink(expression.right)
+                expression.children.forEachIndexed { index, child ->
+                    if (index > 0) +" ${expression.operator} "
+                    licensesLink(child)
+                }
             }
             else -> {
                 +expression.toString()

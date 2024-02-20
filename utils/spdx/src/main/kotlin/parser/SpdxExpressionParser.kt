@@ -95,26 +95,34 @@ class SpdxExpressionParser(
      * Parse an OR expression of the form `or-expression -> and-expression ( "OR" and-expression ) *`.
      */
     private fun parseOrExpression(): SpdxExpression {
-        var left = parseAndExpression()
+        val children = mutableListOf(parseAndExpression())
+
         while (next is Token.OR) {
             consume<Token.OR>()
-            val right = parseAndExpression()
-            left = SpdxCompoundExpression(left, SpdxOperator.OR, right)
+            children.add(parseAndExpression())
         }
-        return left
+
+        return when {
+            children.size > 1 -> SpdxCompoundExpression(SpdxOperator.OR, children)
+            else -> children.first()
+        }
     }
 
     /**
      * Parse an AND expression of the form `and-expression -> primary ( "AND" primary ) *`.
      */
     private fun parseAndExpression(): SpdxExpression {
-        var left = parsePrimary()
+        val children = mutableListOf(parsePrimary())
+
         while (next is Token.AND) {
             consume<Token.AND>()
-            val right = parsePrimary()
-            left = SpdxCompoundExpression(left, SpdxOperator.AND, right)
+            children.add(parsePrimary())
         }
-        return left
+
+        return when {
+            children.size > 1 -> SpdxCompoundExpression(SpdxOperator.AND, children)
+            else -> children.first()
+        }
     }
 
     /**
