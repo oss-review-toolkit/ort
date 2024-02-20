@@ -52,7 +52,7 @@ abstract class AbstractPackageProvenanceStorageFunTest(vararg listeners: TestLis
                 val sourceArtifact = createRemoteArtifact()
                 val result = ResolvedArtifactProvenance(createArtifactProvenance(sourceArtifact))
 
-                storage.putProvenance(id, sourceArtifact, result)
+                storage.writeProvenance(id, sourceArtifact, result)
 
                 storage.readProvenance(id, sourceArtifact) shouldBe result
             }
@@ -62,7 +62,7 @@ abstract class AbstractPackageProvenanceStorageFunTest(vararg listeners: TestLis
                 val vcs = createVcsInfo()
                 val result = ResolvedRepositoryProvenance(createRepositoryProvenance(vcs), vcs.revision, true)
 
-                storage.putProvenance(id, vcs, result)
+                storage.writeProvenance(id, vcs, result)
 
                 storage.readProvenance(id, vcs) shouldBe result
             }
@@ -72,7 +72,7 @@ abstract class AbstractPackageProvenanceStorageFunTest(vararg listeners: TestLis
                 val vcs = createVcsInfo()
                 val result = UnresolvedPackageProvenance("message")
 
-                storage.putProvenance(id, vcs, result)
+                storage.writeProvenance(id, vcs, result)
 
                 storage.readProvenance(id, vcs) shouldBe result
             }
@@ -83,8 +83,8 @@ abstract class AbstractPackageProvenanceStorageFunTest(vararg listeners: TestLis
                 val result1 = UnresolvedPackageProvenance("message")
                 val result2 = ResolvedRepositoryProvenance(createRepositoryProvenance(vcs), vcs.revision, true)
 
-                storage.putProvenance(id, vcs, result1)
-                storage.putProvenance(id, vcs, result2)
+                storage.writeProvenance(id, vcs, result1)
+                storage.writeProvenance(id, vcs, result2)
 
                 storage.readProvenance(id, vcs) shouldBe result2
             }
@@ -96,11 +96,11 @@ abstract class AbstractPackageProvenanceStorageFunTest(vararg listeners: TestLis
 
                 val sourceArtifact = createRemoteArtifact()
                 val artifactResult = ResolvedArtifactProvenance(createArtifactProvenance(sourceArtifact))
-                storage.putProvenance(id, sourceArtifact, artifactResult)
+                storage.writeProvenance(id, sourceArtifact, artifactResult)
 
                 val vcs = createVcsInfo()
                 val vcsResult = ResolvedRepositoryProvenance(createRepositoryProvenance(vcs), vcs.revision, true)
-                storage.putProvenance(id, vcs, vcsResult)
+                storage.writeProvenance(id, vcs, vcsResult)
 
                 storage.readProvenances(id) should containExactlyInAnyOrder(artifactResult, vcsResult)
             }

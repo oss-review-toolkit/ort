@@ -93,7 +93,7 @@ class DefaultNestedProvenanceResolver(
                 // TODO: Find a way to figure out if the nested repository is configured with a fixed revision to
                 //       correctly set `hasOnlyFixedRevisions`. For now always assume that they are fixed because that
                 //       should be correct for most cases and otherwise the storage would have no effect.
-                storage.putNestedProvenance(
+                storage.writeNestedProvenance(
                     provenance,
                     NestedProvenanceResolutionResult(nestedProvenance, hasOnlyFixedRevisions = true)
                 )

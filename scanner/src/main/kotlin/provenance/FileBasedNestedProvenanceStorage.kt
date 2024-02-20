@@ -63,7 +63,7 @@ class FileBasedNestedProvenanceStorage(private val backend: FileStorage) : Neste
         }
     }
 
-    override fun putNestedProvenance(root: RepositoryProvenance, result: NestedProvenanceResolutionResult) {
+    override fun writeNestedProvenance(root: RepositoryProvenance, result: NestedProvenanceResolutionResult) {
         val results = readResults(root).toMutableList()
         results.removeAll { it.nestedProvenance.root == root }
         results += result

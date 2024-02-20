@@ -73,7 +73,7 @@ class PostgresNestedProvenanceStorage(
             }.map { it[table.result] }.find { it.nestedProvenance.root == root }
         }
 
-    override fun putNestedProvenance(root: RepositoryProvenance, result: NestedProvenanceResolutionResult) {
+    override fun writeNestedProvenance(root: RepositoryProvenance, result: NestedProvenanceResolutionResult) {
         database.transaction {
             val idsToRemove = table.selectAll().where {
                 table.vcsType eq root.vcsInfo.type.toString() and
