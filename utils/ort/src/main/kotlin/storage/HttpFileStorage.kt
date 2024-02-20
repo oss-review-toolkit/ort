@@ -80,10 +80,13 @@ class HttpFileStorage(
         }
     }
 
-    override fun exists(path: String): Boolean {
-        val request = Request.Builder()
+    private fun requestBuilder(): Request.Builder =
+        Request.Builder()
             .headers(headers.toHeaders())
             .cacheControl(CacheControl.Builder().maxAge(cacheMaxAgeInSeconds, TimeUnit.SECONDS).build())
+
+    override fun exists(path: String): Boolean {
+        val request = requestBuilder()
             .head()
             .url(urlForPath(path))
             .build()
@@ -92,9 +95,7 @@ class HttpFileStorage(
     }
 
     override fun read(path: String): InputStream {
-        val request = Request.Builder()
-            .headers(headers.toHeaders())
-            .cacheControl(CacheControl.Builder().maxAge(cacheMaxAgeInSeconds, TimeUnit.SECONDS).build())
+        val request = requestBuilder()
             .get()
             .url(urlForPath(path))
             .build()
@@ -117,8 +118,7 @@ class HttpFileStorage(
 
     override fun write(path: String, inputStream: InputStream) {
         inputStream.use {
-            val request = Request.Builder()
-                .headers(headers.toHeaders())
+            val request = requestBuilder()
                 .put(it.readBytes().toRequestBody())
                 .url(urlForPath(path))
                 .build()
