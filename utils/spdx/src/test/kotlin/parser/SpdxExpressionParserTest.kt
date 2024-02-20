@@ -34,7 +34,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxOperator
 
 class SpdxExpressionParserTest : FunSpec({
     context("identifiers") {
-        verifyExceptions(
+        verifyExpressions(
             "a" to SpdxLicenseIdExpression("a"),
             "a+" to SpdxLicenseIdExpression("a", orLaterVersion = true),
             "a-or-later" to SpdxLicenseIdExpression("a-or-later", orLaterVersion = true),
@@ -46,7 +46,7 @@ class SpdxExpressionParserTest : FunSpec({
     }
 
     context("license references") {
-        verifyExceptions(
+        verifyExpressions(
             "LicenseRef-a" to SpdxLicenseReferenceExpression("LicenseRef-a"),
             "LicenseRef-ort-license" to SpdxLicenseReferenceExpression("LicenseRef-ort-license"),
             "DocumentRef-a:LicenseRef-b" to SpdxLicenseReferenceExpression("DocumentRef-a:LicenseRef-b")
@@ -54,7 +54,7 @@ class SpdxExpressionParserTest : FunSpec({
     }
 
     context("WITH expressions") {
-        verifyExceptions(
+        verifyExpressions(
             "a WITH b" to SpdxLicenseWithExceptionExpression(
                 SpdxLicenseIdExpression("a"),
                 "b"
@@ -67,7 +67,7 @@ class SpdxExpressionParserTest : FunSpec({
     }
 
     context("AND expressions") {
-        verifyExceptions(
+        verifyExpressions(
             "a AND b" to SpdxCompoundExpression(
                 SpdxOperator.AND,
                 SpdxLicenseIdExpression("a"),
@@ -90,7 +90,7 @@ class SpdxExpressionParserTest : FunSpec({
     }
 
     context("OR expressions") {
-        verifyExceptions(
+        verifyExpressions(
             "a OR b" to SpdxCompoundExpression(
                 SpdxOperator.OR,
                 SpdxLicenseIdExpression("a"),
@@ -113,7 +113,7 @@ class SpdxExpressionParserTest : FunSpec({
     }
 
     context("compound expressions") {
-        verifyExceptions(
+        verifyExpressions(
             "(a)" to SpdxLicenseIdExpression("a"),
             "(a AND b)" to SpdxCompoundExpression(
                 SpdxOperator.AND,
@@ -155,7 +155,7 @@ class SpdxExpressionParserTest : FunSpec({
     }
 
     context("operator precedence") {
-        verifyExceptions(
+        verifyExpressions(
             "a AND b OR c" to SpdxCompoundExpression(
                 SpdxOperator.OR,
                 SpdxCompoundExpression(
@@ -225,7 +225,7 @@ class SpdxExpressionParserTest : FunSpec({
     }
 
     context("invalid expressions") {
-        verifyErrors(
+        verifyExceptions(
             "a a" to SpdxExpressionParserException(Token.IDENTIFIER(3, 3, "a")),
             "a AND" to SpdxExpressionParserException(null),
             "AND a" to SpdxExpressionParserException(Token.AND(1)),
@@ -250,7 +250,7 @@ class SpdxExpressionParserTest : FunSpec({
 /**
  * Verify that the [SpdxExpressionParser] produces the expected [SpdxExpression] for the given input.
  */
-private suspend fun FunSpecContainerScope.verifyExceptions(vararg input: Pair<String, SpdxExpression>) {
+private suspend fun FunSpecContainerScope.verifyExpressions(vararg input: Pair<String, SpdxExpression>) {
     withData(
         nameFn = { it.first },
         input.asList()
@@ -262,7 +262,7 @@ private suspend fun FunSpecContainerScope.verifyExceptions(vararg input: Pair<St
 /**
  * Verify that the [SpdxExpressionParser] produces the expected [SpdxExpressionParserException] for the given input.
  */
-private suspend fun FunSpecContainerScope.verifyErrors(vararg input: Pair<String, SpdxExpressionParserException>) {
+private suspend fun FunSpecContainerScope.verifyExceptions(vararg input: Pair<String, SpdxExpressionParserException>) {
     withData(
         nameFn = { it.first },
         input.asList()
