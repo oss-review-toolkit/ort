@@ -19,8 +19,6 @@
 
 import de.undercouch.gradle.tasks.download.Download
 
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     // Apply precompiled plugins.
     id("ort-library-conventions")
@@ -43,16 +41,6 @@ dependencies {
     implementation(libs.bundles.kotlinxSerialization)
 
     testImplementation(libs.mockk)
-}
-
-tasks.withType<KotlinCompile>().configureEach {
-    val customCompilerArgs = listOf(
-        "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"
-    )
-
-    compilerOptions {
-        freeCompilerArgs.addAll(customCompilerArgs)
-    }
 }
 
 tasks.register<Download>("updateOsadlMatrix") {
