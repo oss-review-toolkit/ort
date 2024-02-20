@@ -77,16 +77,16 @@ interface PackageProvenanceStorage {
     fun readProvenances(id: Identifier): List<PackageProvenanceResolutionResult>
 
     /**
-     * Put the resolution [result] for the [id] and [sourceArtifact] into the storage. If the storage already contains
+     * Write the resolution [result] for the [id] and [sourceArtifact] into the storage. If the storage already contains
      * an entry for [id] and [sourceArtifact] it is overwritten.
      */
-    fun putProvenance(id: Identifier, sourceArtifact: RemoteArtifact, result: PackageProvenanceResolutionResult)
+    fun writeProvenance(id: Identifier, sourceArtifact: RemoteArtifact, result: PackageProvenanceResolutionResult)
 
     /**
-     * Put the resolution [result] for the [id] and [vcs] into the storage. If the storage already contains an entry
+     * Write the resolution [result] for the [id] and [vcs] into the storage. If the storage already contains an entry
      * for [id] and [vcs] it is overwritten.
      */
-    fun putProvenance(id: Identifier, vcs: VcsInfo, result: PackageProvenanceResolutionResult)
+    fun writeProvenance(id: Identifier, vcs: VcsInfo, result: PackageProvenanceResolutionResult)
 }
 
 /**

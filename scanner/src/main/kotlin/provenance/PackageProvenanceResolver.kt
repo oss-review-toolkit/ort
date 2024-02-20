@@ -142,7 +142,7 @@ class DefaultPackageProvenanceResolver(
 
         if (responseCode == HttpURLConnection.HTTP_OK) {
             val artifactProvenance = ArtifactProvenance(pkg.sourceArtifact)
-            storage.putProvenance(pkg.id, pkg.sourceArtifact, ResolvedArtifactProvenance(artifactProvenance))
+            storage.writeProvenance(pkg.id, pkg.sourceArtifact, ResolvedArtifactProvenance(artifactProvenance))
             return artifactProvenance
         }
 
@@ -252,7 +252,7 @@ class DefaultPackageProvenanceResolver(
                 val repositoryProvenance = RepositoryProvenance(pkg.vcsProcessed, workingTree.getRevision())
 
                 vcs.isFixedRevision(workingTree, revision).onSuccess { isFixedRevision ->
-                    storage.putProvenance(
+                    storage.writeProvenance(
                         pkg.id,
                         pkg.vcsProcessed,
                         ResolvedRepositoryProvenance(repositoryProvenance, revision, isFixedRevision)
@@ -265,7 +265,7 @@ class DefaultPackageProvenanceResolver(
             val message = "Could not resolve revision for package '${pkg.id.toCoordinates()}' with " +
                 "${pkg.vcsProcessed}:\n${messages.joinToString("\n") { "\t$it" }}"
 
-            storage.putProvenance(pkg.id, pkg.vcsProcessed, UnresolvedPackageProvenance(message))
+            storage.writeProvenance(pkg.id, pkg.vcsProcessed, UnresolvedPackageProvenance(message))
 
             throw IOException(message)
         }

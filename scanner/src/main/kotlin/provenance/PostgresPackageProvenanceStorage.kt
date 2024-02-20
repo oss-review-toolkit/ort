@@ -93,7 +93,7 @@ class PostgresPackageProvenanceStorage(
             }.map { it[table.result] }
         }
 
-    override fun putProvenance(
+    override fun writeProvenance(
         id: Identifier,
         sourceArtifact: RemoteArtifact,
         result: PackageProvenanceResolutionResult
@@ -114,7 +114,7 @@ class PostgresPackageProvenanceStorage(
         }
     }
 
-    override fun putProvenance(id: Identifier, vcs: VcsInfo, result: PackageProvenanceResolutionResult) {
+    override fun writeProvenance(id: Identifier, vcs: VcsInfo, result: PackageProvenanceResolutionResult) {
         database.transaction {
             table.deleteWhere {
                 table.identifier eq id.toCoordinates() and

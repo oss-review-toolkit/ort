@@ -71,16 +71,16 @@ class FileBasedPackageProvenanceStorage(val backend: FileStorage) : PackageProve
         }
     }
 
-    override fun putProvenance(
+    override fun writeProvenance(
         id: Identifier,
         sourceArtifact: RemoteArtifact,
         result: PackageProvenanceResolutionResult
-    ) = putProvenance(id, sourceArtifact, null, result)
+    ) = writeProvenance(id, sourceArtifact, null, result)
 
-    override fun putProvenance(id: Identifier, vcs: VcsInfo, result: PackageProvenanceResolutionResult) =
-        putProvenance(id, null, vcs, result)
+    override fun writeProvenance(id: Identifier, vcs: VcsInfo, result: PackageProvenanceResolutionResult) =
+        writeProvenance(id, null, vcs, result)
 
-    private fun putProvenance(
+    private fun writeProvenance(
         id: Identifier,
         sourceArtifact: RemoteArtifact?,
         vcs: VcsInfo?,

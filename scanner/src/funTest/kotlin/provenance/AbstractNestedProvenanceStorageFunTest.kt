@@ -45,7 +45,7 @@ abstract class AbstractNestedProvenanceStorageFunTest(vararg listeners: TestList
                 val root = createRepositoryProvenance()
                 val result = NestedProvenanceResolutionResult(createNestedProvenance(root), true)
 
-                storage.putNestedProvenance(root, result)
+                storage.writeNestedProvenance(root, result)
 
                 storage.readNestedProvenance(root) shouldBe result
             }
@@ -57,8 +57,8 @@ abstract class AbstractNestedProvenanceStorageFunTest(vararg listeners: TestList
                 )
                 val result2 = NestedProvenanceResolutionResult(createNestedProvenance(root), true)
 
-                storage.putNestedProvenance(root, result1)
-                storage.putNestedProvenance(root, result2)
+                storage.writeNestedProvenance(root, result1)
+                storage.writeNestedProvenance(root, result2)
 
                 storage.readNestedProvenance(root) shouldBe result2
             }
