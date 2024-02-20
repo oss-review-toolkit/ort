@@ -193,14 +193,19 @@ class ScannerCommand : OrtCommand(
         val scanStorages = ScanStorages.createFromConfig(ortConfig.scanner)
         val workingTreeCache = DefaultWorkingTreeCache()
 
-        logger.info {
-            val readers = scanStorages.readers.map { it.javaClass.simpleName }
-            "Using the following scan storages for reading results: $readers"
-        }
+        with(scanStorages) {
+            logger.info {
+                val storages = listOf(packageProvenanceStorage, nestedProvenanceStorage).map { it.javaClass.simpleName }
+                "Using the following provenance storages: $storages"
+            }
 
-        logger.info {
-            val writers = scanStorages.writers.map { it.javaClass.simpleName }
-            "Using the following scan storages for writing results: $writers"
+            logger.info {
+                "Using the following scan storages for reading results: " + readers.map { it.javaClass.simpleName }
+            }
+
+            logger.info {
+                "Using the following scan storages for writing results: " + writers.map { it.javaClass.simpleName }
+            }
         }
 
         try {
