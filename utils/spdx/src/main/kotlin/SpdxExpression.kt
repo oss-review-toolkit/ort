@@ -201,29 +201,41 @@ sealed class SpdxExpression {
     /**
      * Concatenate [this][SpdxExpression] and [other] using [SpdxOperator.AND].
      */
-    infix fun and(other: SpdxExpression) = SpdxCompoundExpression(this, SpdxOperator.AND, other)
+    infix fun and(other: SpdxExpression) = SpdxCompoundExpression(SpdxOperator.AND, listOf(this, other))
 
     /**
      * Concatenate [this][SpdxExpression] and [other] using [SpdxOperator.OR].
      */
-    infix fun or(other: SpdxExpression) = SpdxCompoundExpression(this, SpdxOperator.OR, other)
+    infix fun or(other: SpdxExpression) = SpdxCompoundExpression(SpdxOperator.OR, listOf(this, other))
 }
 
 /**
- * An SPDX expression compound of a [left] and a [right] expression with an [operator] as defined by version 2.1 of the
- * [SPDX specification, appendix IV][1].
+ * An SPDX expression compound of a list of [child][children] expressions with an [operator] as defined by version 2.1
+ * of the [SPDX specification, appendix IV][1].
  *
  * [1]: https://spdx.dev/spdx-specification-21-web-version#h.jxpfx0ykyb60
  */
-class SpdxCompoundExpression(
-    val left: SpdxExpression,
+class SpdxCompoundExpression internal constructor(
     val operator: SpdxOperator,
-    val right: SpdxExpression
+    val children: List<SpdxExpression>
 ) : SpdxExpression() {
-    override fun decompose() = left.decompose() + right.decompose()
+    /**
+     * Create a compound expression with the provided [operator] and the [left] and [right] child expressions.
+     */
+    constructor(left: SpdxExpression, operator: SpdxOperator, right: SpdxExpression) :
+        this(operator, listOf(left, right))
+
+    /**
+     * Create a compound expression with the provided [operator], the [first] and [second] child expressions, and an
+     * arbitrary number of [other] child expressions.
+     */
+    constructor(operator: SpdxOperator, first: SpdxExpression, second: SpdxExpression, vararg other: SpdxExpression) :
+        this(operator, listOf(first, second, *other))
+
+    override fun decompose(): Set<SpdxSingleLicenseExpression> = children.flatMapTo(mutableSetOf()) { it.decompose() }
 
     override fun normalize(mapDeprecated: Boolean) =
-        SpdxCompoundExpression(left.normalize(mapDeprecated), operator, right.normalize(mapDeprecated))
+        SpdxCompoundExpression(operator, children.map { it.normalize(mapDeprecated) })
 
     override fun sorted(): SpdxExpression {
         /**
@@ -241,8 +253,7 @@ class SpdxCompoundExpression(
                 }
             }
 
-            addChildren(expression.left)
-            addChildren(expression.right)
+            expression.children.forEach { addChildren(it) }
 
             return children.sortedBy { it.toString() }
         }
@@ -256,31 +267,30 @@ class SpdxCompoundExpression(
     }
 
     override fun validate(strictness: Strictness) {
-        left.validate(strictness)
-        right.validate(strictness)
+        children.forEach { it.validate(strictness) }
     }
 
     override fun validChoices(): Set<SpdxExpression> =
         when (operator) {
             SpdxOperator.AND -> {
-                val leftChoices = left.validChoices()
-                val rightChoices = right.validChoices()
-
-                // Cartesian product of choices on the left and right.
-                leftChoices.flatMapTo(mutableSetOf()) { leftChoice ->
-                    rightChoices.map { rightChoice ->
-                        leftChoice and rightChoice
+                children.fold(setOf()) { acc, child ->
+                    if (acc.isEmpty()) {
+                        child.validChoices()
+                    } else {
+                        child.validChoices().flatMapTo(mutableSetOf()) { childChoice ->
+                            acc.map { it and childChoice }
+                        }
                     }
                 }
             }
 
-            SpdxOperator.OR -> left.validChoices() + right.validChoices()
+            SpdxOperator.OR -> children.flatMapTo(mutableSetOf()) { it.validChoices() }
         }
 
     override fun offersChoice(): Boolean =
         when (operator) {
             SpdxOperator.OR -> true
-            SpdxOperator.AND -> left.offersChoice() || right.offersChoice()
+            SpdxOperator.AND -> children.any { it.offersChoice() }
         }
 
     override fun applyChoice(choice: SpdxExpression, subExpression: SpdxExpression): SpdxExpression {
@@ -320,7 +330,7 @@ class SpdxCompoundExpression(
         if (subExpression == null) return false
 
         if (operator == SpdxOperator.AND) {
-            if (left.isSubExpression(subExpression) || right.isSubExpression(subExpression)) return true
+            if (children.any { it.isSubExpression(subExpression) }) return true
         }
 
         return validChoices().containsAll(subExpression.validChoices())
@@ -343,16 +353,13 @@ class SpdxCompoundExpression(
         // operator is higher than the priority of the operator of the left or right expression, but always adding
         // parentheses makes it easier to understand the expression.
         buildString {
-            when {
-                left is SpdxCompoundExpression && operator != left.operator -> append("($left)")
-                else -> append("$left")
-            }
+            children.forEachIndexed { index, child ->
+                if (index > 0) append(" $operator ")
 
-            append(" $operator ")
-
-            when {
-                right is SpdxCompoundExpression && operator != right.operator -> append("($right)")
-                else -> append("$right")
+                when {
+                    child is SpdxCompoundExpression && operator != child.operator -> append("($child)")
+                    else -> append("$child")
+                }
             }
         }
 }

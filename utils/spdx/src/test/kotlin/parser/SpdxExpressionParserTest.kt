@@ -69,30 +69,21 @@ class SpdxExpressionParserTest : FunSpec({
     context("AND expressions") {
         verifyExceptions(
             "a AND b" to SpdxCompoundExpression(
-                SpdxLicenseIdExpression("a"),
                 SpdxOperator.AND,
+                SpdxLicenseIdExpression("a"),
                 SpdxLicenseIdExpression("b")
             ),
             "a AND b AND c" to SpdxCompoundExpression(
-                SpdxCompoundExpression(
-                    SpdxLicenseIdExpression("a"),
-                    SpdxOperator.AND,
-                    SpdxLicenseIdExpression("b")
-                ),
                 SpdxOperator.AND,
+                SpdxLicenseIdExpression("a"),
+                SpdxLicenseIdExpression("b"),
                 SpdxLicenseIdExpression("c")
             ),
             "a AND b AND c AND d" to SpdxCompoundExpression(
-                SpdxCompoundExpression(
-                    SpdxCompoundExpression(
-                        SpdxLicenseIdExpression("a"),
-                        SpdxOperator.AND,
-                        SpdxLicenseIdExpression("b")
-                    ),
-                    SpdxOperator.AND,
-                    SpdxLicenseIdExpression("c")
-                ),
                 SpdxOperator.AND,
+                SpdxLicenseIdExpression("a"),
+                SpdxLicenseIdExpression("b"),
+                SpdxLicenseIdExpression("c"),
                 SpdxLicenseIdExpression("d")
             )
         )
@@ -101,30 +92,21 @@ class SpdxExpressionParserTest : FunSpec({
     context("OR expressions") {
         verifyExceptions(
             "a OR b" to SpdxCompoundExpression(
-                SpdxLicenseIdExpression("a"),
                 SpdxOperator.OR,
+                SpdxLicenseIdExpression("a"),
                 SpdxLicenseIdExpression("b")
             ),
             "a OR b OR c" to SpdxCompoundExpression(
-                SpdxCompoundExpression(
-                    SpdxLicenseIdExpression("a"),
-                    SpdxOperator.OR,
-                    SpdxLicenseIdExpression("b")
-                ),
                 SpdxOperator.OR,
+                SpdxLicenseIdExpression("a"),
+                SpdxLicenseIdExpression("b"),
                 SpdxLicenseIdExpression("c")
             ),
             "a OR b OR c OR d" to SpdxCompoundExpression(
-                SpdxCompoundExpression(
-                    SpdxCompoundExpression(
-                        SpdxLicenseIdExpression("a"),
-                        SpdxOperator.OR,
-                        SpdxLicenseIdExpression("b")
-                    ),
-                    SpdxOperator.OR,
-                    SpdxLicenseIdExpression("c")
-                ),
                 SpdxOperator.OR,
+                SpdxLicenseIdExpression("a"),
+                SpdxLicenseIdExpression("b"),
+                SpdxLicenseIdExpression("c"),
                 SpdxLicenseIdExpression("d")
             )
         )
@@ -134,38 +116,38 @@ class SpdxExpressionParserTest : FunSpec({
         verifyExceptions(
             "(a)" to SpdxLicenseIdExpression("a"),
             "(a AND b)" to SpdxCompoundExpression(
-                SpdxLicenseIdExpression("a"),
                 SpdxOperator.AND,
+                SpdxLicenseIdExpression("a"),
                 SpdxLicenseIdExpression("b")
             ),
             "a AND (b OR c)" to SpdxCompoundExpression(
-                SpdxLicenseIdExpression("a"),
                 SpdxOperator.AND,
+                SpdxLicenseIdExpression("a"),
                 SpdxCompoundExpression(
-                    SpdxLicenseIdExpression("b"),
                     SpdxOperator.OR,
+                    SpdxLicenseIdExpression("b"),
                     SpdxLicenseIdExpression("c")
                 )
             ),
             "(a AND b) OR c" to SpdxCompoundExpression(
+                SpdxOperator.OR,
                 SpdxCompoundExpression(
-                    SpdxLicenseIdExpression("a"),
                     SpdxOperator.AND,
+                    SpdxLicenseIdExpression("a"),
                     SpdxLicenseIdExpression("b")
                 ),
-                SpdxOperator.OR,
                 SpdxLicenseIdExpression("c")
             ),
             "(a OR b) AND (c OR d)" to SpdxCompoundExpression(
-                SpdxCompoundExpression(
-                    SpdxLicenseIdExpression("a"),
-                    SpdxOperator.OR,
-                    SpdxLicenseIdExpression("b")
-                ),
                 SpdxOperator.AND,
                 SpdxCompoundExpression(
-                    SpdxLicenseIdExpression("c"),
                     SpdxOperator.OR,
+                    SpdxLicenseIdExpression("a"),
+                    SpdxLicenseIdExpression("b")
+                ),
+                SpdxCompoundExpression(
+                    SpdxOperator.OR,
+                    SpdxLicenseIdExpression("c"),
                     SpdxLicenseIdExpression("d")
                 )
             )
@@ -175,67 +157,64 @@ class SpdxExpressionParserTest : FunSpec({
     context("operator precedence") {
         verifyExceptions(
             "a AND b OR c" to SpdxCompoundExpression(
+                SpdxOperator.OR,
                 SpdxCompoundExpression(
-                    SpdxLicenseIdExpression("a"),
                     SpdxOperator.AND,
+                    SpdxLicenseIdExpression("a"),
                     SpdxLicenseIdExpression("b")
                 ),
-                SpdxOperator.OR,
                 SpdxLicenseIdExpression("c")
             ),
             "a OR b AND c" to SpdxCompoundExpression(
-                SpdxLicenseIdExpression("a"),
                 SpdxOperator.OR,
+                SpdxLicenseIdExpression("a"),
                 SpdxCompoundExpression(
-                    SpdxLicenseIdExpression("b"),
                     SpdxOperator.AND,
+                    SpdxLicenseIdExpression("b"),
                     SpdxLicenseIdExpression("c")
                 )
             ),
             "a OR b AND c OR d" to SpdxCompoundExpression(
-                SpdxCompoundExpression(
-                    SpdxLicenseIdExpression("a"),
-                    SpdxOperator.OR,
-                    SpdxCompoundExpression(
-                        SpdxLicenseIdExpression("b"),
-                        SpdxOperator.AND,
-                        SpdxLicenseIdExpression("c")
-                    )
-                ),
                 SpdxOperator.OR,
+                SpdxLicenseIdExpression("a"),
+                SpdxCompoundExpression(
+                    SpdxOperator.AND,
+                    SpdxLicenseIdExpression("b"),
+                    SpdxLicenseIdExpression("c")
+                ),
                 SpdxLicenseIdExpression("d")
             ),
             "a AND b OR c AND d" to SpdxCompoundExpression(
-                SpdxCompoundExpression(
-                    SpdxLicenseIdExpression("a"),
-                    SpdxOperator.AND,
-                    SpdxLicenseIdExpression("b")
-                ),
                 SpdxOperator.OR,
                 SpdxCompoundExpression(
-                    SpdxLicenseIdExpression("c"),
                     SpdxOperator.AND,
+                    SpdxLicenseIdExpression("a"),
+                    SpdxLicenseIdExpression("b")
+                ),
+                SpdxCompoundExpression(
+                    SpdxOperator.AND,
+                    SpdxLicenseIdExpression("c"),
                     SpdxLicenseIdExpression("d")
                 )
             ),
             "a WITH b AND c OR d" to SpdxCompoundExpression(
+                SpdxOperator.OR,
                 SpdxCompoundExpression(
+                    SpdxOperator.AND,
                     SpdxLicenseWithExceptionExpression(
                         SpdxLicenseIdExpression("a"),
                         "b"
                     ),
-                    SpdxOperator.AND,
                     SpdxLicenseIdExpression("c")
                 ),
-                SpdxOperator.OR,
                 SpdxLicenseIdExpression("d")
             ),
             "a OR b AND c WITH d" to SpdxCompoundExpression(
-                SpdxLicenseIdExpression("a"),
                 SpdxOperator.OR,
+                SpdxLicenseIdExpression("a"),
                 SpdxCompoundExpression(
-                    SpdxLicenseIdExpression("b"),
                     SpdxOperator.AND,
+                    SpdxLicenseIdExpression("b"),
                     SpdxLicenseWithExceptionExpression(
                         SpdxLicenseIdExpression("c"),
                         "d"

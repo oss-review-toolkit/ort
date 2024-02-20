@@ -295,10 +295,12 @@ internal fun associateLicensesWithExceptions(license: SpdxExpression): SpdxExpre
     // Exclusively operate on AND-only expressions without further nested expressions.
     val hasOnlyAndOperator = license.operator == SpdxOperator.AND && "(" !in license.toString()
     if (!hasOnlyAndOperator) {
+        val children = license.children.map { associateLicensesWithExceptions(it) }
         return SpdxCompoundExpression(
-            associateLicensesWithExceptions(license.left),
             license.operator,
-            associateLicensesWithExceptions(license.right)
+            children[0],
+            children[1],
+            *children.drop(2).toTypedArray()
         )
     }
 
