@@ -121,7 +121,7 @@ val mergeDetektReports = if (rootProject.tasks.findByName(mergeDetektReportsTask
     rootProject.tasks.named<ReportMergeTask>(mergeDetektReportsTaskName)
 } else {
     rootProject.tasks.register<ReportMergeTask>(mergeDetektReportsTaskName) {
-        output = rootProject.layout.buildDirectory.dir("reports/detekt/merged.sarif").get().asFile
+        output = rootProject.layout.buildDirectory.file("reports/detekt/merged.sarif")
     }
 }
 
