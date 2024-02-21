@@ -266,7 +266,7 @@ private fun resolveProjectRoot(definitionFile: File) =
 private fun resolveVcsInfo(importPath: String, revision: String, gopath: File): VcsInfo {
     val pc = ProcessCapture(
         "go", "get", "-d", importPath,
-        environment = mapOf("GOPATH" to gopath.path, "GO111MODULE" to "off")
+        environment = mapOf("GOPATH" to gopath.path)
     )
 
     // HACK Some failure modes from "go get" can be ignored:
