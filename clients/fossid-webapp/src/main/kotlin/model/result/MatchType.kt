@@ -26,5 +26,10 @@ enum class MatchType {
     IGNORED,
     INTAKE,
     NONE,
-    PARTIAL
+    PARTIAL;
+
+    /**
+     * Test if the match type is a valid one i.e. the scanner can work with it.
+     */
+    fun isValidType() = this == FULL || this == PARTIAL
 }
