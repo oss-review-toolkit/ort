@@ -44,7 +44,6 @@ import org.apache.commons.compress.archivers.zip.ZipFile
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream
 import org.apache.commons.compress.compressors.xz.XZCompressorInputStream
-import org.apache.commons.compress.utils.SeekableInMemoryByteChannel
 import org.apache.logging.log4j.kotlin.logger
 
 enum class ArchiveType(extension: String, vararg aliases: String) {
@@ -157,12 +156,6 @@ fun File.unpack7Zip(targetDirectory: File, filter: (ArchiveEntry) -> Boolean = {
         }
     }
 }
-
-/**
- * Unpack the [ByteArray] assuming it is a Zip archive, ignoring entries not matched by [filter].
- */
-fun ByteArray.unpackZip(targetDirectory: File, filter: (ArchiveEntry) -> Boolean = { true }) =
-    ZipFile.Builder().setSeekableByteChannel(SeekableInMemoryByteChannel(this)).get().unpack(targetDirectory, filter)
 
 /**
  * Unpack the [File] assuming it is a Zip archive ignoring all entries not matched by [filter].
