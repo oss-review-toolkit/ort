@@ -184,3 +184,10 @@ tasks.named<CreateStartScripts>("startScripts") {
         )
     }
 }
+
+tasks.named<JavaExec>("run") {
+    listOf("COLORTERM", "TERM").firstNotNullOfOrNull { System.getenv(it) }?.also {
+        val mode = it.substringAfter('-')
+        environment("FORCE_COLOR" to mode)
+    }
+}
