@@ -809,10 +809,12 @@ class FossId internal constructor(
                     }
                     logger.info { "${snippets.size} snippets." }
 
+                    val filteredSnippets = snippets.filterTo(mutableSetOf()) { it.matchType.isValidType() }
+
                     if (config.fetchSnippetMatchedLines) {
                         logger.info { "Listing snippet matched lines for $it..." }
 
-                        snippets.filter { it.matchType == MatchType.PARTIAL }.map { snippet ->
+                        filteredSnippets.filter { it.matchType == MatchType.PARTIAL }.map { snippet ->
                             val matchedLinesResponse =
                                 service.listMatchedLines(config.user, config.apiKey, scanCode, it, snippet.id)
                                     .checkResponse("list snippets matched lines")
@@ -823,8 +825,7 @@ class FossId internal constructor(
                         }
                     }
 
-                    val excludedMatchTypes = enumSetOf(MatchType.IGNORED, MatchType.NONE)
-                    it to snippets.filterNotTo(mutableSetOf()) { it.matchType in excludedMatchTypes }
+                    it to filteredSnippets
                 }
             }.awaitAll().toMap()
         }
