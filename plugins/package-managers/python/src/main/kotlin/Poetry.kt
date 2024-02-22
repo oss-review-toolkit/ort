@@ -112,7 +112,7 @@ class Poetry(
 
         logger.info { "Generating '${requirementsFile.name}' file in '$workingDir' directory..." }
 
-        val command = listOfNotNull(
+        val command = listOf(
             command(),
             "export",
             "--without-hashes",
