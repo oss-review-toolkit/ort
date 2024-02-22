@@ -56,7 +56,7 @@ jobs:
       uses: gradle/gradle-build-action@v3
       with:
         gradle-home-cache-cleanup: true
-        arguments: detektTestFixtures detektTest detektFunTest
+        arguments: detektMain detektTestFixtures detektTest detektFunTest
     - name: Upload SARIF File
       uses: github/codeql-action/upload-sarif@v3
       if: ${{ always() }} # Upload even if the previous step failed.
