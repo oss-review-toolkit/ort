@@ -42,6 +42,7 @@ object MercurialCommand : CommandLineTool {
 
     override fun transformVersion(output: String): String =
         versionRegex.matchEntire(output.lineSequence().first())?.let { match ->
+            @Suppress("UnsafeCallOnNullableType")
             match.groups["version"]!!.value
         }.orEmpty()
 }

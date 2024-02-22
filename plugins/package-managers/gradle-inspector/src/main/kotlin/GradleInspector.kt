@@ -399,6 +399,7 @@ private val USER_HOST_REGEX = Regex("scm:(?<user>[^:@]+)@(?<host>[^:]+)[:/](?<pa
 
 private fun OrtDependency.toVcsInfo() =
     mavenModel?.vcs?.run {
+        @Suppress("UnsafeCallOnNullableType")
         SCM_REGEX.matchEntire(connection)?.let { match ->
             val type = match.groups["type"]!!.value
             val url = match.groups["url"]!!.value
@@ -459,6 +460,7 @@ private fun OrtDependency.handleValidScmInfo(type: String, url: String, tag: Str
     }
 
 private fun OrtDependency.handleInvalidScmInfo(connection: String, tag: String) =
+    @Suppress("UnsafeCallOnNullableType")
     USER_HOST_REGEX.matchEntire(connection)?.let { match ->
         // Some projects omit the provider and use the SCP-like Git URL syntax, for example
         // "scm:git@github.com:facebook/facebook-android-sdk.git".

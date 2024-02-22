@@ -166,6 +166,7 @@ private fun mapTimeoutErrors(issues: MutableList<Issue>): Boolean {
 
     var onlyTimeoutErrors = true
 
+    @Suppress("UnsafeCallOnNullableType")
     val mappedIssues = issues.map { fullError ->
         val match = TIMEOUT_ERROR_REGEX.matchEntire(fullError.message)
         if (match != null) {
@@ -197,10 +198,12 @@ private fun mapUnknownErrors(issues: MutableList<Issue>): Boolean {
 
     var onlyMemoryErrors = true
 
+    @Suppress("UnsafeCallOnNullableType")
     val mappedIssues = issues.map { fullError ->
         UNKNOWN_ERROR_REGEX.matchEntire(fullError.message)?.let { match ->
             val file = match.groups["file"]!!.value
             val error = match.groups["error"]!!.value
+
             if (error == "MemoryError") {
                 fullError.copy(message = "ERROR: MemoryError while scanning file '$file'.")
             } else {
