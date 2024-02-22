@@ -65,7 +65,7 @@ class ScanOss internal constructor(
 
     private val service = ScanOssService.create(config.apiUrl)
 
-    override val version by lazy {
+    override val version: String by lazy {
         // TODO: Find out the best / cheapest way to query the SCANOSS server for its version.
         val pomProperties = "/META-INF/maven/com.scanoss/scanner/pom.properties"
         val properties = Scanner::class.java.getResourceAsStream(pomProperties).use { Properties().apply { load(it) } }
