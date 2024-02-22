@@ -109,21 +109,23 @@ private fun Project.filterReferencedPackages(allPackages: Set<Package>): Set<Pac
     return allPackages.filterTo(mutableSetOf()) { it.id in projectDependencies }
 }
 
-fun Collection<PackageReference>.withInvariantIssues(): Set<PackageReference> = mapTo(mutableSetOf()) { ref ->
-    ref.copy(
-        dependencies = ref.dependencies.withInvariantIssues(),
-        issues = ref.issues.map { it.copy(timestamp = Instant.EPOCH) }
-    )
-}
+fun Collection<PackageReference>.withInvariantIssues(): Set<PackageReference> =
+    mapTo(mutableSetOf()) { ref ->
+        ref.copy(
+            dependencies = ref.dependencies.withInvariantIssues(),
+            issues = ref.issues.map { it.copy(timestamp = Instant.EPOCH) }
+        )
+    }
 
-fun ProjectAnalyzerResult.withInvariantIssues() = copy(
-    project = project.copy(
-        scopeDependencies = project.scopeDependencies?.mapTo(mutableSetOf()) { scope ->
-            scope.copy(dependencies = scope.dependencies.withInvariantIssues())
-        }
-    ),
-    issues = issues.sortedBy { it.message }.map { it.copy(timestamp = Instant.EPOCH) }
-)
+fun ProjectAnalyzerResult.withInvariantIssues() =
+    copy(
+        project = project.copy(
+            scopeDependencies = project.scopeDependencies?.mapTo(mutableSetOf()) { scope ->
+                scope.copy(dependencies = scope.dependencies.withInvariantIssues())
+            }
+        ),
+        issues = issues.sortedBy { it.message }.map { it.copy(timestamp = Instant.EPOCH) }
+    )
 
 fun Spec.analyze(
     projectDir: File,
