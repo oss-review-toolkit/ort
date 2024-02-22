@@ -26,8 +26,8 @@ import io.kotest.matchers.string.startWith
 
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.scanner.AbstractPathScannerWrapperFunTest
 import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
-import org.ossreviewtoolkit.scanner.scanners.AbstractPathScannerWrapperFunTest
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.spdx.getLicenseText
 import org.ossreviewtoolkit.utils.test.ExpensiveTag

@@ -21,8 +21,8 @@ package org.ossreviewtoolkit.plugins.scanners.askalono
 
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.scanner.AbstractPathScannerWrapperFunTest
 import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
-import org.ossreviewtoolkit.scanner.scanners.AbstractPathScannerWrapperFunTest
 
 class AskalonoFunTest : AbstractPathScannerWrapperFunTest() {
     override val scanner = Askalono("Askalono", ScannerWrapperConfig.EMPTY)
