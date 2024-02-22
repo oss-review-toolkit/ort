@@ -45,9 +45,9 @@ class PnpmFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/pnpm-workspaces/packages.json")
             val expectedResultFile = getAssetFile("projects/synthetic/pnpm-workspaces-expected-output.yml")
 
-            val ortResult = analyze(definitionFile.parentFile, packageManagers = setOf(Pnpm.Factory()))
+            val result = analyze(definitionFile.parentFile, packageManagers = setOf(Pnpm.Factory()))
 
-            patchActualResult(ortResult.toYaml(), patchStartAndEndTime = true) should
+            patchActualResult(result.toYaml(), patchStartAndEndTime = true) should
                 matchExpectedResult(expectedResultFile, definitionFile)
         }
     }

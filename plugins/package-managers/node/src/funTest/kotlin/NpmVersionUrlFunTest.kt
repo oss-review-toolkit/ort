@@ -39,10 +39,10 @@ class NpmVersionUrlFunTest : WordSpec({
             val expectedResult = patchExpectedResult(expectedResultFile, definitionFile)
                 .fromYaml<ProjectAnalyzerResult>()
 
-            val actualResult = create("NPM", allowDynamicVersions = true)
+            val result = create("NPM", allowDynamicVersions = true)
                 .resolveSingleProject(definitionFile, resolveScopes = true)
 
-            actualResult.withInvariantIssues().toYaml() shouldBe expectedResult.withInvariantIssues().toYaml()
+            result.withInvariantIssues().toYaml() shouldBe expectedResult.withInvariantIssues().toYaml()
         }
     }
 })
