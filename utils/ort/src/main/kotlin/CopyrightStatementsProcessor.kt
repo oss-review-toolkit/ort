@@ -68,6 +68,7 @@ private fun replaceYears(copyrightStatement: String): Pair<String, Set<Int>> {
      * string paired to the set of years.
      */
     fun replaceYearRange(copyrightStatement: String): Pair<String, Set<Int>> {
+        @Suppress("UnsafeCallOnNullableType")
         YEAR_RANGE_REGEX.findAll(copyrightStatement).forEach { matchResult ->
             val fromGroup = matchResult.groups[1]!!
             val separatorGroup = matchResult.groups[2]!!
@@ -125,6 +126,7 @@ private fun replaceYears(copyrightStatement: String): Pair<String, Set<Int>> {
     // Replace comma separated years.
     var matchResult = COMMA_SEPARATED_YEARS_REGEX.find(currentStatement)
 
+    @Suppress("UnsafeCallOnNullableType")
     while (matchResult != null) {
         currentStatement = currentStatement.removeRange(matchResult.groups[2]!!.range)
         currentStatement = currentStatement.replaceRange(matchResult.groups[1]!!.range, "$YEAR_PLACEHOLDER ")
@@ -136,6 +138,7 @@ private fun replaceYears(copyrightStatement: String): Pair<String, Set<Int>> {
     // Replace single years.
     matchResult = SINGLE_YEARS_REGEX.find(currentStatement)
 
+    @Suppress("UnsafeCallOnNullableType")
     while (matchResult != null) {
         currentStatement = currentStatement.replaceRange(matchResult.groups[1]!!.range, YEAR_PLACEHOLDER)
         resultYears += matchResult.groups[1]!!.value.toInt()

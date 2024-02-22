@@ -208,11 +208,13 @@ internal class CreateCommand : CliktCommand(
             )
 
         nonOffendingLicenseCategories.flatMapTo(result) { categoryName ->
-            licenseClassifications.licensesByCategory[categoryName] ?: throw UsageError(
-                message = "The given license category '$categoryName' was not found in " +
-                    "'${licenseClassificationsFile!!.absolutePath}'.",
-                statusCode = 2
-            )
+            @Suppress("UnsafeCallOnNullableType")
+            licenseClassifications.licensesByCategory[categoryName]
+                ?: throw UsageError(
+                    message = "The given license category '$categoryName' was not found in " +
+                        "'${licenseClassificationsFile!!.absolutePath}'.",
+                    statusCode = 2
+                )
         }
 
         return result

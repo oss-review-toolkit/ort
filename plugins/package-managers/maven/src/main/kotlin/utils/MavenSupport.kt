@@ -198,6 +198,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             return scm
         }
 
+        @Suppress("UnsafeCallOnNullableType")
         fun parseVcsInfo(project: MavenProject): VcsInfo {
             val scm = getOriginalScm(project)
             val connection = scm?.connection

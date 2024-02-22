@@ -377,7 +377,9 @@ class Yarn2(
                                 // to the fact it relies on package.json parsing and only the project ones are
                                 // available), the dependencies of a package are always searched in the 'Dependencies'
                                 // scope, instead of the scope of this package.
+                                @Suppress("UnsafeCallOnNullableType")
                                 val dependenciesInDependenciesScope = allDependencies[YarnDependencyType.DEPENDENCIES]!!
+
                                 YarnModuleInfo(
                                     packageDependency.id,
                                     packageDependency,

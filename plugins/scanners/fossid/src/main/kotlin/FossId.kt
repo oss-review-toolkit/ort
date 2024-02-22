@@ -771,6 +771,7 @@ class FossId internal constructor(
     /**
      * Get the different kind of results from the scan with [scanCode]
      */
+    @Suppress("UnsafeCallOnNullableType")
     private suspend fun getRawResults(scanCode: String): RawResults {
         val identifiedFiles = service.listIdentifiedFiles(config.user, config.apiKey, scanCode)
             .checkResponse("list identified files")

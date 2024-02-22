@@ -91,9 +91,11 @@ internal fun List<ScopeExclude>.minimize(projectScopes: List<String>): List<Scop
  * Download the sources corresponding to the given [Identifier][id] and [source code origin][sourceCodeOrigin].
  */
 internal fun OrtResult.downloadSources(id: Identifier, sourceCodeOrigin: SourceCodeOrigin): File {
-    val tempDir = createTempDirectory(Paths.get("."), ORTH_NAME).toFile()
-    val pkg = getPackageOrProject(id)!!.metadata
     val config = DownloaderConfiguration(sourceCodeOrigins = listOf(sourceCodeOrigin))
+    val tempDir = createTempDirectory(Paths.get("."), ORTH_NAME).toFile()
+
+    @Suppress("UnsafeCallOnNullableType")
+    val pkg = getPackageOrProject(id)!!.metadata
 
     Downloader(config).download(pkg, tempDir)
 
@@ -212,6 +214,7 @@ internal fun OrtResult.getViolatedRulesByLicense(
     id: Identifier,
     severity: Collection<Severity> = Severity.entries
 ): Map<SpdxSingleLicenseExpression, List<String>> =
+    @Suppress("UnsafeCallOnNullableType")
     getRuleViolations()
         .filter { it.pkg == id && it.severity in severity && it.license != null }
         .groupBy { it.license!! }

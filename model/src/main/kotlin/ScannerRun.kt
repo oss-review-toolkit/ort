@@ -208,6 +208,7 @@ data class ScannerRun(
             }
         }
 
+        @Suppress("UnsafeCallOnNullableType")
         val packageProvenance = resolutionResult.packageProvenance!!
 
         val scanResultsByPath = resolutionResult.getKnownProvenancesWithoutVcsPath().mapValues { (_, provenance) ->
@@ -231,6 +232,7 @@ data class ScannerRun(
             it.packageProvenanceResolutionIssue == null && it.nestedProvenanceResolutionIssue == null
         } ?: return null
 
+        @Suppress("UnsafeCallOnNullableType")
         val packageProvenance = resolutionResult.packageProvenance!!
 
         val fileListsByPath = resolutionResult.getKnownProvenancesWithoutVcsPath().mapValues { (_, provenance) ->

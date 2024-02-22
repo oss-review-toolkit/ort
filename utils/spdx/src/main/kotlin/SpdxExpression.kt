@@ -190,6 +190,7 @@ sealed class SpdxExpression {
             if (it.given == null && currentExpression.isValidChoice(it.choice)) {
                 currentExpression = currentExpression.applyChoice(it.choice)
             } else if (currentExpression.isSubExpression(it.given)) {
+                @Suppress("UnsafeCallOnNullableType")
                 currentExpression = currentExpression.applyChoice(it.choice, it.given!!)
             }
         }

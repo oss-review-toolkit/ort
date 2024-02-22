@@ -57,6 +57,7 @@ internal fun convertRules(excludes: Excludes, issues: MutableList<Issue>): List<
     }
 }
 
+@Suppress("UnsafeCallOnNullableType")
 private fun PathExclude.mapToRule(): IgnoreRule? {
     EXTENSION_REGEX.matchEntire(pattern)?.let { extensionMatch ->
         val extension = extensionMatch.groups["extension"]!!.value

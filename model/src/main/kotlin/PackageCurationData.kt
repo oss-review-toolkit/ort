@@ -177,6 +177,7 @@ data class PackageCurationData(
             isMetadataOnly = isMetadataOnly ?: other.isMetadataOnly,
             isModified = isModified ?: other.isModified,
             declaredLicenseMapping = declaredLicenseMapping.zip(other.declaredLicenseMapping) { value, otherValue ->
+                @Suppress("UnsafeCallOnNullableType")
                 (value ?: otherValue)!!
             }
         )

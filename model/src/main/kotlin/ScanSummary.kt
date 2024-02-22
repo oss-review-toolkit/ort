@@ -157,6 +157,8 @@ internal class IssueListConverter : StdConverter<List<Issue>, List<Issue>>() {
         issues.map { issue ->
             if (issue.affectedPath != null) return@map issue
             val match = TIMEOUT_ERROR_REGEX.matchEntire(issue.message) ?: return@map issue
+
+            @Suppress("UnsafeCallOnNullableType")
             issue.copy(affectedPath = match.groups["file"]!!.value)
         }
 }
