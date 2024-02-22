@@ -471,7 +471,7 @@ internal data class GemSpec(
                 }
 
                 text?.trim()?.takeIf { it.isNotEmpty() }
-            } ?: emptySet()
+            }.orEmpty()
     }
 
     fun merge(other: GemSpec): GemSpec {

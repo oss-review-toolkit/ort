@@ -113,6 +113,7 @@ internal fun Collection<NuGetInspector.PackageData>.toOrtPackages(): Set<Package
 
         fun NuGetInspector.PackageData.getHash(): Hash =
             Hash.create(
+                @Suppress("UseOrEmpty")
                 (sha512 ?: sha256 ?: sha1 ?: md5 ?: "").lowercase()
             )
 
