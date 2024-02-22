@@ -173,7 +173,7 @@
     {
         "schema_version": "1.6.0",
         "id": "GHSA-8r7q-cvjq-x353",
-        "modified": "2023-11-08T03:57:34.512953Z",
+        "modified": "2024-02-22T05:34:32.564420Z",
         "published": "2022-05-14T04:04:14Z",
         "aliases": [
             "CVE-2014-1402",
@@ -258,7 +258,7 @@
             },
             {
                 "type": "WEB",
-                "url": "http://jinja.pocoo.org/docs/changelog/"
+                "url": "http://jinja.pocoo.org/docs/changelog"
             },
             {
                 "type": "WEB",
@@ -310,12 +310,12 @@
             }
         ],
         "database_specific": {
+            "github_reviewed_at": "2022-07-07T22:50:31Z",
+            "github_reviewed": true,
+            "severity": "MODERATE",
             "cwe_ids": [
                 "CWE-266"
             ],
-            "github_reviewed": true,
-            "severity": "MODERATE",
-            "github_reviewed_at": "2022-07-07T22:50:31Z",
             "nvd_published_at": "2014-05-19T14:55:00Z"
         }
     },
