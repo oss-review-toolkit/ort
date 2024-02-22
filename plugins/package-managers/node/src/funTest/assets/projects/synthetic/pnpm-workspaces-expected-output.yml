@@ -145,7 +145,7 @@ analyzer:
           algorithm: "SHA-1"
       vcs:
         type: "Git"
-        url: "git+https://github.com/chalk/ansi-styles.git"
+        url: "https://github.com/chalk/ansi-styles.git"
         revision: "2d02d5bd070f733179007f0904eb5fb41090395a"
         path: ""
       vcs_processed:
@@ -175,7 +175,7 @@ analyzer:
           algorithm: "SHA-1"
       vcs:
         type: "Git"
-        url: "git://github.com/sindresorhus/caller-path"
+        url: "https://github.com/sindresorhus/caller-path.git"
         revision: ""
         path: ""
       vcs_processed:
@@ -205,7 +205,7 @@ analyzer:
           algorithm: "SHA-1"
       vcs:
         type: "Git"
-        url: "git://github.com/sindresorhus/callsites"
+        url: "https://github.com/sindresorhus/callsites.git"
         revision: ""
         path: ""
       vcs_processed:
@@ -233,7 +233,7 @@ analyzer:
           algorithm: "SHA-1"
       vcs:
         type: "Git"
-        url: "git+https://github.com/chalk/chalk.git"
+        url: "https://github.com/chalk/chalk.git"
         revision: "31fa94208034cb7581a81b06045ff2cf51057b40"
         path: ""
       vcs_processed:
@@ -261,7 +261,7 @@ analyzer:
           algorithm: "SHA-1"
       vcs:
         type: "Git"
-        url: "git+https://github.com/chalk/chalk.git"
+        url: "https://github.com/chalk/chalk.git"
         revision: "bccde97f8a1bb125d4fe99e8fd355182101ff4f2"
         path: ""
       vcs_processed:
@@ -291,7 +291,7 @@ analyzer:
           algorithm: "SHA-1"
       vcs:
         type: "Git"
-        url: "git+https://github.com/Qix-/color-convert.git"
+        url: "https://github.com/Qix-/color-convert.git"
         revision: "e1cb7846258e1d7aa25873814684d4fbbbca53ed"
         path: ""
       vcs_processed:
@@ -321,7 +321,7 @@ analyzer:
           algorithm: "SHA-1"
       vcs:
         type: "Git"
-        url: "git+ssh://git@github.com/colorjs/color-name.git"
+        url: "git@github.com:colorjs/color-name.git"
         revision: "4536ce5944f56659a2dfb2198eaf81b5ad5f2ad9"
         path: ""
       vcs_processed:
@@ -351,7 +351,7 @@ analyzer:
           algorithm: "SHA-1"
       vcs:
         type: "Git"
-        url: "git+https://github.com/sindresorhus/has-flag.git"
+        url: "https://github.com/sindresorhus/has-flag.git"
         revision: "474aa39afca7333d356c022fc5be4d31732bbba3"
         path: ""
       vcs_processed:
@@ -411,7 +411,7 @@ analyzer:
           algorithm: "SHA-1"
       vcs:
         type: "Git"
-        url: "git+https://github.com/jonschlinkert/is-even.git"
+        url: "https://github.com/jonschlinkert/is-even.git"
         revision: "e87c060bb1c3f5353cd49c45afbe98d1a6c22b89"
         path: ""
       vcs_processed:
@@ -441,7 +441,7 @@ analyzer:
           algorithm: "SHA-1"
       vcs:
         type: "Git"
-        url: "git+https://github.com/jonschlinkert/is-number.git"
+        url: "https://github.com/jonschlinkert/is-number.git"
         revision: "af885e2e890b9ef0875edd2b117305119ee5bdc5"
         path: ""
       vcs_processed:
@@ -471,7 +471,7 @@ analyzer:
           algorithm: "SHA-1"
       vcs:
         type: "Git"
-        url: "git+https://github.com/jonschlinkert/is-odd.git"
+        url: "https://github.com/jonschlinkert/is-odd.git"
         revision: "59270f5a05b03bdeb0b06c95d922deb59ae31923"
         path: ""
       vcs_processed:
@@ -534,7 +534,7 @@ analyzer:
           algorithm: "SHA-1"
       vcs:
         type: "Git"
-        url: "git://github.com/substack/jsonify.git"
+        url: "http://github.com/substack/jsonify.git"
         revision: ""
         path: ""
       vcs_processed:
@@ -564,7 +564,7 @@ analyzer:
           algorithm: "SHA-1"
       vcs:
         type: "Git"
-        url: "git+https://github.com/jonschlinkert/kind-of.git"
+        url: "https://github.com/jonschlinkert/kind-of.git"
         revision: "0ffe67cf12f5396047c1bacf04232b7deeb24063"
         path: ""
       vcs_processed:
@@ -595,7 +595,7 @@ analyzer:
           algorithm: "SHA-1"
       vcs:
         type: "Git"
-        url: "git+https://github.com/dcodeIO/long.js.git"
+        url: "https://github.com/dcodeIO/long.js.git"
         revision: "088e44e5e3343ef967698565678384fa474b003b"
         path: ""
       vcs_processed:
@@ -655,7 +655,7 @@ analyzer:
           algorithm: "SHA-1"
       vcs:
         type: "Git"
-        url: "git+https://github.com/sindresorhus/require-uncached.git"
+        url: "https://github.com/sindresorhus/require-uncached.git"
         revision: "c56e296e0028357629ea27c61c591c67e818db5f"
         path: ""
       vcs_processed:
@@ -686,7 +686,7 @@ analyzer:
           algorithm: "SHA-1"
       vcs:
         type: "Git"
-        url: "https://github.com/sindresorhus/resolve-from"
+        url: "https://github.com/sindresorhus/resolve-from.git"
         revision: "bae2cf1d66c616ad2eb27e0fe85a10ff0f2dfc92"
         path: ""
       vcs_processed:
@@ -746,7 +746,7 @@ analyzer:
           algorithm: "SHA-1"
       vcs:
         type: "Git"
-        url: "git+https://github.com/chalk/supports-color.git"
+        url: "https://github.com/chalk/supports-color.git"
         revision: "c5edf46896d1fc1826cb1183a60d61eecb65d749"
         path: ""
       vcs_processed:

@@ -687,7 +687,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/ansi-green.git"
+    url: "https://github.com/jonschlinkert/ansi-green.git"
     revision: ""
     path: ""
   vcs_processed:
@@ -746,7 +746,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/nodeca/argparse.git"
+    url: "https://github.com/nodeca/argparse.git"
     revision: "ea45e14bad13b9e4a10af28f11fb7e731079ab72"
     path: ""
   vcs_processed:
@@ -777,7 +777,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/arr-union.git"
+    url: "https://github.com/jonschlinkert/arr-union.git"
     revision: "ede857f5d5082467534e372fd3da45ce5e782e93"
     path: ""
   vcs_processed:
@@ -808,7 +808,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/array-each.git"
+    url: "https://github.com/jonschlinkert/array-each.git"
     revision: "a752d70897f25abfd38bfb51bb1b3a06ffcd2aed"
     path: ""
   vcs_processed:
@@ -872,7 +872,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/assign-symbols.git"
+    url: "https://github.com/jonschlinkert/assign-symbols.git"
     revision: "2df01f26fce8359fa75688eb89e2a1c65de6f237"
     path: ""
   vcs_processed:
@@ -995,7 +995,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/node-base/base.git"
+    url: "https://github.com/node-base/base.git"
     revision: "1885b1dc37dff5479d852dd0810d32207e190bab"
     path: ""
   vcs_processed:
@@ -1055,12 +1055,12 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+ssh://git@github.com/kumavis/browser-stdout.git"
+    url: "http://github.com/kumavis/browser-stdout.git"
     revision: "456b7f33c2d535fc88cf732d1a0e2d48a7600a1b"
     path: ""
   vcs_processed:
     type: "Git"
-    url: "ssh://git@github.com/kumavis/browser-stdout.git"
+    url: "https://github.com/kumavis/browser-stdout.git"
     revision: "456b7f33c2d535fc88cf732d1a0e2d48a7600a1b"
     path: ""
 - id: "NPM::cache-base:1.0.1"
@@ -1086,7 +1086,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/cache-base.git"
+    url: "https://github.com/jonschlinkert/cache-base.git"
     revision: "0889aab765c66585ffbe7b41f9a733ef097665cf"
     path: ""
   vcs_processed:
@@ -1116,7 +1116,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/class-utils.git"
+    url: "https://github.com/jonschlinkert/class-utils.git"
     revision: "0ad9e639d6a63d6dc04043ac5931df85fb898e06"
     path: ""
   vcs_processed:
@@ -1176,7 +1176,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/gulpjs/clone-buffer.git"
+    url: "https://github.com/gulpjs/clone-buffer.git"
     revision: "7dab09850f080e2d137c62c6a673344fa8458942"
     path: ""
   vcs_processed:
@@ -1207,7 +1207,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git://github.com/hughsk/clone-stats.git"
+    url: "git://github.com/hughsk/clone-stats"
     revision: "25810f469944326c761f9f6273268453734a8465"
     path: ""
   vcs_processed:
@@ -1268,7 +1268,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/collection-visit.git"
+    url: "https://github.com/jonschlinkert/collection-visit.git"
     revision: "39c229dceb7e124cb821b59668df5da1d5c81a6c"
     path: ""
   vcs_processed:
@@ -1298,7 +1298,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/tj/commander.js.git"
+    url: "https://github.com/tj/commander.js.git"
     revision: "649eaef336ddc7224eb5c73e4a958685e24de25e"
     path: ""
   vcs_processed:
@@ -1326,7 +1326,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/component/emitter.git"
+    url: "https://github.com/component/emitter.git"
     revision: "6bd7817e8a444cb16e8abdf7dd2d7f04d5ca3dc8"
     path: ""
   vcs_processed:
@@ -1417,7 +1417,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/copy-descriptor.git"
+    url: "https://github.com/jonschlinkert/copy-descriptor.git"
     revision: "572c31416d4538b7ba5f52e2bb0765ac237f79e2"
     path: ""
   vcs_processed:
@@ -1447,7 +1447,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git://github.com/isaacs/core-util-is.git"
+    url: "git://github.com/isaacs/core-util-is"
     revision: "a177da234df5638b363ddc15fa324619a38577c8"
     path: ""
   vcs_processed:
@@ -1537,12 +1537,12 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/samverschueren/decode-uri-component.git"
+    url: "https://github.com/SamVerschueren/decode-uri-component.git"
     revision: "52782a347527a6a05fed02434ffcf8f2ba1b19a3"
     path: ""
   vcs_processed:
     type: "Git"
-    url: "https://github.com/samverschueren/decode-uri-component.git"
+    url: "https://github.com/SamVerschueren/decode-uri-component.git"
     revision: "52782a347527a6a05fed02434ffcf8f2ba1b19a3"
     path: ""
 - id: "NPM::define-property:0.2.5"
@@ -1567,7 +1567,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/define-property.git"
+    url: "https://github.com/jonschlinkert/define-property.git"
     revision: "5bf4e5e9d8d1fdf8fba07fff4bdf13a5d6df8ae4"
     path: ""
   vcs_processed:
@@ -1597,7 +1597,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/define-property.git"
+    url: "https://github.com/jonschlinkert/define-property.git"
     revision: "4811e7c7999e82ab086265eefeb5d9cbffe10912"
     path: ""
   vcs_processed:
@@ -1628,7 +1628,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/define-property.git"
+    url: "https://github.com/jonschlinkert/define-property.git"
     revision: "04717307be822f2ca2544778b92e5d2cbe300c55"
     path: ""
   vcs_processed:
@@ -1686,7 +1686,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "https://github.com/sindresorhus/escape-string-regexp"
+    url: "https://github.com/sindresorhus/escape-string-regexp.git"
     revision: "db124a3e1aae9d692c4899e42a5c6c3e329eaa20"
     path: ""
   vcs_processed:
@@ -1717,7 +1717,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/expand-range.git"
+    url: "https://github.com/jonschlinkert/expand-range.git"
     revision: "4c873af0870df8382bafc66a93d5c89e3aad3d4d"
     path: ""
   vcs_processed:
@@ -1747,7 +1747,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/expand-reflinks.git"
+    url: "https://github.com/jonschlinkert/expand-reflinks.git"
     revision: "340164e223b46f43a87fcff4644090d0b7133400"
     path: ""
   vcs_processed:
@@ -1778,7 +1778,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/extend-shallow.git"
+    url: "https://github.com/jonschlinkert/extend-shallow.git"
     revision: "e9b1f1d2ff9d2990ec4a127afa7c14732d1eec8a"
     path: ""
   vcs_processed:
@@ -1809,7 +1809,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/extend-shallow.git"
+    url: "https://github.com/jonschlinkert/extend-shallow.git"
     revision: "33698c3df7804f0d0e3ea98caa64d53f09c37bd4"
     path: ""
   vcs_processed:
@@ -1840,7 +1840,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/fill-range.git"
+    url: "https://github.com/jonschlinkert/fill-range.git"
     revision: "516e5ad9e40486c168b14062158d136aa3163f2b"
     path: ""
   vcs_processed:
@@ -1872,7 +1872,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/for-in.git"
+    url: "https://github.com/jonschlinkert/for-in.git"
     revision: "5f97ad4f6556e938d9b71614259ddd8044a081e3"
     path: ""
   vcs_processed:
@@ -1904,7 +1904,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/fs-exists-sync.git"
+    url: "https://github.com/jonschlinkert/fs-exists-sync.git"
     revision: "3b44654977775bac2d1151520c9b6257249a6374"
     path: ""
   vcs_processed:
@@ -1965,7 +1965,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/get-value.git"
+    url: "https://github.com/jonschlinkert/get-value.git"
     revision: "5dc7466a65eec37e3b9e3d94f274b7aba193ea60"
     path: ""
   vcs_processed:
@@ -1995,7 +1995,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/regexhq/gfm-code-block-regex.git"
+    url: "https://github.com/regexhq/gfm-code-block-regex.git"
     revision: "91fd47dae730c5da36bd939acac416de221ff5d4"
     path: ""
   vcs_processed:
@@ -2025,7 +2025,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/gfm-code-blocks.git"
+    url: "https://github.com/jonschlinkert/gfm-code-blocks.git"
     revision: "1bdaf425f1fdbcedd4966203c5e402d9019421a1"
     path: ""
   vcs_processed:
@@ -2115,7 +2115,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/gulp-format-md.git"
+    url: "https://github.com/jonschlinkert/gulp-format-md.git"
     revision: "ebcdcba3d9fb6eb16368921200b0621ec8178535"
     path: ""
   vcs_processed:
@@ -2175,7 +2175,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/sindresorhus/has-flag.git"
+    url: "https://github.com/sindresorhus/has-flag.git"
     revision: "8b2ca7e693b2c742b29f2399194077b64b9ff781"
     path: ""
   vcs_processed:
@@ -2206,7 +2206,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/has-value.git"
+    url: "https://github.com/jonschlinkert/has-value.git"
     revision: "adecb27b13b7e99688694e228a946e6e635fcc64"
     path: ""
   vcs_processed:
@@ -2237,7 +2237,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/has-value.git"
+    url: "https://github.com/jonschlinkert/has-value.git"
     revision: "61b5671a48ac40206eb33b4ea75dc2507168d687"
     path: ""
   vcs_processed:
@@ -2268,7 +2268,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/has-values.git"
+    url: "https://github.com/jonschlinkert/has-values.git"
     revision: "199a3eacd663b4ae4b00aef5ef5541aa2c7c8089"
     path: ""
   vcs_processed:
@@ -2299,7 +2299,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/has-values.git"
+    url: "https://github.com/jonschlinkert/has-values.git"
     revision: "fead695044aafcfb337c7125af5479c7eaf1c92c"
     path: ""
   vcs_processed:
@@ -2329,7 +2329,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/mathiasbynens/he.git"
+    url: "https://github.com/mathiasbynens/he.git"
     revision: "670991a4141d01dc015de5194d400d01c863208f"
     path: ""
   vcs_processed:
@@ -2359,7 +2359,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/npm/inflight.git"
+    url: "https://github.com/npm/inflight.git"
     revision: "a547881738c8f57b27795e584071d67cf6ac1a57"
     path: ""
   vcs_processed:
@@ -2388,7 +2388,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git://github.com/isaacs/inherits.git"
+    url: "git://github.com/isaacs/inherits"
     revision: "9a2c29400c6d491e0b7beefe0c32efa3b462545d"
     path: ""
   vcs_processed:
@@ -2419,7 +2419,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/is-accessor-descriptor.git"
+    url: "https://github.com/jonschlinkert/is-accessor-descriptor.git"
     revision: "e64ae49c456c9f31dab47934b0183e2a9938b5bd"
     path: ""
   vcs_processed:
@@ -2450,7 +2450,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/is-accessor-descriptor.git"
+    url: "https://github.com/jonschlinkert/is-accessor-descriptor.git"
     revision: "22b0a2617ccbebd131247c29e3700ca860d37d06"
     path: ""
   vcs_processed:
@@ -2511,7 +2511,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/is-data-descriptor.git"
+    url: "https://github.com/jonschlinkert/is-data-descriptor.git"
     revision: "e6317dbcb27a95281a60120bac83f5938dda4e2c"
     path: ""
   vcs_processed:
@@ -2542,7 +2542,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/is-data-descriptor.git"
+    url: "https://github.com/jonschlinkert/is-data-descriptor.git"
     revision: "42dcba2627fe655daa21aec843ca8de849f26cd6"
     path: ""
   vcs_processed:
@@ -2573,7 +2573,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/is-descriptor.git"
+    url: "https://github.com/jonschlinkert/is-descriptor.git"
     revision: "7559403830553097fcdd56ae93fe69d4ef2b21db"
     path: ""
   vcs_processed:
@@ -2604,7 +2604,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/is-descriptor.git"
+    url: "https://github.com/jonschlinkert/is-descriptor.git"
     revision: "324635c990dc7f1e6d169deecd19769dea72114c"
     path: ""
   vcs_processed:
@@ -2636,7 +2636,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/is-extendable.git"
+    url: "https://github.com/jonschlinkert/is-extendable.git"
     revision: "c36a0732e6a76931c6f66c5931d1f3e54fa44380"
     path: ""
   vcs_processed:
@@ -2666,7 +2666,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/is-extendable.git"
+    url: "https://github.com/jonschlinkert/is-extendable.git"
     revision: "230717f6be5be812c16916ec8a745d6252dfa7a5"
     path: ""
   vcs_processed:
@@ -2696,7 +2696,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/is-number.git"
+    url: "https://github.com/jonschlinkert/is-number.git"
     revision: "d06c6e2cc048d3cad016cb8dfb055bb14d86fffa"
     path: ""
   vcs_processed:
@@ -2726,7 +2726,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/is-number.git"
+    url: "https://github.com/jonschlinkert/is-number.git"
     revision: "af885e2e890b9ef0875edd2b117305119ee5bdc5"
     path: ""
   vcs_processed:
@@ -2756,7 +2756,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/is-number.git"
+    url: "https://github.com/jonschlinkert/is-number.git"
     revision: "0c6b15a88bc10cd47f67a09506399dfc9ddc075d"
     path: ""
   vcs_processed:
@@ -2786,7 +2786,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/is-plain-object.git"
+    url: "https://github.com/jonschlinkert/is-plain-object.git"
     revision: "81345df0d1700a5c285f379cbdca0e273388910d"
     path: ""
   vcs_processed:
@@ -2847,7 +2847,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/is-windows.git"
+    url: "https://github.com/jonschlinkert/is-windows.git"
     revision: "4dcfff4ed9e36ad761a1a24d3899c832382d7254"
     path: ""
   vcs_processed:
@@ -2907,7 +2907,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/isobject.git"
+    url: "https://github.com/jonschlinkert/isobject.git"
     revision: "d693ec8d31b02b42a19b2d806407a4ecb2f9fb73"
     path: ""
   vcs_processed:
@@ -2937,7 +2937,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/isobject.git"
+    url: "https://github.com/jonschlinkert/isobject.git"
     revision: "7ad1fc405d19f144a21e2bfe947fa82801baa7aa"
     path: ""
   vcs_processed:
@@ -2967,7 +2967,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/kind-of.git"
+    url: "https://github.com/jonschlinkert/kind-of.git"
     revision: "0ffe67cf12f5396047c1bacf04232b7deeb24063"
     path: ""
   vcs_processed:
@@ -2997,7 +2997,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/kind-of.git"
+    url: "https://github.com/jonschlinkert/kind-of.git"
     revision: "30bee16e8dffa67417ba35d31bd9bc31517a2d83"
     path: ""
   vcs_processed:
@@ -3027,7 +3027,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/kind-of.git"
+    url: "https://github.com/jonschlinkert/kind-of.git"
     revision: "ed479b6ee194dc1edff852f17095ae1de40bafbc"
     path: ""
   vcs_processed:
@@ -3057,7 +3057,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/kind-of.git"
+    url: "https://github.com/jonschlinkert/kind-of.git"
     revision: "abab085d65f7ee978011da8f135291892fcd97db"
     path: ""
   vcs_processed:
@@ -3087,7 +3087,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/lazy-cache.git"
+    url: "https://github.com/jonschlinkert/lazy-cache.git"
     revision: "ca0579a0687f9a7d915d9ecf53a93af7ad72762d"
     path: ""
   vcs_processed:
@@ -3118,7 +3118,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/list-item.git"
+    url: "https://github.com/jonschlinkert/list-item.git"
     revision: "26f9ef24523c2374acffd97b7627c217c7fce7c0"
     path: ""
   vcs_processed:
@@ -3148,7 +3148,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "https://github.com/lodash/lodash"
+    url: "https://github.com/lodash/lodash.git"
     revision: ""
     path: ""
   vcs_processed:
@@ -3178,7 +3178,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/lodash/lodash.git"
+    url: "https://github.com/lodash/lodash.git"
     revision: ""
     path: ""
   vcs_processed:
@@ -3208,7 +3208,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/lodash/lodash.git"
+    url: "https://github.com/lodash/lodash.git"
     revision: ""
     path: ""
   vcs_processed:
@@ -3238,7 +3238,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/log-ok.git"
+    url: "https://github.com/jonschlinkert/log-ok.git"
     revision: "59edddc6de212f0a339d1903a0e941e46ca36fcc"
     path: ""
   vcs_processed:
@@ -3268,7 +3268,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/map-cache.git"
+    url: "https://github.com/jonschlinkert/map-cache.git"
     revision: "f36c7567cb85b50824db25a2a588c5f7b858823b"
     path: ""
   vcs_processed:
@@ -3298,7 +3298,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/map-visit.git"
+    url: "https://github.com/jonschlinkert/map-visit.git"
     revision: "73bcd8385c9520c595a825486f19623a5e0550f0"
     path: ""
   vcs_processed:
@@ -3328,7 +3328,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/markdown-utils.git"
+    url: "https://github.com/jonschlinkert/markdown-utils.git"
     revision: "b574bd7d52f70afb6099d9794cc27326e1bd36d5"
     path: ""
   vcs_processed:
@@ -3360,7 +3360,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/michaelrhodes/math-random.git"
+    url: "https://github.com/michaelrhodes/math-random.git"
     revision: "13ed513bd579eb868b5054b38836411ae6e29f6a"
     path: ""
   vcs_processed:
@@ -3481,7 +3481,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/mixin-deep.git"
+    url: "https://github.com/jonschlinkert/mixin-deep.git"
     revision: "754f0c20e1bc13ea5a21a64fbc7d6ba5f7b359b9"
     path: ""
   vcs_processed:
@@ -3511,7 +3511,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/substack/node-mkdirp.git"
+    url: "https://github.com/substack/node-mkdirp.git"
     revision: "d4eff0f06093aed4f387e88e9fc301cb76beedc7"
     path: ""
   vcs_processed:
@@ -3541,7 +3541,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/mochajs/mocha.git"
+    url: "https://github.com/mochajs/mocha.git"
     revision: "5bd33a0ba201d227159759e8ced86756595b0c54"
     path: ""
   vcs_processed:
@@ -3569,7 +3569,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/zeit/ms.git"
+    url: "https://github.com/zeit/ms.git"
     revision: "9b88d1568a52ec9bb67ecc8d2aa224fa38fd41f4"
     path: ""
   vcs_processed:
@@ -3600,7 +3600,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/object-copy.git"
+    url: "https://github.com/jonschlinkert/object-copy.git"
     revision: "15b972a4a7137f6bf47886c68e73a2fffa8eacf2"
     path: ""
   vcs_processed:
@@ -3630,7 +3630,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/object-visit.git"
+    url: "https://github.com/jonschlinkert/object-visit.git"
     revision: "2220cd6ea35008481c9e252488bcbde9ebca0983"
     path: ""
   vcs_processed:
@@ -3660,7 +3660,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git://github.com/isaacs/once.git"
+    url: "git://github.com/isaacs/once"
     revision: "0e614d9f5a7e6f0305c625f6b581f6d80b33b8a6"
     path: ""
   vcs_processed:
@@ -3690,7 +3690,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/pascalcase.git"
+    url: "https://github.com/jonschlinkert/pascalcase.git"
     revision: "c2600f8aa648fe093381a064ba364d99b374911c"
     path: ""
   vcs_processed:
@@ -3720,7 +3720,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/sindresorhus/path-is-absolute.git"
+    url: "https://github.com/sindresorhus/path-is-absolute.git"
     revision: "edc91d348b21dac2ab65ea2fbec2868e2eff5eb6"
     path: ""
   vcs_processed:
@@ -3751,7 +3751,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/pretty-remarkable.git"
+    url: "https://github.com/jonschlinkert/pretty-remarkable.git"
     revision: "1ff9466caf5c1e483880c0aef5c496b4609e92d2"
     path: ""
   vcs_processed:
@@ -3779,7 +3779,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/calvinmetcalf/process-nextick-args.git"
+    url: "https://github.com/calvinmetcalf/process-nextick-args.git"
     revision: "b96d59913025441b00c4fd40e6894ddfa8e1c398"
     path: ""
   vcs_processed:
@@ -3810,7 +3810,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/randomatic.git"
+    url: "https://github.com/jonschlinkert/randomatic.git"
     revision: "b7451f4dac44a9920790f76a4d8a1dd081c37a5a"
     path: ""
   vcs_processed:
@@ -3838,7 +3838,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git://github.com/nodejs/readable-stream.git"
+    url: "git://github.com/nodejs/readable-stream"
     revision: "2eb8861e029107b7e079e22c826835cad6ae7854"
     path: ""
   vcs_processed:
@@ -3869,7 +3869,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/regex-not.git"
+    url: "https://github.com/jonschlinkert/regex-not.git"
     revision: "7e368998898e1fc7428596636ef5412ede414f3e"
     path: ""
   vcs_processed:
@@ -3958,7 +3958,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/repeat-element.git"
+    url: "https://github.com/jonschlinkert/repeat-element.git"
     revision: "32af174b4218263952a77d881f37d6e545b7cfd0"
     path: ""
   vcs_processed:
@@ -3989,7 +3989,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/repeat-string.git"
+    url: "https://github.com/jonschlinkert/repeat-string.git"
     revision: "1a95c5d99a02999ccd2cf4663959a18bd2def7b8"
     path: ""
   vcs_processed:
@@ -4019,7 +4019,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/gulpjs/replace-ext.git"
+    url: "https://github.com/gulpjs/replace-ext.git"
     revision: "adaec75e316f1c375dc7a2cb51c7b762b135cc0e"
     path: ""
   vcs_processed:
@@ -4049,7 +4049,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git://github.com/lydell/resolve-url"
+    url: "https://github.com/lydell/resolve-url.git"
     revision: ""
     path: ""
   vcs_processed:
@@ -4170,7 +4170,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/sections.git"
+    url: "https://github.com/jonschlinkert/sections.git"
     revision: "ec3ea81580de43e1b14d160853e1eadbf860006d"
     path: ""
   vcs_processed:
@@ -4201,7 +4201,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/doowb/set-getter.git"
+    url: "https://github.com/doowb/set-getter.git"
     revision: "bfdd988ef9aa472ff05d6d6c7501c33bc36dc39e"
     path: ""
   vcs_processed:
@@ -4232,7 +4232,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/set-value.git"
+    url: "https://github.com/jonschlinkert/set-value.git"
     revision: "bb0f0382f7d7637f3de1bba52d1b4abdbbbde4d4"
     path: ""
   vcs_processed:
@@ -4262,7 +4262,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/snapdragon.git"
+    url: "https://github.com/jonschlinkert/snapdragon.git"
     revision: "6c952b12cabe896a86d9a4fe378f934bccbe6436"
     path: ""
   vcs_processed:
@@ -4293,7 +4293,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/here-be/snapdragon.git"
+    url: "https://github.com/here-be/snapdragon.git"
     revision: "3067f0fe16d5d2771aea793c450f09cb2da533ca"
     path: ""
   vcs_processed:
@@ -4324,7 +4324,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/snapdragon-node.git"
+    url: "https://github.com/jonschlinkert/snapdragon-node.git"
     revision: "bea9505d40be74b3c452039e72e857c9ae3c4b5e"
     path: ""
   vcs_processed:
@@ -4354,7 +4354,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/snapdragon-util.git"
+    url: "https://github.com/jonschlinkert/snapdragon-util.git"
     revision: "a8ee4265c9fd7638cadcd5159c023d7b877b83a6"
     path: ""
   vcs_processed:
@@ -4384,7 +4384,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/snapdragon-util.git"
+    url: "https://github.com/jonschlinkert/snapdragon-util.git"
     revision: "0ea032c8ea02010338568e82e8510a4054966203"
     path: ""
   vcs_processed:
@@ -4415,7 +4415,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/sort-by-value.git"
+    url: "https://github.com/jonschlinkert/sort-by-value.git"
     revision: "e3ba2adb16e5efd28396f97367e19ed4913f74a6"
     path: ""
   vcs_processed:
@@ -4445,12 +4445,12 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+ssh://git@github.com/mozilla/source-map.git"
+    url: "http://github.com/mozilla/source-map.git"
     revision: "326dd955a366569759d9537ef5f0f167c89d92d2"
     path: ""
   vcs_processed:
     type: "Git"
-    url: "ssh://git@github.com/mozilla/source-map.git"
+    url: "https://github.com/mozilla/source-map.git"
     revision: "326dd955a366569759d9537ef5f0f167c89d92d2"
     path: ""
 - id: "NPM::source-map:0.6.1"
@@ -4475,12 +4475,12 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+ssh://git@github.com/mozilla/source-map.git"
+    url: "http://github.com/mozilla/source-map.git"
     revision: "ac518d2f21818146f3310557bd51c13d8cff2ba8"
     path: ""
   vcs_processed:
     type: "Git"
-    url: "ssh://git@github.com/mozilla/source-map.git"
+    url: "https://github.com/mozilla/source-map.git"
     revision: "ac518d2f21818146f3310557bd51c13d8cff2ba8"
     path: ""
 - id: "NPM::source-map-resolve:0.5.3"
@@ -4505,7 +4505,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/lydell/source-map-resolve.git"
+    url: "https://github.com/lydell/source-map-resolve.git"
     revision: "b8244f108af0aaf34c32a61e97b66e38db682afc"
     path: ""
   vcs_processed:
@@ -4535,7 +4535,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/lydell/source-map-url.git"
+    url: "https://github.com/lydell/source-map-url.git"
     revision: "f13c43ca675379922f26c87737fdcbbeac07eb09"
     path: ""
   vcs_processed:
@@ -4565,7 +4565,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/split-string.git"
+    url: "https://github.com/jonschlinkert/split-string.git"
     revision: "2f83feb70267a54ca01e795e6a0558a51b89d6c8"
     path: ""
   vcs_processed:
@@ -4595,7 +4595,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/alexei/sprintf.js.git"
+    url: "https://github.com/alexei/sprintf.js.git"
     revision: "747b806c2dab5b64d5c9958c42884946a187c3b1"
     path: ""
   vcs_processed:
@@ -4627,7 +4627,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/static-extend.git"
+    url: "https://github.com/jonschlinkert/static-extend.git"
     revision: "ce41369391163eb9403848a1b4daf00be981c56b"
     path: ""
   vcs_processed:
@@ -4685,7 +4685,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "https://github.com/jonschlinkert/success-symbol"
+    url: "https://github.com/jonschlinkert/success-symbol.git"
     revision: ""
     path: ""
   vcs_processed:
@@ -4715,7 +4715,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/chalk/supports-color.git"
+    url: "https://github.com/chalk/supports-color.git"
     revision: "bcd82c998094535f3462a3e37856852938ccbb37"
     path: ""
   vcs_processed:
@@ -4746,7 +4746,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/rvagg/through2.git"
+    url: "https://github.com/rvagg/through2.git"
     revision: "72a3cefc0ff1ad5cc178be04eb927f40166226f1"
     path: ""
   vcs_processed:
@@ -4806,7 +4806,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/to-object-path.git"
+    url: "https://github.com/jonschlinkert/to-object-path.git"
     revision: "56f6627285b7f5b7563e6f3ffe3766d966368c17"
     path: ""
   vcs_processed:
@@ -4836,7 +4836,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/to-regex.git"
+    url: "https://github.com/jonschlinkert/to-regex.git"
     revision: "cc5735f98f62c8e9cfb98ae5b309abea1c8a2432"
     path: ""
   vcs_processed:
@@ -4868,7 +4868,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/tokenize-comment.git"
+    url: "https://github.com/jonschlinkert/tokenize-comment.git"
     revision: "9132c85a7ab4ac99ec8aafb7288928c55e2ee613"
     path: ""
   vcs_processed:
@@ -4899,7 +4899,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/union-value.git"
+    url: "https://github.com/jonschlinkert/union-value.git"
     revision: "ae70c7747afc57d6d868fd55f80041e623d2df6a"
     path: ""
   vcs_processed:
@@ -4929,7 +4929,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/unset-value.git"
+    url: "https://github.com/jonschlinkert/unset-value.git"
     revision: "36b62353cde18d6be17a1c0dc080fddcc262d2da"
     path: ""
   vcs_processed:
@@ -4959,7 +4959,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git://github.com/lydell/urix"
+    url: "https://github.com/lydell/urix.git"
     revision: ""
     path: ""
   vcs_processed:
@@ -4989,7 +4989,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/use.git"
+    url: "https://github.com/jonschlinkert/use.git"
     revision: "163104d5c5cc8ed35602625eb90a687df1dbc487"
     path: ""
   vcs_processed:
@@ -5049,7 +5049,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/gulpjs/vinyl.git"
+    url: "https://github.com/gulpjs/vinyl.git"
     revision: "09c5bf424cca072c2ee63a7d3c68d885923f173c"
     path: ""
   vcs_processed:
@@ -5079,7 +5079,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/npm/wrappy.git"
+    url: "https://github.com/npm/wrappy"
     revision: "71d91b6dc5bdeac37e218c2cf03f9ab55b60d214"
     path: ""
   vcs_processed:
@@ -5110,7 +5110,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/write.git"
+    url: "https://github.com/jonschlinkert/write.git"
     revision: "d8d4b0ef32860c9e6f406d301c5266242489f3ee"
     path: ""
   vcs_processed:

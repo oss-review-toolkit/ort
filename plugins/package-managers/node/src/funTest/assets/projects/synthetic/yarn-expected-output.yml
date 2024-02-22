@@ -128,7 +128,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/kriskowal/asap.git"
+    url: "https://github.com/kriskowal/asap.git"
     revision: "3e3d99381444379bb0483cb9216caa39ac67bebb"
     path: ""
   vcs_processed:
@@ -250,7 +250,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/bevry/cson.git"
+    url: "https://github.com/bevry/cson.git"
     revision: "0e913a90be66b2f29d2d75433b06ed52e83ba810"
     path: ""
   vcs_processed:
@@ -280,7 +280,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+ssh://git@github.com/groupon/cson-parser.git"
+    url: "git+ssh://git@github.com/groupon/cson-parser"
     revision: "fa37e04bc6c516eb76ef01df2d105a413c0253a0"
     path: ""
   vcs_processed:
@@ -342,7 +342,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: ""
-    url: "git+https://github.com/fb55/css-what.git"
+    url: "https://github.com/fb55/css-what"
     revision: "2db00ca221922c5b5131d798614aa043f2f6f80e"
     path: ""
   vcs_processed:
@@ -492,12 +492,12 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+ssh://git@github.com/bevry/eachr.git"
+    url: "http://github.com/bevry/eachr.git"
     revision: "57ef794d001c16fd906b2558137e8ea51c1f6330"
     path: ""
   vcs_processed:
     type: "Git"
-    url: "ssh://git@github.com/bevry/eachr.git"
+    url: "https://github.com/bevry/eachr.git"
     revision: "57ef794d001c16fd906b2558137e8ea51c1f6330"
     path: ""
 - id: "NPM::editions:1.3.4"
@@ -523,7 +523,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/bevry/editions.git"
+    url: "https://github.com/bevry/editions.git"
     revision: "5580800dc3935e988b7aa2cf8d571f3e9fa2d8f9"
     path: ""
   vcs_processed:
@@ -554,7 +554,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/bevry/editions.git"
+    url: "https://github.com/bevry/editions.git"
     revision: "84f536320f7eff6385e867d9f5c1de0dfb92fa88"
     path: ""
   vcs_processed:
@@ -615,7 +615,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/bevry/errlop.git"
+    url: "https://github.com/bevry/errlop.git"
     revision: "ca13727bd3a227cd937d104b3217d1cd778cc99b"
     path: ""
   vcs_processed:
@@ -645,12 +645,12 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+ssh://git@github.com/bevry/extract-opts.git"
+    url: "http://github.com/bevry/extract-opts.git"
     revision: "87e349bbf92a6f95d1ecc8b064a1631def105dc8"
     path: ""
   vcs_processed:
     type: "Git"
-    url: "ssh://git@github.com/bevry/extract-opts.git"
+    url: "https://github.com/bevry/extract-opts.git"
     revision: "87e349bbf92a6f95d1ecc8b064a1631def105dc8"
     path: ""
 - id: "NPM::graceful-fs:4.2.0"
@@ -673,7 +673,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/isaacs/node-graceful-fs.git"
+    url: "https://github.com/isaacs/node-graceful-fs"
     revision: "585df780323740a2b562677caa08a80de1f56c62"
     path: ""
   vcs_processed:
@@ -732,7 +732,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git://github.com/isaacs/inherits.git"
+    url: "git://github.com/isaacs/inherits"
     revision: "9a2c29400c6d491e0b7beefe0c32efa3b462545d"
     path: ""
   vcs_processed:
@@ -762,7 +762,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/lodash/lodash.git"
+    url: "https://github.com/lodash/lodash.git"
     revision: ""
     path: ""
   vcs_processed:
@@ -792,7 +792,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/dcodeIO/long.js.git"
+    url: "https://github.com/dcodeIO/long.js.git"
     revision: "8cdc1f74ced4f771aa844f1cbc565b1d4c4451b8"
     path: ""
   vcs_processed:
@@ -822,7 +822,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/fb55/nth-check.git"
+    url: "https://github.com/fb55/nth-check"
     revision: "03a02587bbd126fafc3d2331ffef6ea5cb2f9b66"
     path: ""
   vcs_processed:
@@ -883,7 +883,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/then/promise.git"
+    url: "https://github.com/then/promise.git"
     revision: "cebfa6049cc08843f428c6fc92dde918f8687e6d"
     path: ""
   vcs_processed:
@@ -911,7 +911,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git://github.com/nodejs/readable-stream.git"
+    url: "git://github.com/nodejs/readable-stream"
     revision: "4ba93f84cf8812ca2af793c7304a5c16de72088a"
     path: ""
   vcs_processed:
@@ -941,7 +941,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/bevry/requirefresh.git"
+    url: "https://github.com/bevry/requirefresh.git"
     revision: "f389cbc33b5891468bde8db479bc0f129b0fcc57"
     path: ""
   vcs_processed:
@@ -1002,12 +1002,12 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+ssh://git@github.com/bevry/safefs.git"
+    url: "http://github.com/bevry/safefs.git"
     revision: "51d15eaa03e53aaedd3002dc67814355073e8a55"
     path: ""
   vcs_processed:
     type: "Git"
-    url: "ssh://git@github.com/bevry/safefs.git"
+    url: "https://github.com/bevry/safefs.git"
     revision: "51d15eaa03e53aaedd3002dc67814355073e8a55"
     path: ""
 - id: "NPM::semver:5.7.0"
@@ -1030,7 +1030,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/npm/node-semver.git"
+    url: "https://github.com/npm/node-semver"
     revision: "8055dda0aee91372e3bfc47754a62f40e8a63b98"
     path: ""
   vcs_processed:
@@ -1089,7 +1089,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/bevry/typechecker.git"
+    url: "https://github.com/bevry/typechecker.git"
     revision: "69008d42927749d7e21cfe9816e478dd8d15ab88"
     path: ""
   vcs_processed:
