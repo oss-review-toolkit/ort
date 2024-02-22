@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.scanner.scanners
+package org.ossreviewtoolkit.scanner
 
 import io.kotest.core.Tag
 import io.kotest.core.spec.Spec
@@ -34,8 +34,6 @@ import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.scanner.PathScannerWrapper
-import org.ossreviewtoolkit.scanner.ScanContext
 
 abstract class AbstractPathScannerWrapperFunTest(testTags: Set<Tag> = emptySet()) : StringSpec() {
     protected val scannerConfig = ScannerConfiguration(archive = FileArchiverConfiguration(enabled = false))
