@@ -51,8 +51,8 @@ internal fun PythonInspector.Result.toOrtProject(
     return Project(
         id = id,
         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-        authors = projectData?.parties?.toAuthors() ?: emptySet(),
-        declaredLicenses = projectData?.declaredLicense?.getDeclaredLicenses() ?: emptySet(),
+        authors = projectData?.parties?.toAuthors().orEmpty(),
+        declaredLicenses = projectData?.declaredLicense?.getDeclaredLicenses().orEmpty(),
         vcs = VcsInfo.EMPTY,
         vcsProcessed = PackageManager.processProjectVcs(definitionFile.parentFile, VcsInfo.EMPTY, homepageUrl),
         homepageUrl = homepageUrl,
@@ -123,6 +123,7 @@ internal fun List<PythonInspector.Package>.toOrtPackages(): Set<Package> =
         // artifact. So take all metadata from the first package except for the artifacts.
         val pkg = packages.first()
 
+        @Suppress("UseOrEmpty")
         fun PythonInspector.Package.getHash(): Hash = Hash.create(sha512 ?: sha256 ?: sha1 ?: md5 ?: "")
 
         fun getArtifact(fileExtension: String) =
@@ -134,7 +135,7 @@ internal fun List<PythonInspector.Package>.toOrtPackages(): Set<Package> =
             } ?: RemoteArtifact.EMPTY
 
         val id = Identifier(type = TYPE, namespace = "", name = pkg.name, version = pkg.version)
-        val declaredLicenses = pkg.declaredLicense?.getDeclaredLicenses() ?: emptySet()
+        val declaredLicenses = pkg.declaredLicense?.getDeclaredLicenses().orEmpty()
         val declaredLicensesProcessed = processDeclaredLicenses(id, declaredLicenses)
 
         Package(

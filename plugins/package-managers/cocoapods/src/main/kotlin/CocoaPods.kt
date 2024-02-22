@@ -177,7 +177,7 @@ class CocoaPods(
         return Package(
             id = id,
             authors = emptySet(),
-            declaredLicenses = podspec.license.takeUnless { it.isEmpty() }?.let { setOf(it) } ?: emptySet(),
+            declaredLicenses = podspec.license.takeUnless { it.isEmpty() }?.let { setOf(it) }.orEmpty(),
             description = podspec.summary,
             homepageUrl = podspec.homepage,
             binaryArtifact = RemoteArtifact.EMPTY,
