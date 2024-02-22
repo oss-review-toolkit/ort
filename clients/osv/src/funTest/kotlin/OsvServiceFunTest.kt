@@ -53,9 +53,14 @@ private fun Vulnerability.patchIgnorableFields() =
         }
     )
 
+private fun Vulnerability.normalizeUrls(): Vulnerability {
+    val references = references.mapTo(mutableSetOf()) { it.copy(url = it.url.removeSuffix("/")) }
+    return copy(references = references)
+}
+
 private val emptyJsonObject = JsonObject(emptyMap())
 
-private fun List<Vulnerability>.patchIgnorableFields() = map { it.patchIgnorableFields() }
+private fun List<Vulnerability>.patchFields() = map { it.patchIgnorableFields().normalizeUrls() }
 
 class OsvServiceFunTest : StringSpec({
     "getVulnerabilitiesForPackage() returns the expected vulnerability when queried by commit" {
@@ -65,7 +70,7 @@ class OsvServiceFunTest : StringSpec({
 
         result.shouldBeSuccess { actualData ->
             val expectedData = OsvApiClient.JSON.decodeFromString<List<Vulnerability>>(expectedResult)
-            actualData.patchIgnorableFields() shouldContainExactlyInAnyOrder expectedData.patchIgnorableFields()
+            actualData.patchFields() shouldContainExactlyInAnyOrder expectedData.patchFields()
         }
     }
 
@@ -76,7 +81,7 @@ class OsvServiceFunTest : StringSpec({
 
         result.shouldBeSuccess { actualData ->
             val expectedData = OsvApiClient.JSON.decodeFromString<List<Vulnerability>>(expectedResult)
-            actualData.patchIgnorableFields() shouldContainExactlyInAnyOrder expectedData.patchIgnorableFields()
+            actualData.patchFields() shouldContainExactlyInAnyOrder expectedData.patchFields()
         }
     }
 
