@@ -32,12 +32,8 @@ import java.io.File
 
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.PackageType
-import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
-import org.ossreviewtoolkit.model.config.ScannerConfiguration
 
 abstract class AbstractPathScannerWrapperFunTest(testTags: Set<Tag> = emptySet()) : StringSpec() {
-    protected val scannerConfig = ScannerConfiguration(archive = FileArchiverConfiguration(enabled = false))
-
     // This is loosely based on the patterns from
     // https://github.com/licensee/licensee/blob/6c0f803/lib/licensee/project_files/license_file.rb#L6-L43.
     private val commonlyDetectedFiles = listOf("LICENSE", "LICENCE", "COPYING")
