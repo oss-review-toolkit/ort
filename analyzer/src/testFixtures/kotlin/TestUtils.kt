@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.analyzer.managers
+package org.ossreviewtoolkit.analyzer
 
 import io.kotest.core.spec.Spec
 import io.kotest.inspectors.forAll
@@ -29,11 +29,6 @@ import io.kotest.matchers.should
 import java.io.File
 import java.time.Instant
 
-import org.ossreviewtoolkit.analyzer.Analyzer
-import org.ossreviewtoolkit.analyzer.AnalyzerResultBuilder
-import org.ossreviewtoolkit.analyzer.PackageManager
-import org.ossreviewtoolkit.analyzer.PackageManagerFactory
-import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.DependencyTreeNavigator

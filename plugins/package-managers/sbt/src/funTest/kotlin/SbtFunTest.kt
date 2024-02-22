@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.plugins.packagemanagers.sbt
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.analyzer.managers.analyze
+import org.ossreviewtoolkit.analyzer.analyze
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.Git
 import org.ossreviewtoolkit.utils.test.getAssetFile

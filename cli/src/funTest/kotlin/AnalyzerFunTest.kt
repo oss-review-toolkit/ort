@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit
 
 import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.analyzer.PackageManagerFactory
-import org.ossreviewtoolkit.analyzer.managers.analyze
+import org.ossreviewtoolkit.analyzer.analyze
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType

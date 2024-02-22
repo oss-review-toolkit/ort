@@ -29,8 +29,8 @@ import io.kotest.matchers.string.haveSubstring
 
 import java.io.File
 
-import org.ossreviewtoolkit.analyzer.managers.create
-import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
+import org.ossreviewtoolkit.analyzer.create
+import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.VcsInfo

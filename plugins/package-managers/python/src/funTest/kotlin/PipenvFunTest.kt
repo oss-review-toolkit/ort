@@ -22,8 +22,8 @@ package org.ossreviewtoolkit.plugins.packagemanagers.python
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.should
 
-import org.ossreviewtoolkit.analyzer.managers.create
-import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
+import org.ossreviewtoolkit.analyzer.create
+import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult

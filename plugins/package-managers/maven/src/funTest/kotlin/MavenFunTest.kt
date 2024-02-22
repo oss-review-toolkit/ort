@@ -24,9 +24,9 @@ import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 
-import org.ossreviewtoolkit.analyzer.managers.create
-import org.ossreviewtoolkit.analyzer.managers.resolveScopes
-import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
+import org.ossreviewtoolkit.analyzer.create
+import org.ossreviewtoolkit.analyzer.resolveScopes
+import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively

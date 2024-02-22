@@ -28,9 +28,9 @@ import io.kotest.matchers.maps.haveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.analyzer.managers.analyze
-import org.ossreviewtoolkit.analyzer.managers.create
-import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
+import org.ossreviewtoolkit.analyzer.analyze
+import org.ossreviewtoolkit.analyzer.create
+import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Project
