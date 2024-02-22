@@ -130,6 +130,10 @@ tasks.withType<Detekt>().configureEach detekt@{
 
     dependsOn(":detekt-rules:assemble")
 
+    exclude {
+        "/build/generated/" in it.file.absolutePath
+    }
+
     reports {
         html.required = false
 
