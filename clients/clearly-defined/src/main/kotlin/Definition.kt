@@ -17,15 +17,12 @@
  * License-Filename: LICENSE
  */
 
-@file:UseSerializers(FileSerializer::class, URISerializer::class)
-
 package org.ossreviewtoolkit.clients.clearlydefined
 
-import java.io.File
-import java.net.URI
+import io.ks3.java.`typealias`.FileAsString
+import io.ks3.java.`typealias`.UriAsString
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UseSerializers
 
 /**
  * See https://github.com/clearlydefined/service/blob/b339cb7/schemas/definition-1.0.json#L48-L61.
@@ -50,7 +47,7 @@ data class FinalScore(
  */
 @Serializable
 data class FileEntry(
-    val path: File,
+    val path: FileAsString,
     val license: String? = null,
     val attributions: List<String>? = null,
     val facets: List<String>? = null,
@@ -80,8 +77,8 @@ data class Described(
     val facets: CurationFacets? = null,
     val sourceLocation: SourceLocation? = null,
     val urls: URLs? = null,
-    val projectWebsite: URI? = null,
-    val issueTracker: URI? = null,
+    val projectWebsite: UriAsString? = null,
+    val issueTracker: UriAsString? = null,
     val releaseDate: String? = null,
     val hashes: Hashes? = null,
     val files: Int? = null,
@@ -116,9 +113,9 @@ data class LicensedScore(
  */
 @Serializable
 data class URLs(
-    val registry: URI? = null,
-    val version: URI? = null,
-    val download: URI? = null
+    val registry: UriAsString? = null,
+    val version: UriAsString? = null,
+    val download: UriAsString? = null
 )
 
 /**

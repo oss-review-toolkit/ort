@@ -36,6 +36,7 @@ kotest = "5.8.0"
 kotlinxCoroutines = "1.8.0"
 kotlinxHtml = "0.11.0"
 kotlinxSerialization = "1.6.3"
+ks3 = "0.5.0"
 tomlkt = "0.3.7"
 ktor = "2.3.8"
 log4jApi = "2.23.0"
@@ -129,6 +130,8 @@ kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core",
 kotlinx-html = { module = "org.jetbrains.kotlinx:kotlinx-html-jvm", version.ref = "kotlinxHtml" }
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerialization" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
+ks3-jdk = { module = "io.ks3:ks3-jdk", version.ref = "ks3" }
+ks3-standard = { module = "io.ks3:ks3-standard", version.ref = "ks3" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-okHttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 log4j-api = { module = "org.apache.logging.log4j:log4j-api", version.ref = "log4jApi" }
@@ -169,4 +172,5 @@ xz = { module = "org.tukaani:xz", version.ref = "xz" }
 exposed = ["exposed-core", "exposed-dao", "exposed-jdbc", "exposed-javaTime", "exposed-json"]
 hoplite = ["hoplite-core", "hoplite-yaml"]
 kotlinxSerialization = ["kotlinx-serialization-core", "kotlinx-serialization-json"]
+ks3 = ["ks3-jdk", "ks3-standard"]
 mavenResolver = ["maven-resolver-connector-basic", "maven-resolver-transport-file", "maven-resolver-transport-http", "maven-resolver-transport-wagon"]

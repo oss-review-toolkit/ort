@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.clients.osv
 
-import java.time.Instant
+import io.ks3.java.`typealias`.InstantAsString
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -46,12 +46,9 @@ import kotlinx.serialization.json.JsonObject
 data class Vulnerability(
     val schemaVersion: String = "1.0.0",
     val id: String,
-    @Serializable(InstantSerializer::class)
-    val modified: Instant,
-    @Serializable(InstantSerializer::class)
-    val published: Instant? = null,
-    @Serializable(InstantSerializer::class)
-    val withdrawn: Instant? = null,
+    val modified: InstantAsString,
+    val published: InstantAsString? = null,
+    val withdrawn: InstantAsString? = null,
     val aliases: Set<String> = emptySet(),
     val related: Set<String> = emptySet(),
     val summary: String? = null,

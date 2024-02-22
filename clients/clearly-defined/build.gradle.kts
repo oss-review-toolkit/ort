@@ -30,6 +30,7 @@ dependencies {
     api(libs.retrofit)
 
     implementation(libs.bundles.kotlinxSerialization)
+    implementation(libs.bundles.ks3)
     implementation(libs.kotlinx.coroutines)
     implementation(libs.retrofit.converter.kotlinxSerialization)
     implementation(libs.retrofit.converter.scalars)

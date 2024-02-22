@@ -17,15 +17,12 @@
  * License-Filename: LICENSE
  */
 
-@file:UseSerializers(FileSerializer::class, URISerializer::class)
-
 package org.ossreviewtoolkit.clients.clearlydefined
 
-import java.io.File
-import java.net.URI
+import io.ks3.java.`typealias`.FileAsString
+import io.ks3.java.`typealias`.UriAsString
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UseSerializers
 import kotlinx.serialization.json.JsonElement
 
 @Serializable
@@ -51,8 +48,8 @@ data class Curation(
 data class CurationDescribed(
     val facets: CurationFacets? = null,
     val sourceLocation: SourceLocation? = null,
-    val projectWebsite: URI? = null,
-    val issueTracker: URI? = null,
+    val projectWebsite: UriAsString? = null,
+    val issueTracker: UriAsString? = null,
     val releaseDate: String? = null
 )
 
@@ -81,7 +78,7 @@ data class CurationLicensed(
  */
 @Serializable
 data class CurationFileEntry(
-    val path: File,
+    val path: FileAsString,
     val license: String? = null,
     val attributions: List<String>? = null
 )

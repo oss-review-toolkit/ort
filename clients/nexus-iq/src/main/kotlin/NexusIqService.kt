@@ -21,14 +21,11 @@ package org.ossreviewtoolkit.clients.nexusiq
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 
-import java.net.URI
+import io.ks3.java.`typealias`.UriAsString
+
 import java.util.UUID
 
-import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Serializer
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
 
 import okhttp3.Credentials
@@ -40,12 +37,6 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
-
-@Serializer(URI::class)
-object URISerializer : KSerializer<URI> {
-    override fun serialize(encoder: Encoder, value: URI) = encoder.encodeString(value.toString())
-    override fun deserialize(decoder: Decoder) = URI(decoder.decodeString())
-}
 
 /**
  * Interface for the NexusIQ REST API, based on the documentation from
@@ -120,7 +111,7 @@ interface NexusIqService {
         val source: String,
         val reference: String,
         val severity: Float,
-        @Serializable(URISerializer::class) val url: URI?,
+        val url: UriAsString?,
         val threatCategory: String
     ) {
         // See https://guides.sonatype.com/iqserver/technical-guides/sonatype-vuln-data/#how-is-a-vulnerability-score-severity-calculated.

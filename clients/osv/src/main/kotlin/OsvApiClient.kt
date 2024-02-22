@@ -21,7 +21,8 @@ package org.ossreviewtoolkit.clients.osv
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 
-import java.time.Instant
+import io.ks3.java.`typealias`.InstantAsString
+
 import java.util.concurrent.Executors
 
 import kotlinx.serialization.SerialName
@@ -138,8 +139,7 @@ data class VulnerabilitiesForPackageBatchResponse(
     @Serializable
     data class Id(
         val id: String,
-        @Serializable(InstantSerializer::class)
-        val modified: Instant
+        val modified: InstantAsString
     )
 }
 
