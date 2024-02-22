@@ -126,9 +126,9 @@ class NpmFunTest : WordSpec({
             val expectedResult = patchExpectedResult(expectedResultFile, definitionFile)
                 .fromYaml<ProjectAnalyzerResult>()
 
-            val actualResult = create("NPM").resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = create("NPM").resolveSingleProject(definitionFile, resolveScopes = true)
 
-            actualResult.withInvariantIssues() shouldBe expectedResult.withInvariantIssues()
+            result.withInvariantIssues() shouldBe expectedResult.withInvariantIssues()
         }
     }
 })
