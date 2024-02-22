@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.analyzer
 
-import io.kotest.core.spec.Spec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.collections.shouldHaveAtLeastSize
@@ -122,7 +121,7 @@ fun ProjectAnalyzerResult.withInvariantIssues() =
         issues = issues.sortedBy { it.message }.map { it.copy(timestamp = Instant.EPOCH) }
     )
 
-fun Spec.analyze(
+fun analyze(
     projectDir: File,
     allowDynamicVersions: Boolean = false,
     packageManagers: Collection<PackageManagerFactory> = PackageManagerFactory.ENABLED_BY_DEFAULT
@@ -134,13 +133,13 @@ fun Spec.analyze(
     return analyzer.analyze(managedFiles).withResolvedScopes()
 }
 
-fun Spec.create(
+fun create(
     managerName: String,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration = RepositoryConfiguration()
 ) = PackageManagerFactory.ALL.getValue(managerName).create(USER_DIR, analyzerConfig, repoConfig)
 
-fun Spec.create(
+fun create(
     managerName: String,
     vararg options: Pair<String, String>,
     allowDynamicVersions: Boolean = false,
