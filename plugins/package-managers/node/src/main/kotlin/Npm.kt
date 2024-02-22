@@ -329,7 +329,9 @@ open class Npm(
                         }
                     }
 
-                    vcsFromPackage = parseNpmVcsInfo(details)
+                    // Do not replace but merge, because it happens that `package.json` has VCS info while
+                    // `npm view` doesn't, for example for dependencies hosted on GitLab package registry.
+                    vcsFromPackage = vcsFromPackage.merge(parseNpmVcsInfo(details))
                 }.onFailure { e ->
                     logger.debug { "Unable to get package details from a remote registry: ${e.collectMessages()}" }
                 }

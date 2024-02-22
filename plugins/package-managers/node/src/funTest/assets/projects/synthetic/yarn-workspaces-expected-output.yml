@@ -49,7 +49,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/bitinn/node-fetch.git"
+    url: "https://github.com/bitinn/node-fetch.git"
     revision: "95286f52bb866283bc69521a04efe1de37b26a33"
     path: ""
   vcs_processed:
@@ -107,7 +107,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/heremaps/harp.gl.git"
+    url: "https://github.com/heremaps/harp.gl.git"
     revision: "0c2857f958a34ef7638384afada4fceec427d48d"
     path: "@here/harp-fetch"
   vcs_processed:
@@ -137,7 +137,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/heremaps/harp.gl.git"
+    url: "https://github.com/heremaps/harp.gl.git"
     revision: "ce42b2ce221de76b25ef8aea54f50ff007da2664"
     path: "@here/harp-fetch"
   vcs_processed:
