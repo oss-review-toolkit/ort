@@ -19,15 +19,9 @@
 
 package org.ossreviewtoolkit.clients.osv
 
-import java.time.Instant
-import java.time.format.DateTimeFormatter
-
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.Serializer
-import kotlinx.serialization.descriptors.PrimitiveKind
-import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
-import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.JsonDecoder
@@ -62,20 +56,5 @@ internal object EventSerializer : KSerializer<Event> {
         val tree = JsonObject(mapOf(value.type.name.lowercase() to JsonPrimitive(value.value)))
 
         output.encodeJsonElement(tree)
-    }
-}
-
-/**
- * Handle RFC3339 formatted strings with a 'Z' as suffix.
- */
-internal object InstantSerializer : KSerializer<Instant> {
-    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor(javaClass.canonicalName, PrimitiveKind.STRING)
-
-    override fun serialize(encoder: Encoder, value: Instant) {
-        encoder.encodeString(value.toString())
-    }
-
-    override fun deserialize(decoder: Decoder): Instant {
-        return DateTimeFormatter.ISO_ZONED_DATE_TIME.parse(decoder.decodeString(), Instant::from)
     }
 }
