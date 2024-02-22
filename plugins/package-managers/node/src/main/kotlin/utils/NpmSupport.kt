@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.packagemanagers.node.utils
 import com.fasterxml.jackson.databind.JsonNode
 
 import org.ossreviewtoolkit.analyzer.parseAuthorString
+import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
@@ -153,15 +154,22 @@ internal fun parseNpmVcsInfo(node: JsonNode): VcsInfo {
         revision = head
     )
 
-    val type = repository["type"].textValueOrEmpty()
-    val url = repository.textValue() ?: repository["url"].textValueOrEmpty()
+    if (repository.isTextual) {
+        val url = expandNpmShortcutUrl(repository.textValue())
+        val vcsInfo = VcsHost.parseUrl(url)
+        return vcsInfo.copy(revision = head.takeIf { it.isSha1() } ?: vcsInfo.revision.takeIf { it.isSha1() }.orEmpty())
+    }
+
+    val type = VcsType.forName(repository["type"].textValueOrEmpty()).takeUnless { it == VcsType.UNKNOWN }
+    val url = expandNpmShortcutUrl(repository["url"].textValueOrEmpty())
     val path = repository["directory"].textValueOrEmpty()
+    val vcsInfo = VcsHost.parseUrl(url)
 
     return VcsInfo(
-        type = VcsType.forName(type),
+        type = type ?: vcsInfo.type,
         url = expandNpmShortcutUrl(url),
-        revision = head,
-        path = path
+        revision = head.takeIf { it.isSha1() } ?: vcsInfo.revision.takeIf { it.isSha1() }.orEmpty(),
+        path = path.takeIf { it.isNotBlank() } ?: vcsInfo.path
     )
 }
 
@@ -173,3 +181,7 @@ internal fun splitNpmNamespaceAndName(rawName: String): Pair<String, String> {
     val namespace = rawName.removeSuffix(name).removeSuffix("/")
     return Pair(namespace, name)
 }
+
+private val SHA1_REGEX = "[0-9a-f]{7,40}".toRegex()
+
+private fun String.isSha1(): Boolean = SHA1_REGEX.matches(this.lowercase())

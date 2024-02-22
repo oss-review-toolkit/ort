@@ -2552,13 +2552,13 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "https://github.com/babel/babel/tree/master/packages/babel-cli"
+    url: "https://github.com/babel/babel.git"
     revision: ""
-    path: ""
+    path: "packages/babel-cli"
   vcs_processed:
     type: "Git"
     url: "https://github.com/babel/babel.git"
-    revision: "master"
+    revision: ""
     path: "packages/babel-cli"
 - id: "NPM::babel-code-frame:6.26.0"
   purl: "pkg:npm/babel-code-frame@6.26.0"
@@ -2582,13 +2582,13 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "https://github.com/babel/babel/tree/master/packages/babel-code-frame"
+    url: "https://github.com/babel/babel.git"
     revision: ""
-    path: ""
+    path: "packages/babel-code-frame"
   vcs_processed:
     type: "Git"
     url: "https://github.com/babel/babel.git"
-    revision: "master"
+    revision: ""
     path: "packages/babel-code-frame"
 - id: "NPM::babel-core:6.26.3"
   purl: "pkg:npm/babel-core@6.26.3"
@@ -2612,13 +2612,13 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "https://github.com/babel/babel/tree/master/packages/babel-core"
+    url: "https://github.com/babel/babel.git"
     revision: ""
-    path: ""
+    path: "packages/babel-core"
   vcs_processed:
     type: "Git"
     url: "https://github.com/babel/babel.git"
-    revision: "master"
+    revision: ""
     path: "packages/babel-core"
 - id: "NPM::babel-generator:6.26.1"
   purl: "pkg:npm/babel-generator@6.26.1"
@@ -2642,13 +2642,13 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "https://github.com/babel/babel/tree/master/packages/babel-generator"
+    url: "https://github.com/babel/babel.git"
     revision: ""
-    path: ""
+    path: "packages/babel-generator"
   vcs_processed:
     type: "Git"
     url: "https://github.com/babel/babel.git"
-    revision: "master"
+    revision: ""
     path: "packages/babel-generator"
 - id: "NPM::babel-helpers:6.24.1"
   purl: "pkg:npm/babel-helpers@6.24.1"
@@ -2672,13 +2672,13 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "https://github.com/babel/babel/tree/master/packages/babel-helpers"
+    url: "https://github.com/babel/babel.git"
     revision: ""
-    path: ""
+    path: "packages/babel-helpers"
   vcs_processed:
     type: "Git"
     url: "https://github.com/babel/babel.git"
-    revision: "master"
+    revision: ""
     path: "packages/babel-helpers"
 - id: "NPM::babel-messages:6.23.0"
   purl: "pkg:npm/babel-messages@6.23.0"
@@ -2702,13 +2702,13 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "https://github.com/babel/babel/tree/master/packages/babel-messages"
+    url: "https://github.com/babel/babel.git"
     revision: ""
-    path: ""
+    path: "packages/babel-messages"
   vcs_processed:
     type: "Git"
     url: "https://github.com/babel/babel.git"
-    revision: "master"
+    revision: ""
     path: "packages/babel-messages"
 - id: "NPM::babel-polyfill:6.26.0"
   purl: "pkg:npm/babel-polyfill@6.26.0"
@@ -2732,13 +2732,13 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "https://github.com/babel/babel/tree/master/packages/babel-polyfill"
+    url: "https://github.com/babel/babel.git"
     revision: ""
-    path: ""
+    path: "packages/babel-polyfill"
   vcs_processed:
     type: "Git"
     url: "https://github.com/babel/babel.git"
-    revision: "master"
+    revision: ""
     path: "packages/babel-polyfill"
 - id: "NPM::babel-register:6.26.0"
   purl: "pkg:npm/babel-register@6.26.0"
@@ -2762,13 +2762,13 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "https://github.com/babel/babel/tree/master/packages/babel-register"
+    url: "https://github.com/babel/babel.git"
     revision: ""
-    path: ""
+    path: "packages/babel-register"
   vcs_processed:
     type: "Git"
     url: "https://github.com/babel/babel.git"
-    revision: "master"
+    revision: ""
     path: "packages/babel-register"
 - id: "NPM::babel-runtime:6.26.0"
   purl: "pkg:npm/babel-runtime@6.26.0"
@@ -2792,13 +2792,13 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "https://github.com/babel/babel/tree/master/packages/babel-runtime"
+    url: "https://github.com/babel/babel.git"
     revision: ""
-    path: ""
+    path: "packages/babel-runtime"
   vcs_processed:
     type: "Git"
     url: "https://github.com/babel/babel.git"
-    revision: "master"
+    revision: ""
     path: "packages/babel-runtime"
 - id: "NPM::babel-template:6.26.0"
   purl: "pkg:npm/babel-template@6.26.0"
@@ -2822,13 +2822,13 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "https://github.com/babel/babel/tree/master/packages/babel-template"
+    url: "https://github.com/babel/babel.git"
     revision: ""
-    path: ""
+    path: "packages/babel-template"
   vcs_processed:
     type: "Git"
     url: "https://github.com/babel/babel.git"
-    revision: "master"
+    revision: ""
     path: "packages/babel-template"
 - id: "NPM::babel-traverse:6.26.0"
   purl: "pkg:npm/babel-traverse@6.26.0"
@@ -2853,13 +2853,13 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "https://github.com/babel/babel/tree/master/packages/babel-traverse"
+    url: "https://github.com/babel/babel.git"
     revision: ""
-    path: ""
+    path: "packages/babel-traverse"
   vcs_processed:
     type: "Git"
     url: "https://github.com/babel/babel.git"
-    revision: "master"
+    revision: ""
     path: "packages/babel-traverse"
 - id: "NPM::babel-types:6.26.0"
   purl: "pkg:npm/babel-types@6.26.0"
@@ -2883,13 +2883,13 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "https://github.com/babel/babel/tree/master/packages/babel-types"
+    url: "https://github.com/babel/babel.git"
     revision: ""
-    path: ""
+    path: "packages/babel-types"
   vcs_processed:
     type: "Git"
     url: "https://github.com/babel/babel.git"
-    revision: "master"
+    revision: ""
     path: "packages/babel-types"
 - id: "NPM::babylon:6.18.0"
   purl: "pkg:npm/babylon@6.18.0"
@@ -2913,7 +2913,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "https://github.com/babel/babylon"
+    url: "https://github.com/babel/babylon.git"
     revision: "da66d3f65b0d305c0bb042873d57f26f0c0b0538"
     path: ""
   vcs_processed:
@@ -4577,7 +4577,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git://github.com/isaacs/inherits"
+    url: "git://github.com/isaacs/inherits.git"
     revision: "9a2c29400c6d491e0b7beefe0c32efa3b462545d"
     path: ""
   vcs_processed:
@@ -4607,7 +4607,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "https://github.com/zertosh/invariant"
+    url: "https://github.com/zertosh/invariant.git"
     revision: "ce95a9badeee1c97daff1bca0d1f6cec5dda4fe8"
     path: ""
   vcs_processed:
@@ -6615,7 +6615,7 @@ packages:
     type: "Git"
     url: "https://github.com/facebook/regenerator/tree/master/packages/regenerator-runtime"
     revision: ""
-    path: ""
+    path: "packages/regenerator-runtime"
   vcs_processed:
     type: "Git"
     url: "https://github.com/facebook/regenerator.git"
@@ -6645,7 +6645,7 @@ packages:
     type: "Git"
     url: "https://github.com/facebook/regenerator/tree/master/packages/regenerator-runtime"
     revision: ""
-    path: ""
+    path: "packages/regenerator-runtime"
   vcs_processed:
     type: "Git"
     url: "https://github.com/facebook/regenerator.git"

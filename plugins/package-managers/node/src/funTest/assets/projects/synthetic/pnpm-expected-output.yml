@@ -350,7 +350,7 @@ packages:
       value: "a6d7604573365fe74686c3f311c56513d88285f2"
       algorithm: "SHA-1"
   vcs:
-    type: ""
+    type: "Git"
     url: "https://github.com/fb55/css-what"
     revision: "2db00ca221922c5b5131d798614aa043f2f6f80e"
     path: ""
@@ -710,7 +710,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git://github.com/isaacs/inherits"
+    url: "git://github.com/isaacs/inherits.git"
     revision: "9a2c29400c6d491e0b7beefe0c32efa3b462545d"
     path: ""
   vcs_processed:
@@ -1008,7 +1008,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "https://github.com/npm/node-semver"
+    url: "https://github.com/npm/node-semver.git"
     revision: "0eeceecfba490d136eb3ccae3a8dc118a28565a0"
     path: ""
   vcs_processed:
