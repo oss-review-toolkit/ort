@@ -147,21 +147,21 @@ internal fun parseNpmVcsInfo(node: JsonNode): VcsInfo {
     // See https://github.com/npm/read-package-json/issues/7 for some background info.
     val head = node["gitHead"].textValueOrEmpty()
 
-    return node["repository"]?.let { repo ->
-        val type = repo["type"].textValueOrEmpty()
-        val url = repo.textValue() ?: repo["url"].textValueOrEmpty()
-        val path = repo["directory"].textValueOrEmpty()
-
-        VcsInfo(
-            type = VcsType.forName(type),
-            url = expandNpmShortcutUrl(url),
-            revision = head,
-            path = path
-        )
-    } ?: VcsInfo(
+    val repository = node["repository"] ?: return VcsInfo(
         type = VcsType.UNKNOWN,
         url = "",
         revision = head
+    )
+
+    val type = repository["type"].textValueOrEmpty()
+    val url = repository.textValue() ?: repository["url"].textValueOrEmpty()
+    val path = repository["directory"].textValueOrEmpty()
+
+    return VcsInfo(
+        type = VcsType.forName(type),
+        url = expandNpmShortcutUrl(url),
+        revision = head,
+        path = path
     )
 }
 
