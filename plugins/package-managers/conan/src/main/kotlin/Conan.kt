@@ -488,5 +488,5 @@ class Conan(
      * author name; otherwise, return an empty set.
      */
     private fun parseAuthors(node: JsonNode): Set<String> =
-        parseAuthorString(node["author"]?.textValue(), '<', '(')?.let { setOf(it) }.orEmpty()
+        setOfNotNull(parseAuthorString(node["author"]?.textValue(), '<', '('))
 }
