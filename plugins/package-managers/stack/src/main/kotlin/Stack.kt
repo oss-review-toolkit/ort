@@ -347,7 +347,7 @@ class Stack(
                 .map(String::trim)
                 .filter(String::isNotEmpty)
                 .mapNotNullTo(mutableSetOf(), ::parseAuthorString),
-            declaredLicenses = map["license"]?.let { setOf(it) }.orEmpty(),
+            declaredLicenses = setOfNotNull(map["license"]),
             description = map["description"].orEmpty(),
             homepageUrl = homepageUrl,
             binaryArtifact = RemoteArtifact.EMPTY,
