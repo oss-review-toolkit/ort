@@ -214,7 +214,7 @@ packages:
       value: "a6d7604573365fe74686c3f311c56513d88285f2"
       algorithm: "SHA-1"
   vcs:
-    type: ""
+    type: "Git"
     url: "git+https://github.com/fb55/css-what.git"
     revision: "2db00ca221922c5b5131d798614aa043f2f6f80e"
     path: ""

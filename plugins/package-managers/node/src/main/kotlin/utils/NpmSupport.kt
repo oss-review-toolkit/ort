@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.packagemanagers.node.utils
 import com.fasterxml.jackson.databind.JsonNode
 
 import org.ossreviewtoolkit.analyzer.parseAuthorString
+import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
@@ -147,21 +148,28 @@ internal fun parseNpmVcsInfo(node: JsonNode): VcsInfo {
     // See https://github.com/npm/read-package-json/issues/7 for some background info.
     val head = node["gitHead"].textValueOrEmpty()
 
-    return node["repository"]?.let { repo ->
-        val type = repo["type"].textValueOrEmpty()
-        val url = repo.textValue() ?: repo["url"].textValueOrEmpty()
-        val path = repo["directory"].textValueOrEmpty()
-
-        VcsInfo(
-            type = VcsType.forName(type),
-            url = expandNpmShortcutUrl(url),
-            revision = head,
-            path = path
-        )
-    } ?: VcsInfo(
+    val repository = node["repository"] ?: return VcsInfo(
         type = VcsType.UNKNOWN,
         url = "",
         revision = head
+    )
+
+    if (repository.isTextual) {
+        val url = expandNpmShortcutUrl(repository.textValue())
+        val vcsInfo = VcsHost.parseUrl(url)
+        return vcsInfo.copy(revision = head.takeIf { it.isSha1() } ?: vcsInfo.revision.takeIf { it.isSha1() }.orEmpty())
+    }
+
+    val type = VcsType.forName(repository["type"].textValueOrEmpty()).takeUnless { it == VcsType.UNKNOWN }
+    val url = expandNpmShortcutUrl(repository["url"].textValueOrEmpty())
+    val path = repository["directory"].textValueOrEmpty()
+    val vcsInfo = VcsHost.parseUrl(url)
+
+    return VcsInfo(
+        type = type ?: vcsInfo.type,
+        url = expandNpmShortcutUrl(url),
+        revision = head.takeIf { it.isSha1() } ?: vcsInfo.revision.takeIf { it.isSha1() }.orEmpty(),
+        path = path.takeIf { it.isNotBlank() } ?: vcsInfo.path
     )
 }
 
@@ -173,3 +181,7 @@ internal fun splitNpmNamespaceAndName(rawName: String): Pair<String, String> {
     val namespace = rawName.removeSuffix(name).removeSuffix("/")
     return Pair(namespace, name)
 }
+
+private val SHA1_REGEX = "[0-9a-f]{7,40}".toRegex()
+
+private fun String.isSha1(): Boolean = SHA1_REGEX.matches(this.lowercase())

@@ -2388,7 +2388,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git://github.com/isaacs/inherits"
+    url: "git://github.com/isaacs/inherits.git"
     revision: "9a2c29400c6d491e0b7beefe0c32efa3b462545d"
     path: ""
   vcs_processed:
