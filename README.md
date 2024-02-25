@@ -31,7 +31,7 @@
 
 # Introduction
 
-The OSS Review Toolkit (ORT) is a FOSS policy automation and orchestration toolkit which you can use to manage your (open source) software dependencies in a strategic, safe and efficient manner.
+The OSS Review Toolkit (ORT) is a FOSS policy automation and orchestration toolkit that you can use to manage your (open source) software dependencies in a strategic, safe and efficient manner.
 
 You can use it to:
 
@@ -40,22 +40,29 @@ You can use it to:
 * Create a source code archive for your software project and its dependencies to comply with certain licenses or have your own copy as nothing on the internet is forever
 * Correct package metadata or licensing findings yourself, using InnerSource or with the help of the FOSS community
 
-ORT can be used as library (for programmatic use), via a command line interface (for scripted use), or via its CI integrations.
+ORT can be used as a library (for programmatic use), via a command line interface (for scripted use), or via its CI integrations.
 It consists of the following tools which can be combined into a *highly customizable* pipeline:
 
-* [*Analyzer*](https://oss-review-toolkit.org/ort/docs/tools/analyzer) - determines the dependencies of projects and their metadata, abstracting which package managers or build systems are actually being used.
-* [*Downloader*](https://oss-review-toolkit.org/ort/docs/tools/downloader) - fetches all source code of the projects and their dependencies, abstracting which Version Control System (VCS) or other means are used to retrieve the source code.
-* [*Scanner*](https://oss-review-toolkit.org/ort/docs/tools/scanner) - uses configured source code scanners to detect license / copyright findings, abstracting the type of scanner.
-* [*Advisor*](https://oss-review-toolkit.org/ort/docs/tools/advisor) - retrieves security advisories for used dependencies from configured vulnerability data services.
-* [*Evaluator*](https://oss-review-toolkit.org/ort/docs/tools/evaluator) - evaluates custom policy rules along with custom license classifications against the data gathered in preceding stages and returns a list of policy violations, e.g. to flag license findings.
-* [*Reporter*](https://oss-review-toolkit.org/ort/docs/tools/reporter) - presents results in various formats such as visual reports, Open Source notices or Bill-Of-Materials (BOMs) to easily identify dependencies, licenses, copyrights or policy rule violations.
-* *Notifier* - sends result notifications via different channels (like [emails](./examples/example.notifications.kts) and / or JIRA tickets).
+* [*Analyzer*](https://oss-review-toolkit.org/ort/docs/tools/analyzer):
+  Determines the dependencies of projects and their metadata, abstracting which package managers or build systems are actually being used.
+* [*Downloader*](https://oss-review-toolkit.org/ort/docs/tools/downloader):
+  Fetches all source code of the projects and their dependencies, abstracting which Version Control System (VCS) or other means are used to retrieve the source code.
+* [*Scanner*](https://oss-review-toolkit.org/ort/docs/tools/scanner):
+  Uses configured source code scanners to detect license / copyright findings, abstracting the type of scanner.
+* [*Advisor*](https://oss-review-toolkit.org/ort/docs/tools/advisor):
+  Retrieves security advisories for used dependencies from configured vulnerability data services.
+* [*Evaluator*](https://oss-review-toolkit.org/ort/docs/tools/evaluator):
+  Evaluates custom policy rules along with custom license classifications against the data gathered in preceding stages and returns a list of policy violations, e.g. to flag license findings.
+* [*Reporter*](https://oss-review-toolkit.org/ort/docs/tools/reporter):
+  Presents results in various formats such as visual reports, Open Source notices or Bill-Of-Materials (BOMs) to easily identify dependencies, licenses, copyrights or policy rule violations.
+* *Notifier*:
+  Sends result notifications via different channels (like [emails](./examples/example.notifications.kts) and / or JIRA tickets).
 
 Also see the [list of related tools](https://oss-review-toolkit.org/ort/docs/related-tools) that help with running ORT.
 
 ## Documentation
 
-For detailed information see the documentation on the [ORT Website](https://oss-review-toolkit.org/ort/).
+For detailed information, see the documentation on the [ORT Website](https://oss-review-toolkit.org/ort/).
 
 # Installation
 
@@ -71,7 +78,7 @@ Memory and CPU requirements vary depending on the size and type of project(s) to
 export JAVA_OPTS="$JAVA_OPTS -Xmx8g"
 ```
 
-If ORT requires external tools in order to analyze a project, these tools are listed by the `ort requirements` command.
+If ORT requires external tools to analyze a project, these tools are listed by the `ort requirements` command.
 If a package manager is not list listed there, support for it is integrated directly into ORT and does not require any external tools to be installed.
 
 ## From binaries
@@ -141,7 +148,8 @@ Depending on how ORT was installed, it can be run in the following ways:
 # Want to Help or have Questions?
 
 All contributions are welcome.
-If you are interested in contributing, please read our [contributing guide](https://github.com/oss-review-toolkit/.github/blob/main/CONTRIBUTING.md), and to get quick answers to any of your questions we recommend you [join our Slack community][2].
+If you are interested in contributing, please read our [contributing guide](https://github.com/oss-review-toolkit/.github/blob/main/CONTRIBUTING.md).
+To get quick answers to any of your questions, we recommend you [join our Slack community][2].
 
 # License
 
