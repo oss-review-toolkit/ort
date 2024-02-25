@@ -6,10 +6,7 @@ MD004:
   style: asterisk
 
 # line-length
-MD013:
-  code_blocks: false
-  line_length: 120
-  tables: false
+MD013: false
 
 # no-duplicate-heading
 MD024: false # GitHub has no issues with anchors for headings with the same content.
