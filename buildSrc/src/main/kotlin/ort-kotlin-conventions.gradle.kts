@@ -92,12 +92,10 @@ configurations.all {
     }
 }
 
-// Note: Kotlin DSL cannot directly access configurations that are created by applying a plugin in the very same
-// project, thus put configuration names in quotes to leverage lazy lookup.
 dependencies {
-    "detektPlugins"(project(":detekt-rules"))
+    detektPlugins(project(":detekt-rules"))
 
-    "detektPlugins"("io.gitlab.arturbosch.detekt:detekt-formatting:${libs.versions.detektPlugin.get()}")
+    detektPlugins(libs.plugin.detekt.formatting)
 
     implementation(libs.log4j.api.kotlin)
 }
