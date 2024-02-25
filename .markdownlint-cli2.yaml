@@ -4,6 +4,7 @@
 globs:
   - "**/*.md"
 ignores:
+  - "**/build/**"
   - "**/node_modules/**"
   - "**/projects/external/**"
   - "**/multi-kotlin-project/**"
