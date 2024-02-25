@@ -31,38 +31,25 @@
 
 # Introduction
 
-The OSS Review Toolkit (ORT) is a FOSS policy automation and orchestration toolkit which you can use to manage your
-(open source) software dependencies in a strategic, safe and efficient manner.
+The OSS Review Toolkit (ORT) is a FOSS policy automation and orchestration toolkit which you can use to manage your (open source) software dependencies in a strategic, safe and efficient manner.
 
 You can use it to:
 
 * Generate CycloneDX, SPDX SBOMs, or custom FOSS attribution documentation for your software project
-* Automate your FOSS policy using risk-based Policy as Code to do licensing, security vulnerability, InnerSource
-and engineering standards checks for your software project and its dependencies
-* Create a source code archive for your software project and its dependencies to comply with certain licenses or have
-your own copy as nothing on the internet is forever
+* Automate your FOSS policy using risk-based Policy as Code to do licensing, security vulnerability, InnerSource and engineering standards checks for your software project and its dependencies
+* Create a source code archive for your software project and its dependencies to comply with certain licenses or have your own copy as nothing on the internet is forever
 * Correct package metadata or licensing findings yourself, using InnerSource or with the help of the FOSS community
 
-ORT can be used as library (for programmatic use), via a command line interface (for scripted use), or via its CI
-integrations. It consists of the following tools which can be combined into a *highly customizable* pipeline:
+ORT can be used as library (for programmatic use), via a command line interface (for scripted use), or via its CI integrations.
+It consists of the following tools which can be combined into a *highly customizable* pipeline:
 
-* [*Analyzer*](https://oss-review-toolkit.org/ort/docs/tools/analyzer) - determines the dependencies of projects and
-  their metadata, abstracting which package managers or build systems are actually being used.
-* [*Downloader*](https://oss-review-toolkit.org/ort/docs/tools/downloader) - fetches all source code of the projects and
-  their dependencies, abstracting which Version Control System (VCS) or other means are used to retrieve the source
-  code.
-* [*Scanner*](https://oss-review-toolkit.org/ort/docs/tools/scanner) - uses configured source code scanners to detect
-  license / copyright findings, abstracting the type of scanner.
-* [*Advisor*](https://oss-review-toolkit.org/ort/docs/tools/advisor) - retrieves security advisories for used
-  dependencies from configured vulnerability data services.
-* [*Evaluator*](https://oss-review-toolkit.org/ort/docs/tools/evaluator) - evaluates custom policy rules along with
-  custom license classifications against the data gathered in preceding stages and returns a list of policy violations,
-  e.g. to flag license findings.
-* [*Reporter*](https://oss-review-toolkit.org/ort/docs/tools/reporter) - presents results in various formats such as
-  visual reports, Open Source notices or Bill-Of-Materials (BOMs) to easily identify dependencies, licenses, copyrights
-  or policy rule violations.
-* *Notifier* - sends result notifications via different channels (like [emails](./examples/example.notifications.kts)
-  and / or JIRA tickets).
+* [*Analyzer*](https://oss-review-toolkit.org/ort/docs/tools/analyzer) - determines the dependencies of projects and their metadata, abstracting which package managers or build systems are actually being used.
+* [*Downloader*](https://oss-review-toolkit.org/ort/docs/tools/downloader) - fetches all source code of the projects and their dependencies, abstracting which Version Control System (VCS) or other means are used to retrieve the source code.
+* [*Scanner*](https://oss-review-toolkit.org/ort/docs/tools/scanner) - uses configured source code scanners to detect license / copyright findings, abstracting the type of scanner.
+* [*Advisor*](https://oss-review-toolkit.org/ort/docs/tools/advisor) - retrieves security advisories for used dependencies from configured vulnerability data services.
+* [*Evaluator*](https://oss-review-toolkit.org/ort/docs/tools/evaluator) - evaluates custom policy rules along with custom license classifications against the data gathered in preceding stages and returns a list of policy violations, e.g. to flag license findings.
+* [*Reporter*](https://oss-review-toolkit.org/ort/docs/tools/reporter) - presents results in various formats such as visual reports, Open Source notices or Bill-Of-Materials (BOMs) to easily identify dependencies, licenses, copyrights or policy rule violations.
+* *Notifier* - sends result notifications via different channels (like [emails](./examples/example.notifications.kts) and / or JIRA tickets).
 
 Also see the [list of related tools](https://oss-review-toolkit.org/ort/docs/related-tools) that help with running ORT.
 
@@ -74,13 +61,10 @@ For detailed information see the documentation on the [ORT Website](https://oss-
 
 ## System requirements
 
-ORT is being continuously used on Linux, Windows and macOS by the
-[core development team](https://github.com/orgs/oss-review-toolkit/people), so these operating systems are
-considered to be well-supported.
+ORT is being continuously used on Linux, Windows and macOS by the [core development team](https://github.com/orgs/oss-review-toolkit/people), so these operating systems are considered to be well-supported.
 
-To run the ORT binaries (also see [Installation from binaries](#from-binaries)) at least Java 11 is required. Memory and
-CPU requirements vary depending on the size and type of project(s) to analyze / scan, but the general recommendation is
-to configure Java with 8 GiB of memory and to use a CPU with at least 4 cores.
+To run the ORT binaries (also see [Installation from binaries](#from-binaries)) at least Java 11 is required.
+Memory and CPU requirements vary depending on the size and type of project(s) to analyze / scan, but the general recommendation is to configure Java with 8 GiB of memory and to use a CPU with at least 4 cores.
 
 ```shell
 # This will give the Java Virtual Machine 8GB Memory.
@@ -88,14 +72,12 @@ export JAVA_OPTS="$JAVA_OPTS -Xmx8g"
 ```
 
 If ORT requires external tools in order to analyze a project, these tools are listed by the `ort requirements` command.
-If a package manager is not list listed there, support for it is integrated directly into ORT and does not require any
-external tools to be installed.
+If a package manager is not list listed there, support for it is integrated directly into ORT and does not require any external tools to be installed.
 
 ## From binaries
 
-Preliminary binary artifacts for ORT are currently available via
-[JitPack](https://jitpack.io/#oss-review-toolkit/ort). Please note that due to limitations with the JitPack build
-environment, the reporter is not able to create the Web App report.
+Preliminary binary artifacts for ORT are currently available via [JitPack](https://jitpack.io/#oss-review-toolkit/ort).
+Please note that due to limitations with the JitPack build environment, the reporter is not able to create the Web App report.
 
 ## From sources
 
@@ -117,11 +99,10 @@ git submodule update --init --recursive
 Install the following basic prerequisites:
 
 * Docker 18.09 or later (and ensure its daemon is running).
-* Enable [BuildKit](https://docs.docker.com/develop/develop-images/build_enhancements/#to-enable-buildkit-builds) for
-  Docker.
+* Enable [BuildKit](https://docs.docker.com/develop/develop-images/build_enhancements/#to-enable-buildkit-builds) for Docker.
 
-Change into the directory with ORT's source code and run `docker build -t ort .`. Alternatively, use the script at
-`scripts/docker_build.sh` which also sets the ORT version from the Git revision.
+Change into the directory with ORT's source code and run `docker build -t ort .`.
+Alternatively, use the script at `scripts/docker_build.sh` which also sets the ORT version from the Git revision.
 
 ### Build natively
 
@@ -129,8 +110,7 @@ Install these additional prerequisites:
 
 * Java Development Kit (JDK) version 11 or later; also remember to set the `JAVA_HOME` environment variable accordingly.
 
-Change into the directory with ORT's source code and run `./gradlew installDist` (on the first run this will bootstrap
-Gradle and download all required dependencies).
+Change into the directory with ORT's source code and run `./gradlew installDist` (on the first run this will bootstrap Gradle and download all required dependencies).
 
 ## Basic usage
 
@@ -156,15 +136,12 @@ Depending on how ORT was installed, it can be run in the following ways:
   ./gradlew cli:run --args="--help"
   ```
 
-  Note that in this case the working directory used by ORT is that of the `cli` project, not the directory `gradlew` is
-  located in (see https://github.com/gradle/gradle/issues/6074).
+  Note that in this case the working directory used by ORT is that of the `cli` project, not the directory `gradlew` is located in (see https://github.com/gradle/gradle/issues/6074).
 
 # Want to Help or have Questions?
 
-All contributions are welcome. If you are interested in contributing, please read our
-[contributing guide](https://github.com/oss-review-toolkit/.github/blob/main/CONTRIBUTING.md), and to get quick answers
-to any of your questions we recommend you
-[join our Slack community][2].
+All contributions are welcome.
+If you are interested in contributing, please read our [contributing guide](https://github.com/oss-review-toolkit/.github/blob/main/CONTRIBUTING.md), and to get quick answers to any of your questions we recommend you [join our Slack community][2].
 
 # License
 
@@ -172,5 +149,4 @@ Copyright (C) 2017-2023 [The ORT Project Authors](./NOTICE).
 
 See the [LICENSE](./LICENSE) file in the root of this project for license details.
 
-OSS Review Toolkit (ORT) is a [Linux Foundation project](https://www.linuxfoundation.org) and part of
-[ACT](https://automatecompliance.org/).
+OSS Review Toolkit (ORT) is a [Linux Foundation project](https://www.linuxfoundation.org) and part of [ACT](https://automatecompliance.org/).
