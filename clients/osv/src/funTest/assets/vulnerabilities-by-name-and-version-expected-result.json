@@ -173,7 +173,7 @@
     {
         "schema_version": "1.6.0",
         "id": "GHSA-8r7q-cvjq-x353",
-        "modified": "2024-02-22T05:34:32.564420Z",
+        "modified": "2024-02-23T21:30:30.016986Z",
         "published": "2022-05-14T04:04:14Z",
         "aliases": [
             "CVE-2014-1402",
@@ -254,6 +254,10 @@
             },
             {
                 "type": "WEB",
+                "url": "https://web.archive.org/web/20150523060528/http://www.mandriva.com/en/support/security/advisories/advisory/MDVSA-2014:096/?name=MDVSA-2014:096"
+            },
+            {
+                "type": "WEB",
                 "url": "http://advisories.mageia.org/MGASA-2014-0028.html"
             },
             {
@@ -278,35 +282,7 @@
             },
             {
                 "type": "WEB",
-                "url": "http://secunia.com/advisories/56287"
-            },
-            {
-                "type": "WEB",
-                "url": "http://secunia.com/advisories/58783"
-            },
-            {
-                "type": "WEB",
-                "url": "http://secunia.com/advisories/58918"
-            },
-            {
-                "type": "WEB",
-                "url": "http://secunia.com/advisories/59017"
-            },
-            {
-                "type": "WEB",
-                "url": "http://secunia.com/advisories/60738"
-            },
-            {
-                "type": "WEB",
-                "url": "http://secunia.com/advisories/60770"
-            },
-            {
-                "type": "WEB",
                 "url": "http://www.gentoo.org/security/en/glsa/glsa-201408-13.xml"
-            },
-            {
-                "type": "WEB",
-                "url": "http://www.mandriva.com/security/advisories?name=MDVSA-2014:096"
             }
         ],
         "database_specific": {
