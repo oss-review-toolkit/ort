@@ -215,7 +215,7 @@ sealed class SpdxExpression {
  *
  * [1]: https://spdx.github.io/spdx-spec/v2.2.2/SPDX-license-expressions/#d4-composite-license-expressions
  */
-class SpdxCompoundExpression internal constructor(
+class SpdxCompoundExpression(
     val operator: SpdxOperator,
     val children: List<SpdxExpression>
 ) : SpdxExpression() {
