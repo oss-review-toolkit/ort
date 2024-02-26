@@ -35,7 +35,6 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseWithExceptionExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxOperator
 import org.ossreviewtoolkit.utils.spdx.SpdxSimpleExpression
-import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 /**
@@ -292,62 +291,61 @@ internal fun associateLicensesWithExceptions(license: SpdxExpression): SpdxExpre
     // If this is not a compound expression, there can be no stand-alone license exceptions with belonging licenses.
     if (license !is SpdxCompoundExpression) return license
 
-    // Exclusively operate on AND-only expressions without further nested expressions.
-    val hasOnlyAndOperator = license.operator == SpdxOperator.AND && "(" !in license.toString()
-    if (!hasOnlyAndOperator) {
-        val children = license.children.map { associateLicensesWithExceptions(it) }
-        return SpdxCompoundExpression(
-            license.operator,
-            children[0],
-            children[1],
-            *children.drop(2).toTypedArray()
-        )
+    // Only search for stand-alone exceptions as part of AND-expressions.
+    if (license.operator == SpdxOperator.OR) {
+        return SpdxCompoundExpression(SpdxOperator.OR, license.children.map { associateLicensesWithExceptions(it) })
     }
 
-    val handledLicenses = mutableSetOf<SpdxSingleLicenseExpression>()
-    val simpleLicenses = mutableSetOf<SpdxSimpleExpression>()
-    val associatedLicenses = mutableSetOf<SpdxSimpleExpression>()
-    val remainingExceptions = mutableSetOf<SpdxSingleLicenseExpression>()
-
-    // Divide the AND-operands into exceptions, simple expressions, and licenses than cannot be used with an exception.
-    license.decompose().forEach {
-        when {
-            SpdxLicenseException.forId(it.toString()) != null -> remainingExceptions += it
-            it is SpdxSimpleExpression -> simpleLicenses += it
-            else -> handledLicenses += it
-        }
+    val (standAloneExceptions, licenses) = license.children.partition {
+        it is SpdxSimpleExpression && SpdxLicenseException.forId(it.toString()) != null
     }
 
-    val i = remainingExceptions.iterator()
+    val standAloneExceptionIds = standAloneExceptions.mapTo(mutableSetOf()) { it.toString() }
+    val handledExceptions = mutableSetOf<String>()
 
-    while (i.hasNext()) {
-        val exception = i.next()
-        val exceptionString = exception.toString()
+    val associatedLicenses = licenses.toSet().mapTo(mutableSetOf()) { childLicense ->
+        when (childLicense) {
+            is SpdxCompoundExpression -> associateLicensesWithExceptions(childLicense)
 
-        // Determine all licenses the exception is applicable to.
-        val applicableLicenses = SpdxLicenseException.mapping[exceptionString].orEmpty().mapTo(mutableSetOf()) {
-            SpdxLicenseIdExpression(it.id)
+            is SpdxSimpleExpression -> {
+                val licenseId = childLicense.toString()
+
+                val validLicenseExceptionCombinations = standAloneExceptionIds.mapNotNull { exceptionId ->
+                    val applicableLicenseIds = SpdxLicenseException.mapping[exceptionId].orEmpty().map { it.id }
+
+                    if (licenseId in applicableLicenseIds) {
+                        SpdxLicenseWithExceptionExpression(childLicense, exceptionId)
+                    } else {
+                        null
+                    }
+                }
+
+                handledExceptions += validLicenseExceptionCombinations.map { it.exception }
+
+                when (validLicenseExceptionCombinations.size) {
+                    0 -> childLicense
+                    1 -> validLicenseExceptionCombinations.first()
+                    else -> SpdxCompoundExpression(SpdxOperator.AND, validLicenseExceptionCombinations)
+                }
+            }
+
+            else -> childLicense
         }
-
-        // Associate all remaining licenses that are applicable with the exception and remove the exception.
-        val licenses = simpleLicenses.intersect(applicableLicenses)
-        if (licenses.isEmpty()) continue
-
-        licenses.forEach {
-            handledLicenses += SpdxLicenseWithExceptionExpression(it, exceptionString)
-        }
-
-        associatedLicenses += licenses
-        i.remove()
     }
-
-    handledLicenses += simpleLicenses - associatedLicenses
 
     // Associate remaining "orphan" exceptions with "NOASSERTION" to turn them into valid SPDX expressions.
-    handledLicenses += remainingExceptions.map {
-        SpdxLicenseWithExceptionExpression(SpdxLicenseIdExpression(SpdxConstants.NOASSERTION), it.toString())
+    val orphanExceptions = standAloneExceptionIds - handledExceptions
+
+    orphanExceptions.mapTo(associatedLicenses) { exceptionId ->
+        SpdxLicenseWithExceptionExpression(SpdxLicenseIdExpression(SpdxConstants.NOASSERTION), exceptionId)
     }
 
     // Recreate the compound AND-expression from the associated licenses.
-    return handledLicenses.reduce(SpdxExpression::and)
+    check(associatedLicenses.isNotEmpty())
+
+    return if (associatedLicenses.size == 1) {
+        associatedLicenses.first()
+    } else {
+        SpdxCompoundExpression(SpdxOperator.AND, associatedLicenses.toList())
+    }
 }

@@ -97,8 +97,8 @@ class ScanCodeResultParserTest : FreeSpec({
                     "LicenseRef-scancode-generic-cla AND MIT",
                     "MIT",
                     "MIT",
-                    "GPL-2.0-only WITH GCC-exception-2.0 AND JSON AND BSD-2-Clause AND CC-BY-3.0 AND MIT",
-                    "GPL-2.0-only WITH GCC-exception-2.0 AND BSD-3-Clause"
+                    "JSON AND BSD-2-Clause AND GPL-2.0-only WITH GCC-exception-2.0 AND CC-BY-3.0 AND MIT",
+                    "BSD-3-Clause AND GPL-2.0-only WITH GCC-exception-2.0 AND GPL-2.0-only WITH GCC-exception-2.0"
                 )
             }
         }

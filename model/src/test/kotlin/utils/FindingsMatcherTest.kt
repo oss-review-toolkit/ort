@@ -313,6 +313,14 @@ class FindingsMatcherTest : WordSpec() {
                             "GPL-2.0-only WITH Classpath-exception-2.0 AND " +
                             "GPL-3.0-only WITH Classpath-exception-2.0"
                         ).toSpdx()
+
+                    associateLicensesWithExceptions(
+                        @Suppress("MaxLineLength")
+                        "(CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0) AND GPL-2.0-only AND Classpath-exception-2.0".toSpdx()
+                    ) shouldBe (
+                        "(CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0) AND " +
+                            "GPL-2.0-only WITH Classpath-exception-2.0"
+                        ).toSpdx()
                 }
             }
         }
