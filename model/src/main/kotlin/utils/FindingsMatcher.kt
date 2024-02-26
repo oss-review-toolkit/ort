@@ -346,6 +346,6 @@ internal fun associateLicensesWithExceptions(license: SpdxExpression): SpdxExpre
     return if (associatedLicenses.size == 1) {
         associatedLicenses.first()
     } else {
-        SpdxCompoundExpression(SpdxOperator.AND, associatedLicenses.toList())
+        SpdxCompoundExpression(SpdxOperator.AND, associatedLicenses)
     }
 }
