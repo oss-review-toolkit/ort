@@ -284,9 +284,9 @@ fun associateLicensesWithExceptions(
 }
 
 /**
- * Process [license] for stand-alone license exceptions as part of compound expressions and associate them with
- * applicable licenses. Orphan license exceptions will get associated by [SpdxConstants.NOASSERTION]. Return a new
- * expression that does not contain stand-alone license exceptions anymore.
+ * Process [license] for stand-alone license exceptions as part of AND-expressions and associate them with applicable
+ * licenses. Orphan license exceptions will get associated by [SpdxConstants.NOASSERTION]. Return a new expression that
+ * does not contain stand-alone license exceptions anymore.
  */
 internal fun associateLicensesWithExceptions(license: SpdxExpression): SpdxExpression {
     // If this is not a compound expression, there can be no stand-alone license exceptions with belonging licenses.
