@@ -77,6 +77,7 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.SnippetChoices
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
@@ -560,7 +561,8 @@ internal fun FossIdServiceWithVersion.mockFiles(
 internal fun FossId.scan(
     pkg: Package,
     labels: Map<String, String> = emptyMap(),
-    excludes: Excludes = Excludes()
+    excludes: Excludes = Excludes(),
+    snippetChoices: List<SnippetChoices> = emptyList()
 ): ScanResult =
     scanPackage(
         nestedProvenance = NestedProvenance(
@@ -574,6 +576,7 @@ internal fun FossId.scan(
             labels = labels,
             packageType = PackageType.PACKAGE,
             excludes = excludes,
-            coveredPackages = listOf(pkg)
+            coveredPackages = listOf(pkg),
+            snippetChoices = snippetChoices
         )
     )

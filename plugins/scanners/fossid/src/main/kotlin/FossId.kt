@@ -72,6 +72,8 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.config.snippet.SnippetChoice
+import org.ossreviewtoolkit.model.config.snippet.SnippetChoiceReason
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.scanner.PackageScannerWrapper
 import org.ossreviewtoolkit.scanner.ProvenanceScannerWrapper
@@ -288,7 +290,19 @@ class FossId internal constructor(
                     checkAndCreateScan(scans, url, revision, projectCode, projectName)
                 }
 
-                if (config.waitForResult) {
+                if (config.waitForResult && provenance is RepositoryProvenance) {
+                    val snippetChoices = context.snippetChoices.firstOrNull {
+                        it.provenance.url == provenance.vcsInfo.url
+                    }
+
+                    logger.info {
+                        val choices = snippetChoices?.choices?.filter {
+                            it.choice.reason == SnippetChoiceReason.ORIGINAL_FINDING
+                        }.orEmpty()
+
+                        "Repository ${provenance.vcsInfo.url} has ${choices.size} snippet choice(s)."
+                    }
+
                     val rawResults = getRawResults(scanCode)
                     createResultSummary(
                         startTime,
@@ -297,7 +311,8 @@ class FossId internal constructor(
                         scanCode,
                         scanId,
                         issues,
-                        context.detectedLicenseMapping
+                        context.detectedLicenseMapping,
+                        snippetChoices?.choices.orEmpty()
                     )
                 } else {
                     val issue = createAndLogIssue(
@@ -843,6 +858,7 @@ class FossId internal constructor(
     /**
      * Construct the [ScanSummary] for this FossID scan.
      */
+    @Suppress("LongParameterList")
     private fun createResultSummary(
         startTime: Instant,
         provenance: Provenance,
@@ -850,7 +866,8 @@ class FossId internal constructor(
         scanCode: String,
         scanId: String,
         additionalIssues: MutableList<Issue>,
-        detectedLicenseMapping: Map<String, String>
+        detectedLicenseMapping: Map<String, String>,
+        snippetChoices: List<SnippetChoice>
     ): ScanResult {
         // TODO: Maybe get issues from FossID (see has_failed_scan_files, get_failed_files and maybe get_scan_log).
 
@@ -862,7 +879,7 @@ class FossId internal constructor(
             )
         )
 
-        val snippetFindings = mapSnippetFindings(rawResults, issues)
+        val snippetFindings = mapSnippetFindings(rawResults, issues, snippetChoices)
 
         val ignoredFiles = rawResults.listIgnoredFiles.associateBy { it.path }
 
