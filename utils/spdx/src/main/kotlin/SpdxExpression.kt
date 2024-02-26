@@ -28,9 +28,9 @@ import org.ossreviewtoolkit.utils.spdx.SpdxConstants.LICENSE_REF_PREFIX
 import org.ossreviewtoolkit.utils.spdx.parser.SpdxExpressionParser
 
 /**
- * An SPDX expression as defined by version 2.1 of the [SPDX specification, appendix IV][1].
+ * An SPDX expression as defined by version 2.2 of the [SPDX specification, annex D][1].
  *
- * [1]: https://spdx.dev/spdx-specification-21-web-version#h.jxpfx0ykyb60
+ * [1]: https://spdx.github.io/spdx-spec/v2.2.2/SPDX-license-expressions/
  */
 @JsonSerialize(using = ToStringSerializer::class)
 sealed class SpdxExpression {
@@ -210,10 +210,10 @@ sealed class SpdxExpression {
 }
 
 /**
- * An SPDX expression compound of a list of [child][children] expressions with an [operator] as defined by version 2.1
- * of the [SPDX specification, appendix IV][1].
+ * An SPDX composite expression using an [operator] with a list of [child][children] expressions as defined by version
+ * 2.2 of the [SPDX specification, annex D.4][1].
  *
- * [1]: https://spdx.dev/spdx-specification-21-web-version#h.jxpfx0ykyb60
+ * [1]: https://spdx.github.io/spdx-spec/v2.2.2/SPDX-license-expressions/#d4-composite-license-expressions
  */
 class SpdxCompoundExpression internal constructor(
     val operator: SpdxOperator,
@@ -365,7 +365,7 @@ class SpdxCompoundExpression internal constructor(
 }
 
 /**
- * An SPDX expression that contains only a single license with an optional exception. Can be
+ * An SPDX expression that contains only a single license with an optional exception. Can be either a
  * [SpdxLicenseWithExceptionExpression] or any subtype of [SpdxSimpleExpression].
  */
 sealed class SpdxSingleLicenseExpression : SpdxExpression() {
@@ -487,10 +487,10 @@ class SpdxLicenseWithExceptionExpression(
 }
 
 /**
- * A simple SPDX expression as defined by version 2.1 of the [SPDX specification, appendix IV][1]. A simple expression
+ * An SPDX simple expression as defined by version 2.2 of the [SPDX specification, annex D.3][1]. A simple expression
  * can be either a [SpdxLicenseIdExpression] or a [SpdxLicenseReferenceExpression].
  *
- * [1]: https://spdx.dev/spdx-specification-21-web-version#h.jxpfx0ykyb60
+ * [1]: https://spdx.github.io/spdx-spec/v2.2.2/SPDX-license-expressions/#d3-simple-license-expressions
  */
 sealed class SpdxSimpleExpression : SpdxSingleLicenseExpression() {
     /**
@@ -500,10 +500,10 @@ sealed class SpdxSimpleExpression : SpdxSingleLicenseExpression() {
 }
 
 /**
- * An SPDX expression for a license [id] as defined by version 2.1 of the [SPDX specification, appendix I][1].
+ * An SPDX expression for a license [id] as defined by version 2.2 of the [SPDX specification, annex D][1].
  * [orLaterVersion] indicates whether the license id also describes later versions of the license.
  *
- * [1]: https://spdx.dev/spdx-specification-21-web-version#h.luq9dgcle9mo
+ * [1]: https://spdx.github.io/spdx-spec/v2.2.2/SPDX-license-expressions/
  */
 class SpdxLicenseIdExpression(
     val id: String,
@@ -557,10 +557,9 @@ class SpdxLicenseIdExpression(
 }
 
 /**
- * An SPDX expression for a license reference [id] as defined by version 2.1 of the
- * [SPDX specification, appendix IV][1].
+ * An SPDX expression for a license reference [id] as defined by version 2.2 of the [SPDX specification, annex D][1].
  *
- * [1]: https://spdx.dev/spdx-specification-21-web-version#h.jxpfx0ykyb60
+ * [1]: https://spdx.github.io/spdx-spec/v2.2.2/SPDX-license-expressions/
  */
 data class SpdxLicenseReferenceExpression(
     val id: String
@@ -599,10 +598,9 @@ data class SpdxLicenseReferenceExpression(
 }
 
 /**
- * An SPDX operator for use in compound expressions as defined by version 2.1 of the
- * [SPDX specification, appendix IV][1].
+ * An SPDX operator for composite expressions as defined by version 2.2 of the [SPDX specification, annex D.4][1].
  *
- * [1]: https://spdx.dev/spdx-specification-21-web-version#h.jxpfx0ykyb60
+ * [1]: https://spdx.github.io/spdx-spec/v2.2.2/SPDX-license-expressions/#d4-composite-license-expressions
  */
 enum class SpdxOperator(
     /**
