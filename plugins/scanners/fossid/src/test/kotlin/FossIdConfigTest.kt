@@ -241,5 +241,3 @@ class FossIdConfigTest : WordSpec({
 })
 
 private const val SERVER_URL = "https://www.example.org/fossid"
-private const val USER = "fossIdTestUser"
-private const val API_KEY = "test_api_key"

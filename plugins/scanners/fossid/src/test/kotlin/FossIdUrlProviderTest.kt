@@ -46,7 +46,7 @@ class FossIdUrlProviderTest : StringSpec({
     "Credentials should be added to URLs" {
         val repoUrl = "https://$HOST/$PATH"
         mockAuthenticator(port = -1)
-        val expectedUrl = "https://$USER:$PASSWORD@$HOST/$PATH"
+        val expectedUrl = "https://$URL_USER:$URL_PASSWORD@$HOST/$PATH"
         val urlProvider = FossIdUrlProvider.create(listOf(ADD_CREDENTIALS_MAPPING))
 
         val url = urlProvider.getUrl(repoUrl)
@@ -81,7 +81,7 @@ class FossIdUrlProviderTest : StringSpec({
         val otherHost = "mapped-auth.example.org"
         val regex = "(?<scheme>)://$HOST:(?<port>\\d+)(?<path>.*)"
         val replace = "\${scheme}://#username:#password@$otherHost:\${port}\${path}"
-        val expectedUrl = "https://$USER:$PASSWORD@$otherHost:$PORT/$PATH"
+        val expectedUrl = "https://$URL_USER:$URL_PASSWORD@$otherHost:$PORT/$PATH"
         val urlMapping = listOf("$regex  ->  $replace", "foo -> bar")
         mockAuthenticator(host = otherHost)
 
@@ -120,9 +120,9 @@ private const val HOST = "repo.example.org"
 private const val PORT = 4711
 private const val PATH = "tests/fossid.git"
 private const val REPO_URL = "https://$HOST:$PORT/$PATH"
-private const val USER = "scott"
-private const val PASSWORD = "tiger"
-private val AUTHENTICATION = PasswordAuthentication(USER, PASSWORD.toCharArray())
+private const val URL_USER = "scott"
+private const val URL_PASSWORD = "tiger"
+private val AUTHENTICATION = PasswordAuthentication(URL_USER, URL_PASSWORD.toCharArray())
 
 /** A URL mapping that adds credentials to arbitrary URLs. */
 private const val ADD_CREDENTIALS_MAPPING = "(?<scheme>)://(?<host>)(?<port>:\\d+)?(?<path>.*) -> " +
