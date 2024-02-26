@@ -24,4 +24,9 @@ import org.ossreviewtoolkit.clients.fossid.PolymorphicList
 data class MatchedLines(
     val localFile: PolymorphicList<Int>,
     val mirrorFile: PolymorphicList<Int>
-)
+) {
+    companion object {
+        fun create(localFile: List<Int>, mirrorFile: List<Int>) =
+            MatchedLines(PolymorphicList(localFile), PolymorphicList(mirrorFile))
+    }
+}

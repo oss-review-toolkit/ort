@@ -41,6 +41,7 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.Snippet as OrtSnippet
 import org.ossreviewtoolkit.model.SnippetFinding
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.config.snippet.SnippetChoice
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.mapLicense
 import org.ossreviewtoolkit.model.utils.PurlType
@@ -123,7 +124,11 @@ internal fun <T : Summarizable> List<T>.mapSummary(
 /**
  * Map the raw snippets to ORT [SnippetFinding]s. If a snippet license cannot be parsed, an issues is added to [issues].
  */
-internal fun mapSnippetFindings(rawResults: RawResults, issues: MutableList<Issue>): Set<SnippetFinding> {
+internal fun mapSnippetFindings(
+    rawResults: RawResults,
+    issues: MutableList<Issue>,
+    snippetChoices: List<SnippetChoice>
+): Set<SnippetFinding> {
     return rawResults.listSnippets.flatMap { (file, rawSnippets) ->
         val findings = mutableMapOf<TextLocation, MutableSet<OrtSnippet>>()
 
@@ -190,8 +195,30 @@ internal fun mapSnippetFindings(rawResults: RawResults, issues: MutableList<Issu
                 additionalSnippetData
             )
 
-            sourceLocations.forEach {
-                findings.getOrPut(it) { mutableSetOf(ortSnippet) } += ortSnippet
+            sourceLocations.forEach { sourceLocation ->
+                val isSnippetChoice = when {
+                    snippetChoices.any { it.given.sourceLocation == sourceLocation && it.choice.purl == purl } -> {
+                        logger.info {
+                            "Ignoring snippet $purl for file ${sourceLocation.prettyPrint()}, " +
+                                "as this is a chosen snippet."
+                        }
+                        true
+                    }
+
+                    snippetChoices.any { it.given.sourceLocation == sourceLocation } -> {
+                        logger.info {
+                            "Ignoring snippet $purl for file ${sourceLocation.prettyPrint()}, " +
+                                "as there is a snippet choice for this source location."
+                        }
+                        true
+                    }
+
+                    else -> false
+                }
+
+                if (!isSnippetChoice) {
+                    findings.getOrPut(sourceLocation) { mutableSetOf(ortSnippet) } += ortSnippet
+                }
             }
         }
 
@@ -224,4 +251,11 @@ private fun urlToPackageType(url: String): PurlType =
                 }
             }
         }
+    }
+
+private fun TextLocation.prettyPrint(): String =
+    if (startLine == TextLocation.UNKNOWN_LINE && endLine == TextLocation.UNKNOWN_LINE) {
+        "$path#FULL"
+    } else {
+        "$path#$startLine-$endLine"
     }
