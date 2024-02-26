@@ -42,6 +42,7 @@ import org.ossreviewtoolkit.model.Snippet as OrtSnippet
 import org.ossreviewtoolkit.model.SnippetFinding
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.snippet.SnippetChoice
+import org.ossreviewtoolkit.model.config.snippet.SnippetChoiceReason
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.mapLicense
 import org.ossreviewtoolkit.model.utils.PurlType
@@ -129,6 +130,10 @@ internal fun mapSnippetFindings(
     issues: MutableList<Issue>,
     snippetChoices: List<SnippetChoice>
 ): Set<SnippetFinding> {
+    val locationsWithFalsePositives = snippetChoices.filter {
+        it.choice.reason == SnippetChoiceReason.NO_RELEVANT_FINDING
+    }
+
     return rawResults.listSnippets.flatMap { (file, rawSnippets) ->
         val findings = mutableMapOf<TextLocation, MutableSet<OrtSnippet>>()
 
@@ -216,7 +221,18 @@ internal fun mapSnippetFindings(
                     else -> false
                 }
 
-                if (!isSnippetChoice) {
+                val isLocationsWithFalsePositives = locationsWithFalsePositives.any {
+                    it.given.sourceLocation == sourceLocation
+                }
+
+                if (isLocationsWithFalsePositives) {
+                    logger.info {
+                        "Ignoring snippet $purl for file ${sourceLocation.prettyPrint()}, " +
+                            "as this is a location with only false positives."
+                    }
+                }
+
+                if (!isSnippetChoice && !isLocationsWithFalsePositives) {
                     findings.getOrPut(sourceLocation) { mutableSetOf(ortSnippet) } += ortSnippet
                 }
             }

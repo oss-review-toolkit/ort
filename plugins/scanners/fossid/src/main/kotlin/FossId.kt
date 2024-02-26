@@ -303,6 +303,15 @@ class FossId internal constructor(
                         "Repository ${provenance.vcsInfo.url} has ${choices.size} snippet choice(s)."
                     }
 
+                    logger.info {
+                        val falsePositivesLocationsCount = snippetChoices?.choices?.count {
+                            it.choice.reason == SnippetChoiceReason.NO_RELEVANT_FINDING
+                        } ?: "N/A"
+
+                        "Repository ${provenance.vcsInfo.url} has $falsePositivesLocationsCount location(s) with " +
+                            "false positives."
+                    }
+
                     val rawResults = getRawResults(scanCode)
                     createResultSummary(
                         startTime,
