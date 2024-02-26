@@ -217,7 +217,7 @@ sealed class SpdxExpression {
  */
 class SpdxCompoundExpression(
     val operator: SpdxOperator,
-    val children: List<SpdxExpression>
+    val children: Collection<SpdxExpression>
 ) : SpdxExpression() {
     /**
      * Create a compound expression with the provided [operator] and the [left] and [right] child expressions.
