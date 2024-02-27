@@ -63,6 +63,8 @@ private const val BULK_REQUEST_SIZE = 100
  *
  * * **`serverUrl`:** The base URL of the VulnerableCode REST API. By default, the public VulnerableCode instance is
  *   used.
+ * * **`readTimeout`:** The read timeout in seconds for requests to the VulnerableCode server. The default timeout is
+ *   10 seconds.
  *
  * #### [Secrets][PluginConfiguration.secrets]
  *
