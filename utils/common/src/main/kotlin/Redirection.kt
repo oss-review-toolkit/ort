@@ -19,18 +19,15 @@
 
 package org.ossreviewtoolkit.utils.common
 
+import java.io.ByteArrayOutputStream
 import java.io.FileInputStream
-import java.io.FileOutputStream
 import java.io.PrintStream
 
-import kotlin.io.path.createTempFile
-
 private fun redirectOutput(originalOutput: PrintStream, setOutput: (PrintStream) -> Unit, block: () -> Unit): String {
-    val tempFile = createTempFile("redirect").toFile()
-    val fileStream = FileOutputStream(tempFile)
+    val outputStream = ByteArrayOutputStream()
 
     try {
-        PrintStream(fileStream).use {
+        PrintStream(outputStream).use {
             setOutput(it)
             block()
         }
@@ -38,7 +35,7 @@ private fun redirectOutput(originalOutput: PrintStream, setOutput: (PrintStream)
         setOutput(originalOutput)
     }
 
-    return tempFile.readText().also { tempFile.delete() }
+    return outputStream.toString()
 }
 
 /**
