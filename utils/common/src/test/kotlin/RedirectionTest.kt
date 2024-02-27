@@ -40,9 +40,10 @@ class RedirectionTest : WordSpec({
                 for (i in 1..numberOfLines) System.out.println("stdout: $i")
             }
 
-            // The last printed line has a newline, resulting in a trailing blank line.
-            val stdoutLines = stdout.lines().dropLast(1)
+            // The last printed line has a newline, resulting in a trailing empty line.
+            val stdoutLines = stdout.lines().dropLastWhile { it.isEmpty() }
             stdoutLines.size shouldBe numberOfLines
+            stdoutLines.first() shouldBe "stdout: 1"
             stdoutLines.last() shouldBe "stdout: $numberOfLines"
         }
 
@@ -51,9 +52,10 @@ class RedirectionTest : WordSpec({
                 for (i in 1..numberOfLines) System.err.println("stderr: $i")
             }
 
-            // The last printed line has a newline, resulting in a trailing blank line.
-            val stderrLines = stderr.lines().dropLast(1)
+            // The last printed line has a newline, resulting in a trailing empty line.
+            val stderrLines = stderr.lines().dropLastWhile { it.isEmpty() }
             stderrLines.size shouldBe numberOfLines
+            stderrLines.first() shouldBe "stderr: 1"
             stderrLines.last() shouldBe "stderr: $numberOfLines"
         }
 
@@ -68,14 +70,16 @@ class RedirectionTest : WordSpec({
                 }
             }
 
-            // The last printed line has a newline, resulting in a trailing blank line.
-            val stdoutLines = stdout.lines().dropLast(1)
+            // The last printed line has a newline, resulting in a trailing empty line.
+            val stdoutLines = stdout.lines().dropLastWhile { it.isEmpty() }
             stdoutLines.size shouldBe numberOfLines
+            stdoutLines.first() shouldBe "stdout: 1"
             stdoutLines.last() shouldBe "stdout: $numberOfLines"
 
-            // The last printed line has a newline, resulting in a trailing blank line.
-            val stderrLines = stderr.lines().dropLast(1)
+            // The last printed line has a newline, resulting in a trailing empty line.
+            val stderrLines = stderr.lines().dropLastWhile { it.isEmpty() }
             stderrLines.size shouldBe numberOfLines
+            stderrLines.first() shouldBe "stderr: 1"
             stderrLines.last() shouldBe "stderr: $numberOfLines"
         }
 
@@ -91,9 +95,10 @@ class RedirectionTest : WordSpec({
 
             e?.exitCode shouldBe 42
 
-            // The last printed line has a newline, resulting in a trailing blank line.
-            val stdoutLines = stdout.lines().dropLast(1)
+            // The last printed line has a newline, resulting in a trailing empty line.
+            val stdoutLines = stdout.lines().dropLastWhile { it.isEmpty() }
             stdoutLines.size shouldBe numberOfLines
+            stdoutLines.first() shouldBe "stdout: 1"
             stdoutLines.last() shouldBe "stdout: $numberOfLines"
         }
     }
