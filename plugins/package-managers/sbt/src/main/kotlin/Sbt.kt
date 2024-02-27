@@ -54,37 +54,6 @@ class Sbt(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
-    companion object {
-        // See https://github.com/sbt/sbt/blob/v1.5.1/launcher-package/integration-test/src/test/scala/RunnerTest.scala#L9.
-        private const val SBT_VERSION_PATTERN = "\\d(\\.\\d+){2}(-\\w+)?"
-
-        private val VERSION_REGEX = Regex("\\[info]\\s+($SBT_VERSION_PATTERN)")
-        private val PROJECT_REGEX = Regex("\\[info] \t [ *] (.+)")
-        private val POM_REGEX = Regex("\\[info] Wrote (.+\\.pom)")
-
-        // Batch mode (which suppresses interactive prompts) is not supported on Windows, compare
-        // https://github.com/sbt/sbt-launcher-package/blob/25c1b96/src/universal/bin/sbt.bat#L861 with
-        // https://github.com/sbt/sbt-launcher-package/blob/25c1b96/src/universal/bin/sbt#L449.
-        private val BATCH_MODE = "-batch".takeUnless { Os.isWindows }.orEmpty()
-
-        // Enable the CI mode which disables console colors and supershell, see
-        // https://www.scala-sbt.org/1.x/docs/Command-Line-Reference.html#Command+Line+Options.
-        private val CI_MODE = "-Dsbt.ci=true".addQuotesOnWindows()
-
-        // Disable console colors explicitly as in some cases CI_MODE is not enough.
-        private val NO_COLOR = "-Dsbt.color=false".addQuotesOnWindows()
-
-        // Disable the JLine terminal. Without this the JLine terminal can occasionally send a signal that causes the
-        // parent process to suspend, for example IntelliJ can be suspended while running the SbtTest.
-        private val DISABLE_JLINE = "-Djline.terminal=none".addQuotesOnWindows()
-
-        private val FIXED_USER_HOME = "-Duser.home=${Os.userHomeDirectory}".addQuotesOnWindows()
-
-        private val SBT_OPTIONS = arrayOf(BATCH_MODE, CI_MODE, NO_COLOR, DISABLE_JLINE, FIXED_USER_HOME)
-
-        private fun String.addQuotesOnWindows() = if (Os.isWindows) "\"$this\"" else this
-    }
-
     class Factory : AbstractPackageManagerFactory<Sbt>("SBT") {
         override val globsForDefinitionFiles = listOf("build.sbt", "build.scala")
 
@@ -236,6 +205,35 @@ class Sbt(
         // This is not implemented in favor over overriding [resolveDependencies].
         throw NotImplementedError()
 }
+
+// See https://github.com/sbt/sbt/blob/v1.5.1/launcher-package/integration-test/src/test/scala/RunnerTest.scala#L9.
+private const val SBT_VERSION_PATTERN = "\\d(\\.\\d+){2}(-\\w+)?"
+
+private val VERSION_REGEX = Regex("\\[info]\\s+($SBT_VERSION_PATTERN)")
+private val PROJECT_REGEX = Regex("\\[info] \t [ *] (.+)")
+private val POM_REGEX = Regex("\\[info] Wrote (.+\\.pom)")
+
+// Batch mode (which suppresses interactive prompts) is not supported on Windows, compare
+// https://github.com/sbt/sbt-launcher-package/blob/25c1b96/src/universal/bin/sbt.bat#L861 with
+// https://github.com/sbt/sbt-launcher-package/blob/25c1b96/src/universal/bin/sbt#L449.
+private val BATCH_MODE = "-batch".takeUnless { Os.isWindows }.orEmpty()
+
+// Enable the CI mode which disables console colors and supershell, see
+// https://www.scala-sbt.org/1.x/docs/Command-Line-Reference.html#Command+Line+Options.
+private val CI_MODE = "-Dsbt.ci=true".addQuotesOnWindows()
+
+// Disable console colors explicitly as in some cases CI_MODE is not enough.
+private val NO_COLOR = "-Dsbt.color=false".addQuotesOnWindows()
+
+// Disable the JLine terminal. Without this the JLine terminal can occasionally send a signal that causes the
+// parent process to suspend, for example IntelliJ can be suspended while running the SbtTest.
+private val DISABLE_JLINE = "-Djline.terminal=none".addQuotesOnWindows()
+
+private val FIXED_USER_HOME = "-Duser.home=${Os.userHomeDirectory}".addQuotesOnWindows()
+
+private val SBT_OPTIONS = arrayOf(BATCH_MODE, CI_MODE, NO_COLOR, DISABLE_JLINE, FIXED_USER_HOME)
+
+private fun String.addQuotesOnWindows() = if (Os.isWindows) "\"$this\"" else this
 
 private fun moveGeneratedPom(pomFile: File): Result<File> {
     val targetDirParent = pomFile.parentFile.searchUpwardsForSubdirectory("target")
