@@ -238,7 +238,7 @@ class Sbt(
 }
 
 private fun moveGeneratedPom(pomFile: File): Result<File> {
-    val targetDirParent = pomFile.absoluteFile.parentFile.searchUpwardsForSubdirectory("target")
+    val targetDirParent = pomFile.parentFile.searchUpwardsForSubdirectory("target")
         ?: return Result.failure(IllegalArgumentException("No target subdirectory found for '$pomFile'."))
     val targetFilename = pomFile.relativeTo(targetDirParent).invariantSeparatorsPath.replace('/', '-')
     val targetFile = targetDirParent.resolve(targetFilename)
