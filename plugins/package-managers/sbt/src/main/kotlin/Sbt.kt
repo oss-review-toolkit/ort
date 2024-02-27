@@ -21,14 +21,12 @@ package org.ossreviewtoolkit.plugins.packagemanagers.sbt
 
 import java.io.File
 import java.io.IOException
-import java.lang.invoke.MethodHandles
 import java.nio.file.StandardCopyOption
 import java.util.Properties
 
 import kotlin.io.path.moveTo
 
 import org.apache.logging.log4j.kotlin.logger
-import org.apache.logging.log4j.kotlin.loggerOf
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -182,7 +180,11 @@ class Sbt(
             targetDir.walk().maxDepth(1).filterTo(pomFiles) { it.extension == "pom" }
         }
 
-        return pomFiles.distinct().map { moveGeneratedPom(it) }
+        return pomFiles.distinct().map { pomFile ->
+            moveGeneratedPom(pomFile).onFailure {
+                logger.error { "Moving the POM file failed: ${it.message}" }
+            }.getOrDefault(pomFile)
+        }
     }
 
     override fun beforeResolution(definitionFiles: List<File>) {
@@ -235,17 +237,11 @@ class Sbt(
         throw NotImplementedError()
 }
 
-private val logger = loggerOf(MethodHandles.lookup().lookupClass())
-
-private fun moveGeneratedPom(pomFile: File): File {
-    val targetDirParent = pomFile.absoluteFile.parentFile.searchUpwardsForSubdirectory("target") ?: return pomFile
+private fun moveGeneratedPom(pomFile: File): Result<File> {
+    val targetDirParent = pomFile.absoluteFile.parentFile.searchUpwardsForSubdirectory("target")
+        ?: return Result.failure(IllegalArgumentException("No target subdirectory found for '$pomFile'."))
     val targetFilename = pomFile.relativeTo(targetDirParent).invariantSeparatorsPath.replace('/', '-')
     val targetFile = targetDirParent.resolve(targetFilename)
 
-    if (runCatching { pomFile.toPath().moveTo(targetFile.toPath(), StandardCopyOption.ATOMIC_MOVE) }.isFailure) {
-        logger.error { "Moving '${pomFile.absolutePath}' to '${targetFile.absolutePath}' failed." }
-        return pomFile
-    }
-
-    return targetFile
+    return runCatching { pomFile.toPath().moveTo(targetFile.toPath(), StandardCopyOption.ATOMIC_MOVE).toFile() }
 }
