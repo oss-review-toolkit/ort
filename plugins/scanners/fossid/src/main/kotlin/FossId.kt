@@ -87,6 +87,8 @@ import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
+import org.semver4j.Semver
+
 /**
  * A wrapper for [FossID](https://fossid.com/).
  *
@@ -700,7 +702,9 @@ class FossId internal constructor(
             // Scans that were added to the queue are interpreted as an error by FossID before version 2021.2.
             // For older versions, `waitScanComplete()` is able to deal with queued scans. Therefore, not checking the
             // response of queued scans.
-            if (version >= "2021.2" || scanResult.error != "Scan was added to queue.") {
+            val currentVersion = checkNotNull(Semver.coerce(version))
+            val minVersion = checkNotNull(Semver.coerce("2021.2"))
+            if (currentVersion >= minVersion || scanResult.error != "Scan was added to queue.") {
                 scanResult.checkResponse("trigger scan", false)
             }
 
@@ -739,7 +743,11 @@ class FossId internal constructor(
                     // stays in state "NOT FINISHED". Therefore, we check the output of the Git fetch to find out
                     // whether the download is actually done.
                     val message = response.message
-                    if (version >= "20.2" || message == null || !GIT_FETCH_DONE_REGEX.containsMatchIn(message)) {
+                    val currentVersion = checkNotNull(Semver.coerce(version))
+                    val minVersion = checkNotNull(Semver.coerce("20.2"))
+                    if (currentVersion >= minVersion || message == null
+                        || !GIT_FETCH_DONE_REGEX.containsMatchIn(message)
+                    ) {
                         return@wait false
                     }
 
