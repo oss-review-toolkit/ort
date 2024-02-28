@@ -68,6 +68,8 @@ import org.ossreviewtoolkit.plugins.scanners.fossid.FossId.Companion.SCAN_ID_KEY
 import org.ossreviewtoolkit.plugins.scanners.fossid.FossId.Companion.SERVER_URL_KEY
 import org.ossreviewtoolkit.plugins.scanners.fossid.FossId.Companion.convertGitUrlToProjectName
 
+import org.semver4j.Semver
+
 @Suppress("LargeClass")
 class FossIdTest : WordSpec({
     beforeSpec {
@@ -94,6 +96,16 @@ class FossIdTest : WordSpec({
             val fossId = createFossId(createConfig())
 
             fossId.version shouldBe FOSSID_VERSION
+        }
+
+        "return a comparable version" {
+            val fossId = createFossId(createConfig())
+
+            val currentVersion = checkNotNull(Semver.coerce(fossId.version))
+            val minVersion = checkNotNull(Semver.coerce("2020.2"))
+            (currentVersion >= minVersion) shouldBe true
+            val minVersion2 = checkNotNull(Semver.coerce("2023.3"))
+            (currentVersion <= minVersion2) shouldBe true
         }
     }
 
