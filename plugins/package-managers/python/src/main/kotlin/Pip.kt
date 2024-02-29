@@ -115,7 +115,7 @@ class Pip(
                 PythonInspector.inspect(
                     workingDir = workingDir,
                     definitionFile = definitionFile,
-                    pythonVersion = pythonVersion.replace(".", ""),
+                    pythonVersion = pythonVersion.split('.', limit = 3).take(2).joinToString(""),
                     operatingSystem = operatingSystem
                 )
             } finally {
