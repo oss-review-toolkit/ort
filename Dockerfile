@@ -138,7 +138,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     && sudo rm -rf /var/lib/apt/lists/*
 
 ARG PYTHON_VERSION=3.11.5
-ARG PYENV_GIT_TAG=v2.3.25
+ARG PYENV_GIT_TAG=v2.3.36
 
 ENV PYENV_ROOT=/opt/python
 ENV PATH=$PATH:$PYENV_ROOT/shims:$PYENV_ROOT/bin
