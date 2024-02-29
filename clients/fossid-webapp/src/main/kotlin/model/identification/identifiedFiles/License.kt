@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles
 
 import org.ossreviewtoolkit.clients.fossid.model.identification.common.LicenseMatchType
+import org.ossreviewtoolkit.clients.fossid.model.result.LicenseCategory
 
 data class License(
     val fileLicenseMatchType: LicenseMatchType,
@@ -30,6 +31,7 @@ data class License(
     val isFoss: Int?,
     val isOsiApproved: Int?,
     val isSpdxStandard: Int?,
+    val category: LicenseCategory? = null,
 
     val name: String?,
     val text: String? = null
