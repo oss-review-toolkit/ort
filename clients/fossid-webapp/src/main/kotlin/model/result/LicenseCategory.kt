@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.clients.fossid.model.result
 
 enum class LicenseCategory {
     COMMERCIAL,
+    NON_COMMERCIAL,
     PERMISSIVE,
     STRONG_COPYLEFT,
     UNCATEGORIZED,
