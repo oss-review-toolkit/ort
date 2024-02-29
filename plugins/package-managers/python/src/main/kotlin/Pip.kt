@@ -88,7 +88,7 @@ class Pip(
     }
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
-        val result = runPythonInspector(definitionFile)
+        val result = runPythonInspector(definitionFile) { detectPythonVersion(definitionFile.parentFile) }
 
         val project = result.toOrtProject(managerName, analysisRoot, definitionFile)
         val packages = result.packages.toOrtPackages()
@@ -129,5 +129,13 @@ class Pip(
                     e.collectMessages()
             }
         }.getOrThrow()
+    }
+
+    private fun detectPythonVersion(workingDir: File): String? {
+        // While there seems to be no formal specification, a `.python-version` file seems to be supposed to just
+        // contain the plain version, see e.g. https://github.com/pyenv/pyenv/blob/21c2a3d/test/version.bats#L28.
+        val pythonVersionFile = workingDir.resolve(".python-version")
+        if (!pythonVersionFile.isFile) return null
+        return pythonVersionFile.readLines().firstOrNull()?.takeIf { it.firstOrNull()?.isDigit() == true }
     }
 }
