@@ -185,6 +185,10 @@ tasks.named<CreateStartScripts>("startScripts") {
     }
 }
 
+tasks.named<Tar>("distTar") {
+    compression = Compression.GZIP
+}
+
 tasks.named<JavaExec>("run") {
     System.getenv("TERM")?.also {
         val mode = it.substringAfter('-', "16color")
