@@ -1,0 +1,26 @@
+FROM mise AS python
+
+# Repeat the global argument names for use in this stage.
+ARG PIPENV_VERSION
+ARG POETRY_VERSION
+ARG PYTHON_INSPECTOR_VERSION
+ARG PYTHON_VERSION
+
+# Install the actual tool via mise.
+RUN if [ -n "$PIPENV_VERSION" -o -n "$POETRY_VERSION" -o -n "$PYTHON_INSPECTOR_VERSION" ]; then \
+        # Only install Python if any of the tools that require it gets installed.
+        mise install python@$PYTHON_VERSION; \
+    fi
+
+# Make the mise installs relocatable by turning absolute into relative links.
+RUN find $HOME/.local/share/mise/installs/python -type l -exec ln -frs "$(readlink -f {})" {} \;
+
+# Move the installed tool to the conventional location.
+RUN if [ -d "$HOME/.local/share/mise/installs/python" ]; then mv $HOME/.local/share/mise/installs/python /opt/ort-tools/python; fi
+
+# Make PIP available for following install commands.
+ENV PATH=/opt/ort-tools/python/latest/bin:$PATH
+
+RUN if [ -n "$PIPENV_VERSION" ]; then pip install pipenv==$PIPENV_VERSION; fi
+RUN if [ -n "$POETRY_VERSION" ]; then pip install poetry==$POETRY_VERSION; fi
+RUN if [ -n "$PYTHON_INSPECTOR_VERSION" ]; then pip install python-inspector==$PYTHON_INSPECTOR_VERSION; fi

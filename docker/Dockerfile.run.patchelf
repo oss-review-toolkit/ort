@@ -1,0 +1,7 @@
+RUN --mount=type=cache,target=/var/cache/apt \
+    apt-get update && \
+    apt-get install -y --no-install-recommends file patchelf
+
+# Patch the RUNPATH to be relative in order to make relocated executables work.
+RUN find /opt/ort-tools -type f -executable -exec sh -c 'file $1 | grep -q " ELF "' sh {} \; -print \
+    | xargs patchelf --set-rpath '$ORIGIN'/../lib
