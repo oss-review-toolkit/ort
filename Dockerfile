@@ -60,6 +60,7 @@ ENV MISE_LOG_LEVEL=debug
 ##
 
 # Package managers
+INCLUDE docker/Dockerfile.stage.node
 INCLUDE docker/Dockerfile.stage.python
 
 ##
@@ -67,6 +68,9 @@ INCLUDE docker/Dockerfile.stage.python
 ##
 
 FROM base AS ort-tools
+
+COPY --from=node --link /opt/ort-tools/node /opt/ort-tools/node
+ENV PATH=/opt/ort-tools/node/node_modules/.bin:/opt/ort-tools/node/latest/bin:$PATH
 
 COPY --from=python --link /opt/ort-tools/python /opt/ort-tools/python
 ENV PATH=/opt/ort-tools/python/latest/bin:$PATH

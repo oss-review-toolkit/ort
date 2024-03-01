@@ -1,0 +1,26 @@
+FROM mise AS node
+
+# Repeat the global argument names for use in this stage.
+ARG BOWER_VERSION
+ARG NODE_VERSION
+ARG NPM_VERSION
+ARG PNPM_VERSION
+ARG YARN_VERSION
+
+# Install the actual tool via mise.
+RUN if [ -n "$BOWER_VERSION" -o -n "$NPM_VERSION" -o -n "$PNPM_VERSION" -o -n "$YARN_VERSION" ]; then \
+        # Only install Node if any of the tools that require it gets installed.
+        mise install node@$NODE_VERSION; \
+    fi
+
+# Move the installed tool to the conventional location.
+RUN if [ -d "$HOME/.local/share/mise/installs/node" ]; then mv $HOME/.local/share/mise/installs/node /opt/ort-tools/node; fi
+
+# Make NPM available for following install commands.
+WORKDIR /opt/ort-tools/node
+ENV PATH=/opt/ort-tools/node/node_modules/.bin:/opt/ort-tools/node/latest/bin:$PATH
+
+RUN if [ -n "$NPM_VERSION" ]; then npm install npm@$NPM_VERSION; fi
+RUN if [ -n "$BOWER_VERSION" ]; then npm install bower@$BOWER_VERSION; fi
+RUN if [ -n "$PNPM_VERSION" ]; then npm install pnpm@$PNPM_VERSION; fi
+RUN if [ -n "$YARN_VERSION" ]; then npm install yarn@$YARN_VERSION; fi
