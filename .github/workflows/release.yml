@@ -45,7 +45,7 @@ jobs:
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
         run: ./gradlew --no-configuration-cache publishAndReleaseToMavenCentral
       - name: Build ORT Distributions
-        run: ./gradlew :cli:distZip :helper-cli:distZip
+        run: ./gradlew :cli:distTar :cli:distZip :helper-cli:distTar :helper-cli:distZip
       - name: Generate Release Notes
         run: ./gradlew -q printChangeLog > RELEASE_NOTES.md
       - name: Create GitHub Release
@@ -53,4 +53,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release create $ORT_VERSION --notes-file RELEASE_NOTES.md \
-              ./cli/build/distributions/ort-$ORT_VERSION.zip ./helper-cli/build/distributions/orth-$ORT_VERSION.zip
+              ./cli/build/distributions/ort-$ORT_VERSION.tgz \
+              ./cli/build/distributions/ort-$ORT_VERSION.zip \
+              ./helper-cli/build/distributions/orth-$ORT_VERSION.tgz \
+              ./helper-cli/build/distributions/orth-$ORT_VERSION.zip
