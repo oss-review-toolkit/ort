@@ -1,0 +1,9 @@
+FROM base AS boyterlc
+
+# Repeat the global argument names for use in this stage.
+ARG BOYTERLC_VERSION
+
+RUN if [ -n "$BOYTERLC_VERSION" ]; then \
+        curl -sLO https://github.com/boyter/lc/releases/download/v$BOYTERLC_VERSION/lc-$BOYTERLC_VERSION-x86_64-unknown-linux.zip && \
+            unzip lc-$BOYTERLC_VERSION-x86_64-unknown-linux.zip -d /opt/ort-tools/boyterlc; \
+    fi
