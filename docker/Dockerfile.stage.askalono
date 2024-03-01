@@ -1,0 +1,9 @@
+FROM base AS askalono
+
+# Repeat the global argument names for use in this stage.
+ARG ASKALONO_VERSION
+
+RUN if [ -n "$ASKALONO_VERSION" ]; then \
+        curl -sLO https://github.com/amzn/askalono/releases/download/$ASKALONO_VERSION/askalono-Linux.zip && \
+            unzip askalono-Linux.zip -d /opt/ort-tools/askalono; \
+    fi
