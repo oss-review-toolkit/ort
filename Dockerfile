@@ -62,6 +62,7 @@ ENV MISE_LOG_LEVEL=debug
 # Scanners
 INCLUDE docker/Dockerfile.stage.askalono
 INCLUDE docker/Dockerfile.stage.boyterlc
+INCLUDE docker/Dockerfile.stage.licensee
 
 # Package managers
 INCLUDE docker/Dockerfile.stage.node
@@ -78,6 +79,9 @@ ENV PATH=/opt/ort-tools/askalono:$PATH
 
 COPY --from=boyterlc --link /opt/ort-tools/boyterlc /opt/ort-tools/boyterlc
 ENV PATH=/opt/ort-tools/boyterlc:$PATH
+
+COPY --from=licensee --link /opt/ort-tools/licensee /opt/ort-tools/licensee
+ENV PATH=/opt/ort-tools/licensee:$PATH
 
 COPY --from=node --link /opt/ort-tools/node /opt/ort-tools/node
 ENV PATH=/opt/ort-tools/node/node_modules/.bin:/opt/ort-tools/node/latest/bin:$PATH
