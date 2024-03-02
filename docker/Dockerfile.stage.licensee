@@ -1,0 +1,7 @@
+FROM base AS licensee
+
+# Repeat the global argument names for use in this stage.
+ARG LICENSEE_VERSION
+
+RUN if [ -n "$LICENSEE_VERSION" ]; then apt-get install -y --no-install-recommends cmake libssl-dev pkg-config ruby ruby-dev; fi
+RUN if [ -n "$LICENSEE_VERSION" ]; then gem install --vendor licensee -v $LICENSEE_VERSION; fi
