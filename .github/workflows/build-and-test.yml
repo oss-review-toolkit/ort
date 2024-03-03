@@ -114,7 +114,24 @@ jobs:
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         flags: funTest-non-docker
+  docker-build-check:
+    runs-on: ubuntu-22.04
+    outputs:
+      skip: ${{ steps.check.outputs.skip }}
+    steps:
+    - name: Scheduled docker build
+      id: check
+      shell: bash
+      run: |
+        # Uses gh API and jq to check is docker is scheduled to run, so tests will be done there
+        if [[ "$(gh api repos/:owner/:repo/actions/runs --jq '.workflow_runs[] | select(.name == "docker-ort" and (.status == "in_progress" or .status == "queued"))')" != "" ]]; then
+          echo "skip=true" >> $GITHUB_OUTPUT
+        else
+          echo "skip=false" >> $GITHUB_OUTPUT
+        fi
   funTest-docker:
+    needs: docker-build-check
+    if: needs.docker-build-check.outputs.skip == 'false'
     runs-on: ubuntu-22.04
     container:
       image: ghcr.io/oss-review-toolkit/ort:snapshot
