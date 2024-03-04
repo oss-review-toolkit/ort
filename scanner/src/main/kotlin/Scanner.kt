@@ -70,6 +70,7 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 const val TOOL_NAME = "scanner"
+const val NO_LIMIT_DEPTH = -1
 
 @Suppress("TooManyFunctions")
 class Scanner(
@@ -104,7 +105,12 @@ class Scanner(
         provenanceDownloader = provenanceDownloader
     )
 
-    suspend fun scan(ortResult: OrtResult, skipExcluded: Boolean, labels: Map<String, String>): OrtResult {
+    suspend fun scan(
+        ortResult: OrtResult,
+        skipExcluded: Boolean,
+        labels: Map<String, String>,
+        packagesDepth: Int = NO_LIMIT_DEPTH
+    ): OrtResult {
         val startTime = Instant.now()
 
         val projectPackages = ortResult.getProjects(skipExcluded).mapTo(mutableSetOf()) { it.toPackage() }
@@ -119,8 +125,16 @@ class Scanner(
             )
         )
 
-        val packages = ortResult.getPackages(skipExcluded).map { it.metadata }.filterNotConcluded()
-            .filterNotMetadataOnly().toSet()
+        val packages = when {
+            NO_LIMIT_DEPTH == packagesDepth -> ortResult.getPackages(skipExcluded).map { it.metadata }
+                .filterNotConcluded()
+                .filterNotMetadataOnly().toSet()
+
+            else -> projectPackages.map { ortResult.getDependencies(it.id, packagesDepth, skipExcluded) }
+                .flatten().mapNotNull { ortResult.getPackage(it) }
+                .map { it.metadata }.filterNotConcluded()
+                .filterNotMetadataOnly().toSet()
+        }
         val packageResults = scan(
             packages,
             ScanContext(
