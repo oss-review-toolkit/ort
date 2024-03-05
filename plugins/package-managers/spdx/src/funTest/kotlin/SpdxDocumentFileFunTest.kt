@@ -175,6 +175,25 @@ class SpdxDocumentFileFunTest : WordSpec({
             }
         }
 
+        "retrieve nested DEPENDS_ON dependencies" {
+            val idCurl = Identifier("SpdxDocumentFile::curl:7.70.0")
+            val idOpenSsl = Identifier("SpdxDocumentFile:OpenSSL Development Team:openssl:1.1.1g")
+            val idZlib = Identifier("SpdxDocumentFile::zlib:1.2.11")
+
+            val projectFile = projectDir.resolve("DEPENDS_ON-packages/project-xyz.spdx.yml")
+            val definitionFiles = listOf(projectFile)
+
+            val result = create("SpdxDocumentFile").resolveDependencies(definitionFiles, emptyMap())
+
+            result.projectResults[projectFile] shouldNotBeNull {
+                with(single()) {
+                    val resolvedProject = project.withResolvedScopes(result.dependencyGraph)
+                    resolvedProject.scopes.map { it.name } should containExactlyInAnyOrder("default")
+                    packages.map { it.id } should containExactlyInAnyOrder(idZlib, idCurl, idOpenSsl)
+                }
+            }
+        }
+
         "resolve dependencies from the Conan package manager" {
             val definitionFile = projectDir.resolve("subproject-conan/project-xyz.spdx.yml")
             val expectedResultFile = getAssetFile(

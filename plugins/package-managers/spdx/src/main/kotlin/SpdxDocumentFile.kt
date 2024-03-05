@@ -426,13 +426,7 @@ class SpdxDocumentFile(
                             packages += dependency.toPackage(doc.getDefinitionFile(source), doc)
                             PackageReference(
                                 id = dependency.toIdentifier(),
-                                dependencies = getDependencies(
-                                    source,
-                                    doc,
-                                    packages,
-                                    SpdxRelationship.Type.DEPENDENCY_OF,
-                                    dependsOnCase
-                                ),
+                                dependencies = getDependencies(source, doc, packages),
                                 issues = issues,
                                 linkage = getLinkageForDependency(dependency, target, doc.relationships)
                             )
