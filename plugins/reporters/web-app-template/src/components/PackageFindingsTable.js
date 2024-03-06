@@ -204,7 +204,7 @@ const PackageFindingsTable = (props) => {
             dataIndex: 'path',
             defaultSortOrder: 'ascend',
             key: 'path',
-            sorter: (a, b) => a.path.length - b.path.length,
+            sorter: (a, b) => a.path.localeCompare(b.path),
             textWrap: 'word-break',
             title: 'Path'
         },
