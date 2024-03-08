@@ -97,7 +97,7 @@ Three properties are required to identify the recipients of the snippet choice:
 
 There is also another mandatory property:
 
-* `choices.choice.reason` enum member of [SnippetChoiceReason](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/config/SnippetChoiceReason.kt).
+* `choices.choice.reason` enum member of [SnippetChoiceReason](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/config/snippet/SnippetChoiceReason.kt).
 
 Finally, one property is *informative* and aims at making the snippet choice configuration more maintainable:
 
@@ -154,7 +154,7 @@ Three properties are required to mark all the snippets for a given location as f
 
 There is also another mandatory property:
 
-* `choices.choice.reason` always [SnippetChoiceReason.NO_RELEVANT_FINDING](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/config/SnippetChoiceReason.kt#L26).
+* `choices.choice.reason` always [SnippetChoiceReason.NO_RELEVANT_FINDING](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/config/snippet/SnippetChoiceReason.kt#L26).
 
 And an optional one:
 
