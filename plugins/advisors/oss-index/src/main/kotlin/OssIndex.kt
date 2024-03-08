@@ -36,7 +36,6 @@ import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.config.PluginConfiguration
-import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
 import org.ossreviewtoolkit.utils.common.Options
@@ -126,7 +125,7 @@ class OssIndex(name: String, config: OssIndexConfiguration) : AdviceProvider(nam
         val endTime = Instant.now()
 
         return packages.mapNotNullTo(mutableListOf()) { pkg ->
-            componentReports[pkg.id.toPurl()]?.let { report ->
+            componentReports[pkg.purl]?.let { report ->
                 pkg to AdvisorResult(
                     details,
                     AdvisorSummary(startTime, endTime, issues),
