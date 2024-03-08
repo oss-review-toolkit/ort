@@ -71,14 +71,7 @@ private val SPDX_LINKAGE_RELATIONSHIPS = mapOf(
     SpdxRelationship.Type.STATIC_LINK to PackageLinkage.STATIC
 )
 
-private val SPDX_SCOPE_RELATIONSHIPS = listOf(
-    SpdxRelationship.Type.BUILD_DEPENDENCY_OF,
-    SpdxRelationship.Type.DEV_DEPENDENCY_OF,
-    SpdxRelationship.Type.OPTIONAL_DEPENDENCY_OF,
-    SpdxRelationship.Type.PROVIDED_DEPENDENCY_OF,
-    SpdxRelationship.Type.RUNTIME_DEPENDENCY_OF,
-    SpdxRelationship.Type.TEST_DEPENDENCY_OF
-)
+private val SPDX_SCOPE_RELATIONSHIPS = SpdxRelationship.Type.entries.filter { it.name.endsWith("_DEPENDENCY_OF") }
 
 private val SPDX_VCS_PREFIXES = mapOf(
     "git+" to VcsType.GIT,
