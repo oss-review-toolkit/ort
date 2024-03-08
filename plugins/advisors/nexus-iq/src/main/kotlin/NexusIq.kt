@@ -42,7 +42,6 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.utils.PurlType
 import org.ossreviewtoolkit.model.utils.getPurlType
-import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
 import org.ossreviewtoolkit.utils.common.Options
@@ -149,7 +148,7 @@ class NexusIq(name: String, private val config: NexusIqConfiguration) : AdvicePr
         val endTime = Instant.now()
 
         return packages.mapNotNullTo(mutableListOf()) { pkg ->
-            componentDetails[pkg.id.toPurl()]?.let { pkgDetails ->
+            componentDetails[pkg.purl]?.let { pkgDetails ->
                 pkg to AdvisorResult(
                     details,
                     AdvisorSummary(startTime, endTime, issues),
