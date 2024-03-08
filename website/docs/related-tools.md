@@ -11,8 +11,8 @@ A [repository](https://github.com/oss-review-toolkit/ort-config) with exemplary 
 
 ## ORT Workbench
 
-The [ORT Workbench](https://github.com/oss-review-toolkit/ort-workbench) is an ORT result file viewer developed by the
-ORT core team. It can be used as an alternative to creating a [report](tools/reporter.md) to review the ORT output.
+The [ORT Workbench](https://github.com/oss-review-toolkit/ort-workbench) is an ORT result file viewer developed by the ORT core team.
+It can be used as an alternative to creating a [report](tools/reporter.md) to review the ORT output.
 
 ![Screenshot](https://github.com/oss-review-toolkit/ort-workbench/raw/main/assets/screenshot.png)
 
@@ -26,5 +26,4 @@ A [GitLab Pipeline](https://github.com/oss-review-toolkit/ort-gitlab-ci) to run 
 
 ## ORTHW
 
-A [bash script](https://github.com/oss-review-toolkit/orthw) that helps to simplify and speed up common tasks performed
-when processing ORT results.
+A [bash script](https://github.com/oss-review-toolkit/orthw) that helps to simplify and speed up common tasks performed when processing ORT results.

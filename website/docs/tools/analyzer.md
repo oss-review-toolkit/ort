@@ -4,17 +4,13 @@ sidebar_position: 1
 
 # Analyzer
 
-The *analyzer* is a Software Composition Analysis (SCA) tool that determines the dependencies of software projects
-inside the specified input directory (`-i`). It does so by querying the detected package managers; **no modifications**
-to your existing project source code, like applying build system plugins, are necessary for that to work. The tree of
-transitive dependencies per project is written out as part of an
-[OrtResult](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/OrtResult.kt) in YAML (or
-JSON, see `-f`) format to a file named `analyzer-result.yml` in the specified output directory (`-o`). The output file
-exactly documents the status quo of all package-related metadata. It can be further processed or manually edited before
-passing it to one of the other tools.
+The *analyzer* is a Software Composition Analysis (SCA) tool that determines the dependencies of software projects inside the specified input directory (`-i`).
+It does so by querying the detected package managers; **no modifications** to your existing project source code, like applying build system plugins, are necessary for that to work.
+The tree of transitive dependencies per project is written out as part of an [OrtResult](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/OrtResult.kt) in YAML (or JSON, see `-f`) format to a file named `analyzer-result.yml` in the specified output directory (`-o`).
+The output file exactly documents the status quo of all package-related metadata.
+It can be further processed or manually edited before passing it to one of the other tools.
 
-Currently, the following package managers (grouped by the programming language they are most commonly used with) are
-supported:
+Currently, the following package managers (grouped by the programming language they are most commonly used with) are supported:
 
 * C / C++
   * [Conan](https://conan.io/)
@@ -67,12 +63,8 @@ supported:
 * Scala
   * [SBT](https://www.scala-sbt.org/)
 * Unmanaged
-  * This is a special "package manager" that manages all files that cannot be associated to any of the other package
-    managers.
+  * This is a special "package manager" that manages all files that cannot be associated to any of the other package managers.
 
 <a name="analyzer-for-spdx-documents"></a>
 
-If another package manager that is not part of the list above is used (or no package manager at all), the generic
-fallback to [SPDX documents](https://spdx.dev/specifications/) can be leveraged to describe
-[projects](https://github.com/oss-review-toolkit/ort/blob/main/plugins/package-managers/spdx/src/funTest/assets/projects/synthetic/inline-packages/project-xyz.spdx.yml)
-or [packages](https://github.com/oss-review-toolkit/ort/blob/main/plugins/package-managers/spdx/src/funTest/assets/projects/synthetic/libs/curl/package.spdx.yml).
+If another package manager that is not part of the list above is used (or no package manager at all), the generic fallback to [SPDX documents](https://spdx.dev/specifications/) can be leveraged to describe [projects](https://github.com/oss-review-toolkit/ort/blob/main/plugins/package-managers/spdx/src/funTest/assets/projects/synthetic/inline-packages/project-xyz.spdx.yml) or [packages](https://github.com/oss-review-toolkit/ort/blob/main/plugins/package-managers/spdx/src/funTest/assets/projects/synthetic/libs/curl/package.spdx.yml).
