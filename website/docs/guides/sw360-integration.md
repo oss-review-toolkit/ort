@@ -1,7 +1,6 @@
 # SW360 Integration
 
-OSS Review Toolkit (ORT) offers several ways to integrate with the software component catalog application
-[Eclipse SW360][sw360]:
+OSS Review Toolkit (ORT) offers several ways to integrate with the software component catalog application [Eclipse SW360][sw360]:
 
 * Upload ORT *analyzer* results to SW360
 * Use SW360 package metadata curations as input for the ORT *analyzer*
@@ -18,9 +17,7 @@ To add packages found by ORT to projects and releases in SW360.
 ### Prerequisites
 
 In order to be able to upload ORT results to SW360, first set the connection parameters to your SW360 instance.
-You can do this by defining a `sw360Configuration` scanner storage in the `storages` section of your
-[config.yml](../getting-started/usage.md#ort-configuration-file) (e.g. in `$HOME/.ort/config`) or pass it to the ORT
-command with the `--config` option as shown below.
+You can do this by defining a `sw360Configuration` scanner storage in the `storages` section of your [config.yml](../getting-started/usage.md#ort-configuration-file) (e.g. in `$HOME/.ort/config`) or pass it to the ORT command with the `--config` option as shown below.
 
 ```yaml
 ort:
@@ -38,9 +35,7 @@ ort:
 
 ### Command Line
 
-Uploading to SW360 is a stand-alone
-[ORT command](https://github.com/oss-review-toolkit/ort/blob/main/plugins/commands/upload-result-to-sw360/src/main/kotlin/UploadResultToSw360Command.kt),
-which:
+Uploading to SW360 is a stand-alone [ORT command](https://github.com/oss-review-toolkit/ort/blob/main/plugins/commands/upload-result-to-sw360/src/main/kotlin/UploadResultToSw360Command.kt), which:
 
 1. Takes an *analyzer* result file as an input,
 2. Creates components/releases in SW360 for the packages and ...
@@ -55,21 +50,17 @@ cli/build/install/ort/bin/ort upload-result-to-sw360
 
 ### When to use
 
-If you prefer to use the SW360 web frontend to correct package metadata instead of ORT's
-[curations.yml file](../configuration/package-curations.md).
+If you prefer to use the SW360 web frontend to correct package metadata instead of ORT's [curations.yml file](../configuration/package-curations.md).
 
 Note:
 
-1. Currently, only the SW360 fields `concludedLicenses`, `homepageUrl`, `binaryArtifact` and `sourceArtifact` are used
-   for curations, all other SW360 fields are ignored as there are no corresponding fields for them in ORT.
+1. Currently, only the SW360 fields `concludedLicenses`, `homepageUrl`, `binaryArtifact` and `sourceArtifact` are used for curations, all other SW360 fields are ignored as there are no corresponding fields for them in ORT.
 2. A release in SW360 needs to be in the approved clearing state, otherwise the curated data will not be used.
 
 ### Prerequisites
 
-In order to be able to use SW360 data in the ORT *analyzer*, first set the connection parameters for your SW360
-instance. You can do this by adding an entry of type `SW360` to the list of `packageCurationProviders` in your
-[config.yml](../getting-started/usage.md#ort-configuration-file) (e.g. in `$HOME/.ort/config`) or pass it to the ORT
-command with the `--config` option as shown below.
+In order to be able to use SW360 data in the ORT *analyzer*, first set the connection parameters for your SW360 instance.
+You can do this by adding an entry of type `SW360` to the list of `packageCurationProviders` in your [config.yml](../getting-started/usage.md#ort-configuration-file) (e.g. in `$HOME/.ort/config`) or pass it to the ORT command with the `--config` option as shown below.
 
 ```yaml
 ort:
@@ -87,8 +78,7 @@ ort:
 
 ### Command Line
 
-Apart from configuring your `config.yml` to use the SW360 curation provider, no specific option needs to be passed to
-the *analyzer*:
+Apart from configuring your `config.yml` to use the SW360 curation provider, no specific option needs to be passed to the *analyzer*:
 
 ```shell
 cli/build/install/ort/bin/ort analyze
@@ -100,14 +90,12 @@ cli/build/install/ort/bin/ort analyze
 
 ### When to use
 
-If you prefer to use the SW360 to store the ORT *scanner* results instead of the other
-[storage backends][ort-storage-backends].
+If you prefer to use the SW360 to store the ORT *scanner* results instead of the other [storage backends][ort-storage-backends].
 
 ### Prerequisites
 
 In order to be able to store ORT *scanner* results SW360, first set the connection parameters to your SW360 instance.
-You can do this by defining a `sw360Configuration` scanner storage in the `storages` section of your `config.yml` file
-(e.g. in `$HOME/.ort/config`) or pass it to the ORT command with the `--config` option as shown below.
+You can do this by defining a `sw360Configuration` scanner storage in the `storages` section of your `config.yml` file (e.g. in `$HOME/.ort/config`) or pass it to the ORT command with the `--config` option as shown below.
 
 ```yaml
 ort:
@@ -123,15 +111,14 @@ ort:
         token: token
 ```
 
-The scan results for each package will be uploaded to SW360 once you have completed the above configuration. The
-uploaded results will be used to speed up future scans.
+The scan results for each package will be uploaded to SW360 once you have completed the above configuration.
+The uploaded results will be used to speed up future scans.
 
 Note the [SW360 attachment type][sw360-attachment-type] of the uploaded scan results is `SCAN_RESULT_REPORT`.
 
 ### Command Line
 
-Apart from configuring your `config.yml` to use SW360 to store scan results, no specific option needs to be passed to
-the *scanner*:
+Apart from configuring your `config.yml` to use SW360 to store scan results, no specific option needs to be passed to the *scanner*:
 
 ```shell
 cli/build/install/ort/bin/ort scan 

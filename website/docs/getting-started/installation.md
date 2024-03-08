@@ -6,16 +6,14 @@ sidebar_position: 1
 
 ## From Docker
 
-The easiest way to run ORT is to use the Docker images available from the GitHub container registry. There are two
-images available: [`ort`](https://github.com/oss-review-toolkit/ort/pkgs/container/ort/versions) and
-[`ort-minimal`](https://github.com/oss-review-toolkit/ort/pkgs/container/ort-minimal/versions).
+The easiest way to run ORT is to use the Docker images available from the GitHub container registry.
+There are two images available:
+[`ort`](https://github.com/oss-review-toolkit/ort/pkgs/container/ort/versions) and [`ort-minimal`](https://github.com/oss-review-toolkit/ort/pkgs/container/ort-minimal/versions).
 
-The difference between those two images is that `ort` contains installations of all supported package managers while
-`ort-minimal` contains only the most commonly used package managers to reduce the image size. For example, for release
-`13.0.0` the size of the [`ort`](https://github.com/oss-review-toolkit/ort/pkgs/container/ort/168323397?tag=13.0.0)
-image is ~7 GB and the size of the
-[`ort-minimal`](https://github.com/oss-review-toolkit/ort/pkgs/container/ort-minimal/168320821?tag=13.0.0) image is ~3
-GB. The examples below use the `ort` image. To run them with the `ort-minimal` image replace `ort` with `ort-minimal`.
+The difference between those two images is that `ort` contains installations of all supported package managers while `ort-minimal` contains only the most commonly used package managers to reduce the image size.
+For example, for release `13.0.0` the size of the [`ort`](https://github.com/oss-review-toolkit/ort/pkgs/container/ort/168323397?tag=13.0.0) image is ~7 GB and the size of the [`ort-minimal`](https://github.com/oss-review-toolkit/ort/pkgs/container/ort-minimal/168320821?tag=13.0.0) image is ~3 GB.
+The examples below use the `ort` image.
+To run them with the `ort-minimal` image replace `ort` with `ort-minimal`.
 
 To run the Docker image for the latest ORT release use:
 
@@ -43,8 +41,8 @@ To show which versions of the required tools are installed run the image with th
 docker run ghcr.io/oss-review-toolkit/ort requirements
 ```
 
-The above commands always create a new Docker container. To avoid that they pile up Docker can be run with the `--rm`
-flag to automatically remove the container when the command has finished:
+The above commands always create a new Docker container.
+To avoid that they pile up Docker can be run with the `--rm` flag to automatically remove the container when the command has finished:
 
 ```shell
 docker run --rm ghcr.io/oss-review-toolkit/ort [command]
@@ -52,9 +50,8 @@ docker run --rm ghcr.io/oss-review-toolkit/ort [command]
 
 ## From binaries
 
-A binary distribution of ORT can be downloaded from the
-[latest GitHub release](https://github.com/oss-review-toolkit/ort/releases/latest). The `ort-[version].zip` file
-contains binaries to run ORT in the `bin` folder.
+A binary distribution of ORT can be downloaded from the [latest GitHub release](https://github.com/oss-review-toolkit/ort/releases/latest).
+The `ort-[version].zip` file contains binaries to run ORT in the `bin` folder.
 
 For Linux:
 
@@ -88,11 +85,10 @@ git submodule update --init --recursive
 Install the following basic prerequisites:
 
 * Docker 18.09 or later (and ensure its daemon is running).
-* Enable [BuildKit](https://docs.docker.com/develop/develop-images/build_enhancements/#to-enable-buildkit-builds) for
-  Docker.
+* Enable [BuildKit](https://docs.docker.com/develop/develop-images/build_enhancements/#to-enable-buildkit-builds) for Docker.
 
-Change into the directory with ORT's source code and run `docker build -t ort .`. Alternatively, use the script at
-`scripts/docker_build.sh` which also sets the ORT version from the Git revision.
+Change into the directory with ORT's source code and run `docker build -t ort .`.
+Alternatively, use the script at `scripts/docker_build.sh` which also sets the ORT version from the Git revision.
 
 ### Build natively
 
@@ -100,8 +96,7 @@ Install these additional prerequisites:
 
 * Java Development Kit (JDK) version 11 or later; also remember to set the `JAVA_HOME` environment variable accordingly.
 
-Change into the directory with ORT's source code and run `./gradlew installDist` (on the first run this will bootstrap
-Gradle and download all required dependencies).
+Change into the directory with ORT's source code and run `./gradlew installDist` (on the first run this will bootstrap Gradle and download all required dependencies).
 
 ## Basic usage
 
@@ -127,7 +122,6 @@ Depending on how ORT was installed, it can be run in the following ways:
   ./gradlew cli:run --args="--help"
   ```
 
-  Note that in this case the working directory used by ORT is that of the `cli` project, not the directory `gradlew` is
-  located in (see https://github.com/gradle/gradle/issues/6074).
+  Note that in this case the working directory used by ORT is that of the `cli` project, not the directory `gradlew` is located in (see https://github.com/gradle/gradle/issues/6074).
 
 For simplicity of the following usage examples, the above ORT invocations are unified to just `ort --help`.
