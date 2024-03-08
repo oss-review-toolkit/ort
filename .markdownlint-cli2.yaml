@@ -1,6 +1,8 @@
 #  Configuration for the markdownlint-cli2, see:
 #  https://github.com/DavidAnson/markdownlint-cli2/blob/main/test/markdownlint-cli2-yaml-example/.markdownlint-cli2.yaml
 
+customRules:
+  - markdownlint-rule-max-one-sentence-per-line
 globs:
   - "**/*.md"
 ignores:

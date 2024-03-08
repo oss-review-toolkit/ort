@@ -81,8 +81,12 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Setup Node
+        uses: actions/setup-node@v4
       - name: Check for Markdown issues
-        uses: DavidAnson/markdownlint-cli2-action@v15
+        run: |
+          npm install -g markdownlint-rule-max-one-sentence-per-line@0.0.2
+          npx markdownlint-cli2
   qodana-scan:
     runs-on: ubuntu-22.04
     steps:
