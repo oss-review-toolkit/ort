@@ -20,8 +20,8 @@ The most important tasks for this project are:
 
 All contributions need to pass the `detekt`, `test` and `funTest` checks before they can be merged.
 
-For IDE development we recommend the [IntelliJ IDEA Community Edition](https://www.jetbrains.com/idea/download/) which can directly import the Gradle build files.
-After cloning the project's source code recursively, simply run IDEA and use the following steps to import the project.
+For IDE development, we recommend the [IntelliJ IDEA Community Edition](https://www.jetbrains.com/idea/download/) which can directly import the Gradle build files.
+After cloning the project's source code recursively, run IDEA and use the following steps to import the project.
 
 1. From the *Welcome* dialog: Select `Open`.
 
@@ -53,7 +53,7 @@ When set like
 ```
 
 any failing tests will show the deviation from the expected result in a unified diff format that is compatible with `git apply`.
-If the actual result should be taken as the new expected result, simply copy the diff from the console to the clipboard and run
+If the actual result should be taken as the new expected result, copy the diff from the console to the clipboard and run
 
 * `wl-paste | patch -p1` (Linux with Wayland)
 * `xsel -b | patch -p1` (Linux with X)
@@ -66,4 +66,4 @@ After reviewing the changes, create a commit to accept the new expected result.
 ## Want to Help or have Questions?
 
 All contributions are welcome.
-If you are interested in contributing, please read our [contributing guide](https://github.com/oss-review-toolkit/.github/blob/main/CONTRIBUTING.md), and to get quick answers to any of your questions we recommend you [join our Slack community](http://slack.oss-review-toolkit.org).
+If you are interested in contributing, please read our [contributing guide](https://github.com/oss-review-toolkit/.github/blob/main/CONTRIBUTING.md), and to get quick answers to any of your questions, we recommend you [join our Slack community](http://slack.oss-review-toolkit.org).

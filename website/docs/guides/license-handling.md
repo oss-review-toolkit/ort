@@ -9,13 +9,13 @@ Their ORT-specific names and purposes are explained below.
 
 The ORT *analyzer* picks up declared licenses that are provided as part of package manager specific metadata, like inside the `<licenses>` tag in the `pom.xml` for [Maven][1] or inside the `license` field in the `package.json` for [NPM][2].
 In other words, this is the license the author of the package claims or intends the package to be licensed under; the license that is "visible from the outside".
-ORT does *not* consider licenses mentioned inside of source code files as declared licenses (see [detected licenses](#detected-license) below).
+ORT does *not* consider licenses mentioned inside source code files as declared licenses (see [detected licenses](#detected-license) below).
 As such, the declared license alone only provides an incomplete picture.
 There are so-called "envelope cases" where the license visible from the outside (*on* the envelope) does not match what is *inside* the envelope (i.e. in the source code).
 For example, a package might have declared itself to be licensed under the MIT license, but in the source code a file might contain a BSD-3-Clause license header.
 
-Declared licenses often come in non-SPDX form or contains typos.
-For universally valid cases ORT has built-in [mappings](https://github.com/oss-review-toolkit/ort/blob/main/utils/spdx/src/main/resources/declared-license-mapping.yml).
+Declared licenses often come in non-SPDX form or contain typos.
+For universally valid cases, ORT has built-in [mappings](https://github.com/oss-review-toolkit/ort/blob/main/utils/spdx/src/main/resources/declared-license-mapping.yml).
 For cases that might be ambiguous in general but are valid in the specific context of a package, [curations](../configuration/package-curations.md) can be used to define a `declared_license_mapping`.
 
 ### Detected license
@@ -41,8 +41,8 @@ Curating licenses via a [concluded license](#concluded-license) is somewhat of a
 This can be a problem if a license curation should be reused also for future versions of a package:
 There is a risk that a newer package version introduces new licenses, which would go unnoticed with a concluded license that blindly overrides everything.
 
-That is why in such scenarios a [license finding curation](../configuration/package-configurations.md#defining-path-excludes-and-license-finding-curations) as part of a package configuration is the better option, as it allows to conclude a single exact finding of a license.
-That way unmatched licenses are not affected by the curation and new / changed licenses will not go unnoticed.
+That is why in such scenarios, a [license finding curation](../configuration/package-configurations.md#defining-path-excludes-and-license-finding-curations) as part of a package configuration is the better option, as it allows concluding a single exact finding of a license.
+That way, unmatched licenses are not affected by the curation, and new / changed licenses will not go unnoticed.
 
 [1]: https://maven.apache.org/pom.html#Licenses
 [2]: https://docs.npmjs.com/cli/v8/configuring-npm/package-json#license

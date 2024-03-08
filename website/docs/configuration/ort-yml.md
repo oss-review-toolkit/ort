@@ -2,7 +2,7 @@
 
 The items below can be configured by adding an `.ort.yml` file to the root of the source code repository.
 All configurations in this file apply only to this Project's context.
-Usually the global context is preferred for an increased degree of automation and local configurations should only be done if there are good reasons.
+Usually, the global context is preferred for an increased degree of automation, and local configurations should only be done if there are good reasons.
 
 * [excludes](#excludes) - Mark [files, directories](#excluding-paths) or [package manager scopes](#excluding-scopes) as not included in released artifacts.
 * [resolutions](#resolutions) - Resolve any issues or policy rule violations.
@@ -18,7 +18,7 @@ See the [.ort.yml](https://github.com/oss-review-toolkit/ort/blob/main/.ort.yml)
 
 ### When to Use Excludes
 
-Excludes are used to define which OSS is distributed to third parties and which code is only used internally, e.g. for building, documenting or testing the code.
+Excludes are used to define which OSS is distributed to third parties and which code is only used internally, e.g., for building, documenting or testing the code.
 
 Exclusions apply to paths (files/directories) or scopes.
 Examples of currently supported exclusions:
@@ -30,10 +30,10 @@ Examples of currently supported exclusions:
 
 ORT's default philosophy is to analyze and scan everything it can find to build a complete picture of a repository and its dependencies.
 
-However, the users may not be interested in the results for components that are not included in their released artifacts, for example build files, documentation, examples or test code.
+However, users may not be interested in the results for components that are not included in their released artifacts, for example, build files, documentation, examples or test code.
 To support such use cases, ORT provides a mechanism to mark files, directories or scopes included in the repository as excluded.
 
-Note that by default the excluded parts are analyzed and scanned, but are treated differently in the reports ORT generates:
+Note that by default, the excluded parts are analyzed and scanned, but are treated differently in the reports ORT generates:
 
 * The issue summary does not show issues in the excluded parts.
 * The excluded parts are grayed out.
@@ -157,7 +157,7 @@ import Yarn from '!!raw-loader!@site/../examples/yarn.ort.yml'
 
 Resolutions should be used if you are unable to solve an issue by other means.
 
-If a resolution is not project-specific than add it to [resolutions.yml](resolutions.md) so that it is applied to each scan.
+If a resolution is not project-specific, add it to [resolutions.yml](resolutions.md) so that it is applied to each scan.
 
 ### Resolution Basics
 
@@ -173,7 +173,7 @@ The explanation consists of:
 ### Resolving Issues
 
 If the ORT results show issues, the best approach is usually to fix them and run the scan again.
-However, sometimes it is not possible, for example if an issue occurs in the license scan of a third-party dependency which cannot be fixed or updated.
+However, sometimes it is not possible, for example, if an issue occurs in the license scan of a third-party dependency which cannot be fixed or updated.
 
 In such situations, you can *resolve* the issue in any future scan by adding a resolution to the `.ort.yml` to mark it as acceptable.
 
@@ -202,7 +202,7 @@ resolutions:
 ### Resolving Policy Rule Violations
 
 Resolutions should not be used to resolve license policy rule violations as they do not change the generated open source notices.
-To resolve a license policy rule violation either add a [license finding curation](#curations) to the .ort.yml file if the finding is in your code repository or add a curation to the [curations.yml](package-curations.md) if the violation occurs in a third-party dependency.
+To resolve a license policy rule violation, either add a [license finding curation](#curations) to the .ort.yml file if the finding is in your code repository or add a curation to the [curations.yml](package-curations.md) if the violation occurs in a third-party dependency.
 
 The code below shows the structure of a policy rule violation resolution in the `.ort.yml` file:
 
@@ -352,7 +352,7 @@ The list of available options for `reason` are defined in [LicenseFindingCuratio
 
 ### When to Use License Choices
 
-For multi-licensed dependencies a specific license can be selected.
+For multi-licensed dependencies, a specific license can be selected.
 The license choice can be applied to a package or globally to an SPDX expression in the project.
 A choice is only valid for licenses combined with the SPDX operator `OR`.
 The choices are applied in the evaluator, and the reporter to the effective license of a package, which is calculated by the chosen [LicenseView](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/licenses/LicenseView.kt).

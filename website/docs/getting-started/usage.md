@@ -73,7 +73,7 @@ It consists of sections related to different subcomponents of ORT.
 The meaning of these sections and the properties they can contain is described together with the corresponding subcomponents.
 
 While the file is rather static, there are means to override configuration options for a specific run of ORT or to customize the configuration to a specific environment.
-The following options are supported, in order of precedence:
+The following options are supported (in order of precedence):
 
 * Properties can be defined via environment variables by using the full property path as the variable name.
   For instance, one can override the Postgres schema by setting `ort.scanner.storages.postgres.connection.schema=test_schema`.
@@ -105,7 +105,7 @@ ort config --show-active
 
 #### [Copyright garbage file](../configuration/copyright-garbage.md)
 
-A list of copyright statements that are considered garbage, for example statements that were incorrectly classified as copyrights by the scanner.
+A list of copyright statements that are considered garbage, for example, statements that were incorrectly classified as copyrights by the scanner.
 
 | Format      | Scope  | Default location                        |
 |-------------|--------|-----------------------------------------|
@@ -121,7 +121,7 @@ A file to correct invalid or missing package metadata, and to set the concluded 
 
 #### [Custom license texts dir](../configuration/license-texts.md)
 
-A directory that contains license texts which are not provided by ORT.
+A directory that contains license texts not provided by ORT.
 
 | Format | Scope  | Default location                        |
 |--------|--------|-----------------------------------------|
@@ -178,7 +178,7 @@ The file containing any policy rule implementations to be used with the *evaluat
 
 ### Protecting environment variables
 
-In order to do its analysis, ORT invokes a number of external tools, such as package managers or scanners.
+To do its analysis, ORT invokes a number of external tools, such as package managers or scanners.
 Especially when interacting with package managers to obtain the dependencies of the analyzed project, this can lead to the execution of code in build scripts from potentially unknown sources.
 A possible risk in this constellation is that untrusted code could read sensitive information from environment variables used for the ORT configuration, such as database connection strings or service credentials.
 This is because the environment variables of a process are by default propagated to the child processes spawned by it.
@@ -191,8 +191,8 @@ This filter mechanism can be configured via the following properties in the [ORT
 | deniedProcessEnvironmentVariablesSubstrings | A list of substrings that identify variables containing sensitive information. All variables that contain at least one of these strings (ignoring case) are not propagated to child processes. The default for this property contains strings like "PASS", "PWD", or "TOKEN", which are typically used to reference credentials. |
 | allowedProcessEnvironmentVariableNames | This is a list of variable names that are explicitly allowed to be passed to child processes - even if they contain a substring listed in `deniedProcessEnvironmentVariablesSubstrings`. Via this property variables required by external tools, e.g. credentials for repositories needed by package managers, can be passed through. Here, entries must match variables names exactly and case-sensitively. |
 
-This mechanism offers a certain level of security without enforcing an excessive amount of configuration, which would be needed for instance to define an explicit allow list.
-With the two configuration properties even corner cases can be defined:
+This mechanism offers a certain level of security without enforcing an excessive amount of configuration, which would be needed, for instance, to define an explicit allowlist.
+With the two configuration properties, even corner cases can be defined:
 
-* In order to disable filtering of environment variables completely, set the `deniedProcessEnvironmentVariablesSubstrings` property to a single string that is certainly not contained in any environment variable, such as "This is for sure not contained in a variable name".
+* To disable filtering of environment variables completely, set the `deniedProcessEnvironmentVariablesSubstrings` property to a single string that is certainly not contained in any environment variable, such as "This is for sure not contained in a variable name."
 * To prevent that any environment variable is passed to a child process, substrings can be configured in `deniedProcessEnvironmentVariablesSubstrings` that match all variables, for instance one string for each letter of the alphabet.

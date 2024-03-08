@@ -24,15 +24,15 @@ It will guide through the main steps for running ORT:
 ORT is tested to run on Linux, macOS, and Windows.
 This tutorial assumes that you are running on Linux, but it should be easy to adapt the commands to macOS or Windows.
 
-In addition to Java (version >= 11), for some supported package managers and Version Control Systems additional tools need to be installed.
-In the context of this tutorial the following tools are required:
+In addition to Java (version >= 11), for some supported package managers and Version Control Systems, additional tools need to be installed.
+In the context of this tutorial, the following tools are required:
 
 * Git (any recent version will do)
 * [Node.js](https://nodejs.org) 10.* or higher.
 * [NPM](https://www.npmjs.com) 6.4.* or higher.
 * [Yarn](https://yarnpkg.com) 1.9.* or higher.
 
-For the full list of supported package managers and Version Control Systems see the [README](../tools/analyzer.md).
+For the full list of supported package managers and Version Control Systems, see the [README](../tools/analyzer.md).
 
 ## 2. Download & Install ORT
 
@@ -101,7 +101,7 @@ Writing analyzer result to '[analyzer-output-dir]/analyzer-result.yml'.
 ```
 
 This happens because `mime-types` does not have `package-lock.json` file.
-Without this file the versions of (transitive) dependencies that are defined with version ranges could change at any time, leading to different results of the analyzer.
+Without this file, the versions of (transitive) dependencies that are defined with version ranges could change at any time, leading to different results of the analyzer.
 To override this check, use the global `-P ort.analyzer.allowDynamicVersions=true` option:
 
 ```shell
@@ -204,8 +204,7 @@ analyzer:
           dependencies:
           - id: "NPM::builtin-modules:1.1.1"
           - id: "NPM::contains-path:0.1.0"
-            # If an issue occurred during the dependency analysis of this package there would be an additional "issues"
-            # array.
+            # If an issue occurred during the dependency analysis of this package, there would be an additional "issues" array.
 # ...
 # Detailed metadata about each package from the dependency trees.
     packages:
@@ -240,7 +239,7 @@ analyzer:
           path: ""
       curations: []
 # ...
-# Finally, a list of project related issues that happened during dependency analysis. Fortunately empty in this case.
+# Finally, a list of project-related issues that happened during dependency analysis. Fortunately empty in this case.
     issues: {}
 # A field to quickly check if the analyzer result contains any issues.
     has_issues: false
@@ -251,10 +250,11 @@ analyzer:
 To scan the source code of `mime-types` and its dependencies the source code of `mime-types` and all its dependencies needs to be downloaded.
 The *downloader* tool could be used for this, but it is also integrated in the `scanner` tool, so the scanner will automatically download the source code if the required VCS metadata could be obtained.
 
-Note that if the *downloader* is unable to download the source code due to say a missing source code location in the package metadata then you can use [curations](../configuration/package-curations.md) to fix up the package's metadata.
+Note that if the *downloader* is unable to download the source code, for example, because the package medata provides no source code location, you can use [curations](../configuration/package-curations.md) to fix up the package's metadata.
 
 ORT is designed to integrate lots of different scanners and is not limited to license scanners, technically any tool that explores the source code of a software package could be integrated.
-The actual scanner does not have to run on the same machine, for example we will soon integrate the [ClearlyDefined](https://clearlydefined.io/) scanner backend which will perform the actual scanning remotely.
+The actual scanner does not have to run on the same computer.
+For example, the [FossID](https://github.com/oss-review-toolkit/ort/blob/main/plugins/scanners/fossid/src/main/kotlin/FossId.kt) uses a remote service to execute the scan.
 
 For this tutorial [ScanCode](https://github.com/nexB/scancode-toolkit) is used as a scanner.
 Please install it according to [these instructions](https://github.com/nexB/scancode-toolkit/#installation) first.
@@ -290,7 +290,8 @@ This way belonging results are stored in the same place for traceability.
 If the input file already contained scan results, they are replaced by the new scan results in the output.
 
 As you can see when checking the `scan-result.yml` file, the licenses detected by `ScanCode` match the licenses declared by the packages.
-This is because we scanned a small and well-maintained package in this example, but if you run the scan on a bigger project you will see that `ScanCode` often finds more licenses than are declared by the packages.
+This is because we scanned a small and well-maintained package in this example.
+If you run the scan on a bigger project, you will see that `ScanCode` often finds more licenses than are declared by the packages.
 
 ## 6. Running the evaluator
 
@@ -330,17 +331,17 @@ Created 'PlainTextTemplate' report: [reporter-output-dir]/NOTICE_DEFAULT
 ```
 
 If you do not want to run the *evaluator* you can pass the *scanner* result e.g. `[scanner-output-dir]/scan-result.yml` to the `reporter` instead.
-To learn how you can customize generated notices see [Reporter Templates](../configuration/reporter-templates.md#plain-text-templates).
+To learn how you can customize the generated notices, see [Reporter Templates](../configuration/reporter-templates.md#plain-text-templates).
 To learn how to customize the how-to-fix texts for scanner and analyzer issues see [how-to-fix-text-provider-kts.md](../configuration/how-to-fix-text-provider.md).
 
 ## 8. Curating Package Metadata or License Findings
 
-In the example above everything went well because the VCS information provided by the packages was correct, but this is not always the case.
+In the example above, everything went well because the VCS information provided by the packages was correct, but this is not always the case.
 Often the metadata of packages has no VCS information, points to outdated repositories, or the repositories are not correctly tagged.
 
 ORT provides a variety of mechanisms to fix a variety of issues, for details see:
 
 * [The .ort.yml file](../configuration/ort-yml.md) - project-specific license finding curations, exclusions and resolutions to address issues found within a project's code repository.
-* [The package configuration file](../configuration/package-configurations.md) - package (dependency) and provenance specific license finding curations and exclusions to address issues found within a scan result for a package.
+* [The package configuration file](../configuration/package-configurations.md) - package (dependency) and provenance-specific license finding curations and exclusions to address issues found within a scan result for a package.
 * [The curations.yml file](../configuration/package-curations.md) - curations correct invalid or missing package metadata and set the concluded license for packages.
 * [The resolutions.yml file](../configuration/resolutions.md) - resolutions allow *resolving* any issues or policy rule violations by providing a reason why they are acceptable and can be ignored.

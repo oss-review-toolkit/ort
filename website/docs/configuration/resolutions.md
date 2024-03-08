@@ -26,7 +26,7 @@ The explanation consists of:
 ## Resolving Issues
 
 If the ORT results contain issues, the best approach is usually to fix them and run the scan again.
-However, sometimes it is not possible, for example if an issue occurs in the license scan of a third-party dependency which cannot be fixed or updated.
+However, sometimes it is not possible, for example, if an issue occurs in the license scan of a third-party dependency which cannot be fixed or updated.
 
 In such situations, you can *resolve* the issue in any future scan by adding a resolution to the `resolutions.yml` to mark it as acceptable.
 
@@ -53,7 +53,7 @@ issues:
 ## Resolving Policy Rule Violations
 
 Resolutions should not be used to resolve license policy rule violations as they do not the change generated open source notices.
-To resolve a license policy rule violation either add a local `license_findings` curation to the [.ort.yml file](./ort-yml.md) if the finding is in your code repository or add a curation to the [curations.yml](package-curations.md) if the violation occurs in a third-party dependency.
+To resolve a license policy rule violation, either add a local `license_findings` curation to the [.ort.yml file](./ort-yml.md) if the finding is in your code repository or add a curation to the [curations.yml](package-curations.md) if the violation occurs in a third-party dependency.
 
 The code below shows the structure of a policy rule violation resolution in the `resolutions.yml` file:
 

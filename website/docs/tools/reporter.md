@@ -8,7 +8,7 @@ The *reporter* generates a wide variety of documents in different formats from O
 Currently, the following formats are supported (reporter names are case-insensitive):
 
 * [AsciiDoc Template](../configuration/reporter-templates.md#asciidoc-templates) (`-f AsciiDocTemplate`)
-  * Content customizable with [Apache Freemarker](https://freemarker.apache.org/) templates and [AsciiDoc](https://asciidoc.org/)
+  * Customizable with [Apache Freemarker](https://freemarker.apache.org/) templates and [AsciiDoc](https://asciidoc.org/)
   * PDF style customizable with Asciidoctor [PDF themes](https://docs.asciidoctor.org/pdf-converter/latest/theme/)
   * Supports multiple AsciiDoc backends:
     * PDF (`-f PdfTemplate`)

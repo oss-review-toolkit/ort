@@ -24,7 +24,7 @@ The single forward slash `/` between the environment variable `$PWD` and the `:`
 
 It is possible to install custom certificates when building the image so that they are installed into various keystores.
 To do this, specify `--build-arg CRT_FILES=<path>` when running `docker build`.
-Note that this requires the directory or certificate file to be inside the Docker build context (usually the directory where the build is run, i.e. probably the directory the Dockerfile resides in).
+Note that this requires the directory or certificate file to be inside the Docker build context (usually the directory where the build is run, i.e., probably the directory the Dockerfile resides in).
 Otherwise, the directories cannot be copied into the Docker image.
 
 ## Common Issues
@@ -32,7 +32,7 @@ Otherwise, the directories cannot be copied into the Docker image.
 ### Docker build fails with an "SSL Handshake" error
 
 Some web proxies, such as from Blue Coat (Symantec) [do not support TLSv1.3](https://en.wikipedia.org/wiki/Transport_Layer_Security#TLS_1.3), which leads to errors when Docker tries to establish a connection through them.
-The following steps allow to force a specific TLS version to be used:
+The following steps allow forcing a specific TLS version to be used:
 
 1. Insert `ENV JAVA_OPTS="-Djdk.tls.client.protocols=TLSv1.2"` in the Dockerfile, below the `FROM` line to force a specific TLS version.
 2. Run the build again, it should succeed now.
