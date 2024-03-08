@@ -16,7 +16,7 @@ To add packages found by ORT to projects and releases in SW360.
 
 ### Prerequisites
 
-In order to be able to upload ORT results to SW360, first set the connection parameters to your SW360 instance.
+To be able to upload ORT results to SW360, first set the connection parameters to your SW360 instance.
 You can do this by defining a `sw360Configuration` scanner storage in the `storages` section of your [config.yml](../getting-started/usage.md#ort-configuration-file) (e.g. in `$HOME/.ort/config`) or pass it to the ORT command with the `--config` option as shown below.
 
 ```yaml
@@ -59,7 +59,7 @@ Note:
 
 ### Prerequisites
 
-In order to be able to use SW360 data in the ORT *analyzer*, first set the connection parameters for your SW360 instance.
+To be able to use SW360 data in the ORT *analyzer*, first set the connection parameters for your SW360 instance.
 You can do this by adding an entry of type `SW360` to the list of `packageCurationProviders` in your [config.yml](../getting-started/usage.md#ort-configuration-file) (e.g. in `$HOME/.ort/config`) or pass it to the ORT command with the `--config` option as shown below.
 
 ```yaml
@@ -78,7 +78,7 @@ ort:
 
 ### Command Line
 
-Apart from configuring your `config.yml` to use the SW360 curation provider, no specific option needs to be passed to the *analyzer*:
+Apart from configuring your `config.yml` to use the SW360 curation provider, no specific option has to be passed to the *analyzer*:
 
 ```shell
 cli/build/install/ort/bin/ort analyze
@@ -94,7 +94,7 @@ If you prefer to use the SW360 to store the ORT *scanner* results instead of the
 
 ### Prerequisites
 
-In order to be able to store ORT *scanner* results SW360, first set the connection parameters to your SW360 instance.
+To be able to store ORT *scanner* results SW360, first set the connection parameters to your SW360 instance.
 You can do this by defining a `sw360Configuration` scanner storage in the `storages` section of your `config.yml` file (e.g. in `$HOME/.ort/config`) or pass it to the ORT command with the `--config` option as shown below.
 
 ```yaml

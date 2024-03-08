@@ -11,13 +11,13 @@ The vulnerabilities returned by these services are then stored in the output res
 
 Multiple providers for security advisories are available.
 The providers require specific configuration in the [ORT configuration file](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/resources/reference.yml), which needs to be placed in the *advisor* section.
-When executing the advisor the providers to enable are selected with the `--advisors` option (or its short alias `-a`); here a comma-separated list with provider IDs is expected.
+When executing the advisor, the providers to enable are selected with the `--advisors` option (or its short alias `-a`); here a comma-separated list with provider IDs is expected.
 The following sections describe the providers supported by the advisor:
 
 ## NexusIQ
 
 A security data provider that queries [Nexus IQ Server](https://help.sonatype.com/iqserver).
-In the configuration, the URL where Nexus IQ Server is running and the credentials to authenticate need to be provided:
+In the configuration, the URL of the Nexus IQ Server the credentials must be provided:
 
 ```yaml
 ort:

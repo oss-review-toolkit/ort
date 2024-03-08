@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # Introduction
 
-The OSS Review Toolkit (ORT) is a FOSS policy automation and orchestration toolkit which you can use to manage your (open source) software dependencies in a strategic, safe and efficient manner.
+The OSS Review Toolkit (ORT) is a FOSS policy automation and orchestration toolkit that you can use to manage your (open source) software dependencies in a strategic, safe and efficient manner.
 
 You can use it to:
 
@@ -13,7 +13,7 @@ You can use it to:
 * Create a source code archive for your software project and its dependencies to comply with certain licenses or have your own copy as nothing on the internet is forever
 * Correct package metadata or licensing findings yourself, using InnerSource or with the help of the FOSS community
 
-ORT can be used as library (for programmatic use), via a command line interface (for scripted use), or via its CI integrations.
+ORT can be used as a library (for programmatic use), via a command line interface (for scripted use), or via its CI integrations.
 It consists of the following tools which can be combined into a *highly customizable* pipeline:
 
 * [*Analyzer*](tools/analyzer.md) - determines the dependencies of projects and their metadata, abstracting which package managers or build systems are actually being used.

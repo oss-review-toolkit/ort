@@ -35,8 +35,8 @@ vcs:
 
 ## Defining Path Excludes and License Finding Curations
 
-Path excludes define which code is not part of the distributed release artifact(s) for a package, for example code found in the source repository but only used for building, documenting or testing the code.
-License finding curations are used to fix incorrect scan results, for example if a wrong license was detected, or if a finding is a false positive.
+Path excludes define which code is not part of the distributed release artifact(s) for a package, for example, code found in the source repository but only used for building, documenting or testing the code.
+License finding curations are used to fix incorrect scan results, for example, if a wrong license was detected, or if a finding is a false positive.
 
 The entries for path excludes and license finding curations have the same syntax and semantics as in the `ort.yml` file, see [excluding paths](ort-yml.md#excluding-paths) and [curating license findings](ort-yml.md#curating-project-license-findings) for details.
 
@@ -60,9 +60,9 @@ license_finding_curations:
 ## Command Line
 
 ORT consumes package configuration from a so-called "package configuration directory" which is searched recursively for `.yml` files.
-Each such file must contain exactly one package configuration and there must not be more than one package configuration for any package/provenance combination within that directory.
+Each such file must contain exactly one package configuration, and there must not be more than one package configuration for any package/provenance combination within that directory.
 The default location is `$ORT_CONFIG_DIR/package-configurations/`.
-To use a custom location you can pass it to the `--package-configurations-dir` option of the *evaluator*:
+To use a custom location, you can pass it to the `--package-configurations-dir` option of the *evaluator*:
 
 ```shell
 cli/build/install/ort/bin/ort evaluate

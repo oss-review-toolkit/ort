@@ -10,7 +10,7 @@ Curations can be used to:
 
 * correct invalid or missing package metadata such as:
   * package source code repository.
-  * tag or revision (SHA1) for specific package version.
+  * tag or revision (SHA1) for a specific package version.
   * binary or source artifacts.
   * declared license.
   * package description or URL to its homepage.
@@ -18,13 +18,13 @@ Curations can be used to:
   * concluded license is the license applicable to a package dependency defined as an SPDX license expression.
 * set the *is_metadata_only* flag:
   * metadata-only packages, such as Maven BOM files, do not have any source code.
-    Thus, when the flag is set the *downloader* just skips the download and the *scanner* skips the scan.
+    Thus, when the flag is set, the *downloader* just skips the download and the *scanner* skips the scan.
     Also, any *evaluator rule* may optionally skip its execution.
 * set the *is_modified* flag:
-  * indicates whether files of this package have been modified compared to the original files, e.g., in case of a fork of an upstream Open Source project, or a copy of the code in this project's repository.
+  * it indicates whether files of this package have been modified compared to the original files, e.g., in case of a fork of an upstream Open Source project, or a copy of the code in this project's repository.
 * set the *declared_license_mapping* property:
   * Packages may have declared license string values which cannot be parsed to SpdxExpressions.
-    In some cases this can be fixed by mapping these strings to a valid license.
+    In some cases, this can be fixed by mapping these strings to a valid license.
     If multiple curations declare license mappings, they get combined into a single mapping.
     Thus, multiple curations can contribute to the declared license mapping for the package.
     The effect of its application can be seen in the *declared_license_processed* property of the respective curated package.
@@ -34,12 +34,12 @@ If a license detected in the source code of a package needs to be corrected, add
 
 ## Curations Basics
 
-In order to discover the source code of the dependencies of a package, ORT relies on the package metadata.
+To discover the source code of the dependencies of a package, ORT relies on the package metadata.
 Often the metadata contains information on how to locate the source code, but not always.
 In many cases, the metadata of packages provides no VCS information, it points to outdated repositories or the repositories are not correctly tagged.
 Because it is not always possible to fix this information in upstream packages, ORT offers a curation mechanism for metadata.
 
-These curations can be configured in a YAML file that is passed to the *analyzer*.
+These curations can be configured in a YAML file passed to the *analyzer*.
 The data from the curations file amends the metadata provided by the packages themselves.
 This way, it is possible to fix broken VCS URLs or provide the location of source artifacts.
 
@@ -47,7 +47,7 @@ Hint:
 If the `concluded_license` *and* the `authors` are curated, this package will be skipped during the `scan` step, as no more information from the scanner is required.
 This requires the `skipConcluded` scanner option to be enabled in the [config.yml](../getting-started/usage.md#ort-configuration-file).
 
-The structure of the curations file consist of one or more `id` entries:
+A curation file consists of one or more `id` entries:
 
 ```yaml
 - id: "Maven:com.example.app:example:0.0.1"

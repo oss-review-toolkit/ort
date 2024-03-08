@@ -7,7 +7,7 @@ sidebar_position: 4
 This tool wraps underlying license / copyright scanners with a common API so all supported scanners can be used in the same way to easily run them and compare their results.
 If passed an ORT result file with an analyzer result (`-i`), the *scanner* will automatically download the sources of the dependencies via the *downloader* and scan them afterward.
 
-We recommend to use ORT with any of the following scanners as their integrations have been thoroughly tested (in alphabetical order):
+We recommend using ORT with any of the following scanners as their integrations have been thoroughly tested (in alphabetical order):
 
 * [FossID](https://fossid.com/) (snippet scanner, commercial)
 * [ScanCode](https://github.com/nexB/scancode-toolkit)
@@ -23,8 +23,9 @@ For a comparison of some of these, see this [Bachelor Thesis](https://osr.cs.fau
 
 ## Storage Backends
 
-In order to not download or scan any previously scanned sources again, or to reuse scan results generated via other services, the *scanner* can be configured to use so-called storage backends.
-Before processing a package, it checks whether compatible scan results are already available in one of the storages declared; if this is the case, they are fetched and reused.
+To not download or scan any previously scanned sources again, or to reuse scan results generated via other services, the *scanner* can be configured to use so-called storage backends.
+Before processing a package, it checks whether compatible scan results are already available in one of the storages declared.
+If this is the case, they are fetched and reused.
 Otherwise, the package's source code is downloaded and scanned.
 Afterward, the new scan results can be put into a storage for later reuse.
 
@@ -35,13 +36,13 @@ In the case of repositories that provide a lot of packages, this can bring a sig
 
 It is possible to configure multiple storages to read scan results from or to write scan results to.
 For reading, the declaration order in the configuration is important, as the scanner queries the storages in this order and uses the first matching result.
-This allows a fine-grained control over the sources, from which existing scan results are loaded.
+This allows a fine-grained control over the sources from which existing scan results are loaded.
 For instance, you can specify that the scanner checks first whether results for a specific package are available in a local storage on the file system.
 If this is not the case, it can look up the package in a Postgres database.
 If this does not yield any results either, a service like [ClearlyDefined](https://clearlydefined.io) can be queried.
 Only if all of these steps fail, the scanner has to actually process the package.
 
-When storing a newly generated scan result the scanner invokes all the storages declared as writers.
+When storing a newly generated scan result, the scanner invokes all the storages declared as writers.
 The storage operation is considered successful if all writer storages could successfully persist the scan result.
 
 The configuration of storage backends is located in the [ORT configuration file](../getting-started/usage.md#ort-configuration-file).

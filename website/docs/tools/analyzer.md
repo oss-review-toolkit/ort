@@ -63,7 +63,7 @@ Currently, the following package managers (grouped by the programming language t
 * Scala
   * [SBT](https://www.scala-sbt.org/)
 * Unmanaged
-  * This is a special "package manager" that manages all files that cannot be associated to any of the other package managers.
+  * This is a special "package manager" that manages all files that cannot be associated with any of the other package managers.
 
 <a name="analyzer-for-spdx-documents"></a>
 

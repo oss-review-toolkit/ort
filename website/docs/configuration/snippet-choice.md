@@ -3,14 +3,14 @@
 ## Introduction
 
 Snippets are short pieces of code.
-They might come from difference public sources such as GitHub, GitLab, or Stackoverflow.
+They might come from different public sources such as GitHub, GitLab, or Stackoverflow.
 
 So-called snippet scanners like ScanOSS and FossID scrape those public sources and build a knowledge base of snippets, classifying them by their author, version and license.
 Then, the snippet scanner component of such products can use this knowledge base to find if some source file contains some of those snippets.
 The matching of a snippet can be:
 
 * *full*: the whole snippet matches the source file
-* *partial*: only some parts of a snippet matches the source file
+* *partial*: only some parts of a snippet match the source file
 
 Currently, ORT supports two products offering snippet scanner capabilities:
 ScanOSS and FossID.
@@ -20,7 +20,7 @@ ORT puts those snippets in the `SnippetFindings` property of the [ScanSummary](h
 
 ## The problem
 
-As mentioned in the previous section, ORT returns the list of snippet findings (i.e. matches) for a given source file.
+As mentioned in the previous section, ORT returns the list of snippet findings (i.e., matches) for a given source file.
 These snippet findings are aggregated by source code location, including the line ranges.
 
 ORT lacks a mechanism to control the snippets results: while some of these results are legitimate, others are false positives.
@@ -109,7 +109,7 @@ Then, one or several snippets can be chosen in the `.ort.yml` file.
 Then, ORT is run again to generate nw scan results, taking into account those chosen snippets.
 This loop can be repeated as needed.
 
-### What are the consequences of a snippet choice ?
+### What are the consequences of a snippet choice?
 
 1. The license of the chosen snippet will be added to the license findings
 
@@ -121,7 +121,7 @@ This loop can be repeated as needed.
      With the snippet choice, also files with a partial snippet match (and a chosen snippet) will have the license of the snippet as license finding.
 
 2. For a chosen snippet of a given source code location, all the other snippets will be considered as **false positives** and be removed from the scan results.
-   As it makes no sense to choose two snippets for the same source location, this powerful feature allows to keep in the scan results only snippet findings that require attention.
+   As it makes no sense to choose two snippets for the same source location, this feature allows keeping only those snippet findings that require attention in the scan results.
 3. The snippets that have been chosen won't be visible in the FossID snippet report anymore.
 4. The FossID files with a snippet choice are not *pending* anymore since they will be marked as identified.
    Consequently, they won't be counted in the special "pending files count" ORT issue created by the FossID scanner.
@@ -150,7 +150,7 @@ package_snippet_choices:
 Three properties are required to mark all the snippets for a given location as false positives:
 
 * `provenance.url` is the provenance of the repository of the source file
-* `choices.given.source_location` identifies the source file for which the snippet have been matched against
+* `choices.given.source_location` identifies the source file against which the snippets have been matched
 
 There is also another mandatory property:
 
@@ -162,7 +162,7 @@ And an optional one:
 
 ### What are the consequences of snippets marked as *false positives* ?
 
-1. The snippets that are *false positives* are removed be from the scan results.
+1. The snippets that are *false positives* are removed from the scan results.
 2. The snippets that are *false positives* won't be visible in the FossID snippet report.
 
 ## Snippet choice FAQ
@@ -171,8 +171,8 @@ Q:
 *If the snippets with a snippet choice or a `NO_RELEVANT_FINDING` are not in the scan results anymore, what happens when there is a new snippet finding for this source location (e.g. after an update of the Knowledge base)?*
 
 A:
-Conceptually, the scan results that have been removed in a past run may have to be added again, with the addition of new detected snippets.
-How to achieve that will be remote scanner-specific as FossID is stateful while ScanOSS is not.
+Conceptually, the scan results that have been removed in a past run may have to be added again, with the addition of newly detected snippets.
+How that can be achieved depends on the specific snippet scanner, as for example, FossID is stateful while ScanOSS is not.
 
 Q:
 *Identically, what happens if a snippet with a snippet choice or a `NO_RELEVANT_FINDING` is not present in the scanner Knowledge Base anymore, e.g. after an update?*

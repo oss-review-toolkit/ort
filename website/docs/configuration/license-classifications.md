@@ -21,7 +21,7 @@ The mechanism of assigning categories to licenses is rather generic and can be c
 The information from the `license-classifications.yml` is evaluated by the following components:
 
 * [Rules]: By defining categories like "permissive" or "public domain", rules can determine how to handle specific licenses and issue warning or error messages if problems are detected.
-* [Plain text templates]: Based on their associated categories, the plain text templates for generating NOTICE files can decide, which licenses to include into the generated notice file.
+* [Plain text templates]: Based on their associated categories, the plain text templates for generating NOTICE files can decide which licenses to include in the generated notice file.
 
 The [license-classifications.yml example] demonstrates the intended use cases.
 It defines some categories that specify whether licenses are applicable to development projects.
