@@ -1,0 +1,313 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://www.cip.audi.de/bitbucket/projects/AEVAOSD/repos/aosd_importer/raw/scripts/aosdjsongenerator/schema/product_import.schema.json",
+  "type": "object",
+  "title": "The AOSD 2.0 JSON import",
+  "description": "Defines the JSON format for automatically importing product dependencies into AOSD2.0",
+  "definitions": {
+    "license": {
+      "type": "object",
+      "title": "AOSD License information",
+      "description": "Indication of the licenses under which the software may be used. All licenses are cumulative (and) unless the multiLicensing flag is set.",
+      "required": [
+        "spdxId",
+        "text"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "description": "Full name of the license",
+          "type": "string"
+        },
+        "spdxId": {
+          "description": "SPDX license identifier from https://spdx.org/licenses/",
+          "type": "string",
+          "default": "Commercial"
+        },
+        "text": {
+          "description": "License text",
+          "type": "string"
+        },
+        "url": {
+          "description": "URL where the license is published and can be read.",
+          "type": "string",
+          "default": "https://..."
+        },
+        "copyrights": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "holders": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "notice": {
+              "type": "string"
+            }
+          }
+        },
+        "origin": {
+          "description": "Identifying the origin of the license information.",
+          "type": "string",
+          "enum": [
+            "packagemanagement",
+            "scm",
+            "licensefile"
+          ]
+        }
+      }
+    },
+    "part": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "providers"
+      ],
+      "description": "A part represents a library that is available in the version and can be used separately by third parties. This is not a dependency of the product.",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "features": {
+          "type": "array",
+          "description": "WARNING: Features are not yet implemented!",
+          "items": {
+            "type": "string"
+          }
+        },
+        "providers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/provider"
+          }
+        },
+        "external": {
+          "type": "boolean",
+          "description": "True, if the part is the work of a third party"
+        }
+      }
+    },
+    "internalDependency": {
+      "type": "object",
+      "required": [
+        "from",
+        "to"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "from": {
+          "description": "Name of the software part that requires the dependency",
+          "type": "string"
+        },
+        "to": {
+          "description": "Name of the software part, which is required as dependency",
+          "type": "string"
+        }
+      }
+    },
+    "externalDependency": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "version",
+        "licenses",
+        "parts",
+        "deployPackage"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "Unique identifier of the dependency",
+          "type": "string"
+        },
+        "name": {
+          "description": "Product name of the dependency",
+          "type": "string"
+        },
+        "scmUrl": {
+          "description": "Source code repository of the dependency",
+          "type": "string",
+          "default": "https://..."
+        },
+        "description": {
+          "description": "Short description.",
+          "type": "string"
+        },
+        "version": {
+          "description": "The exact version number",
+          "default": "1.0.0",
+          "type": "string"
+        },
+        "versionRange": {
+          "description": "The possible version range of the dependency",
+          "default": "^1.0.0",
+          "type": "string"
+        },
+        "licenses": {
+          "type": "array",
+          "description": "Indication of the licenses under which the software may be used. All licenses are cumulative (and).",
+          "items": {
+            "description": "Indication of the licenses under which the software may be used. All licenses are cumulative (and).",
+            "$ref": "#/definitions/license"
+          }
+        },
+        "parts": {
+          "type": "array",
+          "description": "The part description is optional for dividing the version into smaller pieacse. e.g. for additional license or usage information if necessary",
+          "items": {
+            "description": "A part represents a library that is available in the version and can be used separately by third parties. This is not a dependency of the product",
+            "$ref": "#/definitions/part"
+          }
+        },
+        "deployPackage": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "A deploy package represents a binary package e.g. for a target platform.",
+          "required": [
+            "name"
+          ],
+          "dependencies": {
+            "downloadUrl": {
+              "required": [
+                "checksums"
+              ]
+            }
+          },
+          "properties": {
+            "name": {
+              "description": "Name or identifier of the variant",
+              "type": "string"
+            },
+            "downloadUrl": {
+              "description": "Information about the download location of the variant (binary)",
+              "type": "string"
+            },
+            "checksums": {
+              "type": "object",
+              "description": "The variant (binary) of the product can be verified using the given (file-)checksum.",
+              "additionalProperties": false,
+              "oneOf": [
+                {
+                  "required": [
+                    "sha256"
+                  ]
+                },
+                {
+                  "required": [
+                    "integrity"
+                  ]
+                }
+              ],
+              "properties": {
+                "md5": {
+                  "type": "string"
+                },
+                "sha1": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string"
+                },
+                "integrity": {
+                  "type": "string"
+                }
+              }
+            },
+            "disclaimer": {
+              "description": "Information on the custom disclaimer of the software",
+              "type": "string"
+            }
+          }
+        },
+        "internalDependencies": {
+          "type": "array",
+          "description": "Provide the ability to model dependencies between two parts of the software. The precondition is that both parts have been described in the JSON",
+          "items": {
+            "$ref": "#/definitions/internalDependency"
+          }
+        },
+        "externalDependencies": {
+          "type": "array",
+          "description": "Reference to the ID of the dependencies which are required by this one.",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "feature": {
+      "type": "object",
+      "title": "AOSD Feature information",
+      "required": [
+        "id"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "shortDescription": {
+          "type": "string"
+        }
+      }
+    },
+    "provider": {
+      "description": "If the version has been divided into individual parts, then these can be made available for third-party use by providing the usage features and license information if necessary (e.g. dual licensing)",
+      "required": [
+        "additionalLicenses",
+        "modified",
+        "usage"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "additionalLicenses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/license"
+          }
+        },
+        "modified": {
+          "type": "boolean",
+          "default": false
+        },
+        "usage": {
+          "type": "string",
+          "enum": [
+            "dynamic_linking",
+            "static_linking",
+            "sys_call_dyn_link",
+            "sys_call_process"
+          ],
+          "default": "dynamic_linking"
+        }
+      }
+    }
+  },
+  "required": [
+    "directDependencies",
+    "dependencies"
+  ],
+  "properties": {
+    "directDependencies": {
+      "description": "Ids of dependencies directly related to the project",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "dependencies": {
+      "description": "Description of the products to be evaluated by AOSD",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/externalDependency"
+      }
+    }
+  }
+}
