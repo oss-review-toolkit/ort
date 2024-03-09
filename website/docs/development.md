@@ -115,4 +115,5 @@ npx markdownlint-cli2
 ## Want to Help or have Questions?
 
 All contributions are welcome.
-If you are interested in contributing, please read our [contributing guide](https://github.com/oss-review-toolkit/.github/blob/main/CONTRIBUTING.md), and to get quick answers to any of your questions, we recommend you [join our Slack community](http://slack.oss-review-toolkit.org).
+If you are interested in contributing, please read our [contributing guide](https://github.com/oss-review-toolkit/.github/blob/main/CONTRIBUTING.md).
+To get quick answers to your questions, [join our Slack community](http://slack.oss-review-toolkit.org).
