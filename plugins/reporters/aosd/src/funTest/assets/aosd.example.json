@@ -1,0 +1,114 @@
+{
+  "$schema": "./aosd.schema.json",
+  "directDependencies": [
+    "1"
+  ],
+  "dependencies": [
+    {
+      "id": "1",
+      "name": "cross-env",
+      "version": "7.0.3",
+      "versionRange": "",
+      "scmUrl": "https://registry.npmjs.org/cross-env/-/cross-env-7.0.3.tgz",
+      "licenses": [
+        {
+          "name": "MIT License",
+          "spdxId": "MIT",
+          "copyrights": {
+            "holders": []
+          },
+          "text": "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.",
+          "origin": "licensefile"
+        }
+      ],
+      "parts": [
+        {
+          "name": "default",
+          "description": "Package: cross-env - License key: MIT - Checksum: 5d10770886077388d316ac13903ecb440a36baa0f0432feea0ed8fe76ab36be6",
+          "providers": [
+            {
+              "additionalLicenses": [
+                {
+                  "name": "MIT License",
+                  "spdxId": "MIT",
+                  "text": "Permission2 is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.",
+                  "url": "http://opensource.org/licenses/mit-license.php",
+                  "copyrights": {
+                    "holders": [],
+                    "notice": ""
+                  },
+                  "origin": "licensefile"
+                }
+              ],
+              "modified": false,
+              "usage": "dynamic_linking"
+            }
+          ],
+          "external": true
+        }
+      ],
+      "deployPackage": {
+        "name": "default",
+        "downloadUrl": "",
+        "checksums": {
+          "integrity": ""
+        }
+      },
+      "externalDependencies": [
+        "2"
+      ]
+    },
+    {
+      "id": "2",
+      "name": "cross-spawn",
+      "version": "7.0.3",
+      "versionRange": "",
+      "scmUrl": "https://registry.npmjs.org/cross-spawn/-/cross-spawn-7.0.3.tgz",
+      "licenses": [
+        {
+          "name": "MIT License",
+          "spdxId": "MIT",
+          "copyrights": {
+            "holders": []
+          },
+          "text": "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.",
+          "origin": "licensefile"
+        }
+      ],
+      "parts": [
+        {
+          "name": "default",
+          "description": "Package: cross-spawn - License key: MIT - Checksum: 5d10770886077388d316ac13903ecb440a36baa0f0432feea0ed8fe76ab36be6",
+          "providers": [
+            {
+              "additionalLicenses": [
+                {
+                  "name": "MIT License",
+                  "spdxId": "MIT",
+                  "text": "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.",
+                  "url": "http://opensource.org/licenses/mit-license.php",
+                  "copyrights": {
+                    "holders": [],
+                    "notice": ""
+                  },
+                  "origin": "licensefile"
+                }
+              ],
+              "modified": false,
+              "usage": "dynamic_linking"
+            }
+          ],
+          "external": true
+        }
+      ],
+      "deployPackage": {
+        "name": "default",
+        "downloadUrl": "",
+        "checksums": {
+          "integrity": ""
+        }
+      },
+      "externalDependencies": []
+    }
+  ]
+}
