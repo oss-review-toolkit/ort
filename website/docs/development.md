@@ -63,6 +63,55 @@ If the actual result should be taken as the new expected result, copy the diff f
 to apply the diff to the local Git working tree (this does not create a commit yet).
 After reviewing the changes, create a commit to accept the new expected result.
 
+## Static Analysis
+
+To ensure consistent code style, ORT uses several static analysis tools.
+These tools are run as part of the CI pipeline, but it is recommended to run them locally before pushing changes.
+The most important tools are listed below.
+For the full list, see [the GitHub workflow](https://github.com/oss-review-toolkit/ort/blob/main/.github/workflows/static-analysis.yml).
+
+### Commitlint
+
+[Commitlint](https://commitlint.js.org) is used to ensure that commit messages follow the [Conventional Commits](https://www.conventionalcommits.org) specification.
+It can be executed locally using [`npx`](https://www.npmjs.com/package/npx).
+For example, to check the last two commits, run:
+
+```shell
+npx commitlint --from=HEAD~2
+```
+
+### Detekt
+
+[Detekt](https://detekt.dev) is used to run static code analysis on the Kotlin code.
+It can be executed locally using the Gradle tasks for each source set:
+
+```shell
+./gradlew detektMain detektTestFixtures detektTest detektFunTest
+```
+
+The above tasks can be slow because they use [type resolution](https://detekt.dev/docs/gettingstarted/type-resolution/).
+To run only the subset of rules that do not require type resolution, use:
+
+```shell
+./gradlew detekt
+```
+
+### Markdownlint
+
+[Markdownlint](https://github.com/DavidAnson/markdownlint) is used to check the Markdown files.
+Instead of a line-length limit, for Markdown files the ["one sentence per line"](https://nick.groenen.me/notes/one-sentence-per-line/) rule is enforced.
+This check requires installing a Markdownlint [extension](https://www.npmjs.com/package/markdownlint-rule-max-one-sentence-per-line?activeTab=readme):
+
+```shell
+npm install -g markdownlint-rule-max-one-sentence-per-line@0.0.2
+```
+
+Markdownlint can be executed locally using [`npx`](https://www.npmjs.com/package/npx):
+
+```shell
+npx markdownlint-cli2
+```
+
 ## Want to Help or have Questions?
 
 All contributions are welcome.
