@@ -39,9 +39,6 @@ import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceScanResult
  * The abstract class that storage backends for scan results need to implement.
  */
 abstract class ScanResultsStorage : PackageBasedScanStorage {
-    /**
-     * A companion object that allow to configure the globally used storage backend.
-     */
     companion object {
         /**
          * A successful [Result] with an empty list of [ScanResult]s.
