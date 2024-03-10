@@ -48,7 +48,7 @@ jobs:
         run: |
           cat .versions >> $GITHUB_ENV
       - name: Build base image
-        uses: ./.github/actions/ortdocker
+        uses: heliocastro/docker-build-control@v1
         with:
           name: base
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -68,7 +68,7 @@ jobs:
         run: |
           cat .versions >> $GITHUB_ENV
       - name: Build NodeJS image
-        uses: ./.github/actions/ortdocker
+        uses: heliocastro/docker-build-control@v1
         with:
           name: nodejs
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -90,7 +90,7 @@ jobs:
         run: |
           cat .versions >> $GITHUB_ENV
       - name: Build Python image
-        uses: ./.github/actions/ortdocker
+        uses: heliocastro/docker-build-control@v1
         with:
           name: python
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -116,7 +116,7 @@ jobs:
         run: |
           cat .versions >> $GITHUB_ENV
       - name: Build Rust image
-        uses: ./.github/actions/ortdocker
+        uses: heliocastro/docker-build-control@v1
         with:
           name: rust
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -135,7 +135,7 @@ jobs:
         run: |
           cat .versions >> $GITHUB_ENV
       - name: Build Ruby image
-        uses: ./.github/actions/ortdocker
+        uses: heliocastro/docker-build-control@v1
         with:
           name: ruby
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -155,7 +155,7 @@ jobs:
         run: |
           cat .versions >> $GITHUB_ENV
       - name: Build Golang image
-        uses: ./.github/actions/ortdocker
+        uses: heliocastro/docker-build-control@v1
         with:
           name: golang
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -174,7 +174,7 @@ jobs:
         run: |
           cat .versions >> $GITHUB_ENV
       - name: Build Android image
-        uses: ./.github/actions/ortdocker
+        uses: heliocastro/docker-build-control@v1
         with:
           name: android
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -193,7 +193,7 @@ jobs:
         run: |
           cat .versions >> $GITHUB_ENV
       - name: Build Dart image
-        uses: ./.github/actions/ortdocker
+        uses: heliocastro/docker-build-control@v1
         with:
           name: dart
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -212,7 +212,7 @@ jobs:
         run: |
           cat .versions >> $GITHUB_ENV
       - name: Build Dotnet image
-        uses: ./.github/actions/ortdocker
+        uses: heliocastro/docker-build-control@v1
         with:
           name: dotnet
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -232,7 +232,7 @@ jobs:
         run: |
           cat .versions >> $GITHUB_ENV
       - name: Build Haskell image
-        uses: ./.github/actions/ortdocker
+        uses: heliocastro/docker-build-control@v1
         with:
           name: haskell
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -251,7 +251,7 @@ jobs:
         run: |
           cat .versions >> $GITHUB_ENV
       - name: Build Scala image
-        uses: ./.github/actions/ortdocker
+        uses: heliocastro/docker-build-control@v1
         with:
           name: scala
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -270,7 +270,7 @@ jobs:
         run: |
           cat .versions >> $GITHUB_ENV
       - name: Build Swift image
-        uses: ./.github/actions/ortdocker
+        uses: heliocastro/docker-build-control@v1
         with:
           name: swift
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -278,30 +278,28 @@ jobs:
           build-args: |
             SWIFT_VERSION=${{ env.SWIFT_VERSION }}
 
-  bazel_image:
-    name: Bazel image
-    needs: [ base_image ]
+  ort_version:
+    name: Get Ort Version
     runs-on: ubuntu-22.04
+    outputs:
+      ort_version: ${{ steps.get_version.outputs.version }}
     steps:
-      - name: Checkout default branch
-        uses: actions/checkout@v4
-      - name: Set environment variables
-        run: |
-          cat .versions >> $GITHUB_ENV
-      - name: Build Bazel image
-        uses: ./.github/actions/ortdocker
-        with:
-          name: bazel
-          token: ${{ secrets.GITHUB_TOKEN }}
-          version: "${{ env.BAZEL_VERSION }}"
-          build-args: |
-            BAZEL_VERSION=${{ env.BAZEL_VERSION }}
+    - name: Checkout default branch
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - id: get_version
+      run: |
+        ORT_VERSION=$(./gradlew -q properties --property version | sed -nr "s/version: (.+)/\1/p")
+        echo "version=${ORT_VERSION}" >> $GITHUB_OUTPUT
+      shell: bash
+
 
   # Minimal Runtime ORT image
   # -------------------------
   minimal_image:
     needs:
-      [ base_image, nodejs_image, python_image, rust_image, ruby_image, golang_image ]
+      [ ort_version, base_image, nodejs_image, python_image, rust_image, ruby_image, golang_image ]
     name: Build ORT minimal image
     runs-on: ubuntu-22.04
     permissions:
@@ -318,47 +316,16 @@ jobs:
         run: |
           cat .versions >> $GITHUB_ENV
 
-      - name: Get ORT current version
-        run: |
-          ORT_VERSION=$(./gradlew -q properties --property version | sed -nr "s/version: (.+)/\1/p")
-          echo "ORT_VERSION=${ORT_VERSION}" >> $GITHUB_ENV
-
-      - name: Set up Docker build
-        uses: docker/setup-buildx-action@v3
-
-      - name: Login to GitHub container registry
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Extract components metadata (tags, labels)
-        id: meta-ort-minimal
-        uses: docker/metadata-action@v5
-        with:
-          images: |
-            ${{ env.REGISTRY }}/${{ github.repository_owner }}/ort-minimal
-          tags: |
-            type=schedule,pattern={{date 'YYYYMMDD'}}
-            type=schedule,pattern=snapshot
-            type=pep440,pattern={{version}}
-            type=raw,value=${{ env.ORT_VERSION }}
-            type=ref,event=tag
-
       - name: Build ORT minimal image
-        uses: docker/build-push-action@v5
+        uses: heliocastro/docker-build-control@v2
         with:
-          context: .
+          name: ort-minimal
           target: minimal
-          push: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
-          load: false
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: ${{ needs.ort_version.outputs.ort_version }}
           build-args: |
             NODEJS_VERSION=${{ env.NODEJS_VERSION }}
-            ORT_VERSION=${{ env.ORT_VERSION }}
-          tags: |
-            ${{ steps.meta-ort-minimal.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+            ORT_VERSION=${{ needs.ort_version.outputs.ort_version }}
           build-contexts: |
             base=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/base:latest
             nodejs=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/nodejs:latest
@@ -370,10 +337,9 @@ jobs:
   # Full Runtime ORT image
   # ----------------------
   ort_image:
-    if: ${{ github.event_name != 'pull_request' }}
     name: Build ORT image
     needs:
-      [ minimal_image, android_image, dart_image, dotnet_image, haskell_image, scala_image, swift_image ]
+      [ ort_version, minimal_image, android_image, dart_image, dotnet_image, haskell_image, scala_image, swift_image ]
     runs-on: ubuntu-22.04
     permissions:
       contents: read
@@ -384,11 +350,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Get ORT current version
-        run: |
-          ORT_VERSION=$(./gradlew -q properties --property version | sed -nr "s/version: (.+)/\1/p")
-          echo "ORT_VERSION=${ORT_VERSION}" >> $GITHUB_ENV
 
       - name: Set up Docker build
         uses: docker/setup-buildx-action@v3
@@ -410,7 +371,7 @@ jobs:
             type=schedule,pattern={{date 'YYYYMMDD'}}
             type=schedule,pattern=snapshot
             type=pep440,pattern={{version}}
-            type=raw,value=${{ env.ORT_VERSION }}
+            type=raw,value=${{ needs.ort_version.outputs.ort_version }}
             type=ref,event=tag
 
       - name: Build ORT image
@@ -419,16 +380,42 @@ jobs:
           context: .
           target: run
           push: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
-          load: false
+          load: ${{ github.event_name == 'pull_request' }}
           tags: |
             ${{ steps.meta-ort.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          labels: ${{ steps.meta-ort.outputs.labels }}
           build-contexts: |
-            minimal=docker-image://${{ env.REGISTRY }}/${{ github.repository_owner }}/ort-minimal:${{ env.ORT_VERSION }}
+            minimal=docker-image://${{ env.REGISTRY }}/${{ github.repository_owner }}/ort-minimal:${{ needs.ort_version.outputs.ort_version }}
             android=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/android:latest
             swift=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/swift:latest
             scala=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/scala:latest
             dart=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/dart:latest
             dotnet=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/dotnet:latest
             haskell=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/haskell:latest
-            bazel=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/bazel:latest
+
+  funTest-docker:
+    needs: ort_image
+    runs-on: ubuntu-22.04
+    container:
+      image: ghcr.io/oss-review-toolkit/ort:${{ needs.ort_image.outputs.build_version }}
+      options: --user 1001
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: 17
+    - name: Run functional tests that do require external tools
+      uses: gradle/gradle-build-action@v3
+      with:
+        gradle-home-cache-cleanup: true
+        arguments: --scan -Ptests.include=org.ossreviewtoolkit.plugins.packagemanagers.* funTest jacocoFunTestReport
+    - name: Upload code coverage data
+      uses: codecov/codecov-action@v4
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        flags: funTest-docker
