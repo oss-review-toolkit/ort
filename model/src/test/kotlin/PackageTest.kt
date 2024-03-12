@@ -51,7 +51,8 @@ class PackageTest : StringSpec({
             sourceArtifact = RemoteArtifact("url", Hash.create("hash")),
             vcs = VcsInfo(VcsType.forName("type"), "url", "revision"),
             isMetadataOnly = false,
-            isModified = false
+            isModified = false,
+            sourceCodeOrigins = null
         )
 
         val other = Package(
@@ -83,6 +84,7 @@ class PackageTest : StringSpec({
         diff.vcs shouldBe pkg.vcsProcessed.toCuration()
         diff.isMetadataOnly shouldBe pkg.isMetadataOnly
         diff.isModified shouldBe pkg.isModified
+        diff.sourceCodeOrigins shouldBe pkg.sourceCodeOrigins
     }
 
     "diff result does not contain unchanged values" {
@@ -112,5 +114,6 @@ class PackageTest : StringSpec({
         diff.sourceArtifact should beNull()
         diff.vcs should beNull()
         diff.isMetadataOnly should beNull()
+        diff.sourceCodeOrigins should beNull()
     }
 })
