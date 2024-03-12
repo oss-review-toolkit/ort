@@ -26,7 +26,7 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 class PackageTest : StringSpec({
-    "diff throws an exception if the identifiers are not equals" {
+    "diff throws an exception if the identifiers are not equal" {
         val pkg = Package.EMPTY.copy(id = Identifier("type1", "namespace1", "name1", "version1"))
         val other = Package.EMPTY.copy(id = Identifier("type2", "namespace2", "name2", "version2"))
 
