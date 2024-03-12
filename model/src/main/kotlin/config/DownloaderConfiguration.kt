@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.model.config
 
 import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.licenses.LicenseCategory
-import org.ossreviewtoolkit.utils.common.getDuplicates
+import org.ossreviewtoolkit.model.utils.requireNotEmptyNoDuplicates
 
 data class DownloaderConfiguration(
     /**
@@ -47,13 +47,6 @@ data class DownloaderConfiguration(
     val sourceCodeOrigins: List<SourceCodeOrigin> = listOf(SourceCodeOrigin.VCS, SourceCodeOrigin.ARTIFACT)
 ) {
     init {
-        require(sourceCodeOrigins.isNotEmpty()) {
-            "'sourceCodeOrigins' must not be empty."
-        }
-
-        val duplicates = sourceCodeOrigins.getDuplicates()
-        require(duplicates.isEmpty()) {
-            "'sourceCodeOrigins' must not contain duplicates. Duplicates: $duplicates"
-        }
+        sourceCodeOrigins.requireNotEmptyNoDuplicates()
     }
 }
