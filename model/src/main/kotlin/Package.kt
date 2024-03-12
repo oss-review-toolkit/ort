@@ -182,7 +182,8 @@ data class Package(
             sourceArtifact = sourceArtifact.takeIf { it != other.sourceArtifact },
             vcs = vcsProcessed.takeIf { it != other.vcsProcessed }?.toCuration(),
             isMetadataOnly = isMetadataOnly.takeIf { it != other.isMetadataOnly },
-            isModified = isModified.takeIf { it != other.isModified }
+            isModified = isModified.takeIf { it != other.isModified },
+            sourceCodeOrigins = sourceCodeOrigins.takeIf { it != other.sourceCodeOrigins }
         )
     }
 

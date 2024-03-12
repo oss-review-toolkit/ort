@@ -49,7 +49,8 @@ class PackageCurationDataTest : WordSpec({
         ),
         isMetadataOnly = true,
         isModified = true,
-        declaredLicenseMapping = mapOf("original" to "original".toSpdx())
+        declaredLicenseMapping = mapOf("original" to "original".toSpdx()),
+        sourceCodeOrigins = listOf(SourceCodeOrigin.ARTIFACT, SourceCodeOrigin.VCS)
     )
 
     val other = PackageCurationData(
@@ -76,7 +77,8 @@ class PackageCurationDataTest : WordSpec({
         ),
         isMetadataOnly = false,
         isModified = false,
-        declaredLicenseMapping = mapOf("other" to "other".toSpdx())
+        declaredLicenseMapping = mapOf("other" to "other".toSpdx()),
+        sourceCodeOrigins = listOf(SourceCodeOrigin.VCS)
     )
 
     "Merging" should {
@@ -92,7 +94,8 @@ class PackageCurationDataTest : WordSpec({
                 binaryArtifact = null,
                 vcs = null,
                 isMetadataOnly = null,
-                declaredLicenseMapping = emptyMap()
+                declaredLicenseMapping = emptyMap(),
+                sourceCodeOrigins = null
             )
 
             originalWithSomeUnsetData.merge(other) shouldBe originalWithSomeUnsetData.copy(
@@ -102,7 +105,8 @@ class PackageCurationDataTest : WordSpec({
                 binaryArtifact = other.binaryArtifact,
                 vcs = other.vcs,
                 isMetadataOnly = other.isMetadataOnly,
-                declaredLicenseMapping = other.declaredLicenseMapping
+                declaredLicenseMapping = other.declaredLicenseMapping,
+                sourceCodeOrigins = other.sourceCodeOrigins
             )
         }
 
@@ -123,7 +127,8 @@ class PackageCurationDataTest : WordSpec({
                 comment = original.comment,
                 authors = original.authors,
                 concludedLicense = original.concludedLicense,
-                declaredLicenseMapping = original.declaredLicenseMapping
+                declaredLicenseMapping = original.declaredLicenseMapping,
+                sourceCodeOrigins = original.sourceCodeOrigins
             )
 
             val mergedData = original.merge(otherWithSomeOriginalData)
