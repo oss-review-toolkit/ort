@@ -47,11 +47,11 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
  */
 interface PackageProvenanceResolver {
     /**
-     * Resolve the [KnownProvenance] of [pkg] based on the provided [sourceCodeOriginPriority].
+     * Resolve the [KnownProvenance] of [pkg] based on the provided [defaultSourceCodeOriginsPriority].
      *
      * Throws an [IOException] if the provenance cannot be resolved.
      */
-    fun resolveProvenance(pkg: Package, sourceCodeOriginPriority: List<SourceCodeOrigin>): KnownProvenance
+    fun resolveProvenance(pkg: Package, defaultSourceCodeOriginsPriority: List<SourceCodeOrigin>): KnownProvenance
 }
 
 /**
@@ -62,15 +62,20 @@ class DefaultPackageProvenanceResolver(
     private val workingTreeCache: WorkingTreeCache
 ) : PackageProvenanceResolver {
     /**
-     * Resolve the [Provenance] of [pkg] based on the provided [sourceCodeOriginPriority]. For source artifacts it is
-     * verified that the [RemoteArtifact] does exist. For a VCS it is verified that the revision exists. If the revision
-     * provided by the [package][pkg] metadata does not exist or is missing, the function tries to guess the tag based
-     * on the name and version of the [package][pkg].
+     * Resolve the [Provenance] of [pkg] based on the provided [defaultSourceCodeOriginsPriority] which is used in case
+     * the [Package][pkg] does not specify the source code origins to be used. For source artifacts it is verified that
+     * the [RemoteArtifact] does exist. For a VCS it is verified that the revision exists. If the revision provided by
+     * the [package][pkg] metadata does not exist or is missing, the function tries to guess the tag based on the name
+     * and version of the [package][pkg].
      */
-    override fun resolveProvenance(pkg: Package, sourceCodeOriginPriority: List<SourceCodeOrigin>): KnownProvenance {
+    override fun resolveProvenance(
+        pkg: Package,
+        defaultSourceCodeOriginsPriority: List<SourceCodeOrigin>
+    ): KnownProvenance {
         val errors = mutableMapOf<SourceCodeOrigin, Throwable>()
+        val sourceCodeOrigins = pkg.sourceCodeOrigins ?: defaultSourceCodeOriginsPriority
 
-        sourceCodeOriginPriority.forEach { sourceCodeOrigin ->
+        sourceCodeOrigins.forEach { sourceCodeOrigin ->
             runCatching {
                 when (sourceCodeOrigin) {
                     SourceCodeOrigin.ARTIFACT -> {
@@ -98,7 +103,7 @@ class DefaultPackageProvenanceResolver(
         val message = buildString {
             append(
                 "Could not resolve provenance for package '${pkg.id.toCoordinates()}' for source code origins " +
-                    "$sourceCodeOriginPriority."
+                    "$defaultSourceCodeOriginsPriority."
             )
 
             errors.forEach { (origin, throwable) ->
