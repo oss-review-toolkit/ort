@@ -69,7 +69,8 @@ class PackageTest : StringSpec({
             sourceArtifact = RemoteArtifact("other url", Hash.create("other hash")),
             vcs = VcsInfo(VcsType.forName("other type"), "other url", "other revision"),
             isMetadataOnly = true,
-            isModified = true
+            isModified = true,
+            sourceCodeOrigins = listOf(SourceCodeOrigin.VCS)
         )
 
         val diff = pkg.diff(other)
@@ -98,7 +99,8 @@ class PackageTest : StringSpec({
             homepageUrl = "homepageUrl",
             binaryArtifact = RemoteArtifact("url", Hash.create("hash")),
             sourceArtifact = RemoteArtifact("url", Hash.create("hash")),
-            vcs = VcsInfo(VcsType.forName("type"), "url", "revision")
+            vcs = VcsInfo(VcsType.forName("type"), "url", "revision"),
+            sourceCodeOrigins = listOf(SourceCodeOrigin.VCS)
         )
 
         val diff = pkg.diff(pkg)
