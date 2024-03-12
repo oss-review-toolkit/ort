@@ -87,11 +87,11 @@ data class LicenseFindingCuration(
     }
 }
 
-class IntListToCsvStringConverter : StdConverter<List<Int>, String>() {
+private class IntListToCsvStringConverter : StdConverter<List<Int>, String>() {
     override fun convert(value: List<Int>): String = value.joinToString(separator = ",")
 }
 
-class CsvStringToIntListConverter : StdConverter<String, List<Int>>() {
+private class CsvStringToIntListConverter : StdConverter<String, List<Int>>() {
     override fun convert(value: String): List<Int> =
         value
             .split(',')
