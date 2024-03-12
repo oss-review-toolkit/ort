@@ -70,3 +70,8 @@
     comment: "A copyright statement was used to declare the license."
     declared_license_mapping:
       "Copyright (C) 2013, Martin Journois": "NONE"
+
+- id: "Maven:androidx.collection:collection:"
+  curations:
+    comment: "Scan the source artifact, because the VCS revision and path are hard to figure out."
+    source_code_origins: [ARTIFACT]
