@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.model
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
+import org.ossreviewtoolkit.model.utils.requireNotEmptyNoDuplicates
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.common.StringSortedSetConverter
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
@@ -129,7 +130,14 @@ data class Package(
      * e.g., in case of a fork of an upstream Open Source project.
      */
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    val isModified: Boolean = false
+    val isModified: Boolean = false,
+
+    /**
+     * The considered source code origins and their priority order to use for this package. If null, the configured
+     * default is used. If not null, this must not be empty and not contain any duplicates.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val sourceCodeOrigins: List<SourceCodeOrigin>? = null
 ) {
     companion object {
         /**
@@ -150,6 +158,10 @@ data class Package(
             vcs = VcsInfo.EMPTY,
             vcsProcessed = VcsInfo.EMPTY
         )
+    }
+
+    init {
+        sourceCodeOrigins?.requireNotEmptyNoDuplicates()
     }
 
     /**
