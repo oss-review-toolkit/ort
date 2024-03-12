@@ -26,8 +26,10 @@ import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.ProvenanceResolutionResult
 import org.ossreviewtoolkit.model.RepositoryProvenance
+import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.utils.common.getDuplicates
 
 fun String.prependPath(prefix: String): String = if (prefix.isBlank()) this else "${prefix.removeSuffix("/")}/$this"
 
@@ -86,3 +88,14 @@ fun String.parseRepoManifestPath() =
             ?.get(1)
             ?.takeUnless { it.isEmpty() }
     }.getOrNull()
+
+internal fun List<SourceCodeOrigin>.requireNotEmptyNoDuplicates() {
+    require(isNotEmpty()) {
+        "'sourceCodeOrigins' must not be empty."
+    }
+
+    val duplicates = getDuplicates()
+    require(duplicates.isEmpty()) {
+        "'sourceCodeOrigins' must not contain duplicates. Duplicates: $duplicates"
+    }
+}
