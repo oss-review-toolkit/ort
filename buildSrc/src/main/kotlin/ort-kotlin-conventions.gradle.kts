@@ -21,11 +21,6 @@ import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.report.ReportMergeTask
 
 import org.gradle.accessors.dm.LibrariesForLibs
-import org.gradle.api.JavaVersion
-import org.gradle.api.attributes.TestSuiteType
-import org.gradle.api.plugins.jvm.JvmTestSuite
-import org.gradle.api.tasks.compile.JavaCompile
-import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.gradle.kotlin.dsl.dependencies
