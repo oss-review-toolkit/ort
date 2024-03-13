@@ -92,6 +92,7 @@ fun patchExpectedResult(
     val env = Environment()
 
     val replacements = buildMap {
+        put("<REPLACE_JDK>", env.buildJdk)
         put("<REPLACE_JAVA>", env.javaVersion)
         put("<REPLACE_OS>", env.os)
         put("\"<REPLACE_PROCESSORS>\"", env.processors.toString())
