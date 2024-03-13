@@ -35,6 +35,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 private val Project.libs: LibrariesForLibs
     get() = extensions.getByType()
 
+val javaLanguageVersion: String by project
+
 plugins {
     // Apply core plugins.
     jacoco
@@ -105,8 +107,13 @@ detekt {
     basePath = rootDir.path
 }
 
-val javaVersion = JavaVersion.current()
-val maxKotlinJvmTarget = runCatching { JvmTarget.fromTarget(javaVersion.majorVersion) }
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(javaLanguageVersion)
+    }
+}
+
+val maxKotlinJvmTarget = runCatching { JvmTarget.fromTarget(javaLanguageVersion) }
     .getOrDefault(enumValues<JvmTarget>().max())
 
 val mergeDetektReportsTaskName = "mergeDetektReports"
