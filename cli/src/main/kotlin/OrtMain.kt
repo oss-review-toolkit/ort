@@ -190,9 +190,9 @@ class OrtMain : CliktCommand(
 
                 cell(
                     """
-                        The OSS Review Toolkit, version ${Theme.Default.info(version)}.
-    
-                        Running$command$user under Java ${env.javaVersion} on ${env.os}
+                        The OSS Review Toolkit, version ${Theme.Default.info(version)},
+                        built with JDK ${env.buildJdk}, running under Java ${env.javaVersion}.
+                        Executing$command$user on ${env.os}
                         with ${env.processors} CPUs and a maximum of $maxMemInMib MiB of memory.
                     """.trimIndent()
                 )

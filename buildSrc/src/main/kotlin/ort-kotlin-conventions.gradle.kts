@@ -113,6 +113,12 @@ java {
     }
 }
 
+tasks.withType<Jar>().configureEach {
+    manifest {
+        attributes["Build-Jdk"] = javaToolchains.compilerFor(java.toolchain).map { it.metadata.jvmVersion }
+    }
+}
+
 val maxKotlinJvmTarget = runCatching { JvmTarget.fromTarget(javaLanguageVersion) }
     .getOrDefault(enumValues<JvmTarget>().max())
 
