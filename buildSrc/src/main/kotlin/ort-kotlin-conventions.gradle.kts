@@ -147,12 +147,6 @@ tasks.withType<Detekt>().configureEach detekt@{
     finalizedBy(mergeDetektReports)
 }
 
-tasks.withType<JavaCompile>().configureEach {
-    // Align this with Kotlin to avoid errors, see https://youtrack.jetbrains.com/issue/KT-48745.
-    sourceCompatibility = maxKotlinJvmTarget.target
-    targetCompatibility = maxKotlinJvmTarget.target
-}
-
 tasks.withType<KotlinCompile>().configureEach {
     val hasSerialization = plugins.hasPlugin(libs.plugins.kotlinSerialization.get().pluginId)
 
