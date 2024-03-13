@@ -41,7 +41,8 @@ data class DownloaderConfiguration(
     val skipExcluded: Boolean = false,
 
     /**
-     * Configuration of the considered source code origins and their priority order.
+     * Configuration of the considered source code origins and their priority order. This must not be empty and not
+     * contain any duplicates.
      */
     val sourceCodeOrigins: List<SourceCodeOrigin> = listOf(SourceCodeOrigin.VCS, SourceCodeOrigin.ARTIFACT)
 ) {
