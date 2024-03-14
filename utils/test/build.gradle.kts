@@ -28,6 +28,9 @@ dependencies {
 
     api(libs.kotest.assertions.core)
     api(libs.kotest.framework.api)
+    api(libs.logbackClassic) {
+        because("Transitively export this to consumers so they do not have to declare a logger implementation.")
+    }
 
     implementation(projects.downloader)
     implementation(projects.utils.ortUtils)
@@ -39,5 +42,4 @@ dependencies {
     implementation(libs.postgresEmbedded)
 
     runtimeOnly(libs.log4j.api.slf4j)
-    runtimeOnly(libs.logbackClassic)
 }
