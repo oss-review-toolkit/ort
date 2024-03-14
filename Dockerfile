@@ -404,6 +404,25 @@ FROM scratch AS dotnet
 COPY --from=dotnetbuild /opt/dotnet /opt/dotnet
 
 #------------------------------------------------------------------------
+# BAZEL
+FROM base as bazelbuild
+
+ARG BAZEL_VERSION=7.0.1
+
+ENV BAZEL_HOME=/opt/bazel
+
+RUN mkdir -p $BAZEL_HOME/bin \
+    && if [ "$(arch)" = "aarch64" ]; then \
+    curl -L https://github.com/bazelbuild/bazel/releases/download/$BAZEL_VERSION/bazel-$BAZEL_VERSION-linux-arm64 -o $BAZEL_HOME/bin/bazel; \
+    else \
+    curl -L https://github.com/bazelbuild/bazel/releases/download/$BAZEL_VERSION/bazel-$BAZEL_VERSION-linux-x86_64 -o $BAZEL_HOME/bin/bazel; \
+    fi \
+    && chmod a+x $BAZEL_HOME/bin/bazel
+
+FROM scratch as bazel
+COPY --from=bazelbuild /opt/bazel /opt/bazel
+
+#------------------------------------------------------------------------
 # ORT
 FROM base as ortbuild
 
@@ -564,3 +583,11 @@ ENV PATH=$PATH:$HASKELL_HOME/bin
 COPY --from=haskell /opt/haskell /opt/haskell
 
 RUN syft /opt/haskell -o spdx-json --file /usr/share/doc/ort/ort-haskell.spdx.json
+
+# Bazel
+ENV BAZEL_HOME=/opt/bazel
+ENV PATH=$PATH:$BAZEL_HOME/bin
+
+COPY --from=bazel $BAZEL_HOME $BAZEL_HOME
+
+RUN syft $BAZEL_HOME -o spdx-json --file /usr/share/doc/ort/ort-bazel.spdx.json
