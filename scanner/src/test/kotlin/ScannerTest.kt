@@ -496,7 +496,7 @@ class ScannerTest : WordSpec({
             val scannerWrapper = spyk(FakeProvenanceScannerWrapper())
 
             val reader = spyk(FakeProvenanceBasedStorageReader(scannerWrapper.details)) {
-                every { read(any()) } returns emptyList()
+                every { read(any(), any()) } returns emptyList()
             }
 
             val scanner = createScanner(
@@ -516,7 +516,7 @@ class ScannerTest : WordSpec({
             )
 
             verify(exactly = 1) {
-                reader.read(pkgWithArtifact.artifactProvenance())
+                reader.read(pkgWithArtifact.artifactProvenance(), any())
                 scannerWrapper.scanProvenance(pkgWithArtifact.artifactProvenance(), any())
             }
         }
@@ -574,7 +574,7 @@ class ScannerTest : WordSpec({
             }
 
             val reader = spyk(FakeProvenanceBasedStorageReader(scannerWrapper.details)) {
-                every { read(unscannedSubRepository) } returns emptyList()
+                every { read(unscannedSubRepository, any()) } returns emptyList()
             }
 
             val scanner = createScanner(
@@ -654,7 +654,7 @@ class ScannerTest : WordSpec({
             )
 
             val reader = spyk(FakeProvenanceBasedStorageReader(scannerWrapper.details)) {
-                every { read(any()) } returns listOf(scanResult)
+                every { read(any(), any()) } returns listOf(scanResult)
             }
 
             val scanner = createScanner(
@@ -823,7 +823,6 @@ class ScannerTest : WordSpec({
             scanner.scan(setOf(pkgWithArtifact), createContext())
 
             verify(exactly = 1) {
-                reader.read(any())
                 reader.read(any(), any())
             }
         }
@@ -994,10 +993,8 @@ private class FakePackageBasedStorageReader(val scannerDetails: ScannerDetails) 
 }
 
 private class FakeProvenanceBasedStorageReader(val scannerDetails: ScannerDetails) : ProvenanceBasedScanStorageReader {
-    override fun read(provenance: KnownProvenance): List<ScanResult> =
+    override fun read(provenance: KnownProvenance, scannerMatcher: ScannerMatcher?): List<ScanResult> =
         listOf(createStoredScanResult(provenance, scannerDetails))
-
-    override fun read(provenance: KnownProvenance, scannerMatcher: ScannerMatcher): List<ScanResult> = read(provenance)
 }
 
 private class FakePackageBasedStorageWriter : PackageBasedScanStorageWriter {

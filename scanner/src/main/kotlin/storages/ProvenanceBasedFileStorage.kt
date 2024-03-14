@@ -34,6 +34,7 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.ProvenanceBasedScanStorage
 import org.ossreviewtoolkit.scanner.ScanStorageException
+import org.ossreviewtoolkit.scanner.ScannerMatcher
 import org.ossreviewtoolkit.scanner.utils.requireEmptyVcsPath
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.fileSystemEncode
@@ -41,7 +42,7 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 
 class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceBasedScanStorage {
-    override fun read(provenance: KnownProvenance): List<ScanResult> {
+    override fun read(provenance: KnownProvenance, scannerMatcher: ScannerMatcher?): List<ScanResult> {
         requireEmptyVcsPath(provenance)
 
         val path = storagePath(provenance)
@@ -52,7 +53,7 @@ class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceB
                     // Use the provided provenance for the result instead of building it from the stored values, because
                     // in the case of a RepositoryRevision only the resolved revision matters.
                     it.copy(provenance = provenance)
-                }
+                }.filter { scannerMatcher?.matches(it.scanner) != false }
             }
         }.getOrElse {
             when (it) {
