@@ -78,6 +78,11 @@ private val GRADLE_USER_HOME = Os.env["GRADLE_USER_HOME"]?.let { File(it) } ?: O
 const val OPTION_GRADLE_VERSION = "gradleVersion"
 
 /**
+ * The name of the option to specify the Java home to use.
+ */
+const val OPTION_JAVA_HOME = "javaHome"
+
+/**
  * The [Gradle](https://gradle.org/) package manager for Java.
  *
  * This package manager supports the following [options][PackageManagerConfiguration.options]:
@@ -159,6 +164,11 @@ class GradleInspector(
                     // Work around https://github.com/gradle/gradle/issues/28464.
                     if (logger.delegate.isDebugEnabled && buildGradleVersion?.isEqualTo("8.5.0") != true) {
                         addProgressListener(ProgressListener { logger.debug(it.displayName) })
+                    }
+
+                    options[OPTION_JAVA_HOME]?.also {
+                        logger.info { "Setting Java home for project analysis to '$it'." }
+                        setJavaHome(File(it))
                     }
                 }
                 .setJvmArguments(jvmArgs)
