@@ -31,14 +31,14 @@ import org.semver4j.Semver
  * so that it can be used as a replacement for a result produced by an actual scanner. A scanner implementation
  * creates a [ScannerMatcher] with its exact properties. Users can override some or all of these properties to
  * state the criteria under which results from a storage are acceptable even if they deviate from the exact
- * properties of the scanner. That way it can be configured for instance, that results produced by an older
+ * properties of the scanner. That way it can be configured, for instance, that results produced by an older
  * version of the scanner can be used.
  */
 data class ScannerMatcher(
     /**
      * Criterion to match the scanner name. This string is interpreted as a regular expression. In the most basic
      * form, it can be an exact scanner name, but by using features of regular expressions, a more advanced
-     * matching can be achieved. So it is possible for instance to select multiple scanners using an alternative ('|')
+     * matching can be achieved. So it is possible, for instance, to select multiple scanners using an alternative ('|')
      * expression or an arbitrary one using a wildcard ('.*').
      */
     val regScannerName: String,
