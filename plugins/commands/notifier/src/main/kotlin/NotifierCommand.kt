@@ -77,11 +77,14 @@ class NotifierCommand : OrtCommand(
 
     override fun run() {
         val ortResult = readOrtResult(ortFile).mergeLabels(labels)
-        val notifier = Notifier(
-            ortResult,
-            ortConfig.notifier,
-            DefaultResolutionProvider.create(ortResult, resolutionsFile)
-        )
+
+        // If available, use only the resolved resolutions.
+        val resolutionProvider = when (ortResult.resolvedConfiguration.resolutions) {
+            null -> DefaultResolutionProvider.create(ortResult, resolutionsFile)
+            else -> ortResult
+        }
+
+        val notifier = Notifier(ortResult, ortConfig.notifier, resolutionProvider)
 
         val script = notificationsFile?.readText() ?: readDefaultNotificationsFile()
         notifier.run(script)
