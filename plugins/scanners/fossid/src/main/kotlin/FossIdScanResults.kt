@@ -47,11 +47,9 @@ import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.mapLicense
 import org.ossreviewtoolkit.model.utils.PurlType
-import org.ossreviewtoolkit.utils.common.alsoIfNull
 import org.ossreviewtoolkit.utils.common.collapseToRanges
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.prettyPrintRanges
-import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.ORT_NAME
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.toSpdx
@@ -167,6 +165,7 @@ private fun mapLicense(
 internal fun mapSnippetFindings(
     rawResults: RawResults,
     issues: MutableList<Issue>,
+    detectedLicenseMapping: Map<String, String>,
     snippetChoices: List<SnippetChoice>,
     snippetLicenseFindings: MutableSet<LicenseFinding>
 ): Set<SnippetFinding> {
@@ -176,16 +175,6 @@ internal fun mapSnippetFindings(
         val findings = mutableMapOf<TextLocation, MutableSet<OrtSnippet>>()
 
         rawSnippets.forEach { snippet ->
-            val license = snippet.artifactLicense?.let { artifactLicense ->
-                DeclaredLicenseProcessor.process(artifactLicense).alsoIfNull {
-                    issues += FossId.createAndLogIssue(
-                        source = "FossId",
-                        message = "Failed to map license '$artifactLicense' as an SPDX expression.",
-                        severity = Severity.HINT
-                    )
-                }
-            } ?: SpdxConstants.NOASSERTION.toSpdx()
-
             // FossID does not return the hash of the remote artifact. Instead, it returns the MD5 hash of the
             // matched file in the remote artifact as part of the "match_file_id" property.
             val url = checkNotNull(snippet.url) {
@@ -229,9 +218,15 @@ internal fun mapSnippetFindings(
                 }
             }
 
+            val ortSnippetLocation = snippetLocation ?: TextLocation(snippet.file, TextLocation.UNKNOWN_LINE)
+
+            val license = snippet.artifactLicense?.let { artifactLicense ->
+                mapLicense(artifactLicense, ortSnippetLocation, issues, detectedLicenseMapping)?.license?.normalize()
+            } ?: SpdxConstants.NOASSERTION.toSpdx()
+
             val ortSnippet = OrtSnippet(
                 snippet.score.toFloat(),
-                snippetLocation ?: TextLocation(snippet.file, TextLocation.UNKNOWN_LINE),
+                ortSnippetLocation,
                 snippetProvenance,
                 purl,
                 license,

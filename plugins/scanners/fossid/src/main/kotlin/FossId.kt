@@ -913,7 +913,13 @@ class FossId internal constructor(
         )
 
         val snippetLicenseFindings = mutableSetOf<LicenseFinding>()
-        val snippetFindings = mapSnippetFindings(rawResults, issues, snippetChoices, snippetLicenseFindings)
+        val snippetFindings = mapSnippetFindings(
+            rawResults,
+            issues,
+            detectedLicenseMapping,
+            snippetChoices,
+            snippetLicenseFindings
+        )
         markFilesWithChosenSnippetsAsIdentified(
             scanCode,
             snippetChoices,
