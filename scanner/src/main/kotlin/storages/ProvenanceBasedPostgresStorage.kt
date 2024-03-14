@@ -45,6 +45,7 @@ import org.ossreviewtoolkit.model.utils.DatabaseUtils.tableExists
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.transaction
 import org.ossreviewtoolkit.scanner.ProvenanceBasedScanStorage
 import org.ossreviewtoolkit.scanner.ScanStorageException
+import org.ossreviewtoolkit.scanner.ScannerMatcher
 import org.ossreviewtoolkit.scanner.storages.utils.jsonb
 import org.ossreviewtoolkit.scanner.utils.requireEmptyVcsPath
 import org.ossreviewtoolkit.utils.common.collectMessages
@@ -77,7 +78,7 @@ class ProvenanceBasedPostgresStorage(
         }
     }
 
-    override fun read(provenance: KnownProvenance): List<ScanResult> {
+    override fun read(provenance: KnownProvenance, scannerMatcher: ScannerMatcher?): List<ScanResult> {
         requireEmptyVcsPath(provenance)
 
         try {
@@ -104,16 +105,18 @@ class ProvenanceBasedPostgresStorage(
                 // Use the provided provenance for the result instead of building it from the stored values, because in
                 // the case of a RepositoryRevision only the resolved revision matters, therefore the VcsInfo.revision
                 // is not stored in the database.
-                query.map {
-                    ScanResult(
-                        provenance = provenance,
-                        scanner = ScannerDetails(
-                            name = it[table.scannerName],
-                            version = it[table.scannerVersion],
-                            configuration = it[table.scannerConfiguration]
-                        ),
-                        summary = it[table.scanSummary]
+                query.mapNotNull {
+                    val details = ScannerDetails(
+                        name = it[table.scannerName],
+                        version = it[table.scannerVersion],
+                        configuration = it[table.scannerConfiguration]
                     )
+
+                    if (scannerMatcher?.matches(details) != false) {
+                        ScanResult(provenance, details, it[table.scanSummary])
+                    } else {
+                        null
+                    }
                 }
             }
         } catch (e: SQLException) {
