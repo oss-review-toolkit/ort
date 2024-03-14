@@ -27,11 +27,6 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
-    - name: Setup Java
-      uses: actions/setup-java@v4
-      with:
-        distribution: temurin
-        java-version: 17
     - name: Check copyrights, license headers, and .gitattributes
       uses: gradle/gradle-build-action@v3
       with:
@@ -42,11 +37,6 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
-    - name: Setup Java
-      uses: actions/setup-java@v4
-      with:
-        distribution: temurin
-        java-version: 17
     - name: Check for Detekt Issues
       uses: gradle/gradle-build-action@v3
       with:
