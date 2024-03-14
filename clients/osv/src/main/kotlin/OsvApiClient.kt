@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.clients.osv
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 
-import io.ks3.java.`typealias`.InstantAsString
+import io.ks3.java.typealiases.InstantAsString
 
 import java.util.concurrent.Executors
 
