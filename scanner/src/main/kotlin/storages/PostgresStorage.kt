@@ -25,11 +25,6 @@ import java.sql.SQLException
 
 import javax.sql.DataSource
 
-import kotlin.math.max
-
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
-
 import org.apache.logging.log4j.kotlin.logger
 
 import org.jetbrains.exposed.sql.Database
@@ -45,7 +40,6 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.checkDatabaseEncoding
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.tableExists
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.transaction
-import org.ossreviewtoolkit.model.utils.DatabaseUtils.transactionAsync
 import org.ossreviewtoolkit.model.utils.arrayParam
 import org.ossreviewtoolkit.model.utils.rawParam
 import org.ossreviewtoolkit.model.utils.tilde
@@ -66,12 +60,7 @@ class PostgresStorage(
     /**
      * The JDBC data source to obtain database connections.
      */
-    private val dataSource: Lazy<DataSource>,
-
-    /**
-     * The number of parallel storage transactions.
-     */
-    private val parallelTransactions: Int
+    private val dataSource: Lazy<DataSource>
 ) : ScanResultsStorage() {
     companion object {
         /** Expression to reference the scanner version as an array. */
@@ -164,56 +153,6 @@ class PostgresStorage(
 
                 val message = "Could not read scan results for '${pkg.id.toCoordinates()}' with " +
                     "$scannerMatcher from database: ${it.collectMessages()}"
-
-                logger.info { message }
-
-                return Result.failure(ScanStorageException(message))
-            }
-        }
-    }
-
-    override fun readInternal(
-        packages: Collection<Package>,
-        scannerMatcher: ScannerMatcher
-    ): Result<Map<Identifier, List<ScanResult>>> {
-        if (packages.isEmpty()) return Result.success(emptyMap())
-
-        val minVersionArray = with(scannerMatcher.minVersion) { intArrayOf(major, minor, patch) }
-        val maxVersionArray = with(scannerMatcher.maxVersion) { intArrayOf(major, minor, patch) }
-
-        return runCatching {
-            runBlocking(Dispatchers.IO) {
-                packages.chunked(max(packages.size / parallelTransactions, 1)).map { chunk ->
-                    database.transactionAsync {
-                        @Suppress("MaxLineLength")
-                        ScanResultDao.find {
-                            (ScanResults.identifier inList chunk.map { it.id.toCoordinates() }) and
-                                (rawParam("scan_result->'scanner'->>'name'") tilde scannerMatcher.regScannerName) and
-                                (rawParam(VERSION_EXPRESSION) greaterEq arrayParam(minVersionArray)) and
-                                (rawParam(VERSION_EXPRESSION) less arrayParam(maxVersionArray))
-                        }.map { it.identifier to it.scanResult }
-                    }
-                }.flatMap { it.await() }
-                    .groupBy { it.first }
-                    .mapValues { (_, results) -> results.map { it.second } }
-                    .mapValues { (id, results) ->
-                        val pkg = packages.single { it.id == id }
-
-                        results
-                            // TODO: Currently the query only accounts for the scanner criteria. Ideally also the
-                            //       provenance should be checked in the query to reduce the downloaded data.
-                            .filter { it.provenance.matches(pkg) }
-                            // The scanner compatibility is already checked in the query, but filter here again to be on
-                            // the safe side.
-                            .filter { scannerMatcher.matches(it.scanner) }
-                    }
-            }
-        }.onFailure {
-            if (it is JsonProcessingException || it is SQLException) {
-                it.showStackTrace()
-
-                val message = "Could not read scan results with $scannerMatcher from database: " +
-                    it.collectMessages()
 
                 logger.info { message }
 

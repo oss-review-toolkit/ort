@@ -139,8 +139,7 @@ private fun createFileBasedStorage(config: FileBasedStorageConfiguration) =
 private fun createPostgresStorage(config: PostgresStorageConfiguration) =
     when (config.type) {
         StorageType.PACKAGE_BASED -> PostgresStorage(
-            DatabaseUtils.createHikariDataSource(config = config.connection, applicationNameSuffix = TOOL_NAME),
-            config.connection.parallelTransactions
+            DatabaseUtils.createHikariDataSource(config = config.connection, applicationNameSuffix = TOOL_NAME)
         )
         StorageType.PROVENANCE_BASED -> ProvenanceBasedPostgresStorage(
             DatabaseUtils.createHikariDataSource(config = config.connection, applicationNameSuffix = TOOL_NAME)

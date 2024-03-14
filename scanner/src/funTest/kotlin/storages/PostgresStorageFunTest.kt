@@ -24,5 +24,5 @@ import org.ossreviewtoolkit.utils.test.PostgresListener
 private val postgresListener = PostgresListener()
 
 class PostgresStorageFunTest : AbstractStorageFunTest(postgresListener) {
-    override fun createStorage() = PostgresStorage(dataSource = postgresListener.dataSource, parallelTransactions = 5)
+    override fun createStorage() = PostgresStorage(dataSource = postgresListener.dataSource)
 }

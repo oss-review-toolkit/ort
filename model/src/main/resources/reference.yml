@@ -191,7 +191,6 @@ ort:
           sslcert: /defaultdir/postgresql.crt
           sslkey: /defaultdir/postgresql.pk8
           sslrootcert: /defaultdir/root.crt
-          parallelTransactions: 5
 
     createMissingArchives: false
 
@@ -217,7 +216,6 @@ ort:
           sslcert: /defaultdir/postgresql.crt
           sslkey: /defaultdir/postgresql.pk8
           sslrootcert: /defaultdir/root.crt
-          parallelTransactions: 5
 
     config:
       # A map from scanner plugin types to the plugin configuration.
