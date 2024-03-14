@@ -19,10 +19,11 @@
 
 package org.ossreviewtoolkit.plugins.reporters.gitlab
 
+import io.ks3.standard.sortedListSerializer
+import io.ks3.standard.sortedSetSerializer
+
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.encoding.Encoder
-import kotlinx.serialization.serializer
 
 private const val GITLAB_LICENSE_SCANNING_SCHEMA_VERSION_MAJOR_MINOR = "2.1"
 
@@ -42,15 +43,13 @@ internal data class GitLabLicenseModel(
     /**
      * The complete set of licenses referred to by [dependencies].
      */
-    @Serializable(SortedLicenseCollectionSerializer::class)
-    @Suppress("SERIALIZER_TYPE_INCOMPATIBLE")
+    @Serializable(SortedLicenseSetSerializer::class)
     val licenses: Set<License>,
 
     /**
      * The list of all dependencies.
      */
-    @Serializable(SortedDependenciesCollectionSerializer::class)
-    @Suppress("SERIALIZER_TYPE_INCOMPATIBLE")
+    @Serializable(SortedDependenciesListSerializer::class)
     val dependencies: List<Dependency>
 ) {
     @Serializable
@@ -96,27 +95,17 @@ internal data class GitLabLicenseModel(
         /**
          * The declared licenses of this dependency.
          */
-        @Serializable(SortedStringCollectionSerializer::class)
-        @Suppress("SERIALIZER_TYPE_INCOMPATIBLE")
+        @Serializable(SortedStringSetSerializer::class)
         val licenses: Set<String>
     )
 }
 
-private class SortedDependenciesCollectionSerializer :
-    KSerializer<Collection<GitLabLicenseModel.Dependency>> by sortedCollectionSerializer(
+private class SortedDependenciesListSerializer :
+    KSerializer<List<GitLabLicenseModel.Dependency>> by sortedListSerializer(
         compareBy({ it.packageManager }, { it.name }, { it.version })
     )
 
-private class SortedLicenseCollectionSerializer :
-    KSerializer<Collection<GitLabLicenseModel.License>> by sortedCollectionSerializer(compareBy { it.id })
+private class SortedLicenseSetSerializer :
+    KSerializer<Set<GitLabLicenseModel.License>> by sortedSetSerializer(compareBy { it.id })
 
-private class SortedStringCollectionSerializer :
-    KSerializer<Collection<String>> by sortedCollectionSerializer(compareBy { it })
-
-private inline fun <reified T> sortedCollectionSerializer(comparator: Comparator<in T>): KSerializer<Collection<T>> {
-    val delegate = serializer<Collection<T>>()
-    return object : KSerializer<Collection<T>> by delegate {
-        override fun serialize(encoder: Encoder, value: Collection<T>) =
-            delegate.serialize(encoder, value.sortedWith(comparator))
-    }
-}
+private class SortedStringSetSerializer : KSerializer<Set<String>> by sortedSetSerializer(compareBy { it })
