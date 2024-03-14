@@ -89,11 +89,13 @@ fun patchExpectedResult(
     definitionFile: File? = null,
     custom: Map<String, String> = emptyMap()
 ): String {
+    val env = Environment()
+
     val replacements = buildMap {
-        put("<REPLACE_JAVA>", System.getProperty("java.version"))
-        put("<REPLACE_OS>", System.getProperty("os.name"))
-        put("\"<REPLACE_PROCESSORS>\"", Runtime.getRuntime().availableProcessors().toString())
-        put("\"<REPLACE_MAX_MEMORY>\"", Runtime.getRuntime().maxMemory().toString())
+        put("<REPLACE_JAVA>", env.javaVersion)
+        put("<REPLACE_OS>", env.os)
+        put("\"<REPLACE_PROCESSORS>\"", env.processors.toString())
+        put("\"<REPLACE_MAX_MEMORY>\"", env.maxMemory.toString())
 
         if (definitionFile != null) {
             val projectDir = definitionFile.parentFile
