@@ -57,7 +57,8 @@ class FossIdLicenseMappingTest : WordSpec({
             val rawResults = createSnippet("Apache 2.0")
             val issues = mutableListOf<Issue>()
 
-            val findings = mapSnippetFindings(rawResults, issues, emptyList(), mutableSetOf())
+            val mapping = mapOf("Apache 2.0" to "Apache-2.0")
+            val findings = mapSnippetFindings(rawResults, issues, mapping, emptyList(), mutableSetOf())
 
             issues should beEmpty()
             findings should haveSize(1)
@@ -72,7 +73,7 @@ class FossIdLicenseMappingTest : WordSpec({
             val rawResults = createSnippet("Apache-2.0")
             val issues = mutableListOf<Issue>()
 
-            val findings = mapSnippetFindings(rawResults, issues, emptyList(), mutableSetOf())
+            val findings = mapSnippetFindings(rawResults, issues, emptyMap(), emptyList(), mutableSetOf())
 
             issues should beEmpty()
             findings should haveSize(1)
@@ -87,13 +88,13 @@ class FossIdLicenseMappingTest : WordSpec({
             val rawResults = createSnippet("invalid license")
             val issues = mutableListOf<Issue>()
 
-            val findings = mapSnippetFindings(rawResults, issues, emptyList(), mutableSetOf())
+            val findings = mapSnippetFindings(rawResults, issues, emptyMap(), emptyList(), mutableSetOf())
 
             issues should haveSize(1)
             issues.first() shouldNotBeNull {
                 message shouldStartWith
-                    "Failed to map license 'invalid license' as an SPDX expression."
-                severity shouldBe Severity.HINT
+                    "Failed to parse license 'invalid license' as an SPDX expression"
+                severity shouldBe Severity.ERROR
             }
             findings should haveSize(1)
             findings.first() shouldNotBeNull {
