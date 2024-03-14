@@ -15,11 +15,34 @@ project:
     revision: "<REPLACE_REVISION>"
     path: "<REPLACE_PATH>"
   homepage_url: ""
-  scopes: []
-packages: []
-issues:
-- timestamp: "1970-01-01T00:00:00Z"
-  source: "SwiftPM"
-  message: "Could not parse lockfile '<REPLACE_ABSOLUTE_DEFINITION_FILE_PATH>'.\
-    \ Unknown file format version '3'."
-  severity: "ERROR"
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "Swift::github.com/alamofire/alamofire:5.4.4"
+packages:
+- id: "Swift::github.com/alamofire/alamofire:5.4.4"
+  purl: "pkg:swift/github.com%2Falamofire%2Falamofire@5.4.4"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/Alamofire/Alamofire.git"
+    revision: "d120af1e8638c7da36c8481fd61a66c0c08dc4fc"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/Alamofire/Alamofire.git"
+    revision: "d120af1e8638c7da36c8481fd61a66c0c08dc4fc"
+    path: ""

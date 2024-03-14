@@ -97,8 +97,9 @@ internal fun parseLockfile(packageResolvedFile: File): Result<Set<PinV2>> =
                 pinsJson?.let { json.decodeFromJsonElement<List<PinV1>>(it) }.orEmpty().map { it.toPinV2(projectDir) }
             }
 
-            "2" -> {
-                // See https://github.com/apple/swift-package-manager/blob/3ef830dddff459e569d6e49c186c3ded33c39bcc/Sources/PackageGraph/PinsStore.swift#L387.
+            "2", "3" -> {
+                // See https://github.com/apple/swift-package-manager/blob/3ef830dddff459e569d6e49c186c3ded33c39bcc/Sources/PackageGraph/PinsStore.swift#L387
+                // and https://github.com/apple/swift-package-manager/blob/3ef830dddff459e569d6e49c186c3ded33c39bcc/Sources/PackageGraph/PinsStore.swift#L465.
                 val pinsJson = root["pins"]
                 pinsJson?.let { json.decodeFromJsonElement<List<PinV2>>(it) }.orEmpty()
             }

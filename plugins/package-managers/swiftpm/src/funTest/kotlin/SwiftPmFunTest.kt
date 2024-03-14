@@ -52,10 +52,21 @@ class SwiftPmFunTest : WordSpec({
         }
     }
 
-    "Analyzing a lockfile with unsupported file format version 3" should {
+    "Analyzing a lockfile with file format version 3" should {
         "return the correct result" {
             val definitionFile = getAssetFile("projects/synthetic/only-lockfile-v3/Package.resolved")
             val expectedResultFile = getAssetFile("projects/synthetic/expected-output-only-lockfile-v3.yml")
+
+            val result = create(PROJECT_TYPE).resolveSingleProject(definitionFile)
+
+            result.withInvariantIssues().toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+        }
+    }
+
+    "Analyzing a lockfile with unsupported file format version 4" should {
+        "return the correct result" {
+            val definitionFile = getAssetFile("projects/synthetic/only-lockfile-v4/Package.resolved")
+            val expectedResultFile = getAssetFile("projects/synthetic/expected-output-only-lockfile-v4.yml")
 
             val result = create(PROJECT_TYPE).resolveSingleProject(definitionFile)
 
