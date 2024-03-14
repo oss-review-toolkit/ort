@@ -104,6 +104,12 @@ ort:
         # another package manager generates files that this package manager requires to run correctly.
         mustRunAfter: [NPM]
 
+      GradleInspector:
+        options:
+          # An optional path to the Java home to use for Gradle project analysis. By default the Java version that ORT
+          # itself is run with will be used.
+          javaHome: "/path/to/java/home"
+
       Yarn2:
         options:
           # If set to true, disable verification of HTTPS certificate of remote registries. Useful when using a proxy to

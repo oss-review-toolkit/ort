@@ -136,9 +136,9 @@ class AnalyzerConfigurationTest : WordSpec({
         "override an existing entry" {
             val original = AnalyzerConfiguration(
                 packageManagers = mapOf(
-                    "Gradle" to PackageManagerConfiguration(
+                    "GradleInspector" to PackageManagerConfiguration(
                         mustRunAfter = listOf("Npm"),
-                        options = mapOf("gradleVersion" to "7.6.1")
+                        options = mapOf("gradleVersion" to "7.6.1", "javaHome" to "/path/to/java/home")
                     ),
                     "Npm" to PackageManagerConfiguration(
                         mustRunAfter = listOf("Yarn")
@@ -148,9 +148,9 @@ class AnalyzerConfigurationTest : WordSpec({
 
             val patched = AnalyzerConfiguration(
                 packageManagers = mapOf(
-                    "Gradle" to PackageManagerConfiguration(
+                    "GradleInspector" to PackageManagerConfiguration(
                         mustRunAfter = listOf("Npm"),
-                        options = mapOf("gradleVersion" to "8.0.2")
+                        options = mapOf("gradleVersion" to "8.0.2", "javaHome" to "/path/to/java/home")
                     ),
                     "Npm" to PackageManagerConfiguration(
                         mustRunAfter = listOf("Yarn")
@@ -158,7 +158,7 @@ class AnalyzerConfigurationTest : WordSpec({
                 )
             )
 
-            original.withPackageManagerOption("Gradle", "gradleVersion", "8.0.2") shouldBe patched
+            original.withPackageManagerOption("GradleInspector", "gradleVersion", "8.0.2") shouldBe patched
         }
 
         "add a non-existing entry" {
