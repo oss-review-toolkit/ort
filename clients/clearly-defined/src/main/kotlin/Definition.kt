@@ -19,8 +19,8 @@
 
 package org.ossreviewtoolkit.clients.clearlydefined
 
-import io.ks3.java.`typealias`.FileAsString
-import io.ks3.java.`typealias`.UriAsString
+import io.ks3.java.typealiases.FileAsString
+import io.ks3.java.typealiases.UriAsString
 
 import kotlinx.serialization.Serializable
 

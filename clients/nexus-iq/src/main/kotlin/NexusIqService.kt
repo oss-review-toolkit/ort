@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.clients.nexusiq
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 
-import io.ks3.java.`typealias`.UriAsString
+import io.ks3.java.typealiases.UriAsString
 
 import java.util.UUID
 

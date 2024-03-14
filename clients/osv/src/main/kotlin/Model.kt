@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.clients.osv
 
-import io.ks3.java.`typealias`.InstantAsString
+import io.ks3.java.typealiases.InstantAsString
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
