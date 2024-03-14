@@ -21,11 +21,6 @@ package org.ossreviewtoolkit.scanner
 
 import kotlin.time.measureTimedValue
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.runBlocking
-
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.Identifier
@@ -75,27 +70,6 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
     }
 
     /**
-     * Return all [ScanResult]s contained in this [ScanResultsStorage] corresponding to the given [packages] that
-     * are [compatible][ScannerMatcher.matches] with the provided [scannerMatcher] wrapped in a [Result]. Also,
-     * [Package.sourceArtifact], [Package.vcs], and [Package.vcsProcessed] are used to check if the scan result matches
-     * the expected source code location. That check is important to find the correct results when different revisions
-     * of a package using the same version name are used (e.g. multiple scans of a "1.0-SNAPSHOT" version during
-     * development).
-     */
-    fun read(packages: Collection<Package>, scannerMatcher: ScannerMatcher): Result<Map<Identifier, List<ScanResult>>> {
-        val (result, duration) = measureTimedValue { readInternal(packages, scannerMatcher) }
-
-        result.onSuccess { results ->
-            logger.info {
-                val count = results.values.sumOf { it.size }
-                "Read $count matching scan result(s) from ${javaClass.simpleName} in $duration."
-            }
-        }
-
-        return result
-    }
-
-    /**
      * Add the given [scanResult] to the stored [ScanResult]s for the scanned [Package] with the provided [id].
      * Depending on the storage implementation this might first read any existing [ScanResult]s and write the new
      * [ScanResult]s to the storage again, implicitly deleting the original storage entry by overwriting it.
@@ -125,30 +99,6 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
      * more efficiently, for example, as part of a database query.
      */
     abstract fun readInternal(pkg: Package, scannerMatcher: ScannerMatcher? = null): Result<List<ScanResult>>
-
-    /**
-     * Internal version of [read]. The default implementation uses [Dispatchers.IO] to run requests for individual
-     * packages in parallel. Implementations may want to override this function if they can filter for the wanted
-     * [scannerMatcher] or fetch results for multiple packages in a more efficient way.
-     */
-    protected open fun readInternal(
-        packages: Collection<Package>,
-        scannerMatcher: ScannerMatcher
-    ): Result<Map<Identifier, List<ScanResult>>> {
-        val results = runBlocking(Dispatchers.IO) {
-            packages.map { async { it.id to readInternal(it, scannerMatcher) } }.awaitAll()
-        }.associate { it }
-
-        val successfulResults = results.mapNotNull { (id, scanResults) ->
-            scanResults.getOrNull()?.let { id to it }
-        }.toMap()
-
-        return if (successfulResults.isEmpty()) {
-            Result.failure(ScanStorageException("Could not read any scan results from ${javaClass.simpleName}."))
-        } else {
-            Result.success(successfulResults)
-        }
-    }
 
     /**
      * Internal version of [add] that skips common sanity checks.
