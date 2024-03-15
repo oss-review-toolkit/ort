@@ -44,6 +44,7 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.snippet.SnippetChoice
 import org.ossreviewtoolkit.model.config.snippet.SnippetChoiceReason
 import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.mapLicense
 import org.ossreviewtoolkit.model.utils.PurlType
 import org.ossreviewtoolkit.utils.common.alsoIfNull
@@ -51,6 +52,7 @@ import org.ossreviewtoolkit.utils.common.collapseToRanges
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.prettyPrintRanges
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
+import org.ossreviewtoolkit.utils.ort.ORT_NAME
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
@@ -90,11 +92,33 @@ internal fun <T : Summarizable> List<T>.mapSummary(
     val files = filterNot { it.getFileName() in ignoredFiles }
     files.forEach { summarizable ->
         val summary = summarizable.toSummary()
+        var fileComment: OrtComment? = null
+
+        if (summarizable is MarkedAsIdentifiedFile) {
+            summarizable.comments.values.firstOrNull {
+                it.comment.contains(ORT_NAME)
+            }?.also {
+                runCatching {
+                    fileComment = jsonMapper.readValue(it.comment, OrtComment::class.java)
+                }.onFailure {
+                    logger.error { "Cannot deserialize comment for ${summary.path}: ${it.message}." }
+                }
+            }
+        }
+
         val defaultLocation = TextLocation(summary.path, TextLocation.UNKNOWN_LINE, TextLocation.UNKNOWN_LINE)
 
         summary.licences.forEach { licenseAddedInTheUI ->
             mapLicense(licenseAddedInTheUI.identifier, defaultLocation, issues, detectedLicenseMapping)?.let {
                 licenseFindings += it
+            }
+        }
+
+        fileComment?.ort?.licenses?.forEach { (licenseInORTComment, locations) ->
+            locations.forEach { location ->
+                mapLicense(licenseInORTComment, location, issues, detectedLicenseMapping)?.let {
+                    licenseFindings += it
+                }
             }
         }
 
@@ -262,15 +286,23 @@ internal fun mapSnippetFindings(
         findings.map { SnippetFinding(it.key, it.value) }
     }.toSet().also {
         remainingSnippetChoices.forEach { snippetChoice ->
-            val message = "The configuration contains a snippet choice for the snippet ${snippetChoice.choice.purl} " +
-                "at ${snippetChoice.given.sourceLocation.prettyPrint()}, but the FossID result contains no such " +
-                "snippet."
-            logger.warn(message)
-            issues += Issue(
-                source = "FossId",
-                message = message,
-                severity = Severity.WARNING
-            )
+            // The issue is created only if the chosen snippet does not correspond to a file marked by a previous run.
+            val isNotOldMarkedAsIdentifiedFile = rawResults.markedAsIdentifiedFiles.none { markedFile ->
+                markedFile.file.path == snippetChoice.given.sourceLocation.path
+            }
+
+            if (isNotOldMarkedAsIdentifiedFile) {
+                val message =
+                    "The configuration contains a snippet choice for the snippet ${snippetChoice.choice.purl} at " +
+                        "${snippetChoice.given.sourceLocation.prettyPrint()}, but the FossID result contains no such " +
+                        "snippet."
+                logger.warn(message)
+                issues += Issue(
+                    source = "FossId",
+                    message = message,
+                    severity = Severity.WARNING
+                )
+            }
         }
     }
 }

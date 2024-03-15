@@ -38,6 +38,8 @@ import kotlinx.coroutines.withTimeoutOrNull
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.clients.fossid.FossIdRestService
+import org.ossreviewtoolkit.clients.fossid.addComponentIdentification
+import org.ossreviewtoolkit.clients.fossid.addFileComment
 import org.ossreviewtoolkit.clients.fossid.checkDownloadStatus
 import org.ossreviewtoolkit.clients.fossid.checkResponse
 import org.ossreviewtoolkit.clients.fossid.createIgnoreRule
@@ -79,6 +81,7 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.snippet.SnippetChoice
 import org.ossreviewtoolkit.model.config.snippet.SnippetChoiceReason
 import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.scanner.PackageScannerWrapper
 import org.ossreviewtoolkit.scanner.ProvenanceScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
@@ -115,6 +118,12 @@ class FossId internal constructor(
 
         @JvmStatic
         private val GIT_FETCH_DONE_REGEX = Regex("-> FETCH_HEAD(?: Already up to date.)*$")
+
+        /**
+         * A regular expression to extract the artifact and version from a Purl returned by FossID.
+         */
+        @JvmStatic
+        private val SNIPPET_PURL_REGEX = Regex("^.*/(?<artifact>[^@]+)@(?<version>.+)")
 
         @JvmStatic
         private val WAIT_DELAY = 10.seconds
@@ -905,7 +914,13 @@ class FossId internal constructor(
 
         val snippetLicenseFindings = mutableSetOf<LicenseFinding>()
         val snippetFindings = mapSnippetFindings(rawResults, issues, snippetChoices, snippetLicenseFindings)
-        markFilesWithChosenSnippetsAsIdentified(scanCode, snippetChoices, snippetFindings, rawResults.listPendingFiles)
+        markFilesWithChosenSnippetsAsIdentified(
+            scanCode,
+            snippetChoices,
+            snippetFindings,
+            rawResults.listPendingFiles,
+            snippetLicenseFindings
+        )
 
         val ignoredFiles = rawResults.listIgnoredFiles.associateBy { it.path }
 
@@ -931,15 +946,20 @@ class FossId internal constructor(
     }
 
     /**
-     * Mark all the files having a snippet choice as identified, only if they have no non-chosen source location
-     * remaining.
+     * Mark all the files in [snippetChoices] as identified, only after searching in [snippetFindings] that they have no
+     * non-chosen source location remaining. Only files in [listPendingFiles] are marked.
+     * Files marked as identified have a license identification and a source location (stored in a comment), using
+     * [licenseFindings] as reference.
      */
     private fun markFilesWithChosenSnippetsAsIdentified(
         scanCode: String,
         snippetChoices: List<SnippetChoice> = emptyList(),
         snippetFindings: Set<SnippetFinding>,
-        pendingFiles: List<String>
+        pendingFiles: List<String>,
+        licenseFindings: Set<LicenseFinding>
     ) {
+        val licenseFindingsByPath = licenseFindings.groupBy { it.location.path }
+
         runBlocking(Dispatchers.IO) {
             val candidatePathsToMark = snippetChoices.groupBy({ it.given.sourceLocation.path }) {
                 it.choice.reason
@@ -961,6 +981,65 @@ class FossId internal constructor(
 
                         requests += async {
                             service.markAsIdentified(config.user, config.apiKey, scanCode, path, false)
+                        }
+
+                        val filteredSnippetChoicesByPath = snippetChoices.filter {
+                            it.given.sourceLocation.path == path
+                        }
+
+                        val relevantSnippetChoices = filteredSnippetChoicesByPath.filter {
+                            it.choice.reason == SnippetChoiceReason.ORIGINAL_FINDING
+                        }
+
+                        relevantSnippetChoices.forEach { filteredSnippetChoice ->
+                            val match = SNIPPET_PURL_REGEX.matchEntire(filteredSnippetChoice.choice.purl.orEmpty())
+                            match?.also {
+                                val artifact = match.groups["artifact"]?.value.orEmpty()
+                                val version = match.groups["version"]?.value.orEmpty()
+                                val location = filteredSnippetChoice.given.sourceLocation
+
+                                requests += async {
+                                    logger.info {
+                                        "Adding component identification '$artifact/$version' to '$path' " +
+                                            "at ${location.startLine}-${location.endLine}."
+                                    }
+
+                                    service.addComponentIdentification(
+                                        config.user,
+                                        config.apiKey,
+                                        scanCode,
+                                        path,
+                                        artifact,
+                                        version,
+                                        false
+                                    )
+                                }
+                            }
+                        }
+
+                        // The chosen snippet source location lines can neither be stored in the scan nor the file, so
+                        // it is stored in a comment attached to the identified file instead.
+                        val licenseFindingsByLicense = licenseFindingsByPath[path]?.groupBy({ it.license.toString() }) {
+                            it.location
+                        }.orEmpty()
+
+                        val relevantChoicesCount = relevantSnippetChoices.size
+                        val notRelevantChoicesCount = filteredSnippetChoicesByPath.count {
+                            it.choice.reason == SnippetChoiceReason.NO_RELEVANT_FINDING
+                        }
+                        val payload = OrtCommentPayload(
+                            licenseFindingsByLicense,
+                            relevantChoicesCount,
+                            notRelevantChoicesCount
+                        )
+                        val comment = OrtComment(payload)
+                        val jsonComment = jsonMapper.writeValueAsString(comment)
+                        requests += async {
+                            logger.info {
+                                "Adding file comment to '$path' with relevant count $relevantChoicesCount and not " +
+                                    "relevant count $notRelevantChoicesCount."
+                            }
+                            service.addFileComment(config.user, config.apiKey, scanCode, path, jsonComment)
                         }
                     }
                 }
