@@ -167,11 +167,12 @@ internal class OrtModelBuilder : ToolingModelBuilder {
                     when (val id = selectedComponent.id) {
                         is ModuleComponentIdentifier -> {
                             val pomFile = if (selectedComponent is ResolvedComponentResultInternal) {
-                                val repositoryId = runCatching { selectedComponent.repositoryId }
-                                    .recoverCatching {
-                                        @Suppress("DEPRECATION")
-                                        selectedComponent.repositoryName
-                                    }.getOrNull()
+                                val repositoryId = runCatching {
+                                    selectedComponent.repositoryId
+                                }.recoverCatching {
+                                    @Suppress("DEPRECATION")
+                                    selectedComponent.repositoryName
+                                }.getOrNull()
 
                                 repositories[repositoryId]?.let { repositoryUrl ->
                                     // Note: Only Maven-style layout is supported for now.
