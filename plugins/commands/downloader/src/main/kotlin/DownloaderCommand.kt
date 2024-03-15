@@ -234,8 +234,10 @@ class DownloaderCommand : OrtCommand(
             throw ProgramResult(0)
         }
 
+        val verb = if (dryRun) "Verifying" else "Downloading"
+
         echo(
-            "Downloading ${packageTypes.joinToString(" and ") { "${it}s" }} from ORT result file at " +
+            "$verb ${packageTypes.joinToString(" and ") { "${it}s" }} from ORT result file at " +
                 "'${ortFile.canonicalPath}'..."
         )
 
@@ -294,7 +296,7 @@ class DownloaderCommand : OrtCommand(
             }
         }
 
-        echo("Downloading ${packages.size} project(s) / package(s) in total.")
+        echo("$verb ${packages.size} project(s) / package(s) in total.")
 
         val packageDownloadDirs = packages.associateWith { outputDir.resolve(it.id.toPath()) }
 
