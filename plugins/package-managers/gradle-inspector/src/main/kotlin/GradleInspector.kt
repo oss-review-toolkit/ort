@@ -160,7 +160,11 @@ class GradleInspector(
             // then block execution of the plugin until a remote debug session is attached to port 5005 (by default),
             // also see https://docs.gradle.org/current/userguide/troubleshooting.html#sec:troubleshooting_build_logic.
             val model = connection.model(OrtDependencyTreeModel::class.java)
-                .addProgressListener(ProgressListener { logger.debug { it.displayName } })
+                .apply {
+                    if (logger.delegate.isDebugEnabled) {
+                        addProgressListener(ProgressListener { logger.debug(it.displayName) })
+                    }
+                }
                 .setJvmArguments(jvmArgs)
                 .setStandardOutput(stdout)
                 .setStandardError(stderr)

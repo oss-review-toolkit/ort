@@ -212,10 +212,13 @@ class Gradle(
                 val stdout = ByteArrayOutputStream()
                 val stderr = ByteArrayOutputStream()
 
-                val dependencyTreeModel = connection
-                    .model(OrtDependencyTreeModel::class.java)
+                val dependencyTreeModel = connection.model(OrtDependencyTreeModel::class.java)
+                    .apply {
+                        if (logger.delegate.isDebugEnabled) {
+                            addProgressListener(ProgressListener { logger.debug(it.displayName) })
+                        }
+                    }
                     .addJvmArguments(jvmArgs)
-                    .addProgressListener(ProgressListener { logger.debug { it.displayName } })
                     .setStandardOutput(stdout)
                     .setStandardError(stderr)
                     .withArguments("-Duser.home=${Os.userHomeDirectory}", "--init-script", initScriptFile.path)
