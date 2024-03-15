@@ -172,6 +172,9 @@ internal class OrtModelBuilder : ToolingModelBuilder {
                                 }.recoverCatching {
                                     @Suppress("DEPRECATION")
                                     selectedComponent.repositoryName
+                                }.map {
+                                    // Work around https://github.com/gradle/gradle/issues/25674.
+                                    if (it == "26c913274550a0b2221f47a0fe2d2358") "MavenRepo" else it
                                 }.getOrNull()
 
                                 repositories[repositoryId]?.let { repositoryUrl ->
