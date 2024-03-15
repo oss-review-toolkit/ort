@@ -110,7 +110,7 @@ class NpmDetection(private val definitionFiles: Collection<File>) {
  * An enum of all supported Node package managers.
  */
 enum class NodePackageManager(
-    val lockFileName: String,
+    val lockfileName: String,
     val markerFileName: String? = null,
     val workspaceFileName: String = NodePackageManager.DEFINITION_FILE
 ) {
@@ -135,27 +135,27 @@ enum class NodePackageManager(
     },
 
     YARN("yarn.lock") {
-        private val lockFileMarker = "# yarn lockfile v1"
+        private val lockfileMarker = "# yarn lockfile v1"
 
         override fun hasLockFile(projectDir: File): Boolean {
-            val lockFile = projectDir.resolve(lockFileName)
-            if (!lockFile.isFile) return false
+            val lockfile = projectDir.resolve(lockfileName)
+            if (!lockfile.isFile) return false
 
-            return lockFile.useLines { lines ->
-                lines.take(2).lastOrNull() == lockFileMarker
+            return lockfile.useLines { lines ->
+                lines.take(2).lastOrNull() == lockfileMarker
             }
         }
     },
 
     YARN2("yarn.lock", markerFileName = ".yarnrc.yml") {
-        private val lockFileMarker = "__metadata:"
+        private val lockfileMarker = "__metadata:"
 
         override fun hasLockFile(projectDir: File): Boolean {
-            val lockFile = projectDir.resolve(lockFileName)
-            if (!lockFile.isFile) return false
+            val lockfile = projectDir.resolve(lockfileName)
+            if (!lockfile.isFile) return false
 
-            return lockFile.useLines { lines ->
-                lines.take(4).lastOrNull() == lockFileMarker
+            return lockfile.useLines { lines ->
+                lines.take(4).lastOrNull() == lockfileMarker
             }
         }
     };
@@ -190,7 +190,7 @@ enum class NodePackageManager(
     /**
      * Return true if the [projectDir] contains a lock file for this package manager, or return false otherwise.
      */
-    open fun hasLockFile(projectDir: File): Boolean = hasNonEmptyFile(projectDir, lockFileName)
+    open fun hasLockFile(projectDir: File): Boolean = hasNonEmptyFile(projectDir, lockfileName)
 
     /**
      * If the [projectDir] contains a workspace file for this package manager, return the list of package patterns, or

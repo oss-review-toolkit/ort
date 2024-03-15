@@ -267,11 +267,11 @@ class Pub(
 
             logger.info { "Reading $PUB_LOCK_FILE file in $workingDir." }
 
-            val lockFile = yamlMapper.readTree(workingDir.resolve(PUB_LOCK_FILE))
+            val lockfile = yamlMapper.readTree(workingDir.resolve(PUB_LOCK_FILE))
 
             logger.info { "Successfully read lockfile." }
 
-            val parsePackagesResult = parseInstalledPackages(lockFile, labels, workingDir)
+            val parsePackagesResult = parseInstalledPackages(lockfile, labels, workingDir)
 
             if (!pubDependenciesOnly) {
                 if (gradleFactory != null) {
@@ -306,9 +306,9 @@ class Pub(
 
             logger.info { "Successfully parsed installed packages." }
 
-            scopes += parseScope("dependencies", manifest, lockFile, parsePackagesResult.packages, labels, workingDir)
+            scopes += parseScope("dependencies", manifest, lockfile, parsePackagesResult.packages, labels, workingDir)
             scopes += parseScope(
-                "dev_dependencies", manifest, lockFile, parsePackagesResult.packages, labels, workingDir
+                "dev_dependencies", manifest, lockfile, parsePackagesResult.packages, labels, workingDir
             )
         }
 
@@ -322,7 +322,7 @@ class Pub(
     private fun parseScope(
         scopeName: String,
         manifest: JsonNode,
-        lockFile: JsonNode,
+        lockfile: JsonNode,
         packages: Map<Identifier, Package>,
         labels: Map<String, String>,
         workingDir: File
@@ -332,14 +332,14 @@ class Pub(
         logger.info { "Parsing scope '$scopeName' for package '$packageName'." }
 
         val requiredPackages = manifest[scopeName]?.fieldNames()?.asSequence().orEmpty().toList()
-        val dependencies = buildDependencyTree(requiredPackages, manifest, lockFile, packages, labels, workingDir)
+        val dependencies = buildDependencyTree(requiredPackages, manifest, lockfile, packages, labels, workingDir)
         return Scope(scopeName, dependencies)
     }
 
     private fun buildDependencyTree(
         dependencies: List<String>,
         manifest: JsonNode,
-        lockFile: JsonNode,
+        lockfile: JsonNode,
         packages: Map<Identifier, Package>,
         labels: Map<String, String>,
         workingDir: File,
@@ -357,7 +357,7 @@ class Pub(
             // dependency tree.
             if (packageName in processedPackages) return@forEach
 
-            val pkgInfoFromLockFile = lockFile["packages"][packageName]
+            val pkgInfoFromLockFile = lockfile["packages"][packageName]
             // If the package is marked as SDK (e.g. flutter, flutter_test, dart) we cannot resolve it correctly as
             // it is not stored in .pub-cache. For now, we just ignore those SDK packages.
             if (pkgInfoFromLockFile == null || pkgInfoFromLockFile["source"].textValueOrEmpty() == "sdk") return@forEach
@@ -379,7 +379,7 @@ class Pub(
                 val transitiveDependencies = buildDependencyTree(
                     dependencies = requiredPackages,
                     manifest = dependencyYamlFile,
-                    lockFile = lockFile,
+                    lockfile = lockfile,
                     packages = packages,
                     labels = labels,
                     workingDir = workingDir,
@@ -513,7 +513,7 @@ class Pub(
     }
 
     private fun parseInstalledPackages(
-        lockFile: JsonNode,
+        lockfile: JsonNode,
         labels: Map<String, String>,
         workingDir: File
     ): ParsePackagesResult {
@@ -526,7 +526,7 @@ class Pub(
         var containsFlutter = false
 
         listOf("packages"/*, "packages-dev"*/).forEach {
-            lockFile[it]?.fields()?.forEach { (packageName, pkgInfoFromLockFile) ->
+            lockfile[it]?.fields()?.forEach { (packageName, pkgInfoFromLockFile) ->
                 try {
                     val version = pkgInfoFromLockFile["version"].textValueOrEmpty()
                     var description = ""
@@ -654,7 +654,7 @@ class Pub(
         // each Pub dependency manually, as the analyzer will only analyze the projectRoot, but not the packages in
         // the ".pub-cache" directory.
         if (containsFlutter && !pubDependenciesOnly) {
-            lockFile["packages"]?.forEach { pkgInfoFromLockFile ->
+            lockfile["packages"]?.forEach { pkgInfoFromLockFile ->
                 // As this package contains Flutter, trigger Gradle manually for it.
                 scanAndroidPackages(pkgInfoFromLockFile, labels, workingDir).forEach { result ->
                     result.collectPackagesByScope("releaseCompileClasspath").forEach { pkg ->
