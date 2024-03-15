@@ -33,4 +33,6 @@ dependencies {
 
     implementation(libs.clikt)
     implementation(libs.kotlinx.coroutines)
+    implementation(libs.mordant)
+    implementation(libs.mordantCoroutines)
 }
