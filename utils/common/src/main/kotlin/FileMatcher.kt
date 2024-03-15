@@ -28,7 +28,7 @@ class FileMatcher(
     /**
      * The collection of [glob patterns][1] to consider for matching.
      *
-     * [1]: https://docs.spring.io/spring-framework/docs/current/javadoc-api/index.html?org/springframework/util/AntPathMatcher.html
+     * [1]: https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/util/AntPathMatcher.html
      */
     val patterns: Collection<String>,
 
