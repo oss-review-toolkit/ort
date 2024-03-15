@@ -36,6 +36,7 @@ import org.eclipse.aether.repository.WorkspaceRepository
 import org.gradle.tooling.GradleConnector
 import org.gradle.tooling.events.ProgressListener
 import org.gradle.tooling.internal.consumer.DefaultGradleConnector
+import org.gradle.tooling.model.build.BuildEnvironment
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -61,6 +62,8 @@ import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.temporaryProperties
 import org.ossreviewtoolkit.utils.common.unquote
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
+
+import org.semver4j.Semver
 
 private val GRADLE_USER_HOME = Os.env["GRADLE_USER_HOME"]?.let { File(it) } ?: Os.userHomeDirectory.resolve(".gradle")
 
@@ -212,9 +215,15 @@ class Gradle(
                 val stdout = ByteArrayOutputStream()
                 val stderr = ByteArrayOutputStream()
 
+                val environment = connection.model(BuildEnvironment::class.java).get()
+                val buildGradleVersion = Semver.coerce(environment.gradle.gradleVersion)
+
+                logger.info { "The project at '$projectDir' uses Gradle version $buildGradleVersion." }
+
                 val dependencyTreeModel = connection.model(OrtDependencyTreeModel::class.java)
                     .apply {
-                        if (logger.delegate.isDebugEnabled) {
+                        // Work around https://github.com/gradle/gradle/issues/28464.
+                        if (logger.delegate.isDebugEnabled && buildGradleVersion?.isEqualTo("8.5.0") != true) {
                             addProgressListener(ProgressListener { logger.debug(it.displayName) })
                         }
                     }

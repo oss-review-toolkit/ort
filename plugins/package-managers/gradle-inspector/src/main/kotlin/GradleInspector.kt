@@ -32,6 +32,7 @@ import org.apache.logging.log4j.kotlin.logger
 import org.gradle.tooling.GradleConnector
 import org.gradle.tooling.events.ProgressListener
 import org.gradle.tooling.internal.consumer.DefaultGradleConnector
+import org.gradle.tooling.model.build.BuildEnvironment
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -67,6 +68,8 @@ import org.ossreviewtoolkit.utils.ort.downloadText
 import org.ossreviewtoolkit.utils.ort.okHttpClient
 import org.ossreviewtoolkit.utils.ort.ortToolsDirectory
 import org.ossreviewtoolkit.utils.spdx.SpdxOperator
+
+import org.semver4j.Semver
 
 /**
  * The names of Gradle (Groovy, Kotlin script) build files for a Gradle project.
@@ -156,12 +159,18 @@ class GradleInspector(
                 .splitOnWhitespace()
                 .map { it.unquote() }
 
+            val environment = connection.model(BuildEnvironment::class.java).get()
+            val buildGradleVersion = Semver.coerce(environment.gradle.gradleVersion)
+
+            logger.info { "The project at '$projectDir' uses Gradle version $buildGradleVersion." }
+
             // In order to debug the plugin, pass the "-Dorg.gradle.debug=true" option to the JVM running ORT. This will
             // then block execution of the plugin until a remote debug session is attached to port 5005 (by default),
             // also see https://docs.gradle.org/current/userguide/troubleshooting.html#sec:troubleshooting_build_logic.
             val model = connection.model(OrtDependencyTreeModel::class.java)
                 .apply {
-                    if (logger.delegate.isDebugEnabled) {
+                    // Work around https://github.com/gradle/gradle/issues/28464.
+                    if (logger.delegate.isDebugEnabled && buildGradleVersion?.isEqualTo("8.5.0") != true) {
                         addProgressListener(ProgressListener { logger.debug(it.displayName) })
                     }
                 }
