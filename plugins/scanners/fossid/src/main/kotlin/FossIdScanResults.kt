@@ -90,28 +90,17 @@ internal fun <T : Summarizable> List<T>.mapSummary(
     val files = filterNot { it.getFileName() in ignoredFiles }
     files.forEach { summarizable ->
         val summary = summarizable.toSummary()
-        val location = TextLocation(summary.path, TextLocation.UNKNOWN_LINE, TextLocation.UNKNOWN_LINE)
+        val defaultLocation = TextLocation(summary.path, TextLocation.UNKNOWN_LINE, TextLocation.UNKNOWN_LINE)
 
-        summary.licences.forEach {
-            runCatching {
-                // TODO: The detected license mapping must be applied here, because FossID can return license strings
-                //       which cannot be parsed to an SpdxExpression. A better solution could be to automatically
-                //       convert the strings into a form that can be parsed, then the mapping could be applied globally.
-                LicenseFinding(it.identifier.mapLicense(detectedLicenseMapping), location)
-            }.onSuccess { licenseFinding ->
-                licenseFindings += licenseFinding.copy(license = licenseFinding.license.normalize())
-            }.onFailure { spdxException ->
-                issues += FossId.createAndLogIssue(
-                    source = "FossId",
-                    message = "Failed to parse license '${it.identifier}' as an SPDX expression: " +
-                        spdxException.collectMessages()
-                )
+        summary.licences.forEach { licenseAddedInTheUI ->
+            mapLicense(licenseAddedInTheUI.identifier, defaultLocation, issues, detectedLicenseMapping)?.let {
+                licenseFindings += it
             }
         }
 
         summarizable.getCopyright().let {
             if (it.isNotEmpty()) {
-                copyrightFindings += CopyrightFinding(it, location)
+                copyrightFindings += CopyrightFinding(it, defaultLocation)
             }
         }
     }
@@ -120,6 +109,31 @@ internal fun <T : Summarizable> List<T>.mapSummary(
         licenseFindings = licenseFindings,
         copyrightFindings = copyrightFindings
     )
+}
+
+/**
+ * Convert a [license] at [location] from FossID to a valid [LicenseFinding]. If the license cannot be mapped, null is
+ * returned and an issue is added to [issues].
+ */
+private fun mapLicense(
+    license: String,
+    location: TextLocation,
+    issues: MutableList<Issue>,
+    detectedLicenseMapping: Map<String, String>
+): LicenseFinding? {
+    return runCatching {
+        // TODO: The detected license mapping must be applied here, because FossID can return license strings
+        //       which cannot be parsed to an SpdxExpression. A better solution could be to automatically
+        //       convert the strings into a form that can be parsed, then the mapping could be applied globally.
+        LicenseFinding(license.mapLicense(detectedLicenseMapping), location)
+    }.onSuccess { licenseFinding ->
+        licenseFinding.copy(license = licenseFinding.license.normalize())
+    }.onFailure { spdxException ->
+        issues += FossId.createAndLogIssue(
+            source = "FossId",
+            message = "Failed to parse license '$license' as an SPDX expression: ${spdxException.collectMessages()}"
+        )
+    }.getOrNull()
 }
 
 /**
