@@ -67,7 +67,7 @@ import org.semver4j.RangesListFactory
  *
  * As pre-condition for the analysis each respective definition file must have a sibling lockfile named 'Podfile.lock'.
  * The dependency tree is constructed solely based on parsing that lockfile. So, the dependency tree can be constructed
- * on any platform. Note that obtaining the dependency tree from the 'pod' command without a lock file has Xcode
+ * on any platform. Note that obtaining the dependency tree from the 'pod' command without a lockfile has Xcode
  * dependencies and is not supported by this class.
  *
  * The only interactions with the 'pod' command happen in order to obtain metadata for dependencies. Therefore,

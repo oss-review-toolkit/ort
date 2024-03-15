@@ -169,7 +169,7 @@ pipeline {
 
         booleanParam(
             name: 'ALLOW_DYNAMIC_VERSIONS',
-            description: 'Allow dynamic versions of dependencies (support projects without lock files).',
+            description: 'Allow dynamic versions of dependencies (support projects without lockfiles).',
             defaultValue: false
         )
 
