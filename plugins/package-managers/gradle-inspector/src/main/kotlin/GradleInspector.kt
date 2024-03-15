@@ -177,7 +177,7 @@ class GradleInspector(
                 .setJvmArguments(jvmArgs)
                 .setStandardOutput(stdout)
                 .setStandardError(stderr)
-                .withArguments("--init-script", initScriptFile.path)
+                .withArguments("-Duser.home=${Os.userHomeDirectory}", "--init-script", initScriptFile.path)
                 .get()
 
             if (stdout.size() > 0) {
