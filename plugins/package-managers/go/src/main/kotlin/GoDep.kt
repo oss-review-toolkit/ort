@@ -63,7 +63,7 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 private val toml = Toml { ignoreUnknownKeys = true }
 
 /**
- * A map of legacy package manager file names "dep" can import, and their respective lock file names, if any.
+ * A map of legacy package manager file names "dep" can import, and their respective lockfile names, if any.
  */
 private val GO_LEGACY_MANIFESTS = mapOf(
     // The [Glide](https://github.com/Masterminds/glide) package manager uses a dedicated `glide.yaml` rules file for

@@ -39,7 +39,7 @@ import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class NpmDetectionTest : WordSpec({
     "All Node package manager detections" should {
-        "ignore empty lock files" {
+        "ignore empty lockfiles" {
             NodePackageManager.entries.forAll {
                 val lockfile = tempdir().resolve(it.lockfileName).apply {
                     writeText("")
@@ -69,7 +69,7 @@ class NpmDetectionTest : WordSpec({
             NodePackageManager.forDirectory(projectDir) shouldContainExactlyInAnyOrder NodePackageManager.entries
         }
 
-        "return only those managers whose lock files are present" {
+        "return only those managers whose lockfiles are present" {
             val projectDir = tempdir().apply {
                 resolve("package.json").writeText("{}")
                 resolve(NPM.lockfileName).writeText("{}")
@@ -79,7 +79,7 @@ class NpmDetectionTest : WordSpec({
             NodePackageManager.forDirectory(projectDir).shouldContainExactlyInAnyOrder(NPM, PNPM)
         }
 
-        "return only NPM if distinguished by lock file" {
+        "return only NPM if distinguished by lockfile" {
             val projectDir = tempdir().apply {
                 resolve("package.json").writeText("{}")
                 resolve(NPM.lockfileName).writeText("{}")
@@ -97,7 +97,7 @@ class NpmDetectionTest : WordSpec({
             NodePackageManager.forDirectory(projectDir).shouldContainExactlyInAnyOrder(NPM)
         }
 
-        "return only PNPM if distinguished by lock file" {
+        "return only PNPM if distinguished by lockfile" {
             val projectDir = tempdir().apply {
                 resolve("package.json").writeText("{}")
                 resolve(PNPM.lockfileName).writeText("#")
@@ -115,7 +115,7 @@ class NpmDetectionTest : WordSpec({
             NodePackageManager.forDirectory(projectDir).shouldContainExactlyInAnyOrder(PNPM)
         }
 
-        "return only YARN if distinguished by lock file" {
+        "return only YARN if distinguished by lockfile" {
             val projectDir = tempdir().apply {
                 resolve("package.json").writeText("{}")
                 resolve(YARN.lockfileName).writeText(YARN_LOCK_FILE_HEADER)
@@ -124,7 +124,7 @@ class NpmDetectionTest : WordSpec({
             NodePackageManager.forDirectory(projectDir).shouldContainExactlyInAnyOrder(YARN)
         }
 
-        "return only YARN2 if distinguished by lock file" {
+        "return only YARN2 if distinguished by lockfile" {
             val projectDir = tempdir().apply {
                 resolve("package.json").writeText("{}")
                 resolve(YARN2.lockfileName).writeText(YARN2_LOCK_FILE_HEADER)
@@ -135,7 +135,7 @@ class NpmDetectionTest : WordSpec({
     }
 
     "NPM detection" should {
-        "recognize lock files" {
+        "recognize lockfiles" {
             val lockfile = tempdir().resolve(NPM.lockfileName).apply {
                 writeText("{}")
             }
@@ -170,7 +170,7 @@ class NpmDetectionTest : WordSpec({
     }
 
     "PNPM detection" should {
-        "recognize lock files" {
+        "recognize lockfiles" {
             val lockfile = tempdir().resolve(PNPM.lockfileName).apply {
                 writeText("lockfileVersion: '6.0'")
             }
@@ -203,7 +203,7 @@ class NpmDetectionTest : WordSpec({
     }
 
     "Yarn detection" should {
-        "recognize lock files" {
+        "recognize lockfiles" {
             val lockfile = tempdir().resolve(YARN.lockfileName).apply {
                 writeText(YARN_LOCK_FILE_HEADER)
             }
@@ -233,7 +233,7 @@ class NpmDetectionTest : WordSpec({
     }
 
     "Yarn2 detection" should {
-        "recognize lock files" {
+        "recognize lockfiles" {
             val lockfile = tempdir().resolve(YARN2.lockfileName).apply {
                 writeText(YARN2_LOCK_FILE_HEADER)
             }

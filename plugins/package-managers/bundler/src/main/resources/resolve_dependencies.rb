@@ -18,7 +18,7 @@
 # License-Filename: LICENSE
 
 # This script mimics the behavior of calling the `bundle lock` CLI command, which resolves a `Gemfile`'s dependencies
-# and writes them along with the respective versions to a lock file [1]. Internally, Bundler tries to find the
+# and writes them along with the respective versions to a lockfile [1]. Internally, Bundler tries to find the
 # dependencies' `gemspec` files both locally and remotely, and retrieves the respective metadata. However, except for
 # the name, version, and transitive dependencies, the Bundler call discards any other metadata. To maintain all
 # metadata, this script basically follows the same steps, but then serializes all metadata as YAML for further

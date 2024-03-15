@@ -130,7 +130,7 @@ class Composer(
 
         val lockfile = ensureLockFile(workingDir)
 
-        logger.info { "Parsing lock file at '$lockfile'..." }
+        logger.info { "Parsing lockfile at '$lockfile'..." }
 
         val json = jsonMapper.readTree(lockfile)
         val packages = parseInstalledPackages(json)
@@ -344,7 +344,7 @@ private fun parseVcsInfo(packageInfo: JsonNode): VcsInfo =
     }.orEmpty()
 
 /**
- * Get all names of "virtual" (replaced or provided) packages in the package or lock file.
+ * Get all names of "virtual" (replaced or provided) packages in the package or lockfile.
  *
  * While Composer also takes the versions of the virtual packages into account, we simply use priorities here. Since
  * Composer can't handle the same package in multiple version, we can assume that as soon as a package is found in
@@ -359,7 +359,7 @@ private fun parseVirtualPackageNames(
 ): Set<String> {
     val replacedNames = mutableSetOf<String>()
 
-    // The contents of the manifest file, which can also define replacements, is not included in the lock file, so
+    // The contents of the manifest file, which can also define replacements, is not included in the lockfile, so
     // we parse the manifest file as well.
     replacedNames += parseVirtualNames(manifest)
 

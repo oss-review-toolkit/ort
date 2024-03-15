@@ -188,7 +188,7 @@ enum class NodePackageManager(
     }
 
     /**
-     * Return true if the [projectDir] contains a lock file for this package manager, or return false otherwise.
+     * Return true if the [projectDir] contains a lockfile for this package manager, or return false otherwise.
      */
     open fun hasLockFile(projectDir: File): Boolean = hasNonEmptyFile(projectDir, lockfileName)
 
