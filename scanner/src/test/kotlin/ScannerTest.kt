@@ -952,11 +952,8 @@ private class FakeProvenanceDownloader(val filename: String = "fake.txt") : Prov
  * validation.
  */
 private class FakePackageProvenanceResolver : PackageProvenanceResolver {
-    override fun resolveProvenance(
-        pkg: Package,
-        defaultSourceCodeOriginsPriority: List<SourceCodeOrigin>
-    ): KnownProvenance {
-        defaultSourceCodeOriginsPriority.forEach { sourceCodeOrigin ->
+    override fun resolveProvenance(pkg: Package, defaultSourceCodeOrigins: List<SourceCodeOrigin>): KnownProvenance {
+        defaultSourceCodeOrigins.forEach { sourceCodeOrigin ->
             when (sourceCodeOrigin) {
                 SourceCodeOrigin.ARTIFACT -> {
                     if (pkg.sourceArtifact != RemoteArtifact.EMPTY) {
