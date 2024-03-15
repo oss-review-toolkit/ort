@@ -128,11 +128,11 @@ class Composer(
             return listOf(result)
         }
 
-        val lockFile = ensureLockFile(workingDir)
+        val lockfile = ensureLockFile(workingDir)
 
-        logger.info { "Parsing lock file at '$lockFile'..." }
+        logger.info { "Parsing lock file at '$lockfile'..." }
 
-        val json = jsonMapper.readTree(lockFile)
+        val json = jsonMapper.readTree(lockfile)
         val packages = parseInstalledPackages(json)
 
         // Let's also determine the "virtual" (replaced and provided) packages. These can be declared as
@@ -157,18 +157,18 @@ class Composer(
     private fun parseScope(
         scopeName: String,
         manifest: JsonNode,
-        lockFile: JsonNode,
+        lockfile: JsonNode,
         packages: Map<String, Package>,
         virtualPackages: Set<String>
     ): Scope {
         val requiredPackages = manifest[scopeName].fieldNamesOrEmpty().asSequence()
-        val dependencies = buildDependencyTree(requiredPackages, lockFile, packages, virtualPackages)
+        val dependencies = buildDependencyTree(requiredPackages, lockfile, packages, virtualPackages)
         return Scope(scopeName, dependencies)
     }
 
     private fun buildDependencyTree(
         dependencies: Sequence<String>,
-        lockFile: JsonNode,
+        lockfile: JsonNode,
         packages: Map<String, Package>,
         virtualPackages: Set<String>,
         dependencyBranch: List<String> = emptyList()
@@ -191,9 +191,9 @@ class Composer(
             }
 
             try {
-                val runtimeDependencies = getRuntimeDependencies(packageName, lockFile)
+                val runtimeDependencies = getRuntimeDependencies(packageName, lockfile)
                 val transitiveDependencies = buildDependencyTree(
-                    runtimeDependencies, lockFile, packages, virtualPackages, dependencyBranch + packageName
+                    runtimeDependencies, lockfile, packages, virtualPackages, dependencyBranch + packageName
                 )
                 packageReferences += packageInfo.toReference(dependencies = transitiveDependencies)
             } catch (e: IOException) {
@@ -278,11 +278,11 @@ class Composer(
     }
 
     private fun ensureLockFile(workingDir: File): File {
-        val lockFile = workingDir.resolve(COMPOSER_LOCK_FILE)
+        val lockfile = workingDir.resolve(COMPOSER_LOCK_FILE)
 
-        val hasLockFile = lockFile.isFile
+        val hasLockFile = lockfile.isFile
         requireLockfile(workingDir) { hasLockFile }
-        if (hasLockFile) return lockFile
+        if (hasLockFile) return lockfile
 
         val composerVersion = Semver(getVersion(workingDir))
         val args = listOfNotNull(
@@ -293,7 +293,7 @@ class Composer(
 
         run(workingDir, *args.toTypedArray())
 
-        return lockFile
+        return lockfile
     }
 }
 
@@ -307,9 +307,9 @@ private fun String.isPlatformDependency(): Boolean =
 private val COMPOSER_PLATFORM_TYPES = setOf("composer", "composer-plugin-api", "composer-runtime-api")
 private val PHP_PLATFORM_TYPES = setOf("php", "php-64bit", "php-ipv6", "php-zts", "php-debug")
 
-private fun getRuntimeDependencies(packageName: String, lockFile: JsonNode): Sequence<String> {
+private fun getRuntimeDependencies(packageName: String, lockfile: JsonNode): Sequence<String> {
     listOf("packages", "packages-dev").forEach {
-        lockFile[it]?.forEach { packageInfo ->
+        lockfile[it]?.forEach { packageInfo ->
             if (packageInfo["name"].textValueOrEmpty() == packageName) {
                 val requiredPackages = packageInfo["require"]
                 if (requiredPackages != null && requiredPackages.isObject) {
@@ -355,7 +355,7 @@ private fun parseVcsInfo(packageInfo: JsonNode): VcsInfo =
 private fun parseVirtualPackageNames(
     packages: Map<String, Package>,
     manifest: JsonNode,
-    lockFile: JsonNode
+    lockfile: JsonNode
 ): Set<String> {
     val replacedNames = mutableSetOf<String>()
 
@@ -364,7 +364,7 @@ private fun parseVirtualPackageNames(
     replacedNames += parseVirtualNames(manifest)
 
     listOf("packages", "packages-dev").forEach { type ->
-        lockFile[type]?.flatMap { pkgInfo ->
+        lockfile[type]?.flatMap { pkgInfo ->
             parseVirtualNames(pkgInfo)
         }?.let {
             replacedNames += it

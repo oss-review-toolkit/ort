@@ -165,11 +165,11 @@ class Bundler(
         // [2]: https://github.com/jruby/jruby/discussions/7403
 
         val lockfiles = definitionFiles.map { it.resolveSibling(BUNDLER_LOCKFILE_NAME) }.filter { it.isFile }
-        val lockFilesBundlerVersion = lockfiles.mapNotNull {
+        val lockfilesBundlerVersion = lockfiles.mapNotNull {
             parseBundlerVersionFromLockfile(it)
         }.sortedWith(AlphaNumericComparator).lastOrNull()
 
-        val bundlerVersion = options[OPTION_BUNDLER_VERSION] ?: lockFilesBundlerVersion
+        val bundlerVersion = options[OPTION_BUNDLER_VERSION] ?: lockfilesBundlerVersion
 
         if (bundlerVersion != null) {
             val duration = measureTime {
