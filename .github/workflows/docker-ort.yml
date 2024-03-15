@@ -279,6 +279,25 @@ jobs:
           build-args: |
             SWIFT_VERSION=${{ env.SWIFT_VERSION }}
 
+  bazel_image:
+    name: Bazel image
+    needs: [ base_image ]
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout default branch
+        uses: actions/checkout@v4
+      - name: Set environment variables
+        run: |
+          cat .versions >> $GITHUB_ENV
+      - name: Build Bazel image
+        uses: ./.github/actions/ortdocker
+        with:
+          name: bazel
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: "${{ env.BAZEL_VERSION }}"
+          build-args: |
+            BAZEL_VERSION=${{ env.BAZEL_VERSION }}
+
   # Minimal Runtime ORT image
   # -------------------------
   minimal_image:
@@ -413,3 +432,4 @@ jobs:
             dart=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/dart:latest
             dotnet=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/dotnet:latest
             haskell=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/haskell:latest
+            bazel=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/bazel:latest
