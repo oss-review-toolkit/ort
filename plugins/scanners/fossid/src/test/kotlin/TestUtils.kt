@@ -51,6 +51,7 @@ import org.ossreviewtoolkit.clients.fossid.model.Scan
 import org.ossreviewtoolkit.clients.fossid.model.identification.common.LicenseMatchType
 import org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.IdentifiedFile
 import org.ossreviewtoolkit.clients.fossid.model.identification.ignored.IgnoredFile
+import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.File
 import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.License
 import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.LicenseFile
 import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.MarkedAsIdentifiedFile
@@ -339,6 +340,50 @@ private fun createMarkedIdentifiedFile(index: Int): MarkedAsIdentifiedFile {
     )
 
     return file
+}
+
+/**
+ * Create a [MarkedAsIdentifiedFile] with the give [license] and [path].
+ */
+internal fun createMarkAsIdentifiedFile(license: String, path: String): MarkedAsIdentifiedFile {
+    val fileLicense = License(
+        id = 1,
+        type = LicenseMatchType.FILE,
+        userId = 1,
+        componentId = 1,
+        identificationId = 1,
+        created = "created",
+        updated = "updated",
+        licenseId = 1
+    ).also {
+        it.file = LicenseFile(
+            licenseIdentifier = license,
+            licenseIncludeInReport = null,
+            licenseIsCopyleft = null,
+            licenseIsFoss = null,
+            licenseIsSpdxStandard = null,
+            licenseName = null
+        )
+    }
+
+    return MarkedAsIdentifiedFile(
+        comment = "comment",
+        comments = emptyMap(),
+        identificationId = 1,
+        identificationCopyright = "copyright",
+        isDistributed = 1,
+        rowId = 1
+    ).also {
+        it.file = File(
+            id = "fileId",
+            md5 = "fileMd5",
+            path = path,
+            sha1 = "fileSha1",
+            sha256 = "fileSha256",
+            size = 0,
+            licenses = mutableMapOf(1 to fileLicense)
+        )
+    }
 }
 
 /**
