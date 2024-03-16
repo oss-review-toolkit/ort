@@ -53,7 +53,7 @@ import org.semver4j.Semver
 
 private val DUMMY_TEXT_LOCATION = TextLocation("fakepath", 13, 21)
 
-abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec() {
+abstract class AbstractPackageBasedScanStorageFunTest(vararg listeners: TestListener) : WordSpec() {
     private val id = Identifier("type", "namespace", "name1", "version")
 
     private val sourceArtifact = RemoteArtifact("url1", Hash.create("0123456789abcdef0123456789abcdef01234567"))

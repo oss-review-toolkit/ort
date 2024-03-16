@@ -45,7 +45,7 @@ import org.ossreviewtoolkit.scanner.ProvenanceBasedScanStorage
 import org.ossreviewtoolkit.scanner.ScanStorageException
 import org.ossreviewtoolkit.scanner.ScannerMatcher
 
-abstract class AbstractProvenanceBasedStorageFunTest(vararg listeners: TestListener) : WordSpec() {
+abstract class AbstractProvenanceBasedScanStorageFunTest(vararg listeners: TestListener) : WordSpec() {
     private lateinit var storage: ProvenanceBasedScanStorage
 
     protected abstract fun createStorage(): ProvenanceBasedScanStorage
