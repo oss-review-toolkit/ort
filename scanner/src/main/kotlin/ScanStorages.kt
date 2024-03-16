@@ -37,8 +37,8 @@ import org.ossreviewtoolkit.scanner.provenance.ResolvedArtifactProvenance
 import org.ossreviewtoolkit.scanner.provenance.ResolvedRepositoryProvenance
 import org.ossreviewtoolkit.scanner.provenance.UnresolvedPackageProvenance
 import org.ossreviewtoolkit.scanner.storages.ClearlyDefinedStorage
-import org.ossreviewtoolkit.scanner.storages.FileBasedStorage
-import org.ossreviewtoolkit.scanner.storages.PostgresStorage
+import org.ossreviewtoolkit.scanner.storages.PackageBasedFileStorage
+import org.ossreviewtoolkit.scanner.storages.PackageBasedPostgresStorage
 import org.ossreviewtoolkit.scanner.storages.ProvenanceBasedFileStorage
 import org.ossreviewtoolkit.scanner.storages.ProvenanceBasedPostgresStorage
 import org.ossreviewtoolkit.scanner.storages.Sw360Storage
@@ -132,13 +132,13 @@ private fun createStorage(config: ScanStorageConfiguration): ScanStorage =
 
 private fun createFileBasedStorage(config: FileBasedStorageConfiguration) =
     when (config.type) {
-        StorageType.PACKAGE_BASED -> FileBasedStorage(config.backend.createFileStorage())
+        StorageType.PACKAGE_BASED -> PackageBasedFileStorage(config.backend.createFileStorage())
         StorageType.PROVENANCE_BASED -> ProvenanceBasedFileStorage(config.backend.createFileStorage())
     }
 
 private fun createPostgresStorage(config: PostgresStorageConfiguration) =
     when (config.type) {
-        StorageType.PACKAGE_BASED -> PostgresStorage(
+        StorageType.PACKAGE_BASED -> PackageBasedPostgresStorage(
             DatabaseUtils.createHikariDataSource(config = config.connection, applicationNameSuffix = TOOL_NAME)
         )
         StorageType.PROVENANCE_BASED -> ProvenanceBasedPostgresStorage(

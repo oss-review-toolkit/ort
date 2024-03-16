@@ -43,7 +43,7 @@ const val SCAN_RESULTS_FILE_NAME = "scan-results.yml"
 /**
  * A [PackageBasedScanStorage] using a [FileStorage] as backend. Scan results are serialized using [YAML][yamlMapper].
  */
-class FileBasedStorage(
+class PackageBasedFileStorage(
     /**
      * The [FileStorage] to use for storing scan results.
      */
