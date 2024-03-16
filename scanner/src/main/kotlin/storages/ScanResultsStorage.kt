@@ -17,19 +17,22 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.scanner
+package org.ossreviewtoolkit.scanner.storages
 
 import kotlin.time.measureTimedValue
 
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.UnknownProvenance
+import org.ossreviewtoolkit.scanner.PackageBasedScanStorage
+import org.ossreviewtoolkit.scanner.ScanStorageException
+import org.ossreviewtoolkit.scanner.ScannerMatcher
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceScanResult
+import org.ossreviewtoolkit.scanner.toNestedProvenanceScanResult
 
 /**
  * The abstract class that storage backends for scan results need to implement.

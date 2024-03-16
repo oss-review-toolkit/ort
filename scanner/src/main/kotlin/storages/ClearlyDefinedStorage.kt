@@ -50,7 +50,6 @@ import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedCoordinates
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedSourceLocation
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
-import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.ScanStorageException
 import org.ossreviewtoolkit.scanner.ScannerMatcher
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory

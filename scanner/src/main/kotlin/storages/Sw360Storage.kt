@@ -43,7 +43,6 @@ import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.writeValue
-import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.ScanStorageException
 import org.ossreviewtoolkit.scanner.ScannerMatcher
 import org.ossreviewtoolkit.utils.common.collectMessages
