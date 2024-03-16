@@ -35,13 +35,6 @@ import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceScanResult
  * The abstract class that storage backends for scan results need to implement.
  */
 abstract class ScanResultsStorage : PackageBasedScanStorage {
-    companion object {
-        /**
-         * A successful [Result] with an empty list of [ScanResult]s.
-         */
-        val EMPTY_RESULT = Result.success<List<ScanResult>>(emptyList())
-    }
-
     /**
      * The name to refer to this storage implementation.
      */

@@ -60,7 +60,7 @@ class FileBasedStorage(
             }
         }.recoverCatching {
             // If the file cannot be found it means no scan results have been stored, yet.
-            if (it is FileNotFoundException) return EMPTY_RESULT
+            if (it is FileNotFoundException) return Result.success(emptyList())
 
             val message = "Could not read scan results for '${id.toCoordinates()}' from path '$path': " +
                 it.collectMessages()
