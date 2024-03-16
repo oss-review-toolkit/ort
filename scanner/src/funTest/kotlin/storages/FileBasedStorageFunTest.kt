@@ -23,6 +23,6 @@ import io.kotest.engine.spec.tempdir
 
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 
-class FileBasedStorageFunTest : AbstractStorageFunTest() {
+class FileBasedStorageFunTest : AbstractPackageBasedScanStorageFunTest() {
     override fun createStorage() = FileBasedStorage(LocalFileStorage(tempdir()))
 }

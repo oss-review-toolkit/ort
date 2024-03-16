@@ -23,6 +23,6 @@ import org.ossreviewtoolkit.utils.test.PostgresListener
 
 private val postgresListener = PostgresListener()
 
-class ProvenanceBasedPostgresStorageFunTest : AbstractProvenanceBasedStorageFunTest(postgresListener) {
+class ProvenanceBasedPostgresStorageFunTest : AbstractProvenanceBasedScanStorageFunTest(postgresListener) {
     override fun createStorage() = ProvenanceBasedPostgresStorage(postgresListener.dataSource)
 }

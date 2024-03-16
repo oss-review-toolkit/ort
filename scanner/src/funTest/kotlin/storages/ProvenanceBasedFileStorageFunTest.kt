@@ -23,6 +23,6 @@ import io.kotest.engine.spec.tempdir
 
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 
-class ProvenanceBasedFileStorageFunTest : AbstractProvenanceBasedStorageFunTest() {
+class ProvenanceBasedFileStorageFunTest : AbstractProvenanceBasedScanStorageFunTest() {
     override fun createStorage() = ProvenanceBasedFileStorage(LocalFileStorage(tempdir()))
 }
