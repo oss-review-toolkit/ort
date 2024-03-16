@@ -31,6 +31,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.scanner.PackageBasedScanStorage
 import org.ossreviewtoolkit.scanner.ScanStorageException
 import org.ossreviewtoolkit.scanner.ScannerMatcher
 import org.ossreviewtoolkit.utils.common.collectMessages
@@ -40,14 +41,14 @@ import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 const val SCAN_RESULTS_FILE_NAME = "scan-results.yml"
 
 /**
- * A [ScanResultsStorage] using a [FileStorage] as backend. Scan results are serialized using [YAML][yamlMapper].
+ * A [PackageBasedScanStorage] using a [FileStorage] as backend. Scan results are serialized using [YAML][yamlMapper].
  */
 class FileBasedStorage(
     /**
      * The [FileStorage] to use for storing scan results.
      */
     val backend: FileStorage
-) : ScanResultsStorage() {
+) : AbstractPackageBasedScanStorage() {
     override val name = "${javaClass.simpleName} with ${backend.javaClass.simpleName} backend"
 
     private fun readForId(id: Identifier): Result<List<ScanResult>> {

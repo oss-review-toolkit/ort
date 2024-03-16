@@ -60,7 +60,7 @@ class PostgresStorage(
      * The JDBC data source to obtain database connections.
      */
     private val dataSource: Lazy<DataSource>
-) : ScanResultsStorage() {
+) : AbstractPackageBasedScanStorage() {
     companion object {
         /** Expression to reference the scanner version as an array. */
         private const val VERSION_ARRAY =

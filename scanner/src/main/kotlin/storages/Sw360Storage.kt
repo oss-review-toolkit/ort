@@ -55,7 +55,7 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempDir
  */
 class Sw360Storage(
     configuration: Sw360StorageConfiguration
-) : ScanResultsStorage() {
+) : AbstractPackageBasedScanStorage() {
     companion object {
         val JSON_MAPPER: ObjectMapper = jsonMapper.copy()
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
