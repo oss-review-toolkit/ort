@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.scanner.toNestedProvenanceScanResult
 /**
  * The abstract class that storage backends for scan results need to implement.
  */
-abstract class ScanResultsStorage : PackageBasedScanStorage {
+abstract class AbstractPackageBasedScanStorage : PackageBasedScanStorage {
     /**
      * The name to refer to this storage implementation.
      */

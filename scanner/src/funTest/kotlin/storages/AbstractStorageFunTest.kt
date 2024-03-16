@@ -99,9 +99,9 @@ abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec
         )
     )
 
-    private lateinit var storage: ScanResultsStorage
+    private lateinit var storage: AbstractPackageBasedScanStorage
 
-    abstract fun createStorage(): ScanResultsStorage
+    abstract fun createStorage(): AbstractPackageBasedScanStorage
 
     init {
         register(*listeners)

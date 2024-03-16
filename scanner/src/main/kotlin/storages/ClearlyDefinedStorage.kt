@@ -72,7 +72,7 @@ class ClearlyDefinedStorage(
     /** The configuration for this storage implementation. */
     config: ClearlyDefinedStorageConfiguration,
     client: OkHttpClient? = null
-) : ScanResultsStorage() {
+) : AbstractPackageBasedScanStorage() {
     constructor(serverUrl: String, client: OkHttpClient? = null) : this(
         ClearlyDefinedStorageConfiguration(serverUrl), client
     )

@@ -30,10 +30,10 @@ import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
+import org.ossreviewtoolkit.scanner.ScanStorage
 import org.ossreviewtoolkit.scanner.ScannerMatcher
 import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
-import org.ossreviewtoolkit.scanner.storages.ScanResultsStorage
 import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
@@ -52,7 +52,7 @@ import org.semver4j.Semver
  * configuration [options][PluginConfiguration.options]:
  *
  * * **"commandLine":** Command line options that modify the result. These are added to the [ScannerDetails] when
- *   looking up results from the [ScanResultsStorage]. Defaults to [ScanCodeConfig.DEFAULT_COMMAND_LINE_OPTIONS].
+ *   looking up results from a [ScanStorage]. Defaults to [ScanCodeConfig.DEFAULT_COMMAND_LINE_OPTIONS].
  * * **"commandLineNonConfig":** Command line options that do not modify the result and should therefore not be
  *   considered in [configuration], like "--processes". Defaults to
  *   [ScanCodeConfig.DEFAULT_COMMAND_LINE_NON_CONFIG_OPTIONS].
