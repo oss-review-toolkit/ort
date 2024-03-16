@@ -55,7 +55,7 @@ private val TABLE_NAME = ScanResults.tableName
 /**
  * The Postgres storage back-end.
  */
-class PostgresStorage(
+class PackageBasedPostgresStorage(
     /**
      * The JDBC data source to obtain database connections.
      */
