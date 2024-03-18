@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.utils.ort.Environment
  */
 data class AnalyzerRun(
     /**
-     * The [Instant] the analyzer was started..
+     * The [Instant] the analyzer was started.
      */
     val startTime: Instant,
 
