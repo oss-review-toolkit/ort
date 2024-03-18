@@ -186,7 +186,7 @@ val checkGitAttributes by tasks.registering {
                 // Skip empty and comment lines.
                 .map { it.trim() }
                 .filter { it.isNotEmpty() && it.first() !in commentChars }
-                // The patterns is the part before the first whitespace.
+                // The pattern is the part before the first whitespace.
                 .mapTo(mutableSetOf()) { line -> line.takeWhile { !it.isWhitespace() } }
                 // Create ignore rules from valid patterns.
                 .mapIndexedNotNull { index, pattern ->
