@@ -226,11 +226,6 @@ class GoDep(
         }
 
         val contents = parseGoDepLockfile(lockfile)
-        if (contents.projects.isEmpty()) {
-            logger.warn { "The lockfile '$lockfile' does not contain any projects." }
-            return emptyList()
-        }
-
         val projects = mutableListOf<Map<String, String>>()
 
         contents.projects.forEach { project ->
