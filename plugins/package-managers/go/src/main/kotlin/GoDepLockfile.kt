@@ -19,7 +19,14 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.go
 
+import java.io.File
+
 import kotlinx.serialization.Serializable
+
+import net.peanuuutz.tomlkt.Toml
+import net.peanuuutz.tomlkt.decodeFromNativeReader
+
+private val toml = Toml { ignoreUnknownKeys = true }
 
 /**
  * See https://golang.github.io/dep/docs/Gopkg.lock.html.
@@ -36,3 +43,6 @@ internal data class GoDepLockfile(
         val version: String? = null
     )
 }
+
+internal fun parseGoDepLockfile(goPkgLock: File): GoDepLockfile =
+    goPkgLock.reader().use { toml.decodeFromNativeReader<GoDepLockfile>(it) }
