@@ -115,10 +115,9 @@ class GoDep(
         val packageRefs = mutableSetOf<PackageReference>()
 
         for (project in projects) {
-            // parseProjects() made sure that all entries contain these keys
-            val name = project.getValue("name")
-            val revision = project.getValue("revision")
-            val version = project.getValue("version")
+            val name = project.name
+            val revision = project.revision
+            val version = project.version ?: revision
 
             val issues = mutableListOf<Issue>()
 
@@ -214,7 +213,7 @@ class GoDep(
         return destination
     }
 
-    private fun parseProjects(workingDir: File, gopath: File): List<Map<String, String>> {
+    private fun parseProjects(workingDir: File, gopath: File): List<GoDepLockfile.Project> {
         val lockfile = workingDir.resolve("Gopkg.lock")
 
         requireLockfile(workingDir) { lockfile.isFile }
@@ -225,15 +224,7 @@ class GoDep(
             run("ensure", workingDir = workingDir, environment = mapOf("GOPATH" to gopath.path))
         }
 
-        val contents = parseGoDepLockfile(lockfile)
-        val projects = mutableListOf<Map<String, String>>()
-
-        contents.projects.forEach { project ->
-            val version = project.version ?: project.revision
-            projects += mapOf("name" to project.name, "revision" to project.revision, "version" to version)
-        }
-
-        return projects
+        return parseGoDepLockfile(lockfile).projects
     }
 }
 
