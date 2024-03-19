@@ -357,22 +357,22 @@ class Pub(
             // dependency tree.
             if (packageName in processedPackages) return@forEach
 
-            val pkgInfoFromLockFile = lockfile["packages"][packageName]
+            val pkgInfoFromLockfile = lockfile["packages"][packageName]
             // If the package is marked as SDK (e.g. flutter, flutter_test, dart) we cannot resolve it correctly as
             // it is not stored in .pub-cache. For now, we just ignore those SDK packages.
-            if (pkgInfoFromLockFile == null || pkgInfoFromLockFile["source"].textValueOrEmpty() == "sdk") return@forEach
+            if (pkgInfoFromLockfile == null || pkgInfoFromLockfile["source"].textValueOrEmpty() == "sdk") return@forEach
 
             val id = Identifier(
                 type = managerName,
                 namespace = "",
                 name = packageName,
-                version = pkgInfoFromLockFile["version"].textValueOrEmpty()
+                version = pkgInfoFromLockfile["version"].textValueOrEmpty()
             )
 
             val packageInfo = packages[id] ?: throw IOException("Could not find package info for $packageName")
 
             try {
-                val dependencyYamlFile = readPackageInfoFromCache(pkgInfoFromLockFile, workingDir)
+                val dependencyYamlFile = readPackageInfoFromCache(pkgInfoFromLockfile, workingDir)
                 val requiredPackages =
                     dependencyYamlFile["dependencies"]?.fieldNames()?.asSequence()?.toList().orEmpty()
 
@@ -390,7 +390,7 @@ class Pub(
                 // dependencies for each pub dependency manually, as the analyzer will only scan the
                 // projectRoot, but not the packages in the ".pub-cache" directory.
                 if (containsFlutter && !pubDependenciesOnly) {
-                    scanAndroidPackages(pkgInfoFromLockFile, labels, workingDir).forEach { resultAndroid ->
+                    scanAndroidPackages(pkgInfoFromLockfile, labels, workingDir).forEach { resultAndroid ->
                         packageReferences += packageInfo.toReference(
                             dependencies = resultAndroid.project.scopes
                                 .find { it.name == "releaseCompileClasspath" }
@@ -526,21 +526,21 @@ class Pub(
         var containsFlutter = false
 
         listOf("packages"/*, "packages-dev"*/).forEach {
-            lockfile[it]?.fields()?.forEach { (packageName, pkgInfoFromLockFile) ->
+            lockfile[it]?.fields()?.forEach { (packageName, pkgInfoFromLockfile) ->
                 try {
-                    val version = pkgInfoFromLockFile["version"].textValueOrEmpty()
+                    val version = pkgInfoFromLockfile["version"].textValueOrEmpty()
                     var description = ""
                     var rawName = ""
                     var homepageUrl = ""
                     var vcs = VcsInfo.EMPTY
                     var authors = emptySet<String>()
 
-                    val source = pkgInfoFromLockFile["source"].textValueOrEmpty()
+                    val source = pkgInfoFromLockfile["source"].textValueOrEmpty()
 
                     when {
                         source == "path" -> {
                             rawName = packageName
-                            val path = pkgInfoFromLockFile["description"]["path"].textValueOrEmpty()
+                            val path = pkgInfoFromLockfile["description"]["path"].textValueOrEmpty()
                             vcs = VersionControlSystem.forDirectory(workingDir.resolve(path))?.getInfo() ?: run {
                                 logger.warn {
                                     "Invalid path of package $rawName: " +
@@ -551,7 +551,7 @@ class Pub(
                         }
 
                         source == "git" -> {
-                            val pkgInfoFromYamlFile = readPackageInfoFromCache(pkgInfoFromLockFile, workingDir)
+                            val pkgInfoFromYamlFile = readPackageInfoFromCache(pkgInfoFromLockfile, workingDir)
 
                             rawName = pkgInfoFromYamlFile["name"]?.textValue() ?: packageName
                             description = pkgInfoFromYamlFile["description"].textValueOrEmpty().trim()
@@ -560,15 +560,15 @@ class Pub(
 
                             vcs = VcsInfo(
                                 type = VcsType.GIT,
-                                url = normalizeVcsUrl(pkgInfoFromLockFile["description"]["url"].textValueOrEmpty()),
-                                revision = pkgInfoFromLockFile["description"]["resolved-ref"].textValueOrEmpty(),
-                                path = pkgInfoFromLockFile["description"]["path"].textValueOrEmpty()
+                                url = normalizeVcsUrl(pkgInfoFromLockfile["description"]["url"].textValueOrEmpty()),
+                                revision = pkgInfoFromLockfile["description"]["resolved-ref"].textValueOrEmpty(),
+                                path = pkgInfoFromLockfile["description"]["path"].textValueOrEmpty()
                             )
                         }
 
                         // For now, we ignore SDKs like the Dart SDK and the Flutter SDK in the analyzer.
                         source != "sdk" -> {
-                            val pkgInfoFromYamlFile = readPackageInfoFromCache(pkgInfoFromLockFile, workingDir)
+                            val pkgInfoFromYamlFile = readPackageInfoFromCache(pkgInfoFromLockfile, workingDir)
 
                             rawName = pkgInfoFromYamlFile["name"].textValueOrEmpty()
                             description = pkgInfoFromYamlFile["description"].textValueOrEmpty().trim()
@@ -583,7 +583,7 @@ class Pub(
                             vcs = VcsHost.parseUrl(repositoryUrl).copy(revision = "")
                         }
 
-                        pkgInfoFromLockFile["description"].textValueOrEmpty() == "flutter" -> {
+                        pkgInfoFromLockfile["description"].textValueOrEmpty() == "flutter" -> {
                             // Set Flutter flag, which triggers another scan for iOS and Android native dependencies.
                             containsFlutter = true
                             // Set hardcoded package details.
@@ -592,7 +592,7 @@ class Pub(
                             description = "Flutter SDK"
                         }
 
-                        pkgInfoFromLockFile["description"].textValueOrEmpty() == "flutter_test" -> {
+                        pkgInfoFromLockfile["description"].textValueOrEmpty() == "flutter_test" -> {
                             // Set hardcoded package details.
                             rawName = "flutter_test"
                             homepageUrl = "https://github.com/flutter/flutter/tree/master/packages/flutter_test"
@@ -604,10 +604,10 @@ class Pub(
                         logger.warn { "No version information found for package $rawName." }
                     }
 
-                    val hostUrl = pkgInfoFromLockFile["description"]["url"].textValueOrEmpty()
+                    val hostUrl = pkgInfoFromLockfile["description"]["url"].textValueOrEmpty()
 
                     val sourceArtifact = if (source == "hosted" && hostUrl.isNotEmpty() && version.isNotEmpty()) {
-                        val sha256 = pkgInfoFromLockFile["description"]["sha256"].textValueOrEmpty()
+                        val sha256 = pkgInfoFromLockfile["description"]["sha256"].textValueOrEmpty()
 
                         RemoteArtifact(
                             url = "$hostUrl/packages/$rawName/versions/$version.tar.gz",
@@ -640,7 +640,7 @@ class Pub(
                 } catch (e: JacksonYAMLParseException) {
                     e.showStackTrace()
 
-                    val packageVersion = pkgInfoFromLockFile["version"].textValueOrEmpty()
+                    val packageVersion = pkgInfoFromLockfile["version"].textValueOrEmpty()
                     issues += createAndLogIssue(
                         source = managerName,
                         message = "Failed to parse $PUBSPEC_YAML for package $packageName:$packageVersion: " +
@@ -654,9 +654,9 @@ class Pub(
         // each Pub dependency manually, as the analyzer will only analyze the projectRoot, but not the packages in
         // the ".pub-cache" directory.
         if (containsFlutter && !pubDependenciesOnly) {
-            lockfile["packages"]?.forEach { pkgInfoFromLockFile ->
+            lockfile["packages"]?.forEach { pkgInfoFromLockfile ->
                 // As this package contains Flutter, trigger Gradle manually for it.
-                scanAndroidPackages(pkgInfoFromLockFile, labels, workingDir).forEach { result ->
+                scanAndroidPackages(pkgInfoFromLockfile, labels, workingDir).forEach { result ->
                     result.collectPackagesByScope("releaseCompileClasspath").forEach { pkg ->
                         packages[pkg.id] = pkg
                     }
@@ -665,7 +665,7 @@ class Pub(
                 }
 
                 // As this package contains Flutter, trigger CocoaPods manually for it.
-                scanIosPackages(pkgInfoFromLockFile, workingDir)?.let { result ->
+                scanIosPackages(pkgInfoFromLockfile, workingDir)?.let { result ->
                     result.packages.forEach { pkg ->
                         packages[pkg.id] = pkg
                     }

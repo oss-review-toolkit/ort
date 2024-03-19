@@ -230,7 +230,7 @@ class GoDep(
             run("ensure", workingDir = workingDir, environment = mapOf("GOPATH" to gopath.path))
         }
 
-        val contents = lockfile.reader().use { toml.decodeFromNativeReader<GoDepLockFile>(it) }
+        val contents = lockfile.reader().use { toml.decodeFromNativeReader<GoDepLockfile>(it) }
         if (contents.projects.isEmpty()) {
             logger.warn { "The lockfile '$lockfile' does not contain any projects." }
             return emptyList()

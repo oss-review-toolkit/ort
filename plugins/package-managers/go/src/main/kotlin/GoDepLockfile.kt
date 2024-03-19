@@ -25,7 +25,7 @@ import kotlinx.serialization.Serializable
  * See https://golang.github.io/dep/docs/Gopkg.lock.html.
  */
 @Serializable
-internal data class GoDepLockFile(
+internal data class GoDepLockfile(
     val projects: List<Project> = emptyList()
 ) {
     @Serializable

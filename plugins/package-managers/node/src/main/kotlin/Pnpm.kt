@@ -51,7 +51,7 @@ class Pnpm(
         ) = Pnpm(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
-    override fun hasLockFile(projectDir: File) = NodePackageManager.PNPM.hasLockFile(projectDir)
+    override fun hasLockfile(projectDir: File) = NodePackageManager.PNPM.hasLockfile(projectDir)
 
     override fun File.isWorkspaceDir() = realFile() in findWorkspaceSubmodules(analysisRoot)
 

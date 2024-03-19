@@ -128,7 +128,7 @@ class Composer(
             return listOf(result)
         }
 
-        val lockfile = ensureLockFile(workingDir)
+        val lockfile = ensureLockfile(workingDir)
 
         logger.info { "Parsing lockfile at '$lockfile'..." }
 
@@ -277,12 +277,12 @@ class Composer(
         return packages
     }
 
-    private fun ensureLockFile(workingDir: File): File {
+    private fun ensureLockfile(workingDir: File): File {
         val lockfile = workingDir.resolve(COMPOSER_LOCK_FILE)
 
-        val hasLockFile = lockfile.isFile
-        requireLockfile(workingDir) { hasLockFile }
-        if (hasLockFile) return lockfile
+        val hasLockfile = lockfile.isFile
+        requireLockfile(workingDir) { hasLockfile }
+        if (hasLockfile) return lockfile
 
         val composerVersion = Semver(getVersion(workingDir))
         val args = listOfNotNull(

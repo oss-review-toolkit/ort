@@ -115,8 +115,8 @@ enum class NodePackageManager(
     val workspaceFileName: String = NodePackageManager.DEFINITION_FILE
 ) {
     NPM("package-lock.json", markerFileName = "npm-shrinkwrap.json") {
-        override fun hasLockFile(projectDir: File): Boolean =
-            super.hasLockFile(projectDir) || hasNonEmptyFile(projectDir, markerFileName)
+        override fun hasLockfile(projectDir: File): Boolean =
+            super.hasLockfile(projectDir) || hasNonEmptyFile(projectDir, markerFileName)
     },
 
     PNPM("pnpm-lock.yaml", workspaceFileName = "pnpm-workspace.yaml") {
@@ -137,7 +137,7 @@ enum class NodePackageManager(
     YARN("yarn.lock") {
         private val lockfileMarker = "# yarn lockfile v1"
 
-        override fun hasLockFile(projectDir: File): Boolean {
+        override fun hasLockfile(projectDir: File): Boolean {
             val lockfile = projectDir.resolve(lockfileName)
             if (!lockfile.isFile) return false
 
@@ -150,7 +150,7 @@ enum class NodePackageManager(
     YARN2("yarn.lock", markerFileName = ".yarnrc.yml") {
         private val lockfileMarker = "__metadata:"
 
-        override fun hasLockFile(projectDir: File): Boolean {
+        override fun hasLockfile(projectDir: File): Boolean {
             val lockfile = projectDir.resolve(lockfileName)
             if (!lockfile.isFile) return false
 
@@ -190,7 +190,7 @@ enum class NodePackageManager(
     /**
      * Return true if the [projectDir] contains a lockfile for this package manager, or return false otherwise.
      */
-    open fun hasLockFile(projectDir: File): Boolean = hasNonEmptyFile(projectDir, lockfileName)
+    open fun hasLockfile(projectDir: File): Boolean = hasNonEmptyFile(projectDir, lockfileName)
 
     /**
      * If the [projectDir] contains a workspace file for this package manager, return the list of package patterns, or
@@ -229,7 +229,7 @@ enum class NodePackageManager(
      */
     fun getFileScore(projectDir: File): Int =
         listOf(
-            hasLockFile(projectDir),
+            hasLockfile(projectDir),
             hasNonEmptyFile(projectDir, markerFileName),
             // Only count the presence of an additional workspace file if it is not the definition file.
             workspaceFileName != DEFINITION_FILE && hasNonEmptyFile(projectDir, workspaceFileName)

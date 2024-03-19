@@ -66,7 +66,7 @@ class Yarn(
         ) = Yarn(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
-    override fun hasLockFile(projectDir: File) = NodePackageManager.YARN.hasLockFile(projectDir)
+    override fun hasLockfile(projectDir: File) = NodePackageManager.YARN.hasLockfile(projectDir)
 
     override fun command(workingDir: File?) = if (Os.isWindows) "yarn.cmd" else "yarn"
 

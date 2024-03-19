@@ -109,7 +109,7 @@ class Cargo(
             return emptyMap()
         }
 
-        val contents = lockfile.reader().use { toml.decodeFromNativeReader<CargoLockFile>(it) }
+        val contents = lockfile.reader().use { toml.decodeFromNativeReader<CargoLockfile>(it) }
         return when (contents.version) {
             3 -> {
                 contents.packages.mapNotNull { pkg ->
