@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.clients.osv
 
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-
 import io.ks3.java.typealiases.InstantAsString
 
 import java.util.concurrent.Executors
@@ -36,6 +34,7 @@ import okhttp3.OkHttpClient
 
 import retrofit2.Call
 import retrofit2.Retrofit
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST

@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.clients.nexusiq
 
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-
 import io.ks3.java.typealiases.UriAsString
 
 import java.util.UUID
@@ -33,6 +31,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 
 import retrofit2.Retrofit
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
