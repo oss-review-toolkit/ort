@@ -51,7 +51,6 @@ postgres = "42.7.3"
 postgresEmbedded = "1.0.2"
 reflections = "0.10.2"
 retrofit = "2.10.0"
-retrofitConverterKotlinxSerialization = "1.0.0"
 s3 = "2.25.0"
 saxonHe = "12.4"
 scanoss = "1.1.6"
@@ -156,7 +155,7 @@ postgresEmbedded = { module = "com.opentable.components:otj-pg-embedded", versio
 reflections = { module = "org.reflections:reflections", version.ref = "reflections" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit-converter-jackson = { module = "com.squareup.retrofit2:converter-jackson", version.ref = "retrofit" }
-retrofit-converter-kotlinxSerialization = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofitConverterKotlinxSerialization" }
+retrofit-converter-kotlinxSerialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofit" }
 retrofit-converter-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "retrofit" }
 saxonHe = { module = "net.sf.saxon:Saxon-HE", version.ref = "saxonHe" }
 scanoss = { module = "com.scanoss:scanner", version.ref = "scanoss" }

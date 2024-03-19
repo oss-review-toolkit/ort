@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.clients.scanoss
 
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
 
@@ -31,6 +29,7 @@ import okhttp3.OkHttpClient
 import org.ossreviewtoolkit.clients.scanoss.model.ScanResponse
 
 import retrofit2.Retrofit
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part

@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.clients.clearlydefined
 
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-
 import java.io.IOException
 
 import kotlinx.coroutines.Dispatchers
@@ -37,6 +35,7 @@ import okhttp3.ResponseBody
 
 import retrofit2.HttpException
 import retrofit2.Retrofit
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
