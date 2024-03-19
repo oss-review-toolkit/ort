@@ -26,9 +26,6 @@ import java.net.URI
 import kotlin.io.path.copyToRecursively
 import kotlin.io.path.createDirectories
 
-import net.peanuuutz.tomlkt.Toml
-import net.peanuuutz.tomlkt.decodeFromNativeReader
-
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
@@ -59,8 +56,6 @@ import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.ort.showStackTrace
-
-private val toml = Toml { ignoreUnknownKeys = true }
 
 /**
  * A map of legacy package manager file names "dep" can import, and their respective lockfile names, if any.
@@ -230,7 +225,7 @@ class GoDep(
             run("ensure", workingDir = workingDir, environment = mapOf("GOPATH" to gopath.path))
         }
 
-        val contents = lockfile.reader().use { toml.decodeFromNativeReader<GoDepLockfile>(it) }
+        val contents = parseGoDepLockfile(lockfile)
         if (contents.projects.isEmpty()) {
             logger.warn { "The lockfile '$lockfile' does not contain any projects." }
             return emptyList()
