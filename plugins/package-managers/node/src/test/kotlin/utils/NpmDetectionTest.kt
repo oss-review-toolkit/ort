@@ -45,7 +45,7 @@ class NpmDetectionTest : WordSpec({
                     writeText("")
                 }
 
-                it.hasLockFile(lockfile.parentFile) shouldBe false
+                it.hasLockfile(lockfile.parentFile) shouldBe false
             }
         }
 
@@ -140,7 +140,7 @@ class NpmDetectionTest : WordSpec({
                 writeText("{}")
             }
 
-            NPM.hasLockFile(lockfile.parentFile) shouldBe true
+            NPM.hasLockfile(lockfile.parentFile) shouldBe true
         }
 
         "parse workspace files" {
@@ -175,7 +175,7 @@ class NpmDetectionTest : WordSpec({
                 writeText("lockfileVersion: '6.0'")
             }
 
-            PNPM.hasLockFile(lockfile.parentFile) shouldBe true
+            PNPM.hasLockfile(lockfile.parentFile) shouldBe true
         }
 
         "parse workspace files" {
@@ -208,7 +208,7 @@ class NpmDetectionTest : WordSpec({
                 writeText(YARN_LOCK_FILE_HEADER)
             }
 
-            YARN.hasLockFile(lockfile.parentFile) shouldBe true
+            YARN.hasLockfile(lockfile.parentFile) shouldBe true
         }
 
         "parse workspace files" {
@@ -238,7 +238,7 @@ class NpmDetectionTest : WordSpec({
                 writeText(YARN2_LOCK_FILE_HEADER)
             }
 
-            YARN2.hasLockFile(lockfile.parentFile) shouldBe true
+            YARN2.hasLockfile(lockfile.parentFile) shouldBe true
         }
 
         "parse workspace files" {

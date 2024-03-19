@@ -26,7 +26,7 @@ import kotlinx.serialization.Serializable
  * See https://docs.rs/cargo-lock/latest/cargo_lock/struct.Lockfile.html.
  */
 @Serializable
-internal data class CargoLockFile(
+internal data class CargoLockfile(
     val version: Int = 1,
 
     @SerialName("package")
