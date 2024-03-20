@@ -24,9 +24,9 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import org.ossreviewtoolkit.utils.common.FileMatcher
 
 /**
- * Defines paths which should be excluded. Each file that is matched by the [glob][pattern] is marked as excluded. If a
- * project definition file is matched by the [pattern] the whole project is excluded. For details about the glob syntax
- * see the [official documentation](https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob).
+ * Defines paths which should be excluded. Each file or directory that is matched by the [glob][pattern] is marked as
+ * excluded. If a project definition file is matched by the [pattern], the whole project is excluded. For details about
+ * the glob syntax see the [FileMatcher] implementation.
  */
 data class PathExclude(
     /**
