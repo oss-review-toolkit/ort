@@ -27,7 +27,7 @@ import org.semver4j.Semver
 /**
  * A data class defining selection criteria for scanners.
  *
- * An instance of this class is passed to a [ScanResultsStorage] to define the criteria a scan result must match,
+ * An instance of this class is passed to a [ScanStorageReader] to define the criteria a scan result must match,
  * so that it can be used as a replacement for a result produced by an actual scanner. A scanner implementation
  * creates a [ScannerMatcher] with its exact properties. Users can override some or all of these properties to
  * state the criteria under which results from a storage are acceptable even if they deviate from the exact
@@ -64,7 +64,7 @@ data class ScannerMatcher(
     companion object {
         /**
          * Return a [ScannerMatcher] instance that is to be used when looking up existing scan results from a
-         * [ScanResultsStorage]. By default, the properties of this instance are initialized to match the scanner
+         * [ScanStorageReader]. By default, the properties of this instance are initialized to match the scanner
          * [details]. These defaults can be overridden by the provided [config].
          */
         fun create(details: ScannerDetails, config: ScannerMatcherConfig = ScannerMatcherConfig.EMPTY): ScannerMatcher {
