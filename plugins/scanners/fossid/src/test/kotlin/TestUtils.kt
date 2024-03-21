@@ -330,7 +330,7 @@ private fun createMarkedIdentifiedFile(index: Int): MarkedAsIdentifiedFile {
         licenseName = "test$index"
     )
 
-    file.file = org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.File(
+    file.file = File(
         id = "marked$index",
         md5 = null,
         path = filePath(index),
