@@ -148,7 +148,7 @@ private fun mapLicense(
         //       which cannot be parsed to an SpdxExpression. A better solution could be to automatically
         //       convert the strings into a form that can be parsed, then the mapping could be applied globally.
         LicenseFinding(license.mapLicense(detectedLicenseMapping), location)
-    }.onSuccess { licenseFinding ->
+    }.map { licenseFinding ->
         licenseFinding.copy(license = licenseFinding.license.normalize())
     }.onFailure { spdxException ->
         issues += FossId.createAndLogIssue(
