@@ -58,7 +58,7 @@ jobs:
           cat .versions >> $GITHUB_ENV
       - name: Build base image
         id: image
-        uses: heliocastro/docker-build-control@dev
+        uses: heliocastro/docker-build-control@v3
         with:
           name: base
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -83,7 +83,7 @@ jobs:
           cat .versions >> $GITHUB_ENV
       - name: Build NodeJS image
         id: image
-        uses: heliocastro/docker-build-control@dev
+        uses: heliocastro/docker-build-control@v3
         with:
           name: nodejs
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -112,7 +112,7 @@ jobs:
           cat .versions >> $GITHUB_ENV
       - name: Build Python image
         id: image
-        uses: heliocastro/docker-build-control@dev
+        uses: heliocastro/docker-build-control@v3
         with:
           name: python
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -145,7 +145,7 @@ jobs:
           cat .versions >> $GITHUB_ENV
       - name: Build Rust image
         id: image
-        uses: heliocastro/docker-build-control@dev
+        uses: heliocastro/docker-build-control@v3
         with:
           name: rust
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -169,7 +169,7 @@ jobs:
           cat .versions >> $GITHUB_ENV
       - name: Build Ruby image
         id: image
-        uses: heliocastro/docker-build-control@dev
+        uses: heliocastro/docker-build-control@v3
         with:
           name: ruby
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -196,7 +196,7 @@ jobs:
           cat .versions >> $GITHUB_ENV
       - name: Build Golang image
         id: image
-        uses: heliocastro/docker-build-control@dev
+        uses: heliocastro/docker-build-control@v3
         with:
           name: golang
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -222,7 +222,7 @@ jobs:
           cat .versions >> $GITHUB_ENV
       - name: Build Android image
         id: image
-        uses: heliocastro/docker-build-control@dev
+        uses: heliocastro/docker-build-control@v3
         with:
           name: android
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -248,7 +248,7 @@ jobs:
           cat .versions >> $GITHUB_ENV
       - name: Build Dart image
         id: image
-        uses: heliocastro/docker-build-control@dev
+        uses: heliocastro/docker-build-control@v3
         with:
           name: dart
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -274,7 +274,7 @@ jobs:
           cat .versions >> $GITHUB_ENV
       - name: Build Dotnet image
         id: image
-        uses: heliocastro/docker-build-control@dev
+        uses: heliocastro/docker-build-control@v3
         with:
           name: dotnet
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -301,7 +301,7 @@ jobs:
           cat .versions >> $GITHUB_ENV
       - name: Build Haskell image
         id: image
-        uses: heliocastro/docker-build-control@dev
+        uses: heliocastro/docker-build-control@v3
         with:
           name: haskell
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -327,7 +327,7 @@ jobs:
           cat .versions >> $GITHUB_ENV
       - name: Build Scala image
         id: image
-        uses: heliocastro/docker-build-control@dev
+        uses: heliocastro/docker-build-control@v3
         with:
           name: scala
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -353,7 +353,7 @@ jobs:
           cat .versions >> $GITHUB_ENV
       - name: Build Swift image
         id: image
-        uses: heliocastro/docker-build-control@dev
+        uses: heliocastro/docker-build-control@v3
         with:
           name: swift
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -380,7 +380,7 @@ jobs:
           cat .versions >> $GITHUB_ENV
       - name: Build Bazel image
         id: image
-        uses: ./.github/actions/ortdocker
+        uses: heliocastro/docker-build-control@v3
         with:
           name: bazel
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -404,8 +404,9 @@ jobs:
         fetch-depth: 0
     - id: get_version
       run: |
-        ORT_VERSION=$(./gradlew -q properties --property version | sed -nr "s/version: (.+)/\1/p")
+        ORT_VERSION=$(./gradlew --no-configure-on-demand -q properties --property version | sed -nr "s/version: (.+)/\1/p")
         echo "version=${ORT_VERSION}" >> $GITHUB_OUTPUT
+        echo "Current ORT Version: $ORT_VERSION"
       shell: bash
 
 
@@ -434,7 +435,7 @@ jobs:
 
       - name: Build ORT minimal image
         id: image
-        uses: heliocastro/docker-build-control@dev
+        uses: heliocastro/docker-build-control@v3
         with:
           name: ort-minimal
           target: minimal
@@ -513,7 +514,7 @@ jobs:
             dart=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/dart:${{ needs.dart_image.outputs.image_version }}
             dotnet=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/dotnet:${{ needs.dotnet_image.outputs.image_version }}
             haskell=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/haskell:${{ needs.haskell_image.outputs.image_version }}
-            bazel=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/bazel::${{ needs.bazel_image.outputs.image_version }}
+            bazel=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/bazel:${{ needs.bazel_image.outputs.image_version }}
 
   funTest-docker:
     needs: [ ort_image, ort_version ]
