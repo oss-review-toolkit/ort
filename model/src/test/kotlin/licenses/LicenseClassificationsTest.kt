@@ -166,6 +166,24 @@ class LicenseClassificationsTest : WordSpec({
         }
     }
 
+    "isCategorized()" should {
+        "match license IDs case-insensitively" {
+            val cat = LicenseCategory("permissive")
+            val pdUpper = SpdxSingleLicenseExpression.parse("LicenseRef-Public-Domain")
+            val pdLower = SpdxSingleLicenseExpression.parse("LicenseRef-public-domain")
+
+            val lc = LicenseClassifications(
+                categories = listOf(cat),
+                categorizations = listOf(
+                    LicenseCategorization(pdUpper, setOf(cat.name))
+                )
+            )
+
+            lc.isCategorized(pdUpper) shouldBe true
+            lc.isCategorized(pdLower) shouldBe true
+        }
+    }
+
     "merge()" should {
         "keep disjunct classifications" {
             val a = classify(
