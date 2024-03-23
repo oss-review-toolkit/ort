@@ -19,6 +19,13 @@ name: ORT Docker Image
 
 on:
   workflow_dispatch:
+    inputs:
+      invalidate-cache:
+        description: 'Build all images disregarding existing version'
+        required: false
+      debug:
+        description: 'Debug docker build'
+        required: false
   schedule:
     - cron: '0 4 * * *'
   pull_request:
@@ -41,6 +48,8 @@ jobs:
   base_image:
     name: Base image
     runs-on: ubuntu-22.04
+    outputs:
+      image_version: ${{ steps.image.outputs.image_version }}
     steps:
       - name: Checkout default branch
         uses: actions/checkout@v4
@@ -48,11 +57,14 @@ jobs:
         run: |
           cat .versions >> $GITHUB_ENV
       - name: Build base image
-        uses: heliocastro/docker-build-control@v1
+        id: image
+        uses: heliocastro/docker-build-control@dev
         with:
           name: base
           token: ${{ secrets.GITHUB_TOKEN }}
           version: "${{ env.JAVA_VERSION }}-jdk-${{ env.UBUNTU_VERSION }}"
+          invalidate-cache: ${{ inputs.invalidate-cache }}
+          debug: ${{ inputs.debug }}
           build-args: |
             JAVA_VERSION=${{ env.JAVA_VERSION }}
             UBUNTU_VERSION=${{ env.UBUNTU_VERSION }}
@@ -61,6 +73,8 @@ jobs:
     name: NodeJS image
     needs: [ base_image ]
     runs-on: ubuntu-22.04
+    outputs:
+      image_version: ${{ steps.image.outputs.image_version }}
     steps:
       - name: Checkout default branch
         uses: actions/checkout@v4
@@ -68,21 +82,28 @@ jobs:
         run: |
           cat .versions >> $GITHUB_ENV
       - name: Build NodeJS image
-        uses: heliocastro/docker-build-control@v1
+        id: image
+        uses: heliocastro/docker-build-control@dev
         with:
           name: nodejs
           token: ${{ secrets.GITHUB_TOKEN }}
           version: "${{ env.NODEJS_VERSION }}"
+          invalidate-cache: ${{ inputs.invalidate-cache }}
+          debug: ${{ inputs.debug }}
           build-args: |
             NODEJS_VERSION=${{ env.NODEJS_VERSION }}
             NPM_VERSION=${{ env.NPM_VERSION }}
             PNPM_VERSION=${{ env.PNPM_VERSION }}
             YARN_VERSION=${{ env.YARN_VERSION }}
+          build-contexts: |
+            base=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/base:${{ needs.base_image.outputs.image_version }}
 
   python_image:
     name: Python image
     needs: [ base_image ]
     runs-on: ubuntu-22.04
+    outputs:
+      image_version: ${{ steps.image.outputs.image_version }}
     steps:
       - name: Checkout default branch
         uses: actions/checkout@v4
@@ -90,11 +111,14 @@ jobs:
         run: |
           cat .versions >> $GITHUB_ENV
       - name: Build Python image
-        uses: heliocastro/docker-build-control@v1
+        id: image
+        uses: heliocastro/docker-build-control@dev
         with:
           name: python
           token: ${{ secrets.GITHUB_TOKEN }}
           version: "${{ env.PYTHON_VERSION }}"
+          invalidate-cache: ${{ inputs.invalidate-cache }}
+          debug: ${{ inputs.debug }}
           build-args: |
             CONAN_VERSION=${{ env.CONAN_VERSION }}
             PIPTOOL_VERSION=${{ env.PIPTOOL_VERSION }}
@@ -104,11 +128,15 @@ jobs:
             PYTHON_POETRY_VERSION=${{ env.PYTHON_POETRY_VERSION }}
             PYTHON_VERSION=${{ env.PYTHON_VERSION }}
             SCANCODE_VERSION=${{ env.SCANCODE_VERSION }}
+          build-contexts: |
+            base=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/base:${{ needs.base_image.outputs.image_version }}
 
   rust_image:
     name: Rust image
     needs: [ base_image ]
     runs-on: ubuntu-22.04
+    outputs:
+      image_version: ${{ steps.image.outputs.image_version }}
     steps:
       - name: Checkout default branch
         uses: actions/checkout@v4
@@ -116,18 +144,23 @@ jobs:
         run: |
           cat .versions >> $GITHUB_ENV
       - name: Build Rust image
-        uses: heliocastro/docker-build-control@v1
+        id: image
+        uses: heliocastro/docker-build-control@dev
         with:
           name: rust
           token: ${{ secrets.GITHUB_TOKEN }}
           version: "${{ env.RUST_VERSION }}"
           build-args: |
             RUST_VERSION=${{ env.RUST_VERSION }}
+          build-contexts: |
+            base=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/base:${{ needs.base_image.outputs.image_version }}
 
   ruby_image:
     name: Ruby image
     needs: [ base_image ]
     runs-on: ubuntu-22.04
+    outputs:
+      image_version: ${{ steps.image.outputs.image_version }}
     steps:
       - name: Checkout default branch
         uses: actions/checkout@v4
@@ -135,19 +168,26 @@ jobs:
         run: |
           cat .versions >> $GITHUB_ENV
       - name: Build Ruby image
-        uses: heliocastro/docker-build-control@v1
+        id: image
+        uses: heliocastro/docker-build-control@dev
         with:
           name: ruby
           token: ${{ secrets.GITHUB_TOKEN }}
           version: "${{ env.RUBY_VERSION }}"
+          invalidate-cache: ${{ inputs.invalidate-cache }}
+          debug: ${{ inputs.debug }}
           build-args: |
             RUBY_VERSION=${{ env.RUBY_VERSION }}
             COCOAPODS_VERSION=${{ env.COCOAPODS_VERSION }}
+          build-contexts: |
+            base=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/base:${{ needs.base_image.outputs.image_version }}
 
   golang_image:
     name: Golang image
     needs: [ base_image ]
     runs-on: ubuntu-22.04
+    outputs:
+      image_version: ${{ steps.image.outputs.image_version }}
     steps:
       - name: Checkout default branch
         uses: actions/checkout@v4
@@ -155,18 +195,25 @@ jobs:
         run: |
           cat .versions >> $GITHUB_ENV
       - name: Build Golang image
-        uses: heliocastro/docker-build-control@v1
+        id: image
+        uses: heliocastro/docker-build-control@dev
         with:
           name: golang
           token: ${{ secrets.GITHUB_TOKEN }}
           version: "${{ env.GO_VERSION }}"
+          invalidate-cache: ${{ inputs.invalidate-cache }}
+          debug: ${{ inputs.debug }}
           build-args: |
             GO_VERSION=${{ env.GO_VERSION }}
+          build-contexts: |
+            base=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/base:${{ needs.base_image.outputs.image_version }}
 
   android_image:
     name: Android image
     needs: [ base_image ]
     runs-on: ubuntu-22.04
+    outputs:
+      image_version: ${{ steps.image.outputs.image_version }}
     steps:
       - name: Checkout default branch
         uses: actions/checkout@v4
@@ -174,18 +221,25 @@ jobs:
         run: |
           cat .versions >> $GITHUB_ENV
       - name: Build Android image
-        uses: heliocastro/docker-build-control@v1
+        id: image
+        uses: heliocastro/docker-build-control@dev
         with:
           name: android
           token: ${{ secrets.GITHUB_TOKEN }}
           version: "${{ env.ANDROID_CMD_VERSION }}"
+          invalidate-cache: ${{ inputs.invalidate-cache }}
+          debug: ${{ inputs.debug }}
           build-args: |
             ANDROID_CMD_VERSION=${{ env.ANDROID_CMD_VERSION }}
+          build-contexts: |
+            base=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/base:${{ needs.base_image.outputs.image_version }}
 
   dart_image:
     name: Dart image
     needs: [ base_image ]
     runs-on: ubuntu-22.04
+    outputs:
+      image_version: ${{ steps.image.outputs.image_version }}
     steps:
       - name: Checkout default branch
         uses: actions/checkout@v4
@@ -193,18 +247,25 @@ jobs:
         run: |
           cat .versions >> $GITHUB_ENV
       - name: Build Dart image
-        uses: heliocastro/docker-build-control@v1
+        id: image
+        uses: heliocastro/docker-build-control@dev
         with:
           name: dart
           token: ${{ secrets.GITHUB_TOKEN }}
           version: "${{ env.DART_VERSION }}"
+          invalidate-cache: ${{ inputs.invalidate-cache }}
+          debug: ${{ inputs.debug }}
           build-args: |
             DART_VERSION=${{ env.DART_VERSION }}
+          build-contexts: |
+            base=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/base:${{ needs.base_image.outputs.image_version }}
 
   dotnet_image:
     name: Dotnet image
     needs: [ base_image ]
     runs-on: ubuntu-22.04
+    outputs:
+      image_version: ${{ steps.image.outputs.image_version }}
     steps:
       - name: Checkout default branch
         uses: actions/checkout@v4
@@ -212,19 +273,26 @@ jobs:
         run: |
           cat .versions >> $GITHUB_ENV
       - name: Build Dotnet image
-        uses: heliocastro/docker-build-control@v1
+        id: image
+        uses: heliocastro/docker-build-control@dev
         with:
           name: dotnet
           token: ${{ secrets.GITHUB_TOKEN }}
           version: "${{ env.DOTNET_VERSION }}"
+          invalidate-cache: ${{ inputs.invalidate-cache }}
+          debug: ${{ inputs.debug }}
           build-args: |
             DOTNET_VERSION=${{ env.DOTNET_VERSION }}
             NUGET_INSPECTOR_VERSION=${{ env.NUGET_INSPECTOR_VERSION }}
+          build-contexts: |
+            base=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/base:${{ needs.base_image.outputs.image_version }}
 
   haskell_image:
     name: Haskell image
     needs: [ base_image ]
     runs-on: ubuntu-22.04
+    outputs:
+      image_version: ${{ steps.image.outputs.image_version }}
     steps:
       - name: Checkout default branch
         uses: actions/checkout@v4
@@ -232,18 +300,25 @@ jobs:
         run: |
           cat .versions >> $GITHUB_ENV
       - name: Build Haskell image
-        uses: heliocastro/docker-build-control@v1
+        id: image
+        uses: heliocastro/docker-build-control@dev
         with:
           name: haskell
           token: ${{ secrets.GITHUB_TOKEN }}
           version: "${{ env.HASKELL_STACK_VERSION }}"
+          invalidate-cache: ${{ inputs.invalidate-cache }}
+          debug: ${{ inputs.debug }}
           build-args: |
             HASKELL_STACK_VERSION=${{ env.HASKELL_STACK_VERSION }}
+          build-contexts: |
+            base=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/base:${{ needs.base_image.outputs.image_version }}
 
   scala_image:
     name: Scala image
     needs: [ base_image ]
     runs-on: ubuntu-22.04
+    outputs:
+      image_version: ${{ steps.image.outputs.image_version }}
     steps:
       - name: Checkout default branch
         uses: actions/checkout@v4
@@ -251,18 +326,25 @@ jobs:
         run: |
           cat .versions >> $GITHUB_ENV
       - name: Build Scala image
-        uses: heliocastro/docker-build-control@v1
+        id: image
+        uses: heliocastro/docker-build-control@dev
         with:
           name: scala
           token: ${{ secrets.GITHUB_TOKEN }}
           version: "${{ env.SBT_VERSION }}"
+          invalidate-cache: ${{ inputs.invalidate-cache }}
+          debug: ${{ inputs.debug }}
           build-args: |
             SBT_VERSION=${{ env.SBT_VERSION }}
+          build-contexts: |
+            base=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/base:${{ needs.base_image.outputs.image_version }}
 
   swift_image:
     name: Swift image
     needs: [ base_image ]
     runs-on: ubuntu-22.04
+    outputs:
+      image_version: ${{ steps.image.outputs.image_version }}
     steps:
       - name: Checkout default branch
         uses: actions/checkout@v4
@@ -270,13 +352,45 @@ jobs:
         run: |
           cat .versions >> $GITHUB_ENV
       - name: Build Swift image
-        uses: heliocastro/docker-build-control@v1
+        id: image
+        uses: heliocastro/docker-build-control@dev
         with:
           name: swift
           token: ${{ secrets.GITHUB_TOKEN }}
           version: "${{ env.SWIFT_VERSION }}"
+          invalidate-cache: ${{ inputs.invalidate-cache }}
+          debug: ${{ inputs.debug }}
           build-args: |
             SWIFT_VERSION=${{ env.SWIFT_VERSION }}
+          build-contexts: |
+            base=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/base:${{ needs.base_image.outputs.image_version }}
+
+
+  bazel_image:
+    name: Bazel image
+    needs: [ base_image ]
+    runs-on: ubuntu-22.04
+    outputs:
+      image_version: ${{ steps.image.outputs.image_version }}
+    steps:
+      - name: Checkout default branch
+        uses: actions/checkout@v4
+      - name: Set environment variables
+        run: |
+          cat .versions >> $GITHUB_ENV
+      - name: Build Bazel image
+        id: image
+        uses: ./.github/actions/ortdocker
+        with:
+          name: bazel
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: "${{ env.BAZEL_VERSION }}"
+          invalidate-cache: ${{ inputs.invalidate-cache }}
+          debug: ${{ inputs.debug }}
+          build-args: |
+            BAZEL_VERSION=${{ env.BAZEL_VERSION }}
+          build-contexts: |
+            base=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/base:${{ needs.base_image.outputs.image_version }}
 
   ort_version:
     name: Get Ort Version
@@ -302,6 +416,8 @@ jobs:
       [ ort_version, base_image, nodejs_image, python_image, rust_image, ruby_image, golang_image ]
     name: Build ORT minimal image
     runs-on: ubuntu-22.04
+    outputs:
+      image_version: ${{ steps.image.outputs.image_version }}
     permissions:
       contents: read
       packages: write
@@ -317,29 +433,34 @@ jobs:
           cat .versions >> $GITHUB_ENV
 
       - name: Build ORT minimal image
-        uses: heliocastro/docker-build-control@v2
+        id: image
+        uses: heliocastro/docker-build-control@dev
         with:
           name: ort-minimal
           target: minimal
           token: ${{ secrets.GITHUB_TOKEN }}
           version: ${{ needs.ort_version.outputs.ort_version }}
+          invalidate-cache: ${{ inputs.invalidate-cache }}
+          debug: ${{ inputs.debug }}
+          images: |
+            ${{ env.REGISTRY }}/${{ github.repository_owner }}/ort-minimal
           build-args: |
             NODEJS_VERSION=${{ env.NODEJS_VERSION }}
             ORT_VERSION=${{ needs.ort_version.outputs.ort_version }}
           build-contexts: |
-            base=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/base:latest
-            nodejs=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/nodejs:latest
-            python=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/python:latest
-            rust=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/rust:latest
-            ruby=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/ruby:latest
-            golang=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/golang:latest
+            base=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/base:${{ needs.base_image.outputs.image_version }}
+            nodejs=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/nodejs:${{ needs.nodejs_image.outputs.image_version }}
+            python=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/python:${{ needs.python_image.outputs.image_version }}
+            rust=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/rust:${{ needs.rust_image.outputs.image_version }}
+            ruby=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/ruby:${{ needs.ruby_image.outputs.image_version }}
+            golang=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/golang:${{ needs.golang_image.outputs.image_version }}
 
   # Full Runtime ORT image
   # ----------------------
   ort_image:
     name: Build ORT image
     needs:
-      [ ort_version, minimal_image, android_image, dart_image, dotnet_image, haskell_image, scala_image, swift_image ]
+      [ ort_version, minimal_image, android_image, dart_image, dotnet_image, haskell_image, scala_image, swift_image, bazel_image ]
     runs-on: ubuntu-22.04
     permissions:
       contents: read
@@ -379,25 +500,26 @@ jobs:
         with:
           context: .
           target: run
-          push: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
-          load: ${{ github.event_name == 'pull_request' }}
+          push: true
+          load: false
           tags: |
             ${{ steps.meta-ort.outputs.tags }}
           labels: ${{ steps.meta-ort.outputs.labels }}
           build-contexts: |
             minimal=docker-image://${{ env.REGISTRY }}/${{ github.repository_owner }}/ort-minimal:${{ needs.ort_version.outputs.ort_version }}
-            android=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/android:latest
-            swift=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/swift:latest
-            scala=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/scala:latest
-            dart=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/dart:latest
-            dotnet=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/dotnet:latest
-            haskell=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/haskell:latest
+            android=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/android:${{ needs.android_image.outputs.image_version }}
+            swift=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/swift:${{ needs.swift_image.outputs.image_version }}
+            scala=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/scala:${{ needs.scala_image.outputs.image_version }}
+            dart=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/dart:${{ needs.dart_image.outputs.image_version }}
+            dotnet=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/dotnet:${{ needs.dotnet_image.outputs.image_version }}
+            haskell=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/haskell:${{ needs.haskell_image.outputs.image_version }}
+            bazel=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/bazel::${{ needs.bazel_image.outputs.image_version }}
 
   funTest-docker:
-    needs: ort_image
+    needs: [ ort_image, ort_version ]
     runs-on: ubuntu-22.04
     container:
-      image: ghcr.io/oss-review-toolkit/ort:${{ needs.ort_image.outputs.build_version }}
+      image: ghcr.io/${{ github.repository_owner }}/ort:${{ needs.ort_version.outputs.ort_version }}
       options: --user 1001
     steps:
     - name: Checkout Repository
