@@ -365,7 +365,6 @@ jobs:
           build-contexts: |
             base=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/base:${{ needs.base_image.outputs.image_version }}
 
-
   bazel_image:
     name: Bazel image
     needs: [ base_image ]
@@ -408,7 +407,6 @@ jobs:
         echo "version=${ORT_VERSION}" >> $GITHUB_OUTPUT
         echo "Current ORT Version: $ORT_VERSION"
       shell: bash
-
 
   # Minimal Runtime ORT image
   # -------------------------
@@ -527,11 +525,6 @@ jobs:
       uses: actions/checkout@v4
       with:
         submodules: recursive
-    - name: Setup Java
-      uses: actions/setup-java@v4
-      with:
-        distribution: temurin
-        java-version: 17
     - name: Run functional tests that do require external tools
       uses: gradle/gradle-build-action@v3
       with:
