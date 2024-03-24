@@ -122,9 +122,11 @@ jobs:
     - name: Scheduled docker build
       id: check
       shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
       run: |
         # Uses gh API and jq to check is docker is scheduled to run, so tests will be done there
-        if [[ "$(gh api repos/:owner/:repo/actions/runs --jq '.workflow_runs[] | select(.name == "docker-ort" and (.status == "in_progress" or .status == "queued"))')" != "" ]]; then
+        if [[ "$(gh api repos/${{ github.repository }}/actions/runs --jq '.workflow_runs[] | select(.name == "ORT Docker Image" and (.status == "in_progress" or .status == "queued"))')" != "" ]]; then
           echo "skip=true" >> $GITHUB_OUTPUT
         else
           echo "skip=false" >> $GITHUB_OUTPUT
