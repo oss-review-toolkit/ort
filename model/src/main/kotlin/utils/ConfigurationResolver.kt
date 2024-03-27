@@ -65,6 +65,8 @@ object ConfigurationResolver {
                 curationProvider.getCurationsFor(packages)
             }
 
+            // While every provider is supposed to only return applicable curations, filter to be on the safe side and
+            // only embed applicable curations in the ORT result.
             val (applicableCurations, nonApplicableCurations) = curations.partition { curation ->
                 packages.any { pkg -> curation.isApplicable(pkg.id) }
             }
