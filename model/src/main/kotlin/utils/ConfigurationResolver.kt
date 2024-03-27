@@ -67,7 +67,7 @@ object ConfigurationResolver {
 
             val (applicableCurations, nonApplicableCurations) = curations.partition { curation ->
                 packages.any { pkg -> curation.isApplicable(pkg.id) }
-            }.let { it.first to it.second }
+            }
 
             if (nonApplicableCurations.isNotEmpty()) {
                 logger.warn {
