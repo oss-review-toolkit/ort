@@ -198,7 +198,13 @@ internal class OrtModelBuilder : ToolingModelBuilder {
                                 null
                             }
 
-                            val modelBuildingResult = poms.getValue(id.toString())
+                            val modelBuildingResult = poms[id.toString()]
+                            if (modelBuildingResult == null && id !in visitedDependencies) {
+                                val message = "No POM found for $id"
+                                logger.warn(message)
+                                warnings += message
+                            }
+
                             val dependencies = if (id in visitedDependencies) {
                                 // Cut the graph on cyclic dependencies.
                                 emptyList()
@@ -212,18 +218,20 @@ internal class OrtModelBuilder : ToolingModelBuilder {
                                 artifactId = id.module,
                                 version = id.version,
                                 classifier = "",
-                                extension = modelBuildingResult.effectiveModel.packaging,
+                                extension = modelBuildingResult?.effectiveModel?.packaging.orEmpty(),
                                 dependencies = dependencies,
                                 error = null,
                                 warning = null,
                                 pomFile = pomFile,
-                                mavenModel = OrtMavenModelImpl(
-                                    licenses = modelBuildingResult.effectiveModel.collectLicenses(),
-                                    authors = modelBuildingResult.effectiveModel.collectAuthors(),
-                                    description = modelBuildingResult.effectiveModel.description.orEmpty(),
-                                    homepageUrl = modelBuildingResult.effectiveModel.url.orEmpty(),
-                                    vcs = modelBuildingResult.getVcsModel()
-                                ),
+                                mavenModel = modelBuildingResult?.run {
+                                    OrtMavenModelImpl(
+                                        licenses = effectiveModel.collectLicenses(),
+                                        authors = effectiveModel.collectAuthors(),
+                                        description = effectiveModel.description.orEmpty(),
+                                        homepageUrl = effectiveModel.url.orEmpty(),
+                                        vcs = getVcsModel()
+                                    )
+                                },
                                 localPath = null
                             )
                         }
