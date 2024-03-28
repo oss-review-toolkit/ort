@@ -103,6 +103,92 @@ class ScanCodeResultParserTest : FreeSpec({
             }
         }
 
+        "for ScanCode 32.1.0 should" - {
+            "contain findings that stem from referenced files" {
+                val resultFile = getAssetFile("scancode-32.1.0_from_file-reference.json")
+
+                val summary = parseResult(resultFile).toScanSummary()
+
+                summary.licenseFindings should containExactlyInAnyOrder(
+                    LicenseFinding(
+                        license = "LicenseRef-scancode-public-domain",
+                        location = TextLocation("COPYING", 9),
+                        score = 100.0f
+                    ),
+                    LicenseFinding(
+                        license = "LicenseRef-scancode-public-domain",
+                        location = TextLocation("COPYING", 11, 12),
+                        score = 100.0f
+                    ),
+                    LicenseFinding(
+                        license = "LGPL-2.1-or-later",
+                        location = TextLocation("COPYING", 13, 14),
+                        score = 100.0f
+                    ),
+                    LicenseFinding(
+                        license = "GPL-2.0-or-later",
+                        location = TextLocation("COPYING", 17, 18),
+                        score = 100.0f
+                    ),
+                    LicenseFinding(
+                        license = "LicenseRef-scancode-public-domain",
+                        location = TextLocation("COPYING", 21, 22),
+                        score = 100.0f
+                    ),
+                    LicenseFinding(
+                        license = "LicenseRef-scancode-public-domain",
+                        location = TextLocation("COPYING", 24),
+                        score = 100.0f
+                    ),
+                    LicenseFinding(
+                        license = "LicenseRef-scancode-public-domain AND GPL-2.0-or-later AND GPL-3.0-or-later",
+                        location = TextLocation("COPYING", 26, 27),
+                        score = 100.0f
+                    ),
+                    LicenseFinding(
+                        license = "LicenseRef-scancode-public-domain",
+                        location = TextLocation("COPYING", 31),
+                        score = 100.0f
+                    ),
+                    LicenseFinding(
+                        license = "LicenseRef-scancode-public-domain",
+                        location = TextLocation("COPYING", 33),
+                        score = 70.0f
+                    ),
+                    LicenseFinding(
+                        license = "LicenseRef-scancode-other-permissive AND LicenseRef-scancode-other-copyleft",
+                        location = TextLocation("COPYING", 33, 34),
+                        score = 100.0f
+                    ),
+                    LicenseFinding(
+                        license = "LicenseRef-scancode-public-domain-disclaimer",
+                        location = TextLocation("COPYING", 36, 50),
+                        score = 96.69f
+                    ),
+                    LicenseFinding(
+                        license = "LGPL-2.1-only AND gpl-2.0 AND gpl-3.0",
+                        location = TextLocation("COPYING", 52, 55),
+                        score = 100.0f
+                    ),
+                    LicenseFinding(
+                        license = "LicenseRef-scancode-public-domain",
+                        location = TextLocation("COPYING", 59),
+                        score = 100.0f
+                    ),
+                    LicenseFinding(
+                        license = "LGPL-2.1-only",
+                        location = TextLocation("COPYING", 1, 502),
+                        score = 100.0f
+                    ),
+                    LicenseFinding(
+                        license = "LGPL-2.1-only",
+                        location = TextLocation("COPYING.LGPLv2.1", 1, 502),
+                        score = 100.0f
+                    )
+                )
+            }
+        }
+
         for (version in 1..MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION) {
             val resultFile = getAssetFile("scancode-output-format-$version.0.0_mime-types-2.1.18.json")
             val summary = parseResult(resultFile).toScanSummary()
