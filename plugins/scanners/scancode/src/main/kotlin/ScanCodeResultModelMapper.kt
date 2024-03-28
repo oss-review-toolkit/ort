@@ -64,6 +64,7 @@ fun ScanCodeResult.toScanSummary(preferFileLicense: Boolean = false): ScanSummar
     val issues = mutableListOf<Issue>()
 
     val header = headers.single()
+    val inputName = header.options.input.first().substringAfterLast('/')
 
     val outputFormatVersion = header.outputFormatVersion?.let { Semver(it) }
     if (outputFormatVersion != null && outputFormatVersion.major > MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION) {
@@ -82,9 +83,16 @@ fun ScanCodeResult.toScanSummary(preferFileLicense: Boolean = false): ScanSummar
         ?: files.flatMap { it.scanCodeKeyToSpdxIdMappings }.toMap()
 
     filesOfTypeFile.forEach { file ->
+        val licensesWithoutReferences = file.licenses.filter {
+            // Note that "fromFile" contains the name of the input directory, see
+            // https://github.com/nexB/scancode-toolkit/issues/3712.
+            it !is LicenseEntry.Version3 || it.fromFile == null || it.fromFile == "$inputName/${file.path}"
+                || it.fromFile == inputName // Input is a single file.
+        }
+
         // ScanCode creates separate license entries for each license in an expression. Deduplicate these by grouping by
         // the same expression.
-        val licenses = file.licenses.groupBy {
+        val licenses = licensesWithoutReferences.groupBy {
             LicenseMatch(it.licenseExpression, it.startLine, it.endLine, it.score)
         }.map {
             // Arbitrarily take the first of the duplicate license entries.
