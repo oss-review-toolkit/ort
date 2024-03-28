@@ -158,6 +158,7 @@ sealed interface LicenseEntry {
         override val startLine: Int,
         override val endLine: Int,
         override val licenseExpression: String,
+        val spdxLicenseExpression: String? = null, // This might be missing in JSON.
         val fromFile: String? = null // This might be missing in JSON.
     ) : LicenseEntry
 }

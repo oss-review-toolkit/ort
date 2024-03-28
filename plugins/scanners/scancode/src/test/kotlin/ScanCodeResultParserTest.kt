@@ -166,7 +166,7 @@ class ScanCodeResultParserTest : FreeSpec({
                         score = 96.69f
                     ),
                     LicenseFinding(
-                        license = "LGPL-2.1-only AND gpl-2.0 AND gpl-3.0",
+                        license = "LGPL-2.1-only AND GPL-2.0-only AND GPL-3.0-only",
                         location = TextLocation("COPYING", 52, 55),
                         score = 100.0f
                     ),
