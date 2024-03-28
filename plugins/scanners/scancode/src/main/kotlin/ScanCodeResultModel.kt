@@ -157,7 +157,8 @@ sealed interface LicenseEntry {
         override val score: Float,
         override val startLine: Int,
         override val endLine: Int,
-        override val licenseExpression: String
+        override val licenseExpression: String,
+        val fromFile: String? = null // This might be missing in JSON.
     ) : LicenseEntry
 }
 
