@@ -37,7 +37,6 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.model.utils.FileProvenanceFileStorage
 import org.ossreviewtoolkit.model.utils.ProvenanceFileStorage
-import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 
 class FileListResolverTest : StringSpec({
@@ -81,7 +80,7 @@ class FileListResolverTest : StringSpec({
 })
 
 private fun Spec.createTempDirWithFiles(vararg paths: String) =
-    createOrtTempDir().apply {
+    tempdir().apply {
         paths.forEachIndexed { index, path ->
             resolve(path).apply {
                 parentFile.mkdirs()

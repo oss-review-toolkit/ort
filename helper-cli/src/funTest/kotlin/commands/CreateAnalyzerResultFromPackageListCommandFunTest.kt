@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.helper.commands
 import com.github.ajalt.clikt.testing.test
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.helper.HelperMain
@@ -29,14 +30,13 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.ResolvedConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.ort.Environment
-import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.test.getAssetFile
 
 class CreateAnalyzerResultFromPackageListCommandFunTest : WordSpec({
     "The command" should {
         "generate the expected analyzer result file" {
             val inputFile = getAssetFile("package-list.yml")
-            val outputFile = createOrtTempDir().resolve("analyzer-result.yml")
+            val outputFile = tempdir().resolve("analyzer-result.yml")
             val expectedOutputFile = getAssetFile("create-analyzer-result-from-pkg-list-expected-output.yml")
 
             HelperMain().test(

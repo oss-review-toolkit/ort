@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.scanners.scancode
 
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.endWith
@@ -28,7 +29,6 @@ import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.scanner.AbstractPathScannerWrapperFunTest
 import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
-import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.spdx.getLicenseText
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
 
@@ -66,7 +66,7 @@ class ScanCodeScannerFunTest : AbstractPathScannerWrapperFunTest(setOf(Expensive
             val id = "LicenseRef-scancode-here-proprietary"
             val text = "x\ny\n"
 
-            val outputDir = createOrtTempDir().apply { resolve(id).writeText(text) }
+            val outputDir = tempdir().apply { resolve(id).writeText(text) }
 
             getLicenseText(id, true, listOf(outputDir)) shouldBe getLicenseText(id, true)
         }
