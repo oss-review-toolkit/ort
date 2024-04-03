@@ -164,10 +164,6 @@ class Cargo(
     }
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
-        // Get the project name and version. If one of them is missing return null, because this is a workspace
-        // definition file that does not contain a project.
-        val pkgDefinition = definitionFile.reader().use { toml.decodeFromNativeReader<CargoManifest>(it) }
-
         val workingDir = definitionFile.parentFile
         val metadataProcess = run(workingDir, "metadata", "--format-version=1")
         val metadata = json.decodeFromString<CargoMetadata>(metadataProcess.stdout)
@@ -178,8 +174,8 @@ class Cargo(
             { parsePackage(it, hashes) }
         )
 
-        val projectId = metadata.workspaceMembers.single {
-            it.startsWith("${pkgDefinition.pkg.name} ${pkgDefinition.pkg.version}")
+        val projectId = requireNotNull(metadata.resolve.root) {
+            "Virtual workspaces are not supported."
         }
 
         val projectNode = metadata.packages.single { it.id == projectId }
@@ -190,8 +186,7 @@ class Cargo(
 
             val transitiveDependencies = directDependencies
                 .mapNotNull { dependency ->
-                    val version =
-                        getResolvedVersion(pkgDefinition.pkg.name, pkgDefinition.pkg.version, dependency.name, metadata)
+                    val version = getResolvedVersion(projectNode.name, projectNode.version, dependency.name, metadata)
                     version?.let { Pair(dependency.name, it) }
                 }
                 .mapTo(mutableSetOf()) {
@@ -207,12 +202,10 @@ class Cargo(
             getTransitiveDependencies(groupedDependencies["build"], "build-dependencies")
         )
 
-        val projectPkg = packages.values.single { pkg ->
-            pkg.id.name == pkgDefinition.pkg.name && pkg.id.version == pkgDefinition.pkg.version
-        }.let { it.copy(id = it.id.copy(type = managerName)) }
+        val projectPkg = packages.getValue(projectId).let { it.copy(id = it.id.copy(type = managerName)) }
 
-        val homepageUrl = pkgDefinition.pkg.homepage.orEmpty()
-        val authors = pkgDefinition.pkg.authors.mapNotNullTo(mutableSetOf(), ::parseAuthorString)
+        val homepageUrl = projectNode.homepage.orEmpty()
+        val authors = projectNode.authors.mapNotNullTo(mutableSetOf(), ::parseAuthorString)
 
         val project = Project(
             id = projectPkg.id,
