@@ -26,41 +26,66 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 internal data class CargoMetadata(
+    /** Array of all packages in the workspace. */
     val packages: List<Package>,
+    /** Array of members of the workspace. Each entry is the Package ID for the package. */
     val workspaceMembers: List<String>,
+    /** The resolved dependency graph for the entire workspace. */
     val resolve: Resolve,
+    /** The absolute path to the root of the workspace. */
     val workspaceRoot: String
 ) {
     @Serializable
     data class Package(
+        /** The name of the package. */
         val name: String,
+        /** The version of the package. */
         val version: String,
+        /** The Package ID for referring to the package within the document. */
         val id: String,
+        /** The license value from the manifest, or null. */
         val license: String? = null,
+        /** The license-file value from the manifest, or null. */
         val licenseFile: String? = null,
+        /** The description value from the manifest, or null. */
         val description: String? = null,
+        /** The source ID of the package, an "opaque" identifier representing where a package is retrieved from. */
         val source: String? = null,
+        /** Array of dependencies declared in the package's manifest. */
         val dependencies: List<Dependency> = emptyList(),
+        /** Array of authors from the manifest. */
         val authors: List<String> = emptyList(),
+        /** The repository value from the manifest or null if not specified. */
         val repository: String? = null,
+        /** The homepage value from the manifest or null if not specified. */
         val homepage: String? = null
     )
 
     @Serializable
     data class Dependency(
+        /** The name of the dependency. */
         val name: String,
+        /** The dependency kind. "dev", "build", or null for a normal dependency. */
         val kind: String? = null
     )
 
     @Serializable
     data class Resolve(
+        /** Array of nodes within the dependency graph. Each node is a package. */
         val nodes: List<Node>,
+
+        /**
+         * The root package of the workspace. This is null if this is a virtual workspace. Otherwise, it is the Package
+         * ID of the root package.
+         */
         val root: String? = null
     )
 
     @Serializable
     data class Node(
+        /** The Package ID of this node. */
         val id: String,
+        /** The dependencies of this package, an array of Package IDs. */
         val dependencies: List<String>
     )
 }
