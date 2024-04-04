@@ -74,7 +74,7 @@ data class PackageCuration(
                 // `Semver.satisfies(String)` requires a valid version range to work as expected, see:
                 // https://github.com/semver4j/semver4j/issues/132.
                 val range = RangesListFactory.create(id.version)
-                require(range.get().size > 0) {
+                require(range.get().isNotEmpty()) {
                     "'${id.version}' is not a valid version range."
                 }
 
