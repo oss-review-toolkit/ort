@@ -183,7 +183,7 @@ fun RuleSet.copyleftInSourceLimitedRule() = packageRule("COPYLEFT_LIMITED_IN_SOU
 fun RuleSet.dependencyInProjectSourceRule() = projectSourceRule("DEPENDENCY_IN_PROJECT_SOURCE_RULE") {
     val denyDirPatterns = listOf(
         "**/node_modules" to setOf("NPM", "Yarn", "PNPM"),
-        "**/vendor" to setOf("GoMod", "GoDep")
+        "**/vendor" to setOf("GoMod")
     )
 
     denyDirPatterns.forEach { (pattern, packageManagers) ->

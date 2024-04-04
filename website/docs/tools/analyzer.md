@@ -19,9 +19,6 @@ Currently, the following package managers (grouped by the programming language t
 * Dart / Flutter
   * [Pub](https://pub.dev/)
 * Go
-  * [dep](https://golang.github.io/dep/)
-  * [Glide](https://github.com/Masterminds/glide)
-  * [Godep](https://github.com/tools/godep)
   * [GoMod](https://github.com/golang/go/wiki/Modules)
 * Haskell
   * [Stack](https://haskellstack.org/)

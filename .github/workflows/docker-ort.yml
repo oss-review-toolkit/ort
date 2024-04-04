@@ -161,7 +161,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           version: "${{ env.GO_VERSION }}"
           build-args: |
-            GO_DEP_VERSION=${{ env.GO_DEP_VERSION }}
             GO_VERSION=${{ env.GO_VERSION }}
 
   android_image:

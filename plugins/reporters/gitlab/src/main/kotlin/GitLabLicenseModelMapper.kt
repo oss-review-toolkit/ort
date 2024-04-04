@@ -112,7 +112,6 @@ private fun Identifier.toPackageManagerName(): String =
         "Composer" -> "composer"
         "Conan" -> "conan"
         "GoMod" -> "go"
-        "GoDep" -> "go" // This mapping is a guess as it is not illustrated by the specification and the examples.
         "Gradle" -> "gradle"
         "Maven" -> "maven"
         "NPM" -> "npm"

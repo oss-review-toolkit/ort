@@ -99,7 +99,6 @@ image_build ruby ort/ruby "$RUBY_VERSION" \
 # Golang
 image_build golang ort/golang "$GO_VERSION" \
     --build-arg GO_VERSION="$GO_VERSION" \
-    --build-arg GO_DEP_VERSION="$GO_DEP_VERSION" \
     --build-context "base=docker-image://${DOCKER_IMAGE_ROOT}/ort/base:latest" \
     "$@"
 
