@@ -906,6 +906,12 @@ _ort_migrate() {
           [[ ${i} -gt COMP_CWORD ]] && in_param='--nuget-ids' || in_param=''
           continue
           ;;
+        --pub-ids)
+          __skip_opt_eq
+          (( i = i + 1 ))
+          [[ ${i} -gt COMP_CWORD ]] && in_param='--pub-ids' || in_param=''
+          continue
+          ;;
         -h|--help)
           __skip_opt_eq
           in_param=''
@@ -923,7 +929,7 @@ _ort_migrate() {
   done
   local word="${COMP_WORDS[$COMP_CWORD]}"
   if [[ "${word}" =~ ^[-] ]]; then
-    COMPREPLY=($(compgen -W '--hocon-to-yaml --nuget-ids -h --help' -- "${word}"))
+    COMPREPLY=($(compgen -W '--hocon-to-yaml --nuget-ids --pub-ids -h --help' -- "${word}"))
     return
   fi
 
@@ -937,6 +943,9 @@ _ort_migrate() {
        COMPREPLY=($(compgen -o default -- "${word}"))
       ;;
     --nuget-ids)
+       COMPREPLY=($(compgen -o default -- "${word}"))
+      ;;
+    --pub-ids)
        COMPREPLY=($(compgen -o default -- "${word}"))
       ;;
     --help)
