@@ -111,7 +111,7 @@ object DependencyGraphConverter {
      * their dependencies in a scope structure.
      */
     private fun AnalyzerResult.projectsWithScopes(): Set<Project> =
-        projects.filterTo(mutableSetOf()) { it.scopeDependencies?.isNotEmpty() ?: false }
+        projects.filterTo(mutableSetOf()) { it.scopeDependencies?.isNotEmpty() == true }
 
     /**
      * Convert the dependency representation used by this [Project] to the dependency graph format, i.e. a set of

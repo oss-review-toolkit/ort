@@ -200,7 +200,7 @@ internal class Parser(input: String) {
         return BazelDepDirective(
             name = params["name"] ?: throw IllegalArgumentException("Missing name in 'bazel_dep' directive"),
             version = params["version"] ?: throw IllegalArgumentException("Missing version in 'bazel_dep' directive"),
-            devDependency = params["dev_dependency"]?.toBoolean() ?: false
+            devDependency = params["dev_dependency"]?.toBoolean() == true
         )
     }
 

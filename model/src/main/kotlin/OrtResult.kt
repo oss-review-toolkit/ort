@@ -559,7 +559,7 @@ data class OrtResult(
      *
      * Return `false` if there is no dependency on this [id].
      */
-    fun isPackageExcluded(id: Identifier): Boolean = packages[id]?.isExcluded ?: false
+    fun isPackageExcluded(id: Identifier): Boolean = packages[id]?.isExcluded == true
 
     /**
      * Return `true` if the [Project] with the given [id] is excluded.
@@ -570,7 +570,7 @@ data class OrtResult(
      *
      * Return `false` if no project with the given [id] is found.
      */
-    fun isProjectExcluded(id: Identifier): Boolean = projects[id]?.isExcluded ?: false
+    fun isProjectExcluded(id: Identifier): Boolean = projects[id]?.isExcluded == true
 
     /**
      * Return true if and only if the given [id] denotes a [Package] contained in this [OrtResult].

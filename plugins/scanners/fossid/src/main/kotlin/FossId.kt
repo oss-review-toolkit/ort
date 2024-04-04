@@ -428,7 +428,7 @@ class FossId internal constructor(
         defaultBranch: String? = null
     ): List<Scan> {
         val scans = filter {
-            val isArchived = it.isArchived ?: false
+            val isArchived = it.isArchived == true
             // The scans in the server contain the url with the credentials, so we have to remove it for the
             // comparison. If we don't, the scans won't be matched if the password changes!
             val urlWithoutCredentials = it.gitRepoUrl?.replaceCredentialsInUri()
@@ -441,7 +441,7 @@ class FossId internal constructor(
             }
 
             scans.filter { scan ->
-                defaultBranch?.let { scan.comment == defaultBranch } ?: false
+                defaultBranch?.let { scan.comment == defaultBranch } == true
             }.ifEmpty {
                 logger.warn { "No recent default branch scan found. Falling back to old behavior." }
 

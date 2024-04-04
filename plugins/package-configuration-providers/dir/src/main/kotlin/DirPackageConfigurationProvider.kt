@@ -54,7 +54,7 @@ open class DirPackageConfigurationProviderFactory :
     override fun parseConfig(options: Options, secrets: Options) =
         DirPackageConfigurationProviderConfig(
             path = File(options.getValue("path")),
-            mustExist = options["mustExist"]?.toBooleanStrict() ?: true
+            mustExist = options["mustExist"]?.toBooleanStrict() != false
         )
 }
 

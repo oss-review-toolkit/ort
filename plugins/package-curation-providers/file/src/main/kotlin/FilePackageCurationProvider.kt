@@ -54,7 +54,7 @@ open class FilePackageCurationProviderFactory : PackageCurationProviderFactory<F
     override fun parseConfig(options: Options, secrets: Options) =
         FilePackageCurationProviderConfig(
             path = File(options.getValue("path")),
-            mustExist = options["mustExist"]?.toBooleanStrict() ?: true
+            mustExist = options["mustExist"]?.toBooleanStrict() != false
         )
 }
 

@@ -71,7 +71,7 @@ internal class PubCacheReader {
         val url = description["url"].textValueOrEmpty()
         val resolvedRef = description["resolved-ref"].textValueOrEmpty()
         val resolvedPath = description["path"].textValueOrEmpty()
-        val isPathRelative = description["relative"]?.booleanValue() ?: false
+        val isPathRelative = description["relative"]?.booleanValue() == true
 
         if (type == "path" && resolvedPath.isNotEmpty()) {
             // For "path" packages, the path should be the absolute resolved path

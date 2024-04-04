@@ -304,7 +304,7 @@ internal class ScanController(
      * Return true if [ScanResult]s for the complete [NestedProvenance] of the package are available.
      */
     fun hasCompleteScanResult(scanner: ScannerWrapper, pkg: Package): Boolean =
-        getNestedProvenance(pkg.id)?.allProvenances?.all { provenance -> hasScanResult(scanner, provenance) } ?: false
+        getNestedProvenance(pkg.id)?.allProvenances?.all { provenance -> hasScanResult(scanner, provenance) } == true
 
     /**
      * Return true if a [ScanResult] for the provided [scanner] and [provenance] is available.
