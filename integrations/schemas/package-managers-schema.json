@@ -4,6 +4,7 @@
     "title": "ORT Package Managers",
     "description": "A list of package managers supported by the OSS Review Toolkit (ORT). A full list of all supported package managers can ve found at https://github.com/oss-review-toolkit/ort/blob/main/analyzer/src/main/resources/META-INF/services/org.ossreviewtoolkit.analyzer.PackageManagerFactory.",
     "enum": [
+        "Bazel",
         "Bower",
         "Bundler",
         "Cargo",
@@ -26,6 +27,7 @@
         "SBT",
         "SpdxDocumentFile",
         "Stack",
+        "SwiftPM",
         "Unmanaged",
         "Yarn",
         "Yarn2"
