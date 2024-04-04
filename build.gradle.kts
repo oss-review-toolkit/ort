@@ -152,7 +152,7 @@ val checkLicenseHeaders by tasks.registering {
             val headerLines = LicenseUtils.extractHeader(file)
 
             val holders = CopyrightUtils.extractHolders(headerLines)
-            if (holders.singleOrNull() != CopyrightUtils.expectedHolder) {
+            if (holders.singleOrNull() != CopyrightUtils.EXPECTED_HOLDER) {
                 hasErrors = true
                 logger.error("Unexpected copyright holder(s) in file '$file': $holders")
             }

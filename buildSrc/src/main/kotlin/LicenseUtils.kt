@@ -71,10 +71,10 @@ object CopyrightableFiles {
 }
 
 object CopyrightUtils {
-    const val expectedHolder =
+    const val EXPECTED_HOLDER =
         "The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)"
 
-    private const val maxCopyrightLines = 50
+    private const val MAX_COPYRIGHT_LINES = 50
     private val copyrightPrefixRegex = Regex("Copyright .*\\d{2,}(-\\d{2,})? ", RegexOption.IGNORE_CASE)
 
     fun extract(file: File): List<String> {
@@ -84,7 +84,7 @@ object CopyrightUtils {
 
         file.useLines { lines ->
             lines.forEach { line ->
-                if (++lineCounter > maxCopyrightLines) return@forEach
+                if (++lineCounter > MAX_COPYRIGHT_LINES) return@forEach
                 val copyright = line.replaceBefore(" Copyright ", "", "").trim()
                 if (copyright.isNotEmpty() && !copyright.endsWith("\"")) copyrights += copyright
             }
@@ -123,11 +123,11 @@ object LicenseUtils {
         SPDX-License-Identifier: Apache-2.0
     """.trimIndent()
 
-    private const val lastHeaderLine = "License-Filename: LICENSE"
+    private const val LAST_HEADER_LINE = "License-Filename: LICENSE"
 
     fun extractHeader(file: File): List<String> {
         var headerLines = file.useLines { lines ->
-            lines.takeWhile { !it.endsWith(lastHeaderLine) }.toList()
+            lines.takeWhile { !it.endsWith(LAST_HEADER_LINE) }.toList()
         }
 
         while (true) {
