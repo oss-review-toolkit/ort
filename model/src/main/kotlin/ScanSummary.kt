@@ -128,7 +128,7 @@ data class ScanSummary(
             licenseFindings = licenseFindings.filterTo(mutableSetOf()) { it.location.matchesPaths() },
             copyrightFindings = copyrightFindings.filterTo(mutableSetOf()) { it.location.matchesPaths() },
             snippetFindings = snippetFindings.filterTo(mutableSetOf()) { it.sourceLocation.matchesPaths() },
-            issues = issues.filter { it.affectedPath?.matchesPaths() ?: true }
+            issues = issues.filter { it.affectedPath?.matchesPaths() != false }
         )
     }
 

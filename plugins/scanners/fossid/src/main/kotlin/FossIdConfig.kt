@@ -172,18 +172,18 @@ data class FossIdConfig(
             val apiKey = secrets[API_KEY_PROPERTY]
                 ?: throw IllegalArgumentException("No FossID API Key configuration found.")
 
-            val waitForResult = options[WAIT_FOR_RESULT_PROPERTY]?.toBoolean() ?: true
+            val waitForResult = options[WAIT_FOR_RESULT_PROPERTY]?.toBoolean() != false
 
-            val keepFailedScans = options[KEEP_FAILED_SCANS_PROPERTY]?.toBoolean() ?: false
-            val deltaScans = options[DELTA_SCAN_PROPERTY]?.toBoolean() ?: false
+            val keepFailedScans = options[KEEP_FAILED_SCANS_PROPERTY]?.toBoolean() == true
+            val deltaScans = options[DELTA_SCAN_PROPERTY]?.toBoolean() == true
             val deltaScanLimit = options[DELTA_SCAN_LIMIT_PROPERTY]?.toInt() ?: Int.MAX_VALUE
 
-            val detectLicenseDeclarations = options[DETECT_LICENSE_DECLARATIONS_PROPERTY]?.toBoolean() ?: false
-            val detectCopyrightStatements = options[DETECT_COPYRIGHT_STATEMENTS_PROPERTY]?.toBoolean() ?: false
+            val detectLicenseDeclarations = options[DETECT_LICENSE_DECLARATIONS_PROPERTY]?.toBoolean() == true
+            val detectCopyrightStatements = options[DETECT_COPYRIGHT_STATEMENTS_PROPERTY]?.toBoolean() == true
 
             val timeout = options[TIMEOUT]?.toInt() ?: DEFAULT_TIMEOUT
 
-            val fetchSnippetMatchedLines = options[FETCH_SNIPPET_MATCHED_LINES]?.toBoolean() ?: false
+            val fetchSnippetMatchedLines = options[FETCH_SNIPPET_MATCHED_LINES]?.toBoolean() == true
 
             require(deltaScanLimit > 0) {
                 "deltaScanLimit must be > 0, current value is $deltaScanLimit."

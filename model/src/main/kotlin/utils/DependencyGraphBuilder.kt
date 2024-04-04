@@ -327,7 +327,7 @@ class DependencyGraphBuilder<D>(
         if (!dependencies2.keys.containsAll(dependencies1)) return false
 
         return ref.dependencies.all { refDep ->
-            dependencies2[dependencyIds[refDep.pkg]]?.let { dependencyTreeEquals(refDep, it) } ?: false
+            dependencies2[dependencyIds[refDep.pkg]]?.let { dependencyTreeEquals(refDep, it) } == true
         }
     }
 

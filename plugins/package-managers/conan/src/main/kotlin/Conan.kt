@@ -154,7 +154,7 @@ class Conan(
 
             // TODO: Support lockfiles which are located in a different directory than the definition file.
             val lockfileName = options[OPTION_LOCKFILE_NAME]
-            requireLockfile(workingDir) { lockfileName?.let { hasLockfile(workingDir.resolve(it).path) } ?: false }
+            requireLockfile(workingDir) { lockfileName?.let { hasLockfile(workingDir.resolve(it).path) } == true }
 
             val jsonFile = createOrtTempDir().resolve("info.json")
             if (lockfileName != null) {

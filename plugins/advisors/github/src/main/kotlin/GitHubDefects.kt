@@ -164,7 +164,7 @@ class GitHubDefects(name: String, config: GitHubDefectsConfiguration) : AdvicePr
         if (tags.size == 1) return releases.find { it.tagName == tags.first() }
 
         val revision = "/${pkg.vcsProcessed.revision}"
-        return releases.find { it.tagCommit?.commitUrl?.endsWith(revision) ?: false }
+        return releases.find { it.tagCommit?.commitUrl?.endsWith(revision) == true }
     }
 
     /**
@@ -259,7 +259,7 @@ class GitHubDefects(name: String, config: GitHubDefectsConfiguration) : AdvicePr
     private fun List<GitHubIssue>.applyLabelFilters(): List<GitHubIssue> =
         filter { issue ->
             val labels = issue.labels()
-            labelFilters.find { it.matches(labels) }?.including ?: false
+            labelFilters.find { it.matches(labels) }?.including == true
         }
 }
 

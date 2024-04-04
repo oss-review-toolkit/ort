@@ -162,7 +162,7 @@ class Bazel(
     private fun getDependencyGraph(projectDir: File, depDirectives: Map<String, BazelDepDirective>): Set<Scope> {
         val modGraphProcess = run("mod", "graph", "--output", "json", workingDir = projectDir)
         val node = JSON.decodeFromString<ModuleGraphNode>(modGraphProcess.stdout)
-        val devDeps = node.dependencies.filter { depDirectives[it.key]?.devDependency ?: false }.toSet()
+        val devDeps = node.dependencies.filter { depDirectives[it.key]?.devDependency == true }.toSet()
         val mainDeps = node.dependencies.toSet() - devDeps
 
         return setOf(

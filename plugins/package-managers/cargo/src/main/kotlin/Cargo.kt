@@ -136,7 +136,7 @@ class Cargo(
         PATH_DEPENDENCY_REGEX.matchEntire(id)?.groups?.get(1)?.let { match ->
             val packageDir = File(match.value)
             packageDir.startsWith(analysisRoot)
-        } ?: false
+        } == true
 
     private fun buildDependencyTree(
         name: String,

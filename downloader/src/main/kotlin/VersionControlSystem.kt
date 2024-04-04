@@ -207,7 +207,7 @@ abstract class VersionControlSystem(
     /**
      * Return true if this [VersionControlSystem] is available for use.
      */
-    fun isAvailable(): Boolean = commandLineTool?.isInPath() ?: true
+    fun isAvailable(): Boolean = commandLineTool?.isInPath() != false
 
     /**
      * Test - in a way specific to this [VersionControlSystem] - whether it can be used to download from the provided

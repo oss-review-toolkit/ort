@@ -352,12 +352,12 @@ fun String.fileSystemEncode() =
 /**
  * Return true if the string represents a false value, otherwise return false.
  */
-fun String?.isFalse() = this?.toBoolean()?.not() ?: false
+fun String?.isFalse() = this?.toBoolean()?.not() == true
 
 /**
  * Return true if the string represents a true value, otherwise return false.
  */
-fun String?.isTrue() = this?.toBoolean() ?: false
+fun String?.isTrue() = this?.toBoolean() == true
 
 /**
  * True if the string is a valid [URI], false otherwise.

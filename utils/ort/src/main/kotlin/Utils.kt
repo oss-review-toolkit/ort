@@ -79,7 +79,7 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
             // for version "3.3.1" accept "3.3.1-npm-packages" but not "3.3.1.0".
             val hasIgnorableSuffixOnly = name.withoutPrefix(versionVariant.name)?.let { tail ->
                 tail.firstOrNull() !in versionVariant.separators
-            } ?: false
+            } == true
 
             // Allow to ignore prefixes in names that are separated by something else than the current separator, e.g.
             // for version "0.10" accept "docutils-0.10" but not "1.0.10".
@@ -97,7 +97,7 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
                     || (last in currentSeparators && (forelast == null || !forelast.isDigit()))
                     // The prefix ends with 'v' and the forelast character is a separator.
                     || (last == 'v' && (forelast == null || forelast in currentSeparators))
-            } ?: false
+            } == true
 
             hasIgnorableSuffixOnly || hasIgnorablePrefixOnly
         }

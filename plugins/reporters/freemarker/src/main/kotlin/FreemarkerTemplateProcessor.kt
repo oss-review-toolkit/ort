@@ -220,7 +220,7 @@ class FreemarkerTemplateProcessor(
         @Suppress("UNUSED") // This function is used in the templates.
         fun filterForCategory(licenses: Collection<ResolvedLicense>, category: String): List<ResolvedLicense> =
             licenses.filter { resolvedLicense ->
-                input.licenseClassifications[resolvedLicense.license]?.contains(category) ?: true
+                input.licenseClassifications[resolvedLicense.license]?.contains(category) != false
             }
 
         /**
@@ -285,7 +285,7 @@ class FreemarkerTemplateProcessor(
         @Suppress("UNUSED") // This function is used in the templates.
         fun hasUnresolvedRuleViolations(threshold: Severity = input.ortConfig.severeRuleViolationThreshold) =
             input.ortResult.getRuleViolations(omitResolved = true, minSeverity = threshold).any { violation ->
-                violation.pkg?.let { input.ortResult.isExcluded(it) } ?: false
+                violation.pkg?.let { input.ortResult.isExcluded(it) } == true
             }
 
         /**
@@ -343,7 +343,7 @@ class FreemarkerTemplateProcessor(
                     capability = capability,
                     minSeverity = severity
                 )
-            )?.isNotEmpty() ?: false
+            )?.isNotEmpty() == true
 
         /**
          * Return the subset of the available advisor results produced by an advisor with the given [capability] that
