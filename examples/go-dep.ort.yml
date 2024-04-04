@@ -1,4 +1,0 @@
-# This is an example for a (project specific) repository configuration file.
-excludes: {}
-# dep only has one scope named 'install' thus no default scope based
-# excludes can be defined.

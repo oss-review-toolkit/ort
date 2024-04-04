@@ -124,7 +124,6 @@ import Bower from '!!raw-loader!@site/../examples/bower.ort.yml'
 import Bundler from '!!raw-loader!@site/../examples/bundler.ort.yml'
 import Cargo from '!!raw-loader!@site/../examples/cargo.ort.yml'
 import Composer from '!!raw-loader!@site/../examples/composer.ort.yml'
-import GoDep from '!!raw-loader!@site/../examples/go-dep.ort.yml'
 import GoMod from '!!raw-loader!@site/../examples/go-mod.ort.yml'
 import Gradle from '!!raw-loader!@site/../examples/gradle.ort.yml'
 import GradleAndroid from '!!raw-loader!@site/../examples/gradle-android.ort.yml'
@@ -139,7 +138,6 @@ import Yarn from '!!raw-loader!@site/../examples/yarn.ort.yml'
 <CodeBlock language="yml" title="bundler.ort.yml">{Bundler}</CodeBlock>
 <CodeBlock language="yml" title="cargo.ort.yml">{Cargo}</CodeBlock>
 <CodeBlock language="yml" title="composer.ort.yml">{Composer}</CodeBlock>
-<CodeBlock language="yml" title="go-dep.ort.yml">{GoDep}</CodeBlock>
 <CodeBlock language="yml" title="go-mod.ort.yml">{GoMod}</CodeBlock>
 <CodeBlock language="yml" title="gradle.ort.yml">{Gradle}</CodeBlock>
 <CodeBlock language="yml" title="gradle-android.ort.yml">{GradleAndroid}</CodeBlock>

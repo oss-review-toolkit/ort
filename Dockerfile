@@ -252,15 +252,13 @@ COPY --from=rustbuild /opt/rust /opt/rust
 # GOLANG - Build as a separate component
 FROM base AS gobuild
 
-ARG GO_DEP_VERSION=0.5.4
 ARG GO_VERSION=1.21.6
 ENV GOBIN=/opt/go/bin
 ENV PATH=$PATH:/opt/go/bin
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN ARCH=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/amd64/) \
-    && curl -L https://dl.google.com/go/go$GO_VERSION.linux-$ARCH.tar.gz | tar -C /opt -xz \
-    && curl -ksS https://raw.githubusercontent.com/golang/dep/v$GO_DEP_VERSION/install.sh | bash
+    && curl -L https://dl.google.com/go/go$GO_VERSION.linux-$ARCH.tar.gz | tar -C /opt -xz
 
 FROM scratch AS golang
 COPY --from=gobuild /opt/go /opt/go
