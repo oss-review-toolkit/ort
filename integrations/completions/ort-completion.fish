@@ -34,7 +34,7 @@ complete -c ort -n "__fish_seen_subcommand_from advise" -s h -l help -d 'Show th
 complete -c ort -f -n __fish_use_subcommand -a analyze -d 'Determine dependencies of a software project.'
 
 ## Options for analyze
-complete -c ort -n "__fish_seen_subcommand_from analyze" -l input-dir -s i -r -F -d 'The project directory to analyze. As a special case, if only one package manager is enabled, this may point to a definition file for that package manager to only analyze that single project.'
+complete -c ort -n "__fish_seen_subcommand_from analyze" -l input-dir -s i -r -F -d 'The project directory to analyze. May point to a definition file if only a single package manager is enabled.'
 complete -c ort -n "__fish_seen_subcommand_from analyze" -l output-dir -s o -r -F -d 'The directory to write the ORT result file with analyzer results to.'
 complete -c ort -n "__fish_seen_subcommand_from analyze" -l output-formats -s f -r -fa "JSON XML YAML" -d 'The list of output formats to be used for the ORT result file(s).'
 complete -c ort -n "__fish_seen_subcommand_from analyze" -l repository-configuration-file -r -F -d 'A file containing the repository configuration. If set, overrides any repository configuration contained in a \'.ort.yml\' file in the repository.'
@@ -119,6 +119,7 @@ complete -c ort -f -n __fish_use_subcommand -a migrate -d 'Assist with migrating
 ## Options for migrate
 complete -c ort -n "__fish_seen_subcommand_from migrate" -l hocon-to-yaml -r -F -d 'Perform a simple conversion of the given HOCON configuration file to YAML and print the result.'
 complete -c ort -n "__fish_seen_subcommand_from migrate" -l nuget-ids -r -F -d 'Convert NuGet package IDs in curations and configurations to the new format that includes a namespace.'
+complete -c ort -n "__fish_seen_subcommand_from migrate" -l pub-ids -r -F -d 'Convert Pub package IDs in curations and configurations to the new format that has no namespace.'
 complete -c ort -n "__fish_seen_subcommand_from migrate" -s h -l help -d 'Show this message and exit'
 
 
