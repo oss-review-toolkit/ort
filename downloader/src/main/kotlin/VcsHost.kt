@@ -39,7 +39,7 @@ enum class VcsHost(
     /**
      * The hostname of VCS host.
      */
-    protected val hostname: String,
+    val hostname: String,
 
     /**
      * The VCS types the host supports.
