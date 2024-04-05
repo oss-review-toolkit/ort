@@ -14,7 +14,7 @@ project:
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
     path: "<REPLACE_PATH>"
-  homepage_url: ""
+  homepage_url: "https://dot.net"
   scopes:
   - name: "net45"
     dependencies:
