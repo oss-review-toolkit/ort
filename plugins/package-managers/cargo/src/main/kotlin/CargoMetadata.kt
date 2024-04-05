@@ -20,6 +20,13 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.cargo
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonNamingStrategy
+
+internal val json = Json {
+    ignoreUnknownKeys = true
+    namingStrategy = JsonNamingStrategy.SnakeCase
+}
 
 /**
  * See https://doc.rust-lang.org/cargo/commands/cargo-metadata.html.

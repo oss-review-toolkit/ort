@@ -23,10 +23,6 @@ package org.ossreviewtoolkit.plugins.packagemanagers.cargo
 
 import java.io.File
 
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonNamingStrategy
-
-import net.peanuuutz.tomlkt.Toml
 import net.peanuuutz.tomlkt.decodeFromNativeReader
 
 import org.apache.logging.log4j.kotlin.logger
@@ -56,13 +52,6 @@ import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxOperator
-
-private val json = Json {
-    ignoreUnknownKeys = true
-    namingStrategy = JsonNamingStrategy.SnakeCase
-}
-
-private val toml = Toml { ignoreUnknownKeys = true }
 
 private const val DEV_KIND_NAME = "dev"
 private const val BUILD_KIND_NAME = "build"
