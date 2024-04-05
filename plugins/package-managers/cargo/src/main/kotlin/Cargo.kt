@@ -167,12 +167,6 @@ class Cargo(
         val workingDir = definitionFile.parentFile
         val metadataProcess = run(workingDir, "metadata", "--format-version=1")
         val metadata = json.decodeFromString<CargoMetadata>(metadataProcess.stdout)
-        val hashes = readHashes(resolveLockfile(metadata))
-
-        val packages = metadata.packages.associateBy(
-            { it.id },
-            { parsePackage(it, hashes) }
-        )
 
         val projectId = requireNotNull(metadata.resolve.root) {
             "Virtual workspaces are not supported."
@@ -180,6 +174,12 @@ class Cargo(
 
         val projectNode = metadata.packages.single { it.id == projectId }
         val groupedDependencies = projectNode.dependencies.groupBy { it.kind.orEmpty() }
+
+        val hashes = readHashes(resolveLockfile(metadata))
+        val packages = metadata.packages.associateBy(
+            { it.id },
+            { parsePackage(it, hashes) }
+        )
 
         fun getTransitiveDependencies(directDependencies: List<CargoMetadata.Dependency>?, scope: String): Scope? {
             if (directDependencies == null) return null
