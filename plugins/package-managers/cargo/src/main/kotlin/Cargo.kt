@@ -64,6 +64,9 @@ private val json = Json {
 
 private val toml = Toml { ignoreUnknownKeys = true }
 
+private const val DEV_KIND_NAME = "dev"
+private const val BUILD_KIND_NAME = "build"
+
 /**
  * The [Cargo](https://doc.rust-lang.org/cargo/) package manager for Rust.
  */
@@ -148,7 +151,7 @@ class Cargo(
 
         val dependencies = node.dependencies.filter {
             // Filter dev and build dependencies, because they are not transitive.
-            it.kind != "dev" && it.kind != "build"
+            it.kind != DEV_KIND_NAME && it.kind != BUILD_KIND_NAME
         }.mapNotNullTo(mutableSetOf()) {
             // TODO: Handle renamed dependencies here, see:
             //       https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#renaming-dependencies-in-cargotoml
@@ -198,8 +201,8 @@ class Cargo(
 
         val scopes = setOfNotNull(
             getTransitiveDependencies(groupedDependencies[""], "dependencies"),
-            getTransitiveDependencies(groupedDependencies["dev"], "dev-dependencies"),
-            getTransitiveDependencies(groupedDependencies["build"], "build-dependencies")
+            getTransitiveDependencies(groupedDependencies[DEV_KIND_NAME], "dev-dependencies"),
+            getTransitiveDependencies(groupedDependencies[BUILD_KIND_NAME], "build-dependencies")
         )
 
         val projectPkg = packages.getValue(projectId).let { it.copy(id = it.id.copy(type = managerName)) }
