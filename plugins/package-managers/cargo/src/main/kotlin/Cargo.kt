@@ -267,7 +267,8 @@ private fun parseSourceArtifact(pkg: CargoMetadata.Package, hashes: Map<String, 
 
     if (source == "registry+https://github.com/rust-lang/crates.io-index") {
         val url = "https://crates.io/api/v1/crates/${pkg.name}/${pkg.version}/download"
-        val hash = Hash.create(hashes[pkg.id].orEmpty())
+        val key = "${pkg.name} ${pkg.version} (${pkg.source})"
+        val hash = Hash.create(hashes[key].orEmpty())
         return RemoteArtifact(url, hash)
     }
 
