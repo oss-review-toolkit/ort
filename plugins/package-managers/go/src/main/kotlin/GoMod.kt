@@ -47,7 +47,6 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.plugins.packagemanagers.go.utils.Graph
-import org.ossreviewtoolkit.plugins.packagemanagers.go.utils.normalizeModuleVersion
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.stashDirectories
@@ -489,3 +488,10 @@ internal fun escapeModuleVersion(version: String): String {
 }
 
 private val upperCaseCharRegex = Regex("[A-Z]")
+
+/**
+ * Return the given [moduleVersion] normalized to a Semver compliant version. The `v` prefix gets stripped and
+ * also any suffix starting with '+', because build metadata is not involved in version comparison according to
+ * https://go.dev/ref/mod#incompatible-versions.
+ */
+private fun normalizeModuleVersion(moduleVersion: String): String = moduleVersion.removePrefix("v").substringBefore("+")
