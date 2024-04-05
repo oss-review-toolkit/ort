@@ -204,18 +204,15 @@ class Cargo(
 
         val projectPkg = packages.getValue(projectId).let { it.copy(id = it.id.copy(type = managerName)) }
 
-        val homepageUrl = projectNode.homepage.orEmpty()
-        val authors = projectNode.authors.mapNotNullTo(mutableSetOf(), ::parseAuthorString)
-
         val project = Project(
             id = projectPkg.id,
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-            authors = authors,
+            authors = projectPkg.authors,
             declaredLicenses = projectPkg.declaredLicenses,
             declaredLicensesProcessed = processDeclaredLicenses(projectPkg.declaredLicenses),
             vcs = projectPkg.vcs,
-            vcsProcessed = processProjectVcs(workingDir, projectPkg.vcs, homepageUrl),
-            homepageUrl = homepageUrl,
+            vcsProcessed = processProjectVcs(workingDir, projectPkg.vcs, projectPkg.homepageUrl),
+            homepageUrl = projectPkg.homepageUrl,
             scopeDependencies = scopes
         )
 
