@@ -93,6 +93,30 @@ internal data class CargoMetadata(
         /** The Package ID of this node. */
         val id: String,
         /** The dependencies of this package, an array of Package IDs. */
-        val dependencies: List<String>
+        val dependencies: List<String>,
+
+        /**
+         * The dependencies of this package. This is an alternative to "dependencies" which contains additional
+         * information. In particular, this handles renamed dependencies.
+         */
+        val deps: List<Dep>
+    )
+
+    @Serializable
+    data class Dep(
+        /** The name of the dependency's library target. If this is a renamed dependency, this is the new name. */
+        val name: String,
+        /** The Package ID of the dependency. */
+        val pkg: String,
+        /** Array of dependency kinds. Added in Cargo 1.40. */
+        val depKinds: List<DepKind>
+    )
+
+    @Serializable
+    data class DepKind(
+        /** The dependency kind. "dev", "build", or null for a normal dependency. */
+        val kind: String? = null,
+        /** The target platform for the dependency. null if not a target dependency. */
+        val target: String? = null
     )
 }
