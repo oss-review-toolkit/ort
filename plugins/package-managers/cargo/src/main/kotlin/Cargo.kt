@@ -201,7 +201,7 @@ class Cargo(
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             authors = projectPkg.authors,
             declaredLicenses = projectPkg.declaredLicenses,
-            declaredLicensesProcessed = processDeclaredLicenses(projectPkg.declaredLicenses),
+            declaredLicensesProcessed = projectPkg.declaredLicensesProcessed,
             vcs = projectPkg.vcs,
             vcsProcessed = processProjectVcs(workingDir, projectPkg.vcs, projectPkg.homepageUrl),
             homepageUrl = projectPkg.homepageUrl,
