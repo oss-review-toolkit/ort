@@ -68,6 +68,9 @@ class RequirementsCommand : OrtCommand(
         /** The determined version does not satisfy ORT's requirements. */
         UNSATISFIED,
 
+        /** The tool is available but the version could not be determined. */
+        UNKNOWN,
+
         /** The tool is not available at all (and thus the version could not be determined). */
         UNAVAILABLE
     }
@@ -104,6 +107,10 @@ class RequirementsCommand : OrtCommand(
 
                 if (VersionStatus.UNSATISFIED in status) {
                     appendLine("\tSome tools were not found in their required versions.")
+                }
+
+                if (VersionStatus.UNKNOWN in status) {
+                    appendLine("\tFor some tools the version could not be determined.")
                 }
 
                 if (VersionStatus.UNAVAILABLE in status) appendLine("\tSome tools were not found at all.")
@@ -246,7 +253,7 @@ class RequirementsCommand : OrtCommand(
                 val status = if (tool.getVersionRequirement().isSatisfiedByAny) {
                     VersionStatus.SATISFIED
                 } else {
-                    VersionStatus.UNSATISFIED
+                    VersionStatus.UNKNOWN
                 }
 
                 Triple(status, WARNING_PREFIX, "Could not determine the version.")
