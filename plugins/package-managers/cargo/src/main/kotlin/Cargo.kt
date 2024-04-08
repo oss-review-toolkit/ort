@@ -200,22 +200,6 @@ class Cargo(
 
 private fun CargoMetadata.Package.isProject() = source == null
 
-private fun parseDeclaredLicenses(pkg: CargoMetadata.Package): Set<String> {
-    val declaredLicenses = pkg.license.orEmpty().split('/')
-        .map { it.trim() }
-        .filterTo(mutableSetOf()) { it.isNotEmpty() }
-
-    // Cargo allows declaring non-SPDX licenses only by referencing a license file. If a license file is specified, add
-    // an unknown declared license to indicate that there is a declared license, but we cannot know which it is at this
-    // point.
-    // See: https://doc.rust-lang.org/cargo/reference/manifest.html#the-license-and-license-file-fields
-    if (pkg.licenseFile.orEmpty().isNotBlank()) {
-        declaredLicenses += SpdxConstants.NOASSERTION
-    }
-
-    return declaredLicenses
-}
-
 private fun parsePackage(pkg: CargoMetadata.Package, hashes: Map<String, String>): Package {
     val declaredLicenses = parseDeclaredLicenses(pkg)
 
@@ -243,6 +227,22 @@ private fun parsePackage(pkg: CargoMetadata.Package, hashes: Map<String, String>
         homepageUrl = pkg.homepage.orEmpty(),
         vcs = VcsHost.parseUrl(pkg.repository.orEmpty())
     )
+}
+
+private fun parseDeclaredLicenses(pkg: CargoMetadata.Package): Set<String> {
+    val declaredLicenses = pkg.license.orEmpty().split('/')
+        .map { it.trim() }
+        .filterTo(mutableSetOf()) { it.isNotEmpty() }
+
+    // Cargo allows declaring non-SPDX licenses only by referencing a license file. If a license file is specified, add
+    // an unknown declared license to indicate that there is a declared license, but we cannot know which it is at this
+    // point.
+    // See: https://doc.rust-lang.org/cargo/reference/manifest.html#the-license-and-license-file-fields
+    if (pkg.licenseFile.orEmpty().isNotBlank()) {
+        declaredLicenses += SpdxConstants.NOASSERTION
+    }
+
+    return declaredLicenses
 }
 
 // Match source dependencies that directly reference git repositories. The specified tag or branch
