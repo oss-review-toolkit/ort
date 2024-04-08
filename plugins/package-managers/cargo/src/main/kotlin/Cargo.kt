@@ -127,16 +127,6 @@ class Cargo(
         }
     }
 
-    /**
-     * Check if a package is a project. All path dependencies inside the analyzer root are treated as project
-     * dependencies.
-     */
-    private fun isProjectDependency(id: String) =
-        PATH_DEPENDENCY_REGEX.matchEntire(id)?.groups?.get(1)?.let { match ->
-            val packageDir = File(match.value)
-            packageDir.startsWith(analysisRoot)
-        } == true
-
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
         val metadataProcess = run(workingDir, "metadata", "--format-version=1")
@@ -156,11 +146,7 @@ class Cargo(
             }
         }
 
-        val hashes = readHashes(resolveLockfile(metadata))
-        val packages = metadata.packages.associateBy(
-            { it.id },
-            { parsePackage(it, hashes) }
-        )
+        val packageById = metadata.packages.associateBy { it.id }
 
         fun Collection<CargoMetadata.Node>.toPackageReferences(): Set<PackageReference> =
             mapNotNullTo(mutableSetOf()) { node ->
@@ -173,9 +159,10 @@ class Cargo(
                     metadata.resolve.nodes.single { it.id == dep.pkg }
                 }
 
-                val linkage = if (isProjectDependency(node.id)) PackageLinkage.PROJECT_STATIC else PackageLinkage.STATIC
-                packages[node.id]?.toReference(
-                    linkage = linkage,
+                val pkg = packageById.getValue(node.id)
+                PackageReference(
+                    id = Identifier("Crate", "", pkg.name, pkg.version),
+                    linkage = if (pkg.isProject()) PackageLinkage.PROJECT_STATIC else PackageLinkage.STATIC,
                     dependencies = dependencyNodes.toPackageReferences()
                 )
             }
@@ -186,7 +173,10 @@ class Cargo(
             depNodesByKind[BUILD_KIND_NAME]?.let { Scope("build-dependencies", it.toPackageReferences()) }
         )
 
-        val projectPkg = packages.getValue(projectId).let { it.copy(id = it.id.copy(type = managerName)) }
+        val hashes = readHashes(resolveLockfile(metadata))
+        val projectPkg = packageById.getValue(projectId).let { cargoPkg ->
+            parsePackage(cargoPkg, hashes).let { it.copy(id = it.id.copy(type = managerName)) }
+        }
 
         val project = Project(
             id = projectPkg.id,
@@ -200,15 +190,15 @@ class Cargo(
             scopeDependencies = scopes
         )
 
-        val nonProjectPackages = packages
-            .filterNot { isProjectDependency(it.key) }
-            .mapTo(mutableSetOf()) { it.value }
+        val nonProjectPackages = packageById.values.mapNotNullTo(mutableSetOf()) { cargoPkg ->
+            cargoPkg.takeUnless { it.isProject() }?.let { parsePackage(cargoPkg, hashes) }
+        }
 
         return listOf(ProjectAnalyzerResult(project, nonProjectPackages))
     }
 }
 
-private val PATH_DEPENDENCY_REGEX = Regex("""^.*\(path\+file://(.*)\)$""")
+private fun CargoMetadata.Package.isProject() = source == null
 
 private fun parseDeclaredLicenses(pkg: CargoMetadata.Package): Set<String> {
     val declaredLicenses = pkg.license.orEmpty().split('/')
