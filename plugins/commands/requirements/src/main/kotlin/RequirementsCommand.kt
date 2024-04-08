@@ -106,14 +106,14 @@ class RequirementsCommand : OrtCommand(
                 appendLine("Not all tools requirements were satisfied:")
 
                 if (VersionStatus.UNSATISFIED in status) {
-                    appendLine("\tSome tools were not found in their required versions.")
+                    appendLine("\t! Some tools were not found in their required versions.")
                 }
 
                 if (VersionStatus.UNKNOWN in status) {
-                    appendLine("\tFor some tools the version could not be determined.")
+                    appendLine("\t! For some tools the version could not be determined.")
                 }
 
-                if (VersionStatus.UNAVAILABLE in status) appendLine("\tSome tools were not found at all.")
+                if (VersionStatus.UNAVAILABLE in status) appendLine("\t! Some tools were not found at all.")
             }
 
             echo(Theme.Default.warning(summary))
