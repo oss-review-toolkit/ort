@@ -49,7 +49,6 @@ import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.unquote
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
-import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxOperator
 
@@ -234,16 +233,14 @@ private fun parseDeclaredLicenses(pkg: CargoMetadata.Package): Set<String> {
     return declaredLicenses
 }
 
-private fun processDeclaredLicenses(licenses: Set<String>): ProcessedDeclaredLicense =
+private fun parsePackage(pkg: CargoMetadata.Package, hashes: Map<String, String>): Package {
+    val declaredLicenses = parseDeclaredLicenses(pkg)
+
     // While the previously used "/" was not explicit about the intended license operator, the community consensus
     // seems to be that an existing "/" should be interpreted as "OR", see e.g. the discussions at
     // https://github.com/rust-lang/cargo/issues/2039
     // https://github.com/rust-lang/cargo/pull/4920
-    DeclaredLicenseProcessor.process(licenses, operator = SpdxOperator.OR)
-
-private fun parsePackage(pkg: CargoMetadata.Package, hashes: Map<String, String>): Package {
-    val declaredLicenses = parseDeclaredLicenses(pkg)
-    val declaredLicensesProcessed = processDeclaredLicenses(declaredLicenses)
+    val declaredLicensesProcessed = DeclaredLicenseProcessor.process(declaredLicenses, operator = SpdxOperator.OR)
 
     return Package(
         id = Identifier(
