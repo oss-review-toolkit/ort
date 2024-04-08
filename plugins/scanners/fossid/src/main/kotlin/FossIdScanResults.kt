@@ -221,7 +221,7 @@ internal fun mapSnippetFindings(
             val ortSnippetLocation = snippetLocation ?: TextLocation(snippet.file, TextLocation.UNKNOWN_LINE)
 
             val license = snippet.artifactLicense?.let { artifactLicense ->
-                mapLicense(artifactLicense, ortSnippetLocation, issues, detectedLicenseMapping)?.license?.normalize()
+                mapLicense(artifactLicense, ortSnippetLocation, issues, detectedLicenseMapping)?.license
             } ?: SpdxConstants.NOASSERTION.toSpdx()
 
             val ortSnippet = OrtSnippet(
