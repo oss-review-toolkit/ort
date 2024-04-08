@@ -31,7 +31,7 @@ internal val toml = Toml { ignoreUnknownKeys = true }
  */
 @Serializable
 internal data class CargoLockfile(
-    val version: Int = 1,
+    val version: Int? = null,
 
     @SerialName("package")
     val packages: List<Package>,
