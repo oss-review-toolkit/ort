@@ -175,7 +175,7 @@ class Cargo(
 
         val hashes = readHashes(resolveLockfile(metadata))
         val projectPkg = packageById.getValue(projectId).let { cargoPkg ->
-            parsePackage(cargoPkg, hashes).let { it.copy(id = it.id.copy(type = managerName)) }
+            cargoPkg.toPackage(hashes).let { it.copy(id = it.id.copy(type = managerName)) }
         }
 
         val project = Project(
@@ -191,7 +191,7 @@ class Cargo(
         )
 
         val nonProjectPackages = packageById.values.mapNotNullTo(mutableSetOf()) { cargoPkg ->
-            cargoPkg.takeUnless { it.isProject() }?.let { parsePackage(cargoPkg, hashes) }
+            cargoPkg.takeUnless { it.isProject() }?.toPackage(hashes)
         }
 
         return listOf(ProjectAnalyzerResult(project, nonProjectPackages))
@@ -200,8 +200,8 @@ class Cargo(
 
 private fun CargoMetadata.Package.isProject() = source == null
 
-private fun parsePackage(pkg: CargoMetadata.Package, hashes: Map<String, String>): Package {
-    val declaredLicenses = parseDeclaredLicenses(pkg)
+private fun CargoMetadata.Package.toPackage(hashes: Map<String, String>): Package {
+    val declaredLicenses = parseDeclaredLicenses()
 
     // While the previously used "/" was not explicit about the intended license operator, the community consensus
     // seems to be that an existing "/" should be interpreted as "OR", see e.g. the discussions at
@@ -215,22 +215,22 @@ private fun parsePackage(pkg: CargoMetadata.Package, hashes: Map<String, String>
             // Note that Rust / Cargo do not support package namespaces, see:
             // https://samsieber.tech/posts/2020/09/registry-structure-influence/
             namespace = "",
-            name = pkg.name,
-            version = pkg.version
+            name = name,
+            version = version
         ),
-        authors = pkg.authors.mapNotNullTo(mutableSetOf()) { parseAuthorString(it) },
+        authors = authors.mapNotNullTo(mutableSetOf()) { parseAuthorString(it) },
         declaredLicenses = declaredLicenses,
         declaredLicensesProcessed = declaredLicensesProcessed,
-        description = pkg.description.orEmpty(),
+        description = description.orEmpty(),
         binaryArtifact = RemoteArtifact.EMPTY,
-        sourceArtifact = parseSourceArtifact(pkg, hashes).orEmpty(),
-        homepageUrl = pkg.homepage.orEmpty(),
-        vcs = VcsHost.parseUrl(pkg.repository.orEmpty())
+        sourceArtifact = parseSourceArtifact(hashes).orEmpty(),
+        homepageUrl = homepage.orEmpty(),
+        vcs = VcsHost.parseUrl(repository.orEmpty())
     )
 }
 
-private fun parseDeclaredLicenses(pkg: CargoMetadata.Package): Set<String> {
-    val declaredLicenses = pkg.license.orEmpty().split('/')
+private fun CargoMetadata.Package.parseDeclaredLicenses(): Set<String> {
+    val declaredLicenses = license.orEmpty().split('/')
         .map { it.trim() }
         .filterTo(mutableSetOf()) { it.isNotEmpty() }
 
@@ -238,7 +238,7 @@ private fun parseDeclaredLicenses(pkg: CargoMetadata.Package): Set<String> {
     // an unknown declared license to indicate that there is a declared license, but we cannot know which it is at this
     // point.
     // See: https://doc.rust-lang.org/cargo/reference/manifest.html#the-license-and-license-file-fields
-    if (pkg.licenseFile.orEmpty().isNotBlank()) {
+    if (licenseFile.orEmpty().isNotBlank()) {
         declaredLicenses += SpdxConstants.NOASSERTION
     }
 
@@ -252,12 +252,12 @@ private fun parseDeclaredLicenses(pkg: CargoMetadata.Package): Set<String> {
 // for the specification for this kind of dependency.
 private val GIT_DEPENDENCY_REGEX = Regex("git\\+(https://.*)\\?(?:rev|tag|branch)=.+#([0-9a-zA-Z]+)")
 
-private fun parseSourceArtifact(pkg: CargoMetadata.Package, hashes: Map<String, String>): RemoteArtifact? {
-    val source = pkg.source ?: return null
+private fun CargoMetadata.Package.parseSourceArtifact(hashes: Map<String, String>): RemoteArtifact? {
+    val source = source ?: return null
 
     if (source == "registry+https://github.com/rust-lang/crates.io-index") {
-        val url = "https://crates.io/api/v1/crates/${pkg.name}/${pkg.version}/download"
-        val key = "${pkg.name} ${pkg.version} (${pkg.source})"
+        val url = "https://crates.io/api/v1/crates/$name/$version/download"
+        val key = "$name $version ($source)"
         val hash = Hash.create(hashes[key].orEmpty())
         return RemoteArtifact(url, hash)
     }
