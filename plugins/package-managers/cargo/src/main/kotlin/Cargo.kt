@@ -101,22 +101,30 @@ class Cargo(
         }
 
         val contents = lockfile.reader().use { toml.decodeFromNativeReader<CargoLockfile>(it) }
+
+        if (contents.version == null) {
+            val checksumMetadata = contents.metadata.mapNotNull { (k, v) ->
+                // Lockfile version 1 uses strings like:
+                // "checksum cfg-if 0.1.9 (registry+https://github.com/rust-lang/crates.io-index)"
+                k.unquote().withoutPrefix("checksum ")?.let { it to v }
+            }.toMap()
+
+            if (checksumMetadata.isNotEmpty()) return checksumMetadata
+        }
+
         return when (contents.version) {
-            3 -> {
+            null, 2, 3 -> {
                 contents.packages.mapNotNull { pkg ->
                     pkg.checksum?.let { checksum ->
+                        // Use the same key format as for version 1, see above.
                         val key = "${pkg.name} ${pkg.version} (${pkg.source})"
                         key to checksum
                     }
-                }
+                }.toMap()
             }
 
-            else -> {
-                contents.metadata.mapNotNull { (k, v) ->
-                    k.unquote().withoutPrefix("checksum ")?.let { it to v }
-                }
-            }
-        }.toMap()
+            else -> throw IllegalArgumentException("Unsupported lockfile version ${contents.version}.")
+        }
     }
 
     /**
