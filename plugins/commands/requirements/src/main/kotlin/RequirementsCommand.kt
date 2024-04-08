@@ -60,7 +60,17 @@ class RequirementsCommand : OrtCommand(
     help = "Check for the command line tools required by ORT."
 ) {
     private enum class RequirementsType { PLUGINS, COMMANDS }
-    private enum class VersionStatus { SATISFIED, UNSATISFIED, UNAVAILABLE }
+
+    private enum class VersionStatus {
+        /** The determined version satisfies ORT's requirements. */
+        SATISFIED,
+
+        /** The determined version does not satisfy ORT's requirements. */
+        UNSATISFIED,
+
+        /** The tool is not available at all (and thus the version could not be determined). */
+        UNAVAILABLE
+    }
 
     private val list by option(
         "--list", "-l",
