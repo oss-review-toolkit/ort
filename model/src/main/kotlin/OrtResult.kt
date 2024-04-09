@@ -504,12 +504,8 @@ data class OrtResult(
             .filterKeys { !omitExcluded || !isExcluded(it) }
 
         return if (omitResolved) {
-            val resolutions = getResolutions().vulnerabilities
-
             allVulnerabilities.mapValues { (_, vulnerabilities) ->
-                vulnerabilities.filter { vulnerability ->
-                    resolutions.none { it.matches(vulnerability) }
-                }
+                vulnerabilities.filter { !isResolved(it) }
             }.filterValues { it.isNotEmpty() }
         } else {
             allVulnerabilities
