@@ -153,7 +153,7 @@ class ScannerCommand : OrtCommand(
         echo("The scan took $duration.")
 
         val resolutionProvider = DefaultResolutionProvider.create(ortResult, resolutionsFile)
-        val issues = scannerRun.getIssues().flatMap { it.value }
+        val issues = scannerRun.getAllIssues().flatMap { it.value }
         SeverityStatsPrinter(terminal, resolutionProvider).stats(issues)
             .print().conclude(ortConfig.severeIssueThreshold, ORT_FAILURE_STATUS_CODE)
     }

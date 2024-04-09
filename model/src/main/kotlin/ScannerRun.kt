@@ -257,7 +257,7 @@ data class ScannerRun(
     fun getFileList(id: Identifier): FileList? = fileListById[id]
 
     @JsonIgnore
-    fun getIssues(): Map<Identifier, Set<Issue>> =
+    fun getAllIssues(): Map<Identifier, Set<Issue>> =
         scanResultsById.mapValues { (_, scanResults) ->
             scanResults.flatMapTo(mutableSetOf()) { it.summary.issues }
         }
