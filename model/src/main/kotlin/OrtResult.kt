@@ -249,7 +249,7 @@ data class OrtResult(
     @JsonIgnore
     fun getIssues(): Map<Identifier, Set<Issue>> {
         val analyzerIssues = analyzer?.result?.getAllIssues().orEmpty()
-        val scannerIssues = scanner?.getIssues().orEmpty()
+        val scannerIssues = scanner?.getAllIssues().orEmpty()
         val advisorIssues = advisor?.results?.getIssues().orEmpty()
 
         val analyzerAndScannerIssues = analyzerIssues.zipWithCollections(scannerIssues)
