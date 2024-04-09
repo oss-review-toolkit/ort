@@ -445,13 +445,7 @@ data class OrtResult(
         }
 
         return if (omitResolved) {
-            val resolutions = getResolutions().ruleViolations
-
-            severeViolations.filter { violation ->
-                resolutions.none { resolution ->
-                    resolution.matches(violation)
-                }
-            }
+            severeViolations.filter { !isResolved(it) }
         } else {
             severeViolations
         }
