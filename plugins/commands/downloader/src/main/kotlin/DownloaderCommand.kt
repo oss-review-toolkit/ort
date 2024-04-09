@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.plugins.commands.downloader
 
 import com.github.ajalt.clikt.core.ProgramResult
+import com.github.ajalt.clikt.core.terminal
 import com.github.ajalt.clikt.parameters.groups.default
 import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
 import com.github.ajalt.clikt.parameters.groups.required
@@ -34,14 +35,27 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.options.switch
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
+import com.github.ajalt.mordant.animation.coroutines.animateInCoroutine
+import com.github.ajalt.mordant.animation.progress.MultiProgressBarAnimation
+import com.github.ajalt.mordant.animation.progress.addTask
+import com.github.ajalt.mordant.animation.progress.advance
+import com.github.ajalt.mordant.rendering.TextAlign
+import com.github.ajalt.mordant.widgets.progress.percentage
+import com.github.ajalt.mordant.widgets.progress.progressBar
+import com.github.ajalt.mordant.widgets.progress.progressBarContextLayout
+import com.github.ajalt.mordant.widgets.progress.progressBarLayout
+import com.github.ajalt.mordant.widgets.progress.text
+import com.github.ajalt.mordant.widgets.progress.timeRemaining
 
 import java.io.File
 
 import kotlin.time.measureTime
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
@@ -232,8 +246,10 @@ class DownloaderCommand : OrtCommand(
             throw ProgramResult(0)
         }
 
+        val verb = if (dryRun) "Verifying" else "Downloading"
+
         echo(
-            "Downloading ${packageTypes.joinToString(" and ") { "${it}s" }} from ORT result file at " +
+            "$verb ${packageTypes.joinToString(" and ") { "${it}s" }} from ORT result file at " +
                 "'${ortFile.canonicalPath}'..."
         )
 
@@ -292,7 +308,7 @@ class DownloaderCommand : OrtCommand(
             }
         }
 
-        echo("Downloading ${packages.size} project(s) / package(s) in total.")
+        echo("$verb ${packages.size} project(s) / package(s) in total.")
 
         val packageDownloadDirs = packages.associateWith { outputDir.resolve(it.id.toPath()) }
 
@@ -314,21 +330,42 @@ class DownloaderCommand : OrtCommand(
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private suspend fun downloadAllPackages(
         packageDownloadDirs: Map<Package, File>,
-        failureMessages: MutableList<String>
+        failureMessages: MutableList<String>,
+        maxParallelDownloads: Int = 8
     ) {
-        withContext(Dispatchers.IO) {
+        val parallelDownloads = packageDownloadDirs.size.coerceAtMost(maxParallelDownloads)
+
+        val overallLayout = progressBarLayout {
+            text(if (dryRun) "Verifying" else "Downloading", align = TextAlign.LEFT)
+            progressBar()
+            percentage()
+            timeRemaining()
+        }
+
+        val taskLayout = progressBarContextLayout<Package> {
+            text(fps = animationFps, align = TextAlign.LEFT) { "> Package '${context.id.toCoordinates()}'..." }
+            percentage()
+        }
+
+        val progress = MultiProgressBarAnimation(terminal).animateInCoroutine()
+        val overall = progress.addTask(overallLayout, total = packageDownloadDirs.size.toLong())
+        val tasks = List(parallelDownloads) { progress.addTask(taskLayout, context = Package.EMPTY, total = 1) }
+
+        withContext(Dispatchers.IO.limitedParallelism(parallelDownloads)) {
+            launch { progress.execute() }
+
             packageDownloadDirs.entries.mapIndexed { index, (pkg, dir) ->
                 async {
-                    val progress = "${index + 1} of ${packageDownloadDirs.size}"
-
-                    val verb = if (dryRun) "Verifying" else "Starting"
-                    echo("$verb download for '${pkg.id.toCoordinates()}' ($progress).")
-
-                    downloadPackage(pkg, dir, failureMessages).also {
-                        if (!dryRun) echo("Finished download for ${pkg.id.toCoordinates()} ($progress).")
+                    with(tasks[index % parallelDownloads]) {
+                        update { context = pkg }
+                        downloadPackage(pkg, dir, failureMessages)
+                        advance()
                     }
+
+                    overall.advance()
                 }
             }.awaitAll()
         }
