@@ -281,9 +281,7 @@ data class OrtResult(
         getIssues()
             .mapNotNull { (id, issues) -> issues.takeUnless { isExcluded(id) } }
             .flatten()
-            .filter { issue ->
-                issue.severity >= minSeverity && getResolutions().issues.none { it.matches(issue) }
-            }
+            .filter { it.severity >= minSeverity && !isResolved(it) }
 
     /**
      * Return a list of [PackageConfiguration]s for the given [packageId] and [provenance].
