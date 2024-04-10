@@ -293,7 +293,7 @@ data class OrtResult(
      */
     @JsonIgnore
     fun getOpenIssues(minSeverity: Severity = Severity.WARNING) =
-        getIssues(omitExcluded = true, omitResolved = true, minSeverity = minSeverity).values.flatten()
+        getIssues(omitExcluded = true, omitResolved = true, minSeverity = minSeverity).values.flatten().distinct()
 
     /**
      * Return a list of [PackageConfiguration]s for the given [packageId] and [provenance].
