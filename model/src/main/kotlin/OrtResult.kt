@@ -252,8 +252,7 @@ data class OrtResult(
         val scannerIssues = scanner?.getAllIssues().orEmpty()
         val advisorIssues = advisor?.results?.getIssues().orEmpty()
 
-        val analyzerAndScannerIssues = analyzerIssues.zipWithCollections(scannerIssues)
-        return analyzerAndScannerIssues.zipWithCollections(advisorIssues)
+        return analyzerIssues.zipWithCollections(scannerIssues).zipWithCollections(advisorIssues)
     }
 
     /**
