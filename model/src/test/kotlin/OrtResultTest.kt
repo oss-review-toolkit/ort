@@ -300,7 +300,7 @@ class OrtResultTest : WordSpec({
                 )
             )
 
-            ortResult.getRuleViolations(omitResolved = false, minSeverity = null).map { it.rule }
+            ortResult.getRuleViolations(omitResolved = false, minSeverity = Severity.entries.min()).map { it.rule }
                 .shouldContainExactly("rule id")
         }
 
