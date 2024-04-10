@@ -448,11 +448,14 @@ data class OrtResult(
      * [omitResolved] and remove violations below the [minSeverity].
      */
     @JsonIgnore
-    fun getRuleViolations(omitResolved: Boolean = false, minSeverity: Severity? = null): List<RuleViolation> {
+    fun getRuleViolations(
+        omitResolved: Boolean = false,
+        minSeverity: Severity = Severity.entries.min()
+    ): List<RuleViolation> {
         val allViolations = evaluator?.violations.orEmpty()
 
         val severeViolations = when (minSeverity) {
-            null -> allViolations
+            Severity.entries.min() -> allViolations
             else -> allViolations.filter { it.severity >= minSeverity }
         }
 
