@@ -244,15 +244,18 @@ data class OrtResult(
     }
 
     /**
-     * Return a map of all de-duplicated [Issue]s associated by [Identifier].
+     * Return a map of all de-duplicated [Issue]s associated by [Identifier]. If [omitExcluded] is set to true, excluded
+     * issues are omitted from the result.
      */
     @JsonIgnore
-    fun getIssues(): Map<Identifier, Set<Issue>> {
+    fun getIssues(omitExcluded: Boolean = false): Map<Identifier, Set<Issue>> {
         val analyzerIssues = analyzer?.result?.getAllIssues().orEmpty()
         val scannerIssues = scanner?.getAllIssues().orEmpty()
         val advisorIssues = advisor?.results?.getIssues().orEmpty()
 
-        return analyzerIssues.zipWithCollections(scannerIssues).zipWithCollections(advisorIssues)
+        val allIssues = analyzerIssues.zipWithCollections(scannerIssues).zipWithCollections(advisorIssues)
+
+        return allIssues.filterKeys { id -> !omitExcluded || !isExcluded(id) }
     }
 
     /**
@@ -277,8 +280,8 @@ data class OrtResult(
      */
     @JsonIgnore
     fun getOpenIssues(minSeverity: Severity = Severity.WARNING) =
-        getIssues()
-            .mapNotNull { (id, issues) -> issues.takeUnless { isExcluded(id) } }
+        getIssues(omitExcluded = true)
+            .values
             .flatten()
             .filter { it.severity >= minSeverity && !isResolved(it) }
 
