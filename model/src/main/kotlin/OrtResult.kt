@@ -246,21 +246,29 @@ data class OrtResult(
     /**
      * Return a map of all de-duplicated [Issue]s associated by [Identifier]. If [omitExcluded] is set to true, excluded
      * issues are omitted from the result. If [omitResolved] is set to true, resolved issues are omitted from the
-     * result.
+     * result. Issues with [severity][Issue.severity] below [minSeverity] are omitted from the result.
      */
     @JsonIgnore
-    fun getIssues(omitExcluded: Boolean = false, omitResolved: Boolean = false): Map<Identifier, Set<Issue>> {
+    fun getIssues(
+        omitExcluded: Boolean = false,
+        omitResolved: Boolean = false,
+        minSeverity: Severity = Severity.entries.min()
+    ): Map<Identifier, Set<Issue>> {
         val analyzerIssues = analyzer?.result?.getAllIssues().orEmpty()
         val scannerIssues = scanner?.getAllIssues().orEmpty()
         val advisorIssues = advisor?.results?.getIssues().orEmpty()
 
         val allIssues = analyzerIssues.zipWithCollections(scannerIssues).zipWithCollections(advisorIssues)
 
-        return allIssues.mapValues { (_, issues) ->
-            issues.filterTo(mutableSetOf()) { !omitResolved || !isResolved(it) }
-        }.filter { (id, issues) ->
-            issues.isNotEmpty() && (!omitExcluded || !isExcluded(id))
-        }
+        return allIssues.mapNotNull { (id, issues) ->
+            if (omitExcluded && isExcluded(id)) return@mapNotNull null
+
+            val filteredIssues = issues.filterTo(mutableSetOf()) {
+                (!omitResolved || !isResolved(it)) && it.severity >= minSeverity
+            }
+
+            filteredIssues.takeUnless { it.isEmpty() }?.let { id to it }
+        }.toMap()
     }
 
     /**
@@ -285,10 +293,7 @@ data class OrtResult(
      */
     @JsonIgnore
     fun getOpenIssues(minSeverity: Severity = Severity.WARNING) =
-        getIssues(omitExcluded = true, omitResolved = true)
-            .values
-            .flatten()
-            .filter { it.severity >= minSeverity }
+        getIssues(omitExcluded = true, omitResolved = true, minSeverity = minSeverity).values.flatten()
 
     /**
      * Return a list of [PackageConfiguration]s for the given [packageId] and [provenance].
