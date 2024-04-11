@@ -270,7 +270,7 @@ class OrtResultTest : WordSpec({
     }
 
     "getRuleViolations()" should {
-        "return unfiltered rule violations if omitResolved is false" {
+        "return unfiltered rule violations if omitResolved is false and minSeverity is HINT" {
             val ortResult = OrtResult.EMPTY.copy(
                 repository = Repository.EMPTY.copy(
                     config = RepositoryConfiguration(
@@ -304,7 +304,7 @@ class OrtResultTest : WordSpec({
                 .shouldContainExactly("rule id")
         }
 
-        "drop resolved rule violations if omitResolved is true" {
+        "drop violations which are resolved or below minSeverity if omitResolved is true and minSeverity is WARNING" {
             val ortResult = OrtResult.EMPTY.copy(
                 evaluator = EvaluatorRun.EMPTY.copy(
                     violations = listOf(
