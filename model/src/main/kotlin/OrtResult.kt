@@ -451,20 +451,10 @@ data class OrtResult(
     fun getRuleViolations(
         omitResolved: Boolean = false,
         minSeverity: Severity = Severity.entries.min()
-    ): List<RuleViolation> {
-        val allViolations = evaluator?.violations.orEmpty()
-
-        val severeViolations = when (minSeverity) {
-            Severity.entries.min() -> allViolations
-            else -> allViolations.filter { it.severity >= minSeverity }
+    ): List<RuleViolation> =
+        evaluator?.violations.orEmpty().filter {
+            (!omitResolved || !isResolved(it)) && it.severity >= minSeverity
         }
-
-        return if (omitResolved) {
-            severeViolations.filter { !isResolved(it) }
-        } else {
-            severeViolations
-        }
-    }
 
     /**
      * Return the list of [ScanResult]s for the given [id].
