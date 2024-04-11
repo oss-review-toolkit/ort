@@ -44,7 +44,7 @@ import org.ossreviewtoolkit.model.config.RuleViolationResolutionReason
 import org.ossreviewtoolkit.utils.test.readOrtResult
 
 class OrtResultTest : WordSpec({
-    "collectDependencies" should {
+    "collectDependencies()" should {
         "be able to get all direct dependencies of a package" {
             val ortResult = readOrtResult("src/test/assets/sbt-multi-project-example-expected-output.yml")
             val id = Identifier("Maven:com.typesafe.akka:akka-stream_2.12:2.5.6")
@@ -59,7 +59,7 @@ class OrtResultTest : WordSpec({
         }
     }
 
-    "collectProjectsAndPackages" should {
+    "collectProjectsAndPackages()" should {
         "be able to get all ids except for ones for sub-projects" {
             val ortResult = readOrtResult("src/test/assets/gradle-all-dependencies-expected-result.yml")
             val ids = ortResult.getProjectsAndPackages()
@@ -72,7 +72,7 @@ class OrtResultTest : WordSpec({
         }
     }
 
-    "getDefinitionFilePathRelativeToAnalyzerRoot" should {
+    "getDefinitionFilePathRelativeToAnalyzerRoot()" should {
         "use the correct vcs" {
             val vcs = VcsInfo(type = VcsType.GIT, url = "https://example.com/git", revision = "")
             val nestedVcs1 = VcsInfo(type = VcsType.GIT, url = "https://example.com/git1", revision = "")
@@ -143,7 +143,7 @@ class OrtResultTest : WordSpec({
         }
     }
 
-    "getOpenIssues" should {
+    "getOpenIssues()" should {
         "omit resolved issues" {
             val ortResult = OrtResult.EMPTY.copy(
                 analyzer = AnalyzerRun.EMPTY.copy(
@@ -269,7 +269,7 @@ class OrtResultTest : WordSpec({
         }
     }
 
-    "getRuleViolations" should {
+    "getRuleViolations()" should {
         "return unfiltered rule violations if omitResolved is false" {
             val ortResult = OrtResult.EMPTY.copy(
                 repository = Repository.EMPTY.copy(
