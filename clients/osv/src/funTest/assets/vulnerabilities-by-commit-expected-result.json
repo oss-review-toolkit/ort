@@ -222,7 +222,8 @@
         "published": "2022-06-23T17:15:14Z",
         "related": [
             "ALSA-2022:8384",
-            "RLSA-2022:8384"
+            "RLSA-2022:8384",
+            "USN-5524-1"
         ],
         "details": "An integer overflow in the component hb-ot-shape-fallback.cc of Harfbuzz v4.3.0 allows attackers to cause a Denial of Service (DoS) via unspecified vectors.",
         "severity": [
@@ -728,7 +729,8 @@
             "ALSA-2023:4158",
             "ALSA-2023:4159",
             "ALSA-2023:4175",
-            "ALSA-2023:4177"
+            "ALSA-2023:4177",
+            "USN-6263-1"
         ],
         "details": "hb-ot-layout-gsubgpos.hh in HarfBuzz through 6.0.0 allows attackers to trigger O(n^2) growth via consecutive marks during the process of looking back for base glyphs when attaching marks.",
         "severity": [
