@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 
 class NpmSupportTest : WordSpec({
-    "expandNpmShortcutUrl" should {
+    "expandNpmShortcutUrl()" should {
         "do nothing for empty URLs" {
             expandNpmShortcutUrl("") shouldBe ""
         }
@@ -80,7 +80,7 @@ class NpmSupportTest : WordSpec({
         }
     }
 
-    "fixNpmDownloadUrl" should {
+    "fixNpmDownloadUrl()" should {
         "replace HTTP with HTTPS for the NPM registry only" {
             fixNpmDownloadUrl("http://registry.npmjs.org/babel-cli/-/babel-cli-6.26.0.tgz") shouldBe
                 "https://registry.npmjs.org/babel-cli/-/babel-cli-6.26.0.tgz"
@@ -93,7 +93,7 @@ class NpmSupportTest : WordSpec({
         }
     }
 
-    "parseNpmAuthors" should {
+    "parseNpmAuthors()" should {
         "get authors from a text node" {
             val node = ObjectMapper().run {
                 createObjectNode().apply {
@@ -118,7 +118,7 @@ class NpmSupportTest : WordSpec({
         }
     }
 
-    "parseNpmLicenses" should {
+    "parseNpmLicenses()" should {
         "get a singular 'license' from a text node" {
             val node = ObjectMapper().run {
                 createObjectNode().apply {
@@ -191,7 +191,7 @@ class NpmSupportTest : WordSpec({
         }
     }
 
-    "parseNpmVcsInfo" should {
+    "parseNpmVcsInfo()" should {
         "get VCS information from an object node" {
             @Suppress("Wrapping")
             val node = ObjectMapper().run {
@@ -214,7 +214,7 @@ class NpmSupportTest : WordSpec({
         }
     }
 
-    "splitNpmNamespaceAndName" should {
+    "splitNpmNamespaceAndName()" should {
         "return the namespace and name separately" {
             splitNpmNamespaceAndName("@babel/core") shouldBe Pair("@babel", "core")
             splitNpmNamespaceAndName("check-if-windows") shouldBe Pair("", "check-if-windows")
