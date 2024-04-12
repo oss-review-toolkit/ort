@@ -73,3 +73,5 @@ val EMPTY_JSON_NODE: JsonNode = MissingNode.getInstance()
 inline fun <reified T> String.fromYaml(): T = yamlMapper.readValue(this)
 
 fun Any?.toYaml(): String = yamlMapper.writeValueAsString(this)
+
+fun String.readJsonTree(): JsonNode = jsonMapper.readTree(this)
