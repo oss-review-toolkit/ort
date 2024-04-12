@@ -28,6 +28,7 @@ import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.readJsonTree
 
 class NpmSupportTest : WordSpec({
     "expandNpmShortcutUrl()" should {
@@ -192,17 +193,16 @@ class NpmSupportTest : WordSpec({
 
     "parseNpmVcsInfo()" should {
         "get VCS information from an object node" {
-            @Suppress("Wrapping")
-            val node = ObjectMapper().run {
-                createObjectNode().apply {
-                    replace("gitHead", TextNode("bar"))
-                    replace("repository", createObjectNode().apply {
-                        replace("type", TextNode("Git"))
-                        replace("url", TextNode("https://example.com/"))
-                        replace("directory", TextNode("foo"))
-                    })
+            val node = """
+            {    
+                "gitHead": "bar",
+                "repository": { 
+                    "type": "Git", 
+                    "url": "https://example.com/",
+                    "directory": "foo"
                 }
             }
+            """.readJsonTree()
 
             parseNpmVcsInfo(node) shouldBe VcsInfo(
                 VcsType.GIT,
