@@ -103,7 +103,7 @@ Add the following lines to the *.ort.yml* file.
 To **choose** this snippet:
 [source,yaml]
 --
-package_snippet_choices:
+snippet_choices:
 - provenance:
     url: "${scanResult.provenance.vcsInfo.url}"
   choices:
@@ -120,7 +120,7 @@ package_snippet_choices:
 Or to mark this location has having ONLY **false positives snippets**:
 [source,yaml]
 --
-package_snippet_choices:
+snippet_choices:
 - provenance:
     url: "${scanResult.provenance.vcsInfo.url}"
   choices:
