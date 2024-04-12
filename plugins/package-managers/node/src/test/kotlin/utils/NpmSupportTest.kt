@@ -194,13 +194,13 @@ class NpmSupportTest : WordSpec({
     "parseNpmVcsInfo()" should {
         "get VCS information from an object node containing a repository node which is an object" {
             val node = """
-            {    
-                "gitHead": "bar",
-                "repository": { 
-                    "type": "Git", 
-                    "url": "https://example.com/",
-                    "directory": "foo"
-                }
+            {
+              "gitHead": "bar",
+              "repository": {
+                "type": "Git",
+                "url": "https://example.com/",
+                "directory": "foo"
+              }
             }
             """.readJsonTree()
 
@@ -214,9 +214,9 @@ class NpmSupportTest : WordSpec({
 
         "get VCS information from an object node containing a repository node which is textual" {
             val node = """
-            {    
-                "gitHead": "bar",
-                "repository": "git+ssh://example.com/a/b.git" 
+            {
+              "gitHead": "bar",
+              "repository": "git+ssh://example.com/a/b.git"
             }
             """.readJsonTree()
 
