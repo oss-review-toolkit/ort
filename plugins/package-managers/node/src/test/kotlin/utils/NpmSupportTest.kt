@@ -26,7 +26,6 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 
@@ -196,7 +195,7 @@ class NpmSupportTest : WordSpec({
             @Suppress("Wrapping")
             val node = ObjectMapper().run {
                 createObjectNode().apply {
-                    replace("gitHead", TextNode(HashAlgorithm.SHA1GIT.emptyValue))
+                    replace("gitHead", TextNode("bar"))
                     replace("repository", createObjectNode().apply {
                         replace("type", TextNode("Git"))
                         replace("url", TextNode("https://example.com/"))
@@ -208,7 +207,7 @@ class NpmSupportTest : WordSpec({
             parseNpmVcsInfo(node) shouldBe VcsInfo(
                 VcsType.GIT,
                 "https://example.com/",
-                HashAlgorithm.SHA1GIT.emptyValue,
+                "bar",
                 "foo"
             )
         }
