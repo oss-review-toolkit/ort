@@ -19,9 +19,6 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.node.utils
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.node.TextNode
-
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.shouldBe
@@ -95,24 +92,23 @@ class NpmSupportTest : WordSpec({
 
     "parseNpmAuthors()" should {
         "get authors from a text node" {
-            val node = ObjectMapper().run {
-                createObjectNode().apply {
-                    replace("author", TextNode("Jane Doe <jane.doe@example.com>"))
-                }
+            val node = """
+            {
+              "author": "Jane Doe <jane.doe@example.com>"
             }
+            """.readJsonTree()
 
             parseNpmAuthors(node) shouldBe setOf("Jane Doe")
         }
 
         "get authors from an object node" {
-            @Suppress("Wrapping")
-            val node = ObjectMapper().run {
-                createObjectNode().apply {
-                    replace("author", createObjectNode().apply {
-                        replace("name", TextNode("John Doe"))
-                    })
-                }
+            val node = """
+            {
+              "author": {
+                "name": "John Doe"
+              }
             }
+            """.readJsonTree()
 
             parseNpmAuthors(node) shouldBe setOf("John Doe")
         }
@@ -120,72 +116,69 @@ class NpmSupportTest : WordSpec({
 
     "parseNpmLicenses()" should {
         "get a singular 'license' from a text node" {
-            val node = ObjectMapper().run {
-                createObjectNode().apply {
-                    replace("license", TextNode("Apache-2.0"))
-                }
+            val node = """
+            {
+              "license": "Apache-2.0"
             }
+            """.trimIndent().readJsonTree()
 
             parseNpmLicenses(node) shouldBe setOf("Apache-2.0")
         }
 
         "get a singular 'license' from an array node" {
-            @Suppress("Wrapping")
-            val node = ObjectMapper().run {
-                createObjectNode().apply {
-                    replace("license", createArrayNode().apply {
-                        add("Apache-2.0")
-                    })
-                }
+            val node = """
+            {
+              "license": [
+                "Apache-2.0"
+              ]
             }
+            """.readJsonTree()
 
             parseNpmLicenses(node) shouldBe setOf("Apache-2.0")
         }
 
         "get a singular 'license' from an object node" {
-            @Suppress("Wrapping")
-            val node = ObjectMapper().run {
-                createObjectNode().apply {
-                    replace("license", createObjectNode().apply {
-                        replace("type", TextNode("Apache-2.0"))
-                    })
-                }
+            val node = """
+            {
+              "license": {
+                "type": "Apache-2.0"
+              }
             }
+            """.readJsonTree()
 
             parseNpmLicenses(node) shouldBe setOf("Apache-2.0")
         }
 
         "get plural 'licenses' from an object node" {
-            @Suppress("Wrapping")
-            val node = ObjectMapper().run {
-                createObjectNode().apply {
-                    replace("licenses", createArrayNode().apply {
-                        add(createObjectNode().apply {
-                            replace("type", TextNode("Apache-2.0"))
-                        })
-                    })
+            val node = """
+            {
+              "licenses": [
+                {
+                  "type": "Apache-2.0"
                 }
+              ]
             }
+            """.readJsonTree()
 
             parseNpmLicenses(node) shouldBe setOf("Apache-2.0")
         }
 
         "map 'UNLICENSED' to 'NONE'" {
-            val node = ObjectMapper().run {
-                createObjectNode().apply {
-                    replace("license", TextNode("UNLICENSED"))
-                }
-            }
+            val node = """
+            {
+              "license": "UNLICENSED"
+            }    
+            """.trimIndent().readJsonTree()
 
             parseNpmLicenses(node) shouldBe setOf("NONE")
         }
 
         "map 'SEE LICENSE IN ...' to 'NOASSERTION'" {
-            val node = ObjectMapper().run {
-                createObjectNode().apply {
-                    replace("license", TextNode("SEE LICENSE IN LICENSE"))
-                }
+            val node = """
+            {
+              "license": "SEE LICENSE IN ..."
             }
+            """.trimIndent().readJsonTree()
 
             parseNpmLicenses(node) shouldBe setOf("NOASSERTION")
         }
