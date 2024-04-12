@@ -74,7 +74,7 @@ Now an operator decided that the snippet `pkg:github/RS2007/dotfiles@0384a21038f
 To do so, the user defines in the repository's `.ort.yml` the following **snippet choice**:
 
 ```yaml
-package_snippet_choices:
+snippet_choices:
 - provenance:
     url: "https://github.com/vdurmont/semver4j.git"
   choices:
@@ -133,7 +133,7 @@ How to deal with a source location that has *only* false positives snippets?
 The solution is to use the `NO_RELEVANT_FINDING` reason in the `.ort.yml` file:
 
 ```yaml
-package_snippet_choices:
+snippet_choices:
 - provenance:
     url: "https://github.com/vdurmont/semver4j.git"
   choices:
