@@ -18,7 +18,7 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
     - name: Build all classes
-      uses: gradle/gradle-build-action@v3
+      uses: gradle/actions/setup-gradle@v3
       with:
         gradle-home-cache-cleanup: true
         arguments: --scan classes -x :plugins:reporters:web-app-template:yarnBuild
@@ -29,7 +29,7 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
     - name: Build the web-app-reporter
-      uses: gradle/gradle-build-action@v3
+      uses: gradle/actions/setup-gradle@v3
       with:
         gradle-home-cache-cleanup: true
         arguments: --scan :plugins:reporters:web-app-template:yarnBuild
@@ -47,7 +47,7 @@ jobs:
         languages: java
         tools: latest
     - name: Build all classes
-      uses: gradle/gradle-build-action@v3
+      uses: gradle/actions/setup-gradle@v3
       with:
         gradle-home-cache-cleanup: true
         arguments: -Dorg.gradle.jvmargs=-Xmx1g classes -x :plugins:reporters:web-app-template:yarnBuild
@@ -60,7 +60,7 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
     - name: Run unit tests
-      uses: gradle/gradle-build-action@v3
+      uses: gradle/actions/setup-gradle@v3
       with:
         gradle-home-cache-cleanup: true
         arguments: --scan test jacocoTestReport -x :plugins:reporters:web-app-template:yarnBuild
@@ -105,7 +105,7 @@ jobs:
           curl -Os https://raw.githubusercontent.com/nexB/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt
           pip install --no-cache-dir --constraint requirements.txt scancode-toolkit==$SCANCODE_VERSION
     - name: Run functional tests that do not require external tools
-      uses: gradle/gradle-build-action@v3
+      uses: gradle/actions/setup-gradle@v3
       with:
         gradle-home-cache-cleanup: true
         arguments: --scan -Ptests.exclude=org.ossreviewtoolkit.plugins.packagemanagers.* funTest jacocoFunTestReport
@@ -125,7 +125,7 @@ jobs:
       with:
         submodules: recursive
     - name: Run functional tests that do require external tools
-      uses: gradle/gradle-build-action@v3
+      uses: gradle/actions/setup-gradle@v3
       with:
         gradle-home-cache-cleanup: true
         arguments: --scan -Ptests.include=org.ossreviewtoolkit.plugins.packagemanagers.* funTest jacocoFunTestReport
