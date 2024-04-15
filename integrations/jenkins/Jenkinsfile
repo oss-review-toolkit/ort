@@ -284,6 +284,18 @@ pipeline {
             description: 'Run the reporter tool.',
             defaultValue: true
         )
+
+        string(
+            name: 'REPORT_FORMATS',
+            description: 'A comma-separated list of report formats to generate.',
+            defaultValue: 'CycloneDX,SpdxDocument,PdfTemplate,PlainTextTemplate,StaticHTML,WebApp'
+        )
+
+        string(
+            name: 'REPORT_FORMATS_OPTIONS',
+            description: 'A comma-separated list of report-format-specific options, e.g. "PlainTextTemplate=template.id=NOTICE_SUMMARY".',
+            defaultValue: ''
+        )
     }
 
     stages {
@@ -894,10 +906,19 @@ pipeline {
                     ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
                 fi
 
+                if [ -n "$REPORT_FORMATS" ]; then
+                    REPORT_FORMATS_OPTION="-f $REPORT_FORMATS"
+                fi
+
+                if [ -n "$REPORT_FORMATS_OPTIONS" ]; then
+                    REPORT_FORMATS_OPTIONS_OPTION="-O $REPORT_FORMATS_OPTIONS"
+                fi
+
                 /opt/ort/bin/ort $ORT_OPTIONS report \
-                    -f CycloneDX,SpdxDocument,PdfTemplate,PlainTextTemplate,StaticHTML,WebApp \
                     -i out/results/current-result.yml \
-                    -o out/results/reporter
+                    -o out/results/reporter \
+                    $REPORT_FORMATS_OPTION \
+                    $REPORT_FORMATS_OPTIONS_OPTION
                 '''.stripIndent().trim()
             }
 
