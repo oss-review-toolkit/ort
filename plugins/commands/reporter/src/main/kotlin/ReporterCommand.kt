@@ -103,7 +103,7 @@ class ReporterCommand : OrtCommand(
 
     private val reportFormats by option(
         "--report-formats", "-f",
-        help = "The comma-separated reports to generate, any of ${Reporter.ALL.keys}."
+        help = "A comma-separated list of report formats to generate, any of ${Reporter.ALL.keys}."
     ).convert { name ->
         Reporter.ALL[name] ?: throw BadParameterValue("Report formats must be one or more of ${Reporter.ALL.keys}.")
     }.split(",").required().outputGroup()
