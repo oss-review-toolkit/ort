@@ -25,6 +25,8 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.apache.logging.log4j.kotlin.logger
+
 import org.ossreviewtoolkit.helper.utils.minimize
 import org.ossreviewtoolkit.helper.utils.readOrtResult
 import org.ossreviewtoolkit.helper.utils.replaceScopeExcludes
@@ -78,6 +80,8 @@ private fun OrtResult.generateScopeExcludes(): List<ScopeExclude> {
     val projectScopes = getProjects().flatMap { project ->
         dependencyNavigator.scopeNames(project)
     }
+
+    logger.info { "Found the following scopes: ${projectScopes.joinToString()}" }
 
     return getProjects().flatMap { project ->
         getScopeExcludesForPackageManager(project.id.type)
