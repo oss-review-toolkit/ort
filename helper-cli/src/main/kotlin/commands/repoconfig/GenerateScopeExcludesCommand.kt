@@ -53,7 +53,7 @@ internal class GenerateScopeExcludesCommand : CliktCommand(
         "--repository-configuration-file",
         help = "The repository configuration file to write the generated scope excludes to."
     ).convert { it.expandTilde() }
-        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
+        .file(mustExist = false, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
         .convert { it.absoluteFile.normalize() }
         .required()
 
@@ -61,8 +61,13 @@ internal class GenerateScopeExcludesCommand : CliktCommand(
         val ortResult = readOrtResult(ortFile)
         val scopeExcludes = ortResult.generateScopeExcludes()
 
-        repositoryConfigurationFile
-            .readValue<RepositoryConfiguration>()
+        val repositoryConfiguration = if (repositoryConfigurationFile.isFile) {
+            repositoryConfigurationFile.readValue<RepositoryConfiguration>()
+        } else {
+            RepositoryConfiguration()
+        }
+
+        repositoryConfiguration
             .replaceScopeExcludes(scopeExcludes)
             .sortScopeExcludes()
             .write(repositoryConfigurationFile)
