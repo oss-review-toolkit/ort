@@ -79,7 +79,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
  * Return an approximated minimal sublist of [this] so that the result still matches the exact same entries of the given
  * [projectScopes].
  */
-internal fun List<ScopeExclude>.minimize(projectScopes: List<String>): List<ScopeExclude> {
+internal fun List<ScopeExclude>.minimize(projectScopes: Set<String>): List<ScopeExclude> {
     val scopeExcludes = associateWith { scopeExclude ->
         projectScopes.filter { scopeExclude.matches(it) }.toSet()
     }
