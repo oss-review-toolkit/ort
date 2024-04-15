@@ -10,6 +10,8 @@ on:
 
 env:
   GRADLE_OPTS: -Dorg.gradle.daemon=false -Dkotest.assertions.multi-line-diff=unified
+  REGISTRY: ghcr.io
+  TEST_IMAGE_TAG: ort:test
 
 jobs:
   build:
@@ -116,19 +118,45 @@ jobs:
         flags: funTest-non-docker
   funTest-docker:
     runs-on: ubuntu-22.04
-    container:
-      image: ghcr.io/oss-review-toolkit/ort:snapshot
-      options: --user 1001
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
       with:
         submodules: recursive
-    - name: Run functional tests that do require external tools
+    - name: Free Disk Space
+      uses: ./.github/actions/free-disk-space
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    - name: Build ORT Docker Image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        load: true
+        tags: ${{ env.TEST_IMAGE_TAG }}
+        target: all-tools
+        cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ github.repository_owner }}/ort:cache
+    - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v3
       with:
         gradle-home-cache-cleanup: true
-        arguments: --scan -Ptests.include=org.ossreviewtoolkit.plugins.packagemanagers.* funTest jacocoFunTestReport
+    - name: Run functional tests that do require external tools
+      run: |
+        # Change the ownership of the Gradle user home and the workspace to the user in the Docker container.
+        sudo chown -R 1000:1000 /home/runner/.gradle
+        sudo chown -R 1000:1000 ${{ github.workspace }}
+
+        # Run the functional tests in the Docker container.
+        docker run \
+          -v ${{ github.workspace }}:/workspace \
+          -v /home/runner/.gradle:/home/ort/.gradle \
+          -w /workspace \
+          --entrypoint=/bin/sh \
+          ${{ env.TEST_IMAGE_TAG }} \
+          -c "GRADLE_USER_HOME=/home/ort/.gradle ./gradlew --scan -Ptests.include=org.ossreviewtoolkit.plugins.packagemanagers.* funTest jacocoFunTestReport"
+
+        # Change the ownership of the Gradle user home and the workspace back to the user in the GitHub Actions runner.
+        sudo chown -R 1001:121 /home/runner/.gradle
+        sudo chown -R 1001:121 ${{ github.workspace }}
     - name: Upload code coverage data
       uses: codecov/codecov-action@v4
       with:
