@@ -200,7 +200,7 @@ class OrtMainFunTest : StringSpec() {
             )
 
             val stdout = result.stdout.lineSequence()
-            val lines = stdout.filter { it.startsWith("Writing analyzer result to ") }
+            val lines = stdout.filter { it.startsWith("Wrote analyzer result to ") }
 
             withClue(result.stderr) {
                 lines.count() shouldBe 2

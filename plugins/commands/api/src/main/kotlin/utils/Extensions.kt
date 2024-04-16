@@ -65,11 +65,9 @@ fun readOrtResult(ortFile: File): OrtResult {
 fun writeOrtResult(ortResult: OrtResult, outputFiles: Collection<File>, terminal: Terminal) {
     outputFiles.forEach { file ->
         val resultName = file.name.substringBefore('-')
-        terminal.println("Writing $resultName result to '$file'.")
-
         val duration = measureTime { file.writeValue(ortResult) }
 
-        logger.info { "Wrote ORT result to '${file.name}' (${file.formatSizeInMib}) in $duration." }
+        terminal.println("Wrote $resultName result to '$file' (${file.formatSizeInMib}) in $duration.")
 
         logger.debug { "Output ORT result file has SHA-1 hash ${HashAlgorithm.SHA1.calculate(file)}." }
     }
