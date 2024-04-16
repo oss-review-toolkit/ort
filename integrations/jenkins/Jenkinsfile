@@ -402,12 +402,12 @@ pipeline {
                         VCS_REVISION_OPTION="--vcs-revision $PROJECT_VCS_REVISION"
                     fi
 
-                    echo "default login $LOGIN password $PASSWORD" > $HOME/.netrc
+                    echo "default login $LOGIN password $PASSWORD" > "$HOME/.netrc"
 
                     rm -fr "$PROJECT_DIR"
                     /opt/ort/bin/ort $ORT_OPTIONS download --project-url $PROJECT_VCS_URL $VCS_REVISION_OPTION -o "$PROJECT_DIR/source"
 
-                    rm -f $HOME/.netrc
+                    rm -f "$HOME/.netrc"
                     '''.stripIndent().trim()
                 }
             }
@@ -449,12 +449,12 @@ pipeline {
                         VCS_REVISION_OPTION="--vcs-revision $ORT_CONFIG_VCS_REVISION"
                     fi
 
-                    echo "default login $LOGIN password $PASSWORD" > $HOME/.netrc
+                    echo "default login $LOGIN password $PASSWORD" > "$HOME/.netrc"
 
-                    rm -fr $ORT_DATA_DIR/config
-                    /opt/ort/bin/ort $ORT_OPTIONS download --project-url $ORT_CONFIG_VCS_URL $VCS_REVISION_OPTION -o $ORT_DATA_DIR/config
+                    rm -fr "$ORT_DATA_DIR/config"
+                    /opt/ort/bin/ort $ORT_OPTIONS download --project-url $ORT_CONFIG_VCS_URL $VCS_REVISION_OPTION -o "$ORT_DATA_DIR/config"
 
-                    rm -f $HOME/.netrc
+                    rm -f "$HOME/.netrc"
                     '''.stripIndent().trim()
                 }
 
@@ -467,7 +467,7 @@ pipeline {
                     echo "Not creating '$ORT_CONFIG_DIR/config.yml' as it already exists."
                 else
                     echo "Creating '$ORT_CONFIG_DIR/config.yml' template for job parameters."
-                    cat >$ORT_CONFIG_DIR/config.yml <<EOF
+                    cat >"$ORT_CONFIG_DIR/config.yml" <<EOF
                 ort:
                   packageCurationProviders:
                     - name: DefaultFile
@@ -688,7 +688,7 @@ pipeline {
                             PACKAGE_TYPES_OPTION=${PACKAGE_TYPES_OPTION// /,}
                             PACKAGE_TYPES_OPTION="--package-types $PACKAGE_TYPES_OPTION"
 
-                            echo "default login $LOGIN password $PASSWORD" > $HOME/.netrc
+                            echo "default login $LOGIN password $PASSWORD" > "$HOME/.netrc"
 
                             rm -fr out/results/scanner
                             /opt/ort/bin/ort $ORT_OPTIONS scan \
@@ -698,7 +698,7 @@ pipeline {
                                 $PROJECT_SCANNERS_OPTION \
                                 $SCANNERS_OPTION
 
-                            rm -f $HOME/.netrc
+                            rm -f "$HOME/.netrc"
                         fi
                         '''.stripIndent().trim()
 
