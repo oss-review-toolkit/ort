@@ -317,12 +317,18 @@ class EvaluatorCommand : OrtCommand(
         val scripts = scriptUris.map { it.toURL().readText() }
         val evaluatorRun = evaluator.run(*scripts.toTypedArray())
 
+        if (evaluatorRun.violations.isNotEmpty()) {
+            echo("The following ${evaluatorRun.violations.size} rule violations have been found:")
+
+            evaluatorRun.violations.forEach { violation ->
+                echo(violation.format())
+            }
+        } else {
+            echo("No rule violations have been found.")
+        }
+
         val duration = with(evaluatorRun) { Duration.between(startTime, endTime).toKotlinDuration() }
         echo("The evaluation of ${scriptUris.size} script(s) took $duration.")
-
-        evaluatorRun.violations.forEach { violation ->
-            echo(violation.format())
-        }
 
         // Note: This overwrites any existing EvaluatorRun from the input file.
         val ortResultOutput = ortResultInput.copy(evaluator = evaluatorRun)
