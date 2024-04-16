@@ -449,8 +449,8 @@ FROM scratch AS ortbin
 COPY --from=ortbuild /opt/ort /opt/ort
 
 #------------------------------------------------------------------------
-# Minimal Runtime container
-FROM base as minimal
+# Container with minimal selection of supported package managers.
+FROM base as minimal-tools
 
 # Remove ort build scripts
 RUN [ -d /etc/scripts ] && sudo rm -rf /etc/scripts
@@ -499,21 +499,9 @@ ENV PATH=$PATH:$RBENV_ROOT/bin:$RBENV_ROOT/shims:$RBENV_ROOT/plugins/ruby-instal
 COPY --from=ruby --chown=$USER:$USER $RBENV_ROOT $RBENV_ROOT
 RUN syft $RBENV_ROOT -o spdx-json --output json=/usr/share/doc/ort/ort-ruby.spdx.json
 
-# ORT
-COPY --from=ortbin --chown=$USER:$USER /opt/ort /opt/ort
-ENV PATH=$PATH:/opt/ort/bin
-
-USER $USER
-WORKDIR $HOME
-
-# Ensure that the ORT data directory exists to be able to mount the config into it with correct permissions.
-RUN mkdir -p "$HOME/.ort"
-
-ENTRYPOINT ["/opt/ort/bin/ort"]
-
 #------------------------------------------------------------------------
-# Full Runtime container
-FROM minimal as run
+# Container with all supported package managers.
+FROM minimal-tools as all-tools
 
 # Repo and Android
 ENV ANDROID_HOME=/opt/android-sdk
@@ -589,3 +577,35 @@ ENV PATH=$PATH:$BAZEL_HOME/bin
 COPY --from=bazel $BAZEL_HOME $BAZEL_HOME
 
 RUN syft $BAZEL_HOME -o spdx-json --output json=/usr/share/doc/ort/ort-bazel.spdx.json
+
+#------------------------------------------------------------------------
+# Runtime container with minimal selection of supported package managers pre-installed.
+FROM minimal-tools as minimal
+
+# ORT
+COPY --from=ortbin --chown=$USER:$USER /opt/ort /opt/ort
+ENV PATH=$PATH:/opt/ort/bin
+
+USER $USER
+WORKDIR $HOME
+
+# Ensure that the ORT data directory exists to be able to mount the config into it with correct permissions.
+RUN mkdir -p "$HOME/.ort"
+
+ENTRYPOINT ["/opt/ort/bin/ort"]
+
+#------------------------------------------------------------------------
+# Runtime container with all supported package managers pre-installed.
+FROM all-tools as run
+
+# ORT
+COPY --from=ortbin --chown=$USER:$USER /opt/ort /opt/ort
+ENV PATH=$PATH:/opt/ort/bin
+
+USER $USER
+WORKDIR $HOME
+
+# Ensure that the ORT data directory exists to be able to mount the config into it with correct permissions.
+RUN mkdir -p "$HOME/.ort"
+
+ENTRYPOINT ["/opt/ort/bin/ort"]
