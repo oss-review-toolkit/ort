@@ -69,7 +69,7 @@ class MavenDependencyHandler(
             version = dependency.artifact.version
         )
 
-    override fun dependenciesFor(dependency: DependencyNode): Collection<DependencyNode> {
+    override fun dependenciesFor(dependency: DependencyNode): List<DependencyNode> {
         val childrenWithoutToolDependencies = dependency.children.filterNot { node ->
             TOOL_DEPENDENCIES.any(node.artifact.identifier()::startsWith)
         }
@@ -88,7 +88,7 @@ class MavenDependencyHandler(
      * Create a [Package] representing a [dependency] if possible, recording any [issues]. Inter-project
      * dependencies are skipped.
      */
-    override fun createPackage(dependency: DependencyNode, issues: MutableList<Issue>): Package? {
+    override fun createPackage(dependency: DependencyNode, issues: MutableCollection<Issue>): Package? {
         if (isLocalProject(dependency)) return null
 
         return runCatching {

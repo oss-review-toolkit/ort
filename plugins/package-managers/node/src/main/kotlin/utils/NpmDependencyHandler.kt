@@ -67,11 +67,11 @@ internal data class NpmModuleInfo(
 internal class NpmDependencyHandler(private val npm: Npm) : DependencyHandler<NpmModuleInfo> {
     override fun identifierFor(dependency: NpmModuleInfo): Identifier = dependency.id
 
-    override fun dependenciesFor(dependency: NpmModuleInfo): Collection<NpmModuleInfo> = dependency.dependencies
+    override fun dependenciesFor(dependency: NpmModuleInfo): List<NpmModuleInfo> = dependency.dependencies.toList()
 
     override fun linkageFor(dependency: NpmModuleInfo): PackageLinkage = PackageLinkage.DYNAMIC
 
-    override fun createPackage(dependency: NpmModuleInfo, issues: MutableList<Issue>): Package =
+    override fun createPackage(dependency: NpmModuleInfo, issues: MutableCollection<Issue>): Package =
         runBlocking {
             npm.parsePackage(dependency.workingDir, dependency.packageFile).second
         }

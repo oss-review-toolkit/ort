@@ -73,10 +73,10 @@ class PackageManagerDependencyHandler(
 
     private val navigator = DependencyGraphNavigator(analyzerResult.dependencyGraphs)
 
-    override fun createPackage(dependency: ResolvableDependencyNode, issues: MutableList<Issue>): Package? =
+    override fun createPackage(dependency: ResolvableDependencyNode, issues: MutableCollection<Issue>): Package? =
         analyzerResult.packages.find { it.id == dependency.id }
 
-    override fun dependenciesFor(dependency: ResolvableDependencyNode): Collection<ResolvableDependencyNode> =
+    override fun dependenciesFor(dependency: ResolvableDependencyNode): List<ResolvableDependencyNode> =
         buildList {
             dependency.visitDependencies { dependencies ->
                 dependencies.forEach { node ->
@@ -87,7 +87,7 @@ class PackageManagerDependencyHandler(
 
     override fun identifierFor(dependency: ResolvableDependencyNode): Identifier = dependency.id
 
-    override fun issuesForDependency(dependency: ResolvableDependencyNode): Collection<Issue> = dependency.issues
+    override fun issuesForDependency(dependency: ResolvableDependencyNode): List<Issue> = dependency.issues
 
     override fun linkageFor(dependency: ResolvableDependencyNode): PackageLinkage = dependency.linkage
 

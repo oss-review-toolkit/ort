@@ -720,12 +720,14 @@ class Yarn2(
     private class Yarn2DependencyHandler : DependencyHandler<YarnModuleInfo> {
         override fun identifierFor(dependency: YarnModuleInfo): Identifier = dependency.id
 
-        override fun dependenciesFor(dependency: YarnModuleInfo): Collection<YarnModuleInfo> = dependency.dependencies
+        override fun dependenciesFor(dependency: YarnModuleInfo): List<YarnModuleInfo> =
+            dependency.dependencies.toList()
 
         override fun linkageFor(dependency: YarnModuleInfo): PackageLinkage =
             if (dependency.pkg == null) PackageLinkage.PROJECT_DYNAMIC else PackageLinkage.DYNAMIC
 
-        override fun createPackage(dependency: YarnModuleInfo, issues: MutableList<Issue>): Package? = dependency.pkg
+        override fun createPackage(dependency: YarnModuleInfo, issues: MutableCollection<Issue>): Package? =
+            dependency.pkg
     }
 
     /**

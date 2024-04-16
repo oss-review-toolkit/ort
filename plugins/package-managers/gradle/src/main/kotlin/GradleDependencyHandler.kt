@@ -64,9 +64,9 @@ internal class GradleDependencyHandler(
             version = dependency.version
         )
 
-    override fun dependenciesFor(dependency: OrtDependency): Collection<OrtDependency> = dependency.dependencies
+    override fun dependenciesFor(dependency: OrtDependency): List<OrtDependency> = dependency.dependencies
 
-    override fun issuesForDependency(dependency: OrtDependency): Collection<Issue> =
+    override fun issuesForDependency(dependency: OrtDependency): List<Issue> =
         listOfNotNull(
             dependency.error?.let {
                 createAndLogIssue(
@@ -88,7 +88,7 @@ internal class GradleDependencyHandler(
     override fun linkageFor(dependency: OrtDependency): PackageLinkage =
         if (dependency.isProjectDependency()) PackageLinkage.PROJECT_DYNAMIC else PackageLinkage.DYNAMIC
 
-    override fun createPackage(dependency: OrtDependency, issues: MutableList<Issue>): Package? {
+    override fun createPackage(dependency: OrtDependency, issues: MutableCollection<Issue>): Package? {
         // Only look for a package if there was no error resolving the dependency and it is no project dependency.
         if (dependency.error != null || dependency.isProjectDependency()) return null
 

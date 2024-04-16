@@ -357,14 +357,15 @@ private const val NO_PACKAGE_NAMESPACE = "no-package"
 private object PackageRefDependencyHandler : DependencyHandler<PackageReference> {
     override fun identifierFor(dependency: PackageReference): Identifier = dependency.id
 
-    override fun dependenciesFor(dependency: PackageReference): Collection<PackageReference> = dependency.dependencies
+    override fun dependenciesFor(dependency: PackageReference): List<PackageReference> =
+        dependency.dependencies.toList()
 
     override fun linkageFor(dependency: PackageReference): PackageLinkage = dependency.linkage
 
-    override fun createPackage(dependency: PackageReference, issues: MutableList<Issue>): Package? =
+    override fun createPackage(dependency: PackageReference, issues: MutableCollection<Issue>): Package? =
         Package.EMPTY.copy(id = dependency.id).takeUnless { dependency.id.namespace == NO_PACKAGE_NAMESPACE }
 
-    override fun issuesForDependency(dependency: PackageReference): Collection<Issue> = dependency.issues
+    override fun issuesForDependency(dependency: PackageReference): List<Issue> = dependency.issues
 }
 
 /**

@@ -43,7 +43,7 @@ interface DependencyHandler<D> {
      * Return a collection with the dependencies of the given [dependency]. [DependencyGraphBuilder] invokes this
      * function to construct the whole dependency tree spawned by this [dependency].
      */
-    fun dependenciesFor(dependency: D): Collection<D>
+    fun dependenciesFor(dependency: D): List<D>
 
     /**
      * Return the [PackageLinkage] for the given [dependency].
@@ -57,12 +57,12 @@ interface DependencyHandler<D> {
      * the provided [issues] list. If the [dependency] does not map to a package, an implementation should return
      * *null*.
      */
-    fun createPackage(dependency: D, issues: MutableList<Issue>): Package?
+    fun createPackage(dependency: D, issues: MutableCollection<Issue>): Package?
 
     /**
      * Return a collection with known issues for the given [dependency]. Some package manager implementations may
      * already encounter problems when obtaining dependency representations. These can be reported here. This base
      * implementation returns an empty collection.
      */
-    fun issuesForDependency(dependency: D): Collection<Issue> = emptyList()
+    fun issuesForDependency(dependency: D): List<Issue> = emptyList()
 }

@@ -132,14 +132,14 @@ object DependencyGraphConverter {
     private object ScopesDependencyHandler : DependencyHandler<PackageReference> {
         override fun identifierFor(dependency: PackageReference): Identifier = dependency.id
 
-        override fun dependenciesFor(dependency: PackageReference): Collection<PackageReference> =
-            dependency.dependencies
+        override fun dependenciesFor(dependency: PackageReference): List<PackageReference> =
+            dependency.dependencies.toList()
 
         override fun linkageFor(dependency: PackageReference): PackageLinkage = dependency.linkage
 
-        override fun createPackage(dependency: PackageReference, issues: MutableList<Issue>): Package? = null
+        override fun createPackage(dependency: PackageReference, issues: MutableCollection<Issue>): Package? = null
 
-        override fun issuesForDependency(dependency: PackageReference): Collection<Issue> = dependency.issues
+        override fun issuesForDependency(dependency: PackageReference): List<Issue> = dependency.issues
     }
 }
 
