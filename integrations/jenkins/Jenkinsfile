@@ -568,7 +568,7 @@ pipeline {
 
                     /opt/ort/bin/set_gradle_proxy.sh
 
-                    rm -fr out/results
+                    rm -fr out/results/analyzer
                     /opt/ort/bin/ort $ORT_OPTIONS analyze -i "$PROJECT_DIR/source/$ANALYZER_INPUT_PATH" -o out/results/analyzer -l JENKINS_BUILD_URL=$BUILD_URL
                     '''.stripIndent().trim()
 
@@ -690,6 +690,7 @@ pipeline {
 
                             echo "default login $LOGIN password $PASSWORD" > $HOME/.netrc
 
+                            rm -fr out/results/scanner
                             /opt/ort/bin/ort $ORT_OPTIONS scan \
                                 -i out/results/current-result.yml \
                                 -o out/results/scanner \
@@ -778,6 +779,7 @@ pipeline {
 
                         ADVISOR_OPTIONS="-a OSV,VulnerableCode"
 
+                        rm -fr out/results/advisor
                         /opt/ort/bin/ort $ORT_OPTIONS advise $ADVISOR_OPTIONS -i out/results/current-result.yml -o out/results/advisor
                         '''.stripIndent().trim()
 
@@ -848,6 +850,7 @@ pipeline {
                             RULES_OPTIONS="$RULES_OPTIONS --rules-file $ORT_CONFIG_DIR/evaluator.rules.kts"
                         fi
 
+                        rm -fr out/results/evaluator
                         /opt/ort/bin/ort $ORT_OPTIONS evaluate -i out/results/current-result.yml $RULES_OPTIONS -o out/results/evaluator
                         '''.stripIndent().trim()
 
@@ -914,6 +917,7 @@ pipeline {
                     REPORT_FORMATS_OPTIONS_OPTION="-O $REPORT_FORMATS_OPTIONS"
                 fi
 
+                rm -fr out/results/reporter
                 /opt/ort/bin/ort $ORT_OPTIONS report \
                     -i out/results/current-result.yml \
                     -o out/results/reporter \
