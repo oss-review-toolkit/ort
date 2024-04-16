@@ -253,15 +253,32 @@ data class OrtResult(
         omitExcluded: Boolean = false,
         omitResolved: Boolean = false,
         minSeverity: Severity = Severity.entries.min()
-    ): Map<Identifier, Set<Issue>> {
-        val analyzerIssues = analyzer?.result?.getAllIssues().orEmpty()
-        val scannerIssues = scanner?.getAllIssues().orEmpty()
-        val advisorIssues = advisor?.results?.getIssues().orEmpty()
+    ): Map<Identifier, Set<Issue>> =
+        getAnalyzerIssues()
+            .zipWithCollections(getScanIssues())
+            .zipWithCollections(getAdvisorIssues())
+            .filterIssues(omitExcluded, omitResolved, minSeverity)
 
-        val allIssues = analyzerIssues.zipWithCollections(scannerIssues).zipWithCollections(advisorIssues)
+    fun getAnalyzerIssues(
+        omitExcluded: Boolean = false,
+        omitResolved: Boolean = false,
+        minSeverity: Severity = Severity.entries.min()
+    ): Map<Identifier, Set<Issue>> =
+        analyzer?.result?.getAllIssues().orEmpty().filterIssues(omitExcluded, omitResolved, minSeverity)
 
-        return allIssues.filterIssues(omitExcluded, omitResolved, minSeverity)
-    }
+    fun getScanIssues(
+        omitExcluded: Boolean = false,
+        omitResolved: Boolean = false,
+        minSeverity: Severity = Severity.entries.min()
+    ): Map<Identifier, Set<Issue>> =
+        scanner?.getAllIssues().orEmpty().filterIssues(omitExcluded, omitResolved, minSeverity)
+
+    fun getAdvisorIssues(
+        omitExcluded: Boolean = false,
+        omitResolved: Boolean = false,
+        minSeverity: Severity = Severity.entries.min()
+    ): Map<Identifier, Set<Issue>> =
+        advisor?.results?.getIssues().orEmpty().filterIssues(omitExcluded, omitResolved, minSeverity)
 
     private fun Map<Identifier, Set<Issue>>.filterIssues(
         omitExcluded: Boolean = false,
