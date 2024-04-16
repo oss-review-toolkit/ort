@@ -1,0 +1,76 @@
+# Copyright (C) 2024 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0
+# License-Filename: LICENSE
+
+name: "Free Disk Space"
+description: "Remove unneeded preinstalled Docker images and software to free disk space."
+author: "The ORT Project Authors"
+
+runs:
+  using: "composite"
+
+  steps:
+    - name: Print Disk Space
+      shell: bash
+      run: df -h
+    - name: List Docker Images
+      if: ${{ false }} # Can be enabled if the 'Remove Unneeded Docker Images' step below needs to be updated.
+      shell: bash
+      run: docker images
+    - name: Remove Unneeded Docker Images
+      shell: bash
+      run: |
+        docker image rm \
+          node:16 \
+          node:16-alpine \
+          node:18 \
+          node:18-alpine \
+          node:20 \
+          node:20-alpine \
+          debian:10 \
+          debian:11 \
+          ubuntu:20.04 \
+          ubuntu:22.04
+    - name: Print Disk Space
+      shell: bash
+      run: df -h
+    - name: Get Size of Installed Tools
+      if: ${{ false }} # Can be enabled if the 'Remove Unneeded Tools' step below needs to be updated.
+      shell: bash
+      run: |
+        sudo du -hsc /usr/lib/*
+        sudo du -hsc /usr/local/*
+        sudo du -hsc /usr/local/lib/*
+        sudo du -hsc /usr/local/share/*
+        sudo du -hsc /usr/share/*
+    - name: Remove Unneeded Tools
+      shell: bash
+      run: |
+        sudo rm -rf /usr/local/lib/android
+        sudo rm -rf /usr/local/lib/node_modules
+        sudo rm -rf /usr/local/share/chromium
+        sudo rm -rf /usr/local/share/powershell
+        sudo rm -rf /usr/share/az_11.3.1
+        sudo rm -rf /usr/share/dotnet
+        sudo rm -rf /usr/share/kotlinc
+        sudo rm -rf /usr/share/mecab
+        sudo rm -rf /usr/share/miniconda
+        sudo rm -rf /usr/share/ri
+        sudo rm -rf /usr/share/sbt
+        sudo rm -rf /usr/share/swift
+    - name: Print Disk Space
+      shell: bash
+      run: df -h
