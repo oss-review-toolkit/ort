@@ -65,11 +65,7 @@ abstract class ScriptRunner {
      * Run the given [script], returning a [ResultValue].
      */
     fun runScript(script: String): ResultValue {
-        val (result, duration) = measureTimedValue {
-            scriptingHost.eval(script.toScriptSource(), compConfig, evalConfig)
-        }
-
-        logger.info { "Evaluating the script took $duration." }
+        val result = scriptingHost.eval(script.toScriptSource(), compConfig, evalConfig)
 
         logReports(result.reports)
 
