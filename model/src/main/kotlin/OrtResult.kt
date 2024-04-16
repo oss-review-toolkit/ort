@@ -260,7 +260,15 @@ data class OrtResult(
 
         val allIssues = analyzerIssues.zipWithCollections(scannerIssues).zipWithCollections(advisorIssues)
 
-        return allIssues.mapNotNull { (id, issues) ->
+        return allIssues.filterIssues(omitExcluded, omitResolved, minSeverity)
+    }
+
+    private fun Map<Identifier, Set<Issue>>.filterIssues(
+        omitExcluded: Boolean = false,
+        omitResolved: Boolean = false,
+        minSeverity: Severity = Severity.entries.min()
+    ): Map<Identifier, Set<Issue>> =
+        mapNotNull { (id, issues) ->
             if (omitExcluded && isExcluded(id)) return@mapNotNull null
 
             val filteredIssues = issues.filterTo(mutableSetOf()) {
@@ -269,7 +277,6 @@ data class OrtResult(
 
             filteredIssues.takeUnless { it.isEmpty() }?.let { id to it }
         }.toMap()
-    }
 
     /**
      * Return the label values corresponding to the given [key] split at the delimiter ',', or an empty set if the label
