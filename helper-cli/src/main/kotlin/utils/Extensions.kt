@@ -33,10 +33,8 @@ import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.downloader.Downloader
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Provenance
@@ -232,24 +230,6 @@ internal fun KnownProvenance?.getSourceCodeOrigin(): SourceCodeOrigin? =
         is RepositoryProvenance -> SourceCodeOrigin.VCS
         else -> null
     }
-
-/**
- * Return all issues from scan results. Issues for excludes [Project]s or [Package]s are not returned if and only if
- * the given [omitExcluded] is true.
- */
-internal fun OrtResult.getScanIssues(omitExcluded: Boolean = false): List<Issue> {
-    val result = mutableListOf<Issue>()
-
-    getScanResults().forEach { (id, results) ->
-        if (!omitExcluded || !isExcluded(id)) {
-            results.forEach { scanResult ->
-                result += scanResult.summary.issues
-            }
-        }
-    }
-
-    return result
-}
 
 /**
  * Return all path excludes from this [OrtResult] represented as [RepositoryPathExcludes].

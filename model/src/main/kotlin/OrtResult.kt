@@ -276,15 +276,47 @@ data class OrtResult(
         omitExcluded: Boolean = false,
         omitResolved: Boolean = false,
         minSeverity: Severity = Severity.entries.min()
-    ): Map<Identifier, Set<Issue>> {
-        val analyzerIssues = analyzer?.result?.getAllIssues().orEmpty()
-        val scannerIssues = scanner?.getAllIssues().orEmpty()
-        val advisorIssues = advisor?.results?.getIssues().orEmpty()
+    ): Map<Identifier, Set<Issue>> =
+        getAnalyzerIssues()
+            .zipWithCollections(getScannerIssues())
+            .zipWithCollections(getAdvisorIssues())
+            .filterIssues(omitExcluded, omitResolved, minSeverity)
 
-        val allIssues = analyzerIssues.zipWithCollections(scannerIssues).zipWithCollections(advisorIssues)
+    /**
+     * Return a map of all de-duplicated analyzer [Issue]s associated by [Identifier]. If [omitExcluded] is set to true,
+     * excluded issues are omitted from the result. If [omitResolved] is set to true, resolved issues are omitted from
+     * the result. Issues with [severity][Issue.severity] below [minSeverity] are omitted from the result.
+     */
+    fun getAnalyzerIssues(
+        omitExcluded: Boolean = false,
+        omitResolved: Boolean = false,
+        minSeverity: Severity = Severity.entries.min()
+    ): Map<Identifier, Set<Issue>> =
+        analyzer?.result?.getAllIssues().orEmpty().filterIssues(omitExcluded, omitResolved, minSeverity)
 
-        return allIssues.filterIssues(omitExcluded, omitResolved, minSeverity)
-    }
+    /**
+     * Return a map of all de-duplicated scanner [Issue]s associated by [Identifier]. If [omitExcluded] is set to true,
+     * excluded issues are omitted from the result. If [omitResolved] is set to true, resolved issues are omitted from
+     * the result. Issues with [severity][Issue.severity] below [minSeverity] are omitted from the result.
+     */
+    fun getScannerIssues(
+        omitExcluded: Boolean = false,
+        omitResolved: Boolean = false,
+        minSeverity: Severity = Severity.entries.min()
+    ): Map<Identifier, Set<Issue>> =
+        scanner?.getAllIssues().orEmpty().filterIssues(omitExcluded, omitResolved, minSeverity)
+
+    /**
+     * Return a map of all de-duplicated advisor [Issue]s associated by [Identifier]. If [omitExcluded] is set to true,
+     * excluded issues are omitted from the result. If [omitResolved] is set to true, resolved issues are omitted from
+     * the result. Issues with [severity][Issue.severity] below [minSeverity] are omitted from the result.
+     */
+    fun getAdvisorIssues(
+        omitExcluded: Boolean = false,
+        omitResolved: Boolean = false,
+        minSeverity: Severity = Severity.entries.min()
+    ): Map<Identifier, Set<Issue>> =
+        advisor?.results?.getIssues().orEmpty().filterIssues(omitExcluded, omitResolved, minSeverity)
 
     private fun Map<Identifier, Set<Issue>>.filterIssues(
         omitExcluded: Boolean = false,

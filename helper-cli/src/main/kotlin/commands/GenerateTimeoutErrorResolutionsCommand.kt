@@ -26,7 +26,6 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.utils.getScanIssues
 import org.ossreviewtoolkit.helper.utils.readOrtResult
 import org.ossreviewtoolkit.helper.utils.replaceConfig
 import org.ossreviewtoolkit.model.config.IssueResolution
@@ -70,11 +69,9 @@ internal class GenerateTimeoutErrorResolutionsCommand : CliktCommand(
 
         val resolutionProvider = DefaultResolutionProvider.create(ortResult, resolutionsFile)
 
-        val timeoutIssues = ortResult
-            .getScanIssues(omitExcluded)
-            .filter {
-                it.message.startsWith("ERROR: Timeout") && !resolutionProvider.isResolved(it)
-            }
+        val timeoutIssues = ortResult.getScannerIssues(omitExcluded).flatMapTo(mutableSetOf()) { it.value }.filter {
+            it.message.startsWith("ERROR: Timeout") && !resolutionProvider.isResolved(it)
+        }
 
         val generatedResolutions = timeoutIssues.mapTo(mutableSetOf()) {
             IssueResolution(
