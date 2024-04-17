@@ -31,13 +31,17 @@ import org.apache.logging.log4j.kotlin.logger
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.Maven
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.getCommonParentFile
 import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
 import org.ossreviewtoolkit.utils.common.suppressInput
+import org.ossreviewtoolkit.utils.ort.Environment
+import org.ossreviewtoolkit.utils.ort.JavaBootstrapper
 
 import org.semver4j.Semver
 
@@ -47,7 +51,30 @@ import org.semver4j.Semver
 const val LOWEST_SUPPORTED_SBT_VERSION = "0.13.0"
 
 /**
+ * The name of the option to specify the SBT version.
+ */
+const val OPTION_SBT_VERSION = "sbtVersion"
+
+/**
+ * The name of the option to specify the Java version to use.
+ */
+const val OPTION_JAVA_VERSION = "javaVersion"
+
+/**
+ * The name of the option to specify the Java home to use.
+ */
+const val OPTION_JAVA_HOME = "javaHome"
+
+/**
  * The [SBT](https://www.scala-sbt.org/) package manager for Scala.
+ *
+ * This package manager supports the following [options][PackageManagerConfiguration.options]:
+ * - *sbtVersion*: The version of SBT to use when analyzing projects. Defaults to the version defined in the build
+ *   properties.
+ * - *javaVersion*: The version of Java to use when analyzing projects. By default, the same Java version as for ORT
+ *   itself it used. Overrides `javaHome` if both are specified.
+ * - *javaHome*: The directory of the Java home to use when analyzing projects. By default, the same Java home as for
+ *   ORT itself is used.
  */
 class Sbt(
     name: String,
@@ -75,8 +102,11 @@ class Sbt(
 
         logger.info { "Determined '$workingDir' as the $managerName project root directory." }
 
+        val sbtVersion = options[OPTION_SBT_VERSION]
         val sbtVersions = getBuildSbtVersions(workingDir)
         when {
+            sbtVersion != null -> logger.info { "Using configured custom $managerName version $sbtVersion." }
+
             sbtVersions.isEmpty() ->
                 logger.info { "The build does not configure any $managerName version to be used." }
 
@@ -87,14 +117,46 @@ class Sbt(
                 logger.warn { "The build configures multiple different $managerName versions to be used: $sbtVersions" }
         }
 
-        val lowestSbtVersion = sbtVersions.firstOrNull()
+        val lowestSbtVersion = sbtVersion?.let { Semver(it) } ?: sbtVersions.firstOrNull()
         require(lowestSbtVersion?.isLowerThan(Semver(LOWEST_SUPPORTED_SBT_VERSION)) != true) {
             "Build $managerName version $lowestSbtVersion is lower than version $LOWEST_SUPPORTED_SBT_VERSION."
         }
 
+        // TODO: Consider auto-detecting the Java version based on the SBT version. See:
+        //       https://docs.scala-lang.org/overviews/jdk-compatibility/overview.html#build-tool-compatibility-table
+        val javaHome = options[OPTION_JAVA_VERSION]?.let {
+            val requestedVersion = Semver.coerce(it)
+            val runningVersion = Semver.coerce(Environment().javaVersion)
+            if (requestedVersion != runningVersion) {
+                JavaBootstrapper.installJdk("TEMURIN", it)
+                    .onFailure { e ->
+                        logger.error { "Failed to bootstrap JDK version $requestedVersion: ${e.collectMessages()}" }
+                    }.getOrNull()
+            } else {
+                null
+            }
+        } ?: options[OPTION_JAVA_HOME]?.let { File(it) }
+
+        javaHome?.also {
+            logger.info { "Setting Java home for project analysis to '$it'." }
+        }
+
+        fun getSbtOptions(sbtVersion: String?, javaHome: File?): List<String> =
+            mutableListOf(BATCH_MODE, CI_MODE, NO_COLOR, DISABLE_JLINE, FIXED_USER_HOME).apply {
+                sbtVersion?.also {
+                    add("--sbt-version")
+                    add(it)
+                }
+
+                javaHome?.also {
+                    add("--java-home")
+                    add(it.absolutePath)
+                }
+            }
+
         fun runSbt(vararg command: String) =
             suppressInput {
-                run(workingDir, *SBT_OPTIONS, *command)
+                run(workingDir, *getSbtOptions(sbtVersion, javaHome).toTypedArray(), *command)
             }
 
         // Get the list of project names.
@@ -181,8 +243,6 @@ private val NO_COLOR = "-Dsbt.color=false".addQuotesOnWindows()
 private val DISABLE_JLINE = "-Djline.terminal=none".addQuotesOnWindows()
 
 private val FIXED_USER_HOME = "-Duser.home=${Os.userHomeDirectory}".addQuotesOnWindows()
-
-private val SBT_OPTIONS = arrayOf(BATCH_MODE, CI_MODE, NO_COLOR, DISABLE_JLINE, FIXED_USER_HOME)
 
 private fun String.addQuotesOnWindows() = if (Os.isWindows) "\"$this\"" else this
 
