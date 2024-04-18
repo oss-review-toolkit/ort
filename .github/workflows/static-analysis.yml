@@ -27,26 +27,25 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
-    - name: Check copyrights, license headers, and .gitattributes
+    - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v3
       with:
         gradle-home-cache-cleanup: true
-        arguments: checkCopyrightsInNoticeFile checkLicenseHeaders checkGitAttributes
+    - name: Check copyrights, license headers, and .gitattributes
+      run: ./gradlew checkCopyrightsInNoticeFile checkLicenseHeaders checkGitAttributes
   detekt-issues:
     runs-on: ubuntu-22.04
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v3
+      with:
+        gradle-home-cache-cleanup: true
     - name: Check for Detekt Issues
-      uses: gradle/actions/setup-gradle@v3
-      with:
-        gradle-home-cache-cleanup: true
-        arguments: detekt
+      run: ./gradlew detekt
     - name: Check for Detekt Issues with type resolution
-      uses: gradle/actions/setup-gradle@v3
-      with:
-        gradle-home-cache-cleanup: true
-        arguments: detektMain detektTestFixtures detektTest detektFunTest
+      run: ./gradlew detektMain detektTestFixtures detektTest detektFunTest
     - name: Upload SARIF File
       uses: github/codeql-action/upload-sarif@v3
       if: ${{ always() }} # Upload even if the previous step failed.
