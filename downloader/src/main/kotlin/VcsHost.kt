@@ -144,8 +144,7 @@ enum class VcsHost(
     GITHUB("github.com", VcsType.GIT) {
         override fun getUserOrOrgInternal(projectUrl: URI) = projectUrlToUserOrOrgAndProject(projectUrl)?.first
 
-        override fun getProjectInternal(projectUrl: URI) =
-            projectUrlToUserOrOrgAndProject(projectUrl)?.second?.removeSuffix(".git")
+        override fun getProjectInternal(projectUrl: URI) = projectUrlToUserOrOrgAndProject(projectUrl)?.second
 
         override fun toVcsInfoInternal(projectUrl: URI) =
             gitProjectUrlToVcsInfo(projectUrl) { baseUrl, pathIterator ->
@@ -183,8 +182,7 @@ enum class VcsHost(
     GITLAB("gitlab.com", VcsType.GIT) {
         override fun getUserOrOrgInternal(projectUrl: URI) = projectUrlToUserOrOrgAndProject(projectUrl)?.first
 
-        override fun getProjectInternal(projectUrl: URI) =
-            projectUrlToUserOrOrgAndProject(projectUrl)?.second?.removeSuffix(".git")
+        override fun getProjectInternal(projectUrl: URI) = projectUrlToUserOrOrgAndProject(projectUrl)?.second
 
         override fun toVcsInfoInternal(projectUrl: URI) =
             gitProjectUrlToVcsInfo(projectUrl) { baseUrl, pathIterator ->
