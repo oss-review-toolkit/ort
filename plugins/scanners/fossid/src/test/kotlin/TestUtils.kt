@@ -549,7 +549,7 @@ internal fun FossIdServiceWithVersion.expectCreateScan(
 ): FossIdServiceWithVersion {
     coEvery {
         createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, comment)
-    } returns MapResponseBody(status = 1, data = mapOf("scan_id" to SCAN_ID.toString()))
+    } returns PolymorphicResponseBody(status = 1, data = PolymorphicList(listOf(SCAN_ID.toString())))
     return this
 }
 

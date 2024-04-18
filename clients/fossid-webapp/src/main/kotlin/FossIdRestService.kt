@@ -226,7 +226,7 @@ interface FossIdRestService {
     suspend fun createProject(@Body body: PostRequestBody): MapResponseBody<String>
 
     @POST("api.php")
-    suspend fun createScan(@Body body: PostRequestBody): MapResponseBody<String>
+    suspend fun createScan(@Body body: PostRequestBody): PolymorphicResponseBody<String>
 
     @POST("api.php")
     suspend fun runScan(@Body body: PostRequestBody): EntityResponseBody<Nothing>

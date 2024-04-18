@@ -681,7 +681,7 @@ class FossId internal constructor(
             reference
         ).checkResponse("create scan")
 
-        val scanId = response.data?.get("scan_id")
+        val scanId = response.data?.firstOrNull()
 
         requireNotNull(scanId) { "Scan could not be created. The response was: ${response.message}." }
 
