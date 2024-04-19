@@ -117,9 +117,4 @@ data class PostgresConnection(
      */
     @JsonInclude(Include.NON_NULL)
     val minimumIdle: Int? = null
-
-    /**
-     * TODO: Make additional parameters configurable, see:
-     *       https://jdbc.postgresql.org/documentation/head/connect.html
-     */
 )
