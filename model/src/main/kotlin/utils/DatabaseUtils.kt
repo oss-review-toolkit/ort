@@ -73,6 +73,13 @@ object DatabaseUtils {
                 schema = config.schema
                 maximumPoolSize = maxPoolSize
 
+                config.connectionTimeout?.also { connectionTimeout = it }
+                config.idleTimeout?.also { idleTimeout = it }
+                config.keepaliveTime?.also { keepaliveTime = it }
+                config.maxLifetime?.also { maxLifetime = it }
+                config.maximumPoolSize?.also { maximumPoolSize = it }
+                config.minimumIdle?.also { minimumIdle = it }
+
                 val suffix = " - $applicationNameSuffix".takeIf { applicationNameSuffix.isNotEmpty() }.orEmpty()
                 addDataSourceProperty("ApplicationName", "$ORT_FULL_NAME$suffix")
 
