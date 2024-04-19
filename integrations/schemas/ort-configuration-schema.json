@@ -384,6 +384,24 @@
                 },
                 "parallelTransactions": {
                     "type": "integer"
+                },
+                "connectionTimeout": {
+                    "type": "integer"
+                },
+                "idleTimeout": {
+                    "type": "integer"
+                },
+                "keepaliveTime": {
+                    "type": "integer"
+                },
+                "maxLifetime": {
+                    "type": "integer"
+                },
+                "maximumPoolSize": {
+                    "type": "integer"
+                },
+                "minimumIdle": {
+                    "type": "integer"
                 }
             },
             "required": [
