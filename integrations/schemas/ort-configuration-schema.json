@@ -382,9 +382,6 @@
                 "sslrootcert": {
                     "type": "string"
                 },
-                "parallelTransactions": {
-                    "type": "integer"
-                },
                 "connectionTimeout": {
                     "type": "integer"
                 },

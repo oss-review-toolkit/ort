@@ -19,10 +19,12 @@
 
 package org.ossreviewtoolkit.model.config
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonInclude.Include
 import com.fasterxml.jackson.annotation.JsonProperty
 
+@JsonIgnoreProperties("parallel_transactions")
 data class PostgresConnection(
     /**
      * The database URL in JDBC format.
@@ -71,11 +73,6 @@ data class PostgresConnection(
      */
     @JsonInclude(Include.NON_NULL)
     val sslrootcert: String? = null,
-
-    /**
-     * The number of parallel transactions to use for the storage dispatcher.
-     */
-    val parallelTransactions: Int = 5,
 
     /**
      * The maximum number of milliseconds to wait for connections from the pool. For details see the
