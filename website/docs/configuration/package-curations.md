@@ -83,7 +83,7 @@ A curation file consists of one or more `id` entries:
       path: "subdirectory"
     is_metadata_only: true
     is_modified: true
-    source_code_origins: "ARTIFACT, VCS"
+    source_code_origins: [ARTIFACT, VCS]
 ```
 
 Where the list of available options for curations is defined in [PackageCurationData.kt](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/PackageCurationData.kt).
