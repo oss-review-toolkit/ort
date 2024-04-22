@@ -25,6 +25,8 @@ repository:
       - pattern: "**/*.java"
         reason: "EXAMPLE_OF"
         comment: "These are example files."
+      - pattern: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/excluded-file.dat"
+        reason: "DATA_FILE_OF"
       scopes:
       - pattern: "testCompile"
         reason: "TEST_DEPENDENCY_OF"
@@ -479,6 +481,11 @@ scanner:
           path: "project/file1.java"
           start_line: 1
           end_line: 1
+      issues:
+      - timestamp: "2024-04-22T10:36:10.661544294Z"
+        source: "FakeScanner"
+        message: "ERROR: Timeout after 300 seconds while scanning file 'project/file-within-excluded-project.dat'."
+        affected_path: "project/file-of-excluded-project.dat"
   - provenance:
       vcs_info:
         type: "Git"
@@ -529,6 +536,14 @@ scanner:
           \ Please make sure the published POM file includes the SCM connection, see:\
           \ https://docs.gradle.org/current/userguide/publishing_maven.html#sec:modifying_the_generated_pom"
         severity: "ERROR"
+      - timestamp: "2024-04-22T10:36:10.661544294Z"
+        source: "FakeScanner"
+        message: "ERROR: Timeout after 300 seconds while scanning file 'analyzer/src/funTest/assets/projects/synthetic/gradle/lib/included-file.dat'."
+        affected_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/included-file.dat"
+      - timestamp: "2024-04-22T10:36:10.661544294Z"
+        source: "FakeScanner"
+        message: "ERROR: Timeout after 300 seconds while scanning file 'analyzer/src/funTest/assets/projects/synthetic/gradle/lib/excluded-file.dat'."
+        affected_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/excluded-file.dat"
   - provenance:
       source_artifact:
         url: "https://repo.maven.apache.org/maven2/com/h2database/h2/1.4.200/h2-1.4.200-sources.jar"
