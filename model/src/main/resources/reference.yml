@@ -191,6 +191,12 @@ ort:
           sslcert: /defaultdir/postgresql.crt
           sslkey: /defaultdir/postgresql.pk8
           sslrootcert: /defaultdir/root.crt
+          connectionTimeout: 30000
+          idleTimeout: 600000
+          keepaliveTime: 0
+          maxLifetime: 1800000
+          maximumPoolSize: 10
+          minimumIdle: 600000
 
     createMissingArchives: false
 
@@ -216,6 +222,12 @@ ort:
           sslcert: /defaultdir/postgresql.crt
           sslkey: /defaultdir/postgresql.pk8
           sslrootcert: /defaultdir/root.crt
+          connectionTimeout: 30000
+          idleTimeout: 600000
+          keepaliveTime: 0
+          maxLifetime: 1800000
+          maximumPoolSize: 10
+          minimumIdle: 600000
 
     config:
       # A map from scanner plugin types to the plugin configuration.
@@ -308,6 +320,12 @@ ort:
           sslcert: /defaultdir/postgresql.crt
           sslkey: /defaultdir/postgresql.pk8
           sslrootcert: /defaultdir/root.crt
+          connectionTimeout: 30000
+          idleTimeout: 600000
+          keepaliveTime: 0
+          maxLifetime: 1800000
+          maximumPoolSize: 10
+          minimumIdle: 600000
         type: PROVENANCE_BASED
 
       sw360Configuration:
@@ -343,6 +361,12 @@ ort:
           sslcert: /defaultdir/postgresql.crt
           sslkey: /defaultdir/postgresql.pk8
           sslrootcert: /defaultdir/root.crt
+          connectionTimeout: 30000
+          idleTimeout: 600000
+          keepaliveTime: 0
+          maxLifetime: 1800000
+          maximumPoolSize: 10
+          minimumIdle: 600000
 
   reporter:
     config:
