@@ -24,7 +24,7 @@ import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.analyzer.analyze
 import org.ossreviewtoolkit.model.toYaml
-import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.Git
+import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.GitCommand
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
@@ -36,7 +36,7 @@ class SbtFunTest : StringSpec({
         val expectedResult = matchExpectedResult(expectedResultFile, definitionFile)
 
         // Clean any previously generated POM files / target directories.
-        Git().run(definitionFile.parentFile, "clean", "-fd")
+        GitCommand.run(definitionFile.parentFile, "clean", "-fd")
 
         val ortResult = analyze(definitionFile.parentFile, packageManagers = setOf(Sbt.Factory()))
 
@@ -49,7 +49,7 @@ class SbtFunTest : StringSpec({
         val expectedResult = matchExpectedResult(expectedResultFile, definitionFile)
 
         // Clean any previously generated POM files / target directories.
-        Git().run(definitionFile.parentFile, "clean", "-fd")
+        GitCommand.run(definitionFile.parentFile, "clean", "-fd")
 
         val ortResult = analyze(definitionFile.parentFile, packageManagers = setOf(Sbt.Factory()))
 

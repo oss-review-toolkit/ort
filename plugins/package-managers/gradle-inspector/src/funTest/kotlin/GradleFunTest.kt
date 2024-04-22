@@ -30,7 +30,7 @@ import io.kotest.matchers.should
 import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.toYaml
-import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.Git
+import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.GitCommand
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
@@ -61,7 +61,7 @@ class GradleFunTest : StringSpec() {
 
     override suspend fun afterSpec(spec: Spec) {
         // Reset the Gradle wrapper files to the committed state.
-        Git().run(projectDir, "checkout", "gradle/", "gradlew*")
+        GitCommand.run(projectDir, "checkout", "gradle/", "gradlew*")
     }
 
     init {
