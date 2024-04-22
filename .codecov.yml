@@ -1,6 +1,6 @@
 comment:
   # Keep this in sync with the number of codecov-action calls.
-  after_n_builds: 4
+  after_n_builds: 3
 coverage:
   status:
     project:
