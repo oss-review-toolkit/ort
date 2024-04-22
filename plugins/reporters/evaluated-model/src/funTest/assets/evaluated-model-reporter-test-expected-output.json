@@ -102,6 +102,7 @@
     "source" : "FakeScanner",
     "message" : "ERROR: Timeout after 300 seconds while scanning file 'project/file-within-excluded-project.dat'.",
     "severity" : "ERROR",
+    "is_excluded" : true,
     "pkg" : 0,
     "scan_result" : 0,
     "how_to_fix" : "Some how to fix text."
@@ -112,6 +113,7 @@
     "source" : "FakeScanner",
     "message" : "Example hint.",
     "severity" : "HINT",
+    "is_excluded" : true,
     "pkg" : 0,
     "scan_result" : 0,
     "how_to_fix" : "Some how to fix text."
@@ -122,6 +124,7 @@
     "source" : "FakeScanner",
     "message" : "Example warning.",
     "severity" : "WARNING",
+    "is_excluded" : true,
     "pkg" : 0,
     "scan_result" : 0,
     "how_to_fix" : "Some how to fix text."
@@ -132,6 +135,7 @@
     "source" : "FakeScanner",
     "message" : "Example error.",
     "severity" : "ERROR",
+    "is_excluded" : true,
     "pkg" : 0,
     "scan_result" : 0,
     "how_to_fix" : "Some how to fix text."
@@ -143,6 +147,7 @@
     "message" : "Example error, resolved.",
     "severity" : "ERROR",
     "resolutions" : [ 0 ],
+    "is_excluded" : true,
     "pkg" : 0,
     "scan_result" : 0,
     "how_to_fix" : "Some how to fix text."
@@ -210,6 +215,7 @@
     "source" : "FakeScanner",
     "message" : "ERROR: Timeout after 300 seconds while scanning file 'analyzer/src/funTest/assets/projects/synthetic/gradle/lib/excluded-file.dat'.",
     "severity" : "ERROR",
+    "is_excluded" : true,
     "pkg" : 1,
     "scan_result" : 1,
     "how_to_fix" : "Some how to fix text."
