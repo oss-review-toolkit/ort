@@ -595,6 +595,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
                 message = issue.message,
                 severity = issue.severity,
                 resolutions = resolutions,
+                isExcluded = input.ortResult.isExcluded(issue, pkg.id),
                 pkg = pkg,
                 scanResult = scanResult,
                 path = path,

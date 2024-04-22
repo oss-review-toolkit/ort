@@ -41,6 +41,8 @@ data class EvaluatedIssue(
     val severity: Severity = Severity.ERROR,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val resolutions: List<IssueResolution>,
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    val isExcluded: Boolean = false,
     @JsonIdentityReference(alwaysAsId = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val pkg: EvaluatedPackage?,
