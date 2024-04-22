@@ -174,12 +174,21 @@ class RequirementsCommand : OrtCommand(
             Modifier.isAbstract(it.modifiers) || it.isAnonymousClass || it.isLocalClass
         }.sortedBy { it.simpleName }.forEach {
             runCatching {
+                fun Class<out Any>.isBundledPlugin(type: String) =
+                    packageName.startsWith("org.ossreviewtoolkit.plugins.$type.")
+
                 val kotlinObject = it.kotlin.objectInstance
 
                 var category = "Other tool"
                 val instance = when {
                     kotlinObject != null -> {
                         logger.debug { "$it is a Kotlin object." }
+
+                        when {
+                            it.isBundledPlugin("packagemanagers") -> category = "PackageManager"
+                            it.isBundledPlugin("versioncontrolsystems") -> category = "VersionControlSystem"
+                        }
+
                         kotlinObject
                     }
 
