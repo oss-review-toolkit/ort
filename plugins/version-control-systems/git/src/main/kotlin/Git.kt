@@ -63,7 +63,7 @@ import org.semver4j.RangesListFactory
 const val GIT_HISTORY_DEPTH = 50
 
 // Replace prefixes of Git submodule repository URLs.
-private val REPOSITORY_URL_PREFIX_REPLACEMENTS = mapOf(
+private val REPOSITORY_URL_PREFIX_REPLACEMENTS = listOf(
     "git://" to "https://"
 )
 
@@ -123,12 +123,7 @@ class Git : VersionControlSystem(), CommandLineTool {
             match.groups["version"]!!.value
         }.orEmpty()
 
-    override fun getWorkingTree(vcsDirectory: File): WorkingTree =
-        GitWorkingTree(
-            workingDir = vcsDirectory,
-            vcsType = VcsType.forName(type),
-            repositoryUrlPrefixReplacements = REPOSITORY_URL_PREFIX_REPLACEMENTS
-        )
+    override fun getWorkingTree(vcsDirectory: File): WorkingTree = GitWorkingTree(vcsDirectory, VcsType.forName(type))
 
     override fun isApplicableUrlInternal(vcsUrl: String): Boolean =
         runCatching {
@@ -276,18 +271,20 @@ class Git : VersionControlSystem(), CommandLineTool {
     private fun updateSubmodules(workingTree: WorkingTree) {
         if (!workingTree.getRootPath().resolve(".gitmodules").isFile) return
 
-        val configOption = REPOSITORY_URL_PREFIX_REPLACEMENTS.flatMap { (prefix, replacement) ->
-            listOf("-c", "url.$replacement.insteadOf=$prefix")
-        }.toTypedArray()
+        val insteadOf = REPOSITORY_URL_PREFIX_REPLACEMENTS.map { (prefix, replacement) ->
+            "url.$replacement.insteadOf $prefix"
+        }
 
         runCatching {
             // TODO: Migrate this to JGit once https://bugs.eclipse.org/bugs/show_bug.cgi?id=580731 is implemented.
-            workingTree.runGit(
-                *configOption, "submodule", "update", "--init", "--recursive", "--depth", "$GIT_HISTORY_DEPTH"
-            )
+            workingTree.runGit("submodule", "update", "--init", "--recursive", "--depth", "$GIT_HISTORY_DEPTH")
+
+            insteadOf.forEach {
+                workingTree.runGit("submodule", "foreach", "--recursive", "git config $it")
+            }
         }.recover {
             // As Git's dumb HTTP transport does not support shallow capabilities, also try to not limit the depth.
-            workingTree.runGit(*configOption, "submodule", "update", "--recursive")
+            workingTree.runGit("submodule", "update", "--recursive")
         }
     }
 
