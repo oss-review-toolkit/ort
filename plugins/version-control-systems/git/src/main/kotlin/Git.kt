@@ -82,7 +82,7 @@ object GitCommand : CommandLineTool {
         }.orEmpty()
 }
 
-class Git : VersionControlSystem() {
+class Git : VersionControlSystem(GitCommand) {
     companion object {
         init {
             // Make sure that JGit uses the exact same authentication information as ORT itself. This addresses
