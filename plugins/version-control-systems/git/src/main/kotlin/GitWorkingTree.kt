@@ -50,11 +50,7 @@ private fun findGitOrSubmoduleDir(workingDirOrFile: File): Repository {
     }.getOrThrow()
 }
 
-internal open class GitWorkingTree(
-    workingDir: File,
-    vcsType: VcsType,
-    private val repositoryUrlPrefixReplacements: Map<String, String> = emptyMap()
-) : WorkingTree(workingDir, vcsType) {
+internal open class GitWorkingTree(workingDir: File, vcsType: VcsType) : WorkingTree(workingDir, vcsType) {
     fun <T> useRepo(block: Repository.() -> T): T = findGitOrSubmoduleDir(workingDir).use(block)
 
     override fun isValid(): Boolean = useRepo { objectDatabase?.exists() == true }
@@ -94,19 +90,7 @@ internal open class GitWorkingTree(
             listSubmodulePaths(this).associateWith { path ->
                 GitWorkingTree(workTree.resolve(path), vcsType).getInfo()
             }
-        }.mapValues { it.value.replaceUrlPrefixes() }
-
-    private fun VcsInfo.replaceUrlPrefixes(): VcsInfo {
-        val patchedUrl = repositoryUrlPrefixReplacements.entries.fold(url) { url, (prefix, replacement) ->
-            if (url.startsWith(prefix)) {
-                "$replacement${url.removePrefix(prefix)}"
-            } else {
-                url
-            }
         }
-
-        return takeIf { patchedUrl == url } ?: copy(url = patchedUrl)
-    }
 
     override fun getRemoteUrl(): String =
         useRepo {
