@@ -454,7 +454,7 @@ Prism.languages.yaml={scalar:{pattern:/([\-:]\s*(?:![^\s]+)?[ \t]*[|>])[ \t]*(?:
          <h2>Index</h2>
          <ul>
             <li><a href="#rule-violation-summary">Rule Violation Summary (1 errors, 1 warnings, 0 hints to resolve)</a></li>
-            <li><a href="#issue-summary">Issue Summary (1 errors, 0 warnings, 0 hints to resolve)</a></li>
+            <li><a href="#issue-summary">Issue Summary (3 errors, 0 warnings, 0 hints to resolve)</a></li>
             <li><a href="#Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0">Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0 
                   <div class="ort-reason">Excluded: EXAMPLE_OF - The project is an example.</div></a></li>
             <li><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0">Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0</a></li>
@@ -531,7 +531,7 @@ Prism.languages.yaml={scalar:{pattern:/([\-:]\s*(?:![^\s]+)?[ \t]*[|>])[ \t]*(?:
                </tr>
             </tbody>
          </table>
-         <h2 id="issue-summary">Issue Summary (1 errors, 0 warnings, 0 hints to resolve)</h2>
+         <h2 id="issue-summary">Issue Summary (3 errors, 0 warnings, 0 hints to resolve)</h2>
          <p>Issues from excluded components are not shown in this summary.</p>
          <h3>Packages</h3>
          <table class="ort-report-table">
@@ -553,6 +553,40 @@ Prism.languages.yaml={scalar:{pattern:/([\-:]\s*(?:![^\s]+)?[ \t]*[|>])[ \t]*(?:
                            <p>Unknown time [ERROR]: Dummy - DownloadException: No source artifact URL provided for
                               'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'.<br>Caused by: DownloadException: No VCS URL provided for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'.
                               Please make sure the published POM file includes the SCM connection, see: https://docs.gradle.org/current/userguide/publishing_maven.html#sec:modifying_the_generated_pom</p>
+                           <p></p>
+                        </li>
+                        <details>
+                           <summary>How to fix</summary>
+                           <ul>
+                              
+                              <li><em>Step 1</em></li>
+                              
+                              <li><strong>Step 2</strong></li>
+                              
+                              <li><em><strong>Step 3</strong></em>
+                                 <code>Some long issue resolution text to verify that overflow:scroll is working as expected.</code></li>
+                              </ul>
+                           </details>
+                        <li>
+                           <p>2024-04-22T10:36:10.661544294Z [ERROR]: FakeScanner - ERROR: Timeout after 300 seconds
+                              while scanning file 'analyzer/src/funTest/assets/projects/synthetic/gradle/lib/included-file.dat'.</p>
+                           <p></p>
+                        </li>
+                        <details>
+                           <summary>How to fix</summary>
+                           <ul>
+                              
+                              <li><em>Step 1</em></li>
+                              
+                              <li><strong>Step 2</strong></li>
+                              
+                              <li><em><strong>Step 3</strong></em>
+                                 <code>Some long issue resolution text to verify that overflow:scroll is working as expected.</code></li>
+                              </ul>
+                           </details>
+                        <li>
+                           <p>2024-04-22T10:36:10.661544294Z [ERROR]: FakeScanner - ERROR: Timeout after 300 seconds
+                              while scanning file 'analyzer/src/funTest/assets/projects/synthetic/gradle/lib/excluded-file.dat'.</p>
                            <p></p>
                         </li>
                         <details>
@@ -612,7 +646,7 @@ Prism.languages.yaml={scalar:{pattern:/([\-:]\s*(?:![^\s]+)?[ \t]*[|>])[ \t]*(?:
                </tr>
             </thead>
             <tbody>
-               <tr class="ort-success " id="Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0-pkg-1">
+               <tr class="ort-error " id="Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0-pkg-1">
                   <td><a href="#Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0-pkg-1">1</a></td>
                   <td>Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0</td>
                   <td></td>
@@ -636,7 +670,12 @@ Prism.languages.yaml={scalar:{pattern:/([\-:]\s*(?:![^\s]+)?[ \t]*[|>])[ \t]*(?:
                      <ul></ul>
                   </td>
                   <td>
-                     <ul></ul>
+                     <ul>
+                        <li>
+                           <p>2024-04-22T10:36:10.661544294Z [ERROR]: FakeScanner - ERROR: Timeout after 300 seconds
+                              while scanning file 'project/file-within-excluded-project.dat'.</p>
+                        </li>
+                     </ul>
                   </td>
                </tr>
             </tbody>
@@ -703,6 +742,14 @@ Prism.languages.yaml={scalar:{pattern:/([\-:]\s*(?:![^\s]+)?[ \t]*[|>])[ \t]*(?:
                            <p>Unknown time [ERROR]: Dummy - DownloadException: No source artifact URL provided for
                               'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'.<br>Caused by: DownloadException: No VCS URL provided for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'.
                               Please make sure the published POM file includes the SCM connection, see: https://docs.gradle.org/current/userguide/publishing_maven.html#sec:modifying_the_generated_pom</p>
+                        </li>
+                        <li>
+                           <p>2024-04-22T10:36:10.661544294Z [ERROR]: FakeScanner - ERROR: Timeout after 300 seconds
+                              while scanning file 'analyzer/src/funTest/assets/projects/synthetic/gradle/lib/included-file.dat'.</p>
+                        </li>
+                        <li>
+                           <p>2024-04-22T10:36:10.661544294Z [ERROR]: FakeScanner - ERROR: Timeout after 300 seconds
+                              while scanning file 'analyzer/src/funTest/assets/projects/synthetic/gradle/lib/excluded-file.dat'.</p>
                         </li>
                      </ul>
                   </td>
@@ -913,6 +960,8 @@ excludes:
   - pattern: "**/*.java"
     reason: "EXAMPLE_OF"
     comment: "These are example files."
+  - pattern: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/excluded-file.dat"
+    reason: "DATA_FILE_OF"
   scopes:
   - pattern: "testCompile"
     reason: "TEST_DEPENDENCY_OF"
