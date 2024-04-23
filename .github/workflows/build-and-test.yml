@@ -146,22 +146,15 @@ jobs:
         gradle-home-cache-cleanup: true
     - name: Run functional tests that do require external tools
       run: |
-        # Change the ownership of the Gradle user home and the workspace to the user in the Docker container.
-        sudo chown -R 1000:1000 /home/runner/.gradle
-        sudo chown -R 1000:1000 ${{ github.workspace }}
-
         # Run the functional tests in the Docker container.
         docker run \
-          -v /home/runner/.gradle:/home/ort/.gradle \
+          -u $(id -u):$(id -g) \
+          -v /home/runner:/home/runner \
           -v ${{ github.workspace }}:/workspace \
           -w /workspace \
-          -e GRADLE_USER_HOME=/home/ort/.gradle \
+          -e HOME=/home/runner \
           ${{ env.TEST_IMAGE_TAG }} \
           -c "./gradlew --scan -Ptests.include=org.ossreviewtoolkit.plugins.packagemanagers.* funTest jacocoFunTestReport"
-
-        # Change the ownership of the Gradle user home and the workspace back to the user in the GitHub Actions runner.
-        sudo chown -R 1001:121 /home/runner/.gradle
-        sudo chown -R 1001:121 ${{ github.workspace }}
     - name: Upload code coverage data
       uses: codecov/codecov-action@v4
       with:
