@@ -153,7 +153,7 @@ data class OrtResult(
         resolvedConfiguration.packageConfigurations.orEmpty().groupBy { it.id }
     }
 
-    private val excludedAffectedPathIssuesForId: Map<Identifier, Set<Issue>> by lazy {
+    private val issuesWithExcludedAffectedPathById: Map<Identifier, Set<Issue>> by lazy {
         buildMap<Identifier, MutableSet<Issue>> {
             scanner?.getAllScanResults().orEmpty().forEach { (id, scanResults) ->
                 scanResults.forEach { scanResult ->
@@ -289,7 +289,7 @@ data class OrtResult(
             val filteredIssues = issues.filterTo(mutableSetOf()) {
                 (!omitResolved || !isResolved(it))
                     && it.severity >= minSeverity
-                    && it !in excludedAffectedPathIssuesForId[id].orEmpty()
+                    && it !in issuesWithExcludedAffectedPathById[id].orEmpty()
             }
 
             filteredIssues.takeUnless { it.isEmpty() }?.let { id to it }
@@ -566,6 +566,13 @@ data class OrtResult(
         } else {
             isPackageExcluded(id)
         }
+
+    /**
+     * Return `true` if and only if the given [issue] is excluded in context of the given [id]. This is the case when
+     * either [id] is excluded, or the [affected path][Issue.affectedPath] of [issue] is matched by a path exclude.
+     */
+    fun isExcluded(issue: Issue, id: Identifier): Boolean =
+        isExcluded(id) || issue in issuesWithExcludedAffectedPathById[id].orEmpty()
 
     /**
      * Return `true` if all dependencies on the package or project identified by the given [id] are excluded. This is
