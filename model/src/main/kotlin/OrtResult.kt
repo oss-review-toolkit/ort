@@ -153,6 +153,29 @@ data class OrtResult(
         resolvedConfiguration.packageConfigurations.orEmpty().groupBy { it.id }
     }
 
+    private val excludedAffectedPathIssuesForId: Map<Identifier, Set<Issue>> by lazy {
+        buildMap<Identifier, MutableSet<Issue>> {
+            scanner?.getAllScanResults().orEmpty().forEach { (id, scanResults) ->
+                scanResults.forEach { scanResult ->
+                    val pathExcludes = getPathExcludes(id, scanResult.provenance)
+
+                    scanResult.summary.issues.forEach { issue ->
+                        if (issue.affectedPath != null && pathExcludes.any { it.matches(issue.affectedPath) }) {
+                            getOrPut(id) { mutableSetOf() } += issue
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getPathExcludes(id: Identifier, provenance: Provenance) =
+        if (isProject(id)) {
+            repository.config.excludes.paths
+        } else {
+            getPackageConfigurations(id, provenance).flatMapTo(mutableSetOf()) { it.pathExcludes }
+        }
+
     /**
      * A map of projects and their excluded state. Calculating this map once brings massive performance improvements
      * when querying projects in large analyzer results.
@@ -264,7 +287,9 @@ data class OrtResult(
             if (omitExcluded && isExcluded(id)) return@mapNotNull null
 
             val filteredIssues = issues.filterTo(mutableSetOf()) {
-                (!omitResolved || !isResolved(it)) && it.severity >= minSeverity
+                (!omitResolved || !isResolved(it))
+                    && it.severity >= minSeverity
+                    && it !in excludedAffectedPathIssuesForId[id].orEmpty()
             }
 
             filteredIssues.takeUnless { it.isEmpty() }?.let { id to it }
