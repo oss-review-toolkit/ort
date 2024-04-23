@@ -155,9 +155,7 @@ class OrtResultTest : WordSpec({
         "omit resolved issues" {
             val ortResult = OrtResult.EMPTY.copy(
                 analyzer = AnalyzerRun.EMPTY.copy(
-                    result = AnalyzerResult(
-                        projects = emptySet(),
-                        packages = emptySet(),
+                    result = AnalyzerResult.EMPTY.copy(
                         issues = mapOf(
                             Identifier("Maven:org.oss-review-toolkit:example:1.0") to listOf(
                                 Issue(message = "Issue message to resolve", source = ""),
@@ -187,9 +185,7 @@ class OrtResultTest : WordSpec({
         "omit issues with violation below threshold" {
             val ortResult = OrtResult.EMPTY.copy(
                 analyzer = AnalyzerRun.EMPTY.copy(
-                    result = AnalyzerResult(
-                        projects = emptySet(),
-                        packages = emptySet(),
+                    result = AnalyzerResult.EMPTY.copy(
                         issues = mapOf(
                             Identifier("Maven:org.oss-review-toolkit:example:1.0") to
                                 listOf(
@@ -229,7 +225,7 @@ class OrtResultTest : WordSpec({
                     )
                 ),
                 analyzer = AnalyzerRun.EMPTY.copy(
-                    result = AnalyzerResult(
+                    result = AnalyzerResult.EMPTY.copy(
                         projects = setOf(
                             Project.EMPTY.copy(
                                 id = Identifier("Maven:org.oss-review-toolkit:excluded:1.0"),
@@ -237,7 +233,6 @@ class OrtResultTest : WordSpec({
                                 declaredLicenses = emptySet()
                             )
                         ),
-                        packages = emptySet(),
                         issues = mapOf(
                             Identifier("Maven:org.oss-review-toolkit:excluded:1.0") to
                                 listOf(Issue(message = "Excluded issue", source = "")),
