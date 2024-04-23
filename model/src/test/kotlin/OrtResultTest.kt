@@ -210,7 +210,7 @@ class OrtResultTest : WordSpec({
             openIssues.map { it.message } shouldHaveSingleElement "Issue with severity 'warning'"
         }
 
-        "omit excluded issues" {
+        "omit issues of excluded projects" {
             val ortResult = OrtResult.EMPTY.copy(
                 repository = Repository.EMPTY.copy(
                     config = RepositoryConfiguration(
