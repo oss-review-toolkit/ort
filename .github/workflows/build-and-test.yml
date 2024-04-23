@@ -152,8 +152,8 @@ jobs:
 
         # Run the functional tests in the Docker container.
         docker run \
-          -v ${{ github.workspace }}:/workspace \
           -v /home/runner/.gradle:/home/ort/.gradle \
+          -v ${{ github.workspace }}:/workspace \
           -w /workspace \
           --entrypoint=/bin/sh \
           ${{ env.TEST_IMAGE_TAG }} \
