@@ -21,11 +21,12 @@ package org.ossreviewtoolkit.model
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.haveSize
+import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSingleElement
+import io.kotest.matchers.collections.shouldNotContain
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldMatch
@@ -61,15 +62,21 @@ class OrtResultTest : WordSpec({
     }
 
     "getProjectsAndPackages()" should {
-        "be able to get all ids except for ones for sub-projects" {
-            val ortResult = readOrtResult("src/test/assets/gradle-all-dependencies-expected-result.yml")
+        val ortResult = readOrtResult("src/test/assets/gradle-all-dependencies-expected-result.yml")
+        val subProjectId = Identifier("Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0")
+
+        "be able to get all ids including sub-projects" {
             val ids = ortResult.getProjectsAndPackages()
-            val idsWithoutSubProjects = ortResult.getProjectsAndPackages(includeSubProjects = false)
-            val actualIds = ids - idsWithoutSubProjects
 
             ids should haveSize(9)
-            idsWithoutSubProjects should haveSize(8)
-            actualIds should containExactly(Identifier("Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"))
+            ids shouldContain subProjectId
+        }
+
+        "be able to get all ids excluding sub-projects" {
+            val ids = ortResult.getProjectsAndPackages(includeSubProjects = false)
+
+            ids should haveSize(8)
+            ids shouldNotContain(subProjectId)
         }
     }
 
