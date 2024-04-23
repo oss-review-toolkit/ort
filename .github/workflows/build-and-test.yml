@@ -155,8 +155,9 @@ jobs:
           -v /home/runner/.gradle:/home/ort/.gradle \
           -v ${{ github.workspace }}:/workspace \
           -w /workspace \
+          -e GRADLE_USER_HOME=/home/ort/.gradle \
           ${{ env.TEST_IMAGE_TAG }} \
-          -c "GRADLE_USER_HOME=/home/ort/.gradle ./gradlew --scan -Ptests.include=org.ossreviewtoolkit.plugins.packagemanagers.* funTest jacocoFunTestReport"
+          -c "./gradlew --scan -Ptests.include=org.ossreviewtoolkit.plugins.packagemanagers.* funTest jacocoFunTestReport"
 
         # Change the ownership of the Gradle user home and the workspace back to the user in the GitHub Actions runner.
         sudo chown -R 1001:121 /home/runner/.gradle
