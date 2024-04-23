@@ -155,7 +155,6 @@ jobs:
           -v /home/runner/.gradle:/home/ort/.gradle \
           -v ${{ github.workspace }}:/workspace \
           -w /workspace \
-          --entrypoint=/bin/sh \
           ${{ env.TEST_IMAGE_TAG }} \
           -c "GRADLE_USER_HOME=/home/ort/.gradle ./gradlew --scan -Ptests.include=org.ossreviewtoolkit.plugins.packagemanagers.* funTest jacocoFunTestReport"
 
