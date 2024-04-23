@@ -60,6 +60,68 @@ class IssuesTable extends React.Component {
 
         const columns = [];
 
+        if (showExcludesColumn) {
+            columns.push({
+                align: 'right',
+                filters: (() => [
+                    {
+                        text: (
+                            <span>
+                                <FileExcelOutlined className="ort-excluded" />
+                                {' '}
+                                Excluded
+                            </span>
+                        ),
+                        value: 'excluded'
+                    },
+                    {
+                        text: (
+                            <span>
+                                <FileAddOutlined />
+                                {' '}
+                                Included
+                            </span>
+                        ),
+                        value: 'included'
+                    }
+                ])(),
+                filteredValue: filteredInfo.excludes || null,
+                key: 'excludes',
+                onFilter: (value, webAppOrtIssue) => {
+                    const webAppPackage = webAppOrtIssue.package;
+
+                    if (value === 'excluded') {
+                        return webAppPackage.isExcluded;
+                    }
+
+                    if (value === 'included') {
+                        return !webAppPackage.isExcluded;
+                    }
+
+                    return false;
+                },
+                render: (webAppOrtIssue) => {
+                    const webAppPackage = webAppOrtIssue.package;
+
+                    return webAppPackage.isExcluded
+                        ? (
+                        <span className="ort-excludes">
+                            <Tooltip
+                                placement="right"
+                                title={Array.from(webAppPackage.excludeReasons).join(', ')}
+                            >
+                                <FileExcelOutlined className="ort-excluded" />
+                            </Tooltip>
+                        </span>
+                            )
+                        : (
+                        <FileAddOutlined />
+                            );
+                },
+                width: '2em'
+            });
+        }
+
         columns.push({
             align: 'center',
             dataIndex: 'severityIndex',
@@ -128,68 +190,6 @@ class IssuesTable extends React.Component {
             sortOrder: sortedInfo.field === 'severityIndex' && sortedInfo.order,
             width: '5em'
         });
-
-        if (showExcludesColumn) {
-            columns.push({
-                align: 'right',
-                filters: (() => [
-                    {
-                        text: (
-                            <span>
-                                <FileExcelOutlined className="ort-excluded" />
-                                {' '}
-                                Excluded
-                            </span>
-                        ),
-                        value: 'excluded'
-                    },
-                    {
-                        text: (
-                            <span>
-                                <FileAddOutlined />
-                                {' '}
-                                Included
-                            </span>
-                        ),
-                        value: 'included'
-                    }
-                ])(),
-                filteredValue: filteredInfo.excludes || null,
-                key: 'excludes',
-                onFilter: (value, webAppOrtIssue) => {
-                    const webAppPackage = webAppOrtIssue.package;
-
-                    if (value === 'excluded') {
-                        return webAppPackage.isExcluded;
-                    }
-
-                    if (value === 'included') {
-                        return !webAppPackage.isExcluded;
-                    }
-
-                    return false;
-                },
-                render: (webAppOrtIssue) => {
-                    const webAppPackage = webAppOrtIssue.package;
-
-                    return webAppPackage.isExcluded
-                        ? (
-                        <span className="ort-excludes">
-                            <Tooltip
-                                placement="right"
-                                title={Array.from(webAppPackage.excludeReasons).join(', ')}
-                            >
-                                <FileExcelOutlined className="ort-excluded" />
-                            </Tooltip>
-                        </span>
-                            )
-                        : (
-                        <FileAddOutlined />
-                            );
-                },
-                width: '2em'
-            });
-        }
 
         columns.push(
             {
