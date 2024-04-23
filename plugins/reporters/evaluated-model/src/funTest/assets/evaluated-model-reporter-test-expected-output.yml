@@ -919,10 +919,10 @@ statistics:
     rule_violation_resolutions: 1
     vulnerability_resolutions: 0
   open_issues:
-    errors: 3
+    errors: 2
     warnings: 0
     hints: 0
-    severe: 3
+    severe: 2
   open_rule_violations:
     errors: 1
     warnings: 1

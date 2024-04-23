@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.model
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.collections.shouldContain
@@ -246,6 +247,79 @@ class OrtResultTest : WordSpec({
             val openIssues = ortResult.getOpenIssues()
 
             openIssues.map { it.message } shouldHaveSingleElement "Included issue"
+        }
+
+        "omit scan issues with excluded affected path" {
+            val projectId = Identifier("Maven:org.oss-review-toolkit:example-project:1.0")
+            val vcs = VcsInfo(
+                type = VcsType.GIT,
+                url = "https:/github.com/example.project.git",
+                revision = "0000000000000000000000000000000000000000",
+                path = ""
+            )
+
+            val ortResult = OrtResult.EMPTY.copy(
+                repository = Repository.EMPTY.copy(
+                    vcs = vcs,
+                    vcsProcessed = vcs,
+                    config = RepositoryConfiguration(
+                        excludes = Excludes(
+                            paths = listOf(
+                                PathExclude(
+                                    pattern = "test/**",
+                                    reason = PathExcludeReason.TEST_OF
+                                )
+                            )
+                        )
+                    )
+                ),
+                analyzer = AnalyzerRun.EMPTY.copy(
+                    result = AnalyzerResult.EMPTY.copy(
+                        projects = setOf(
+                            Project.EMPTY.copy(
+                                id = projectId,
+                                definitionFilePath = "pom.xml",
+                                declaredLicenses = emptySet(),
+                                vcsProcessed = vcs
+                            )
+                        )
+                    )
+                ),
+                scanner = ScannerRun.EMPTY.copy(
+                    scanners = mapOf(projectId to setOf("ScanCode")),
+                    provenances = setOf(
+                        ProvenanceResolutionResult(
+                            id = projectId,
+                            packageProvenance = RepositoryProvenance(
+                                vcsInfo = vcs,
+                                resolvedRevision = vcs.revision
+                            )
+                        )
+                    ),
+                    scanResults = setOf(
+                        ScanResult(
+                            provenance = RepositoryProvenance(
+                                vcsInfo = vcs,
+                                resolvedRevision = vcs.revision
+                            ),
+                            scanner = ScannerDetails.EMPTY.copy(name = "ScanCode"),
+                            summary = ScanSummary.EMPTY.copy(
+                                issues = listOf(
+                                    Issue(
+                                        message = "Included issue",
+                                        source = "ScanCode",
+                                        affectedPath = "test/assets/asset.json"
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+
+            val issues = ortResult.getOpenIssues()
+
+            issues should beEmpty()
         }
     }
 
