@@ -292,8 +292,9 @@ class OrtResultTest : WordSpec({
                 )
             )
 
-            ortResult.getRuleViolations(omitResolved = false, minSeverity = Severity.entries.min()).map { it.rule }
-                .shouldContainExactly("rule id")
+            val ruleViolations = ortResult.getRuleViolations(omitResolved = false, minSeverity = Severity.entries.min())
+
+            ruleViolations.map { it.rule }.shouldContainExactly("rule id")
         }
 
         "drop violations which are resolved or below minSeverity if omitResolved is true and minSeverity is WARNING" {
@@ -342,8 +343,9 @@ class OrtResultTest : WordSpec({
                 )
             )
 
-            ortResult.getRuleViolations(omitResolved = true, minSeverity = Severity.WARNING).map { it.rule }
-                .shouldContainExactly("Rule violation without resolution")
+            val ruleViolations = ortResult.getRuleViolations(omitResolved = true, minSeverity = Severity.WARNING)
+
+            ruleViolations.map { it.rule }.shouldContainExactly("Rule violation without resolution")
         }
     }
 })
