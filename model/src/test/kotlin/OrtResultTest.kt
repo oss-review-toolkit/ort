@@ -45,7 +45,7 @@ import org.ossreviewtoolkit.model.config.RuleViolationResolutionReason
 import org.ossreviewtoolkit.utils.test.readOrtResult
 
 class OrtResultTest : WordSpec({
-    "collectDependencies()" should {
+    "getDependencies()" should {
         "be able to get all direct dependencies of a package" {
             val ortResult = readOrtResult("src/test/assets/sbt-multi-project-example-expected-output.yml")
             val id = Identifier("Maven:com.typesafe.akka:akka-stream_2.12:2.5.6")
@@ -60,7 +60,7 @@ class OrtResultTest : WordSpec({
         }
     }
 
-    "collectProjectsAndPackages()" should {
+    "getProjectsAndPackages()" should {
         "be able to get all ids except for ones for sub-projects" {
             val ortResult = readOrtResult("src/test/assets/gradle-all-dependencies-expected-result.yml")
             val ids = ortResult.getProjectsAndPackages()
