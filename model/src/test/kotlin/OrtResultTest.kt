@@ -25,6 +25,7 @@ import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.collections.shouldHaveSingleElement
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldMatch
@@ -173,10 +174,7 @@ class OrtResultTest : WordSpec({
 
             val openIssues = ortResult.getOpenIssues(Severity.WARNING)
 
-            openIssues should haveSize(1)
-            with(openIssues.first()) {
-                message shouldBe "Non-resolved issue"
-            }
+            openIssues.map { it.message } shouldHaveSingleElement "Non-resolved issue"
         }
 
         "omit issues with violation below threshold" {
@@ -206,10 +204,7 @@ class OrtResultTest : WordSpec({
 
             val openIssues = ortResult.getOpenIssues(Severity.WARNING)
 
-            openIssues should haveSize(1)
-            with(openIssues.first()) {
-                message shouldBe "Issue with severity 'warning'"
-            }
+            openIssues.map { it.message } shouldHaveSingleElement "Issue with severity 'warning'"
         }
 
         "omit excluded issues" {
@@ -248,10 +243,7 @@ class OrtResultTest : WordSpec({
 
             val openIssues = ortResult.getOpenIssues()
 
-            openIssues should haveSize(1)
-            with(openIssues.first()) {
-                message shouldBe "Included issue"
-            }
+            openIssues.map { it.message } shouldHaveSingleElement "Included issue"
         }
     }
 
