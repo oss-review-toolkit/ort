@@ -59,77 +59,76 @@ class RuleViolationsTable extends React.Component {
             return null;
         }
 
-        const columns = [
-            {
-                align: 'center',
-                dataIndex: 'severityIndex',
-                key: 'severityIndex',
-                filters: [
-                    {
-                        text: 'Errors',
-                        value: 0
-                    },
-                    {
-                        text: 'Warnings',
-                        value: 1
-                    },
-                    {
-                        text: 'Hint',
-                        value: 2
-                    },
-                    {
-                        text: 'Resolved',
-                        value: 3
-                    }
-                ],
-                filteredValue: filteredInfo.severityIndex || null,
-                onFilter: (value, webAppRuleViolation) => webAppRuleViolation.severityIndex === Number(value),
-                render: (text, webAppRuleViolation) => (
-                    webAppRuleViolation.isResolved
-                        ? (
-                            <Tooltip
-                                placement="right"
-                                title={Array.from(webAppRuleViolation.resolutionReasons).join(', ')}
-                            >
-                                <IssuesCloseOutlined
-                                    className="ort-ok"
-                                />
-                            </Tooltip>
-                            )
-                        : (
-                            <span>
-                                {
-                                    webAppRuleViolation.severity === 'ERROR'
-                                    && (
-                                        <ExclamationCircleOutlined
-                                            className="ort-error"
-                                        />
-                                    )
-                                }
-                                {
-                                    webAppRuleViolation.severity === 'WARNING'
-                                    && (
-                                        <WarningOutlined
-                                            className="ort-warning"
-                                        />
-                                    )
-                                }
-                                {
-                                    webAppRuleViolation.severity === 'HINT'
-                                    && (
-                                        <InfoCircleOutlined
-                                            className="ort-hint"
-                                        />
-                                    )
-                                }
-                            </span>
-                            )
-                ),
-                sorter: (a, b) => a.severityIndex - b.severityIndex,
-                sortOrder: sortedInfo.field === 'severityIndex' && sortedInfo.order,
-                width: '5em'
-            }
-        ];
+        const columns = [];
+        columns.push({
+            align: 'center',
+            dataIndex: 'severityIndex',
+            key: 'severityIndex',
+            filters: [
+                {
+                    text: 'Errors',
+                    value: 0
+                },
+                {
+                    text: 'Warnings',
+                    value: 1
+                },
+                {
+                    text: 'Hint',
+                    value: 2
+                },
+                {
+                    text: 'Resolved',
+                    value: 3
+                }
+            ],
+            filteredValue: filteredInfo.severityIndex || null,
+            onFilter: (value, webAppRuleViolation) => webAppRuleViolation.severityIndex === Number(value),
+            render: (text, webAppRuleViolation) => (
+                webAppRuleViolation.isResolved
+                    ? (
+                        <Tooltip
+                            placement="right"
+                            title={Array.from(webAppRuleViolation.resolutionReasons).join(', ')}
+                        >
+                            <IssuesCloseOutlined
+                                className="ort-ok"
+                            />
+                        </Tooltip>
+                        )
+                    : (
+                        <span>
+                            {
+                                webAppRuleViolation.severity === 'ERROR'
+                                && (
+                                    <ExclamationCircleOutlined
+                                        className="ort-error"
+                                    />
+                                )
+                            }
+                            {
+                                webAppRuleViolation.severity === 'WARNING'
+                                && (
+                                    <WarningOutlined
+                                        className="ort-warning"
+                                    />
+                                )
+                            }
+                            {
+                                webAppRuleViolation.severity === 'HINT'
+                                && (
+                                    <InfoCircleOutlined
+                                        className="ort-hint"
+                                    />
+                                )
+                            }
+                        </span>
+                        )
+            ),
+            sorter: (a, b) => a.severityIndex - b.severityIndex,
+            sortOrder: sortedInfo.field === 'severityIndex' && sortedInfo.order,
+            width: '5em'
+        });
 
         if (showExcludesColumn) {
             columns.push({

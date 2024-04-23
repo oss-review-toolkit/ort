@@ -70,101 +70,101 @@ class VulnerabilitiesTable extends React.Component {
             return null;
         }
 
-        const columns = [
-            {
-                align: 'center',
-                dataIndex: 'severityIndex',
-                key: 'severityIndex',
-                filters: [
-                    {
-                        text: 'Critical',
-                        value: 0
-                    },
-                    {
-                        text: 'High',
-                        value: 1
-                    },
-                    {
-                        text: 'Medium',
-                        value: 2
-                    },
-                    {
-                        text: 'Low',
-                        value: 3
-                    },
-                    {
-                        text: 'Resolved',
-                        value: 5
-                    },
-                    {
-                        text: 'Unknown',
-                        value: 4
-                    }
-                ],
-                filteredValue: filteredInfo.severityIndex || null,
-                onFilter: (value, webAppVulnerability) => webAppVulnerability.severityIndex === Number(value),
-                render: (text, webAppVulnerability) => (
-                    webAppVulnerability.isResolved
-                        ? (
-                            <Tooltip
-                                placement="right"
-                                title={Array.from(webAppVulnerability.resolutionReasons).join(', ')}
-                            >
-                                <IssuesCloseOutlined
-                                    className="ort-ok"
-                                />
-                            </Tooltip>
-                            )
-                        : (
-                            <span>
-                                {
-                                    webAppVulnerability.severityIndex === 0
-                                    && (
-                                        <CloseCircleOutlined
-                                            className="ort-critical"
-                                        />
-                                    )
-                                }
-                                {
-                                    webAppVulnerability.severityIndex === 1
-                                    && (
-                                        <ExclamationCircleOutlined
-                                            className="ort-high"
-                                        />
-                                    )
-                                }
-                                {
-                                    webAppVulnerability.severityIndex === 2
-                                    && (
-                                        <WarningOutlined
-                                            className="ort-medium"
-                                        />
-                                    )
-                                }
-                                {
-                                    webAppVulnerability.severityIndex === 3
-                                    && (
-                                        <InfoCircleOutlined
-                                            className="ort-low"
-                                        />
-                                    )
-                                }
-                                {
-                                    webAppVulnerability.severityIndex === 4
-                                    && (
-                                        <QuestionCircleOutlined
-                                            className="ort-unknown"
-                                        />
-                                    )
-                                }
-                            </span>
-                            )
-                ),
-                sorter: (a, b) => a.severityIndex - b.severityIndex,
-                sortOrder: sortedInfo.field === 'severityIndex' && sortedInfo.order,
-                width: '5em'
-            }
-        ];
+        const columns = [];
+
+        columns.push({
+            align: 'center',
+            dataIndex: 'severityIndex',
+            key: 'severityIndex',
+            filters: [
+                {
+                    text: 'Critical',
+                    value: 0
+                },
+                {
+                    text: 'High',
+                    value: 1
+                },
+                {
+                    text: 'Medium',
+                    value: 2
+                },
+                {
+                    text: 'Low',
+                    value: 3
+                },
+                {
+                    text: 'Resolved',
+                    value: 5
+                },
+                {
+                    text: 'Unknown',
+                    value: 4
+                }
+            ],
+            filteredValue: filteredInfo.severityIndex || null,
+            onFilter: (value, webAppVulnerability) => webAppVulnerability.severityIndex === Number(value),
+            render: (text, webAppVulnerability) => (
+                webAppVulnerability.isResolved
+                    ? (
+                        <Tooltip
+                            placement="right"
+                            title={Array.from(webAppVulnerability.resolutionReasons).join(', ')}
+                        >
+                            <IssuesCloseOutlined
+                                className="ort-ok"
+                            />
+                        </Tooltip>
+                        )
+                    : (
+                        <span>
+                            {
+                                webAppVulnerability.severityIndex === 0
+                                && (
+                                    <CloseCircleOutlined
+                                        className="ort-critical"
+                                    />
+                                )
+                            }
+                            {
+                                webAppVulnerability.severityIndex === 1
+                                && (
+                                    <ExclamationCircleOutlined
+                                        className="ort-high"
+                                    />
+                                )
+                            }
+                            {
+                                webAppVulnerability.severityIndex === 2
+                                && (
+                                    <WarningOutlined
+                                        className="ort-medium"
+                                    />
+                                )
+                            }
+                            {
+                                webAppVulnerability.severityIndex === 3
+                                && (
+                                    <InfoCircleOutlined
+                                        className="ort-low"
+                                    />
+                                )
+                            }
+                            {
+                                webAppVulnerability.severityIndex === 4
+                                && (
+                                    <QuestionCircleOutlined
+                                        className="ort-unknown"
+                                    />
+                                )
+                            }
+                        </span>
+                        )
+            ),
+            sorter: (a, b) => a.severityIndex - b.severityIndex,
+            sortOrder: sortedInfo.field === 'severityIndex' && sortedInfo.order,
+            width: '5em'
+        });
 
         if (showExcludesColumn) {
             columns.push({
