@@ -306,7 +306,7 @@ class DownloaderFunTest : WordSpec({
 
             val provenance = Downloader(DownloaderConfiguration()).download(pkg, outputDir)
 
-            outputDir.walk().onEnter { it.name != ".svn" }.count() shouldBe 302
+            outputDir.walk().onEnter { it.name !in VCS_DIRECTORIES }.count() shouldBe 302
 
             provenance.shouldBeTypeOf<RepositoryProvenance>().apply {
                 vcsInfo.type shouldBe VcsType.SUBVERSION
