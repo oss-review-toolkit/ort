@@ -157,14 +157,12 @@ class IssuesTable extends React.Component {
                 filteredValue: filteredInfo.excludes || null,
                 key: 'excludes',
                 onFilter: (value, webAppOrtIssue) => {
-                    const webAppPackage = webAppOrtIssue.package;
-
                     if (value === 'excluded') {
-                        return webAppPackage.isExcluded;
+                        return webAppOrtIssue.isExcluded;
                     }
 
                     if (value === 'included') {
-                        return !webAppPackage.isExcluded;
+                        return !webAppOrtIssue.isExcluded;
                     }
 
                     return false;
@@ -172,7 +170,7 @@ class IssuesTable extends React.Component {
                 render: (webAppOrtIssue) => {
                     const webAppPackage = webAppOrtIssue.package;
 
-                    return webAppPackage.isExcluded
+                    return webAppOrtIssue.isExcluded
                         ? (
                         <span className="ort-excludes">
                             <Tooltip
