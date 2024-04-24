@@ -107,7 +107,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
         // managers) which we need to attach to an artificial "unmanaged" project.
         val managedDirs = managedFiles.values.flatten().mapNotNull { it.parentFile }
         val hasOnlyManagedDirs = absoluteProjectPath in managedDirs || absoluteProjectPath.listFiles().orEmpty().all {
-            it in managedDirs || it.name in VCS_DIRECTORIES
+            it.isDirectory && (it in managedDirs || it.name in VCS_DIRECTORIES)
         }
 
         if (!hasOnlyManagedDirs) {
