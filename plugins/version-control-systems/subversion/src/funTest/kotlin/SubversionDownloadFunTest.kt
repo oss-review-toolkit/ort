@@ -76,17 +76,16 @@ class SubversionDownloadFunTest : StringSpec() {
                 vcsProcessed = VcsInfo(VcsType.SUBVERSION, REPO_URL, REPO_REV, path = REPO_PATH)
             )
             val expectedFiles = listOf(
-                File(REPO_PATH, "checkyear.js"),
-                File(REPO_PATH, "coverity.bat")
+                "$REPO_PATH/checkyear.js",
+                "$REPO_PATH/coverity.bat"
             )
 
             val workingTree = svn.download(pkg, outputDir)
-            val actualFiles = workingTree.workingDir.walkBottomUp()
+            val actualFiles = workingTree.workingDir.walk()
                 .onEnter { it.name !in VCS_DIRECTORIES }
                 .filter { it.isFile }
-                .map { it.relativeTo(outputDir) }
-                .sortedBy { it.path }
-                .toList()
+                .mapTo(mutableListOf()) { it.toRelativeString(workingTree.workingDir) }
+                .sorted()
 
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV
