@@ -38,9 +38,7 @@ import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class PubFunTest : WordSpec({
     "Pub" should {
-        // TODO: Tests are temporarily disabled to prevent Bootstrapping of the Flutter SDK as GitHub runners are
-        //       running out of disk space. Enable them again once a better solution was implemented.
-        "resolve dart http dependencies correctly".config(enabled = false) {
+        "resolve dart http dependencies correctly" {
             val definitionFile = getAssetFile("projects/external/dart-http/pubspec.yaml")
             val expectedResultFile = getAssetFile("projects/external/dart-http-expected-output.yml")
             val lockfile = definitionFile.resolveSibling("pubspec.lock").also {
@@ -56,7 +54,7 @@ class PubFunTest : WordSpec({
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
-        "resolve dependencies for a project with dependencies without a static version".config(enabled = false) {
+        "resolve dependencies for a project with dependencies without a static version" {
             val definitionFile = getAssetFile("projects/synthetic/any-version/pubspec.yaml")
             val expectedResultFile = getAssetFile("projects/synthetic/pub-expected-output-any-version.yml")
 
@@ -65,7 +63,7 @@ class PubFunTest : WordSpec({
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
-        "resolve multi-module dependencies correctly".config(enabled = false) {
+        "resolve multi-module dependencies correctly" {
             val definitionFile = getAssetFile("projects/synthetic/multi-module/pubspec.yaml")
             val expectedResultFile = getAssetFile("projects/synthetic/pub-expected-output-multi-module.yml")
 
@@ -76,7 +74,7 @@ class PubFunTest : WordSpec({
             }
         }
 
-        "resolve dependencies for a project with Flutter, Android and Cocoapods".config(enabled = false) {
+        "resolve dependencies for a project with Flutter, Android and Cocoapods" {
             val definitionFile = getAssetFile(
                 "projects/synthetic/flutter-project-with-android-and-cocoapods/pubspec.yaml"
             )
@@ -92,7 +90,7 @@ class PubFunTest : WordSpec({
             }
         }
 
-        "show an error if no lockfile is present".config(enabled = false) {
+        "show an error if no lockfile is present" {
             val definitionFile = getAssetFile("projects/synthetic/no-lockfile/pubspec.yaml")
 
             val result = create("Pub").resolveSingleProject(definitionFile)
