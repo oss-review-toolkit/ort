@@ -22,6 +22,8 @@ import { randomStringGenerator } from '../utils';
 class WebAppOrtIssue {
     #_id;
 
+    #isExcluded
+
     #howToFix
 
     #message;
@@ -57,6 +59,8 @@ class WebAppOrtIssue {
             if (Number.isInteger(obj._id)) {
                 this.#_id = obj._id;
             }
+
+            this.#isExcluded = obj.is_excluded === true || obj.isExcluded === true;
 
             if (obj.how_to_fix || obj.howToFix) {
                 this.#howToFix = obj.how_to_fix
@@ -123,6 +127,10 @@ class WebAppOrtIssue {
 
     get howToFix() {
         return this.#howToFix;
+    }
+
+    get isExcluded() {
+        return this.#isExcluded;
     }
 
     get isResolved() {
