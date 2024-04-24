@@ -76,7 +76,9 @@ class GitDownloadFunTest : StringSpec() {
             )
 
             val workingTree = git.download(pkg, outputDir)
-            val actualFiles = workingTree.workingDir.list().sorted()
+            val actualFiles = workingTree.workingDir.walk().maxDepth(1).mapNotNullTo(mutableListOf()) {
+                it.toRelativeString(workingTree.workingDir).ifEmpty { null }
+            }.sorted()
 
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV
