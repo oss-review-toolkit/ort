@@ -55,7 +55,7 @@ import org.ossreviewtoolkit.utils.ort.ping
  */
 class Downloader(private val config: DownloaderConfiguration) {
     private fun verifyOutputDirectory(outputDirectory: File) {
-        require(!outputDirectory.exists() || outputDirectory.list().isEmpty()) {
+        require(!outputDirectory.exists() || outputDirectory.walk().singleOrNull() == outputDirectory) {
             "The output directory '$outputDirectory' must not contain any files yet."
         }
 

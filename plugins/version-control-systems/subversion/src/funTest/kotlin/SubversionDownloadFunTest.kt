@@ -62,7 +62,9 @@ class SubversionDownloadFunTest : StringSpec() {
             )
 
             val workingTree = svn.download(pkg, outputDir)
-            val actualFiles = workingTree.workingDir.list().sorted()
+            val actualFiles = workingTree.workingDir.walk().maxDepth(1).mapNotNullTo(mutableListOf()) {
+                it.toRelativeString(workingTree.workingDir).ifEmpty { null }
+            }.sorted()
 
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV
@@ -103,7 +105,9 @@ class SubversionDownloadFunTest : StringSpec() {
             )
 
             val workingTree = svn.download(pkg, outputDir)
-            val actualFiles = workingTree.workingDir.list().sorted()
+            val actualFiles = workingTree.workingDir.walk().maxDepth(1).mapNotNullTo(mutableListOf()) {
+                it.toRelativeString(workingTree.workingDir).ifEmpty { null }
+            }.sorted()
 
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV_FOR_TAG
@@ -135,7 +139,10 @@ class SubversionDownloadFunTest : StringSpec() {
             )
 
             val workingTree = svn.download(pkg, outputDir)
-            val actualFiles = workingTree.workingDir.resolve(REPO_PATH_FOR_VERSION).list().sorted()
+            val pathForVersion = workingTree.workingDir.resolve(REPO_PATH_FOR_VERSION)
+            val actualFiles = pathForVersion.walk().maxDepth(1).mapNotNullTo(mutableListOf()) {
+                it.toRelativeString(pathForVersion).ifEmpty { null }
+            }.sorted()
 
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
