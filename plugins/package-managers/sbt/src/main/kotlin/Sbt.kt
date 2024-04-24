@@ -146,7 +146,7 @@ class Sbt(
                     "the '$targetDir' directory."
             }
 
-            targetDir.walk().maxDepth(1).filterTo(pomFiles) { it.extension == "pom" }
+            targetDir.walk().maxDepth(1).filterTo(pomFiles) { it.isFile && it.extension == "pom" }
         }
 
         return pomFiles.distinct().map { pomFile ->
