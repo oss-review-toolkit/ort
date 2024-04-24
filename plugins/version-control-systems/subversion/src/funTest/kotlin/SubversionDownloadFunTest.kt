@@ -30,6 +30,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
 
 private const val REPO_URL = "https://svn.code.sf.net/p/sendmessage/code"
@@ -79,7 +80,7 @@ class SubversionDownloadFunTest : StringSpec() {
 
             val workingTree = svn.download(pkg, outputDir)
             val actualFiles = workingTree.workingDir.walkBottomUp()
-                .onEnter { it.name != ".svn" }
+                .onEnter { it.name !in VCS_DIRECTORIES }
                 .filter { it.isFile }
                 .map { it.relativeTo(outputDir) }
                 .sortedBy { it.path }
