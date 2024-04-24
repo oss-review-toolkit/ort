@@ -143,12 +143,14 @@ open class Npm(
         val nodeModulesDir = moduleDir.resolve("node_modules")
         if (!nodeModulesDir.isDirectory) return emptyList()
 
-        val searchDirs = nodeModulesDir.walk().maxDepth(1).filter {
-            it.isDirectory && it.name.startsWith("@")
-        }.toList() + nodeModulesDir
+        val searchDirs = nodeModulesDir.walk().maxDepth(1).filterTo(mutableListOf()) {
+            (it.isDirectory && it.name.startsWith("@")) || it == nodeModulesDir
+        }
 
         return searchDirs.flatMap { dir ->
-            dir.walk().maxDepth(1).filter { it.isDirectory && it.isSymbolicLink() }.toList()
+            dir.walk().maxDepth(1).filterTo(mutableListOf()) {
+                it.isDirectory && it.isSymbolicLink() && it != dir
+            }
         }
     }
 
