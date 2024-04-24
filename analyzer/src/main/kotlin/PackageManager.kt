@@ -124,9 +124,9 @@ abstract class PackageManager(
                     else -> true
                 }
             }.filter { it.isDirectory }.forEach { dir ->
-                val filesInCurrentDir = dir.walk().maxDepth(1).filter {
+                val filesInCurrentDir = dir.walk().maxDepth(1).filterTo(mutableListOf()) {
                     it.isFile && !excludes.isPathExcluded(rootPath, it.toPath())
-                }.toList()
+                }
 
                 distinctPackageManagers.forEach { manager ->
                     // Create a list of lists of matching files per glob.
