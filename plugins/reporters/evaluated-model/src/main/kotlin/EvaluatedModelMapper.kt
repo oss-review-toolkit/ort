@@ -725,7 +725,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
 
     /**
      * Return a copy of the [RepositoryConfiguration] with [Resolutions] that refer to the same instances as the
-     * [ResolvedConfiguration] for equal [Resolutions]. This is required for the [EvaluatedModel] to contained indexed
+     * [ResolvedConfiguration] for equal [Resolutions]. This is required for the [EvaluatedModel] to contain indexed
      * references instead of duplicate [Resolutions].
      */
     private fun Repository.deduplicateResolutions(): Repository {
