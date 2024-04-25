@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.scanner.utils.DefaultWorkingTreeCache
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.test.ExpensiveTag
 
 class DefaultNestedProvenanceResolverFunTest : WordSpec() {
     private val workingTreeCache = DefaultWorkingTreeCache()
@@ -204,7 +205,7 @@ class DefaultNestedProvenanceResolverFunTest : WordSpec() {
                 }
             }
 
-            "work for Subversion tags".config(enabled = false /* This needs fixing, see ORT issue 6160. */) {
+            "work for Subversion tags".config(tags = setOf(ExpensiveTag)) {
                 val provenance = RepositoryProvenance(
                     vcsInfo = VcsInfo(
                         type = VcsType.SUBVERSION,
