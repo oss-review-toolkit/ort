@@ -82,6 +82,11 @@
   } ],
   "issue_resolutions" : [ {
     "_id" : 0,
+    "message" : "Example error, resolved.",
+    "reason" : "CANT_FIX_ISSUE",
+    "comment" : "Resolved for illustration."
+  }, {
+    "_id" : 1,
     "message" : "A test issue\\.",
     "reason" : "CANT_FIX_ISSUE",
     "comment" : "A comment explaining why the issue can be ignored."
@@ -98,6 +103,84 @@
     "how_to_fix" : "Some how to fix text."
   }, {
     "_id" : 1,
+    "timestamp" : "2024-04-25T07:44:20.725613974Z",
+    "type" : "SCANNER",
+    "source" : "FakeScanner",
+    "message" : "Example hint.",
+    "severity" : "HINT",
+    "pkg" : 0,
+    "scan_result" : 0,
+    "how_to_fix" : "Some how to fix text."
+  }, {
+    "_id" : 2,
+    "timestamp" : "2024-04-25T07:44:20.725613974Z",
+    "type" : "SCANNER",
+    "source" : "FakeScanner",
+    "message" : "Example warning.",
+    "severity" : "WARNING",
+    "pkg" : 0,
+    "scan_result" : 0,
+    "how_to_fix" : "Some how to fix text."
+  }, {
+    "_id" : 3,
+    "timestamp" : "2024-04-25T07:44:20.725613974Z",
+    "type" : "SCANNER",
+    "source" : "FakeScanner",
+    "message" : "Example error.",
+    "severity" : "ERROR",
+    "pkg" : 0,
+    "scan_result" : 0,
+    "how_to_fix" : "Some how to fix text."
+  }, {
+    "_id" : 4,
+    "timestamp" : "2024-04-25T07:44:20.725613974Z",
+    "type" : "SCANNER",
+    "source" : "FakeScanner",
+    "message" : "Example error, resolved.",
+    "severity" : "ERROR",
+    "resolutions" : [ 0 ],
+    "pkg" : 0,
+    "scan_result" : 0,
+    "how_to_fix" : "Some how to fix text."
+  }, {
+    "_id" : 5,
+    "timestamp" : "2024-04-25T07:44:20.725613974Z",
+    "type" : "ANALYZER",
+    "source" : "Gradle",
+    "message" : "Example hint.",
+    "severity" : "HINT",
+    "pkg" : 1,
+    "how_to_fix" : "Some how to fix text."
+  }, {
+    "_id" : 6,
+    "timestamp" : "2024-04-25T07:44:20.725613974Z",
+    "type" : "ANALYZER",
+    "source" : "Gradle",
+    "message" : "Example warning.",
+    "severity" : "WARNING",
+    "pkg" : 1,
+    "how_to_fix" : "Some how to fix text."
+  }, {
+    "_id" : 7,
+    "timestamp" : "2024-04-25T07:44:20.725613974Z",
+    "type" : "ANALYZER",
+    "source" : "Gradle",
+    "message" : "Example error.",
+    "severity" : "ERROR",
+    "pkg" : 1,
+    "how_to_fix" : "Some how to fix text."
+  }, {
+    "_id" : 8,
+    "timestamp" : "2024-04-25T07:44:20.725613974Z",
+    "type" : "ANALYZER",
+    "source" : "Gradle",
+    "message" : "Example error, resolved.",
+    "severity" : "ERROR",
+    "resolutions" : [ 0 ],
+    "pkg" : 1,
+    "how_to_fix" : "Some how to fix text."
+  }, {
+    "_id" : 9,
     "timestamp" : "1970-01-01T00:00:00Z",
     "type" : "SCANNER",
     "source" : "Dummy",
@@ -107,7 +190,7 @@
     "scan_result" : 1,
     "how_to_fix" : "Some how to fix text."
   }, {
-    "_id" : 2,
+    "_id" : 10,
     "timestamp" : "2024-04-22T10:36:10.661544294Z",
     "type" : "SCANNER",
     "source" : "FakeScanner",
@@ -117,7 +200,7 @@
     "scan_result" : 1,
     "how_to_fix" : "Some how to fix text."
   }, {
-    "_id" : 3,
+    "_id" : 11,
     "timestamp" : "2024-04-22T10:36:10.661544294Z",
     "type" : "SCANNER",
     "source" : "FakeScanner",
@@ -127,13 +210,54 @@
     "scan_result" : 1,
     "how_to_fix" : "Some how to fix text."
   }, {
-    "_id" : 4,
+    "_id" : 12,
+    "timestamp" : "2024-04-25T07:44:20.725613974Z",
+    "type" : "SCANNER",
+    "source" : "FakeScanner",
+    "message" : "Example hint.",
+    "severity" : "HINT",
+    "pkg" : 1,
+    "scan_result" : 1,
+    "how_to_fix" : "Some how to fix text."
+  }, {
+    "_id" : 13,
+    "timestamp" : "2024-04-25T07:44:20.725613974Z",
+    "type" : "SCANNER",
+    "source" : "FakeScanner",
+    "message" : "Example warning.",
+    "severity" : "WARNING",
+    "pkg" : 1,
+    "scan_result" : 1,
+    "how_to_fix" : "Some how to fix text."
+  }, {
+    "_id" : 14,
+    "timestamp" : "2024-04-25T07:44:20.725613974Z",
+    "type" : "SCANNER",
+    "source" : "FakeScanner",
+    "message" : "Example error.",
+    "severity" : "ERROR",
+    "pkg" : 1,
+    "scan_result" : 1,
+    "how_to_fix" : "Some how to fix text."
+  }, {
+    "_id" : 15,
+    "timestamp" : "2024-04-25T07:44:20.725613974Z",
+    "type" : "SCANNER",
+    "source" : "FakeScanner",
+    "message" : "Example error, resolved.",
+    "severity" : "ERROR",
+    "resolutions" : [ 0 ],
+    "pkg" : 1,
+    "scan_result" : 1,
+    "how_to_fix" : "Some how to fix text."
+  }, {
+    "_id" : 16,
     "timestamp" : "1970-01-01T00:00:00Z",
     "type" : "ADVISOR",
     "source" : "VulnerableCode",
     "message" : "A test issue.",
     "severity" : "ERROR",
-    "resolutions" : [ 0 ],
+    "resolutions" : [ 1 ],
     "pkg" : 2,
     "how_to_fix" : "Some how to fix text."
   } ],
@@ -156,7 +280,7 @@
     "start_time" : "1970-01-01T00:00:00Z",
     "end_time" : "1970-01-01T00:00:00Z",
     "package_verification_code" : "bab81eca7b6fae7b64d4c7343a2f5c43c4caa171",
-    "issues" : [ 0 ]
+    "issues" : [ 0, 1, 2, 3, 4 ]
   }, {
     "_id" : 1,
     "provenance" : {
@@ -176,7 +300,7 @@
     "start_time" : "1970-01-01T00:00:00Z",
     "end_time" : "1970-01-01T00:00:00Z",
     "package_verification_code" : "be26ae6e9285a5d349d037deeb5eff2015635739",
-    "issues" : [ 1, 2, 3 ]
+    "issues" : [ 9, 10, 11, 12, 13, 14, 15 ]
   }, {
     "_id" : 2,
     "provenance" : {
@@ -443,7 +567,8 @@
       "end_line" : 20,
       "scan_result" : 1
     } ],
-    "is_excluded" : false
+    "is_excluded" : false,
+    "issues" : [ 5, 6, 7, 8 ]
   }, {
     "_id" : 2,
     "id" : "Maven:org.apache.commons:commons-text:1.1",
@@ -1001,15 +1126,15 @@
       "scope_excludes" : 1,
       "license_choices" : 2,
       "license_finding_curations" : 0,
-      "issue_resolutions" : 1,
+      "issue_resolutions" : 2,
       "rule_violation_resolutions" : 1,
       "vulnerability_resolutions" : 0
     },
     "open_issues" : {
-      "errors" : 2,
-      "warnings" : 0,
-      "hints" : 0,
-      "severe" : 2
+      "errors" : 4,
+      "warnings" : 2,
+      "hints" : 2,
+      "severe" : 6
     },
     "open_rule_violations" : {
       "errors" : 1,
@@ -1081,7 +1206,7 @@
         "scopes" : [ 0 ]
       },
       "resolutions" : {
-        "issues" : [ 0 ],
+        "issues" : [ 1, 0 ],
         "rule_violations" : [ 0 ]
       },
       "license_choices" : {
@@ -1101,7 +1226,7 @@
   },
   "severe_issue_threshold" : "WARNING",
   "severe_rule_violation_threshold" : "WARNING",
-  "repository_configuration" : "---\nexcludes:\n  paths:\n  - pattern: \"sub/module/project/build.gradle\"\n    reason: \"EXAMPLE_OF\"\n    comment: \"The project is an example.\"\n  - pattern: \"**/*.java\"\n    reason: \"EXAMPLE_OF\"\n    comment: \"These are example files.\"\n  - pattern: \"analyzer/src/funTest/assets/projects/synthetic/gradle/lib/excluded-file.dat\"\n    reason: \"DATA_FILE_OF\"\n  scopes:\n  - pattern: \"testCompile\"\n    reason: \"TEST_DEPENDENCY_OF\"\n    comment: \"The scope only contains test dependencies.\"\nresolutions:\n  issues:\n  - message: \"A test issue\\\\.\"\n    reason: \"CANT_FIX_ISSUE\"\n    comment: \"A comment explaining why the issue can be ignored.\"\n  rule_violations:\n  - message: \"Apache-2.0 hint\"\n    reason: \"CANT_FIX_EXCEPTION\"\n    comment: \"Apache-2 is not an issue.\"\nlicense_choices:\n  repository_license_choices:\n  - given: \"GPL-2.0-only OR MIT\"\n    choice: \"MIT\"\n  package_license_choices:\n  - package_id: \"Maven:com.h2database:h2:1.4.200\"\n    license_choices:\n    - given: \"MPL-2.0 OR EPL-1.0\"\n      choice: \"MPL-2.0\"\n",
+  "repository_configuration" : "---\nexcludes:\n  paths:\n  - pattern: \"sub/module/project/build.gradle\"\n    reason: \"EXAMPLE_OF\"\n    comment: \"The project is an example.\"\n  - pattern: \"**/*.java\"\n    reason: \"EXAMPLE_OF\"\n    comment: \"These are example files.\"\n  - pattern: \"analyzer/src/funTest/assets/projects/synthetic/gradle/lib/excluded-file.dat\"\n    reason: \"DATA_FILE_OF\"\n  scopes:\n  - pattern: \"testCompile\"\n    reason: \"TEST_DEPENDENCY_OF\"\n    comment: \"The scope only contains test dependencies.\"\nresolutions:\n  issues:\n  - message: \"A test issue\\\\.\"\n    reason: \"CANT_FIX_ISSUE\"\n    comment: \"A comment explaining why the issue can be ignored.\"\n  - message: \"Example error, resolved.\"\n    reason: \"CANT_FIX_ISSUE\"\n    comment: \"Resolved for illustration.\"\n  rule_violations:\n  - message: \"Apache-2.0 hint\"\n    reason: \"CANT_FIX_EXCEPTION\"\n    comment: \"Apache-2 is not an issue.\"\nlicense_choices:\n  repository_license_choices:\n  - given: \"GPL-2.0-only OR MIT\"\n    choice: \"MIT\"\n  package_license_choices:\n  - package_id: \"Maven:com.h2database:h2:1.4.200\"\n    license_choices:\n    - given: \"MPL-2.0 OR EPL-1.0\"\n      choice: \"MPL-2.0\"\n",
   "labels" : {
     "job_parameters.JOB_PARAM_1" : "label job param 1",
     "job_parameters.JOB_PARAM_2" : "label job param 2",

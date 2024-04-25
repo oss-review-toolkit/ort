@@ -48,7 +48,7 @@ class OpossumReporterFunTest : WordSpec({
                 isObject shouldBe true
                 get("metadata").get("projectId").asText() shouldBe "0"
                 get("attributionBreakpoints").size() shouldBe 4
-                get("externalAttributionSources").size() shouldBe 6
+                get("externalAttributionSources").size() shouldBe 7
                 get("resourcesToAttributions").fieldNames().asSequence() shouldContain
                     "/analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle/" +
                     "compile/org.apache.commons/commons-text@1.1/dependencies/org.apache.commons/commons-lang3@3.5"
