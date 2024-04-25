@@ -8,6 +8,9 @@ path_excludes:
   pattern: "**/*.java"
   reason: "EXAMPLE_OF"
   comment: "These are example files."
+- _id: 2
+  pattern: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/excluded-file.dat"
+  reason: "DATA_FILE_OF"
 scope_excludes:
 - _id: 0
   pattern: "testCompile"
@@ -976,9 +979,7 @@ repository:
       paths:
       - 0
       - 1
-      - _id: 2
-        pattern: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/excluded-file.dat"
-        reason: "DATA_FILE_OF"
+      - 2
       scopes:
       - 0
     resolutions:
