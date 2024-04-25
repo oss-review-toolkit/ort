@@ -122,6 +122,8 @@ class Subversion : VersionControlSystem() {
 
     override fun updateWorkingTree(workingTree: WorkingTree, revision: String, path: String, recursive: Boolean) =
         runCatching {
+            clientManager.updateClient.isIgnoreExternals = !recursive
+
             revision.toLongOrNull()?.let { numericRevision ->
                 // This code path updates the working tree to a numeric revision.
                 val svnRevision = SVNRevision.create(numericRevision)
@@ -130,7 +132,7 @@ class Subversion : VersionControlSystem() {
                 updateEmptyPath(workingTree, svnRevision, path)
 
                 // Then deepen only the requested path in the desired revision.
-                clientManager.updateClient.apply { isIgnoreExternals = !recursive }.doUpdate(
+                clientManager.updateClient.doUpdate(
                     workingTree.workingDir.resolve(path),
                     svnRevision,
                     SVNDepth.INFINITY,
@@ -159,7 +161,7 @@ class Subversion : VersionControlSystem() {
                 updateEmptyPath(workingTree, SVNRevision.HEAD, path)
 
                 // Finally, deepen only the requested path in the current revision.
-                clientManager.updateClient.apply { isIgnoreExternals = !recursive }.doUpdate(
+                clientManager.updateClient.doUpdate(
                     workingTree.workingDir.resolve(path),
                     SVNRevision.HEAD,
                     SVNDepth.INFINITY,
