@@ -103,74 +103,69 @@ class Subversion : VersionControlSystem() {
         return getWorkingTree(targetDir)
     }
 
-    private fun updateEmptyPath(workingTree: WorkingTree, revision: SVNRevision, path: String) {
-        val pathIterator = Paths.get(path).iterator()
+    private fun deepenWorkingTreePath(workingTree: WorkingTree, path: String, revision: SVNRevision): Long {
+        val finalPath = workingTree.workingDir.resolve(path)
         var currentPath = workingTree.workingDir
 
+        // Avoid the "None of the targets are working copies" error by deepening one path at a time.
+        val pathIterator = Paths.get(path).iterator()
+        val pathRevisions = mutableSetOf<Long>()
+
         while (pathIterator.hasNext()) {
-            clientManager.updateClient.doUpdate(
+            currentPath = currentPath.resolve(pathIterator.next().toFile())
+
+            pathRevisions += clientManager.updateClient.doUpdate(
                 currentPath,
                 revision,
-                SVNDepth.EMPTY,
+                if (currentPath != finalPath) SVNDepth.EMPTY else SVNDepth.INFINITY,
                 /* allowUnversionedObstructions = */ false,
                 /* depthIsSticky = */ true
             )
-
-            currentPath = currentPath.resolve(pathIterator.next().toFile())
         }
+
+        return pathRevisions.single()
     }
 
     override fun updateWorkingTree(workingTree: WorkingTree, revision: String, path: String, recursive: Boolean) =
         runCatching {
+            // Note that the path should never be part of the URL as that would root the working tree at that path, but
+            // the path should be available in the working tree.
+            val (svnUrl, svnRevision) = revision.toLongOrNull()?.let { numericRevision ->
+                val url = workingTree.getRemoteUrl()
+
+                SVNURL.parseURIEncoded(url) to SVNRevision.create(numericRevision)
+            } ?: run {
+                val url = listOf(workingTree.getRemoteUrl(), revision).joinToString("/")
+
+                SVNURL.parseURIEncoded(url) to SVNRevision.HEAD
+            }
+
             clientManager.updateClient.isIgnoreExternals = !recursive
 
-            revision.toLongOrNull()?.let { numericRevision ->
-                // This code path updates the working tree to a numeric revision.
-                val svnRevision = SVNRevision.create(numericRevision)
-
-                // First update the (empty) working tree to the desired revision along the requested path.
-                updateEmptyPath(workingTree, svnRevision, path)
-
-                // Then deepen only the requested path in the desired revision.
-                clientManager.updateClient.doUpdate(
-                    workingTree.workingDir.resolve(path),
-                    svnRevision,
-                    SVNDepth.INFINITY,
-                    /* allowUnversionedObstructions = */ false,
-                    /* depthIsSticky = */ true
-                )
-            } ?: run {
-                // This code path updates the working tree to a symbolic revision.
-                val svnUrl = SVNURL.parseURIEncoded(
-                    "${workingTree.getRemoteUrl()}/$revision"
-                )
-
-                // First switch the (empty) working tree to the requested branch / tag.
-                clientManager.updateClient.doSwitch(
-                    workingTree.workingDir,
-                    svnUrl,
-                    SVNRevision.HEAD,
-                    SVNRevision.HEAD,
-                    SVNDepth.EMPTY,
-                    /* allowUnversionedObstructions = */ false,
-                    /* depthIsSticky = */ true,
-                    /* ignoreAncestry = */ true
-                )
-
-                // Then update the working tree in the current revision along the requested path, and ...
-                updateEmptyPath(workingTree, SVNRevision.HEAD, path)
-
-                // Finally, deepen only the requested path in the current revision.
-                clientManager.updateClient.doUpdate(
-                    workingTree.workingDir.resolve(path),
-                    SVNRevision.HEAD,
-                    SVNDepth.INFINITY,
-                    /* allowUnversionedObstructions = */ false,
-                    /* depthIsSticky = */ true
-                )
+            logger.info {
+                val printableRevision = svnRevision.name ?: svnRevision.number
+                "Switching $type '${workingTree.workingDir}' to $svnUrl at revision $printableRevision."
             }
-        }.map {
-            it.toString()
+
+            val workingTreeRevision = clientManager.updateClient.doSwitch(
+                workingTree.workingDir,
+                svnUrl,
+                svnRevision,
+                svnRevision,
+                if (path.isEmpty()) SVNDepth.INFINITY else SVNDepth.EMPTY,
+                /* allowUnversionedObstructions = */ false,
+                /* depthIsSticky = */ true
+            )
+
+            logger.info { "$type working tree '${workingTree.workingDir}' is at revision $workingTreeRevision." }
+
+            if (path.isNotEmpty()) {
+                logger.info { "Deepening path '$path' in $type working tree '${workingTree.workingDir}'." }
+                val pathRevision = deepenWorkingTreePath(workingTree, path, svnRevision)
+                check(pathRevision == workingTreeRevision)
+            }
+
+            workingTreeRevision.toString()
         }
 }
 
