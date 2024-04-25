@@ -485,6 +485,7 @@ scanner:
       - timestamp: "2024-04-22T10:36:10.661544294Z"
         source: "FakeScanner"
         message: "ERROR: Timeout after 300 seconds while scanning file 'project/file-within-excluded-project.dat'."
+        severity: "ERROR"
         affected_path: "project/file-of-excluded-project.dat"
   - provenance:
       vcs_info:
@@ -539,10 +540,12 @@ scanner:
       - timestamp: "2024-04-22T10:36:10.661544294Z"
         source: "FakeScanner"
         message: "ERROR: Timeout after 300 seconds while scanning file 'analyzer/src/funTest/assets/projects/synthetic/gradle/lib/included-file.dat'."
+        severity: "ERROR"
         affected_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/included-file.dat"
       - timestamp: "2024-04-22T10:36:10.661544294Z"
         source: "FakeScanner"
         message: "ERROR: Timeout after 300 seconds while scanning file 'analyzer/src/funTest/assets/projects/synthetic/gradle/lib/excluded-file.dat'."
+        severity: "ERROR"
         affected_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/excluded-file.dat"
   - provenance:
       source_artifact:
