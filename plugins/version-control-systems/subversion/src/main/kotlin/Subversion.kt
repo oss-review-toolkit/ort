@@ -169,13 +169,6 @@ class Subversion : VersionControlSystem() {
             }
 
             true
-        }.onFailure {
-            it.showStackTrace()
-
-            logger.warn {
-                "Failed to update the $type working tree at '${workingTree.workingDir}' to revision '$revision':\n" +
-                    it.collectMessages()
-            }
         }.map {
             revision
         }
