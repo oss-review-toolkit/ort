@@ -169,10 +169,8 @@ class Subversion : VersionControlSystem() {
                     /* depthIsSticky = */ true
                 )
             }
-
-            true
         }.map {
-            revision
+            it.toString()
         }
 }
 
