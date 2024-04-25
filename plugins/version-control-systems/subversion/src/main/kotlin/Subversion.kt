@@ -147,11 +147,12 @@ class Subversion : VersionControlSystem() {
                 "Switching $type '${workingTree.workingDir}' to $svnUrl at revision $printableRevision."
             }
 
+            // For "peg revision" vs. "revision" see https://svnbook.red-bean.com/en/1.7/svn.advanced.pegrevs.html.
             val workingTreeRevision = clientManager.updateClient.doSwitch(
                 workingTree.workingDir,
                 svnUrl,
-                svnRevision,
-                svnRevision,
+                /* pegRevision = */ SVNRevision.HEAD,
+                /* revision = */ svnRevision,
                 if (path.isEmpty()) SVNDepth.INFINITY else SVNDepth.EMPTY,
                 /* allowUnversionedObstructions = */ false,
                 /* depthIsSticky = */ true
