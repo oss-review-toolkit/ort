@@ -98,8 +98,8 @@ internal object ReportTableModelMapper {
                 )
 
                 val isRowExcluded = input.ortResult.isExcluded(row.id)
-                val unresolvedAnalyzerIssues = row.analyzerIssues.filterUnresolved()
-                val unresolvedScanIssues = row.scanIssues.filterUnresolved()
+                val unresolvedAnalyzerIssues = row.analyzerIssues.filterUnresolved().sortedByDescending { it.severity }
+                val unresolvedScanIssues = row.scanIssues.filterUnresolved().sortedByDescending { it.severity }
 
                 if ((unresolvedAnalyzerIssues.isNotEmpty() || unresolvedScanIssues.isNotEmpty())
                     && !isRowExcluded
