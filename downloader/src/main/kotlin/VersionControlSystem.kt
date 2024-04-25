@@ -251,7 +251,9 @@ abstract class VersionControlSystem(
         }
 
         val workingTreeRevision = results.last().getOrElse {
-            throw DownloadException("$type failed to download from URL ${pkg.vcsProcessed.url}.", it)
+            throw DownloadException(
+                "$type failed to download from ${pkg.vcsProcessed.url} to '${workingTree.workingDir}'.", it
+            )
         }
 
         pkg.vcsProcessed.path.let {

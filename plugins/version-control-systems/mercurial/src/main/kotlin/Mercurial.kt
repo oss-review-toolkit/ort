@@ -29,8 +29,6 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.ProcessCapture
-import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 const val MERCURIAL_LARGE_FILES_EXTENSION = "largefiles = "
 const val MERCURIAL_SPARSE_EXTENSION = "sparse = "
@@ -104,10 +102,6 @@ class Mercurial : VersionControlSystem(MercurialCommand) {
 
             // Explicitly update the working tree to the desired revision.
             MercurialCommand.run(workingTree.workingDir, "update", revision).isSuccess
-        }.onFailure {
-            it.showStackTrace()
-
-            logger.warn { "Failed to update $type working tree to revision '$revision': ${it.collectMessages()}" }
         }.map {
             revision
         }
