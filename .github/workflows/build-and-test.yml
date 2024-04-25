@@ -153,6 +153,7 @@ jobs:
           -v ${{ github.workspace }}:/workspace \
           -w /workspace \
           -e HOME=/home/runner \
+          -e GRADLE_OPTS="$GRADLE_OPTS" \
           ${{ env.TEST_IMAGE_TAG }} \
           -c "./gradlew --scan -Ptests.include=org.ossreviewtoolkit.plugins.packagemanagers.* funTest jacocoFunTestReport"
     - name: Upload code coverage data
