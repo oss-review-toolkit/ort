@@ -252,7 +252,7 @@ COPY --from=rustbuild /opt/rust /opt/rust
 # GOLANG - Build as a separate component
 FROM base AS gobuild
 
-ARG GO_VERSION=1.22.0
+ARG GO_VERSION=1.22.2
 ENV GOBIN=/opt/go/bin
 ENV PATH=$PATH:/opt/go/bin
 
