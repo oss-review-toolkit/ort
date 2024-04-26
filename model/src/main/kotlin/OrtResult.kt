@@ -406,13 +406,13 @@ data class OrtResult(
 
     /**
      * Return the set of all project or package identifiers in the result, optionally [including those of subprojects]
-     * [includeSubProjects].
+     * [includeSubProjects] and optionally limited to only non-excluded ones if [omitExcluded] is true.
      */
     @JsonIgnore
-    fun getProjectsAndPackages(includeSubProjects: Boolean = true): Set<Identifier> =
+    fun getProjectsAndPackages(includeSubProjects: Boolean = true, omitExcluded: Boolean = false): Set<Identifier> =
         buildSet {
-            getProjects(includeSubProjects = includeSubProjects).mapTo(this) { it.id }
-            getPackages().mapTo(this) { it.metadata.id }
+            getProjects(includeSubProjects = includeSubProjects, omitExcluded = omitExcluded).mapTo(this) { it.id }
+            getPackages(omitExcluded = omitExcluded).mapTo(this) { it.metadata.id }
         }
 
     /**
