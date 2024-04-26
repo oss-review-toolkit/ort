@@ -350,7 +350,7 @@ pipeline {
         stage('Build ORT Docker image') {
             agent {
                 dockerfile {
-                    filename 'Dockerfile-legacy'
+                    filename 'Dockerfile'
                     additionalBuildArgs getDockerBuildArgs()
                     args DOCKER_RUN_ARGS
                 }
@@ -377,7 +377,7 @@ pipeline {
         stage('Clone project') {
             agent {
                 dockerfile {
-                    filename 'Dockerfile-legacy'
+                    filename 'Dockerfile'
                     additionalBuildArgs getDockerBuildArgs()
                     args DOCKER_RUN_ARGS
                 }
@@ -416,7 +416,7 @@ pipeline {
         stage('Clone ORT configuration') {
             agent {
                 dockerfile {
-                    filename 'Dockerfile-legacy'
+                    filename 'Dockerfile'
                     additionalBuildArgs getDockerBuildArgs()
                     args DOCKER_RUN_ARGS
                 }
@@ -493,7 +493,7 @@ pipeline {
         stage('Unstash ORT analyzer result') {
             agent {
                 dockerfile {
-                    filename 'Dockerfile-legacy'
+                    filename 'Dockerfile'
                     additionalBuildArgs getDockerBuildArgs()
                     args DOCKER_RUN_ARGS
                 }
@@ -522,7 +522,7 @@ pipeline {
         stage('Run ORT analyzer') {
             agent {
                 dockerfile {
-                    filename 'Dockerfile-legacy'
+                    filename 'Dockerfile'
                     additionalBuildArgs getDockerBuildArgs()
                     args DOCKER_RUN_ARGS
                 }
@@ -619,7 +619,7 @@ pipeline {
 
             agent {
                 dockerfile {
-                    filename 'Dockerfile-legacy'
+                    filename 'Dockerfile'
                     additionalBuildArgs getDockerBuildArgs()
                     args DOCKER_RUN_ARGS
                 }
@@ -749,7 +749,7 @@ pipeline {
 
             agent {
                 dockerfile {
-                    filename 'Dockerfile-legacy'
+                    filename 'Dockerfile'
                     additionalBuildArgs getDockerBuildArgs()
                     args DOCKER_RUN_ARGS
                 }
@@ -812,7 +812,7 @@ pipeline {
 
             agent {
                 dockerfile {
-                    filename 'Dockerfile-legacy'
+                    filename 'Dockerfile'
                     additionalBuildArgs getDockerBuildArgs()
                     args DOCKER_RUN_ARGS
                 }
@@ -883,7 +883,7 @@ pipeline {
 
             agent {
                 dockerfile {
-                    filename 'Dockerfile-legacy'
+                    filename 'Dockerfile'
                     additionalBuildArgs getDockerBuildArgs()
                     args DOCKER_RUN_ARGS
                 }
