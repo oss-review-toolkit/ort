@@ -32,7 +32,6 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.utils.test.ExpensiveTag
 
 private const val PKG_VERSION = "0.4.1"
 
@@ -62,7 +61,7 @@ class GitDownloadFunTest : StringSpec() {
             exception.message shouldBe "Git failed to get revisions from URL $url."
         }
 
-        "Git can download a given revision".config(tags = setOf(ExpensiveTag)) {
+        "Git can download a given revision" {
             val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.GIT, REPO_URL, REPO_REV))
             val expectedFiles = listOf(
                 ".git",
@@ -85,7 +84,7 @@ class GitDownloadFunTest : StringSpec() {
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
         }
 
-        "Git can download only a single path".config(tags = setOf(ExpensiveTag)) {
+        "Git can download only a single path" {
             val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.GIT, REPO_URL, REPO_REV, path = REPO_PATH))
             val expectedFiles = listOf(
                 File("LICENSE"),
@@ -107,7 +106,7 @@ class GitDownloadFunTest : StringSpec() {
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
         }
 
-        "Git can download based on a version".config(tags = setOf(ExpensiveTag)) {
+        "Git can download based on a version" {
             val pkg = Package.EMPTY.copy(
                 id = Identifier("Test:::$PKG_VERSION"),
 
@@ -121,7 +120,7 @@ class GitDownloadFunTest : StringSpec() {
             workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
         }
 
-        "Git can download only a single path based on a version".config(tags = setOf(ExpensiveTag)) {
+        "Git can download only a single path based on a version" {
             val pkg = Package.EMPTY.copy(
                 id = Identifier("Test:::$PKG_VERSION"),
 

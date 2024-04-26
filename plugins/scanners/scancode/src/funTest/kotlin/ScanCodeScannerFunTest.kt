@@ -30,9 +30,8 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.scanner.AbstractPathScannerWrapperFunTest
 import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
 import org.ossreviewtoolkit.utils.spdx.getLicenseText
-import org.ossreviewtoolkit.utils.test.ExpensiveTag
 
-class ScanCodeScannerFunTest : AbstractPathScannerWrapperFunTest(setOf(ExpensiveTag)) {
+class ScanCodeScannerFunTest : AbstractPathScannerWrapperFunTest() {
     override val scanner = ScanCode("ScanCode", ScanCodeConfig.DEFAULT, ScannerWrapperConfig.EMPTY)
 
     override val expectedFileLicenses = listOf(

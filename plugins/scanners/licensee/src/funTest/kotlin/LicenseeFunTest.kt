@@ -23,9 +23,8 @@ import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.scanner.AbstractPathScannerWrapperFunTest
 import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
-import org.ossreviewtoolkit.utils.test.ExpensiveTag
 
-class LicenseeFunTest : AbstractPathScannerWrapperFunTest(setOf(ExpensiveTag)) {
+class LicenseeFunTest : AbstractPathScannerWrapperFunTest() {
     override val scanner = Licensee("Licensee", ScannerWrapperConfig.EMPTY)
 
     override val expectedFileLicenses = listOf(

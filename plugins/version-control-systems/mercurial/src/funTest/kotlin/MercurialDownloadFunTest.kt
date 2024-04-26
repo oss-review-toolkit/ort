@@ -30,7 +30,6 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.utils.test.ExpensiveTag
 
 private const val PKG_VERSION = "v1.0.0"
 
@@ -50,7 +49,7 @@ class MercurialDownloadFunTest : StringSpec() {
     }
 
     init {
-        "Mercurial can download a given revision".config(tags = setOf(ExpensiveTag)) {
+        "Mercurial can download a given revision" {
             val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.MERCURIAL, REPO_URL, REPO_REV))
             val expectedFiles = listOf(
                 ".hg",
@@ -77,7 +76,7 @@ class MercurialDownloadFunTest : StringSpec() {
         }
 
         "Mercurial can download only a single path"
-            .config(enabled = hg.isAtLeastVersion("4.3"), tags = setOf(ExpensiveTag)) {
+            .config(enabled = hg.isAtLeastVersion("4.3")) {
                 val pkg = Package.EMPTY.copy(
                     vcsProcessed = VcsInfo(VcsType.MERCURIAL, REPO_URL, REPO_REV, path = REPO_PATH)
                 )
@@ -103,7 +102,7 @@ class MercurialDownloadFunTest : StringSpec() {
                 actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
             }
 
-        "Mercurial can download based on a version".config(tags = setOf(ExpensiveTag)) {
+        "Mercurial can download based on a version" {
             val pkg = Package.EMPTY.copy(
                 id = Identifier("Test:::$PKG_VERSION"),
 
@@ -118,7 +117,7 @@ class MercurialDownloadFunTest : StringSpec() {
         }
 
         "Mercurial can download only a single path based on a version"
-            .config(enabled = hg.isAtLeastVersion("4.3"), tags = setOf(ExpensiveTag)) {
+            .config(enabled = hg.isAtLeastVersion("4.3")) {
                 val pkg = Package.EMPTY.copy(
                     id = Identifier("Test:::$PKG_VERSION"),
 
