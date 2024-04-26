@@ -225,7 +225,7 @@ private fun CargoMetadata.Package.toPackage(hashes: Map<String, String>): Packag
         binaryArtifact = RemoteArtifact.EMPTY,
         sourceArtifact = parseSourceArtifact(hashes).orEmpty(),
         homepageUrl = homepage.orEmpty(),
-        vcs = VcsHost.parseUrl(repository.orEmpty())
+        vcs = repository?.let { VcsHost.parseUrl(it) }.orEmpty()
     )
 }
 
