@@ -130,7 +130,13 @@ object StatisticsCalculator {
 
         return LicenseStatistics(
             declared = ids.countLicenses { filter(LicenseView.ONLY_DECLARED) },
-            detected = ids.countLicenses { filter(LicenseView.ONLY_DETECTED) }
+            detected = ids.countLicenses { filter(LicenseView.ONLY_DETECTED) },
+            effective = ortResult.getProjectsAndPackages(omitExcluded = true).countLicenses {
+                filterExcluded()
+                    .filter(LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED)
+                    .applyChoices(ortResult.getPackageLicenseChoices(id))
+                    .applyChoices(ortResult.getRepositoryLicenseChoices())
+            }
         )
     }
 

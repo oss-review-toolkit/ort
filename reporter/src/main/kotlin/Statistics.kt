@@ -165,7 +165,13 @@ data class LicenseStatistics(
      * All detected licenses, mapped to the number of [Project]s and [Package]s they were detected in.
      */
     @JsonPropertyOrder(alphabetic = true)
-    val detected: Map<String, Int>
+    val detected: Map<String, Int>,
+
+    /**
+     * All effective licenses, mapped to the number of non-excluded [Project]s and [Package]s they apply to.
+     */
+    @JsonPropertyOrder(alphabetic = true)
+    val effective: Map<String, Int>
 )
 
 /**

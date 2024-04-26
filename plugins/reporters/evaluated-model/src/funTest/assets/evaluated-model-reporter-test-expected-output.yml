@@ -1093,6 +1093,13 @@ statistics:
       LicenseRef-test-Apache-2.0-multi-line: 1
       LicenseRef-test-Apache-2.0-single-line: 1
       MIT: 2
+    effective:
+      Apache-2.0: 2
+      BSD-3-Clause: 1
+      GPL-2.0-only WITH Classpath-exception-2.0: 1
+      LicenseRef-test-Apache-2.0-multi-line: 1
+      LicenseRef-test-Apache-2.0-single-line: 1
+      MIT: 1
   execution_duration_in_seconds: 3125
 repository:
   vcs:
