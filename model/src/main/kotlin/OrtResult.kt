@@ -409,15 +409,11 @@ data class OrtResult(
      * [includeSubProjects].
      */
     @JsonIgnore
-    fun getProjectsAndPackages(includeSubProjects: Boolean = true): Set<Identifier> {
-        val projectsAndPackages = mutableSetOf<Identifier>()
-        val projects = getProjects(includeSubProjects = includeSubProjects)
-
-        projects.mapTo(projectsAndPackages) { it.id }
-        getPackages().mapTo(projectsAndPackages) { it.metadata.id }
-
-        return projectsAndPackages
-    }
+    fun getProjectsAndPackages(includeSubProjects: Boolean = true): Set<Identifier> =
+        buildSet {
+            getProjects(includeSubProjects = includeSubProjects).mapTo(this) { it.id }
+            getPackages().mapTo(this) { it.metadata.id }
+        }
 
     /**
      * Return all [SpdxLicenseChoice]s applicable for the scope of the whole [repository].
