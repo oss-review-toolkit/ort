@@ -118,8 +118,6 @@ object StatisticsCalculator {
         ortResult: OrtResult,
         licenseInfoResolver: LicenseInfoResolver
     ): LicenseStatistics {
-        val ids = ortResult.getProjectsAndPackages()
-
         fun Collection<Identifier>.countLicenses(
             transform: ResolvedLicenseInfo.() -> ResolvedLicenseInfo = { this }
         ): Map<String, Int> =
@@ -128,12 +126,11 @@ object StatisticsCalculator {
                 transform(resolvedLicenseInfo).map { it.license.toString() }
             }.groupingBy { it }.eachCount().toMap()
 
-        val declaredLicenses = ids.countLicenses { filter(LicenseView.ONLY_DECLARED) }
-        val detectedLicenses = ids.countLicenses { filter(LicenseView.ONLY_DETECTED) }
+        val ids = ortResult.getProjectsAndPackages()
 
         return LicenseStatistics(
-            declared = declaredLicenses,
-            detected = detectedLicenses
+            declared = ids.countLicenses { filter(LicenseView.ONLY_DECLARED) },
+            detected = ids.countLicenses { filter(LicenseView.ONLY_DETECTED) }
         )
     }
 
