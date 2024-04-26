@@ -250,7 +250,7 @@ private fun CargoMetadata.Package.parseDeclaredLicenses(): Set<String> {
 // to.
 // See https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#specifying-dependencies-from-git-repositories
 // for the specification for this kind of dependency.
-private val GIT_DEPENDENCY_REGEX = Regex("git\\+(https://.*)\\?(?:rev|tag|branch)=.+#([0-9a-zA-Z]+)")
+private val GIT_DEPENDENCY_REGEX = Regex("git\\+(https://.*)\\?(?:rev|tag|branch)=.+#([0-9a-fA-F]{7,40})")
 
 private fun CargoMetadata.Package.parseSourceArtifact(hashes: Map<String, String>): RemoteArtifact? {
     val source = source ?: return null
