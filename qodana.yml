@@ -15,8 +15,9 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
+version: "1.0"
 profile:
   name: qodana.recommended
 include:
   - name: CheckDependencyLicenses
-linter: jetbrains/qodana-jvm-community:2023.2
+linter: jetbrains/qodana-jvm-community:2024.1
