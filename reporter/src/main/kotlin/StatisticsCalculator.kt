@@ -24,6 +24,7 @@ import java.time.Instant
 
 import kotlin.time.toKotlinDuration
 
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.IssueResolution
@@ -31,6 +32,7 @@ import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.licenses.LicenseView
+import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 
 /**
  * This class calculates [Statistics] for a given [OrtResult] and the applicable [IssueResolution]s and
@@ -118,13 +120,16 @@ object StatisticsCalculator {
     ): LicenseStatistics {
         val ids = ortResult.getProjectsAndPackages()
 
-        fun countLicenses(view: LicenseView): Map<String, Int> =
-            ids.flatMap { id ->
-                licenseInfoResolver.resolveLicenseInfo(id).filter(view).map { it.license.toString() }
+        fun Collection<Identifier>.countLicenses(
+            transform: ResolvedLicenseInfo.() -> ResolvedLicenseInfo = { this }
+        ): Map<String, Int> =
+            distinct().flatMap { id ->
+                val resolvedLicenseInfo = licenseInfoResolver.resolveLicenseInfo(id)
+                transform(resolvedLicenseInfo).map { it.license.toString() }
             }.groupingBy { it }.eachCount().toMap()
 
-        val declaredLicenses = countLicenses(LicenseView.ONLY_DECLARED)
-        val detectedLicenses = countLicenses(LicenseView.ONLY_DETECTED)
+        val declaredLicenses = ids.countLicenses { filter(LicenseView.ONLY_DECLARED) }
+        val detectedLicenses = ids.countLicenses { filter(LicenseView.ONLY_DETECTED) }
 
         return LicenseStatistics(
             declared = declaredLicenses,
