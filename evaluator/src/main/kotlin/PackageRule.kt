@@ -92,7 +92,7 @@ open class PackageRule(
 
             override fun matches(): Boolean {
                 val run = ruleSet.ortResult.advisor ?: return false
-                return run.results.getVulnerabilities(pkg.metadata.id)
+                return run.results.getVulnerabilities(pkg.metadata.id).asSequence()
                     .filter { vulnerability -> !ruleSet.resolutionProvider.isResolved(vulnerability) }
                     .flatMap { it.references }
                     .filter { reference -> reference.scoringSystem == scoringSystem }
