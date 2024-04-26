@@ -25,7 +25,6 @@ import io.kotest.matchers.should
 import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.toYaml
-import org.ossreviewtoolkit.utils.test.ExpensiveTag
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
@@ -58,7 +57,6 @@ class GradleAndroidFunTest : StringSpec({
     }
 
     "Cyclic dependencies over multiple libraries can be handled".config(
-        tags = setOf(ExpensiveTag),
         // This requires some work to make results comparable to the serialized PackageManagerResult.
         enabled = false
     ) {

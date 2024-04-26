@@ -25,7 +25,6 @@ import io.kotest.matchers.should
 import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.toYaml
-import org.ossreviewtoolkit.utils.test.ExpensiveTag
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
@@ -57,7 +56,7 @@ class GradleAndroidFunTest : StringSpec({
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
-    "Cyclic dependencies over multiple libraries can be handled".config(tags = setOf(ExpensiveTag)) {
+    "Cyclic dependencies over multiple libraries can be handled" {
         val definitionFile = getAssetFile("projects/synthetic/gradle-android-cyclic/app/build.gradle")
         val expectedResultFile = getAssetFile("projects/synthetic/gradle-android-cyclic-expected-output-app.yml")
 
