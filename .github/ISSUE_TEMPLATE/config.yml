@@ -1,0 +1,7 @@
+contact_links:
+- name: Discuss an Idea
+  about: Start a discussion or ask a longer question.
+  url: https://github.com/oss-review-toolkit/ort/discussions
+- name: Ask a Question
+  about: Ask a quick question or just chat with the ORT community.
+  url: http://slack.oss-review-toolkit.org/
