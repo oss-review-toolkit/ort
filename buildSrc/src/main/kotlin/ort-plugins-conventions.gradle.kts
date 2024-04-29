@@ -35,7 +35,7 @@ dependencies {
     // their own.
     val embeddedProjects = setOf("gradle-plugin", "web-app-template")
 
-    project.subprojects.filter {
+    childProjects.values.filter {
         it.name !in embeddedProjects
     }.forEach {
         api(it)
