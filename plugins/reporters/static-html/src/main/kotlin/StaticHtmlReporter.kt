@@ -24,7 +24,6 @@ import com.vladsch.flexmark.parser.Parser
 
 import java.io.File
 import java.time.Instant
-import java.util.SortedMap
 
 import javax.xml.parsers.DocumentBuilderFactory
 
@@ -56,6 +55,7 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.isValidUri
 import org.ossreviewtoolkit.utils.common.joinNonBlank
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
+import org.ossreviewtoolkit.utils.common.titlecase
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.ORT_FULL_NAME
 import org.ossreviewtoolkit.utils.spdx.SpdxCompoundExpression
@@ -153,8 +153,12 @@ class StaticHtmlReporter : Reporter {
                         ruleViolationTable(it)
                     }
 
-                    if (reportTableModel.issueSummary.rows.isNotEmpty()) {
-                        issueTable(reportTableModel.issueSummary)
+                    if (reportTableModel.analyzerIssueSummary.rows.isNotEmpty()) {
+                        issueTable(reportTableModel.analyzerIssueSummary)
+                    }
+
+                    if (reportTableModel.scannerIssueSummary.rows.isNotEmpty()) {
+                        issueTable(reportTableModel.scannerIssueSummary)
                     }
 
                     reportTableModel.projectDependencies.forEach { (project, table) ->
@@ -204,12 +208,18 @@ class StaticHtmlReporter : Reporter {
                 }
             }
 
-            if (reportTableModel.issueSummary.rows.isNotEmpty()) {
+            if (reportTableModel.analyzerIssueSummary.rows.isNotEmpty()) {
                 li {
-                    a("#issue-summary") {
-                        with(reportTableModel.issueSummary) {
-                            +"Issue Summary ($errorCount errors, $warningCount warnings, $hintCount hints to resolve)"
-                        }
+                    a("#${reportTableModel.analyzerIssueSummary.id()}") {
+                        +reportTableModel.analyzerIssueSummary.title()
+                    }
+                }
+            }
+
+            if (reportTableModel.scannerIssueSummary.rows.isNotEmpty()) {
+                li {
+                    a("#${reportTableModel.scannerIssueSummary.id()}") {
+                        +reportTableModel.scannerIssueSummary.title()
                     }
                 }
             }
@@ -312,75 +322,34 @@ class StaticHtmlReporter : Reporter {
 
     private fun DIV.issueTable(issueSummary: IssueTable) {
         h2 {
-            id = "issue-summary"
-            with(issueSummary) {
-                +"Issue Summary ($errorCount errors, $warningCount warnings, $hintCount hints to resolve)"
-            }
+            id = issueSummary.id()
+            +issueSummary.title()
         }
 
         p { +"Issues from excluded components are not shown in this summary." }
-
-        h3 { +"Packages" }
 
         table("ort-report-table") {
             thead {
                 tr {
                     th { +"#" }
                     th { +"Package" }
-                    th { +"Analyzer Issues" }
-                    th { +"Scanner Issues" }
+                    th { +"Message" }
                 }
             }
 
             tbody {
                 issueSummary.rows.forEachIndexed { rowIndex, issue ->
-                    issueRow(rowIndex + 1, issue)
+                    issueRow(issueSummary.rowId(rowIndex + 1), rowIndex + 1, issue)
                 }
             }
         }
     }
 
-    private fun TR.listIssues(issues: SortedMap<Identifier, List<ResolvableIssue>>) {
-        td {
-            issues.forEach { (id, issues) ->
-                a("#${id.toCoordinates()}") { +id.toCoordinates() }
-
-                ul {
-                    issues.forEach { issue ->
-                        li {
-                            p { issueDescription(issue) }
-                            p { +issue.resolutionDescription }
-                        }
-
-                        if (!issue.isResolved && issue.howToFix.isNotBlank()) {
-                            details {
-                                unsafe { +"<summary>How to fix</summary>" }
-                                markdown(issue.howToFix)
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private fun TBODY.issueRow(rowIndex: Int, row: ReportTableModel.IssueRow) {
-        val rowId = "issue-$rowIndex"
-
-        val issues = (row.analyzerIssues + row.scanIssues).flatMap { it.value }
-
-        val worstSeverity = issues.filterNot { it.isResolved }.maxOfOrNull { it.severity } ?: Severity.ERROR
-
-        val areAllResolved = issues.isNotEmpty() && issues.all { it.isResolved }
-
-        val cssClass = if (areAllResolved) {
-            "ort-resolved"
-        } else {
-            when (worstSeverity) {
-                Severity.ERROR -> "ort-error"
-                Severity.WARNING -> "ort-warning"
-                Severity.HINT -> "ort-hint"
-            }
+    private fun TBODY.issueRow(rowId: String, rowIndex: Int, row: ReportTableModel.IssueRow) {
+        val cssClass = when (row.issue.severity) {
+            Severity.ERROR -> "ort-error"
+            Severity.WARNING -> "ort-warning"
+            Severity.HINT -> "ort-hint"
         }
 
         tr(cssClass) {
@@ -395,8 +364,16 @@ class StaticHtmlReporter : Reporter {
 
             td { +row.id.toCoordinates() }
 
-            listIssues(row.analyzerIssues)
-            listIssues(row.scanIssues)
+            td {
+                p { issueDescription(row.issue) }
+
+                if (row.issue.howToFix.isNotBlank()) {
+                    details {
+                        unsafe { +"<summary>How to fix</summary>" }
+                        markdown(row.issue.howToFix)
+                    }
+                }
+            }
         }
     }
 
@@ -730,3 +707,10 @@ private val SCOPE_EXCLUDE_LIST_COMPARATOR = compareBy<Map.Entry<String, List<Sco
 private val PathExclude.description: String get() = joinNonBlank(reason.toString(), comment)
 
 private val ScopeExclude.description: String get() = joinNonBlank(reason.toString(), comment)
+
+private fun IssueTable.title(): String =
+    "${type.name.titlecase()} Issue Summary ($errorCount errors, $warningCount warnings, $hintCount hints to resolve)"
+
+private fun IssueTable.id(): String = "${type.name.lowercase()}-issue-summary"
+
+private fun IssueTable.rowId(index: Int): String = "${id()}-$index"

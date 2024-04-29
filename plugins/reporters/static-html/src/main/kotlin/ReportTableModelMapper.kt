@@ -31,7 +31,6 @@ import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTableModel.DependencyRow
-import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTableModel.IssueRow
 import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTableModel.IssueTable
 import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTableModel.ProjectTable
 import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTableModel.ResolvableIssue
@@ -44,8 +43,6 @@ import org.ossreviewtoolkit.reporter.ReporterInput
  */
 internal object ReportTableModelMapper {
     fun map(input: ReporterInput): ReportTableModel {
-        val issueSummaryRows = mutableMapOf<Identifier, IssueRow>()
-
         val analyzerResult = input.ortResult.analyzer?.result
         val excludes = input.ortResult.getExcludes()
 
@@ -76,7 +73,7 @@ internal object ReportTableModelMapper {
 
                 val pkg = input.ortResult.getPackageOrProject(id)?.metadata
 
-                val row = DependencyRow(
+                DependencyRow(
                     id = id,
                     sourceArtifact = pkg?.sourceArtifact.orEmpty(),
                     vcsInfo = pkg?.vcsProcessed.orEmpty(),
@@ -96,32 +93,6 @@ internal object ReportTableModelMapper {
                         it.toResolvableIssue(input.ortResult, input.howToFixTextProvider)
                     }
                 )
-
-                val isRowExcluded = input.ortResult.isExcluded(row.id)
-                val unresolvedAnalyzerIssues = row.analyzerIssues.filterUnresolved().sortedByDescending { it.severity }
-                val unresolvedScanIssues = row.scanIssues.filterUnresolved().sortedByDescending { it.severity }
-
-                if ((unresolvedAnalyzerIssues.isNotEmpty() || unresolvedScanIssues.isNotEmpty())
-                    && !isRowExcluded
-                ) {
-                    val issueRow = IssueRow(
-                        id = row.id,
-                        analyzerIssues = if (unresolvedAnalyzerIssues.isNotEmpty()) {
-                            sortedMapOf(project.id to unresolvedAnalyzerIssues)
-                        } else {
-                            sortedMapOf()
-                        },
-                        scanIssues = if (unresolvedScanIssues.isNotEmpty()) {
-                            sortedMapOf(project.id to unresolvedScanIssues)
-                        } else {
-                            sortedMapOf()
-                        }
-                    )
-
-                    issueSummaryRows[row.id] = issueSummaryRows[issueRow.id]?.merge(issueRow) ?: issueRow
-                }
-
-                row
             }
 
             ProjectTable(
@@ -130,8 +101,6 @@ internal object ReportTableModelMapper {
                 pathExcludes
             )
         }.orEmpty().toSortedMap(compareBy { it.id })
-
-        val issueSummaryTable = IssueTable(issueSummaryRows.values.sortedBy { it.id })
 
         // TODO: Use the prefixes up until the first '.' (which below get discarded) for some visual grouping in the
         //       report.
@@ -145,7 +114,8 @@ internal object ReportTableModelMapper {
             input.ortResult.repository.vcsProcessed,
             input.ortResult.repository.config,
             ruleViolations,
-            issueSummaryTable,
+            getAnalyzerIssueSummaryTable(input),
+            getScannerIssueSummaryTable(input),
             projectTables,
             labels
         )
@@ -159,8 +129,6 @@ private val VIOLATION_COMPARATOR = compareBy<ResolvableViolation> { it.isResolve
     .thenBy { it.violation.license.toString() }
     .thenBy { it.violation.message }
     .thenBy { it.resolutionDescription }
-
-private fun Collection<ResolvableIssue>.filterUnresolved() = filter { !it.isResolved }
 
 private fun Project.getScopesForDependencies(
     excludes: Excludes,
@@ -213,4 +181,23 @@ private fun RuleViolation.toResolvableViolation(ortResult: OrtResult): Resolvabl
         },
         isResolved = resolutions.isNotEmpty()
     )
+}
+
+private fun getAnalyzerIssueSummaryTable(input: ReporterInput): IssueTable =
+    input.ortResult.getAnalyzerIssues(omitExcluded = true, omitResolved = true)
+        .toIssueSummaryTable(IssueTable.Type.ANALYZER, input)
+
+private fun getScannerIssueSummaryTable(input: ReporterInput): IssueTable =
+    input.ortResult.getScannerIssues(omitExcluded = true, omitResolved = true)
+        .toIssueSummaryTable(IssueTable.Type.SCANNER, input)
+
+private fun Map<Identifier, Set<Issue>>.toIssueSummaryTable(type: IssueTable.Type, input: ReporterInput): IssueTable {
+    val rows = flatMap { (id, issues) ->
+        issues.map { issue ->
+            val resolvableIssue = issue.toResolvableIssue(input.ortResult, input.howToFixTextProvider)
+            ReportTableModel.IssueRow(resolvableIssue, id)
+        }
+    }.sortedWith(compareByDescending<ReportTableModel.IssueRow> { it.issue.severity }.thenBy { it.id })
+
+    return IssueTable(type, rows)
 }
