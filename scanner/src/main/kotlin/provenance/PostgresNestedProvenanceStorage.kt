@@ -79,7 +79,7 @@ class PostgresNestedProvenanceStorage(
                 table.vcsType eq root.vcsInfo.type.toString() and
                     (table.vcsUrl eq root.vcsInfo.url) and
                     (table.vcsRevision eq root.resolvedRevision)
-            }.filter { it[table.result].nestedProvenance.root == root }.map { it[table.id].value }
+            }.filter { it[table.result].nestedProvenance.root == root }.map { it[table.id] }
 
             table.deleteWhere { table.id inList idsToRemove }
 

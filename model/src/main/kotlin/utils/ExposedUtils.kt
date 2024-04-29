@@ -43,7 +43,7 @@ fun <T : Any> Transaction.execShow(statement: String, transform: (ResultSet) -> 
     require(statement.startsWith("SHOW")) { "Query must start with 'SHOW'." }
 
     return exec(object : Statement<T>(StatementType.SELECT, emptyList()) {
-        override fun arguments(): Iterable<Iterable<Pair<IColumnType, Any?>>> = emptyList()
+        override fun arguments(): Iterable<Iterable<Pair<IColumnType<*>, Any?>>> = emptyList()
 
         override fun prepareSQL(transaction: Transaction, prepared: Boolean): String = statement
 
