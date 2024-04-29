@@ -64,6 +64,8 @@ import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseWithExceptionExpression
 
+private const val RULE_VIOLATION_TABLE_ID = "rule-violation-summary"
+
 @Suppress("LargeClass", "TooManyFunctions")
 class StaticHtmlReporter : Reporter {
     override val type = "StaticHtml"
@@ -196,7 +198,7 @@ class StaticHtmlReporter : Reporter {
         ul {
             reportTableModel.ruleViolations?.let { ruleViolations ->
                 li {
-                    a("#rule-violation-summary") {
+                    a("#$RULE_VIOLATION_TABLE_ID") {
                         +getRuleViolationSummaryString(ruleViolations)
                     }
                 }
@@ -237,7 +239,7 @@ class StaticHtmlReporter : Reporter {
 
     private fun DIV.evaluatorTable(ruleViolations: List<ReportTableModel.ResolvableViolation>) {
         h2 {
-            id = "rule-violation-summary"
+            id = RULE_VIOLATION_TABLE_ID
             +getRuleViolationSummaryString(ruleViolations)
         }
 
