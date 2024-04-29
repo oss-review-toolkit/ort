@@ -507,7 +507,7 @@ scanner:
         source: "FakeScanner"
         message: "ERROR: Timeout after 300 seconds while scanning file 'project/file-within-excluded-project.dat'."
         severity: "ERROR"
-        affected_path: "project/file-of-excluded-project.dat"
+        affected_path: "project/file-within-excluded-project.dat"
       - timestamp: "2024-04-25T07:44:20.725613974Z"
         source: "FakeScanner"
         message: "Example hint."
