@@ -9,7 +9,6 @@ graphQlPlugin = "6.8.0"
 ideaExtPlugin = "1.1.8"
 kotlinPlugin = "1.9.23"
 mavenPublishPlugin = "0.28.0"
-versionsPlugin = "0.51.0"
 
 asciidoctorj = "2.5.12"
 asciidoctorjPdf = "2.3.15"

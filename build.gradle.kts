@@ -17,8 +17,6 @@
  * License-Filename: LICENSE
  */
 
-import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
-
 import org.eclipse.jgit.ignore.FastIgnoreRule
 
 import org.jetbrains.gradle.ext.Gradle
@@ -70,21 +68,6 @@ idea {
 extensions.findByName("buildScan")?.withGroovyBuilder {
     setProperty("termsOfServiceUrl", "https://gradle.com/terms-of-service")
     setProperty("termsOfServiceAgree", "yes")
-}
-
-tasks.named<DependencyUpdatesTask>("dependencyUpdates") {
-    gradleReleaseChannel = "current"
-    outputFormatter = "json"
-
-    val nonFinalQualifiers = listOf(
-        "alpha", "b", "beta", "cr", "dev", "ea", "eap", "m", "milestone", "pr", "preview", "rc", "\\d{14}"
-    ).joinToString("|", "(", ")")
-
-    val nonFinalQualifiersRegex = Regex(".*[.-]$nonFinalQualifiers[.\\d-+]*", RegexOption.IGNORE_CASE)
-
-    rejectVersionIf {
-        candidate.version.matches(nonFinalQualifiersRegex)
-    }
 }
 
 // Gradle's "dependencies" task selector only executes on a single / the current project [1]. However, sometimes viewing
