@@ -73,8 +73,6 @@ class WebAppOrtResult {
 
     #packages = [];
 
-    #packageIndexesByPackageNameMap = new Map();
-
     #pathExcludes = [];
 
     #paths = [];
