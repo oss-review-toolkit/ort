@@ -348,7 +348,7 @@ class StaticHtmlReporter : Reporter {
                 ul {
                     issues.forEach { issue ->
                         li {
-                            issueDescription(issue)
+                            p { issueDescription(issue) }
                             p { +issue.resolutionDescription }
                         }
 
@@ -583,7 +583,7 @@ class StaticHtmlReporter : Reporter {
         ul {
             issues.forEach {
                 li {
-                    issueDescription(it)
+                    p { issueDescription(it) }
 
                     if (it.isResolved) {
                         classes = setOf("ort-resolved")
@@ -594,13 +594,11 @@ class StaticHtmlReporter : Reporter {
         }
     }
 
-    private fun LI.issueDescription(issue: ResolvableIssue) {
-        p {
-            var first = true
-            issue.description.lines().forEach {
-                if (first) first = false else br
-                +it
-            }
+    private fun P.issueDescription(issue: ResolvableIssue) {
+        var first = true
+        issue.description.lines().forEach {
+            if (first) first = false else br
+            +it
         }
     }
 
