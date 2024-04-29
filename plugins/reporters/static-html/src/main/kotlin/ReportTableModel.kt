@@ -55,7 +55,7 @@ internal data class ReportTableModel(
     val ruleViolations: List<ResolvableViolation>?,
 
     /**
-     * A [IssueTable] containing all dependencies that caused issues.
+     * An [IssueTable] containing all dependencies that caused issues.
      */
     val issueSummary: IssueTable,
 
