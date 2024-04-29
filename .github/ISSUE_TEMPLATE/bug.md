@@ -2,7 +2,7 @@
 name: Bug Report
 about: I want to report a bug that I am facing.
 title: ''
-labels: 'bug'
+labels: ['bug', 'to triage']
 
 ---
 ### Describe the bug

@@ -2,7 +2,7 @@
 name: Enhancement Proposal
 about: I want to propose to enhance existing functionality.
 title: ''
-labels: 'enhancement'
+labels: ['enhancement', 'to triage']
 
 ---
 ### What is the existing functionality and how should it be enhanced?
