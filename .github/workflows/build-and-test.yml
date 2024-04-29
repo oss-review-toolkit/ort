@@ -149,6 +149,8 @@ jobs:
         # Run the functional tests in the Docker container.
         docker run \
           -u $(id -u):$(id -g) \
+          -v /etc/group:/etc/group:ro \
+          -v /etc/passwd:/etc/passwd:ro \
           -v /home/runner:/home/runner \
           -v ${{ github.workspace }}:/workspace \
           -w /workspace \
