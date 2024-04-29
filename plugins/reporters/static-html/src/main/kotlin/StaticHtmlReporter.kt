@@ -150,7 +150,7 @@ class StaticHtmlReporter : Reporter {
                     index(reportTableModel)
 
                     reportTableModel.ruleViolations?.let {
-                        evaluatorTable(it)
+                        ruleViolationTable(it)
                     }
 
                     if (reportTableModel.issueSummary.rows.isNotEmpty()) {
@@ -237,7 +237,7 @@ class StaticHtmlReporter : Reporter {
         }
     }
 
-    private fun DIV.evaluatorTable(ruleViolations: List<ReportTableModel.ResolvableViolation>) {
+    private fun DIV.ruleViolationTable(ruleViolations: List<ReportTableModel.ResolvableViolation>) {
         h2 {
             id = RULE_VIOLATION_TABLE_ID
             +getRuleViolationSummaryString(ruleViolations)
@@ -259,14 +259,14 @@ class StaticHtmlReporter : Reporter {
 
                 tbody {
                     ruleViolations.forEachIndexed { rowIndex, ruleViolation ->
-                        evaluatorRow(rowIndex + 1, ruleViolation)
+                        ruleViolationRow(rowIndex + 1, ruleViolation)
                     }
                 }
             }
         }
     }
 
-    private fun TBODY.evaluatorRow(rowIndex: Int, ruleViolation: ReportTableModel.ResolvableViolation) {
+    private fun TBODY.ruleViolationRow(rowIndex: Int, ruleViolation: ReportTableModel.ResolvableViolation) {
         val cssClass = if (ruleViolation.isResolved) {
             "ort-resolved"
         } else {
