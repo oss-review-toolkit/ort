@@ -91,14 +91,12 @@ tasks.named<DependencyUpdatesTask>("dependencyUpdates") {
 // all dependencies at once is beneficial, e.g. for debugging version conflict resolution.
 // [1]: https://docs.gradle.org/current/userguide/viewing_debugging_dependencies.html#sec:listing_dependencies
 tasks.register("allDependencies") {
-    val dependenciesTasks = allprojects.map { it.tasks.named<DependencyReportTask>("dependencies") }
+    val dependenciesTasks = allprojects.map { it.tasks.named<DependencyReportTask>("dependencies").get() }
     dependsOn(dependenciesTasks)
 
     // Ensure deterministic output by requiring to run tasks after each other in always the same order.
     dependenciesTasks.zipWithNext().forEach { (a, b) ->
-        b.configure {
-            mustRunAfter(a)
-        }
+        b.mustRunAfter(a)
     }
 }
 
