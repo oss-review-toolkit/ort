@@ -33,7 +33,6 @@ import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.licenses.ResolvedLicense
-import org.ossreviewtoolkit.utils.common.zipWithCollections
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 internal fun Collection<ReportTableModel.ResolvableIssue>.containsUnresolved() = any { !it.isResolved }
@@ -57,7 +56,12 @@ internal data class ReportTableModel(
     /**
      * An [IssueTable] containing all dependencies that caused issues.
      */
-    val issueSummary: IssueTable,
+    val analyzerIssueSummary: IssueTable,
+
+    /**
+     * A [IssueTable] containing all scanner issues.
+     */
+    val scannerIssueSummary: IssueTable,
 
     /**
      * The [ProjectTable]s containing the dependencies for each [Project].
@@ -143,47 +147,30 @@ internal data class ReportTableModel(
     )
 
     data class IssueTable(
+        val type: Type,
         val rows: List<IssueRow>
     ) {
-        val errorCount: Int
-        val warningCount: Int
-        val hintCount: Int
+        val errorCount = rows.count { it.issue.severity == Severity.ERROR }
+        val warningCount = rows.count { it.issue.severity == Severity.WARNING }
+        val hintCount = rows.count { it.issue.severity == Severity.HINT }
 
-        init {
-            val unresolvedIssues = rows.flatMap {
-                it.analyzerIssues.flatMap { (_, issues) -> issues } +
-                    it.scanIssues.flatMap { (_, issues) -> issues }
-            }.filterNot { it.isResolved }.groupBy { it.severity }
-
-            errorCount = unresolvedIssues[Severity.ERROR].orEmpty().size
-            warningCount = unresolvedIssues[Severity.WARNING].orEmpty().size
-            hintCount = unresolvedIssues[Severity.HINT].orEmpty().size
+        enum class Type {
+            ANALYZER,
+            SCANNER
         }
     }
 
     data class IssueRow(
         /**
-         * The identifier of the package.
-         */
-        val id: Identifier,
-
-        /**
          * All analyzer issues related to this package, grouped by the [Identifier] of the [Project] they appear in.
          */
-        val analyzerIssues: SortedMap<Identifier, List<ResolvableIssue>>,
+        val issue: ResolvableIssue,
 
         /**
-         * All scan issues related to this package, grouped by the [Identifier] of the [Project] they appear in.
+         * The identifier of the package the issue corresponds to.
          */
-        val scanIssues: SortedMap<Identifier, List<ResolvableIssue>>
-    ) {
-        fun merge(other: IssueRow): IssueRow =
-            IssueRow(
-                id = id,
-                analyzerIssues = analyzerIssues.zipWithCollections(other.analyzerIssues).toSortedMap(),
-                scanIssues = scanIssues.zipWithCollections(other.scanIssues).toSortedMap()
-            )
-    }
+        val id: Identifier
+    )
 
     data class ResolvableIssue(
         val source: String,
