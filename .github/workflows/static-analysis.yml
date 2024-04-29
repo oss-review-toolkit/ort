@@ -91,7 +91,7 @@ jobs:
         use-caches: false
     - uses: github/codeql-action/upload-sarif@v3
       with:
-        sarif_file: ${{runner.temp}}/qodana/results/qodana.sarif.json
+        sarif_file: ${{ runner.temp }}/qodana/results/qodana.sarif.json
   reuse-tool:
     runs-on: ubuntu-22.04
     steps:
