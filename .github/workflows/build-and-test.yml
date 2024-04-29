@@ -24,7 +24,7 @@ jobs:
       with:
         gradle-home-cache-cleanup: true
     - name: Build all classes
-      run: ./gradlew --scan classes
+      run: ./gradlew classes
   codeql-analysis:
     needs: build
     runs-on: ubuntu-22.04
