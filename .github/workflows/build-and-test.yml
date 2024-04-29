@@ -24,19 +24,7 @@ jobs:
       with:
         gradle-home-cache-cleanup: true
     - name: Build all classes
-      run: ./gradlew --scan classes -x :plugins:reporters:web-app-template:yarnBuild
-  build-web-app-reporter:
-    needs: build
-    runs-on: ubuntu-22.04
-    steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v3
-      with:
-        gradle-home-cache-cleanup: true
-    - name: Build the web-app-reporter
-      run: ./gradlew --scan :plugins:reporters:web-app-template:yarnBuild
+      run: ./gradlew --scan classes
   codeql-analysis:
     needs: build
     runs-on: ubuntu-22.04
@@ -55,7 +43,7 @@ jobs:
       with:
         gradle-home-cache-cleanup: true
     - name: Build all classes
-      run: ./gradlew -Dorg.gradle.jvmargs=-Xmx1g classes -x :plugins:reporters:web-app-template:yarnBuild
+      run: ./gradlew -Dorg.gradle.jvmargs=-Xmx1g classes
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
   test:
@@ -69,14 +57,14 @@ jobs:
       with:
         gradle-home-cache-cleanup: true
     - name: Run unit tests
-      run: ./gradlew --scan test jacocoTestReport -x :plugins:reporters:web-app-template:yarnBuild
+      run: ./gradlew --scan test jacocoTestReport
     - name: Upload code coverage data
       uses: codecov/codecov-action@v4
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         flags: test
   funTest-non-docker:
-    needs: build-web-app-reporter
+    needs: build
     runs-on: ubuntu-22.04
     steps:
     - name: Checkout Repository
