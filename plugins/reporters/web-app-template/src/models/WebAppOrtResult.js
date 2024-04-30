@@ -45,6 +45,8 @@ class WebAppOrtResult {
 
     #dependencyTrees = [];
 
+    #effectiveLicenses = [];
+
     #treeNodesByPackageIndexMap;
 
     #treeNodesByKeyMap;
@@ -225,7 +227,8 @@ class WebAppOrtResult {
                     },
                     licenses: {
                         declared,
-                        detected
+                        detected,
+                        effective
                     }
                 } = this.#statistics;
 
@@ -235,6 +238,10 @@ class WebAppOrtResult {
 
                 if (detected) {
                     this.#detectedLicensesProcessed = [...detected.keys()];
+                }
+
+                if (effective) {
+                    this.#effectiveLicenses = [...effective.keys()];
                 }
 
                 if (totalTreeDepth) {
@@ -402,6 +409,10 @@ class WebAppOrtResult {
 
     get effectiveLicensePackages() {
         return this.#effectiveLicensePackages;
+    }
+
+    get effectiveLicenses() {
+        return this.#effectiveLicenses;
     }
 
     get issues() {
