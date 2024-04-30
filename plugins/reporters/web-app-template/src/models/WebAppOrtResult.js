@@ -391,14 +391,6 @@ class WebAppOrtResult {
         return this.#dependencyTrees;
     }
 
-    get treeNodesByPackageIndexMap() {
-        return this.#treeNodesByPackageIndexMap;
-    }
-
-    get treeNodesByKeyMap() {
-        return this.#treeNodesByKeyMap;
-    }
-
     get detectedLicenses() {
         return this.#detectedLicenses;
     }
@@ -485,6 +477,14 @@ class WebAppOrtResult {
 
     get statistics() {
         return this.#statistics;
+    }
+
+    get treeNodesByPackageIndexMap() {
+        return this.#treeNodesByPackageIndexMap;
+    }
+
+    get treeNodesByKeyMap() {
+        return this.#treeNodesByKeyMap;
     }
 
     get vulnerabilities() {
