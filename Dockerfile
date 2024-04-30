@@ -422,6 +422,17 @@ COPY --from=bazelbuild /opt/bazel /opt/bazel
 COPY --from=bazelbuild /opt/go/bin/buildozer /opt/go/bin/buildozer
 
 #------------------------------------------------------------------------
+# BITBAKE
+FROM base as bitbakebuild
+
+ARG BITBAKE_VERSION
+
+RUN git clone --branch $BITBAKE_VERSION --depth 1 https://git.openembedded.org/bitbake /opt/bitbake
+
+FROM scratch as bitbake
+COPY --from=bitbakebuild /opt/bitbake /opt/bitbake
+
+#------------------------------------------------------------------------
 # ORT
 FROM base as ortbuild
 
@@ -557,6 +568,21 @@ ENV PATH=$PATH:$BAZEL_HOME/bin
 
 COPY --from=bazel $BAZEL_HOME $BAZEL_HOME
 COPY --from=bazel --chown=$USER:$USER /opt/go/bin/buildozer /opt/go/bin/buildozer
+
+# BitBake
+ENV BITBAKE_HOME=/opt/bitbake
+ENV PATH=$PATH:$BITBAKE_HOME/bin
+
+COPY --from=bitbake $BITBAKE_HOME $BITBAKE_HOME
+
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    sudo apt-get update && \
+    DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends \
+        bzip2 chrpath cpio diffstat gawk lz4 patch zstd \
+    && sudo rm -rf /var/lib/apt/lists/*
+
+RUN syft $BITBAKE_HOME -o spdx-json --output json=/usr/share/doc/ort/ort-bitbake.spdx.json
 
 #------------------------------------------------------------------------
 # Runtime container with minimal selection of supported package managers pre-installed.
