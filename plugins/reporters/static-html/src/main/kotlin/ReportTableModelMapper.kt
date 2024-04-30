@@ -116,6 +116,7 @@ internal object ReportTableModelMapper {
             ruleViolations,
             getAnalyzerIssueSummaryTable(input),
             getScannerIssueSummaryTable(input),
+            getAdvisorIssueSummaryTable(input),
             projectTables,
             labels
         )
@@ -190,6 +191,10 @@ private fun getAnalyzerIssueSummaryTable(input: ReporterInput): IssueTable =
 private fun getScannerIssueSummaryTable(input: ReporterInput): IssueTable =
     input.ortResult.getScannerIssues(omitExcluded = true, omitResolved = true)
         .toIssueSummaryTable(IssueTable.Type.SCANNER, input)
+
+private fun getAdvisorIssueSummaryTable(input: ReporterInput): IssueTable =
+    input.ortResult.getAdvisorIssues(omitExcluded = true, omitResolved = true)
+        .toIssueSummaryTable(IssueTable.Type.ADVISOR, input)
 
 private fun Map<Identifier, Set<Issue>>.toIssueSummaryTable(type: IssueTable.Type, input: ReporterInput): IssueTable {
     val rows = flatMap { (id, issues) ->
