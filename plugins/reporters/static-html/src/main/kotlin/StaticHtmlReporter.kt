@@ -161,6 +161,10 @@ class StaticHtmlReporter : Reporter {
                         issueTable(reportTableModel.scannerIssueSummary)
                     }
 
+                    if (reportTableModel.advisorIssueSummary.rows.isNotEmpty()) {
+                        issueTable(reportTableModel.advisorIssueSummary)
+                    }
+
                     reportTableModel.projectDependencies.forEach { (project, table) ->
                         projectTable(project, table)
                     }
@@ -220,6 +224,14 @@ class StaticHtmlReporter : Reporter {
                 li {
                     a("#${reportTableModel.scannerIssueSummary.id()}") {
                         +reportTableModel.scannerIssueSummary.title()
+                    }
+                }
+            }
+
+            if (reportTableModel.advisorIssueSummary.rows.isNotEmpty()) {
+                li {
+                    a("#${reportTableModel.advisorIssueSummary.id()}") {
+                        +reportTableModel.advisorIssueSummary.title()
                     }
                 }
             }

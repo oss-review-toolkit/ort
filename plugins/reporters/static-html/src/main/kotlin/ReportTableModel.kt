@@ -64,6 +64,11 @@ internal data class ReportTableModel(
     val scannerIssueSummary: IssueTable,
 
     /**
+     * A [IssueTable] containing all advisor issues.
+     */
+    val advisorIssueSummary: IssueTable,
+
+    /**
      * The [ProjectTable]s containing the dependencies for each [Project].
      */
     val projectDependencies: SortedMap<Project, ProjectTable>,
@@ -156,7 +161,8 @@ internal data class ReportTableModel(
 
         enum class Type {
             ANALYZER,
-            SCANNER
+            SCANNER,
+            ADVISOR
         }
     }
 
