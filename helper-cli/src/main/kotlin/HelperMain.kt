@@ -40,7 +40,6 @@ import org.ossreviewtoolkit.helper.commands.packageconfig.PackageConfigurationCo
 import org.ossreviewtoolkit.helper.commands.packagecuration.PackageCurationsCommand
 import org.ossreviewtoolkit.helper.commands.provenancestorage.ProvenanceStorageCommand
 import org.ossreviewtoolkit.helper.commands.repoconfig.RepositoryConfigurationCommand
-import org.ossreviewtoolkit.helper.commands.scanstorage.ScanStorageCommand
 import org.ossreviewtoolkit.helper.utils.ORTH_NAME
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.ort.printStackTrace
@@ -100,7 +99,6 @@ internal class HelperMain : CliktCommand(
             PackageCurationsCommand(),
             ProvenanceStorageCommand(),
             RepositoryConfigurationCommand(),
-            ScanStorageCommand(),
             SetDependencyRepresentationCommand(),
             SetLabelsCommand(),
             TransformResultCommand(),
