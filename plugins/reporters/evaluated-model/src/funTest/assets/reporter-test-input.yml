@@ -33,7 +33,7 @@ repository:
         comment: "The scope only contains test dependencies."
     resolutions:
       issues:
-      - message: "A test issue\\."
+      - message: "Example advisor error, resolved."
         reason: "CANT_FIX_ISSUE"
         comment: "A comment explaining why the issue can be ignored."
       - message: "Example error, resolved."
@@ -791,8 +791,20 @@ advisor:
           issues:
           - timestamp: "1970-01-01T00:00:00Z"
             source: "VulnerableCode"
-            message: "A test issue."
+            message: "Example advisor error, resolved."
             severity: "ERROR"
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "VulnerableCode"
+            message: "Example advisor error."
+            severity: "ERROR"
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "VulnerableCode"
+            message: "Example advisor warning."
+            severity: "WARNING"
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "VulnerableCode"
+            message: "Example advisor hint."
+            severity: "HINT"
         defects: []
         vulnerabilities:
         - id: "VULCOID-VULNERABILITY_ID"
@@ -845,7 +857,7 @@ resolved_configuration:
         concluded_license: "MPL-2.0 OR EPL-1.0"
   resolutions:
     issues:
-    - message: "A test issue\\."
+    - message: "Example advisor error, resolved."
       reason: "CANT_FIX_ISSUE"
       comment: "A comment explaining why the issue can be ignored."
     - message: "Example error, resolved."

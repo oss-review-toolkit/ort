@@ -91,7 +91,7 @@
     "comment" : "Resolved for illustration."
   }, {
     "_id" : 1,
-    "message" : "A test issue\\.",
+    "message" : "Example advisor error, resolved.",
     "reason" : "CANT_FIX_ISSUE",
     "comment" : "A comment explaining why the issue can be ignored."
   } ],
@@ -265,13 +265,40 @@
     "timestamp" : "1970-01-01T00:00:00Z",
     "type" : "ADVISOR",
     "source" : "VulnerableCode",
-    "message" : "A test issue.",
+    "message" : "Example advisor error, resolved.",
     "severity" : "ERROR",
     "resolutions" : [ 1 ],
     "pkg" : 2,
     "how_to_fix" : "Some how to fix text."
   }, {
     "_id" : 17,
+    "timestamp" : "1970-01-01T00:00:00Z",
+    "type" : "ADVISOR",
+    "source" : "VulnerableCode",
+    "message" : "Example advisor error.",
+    "severity" : "ERROR",
+    "pkg" : 2,
+    "how_to_fix" : "Some how to fix text."
+  }, {
+    "_id" : 18,
+    "timestamp" : "1970-01-01T00:00:00Z",
+    "type" : "ADVISOR",
+    "source" : "VulnerableCode",
+    "message" : "Example advisor warning.",
+    "severity" : "WARNING",
+    "pkg" : 2,
+    "how_to_fix" : "Some how to fix text."
+  }, {
+    "_id" : 19,
+    "timestamp" : "1970-01-01T00:00:00Z",
+    "type" : "ADVISOR",
+    "source" : "VulnerableCode",
+    "message" : "Example advisor hint.",
+    "severity" : "HINT",
+    "pkg" : 2,
+    "how_to_fix" : "Some how to fix text."
+  }, {
+    "_id" : 20,
     "timestamp" : "2024-04-25T07:44:20.725613974Z",
     "type" : "ANALYZER",
     "source" : "Gradle",
@@ -281,7 +308,7 @@
     "path" : 0,
     "how_to_fix" : "Some how to fix text."
   }, {
-    "_id" : 18,
+    "_id" : 21,
     "timestamp" : "2024-04-25T07:44:20.725613974Z",
     "type" : "ANALYZER",
     "source" : "Gradle",
@@ -1055,7 +1082,7 @@
         "key" : 3,
         "linkage" : "DYNAMIC",
         "pkg" : 2,
-        "issues" : [ 17 ],
+        "issues" : [ 20 ],
         "children" : [ {
           "key" : 4,
           "linkage" : "DYNAMIC",
@@ -1084,7 +1111,7 @@
         "key" : 9,
         "linkage" : "DYNAMIC",
         "pkg" : 3,
-        "issues" : [ 18 ],
+        "issues" : [ 21 ],
         "children" : [ {
           "key" : 10,
           "linkage" : "DYNAMIC",
@@ -1176,10 +1203,10 @@
       "vulnerability_resolutions" : 0
     },
     "open_issues" : {
-      "errors" : 4,
-      "warnings" : 3,
-      "hints" : 2,
-      "severe" : 7
+      "errors" : 5,
+      "warnings" : 4,
+      "hints" : 3,
+      "severe" : 9
     },
     "open_rule_violations" : {
       "errors" : 1,
@@ -1275,7 +1302,7 @@
   },
   "severe_issue_threshold" : "WARNING",
   "severe_rule_violation_threshold" : "WARNING",
-  "repository_configuration" : "---\nexcludes:\n  paths:\n  - pattern: \"sub/module/project/build.gradle\"\n    reason: \"EXAMPLE_OF\"\n    comment: \"The project is an example.\"\n  - pattern: \"**/*.java\"\n    reason: \"EXAMPLE_OF\"\n    comment: \"These are example files.\"\n  - pattern: \"analyzer/src/funTest/assets/projects/synthetic/gradle/lib/excluded-file.dat\"\n    reason: \"DATA_FILE_OF\"\n  scopes:\n  - pattern: \"testCompile\"\n    reason: \"TEST_DEPENDENCY_OF\"\n    comment: \"The scope only contains test dependencies.\"\nresolutions:\n  issues:\n  - message: \"A test issue\\\\.\"\n    reason: \"CANT_FIX_ISSUE\"\n    comment: \"A comment explaining why the issue can be ignored.\"\n  - message: \"Example error, resolved.\"\n    reason: \"CANT_FIX_ISSUE\"\n    comment: \"Resolved for illustration.\"\n  rule_violations:\n  - message: \"Apache-2.0 hint\"\n    reason: \"CANT_FIX_EXCEPTION\"\n    comment: \"Apache-2 is not an issue.\"\nlicense_choices:\n  repository_license_choices:\n  - given: \"GPL-2.0-only OR MIT\"\n    choice: \"MIT\"\n  package_license_choices:\n  - package_id: \"Maven:com.h2database:h2:1.4.200\"\n    license_choices:\n    - given: \"MPL-2.0 OR EPL-1.0\"\n      choice: \"MPL-2.0\"\n",
+  "repository_configuration" : "---\nexcludes:\n  paths:\n  - pattern: \"sub/module/project/build.gradle\"\n    reason: \"EXAMPLE_OF\"\n    comment: \"The project is an example.\"\n  - pattern: \"**/*.java\"\n    reason: \"EXAMPLE_OF\"\n    comment: \"These are example files.\"\n  - pattern: \"analyzer/src/funTest/assets/projects/synthetic/gradle/lib/excluded-file.dat\"\n    reason: \"DATA_FILE_OF\"\n  scopes:\n  - pattern: \"testCompile\"\n    reason: \"TEST_DEPENDENCY_OF\"\n    comment: \"The scope only contains test dependencies.\"\nresolutions:\n  issues:\n  - message: \"Example advisor error, resolved.\"\n    reason: \"CANT_FIX_ISSUE\"\n    comment: \"A comment explaining why the issue can be ignored.\"\n  - message: \"Example error, resolved.\"\n    reason: \"CANT_FIX_ISSUE\"\n    comment: \"Resolved for illustration.\"\n  rule_violations:\n  - message: \"Apache-2.0 hint\"\n    reason: \"CANT_FIX_EXCEPTION\"\n    comment: \"Apache-2 is not an issue.\"\nlicense_choices:\n  repository_license_choices:\n  - given: \"GPL-2.0-only OR MIT\"\n    choice: \"MIT\"\n  package_license_choices:\n  - package_id: \"Maven:com.h2database:h2:1.4.200\"\n    license_choices:\n    - given: \"MPL-2.0 OR EPL-1.0\"\n      choice: \"MPL-2.0\"\n",
   "labels" : {
     "job_parameters.JOB_PARAM_1" : "label job param 1",
     "job_parameters.JOB_PARAM_2" : "label job param 2",
