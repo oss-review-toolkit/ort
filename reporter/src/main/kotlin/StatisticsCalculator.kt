@@ -124,7 +124,7 @@ object StatisticsCalculator {
             flatMap { id ->
                 val resolvedLicenseInfo = licenseInfoResolver.resolveLicenseInfo(id)
                 transform(resolvedLicenseInfo).map { it.license.toString() }
-            }.groupingBy { it }.eachCount().toMap()
+            }.groupingBy { it }.eachCount()
 
         val ids = ortResult.getProjectsAndPackages()
 
