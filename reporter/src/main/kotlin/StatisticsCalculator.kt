@@ -118,10 +118,10 @@ object StatisticsCalculator {
         ortResult: OrtResult,
         licenseInfoResolver: LicenseInfoResolver
     ): LicenseStatistics {
-        fun Collection<Identifier>.countLicenses(
+        fun Set<Identifier>.countLicenses(
             transform: ResolvedLicenseInfo.() -> ResolvedLicenseInfo = { this }
         ): Map<String, Int> =
-            distinct().flatMap { id ->
+            flatMap { id ->
                 val resolvedLicenseInfo = licenseInfoResolver.resolveLicenseInfo(id)
                 transform(resolvedLicenseInfo).map { it.license.toString() }
             }.groupingBy { it }.eachCount().toMap()
