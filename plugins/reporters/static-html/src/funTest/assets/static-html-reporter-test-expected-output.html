@@ -454,7 +454,7 @@ Prism.languages.yaml={scalar:{pattern:/([\-:]\s*(?:![^\s]+)?[ \t]*[|>])[ \t]*(?:
          <h2>Index</h2>
          <ul>
             <li><a href="#rule-violation-summary">Rule Violation Summary (1 errors, 1 warnings, 0 hints to resolve)</a></li>
-            <li><a href="#issue-summary">Issue Summary (5 errors, 2 warnings, 2 hints to resolve)</a></li>
+            <li><a href="#issue-summary">Issue Summary (5 errors, 3 warnings, 2 hints to resolve)</a></li>
             <li><a href="#Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0">Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0 
                   <div class="ort-reason">Excluded: EXAMPLE_OF - The project is an example.</div></a></li>
             <li><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0">Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0</a></li>
@@ -531,7 +531,7 @@ Prism.languages.yaml={scalar:{pattern:/([\-:]\s*(?:![^\s]+)?[ \t]*[|>])[ \t]*(?:
                </tr>
             </tbody>
          </table>
-         <h2 id="issue-summary">Issue Summary (5 errors, 2 warnings, 2 hints to resolve)</h2>
+         <h2 id="issue-summary">Issue Summary (5 errors, 3 warnings, 2 hints to resolve)</h2>
          <p>Issues from excluded components are not shown in this summary.</p>
          <h3>Packages</h3>
          <table class="ort-report-table">
@@ -701,6 +701,31 @@ Prism.languages.yaml={scalar:{pattern:/([\-:]\s*(?:![^\s]+)?[ \t]*[|>])[ \t]*(?:
                            </details>
                      </ul>
                   </td>
+               </tr>
+               <tr class="ort-warning" id="issue-2">
+                  <td><a href="#issue-2">2</a></td>
+                  <td>Maven:org.apache.commons:commons-text:1.1</td>
+                  <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0">Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0</a><ul>
+                        <li>
+                           <p>2024-04-25T07:44:20.725613974Z [WARNING]: Gradle - Example analyzer warning in included
+                              package.</p>
+                           <p></p>
+                        </li>
+                        <details>
+                           <summary>How to fix</summary>
+                           <ul>
+                              
+                              <li><em>Step 1</em></li>
+                              
+                              <li><strong>Step 2</strong></li>
+                              
+                              <li><em><strong>Step 3</strong></em>
+                                 <code>Some long issue resolution text to verify that overflow:scroll is working as expected.</code></li>
+                              </ul>
+                           </details>
+                     </ul>
+                  </td>
+                  <td></td>
                </tr>
             </tbody>
          </table>
@@ -895,7 +920,7 @@ Prism.languages.yaml={scalar:{pattern:/([\-:]\s*(?:![^\s]+)?[ \t]*[|>])[ \t]*(?:
                      </ul>
                   </td>
                </tr>
-               <tr class="ort-success ort-excluded" id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-2">
+               <tr class="ort-error ort-excluded" id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-2">
                   <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-2">2</a></td>
                   <td>Ant:junit:junit:4.12</td>
                   <td>
@@ -916,7 +941,12 @@ Prism.languages.yaml={scalar:{pattern:/([\-:]\s*(?:![^\s]+)?[ \t]*[|>])[ \t]*(?:
                      </dl>
                   </td>
                   <td>
-                     <ul></ul>
+                     <ul>
+                        <li>
+                           <p>2024-04-25T07:44:20.725613974Z [WARNING]: Gradle - Example analyzer warning in excluded
+                              package.</p>
+                        </li>
+                     </ul>
                   </td>
                   <td>
                      <ul></ul>
@@ -1014,7 +1044,7 @@ Prism.languages.yaml={scalar:{pattern:/([\-:]\s*(?:![^\s]+)?[ \t]*[|>])[ \t]*(?:
                      <ul></ul>
                   </td>
                </tr>
-               <tr class="ort-success " id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-6">
+               <tr class="ort-error " id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-6">
                   <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-6">6</a></td>
                   <td>Maven:org.apache.commons:commons-text:1.1</td>
                   <td>
@@ -1036,7 +1066,12 @@ Prism.languages.yaml={scalar:{pattern:/([\-:]\s*(?:![^\s]+)?[ \t]*[|>])[ \t]*(?:
                      </dl>
                   </td>
                   <td>
-                     <ul></ul>
+                     <ul>
+                        <li>
+                           <p>2024-04-25T07:44:20.725613974Z [WARNING]: Gradle - Example analyzer warning in included
+                              package.</p>
+                        </li>
+                     </ul>
                   </td>
                   <td>
                      <ul></ul>

@@ -235,6 +235,25 @@ issues:
   - 1
   pkg: 2
   how_to_fix: "Some how to fix text."
+- _id: 17
+  timestamp: "2024-04-25T07:44:20.725613974Z"
+  type: "ANALYZER"
+  source: "Gradle"
+  message: "Example analyzer warning in included package."
+  severity: "WARNING"
+  pkg: 2
+  path: 0
+  how_to_fix: "Some how to fix text."
+- _id: 18
+  timestamp: "2024-04-25T07:44:20.725613974Z"
+  type: "ANALYZER"
+  source: "Gradle"
+  message: "Example analyzer warning in excluded package."
+  severity: "WARNING"
+  is_excluded: true
+  pkg: 3
+  path: 1
+  how_to_fix: "Some how to fix text."
 scan_results:
 - _id: 0
   provenance:
@@ -555,8 +574,8 @@ packages:
     revision: ""
     path: ""
   paths:
-  - 5
-  - 6
+  - 7
+  - 8
   levels:
   - 0
   - 1
@@ -602,7 +621,7 @@ packages:
     revision: ""
     path: ""
   paths:
-  - 0
+  - 2
   levels:
   - 0
   scopes:
@@ -654,7 +673,7 @@ packages:
       comment: "Foobar is an imaginary dependency and offers a license choice"
       concluded_license: "GPL-2.0-only OR MIT"
   paths:
-  - 1
+  - 3
   levels:
   - 1
   scopes:
@@ -706,7 +725,7 @@ packages:
       comment: "H2 database offers a license choice"
       concluded_license: "MPL-2.0 OR EPL-1.0"
   paths:
-  - 2
+  - 4
   levels:
   - 1
   scopes:
@@ -753,8 +772,8 @@ packages:
     revision: ""
     path: ""
   paths:
-  - 3
-  - 4
+  - 5
+  - 6
   levels:
   - 1
   - 2
@@ -837,7 +856,7 @@ packages:
     revision: ""
     path: ""
   paths:
-  - 7
+  - 9
   levels:
   - 1
   scopes:
@@ -873,8 +892,8 @@ packages:
     revision: ""
     path: ""
   paths:
-  - 8
-  - 9
+  - 10
+  - 11
   levels:
   - 0
   scopes:
@@ -883,58 +902,68 @@ packages:
   is_excluded: false
 paths:
 - _id: 0
+  pkg: 2
+  project: 1
+  scope: 0
+  path: []
+- _id: 1
   pkg: 3
   project: 1
   scope: 1
   path: []
-- _id: 1
+- _id: 2
+  pkg: 3
+  project: 1
+  scope: 1
+  path: []
+- _id: 3
   pkg: 4
   project: 1
   scope: 1
   path:
   - 3
-- _id: 2
+- _id: 4
   pkg: 5
   project: 1
   scope: 1
   path:
   - 3
-- _id: 3
+- _id: 5
   pkg: 6
   project: 1
   scope: 0
   path:
   - 2
-- _id: 4
+- _id: 6
   pkg: 6
   project: 1
   scope: 1
   path:
   - 9
   - 2
-- _id: 5
+- _id: 7
   pkg: 2
   project: 1
   scope: 0
   path: []
-- _id: 6
+- _id: 8
   pkg: 2
   project: 1
   scope: 1
   path:
   - 9
-- _id: 7
+- _id: 9
   pkg: 8
   project: 1
   scope: 1
   path:
   - 3
-- _id: 8
+- _id: 10
   pkg: 9
   project: 1
   scope: 0
   path: []
-- _id: 9
+- _id: 11
   pkg: 9
   project: 1
   scope: 1
@@ -953,6 +982,8 @@ dependency_trees:
     - key: 3
       linkage: "DYNAMIC"
       pkg: 2
+      issues:
+      - 17
       children:
       - key: 4
         linkage: "DYNAMIC"
@@ -976,6 +1007,8 @@ dependency_trees:
     - key: 9
       linkage: "DYNAMIC"
       pkg: 3
+      issues:
+      - 18
       children:
       - key: 10
         linkage: "DYNAMIC"
@@ -1056,9 +1089,9 @@ statistics:
     vulnerability_resolutions: 0
   open_issues:
     errors: 4
-    warnings: 2
+    warnings: 3
     hints: 2
-    severe: 6
+    severe: 7
   open_rule_violations:
     errors: 1
     warnings: 1
