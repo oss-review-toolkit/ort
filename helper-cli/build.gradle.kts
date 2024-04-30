@@ -43,8 +43,6 @@ dependencies {
 
     implementation(libs.clikt)
     implementation(libs.commonsCompress)
-    implementation(libs.exposed.core)
-    implementation(libs.hikari)
     implementation(libs.jackson.module.kotlin)
     implementation(libs.jslt)
     implementation(libs.log4j.api)
