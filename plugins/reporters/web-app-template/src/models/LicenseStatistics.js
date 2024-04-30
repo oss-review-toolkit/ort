@@ -22,6 +22,8 @@ class LicenseStatistics {
 
     #detected = new Map();
 
+    #effective = new Map();
+
     constructor(obj) {
         if (obj instanceof Object) {
             if (obj.declared !== null && obj.declared instanceof Object) {
@@ -35,6 +37,12 @@ class LicenseStatistics {
                     ([name, nrPackages]) => this.#detected.set(name, nrPackages)
                 );
             }
+
+            if (obj.effective !== null && obj.effective instanceof Object) {
+                Object.entries(obj.detected).forEach(
+                    ([name, nrPackages]) => this.#effective.set(name, nrPackages)
+                );
+            }
         }
     }
 
@@ -44,6 +52,10 @@ class LicenseStatistics {
 
     get detected() {
         return this.#detected;
+    }
+
+    get effective() {
+        return this.#effective;
     }
 }
 
