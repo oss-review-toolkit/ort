@@ -22,13 +22,22 @@ package org.ossreviewtoolkit.plugins.packagemanagers.carthage
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.should
 
+import java.io.File
+
 import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
+import org.ossreviewtoolkit.downloader.VcsHost
+import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.toYaml
+import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
 class CarthageFunTest : StringSpec({
+    val vcs = checkNotNull(VersionControlSystem.forDirectory(File(".")))
+    val vcsUrl = normalizeVcsUrl(vcs.getRemoteUrl())
+    val vcsHost = checkNotNull(VcsHost.fromUrl(vcsUrl))
+
     "Project dependencies are detected correctly" {
         val definitionFile = getAssetFile("projects/synthetic/carthage/Cartfile.resolved")
         val expectedResultFile = getAssetFile("projects/synthetic/carthage-expected-output.yml")
@@ -38,7 +47,7 @@ class CarthageFunTest : StringSpec({
         result.toYaml() should matchExpectedResult(
             expectedResultFile,
             definitionFile,
-            mapOf("<REPLACE_GITHUB_ORGANIZATION>" to "oss-review-toolkit")
+            mapOf("<REPLACE_GITHUB_ORGANIZATION>" to vcsHost.getUserOrOrganization(vcsUrl).orEmpty())
         )
     }
 })
