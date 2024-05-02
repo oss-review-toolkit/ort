@@ -35,10 +35,10 @@ import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
 
 /**
- * A mapper which converts an [OrtResult] to a [ReportTable].
+ * A mapper which converts an [OrtResult] to a [TablesReport].
  */
-internal object ReportTableModelMapper {
-    fun map(input: ReporterInput): ReportTable {
+internal object TablesReportModelMapper {
+    fun map(input: ReporterInput): TablesReport {
         val analyzerResult = input.ortResult.analyzer?.result
         val excludes = input.ortResult.getExcludes()
 
@@ -106,7 +106,7 @@ internal object ReportTableModelMapper {
             .map { it.toResolvableViolation(input.ortResult) }
             .sortedWith(VIOLATION_COMPARATOR)
 
-        return ReportTable(
+        return TablesReport(
             input.ortResult.repository.vcsProcessed,
             input.ortResult.repository.config,
             ruleViolations,
