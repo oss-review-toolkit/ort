@@ -47,9 +47,6 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseLocation
 import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTable.IssueTable
-import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTable.ProjectTable
-import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTable.ResolvableIssue
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.isValidUri
@@ -177,7 +174,7 @@ class StaticHtmlReporter : Reporter {
         return document.serialize().normalizeLineBreaks()
     }
 
-    private fun getRuleViolationSummaryString(ruleViolations: List<ReportTable.ResolvableViolation>): String {
+    private fun getRuleViolationSummaryString(ruleViolations: List<ResolvableViolation>): String {
         val violations = ruleViolations.filterNot { it.isResolved }.groupBy { it.violation.severity }
         val errorCount = violations[Severity.ERROR].orEmpty().size
         val warningCount = violations[Severity.WARNING].orEmpty().size
@@ -259,7 +256,7 @@ class StaticHtmlReporter : Reporter {
         }
     }
 
-    private fun DIV.ruleViolationTable(ruleViolations: List<ReportTable.ResolvableViolation>) {
+    private fun DIV.ruleViolationTable(ruleViolations: List<ResolvableViolation>) {
         h2 {
             id = RULE_VIOLATION_TABLE_ID
             +getRuleViolationSummaryString(ruleViolations)
@@ -288,7 +285,7 @@ class StaticHtmlReporter : Reporter {
         }
     }
 
-    private fun TBODY.ruleViolationRow(rowIndex: Int, ruleViolation: ReportTable.ResolvableViolation) {
+    private fun TBODY.ruleViolationRow(rowIndex: Int, ruleViolation: ResolvableViolation) {
         val cssClass = if (ruleViolation.isResolved) {
             "ort-resolved"
         } else {
