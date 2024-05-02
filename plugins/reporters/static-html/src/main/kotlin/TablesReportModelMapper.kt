@@ -83,10 +83,10 @@ internal object TablesReportModelMapper {
                         input.ortResult.getRepositoryLicenseChoices()
                     )?.sorted(),
                     analyzerIssues = analyzerIssues.map {
-                        it.toResolvableIssue(input.ortResult, input.howToFixTextProvider)
+                        it.toTableReportIssue(input.ortResult, input.howToFixTextProvider)
                     },
                     scanIssues = scanIssues.map {
-                        it.toResolvableIssue(input.ortResult, input.howToFixTextProvider)
+                        it.toTableReportIssue(input.ortResult, input.howToFixTextProvider)
                     }
                 )
             }
@@ -103,7 +103,7 @@ internal object TablesReportModelMapper {
         val labels = input.ortResult.labels.mapKeys { it.key.substringAfter(".") }
 
         val ruleViolations = input.ortResult.getRuleViolations()
-            .map { it.toResolvableViolation(input.ortResult) }
+            .map { it.toTableReportViolation(input.ortResult) }
             .sortedWith(VIOLATION_COMPARATOR)
 
         return TablesReport(
@@ -119,7 +119,7 @@ internal object TablesReportModelMapper {
     }
 }
 
-private val VIOLATION_COMPARATOR = compareBy<ResolvableViolation> { it.isResolved }
+private val VIOLATION_COMPARATOR = compareBy<TablesReportViolation> { it.isResolved }
     .thenByDescending { it.violation.severity }
     .thenBy { it.violation.rule }
     .thenBy { it.violation.pkg }
@@ -143,9 +143,12 @@ private fun Project.getScopesForDependencies(
     return result
 }
 
-private fun Issue.toResolvableIssue(ortResult: OrtResult, howToFixTextProvider: HowToFixTextProvider): ResolvableIssue {
+private fun Issue.toTableReportIssue(
+    ortResult: OrtResult,
+    howToFixTextProvider: HowToFixTextProvider
+): TablesReportIssue {
     val resolutions = ortResult.getResolutionsFor(this)
-    return ResolvableIssue(
+    return TablesReportIssue(
         source = source,
         description = toString(),
         resolutionDescription = buildString {
@@ -163,9 +166,9 @@ private fun Issue.toResolvableIssue(ortResult: OrtResult, howToFixTextProvider: 
     )
 }
 
-private fun RuleViolation.toResolvableViolation(ortResult: OrtResult): ResolvableViolation {
+private fun RuleViolation.toTableReportViolation(ortResult: OrtResult): TablesReportViolation {
     val resolutions = ortResult.getResolutionsFor(this)
-    return ResolvableViolation(
+    return TablesReportViolation(
         violation = this,
         resolutionDescription = buildString {
             if (resolutions.isNotEmpty()) {
@@ -195,7 +198,7 @@ private fun getAdvisorIssueSummaryTable(input: ReporterInput): IssueTable =
 private fun Map<Identifier, Set<Issue>>.toIssueSummaryTable(type: IssueTable.Type, input: ReporterInput): IssueTable {
     val rows = flatMap { (id, issues) ->
         issues.map { issue ->
-            val resolvableIssue = issue.toResolvableIssue(input.ortResult, input.howToFixTextProvider)
+            val resolvableIssue = issue.toTableReportIssue(input.ortResult, input.howToFixTextProvider)
             IssueTable.Row(resolvableIssue, id)
         }
     }.sortedWith(compareByDescending<IssueTable.Row> { it.issue.severity }.thenBy { it.id })
