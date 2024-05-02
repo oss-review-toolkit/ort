@@ -30,19 +30,19 @@ import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.orEmpty
-import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTableModel.DependencyRow
-import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTableModel.IssueTable
-import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTableModel.ProjectTable
-import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTableModel.ResolvableIssue
-import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTableModel.ResolvableViolation
+import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTable.DependencyRow
+import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTable.IssueTable
+import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTable.ProjectTable
+import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTable.ResolvableIssue
+import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTable.ResolvableViolation
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
 
 /**
- * A mapper which converts an [OrtResult] to a [ReportTableModel].
+ * A mapper which converts an [OrtResult] to a [ReportTable].
  */
 internal object ReportTableModelMapper {
-    fun map(input: ReporterInput): ReportTableModel {
+    fun map(input: ReporterInput): ReportTable {
         val analyzerResult = input.ortResult.analyzer?.result
         val excludes = input.ortResult.getExcludes()
 
@@ -110,7 +110,7 @@ internal object ReportTableModelMapper {
             .map { it.toResolvableViolation(input.ortResult) }
             .sortedWith(VIOLATION_COMPARATOR)
 
-        return ReportTableModel(
+        return ReportTable(
             input.ortResult.repository.vcsProcessed,
             input.ortResult.repository.config,
             ruleViolations,
@@ -200,9 +200,9 @@ private fun Map<Identifier, Set<Issue>>.toIssueSummaryTable(type: IssueTable.Typ
     val rows = flatMap { (id, issues) ->
         issues.map { issue ->
             val resolvableIssue = issue.toResolvableIssue(input.ortResult, input.howToFixTextProvider)
-            ReportTableModel.IssueRow(resolvableIssue, id)
+            ReportTable.IssueRow(resolvableIssue, id)
         }
-    }.sortedWith(compareByDescending<ReportTableModel.IssueRow> { it.issue.severity }.thenBy { it.id })
+    }.sortedWith(compareByDescending<ReportTable.IssueRow> { it.issue.severity }.thenBy { it.id })
 
     return IssueTable(type, rows)
 }

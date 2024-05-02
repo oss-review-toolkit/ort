@@ -47,9 +47,9 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseLocation
 import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTableModel.IssueTable
-import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTableModel.ProjectTable
-import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTableModel.ResolvableIssue
+import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTable.IssueTable
+import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTable.ProjectTable
+import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTable.ResolvableIssue
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.isValidUri
@@ -87,7 +87,7 @@ class StaticHtmlReporter : Reporter {
         return listOf(outputFile)
     }
 
-    private fun renderHtml(reportTableModel: ReportTableModel): String {
+    private fun renderHtml(reportTable: ReportTable): String {
         val document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument()
 
         document.append.html {
@@ -138,38 +138,38 @@ class StaticHtmlReporter : Reporter {
                     h2 { +"Project" }
 
                     div {
-                        with(reportTableModel.vcsInfo) {
+                        with(reportTable.vcsInfo) {
                             +"Scanned revision $revision of $type repository $url"
                         }
                     }
 
-                    if (reportTableModel.labels.isNotEmpty()) {
-                        labelsTable(reportTableModel.labels)
+                    if (reportTable.labels.isNotEmpty()) {
+                        labelsTable(reportTable.labels)
                     }
 
-                    index(reportTableModel)
+                    index(reportTable)
 
-                    reportTableModel.ruleViolations?.let {
+                    reportTable.ruleViolations?.let {
                         ruleViolationTable(it)
                     }
 
-                    if (reportTableModel.analyzerIssueSummary.rows.isNotEmpty()) {
-                        issueTable(reportTableModel.analyzerIssueSummary)
+                    if (reportTable.analyzerIssueSummary.rows.isNotEmpty()) {
+                        issueTable(reportTable.analyzerIssueSummary)
                     }
 
-                    if (reportTableModel.scannerIssueSummary.rows.isNotEmpty()) {
-                        issueTable(reportTableModel.scannerIssueSummary)
+                    if (reportTable.scannerIssueSummary.rows.isNotEmpty()) {
+                        issueTable(reportTable.scannerIssueSummary)
                     }
 
-                    if (reportTableModel.advisorIssueSummary.rows.isNotEmpty()) {
-                        issueTable(reportTableModel.advisorIssueSummary)
+                    if (reportTable.advisorIssueSummary.rows.isNotEmpty()) {
+                        issueTable(reportTable.advisorIssueSummary)
                     }
 
-                    reportTableModel.projectDependencies.forEach { (project, table) ->
+                    reportTable.projectDependencies.forEach { (project, table) ->
                         projectTable(project, table)
                     }
 
-                    repositoryConfiguration(reportTableModel.config)
+                    repositoryConfiguration(reportTable.config)
                 }
             }
         }
@@ -177,7 +177,7 @@ class StaticHtmlReporter : Reporter {
         return document.serialize().normalizeLineBreaks()
     }
 
-    private fun getRuleViolationSummaryString(ruleViolations: List<ReportTableModel.ResolvableViolation>): String {
+    private fun getRuleViolationSummaryString(ruleViolations: List<ReportTable.ResolvableViolation>): String {
         val violations = ruleViolations.filterNot { it.isResolved }.groupBy { it.violation.severity }
         val errorCount = violations[Severity.ERROR].orEmpty().size
         val warningCount = violations[Severity.WARNING].orEmpty().size
@@ -200,11 +200,11 @@ class StaticHtmlReporter : Reporter {
         }
     }
 
-    private fun DIV.index(reportTableModel: ReportTableModel) {
+    private fun DIV.index(reportTable: ReportTable) {
         h2 { +"Index" }
 
         ul {
-            reportTableModel.ruleViolations?.let { ruleViolations ->
+            reportTable.ruleViolations?.let { ruleViolations ->
                 li {
                     a("#$RULE_VIOLATION_TABLE_ID") {
                         +getRuleViolationSummaryString(ruleViolations)
@@ -212,31 +212,31 @@ class StaticHtmlReporter : Reporter {
                 }
             }
 
-            if (reportTableModel.analyzerIssueSummary.rows.isNotEmpty()) {
+            if (reportTable.analyzerIssueSummary.rows.isNotEmpty()) {
                 li {
-                    a("#${reportTableModel.analyzerIssueSummary.id()}") {
-                        +reportTableModel.analyzerIssueSummary.title()
+                    a("#${reportTable.analyzerIssueSummary.id()}") {
+                        +reportTable.analyzerIssueSummary.title()
                     }
                 }
             }
 
-            if (reportTableModel.scannerIssueSummary.rows.isNotEmpty()) {
+            if (reportTable.scannerIssueSummary.rows.isNotEmpty()) {
                 li {
-                    a("#${reportTableModel.scannerIssueSummary.id()}") {
-                        +reportTableModel.scannerIssueSummary.title()
+                    a("#${reportTable.scannerIssueSummary.id()}") {
+                        +reportTable.scannerIssueSummary.title()
                     }
                 }
             }
 
-            if (reportTableModel.advisorIssueSummary.rows.isNotEmpty()) {
+            if (reportTable.advisorIssueSummary.rows.isNotEmpty()) {
                 li {
-                    a("#${reportTableModel.advisorIssueSummary.id()}") {
-                        +reportTableModel.advisorIssueSummary.title()
+                    a("#${reportTable.advisorIssueSummary.id()}") {
+                        +reportTable.advisorIssueSummary.title()
                     }
                 }
             }
 
-            reportTableModel.projectDependencies.forEach { (project, projectTable) ->
+            reportTable.projectDependencies.forEach { (project, projectTable) ->
                 li {
                     a("#${project.id.toCoordinates()}") {
                         +project.id.toCoordinates()
@@ -259,7 +259,7 @@ class StaticHtmlReporter : Reporter {
         }
     }
 
-    private fun DIV.ruleViolationTable(ruleViolations: List<ReportTableModel.ResolvableViolation>) {
+    private fun DIV.ruleViolationTable(ruleViolations: List<ReportTable.ResolvableViolation>) {
         h2 {
             id = RULE_VIOLATION_TABLE_ID
             +getRuleViolationSummaryString(ruleViolations)
@@ -288,7 +288,7 @@ class StaticHtmlReporter : Reporter {
         }
     }
 
-    private fun TBODY.ruleViolationRow(rowIndex: Int, ruleViolation: ReportTableModel.ResolvableViolation) {
+    private fun TBODY.ruleViolationRow(rowIndex: Int, ruleViolation: ReportTable.ResolvableViolation) {
         val cssClass = if (ruleViolation.isResolved) {
             "ort-resolved"
         } else {
@@ -357,7 +357,7 @@ class StaticHtmlReporter : Reporter {
         }
     }
 
-    private fun TBODY.issueRow(rowId: String, rowIndex: Int, row: ReportTableModel.IssueRow) {
+    private fun TBODY.issueRow(rowId: String, rowIndex: Int, row: ReportTable.IssueRow) {
         val cssClass = when (row.issue.severity) {
             Severity.ERROR -> "ort-error"
             Severity.WARNING -> "ort-warning"
@@ -457,7 +457,7 @@ class StaticHtmlReporter : Reporter {
         }
     }
 
-    private fun TBODY.projectRow(projectId: String, rowIndex: Int, row: ReportTableModel.DependencyRow) {
+    private fun TBODY.projectRow(projectId: String, rowIndex: Int, row: ReportTable.DependencyRow) {
         // Only mark the row as excluded if all scopes the dependency appears in are excluded.
         val rowExcludedClass =
             if (row.scopes.isNotEmpty() && row.scopes.all { it.value.isNotEmpty() }) "ort-excluded" else ""
