@@ -30,9 +30,9 @@ import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.orEmpty
-import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTable.DependencyRow
 import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTable.IssueTable
 import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTable.ProjectTable
+import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTable.ProjectTable.Row
 import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTable.ResolvableIssue
 import org.ossreviewtoolkit.plugins.reporters.statichtml.ReportTable.ResolvableViolation
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
@@ -73,7 +73,7 @@ internal object ReportTableModelMapper {
 
                 val pkg = input.ortResult.getPackageOrProject(id)?.metadata
 
-                DependencyRow(
+                Row(
                     id = id,
                     sourceArtifact = pkg?.sourceArtifact.orEmpty(),
                     vcsInfo = pkg?.vcsProcessed.orEmpty(),
