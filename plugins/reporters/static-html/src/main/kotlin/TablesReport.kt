@@ -52,17 +52,17 @@ internal data class TablesReport(
     val ruleViolations: List<TablesReportViolation>?,
 
     /**
-     * An [IssueTable] containing all dependencies that caused issues.
+     * An [IssueTable] containing all analyzer issues.
      */
     val analyzerIssueSummary: IssueTable,
 
     /**
-     * A [IssueTable] containing all scanner issues.
+     * An [IssueTable] containing all scanner issues.
      */
     val scannerIssueSummary: IssueTable,
 
     /**
-     * A [IssueTable] containing all advisor issues.
+     * An [IssueTable] containing all advisor issues.
      */
     val advisorIssueSummary: IssueTable,
 
