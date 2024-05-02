@@ -85,7 +85,7 @@ jobs:
       with:
         fetch-depth: 0
     - name: Qodana Scan
-      uses: JetBrains/qodana-action@v2024.1.2
+      uses: JetBrains/qodana-action@v2024.1.3
       with:
         post-pr-comment: false
         use-caches: false
