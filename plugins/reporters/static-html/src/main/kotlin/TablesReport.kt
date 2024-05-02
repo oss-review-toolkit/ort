@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.licenses.ResolvedLicense
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
-internal data class ReportTable(
+internal data class TablesReport(
     /**
      * The [VcsInfo] for the scanned project.
      */

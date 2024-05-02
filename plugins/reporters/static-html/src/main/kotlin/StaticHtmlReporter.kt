@@ -72,9 +72,9 @@ class StaticHtmlReporter : Reporter {
     private val licensesSha1 = mutableMapOf<String, String>()
 
     override fun generateReport(input: ReporterInput, outputDir: File, config: PluginConfiguration): List<File> {
-        val reportTableModel = ReportTableModelMapper.map(input)
+        val tablesReport = TablesReportModelMapper.map(input)
 
-        val html = renderHtml(reportTableModel)
+        val html = renderHtml(tablesReport)
         val outputFile = outputDir.resolve(reportFilename)
 
         outputFile.bufferedWriter().use {
@@ -84,7 +84,7 @@ class StaticHtmlReporter : Reporter {
         return listOf(outputFile)
     }
 
-    private fun renderHtml(reportTable: ReportTable): String {
+    private fun renderHtml(tablesReport: TablesReport): String {
         val document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument()
 
         document.append.html {
@@ -135,38 +135,38 @@ class StaticHtmlReporter : Reporter {
                     h2 { +"Project" }
 
                     div {
-                        with(reportTable.vcsInfo) {
+                        with(tablesReport.vcsInfo) {
                             +"Scanned revision $revision of $type repository $url"
                         }
                     }
 
-                    if (reportTable.labels.isNotEmpty()) {
-                        labelsTable(reportTable.labels)
+                    if (tablesReport.labels.isNotEmpty()) {
+                        labelsTable(tablesReport.labels)
                     }
 
-                    index(reportTable)
+                    index(tablesReport)
 
-                    reportTable.ruleViolations?.let {
+                    tablesReport.ruleViolations?.let {
                         ruleViolationTable(it)
                     }
 
-                    if (reportTable.analyzerIssueSummary.rows.isNotEmpty()) {
-                        issueTable(reportTable.analyzerIssueSummary)
+                    if (tablesReport.analyzerIssueSummary.rows.isNotEmpty()) {
+                        issueTable(tablesReport.analyzerIssueSummary)
                     }
 
-                    if (reportTable.scannerIssueSummary.rows.isNotEmpty()) {
-                        issueTable(reportTable.scannerIssueSummary)
+                    if (tablesReport.scannerIssueSummary.rows.isNotEmpty()) {
+                        issueTable(tablesReport.scannerIssueSummary)
                     }
 
-                    if (reportTable.advisorIssueSummary.rows.isNotEmpty()) {
-                        issueTable(reportTable.advisorIssueSummary)
+                    if (tablesReport.advisorIssueSummary.rows.isNotEmpty()) {
+                        issueTable(tablesReport.advisorIssueSummary)
                     }
 
-                    reportTable.projectDependencies.forEach { (project, table) ->
+                    tablesReport.projectDependencies.forEach { (project, table) ->
                         projectTable(project, table)
                     }
 
-                    repositoryConfiguration(reportTable.config)
+                    repositoryConfiguration(tablesReport.config)
                 }
             }
         }
@@ -197,11 +197,11 @@ class StaticHtmlReporter : Reporter {
         }
     }
 
-    private fun DIV.index(reportTable: ReportTable) {
+    private fun DIV.index(tablesReport: TablesReport) {
         h2 { +"Index" }
 
         ul {
-            reportTable.ruleViolations?.let { ruleViolations ->
+            tablesReport.ruleViolations?.let { ruleViolations ->
                 li {
                     a("#$RULE_VIOLATION_TABLE_ID") {
                         +getRuleViolationSummaryString(ruleViolations)
@@ -209,31 +209,31 @@ class StaticHtmlReporter : Reporter {
                 }
             }
 
-            if (reportTable.analyzerIssueSummary.rows.isNotEmpty()) {
+            if (tablesReport.analyzerIssueSummary.rows.isNotEmpty()) {
                 li {
-                    a("#${reportTable.analyzerIssueSummary.id()}") {
-                        +reportTable.analyzerIssueSummary.title()
+                    a("#${tablesReport.analyzerIssueSummary.id()}") {
+                        +tablesReport.analyzerIssueSummary.title()
                     }
                 }
             }
 
-            if (reportTable.scannerIssueSummary.rows.isNotEmpty()) {
+            if (tablesReport.scannerIssueSummary.rows.isNotEmpty()) {
                 li {
-                    a("#${reportTable.scannerIssueSummary.id()}") {
-                        +reportTable.scannerIssueSummary.title()
+                    a("#${tablesReport.scannerIssueSummary.id()}") {
+                        +tablesReport.scannerIssueSummary.title()
                     }
                 }
             }
 
-            if (reportTable.advisorIssueSummary.rows.isNotEmpty()) {
+            if (tablesReport.advisorIssueSummary.rows.isNotEmpty()) {
                 li {
-                    a("#${reportTable.advisorIssueSummary.id()}") {
-                        +reportTable.advisorIssueSummary.title()
+                    a("#${tablesReport.advisorIssueSummary.id()}") {
+                        +tablesReport.advisorIssueSummary.title()
                     }
                 }
             }
 
-            reportTable.projectDependencies.forEach { (project, projectTable) ->
+            tablesReport.projectDependencies.forEach { (project, projectTable) ->
                 li {
                     a("#${project.id.toCoordinates()}") {
                         +project.id.toCoordinates()
