@@ -82,7 +82,7 @@ internal data class ReportTable(
         /**
          * The dependencies of this project.
          */
-        val rows: List<DependencyRow>,
+        val rows: List<Row>,
 
         /**
          * The path to the directory containing the definition file of the project, relative to the analyzer root,
@@ -96,60 +96,60 @@ internal data class ReportTable(
         val pathExcludes: List<PathExclude>
     ) {
         fun isExcluded() = pathExcludes.isNotEmpty()
+
+        data class Row(
+            /**
+             * The identifier of the package.
+             */
+            val id: Identifier,
+
+            /**
+             * The remote artifact where the source package can be downloaded.
+             */
+            val sourceArtifact: RemoteArtifact,
+
+            /**
+             * The VCS information of the package.
+             */
+            val vcsInfo: VcsInfo,
+
+            /**
+             * The scopes the package is used in.
+             */
+            val scopes: SortedMap<String, List<ScopeExclude>>,
+
+            /**
+             * The concluded license of the package.
+             */
+            val concludedLicense: SpdxExpression?,
+
+            /**
+             * The licenses declared by the package.
+             */
+            val declaredLicenses: List<ResolvedLicense>,
+
+            /**
+             * The detected licenses aggregated from all [ScanResult]s for this package.
+             */
+            val detectedLicenses: List<ResolvedLicense>,
+
+            /**
+             * The effective license of the package derived from the licenses of the license sources chosen by a
+             * LicenseView, with optional choices applied.
+             */
+            val effectiveLicense: SpdxExpression?,
+
+            /**
+             * All analyzer issues related to this package.
+             */
+            val analyzerIssues: List<ResolvableIssue>,
+
+            /**
+             * All scan issues related to this package.
+             */
+            val scanIssues: List<ResolvableIssue>
+        )
     }
-
-    data class DependencyRow(
-        /**
-         * The identifier of the package.
-         */
-        val id: Identifier,
-
-        /**
-         * The remote artifact where the source package can be downloaded.
-         */
-        val sourceArtifact: RemoteArtifact,
-
-        /**
-         * The VCS information of the package.
-         */
-        val vcsInfo: VcsInfo,
-
-        /**
-         * The scopes the package is used in.
-         */
-        val scopes: SortedMap<String, List<ScopeExclude>>,
-
-        /**
-         * The concluded license of the package.
-         */
-        val concludedLicense: SpdxExpression?,
-
-        /**
-         * The licenses declared by the package.
-         */
-        val declaredLicenses: List<ResolvedLicense>,
-
-        /**
-         * The detected licenses aggregated from all [ScanResult]s for this package.
-         */
-        val detectedLicenses: List<ResolvedLicense>,
-
-        /**
-         * The effective license of the package derived from the licenses of the license sources chosen by a
-         * LicenseView, with optional choices applied.
-         */
-        val effectiveLicense: SpdxExpression?,
-
-        /**
-         * All analyzer issues related to this package.
-         */
-        val analyzerIssues: List<ResolvableIssue>,
-
-        /**
-         * All scan issues related to this package.
-         */
-        val scanIssues: List<ResolvableIssue>
-    )
 
     data class IssueTable(
         val type: Type,

@@ -457,7 +457,7 @@ class StaticHtmlReporter : Reporter {
         }
     }
 
-    private fun TBODY.projectRow(projectId: String, rowIndex: Int, row: ReportTable.DependencyRow) {
+    private fun TBODY.projectRow(projectId: String, rowIndex: Int, row: ProjectTable.Row) {
         // Only mark the row as excluded if all scopes the dependency appears in are excluded.
         val rowExcludedClass =
             if (row.scopes.isNotEmpty() && row.scopes.all { it.value.isNotEmpty() }) "ort-excluded" else ""
