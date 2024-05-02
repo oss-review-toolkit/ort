@@ -200,9 +200,9 @@ private fun Map<Identifier, Set<Issue>>.toIssueSummaryTable(type: IssueTable.Typ
     val rows = flatMap { (id, issues) ->
         issues.map { issue ->
             val resolvableIssue = issue.toResolvableIssue(input.ortResult, input.howToFixTextProvider)
-            ReportTable.IssueRow(resolvableIssue, id)
+            IssueTable.Row(resolvableIssue, id)
         }
-    }.sortedWith(compareByDescending<ReportTable.IssueRow> { it.issue.severity }.thenBy { it.id })
+    }.sortedWith(compareByDescending<IssueTable.Row> { it.issue.severity }.thenBy { it.id })
 
     return IssueTable(type, rows)
 }

@@ -153,7 +153,7 @@ internal data class ReportTable(
 
     data class IssueTable(
         val type: Type,
-        val rows: List<IssueRow>
+        val rows: List<Row>
     ) {
         val errorCount = rows.count { it.issue.severity == Severity.ERROR }
         val warningCount = rows.count { it.issue.severity == Severity.WARNING }
@@ -164,19 +164,19 @@ internal data class ReportTable(
             SCANNER,
             ADVISOR
         }
+
+        data class Row(
+            /**
+             * All analyzer issues related to this package, grouped by the [Identifier] of the [Project] they appear in.
+             */
+            val issue: ResolvableIssue,
+
+            /**
+             * The identifier of the package the issue corresponds to.
+             */
+            val id: Identifier
+        )
     }
-
-    data class IssueRow(
-        /**
-         * All analyzer issues related to this package, grouped by the [Identifier] of the [Project] they appear in.
-         */
-        val issue: ResolvableIssue,
-
-        /**
-         * The identifier of the package the issue corresponds to.
-         */
-        val id: Identifier
-    )
 
     data class ResolvableIssue(
         val source: String,

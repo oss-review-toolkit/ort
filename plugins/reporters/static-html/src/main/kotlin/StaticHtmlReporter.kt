@@ -357,7 +357,7 @@ class StaticHtmlReporter : Reporter {
         }
     }
 
-    private fun TBODY.issueRow(rowId: String, rowIndex: Int, row: ReportTable.IssueRow) {
+    private fun TBODY.issueRow(rowId: String, rowIndex: Int, row: IssueTable.Row) {
         val cssClass = when (row.issue.severity) {
             Severity.ERROR -> "ort-error"
             Severity.WARNING -> "ort-warning"
