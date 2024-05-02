@@ -49,7 +49,7 @@ internal data class TablesReport(
     /**
      * A list containing all evaluator rule violations. `null` if no evaluator result is available.
      */
-    val ruleViolations: List<ResolvableViolation>?,
+    val ruleViolations: List<TablesReportViolation>?,
 
     /**
      * An [IssueTable] containing all dependencies that caused issues.
@@ -95,7 +95,7 @@ internal data class IssueTable(
         /**
          * All analyzer issues related to this package, grouped by the [Identifier] of the [Project] they appear in.
          */
-        val issue: ResolvableIssue,
+        val issue: TablesReportIssue,
 
         /**
          * The identifier of the package the issue corresponds to.
@@ -168,16 +168,16 @@ internal data class ProjectTable(
         /**
          * All analyzer issues related to this package.
          */
-        val analyzerIssues: List<ResolvableIssue>,
+        val analyzerIssues: List<TablesReportIssue>,
 
         /**
          * All scan issues related to this package.
          */
-        val scanIssues: List<ResolvableIssue>
+        val scanIssues: List<TablesReportIssue>
     )
 }
 
-internal data class ResolvableIssue(
+internal data class TablesReportIssue(
     val source: String,
     val description: String,
     val resolutionDescription: String,
@@ -186,7 +186,7 @@ internal data class ResolvableIssue(
     val howToFix: String
 )
 
-internal data class ResolvableViolation(
+internal data class TablesReportViolation(
     val violation: RuleViolation,
     val resolutionDescription: String,
     val isResolved: Boolean

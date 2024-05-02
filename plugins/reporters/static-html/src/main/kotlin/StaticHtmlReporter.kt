@@ -174,7 +174,7 @@ class StaticHtmlReporter : Reporter {
         return document.serialize().normalizeLineBreaks()
     }
 
-    private fun getRuleViolationSummaryString(ruleViolations: List<ResolvableViolation>): String {
+    private fun getRuleViolationSummaryString(ruleViolations: List<TablesReportViolation>): String {
         val violations = ruleViolations.filterNot { it.isResolved }.groupBy { it.violation.severity }
         val errorCount = violations[Severity.ERROR].orEmpty().size
         val warningCount = violations[Severity.WARNING].orEmpty().size
@@ -256,7 +256,7 @@ class StaticHtmlReporter : Reporter {
         }
     }
 
-    private fun DIV.ruleViolationTable(ruleViolations: List<ResolvableViolation>) {
+    private fun DIV.ruleViolationTable(ruleViolations: List<TablesReportViolation>) {
         h2 {
             id = RULE_VIOLATION_TABLE_ID
             +getRuleViolationSummaryString(ruleViolations)
@@ -285,7 +285,7 @@ class StaticHtmlReporter : Reporter {
         }
     }
 
-    private fun TBODY.ruleViolationRow(rowIndex: Int, ruleViolation: ResolvableViolation) {
+    private fun TBODY.ruleViolationRow(rowIndex: Int, ruleViolation: TablesReportViolation) {
         val cssClass = if (ruleViolation.isResolved) {
             "ort-resolved"
         } else {
@@ -565,7 +565,7 @@ class StaticHtmlReporter : Reporter {
         }
     }
 
-    private fun TD.issueList(issues: List<ResolvableIssue>) {
+    private fun TD.issueList(issues: List<TablesReportIssue>) {
         ul {
             issues.forEach {
                 li {
@@ -580,7 +580,7 @@ class StaticHtmlReporter : Reporter {
         }
     }
 
-    private fun P.issueDescription(issue: ResolvableIssue) {
+    private fun P.issueDescription(issue: TablesReportIssue) {
         var first = true
         issue.description.lines().forEach {
             if (first) first = false else br
@@ -724,4 +724,4 @@ private fun IssueTable.id(): String = "${type.name.lowercase()}-issue-summary"
 
 private fun IssueTable.rowId(index: Int): String = "${id()}-$index"
 
-private fun Collection<ResolvableIssue>.containsUnresolved() = any { !it.isResolved }
+private fun Collection<TablesReportIssue>.containsUnresolved() = any { !it.isResolved }
