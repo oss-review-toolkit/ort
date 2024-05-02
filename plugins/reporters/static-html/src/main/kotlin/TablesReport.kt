@@ -93,7 +93,7 @@ internal data class IssueTable(
 
     data class Row(
         /**
-         * All analyzer issues related to this package, grouped by the [Identifier] of the [Project] they appear in.
+         * The issue of this row represents of the given [type][type].
          */
         val issue: TablesReportIssue,
 
