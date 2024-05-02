@@ -723,3 +723,5 @@ private fun IssueTable.title(): String =
 private fun IssueTable.id(): String = "${type.name.lowercase()}-issue-summary"
 
 private fun IssueTable.rowId(index: Int): String = "${id()}-$index"
+
+private fun Collection<ResolvableIssue>.containsUnresolved() = any { !it.isResolved }
