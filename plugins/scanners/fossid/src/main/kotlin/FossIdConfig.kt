@@ -115,41 +115,41 @@ data class FossIdConfig(
 ) {
     companion object {
         /** Name of the configuration property for the server URL. */
-        private const val SERVER_URL_PROPERTY = "serverUrl"
+        private const val PROP_SERVER_URL = "serverUrl"
 
         /** Name of the configuration property for the username. */
-        private const val USER_PROPERTY = "user"
+        private const val PROP_USER = "user"
 
         /** Name of the configuration property for the API key. */
-        private const val API_KEY_PROPERTY = "apiKey"
+        private const val PROP_API_KEY = "apiKey"
 
         /** Name of the configuration property controlling whether ORT should wait for FossID results. */
-        private const val WAIT_FOR_RESULT_PROPERTY = "waitForResult"
+        private const val PROP_WAIT_FOR_RESULT = "waitForResult"
 
         /** Name of the configuration property defining the naming convention for projects. */
-        private const val NAMING_PROJECT_PATTERN_PROPERTY = "namingProjectPattern"
+        private const val PROP_NAMING_PROJECT_PATTERN = "namingProjectPattern"
 
         /** Name of the configuration property defining the naming convention for scans. */
-        private const val NAMING_SCAN_PATTERN_PROPERTY = "namingScanPattern"
+        private const val PROP_NAMING_SCAN_PATTERN = "namingScanPattern"
 
         /** Name of the configuration property defining whether to keep failed scans. */
-        private const val KEEP_FAILED_SCANS_PROPERTY = "keepFailedScans"
+        private const val PROP_KEEP_FAILED_SCANS = "keepFailedScans"
 
         /** Name of the configuration property controlling whether delta scans are to be created. */
-        private const val DELTA_SCAN_PROPERTY = "deltaScans"
+        private const val PROP_DELTA_SCAN = "deltaScans"
 
         /** Name of the configuration property that limits the number of delta scans. */
-        private const val DELTA_SCAN_LIMIT_PROPERTY = "deltaScanLimit"
+        private const val PROP_DELTA_SCAN_LIMIT = "deltaScanLimit"
 
-        private const val DETECT_LICENSE_DECLARATIONS_PROPERTY = "detectLicenseDeclarations"
+        private const val PROP_DETECT_LICENSE_DECLARATIONS = "detectLicenseDeclarations"
 
-        private const val DETECT_COPYRIGHT_STATEMENTS_PROPERTY = "detectCopyrightStatements"
+        private const val PROP_DETECT_COPYRIGHT_STATEMENTS = "detectCopyrightStatements"
 
         /** Name of the configuration property defining the timeout in minutes for communication with FossID. */
-        private const val TIMEOUT = "timeout"
+        private const val PROP_TIMEOUT = "timeout"
 
         /** Name of the configuration property controlling whether matched lines of snippets are to be fetched. */
-        private const val FETCH_SNIPPET_MATCHED_LINES = "fetchSnippetMatchedLines"
+        private const val PROP_FETCH_SNIPPET_MATCHED_LINES = "fetchSnippetMatchedLines"
 
         /**
          * The scanner options beginning with this prefix will be used to parameterize project and scan names.
@@ -165,25 +165,25 @@ data class FossIdConfig(
         fun create(options: Options, secrets: Options): FossIdConfig {
             require(options.isNotEmpty()) { "No FossID Scanner configuration found." }
 
-            val serverUrl = options[SERVER_URL_PROPERTY]
+            val serverUrl = options[PROP_SERVER_URL]
                 ?: throw IllegalArgumentException("No FossID server URL configuration found.")
-            val user = secrets[USER_PROPERTY]
+            val user = secrets[PROP_USER]
                 ?: throw IllegalArgumentException("No FossID User configuration found.")
-            val apiKey = secrets[API_KEY_PROPERTY]
+            val apiKey = secrets[PROP_API_KEY]
                 ?: throw IllegalArgumentException("No FossID API Key configuration found.")
 
-            val waitForResult = options[WAIT_FOR_RESULT_PROPERTY]?.toBoolean() != false
+            val waitForResult = options[PROP_WAIT_FOR_RESULT]?.toBoolean() != false
 
-            val keepFailedScans = options[KEEP_FAILED_SCANS_PROPERTY]?.toBoolean() == true
-            val deltaScans = options[DELTA_SCAN_PROPERTY]?.toBoolean() == true
-            val deltaScanLimit = options[DELTA_SCAN_LIMIT_PROPERTY]?.toInt() ?: Int.MAX_VALUE
+            val keepFailedScans = options[PROP_KEEP_FAILED_SCANS]?.toBoolean() == true
+            val deltaScans = options[PROP_DELTA_SCAN]?.toBoolean() == true
+            val deltaScanLimit = options[PROP_DELTA_SCAN_LIMIT]?.toInt() ?: Int.MAX_VALUE
 
-            val detectLicenseDeclarations = options[DETECT_LICENSE_DECLARATIONS_PROPERTY]?.toBoolean() == true
-            val detectCopyrightStatements = options[DETECT_COPYRIGHT_STATEMENTS_PROPERTY]?.toBoolean() == true
+            val detectLicenseDeclarations = options[PROP_DETECT_LICENSE_DECLARATIONS]?.toBoolean() == true
+            val detectCopyrightStatements = options[PROP_DETECT_COPYRIGHT_STATEMENTS]?.toBoolean() == true
 
-            val timeout = options[TIMEOUT]?.toInt() ?: DEFAULT_TIMEOUT
+            val timeout = options[PROP_TIMEOUT]?.toInt() ?: DEFAULT_TIMEOUT
 
-            val fetchSnippetMatchedLines = options[FETCH_SNIPPET_MATCHED_LINES]?.toBoolean() == true
+            val fetchSnippetMatchedLines = options[PROP_FETCH_SNIPPET_MATCHED_LINES]?.toBoolean() == true
 
             require(deltaScanLimit > 0) {
                 "deltaScanLimit must be > 0, current value is $deltaScanLimit."
@@ -212,11 +212,11 @@ data class FossIdConfig(
      * Create a [FossIdNamingProvider] helper object based on the configuration stored in this object.
      */
     fun createNamingProvider(): FossIdNamingProvider {
-        val namingProjectPattern = options[NAMING_PROJECT_PATTERN_PROPERTY]?.also {
+        val namingProjectPattern = options[PROP_NAMING_PROJECT_PATTERN]?.also {
             logger.info { "Naming pattern for projects is $it." }
         }
 
-        val namingScanPattern = options[NAMING_SCAN_PATTERN_PROPERTY]?.also {
+        val namingScanPattern = options[PROP_NAMING_SCAN_PATTERN]?.also {
             logger.info { "Naming pattern for scans is $it." }
         }
 
