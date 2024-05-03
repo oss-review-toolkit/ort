@@ -179,7 +179,7 @@ data class SpdxFile(
 
         require(copyrightText.isNotBlank()) { "The copyright text must not be blank." }
 
-        require(filename.isNotBlank()) { "The filename must not be blank." }
+        require(filename.isNotBlank()) { "The filename for SPDX-ID '$spdxId' must not be blank." }
 
         require(licenseConcluded.isSpdxExpressionOrNotPresent()) {
             "The license concluded must be either an SpdxExpression, 'NONE' or 'NOASSERTION', but was " +
