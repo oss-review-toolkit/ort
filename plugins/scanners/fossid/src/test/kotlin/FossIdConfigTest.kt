@@ -50,7 +50,8 @@ class FossIdConfigTest : WordSpec({
                 "detectLicenseDeclarations" to "true",
                 "detectCopyrightStatements" to "true",
                 "timeout" to "300",
-                "fetchSnippetMatchedLines" to "true"
+                "fetchSnippetMatchedLines" to "true",
+                "snippetsLimit" to "1000"
             )
 
             val secrets = mapOf(
@@ -72,7 +73,8 @@ class FossIdConfigTest : WordSpec({
                 detectCopyrightStatements = true,
                 timeout = 300,
                 fetchSnippetMatchedLines = true,
-                options = options
+                options = options,
+                snippetsLimit = 1000
             )
         }
 
@@ -98,7 +100,8 @@ class FossIdConfigTest : WordSpec({
                 detectCopyrightStatements = false,
                 timeout = 60,
                 fetchSnippetMatchedLines = false,
-                options = options
+                options = options,
+                snippetsLimit = 500
             )
         }
 
