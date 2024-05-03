@@ -111,9 +111,12 @@ class Osv(name: String, config: OsvConfiguration) : AdviceProvider(name) {
         val result = service.getVulnerabilityIdsForPackages(requests.map { it.second })
         val results = mutableListOf<Pair<Identifier, List<String>>>()
 
-        result.map {
-            it.mapIndexedTo(results) { i, vulnerabilities ->
-                requests[i].first.id to vulnerabilities
+        result.map { allVulnerabilities ->
+            // OSV returns vulnerability results in the same order as packages were requested, so use the list index to
+            // identify to which package a result belongs. This means that also empty results are returned as otherwise
+            // list indices would not match, so filter these out.
+            allVulnerabilities.mapIndexedNotNullTo(results) { i, pkgVulnerabilities ->
+                pkgVulnerabilities.takeUnless { it.isEmpty() }?.let { requests[i].first.id to it }
             }
         }.onFailure {
             logger.error {
