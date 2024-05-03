@@ -34,6 +34,7 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.options.switch
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
+import com.github.ajalt.mordant.rendering.Theme
 
 import java.io.File
 
@@ -212,9 +213,8 @@ class DownloaderCommand : OrtCommand(
         echo("The $verb took $duration.")
 
         if (failureMessages.isNotEmpty()) {
-            logger.error {
-                "The following failure(s) occurred:\n" + failureMessages.joinToString("\n--\n")
-            }
+            echo(Theme.Default.danger("The following failure(s) occurred:"))
+            failureMessages.joinToString("\n--\n").forEach(::echo)
 
             throw ProgramResult(1)
         }
@@ -224,10 +224,12 @@ class DownloaderCommand : OrtCommand(
         val ortResult = readOrtResult(ortFile)
 
         if (ortResult.analyzer?.result == null) {
-            logger.warn {
-                "Cannot run the downloader as the provided ORT result file '${ortFile.canonicalPath}' does " +
-                    "not contain an analyzer result. Nothing will be downloaded."
-            }
+            echo(
+                Theme.Default.warning(
+                    "Cannot run the downloader as the provided ORT result file '${ortFile.canonicalPath}' does " +
+                        "not contain an analyzer result. Nothing will be downloaded."
+                )
+            )
 
             throw ProgramResult(0)
         }

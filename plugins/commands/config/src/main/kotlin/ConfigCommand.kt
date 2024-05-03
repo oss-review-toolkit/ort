@@ -27,6 +27,7 @@ import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
+import com.github.ajalt.mordant.rendering.Theme
 
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.OrtConfigurationWrapper
@@ -93,7 +94,7 @@ class ConfigCommand : OrtCommand(
             }.onSuccess {
                 echo("The syntax of the configuration file '$this' is valid.")
             }.onFailure {
-                echo(it.collectMessages())
+                echo(Theme.Default.danger(it.collectMessages()))
                 throw ProgramResult(2)
             }
         }
