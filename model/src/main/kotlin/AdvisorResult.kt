@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.model
 
+import com.fasterxml.jackson.annotation.JsonInclude
+
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 
 /**
@@ -41,10 +43,12 @@ data class AdvisorResult(
     /**
      * The defects.
      */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val defects: List<Defect> = emptyList(),
 
     /**
      * The vulnerabilities.
      */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val vulnerabilities: List<Vulnerability> = emptyList()
 )
