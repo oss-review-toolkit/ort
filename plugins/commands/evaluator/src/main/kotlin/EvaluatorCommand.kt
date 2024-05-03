@@ -30,6 +30,7 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
+import com.github.ajalt.mordant.rendering.Theme
 
 import java.io.File
 import java.net.URI
@@ -202,7 +203,14 @@ class EvaluatorCommand : OrtCommand(
         rulesResource.mapTo(scriptUris) { javaClass.getResource(it).toURI() }
 
         if (scriptUris.isEmpty()) {
-            scriptUris += ortConfigDirectory.resolve(ORT_EVALUATOR_RULES_FILENAME).toURI()
+            val defaultRulesFile = ortConfigDirectory.resolve(ORT_EVALUATOR_RULES_FILENAME)
+
+            if (defaultRulesFile.isFile) {
+                scriptUris += defaultRulesFile.toURI()
+            } else {
+                echo(Theme.Default.danger("No rules specified."))
+                throw ProgramResult(1)
+            }
         }
 
         val configurationFiles = listOfNotNull(
