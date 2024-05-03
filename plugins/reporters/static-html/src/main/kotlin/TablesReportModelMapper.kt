@@ -124,7 +124,6 @@ private fun RuleViolation.toTableReportViolation(ortResult: OrtResult): TablesRe
 
 private fun getProjectTable(input: ReporterInput, project: Project): ProjectTable {
     val scopesForDependencies = input.ortResult.getScopesForDependencies(project)
-    val pathExcludes = input.ortResult.getExcludes().findPathExcludes(project, input.ortResult)
 
     val allIds = sortedSetOf(project.id)
     allIds += input.ortResult.dependencyNavigator.projectDependencies(project)
@@ -172,9 +171,9 @@ private fun getProjectTable(input: ReporterInput, project: Project): ProjectTabl
     }
 
     return ProjectTable(
-        tableRows,
-        input.ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(project),
-        pathExcludes
+        rows = tableRows,
+        fullDefinitionFilePath = input.ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(project),
+        pathExcludes = input.ortResult.getExcludes().findPathExcludes(project, input.ortResult)
     )
 }
 
