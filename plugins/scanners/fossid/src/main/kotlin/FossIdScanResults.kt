@@ -21,6 +21,9 @@ package org.ossreviewtoolkit.plugins.scanners.fossid
 
 import java.lang.invoke.MethodHandles
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+
 import org.apache.logging.log4j.kotlin.loggerOf
 
 import org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.IdentifiedFile
@@ -64,7 +67,7 @@ internal data class RawResults(
     val markedAsIdentifiedFiles: List<MarkedAsIdentifiedFile>,
     val listIgnoredFiles: List<IgnoredFile>,
     val listPendingFiles: List<String>,
-    val listSnippets: Map<String, Set<Snippet>>,
+    val listSnippets: Flow<Pair<String, Set<Snippet>>>,
     val snippetMatchedLines: Map<Int, MatchedLines> = emptyMap()
 )
 
@@ -162,7 +165,7 @@ private fun mapLicense(
  * Map the raw snippets to ORT [SnippetFinding]s. If a snippet license cannot be parsed, an issues is added to [issues].
  * [LicenseFinding]s due to chosen snippets will be added to [snippetLicenseFindings].
  */
-internal fun mapSnippetFindings(
+internal suspend fun mapSnippetFindings(
     rawResults: RawResults,
     issues: MutableList<Issue>,
     detectedLicenseMapping: Map<String, String>,
@@ -170,8 +173,9 @@ internal fun mapSnippetFindings(
     snippetLicenseFindings: MutableSet<LicenseFinding>
 ): Set<SnippetFinding> {
     val remainingSnippetChoices = snippetChoices.toMutableList()
+    val allFindings = mutableSetOf<SnippetFinding>()
 
-    return rawResults.listSnippets.flatMap { (file, rawSnippets) ->
+    rawResults.listSnippets.map { (file, rawSnippets) ->
         val findings = mutableMapOf<TextLocation, MutableSet<OrtSnippet>>()
 
         rawSnippets.forEach { snippet ->
@@ -279,7 +283,11 @@ internal fun mapSnippetFindings(
         }
 
         findings.map { SnippetFinding(it.key, it.value) }
-    }.toSet().also {
+    }.collect {
+        allFindings += it
+    }
+
+    return allFindings.also {
         remainingSnippetChoices.forEach { snippetChoice ->
             // The issue is created only if the chosen snippet does not correspond to a file marked by a previous run.
             val isNotOldMarkedAsIdentifiedFile = rawResults.markedAsIdentifiedFiles.none { markedFile ->
