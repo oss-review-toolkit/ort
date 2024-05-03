@@ -137,6 +137,11 @@ private fun getProjectTable(input: ReporterInput, project: Project): ProjectTabl
             .sortedBy { it.license.toString() }
         val detectedLicenses = resolvedLicenseInfo.filter { LicenseSource.DETECTED in it.sources }
             .sortedBy { it.license.toString() }
+        val effectiveLicense = resolvedLicenseInfo.filterExcluded().effectiveLicense(
+            LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED,
+            input.ortResult.getPackageLicenseChoices(id),
+            input.ortResult.getRepositoryLicenseChoices()
+        )?.sorted()
 
         val analyzerIssues = projectIssuesForId[id].orEmpty() + input.ortResult.analyzer?.result?.issues?.get(id)
             .orEmpty()
@@ -151,11 +156,7 @@ private fun getProjectTable(input: ReporterInput, project: Project): ProjectTabl
             concludedLicense = concludedLicense,
             declaredLicenses = declaredLicenses,
             detectedLicenses = detectedLicenses,
-            effectiveLicense = resolvedLicenseInfo.filterExcluded().effectiveLicense(
-                LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED,
-                input.ortResult.getPackageLicenseChoices(id),
-                input.ortResult.getRepositoryLicenseChoices()
-            )?.sorted(),
+            effectiveLicense = effectiveLicense,
             analyzerIssues = analyzerIssues.map {
                 it.toTableReportIssue(input.ortResult, input.howToFixTextProvider)
             },
