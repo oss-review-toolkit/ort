@@ -95,12 +95,12 @@ class CompareCommand : OrtCommand(
 
     override fun run() {
         if (fileA == fileB) {
-            echo("The arguments point to the same file.")
+            echo(Theme.Default.success("The arguments point to the same file."))
             throw ProgramResult(0)
         }
 
         if (fileA.extension != fileB.extension) {
-            echo("The file arguments need to be of the same type.")
+            echo(Theme.Default.danger("The file arguments need to be of the same type."))
             throw ProgramResult(1)
         }
 
@@ -126,7 +126,7 @@ class CompareCommand : OrtCommand(
                 )
 
                 if (resultA == resultB) {
-                    echo("The ORT results are the same.")
+                    echo(Theme.Default.success("The ORT results are the same."))
                     throw ProgramResult(0)
                 }
 
@@ -160,7 +160,7 @@ class CompareCommand : OrtCommand(
                 )
 
                 if (diff.isEmpty()) {
-                    echo("The ORT results are the same.")
+                    echo(Theme.Default.success("The ORT results are the same."))
                     throw ProgramResult(0)
                 }
 

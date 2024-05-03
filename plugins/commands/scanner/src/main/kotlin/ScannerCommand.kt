@@ -33,6 +33,7 @@ import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
+import com.github.ajalt.mordant.rendering.Theme
 
 import java.time.Duration
 
@@ -145,7 +146,7 @@ class ScannerCommand : OrtCommand(
 
         val scannerRun = ortResult.scanner
         if (scannerRun == null) {
-            echo("No scanner run was created.")
+            echo(Theme.Default.danger("No scanner run was created."))
             throw ProgramResult(1)
         }
 

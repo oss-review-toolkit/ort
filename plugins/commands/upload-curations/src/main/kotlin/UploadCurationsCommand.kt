@@ -26,6 +26,7 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
+import com.github.ajalt.mordant.rendering.Theme
 
 import java.net.URI
 
@@ -141,7 +142,7 @@ class UploadCurationsCommand : OrtCommand(
         echo("Successfully uploaded $uploadedCurationsCount of $count curations.")
 
         if (uploadedCurationsCount != count) {
-            echo("At least one curation failed to be uploaded.")
+            echo(Theme.Default.danger("At least one curation failed to be uploaded."))
             throw ProgramResult(2)
         }
     }

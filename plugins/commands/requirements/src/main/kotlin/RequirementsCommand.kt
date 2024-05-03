@@ -233,7 +233,7 @@ class RequirementsCommand : OrtCommand(
                     tools.getOrPut(category) { mutableListOf() } += instance
                 }
             }.onFailure { e ->
-                logger.error { "There was an error instantiating $it: $e." }
+                echo(Theme.Default.danger("There was an error instantiating $it: $e."))
                 throw ProgramResult(1)
             }
         }

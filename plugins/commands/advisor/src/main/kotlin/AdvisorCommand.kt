@@ -32,6 +32,7 @@ import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
+import com.github.ajalt.mordant.rendering.Theme
 
 import java.time.Duration
 
@@ -133,7 +134,7 @@ class AdvisorCommand : OrtCommand(
 
         val advisorRun = ortResultOutput.advisor
         if (advisorRun == null) {
-            echo("No advisor run was created.")
+            echo(Theme.Default.danger("No advisor run was created."))
             throw ProgramResult(1)
         }
 
