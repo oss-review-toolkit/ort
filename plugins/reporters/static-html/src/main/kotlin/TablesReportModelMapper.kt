@@ -39,65 +39,6 @@ import org.ossreviewtoolkit.reporter.ReporterInput
  */
 internal object TablesReportModelMapper {
     fun map(input: ReporterInput): TablesReport {
-        val analyzerResult = input.ortResult.analyzer?.result
-        val excludes = input.ortResult.getExcludes()
-
-        val projectTables = analyzerResult?.projects?.associateWith { project ->
-            val scopesForDependencies = project.getScopesForDependencies(excludes, input.ortResult.dependencyNavigator)
-            val pathExcludes = excludes.findPathExcludes(project, input.ortResult)
-
-            val allIds = sortedSetOf(project.id)
-            allIds += input.ortResult.dependencyNavigator.projectDependencies(project)
-
-            val projectIssues = input.ortResult.dependencyNavigator.projectIssues(project)
-            val tableRows = allIds.map { id ->
-                val scanResults = input.ortResult.getScanResultsForId(id)
-
-                val resolvedLicenseInfo = input.licenseInfoResolver.resolveLicenseInfo(id)
-
-                val concludedLicense = resolvedLicenseInfo.licenseInfo.concludedLicenseInfo.concludedLicense
-                val declaredLicenses = resolvedLicenseInfo.filter { LicenseSource.DECLARED in it.sources }
-                    .sortedBy { it.license.toString() }
-                val detectedLicenses = resolvedLicenseInfo.filter { LicenseSource.DETECTED in it.sources }
-                    .sortedBy { it.license.toString() }
-
-                val analyzerIssues = projectIssues[id].orEmpty() + analyzerResult.issues[id].orEmpty()
-
-                val scanIssues = scanResults.flatMapTo(mutableSetOf()) {
-                    it.summary.issues
-                }
-
-                val pkg = input.ortResult.getPackageOrProject(id)?.metadata
-
-                Row(
-                    id = id,
-                    sourceArtifact = pkg?.sourceArtifact.orEmpty(),
-                    vcsInfo = pkg?.vcsProcessed.orEmpty(),
-                    scopes = scopesForDependencies[id].orEmpty().toSortedMap(),
-                    concludedLicense = concludedLicense,
-                    declaredLicenses = declaredLicenses,
-                    detectedLicenses = detectedLicenses,
-                    effectiveLicense = resolvedLicenseInfo.filterExcluded().effectiveLicense(
-                        LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED,
-                        input.ortResult.getPackageLicenseChoices(id),
-                        input.ortResult.getRepositoryLicenseChoices()
-                    )?.sorted(),
-                    analyzerIssues = analyzerIssues.map {
-                        it.toTableReportIssue(input.ortResult, input.howToFixTextProvider)
-                    },
-                    scanIssues = scanIssues.map {
-                        it.toTableReportIssue(input.ortResult, input.howToFixTextProvider)
-                    }
-                )
-            }
-
-            ProjectTable(
-                tableRows,
-                input.ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(project),
-                pathExcludes
-            )
-        }.orEmpty().toSortedMap(compareBy { it.id })
-
         // TODO: Use the prefixes up until the first '.' (which below get discarded) for some visual grouping in the
         //       report.
         val labels = input.ortResult.labels.mapKeys { it.key.substringAfter(".") }
@@ -105,6 +46,10 @@ internal object TablesReportModelMapper {
         val ruleViolations = input.ortResult.getRuleViolations()
             .map { it.toTableReportViolation(input.ortResult) }
             .sortedWith(VIOLATION_COMPARATOR)
+
+        val projectTables = input.ortResult.getProjects()
+            .associateWith { getProjectTable(input, it) }
+            .toSortedMap(compareBy { it.id })
 
         return TablesReport(
             input.ortResult.repository.vcsProcessed,
@@ -180,6 +125,64 @@ private fun RuleViolation.toTableReportViolation(ortResult: OrtResult): TablesRe
             }
         },
         isResolved = resolutions.isNotEmpty()
+    )
+}
+
+private fun getProjectTable(input: ReporterInput, project: Project): ProjectTable {
+    val analyzerResult = input.ortResult.analyzer!!.result
+    val excludes = input.ortResult.getExcludes()
+    val scopesForDependencies = project.getScopesForDependencies(excludes, input.ortResult.dependencyNavigator)
+    val pathExcludes = excludes.findPathExcludes(project, input.ortResult)
+
+    val allIds = sortedSetOf(project.id)
+    allIds += input.ortResult.dependencyNavigator.projectDependencies(project)
+
+    val projectIssues = input.ortResult.dependencyNavigator.projectIssues(project)
+    val tableRows = allIds.map { id ->
+        val scanResults = input.ortResult.getScanResultsForId(id)
+
+        val resolvedLicenseInfo = input.licenseInfoResolver.resolveLicenseInfo(id)
+
+        val concludedLicense = resolvedLicenseInfo.licenseInfo.concludedLicenseInfo.concludedLicense
+        val declaredLicenses = resolvedLicenseInfo.filter { LicenseSource.DECLARED in it.sources }
+            .sortedBy { it.license.toString() }
+        val detectedLicenses = resolvedLicenseInfo.filter { LicenseSource.DETECTED in it.sources }
+            .sortedBy { it.license.toString() }
+
+        val analyzerIssues = projectIssues[id].orEmpty() + analyzerResult.issues[id].orEmpty()
+
+        val scanIssues = scanResults.flatMapTo(mutableSetOf()) {
+            it.summary.issues
+        }
+
+        val pkg = input.ortResult.getPackageOrProject(id)?.metadata
+
+        Row(
+            id = id,
+            sourceArtifact = pkg?.sourceArtifact.orEmpty(),
+            vcsInfo = pkg?.vcsProcessed.orEmpty(),
+            scopes = scopesForDependencies[id].orEmpty().toSortedMap(),
+            concludedLicense = concludedLicense,
+            declaredLicenses = declaredLicenses,
+            detectedLicenses = detectedLicenses,
+            effectiveLicense = resolvedLicenseInfo.filterExcluded().effectiveLicense(
+                LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED,
+                input.ortResult.getPackageLicenseChoices(id),
+                input.ortResult.getRepositoryLicenseChoices()
+            )?.sorted(),
+            analyzerIssues = analyzerIssues.map {
+                it.toTableReportIssue(input.ortResult, input.howToFixTextProvider)
+            },
+            scanIssues = scanIssues.map {
+                it.toTableReportIssue(input.ortResult, input.howToFixTextProvider)
+            }
+        )
+    }
+
+    return ProjectTable(
+        tableRows,
+        input.ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(project),
+        pathExcludes
     )
 }
 
