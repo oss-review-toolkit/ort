@@ -22,12 +22,11 @@ package org.ossreviewtoolkit.plugins.commands.evaluator
 import com.github.ajalt.clikt.testing.test
 
 import io.kotest.assertions.throwables.shouldNotThrow
-import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.file.exist
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
-import io.kotest.matchers.string.shouldContain
 
 import java.io.FileNotFoundException
 
@@ -36,13 +35,11 @@ import org.ossreviewtoolkit.utils.ort.ORT_EVALUATOR_RULES_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
 class EvaluatorCommandTest : StringSpec({
-    "If no rules are specified, the default rules file should be required" {
+    "If no rules are specified / exist at all, the status code should be 1" {
         val args = "--check-syntax".split(' ')
 
         ortConfigDirectory.resolve(ORT_EVALUATOR_RULES_FILENAME) shouldNot exist()
-        shouldThrow<FileNotFoundException> {
-            EvaluatorCommand().test(args, envvars = mapOf(ORT_CONFIG_DIR_ENV_NAME to tempdir().path))
-        }.message shouldContain ORT_EVALUATOR_RULES_FILENAME
+        EvaluatorCommand().test(args, envvars = mapOf(ORT_CONFIG_DIR_ENV_NAME to tempdir().path)).statusCode shouldBe 1
     }
 
     "If a rules resource is specified, the default rules file should not be required" {
