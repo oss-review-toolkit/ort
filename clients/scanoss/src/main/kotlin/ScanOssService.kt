@@ -41,7 +41,7 @@ interface ScanOssService {
         /**
          * The default API URL.
          */
-        const val DEFAULT_API_URL = "https://osskb.org/api/"
+        const val DEFAULT_API_URL = "https://api.osskb.org/"
 
         /**
          * The JSON (de-)serialization object used by this service.
