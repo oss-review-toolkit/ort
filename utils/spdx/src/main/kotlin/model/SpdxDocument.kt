@@ -137,7 +137,7 @@ data class SpdxDocument(
 
         require(spdxVersion.isNotBlank()) { "The SPDX version must not be blank." }
 
-        require(name.isNotBlank()) { "The name must not be blank." }
+        require(name.isNotBlank()) { "The document name for SPDX-ID '$spdxId' must not be blank." }
 
         require(dataLicense.isNotBlank()) { "The data license must not be blank." }
 

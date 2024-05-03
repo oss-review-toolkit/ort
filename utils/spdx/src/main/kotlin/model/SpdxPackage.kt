@@ -201,7 +201,7 @@ data class SpdxPackage(
 
         require(downloadLocation.isNotBlank()) { "The download location must not be blank." }
 
-        require(name.isNotBlank()) { "The name must not be blank." }
+        require(name.isNotBlank()) { "The package name for SPDX-ID '$spdxId' must not be blank." }
 
         val validPrefixes = listOf(SpdxConstants.PERSON, SpdxConstants.ORGANIZATION)
 
