@@ -123,13 +123,11 @@ private fun RuleViolation.toTableReportViolation(ortResult: OrtResult): TablesRe
 }
 
 private fun getProjectTable(input: ReporterInput, project: Project): ProjectTable {
-    val scopesForDependencies = input.ortResult.getScopesForDependencies(project)
+    val projectIssuesForId = input.ortResult.dependencyNavigator.projectIssues(project)
+    val scopesForId = input.ortResult.getScopesForDependencies(project)
     val ids = input.ortResult.dependencyNavigator.projectDependencies(project) + project.id
-    val projectIssues = input.ortResult.dependencyNavigator.projectIssues(project)
 
     val tableRows = ids.map { id ->
-        val scanResults = input.ortResult.getScanResultsForId(id)
-
         val resolvedLicenseInfo = input.licenseInfoResolver.resolveLicenseInfo(id)
 
         val concludedLicense = resolvedLicenseInfo.licenseInfo.concludedLicenseInfo.concludedLicense
@@ -138,9 +136,10 @@ private fun getProjectTable(input: ReporterInput, project: Project): ProjectTabl
         val detectedLicenses = resolvedLicenseInfo.filter { LicenseSource.DETECTED in it.sources }
             .sortedBy { it.license.toString() }
 
-        val analyzerIssues = projectIssues[id].orEmpty() + input.ortResult.analyzer?.result?.issues?.get(id).orEmpty()
+        val analyzerIssues = projectIssuesForId[id].orEmpty() + input.ortResult.analyzer?.result?.issues?.get(id)
+            .orEmpty()
 
-        val scanIssues = scanResults.flatMapTo(mutableSetOf()) {
+        val scanIssues = input.ortResult.getScanResultsForId(id).flatMapTo(mutableSetOf()) {
             it.summary.issues
         }
 
@@ -150,7 +149,7 @@ private fun getProjectTable(input: ReporterInput, project: Project): ProjectTabl
             id = id,
             sourceArtifact = pkg?.sourceArtifact.orEmpty(),
             vcsInfo = pkg?.vcsProcessed.orEmpty(),
-            scopes = scopesForDependencies[id].orEmpty().toSortedMap(),
+            scopes = scopesForId[id].orEmpty().toSortedMap(),
             concludedLicense = concludedLicense,
             declaredLicenses = declaredLicenses,
             detectedLicenses = detectedLicenses,
