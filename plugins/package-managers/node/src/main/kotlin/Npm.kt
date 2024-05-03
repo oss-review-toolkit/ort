@@ -534,8 +534,11 @@ open class Npm(
 
         val rawName = json["name"].textValueOrEmpty()
         val (namespace, name) = splitNpmNamespaceAndName(rawName)
-        if (name.isBlank()) {
-            logger.warn { "'$packageJson' does not define a name." }
+
+        val projectName = name.ifBlank {
+            getFallbackProjectName(analysisRoot, packageJson).also {
+                logger.warn { "'$packageJson' does not define a name, falling back to '$it'." }
+            }
         }
 
         val version = json["version"].textValueOrEmpty()
@@ -553,7 +556,7 @@ open class Npm(
             id = Identifier(
                 type = managerName,
                 namespace = namespace,
-                name = name,
+                name = projectName,
                 version = version
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(packageJson).path,
