@@ -119,32 +119,42 @@ class PackageBasedPostgresStorage(
             """.trimIndent()
         )
 
-    override fun readInternal(pkg: Package, scannerMatcher: ScannerMatcher?): Result<List<ScanResult>> {
-        val minVersionArray = scannerMatcher?.minVersion?.run { intArrayOf(major, minor, patch) }
-        val maxVersionArray = scannerMatcher?.maxVersion?.run { intArrayOf(major, minor, patch) }
+    override fun readInternal(pkg: Package): Result<List<ScanResult>> =
+        runCatching {
+            database.transaction {
+                ScanResultDao.find { ScanResults.identifier eq pkg.id.toCoordinates() }.map { it.scanResult }
+            }
+        }.onFailure {
+            if (it is JsonProcessingException || it is SQLException) {
+                it.showStackTrace()
+
+                val message = "Could not read scan results for '${pkg.id.toCoordinates()}' from database: " +
+                    it.collectMessages()
+
+                logger.info { message }
+
+                return Result.failure(ScanStorageException(message))
+            }
+        }
+
+    override fun readInternal(pkg: Package, scannerMatcher: ScannerMatcher): Result<List<ScanResult>> {
+        val minVersionArray = with(scannerMatcher.minVersion) { intArrayOf(major, minor, patch) }
+        val maxVersionArray = with(scannerMatcher.maxVersion) { intArrayOf(major, minor, patch) }
 
         return runCatching {
             database.transaction {
                 ScanResultDao.find {
-                    var expression = (ScanResults.identifier eq pkg.id.toCoordinates())
-
-                    scannerMatcher?.regScannerName?.let {
-                        expression = expression and (rawParam("scan_result->'scanner'->>'name'") tilde it)
-                    }
-
-                    minVersionArray?.let {
-                        expression = expression and (rawParam(VERSION_EXPRESSION) greaterEq arrayParam(it))
-                    }
-
-                    maxVersionArray?.let {
-                        expression = expression and (rawParam(VERSION_EXPRESSION) less arrayParam(it))
-                    }
-
-                    expression
+                    (ScanResults.identifier eq pkg.id.toCoordinates()) and
+                        (rawParam("scan_result->'scanner'->>'name'") tilde scannerMatcher.regScannerName) and
+                        (rawParam(VERSION_EXPRESSION) greaterEq arrayParam(minVersionArray)) and
+                        (rawParam(VERSION_EXPRESSION) less arrayParam(maxVersionArray))
                 }.map { it.scanResult }
                     // TODO: Currently the query only accounts for the scanner criteria. Ideally also the provenance
                     //       should be checked in the query to reduce the downloaded data.
                     .filter { it.provenance.matches(pkg) }
+                    // The scanner compatibility is already checked in the query, but filter here again to be on the
+                    // safe side.
+                    .filter { scannerMatcher.matches(it.scanner) }
             }
         }.onFailure {
             if (it is JsonProcessingException || it is SQLException) {

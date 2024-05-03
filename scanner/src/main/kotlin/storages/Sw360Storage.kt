@@ -44,7 +44,6 @@ import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.scanner.ScanStorageException
-import org.ossreviewtoolkit.scanner.ScannerMatcher
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
@@ -86,7 +85,7 @@ class Sw360Storage(
     private val connectionFactory = createConnection(configuration)
     private val releaseClient = connectionFactory.releaseAdapter
 
-    override fun readInternal(pkg: Package, scannerMatcher: ScannerMatcher?): Result<List<ScanResult>> {
+    override fun readInternal(pkg: Package): Result<List<ScanResult>> {
         val tempScanResultFile = createTempFileForUpload(pkg.id)
 
         val result = runCatching {

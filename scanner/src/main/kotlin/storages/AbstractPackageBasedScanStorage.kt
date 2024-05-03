@@ -24,7 +24,6 @@ import kotlin.time.measureTimedValue
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.UnknownProvenance
@@ -45,16 +44,32 @@ abstract class AbstractPackageBasedScanStorage : PackageBasedScanStorage {
     open val name: String = javaClass.simpleName
 
     /**
-     * Read all [ScanResult]s for the provided [package][pkg]. The results have to match the
-     * [provenance][KnownProvenance.matches] of the package and can optionally be filtered by the provided
-     * [scannerMatcher].
+     * Return all [ScanResult]s contained in this [ScanResultsStorage] corresponding to the [package][pkg] wrapped in a
+     * [Result].
      */
-    fun read(pkg: Package, scannerMatcher: ScannerMatcher? = null): Result<List<ScanResult>> {
-        val (result, duration) = measureTimedValue {
-            readInternal(pkg, scannerMatcher).map { results ->
-                results.filter { scannerMatcher?.matches(it.scanner) != false }
+    fun read(pkg: Package): Result<List<ScanResult>> {
+        val (result, duration) = measureTimedValue { readInternal(pkg) }
+
+        result.onSuccess { results ->
+            logger.info {
+                "Read ${results.size} scan result(s) for '${pkg.id.toCoordinates()}' from ${javaClass.simpleName} in " +
+                    "$duration."
             }
         }
+
+        return result
+    }
+
+    /**
+     * Return all [ScanResult]s contained in this [ScanResultsStorage] corresponding to the given [package][pkg] that
+     * are [compatible][ScannerMatcher.matches] with the provided [scannerMatcher] wrapped in a [Result]. Also,
+     * [Package.sourceArtifact], [Package.vcs], and [Package.vcsProcessed] are used to check if the scan result matches
+     * the expected source code location. That check is important to find the correct results when different revisions
+     * of a package using the same version name are used (e.g. multiple scans of a "1.0-SNAPSHOT" version during
+     * development).
+     */
+    fun read(pkg: Package, scannerMatcher: ScannerMatcher): Result<List<ScanResult>> {
+        val (result, duration) = measureTimedValue { readInternal(pkg, scannerMatcher) }
 
         result.onSuccess { results ->
             logger.info {
@@ -91,21 +106,58 @@ abstract class AbstractPackageBasedScanStorage : PackageBasedScanStorage {
     }
 
     /**
-     * Internal version of [read]. Implementations do not have to filter results using the provided [scannerMatcher] as
-     * this is done by the public [read] function. They can use the [scannerMatcher] if they can implement the filtering
-     * more efficiently, for example, as part of a database query.
+     * Internal version of [read].
      */
-    abstract fun readInternal(pkg: Package, scannerMatcher: ScannerMatcher? = null): Result<List<ScanResult>>
+    protected abstract fun readInternal(pkg: Package): Result<List<ScanResult>>
+
+    /**
+     * Internal version of [read]. Implementations may want to override this function if they can filter for the wanted
+     * [scannerMatcher] in a more efficient way than this default implementation.
+     */
+    protected open fun readInternal(pkg: Package, scannerMatcher: ScannerMatcher): Result<List<ScanResult>> =
+        readInternal(pkg).map { results ->
+            if (results.isEmpty()) {
+                results
+            } else {
+                val (matchingProvenance, nonMatchingProvenance) = results.partition { it.provenance.matches(pkg) }
+
+                if (matchingProvenance.isEmpty()) {
+                    logger.debug {
+                        "No stored scan results found for $pkg. The following entries with non-matching provenance " +
+                            "have been ignored: ${nonMatchingProvenance.map { it.provenance }}"
+                    }
+
+                    matchingProvenance
+                } else {
+                    val (matchingCriteria, nonMatchingCriteria) = matchingProvenance.partition {
+                        scannerMatcher.matches(it.scanner)
+                    }
+
+                    if (matchingCriteria.isEmpty()) {
+                        logger.debug {
+                            "No stored scan results for '${pkg.id.toCoordinates()}' match $scannerMatcher. The " +
+                                "following entries with non-matching criteria have been ignored: " +
+                                nonMatchingCriteria.map { it.scanner }
+                        }
+                    }
+
+                    matchingCriteria
+                }
+            }
+        }
 
     /**
      * Internal version of [add] that skips common sanity checks.
      */
     protected abstract fun addInternal(id: Identifier, scanResult: ScanResult): Result<Unit>
 
+    override fun read(pkg: Package, nestedProvenance: NestedProvenance): List<NestedProvenanceScanResult> =
+        read(pkg).toNestedProvenanceScanResult(nestedProvenance)
+
     override fun read(
         pkg: Package,
         nestedProvenance: NestedProvenance,
-        scannerMatcher: ScannerMatcher?
+        scannerMatcher: ScannerMatcher
     ): List<NestedProvenanceScanResult> = read(pkg, scannerMatcher).toNestedProvenanceScanResult(nestedProvenance)
 
     private fun Result<List<ScanResult>>.toNestedProvenanceScanResult(nestedProvenance: NestedProvenance) =

@@ -39,9 +39,16 @@ sealed interface ScanStorageReader
  */
 interface PackageBasedScanStorageReader : ScanStorageReader {
     /**
-     * Read all [ScanResult]s for the provided [package][pkg]. The results have to match the
-     * [provenance][KnownProvenance.matches] of the package and can optionally be filtered by the provided
-     * [scannerMatcher]. The results are converted to a [NestedProvenanceScanResult] using the provided
+     * Read all [ScanResult]s for the provided [package][pkg]. The package scan results are converted to a
+     * [NestedProvenanceScanResult] using the provided [nestedProvenance].
+     *
+     * Throws a [ScanStorageException] if an error occurs while reading from the storage.
+     */
+    fun read(pkg: Package, nestedProvenance: NestedProvenance): List<NestedProvenanceScanResult>
+
+    /**
+     * Read all [ScanResult]s for the provided [package][pkg] matching the [provenance][KnownProvenance.matches] and the
+     * [scannerMatcher]. The package scan results are converted to a [NestedProvenanceScanResult] using the provided
      * [nestedProvenance].
      *
      * Throws a [ScanStorageException] if an error occurs while reading from the storage.
@@ -49,7 +56,7 @@ interface PackageBasedScanStorageReader : ScanStorageReader {
     fun read(
         pkg: Package,
         nestedProvenance: NestedProvenance,
-        scannerMatcher: ScannerMatcher? = null
+        scannerMatcher: ScannerMatcher
     ): List<NestedProvenanceScanResult>
 }
 

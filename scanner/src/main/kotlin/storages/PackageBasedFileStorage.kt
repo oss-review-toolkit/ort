@@ -33,7 +33,6 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.PackageBasedScanStorage
 import org.ossreviewtoolkit.scanner.ScanStorageException
-import org.ossreviewtoolkit.scanner.ScannerMatcher
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
@@ -51,8 +50,8 @@ class PackageBasedFileStorage(
 ) : AbstractPackageBasedScanStorage() {
     override val name = "${javaClass.simpleName} with ${backend.javaClass.simpleName} backend"
 
-    private fun readForId(id: Identifier): Result<List<ScanResult>> {
-        val path = storagePath(id)
+    override fun readInternal(pkg: Package): Result<List<ScanResult>> {
+        val path = storagePath(pkg.id)
 
         return runCatching {
             backend.read(path).use { input ->
@@ -62,7 +61,7 @@ class PackageBasedFileStorage(
             // If the file cannot be found it means no scan results have been stored, yet.
             if (it is FileNotFoundException) return Result.success(emptyList())
 
-            val message = "Could not read scan results for '${id.toCoordinates()}' from path '$path': " +
+            val message = "Could not read scan results for '${pkg.id.toCoordinates()}' from path '$path': " +
                 it.collectMessages()
 
             logger.info { message }
@@ -71,11 +70,10 @@ class PackageBasedFileStorage(
         }
     }
 
-    override fun readInternal(pkg: Package, scannerMatcher: ScannerMatcher?): Result<List<ScanResult>> =
-        readForId(pkg.id).map { results -> results.filter { it.provenance.matches(pkg) } }
-
     override fun addInternal(id: Identifier, scanResult: ScanResult): Result<Unit> {
-        val existingScanResults = readForId(id).getOrDefault(emptyList())
+        // Note: The file-based `read()`-implementation does not require the full `Package` information for reading
+        // existing results, so it is fine to use an empty package here.
+        val existingScanResults = read(Package.EMPTY.copy(id = id)).getOrDefault(emptyList())
 
         if (existingScanResults.any { it.scanner == scanResult.scanner && it.provenance == scanResult.provenance }) {
             val message = "Did not store scan result for '${id.toCoordinates()}' because a scan result for the same " +
