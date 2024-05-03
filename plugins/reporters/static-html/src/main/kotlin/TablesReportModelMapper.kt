@@ -132,6 +132,7 @@ private fun getProjectTable(input: ReporterInput, project: Project): ProjectTabl
         val resolvedLicenseInfo = input.licenseInfoResolver.resolveLicenseInfo(id)
 
         val concludedLicense = resolvedLicenseInfo.licenseInfo.concludedLicenseInfo.concludedLicense
+            ?.sorted()
         val declaredLicenses = resolvedLicenseInfo.filter { LicenseSource.DECLARED in it.sources }
             .sortedBy { it.license.toString() }
         val detectedLicenses = resolvedLicenseInfo.filter { LicenseSource.DETECTED in it.sources }
