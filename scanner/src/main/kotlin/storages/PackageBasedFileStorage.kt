@@ -51,7 +51,7 @@ class PackageBasedFileStorage(
 ) : AbstractPackageBasedScanStorage() {
     override val name = "${javaClass.simpleName} with ${backend.javaClass.simpleName} backend"
 
-    private fun readForId(id: Identifier): Result<List<ScanResult>> {
+    fun readForId(id: Identifier): Result<List<ScanResult>> {
         val path = storagePath(id)
 
         return runCatching {
