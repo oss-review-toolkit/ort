@@ -124,6 +124,7 @@ private fun RuleViolation.toTableReportViolation(ortResult: OrtResult): TablesRe
 
 private fun getProjectTable(input: ReporterInput, project: Project): ProjectTable {
     val projectIssuesForId = input.ortResult.dependencyNavigator.projectIssues(project)
+    val scannerIssuesForId = input.ortResult.getScannerIssues()
     val scopesForId = input.ortResult.getScopesForDependencies(project)
     val ids = input.ortResult.dependencyNavigator.projectDependencies(project) + project.id
 
@@ -138,10 +139,6 @@ private fun getProjectTable(input: ReporterInput, project: Project): ProjectTabl
 
         val analyzerIssues = projectIssuesForId[id].orEmpty() + input.ortResult.analyzer?.result?.issues?.get(id)
             .orEmpty()
-
-        val scanIssues = input.ortResult.getScanResultsForId(id).flatMapTo(mutableSetOf()) {
-            it.summary.issues
-        }
 
         val pkg = input.ortResult.getPackageOrProject(id)?.metadata
 
@@ -161,7 +158,7 @@ private fun getProjectTable(input: ReporterInput, project: Project): ProjectTabl
             analyzerIssues = analyzerIssues.map {
                 it.toTableReportIssue(input.ortResult, input.howToFixTextProvider)
             },
-            scanIssues = scanIssues.map {
+            scanIssues = scannerIssuesForId[id].orEmpty().map {
                 it.toTableReportIssue(input.ortResult, input.howToFixTextProvider)
             }
         )
