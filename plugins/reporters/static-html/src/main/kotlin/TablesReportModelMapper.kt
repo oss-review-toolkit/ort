@@ -19,14 +19,12 @@
 
 package org.ossreviewtoolkit.plugins.reporters.statichtml
 
-import org.ossreviewtoolkit.model.DependencyNavigator
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RuleViolation
-import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.orEmpty
@@ -70,13 +68,11 @@ private val VIOLATION_COMPARATOR = compareBy<TablesReportViolation> { it.isResol
     .thenBy { it.violation.message }
     .thenBy { it.resolutionDescription }
 
-private fun Project.getScopesForDependencies(
-    excludes: Excludes,
-    navigator: DependencyNavigator
-): Map<Identifier, Map<String, List<ScopeExclude>>> {
+private fun OrtResult.getScopesForDependencies(project: Project): Map<Identifier, Map<String, List<ScopeExclude>>> {
     val result = mutableMapOf<Identifier, MutableMap<String, List<ScopeExclude>>>()
+    val excludes = getExcludes()
 
-    navigator.scopeDependencies(this).forEach { (scopeName, dependencies) ->
+    dependencyNavigator.scopeDependencies(project).forEach { (scopeName, dependencies) ->
         dependencies.forEach { dependency ->
             result.getOrPut(dependency) { mutableMapOf() }
                 .getOrPut(scopeName) { excludes.findScopeExcludes(scopeName) }
@@ -128,9 +124,8 @@ private fun RuleViolation.toTableReportViolation(ortResult: OrtResult): TablesRe
 
 private fun getProjectTable(input: ReporterInput, project: Project): ProjectTable {
     val analyzerResult = input.ortResult.analyzer!!.result
-    val excludes = input.ortResult.getExcludes()
-    val scopesForDependencies = project.getScopesForDependencies(excludes, input.ortResult.dependencyNavigator)
-    val pathExcludes = excludes.findPathExcludes(project, input.ortResult)
+    val scopesForDependencies = input.ortResult.getScopesForDependencies(project)
+    val pathExcludes = input.ortResult.getExcludes().findPathExcludes(project, input.ortResult)
 
     val allIds = sortedSetOf(project.id)
     allIds += input.ortResult.dependencyNavigator.projectDependencies(project)
