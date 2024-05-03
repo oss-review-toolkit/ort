@@ -39,8 +39,6 @@ import org.ossreviewtoolkit.reporter.ReporterInput
  */
 internal object TablesReportModelMapper {
     fun map(input: ReporterInput): TablesReport {
-        // TODO: Use the prefixes up until the first '.' (which below get discarded) for some visual grouping in the
-        //       report.
         val labels = input.ortResult.labels.mapKeys { it.key.substringAfter(".") }
 
         val ruleViolations = input.ortResult.getRuleViolations()
