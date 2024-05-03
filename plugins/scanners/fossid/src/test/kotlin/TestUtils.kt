@@ -121,7 +121,8 @@ internal fun createConfig(
     waitForResult: Boolean = true,
     deltaScans: Boolean = true,
     deltaScanLimit: Int = Int.MAX_VALUE,
-    fetchSnippetMatchedLines: Boolean = false
+    fetchSnippetMatchedLines: Boolean = false,
+    snippetsLimit: Int = Int.MAX_VALUE
 ): FossIdConfig {
     val config = FossIdConfig(
         serverUrl = "https://www.example.org/fossid",
@@ -135,7 +136,8 @@ internal fun createConfig(
         detectCopyrightStatements = false,
         timeout = 60,
         fetchSnippetMatchedLines = fetchSnippetMatchedLines,
-        options = emptyMap()
+        options = emptyMap(),
+        snippetsLimit = snippetsLimit
     )
 
     val namingProvider = createNamingProviderMock()

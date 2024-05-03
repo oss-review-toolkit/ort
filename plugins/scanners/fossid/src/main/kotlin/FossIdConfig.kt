@@ -110,6 +110,9 @@ data class FossIdConfig(
     /** Whether matched lines of snippets are to be fetched. */
     val fetchSnippetMatchedLines: Boolean,
 
+    /** A limit on the amount of snippets to fetch. **/
+    val snippetsLimit: Int,
+
     /** Stores the map with FossID-specific configuration options. */
     private val options: Map<String, String>
 ) {
@@ -151,6 +154,9 @@ data class FossIdConfig(
         /** Name of the configuration property controlling whether matched lines of snippets are to be fetched. */
         private const val PROP_FETCH_SNIPPET_MATCHED_LINES = "fetchSnippetMatchedLines"
 
+        /** Name of the configuration property defining the limit on the amount of snippets to fetch. */
+        private const val PROP_SNIPPETS_LIMIT = "snippetsLimit"
+
         /**
          * The scanner options beginning with this prefix will be used to parameterize project and scan names.
          */
@@ -161,6 +167,12 @@ data class FossIdConfig(
          */
         @JvmStatic
         private val DEFAULT_TIMEOUT = 60
+
+        /**
+         * Default limit on the amount of snippets to fetch.
+         */
+        @JvmStatic
+        private val DEFAULT_SNIPPETS_LIMIT = 500
 
         fun create(options: Options, secrets: Options): FossIdConfig {
             require(options.isNotEmpty()) { "No FossID Scanner configuration found." }
@@ -184,6 +196,7 @@ data class FossIdConfig(
             val timeout = options[PROP_TIMEOUT]?.toInt() ?: DEFAULT_TIMEOUT
 
             val fetchSnippetMatchedLines = options[PROP_FETCH_SNIPPET_MATCHED_LINES]?.toBoolean() == true
+            val snippetsLimit = options[PROP_SNIPPETS_LIMIT]?.toInt() ?: DEFAULT_SNIPPETS_LIMIT
 
             require(deltaScanLimit > 0) {
                 "deltaScanLimit must be > 0, current value is $deltaScanLimit."
@@ -203,7 +216,8 @@ data class FossIdConfig(
                 detectCopyrightStatements = detectCopyrightStatements,
                 timeout = timeout,
                 fetchSnippetMatchedLines = fetchSnippetMatchedLines,
-                options = options
+                options = options,
+                snippetsLimit = snippetsLimit
             )
         }
     }
