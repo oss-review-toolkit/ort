@@ -126,8 +126,8 @@ internal fun List<PythonInspector.Package>.toOrtPackages(): Set<Package> =
         @Suppress("UseOrEmpty")
         fun PythonInspector.Package.getHash(): Hash = Hash.create(sha512 ?: sha256 ?: sha1 ?: md5 ?: "")
 
-        fun getArtifact(fileExtension: String) =
-            packages.find { it.downloadUrl.endsWith(fileExtension) }?.let {
+        fun getArtifact(vararg fileExtensions: String) =
+            packages.find { pkg -> fileExtensions.any { pkg.downloadUrl.endsWith(it) } }?.let {
                 RemoteArtifact(
                     url = it.downloadUrl,
                     hash = it.getHash()
@@ -151,7 +151,7 @@ internal fun List<PythonInspector.Package>.toOrtPackages(): Set<Package> =
             description = pkg.description.lineSequence().firstOrNull { it.isNotBlank() }.orEmpty(),
             homepageUrl = pkg.homepageUrl.orEmpty(),
             binaryArtifact = getArtifact(".whl"),
-            sourceArtifact = getArtifact(".tar.gz"),
+            sourceArtifact = getArtifact(".tar.gz", ".zip"),
             vcs = VcsInfo.EMPTY.copy(url = pkg.vcsUrl.orEmpty()),
             vcsProcessed = PackageManager.processPackageVcs(
                 VcsInfo(VcsType.UNKNOWN, pkg.vcsUrl.orEmpty(), revision = ""),

@@ -42,10 +42,10 @@ packages:
       value: "f34088c08be2ec16279dfa9c3b4ff3d1453c5c67597a33e2819b000e18d4c546"
       algorithm: "SHA-256"
   source_artifact:
-    url: ""
+    url: "https://files.pythonhosted.org/packages/f6/14/aa3ec10e4ab1524ba69f4742ef9cfa01fd668d0840afe5d5e6f708a95031/graphviz-0.19.1.zip"
     hash:
-      value: ""
-      algorithm: ""
+      value: "09ed0cde452d015fe77c4845a210eb642f28d245f5bc250d4b97808cb8f49078"
+      algorithm: "SHA-256"
   vcs:
     type: ""
     url: ""
