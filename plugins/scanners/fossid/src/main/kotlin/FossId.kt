@@ -32,6 +32,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeoutOrNull
 
@@ -857,36 +858,37 @@ class FossId internal constructor(
         }
 
         val matchedLines = mutableMapOf<Int, MatchedLines>()
-        val snippets = runBlocking(Dispatchers.IO) {
-            pendingFiles.map {
-                async {
-                    logger.info { "Listing snippet for $it..." }
-                    val snippetResponse = service.listSnippets(config.user, config.apiKey, scanCode, it)
-                        .checkResponse("list snippets")
-                    val snippets = checkNotNull(snippetResponse.data) {
-                        "Snippet could not be listed. Response was ${snippetResponse.message}."
-                    }
-                    logger.info { "${snippets.size} snippets." }
+        val pendingFilesIterator = pendingFiles.iterator()
+        val snippets = flow {
+            while (pendingFilesIterator.hasNext()) {
+                val file = pendingFilesIterator.next()
+                logger.info { "Listing snippet for $file..." }
 
-                    val filteredSnippets = snippets.filterTo(mutableSetOf()) { it.matchType.isValidType() }
-
-                    if (config.fetchSnippetMatchedLines) {
-                        logger.info { "Listing snippet matched lines for $it..." }
-
-                        filteredSnippets.filter { it.matchType == MatchType.PARTIAL }.map { snippet ->
-                            val matchedLinesResponse =
-                                service.listMatchedLines(config.user, config.apiKey, scanCode, it, snippet.id)
-                                    .checkResponse("list snippets matched lines")
-                            val lines = checkNotNull(matchedLinesResponse.data) {
-                                "Matched lines could not be listed. Response was ${matchedLinesResponse.message}."
-                            }
-                            matchedLines[snippet.id] = lines
-                        }
-                    }
-
-                    it to filteredSnippets
+                val snippetResponse = service.listSnippets(config.user, config.apiKey, scanCode, file)
+                    .checkResponse("list snippets")
+                val snippets = checkNotNull(snippetResponse.data) {
+                    "Snippet could not be listed. Response was ${snippetResponse.message}."
                 }
-            }.awaitAll().toMap()
+                logger.info { "${snippets.size} snippets." }
+
+                val filteredSnippets = snippets.filterTo(mutableSetOf()) { it.matchType.isValidType() }
+
+                if (config.fetchSnippetMatchedLines) {
+                    logger.info { "Listing snippet matched lines for $file..." }
+
+                    filteredSnippets.filter { it.matchType == MatchType.PARTIAL }.map { snippet ->
+                        val matchedLinesResponse =
+                            service.listMatchedLines(config.user, config.apiKey, scanCode, file, snippet.id)
+                                .checkResponse("list snippets matched lines")
+                        val lines = checkNotNull(matchedLinesResponse.data) {
+                            "Matched lines could not be listed. Response was ${matchedLinesResponse.message}."
+                        }
+                        matchedLines[snippet.id] = lines
+                    }
+                }
+
+                emit(file to filteredSnippets.toSet())
+            }
         }
 
         return RawResults(
@@ -903,7 +905,7 @@ class FossId internal constructor(
      * Construct the [ScanSummary] for this FossID scan.
      */
     @Suppress("LongParameterList")
-    private fun createResultSummary(
+    private suspend fun createResultSummary(
         startTime: Instant,
         provenance: Provenance,
         rawResults: RawResults,

@@ -26,6 +26,8 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
+import kotlinx.coroutines.flow.flowOf
+
 import org.ossreviewtoolkit.clients.fossid.PolymorphicList
 import org.ossreviewtoolkit.clients.fossid.model.result.MatchType
 import org.ossreviewtoolkit.clients.fossid.model.result.MatchedLines
@@ -38,32 +40,34 @@ class FossIdSnippetMappingTest : WordSpec({
     "mapSnippetFindings" should {
         "group snippets by source file location" {
             val issues = mutableListOf<Issue>()
-            val listSnippets = mapOf(
-                "src/main/java/Tokenizer.java" to setOf(
-                    createSnippet(
-                        1,
-                        MatchType.FULL,
-                        "pkg:github/vdurmont/semver4j@3.1.0",
-                        "MIT",
-                        "src/main/java/com/vdurmont/semver4j/Tokenizer.java"
+            val listSnippets = flowOf(
+                "src/main/java/Tokenizer.java" to
+                    setOf(
+                        createSnippet(
+                            1,
+                            MatchType.FULL,
+                            "pkg:github/vdurmont/semver4j@3.1.0",
+                            "MIT",
+                            "src/main/java/com/vdurmont/semver4j/Tokenizer.java"
+                        ),
+                        createSnippet(
+                            2,
+                            MatchType.FULL,
+                            "pkg:maven/com.vdurmont/semver4j@3.1.0",
+                            "MIT",
+                            "com/vdurmont/semver4j/Tokenizer.java"
+                        )
                     ),
-                    createSnippet(
-                        2,
-                        MatchType.FULL,
-                        "pkg:maven/com.vdurmont/semver4j@3.1.0",
-                        "MIT",
-                        "com/vdurmont/semver4j/Tokenizer.java"
+                "src/main/java/com/vdurmont/semver4j/Requirement.java" to
+                    setOf(
+                        createSnippet(
+                            3,
+                            MatchType.PARTIAL,
+                            "pkg:github/vdurmont/semver4j@3.1.0",
+                            "MIT",
+                            "com/vdurmont/semver4j/Requirement.java"
+                        )
                     )
-                ),
-                "src/main/java/com/vdurmont/semver4j/Requirement.java" to setOf(
-                    createSnippet(
-                        3,
-                        MatchType.PARTIAL,
-                        "pkg:github/vdurmont/semver4j@3.1.0",
-                        "MIT",
-                        "com/vdurmont/semver4j/Requirement.java"
-                    )
-                )
             )
             val localFile = ((1..24) + (45..675)).toPolymorphicList()
             val remoteFile = (1..655).toPolymorphicList()

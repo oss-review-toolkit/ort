@@ -26,6 +26,8 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldStartWith
 
+import kotlinx.coroutines.flow.flowOf
+
 import org.ossreviewtoolkit.clients.fossid.model.result.LicenseCategory
 import org.ossreviewtoolkit.clients.fossid.model.result.MatchType
 import org.ossreviewtoolkit.clients.fossid.model.result.Snippet
@@ -150,5 +152,5 @@ private fun createSnippet(license: String): RawResults {
         null,
         null
     )
-    return RawResults(emptyList(), emptyList(), emptyList(), emptyList(), mapOf(FILE_PATH to setOf(snippet)))
+    return RawResults(emptyList(), emptyList(), emptyList(), emptyList(), flowOf(FILE_PATH to setOf(snippet)))
 }
