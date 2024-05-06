@@ -190,7 +190,7 @@ tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
     line-height: 1.3em;
 }
 
-.ort-table-issues, .ort-table-rule-violations {
+.ort-table-issues, .ort-table-rule-violations, .ort-table-vulnerabilities {
     background: transparent;
     border-bottom: 0px;
 }
