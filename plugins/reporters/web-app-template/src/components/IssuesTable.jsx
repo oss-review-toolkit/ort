@@ -40,7 +40,7 @@ import ResolutionTable from './ResolutionTable';
 import ScopeExcludesTable from './ScopeExcludesTable';
 import { getColumnSearchProps } from './Shared';
 
-// Generates the HTML to display violations as a Table
+// Generates the HTML to display issues as a Table
 class IssuesTable extends React.Component {
     render() {
         const {

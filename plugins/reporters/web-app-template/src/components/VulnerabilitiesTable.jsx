@@ -283,7 +283,7 @@ class VulnerabilitiesTable extends React.Component {
 
         return (
             <Table
-                className="ort-table-rule-violations"
+                className="ort-table-vulnerabilities"
                 columns={columns}
                 dataSource={vulnerabilities}
                 rowKey="key"
@@ -364,7 +364,7 @@ class VulnerabilitiesTable extends React.Component {
                     }
                 }}
                 locale={{
-                    emptyText: 'No violations'
+                    emptyText: 'No vulnerabilities'
                 }}
                 pagination={
                     {
@@ -374,7 +374,7 @@ class VulnerabilitiesTable extends React.Component {
                         position: 'bottom',
                         showQuickJumper: true,
                         showSizeChanger: true,
-                        showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} violations`
+                        showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} vulnerabilities`
                     }
                 }
                 onChange={onChange}
