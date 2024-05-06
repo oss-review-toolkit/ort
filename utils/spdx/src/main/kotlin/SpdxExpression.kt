@@ -411,7 +411,7 @@ class SpdxLicenseWithExceptionExpression(
     val exception: String
 ) : SpdxSingleLicenseExpression() {
     companion object {
-        private val EXCEPTION_STRING_PATTERN = Regex("\\bexception\\b", RegexOption.IGNORE_CASE)
+        private val EXCEPTION_STRING_PATTERN = Regex("\\b(exception|additional-terms)\\b", RegexOption.IGNORE_CASE)
 
         /**
          * Parse a string into an [SpdxLicenseWithExceptionExpression]. Throws an [SpdxException] if the string cannot
