@@ -128,7 +128,7 @@ private fun getProjectTable(input: ReporterInput, project: Project): ProjectTabl
     val scopesForId = input.ortResult.getScopesForDependencies(project)
     val ids = input.ortResult.dependencyNavigator.projectDependencies(project) + project.id
 
-    val tableRows = ids.map { id ->
+    val rows = ids.map { id ->
         val resolvedLicenseInfo = input.licenseInfoResolver.resolveLicenseInfo(id)
 
         val concludedLicense = resolvedLicenseInfo.licenseInfo.concludedLicenseInfo.concludedLicense
@@ -167,7 +167,7 @@ private fun getProjectTable(input: ReporterInput, project: Project): ProjectTabl
     }
 
     return ProjectTable(
-        rows = tableRows.sortedWith(compareByDescending<Row> { it.id == project.id }.thenBy { it.id }),
+        rows = rows.sortedWith(compareByDescending<Row> { it.id == project.id }.thenBy { it.id }),
         fullDefinitionFilePath = input.ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(project),
         pathExcludes = input.ortResult.getExcludes().findPathExcludes(project, input.ortResult)
     )
