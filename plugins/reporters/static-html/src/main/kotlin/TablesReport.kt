@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.plugins.reporters.statichtml
 
-import java.util.SortedMap
-
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Project
@@ -152,7 +150,7 @@ internal data class ProjectTable(
         /**
          * The scopes the package is used in.
          */
-        val scopes: SortedMap<String, List<ScopeExclude>>,
+        val scopes: List<Scope>,
 
         /**
          * The concluded license of the package.
@@ -184,6 +182,18 @@ internal data class ProjectTable(
          * All scan issues related to this package.
          */
         val scanIssues: List<TablesReportIssue>
+    )
+
+    data class Scope(
+        /**
+         * The name of the scope.
+         */
+        val name: String,
+
+        /**
+         * The excludes matching this scope.
+         */
+        val excludes: List<ScopeExclude>
     )
 }
 

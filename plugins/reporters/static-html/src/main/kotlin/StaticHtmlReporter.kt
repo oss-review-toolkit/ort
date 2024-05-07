@@ -454,7 +454,7 @@ class StaticHtmlReporter : Reporter {
     private fun TBODY.projectRow(projectId: String, rowIndex: Int, row: ProjectTable.Row) {
         // Only mark the row as excluded if all scopes the dependency appears in are excluded.
         val rowExcludedClass =
-            if (row.scopes.isNotEmpty() && row.scopes.all { it.value.isNotEmpty() }) "ort-excluded" else ""
+            if (row.scopes.isNotEmpty() && row.scopes.all { it.excludes.isNotEmpty() }) "ort-excluded" else ""
 
         val cssClass = when {
             row.analyzerIssues.containsUnresolved() || row.scanIssues.containsUnresolved() -> "ort-error"
@@ -477,20 +477,19 @@ class StaticHtmlReporter : Reporter {
             td {
                 if (row.scopes.isNotEmpty()) {
                     ul {
-                        row.scopes.entries.sortedWith(SCOPE_EXCLUDE_LIST_COMPARATOR)
-                            .forEach { (scopeName, scopeExcludes) ->
-                                val excludedClass = if (scopeExcludes.isNotEmpty()) "ort-excluded" else ""
-                                li(excludedClass) {
-                                    +scopeName
-                                    if (scopeExcludes.isNotEmpty()) {
-                                        +" "
-                                        div("ort-reason") {
-                                            +"Excluded: "
-                                            +scopeExcludes.joinToString { it.description }
-                                        }
+                        row.scopes.forEach { scope ->
+                            val excludedClass = if (scope.excludes.isNotEmpty()) "ort-excluded" else ""
+                            li(excludedClass) {
+                                +scope.name
+                                if (scope.excludes.isNotEmpty()) {
+                                    +" "
+                                    div("ort-reason") {
+                                        +"Excluded: "
+                                        +scope.excludes.joinToString { it.description }
                                     }
                                 }
                             }
+                        }
                     }
                 }
             }
@@ -705,10 +704,6 @@ private fun ResolvedLicenseLocation.permalink(id: Identifier): String? {
 
     return null
 }
-
-private val SCOPE_EXCLUDE_LIST_COMPARATOR = compareBy<Map.Entry<String, List<ScopeExclude>>>(
-    { it.value.isNotEmpty() }, { it.key }
-)
 
 private val PathExclude.description: String get() = joinNonBlank(reason.toString(), comment)
 
