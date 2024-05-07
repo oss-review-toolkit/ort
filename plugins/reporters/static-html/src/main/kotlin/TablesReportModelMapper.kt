@@ -167,7 +167,7 @@ private fun getProjectTable(input: ReporterInput, project: Project): ProjectTabl
     }
 
     return ProjectTable(
-        rows = tableRows.sortedBy { it.id },
+        rows = tableRows.sortedWith(compareByDescending<Row> { it.id == project.id }.thenBy { it.id }),
         fullDefinitionFilePath = input.ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(project),
         pathExcludes = input.ortResult.getExcludes().findPathExcludes(project, input.ortResult)
     )
