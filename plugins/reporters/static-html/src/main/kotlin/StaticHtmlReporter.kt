@@ -35,7 +35,6 @@ import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageProvider
-import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
@@ -162,8 +161,8 @@ class StaticHtmlReporter : Reporter {
                         issueTable(tablesReport.advisorIssueSummary)
                     }
 
-                    tablesReport.projectDependencies.forEach { (project, table) ->
-                        projectTable(project, table)
+                    tablesReport.projectDependencies.forEach { (_, table) ->
+                        projectTable(table)
                     }
 
                     repositoryConfiguration(tablesReport.config)
@@ -386,12 +385,12 @@ class StaticHtmlReporter : Reporter {
         }
     }
 
-    private fun DIV.projectTable(project: Project, table: ProjectTable) {
+    private fun DIV.projectTable(table: ProjectTable) {
         val excludedClass = "ort-excluded".takeIf { table.isExcluded() }.orEmpty()
 
         h2 {
-            id = project.id.toCoordinates()
-            +"${project.id.toCoordinates()} (${table.fullDefinitionFilePath})"
+            id = table.id.toCoordinates()
+            +"${table.id.toCoordinates()} (${table.fullDefinitionFilePath})"
         }
 
         if (table.isExcluded()) {
@@ -405,7 +404,7 @@ class StaticHtmlReporter : Reporter {
             }
         }
 
-        project.vcsProcessed.let { vcsInfo ->
+        table.vcs.let { vcsInfo ->
             h3(excludedClass) { +"VCS Information" }
 
             table("ort-report-labels $excludedClass") {
@@ -446,7 +445,7 @@ class StaticHtmlReporter : Reporter {
 
             tbody {
                 table.rows.forEachIndexed { rowIndex, row ->
-                    projectRow(project.id.toCoordinates(), rowIndex + 1, row)
+                    projectRow(table.id.toCoordinates(), rowIndex + 1, row)
                 }
             }
         }

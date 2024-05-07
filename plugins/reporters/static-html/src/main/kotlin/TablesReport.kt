@@ -106,6 +106,16 @@ internal data class IssueTable(
 
 internal data class ProjectTable(
     /**
+     * The identifier of the project.
+     */
+    val id: Identifier,
+
+    /**
+     * The (processed) VCS info of the project.
+     */
+    val vcs: VcsInfo,
+
+    /**
      * The dependencies of this project.
      */
     val rows: List<Row>,
