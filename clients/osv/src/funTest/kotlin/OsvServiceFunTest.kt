@@ -109,6 +109,7 @@ class OsvServiceFunTest : StringSpec({
                     "GHSA-fqh9-2qgg-h84h",
                     "GHSA-g3rq-g295-4j3m",
                     "GHSA-h5c8-rqwp-cp95",
+                    "GHSA-h75v-3vvj-5mfj",
                     "GHSA-hj2j-77xm-mc5v",
                     "PYSEC-2014-8",
                     "PYSEC-2014-82",
