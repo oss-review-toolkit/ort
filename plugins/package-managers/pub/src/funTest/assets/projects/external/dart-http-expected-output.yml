@@ -76,7 +76,7 @@ project:
           dependencies:
           - id: "Pub::collection:1.18.0"
           - id: "Pub::meta:1.14.0"
-    - id: "Pub::test:1.25.4"
+    - id: "Pub::test:1.25.5"
       dependencies:
       - id: "Pub::analyzer:6.4.1"
         dependencies:
@@ -168,7 +168,7 @@ project:
             - id: "Pub::path:1.9.0"
             - id: "Pub::term_glyph:1.2.1"
       - id: "Pub::collection:1.18.0"
-      - id: "Pub::coverage:1.7.2"
+      - id: "Pub::coverage:1.8.0"
         dependencies:
         - id: "Pub::args:2.5.0"
         - id: "Pub::logging:1.2.0"
@@ -471,7 +471,7 @@ project:
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::meta:1.14.0"
-      - id: "Pub::shelf_web_socket:1.0.4"
+      - id: "Pub::shelf_web_socket:2.0.0"
         dependencies:
         - id: "Pub::shelf:1.4.1"
           dependencies:
@@ -514,7 +514,7 @@ project:
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::meta:1.14.0"
-        - id: "Pub::web_socket_channel:2.4.5"
+        - id: "Pub::web_socket_channel:3.0.0"
           dependencies:
           - id: "Pub::async:2.11.0"
             dependencies:
@@ -532,6 +532,9 @@ project:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::meta:1.14.0"
           - id: "Pub::web:0.5.1"
+          - id: "Pub::web_socket:0.1.3"
+            dependencies:
+            - id: "Pub::web:0.5.1"
       - id: "Pub::source_span:1.10.0"
         dependencies:
         - id: "Pub::collection:1.18.0"
@@ -683,7 +686,7 @@ project:
               - id: "Pub::path:1.9.0"
               - id: "Pub::term_glyph:1.2.1"
         - id: "Pub::collection:1.18.0"
-        - id: "Pub::coverage:1.7.2"
+        - id: "Pub::coverage:1.8.0"
           dependencies:
           - id: "Pub::args:2.5.0"
           - id: "Pub::logging:1.2.0"
@@ -850,7 +853,7 @@ project:
       - id: "Pub::typed_data:1.3.2"
         dependencies:
         - id: "Pub::collection:1.18.0"
-      - id: "Pub::web_socket_channel:2.4.5"
+      - id: "Pub::web_socket_channel:3.0.0"
         dependencies:
         - id: "Pub::async:2.11.0"
           dependencies:
@@ -868,6 +871,9 @@ project:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::meta:1.14.0"
         - id: "Pub::web:0.5.1"
+        - id: "Pub::web_socket:0.1.3"
+          dependencies:
+          - id: "Pub::web:0.5.1"
       - id: "Pub::webkit_inspection_protocol:1.2.1"
         dependencies:
         - id: "Pub::logging:1.2.0"
@@ -1073,8 +1079,8 @@ packages:
     url: "https://github.com/dart-lang/convert.git"
     revision: ""
     path: ""
-- id: "Pub::coverage:1.7.2"
-  purl: "pkg:pub/coverage@1.7.2"
+- id: "Pub::coverage:1.8.0"
+  purl: "pkg:pub/coverage@1.8.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "Coverage data manipulation and formatting"
@@ -1085,9 +1091,9 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://pub.dev/packages/coverage/versions/1.7.2.tar.gz"
+    url: "https://pub.dev/packages/coverage/versions/1.8.0.tar.gz"
     hash:
-      value: "8acabb8306b57a409bf4c83522065672ee13179297a6bb0cb9ead73948df7c76"
+      value: "3945034e86ea203af7a056d98e98e42a5518fff200d6e8e6647e1886b07e936e"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
@@ -1661,8 +1667,8 @@ packages:
     url: "https://github.com/dart-lang/shelf.git"
     revision: ""
     path: "pkgs/shelf_static"
-- id: "Pub::shelf_web_socket:1.0.4"
-  purl: "pkg:pub/shelf_web_socket@1.0.4"
+- id: "Pub::shelf_web_socket:2.0.0"
+  purl: "pkg:pub/shelf_web_socket@2.0.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "A shelf handler that wires up a listener for every connection."
@@ -1673,9 +1679,9 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://pub.dev/packages/shelf_web_socket/versions/1.0.4.tar.gz"
+    url: "https://pub.dev/packages/shelf_web_socket/versions/2.0.0.tar.gz"
     hash:
-      value: "9ca081be41c60190ebcb4766b2486a7d50261db7bd0f5d9615f2d653637a84c1"
+      value: "073c147238594ecd0d193f3456a5fe91c4b0abbcc68bf5cd95b36c4e194ac611"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
@@ -1870,8 +1876,8 @@ packages:
     url: "https://github.com/dart-lang/term_glyph.git"
     revision: ""
     path: ""
-- id: "Pub::test:1.25.4"
-  purl: "pkg:pub/test@1.25.4"
+- id: "Pub::test:1.25.5"
+  purl: "pkg:pub/test@1.25.5"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "A full featured library for writing and running Dart tests across\
@@ -1883,9 +1889,9 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://pub.dev/packages/test/versions/1.25.4.tar.gz"
+    url: "https://pub.dev/packages/test/versions/1.25.5.tar.gz"
     hash:
-      value: "d72b538180efcf8413cd2e4e6fcc7ae99c7712e0909eb9223f9da6e6d0ef715f"
+      value: "d11b55850c68c1f6c0cf00eabded4e66c4043feaf6c0d7ce4a36785137df6331"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
@@ -2055,8 +2061,35 @@ packages:
     url: "https://github.com/dart-lang/web.git"
     revision: ""
     path: ""
-- id: "Pub::web_socket_channel:2.4.5"
-  purl: "pkg:pub/web_socket_channel@2.4.5"
+- id: "Pub::web_socket:0.1.3"
+  purl: "pkg:pub/web_socket@0.1.3"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "Any easy-to-use library for communicating with WebSockets that has\
+    \ multiple implementations."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://pub.dev/packages/web_socket/versions/0.1.3.tar.gz"
+    hash:
+      value: "bfe704c186c6e32a46f6607f94d079cd0b747b9a489fceeecc93cd3adb98edd5"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/http.git"
+    revision: ""
+    path: "pkgs/web_socket"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/http.git"
+    revision: ""
+    path: "pkgs/web_socket"
+- id: "Pub::web_socket_channel:3.0.0"
+  purl: "pkg:pub/web_socket_channel@3.0.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "StreamChannel wrappers for WebSockets. Provides a cross-platform WebSocketChannel\
@@ -2069,9 +2102,9 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://pub.dev/packages/web_socket_channel/versions/2.4.5.tar.gz"
+    url: "https://pub.dev/packages/web_socket_channel/versions/3.0.0.tar.gz"
     hash:
-      value: "58c6666b342a38816b2e7e50ed0f1e261959630becd4c879c4f26bfa14aa5a42"
+      value: "a2d56211ee4d35d9b344d9d4ce60f362e4f5d1aafb988302906bd732bc731276"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
