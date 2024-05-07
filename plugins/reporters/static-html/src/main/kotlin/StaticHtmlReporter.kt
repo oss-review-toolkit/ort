@@ -161,7 +161,7 @@ class StaticHtmlReporter : Reporter {
                         issueTable(tablesReport.advisorIssueSummary)
                     }
 
-                    tablesReport.projectDependencies.forEach { (_, table) ->
+                    tablesReport.projectDependencies.forEach { table ->
                         projectTable(table)
                     }
 
@@ -232,10 +232,10 @@ class StaticHtmlReporter : Reporter {
                 }
             }
 
-            tablesReport.projectDependencies.forEach { (project, projectTable) ->
+            tablesReport.projectDependencies.forEach { projectTable ->
                 li {
-                    a("#${project.id.toCoordinates()}") {
-                        +project.id.toCoordinates()
+                    a("#${projectTable.id.toCoordinates()}") {
+                        +projectTable.id.toCoordinates()
 
                         if (projectTable.isExcluded()) {
                             projectTable.pathExcludes.forEach { exclude ->

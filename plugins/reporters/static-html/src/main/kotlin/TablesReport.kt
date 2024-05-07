@@ -69,7 +69,7 @@ internal data class TablesReport(
     /**
      * The [ProjectTable]s containing the dependencies for each [Project].
      */
-    val projectDependencies: SortedMap<Project, ProjectTable>,
+    val projectDependencies: List<ProjectTable>,
 
     /**
      * The labels from [OrtResult.labels].

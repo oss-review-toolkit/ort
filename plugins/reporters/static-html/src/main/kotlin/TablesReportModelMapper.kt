@@ -44,8 +44,8 @@ internal object TablesReportModelMapper {
             .sortedWith(VIOLATION_COMPARATOR)
 
         val projectTables = input.ortResult.getProjects()
-            .associateWith { getProjectTable(input, it) }
-            .toSortedMap(compareBy { it.id })
+            .map { getProjectTable(input, it) }
+            .sortedBy { it.id }
 
         return TablesReport(
             input.ortResult.repository.vcsProcessed,
