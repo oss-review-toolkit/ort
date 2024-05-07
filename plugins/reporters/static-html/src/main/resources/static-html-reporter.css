@@ -101,10 +101,6 @@ table.ort-excluded tr.ort-excluded td li.ort-excluded {
     width: 100%;
 }
 
-.ort-report-table tr:hover {
-    background: rgba(34, 36, 38, .15);
-}
-
 .ort-report-table tr.ort-error {
     background: #fff6f6;
     color: #9f3a38;
