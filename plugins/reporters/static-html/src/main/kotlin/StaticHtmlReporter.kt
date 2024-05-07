@@ -445,8 +445,8 @@ class StaticHtmlReporter : Reporter {
             }
 
             tbody {
-                table.rows.forEachIndexed { rowIndex, pkg ->
-                    projectRow(project.id.toCoordinates(), rowIndex + 1, pkg)
+                table.rows.forEachIndexed { rowIndex, row ->
+                    projectRow(project.id.toCoordinates(), rowIndex + 1, row)
                 }
             }
         }
