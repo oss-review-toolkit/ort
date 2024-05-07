@@ -146,13 +146,17 @@ private fun getProjectTable(input: ReporterInput, project: Project): ProjectTabl
         val analyzerIssues = projectIssuesForId[id].orEmpty() + input.ortResult.analyzer?.result?.issues?.get(id)
             .orEmpty()
 
+        val scopes = scopesForId[id].orEmpty().map { (name, excludes) ->
+            ProjectTable.Scope(name, excludes)
+        }.sortedWith(compareBy({ it.excludes.isNotEmpty() }, { it.name }))
+
         val pkg = input.ortResult.getPackageOrProject(id)?.metadata
 
         Row(
             id = id,
             sourceArtifact = pkg?.sourceArtifact.orEmpty(),
             vcsInfo = pkg?.vcsProcessed.orEmpty(),
-            scopes = scopesForId[id].orEmpty().toSortedMap(),
+            scopes = scopes,
             concludedLicense = concludedLicense,
             declaredLicenses = declaredLicenses,
             detectedLicenses = detectedLicenses,
