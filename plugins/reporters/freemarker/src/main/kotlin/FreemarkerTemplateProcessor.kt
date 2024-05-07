@@ -218,10 +218,13 @@ class FreemarkerTemplateProcessor(
          * all.
          */
         @Suppress("UNUSED") // This function is used in the templates.
-        fun filterForCategory(licenses: Collection<ResolvedLicense>, category: String): List<ResolvedLicense> =
-            licenses.filter { resolvedLicense ->
-                input.licenseClassifications[resolvedLicense.license]?.contains(category) != false
+        fun filterForCategory(licenses: Collection<ResolvedLicense>, category: String): List<ResolvedLicense> {
+            val licensesInCategory = input.licenseClassifications.getLicenses(category)
+
+            return licenses.filter { resolvedLicense ->
+                resolvedLicense.license in licensesInCategory
             }
+        }
 
         /**
          * Merge the [ResolvedLicense]s of multiple [models] and filter them using [licenseView] and

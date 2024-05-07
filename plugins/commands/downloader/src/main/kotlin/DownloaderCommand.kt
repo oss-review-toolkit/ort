@@ -58,7 +58,6 @@ import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.model.licenses.LicenseCategorization
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.licenses.LicenseView
@@ -273,7 +272,6 @@ class DownloaderCommand : OrtCommand(
         if (includedLicenseCategories.isNotEmpty() && licenseClassificationsFile.isFile) {
             val originalCount = packages.size
 
-            val licenseCategorizations = licenseClassificationsFile.readValue<LicenseClassifications>().categorizations
             val licenseInfoResolver = ortResult.createLicenseInfoResolver()
 
             val isModified = packages.retainAll { pkg ->
@@ -281,7 +279,7 @@ class DownloaderCommand : OrtCommand(
                 // DownloaderConfiguration's includedLicenseCategories.
                 getLicenseCategoriesForPackage(
                     pkg,
-                    licenseCategorizations,
+                    EmptyLicenseClassifications(),
                     licenseInfoResolver,
                     ortResult.getRepositoryLicenseChoices(),
                     ortResult.getPackageLicenseChoices(pkg.id)
@@ -370,7 +368,7 @@ class DownloaderCommand : OrtCommand(
      */
     private fun getLicenseCategoriesForPackage(
         pkg: Package,
-        licenseCategorizations: List<LicenseCategorization>,
+        licenseClassifications: LicenseClassifications,
         licenseInfoResolver: LicenseInfoResolver,
         vararg licenseChoices: List<SpdxLicenseChoice>
     ): Set<String> {
@@ -380,10 +378,9 @@ class DownloaderCommand : OrtCommand(
             *licenseChoices
         )?.decompose().orEmpty()
 
-        return licenseCategorizations
-            .filter { it.id in effectiveLicenses }
-            .flatMap { it.categories }
-            .toSet()
+        return effectiveLicenses.flatMapTo(mutableSetOf()) { license ->
+            licenseClassifications.getCategories(license).map { it.name }
+        }
     }
 
     private fun downloadFromProjectUrl(projectUrl: String, failureMessages: MutableList<String>) {

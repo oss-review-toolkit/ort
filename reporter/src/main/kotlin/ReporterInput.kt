@@ -25,6 +25,7 @@ import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.model.licenses.DefaultLicenseInfoProvider
+import org.ossreviewtoolkit.model.licenses.EmptyLicenseClassifications
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.reporter.StatisticsCalculator.getStatistics
@@ -68,7 +69,7 @@ data class ReporterInput(
      * [LicenseClassifications], can be used to handle licenses based on the user's configuration, for example to
      * determine which licenses to include in a notice file.
      */
-    val licenseClassifications: LicenseClassifications = LicenseClassifications(),
+    val licenseClassifications: LicenseClassifications = EmptyLicenseClassifications(),
 
     /**
      * A [HowToFixTextProvider], can be used to integrate how to fix texts for [Issue]s into reports.

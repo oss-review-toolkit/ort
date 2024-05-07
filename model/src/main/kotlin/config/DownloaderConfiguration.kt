@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.model.config
 
 import org.ossreviewtoolkit.model.SourceCodeOrigin
-import org.ossreviewtoolkit.model.licenses.LicenseCategory
 import org.ossreviewtoolkit.model.utils.requireNotEmptyNoDuplicates
 
 data class DownloaderConfiguration(

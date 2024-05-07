@@ -26,7 +26,6 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.model.licenses.LicenseCategorization
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.common.expandTilde
@@ -61,21 +60,26 @@ internal class ListLicenseCategoriesCommand : CliktCommand(
 
     private fun LicenseClassifications.summary(): String =
         buildString {
-            appendLine("Found ${categorizations.size} licenses categorized as:\n")
+            appendLine("Found ${getAllLicenses().size} licenses categorized as:\n")
 
-            categorizations.groupByCategory().toList().sortedBy { it.first }.forEach { (category, licenses) ->
-                appendLine("  $category (${licenses.size})")
+            getAllCategories().sortedBy { it.name }.forEach { category ->
+                val licenses = getLicenses(category.name)
+                appendLine("  ${category.name} (${licenses.size})")
             }
         }
 
     private fun LicenseClassifications.licensesByCategory(): String =
         buildString {
-            categorizations.groupByCategory().forEach { (category, licenses) ->
-                appendLine("$category (${licenses.size}):")
+            getAllCategories().sortedBy { it.name }.forEach { category ->
+                val licenses = getLicenses(category.name)
+                appendLine("${category.name} (${licenses.size}):")
                 appendLine()
 
-                licenses.sortedBy { it.id.toString() }.forEach { license ->
-                    appendLine("  ${license.description(category)}")
+                licenses.sortedBy { it.toString() }.forEach { license ->
+                    append("  $license")
+                    val otherCategories = getCategories(license).filterNot { it.name == category.name }
+                    if (otherCategories.isNotEmpty()) append(": [${otherCategories.joinToString()}]")
+                    appendLine()
                 }
                 appendLine()
             }
@@ -83,22 +87,8 @@ internal class ListLicenseCategoriesCommand : CliktCommand(
 
     private fun LicenseClassifications.licensesList(): String =
         buildString {
-            categorizations.sortedBy { it.id.toString() }.forEach { license ->
-                appendLine(license.description())
+            getAllLicenses().sortedBy { it.toString() }.forEach { license ->
+                appendLine("$license: [${getCategories(license).joinToString { it.name }}]")
             }
         }
-
-    private fun LicenseCategorization.description(ignoreCategory: String? = null): String {
-        val filteredCategories = categories.filterNot { it == ignoreCategory }
-
-        return buildString {
-            append(id)
-            if (filteredCategories.isNotEmpty()) append(": [${filteredCategories.joinToString()}]")
-        }
-    }
-
-    private fun Collection<LicenseCategorization>.groupByCategory(): Map<String, List<LicenseCategorization>> =
-        flatMap { license ->
-            license.categories.map { category -> license to category }
-        }.groupBy({ it.second }, { it.first })
 }
