@@ -54,22 +54,22 @@ internal data class TablesReport(
     /**
      * An [IssueTable] containing all analyzer issues.
      */
-    val analyzerIssueSummary: IssueTable,
+    val analyzerIssues: IssueTable,
 
     /**
      * An [IssueTable] containing all scanner issues.
      */
-    val scannerIssueSummary: IssueTable,
+    val scannerIssues: IssueTable,
 
     /**
      * An [IssueTable] containing all advisor issues.
      */
-    val advisorIssueSummary: IssueTable,
+    val advisorIssues: IssueTable,
 
     /**
      * The [ProjectTable]s containing the dependencies for each [Project].
      */
-    val projectDependencies: List<ProjectTable>,
+    val projects: List<ProjectTable>,
 
     /**
      * The labels from [OrtResult.labels].
