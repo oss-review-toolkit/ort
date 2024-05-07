@@ -149,19 +149,19 @@ class StaticHtmlReporter : Reporter {
                         ruleViolationTable(it)
                     }
 
-                    if (tablesReport.analyzerIssueSummary.rows.isNotEmpty()) {
-                        issueTable(tablesReport.analyzerIssueSummary)
+                    if (tablesReport.analyzerIssues.rows.isNotEmpty()) {
+                        issueTable(tablesReport.analyzerIssues)
                     }
 
-                    if (tablesReport.scannerIssueSummary.rows.isNotEmpty()) {
-                        issueTable(tablesReport.scannerIssueSummary)
+                    if (tablesReport.scannerIssues.rows.isNotEmpty()) {
+                        issueTable(tablesReport.scannerIssues)
                     }
 
-                    if (tablesReport.advisorIssueSummary.rows.isNotEmpty()) {
-                        issueTable(tablesReport.advisorIssueSummary)
+                    if (tablesReport.advisorIssues.rows.isNotEmpty()) {
+                        issueTable(tablesReport.advisorIssues)
                     }
 
-                    tablesReport.projectDependencies.forEach { table ->
+                    tablesReport.projects.forEach { table ->
                         projectTable(table)
                     }
 
@@ -208,31 +208,31 @@ class StaticHtmlReporter : Reporter {
                 }
             }
 
-            if (tablesReport.analyzerIssueSummary.rows.isNotEmpty()) {
+            if (tablesReport.analyzerIssues.rows.isNotEmpty()) {
                 li {
-                    a("#${tablesReport.analyzerIssueSummary.id()}") {
-                        +tablesReport.analyzerIssueSummary.title()
+                    a("#${tablesReport.analyzerIssues.id()}") {
+                        +tablesReport.analyzerIssues.title()
                     }
                 }
             }
 
-            if (tablesReport.scannerIssueSummary.rows.isNotEmpty()) {
+            if (tablesReport.scannerIssues.rows.isNotEmpty()) {
                 li {
-                    a("#${tablesReport.scannerIssueSummary.id()}") {
-                        +tablesReport.scannerIssueSummary.title()
+                    a("#${tablesReport.scannerIssues.id()}") {
+                        +tablesReport.scannerIssues.title()
                     }
                 }
             }
 
-            if (tablesReport.advisorIssueSummary.rows.isNotEmpty()) {
+            if (tablesReport.advisorIssues.rows.isNotEmpty()) {
                 li {
-                    a("#${tablesReport.advisorIssueSummary.id()}") {
-                        +tablesReport.advisorIssueSummary.title()
+                    a("#${tablesReport.advisorIssues.id()}") {
+                        +tablesReport.advisorIssues.title()
                     }
                 }
             }
 
-            tablesReport.projectDependencies.forEach { projectTable ->
+            tablesReport.projects.forEach { projectTable ->
                 li {
                     a("#${projectTable.id.toCoordinates()}") {
                         +projectTable.id.toCoordinates()
