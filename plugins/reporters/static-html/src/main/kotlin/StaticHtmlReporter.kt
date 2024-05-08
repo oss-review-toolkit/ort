@@ -265,7 +265,7 @@ class StaticHtmlReporter : Reporter {
         if (ruleViolations.isEmpty()) {
             +"No rule violations found."
         } else {
-            table("ort-report-table ort-violations") {
+            table("ort-report-table ort-report-rule-violation-table") {
                 thead {
                     tr {
                         th { +"#" }
@@ -432,7 +432,7 @@ class StaticHtmlReporter : Reporter {
 
         h3(excludedClass) { +"Packages" }
 
-        table("ort-report-table ort-packages $excludedClass") {
+        table("ort-report-table ort-report-project-table $excludedClass") {
             thead {
                 tr {
                     th { +"#" }
