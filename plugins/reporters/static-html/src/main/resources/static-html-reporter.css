@@ -55,13 +55,17 @@ ul {
     width: 110px;
 }
 
-.ort-report-labels {
+/*
+ * Table for key value pairs with a simple styling. Used for the VCS infos of projects and for the ORT result labels.
+ */
+
+.ort-report-key-value-table {
     font-size: 12px;
     border-spacing: 0;
     table-layout: fixed;
 }
 
-.ort-report-labels td {
+.ort-report-key-value-table td {
     border-bottom: 1px solid rgba(34, 36, 38, .15);
     overflow: hidden;
     padding: 5px 20px 5px 0px;
@@ -69,7 +73,7 @@ ul {
     word-wrap: break-word;
 }
 
-.ort-report-labels tr:first-child td {
+.ort-report-key-value-table tr:first-child td {
     border-top: 1px solid rgba(34, 36, 38, .15);
 }
 
