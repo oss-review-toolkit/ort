@@ -116,7 +116,8 @@ class StaticHtmlReporter : Reporter {
                 div {
                     id = "report-container"
 
-                    div("ort-report-label") {
+                    div {
+                        id = "ort-report-top-label"
                         +"Scan Report"
                     }
 
