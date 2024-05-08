@@ -32,6 +32,10 @@ ul {
     padding: 0;
 }
 
+/*
+ * The root tag which contains everything.
+ */
+
 #report-container {
     background-color: #fff;
     border: 1px solid rgba(34, 36, 38, .15);
@@ -85,29 +89,9 @@ ul {
     border-top: 1px solid rgba(34, 36, 38, .15);
 }
 
-.excluded {
-    filter: opacity(50%);
-}
-
-.reason {
-    border-radius: 3px;
-    background: #EEE;
-    padding: 2px;
-    font-size: 12px;
-    display: inline;
-}
-
-table.excluded tr.excluded {
-    filter: opacity(100%);
-}
-
-table tr.excluded td li.excluded {
-    filter: opacity(100%);
-}
-
-table.excluded tr.excluded td li.excluded {
-    filter: opacity(100%);
-}
+/*
+ * The base class for the main top level tables for violations, issues and projects.
+ */
 
 .report-table {
     border-spacing: 0;
@@ -115,33 +99,6 @@ table.excluded tr.excluded td li.excluded {
     table-layout: fixed;
     text-overflow: ellipsis;
     width: 100%;
-}
-
-.report-table tr.error {
-    background: #fff6f6;
-    color: #9f3a38;
-}
-
-.report-table tr.warning {
-    background: #fffaf3;
-    color: #573a08;
-}
-
-.report-table tr.hint {
-    background: #f7f5ff;
-    color: #1c0859;
-}
-
-.report-table tr:last-child td {
-    border-bottom: 1px solid rgba(34, 36, 38, .15);
-}
-
-.report-table tr:last-child td:first-child {
-    border-bottom-left-radius: .28rem;
-}
-
-.report-table tr:last-child td:last-child {
-    border-bottom-right-radius: .28rem;
 }
 
 .report-table th {
@@ -169,6 +126,18 @@ table.excluded tr.excluded td li.excluded {
     border-top: 1px solid rgba(34, 36, 38, .15);
 }
 
+.report-table tr:last-child td {
+    border-bottom: 1px solid rgba(34, 36, 38, .15);
+}
+
+.report-table tr:last-child td:first-child {
+    border-bottom-left-radius: .28rem;
+}
+
+.report-table tr:last-child td:last-child {
+    border-bottom-right-radius: .28rem;
+}
+
 .report-table td {
     border-left: 1px solid rgba(34, 36, 38, .15);
     border-top: 1px solid rgba(34, 36, 38, .15);
@@ -183,10 +152,41 @@ table.excluded tr.excluded td li.excluded {
     border-right: 1px solid rgba(34, 36, 38, .15);
 }
 
+.report-table li.resolved {
+    color: #2c662d;
+}
+
+.report-table details {
+    overflow: scroll;
+}
+
+.report-table tr.error {
+    background: #fff6f6;
+    color: #9f3a38;
+}
+
+.report-table tr.warning {
+    background: #fffaf3;
+    color: #573a08;
+}
+
+.report-table tr.hint {
+    background: #f7f5ff;
+    color: #1c0859;
+}
+
+/**
+ * Rule violation table, which specializes .report-table.
+ */
+
 .report-rule-violation-table tr.resolved {
     background: #fcfff5;
     color: #2c662d;
 }
+
+/**
+ * Project table, which specializes .report-table.
+ */
 
 .report-project-table tr.error {
     color: black;
@@ -197,13 +197,37 @@ table.excluded tr.excluded td li.excluded {
     color: #9f3a38;
 }
 
-.report-table li.resolved {
-    color: #2c662d;
+/*
+ * Excluded state.
+ */
+
+.excluded {
+    filter: opacity(50%);
 }
 
-.report-table details {
-    overflow: scroll;
+.reason {
+    border-radius: 3px;
+    background: #EEE;
+    padding: 2px;
+    font-size: 12px;
+    display: inline;
 }
+
+table.excluded tr.excluded {
+    filter: opacity(100%);
+}
+
+table tr.excluded td li.excluded {
+    filter: opacity(100%);
+}
+
+table.excluded tr.excluded td li.excluded {
+    filter: opacity(100%);
+}
+
+/**
+ * Report table media specific styling.
+ */
 
 @media all and (max-width: 1000px) {
     .report-table th:nth-child(2), .report-table td:nth-child(2) {
