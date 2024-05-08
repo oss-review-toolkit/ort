@@ -175,17 +175,17 @@ table.ort-excluded tr.ort-excluded td li.ort-excluded {
     border-right: 1px solid rgba(34, 36, 38, .15);
 }
 
-.ort-report-table.ort-report-rule-violation-table tr.ort-resolved {
+.ort-report-rule-violation-table tr.ort-resolved {
     background: #fcfff5;
     color: #2c662d;
 }
 
-.ort-report-table.ort-report-project-table tr.ort-error {
+.ort-report-project-table tr.ort-error {
     color: black;
 }
 
-.ort-report-table.ort-report-project-table tr.ort-error td:nth-child(5),
-.ort-report-table.ort-report-project-table tr.ort-error td:nth-child(6) {
+.ort-report-project-table tr.ort-error td:nth-child(5),
+.ort-report-project-table tr.ort-error td:nth-child(6) {
     color: #9f3a38;
 }
 
