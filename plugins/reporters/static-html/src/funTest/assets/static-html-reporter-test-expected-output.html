@@ -63,13 +63,17 @@ ul {
     width: 110px;
 }
 
-.ort-report-labels {
+/*
+ * Table for key value pairs with a simple styling. Used for the VCS infos of projects and for the ORT result labels.
+ */
+
+.ort-report-key-value-table {
     font-size: 12px;
     border-spacing: 0;
     table-layout: fixed;
 }
 
-.ort-report-labels td {
+.ort-report-key-value-table td {
     border-bottom: 1px solid rgba(34, 36, 38, .15);
     overflow: hidden;
     padding: 5px 20px 5px 0px;
@@ -77,7 +81,7 @@ ul {
     word-wrap: break-word;
 }
 
-.ort-report-labels tr:first-child td {
+.ort-report-key-value-table tr:first-child td {
     border-top: 1px solid rgba(34, 36, 38, .15);
 }
 
@@ -427,7 +431,7 @@ Prism.languages.yaml={scalar:{pattern:/([\-:]\s*(?:![^\s]+)?[ \t]*[|>])[ \t]*(?:
          <h2>Project</h2>
          <div>Scanned revision master of Git repository https://github.com/oss-review-toolkit/ort.git</div>
          <h2>Labels</h2>
-         <table class="ort-report-labels">
+         <table class="ort-report-key-value-table">
             <tbody>
                <tr>
                   <td>JOB_PARAM_1</td>
@@ -811,7 +815,7 @@ Prism.languages.yaml={scalar:{pattern:/([\-:]\s*(?:![^\s]+)?[ \t]*[|>])[ \t]*(?:
             <div class="ort-reason">EXAMPLE_OF - The project is an example.</div>
          </p>
          <h3 class="ort-excluded">VCS Information</h3>
-         <table class="ort-report-labels ort-excluded">
+         <table class="ort-report-key-value-table ort-excluded">
             <tbody>
                <tr>
                   <td>Type</td>
@@ -894,7 +898,7 @@ Prism.languages.yaml={scalar:{pattern:/([\-:]\s*(?:![^\s]+)?[ \t]*[|>])[ \t]*(?:
          </table>
          <h2 id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0">Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0 (analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle)</h2>
          <h3 class="">VCS Information</h3>
-         <table class="ort-report-labels ">
+         <table class="ort-report-key-value-table ">
             <tbody>
                <tr>
                   <td>Type</td>

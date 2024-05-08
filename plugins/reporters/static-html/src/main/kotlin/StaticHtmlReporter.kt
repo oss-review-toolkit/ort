@@ -185,7 +185,7 @@ class StaticHtmlReporter : Reporter {
 
     private fun DIV.labelsTable(labels: Map<String, String>) {
         h2 { +"Labels" }
-        table("ort-report-labels") {
+        table("ort-report-key-value-table") {
             tbody { labels.forEach { (key, value) -> labelRow(key, value) } }
         }
     }
@@ -408,7 +408,7 @@ class StaticHtmlReporter : Reporter {
         table.vcs.let { vcsInfo ->
             h3(excludedClass) { +"VCS Information" }
 
-            table("ort-report-labels $excludedClass") {
+            table("ort-report-key-value-table $excludedClass") {
                 tbody {
                     tr {
                         td { +"Type" }
