@@ -117,7 +117,7 @@ class StaticHtmlReporter : Reporter {
                     id = "report-container"
 
                     div {
-                        id = "ort-report-top-label"
+                        id = "report-top-label"
                         +"Scan Report"
                     }
 
@@ -185,7 +185,7 @@ class StaticHtmlReporter : Reporter {
 
     private fun DIV.labelsTable(labels: Map<String, String>) {
         h2 { +"Labels" }
-        table("ort-report-key-value-table") {
+        table("report-key-value-table") {
             tbody { labels.forEach { (key, value) -> labelRow(key, value) } }
         }
     }
@@ -241,7 +241,7 @@ class StaticHtmlReporter : Reporter {
                         if (projectTable.isExcluded()) {
                             projectTable.pathExcludes.forEach { exclude ->
                                 +" "
-                                div("ort-reason") { +"Excluded: ${exclude.description}" }
+                                div("reason") { +"Excluded: ${exclude.description}" }
                             }
                         }
                     }
@@ -265,7 +265,7 @@ class StaticHtmlReporter : Reporter {
         if (ruleViolations.isEmpty()) {
             +"No rule violations found."
         } else {
-            table("ort-report-table ort-report-rule-violation-table") {
+            table("report-table report-rule-violation-table") {
                 thead {
                     tr {
                         th { +"#" }
@@ -287,12 +287,12 @@ class StaticHtmlReporter : Reporter {
 
     private fun TBODY.ruleViolationRow(rowIndex: Int, ruleViolation: TablesReportViolation) {
         val cssClass = if (ruleViolation.isResolved) {
-            "ort-resolved"
+            "resolved"
         } else {
             when (ruleViolation.violation.severity) {
-                Severity.ERROR -> "ort-error"
-                Severity.WARNING -> "ort-warning"
-                Severity.HINT -> "ort-hint"
+                Severity.ERROR -> "error"
+                Severity.WARNING -> "warning"
+                Severity.HINT -> "hint"
             }
         }
 
@@ -337,7 +337,7 @@ class StaticHtmlReporter : Reporter {
 
         p { +"Issues from excluded components are not shown in this summary." }
 
-        table("ort-report-table") {
+        table("report-table") {
             thead {
                 tr {
                     th { +"#" }
@@ -356,9 +356,9 @@ class StaticHtmlReporter : Reporter {
 
     private fun TBODY.issueRow(rowId: String, rowIndex: Int, row: IssueTable.Row) {
         val cssClass = when (row.issue.severity) {
-            Severity.ERROR -> "ort-error"
-            Severity.WARNING -> "ort-warning"
-            Severity.HINT -> "ort-hint"
+            Severity.ERROR -> "error"
+            Severity.WARNING -> "warning"
+            Severity.HINT -> "hint"
         }
 
         tr(cssClass) {
@@ -387,7 +387,7 @@ class StaticHtmlReporter : Reporter {
     }
 
     private fun DIV.projectTable(table: ProjectTable) {
-        val excludedClass = "ort-excluded".takeIf { table.isExcluded() }.orEmpty()
+        val excludedClass = "excluded".takeIf { table.isExcluded() }.orEmpty()
 
         h2 {
             id = table.id.toCoordinates()
@@ -401,14 +401,14 @@ class StaticHtmlReporter : Reporter {
 
         table.pathExcludes.forEach { exclude ->
             p {
-                div("ort-reason") { +exclude.description }
+                div("reason") { +exclude.description }
             }
         }
 
         table.vcs.let { vcsInfo ->
             h3(excludedClass) { +"VCS Information" }
 
-            table("ort-report-key-value-table $excludedClass") {
+            table("report-key-value-table $excludedClass") {
                 tbody {
                     tr {
                         td { +"Type" }
@@ -432,7 +432,7 @@ class StaticHtmlReporter : Reporter {
 
         h3(excludedClass) { +"Packages" }
 
-        table("ort-report-table ort-report-project-table $excludedClass") {
+        table("report-table report-project-table $excludedClass") {
             thead {
                 tr {
                     th { +"#" }
@@ -455,12 +455,12 @@ class StaticHtmlReporter : Reporter {
     private fun TBODY.projectRow(projectId: String, rowIndex: Int, row: ProjectTable.Row) {
         // Only mark the row as excluded if all scopes the dependency appears in are excluded.
         val rowExcludedClass =
-            if (row.scopes.isNotEmpty() && row.scopes.all { it.excludes.isNotEmpty() }) "ort-excluded" else ""
+            if (row.scopes.isNotEmpty() && row.scopes.all { it.excludes.isNotEmpty() }) "excluded" else ""
 
         val cssClass = when {
-            row.analyzerIssues.containsUnresolved() || row.scanIssues.containsUnresolved() -> "ort-error"
-            row.declaredLicenses.isEmpty() && row.detectedLicenses.isEmpty() -> "ort-warning"
-            else -> "ort-success"
+            row.analyzerIssues.containsUnresolved() || row.scanIssues.containsUnresolved() -> "error"
+            row.declaredLicenses.isEmpty() && row.detectedLicenses.isEmpty() -> "warning"
+            else -> "success"
         }
 
         val rowId = "$projectId-pkg-$rowIndex"
@@ -479,12 +479,12 @@ class StaticHtmlReporter : Reporter {
                 if (row.scopes.isNotEmpty()) {
                     ul {
                         row.scopes.forEach { scope ->
-                            val excludedClass = if (scope.excludes.isNotEmpty()) "ort-excluded" else ""
+                            val excludedClass = if (scope.excludes.isNotEmpty()) "excluded" else ""
                             li(excludedClass) {
                                 +scope.name
                                 if (scope.excludes.isNotEmpty()) {
                                     +" "
-                                    div("ort-reason") {
+                                    div("reason") {
                                         +"Excluded: "
                                         +scope.excludes.joinToString { it.description }
                                     }
@@ -536,7 +536,7 @@ class StaticHtmlReporter : Reporter {
                                         }
                                     }
                                 } else {
-                                    div("ort-excluded") {
+                                    div("excluded") {
                                         +"${license.license} (Excluded: "
                                         +pathExcludes.joinToString { it.description }
                                         +")"
@@ -569,7 +569,7 @@ class StaticHtmlReporter : Reporter {
                     p { issueDescription(it) }
 
                     if (it.isResolved) {
-                        classes = setOf("ort-resolved")
+                        classes = setOf("resolved")
                         p { +it.resolutionDescription }
                     }
                 }
