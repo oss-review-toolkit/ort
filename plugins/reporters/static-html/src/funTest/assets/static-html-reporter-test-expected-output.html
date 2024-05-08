@@ -183,17 +183,17 @@ table.ort-excluded tr.ort-excluded td li.ort-excluded {
     border-right: 1px solid rgba(34, 36, 38, .15);
 }
 
-.ort-report-table.ort-violations tr.ort-resolved {
+.ort-report-table.ort-report-rule-violation-table tr.ort-resolved {
     background: #fcfff5;
     color: #2c662d;
 }
 
-.ort-report-table.ort-packages tr.ort-error {
+.ort-report-table.ort-report-project-table tr.ort-error {
     color: black;
 }
 
-.ort-report-table.ort-packages tr.ort-error td:nth-child(5),
-.ort-report-table.ort-packages tr.ort-error td:nth-child(6) {
+.ort-report-table.ort-report-project-table tr.ort-error td:nth-child(5),
+.ort-report-table.ort-report-project-table tr.ort-error td:nth-child(6) {
     color: #9f3a38;
 }
 
@@ -467,7 +467,7 @@ Prism.languages.yaml={scalar:{pattern:/([\-:]\s*(?:![^\s]+)?[ \t]*[|>])[ \t]*(?:
             <li><a href="#repository-configuration">Repository Configuration</a></li>
          </ul>
          <h2 id="rule-violation-summary">Rule Violation Summary (1 errors, 1 warnings, 0 hints to resolve)</h2>
-         <table class="ort-report-table ort-violations">
+         <table class="ort-report-table ort-report-rule-violation-table">
             <thead>
                <tr>
                   <th>#</th>
@@ -836,7 +836,7 @@ Prism.languages.yaml={scalar:{pattern:/([\-:]\s*(?:![^\s]+)?[ \t]*[|>])[ \t]*(?:
             </tbody>
          </table>
          <h3 class="ort-excluded">Packages</h3>
-         <table class="ort-report-table ort-packages ort-excluded">
+         <table class="ort-report-table ort-report-project-table ort-excluded">
             <thead>
                <tr>
                   <th>#</th>
@@ -919,7 +919,7 @@ Prism.languages.yaml={scalar:{pattern:/([\-:]\s*(?:![^\s]+)?[ \t]*[|>])[ \t]*(?:
             </tbody>
          </table>
          <h3 class="">Packages</h3>
-         <table class="ort-report-table ort-packages ">
+         <table class="ort-report-table ort-report-project-table ">
             <thead>
                <tr>
                   <th>#</th>
