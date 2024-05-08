@@ -36,7 +36,7 @@ ul {
  * The label at the very top of the report.
  */
  
-#ort-report-top-label {
+#report-top-label {
     background-color: #f9fafb;
     border-left: 1px solid rgba(34, 36, 38, .15);
     border-right: 1px solid rgba(34, 36, 38, .15);
@@ -59,13 +59,13 @@ ul {
  * Table for key value pairs with a simple styling. Used for the VCS infos of projects and for the ORT result labels.
  */
 
-.ort-report-key-value-table {
+.report-key-value-table {
     font-size: 12px;
     border-spacing: 0;
     table-layout: fixed;
 }
 
-.ort-report-key-value-table td {
+.report-key-value-table td {
     border-bottom: 1px solid rgba(34, 36, 38, .15);
     overflow: hidden;
     padding: 5px 20px 5px 0px;
@@ -73,15 +73,15 @@ ul {
     word-wrap: break-word;
 }
 
-.ort-report-key-value-table tr:first-child td {
+.report-key-value-table tr:first-child td {
     border-top: 1px solid rgba(34, 36, 38, .15);
 }
 
-.ort-excluded {
+.excluded {
     filter: opacity(50%);
 }
 
-.ort-reason {
+.reason {
     border-radius: 3px;
     background: #EEE;
     padding: 2px;
@@ -89,19 +89,19 @@ ul {
     display: inline;
 }
 
-table.ort-excluded tr.ort-excluded {
+table.excluded tr.excluded {
     filter: opacity(100%);
 }
 
-table tr.ort-excluded td li.ort-excluded {
+table tr.excluded td li.excluded {
     filter: opacity(100%);
 }
 
-table.ort-excluded tr.ort-excluded td li.ort-excluded {
+table.excluded tr.excluded td li.excluded {
     filter: opacity(100%);
 }
 
-.ort-report-table {
+.report-table {
     border-spacing: 0;
     overflow: hidden;
     table-layout: fixed;
@@ -109,34 +109,34 @@ table.ort-excluded tr.ort-excluded td li.ort-excluded {
     width: 100%;
 }
 
-.ort-report-table tr.ort-error {
+.report-table tr.error {
     background: #fff6f6;
     color: #9f3a38;
 }
 
-.ort-report-table tr.ort-warning {
+.report-table tr.warning {
     background: #fffaf3;
     color: #573a08;
 }
 
-.ort-report-table tr.ort-hint {
+.report-table tr.hint {
     background: #f7f5ff;
     color: #1c0859;
 }
 
-.ort-report-table tr:last-child td {
+.report-table tr:last-child td {
     border-bottom: 1px solid rgba(34, 36, 38, .15);
 }
 
-.ort-report-table tr:last-child td:first-child {
+.report-table tr:last-child td:first-child {
     border-bottom-left-radius: .28rem;
 }
 
-.ort-report-table tr:last-child td:last-child {
+.report-table tr:last-child td:last-child {
     border-bottom-right-radius: .28rem;
 }
 
-.ort-report-table th {
+.report-table th {
     background-color: #f9fafb;
     border-left: 1px solid rgba(34, 36, 38, .15);
     border-top: 1px solid rgba(34, 36, 38, .15);
@@ -147,7 +147,7 @@ table.ort-excluded tr.ort-excluded td li.ort-excluded {
     white-space: nowrap;
 }
 
-.ort-report-table th:first-child {
+.report-table th:first-child {
     width: 30px;
     white-space: nowrap;
     border-top-left-radius: .28rem;
@@ -155,13 +155,13 @@ table.ort-excluded tr.ort-excluded td li.ort-excluded {
     border-top: 1px solid rgba(34, 36, 38, .15);
 }
 
-.ort-report-table th:last-child {
+.report-table th:last-child {
     border-top-right-radius: .28rem;
     border-right: 1px solid rgba(34, 36, 38, .15);
     border-top: 1px solid rgba(34, 36, 38, .15);
 }
 
-.ort-report-table td {
+.report-table td {
     border-left: 1px solid rgba(34, 36, 38, .15);
     border-top: 1px solid rgba(34, 36, 38, .15);
     padding: 8px;
@@ -171,34 +171,34 @@ table.ort-excluded tr.ort-excluded td li.ort-excluded {
     word-wrap: break-word;
 }
 
-.ort-report-table td:last-child {
+.report-table td:last-child {
     border-right: 1px solid rgba(34, 36, 38, .15);
 }
 
-.ort-report-rule-violation-table tr.ort-resolved {
+.report-rule-violation-table tr.resolved {
     background: #fcfff5;
     color: #2c662d;
 }
 
-.ort-report-project-table tr.ort-error {
+.report-project-table tr.error {
     color: black;
 }
 
-.ort-report-project-table tr.ort-error td:nth-child(5),
-.ort-report-project-table tr.ort-error td:nth-child(6) {
+.report-project-table tr.error td:nth-child(5),
+.report-project-table tr.error td:nth-child(6) {
     color: #9f3a38;
 }
 
-.ort-report-table li.ort-resolved {
+.report-table li.resolved {
     color: #2c662d;
 }
 
-.ort-report-table details {
+.report-table details {
     overflow: scroll;
 }
 
 @media all and (max-width: 1000px) {
-    .ort-report-table th:nth-child(2), .ort-report-table td:nth-child(2) {
+    .report-table th:nth-child(2), .report-table td:nth-child(2) {
         display: none;
         width: 0;
         height: 0;
@@ -208,7 +208,7 @@ table.ort-excluded tr.ort-excluded td li.ort-excluded {
 }
 
 @media all and (max-width: 900px) {
-    .ort-report-table th:nth-child(3), .ort-report-table td:nth-child(3) {
+    .report-table th:nth-child(3), .report-table td:nth-child(3) {
         display: none;
         width: 0;
         height: 0;
@@ -218,10 +218,10 @@ table.ort-excluded tr.ort-excluded td li.ort-excluded {
 }
 
 @media all and (max-width: 800px) {
-    .ort-report-table th:nth-child(5),
-    .ort-report-table td:nth-child(5),
-    .ort-report-table th:nth-child(6),
-    .ort-report-table td:nth-child(6) {
+    .report-table th:nth-child(5),
+    .report-table td:nth-child(5),
+    .report-table th:nth-child(6),
+    .report-table td:nth-child(6) {
         display: none;
         width: 0;
         height: 0;
@@ -229,23 +229,23 @@ table.ort-excluded tr.ort-excluded td li.ort-excluded {
         visibility: collapse;
     }
 
-    .ort-report-table th:nth-child(4) {
+    .report-table th:nth-child(4) {
         border-top-right-radius: .28rem;
         border-right: 1px solid rgba(34, 36, 38, .15);
     }
 
-    .ort-report-table td:nth-child(4) {
+    .report-table td:nth-child(4) {
         border-right: 1px solid rgba(34, 36, 38, .15);
     }
 
-    .ort-report-table tr:last-child td:nth-child(4) {
+    .report-table tr:last-child td:nth-child(4) {
         border-bottom-right-radius: .28rem;
     }
 }
 
 @media all and (max-width: 500px) {
-    .ort-report-table th:nth-child(4),
-    .ort-report-table td:nth-child(4) {
+    .report-table th:nth-child(4),
+    .report-table td:nth-child(4) {
         display: none;
         width: 0;
         height: 0;
@@ -253,16 +253,16 @@ table.ort-excluded tr.ort-excluded td li.ort-excluded {
         visibility: collapse;
     }
 
-    .ort-report-table th:first-child {
+    .report-table th:first-child {
         border-top-right-radius: .28rem;
         border-right: 1px solid rgba(34, 36, 38, .15);
     }
 
-    .ort-report-table td:first-child {
+    .report-table td:first-child {
         border-right: 1px solid rgba(34, 36, 38, .15);
     }
 
-    .ort-report-table tr:last-child td:first-child {
+    .report-table tr:last-child td:first-child {
         border-bottom-right-radius: .28rem;
     }
 }
