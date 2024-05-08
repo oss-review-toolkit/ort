@@ -32,7 +32,11 @@ ul {
     margin: 1em 2em 1em 2em;
 }
 
-.ort-report-label {
+/*
+ * The label at the very top of the report.
+ */
+ 
+#ort-report-top-label {
     background-color: #f9fafb;
     border-left: 1px solid rgba(34, 36, 38, .15);
     border-right: 1px solid rgba(34, 36, 38, .15);
