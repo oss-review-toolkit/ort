@@ -43,11 +43,7 @@ dependencies {
 }
 
 tasks.named<KotlinCompile>("compileTestKotlin") {
-    val customCompilerArgs = listOf(
-        "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"
-    )
-
     compilerOptions {
-        freeCompilerArgs.addAll(customCompilerArgs)
+        optIn = listOf("kotlinx.serialization.ExperimentalSerializationApi")
     }
 }

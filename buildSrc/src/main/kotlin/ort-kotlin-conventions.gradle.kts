@@ -161,19 +161,19 @@ tasks.withType<Detekt>().configureEach detekt@{
 }
 
 tasks.withType<KotlinCompile>().configureEach {
-    val hasSerialization = plugins.hasPlugin(libs.plugins.kotlinSerialization.get().pluginId)
+    val hasSerializationPlugin = plugins.hasPlugin(libs.plugins.kotlinSerialization.get().pluginId)
 
-    val customCompilerArgs = buildList {
-        add("-opt-in=kotlin.contracts.ExperimentalContracts")
-        add("-opt-in=kotlin.io.encoding.ExperimentalEncodingApi")
-        add("-opt-in=kotlin.io.path.ExperimentalPathApi")
-        add("-opt-in=kotlin.time.ExperimentalTime")
-        if (hasSerialization) add("-opt-in=kotlinx.serialization.ExperimentalSerializationApi")
-    }
+    val optInRequirements = listOfNotNull(
+        "kotlin.contracts.ExperimentalContracts",
+        "kotlin.io.encoding.ExperimentalEncodingApi",
+        "kotlin.io.path.ExperimentalPathApi",
+        "kotlin.time.ExperimentalTime",
+        "kotlinx.serialization.ExperimentalSerializationApi".takeIf { hasSerializationPlugin }
+    )
 
     compilerOptions {
         allWarningsAsErrors = true
-        freeCompilerArgs.addAll(customCompilerArgs)
+        optIn = optInRequirements
         jvmTarget = maxKotlinJvmTarget
     }
 }
