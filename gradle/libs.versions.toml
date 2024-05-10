@@ -32,6 +32,7 @@ jruby = "9.4.3.0"
 jslt = "0.1.14"
 jsonSchemaValidator = "1.0.86"
 kotest = "5.6.2"
+kotestClock = "1.0.0"
 kotlinxCoroutines = "1.7.2"
 kotlinxHtml = "0.9.1"
 kotlinxSerialization = "1.5.1"
@@ -110,6 +111,7 @@ jsonSchemaValidator = { module = "com.networknt:json-schema-validator", version.
 kotestAssertionsCore = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 kotestAssertionsJson = { module = "io.kotest:kotest-assertions-json", version.ref = "kotest" }
 kotestExtensionsJunitXml = { module = "io.kotest:kotest-extensions-junitxml", version.ref = "kotest" }
+kotestExtensionsClock = { module = "io.kotest.extensions:kotest-extensions-clock", version.ref = "kotestClock" }
 kotestFrameworkApi = { module = "io.kotest:kotest-framework-api", version.ref = "kotest" }
 kotestFrameworkEngine = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
 kotestRunnerJunit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }

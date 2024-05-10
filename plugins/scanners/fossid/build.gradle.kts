@@ -34,6 +34,7 @@ dependencies {
 
     implementation(libs.kotlinxCoroutines)
 
+    testImplementation(libs.kotestExtensionsClock)
     testImplementation(libs.mockk)
     testImplementation(libs.wiremock)
 }

@@ -46,6 +46,9 @@ internal class FossIdNamingProvider(
     companion object : Logging {
         @JvmStatic
         val FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")
+
+        @JvmStatic
+        val MAX_SCAN_CODE_LEN = 254
     }
 
     fun createProjectCode(projectName: String): String = namingProjectPattern?.let {
@@ -57,15 +60,48 @@ internal class FossIdNamingProvider(
 
     fun createScanCode(projectName: String, deltaTag: FossId.DeltaTag? = null, branch: String = ""): String {
         var defaultPattern = "#projectName_#currentTimestamp"
-        val builtins = mutableMapOf("#projectName" to projectName, "#branch" to branch)
+        val builtins = mutableMapOf("#projectName" to projectName)
 
         deltaTag?.let {
             defaultPattern += "_#deltaTag"
             builtins += "#deltaTag" to deltaTag.name.lowercase()
         }
 
-        val pattern = namingScanPattern ?: defaultPattern
-        return replaceNamingConventionVariables(pattern, builtins, namingConventionVariables)
+        if (branch.isNotBlank()) {
+            val branchName = normalizeBranchName(branch, defaultPattern, builtins)
+            defaultPattern += "_#branch"
+            builtins += "#branch" to branchName
+        }
+
+        return replaceNamingConventionVariables(
+            (namingScanPattern ?: defaultPattern), builtins, namingConventionVariables
+        )
+    }
+
+    /**
+     * Replaces non-standard characters in branch name and trimming it's length to one that will not exceed
+     * maximum length of FossID scan ID, when combined with rest of variables
+     */
+    private fun normalizeBranchName(
+        branch: String,
+        defaultPattern: String,
+        scanCodeVariables: Map<String, String>
+    ): String {
+        val noBranchScanCodeLength =
+            replaceNamingConventionVariables(
+                (namingScanPattern ?: defaultPattern),
+                scanCodeVariables,
+                namingConventionVariables
+            ).length
+
+        val maxBranchNameLength = MAX_SCAN_CODE_LEN - noBranchScanCodeLength
+        val cleanedBranchName = branch.replace(Regex("[^a-zA-Z0-9-_]"), "_")
+
+        return if (cleanedBranchName.length <= maxBranchNameLength) {
+            cleanedBranchName
+        } else {
+            cleanedBranchName.substring(0, maxBranchNameLength)
+        }
     }
 
     /**
