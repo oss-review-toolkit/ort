@@ -445,14 +445,17 @@ class StaticHtmlReporter : Reporter {
             }
 
             tbody {
-                table.rows.forEachIndexed { rowIndex, row ->
-                    projectRow(table.id.toCoordinates(), rowIndex + 1, row)
+                repeat(table.rows.size) { index ->
+                    projectRow(table, index)
                 }
             }
         }
     }
 
-    private fun TBODY.projectRow(projectId: String, rowIndex: Int, row: ProjectTable.Row) {
+    private fun TBODY.projectRow(projectTable: ProjectTable, rowIndex: Int) {
+        val row = projectTable.rows[rowIndex]
+        val rowId = "${projectTable.id.toCoordinates()}-pkg-${rowIndex + 1}"
+
         // Only mark the row as excluded if all scopes the dependency appears in are excluded.
         val rowExcludedClass =
             if (row.scopes.isNotEmpty() && row.scopes.all { it.excludes.isNotEmpty() }) "excluded" else ""
@@ -463,14 +466,12 @@ class StaticHtmlReporter : Reporter {
             else -> "success"
         }
 
-        val rowId = "$projectId-pkg-$rowIndex"
-
         tr("$cssClass $rowExcludedClass") {
             id = rowId
             td {
                 a {
                     href = "#$rowId"
-                    +rowIndex.toString()
+                    +(rowIndex + 1).toString()
                 }
             }
             td { +row.id.toCoordinates() }
