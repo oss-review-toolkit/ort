@@ -35,6 +35,8 @@ jobs:
       run: ./gradlew checkCopyrightsInNoticeFile checkLicenseHeaders checkGitAttributes
   detekt-issues:
     runs-on: ubuntu-22.04
+    permissions:
+      security-events: write
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
@@ -79,6 +81,8 @@ jobs:
   qodana-scan:
     if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-22.04
+    permissions:
+      security-events: write
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
