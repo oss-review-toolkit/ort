@@ -37,6 +37,7 @@ import org.apache.logging.log4j.kotlin.logger
  * * **currentTimestamp**: The current time.
  * * **deltaTag** (scan code only): If delta scans is enabled, this qualifies the scan as an *origin* scan or a *delta*
  * scan.
+ * * **branch**: branch name (revision) given to scan
  */
 class FossIdNamingProvider(
     private val namingProjectPattern: String?,
@@ -46,6 +47,8 @@ class FossIdNamingProvider(
     companion object {
         @JvmStatic
         val FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")
+
+        const val MAX_SCAN_CODE_LEN = 254
     }
 
     fun createProjectCode(projectName: String): String =
@@ -57,16 +60,86 @@ class FossIdNamingProvider(
         } ?: projectName
 
     fun createScanCode(projectName: String, deltaTag: FossId.DeltaTag? = null, branch: String = ""): String {
+        return namingScanPattern?.let {
+            createScanCodeForCustomPattern(namingScanPattern, projectName, deltaTag, branch)
+        } ?: run {
+            createScanCodeForDefaultPattern(projectName, deltaTag, branch)
+        }
+    }
+
+    private fun createScanCodeForDefaultPattern(
+        projectName: String,
+        deltaTag: FossId.DeltaTag? = null,
+        branch: String = ""
+    ): String {
+        val builtins = mutableMapOf("#projectName" to projectName)
         var defaultPattern = "#projectName_#currentTimestamp"
-        val builtins = mutableMapOf("#projectName" to projectName, "#branch" to branch)
 
         deltaTag?.let {
             defaultPattern += "_#deltaTag"
             builtins += "#deltaTag" to deltaTag.name.lowercase()
         }
 
-        val pattern = namingScanPattern ?: defaultPattern
-        return replaceNamingConventionVariables(pattern, builtins, namingConventionVariables)
+        if (branch.isNotBlank()) {
+            val branchName = normalizeBranchName(branch, defaultPattern, builtins)
+            defaultPattern += "_#branch"
+            builtins += "#branch" to branchName
+        }
+
+        return replaceNamingConventionVariables(defaultPattern, builtins, namingConventionVariables)
+    }
+
+    private fun createScanCodeForCustomPattern(
+        namingPattern: String,
+        projectName: String,
+        deltaTag: FossId.DeltaTag? = null,
+        branch: String = ""
+    ): String {
+        val builtins = mutableMapOf<String, String>()
+
+        namingPattern.contains("#projectName").let {
+            builtins += "#projectName" to projectName
+        }
+
+        namingPattern.contains("#deltaTag").let {
+            if (deltaTag != null) {
+                builtins += "#deltaTag" to deltaTag.name.lowercase()
+            }
+        }
+
+        namingPattern.contains("#branch").let {
+            val namingPatternWithoutBranchPlaceholder = namingPattern.replace("#branch", "")
+            builtins += "#branch" to normalizeBranchName(branch, namingPatternWithoutBranchPlaceholder, builtins)
+        }
+
+        return replaceNamingConventionVariables(namingPattern, builtins, namingConventionVariables)
+    }
+
+    /**
+     * Replaces non-standard characters in branch name and trims its length to one that will not exceed
+     * maximum length of FossID scan ID, when combined with the rest of variables
+     */
+    private fun normalizeBranchName(
+        branch: String,
+        scanCodeNamingPattern: String,
+        scanCodeVariables: Map<String, String>
+    ): String {
+        val noBranchScanCode =
+            replaceNamingConventionVariables(
+                scanCodeNamingPattern,
+                scanCodeVariables,
+                namingConventionVariables
+            )
+
+        require(noBranchScanCode.length < MAX_SCAN_CODE_LEN) {
+            throw IllegalArgumentException(
+                "FossID scan code '$noBranchScanCode' is too long. " +
+                    "It must not exceed $MAX_SCAN_CODE_LEN characters. Please consider shorter naming scan pattern."
+            )
+        }
+
+        val maxBranchNameLength = MAX_SCAN_CODE_LEN - noBranchScanCode.length
+        return branch.replace(Regex("[^a-zA-Z0-9-_]"), "_").take(maxBranchNameLength)
     }
 
     /**
