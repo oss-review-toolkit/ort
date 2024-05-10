@@ -84,7 +84,8 @@ private fun OrtResult.getScopesForDependencies(project: Project): Map<Identifier
 
 private fun Issue.toTableReportIssue(
     ortResult: OrtResult,
-    howToFixTextProvider: HowToFixTextProvider
+    howToFixTextProvider: HowToFixTextProvider,
+    isExcluded: Boolean
 ): TablesReportIssue {
     val resolutions = ortResult.getResolutionsFor(this)
     return TablesReportIssue(
@@ -99,6 +100,7 @@ private fun Issue.toTableReportIssue(
                 )
             }
         },
+        isExcluded = isExcluded,
         isResolved = resolutions.isNotEmpty(),
         severity = severity,
         howToFix = howToFixTextProvider.getHowToFixText(this).orEmpty()
@@ -143,8 +145,24 @@ private fun getProjectTable(input: ReporterInput, project: Project): ProjectTabl
             input.ortResult.getRepositoryLicenseChoices()
         )?.sorted()
 
-        val analyzerIssues = projectIssuesForId[id].orEmpty() + input.ortResult.analyzer?.result?.issues?.get(id)
-            .orEmpty()
+        val issues = buildList {
+            addAll(projectIssuesForId[id].orEmpty())
+            addAll(input.ortResult.analyzer?.result?.issues?.get(id).orEmpty())
+            addAll(scannerIssuesForId[id].orEmpty())
+        }.map { issue ->
+            val isRowExcluded = input.ortResult.isExcluded(id) ||
+                (id != project.id && scopesForId[id].orEmpty().all { it.value.isNotEmpty() })
+
+            issue.toTableReportIssue(
+                input.ortResult,
+                input.howToFixTextProvider,
+                isRowExcluded || input.ortResult.isExcluded(issue, id)
+            )
+        }
+
+        val (openIssues, excludedOrResolvedIssue) = issues.partition {
+            !(it.isResolved || it.isExcluded)
+        }
 
         val scopes = scopesForId[id].orEmpty().map { (name, excludes) ->
             ProjectTable.Scope(name, excludes)
@@ -161,12 +179,8 @@ private fun getProjectTable(input: ReporterInput, project: Project): ProjectTabl
             declaredLicenses = declaredLicenses,
             detectedLicenses = detectedLicenses,
             effectiveLicense = effectiveLicense,
-            analyzerIssues = analyzerIssues.map {
-                it.toTableReportIssue(input.ortResult, input.howToFixTextProvider)
-            },
-            scanIssues = scannerIssuesForId[id].orEmpty().map {
-                it.toTableReportIssue(input.ortResult, input.howToFixTextProvider)
-            }
+            openIssues.sortedByDescending { it.severity },
+            excludedOrResolvedIssue.sortedByDescending { it.isResolved }
         )
     }
 
@@ -194,7 +208,7 @@ private fun getAdvisorIssueSummaryTable(input: ReporterInput): IssueTable =
 private fun Map<Identifier, Set<Issue>>.toIssueSummaryTable(type: IssueTable.Type, input: ReporterInput): IssueTable {
     val rows = flatMap { (id, issues) ->
         issues.map { issue ->
-            val resolvableIssue = issue.toTableReportIssue(input.ortResult, input.howToFixTextProvider)
+            val resolvableIssue = issue.toTableReportIssue(input.ortResult, input.howToFixTextProvider, false)
             IssueTable.Row(resolvableIssue, id)
         }
     }.sortedWith(compareByDescending<IssueTable.Row> { it.issue.severity }.thenBy { it.id })

@@ -144,57 +144,70 @@ ul {
     border-right: 1px solid rgba(34, 36, 38, .15);
 }
 
-.report-table li.resolved {
-    color: #2c662d;
-}
-
 .report-table details {
     overflow: scroll;
 }
 
-.report-table tr.error {
+.report-table tr.error td {
     background: #fff6f6;
     color: #9f3a38;
 }
 
-.report-table tr.warning {
+.report-table tr.warning td {
     background: #fffaf3;
     color: #573a08;
 }
 
-.report-table tr.hint {
+.report-table tr.hint td {
     background: #f7f5ff;
     color: #1c0859;
 }
 
 /**
- * Rule violation table, which specializes .report-table.
+ * Project section.
  */
 
-.report-rule-violation-table tr.resolved {
+.project.excluded {
+   h3, .report-key-value-table, .report-project-table > thead th {
+      filter: opacity(50%);
+   }
+}
+
+.report-project-table .pkg.excluded {
+   > td:nth-child(1), td:nth-child(2), td:nth-child(3), td:nth-child(4) {
+      filter: opacity(50%);
+   }
+}
+
+.report-project-table .pkg:not(.excluded) {
+   .scope.excluded, .detected-license.excluded {
+      filter: opacity(50%);
+   }
+}
+
+.report-project-table td:has(.package-issue-table) {
+   padding: 0px;
+}
+
+.package-issue-table {
+   border-spacing: 10px;
+   padding: 0px;
+   margin: 0px;
+}
+
+.package-issue-table td {
+    border-radius: .60rem !important;
+    border-bottom: 1px solid rgba(34, 36, 38, .15);
+}
+
+.package-issue-table tr.resolved td {
     background: #fcfff5;
     color: #2c662d;
 }
 
-/**
- * Project table, which specializes .report-table.
- */
-
-.report-project-table tr.error {
-    color: black;
-}
-
-.report-project-table tr.error td:nth-child(5),
-.report-project-table tr.error td:nth-child(6) {
-    color: #9f3a38;
-}
-
-/*
- * Excluded state.
- */
-
-.excluded {
-    filter: opacity(50%);
+.package-issue-table tr.excluded td {
+    background: #f9fafb;
+    color: rgba(34, 36, 38, .7);
 }
 
 .reason {
@@ -203,18 +216,6 @@ ul {
     padding: 2px;
     font-size: 12px;
     display: inline;
-}
-
-table.excluded tr.excluded {
-    filter: opacity(100%);
-}
-
-table tr.excluded td li.excluded {
-    filter: opacity(100%);
-}
-
-table.excluded tr.excluded td li.excluded {
-    filter: opacity(100%);
 }
 
 /**
