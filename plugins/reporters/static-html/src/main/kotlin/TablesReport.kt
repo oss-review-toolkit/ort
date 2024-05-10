@@ -176,12 +176,12 @@ internal data class ProjectTable(
         /**
          * All analyzer issues related to this package.
          */
-        val analyzerIssues: List<TablesReportIssue>,
+        val openIssues: List<TablesReportIssue>,
 
         /**
-         * All scan issues related to this package.
+         * All issues which are either resolved or excluded or both.
          */
-        val scanIssues: List<TablesReportIssue>
+        val excludedOrResolvedIssues: List<TablesReportIssue>
     ) {
         /**
          * Return true if and only if this [Row] is excluded by any [ScopeExclude]s
@@ -211,6 +211,7 @@ internal data class TablesReportIssue(
     val source: String,
     val description: String,
     val resolutionDescription: String,
+    val isExcluded: Boolean,
     val isResolved: Boolean,
     val severity: Severity,
     val howToFix: String

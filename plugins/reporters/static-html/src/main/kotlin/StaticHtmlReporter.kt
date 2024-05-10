@@ -389,83 +389,79 @@ class StaticHtmlReporter : Reporter {
     private fun DIV.projectTable(table: ProjectTable) {
         val excludedClass = "excluded".takeIf { table.isExcluded() }.orEmpty()
 
-        h2 {
+        div("project $excludedClass") {
             id = table.id.toCoordinates()
-            +"${table.id.toCoordinates()} (${table.fullDefinitionFilePath})"
-        }
 
-        if (table.isExcluded()) {
-            h3 { +"Project is Excluded" }
-            p { +"The project is excluded for the following reason(s):" }
-        }
-
-        table.pathExcludes.forEach { exclude ->
-            p {
-                div("reason") { +exclude.description }
+            h2 {
+                +"${table.id.toCoordinates()} (${table.fullDefinitionFilePath})"
             }
-        }
 
-        table.vcs.let { vcsInfo ->
-            h3(excludedClass) { +"VCS Information" }
+            if (table.isExcluded()) {
+                h3 { +"Project is Excluded" }
+                p { +"The project is excluded for the following reason(s):" }
+            }
 
-            table("report-key-value-table $excludedClass") {
+            table.pathExcludes.forEach { exclude ->
+                p {
+                    div("reason") { +exclude.description }
+                }
+            }
+
+            table.vcs.let { vcsInfo ->
+                h3 { +"VCS Information" }
+
+                table("report-key-value-table $excludedClass") {
+                    tbody {
+                        tr {
+                            td { +"Type" }
+                            td { +vcsInfo.type.toString() }
+                        }
+                        tr {
+                            td { +"URL" }
+                            td { +vcsInfo.url }
+                        }
+                        tr {
+                            td { +"Path" }
+                            td { +vcsInfo.path }
+                        }
+                        tr {
+                            td { +"Revision" }
+                            td { +vcsInfo.revision }
+                        }
+                    }
+                }
+            }
+
+            h3 { +"Packages" }
+
+            table("report-table report-project-table $excludedClass") {
+                thead {
+                    tr(excludedClass) {
+                        th { +"#" }
+                        th { +"Package" }
+                        th { +"Scopes" }
+                        th { +"Licenses" }
+                        th { +"Open Issues" }
+                        th { +"Excluded & Resolved Issues" }
+                    }
+                }
+
                 tbody {
-                    tr {
-                        td { +"Type" }
-                        td { +vcsInfo.type.toString() }
+                    repeat(table.rows.size) { index ->
+                        projectRow(table, index)
                     }
-                    tr {
-                        td { +"URL" }
-                        td { +vcsInfo.url }
-                    }
-                    tr {
-                        td { +"Path" }
-                        td { +vcsInfo.path }
-                    }
-                    tr {
-                        td { +"Revision" }
-                        td { +vcsInfo.revision }
-                    }
-                }
-            }
-        }
-
-        h3(excludedClass) { +"Packages" }
-
-        table("report-table report-project-table $excludedClass") {
-            thead {
-                tr {
-                    th { +"#" }
-                    th { +"Package" }
-                    th { +"Scopes" }
-                    th { +"Licenses" }
-                    th { +"Analyzer Issues" }
-                    th { +"Scanner Issues" }
-                }
-            }
-
-            tbody {
-                repeat(table.rows.size) { index ->
-                    projectRow(table, index)
                 }
             }
         }
     }
 
     private fun TBODY.projectRow(projectTable: ProjectTable, rowIndex: Int) {
-        val row = projectTable.rows[rowIndex]
-        val rowId = "${projectTable.id.toCoordinates()}-pkg-${rowIndex + 1}"
-
         // Only mark the row as excluded if all scopes the dependency appears in are excluded.
-        val rowExcludedClass = "excluded".takeIf { row.isExcluded() }.orEmpty()
+        val rowId = "${projectTable.id.toCoordinates()}-pkg-${rowIndex + 1}"
+        val row = projectTable.rows[rowIndex]
+        val rowExcludedClass = "excluded".takeIf { projectTable.isExcluded() || row.isExcluded() }.orEmpty()
 
-        val cssClass = when {
-            row.analyzerIssues.containsUnresolved() || row.scanIssues.containsUnresolved() -> "error"
-            row.declaredLicenses.isEmpty() && row.detectedLicenses.isEmpty() -> "warning"
-            else -> "success"
-        }
-
-        tr("$cssClass $rowExcludedClass") {
+        tr("pkg $rowExcludedClass") {
             id = rowId
             td {
                 a {
@@ -479,8 +475,8 @@ class StaticHtmlReporter : Reporter {
                 if (row.scopes.isNotEmpty()) {
                     ul {
                         row.scopes.forEach { scope ->
-                            val excludedClass = "excluded".takeIf { scope.isExcluded() }.orEmpty()
-                            li(excludedClass) {
+                            val scopeExcludedClass = "excluded".takeIf { scope.isExcluded() }.orEmpty()
+                            li("scope $scopeExcludedClass") {
                                 +scope.name
                                 if (scope.excludes.isNotEmpty()) {
                                     +" "
@@ -528,7 +524,7 @@ class StaticHtmlReporter : Reporter {
                                 }
 
                                 if (!license.isDetectedExcluded) {
-                                    div {
+                                    div("detected-license") {
                                         licensesLink(license.license)
                                         if (permalink != null) {
                                             val count = license.locations.count { it.matchingPathExcludes.isEmpty() }
@@ -536,7 +532,7 @@ class StaticHtmlReporter : Reporter {
                                         }
                                     }
                                 } else {
-                                    div("excluded") {
+                                    div("detected-license excluded") {
                                         +"${license.license} (Excluded: "
                                         +pathExcludes.joinToString { it.description }
                                         +")"
@@ -556,21 +552,39 @@ class StaticHtmlReporter : Reporter {
                 }
             }
 
-            td { issueList(row.analyzerIssues) }
+            td {
+                if (row.openIssues.isNotEmpty()) {
+                    issueList(row.openIssues)
+                }
+            }
 
-            td { issueList(row.scanIssues) }
+            td {
+                if (row.excludedOrResolvedIssues.isNotEmpty()) {
+                    issueList(row.excludedOrResolvedIssues)
+                }
+            }
         }
     }
 
     private fun TD.issueList(issues: List<TablesReportIssue>) {
-        ul {
+        table("report-table package-issue-table") {
             issues.forEach {
-                li {
-                    p { issueDescription(it) }
+                val cssClass = when {
+                    it.isResolved -> "resolved"
+                    it.isExcluded -> "excluded"
+                    it.severity == Severity.ERROR -> "error"
+                    it.severity == Severity.WARNING -> "warning"
+                    it.severity == Severity.HINT -> "hint"
+                    else -> null
+                }
 
-                    if (it.isResolved) {
-                        classes = setOf("resolved")
-                        p { +it.resolutionDescription }
+                tr(cssClass) {
+                    td {
+                        p { issueDescription(it) }
+
+                        if (it.isResolved) {
+                            p { +it.resolutionDescription }
+                        }
                     }
                 }
             }
@@ -716,5 +730,3 @@ private fun IssueTable.title(): String =
 private fun IssueTable.id(): String = "${type.name.lowercase()}-issue-summary"
 
 private fun IssueTable.rowId(index: Int): String = "${id()}-$index"
-
-private fun Collection<TablesReportIssue>.containsUnresolved() = any { !it.isResolved }

@@ -152,57 +152,70 @@ ul {
     border-right: 1px solid rgba(34, 36, 38, .15);
 }
 
-.report-table li.resolved {
-    color: #2c662d;
-}
-
 .report-table details {
     overflow: scroll;
 }
 
-.report-table tr.error {
+.report-table tr.error td {
     background: #fff6f6;
     color: #9f3a38;
 }
 
-.report-table tr.warning {
+.report-table tr.warning td {
     background: #fffaf3;
     color: #573a08;
 }
 
-.report-table tr.hint {
+.report-table tr.hint td {
     background: #f7f5ff;
     color: #1c0859;
 }
 
 /**
- * Rule violation table, which specializes .report-table.
+ * Project section.
  */
 
-.report-rule-violation-table tr.resolved {
+.project.excluded {
+   h3, .report-key-value-table, .report-project-table > thead th {
+      filter: opacity(50%);
+   }
+}
+
+.report-project-table .pkg.excluded {
+   > td:nth-child(1), td:nth-child(2), td:nth-child(3), td:nth-child(4) {
+      filter: opacity(50%);
+   }
+}
+
+.report-project-table .pkg:not(.excluded) {
+   .scope.excluded, .detected-license.excluded {
+      filter: opacity(50%);
+   }
+}
+
+.report-project-table td:has(.package-issue-table) {
+   padding: 0px;
+}
+
+.package-issue-table {
+   border-spacing: 10px;
+   padding: 0px;
+   margin: 0px;
+}
+
+.package-issue-table td {
+    border-radius: .60rem !important;
+    border-bottom: 1px solid rgba(34, 36, 38, .15);
+}
+
+.package-issue-table tr.resolved td {
     background: #fcfff5;
     color: #2c662d;
 }
 
-/**
- * Project table, which specializes .report-table.
- */
-
-.report-project-table tr.error {
-    color: black;
-}
-
-.report-project-table tr.error td:nth-child(5),
-.report-project-table tr.error td:nth-child(6) {
-    color: #9f3a38;
-}
-
-/*
- * Excluded state.
- */
-
-.excluded {
-    filter: opacity(50%);
+.package-issue-table tr.excluded td {
+    background: #f9fafb;
+    color: rgba(34, 36, 38, .7);
 }
 
 .reason {
@@ -211,18 +224,6 @@ ul {
     padding: 2px;
     font-size: 12px;
     display: inline;
-}
-
-table.excluded tr.excluded {
-    filter: opacity(100%);
-}
-
-table tr.excluded td li.excluded {
-    filter: opacity(100%);
-}
-
-table.excluded tr.excluded td li.excluded {
-    filter: opacity(100%);
 }
 
 /**
@@ -832,398 +833,410 @@ Prism.languages.yaml={scalar:{pattern:/([\-:]\s*(?:![^\s]+)?[ \t]*[|>])[ \t]*(?:
                </tr>
             </tbody>
          </table>
-         <h2 id="Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0">Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0 (sub/module/project/build.gradle)</h2>
-         <h3>Project is Excluded</h3>
-         <p>The project is excluded for the following reason(s):</p>
-         <p>
-            <div class="reason">EXAMPLE_OF - The project is an example.</div>
-         </p>
-         <h3 class="excluded">VCS Information</h3>
-         <table class="report-key-value-table excluded">
-            <tbody>
-               <tr>
-                  <td>Type</td>
-                  <td>Git</td>
-               </tr>
-               <tr>
-                  <td>URL</td>
-                  <td>https://example.com/git</td>
-               </tr>
-               <tr>
-                  <td>Path</td>
-                  <td>project</td>
-               </tr>
-               <tr>
-                  <td>Revision</td>
-                  <td>master</td>
-               </tr>
-            </tbody>
-         </table>
-         <h3 class="excluded">Packages</h3>
-         <table class="report-table report-project-table excluded">
-            <thead>
-               <tr>
-                  <th>#</th>
-                  <th>Package</th>
-                  <th>Scopes</th>
-                  <th>Licenses</th>
-                  <th>Analyzer Issues</th>
-                  <th>Scanner Issues</th>
-               </tr>
-            </thead>
-            <tbody>
-               <tr class="error " id="Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0-pkg-1">
-                  <td><a href="#Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0-pkg-1">1</a></td>
-                  <td>Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0</td>
-                  <td></td>
-                  <td><em>Declared Licenses:</em><dl>
-                        <dd>
-                           <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:197ec4de65a2e5414b290fb46dee75f55e1b69e8">CC-BY-NC-3.0</a></div>
-                           <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:f288702d2fa16d3cdf0035b15a9fcbc552cd88e7">GPL-3.0-only</a> WITH <a href="https://archive.softwareheritage.org/browse/content/sha1_git:e86f7fb58a4656330ebdfab5e75d72f86f5e9af9">GCC-exception-3.1</a></div>
-                        </dd>
-                     </dl><em>Detected Licenses (from <a href="https://example.com/git">VCS</a>):</em><dl>
-                        <dd>
-                           <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64">Apache-2.0</a></div>
-                           <div class="excluded">MIT (Excluded: EXAMPLE_OF - These are example files.)</div>
-                        </dd>
-                     </dl><em>Effective License:</em><dl>
-                        <dd>
-                           <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64">Apache-2.0</a> AND <a href="https://archive.softwareheritage.org/browse/content/sha1_git:197ec4de65a2e5414b290fb46dee75f55e1b69e8">CC-BY-NC-3.0</a> AND <a href="https://archive.softwareheritage.org/browse/content/sha1_git:f288702d2fa16d3cdf0035b15a9fcbc552cd88e7">GPL-3.0-only</a> WITH <a href="https://archive.softwareheritage.org/browse/content/sha1_git:e86f7fb58a4656330ebdfab5e75d72f86f5e9af9">GCC-exception-3.1</a></div>
-                        </dd>
-                     </dl>
-                  </td>
-                  <td>
-                     <ul></ul>
-                  </td>
-                  <td>
-                     <ul>
-                        <li>
-                           <p>2024-04-22T10:36:10.661544294Z [ERROR]: FakeScanner - ERROR: Timeout after 300 seconds
-                              while scanning file 'project/file-within-excluded-project.dat'.</p>
-                        </li>
-                        <li>
-                           <p>2024-04-25T07:44:20.725613974Z [HINT]: FakeScanner - Example hint.</p>
-                        </li>
-                        <li>
-                           <p>2024-04-25T07:44:20.725613974Z [WARNING]: FakeScanner - Example warning.</p>
-                        </li>
-                        <li>
-                           <p>2024-04-25T07:44:20.725613974Z [ERROR]: FakeScanner - Example error.</p>
-                        </li>
-                        <li class="resolved">
-                           <p>2024-04-25T07:44:20.725613974Z [ERROR]: FakeScanner - Example error, resolved.</p>
-                           <p>
-                              Resolved by: CANT_FIX_ISSUE - Resolved for illustration.</p>
-                        </li>
-                     </ul>
-                  </td>
-               </tr>
-            </tbody>
-         </table>
-         <h2 id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0">Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0 (analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle)</h2>
-         <h3 class="">VCS Information</h3>
-         <table class="report-key-value-table ">
-            <tbody>
-               <tr>
-                  <td>Type</td>
-                  <td>Git</td>
-               </tr>
-               <tr>
-                  <td>URL</td>
-                  <td>https://github.com/oss-review-toolkit/ort.git</td>
-               </tr>
-               <tr>
-                  <td>Path</td>
-                  <td>analyzer/src/funTest/assets/projects/synthetic/gradle/lib</td>
-               </tr>
-               <tr>
-                  <td>Revision</td>
-                  <td>master</td>
-               </tr>
-            </tbody>
-         </table>
-         <h3 class="">Packages</h3>
-         <table class="report-table report-project-table ">
-            <thead>
-               <tr>
-                  <th>#</th>
-                  <th>Package</th>
-                  <th>Scopes</th>
-                  <th>Licenses</th>
-                  <th>Analyzer Issues</th>
-                  <th>Scanner Issues</th>
-               </tr>
-            </thead>
-            <tbody>
-               <tr class="error " id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-1">
-                  <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-1">1</a></td>
-                  <td>Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0</td>
-                  <td></td>
-                  <td><em>Detected Licenses (from <a href="https://github.com/oss-review-toolkit/ort.git">VCS</a>):</em><dl>
-                        <dd>
-                           <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:c329ef6d12d2a701a57fedeab0437884fe0d8de2">BSD-3-Clause</a> (<a href="https://github.com/oss-review-toolkit/ort/tree/master/analyzer/src/funTest/assets/projects/synthetic/gradle/lib/src/code.cpp#L1">link</a> to the location)</div>
-                           <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:d159169d1050894d3ea3b98e1c965c4058208fe1">GPL-2.0-only</a> WITH <a href="https://archive.softwareheritage.org/browse/content/sha1_git:63ae6d171e2da985784f3e0ac865491fa093521d">Classpath-exception-2.0</a> (<a href="https://github.com/oss-review-toolkit/ort/tree/master/analyzer/src/funTest/assets/projects/synthetic/gradle/lib/src/code.cpp#L1">link</a> to the location)</div>
-                           <div>LicenseRef-test-Apache-2.0-multi-line (<a href="https://github.com/oss-review-toolkit/ort/tree/master/analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle#L19-L20">link</a> to the location)</div>
-                           <div>LicenseRef-test-Apache-2.0-single-line (exemplary <a href="https://github.com/oss-review-toolkit/ort/tree/master/analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle#L19">link</a> to the first of 2 locations)</div>
-                           <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:1bf98523e33170372cf0702f03e38dadec3c5094">MIT</a> (<a href="https://github.com/oss-review-toolkit/ort/tree/master/analyzer/src/funTest/assets/projects/synthetic/gradle/lib/src/code.cpp#L1">link</a> to the location)</div>
-                        </dd>
-                     </dl><em>Effective License:</em><dl>
-                        <dd>
-                           <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:c329ef6d12d2a701a57fedeab0437884fe0d8de2">BSD-3-Clause</a> AND <a href="https://archive.softwareheritage.org/browse/content/sha1_git:d159169d1050894d3ea3b98e1c965c4058208fe1">GPL-2.0-only</a> WITH <a href="https://archive.softwareheritage.org/browse/content/sha1_git:63ae6d171e2da985784f3e0ac865491fa093521d">Classpath-exception-2.0</a> AND LicenseRef-test-Apache-2.0-multi-line AND LicenseRef-test-Apache-2.0-single-line OR LicenseRef-test-Apache-2.0-multi-line AND LicenseRef-test-Apache-2.0-single-line AND <a href="https://archive.softwareheritage.org/browse/content/sha1_git:1bf98523e33170372cf0702f03e38dadec3c5094">MIT</a></div>
-                        </dd>
-                     </dl>
-                  </td>
-                  <td>
-                     <ul>
-                        <li>
-                           <p>2024-04-25T07:44:20.725613974Z [HINT]: Gradle - Example hint.</p>
-                        </li>
-                        <li>
-                           <p>2024-04-25T07:44:20.725613974Z [WARNING]: Gradle - Example warning.</p>
-                        </li>
-                        <li>
-                           <p>2024-04-25T07:44:20.725613974Z [ERROR]: Gradle - Example error.</p>
-                        </li>
-                        <li class="resolved">
-                           <p>2024-04-25T07:44:20.725613974Z [ERROR]: Gradle - Example error, resolved.</p>
-                           <p>
-                              Resolved by: CANT_FIX_ISSUE - Resolved for illustration.</p>
-                        </li>
-                     </ul>
-                  </td>
-                  <td>
-                     <ul>
-                        <li>
-                           <p>Unknown time [ERROR]: Dummy - DownloadException: No source artifact URL provided for
-                              'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'.<br>Caused by: DownloadException: No VCS URL provided for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'.
-                              Please make sure the published POM file includes the SCM connection, see: https://docs.gradle.org/current/userguide/publishing_maven.html#sec:modifying_the_generated_pom</p>
-                        </li>
-                        <li>
-                           <p>2024-04-22T10:36:10.661544294Z [ERROR]: FakeScanner - ERROR: Timeout after 300 seconds
-                              while scanning file 'analyzer/src/funTest/assets/projects/synthetic/gradle/lib/included-file.dat'.</p>
-                        </li>
-                        <li>
-                           <p>2024-04-25T07:44:20.725613974Z [HINT]: FakeScanner - Example hint.</p>
-                        </li>
-                        <li>
-                           <p>2024-04-25T07:44:20.725613974Z [WARNING]: FakeScanner - Example warning.</p>
-                        </li>
-                        <li>
-                           <p>2024-04-25T07:44:20.725613974Z [ERROR]: FakeScanner - Example error.</p>
-                        </li>
-                        <li class="resolved">
-                           <p>2024-04-25T07:44:20.725613974Z [ERROR]: FakeScanner - Example error, resolved.</p>
-                           <p>
-                              Resolved by: CANT_FIX_ISSUE - Resolved for illustration.</p>
-                        </li>
-                     </ul>
-                  </td>
-               </tr>
-               <tr class="error excluded" id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-2">
-                  <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-2">2</a></td>
-                  <td>Ant:junit:junit:4.12</td>
-                  <td>
-                     <ul>
-                        <li class="excluded">testCompile 
-                           <div class="reason">Excluded: TEST_DEPENDENCY_OF - The scope only contains test dependencies.</div>
-                        </li>
-                     </ul>
-                  </td>
-                  <td><em>Declared Licenses:</em><dl>
-                        <dd>
-                           <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:2aa9b989e0fec475baf21544f8613cb53d03c3f7">EPL-1.0</a></div>
-                        </dd>
-                     </dl><em>Effective License:</em><dl>
-                        <dd>
-                           <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:2aa9b989e0fec475baf21544f8613cb53d03c3f7">EPL-1.0</a></div>
-                        </dd>
-                     </dl>
-                  </td>
-                  <td>
-                     <ul>
-                        <li>
-                           <p>2024-04-25T07:44:20.725613974Z [WARNING]: Gradle - Example analyzer warning in excluded
-                              package.</p>
-                        </li>
-                     </ul>
-                  </td>
-                  <td>
-                     <ul></ul>
-                  </td>
-               </tr>
-               <tr class="success excluded" id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-3">
-                  <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-3">3</a></td>
-                  <td>Maven:com.foobar:foobar:1.0</td>
-                  <td>
-                     <ul>
-                        <li class="excluded">testCompile 
-                           <div class="reason">Excluded: TEST_DEPENDENCY_OF - The scope only contains test dependencies.</div>
-                        </li>
-                     </ul>
-                  </td>
-                  <td><em>Concluded License:</em><dl>
-                        <dd>
-                           <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:d159169d1050894d3ea3b98e1c965c4058208fe1">GPL-2.0-only</a> OR <a href="https://archive.softwareheritage.org/browse/content/sha1_git:1bf98523e33170372cf0702f03e38dadec3c5094">MIT</a></div>
-                        </dd>
-                     </dl><em>Declared Licenses:</em><dl>
-                        <dd>
-                           <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:d159169d1050894d3ea3b98e1c965c4058208fe1">GPL-2.0-only</a></div>
-                           <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:1bf98523e33170372cf0702f03e38dadec3c5094">MIT</a></div>
-                        </dd>
-                     </dl><em>Effective License:</em><dl>
-                        <dd>
-                           <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:1bf98523e33170372cf0702f03e38dadec3c5094">MIT</a></div>
-                        </dd>
-                     </dl>
-                  </td>
-                  <td>
-                     <ul></ul>
-                  </td>
-                  <td>
-                     <ul></ul>
-                  </td>
-               </tr>
-               <tr class="success excluded" id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-4">
-                  <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-4">4</a></td>
-                  <td>Maven:com.h2database:h2:1.4.200</td>
-                  <td>
-                     <ul>
-                        <li class="excluded">testCompile 
-                           <div class="reason">Excluded: TEST_DEPENDENCY_OF - The scope only contains test dependencies.</div>
-                        </li>
-                     </ul>
-                  </td>
-                  <td><em>Concluded License:</em><dl>
-                        <dd>
-                           <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:2aa9b989e0fec475baf21544f8613cb53d03c3f7">EPL-1.0</a> OR <a href="https://archive.softwareheritage.org/browse/content/sha1_git:a612ad9813b006ce81d1ee438dd784da99a54007">MPL-2.0</a></div>
-                        </dd>
-                     </dl><em>Declared Licenses:</em><dl>
-                        <dd>
-                           <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:2aa9b989e0fec475baf21544f8613cb53d03c3f7">EPL-1.0</a></div>
-                           <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:a612ad9813b006ce81d1ee438dd784da99a54007">MPL-2.0</a></div>
-                        </dd>
-                     </dl><em>Effective License:</em><dl>
-                        <dd>
-                           <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:a612ad9813b006ce81d1ee438dd784da99a54007">MPL-2.0</a></div>
-                        </dd>
-                     </dl>
-                  </td>
-                  <td>
-                     <ul></ul>
-                  </td>
-                  <td>
-                     <ul></ul>
-                  </td>
-               </tr>
-               <tr class="success " id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-5">
-                  <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-5">5</a></td>
-                  <td>Maven:org.apache.commons:commons-lang3:3.5</td>
-                  <td>
-                     <ul>
-                        <li class="">compile</li>
-                        <li class="excluded">testCompile 
-                           <div class="reason">Excluded: TEST_DEPENDENCY_OF - The scope only contains test dependencies.</div>
-                        </li>
-                     </ul>
-                  </td>
-                  <td><em>Declared Licenses:</em><dl>
-                        <dd>
-                           <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64">Apache-2.0</a></div>
-                        </dd>
-                     </dl><em>Effective License:</em><dl>
-                        <dd>
-                           <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64">Apache-2.0</a></div>
-                        </dd>
-                     </dl>
-                  </td>
-                  <td>
-                     <ul></ul>
-                  </td>
-                  <td>
-                     <ul></ul>
-                  </td>
-               </tr>
-               <tr class="error " id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-6">
-                  <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-6">6</a></td>
-                  <td>Maven:org.apache.commons:commons-text:1.1</td>
-                  <td>
-                     <ul>
-                        <li class="">compile</li>
-                        <li class="excluded">testCompile 
-                           <div class="reason">Excluded: TEST_DEPENDENCY_OF - The scope only contains test dependencies.</div>
-                        </li>
-                     </ul>
-                  </td>
-                  <td><em>Declared Licenses:</em><dl>
-                        <dd>
-                           <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64">Apache-2.0</a></div>
-                        </dd>
-                     </dl><em>Effective License:</em><dl>
-                        <dd>
-                           <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64">Apache-2.0</a></div>
-                        </dd>
-                     </dl>
-                  </td>
-                  <td>
-                     <ul>
-                        <li>
-                           <p>2024-04-25T07:44:20.725613974Z [WARNING]: Gradle - Example analyzer warning in included
-                              package.</p>
-                        </li>
-                     </ul>
-                  </td>
-                  <td>
-                     <ul></ul>
-                  </td>
-               </tr>
-               <tr class="warning " id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-7">
-                  <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-7">7</a></td>
-                  <td>Maven:org.example.test:component:1.11</td>
-                  <td>
-                     <ul>
-                        <li class="">compile</li>
-                        <li class="excluded">testCompile 
-                           <div class="reason">Excluded: TEST_DEPENDENCY_OF - The scope only contains test dependencies.</div>
-                        </li>
-                     </ul>
-                  </td>
-                  <td></td>
-                  <td>
-                     <ul></ul>
-                  </td>
-                  <td>
-                     <ul></ul>
-                  </td>
-               </tr>
-               <tr class="success excluded" id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-8">
-                  <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-8">8</a></td>
-                  <td>Maven:org.hamcrest:hamcrest-core:1.3</td>
-                  <td>
-                     <ul>
-                        <li class="excluded">testCompile 
-                           <div class="reason">Excluded: TEST_DEPENDENCY_OF - The scope only contains test dependencies.</div>
-                        </li>
-                     </ul>
-                  </td>
-                  <td><em>Declared Licenses:</em><dl>
-                        <dd>
-                           <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:c329ef6d12d2a701a57fedeab0437884fe0d8de2">BSD-3-Clause</a></div>
-                        </dd>
-                     </dl><em>Effective License:</em><dl>
-                        <dd>
-                           <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:c329ef6d12d2a701a57fedeab0437884fe0d8de2">BSD-3-Clause</a></div>
-                        </dd>
-                     </dl>
-                  </td>
-                  <td>
-                     <ul></ul>
-                  </td>
-                  <td>
-                     <ul></ul>
-                  </td>
-               </tr>
-            </tbody>
-         </table>
+         <div class="project excluded" id="Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0">
+            <h2>Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0 (sub/module/project/build.gradle)</h2>
+            <h3>Project is Excluded</h3>
+            <p>The project is excluded for the following reason(s):</p>
+            <p>
+               <div class="reason">EXAMPLE_OF - The project is an example.</div>
+            </p>
+            <h3>VCS Information</h3>
+            <table class="report-key-value-table excluded">
+               <tbody>
+                  <tr>
+                     <td>Type</td>
+                     <td>Git</td>
+                  </tr>
+                  <tr>
+                     <td>URL</td>
+                     <td>https://example.com/git</td>
+                  </tr>
+                  <tr>
+                     <td>Path</td>
+                     <td>project</td>
+                  </tr>
+                  <tr>
+                     <td>Revision</td>
+                     <td>master</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3>Packages</h3>
+            <table class="report-table report-project-table excluded">
+               <thead>
+                  <tr class="excluded">
+                     <th>#</th>
+                     <th>Package</th>
+                     <th>Scopes</th>
+                     <th>Licenses</th>
+                     <th>Open Issues</th>
+                     <th>Excluded &amp; Resolved Issues</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr class="pkg excluded" id="Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0-pkg-1">
+                     <td><a href="#Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0-pkg-1">1</a></td>
+                     <td>Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0</td>
+                     <td></td>
+                     <td><em>Declared Licenses:</em><dl>
+                           <dd>
+                              <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:197ec4de65a2e5414b290fb46dee75f55e1b69e8">CC-BY-NC-3.0</a></div>
+                              <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:f288702d2fa16d3cdf0035b15a9fcbc552cd88e7">GPL-3.0-only</a> WITH <a href="https://archive.softwareheritage.org/browse/content/sha1_git:e86f7fb58a4656330ebdfab5e75d72f86f5e9af9">GCC-exception-3.1</a></div>
+                           </dd>
+                        </dl><em>Detected Licenses (from <a href="https://example.com/git">VCS</a>):</em><dl>
+                           <dd>
+                              <div class="detected-license"><a href="https://archive.softwareheritage.org/browse/content/sha1_git:261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64">Apache-2.0</a></div>
+                              <div class="detected-license excluded">MIT (Excluded: EXAMPLE_OF - These are example files.)</div>
+                           </dd>
+                        </dl><em>Effective License:</em><dl>
+                           <dd>
+                              <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64">Apache-2.0</a> AND <a href="https://archive.softwareheritage.org/browse/content/sha1_git:197ec4de65a2e5414b290fb46dee75f55e1b69e8">CC-BY-NC-3.0</a> AND <a href="https://archive.softwareheritage.org/browse/content/sha1_git:f288702d2fa16d3cdf0035b15a9fcbc552cd88e7">GPL-3.0-only</a> WITH <a href="https://archive.softwareheritage.org/browse/content/sha1_git:e86f7fb58a4656330ebdfab5e75d72f86f5e9af9">GCC-exception-3.1</a></div>
+                           </dd>
+                        </dl>
+                     </td>
+                     <td></td>
+                     <td>
+                        <table class="report-table package-issue-table">
+                           <tr class="resolved">
+                              <td>
+                                 <p>2024-04-25T07:44:20.725613974Z [ERROR]: FakeScanner - Example error, resolved.</p>
+                                 <p>
+                                    Resolved by: CANT_FIX_ISSUE - Resolved for illustration.</p>
+                              </td>
+                           </tr>
+                           <tr class="excluded">
+                              <td>
+                                 <p>2024-04-22T10:36:10.661544294Z [ERROR]: FakeScanner - ERROR: Timeout after 300 seconds
+                                    while scanning file 'project/file-within-excluded-project.dat'.</p>
+                              </td>
+                           </tr>
+                           <tr class="excluded">
+                              <td>
+                                 <p>2024-04-25T07:44:20.725613974Z [HINT]: FakeScanner - Example hint.</p>
+                              </td>
+                           </tr>
+                           <tr class="excluded">
+                              <td>
+                                 <p>2024-04-25T07:44:20.725613974Z [WARNING]: FakeScanner - Example warning.</p>
+                              </td>
+                           </tr>
+                           <tr class="excluded">
+                              <td>
+                                 <p>2024-04-25T07:44:20.725613974Z [ERROR]: FakeScanner - Example error.</p>
+                              </td>
+                           </tr>
+                        </table>
+                     </td>
+                  </tr>
+               </tbody>
+            </table>
+         </div>
+         <div class="project " id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0">
+            <h2>Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0 (analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle)</h2>
+            <h3>VCS Information</h3>
+            <table class="report-key-value-table ">
+               <tbody>
+                  <tr>
+                     <td>Type</td>
+                     <td>Git</td>
+                  </tr>
+                  <tr>
+                     <td>URL</td>
+                     <td>https://github.com/oss-review-toolkit/ort.git</td>
+                  </tr>
+                  <tr>
+                     <td>Path</td>
+                     <td>analyzer/src/funTest/assets/projects/synthetic/gradle/lib</td>
+                  </tr>
+                  <tr>
+                     <td>Revision</td>
+                     <td>master</td>
+                  </tr>
+               </tbody>
+            </table>
+            <h3>Packages</h3>
+            <table class="report-table report-project-table ">
+               <thead>
+                  <tr class="">
+                     <th>#</th>
+                     <th>Package</th>
+                     <th>Scopes</th>
+                     <th>Licenses</th>
+                     <th>Open Issues</th>
+                     <th>Excluded &amp; Resolved Issues</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr class="pkg " id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-1">
+                     <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-1">1</a></td>
+                     <td>Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0</td>
+                     <td></td>
+                     <td><em>Detected Licenses (from <a href="https://github.com/oss-review-toolkit/ort.git">VCS</a>):</em><dl>
+                           <dd>
+                              <div class="detected-license"><a href="https://archive.softwareheritage.org/browse/content/sha1_git:c329ef6d12d2a701a57fedeab0437884fe0d8de2">BSD-3-Clause</a> (<a href="https://github.com/oss-review-toolkit/ort/tree/master/analyzer/src/funTest/assets/projects/synthetic/gradle/lib/src/code.cpp#L1">link</a> to the location)</div>
+                              <div class="detected-license"><a href="https://archive.softwareheritage.org/browse/content/sha1_git:d159169d1050894d3ea3b98e1c965c4058208fe1">GPL-2.0-only</a> WITH <a href="https://archive.softwareheritage.org/browse/content/sha1_git:63ae6d171e2da985784f3e0ac865491fa093521d">Classpath-exception-2.0</a> (<a href="https://github.com/oss-review-toolkit/ort/tree/master/analyzer/src/funTest/assets/projects/synthetic/gradle/lib/src/code.cpp#L1">link</a> to the location)</div>
+                              <div class="detected-license">LicenseRef-test-Apache-2.0-multi-line (<a href="https://github.com/oss-review-toolkit/ort/tree/master/analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle#L19-L20">link</a> to the location)</div>
+                              <div class="detected-license">LicenseRef-test-Apache-2.0-single-line (exemplary <a href="https://github.com/oss-review-toolkit/ort/tree/master/analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle#L19">link</a> to the first of 2 locations)</div>
+                              <div class="detected-license"><a href="https://archive.softwareheritage.org/browse/content/sha1_git:1bf98523e33170372cf0702f03e38dadec3c5094">MIT</a> (<a href="https://github.com/oss-review-toolkit/ort/tree/master/analyzer/src/funTest/assets/projects/synthetic/gradle/lib/src/code.cpp#L1">link</a> to the location)</div>
+                           </dd>
+                        </dl><em>Effective License:</em><dl>
+                           <dd>
+                              <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:c329ef6d12d2a701a57fedeab0437884fe0d8de2">BSD-3-Clause</a> AND <a href="https://archive.softwareheritage.org/browse/content/sha1_git:d159169d1050894d3ea3b98e1c965c4058208fe1">GPL-2.0-only</a> WITH <a href="https://archive.softwareheritage.org/browse/content/sha1_git:63ae6d171e2da985784f3e0ac865491fa093521d">Classpath-exception-2.0</a> AND LicenseRef-test-Apache-2.0-multi-line AND LicenseRef-test-Apache-2.0-single-line OR LicenseRef-test-Apache-2.0-multi-line AND LicenseRef-test-Apache-2.0-single-line AND <a href="https://archive.softwareheritage.org/browse/content/sha1_git:1bf98523e33170372cf0702f03e38dadec3c5094">MIT</a></div>
+                           </dd>
+                        </dl>
+                     </td>
+                     <td>
+                        <table class="report-table package-issue-table">
+                           <tr class="error">
+                              <td>
+                                 <p>2024-04-25T07:44:20.725613974Z [ERROR]: Gradle - Example error.</p>
+                              </td>
+                           </tr>
+                           <tr class="error">
+                              <td>
+                                 <p>Unknown time [ERROR]: Dummy - DownloadException: No source artifact URL provided for
+                                    'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'.<br>Caused by: DownloadException: No VCS URL provided for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'.
+                                    Please make sure the published POM file includes the SCM connection, see: https://docs.gradle.org/current/userguide/publishing_maven.html#sec:modifying_the_generated_pom</p>
+                              </td>
+                           </tr>
+                           <tr class="error">
+                              <td>
+                                 <p>2024-04-22T10:36:10.661544294Z [ERROR]: FakeScanner - ERROR: Timeout after 300 seconds
+                                    while scanning file 'analyzer/src/funTest/assets/projects/synthetic/gradle/lib/included-file.dat'.</p>
+                              </td>
+                           </tr>
+                           <tr class="error">
+                              <td>
+                                 <p>2024-04-25T07:44:20.725613974Z [ERROR]: FakeScanner - Example error.</p>
+                              </td>
+                           </tr>
+                           <tr class="warning">
+                              <td>
+                                 <p>2024-04-25T07:44:20.725613974Z [WARNING]: Gradle - Example warning.</p>
+                              </td>
+                           </tr>
+                           <tr class="warning">
+                              <td>
+                                 <p>2024-04-25T07:44:20.725613974Z [WARNING]: FakeScanner - Example warning.</p>
+                              </td>
+                           </tr>
+                           <tr class="hint">
+                              <td>
+                                 <p>2024-04-25T07:44:20.725613974Z [HINT]: Gradle - Example hint.</p>
+                              </td>
+                           </tr>
+                           <tr class="hint">
+                              <td>
+                                 <p>2024-04-25T07:44:20.725613974Z [HINT]: FakeScanner - Example hint.</p>
+                              </td>
+                           </tr>
+                        </table>
+                     </td>
+                     <td>
+                        <table class="report-table package-issue-table">
+                           <tr class="resolved">
+                              <td>
+                                 <p>2024-04-25T07:44:20.725613974Z [ERROR]: Gradle - Example error, resolved.</p>
+                                 <p>
+                                    Resolved by: CANT_FIX_ISSUE - Resolved for illustration.</p>
+                              </td>
+                           </tr>
+                           <tr class="resolved">
+                              <td>
+                                 <p>2024-04-25T07:44:20.725613974Z [ERROR]: FakeScanner - Example error, resolved.</p>
+                                 <p>
+                                    Resolved by: CANT_FIX_ISSUE - Resolved for illustration.</p>
+                              </td>
+                           </tr>
+                        </table>
+                     </td>
+                  </tr>
+                  <tr class="pkg excluded" id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-2">
+                     <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-2">2</a></td>
+                     <td>Ant:junit:junit:4.12</td>
+                     <td>
+                        <ul>
+                           <li class="scope excluded">testCompile 
+                              <div class="reason">Excluded: TEST_DEPENDENCY_OF - The scope only contains test dependencies.</div>
+                           </li>
+                        </ul>
+                     </td>
+                     <td><em>Declared Licenses:</em><dl>
+                           <dd>
+                              <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:2aa9b989e0fec475baf21544f8613cb53d03c3f7">EPL-1.0</a></div>
+                           </dd>
+                        </dl><em>Effective License:</em><dl>
+                           <dd>
+                              <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:2aa9b989e0fec475baf21544f8613cb53d03c3f7">EPL-1.0</a></div>
+                           </dd>
+                        </dl>
+                     </td>
+                     <td></td>
+                     <td>
+                        <table class="report-table package-issue-table">
+                           <tr class="excluded">
+                              <td>
+                                 <p>2024-04-25T07:44:20.725613974Z [WARNING]: Gradle - Example analyzer warning in excluded
+                                    package.</p>
+                              </td>
+                           </tr>
+                        </table>
+                     </td>
+                  </tr>
+                  <tr class="pkg excluded" id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-3">
+                     <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-3">3</a></td>
+                     <td>Maven:com.foobar:foobar:1.0</td>
+                     <td>
+                        <ul>
+                           <li class="scope excluded">testCompile 
+                              <div class="reason">Excluded: TEST_DEPENDENCY_OF - The scope only contains test dependencies.</div>
+                           </li>
+                        </ul>
+                     </td>
+                     <td><em>Concluded License:</em><dl>
+                           <dd>
+                              <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:d159169d1050894d3ea3b98e1c965c4058208fe1">GPL-2.0-only</a> OR <a href="https://archive.softwareheritage.org/browse/content/sha1_git:1bf98523e33170372cf0702f03e38dadec3c5094">MIT</a></div>
+                           </dd>
+                        </dl><em>Declared Licenses:</em><dl>
+                           <dd>
+                              <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:d159169d1050894d3ea3b98e1c965c4058208fe1">GPL-2.0-only</a></div>
+                              <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:1bf98523e33170372cf0702f03e38dadec3c5094">MIT</a></div>
+                           </dd>
+                        </dl><em>Effective License:</em><dl>
+                           <dd>
+                              <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:1bf98523e33170372cf0702f03e38dadec3c5094">MIT</a></div>
+                           </dd>
+                        </dl>
+                     </td>
+                     <td></td>
+                     <td></td>
+                  </tr>
+                  <tr class="pkg excluded" id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-4">
+                     <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-4">4</a></td>
+                     <td>Maven:com.h2database:h2:1.4.200</td>
+                     <td>
+                        <ul>
+                           <li class="scope excluded">testCompile 
+                              <div class="reason">Excluded: TEST_DEPENDENCY_OF - The scope only contains test dependencies.</div>
+                           </li>
+                        </ul>
+                     </td>
+                     <td><em>Concluded License:</em><dl>
+                           <dd>
+                              <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:2aa9b989e0fec475baf21544f8613cb53d03c3f7">EPL-1.0</a> OR <a href="https://archive.softwareheritage.org/browse/content/sha1_git:a612ad9813b006ce81d1ee438dd784da99a54007">MPL-2.0</a></div>
+                           </dd>
+                        </dl><em>Declared Licenses:</em><dl>
+                           <dd>
+                              <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:2aa9b989e0fec475baf21544f8613cb53d03c3f7">EPL-1.0</a></div>
+                              <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:a612ad9813b006ce81d1ee438dd784da99a54007">MPL-2.0</a></div>
+                           </dd>
+                        </dl><em>Effective License:</em><dl>
+                           <dd>
+                              <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:a612ad9813b006ce81d1ee438dd784da99a54007">MPL-2.0</a></div>
+                           </dd>
+                        </dl>
+                     </td>
+                     <td></td>
+                     <td></td>
+                  </tr>
+                  <tr class="pkg " id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-5">
+                     <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-5">5</a></td>
+                     <td>Maven:org.apache.commons:commons-lang3:3.5</td>
+                     <td>
+                        <ul>
+                           <li class="scope ">compile</li>
+                           <li class="scope excluded">testCompile 
+                              <div class="reason">Excluded: TEST_DEPENDENCY_OF - The scope only contains test dependencies.</div>
+                           </li>
+                        </ul>
+                     </td>
+                     <td><em>Declared Licenses:</em><dl>
+                           <dd>
+                              <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64">Apache-2.0</a></div>
+                           </dd>
+                        </dl><em>Effective License:</em><dl>
+                           <dd>
+                              <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64">Apache-2.0</a></div>
+                           </dd>
+                        </dl>
+                     </td>
+                     <td></td>
+                     <td></td>
+                  </tr>
+                  <tr class="pkg " id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-6">
+                     <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-6">6</a></td>
+                     <td>Maven:org.apache.commons:commons-text:1.1</td>
+                     <td>
+                        <ul>
+                           <li class="scope ">compile</li>
+                           <li class="scope excluded">testCompile 
+                              <div class="reason">Excluded: TEST_DEPENDENCY_OF - The scope only contains test dependencies.</div>
+                           </li>
+                        </ul>
+                     </td>
+                     <td><em>Declared Licenses:</em><dl>
+                           <dd>
+                              <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64">Apache-2.0</a></div>
+                           </dd>
+                        </dl><em>Effective License:</em><dl>
+                           <dd>
+                              <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64">Apache-2.0</a></div>
+                           </dd>
+                        </dl>
+                     </td>
+                     <td>
+                        <table class="report-table package-issue-table">
+                           <tr class="warning">
+                              <td>
+                                 <p>2024-04-25T07:44:20.725613974Z [WARNING]: Gradle - Example analyzer warning in included
+                                    package.</p>
+                              </td>
+                           </tr>
+                        </table>
+                     </td>
+                     <td></td>
+                  </tr>
+                  <tr class="pkg " id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-7">
+                     <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-7">7</a></td>
+                     <td>Maven:org.example.test:component:1.11</td>
+                     <td>
+                        <ul>
+                           <li class="scope ">compile</li>
+                           <li class="scope excluded">testCompile 
+                              <div class="reason">Excluded: TEST_DEPENDENCY_OF - The scope only contains test dependencies.</div>
+                           </li>
+                        </ul>
+                     </td>
+                     <td></td>
+                     <td></td>
+                     <td></td>
+                  </tr>
+                  <tr class="pkg excluded" id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-8">
+                     <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-8">8</a></td>
+                     <td>Maven:org.hamcrest:hamcrest-core:1.3</td>
+                     <td>
+                        <ul>
+                           <li class="scope excluded">testCompile 
+                              <div class="reason">Excluded: TEST_DEPENDENCY_OF - The scope only contains test dependencies.</div>
+                           </li>
+                        </ul>
+                     </td>
+                     <td><em>Declared Licenses:</em><dl>
+                           <dd>
+                              <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:c329ef6d12d2a701a57fedeab0437884fe0d8de2">BSD-3-Clause</a></div>
+                           </dd>
+                        </dl><em>Effective License:</em><dl>
+                           <dd>
+                              <div><a href="https://archive.softwareheritage.org/browse/content/sha1_git:c329ef6d12d2a701a57fedeab0437884fe0d8de2">BSD-3-Clause</a></div>
+                           </dd>
+                        </dl>
+                     </td>
+                     <td></td>
+                     <td></td>
+                  </tr>
+               </tbody>
+            </table>
+         </div>
          <h2 id="repository-configuration">Repository Configuration</h2>
          <pre><code class="language-yaml">
 ---
