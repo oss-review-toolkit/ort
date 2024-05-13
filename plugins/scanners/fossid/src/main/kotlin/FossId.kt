@@ -922,6 +922,7 @@ class FossId internal constructor(
         val snippetLicenseFindings = mutableSetOf<LicenseFinding>()
         val snippetFindings = mapSnippetFindings(
             rawResults,
+            config.snippetsLimit,
             issues,
             detectedLicenseMapping,
             snippetChoices,

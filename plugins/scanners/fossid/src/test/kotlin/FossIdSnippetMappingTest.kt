@@ -82,7 +82,14 @@ class FossIdSnippetMappingTest : WordSpec({
                 snippetMatchedLines
             )
 
-            val mappedSnippets = mapSnippetFindings(rawResults, issues, emptyMap(), emptyList(), mutableSetOf())
+            val mappedSnippets = mapSnippetFindings(
+                rawResults,
+                500,
+                issues,
+                emptyMap(),
+                emptyList(),
+                mutableSetOf()
+            )
 
             issues should beEmpty()
             mappedSnippets shouldHaveSize 3

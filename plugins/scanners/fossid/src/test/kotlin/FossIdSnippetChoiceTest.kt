@@ -66,8 +66,9 @@ import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.utils.ort.ORT_NAME
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
-/** A sample file in the results. **/
+/** Sample files in the results. **/
 private const val FILE_1 = "a.java"
+private const val FILE_2 = "b.java"
 
 /** A sample purl in the results. **/
 private const val PURL_1 = "pkg:github/fakeuser/fakepackage1@1.0.0"
@@ -78,6 +79,7 @@ private const val PURL_2 = "pkg:github/fakeuser/fakepackage2@1.0.0"
 /** A sample purl in the results. **/
 private const val PURL_3 = "pkg:github/fakeuser/fakepackage3@1.0.0"
 
+@Suppress("LargeClass")
 class FossIdSnippetChoiceTest : WordSpec({
     beforeSpec {
         mockkStatic("org.ossreviewtoolkit.clients.fossid.ExtensionsKt")
@@ -716,6 +718,127 @@ class FossIdSnippetChoiceTest : WordSpec({
             }
             coVerify {
                 service.unmarkAsIdentified(USER, API_KEY, scanCode, FILE_1, any())
+            }
+        }
+
+        "respect the snippet limit when listing snippets" {
+            val projectCode = projectCode(PROJECT)
+            val scanCode = scanCode(PROJECT, null)
+            val config = createConfig(deltaScans = false, fetchSnippetMatchedLines = true, snippetsLimit = 2)
+            val vcsInfo = createVcsInfo()
+            val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
+            val pkgId = createIdentifier(index = 42)
+
+            FossIdRestService.create(config.serverUrl)
+                .expectProjectRequest(projectCode)
+                .expectListScans(projectCode, listOf(scan))
+                .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
+                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
+                .expectDownload(scanCode)
+                .mockFiles(
+                    scanCode,
+                    pendingFiles = listOf(FILE_1, FILE_2),
+                    snippets = listOf(
+                        createSnippet(0, FILE_1, PURL_1),
+                        createSnippet(1, FILE_1, PURL_2)
+                    ),
+                    matchedLines = mapOf(
+                        0 to MatchedLines.create((10..20).toList(), (10..20).toList()),
+                        1 to MatchedLines.create((20..30).toList(), (20..30).toList())
+                    )
+                )
+
+            val fossId = createFossId(config)
+
+            val summary = fossId.scan(createPackage(pkgId, vcsInfo)).summary
+
+            summary.snippetFindings shouldHaveSize 2
+            summary.snippetFindings.forEach {
+                it.sourceLocation.path shouldBe FILE_1
+            }
+
+            summary.snippetFindings.flatMap { it.snippets } shouldHaveSize 2
+            // todo + test issue
+        }
+
+        "list all the snippets of a file even if if goes over the snippets limit" {
+            val projectCode = projectCode(PROJECT)
+            val scanCode = scanCode(PROJECT, null)
+            val config = createConfig(deltaScans = false, fetchSnippetMatchedLines = true, snippetsLimit = 2)
+            val vcsInfo = createVcsInfo()
+            val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
+            val pkgId = createIdentifier(index = 42)
+
+            FossIdRestService.create(config.serverUrl)
+                .expectProjectRequest(projectCode)
+                .expectListScans(projectCode, listOf(scan))
+                .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
+                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
+                .expectDownload(scanCode)
+                .mockFiles(
+                    scanCode,
+                    pendingFiles = listOf(FILE_1),
+                    snippets = listOf(
+                        createSnippet(0, FILE_1, PURL_1),
+                        createSnippet(1, FILE_1, PURL_2),
+                        createSnippet(2, FILE_1, PURL_3)
+                    ),
+                    matchedLines = mapOf(
+                        0 to MatchedLines.create((10..20).toList(), (10..20).toList()),
+                        1 to MatchedLines.create((20..30).toList(), (20..30).toList()),
+                        2 to MatchedLines.create((20..30).toList(), (20..30).toList())
+                    )
+                )
+
+            val fossId = createFossId(config)
+
+            val summary = fossId.scan(createPackage(pkgId, vcsInfo)).summary
+
+            summary.snippetFindings shouldHaveSize 2
+            summary.snippetFindings.flatMap { it.snippets } shouldHaveSize 3
+        }
+
+        "not count the chosen snippet when enforcing the snippet limits" {
+            val projectCode = projectCode(PROJECT)
+            val scanCode = scanCode(PROJECT, null)
+            val config = createConfig(deltaScans = false, fetchSnippetMatchedLines = true, snippetsLimit = 2)
+            val vcsInfo = createVcsInfo()
+            val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
+            val pkgId = createIdentifier(index = 42)
+
+            FossIdRestService.create(config.serverUrl)
+                .expectProjectRequest(projectCode)
+                .expectListScans(projectCode, listOf(scan))
+                .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
+                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
+                .expectDownload(scanCode)
+                .mockFiles(
+                    scanCode,
+                    pendingFiles = listOf(FILE_1, FILE_2),
+                    snippets = listOf(
+                        createSnippet(0, FILE_1, PURL_1),
+                        createSnippet(1, FILE_1, PURL_2)
+                    ),
+                    matchedLines = mapOf(
+                        0 to MatchedLines.create((10..20).toList(), (10..20).toList()),
+                        1 to MatchedLines.create((20..30).toList(), (20..30).toList())
+                    )
+                )
+
+            val snippetChoices = createSnippetChoices(
+                vcsInfo.url,
+                createSnippetChoice(TextLocation(FILE_1, 10, 20), PURL_1, "")
+            )
+            val fossId = createFossId(config)
+
+            val summary = fossId.scan(createPackage(pkgId, vcsInfo), snippetChoices = snippetChoices).summary
+
+            summary.snippetFindings shouldHaveSize 3
+            summary.snippetFindings.first().apply {
+                sourceLocation.path shouldBe FILE_1
+            }
+            summary.snippetFindings.drop(1).forEach {
+                it.sourceLocation.path shouldBe FILE_2
             }
         }
     }
