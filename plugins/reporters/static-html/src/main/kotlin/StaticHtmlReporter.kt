@@ -457,8 +457,7 @@ class StaticHtmlReporter : Reporter {
         val rowId = "${projectTable.id.toCoordinates()}-pkg-${rowIndex + 1}"
 
         // Only mark the row as excluded if all scopes the dependency appears in are excluded.
-        val rowExcludedClass =
-            if (row.scopes.isNotEmpty() && row.scopes.all { it.excludes.isNotEmpty() }) "excluded" else ""
+        val rowExcludedClass = "excluded".takeIf { row.isExcluded() }.orEmpty()
 
         val cssClass = when {
             row.analyzerIssues.containsUnresolved() || row.scanIssues.containsUnresolved() -> "error"

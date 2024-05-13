@@ -182,7 +182,12 @@ internal data class ProjectTable(
          * All scan issues related to this package.
          */
         val scanIssues: List<TablesReportIssue>
-    )
+    ) {
+        /**
+         * Return true if and only if this [Row] is excluded by any [ScopeExclude]s
+         */
+        fun isExcluded(): Boolean = scopes.isNotEmpty() && scopes.all { it.excludes.isNotEmpty() }
+    }
 
     data class Scope(
         /**
