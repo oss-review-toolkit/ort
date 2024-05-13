@@ -176,113 +176,15 @@ internal suspend fun mapSnippetFindings(
     val allFindings = mutableSetOf<SnippetFinding>()
 
     rawResults.listSnippets.map { (file, rawSnippets) ->
-        val findings = mutableMapOf<TextLocation, MutableSet<OrtSnippet>>()
-
-        rawSnippets.forEach { snippet ->
-            // FossID does not return the hash of the remote artifact. Instead, it returns the MD5 hash of the
-            // matched file in the remote artifact as part of the "match_file_id" property.
-            val url = checkNotNull(snippet.url) {
-                "The URL of snippet ${snippet.id} for file '$file' must not be null."
-            }
-            val snippetProvenance = ArtifactProvenance(RemoteArtifact(url, Hash.NONE))
-            val purl = snippet.purl
-                ?: "pkg:${urlToPackageType(url)}/${snippet.author}/${snippet.artifact}@${snippet.version}"
-
-            val additionalSnippetData = mutableMapOf(
-                FossId.SNIPPET_DATA_ID to snippet.id.toString(),
-                FossId.SNIPPET_DATA_MATCH_TYPE to snippet.matchType.toString(),
-                FossId.SNIPPET_DATA_RELEASE_DATE to snippet.releaseDate.orEmpty()
-            )
-
-            var sourceLocations: Set<TextLocation> = setOf(TextLocation(file, TextLocation.UNKNOWN_LINE))
-            var snippetLocation: TextLocation? = null
-
-            if (snippet.matchType == MatchType.PARTIAL) {
-                val rawMatchedLines = rawResults.snippetMatchedLines[snippet.id]
-                val rawMatchedLinesSourceFile = rawMatchedLines?.localFile.orEmpty().collapseToRanges()
-                val rawMatchedLinesSnippetFile = rawMatchedLines?.mirrorFile.orEmpty().collapseToRanges()
-
-                if (rawMatchedLinesSourceFile.isNotEmpty()) {
-                    sourceLocations = rawMatchedLinesSourceFile.map { (first, second) ->
-                        TextLocation(file, first, second)
-                    }.toSet()
-                }
-
-                snippetLocation = rawMatchedLinesSnippetFile.firstOrNull()
-                    ?.let { (startLine, endLine) -> TextLocation(snippet.file, startLine, endLine) }
-
-                if (rawMatchedLinesSourceFile.isNotEmpty()) {
-                    additionalSnippetData[FossId.SNIPPET_DATA_MATCHED_LINE_SOURCE] =
-                        rawMatchedLinesSourceFile.prettyPrintRanges()
-                }
-
-                if (rawMatchedLinesSnippetFile.isNotEmpty()) {
-                    additionalSnippetData[FossId.SNIPPET_DATA_MATCHED_LINE_SNIPPET] =
-                        rawMatchedLinesSnippetFile.prettyPrintRanges()
-                }
-            }
-
-            val ortSnippetLocation = snippetLocation ?: TextLocation(snippet.file, TextLocation.UNKNOWN_LINE)
-
-            val license = snippet.artifactLicense?.let { artifactLicense ->
-                mapLicense(artifactLicense, ortSnippetLocation, issues, detectedLicenseMapping)?.license
-            } ?: SpdxConstants.NOASSERTION.toSpdx()
-
-            val ortSnippet = OrtSnippet(
-                snippet.score.toFloat(),
-                ortSnippetLocation,
-                snippetProvenance,
-                purl,
-                license,
-                additionalSnippetData
-            )
-
-            sourceLocations.forEach { sourceLocation ->
-                val isSnippetChoice = when {
-                    snippetChoices.any { it.given.sourceLocation == sourceLocation && it.choice.purl == purl } -> {
-                        logger.info {
-                            "Ignoring snippet $purl for file ${sourceLocation.prettyPrint()}, " +
-                                "as this is a chosen snippet."
-                        }
-                        true
-                    }
-
-                    snippetChoices.any { it.given.sourceLocation == sourceLocation } -> {
-                        logger.info {
-                            "Ignoring snippet $purl for file ${sourceLocation.prettyPrint()}, " +
-                                "as there is a snippet choice for this source location."
-                        }
-                        true
-                    }
-
-                    else -> false
-                }
-
-                val isLocationWithFalsePositives = remainingSnippetChoices.removeIf {
-                    it.given.sourceLocation == sourceLocation &&
-                        it.choice.reason == SnippetChoiceReason.NO_RELEVANT_FINDING
-                }
-
-                if (isLocationWithFalsePositives) {
-                    logger.info {
-                        "Ignoring snippet $purl for file ${sourceLocation.prettyPrint()}, " +
-                            "as this is a location with only false positives."
-                    }
-                }
-
-                if (!isSnippetChoice && !isLocationWithFalsePositives) {
-                    findings.getOrPut(sourceLocation) { mutableSetOf(ortSnippet) } += ortSnippet
-                }
-
-                getLicenseFindingFromSnippetChoice(
-                    remainingSnippetChoices,
-                    sourceLocation,
-                    ortSnippet
-                )?.let { finding -> snippetLicenseFindings += finding }
-            }
-        }
-
-        findings.map { SnippetFinding(it.key, it.value) }
+        rawSnippets.mapSnippetFindingsForFile(
+            file,
+            rawResults.snippetMatchedLines,
+            issues,
+            detectedLicenseMapping,
+            snippetChoices,
+            remainingSnippetChoices,
+            snippetLicenseFindings
+        )
     }.collect {
         allFindings += it
     }
@@ -308,6 +210,131 @@ internal suspend fun mapSnippetFindings(
             }
         }
     }
+}
+
+/**
+ * Map the snippets (@receiver]) of a single pending [file] to ORT [SnippetFinding]s. [snippetMatchedLines] contains the
+ * matching lines for those snippets. The licenses are mapped using the [detectedLicenseMapping]. Snippet choices are
+ * enforced using [snippetChoices] and [remainingSnippetChoices], the latter being the list of pending choices to be
+ * made.
+ * If any error occurs, an issue is added to [issues].
+ */
+private fun Set<Snippet>.mapSnippetFindingsForFile(
+    file: String,
+    snippetMatchedLines: Map<Int, MatchedLines>,
+    issues: MutableList<Issue>,
+    detectedLicenseMapping: Map<String, String>,
+    snippetChoices: List<SnippetChoice>,
+    remainingSnippetChoices: MutableList<SnippetChoice>,
+    snippetLicenseFindings: MutableSet<LicenseFinding>
+): List<SnippetFinding> {
+    val findings = mutableMapOf<TextLocation, MutableSet<OrtSnippet>>()
+
+    forEach { snippet ->
+        // FossID does not return the hash of the remote artifact. Instead, it returns the MD5 hash of the
+        // matched file in the remote artifact as part of the "match_file_id" property.
+        val url = checkNotNull(snippet.url) {
+            "The URL of snippet ${snippet.id} for file '$file' must not be null."
+        }
+        val snippetProvenance = ArtifactProvenance(RemoteArtifact(url, Hash.NONE))
+        val purl = snippet.purl
+            ?: "pkg:${urlToPackageType(url)}/${snippet.author}/${snippet.artifact}@${snippet.version}"
+
+        val additionalSnippetData = mutableMapOf(
+            FossId.SNIPPET_DATA_ID to snippet.id.toString(),
+            FossId.SNIPPET_DATA_MATCH_TYPE to snippet.matchType.toString(),
+            FossId.SNIPPET_DATA_RELEASE_DATE to snippet.releaseDate.orEmpty()
+        )
+
+        var sourceLocations: Set<TextLocation> = setOf(TextLocation(file, TextLocation.UNKNOWN_LINE))
+        var snippetLocation: TextLocation? = null
+
+        if (snippet.matchType == MatchType.PARTIAL) {
+            val rawMatchedLines = snippetMatchedLines[snippet.id]
+            val rawMatchedLinesSourceFile = rawMatchedLines?.localFile.orEmpty().collapseToRanges()
+            val rawMatchedLinesSnippetFile = rawMatchedLines?.mirrorFile.orEmpty().collapseToRanges()
+
+            if (rawMatchedLinesSourceFile.isNotEmpty()) {
+                sourceLocations = rawMatchedLinesSourceFile.map { (first, second) ->
+                    TextLocation(file, first, second)
+                }.toSet()
+            }
+
+            snippetLocation = rawMatchedLinesSnippetFile.firstOrNull()
+                ?.let { (startLine, endLine) -> TextLocation(snippet.file, startLine, endLine) }
+
+            if (rawMatchedLinesSourceFile.isNotEmpty()) {
+                additionalSnippetData[FossId.SNIPPET_DATA_MATCHED_LINE_SOURCE] =
+                    rawMatchedLinesSourceFile.prettyPrintRanges()
+            }
+
+            if (rawMatchedLinesSnippetFile.isNotEmpty()) {
+                additionalSnippetData[FossId.SNIPPET_DATA_MATCHED_LINE_SNIPPET] =
+                    rawMatchedLinesSnippetFile.prettyPrintRanges()
+            }
+        }
+
+        val ortSnippetLocation = snippetLocation ?: TextLocation(snippet.file, TextLocation.UNKNOWN_LINE)
+
+        val license = snippet.artifactLicense?.let { artifactLicense ->
+            mapLicense(artifactLicense, ortSnippetLocation, issues, detectedLicenseMapping)?.license
+        } ?: SpdxConstants.NOASSERTION.toSpdx()
+
+        val ortSnippet = OrtSnippet(
+            snippet.score.toFloat(),
+            ortSnippetLocation,
+            snippetProvenance,
+            purl,
+            license,
+            additionalSnippetData
+        )
+
+        sourceLocations.forEach { sourceLocation ->
+            val isSnippetChoice = when {
+                snippetChoices.any { it.given.sourceLocation == sourceLocation && it.choice.purl == purl } -> {
+                    logger.info {
+                        "Ignoring snippet $purl for file ${sourceLocation.prettyPrint()}, " +
+                            "as this is a chosen snippet."
+                    }
+                    true
+                }
+
+                snippetChoices.any { it.given.sourceLocation == sourceLocation } -> {
+                    logger.info {
+                        "Ignoring snippet $purl for file ${sourceLocation.prettyPrint()}, " +
+                            "as there is a snippet choice for this source location."
+                    }
+                    true
+                }
+
+                else -> false
+            }
+
+            val isLocationWithFalsePositives = remainingSnippetChoices.removeIf {
+                it.given.sourceLocation == sourceLocation &&
+                    it.choice.reason == SnippetChoiceReason.NO_RELEVANT_FINDING
+            }
+
+            if (isLocationWithFalsePositives) {
+                logger.info {
+                    "Ignoring snippet $purl for file ${sourceLocation.prettyPrint()}, " +
+                        "as this is a location with only false positives."
+                }
+            }
+
+            if (!isSnippetChoice && !isLocationWithFalsePositives) {
+                findings.getOrPut(sourceLocation) { mutableSetOf(ortSnippet) } += ortSnippet
+            }
+
+            getLicenseFindingFromSnippetChoice(
+                remainingSnippetChoices,
+                sourceLocation,
+                ortSnippet
+            )?.let { finding -> snippetLicenseFindings += finding }
+        }
+    }
+
+    return findings.map { SnippetFinding(it.key, it.value) }
 }
 
 /**
