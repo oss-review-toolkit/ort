@@ -186,7 +186,7 @@ internal data class ProjectTable(
         /**
          * Return true if and only if this [Row] is excluded by any [ScopeExclude]s
          */
-        fun isExcluded(): Boolean = scopes.isNotEmpty() && scopes.all { it.excludes.isNotEmpty() }
+        fun isExcluded(): Boolean = scopes.isNotEmpty() && scopes.all { it.isExcluded() }
     }
 
     data class Scope(
@@ -199,7 +199,12 @@ internal data class ProjectTable(
          * The excludes matching this scope.
          */
         val excludes: List<ScopeExclude>
-    )
+    ) {
+        /**
+         * Return true if an only if this scope is matched by any [ScopeExclude]'s.
+         */
+        fun isExcluded(): Boolean = excludes.isNotEmpty()
+    }
 }
 
 internal data class TablesReportIssue(
