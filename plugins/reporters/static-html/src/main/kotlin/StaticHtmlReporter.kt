@@ -479,7 +479,7 @@ class StaticHtmlReporter : Reporter {
                 if (row.scopes.isNotEmpty()) {
                     ul {
                         row.scopes.forEach { scope ->
-                            val excludedClass = if (scope.excludes.isNotEmpty()) "excluded" else ""
+                            val excludedClass = "excluded".takeIf { scope.isExcluded() }.orEmpty()
                             li(excludedClass) {
                                 +scope.name
                                 if (scope.excludes.isNotEmpty()) {
