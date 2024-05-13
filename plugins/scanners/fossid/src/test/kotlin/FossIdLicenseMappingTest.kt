@@ -60,7 +60,14 @@ class FossIdLicenseMappingTest : WordSpec({
             val issues = mutableListOf<Issue>()
 
             val mapping = mapOf("Apache 2.0" to "Apache-2.0")
-            val findings = mapSnippetFindings(rawResults, issues, mapping, emptyList(), mutableSetOf())
+            val findings = mapSnippetFindings(
+                rawResults,
+                500,
+                issues,
+                mapping,
+                emptyList(),
+                mutableSetOf()
+            )
 
             issues should beEmpty()
             findings should haveSize(1)
@@ -75,7 +82,14 @@ class FossIdLicenseMappingTest : WordSpec({
             val rawResults = createSnippet("GFDL-1.2")
             val issues = mutableListOf<Issue>()
 
-            val findings = mapSnippetFindings(rawResults, issues, emptyMap(), emptyList(), mutableSetOf())
+            val findings = mapSnippetFindings(
+                rawResults,
+                500,
+                issues,
+                emptyMap(),
+                emptyList(),
+                mutableSetOf()
+            )
 
             issues should beEmpty()
             findings should haveSize(1)
@@ -90,7 +104,14 @@ class FossIdLicenseMappingTest : WordSpec({
             val rawResults = createSnippet("Apache-2.0")
             val issues = mutableListOf<Issue>()
 
-            val findings = mapSnippetFindings(rawResults, issues, emptyMap(), emptyList(), mutableSetOf())
+            val findings = mapSnippetFindings(
+                rawResults,
+                500,
+                issues,
+                emptyMap(),
+                emptyList(),
+                mutableSetOf()
+            )
 
             issues should beEmpty()
             findings should haveSize(1)
@@ -105,7 +126,14 @@ class FossIdLicenseMappingTest : WordSpec({
             val rawResults = createSnippet("invalid license")
             val issues = mutableListOf<Issue>()
 
-            val findings = mapSnippetFindings(rawResults, issues, emptyMap(), emptyList(), mutableSetOf())
+            val findings = mapSnippetFindings(
+                rawResults,
+                500,
+                issues,
+                emptyMap(),
+                emptyList(),
+                mutableSetOf()
+            )
 
             issues should haveSize(1)
             issues.first() shouldNotBeNull {

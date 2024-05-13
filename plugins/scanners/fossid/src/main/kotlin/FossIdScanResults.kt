@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.plugins.scanners.fossid
 import java.lang.invoke.MethodHandles
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.transformWhile
 
 import org.apache.logging.log4j.kotlin.loggerOf
 
@@ -167,16 +167,21 @@ private fun mapLicense(
  */
 internal suspend fun mapSnippetFindings(
     rawResults: RawResults,
+    snippetsLimit: Int,
     issues: MutableList<Issue>,
     detectedLicenseMapping: Map<String, String>,
     snippetChoices: List<SnippetChoice>,
     snippetLicenseFindings: MutableSet<LicenseFinding>
 ): Set<SnippetFinding> {
     val remainingSnippetChoices = snippetChoices.toMutableList()
-    val allFindings = mutableSetOf<SnippetFinding>()
+    val results = mutableSetOf<SnippetFinding>()
+    var runningSnippetCount = 0
 
-    rawResults.listSnippets.map { (file, rawSnippets) ->
-        rawSnippets.mapSnippetFindingsForFile(
+    rawResults.listSnippets.transformWhile { (file, rawSnippets) ->
+        emit(file to rawSnippets)
+        runningSnippetCount < snippetsLimit
+    }.collect { (file, rawSnippets) ->
+        val mappedSnippets = rawSnippets.mapSnippetFindingsForFile(
             file,
             rawResults.snippetMatchedLines,
             issues,
@@ -185,11 +190,12 @@ internal suspend fun mapSnippetFindings(
             remainingSnippetChoices,
             snippetLicenseFindings
         )
-    }.collect {
-        allFindings += it
+
+        runningSnippetCount += mappedSnippets.size
+        results += mappedSnippets
     }
 
-    return allFindings.also {
+    return results.also {
         remainingSnippetChoices.forEach { snippetChoice ->
             // The issue is created only if the chosen snippet does not correspond to a file marked by a previous run.
             val isNotOldMarkedAsIdentifiedFile = rawResults.markedAsIdentifiedFiles.none { markedFile ->
