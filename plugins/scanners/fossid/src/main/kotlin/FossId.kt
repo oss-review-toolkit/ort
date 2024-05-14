@@ -31,6 +31,7 @@ import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
@@ -876,14 +877,19 @@ class FossId internal constructor(
                 if (config.fetchSnippetMatchedLines) {
                     logger.info { "Listing snippet matched lines for $file..." }
 
-                    filteredSnippets.filter { it.matchType == MatchType.PARTIAL }.map { snippet ->
-                        val matchedLinesResponse =
-                            service.listMatchedLines(config.user, config.apiKey, scanCode, file, snippet.id)
-                                .checkResponse("list snippets matched lines")
-                        val lines = checkNotNull(matchedLinesResponse.data) {
-                            "Matched lines could not be listed. Response was ${matchedLinesResponse.message}."
-                        }
-                        matchedLines[snippet.id] = lines
+                    coroutineScope {
+                        filteredSnippets.filter { it.matchType == MatchType.PARTIAL }.map { snippet ->
+                            async {
+                                val matchedLinesResponse =
+                                    service.listMatchedLines(config.user, config.apiKey, scanCode, file, snippet.id)
+                                        .checkResponse("list snippets matched lines")
+                                val lines = checkNotNull(matchedLinesResponse.data) {
+                                    "Matched lines could not be listed. Response was " +
+                                        "${matchedLinesResponse.message}."
+                                }
+                                matchedLines[snippet.id] = lines
+                            }
+                        }.awaitAll()
                     }
                 }
 
