@@ -313,7 +313,7 @@ class Bundler(
 
         // The metadata produced by the "resolve_dependencies.rb" script separates specs for packages with the "\0"
         // character as delimiter.
-        val gemSpecs = stdout.split('\u0000').dropWhile { it.startsWith("Fetching gem metadata") }.map {
+        val gemSpecs = stdout.split('\u0000').map {
             GemSpec.createFromMetadata(yamlMapper.readTree(it))
         }.associateByTo(mutableMapOf()) {
             it.name
