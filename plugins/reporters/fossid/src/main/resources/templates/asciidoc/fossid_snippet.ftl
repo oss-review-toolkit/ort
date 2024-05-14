@@ -31,6 +31,15 @@ List of all the provenances with their files and snippets.
 
 [#if scanResult.scanner.name != "FossId"] [#continue] [/#if]
 
+[#assign snippetsLimitIssue = helper.getSnippetsLimitIssue()]
+
+[#if snippetsLimitIssue??]
+[WARNING]
+====
+${snippetsLimitIssue}
+====
+[/#if]
+
 [#if scanResult.provenance.vcsInfo??]
     [#assign url = scanResult.provenance.vcsInfo.url]
 [#else]

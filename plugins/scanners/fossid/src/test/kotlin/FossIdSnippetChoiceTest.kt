@@ -758,7 +758,12 @@ class FossIdSnippetChoiceTest : WordSpec({
             }
 
             summary.snippetFindings.flatMap { it.snippets } shouldHaveSize 2
-            // todo + test issue
+
+            summary.issues.forAtLeastOne {
+                it.message shouldBe "The snippets limit of 2 has been reached. To see the possible remaining " +
+                    "snippets, please perform a snippet choice for the snippets presents in the snippet report an " +
+                    "rerun the scan."
+            }
         }
 
         "list all the snippets of a file even if if goes over the snippets limit" {
@@ -796,6 +801,12 @@ class FossIdSnippetChoiceTest : WordSpec({
 
             summary.snippetFindings shouldHaveSize 2
             summary.snippetFindings.flatMap { it.snippets } shouldHaveSize 3
+
+            summary.issues.forAtLeastOne {
+                it.message shouldBe "The snippets limit of 2 has been reached. To see the possible remaining " +
+                    "snippets, please perform a snippet choice for the snippets presents in the snippet report an " +
+                    "rerun the scan."
+            }
         }
 
         "not count the chosen snippet when enforcing the snippet limits" {
@@ -839,6 +850,12 @@ class FossIdSnippetChoiceTest : WordSpec({
             }
             summary.snippetFindings.drop(1).forEach {
                 it.sourceLocation.path shouldBe FILE_2
+            }
+
+            summary.issues.forAtLeastOne {
+                it.message shouldBe "The snippets limit of 2 has been reached. To see the possible remaining " +
+                    "snippets, please perform a snippet choice for the snippets presents in the snippet report an " +
+                    "rerun the scan."
             }
         }
     }
