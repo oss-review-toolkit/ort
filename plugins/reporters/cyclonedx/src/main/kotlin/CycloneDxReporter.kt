@@ -24,8 +24,8 @@ import java.util.Date
 import java.util.SortedSet
 import java.util.UUID
 
-import org.cyclonedx.BomGeneratorFactory
-import org.cyclonedx.CycloneDxSchema
+import org.cyclonedx.Version
+import org.cyclonedx.generators.BomGeneratorFactory
 import org.cyclonedx.model.AttachmentText
 import org.cyclonedx.model.Bom
 import org.cyclonedx.model.Component
@@ -35,6 +35,7 @@ import org.cyclonedx.model.Hash
 import org.cyclonedx.model.License
 import org.cyclonedx.model.LicenseChoice
 import org.cyclonedx.model.Metadata
+import org.cyclonedx.model.license.Expression
 import org.cyclonedx.model.metadata.ToolInformation
 
 import org.ossreviewtoolkit.model.FileFormat
@@ -68,7 +69,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicense
  */
 class CycloneDxReporter : Reporter {
     companion object {
-        val DEFAULT_SCHEMA_VERSION = CycloneDxSchema.Version.VERSION_15
+        val DEFAULT_SCHEMA_VERSION = Version.VERSION_15
         val DEFAULT_DATA_LICENSE = SpdxLicense.CC0_1_0
 
         const val REPORT_BASE_FILENAME = "bom.cyclonedx"
@@ -140,7 +141,7 @@ class CycloneDxReporter : Reporter {
         val projects = input.ortResult.getProjects(omitExcluded = true).sortedBy { it.id }
         val packages = input.ortResult.getPackages(omitExcluded = true).sortedBy { it.metadata.id }
 
-        val schemaVersion = CycloneDxSchema.Version.entries.find {
+        val schemaVersion = Version.entries.find {
             it.versionString == config.options[OPTION_SCHEMA_VERSION]
         } ?: DEFAULT_SCHEMA_VERSION
 
@@ -163,7 +164,7 @@ class CycloneDxReporter : Reporter {
                     }
                 )
             }
-            licenseChoice = LicenseChoice().apply { expression = dataLicense }
+            licenses = LicenseChoice().apply { expression = Expression(dataLicense) }
         }
 
         if (createSingleBom) {
@@ -326,7 +327,7 @@ class CycloneDxReporter : Reporter {
             hashes = listOfNotNull(hash)
 
             // TODO: Support license expressions once we have fully converted to them.
-            licenseChoice = LicenseChoice().apply { licenses = licenseObjects }
+            licenses = LicenseChoice().apply { licenses = licenseObjects }
 
             // TODO: Find a way to associate copyrights to the license they belong to, see
             //       https://github.com/CycloneDX/cyclonedx-core-java/issues/58
@@ -348,7 +349,7 @@ class CycloneDxReporter : Reporter {
 
     private fun writeBom(
         bom: Bom,
-        schemaVersion: CycloneDxSchema.Version,
+        schemaVersion: Version,
         outputDir: File,
         outputName: String,
         requestedOutputFileFormats: Set<FileFormat>
@@ -373,13 +374,13 @@ class CycloneDxReporter : Reporter {
                             // Clear the "dependencyType".
                             component.extensibleTypes = null
 
-                            component.licenseChoice.licenses.forEach { license ->
+                            component.licenses.licenses.forEach { license ->
                                 // Clear the "origin".
                                 license.extensibleTypes = null
                             }
 
                             // Remove duplicates that may occur due to clearing the distinguishing extensive type.
-                            component.licenseChoice.licenses = component.licenseChoice.licenses.distinct()
+                            component.licenses.licenses = component.licenses.licenses.distinct()
                         }
                     }
 

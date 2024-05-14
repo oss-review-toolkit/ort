@@ -127,7 +127,11 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       <copyright>Copyright 1, Copyright 2</copyright>
       <purl>pkg:npm/%40ort/concluded-license@1.0?classifier=sources</purl>
       <modified>false</modified>
-      <externalReferences><reference type="website"><url>https://github.com/oss-review-toolkit/ort</url></reference></externalReferences><ort:dependencyType xmlns:ort="http://www.w3.org/1999/xhtml">direct</ort:dependencyType>
+      <externalReferences>
+        <reference type="website">
+          <url>https://github.com/oss-review-toolkit/ort</url>
+        </reference>
+      </externalReferences><ort:dependencyType xmlns:ort="http://www.w3.org/1999/xhtml">direct</ort:dependencyType>
     </component>
     <component type="library" bom-ref="NPM:@ort:declared-license:1.0">
       <group>@ort</group>
@@ -192,7 +196,11 @@ THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       <copyright>Copyright 1</copyright>
       <purl>pkg:npm/%40ort/declared-license@1.0?classifier=sources</purl>
       <modified>false</modified>
-      <externalReferences><reference type="website"><url>https://github.com/oss-review-toolkit/ort</url></reference></externalReferences><ort:dependencyType xmlns:ort="http://www.w3.org/1999/xhtml">direct</ort:dependencyType>
+      <externalReferences>
+        <reference type="website">
+          <url>https://github.com/oss-review-toolkit/ort</url>
+        </reference>
+      </externalReferences><ort:dependencyType xmlns:ort="http://www.w3.org/1999/xhtml">direct</ort:dependencyType>
     </component>
     <component type="library" bom-ref="NPM:@ort:license-file:1.0">
       <group>@ort</group>
@@ -229,7 +237,11 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       <copyright>Copyright 1, Copyright 2</copyright>
       <purl>pkg:npm/%40ort/license-file@1.0?classifier=sources</purl>
       <modified>false</modified>
-      <externalReferences><reference type="website"><url>https://github.com/oss-review-toolkit/ort</url></reference></externalReferences><ort:dependencyType xmlns:ort="http://www.w3.org/1999/xhtml">direct</ort:dependencyType>
+      <externalReferences>
+        <reference type="website">
+          <url>https://github.com/oss-review-toolkit/ort</url>
+        </reference>
+      </externalReferences><ort:dependencyType xmlns:ort="http://www.w3.org/1999/xhtml">direct</ort:dependencyType>
     </component>
     <component type="library" bom-ref="NPM:@ort:license-file-and-additional-licenses:1.0">
       <group>@ort</group>
@@ -294,7 +306,11 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       <copyright>Copyright 1, Copyright 2, Copyright 3</copyright>
       <purl>pkg:npm/%40ort/license-file-and-additional-licenses@1.0?classifier=sources</purl>
       <modified>false</modified>
-      <externalReferences><reference type="website"><url>https://github.com/oss-review-toolkit/ort</url></reference></externalReferences><ort:dependencyType xmlns:ort="http://www.w3.org/1999/xhtml">direct</ort:dependencyType>
+      <externalReferences>
+        <reference type="website">
+          <url>https://github.com/oss-review-toolkit/ort</url>
+        </reference>
+      </externalReferences><ort:dependencyType xmlns:ort="http://www.w3.org/1999/xhtml">direct</ort:dependencyType>
     </component>
     <component type="library" bom-ref="NPM:@ort:no-license-file:1.0">
       <group>@ort</group>
@@ -328,7 +344,11 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       <copyright>Copyright 1</copyright>
       <purl>pkg:npm/%40ort/no-license-file@1.0</purl>
       <modified>false</modified>
-      <externalReferences><reference type="website"><url>https://github.com/oss-review-toolkit/ort</url></reference></externalReferences><ort:dependencyType xmlns:ort="http://www.w3.org/1999/xhtml">direct</ort:dependencyType>
+      <externalReferences>
+        <reference type="website">
+          <url>https://github.com/oss-review-toolkit/ort</url>
+        </reference>
+      </externalReferences><ort:dependencyType xmlns:ort="http://www.w3.org/1999/xhtml">direct</ort:dependencyType>
     </component>
   </components>
   <vulnerabilities>
