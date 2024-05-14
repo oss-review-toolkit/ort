@@ -195,6 +195,16 @@ internal suspend fun mapSnippetFindings(
         results += mappedSnippets
     }
 
+    if (runningSnippetCount >= snippetsLimit) {
+        issues += Issue(
+            source = "FossId",
+            message = "The snippets limit of $snippetsLimit has been reached. To see the possible remaining " +
+                "snippets, please perform a snippet choice for the snippets presents in the snippet report an " +
+                "rerun the scan.",
+            severity = Severity.HINT
+        )
+    }
+
     return results.also {
         remainingSnippetChoices.forEach { snippetChoice ->
             // The issue is created only if the chosen snippet does not correspond to a file marked by a previous run.

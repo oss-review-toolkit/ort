@@ -198,6 +198,7 @@ class FreemarkerTemplateProcessor(
     /**
      * A collection of helper functions for the Freemarker templates.
      */
+    @Suppress("TooManyFunctions")
     class TemplateHelper(private val input: ReporterInput) {
         /**
          * Return only those [packages] that are a dependency of at least one of the provided [projects][projectIds].
@@ -276,6 +277,18 @@ class FreemarkerTemplateProcessor(
         @Suppress("UNUSED") // This function is used in the templates.
         fun hasUnresolvedIssues(threshold: Severity = input.ortConfig.severeIssueThreshold) =
             input.ortResult.getOpenIssues(minSeverity = threshold).isNotEmpty()
+
+        /**
+         * If there are any issue caused by reaching the snippets limit, return the text of the issue. Otherwise reuturn
+         * 'null'.
+         */
+        @Suppress("UNUSED") // This function is used in the templates.
+        fun getSnippetsLimitIssue() =
+            input.ortResult.scanner?.scanResults?.flatMap { result ->
+                result.summary.issues
+            }?.firstOrNull {
+                it.message.contains("snippets limit")
+            }?.message
 
         /**
          * Return `true` if there are any unresolved and non-excluded [RuleViolation]s whose severity is equal to or
