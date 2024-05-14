@@ -24,6 +24,7 @@ project:
     - id: "Gem::rack:2.1.4"
   - name: "test"
     dependencies:
+    - id: "Gem::elasticsearch-rails:7.2.1"
     - id: "Gem::rspec:3.7.0"
       dependencies:
       - id: "Gem::rspec-core:3.7.1"
@@ -76,6 +77,38 @@ packages:
   vcs_processed:
     type: "Git"
     url: "https://github.com/halostatue/diff-lcs.git"
+    revision: ""
+    path: ""
+- id: "Gem::elasticsearch-rails:7.2.1"
+  purl: "pkg:gem/elasticsearch-rails@7.2.1"
+  authors:
+  - "Karel Minarik"
+  declared_licenses:
+  - "Apache 2"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache 2: "Apache-2.0"
+  description: "Ruby on Rails integrations for Elasticsearch."
+  homepage_url: "https://www.elastic.co/guide/en/elasticsearch/client/ruby-api/current/ruby_on_rails.html"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://rubygems.org/gems/elasticsearch-rails-7.2.1.gem"
+    hash:
+      value: "0750dc0e956358d9a3a0912a8186c266ef19f8de0b178c61996ed1a6998156e4"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/elastic/elasticsearch-rails.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/elastic/elasticsearch-rails.git"
     revision: ""
     path: ""
 - id: "Gem::mini_portile2:2.4.0"

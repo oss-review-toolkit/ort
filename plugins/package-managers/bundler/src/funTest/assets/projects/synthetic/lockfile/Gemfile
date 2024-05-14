@@ -7,4 +7,5 @@ gem 'rack', '~>2.1'
 
 group :test do
     gem 'rspec', :require => 'spec'
+    gem 'elasticsearch-rails', github: 'elastic/elasticsearch-rails', ref: 'v7.2.1'
 end
