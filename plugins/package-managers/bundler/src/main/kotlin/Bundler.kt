@@ -311,8 +311,8 @@ class Bundler(
     private fun resolveGemsMetadata(workingDir: File): MutableMap<String, GemSpec> {
         val stdout = runScriptResource(RESOLVE_DEPENDENCIES_SCRIPT, workingDir)
 
-        // The metadata produced by the "bundler_resolve_dependencies.rb" script separates specs for packages with the
-        // "\0" character as delimiter.
+        // The metadata produced by the "resolve_dependencies.rb" script separates specs for packages with the "\0"
+        // character as delimiter.
         val gemSpecs = stdout.split('\u0000').dropWhile { it.startsWith("Fetching gem metadata") }.map {
             GemSpec.createFromMetadata(yamlMapper.readTree(it))
         }.associateByTo(mutableMapOf()) {
