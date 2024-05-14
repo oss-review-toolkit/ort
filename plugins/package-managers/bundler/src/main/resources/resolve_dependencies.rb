@@ -31,13 +31,11 @@ require 'bundler'
 # Resolve dependencies independently of the Ruby interpreter.
 Bundler.settings.set_global(:force_ruby_platform, true)
 
-definition = Bundler.definition
-
 # This command tries to resolve dependencies that are specified in the Gemfile of the current working directory.
 # Explicitly enable resolution of remote `gem` or `git` dependencies. `path` dependencies are still resolved locally.
-definition.resolve_remotely!
+Bundler.definition.resolve_remotely!
 
-definition.specs.each do |spec|
+Bundler.definition.specs.each do |spec|
   puts("\0")
   puts(spec.to_yaml)
 end
