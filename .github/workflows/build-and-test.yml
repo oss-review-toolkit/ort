@@ -72,7 +72,7 @@ jobs:
       with:
         submodules: recursive
     - name: Set tool version environment variables
-      run: cat .versions >> $GITHUB_ENV
+      run: sed "s/^ARG //" docker/versions.dockerfile >> $GITHUB_ENV
     - name: Install required tools
       run: |
           # Uninstall mono-devel because it contains the "lc" command which conflicts with BoyterLc.

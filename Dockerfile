@@ -1,4 +1,6 @@
-# syntax=docker/dockerfile:1.4
+# syntax=devthefuture/dockerfile-x
+# The above opts-in for an extended syntax that supports e.g. "INCLUDE" statements, see
+# https://codeberg.org/devthefuture/dockerfile-x
 
 # Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
 #
@@ -17,9 +19,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-# Set this to the Java version to use in the base image (and to build and run ORT with).
-ARG JAVA_VERSION=17
-ARG UBUNTU_VERSION=jammy
+INCLUDE docker/versions.dockerfile
 
 # Use OpenJDK Eclipe Temurin Ubuntu LTS
 FROM eclipse-temurin:$JAVA_VERSION-jdk-$UBUNTU_VERSION as base
@@ -137,8 +137,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     tk-dev \
     && sudo rm -rf /var/lib/apt/lists/*
 
-ARG PYTHON_VERSION=3.11.8
-ARG PYENV_GIT_TAG=v2.3.36
+ARG PYTHON_VERSION
+ARG PYENV_GIT_TAG
 
 ENV PYENV_ROOT=/opt/python
 ENV PATH=$PATH:$PYENV_ROOT/shims:$PYENV_ROOT/bin
@@ -146,12 +146,12 @@ RUN curl -kSs https://pyenv.run | bash \
     && pyenv install -v $PYTHON_VERSION \
     && pyenv global $PYTHON_VERSION
 
-ARG CONAN_VERSION=1.63.0
-ARG PYTHON_INSPECTOR_VERSION=0.10.0
-ARG PYTHON_PIPENV_VERSION=2023.10.24
-ARG PYTHON_POETRY_VERSION=1.7.0
-ARG PIPTOOL_VERSION=23.3.1
-ARG SCANCODE_VERSION=32.1.0
+ARG CONAN_VERSION
+ARG PYTHON_INSPECTOR_VERSION
+ARG PYTHON_PIPENV_VERSION
+ARG PYTHON_POETRY_VERSION
+ARG PIPTOOL_VERSION
+ARG SCANCODE_VERSION
 
 RUN pip install --no-cache-dir -U \
     pip=="$PIPTOOL_VERSION" \
@@ -180,11 +180,11 @@ COPY --from=pythonbuild /opt/python /opt/python
 # NODEJS - Build NodeJS as a separate component with nvm
 FROM base AS nodejsbuild
 
-ARG BOWER_VERSION=1.8.12
-ARG NODEJS_VERSION=20.9.0
-ARG NPM_VERSION=10.1.0
-ARG PNPM_VERSION=8.10.3
-ARG YARN_VERSION=1.22.19
+ARG BOWER_VERSION
+ARG NODEJS_VERSION
+ARG NPM_VERSION
+ARG PNPM_VERSION
+ARG YARN_VERSION
 
 ENV NVM_DIR=/opt/nvm
 ENV PATH=$PATH:$NVM_DIR/versions/node/v$NODEJS_VERSION/bin
@@ -216,8 +216,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     zlib1g-dev \
     && sudo rm -rf /var/lib/apt/lists/*
 
-ARG COCOAPODS_VERSION=1.14.2
-ARG RUBY_VERSION=3.1.2
+ARG COCOAPODS_VERSION
+ARG RUBY_VERSION
 
 ENV RBENV_ROOT=/opt/rbenv
 ENV PATH=$RBENV_ROOT/bin:$RBENV_ROOT/shims/:$RBENV_ROOT/plugins/ruby-build/bin:$PATH
@@ -238,7 +238,7 @@ COPY --from=rubybuild /opt/rbenv /opt/rbenv
 # RUST - Build as a separate component
 FROM base AS rustbuild
 
-ARG RUST_VERSION=1.72.0
+ARG RUST_VERSION
 
 ENV RUST_HOME=/opt/rust
 ENV CARGO_HOME=$RUST_HOME/cargo
@@ -252,7 +252,7 @@ COPY --from=rustbuild /opt/rust /opt/rust
 # GOLANG - Build as a separate component
 FROM base AS gobuild
 
-ARG GO_VERSION=1.22.2
+ARG GO_VERSION
 ENV GOBIN=/opt/go/bin
 ENV PATH=$PATH:/opt/go/bin
 
@@ -274,7 +274,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     zlib1g-dev \
     && sudo rm -rf /var/lib/apt/lists/*
 
-ARG HASKELL_STACK_VERSION=2.13.1
+ARG HASKELL_STACK_VERSION
 
 ENV HASKELL_HOME=/opt/haskell
 ENV PATH=$PATH:$HASKELL_HOME/bin
@@ -295,7 +295,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     unzip \
     && sudo rm -rf /var/lib/apt/lists/*
 
-ARG ANDROID_CMD_VERSION=11076708
+ARG ANDROID_CMD_VERSION
 ENV ANDROID_HOME=/opt/android-sdk
 
 RUN --mount=type=tmpfs,target=/android \
@@ -320,7 +320,7 @@ COPY --from=androidbuild /opt/android-sdk /opt/android-sdk
 #  Dart
 FROM base AS dartbuild
 
-ARG DART_VERSION=2.18.4
+ARG DART_VERSION
 WORKDIR /opt/
 
 ENV DART_SDK=/opt/dart-sdk
@@ -340,7 +340,7 @@ COPY --from=dartbuild /opt/dart-sdk /opt/dart-sdk
 # SBT
 FROM base AS scalabuild
 
-ARG SBT_VERSION=1.9.7
+ARG SBT_VERSION
 
 ENV SBT_HOME=/opt/sbt
 ENV PATH=$PATH:$SBT_HOME/bin
@@ -354,7 +354,7 @@ COPY --from=scalabuild /opt/sbt /opt/sbt
 # SWIFT
 FROM base AS swiftbuild
 
-ARG SWIFT_VERSION=5.9.2
+ARG SWIFT_VERSION
 
 ENV SWIFT_HOME=/opt/swift
 ENV PATH=$PATH:$SWIFT_HOME/bin
@@ -376,8 +376,8 @@ COPY --from=swiftbuild /opt/swift /opt/swift
 # DOTNET
 FROM base AS dotnetbuild
 
-ARG DOTNET_VERSION=6.0
-ARG NUGET_INSPECTOR_VERSION=0.9.12
+ARG DOTNET_VERSION
+ARG NUGET_INSPECTOR_VERSION
 
 ENV DOTNET_HOME=/opt/dotnet
 ENV NUGET_INSPECTOR_HOME=$DOTNET_HOME
@@ -405,7 +405,7 @@ COPY --from=dotnetbuild /opt/dotnet /opt/dotnet
 # BAZEL
 FROM base as bazelbuild
 
-ARG BAZEL_VERSION=7.0.1
+ARG BAZEL_VERSION
 
 ENV BAZEL_HOME=/opt/bazel
 
@@ -472,7 +472,7 @@ COPY --from=python --chown=$USER:$USER $PYENV_ROOT $PYENV_ROOT
 RUN syft $PYENV_ROOT -o spdx-json --output json=/usr/share/doc/ort/ort-python.spdx.json
 
 # NodeJS
-ARG NODEJS_VERSION=20.9.0
+ARG NODEJS_VERSION
 ENV NVM_DIR=/opt/nvm
 ENV PATH=$PATH:$NVM_DIR/versions/node/v$NODEJS_VERSION/bin
 COPY --from=nodejs --chown=$USER:$USER $NVM_DIR $NVM_DIR
@@ -545,8 +545,8 @@ COPY --from=dotnet --chown=$USER:$USER $DOTNET_HOME $DOTNET_HOME
 RUN syft $DOTNET_HOME -o spdx-json --output json=/usr/share/doc/ort/ort-dotnet.spdx.json
 
 # PHP
-ARG PHP_VERSION=8.1
-ARG COMPOSER_VERSION=2.2
+ARG PHP_VERSION
+ARG COMPOSER_VERSION
 
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
