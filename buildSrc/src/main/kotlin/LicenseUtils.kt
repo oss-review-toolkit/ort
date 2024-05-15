@@ -25,13 +25,6 @@ object CopyrightableFiles {
     private val excludedPaths = listOf(
         "LICENSE",
         "NOTICE",
-        "website/babel.config.js",
-        "website/docusaurus.config.js",
-        "website/docs/configuration/_category_.yml",
-        "website/docs/getting-started/_category_.yml",
-        "website/docs/guides/_category_.yml",
-        "website/docs/tools/_category_.yml",
-        "website/sidebars.js",
         "gradlew",
         "gradle/",
         "examples/",
@@ -47,7 +40,14 @@ object CopyrightableFiles {
         "resources/licenses/",
         "resources/licenserefs/",
         "test/assets/",
-        "funTest/assets/"
+        "funTest/assets/",
+        "website/babel.config.js",
+        "website/docusaurus.config.js",
+        "website/docs/configuration/_category_.yml",
+        "website/docs/getting-started/_category_.yml",
+        "website/docs/guides/_category_.yml",
+        "website/docs/tools/_category_.yml",
+        "website/sidebars.js"
     )
 
     private val excludedExtensions = listOf(
