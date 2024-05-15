@@ -27,6 +27,7 @@ object CopyrightableFiles {
         "NOTICE",
         "gradlew",
         "gradle/",
+        "docker/versions.dockerfile",
         "examples/",
         "integrations/completions/",
         "plugins/reporters/asciidoc/src/main/resources/pdf-theme/pdf-theme.yml",
