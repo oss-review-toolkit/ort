@@ -51,9 +51,7 @@ internal class FilterCommand : CliktCommand(
     override fun run() {
         val classifications = licenseClassificationsFile.readValue<LicenseClassifications>()
 
-        val categorizations = classifications.categorizations.filter { categorization ->
-            categorization.categories.any { it in keepLicenseCategories }
-        }
+        val categorizations = classifications.getAllCategories().filter { it.name in keepLicenseCategories }
 
         val categories = categorizations.flatMapTo(mutableSetOf()) { it.categories }.map { categoryName ->
             classifications.categories.single { it.name == categoryName }
