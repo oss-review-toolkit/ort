@@ -8,7 +8,7 @@
 
 [![Build and Test][7]][8] [![JitPack build status][9]][10] [![Code coverage][11]][12]
 
-[![TODOs][13]][14] [![REUSE status][15]][16] [![CII][17]][18]
+[![TODOs][13]][14] [![REUSE status][15]][16] [![OpenSSF Best Practices][17]][18]
 
 [1]: https://img.shields.io/badge/Join_us_on_Slack!-ort--talk-blue.svg?longCache=true&logo=slack
 [2]: http://slack.oss-review-toolkit.org
@@ -26,8 +26,8 @@
 [14]: https://www.tickgit.com/browse?repo=github.com/oss-review-toolkit/ort
 [15]: https://api.reuse.software/badge/github.com/oss-review-toolkit/ort
 [16]: https://api.reuse.software/info/github.com/oss-review-toolkit/ort
-[17]: https://bestpractices.coreinfrastructure.org/projects/4618/badge
-[18]: https://bestpractices.coreinfrastructure.org/projects/4618
+[17]: https://www.bestpractices.dev/projects/4618/badge
+[18]: https://www.bestpractices.dev/projects/4618
 
 # Introduction
 
