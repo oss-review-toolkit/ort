@@ -44,8 +44,8 @@ plugins {
 
 application {
     applicationDefaultJvmArgs = listOf(
-        "--add-opens", "java.base/sun.nio.ch=ALL-UNNAMED",
-        "--add-opens", "java.base/java.io=ALL-UNNAMED"
+        "--add-opens", "java.base/java.io=ALL-UNNAMED",
+        "--add-opens", "java.base/sun.nio.ch=ALL-UNNAMED"
     )
 }
 
