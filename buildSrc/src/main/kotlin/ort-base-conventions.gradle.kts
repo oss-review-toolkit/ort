@@ -42,11 +42,13 @@ repositories {
     }
 }
 
-tasks.withType<Jar>().configureEach {
+tasks.withType<AbstractArchiveTask>().configureEach {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     isPreserveFileTimestamps = false
     isReproducibleFileOrder = true
+}
 
+tasks.withType<Jar>().configureEach {
     manifest {
         attributes["Implementation-Version"] = version
     }
