@@ -382,8 +382,7 @@ class DownloaderCommand : OrtCommand(
 
         return licenseCategorizations
             .filter { it.id in effectiveLicenses }
-            .flatMap { it.categories }
-            .toSet()
+            .flatMapTo(mutableSetOf()) { it.categories }
     }
 
     private fun downloadFromProjectUrl(projectUrl: String, failureMessages: MutableList<String>) {
