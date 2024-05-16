@@ -1186,15 +1186,40 @@ Prism.languages.yaml={scalar:{pattern:/([\-:]\s*(?:![^\s]+)?[ \t]*[|>])[ \t]*(?:
                      </td>
                      <td>
                         <table class="report-table package-issue-table">
+                           <tr class="error">
+                              <td>
+                                 <p>Unknown time [ERROR]: VulnerableCode - Example advisor error.</p>
+                              </td>
+                           </tr>
                            <tr class="warning">
                               <td>
                                  <p>2024-04-25T07:44:20.725613974Z [WARNING]: Gradle - Example analyzer warning in included
                                     package.</p>
                               </td>
                            </tr>
+                           <tr class="warning">
+                              <td>
+                                 <p>Unknown time [WARNING]: VulnerableCode - Example advisor warning.</p>
+                              </td>
+                           </tr>
+                           <tr class="hint">
+                              <td>
+                                 <p>Unknown time [HINT]: VulnerableCode - Example advisor hint.</p>
+                              </td>
+                           </tr>
                         </table>
                      </td>
-                     <td></td>
+                     <td>
+                        <table class="report-table package-issue-table">
+                           <tr class="resolved">
+                              <td>
+                                 <p>Unknown time [ERROR]: VulnerableCode - Example advisor error, resolved.</p>
+                                 <p>
+                                    Resolved by: CANT_FIX_ISSUE - A comment explaining why the issue can be ignored.</p>
+                              </td>
+                           </tr>
+                        </table>
+                     </td>
                   </tr>
                   <tr class="pkg " id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-7">
                      <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-7">7</a></td>
