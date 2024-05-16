@@ -127,6 +127,7 @@ private fun RuleViolation.toTableReportViolation(ortResult: OrtResult): TablesRe
 private fun getProjectTable(input: ReporterInput, project: Project): ProjectTable {
     val projectIssuesForId = input.ortResult.dependencyNavigator.projectIssues(project)
     val scannerIssuesForId = input.ortResult.getScannerIssues()
+    val advisorIssuesForId = input.ortResult.getAdvisorIssues()
     val scopesForId = input.ortResult.getScopesForDependencies(project)
     val ids = input.ortResult.dependencyNavigator.projectDependencies(project) + project.id
 
@@ -149,6 +150,7 @@ private fun getProjectTable(input: ReporterInput, project: Project): ProjectTabl
             addAll(projectIssuesForId[id].orEmpty())
             addAll(input.ortResult.analyzer?.result?.issues?.get(id).orEmpty())
             addAll(scannerIssuesForId[id].orEmpty())
+            addAll(advisorIssuesForId[id].orEmpty())
         }.map { issue ->
             val isRowExcluded = input.ortResult.isExcluded(id) ||
                 (id != project.id && scopesForId[id].orEmpty().all { it.value.isNotEmpty() })
