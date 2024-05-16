@@ -329,7 +329,7 @@ data class OrtResult(
             val filteredIssues = issues.filterTo(mutableSetOf()) {
                 (!omitResolved || !isResolved(it))
                     && it.severity >= minSeverity
-                    && it !in issuesWithExcludedAffectedPathById[id].orEmpty()
+                    && (!omitExcluded || it !in issuesWithExcludedAffectedPathById[id].orEmpty())
             }
 
             filteredIssues.takeUnless { it.isEmpty() }?.let { id to it }
