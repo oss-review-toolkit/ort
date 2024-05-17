@@ -531,6 +531,27 @@ class SpdxExpressionTest : WordSpec({
     }
 
     "validChoices()" should {
+        "return the original terms of an expression in DNF" {
+            val choices = "(a AND b) OR (c AND d) OR (e AND f)".toSpdx().validChoices()
+
+            choices.map { it.toString() } should containExactlyInAnyOrder(
+                "a AND b",
+                "c AND d",
+                "e AND f"
+            )
+        }
+
+        "return the distribution of all terms of an expression in CNF" {
+            val choices = "(a OR b) AND (c OR d)".toSpdx().validChoices()
+
+            choices.map { it.toString() } should containExactlyInAnyOrder(
+                "a AND c",
+                "a AND d",
+                "b AND c",
+                "b AND d"
+            )
+        }
+
         "return the valid choices for a complex expression" {
             val choices = "(a OR b) AND c AND (d OR e)".toSpdx().validChoices()
 
