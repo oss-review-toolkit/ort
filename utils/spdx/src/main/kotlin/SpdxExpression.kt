@@ -163,7 +163,7 @@ sealed class SpdxExpression {
     open fun offersChoice(): Boolean = false
 
     /**
-     * Apply a license [choice], optionally limited to the given [subExpression], and return a [SpdxExpression] where
+     * Apply a license [choice], optionally limited to the given [subExpression], and return an [SpdxExpression] where
      * the choice is resolved.
      */
     open fun applyChoice(choice: SpdxExpression, subExpression: SpdxExpression = this): SpdxExpression {
@@ -392,7 +392,7 @@ sealed class SpdxSingleLicenseExpression : SpdxExpression() {
     abstract fun simpleLicense(): String
 
     /**
-     * Return the license exception identifier if this is a [SpdxLicenseWithExceptionExpression] or null otherwise.
+     * Return the license exception identifier if this is an [SpdxLicenseWithExceptionExpression] or null otherwise.
      */
     abstract fun exception(): String?
 
@@ -494,7 +494,7 @@ class SpdxLicenseWithExceptionExpression(
 
 /**
  * An SPDX simple expression as defined by version 2.2 of the [SPDX specification, annex D.3][1]. A simple expression
- * can be either a [SpdxLicenseIdExpression] or a [SpdxLicenseReferenceExpression].
+ * can be either an [SpdxLicenseIdExpression] or an [SpdxLicenseReferenceExpression].
  *
  * [1]: https://spdx.github.io/spdx-spec/v2.2.2/SPDX-license-expressions/#d3-simple-license-expressions
  */
