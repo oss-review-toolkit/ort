@@ -106,6 +106,7 @@ data class Project(
      * graph.
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonSerialize(converter = StringSortedSetConverter::class)
     val scopeNames: Set<String>? = null
 ) {
     companion object {
