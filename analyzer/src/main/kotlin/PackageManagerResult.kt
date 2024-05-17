@@ -19,11 +19,14 @@
 
 package org.ossreviewtoolkit.analyzer
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+
 import java.io.File
 
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.model.utils.PackageSortedSetConverter
 
 /**
  * A data class representing the result of the execution of a [PackageManager]. An instance contains the single
@@ -48,5 +51,6 @@ data class PackageManagerResult(
      * produce a shared [DependencyGraph] typically do not collect packages on a project-level, but globally. Such
      * packages can be stored in this property.
      */
+    @JsonSerialize(converter = PackageSortedSetConverter::class)
     val sharedPackages: Set<Package> = emptySet()
 )
