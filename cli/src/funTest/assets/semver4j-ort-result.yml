@@ -201,15 +201,6 @@ scanner:
         revision: "r4.12"
         path: ""
       resolved_revision: "64155f8a9babcfcf4263cf4d08253a1556e75481"
-  scanners:
-    "Maven:com.vdurmont:semver4j:3.1.0":
-    - "ScanCode"
-    "Maven:junit:junit:4.12":
-    - "ScanCode"
-    "Maven:org.hamcrest:hamcrest-core:1.3":
-    - "ScanCode"
-    "Maven:org.mockito:mockito-all:1.10.19":
-    - "ScanCode"
   scan_results:
   - provenance:
       vcs_info:
@@ -325,6 +316,15 @@ scanner:
           path: "LICENSE.md"
           start_line: 3
           end_line: 3
+  scanners:
+    Maven:com.vdurmont:semver4j:3.1.0:
+    - "ScanCode"
+    Maven:junit:junit:4.12:
+    - "ScanCode"
+    Maven:org.hamcrest:hamcrest-core:1.3:
+    - "ScanCode"
+    Maven:org.mockito:mockito-all:1.10.19:
+    - "ScanCode"
   files:
   - provenance:
       vcs_info:
