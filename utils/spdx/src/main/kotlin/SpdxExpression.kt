@@ -302,7 +302,7 @@ class SpdxCompoundExpression(
     override fun applyChoice(choice: SpdxExpression, subExpression: SpdxExpression): SpdxExpression {
         if (!subExpression.isSubExpression(choice)) {
             throw InvalidLicenseChoiceException(
-                "$choice is not a valid choice for $subExpression. Valid choices are: ${validChoices()}."
+                "$choice is not a valid choice for $subExpression. Valid choices are: ${subExpression.validChoices()}."
             )
         }
 
