@@ -193,7 +193,8 @@ data class Severity(
 ) {
     enum class Type {
         CVSS_V2,
-        CVSS_V3
+        CVSS_V3,
+        CVSS_V4
     }
 }
 
