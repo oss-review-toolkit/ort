@@ -355,7 +355,7 @@ class SpdxCompoundExpression(
 
     override fun toString() =
         // If the operator of the left or right expression is different from the operator of this expression, put the
-        // respective expression in parentheses. Semantically this would only be required if the priority of this
+        // respective expression in parentheses. Semantically, this would only be required if the priority of this
         // operator is higher than the priority of the operator of the left or right expression, but always adding
         // parentheses makes it easier to understand the expression.
         buildString {
