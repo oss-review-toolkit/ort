@@ -336,9 +336,9 @@ class SpdxExpressionChoiceTest : WordSpec({
             val choices = "(a OR b) AND (a OR b)".toSpdx().validChoices()
 
             choices.map { it.toString() } should containExactlyInAnyOrder(
-                "a AND a",
+                "a",
                 "b AND a",
-                "b AND b"
+                "b"
             )
         }
     }
