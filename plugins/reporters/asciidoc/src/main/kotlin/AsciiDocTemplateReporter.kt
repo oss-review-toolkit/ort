@@ -59,7 +59,7 @@ open class AsciiDocTemplateReporter(private val backend: String, override val ty
         ASCII_DOC_FILE_EXTENSION
     )
 
-    private val asciidoctor by lazy { Asciidoctor.Factory.create() }
+    internal val asciidoctor by lazy { Asciidoctor.Factory.create() }
 
     /**
      * Turn recognized [options] into [Attributes] and remove them from [options] afterwards to mark them as processed.
