@@ -532,7 +532,7 @@ project:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::meta:1.15.0"
           - id: "Pub::web:0.5.1"
-          - id: "Pub::web_socket:0.1.3"
+          - id: "Pub::web_socket:0.1.4"
             dependencies:
             - id: "Pub::web:0.5.1"
       - id: "Pub::source_span:1.10.0"
@@ -871,7 +871,7 @@ project:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::meta:1.15.0"
         - id: "Pub::web:0.5.1"
-        - id: "Pub::web_socket:0.1.3"
+        - id: "Pub::web_socket:0.1.4"
           dependencies:
           - id: "Pub::web:0.5.1"
       - id: "Pub::webkit_inspection_protocol:1.2.1"
@@ -2061,8 +2061,8 @@ packages:
     url: "https://github.com/dart-lang/web.git"
     revision: ""
     path: ""
-- id: "Pub::web_socket:0.1.3"
-  purl: "pkg:pub/web_socket@0.1.3"
+- id: "Pub::web_socket:0.1.4"
+  purl: "pkg:pub/web_socket@0.1.4"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "Any easy-to-use library for communicating with WebSockets that has\
@@ -2074,9 +2074,9 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://pub.dev/packages/web_socket/versions/0.1.3.tar.gz"
+    url: "https://pub.dev/packages/web_socket/versions/0.1.4.tar.gz"
     hash:
-      value: "bfe704c186c6e32a46f6607f94d079cd0b747b9a489fceeecc93cd3adb98edd5"
+      value: "217f49b5213796cb508d6a942a5dc604ce1cb6a0a6b3d8cb3f0c314f0ecea712"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
