@@ -45,6 +45,7 @@ class OrtScriptCompilationConfiguration : ScriptCompilationConfiguration({
     compilerOptions("-jvm-target", Environment().javaVersion.substringBefore('.'))
 
     defaultImports(
+        "org.apache.logging.log4j.kotlin.logger",
         "org.ossreviewtoolkit.utils.common.*",
         "org.ossreviewtoolkit.utils.ort.*",
         "java.util.*"
