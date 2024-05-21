@@ -90,7 +90,7 @@ private fun Issue.toTableReportIssue(
     val resolutions = ortResult.getResolutionsFor(this)
     return TablesReportIssue(
         source = source,
-        description = toString(),
+        description = message,
         resolutionDescription = buildString {
             if (resolutions.isNotEmpty()) {
                 append(
