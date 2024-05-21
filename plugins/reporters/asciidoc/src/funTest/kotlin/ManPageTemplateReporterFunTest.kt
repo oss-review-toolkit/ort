@@ -33,13 +33,16 @@ import org.ossreviewtoolkit.utils.test.matchExpectedResult
 class ManPageTemplateReporterFunTest : StringSpec({
     "ManPage report is created from default template" {
         val expectedResultFile = getAssetFile("manpage-template-reporter-expected-result.1")
+        val reporter = ManPageTemplateReporter()
 
-        val reportContent =
-            ManPageTemplateReporter().generateReport(ReporterInput(ORT_RESULT), tempdir()).single().readText()
+        val reportContent = reporter.generateReport(ReporterInput(ORT_RESULT), tempdir()).single().readText()
 
         reportContent should matchExpectedResult(
             expectedResultFile,
-            custom = mapOf("<REPLACE_DATE>" to "${LocalDate.now()}")
+            custom = mapOf(
+                "<REPLACE_DATE>" to "${LocalDate.now()}",
+                "<REPLACE_ASCIIDOCTOR_VERSION>" to reporter.asciidoctor.asciidoctorVersion()
+            )
         )
     }
 })
