@@ -26,6 +26,7 @@
 
 import org.ossreviewtoolkit.evaluator.osadl.Compatibility
 import org.ossreviewtoolkit.evaluator.osadl.CompatibilityMatrix
+logger.info { "XXX root." }
 
 val ruleSet = ruleSet(ortResult, licenseInfoResolver) {
     val licenseView = LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED
@@ -36,6 +37,7 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver) {
         require {
             -isExcluded()
         }
+        logger.info { "XXX dependencyRule." }
 
         val projectLicenseInfo = licenseInfoResolver.resolveLicenseInfo(project.id).filterExcluded()
             .applyChoices(ortResult.getRepositoryLicenseChoices(), licenseView)
@@ -49,7 +51,10 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver) {
                 -isExcluded()
             }
 
+            logger.info { "XXX licenseRule." }
+
             outboundLicenses.forEach { outboundLicense ->
+                logger.info { "XXX Chekcing $outboundLicense." }
                 val compatibilityInfo = CompatibilityMatrix
                     // Be conservative and use the simple license string without the exception string for lookup.
                     // Eventually resulting false-positives are better than an incompatibility to be missed.
