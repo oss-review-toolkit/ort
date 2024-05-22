@@ -604,6 +604,36 @@ analyzer:
         url: "https://github.com/dcodeIO/long.js.git"
         revision: "088e44e5e3343ef967698565678384fa474b003b"
         path: ""
+    - id: "NPM::pnpm-app-example:1.1.4"
+      purl: "pkg:npm/pnpm-app-example@1.1.4"
+      authors:
+      - "DavidWells"
+      declared_licenses:
+      - "ISC"
+      declared_licenses_processed:
+        spdx_expression: "ISC"
+      description: ""
+      homepage_url: ""
+      binary_artifact:
+        url: ""
+        hash:
+          value: ""
+          algorithm: ""
+      source_artifact:
+        url: ""
+        hash:
+          value: ""
+          algorithm: ""
+      vcs:
+        type: "Git"
+        url: "<REPLACE_URL>"
+        revision: "<REPLACE_REVISION>"
+        path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm-workspaces/src/app"
+      vcs_processed:
+        type: "Git"
+        url: "<REPLACE_URL_PROCESSED>"
+        revision: "<REPLACE_REVISION>"
+        path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm-workspaces/src/app"
     - id: "NPM::pnpm-workspaces:1.0.1"
       purl: "pkg:npm/pnpm-workspaces@1.0.1"
       authors:
@@ -785,6 +815,36 @@ analyzer:
         url: "<REPLACE_URL_PROCESSED>"
         revision: "<REPLACE_REVISION>"
         path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm-workspaces/src/packages/package-a"
+    - id: "NPM::testing-pnpm-package-b:1.0.2"
+      purl: "pkg:npm/testing-pnpm-package-b@1.0.2"
+      authors:
+      - "Marcel Bochtler"
+      declared_licenses:
+      - "ISC"
+      declared_licenses_processed:
+        spdx_expression: "ISC"
+      description: ""
+      homepage_url: ""
+      binary_artifact:
+        url: ""
+        hash:
+          value: ""
+          algorithm: ""
+      source_artifact:
+        url: ""
+        hash:
+          value: ""
+          algorithm: ""
+      vcs:
+        type: "Git"
+        url: "<REPLACE_URL>"
+        revision: "<REPLACE_REVISION>"
+        path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm-workspaces/src/packages/package-b"
+      vcs_processed:
+        type: "Git"
+        url: "<REPLACE_URL_PROCESSED>"
+        revision: "<REPLACE_REVISION>"
+        path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm-workspaces/src/packages/package-b"
 scanner: null
 advisor: null
 evaluator: null
