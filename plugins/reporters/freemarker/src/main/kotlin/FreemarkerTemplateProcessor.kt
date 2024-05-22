@@ -279,8 +279,8 @@ class FreemarkerTemplateProcessor(
             input.ortResult.getOpenIssues(minSeverity = threshold).isNotEmpty()
 
         /**
-         * If there are any issue caused by reaching the snippets limit, return the text of the issue. Otherwise reuturn
-         * 'null'.
+         * If there are any issue caused by reaching the snippets limit, return the text of the issue. Otherwise return
+         * the empty string.
          */
         @Suppress("UNUSED") // This function is used in the templates.
         fun getSnippetsLimitIssue() =
@@ -288,7 +288,7 @@ class FreemarkerTemplateProcessor(
                 result.summary.issues
             }?.firstOrNull {
                 it.message.contains("snippets limit")
-            }?.message
+            }?.message.orEmpty()
 
         /**
          * Return `true` if there are any unresolved and non-excluded [RuleViolation]s whose severity is equal to or
