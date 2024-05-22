@@ -32,3 +32,8 @@ A [GitLab Pipeline](https://github.com/oss-review-toolkit/ort-gitlab-ci) to run 
 ## ORTHW
 
 A [bash script](https://github.com/oss-review-toolkit/orthw) that helps to simplify and speed up common tasks performed when processing ORT results.
+
+## OpossumUI
+
+[OpossumUI](https://github.com/opossum-tool/OpossumUI) is a desktop application that provides a compliance audit workflow.
+ORT can generate input files for OpossumUI using the "Opossum" reporter.
