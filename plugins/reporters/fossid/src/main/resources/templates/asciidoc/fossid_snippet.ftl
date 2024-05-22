@@ -33,7 +33,7 @@ List of all the provenances with their files and snippets.
 
 [#assign snippetsLimitIssue = helper.getSnippetsLimitIssue()]
 
-[#if snippetsLimitIssue??]
+[#if snippetsLimitIssue?has_content]
 [WARNING]
 ====
 ${snippetsLimitIssue}
