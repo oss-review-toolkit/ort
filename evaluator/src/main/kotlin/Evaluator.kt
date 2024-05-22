@@ -21,8 +21,9 @@ package org.ossreviewtoolkit.evaluator
 
 import java.time.Instant
 
+import kotlin.script.experimental.api.KotlinType
 import kotlin.script.experimental.api.ScriptEvaluationConfiguration
-import kotlin.script.experimental.api.constructorArgs
+import kotlin.script.experimental.api.providedProperties
 import kotlin.script.experimental.api.scriptsInstancesSharing
 import kotlin.script.experimental.jvmhost.createJvmCompilationConfigurationFromTemplate
 
@@ -42,10 +43,20 @@ class Evaluator(
     licenseClassifications: LicenseClassifications = LicenseClassifications(),
     time: Instant = Instant.now()
 ) : ScriptRunner() {
-    override val compConfig = createJvmCompilationConfigurationFromTemplate<RulesScriptTemplate>()
+    private val customProperties = mapOf(
+        "ortResult" to ortResult,
+        "licenseInfoResolver" to licenseInfoResolver,
+        "resolutionProvider" to resolutionProvider,
+        "licenseClassifications" to licenseClassifications,
+        "time" to time
+    )
+
+    override val compConfig = createJvmCompilationConfigurationFromTemplate<RulesScriptTemplate> {
+        providedProperties(customProperties.mapValues { (_, v) -> KotlinType(v::class) })
+    }
 
     override val evalConfig = ScriptEvaluationConfiguration {
-        constructorArgs(ortResult, licenseInfoResolver, resolutionProvider, licenseClassifications, time)
+        providedProperties(customProperties)
         scriptsInstancesSharing(true)
     }
 

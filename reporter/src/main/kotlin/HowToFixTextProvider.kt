@@ -19,9 +19,10 @@
 
 package org.ossreviewtoolkit.reporter
 
+import kotlin.script.experimental.api.KotlinType
 import kotlin.script.experimental.api.ResultValue
 import kotlin.script.experimental.api.ScriptEvaluationConfiguration
-import kotlin.script.experimental.api.constructorArgs
+import kotlin.script.experimental.api.providedProperties
 import kotlin.script.experimental.api.scriptsInstancesSharing
 import kotlin.script.experimental.jvmhost.createJvmCompilationConfigurationFromTemplate
 
@@ -54,10 +55,14 @@ fun interface HowToFixTextProvider {
 }
 
 private class HowToFixScriptRunner(ortResult: OrtResult) : ScriptRunner() {
-    override val compConfig = createJvmCompilationConfigurationFromTemplate<HowToFixTextProviderScriptTemplate>()
+    private val customProperties = mapOf("ortResult" to ortResult)
+
+    override val compConfig = createJvmCompilationConfigurationFromTemplate<HowToFixTextProviderScriptTemplate> {
+        providedProperties(customProperties.mapValues { (_, v) -> KotlinType(v::class) })
+    }
 
     override val evalConfig = ScriptEvaluationConfiguration {
-        constructorArgs(ortResult)
+        providedProperties(customProperties)
         scriptsInstancesSharing(true)
     }
 
