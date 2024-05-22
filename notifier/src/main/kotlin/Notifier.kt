@@ -23,7 +23,6 @@ import java.time.Instant
 
 import kotlin.script.experimental.api.KotlinType
 import kotlin.script.experimental.api.ScriptEvaluationConfiguration
-import kotlin.script.experimental.api.constructorArgs
 import kotlin.script.experimental.api.providedProperties
 import kotlin.script.experimental.api.scriptsInstancesSharing
 import kotlin.script.experimental.jvmhost.createJvmCompilationConfigurationFromTemplate
@@ -43,6 +42,8 @@ class Notifier(
     resolutionProvider: ResolutionProvider = DefaultResolutionProvider()
 ) : ScriptRunner() {
     private val customProperties = buildMap {
+        put("ortResult", ortResult)
+
         config.mail?.let { put("mailClient", MailNotifier(it)) }
         config.jira?.let { put("jiraClient", JiraNotifier(it)) }
 
@@ -54,10 +55,8 @@ class Notifier(
     }
 
     override val evalConfig = ScriptEvaluationConfiguration {
-        constructorArgs(ortResult)
-        scriptsInstancesSharing(true)
-
         providedProperties(customProperties)
+        scriptsInstancesSharing(true)
     }
 
     fun run(script: String): NotifierRun {
