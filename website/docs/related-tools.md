@@ -9,6 +9,11 @@ sidebar_label: Related Tools
 
 A [repository](https://github.com/oss-review-toolkit/ort-config) with exemplary ORT configuration files.
 
+## ORT Server
+
+The [ORT Server](https://github.com/eclipse-apoapsis/ort-server) is a scalable server implementation of ORT.
+It is designed to run inside a Kubernetes cluster and can be used via a REST API or a web frontend which is currently under development.
+
 ## ORT Workbench
 
 The [ORT Workbench](https://github.com/oss-review-toolkit/ort-workbench) is an ORT result file viewer developed by the ORT core team.
