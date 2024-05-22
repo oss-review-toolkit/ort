@@ -191,8 +191,12 @@ internal suspend fun mapSnippetFindings(
             snippetLicenseFindings
         )
 
-        runningSnippetCount += mappedSnippets.size
-        results += mappedSnippets
+        val snippetFindingIterator = mappedSnippets.iterator()
+        while (runningSnippetCount < snippetsLimit && snippetFindingIterator.hasNext()) {
+            val snippetFinding = snippetFindingIterator.next()
+            runningSnippetCount += snippetFinding.snippets.size
+            results += snippetFinding
+        }
     }
 
     if (runningSnippetCount >= snippetsLimit) {
