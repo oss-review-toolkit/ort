@@ -721,7 +721,7 @@ class FossIdSnippetChoiceTest : WordSpec({
             }
         }
 
-        "respect the snippet limit when listing snippets" {
+        "respect the snippet limit when listing snippets (single snippet per finding)" {
             val projectCode = projectCode(PROJECT)
             val scanCode = scanCode(PROJECT, null)
             val config = createConfig(deltaScans = false, fetchSnippetMatchedLines = true, snippetsLimit = 2)
@@ -753,6 +753,51 @@ class FossIdSnippetChoiceTest : WordSpec({
             val summary = fossId.scan(createPackage(pkgId, vcsInfo)).summary
 
             summary.snippetFindings shouldHaveSize 2
+            summary.snippetFindings.forEach {
+                it.sourceLocation.path shouldBe FILE_1
+            }
+
+            summary.snippetFindings.flatMap { it.snippets } shouldHaveSize 2
+
+            summary.issues.forAtLeastOne {
+                it.message shouldBe "The snippets limit of 2 has been reached. To see the possible remaining " +
+                    "snippets, please perform a snippet choice for the snippets presents in the snippet report an " +
+                    "rerun the scan."
+            }
+        }
+
+        "respect the snippet limit when listing snippets (multiple snippets per finding)" {
+            val projectCode = projectCode(PROJECT)
+            val scanCode = scanCode(PROJECT, null)
+            val config = createConfig(deltaScans = false, fetchSnippetMatchedLines = true, snippetsLimit = 2)
+            val vcsInfo = createVcsInfo()
+            val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
+            val pkgId = createIdentifier(index = 42)
+
+            FossIdRestService.create(config.serverUrl)
+                .expectProjectRequest(projectCode)
+                .expectListScans(projectCode, listOf(scan))
+                .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
+                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
+                .expectDownload(scanCode)
+                .mockFiles(
+                    scanCode,
+                    pendingFiles = listOf(FILE_1, FILE_2),
+                    snippets = listOf(
+                        createSnippet(0, FILE_1, PURL_1),
+                        createSnippet(1, FILE_1, PURL_2)
+                    ),
+                    matchedLines = mapOf(
+                        0 to MatchedLines.create((10..20).toList(), (10..20).toList()),
+                        1 to MatchedLines.create((10..20).toList(), (20..30).toList())
+                    )
+                )
+
+            val fossId = createFossId(config)
+
+            val summary = fossId.scan(createPackage(pkgId, vcsInfo)).summary
+
+            summary.snippetFindings shouldHaveSize 1
             summary.snippetFindings.forEach {
                 it.sourceLocation.path shouldBe FILE_1
             }
@@ -844,12 +889,12 @@ class FossIdSnippetChoiceTest : WordSpec({
 
             val summary = fossId.scan(createPackage(pkgId, vcsInfo), snippetChoices = snippetChoices).summary
 
-            summary.snippetFindings shouldHaveSize 3
-            summary.snippetFindings.first().apply {
+            summary.snippetFindings shouldHaveSize 2
+            summary.snippetFindings.first().apply { // one snippet is remaining for file 1
                 sourceLocation.path shouldBe FILE_1
             }
-            summary.snippetFindings.drop(1).forEach {
-                it.sourceLocation.path shouldBe FILE_2
+            summary.snippetFindings.last().apply { // one snippet for file 2, then the limit is reached
+                sourceLocation.path shouldBe FILE_2
             }
 
             summary.issues.forAtLeastOne {
