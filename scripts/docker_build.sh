@@ -25,6 +25,9 @@ DOCKER_IMAGE_ROOT="${DOCKER_IMAGE_ROOT:-ghcr.io/oss-review-toolkit}"
 
 echo "Setting ORT_VERSION to $ORT_VERSION."
 
+# shellcheck disable=SC2046
+export $(sed "s/^ARG //" "$GIT_ROOT/docker/versions.dockerfile" | xargs)
+
 # ---------------------------
 # image_build function
 # Usage ( position parameters):
