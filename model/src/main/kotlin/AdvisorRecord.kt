@@ -127,7 +127,7 @@ data class AdvisorRecord(
  * references. Other [Vulnerability] properties are taken from the first object which has any such property set.
  */
 private fun Collection<Vulnerability>.mergeVulnerabilities(): List<Vulnerability> {
-    val vulnerabilitiesById = groupByTo(sortedMapOf()) { it.id }
+    val vulnerabilitiesById = groupBy { it.id }
     return vulnerabilitiesById.map { it.value.mergeReferences() }
 }
 
