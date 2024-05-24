@@ -93,8 +93,8 @@ class DependencyGraphTest : WordSpec({
             )
             val refLang = DependencyReference(0)
             val refCollections = DependencyReference(1)
-            val refConfig = DependencyReference(2, dependencies = sortedSetOf(refLang, refCollections))
-            val refCsv = DependencyReference(3, dependencies = sortedSetOf(refConfig))
+            val refConfig = DependencyReference(2, dependencies = setOf(refLang, refCollections))
+            val refCsv = DependencyReference(3, dependencies = setOf(refConfig))
             val fragments = sortedSetOf(DependencyGraph.DEPENDENCY_REFERENCE_COMPARATOR, refCsv)
             val scopeMap = mapOf("s" to listOf(RootDependencyIndex(3)))
             val graph = DependencyGraph(ids, fragments, scopeMap)
@@ -113,10 +113,10 @@ class DependencyGraphTest : WordSpec({
             val refLogging = DependencyReference(3)
             val refLang = DependencyReference(0)
             val refCollections1 = DependencyReference(1)
-            val refCollections2 = DependencyReference(1, fragment = 1, dependencies = sortedSetOf(refLogging))
-            val refConfig1 = DependencyReference(2, dependencies = sortedSetOf(refLang, refCollections1))
+            val refCollections2 = DependencyReference(1, fragment = 1, dependencies = setOf(refLogging))
+            val refConfig1 = DependencyReference(2, dependencies = setOf(refLang, refCollections1))
             val refConfig2 =
-                DependencyReference(2, fragment = 1, dependencies = sortedSetOf(refLang, refCollections2))
+                DependencyReference(2, fragment = 1, dependencies = setOf(refLang, refCollections2))
             val fragments = sortedSetOf(refConfig1, refConfig2)
             val scopeMap = mapOf(
                 "s1" to listOf(RootDependencyIndex(2)),
@@ -170,7 +170,7 @@ class DependencyGraphTest : WordSpec({
             )
             val issue = Issue(source = "analyzer", message = "Could not analyze :-(")
             val refLang = DependencyReference(0, linkage = PackageLinkage.PROJECT_DYNAMIC)
-            val refCol = DependencyReference(1, issues = listOf(issue), dependencies = sortedSetOf(refLang))
+            val refCol = DependencyReference(1, issues = listOf(issue), dependencies = setOf(refLang))
             val trees = sortedSetOf(refCol)
             val scopeMap = mapOf("s" to listOf(RootDependencyIndex(1)))
 

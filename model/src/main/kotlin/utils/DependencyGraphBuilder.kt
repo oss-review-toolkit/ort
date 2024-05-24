@@ -370,7 +370,7 @@ class DependencyGraphBuilder<D>(
         transitive: Boolean,
         processed: Set<D>
     ): DependencyReference? {
-        val transitiveDependencies = dependencyHandler.dependenciesFor(dependency).mapNotNull {
+        val transitiveDependencies = dependencyHandler.dependenciesFor(dependency).mapNotNullTo(mutableSetOf()) {
             addDependencyToGraph(scopeName, it, transitive = true, processed)
         }
 
@@ -387,7 +387,7 @@ class DependencyGraphBuilder<D>(
         val ref = DependencyReference(
             pkg = index.root,
             fragment = index.fragment,
-            dependencies = transitiveDependencies.toSortedSet(),
+            dependencies = transitiveDependencies,
             linkage = dependencyHandler.linkageFor(dependency),
             issues = issues
         )
