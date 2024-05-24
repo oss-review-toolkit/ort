@@ -277,7 +277,7 @@ ort:
 
       SCANOSS:
         options:
-          apiUrl: 'https://osskb.org/api/'
+          apiUrl: 'https://api.osskb.org/'
         secrets:
           apiKey: 'your API key'
 
