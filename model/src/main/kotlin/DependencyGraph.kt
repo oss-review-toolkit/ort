@@ -400,10 +400,10 @@ private fun DependencyReference.toGraphNode() = DependencyGraphNode(pkg, fragmen
 /**
  * Construct a mapping of dependencies based on the given [roots].
  */
-private fun constructNodeDependenciesFromScopeRoots(roots: SortedSet<DependencyReference>): NodeDependencies {
+private fun constructNodeDependenciesFromScopeRoots(roots: Set<DependencyReference>): NodeDependencies {
     val mapping = mutableMapOf<DependencyGraphNode, List<DependencyGraphNode>>()
 
-    fun construct(refs: SortedSet<DependencyReference>) {
+    fun construct(refs: Set<DependencyReference>) {
         refs.forEach { ref ->
             val node = ref.toGraphNode()
             if (node !in mapping) {
