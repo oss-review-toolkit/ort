@@ -82,7 +82,7 @@ class DependencyTreeNavigatorTest : AbstractDependencyNavigatorTest() {
 
         "dependencyTreeDepth" should {
             "return 0 if the scope does not contain any package" {
-                val scope = Scope(name = "test", dependencies = sortedSetOf())
+                val scope = Scope(name = "test", dependencies = emptySet())
                 val project = Project.EMPTY.copy(scopeDependencies = setOf(scope))
 
                 navigator.dependencyTreeDepth(project, scope.name) shouldBe 0

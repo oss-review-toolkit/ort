@@ -70,7 +70,7 @@ data class LicenseClassifications(
     /** A property allowing convenient access to the names of all categories defined in alphabetical order. */
     @get:JsonIgnore
     val categoryNames: Set<String> by lazy {
-        categories.mapTo(sortedSetOf()) { it.name }
+        categories.mapTo(mutableSetOf()) { it.name }
     }
 
     init {
