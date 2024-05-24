@@ -154,7 +154,12 @@ class DependencyGraphTest : WordSpec({
                 "s2" to listOf(RootDependencyIndex(2, fragment = 1))
             )
 
-            val graph = DependencyGraph(ids, sortedSetOf(), scopeMap, nodes, edges)
+            val graph = DependencyGraph(
+                packages = ids,
+                scopes = scopeMap,
+                nodes = nodes,
+                edges = edges
+            )
             val scopes = graph.createScopes()
 
             scopeDependencies(scopes, "s1") shouldBe "${ids[2]}<${ids[1]}${ids[0]}>"
