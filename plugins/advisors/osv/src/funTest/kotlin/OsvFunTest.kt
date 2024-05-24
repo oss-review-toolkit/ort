@@ -48,7 +48,8 @@ class OsvFunTest : StringSpec({
             "NPM::rebber:1.0.0",
             "NuGet::Bunkum:4.0.0",
             "Pub::http:0.13.1",
-            "PyPI::django:3.2"
+            "PyPI::django:3.2",
+            "Swift::github.com/apple/swift-nio:2.41.0"
         ).mapTo(mutableSetOf()) {
             identifierToPackage(it)
         }
