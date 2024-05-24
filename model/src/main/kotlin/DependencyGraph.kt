@@ -295,7 +295,7 @@ data class RootDependencyIndex(
  * Note: This is by intention no data class. Equality is tested via references and not via the values contained.
  */
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-class DependencyReference(
+data class DependencyReference(
     /**
      * Stores the numeric index of the package dependency referenced by this object. The package behind this index can
      * be resolved by evaluating the list of identifiers stored in [DependencyGraph] at this index.
@@ -326,17 +326,7 @@ class DependencyReference(
      * A list of [Issue]s that occurred handling this dependency.
      */
     val issues: List<Issue> = emptyList()
-) : Comparable<DependencyReference> {
-    /**
-     * Define an order on [DependencyReference] instances. Instances are ordered by their indices and fragment indices.
-     */
-    override fun compareTo(other: DependencyReference): Int =
-        if (pkg != other.pkg) {
-            pkg - other.pkg
-        } else {
-            fragment - other.fragment
-        }
-}
+)
 
 /**
  * A data class representing a node in the dependency graph.
