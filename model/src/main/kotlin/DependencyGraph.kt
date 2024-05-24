@@ -21,9 +21,11 @@ package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
 import java.util.SortedSet
 
+import org.ossreviewtoolkit.model.utils.DependencyGraphEdgeSortedSetConverter
 import org.ossreviewtoolkit.model.utils.PackageLinkageValueFilter
 
 /**
@@ -102,6 +104,7 @@ data class DependencyGraph(
      * A set with the edges of this dependency graph. By traversing the edges, the dependencies of packages can be
      * determined.
      */
+    @JsonSerialize(converter = DependencyGraphEdgeSortedSetConverter::class)
     val edges: Set<DependencyGraphEdge>? = null
 ) {
     companion object {
