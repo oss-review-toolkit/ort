@@ -103,18 +103,17 @@ class AnalyzerResultBuilderTest : WordSpec() {
         DependencyGraph.qualifyScope(project2, "scope-3") to listOf(RootDependencyIndex(0))
     )
 
-    private val graph1 =
-        DependencyGraph(
-            dependencies1,
-            sortedSetOf(DependencyGraph.DEPENDENCY_REFERENCE_COMPARATOR, depRef1, depRef2),
-            scopeMapping1
-        )
-    private val graph2 =
-        DependencyGraph(
-            dependencies2,
-            sortedSetOf(DependencyGraph.DEPENDENCY_REFERENCE_COMPARATOR, depRef3),
-            scopeMapping2
-        )
+    private val graph1 = DependencyGraph(
+        packages = dependencies1,
+        scopeRoots = sortedSetOf(DependencyGraph.DEPENDENCY_REFERENCE_COMPARATOR, depRef1, depRef2),
+        scopes = scopeMapping1
+    )
+
+    private val graph2 = DependencyGraph(
+        packages = dependencies2,
+        scopeRoots = sortedSetOf(DependencyGraph.DEPENDENCY_REFERENCE_COMPARATOR, depRef3),
+        scopes = scopeMapping2
+    )
 
     private val analyzerResult1 = ProjectAnalyzerResult(
         project1, setOf(package1), listOf(issue3, issue4)

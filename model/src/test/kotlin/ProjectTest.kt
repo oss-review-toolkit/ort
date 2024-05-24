@@ -77,7 +77,11 @@ private fun createDependencyGraph(qualified: Boolean = false): DependencyGraph {
         plainScopeMapping
     }
 
-    return DependencyGraph(dependencies, sortedSetOf(exampleRef, csvRef), scopeMapping)
+    return DependencyGraph(
+        packages = dependencies,
+        scopeRoots = sortedSetOf(exampleRef, csvRef),
+        scopes = scopeMapping
+    )
 }
 
 class ProjectTest : WordSpec({
