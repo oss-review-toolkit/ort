@@ -1,4 +1,4 @@
-# syntax=devthefuture/dockerfile-x
+# syntax=devthefuture/dockerfile-x:v1.4.1
 # The above opts-in for an extended syntax that supports e.g. "INCLUDE" statements, see
 # https://codeberg.org/devthefuture/dockerfile-x
 
