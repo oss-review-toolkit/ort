@@ -41,6 +41,7 @@ import io.kotest.matchers.types.beInstanceOf
 import java.io.File
 import java.io.IOException
 import java.net.URI
+import java.net.URLDecoder
 import java.time.DayOfWeek
 import java.util.Locale
 
@@ -375,13 +376,21 @@ class ExtensionsTest : WordSpec({
 
             assertSoftly {
                 reserved.forEach {
-                    val hexString = String.format(Locale.ROOT, "%%%02X", it.code)
-                    it.toString().percentEncode() shouldBe hexString
+                    val decoded = it.toString()
+
+                    val encoded = decoded.percentEncode()
+
+                    encoded shouldBe String.format(Locale.ROOT, "%%%02X", it.code)
+                    URLDecoder.decode(encoded, Charsets.UTF_8) shouldBe decoded
                 }
 
                 unreserved.forEach {
-                    val singleCharString = it.toString()
-                    singleCharString.percentEncode() shouldBe singleCharString
+                    val decoded = it.toString()
+
+                    val encoded = decoded.percentEncode()
+
+                    encoded shouldBe decoded
+                    URLDecoder.decode(encoded, Charsets.UTF_8) shouldBe decoded
                 }
 
                 " ".percentEncode() shouldBe "%20"
