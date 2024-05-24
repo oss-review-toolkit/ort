@@ -48,13 +48,13 @@ import java.util.Locale
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class ExtensionsTest : WordSpec({
-    "ByteArray.toHexString" should {
+    "ByteArray.toHexString()" should {
         "correctly convert a byte array to a string of hexadecimal digits" {
             byteArrayOf(0xde.toByte(), 0xad.toByte(), 0xbe.toByte(), 0xef.toByte()).encodeHex() shouldBe "deadbeef"
         }
     }
 
-    "Collection.getDuplicates" should {
+    "Collection.getDuplicates()" should {
         "return no duplicates if there are none" {
             emptyList<String>().getDuplicates() should beEmpty()
             listOf("no", "dupes", "in", "here").getDuplicates() should beEmpty()
@@ -87,7 +87,7 @@ class ExtensionsTest : WordSpec({
         }
     }
 
-    "EnumSet.plus" should {
+    "EnumSet.plus()" should {
         "create an empty set if both summands are empty" {
             val sum = enumSetOf<DayOfWeek>() + enumSetOf()
 
@@ -101,7 +101,7 @@ class ExtensionsTest : WordSpec({
         }
     }
 
-    "File.expandTilde" should {
+    "File.expandTilde()" should {
         "expand the path if the SHELL environment variable is set".config(enabled = Os.env["SHELL"] != null) {
             File("~/Desktop").expandTilde() shouldBe Os.userHomeDirectory.resolve("Desktop")
         }
@@ -111,7 +111,7 @@ class ExtensionsTest : WordSpec({
         }
     }
 
-    "File.isSymbolicLink" should {
+    "File.isSymbolicLink()" should {
         val tempDir = tempdir()
         val file = tempDir.resolve("file").apply { createNewFile() }
         val directory = tempDir.resolve("directory").safeMkdirs()
@@ -170,7 +170,7 @@ class ExtensionsTest : WordSpec({
         }
     }
 
-    "File.safeMkDirs" should {
+    "File.safeMkDirs()" should {
         "succeed if directory already exists" {
             val directory = tempdir()
 
@@ -212,7 +212,7 @@ class ExtensionsTest : WordSpec({
         }
     }
 
-    "File.searchUpwardsForSubdirectory" should {
+    "File.searchUpwardsForSubdirectory()" should {
         "find the root Git directory" {
             val gitRoot = File(".").searchUpwardsForSubdirectory(".git")
 
@@ -222,7 +222,7 @@ class ExtensionsTest : WordSpec({
         }
     }
 
-    "Map.zip" should {
+    "Map.zip()" should {
         val operation = { left: Int?, right: Int? -> (left ?: 0) + (right ?: 0) }
 
         "correctly merge maps" {
@@ -257,7 +257,7 @@ class ExtensionsTest : WordSpec({
         }
     }
 
-    "Map.zipWithDefault" should {
+    "Map.zipWithDefault()" should {
         val operation = { left: Int, right: Int -> left + right }
 
         "correctly merge maps" {
@@ -292,7 +292,7 @@ class ExtensionsTest : WordSpec({
         }
     }
 
-    "Map.zipWithCollections" should {
+    "Map.zipWithCollections()" should {
         "correctly merge maps with list values" {
             val map = mapOf(
                 "1" to listOf(1),
@@ -353,7 +353,7 @@ class ExtensionsTest : WordSpec({
         }
     }
 
-    "String.isValidUri" should {
+    "String.isValidUri()" should {
         "return true for a valid URI" {
             "https://github.com/oss-review-toolkit/ort".isValidUri() shouldBe true
         }
@@ -363,7 +363,7 @@ class ExtensionsTest : WordSpec({
         }
     }
 
-    "String.percentEncode" should {
+    "String.percentEncode()" should {
         "encode characters according to RFC 3986" {
             val genDelims = listOf(':', '/', '?', '#', '[', ']', '@')
             val subDelims = listOf('!', '$', '&', '\'', '(', ')', '*', '+', ',', ';', '=')
@@ -398,7 +398,7 @@ class ExtensionsTest : WordSpec({
         }
     }
 
-    "String.replaceCredentialsInUri" should {
+    "String.replaceCredentialsInUri()" should {
         "strip the user name from a string representing a URL" {
             "ssh://bot@gerrit.host.com:29418/parent/project".replaceCredentialsInUri() shouldBe
                 "ssh://gerrit.host.com:29418/parent/project"
@@ -429,7 +429,7 @@ class ExtensionsTest : WordSpec({
         }
     }
 
-    "String.unquote" should {
+    "String.unquote()" should {
         "remove surrounding quotes" {
             "'single'".unquote() shouldBe "single"
             "\"double\"".unquote() shouldBe "double"
@@ -456,7 +456,7 @@ class ExtensionsTest : WordSpec({
         }
     }
 
-    "String.urlencode" should {
+    "String.fileSystemEncode()" should {
         val str = "project: fünky\$name*>nul."
 
         "encode '*'" {
@@ -479,7 +479,7 @@ class ExtensionsTest : WordSpec({
         }
     }
 
-    "URI.getQueryParameters" should {
+    "URI.getQueryParameters()" should {
         "return the query parameter for a simple query" {
             URI("https://oss-review-toolkit.org?key=value").getQueryParameters() shouldBe
                 mapOf("key" to listOf("value"))
@@ -507,7 +507,7 @@ class ExtensionsTest : WordSpec({
         }
     }
 
-    "collapseValues" should {
+    "collapseToRanges()" should {
         "not modify a single value" {
             val lines = listOf(255)
             lines.collapseToRanges() should containExactlyCollection(255 to 255)
