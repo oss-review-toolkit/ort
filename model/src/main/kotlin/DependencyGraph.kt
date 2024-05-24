@@ -99,10 +99,10 @@ data class DependencyGraph(
     val nodes: List<DependencyGraphNode>? = null,
 
     /**
-     * A list with the edges of this dependency graph. By traversing the edges, the dependencies of packages can be
+     * A set with the edges of this dependency graph. By traversing the edges, the dependencies of packages can be
      * determined.
      */
-    val edges: List<DependencyGraphEdge>? = null
+    val edges: Set<DependencyGraphEdge>? = null
 ) {
     companion object {
         /**
@@ -419,7 +419,7 @@ private fun constructNodeDependenciesFromScopeRoots(roots: SortedSet<DependencyR
  */
 private fun constructNodeDependenciesFromGraph(
     nodes: List<DependencyGraphNode>,
-    edges: List<DependencyGraphEdge>
+    edges: Set<DependencyGraphEdge>
 ): NodeDependencies {
     val mapping = mutableMapOf<DependencyGraphNode, MutableList<DependencyGraphNode>>()
 
