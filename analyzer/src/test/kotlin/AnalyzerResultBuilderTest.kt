@@ -105,13 +105,13 @@ class AnalyzerResultBuilderTest : WordSpec() {
 
     private val graph1 = DependencyGraph(
         packages = dependencies1,
-        scopeRoots = sortedSetOf(DependencyGraph.DEPENDENCY_REFERENCE_COMPARATOR, depRef1, depRef2),
+        scopeRoots = setOf(depRef1, depRef2),
         scopes = scopeMapping1
     )
 
     private val graph2 = DependencyGraph(
         packages = dependencies2,
-        scopeRoots = sortedSetOf(DependencyGraph.DEPENDENCY_REFERENCE_COMPARATOR, depRef3),
+        scopeRoots = setOf(depRef3),
         scopes = scopeMapping2
     )
 

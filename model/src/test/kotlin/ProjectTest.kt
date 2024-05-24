@@ -79,7 +79,7 @@ private fun createDependencyGraph(qualified: Boolean = false): DependencyGraph {
 
     return DependencyGraph(
         packages = dependencies,
-        scopeRoots = sortedSetOf(exampleRef, csvRef),
+        scopeRoots = setOf(exampleRef, csvRef),
         scopes = scopeMapping
     )
 }
