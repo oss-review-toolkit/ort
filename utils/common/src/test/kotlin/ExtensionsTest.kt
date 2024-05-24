@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.utils.common
 
-import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
@@ -374,26 +373,24 @@ class ExtensionsTest : WordSpec({
             val special = listOf('-', '.', '_', '~')
             val unreserved = alpha + digit + special
 
-            assertSoftly {
-                reserved.forEach {
-                    val decoded = it.toString()
+            " ".percentEncode() shouldBe "%20"
 
-                    val encoded = decoded.percentEncode()
+            reserved.forAll {
+                val decoded = it.toString()
 
-                    encoded shouldBe String.format(Locale.ROOT, "%%%02X", it.code)
-                    URLDecoder.decode(encoded, Charsets.UTF_8) shouldBe decoded
-                }
+                val encoded = decoded.percentEncode()
 
-                unreserved.forEach {
-                    val decoded = it.toString()
+                encoded shouldBe String.format(Locale.ROOT, "%%%02X", it.code)
+                URLDecoder.decode(encoded, Charsets.UTF_8) shouldBe decoded
+            }
 
-                    val encoded = decoded.percentEncode()
+            unreserved.asList().forAll {
+                val decoded = it.toString()
 
-                    encoded shouldBe decoded
-                    URLDecoder.decode(encoded, Charsets.UTF_8) shouldBe decoded
-                }
+                val encoded = decoded.percentEncode()
 
-                " ".percentEncode() shouldBe "%20"
+                encoded shouldBe decoded
+                URLDecoder.decode(encoded, Charsets.UTF_8) shouldBe decoded
             }
         }
     }
