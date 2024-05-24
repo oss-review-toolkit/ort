@@ -49,7 +49,7 @@ class PackageCurationDataTest : WordSpec({
         ),
         isMetadataOnly = true,
         isModified = true,
-        declaredLicenseMapping = mapOf("original" to "original".toSpdx()),
+        declaredLicenseMapping = mapOf("original" to "LicenseRef-original".toSpdx()),
         sourceCodeOrigins = listOf(SourceCodeOrigin.ARTIFACT, SourceCodeOrigin.VCS)
     )
 
@@ -77,7 +77,7 @@ class PackageCurationDataTest : WordSpec({
         ),
         isMetadataOnly = false,
         isModified = false,
-        declaredLicenseMapping = mapOf("other" to "other".toSpdx()),
+        declaredLicenseMapping = mapOf("other" to "LicenseRef-other".toSpdx()),
         sourceCodeOrigins = listOf(SourceCodeOrigin.VCS)
     )
 
@@ -116,8 +116,8 @@ class PackageCurationDataTest : WordSpec({
                 authors = setOf("original", "other"),
                 concludedLicense = "original AND other".toSpdx(),
                 declaredLicenseMapping = mapOf(
-                    "original" to "original".toSpdx(),
-                    "other" to "other".toSpdx()
+                    "original" to "LicenseRef-original".toSpdx(),
+                    "other" to "LicenseRef-other".toSpdx()
                 )
             )
         }
