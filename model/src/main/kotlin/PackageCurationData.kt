@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import org.ossreviewtoolkit.utils.common.zip
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression.Strictness.ALLOW_LICENSEREF_EXCEPTIONS
 
 /**
  * This class contains curation data for a package. It is used to amend the automatically detected metadata for a
@@ -108,6 +109,14 @@ data class PackageCurationData(
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val sourceCodeOrigins: List<SourceCodeOrigin>? = null
 ) {
+    init {
+        declaredLicenseMapping.forEach { (key, value) ->
+            require(value.isValid(ALLOW_LICENSEREF_EXCEPTIONS)) {
+                "The declared license '$key' is configured to map to '$value' which is not a valid SPDX expression."
+            }
+        }
+    }
+
     /**
      * Apply this [PackageCuration] to [targetPackage] by overriding all values of [targetPackage] with non-null values
      * of this [PackageCurationData], and return the resulting [CuratedPackage].
