@@ -35,12 +35,11 @@ class DependencyGraphTest : WordSpec({
                 id("org.apache.commons", "commons-collections4", "4.4"),
                 id(group = "org.junit", artifact = "junit", version = "5")
             )
-            val fragments =
-                sortedSetOf(
-                    DependencyReference(0),
-                    DependencyReference(1),
-                    DependencyReference(2)
-                )
+            val fragments = sortedSetOf(
+                DependencyReference(0),
+                DependencyReference(1),
+                DependencyReference(2)
+            )
             val scopeMap = mapOf(
                 "p1:scope1" to listOf(RootDependencyIndex(0), RootDependencyIndex(1)),
                 "p2:scope2" to listOf(RootDependencyIndex(1), RootDependencyIndex(2))
@@ -63,12 +62,11 @@ class DependencyGraphTest : WordSpec({
                 id("org.apache.commons", "commons-collections4", "4.4"),
                 id("org.junit", "junit", "5")
             )
-            val fragments =
-                sortedSetOf(
-                    DependencyReference(0),
-                    DependencyReference(1),
-                    DependencyReference(2)
-                )
+            val fragments = sortedSetOf(
+                DependencyReference(0),
+                DependencyReference(1),
+                DependencyReference(2)
+            )
             val scopeMap = mapOf(
                 qualifiedScopeName to listOf(RootDependencyIndex(0), RootDependencyIndex(1)),
                 DependencyGraph.qualifyScope(qualifier, "scope2") to listOf(
