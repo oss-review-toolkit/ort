@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import java.util.SortedSet
 
 import org.ossreviewtoolkit.model.utils.DependencyGraphEdgeSortedSetConverter
+import org.ossreviewtoolkit.model.utils.DependencyReferenceSortedSetConverter
 import org.ossreviewtoolkit.model.utils.PackageLinkageValueFilter
 
 /**
@@ -317,7 +318,8 @@ class DependencyReference(
     /**
      * A set with the references to the dependencies of this dependency. That way a tree-like structure is established.
      */
-    val dependencies: SortedSet<DependencyReference> = sortedSetOf(),
+    @JsonSerialize(contentConverter = DependencyReferenceSortedSetConverter::class)
+    val dependencies: Set<DependencyReference> = emptySet(),
 
     /**
      * The type of linkage used for the referred package from its dependent package. As most of our supported
