@@ -119,6 +119,7 @@ object Ecosystem {
     const val PUB = "Pub"
     const val PYPI = "PyPI"
     const val RUBY_GEMS = "RubyGems"
+    const val SWIFT_URL = "SwiftURL"
 }
 
 @Serializable(EventSerializer::class)

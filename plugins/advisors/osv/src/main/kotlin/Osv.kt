@@ -159,6 +159,7 @@ private fun createRequest(pkg: Package): VulnerabilitiesForPackageRequest? {
         "Maven" -> Ecosystem.MAVEN
         "Pub" -> Ecosystem.PUB
         "PyPI" -> Ecosystem.PYPI
+        "Swift" -> Ecosystem.SWIFT_URL
         else -> null
     }
 
