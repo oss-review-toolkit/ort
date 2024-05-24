@@ -553,8 +553,8 @@ private fun constructSortedScopeMappings(
 ): Map<String, List<RootDependencyIndex>> {
     val orderedMappings = mutableMapOf<String, List<RootDependencyIndex>>()
 
-    scopeMappings.keys.toSortedSet().forEach { scope ->
-        orderedMappings[scope] = scopeMappings.getValue(scope)
+    scopeMappings.entries.sortedBy { it.key }.forEach { (scope, rootDependencyIndices) ->
+        orderedMappings[scope] = rootDependencyIndices
             .map { it.mapIndex(indexMapping) }
             .sortedWith(rootDependencyIndexComparator)
     }
