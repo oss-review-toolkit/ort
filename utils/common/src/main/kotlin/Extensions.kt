@@ -378,7 +378,7 @@ fun String.normalizeLineBreaks() = replace(NON_LINUX_LINE_BREAKS, "\n")
  * Return the [percent-encoded](https://en.wikipedia.org/wiki/Percent-encoding) string.
  */
 fun String.percentEncode(): String =
-    java.net.URLEncoder.encode(this, "UTF-8")
+    java.net.URLEncoder.encode(this, Charsets.UTF_8)
         // As "encode" above actually performs encoding for forms, not for query strings, spaces are encoded as
         // "+" instead of "%20", so apply the proper mapping here afterwards ("+" in the original string is
         // encoded as "%2B").
