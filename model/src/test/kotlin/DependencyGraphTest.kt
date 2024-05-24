@@ -144,7 +144,7 @@ class DependencyGraphTest : WordSpec({
             val nodeConfig1 = DependencyGraphNode(2)
             val nodeConfig2 = DependencyGraphNode(2, fragment = 1)
             val nodes = listOf(nodeLogging, nodeLang, nodeCollections1, nodeCollections2, nodeConfig1, nodeConfig2)
-            val edges = listOf(
+            val edges = setOf(
                 DependencyGraphEdge(3, 0),
                 DependencyGraphEdge(4, 1),
                 DependencyGraphEdge(4, 2),
