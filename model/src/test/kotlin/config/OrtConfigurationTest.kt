@@ -291,7 +291,7 @@ class OrtConfigurationTest : WordSpec({
                     }
 
                     get("SCANOSS") shouldNotBeNull {
-                        options shouldContainExactly mapOf("apiUrl" to "https://osskb.org/api/")
+                        options shouldContainExactly mapOf("apiUrl" to "https://api.osskb.org/")
                         secrets shouldContainExactly mapOf("apiKey" to "your API key")
                     }
                 }
