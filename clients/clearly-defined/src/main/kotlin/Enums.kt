@@ -21,8 +21,6 @@ package org.ossreviewtoolkit.clients.clearlydefined
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.encodeToJsonElement
-import kotlinx.serialization.json.jsonPrimitive
 
 /**
  * See https://github.com/clearlydefined/service/blob/48f2c97/schemas/definition-1.0.json#L32-L48.
@@ -50,7 +48,7 @@ enum class ComponentType(val defaultProvider: Provider? = null) {
 
     // Align the string representation with the serial name to make Retrofit's GET request work. Also see:
     // https://github.com/JakeWharton/retrofit2-kotlinx-serialization-converter/issues/39
-    override fun toString() = ClearlyDefinedService.JSON.encodeToJsonElement(this).jsonPrimitive.content
+    override fun toString() = serializer().descriptor.getElementName(ordinal)
 }
 
 /**
@@ -80,7 +78,7 @@ enum class Provider {
 
     // Align the string representation with the serial name to make Retrofit's GET request work. Also see:
     // https://github.com/JakeWharton/retrofit2-kotlinx-serialization-converter/issues/39
-    override fun toString() = ClearlyDefinedService.JSON.encodeToJsonElement(this).jsonPrimitive.content
+    override fun toString() = serializer().descriptor.getElementName(ordinal)
 }
 
 /**
