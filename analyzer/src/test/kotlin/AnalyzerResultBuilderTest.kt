@@ -157,18 +157,16 @@ class AnalyzerResultBuilderTest : WordSpec() {
             "not change its representation when serialized again" {
                 val p1 = project1.copy(scopeDependencies = null, scopeNames = setOf("scope1"))
                 val p2 = project2.copy(scopeDependencies = null, scopeNames = setOf("scope3"))
-                val result = AnalyzerResult(
+                val serializedResult = AnalyzerResult(
                     projects = setOf(p1, p2, project3),
                     packages = emptySet(),
                     dependencyGraphs = mapOf(
                         project1.id.type to graph1,
                         project2.id.type to graph2
                     )
-                )
+                ).toYaml()
 
-                val serializedResult = result.toYaml().fromYaml<AnalyzerResult>().toYaml()
-
-                serializedResult shouldBe serializedResult
+                serializedResult.fromYaml<AnalyzerResult>().toYaml() shouldBe serializedResult
             }
 
             "use the dependency graph representation on serialization" {
