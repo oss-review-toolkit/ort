@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.MappingIterator
 import com.fasterxml.jackson.databind.node.NullNode
 import com.fasterxml.jackson.databind.node.ObjectNode
+import com.fasterxml.jackson.module.kotlin.contains
 import com.fasterxml.jackson.module.kotlin.readValues
 
 import java.io.File
@@ -87,6 +88,10 @@ private enum class YarnDependencyType(val type: String) {
  * - *disableRegistryCertificateVerification*: If true, the `yarn npm info` commands called by this package manager will
  *   not verify the server certificate of the HTTPS connection to the NPM registry. This allows to replace the latter by
  *   a local one, e.g. for intercepting the requests or replaying them.
+ * - *corepackOverride*: Per default, this class determines via auto-detection whether Yarn has been installed via
+ *   [Corepack](https://yarnpkg.com/corepack), which impacts the name of the executable to use. With this option,
+ *   auto-detection can be disabled, and the enabled status of Corepack can be explicitly specified. This is useful to
+ *   force a specific behavior in some environments.
  */
 class Yarn2(
     name: String,
@@ -99,6 +104,11 @@ class Yarn2(
          * The name of the option to disable HTTPS server certificate verification.
          */
         const val OPTION_DISABLE_REGISTRY_CERTIFICATE_VERIFICATION = "disableRegistryCertificateVerification"
+
+        /**
+         * The name of the option that allows overriding the automatic detection of Corepack.
+         */
+        const val OPTION_COREPACK_OVERRIDE = "corepackOverride"
 
         /**
          * The name of Yarn 2+ resource file.
@@ -119,10 +129,35 @@ class Yarn2(
          * The amount of package details to query at once with `yarn npm info`.
          */
         private const val BULK_DETAILS_SIZE = 1000
+
+        /**
+         * The name of the manifest file used by Yarn 2+.
+         */
+        private const val MANIFEST_FILE = "package.json"
+
+        /**
+         * The name of the property that defines the package manager and its version if Corepack is enabled.
+         */
+        private const val PACKAGE_MANAGER_PROPERTY = "packageManager"
+
+        /**
+         * The name of the default executable. This is used when the [OPTION_COREPACK_OVERRIDE] option is set.
+         */
+        private const val DEFAULT_EXECUTABLE_NAME = "yarn"
+
+        /**
+         * Check whether Corepack is enabled based on the `package.json` file in [workingDir]. If no such file is found
+         * or if it cannot be read, assume that this is not the case.
+         */
+        private fun isCorepackEnabledInManifest(workingDir: File): Boolean {
+            return runCatching {
+                jsonMapper.readTree(workingDir.resolve(MANIFEST_FILE)).contains(PACKAGE_MANAGER_PROPERTY)
+            }.getOrDefault(false)
+        }
     }
 
     class Factory : AbstractPackageManagerFactory<Yarn2>("Yarn2") {
-        override val globsForDefinitionFiles = listOf("package.json")
+        override val globsForDefinitionFiles = listOf(MANIFEST_FILE)
 
         override fun create(
             analysisRoot: File,
@@ -135,7 +170,8 @@ class Yarn2(
      * The Yarn 2+ executable is not installed globally: The program shipped by the project in `.yarn/releases` is used
      * instead. The value of the 'yarnPath' property in the resource file `.yarnrc.yml` defines the path to the
      * executable for the current project e.g. `yarnPath: .yarn/releases/yarn-3.2.1.cjs`.
-     * This map holds the mapping between the directory and their Yarn 2+ executables.
+     * This map holds the mapping between the directory and their Yarn 2+ executables. It is only used if Yarn has not
+     * been installed via Corepack; then it is accessed under a default name.
      */
     private val yarn2ExecutablesByPath: MutableMap<File, String> = mutableMapOf()
 
@@ -156,6 +192,13 @@ class Yarn2(
 
     override fun command(workingDir: File?): String {
         if (workingDir == null) return ""
+
+        val corepackEnabled = if (OPTION_COREPACK_OVERRIDE in options) {
+            options[OPTION_COREPACK_OVERRIDE].toBoolean()
+        } else {
+            isCorepackEnabledInManifest(workingDir)
+        }
+        if (corepackEnabled) return DEFAULT_EXECUTABLE_NAME
 
         return yarn2ExecutablesByPath.getOrPut(workingDir) {
             val yarnConfig = yamlMapper.readTree(workingDir.resolve(YARN2_RESOURCE_FILE))
