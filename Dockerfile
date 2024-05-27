@@ -159,7 +159,6 @@ RUN pip install --no-cache-dir -U \
     && pip install --no-cache-dir -U \
     Mercurial \
     conan=="$CONAN_VERSION" \
-    pip \
     pipenv=="$PYTHON_PIPENV_VERSION" \
     poetry=="$PYTHON_POETRY_VERSION" \
     python-inspector=="$PYTHON_INSPECTOR_VERSION"
