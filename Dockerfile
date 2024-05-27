@@ -153,6 +153,15 @@ ARG PYTHON_POETRY_VERSION
 ARG PIPTOOL_VERSION
 ARG SCANCODE_VERSION
 
+RUN ARCH=$(arch | sed s/aarch64/arm64/) \
+    &&  if [ "$ARCH" == "arm64" ]; then \
+    pip install -U scancode-toolkit-mini==$SCANCODE_VERSION; \
+    else \
+    curl -Os https://raw.githubusercontent.com/nexB/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt; \
+    pip install -U --constraint requirements.txt scancode-toolkit==$SCANCODE_VERSION; \
+    rm requirements.txt; \
+    fi
+
 RUN pip install --no-cache-dir -U \
     pip=="$PIPTOOL_VERSION" \
     wheel \
@@ -162,15 +171,6 @@ RUN pip install --no-cache-dir -U \
     pipenv=="$PYTHON_PIPENV_VERSION" \
     poetry=="$PYTHON_POETRY_VERSION" \
     python-inspector=="$PYTHON_INSPECTOR_VERSION"
-
-RUN ARCH=$(arch | sed s/aarch64/arm64/) \
-    &&  if [ "$ARCH" == "arm64" ]; then \
-    pip install -U scancode-toolkit-mini==$SCANCODE_VERSION; \
-    else \
-    curl -Os https://raw.githubusercontent.com/nexB/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt; \
-    pip install -U --constraint requirements.txt scancode-toolkit==$SCANCODE_VERSION; \
-    rm requirements.txt; \
-    fi
 
 FROM scratch AS python
 COPY --from=pythonbuild /opt/python /opt/python
