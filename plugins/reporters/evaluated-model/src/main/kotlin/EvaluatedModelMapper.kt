@@ -426,21 +426,19 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
                 calculatePackageVerificationCode(fileList.files.map { it.sha1 }.asSequence())
             }.orEmpty(),
             issues = issues
-        )
-
-        val actualScanResult = scanResults.addIfRequired(evaluatedScanResult)
+        ).run { scanResults.addIfRequired(this) }
 
         issues += addIssues(
             result.summary.issues,
             EvaluatedIssueType.SCANNER,
             pkg,
-            actualScanResult,
+            evaluatedScanResult,
             null
         )
 
-        addLicensesAndCopyrights(pkg.id, result, actualScanResult, findings)
+        addLicensesAndCopyrights(pkg.id, result, evaluatedScanResult, findings)
 
-        return actualScanResult
+        return evaluatedScanResult
     }
 
     private fun addDependencyTree(project: Project, pkg: EvaluatedPackage, deduplicateDependencyTree: Boolean) {
