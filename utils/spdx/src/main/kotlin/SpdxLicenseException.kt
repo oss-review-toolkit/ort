@@ -46,6 +46,7 @@ enum class SpdxLicenseException(
     val deprecated: Boolean = false
 ) {
     ASTERISK_EXCEPTION("Asterisk-exception", "Asterisk exception"),
+    ASTERISK_LINKING_PROTOCOLS_EXCEPTION("Asterisk-linking-protocols-exception", "Asterisk linking protocols exception"),
     AUTOCONF_EXCEPTION_2_0("Autoconf-exception-2.0", "Autoconf exception 2.0"),
     AUTOCONF_EXCEPTION_3_0("Autoconf-exception-3.0", "Autoconf exception 3.0"),
     AUTOCONF_EXCEPTION_GENERIC("Autoconf-exception-generic", "Autoconf generic exception"),
@@ -93,11 +94,13 @@ enum class SpdxLicenseException(
     OCCT_EXCEPTION_1_0("OCCT-exception-1.0", "Open CASCADE Exception 1.0"),
     OPENJDK_ASSEMBLY_EXCEPTION_1_0("OpenJDK-assembly-exception-1.0", "OpenJDK Assembly exception 1.0"),
     OPENVPN_OPENSSL_EXCEPTION("openvpn-openssl-exception", "OpenVPN OpenSSL Exception"),
+    PCRE2_EXCEPTION("PCRE2-exception", "PCRE2 exception"),
     PS_OR_PDF_FONT_EXCEPTION_20170817("PS-or-PDF-font-exception-20170817", "PS/PDF font exception (2017-08-17)"),
     QPL_1_0_INRIA_2004_EXCEPTION("QPL-1.0-INRIA-2004-exception", "INRIA QPL 1.0 2004 variant exception"),
     QT_GPL_EXCEPTION_1_0("Qt-GPL-exception-1.0", "Qt GPL exception 1.0"),
     QT_LGPL_EXCEPTION_1_1("Qt-LGPL-exception-1.1", "Qt LGPL exception 1.1"),
     QWT_EXCEPTION_1_0("Qwt-exception-1.0", "Qwt exception 1.0"),
+    RRDTOOL_FLOSS_EXCEPTION_2_0("RRDtool-FLOSS-exception-2.0", "RRDtool FLOSS exception 2.0"),
     SANE_EXCEPTION("SANE-exception", "SANE Exception"),
     SHL_2_0("SHL-2.0", "Solderpad Hardware License v2.0"),
     SHL_2_1("SHL-2.1", "Solderpad Hardware License v2.1"),
