@@ -49,6 +49,7 @@ import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.FindingsMatcher
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
+import org.ossreviewtoolkit.model.utils.filterByVcsPath
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.StatisticsCalculator.getStatistics
@@ -411,6 +412,12 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         findings: MutableList<EvaluatedFinding>
     ): List<EvaluatedScanResult> =
         input.ortResult.getScanResultsForId(pkg.id).map { scanResult ->
+            // If a VCS path curation has been applied after the scanning stage, it is possible to apply that curation
+            // without re-scanning in case the new VCS path is a subdirectory of the scanned VCS path. So, filter by VCS
+            // path to enable the user to see the effect on the detected license with a shorter turn around time /
+            // without re-scanning.
+            scanResult.filterByVcsPath(input.ortResult.getPackage(pkg.id)?.metadata?.vcsProcessed?.path.orEmpty())
+        }.map { scanResult ->
             convertScanResult(scanResult, findings, pkg)
         }
 
