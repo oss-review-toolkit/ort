@@ -277,9 +277,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
 
         issues += addAnalyzerIssues(project.id, evaluatedPackage)
 
-        input.ortResult.getScanResultsForId(project.id).mapTo(scanResults) { result ->
-            convertScanResult(result, findings, evaluatedPackage)
-        }
+        scanResults += convertScanResultsForPackage(evaluatedPackage, findings)
 
         findings.filter { it.type == EvaluatedFindingType.LICENSE }.mapNotNullTo(detectedLicenses) { it.license }
 
@@ -342,9 +340,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
 
         issues += addAnalyzerIssues(pkg.id, evaluatedPackage)
 
-        input.ortResult.getScanResultsForId(pkg.id).mapTo(scanResults) { result ->
-            convertScanResult(result, findings, evaluatedPackage)
-        }
+        scanResults += convertScanResultsForPackage(evaluatedPackage, findings)
 
         findings.filter { it.type == EvaluatedFindingType.LICENSE }.mapNotNullTo(detectedLicenses) { it.license }
 
@@ -409,6 +405,14 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             resolutions = resolutions
         )
     }
+
+    private fun convertScanResultsForPackage(
+        pkg: EvaluatedPackage,
+        findings: MutableList<EvaluatedFinding>
+    ): List<EvaluatedScanResult> =
+        input.ortResult.getScanResultsForId(pkg.id).map { scanResult ->
+            convertScanResult(scanResult, findings, pkg)
+        }
 
     private fun convertScanResult(
         result: ScanResult,
