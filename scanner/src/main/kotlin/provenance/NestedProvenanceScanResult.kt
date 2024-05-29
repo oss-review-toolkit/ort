@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.scanner.provenance
 
 import org.ossreviewtoolkit.model.KnownProvenance
+import org.ossreviewtoolkit.model.NestedProvenance
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult

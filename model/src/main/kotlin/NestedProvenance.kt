@@ -17,13 +17,9 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.scanner.provenance
+package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-
-import org.ossreviewtoolkit.model.ArtifactProvenance
-import org.ossreviewtoolkit.model.KnownProvenance
-import org.ossreviewtoolkit.model.RepositoryProvenance
 
 /**
  * This class contains information about a [root] provenance and all nested [subRepositories].

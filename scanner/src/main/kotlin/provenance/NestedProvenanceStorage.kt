@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.scanner.provenance
 
+import org.ossreviewtoolkit.model.NestedProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.utils.DatabaseUtils
