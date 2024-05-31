@@ -1003,6 +1003,7 @@
             "ALSA-2023:4175",
             "ALSA-2023:4177",
             "ALSA-2024:2410",
+            "ALSA-2024:2980",
             "USN-6263-1"
         ],
         "details": "hb-ot-layout-gsubgpos.hh in HarfBuzz through 6.0.0 allows attackers to trigger O(n^2) growth via consecutive marks during the process of looking back for base glyphs when attaching marks.",
