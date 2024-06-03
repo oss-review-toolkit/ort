@@ -76,7 +76,7 @@ project:
           dependencies:
           - id: "Pub::collection:1.18.0"
           - id: "Pub::meta:1.15.0"
-    - id: "Pub::test:1.25.5"
+    - id: "Pub::test:1.25.6"
       dependencies:
       - id: "Pub::analyzer:6.4.1"
         dependencies:
@@ -216,7 +216,7 @@ project:
           dependencies:
           - id: "Pub::path:1.9.0"
         - id: "Pub::term_glyph:1.2.1"
-        - id: "Pub::test_api:0.7.1"
+        - id: "Pub::test_api:0.7.2"
           dependencies:
           - id: "Pub::async:2.11.0"
             dependencies:
@@ -549,7 +549,7 @@ project:
           dependencies:
           - id: "Pub::collection:1.18.0"
           - id: "Pub::meta:1.15.0"
-      - id: "Pub::test_api:0.7.1"
+      - id: "Pub::test_api:0.7.2"
         dependencies:
         - id: "Pub::async:2.11.0"
           dependencies:
@@ -593,7 +593,7 @@ project:
             - id: "Pub::path:1.9.0"
             - id: "Pub::term_glyph:1.2.1"
         - id: "Pub::term_glyph:1.2.1"
-      - id: "Pub::test_core:0.6.2"
+      - id: "Pub::test_core:0.6.3"
         dependencies:
         - id: "Pub::analyzer:6.4.1"
           dependencies:
@@ -790,7 +790,7 @@ project:
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::meta:1.15.0"
-        - id: "Pub::test_api:0.7.1"
+        - id: "Pub::test_api:0.7.2"
           dependencies:
           - id: "Pub::async:2.11.0"
             dependencies:
@@ -1876,8 +1876,8 @@ packages:
     url: "https://github.com/dart-lang/term_glyph.git"
     revision: ""
     path: ""
-- id: "Pub::test:1.25.5"
-  purl: "pkg:pub/test@1.25.5"
+- id: "Pub::test:1.25.6"
+  purl: "pkg:pub/test@1.25.6"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "A full featured library for writing and running Dart tests across\
@@ -1889,9 +1889,9 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://pub.dev/packages/test/versions/1.25.5.tar.gz"
+    url: "https://pub.dev/packages/test/versions/1.25.6.tar.gz"
     hash:
-      value: "d11b55850c68c1f6c0cf00eabded4e66c4043feaf6c0d7ce4a36785137df6331"
+      value: "47e9b601e20f24c27d08002eb635e92ddc2195010a8b3a621f4ed44ef70f6864"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
@@ -1903,8 +1903,8 @@ packages:
     url: "https://github.com/dart-lang/test.git"
     revision: ""
     path: "pkgs/test"
-- id: "Pub::test_api:0.7.1"
-  purl: "pkg:pub/test_api@0.7.1"
+- id: "Pub::test_api:0.7.2"
+  purl: "pkg:pub/test_api@0.7.2"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "The user facing API for structuring Dart tests and checking expectations."
@@ -1915,9 +1915,9 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://pub.dev/packages/test_api/versions/0.7.1.tar.gz"
+    url: "https://pub.dev/packages/test_api/versions/0.7.2.tar.gz"
     hash:
-      value: "2419f20b0c8677b2d67c8ac4d1ac7372d862dc6c460cdbb052b40155408cd794"
+      value: "5b8a98dafc4d5c4c9c72d8b31ab2b23fc13422348d2997120294d3bac86b4ddb"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
@@ -1929,8 +1929,8 @@ packages:
     url: "https://github.com/dart-lang/test.git"
     revision: ""
     path: "pkgs/test_api"
-- id: "Pub::test_core:0.6.2"
-  purl: "pkg:pub/test_core@0.6.2"
+- id: "Pub::test_core:0.6.3"
+  purl: "pkg:pub/test_core@0.6.3"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "A basic library for writing tests and running them on the VM."
@@ -1941,9 +1941,9 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://pub.dev/packages/test_core/versions/0.6.2.tar.gz"
+    url: "https://pub.dev/packages/test_core/versions/0.6.3.tar.gz"
     hash:
-      value: "4d070a6bc36c1c4e89f20d353bfd71dc30cdf2bd0e14349090af360a029ab292"
+      value: "0c583123c86e58ab5036c92db5c7116ffddd655f1f5be762967d09f0fc66bf2d"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
