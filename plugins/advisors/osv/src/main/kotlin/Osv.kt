@@ -192,7 +192,6 @@ private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.vulne
         }
 
         Cvss.fromVector(it.score)?.let { cvss ->
-            // Work around for https://github.com/stevespringett/cvss-calculator/issues/56.
             it.score.substringBefore("/") to "${cvss.calculateScore().baseScore}"
         } ?: run {
             logger.debug { "Could not parse CVSS vector '${it.score}'." }
