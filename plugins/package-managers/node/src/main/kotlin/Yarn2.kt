@@ -149,11 +149,10 @@ class Yarn2(
          * Check whether Corepack is enabled based on the `package.json` file in [workingDir]. If no such file is found
          * or if it cannot be read, assume that this is not the case.
          */
-        private fun isCorepackEnabledInManifest(workingDir: File): Boolean {
-            return runCatching {
+        private fun isCorepackEnabledInManifest(workingDir: File): Boolean =
+            runCatching {
                 jsonMapper.readTree(workingDir.resolve(MANIFEST_FILE)).contains(PACKAGE_MANAGER_PROPERTY)
             }.getOrDefault(false)
-        }
     }
 
     class Factory : AbstractPackageManagerFactory<Yarn2>("Yarn2") {
