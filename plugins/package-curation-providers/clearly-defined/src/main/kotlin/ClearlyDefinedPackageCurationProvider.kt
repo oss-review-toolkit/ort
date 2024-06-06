@@ -48,7 +48,7 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
-import org.ossreviewtoolkit.utils.spdx.toSpdx
+import org.ossreviewtoolkit.utils.spdx.toSpdxOrNull
 
 import retrofit2.HttpException
 
@@ -153,7 +153,7 @@ class ClearlyDefinedPackageCurationProvider(
                 // Only take curations of good quality (i.e. those not using deprecated identifiers) and in
                 // particular none that contain "OTHER" as a license, also see
                 // https://github.com/clearlydefined/curated-data/issues/7836.
-                runCatching { declaredLicense.toSpdx(SpdxExpression.Strictness.ALLOW_CURRENT) }.getOrNull()
+                declaredLicense.toSpdxOrNull(SpdxExpression.Strictness.ALLOW_CURRENT)
             }
 
             val sourceLocation = curation.described?.sourceLocation?.toArtifactOrVcs()
