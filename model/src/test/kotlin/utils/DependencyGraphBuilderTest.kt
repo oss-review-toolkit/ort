@@ -27,6 +27,7 @@ import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
@@ -40,7 +41,6 @@ import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.RootDependencyIndex
 import org.ossreviewtoolkit.model.Scope
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class DependencyGraphBuilderTest : WordSpec({
     "DependencyGraphBuilder" should {
@@ -217,7 +217,7 @@ class DependencyGraphBuilderTest : WordSpec({
 
             scopeDependencies(scopes, scope) shouldContainExactly listOf(depCyc2)
 
-            graph.nodes.shouldNotBeNull {
+            graph.nodes shouldNotBeNull {
                 this shouldHaveSize 3
             }
         }

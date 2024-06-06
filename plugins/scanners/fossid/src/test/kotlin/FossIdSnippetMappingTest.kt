@@ -23,6 +23,7 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -34,7 +35,6 @@ import org.ossreviewtoolkit.clients.fossid.model.result.MatchedLines
 import org.ossreviewtoolkit.clients.fossid.model.result.Snippet
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class FossIdSnippetMappingTest : WordSpec({
     "mapSnippetFindings" should {

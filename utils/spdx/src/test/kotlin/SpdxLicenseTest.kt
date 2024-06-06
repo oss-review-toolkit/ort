@@ -20,12 +20,11 @@
 package org.ossreviewtoolkit.utils.spdx
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldEndWith
 import io.kotest.matchers.string.shouldStartWith
-
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class SpdxLicenseTest : WordSpec({
     "The license lookup" should {

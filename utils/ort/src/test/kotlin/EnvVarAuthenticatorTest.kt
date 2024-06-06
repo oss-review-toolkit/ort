@@ -21,12 +21,12 @@ package org.ossreviewtoolkit.utils.ort
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.utils.ort.EnvVarAuthenticator.Companion.ORT_HTTP_PASSWORD_ENV_NAME
 import org.ossreviewtoolkit.utils.ort.EnvVarAuthenticator.Companion.ORT_HTTP_USERNAME_ENV_NAME
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class EnvVarAuthenticatorTest : StringSpec({
     "Setting the username alone does not return authentication" {

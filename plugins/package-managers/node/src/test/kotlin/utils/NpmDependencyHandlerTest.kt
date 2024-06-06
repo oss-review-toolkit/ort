@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.packagemanagers.node.utils
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -32,7 +33,6 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.plugins.packagemanagers.node.Npm
 import org.ossreviewtoolkit.utils.test.USER_DIR
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class NpmDependencyHandlerTest : StringSpec({
     "identifierFor extracts the correct identifier" {

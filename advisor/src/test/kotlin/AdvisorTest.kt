@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.advisor
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.maps.beEmpty
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.beTheSameInstanceAs
@@ -38,7 +39,6 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class AdvisorTest : WordSpec({
     "retrieveFindings" should {

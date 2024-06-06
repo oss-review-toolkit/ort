@@ -21,11 +21,11 @@ package org.ossreviewtoolkit.model
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.nulls.shouldNotBeNull
 
 import org.ossreviewtoolkit.model.FileList.Entry
 import org.ossreviewtoolkit.model.utils.alignRevisions
 import org.ossreviewtoolkit.model.utils.clearVcsPath
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class ScannerRunTest : WordSpec({
     "getFileList()" should {
@@ -89,7 +89,7 @@ class ScannerRunTest : WordSpec({
                 )
             )
 
-            run.getFileList(id).shouldNotBeNull {
+            run.getFileList(id) shouldNotBeNull {
                 files shouldContainExactlyInAnyOrder listOf(
                     Entry("vcs/path/file1.txt", "1111111111111111111111111111111111111111"),
                     Entry("vcs/path/sub/repository/some/dir/file4.txt", "4444444444444444444444444444444444444444")

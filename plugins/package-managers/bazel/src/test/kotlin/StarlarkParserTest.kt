@@ -22,9 +22,8 @@ package org.ossreviewtoolkit.plugins.packagemanagers.bazel
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
-
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class StarlarkParserTest : WordSpec({
     "Lexer" should {

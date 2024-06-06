@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.packagemanagers.pub
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.string.haveSubstring
 
@@ -34,7 +35,6 @@ import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class PubFunTest : WordSpec({
     "Pub" should {
@@ -69,7 +69,7 @@ class PubFunTest : WordSpec({
 
             val ortResult = analyze(definitionFile.parentFile)
 
-            ortResult.analyzer.shouldNotBeNull {
+            ortResult.analyzer shouldNotBeNull {
                 result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
             }
         }
@@ -84,7 +84,7 @@ class PubFunTest : WordSpec({
 
             val ortResult = analyze(definitionFile.parentFile)
 
-            ortResult.analyzer.shouldNotBeNull {
+            ortResult.analyzer shouldNotBeNull {
                 result.patchPackages().reduceToPubProjects().toYaml() should
                     matchExpectedResult(expectedResultFile, definitionFile)
             }

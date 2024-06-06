@@ -21,10 +21,9 @@ package org.ossreviewtoolkit.utils.ort
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class NetRcAuthenticatorTest : WordSpec({
     "getNetrcAuthentication()" should {

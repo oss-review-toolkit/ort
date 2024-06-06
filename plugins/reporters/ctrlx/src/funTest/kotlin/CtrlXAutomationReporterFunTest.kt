@@ -23,6 +23,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.haveSize
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 
 import kotlinx.serialization.json.decodeFromStream
@@ -31,7 +32,6 @@ import org.ossreviewtoolkit.plugins.reporters.ctrlx.CtrlXAutomationReporter.Comp
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class CtrlXAutomationReporterFunTest : StringSpec({
     "The official sample file can be deserialized" {

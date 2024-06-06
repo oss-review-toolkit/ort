@@ -19,18 +19,11 @@
 
 package org.ossreviewtoolkit.utils.test
 
-import io.kotest.matchers.nulls.shouldNotBeNull
-
 import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.model.utils.FileProvenanceFileStorage
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
-
-infix fun <T : Any> T?.shouldNotBeNull(block: T.() -> Unit) {
-    this.shouldNotBeNull()
-    block()
-}
 
 fun FileArchiver.Companion.createDefault() =
     FileArchiver(
