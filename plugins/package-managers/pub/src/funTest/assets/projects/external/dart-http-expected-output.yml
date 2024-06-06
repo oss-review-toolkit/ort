@@ -76,7 +76,7 @@ project:
           dependencies:
           - id: "Pub::collection:1.18.0"
           - id: "Pub::meta:1.15.0"
-    - id: "Pub::test:1.25.6"
+    - id: "Pub::test:1.25.7"
       dependencies:
       - id: "Pub::analyzer:6.4.1"
         dependencies:
@@ -593,7 +593,7 @@ project:
             - id: "Pub::path:1.9.0"
             - id: "Pub::term_glyph:1.2.1"
         - id: "Pub::term_glyph:1.2.1"
-      - id: "Pub::test_core:0.6.3"
+      - id: "Pub::test_core:0.6.4"
         dependencies:
         - id: "Pub::analyzer:6.4.1"
           dependencies:
@@ -1876,8 +1876,8 @@ packages:
     url: "https://github.com/dart-lang/term_glyph.git"
     revision: ""
     path: ""
-- id: "Pub::test:1.25.6"
-  purl: "pkg:pub/test@1.25.6"
+- id: "Pub::test:1.25.7"
+  purl: "pkg:pub/test@1.25.7"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "A full featured library for writing and running Dart tests across\
@@ -1889,9 +1889,9 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://pub.dev/packages/test/versions/1.25.6.tar.gz"
+    url: "https://pub.dev/packages/test/versions/1.25.7.tar.gz"
     hash:
-      value: "47e9b601e20f24c27d08002eb635e92ddc2195010a8b3a621f4ed44ef70f6864"
+      value: "7ee44229615f8f642b68120165ae4c2a75fe77ae2065b1e55ae4711f6cf0899e"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
@@ -1929,8 +1929,8 @@ packages:
     url: "https://github.com/dart-lang/test.git"
     revision: ""
     path: "pkgs/test_api"
-- id: "Pub::test_core:0.6.3"
-  purl: "pkg:pub/test_core@0.6.3"
+- id: "Pub::test_core:0.6.4"
+  purl: "pkg:pub/test_core@0.6.4"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "A basic library for writing tests and running them on the VM."
@@ -1941,9 +1941,9 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://pub.dev/packages/test_core/versions/0.6.3.tar.gz"
+    url: "https://pub.dev/packages/test_core/versions/0.6.4.tar.gz"
     hash:
-      value: "0c583123c86e58ab5036c92db5c7116ffddd655f1f5be762967d09f0fc66bf2d"
+      value: "55ea5a652e38a1dfb32943a7973f3681a60f872f8c3a05a14664ad54ef9c6696"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
