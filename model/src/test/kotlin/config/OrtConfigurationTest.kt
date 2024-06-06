@@ -31,6 +31,7 @@ import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.maps.containExactly as containExactlyEntries
 import io.kotest.matchers.maps.shouldContainExactly
 import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
@@ -42,7 +43,6 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.utils.common.EnvironmentVariableFilter
 import org.ossreviewtoolkit.utils.ort.ORT_REFERENCE_CONFIG_FILENAME
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class OrtConfigurationTest : WordSpec({
     "OrtConfiguration" should {

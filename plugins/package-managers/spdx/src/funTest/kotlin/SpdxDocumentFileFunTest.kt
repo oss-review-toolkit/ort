@@ -25,6 +25,7 @@ import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.maps.haveSize
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -42,7 +43,6 @@ import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class SpdxDocumentFileFunTest : WordSpec({
     "resolveDependencies()" should {
@@ -202,7 +202,7 @@ class SpdxDocumentFileFunTest : WordSpec({
 
             val ortResult = analyze(definitionFile.parentFile, allowDynamicVersions = true)
 
-            ortResult.analyzer.shouldNotBeNull {
+            ortResult.analyzer shouldNotBeNull {
                 result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
             }
         }

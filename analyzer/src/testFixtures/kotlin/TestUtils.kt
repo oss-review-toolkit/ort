@@ -43,7 +43,6 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.utils.test.USER_DIR
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 fun PackageManager.resolveSingleProject(definitionFile: File, resolveScopes: Boolean = false): ProjectAnalyzerResult {
     val managerResult = resolveDependencies(listOf(definitionFile), emptyMap())
@@ -69,7 +68,7 @@ fun PackageManager.collateMultipleProjects(vararg definitionFiles: File): Analyz
         builder.addDependencyGraph(managerName, it).addPackages(managerResult.sharedPackages)
     }
     definitionFiles.forAll { definitionFile ->
-        managerResult.projectResults[definitionFile].shouldNotBeNull {
+        managerResult.projectResults[definitionFile] shouldNotBeNull {
             this shouldHaveAtLeastSize 1
             forEach { builder.addResult(it) }
         }

@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.scanners.fossid
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -29,7 +30,6 @@ import org.ossreviewtoolkit.clients.fossid.model.rules.IgnoreRule
 import org.ossreviewtoolkit.clients.fossid.model.rules.RuleType
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Severity
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class LegacyRulesTest : WordSpec({
     "compareRules" should {
@@ -46,7 +46,7 @@ class LegacyRulesTest : WordSpec({
             val legacyRules = referenceRules.filterLegacyRules(rulesToTest, issues)
 
             issues shouldHaveSize 1
-            issues.first().shouldNotBeNull {
+            issues.first() shouldNotBeNull {
                 message shouldBe "Rule '.pdf' with type '${RuleType.EXTENSION}' is not present in the .ort.yml path" +
                     " excludes. Add it to the .ort.yml file or remove it from the FossID scan."
                 severity shouldBe Severity.HINT

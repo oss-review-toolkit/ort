@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.utils.common
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.shouldBeIn
 import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
@@ -29,7 +30,6 @@ import io.kotest.matchers.shouldNot
 import java.io.File
 
 import org.ossreviewtoolkit.utils.common.Os.getPathFromEnvironment
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class OsTest : WordSpec({
     "getPathFromEnvironment" should {

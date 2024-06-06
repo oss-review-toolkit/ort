@@ -24,6 +24,7 @@ import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSingleElement
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -38,8 +39,6 @@ import java.net.Authenticator
 import java.net.PasswordAuthentication
 import java.net.URI
 import java.nio.file.Paths
-
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class UtilsTest : WordSpec({
     "filterVersionNames" should {

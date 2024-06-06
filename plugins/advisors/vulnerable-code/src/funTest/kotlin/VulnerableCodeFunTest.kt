@@ -22,13 +22,13 @@ package org.ossreviewtoolkit.plugins.advisors.vulnerablecode
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldContainAll
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.utils.toPurl
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class VulnerableCodeFunTest : WordSpec({
     "Vulnerable Maven packages" should {

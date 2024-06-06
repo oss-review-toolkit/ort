@@ -28,6 +28,7 @@ import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.maps.containExactly as containExactlyEntries
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.sequences.beEmpty as beEmptySequence
 import io.kotest.matchers.sequences.containAllInAnyOrder
 import io.kotest.matchers.should
@@ -39,7 +40,6 @@ import java.io.File
 import java.time.Instant
 
 import org.ossreviewtoolkit.utils.test.readOrtResult
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 /**
  * A base class for tests of concrete [DependencyNavigator] implementations.

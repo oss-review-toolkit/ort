@@ -25,6 +25,7 @@ import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -35,7 +36,6 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NodePackageManage
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NodePackageManager.YARN2
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class NpmDetectionTest : WordSpec({
     "All Node package manager detections" should {

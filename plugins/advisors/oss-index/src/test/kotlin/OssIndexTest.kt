@@ -32,6 +32,7 @@ import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.shouldHaveSingleElement
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -46,7 +47,6 @@ import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
 import org.ossreviewtoolkit.utils.common.enumSetOf
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class OssIndexTest : WordSpec({
     val server = WireMockServer(

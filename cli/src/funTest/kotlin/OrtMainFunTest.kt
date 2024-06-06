@@ -29,6 +29,7 @@ import io.kotest.engine.spec.tempdir
 import io.kotest.engine.spec.tempfile
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.haveSize
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -47,7 +48,6 @@ import org.ossreviewtoolkit.utils.ort.ORT_REFERENCE_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 /**
  * A test for the main entry point of the application.

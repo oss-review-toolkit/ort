@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.scanners.fossid
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -31,7 +32,6 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class MapIgnoreRulesTest : WordSpec({
     "convertRules" should {
@@ -42,7 +42,7 @@ class MapIgnoreRulesTest : WordSpec({
             val ignoreRules = convertRules(exclude, issues)
 
             ignoreRules shouldHaveSize 1
-            ignoreRules.first().shouldNotBeNull {
+            ignoreRules.first() shouldNotBeNull {
                 value shouldBe "directory/**"
                 type shouldBe RuleType.DIRECTORY
             }
@@ -57,7 +57,7 @@ class MapIgnoreRulesTest : WordSpec({
             val ignoreRules = convertRules(exclude, issues)
 
             ignoreRules shouldHaveSize 1
-            ignoreRules.first().shouldNotBeNull {
+            ignoreRules.first() shouldNotBeNull {
                 value shouldBe "directory/sub1/sub2/**"
                 type shouldBe RuleType.DIRECTORY
             }
@@ -72,7 +72,7 @@ class MapIgnoreRulesTest : WordSpec({
             val ignoreRules = convertRules(exclude, issues)
 
             ignoreRules shouldHaveSize 1
-            ignoreRules.first().shouldNotBeNull {
+            ignoreRules.first() shouldNotBeNull {
                 value shouldBe ".git"
                 type shouldBe RuleType.DIRECTORY
             }
@@ -85,7 +85,7 @@ class MapIgnoreRulesTest : WordSpec({
             val ignoreRules = convertRules(exclude, issues)
 
             ignoreRules shouldHaveSize 1
-            ignoreRules.first().shouldNotBeNull {
+            ignoreRules.first() shouldNotBeNull {
                 value shouldBe "src/example.test/templates"
                 type shouldBe RuleType.DIRECTORY
             }
@@ -100,7 +100,7 @@ class MapIgnoreRulesTest : WordSpec({
             val ignoreRules = convertRules(exclude, issues)
 
             ignoreRules shouldHaveSize 1
-            ignoreRules.first().shouldNotBeNull {
+            ignoreRules.first() shouldNotBeNull {
                 value shouldBe "test-prod"
                 type shouldBe RuleType.DIRECTORY
             }
@@ -113,7 +113,7 @@ class MapIgnoreRulesTest : WordSpec({
             val ignoreRules = convertRules(exclude, issues)
 
             ignoreRules shouldHaveSize 1
-            ignoreRules.first().shouldNotBeNull {
+            ignoreRules.first() shouldNotBeNull {
                 value shouldBe "src/test-prod/templates"
                 type shouldBe RuleType.DIRECTORY
             }
@@ -128,7 +128,7 @@ class MapIgnoreRulesTest : WordSpec({
             val ignoreRules = convertRules(exclude, issues)
 
             ignoreRules shouldHaveSize 1
-            ignoreRules.first().shouldNotBeNull {
+            ignoreRules.first() shouldNotBeNull {
                 value shouldBe "directory"
                 type shouldBe RuleType.DIRECTORY
             }
@@ -143,7 +143,7 @@ class MapIgnoreRulesTest : WordSpec({
             val ignoreRules = convertRules(exclude, issues)
 
             ignoreRules shouldHaveSize 1
-            ignoreRules.first().shouldNotBeNull {
+            ignoreRules.first() shouldNotBeNull {
                 value shouldBe "directory/sub1/sub2"
                 type shouldBe RuleType.DIRECTORY
             }
@@ -158,7 +158,7 @@ class MapIgnoreRulesTest : WordSpec({
             val ignoreRules = convertRules(exclude, issues)
 
             ignoreRules shouldHaveSize 1
-            ignoreRules.first().shouldNotBeNull {
+            ignoreRules.first() shouldNotBeNull {
                 value shouldBe ".pdf"
                 type shouldBe RuleType.EXTENSION
             }
@@ -173,7 +173,7 @@ class MapIgnoreRulesTest : WordSpec({
             val ignoreRules = convertRules(exclude, issues)
 
             ignoreRules shouldHaveSize 1
-            ignoreRules.first().shouldNotBeNull {
+            ignoreRules.first() shouldNotBeNull {
                 value shouldBe "file.txt"
                 type shouldBe RuleType.FILE
             }
@@ -188,7 +188,7 @@ class MapIgnoreRulesTest : WordSpec({
             val ignoreRules = convertRules(exclude, issues)
 
             ignoreRules shouldHaveSize 1
-            ignoreRules.first().shouldNotBeNull {
+            ignoreRules.first() shouldNotBeNull {
                 value shouldBe "file.old.txt"
                 type shouldBe RuleType.FILE
             }
@@ -203,7 +203,7 @@ class MapIgnoreRulesTest : WordSpec({
             val ignoreRules = convertRules(exclude, issues)
 
             ignoreRules shouldHaveSize 1
-            ignoreRules.first().shouldNotBeNull {
+            ignoreRules.first() shouldNotBeNull {
                 value shouldBe "package-lock.json"
                 type shouldBe RuleType.FILE
             }
@@ -220,7 +220,7 @@ class MapIgnoreRulesTest : WordSpec({
             ignoreRules should beEmpty()
 
             issues shouldHaveSize 1
-            issues.first().shouldNotBeNull {
+            issues.first() shouldNotBeNull {
                 message shouldBe "Path exclude 'directory/**/test/*' cannot be converted to an ignore rule."
                 severity shouldBe Severity.HINT
             }

@@ -26,6 +26,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.maps.shouldHaveKey
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 
@@ -36,7 +37,6 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 
 import org.ossreviewtoolkit.clients.scanoss.model.IdentificationType
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 /**
  * The default filename in a SCANOSS response.

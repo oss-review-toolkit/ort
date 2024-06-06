@@ -24,11 +24,10 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.maps.containExactly as containExactlyEntries
 import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
-
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class AnalyzerConfigurationTest : WordSpec({
     "AnalyzerConfiguration()" should {

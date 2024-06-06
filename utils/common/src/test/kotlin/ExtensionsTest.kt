@@ -32,6 +32,7 @@ import io.kotest.matchers.file.aDirectory
 import io.kotest.matchers.file.aFile
 import io.kotest.matchers.file.exist
 import io.kotest.matchers.maps.containExactly
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
@@ -43,8 +44,6 @@ import java.net.URI
 import java.net.URLDecoder
 import java.time.DayOfWeek
 import java.util.Locale
-
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class ExtensionsTest : WordSpec({
     "ByteArray.toHexString()" should {

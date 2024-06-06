@@ -26,6 +26,7 @@ import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.collections.shouldNotContain
 import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
@@ -60,7 +61,6 @@ import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.scannerRunOf
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class OpossumReporterTest : WordSpec({
     "resolvePath()" should {

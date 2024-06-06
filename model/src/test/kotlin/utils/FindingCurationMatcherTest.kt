@@ -23,6 +23,7 @@ import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -35,7 +36,6 @@ import org.ossreviewtoolkit.model.config.LicenseFindingCurationReason.INCORRECT
 import org.ossreviewtoolkit.model.licenses.LicenseFindingCurationResult
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.toSpdx
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class FindingCurationMatcherTest : WordSpec() {
     private val matcher = FindingCurationMatcher()

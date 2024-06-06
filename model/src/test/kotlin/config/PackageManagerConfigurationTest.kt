@@ -22,9 +22,8 @@ package org.ossreviewtoolkit.model.config
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.maps.containExactly as containExactlyEntries
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
-
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class PackageManagerConfigurationTest : WordSpec({
     "merge" should {

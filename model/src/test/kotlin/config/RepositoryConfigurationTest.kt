@@ -25,6 +25,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
@@ -35,7 +36,6 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.snippet.SnippetChoiceReason
 import org.ossreviewtoolkit.model.fromYaml
 import org.ossreviewtoolkit.utils.spdx.toSpdx
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class RepositoryConfigurationTest : WordSpec({
     "RepositoryConfiguration" should {
