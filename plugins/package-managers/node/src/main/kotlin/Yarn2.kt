@@ -151,7 +151,7 @@ class Yarn2(
          */
         private fun isCorepackEnabledInManifest(workingDir: File): Boolean =
             runCatching {
-                jsonMapper.readTree(workingDir.resolve(MANIFEST_FILE)).contains(PACKAGE_MANAGER_PROPERTY)
+                PACKAGE_MANAGER_PROPERTY in jsonMapper.readTree(workingDir.resolve(MANIFEST_FILE))
             }.getOrDefault(false)
     }
 
