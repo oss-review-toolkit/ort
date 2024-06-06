@@ -15,6 +15,10 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
+# A mapping from license strings collected from the declared licenses of Open Source packages to SPDX expressions. This
+# mapping only contains license strings which can *not* be parsed by [SpdxExpression.parse], for example because the
+# license names contain white spaces. See [SpdxSimpleLicenseMapping] for a mapping of varied license names.
+
 # Sort the entries below via IntelliJ's "Edit" -> "Sort Lines".
 # Map a declared license string to "NONE" in order to discard it.
 ---
