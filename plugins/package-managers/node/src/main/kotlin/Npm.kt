@@ -665,7 +665,7 @@ private fun List<String>.groupLines(marker: String): List<String> {
             commonPrefix = line.commonPrefixWith(messages.last())
             if (!commonPrefix.endsWith(' ')) {
                 // Deal with prefixes being used on their own as separators.
-                commonPrefix = if ("$commonPrefix " == previousPrefix) {
+                commonPrefix = if ("$commonPrefix " == previousPrefix || line.startsWith("$commonPrefix ")) {
                     "$commonPrefix "
                 } else {
                     commonPrefix.dropLastWhile { it != ' ' }
