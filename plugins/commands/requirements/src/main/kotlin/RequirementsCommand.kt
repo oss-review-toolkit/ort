@@ -283,7 +283,7 @@ class RequirementsCommand : OrtCommand(
 
         return status to buildString {
             append(prefix)
-            append("${tool.javaClass.simpleName}: Requires '${tool.command()}' in ")
+            append("${tool.displayName()}: Requires '${tool.command()}' in ")
 
             if (tool.getVersionRequirement().isSatisfiedByAny) {
                 append("no specific version. ")
