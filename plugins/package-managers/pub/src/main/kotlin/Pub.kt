@@ -88,9 +88,12 @@ private val dartCommand = if (Os.isWindows) "dart.bat" else "dart"
  *
  * This implementation is using the Pub version distributed with Flutter. If Flutter is not installed on the system, it
  * is automatically downloaded and installed in the `~/.ort/tools` directory. The version of Flutter that is
- * automatically installed can be configured by setting the `FLUTTER_VERSION` environment variable.
+ * automatically installed can be configured either by the `flutterVersion` package manager option (see below) or by
+ * setting the `FLUTTER_VERSION` environment variable.
  *
  * This package manager supports the following [options][PackageManagerConfiguration.options]:
+ * - *flutterVersion*: The version to use when bootstrapping Flutter. If Flutter is already on the path, this option is
+ *   ignored.
  * - *gradleVersion*: The version of Gradle to use when analyzing Gradle projects. Defaults to [GRADLE_VERSION].
  * - *pubDependenciesOnly*: Only scan Pub dependencies and skip native ones for Android (Gradle) and iOS (CocoaPods).
  */
@@ -102,6 +105,7 @@ class Pub(
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
     companion object {
+        const val OPTION_FLUTTER_VERSION = "flutterVersion"
         const val OPTION_GRADLE_VERSION = "gradleVersion"
         const val OPTION_PUB_DEPENDENCIES_ONLY = "pubDependenciesOnly"
     }
@@ -116,7 +120,7 @@ class Pub(
         ) = Pub(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
-    private val flutterVersion = Os.env["FLUTTER_VERSION"] ?: "3.19.3-stable"
+    private val flutterVersion = options[OPTION_FLUTTER_VERSION] ?: Os.env["FLUTTER_VERSION"] ?: "3.19.3-stable"
     private val flutterInstallDir = ortToolsDirectory.resolve("flutter-$flutterVersion")
 
     private val flutterHome by lazy {
