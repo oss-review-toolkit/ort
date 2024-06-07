@@ -115,5 +115,25 @@ class NpmTest : WordSpec({
                 "deprecated coffee-script@1.12.7: CoffeeScript on NPM has moved to \"coffeescript\" (no hyphen)"
             )
         }
+
+        "treat a single block of errors as one issue" {
+            val output = """
+                npm ERR! code EEXIST
+                npm ERR! syscall mkdir
+                npm ERR! path G:\Git\lsp-sample\node_modules.staging
+                npm ERR! errno -4075
+                npm ERR! EEXIST: file already exists, mkdir 'G:\Git\lsp-sample\node_modules.staging'
+                npm ERR! File exists: G:\Git\lsp-sample\node_modules.staging
+                npm ERR! Remove the existing file and try again, or run npm
+                npm ERR! with --force to overwrite files recklessly.
+            """.trimIndent()
+
+            output.lines().groupLines("npm ERR! ") shouldBe listOf(
+                "EEXIST: file already exists, mkdir 'G:\\Git\\lsp-sample\\node_modules.staging' " +
+                    "File exists: G:\\Git\\lsp-sample\\node_modules.staging " +
+                    "Remove the existing file and try again, or run npm " +
+                    "with --force to overwrite files recklessly."
+            )
+        }
     }
 })
