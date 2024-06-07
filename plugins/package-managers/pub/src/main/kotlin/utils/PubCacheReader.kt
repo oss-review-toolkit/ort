@@ -26,7 +26,6 @@ import java.io.File
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.downloader.VcsHost
-import org.ossreviewtoolkit.plugins.packagemanagers.pub.flutterHome
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
@@ -36,7 +35,7 @@ import org.ossreviewtoolkit.utils.common.textValueOrEmpty
  * directory. If Flutter is installed it additionally looks for files in the ".pub-cache" directory of Flutter's
  * installation directory.
  */
-internal class PubCacheReader {
+internal class PubCacheReader(flutterHome: File? = null) {
     private val pubCacheRoot by lazy {
         Os.env["PUB_CACHE"]?.let { return@lazy File(it) }
 
@@ -48,7 +47,7 @@ internal class PubCacheReader {
     }
 
     private val flutterPubCacheRoot by lazy {
-        flutterHome.resolve(".pub-cache").takeIf { it.isDirectory }
+        flutterHome?.resolve(".pub-cache")?.takeIf { it.isDirectory }
     }
 
     fun findFile(packageInfo: JsonNode, workingDir: File, filename: String): File? {
