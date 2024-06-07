@@ -370,6 +370,10 @@ ort:
 
   reporter:
     config:
+      CycloneDx:
+        options:
+          schema.version: 1.6
+
       FossId:
         options:
           serverUrl: 'https://fossid.example.com/instance/'

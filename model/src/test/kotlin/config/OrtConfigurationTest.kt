@@ -28,6 +28,7 @@ import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.maps.beEmpty
 import io.kotest.matchers.maps.containExactly as containExactlyEntries
 import io.kotest.matchers.maps.shouldContainExactly
 import io.kotest.matchers.nulls.beNull
@@ -387,7 +388,14 @@ class OrtConfigurationTest : WordSpec({
 
             with(ortConfig.reporter) {
                 config shouldNotBeNull {
-                    keys shouldContainExactlyInAnyOrder setOf("FossId")
+                    keys shouldContainExactlyInAnyOrder setOf("CycloneDx", "FossId")
+
+                    get("CycloneDx") shouldNotBeNull {
+                        options shouldContainExactly mapOf(
+                            "schema.version" to "1.6"
+                        )
+                        secrets should beEmpty()
+                    }
 
                     get("FossId") shouldNotBeNull {
                         options shouldContainExactly mapOf(
