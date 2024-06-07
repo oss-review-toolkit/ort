@@ -83,16 +83,6 @@ private const val PUB_LOCK_FILE = "pubspec.lock"
 private val flutterCommand = if (Os.isWindows) "flutter.bat" else "flutter"
 private val dartCommand = if (Os.isWindows) "dart.bat" else "dart"
 
-private val flutterVersion = Os.env["FLUTTER_VERSION"] ?: "3.19.3-stable"
-private val flutterInstallDir = ortToolsDirectory.resolve("flutter-$flutterVersion")
-
-val flutterHome by lazy {
-    Os.getPathFromEnvironment(flutterCommand)?.realFile()?.parentFile?.parentFile
-        ?: Os.env["FLUTTER_HOME"]?.let { File(it) } ?: flutterInstallDir.resolve("flutter")
-}
-
-private val flutterAbsolutePath = flutterHome.resolve("bin")
-
 /**
  * The [Pub](https://pub.dev/) package manager for Dart / Flutter.
  *
@@ -126,6 +116,16 @@ class Pub(
         ) = Pub(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
+    private val flutterVersion = Os.env["FLUTTER_VERSION"] ?: "3.19.3-stable"
+    private val flutterInstallDir = ortToolsDirectory.resolve("flutter-$flutterVersion")
+
+    private val flutterHome by lazy {
+        Os.getPathFromEnvironment(flutterCommand)?.realFile()?.parentFile?.parentFile
+            ?: Os.env["FLUTTER_HOME"]?.let { File(it) } ?: flutterInstallDir.resolve("flutter")
+    }
+
+    private val flutterAbsolutePath = flutterHome.resolve("bin")
+
     private val gradleFactory = PackageManagerFactory.ALL["Gradle"]
 
     private data class ParsePackagesResult(
@@ -133,7 +133,7 @@ class Pub(
         val issues: List<Issue>
     )
 
-    private val reader = PubCacheReader()
+    private val reader = PubCacheReader(flutterHome)
     private val gradleDefinitionFilesForPubDefinitionFiles = mutableMapOf<File, Set<File>>()
 
     private val pubDependenciesOnly = options[OPTION_PUB_DEPENDENCIES_ONLY].toBoolean()
