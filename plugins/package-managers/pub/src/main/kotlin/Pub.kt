@@ -76,6 +76,7 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
 
+private const val DEFAULT_FLUTTER_VERSION = "3.19.3-stable"
 private const val DEFAULT_GRADLE_VERSION = "7.3"
 private const val PUBSPEC_YAML = "pubspec.yaml"
 private const val PUB_LOCK_FILE = "pubspec.lock"
@@ -120,7 +121,7 @@ class Pub(
         ) = Pub(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
-    private val flutterVersion = options[OPTION_FLUTTER_VERSION] ?: Os.env["FLUTTER_VERSION"] ?: "3.19.3-stable"
+    private val flutterVersion = options[OPTION_FLUTTER_VERSION] ?: Os.env["FLUTTER_VERSION"] ?: DEFAULT_FLUTTER_VERSION
     private val flutterInstallDir = ortToolsDirectory.resolve("flutter-$flutterVersion")
 
     private val flutterHome by lazy {
