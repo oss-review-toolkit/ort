@@ -66,19 +66,8 @@ private data class Include(
     val name: String
 )
 
-class GitRepo : VersionControlSystem(), CommandLineTool {
-    override val type = VcsType.GIT_REPO.toString()
-    override val priority = 50
-    override val latestRevisionNames = listOf("HEAD", "@")
-
+object GitRepoCommand : CommandLineTool {
     override fun command(workingDir: File?) = "repo"
-
-    override fun getVersion() = getVersion(null)
-
-    override fun getDefaultBranchName(url: String): String {
-        val refs = org.eclipse.jgit.api.Git.lsRemoteRepository().setRemote(url).callAsMap()
-        return (refs["HEAD"] as? SymbolicRef)?.target?.name?.removePrefix("refs/heads/") ?: "master"
-    }
 
     override fun transformVersion(output: String): String {
         val launcherVersion = output.lineSequence().mapNotNull { line ->
@@ -87,6 +76,19 @@ class GitRepo : VersionControlSystem(), CommandLineTool {
             ?: throw IOException("The 'repo' version can only be determined from an initialized working tree.")
 
         return "$launcherVersion (launcher)"
+    }
+}
+
+class GitRepo : VersionControlSystem(GitRepoCommand) {
+    override val type = VcsType.GIT_REPO.toString()
+    override val priority = 50
+    override val latestRevisionNames = listOf("HEAD", "@")
+
+    override fun getVersion() = GitRepoCommand.getVersion(null)
+
+    override fun getDefaultBranchName(url: String): String {
+        val refs = org.eclipse.jgit.api.Git.lsRemoteRepository().setRemote(url).callAsMap()
+        return (refs["HEAD"] as? SymbolicRef)?.target?.name?.removePrefix("refs/heads/") ?: "master"
     }
 
     override fun getWorkingTree(vcsDirectory: File): WorkingTree {
@@ -221,12 +223,13 @@ class GitRepo : VersionControlSystem(), CommandLineTool {
 
     private fun runRepo(targetDir: File, vararg args: String) =
         if (Os.isWindows) {
-            val repo = Os.getPathFromEnvironment(command()) ?: throw IOException("'repo' not found in PATH.")
+            val repo = Os.getPathFromEnvironment(GitRepoCommand.command())
+                ?: throw IOException("'repo' not found in PATH.")
 
             // On Windows, the script itself is not executable, so we need to explicitly specify Python as the
             // interpreter. As of repo version 2.4, Python 3.6 is required also on Windows.
             ProcessCapture(targetDir, "py", "-3", repo.absolutePath, *args).requireSuccess()
         } else {
-            run(targetDir, *args)
+            GitRepoCommand.run(targetDir, *args)
         }
 }
