@@ -76,7 +76,7 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
 
-private const val GRADLE_VERSION = "7.3"
+private const val DEFAULT_GRADLE_VERSION = "7.3"
 private const val PUBSPEC_YAML = "pubspec.yaml"
 private const val PUB_LOCK_FILE = "pubspec.lock"
 
@@ -94,7 +94,7 @@ private val dartCommand = if (Os.isWindows) "dart.bat" else "dart"
  * This package manager supports the following [options][PackageManagerConfiguration.options]:
  * - *flutterVersion*: The version to use when bootstrapping Flutter. If Flutter is already on the path, this option is
  *   ignored.
- * - *gradleVersion*: The version of Gradle to use when analyzing Gradle projects. Defaults to [GRADLE_VERSION].
+ * - *gradleVersion*: The version of Gradle to use when analyzing Gradle projects. Defaults to [DEFAULT_GRADLE_VERSION].
  * - *pubDependenciesOnly*: Only scan Pub dependencies and skip native ones for Android (Gradle) and iOS (CocoaPods).
  */
 @Suppress("TooManyFunctions")
@@ -444,7 +444,7 @@ class Pub(
         if (gradleFactory == null || !definitionFile.isFile) return emptyList()
 
         return analyzerResultCacheAndroid.getOrPut(packageName) {
-            val pubGradleVersion = options[OPTION_GRADLE_VERSION] ?: GRADLE_VERSION
+            val pubGradleVersion = options[OPTION_GRADLE_VERSION] ?: DEFAULT_GRADLE_VERSION
 
             logger.info {
                 "Analyzing Android dependencies for package '$packageName' using Gradle version $pubGradleVersion."
