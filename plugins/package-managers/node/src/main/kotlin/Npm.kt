@@ -693,8 +693,19 @@ internal fun List<String>.groupLines(vararg markers: String): List<String> {
         collapsedLines[collapsedLines.size - 1] = collapsedLines.last().removePrefix(previousPrefix).trimStart()
     }
 
-    return collapsedLines.takeWhile {
+    val nonFooterLines = collapsedLines.takeWhile {
         // Skip any footer as a whole.
         it != "A complete log of this run can be found in:"
+    }
+
+    // If no lines but the last end with a dot, assume the message to be a single sentence.
+    return if (
+        nonFooterLines.size > 1 &&
+        nonFooterLines.last().endsWith('.') &&
+        nonFooterLines.subList(0, nonFooterLines.size - 1).none { it.endsWith('.') }
+    ) {
+        listOf(nonFooterLines.joinToString(" "))
+    } else {
+        nonFooterLines.map { it.trim() }
     }
 }
