@@ -582,12 +582,12 @@ open class Npm(
 
         // Generally forward issues from the NPM CLI to the ORT NPM package manager. Lower the severity of warnings to
         // hints, as warnings usually do not prevent the ORT NPM package manager from getting the dependencies right.
-        lines.groupLines("npm WARN ").mapTo(issues) {
+        lines.groupLines("npm WARN ", "npm warn ").mapTo(issues) {
             Issue(source = managerName, message = it, severity = Severity.HINT)
         }
 
         // For errors, however, something clearly went wrong, so keep the severity here.
-        lines.groupLines("npm ERR! ").mapTo(issues) {
+        lines.groupLines("npm ERR! ", "npm error ").mapTo(issues) {
             Issue(source = managerName, message = it, severity = Severity.ERROR)
         }
 
@@ -644,13 +644,15 @@ private fun nodeModulesDirForPackageJson(packageJson: File): File? {
     return modulesDir.takeIf { it.name == "node_modules" }
 }
 
-private fun List<String>.groupLines(marker: String): List<String> {
+internal fun List<String>.groupLines(vararg markers: String): List<String> {
     val ignorableLinePrefixes = setOf("code ", "errno ", "path ", "syscall ")
     val singleLinePrefixes = setOf("deprecated ", "skipping integrity check for git dependency ")
     val minCommonPrefixLength = 5
 
     val issueLines = mapNotNull { line ->
-        line.withoutPrefix(marker)?.takeUnless { ignorableLinePrefixes.any { prefix -> it.startsWith(prefix) } }
+        markers.firstNotNullOfOrNull { marker ->
+            line.withoutPrefix(marker)?.takeUnless { ignorableLinePrefixes.any { prefix -> it.startsWith(prefix) } }
+        }
     }
 
     var commonPrefix: String

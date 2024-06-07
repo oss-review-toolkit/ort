@@ -94,4 +94,22 @@ class NpmTest : StringSpec({
             unmockkConstructor(ProcessCapture::class)
         }
     }
+
+    "groupLines() should remove common prefixes from NPM warnings" {
+        val output = """
+            npm warn old lockfile
+            npm warn old lockfile The npm-shrinkwrap.json file was created with an old version of npm,
+            npm warn old lockfile so supplemental metadata must be fetched from the registry.
+            npm warn old lockfile
+            npm warn old lockfile This is a one-time fix-up, please be patient...
+            npm warn old lockfile
+            npm warn deprecated coffee-script@1.12.7: CoffeeScript on NPM has moved to "coffeescript" (no hyphen)
+        """.trimIndent()
+
+        output.lines().groupLines("npm warn ") shouldBe listOf(
+            "The npm-shrinkwrap.json file was created with an old version of npm, so supplemental metadata must be " +
+                "fetched from the registry. This is a one-time fix-up, please be patient...",
+            "deprecated coffee-script@1.12.7: CoffeeScript on NPM has moved to \"coffeescript\" (no hyphen)"
+        )
+    }
 })
