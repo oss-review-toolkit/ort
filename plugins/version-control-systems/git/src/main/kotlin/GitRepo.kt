@@ -77,6 +77,8 @@ object GitRepoCommand : CommandLineTool {
 
         return "$launcherVersion (launcher)"
     }
+
+    override fun displayName(): String = "GitRepo"
 }
 
 class GitRepo : VersionControlSystem(GitRepoCommand) {

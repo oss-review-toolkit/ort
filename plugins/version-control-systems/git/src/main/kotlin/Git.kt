@@ -80,6 +80,8 @@ object GitCommand : CommandLineTool {
             @Suppress("UnsafeCallOnNullableType")
             match.groups["version"]!!.value
         }.orEmpty()
+
+    override fun displayName(): String = "Git"
 }
 
 class Git : VersionControlSystem(GitCommand) {

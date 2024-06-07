@@ -43,6 +43,8 @@ object MercurialCommand : CommandLineTool {
             @Suppress("UnsafeCallOnNullableType")
             match.groups["version"]!!.value
         }.orEmpty()
+
+    override fun displayName(): String = "Mercurial"
 }
 
 class Mercurial : VersionControlSystem(MercurialCommand) {
