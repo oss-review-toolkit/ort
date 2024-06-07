@@ -31,7 +31,7 @@ class FossIdSnippetReporter : Reporter by delegateReporter {
     companion object {
         private const val TEMPLATE_NAME = "fossid_snippet"
 
-        val delegateReporter = HtmlTemplateReporter()
+        private val delegateReporter = HtmlTemplateReporter()
     }
 
     override val type = "FossIdSnippet"
