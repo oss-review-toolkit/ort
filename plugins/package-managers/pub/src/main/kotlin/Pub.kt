@@ -86,8 +86,8 @@ private val dartCommand = if (Os.isWindows) "dart.bat" else "dart"
 /**
  * The [Pub](https://pub.dev/) package manager for Dart / Flutter.
  *
- * This implementation is using the Pub version that is distributed with Flutter. If Flutter is not installed on the
- * system it is automatically downloaded and installed in the `~/.ort/tools` directory. The version of Flutter that is
+ * This implementation is using the Pub version distributed with Flutter. If Flutter is not installed on the system, it
+ * is automatically downloaded and installed in the `~/.ort/tools` directory. The version of Flutter that is
  * automatically installed can be configured by setting the `FLUTTER_VERSION` environment variable.
  *
  * This package manager supports the following [options][PackageManagerConfiguration.options]:

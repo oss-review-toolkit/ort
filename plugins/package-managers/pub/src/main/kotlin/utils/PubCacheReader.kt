@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 
 /**
  * A reader for the Pub cache directory. It looks for files in the ".pub-cache" directory in the user's home
- * directory. If Flutter is installed it additionally looks for files in the ".pub-cache" directory of Flutter's
+ * directory. If Flutter is installed, it additionally looks for files in the ".pub-cache" directory of Flutter's
  * installation directory.
  */
 internal class PubCacheReader(flutterHome: File? = null) {
