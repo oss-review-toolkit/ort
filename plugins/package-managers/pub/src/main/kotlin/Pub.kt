@@ -112,6 +112,7 @@ class Pub(
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
     companion object {
+        const val OPTION_GRADLE_VERSION = "gradleVersion"
         const val OPTION_PUB_DEPENDENCIES_ONLY = "pubDependenciesOnly"
     }
 
@@ -439,7 +440,7 @@ class Pub(
         if (gradleFactory == null || !definitionFile.isFile) return emptyList()
 
         return analyzerResultCacheAndroid.getOrPut(packageName) {
-            val pubGradleVersion = options[gradleFactory.type] ?: GRADLE_VERSION
+            val pubGradleVersion = options[OPTION_GRADLE_VERSION] ?: GRADLE_VERSION
 
             logger.info {
                 "Analyzing Android dependencies for package '$packageName' using Gradle version $pubGradleVersion."
