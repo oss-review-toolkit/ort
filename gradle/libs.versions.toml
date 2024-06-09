@@ -12,7 +12,7 @@ mavenPublishPlugin = "0.28.0"
 versionsPlugin = "0.51.0"
 
 asciidoctorj = "2.5.13"
-asciidoctorjPdf = "2.3.15"
+asciidoctorjPdf = "2.3.17"
 clikt = "4.4.0"
 commonsCompress = "1.26.2"
 cvssCalculator = "1.4.3"
