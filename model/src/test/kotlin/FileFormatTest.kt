@@ -25,6 +25,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.assertions.throwables.shouldThrowWithMessage
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempfile
+import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.file.shouldHaveFileSize
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
@@ -89,6 +90,18 @@ class FileFormatTest : WordSpec({
 
             file shouldHaveFileSize 0
             file.readValueOrNull<Any>() should beNull()
+        }
+
+        "be able to deserialize empty JSON arrays" {
+            val file = tempfile(suffix = ".json").apply { writeText("[]") }
+
+            file.readValueOrNull<List<PackageCuration>>().shouldBeEmpty()
+        }
+
+        "be able to deserialize empty YAML sequences" {
+            val file = tempfile(suffix = ".yml").apply { writeText("[]") }
+
+            file.readValueOrNull<List<PackageCuration>>().shouldBeEmpty()
         }
 
         "throw for invalid files" {
