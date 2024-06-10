@@ -32,14 +32,14 @@ import io.kotest.matchers.shouldBe
 class FileFormatTest : WordSpec({
     "File.readTree()" should {
         "return and empty node for empty files" {
-            val file = tempfile(null, ".json")
+            val file = tempfile(suffix = ".json")
 
             file shouldHaveFileSize 0
             file.readTree() shouldBe EMPTY_JSON_NODE
         }
 
         "throw for invalid files" {
-            val file = tempfile(null, ".json").apply { writeText("foo") }
+            val file = tempfile(suffix = ".json").apply { writeText("foo") }
 
             shouldThrow<JsonParseException> {
                 file.readTree()
@@ -49,14 +49,14 @@ class FileFormatTest : WordSpec({
 
     "File.readValueOrNull()" should {
         "return null for empty files" {
-            val file = tempfile(null, ".json")
+            val file = tempfile(suffix = ".json")
 
             file shouldHaveFileSize 0
             file.readValueOrNull<Any>() should beNull()
         }
 
         "throw for invalid files" {
-            val file = tempfile(null, ".json").apply { writeText("foo") }
+            val file = tempfile(suffix = ".json").apply { writeText("foo") }
 
             shouldThrow<JsonParseException> {
                 file.readValueOrNull()
