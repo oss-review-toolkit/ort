@@ -22,9 +22,10 @@ package org.ossreviewtoolkit.model
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.convertValue
-import com.fasterxml.jackson.module.kotlin.readValue
+import com.fasterxml.jackson.module.kotlin.readValues
 
 import java.io.File
+import java.io.IOException
 
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 
@@ -94,9 +95,20 @@ fun File.mapper() = FileFormat.forFile(this).mapper
 fun File.readTree(): JsonNode = mapper().readTree(this)
 
 /**
- * Use the Jackson mapper returned from [File.mapper] to read an object of type [T] from this file.
+ * Use the Jackson mapper returned from [File.mapper] to read a single object of type [T] from this file. Throw an
+ * [IOException] if not exactly one value is contained in the file, e.g. in case of multiple YAML documents per file.
  */
-inline fun <reified T : Any> File.readValue(): T = mapper().readValue(this)
+inline fun <reified T : Any> File.readValue(): T {
+    val mapper = mapper()
+    val parser = mapper.factory.createParser(this)
+
+    val values = mapper.readValues<T>(parser).readAll().also {
+        if (it.isEmpty()) throw IOException("No object found in file '$this'.")
+        if (it.size > 1) throw IOException("Multiple top-level objects found in file '$this'.")
+    }
+
+    return values.first()
+}
 
 /**
  * Use the Jackson mapper returned from [File.mapper] to read an object of type [T] from this file, or return null if

@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.model
 import com.fasterxml.jackson.core.JsonParseException
 
 import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.assertions.throwables.shouldThrowWithMessage
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempfile
 import io.kotest.matchers.file.shouldHaveFileSize
@@ -55,6 +56,28 @@ class FileFormatTest : WordSpec({
 
             file shouldHaveFileSize 0
             shouldThrow<IOException> {
+                file.readValue()
+            }
+        }
+
+        "refuse to read multiple documents per file" {
+            val file = tempfile(null, ".yml").apply {
+                @Suppress("MaxLineLength")
+                writeText(
+                    """
+                    ---
+                    id: "Maven:dom4j:dom4j:1.6.1"
+                    source_artifact_url: "https://repo.maven.apache.org/maven2/dom4j/dom4j/1.6.1/dom4j-1.6.1-sources.jar"
+                    ---
+                    id: "Maven:dom4j:dom4j:1.6.1"
+                    source_artifact_url: "<INTERNAL_ARTIFACTORY>/dom4j-1.6.1-sources.jar"
+                    """.trimIndent()
+                )
+            }
+
+            shouldThrowWithMessage<IOException>(
+                "Multiple top-level objects found in file '$file'."
+            ) {
                 file.readValue()
             }
         }
