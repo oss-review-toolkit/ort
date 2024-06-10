@@ -98,5 +98,27 @@ class FileFormatTest : WordSpec({
                 file.readValueOrNull()
             }
         }
+
+        "refuse to read multiple documents per file" {
+            val file = tempfile(null, ".yml").apply {
+                @Suppress("MaxLineLength")
+                writeText(
+                    """
+                    ---
+                    id: "Maven:dom4j:dom4j:1.6.1"
+                    source_artifact_url: "https://repo.maven.apache.org/maven2/dom4j/dom4j/1.6.1/dom4j-1.6.1-sources.jar"
+                    ---
+                    id: "Maven:dom4j:dom4j:1.6.1"
+                    source_artifact_url: "<INTERNAL_ARTIFACTORY>/dom4j-1.6.1-sources.jar"
+                    """.trimIndent()
+                )
+            }
+
+            shouldThrowWithMessage<IOException>(
+                "Multiple top-level objects found in file '$file'."
+            ) {
+                file.readValueOrNull()
+            }
+        }
     }
 })

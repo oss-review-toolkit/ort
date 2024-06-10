@@ -21,7 +21,6 @@ package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.convertValue
 import com.fasterxml.jackson.module.kotlin.readValues
 
 import java.io.File
@@ -98,26 +97,25 @@ fun File.readTree(): JsonNode = mapper().readTree(this)
  * Use the Jackson mapper returned from [File.mapper] to read a single object of type [T] from this file. Throw an
  * [IOException] if not exactly one value is contained in the file, e.g. in case of multiple YAML documents per file.
  */
-inline fun <reified T : Any> File.readValue(): T {
+inline fun <reified T : Any> File.readValue(): T =
+    readValueOrNull() ?: throw IOException("No object found in file '$this'.")
+
+/**
+ * Use the Jackson mapper returned from [File.mapper] to read an object of type [T] from this file, or return null if
+ * the file has no content. Throw an [IOException] if not exactly one value is contained in the file, e.g. in case of
+ * multiple YAML documents per file.
+ */
+inline fun <reified T : Any> File.readValueOrNull(): T? {
     val mapper = mapper()
     val parser = mapper.factory.createParser(this)
 
     val values = mapper.readValues<T>(parser).readAll().also {
-        if (it.isEmpty()) throw IOException("No object found in file '$this'.")
+        if (it.isEmpty()) return null
         if (it.size > 1) throw IOException("Multiple top-level objects found in file '$this'.")
     }
 
     return values.first()
 }
-
-/**
- * Use the Jackson mapper returned from [File.mapper] to read an object of type [T] from this file, or return null if
- * the file has no content.
- */
-inline fun <reified T : Any> File.readValueOrNull(): T? =
-    // Parse the file in a two-step process to avoid readValue() throwing an exception on empty files. Also see
-    // https://github.com/FasterXML/jackson-databind/issues/1406#issuecomment-252676674.
-    mapper().let { it.convertValue(it.readTree(this)) }
 
 /**
  * Use the Jackson mapper returned from [File.mapper] to read an object of type [T] from this file, or return the
