@@ -34,7 +34,7 @@ import java.io.IOException
 
 class FileFormatTest : WordSpec({
     "File.readTree()" should {
-        "return and empty node for empty files" {
+        "return and empty node for zero size files" {
             val file = tempfile(suffix = ".json")
 
             file shouldHaveFileSize 0
@@ -51,7 +51,7 @@ class FileFormatTest : WordSpec({
     }
 
     "File.readValue()" should {
-        "throw for empty files" {
+        "throw for zero size files" {
             val file = tempfile(suffix = ".yml")
 
             file shouldHaveFileSize 0
@@ -84,7 +84,7 @@ class FileFormatTest : WordSpec({
     }
 
     "File.readValueOrNull()" should {
-        "return null for empty files" {
+        "return null for zero size files" {
             val file = tempfile(suffix = ".json")
 
             file shouldHaveFileSize 0
