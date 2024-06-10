@@ -29,6 +29,8 @@ import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
+import java.io.IOException
+
 class FileFormatTest : WordSpec({
     "File.readTree()" should {
         "return and empty node for empty files" {
@@ -43,6 +45,17 @@ class FileFormatTest : WordSpec({
 
             shouldThrow<JsonParseException> {
                 file.readTree()
+            }
+        }
+    }
+
+    "File.readValue()" should {
+        "throw for empty files" {
+            val file = tempfile(suffix = ".yml")
+
+            file shouldHaveFileSize 0
+            shouldThrow<IOException> {
+                file.readValue()
             }
         }
     }
