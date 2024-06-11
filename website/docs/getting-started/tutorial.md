@@ -306,7 +306,7 @@ cli/build/install/ort/bin/ort evaluate
   --rules-file evaluator.rules.kts
   --license-classifications-file license-classifications.yml
   -i [scanner-output-dir]/scan-result.yml
-  -o [evaluator-output-dir]/mime-types
+  -o [evaluator-output-dir]
 ```
 
 See the [curations.yml documentation](../configuration/package-curations.md) to learn more about using curations to correct invalid or missing package metadata and the [license-classifications.yml documentation](../configuration/license-classifications.md) on how you can classify licenses to simplify writing the policy rules.
