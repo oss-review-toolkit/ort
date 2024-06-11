@@ -55,14 +55,24 @@ jobs:
             type=ref,event=tag
             type=sha
       - name: Build & Push 'ort' Docker Image
+        if: ${{ github.event_name != 'pull_request' }}
         uses: docker/build-push-action@v5
         with:
           context: .
-          push: ${{ github.event_name != 'pull_request' }}
+          push: true
           tags: ${{ steps.meta-ort.outputs.tags }}
           labels: ${{ steps.meta-ort.outputs.labels }}
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ github.repository_owner }}/ort:cache
           cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ github.repository_owner }}/ort:cache,mode=max
+          build-args: ORT_VERSION=${{ env.ORT_VERSION }}
+      - name: Build 'ort' Docker Image
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          tags: ${{ steps.meta-ort.outputs.tags }}
+          labels: ${{ steps.meta-ort.outputs.labels }}
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ github.repository_owner }}/ort:cache
           build-args: ORT_VERSION=${{ env.ORT_VERSION }}
       - name: Extract Metadata for 'ort-minimal' Docker Image
         id: meta-ort-minimal
