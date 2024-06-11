@@ -4,12 +4,6 @@ sidebar_position: 4
 
 # Tutorial
 
-:::caution Outdated
-
-Please note that this tutorial is partly outdated and needs to be overhauled.
-
-:::
-
 This tutorial gives a brief introduction to how the tools work together at the example of the [mime-types](https://www.npmjs.com/package/mime-types) NPM package.
 It will guide through the main steps for running ORT:
 
@@ -65,7 +59,7 @@ For reliable results we use version 2.1.18 (replace `[mime-types-dir]` with the 
 ```shell
 git clone https://github.com/jshttp/mime-types.git [mime-types-dir]
 cd [mime-types-dir]
-git checkout 2.1.18
+git checkout 2.1.35
 ```
 
 ## 4. Run the analyzer on `mime-types`
@@ -92,12 +86,22 @@ In case of `mime-types` it will find the `package.json` file and write the resul
 On the first attempt of running the analyzer on the `mime-types` package it will fail with an error message:
 
 ```shell
-The following package managers are activated:
-        Bower, Bundler, Cargo, Composer, DotNet, Gradle, Maven, NPM, NuGet, PIP, SBT, Stack, Yarn
+The following 25 package manager(s) are enabled:
+        Bazel, Bower, Bundler, Cargo, Carthage, CocoaPods, Composer, Conan, GoMod, Gradle, Maven, NPM, NuGet, PIP, Pipenv, PNPM, Poetry, Pub, SBT, SpdxDocumentFile, Stack, SwiftPM, Unmanaged, Yarn, Yarn2
+The following 2 package curation provider(s) are enabled:
+        DefaultDir, DefaultFile
 Analyzing project path:
-        [mime-types-dir]
-ERROR - Resolving dependencies for 'package.json' failed with: No lockfile found in '[mime-types-dir]'. This potentially results in unstable versions of dependencies. To support this, enable the 'allowDynamicVersions' option in 'config.yml'.
-Writing analyzer result to '[analyzer-output-dir]/analyzer-result.yml'.
+        [workdir]/mime-types
+00:31:07.985 [main] WARN  org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NpmDetection - Any of [NPM, PNPM, YARN, YARN2] could be the package manager for '[workdir]/mime-types/package.json'. Assuming it is an NPM project.
+00:31:07.987 [main] WARN  org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NpmDetection - Any of [NPM, PNPM, YARN, YARN2] could be the package manager for '[workdir]/mime-types/package.json'. Assuming it is an NPM project.
+00:31:07.988 [main] WARN  org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NpmDetection - Any of [NPM, PNPM, YARN, YARN2] could be the package manager for '[workdir]/mime-types/package.json'. Assuming it is an NPM project.
+00:31:07.990 [main] WARN  org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NpmDetection - Any of [NPM, PNPM, YARN, YARN2] could be the package manager for '[workdir]/mime-types/package.json'. Assuming it is an NPM project.
+Found 1 NPM definition file(s) at:
+        package.json
+Found in total 1 definition file(s) from the following 1 package manager(s):
+        NPM
+00:31:08.572 [DefaultDispatcher-worker-1] ERROR org.ossreviewtoolkit.analyzer.PackageManager - NPM failed to resolve dependencies for path 'package.json': IllegalArgumentException: No lockfile found in '.'. This potentially results in unstable versions of dependencies. To support this, enable the 'allowDynamicVersions' option in 'config.yml'.
+Wrote analyzer result to '[analyzer-output-dir]/analyzer-result.yml' (0.00 MiB) in 449.630951ms.
 ```
 
 This happens because `mime-types` does not have `package-lock.json` file.
@@ -105,12 +109,25 @@ Without this file, the versions of (transitive) dependencies that are defined wi
 To override this check, use the global `-P ort.analyzer.allowDynamicVersions=true` option:
 
 ```shell
+$ rm [analyzer-output-dir/analyzer-result.yml
 $ cli/build/install/ort/bin/ort -P ort.analyzer.allowDynamicVersions=true analyze -i [mime-types-dir] -o [analyzer-output-dir]
-The following package managers are activated:
-        Bundler, Composer, Gradle, Maven, NPM, PIP, SBT, Stack, Yarn
+...
+The following 25 package manager(s) are enabled:
+        Bazel, Bower, Bundler, Cargo, Carthage, CocoaPods, Composer, Conan, GoMod, Gradle, Maven, NPM, NuGet, PIP, Pipenv, PNPM, Poetry, Pub, SBT, SpdxDocumentFile, Stack, SwiftPM, Unmanaged, Yarn, Yarn2
+The following 2 package curation provider(s) are enabled:
+        DefaultDir, DefaultFile
 Analyzing project path:
-        [mime-types-dir]
-Writing analyzer result to '[analyzer-output-dir]/analyzer-result.yml'.
+        [workdir]/mime-types
+00:33:15.573 [main] WARN  org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NpmDetection - Any of [NPM, PNPM, YARN, YARN2] could be the package manager for '[workdir]/mime-types/package.json'. Assuming it is an NPM project.
+00:33:15.575 [main] WARN  org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NpmDetection - Any of [NPM, PNPM, YARN, YARN2] could be the package manager for '[workdir]/mime-types/package.json'. Assuming it is an NPM project.
+00:33:15.576 [main] WARN  org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NpmDetection - Any of [NPM, PNPM, YARN, YARN2] could be the package manager for '[workdir]/mime-types/package.json'. Assuming it is an NPM project.
+00:33:15.579 [main] WARN  org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NpmDetection - Any of [NPM, PNPM, YARN, YARN2] could be the package manager for '[workdir]/mime-types/package.json'. Assuming it is an NPM project.
+Found 1 NPM definition file(s) at:
+        package.json
+Found in total 1 definition file(s) from the following 1 package manager(s):
+        NPM
+Wrote analyzer result to '[analyzer-output-dir]/analyzer-result.yml' (0.24 MiB) in 339.135518ms.
+...
 ```
 
 The result file will contain information about the `mime-types` package itself, the dependency tree for each scope, and information about each dependency.
@@ -134,115 +151,169 @@ excludes:
 Following is an overview of the structure of the `analyzer-result.yml` file (comments were added for clarity and are not part of a real result file):
 
 ```yaml
+---
 # VCS information about the input directory.
 repository:
   vcs:
     type: "Git"
     url: "https://github.com/jshttp/mime-types.git"
-    revision: "7c4ce23d7354fbf64c69d7b7be8413c4ba2add78"
+    revision: "ef932231c20e716ec27ea159c082322c3c485b66"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/jshttp/mime-types.git"
-    revision: "7c4ce23d7354fbf64c69d7b7be8413c4ba2add78"
+    revision: "ef932231c20e716ec27ea159c082322c3c485b66"
     path: ""
   # Will only be present if an '.ort.yml' configuration file with scope excludes was provided. Otherwise, this is an empty object.
   config:
     excludes:
       scopes:
-      - pattern: "devDependencies"
-        reason: "DEV_DEPENDENCY_OF"
-        comment: "Packages for development only."
+        - pattern: "devDependencies"
+          reason: "DEV_DEPENDENCY_OF"
+          comment: "Packages for development only."
 # The analyzer result.
 analyzer:
   # The time when the analyzer was executed.
-  start_time: "2019-02-19T10:03:07.269Z"
-  end_time: "2019-02-19T10:03:19.932Z"
-  # Information about the environment the analyzer was run in.
+  start_time: "2024-06-07T23:05:21.827379368Z"
+  end_time: "2024-06-07T23:05:39.100655684Z"
   environment:
-    ort_version: "331c32d"
+    ort_version: "22.7.1-006.sha.56240bf"
+    build_jdk: "11.0.22+7"
+    java_version: "17.0.11"
     os: "Linux"
+    processors: 24
+    max_memory: 25300041728
     variables:
+      HOME: "/home/[your user]"
       SHELL: "/bin/bash"
       TERM: "xterm-256color"
-      JAVA_HOME: "/usr/lib/jvm/java-8-oracle"
-    tool_versions: {}
+      GOPATH: "[Path to the Go binary]"
+    tool_versions:
+      NPM: "9.2.0"
   # Configuration options of the analyzer.
   config:
     allow_dynamic_versions: true
+    skip_excluded: false
   # The result of the dependency analysis.
   result:
     # Metadata about all found projects, in this case only the mime-types package defined by the package.json file.
     projects:
-    - id: "NPM::mime-types:2.1.18"
-      purl: "pkg://NPM//mime-types@2.1.18"
-      definition_file_path: "package.json"
-      declared_licenses:
-      - "MIT"
-      declared_licenses_processed:
-        spdx_expression: "MIT"
-      vcs:
-        type: ""
-        url: "https://github.com/jshttp/mime-types.git"
-        revision: ""
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "https://github.com/jshttp/mime-types.git"
-        revision: "076f7902e3a730970ea96cd0b9c09bb6110f1127"
-        path: ""
-      homepage_url: ""
-      # The dependency trees by scope.
-      scopes:
-      - name: "dependencies"
-        dependencies:
-        - id: "NPM::mime-db:1.33.0"
-      - name: "devDependencies"
-        dependencies:
-        - id: "NPM::eslint-config-standard:10.2.1"
-        - id: "NPM::eslint-plugin-import:2.8.0"
-          dependencies:
-          - id: "NPM::builtin-modules:1.1.1"
-          - id: "NPM::contains-path:0.1.0"
-            # If an issue occurred during the dependency analysis of this package, there would be an additional "issues" array.
-# ...
-# Detailed metadata about each package from the dependency trees.
-    packages:
-    - package:
-        id: "NPM::abbrev:1.0.9"
-        purl: "pkg://NPM//abbrev@1.0.9"
+      - id: "NPM::mime-types:2.1.35"
+        definition_file_path: "package.json"
         declared_licenses:
-        - "ISC"
+          - "MIT"
         declared_licenses_processed:
-          spdx_expression: "ISC"
-        description: "Like ruby's abbrev module, but in js"
-        homepage_url: "https://github.com/isaacs/abbrev-js#readme"
+          spdx_expression: "MIT"
+        vcs:
+          type: ""
+          url: "https://github.com/jshttp/mime-types.git"
+          revision: ""
+          path: ""
+        vcs_processed:
+          type: "Git"
+          url: "https://github.com/jshttp/mime-types.git"
+          revision: "ef932231c20e716ec27ea159c082322c3c485b66"
+          path: ""
+        homepage_url: ""
+        # The dependency trees by scope.
+        scope_names:
+          - "dependencies"
+          - "devDependencies"
+    # Detailed metadata about each package from the dependency trees.
+    packages:
+      - id: "NPM::acorn:7.4.1"
+        purl: "pkg:npm/acorn@7.4.1"
+        declared_licenses:
+          - "MIT"
+        declared_licenses_processed:
+          spdx_expression: "MIT"
+        description: "ECMAScript parser"
+        homepage_url: "https://github.com/acornjs/acorn"
         binary_artifact:
           url: ""
           hash:
             value: ""
             algorithm: ""
         source_artifact:
-          url: "https://registry.npmjs.org/abbrev/-/abbrev-1.0.9.tgz"
+          url: "https://registry.npmjs.org/acorn/-/acorn-7.4.1.tgz"
           hash:
-            value: "91b4792588a7738c25f35dd6f63752a2f8776135"
+            value: "feaed255973d2e77555b83dbc08851a6c63520fa"
             algorithm: "SHA-1"
         vcs:
           type: "Git"
-          url: "git+ssh://git@github.com/isaacs/abbrev-js.git"
-          revision: "c386cd9dbb1d8d7581718c54d4ba944cc9298d6f"
+          url: "https://github.com/acornjs/acorn.git"
+          revision: ""
           path: ""
         vcs_processed:
           type: "Git"
-          url: "ssh://git@github.com/isaacs/abbrev-js.git"
-          revision: "c386cd9dbb1d8d7581718c54d4ba944cc9298d6f"
+          url: "https://github.com/acornjs/acorn.git"
+          revision: ""
           path: ""
-      curations: []
+    # ...
+    # A list of project-related issues that happened during dependency analysis.
+    issues:
+      NPM::mime-types:2.1.35:
+        - timestamp: "2024-06-07T23:05:25.472509460Z"
+          source: "NPM"
+          message: "deprecated inflight@1.0.6: This module is not supported, and leaks\
+          \ memory. Do not use it. Check out lru-cache if you want a good and tested\
+          \ way to coalesce async requests by a key value, which is much more comprehensive\
+          \ and powerful."
+          severity: "HINT"
+        - timestamp: "2024-06-07T23:05:25.472524097Z"
+          source: "NPM"
+          message: "deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer\
+          \ supported"
+          severity: "HINT"
+        - timestamp: "2024-06-07T23:05:25.472525680Z"
+          source: "NPM"
+          message: "deprecated glob@7.2.0: Glob versions prior to v9 are no longer supported"
+          severity: "HINT"
+    dependency_graphs:
+      NPM:
+        packages:
+          - "NPM::acorn-jsx:5.3.2"
+          - "NPM::acorn:7.4.1"
+          - "NPM::aggregate-error:3.1.0"
+          - "NPM::ajv:6.12.6"
+          - "NPM::ajv:8.16.0"
+        # ...
+        scopes:
+          :mime-types:2.1.35:dependencies:
+            - root: 216
+          :mime-types:2.1.35:devDependencies:
+            - root: 81
+            - root: 85
+            - root: 86
+            - root: 87
+            - root: 88
+            - root: 89
+            - root: 94
+            - root: 220
+            - root: 229
+        nodes:
+          - pkg: 216
+          - pkg: 81
+          - pkg: 72
+          - pkg: 117
+        # ...
+        edges:
+          - from: 6
+            to: 3
+          - from: 7
+            to: 2
 # ...
-# Finally, a list of project-related issues that happened during dependency analysis. Fortunately empty in this case.
-    issues: {}
-# A field to quickly check if the analyzer result contains any issues.
-    has_issues: false
+scanner: null
+advisor: null
+evaluator: null
+resolved_configuration:
+  package_curations:
+    - provider:
+        id: "DefaultDir"
+      curations: []
+    - provider:
+        id: "DefaultFile"
+      curations: []
 ```
 
 ## 5. Run the scanner
@@ -273,16 +344,14 @@ As during the *analyzer* step an `.ort.yml` configuration file was provided to e
 
 ```shell
 $ cli/build/install/ort/bin/ort -P ort.scanner.skipExcluded=true scan -i [analyzer-output-dir]/analyzer-result.yml -o [scanner-output-dir]
-Using scanner 'ScanCode'.
-Limiting scan to scopes: [dependencies]
-Bootstrapping scanner 'ScanCode' as required version 2.9.2 was not found in PATH.
-Using processed VcsInfo(type=git, url=https://github.com/jshttp/mime-db.git, revision=482cd6a25bbd6177de04a686d0e2a0c2465bf445, resolvedRevision=null, path=).
-Original was VcsInfo(type=git, url=git+https://github.com/jshttp/mime-db.git, revision=482cd6a25bbd6177de04a686d0e2a0c2465bf445, resolvedRevision=null, path=).
-Running ScanCode version 2.9.2 on directory '[scanner-output-dir]/downloads/NPM/unknown/mime-db/1.35.0'.
-Using processed VcsInfo(type=git, url=https://github.com/jshttp/mime-types.git, revision=7c4ce23d7354fbf64c69d7b7be8413c4ba2add78, resolvedRevision=null, path=).
-Original was VcsInfo(type=, url=https://github.com/jshttp/mime-types.git, revision=, resolvedRevision=null, path=).
-Running ScanCode version 2.9.2 on directory '[scanner-output-dir]/downloads/NPM/unknown/mime-types/2.1.18'.
-Writing scan result to '[scanner-output-dir]/scan-result.yml'.
+Scanning projects with:
+        ScanCode (version 32.1.0)
+Scanning packages with:
+        ScanCode (version 32.1.0)
+Wrote scan result to '[scanner-output-dir]/scan-result.yml' (0.42 MiB) in 209.344576ms.
+The scan took 3.591540482s.
+Resolved issues: 0 errors, 0 warnings, 0 hints.
+Unresolved issues: 0 errors, 0 warnings, 0 hints.
 ```
 
 The `scanner` writes a new ORT result file to `[scanner-output-dir]/scan-result.yml` containing the scan results in addition to the analyzer result from the input.
@@ -306,7 +375,19 @@ cli/build/install/ort/bin/ort evaluate
   --rules-file evaluator.rules.kts
   --license-classifications-file license-classifications.yml
   -i [scanner-output-dir]/scan-result.yml
-  -o [evaluator-output-dir]/mime-types
+  -o [evaluator-output-dir]
+```
+
+Example output:
+
+```shell
+The following 1 rule violations have been found:
+ERROR: MISSING_CONTRIBUTING_FILE - The project's code repository does not contain the file 'CONTRIBUTING.md'.
+The evaluation of 1 script(s) took 2.277363920s.
+Wrote evaluation result to '[evaluator-output-dir]/evaluation-result.yml' (0.42 MiB) in 225.231183ms.
+Resolved rule violations: 0 errors, 0 warnings, 0 hints.
+Unresolved rule violations: 1 error, 0 warnings, 0 hints.
+There is 1 unresolved rule violation with a severity equal to or greater than the WARNING threshold.
 ```
 
 See the [curations.yml documentation](../configuration/package-curations.md) to learn more about using curations to correct invalid or missing package metadata and the [license-classifications.yml documentation](../configuration/license-classifications.md) on how you can classify licenses to simplify writing the policy rules.
@@ -325,9 +406,14 @@ cli/build/install/ort/bin/ort report
   -f PlainTextTemplate,StaticHtml,WebApp
   -i [evaluator-output-dir]/evaluation-result.yml
   -o [reporter-output-dir]
-Created 'StaticHtml' report: [reporter-output-dir]/scan-report.html
-Created 'WebApp' report: [reporter-output-dir]/scan-report-web-app.html
-Created 'PlainTextTemplate' report: [reporter-output-dir]/NOTICE_DEFAULT
+...
+Generating the 'PlainTextTemplate' report in thread 'DefaultDispatcher-worker-2'...
+Generating the 'WebApp' report in thread 'DefaultDispatcher-worker-4'...
+Generating the 'StaticHtml' report in thread 'DefaultDispatcher-worker-3'...
+Successfully created 'PlainTextTemplate' report(s) at '[reporter-output-dir]/NOTICE_DEFAULT' in 289.407999ms.
+Successfully created 'StaticHtml' report(s) at '[reporter-output-dir]/scan-report.html' in 593.313833ms.
+Successfully created 'WebApp' report(s) at '[reporter-output-dir]/scan-report-web-app.html' in 475.395069ms.
+Created 3 of 3 report(s) in 618.614701ms.
 ```
 
 If you do not want to run the *evaluator* you can pass the *scanner* result e.g. `[scanner-output-dir]/scan-result.yml` to the `reporter` instead.
