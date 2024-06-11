@@ -90,6 +90,8 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
+          # Do not "cache-to" here to not overwrite additional layers from the "full" image, which also contains all
+          # layers present in the "minimal" image anyway.
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta-ort-minimal.outputs.tags }}
           labels: ${{ steps.meta-ort-minimal.outputs.labels }}
