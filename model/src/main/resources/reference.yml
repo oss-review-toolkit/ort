@@ -198,8 +198,6 @@ ort:
           maximumPoolSize: 10
           minimumIdle: 600000
 
-    createMissingArchives: false
-
     # Map scanner license findings to valid SPDX licenses. Note that these mappings are only applied in new scans,
     # stored scan results are not affected.
     detectedLicenseMapping:

@@ -387,7 +387,6 @@ scanner:
     tool_versions: {}
   config:
     skip_concluded: false
-    create_missing_archives: false
     detected_license_mapping:
       LicenseRef-scancode-agpl-generic-additional-terms: "NOASSERTION"
       LicenseRef-scancode-generic-cla: "NOASSERTION"
