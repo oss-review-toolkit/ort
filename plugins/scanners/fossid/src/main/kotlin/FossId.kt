@@ -508,9 +508,7 @@ class FossId internal constructor(
         val vcs = requireNotNull(VersionControlSystem.forUrl(url))
 
         val defaultBranch = vcs.getDefaultBranchName(url)
-        logger.info {
-            if (defaultBranch != null) "Default branch is '$defaultBranch'." else "There is no default remote branch."
-        }
+        logger.info { "Default branch is '$defaultBranch'." }
 
         // If a scan for the default branch is created, put the default branch name in the scan code (the
         // FossIdNamingProvider must also have a scan pattern that makes use of it).

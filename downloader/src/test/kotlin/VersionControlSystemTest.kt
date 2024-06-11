@@ -156,7 +156,7 @@ private class VersionControlSystemTestImpl(
 ) : VersionControlSystem(tool) {
     override fun getVersion(): String = "0"
 
-    override fun getDefaultBranchName(url: String): String? = null
+    override fun getDefaultBranchName(url: String): String = ""
 
     override fun getWorkingTree(vcsDirectory: File): WorkingTree = mockk()
 

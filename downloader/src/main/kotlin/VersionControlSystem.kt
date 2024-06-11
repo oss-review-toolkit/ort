@@ -179,9 +179,10 @@ abstract class VersionControlSystem(
     abstract fun getVersion(): String
 
     /**
-     * Return the name of the default branch for the repository at [url], or null if there is no default remote branch.
+     * Return the name of the default branch for the repository at [url]. It is expected that there always is a default
+     * branch name that implementations can fall back to, and that the returned name is non-empty.
      */
-    abstract fun getDefaultBranchName(url: String): String?
+    abstract fun getDefaultBranchName(url: String): String
 
     /**
      * Return a working tree instance for this VCS.
