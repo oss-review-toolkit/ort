@@ -198,9 +198,6 @@
                 "archive": {
                     "$ref": "#/definitions/Archive"
                 },
-                "createMissingArchives": {
-                    "type": "boolean"
-                },
                 "detectedLicenseMapping": {
                     "$ref": "#/definitions/DetectedLicenseMapping"
                 },

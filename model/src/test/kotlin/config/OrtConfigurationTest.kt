@@ -221,8 +221,6 @@ class OrtConfigurationTest : WordSpec({
                     }
                 }
 
-                createMissingArchives shouldBe false
-
                 detectedLicenseMapping shouldContainExactly mapOf(
                     "BSD (Three Clause License)" to "BSD-3-clause",
                     "LicenseRef-scancode-generic-cla" to "NOASSERTION"
