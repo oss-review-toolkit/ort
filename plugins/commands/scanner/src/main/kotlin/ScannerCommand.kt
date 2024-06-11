@@ -43,6 +43,7 @@ import kotlinx.coroutines.runBlocking
 
 import org.apache.logging.log4j.kotlin.logger
 
+import org.ossreviewtoolkit.downloader.DefaultWorkingTreeCache
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.PackageType
@@ -61,7 +62,6 @@ import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.provenance.DefaultNestedProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.DefaultPackageProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.DefaultProvenanceDownloader
-import org.ossreviewtoolkit.scanner.utils.DefaultWorkingTreeCache
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.ORT_FAILURE_STATUS_CODE

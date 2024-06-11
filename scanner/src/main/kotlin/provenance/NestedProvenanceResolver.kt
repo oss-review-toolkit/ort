@@ -23,11 +23,11 @@ import kotlinx.coroutines.runBlocking
 
 import org.apache.logging.log4j.kotlin.logger
 
+import org.ossreviewtoolkit.downloader.WorkingTreeCache
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
-import org.ossreviewtoolkit.scanner.utils.WorkingTreeCache
 
 /**
  * The [NestedProvenanceResolver] provides a function to resolve nested provenances.

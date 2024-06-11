@@ -17,15 +17,13 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.scanner.utils
+package org.ossreviewtoolkit.downloader
 
 import java.io.IOException
 
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir

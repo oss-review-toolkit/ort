@@ -24,6 +24,7 @@ import io.kotest.matchers.should
 
 import java.io.File
 
+import org.ossreviewtoolkit.downloader.DefaultWorkingTreeCache
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.Identifier
@@ -50,7 +51,6 @@ import org.ossreviewtoolkit.scanner.provenance.DefaultPackageProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.DefaultProvenanceDownloader
 import org.ossreviewtoolkit.scanner.provenance.DummyNestedProvenanceStorage
 import org.ossreviewtoolkit.scanner.provenance.DummyProvenanceStorage
-import org.ossreviewtoolkit.scanner.utils.DefaultWorkingTreeCache
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.test.getAssetFile

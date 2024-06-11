@@ -25,6 +25,7 @@ plugins {
 dependencies {
     api(projects.plugins.commands.commandApi)
 
+    implementation(projects.downloader)
     implementation(projects.model)
     implementation(projects.scanner)
     implementation(projects.utils.commonUtils)
