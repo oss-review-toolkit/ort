@@ -36,6 +36,9 @@ import retrofit2.http.Part
 
 typealias FullScanResponse = Map<String, List<ScanResponse>>
 
+/**
+ * The API definition for SCANOSS, see https://docs.osskb.org/.
+ */
 interface ScanOssService {
     companion object {
         /**
