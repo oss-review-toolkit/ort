@@ -35,10 +35,16 @@ sealed interface Provenance {
      * True if this [Provenance] refers to the same source code as [pkg], assuming that it belongs to the package id.
      */
     fun matches(pkg: Package): Boolean
+
+    /**
+     * True if this [Provenance] matches the [Provenance][other] both in type and attributes.
+     */
+    fun matches(other: Provenance): Boolean
 }
 
 data object UnknownProvenance : Provenance {
     override fun matches(pkg: Package): Boolean = false
+    override fun matches(other: Provenance): Boolean = false
 }
 
 sealed interface KnownProvenance : Provenance
@@ -53,6 +59,8 @@ data class ArtifactProvenance(
     val sourceArtifact: RemoteArtifact
 ) : KnownProvenance {
     override fun matches(pkg: Package): Boolean = sourceArtifact == pkg.sourceArtifact
+    override fun matches(other: Provenance): Boolean =
+        other is ArtifactProvenance && sourceArtifact == other.sourceArtifact
 }
 
 /**
@@ -79,6 +87,14 @@ data class RepositoryProvenance(
      * Return true if this provenance matches the processed VCS information of the [package][pkg].
      */
     override fun matches(pkg: Package): Boolean = vcsInfo == pkg.vcsProcessed
+
+    /**
+     * Return true if the [Provenance][other] is a [RepositoryProvenance] and its normalized vcsInfo matches this
+     * provenance's normalized [VcsInfo][vcsInfo].
+     */
+    override fun matches(other: Provenance): Boolean =
+        other is RepositoryProvenance && resolvedRevision == other.resolvedRevision &&
+            other.vcsInfo.normalize().equalsDisregardingPath(vcsInfo.normalize())
 }
 
 /**
