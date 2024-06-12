@@ -358,8 +358,11 @@ class Bundler(
         workingDir.walk().maxDepth(1).filter { it.isFile && it.extension == "gemspec" }.firstOrNull()
 
     private fun queryRubygems(name: String, version: String, retryCount: Int = 3): GemSpec? {
-        // See http://guides.rubygems.org/rubygems-org-api-v2/.
-        val url = "https://rubygems.org/api/v2/rubygems/$name/versions/$version.yaml"
+        // NOTE: Explicitly use platform=ruby here to enforce the same behavior here that is also used in the Bundler
+        //       resolving logic.
+        // See plugins/package-managers/bundler/src/main/resources/resolve_dependencies.rb
+        // See <http://guides.rubygems.org/rubygems-org-api-v2/>.
+        val url = "https://rubygems.org/api/v2/rubygems/$name/versions/$version.yaml?platform=ruby"
 
         return okHttpClient.downloadText(url).mapCatching {
             GemSpec.createFromGem(yamlMapper.readTree(it))
