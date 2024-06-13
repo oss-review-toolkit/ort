@@ -1,197 +1,381 @@
+from conan import ConanFile
+from conan.errors import ConanInvalidConfiguration
+from conan.tools.cmake import CMake, CMakeDeps, CMakeToolchain, cmake_layout
+from conan.tools.files import apply_conandata_patches, copy, export_conandata_patches, get, replace_in_file, rm, rmdir
+from conan.tools.microsoft import is_msvc, is_msvc_static_runtime, msvc_runtime_flag, VCVars
+from conan.tools.scm import Version
+from conan.tools.build import check_min_cppstd
+from collections import namedtuple
 import os
-import shutil
 
-from conans import CMake
-from conans import ConanFile, tools
+required_conan_version = ">=1.54.0"
 
 
 class PocoConan(ConanFile):
-    name = "Poco"
-    version = "1.9.3"
-    url = "http://github.com/pocoproject/conan-poco"
-    exports_sources = "CMakeLists.txt", "PocoMacros.cmake"  # REMOVE POCOMACROS IN NEXT VERSION!
-    generators = "cmake", "txt"
+    name = "poco"
+    description = (
+        "Modern, powerful open source C++ class libraries for building "
+        "network- and internet-based applications that run on desktop, server, "
+        "mobile and embedded systems."
+    )
+    license = "BSL-1.0"
+    url = "https://github.com/conan-io/conan-center-index"
+    homepage = "https://pocoproject.org"
+    topics = ("building", "networking", "server", "mobile", "embedded")
+    package_type = "library"
     settings = "os", "arch", "compiler", "build_type"
-    author = "The Author <author@example.org>"
-    license = "The Boost Software License 1.0"
-    description = "Modern, powerful open source C++ class libraries for building network- and internet-based " \
-                  "applications that run on desktop, server, mobile and embedded systems."
-    options = {"shared": [True, False],
-               "fPIC": [True, False],
-               "enable_xml": [True, False],
-               "enable_json": [True, False],
-               "enable_mongodb": [True, False],
-               "enable_pdf": [True, False],
-               "enable_util": [True, False],
-               "enable_net": [True, False],
-               "enable_netssl": [True, False],
-               "enable_netssl_win": [True, False],
-               "enable_crypto": [True, False],
-               "enable_data": [True, False],
-               "enable_data_sqlite": [True, False],
-               "enable_data_mysql": [True, False],
-               "enable_data_odbc": [True, False],
-               "enable_sevenzip": [True, False],
-               "enable_zip": [True, False],
-               "enable_apacheconnector": [True, False],
-               "enable_cppparser": [True, False],
-               "enable_pocodoc": [True, False],
-               "enable_pagecompiler": [True, False],
-               "enable_pagecompiler_file2page": [True, False],
-               "enable_redis": [True, False],
-               "force_openssl": [True, False],  # "Force usage of OpenSSL even under windows"
-               "enable_tests": [True, False],
-               "poco_unbundled": [True, False],
-               "cxx_14": [True, False]
-              }
-    default_options = '''
-shared=False
-fPIC=True
-enable_xml=True
-enable_json=True
-enable_mongodb=True
-enable_pdf=False
-enable_util=True
-enable_net=True
-enable_netssl=True
-enable_netssl_win=True
-enable_crypto=True
-enable_data=True
-enable_data_sqlite=True
-enable_data_mysql=False
-enable_data_odbc=False
-enable_sevenzip=False
-enable_zip=True
-enable_apacheconnector=False
-enable_cppparser=False
-enable_pocodoc=False
-enable_pagecompiler=False
-enable_pagecompiler_file2page=False
-enable_redis=True
-force_openssl=True
-enable_tests=False
-poco_unbundled=False
-cxx_14=False
-'''
+    options = {
+        "shared": [True, False],
+        "fPIC": [True, False],
+        "enable_fork": [True, False],
+        "enable_active_record": [True, False, "deprecated"],
+        "log_debug": [True, False],
+        "with_sql_parser": [True, False],
+        "comp_foundation_sharedlibrary_debug_suffix": [True, False],
+    }
+    default_options = {
+        "shared": False,
+        "fPIC": True,
+        "enable_fork": True,
+        "enable_active_record": "deprecated",
+        "log_debug": False,
+        "with_sql_parser": True,
+        "comp_foundation_sharedlibrary_debug_suffix": True,
+    }
 
-    def source(self):
-        zip_name = "poco-%s-release.zip" % self.version
-        tools.download("https://github.com/pocoproject/poco/archive/%s" % zip_name, zip_name)
-        tools.unzip(zip_name)
-        shutil.move("poco-poco-%s-release" % self.version, "poco")
-        os.unlink(zip_name)
-        shutil.move("poco/CMakeLists.txt", "poco/CMakeListsOriginal.cmake")
-        shutil.move("CMakeLists.txt", "poco/CMakeLists.txt")
-        # Patch the PocoMacros.cmake to fix the detection of the win10 sdk.
-        # NOTE: ALREADY FIXED IN POCO REPO, REMOVE THIS FOR NEXT VERSION
-        shutil.move("PocoMacros.cmake", "poco/cmake/PocoMacros.cmake")
+    _PocoComponent = namedtuple("_PocoComponent", ("option", "default_option", "dependencies", "external_dependencies", "is_lib"))
+    _poco_component_tree = {
+        "mod_poco": _PocoComponent("enable_apacheconnector", False, ["Util", "Net"], ["apr::apr", "apr-util::apr-util"], False),
+        "CppParser": _PocoComponent("enable_cppparser", False, ["Foundation"], [], False),
+        # "CppUnit": _PocoComponent("enable_cppunit", False, ["Foundation"], [], False)),
+        "Crypto": _PocoComponent("enable_crypto", True, ["Foundation"], ["openssl::openssl"], True),
+        "Data": _PocoComponent("enable_data", True, ["Foundation"], [], True),
+        "DataMySQL": _PocoComponent("enable_data_mysql", True, ["Data"], ["libmysqlclient::libmysqlclient"], True),
+        "DataODBC": _PocoComponent("enable_data_odbc", False, ["Data"], [], True), # requires odbc but conditional, see package_info()
+        "DataPostgreSQL": _PocoComponent("enable_data_postgresql", True, ["Data"], ["libpq::libpq"], True),
+        "DataSQLite": _PocoComponent("enable_data_sqlite", True, ["Data"], ["sqlite3::sqlite3"], True),
+        "Encodings": _PocoComponent("enable_encodings", True, ["Foundation"], [], True),
+        # "EncodingsCompiler": _PocoComponent("enable_encodingscompiler", False, ["Net", "Util"], [], False),
+        "Foundation": _PocoComponent(None, "Foundation", [], ["pcre::pcre", "zlib::zlib"], True),
+        "JSON": _PocoComponent("enable_json", True, ["Foundation"], [], True),
+        "JWT": _PocoComponent("enable_jwt", True, ["JSON", "Crypto"], [], True),
+        "MongoDB": _PocoComponent("enable_mongodb", True, ["Net"], [], True),
+        "Net": _PocoComponent("enable_net", True, ["Foundation"], [], True),
+        "NetSSL": _PocoComponent("enable_netssl", True, ["Crypto", "Util", "Net"], [], True),
+        "NetSSLWin": _PocoComponent("enable_netssl_win", False, ["Net", "Util"], [], True),
+        "PDF": _PocoComponent("enable_pdf", False, ["XML", "Util"], [], True),
+        "PageCompiler": _PocoComponent("enable_pagecompiler", False, ["Net", "Util"], [], False),
+        "File2Page": _PocoComponent("enable_pagecompiler_file2page", False, ["Net", "Util", "XML", "JSON"], [], False),
+        "PocoDoc": _PocoComponent("enable_pocodoc", False, ["Util", "XML", "CppParser"], [], False),
+        "Redis": _PocoComponent("enable_redis", True, ["Net"], [], True),
+        "SevenZip": _PocoComponent("enable_sevenzip", False, ["Util", "XML"], [], True),
+        "Util": _PocoComponent("enable_util", True, ["Foundation", "XML", "JSON"], [], True),
+        "XML": _PocoComponent("enable_xml", True, ["Foundation"], ["expat::expat"], True),
+        "Zip": _PocoComponent("enable_zip", True, ["Util", "XML"], [], True),
+        "ActiveRecord": _PocoComponent("enable_activerecord", True, ["Foundation", "Data"], [], True),
+        "ActiveRecordCompiler": _PocoComponent("enable_activerecord_compiler", False, ["Util", "XML"], [], False),
+        "Prometheus": _PocoComponent("enable_prometheus", False, ["Foundation", "Net"], [], True),
+    }
+
+    for comp in _poco_component_tree.values():
+        if comp.option:
+            options[comp.option] = [True, False]
+            default_options[comp.option] = comp.default_option
+    del comp
+
+    @property
+    def _min_cppstd(self):
+        # Since 1.10.0, poco officially requires C++14
+        # https://github.com/pocoproject/poco/releases/tag/poco-1.10.0-release
+        # But poco uses C++11 features only until 1.12.5
+        # https://github.com/pocoproject/poco/commit/886b76f4faa2007cc0c09dad81f8dcdee6fcb4ac
+        if Version(self.version) < "1.12.5":
+            return "11"
+        # Since 1.13.0, poco requires C++17
+        # https://github.com/pocoproject/poco/releases/tag/poco-1.13.0-release
+        if Version(self.version) < "1.13.0":
+            return "14"
+        return "17"
+
+    @property
+    def _compilers_minimum_version(self):
+        return {
+            "14": {
+                "gcc": "6",
+                "clang": "5",
+                "apple-clang": "10",
+                "Visual Studio": "15",
+                "msvc": "191",
+            },
+            "17": {
+                "gcc": "8",
+                "clang": "7",
+                "apple-clang": "12",
+                "Visual Studio": "16",
+                "msvc": "192",
+            },
+        }.get(self._min_cppstd, {})
+
+    def export_sources(self):
+        export_conandata_patches(self)
 
     def config_options(self):
         if self.settings.os == "Windows":
             del self.options.fPIC
+            del self.options.enable_fork
+        else:
+            del self.options.enable_netssl_win
+        if Version(self.version) < "1.12.0":
+            del self.options.enable_prometheus
+        if Version(self.version) < "1.13.0":
+            del self.options.with_sql_parser
+        if self.settings.build_type != "Debug":
+            del self.options.comp_foundation_sharedlibrary_debug_suffix
 
     def configure(self):
-        if self.options.enable_apacheconnector:
-            raise Exception("Apache connector not supported: https://github.com/pocoproject/poco/issues/1764")
+        if self.options.enable_active_record != "deprecated":
+            self.output.warning("enable_active_record option is deprecated, use 'enable_activerecord' instead")
+        if self.options.shared:
+            self.options.rm_safe("fPIC")
+        if not self.options.enable_xml:
+            util_dependencies = self._poco_component_tree["Util"].dependencies
+            self._poco_component_tree["Util"] = self._poco_component_tree["Util"]._replace(dependencies = [x for x in util_dependencies if x != "XML"])
+        if not self.options.enable_json:
+            util_dependencies = self._poco_component_tree["Util"].dependencies
+            self._poco_component_tree["Util"] = self._poco_component_tree["Util"]._replace(dependencies = [x for x in util_dependencies if x != "JSON"])
+        if Version(self.version) >= "1.12.0":
+            foundation_external_dependencies = self._poco_component_tree["Foundation"].external_dependencies
+            self._poco_component_tree["Foundation"] = self._poco_component_tree["Foundation"]._replace(external_dependencies = list(map(lambda x: 'pcre2::pcre2' if x == 'pcre::pcre' else x, foundation_external_dependencies)))
+
+    def layout(self):
+        cmake_layout(self, src_folder="src")
 
     def requirements(self):
-        if self.options.enable_netssl or self.options.enable_netssl_win or self.options.enable_crypto or self.options.force_openssl:
-            self.requires.add("openssl/3.0.0", private=False)
+        if Version(self.version) < "1.12.0":
+            self.requires("pcre/8.45")
+        else:
+            self.requires("pcre2/10.42")
+        self.requires("zlib/[>=1.2.11 <2]", transitive_headers=True)
+        if self.options.enable_xml:
+            self.requires("expat/[>=2.6.2 <3]", transitive_headers=True)
+        if self.options.enable_data_sqlite:
+            self.requires("sqlite3/3.45.0")
+        if self.options.enable_apacheconnector:
+            self.requires("apr/1.7.4")
+            self.requires("apr-util/1.6.1")
+        if self.options.enable_netssl or self.options.enable_crypto or \
+           self.options.get_safe("enable_jwt"):
+            self.requires("openssl/[>=1.1 <4]", transitive_headers=True)
+        if self.options.enable_data_odbc and self.settings.os != "Windows":
+            self.requires("odbc/2.3.11")
+        if self.options.get_safe("enable_data_postgresql"):
+            self.requires("libpq/15.4")
+        if self.options.get_safe("enable_data_mysql"):
+            self.requires("libmysqlclient/8.1.0")
 
-        if self.options.enable_data_mysql:
-            # self.requires.add("MySQLClient/6.1.6@hklabbers/stable")
-            raise Exception("MySQL not supported yet, open an issue here please: %s" % self.url)
+    def package_id(self):
+        del self.info.options.enable_active_record
+        del self.info.options.log_debug
+
+    def validate(self):
+        if self.settings.compiler.cppstd:
+            check_min_cppstd(self, self._min_cppstd)
+        minimum_version = self._compilers_minimum_version.get(str(self.settings.compiler), False)
+        if minimum_version and Version(self.settings.compiler.version) < minimum_version:
+            raise ConanInvalidConfiguration(
+                f"{self.ref} requires C++{self._min_cppstd}, which your compiler does not support."
+            )
+
+        if self.options.enable_apacheconnector:
+            # FIXME: missing apache2 recipe + few issues
+            raise ConanInvalidConfiguration("Apache connector not supported: https://github.com/pocoproject/poco/issues/1764")
+        if is_msvc(self) and self.options.shared and is_msvc_static_runtime(self):
+            raise ConanInvalidConfiguration("Cannot build shared poco libraries with MT(d) runtime")
+        for compopt in self._poco_component_tree.values():
+            if not compopt.option:
+                continue
+            if self.options.get_safe(compopt.option, False):
+                for compdep in compopt.dependencies:
+                    if not self._poco_component_tree[compdep].option:
+                        continue
+                    if not self.options.get_safe(self._poco_component_tree[compdep].option, False):
+                        raise ConanInvalidConfiguration(f"option {compopt.option} requires also option {self._poco_component_tree[compdep].option}")
+        if self.options.enable_data_sqlite:
+            if self.dependencies["sqlite3"].options.threadsafe == 0:
+                raise ConanInvalidConfiguration("sqlite3 must be built with threadsafe enabled")
+        if self.options.enable_netssl and self.options.get_safe("enable_netssl_win", False):
+            raise ConanInvalidConfiguration("Conflicting enable_netssl[_win] settings")
+
+    def source(self):
+        get(self, **self.conan_data["sources"][self.version], strip_root=True)
+
+    def _dep_include_paths(self, dep_name):
+        dep = self.dependencies[dep_name]
+        dep_cpp_info = dep.cpp_info.aggregated_components()
+        return [os.path.join(dep.package_folder, dir).replace("\\", "/") for dir in dep_cpp_info.includedirs]
+
+    def _dep_lib_paths(self, dep_name):
+        dep = self.dependencies[dep_name]
+        dep_cpp_info = dep.cpp_info.aggregated_components()
+        return [os.path.join(dep.package_folder, dir).replace("\\", "/") for dir in dep_cpp_info.libdirs]
+
+    def generate(self):
+        tc = CMakeToolchain(self)
+        tc.variables["CMAKE_BUILD_TYPE"] = self.settings.build_type
+        for comp in self._poco_component_tree.values():
+            if comp.option:
+                tc.variables[comp.option.upper()] = self.options.get_safe(comp.option, False)
+        tc.variables["POCO_UNBUNDLED"] = True
+        tc.variables["CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_SKIP"] = True
+        if is_msvc(self):
+            tc.variables["POCO_MT"] = is_msvc_static_runtime(self)
+        if self.options.get_safe("enable_data_postgresql", False):
+            tc.variables["PostgreSQL_ROOT_DIR"] = self.dependencies["libpq"].package_folder.replace("\\", "/")
+            tc.variables["PostgreSQL_ROOT_INCLUDE_DIRS"] = ";".join(self._dep_include_paths("libpq"))
+            tc.variables["PostgreSQL_ROOT_LIBRARY_DIRS"] = ";".join(self._dep_lib_paths("libpq"))
+        if self.options.get_safe("enable_data_mysql", False):
+            tc.variables["MYSQL_ROOT_DIR"] = self.dependencies["libmysqlclient"].package_folder.replace("\\", "/")
+            tc.variables["MYSQL_ROOT_INCLUDE_DIRS"] = ";".join(self._dep_include_paths("libmysqlclient"))
+            tc.variables["MYSQL_INCLUDE_DIR"] = ";".join(self._dep_include_paths("libmysqlclient"))
+            tc.variables["MYSQL_ROOT_LIBRARY_DIRS"] = ";".join(self._dep_lib_paths("libmysqlclient"))
+        if self.options.enable_apacheconnector:
+            tc.variables["APR_ROOT_DIR"] = self.dependencies["apr"].package_folder.replace("\\", "/")
+            tc.variables["APR_ROOT_INCLUDE_DIRS"] = ";".join(self._dep_include_paths("apr"))
+            tc.variables["APR_ROOT_LIBRARY_DIRS"] = ";".join(self._dep_lib_paths("apr"))
+            tc.variables["APRUTIL_ROOT_DIR"] = self.dependencies["apr-util"].package_folder.replace("\\", "/")
+            tc.variables["APRUTIL_ROOT_INCLUDE_DIRS"] = ";".join(self._dep_include_paths("apr-util"))
+            tc.variables["APRUTIL_ROOT_LIBRARY_DIRS"] = ";".join(self._dep_lib_paths("apr-util"))
+        # Disable fork
+        if not self.options.get_safe("enable_fork", True):
+            tc.variables["POCO_NO_FORK_EXEC"] = True
+        if self.options.get_safe("with_sql_parser", None) is False:
+            tc.variables["POCO_DATA_NO_SQL_PARSER"] = True
+        # Disable automatic linking on MSVC
+        tc.preprocessor_definitions["POCO_NO_AUTOMATIC_LIBS"] = "1"
+        # Picked up from conan v1 CMake wrapper, don't know the rationale
+        tc.preprocessor_definitions["XML_DTD"] = "1"
+        # Disable SharedLibrary::suffix() including "d" as part of the platform-specific filename suffix
+        if not self.options.get_safe("comp_foundation_sharedlibrary_debug_suffix", True):
+            tc.preprocessor_definitions["POCO_NO_SHARED_LIBRARY_DEBUG_SUFFIX"] = "1"
+        tc.generate()
+
+        deps = CMakeDeps(self)
+        deps.generate()
+
+        if is_msvc(self):
+            # On Windows, Poco needs a message (MC) compiler.
+            vcvars = VCVars(self)
+            vcvars.generate()
+
+    def _patch_sources(self):
+        apply_conandata_patches(self)
+        # mysql
+        if self.options.get_safe("enable_data_mysql"):
+            mysql_cpp_info = self.dependencies["libmysqlclient"].cpp_info
+            mysql_config_file = mysql_cpp_info.get_property("cmake_file_name") or "libmysqlclient"
+            replace_in_file(
+                self,
+                os.path.join(self.source_folder, "CMakeLists.txt"),
+                "find_package(MySQL REQUIRED)",
+                f"find_package({mysql_config_file} REQUIRED CONFIG)\nset(MYSQL_FOUND TRUE)",
+            )
+            mysql_target_name = mysql_cpp_info.get_property("cmake_target_name") or "libmysqlclient::libmysqlclient"
+            replace_in_file(
+                self,
+                os.path.join(self.source_folder, "Data", "MySQL", "CMakeLists.txt"),
+                "MySQL::client",
+                mysql_target_name,
+            )
+        # libpq
+        if self.options.get_safe("enable_data_postgresql"):
+            replace_in_file(
+                self,
+                os.path.join(self.source_folder, "CMakeLists.txt"),
+                "find_package(PostgreSQL REQUIRED)",
+                "find_package(PostgreSQL REQUIRED)\nset(POSTGRESQL_FOUND TRUE)",
+            )
+            replace_in_file(
+                self,
+                os.path.join(self.source_folder, "Data", "PostgreSQL", "CMakeLists.txt"),
+                "PostgreSQL::client",
+                "PostgreSQL::PostgreSQL",
+            )
+        # Ensure to use FindEXPAT.cmake instead of expat-config.cmake
+        # (side effect of CMAKE_FIND_PACKAGE_PREFER_CONFIG ON, see https://github.com/conan-io/conan/issues/10387)
+        replace_in_file(
+            self,
+            os.path.join(self.source_folder, "XML", "CMakeLists.txt"),
+            "find_package(EXPAT REQUIRED)",
+            "find_package(EXPAT REQUIRED MODULE)",
+        )
 
     def build(self):
-        if self.settings.compiler == "Visual Studio" and self.options.shared:
-            self.output.warn("Adding ws2_32 dependency...")
-            replace = 'Net Util Foundation Crypt32.lib'
-            tools.replace_in_file("poco/NetSSL_Win/CMakeLists.txt", replace, replace + " ws2_32 ")
-
-            replace = 'Foundation ${OPENSSL_LIBRARIES}'
-            tools.replace_in_file("poco/Crypto/CMakeLists.txt", replace, replace + " ws2_32 Crypt32.lib")
-
-        cmake = CMake(self, parallel=None)  # Parallel crashes building
-        for option_name in self.options.values.fields:
-            activated = getattr(self.options, option_name)
-            if option_name == "shared":
-                cmake.definitions["POCO_STATIC"] = "OFF" if activated else "ON"
-            elif not option_name == "fPIC":
-                cmake.definitions[option_name.upper()] = "ON" if activated else "OFF"
-
-        if self.settings.os == "Windows" and self.settings.compiler == "Visual Studio":  # MT or MTd
-            cmake.definitions["POCO_MT"] = "ON" if "MT" in str(self.settings.compiler.runtime) else "OFF"
-        self.output.info(cmake.definitions)
-        os.mkdir("build")
-        cmake.configure(source_dir="../poco", build_dir="build")
+        self._patch_sources()
+        cmake = CMake(self)
+        cmake.configure()
         cmake.build()
 
     def package(self):
-        # Copy the license files
-        self.copy("poco/LICENSE", dst=".", keep_path=False)
-        # Typically includes we want to keep_path=True (default)
-        packages = ["CppUnit", "Crypto", "Data", "Data/MySQL", "Data/ODBC", "Data/SQLite",
-                    "Foundation", "JSON", "MongoDB", "Net", "Redis", "Util",
-                    "XML", "Zip"]
-        if self.settings.os == "Windows" and self.options.enable_netssl_win:
-            packages.append("NetSSL_Win")
-        else:
-            packages.append("NetSSL_OpenSSL")
-
-        for header in packages:
-            self.copy(pattern="*.h", dst="include", src="poco/%s/include" % header)
-
-        # But for libs and dlls, we want to avoid intermediate folders
-        self.copy(pattern="*.lib", dst="lib", src="build/lib", keep_path=False)
-        self.copy(pattern="*.a",   dst="lib", src="build/lib", keep_path=False)
-        self.copy(pattern="*.dll", dst="bin", src="build/bin", keep_path=False)
-        # in linux shared libs are in lib, not bin
-        self.copy(pattern="*.so*", dst="lib", src="build/lib", keep_path=False, symlinks=True)
-        self.copy(pattern="*.dylib", dst="lib", src="build/lib", keep_path=False)
+        copy(self, "LICENSE", src=self.source_folder, dst=os.path.join(self.package_folder, "licenses"))
+        cmake = CMake(self)
+        cmake.install()
+        rmdir(self, os.path.join(self.package_folder, "lib", "cmake"))
+        rmdir(self, os.path.join(self.package_folder, "cmake"))
+        rm(self, "*.pdb", os.path.join(self.package_folder, "bin"))
+        # INFO: missing headers https://github.com/pocoproject/poco/issues/4378
+        if self.options.get_safe("with_sql_parser", False):
+            copy(
+                self,
+                "*.h",
+                os.path.join(self.source_folder, "Data", "src"),
+                os.path.join(self.package_folder, "include"),
+            )
 
     def package_info(self):
-        """ Define the required info that the consumers/users of this package will have
-        to add to their projects
-        """
-        libs = [("enable_mongodb", "PocoMongoDB"),
-                ("enable_pdf", "PocoPDF"),
-                ("enable_netssl", "PocoNetSSL"),
-                ("enable_netssl_win", "PocoNetSSLWin"),
-                ("enable_net", "PocoNet"),
-                ("enable_crypto", "PocoCrypto"),
-                ("enable_data_sqlite", "PocoDataSQLite"),
-                ("enable_data_mysql", "PocoDataMySQL"),
-                ("enable_data_odbc", "PocoDataODBC"),
-                ("enable_data", "PocoData"),
-                ("enable_sevenzip", "PocoSevenZip"),
-                ("enable_zip", "PocoZip"),
-                ("enable_apacheconnector", "PocoApacheConnector"),
-                ("enable_util", "PocoUtil"),
-                ("enable_xml", "PocoXML"),
-                ("enable_json", "PocoJSON"),
-                ("enable_redis", "PocoRedis")]
+        self.cpp_info.set_property("cmake_file_name", "Poco")
+        self.cpp_info.set_property("cmake_target_name", "Poco::Poco")
 
-        suffix = str(self.settings.compiler.runtime).lower()  \
-                 if self.settings.compiler == "Visual Studio" and not self.options.shared \
-                 else ("d" if self.settings.build_type=="Debug" else "")
+        self.cpp_info.filenames["cmake_find_package"] = "Poco"
+        self.cpp_info.filenames["cmake_find_package_multi"] = "Poco"
+        self.cpp_info.names["cmake_find_package"] = "Poco"
+        self.cpp_info.names["cmake_find_package_multi"] = "Poco"
 
-        for flag, lib in libs:
-            if getattr(self.options, flag):
-                if self.settings.os == "Windows" and flag == "enable_netssl" and self.options.enable_netssl_win:
-                    continue
+        suffix = msvc_runtime_flag(self).lower() \
+                 if is_msvc(self) and not self.options.shared \
+                 else ("d" if self.settings.build_type == "Debug" else "")
 
-                if self.settings.os != "Windows" and flag == "enable_netssl_win":
-                    continue
+        for compname, comp in self._poco_component_tree.items():
+            if comp.option is None or self.options.get_safe(comp.option):
+                conan_component = f"poco_{compname.lower()}"
+                requires = [f"poco_{dependency.lower()}" for dependency in comp.dependencies] + comp.external_dependencies
+                self.cpp_info.components[conan_component].set_property("cmake_target_name", f"Poco::{compname}")
+                self.cpp_info.components[conan_component].set_property("cmake_file_name", compname)
+                self.cpp_info.components[conan_component].names["cmake_find_package"] = compname
+                self.cpp_info.components[conan_component].names["cmake_find_package_multi"] = compname
+                if comp.is_lib:
+                    self.cpp_info.components[conan_component].libs = [f"Poco{compname}{suffix}"]
+                self.cpp_info.components[conan_component].requires = requires
 
-                self.cpp_info.libs.append("%s%s" % (lib, suffix))
+        if self.settings.os in ["Linux", "FreeBSD"]:
+            self.cpp_info.components["poco_foundation"].system_libs.extend(["pthread", "dl", "rt"])
 
-        self.cpp_info.libs.append("PocoFoundation%s" % suffix)
+        if self.options.log_debug:
+            self.cpp_info.components["poco_foundation"].defines.append("POCO_LOG_DEBUG")
 
-        # in linux we need to link also with these libs
-        if self.settings.os == "Linux":
-            self.cpp_info.libs.extend(["pthread", "dl", "rt"])
-
+        if is_msvc(self):
+            self.cpp_info.components["poco_foundation"].defines.append("POCO_NO_AUTOMATIC_LIBS")
         if not self.options.shared:
-            self.cpp_info.defines.extend(["POCO_STATIC=ON", "POCO_NO_AUTOMATIC_LIBS"])
-            if self.settings.compiler == "Visual Studio":
-                self.cpp_info.libs.extend(["ws2_32", "Iphlpapi", "Crypt32"])
+            self.cpp_info.components["poco_foundation"].defines.append("POCO_STATIC=ON")
+            if self.settings.os == "Windows":
+                self.cpp_info.components["poco_foundation"].system_libs.extend(["ws2_32", "iphlpapi", "crypt32"])
+        if self.options.enable_data_odbc:
+            if self.settings.os == "Windows":
+                self.cpp_info.components["poco_dataodbc"].system_libs.extend(["odbc32", "odbccp32"])
+            else:
+                self.cpp_info.components["poco_dataodbc"].requires.append("odbc::odbc")
+        self.cpp_info.components["poco_foundation"].defines.append("POCO_UNBUNDLED")
+        if self.options.enable_util:
+            if not self.options.enable_json:
+                self.cpp_info.components["poco_util"].defines.append("POCO_UTIL_NO_JSONCONFIGURATION")
+            if not self.options.enable_xml:
+                self.cpp_info.components["poco_util"].defines.append("POCO_UTIL_NO_XMLCONFIGURATION")
