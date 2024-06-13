@@ -106,7 +106,7 @@ class OrtResultTest : WordSpec({
             )
             val ortResult = OrtResult(
                 Repository(
-                    vcs = vcs,
+                    provenance = RepositoryProvenance(vcs, vcs.revision),
                     nestedRepositories = mapOf(
                         "path/1" to nestedVcs1,
                         "path/2" to nestedVcs2
@@ -134,7 +134,7 @@ class OrtResultTest : WordSpec({
             )
             val ortResult = OrtResult(
                 Repository(
-                    vcs = vcs,
+                    provenance = RepositoryProvenance(vcs, vcs.revision),
                     nestedRepositories = mapOf(
                         "path/1" to nestedVcs1
                     )
@@ -260,8 +260,7 @@ class OrtResultTest : WordSpec({
 
             val ortResult = OrtResult.EMPTY.copy(
                 repository = Repository.EMPTY.copy(
-                    vcs = vcs,
-                    vcsProcessed = vcs,
+                    provenance = RepositoryProvenance(vcs, vcs.revision),
                     config = RepositoryConfiguration(
                         excludes = Excludes(
                             paths = listOf(

@@ -136,16 +136,13 @@ Following is an overview of the structure of the `analyzer-result.yml` file (com
 ```yaml
 # VCS information about the input directory.
 repository:
-  vcs:
-    type: "Git"
-    url: "https://github.com/jshttp/mime-types.git"
-    revision: "7c4ce23d7354fbf64c69d7b7be8413c4ba2add78"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/jshttp/mime-types.git"
-    revision: "7c4ce23d7354fbf64c69d7b7be8413c4ba2add78"
-    path: ""
+  provenance:
+    vcs_info:
+      type: "Git"
+      url: "https://github.com/jshttp/mime-types.git"
+      revision: "7c4ce23d7354fbf64c69d7b7be8413c4ba2add78"
+      path: ""
+    resolved_revision: "7c4ce23d7354fbf64c69d7b7be8413c4ba2add78"
   # Will only be present if an '.ort.yml' configuration file with scope excludes was provided. Otherwise, this is an empty object.
   config:
     excludes:

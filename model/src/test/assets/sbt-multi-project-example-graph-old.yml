@@ -1,15 +1,12 @@
 ---
 repository:
-  vcs:
-    type: "Git"
-    url: "https://github.com/oss-review-toolkit/sbt-multi-project-example.git"
-    revision: "3c4e434b241b1f1addc97794932043b86afc2548"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/oss-review-toolkit/sbt-multi-project-example.git"
-    revision: "3c4e434b241b1f1addc97794932043b86afc2548"
-    path: ""
+  provenance:
+    vcs_info:
+      type: "Git"
+      url: "https://github.com/oss-review-toolkit/sbt-multi-project-example.git"
+      revision: "3c4e434b241b1f1addc97794932043b86afc2548"
+      path: ""
+    resolved_revision: "3c4e434b241b1f1addc97794932043b86afc2548"
   config: {}
 analyzer:
   start_time: "1970-01-01T00:00:00Z"

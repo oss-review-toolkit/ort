@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -31,13 +32,7 @@ data class Repository(
     /**
      * Original VCS-related information from the working tree containing the analyzer root.
      */
-    val vcs: VcsInfo,
-
-    /**
-     * Processed VCS-related information from the working tree containing the analyzer root that has e.g. common
-     * mistakes corrected.
-     */
-    val vcsProcessed: VcsInfo = vcs.normalize(),
+    val provenance: KnownProvenance,
 
     /**
      * A map of nested repositories, for example Git submodules or Git-Repo modules. The key is the path to the
@@ -57,18 +52,33 @@ data class Repository(
          */
         @JvmField
         val EMPTY = Repository(
-            vcs = VcsInfo.EMPTY,
-            vcsProcessed = VcsInfo.EMPTY,
+            provenance = RepositoryProvenance(VcsInfo.EMPTY, ""),
             nestedRepositories = emptyMap(),
             config = RepositoryConfiguration()
         )
     }
 
+    @JsonIgnore
+    val vcs = if (provenance is RepositoryProvenance) {
+        provenance.vcsInfo
+    } else {
+        VcsInfo.EMPTY
+    }
+
+    @JsonIgnore
+    val vcsProcessed = if (provenance is RepositoryProvenance) {
+        provenance.vcsInfo.normalize()
+    } else {
+        VcsInfo.EMPTY
+    }
+
     /**
-     * Return the path of [vcs] relative to [Repository.vcs], or null if [vcs] is neither [Repository.vcs] nor contained
-     * in [nestedRepositories].
+     * Return the path of [vcs] relative to [Repository.provenance], or null if [vcs] is neither
+     * [Repository.provenance] nor contained in [nestedRepositories].
      */
     fun getRelativePath(vcs: VcsInfo): String? {
+        if (this.provenance !is RepositoryProvenance) return null
+
         val normalizedVcs = vcs.normalize()
 
         if (vcsProcessed.equalsDisregardingPath(normalizedVcs)) return ""

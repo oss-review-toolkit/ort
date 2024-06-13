@@ -44,6 +44,7 @@ import org.ossreviewtoolkit.clients.fossid.model.report.SelectionType
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
@@ -279,11 +280,14 @@ private fun createReporterMock(): Pair<FossIdRestService, FossIdReporter> {
 }
 
 private fun createReporterInput(vararg scanCodes: String): ReporterInput {
-    val analyzedVcs = VcsInfo(
-        type = VcsType.GIT,
-        revision = "master",
-        url = "https://github.com/path/first-project.git",
-        path = "sub/path"
+    val analyzedProvenance = RepositoryProvenance(
+        VcsInfo(
+            type = VcsType.GIT,
+            revision = "master",
+            url = "https://github.com/path/first-project.git",
+            path = "sub/path"
+        ),
+        resolvedRevision = "master"
     )
 
     val results = scanCodes.associateByTo(
@@ -302,6 +306,7 @@ private fun createReporterInput(vararg scanCodes: String): ReporterInput {
     return ReporterInput(
         OrtResult(
             repository = Repository(
+                provenance = analyzedProvenance,
                 config = RepositoryConfiguration(
                     excludes = Excludes(
                         scopes = listOf(
@@ -312,9 +317,7 @@ private fun createReporterInput(vararg scanCodes: String): ReporterInput {
                             )
                         )
                     )
-                ),
-                vcs = analyzedVcs,
-                vcsProcessed = analyzedVcs
+                )
             ),
             scanner = scannerRunOf(*results.toList().toTypedArray())
         )
