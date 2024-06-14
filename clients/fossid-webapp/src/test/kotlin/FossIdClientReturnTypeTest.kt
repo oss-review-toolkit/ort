@@ -256,6 +256,22 @@ class FossIdClientReturnTypeTest : StringSpec({
         }
     }
 
+    "When create scan returns an error, no exception is thrown" {
+        service.createScan(
+            "",
+            "",
+            PROJECT_CODE_1,
+            SCAN_CODE_1,
+            "git_repo_url",
+            "develop"
+        ).shouldNotBeNull().run {
+            error shouldBe "Field git_repo_url: there was an issue executing command: timeout 200 git ls-remote 'ssh " +
+                "git repo' 2>&1. Exit status: 128. Output: Repository not found The requested repository does not " +
+                "exist, or you do not have permission to access it. fatal: Could not read from remote repository.  " +
+                "Please make sure you have the correct access rights and the repository exists."
+        }
+    }
+
     "A file can be marked as identified" {
         service.markAsIdentified(
             "",

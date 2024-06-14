@@ -149,7 +149,7 @@ suspend fun FossIdRestService.createScan(
     gitRepoUrl: String,
     gitBranch: String,
     comment: String = ""
-): MapResponseBody<String> =
+): PolymorphicResponseBody<String> =
     createScan(
         PostRequestBody(
             "create",
