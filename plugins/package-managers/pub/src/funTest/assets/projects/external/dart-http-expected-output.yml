@@ -186,7 +186,7 @@ project:
         - id: "Pub::stack_trace:1.11.1"
           dependencies:
           - id: "Pub::path:1.9.0"
-        - id: "Pub::vm_service:14.2.3"
+        - id: "Pub::vm_service:14.2.4"
       - id: "Pub::http_multi_server:3.2.1"
         dependencies:
         - id: "Pub::async:2.11.0"
@@ -704,7 +704,7 @@ project:
           - id: "Pub::stack_trace:1.11.1"
             dependencies:
             - id: "Pub::path:1.9.0"
-          - id: "Pub::vm_service:14.2.3"
+          - id: "Pub::vm_service:14.2.4"
         - id: "Pub::frontend_server_client:4.0.0"
           dependencies:
           - id: "Pub::async:2.11.0"
@@ -834,7 +834,7 @@ project:
               - id: "Pub::path:1.9.0"
               - id: "Pub::term_glyph:1.2.1"
           - id: "Pub::term_glyph:1.2.1"
-        - id: "Pub::vm_service:14.2.3"
+        - id: "Pub::vm_service:14.2.4"
         - id: "Pub::yaml:3.1.2"
           dependencies:
           - id: "Pub::collection:1.18.0"
@@ -1981,8 +1981,8 @@ packages:
     url: "https://github.com/dart-lang/typed_data.git"
     revision: ""
     path: ""
-- id: "Pub::vm_service:14.2.3"
-  purl: "pkg:pub/vm_service@14.2.3"
+- id: "Pub::vm_service:14.2.4"
+  purl: "pkg:pub/vm_service@14.2.4"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "A library to communicate with a service implementing the Dart VM service\
@@ -1994,9 +1994,9 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://pub.dev/packages/vm_service/versions/14.2.3.tar.gz"
+    url: "https://pub.dev/packages/vm_service/versions/14.2.4.tar.gz"
     hash:
-      value: "360c4271613beb44db559547d02f8b0dc044741d0eeb9aa6ccdb47e8ec54c63a"
+      value: "f652077d0bdf60abe4c1f6377448e8655008eef28f128bc023f7b5e8dfeb48fc"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
