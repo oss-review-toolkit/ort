@@ -47,7 +47,7 @@ import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.showStackTrace
-import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression.Strictness
 import org.ossreviewtoolkit.utils.spdx.toSpdxOrNull
 
 import retrofit2.HttpException
@@ -149,12 +149,9 @@ class ClearlyDefinedPackageCurationProvider(
         filteredCurations.forEach inner@{ (coordinates, curation) ->
             val pkgId = coordinatesToIds[coordinates] ?: return@inner
 
-            val declaredLicenseParsed = curation.licensed?.declared?.let { declaredLicense ->
-                // Only take curations of good quality (i.e. those not using deprecated identifiers) and in
-                // particular none that contain "OTHER" as a license, also see
-                // https://github.com/clearlydefined/curated-data/issues/7836.
-                declaredLicense.toSpdxOrNull(SpdxExpression.Strictness.ALLOW_CURRENT)
-            }
+            // Only take curations of good quality (i.e. those not using deprecated identifiers) and in particular none
+            // that contain "OTHER" as a license, also see https://github.com/clearlydefined/curated-data/issues/7836.
+            val declaredLicenseParsed = curation.licensed?.declared?.toSpdxOrNull(Strictness.ALLOW_CURRENT)
 
             val sourceLocation = curation.described?.sourceLocation?.toArtifactOrVcs()
 
