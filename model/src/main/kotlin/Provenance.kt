@@ -80,7 +80,9 @@ data class RepositoryProvenance(
     val resolvedRevision: String
 ) : KnownProvenance {
     init {
-        require(resolvedRevision.isNotBlank()) { "The resolved revision must not be blank." }
+        require(resolvedRevision.isNotBlank() || vcsInfo == VcsInfo.EMPTY) {
+            "The resolved revision must not be blank."
+        }
     }
 
     /**
