@@ -30,9 +30,9 @@ import kotlinx.serialization.encodeToString
 class ModelTest : StringSpec({
     "Deserializing and serializing any vulnerability is idempotent for all official examples" {
         getVulnerabilityExamplesJson().forAll { vulnerabilityJson ->
-            val vulnerability = OsvApiClient.JSON.decodeFromString<Vulnerability>(vulnerabilityJson)
+            val vulnerability = OsvService.JSON.decodeFromString<Vulnerability>(vulnerabilityJson)
 
-            val serializedVulnerabilityJson = OsvApiClient.JSON.encodeToString(vulnerability)
+            val serializedVulnerabilityJson = OsvService.JSON.encodeToString(vulnerability)
 
             serializedVulnerabilityJson shouldEqualJson vulnerabilityJson
         }

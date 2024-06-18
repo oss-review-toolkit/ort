@@ -62,14 +62,14 @@ private val emptyJsonObject = JsonObject(emptyMap())
 
 private fun List<Vulnerability>.patchFields() = map { it.patchIgnorableFields().normalizeUrls() }
 
-class OsvServiceFunTest : StringSpec({
+class OsvServiceWrapperFunTest : StringSpec({
     "getVulnerabilitiesForPackage() returns the expected vulnerability when queried by commit" {
         val expectedResult = getAssetAsString("vulnerabilities-by-commit-expected-result.json")
 
-        val result = OsvService().getVulnerabilitiesForPackage(VULNERABILITY_FOR_PACKAGE_BY_COMMIT_REQUEST)
+        val result = OsvServiceWrapper().getVulnerabilitiesForPackage(VULNERABILITY_FOR_PACKAGE_BY_COMMIT_REQUEST)
 
         result.shouldBeSuccess { actualData ->
-            val expectedData = OsvApiClient.JSON.decodeFromString<List<Vulnerability>>(expectedResult)
+            val expectedData = OsvService.JSON.decodeFromString<List<Vulnerability>>(expectedResult)
             actualData.patchFields() shouldContainExactlyInAnyOrder expectedData.patchFields()
         }
     }
@@ -77,10 +77,10 @@ class OsvServiceFunTest : StringSpec({
     "getVulnerabilitiesForPackage() returns the expected vulnerability when queried by name and version" {
         val expectedResult = getAssetAsString("vulnerabilities-by-name-and-version-expected-result.json")
 
-        val result = OsvService().getVulnerabilitiesForPackage(VULNERABILITY_FOR_PACKAGE_BY_NAME_AND_VERSION)
+        val result = OsvServiceWrapper().getVulnerabilitiesForPackage(VULNERABILITY_FOR_PACKAGE_BY_NAME_AND_VERSION)
 
         result.shouldBeSuccess { actualData ->
-            val expectedData = OsvApiClient.JSON.decodeFromString<List<Vulnerability>>(expectedResult)
+            val expectedData = OsvService.JSON.decodeFromString<List<Vulnerability>>(expectedResult)
             actualData.patchFields() shouldContainExactlyInAnyOrder expectedData.patchFields()
         }
     }
@@ -92,7 +92,7 @@ class OsvServiceFunTest : StringSpec({
             VULNERABILITY_FOR_PACKAGE_BY_NAME_AND_VERSION
         )
 
-        val result = OsvService().getVulnerabilityIdsForPackages(requests)
+        val result = OsvServiceWrapper().getVulnerabilityIdsForPackages(requests)
 
         result.shouldBeSuccess {
             it shouldBe listOf(
@@ -124,10 +124,10 @@ class OsvServiceFunTest : StringSpec({
     "getVulnerabilityForId() returns the expected vulnerability for the given ID" {
         val expectedResult = getAssetAsString("vulnerability-by-id-expected-result.json")
 
-        val result = OsvService().getVulnerabilityForId("GHSA-xvch-5gv4-984h")
+        val result = OsvServiceWrapper().getVulnerabilityForId("GHSA-xvch-5gv4-984h")
 
         result.shouldBeSuccess { actualData ->
-            val expectedData = OsvApiClient.JSON.decodeFromString<Vulnerability>(expectedResult)
+            val expectedData = OsvService.JSON.decodeFromString<Vulnerability>(expectedResult)
             actualData.patchIgnorableFields() shouldBe expectedData.patchIgnorableFields()
         }
     }
@@ -135,7 +135,7 @@ class OsvServiceFunTest : StringSpec({
     "getVulnerabilitiesForIds() return the vulnerabilities for the given IDs" {
         val ids = setOf("GHSA-xvch-5gv4-984h", "PYSEC-2014-82")
 
-        val result = OsvService().getVulnerabilitiesForIds(ids)
+        val result = OsvServiceWrapper().getVulnerabilitiesForIds(ids)
 
         result.shouldBeSuccess {
             it.map { vulnerability -> vulnerability.id } shouldContainExactlyInAnyOrder ids
