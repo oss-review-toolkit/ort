@@ -935,6 +935,46 @@ class FossIdTest : WordSpec({
             }
         }
 
+        "apply exclusion rules to a non-delta scan" {
+            val projectCode = projectCode(PROJECT)
+            val scanCode = scanCode(PROJECT, null)
+            val config = createConfig(deltaScans = false)
+            val vcsInfo = createVcsInfo()
+            val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
+
+            val service = FossIdRestService.create(config.serverUrl)
+                .expectProjectRequest(projectCode)
+                .expectListScans(projectCode, listOf(scan))
+                .expectCheckScanStatus(scanCode, ScanStatus.NEW, ScanStatus.FINISHED)
+                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
+                .expectDownload(scanCode)
+                .expectCreateIgnoreRule(scanCode, IGNORE_RULE.type, IGNORE_RULE.value, DEFAULT_IGNORE_RULE_SCOPE)
+                .mockFiles(scanCode, identifiedRange = 1..2, markedRange = 1..2)
+            coEvery { service.runScan(any()) } returns EntityResponseBody(status = 1)
+
+            val fossId = createFossId(config)
+
+            fossId.scan(
+                createPackage(createIdentifier(index = 1), vcsInfo),
+                mapOf(FossId.PROJECT_REVISION_LABEL to ""),
+                Excludes(listOf(PathExclude("*.docx", PathExcludeReason.OTHER)))
+            )
+
+            coVerify {
+                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision)
+                service.downloadFromGit(USER, API_KEY, scanCode)
+                service.checkDownloadStatus(USER, API_KEY, scanCode)
+                service.createIgnoreRule(
+                    USER,
+                    API_KEY,
+                    scanCode,
+                    IGNORE_RULE.type,
+                    IGNORE_RULE.value,
+                    DEFAULT_IGNORE_RULE_SCOPE
+                )
+            }
+        }
+
         "delete newly triggered scans if a package cannot be scanned" {
             val id1 = createIdentifier(index = 1)
             val vcsInfo1 = createVcsInfo()

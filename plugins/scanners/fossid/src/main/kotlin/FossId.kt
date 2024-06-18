@@ -306,7 +306,7 @@ class FossId internal constructor(
                 val (scanCode, scanId) = if (config.deltaScans) {
                     checkAndCreateDeltaScan(scans, url, revision, projectCode, projectName, context, issues)
                 } else {
-                    checkAndCreateScan(scans, url, revision, projectCode, projectName)
+                    checkAndCreateScan(scans, url, revision, projectCode, projectName, context, issues)
                 }
 
                 if (config.waitForResult && provenance is RepositoryProvenance) {
@@ -460,7 +460,9 @@ class FossId internal constructor(
         url: String,
         revision: String,
         projectCode: String,
-        projectName: String
+        projectName: String,
+        context: ScanContext,
+        issues: MutableList<Issue>
     ): Pair<String, String> {
         val existingScan = scans.recentScansForRepository(url, revision = revision).findLatestPendingOrFinishedScan()
 
@@ -474,6 +476,21 @@ class FossId internal constructor(
             logger.info { "Initiating the download..." }
             service.downloadFromGit(config.user, config.apiKey, scanCode)
                 .checkResponse("download data from Git", false)
+
+            val excludesRules = context.excludes?.let {
+                convertRules(it, issues).also {
+                    logger.info { "${it.size} rule(s) from ORT excludes have been found." }
+                }
+            }.orEmpty()
+
+            excludesRules.forEach {
+                service.createIgnoreRule(config.user, config.apiKey, scanCode, it.type, it.value, RuleScope.SCAN)
+                    .checkResponse("create ignore rules", false)
+
+                logger.info {
+                    "Ignore rule of type '${it.type}' and value '${it.value}' has been created for the new scan."
+                }
+            }
 
             scanCode to scanId
         } else {
