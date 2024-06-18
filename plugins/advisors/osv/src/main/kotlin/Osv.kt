@@ -29,7 +29,7 @@ import org.apache.logging.log4j.kotlin.logger
 import org.ossreviewtoolkit.advisor.AdviceProvider
 import org.ossreviewtoolkit.advisor.AdviceProviderFactory
 import org.ossreviewtoolkit.clients.osv.Ecosystem
-import org.ossreviewtoolkit.clients.osv.OsvService
+import org.ossreviewtoolkit.clients.osv.OsvServiceWrapper
 import org.ossreviewtoolkit.clients.osv.Severity
 import org.ossreviewtoolkit.clients.osv.VulnerabilitiesForPackageRequest
 import org.ossreviewtoolkit.clients.osv.Vulnerability
@@ -69,7 +69,7 @@ class Osv(name: String, config: OsvConfiguration) : AdviceProvider(name) {
 
     override val details: AdvisorDetails = AdvisorDetails(providerName, enumSetOf(AdvisorCapability.VULNERABILITIES))
 
-    private val service = OsvService(
+    private val service = OsvServiceWrapper(
         serverUrl = config.serverUrl,
         httpClient = OkHttpClientHelper.buildClient()
     )
