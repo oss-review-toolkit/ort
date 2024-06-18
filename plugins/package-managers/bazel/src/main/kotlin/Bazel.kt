@@ -29,7 +29,7 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
-import org.ossreviewtoolkit.clients.bazelmoduleregistry.BazelModuleRegistryClient
+import org.ossreviewtoolkit.clients.bazelmoduleregistry.BazelModuleRegistryService
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.ModuleMetadata
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.ModuleSourceInfo
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -125,7 +125,7 @@ class Bazel(
     }
 
     private fun getPackages(scopes: Set<Scope>, registryUrl: String?): Set<Package> {
-        val registry = BazelModuleRegistryClient.create(registryUrl)
+        val registry = BazelModuleRegistryService.create(registryUrl)
         val ids = scopes.flatMapTo(mutableSetOf()) { it.collectDependencies() }
         val moduleMetadataForId = ids.associateWith { getModuleMetadata(it, registry) }
         val moduleSourceInfoForId = ids.associateWith { getModuleSourceInfo(it, registry) }
@@ -143,14 +143,14 @@ class Bazel(
             vcs = metadata?.vcsInfo().orEmpty()
         )
 
-    private fun getModuleMetadata(id: Identifier, registry: BazelModuleRegistryClient): ModuleMetadata? =
+    private fun getModuleMetadata(id: Identifier, registry: BazelModuleRegistryService): ModuleMetadata? =
         runCatching {
             runBlocking { registry.getModuleMetadata(id.name) }
         }.onFailure {
             logger.warn { "Failed to fetch metadata for Bazel module '${id.name}': ${it.collectMessages()}" }
         }.getOrNull()
 
-    private fun getModuleSourceInfo(id: Identifier, registry: BazelModuleRegistryClient): ModuleSourceInfo? =
+    private fun getModuleSourceInfo(id: Identifier, registry: BazelModuleRegistryService): ModuleSourceInfo? =
         runCatching {
             runBlocking { registry.getModuleSourceInfo(id.name, id.version) }
         }.onFailure {
