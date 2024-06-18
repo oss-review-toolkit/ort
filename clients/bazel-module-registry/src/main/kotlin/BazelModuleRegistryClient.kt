@@ -44,8 +44,8 @@ private val JSON = Json {
 private const val DEFAULT_URL = "https://bcr.bazel.build"
 
 /**
- * Interface for a Bazel Module Registry, based on the directory structure of https://bcr.bazel.build
- * and the git repository it is based on (https://github.com/bazelbuild/bazel-central-registry/).
+ * Interface for a Bazel Module Registry, based on the directory structure of https://bcr.bazel.build/ and the Git
+ * repository it is based on (https://github.com/bazelbuild/bazel-central-registry/).
  */
 interface BazelModuleRegistryClient {
     companion object {
