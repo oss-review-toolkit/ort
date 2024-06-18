@@ -47,13 +47,13 @@ private const val DEFAULT_URL = "https://bcr.bazel.build"
  * Interface for a Bazel Module Registry, based on the directory structure of https://bcr.bazel.build/ and the Git
  * repository it is based on (https://github.com/bazelbuild/bazel-central-registry/).
  */
-interface BazelModuleRegistryClient {
+interface BazelModuleRegistryService {
     companion object {
         /**
          * Create a Bazel Module Registry client instance for communicating with a server running at the given [url],
          * defaulting to the Bazel Central Registry, optionally with a pre-built OkHttp [client].
          */
-        fun create(url: String? = null, client: OkHttpClient? = null): BazelModuleRegistryClient {
+        fun create(url: String? = null, client: OkHttpClient? = null): BazelModuleRegistryService {
             val bmrClient = client ?: OkHttpClient()
 
             val contentType = "application/json".toMediaType()
@@ -63,7 +63,7 @@ interface BazelModuleRegistryClient {
                 .addConverterFactory(JSON.asConverterFactory(contentType))
                 .build()
 
-            return retrofit.create(BazelModuleRegistryClient::class.java)
+            return retrofit.create(BazelModuleRegistryService::class.java)
         }
     }
 

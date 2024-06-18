@@ -25,7 +25,7 @@ import io.kotest.matchers.comparables.shouldBeGreaterThan
 import io.kotest.matchers.shouldBe
 
 class BazelModuleRegistryClientFunTest : WordSpec({
-    val client = BazelModuleRegistryClient.create()
+    val client = BazelModuleRegistryService.create()
     val repoUrl = "https://github.com/google/glog"
 
     "getModuleMetadata" should {
