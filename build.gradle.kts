@@ -67,9 +67,11 @@ idea {
     }
 }
 
-extensions.findByName("buildScan")?.withGroovyBuilder {
-    setProperty("termsOfServiceUrl", "https://gradle.com/terms-of-service")
-    setProperty("termsOfServiceAgree", "yes")
+extensions.findByName("develocity")?.withGroovyBuilder {
+    getProperty("buildScan")?.withGroovyBuilder {
+        setProperty("termsOfUseUrl", "https://gradle.com/terms-of-service")
+        setProperty("termsOfUseAgree", "yes")
+    }
 }
 
 tasks.named<DependencyUpdatesTask>("dependencyUpdates") {
