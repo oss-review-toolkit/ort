@@ -150,6 +150,7 @@ maven-resolver-transport-wagon = { module = "org.apache.maven.resolver:maven-res
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 mordant = { module = "com.github.ajalt.mordant:mordant", version.ref = "mordant" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+okhttp-loggingInterceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
 postgres = { module = "org.postgresql:postgresql", version.ref = "postgres" }
 postgresEmbedded = { module = "com.opentable.components:otj-pg-embedded", version.ref = "postgresEmbedded" }
 reflections = { module = "org.reflections:reflections", version.ref = "reflections" }
