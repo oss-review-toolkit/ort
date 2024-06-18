@@ -23,8 +23,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
-import java.util.SortedSet
-
 import org.ossreviewtoolkit.model.utils.DependencyGraphEdgeSortedSetConverter
 import org.ossreviewtoolkit.model.utils.DependencyReferenceSortedSetConverter
 import org.ossreviewtoolkit.model.utils.PackageLinkageValueFilter
@@ -86,7 +84,8 @@ data class DependencyGraph(
      * declared by scopes that cannot be reached via other paths in the dependency graph. Note that this property
      * exists for backwards compatibility only; it is replaced by the lists of nodes and edges.
      */
-    val scopeRoots: SortedSet<DependencyReference> = sortedSetOf(),
+    @JsonSerialize(converter = DependencyReferenceSortedSetConverter::class)
+    val scopeRoots: Set<DependencyReference> = emptySet(),
 
     /**
      * A mapping from scope names to the direct dependencies of the scopes. Based on this information, the set of
@@ -109,12 +108,6 @@ data class DependencyGraph(
     val edges: Set<DependencyGraphEdge>? = null
 ) {
     companion object {
-        /**
-         * A comparator for [DependencyReference] objects. Note that the concrete order does not really matter, it
-         * just has to be well-defined.
-         */
-        val DEPENDENCY_REFERENCE_COMPARATOR = compareBy<DependencyReference>({ it.pkg }, { it.fragment })
-
         /**
          * Return a name for the given [scope][scopeName] that is qualified with parts of the identifier of the given
          * [project]. This is used to ensure that the scope names are unique when constructing a dependency graph from
@@ -302,7 +295,7 @@ data class RootDependencyIndex(
  * Note: This is by intention no data class. Equality is tested via references and not via the values contained.
  */
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-class DependencyReference(
+data class DependencyReference(
     /**
      * Stores the numeric index of the package dependency referenced by this object. The package behind this index can
      * be resolved by evaluating the list of identifiers stored in [DependencyGraph] at this index.
@@ -333,17 +326,7 @@ class DependencyReference(
      * A list of [Issue]s that occurred handling this dependency.
      */
     val issues: List<Issue> = emptyList()
-) : Comparable<DependencyReference> {
-    /**
-     * Define an order on [DependencyReference] instances. Instances are ordered by their indices and fragment indices.
-     */
-    override fun compareTo(other: DependencyReference): Int =
-        if (pkg != other.pkg) {
-            pkg - other.pkg
-        } else {
-            fragment - other.fragment
-        }
-}
+)
 
 /**
  * A data class representing a node in the dependency graph.
