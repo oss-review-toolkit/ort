@@ -79,7 +79,7 @@ fun String.isSpdxExpressionOrNotPresent(strictness: Strictness = Strictness.ALLO
     SpdxConstants.isNotPresent(this) || isSpdxExpression(strictness)
 
 /**
- * Parses the string as an [SpdxExpression] of the given [strictness] and returns the result on success, or throws an
+ * Parse this string as an [SpdxExpression] of the given [strictness] and return the result on success, or throw an
  * [SpdxException] if the string cannot be parsed.
  */
 fun String.toSpdx(strictness: Strictness = Strictness.ALLOW_ANY): SpdxExpression =
