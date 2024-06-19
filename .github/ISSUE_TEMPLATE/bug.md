@@ -28,7 +28,7 @@ Add console and / or log output that shows the error and additional context.
 No screenshots of plain text please, to keep text searchable.
 
 ```
-<copy & paste output to here>
+<copy & paste console output to here; no screenshots please>
 ```
 
 ### Environment
@@ -36,7 +36,7 @@ No screenshots of plain text please, to keep text searchable.
 Output of the `ort requirements` command:
 
 ```
-<copy & paste output to here>
+<copy & paste console output to here; no screenshots please>
 ```
 
 *Or* manually specify:
@@ -48,7 +48,7 @@ Output of the `ort requirements` command:
 *And* specify (relevant parts of) your ORT configuration (`config.yml`):
 
 ```
-<copy & paste output to here>
+<copy & paste console output to here; no screenshots please>
 ```
 
 ### Additional context
