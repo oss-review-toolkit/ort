@@ -43,7 +43,7 @@ class LegacyRulesTest : WordSpec({
             )
             val issues = mutableListOf<Issue>()
 
-            val legacyRules = referenceRules.filterLegacyRules(rulesToTest, issues)
+            val legacyRules = rulesToTest.filterLegacyRules(referenceRules, issues)
 
             issues shouldHaveSize 1
             issues.first() shouldNotBeNull {
@@ -65,7 +65,7 @@ class LegacyRulesTest : WordSpec({
             )
             val issues = mutableListOf<Issue>()
 
-            val legacyRules = referenceRules.filterLegacyRules(rulesToTest, issues)
+            val legacyRules = rulesToTest.filterLegacyRules(referenceRules, issues)
 
             issues should beEmpty()
             legacyRules should beEmpty()
