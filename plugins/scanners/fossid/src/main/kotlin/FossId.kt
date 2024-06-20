@@ -912,7 +912,7 @@ class FossId internal constructor(
         rawResults: RawResults,
         scanCode: String,
         scanId: String,
-        additionalIssues: MutableList<Issue>,
+        additionalIssues: List<Issue>,
         detectedLicenseMapping: Map<String, String>,
         snippetChoices: List<SnippetChoice>
     ): ScanResult {
