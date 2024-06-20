@@ -100,13 +100,12 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.semver4j.Semver
 
 /**
- * A wrapper for [FossID](https://fossid.com/).
+ * A wrapper for the [FossID](https://fossid.com/) snippet scanner.
  *
- * This scanner can be configured in [ScannerConfiguration.config]. For the options available and their documentation
- * refer to [FossIdConfig].
+ * This scanner can be configured in [ScannerConfiguration.config]. For the available options see [FossIdConfig].
  *
  * This scanner was implemented before the introduction of [provenance based scanning][ProvenanceScannerWrapper].
- * Therefore it implements the [PackageScannerWrapper] interface for backward compatibility, even though FossID itself
+ * Therefore, it implements the [PackageScannerWrapper] interface for backward compatibility, even though FossID itself
  * gets a Git repository URL as input and would be a good match for [ProvenanceScannerWrapper].
  */
 @Suppress("LargeClass", "TooManyFunctions")
