@@ -28,7 +28,6 @@ import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.clients.fossid.model.rules.IgnoreRule
 import org.ossreviewtoolkit.clients.fossid.model.rules.RuleType
-import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Severity
 
 class LegacyRulesTest : WordSpec({
@@ -41,9 +40,8 @@ class LegacyRulesTest : WordSpec({
             val rulesToTest = listOf(
                 IgnoreRule(-1, RuleType.EXTENSION, ".pdf", -1, "")
             )
-            val issues = mutableListOf<Issue>()
 
-            val legacyRules = rulesToTest.filterLegacyRules(referenceRules, issues)
+            val (legacyRules, issues) = rulesToTest.filterLegacyRules(referenceRules)
 
             issues shouldHaveSize 1
             issues.first() shouldNotBeNull {
@@ -63,9 +61,8 @@ class LegacyRulesTest : WordSpec({
             val rulesToTest = listOf(
                 IgnoreRule(-1, RuleType.DIRECTORY, "directory", -1, "")
             )
-            val issues = mutableListOf<Issue>()
 
-            val legacyRules = rulesToTest.filterLegacyRules(referenceRules, issues)
+            val (legacyRules, issues) = rulesToTest.filterLegacyRules(referenceRules)
 
             issues should beEmpty()
             legacyRules should beEmpty()

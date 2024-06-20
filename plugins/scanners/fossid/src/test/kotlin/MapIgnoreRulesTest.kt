@@ -27,7 +27,6 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.clients.fossid.model.rules.RuleType
-import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PathExclude
@@ -37,9 +36,8 @@ class MapIgnoreRulesTest : WordSpec({
     "convertRules" should {
         "map rule with directory with **" {
             val exclude = Excludes(listOf(PathExclude("directory/**", PathExcludeReason.OTHER)))
-            val issues = mutableListOf<Issue>()
 
-            val ignoreRules = convertRules(exclude, issues)
+            val (ignoreRules, issues) = convertRules(exclude)
 
             ignoreRules shouldHaveSize 1
             ignoreRules.first() shouldNotBeNull {
@@ -52,9 +50,8 @@ class MapIgnoreRulesTest : WordSpec({
 
         "map rule with directory containing subdirectories with **" {
             val exclude = Excludes(listOf(PathExclude("directory/sub1/sub2/**", PathExcludeReason.OTHER)))
-            val issues = mutableListOf<Issue>()
 
-            val ignoreRules = convertRules(exclude, issues)
+            val (ignoreRules, issues) = convertRules(exclude)
 
             ignoreRules shouldHaveSize 1
             ignoreRules.first() shouldNotBeNull {
@@ -67,9 +64,8 @@ class MapIgnoreRulesTest : WordSpec({
 
         "map rule with directory containing a dot" {
             val exclude = Excludes(listOf(PathExclude(".git/", PathExcludeReason.OTHER)))
-            val issues = mutableListOf<Issue>()
 
-            val ignoreRules = convertRules(exclude, issues)
+            val (ignoreRules, _) = convertRules(exclude)
 
             ignoreRules shouldHaveSize 1
             ignoreRules.first() shouldNotBeNull {
@@ -80,9 +76,8 @@ class MapIgnoreRulesTest : WordSpec({
 
         "map rule with directory containing subdirectories with a dot" {
             val exclude = Excludes(listOf(PathExclude("src/example.test/templates/", PathExcludeReason.OTHER)))
-            val issues = mutableListOf<Issue>()
 
-            val ignoreRules = convertRules(exclude, issues)
+            val (ignoreRules, issues) = convertRules(exclude)
 
             ignoreRules shouldHaveSize 1
             ignoreRules.first() shouldNotBeNull {
@@ -95,9 +90,8 @@ class MapIgnoreRulesTest : WordSpec({
 
         "map rule with directory containing a dash" {
             val exclude = Excludes(listOf(PathExclude("test-prod/", PathExcludeReason.OTHER)))
-            val issues = mutableListOf<Issue>()
 
-            val ignoreRules = convertRules(exclude, issues)
+            val (ignoreRules, _) = convertRules(exclude)
 
             ignoreRules shouldHaveSize 1
             ignoreRules.first() shouldNotBeNull {
@@ -108,9 +102,8 @@ class MapIgnoreRulesTest : WordSpec({
 
         "map rule with directory containing subdirectories with a dash" {
             val exclude = Excludes(listOf(PathExclude("src/test-prod/templates/", PathExcludeReason.OTHER)))
-            val issues = mutableListOf<Issue>()
 
-            val ignoreRules = convertRules(exclude, issues)
+            val (ignoreRules, issues) = convertRules(exclude)
 
             ignoreRules shouldHaveSize 1
             ignoreRules.first() shouldNotBeNull {
@@ -123,9 +116,8 @@ class MapIgnoreRulesTest : WordSpec({
 
         "map rule with directory" {
             val exclude = Excludes(listOf(PathExclude("directory/", PathExcludeReason.OTHER)))
-            val issues = mutableListOf<Issue>()
 
-            val ignoreRules = convertRules(exclude, issues)
+            val (ignoreRules, issues) = convertRules(exclude)
 
             ignoreRules shouldHaveSize 1
             ignoreRules.first() shouldNotBeNull {
@@ -138,9 +130,8 @@ class MapIgnoreRulesTest : WordSpec({
 
         "map rule with directory containing subdirectories" {
             val exclude = Excludes(listOf(PathExclude("directory/sub1/sub2/", PathExcludeReason.OTHER)))
-            val issues = mutableListOf<Issue>()
 
-            val ignoreRules = convertRules(exclude, issues)
+            val (ignoreRules, issues) = convertRules(exclude)
 
             ignoreRules shouldHaveSize 1
             ignoreRules.first() shouldNotBeNull {
@@ -153,9 +144,8 @@ class MapIgnoreRulesTest : WordSpec({
 
         "map rule with file extensions" {
             val exclude = Excludes(listOf(PathExclude("*.pdf", PathExcludeReason.OTHER)))
-            val issues = mutableListOf<Issue>()
 
-            val ignoreRules = convertRules(exclude, issues)
+            val (ignoreRules, issues) = convertRules(exclude)
 
             ignoreRules shouldHaveSize 1
             ignoreRules.first() shouldNotBeNull {
@@ -168,9 +158,8 @@ class MapIgnoreRulesTest : WordSpec({
 
         "map rule with file" {
             val exclude = Excludes(listOf(PathExclude("file.txt", PathExcludeReason.OTHER)))
-            val issues = mutableListOf<Issue>()
 
-            val ignoreRules = convertRules(exclude, issues)
+            val (ignoreRules, issues) = convertRules(exclude)
 
             ignoreRules shouldHaveSize 1
             ignoreRules.first() shouldNotBeNull {
@@ -183,9 +172,8 @@ class MapIgnoreRulesTest : WordSpec({
 
         "map rule with files (with '.' in their names)" {
             val exclude = Excludes(listOf(PathExclude("file.old.txt", PathExcludeReason.OTHER)))
-            val issues = mutableListOf<Issue>()
 
-            val ignoreRules = convertRules(exclude, issues)
+            val (ignoreRules, issues) = convertRules(exclude)
 
             ignoreRules shouldHaveSize 1
             ignoreRules.first() shouldNotBeNull {
@@ -198,9 +186,8 @@ class MapIgnoreRulesTest : WordSpec({
 
         "map rule with files (with '-' in their names)" {
             val exclude = Excludes(listOf(PathExclude("package-lock.json", PathExcludeReason.OTHER)))
-            val issues = mutableListOf<Issue>()
 
-            val ignoreRules = convertRules(exclude, issues)
+            val (ignoreRules, issues) = convertRules(exclude)
 
             ignoreRules shouldHaveSize 1
             ignoreRules.first() shouldNotBeNull {
@@ -213,9 +200,8 @@ class MapIgnoreRulesTest : WordSpec({
 
         "add an issue when the pattern cannot be mapped" {
             val exclude = Excludes(listOf(PathExclude("directory/**/test/*", PathExcludeReason.OTHER)))
-            val issues = mutableListOf<Issue>()
 
-            val ignoreRules = convertRules(exclude, issues)
+            val (ignoreRules, issues) = convertRules(exclude)
 
             ignoreRules should beEmpty()
 
