@@ -63,6 +63,7 @@ import org.ossreviewtoolkit.clients.fossid.model.Project
 import org.ossreviewtoolkit.clients.fossid.model.Scan
 import org.ossreviewtoolkit.clients.fossid.model.result.MatchType
 import org.ossreviewtoolkit.clients.fossid.model.result.MatchedLines
+import org.ossreviewtoolkit.clients.fossid.model.rules.IgnoreRule
 import org.ossreviewtoolkit.clients.fossid.model.rules.RuleScope
 import org.ossreviewtoolkit.clients.fossid.model.rules.RuleType
 import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
@@ -80,6 +81,7 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.SnippetFinding
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.snippet.SnippetChoice
 import org.ossreviewtoolkit.model.config.snippet.SnippetChoiceReason
@@ -476,20 +478,7 @@ class FossId internal constructor(
             service.downloadFromGit(config.user, config.apiKey, scanCode)
                 .checkResponse("download data from Git", false)
 
-            val excludesRules = context.excludes?.let {
-                convertRules(it, issues).also {
-                    logger.info { "${it.size} rule(s) from ORT excludes have been found." }
-                }
-            }.orEmpty()
-
-            excludesRules.forEach {
-                service.createIgnoreRule(config.user, config.apiKey, scanCode, it.type, it.value, RuleScope.SCAN)
-                    .checkResponse("create ignore rules", false)
-
-                logger.info {
-                    "Ignore rule of type '${it.type}' and value '${it.value}' has been created for the new scan."
-                }
-            }
+            createIgnoreRules(scanCode, context.excludes, issues = issues)
 
             scanCode to scanId
         } else {
@@ -573,20 +562,7 @@ class FossId internal constructor(
             .checkResponse("download data from Git", false)
 
         if (existingScan == null) {
-            val excludesRules = context.excludes?.let {
-                convertRules(it, issues).also {
-                    logger.info { "${it.size} rule(s) from ORT excludes have been found." }
-                }
-            }.orEmpty()
-
-            excludesRules.forEach {
-                service.createIgnoreRule(config.user, config.apiKey, scanCode, it.type, it.value, RuleScope.SCAN)
-                    .checkResponse("create ignore rules", false)
-
-                logger.info {
-                    "Ignore rule of type '${it.type}' and value '${it.value}' has been created for the new scan."
-                }
-            }
+            createIgnoreRules(scanCode, context.excludes, issues = issues)
 
             if (config.waitForResult) checkScan(scanCode)
         } else {
@@ -609,26 +585,7 @@ class FossId internal constructor(
                 val exclusions = setOf(".git", "^\\.git")
                 val filteredRules = rules.filterNot { it.type == RuleType.DIRECTORY && it.value in exclusions }
 
-                val excludesRules = context.excludes?.let {
-                    convertRules(it, issues).also {
-                        logger.info { "${it.size} rules from ORT excludes have been found." }
-                    }
-                }.orEmpty()
-
-                // Create an issue for each legacy rule existing.
-                val legacyRules = excludesRules.filterLegacyRules(filteredRules, issues)
-                if (legacyRules.isNotEmpty()) {
-                    logger.warn { "${legacyRules.size} legacy rules have been found." }
-                }
-
-                val allRules = excludesRules + legacyRules
-                allRules.forEach {
-                    service.createIgnoreRule(config.user, config.apiKey, scanCode, it.type, it.value, RuleScope.SCAN)
-                        .checkResponse("create ignore rules", false)
-                    logger.info {
-                        "Ignore rule of type '${it.type}' and value '${it.value}' has been created for the new scan."
-                    }
-                }
+                createIgnoreRules(scanCode, context.excludes, filteredRules, issues)
             }
 
             logger.info { "Reusing identifications from scan '$existingScanCode'." }
@@ -669,6 +626,34 @@ class FossId internal constructor(
                     deleteScan(code)
                 }
             }
+    }
+
+    private suspend fun createIgnoreRules(
+        scanCode: String,
+        excludes: Excludes?,
+        existingRules: List<IgnoreRule> = emptyList(),
+        issues : MutableList<Issue>
+    ) {
+        val excludesRules = excludes?.let {
+            convertRules(it, issues).also {
+                logger.info { "${it.size} rules from ORT excludes have been found." }
+            }
+        }.orEmpty()
+
+        // Create an issue for each legacy rule.
+        val legacyRules = excludesRules.filterLegacyRules(existingRules, issues)
+        if (legacyRules.isNotEmpty()) {
+            logger.warn { "${legacyRules.size} legacy rules have been found." }
+        }
+
+        val allRules = excludesRules + legacyRules
+        allRules.forEach {
+            service.createIgnoreRule(config.user, config.apiKey, scanCode, it.type, it.value, RuleScope.SCAN)
+                .checkResponse("create ignore rules", false)
+            logger.info {
+                "Ignore rule of type '${it.type}' and value '${it.value}' has been created for the new scan."
+            }
+        }
     }
 
     /**
