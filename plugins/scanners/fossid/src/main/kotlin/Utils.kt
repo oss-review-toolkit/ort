@@ -46,15 +46,15 @@ internal fun convertRules(excludes: Excludes): Pair<List<IgnoreRule>, List<Issue
 
     val ignoreRules = excludes.paths.mapNotNull { pathExclude ->
         pathExclude.mapToRule().alsoIfNull {
+            val message = "Path exclude '${pathExclude.pattern}' cannot be converted to an ignore rule."
+
             issues += Issue(
                 source = "FossID.convertRules",
-                message = "Path exclude '${pathExclude.pattern}' cannot be converted to an ignore rule.",
+                message = message,
                 severity = Severity.HINT
             )
 
-            logger.warn {
-                "Path exclude  '${pathExclude.pattern}' cannot be converted to an ignore rule."
-            }
+            logger.warn { message }
         }
     }
 
