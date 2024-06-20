@@ -356,14 +356,26 @@ class Scanner(
                     "Finished scan of ${nestedProvenance.root} with package scanner '${scanner.name}'."
                 }
 
+                val provenanceScanResultsToStore = mutableSetOf<Pair<KnownProvenance, ScanResult>>()
                 packagesWithIncompleteScanResult.forEach processResults@{ pkg ->
                     val nestedProvenanceScanResult = scanResult.toNestedProvenanceScanResult(nestedProvenance)
                     controller.addNestedScanResult(scanner, nestedProvenanceScanResult)
 
                     // TODO: Run in coroutine.
                     if (scanner.writeToStorage) {
-                        storeNestedScanResult(pkg, nestedProvenanceScanResult)
+                        storePackageScanResult(pkg, nestedProvenanceScanResult)
+
+                        nestedProvenanceScanResult.scanResults.forEach { (provenance, scanResults) ->
+                            scanResults.forEach { scanResult ->
+                                provenanceScanResultsToStore += provenance to scanResult
+                            }
+                        }
                     }
+                }
+
+                // Store only deduplicated provenance scan results.
+                provenanceScanResultsToStore.forEach { (provenance, scanResult) ->
+                    storeProvenanceScanResult(provenance, scanResult)
                 }
             }
         }
@@ -598,16 +610,6 @@ class Scanner(
             }
         } finally {
             downloadDir.safeDeleteRecursively(force = true)
-        }
-    }
-
-    private fun storeNestedScanResult(pkg: Package, nestedProvenanceScanResult: NestedProvenanceScanResult) {
-        storePackageScanResult(pkg, nestedProvenanceScanResult)
-
-        nestedProvenanceScanResult.scanResults.forEach { (provenance, scanResults) ->
-            scanResults.forEach { scanResult ->
-                storeProvenanceScanResult(provenance, scanResult)
-            }
         }
     }
 

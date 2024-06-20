@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.scanner
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.maps.containExactly
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -177,6 +178,35 @@ class ScannerTest : WordSpec({
             scanner.scan(setOf(pkgWithArtifact, pkgWithVcs), createContext())
 
             verify(exactly = 0) { provenanceDownloader.download(any()) }
+        }
+
+        "store only a single scan result per provenance" {
+            val packageScanner = FakePackageScannerWrapper()
+
+            val pkgWithVcs1 = Package.new(name = "project1").withValidVcs()
+            val pkgWithVcs2 = Package.new(name = "project2").withValidVcs()
+            val pkgWithVcs3 = Package.new(name = "project3").withValidVcs()
+            val packageScannerResult = createScanResult(pkgWithVcs1.repositoryProvenance(), packageScanner.details)
+
+            val scannerWrapper = spyk(packageScanner) {
+                every { scanPackage(any(), any()) } returns packageScannerResult
+            }
+
+            val storedScanResults = mutableListOf<ScanResult>()
+            val writer = object : ProvenanceBasedScanStorageWriter {
+                override fun write(scanResult: ScanResult) {
+                    storedScanResults.add(scanResult)
+                }
+            }
+
+            val scanner = createScanner(
+                packageScannerWrappers = listOf(scannerWrapper),
+                storageWriters = listOf(writer)
+            )
+
+            scanner.scan(setOf(pkgWithVcs1, pkgWithVcs2, pkgWithVcs3), createContext())
+
+            storedScanResults shouldContainExactly listOf(packageScannerResult)
         }
     }
 
