@@ -40,6 +40,7 @@ import java.time.Instant
 import kotlinx.serialization.encodeToString
 
 import org.ossreviewtoolkit.clients.dos.JSON
+import org.ossreviewtoolkit.clients.dos.PackageInfo
 import org.ossreviewtoolkit.clients.dos.ScanResultsResponseBody
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
@@ -163,7 +164,12 @@ class DosScannerTest : StringSpec({
         val issues = mutableListOf<Issue>()
 
         val result = scanner.runBackendScan(
-            purls = listOf(pkg.purl),
+            packages = listOf(
+                PackageInfo(
+                    purl = pkg.purl,
+                    declaredLicenseExpressionSPDX = null
+                )
+            ),
             sourceDir = tempdir(),
             startTime = Instant.now(),
             issues = issues

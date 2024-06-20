@@ -33,6 +33,7 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.clients.dos.DosClient
 import org.ossreviewtoolkit.clients.dos.DosService
+import org.ossreviewtoolkit.clients.dos.PackageInfo
 import org.ossreviewtoolkit.clients.dos.ScanResultsResponseBody
 import org.ossreviewtoolkit.downloader.DefaultWorkingTreeCache
 import org.ossreviewtoolkit.model.Issue
@@ -104,13 +105,13 @@ class DosScanner internal constructor(
                 return@runBlocking null
             }
 
-            val purls = context.coveredPackages.getDosPurls(provenance)
+            val packages = context.coveredPackages.getDosPackages(provenance)
 
-            logger.info { "Packages requested for scanning: ${purls.joinToString()}" }
+            logger.info { "Packages requested for scanning: ${packages.joinToString { it.purl }}" }
 
             // Ask for scan results from DOS API
             val existingScanResults = runCatching {
-                client.getScanResults(purls, config.fetchConcluded)
+                client.getScanResults(packages.map{it.purl}, config.fetchConcluded)
             }.onFailure {
                 issues += createAndLogIssue(name, it.collectMessages())
             }.onSuccess {
@@ -124,7 +125,7 @@ class DosScanner internal constructor(
                     runCatching {
                         downloader.download(provenance)
                     }.mapCatching { sourceDir ->
-                        runBackendScan(purls, sourceDir, startTime, issues)
+                        runBackendScan(packages, sourceDir, startTime, issues)
                     }.onFailure {
                         issues += createAndLogIssue(name, it.collectMessages())
                     }.getOrNull()
@@ -135,7 +136,7 @@ class DosScanner internal constructor(
                         "The job ID must not be null for 'pending' status."
                     }
 
-                    pollForCompletion(purls.first(), jobId, "Pending scan", startTime, issues)
+                    pollForCompletion(packages.first().purl, jobId, "Pending scan", startTime, issues)
                 }
 
                 "ready" -> existingScanResults
@@ -162,12 +163,12 @@ class DosScanner internal constructor(
     }
 
     internal suspend fun runBackendScan(
-        purls: List<String>,
+        packages: List<PackageInfo>,
         sourceDir: File,
         startTime: Instant,
         issues: MutableList<Issue>
     ): ScanResultsResponseBody? {
-        logger.info { "Initiating a backend scan for $purls." }
+        logger.info { "Initiating a backend scan for ${packages.map { it.purl }}." }
 
         val tmpDir = createOrtTempDir()
         val zipName = "${sourceDir.name}.zip"
@@ -189,18 +190,18 @@ class DosScanner internal constructor(
             return null
         }
 
-        val jobResponse = client.addScanJob(zipName, purls)
+        val jobResponse = client.addScanJob(zipName, packages)
         val id = jobResponse?.scannerJobId
 
         if (id == null) {
-            issues += createAndLogIssue(name, "Failed to add scan job for '$zipName' and $purls.")
+            issues += createAndLogIssue(name, "Failed to add scan job for '$zipName' and ${packages.map { it.purl }}.")
             return null
         }
 
         // In case of multiple PURLs, they all point to packages with the same provenance. So if one package scan is
         // complete, all package scans are complete, which is why it is enough to arbitrarily pool for the first
         // package here.
-        return pollForCompletion(purls.first(), id, "New scan", startTime, issues)
+        return pollForCompletion(packages.first().purl, id, "New scan", startTime, issues)
     }
 
     private suspend fun pollForCompletion(
@@ -235,15 +236,25 @@ class DosScanner internal constructor(
     }
 }
 
-private fun Collection<Package>.getDosPurls(provenance: Provenance = UnknownProvenance): List<String> {
+private fun Collection<Package>.getDosPackages(provenance: Provenance = UnknownProvenance): List<PackageInfo> {
     val extras = provenance.toPurlExtras()
 
     return when (provenance) {
         is RepositoryProvenance -> {
             // Maintain the VCS path to get the "bookmarking" right for the file tree in the package configuration UI.
-            map { it.id.toPurl(extras.qualifiers, it.vcsProcessed.path) }
+            map {
+                PackageInfo(
+                    purl = it.id.toPurl(extras.qualifiers, it.vcsProcessed.path),
+                    declaredLicenseExpressionSPDX = it.declaredLicensesProcessed.spdxExpression?.toString()
+                )
+            }
         }
 
-        else -> map { it.id.toPurl(extras) }
+        else -> map {
+            PackageInfo(
+                purl = it.id.toPurl(extras),
+                declaredLicenseExpressionSPDX = it.declaredLicensesProcessed.spdxExpression?.toString()
+            )
+        }
     }
 }

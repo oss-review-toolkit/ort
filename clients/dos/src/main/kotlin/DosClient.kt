@@ -96,22 +96,25 @@ class DosClient(private val service: DosService) {
     }
 
     /**
-     * Add a new scan job [zipFileKey] and [purls]. Return a [JobResponseBody] or null on error.
+     * Add a new scan job [zipFileKey] and [packages]. Return a [JobResponseBody] or null on error.
      */
-    suspend fun addScanJob(zipFileKey: String, purls: List<String>): JobResponseBody? {
-        if (zipFileKey.isEmpty() || purls.isEmpty()) {
+    suspend fun addScanJob(zipFileKey: String, packages: List<PackageInfo>): JobResponseBody? {
+        if (zipFileKey.isEmpty() || packages.isEmpty()) {
             logger.error { "The ZIP file key and Package URLs are required to add a scan job." }
             return null
         }
 
-        val requestBody = JobRequestBody(zipFileKey, purls)
+        val requestBody = JobRequestBody(zipFileKey, packages)
         val response = service.addScanJob(requestBody)
         val responseBody = response.body()
 
         return if (response.isSuccessful && responseBody != null) {
             responseBody
         } else {
-            logger.error { "Error adding a new scan job for $zipFileKey and $purls: ${response.errorBody()?.string()}" }
+            logger.error {
+                "Error adding a new scan job for $zipFileKey and ${packages.map { it.purl }}: " +
+                    "${response.errorBody()?.string()}"
+            }
 
             null
         }
