@@ -171,11 +171,10 @@ class DependencyGraphBuilder<D>(
         val (nodes, edges) = references.toGraph(indexMapping)
 
         return DependencyGraph(
-            sortedDependencyIds,
-            sortedSetOf(),
-            constructSortedScopeMappings(scopeMapping, indexMapping),
-            nodes,
-            edges.removeCycles()
+            packages = sortedDependencyIds,
+            scopes = constructSortedScopeMappings(scopeMapping, indexMapping),
+            nodes = nodes,
+            edges = edges.removeCycles()
         )
     }
 
