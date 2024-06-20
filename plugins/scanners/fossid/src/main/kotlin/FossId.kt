@@ -641,7 +641,7 @@ class FossId internal constructor(
         }.orEmpty()
 
         // Create an issue for each legacy rule.
-        val legacyRules = excludesRules.filterLegacyRules(existingRules, issues)
+        val legacyRules = existingRules.filterLegacyRules(excludesRules, issues)
         if (legacyRules.isNotEmpty()) {
             logger.warn { "${legacyRules.size} legacy rules have been found." }
         }

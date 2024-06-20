@@ -84,15 +84,16 @@ private fun PathExclude.mapToRule(): IgnoreRule? {
 }
 
 /**
- * Check if some elements of [rulesToTest] are legacy rules i.e. are not present in a reference list (current object).
- * Create an issue on [issues] for each legacy rule and return a list of the latter.
+ * Filter [IgnoreRule]s which are not contained in the [referenceRules]. These are legacy rules because they were not
+ * created from the [Excludes] defined in the repository configuration. Also create an [Issue] for each legacy rule and
+ * add it to [issues].
  */
 internal fun List<IgnoreRule>.filterLegacyRules(
-    rulesToTest: List<IgnoreRule>,
+    referenceRules: List<IgnoreRule>,
     issues: MutableList<Issue>
 ): List<IgnoreRule> =
-    rulesToTest.filterNot { ruleToTest ->
-        any { it.value == ruleToTest.value && it.type == ruleToTest.type }
+    filterNot { rule ->
+        referenceRules.any { it.value == rule.value && it.type == rule.type }
     }.onEach {
         issues += Issue(
             source = "FossID.compare",
