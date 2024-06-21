@@ -241,7 +241,7 @@ class Gradle(
                 }
 
                 if (stderr.size() > 0) {
-                    logger.warn {
+                    logger.debug {
                         "Analyzing the project in '$projectDir' produced the following error output:\n" +
                             stderr.toString().prependIndent("\t")
                     }
