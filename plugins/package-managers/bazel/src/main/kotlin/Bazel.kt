@@ -29,9 +29,11 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
-import org.ossreviewtoolkit.clients.bazelmoduleregistry.RemoteBazelModuleRegistryService
+import org.ossreviewtoolkit.clients.bazelmoduleregistry.BazelModuleRegistryService
+import org.ossreviewtoolkit.clients.bazelmoduleregistry.LocalBazelModuleRegistryService
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.ModuleMetadata
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.ModuleSourceInfo
+import org.ossreviewtoolkit.clients.bazelmoduleregistry.RemoteBazelModuleRegistryService
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.HashAlgorithm
@@ -51,6 +53,7 @@ import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.encodeHex
+import org.ossreviewtoolkit.utils.common.withoutPrefix
 
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
@@ -101,7 +104,15 @@ class Bazel(
         // resolution.
         val registryUrl = parseLockfile(lockfile).registryUrl()
 
-        val packages = getPackages(scopes, registryUrl)
+        val registry = registryUrl.withoutPrefix("file://")?.let {
+            val localRegistryURL = it.replace("%workspace%", projectDir.absolutePath)
+            logger.info {
+                "Using local Bazel module registry at '$localRegistryURL'."
+            }
+            LocalBazelModuleRegistryService(File(localRegistryURL))
+        } ?: RemoteBazelModuleRegistryService.create(registryUrl)
+
+        val packages = getPackages(scopes, registry)
 
         return listOf(
             ProjectAnalyzerResult(
@@ -124,8 +135,7 @@ class Bazel(
         )
     }
 
-    private fun getPackages(scopes: Set<Scope>, registryUrl: String?): Set<Package> {
-        val registry = RemoteBazelModuleRegistryService.create(registryUrl)
+    private fun getPackages(scopes: Set<Scope>, registry: BazelModuleRegistryService): Set<Package> {
         val ids = scopes.flatMapTo(mutableSetOf()) { it.collectDependencies() }
         val moduleMetadataForId = ids.associateWith { getModuleMetadata(it, registry) }
         val moduleSourceInfoForId = ids.associateWith { getModuleSourceInfo(it, registry) }
@@ -143,14 +153,14 @@ class Bazel(
             vcs = metadata?.vcsInfo().orEmpty()
         )
 
-    private fun getModuleMetadata(id: Identifier, registry: RemoteBazelModuleRegistryService): ModuleMetadata? =
+    private fun getModuleMetadata(id: Identifier, registry: BazelModuleRegistryService): ModuleMetadata? =
         runCatching {
             runBlocking { registry.getModuleMetadata(id.name) }
         }.onFailure {
             logger.warn { "Failed to fetch metadata for Bazel module '${id.name}': ${it.collectMessages()}" }
         }.getOrNull()
 
-    private fun getModuleSourceInfo(id: Identifier, registry: RemoteBazelModuleRegistryService): ModuleSourceInfo? =
+    private fun getModuleSourceInfo(id: Identifier, registry: BazelModuleRegistryService): ModuleSourceInfo? =
         runCatching {
             runBlocking { registry.getModuleSourceInfo(id.name, id.version) }
         }.onFailure {

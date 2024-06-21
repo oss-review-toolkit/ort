@@ -20,7 +20,14 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.bazel
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.engine.spec.tempdir
+import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNot
+
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.utils.test.getAssetFile
 
 class BazelTest : WordSpec({
     "transformBazelVersion()" should {
@@ -38,6 +45,21 @@ class BazelTest : WordSpec({
 
             val result = transformBazelVersion(bazelVersionOutput)
             result shouldBe "7.0.1"
+        }
+    }
+
+    "Bazel package manager" should {
+        "support local registry" {
+            val projectAssets = getAssetFile("projects/synthetic/bazel-local-registry/")
+            val projectDir = tempdir()
+            projectAssets.copyRecursively(projectDir)
+            val definitionFile = projectDir.resolve("MODULE.bazel")
+
+            val bazel = Bazel("bazel", projectDir, AnalyzerConfiguration(), RepositoryConfiguration())
+
+            val resolvedDependencies = bazel.resolveDependencies(definitionFile, emptyMap())
+
+            resolvedDependencies shouldNot beEmpty()
         }
     }
 })

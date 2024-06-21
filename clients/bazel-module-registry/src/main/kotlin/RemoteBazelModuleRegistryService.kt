@@ -19,9 +19,6 @@
 
 package org.ossreviewtoolkit.clients.bazelmoduleregistry
 
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonNamingStrategy
-
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 
@@ -29,14 +26,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
-
-/**
- * The JSON (de-)serialization object used by this client.
- */
-private val JSON = Json {
-    ignoreUnknownKeys = true
-    namingStrategy = JsonNamingStrategy.SnakeCase
-}
 
 /**
  * The client uses the Bazel Central Registry by default.
@@ -47,7 +36,7 @@ private const val DEFAULT_URL = "https://bcr.bazel.build"
  * Interface for a Bazel Module Registry, based on the directory structure of https://bcr.bazel.build/ and the Git
  * repository it is based on (https://github.com/bazelbuild/bazel-central-registry/).
  */
-interface RemoteBazelModuleRegistryService {
+interface RemoteBazelModuleRegistryService : BazelModuleRegistryService {
     companion object {
         /**
          * Create a Bazel Module Registry client instance for communicating with a server running at the given [url],
@@ -72,12 +61,15 @@ interface RemoteBazelModuleRegistryService {
      * E.g. https://bcr.bazel.build/modules/glog/metadata.json.
      */
     @GET("modules/{name}/metadata.json")
-    suspend fun getModuleMetadata(@Path("name") name: String): ModuleMetadata
+    override suspend fun getModuleMetadata(@Path("name") name: String): ModuleMetadata
 
     /**
      * Retrieve information about the source code for a specific version of a module.
      * E.g. https://bcr.bazel.build/modules/glog/0.5.0/source.json.
      */
     @GET("modules/{name}/{version}/source.json")
-    suspend fun getModuleSourceInfo(@Path("name") name: String, @Path("version") version: String): ModuleSourceInfo
+    override suspend fun getModuleSourceInfo(
+        @Path("name") name: String,
+        @Path("version") version: String
+    ): ModuleSourceInfo
 }
