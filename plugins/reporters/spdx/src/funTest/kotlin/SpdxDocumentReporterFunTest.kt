@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.reporters.spdx
 
 import com.networknt.schema.JsonSchemaFactory
 import com.networknt.schema.SpecVersion
+import com.networknt.schema.serialization.JsonNodeReader
 
 import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
@@ -70,15 +71,15 @@ import org.ossreviewtoolkit.utils.test.scannerRunOf
 class SpdxDocumentReporterFunTest : WordSpec({
     "Reporting to JSON" should {
         "create a valid document" {
-            val jsonMapper = FileFormat.JSON.mapper
+            val nodeReader = JsonNodeReader.builder().jsonMapper(FileFormat.JSON.mapper).build()
             val schema = JsonSchemaFactory
                 .builder(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7))
-                .jsonMapper(FileFormat.JSON.mapper)
+                .jsonNodeReader(nodeReader)
                 .build()
                 .getSchema(getAssetFile("spdx-schema.json").toURI())
 
             val jsonSpdxDocument = generateReport(ortResult, FileFormat.JSON)
-            val errors = schema.validate(jsonMapper.readTree(jsonSpdxDocument))
+            val errors = schema.validate(FileFormat.JSON.mapper.readTree(jsonSpdxDocument))
 
             errors should beEmpty()
         }

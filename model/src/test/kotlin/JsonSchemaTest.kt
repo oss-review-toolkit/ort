@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.model
 
 import com.networknt.schema.JsonSchemaFactory
 import com.networknt.schema.SpecVersion
+import com.networknt.schema.serialization.JsonNodeReader
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.inspectors.forAll
@@ -105,9 +106,11 @@ class JsonSchemaTest : StringSpec({
     }
 })
 
+private val nodeReader = JsonNodeReader.builder().yamlMapper(yamlMapper).build()
+
 private val schemaV7 = JsonSchemaFactory
     .builder(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7))
-    .yamlMapper(yamlMapper)
+    .jsonNodeReader(nodeReader)
     .build()
 
 private val repositoryConfigurationSchema =
