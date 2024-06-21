@@ -31,10 +31,10 @@ private val json = Json { ignoreUnknownKeys = true }
  */
 @Serializable
 internal data class Lockfile(
-    val flags: Flags
+    val flags: Flags? = null
 ) {
     // TODO Support multiple registries.
-    fun registryUrl(): String? = flags.cmdRegistries.getOrElse(0) { null }
+    fun registryUrl(): String? = flags?.cmdRegistries?.getOrElse(0) { null }
 }
 
 @Serializable
