@@ -60,7 +60,7 @@ class DosClient(private val service: DosService) {
      */
     suspend fun getUploadUrl(key: String): String? {
         if (key.isEmpty()) {
-            logger.error { "Need the name of the zipped packet to upload" }
+            logger.error { "The key for getting the upload URL must be non-empty." }
             return null
         }
 
@@ -161,7 +161,7 @@ class DosClient(private val service: DosService) {
      */
     suspend fun getScanJobState(id: String): JobStateResponseBody? {
         if (id.isEmpty()) {
-            logger.error { "Need the job ID to check for job state" }
+            logger.error { "The job ID for getting the scan job state must be non-empty." }
             return null
         }
 
