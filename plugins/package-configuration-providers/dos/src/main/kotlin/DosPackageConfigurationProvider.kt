@@ -65,8 +65,8 @@ class DosPackageConfigurationProviderFactory :
     override fun parseConfig(options: Options, secrets: Options) =
         DosPackageConfigurationProviderConfig(
             url = options.getValue("url"),
-            timeout = options["timeout"]?.toLongOrNull(),
-            token = secrets.getValue("token")
+            token = secrets.getValue("token"),
+            timeout = options["timeout"]?.toLongOrNull()
         )
 }
 
