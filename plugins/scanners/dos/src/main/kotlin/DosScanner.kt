@@ -111,7 +111,7 @@ class DosScanner internal constructor(
 
             // Ask for scan results from DOS API
             val existingScanResults = runCatching {
-                client.getScanResults(packages.map{it.purl}, config.fetchConcluded)
+                client.getScanResults(packages, config.fetchConcluded)
             }.onFailure {
                 issues += createAndLogIssue(name, it.collectMessages())
             }.onSuccess {
@@ -136,7 +136,7 @@ class DosScanner internal constructor(
                         "The job ID must not be null for 'pending' status."
                     }
 
-                    pollForCompletion(packages.first().purl, jobId, "Pending scan", startTime, issues)
+                    pollForCompletion(packages.first(), jobId, "Pending scan", startTime, issues)
                 }
 
                 "ready" -> existingScanResults
@@ -201,11 +201,11 @@ class DosScanner internal constructor(
         // In case of multiple PURLs, they all point to packages with the same provenance. So if one package scan is
         // complete, all package scans are complete, which is why it is enough to arbitrarily pool for the first
         // package here.
-        return pollForCompletion(packages.first().purl, id, "New scan", startTime, issues)
+        return pollForCompletion(packages.first(), id, "New scan", startTime, issues)
     }
 
     private suspend fun pollForCompletion(
-        purl: String,
+        pkg: PackageInfo,
         jobId: String,
         logMessagePrefix: String,
         startTime: Instant,
@@ -222,7 +222,7 @@ class DosScanner internal constructor(
             when (jobState.state.status) {
                 "completed" -> {
                     logger.info { "Scan completed" }
-                    return client.getScanResults(listOf(purl), config.fetchConcluded)
+                    return client.getScanResults(listOf(pkg), config.fetchConcluded)
                 }
 
                 "failed" -> {

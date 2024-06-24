@@ -61,10 +61,11 @@ data class PackageInfo(
 @Serializable
 data class ScanResultsRequestBody(
     /**
-     * The list of purls to get scan results for. In case multiple purls are provided, it is assumed that they all
-     * refer to the same provenance (like a monorepo).
+     * The list of packages to get scan results for. In case multiple packages are provided, it is assumed that they all
+     * refer to the same provenance (like a monorepo). If only some of the packages exist in the DOS database, new purl
+     * bookmarks will be added for the missing packages (hence the need for the declared license here).
      */
-    val purls: List<String>? = null,
+    val packages: List<PackageInfo>,
 
     /** Options fort requesting scan results. */
     val options: ReqOptions? = null
