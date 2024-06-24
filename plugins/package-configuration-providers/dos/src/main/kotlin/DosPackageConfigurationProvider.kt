@@ -74,12 +74,7 @@ class DosPackageConfigurationProviderFactory :
  * A [PackageConfigurationProvider] that loads [PackageConfiguration]s from a Double Open Server instance.
  */
 class DosPackageConfigurationProvider(config: DosPackageConfigurationProviderConfig) : PackageConfigurationProvider {
-    private val service = DosService.create(
-        config.url,
-        config.token,
-        config.timeout?.let { Duration.ofSeconds(it) }
-    )
-
+    private val service = DosService.create(config.url, config.token, config.timeout?.let { Duration.ofSeconds(it) })
     private val client = DosClient(service)
 
     override fun getPackageConfigurations(packageId: Identifier, provenance: Provenance): List<PackageConfiguration> {
