@@ -99,6 +99,8 @@ potential-bugs:
     excludes: ["**/GradleModel.kt", "**/build.gradle.kts"]
 
 ORT:
+  OrtEmptyLineAfterBlock:
+    active: true
   OrtImportOrder:
     active: true
     excludes: ["**/clients/github-graphql/build/generated/**"]

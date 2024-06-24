@@ -26,5 +26,13 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 class OrtRuleSet : RuleSetProvider {
     override val ruleSetId: String = "ORT"
 
-    override fun instance(config: Config) = RuleSet(ruleSetId, listOf(OrtImportOrder(config), OrtPackageNaming(config)))
+    override fun instance(config: Config) =
+        RuleSet(
+            ruleSetId,
+            listOf(
+                OrtEmptyLineAfterBlock(config),
+                OrtImportOrder(config),
+                OrtPackageNaming(config)
+            )
+        )
 }
