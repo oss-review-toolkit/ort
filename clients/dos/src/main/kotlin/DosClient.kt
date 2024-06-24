@@ -48,7 +48,7 @@ class DosClient(private val service: DosService) {
         return if (response.isSuccessful && responseBody != null) {
             responseBody
         } else {
-            logger.error { "Error getting the package configuration for PURL $purl: ${response.errorBody()}" }
+            logger.error { "Error getting the package configuration for PURL $purl: ${response.errorBody()?.string()}" }
 
             null
         }
@@ -90,7 +90,7 @@ class DosClient(private val service: DosService) {
             logger.info { "Successfully uploaded $file to S3." }
             true
         } else {
-            logger.error { "Failed to upload $file to S3: ${response.errorBody()}" }
+            logger.error { "Failed to upload $file to S3: ${response.errorBody()?.string()}" }
             false
         }
     }
@@ -111,7 +111,7 @@ class DosClient(private val service: DosService) {
         return if (response.isSuccessful && responseBody != null) {
             responseBody
         } else {
-            logger.error { "Error adding a new scan job for $zipFileKey and $purls: ${response.errorBody()}" }
+            logger.error { "Error adding a new scan job for $zipFileKey and $purls: ${response.errorBody()?.string()}" }
 
             null
         }
@@ -149,7 +149,7 @@ class DosClient(private val service: DosService) {
 
             responseBody
         } else {
-            logger.error { "Error getting scan results: ${response.errorBody()}" }
+            logger.error { "Error getting scan results: ${response.errorBody()?.string()}" }
 
             null
         }
@@ -171,7 +171,7 @@ class DosClient(private val service: DosService) {
         return if (response.isSuccessful && responseBody != null) {
             responseBody
         } else {
-            logger.error { "Error getting the scan state for job $id: ${response.errorBody()}" }
+            logger.error { "Error getting the scan state for job $id: ${response.errorBody()?.string()}" }
 
             null
         }
