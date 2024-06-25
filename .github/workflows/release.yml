@@ -19,7 +19,9 @@ jobs:
     env:
       ORT_VERSION: ${{ inputs.tag || github.ref_name }}
     permissions:
+      attestations: write
       contents: write
+      id-token: write
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout Repository
@@ -53,3 +55,9 @@ jobs:
           gh release create $ORT_VERSION --notes-file RELEASE_NOTES.md \
               ./cli/build/distributions/ort-$ORT_VERSION.{tgz,zip}* \
               ./helper-cli/build/distributions/orth-$ORT_VERSION.{tgz,zip}*
+      - name: Attest Build Provenance
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: |
+            ./cli/build/distributions/ort-$ORT_VERSION.{tgz,zip}*
+            ./helper-cli/build/distributions/orth-$ORT_VERSION.{tgz,zip}*
