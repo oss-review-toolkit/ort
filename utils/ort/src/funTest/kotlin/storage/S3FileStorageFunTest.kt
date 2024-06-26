@@ -58,13 +58,16 @@ class S3FileStorageFunTest : WordSpec() {
                     } else {
                         HttpURLConnection.HTTP_NOT_FOUND
                     }
+
                     exchange.sendResponseHeaders(status, -1)
                 }
+
                 "PUT" -> {
                     val key = exchange.requestURI.toString().removePrefix("/$bucket/")
                     requests[key] = exchange.requestBody.reader().use { it.readText() }.split("\n")[1].trimEnd()
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0)
                 }
+
                 "GET" -> {
                     val key = exchange.requestURI.toString().removePrefix("/$bucket/")
                     val data = requests[key]
@@ -127,6 +130,7 @@ class S3FileStorageFunTest : WordSpec() {
                 shouldNotThrowAny {
                     storage.write("target/file", "content".byteInputStream())
                 }
+
                 handler.requests["target/file"] shouldBe "content"
             }
         }

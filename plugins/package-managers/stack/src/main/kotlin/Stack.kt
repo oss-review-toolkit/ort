@@ -260,6 +260,7 @@ class Stack(
                     val nestedMap = parseKeyValue(i, keyPrefix + keyValue[0].replace(" ", "-") + "-")
                     map += nestedMap
                 }
+
                 2 -> {
                     // Handle lines with a colon.
                     val key = (keyPrefix + keyValue[0]).lowercase()

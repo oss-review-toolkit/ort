@@ -99,6 +99,7 @@ internal class ListPackagesCommand : CliktCommand(
                 appendLine(it.toCoordinates())
             }
         }
+
         print(result)
     }
 }

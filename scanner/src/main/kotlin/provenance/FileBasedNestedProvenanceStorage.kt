@@ -51,6 +51,7 @@ class FileBasedNestedProvenanceStorage(private val backend: FileStorage) : Neste
                     // If the file cannot be found it means no scan results have been stored, yet.
                     emptyList()
                 }
+
                 else -> {
                     logger.info {
                         "Could not read resolved nested provenances for '$root' from path '$path': " +
@@ -85,6 +86,7 @@ class FileBasedNestedProvenanceStorage(private val backend: FileStorage) : Neste
                             it.collectMessages()
                     }
                 }
+
                 else -> throw it
             }
         }

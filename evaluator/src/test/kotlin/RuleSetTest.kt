@@ -171,6 +171,7 @@ class RuleSetTest : WordSpec({
                         every { ref.id } answers { node.id.copy(name = node.id.name + "-ref") }
                         ref
                     }
+
                     spyNode
                 }
             }

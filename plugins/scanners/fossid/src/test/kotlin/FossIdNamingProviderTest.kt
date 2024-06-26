@@ -77,6 +77,7 @@ class FossIdNamingProviderTest : WordSpec() {
                         "example-project-name", null, "CODE-2233_Red-dots-added-to-layout"
                     ) shouldBeEqual "example-project-name_" + expectedTimestamp + "_CODE-2233_Red-dots-added-to-layout"
                 }
+
                 unmockkAll()
             }
 
@@ -89,6 +90,7 @@ class FossIdNamingProviderTest : WordSpec() {
                     ) shouldBeEqual "example-project-name_" + expectedTimestamp +
                         "_delta_CODE-2233_Red-dots-added-to-layout"
                 }
+
                 unmockkAll()
             }
 

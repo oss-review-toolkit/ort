@@ -62,6 +62,7 @@ class AnalyzerResultBuilder {
                 val existingDefinitionFileUrl = existingProject.let {
                     "${it.vcsProcessed.url}/${it.definitionFilePath}"
                 }
+
                 val incomingDefinitionFileUrl = projectAnalyzerResult.project.let {
                     "${it.vcsProcessed.url}/${it.definitionFilePath}"
                 }

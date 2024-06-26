@@ -94,6 +94,7 @@ class NpmDetection(private val definitionFiles: Collection<File>) {
                 logger.info {
                     "Skipping '$file' as it is part of a workspace implicitly handled by $managersFromWorkspaces."
                 }
+
                 return@filter false
             }
 

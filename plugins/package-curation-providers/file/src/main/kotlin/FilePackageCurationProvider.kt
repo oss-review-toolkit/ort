@@ -126,6 +126,7 @@ class FilePackageCurationProvider(
                         appendLine(files.prependIndent())
                     }
                 }
+
                 throw DuplicatedCurationException("Duplicate curations found:\n${duplicatesInfo.prependIndent()}")
             }
 

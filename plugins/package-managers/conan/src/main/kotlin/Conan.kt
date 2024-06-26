@@ -416,6 +416,7 @@ class Conan(
             val url = artifactEntry["url"].let { urlNode ->
                 (urlNode.takeIf { it.isTextual } ?: urlNode.first()).textValueOrEmpty()
             }
+
             val hash = Hash.create(artifactEntry["sha256"].textValueOrEmpty(), HashAlgorithm.SHA256.name)
 
             RemoteArtifact(url, hash)

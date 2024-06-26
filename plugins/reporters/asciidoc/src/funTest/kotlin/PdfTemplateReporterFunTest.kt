@@ -41,6 +41,7 @@ class PdfTemplateReporterFunTest : StringSpec({
             it.read(header) shouldBe header.size
             String(header) shouldBe "%PDF"
         }
+
         report.length() should beInRange(111000L..115000L)
     }
 

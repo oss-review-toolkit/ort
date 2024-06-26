@@ -94,6 +94,7 @@ class FossIdReporterTest : WordSpec({
                     DEFAULT_OPTIONS.filterNot { it.key == FossIdReporter.SERVER_URL_PROPERTY }
                 )
             }
+
             exception shouldHaveMessage "No FossID server URL configuration found."
         }
 
@@ -106,6 +107,7 @@ class FossIdReporterTest : WordSpec({
                     secrets = DEFAULT_SECRETS.filterNot { it.key == FossIdReporter.API_KEY_PROPERTY }
                 )
             }
+
             exception shouldHaveMessage "No FossID API Key configuration found."
         }
 
@@ -118,6 +120,7 @@ class FossIdReporterTest : WordSpec({
                     secrets = DEFAULT_SECRETS.filterNot { it.key == FossIdReporter.USER_PROPERTY }
                 )
             }
+
             exception shouldHaveMessage "No FossID User configuration found."
         }
 

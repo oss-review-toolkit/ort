@@ -389,6 +389,7 @@ class FossIdTest : WordSpec({
                     additionalData[FossId.SNIPPET_DATA_MATCHED_LINE_SNIPPET] shouldBe "11-12"
                 }
             }
+
             summary.snippetFindings.elementAt(1).apply {
                 sourceLocation shouldBe TextLocation("/pending/file/1", 21, 22)
                 snippets shouldHaveSize 1
@@ -399,6 +400,7 @@ class FossIdTest : WordSpec({
                     additionalData[FossId.SNIPPET_DATA_MATCHED_LINE_SNIPPET] shouldBe "11-12"
                 }
             }
+
             summary.snippetFindings.last().apply {
                 sourceLocation shouldBe TextLocation("/pending/file/1", 36)
                 snippets shouldHaveSize 1

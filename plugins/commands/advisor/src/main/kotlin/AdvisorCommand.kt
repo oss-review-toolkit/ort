@@ -147,6 +147,7 @@ class AdvisorCommand : OrtCommand(
             val vulnerablePackageCount = count { (id, vulnerabilities) ->
                 id in includedPackages && vulnerabilities.isNotEmpty()
             }
+
             val vulnerabilityCount = filterKeys { it in includedPackages }.values.sumOf { it.size }
 
             echo(

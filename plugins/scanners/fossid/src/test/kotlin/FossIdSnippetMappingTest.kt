@@ -101,10 +101,12 @@ class FossIdSnippetMappingTest : WordSpec({
                     "pkg:maven/com.vdurmont/semver4j@3.1.0"
                 )
             }
+
             mappedSnippets.elementAtOrNull(1) shouldNotBeNull {
                 sourceLocation shouldBe TextLocation("src/main/java/com/vdurmont/semver4j/Requirement.java", 1, 24)
                 snippets.map { it.purl } should containExactly("pkg:github/vdurmont/semver4j@3.1.0")
             }
+
             mappedSnippets.elementAtOrNull(2) shouldNotBeNull {
                 sourceLocation shouldBe TextLocation("src/main/java/com/vdurmont/semver4j/Requirement.java", 45, 675)
                 snippets.map { it.purl } should containExactly("pkg:github/vdurmont/semver4j@3.1.0")

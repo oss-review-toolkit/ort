@@ -67,6 +67,7 @@ fun PackageManager.collateMultipleProjects(vararg definitionFiles: File): Analyz
     managerResult.dependencyGraph?.let {
         builder.addDependencyGraph(managerName, it).addPackages(managerResult.sharedPackages)
     }
+
     definitionFiles.forAll { definitionFile ->
         managerResult.projectResults[definitionFile] shouldNotBeNull {
             this shouldHaveAtLeastSize 1

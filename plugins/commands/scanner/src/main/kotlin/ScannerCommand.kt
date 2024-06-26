@@ -170,6 +170,7 @@ class ScannerCommand : OrtCommand(
                 val config = ortConfig.scanner.config?.get(it.type)
                 it.create(config?.options.orEmpty(), config?.secrets.orEmpty())
             }
+
         val projectScannerWrappers = projectScannerWrapperFactories
             .takeIf { PackageType.PROJECT in packageTypes }.orEmpty()
             .map {

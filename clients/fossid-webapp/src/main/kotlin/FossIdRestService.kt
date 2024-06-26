@@ -97,6 +97,7 @@ interface FossIdRestService {
                 requireNotNull(boundType) {
                     "The PolymorphicListDeserializer needs a type to deserialize values!"
                 }
+
                 return when (p.currentToken) {
                     JsonToken.VALUE_FALSE -> PolymorphicList()
                     JsonToken.START_ARRAY -> {
@@ -104,6 +105,7 @@ interface FossIdRestService {
                         val array = JSON_MAPPER.readValue<Array<Any>>(p, arrayType)
                         PolymorphicList(array.toList())
                     }
+
                     JsonToken.START_OBJECT -> {
                         val mapType = JSON_MAPPER.typeFactory.constructMapType(
                             LinkedHashMap::class.java,
@@ -116,6 +118,7 @@ interface FossIdRestService {
                         // present in the elements themselves, we don't lose any information by discarding the keys.
                         PolymorphicList(map.values.toList())
                     }
+
                     else -> error("FossID returned a type not handled by this deserializer!")
                 }
             }
@@ -147,15 +150,18 @@ interface FossIdRestService {
                         val value = JSON_MAPPER.readValue(p, String::class.java)
                         PolymorphicInt(value.toInt())
                     }
+
                     JsonToken.VALUE_NUMBER_INT -> {
                         val value = JSON_MAPPER.readValue(p, Int::class.java)
                         PolymorphicInt(value)
                     }
+
                     JsonToken.START_ARRAY -> {
                         val array = JSON_MAPPER.readValue(p, IntArray::class.java)
                         val value = if (array.isEmpty()) null else array.first()
                         PolymorphicInt(value)
                     }
+
                     JsonToken.START_OBJECT -> {
                         val mapType = JSON_MAPPER.typeFactory.constructMapType(
                             LinkedHashMap::class.java,
@@ -166,8 +172,10 @@ interface FossIdRestService {
                         if (map.size != 1) {
                             error("A map representing a polymorphic integer should have one value!")
                         }
+
                         PolymorphicInt(map.values.first().toString().toInt())
                     }
+
                     else -> error("FossID returned a type not handled by this deserializer!")
                 }
             }

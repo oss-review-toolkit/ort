@@ -614,6 +614,7 @@ private fun findDependencyModuleDir(dependencyName: String, searchModuleDirs: Li
             return listOf(dependencyModuleDir) + searchModuleDirs.subList(index, searchModuleDirs.size)
         }
     }
+
     return emptyList()
 }
 

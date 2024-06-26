@@ -197,6 +197,7 @@ class Yarn2(
         } else {
             isCorepackEnabledInManifest(workingDir)
         }
+
         if (corepackEnabled) return DEFAULT_EXECUTABLE_NAME
 
         return yarn2ExecutablesByPath.getOrPut(workingDir) {
@@ -436,6 +437,7 @@ class Yarn2(
                     }
                 }
             }
+
         return allProjects
     }
 
@@ -544,6 +546,7 @@ class Yarn2(
             require(pkg.id.version.isNotEmpty()) {
                 "Generated package info for '${id.toCoordinates()}' has no version."
             }
+
             allPackages += id to pkg
             id
         }
@@ -688,6 +691,7 @@ class Yarn2(
                 result += it to dependencyType
             }
         }
+
         return result
     }
 

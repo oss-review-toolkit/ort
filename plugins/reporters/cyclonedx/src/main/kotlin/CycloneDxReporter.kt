@@ -164,6 +164,7 @@ class CycloneDxReporter : Reporter {
                     }
                 )
             }
+
             licenses = LicenseChoice().apply { expression = Expression(dataLicense) }
         }
 
@@ -276,13 +277,16 @@ class CycloneDxReporter : Reporter {
                                 .fromString(reference.scoringSystem)
                         }
                     }
+
                     affects = mutableListOf(
                         org.cyclonedx.model.vulnerability.Vulnerability.Affect()
                             .apply { ref = vulnerabilityBomRef }
                     )
                 }
+
                 vulnerabilities.add(vulnerability)
             }
+
             bom.vulnerabilities = vulnerabilities
         }
     }
@@ -386,6 +390,7 @@ class CycloneDxReporter : Reporter {
 
                     BomGeneratorFactory.createJson(schemaVersion, bomWithoutExtensibleTypes) as Any
                 }
+
                 else -> throw IllegalArgumentException("Unsupported CycloneDX file format '$fileFormat'.")
             }
 

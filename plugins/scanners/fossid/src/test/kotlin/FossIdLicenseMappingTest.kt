@@ -52,6 +52,7 @@ class FossIdLicenseMappingTest : WordSpec({
             issues.first() shouldNotBeNull {
                 message shouldStartWith "Failed to parse license 'invalid license' as an SPDX expression:"
             }
+
             findings.licenseFindings should beEmpty()
         }
 
@@ -141,6 +142,7 @@ class FossIdLicenseMappingTest : WordSpec({
                     "Failed to parse license 'invalid license' as an SPDX expression"
                 severity shouldBe Severity.ERROR
             }
+
             findings should haveSize(1)
             findings.first() shouldNotBeNull {
                 snippets.first() shouldNotBeNull {

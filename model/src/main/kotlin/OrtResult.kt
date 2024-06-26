@@ -262,6 +262,7 @@ data class OrtResult(
                 append(vcsPath)
                 append("/")
             }
+
             append(path)
         }
     }

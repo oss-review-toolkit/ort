@@ -116,6 +116,7 @@ fun ScanCodeResult.toScanSummary(preferFileLicense: Boolean = false): ScanSummar
                     license is LicenseEntry.Version3 && license.spdxLicenseExpression != null -> {
                         license.spdxLicenseExpression
                     }
+
                     else -> license.licenseExpression.mapLicense(scanCodeKeyToSpdxIdMappings)
                 }
 

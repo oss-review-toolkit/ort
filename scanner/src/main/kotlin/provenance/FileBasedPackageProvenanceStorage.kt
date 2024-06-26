@@ -59,6 +59,7 @@ class FileBasedPackageProvenanceStorage(val backend: FileStorage) : PackageProve
                     // If the file cannot be found it means no scan results have been stored yet.
                     emptyList()
                 }
+
                 else -> {
                     logger.info {
                         "Could not read resolved provenances for '${id.toCoordinates()}' from path '$path': " +
@@ -108,6 +109,7 @@ class FileBasedPackageProvenanceStorage(val backend: FileStorage) : PackageProve
                             it.collectMessages()
                     }
                 }
+
                 else -> throw it
             }
         }

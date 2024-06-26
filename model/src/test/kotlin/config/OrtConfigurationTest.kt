@@ -341,6 +341,7 @@ class OrtConfigurationTest : WordSpec({
                         sslkey shouldBe "/defaultdir/postgresql.pk8"
                         sslrootcert shouldBe "/defaultdir/root.crt"
                     }
+
                     postgresStorage.type shouldBe StorageType.PROVENANCE_BASED
 
                     val sw360Storage = this["sw360Configuration"]

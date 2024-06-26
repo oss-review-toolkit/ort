@@ -122,6 +122,7 @@ private fun SpdxExpression.getLicenseRefExceptions(result: MutableSet<String>) {
         is SpdxLicenseWithExceptionExpression -> if (isPresent() && exception.startsWith(LICENSE_REF_PREFIX)) {
             result.add(exception)
         }
+
         else -> { }
     }
 }

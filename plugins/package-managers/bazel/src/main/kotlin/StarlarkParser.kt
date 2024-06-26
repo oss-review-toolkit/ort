@@ -71,6 +71,7 @@ internal class Lexer(private val input: String) {
             while (!isMultilineString() && !isEOF()) {
                 advance()
             }
+
             val str = input.substring(start, pos)
             advance(3) // Skip closing """.
             return Token(TokenType.STRING, str)
@@ -80,6 +81,7 @@ internal class Lexer(private val input: String) {
             while (peek() != '"' && !isEOF()) {
                 advance()
             }
+
             val str = input.substring(start, pos)
             advance() // Skip closing quote.
             return Token(TokenType.STRING, str)
@@ -91,11 +93,13 @@ internal class Lexer(private val input: String) {
         while (isAlpha(peek()) || isDigit(peek()) || peek() == '_') {
             advance()
         }
+
         val str = input.substring(start, pos)
 
         if (str.lowercase() == "true" || str.lowercase() == "false") {
             return Token(TokenType.BOOLEAN, str.lowercase())
         }
+
         return Token(TokenType.IDENTIFIER, str)
     }
 
@@ -104,6 +108,7 @@ internal class Lexer(private val input: String) {
         while (isDigit(peek())) {
             advance()
         }
+
         val number = input.substring(start, pos)
         return Token(TokenType.NUMBER, number)
     }
@@ -116,34 +121,43 @@ internal class Lexer(private val input: String) {
                         advance()
                     }
                 }
+
                 ' ', '\n', '\r', '\t' -> advance()
+
                 '=' -> {
                     advance()
                     return Token(TokenType.EQUALS, "=")
                 }
+
                 '(' -> {
                     advance()
                     return Token(TokenType.LPAREN, "(")
                 }
+
                 ')' -> {
                     advance()
                     return Token(TokenType.RPAREN, ")")
                 }
+
                 '[' -> {
                     advance()
                     return Token(TokenType.LBRACKET, "[")
                 }
+
                 ']' -> {
                     advance()
                     return Token(TokenType.RBRACKET, "]")
                 }
+
                 ',' -> {
                     advance()
                     return Token(TokenType.COMMA, ",")
                 }
+
                 '"' -> {
                     return tokenizeString()
                 }
+
                 else -> {
                     if (isAlpha(c)) {
                         return tokenizeIdentifier()
@@ -155,6 +169,7 @@ internal class Lexer(private val input: String) {
                 }
             }
         }
+
         return Token(TokenType.EOF, "")
     }
 }
@@ -180,9 +195,11 @@ internal class Parser(input: String) {
             while (currentToken.type != TokenType.RBRACKET) {
                 eat(currentToken.type)
             }
+
             eat(TokenType.RBRACKET)
             value = "TODO"
         }
+
         return key to value
     }
 
@@ -195,6 +212,7 @@ internal class Parser(input: String) {
             params[key] = value
             if (currentToken.type == TokenType.COMMA) eat(TokenType.COMMA)
         }
+
         eat(TokenType.RPAREN)
 
         return BazelDepDirective(
@@ -213,6 +231,7 @@ internal class Parser(input: String) {
             params[key] = value
             if (currentToken.type == TokenType.COMMA) eat(TokenType.COMMA)
         }
+
         eat(TokenType.RPAREN)
 
         return ModuleDirective(

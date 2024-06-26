@@ -116,6 +116,7 @@ data class PackageReference(
         val transformedDependencies = dependencies.mapTo(mutableSetOf()) {
             it.traverse(transform)
         }
+
         return transform(copy(dependencies = transformedDependencies))
     }
 

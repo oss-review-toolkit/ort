@@ -189,6 +189,7 @@ class Pub(
                     else -> throw IllegalArgumentException("Unsupported macOS architecture '$arch'.")
                 }
             }
+
             else -> throw IllegalArgumentException("Unsupported operating system.")
         }
 
@@ -403,6 +404,7 @@ class Pub(
                                 ?.dependencies
                         )
                     }
+
                     // TODO: Enable support for iOS / CocoaPods once the package manager is implemented.
                 }
 
@@ -552,6 +554,7 @@ class Pub(
                                     "Invalid path of package $rawName: " +
                                         "'$path' is outside of the project root '$workingDir'."
                                 }
+
                                 VcsInfo.EMPTY
                             }
                         }
@@ -728,6 +731,7 @@ class Pub(
                 throw IOException(result.errorMessage)
             }
         }
+
         return result
     }
 

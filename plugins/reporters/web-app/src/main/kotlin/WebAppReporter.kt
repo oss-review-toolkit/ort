@@ -71,6 +71,7 @@ class WebAppReporter : Reporter {
             val gzipParameters = GzipParameters().apply {
                 compressionLevel = Deflater.BEST_COMPRESSION
             }
+
             GzipCompressorOutputStream(b64OutputStream, gzipParameters).bufferedWriter().use { gzipWriter ->
                 evaluatedModel.toJson(gzipWriter, prettyPrint = false)
             }

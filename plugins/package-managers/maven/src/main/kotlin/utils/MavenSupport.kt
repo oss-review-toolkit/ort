@@ -423,6 +423,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                 workspaceReader = this@MavenSupport.workspaceReader
             }
         }
+
         val projectBuildingResults = try {
             projectBuilder.build(pomFiles, false, projectBuildingRequest)
         } catch (e: ProjectBuildingException) {
@@ -709,6 +710,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                         "There was an error building '${it.identifier()}', continuing with the incompletely built " +
                             "project: ${e.collectMessages()}"
                     }
+
                     failedProject.project
                 } else {
                     logger.error { "Failed to build '${it.identifier()}': ${e.collectMessages()}" }

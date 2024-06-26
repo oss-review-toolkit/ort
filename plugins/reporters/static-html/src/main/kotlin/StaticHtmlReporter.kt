@@ -98,6 +98,7 @@ class StaticHtmlReporter : Reporter {
                         +css
                     }
                 }
+
                 style {
                     unsafe {
                         +"\n"
@@ -105,6 +106,7 @@ class StaticHtmlReporter : Reporter {
                     }
                 }
             }
+
             body {
                 script(type = ScriptType.textJavaScript) {
                     unsafe {
@@ -129,6 +131,7 @@ class StaticHtmlReporter : Reporter {
                             href = "https://oss-review-toolkit.org/"
                             +ORT_FULL_NAME
                         }
+
                         +", version ${Environment.ORT_VERSION} on ${Instant.now()}."
                     }
 
@@ -306,6 +309,7 @@ class StaticHtmlReporter : Reporter {
                     +rowIndex.toString()
                 }
             }
+
             td { +ruleViolation.violation.rule }
             td { +(ruleViolation.violation.pkg?.toCoordinates() ?: "-") }
             td {
@@ -315,6 +319,7 @@ class StaticHtmlReporter : Reporter {
                     "-"
                 }
             }
+
             td {
                 p { +ruleViolation.violation.message }
                 if (ruleViolation.isResolved) {
@@ -416,14 +421,17 @@ class StaticHtmlReporter : Reporter {
                             td { +"Type" }
                             td { +vcsInfo.type.toString() }
                         }
+
                         tr {
                             td { +"URL" }
                             td { +vcsInfo.url }
                         }
+
                         tr {
                             td { +"Path" }
                             td { +vcsInfo.path }
                         }
+
                         tr {
                             td { +"Revision" }
                             td { +vcsInfo.revision }
@@ -469,6 +477,7 @@ class StaticHtmlReporter : Reporter {
                     +(rowIndex + 1).toString()
                 }
             }
+
             td { +row.id.toCoordinates() }
 
             td {
@@ -642,17 +651,20 @@ class StaticHtmlReporter : Reporter {
             is SpdxLicenseIdExpression -> {
                 licenseLink(expression.toString())
             }
+
             is SpdxLicenseWithExceptionExpression -> {
                 licenseLink(expression.simpleLicense())
                 +" ${SpdxExpression.WITH} "
                 licenseLink(expression.exception)
             }
+
             is SpdxCompoundExpression -> {
                 expression.children.forEachIndexed { index, child ->
                     if (index > 0) +" ${expression.operator} "
                     licensesLink(child)
                 }
             }
+
             else -> {
                 +expression.toString()
             }

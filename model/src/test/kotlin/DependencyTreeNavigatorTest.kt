@@ -48,6 +48,7 @@ class DependencyTreeNavigatorTest : AbstractDependencyNavigatorTest() {
                                     }
                                 }
                             }
+
                             pkg("D") {
                                 pkg("E")
                             }

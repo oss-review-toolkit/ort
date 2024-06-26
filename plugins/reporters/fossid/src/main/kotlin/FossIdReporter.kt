@@ -73,12 +73,15 @@ class FossIdReporter : Reporter {
         val serverUrl = requireNotNull(config.options[SERVER_URL_PROPERTY]) {
             "No FossID server URL configuration found."
         }
+
         val apiKey = requireNotNull(config.secrets[API_KEY_PROPERTY]) {
             "No FossID API Key configuration found."
         }
+
         val user = requireNotNull(config.secrets[USER_PROPERTY]) {
             "No FossID User configuration found."
         }
+
         val reportType = config.options[REPORT_TYPE_PROPERTY]?.let {
             runCatching {
                 ReportType.valueOf(it)

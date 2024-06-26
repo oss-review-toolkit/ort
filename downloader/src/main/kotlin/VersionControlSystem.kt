@@ -86,6 +86,7 @@ abstract class VersionControlSystem(
                             it.isAvailable() && it.isApplicableUrl(vcsUrl)
                         }
                     }
+
                     else -> forType(type)
                 }.also {
                     urlToVcsMap[vcsUrl] = it
