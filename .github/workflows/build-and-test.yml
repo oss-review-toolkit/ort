@@ -58,6 +58,11 @@ jobs:
         gradle-home-cache-cleanup: true
     - name: Run unit tests
       run: ./gradlew --scan test jacocoTestReport
+    - name: Create Test Summary
+      uses: test-summary/action@v2
+      with:
+        paths: "**/test-results/**/TEST-*.xml"
+      if: always()
     - name: Upload code coverage data
       uses: codecov/codecov-action@v4
       with:
@@ -104,6 +109,11 @@ jobs:
         gradle-home-cache-cleanup: true
     - name: Run functional tests that do not require external tools
       run: ./gradlew --scan -Ptests.exclude=org.ossreviewtoolkit.plugins.packagemanagers.* funTest jacocoFunTestReport
+    - name: Create Test Summary
+      uses: test-summary/action@v2
+      with:
+        paths: "**/test-results/**/TEST-*.xml"
+      if: always()
     - name: Upload code coverage data
       uses: codecov/codecov-action@v4
       with:
@@ -146,6 +156,11 @@ jobs:
           -e GRADLE_OPTS="$GRADLE_OPTS" \
           ${{ env.TEST_IMAGE_TAG }} \
           -c "./gradlew --scan -Ptests.include=org.ossreviewtoolkit.plugins.packagemanagers.* funTest jacocoFunTestReport"
+    - name: Create Test Summary
+      uses: test-summary/action@v2
+      with:
+        paths: "**/test-results/**/TEST-*.xml"
+      if: always()
     - name: Upload code coverage data
       uses: codecov/codecov-action@v4
       with:
