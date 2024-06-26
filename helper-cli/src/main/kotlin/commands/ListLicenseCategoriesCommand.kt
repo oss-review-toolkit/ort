@@ -77,6 +77,7 @@ internal class ListLicenseCategoriesCommand : CliktCommand(
                 licenses.sortedBy { it.id.toString() }.forEach { license ->
                     appendLine("  ${license.description(category)}")
                 }
+
                 appendLine()
             }
         }

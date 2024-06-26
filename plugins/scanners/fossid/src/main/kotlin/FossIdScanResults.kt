@@ -256,6 +256,7 @@ private fun Set<Snippet>.mapSnippetFindingsForFile(
         val url = checkNotNull(snippet.url) {
             "The URL of snippet ${snippet.id} for file '$file' must not be null."
         }
+
         val snippetProvenance = ArtifactProvenance(RemoteArtifact(url, Hash.NONE))
         val purl = snippet.purl
             ?: "pkg:${urlToPackageType(url)}/${snippet.author}/${snippet.artifact}@${snippet.version}"
@@ -316,6 +317,7 @@ private fun Set<Snippet>.mapSnippetFindingsForFile(
                         "Ignoring snippet $purl for file ${sourceLocation.prettyPrint()}, " +
                             "as this is a chosen snippet."
                     }
+
                     true
                 }
 
@@ -324,6 +326,7 @@ private fun Set<Snippet>.mapSnippetFindingsForFile(
                         "Ignoring snippet $purl for file ${sourceLocation.prettyPrint()}, " +
                             "as there is a snippet choice for this source location."
                     }
+
                     true
                 }
 
@@ -375,6 +378,7 @@ private fun getLicenseFindingFromSnippetChoice(
             "Adding snippet choice for ${sourceLocation.prettyPrint()} " +
                 "with license ${snippet.licenses} to the license findings."
         }
+
         LicenseFinding(snippet.licenses, sourceLocation)
     } else {
         null
@@ -395,6 +399,7 @@ internal fun listUnmatchedSnippetChoices(
         val snippetChoicesByName = snippetChoices.filter {
             it.given.sourceLocation.path == markedFileName
         }
+
         val comment = markedAsIdentifiedFile.comments.values.firstOrNull {
             it.comment.contains(ORT_NAME)
         }?.runCatching {
@@ -411,12 +416,15 @@ internal fun listUnmatchedSnippetChoices(
                 val snippetChoicesCount = snippetChoicesByName.count {
                     it.choice.reason == SnippetChoiceReason.ORIGINAL_FINDING
                 }
+
                 val notRelevantSnippetsCount = snippetChoicesByName.count {
                     it.choice.reason == SnippetChoiceReason.NO_RELEVANT_FINDING
                 }
+
                 snippetChoicesCount == comment.ort.snippetChoicesCount &&
                     notRelevantSnippetsCount == comment.ort.notRelevantSnippetsCount
             }
+
             else -> true
         }
     }.map { it.getFileName() }

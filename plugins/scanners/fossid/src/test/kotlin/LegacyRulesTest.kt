@@ -49,6 +49,7 @@ class LegacyRulesTest : WordSpec({
                     " excludes. Add it to the .ort.yml file or remove it from the FossID scan."
                 severity shouldBe Severity.HINT
             }
+
             legacyRules shouldHaveSize 1
             legacyRules shouldBe rulesToTest
         }

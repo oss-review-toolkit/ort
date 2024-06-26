@@ -113,6 +113,7 @@ class DirPackageConfigurationProvider(
                         appendLine(files.prependIndent())
                     }
                 }
+
                 throw DuplicatedConfigurationException(
                     "Duplicate package configuration found:\n${duplicatesInfo.prependIndent()}"
                 )

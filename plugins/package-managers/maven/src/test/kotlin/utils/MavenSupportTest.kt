@@ -37,6 +37,7 @@ class MavenSupportTest : WordSpec({
                     connection = "scm:git:https://github.com/spring-projects/spring-boot.git/childArtifactName"
                     url = "https://github.com/oss-review-toolkit/correctUrl"
                 }
+
                 parent = MavenProject().apply {
                     scm = Scm().apply {
                         connection = "scm:git:https://github.com/spring-projects/spring-boot.git"
@@ -56,6 +57,7 @@ class MavenSupportTest : WordSpec({
                     connection = "scm:git:https://github.com/oss-review-toolkit/childConnection.git"
                     url = "https://github.com/spring-projects/spring-boot/childArtifactName"
                 }
+
                 parent = MavenProject().apply {
                     scm = Scm().apply {
                         connection = "scm:git:https://github.com/oss-review-toolkit/parentConnection.git"
@@ -108,6 +110,7 @@ class MavenSupportTest : WordSpec({
                     tag = "v2.8.1"
                 }
             }
+
             val gitProvider = MavenProject().apply {
                 scm = Scm().apply {
                     connection = "scm:git://github.com/vigna/fastutil.git"

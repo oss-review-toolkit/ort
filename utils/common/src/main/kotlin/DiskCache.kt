@@ -124,6 +124,7 @@ class DiskCache(
         } catch (e: IOException) {
             logger.error { "Could not read cache entry for key '$diskKey': ${e.collectMessages()}" }
         }
+
         return null
     }
 
@@ -136,10 +137,12 @@ class DiskCache(
                 set(INDEX_DATA, data)
                 commit()
             }
+
             return true
         } catch (e: IOException) {
             logger.error { "Could not write to disk cache for key '$diskKey': ${e.collectMessages()}" }
         }
+
         return false
     }
 

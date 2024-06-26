@@ -76,6 +76,7 @@ internal class GenerateProjectExcludesCommand : CliktCommand(
                     comment = "TODO"
                 )
             }
+
         val existingPathExcludes = repositoryConfiguration.excludes.paths
         val pathExcludes = (existingPathExcludes + generatedPathExcludes).distinctBy { it.pattern }
 

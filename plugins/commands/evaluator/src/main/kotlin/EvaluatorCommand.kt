@@ -363,6 +363,7 @@ private fun RuleViolation.format() =
             append(id.toCoordinates())
             append(" - ")
         }
+
         license?.let { license ->
             append(license)
             licenseSource?.let { source ->
@@ -370,7 +371,9 @@ private fun RuleViolation.format() =
                 append(source)
                 append(")")
             }
+
             append(" - ")
         }
+
         append(message)
     }

@@ -263,6 +263,7 @@ class OpossumReporter : Reporter {
             if (key !in externalAttributionSources) {
                 externalAttributionSources[key] = OpossumExternalAttributionSource(name, priority)
             }
+
             return key
         }
 

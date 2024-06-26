@@ -247,6 +247,7 @@ private class AnalyzerState {
                 result.dependencyGraph?.let {
                     builder.addDependencyGraph(manager.managerName, it).addPackages(result.sharedPackages)
                 }
+
                 _finishedPackageManagersState.value = (_finishedPackageManagersState.value + manager.managerName)
                     .toSortedSet(String.CASE_INSENSITIVE_ORDER)
             }

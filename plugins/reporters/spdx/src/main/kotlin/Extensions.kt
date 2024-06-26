@@ -115,6 +115,7 @@ private fun Package.toSpdxExternalReferences(): List<SpdxExternalReference> {
         } else {
             SpdxExternalReference.Type.Cpe22Type
         }
+
         externalRefs += SpdxExternalReference(
             referenceType,
             referenceLocator = it

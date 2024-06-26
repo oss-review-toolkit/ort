@@ -39,6 +39,7 @@ class StarlarkParserTest : WordSpec({
             lexer.nextToken() shouldBe Token(TokenType.RPAREN, ")")
             lexer.nextToken() shouldBe Token(TokenType.EOF, "")
         }
+
         "skip comments" {
             val moduleFileContent = """
                 # yaml-cpp is a YAML parser and emitter in c++ matching the YAML specification.
@@ -49,6 +50,7 @@ class StarlarkParserTest : WordSpec({
 
             lexer.nextToken() shouldBe Token(TokenType.IDENTIFIER, "module")
         }
+
         "support multi-line strings" {
             val moduleFileContent = """
                 ""${'"'}

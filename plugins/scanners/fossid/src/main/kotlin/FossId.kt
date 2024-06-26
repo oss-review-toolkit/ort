@@ -412,6 +412,7 @@ class FossId internal constructor(
                         "Found a previous scan which is still running. Will ignore the 'waitForResult' option and " +
                             "wait..."
                     }
+
                     waitScanComplete(scanCode)
                     true
                 }
@@ -544,12 +545,14 @@ class FossId internal constructor(
             logger.info {
                 "No scan found for $mappedUrlWithoutCredentials and revision $revision. Creating origin scan..."
             }
+
             namingProvider.createScanCode(projectName, DeltaTag.ORIGIN, revision)
         } else {
             logger.info { "Scan '${existingScan.code}' found for $mappedUrlWithoutCredentials and revision $revision." }
             logger.info {
                 "Existing scan has for reference(s): ${existingScan.comment.orEmpty()}. Creating delta scan..."
             }
+
             namingProvider.createScanCode(projectName, DeltaTag.DELTA, revision)
         }
 
@@ -850,6 +853,7 @@ class FossId internal constructor(
                     "Marked as identified file '$it' is not in .ort.yml anymore or its configuration has been " +
                         "altered: putting it again as 'pending'."
                 }
+
                 service.unmarkAsIdentified(config.user, config.apiKey, scanCode, it, false)
             }
         }
@@ -866,6 +870,7 @@ class FossId internal constructor(
                 val snippets = checkNotNull(snippetResponse.data) {
                     "Snippet could not be listed. Response was ${snippetResponse.message}."
                 }
+
                 logger.info { "${snippets.size} snippets." }
 
                 val filteredSnippets = snippets.filterTo(mutableSetOf()) { it.matchType.isValidType() }
@@ -883,6 +888,7 @@ class FossId internal constructor(
                                     "Matched lines could not be listed. Response was " +
                                         "${matchedLinesResponse.message}."
                                 }
+
                                 matchedLines[snippet.id] = lines
                             }
                         }.awaitAll()
@@ -1055,6 +1061,7 @@ class FossId internal constructor(
                         val notRelevantChoicesCount = filteredSnippetChoicesByPath.count {
                             it.choice.reason == SnippetChoiceReason.NO_RELEVANT_FINDING
                         }
+
                         val payload = OrtCommentPayload(
                             licenseFindingsByLicense,
                             relevantChoicesCount,
@@ -1067,6 +1074,7 @@ class FossId internal constructor(
                                 "Adding file comment to '$path' with relevant count $relevantChoicesCount and not " +
                                     "relevant count $notRelevantChoicesCount."
                             }
+
                             service.addFileComment(config.user, config.apiKey, scanCode, path, jsonComment)
                         }
                     }
@@ -1075,6 +1083,7 @@ class FossId internal constructor(
 
             requests.awaitAll()
         }
+
         return result
     }
 }

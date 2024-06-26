@@ -50,6 +50,7 @@ class ProjectSourceRuleTest : WordSpec({
                     "module/docs/LICENSE.txt"
                 )
             }
+
             val rule = createRule(dir)
 
             with(rule) {
@@ -64,6 +65,7 @@ class ProjectSourceRuleTest : WordSpec({
             val dir = tempdir().apply {
                 addDirs("README.md")
             }
+
             val rule = createRule(dir)
 
             rule.projectSourceHasFile("README.md").matches() shouldBe false
@@ -82,6 +84,7 @@ class ProjectSourceRuleTest : WordSpec({
             val dir = tempdir().apply {
                 addDirs("a/b/c")
             }
+
             val rule = createRule(dir)
 
             with(rule) {
@@ -96,6 +99,7 @@ class ProjectSourceRuleTest : WordSpec({
             val dir = tempdir().apply {
                 addFiles("a")
             }
+
             val rule = createRule(dir)
 
             rule.projectSourceHasDirectory("a").matches() shouldBe false
@@ -105,6 +109,7 @@ class ProjectSourceRuleTest : WordSpec({
             val dir = tempdir().apply {
                 addDirs("b")
             }
+
             val rule = createRule(dir)
 
             rule.projectSourceHasDirectory("a").matches() shouldBe false
@@ -123,6 +128,7 @@ class ProjectSourceRuleTest : WordSpec({
                     """.trimIndent()
                 )
             }
+
             val rule = createRule(dir)
 
             rule.projectSourceHasFileWithContent(".*^#{1,2} License$.*", "README.md").matches() shouldBe true

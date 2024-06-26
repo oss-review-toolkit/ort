@@ -122,6 +122,7 @@ class VulnerableCode(name: String, config: VulnerableCodeConfiguration) : Advice
                     "The request of chunk ${index + 1} of ${chunks.size} failed for the following ${chunk.size} " +
                         "PURL(s):"
                 }
+
                 chunk.forEach(logger::error)
             }
         }

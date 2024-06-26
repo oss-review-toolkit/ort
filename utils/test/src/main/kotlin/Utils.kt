@@ -191,6 +191,7 @@ fun scannerRunOf(vararg pkgScanResults: Pair<Identifier, List<ScanResult>>): Sca
             }
         )
     }
+
     val scanners = pkgScanResults.associate { (id, scanResultsForId) ->
         id to scanResultsForId.mapTo(mutableSetOf()) { it.scanner.name }
     }

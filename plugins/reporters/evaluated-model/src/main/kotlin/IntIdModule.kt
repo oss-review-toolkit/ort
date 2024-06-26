@@ -52,6 +52,7 @@ class IntIdModule(private val types: List<Class<out Any>>) : SimpleModule() {
                         null
                     )
                 }
+
                 return super.findObjectIdInfo(ann)
             }
         })

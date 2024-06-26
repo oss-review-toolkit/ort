@@ -274,6 +274,7 @@ class Composer(
                 )
             }
         }
+
         return packages
     }
 
@@ -370,6 +371,7 @@ private fun parseVirtualPackageNames(
             replacedNames += it
         }
     }
+
     return replacedNames - packages.keys
 }
 

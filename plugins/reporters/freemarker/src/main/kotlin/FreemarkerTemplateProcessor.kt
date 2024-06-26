@@ -137,6 +137,7 @@ class FreemarkerTemplateProcessor(
                 setDirectoryForTemplateLoading(file.parentFile)
                 getTemplate(file.name)
             }
+
             outputFile.writer().use { template.process(dataModel, it) }
 
             outputFiles += outputFile

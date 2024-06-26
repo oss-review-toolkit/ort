@@ -109,6 +109,7 @@ private fun replaceYears(copyrightStatement: String): Pair<String, Set<Int>> {
             if (replaceResult.second.isEmpty()) {
                 return Pair(currentStatement, years)
             }
+
             years += replaceResult.second
             currentStatement = replaceResult.first
         }

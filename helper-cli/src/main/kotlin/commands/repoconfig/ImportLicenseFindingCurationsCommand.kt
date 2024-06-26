@@ -93,6 +93,7 @@ internal class ImportLicenseFindingCurationsCommand : CliktCommand(
         } else {
             RepositoryConfiguration()
         }
+
         val vcsUrlMapping = vcsUrlMappingFile?.readValue<VcsUrlMapping>().orEmpty()
 
         val allLicenseFindings = ortResult.getLicenseFindingsForAllProjects()

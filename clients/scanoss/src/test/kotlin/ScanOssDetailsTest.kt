@@ -81,14 +81,17 @@ class ScanOssDetailsTest : StringSpec({
                 copyrights.first() shouldNotBeNull {
                     source shouldBe Source.FILE_HEADER
                 }
+
                 vulnerabilities shouldHaveSize 1
                 vulnerabilities.first() shouldNotBeNull {
                     id shouldBe "GHSA-27p5-7cw6-m45h"
                 }
+
                 quality shouldHaveSize 1
                 quality.first() shouldNotBeNull {
                     score shouldBe "2/5"
                 }
+
                 cryptography should beEmpty()
             }
         }

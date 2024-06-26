@@ -111,6 +111,7 @@ class CarthageTest : WordSpec() {
                     forEach {
                         it.id.type shouldBe "Carthage"
                     }
+
                     count { "user/project" in it.vcs.url } shouldBe 1
                     count { "user-2/project_2" in it.vcs.url } shouldBe 1
                     count { "binary/dependency.zip" in it.binaryArtifact.url } shouldBe 1

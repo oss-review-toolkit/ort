@@ -112,9 +112,11 @@ private fun Provenance.getSortKey(): String =
                 this += vcsInfo.type.toString()
                 this += vcsInfo.url
             }
+
             is ArtifactProvenance -> {
                 this += sourceArtifact.url
             }
+
             else -> {
                 // Do not add anything, because unknown provenance does not have any properties.
             }

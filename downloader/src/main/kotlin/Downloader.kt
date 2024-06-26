@@ -291,6 +291,7 @@ class Downloader(private val config: DownloaderConfiguration) {
                 throw e
             }
         }
+
         val resolvedRevision = workingTree.getRevision()
 
         logger.info {

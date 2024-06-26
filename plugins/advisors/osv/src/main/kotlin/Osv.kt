@@ -134,6 +134,7 @@ class Osv(name: String, config: OsvConfiguration) : AdviceProvider(name) {
             logger.error {
                 "Requesting vulnerabilities for IDs failed: ${it.collectMessages()}"
             }
+
             emptyList()
         }
     }

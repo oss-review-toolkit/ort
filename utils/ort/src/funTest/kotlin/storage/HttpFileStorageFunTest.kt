@@ -53,6 +53,7 @@ class HttpFileStorageFunTest : WordSpec() {
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_CREATED, 0)
                     requests[exchange.requestURI.toString()] = exchange.requestBody.reader().use { it.readText() }
                 }
+
                 "GET" -> {
                     requests[exchange.requestURI.toString()].let { data ->
                         if (data != null) {

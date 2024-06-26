@@ -310,5 +310,6 @@ private fun Provenance.writeValueAsString(): String =
         is RepositoryProvenance -> {
             "type=${vcsInfo.type}, url=${vcsInfo.url}, path=${vcsInfo.path}, revision=$resolvedRevision"
         }
+
         else -> throw IllegalArgumentException("Provenance must have either a non-null source artifact or VCS info.")
     }

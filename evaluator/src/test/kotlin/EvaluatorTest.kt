@@ -146,6 +146,7 @@ class EvaluatorTest : WordSpec({
                     }
                 }
             }
+
             val script = javaClass.getResource("/rules/osadl.rules.kts").readText()
 
             val result = Evaluator(compatibleOrtResult).run(script)
@@ -179,6 +180,7 @@ class EvaluatorTest : WordSpec({
                     }
                 }
             }
+
             val script = javaClass.getResource("/rules/osadl.rules.kts").readText()
 
             val result = Evaluator(incompatibleOrtResult).run(script)
@@ -212,6 +214,7 @@ class EvaluatorTest : WordSpec({
                     }
                 }
             }
+
             val script = javaClass.getResource("/rules/osadl.rules.kts").readText()
 
             val result = Evaluator(incompatibleOrtResult).run(script)

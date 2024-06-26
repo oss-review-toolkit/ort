@@ -109,6 +109,7 @@ class Bazel(
             logger.info {
                 "Using local Bazel module registry at '$localRegistryURL'."
             }
+
             LocalBazelModuleRegistryService(File(localRegistryURL))
         } ?: RemoteBazelModuleRegistryService.create(registryUrl)
 

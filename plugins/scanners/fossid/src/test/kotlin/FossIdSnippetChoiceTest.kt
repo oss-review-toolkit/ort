@@ -238,6 +238,7 @@ class FossIdSnippetChoiceTest : WordSpec({
                     purl shouldBe PURL_3
                 }
             }
+
             summary.issues.filter { it.severity > Severity.HINT } should beEmpty()
         }
 
@@ -336,6 +337,7 @@ class FossIdSnippetChoiceTest : WordSpec({
             coVerify {
                 service.markAsIdentified(USER, API_KEY, scanCode, FILE_1, any())
             }
+
             summary.issues.filter { it.severity > Severity.HINT } should beEmpty()
 
             summary.issues.forAtLeastOne {
@@ -386,9 +388,11 @@ class FossIdSnippetChoiceTest : WordSpec({
                     purl shouldBe PURL_2
                 }
             }
+
             coVerify(inverse = true) {
                 service.markAsIdentified(USER, API_KEY, scanCode, FILE_1, any())
             }
+
             summary.issues.filter { it.severity > Severity.HINT } should beEmpty()
 
             summary.issues.forAtLeastOne {
@@ -437,6 +441,7 @@ class FossIdSnippetChoiceTest : WordSpec({
             coVerify(exactly = 1) {
                 service.markAsIdentified(USER, API_KEY, scanCode, FILE_1, any())
             }
+
             summary.issues.filter { it.severity > Severity.HINT } should beEmpty()
         }
 
@@ -565,6 +570,7 @@ class FossIdSnippetChoiceTest : WordSpec({
                 license shouldBe "MIT".toSpdx()
                 location shouldBe choiceLocation
             }
+
             summary.issues.filter { it.severity > Severity.HINT } should beEmpty()
             summary.snippetFindings should beEmpty()
         }
@@ -599,6 +605,7 @@ class FossIdSnippetChoiceTest : WordSpec({
                 val defaultLocation = TextLocation(FILE_1, -1, -1)
                 location shouldBe defaultLocation
             }
+
             summary.issues.filter { it.severity > Severity.HINT } should beEmpty()
             summary.snippetFindings should beEmpty()
         }
@@ -644,6 +651,7 @@ class FossIdSnippetChoiceTest : WordSpec({
             summary.issues.forAtLeastOne {
                 it.message shouldBe "This scan has 1 file(s) pending identification in FossID."
             }
+
             summary.issues.filter { it.severity > Severity.HINT } should beEmpty()
             summary.snippetFindings shouldHaveSize 2
             summary.snippetFindings.first().apply {
@@ -651,11 +659,13 @@ class FossIdSnippetChoiceTest : WordSpec({
                 snippets shouldHaveSize 2
                 snippets.map { it.purl } shouldBe listOf(PURL_1, PURL_2)
             }
+
             summary.snippetFindings.last().apply {
                 sourceLocation.path shouldBe FILE_1
                 snippets shouldHaveSize 1
                 snippets.map { it.purl } shouldBe listOf(PURL_3)
             }
+
             coVerify {
                 service.unmarkAsIdentified(USER, API_KEY, scanCode, FILE_1, any())
             }
@@ -706,6 +716,7 @@ class FossIdSnippetChoiceTest : WordSpec({
             summary.issues.forAtLeastOne {
                 it.message shouldBe "This scan has 1 file(s) pending identification in FossID."
             }
+
             summary.issues.filter { it.severity > Severity.HINT } should beEmpty()
             // Two snippets have been chosen according to the count in the comment. However, the .ort.yml file contains
             // only one snippet choice: Therefore, the file should be 'pending' again and the remaining snippet should
@@ -716,6 +727,7 @@ class FossIdSnippetChoiceTest : WordSpec({
                 snippets shouldHaveSize 1
                 snippets.map { it.purl } shouldBe listOf(PURL_3)
             }
+
             coVerify {
                 service.unmarkAsIdentified(USER, API_KEY, scanCode, FILE_1, any())
             }
@@ -890,9 +902,11 @@ class FossIdSnippetChoiceTest : WordSpec({
             val summary = fossId.scan(createPackage(pkgId, vcsInfo), snippetChoices = snippetChoices).summary
 
             summary.snippetFindings shouldHaveSize 2
+
             summary.snippetFindings.first().apply { // one snippet is remaining for file 1
                 sourceLocation.path shouldBe FILE_1
             }
+
             summary.snippetFindings.last().apply { // one snippet for file 2, then the limit is reached
                 sourceLocation.path shouldBe FILE_2
             }

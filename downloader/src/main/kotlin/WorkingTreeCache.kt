@@ -92,6 +92,7 @@ class DefaultWorkingTreeCache : WorkingTreeCache {
                     workingTrees[key]?.getRootPath()?.safeDeleteRecursively(force = true)
                 }
             }
+
             workingTrees.clear()
             workingTreeMutexes.clear()
         }

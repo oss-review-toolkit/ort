@@ -104,6 +104,7 @@ class OrtImportOrder(config: Config) : Rule(config) {
             pathsWithBlankLines += it.value
             pathsWithBlankLines += ""
         }
+
         pathsWithBlankLines.removeLast()
 
         return pathsWithBlankLines

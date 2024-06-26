@@ -175,6 +175,7 @@ class CycloneDxReporterFunTest : WordSpec({
                 .generateReport(ORT_RESULT, jsonOptions).also {
                     it shouldHaveSize 2
                 }
+
             val actualBomWithFindings = bomProjectWithFindings.readText().patchCycloneDxResult()
             val actualBomWithoutFindings = bomProjectWithoutFindings.readText().patchCycloneDxResult()
 

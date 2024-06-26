@@ -61,6 +61,7 @@ class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceB
                     // If the file cannot be found it means no scan results have been stored, yet.
                     emptyList()
                 }
+
                 else -> {
                     logger.info {
                         "Could not read scan results for '$provenance' from path '$path': " +
@@ -109,6 +110,7 @@ class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceB
                         "Could not store scan result for '$provenance' at path '$path': ${it.collectMessages()}"
                     }
                 }
+
                 else -> throw it
             }
         }

@@ -78,6 +78,7 @@ class FilePackageCurationProviderTest : StringSpec() {
             curations.forEach {
                 it.isApplicable(identifier) shouldBe true
             }
+
             (provider.packageCurations - curations).forEach {
                 it.isApplicable(identifier) shouldBe false
             }
