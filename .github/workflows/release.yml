@@ -59,5 +59,7 @@ jobs:
         uses: actions/attest-build-provenance@v1
         with:
           subject-path: |
-            ./cli/build/distributions/ort-$ORT_VERSION.{tgz,zip}*
-            ./helper-cli/build/distributions/orth-$ORT_VERSION.{tgz,zip}*
+            ./cli/build/distributions/ort-$ORT_VERSION.tgz
+            ./cli/build/distributions/ort-$ORT_VERSION.zip
+            ./helper-cli/build/distributions/orth-$ORT_VERSION.tgz
+            ./helper-cli/build/distributions/orth-$ORT_VERSION.zip
