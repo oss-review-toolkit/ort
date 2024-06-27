@@ -24,11 +24,14 @@ import java.io.File
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.decodeFromStream
 
+private const val BAZEL_MODULES_DIR = "modules"
+
 /**
  * A Bazel registry which is located on the local file system.
  */
 class LocalBazelModuleRegistryService(directory: File) : BazelModuleRegistryService {
     private val moduleDirectory: File
+    private val bazelRegistry: BazelRegistry
 
     init {
         val registryFile = directory.resolve("bazel_registry.json")
@@ -37,11 +40,11 @@ class LocalBazelModuleRegistryService(directory: File) : BazelModuleRegistryServ
             "The Bazel registry file bazel_registry.json does not exist in '${directory.canonicalPath}'."
         }
 
-        val bazelRegistry = registryFile.inputStream().use {
+        bazelRegistry = registryFile.inputStream().use {
             JSON.decodeFromStream<BazelRegistry>(it)
         }
 
-        moduleDirectory = registryFile.resolve(bazelRegistry.moduleBasePath)
+        moduleDirectory = registryFile.resolveSibling(BAZEL_MODULES_DIR)
     }
 
     override suspend fun getModuleMetadata(name: String): ModuleMetadata {
