@@ -168,9 +168,9 @@ class Bazel(
             "mod", "graph", "--output", "json", "--disk_cache=", workingDir = projectDir
         )
 
-        val node = modGraphProcess.stdout.parseBazelModule()
-        val devDeps = node.dependencies.filter { depDirectives[it.key]?.devDependency == true }.toSet()
-        val mainDeps = node.dependencies.toSet() - devDeps
+        val mainModule = modGraphProcess.stdout.parseBazelModule()
+        val devDeps = mainModule.dependencies.filter { depDirectives[it.key]?.devDependency == true }.toSet()
+        val mainDeps = mainModule.dependencies.toSet() - devDeps
 
         return setOf(
             Scope(
