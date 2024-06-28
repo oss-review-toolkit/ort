@@ -82,9 +82,7 @@ class Bazel(
 
     override fun command(workingDir: File?) = "bazel"
 
-    override fun getVersionArguments() = "version"
-
-    override fun transformVersion(output: String) = transformBazelVersion(output)
+    override fun transformVersion(output: String) = output.removePrefix("bazel ")
 
     // Bazel 6.0 already supports bzlmod but it is not enabled by default.
     // Supporting it would require adding the flag "--enable_bzlmod=true" at the correct position of all bazel
@@ -203,14 +201,6 @@ class Bazel(
             dependencies = node.dependencies.map { parseModuleGraphNode(it) }.toSet()
         )
 }
-
-internal fun transformBazelVersion(output: String) =
-    output.lineSequence()
-        .find { it.startsWith("Build label") }
-        .orEmpty()
-        .split(':')
-        .getOrElse(1) { "" }
-        .trim()
 
 private fun ModuleMetadata.vcsInfo(): VcsInfo {
     val repo = repository?.firstOrNull().orEmpty()
