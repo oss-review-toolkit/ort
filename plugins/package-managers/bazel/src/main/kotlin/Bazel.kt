@@ -23,7 +23,6 @@ import java.io.File
 import java.util.Base64
 
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.json.Json
 
 import org.apache.logging.log4j.kotlin.logger
 
@@ -59,10 +58,6 @@ import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
 
 private const val LOCKFILE_NAME = "MODULE.bazel.lock"
-
-private val JSON = Json {
-    ignoreUnknownKeys = true
-}
 
 class Bazel(
     name: String,
@@ -173,7 +168,7 @@ class Bazel(
             "mod", "graph", "--output", "json", "--disk_cache=", workingDir = projectDir
         )
 
-        val node = JSON.decodeFromString<BazelModule>(modGraphProcess.stdout)
+        val node = modGraphProcess.stdout.parseBazelModule()
         val devDeps = node.dependencies.filter { depDirectives[it.key]?.devDependency == true }.toSet()
         val mainDeps = node.dependencies.toSet() - devDeps
 
