@@ -175,11 +175,11 @@ class Bazel(
         return setOf(
             Scope(
                 name = "main",
-                dependencies = mainDeps.map { it.toPackageReference() }.toSet()
+                dependencies = mainDeps.mapTo(mutableSetOf()) { it.toPackageReference() }
             ),
             Scope(
                 name = "dev",
-                dependencies = devDeps.map { it.toPackageReference() }.toSet()
+                dependencies = devDeps.mapTo(mutableSetOf()) { it.toPackageReference() }
             )
         )
     }
