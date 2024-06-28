@@ -48,9 +48,9 @@ internal fun parseLockfile(lockfile: File): Lockfile = json.decodeFromString<Loc
  * The data model for the output of "bazel mod graph --output json".
  */
 @Serializable
-internal data class ModuleGraphNode(
+internal data class BazelModule(
     val key: String,
     val name: String? = null,
     val version: String? = null,
-    val dependencies: List<ModuleGraphNode> = emptyList()
+    val dependencies: List<BazelModule> = emptyList()
 )
