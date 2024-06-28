@@ -54,3 +54,5 @@ internal data class BazelModule(
     val version: String? = null,
     val dependencies: List<BazelModule> = emptyList()
 )
+
+internal fun String.parseBazelModule() = json.decodeFromString<BazelModule>(this)
