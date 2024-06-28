@@ -173,7 +173,7 @@ class Bazel(
             "mod", "graph", "--output", "json", "--disk_cache=", workingDir = projectDir
         )
 
-        val node = JSON.decodeFromString<ModuleGraphNode>(modGraphProcess.stdout)
+        val node = JSON.decodeFromString<BazelModule>(modGraphProcess.stdout)
         val devDeps = node.dependencies.filter { depDirectives[it.key]?.devDependency == true }.toSet()
         val mainDeps = node.dependencies.toSet() - devDeps
 
@@ -189,7 +189,7 @@ class Bazel(
         )
     }
 
-    private fun parseModuleGraphNode(node: ModuleGraphNode): PackageReference =
+    private fun parseModuleGraphNode(node: BazelModule): PackageReference =
         PackageReference(
             id = Identifier(
                 type = managerName,
