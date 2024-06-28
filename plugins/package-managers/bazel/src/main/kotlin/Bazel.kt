@@ -175,28 +175,28 @@ class Bazel(
         return setOf(
             Scope(
                 name = "main",
-                dependencies = mainDeps.map { parseModuleGraphNode(it) }.toSet()
+                dependencies = mainDeps.map { it.toPackageReference() }.toSet()
             ),
             Scope(
                 name = "dev",
-                dependencies = devDeps.map { parseModuleGraphNode(it) }.toSet()
+                dependencies = devDeps.map { it.toPackageReference() }.toSet()
             )
         )
     }
 
-    private fun parseModuleGraphNode(node: BazelModule): PackageReference =
+    private fun BazelModule.toPackageReference(): PackageReference =
         PackageReference(
             id = Identifier(
                 type = managerName,
                 namespace = "",
-                name = node.name ?: node.key.substringBefore("@", ""),
-                version = node.version ?: node.key.substringAfter("@", "")
+                name = name ?: key.substringBefore("@", ""),
+                version = version ?: key.substringAfter("@", "")
             ),
             // Static linking is the default for cc_binary targets. According to the documentation, it is off for
             // cc_test, but according to experiments, it is on.
             // See https://bazel.build/reference/be/c-cpp#cc_binary.linkstatic
             linkage = PackageLinkage.STATIC,
-            dependencies = node.dependencies.map { parseModuleGraphNode(it) }.toSet()
+            dependencies = dependencies.map { it.toPackageReference() }.toSet()
         )
 }
 
