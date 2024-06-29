@@ -41,7 +41,6 @@ dependencies {
     implementation(projects.utils.spdxUtils)
 
     implementation(libs.bundles.kotlinxSerialization)
-    implementation(libs.tomlkt)
 
     funTestImplementation(testFixtures(projects.analyzer))
 }
