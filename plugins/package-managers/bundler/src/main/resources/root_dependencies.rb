@@ -32,4 +32,4 @@ Bundler.load.current_dependencies.each do |dep|
     end
 end
 
-puts(YAML.dump(groups))
+puts(groups.to_yaml)

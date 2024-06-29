@@ -27,6 +27,7 @@
 # [1] https://github.com/rubygems/bundler/blob/35be6d9a603084f719fec4f4028c18860def07f6/lib/bundler/cli/lock.rb#L49-L58
 
 require 'bundler'
+require 'yaml'
 
 # Resolve dependencies independently of the Ruby interpreter.
 Bundler.settings.set_global(:force_ruby_platform, true)
