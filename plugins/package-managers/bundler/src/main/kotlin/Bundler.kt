@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.bundler
 
-import com.fasterxml.jackson.databind.JsonNode
+import com.charleskorn.kaml.Yaml
 
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -28,6 +28,8 @@ import java.io.PrintStream
 import java.net.HttpURLConnection
 
 import kotlin.time.measureTime
+
+import kotlinx.serialization.serializer
 
 import org.apache.logging.log4j.kotlin.logger
 
@@ -53,12 +55,9 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
-import org.ossreviewtoolkit.model.fromYaml
 import org.ossreviewtoolkit.model.orEmpty
-import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.AlphaNumericComparator
 import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.ort.HttpDownloadError
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.downloadText
@@ -84,6 +83,9 @@ private const val BUNDLER_GEM_NAME = "bundler"
  * The name of the file where Bundler stores locked down dependency information.
  */
 internal const val BUNDLER_LOCKFILE_NAME = "Gemfile.lock"
+
+// TODO: Remove this again once available upstream.
+private inline fun <reified T> Yaml.decodeFromString(string: String): T = decodeFromString(serializer<T>(), string)
 
 private fun runScriptCode(code: String, workingDir: File? = null): String {
     val bytes = ByteArrayOutputStream()
@@ -306,7 +308,7 @@ class Bundler(
     }
 
     private fun getDependencyGroups(workingDir: File): Map<String, List<String>> =
-        runScriptResource(ROOT_DEPENDENCIES_SCRIPT, workingDir).fromYaml()
+        YAML.decodeFromString(runScriptResource(ROOT_DEPENDENCIES_SCRIPT, workingDir))
 
     private fun resolveGemsInfo(workingDir: File): MutableMap<String, GemInfo> {
         val stdout = runScriptResource(RESOLVE_DEPENDENCIES_SCRIPT, workingDir)
@@ -314,7 +316,8 @@ class Bundler(
         // The metadata produced by the "resolve_dependencies.rb" script separates specs for packages with the "\0"
         // character as delimiter.
         val gemsInfo = stdout.split('\u0000').map {
-            GemInfo.createFromMetadata(yamlMapper.readTree(it))
+            val spec = YAML.decodeFromString<GemSpec>(it)
+            GemInfo.createFromMetadata(spec)
         }.associateByTo(mutableMapOf()) {
             it.name
         }
@@ -365,7 +368,8 @@ class Bundler(
         val url = "https://rubygems.org/api/v2/rubygems/$name/versions/$version.yaml?platform=ruby"
 
         return okHttpClient.downloadText(url).mapCatching {
-            GemInfo.createFromGem(yamlMapper.readTree(it))
+            val details = YAML.decodeFromString<VersionDetails>(it)
+            GemInfo.createFromGem(details)
         }.onFailure {
             val error = (it as? HttpDownloadError) ?: run {
                 logger.warn { "Unable to retrieve metadata for gem '$name' from RubyGems: ${it.message}" }
@@ -416,65 +420,58 @@ internal data class GemInfo(
     val artifact: RemoteArtifact
 ) {
     companion object {
-        fun createFromMetadata(node: JsonNode): GemInfo {
-            val runtimeDependencies = node["dependencies"]?.asIterable()?.mapNotNull { dependency ->
-                dependency["name"]?.textValue()?.takeIf { dependency["type"]?.textValue() == ":runtime" }
-            }?.toSet()
+        fun createFromMetadata(spec: GemSpec): GemInfo {
+            val runtimeDependencies = spec.dependencies.mapNotNullTo(mutableSetOf()) { (name, type) ->
+                name.takeIf { type == VersionDetails.Scope.RUNTIME.toString() }
+            }
 
-            val homepage = node["homepage"].textValueOrEmpty()
+            val homepage = spec.homepage.orEmpty()
+
             return GemInfo(
-                node["name"].textValue(),
-                node["version"]["version"].textValue(),
+                spec.name,
+                spec.version.version,
                 homepage,
-                node["authors"]?.toList().mapToSetOfNotEmptyStrings(),
-                node["licenses"]?.toList().mapToSetOfNotEmptyStrings(),
-                node["description"].textValueOrEmpty(),
-                runtimeDependencies.orEmpty(),
+                spec.authors.mapToSetOfNotEmptyStrings(),
+                spec.licenses.mapToSetOfNotEmptyStrings(),
+                spec.description.orEmpty(),
+                runtimeDependencies,
                 VcsHost.parseUrl(homepage),
                 RemoteArtifact.EMPTY
             )
         }
 
-        fun createFromGem(node: JsonNode): GemInfo {
-            val runtimeDependencies = node["dependencies"]?.get("runtime")?.mapNotNull { dependency ->
-                dependency["name"]?.textValue()
-            }?.toSet()
+        fun createFromGem(details: VersionDetails): GemInfo {
+            val runtimeDependencies = details.dependencies[VersionDetails.Scope.RUNTIME]
+                ?.mapTo(mutableSetOf()) { it.name }
+                .orEmpty()
 
-            val vcs = sequenceOf(node["source_code_uri"], node["homepage_uri"]).mapNotNull { uri ->
-                uri?.textValue()?.takeIf { it.isNotEmpty() }
-            }.firstOrNull()?.let {
-                VcsHost.parseUrl(it)
-            }.orEmpty()
+            val vcs = listOfNotNull(details.sourceCodeUri, details.homepageUri)
+                .mapToSetOfNotEmptyStrings()
+                .firstOrNull()
+                ?.let { VcsHost.parseUrl(it) }
+                .orEmpty()
 
-            val artifact = if (node.hasNonNull("gem_uri") && node.hasNonNull("sha")) {
-                val sha = node["sha"].textValue()
-                RemoteArtifact(node["gem_uri"].textValue(), Hash.create(sha))
+            val artifact = if (details.gemUri != null && details.sha != null) {
+                RemoteArtifact(details.gemUri, Hash.create(details.sha))
             } else {
                 RemoteArtifact.EMPTY
             }
 
             return GemInfo(
-                node["name"].textValue(),
-                node["version"].textValue(),
-                node["homepage_uri"].textValueOrEmpty(),
-                node["authors"].textValueOrEmpty().split(',').mapToSetOfNotEmptyStrings(),
-                node["licenses"]?.toList().mapToSetOfNotEmptyStrings(),
-                node["info"].textValueOrEmpty(),
-                runtimeDependencies.orEmpty(),
+                details.name,
+                details.version,
+                details.homepageUri.orEmpty(),
+                details.authors?.split(',').mapToSetOfNotEmptyStrings(),
+                details.licenses.mapToSetOfNotEmptyStrings(),
+                details.info.orEmpty(),
+                runtimeDependencies,
                 vcs,
                 artifact
             )
         }
 
-        private inline fun <reified T> Collection<T>?.mapToSetOfNotEmptyStrings(): Set<String> =
-            this?.mapNotNullTo(mutableSetOf()) { entry ->
-                val text = when (T::class) {
-                    JsonNode::class -> (entry as JsonNode).textValue()
-                    else -> entry.toString()
-                }
-
-                text?.trim()?.takeIf { it.isNotEmpty() }
-            }.orEmpty()
+        private fun Collection<String>?.mapToSetOfNotEmptyStrings(): Set<String> =
+            this?.mapNotNullTo(mutableSetOf()) { string -> string.trim().takeUnless { it.isEmpty() } }.orEmpty()
     }
 
     fun merge(other: GemInfo): GemInfo {

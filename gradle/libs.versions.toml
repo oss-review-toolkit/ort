@@ -32,6 +32,7 @@ jiraRestClient = "5.2.7"
 jruby = "9.4.7.0"
 jslt = "0.1.14"
 jsonSchemaValidator = "1.4.3"
+kaml = "0.60.0"
 kotest = "5.9.1"
 kotlinxCoroutines = "1.8.1"
 kotlinxHtml = "0.11.0"
@@ -131,6 +132,7 @@ kotlinx-html = { module = "org.jetbrains.kotlinx:kotlinx-html-jvm", version.ref 
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerialization" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 kotlinx-serialization-toml = { module = "net.peanuuutz.tomlkt:tomlkt", version.ref = "tomlkt" }
+kotlinx-serialization-yaml = { module = "com.charleskorn.kaml:kaml", version.ref = "kaml" }
 ks3-jdk = { module = "io.ks3:ks3-jdk", version.ref = "ks3" }
 ks3-standard = { module = "io.ks3:ks3-standard", version.ref = "ks3" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
