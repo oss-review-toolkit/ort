@@ -56,11 +56,11 @@ class BundlerTest : WordSpec({
         }
     }
 
-    "createFromJson()" should {
-        "parse JSON metadata for a Gem correctly" {
-            val rspecGemJson = File("src/test/assets/rspec-3.7.0.yaml")
+    "createFromGem()" should {
+        "parse YAML metadata for a Gem correctly" {
+            val gemSpecFile = File("src/test/assets/rspec-3.7.0.yaml")
 
-            val gemspec = GemSpec.createFromGem(rspecGemJson.readValue())
+            val gemspec = GemSpec.createFromGem(gemSpecFile.readValue())
 
             gemspec shouldBe GemSpec(
                 name = "rspec",
