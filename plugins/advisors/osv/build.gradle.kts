@@ -31,5 +31,6 @@ dependencies {
     implementation(projects.utils.ortUtils)
 
     implementation(libs.cvssCalculator)
-    implementation(libs.bundles.kotlinxSerialization)
+    implementation(libs.kotlinx.serialization.core)
+    implementation(libs.kotlinx.serialization.json)
 }

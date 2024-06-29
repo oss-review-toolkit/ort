@@ -47,7 +47,8 @@ dependencies {
 
     testImplementation(platform(projects.plugins.scanners))
 
-    testImplementation(libs.bundles.kotlinxSerialization)
+    testImplementation(libs.kotlinx.serialization.core)
+    testImplementation(libs.kotlinx.serialization.json)
     testImplementation(libs.mockk)
     testImplementation(libs.retrofit.converter.kotlinxSerialization)
     testImplementation(libs.wiremock)

@@ -37,7 +37,8 @@ dependencies {
 
     funTestApi(testFixtures(projects.scanner))
 
-    testImplementation(libs.bundles.kotlinxSerialization)
+    testImplementation(libs.kotlinx.serialization.core)
+    testImplementation(libs.kotlinx.serialization.json)
     testImplementation(libs.mockk)
     testImplementation(libs.wiremock)
 }

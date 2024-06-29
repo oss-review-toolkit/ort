@@ -32,7 +32,8 @@ dependencies {
     implementation(projects.model)
     implementation(projects.utils.commonUtils)
 
-    implementation(libs.bundles.kotlinxSerialization)
+    implementation(libs.kotlinx.serialization.core)
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.log4j.api.kotlin)
     implementation(libs.okhttp.loggingInterceptor)
     implementation(libs.retrofit.converter.kotlinxSerialization)

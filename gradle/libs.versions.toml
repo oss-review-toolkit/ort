@@ -172,6 +172,5 @@ xz = { module = "org.tukaani:xz", version.ref = "xz" }
 [bundles]
 exposed = ["exposed-core", "exposed-dao", "exposed-jdbc", "exposed-javaTime", "exposed-json"]
 hoplite = ["hoplite-core", "hoplite-yaml"]
-kotlinxSerialization = ["kotlinx-serialization-core", "kotlinx-serialization-json"]
 ks3 = ["ks3-jdk", "ks3-standard"]
 mavenResolver = ["maven-resolver-connector-basic", "maven-resolver-transport-file", "maven-resolver-transport-http", "maven-resolver-transport-wagon"]
