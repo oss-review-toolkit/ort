@@ -20,6 +20,9 @@
 plugins {
     // Apply precompiled plugins.
     id("ort-library-conventions")
+
+    // Apply third-party plugins.
+    alias(libs.plugins.kotlinSerialization)
 }
 
 dependencies {
@@ -31,10 +34,9 @@ dependencies {
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxUtils)
 
-    implementation(libs.jackson.core)
-    implementation(libs.jackson.databind)
-    implementation(libs.jackson.dataformat.yaml)
     implementation(libs.jruby)
+    implementation(libs.kotlinx.serialization.core)
+    implementation(libs.kotlinx.serialization.yaml)
 
     funTestImplementation(testFixtures(projects.analyzer))
 }
