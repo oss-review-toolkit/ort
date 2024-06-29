@@ -37,7 +37,8 @@ dependencies {
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxUtils)
 
-    implementation(libs.bundles.kotlinxSerialization)
+    implementation(libs.kotlinx.serialization.core)
+    implementation(libs.kotlinx.serialization.json)
 
     funTestApi(testFixtures(projects.scanner))
 

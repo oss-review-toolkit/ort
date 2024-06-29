@@ -32,7 +32,8 @@ dependencies {
     implementation(projects.model)
     implementation(projects.utils.commonUtils)
 
-    implementation(libs.bundles.kotlinxSerialization)
+    implementation(libs.kotlinx.serialization.core)
+    implementation(libs.kotlinx.serialization.json)
 
     funTestImplementation(testFixtures(projects.reporter))
 }

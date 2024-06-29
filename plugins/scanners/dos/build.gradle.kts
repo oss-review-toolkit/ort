@@ -35,8 +35,9 @@ dependencies {
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxUtils)
 
-    implementation(libs.bundles.kotlinxSerialization)
     implementation(libs.kotlinx.coroutines)
+    implementation(libs.kotlinx.serialization.core)
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.log4j.api)
 
     testImplementation(libs.mockk)
