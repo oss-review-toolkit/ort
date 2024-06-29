@@ -131,7 +131,7 @@ packages:
   - "MIT"
   declared_licenses_processed:
     spdx_expression: "MIT"
-  description: ""
+  description: "HTTP/REST API client library."
   homepage_url: "https://lostisland.github.io/faraday"
   binary_artifact:
     url: ""

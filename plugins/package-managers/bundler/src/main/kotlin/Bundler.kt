@@ -453,13 +453,17 @@ internal data class GemSpec(
                 RemoteArtifact.EMPTY
             }
 
+            val description = sequenceOf(node["description"], node["summary"], node["info"]).mapNotNull { text ->
+                text?.textValue()?.takeIf { it.isNotEmpty() }
+            }.firstOrNull()
+
             return GemSpec(
                 node["name"].textValue(),
                 node["version"].textValue(),
                 node["homepage_uri"].textValueOrEmpty(),
                 node["authors"].textValueOrEmpty().split(',').mapToSetOfNotEmptyStrings(),
                 node["licenses"]?.toList().mapToSetOfNotEmptyStrings(),
-                node["description"].textValueOrEmpty(),
+                description.orEmpty(),
                 runtimeDependencies.orEmpty(),
                 vcs,
                 artifact
