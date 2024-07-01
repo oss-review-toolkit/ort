@@ -196,25 +196,23 @@ class Bazel(
         )
 }
 
-private fun ModuleMetadata.vcsInfo(): VcsInfo {
-    val repo = repository?.firstOrNull().orEmpty()
-
-    // From looking at all current values of this field on BCR, it looks like only the special value "github:"
-    // exists. Otherwise, it's just the repo URL.
-    val url = if (repo.startsWith("github:")) {
-        val path = repo.substringAfter("github:")
+private fun String.expandRepositoryUrl(): String =
+    // From looking at all current values of this field on BCR, it looks like only the special value "github:" exists.
+    // Otherwise, it's just the repo URL.
+    if (startsWith("github:")) {
+        val path = substringAfter("github:")
         "https://github.com/$path"
     } else {
-        repo
+        this
     }
 
-    return VcsInfo(
+private fun ModuleMetadata.vcsInfo() =
+    VcsInfo(
         type = VcsType.GIT,
-        url = url,
+        url = repository?.firstOrNull().orEmpty().expandRepositoryUrl(),
         revision = "",
         path = ""
     )
-}
 
 private fun ModuleSourceInfo.remoteArtifact(): RemoteArtifact {
     val (algo, b64digest) = integrity.split("-", limit = 2)
