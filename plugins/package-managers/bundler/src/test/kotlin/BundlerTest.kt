@@ -58,9 +58,9 @@ class BundlerTest : WordSpec({
 
     "createFromGem()" should {
         "parse YAML metadata for a Gem correctly" {
-            val gemSpecFile = File("src/test/assets/rspec-3.7.0.yaml")
+            val rubyGemsFile = File("src/test/assets/rspec-3.7.0.yaml")
 
-            val gemspec = GemSpec.createFromGem(gemSpecFile.readValue())
+            val gemspec = GemSpec.createFromGem(rubyGemsFile.readValue())
 
             gemspec shouldBe GemSpec(
                 name = "rspec",

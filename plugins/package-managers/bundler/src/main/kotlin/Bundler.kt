@@ -275,14 +275,14 @@ class Bundler(
             val gemId = Identifier("Gem", "", gemSpec.name, gemSpec.version)
 
             // The project itself can be listed as a dependency if the project is a gem (i.e. there is a .gemspec file
-            // for it, and the Gemfile refers to it). In that case, skip querying Rubygems and adding Package and
+            // for it, and the Gemfile refers to it). In that case, skip querying RubyGems and adding Package and
             // PackageReference objects and continue with the projects dependencies.
             if (gemId == projectId) {
                 gemSpec.runtimeDependencies.forEach {
                     parseDependency(workingDir, projectId, it, gemSpecs, scopeDependencies, issues)
                 }
             } else {
-                queryRubygems(gemId.name, gemId.version)?.apply {
+                queryRubyGems(gemId.name, gemId.version)?.apply {
                     gemSpecs[gemName] = merge(gemSpec)
                 }
 
@@ -357,7 +357,7 @@ class Bundler(
     private fun getGemspecFile(workingDir: File) =
         workingDir.walk().maxDepth(1).filter { it.isFile && it.extension == "gemspec" }.firstOrNull()
 
-    private fun queryRubygems(name: String, version: String, retryCount: Int = 3): GemSpec? {
+    private fun queryRubyGems(name: String, version: String, retryCount: Int = 3): GemSpec? {
         // NOTE: Explicitly use platform=ruby here to enforce the same behavior here that is also used in the Bundler
         //       resolving logic.
         // See plugins/package-managers/bundler/src/main/resources/resolve_dependencies.rb
@@ -386,7 +386,7 @@ class Bundler(
                     if (retryCount > 0) {
                         // We see a lot of sporadic "bad gateway" responses that disappear when trying again.
                         Thread.sleep(100)
-                        return queryRubygems(name, version, retryCount - 1)
+                        return queryRubyGems(name, version, retryCount - 1)
                     }
 
                     throw IOException(
