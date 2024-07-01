@@ -104,33 +104,10 @@ class Stack(
         val projectPackage = parseCabalFile(cabalFile.readText())
         val projectId = projectPackage.id.copy(type = managerName)
 
-        fun runStack(vararg command: String): ProcessCapture {
-            // Delete any left-overs from interrupted stack runs.
-            workingDir.resolve(".stack-work").safeDeleteRecursively()
-
-            return run(workingDir, *command)
-        }
-
-        fun listDependencies(scope: String): List<Dependency> {
-            val scopeOptions = listOfNotNull(
-                "--$scope",
-                // Disable the default inclusion of external dependencies if another scope than "external" is specified.
-                "--no-$EXTERNAL_SCOPE_NAME".takeIf { scope != EXTERNAL_SCOPE_NAME }
-            )
-
-            val dependenciesJson = runStack(
-                // Use a hints file for global packages to not require installing the Glasgow Haskell Compiler (GHC).
-                "ls", "dependencies", "json", "--global-hints", *scopeOptions.toTypedArray()
-            ).stdout
-
-            return dependenciesJson.parseDependencies()
-        }
-
         val allDependencies = mutableSetOf<Dependency>()
-
-        val externalDependencyList = listDependencies(EXTERNAL_SCOPE_NAME).also { allDependencies += it }
-        val testDependencyList = listDependencies(TEST_SCOPE_NAME).also { allDependencies += it }
-        val benchDependencyList = listDependencies(BENCH_SCOPE_NAME).also { allDependencies += it }
+        val externalDependencyList = listDependencies(workingDir, EXTERNAL_SCOPE_NAME).also { allDependencies += it }
+        val testDependencyList = listDependencies(workingDir, TEST_SCOPE_NAME).also { allDependencies += it }
+        val benchDependencyList = listDependencies(workingDir, BENCH_SCOPE_NAME).also { allDependencies += it }
 
         val dependencyPackageMap = mutableMapOf<Dependency, Package>()
 
@@ -198,6 +175,28 @@ class Stack(
         )
 
         return listOf(ProjectAnalyzerResult(project, dependencyPackageMap.values.toSet()))
+    }
+
+    private fun runStack(workingDir: File, vararg command: String): ProcessCapture {
+        // Delete any left-overs from interrupted stack runs.
+        workingDir.resolve(".stack-work").safeDeleteRecursively()
+
+        return run(workingDir, *command)
+    }
+
+    private fun listDependencies(workingDir: File, scope: String): List<Dependency> {
+        val scopeOptions = listOfNotNull(
+            "--$scope",
+            // Disable the default inclusion of external dependencies if another scope than "external" is specified.
+            "--no-$EXTERNAL_SCOPE_NAME".takeIf { scope != EXTERNAL_SCOPE_NAME }
+        )
+
+        val dependenciesJson = runStack(
+            // Use a hints file for global packages to not require installing the Glasgow Haskell Compiler (GHC).
+            workingDir, "ls", "dependencies", "json", "--global-hints", *scopeOptions.toTypedArray()
+        ).stdout
+
+        return dependenciesJson.parseDependencies()
     }
 
     private fun getPackageUrl(name: String, version: String) = "https://hackage.haskell.org/package/$name-$version"
