@@ -365,8 +365,7 @@ class CycloneDxReporter : Reporter {
             val outputFile = outputDir.resolve("$outputName.${fileFormat.fileExtension}")
 
             val bomGenerator = when (fileFormat) {
-                // Note that the BomXmlGenerator and BomJsonGenerator interfaces do not share a common base interface.
-                FileFormat.XML -> BomGeneratorFactory.createXml(schemaVersion, bom) as Any
+                FileFormat.XML -> BomGeneratorFactory.createXml(schemaVersion, bom)
                 FileFormat.JSON -> {
                     // JSON output cannot handle extensible types (see [1]), so simply remove them. As JSON output is
                     // guaranteed to be the last format serialized, it is okay to modify the BOM here without doing a
