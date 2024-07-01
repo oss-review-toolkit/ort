@@ -105,9 +105,9 @@ class Stack(
         val projectId = projectPackage.id.copy(type = managerName)
 
         val allDependencies = mutableSetOf<Dependency>()
-        val externalDependencyList = listDependencies(workingDir, EXTERNAL_SCOPE_NAME).also { allDependencies += it }
-        val testDependencyList = listDependencies(workingDir, TEST_SCOPE_NAME).also { allDependencies += it }
-        val benchDependencyList = listDependencies(workingDir, BENCH_SCOPE_NAME).also { allDependencies += it }
+        val externalDependencies = listDependencies(workingDir, EXTERNAL_SCOPE_NAME).also { allDependencies += it }
+        val testDependencies = listDependencies(workingDir, TEST_SCOPE_NAME).also { allDependencies += it }
+        val benchDependencies = listDependencies(workingDir, BENCH_SCOPE_NAME).also { allDependencies += it }
 
         val dependencyPackageMap = mutableMapOf<Dependency, Package>()
 
@@ -131,9 +131,9 @@ class Stack(
             }
 
         val scopes = setOf(
-            Scope(EXTERNAL_SCOPE_NAME, externalDependencyList.getProjectDependencies().toPackageReferences()),
-            Scope(TEST_SCOPE_NAME, testDependencyList.getProjectDependencies().toPackageReferences()),
-            Scope(BENCH_SCOPE_NAME, benchDependencyList.getProjectDependencies().toPackageReferences())
+            Scope(EXTERNAL_SCOPE_NAME, externalDependencies.getProjectDependencies().toPackageReferences()),
+            Scope(TEST_SCOPE_NAME, testDependencies.getProjectDependencies().toPackageReferences()),
+            Scope(BENCH_SCOPE_NAME, benchDependencies.getProjectDependencies().toPackageReferences())
         )
 
         val project = Project(
