@@ -196,13 +196,7 @@ class Bazel(
         )
 }
 
-private fun String.expandRepositoryUrl(): String =
-    if (startsWith("github:")) {
-        val path = substringAfter("github:")
-        "https://github.com/$path"
-    } else {
-        this
-    }
+private fun String.expandRepositoryUrl(): String = withoutPrefix("github:")?.let { "https://github.com/$it" } ?: this
 
 private fun ModuleMetadata.toVcsInfo() =
     VcsInfo(
