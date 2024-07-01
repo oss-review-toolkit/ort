@@ -104,7 +104,6 @@ class Stack(
         val projectPackage = parseCabalFile(cabalFile.readText())
         val projectId = projectPackage.id.copy(type = managerName)
 
-        // Parse package information from the stack.yaml file.
         fun runStack(vararg command: String): ProcessCapture {
             // Delete any left-overs from interrupted stack runs.
             workingDir.resolve(".stack-work").safeDeleteRecursively()
