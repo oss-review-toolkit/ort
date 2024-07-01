@@ -143,8 +143,8 @@ class Bazel(
             description = "",
             homepageUrl = metadata?.homepage?.toString().orEmpty(),
             binaryArtifact = RemoteArtifact.EMPTY,
-            sourceArtifact = sourceInfo?.remoteArtifact().orEmpty(),
-            vcs = metadata?.vcsInfo().orEmpty()
+            sourceArtifact = sourceInfo?.toRemoteArtifact().orEmpty(),
+            vcs = metadata?.toVcsInfo().orEmpty()
         )
 
     private fun getModuleMetadata(id: Identifier, registry: BazelModuleRegistryService): ModuleMetadata? =
@@ -206,7 +206,7 @@ private fun String.expandRepositoryUrl(): String =
         this
     }
 
-private fun ModuleMetadata.vcsInfo() =
+private fun ModuleMetadata.toVcsInfo() =
     VcsInfo(
         type = VcsType.GIT,
         url = repository?.firstOrNull().orEmpty().expandRepositoryUrl(),
@@ -214,7 +214,7 @@ private fun ModuleMetadata.vcsInfo() =
         path = ""
     )
 
-private fun ModuleSourceInfo.remoteArtifact(): RemoteArtifact {
+private fun ModuleSourceInfo.toRemoteArtifact(): RemoteArtifact {
     val (algo, b64digest) = integrity.split("-", limit = 2)
     val digest = Base64.getDecoder().decode(b64digest).encodeHex()
 
