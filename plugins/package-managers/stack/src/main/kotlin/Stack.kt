@@ -181,9 +181,6 @@ class Stack(
                 }
             }
 
-        fun List<Dependency>.getProjectDependencies(): List<String> =
-            single { it.location?.type == PROJECT_PACKAGE_TYPE }.dependencies
-
         val scopes = setOf(
             Scope(EXTERNAL_SCOPE_NAME, externalDependencyList.getProjectDependencies().toPackageReferences()),
             Scope(TEST_SCOPE_NAME, testDependencyList.getProjectDependencies().toPackageReferences()),
@@ -339,3 +336,6 @@ class Stack(
         )
     }
 }
+
+private fun List<Dependency>.getProjectDependencies(): List<String> =
+    single { it.location?.type == PROJECT_PACKAGE_TYPE }.dependencies
