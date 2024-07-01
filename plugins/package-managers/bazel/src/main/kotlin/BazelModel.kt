@@ -42,7 +42,7 @@ internal data class Flags(
     val cmdRegistries: List<String>
 )
 
-internal fun parseLockfile(lockfile: File): Lockfile = json.decodeFromString<Lockfile>(lockfile.readText())
+internal fun parseLockfile(lockfile: File) = json.decodeFromString<Lockfile>(lockfile.readText())
 
 /**
  * The data model for the output of "bazel mod graph --output json".
