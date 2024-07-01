@@ -38,7 +38,6 @@ import org.cyclonedx.model.Metadata
 import org.cyclonedx.model.license.Expression
 import org.cyclonedx.model.metadata.ToolInformation
 
-import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Package
@@ -82,8 +81,8 @@ class CycloneDxReporter : Reporter {
 
     override val type = "CycloneDx"
 
-    // Ensure that JSON comes last due to a work-around in writeBom() below.
-    private val supportedOutputFileFormats = listOf(FileFormat.XML, FileFormat.JSON)
+    // Ensure that the default / XML comes frist and JSON comes last due to a work-around in writeBom() below.
+    private val supportedFileExtensions = listOf("xml", "json")
 
     private fun Bom.addExternalReference(type: ExternalReference.Type, url: String, comment: String? = null) {
         if (url.isBlank()) return
@@ -148,10 +147,17 @@ class CycloneDxReporter : Reporter {
         val dataLicense = config.options[OPTION_DATA_LICENSE] ?: DEFAULT_DATA_LICENSE.id
         val createSingleBom = !config.options[OPTION_SINGLE_BOM].isFalse()
 
-        val outputFileFormats = config.options[OPTION_OUTPUT_FILE_FORMATS]
+        val outputFileExtensions = config.options[OPTION_OUTPUT_FILE_FORMATS]
             ?.split(",")
-            ?.mapTo(mutableSetOf()) { FileFormat.valueOf(it.uppercase()) }
-            ?: setOf(FileFormat.XML)
+            ?.map { it.trim().lowercase() }
+            ?.distinct()
+            .takeUnless { it.isNullOrEmpty() }
+            ?: supportedFileExtensions.take(1)
+
+        val unsupportedFileExtensions = outputFileExtensions - supportedFileExtensions
+        require(unsupportedFileExtensions.isEmpty()) {
+            "The following file extension are not supported by $type: ${unsupportedFileExtensions.joinToString()}"
+        }
 
         val metadata = Metadata().apply {
             timestamp = Date()
@@ -205,7 +211,7 @@ class CycloneDxReporter : Reporter {
 
             addVulnerabilitiesToBom(input.ortResult.getVulnerabilities(), bom)
 
-            outputFiles += writeBom(bom, schemaVersion, outputDir, REPORT_BASE_FILENAME, outputFileFormats)
+            outputFiles += writeBom(bom, schemaVersion, outputDir, REPORT_BASE_FILENAME, outputFileExtensions)
         } else {
             projects.forEach { project ->
                 val bom = Bom().apply {
@@ -250,7 +256,7 @@ class CycloneDxReporter : Reporter {
                 addVulnerabilitiesToBom(input.ortResult.getVulnerabilities(), bom)
 
                 val reportName = "$REPORT_BASE_FILENAME-${project.id.toPath("-")}"
-                outputFiles += writeBom(bom, schemaVersion, outputDir, reportName, outputFileFormats)
+                outputFiles += writeBom(bom, schemaVersion, outputDir, reportName, outputFileExtensions)
             }
         }
 
@@ -356,17 +362,16 @@ class CycloneDxReporter : Reporter {
         schemaVersion: Version,
         outputDir: File,
         outputName: String,
-        requestedOutputFileFormats: Set<FileFormat>
+        outputFileExtensions: List<String>
     ): List<File> {
         val writtenFiles = mutableListOf<File>()
-        val outputFileFormats = supportedOutputFileFormats.filter { it in requestedOutputFileFormats }
 
-        outputFileFormats.forEach { fileFormat ->
-            val outputFile = outputDir.resolve("$outputName.${fileFormat.fileExtension}")
+        outputFileExtensions.forEach { fileExtension ->
+            val outputFile = outputDir.resolve("$outputName.$fileExtension")
 
-            val bomGenerator = when (fileFormat) {
-                FileFormat.XML -> BomGeneratorFactory.createXml(schemaVersion, bom)
-                FileFormat.JSON -> {
+            val bomGenerator = when (fileExtension) {
+                "xml" -> BomGeneratorFactory.createXml(schemaVersion, bom)
+                "json" -> {
                     // JSON output cannot handle extensible types (see [1]), so simply remove them. As JSON output is
                     // guaranteed to be the last format serialized, it is okay to modify the BOM here without doing a
                     // deep copy first.
@@ -390,7 +395,7 @@ class CycloneDxReporter : Reporter {
                     BomGeneratorFactory.createJson(schemaVersion, bomWithoutExtensibleTypes) as Any
                 }
 
-                else -> throw IllegalArgumentException("Unsupported CycloneDX file format '$fileFormat'.")
+                else -> throw IllegalArgumentException("Unsupported CycloneDX file extension '$fileExtension'.")
             }
 
             outputFile.bufferedWriter().use { it.write(bomGenerator.toString()) }
