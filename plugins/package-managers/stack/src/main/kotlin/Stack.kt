@@ -19,9 +19,6 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.stack
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.module.kotlin.readValue
-
 import java.io.File
 import java.io.IOException
 
@@ -42,7 +39,6 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.ProcessCapture
@@ -78,21 +74,6 @@ class Stack(
             repoConfig: RepositoryConfiguration
         ) = Stack(type, analysisRoot, analyzerConfig, repoConfig)
     }
-
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    private data class Location(
-        val url: String,
-        val type: String
-    )
-
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    private data class Dependency(
-        val name: String,
-        val version: String,
-        val license: String,
-        val location: Location? = null,
-        val dependencies: List<String> = emptyList()
-    )
 
     override fun command(workingDir: File?) = "stack"
 
@@ -143,7 +124,7 @@ class Stack(
                 "ls", "dependencies", "json", "--global-hints", *scopeOptions.toTypedArray()
             ).stdout
 
-            return jsonMapper.readValue(dependenciesJson)
+            return dependenciesJson.parseDependencies()
         }
 
         val allDependencies = mutableSetOf<Dependency>()
