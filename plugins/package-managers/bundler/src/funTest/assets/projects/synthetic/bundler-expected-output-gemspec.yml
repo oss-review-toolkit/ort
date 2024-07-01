@@ -518,7 +518,7 @@ packages:
   - "Bob Example"
   declared_licenses: []
   declared_licenses_processed: {}
-  description: ""
+  description: "Test project with gemspec"
   homepage_url: ""
   binary_artifact:
     url: ""
