@@ -197,8 +197,6 @@ class Bazel(
 }
 
 private fun String.expandRepositoryUrl(): String =
-    // From looking at all current values of this field on BCR, it looks like only the special value "github:" exists.
-    // Otherwise, it's just the repo URL.
     if (startsWith("github:")) {
         val path = substringAfter("github:")
         "https://github.com/$path"
