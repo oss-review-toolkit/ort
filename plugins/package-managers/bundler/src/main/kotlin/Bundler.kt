@@ -426,6 +426,7 @@ internal data class GemInfo(
             }
 
             val homepage = spec.homepage.orEmpty()
+            val info = spec.description ?: spec.summary
 
             return GemInfo(
                 spec.name,
@@ -433,7 +434,7 @@ internal data class GemInfo(
                 homepage,
                 spec.authors.mapToSetOfNotEmptyStrings(),
                 spec.licenses.mapToSetOfNotEmptyStrings(),
-                spec.description.orEmpty(),
+                info.orEmpty(),
                 runtimeDependencies,
                 VcsHost.parseUrl(homepage),
                 RemoteArtifact.EMPTY
