@@ -112,34 +112,7 @@ class Stack(
         val dependencyPackageMap = mutableMapOf<Dependency, Package>()
 
         allDependencies.forEach { dependency ->
-            val id = Identifier(
-                type = "Hackage",
-                namespace = "",
-                name = dependency.name,
-                version = dependency.version
-            )
-
-            val fallback = Package.EMPTY.copy(
-                id = id,
-                purl = id.toPurl(),
-                declaredLicenses = setOf(dependency.license)
-            )
-
-            val pkg = when (dependency.location?.type) {
-                null, HACKAGE_PACKAGE_TYPE -> {
-                    // Enrich the package with additional metadata from Hackage.
-                    downloadCabalFile(id)?.let {
-                        parseCabalFile(it)
-                    } ?: fallback
-                }
-
-                PROJECT_PACKAGE_TYPE -> {
-                    // Do not add the project as a package.
-                    null
-                }
-
-                else -> fallback
-            }
+            val pkg = dependency.toPackage()
 
             // Do not add the Glasgow Haskell Compiler (GHC) as a package.
             if (pkg != null && pkg.id.name != "ghc") dependencyPackageMap[dependency] = pkg
@@ -197,6 +170,37 @@ class Stack(
         ).stdout
 
         return dependenciesJson.parseDependencies()
+    }
+
+    private fun Dependency.toPackage(): Package? {
+        val id = Identifier(
+            type = "Hackage",
+            namespace = "",
+            name = name,
+            version = version
+        )
+
+        val fallback = Package.EMPTY.copy(
+            id = id,
+            purl = id.toPurl(),
+            declaredLicenses = setOf(license)
+        )
+
+        return when (location?.type) {
+            null, HACKAGE_PACKAGE_TYPE -> {
+                // Enrich the package with additional metadata from Hackage.
+                downloadCabalFile(id)?.let {
+                    parseCabalFile(it)
+                } ?: fallback
+            }
+
+            PROJECT_PACKAGE_TYPE -> {
+                // Do not add the project as a package.
+                null
+            }
+
+            else -> fallback
+        }
     }
 
     private fun getPackageUrl(name: String, version: String) = "https://hackage.haskell.org/package/$name-$version"
