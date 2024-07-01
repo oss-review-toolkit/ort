@@ -104,18 +104,17 @@ class Stack(
         val projectPackage = parseCabalFile(cabalFile.readText())
         val projectId = projectPackage.id.copy(type = managerName)
 
-        val allDependencies = mutableSetOf<Dependency>()
-        val externalDependencies = listDependencies(workingDir, EXTERNAL_SCOPE_NAME).also { allDependencies += it }
-        val testDependencies = listDependencies(workingDir, TEST_SCOPE_NAME).also { allDependencies += it }
-        val benchDependencies = listDependencies(workingDir, BENCH_SCOPE_NAME).also { allDependencies += it }
+        val externalDependencies = listDependencies(workingDir, EXTERNAL_SCOPE_NAME)
+        val testDependencies = listDependencies(workingDir, TEST_SCOPE_NAME)
+        val benchDependencies = listDependencies(workingDir, BENCH_SCOPE_NAME)
 
-        val dependencyPackageMap = mutableMapOf<Dependency, Package>()
+        val dependencyPackageMap = buildMap {
+            (externalDependencies + testDependencies + benchDependencies).forEach { dependency ->
+                val pkg = dependency.toPackage()
 
-        allDependencies.forEach { dependency ->
-            val pkg = dependency.toPackage()
-
-            // Do not add the Glasgow Haskell Compiler (GHC) as a package.
-            if (pkg != null && pkg.id.name != "ghc") dependencyPackageMap[dependency] = pkg
+                // Do not add the Glasgow Haskell Compiler (GHC) as a package.
+                if (pkg != null && pkg.id.name != "ghc") this[dependency] = pkg
+            }
         }
 
         fun List<String>.toPackageReferences(): Set<PackageReference> =
