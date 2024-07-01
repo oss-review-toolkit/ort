@@ -25,7 +25,6 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.databind.node.MissingNode
-import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
@@ -50,7 +49,6 @@ val mapperConfig: ObjectMapper.() -> Unit = {
 }
 
 val jsonMapper = JsonMapper().apply(mapperConfig)
-val xmlMapper = XmlMapper().apply(mapperConfig)
 
 val yamlMapper: YAMLMapper = YAMLMapper(
     YAMLFactory.builder()

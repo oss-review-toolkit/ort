@@ -28,7 +28,6 @@ dependencies {
     api(projects.utils.spdxUtils)
 
     api(libs.jackson.databind)
-    api(libs.jackson.dataformat.xml)
     api(libs.jackson.dataformat.yaml)
     api(libs.log4j.api)
 
