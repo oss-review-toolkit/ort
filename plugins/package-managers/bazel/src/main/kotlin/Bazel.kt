@@ -92,7 +92,7 @@ class Bazel(
         val depDirectives = moduleMetadata.dependencies.associateBy { "${it.name}@${it.version}" }
         val scopes = getDependencyGraph(projectDir, depDirectives)
 
-        // If no lock file is present, getDependencyGraph() runs "bazel mod graph", which creates a MODULE.bazel.lock
+        // If no lockfile is present, getDependencyGraph() runs "bazel mod graph", which creates a MODULE.bazel.lock
         // file as a side effect. That file contains the URL of the Bazel module registry that was used for dependency
         // resolution.
         val registryUrl = parseLockfile(lockfile).registryUrl()
