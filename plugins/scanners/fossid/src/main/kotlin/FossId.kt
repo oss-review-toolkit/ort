@@ -114,7 +114,7 @@ import org.semver4j.Semver
 class FossId internal constructor(
     override val name: String,
     private val config: FossIdConfig,
-    private val wrapperConfig: ScannerWrapperConfig
+    wrapperConfig: ScannerWrapperConfig
 ) : PackageScannerWrapper {
     companion object {
         @JvmStatic
