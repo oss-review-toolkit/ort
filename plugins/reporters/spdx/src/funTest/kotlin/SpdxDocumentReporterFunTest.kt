@@ -159,8 +159,11 @@ private val analyzedVcs = VcsInfo(
     path = ""
 )
 
+private val analyzedProvenance = RepositoryProvenance(analyzedVcs, "master")
+
 private val ortResult = OrtResult(
     repository = Repository(
+        provenance = analyzedProvenance,
         config = RepositoryConfiguration(
             excludes = Excludes(
                 scopes = listOf(
@@ -171,9 +174,7 @@ private val ortResult = OrtResult(
                     )
                 )
             )
-        ),
-        vcs = analyzedVcs,
-        vcsProcessed = analyzedVcs
+        )
     ),
     analyzer = AnalyzerRun.EMPTY.copy(
         result = AnalyzerResult(

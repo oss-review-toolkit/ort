@@ -1,15 +1,12 @@
 ---
 repository:
-  vcs:
-    type: "Git"
-    url: "https://github.com/tests/test-project.git"
-    revision: "1234567890"
-    path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/tests/test-project.git"
-    revision: "1234567890"
-    path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
+  provenance:
+    vcs_info:
+      type: "Git"
+      url: "https://github.com/tests/test-project.git"
+      revision: "1234567890"
+      path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
+    resolved_revision: "1234567890"
   config:
     excludes:
       paths:

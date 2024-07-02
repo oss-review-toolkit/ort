@@ -83,6 +83,11 @@ data class VcsInfo(
      * Return a [VcsInfoCurationData] with the properties from this [VcsInfo].
      */
     fun toCuration() = VcsInfoCurationData(type, url, revision, path)
+
+    /**
+     * Return true if this [VcsInfo] equals the given [VcsInfo][other], disregarding the path.
+     */
+    fun equalsDisregardingPath(other: VcsInfo) = type == other.type && url == other.url && revision == other.revision
 }
 
 /**

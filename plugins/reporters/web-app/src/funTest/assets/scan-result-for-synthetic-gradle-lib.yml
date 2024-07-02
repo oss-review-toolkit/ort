@@ -1,15 +1,12 @@
 ---
 repository:
-  vcs:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: ""
-    revision: ""
-    path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib"
+  provenance:
+    vcs_info:
+      type: "Git"
+      url: ""
+      revision: "main"
+      path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib"
+    resolved_revision: "main"
   config: {}
 analyzer:
   start_time: "1970-01-01T00:00:00Z"
@@ -40,7 +37,7 @@ analyzer:
       vcs_processed:
         type: "Git"
         url: ""
-        revision: ""
+        revision: "main"
         path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib"
       homepage_url: ""
       scopes:

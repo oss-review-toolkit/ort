@@ -27,6 +27,7 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
@@ -151,7 +152,7 @@ val scanResults = listOf(
 
 val ortResult = OrtResult(
     repository = Repository(
-        vcs = VcsInfo.EMPTY,
+        provenance = RepositoryProvenance(VcsInfo.EMPTY, ""),
         config = RepositoryConfiguration(
             excludes = Excludes(
                 paths = listOf(

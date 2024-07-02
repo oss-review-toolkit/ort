@@ -1,15 +1,12 @@
 ---
 repository:
-  vcs:
-    type: "Git"
-    url: "https://github.com/example/project.git"
-    revision: "2222222222222222222222222222222222222222"
-    path: "vcs-path/project"
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/example/project.git"
-    revision: "2222222222222222222222222222222222222222"
-    path: "vcs-path/project"
+  provenance:
+    vcs_info:
+      type: "Git"
+      url: "https://github.com/example/project.git"
+      revision: "2222222222222222222222222222222222222222"
+      path: "vcs-path/project"
+    resolved_revision: "2222222222222222222222222222222222222222"
   config:
     excludes:
       scopes:

@@ -90,10 +90,11 @@ private fun scanResults(vcsInfo: VcsInfo, findingsPaths: Collection<String>): Li
     )
 }
 
+private const val PROJECT_REVISION = "deadbeaf44444444333333332222222211111111"
 private val PROJECT_VCS_INFO = VcsInfo(
     type = VcsType.GIT_REPO,
     url = "ssh://git@host/manifests/repo?manifest=path/to/manifest.xml",
-    revision = "deadbeaf44444444333333332222222211111111"
+    revision = PROJECT_REVISION
 )
 private val NESTED_VCS_INFO = VcsInfo(
     type = VcsType.GIT,
@@ -108,8 +109,7 @@ private val idNestedProject = Identifier("SpdxDocumentFile:@ort:project-in-neste
 
 private val ORT_RESULT = OrtResult(
     repository = Repository(
-        vcs = PROJECT_VCS_INFO,
-        config = RepositoryConfiguration(),
+        provenance = RepositoryProvenance(PROJECT_VCS_INFO, PROJECT_REVISION),
         nestedRepositories = mapOf("nested-vcs-dir" to NESTED_VCS_INFO)
     ),
     analyzer = AnalyzerRun.EMPTY.copy(
