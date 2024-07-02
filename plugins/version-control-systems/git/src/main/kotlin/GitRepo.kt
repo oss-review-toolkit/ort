@@ -19,10 +19,14 @@
 
 package org.ossreviewtoolkit.plugins.versioncontrolsystems.git
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
-
 import java.io.File
 import java.io.IOException
+
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
+
+import nl.adaptivity.xmlutil.serialization.XML
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 import org.apache.logging.log4j.kotlin.logger
 
@@ -32,7 +36,6 @@ import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.parseRepoManifestPath
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
@@ -53,7 +56,9 @@ private const val GIT_REPO_REV = "v2.39"
  * The minimal manifest structure as used by the wrapping "manifest.xml" file as of repo version 2.4. For the full
  * structure see https://gerrit.googlesource.com/git-repo/+/refs/heads/master/docs/manifest-format.md.
  */
+@Serializable
 private data class Manifest(
+    @XmlSerialName("include")
     val include: Include
 )
 
@@ -61,8 +66,8 @@ private data class Manifest(
  * The "include" tag of a "manifest.xml" file, see
  * https://gerrit.googlesource.com/git-repo/+/refs/heads/master/docs/manifest-format.md#Element-include.
  */
+@Serializable
 private data class Include(
-    @JacksonXmlProperty(isAttribute = true)
     val name: String
 )
 
@@ -116,7 +121,8 @@ class GitRepo : VersionControlSystem(GitRepoCommand) {
                     } else {
                         // As of repo 2.4, the active manifest is a real file with an include directive instead of a
                         // symbolic link, see https://gerrit-review.googlesource.com/c/git-repo/+/256313.
-                        val manifest = manifestWrapper.readValue<Manifest>()
+                        val manifestText = manifestWrapper.readText()
+                        val manifest = XML().decodeFromString<Manifest>(manifestText)
                         workingDir.resolve(manifest.include.name)
                     }
 

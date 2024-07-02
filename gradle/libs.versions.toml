@@ -61,6 +61,7 @@ springCore = "5.3.37"
 svnkit = "1.10.11"
 sw360Client = "17.0.1-m2"
 wiremock = "3.8.0"
+xmlutil = "0.90.1"
 xz = "1.9"
 
 [plugins]
@@ -107,7 +108,6 @@ hoplite-yaml = { module = "com.sksamuel.hoplite:hoplite-yaml", version.ref = "ho
 jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref = "jackson" }
 jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jackson" }
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
-jackson-dataformat-xml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-xml", version.ref = "jackson" }
 jackson-dataformat-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml", version.ref = "jackson" }
 jackson-datatype-jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson" }
 jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
@@ -132,6 +132,7 @@ kotlinx-html = { module = "org.jetbrains.kotlinx:kotlinx-html-jvm", version.ref 
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerialization" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 kotlinx-serialization-toml = { module = "net.peanuuutz.tomlkt:tomlkt", version.ref = "tomlkt" }
+kotlinx-serialization-xml = { module = "io.github.pdvrieze.xmlutil:serialization", version.ref = "xmlutil" }
 kotlinx-serialization-yaml = { module = "com.charleskorn.kaml:kaml", version.ref = "kaml" }
 ks3-jdk = { module = "io.ks3:ks3-jdk", version.ref = "ks3" }
 ks3-standard = { module = "io.ks3:ks3-standard", version.ref = "ks3" }
