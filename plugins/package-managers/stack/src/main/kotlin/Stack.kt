@@ -108,16 +108,9 @@ class Stack(
         val testDependencies = listDependencies(workingDir, TEST_SCOPE_NAME)
         val benchDependencies = listDependencies(workingDir, BENCH_SCOPE_NAME)
 
-        val dependencyPackageMap = buildMap {
-            (externalDependencies + testDependencies + benchDependencies).filterNot {
-                it.isProject()
-            }.forEach { dependency ->
-                val pkg = dependency.toPackage()
-
-                // Do not add the Glasgow Haskell Compiler (GHC) as a package.
-                if (pkg.id.name != "ghc") this[dependency] = pkg
-            }
-        }
+        val dependencyPackageMap = (externalDependencies + testDependencies + benchDependencies).filterNot {
+            it.isProject()
+        }.associateWith { it.toPackage() }
 
         fun List<String>.toPackageReferences(): Set<PackageReference> =
             mapNotNullTo(mutableSetOf()) { name ->
@@ -137,6 +130,9 @@ class Stack(
             Scope(BENCH_SCOPE_NAME, benchDependencies.getProjectDependencies().toPackageReferences())
         )
 
+        val referencedPackageIds = scopes.flatMapTo(mutableSetOf()) { it.collectDependencies() }
+        val packages = dependencyPackageMap.values.filterTo(mutableSetOf()) { it.id in referencedPackageIds }
+
         val project = Project(
             id = projectId,
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
@@ -148,7 +144,7 @@ class Stack(
             scopeDependencies = scopes
         )
 
-        return listOf(ProjectAnalyzerResult(project, dependencyPackageMap.values.toSet()))
+        return listOf(ProjectAnalyzerResult(project, packages))
     }
 
     private fun runStack(workingDir: File, vararg command: String): ProcessCapture {
