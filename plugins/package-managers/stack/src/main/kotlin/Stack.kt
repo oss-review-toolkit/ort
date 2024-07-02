@@ -90,19 +90,6 @@ class Stack(
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
 
-        // Parse project information from the *.cabal file.
-        val cabalFiles = workingDir.walk().filter {
-            it.isFile && it.extension == "cabal"
-        }.toList()
-
-        val cabalFile = when (cabalFiles.size) {
-            0 -> throw IOException("No *.cabal file found in '$workingDir'.")
-            1 -> cabalFiles.first()
-            else -> throw IOException("Multiple *.cabal files found in '$cabalFiles'.")
-        }
-
-        val projectPackage = parseCabalFile(cabalFile.readText(), managerName)
-
         val externalDependencies = listDependencies(workingDir, EXTERNAL_SCOPE_NAME)
         val testDependencies = listDependencies(workingDir, TEST_SCOPE_NAME)
         val benchDependencies = listDependencies(workingDir, BENCH_SCOPE_NAME)
@@ -132,17 +119,7 @@ class Stack(
 
         val referencedPackageIds = scopes.flatMapTo(mutableSetOf()) { it.collectDependencies() }
         val packages = dependencyPackageMap.values.filterTo(mutableSetOf()) { it.id in referencedPackageIds }
-
-        val project = Project(
-            id = projectPackage.id,
-            definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-            authors = projectPackage.authors,
-            declaredLicenses = projectPackage.declaredLicenses,
-            vcs = projectPackage.vcs,
-            vcsProcessed = processProjectVcs(workingDir, projectPackage.vcs, projectPackage.homepageUrl),
-            homepageUrl = projectPackage.homepageUrl,
-            scopeDependencies = scopes
-        )
+        val project = getProject(definitionFile, scopes)
 
         return listOf(ProjectAnalyzerResult(project, packages))
     }
@@ -167,6 +144,34 @@ class Stack(
         ).stdout
 
         return dependenciesJson.parseDependencies()
+    }
+
+    private fun getProject(definitionFile: File, scopes: Set<Scope>): Project {
+        val workingDir = definitionFile.parentFile
+
+        // Parse project information from the *.cabal file.
+        val cabalFiles = workingDir.walk().filter {
+            it.isFile && it.extension == "cabal"
+        }.toList()
+
+        val cabalFile = when (cabalFiles.size) {
+            0 -> throw IOException("No *.cabal file found in '$workingDir'.")
+            1 -> cabalFiles.first()
+            else -> throw IOException("Multiple *.cabal files found in '$cabalFiles'.")
+        }
+
+        val projectPackage = parseCabalFile(cabalFile.readText(), managerName)
+
+        return Project(
+            id = projectPackage.id,
+            definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+            authors = projectPackage.authors,
+            declaredLicenses = projectPackage.declaredLicenses,
+            vcs = projectPackage.vcs,
+            vcsProcessed = processProjectVcs(workingDir, projectPackage.vcs, projectPackage.homepageUrl),
+            homepageUrl = projectPackage.homepageUrl,
+            scopeDependencies = scopes
+        )
     }
 
     private fun Dependency.toPackage(): Package {
