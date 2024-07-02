@@ -101,8 +101,7 @@ class Stack(
             else -> throw IOException("Multiple *.cabal files found in '$cabalFiles'.")
         }
 
-        val projectPackage = parseCabalFile(cabalFile.readText())
-        val projectId = projectPackage.id.copy(type = managerName)
+        val projectPackage = parseCabalFile(cabalFile.readText(), managerName)
 
         val externalDependencies = listDependencies(workingDir, EXTERNAL_SCOPE_NAME)
         val testDependencies = listDependencies(workingDir, TEST_SCOPE_NAME)
@@ -135,7 +134,7 @@ class Stack(
         val packages = dependencyPackageMap.values.filterTo(mutableSetOf()) { it.id in referencedPackageIds }
 
         val project = Project(
-            id = projectId,
+            id = projectPackage.id,
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             authors = projectPackage.authors,
             declaredLicenses = projectPackage.declaredLicenses,
@@ -179,7 +178,7 @@ class Stack(
         )
 
         if (location == null || location.type == HACKAGE_PACKAGE_TYPE) {
-            downloadCabalFile(id)?.let { return parseCabalFile(it) }
+            downloadCabalFile(id)?.let { return parseCabalFile(it, "Hackage") }
         }
 
         return Package.EMPTY.copy(
@@ -281,13 +280,13 @@ class Stack(
 
     // TODO: Consider replacing this with a Haskell helper script that calls "readGenericPackageDescription" and dumps
     //       it as JSON to the console.
-    private fun parseCabalFile(cabal: String): Package {
+    private fun parseCabalFile(cabal: String, identifierType: String): Package {
         // For an example file see
         // https://hackage.haskell.org/package/transformers-compat-0.5.1.4/src/transformers-compat.cabal
         val map = parseKeyValue(cabal.lines().listIterator())
 
         val id = Identifier(
-            type = "Hackage",
+            type = identifierType,
             namespace = map["category"].orEmpty(),
             name = map["name"].orEmpty(),
             version = map["version"].orEmpty()
