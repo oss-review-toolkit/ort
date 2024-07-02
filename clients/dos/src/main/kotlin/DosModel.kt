@@ -47,12 +47,25 @@ data class UploadUrlResponseBody(
 )
 
 @Serializable
+data class PackageInfo(
+    /** The purl for the package (includes the VCS information). */
+    val purl: String,
+
+    /**
+     * The declared license for the package, if any. TODO: Use SpdxExpression type instead of String when the
+     * SpdxExpression class has been migrated to use kotlinx-serialization.
+     */
+    val declaredLicenseExpressionSPDX: String?
+)
+
+@Serializable
 data class ScanResultsRequestBody(
     /**
-     * The list of purls to get scan results for. In case multiple purls are provided, it is assumed that they all
-     * refer to the same provenance (like a monorepo).
+     * The list of packages to get scan results for. In case multiple packages are provided, it is assumed that they all
+     * refer to the same provenance (like a monorepo). If only some of the packages exist in the DOS database, new purl
+     * bookmarks will be added for the missing packages (hence the need for the declared license here).
      */
-    val purls: List<String>? = null,
+    val packages: List<PackageInfo>,
 
     /** Options fort requesting scan results. */
     val options: ReqOptions? = null
@@ -90,8 +103,8 @@ data class JobRequestBody(
     /** The key of the previously uploaded ZIP file to scan. */
     val zipFileKey: String,
 
-    /** The list of purls whose packages' source code is contained in the ZIP file. */
-    val purls: List<String>
+    /** The list of packages whose source code is contained in the ZIP file. */
+    val packages: List<PackageInfo>
 )
 
 @Serializable

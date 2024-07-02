@@ -96,45 +96,51 @@ class DosClient(private val service: DosService) {
     }
 
     /**
-     * Add a new scan job [zipFileKey] and [purls]. Return a [JobResponseBody] or null on error.
+     * Add a new scan job [zipFileKey] and [packages]. Return a [JobResponseBody] or null on error.
      */
-    suspend fun addScanJob(zipFileKey: String, purls: List<String>): JobResponseBody? {
-        if (zipFileKey.isEmpty() || purls.isEmpty()) {
+    suspend fun addScanJob(zipFileKey: String, packages: List<PackageInfo>): JobResponseBody? {
+        if (zipFileKey.isEmpty() || packages.isEmpty()) {
             logger.error { "The ZIP file key and Package URLs are required to add a scan job." }
             return null
         }
 
-        val requestBody = JobRequestBody(zipFileKey, purls)
+        val requestBody = JobRequestBody(zipFileKey, packages)
         val response = service.addScanJob(requestBody)
         val responseBody = response.body()
 
         return if (response.isSuccessful && responseBody != null) {
             responseBody
         } else {
-            logger.error { "Error adding a new scan job for $zipFileKey and $purls: ${response.errorBody()?.string()}" }
+            logger.error {
+                "Error adding a new scan job for $zipFileKey and ${packages.map { it.purl }}: " +
+                    "${response.errorBody()?.string()}"
+            }
 
             null
         }
     }
 
     /**
-     * Get scan results for a list of [purls]. In case multiple purls are provided, it is assumed that they all refer to
-     * the same provenance (like a monorepo). If [fetchConcluded] is true, return concluded licenses instead of detected
-     * licenses. Return either existing results, a "pending" message if the package is currently being scanned, a
-     * "no-results" message if a scan yielded no results, or null on error.
+     * Get scan results for a list of [packages]. In case multiple packages are provided, it is assumed that they all
+     * refer to the same provenance (like a monorepo). If [fetchConcluded] is true, return concluded licenses instead of
+     * detected licenses. Return either existing results, a "pending" message if the package is currently being scanned,
+     * a "no-results" message if a scan yielded no results, or null on error. If only some of the packages exist in DOS
+     * database (identified by purl), new bookmarks for the remaining packages are made (hence the need to provide the
+     * declared licenses for these packages in this request).
      */
-    suspend fun getScanResults(purls: List<String>, fetchConcluded: Boolean): ScanResultsResponseBody? {
-        if (purls.isEmpty()) {
+    suspend fun getScanResults(packages: List<PackageInfo>, fetchConcluded: Boolean): ScanResultsResponseBody? {
+        if (packages.isEmpty()) {
             logger.error { "The list of PURLs to get scan results for must not be empty." }
             return null
         }
 
         val options = ScanResultsRequestBody.ReqOptions(fetchConcluded)
-        val requestBody = ScanResultsRequestBody(purls, options)
+        val requestBody = ScanResultsRequestBody(packages, options)
         val response = service.getScanResults(requestBody)
         val responseBody = response.body()
 
         return if (response.isSuccessful && responseBody != null) {
+            val purls = packages.map { it.purl }
             when (responseBody.state.status) {
                 "no-results" -> logger.info { "No scan results found for $purls." }
                 "pending" -> logger.info { "Scan pending for $purls." }

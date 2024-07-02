@@ -40,6 +40,7 @@ import java.time.Instant
 import kotlinx.serialization.encodeToString
 
 import org.ossreviewtoolkit.clients.dos.JSON
+import org.ossreviewtoolkit.clients.dos.PackageInfo
 import org.ossreviewtoolkit.clients.dos.ScanResultsResponseBody
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
@@ -104,7 +105,15 @@ class DosScannerTest : StringSpec({
                 )
         )
 
-        val status = scanner.client.getScanResults(listOf("purl"), false)?.state?.status
+        val status = scanner.client.getScanResults(
+            listOf(
+                PackageInfo(
+                    purl = "purl",
+                    declaredLicenseExpressionSPDX = null
+                )
+            ),
+            false
+        )?.state?.status
 
         status shouldBe "no-results"
     }
@@ -119,7 +128,15 @@ class DosScannerTest : StringSpec({
                 )
         )
 
-        val response = scanner.client.getScanResults(listOf("purl"), false)
+        val response = scanner.client.getScanResults(
+            listOf(
+                PackageInfo(
+                    purl = "purl",
+                    declaredLicenseExpressionSPDX = null
+                )
+            ),
+            false
+        )
 
         response?.state?.status shouldBe "pending"
         response?.state?.jobId shouldBe "dj34eh4h65"
@@ -135,7 +152,15 @@ class DosScannerTest : StringSpec({
                 )
         )
 
-        val response = scanner.client.getScanResults(listOf("purl"), false)
+        val response = scanner.client.getScanResults(
+            listOf(
+                PackageInfo(
+                    purl = "purl",
+                    declaredLicenseExpressionSPDX = null
+                )
+            ),
+            false
+        )
 
         val actualJson = JSON.encodeToString(response?.results)
         val expectedJson = JSON.decodeFromString<ScanResultsResponseBody>(getResourceAsString("/ready.json")).let {
@@ -163,7 +188,12 @@ class DosScannerTest : StringSpec({
         val issues = mutableListOf<Issue>()
 
         val result = scanner.runBackendScan(
-            purls = listOf(pkg.purl),
+            packages = listOf(
+                PackageInfo(
+                    purl = pkg.purl,
+                    declaredLicenseExpressionSPDX = null
+                )
+            ),
             sourceDir = tempdir(),
             startTime = Instant.now(),
             issues = issues
