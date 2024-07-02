@@ -109,11 +109,14 @@ class Stack(
         val benchDependencies = listDependencies(workingDir, BENCH_SCOPE_NAME)
 
         val dependencyPackageMap = buildMap {
-            (externalDependencies + testDependencies + benchDependencies).forEach { dependency ->
+            (externalDependencies + testDependencies + benchDependencies).filterNot {
+                // Do not add the project as a package.
+                it.isProject()
+            }.forEach { dependency ->
                 val pkg = dependency.toPackage()
 
                 // Do not add the Glasgow Haskell Compiler (GHC) as a package.
-                if (pkg != null && pkg.id.name != "ghc") this[dependency] = pkg
+                if (pkg.id.name != "ghc") this[dependency] = pkg
             }
         }
 
@@ -171,7 +174,7 @@ class Stack(
         return dependenciesJson.parseDependencies()
     }
 
-    private fun Dependency.toPackage(): Package? {
+    private fun Dependency.toPackage(): Package {
         val id = Identifier(
             type = "Hackage",
             namespace = "",
@@ -191,11 +194,6 @@ class Stack(
                 downloadCabalFile(id)?.let {
                     parseCabalFile(it)
                 } ?: fallback
-            }
-
-            PROJECT_PACKAGE_TYPE -> {
-                // Do not add the project as a package.
-                null
             }
 
             else -> fallback
@@ -340,3 +338,5 @@ class Stack(
 
 private fun List<Dependency>.getProjectDependencies(): List<String> =
     single { it.location?.type == PROJECT_PACKAGE_TYPE }.dependencies
+
+private fun Dependency.isProject(): Boolean = location?.type == PROJECT_PACKAGE_TYPE
