@@ -52,6 +52,7 @@ import org.semver4j.RangesListFactory
 private const val EXTERNAL_SCOPE_NAME = "external"
 private const val TEST_SCOPE_NAME = "test"
 private const val BENCH_SCOPE_NAME = "bench"
+private val SCOPE_NAMES = setOf(EXTERNAL_SCOPE_NAME, TEST_SCOPE_NAME, BENCH_SCOPE_NAME)
 
 private const val HACKAGE_PACKAGE_TYPE = "hackage"
 private const val PROJECT_PACKAGE_TYPE = "project package"
@@ -90,35 +91,19 @@ class Stack(
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
 
-        val externalDependencies = listDependencies(workingDir, EXTERNAL_SCOPE_NAME)
-        val testDependencies = listDependencies(workingDir, TEST_SCOPE_NAME)
-        val benchDependencies = listDependencies(workingDir, BENCH_SCOPE_NAME)
+        val dependenciesForScopeName = SCOPE_NAMES.associateWith { listDependencies(workingDir, it) }
 
-        val dependencyPackageMap = (externalDependencies + testDependencies + benchDependencies).filterNot {
-            // Do not add the project as a package.
-            it.isProject()
-        }.associateWith { it.toPackage() }
+        val packageForName = dependenciesForScopeName.values.flatten()
+            .distinctBy { it.name }
+            .filterNot { it.isProject() } // Do not add the project as a package.
+            .associate { it.name to it.toPackage() }
 
-        fun List<String>.toPackageReferences(): Set<PackageReference> =
-            mapNotNullTo(mutableSetOf()) { name ->
-                // TODO: Stack identifies dependencies only by name. Find out how dependencies with the same name but in
-                //       different namespaces should be handled.
-                dependencyPackageMap.entries.find { (dependency, _) -> dependency.name == name }?.let { entry ->
-                    val pkg = entry.value
-                    val dependencies = entry.key.dependencies.toPackageReferences()
+        val scopes = dependenciesForScopeName.mapTo(mutableSetOf()) { (name, dependencies) ->
+            dependencies.toScope(name, packageForName)
+        }
 
-                    pkg.toReference().copy(dependencies = dependencies)
-                }
-            }
-
-        val scopes = setOf(
-            Scope(EXTERNAL_SCOPE_NAME, externalDependencies.getProjectDependencies().toPackageReferences()),
-            Scope(TEST_SCOPE_NAME, testDependencies.getProjectDependencies().toPackageReferences()),
-            Scope(BENCH_SCOPE_NAME, benchDependencies.getProjectDependencies().toPackageReferences())
-        )
-
-        val referencedPackageIds = scopes.flatMapTo(mutableSetOf()) { it.collectDependencies() }
-        val packages = dependencyPackageMap.values.filterTo(mutableSetOf()) { it.id in referencedPackageIds }
+        val referencedPackages = scopes.flatMapTo(mutableSetOf()) { it.collectDependencies() }
+        val packages = packageForName.values.filterTo(mutableSetOf()) { it.id in referencedPackages }
         val project = getProject(definitionFile, scopes)
 
         return listOf(ProjectAnalyzerResult(project, packages))
@@ -329,7 +314,30 @@ class Stack(
     }
 }
 
-private fun List<Dependency>.getProjectDependencies(): List<String> =
-    single { it.location?.type == PROJECT_PACKAGE_TYPE }.dependencies
-
 private fun Dependency.isProject(): Boolean = location?.type == PROJECT_PACKAGE_TYPE
+
+private fun Collection<Dependency>.toScope(scopeName: String, packageForName: Map<String, Package>): Scope {
+    // TODO: Stack identifies dependencies only by name. Find out how dependencies with the same name but in
+    //       different namespaces should be handled.
+    val dependencyForName = associateBy { it.name }
+
+    return Scope(
+        name = scopeName,
+        dependencies = single {
+            it.location?.type == PROJECT_PACKAGE_TYPE
+        }.dependencies.mapTo(mutableSetOf()) { name ->
+            dependencyForName.getValue(name).toPackageReference(dependencyForName, packageForName)
+        }
+    )
+}
+
+private fun Dependency.toPackageReference(
+    dependencyForName: Map<String, Dependency>,
+    packageForName: Map<String, Package>
+): PackageReference =
+    PackageReference(
+        id = packageForName.getValue(name).id,
+        dependencies = dependencies.mapTo(mutableSetOf()) { name ->
+            dependencyForName.getValue(name).toPackageReference(dependencyForName, packageForName)
+        }
+    )
