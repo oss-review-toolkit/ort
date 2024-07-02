@@ -68,21 +68,23 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 class DosScanner internal constructor(
     override val name: String,
     private val config: DosScannerConfig,
-    override val readFromStorage: Boolean,
-    override val writeToStorage: Boolean
+    wrapperConfig: ScannerWrapperConfig
 ) : PackageScannerWrapper {
     class Factory : ScannerWrapperFactory<DosScannerConfig>("DOS") {
         override fun create(config: DosScannerConfig, wrapperConfig: ScannerWrapperConfig) =
-            DosScanner(type, config, readFromStorage = false, writeToStorage = false)
+            DosScanner(type, config, wrapperConfig)
 
         override fun parseConfig(options: Options, secrets: Options) = DosScannerConfig.create(options, secrets)
     }
 
-    override val matcher: ScannerMatcher? = null
-    override val configuration = ""
-
     // TODO: Introduce a DOS version and expose it through the API to use it here.
     override val version = "1.0.0"
+
+    override val configuration = ""
+
+    override val matcher: ScannerMatcher? = null
+    override val readFromStorage by lazy { wrapperConfig.readFromStorageWithDefault(matcher) }
+    override val writeToStorage by lazy { wrapperConfig.writeToStorageWithDefault(matcher) }
 
     private val service = DosService.create(config.url, config.token, config.timeout?.let { Duration.ofSeconds(it) })
     internal val client = DosClient(service)
