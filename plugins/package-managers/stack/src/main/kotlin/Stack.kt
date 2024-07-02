@@ -178,22 +178,15 @@ class Stack(
             version = version
         )
 
-        val fallback = Package.EMPTY.copy(
+        if (location == null || location.type == HACKAGE_PACKAGE_TYPE) {
+            downloadCabalFile(id)?.let { return parseCabalFile(it) }
+        }
+
+        return Package.EMPTY.copy(
             id = id,
             purl = id.toPurl(),
             declaredLicenses = setOf(license)
         )
-
-        return when (location?.type) {
-            null, HACKAGE_PACKAGE_TYPE -> {
-                // Enrich the package with additional metadata from Hackage.
-                downloadCabalFile(id)?.let {
-                    parseCabalFile(it)
-                } ?: fallback
-            }
-
-            else -> fallback
-        }
     }
 
     private fun getPackageUrl(name: String, version: String) = "https://hackage.haskell.org/package/$name-$version"
