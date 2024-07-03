@@ -94,10 +94,10 @@ class SpdxDocumentReporter : Reporter {
         }
 
         return outputFileFormats.map { fileFormat ->
-            val serializedDocument = fileFormat.mapper.writeValueAsString(spdxDocument)
-
             outputDir.resolve("$REPORT_BASE_FILENAME.${fileFormat.fileExtension}").apply {
-                bufferedWriter().use { it.write(serializedDocument) }
+                bufferedWriter().use { writer ->
+                    fileFormat.mapper.writeValue(writer, spdxDocument)
+                }
             }
         }
     }
