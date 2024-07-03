@@ -79,7 +79,7 @@ interface CommandLineTool {
      * Run the command in the [workingDir] directory with arguments as specified by [args].
      */
     fun run(workingDir: File?, vararg args: CharSequence) =
-        ProcessCapture(workingDir, *command(workingDir).splitOnWhitespace().toTypedArray(), *args).requireSuccess()
+        run(args = args, workingDir = workingDir, environment = emptyMap())
 
     /**
      * Get the version of the command by parsing its output.
