@@ -57,9 +57,6 @@ private const val TEST_SCOPE_NAME = "test"
 private const val BENCH_SCOPE_NAME = "bench"
 private val SCOPE_NAMES = setOf(EXTERNAL_SCOPE_NAME, TEST_SCOPE_NAME, BENCH_SCOPE_NAME)
 
-private const val HACKAGE_PACKAGE_TYPE = "hackage"
-private const val PROJECT_PACKAGE_TYPE = "project package"
-
 /**
  * The [Stack](https://haskellstack.org/) package manager for Haskell.
  */
@@ -167,7 +164,7 @@ class Stack(
             version = version
         )
 
-        if (location == null || location.type == HACKAGE_PACKAGE_TYPE) {
+        if (location == null || location.type == Location.TYPE_HACKAGE) {
             okHttpClient.downloadCabalFile(id)?.let { return parseCabalFile(it, "Hackage") }
         }
 
@@ -179,7 +176,7 @@ class Stack(
     }
 }
 
-private fun Dependency.isProject(): Boolean = location?.type == PROJECT_PACKAGE_TYPE
+private fun Dependency.isProject(): Boolean = location?.type == Location.TYPE_PROJECT
 
 private fun Collection<Dependency>.toScope(scopeName: String, packageForName: Map<String, Package>): Scope {
     // TODO: Stack identifies dependencies only by name. Find out how dependencies with the same name but in
@@ -189,7 +186,7 @@ private fun Collection<Dependency>.toScope(scopeName: String, packageForName: Ma
     return Scope(
         name = scopeName,
         dependencies = single {
-            it.location?.type == PROJECT_PACKAGE_TYPE
+            it.location?.type == Location.TYPE_PROJECT
         }.dependencies.mapTo(mutableSetOf()) { name ->
             dependencyForName.getValue(name).toPackageReference(dependencyForName, packageForName)
         }
