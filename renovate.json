@@ -20,6 +20,13 @@
   "packageRules": [
     {
       "matchPackageNames": [
+        "com.atlassian.jira:jira-rest-java-client-api",
+        "com.atlassian.jira:jira-rest-java-client-app"
+      ],
+      "allowedVersions": "/^[0-9]+\\.[0-9]+\\.[0-9]+$/"
+    },
+    {
+      "matchPackageNames": [
         "org.springframework:spring-core"
       ],
       "allowedVersions": "< 6.0.0"
