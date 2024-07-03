@@ -28,7 +28,12 @@ import org.ossreviewtoolkit.model.jsonMapper
 internal data class Location(
     val url: String,
     val type: String
-)
+) {
+    companion object {
+        const val TYPE_HACKAGE = "hackage"
+        const val TYPE_PROJECT = "project package"
+    }
+}
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 internal data class Dependency(
