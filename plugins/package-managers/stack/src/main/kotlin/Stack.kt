@@ -185,9 +185,7 @@ private fun Collection<Dependency>.toScope(scopeName: String, packageForName: Ma
 
     return Scope(
         name = scopeName,
-        dependencies = single {
-            it.location?.type == Location.TYPE_PROJECT
-        }.dependencies.mapTo(mutableSetOf()) { name ->
+        dependencies = single { it.isProject() }.dependencies.mapTo(mutableSetOf()) { name ->
             dependencyForName.getValue(name).toPackageReference(dependencyForName, packageForName)
         }
     )
