@@ -19,12 +19,12 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.stack
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.module.kotlin.readValue
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 
-import org.ossreviewtoolkit.model.jsonMapper
+private val JSON = Json { ignoreUnknownKeys = true }
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Serializable
 internal data class Location(
     val url: String,
     val type: String
@@ -35,7 +35,7 @@ internal data class Location(
     }
 }
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Serializable
 internal data class Dependency(
     val name: String,
     val version: String,
@@ -44,4 +44,4 @@ internal data class Dependency(
     val dependencies: List<String> = emptyList()
 )
 
-internal fun String.parseDependencies() = jsonMapper.readValue<List<Dependency>>(this)
+internal fun String.parseDependencies() = JSON.decodeFromString<List<Dependency>>(this)
