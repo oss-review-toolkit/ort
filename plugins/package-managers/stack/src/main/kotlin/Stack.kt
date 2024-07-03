@@ -305,9 +305,9 @@ private fun parseCabalFile(cabal: String, identifierType: String): Package {
     val vcsPath = (map["source-repository-this-subdir"] ?: map["source-repository-head-subdir"]).orEmpty()
     val vcs = VcsInfo(
         type = VcsType.forName(vcsType),
-        revision = map["source-repository-this-tag"].orEmpty(),
         url = vcsUrl,
-        path = vcsPath
+        path = vcsPath,
+        revision = map["source-repository-this-tag"].orEmpty()
     )
 
     val homepageUrl = map["homepage"].orEmpty()
