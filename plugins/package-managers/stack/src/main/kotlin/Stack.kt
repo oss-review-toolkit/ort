@@ -305,13 +305,10 @@ private fun parseCabalFile(cabal: String, identifierType: String): Package {
         url = "${getPackageUrl(id.name, id.version)}/${id.name}-${id.version}.tar.gz"
     )
 
-    val vcsType = (map["source-repository-this-type"] ?: map["source-repository-head-type"]).orEmpty()
-    val vcsUrl = (map["source-repository-this-location"] ?: map["source-repository-head-location"]).orEmpty()
-    val vcsPath = (map["source-repository-this-subdir"] ?: map["source-repository-head-subdir"]).orEmpty()
     val vcs = VcsInfo(
-        type = VcsType.forName(vcsType),
-        url = vcsUrl,
-        path = vcsPath,
+        type = VcsType.forName((map["source-repository-this-type"] ?: map["source-repository-head-type"]).orEmpty()),
+        url = (map["source-repository-this-location"] ?: map["source-repository-head-location"]).orEmpty(),
+        path = (map["source-repository-this-subdir"] ?: map["source-repository-head-subdir"]).orEmpty(),
         revision = map["source-repository-this-tag"].orEmpty()
     )
 
