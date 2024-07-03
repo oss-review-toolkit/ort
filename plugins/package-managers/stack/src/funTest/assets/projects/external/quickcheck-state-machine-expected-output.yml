@@ -1122,12 +1122,12 @@ packages:
     type: "Git"
     url: "https://github.com/haskell-compat/base-compat"
     revision: ""
-    path: ""
+    path: "base-compat"
   vcs_processed:
     type: "Git"
     url: "https://github.com/haskell-compat/base-compat.git"
     revision: ""
-    path: ""
+    path: "base-compat"
 - id: "Hackage:Compatibility:base-orphans:0.8"
   purl: "pkg:hackage/Compatibility/base-orphans@0.8"
   authors:
@@ -2399,12 +2399,12 @@ packages:
     type: "Git"
     url: "https://github.com/haskell/cabal/"
     revision: ""
-    path: ""
+    path: "Cabal"
   vcs_processed:
     type: "Git"
     url: "https://github.com/haskell/cabal.git"
     revision: ""
-    path: ""
+    path: "Cabal"
 - id: "Hackage:GHC:ghc-prim:0.5.3"
   purl: "pkg:hackage/GHC/ghc-prim@0.5.3"
   declared_licenses:
@@ -2428,12 +2428,12 @@ packages:
     type: "Git"
     url: "http://git.haskell.org/ghc.git"
     revision: ""
-    path: ""
+    path: "libraries/ghc-prim"
   vcs_processed:
     type: "Git"
     url: "http://git.haskell.org/ghc.git"
     revision: ""
-    path: ""
+    path: "libraries/ghc-prim"
 - id: "Hackage:Generics:generics-sop:0.4.0.1"
   purl: "pkg:hackage/Generics/generics-sop@0.4.0.1"
   authors:
@@ -2803,12 +2803,12 @@ packages:
     type: "Git"
     url: "http://git.haskell.org/ghc.git"
     revision: ""
-    path: ""
+    path: "libraries/base"
   vcs_processed:
     type: "Git"
     url: "http://git.haskell.org/ghc.git"
     revision: ""
-    path: ""
+    path: "libraries/base"
 - id: "Hackage:System:directory:1.3.3.0"
   purl: "pkg:hackage/System/directory@1.3.3.0"
   declared_licenses:
@@ -3110,12 +3110,12 @@ packages:
     type: "Git"
     url: "http://git.haskell.org/ghc.git"
     revision: ""
-    path: ""
+    path: "libraries/template-haskell"
   vcs_processed:
     type: "Git"
     url: "http://git.haskell.org/ghc.git"
     revision: ""
-    path: ""
+    path: "libraries/template-haskell"
 - id: "Hackage:Testing:QuickCheck:2.13.1"
   purl: "pkg:hackage/Testing/QuickCheck@2.13.1"
   authors:
