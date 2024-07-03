@@ -50,6 +50,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.encodeHex
 import org.ossreviewtoolkit.utils.common.withoutPrefix
@@ -76,6 +77,14 @@ class Bazel(
     }
 
     override fun command(workingDir: File?) = "bazel"
+
+    override fun run(vararg args: CharSequence, workingDir: File?, environment: Map<String, String>): ProcessCapture =
+        super.run(
+            args = args,
+            workingDir = workingDir,
+            // Disable the optional wrapper script under `tools/bazel`, to ensure the --version option works.
+            environment = environment + mapOf("BAZELISK_SKIP_WRAPPER" to "true")
+        )
 
     override fun transformVersion(output: String) = output.removePrefix("bazel ")
 
