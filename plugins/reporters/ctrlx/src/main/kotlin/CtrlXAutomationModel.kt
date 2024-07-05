@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.utils.spdx.isSpdxExpression
  * The root element of "fossinfo.json" files, see https://github.com/boschrexroth/json-schema.
  */
 @Serializable
-data class FossInfo(
+internal data class FossInfo(
     /**
      * The reference to the JSON schema in use.
      */
@@ -58,7 +58,7 @@ data class FossInfo(
  * An OSS component.
  */
 @Serializable
-data class Component(
+internal data class Component(
     /**
      * The OSS component name.
      */
@@ -124,7 +124,7 @@ data class Component(
  * An OSS component's copyright information.
  */
 @Serializable
-data class CopyrightInformation(
+internal data class CopyrightInformation(
     /**
      * The copyright text.
      */
@@ -140,7 +140,7 @@ data class CopyrightInformation(
  * An OSS component's license.
  */
 @Serializable
-data class License(
+internal data class License(
     /**
      * The license name.
      */
@@ -179,7 +179,7 @@ data class License(
 /**
  * The OSS component usage which may affect the required obligations.
  */
-enum class Usage {
+internal enum class Usage {
     /** The OSS component is used without modifications. */
     AsIs,
 
@@ -190,7 +190,7 @@ enum class Usage {
 /**
  * The OSS component integration which may affect the required obligations.
  */
-enum class IntegrationMechanism {
+internal enum class IntegrationMechanism {
     /** DLL, Assembly. */
     LinkedDynamically,
 
