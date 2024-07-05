@@ -357,7 +357,8 @@ class SpdxDocumentFile(
         }
 
     internal fun getPackageManagerDependency(pkgId: String, doc: SpdxResolvedDocument): PackageReference? {
-        val spdxPackage = doc.getSpdxPackageForId(pkgId, mutableListOf()) ?: return null
+        val issues = mutableListOf<Issue>()
+        val spdxPackage = doc.getSpdxPackageForId(pkgId, issues) ?: return null
         val definitionFile = doc.getDefinitionFile(pkgId) ?: return null
 
         if (spdxPackage.packageFilename.isBlank()) return null
@@ -376,7 +377,8 @@ class SpdxDocumentFile(
                         packageManager = factory.type,
                         definitionFile = VersionControlSystem.getPathInfo(packageFile).path,
                         scope = scope,
-                        linkage = PackageLinkage.PROJECT_STATIC // TODO: Set linkage based on SPDX reference type.
+                        linkage = PackageLinkage.PROJECT_STATIC, // TODO: Set linkage based on SPDX reference type.
+                        issues = issues
                     )
                 }
             }

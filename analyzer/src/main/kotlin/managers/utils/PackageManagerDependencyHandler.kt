@@ -49,7 +49,8 @@ class PackageManagerDependencyHandler(
             packageManager: String,
             definitionFile: String,
             scope: String,
-            linkage: PackageLinkage
+            linkage: PackageLinkage,
+            issues: List<Issue> = emptyList()
         ): PackageReference =
             PackageReference(
                 id = Identifier(
@@ -57,7 +58,8 @@ class PackageManagerDependencyHandler(
                     namespace = packageManager,
                     name = definitionFile.encodeColon(),
                     version = "$linkage@$scope"
-                )
+                ),
+                issues = issues
             )
 
         private fun getPackageManagerDependency(node: DependencyNode): PackageManagerDependency? =
