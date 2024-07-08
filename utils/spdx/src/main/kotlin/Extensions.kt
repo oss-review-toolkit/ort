@@ -17,8 +17,6 @@
  * License-Filename: LICENSE
  */
 
-@file:Suppress("TooManyFunctions")
-
 package org.ossreviewtoolkit.utils.spdx
 
 import java.lang.invoke.MethodHandles
@@ -29,32 +27,6 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression.Strictness
 
 private val logger = loggerOf(MethodHandles.lookup().lookupClass())
-
-/**
- * Create an [SpdxExpression] by concatenating [this][SpdxLicense] and [other] using [SpdxOperator.AND].
- */
-infix fun SpdxLicense.and(other: SpdxLicense) = this and other.toExpression()
-
-/**
- * Create an [SpdxExpression] by concatenating [this][SpdxLicense] and [other] using [SpdxOperator.AND].
- */
-infix fun SpdxLicense.and(other: SpdxExpression) = SpdxCompoundExpression(toExpression(), SpdxOperator.AND, other)
-
-/**
- * Create an [SpdxExpression] by concatenating [this][SpdxLicense] and [other] using [SpdxOperator.OR].
- */
-infix fun SpdxLicense.or(other: SpdxLicense) = this or other.toExpression()
-
-/**
- * Create an [SpdxExpression] by concatenating [this][SpdxLicense] and [other] using [SpdxOperator.OR].
- */
-infix fun SpdxLicense.or(other: SpdxExpression) = SpdxCompoundExpression(toExpression(), SpdxOperator.OR, other)
-
-/**
- * Create an [SpdxExpression] by concatenating [this][SpdxLicense] and [exception] using [SpdxExpression.WITH].
- */
-infix fun SpdxLicense.with(exception: SpdxLicenseException) =
-    SpdxLicenseWithExceptionExpression(toExpression(), exception.id)
 
 /**
  * Create an [SpdxLicenseIdExpression] from this [SpdxLicense].
