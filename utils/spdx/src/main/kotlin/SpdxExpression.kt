@@ -601,28 +601,3 @@ data class SpdxLicenseReferenceExpression(
 
     override fun getLicenseUrl(): String? = null
 }
-
-/**
- * An SPDX operator for composite expressions as defined by version 2.2 of the [SPDX specification, annex D.4][1].
- *
- * [1]: https://spdx.github.io/spdx-spec/v2.2.2/SPDX-license-expressions/#d4-composite-license-expressions
- */
-enum class SpdxOperator(
-    /**
-     * The priority of the operator. An operator with a larger priority value binds stronger than an operator with a
-     * lower priority value. Operators with the same priority bind left-associative.
-     */
-    val priority: Int
-) {
-    /**
-     * The conjunctive binary "AND" operator to construct a new license expression if required to simultaneously comply
-     * with two or more licenses, where both the left and right operands are valid [SpdxExpressions][SpdxExpression].
-     */
-    AND(1),
-
-    /**
-     * The disjunctive binary "OR" operator to construct a new license expression if presented with a choice between
-     * two or more licenses, where both the left and right operands are valid [SpdxExpressions][SpdxExpression].
-     */
-    OR(0)
-}
