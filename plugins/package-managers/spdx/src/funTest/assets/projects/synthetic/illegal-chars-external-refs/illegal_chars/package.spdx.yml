@@ -1,0 +1,23 @@
+SPDXID: "SPDXRef-DOCUMENT"
+spdxVersion: "SPDX-2.2"
+creationInfo:
+  created: "2022-06-29T00:00:00Z"
+  creators:
+  - "Organization: OSS Review Toolkit"
+name: "illegal_chars"
+dataLicense: "CC0-1.0"
+documentNamespace: "http://spdx.org/spdxdocs/example"
+documentDescribes:
+  - "SPDXRef-Package-asio_dtls"
+packages:
+  - SPDXID: "SPDXRef-Package-illegal_chars" # This SPDX ID contains '_' which is not allowed.
+    description: "A SPDX document that is in a directory characters not allowed for SPDX IDs"
+    copyrightText: "NONE"
+    filesAnalyzed: false
+    homepage: "https://example.com/"
+    licenseConcluded: "NOASSERTION"
+    licenseDeclared: "NOASSERTION"
+    originator: "Organization: Robert Bosch GmbH"
+    name: "illegal_chars"
+    downloadLocation: "https://example.com"
+    versionInfo: "1.0.0"

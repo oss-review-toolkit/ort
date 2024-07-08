@@ -23,6 +23,7 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.collections.shouldHaveSingleElement
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.maps.haveSize
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -254,6 +255,29 @@ class SpdxDocumentFileFunTest : WordSpec({
                 Identifier("SpdxDocumentFile::my-lib:8.88.8"),
                 Identifier("SpdxDocumentFile:OpenSSL Development Team:openssl:1.1.1g")
             )
+        }
+
+        "collect issues for subprojects using illegal SPDX identifiers" {
+            val projectFile = projectDir.resolve("illegal-chars-external-refs/project-xyz.spdx.yml")
+            val subProjectFile = projectDir.resolve("illegal-chars-external-refs/illegal_chars/package.spdx.yml")
+            val definitionFiles = listOf(projectFile, subProjectFile)
+
+            val result = create("SpdxDocumentFile").resolveDependencies(definitionFiles, emptyMap())
+
+            val rootProject = result.projectResults[projectFile.absoluteFile]?.first()
+
+            rootProject shouldNotBeNull {
+                issues shouldHaveSize 1
+                issues.shouldHaveSingleElement {
+                    val expectedMessage = Regex(
+                        """
+                            .*SPDX ID 'SPDXRef-Package-illegal_chars' is only allowed to contain letters, numbers, '\.', and '-'.*
+                        """.trimIndent()
+                    )
+
+                    expectedMessage.containsMatchIn(it.message)
+                }
+            }
         }
     }
 })
