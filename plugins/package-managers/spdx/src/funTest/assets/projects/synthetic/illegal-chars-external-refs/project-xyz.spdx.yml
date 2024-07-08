@@ -1,0 +1,29 @@
+SPDXID: "SPDXRef-DOCUMENT"
+spdxVersion: "SPDX-2.2"
+creationInfo:
+  created: "2024-07-08T18:30:22Z"
+  creators:
+  - "OSS Review Toolkit"
+name: "External Ref with illegal chars"
+dataLicense: "CC0-1.0"
+documentNamespace: "https://spdx.org/spdxdocs/example"
+documentDescribes:
+- "SPDXRef-Package-illegal-chars"
+
+externalDocumentRefs:
+- externalDocumentId: "DocumentRef-illegal_chars" # This SPDX ID contains '_' which is not allowed.
+  spdxDocument: "illegal_chars/package.spdx.yml"
+  checksum:
+    algorithm: "SHA1"
+    checksumValue: "3e3edec9f5073a7b17a9fd066e5f49ed3e41f0a2"
+
+packages:
+- SPDXID: "SPDXRef-Package-test"
+  copyrightText: "NONE"
+  downloadLocation: "https://example.com"
+  filesAnalyzed: false
+  homepage: "NONE"
+  licenseConcluded: "Apache-2.0"
+  licenseDeclared: "Apache-2.0"
+  name: "Illegal Chars"
+  originator: "Organization: OSS Review Toolkit"
