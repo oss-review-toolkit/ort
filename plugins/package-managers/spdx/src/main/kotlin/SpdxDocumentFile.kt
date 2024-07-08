@@ -525,7 +525,7 @@ class SpdxDocumentFile(
             scopeDependencies = scopes
         )
 
-        return listOf(ProjectAnalyzerResult(project, packages))
+        return listOf(ProjectAnalyzerResult(project, packages, transitiveDocument.getIssuesWithoutSpdxPackage()))
     }
 
     /**

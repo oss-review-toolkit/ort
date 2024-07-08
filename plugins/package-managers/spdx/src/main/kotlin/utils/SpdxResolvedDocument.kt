@@ -134,6 +134,15 @@ internal data class SpdxResolvedDocument(
     }
 
     /**
+     * Retrieve the issues from [issuesByReferenceId] that are not associated with [any package][packagesById]. These
+     * issues can be related to general issues within the SPDX document.
+     */
+    fun getIssuesWithoutSpdxPackage() =
+        issuesByReferenceId.mapNotNull { (id, issue) ->
+            if (packagesById[id] == null) issue else null
+        }
+
+    /**
      * Return the local definition file in which the package with the given [identifier] is declared. If the package
      * cannot be resolved or if it has not been declared in a local file, return *null*.
      */
