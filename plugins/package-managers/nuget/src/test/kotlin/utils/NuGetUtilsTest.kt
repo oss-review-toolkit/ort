@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.nuget.utils
 
-import io.kotest.assertions.assertSoftly
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
@@ -27,34 +26,36 @@ import org.ossreviewtoolkit.model.Identifier
 
 class NuGetUtilsTest : WordSpec({
     "getIdentifierWithNamespace()" should {
-        "split the namespace from the name" {
-            assertSoftly {
-                getIdentifierWithNamespace("NuGet", "SharpCompress", "0.23.0") shouldBe
-                    Identifier("NuGet::SharpCompress:0.23.0")
+        "use an empty namespace if only a name is present" {
+            getIdentifierWithNamespace("NuGet", "SharpCompress", "0.23.0") shouldBe
+                Identifier("NuGet::SharpCompress:0.23.0")
+        }
 
-                getIdentifierWithNamespace("NuGet", "System.IO", "4.1.0") shouldBe
-                    Identifier("NuGet:System:IO:4.1.0")
-                getIdentifierWithNamespace("NuGet", "System.IO.Compression", "4.3.0") shouldBe
-                    Identifier("NuGet:System.IO:Compression:4.3.0")
-                getIdentifierWithNamespace("NuGet", "System.IO.Compression.ZipFile", "4.0.1") shouldBe
-                    Identifier("NuGet:System.IO:Compression.ZipFile:4.0.1")
+        "use up to two dot-separated components from the name as the namespace" {
+            getIdentifierWithNamespace("NuGet", "System.IO", "4.1.0") shouldBe
+                Identifier("NuGet:System:IO:4.1.0")
+            getIdentifierWithNamespace("NuGet", "System.IO.Compression", "4.3.0") shouldBe
+                Identifier("NuGet:System.IO:Compression:4.3.0")
+            getIdentifierWithNamespace("NuGet", "System.IO.Compression.ZipFile", "4.0.1") shouldBe
+                Identifier("NuGet:System.IO:Compression.ZipFile:4.0.1")
+        }
 
-                getIdentifierWithNamespace(
-                    "NuGet",
-                    "Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore",
-                    "2.2.1"
-                ) shouldBe Identifier(
-                    "NuGet:Microsoft.Extensions:Diagnostics.HealthChecks.EntityFrameworkCore:2.2.1"
-                )
+        "keep multiple dot-separated components as part of the name" {
+            getIdentifierWithNamespace(
+                "NuGet",
+                "Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore",
+                "2.2.1"
+            ) shouldBe Identifier(
+                "NuGet:Microsoft.Extensions:Diagnostics.HealthChecks.EntityFrameworkCore:2.2.1"
+            )
 
-                getIdentifierWithNamespace(
-                    "NuGet",
-                    "Microsoft.AspNetCore.Components.WebAssembly.Build.BrotliCompression",
-                    "3.1.6"
-                ) shouldBe Identifier(
-                    "NuGet:Microsoft.AspNetCore:Components.WebAssembly.Build.BrotliCompression:3.1.6"
-                )
-            }
+            getIdentifierWithNamespace(
+                "NuGet",
+                "Microsoft.AspNetCore.Components.WebAssembly.Build.BrotliCompression",
+                "3.1.6"
+            ) shouldBe Identifier(
+                "NuGet:Microsoft.AspNetCore:Components.WebAssembly.Build.BrotliCompression:3.1.6"
+            )
         }
     }
 })
