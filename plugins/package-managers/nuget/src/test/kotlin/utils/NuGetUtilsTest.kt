@@ -57,5 +57,10 @@ class NuGetUtilsTest : WordSpec({
                 "NuGet:Microsoft.AspNetCore:Components.WebAssembly.Build.BrotliCompression:3.1.6"
             )
         }
+
+        "not use numeric components for the namespace" {
+            getIdentifierWithNamespace("NuGet", "SharpSvn.1.9-x64", "1.9007.3987.251") shouldBe
+                Identifier("NuGet::SharpSvn.1.9-x64:1.9007.3987.251")
+        }
     }
 })

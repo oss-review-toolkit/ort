@@ -27,8 +27,22 @@ import org.ossreviewtoolkit.model.Identifier
  * a NuGet package [Identifier], e.g. to use it as part of curations.
  */
 fun getIdentifierWithNamespace(type: String, name: String, version: String): Identifier {
-    val namespace = name.split('.', limit = 3).toMutableList()
-    val nameWithoutNamespace = namespace.removeLast()
-    val namespaceWithoutName = namespace.joinToString(".")
+    val components = name.split('.')
+    val maxNamespaceComponents = (components.size - 1).coerceAtMost(2)
+
+    var i = 0
+    while (i < maxNamespaceComponents) {
+        // If any namespace component start with a digit, treat all components as parts of the name.
+        if (components[i].first().isDigit()) {
+            i = 0
+            break
+        }
+
+        ++i
+    }
+
+    val namespaceWithoutName = components.subList(0, i).joinToString(".")
+    val nameWithoutNamespace = components.subList(i, components.size).joinToString(".")
+
     return Identifier(type, namespaceWithoutName, nameWithoutNamespace, version)
 }
