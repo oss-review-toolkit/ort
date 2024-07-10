@@ -24,6 +24,8 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.collections.shouldHaveSingleElement
 import io.kotest.matchers.maps.shouldContain
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -95,7 +97,7 @@ class FossIdClientNewProjectTest : StringSpec({
             SCAN_CODE,
             "https://github.com/gundy/semver4j.git",
             "671aa533f7e33c773bf620b9f466650c3b9ab26e"
-        ).shouldNotBeNull().data.shouldNotBeNull() shouldContain("scan_id" to "4920")
+        ).shouldNotBeNull().data.shouldNotBeNull().shouldHaveSingleElement("4920")
     }
 
     "Download from Git can be triggered" {
