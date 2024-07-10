@@ -72,6 +72,11 @@ internal class ListPackagesCommand : CliktCommand(
             "comma-separated values."
     ).enum<Severity>().split(",").default(Severity.entries)
 
+    private val omitExcluded by option(
+        "--omit-excluded",
+        help = "Only list non-excluded packages."
+    ).flag()
+
     override fun run() {
         val ortResult = readOrtResult(ortFile)
 
@@ -86,7 +91,7 @@ internal class ListPackagesCommand : CliktCommand(
             it.severity in offendingSeverities
         }.mapNotNullTo(mutableSetOf()) { it.pkg }
 
-        val packages = ortResult.getProjectsAndPackages().filter { id ->
+        val packages = ortResult.getProjectsAndPackages(omitExcluded = omitExcluded).filter { id ->
             (ortResult.isPackage(id) && PACKAGE in type) || (ortResult.isProject(id) && PROJECT in type)
         }.filter { id ->
             matchDetectedLicenses.isEmpty() || (matchDetectedLicenses - getDetectedLicenses(id)).isEmpty()
