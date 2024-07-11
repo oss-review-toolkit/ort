@@ -20,16 +20,16 @@ jobs:
       id-token: write
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
         with:
           persist-credentials: false
       - name: Run Analysis
-        uses: ossf/scorecard-action@v2.3.3
+        uses: ossf/scorecard-action@dc50aa9510b46c811795eb24b2f1ba02a914e534 # v2.3.3
         with:
           results_file: ossf-results.sarif
           results_format: sarif
           publish_results: true
       - name: Upload Code Scanning Results
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@b611370bb5703a7efb587f9d136a52ea24c5c38c # v3
         with:
           sarif_file: ossf-results.sarif
