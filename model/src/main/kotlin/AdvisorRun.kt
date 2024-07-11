@@ -52,4 +52,14 @@ data class AdvisorRun(
      * The result of this run.
      */
     val results: AdvisorRecord
-)
+) {
+    companion object {
+        val EMPTY = AdvisorRun(
+            startTime = Instant.EPOCH,
+            endTime = Instant.EPOCH,
+            environment = Environment(),
+            config = AdvisorConfiguration(),
+            results = AdvisorRecord(emptyMap())
+        )
+    }
+}
