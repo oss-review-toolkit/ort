@@ -84,6 +84,7 @@ internal class HelperMain : CliktCommand(
             ExtractRepositoryConfigurationCommand(),
             GenerateTimeoutErrorResolutionsCommand(),
             GetPackageLicensesCommand(),
+            GroupScanIssuesCommand(),
             DownloadResultsFromPostgresCommand(),
             ImportCopyrightGarbageCommand(),
             ImportScanResultsCommand(),
