@@ -27,7 +27,6 @@ import kotlinx.coroutines.withContext
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.model.AdvisorRecord
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorRun
 import org.ossreviewtoolkit.model.Identifier
@@ -106,10 +105,8 @@ class Advisor(
                 }
             }
 
-            val advisorRecord = AdvisorRecord(results)
-
             val endTime = Instant.now()
 
-            AdvisorRun(startTime, endTime, Environment(), config, advisorRecord)
+            AdvisorRun(startTime, endTime, Environment(), config, results)
         }
 }

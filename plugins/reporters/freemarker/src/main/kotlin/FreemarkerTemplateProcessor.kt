@@ -30,9 +30,9 @@ import java.io.File
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.AdvisorCapability
-import org.ossreviewtoolkit.model.AdvisorRecord
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorResultFilter
+import org.ossreviewtoolkit.model.AdvisorRun
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.OrtResult
@@ -352,8 +352,8 @@ class FreemarkerTemplateProcessor(
          * therefore, it should contain a corresponding warning.
          */
         fun hasAdvisorIssues(capability: AdvisorCapability, severity: Severity): Boolean =
-            input.ortResult.advisor?.results?.filterResults(
-                AdvisorRecord.resultsWithIssues(
+            input.ortResult.advisor?.filterResults(
+                AdvisorRun.resultsWithIssues(
                     capability = capability,
                     minSeverity = severity
                 )
@@ -369,7 +369,7 @@ class FreemarkerTemplateProcessor(
             severity: Severity
         ): Map<Identifier, List<AdvisorResult>> =
             input.filteredAdvisorResults(
-                AdvisorRecord.resultsWithIssues(
+                AdvisorRun.resultsWithIssues(
                     capability = capability,
                     minSeverity = severity
                 )
@@ -379,13 +379,13 @@ class FreemarkerTemplateProcessor(
          * Return the subset of the available advisor results that contain vulnerabilities.
          */
         fun advisorResultsWithVulnerabilities(): Map<Identifier, List<AdvisorResult>> =
-            input.filteredAdvisorResults(AdvisorRecord.RESULTS_WITH_VULNERABILITIES)
+            input.filteredAdvisorResults(AdvisorRun.RESULTS_WITH_VULNERABILITIES)
 
         /**
          * Return the subset of the available advisor results that contain defects.
          */
         fun advisorResultsWithDefects(): Map<Identifier, List<AdvisorResult>> =
-            input.filteredAdvisorResults(AdvisorRecord.RESULTS_WITH_DEFECTS)
+            input.filteredAdvisorResults(AdvisorRun.RESULTS_WITH_DEFECTS)
 
         /**
          * Return the package from the current [OrtResult] with the given [id] or the empty package if the ID cannot be
@@ -453,4 +453,4 @@ private fun List<ResolvedLicense>.merge(): ResolvedLicense {
  * results are available.
  */
 private fun ReporterInput.filteredAdvisorResults(filter: AdvisorResultFilter): Map<Identifier, List<AdvisorResult>> =
-    ortResult.advisor?.results?.filterResults(filter).orEmpty()
+    ortResult.advisor?.filterResults(filter).orEmpty()

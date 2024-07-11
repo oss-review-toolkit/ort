@@ -33,14 +33,14 @@ import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
 import org.ossreviewtoolkit.utils.common.enumSetOf
 
-class AdvisorRecordTest : WordSpec({
+class AdvisorResultTest : WordSpec({
     "collectIssues" should {
         "return a map which does not contain entries for IDs without any issues" {
-            val record = advisorRecordOf(
+            val run = advisorRunOf(
                 langId to listOf(createResult())
             )
 
-            val issues = record.getIssues()
+            val issues = run.getIssues()
 
             issues.keys shouldNotContain langId
         }
@@ -49,12 +49,12 @@ class AdvisorRecordTest : WordSpec({
             val issue1 = Issue(source = "Advisor", message = "Failure1")
             val issue2 = Issue(source = "Advisor", message = "Failure2")
             val issue3 = Issue(source = "Advisor", message = "Warning", severity = Severity.WARNING)
-            val record = advisorRecordOf(
+            val run = advisorRunOf(
                 langId to listOf(createResult(issues = listOf(issue3))),
                 queryId to listOf(createResult(issues = listOf(issue1, issue2)))
             )
 
-            val issues = record.getIssues()
+            val issues = run.getIssues()
 
             issues.keys should containExactlyInAnyOrder(langId, queryId)
             issues[langId] should containExactly(issue3)
@@ -64,34 +64,34 @@ class AdvisorRecordTest : WordSpec({
 
     "getVulnerabilities" should {
         "return an empty list for an unknown package" {
-            val record = advisorRecordOf()
+            val run = advisorRunOf()
 
-            record.getVulnerabilities(langId) should beEmpty()
+            run.getVulnerabilities(langId) should beEmpty()
         }
 
         "return the vulnerabilities of a specific package" {
             val vul1 = createVulnerability("CVE-2021-1")
             val vul2 = createVulnerability("CVE-2021-2")
 
-            val record = advisorRecordOf(
+            val run = advisorRunOf(
                 queryId to listOf(createResult(vulnerabilities = listOf(vul1, vul2)))
             )
 
-            record.getVulnerabilities(queryId) should containExactly(vul1, vul2)
+            run.getVulnerabilities(queryId) should containExactly(vul1, vul2)
         }
 
         "combine the vulnerabilities of a specific package from multiple advisor results" {
             val vul1 = createVulnerability("CVE-2021-1")
             val vul2 = createVulnerability("CVE-2021-2")
 
-            val record = advisorRecordOf(
+            val run = advisorRunOf(
                 queryId to listOf(
                     createResult(advisorIndex = 1, vulnerabilities = listOf(vul1)),
                     createResult(advisorIndex = 2, vulnerabilities = listOf(vul2))
                 )
             )
 
-            record.getVulnerabilities(queryId) should containExactly(vul1, vul2)
+            run.getVulnerabilities(queryId) should containExactly(vul1, vul2)
         }
 
         "merge the references of vulnerabilities" {
@@ -101,14 +101,14 @@ class AdvisorRecordTest : WordSpec({
             val vul3 = createVulnerability("CVE-2021-2")
             val mergedVulnerability = Vulnerability(id = vul1.id, references = vul1.references + vul2.references)
 
-            val record = advisorRecordOf(
+            val run = advisorRunOf(
                 queryId to listOf(
                     createResult(advisorIndex = 1, vulnerabilities = listOf(vul1)),
                     createResult(advisorIndex = 2, vulnerabilities = listOf(vul2, vul3))
                 )
             )
 
-            record.getVulnerabilities(queryId) should containExactly(mergedVulnerability, vul3)
+            run.getVulnerabilities(queryId) should containExactly(mergedVulnerability, vul3)
         }
 
         "remove duplicate references when merging vulnerabilities" {
@@ -122,22 +122,22 @@ class AdvisorRecordTest : WordSpec({
                 references = vul1.references + vul2.references + vul4.references
             )
 
-            val record = advisorRecordOf(
+            val run = advisorRunOf(
                 queryId to listOf(
                     createResult(advisorIndex = 1, vulnerabilities = listOf(vul1)),
                     createResult(advisorIndex = 2, vulnerabilities = listOf(vul2, vul3, vul4))
                 )
             )
 
-            record.getVulnerabilities(queryId) should containExactly(mergedVulnerability)
+            run.getVulnerabilities(queryId) should containExactly(mergedVulnerability)
         }
     }
 
     "getDefects" should {
         "return an empty list for an unknown package" {
-            val record = advisorRecordOf()
+            val run = advisorRunOf()
 
-            record.getDefects(langId) should beEmpty()
+            run.getDefects(langId) should beEmpty()
         }
 
         "return the combined defects detected for a specific package" {
@@ -147,14 +147,14 @@ class AdvisorRecordTest : WordSpec({
             val defect4 = createDefect("d4")
             val defect5 = createDefect("d5")
 
-            val record = advisorRecordOf(
+            val run = advisorRunOf(
                 queryId to listOf(
                     createResult(advisorIndex = 1, defects = listOf(defect1, defect2)),
                     createResult(advisorIndex = 2, defects = listOf(defect3, defect4, defect5))
                 )
             )
 
-            record.getDefects(queryId) should containExactlyInAnyOrder(defect1, defect2, defect3, defect4, defect5)
+            run.getDefects(queryId) should containExactlyInAnyOrder(defect1, defect2, defect3, defect4, defect5)
         }
     }
 
@@ -166,12 +166,12 @@ class AdvisorRecordTest : WordSpec({
                 defects = listOf(createDefect("bug1"))
             )
 
-            val record = advisorRecordOf(
+            val run = advisorRunOf(
                 queryId to listOf(createResult(advisorIndex = 1), createResult(advisorIndex = 2)),
                 langId to listOf(matchingResult, createResult(advisorIndex = 2))
             )
 
-            val filteredResults = record.filterResults { it == matchingResult }
+            val filteredResults = run.filterResults { it == matchingResult }
 
             filteredResults.keys should containExactly(langId)
             filteredResults.getValue(langId) should containExactly(matchingResult)
@@ -183,11 +183,11 @@ class AdvisorRecordTest : WordSpec({
             val result3 = createResult(advisorIndex = 3)
             val result4 = createResult(advisorIndex = 4, vulnerabilities = listOf(createVulnerability("CVE-2")))
 
-            val record = advisorRecordOf(
+            val run = advisorRunOf(
                 queryId to listOf(result1, result2, result3, result4)
             )
 
-            val filteredResults = record.filterResults(AdvisorRecord.RESULTS_WITH_VULNERABILITIES)
+            val filteredResults = run.filterResults(AdvisorRun.RESULTS_WITH_VULNERABILITIES)
 
             filteredResults.keys should containExactly(queryId)
             filteredResults.getValue(queryId) should containExactlyInAnyOrder(result1, result4)
@@ -199,11 +199,11 @@ class AdvisorRecordTest : WordSpec({
             val result3 = createResult(advisorIndex = 3)
             val result4 = createResult(advisorIndex = 4, vulnerabilities = listOf(createVulnerability("CVE-2")))
 
-            val record = advisorRecordOf(
+            val run = advisorRunOf(
                 queryId to listOf(result1, result2, result3, result4)
             )
 
-            val filteredResults = record.filterResults(AdvisorRecord.RESULTS_WITH_DEFECTS)
+            val filteredResults = run.filterResults(AdvisorRun.RESULTS_WITH_DEFECTS)
 
             filteredResults.keys should containExactly(queryId)
             filteredResults.getValue(queryId) should containExactly(result2)
@@ -216,12 +216,12 @@ class AdvisorRecordTest : WordSpec({
             )
             val result2 = createResult(advisorIndex = 2)
 
-            val record = advisorRecordOf(
+            val run = advisorRunOf(
                 queryId to listOf(result1),
                 langId to listOf(result2)
             )
 
-            val filteredResults = record.filterResults(AdvisorRecord.resultsWithIssues())
+            val filteredResults = run.filterResults(AdvisorRun.resultsWithIssues())
 
             filteredResults.keys should containExactly(queryId)
             filteredResults.getValue(queryId) should containExactly(result1)
@@ -238,12 +238,12 @@ class AdvisorRecordTest : WordSpec({
                 capability = AdvisorCapability.DEFECTS
             )
 
-            val record = advisorRecordOf(
+            val run = advisorRunOf(
                 queryId to listOf(result1),
                 langId to listOf(result2)
             )
 
-            val filteredResults = record.filterResults(AdvisorRecord.resultsWithIssues(minSeverity = Severity.ERROR))
+            val filteredResults = run.filterResults(AdvisorRun.resultsWithIssues(minSeverity = Severity.ERROR))
 
             filteredResults.keys should containExactly(queryId)
             filteredResults.getValue(queryId) should containExactly(result1)
@@ -260,12 +260,12 @@ class AdvisorRecordTest : WordSpec({
                 capability = AdvisorCapability.DEFECTS
             )
 
-            val record = advisorRecordOf(
+            val run = advisorRunOf(
                 queryId to listOf(result1), langId to listOf(result2)
             )
 
-            val filteredResults = record.filterResults(
-                AdvisorRecord.resultsWithIssues(
+            val filteredResults = run.filterResults(
+                AdvisorRun.resultsWithIssues(
                     minSeverity = Severity.WARNING,
                     capability = AdvisorCapability.VULNERABILITIES
                 )
@@ -333,4 +333,5 @@ private fun createResult(
     return AdvisorResult(details, summary, defects, vulnerabilities)
 }
 
-private fun advisorRecordOf(vararg results: Pair<Identifier, List<AdvisorResult>>) = AdvisorRecord(results.toMap())
+private fun advisorRunOf(vararg results: Pair<Identifier, List<AdvisorResult>>) =
+    AdvisorRun.EMPTY.copy(results = results.toMap())

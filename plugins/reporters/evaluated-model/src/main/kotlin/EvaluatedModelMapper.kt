@@ -115,7 +115,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             addRuleViolation(ruleViolation)
         }
 
-        input.ortResult.advisor?.results?.advisorResults?.forEach { (id, results) ->
+        input.ortResult.advisor?.results?.forEach { (id, results) ->
             val pkg = packages.getValue(id)
 
             results.forEach { result ->

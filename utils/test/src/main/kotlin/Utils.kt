@@ -25,7 +25,6 @@ import java.io.File
 import java.time.Instant
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.model.AdvisorRecord
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorRun
 import org.ossreviewtoolkit.model.ArtifactProvenance
@@ -66,7 +65,7 @@ fun advisorRunOf(vararg results: Pair<Identifier, List<AdvisorResult>>): Advisor
         endTime = Instant.now(),
         environment = Environment(),
         config = AdvisorConfiguration(),
-        results = AdvisorRecord(results.toMap())
+        results = results.toMap()
     )
 
 /**
