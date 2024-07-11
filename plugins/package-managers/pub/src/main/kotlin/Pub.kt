@@ -397,7 +397,7 @@ class Pub(
                 // dependencies for each pub dependency manually, as the analyzer will only scan the
                 // projectRoot, but not the packages in the ".pub-cache" directory.
                 if (containsFlutter && !pubDependenciesOnly) {
-                    scanAndroidPackages(pkgInfoFromLockfile, labels, workingDir).forEach { resultAndroid ->
+                    analyzeAndroidPackages(pkgInfoFromLockfile, labels, workingDir).forEach { resultAndroid ->
                         packageReferences += packageInfo.toReference(
                             dependencies = resultAndroid.project.scopes
                                 .find { it.name == "releaseCompileClasspath" }
@@ -429,7 +429,7 @@ class Pub(
 
     private val analyzerResultCacheAndroid = mutableMapOf<String, List<ProjectAnalyzerResult>>()
 
-    private fun scanAndroidPackages(
+    private fun analyzeAndroidPackages(
         packageInfo: JsonNode,
         labels: Map<String, String>,
         workingDir: File
@@ -469,7 +469,7 @@ class Pub(
         }
     }
 
-    private fun scanIosPackages(packageInfo: JsonNode, workingDir: File): ProjectAnalyzerResult? {
+    private fun analyzeIosPackages(packageInfo: JsonNode, workingDir: File): ProjectAnalyzerResult? {
         // TODO: Implement similar to `scanAndroidPackages` once CocoaPods is implemented.
         val packageName = packageInfo["description"]["name"].textValueOrEmpty()
 
@@ -665,7 +665,7 @@ class Pub(
         if (containsFlutter && !pubDependenciesOnly) {
             lockfile["packages"]?.forEach { pkgInfoFromLockfile ->
                 // As this package contains Flutter, trigger Gradle manually for it.
-                scanAndroidPackages(pkgInfoFromLockfile, labels, workingDir).forEach { result ->
+                analyzeAndroidPackages(pkgInfoFromLockfile, labels, workingDir).forEach { result ->
                     result.collectPackagesByScope("releaseCompileClasspath").forEach { pkg ->
                         packages[pkg.id] = pkg
                     }
@@ -674,7 +674,7 @@ class Pub(
                 }
 
                 // As this package contains Flutter, trigger CocoaPods manually for it.
-                scanIosPackages(pkgInfoFromLockfile, workingDir)?.let { result ->
+                analyzeIosPackages(pkgInfoFromLockfile, workingDir)?.let { result ->
                     result.packages.forEach { pkg ->
                         packages[pkg.id] = pkg
                     }
