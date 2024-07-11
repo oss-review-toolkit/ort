@@ -77,6 +77,11 @@ internal class ListPackagesCommand : CliktCommand(
         help = "Only list non-excluded packages."
     ).flag()
 
+    private val omitVersion by option(
+        "--omit-version",
+        help = "Only list packages distinct by type, namespace and name."
+    ).flag()
+
     override fun run() {
         val ortResult = readOrtResult(ortFile)
 
@@ -97,7 +102,9 @@ internal class ListPackagesCommand : CliktCommand(
             matchDetectedLicenses.isEmpty() || (matchDetectedLicenses - getDetectedLicenses(id)).isEmpty()
         }.filter { id ->
             !offendingOnly || id in packagesWithOffendingRuleViolations
-        }.sortedBy { it }
+        }.map {
+            it.takeUnless { omitVersion } ?: it.copy(version = "")
+        }.distinct().sortedBy { it }
 
         val result = buildString {
             packages.forEach {
