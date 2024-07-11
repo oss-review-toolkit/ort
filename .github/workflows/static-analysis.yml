@@ -114,3 +114,25 @@ jobs:
       run: |
         pip install --user reuse
         ~/.local/bin/reuse lint
+  scorecard-analysis:
+    runs-on: ubuntu-latest
+    permissions:
+      # Needed for SARIF scanning upload.
+      security-events: write
+      # Needed for GitHub OIDC token if `publish_results` is true.
+      id-token: write
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        persist-credentials: false
+    - name: Run Analysis
+      uses: ossf/scorecard-action@v2.3.3
+      with:
+        results_file: ossf-results.sarif
+        results_format: sarif
+        publish_results: true
+    - name: Upload Code Scanning Results
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: ossf-results.sarif
