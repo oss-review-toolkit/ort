@@ -19,7 +19,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: wagoid/commitlint-github-action@v6
+      - name: Check Commit Messages
+        uses: wagoid/commitlint-github-action@v6
         with:
           configFile: .commitlintrc.yml
   code-base-checks:
@@ -95,7 +96,8 @@ jobs:
       with:
         post-pr-comment: false
         use-caches: false
-    - uses: github/codeql-action/upload-sarif@v3
+    - name: Upload Code Scanning Results
+      uses: github/codeql-action/upload-sarif@v3
       with:
         sarif_file: ${{ runner.temp }}/qodana/results/qodana.sarif.json
   reuse-tool:
