@@ -63,7 +63,7 @@ class AdvisorTest : WordSpec({
             val result = advisor.advise(originResult)
 
             result.advisor shouldNotBeNull {
-                results.advisorResults should beEmpty()
+                results should beEmpty()
             }
 
             coVerify(exactly = 0) {
@@ -104,7 +104,7 @@ class AdvisorTest : WordSpec({
             val result = advisor.advise(originResult)
 
             result.advisor shouldNotBeNull {
-                results.advisorResults shouldBe expectedResults
+                results shouldBe expectedResults
             }
         }
     }

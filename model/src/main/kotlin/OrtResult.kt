@@ -110,7 +110,7 @@ data class OrtResult(
     val dependencyNavigator: DependencyNavigator by lazy { CompatibilityDependencyNavigator.create(this) }
 
     private val advisorResultsById: Map<Identifier, List<AdvisorResult>> by lazy {
-        advisor?.results?.advisorResults.orEmpty()
+        advisor?.results.orEmpty()
     }
 
     /**
@@ -317,7 +317,7 @@ data class OrtResult(
         omitResolved: Boolean = false,
         minSeverity: Severity = Severity.entries.min()
     ): Map<Identifier, Set<Issue>> =
-        advisor?.results?.getIssues().orEmpty().filterIssues(omitExcluded, omitResolved, minSeverity)
+        advisor?.getIssues().orEmpty().filterIssues(omitExcluded, omitResolved, minSeverity)
 
     private fun Map<Identifier, Set<Issue>>.filterIssues(
         omitExcluded: Boolean = false,
@@ -560,7 +560,7 @@ data class OrtResult(
         omitResolved: Boolean = false,
         omitExcluded: Boolean = false
     ): Map<Identifier, List<Vulnerability>> {
-        val allVulnerabilities = advisor?.results?.getVulnerabilities().orEmpty()
+        val allVulnerabilities = advisor?.getVulnerabilities().orEmpty()
             .filterKeys { !omitExcluded || !isExcluded(it) }
 
         return if (omitResolved) {

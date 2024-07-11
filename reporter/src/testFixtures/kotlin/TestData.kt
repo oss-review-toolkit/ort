@@ -24,7 +24,6 @@ import java.time.Instant
 
 import org.ossreviewtoolkit.model.AdvisorCapability
 import org.ossreviewtoolkit.model.AdvisorDetails
-import org.ossreviewtoolkit.model.AdvisorRecord
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorRun
 import org.ossreviewtoolkit.model.AdvisorSummary
@@ -417,14 +416,12 @@ val ADVISOR_WITH_VULNERABILITIES = AdvisorRun(
     endTime = Instant.now(),
     environment = Environment(),
     config = AdvisorConfiguration(),
-    results = AdvisorRecord(
-        mapOf(
-            Identifier("NPM:@ort:declared-license:1.0") to listOf(
-                AdvisorResult(
-                    advisor = AdvisorDetails("VulnerableCode", enumSetOf(AdvisorCapability.VULNERABILITIES)),
-                    summary = AdvisorSummary(Instant.now(), Instant.now()),
-                    vulnerabilities = listOf(VULNERABILITY)
-                )
+    results = mapOf(
+        Identifier("NPM:@ort:declared-license:1.0") to listOf(
+            AdvisorResult(
+                advisor = AdvisorDetails("VulnerableCode", enumSetOf(AdvisorCapability.VULNERABILITIES)),
+                summary = AdvisorSummary(Instant.now(), Instant.now()),
+                vulnerabilities = listOf(VULNERABILITY)
             )
         )
     )

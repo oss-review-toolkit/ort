@@ -141,7 +141,7 @@ class AdvisorCommand : OrtCommand(
         val duration = with(advisorRun) { Duration.between(startTime, endTime).toKotlinDuration() }
         echo("The advice took $duration.")
 
-        with(advisorRun.results.getVulnerabilities()) {
+        with(advisorRun.getVulnerabilities()) {
             val includedPackages = ortResultOutput.getPackages(omitExcluded = true).map { it.metadata.id }
             val totalPackageCount = includedPackages.size
             val vulnerablePackageCount = count { (id, vulnerabilities) ->
@@ -157,7 +157,7 @@ class AdvisorCommand : OrtCommand(
         }
 
         val resolutionProvider = DefaultResolutionProvider.create(ortResultOutput, resolutionsFile)
-        val issues = advisorRun.results.getIssues().flatMap { it.value }
+        val issues = advisorRun.getIssues().flatMap { it.value }
         SeverityStatsPrinter(terminal, resolutionProvider).stats(issues)
             .print().conclude(ortConfig.severeIssueThreshold, ORT_FAILURE_STATUS_CODE)
     }

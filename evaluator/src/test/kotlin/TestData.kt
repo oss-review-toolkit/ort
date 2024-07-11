@@ -24,7 +24,6 @@ import java.time.Instant
 
 import org.ossreviewtoolkit.model.AdvisorCapability
 import org.ossreviewtoolkit.model.AdvisorDetails
-import org.ossreviewtoolkit.model.AdvisorRecord
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorRun
 import org.ossreviewtoolkit.model.AdvisorSummary
@@ -221,31 +220,29 @@ val ortResult = OrtResult(
         endTime = Instant.EPOCH,
         environment = Environment(),
         config = AdvisorConfiguration(),
-        results = AdvisorRecord(
-            advisorResults = mapOf(
-                packageWithVulnerabilities.id to listOf(
-                    AdvisorResult(
-                        advisor = AdvisorDetails("Advisor", enumSetOf(AdvisorCapability.VULNERABILITIES)),
-                        summary = AdvisorSummary(startTime = Instant.EPOCH, endTime = Instant.EPOCH),
-                        vulnerabilities = listOf(
-                            Vulnerability(
-                                id = "CVE-2021-critical",
-                                references = listOf(
-                                    VulnerabilityReference(
-                                        url = URI("https://oss-review-toolkit.org"),
-                                        scoringSystem = "CVSS3",
-                                        severity = "9.0"
-                                    )
+        results = mapOf(
+            packageWithVulnerabilities.id to listOf(
+                AdvisorResult(
+                    advisor = AdvisorDetails("Advisor", enumSetOf(AdvisorCapability.VULNERABILITIES)),
+                    summary = AdvisorSummary(startTime = Instant.EPOCH, endTime = Instant.EPOCH),
+                    vulnerabilities = listOf(
+                        Vulnerability(
+                            id = "CVE-2021-critical",
+                            references = listOf(
+                                VulnerabilityReference(
+                                    url = URI("https://oss-review-toolkit.org"),
+                                    scoringSystem = "CVSS3",
+                                    severity = "9.0"
                                 )
-                            ),
-                            Vulnerability(
-                                id = "CVE-2021-trivial",
-                                references = listOf(
-                                    VulnerabilityReference(
-                                        url = URI("https://oss-review-toolkit.org"),
-                                        scoringSystem = "CVSS3",
-                                        severity = "2.0"
-                                    )
+                            )
+                        ),
+                        Vulnerability(
+                            id = "CVE-2021-trivial",
+                            references = listOf(
+                                VulnerabilityReference(
+                                    url = URI("https://oss-review-toolkit.org"),
+                                    scoringSystem = "CVSS3",
+                                    severity = "2.0"
                                 )
                             )
                         )
