@@ -29,6 +29,7 @@ jobs:
     needs: build
     runs-on: ubuntu-22.04
     permissions:
+      # Needed for SARIF scanning upload.
       security-events: write
     steps:
     - name: Checkout Repository
