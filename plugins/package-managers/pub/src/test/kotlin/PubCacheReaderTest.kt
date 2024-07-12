@@ -40,6 +40,9 @@ class PubCacheReaderTest : WordSpec({
     val gitPackageCacheDir = tmpPubCacheDir.resolve("git/$PACKAGE_NAME-$RESOLVED_REF")
     val gitPackageWithPathCacheDir = tmpPubCacheDir.resolve("git/$PACKAGE_NAME-$RESOLVED_REF/$PACKAGE_NAME")
     val hostedPackageCacheDir = tmpPubCacheDir.resolve("hosted/oss-review-toolkit.org/$PACKAGE_NAME-$PACKAGE_VERSION")
+    val customPackageCacheDir = tmpPubCacheDir.resolve(
+        "hosted/oss-review-toolkit.org%47api%47pub%47repository%47/$PACKAGE_NAME-$PACKAGE_VERSION"
+    )
     val localPackagePathAbsolute = ABSOLUTE_PATH
     val localPackagePathRelative = ABSOLUTE_PATH.resolve(RELATIVE_PATH)
 
@@ -49,6 +52,7 @@ class PubCacheReaderTest : WordSpec({
         gitPackageCacheDir.safeMkdirs()
         gitPackageWithPathCacheDir.safeMkdirs()
         hostedPackageCacheDir.safeMkdirs()
+        customPackageCacheDir.safeMkdirs()
     }
 
     "findProjectRoot()" should {
@@ -81,6 +85,21 @@ class PubCacheReaderTest : WordSpec({
             reader.findProjectRoot(packageInfo, ABSOLUTE_PATH) shouldBe gitPackageWithPathCacheDir
         }
 
+        "resolve the path of a Git dependency with special path" {
+            val packageInfo = PackageInfo(
+                dependency = "direct main",
+                description = PackageInfo.Description(
+                    path = ".",
+                    resolvedRef = RESOLVED_REF,
+                    url = "https://github.com/oss-review-toolkit/$PACKAGE_NAME.git"
+                ),
+                source = "git",
+                version = "9.9.9"
+            )
+
+            reader.findProjectRoot(packageInfo, ABSOLUTE_PATH) shouldBe gitPackageCacheDir
+        }
+
         "resolve the path of a hosted dependency" {
             val packageInfo = PackageInfo(
                 dependency = "transitive",
@@ -93,6 +112,20 @@ class PubCacheReaderTest : WordSpec({
             )
 
             reader.findProjectRoot(packageInfo, ABSOLUTE_PATH) shouldBe hostedPackageCacheDir
+        }
+
+        "resolve the path of a custom package repository dependency" {
+            val packageInfo = PackageInfo(
+                dependency = "transitive",
+                description = PackageInfo.Description(
+                    name = PACKAGE_NAME,
+                    url = "https://oss-review-toolkit.org/api/pub/repository/"
+                ),
+                source = "hosted",
+                version = PACKAGE_VERSION
+            )
+
+            reader.findProjectRoot(packageInfo, ABSOLUTE_PATH) shouldBe customPackageCacheDir
         }
 
         "resolve the relative path of a local dependency" {
