@@ -84,13 +84,13 @@ internal class PubCacheReader(flutterHome: File? = null) {
         val path = if (type == "hosted" && url.isNotEmpty()) {
             // Packages with source set to "hosted" and "url" key in description set to "https://pub.dartlang.org".
             // The path should be resolved to "hosted/pub.dartlang.org/packageName-packageVersion".
-            "hosted/${url.replace("https://", "")}/$packageName-$packageVersion"
+            "hosted/${url.hostedUrlToDirectoryName()}/$packageName-$packageVersion"
         } else if (type == "git" && resolvedRef.isNotEmpty()) {
             // Packages with source set to "git" and a "resolved-ref" key in description set to a gitHash.
             // These packages do not define a packageName in the packageInfo, but by definition the path resolves to
             // the project name as given from the VcsHost and to the resolvedRef.
             val projectName = VcsHost.getProject(url) ?: return null
-            if (resolvedPath.isNotEmpty()) {
+            if (resolvedPath.isNotEmpty() && resolvedPath != ".") {
                 "git/$projectName-$resolvedRef/$resolvedPath"
             } else {
                 "git/$projectName-$resolvedRef"
@@ -106,3 +106,21 @@ internal class PubCacheReader(flutterHome: File? = null) {
             ?: flutterPubCacheRoot?.resolve(path)?.takeIf { it.isDirectory }
     }
 }
+
+// See https://github.com/dart-lang/pub/blob/ea4a1c854690d3abceb92c8cc2c6454470f9d5a7/lib/src/source/hosted.dart#L1899.
+private fun String.hostedUrlToDirectoryName(): String {
+    val url = replace(schemeLocalhostRegex) { match ->
+        // Do not include the scheme for HTTPS URLs. This makes the directory names nice for the default and most
+        // recommended scheme. Also do not include it for localhost URLs, since they are always known to be HTTP.
+        val localhost = if (match.groupValues.size == 3) "" else "localhost"
+        val scheme = if (match.groupValues[1] == "https://" || localhost.isNotEmpty()) "" else match.groupValues[1]
+        "$scheme$localhost"
+    }
+
+    return url.replace(specialCharRegex) { match ->
+        match.groupValues[0].map { char -> "%${char.code}" }.joinToString("")
+    }
+}
+
+private val schemeLocalhostRegex = """^(https?://)(127\.0\.0\.1|\[::1]|localhost)?""".toRegex()
+private val specialCharRegex = """[<>:"\\/|?*%]""".toRegex()
