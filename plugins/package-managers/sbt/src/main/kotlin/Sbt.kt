@@ -210,7 +210,7 @@ class Sbt(
 private const val SBT_VERSION_PATTERN = "\\d(\\.\\d+){2}(-\\w+)?"
 
 private val VERSION_REGEX = Regex("\\[info]\\s+($SBT_VERSION_PATTERN)")
-private val PROJECT_REGEX = Regex("\\[info] \t [ *] (.+)")
+private val PROJECT_REGEX = Regex("\\[info] \t [ *] (\\S+)")
 private val POM_REGEX = Regex("\\[info] Wrote (.+\\.pom)")
 
 // Batch mode (which suppresses interactive prompts) is not supported on Windows, compare
