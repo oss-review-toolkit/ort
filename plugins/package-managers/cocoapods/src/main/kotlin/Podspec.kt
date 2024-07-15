@@ -25,7 +25,9 @@ import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
+import com.fasterxml.jackson.module.kotlin.readValue
 
+import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -53,6 +55,8 @@ internal data class Podspec(
         return result
     }
 }
+
+internal fun String.parsePodspec(): Podspec = jsonMapper.readValue<Podspec>(this)
 
 /**
  * Handle deserialization of the following two possible representations:
