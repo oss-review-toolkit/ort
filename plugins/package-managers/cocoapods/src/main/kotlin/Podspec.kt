@@ -19,29 +19,27 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.cocoapods
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer
-import com.fasterxml.jackson.module.kotlin.readValue
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.JsonTransformingSerializer
+import kotlinx.serialization.json.jsonPrimitive
 
-import org.ossreviewtoolkit.model.jsonMapper
-import org.ossreviewtoolkit.utils.common.textValueOrEmpty
-
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Serializable
 internal data class Podspec(
     val name: String = "",
     val version: String = "",
-    @JsonDeserialize(using = LicenseDeserializer::class)
+    @Serializable(with = LicenseSerializer::class)
     val license: String = "",
     val summary: String = "",
     val homepage: String = "",
     val source: Source? = null,
     private val subspecs: List<Podspec> = emptyList()
 ) {
-    @JsonIgnoreProperties(ignoreUnknown = true)
+    @Serializable
     data class Source(
         val git: String? = null,
         val tag: String? = null,
@@ -63,7 +61,9 @@ internal data class Podspec(
     }
 }
 
-internal fun String.parsePodspec(): Podspec = jsonMapper.readValue<Podspec>(this)
+private val JSON = Json { ignoreUnknownKeys = true }
+
+internal fun String.parsePodspec(): Podspec = JSON.decodeFromString<Podspec>(this)
 
 /**
  * Handle deserialization of the following two possible representations:
@@ -71,14 +71,11 @@ internal fun String.parsePodspec(): Podspec = jsonMapper.readValue<Podspec>(this
  * 1. https://github.com/CocoaPods/Specs/blob/f75c24e7e9df1dac6ffa410a6fb30f01e026d4d6/Specs/8/5/e/SocketIOKit/2.0.1/SocketIOKit.podspec.json#L6-L9
  * 2. https://github.com/CocoaPods/Specs/blob/f75c24e7e9df1dac6ffa410a6fb30f01e026d4d6/Specs/8/5/e/FirebaseObjects/0.0.1/FirebaseObjects.podspec.json#L6
  */
-private class LicenseDeserializer : StdDeserializer<String>(String::class.java) {
-    override fun deserialize(parser: JsonParser, context: DeserializationContext): String {
-        val node = parser.codec.readTree<JsonNode>(parser)
-
-        return if (node.isTextual) {
-            node.textValue()
+private object LicenseSerializer : JsonTransformingSerializer<String>(String.serializer()) {
+    override fun transformDeserialize(element: JsonElement): JsonElement =
+        if (element is JsonObject) {
+            element["type"]?.jsonPrimitive ?: JsonPrimitive("")
         } else {
-            node["type"].textValueOrEmpty()
+            element
         }
-    }
 }
