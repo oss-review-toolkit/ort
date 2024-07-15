@@ -391,7 +391,7 @@ class CycloneDxReporter : Reporter {
                         }
                     }
 
-                    BomGeneratorFactory.createJson(schemaVersion, bomWithoutExtensibleTypes) as Any
+                    BomGeneratorFactory.createJson(schemaVersion, bomWithoutExtensibleTypes)
                 }
 
                 else -> throw IllegalArgumentException("Unsupported CycloneDX file extension '$fileExtension'.")
