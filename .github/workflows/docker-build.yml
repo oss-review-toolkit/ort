@@ -27,7 +27,7 @@ jobs:
       - name: Free Disk Space
         uses: ./.github/actions/free-disk-space
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@dbbdc275be76ac10734476cc723d82dfe7ec6eda # v3
+        uses: gradle/actions/setup-gradle@d9c87d481d55275bb5441eef3fe0e46805f9ef70 # v3
         with:
           gradle-home-cache-cleanup: true
       - name: Get ORT version
