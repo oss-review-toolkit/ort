@@ -56,7 +56,7 @@ jobs:
             type=sha
       - name: Build & Push 'ort' Docker Image
         if: ${{ github.event_name != 'pull_request' }}
-        uses: docker/build-push-action@1a162644f9a7e87d8f4b053101d1d9a712edc18c # v6
+        uses: docker/build-push-action@a254f8ca60a858f3136a2f1f23a60969f2c402dd # v6
         with:
           context: .
           push: true
@@ -67,7 +67,7 @@ jobs:
           build-args: ORT_VERSION=${{ env.ORT_VERSION }}
       - name: Build 'ort' Docker Image
         if: ${{ github.event_name == 'pull_request' }}
-        uses: docker/build-push-action@1a162644f9a7e87d8f4b053101d1d9a712edc18c # v6
+        uses: docker/build-push-action@a254f8ca60a858f3136a2f1f23a60969f2c402dd # v6
         with:
           context: .
           tags: ${{ steps.meta-ort.outputs.tags }}
@@ -87,7 +87,7 @@ jobs:
             type=ref,event=tag
             type=sha
       - name: Build & Push 'ort-minimal' Docker Image
-        uses: docker/build-push-action@1a162644f9a7e87d8f4b053101d1d9a712edc18c # v6
+        uses: docker/build-push-action@a254f8ca60a858f3136a2f1f23a60969f2c402dd # v6
         with:
           context: .
           # Do not "cache-to" here to not overwrite additional layers from the "full" image, which also contains all
