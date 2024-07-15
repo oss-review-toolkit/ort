@@ -44,7 +44,6 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.orEmpty
-import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.CommandLineTool
@@ -212,8 +211,9 @@ class CocoaPods(
         }
 
         val podspecFile = File(podspecCommand.stdout.trim())
+        val podspec = podspecFile.readText().parsePodspec()
 
-        podspecFile.readValue<Podspec>().withSubspecs().associateByTo(podspecCache) { it.name }
+        podspec.withSubspecs().associateByTo(podspecCache) { it.name }
 
         return podspecCache.getValue(id.name)
     }
