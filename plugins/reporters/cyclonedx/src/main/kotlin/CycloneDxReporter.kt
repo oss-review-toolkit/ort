@@ -24,6 +24,8 @@ import java.util.Date
 import java.util.SortedSet
 import java.util.UUID
 
+import org.apache.logging.log4j.kotlin.logger
+
 import org.cyclonedx.Version
 import org.cyclonedx.generators.BomGeneratorFactory
 import org.cyclonedx.model.AttachmentText
@@ -368,10 +370,14 @@ class CycloneDxReporter : Reporter {
         outputFileExtensions.forEach { fileExtension ->
             val outputFile = outputDir.resolve("$outputName.$fileExtension")
 
-            val bom = generateBom(bom, schemaVersion, fileExtension)
-
-            outputFile.bufferedWriter().use { it.write(bom) }
-            writtenFiles += outputFile
+            runCatching {
+                generateBom(bom, schemaVersion, fileExtension)
+            }.onSuccess { bom ->
+                outputFile.bufferedWriter().use { it.write(bom) }
+                writtenFiles += outputFile
+            }.onFailure {
+                logger.error("Unable to create CycloneDX report: ", it)
+            }
         }
 
         return writtenFiles
