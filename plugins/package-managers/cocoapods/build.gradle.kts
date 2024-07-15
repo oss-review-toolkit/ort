@@ -20,6 +20,9 @@
 plugins {
     // Apply precompiled plugins.
     id("ort-library-conventions")
+
+    // Apply third-party plugins.
+    alias(libs.plugins.kotlinSerialization)
 }
 
 dependencies {
@@ -36,6 +39,9 @@ dependencies {
     implementation(projects.downloader)
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxUtils)
+
+    implementation(libs.kotlinx.serialization.core)
+    implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.jackson.annotations)
     implementation(libs.jackson.core)
