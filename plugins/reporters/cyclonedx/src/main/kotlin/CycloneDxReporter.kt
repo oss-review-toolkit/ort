@@ -368,8 +368,8 @@ class CycloneDxReporter : Reporter {
         outputFileExtensions.forEach { fileExtension ->
             val outputFile = outputDir.resolve("$outputName.$fileExtension")
 
-            val bomGenerator = when (fileExtension) {
-                "xml" -> BomGeneratorFactory.createXml(schemaVersion, bom)
+            val bom = when (fileExtension) {
+                "xml" -> BomGeneratorFactory.createXml(schemaVersion, bom).toXmlString()
                 "json" -> {
                     // JSON output cannot handle extensible types (see [1]), so simply remove them. As JSON output is
                     // guaranteed to be the last format serialized, it is okay to modify the BOM here without doing a
@@ -391,13 +391,13 @@ class CycloneDxReporter : Reporter {
                         }
                     }
 
-                    BomGeneratorFactory.createJson(schemaVersion, bomWithoutExtensibleTypes)
+                    BomGeneratorFactory.createJson(schemaVersion, bomWithoutExtensibleTypes).toJsonString()
                 }
 
                 else -> throw IllegalArgumentException("Unsupported CycloneDX file extension '$fileExtension'.")
             }
 
-            outputFile.bufferedWriter().use { it.write(bomGenerator.toString()) }
+            outputFile.bufferedWriter().use { it.write(bom) }
             writtenFiles += outputFile
         }
 
