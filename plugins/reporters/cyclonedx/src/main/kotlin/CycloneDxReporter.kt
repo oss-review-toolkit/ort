@@ -336,7 +336,7 @@ class CycloneDxReporter : Reporter {
 
             hashes = listOfNotNull(hash)
 
-            licenses = LicenseChoice().apply { licenses = licenseObjects }
+            if (licenseObjects.isNotEmpty()) licenses = LicenseChoice().apply { licenses = licenseObjects }
 
             // TODO: Find a way to associate copyrights to the license they belong to, see
             //       https://github.com/CycloneDX/cyclonedx-core-java/issues/58
