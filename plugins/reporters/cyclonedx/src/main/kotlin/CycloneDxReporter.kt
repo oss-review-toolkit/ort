@@ -336,7 +336,6 @@ class CycloneDxReporter : Reporter {
 
             hashes = listOfNotNull(hash)
 
-            // TODO: Support license expressions once we have fully converted to them.
             licenses = LicenseChoice().apply { licenses = licenseObjects }
 
             // TODO: Find a way to associate copyrights to the license they belong to, see
