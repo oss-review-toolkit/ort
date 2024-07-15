@@ -38,9 +38,16 @@ internal data class Podspec(
     val license: String = "",
     val summary: String = "",
     val homepage: String = "",
-    val source: Map<String, String> = emptyMap(),
+    val source: Source? = null,
     private val subspecs: List<Podspec> = emptyList()
 ) {
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    data class Source(
+        val git: String? = null,
+        val tag: String? = null,
+        val http: String? = null
+    )
+
     fun withSubspecs(): List<Podspec> {
         val result = mutableListOf<Podspec>()
 

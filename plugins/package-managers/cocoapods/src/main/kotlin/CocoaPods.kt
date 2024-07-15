@@ -159,11 +159,11 @@ class CocoaPods(
     private fun getPackage(id: Identifier, workingDir: File): Package {
         val podspec = getPodspec(id, workingDir) ?: return Package.EMPTY.copy(id = id, purl = id.toPurl())
 
-        val vcs = podspec.source["git"]?.let { url ->
+        val vcs = podspec.source?.git?.let { url ->
             VcsInfo(
                 type = VcsType.GIT,
                 url = url,
-                revision = podspec.source["tag"].orEmpty()
+                revision = podspec.source.tag.orEmpty()
             )
         }.orEmpty()
 
@@ -174,7 +174,7 @@ class CocoaPods(
             description = podspec.summary,
             homepageUrl = podspec.homepage,
             binaryArtifact = RemoteArtifact.EMPTY,
-            sourceArtifact = podspec.source["http"]?.let { RemoteArtifact(it, Hash.NONE) }.orEmpty(),
+            sourceArtifact = podspec.source?.http?.let { RemoteArtifact(it, Hash.NONE) }.orEmpty(),
             vcs = vcs,
             vcsProcessed = processPackageVcs(vcs, podspec.homepage)
         )
