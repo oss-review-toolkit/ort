@@ -535,6 +535,10 @@
         "aliases": [
             "CVE-2024-22195"
         ],
+        "related": [
+            "CGA-f27q-c9f6-2v7h",
+            "CGA-hgvf-wwm9-3343"
+        ],
         "summary": "Jinja vulnerable to HTML attribute injection when passing user input as keys to xmlattr filter",
         "details": "The `xmlattr` filter in affected versions of Jinja accepts keys containing spaces. XML/HTML attributes cannot contain spaces, as each would then be interpreted as a separate attribute. If an application accepts keys (as opposed to only values) as user input, and renders these in pages that other users see as well, an attacker could use this to inject other attributes and perform XSS. Note that accepting keys as user input is not common or a particularly intended use case of the `xmlattr` filter, and an application doing so should already be verifying what keys are provided regardless of this fix.",
         "severity": [
@@ -673,6 +677,15 @@
         "published": "2024-05-06T14:20:59Z",
         "aliases": [
             "CVE-2024-34064"
+        ],
+        "related": [
+            "CGA-3h69-x6cf-g5c9",
+            "CGA-8hp4-mxq9-cfjp",
+            "CGA-j4qq-j23r-522f",
+            "CGA-ph4r-hmw2-vp9r",
+            "CGA-rwrm-vm7r-mrmj",
+            "CGA-w4rq-c3cf-82f3",
+            "CGA-x9j2-vg55-h4p4"
         ],
         "summary": "Jinja vulnerable to HTML attribute injection when passing user input as keys to xmlattr filter",
         "details": "The `xmlattr` filter in affected versions of Jinja accepts keys containing non-attribute characters. XML/HTML attributes cannot contain spaces, `/`, `>`, or `=`, as each would then be interpreted as starting a separate attribute. If an application accepts keys (as opposed to only values) as user input, and renders these in pages that other users see as well, an attacker could use this to inject other attributes and perform XSS. The fix for the previous GHSA-h5c8-rqwp-cp95 CVE-2024-22195 only addressed spaces but not other characters.\n\nAccepting keys as user input is now explicitly considered an unintended use case of the `xmlattr` filter, and code that does so without otherwise validating the input should be flagged as insecure, regardless of Jinja version. Accepting _values_ as user input continues to be safe.",
