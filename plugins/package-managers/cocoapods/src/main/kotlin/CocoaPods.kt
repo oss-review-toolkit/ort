@@ -264,20 +264,19 @@ private fun parseLockfile(podfileLock: File): LockfileData {
         }
     }
 
-    val externalSources = root.get("CHECKOUT OPTIONS")?.fields()?.asSequence()?.mapNotNull {
-        val checkout = it.value as ObjectNode
+    val externalSources = root.get("CHECKOUT OPTIONS")?.fields()?.asSequence()?.mapNotNull { (name, checkout) ->
         val url = checkout[":git"]?.textValue() ?: return@mapNotNull null
         val revision = checkout[":commit"].textValueOrEmpty()
 
         // The version written to the lockfile matches the version specified in the project's ".podspec" file at the
         // given revision, so the same version might be used in different revisions. To still get a unique identifier,
         // append the revision to the version.
-        val versionFromPodspec = checkNotNull(resolvedVersions[it.key])
+        val versionFromPodspec = checkNotNull(resolvedVersions[name])
         val uniqueVersion = "$versionFromPodspec-$revision"
-        val id = Identifier("Pod", "", it.key, uniqueVersion)
+        val id = Identifier("Pod", "", name, uniqueVersion)
 
         // Write the unique version back for correctly associating dependencies below.
-        resolvedVersions[it.key] = uniqueVersion
+        resolvedVersions[name] = uniqueVersion
 
         id to Package(
             id = id,
