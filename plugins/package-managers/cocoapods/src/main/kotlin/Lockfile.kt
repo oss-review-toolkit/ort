@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.packagemanagers.cocoapods
 import com.charleskorn.kaml.Yaml
 import com.charleskorn.kaml.YamlList
 import com.charleskorn.kaml.YamlMap
+import com.charleskorn.kaml.YamlNode
 import com.charleskorn.kaml.YamlScalar
 import com.charleskorn.kaml.yamlList
 import com.charleskorn.kaml.yamlMap
@@ -29,6 +30,7 @@ import com.charleskorn.kaml.yamlScalar
 
 import org.ossreviewtoolkit.plugins.packagemanagers.cocoapods.Lockfile.CheckoutOption
 import org.ossreviewtoolkit.plugins.packagemanagers.cocoapods.Lockfile.Dependency
+import org.ossreviewtoolkit.plugins.packagemanagers.cocoapods.Lockfile.Pod
 
 internal data class Lockfile(
     val pods: List<Pod>,
@@ -54,29 +56,7 @@ internal data class Lockfile(
 
 internal fun String.parseLockfile(): Lockfile {
     val root = Yaml.default.parseToYamlNode(this).yamlMap
-
-    val pods = root.get<YamlList>("PODS")!!.items.map { node ->
-        when {
-            node is YamlMap -> {
-                val (key, value) = node.yamlMap.entries.entries.single()
-                val (name, version) = parseNameAndVersion(key.content)
-
-                Lockfile.Pod(
-                    name = name,
-                    version = version,
-                    dependencies = value.yamlList.items.map {
-                        val (depName, depVersion) = parseNameAndVersion(it.yamlScalar.content)
-                        Lockfile.Pod(depName, depVersion)
-                    }
-                )
-            }
-
-            else -> {
-                val (name, version) = parseNameAndVersion(node.yamlScalar.content)
-                Lockfile.Pod(name, version)
-            }
-        }
-    }
+    val pods = root.get<YamlList>("PODS")!!.items.map { it.toPod() }
 
     val checkoutOptions = root.get<YamlMap>("CHECKOUT OPTIONS")?.entries.orEmpty().map {
         val name = it.key.content
@@ -97,6 +77,28 @@ internal fun String.parseLockfile(): Lockfile {
 
     return Lockfile(pods, checkoutOptions, dependencies)
 }
+
+private fun YamlNode.toPod(): Pod =
+    when {
+        this is YamlMap -> {
+            val (key, value) = yamlMap.entries.entries.single()
+            val (name, version) = parseNameAndVersion(key.content)
+
+            Pod(
+                name = name,
+                version = version,
+                dependencies = value.yamlList.items.map {
+                    val (depName, depVersion) = parseNameAndVersion(it.yamlScalar.content)
+                    Pod(depName, depVersion)
+                }
+            )
+        }
+
+        else -> {
+            val (name, version) = parseNameAndVersion(yamlScalar.content)
+            Pod(name, version)
+        }
+    }
 
 private fun parseNameAndVersion(entry: String): Pair<String, String?> {
     val info = entry.split(' ', limit = 2)
