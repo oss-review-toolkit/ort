@@ -318,7 +318,7 @@ enum class VcsHost(
         private val SVN_BRANCH_OR_TAG_PATTERN = Regex("(.*svn.*)/(branches|tags)/([^/]+)/?(.*)")
         private val SVN_TRUNK_PATTERN = Regex("(.*svn.*)/(trunk)/?(.*)")
         private val GIT_REVISION_FRAGMENT = Regex("git.+#[a-fA-F0-9]{7,}")
-        private val GIT_PROJECT_NAME = Regex("/([^/]+)\\.git")
+        private val GIT_PROJECT_NAME = Regex("/([^/]+)\\.git$")
 
         /**
          * Return the applicable [VcsHost] for the given [url], or null if no applicable host is found.
