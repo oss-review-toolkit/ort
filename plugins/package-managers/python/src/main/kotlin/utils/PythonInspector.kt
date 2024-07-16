@@ -46,7 +46,13 @@ internal object PythonInspector : CommandLineTool {
 
     override fun getVersionRequirement(): RangesList = RangesListFactory.create("[0.9.2,)")
 
-    fun inspect(workingDir: File, definitionFile: File, pythonVersion: String, operatingSystem: String): Result {
+    fun inspect(
+        workingDir: File,
+        definitionFile: File,
+        pythonVersion: String,
+        operatingSystem: String,
+        analyzeSetupPyInsecurely: Boolean
+    ): Result {
         val outputFile = createOrtTempFile(prefix = "python-inspector", suffix = ".json")
 
         val commandLineOptions = buildList {
@@ -59,7 +65,9 @@ internal object PythonInspector : CommandLineTool {
             add("--json-pdt")
             add(outputFile.absolutePath)
 
-            add("--analyze-setup-py-insecurely")
+            if (analyzeSetupPyInsecurely) {
+                add("--analyze-setup-py-insecurely")
+            }
 
             if (definitionFile.name == "setup.py") {
                 add("--setup-py")
