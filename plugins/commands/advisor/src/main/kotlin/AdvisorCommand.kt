@@ -34,6 +34,13 @@ import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 import com.github.ajalt.mordant.rendering.Theme
 
+import io.klogging.Level.INFO
+import io.klogging.config.STDOUT_SIMPLE
+import io.klogging.config.loggingConfiguration
+import io.klogging.context.Context
+import io.klogging.rendering.RENDER_CLEF
+import io.klogging.sending.STDOUT
+
 import java.time.Duration
 
 import kotlin.time.toKotlinDuration
@@ -42,6 +49,8 @@ import kotlinx.coroutines.runBlocking
 
 import org.ossreviewtoolkit.advisor.AdviceProviderFactory
 import org.ossreviewtoolkit.advisor.Advisor
+import org.ossreviewtoolkit.advisor.OrtContext
+import org.ossreviewtoolkit.advisor.VulnerabilityRegistry
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
@@ -53,6 +62,7 @@ import org.ossreviewtoolkit.plugins.commands.api.utils.readOrtResult
 import org.ossreviewtoolkit.plugins.commands.api.utils.writeOrtResult
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.safeMkdirs
+import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.ORT_FAILURE_STATUS_CODE
 import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
@@ -112,6 +122,19 @@ class AdvisorCommand : OrtCommand(
     ).flag().deprecated("Use the global option 'ort -P ort.advisor.skipExcluded=... advise' instead.")
 
     override fun run() {
+        loggingConfiguration {
+            sink("console", STDOUT_SIMPLE)
+            logging {
+                fromMinLevel(INFO) { toSink("console") }
+            }
+        }
+
+        Context.addContextItemExtractor(OrtContext) { ortContext ->
+            mapOf(
+                "ortVersion" to ortContext.environment.ortVersion
+            )
+        }
+
         val outputFiles = outputFormats.mapTo(mutableSetOf()) { format ->
             outputDir.resolve("advisor-result.${format.fileExtension}")
         }
@@ -125,9 +148,13 @@ class AdvisorCommand : OrtCommand(
         val advisor = Advisor(distinctProviders, ortConfig.advisor)
 
         val ortResultInput = readOrtResult(ortFile)
-        val ortResultOutput = runBlocking {
+        val vulnerabilityRegistry = VulnerabilityRegistry()
+        val ortResultOutput = runBlocking(OrtContext(ortConfig, Environment(), vulnerabilityRegistry)) {
             advisor.advise(ortResultInput, skipExcluded || ortConfig.advisor.skipExcluded).mergeLabels(labels)
         }
+
+        val vulnerabilities = vulnerabilityRegistry.getVulnerabilities()
+        println("Got ${vulnerabilities.size} vulnerabilities from VulnerabilityRegistry.")
 
         outputDir.safeMkdirs()
         writeOrtResult(ortResultOutput, outputFiles, terminal)

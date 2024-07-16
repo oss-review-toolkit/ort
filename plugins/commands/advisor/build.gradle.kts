@@ -31,5 +31,6 @@ dependencies {
     implementation(projects.utils.ortUtils)
 
     implementation(libs.clikt)
+    implementation(libs.klogging)
     implementation(libs.kotlinx.coroutines)
 }

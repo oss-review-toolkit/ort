@@ -33,6 +33,7 @@ jruby = "9.4.8.0"
 jslt = "0.1.14"
 jsonSchemaValidator = "1.5.0"
 kaml = "0.60.0"
+klogging = "0.5.14"
 kotest = "5.9.1"
 kotlinxCoroutines = "1.8.1"
 kotlinxHtml = "0.11.0"
@@ -120,6 +121,7 @@ jiraRestClient-app = { module = "com.atlassian.jira:jira-rest-java-client-app", 
 jruby = { module = "org.jruby:jruby", version.ref = "jruby" }
 jslt = { module = "com.schibsted.spt.data:jslt", version.ref = "jslt" }
 jsonSchemaValidator = { module = "com.networknt:json-schema-validator", version.ref = "jsonSchemaValidator" }
+klogging = { module = "io.klogging:klogging-jvm", version.ref = "klogging" }
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 kotest-assertions-json = { module = "io.kotest:kotest-assertions-json", version.ref = "kotest" }
 kotest-extensions-junitXml = { module = "io.kotest:kotest-extensions-junitxml", version.ref = "kotest" }

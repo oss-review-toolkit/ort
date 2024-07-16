@@ -28,6 +28,7 @@ dependencies {
 
     implementation(projects.utils.ortUtils)
 
+    implementation(libs.klogging)
     implementation(libs.kotlinx.coroutines)
 
     testImplementation(libs.mockk)

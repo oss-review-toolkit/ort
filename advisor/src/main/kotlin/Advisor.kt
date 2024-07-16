@@ -19,13 +19,17 @@
 
 package org.ossreviewtoolkit.advisor
 
+import io.klogging.Klogger
+import io.klogging.logger
+
 import java.time.Instant
+
+import kotlin.coroutines.AbstractCoroutineContextElement
+import kotlin.coroutines.CoroutineContext
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
-
-import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorRun
@@ -33,7 +37,32 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
+import org.ossreviewtoolkit.model.config.OrtConfiguration
+import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.utils.ort.Environment
+
+class VulnerabilityRegistry {
+    private val vulnerabilities = mutableListOf<Vulnerability>()
+
+    fun addVulnerability(vulnerability: Vulnerability) {
+        vulnerabilities += vulnerability
+    }
+
+    fun getVulnerabilities(): List<Vulnerability> = vulnerabilities
+}
+
+data class OrtContext(
+    val config: OrtConfiguration,
+    val environment: Environment,
+    val vulnerabilityRegistry: VulnerabilityRegistry
+) : AbstractCoroutineContextElement(OrtContext) {
+    companion object Key : CoroutineContext.Key<OrtContext>
+
+    override val key: CoroutineContext.Key<*> get() = Key
+}
+
+inline val <reified T> T.logger: Klogger
+    get() = logger(T::class)
 
 /**
  * The class to manage [AdviceProvider]s. It invokes the configured providers and adds their findings to the current
@@ -81,7 +110,14 @@ class Advisor(
 
                 providers.map { provider ->
                     async {
+                        logger.info("Getting advice from {provider}...", provider.providerName)
+
                         val providerResults = provider.retrievePackageFindings(packages)
+
+                        providerResults.values.forEach { result ->
+                            result.vulnerabilities.forEach { vulnerability ->
+                                coroutineContext[OrtContext]?.vulnerabilityRegistry?.addVulnerability(vulnerability)}
+                        }
 
                         logger.info {
                             "Found ${providerResults.values.flatMap { it.vulnerabilities }.distinct().size} distinct " +
