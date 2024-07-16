@@ -368,34 +368,7 @@ class CycloneDxReporter : Reporter {
         outputFileExtensions.forEach { fileExtension ->
             val outputFile = outputDir.resolve("$outputName.$fileExtension")
 
-            val bom = when (fileExtension) {
-                "xml" -> BomGeneratorFactory.createXml(schemaVersion, bom).toXmlString()
-                "json" -> {
-                    // JSON output cannot handle extensible types (see [1]), so simply remove them. As JSON output is
-                    // guaranteed to be the last format serialized, it is okay to modify the BOM here without doing a
-                    // deep copy first.
-                    //
-                    // [1] https://github.com/CycloneDX/cyclonedx-core-java/issues/99.
-                    val bomWithoutExtensibleTypes = bom.apply {
-                        components.forEach { component ->
-                            // Clear the "dependencyType".
-                            component.extensibleTypes = null
-
-                            component.licenses.licenses.forEach { license ->
-                                // Clear the "origin".
-                                license.extensibleTypes = null
-                            }
-
-                            // Remove duplicates that may occur due to clearing the distinguishing extensive type.
-                            component.licenses.licenses = component.licenses.licenses.distinct()
-                        }
-                    }
-
-                    BomGeneratorFactory.createJson(schemaVersion, bomWithoutExtensibleTypes).toJsonString()
-                }
-
-                else -> throw IllegalArgumentException("Unsupported CycloneDX file extension '$fileExtension'.")
-            }
+            val bom = generateBom(bom, schemaVersion, fileExtension)
 
             outputFile.bufferedWriter().use { it.write(bom) }
             writtenFiles += outputFile
@@ -410,3 +383,35 @@ class CycloneDxReporter : Reporter {
  */
 private fun ResolvedLicenseInfo.getLicenseNames(vararg sources: LicenseSource): SortedSet<String> =
     licenses.filter { license -> sources.any { it in license.sources } }.mapTo(sortedSetOf()) { it.license.toString() }
+
+/**
+ * Return the string representation for the given [bom], [schemaVersion] and [fileExtension].
+ */
+private fun generateBom(bom: Bom, schemaVersion: Version, fileExtension: String): String =
+    when (fileExtension) {
+        "xml" -> BomGeneratorFactory.createXml(schemaVersion, bom).toXmlString()
+        "json" -> {
+            // JSON output cannot handle extensible types (see [1]), so simply remove them. As JSON output is guaranteed
+            // to be the last format serialized, it is okay to modify the BOM here without doing a deep copy first.
+            //
+            // [1] https://github.com/CycloneDX/cyclonedx-core-java/issues/99.
+            val bomWithoutExtensibleTypes = bom.apply {
+                components.forEach { component ->
+                    // Clear the "dependencyType".
+                    component.extensibleTypes = null
+
+                    component.licenses.licenses.forEach { license ->
+                        // Clear the "origin".
+                        license.extensibleTypes = null
+                    }
+
+                    // Remove duplicates that may occur due to clearing the distinguishing extensive type.
+                    component.licenses.licenses = component.licenses.licenses.distinct()
+                }
+            }
+
+            BomGeneratorFactory.createJson(schemaVersion, bomWithoutExtensibleTypes).toJsonString()
+        }
+
+        else -> throw IllegalArgumentException("Unsupported CycloneDX file extension '$fileExtension'.")
+    }
