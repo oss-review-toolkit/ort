@@ -406,13 +406,15 @@ private fun generateBom(bom: Bom, schemaVersion: Version, fileExtension: String)
                     // Clear the "dependencyType".
                     component.extensibleTypes = null
 
-                    component.licenses.licenses.forEach { license ->
-                        // Clear the "origin".
-                        license.extensibleTypes = null
-                    }
+                    if (component.licenses?.licenses != null) {
+                        component.licenses.licenses.forEach { license ->
+                            // Clear the "origin".
+                            license.extensibleTypes = null
+                        }
 
-                    // Remove duplicates that may occur due to clearing the distinguishing extensive type.
-                    component.licenses.licenses = component.licenses.licenses.distinct()
+                        // Remove duplicates that may occur due to clearing the distinguishing extensive type.
+                        component.licenses.licenses = component.licenses.licenses.distinct()
+                    }
                 }
             }
 
