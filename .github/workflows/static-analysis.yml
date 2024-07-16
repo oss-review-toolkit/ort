@@ -47,9 +47,7 @@ jobs:
       with:
         gradle-home-cache-cleanup: true
     - name: Check for Detekt Issues
-      run: ./gradlew detekt
-    - name: Check for Detekt Issues with type resolution
-      run: ./gradlew detektMain detektTestFixtures detektTest detektFunTest
+      run: ./gradlew detektAll
     - name: Upload SARIF File
       uses: github/codeql-action/upload-sarif@4fa2a7953630fd2f3fb380f21be14ede0169dd4f # v3
       if: always() # Upload even if the previous step failed.

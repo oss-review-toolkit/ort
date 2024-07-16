@@ -131,10 +131,13 @@ val mergeDetektReports = if (rootProject.tasks.findByName(mergeDetektReportsTask
     }
 }
 
+val detekt = tasks.named<Detekt>("detekt")
+
 tasks.withType<Detekt>().configureEach detekt@{
     jvmTarget = maxKotlinJvmTarget.target
 
     dependsOn(":detekt-rules:assemble")
+    if (this != detekt.get()) mustRunAfter(detekt)
 
     exclude {
         "/build/generated/" in it.file.absolutePath
@@ -158,6 +161,10 @@ tasks.withType<Detekt>().configureEach detekt@{
     }
 
     finalizedBy(mergeDetektReports)
+}
+
+tasks.register("detektAll") {
+    dependsOn(tasks.withType<Detekt>())
 }
 
 tasks.withType<KotlinCompile>().configureEach {
