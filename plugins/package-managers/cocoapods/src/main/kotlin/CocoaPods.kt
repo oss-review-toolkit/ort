@@ -118,7 +118,7 @@ class CocoaPods(
 
             scopes += Scope(SCOPE_NAME, lockfileData.dependencies)
             packages += scopes.flatMap { it.collectDependencies() }.map {
-                lockfileData.externalSources[it] ?: getPackage(it, workingDir)
+                lockfileData.packagesFromCheckoutOptionsForId[it] ?: getPackage(it, workingDir)
             }
         } else {
             issues += createAndLogIssue(
@@ -221,7 +221,7 @@ private const val SCOPE_NAME = "dependencies"
 
 private data class LockfileData(
     val dependencies: Set<PackageReference>,
-    val externalSources: Map<Identifier, Package>
+    val packagesFromCheckoutOptionsForId: Map<Identifier, Package>
 )
 
 private fun parseLockfile(podfileLock: File): LockfileData {
@@ -242,7 +242,7 @@ private fun parseLockfile(podfileLock: File): LockfileData {
         }
     }
 
-    val externalSources = lockfile.checkoutOptions.mapNotNull { (name, checkoutOption) ->
+    val packagesFromCheckoutOptionsForId = lockfile.checkoutOptions.mapNotNull { (name, checkoutOption) ->
         val url = checkoutOption.git ?: return@mapNotNull null
         val revision = checkoutOption.commit.orEmpty()
 
@@ -285,5 +285,5 @@ private fun parseLockfile(podfileLock: File): LockfileData {
         createPackageReference(dependency.name)
     }
 
-    return LockfileData(dependencies, externalSources)
+    return LockfileData(dependencies, packagesFromCheckoutOptionsForId)
 }
