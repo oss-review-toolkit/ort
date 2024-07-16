@@ -376,7 +376,7 @@ class CycloneDxReporter : Reporter {
                 outputFile.bufferedWriter().use { it.write(bom) }
                 writtenFiles += outputFile
             }.onFailure {
-                logger.error("Unable to create CycloneDX report: ", it)
+                logger.error("Unable to create the CycloneDX '$fileExtension' report: ", it)
             }
         }
 
