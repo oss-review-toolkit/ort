@@ -19,9 +19,14 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.cocoapods
 
-import com.fasterxml.jackson.databind.node.ObjectNode
+import com.charleskorn.kaml.Yaml
+import com.charleskorn.kaml.YamlList
+import com.charleskorn.kaml.YamlMap
+import com.charleskorn.kaml.YamlScalar
+import com.charleskorn.kaml.yamlList
+import com.charleskorn.kaml.yamlMap
+import com.charleskorn.kaml.yamlScalar
 
-import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.plugins.packagemanagers.cocoapods.Lockfile.CheckoutOption
 import org.ossreviewtoolkit.plugins.packagemanagers.cocoapods.Lockfile.Dependency
 
@@ -48,40 +53,45 @@ internal data class Lockfile(
 }
 
 internal fun String.parseLockfile(): Lockfile {
-    val root = yamlMapper.readTree(this)
+    val root = Yaml.default.parseToYamlNode(this).yamlMap
 
-    val pods = root.get("PODS").map { node ->
-        when (node) {
-            is ObjectNode -> {
-                val (name, version) = parseNameAndVersion(node.fieldNames().asSequence().single())
+    val pods = root.get<YamlList>("PODS")!!.items.map { node ->
+        when {
+            node is YamlMap -> {
+                val (key, value) = node.yamlMap.entries.entries.single()
+                val (name, version) = parseNameAndVersion(key.content)
+
                 Lockfile.Pod(
                     name = name,
                     version = version,
-                    dependencies = node.single().map {
-                        val (depName, depVersion) = parseNameAndVersion(it.textValue())
+                    dependencies = value.yamlList.items.map {
+                        val (depName, depVersion) = parseNameAndVersion(it.yamlScalar.content)
                         Lockfile.Pod(depName, depVersion)
                     }
                 )
             }
 
             else -> {
-                val (name, version) = parseNameAndVersion(node.textValue())
+                val (name, version) = parseNameAndVersion(node.yamlScalar.content)
                 Lockfile.Pod(name, version)
             }
         }
     }
 
-    val checkoutOptions = root.get("CHECKOUT OPTIONS")?.fields()?.asSequence()?.map { (name, node) ->
+    val checkoutOptions = root.get<YamlMap>("CHECKOUT OPTIONS")?.entries.orEmpty().map {
+        val name = it.key.content
+        val node = it.value.yamlMap
+
         val checkoutOption = CheckoutOption(
-            git = node[":git"]?.textValue(),
-            commit = node[":commit"].textValue()
+            git = node.get<YamlScalar>(":git")?.content,
+            commit = node.get<YamlScalar>(":commit")?.content
         )
 
         name to checkoutOption
-    }.orEmpty().toMap()
+    }.toMap()
 
-    val dependencies = root.get("DEPENDENCIES").map { node ->
-        val (name, version) = parseNameAndVersion(node.textValue())
+    val dependencies = root.get<YamlList>("DEPENDENCIES")!!.items.map { node ->
+        val (name, version) = parseNameAndVersion(node.yamlScalar.content)
         Dependency(name, version)
     }
 
