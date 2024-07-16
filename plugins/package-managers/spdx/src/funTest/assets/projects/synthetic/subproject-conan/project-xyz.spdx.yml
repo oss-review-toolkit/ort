@@ -16,7 +16,7 @@ externalDocumentRefs:
     spdxDocument: "./subproject/subproject-with-conan-reference.spdx.yml"
     checksum:
       algorithm: "SHA1"
-      checksumValue: "53840294281f7d1bf401b746162da11dcf9306eb"
+      checksumValue: "032a087b0da8f353c03671a72179b807b4ec7eb3"
 packages:
   - SPDXID: "SPDXRef-Package-xyz"
     description: "Awesome product created by Example Inc."
