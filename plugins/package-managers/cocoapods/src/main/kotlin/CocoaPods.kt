@@ -287,7 +287,7 @@ private fun parseLockfile(podfileLock: File): LockfileData {
             sourceArtifact = RemoteArtifact.EMPTY,
             vcs = VcsInfo(VcsType.GIT, url, revision)
         )
-    }?.toMap()
+    }.orEmpty().toMap()
 
     fun createPackageReference(name: String): PackageReference =
         PackageReference(
@@ -308,5 +308,5 @@ private fun parseLockfile(podfileLock: File): LockfileData {
         createPackageReference(name)
     }
 
-    return LockfileData(dependencies, externalSources.orEmpty())
+    return LockfileData(dependencies, externalSources)
 }
