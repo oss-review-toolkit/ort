@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.cocoapods
 
-import com.fasterxml.jackson.databind.node.ObjectNode
-
 import java.io.File
 import java.io.IOException
 
@@ -45,12 +43,10 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.utils.toPurl
-import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.stashDirectories
-import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
@@ -223,50 +219,32 @@ private const val LOCKFILE_FILENAME = "Podfile.lock"
 
 private const val SCOPE_NAME = "dependencies"
 
-private fun parseNameAndVersion(entry: String): Pair<String, String?> {
-    val info = entry.split(' ', limit = 2)
-    val name = info[0]
-
-    // A version entry could look something like "(6.3.0)", "(= 2021.06.28.00-v2)", "(~> 8.15.0)", etc. Also see
-    // https://guides.cocoapods.org/syntax/podfile.html#pod.
-    val version = info.getOrNull(1)?.removeSurrounding("(", ")")
-
-    return name to version
-}
-
 private data class LockfileData(
     val dependencies: Set<PackageReference>,
     val externalSources: Map<Identifier, Package>
 )
 
 private fun parseLockfile(podfileLock: File): LockfileData {
+    val lockfile = podfileLock.readText().parseLockfile()
     val resolvedVersions = mutableMapOf<String, String>()
     val dependencyConstraints = mutableMapOf<String, MutableSet<String>>()
-    val root = yamlMapper.readTree(podfileLock)
 
     // The "PODS" section lists the resolved dependencies and, nested by one level, any version constraints of their
     // direct dependencies. That is, the nesting never goes deeper than two levels.
-    root.get("PODS").forEach { node ->
-        when (node) {
-            is ObjectNode -> {
-                val (name, version) = parseNameAndVersion(node.fieldNames().asSequence().single())
-                resolvedVersions[name] = checkNotNull(version)
-                dependencyConstraints[name] = node.single().mapTo(mutableSetOf()) {
-                    // Discard the version (which is only a constraint in this case) and just take the name.
-                    parseNameAndVersion(it.textValue()).first
-                }
-            }
+    lockfile.pods.map { pod ->
+        resolvedVersions[pod.name] = checkNotNull(pod.version)
 
-            else -> {
-                val (name, version) = parseNameAndVersion(node.textValue())
-                resolvedVersions[name] = checkNotNull(version)
+        if (pod.dependencies.isNotEmpty()) {
+            dependencyConstraints[pod.name] = pod.dependencies.mapTo(mutableSetOf()) {
+                // Discard the version (which is only a constraint in this case) and just take the name.
+                it.name
             }
         }
     }
 
-    val externalSources = root.get("CHECKOUT OPTIONS")?.fields()?.asSequence()?.mapNotNull { (name, checkout) ->
-        val url = checkout[":git"]?.textValue() ?: return@mapNotNull null
-        val revision = checkout[":commit"].textValueOrEmpty()
+    val externalSources = lockfile.checkoutOptions.mapNotNull { (name, checkoutOption) ->
+        val url = checkoutOption.git ?: return@mapNotNull null
+        val revision = checkoutOption.commit.orEmpty()
 
         // The version written to the lockfile matches the version specified in the project's ".podspec" file at the
         // given revision, so the same version might be used in different revisions. To still get a unique identifier,
@@ -287,7 +265,7 @@ private fun parseLockfile(podfileLock: File): LockfileData {
             sourceArtifact = RemoteArtifact.EMPTY,
             vcs = VcsInfo(VcsType.GIT, url, revision)
         )
-    }.orEmpty().toMap()
+    }.toMap()
 
     fun createPackageReference(name: String): PackageReference =
         PackageReference(
@@ -302,10 +280,9 @@ private fun parseLockfile(podfileLock: File): LockfileData {
 
     // The "DEPENDENCIES" section lists direct dependencies, but only along with version constraints, not with their
     // resolved versions, and eventually additional information about the source.
-    val dependencies = root.get("DEPENDENCIES").mapTo(mutableSetOf()) { node ->
-        // Discard the version (which is only a constraint in this case) and just take the name.
-        val (name, _) = parseNameAndVersion(node.textValue())
-        createPackageReference(name)
+    val dependencies = lockfile.dependencies.mapTo(mutableSetOf()) { dependency ->
+        // Ignore the version (which is only a constraint in this case) and just take the name.
+        createPackageReference(dependency.name)
     }
 
     return LockfileData(dependencies, externalSources)
