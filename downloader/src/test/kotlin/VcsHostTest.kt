@@ -511,6 +511,10 @@ class VcsHostTest : WordSpec({
             VcsHost.getProject("ssh://git@gitlab.custom.com:group/project.git") shouldBe "project"
         }
 
+        "work for a generic URL with .git twice to a Git repository" {
+            VcsHost.getProject("ssh://git@internal.gitlab.custom.com:group/project.git") shouldBe "project"
+        }
+
         "handle an unknown URL" {
             VcsHost.fromUrl("https://host.tld/path/to/repo") should beNull()
         }
