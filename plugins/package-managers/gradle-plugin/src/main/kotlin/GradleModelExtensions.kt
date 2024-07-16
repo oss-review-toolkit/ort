@@ -50,7 +50,11 @@ internal fun Configuration.isRelevant(): Boolean {
     // https://gist.github.com/h0tk3y/41c73d1f822378f52f1e6cce8dcf56aa for some background information.
     val isDependenciesMetadata = name.endsWith("DependenciesMetadata")
 
-    return canBeResolved && !isDeprecatedConfiguration && !isDependenciesMetadata
+    // Ignore Kotlin Multiplatform Project configurations for resolving source files because by nature not every
+    // published library has sources variants that can be resolved.
+    val isDependencySources = name == "dependencySources" || name.endsWith("DependencySources")
+
+    return canBeResolved && !isDeprecatedConfiguration && !isDependenciesMetadata && !isDependencySources
 }
 
 /**
