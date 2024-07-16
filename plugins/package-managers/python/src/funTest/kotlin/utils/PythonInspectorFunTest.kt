@@ -38,7 +38,8 @@ class PythonInspectorFunTest : StringSpec({
                 workingDir = workingDir,
                 definitionFile = definitionFile,
                 pythonVersion = "27",
-                operatingSystem = "linux"
+                operatingSystem = "linux",
+                analyzeSetupPyInsecurely = true
             )
         } finally {
             workingDir.resolve(".cache").safeDeleteRecursively(force = true)
@@ -47,5 +48,26 @@ class PythonInspectorFunTest : StringSpec({
         result.projects should haveSize(2)
         result.resolvedDependenciesGraph should haveSize(1)
         result.packages should haveSize(11)
+    }
+
+    "python-inspector can be run without setup.py file analysis" {
+        val definitionFile = projectsDir.resolve("synthetic/python-inspector-no-analyze-setup-py/requirements.txt")
+        val workingDir = definitionFile.parentFile
+
+        val result = try {
+            PythonInspector.inspect(
+                workingDir = workingDir,
+                definitionFile = definitionFile,
+                pythonVersion = "311",
+                operatingSystem = "linux",
+                analyzeSetupPyInsecurely = false
+            )
+        } finally {
+            workingDir.resolve(".cache").safeDeleteRecursively(force = true)
+        }
+
+        result.projects should haveSize(1)
+        result.resolvedDependenciesGraph should haveSize(1)
+        result.packages should haveSize(3)
     }
 })

@@ -42,12 +42,16 @@ private val OPERATING_SYSTEMS = listOf(OPTION_OPERATING_SYSTEM_DEFAULT, "macos",
 private const val OPTION_PYTHON_VERSION_DEFAULT = "3.11"
 internal val PYTHON_VERSIONS = listOf("2.7", "3.6", "3.7", "3.8", "3.9", "3.10", OPTION_PYTHON_VERSION_DEFAULT)
 
+private const val OPTION_ANALYZE_SETUP_PY_INSECURELY_DEFAULT = true
+
 /**
  * The [PIP](https://pip.pypa.io/) package manager for Python. Also see
  * [install_requires vs requirements files](https://packaging.python.org/discussions/install-requires-vs-requirements/)
  * and [setup.py vs. requirements.txt](https://caremad.io/posts/2013/07/setup-vs-requirement/).
  *
  * This package manager supports the following [options][PackageManagerConfiguration.options]:
+ * - *analyzeSetupPyInsecurely*: If "true", `python-inspector` resolves dependencies from setup.py files by executing
+ *   them. This is a potential security risk. Defaults to "true".
  * - *operatingSystem*: The name of the operating system to resolve dependencies for. One of "linux", "macos", or
  *   "windows". Defaults to "linux".
  * - *pythonVersion*: The Python version to resolve dependencies for. Defaults to "3.10".
@@ -61,6 +65,7 @@ class Pip(
     companion object {
         const val OPTION_OPERATING_SYSTEM = "operatingSystem"
         const val OPTION_PYTHON_VERSION = "pythonVersion"
+        const val OPTION_ANALYZE_SETUP_PY_INSECURELY = "analyzeSetupPyInsecurely"
     }
 
     class Factory : AbstractPackageManagerFactory<Pip>("PIP") {
@@ -87,6 +92,12 @@ class Pip(
         }
     }
 
+    private val analyzeSetupPyInsecurelyOption = options[OPTION_ANALYZE_SETUP_PY_INSECURELY]?.also { analyzeSetupPy ->
+        requireNotNull(analyzeSetupPy.toBooleanStrictOrNull()) {
+            "The '$OPTION_ANALYZE_SETUP_PY_INSECURELY' option must be 'true' or 'false', but was '$analyzeSetupPy'."
+        }
+    }
+
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val result = runPythonInspector(definitionFile) { detectPythonVersion(definitionFile.parentFile) }
 
@@ -102,7 +113,8 @@ class Pip(
     ): PythonInspector.Result {
         val operatingSystem = operatingSystemOption ?: OPTION_OPERATING_SYSTEM_DEFAULT
         val pythonVersion = pythonVersionOption ?: detectPythonVersion() ?: OPTION_PYTHON_VERSION_DEFAULT
-
+        val analyzeSetupPyInsecurely = analyzeSetupPyInsecurelyOption?.toBooleanStrict()
+            ?: OPTION_ANALYZE_SETUP_PY_INSECURELY_DEFAULT
         val workingDir = definitionFile.parentFile
 
         logger.info {
@@ -116,7 +128,8 @@ class Pip(
                     workingDir = workingDir,
                     definitionFile = definitionFile,
                     pythonVersion = pythonVersion.split('.', limit = 3).take(2).joinToString(""),
-                    operatingSystem = operatingSystem
+                    operatingSystem = operatingSystem,
+                    analyzeSetupPyInsecurely = analyzeSetupPyInsecurely
                 )
             } finally {
                 workingDir.resolve(".cache").safeDeleteRecursively(force = true)
