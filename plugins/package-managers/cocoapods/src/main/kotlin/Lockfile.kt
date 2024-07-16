@@ -87,10 +87,7 @@ private fun YamlNode.toPod(): Pod =
             Pod(
                 name = name,
                 version = version,
-                dependencies = value.yamlList.items.map {
-                    val (depName, depVersion) = parseNameAndVersion(it.yamlScalar.content)
-                    Pod(depName, depVersion)
-                }
+                dependencies = value.yamlList.items.map { it.toPod() }
             )
         }
 
