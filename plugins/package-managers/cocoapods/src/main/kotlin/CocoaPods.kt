@@ -116,7 +116,7 @@ class CocoaPods(
             val lockfileData = parseLockfile(lockfile)
 
             scopes += Scope(SCOPE_NAME, lockfileData.dependencies)
-            packages += scopes.flatMap { it.collectDependencies() }.map {
+            packages += scopes.flatMapTo(mutableSetOf()) { it.collectDependencies() }.map {
                 lockfileData.packagesFromCheckoutOptionsForId[it] ?: getPackage(it, workingDir)
             }
         } else {
