@@ -42,12 +42,7 @@ dependencies {
 
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
-
-    implementation(libs.jackson.annotations)
-    implementation(libs.jackson.core)
-    implementation(libs.jackson.databind)
-    implementation(libs.jackson.dataformat.yaml)
-    implementation(libs.jackson.module.kotlin)
+    implementation(libs.kotlinx.serialization.yaml)
 
     funTestImplementation(testFixtures(projects.analyzer))
 }
