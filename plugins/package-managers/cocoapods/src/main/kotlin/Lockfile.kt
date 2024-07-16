@@ -56,7 +56,7 @@ internal data class Lockfile(
 
 internal fun String.parseLockfile(): Lockfile {
     val root = Yaml.default.parseToYamlNode(this).yamlMap
-    val pods = root.get<YamlList>("PODS")!!.items.map { it.toPod() }
+    val pods = root.get<YamlList>("PODS")?.items.orEmpty().map { it.toPod() }
 
     val checkoutOptions = root.get<YamlMap>("CHECKOUT OPTIONS")?.entries.orEmpty().map {
         val name = it.key.content
@@ -70,7 +70,7 @@ internal fun String.parseLockfile(): Lockfile {
         name to checkoutOption
     }.toMap()
 
-    val dependencies = root.get<YamlList>("DEPENDENCIES")!!.items.map { node ->
+    val dependencies = root.get<YamlList>("DEPENDENCIES")?.items.orEmpty().map { node ->
         val (name, version) = parseNameAndVersion(node.yamlScalar.content)
         Dependency(name, version)
     }
