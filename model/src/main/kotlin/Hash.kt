@@ -78,6 +78,11 @@ data class Hash(
                     "'$value' is not a $algorithm hash."
                 }
             }
+
+        /**
+         * Create a [Hash] instance similar to [create](String,String).
+         */
+        fun create(value: String, algorithm: HashAlgorithm): Hash = create(value, algorithm.name)
     }
 
     /**

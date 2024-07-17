@@ -620,7 +620,7 @@ class Pub(
 
                         RemoteArtifact(
                             url = "$hostUrl/packages/$rawName/versions/$version.tar.gz",
-                            hash = Hash.create(sha256, HashAlgorithm.SHA256.name)
+                            hash = Hash.create(sha256, HashAlgorithm.SHA256)
                         )
                     } else {
                         RemoteArtifact.EMPTY
