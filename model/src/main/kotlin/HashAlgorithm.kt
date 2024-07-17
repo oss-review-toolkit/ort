@@ -113,17 +113,14 @@ enum class HashAlgorithm(vararg val aliases: String, val emptyValue: String, val
          */
         fun create(value: String): HashAlgorithm {
             if (value.isBlank()) return NONE
-
-            return when (value.length) {
-                128 -> SHA512
-                96 -> SHA384
-                64 -> SHA256
-                40 -> SHA1
-                32 -> MD5
-                else -> UNKNOWN
-            }
+            return HashAlgorithm.entries.find { it.size == value.length } ?: UNKNOWN
         }
     }
+
+    /**
+     * The size of a hexadecimal hash value string for this algorithm.
+     */
+    val size = emptyValue.length
 
     /**
      * Convert the hash algorithm to a string representation.
