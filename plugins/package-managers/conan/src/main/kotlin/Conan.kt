@@ -328,7 +328,7 @@ class Conan(
             Json.parseToJsonElement(jsonFile.readText()).jsonObject.also {
                 jsonFile.parentFile.safeDeleteRecursively(force = true)
             }
-        }.get(field)?.jsonPrimitive?.content.orEmpty()
+        }[field]?.jsonPrimitive?.content.orEmpty()
 
     /**
      * Find the [PackageInfo] that represents the project defined in the definition file.
