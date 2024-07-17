@@ -61,6 +61,14 @@ data class OrtContext(
     override val key: CoroutineContext.Key<*> get() = Key
 }
 
+data class PluginContext(
+    val name: String
+) : AbstractCoroutineContextElement(PluginContext) {
+    companion object Key : CoroutineContext.Key<PluginContext>
+
+    override val key: CoroutineContext.Key<*> get() = Key
+}
+
 inline val <reified T> T.logger: Klogger
     get() = logger(T::class)
 
@@ -109,7 +117,7 @@ class Advisor(
                 }
 
                 providers.map { provider ->
-                    async {
+                    async(PluginContext(provider.providerName)) {
                         logger.info("Getting advice from {provider}...", provider.providerName)
 
                         val providerResults = provider.retrievePackageFindings(packages)

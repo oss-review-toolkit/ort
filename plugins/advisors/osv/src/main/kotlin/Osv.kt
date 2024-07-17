@@ -24,10 +24,9 @@ import java.time.Instant
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.contentOrNull
 
-import org.apache.logging.log4j.kotlin.logger
-
 import org.ossreviewtoolkit.advisor.AdviceProvider
 import org.ossreviewtoolkit.advisor.AdviceProviderFactory
+import org.ossreviewtoolkit.advisor.logger
 import org.ossreviewtoolkit.clients.osv.Ecosystem
 import org.ossreviewtoolkit.clients.osv.OsvServiceWrapper
 import org.ossreviewtoolkit.clients.osv.Severity
@@ -93,9 +92,11 @@ class Osv(name: String, config: OsvConfiguration) : AdviceProvider(name) {
         }.toMap()
     }
 
-    private fun getVulnerabilitiesForPackage(packages: Set<Package>): Map<Identifier, List<Vulnerability>> {
+    private suspend fun getVulnerabilitiesForPackage(packages: Set<Package>): Map<Identifier, List<Vulnerability>> {
+        logger.info { "Getting vulnerabilities for ${packages.size} packages." }
         val vulnerabilityIdsForPackageId = getVulnerabilityIdsForPackages(packages)
         val allVulnerabilityIds = vulnerabilityIdsForPackageId.values.flatten().toSet()
+        logger.info { "Retrieved ${allVulnerabilityIds.size} vulnerabilities." }
         val vulnerabilityForId = getVulnerabilitiesForIds(allVulnerabilityIds).associateBy { it.id }
 
         return packages.associate { pkg ->
@@ -103,7 +104,7 @@ class Osv(name: String, config: OsvConfiguration) : AdviceProvider(name) {
         }
     }
 
-    private fun getVulnerabilityIdsForPackages(packages: Set<Package>): Map<Identifier, List<String>> {
+    private suspend fun getVulnerabilityIdsForPackages(packages: Set<Package>): Map<Identifier, List<String>> {
         val requests = packages.mapNotNull { pkg ->
             createRequest(pkg)?.let { pkg to it }
         }
@@ -127,7 +128,7 @@ class Osv(name: String, config: OsvConfiguration) : AdviceProvider(name) {
         return results.toMap()
     }
 
-    private fun getVulnerabilitiesForIds(ids: Set<String>): List<Vulnerability> {
+    private suspend fun getVulnerabilitiesForIds(ids: Set<String>): List<Vulnerability> {
         val result = service.getVulnerabilitiesForIds(ids)
 
         return result.getOrElse {
@@ -182,7 +183,7 @@ private fun createRequest(pkg: Package): VulnerabilitiesForPackageRequest? {
     return null
 }
 
-private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.vulnerabilities.Vulnerability {
+private suspend fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.vulnerabilities.Vulnerability {
     // OSV uses a list in order to support multiple representations of the severity using different scoring systems.
     // However, only one representation is actually possible currently, because the enum 'Severity.Type' contains just a
     // single element / scoring system. So, picking first severity is fine, in particular because ORT only supports a

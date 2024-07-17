@@ -50,6 +50,7 @@ import kotlinx.coroutines.runBlocking
 import org.ossreviewtoolkit.advisor.AdviceProviderFactory
 import org.ossreviewtoolkit.advisor.Advisor
 import org.ossreviewtoolkit.advisor.OrtContext
+import org.ossreviewtoolkit.advisor.PluginContext
 import org.ossreviewtoolkit.advisor.VulnerabilityRegistry
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
@@ -130,9 +131,11 @@ class AdvisorCommand : OrtCommand(
         }
 
         Context.addContextItemExtractor(OrtContext) { ortContext ->
-            mapOf(
-                "ortVersion" to ortContext.environment.ortVersion
-            )
+            mapOf("ortVersion" to ortContext.environment.ortVersion)
+        }
+
+        Context.addContextItemExtractor(PluginContext) { pluginContext ->
+            mapOf("plugin" to pluginContext.name)
         }
 
         val outputFiles = outputFormats.mapTo(mutableSetOf()) { format ->

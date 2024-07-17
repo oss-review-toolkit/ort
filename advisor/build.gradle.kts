@@ -26,9 +26,10 @@ dependencies {
     api(projects.model)
     api(projects.utils.commonUtils)
 
+    api(libs.klogging)
+
     implementation(projects.utils.ortUtils)
 
-    implementation(libs.klogging)
     implementation(libs.kotlinx.coroutines)
 
     testImplementation(libs.mockk)
