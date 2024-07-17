@@ -413,57 +413,33 @@ class Conan(
     private fun parseProjectPackage(pkgInfos: List<PackageInfo>, definitionFile: File, workingDir: File): Package {
         val projectPackage = findProjectPackageInfo(pkgInfos, definitionFile.name)
 
-        return if (definitionFile.name == "conanfile.py") {
-            generateProjectPackageFromConanfilePy(projectPackage, definitionFile, workingDir)
-        } else {
-            generateProjectPackageFromConanfileTxt(projectPackage)
-        }
+        return generateProjectPackage(projectPackage, definitionFile, workingDir)
     }
 
     /**
      * Return a [Package] containing project-level information from [pkgInfo] and [definitionFile] using the
      * `conan inspect` command.
      */
-    private fun generateProjectPackageFromConanfilePy(
-        pkgInfo: PackageInfo,
-        definitionFile: File,
-        workingDir: File
-    ): Package =
-        Package(
-            id = Identifier(
-                type = managerName,
-                namespace = "",
-                name = inspectField(definitionFile.name, workingDir, "name"),
-                version = inspectField(definitionFile.name, workingDir, "version")
-            ),
-            authors = parseAuthors(pkgInfo),
-            declaredLicenses = pkgInfo.license.toSet(),
-            description = inspectField(definitionFile.name, workingDir, "description"),
-            homepageUrl = pkgInfo.homepage.orEmpty(),
-            binaryArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
-            sourceArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
-            vcs = parseVcsInfo(pkgInfo)
-        )
+    private fun generateProjectPackage(pkgInfo: PackageInfo, definitionFile: File, workingDir: File): Package {
+        fun inspectOrNull(field: String) =
+            definitionFile.name.takeIf { it == "conanfile.py" }?.let { inspectField(it, workingDir, field) }
 
-    /**
-     * Return a [Package] containing project-level information from [pkgInfo].
-     */
-    private fun generateProjectPackageFromConanfileTxt(pkgInfo: PackageInfo): Package =
-        Package(
+        return Package(
             id = Identifier(
                 type = managerName,
                 namespace = "",
-                name = pkgInfo.reference.orEmpty(),
-                version = ""
+                name = inspectOrNull("name") ?: pkgInfo.reference.orEmpty(),
+                version = inspectOrNull("version").orEmpty()
             ),
             authors = parseAuthors(pkgInfo),
             declaredLicenses = pkgInfo.license.toSet(),
-            description = "",
+            description = inspectOrNull("description").orEmpty(),
             homepageUrl = pkgInfo.homepage.orEmpty(),
             binaryArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
             sourceArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
             vcs = parseVcsInfo(pkgInfo)
         )
+    }
 
     /**
      * Parse information about the package author from the given [package info][pkgInfo]. If present, return a set
