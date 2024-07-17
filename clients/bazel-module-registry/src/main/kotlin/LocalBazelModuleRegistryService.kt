@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.clients.bazelmoduleregistry
 import java.io.File
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.decodeFromStream
 
 private const val BAZEL_MODULES_DIR = "modules"
 
@@ -40,27 +39,20 @@ class LocalBazelModuleRegistryService(directory: File) : BazelModuleRegistryServ
             "The Bazel registry file bazel_registry.json does not exist in '${directory.canonicalPath}'."
         }
 
-        bazelRegistry = registryFile.inputStream().use {
-            JSON.decodeFromStream<BazelRegistry>(it)
-        }
-
+        bazelRegistry = JSON.decodeFromString<BazelRegistry>(registryFile.readText())
         moduleDirectory = registryFile.resolveSibling(BAZEL_MODULES_DIR)
     }
 
     override suspend fun getModuleMetadata(name: String): ModuleMetadata {
         val metadataJson = moduleDirectory.resolve(name).resolve("metadata.json")
         require(metadataJson.isFile)
-        return metadataJson.inputStream().use {
-            JSON.decodeFromStream<ModuleMetadata>(it)
-        }
+        return JSON.decodeFromString<ModuleMetadata>(metadataJson.readText())
     }
 
     override suspend fun getModuleSourceInfo(name: String, version: String): ModuleSourceInfo {
         val sourceJson = moduleDirectory.resolve(name).resolve(version).resolve("source.json")
         require(sourceJson.isFile)
-        return sourceJson.inputStream().use {
-            JSON.decodeFromStream<ModuleSourceInfo>(it)
-        }
+        return JSON.decodeFromString<ModuleSourceInfo>(sourceJson.readText())
     }
 }
 

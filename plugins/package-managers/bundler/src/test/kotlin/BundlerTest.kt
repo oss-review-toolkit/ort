@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.bundler
 
-import com.charleskorn.kaml.decodeFromStream
-
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.shouldBe
@@ -60,9 +58,7 @@ class BundlerTest : WordSpec({
     "createFromGem()" should {
         "parse YAML metadata for a Gem correctly" {
             val rubyGemsFile = File("src/test/assets/rspec-3.7.0.yaml")
-            val details = rubyGemsFile.inputStream().use {
-                YAML.decodeFromStream<VersionDetails>(it)
-            }
+            val details = YAML.decodeFromString<VersionDetails>(rubyGemsFile.readText())
 
             val gemInfo = GemInfo.createFromGem(details)
 

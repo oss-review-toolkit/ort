@@ -85,7 +85,7 @@ private const val BUNDLER_GEM_NAME = "bundler"
 internal const val BUNDLER_LOCKFILE_NAME = "Gemfile.lock"
 
 // TODO: Remove this again once available upstream.
-private inline fun <reified T> Yaml.decodeFromString(string: String): T = decodeFromString(serializer<T>(), string)
+internal inline fun <reified T> Yaml.decodeFromString(string: String): T = decodeFromString(serializer<T>(), string)
 
 private fun runScriptCode(code: String, workingDir: File? = null): String {
     val bytes = ByteArrayOutputStream()

@@ -25,7 +25,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
-import kotlinx.serialization.json.decodeFromStream
 
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
@@ -91,7 +90,7 @@ internal object PythonInspector : CommandLineTool {
 
         return try {
             run(workingDir, *commandLineOptions.toTypedArray())
-            outputFile.inputStream().use { json.decodeFromStream(it) }
+            json.decodeFromString(outputFile.readText())
         } finally {
             outputFile.parentFile.safeDeleteRecursively(force = true)
         }

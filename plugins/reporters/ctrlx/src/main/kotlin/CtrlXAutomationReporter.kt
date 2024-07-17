@@ -21,8 +21,8 @@ package org.ossreviewtoolkit.plugins.reporters.ctrlx
 
 import java.io.File
 
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.encodeToStream
 
 import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.licenses.LicenseView
@@ -89,7 +89,7 @@ class CtrlXAutomationReporter : Reporter {
         }
 
         val info = FossInfo(components = components)
-        reportFile.outputStream().use { JSON.encodeToStream(info, it) }
+        reportFile.writeText(JSON.encodeToString(info))
 
         return listOf(reportFile)
     }
