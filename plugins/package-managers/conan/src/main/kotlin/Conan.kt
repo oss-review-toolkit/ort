@@ -19,10 +19,19 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.conan
 
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.module.kotlin.readValue
+import com.charleskorn.kaml.Yaml
+import com.charleskorn.kaml.YamlNode
+import com.charleskorn.kaml.YamlScalar
+import com.charleskorn.kaml.yamlList
+import com.charleskorn.kaml.yamlMap
+import com.charleskorn.kaml.yamlScalar
 
 import java.io.File
+
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 
 import org.apache.logging.log4j.kotlin.logger
 
@@ -44,14 +53,11 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.model.jsonMapper
-import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.masked
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.stashDirectories
-import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
@@ -112,7 +118,7 @@ class Conan(
     // [2]: https://docs.conan.io/en/latest/configuration/download_cache.html#download-cache
     private val conanStoragePath = conanHome.resolve("data")
 
-    private val pkgInspectResults = mutableMapOf<String, JsonNode>()
+    private val pkgInspectResults = mutableMapOf<String, JsonObject>()
 
     override fun command(workingDir: File?) = "conan"
 
@@ -319,8 +325,10 @@ class Conan(
         pkgInspectResults.getOrPut(pkgName) {
             val jsonFile = createOrtTempDir().resolve("inspect.json")
             run(workingDir, "inspect", pkgName, "--json", jsonFile.absolutePath)
-            jsonMapper.readTree(jsonFile).also { jsonFile.parentFile.safeDeleteRecursively(force = true) }
-        }.get(field).textValueOrEmpty()
+            Json.parseToJsonElement(jsonFile.readText()).jsonObject.also {
+                jsonFile.parentFile.safeDeleteRecursively(force = true)
+            }
+        }.get(field)?.jsonPrimitive?.content.orEmpty()
 
     /**
      * Find the [PackageInfo] that represents the project defined in the definition file.
@@ -367,19 +375,21 @@ class Conan(
     /**
      * Return the generic map of Conan data for the [id].
      */
-    private fun readConanData(id: Identifier): Map<String, JsonNode> {
+    private fun readConanData(id: Identifier): Map<String, YamlNode> {
         val conanDataFile = conanStoragePath.resolve("${id.name}/${id.version}/_/_/export/conandata.yml")
 
         return runCatching {
-            val conanData = yamlMapper.readValue<Map<String, JsonNode>>(conanDataFile)
+            val conanData = Yaml.default.parseToYamlNode(conanDataFile.readText()).yamlMap.entries.mapKeys {
+                it.key.content
+            }
 
             // Replace metadata for all version with metadata for this specific version for convenient access.
-            conanData.mapValues { (key, value) ->
-                when (key) {
-                    "patches", "sources" -> value[id.version]
+            conanData.mapNotNull { (key, value) ->
+                key to when (key) {
+                    "patches", "sources" -> value.yamlMap[id.version] ?: return@mapNotNull null
                     else -> value
                 }
-            }
+            }.toMap()
         }.getOrDefault(emptyMap())
     }
 
@@ -387,15 +397,15 @@ class Conan(
      * Return the source artifact contained in [conanData], or [RemoteArtifact.EMPTY] if no source artifact is
      * available.
      */
-    private fun parseSourceArtifact(conanData: Map<String, JsonNode>): RemoteArtifact =
+    private fun parseSourceArtifact(conanData: Map<String, YamlNode>): RemoteArtifact =
         runCatching {
-            val artifactEntry = conanData.getValue("sources")
+            val artifactEntry = conanData.getValue("sources").yamlMap
 
-            val url = artifactEntry["url"].let { urlNode ->
-                urlNode.takeIf { it.isTextual } ?: urlNode.first()
-            }.textValueOrEmpty()
+            val url = checkNotNull(artifactEntry.get("url")).let { urlNode ->
+                urlNode.takeIf { it is YamlScalar } ?: urlNode.yamlList.items.first()
+            }.yamlScalar.content
 
-            val hashValue = artifactEntry["sha256"].textValueOrEmpty()
+            val hashValue = artifactEntry.get<YamlScalar>("sha256")?.content.orEmpty()
             val hash = Hash.create(hashValue, HashAlgorithm.SHA256.name)
 
             RemoteArtifact(url, hash)
