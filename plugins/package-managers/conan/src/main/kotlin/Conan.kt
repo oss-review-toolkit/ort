@@ -164,21 +164,20 @@ class Conan(
                 run(workingDir, "info", definitionFile.name, "--json", jsonFile.absolutePath, *DUMMY_COMPILER_SETTINGS)
             }
 
-            val pkgInfos = jsonMapper.readTree(jsonFile)
+            val pkgInfos = parsePackageInfos(jsonFile)
             jsonFile.parentFile.safeDeleteRecursively(force = true)
 
             val packageList = removeProjectPackage(pkgInfos, definitionFile.name)
             val packages = parsePackages(packageList, workingDir)
+            val projectInfo = findProjectPackageInfo(pkgInfos, definitionFile.name)
 
             val dependenciesScope = Scope(
                 name = SCOPE_NAME_DEPENDENCIES,
-                dependencies =
-                parseDependencies(pkgInfos, definitionFile.name, SCOPE_NAME_DEPENDENCIES, workingDir)
+                dependencies = parseDependencyTree(pkgInfos, projectInfo.requires, workingDir)
             )
             val devDependenciesScope = Scope(
                 name = SCOPE_NAME_DEV_DEPENDENCIES,
-                dependencies =
-                parseDependencies(pkgInfos, definitionFile.name, SCOPE_NAME_DEV_DEPENDENCIES, workingDir)
+                dependencies = parseDependencyTree(pkgInfos, projectInfo.buildRequires, workingDir)
             )
 
             val projectPackage = parseProjectPackage(pkgInfos, definitionFile, workingDir)
@@ -261,23 +260,21 @@ class Conan(
     }
 
     /**
-     * Return the dependency tree for [pkg] for the given [scopeName].
+     * Return the dependency tree for the given [direct scope dependencies][requires].
      */
     private fun parseDependencyTree(
-        pkgInfos: JsonNode,
-        pkg: JsonNode,
-        scopeName: String,
+        pkgInfos: List<PackageInfo>,
+        requires: List<String>,
         workingDir: File
     ): Set<PackageReference> =
         buildSet {
-            pkg[scopeName]?.forEach { childNode ->
-                val childRef = childNode.textValueOrEmpty()
-                pkgInfos.find { it["reference"].textValueOrEmpty() == childRef }?.let { pkgInfo ->
+            requires.forEach { childRef ->
+                pkgInfos.find { it.reference.orEmpty() == childRef }?.let { pkgInfo ->
                     logger.debug { "Found child '$childRef'." }
 
                     val id = parsePackageId(pkgInfo, workingDir)
-                    val dependencies = parseDependencyTree(pkgInfos, pkgInfo, SCOPE_NAME_DEPENDENCIES, workingDir) +
-                        parseDependencyTree(pkgInfos, pkgInfo, SCOPE_NAME_DEV_DEPENDENCIES, workingDir)
+                    val dependencies = parseDependencyTree(pkgInfos, pkgInfo.requires, workingDir) +
+                        parseDependencyTree(pkgInfos, pkgInfo.buildRequires, workingDir)
 
                     this += PackageReference(id, dependencies = dependencies)
                 }
@@ -285,39 +282,28 @@ class Conan(
         }
 
     /**
-     * Run through each package and parse the list of its dependencies (also transitive ones).
+     * Return the map of packages and their identifiers which are contained in [pkgInfos].
      */
-    private fun parseDependencies(
-        pkgInfos: JsonNode,
-        definitionFileName: String,
-        scopeName: String,
-        workingDir: File
-    ): Set<PackageReference> =
-        parseDependencyTree(pkgInfos, findProjectNode(pkgInfos, definitionFileName), scopeName, workingDir)
-
-    /**
-     * Return the map of packages and their identifiers which are contained in [nodes].
-     */
-    private fun parsePackages(nodes: List<JsonNode>, workingDir: File): Map<String, Package> =
-        nodes.associate { node ->
-            val pkg = parsePackage(node, workingDir)
+    private fun parsePackages(pkgInfos: List<PackageInfo>, workingDir: File): Map<String, Package> =
+        pkgInfos.associate { pkgInfo ->
+            val pkg = parsePackage(pkgInfo, workingDir)
             "${pkg.id.name}:${pkg.id.version}" to pkg
         }
 
     /**
-     * Return the [Package] parsed from the given [node].
+     * Return the [Package] parsed from the given [pkgInfo].
      */
-    private fun parsePackage(node: JsonNode, workingDir: File): Package {
-        val homepageUrl = node["homepage"].textValueOrEmpty()
+    private fun parsePackage(pkgInfo: PackageInfo, workingDir: File): Package {
+        val homepageUrl = pkgInfo.homepage.orEmpty()
 
-        val id = parsePackageId(node, workingDir)
+        val id = parsePackageId(pkgInfo, workingDir)
         val conanData = readConanData(id)
 
         return Package(
             id = id,
-            authors = parseAuthors(node),
-            declaredLicenses = parseDeclaredLicenses(node),
-            description = parsePackageField(node, workingDir, "description"),
+            authors = parseAuthors(pkgInfo),
+            declaredLicenses = pkgInfo.license.toSet(),
+            description = parsePackageField(pkgInfo, workingDir, "description"),
             homepageUrl = homepageUrl,
             binaryArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
             sourceArtifact = parseSourceArtifact(conanData),
@@ -337,54 +323,46 @@ class Conan(
         }.get(field).textValueOrEmpty()
 
     /**
-     * Find the node that represents the project defined in the definition file.
+     * Find the [PackageInfo] that represents the project defined in the definition file.
      */
-    private fun findProjectNode(pkgInfos: JsonNode, definitionFileName: String): JsonNode =
+    private fun findProjectPackageInfo(pkgInfos: List<PackageInfo>, definitionFileName: String): PackageInfo =
         pkgInfos.first {
             // Use "in" because conanfile.py's reference string often includes other data.
-            definitionFileName in it["reference"].textValueOrEmpty()
+            definitionFileName in it.reference.orEmpty()
         }
 
     /**
      * Return the full list of packages, excluding the project level information.
      */
-    private fun removeProjectPackage(pkgInfos: JsonNode, definitionFileName: String): List<JsonNode> =
-        pkgInfos.minusElement(findProjectNode(pkgInfos, definitionFileName))
+    private fun removeProjectPackage(pkgInfos: List<PackageInfo>, definitionFileName: String): List<PackageInfo> =
+        pkgInfos.minusElement(findProjectPackageInfo(pkgInfos, definitionFileName))
 
     /**
-     * Return the set of declared licenses contained in [node].
+     * Return the [Identifier] for the package contained in [pkgInfo].
      */
-    private fun parseDeclaredLicenses(node: JsonNode): Set<String> =
-        mutableSetOf<String>().also { licenses ->
-            node["license"]?.mapNotNullTo(licenses) { it.textValue() }
-        }
-
-    /**
-     * Return the [Identifier] for the package contained in [node].
-     */
-    private fun parsePackageId(node: JsonNode, workingDir: File) =
+    private fun parsePackageId(pkgInfo: PackageInfo, workingDir: File) =
         Identifier(
             type = "Conan",
             namespace = "",
-            name = parsePackageField(node, workingDir, "name"),
-            version = parsePackageField(node, workingDir, "version")
+            name = parsePackageField(pkgInfo, workingDir, "name"),
+            version = parsePackageField(pkgInfo, workingDir, "version")
         )
 
     /**
-     * Return the [VcsInfo] contained in [node].
+     * Return the [VcsInfo] contained in [pkgInfo].
      */
-    private fun parseVcsInfo(node: JsonNode): VcsInfo {
-        val revision = node["revision"].textValueOrEmpty()
-        val url = node["url"].textValueOrEmpty()
+    private fun parseVcsInfo(pkgInfo: PackageInfo): VcsInfo {
+        val revision = pkgInfo.revision.orEmpty()
+        val url = pkgInfo.url.orEmpty()
         val vcsInfo = VcsHost.parseUrl(url)
         return if (revision == "0") vcsInfo else vcsInfo.copy(revision = revision)
     }
 
     /**
-     * Return the value of [field] from the output of `conan inspect --raw` for the package in [node].
+     * Return the value of [field] from the output of `conan inspect --raw` for the package in [pkgInfo].
      */
-    private fun parsePackageField(node: JsonNode, workingDir: File, field: String): String =
-        inspectField(node["display_name"].textValue(), workingDir, field)
+    private fun parsePackageField(pkgInfo: PackageInfo, workingDir: File, field: String): String =
+        inspectField(pkgInfo.displayName, workingDir, field)
 
     /**
      * Return the generic map of Conan data for the [id].
@@ -433,21 +411,25 @@ class Conan(
      * TODO: The format of `conan info` output for a conanfile.txt file may be such that we can get project metadata
      *       from the `requires` field. Need to investigate whether this is a sure thing before implementing.
      */
-    private fun parseProjectPackage(pkgInfos: JsonNode, definitionFile: File, workingDir: File): Package {
-        val projectPackageJson = findProjectNode(pkgInfos, definitionFile.name)
+    private fun parseProjectPackage(pkgInfos: List<PackageInfo>, definitionFile: File, workingDir: File): Package {
+        val projectPackage = findProjectPackageInfo(pkgInfos, definitionFile.name)
 
         return if (definitionFile.name == "conanfile.py") {
-            generateProjectPackageFromConanfilePy(projectPackageJson, definitionFile, workingDir)
+            generateProjectPackageFromConanfilePy(projectPackage, definitionFile, workingDir)
         } else {
-            generateProjectPackageFromConanfileTxt(projectPackageJson)
+            generateProjectPackageFromConanfileTxt(projectPackage)
         }
     }
 
     /**
-     * Return a [Package] containing project-level information parsed from [node] and [definitionFile] using the
+     * Return a [Package] containing project-level information from [pkgInfo] and [definitionFile] using the
      * `conan inspect` command.
      */
-    private fun generateProjectPackageFromConanfilePy(node: JsonNode, definitionFile: File, workingDir: File): Package =
+    private fun generateProjectPackageFromConanfilePy(
+        pkgInfo: PackageInfo,
+        definitionFile: File,
+        workingDir: File
+    ): Package =
         Package(
             id = Identifier(
                 type = managerName,
@@ -455,39 +437,39 @@ class Conan(
                 name = inspectField(definitionFile.name, workingDir, "name"),
                 version = inspectField(definitionFile.name, workingDir, "version")
             ),
-            authors = parseAuthors(node),
-            declaredLicenses = parseDeclaredLicenses(node),
+            authors = parseAuthors(pkgInfo),
+            declaredLicenses = pkgInfo.license.toSet(),
             description = inspectField(definitionFile.name, workingDir, "description"),
-            homepageUrl = node["homepage"].textValueOrEmpty(),
+            homepageUrl = pkgInfo.homepage.orEmpty(),
             binaryArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
             sourceArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
-            vcs = parseVcsInfo(node)
+            vcs = parseVcsInfo(pkgInfo)
         )
 
     /**
-     * Return a [Package] containing project-level information parsed from [node].
+     * Return a [Package] containing project-level information from [pkgInfo].
      */
-    private fun generateProjectPackageFromConanfileTxt(node: JsonNode): Package =
+    private fun generateProjectPackageFromConanfileTxt(pkgInfo: PackageInfo): Package =
         Package(
             id = Identifier(
                 type = managerName,
                 namespace = "",
-                name = node["reference"].textValueOrEmpty(),
+                name = pkgInfo.reference.orEmpty(),
                 version = ""
             ),
-            authors = parseAuthors(node),
-            declaredLicenses = parseDeclaredLicenses(node),
+            authors = parseAuthors(pkgInfo),
+            declaredLicenses = pkgInfo.license.toSet(),
             description = "",
-            homepageUrl = node["homepage"].textValueOrEmpty(),
+            homepageUrl = pkgInfo.homepage.orEmpty(),
             binaryArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
             sourceArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
-            vcs = parseVcsInfo(node)
+            vcs = parseVcsInfo(pkgInfo)
         )
 
     /**
-     * Parse information about the package author from the given JSON [node]. If present, return a set containing the
-     * author name; otherwise, return an empty set.
+     * Parse information about the package author from the given [package info][pkgInfo]. If present, return a set
+     * containing the author name; otherwise, return an empty set.
      */
-    private fun parseAuthors(node: JsonNode): Set<String> =
-        setOfNotNull(parseAuthorString(node["author"]?.textValue(), '<', '('))
+    private fun parseAuthors(pkgInfo: PackageInfo): Set<String> =
+        setOfNotNull(parseAuthorString(pkgInfo.author.orEmpty(), '<', '('))
 }
