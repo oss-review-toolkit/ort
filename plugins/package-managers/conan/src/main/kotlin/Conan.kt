@@ -180,7 +180,7 @@ class Conan(
                 dependencies = parseDependencyTree(pkgInfos, projectInfo.buildRequires, workingDir)
             )
 
-            val projectPackage = parseProjectPackage(pkgInfos, definitionFile, workingDir)
+            val projectPackage = generateProjectPackage(projectInfo, definitionFile, workingDir)
 
             return listOf(
                 ProjectAnalyzerResult(
@@ -403,22 +403,13 @@ class Conan(
         }
 
     /**
-     * Return a [Package] containing project-level information depending on which [definitionFile] was found:
+     * Return a [Package] containing project-level information from [pkgInfo] and [definitionFile] using the
+     * `conan inspect` command if possible:
      * - conanfile.txt: `conan inspect conanfile.txt` is not supported.
      * - conanfile.py: `conan inspect conanfile.py` is supported and more useful project metadata is parsed.
      *
      * TODO: The format of `conan info` output for a conanfile.txt file may be such that we can get project metadata
      *       from the `requires` field. Need to investigate whether this is a sure thing before implementing.
-     */
-    private fun parseProjectPackage(pkgInfos: List<PackageInfo>, definitionFile: File, workingDir: File): Package {
-        val projectPackage = findProjectPackageInfo(pkgInfos, definitionFile.name)
-
-        return generateProjectPackage(projectPackage, definitionFile, workingDir)
-    }
-
-    /**
-     * Return a [Package] containing project-level information from [pkgInfo] and [definitionFile] using the
-     * `conan inspect` command.
      */
     private fun generateProjectPackage(pkgInfo: PackageInfo, definitionFile: File, workingDir: File): Package {
         fun inspectOrNull(field: String) =
