@@ -387,8 +387,8 @@ class Conan(
      * Return the source artifact contained in [conanData], or [RemoteArtifact.EMPTY] if no source artifact is
      * available.
      */
-    private fun parseSourceArtifact(conanData: Map<String, JsonNode>): RemoteArtifact {
-        return runCatching {
+    private fun parseSourceArtifact(conanData: Map<String, JsonNode>): RemoteArtifact =
+        runCatching {
             val artifactEntry = conanData.getValue("sources")
 
             val url = artifactEntry["url"].let { urlNode ->
@@ -401,7 +401,6 @@ class Conan(
         }.getOrElse {
             RemoteArtifact.EMPTY
         }
-    }
 
     /**
      * Return a [Package] containing project-level information depending on which [definitionFile] was found:
