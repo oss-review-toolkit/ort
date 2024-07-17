@@ -392,8 +392,8 @@ class Conan(
             val artifactEntry = conanData.getValue("sources")
 
             val url = artifactEntry["url"].let { urlNode ->
-                (urlNode.takeIf { it.isTextual } ?: urlNode.first()).textValueOrEmpty()
-            }
+                urlNode.takeIf { it.isTextual } ?: urlNode.first()
+            }.textValueOrEmpty()
 
             val hashValue = artifactEntry["sha256"].textValueOrEmpty()
             val hash = Hash.create(hashValue, HashAlgorithm.SHA256.name)
