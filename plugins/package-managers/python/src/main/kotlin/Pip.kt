@@ -51,10 +51,10 @@ private const val OPTION_ANALYZE_SETUP_PY_INSECURELY_DEFAULT = true
  *
  * This package manager supports the following [options][PackageManagerConfiguration.options]:
  * - *analyzeSetupPyInsecurely*: If "true", `python-inspector` resolves dependencies from setup.py files by executing
- *   them. This is a potential security risk. Defaults to "true".
+ *   them. This is a potential security risk. Defaults to [OPTION_ANALYZE_SETUP_PY_INSECURELY_DEFAULT].
  * - *operatingSystem*: The name of the operating system to resolve dependencies for. One of "linux", "macos", or
- *   "windows". Defaults to "linux".
- * - *pythonVersion*: The Python version to resolve dependencies for. Defaults to "3.11".
+ *   "windows". Defaults to [OPTION_OPERATING_SYSTEM_DEFAULT].
+ * - *pythonVersion*: The Python version to resolve dependencies for. Defaults to [OPTION_PYTHON_VERSION_DEFAULT].
  */
 class Pip(
     name: String,
