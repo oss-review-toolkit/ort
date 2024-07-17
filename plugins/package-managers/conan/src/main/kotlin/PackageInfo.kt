@@ -19,19 +19,20 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.conan
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.databind.PropertyNamingStrategies
-import com.fasterxml.jackson.module.kotlin.readValue
-
 import java.io.File
 
-import org.ossreviewtoolkit.model.jsonMapper
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonNamingStrategy
 
-private val mapper = jsonMapper.copy().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
+private val JSON = Json {
+    ignoreUnknownKeys = true
+    namingStrategy = JsonNamingStrategy.SnakeCase
+}
 
-internal fun parsePackageInfos(file: File): List<PackageInfo> = mapper.readValue<List<PackageInfo>>(file)
+internal fun parsePackageInfos(file: File): List<PackageInfo> = JSON.decodeFromString(file.readText())
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Serializable
 internal data class PackageInfo(
     val reference: String? = null,
     val author: String? = null,
