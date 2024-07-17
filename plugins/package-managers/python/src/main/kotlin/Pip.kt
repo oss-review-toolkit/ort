@@ -54,7 +54,7 @@ private const val OPTION_ANALYZE_SETUP_PY_INSECURELY_DEFAULT = true
  *   them. This is a potential security risk. Defaults to "true".
  * - *operatingSystem*: The name of the operating system to resolve dependencies for. One of "linux", "macos", or
  *   "windows". Defaults to "linux".
- * - *pythonVersion*: The Python version to resolve dependencies for. Defaults to "3.10".
+ * - *pythonVersion*: The Python version to resolve dependencies for. Defaults to "3.11".
  */
 class Pip(
     name: String,
