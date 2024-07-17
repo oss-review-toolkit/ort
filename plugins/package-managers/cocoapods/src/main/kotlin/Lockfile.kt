@@ -71,7 +71,7 @@ internal fun String.parseLockfile(): Lockfile {
         }
     }
 
-    val checkoutOptions = root.get("CHECKOUT OPTIONS")?.fields()?.asSequence()?.mapNotNull { (name, node) ->
+    val checkoutOptions = root.get("CHECKOUT OPTIONS")?.fields()?.asSequence()?.map { (name, node) ->
         val checkoutOption = CheckoutOption(
             git = node[":git"]?.textValue(),
             commit = node[":commit"].textValue()
