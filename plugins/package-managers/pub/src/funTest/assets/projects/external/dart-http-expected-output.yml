@@ -514,7 +514,7 @@ project:
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::meta:1.15.0"
-        - id: "Pub::web_socket_channel:3.0.0"
+        - id: "Pub::web_socket_channel:3.0.1"
           dependencies:
           - id: "Pub::async:2.11.0"
             dependencies:
@@ -853,7 +853,7 @@ project:
       - id: "Pub::typed_data:1.3.2"
         dependencies:
         - id: "Pub::collection:1.18.0"
-      - id: "Pub::web_socket_channel:3.0.0"
+      - id: "Pub::web_socket_channel:3.0.1"
         dependencies:
         - id: "Pub::async:2.11.0"
           dependencies:
@@ -2088,8 +2088,8 @@ packages:
     url: "https://github.com/dart-lang/http.git"
     revision: ""
     path: "pkgs/web_socket"
-- id: "Pub::web_socket_channel:3.0.0"
-  purl: "pkg:pub/web_socket_channel@3.0.0"
+- id: "Pub::web_socket_channel:3.0.1"
+  purl: "pkg:pub/web_socket_channel@3.0.1"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "StreamChannel wrappers for WebSockets. Provides a cross-platform WebSocketChannel\
@@ -2102,9 +2102,9 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://pub.dev/packages/web_socket_channel/versions/3.0.0.tar.gz"
+    url: "https://pub.dev/packages/web_socket_channel/versions/3.0.1.tar.gz"
     hash:
-      value: "a2d56211ee4d35d9b344d9d4ce60f362e4f5d1aafb988302906bd732bc731276"
+      value: "9f187088ed104edd8662ca07af4b124465893caf063ba29758f97af57e61da8f"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
