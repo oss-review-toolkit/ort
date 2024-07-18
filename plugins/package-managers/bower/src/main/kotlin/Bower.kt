@@ -21,8 +21,6 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.bower
 
-import com.fasterxml.jackson.databind.JsonNode
-
 import java.io.File
 import java.util.Stack
 
@@ -41,13 +39,9 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.common.fieldNamesOrEmpty
-import org.ossreviewtoolkit.utils.common.fieldsOrEmpty
 import org.ossreviewtoolkit.utils.common.stashDirectories
-import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
@@ -84,22 +78,23 @@ class Bower(
         stashDirectories(workingDir.resolve("bower_components")).use {
             installDependencies(workingDir)
             val dependenciesJson = listDependencies(workingDir)
-            val rootNode = jsonMapper.readTree(dependenciesJson)
-            val packages = parsePackages(rootNode)
+            val packageInfo = parsePackageInfoJson(dependenciesJson)
+
+            val packages = parsePackages(packageInfo)
             val dependenciesScope = Scope(
                 name = SCOPE_NAME_DEPENDENCIES,
-                dependencies = parseDependencyTree(rootNode, SCOPE_NAME_DEPENDENCIES)
+                dependencies = parseDependencyTree(packageInfo, SCOPE_NAME_DEPENDENCIES)
             )
             val devDependenciesScope = Scope(
                 name = SCOPE_NAME_DEV_DEPENDENCIES,
-                dependencies = parseDependencyTree(rootNode, SCOPE_NAME_DEV_DEPENDENCIES)
+                dependencies = parseDependencyTree(packageInfo, SCOPE_NAME_DEV_DEPENDENCIES)
             )
 
-            val projectPackage = parsePackage(rootNode)
+            val projectPackage = parsePackage(packageInfo)
             val project = Project(
                 id = projectPackage.id,
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-                authors = projectPackage.authors,
+                authors = parseAuthors(packageInfo),
                 declaredLicenses = projectPackage.declaredLicenses,
                 vcs = projectPackage.vcs,
                 vcsProcessed = processProjectVcs(workingDir, projectPackage.vcs, projectPackage.homepageUrl),
@@ -119,142 +114,124 @@ class Bower(
 private const val SCOPE_NAME_DEPENDENCIES = "dependencies"
 private const val SCOPE_NAME_DEV_DEPENDENCIES = "devDependencies"
 
-private fun parsePackageId(node: JsonNode) =
+private fun parsePackageId(info: PackageInfo) =
     Identifier(
         type = "Bower",
         namespace = "",
-        name = node["pkgMeta"]["name"].textValueOrEmpty(),
-        version = node["pkgMeta"]["version"].textValueOrEmpty()
+        name = info.pkgMeta.name.orEmpty(),
+        version = info.pkgMeta.version.orEmpty()
     )
 
-private fun parseRepositoryType(node: JsonNode) =
-    VcsType.forName(node["pkgMeta"]["repository"]?.get("type").textValueOrEmpty())
+private fun parseRepositoryType(info: PackageInfo) = VcsType.forName(info.pkgMeta.repository?.type.orEmpty())
 
-private fun parseRepositoryUrl(node: JsonNode) =
-    node["pkgMeta"]["repository"]?.get("url")?.textValue()
-        ?: node["pkgMeta"]["_source"].textValueOrEmpty()
+private fun parseRepositoryUrl(info: PackageInfo) = info.pkgMeta.repository?.url ?: info.pkgMeta.source.orEmpty()
 
-private fun parseRevision(node: JsonNode): String =
-    node["pkgMeta"]["_resolution"]?.get("commit")?.textValue()
-        ?: node["pkgMeta"]["_resolution"]?.get("tag").textValueOrEmpty()
+private fun parseRevision(info: PackageInfo): String =
+    info.pkgMeta.resolution?.commit ?: info.pkgMeta.resolution?.tag.orEmpty()
 
-private fun parseVcsInfo(node: JsonNode) =
+private fun parseVcsInfo(info: PackageInfo) =
     VcsInfo(
-        type = parseRepositoryType(node),
-        url = parseRepositoryUrl(node),
-        revision = parseRevision(node)
+        type = parseRepositoryType(info),
+        url = parseRepositoryUrl(info),
+        revision = parseRevision(info)
     )
-
-private fun parseDeclaredLicenses(node: JsonNode): Set<String> =
-    buildSet {
-        val license = node["pkgMeta"]["license"].textValueOrEmpty()
-        if (license.isNotEmpty()) add(license)
-    }
 
 /**
  * Parse information about the author. According to https://github.com/bower/spec/blob/master/json.md#authors,
  * there are two formats to specify the authors of a package (similar to NPM). The difference is that the
  * strings or objects are inside an array.
  */
-private fun parseAuthors(node: JsonNode): Set<String> =
-    buildSet {
-        node["pkgMeta"]["authors"]?.mapNotNull { authorNode ->
-            when {
-                authorNode.isObject -> authorNode["name"]?.textValue()
-                authorNode.isTextual -> parseAuthorString(authorNode.textValue(), '<', '(')
-                else -> null
-            }
-        }?.let { addAll(it) }
-    }
+private fun parseAuthors(info: PackageInfo): Set<String> =
+    info.pkgMeta.authors.mapNotNullTo(mutableSetOf()) { parseAuthorString(it.name, '<', '(') }
 
-private fun parsePackage(node: JsonNode) =
+private fun parsePackage(info: PackageInfo) =
     Package(
-        id = parsePackageId(node),
-        authors = parseAuthors(node),
-        declaredLicenses = parseDeclaredLicenses(node),
-        description = node["pkgMeta"]["description"].textValueOrEmpty(),
-        homepageUrl = node["pkgMeta"]["homepage"].textValueOrEmpty(),
+        id = parsePackageId(info),
+        authors = parseAuthors(info),
+        declaredLicenses = setOfNotNull(info.pkgMeta.license?.takeUnless { it.isEmpty() }),
+        description = info.pkgMeta.description.orEmpty(),
+        homepageUrl = info.pkgMeta.homepage.orEmpty(),
         binaryArtifact = RemoteArtifact.EMPTY,
         sourceArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
-        vcs = parseVcsInfo(node)
+        vcs = parseVcsInfo(info)
     )
 
-private fun getDependencyNodes(node: JsonNode): Sequence<JsonNode> =
-    node["dependencies"].fieldsOrEmpty().asSequence().map { it.value }
+private fun getDependencyInfos(info: PackageInfo): Sequence<PackageInfo> =
+    info.dependencies.asSequence().map { it.value }
 
-private fun parsePackages(node: JsonNode): Map<String, Package> {
+private fun parsePackages(info: PackageInfo): Map<String, Package> {
     val result = mutableMapOf<String, Package>()
 
-    val stack = Stack<JsonNode>()
-    stack += getDependencyNodes(node)
+    val stack = Stack<PackageInfo>()
+    stack += getDependencyInfos(info)
 
     while (!stack.empty()) {
-        val currentNode = stack.pop()
-        val pkg = parsePackage(currentNode)
+        val currentInfo = stack.pop()
+        val pkg = parsePackage(currentInfo)
         result["${pkg.id.name}:${pkg.id.version}"] = pkg
 
-        stack += getDependencyNodes(currentNode)
+        stack += getDependencyInfos(currentInfo)
     }
 
     return result
 }
 
-private fun hasCompleteDependencies(node: JsonNode, scopeName: String): Boolean {
-    val dependencyKeys = node["dependencies"].fieldNamesOrEmpty().asSequence().toSet()
-    val dependencyRefKeys = node["pkgMeta"][scopeName].fieldNamesOrEmpty().asSequence().toSet()
+private fun hasCompleteDependencies(info: PackageInfo, scopeName: String): Boolean {
+    val dependencyKeys = info.dependencies.keys
+    val dependencyRefKeys = info.pkgMeta.getDependencies(scopeName).keys
 
     return dependencyKeys.containsAll(dependencyRefKeys)
 }
 
-private fun dependencyKeyOf(node: JsonNode): String? {
+private fun dependencyKeyOf(info: PackageInfo): String? {
     // As non-null dependency keys are supposed to define an equivalence relation for parsing 'missing' nodes,
     // only the name and version attributes can be used. Typically, those attributes should be not null
     // however in particular for root projects the null case also happens.
-    val name = node["pkgMeta"]["name"].textValueOrEmpty()
-    val version = node["pkgMeta"]["version"].textValueOrEmpty()
+    val name = info.pkgMeta.name.orEmpty()
+    val version = info.pkgMeta.version.orEmpty()
     return "$name:$version".takeUnless { name.isEmpty() || version.isEmpty() }
 }
 
-private fun getNodesWithCompleteDependencies(node: JsonNode): Map<String, JsonNode> {
-    val result = mutableMapOf<String, JsonNode>()
+private fun getNodesWithCompleteDependencies(info: PackageInfo): Map<String, PackageInfo> {
+    val result = mutableMapOf<String, PackageInfo>()
 
-    val stack = Stack<JsonNode>().apply { push(node) }
+    val stack = Stack<PackageInfo>().apply { push(info) }
     while (!stack.empty()) {
-        val currentNode = stack.pop()
+        val currentInfo = stack.pop()
 
-        dependencyKeyOf(currentNode)?.let { key ->
-            if (hasCompleteDependencies(node, SCOPE_NAME_DEPENDENCIES) &&
-                hasCompleteDependencies(node, SCOPE_NAME_DEV_DEPENDENCIES)
+        dependencyKeyOf(currentInfo)?.let { key ->
+            if (hasCompleteDependencies(info, SCOPE_NAME_DEPENDENCIES) &&
+                hasCompleteDependencies(info, SCOPE_NAME_DEV_DEPENDENCIES)
             ) {
-                result[key] = currentNode
+                result[key] = currentInfo
             }
         }
 
-        stack += getDependencyNodes(currentNode)
+        stack += getDependencyInfos(currentInfo)
     }
 
     return result
 }
 
 private fun parseDependencyTree(
-    node: JsonNode,
+    info: PackageInfo,
     scopeName: String,
-    alternativeNodes: Map<String, JsonNode> = getNodesWithCompleteDependencies(node)
+    alternativeNodes: Map<String, PackageInfo> = getNodesWithCompleteDependencies(info)
 ): Set<PackageReference> {
     val result = mutableSetOf<PackageReference>()
 
-    if (!hasCompleteDependencies(node, scopeName)) {
+    if (!hasCompleteDependencies(info, scopeName)) {
         // Bower leaves out a dependency entry for a child if there exists a similar node to its parent node
         // with the exact same name and resolved target. This makes it necessary to retrieve the information
         // about the subtree rooted at the parent from that other node containing the full dependency
         // information.
         // See https://github.com/bower/bower/blob/6bc778d/lib/core/Manager.js#L557 and below.
-        val alternativeNode = checkNotNull(alternativeNodes[dependencyKeyOf(node)])
+        val alternativeNode = checkNotNull(alternativeNodes[dependencyKeyOf(info)])
         return parseDependencyTree(alternativeNode, scopeName, alternativeNodes)
     }
 
-    node["pkgMeta"][scopeName].fieldNamesOrEmpty().forEach {
-        val childNode = node["dependencies"][it]
+    info.pkgMeta.getDependencies(scopeName).keys.forEach {
+        val childNode = info.dependencies.getValue(it)
         val childScope = SCOPE_NAME_DEPENDENCIES
         val childDependencies = parseDependencyTree(childNode, childScope, alternativeNodes)
         val packageReference = PackageReference(
@@ -266,3 +243,10 @@ private fun parseDependencyTree(
 
     return result
 }
+
+private fun PackageMeta.getDependencies(scopeName: String) =
+    when (scopeName) {
+        SCOPE_NAME_DEPENDENCIES -> dependencies
+        SCOPE_NAME_DEV_DEPENDENCIES -> devDependencies
+        else -> error("Invalid scope name: '$scopeName'.")
+    }
