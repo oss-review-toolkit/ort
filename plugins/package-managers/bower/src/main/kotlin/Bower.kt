@@ -193,7 +193,7 @@ private val PackageInfo.key: String?
         return "$name:$version".takeUnless { name.isEmpty() || version.isEmpty() }
     }
 
-private fun getNodesWithCompleteDependencies(info: PackageInfo): Map<String, PackageInfo> {
+private fun getPackageInfosWithCompleteDependencies(info: PackageInfo): Map<String, PackageInfo> {
     val result = mutableMapOf<String, PackageInfo>()
 
     val stack = Stack<PackageInfo>().apply { push(info) }
@@ -217,27 +217,27 @@ private fun getNodesWithCompleteDependencies(info: PackageInfo): Map<String, Pac
 private fun parseDependencyTree(
     info: PackageInfo,
     scopeName: String,
-    alternativeNodes: Map<String, PackageInfo> = getNodesWithCompleteDependencies(info)
+    alternativeInfos: Map<String, PackageInfo> = getPackageInfosWithCompleteDependencies(info)
 ): Set<PackageReference> {
     val result = mutableSetOf<PackageReference>()
 
     if (!hasCompleteDependencies(info, scopeName)) {
-        // Bower leaves out a dependency entry for a child if there exists a similar node to its parent node
+        // Bower leaves out a dependency entry for a child if there exists a similar entry to its parent entry
         // with the exact same name and resolved target. This makes it necessary to retrieve the information
-        // about the subtree rooted at the parent from that other node containing the full dependency
+        // about the subtree rooted at the parent from that other entry containing the full dependency
         // information.
         // See https://github.com/bower/bower/blob/6bc778d/lib/core/Manager.js#L557 and below.
         @Suppress("UnsafeCallOnNullableType")
-        val alternativeNode = alternativeNodes.getValue(info.key!!)
-        return parseDependencyTree(alternativeNode, scopeName, alternativeNodes)
+        val alternativeNode = alternativeInfos.getValue(info.key!!)
+        return parseDependencyTree(alternativeNode, scopeName, alternativeInfos)
     }
 
     info.pkgMeta.getDependencies(scopeName).keys.forEach {
-        val childNode = info.dependencies.getValue(it)
+        val childInfo = info.dependencies.getValue(it)
         val childScope = SCOPE_NAME_DEPENDENCIES
-        val childDependencies = parseDependencyTree(childNode, childScope, alternativeNodes)
+        val childDependencies = parseDependencyTree(childInfo, childScope, alternativeInfos)
         val packageReference = PackageReference(
-            id = parsePackageId(childNode),
+            id = parsePackageId(childInfo),
             dependencies = childDependencies
         )
         result += packageReference
