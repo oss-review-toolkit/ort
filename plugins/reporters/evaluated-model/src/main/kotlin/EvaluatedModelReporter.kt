@@ -62,7 +62,6 @@ class EvaluatedModelReporter : Reporter {
                 when (fileFormat) {
                     FileFormat.JSON -> evaluatedModel.toJson(it)
                     FileFormat.YAML -> evaluatedModel.toYaml(it)
-                    else -> throw IllegalArgumentException("Unsupported Evaluated Model file format '$fileFormat'.")
                 }
             }
 
