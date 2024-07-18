@@ -19,21 +19,19 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.bower
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.PropertyNamingStrategies
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer
-import com.fasterxml.jackson.module.kotlin.readValue
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonTransformingSerializer
+import kotlinx.serialization.json.jsonArray
 
-import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.plugins.packagemanagers.bower.PackageMeta.Author
-import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Serializable
 internal data class PackageInfo(
     val pkgMeta: PackageMeta,
     val dependencies: Map<String, PackageInfo> = emptyMap()
@@ -42,9 +40,10 @@ internal data class PackageInfo(
 /**
  * See https://github.com/bower/spec/blob/master/json.md.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Serializable
 internal data class PackageMeta(
     val name: String? = null,
+    @Serializable(with = AuthorListSerializer::class)
     val authors: List<Author> = emptyList(),
     val description: String? = null,
     val license: String? = null,
@@ -52,47 +51,50 @@ internal data class PackageMeta(
     val dependencies: Map<String, String> = emptyMap(),
     val devDependencies: Map<String, String> = emptyMap(),
     val version: String? = null,
-    @JsonProperty("_resolution")
+    @SerialName("_resolution")
     val resolution: Resolution? = null,
     val repository: Repository? = null,
-    @JsonProperty("_source")
-    val source: String?
+    @SerialName("_source")
+    val source: String? = null
 ) {
-    @JsonIgnoreProperties(ignoreUnknown = true)
+    @Serializable
     data class Resolution(
         val type: String? = null,
         val tag: String? = null,
         val commit: String? = null
     )
 
-    @JsonDeserialize(using = AuthorDeserializer::class)
+    @Serializable
     data class Author(
         val name: String,
         val email: String? = null
     )
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
+    @Serializable
     data class Repository(
         val type: String,
         val url: String
     )
 }
 
-private val MAPPER = jsonMapper.copy().setPropertyNamingStrategy(PropertyNamingStrategies.LOWER_CAMEL_CASE)
+private val JSON = Json { ignoreUnknownKeys = true }
 
-internal fun parsePackageInfoJson(json: String): PackageInfo = MAPPER.readValue<PackageInfo>(json)
+internal fun parsePackageInfoJson(json: String): PackageInfo = JSON.decodeFromString<PackageInfo>(json)
 
 /**
  * Parse information about the author. According to https://github.com/bower/spec/blob/master/json.md#authors,
  * there are two formats to specify the authors of a package (similar to NPM). The difference is that the
  * strings or objects are inside an array.
+ *
+ * Note: As of Kotlin 2.0.20 it will be supported to associate the serializer with a class annotation. So, the
+ * serializer then can be simplified into a single item deserializer. See also
+ * https://github.com/Kotlin/kotlinx.serialization/issues/1169#issuecomment-2083213759.
  */
-private class AuthorDeserializer : StdDeserializer<Author>(Author::class.java) {
-    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): Author {
-        val node = p.codec.readTree<JsonNode>(p)
-        return when {
-            node.isTextual -> Author(node.textValue())
-            else -> Author(node["name"].textValueOrEmpty(), node["email"]?.textValue())
-        }
-    }
+private object AuthorListSerializer : JsonTransformingSerializer<List<Author>>(ListSerializer(Author.serializer())) {
+    override fun transformDeserialize(element: JsonElement): JsonElement =
+        JsonArray(
+            element.jsonArray.map { item ->
+                item.takeIf { it is JsonObject } ?: JsonObject(mapOf("name" to item))
+            }
+        )
 }
