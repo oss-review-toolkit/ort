@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
 import org.ossreviewtoolkit.utils.test.PostgresListener
 
-private val SOURCE_ARTIFACT_PROVENANCE = ArtifactProvenance(sourceArtifact = RemoteArtifact("url", Hash.create("hash")))
+private val SOURCE_ARTIFACT_PROVENANCE = ArtifactProvenance(RemoteArtifact("https://example.com/", Hash.NONE))
 private val VCS_PROVENANCE = RepositoryProvenance(
     vcsInfo = VcsInfo(
         type = VcsType.GIT,

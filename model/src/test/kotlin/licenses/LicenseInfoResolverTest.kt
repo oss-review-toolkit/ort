@@ -39,7 +39,6 @@ import java.lang.IllegalArgumentException
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.Hash
-import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.LicenseSource
@@ -338,7 +337,7 @@ class LicenseInfoResolverTest : WordSpec({
         "apply path excludes" {
             val sourceArtifact = RemoteArtifact(
                 url = "https://example.com/",
-                hash = Hash("", HashAlgorithm.NONE)
+                hash = Hash.NONE
             )
             val sourceArtifactProvenance = ArtifactProvenance(
                 sourceArtifact = sourceArtifact

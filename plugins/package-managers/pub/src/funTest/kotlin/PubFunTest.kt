@@ -31,7 +31,6 @@ import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.Hash
-import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
@@ -122,8 +121,8 @@ private fun AnalyzerResult.patchPackages(): AnalyzerResult {
         pkg.takeUnless { it.id.toCoordinates().startsWith("Maven:com.android.tools.build:aapt2:") }
             ?: pkg.copy(
                 binaryArtifact = pkg.binaryArtifact.copy(
-                    url = "***",
-                    hash = Hash("***", HashAlgorithm.SHA1)
+                    url = "https://example.com/",
+                    hash = Hash.NONE
                 )
             )
     }

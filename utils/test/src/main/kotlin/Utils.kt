@@ -156,7 +156,7 @@ fun scannerRunOf(vararg pkgScanResults: Pair<Identifier, List<ScanResult>>): Sca
                 provenance = ArtifactProvenance(
                     sourceArtifact = RemoteArtifact(
                         url = id.toPurl(),
-                        hash = Hash(value = "", algorithm = HashAlgorithm.NONE)
+                        hash = Hash.NONE
                     )
                 )
             )
