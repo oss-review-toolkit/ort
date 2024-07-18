@@ -20,6 +20,8 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.conan
 
 import com.charleskorn.kaml.Yaml
+import com.charleskorn.kaml.YamlList
+import com.charleskorn.kaml.YamlMap
 import com.charleskorn.kaml.YamlNode
 import com.charleskorn.kaml.YamlScalar
 import com.charleskorn.kaml.yamlList
@@ -303,7 +305,7 @@ class Conan(
         val homepageUrl = pkgInfo.homepage.orEmpty()
 
         val id = parsePackageId(pkgInfo, workingDir)
-        val conanData = readConanData(id)
+        val conanData = readConanData(id.name, id.version, conanStoragePath)
 
         return Package(
             id = id,
@@ -314,7 +316,7 @@ class Conan(
             binaryArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
             sourceArtifact = parseSourceArtifact(conanData),
             vcs = processPackageVcs(VcsInfo.EMPTY, homepageUrl),
-            isModified = "patches" in conanData
+            isModified = conanData.hasPatches
         )
     }
 
@@ -373,45 +375,16 @@ class Conan(
         inspectField(pkgInfo.displayName, workingDir, field)
 
     /**
-     * Return the generic map of Conan data for the [id].
-     */
-    private fun readConanData(id: Identifier): Map<String, YamlNode> {
-        val conanDataFile = conanStoragePath.resolve("${id.name}/${id.version}/_/_/export/conandata.yml")
-
-        return runCatching {
-            val conanData = Yaml.default.parseToYamlNode(conanDataFile.readText()).yamlMap.entries.mapKeys {
-                it.key.content
-            }
-
-            // Replace metadata for all version with metadata for this specific version for convenient access.
-            conanData.mapNotNull { (key, value) ->
-                key to when (key) {
-                    "patches", "sources" -> value.yamlMap[id.version] ?: return@mapNotNull null
-                    else -> value
-                }
-            }.toMap()
-        }.getOrDefault(emptyMap())
-    }
-
-    /**
      * Return the source artifact contained in [conanData], or [RemoteArtifact.EMPTY] if no source artifact is
      * available.
      */
-    private fun parseSourceArtifact(conanData: Map<String, YamlNode>): RemoteArtifact =
-        runCatching {
-            val artifactEntry = conanData.getValue("sources").yamlMap
+    private fun parseSourceArtifact(conanData: ConanData): RemoteArtifact {
+        val url = conanData.url ?: return RemoteArtifact.EMPTY
+        val hashValue = conanData.sha256.orEmpty()
+        val hash = Hash.NONE.takeIf { hashValue.isEmpty() } ?: Hash.create(hashValue, HashAlgorithm.SHA256.name)
 
-            val url = checkNotNull(artifactEntry.get("url")).let { urlNode ->
-                urlNode.takeIf { it is YamlScalar } ?: urlNode.yamlList.items.first()
-            }.yamlScalar.content
-
-            val hashValue = artifactEntry.get<YamlScalar>("sha256")?.content.orEmpty()
-            val hash = Hash.create(hashValue, HashAlgorithm.SHA256.name)
-
-            RemoteArtifact(url, hash)
-        }.getOrElse {
-            RemoteArtifact.EMPTY
-        }
+        return RemoteArtifact(url, hash)
+    }
 
     /**
      * Return a [Package] containing project-level information from [pkgInfo] and [definitionFile] using the
@@ -449,4 +422,30 @@ class Conan(
      */
     private fun parseAuthors(pkgInfo: PackageInfo): Set<String> =
         setOfNotNull(parseAuthorString(pkgInfo.author.orEmpty(), '<', '('))
+}
+
+private data class ConanData(
+    val url: String?,
+    val sha256: String?,
+    val hasPatches: Boolean
+)
+
+private fun readConanData(name: String, version: String, conanStorageDir: File): ConanData {
+    val conanDataFile = conanStorageDir.resolve("$name/$version/_/_/export/conandata.yml")
+    val root = Yaml.default.parseToYamlNode(conanDataFile.readText()).yamlMap
+
+    val patchesForVersion = root.get<YamlMap>("patches")?.get<YamlList>(version)
+    val hasPatches = !patchesForVersion?.items.isNullOrEmpty()
+
+    val sourceForVersion = root.get<YamlMap>("sources")?.get<YamlMap>(version)
+    val sha256 = sourceForVersion?.get<YamlScalar>("sha256")?.content
+
+    val url = sourceForVersion?.get<YamlNode>("url")?.let {
+        when {
+            it is YamlList -> it.yamlList.items.firstOrNull()?.yamlScalar?.content
+            else -> it.yamlScalar.content
+        }
+    }
+
+    return ConanData(url, sha256, hasPatches)
 }
