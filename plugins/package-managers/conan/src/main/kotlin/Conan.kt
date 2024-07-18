@@ -311,7 +311,7 @@ class Conan(
             id = id,
             authors = parseAuthors(pkgInfo),
             declaredLicenses = pkgInfo.license.toSet(),
-            description = inspectField(pkgInfo.displayName, workingDir, "description"),
+            description = inspectField(pkgInfo.displayName, workingDir, "description").orEmpty(),
             homepageUrl = homepageUrl,
             binaryArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
             sourceArtifact = parseSourceArtifact(conanData),
@@ -321,10 +321,10 @@ class Conan(
     }
 
     /**
-     * Return the value `conan inspect` reports for the given [field].
+     * Return the value `conan inspect` reports for the given [field], or null if the field does not exist.
      */
-    private fun inspectField(pkgName: String, workingDir: File, field: String): String =
-        pkgInspectResults.getOrPut(pkgName) {
+    private fun inspectField(pkgName: String, workingDir: File, field: String): String? {
+        val results = pkgInspectResults.getOrPut(pkgName) {
             // Note: While Conan 2 supports inspect output to stdout, Conan 1 does not and a temporary file is required,
             // see https://github.com/conan-io/conan/issues/6972.
             val jsonFile = createOrtTempDir().resolve("inspect.json")
@@ -332,7 +332,10 @@ class Conan(
             Json.parseToJsonElement(jsonFile.readText()).jsonObject.also {
                 jsonFile.parentFile.safeDeleteRecursively(force = true)
             }
-        }[field]?.jsonPrimitive?.content.orEmpty()
+        }
+
+        return results[field]?.jsonPrimitive?.content
+    }
 
     /**
      * Find the [PackageInfo] that represents the project defined in the definition file.
@@ -356,8 +359,8 @@ class Conan(
         Identifier(
             type = "Conan",
             namespace = "",
-            name = inspectField(pkgInfo.displayName, workingDir, "name"),
-            version = inspectField(pkgInfo.displayName, workingDir, "version")
+            name = inspectField(pkgInfo.displayName, workingDir, "name").orEmpty(),
+            version = inspectField(pkgInfo.displayName, workingDir, "version").orEmpty()
         )
 
     /**
