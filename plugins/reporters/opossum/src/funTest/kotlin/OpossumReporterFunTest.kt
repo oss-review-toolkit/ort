@@ -61,7 +61,7 @@ private fun TestConfiguration.generateReport(ortResult: OrtResult): String {
     val input = ReporterInput(ortResult)
     val outputDir = tempdir()
 
-    OpossumReporter().generateReport(input, outputDir).single().unpackZip(outputDir)
+    OpossumReporter().generateReport(input, outputDir).single().getOrThrow().unpackZip(outputDir)
 
     return outputDir.resolve("input.json").readText()
 }

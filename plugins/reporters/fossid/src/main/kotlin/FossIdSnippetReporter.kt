@@ -36,7 +36,11 @@ class FossIdSnippetReporter : Reporter by delegateReporter {
 
     override val type = "FossIdSnippet"
 
-    override fun generateReport(input: ReporterInput, outputDir: File, config: PluginConfiguration): List<File> {
+    override fun generateReport(
+        input: ReporterInput,
+        outputDir: File,
+        config: PluginConfiguration
+    ): List<Result<File>> {
         val hasFossIdResults = input.ortResult.scanner?.scanResults?.any { it.scanner.name == "FossId" } == true
         require(hasFossIdResults) { "No FossID scan results have been found." }
 

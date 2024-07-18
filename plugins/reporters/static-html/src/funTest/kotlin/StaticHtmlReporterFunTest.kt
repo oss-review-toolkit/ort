@@ -74,5 +74,5 @@ private fun TestConfiguration.generateReport(ortResult: OrtResult): String {
 
     val outputDir = tempdir()
 
-    return StaticHtmlReporter().generateReport(input, outputDir).single().readText()
+    return StaticHtmlReporter().generateReport(input, outputDir).single().getOrThrow().readText()
 }

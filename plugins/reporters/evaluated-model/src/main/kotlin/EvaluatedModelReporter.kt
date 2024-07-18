@@ -43,31 +43,32 @@ class EvaluatedModelReporter : Reporter {
 
     override val type = "EvaluatedModel"
 
-    override fun generateReport(input: ReporterInput, outputDir: File, config: PluginConfiguration): List<File> {
+    override fun generateReport(
+        input: ReporterInput,
+        outputDir: File,
+        config: PluginConfiguration
+    ): List<Result<File>> {
         val evaluatedModel = EvaluatedModel.create(
             input,
             config.options[OPTION_DEDUPLICATE_DEPENDENCY_TREE].toBoolean()
         )
 
-        val outputFiles = mutableListOf<File>()
         val outputFileFormats = config.options[OPTION_OUTPUT_FILE_FORMATS]
             ?.split(',')
             ?.mapTo(mutableSetOf()) { FileFormat.forExtension(it) }
             ?: setOf(FileFormat.JSON)
 
-        outputFileFormats.forEach { fileFormat ->
-            val outputFile = outputDir.resolve("evaluated-model.${fileFormat.fileExtension}")
-
-            outputFile.bufferedWriter().use {
-                when (fileFormat) {
-                    FileFormat.JSON -> evaluatedModel.toJson(it)
-                    FileFormat.YAML -> evaluatedModel.toYaml(it)
+        return outputFileFormats.map { fileFormat ->
+            runCatching {
+                outputDir.resolve("evaluated-model.${fileFormat.fileExtension}").apply {
+                    bufferedWriter().use {
+                        when (fileFormat) {
+                            FileFormat.JSON -> evaluatedModel.toJson(it)
+                            FileFormat.YAML -> evaluatedModel.toYaml(it)
+                        }
+                    }
                 }
             }
-
-            outputFiles += outputFile
         }
-
-        return outputFiles
     }
 }

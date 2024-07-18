@@ -140,6 +140,7 @@ private fun TestConfiguration.generateReport(
 
     return SpdxDocumentReporter().generateReport(input, outputDir, PluginConfiguration(reportOptions))
         .single()
+        .getOrThrow()
         .readText()
         .normalizeLineBreaks()
 }

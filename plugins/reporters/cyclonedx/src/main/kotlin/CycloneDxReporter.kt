@@ -24,8 +24,6 @@ import java.util.Date
 import java.util.SortedSet
 import java.util.UUID
 
-import org.apache.logging.log4j.kotlin.logger
-
 import org.cyclonedx.Version
 import org.cyclonedx.generators.BomGeneratorFactory
 import org.cyclonedx.model.AttachmentText
@@ -135,8 +133,12 @@ class CycloneDxReporter : Reporter {
             }
         }
 
-    override fun generateReport(input: ReporterInput, outputDir: File, config: PluginConfiguration): List<File> {
-        val outputFiles = mutableListOf<File>()
+    override fun generateReport(
+        input: ReporterInput,
+        outputDir: File,
+        config: PluginConfiguration
+    ): List<Result<File>> {
+        val reportFileResults = mutableListOf<Result<File>>()
 
         val projects = input.ortResult.getProjects(omitExcluded = true).sortedBy { it.id }
         val packages = input.ortResult.getPackages(omitExcluded = true).sortedBy { it.metadata.id }
@@ -212,7 +214,7 @@ class CycloneDxReporter : Reporter {
 
             addVulnerabilitiesToBom(input.ortResult.getVulnerabilities(), bom)
 
-            outputFiles += writeBom(bom, schemaVersion, outputDir, REPORT_BASE_FILENAME, outputFileExtensions)
+            reportFileResults += writeBom(bom, schemaVersion, outputDir, REPORT_BASE_FILENAME, outputFileExtensions)
         } else {
             projects.forEach { project ->
                 val bom = Bom().apply {
@@ -257,11 +259,11 @@ class CycloneDxReporter : Reporter {
                 addVulnerabilitiesToBom(input.ortResult.getVulnerabilities(), bom)
 
                 val reportName = "$REPORT_BASE_FILENAME-${project.id.toPath("-")}"
-                outputFiles += writeBom(bom, schemaVersion, outputDir, reportName, outputFileExtensions)
+                reportFileResults += writeBom(bom, schemaVersion, outputDir, reportName, outputFileExtensions)
             }
         }
 
-        return outputFiles
+        return reportFileResults
     }
 
     private fun addVulnerabilitiesToBom(advisorVulnerabilities: Map<Identifier, List<Vulnerability>>, bom: Bom) {
@@ -363,24 +365,16 @@ class CycloneDxReporter : Reporter {
         outputDir: File,
         outputName: String,
         outputFileExtensions: List<String>
-    ): List<File> {
-        val writtenFiles = mutableListOf<File>()
-
-        outputFileExtensions.forEach { fileExtension ->
-            val outputFile = outputDir.resolve("$outputName.$fileExtension")
-
+    ): List<Result<File>> =
+        outputFileExtensions.map { fileExtension ->
             runCatching {
-                generateBom(bom, schemaVersion, fileExtension)
-            }.onSuccess { bom ->
-                outputFile.bufferedWriter().use { it.write(bom) }
-                writtenFiles += outputFile
-            }.onFailure {
-                logger.error("Unable to create the CycloneDX '$fileExtension' report: ", it)
+                val bomString = generateBom(bom, schemaVersion, fileExtension)
+
+                outputDir.resolve("$outputName.$fileExtension").apply {
+                    bufferedWriter().use { it.write(bomString) }
+                }
             }
         }
-
-        return writtenFiles
-    }
 }
 
 /**

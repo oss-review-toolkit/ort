@@ -35,7 +35,8 @@ class ManPageTemplateReporterFunTest : StringSpec({
         val expectedResultFile = getAssetFile("manpage-template-reporter-expected-result.1")
         val reporter = ManPageTemplateReporter()
 
-        val reportContent = reporter.generateReport(ReporterInput(ORT_RESULT), tempdir()).single().readText()
+        val reportContent = reporter.generateReport(ReporterInput(ORT_RESULT), tempdir())
+            .single().getOrThrow().readText()
 
         reportContent should matchExpectedResult(
             expectedResultFile,

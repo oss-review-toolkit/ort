@@ -97,7 +97,7 @@ private fun TestConfiguration.generateReport(
     val outputDir = tempdir()
     val reporterConfig = PluginConfiguration(options)
 
-    return PlainTextTemplateReporter().generateReport(input, outputDir, reporterConfig).single().readText()
+    return PlainTextTemplateReporter().generateReport(input, outputDir, reporterConfig).single().getOrThrow().readText()
 }
 
 private fun createLicenseClassifications(): LicenseClassifications {

@@ -45,9 +45,11 @@ class CtrlXAutomationReporter : Reporter {
 
     override val type = "CtrlXAutomation"
 
-    override fun generateReport(input: ReporterInput, outputDir: File, config: PluginConfiguration): List<File> {
-        val reportFile = outputDir.resolve(REPORT_FILENAME)
-
+    override fun generateReport(
+        input: ReporterInput,
+        outputDir: File,
+        config: PluginConfiguration
+    ): List<Result<File>> {
         val packages = input.ortResult.getPackages(omitExcluded = true)
         val components = packages.mapTo(mutableListOf()) { (pkg, _) ->
             val qualifiedName = when (pkg.id.type) {
@@ -88,9 +90,14 @@ class CtrlXAutomationReporter : Reporter {
             )
         }
 
-        val info = FossInfo(components = components)
-        reportFile.outputStream().use { JSON.encodeToStream(info, it) }
+        val reportFileResult = runCatching {
+            val info = FossInfo(components = components)
 
-        return listOf(reportFile)
+            outputDir.resolve(REPORT_FILENAME).apply {
+                outputStream().use { JSON.encodeToStream(info, it) }
+            }
+        }
+
+        return listOf(reportFileResult)
     }
 }

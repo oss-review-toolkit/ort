@@ -21,7 +21,8 @@ package org.ossreviewtoolkit.plugins.reporters.fossid
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.collections.shouldBeSingleton
+import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.throwable.shouldHaveMessage
 
 import io.mockk.clearAllMocks
@@ -241,9 +242,11 @@ class FossIdReporterTest : WordSpec({
             val (_, reporterMock) = createReporterMock()
             val input = createReporterInput(SCANCODE_1)
 
-            val result = reporterMock.generateReport(input)
+            val reportFileResults = reporterMock.generateReport(input)
 
-            result shouldContainExactly listOf(FILE_SAMPLE)
+            reportFileResults.shouldBeSingleton {
+                it shouldBeSuccess FILE_SAMPLE
+            }
         }
 
         "ignore scan results without a scancode" {
