@@ -183,14 +183,15 @@ private fun hasCompleteDependencies(info: PackageInfo, scopeName: String): Boole
     return dependencyKeys.containsAll(dependencyRefKeys)
 }
 
-private fun dependencyKeyOf(info: PackageInfo): String? {
-    // As non-null dependency keys are supposed to define an equivalence relation for parsing 'missing' nodes,
-    // only the name and version attributes can be used. Typically, those attributes should be not null
-    // however in particular for root projects the null case also happens.
-    val name = info.pkgMeta.name.orEmpty()
-    val version = info.pkgMeta.version.orEmpty()
-    return "$name:$version".takeUnless { name.isEmpty() || version.isEmpty() }
-}
+private val PackageInfo.key: String?
+    get() {
+        // As non-null dependency keys are supposed to define an equivalence relation for parsing 'missing' nodes,
+        // only the name and version attributes can be used. Typically, those attributes should be not null
+        // however in particular for root projects the null case also happens.
+        val name = pkgMeta.name.orEmpty()
+        val version = pkgMeta.version.orEmpty()
+        return "$name:$version".takeUnless { name.isEmpty() || version.isEmpty() }
+    }
 
 private fun getNodesWithCompleteDependencies(info: PackageInfo): Map<String, PackageInfo> {
     val result = mutableMapOf<String, PackageInfo>()
@@ -199,7 +200,7 @@ private fun getNodesWithCompleteDependencies(info: PackageInfo): Map<String, Pac
     while (!stack.empty()) {
         val currentInfo = stack.pop()
 
-        dependencyKeyOf(currentInfo)?.let { key ->
+        currentInfo.key?.let { key ->
             if (hasCompleteDependencies(info, SCOPE_NAME_DEPENDENCIES) &&
                 hasCompleteDependencies(info, SCOPE_NAME_DEV_DEPENDENCIES)
             ) {
@@ -226,7 +227,7 @@ private fun parseDependencyTree(
         // about the subtree rooted at the parent from that other node containing the full dependency
         // information.
         // See https://github.com/bower/bower/blob/6bc778d/lib/core/Manager.js#L557 and below.
-        val alternativeNode = checkNotNull(alternativeNodes[dependencyKeyOf(info)])
+        val alternativeNode = checkNotNull(alternativeNodes[info.key])
         return parseDependencyTree(alternativeNode, scopeName, alternativeNodes)
     }
 
