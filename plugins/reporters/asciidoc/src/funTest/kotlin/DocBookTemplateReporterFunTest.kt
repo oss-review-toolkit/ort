@@ -34,8 +34,8 @@ class DocBookTemplateReporterFunTest : StringSpec({
     "DocBook report is created from default template" {
         val expectedResultFile = getAssetFile("docbook-template-reporter-expected-result.xml")
 
-        val reportContent =
-            DocBookTemplateReporter().generateReport(ReporterInput(ORT_RESULT), tempdir()).single().readText()
+        val reportContent = DocBookTemplateReporter().generateReport(ReporterInput(ORT_RESULT), tempdir())
+            .single().getOrThrow().readText()
 
         reportContent should matchExpectedResult(
             expectedResultFile,

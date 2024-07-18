@@ -50,7 +50,11 @@ class WebAppReporter : Reporter {
 
     private val reportFilename = "scan-report-web-app.html"
 
-    override fun generateReport(input: ReporterInput, outputDir: File, config: PluginConfiguration): List<File> {
+    override fun generateReport(
+        input: ReporterInput,
+        outputDir: File,
+        config: PluginConfiguration
+    ): List<Result<File>> {
         val template = javaClass.getResource("/scan-report-template.html").readText()
         val evaluatedModel = EvaluatedModel.create(
             input,
@@ -61,24 +65,26 @@ class WebAppReporter : Reporter {
         val prefix = template.substring(0, index)
         val suffix = template.substring(index + PLACEHOLDER.length, template.length)
 
-        val outputFile = outputDir.resolve(reportFilename)
+        val reportFileResult = runCatching {
+            val outputFile = outputDir.resolve(reportFilename)
 
-        outputFile.writeText(prefix)
+            outputFile.writeText(prefix)
 
-        FileOutputStream(outputFile, /* append = */ true).use { outputStream ->
-            val b64OutputStream = Base64.getEncoder().wrap(outputStream)
+            FileOutputStream(outputFile, /* append = */ true).use { outputStream ->
+                val b64OutputStream = Base64.getEncoder().wrap(outputStream)
 
-            val gzipParameters = GzipParameters().apply {
-                compressionLevel = Deflater.BEST_COMPRESSION
+                val gzipParameters = GzipParameters().apply {
+                    compressionLevel = Deflater.BEST_COMPRESSION
+                }
+
+                GzipCompressorOutputStream(b64OutputStream, gzipParameters).bufferedWriter().use { gzipWriter ->
+                    evaluatedModel.toJson(gzipWriter, prettyPrint = false)
+                }
             }
 
-            GzipCompressorOutputStream(b64OutputStream, gzipParameters).bufferedWriter().use { gzipWriter ->
-                evaluatedModel.toJson(gzipWriter, prettyPrint = false)
-            }
+            outputFile.apply { appendText(suffix) }
         }
 
-        outputFile.appendText(suffix)
-
-        return listOf(outputFile)
+        return listOf(reportFileResult)
     }
 }

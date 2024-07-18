@@ -22,7 +22,9 @@ package org.ossreviewtoolkit.plugins.reporters.trustsource
 import io.kotest.assertions.json.shouldEqualJson
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.engine.spec.tempdir
+import io.kotest.matchers.collections.shouldBeSingleton
 import io.kotest.matchers.file.aFile
+import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.reporter.ORT_RESULT
@@ -33,9 +35,13 @@ class TrustSourceReporterFunTest : StringSpec({
     "The expected report should be generated" {
         val expectedReport = getAssetAsString("expected-report.json")
 
-        val reportFile = TrustSourceReporter().generateReport(ReporterInput(ORT_RESULT), tempdir()).single()
+        val reportFiles = TrustSourceReporter().generateReport(ReporterInput(ORT_RESULT), tempdir())
 
-        reportFile shouldBe aFile()
-        reportFile.readText() shouldEqualJson expectedReport
+        reportFiles.shouldBeSingleton {
+            it shouldBeSuccess { reportFile ->
+                reportFile shouldBe aFile()
+                reportFile.readText() shouldEqualJson expectedReport
+            }
+        }
     }
 })

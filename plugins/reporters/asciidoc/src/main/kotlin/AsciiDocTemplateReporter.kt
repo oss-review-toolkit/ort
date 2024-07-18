@@ -68,17 +68,21 @@ open class AsciiDocTemplateReporter(private val backend: String, override val ty
     protected open fun processTemplateOptions(outputDir: File, options: MutableMap<String, String>): Attributes =
         Attributes.builder().build()
 
-    final override fun generateReport(input: ReporterInput, outputDir: File, config: PluginConfiguration): List<File> {
+    final override fun generateReport(
+        input: ReporterInput,
+        outputDir: File,
+        config: PluginConfiguration
+    ): List<Result<File>> {
         val asciiDocOutputDir = createOrtTempDir("asciidoc")
 
         val templateOptions = config.options.toMutableMap()
         val asciidoctorAttributes = processTemplateOptions(asciiDocOutputDir, templateOptions)
-        val asciiDocFiles = generateAsciiDocFiles(input, asciiDocOutputDir, templateOptions)
-        val reports = processAsciiDocFiles(input, outputDir, asciiDocFiles, asciidoctorAttributes)
+        val asciiDocFileResults = generateAsciiDocFiles(input, asciiDocOutputDir, templateOptions)
+        val reportFileResults = processAsciiDocFiles(input, outputDir, asciiDocFileResults, asciidoctorAttributes)
 
         asciiDocOutputDir.safeDeleteRecursively()
 
-        return reports
+        return reportFileResults
     }
 
     /**
@@ -88,7 +92,7 @@ open class AsciiDocTemplateReporter(private val backend: String, override val ty
         input: ReporterInput,
         outputDir: File,
         options: MutableMap<String, String>
-    ): List<File> {
+    ): List<Result<File>> {
         if (FreemarkerTemplateProcessor.OPTION_TEMPLATE_PATH !in options) {
             options.putIfAbsent(
                 FreemarkerTemplateProcessor.OPTION_TEMPLATE_ID,
@@ -106,31 +110,28 @@ open class AsciiDocTemplateReporter(private val backend: String, override val ty
     }
 
     /**
-     * Generate the reports for the [asciiDocFiles] using Asciidoctor in [outputDir] applying the
+     * Generate the reports for the [asciiDocFileResults] using Asciidoctor in [outputDir] applying the
      * [asciidoctorAttributes].
      */
     protected open fun processAsciiDocFiles(
         input: ReporterInput,
         outputDir: File,
-        asciiDocFiles: List<File>,
+        asciiDocFileResults: List<Result<File>>,
         asciidoctorAttributes: Attributes
-    ): List<File> {
+    ): List<Result<File>> {
         val optionsBuilder = Options.builder()
             .attributes(asciidoctorAttributes)
             .backend(backend)
             .safe(SafeMode.UNSAFE)
 
-        val outputFiles = mutableListOf<File>()
-
-        asciiDocFiles.forEach { file ->
-            val outputFile = outputDir.resolve("${file.nameWithoutExtension}.$backend")
-
-            val options = optionsBuilder.toFile(outputFile).build()
-            asciidoctor.convertFile(file, options)
-
-            outputFiles += outputFile
+        return asciiDocFileResults.map { fileResult ->
+            // This implicitly passes through any failure from generating the Asciidoc file.
+            fileResult.mapCatching { file ->
+                outputDir.resolve("${file.nameWithoutExtension}.$backend").also { outputFile ->
+                    val options = optionsBuilder.toFile(outputFile).build()
+                    asciidoctor.convertFile(file, options)
+                }
+            }
         }
-
-        return outputFiles
     }
 }

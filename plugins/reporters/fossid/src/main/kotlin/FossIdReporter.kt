@@ -69,7 +69,11 @@ class FossIdReporter : Reporter {
 
     override val type = "FossId"
 
-    override fun generateReport(input: ReporterInput, outputDir: File, config: PluginConfiguration): List<File> {
+    override fun generateReport(
+        input: ReporterInput,
+        outputDir: File,
+        config: PluginConfiguration
+    ): List<Result<File>> {
         val serverUrl = requireNotNull(config.options[SERVER_URL_PROPERTY]) {
             "No FossID server URL configuration found."
         }
@@ -111,9 +115,9 @@ class FossIdReporter : Reporter {
                             logger.info {
                                 "Error during report generation: ${it.collectMessages()}."
                             }
-                        }.getOrNull()
+                        }
                 }
-            }.awaitAll().filterNotNull()
+            }.awaitAll()
         }
     }
 }

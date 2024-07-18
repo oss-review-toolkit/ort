@@ -54,15 +54,23 @@ class GitLabLicenseModelReporter : Reporter {
 
     private val reportFilename = "gl-license-scanning-report.json"
 
-    override fun generateReport(input: ReporterInput, outputDir: File, config: PluginConfiguration): List<File> {
+    override fun generateReport(
+        input: ReporterInput,
+        outputDir: File,
+        config: PluginConfiguration
+    ): List<Result<File>> {
         val skipExcluded = config.options[OPTION_SKIP_EXCLUDED]?.toBooleanStrictOrNull() ?: false
 
         val licenseModel = GitLabLicenseModelMapper.map(input.ortResult, skipExcluded)
-        val licenseModelJson = JSON.encodeToString(licenseModel)
 
-        val outputFile = outputDir.resolve(reportFilename)
-        outputFile.bufferedWriter().use { it.write(licenseModelJson) }
+        val reportFileResult = runCatching {
+            val licenseModelJson = JSON.encodeToString(licenseModel)
 
-        return listOf(outputFile)
+            outputDir.resolve(reportFilename).apply {
+                bufferedWriter().use { it.write(licenseModelJson) }
+            }
+        }
+
+        return listOf(reportFileResult)
     }
 }

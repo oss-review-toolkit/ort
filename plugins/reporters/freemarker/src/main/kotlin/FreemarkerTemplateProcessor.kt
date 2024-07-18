@@ -93,7 +93,7 @@ class FreemarkerTemplateProcessor(
      * Process all Freemarker templates referenced in "template.id" and "template.path" options and returns the
      * generated files.
      */
-    fun processTemplates(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> =
+    fun processTemplates(input: ReporterInput, outputDir: File, options: Map<String, String>): List<Result<File>> =
         processTemplatesInternal(createDataModel(input), outputDir, options)
 
     /**
@@ -104,7 +104,7 @@ class FreemarkerTemplateProcessor(
         dataModel: Map<String, Any>,
         outputDir: File,
         options: Map<String, String>
-    ): List<File> {
+    ): List<Result<File>> {
         val templatePaths = options[OPTION_TEMPLATE_PATH]?.split(',').orEmpty()
         val templateIds = options[OPTION_TEMPLATE_ID]?.split(',').orEmpty()
 
@@ -115,35 +115,40 @@ class FreemarkerTemplateProcessor(
         }
 
         val fileExtensionWithDot = fileExtension.takeIf { it.isEmpty() } ?: ".$fileExtension"
-        val outputFiles = mutableListOf<File>()
+        val reportFileResults = mutableListOf<Result<File>>()
 
-        templateIds.forEach { id ->
+        templateIds.mapTo(reportFileResults) { id ->
             val outputFile = outputDir.resolve("$filePrefix$id$fileExtensionWithDot")
 
             logger.info { "Generating file '$outputFile' using template id '$id'." }
 
-            val template = freemarkerConfig.getTemplate("$id.ftl")
-            outputFile.writer().use { template.process(dataModel, it) }
+            runCatching {
+                val template = freemarkerConfig.getTemplate("$id.ftl")
 
-            outputFiles += outputFile
+                outputFile.apply {
+                    writer().use { template.process(dataModel, it) }
+                }
+            }
         }
 
-        templateFiles.forEach { file ->
+        templateFiles.mapTo(reportFileResults) { file ->
             val outputFile = outputDir.resolve("$filePrefix${file.nameWithoutExtension}$fileExtensionWithDot")
 
             logger.info { "Generating file '$outputFile' using template file '${file.absolutePath}'." }
 
-            val template = freemarkerConfig.run {
-                setDirectoryForTemplateLoading(file.parentFile)
-                getTemplate(file.name)
+            runCatching {
+                val template = freemarkerConfig.run {
+                    setDirectoryForTemplateLoading(file.parentFile)
+                    getTemplate(file.name)
+                }
+
+                outputFile.apply {
+                    writer().use { template.process(dataModel, it) }
+                }
             }
-
-            outputFile.writer().use { template.process(dataModel, it) }
-
-            outputFiles += outputFile
         }
 
-        return outputFiles
+        return reportFileResults
     }
 
     /**

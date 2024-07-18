@@ -289,7 +289,7 @@ class ReporterCommand : OrtCommand(
 
                         reporter to measureTimedValue {
                             val options = reportConfigMap[reporter.type] ?: PluginConfiguration.EMPTY
-                            runCatching { reporter.generateReport(input, outputDir, options) }
+                            reporter.generateReport(input, outputDir, options)
                         }
                     }
                 }.awaitAll()
@@ -300,18 +300,20 @@ class ReporterCommand : OrtCommand(
 
         reportDurationMap.value.forEach { (reporter, timedValue) ->
             val name = reporter.type
+            val fileResults = timedValue.value
 
-            timedValue.value.onSuccess { files ->
-                val fileList = files.joinToString { "'$it'" }
-                echo("Successfully created '$name' report(s) at $fileList in ${timedValue.duration}.")
-            }.onFailure { e ->
-                e.showStackTrace()
+            fileResults.forEach { fileResult ->
+                fileResult.onSuccess { file ->
+                    echo("Successfully created '$name' report at $file in ${timedValue.duration}.")
+                }.onFailure { e ->
+                    e.showStackTrace()
 
-                logger.error {
-                    "Could not create '$name' report in ${timedValue.duration}: ${e.collectMessages()}"
+                    logger.error {
+                        "Could not create '$name' report in ${timedValue.duration}: ${e.collectMessages()}"
+                    }
+
+                    ++failureCount
                 }
-
-                ++failureCount
             }
         }
 

@@ -49,7 +49,11 @@ class PlainTextTemplateReporter : Reporter {
 
     private val templateProcessor = FreemarkerTemplateProcessor(TEMPLATE_DIRECTORY)
 
-    override fun generateReport(input: ReporterInput, outputDir: File, config: PluginConfiguration): List<File> {
+    override fun generateReport(
+        input: ReporterInput,
+        outputDir: File,
+        config: PluginConfiguration
+    ): List<Result<File>> {
         val templateOptions = config.options.toMutableMap()
 
         if (FreemarkerTemplateProcessor.OPTION_TEMPLATE_PATH !in templateOptions) {

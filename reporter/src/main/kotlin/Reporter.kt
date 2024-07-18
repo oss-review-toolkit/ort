@@ -39,11 +39,12 @@ interface Reporter : Plugin {
     /**
      * Generate a report for the provided [input] and write the generated file(s) to the [outputDir]. If and how the
      * [input] data is used depends on the specific reporter implementation, taking into account any format-specific
-     * [config]. The list of generated report files is returned.
+     * [config]. Return a list of [Result]s that wrap the generated report file on success, or a file specific failure
+     * if something went wrong.
      */
     fun generateReport(
         input: ReporterInput,
         outputDir: File,
         config: PluginConfiguration = PluginConfiguration.EMPTY
-    ): List<File>
+    ): List<Result<File>>
 }

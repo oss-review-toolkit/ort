@@ -21,9 +21,10 @@ package org.ossreviewtoolkit.plugins.reporters.ctrlx
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.engine.spec.tempdir
-import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.haveSize
+import io.kotest.matchers.collections.shouldBeSingleton
 import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.should
 
 import kotlinx.serialization.json.decodeFromStream
@@ -47,6 +48,8 @@ class CtrlXAutomationReporterFunTest : StringSpec({
         val outputDir = tempdir()
         val reportFiles = CtrlXAutomationReporter().generateReport(ReporterInput(ORT_RESULT), outputDir)
 
-        reportFiles.map { it.name } should containExactly(REPORT_FILENAME)
+        reportFiles.shouldBeSingleton {
+            it shouldBeSuccess outputDir.resolve(REPORT_FILENAME)
+        }
     }
 })

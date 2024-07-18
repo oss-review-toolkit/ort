@@ -70,7 +70,7 @@ private fun TestConfiguration.generateReport(ortResult: OrtResult, skipExcluded:
         input = ReporterInput(ortResult = ortResult),
         outputDir = tempdir(),
         config = PluginConfiguration(mapOf(GitLabLicenseModelReporter.OPTION_SKIP_EXCLUDED to skipExcluded.toString()))
-    ).single().readText().normalizeLineBreaks()
+    ).single().getOrThrow().readText().normalizeLineBreaks()
 
 private fun createOrtResult(): OrtResult {
     return OrtResult(

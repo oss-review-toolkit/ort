@@ -71,5 +71,5 @@ private fun TestConfiguration.generateReport(ortResult: OrtResult, options: Map<
     val outputDir = tempdir()
 
     return EvaluatedModelReporter().generateReport(input, outputDir, PluginConfiguration(options))
-        .single().readText().normalizeLineBreaks()
+        .single().getOrThrow().readText().normalizeLineBreaks()
 }

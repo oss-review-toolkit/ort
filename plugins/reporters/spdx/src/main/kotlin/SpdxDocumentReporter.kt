@@ -63,7 +63,11 @@ class SpdxDocumentReporter : Reporter {
 
     override val type = "SpdxDocument"
 
-    override fun generateReport(input: ReporterInput, outputDir: File, config: PluginConfiguration): List<File> {
+    override fun generateReport(
+        input: ReporterInput,
+        outputDir: File,
+        config: PluginConfiguration
+    ): List<Result<File>> {
         val outputFileFormats = config.options[OPTION_OUTPUT_FILE_FORMATS]
             ?.split(',')
             ?.mapTo(mutableSetOf()) { FileFormat.valueOf(it.uppercase()) }
@@ -94,9 +98,11 @@ class SpdxDocumentReporter : Reporter {
         }
 
         return outputFileFormats.map { fileFormat ->
-            outputDir.resolve("$REPORT_BASE_FILENAME.${fileFormat.fileExtension}").apply {
-                bufferedWriter().use { writer ->
-                    fileFormat.mapper.writeValue(writer, spdxDocument)
+            runCatching {
+                outputDir.resolve("$REPORT_BASE_FILENAME.${fileFormat.fileExtension}").apply {
+                    bufferedWriter().use { writer ->
+                        fileFormat.mapper.writeValue(writer, spdxDocument)
+                    }
                 }
             }
         }

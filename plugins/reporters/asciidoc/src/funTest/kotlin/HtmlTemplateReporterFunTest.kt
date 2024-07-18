@@ -33,7 +33,8 @@ class HtmlTemplateReporterFunTest : StringSpec({
         val expectedResultFile = getAssetFile("html-template-reporter-expected-result.html")
 
         val reporter = HtmlTemplateReporter()
-        val reportContent = reporter.generateReport(ReporterInput(ORT_RESULT), tempdir()).single().readText()
+        val reportContent = reporter.generateReport(ReporterInput(ORT_RESULT), tempdir())
+            .single().getOrThrow().readText()
 
         reportContent.patchAsciiDocTemplateResult() shouldBe patchExpectedResult(
             expectedResultFile,

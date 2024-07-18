@@ -534,14 +534,22 @@ class OpossumReporter : Reporter {
         return opossumInput
     }
 
-    override fun generateReport(input: ReporterInput, outputDir: File, config: PluginConfiguration): List<File> {
+    override fun generateReport(
+        input: ReporterInput,
+        outputDir: File,
+        config: PluginConfiguration
+    ): List<Result<File>> {
         val maxDepth = config.options.getOrDefault(OPTION_SCANNER_MAX_DEPTH, "3").toInt()
-        val opossumInput = generateOpossumInput(input, maxDepth)
-        val outputFile = outputDir.resolve("report.opossum")
 
-        writeReport(outputFile, opossumInput)
+        val reportFileResult = runCatching {
+            val opossumInput = generateOpossumInput(input, maxDepth)
 
-        return listOf(outputFile)
+            outputDir.resolve("report.opossum").also {
+                writeReport(it, opossumInput)
+            }
+        }
+
+        return listOf(reportFileResult)
     }
 }
 

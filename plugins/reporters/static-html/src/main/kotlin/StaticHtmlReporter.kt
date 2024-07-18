@@ -70,17 +70,22 @@ class StaticHtmlReporter : Reporter {
     private val css = javaClass.getResource("/static-html-reporter.css").readText()
     private val licensesSha1 = mutableMapOf<String, String>()
 
-    override fun generateReport(input: ReporterInput, outputDir: File, config: PluginConfiguration): List<File> {
+    override fun generateReport(
+        input: ReporterInput,
+        outputDir: File,
+        config: PluginConfiguration
+    ): List<Result<File>> {
         val tablesReport = TablesReportModelMapper.map(input)
 
-        val html = renderHtml(tablesReport)
-        val outputFile = outputDir.resolve(reportFilename)
+        val reportFileResult = runCatching {
+            val html = renderHtml(tablesReport)
 
-        outputFile.bufferedWriter().use {
-            it.write(html)
+            outputDir.resolve(reportFilename).apply {
+                bufferedWriter().use { it.write(html) }
+            }
         }
 
-        return listOf(outputFile)
+        return listOf(reportFileResult)
     }
 
     private fun renderHtml(tablesReport: TablesReport): String {

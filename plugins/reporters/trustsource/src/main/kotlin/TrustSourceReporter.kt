@@ -39,7 +39,11 @@ class TrustSourceReporter : Reporter {
 
     private val reportFilename = "trustsource-report.json"
 
-    override fun generateReport(input: ReporterInput, outputDir: File, config: PluginConfiguration): List<File> {
+    override fun generateReport(
+        input: ReporterInput,
+        outputDir: File,
+        config: PluginConfiguration
+    ): List<Result<File>> {
         val outputFile = outputDir.resolve(reportFilename)
 
         val nav = input.ortResult.dependencyNavigator
@@ -48,9 +52,13 @@ class TrustSourceReporter : Reporter {
             NewScan(module = project.id.name, dependencies = deps)
         }
 
-        outputFile.outputStream().use { JSON.encodeToStream(scans, it) }
+        val reportFileResult = runCatching {
+            outputFile.apply {
+                outputStream().use { JSON.encodeToStream(scans, it) }
+            }
+        }
 
-        return listOf(outputFile)
+        return listOf(reportFileResult)
     }
 }
 
