@@ -40,6 +40,9 @@ class PubCacheReaderTest : WordSpec({
     val gitPackageCacheDir = tmpPubCacheDir.resolve("git/$PACKAGE_NAME-$RESOLVED_REF")
     val gitPackageWithPathCacheDir = tmpPubCacheDir.resolve("git/$PACKAGE_NAME-$RESOLVED_REF/$PACKAGE_NAME")
     val hostedPackageCacheDir = tmpPubCacheDir.resolve("hosted/oss-review-toolkit.org/$PACKAGE_NAME-$PACKAGE_VERSION")
+    val customPackageCacheDir = tmpPubCacheDir.resolve(
+        "hosted/oss-review-toolkit.org%47api%47pub%47repository%47/$PACKAGE_NAME-$PACKAGE_VERSION"
+    )
     val localPackagePathAbsolute = ABSOLUTE_PATH
     val localPackagePathRelative = ABSOLUTE_PATH.resolve(RELATIVE_PATH)
 
@@ -49,6 +52,7 @@ class PubCacheReaderTest : WordSpec({
         gitPackageCacheDir.safeMkdirs()
         gitPackageWithPathCacheDir.safeMkdirs()
         hostedPackageCacheDir.safeMkdirs()
+        customPackageCacheDir.safeMkdirs()
     }
 
     "findProjectRoot" should {
@@ -59,6 +63,27 @@ class PubCacheReaderTest : WordSpec({
                         {
                             "dependency": "direct main",
                             "description": {
+                                "ref": "master",
+                                "resolved-ref": "$RESOLVED_REF",
+                                "url": "https://github.com/oss-review-toolkit/$PACKAGE_NAME.git"
+                            },
+                            "source": "git",
+                            "version": "9.9.9"
+                        }
+                    """.trimIndent()
+                ),
+                ABSOLUTE_PATH // not used
+            ) shouldBe gitPackageCacheDir
+        }
+
+        "resolve the path of a Git dependency with special path" {
+            reader.findProjectRoot(
+                jsonMapper.readTree(
+                    """
+                        {
+                            "dependency": "direct main",
+                            "description": {
+                                "path": ".",
                                 "ref": "master",
                                 "resolved-ref": "$RESOLVED_REF",
                                 "url": "https://github.com/oss-review-toolkit/$PACKAGE_NAME.git"
@@ -110,6 +135,25 @@ class PubCacheReaderTest : WordSpec({
                 ),
                 ABSOLUTE_PATH // not used
             ) shouldBe hostedPackageCacheDir
+        }
+
+        "resolve the path of a custom package repository dependency" {
+            PubCacheReader().findProjectRoot(
+                jsonMapper.readTree(
+                    """
+                        {
+                            "dependency": "transitive",
+                            "description": {
+                                "name": "$PACKAGE_NAME",
+                                "url": "https://oss-review-toolkit.org/api/pub/repository/"
+                            },
+                            "source": "hosted",
+                            "version": "$PACKAGE_VERSION"
+                        }
+                    """.trimIndent()
+                ),
+                ABSOLUTE_PATH // not used
+            ) shouldBe customPackageCacheDir
         }
 
         "resolve the relative path of a local dependency" {

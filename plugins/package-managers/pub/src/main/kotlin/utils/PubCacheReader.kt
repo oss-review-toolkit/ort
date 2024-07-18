@@ -85,13 +85,13 @@ internal class PubCacheReader(flutterHome: File? = null) {
         val path = if (type == "hosted" && url.isNotEmpty()) {
             // Packages with source set to "hosted" and "url" key in description set to "https://pub.dartlang.org".
             // The path should be resolved to "hosted/pub.dartlang.org/packageName-packageVersion".
-            "hosted/${url.replace("https://", "")}/$packageName-$packageVersion"
+            "hosted/${url.replace("https://", "").replace("/", "%47")}/$packageName-$packageVersion"
         } else if (type == "git" && resolvedRef.isNotEmpty()) {
             // Packages with source set to "git" and a "resolved-ref" key in description set to a gitHash.
             // These packages do not define a packageName in the packageInfo, but by definition the path resolves to
             // the project name as given from the VcsHost and to the resolvedRef.
             val projectName = VcsHost.getProject(url) ?: return null
-            if (resolvedPath.isNotEmpty()) {
+            if (resolvedPath.isNotEmpty() && resolvedPath != ".") {
                 "git/$projectName-$resolvedRef/$resolvedPath"
             } else {
                 "git/$projectName-$resolvedRef"
