@@ -392,19 +392,19 @@ class Conan(
      *       from the `requires` field. Need to investigate whether this is a sure thing before implementing.
      */
     private fun generateProjectPackage(pkgInfo: PackageInfo, definitionFile: File, workingDir: File): Package {
-        fun inspectOrNull(field: String) =
+        fun inspectPyFile(field: String) =
             definitionFile.name.takeIf { it == "conanfile.py" }?.let { inspectField(it, workingDir, field) }
 
         return Package(
             id = Identifier(
                 type = managerName,
                 namespace = "",
-                name = inspectOrNull("name") ?: pkgInfo.reference.orEmpty(),
-                version = inspectOrNull("version").orEmpty()
+                name = inspectPyFile("name") ?: pkgInfo.reference.orEmpty(),
+                version = inspectPyFile("version").orEmpty()
             ),
             authors = parseAuthors(pkgInfo),
             declaredLicenses = pkgInfo.license.toSet(),
-            description = inspectOrNull("description").orEmpty(),
+            description = inspectPyFile("description").orEmpty(),
             homepageUrl = pkgInfo.homepage.orEmpty(),
             binaryArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
             sourceArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
