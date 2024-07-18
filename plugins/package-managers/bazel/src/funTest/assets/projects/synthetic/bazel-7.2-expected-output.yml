@@ -1,0 +1,261 @@
+---
+project:
+  id: "Bazel::plugins/package-managers/bazel/src/funTest/assets/projects/synthetic/bazel-7.2/MODULE.bazel:"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "dev"
+    dependencies:
+    - id: "Bazel::googletest:1.14.0"
+      linkage: "STATIC"
+      dependencies:
+      - id: "Bazel::abseil-cpp:20230125.1"
+        linkage: "STATIC"
+        dependencies:
+        - id: "Bazel::bazel_skylib:1.6.1"
+          linkage: "STATIC"
+          dependencies:
+          - id: "Bazel::platforms:0.0.9"
+            linkage: "STATIC"
+        - id: "Bazel::platforms:0.0.9"
+          linkage: "STATIC"
+        - id: "Bazel::rules_cc:0.0.9"
+          linkage: "STATIC"
+      - id: "Bazel::platforms:0.0.9"
+        linkage: "STATIC"
+        dependencies:
+        - id: "Bazel::rules_license:0.0.7"
+          linkage: "STATIC"
+      - id: "Bazel::rules_cc:0.0.9"
+        linkage: "STATIC"
+        dependencies:
+        - id: "Bazel::platforms:0.0.9"
+          linkage: "STATIC"
+  - name: "main"
+    dependencies:
+    - id: "Bazel::glog:0.5.0"
+      linkage: "STATIC"
+      dependencies:
+      - id: "Bazel::gflags:2.2.2"
+        linkage: "STATIC"
+packages:
+- id: "Bazel::abseil-cpp:20230125.1"
+  purl: "pkg:generic/abseil-cpp@20230125.1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/abseil/abseil-cpp"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/abseil/abseil-cpp/archive/refs/tags/20230125.1.tar.gz"
+    hash:
+      value: "81311c17599b3712069ded20cca09a62ab0bf2a89dfa16993786c8782b7ed145"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/abseil/abseil-cpp"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/abseil/abseil-cpp.git"
+    revision: ""
+    path: ""
+- id: "Bazel::bazel_skylib:1.6.1"
+  purl: "pkg:generic/bazel_skylib@1.6.1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/bazelbuild/bazel-skylib"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/bazelbuild/bazel-skylib/releases/download/1.6.1/bazel-skylib-1.6.1.tar.gz"
+    hash:
+      value: "9f38886a40548c6e96c106b752f242130ee11aaa068a56ba7e56f4511f33e4f2"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/bazelbuild/bazel-skylib"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/bazelbuild/bazel-skylib.git"
+    revision: ""
+    path: ""
+- id: "Bazel::gflags:2.2.2"
+  purl: "pkg:generic/gflags@2.2.2"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://gflags.github.io/gflags/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/gflags/gflags/archive/refs/tags/v2.2.2.tar.gz"
+    hash:
+      value: "34af2f15cf7367513b352bdcd2493ab14ce43692d2dcd9dfc499492966c64dcf"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/gflags/gflags"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/gflags/gflags.git"
+    revision: ""
+    path: ""
+- id: "Bazel::glog:0.5.0"
+  purl: "pkg:generic/glog@0.5.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/google/glog"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/google/glog/archive/refs/tags/v0.5.0.tar.gz"
+    hash:
+      value: "eede71f28371bf39aa69b45de23b329d37214016e2055269b3b5e7cfd40b59f5"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/google/glog"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/google/glog.git"
+    revision: ""
+    path: ""
+- id: "Bazel::googletest:1.14.0"
+  purl: "pkg:generic/googletest@1.14.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://google.github.io/googletest/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/google/googletest/archive/refs/tags/v1.14.0.tar.gz"
+    hash:
+      value: "8ad598c73ad796e0d8280b082cebd82a630d73e73cd3c70057938a6501bba5d7"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/google/googletest"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/google/googletest.git"
+    revision: ""
+    path: ""
+- id: "Bazel::platforms:0.0.9"
+  purl: "pkg:generic/platforms@0.0.9"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/bazelbuild/platforms"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/bazelbuild/platforms/releases/download/0.0.9/platforms-0.0.9.tar.gz"
+    hash:
+      value: "5eda539c841265031c2f82d8ae7a3a6490bd62176e0c038fc469eabf91f6149b"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/bazelbuild/platforms"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/bazelbuild/platforms.git"
+    revision: ""
+    path: ""
+- id: "Bazel::rules_cc:0.0.9"
+  purl: "pkg:generic/rules_cc@0.0.9"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/bazelbuild/rules_cc"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/bazelbuild/rules_cc/releases/download/0.0.9/rules_cc-0.0.9.tar.gz"
+    hash:
+      value: "2037875b9a4456dce4a79d112a8ae885bbc4aad968e6587dca6e64f3a0900cdf"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: ""
+    revision: ""
+    path: ""
+- id: "Bazel::rules_license:0.0.7"
+  purl: "pkg:generic/rules_license@0.0.7"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/bazelbuild/rules_license"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/bazelbuild/rules_license/releases/download/0.0.7/rules_license-0.0.7.tar.gz"
+    hash:
+      value: "4531deccb913639c30e5c7512a054d5d875698daeb75d8cf90f284375fe7c360"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/bazelbuild/rules_license"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/bazelbuild/rules_license.git"
+    revision: ""
+    path: ""
