@@ -381,7 +381,7 @@ class Conan(
     private fun parseSourceArtifact(conanData: ConanData): RemoteArtifact {
         val url = conanData.url ?: return RemoteArtifact.EMPTY
         val hashValue = conanData.sha256.orEmpty()
-        val hash = Hash.NONE.takeIf { hashValue.isEmpty() } ?: Hash.create(hashValue, HashAlgorithm.SHA256.name)
+        val hash = Hash.NONE.takeIf { hashValue.isEmpty() } ?: Hash(hashValue, HashAlgorithm.SHA256)
 
         return RemoteArtifact(url, hash)
     }
