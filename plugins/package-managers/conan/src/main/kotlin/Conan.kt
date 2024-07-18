@@ -325,6 +325,8 @@ class Conan(
      */
     private fun inspectField(pkgName: String, workingDir: File, field: String): String =
         pkgInspectResults.getOrPut(pkgName) {
+            // Note: While Conan 2 supports inspect output to stdout, Conan 1 does not and a temporary file is required,
+            // see https://github.com/conan-io/conan/issues/6972.
             val jsonFile = createOrtTempDir().resolve("inspect.json")
             run(workingDir, "inspect", pkgName, "--json", jsonFile.absolutePath)
             Json.parseToJsonElement(jsonFile.readText()).jsonObject.also {
