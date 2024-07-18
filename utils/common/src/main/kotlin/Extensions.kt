@@ -350,16 +350,6 @@ fun String.fileSystemEncode() =
         .take(255)
 
 /**
- * Return true if the string represents a false value, otherwise return false.
- */
-fun String?.isFalse() = this?.toBoolean()?.not() == true
-
-/**
- * Return true if the string represents a true value, otherwise return false.
- */
-fun String?.isTrue() = this?.toBoolean() == true
-
-/**
  * True if the string is a valid [URI], false otherwise.
  */
 fun String.isValidUri() = runCatching { URI(this) }.isSuccess
