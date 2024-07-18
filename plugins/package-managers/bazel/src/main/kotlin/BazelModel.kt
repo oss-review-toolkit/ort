@@ -31,8 +31,18 @@ private val json = Json { ignoreUnknownKeys = true }
  */
 @Serializable
 internal data class Lockfile(
-    val flags: Flags? = null
+    // The flags containing the registry URLs (Bazel < 7.2.0).
+    val flags: Flags? = null,
+
+    // The registry URLs of the project's dependencies packages  (Bazel >= 7.2.0).
+    val registryFileHashes: Map<String, String>? = null
 ) {
+    init {
+        require((flags != null && registryFileHashes == null) || (flags == null && registryFileHashes != null)) {
+            "Exactly one of 'flags' and 'registryFileHashes' must be set."
+        }
+    }
+
     // TODO Support multiple registries.
     fun registryUrl(): String? = flags?.cmdRegistries?.getOrElse(0) { null }
 }

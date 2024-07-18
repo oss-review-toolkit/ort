@@ -46,4 +46,13 @@ class BazelFunTest : StringSpec({
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
+
+    "Dependencies are detected correctly with Bazel 7.2.0" {
+        val definitionFile = getAssetFile("projects/synthetic/bazel-7.2/MODULE.bazel")
+        val expectedResultFile = getAssetFile("projects/synthetic/bazel-7.2-expected-output.yml")
+
+        val result = create("Bazel").resolveSingleProject(definitionFile)
+
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
 })
