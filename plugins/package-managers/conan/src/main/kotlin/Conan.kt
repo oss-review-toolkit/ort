@@ -311,7 +311,7 @@ class Conan(
             id = id,
             authors = parseAuthors(pkgInfo),
             declaredLicenses = pkgInfo.license.toSet(),
-            description = parsePackageField(pkgInfo, workingDir, "description"),
+            description = inspectField(pkgInfo.displayName, workingDir, "description"),
             homepageUrl = homepageUrl,
             binaryArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
             sourceArtifact = parseSourceArtifact(conanData),
@@ -356,8 +356,8 @@ class Conan(
         Identifier(
             type = "Conan",
             namespace = "",
-            name = parsePackageField(pkgInfo, workingDir, "name"),
-            version = parsePackageField(pkgInfo, workingDir, "version")
+            name = inspectField(pkgInfo.displayName, workingDir, "name"),
+            version = inspectField(pkgInfo.displayName, workingDir, "version")
         )
 
     /**
@@ -369,12 +369,6 @@ class Conan(
         val vcsInfo = VcsHost.parseUrl(url)
         return if (revision == "0") vcsInfo else vcsInfo.copy(revision = revision)
     }
-
-    /**
-     * Return the value of [field] from the output of `conan inspect --raw` for the package in [pkgInfo].
-     */
-    private fun parsePackageField(pkgInfo: PackageInfo, workingDir: File, field: String): String =
-        inspectField(pkgInfo.displayName, workingDir, field)
 
     /**
      * Return the source artifact contained in [conanData], or [RemoteArtifact.EMPTY] if no source artifact is
