@@ -200,14 +200,14 @@ class MavenSupportTest : WordSpec({
             MavenSupport.parseChecksum(
                 checksum = "868c0792233fc78d8c9bac29ac79ade988301318 7de43522ca1a2a65d7c3b9eacb802a51745b245c",
                 algorithm = "SHA1"
-            ) shouldBe Hash.create("868c0792233fc78d8c9bac29ac79ade988301318", "SHA1")
+            ) shouldBe Hash("868c0792233fc78d8c9bac29ac79ade988301318", "SHA1")
         }
 
         "ignore prefixes and suffixes" {
             MavenSupport.parseChecksum(
                 checksum = "prefix 868c0792233fc78d8c9bac29ac79ade988301318 suffix",
                 algorithm = "SHA1"
-            ) shouldBe Hash.create("868c0792233fc78d8c9bac29ac79ade988301318", "SHA1")
+            ) shouldBe Hash("868c0792233fc78d8c9bac29ac79ade988301318", "SHA1")
         }
     }
 })

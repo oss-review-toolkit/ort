@@ -121,7 +121,7 @@ fun String.toProvenance(): Provenance {
             ArtifactProvenance(
                 sourceArtifact = RemoteArtifact(
                     url = URLDecoder.decode(encodedUrl, "UTF-8"),
-                    hash = Hash.create(value, algorithm)
+                    hash = Hash(value, algorithm)
                 )
             )
         }

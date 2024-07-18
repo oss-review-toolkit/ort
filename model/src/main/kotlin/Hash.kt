@@ -67,18 +67,18 @@ data class Hash(
                 Hash(value.lowercase(), HashAlgorithm.create(value))
             }
         }
-
-        /**
-         * Create a [Hash] instance from a known hash [value] and [algorithm]. This is mostly used for deserialization
-         * to verify the algorithm matches the one determined by the value.
-         */
-        fun create(value: String, algorithm: String): Hash =
-            create(value).also { hash ->
-                require(hash.algorithm == HashAlgorithm.fromString(algorithm)) {
-                    "'$value' is not a $algorithm hash."
-                }
-            }
     }
+
+    init {
+        require(value.length == algorithm.size || algorithm == HashAlgorithm.UNKNOWN) {
+            "'$value' is not a $algorithm hash."
+        }
+    }
+
+    /**
+     * Construct a [Hash] instance from hash [value] and [algorithm] strings.
+     */
+    constructor(value: String, algorithm: String) : this(value, HashAlgorithm.fromString(algorithm))
 
     /**
      * Return the hash in Support Subresource Integrity (SRI) format.

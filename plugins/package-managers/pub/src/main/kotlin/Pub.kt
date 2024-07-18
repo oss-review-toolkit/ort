@@ -616,11 +616,11 @@ class Pub(
                     val hostUrl = pkgInfoFromLockfile["description"]["url"].textValueOrEmpty()
 
                     val sourceArtifact = if (source == "hosted" && hostUrl.isNotEmpty() && version.isNotEmpty()) {
-                        val sha256 = pkgInfoFromLockfile["description"]["sha256"].textValueOrEmpty()
+                        val sha256 = pkgInfoFromLockfile["description"]["sha256"].textValue()
 
                         RemoteArtifact(
                             url = "$hostUrl/packages/$rawName/versions/$version.tar.gz",
-                            hash = Hash.create(sha256, HashAlgorithm.SHA256.name)
+                            hash = Hash(sha256, HashAlgorithm.SHA256)
                         )
                     } else {
                         RemoteArtifact.EMPTY

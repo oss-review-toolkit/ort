@@ -307,7 +307,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
          */
         internal fun parseChecksum(checksum: String, algorithm: String) =
             checksum.splitOnWhitespace().firstNotNullOfOrNull {
-                runCatching { Hash.create(it, algorithm) }.getOrNull()
+                runCatching { Hash(it, algorithm) }.getOrNull()
             } ?: Hash.NONE
 
         /**

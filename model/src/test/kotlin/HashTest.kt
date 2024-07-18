@@ -73,12 +73,12 @@ class HashTest : WordSpec({
 
     "Passing a string value and name to create()" should {
         "succeed if the name is valid for the created hash" {
-            Hash.create("6a7d2814506e9801f13e767964ae3a8f", "MD5").algorithm shouldBe HashAlgorithm.MD5
+            Hash("6a7d2814506e9801f13e767964ae3a8f", "MD5").algorithm shouldBe HashAlgorithm.MD5
         }
 
         "fail if the name is invalid for the created hash" {
             shouldThrow<IllegalArgumentException> {
-                Hash.create("0123456789", "MD5")
+                Hash("0123456789", "MD5")
             }
         }
     }

@@ -394,7 +394,7 @@ private fun SpdxExternalDocumentReference.resolveFromDownload(
  * checksum. If not, return an [Issue] based on the document [uri] and [managerName].
  */
 private fun SpdxExternalDocumentReference.verifyChecksum(file: File, uri: URI, managerName: String): Issue? {
-    val hash = Hash.create(checksum.checksumValue, checksum.algorithm.name)
+    val hash = Hash(checksum.checksumValue, checksum.algorithm.name)
     if (hash.verify(file)) return null
 
     return SpdxResolvedDocument.createAndLogIssue(

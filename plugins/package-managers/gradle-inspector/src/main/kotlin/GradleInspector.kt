@@ -403,7 +403,7 @@ private fun GradleInspector.createRemoteArtifact(
  */
 private fun parseChecksum(checksum: String, algorithm: String) =
     checksum.splitOnWhitespace().firstNotNullOfOrNull {
-        runCatching { Hash.create(it, algorithm) }.getOrNull()
+        runCatching { Hash(it, algorithm) }.getOrNull()
     } ?: Hash.NONE
 
 // See http://maven.apache.org/pom.html#SCM.
