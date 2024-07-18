@@ -272,7 +272,7 @@ val ORT_RESULT = OrtResult(
                 provenance = ArtifactProvenance(
                     sourceArtifact = RemoteArtifact(
                         url = "https://example.com/license-file-1.0.tgz",
-                        hash = Hash(value = "", algorithm = HashAlgorithm.SHA1)
+                        hash = Hash.NONE
                     )
                 ),
                 scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
@@ -305,7 +305,7 @@ val ORT_RESULT = OrtResult(
                 provenance = ArtifactProvenance(
                     sourceArtifact = RemoteArtifact(
                         url = "https://example.com/license-file-and-additional-licenses-1.0.tgz",
-                        hash = Hash(value = "", algorithm = HashAlgorithm.SHA1)
+                        hash = Hash.NONE
                     )
                 ),
                 scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
@@ -346,7 +346,7 @@ val ORT_RESULT = OrtResult(
                 provenance = ArtifactProvenance(
                     sourceArtifact = RemoteArtifact(
                         url = "https://example.com/concluded-license-1.0.tgz",
-                        hash = Hash(value = "", algorithm = HashAlgorithm.SHA1)
+                        hash = Hash.NONE
                     )
                 ),
                 scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
@@ -379,7 +379,7 @@ val ORT_RESULT = OrtResult(
                 provenance = ArtifactProvenance(
                     sourceArtifact = RemoteArtifact(
                         url = "https://example.com/declared-license-1.0.tgz",
-                        hash = Hash(value = "", algorithm = HashAlgorithm.SHA1)
+                        hash = Hash.NONE
                     )
                 ),
                 scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
