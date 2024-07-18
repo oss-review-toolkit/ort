@@ -28,7 +28,6 @@ import kotlinx.serialization.json.JsonNamingStrategy
 import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.common.isTrue
 
 /**
  * Creates YAML documents according to the GitLab license model schema version 2.1, see
@@ -56,7 +55,7 @@ class GitLabLicenseModelReporter : Reporter {
     private val reportFilename = "gl-license-scanning-report.json"
 
     override fun generateReport(input: ReporterInput, outputDir: File, config: PluginConfiguration): List<File> {
-        val skipExcluded = config.options[OPTION_SKIP_EXCLUDED].isTrue()
+        val skipExcluded = config.options[OPTION_SKIP_EXCLUDED]?.toBooleanStrictOrNull() ?: false
 
         val licenseModel = GitLabLicenseModelMapper.map(input.ortResult, skipExcluded)
         val licenseModelJson = JSON.encodeToString(licenseModel)

@@ -50,7 +50,6 @@ import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.common.isFalse
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.ORT_FULL_NAME
 import org.ossreviewtoolkit.utils.ort.ORT_NAME
@@ -147,7 +146,7 @@ class CycloneDxReporter : Reporter {
         } ?: DEFAULT_SCHEMA_VERSION
 
         val dataLicense = config.options[OPTION_DATA_LICENSE] ?: DEFAULT_DATA_LICENSE.id
-        val createSingleBom = !config.options[OPTION_SINGLE_BOM].isFalse()
+        val createSingleBom = config.options[OPTION_SINGLE_BOM]?.toBooleanStrictOrNull() ?: true
 
         val outputFileExtensions = config.options[OPTION_OUTPUT_FILE_FORMATS]
             ?.split(",")
