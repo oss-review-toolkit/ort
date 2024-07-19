@@ -33,6 +33,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import retrofit2.http.Body
@@ -83,24 +84,24 @@ interface OsvService {
      * Get the vulnerabilities for the package matched by the given [request].
      */
     @POST("v1/query")
-    fun getVulnerabilitiesForPackage(
+    suspend fun getVulnerabilitiesForPackage(
         @Body request: VulnerabilitiesForPackageRequest
-    ): Call<VulnerabilitiesForPackageResponse>
+    ): Response<VulnerabilitiesForPackageResponse>
 
     /**
      * Get the identifiers of the vulnerabilities for the packages matched by the respective given [request].
      * The amount of requests contained in the give [batch request][request] must not exceed [BATCH_REQUEST_MAX_SIZE].
      */
     @POST("v1/querybatch")
-    fun getVulnerabilityIdsForPackages(
+    suspend fun getVulnerabilityIdsForPackages(
         @Body request: VulnerabilitiesForPackageBatchRequest
-    ): Call<VulnerabilitiesForPackageBatchResponse>
+    ): Response<VulnerabilitiesForPackageBatchResponse>
 
     /**
      * Return the vulnerability denoted by the given [id].
      */
     @GET("v1/vulns/{id}")
-    fun getVulnerabilityForId(@Path("id") id: String): Call<Vulnerability>
+    suspend fun getVulnerabilityForId(@Path("id") id: String): Response<Vulnerability>
 }
 
 @Serializable
