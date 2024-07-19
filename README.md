@@ -159,4 +159,5 @@ Copyright (C) 2017-2024 [The ORT Project Authors](./NOTICE).
 
 See the [LICENSE](./LICENSE) file in the root of this project for license details.
 
-OSS Review Toolkit (ORT) is a [Linux Foundation project](https://www.linuxfoundation.org) and part of [ACT](https://automatecompliance.org/).
+OSS Review Toolkit (ORT) is a [Linux Foundation project](https://www.linuxfoundation.org/) and part of [ACT](https://automatecompliance.org/).
+To learn more on how the project is governed, including its charter, see the [ort-governance](https://github.com/oss-review-toolkit/ort-governance) repository.
