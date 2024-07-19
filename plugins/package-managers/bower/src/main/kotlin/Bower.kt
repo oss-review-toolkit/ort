@@ -101,7 +101,7 @@ class Bower(
                 scopeDependencies = scopes
             )
 
-            return listOf(ProjectAnalyzerResult(project, packages.values.toSet()))
+            return listOf(ProjectAnalyzerResult(project, packages))
         }
     }
 
@@ -142,7 +142,7 @@ private fun PackageInfo.toPackage() =
         vcs = toVcsInfo()
     )
 
-private fun parsePackages(info: PackageInfo): Map<String, Package> {
+private fun parsePackages(info: PackageInfo): Set<Package> {
     val result = mutableMapOf<String, Package>()
     val queue = LinkedList(info.dependencies.values)
 
@@ -154,7 +154,7 @@ private fun parsePackages(info: PackageInfo): Map<String, Package> {
         queue += info.dependencies.values
     }
 
-    return result
+    return result.values.toSet()
 }
 
 private fun hasCompleteDependencies(info: PackageInfo, scopeName: String): Boolean {
