@@ -122,18 +122,11 @@ private fun parsePackageId(info: PackageInfo) =
         version = info.pkgMeta.version.orEmpty()
     )
 
-private fun parseRepositoryType(info: PackageInfo) = VcsType.forName(info.pkgMeta.repository?.type.orEmpty())
-
-private fun parseRepositoryUrl(info: PackageInfo) = info.pkgMeta.repository?.url ?: info.pkgMeta.source.orEmpty()
-
-private fun parseRevision(info: PackageInfo): String =
-    info.pkgMeta.resolution?.commit ?: info.pkgMeta.resolution?.tag.orEmpty()
-
 private fun parseVcsInfo(info: PackageInfo) =
     VcsInfo(
-        type = parseRepositoryType(info),
-        url = parseRepositoryUrl(info),
-        revision = parseRevision(info)
+        type = VcsType.forName(info.pkgMeta.repository?.type.orEmpty()),
+        url = info.pkgMeta.repository?.url ?: info.pkgMeta.source.orEmpty(),
+        revision = info.pkgMeta.resolution?.commit ?: info.pkgMeta.resolution?.tag.orEmpty()
     )
 
 /**
