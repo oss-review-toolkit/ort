@@ -39,6 +39,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.plugins.packagemanagers.bower.PackageInfo.Endpoint
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.stashDirectories
@@ -168,24 +169,17 @@ private fun hasCompleteDependencies(info: PackageInfo, scopeName: String): Boole
     return dependencyKeys.containsAll(dependencyRefKeys)
 }
 
-private val PackageInfo.key: String?
-    get() {
-        // As non-null dependency keys are supposed to define an equivalence relation for parsing 'missing' nodes,
-        // only the name and version attributes can be used. Typically, those attributes should be not null
-        // however in particular for root projects the null case also happens.
-        val name = pkgMeta.name.orEmpty()
-        val version = pkgMeta.version.orEmpty()
-        return "$name:$version".takeUnless { name.isEmpty() || version.isEmpty() }
-    }
+private val PackageInfo.key: Endpoint
+    get() = endpoint
 
-private fun getPackageInfosWithCompleteDependencies(info: PackageInfo): Map<String, PackageInfo> {
-    val result = mutableMapOf<String, PackageInfo>()
+private fun getPackageInfosWithCompleteDependencies(info: PackageInfo): Map<Endpoint, PackageInfo> {
+    val result = mutableMapOf<Endpoint, PackageInfo>()
 
     val stack = Stack<PackageInfo>().apply { push(info) }
     while (stack.isNotEmpty()) {
         val currentInfo = stack.pop()
 
-        currentInfo.key?.let { key ->
+        currentInfo.key.let { key ->
             if (hasCompleteDependencies(info, SCOPE_NAME_DEPENDENCIES) &&
                 hasCompleteDependencies(info, SCOPE_NAME_DEV_DEPENDENCIES)
             ) {
@@ -202,7 +196,7 @@ private fun getPackageInfosWithCompleteDependencies(info: PackageInfo): Map<Stri
 private fun parseDependencyTree(
     info: PackageInfo,
     scopeName: String,
-    alternativeInfos: Map<String, PackageInfo> = getPackageInfosWithCompleteDependencies(info)
+    alternativeInfos: Map<Endpoint, PackageInfo> = getPackageInfosWithCompleteDependencies(info)
 ): Set<PackageReference> {
     val result = mutableSetOf<PackageReference>()
 
@@ -212,8 +206,7 @@ private fun parseDependencyTree(
         // about the subtree rooted at the parent from that other entry containing the full dependency
         // information.
         // See https://github.com/bower/bower/blob/6bc778d/lib/core/Manager.js#L557 and below.
-        @Suppress("UnsafeCallOnNullableType")
-        val alternativeNode = alternativeInfos.getValue(info.key!!)
+        val alternativeNode = alternativeInfos.getValue(info.key)
         return parseDependencyTree(alternativeNode, scopeName, alternativeInfos)
     }
 

@@ -33,9 +33,17 @@ import org.ossreviewtoolkit.plugins.packagemanagers.bower.PackageMeta.Author
 
 @Serializable
 internal data class PackageInfo(
+    val endpoint: Endpoint,
     val pkgMeta: PackageMeta,
     val dependencies: Map<String, PackageInfo> = emptyMap()
-)
+) {
+    @Serializable
+    data class Endpoint(
+        val name: String,
+        val source: String,
+        val target: String
+    )
+}
 
 /**
  * See https://github.com/bower/spec/blob/master/json.md.
