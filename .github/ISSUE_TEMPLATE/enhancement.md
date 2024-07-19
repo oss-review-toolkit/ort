@@ -1,5 +1,5 @@
 ---
-name: Enhancement Proposal
+name: Enhancement Proposal ⚡
 about: I want to propose to enhance existing functionality.
 title: ''
 labels: ['enhancement', 'to triage']
