@@ -114,32 +114,32 @@ class Bower(
 private const val SCOPE_NAME_DEPENDENCIES = "dependencies"
 private const val SCOPE_NAME_DEV_DEPENDENCIES = "devDependencies"
 
-private fun parsePackageId(info: PackageInfo) =
+private fun PackageInfo.toId() =
     Identifier(
         type = "Bower",
         namespace = "",
-        name = info.pkgMeta.name.orEmpty(),
-        version = info.pkgMeta.version.orEmpty()
+        name = pkgMeta.name.orEmpty(),
+        version = pkgMeta.version.orEmpty()
     )
 
-private fun parseVcsInfo(info: PackageInfo) =
+private fun PackageInfo.toVcsInfo() =
     VcsInfo(
-        type = VcsType.forName(info.pkgMeta.repository?.type.orEmpty()),
-        url = info.pkgMeta.repository?.url ?: info.pkgMeta.source.orEmpty(),
-        revision = info.pkgMeta.resolution?.commit ?: info.pkgMeta.resolution?.tag.orEmpty()
+        type = VcsType.forName(pkgMeta.repository?.type.orEmpty()),
+        url = pkgMeta.repository?.url ?: pkgMeta.source.orEmpty(),
+        revision = pkgMeta.resolution?.commit ?: pkgMeta.resolution?.tag.orEmpty()
     )
 
-private fun parsePackage(info: PackageInfo) =
+private fun PackageInfo.toPackage() =
     Package(
-        id = parsePackageId(info),
+        id = toId(),
         // See https://github.com/bower/spec/blob/master/json.md#authors.
-        authors = info.pkgMeta.authors.mapNotNullTo(mutableSetOf()) { parseAuthorString(it.name, '<', '(') },
-        declaredLicenses = setOfNotNull(info.pkgMeta.license?.takeUnless { it.isEmpty() }),
-        description = info.pkgMeta.description.orEmpty(),
-        homepageUrl = info.pkgMeta.homepage.orEmpty(),
+        authors = pkgMeta.authors.mapNotNullTo(mutableSetOf()) { parseAuthorString(it.name, '<', '(') },
+        declaredLicenses = setOfNotNull(pkgMeta.license?.takeUnless { it.isEmpty() }),
+        description = pkgMeta.description.orEmpty(),
+        homepageUrl = pkgMeta.homepage.orEmpty(),
         binaryArtifact = RemoteArtifact.EMPTY,
         sourceArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
-        vcs = parseVcsInfo(info)
+        vcs = toVcsInfo()
     )
 
 private fun getDependencyInfos(info: PackageInfo): Sequence<PackageInfo> =
@@ -153,7 +153,7 @@ private fun parsePackages(info: PackageInfo): Map<String, Package> {
 
     while (!stack.empty()) {
         val currentInfo = stack.pop()
-        val pkg = parsePackage(currentInfo)
+        val pkg = currentInfo.toPackage()
         result["${pkg.id.name}:${pkg.id.version}"] = pkg
 
         stack += getDependencyInfos(currentInfo)
@@ -223,7 +223,7 @@ private fun parseDependencyTree(
         val childScope = SCOPE_NAME_DEPENDENCIES
         val childDependencies = parseDependencyTree(childInfo, childScope, alternativeInfos)
         val packageReference = PackageReference(
-            id = parsePackageId(childInfo),
+            id = childInfo.toId(),
             dependencies = childDependencies
         )
         result += packageReference
