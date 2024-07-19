@@ -147,11 +147,11 @@ Depending on how ORT was installed, it can be run in the following ways:
 
   Note that in this case the working directory used by ORT is that of the `cli` project, not the directory `gradlew` is located in (see https://github.com/gradle/gradle/issues/6074).
 
-# Want to Help or have Questions?
+# Contributing
 
 All contributions are welcome.
-If you are interested in contributing, please read our [contributing guide](https://github.com/oss-review-toolkit/.github/blob/main/CONTRIBUTING.md).
-To get quick answers to any of your questions, we recommend you [join our Slack community][2].
+If you are interested in contributing code, please read our [contributing guide](https://github.com/oss-review-toolkit/.github/blob/main/CONTRIBUTING.md).
+For everything from reporting bugs to asking questions, please go through the [issue workflow](https://github.com/oss-review-toolkit/ort/issues/new/choose).
 
 # License
 
