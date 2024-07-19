@@ -150,7 +150,7 @@ private fun parsePackages(info: PackageInfo): Map<String, Package> {
     val stack = Stack<PackageInfo>()
     stack += getDependencyInfos(info)
 
-    while (!stack.empty()) {
+    while (stack.isNotEmpty()) {
         val currentInfo = stack.pop()
         val pkg = currentInfo.toPackage()
         result["${pkg.id.name}:${pkg.id.version}"] = pkg
@@ -182,7 +182,7 @@ private fun getPackageInfosWithCompleteDependencies(info: PackageInfo): Map<Stri
     val result = mutableMapOf<String, PackageInfo>()
 
     val stack = Stack<PackageInfo>().apply { push(info) }
-    while (!stack.empty()) {
+    while (stack.isNotEmpty()) {
         val currentInfo = stack.pop()
 
         currentInfo.key?.let { key ->
