@@ -76,12 +76,16 @@ class Bower(
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
 
-        stashDirectories(workingDir.resolve("bower_components")).use {
+        stashDirectories(workingDir.resolve("bower_components")).use { _ ->
             installDependencies(workingDir)
             val dependenciesJson = listDependencies(workingDir)
             val projectPackageInfo = parsePackageInfoJson(dependenciesJson)
 
-            val packages = parsePackages(projectPackageInfo)
+            val packages = projectPackageInfo
+                .getTransitiveDependencies()
+                .distinctBy { it.key }
+                .mapTo(mutableSetOf()) { it.toPackage() }
+
             val scopes = SCOPE_NAMES.mapTo(mutableSetOf()) { scopeName ->
                 Scope(
                     name = scopeName,
@@ -142,20 +146,17 @@ private fun PackageInfo.toPackage() =
         vcs = toVcsInfo()
     )
 
-private fun parsePackages(info: PackageInfo): Set<Package> {
-    val result = mutableMapOf<Identifier, Package>()
-    val queue = LinkedList(info.dependencies.values)
+private fun PackageInfo.getTransitiveDependencies(): List<PackageInfo> {
+    val result = LinkedList<PackageInfo>()
+    val queue = LinkedList(dependencies.values)
 
     while (queue.isNotEmpty()) {
-        val currentInfo = queue.removeFirst()
-
-        val pkg = currentInfo.toPackage()
-        result[pkg.id] = pkg
-
+        val info = queue.removeFirst()
+        result += info
         queue += info.dependencies.values
     }
 
-    return result.values.toSet()
+    return result
 }
 
 private fun hasCompleteDependencies(info: PackageInfo, scopeName: String): Boolean {
@@ -168,26 +169,11 @@ private fun hasCompleteDependencies(info: PackageInfo, scopeName: String): Boole
 private val PackageInfo.key: Endpoint
     get() = endpoint
 
-private fun getPackageInfosWithCompleteDependencies(info: PackageInfo): Map<Endpoint, PackageInfo> {
-    val result = mutableMapOf<Endpoint, PackageInfo>()
-    val queue = LinkedList<PackageInfo>().apply { add(info) }
-
-    while (queue.isNotEmpty()) {
-        val currentInfo = queue.removeFirst()
-
-        currentInfo.key.let { key ->
-            if (hasCompleteDependencies(info, SCOPE_NAME_DEPENDENCIES) &&
-                hasCompleteDependencies(info, SCOPE_NAME_DEV_DEPENDENCIES)
-            ) {
-                result[key] = currentInfo
-            }
-        }
-
-        queue += currentInfo.dependencies.values
+private fun getPackageInfosWithCompleteDependencies(root: PackageInfo): Map<Endpoint, PackageInfo> =
+    (root.getTransitiveDependencies() + root).associateBy { it.key }.filter { (_, info) ->
+        hasCompleteDependencies(info, SCOPE_NAME_DEPENDENCIES)
+            && hasCompleteDependencies(info, SCOPE_NAME_DEV_DEPENDENCIES)
     }
-
-    return result
-}
 
 private fun parseDependencyTree(
     info: PackageInfo,
