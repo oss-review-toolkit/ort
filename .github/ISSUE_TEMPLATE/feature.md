@@ -1,5 +1,5 @@
 ---
-name: Feature Request
+name: Feature Request 🎉
 about: I want to request a new feature that I find useful.
 title: ''
 labels: ['new feature', 'to triage']
