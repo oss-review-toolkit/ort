@@ -81,16 +81,14 @@ class Bower(
             val projectPackageInfo = parsePackageInfoJson(dependenciesJson)
 
             val packages = parsePackages(projectPackageInfo)
-            val dependenciesScope = Scope(
-                name = SCOPE_NAME_DEPENDENCIES,
-                dependencies = parseDependencyTree(projectPackageInfo, SCOPE_NAME_DEPENDENCIES)
-            )
-            val devDependenciesScope = Scope(
-                name = SCOPE_NAME_DEV_DEPENDENCIES,
-                dependencies = parseDependencyTree(projectPackageInfo, SCOPE_NAME_DEV_DEPENDENCIES)
-            )
+            val scopes = SCOPE_NAMES.mapTo(mutableSetOf()) { scopeName ->
+                Scope(
+                    name = scopeName,
+                    dependencies = parseDependencyTree(projectPackageInfo, scopeName)
+                )
+            }
 
-            val projectPackage = parsePackage(projectPackageInfo)
+            val projectPackage = projectPackageInfo.toPackage()
             val project = Project(
                 id = projectPackage.id,
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
@@ -99,7 +97,7 @@ class Bower(
                 vcs = projectPackage.vcs,
                 vcsProcessed = processProjectVcs(workingDir, projectPackage.vcs, projectPackage.homepageUrl),
                 homepageUrl = projectPackage.homepageUrl,
-                scopeDependencies = setOf(dependenciesScope, devDependenciesScope)
+                scopeDependencies = scopes
             )
 
             return listOf(ProjectAnalyzerResult(project, packages.values.toSet()))
@@ -113,6 +111,7 @@ class Bower(
 
 private const val SCOPE_NAME_DEPENDENCIES = "dependencies"
 private const val SCOPE_NAME_DEV_DEPENDENCIES = "devDependencies"
+private val SCOPE_NAMES = setOf(SCOPE_NAME_DEPENDENCIES, SCOPE_NAME_DEV_DEPENDENCIES)
 
 private fun PackageInfo.toId() =
     Identifier(
