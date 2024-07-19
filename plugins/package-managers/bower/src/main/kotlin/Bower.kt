@@ -163,7 +163,7 @@ private fun parsePackages(info: PackageInfo): Map<String, Package> {
 
 private fun hasCompleteDependencies(info: PackageInfo, scopeName: String): Boolean {
     val dependencyKeys = info.dependencies.keys
-    val dependencyRefKeys = info.pkgMeta.getDependencies(scopeName).keys
+    val dependencyRefKeys = info.getScopeDependencies(scopeName)
 
     return dependencyKeys.containsAll(dependencyRefKeys)
 }
@@ -217,7 +217,7 @@ private fun parseDependencyTree(
         return parseDependencyTree(alternativeNode, scopeName, alternativeInfos)
     }
 
-    info.pkgMeta.getDependencies(scopeName).keys.forEach {
+    info.getScopeDependencies(scopeName).forEach {
         val childInfo = info.dependencies.getValue(it)
         val childScope = SCOPE_NAME_DEPENDENCIES
         val childDependencies = parseDependencyTree(childInfo, childScope, alternativeInfos)
@@ -231,9 +231,9 @@ private fun parseDependencyTree(
     return result
 }
 
-private fun PackageMeta.getDependencies(scopeName: String) =
+private fun PackageInfo.getScopeDependencies(scopeName: String): Set<String> =
     when (scopeName) {
-        SCOPE_NAME_DEPENDENCIES -> dependencies
-        SCOPE_NAME_DEV_DEPENDENCIES -> devDependencies
+        SCOPE_NAME_DEPENDENCIES -> pkgMeta.dependencies.keys
+        SCOPE_NAME_DEV_DEPENDENCIES -> pkgMeta.devDependencies.keys
         else -> error("Invalid scope name: '$scopeName'.")
     }
