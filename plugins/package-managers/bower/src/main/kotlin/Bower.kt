@@ -17,8 +17,6 @@
  * License-Filename: LICENSE
  */
 
-@file:Suppress("TooManyFunctions")
-
 package org.ossreviewtoolkit.plugins.packagemanagers.bower
 
 import java.io.File
@@ -50,7 +48,6 @@ import org.semver4j.RangesListFactory
 /**
  * The [Bower](https://bower.io/) package manager for JavaScript.
  */
-@Suppress("TooManyFunctions")
 class Bower(
     name: String,
     analysisRoot: File,
