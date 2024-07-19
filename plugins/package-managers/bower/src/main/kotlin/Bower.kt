@@ -129,18 +129,11 @@ private fun parseVcsInfo(info: PackageInfo) =
         revision = info.pkgMeta.resolution?.commit ?: info.pkgMeta.resolution?.tag.orEmpty()
     )
 
-/**
- * Parse information about the author. According to https://github.com/bower/spec/blob/master/json.md#authors,
- * there are two formats to specify the authors of a package (similar to NPM). The difference is that the
- * strings or objects are inside an array.
- */
-private fun parseAuthors(info: PackageInfo): Set<String> =
-    info.pkgMeta.authors.mapNotNullTo(mutableSetOf()) { parseAuthorString(it.name, '<', '(') }
-
 private fun parsePackage(info: PackageInfo) =
     Package(
         id = parsePackageId(info),
-        authors = parseAuthors(info),
+        // See https://github.com/bower/spec/blob/master/json.md#authors.
+        authors = info.pkgMeta.authors.mapNotNullTo(mutableSetOf()) { parseAuthorString(it.name, '<', '(') },
         declaredLicenses = setOfNotNull(info.pkgMeta.license?.takeUnless { it.isEmpty() }),
         description = info.pkgMeta.description.orEmpty(),
         homepageUrl = info.pkgMeta.homepage.orEmpty(),
