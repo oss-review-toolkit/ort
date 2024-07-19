@@ -142,21 +142,18 @@ private fun PackageInfo.toPackage() =
         vcs = toVcsInfo()
     )
 
-private fun getDependencyInfos(info: PackageInfo): Sequence<PackageInfo> =
-    info.dependencies.asSequence().map { it.value }
-
 private fun parsePackages(info: PackageInfo): Map<String, Package> {
     val result = mutableMapOf<String, Package>()
 
     val stack = Stack<PackageInfo>()
-    stack += getDependencyInfos(info)
+    stack += info.dependencies.values
 
     while (stack.isNotEmpty()) {
         val currentInfo = stack.pop()
         val pkg = currentInfo.toPackage()
         result["${pkg.id.name}:${pkg.id.version}"] = pkg
 
-        stack += getDependencyInfos(currentInfo)
+        stack += info.dependencies.values
     }
 
     return result
@@ -187,7 +184,7 @@ private fun getPackageInfosWithCompleteDependencies(info: PackageInfo): Map<Endp
             }
         }
 
-        stack += getDependencyInfos(currentInfo)
+        stack += currentInfo.dependencies.values
     }
 
     return result
