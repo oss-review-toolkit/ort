@@ -337,7 +337,7 @@ class LicenseInfoResolverTest : WordSpec({
 
         "apply path excludes" {
             val sourceArtifact = RemoteArtifact(
-                url = "http://example.com",
+                url = "https://example.com/",
                 hash = Hash("", HashAlgorithm.NONE)
             )
             val sourceArtifactProvenance = ArtifactProvenance(

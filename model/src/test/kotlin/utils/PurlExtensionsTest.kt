@@ -36,7 +36,7 @@ class PurlExtensionsTest : StringSpec({
     "Artifact provenance can be converted to PURL extras and back" {
         val provenance = ArtifactProvenance(
             sourceArtifact = RemoteArtifact(
-                url = "http://example.com/sources.zip",
+                url = "https://example.com/sources.zip",
                 hash = Hash(
                     value = "ddce269a1e3d054cae349621c198dd52",
                     algorithm = HashAlgorithm.MD5
@@ -49,7 +49,7 @@ class PurlExtensionsTest : StringSpec({
         val purl = id.toPurl(extras.qualifiers, extras.subpath)
 
         purl shouldBe "pkg:maven/com.example/sources@1.2.3?" +
-            "download_url=http%3A%2F%2Fexample.com%2Fsources.zip&" +
+            "download_url=https%3A%2F%2Fexample.com%2Fsources.zip&" +
             "checksum=md5%3Addce269a1e3d054cae349621c198dd52"
         purl.toProvenance() shouldBe provenance
     }
