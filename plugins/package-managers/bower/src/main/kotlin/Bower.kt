@@ -94,7 +94,7 @@ class Bower(
             val project = Project(
                 id = projectPackage.id,
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-                authors = parseAuthors(packageInfo),
+                authors = projectPackage.authors,
                 declaredLicenses = projectPackage.declaredLicenses,
                 vcs = projectPackage.vcs,
                 vcsProcessed = processProjectVcs(workingDir, projectPackage.vcs, projectPackage.homepageUrl),
