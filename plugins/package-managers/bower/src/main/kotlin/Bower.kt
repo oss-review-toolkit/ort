@@ -22,7 +22,7 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.bower
 
 import java.io.File
-import java.util.Stack
+import java.util.LinkedList
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -144,16 +144,14 @@ private fun PackageInfo.toPackage() =
 
 private fun parsePackages(info: PackageInfo): Map<String, Package> {
     val result = mutableMapOf<String, Package>()
+    val queue = LinkedList(info.dependencies.values)
 
-    val stack = Stack<PackageInfo>()
-    stack += info.dependencies.values
-
-    while (stack.isNotEmpty()) {
-        val currentInfo = stack.pop()
+    while (queue.isNotEmpty()) {
+        val currentInfo = queue.removeFirst()
         val pkg = currentInfo.toPackage()
         result["${pkg.id.name}:${pkg.id.version}"] = pkg
 
-        stack += info.dependencies.values
+        queue += info.dependencies.values
     }
 
     return result
@@ -171,10 +169,10 @@ private val PackageInfo.key: Endpoint
 
 private fun getPackageInfosWithCompleteDependencies(info: PackageInfo): Map<Endpoint, PackageInfo> {
     val result = mutableMapOf<Endpoint, PackageInfo>()
+    val queue = LinkedList<PackageInfo>().apply { add(info) }
 
-    val stack = Stack<PackageInfo>().apply { push(info) }
-    while (stack.isNotEmpty()) {
-        val currentInfo = stack.pop()
+    while (queue.isNotEmpty()) {
+        val currentInfo = queue.removeFirst()
 
         currentInfo.key.let { key ->
             if (hasCompleteDependencies(info, SCOPE_NAME_DEPENDENCIES) &&
@@ -184,7 +182,7 @@ private fun getPackageInfosWithCompleteDependencies(info: PackageInfo): Map<Endp
             }
         }
 
-        stack += currentInfo.dependencies.values
+        queue += currentInfo.dependencies.values
     }
 
     return result
