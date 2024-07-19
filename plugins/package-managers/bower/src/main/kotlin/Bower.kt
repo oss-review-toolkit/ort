@@ -118,6 +118,29 @@ private const val SCOPE_NAME_DEPENDENCIES = "dependencies"
 private const val SCOPE_NAME_DEV_DEPENDENCIES = "devDependencies"
 private val SCOPE_NAMES = setOf(SCOPE_NAME_DEPENDENCIES, SCOPE_NAME_DEV_DEPENDENCIES)
 
+private val PackageInfo.key: Endpoint
+    get() = endpoint
+
+private fun PackageInfo.getScopeDependencies(scopeName: String): Set<String> =
+    when (scopeName) {
+        SCOPE_NAME_DEPENDENCIES -> pkgMeta.dependencies.keys
+        SCOPE_NAME_DEV_DEPENDENCIES -> pkgMeta.devDependencies.keys
+        else -> error("Invalid scope name: '$scopeName'.")
+    }
+
+private fun PackageInfo.getTransitiveDependencies(): List<PackageInfo> {
+    val result = LinkedList<PackageInfo>()
+    val queue = LinkedList(dependencies.values)
+
+    while (queue.isNotEmpty()) {
+        val info = queue.removeFirst()
+        result += info
+        queue += info.dependencies.values
+    }
+
+    return result
+}
+
 private fun PackageInfo.toId() =
     Identifier(
         type = "Bower",
@@ -146,28 +169,12 @@ private fun PackageInfo.toPackage() =
         vcs = toVcsInfo()
     )
 
-private fun PackageInfo.getTransitiveDependencies(): List<PackageInfo> {
-    val result = LinkedList<PackageInfo>()
-    val queue = LinkedList(dependencies.values)
-
-    while (queue.isNotEmpty()) {
-        val info = queue.removeFirst()
-        result += info
-        queue += info.dependencies.values
-    }
-
-    return result
-}
-
 private fun hasCompleteDependencies(info: PackageInfo, scopeName: String): Boolean {
     val dependencyKeys = info.dependencies.keys
     val dependencyRefKeys = info.getScopeDependencies(scopeName)
 
     return dependencyKeys.containsAll(dependencyRefKeys)
 }
-
-private val PackageInfo.key: Endpoint
-    get() = endpoint
 
 private fun getPackageInfosWithCompleteDependencies(root: PackageInfo): Map<Endpoint, PackageInfo> =
     (root.getTransitiveDependencies() + root).associateBy { it.key }.filter { (_, info) ->
@@ -205,10 +212,3 @@ private fun parseDependencyTree(
 
     return result
 }
-
-private fun PackageInfo.getScopeDependencies(scopeName: String): Set<String> =
-    when (scopeName) {
-        SCOPE_NAME_DEPENDENCIES -> pkgMeta.dependencies.keys
-        SCOPE_NAME_DEV_DEPENDENCIES -> pkgMeta.devDependencies.keys
-        else -> error("Invalid scope name: '$scopeName'.")
-    }
