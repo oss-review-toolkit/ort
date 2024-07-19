@@ -63,28 +63,6 @@ private val emptyJsonObject = JsonObject(emptyMap())
 private fun List<Vulnerability>.patchFields() = map { it.patchIgnorableFields().normalizeUrls() }
 
 class OsvServiceWrapperFunTest : StringSpec({
-    "getVulnerabilitiesForPackage() returns the expected vulnerability when queried by commit" {
-        val expectedResult = getAssetAsString("vulnerabilities-by-commit-expected-result.json")
-
-        val result = OsvServiceWrapper().getVulnerabilitiesForPackage(VULNERABILITY_FOR_PACKAGE_BY_COMMIT_REQUEST)
-
-        result.shouldBeSuccess { actualData ->
-            val expectedData = OsvService.JSON.decodeFromString<List<Vulnerability>>(expectedResult)
-            actualData.patchFields() shouldContainExactlyInAnyOrder expectedData.patchFields()
-        }
-    }
-
-    "getVulnerabilitiesForPackage() returns the expected vulnerability when queried by name and version" {
-        val expectedResult = getAssetAsString("vulnerabilities-by-name-and-version-expected-result.json")
-
-        val result = OsvServiceWrapper().getVulnerabilitiesForPackage(VULNERABILITY_FOR_PACKAGE_BY_NAME_AND_VERSION)
-
-        result.shouldBeSuccess { actualData ->
-            val expectedData = OsvService.JSON.decodeFromString<List<Vulnerability>>(expectedResult)
-            actualData.patchFields() shouldContainExactlyInAnyOrder expectedData.patchFields()
-        }
-    }
-
     "getVulnerabilityIdsForPackages() return the vulnerability IDs for the given batch request" {
         val requests = listOf(
             VULNERABILITY_FOR_PACKAGE_BY_COMMIT_REQUEST,
@@ -118,17 +96,6 @@ class OsvServiceWrapperFunTest : StringSpec({
                     "PYSEC-2021-66"
                 )
             )
-        }
-    }
-
-    "getVulnerabilityForId() returns the expected vulnerability for the given ID" {
-        val expectedResult = getAssetAsString("vulnerability-by-id-expected-result.json")
-
-        val result = OsvServiceWrapper().getVulnerabilityForId("GHSA-xvch-5gv4-984h")
-
-        result.shouldBeSuccess { actualData ->
-            val expectedData = OsvService.JSON.decodeFromString<Vulnerability>(expectedResult)
-            actualData.patchIgnorableFields() shouldBe expectedData.patchIgnorableFields()
         }
     }
 

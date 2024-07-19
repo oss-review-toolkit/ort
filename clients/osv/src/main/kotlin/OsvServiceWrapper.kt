@@ -36,21 +36,6 @@ class OsvServiceWrapper(serverUrl: String? = null, httpClient: OkHttpClient? = n
     private val service = OsvService.create(serverUrl, httpClient)
 
     /**
-     * Get the vulnerabilities for the package matching the given [request].
-     */
-    suspend fun getVulnerabilitiesForPackage(request: VulnerabilitiesForPackageRequest): Result<List<Vulnerability>> =
-        withContext(Dispatchers.IO) {
-            val response = service.getVulnerabilitiesForPackage(request)
-            val body = response.body()
-
-            if (response.isSuccessful && body != null) {
-                Result.success(body.vulnerabilities)
-            } else {
-                Result.failure(IOException(response.message()))
-            }
-        }
-
-    /**
      * Return the vulnerability IDs for the respective package matched by the given [requests].
      */
     suspend fun getVulnerabilityIdsForPackages(requests: List<VulnerabilitiesForPackageRequest>): Result<List<List<String>>> =
@@ -79,21 +64,6 @@ class OsvServiceWrapper(serverUrl: String? = null, httpClient: OkHttpClient? = n
             }
 
             Result.success(result)
-        }
-
-    /**
-     * Return the vulnerability denoted by the given [id].
-     */
-    suspend fun getVulnerabilityForId(id: String): Result<Vulnerability> =
-        withContext(Dispatchers.IO) {
-            val response = service.getVulnerabilityForId(id)
-            val body = response.body()
-
-            if (response.isSuccessful && body != null) {
-                Result.success(body)
-            } else {
-                Result.failure(IOException(response.message()))
-            }
         }
 
     /**
