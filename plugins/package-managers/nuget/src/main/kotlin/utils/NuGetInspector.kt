@@ -24,7 +24,6 @@ import java.io.File
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
-import kotlinx.serialization.json.decodeFromStream
 
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
@@ -66,7 +65,7 @@ internal object NuGetInspector : CommandLineTool {
 
         return try {
             run(workingDir, *commandLineOptions.toTypedArray())
-            outputFile.inputStream().use { json.decodeFromStream(it) }
+            json.decodeFromString(outputFile.readText())
         } finally {
             workingDir.resolve(".cache").safeDeleteRecursively(force = true)
             outputFile.parentFile.safeDeleteRecursively(force = true)

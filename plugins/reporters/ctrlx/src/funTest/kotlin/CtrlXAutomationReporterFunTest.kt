@@ -26,17 +26,14 @@ import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 
-import kotlinx.serialization.json.decodeFromStream
-
 import org.ossreviewtoolkit.plugins.reporters.ctrlx.CtrlXAutomationReporter.Companion.REPORT_FILENAME
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.test.getAssetFile
+import org.ossreviewtoolkit.utils.test.getAssetAsString
 
 class CtrlXAutomationReporterFunTest : StringSpec({
     "The official sample file can be deserialized" {
-        val fossInfoFile = getAssetFile("sample.fossinfo.json")
-        val fossInfo = fossInfoFile.inputStream().use { CtrlXAutomationReporter.JSON.decodeFromStream<FossInfo>(it) }
+        val fossInfo = CtrlXAutomationReporter.JSON.decodeFromString<FossInfo>(getAssetAsString("sample.fossinfo.json"))
 
         fossInfo.components shouldNotBeNull {
             this should haveSize(8)

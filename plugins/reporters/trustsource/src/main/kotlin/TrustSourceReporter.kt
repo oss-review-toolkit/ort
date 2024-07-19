@@ -21,8 +21,8 @@ package org.ossreviewtoolkit.plugins.reporters.trustsource
 
 import java.io.File
 
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.encodeToStream
 
 import org.ossreviewtoolkit.model.DependencyNode
 import org.ossreviewtoolkit.model.config.PluginConfiguration
@@ -48,7 +48,7 @@ class TrustSourceReporter : Reporter {
             NewScan(module = project.id.name, dependencies = deps)
         }
 
-        outputFile.outputStream().use { JSON.encodeToStream(scans, it) }
+        outputFile.writeText(JSON.encodeToString(scans))
 
         return listOf(outputFile)
     }

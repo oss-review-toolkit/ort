@@ -24,7 +24,6 @@ import java.io.File
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.json.decodeToSequence
 
 import org.apache.logging.log4j.kotlin.logger
@@ -443,7 +442,7 @@ private fun ModuleInfo.toSourceArtifact(): RemoteArtifact {
 private fun ModuleInfo.toVcsInfo(): VcsInfo? {
     val escapedVersion = escapeModuleVersion(version)
     val infoFile = goMod?.let { File(it).resolveSibling("$escapedVersion.info") } ?: return null
-    val info = infoFile.inputStream().use { JSON.decodeFromStream<ModuleInfoFile>(it) }
+    val info = JSON.decodeFromString<ModuleInfoFile>(infoFile.readText())
     val type = info.origin.vcs?.let { VcsType.forName(it) }.takeIf { it == VcsType.GIT } ?: return null
 
     return VcsInfo(
