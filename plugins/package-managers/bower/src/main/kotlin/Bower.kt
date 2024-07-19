@@ -78,19 +78,19 @@ class Bower(
         stashDirectories(workingDir.resolve("bower_components")).use {
             installDependencies(workingDir)
             val dependenciesJson = listDependencies(workingDir)
-            val packageInfo = parsePackageInfoJson(dependenciesJson)
+            val projectPackageInfo = parsePackageInfoJson(dependenciesJson)
 
-            val packages = parsePackages(packageInfo)
+            val packages = parsePackages(projectPackageInfo)
             val dependenciesScope = Scope(
                 name = SCOPE_NAME_DEPENDENCIES,
-                dependencies = parseDependencyTree(packageInfo, SCOPE_NAME_DEPENDENCIES)
+                dependencies = parseDependencyTree(projectPackageInfo, SCOPE_NAME_DEPENDENCIES)
             )
             val devDependenciesScope = Scope(
                 name = SCOPE_NAME_DEV_DEPENDENCIES,
-                dependencies = parseDependencyTree(packageInfo, SCOPE_NAME_DEV_DEPENDENCIES)
+                dependencies = parseDependencyTree(projectPackageInfo, SCOPE_NAME_DEV_DEPENDENCIES)
             )
 
-            val projectPackage = parsePackage(packageInfo)
+            val projectPackage = parsePackage(projectPackageInfo)
             val project = Project(
                 id = projectPackage.id,
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
