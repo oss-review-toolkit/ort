@@ -143,13 +143,14 @@ private fun PackageInfo.toPackage() =
     )
 
 private fun parsePackages(info: PackageInfo): Set<Package> {
-    val result = mutableMapOf<String, Package>()
+    val result = mutableMapOf<Identifier, Package>()
     val queue = LinkedList(info.dependencies.values)
 
     while (queue.isNotEmpty()) {
         val currentInfo = queue.removeFirst()
+
         val pkg = currentInfo.toPackage()
-        result["${pkg.id.name}:${pkg.id.version}"] = pkg
+        result[pkg.id] = pkg
 
         queue += info.dependencies.values
     }
