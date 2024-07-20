@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.advisor
 
+import kotlinx.coroutines.flow.Flow
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.Package
@@ -33,6 +34,10 @@ abstract class AdviceProvider(val providerName: String) {
      * For a given set of [Package]s, retrieve findings and return a map that associates packages with [AdvisorResult]s.
      */
     abstract suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, AdvisorResult>
+
+    open suspend fun execute(packages: Set<Package>): Flow<AdvisorUpdate> {
+        throw NotImplementedError("This provider does not support execution.")
+    }
 
     /**
      * An object with detail information about this [AdviceProvider].

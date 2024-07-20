@@ -19,6 +19,14 @@
 
 package org.ossreviewtoolkit.plugins.advisors.osv
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.withContext
+import kotlinx.datetime.Clock
+import kotlinx.datetime.toJavaInstant
 import java.time.Instant
 
 import kotlinx.serialization.json.JsonPrimitive
@@ -26,17 +34,20 @@ import kotlinx.serialization.json.contentOrNull
 
 import org.ossreviewtoolkit.advisor.AdviceProvider
 import org.ossreviewtoolkit.advisor.AdviceProviderFactory
+import org.ossreviewtoolkit.advisor.AdvisorUpdate
 import org.ossreviewtoolkit.advisor.logger
 import org.ossreviewtoolkit.clients.osv.Ecosystem
 import org.ossreviewtoolkit.clients.osv.OsvServiceWrapper
 import org.ossreviewtoolkit.clients.osv.Severity
 import org.ossreviewtoolkit.clients.osv.VulnerabilitiesForPackageRequest
 import org.ossreviewtoolkit.clients.osv.Vulnerability
+import org.ossreviewtoolkit.clients.osv.VulnerabilityResult
 import org.ossreviewtoolkit.model.AdvisorCapability
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
@@ -47,6 +58,7 @@ import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 
 import us.springett.cvss.Cvss
+import kotlin.coroutines.coroutineContext
 
 /**
  * An advice provider that obtains vulnerability information from Open Source Vulnerabilities (https://osv.dev/).
@@ -73,22 +85,83 @@ class Osv(name: String, config: OsvConfiguration) : AdviceProvider(name) {
         httpClient = OkHttpClientHelper.buildClient()
     )
 
+    override suspend fun execute(packages: Set<Package>): Flow<AdvisorUpdate> =
+        flow {
+            val startTime = Clock.System.now()
+
+            val vulnerabilityIdsByPackageId = getVulnerabilityIdsForPackages(packages)
+            val allVulnerabilityIds = vulnerabilityIdsByPackageId.values.flatten().toSet()
+
+            val allVulnerabilities = mutableMapOf<String, Vulnerability>()
+            val allIssues = mutableMapOf<String, Issue>()
+            val missingIdsByPackage =
+                vulnerabilityIdsByPackageId.mapValuesTo(mutableMapOf()) { it.value.toMutableSet() }
+
+            suspend fun createResult(vulnerabilityIds: List<String>, additionalIssues: List<Issue> = emptyList()) =
+                AdvisorResult(
+                    advisor = details,
+                    summary = AdvisorSummary(
+                        startTime = startTime.toJavaInstant(),
+                        endTime = Clock.System.now().toJavaInstant(),
+                        issues = vulnerabilityIds.mapNotNull { allIssues[it] } + additionalIssues
+                    ),
+                    vulnerabilities = vulnerabilityIds.mapNotNull { allVulnerabilities[it]?.toOrtVulnerability() }
+                )
+
+            // Emit updates for packages without vulnerabilities.
+            (packages.map { it.id } - vulnerabilityIdsByPackageId.keys).forEach { pkgId ->
+                val advisorResult = createResult(emptyList())
+                emit(AdvisorUpdate(providerName, pkgId, advisorResult))
+            }
+
+            service.getVulnerabilities(allVulnerabilityIds).collect { result ->
+                when (result) {
+                    is VulnerabilityResult.Success -> allVulnerabilities[result.id] = result.vulnerability
+                    is VulnerabilityResult.Failure ->
+                        allIssues[result.id] = Issue(source = providerName, message = result.error)
+                }
+
+                missingIdsByPackage.mapValues { it.value -= result.id }
+
+                // Emit updates for packages where all vulnerabilities have been received.
+                val completedPackages = missingIdsByPackage.filter { it.value.isEmpty() }.keys
+                missingIdsByPackage -= completedPackages
+
+                completedPackages.forEach { pkgId ->
+                    val vulnerabilityIds = vulnerabilityIdsByPackageId[pkgId].orEmpty()
+                    val advisorResult = createResult(vulnerabilityIds)
+                    emit(AdvisorUpdate(providerName, pkgId, advisorResult))
+                }
+            }
+
+            // Emit update for packages which were not completed for some reason.
+            missingIdsByPackage.forEach { (pkgId, ids) ->
+                val issues = ids.map {
+                    Issue(source = providerName, message = "Did not get result for vulnerability id '$it'.")
+                }
+
+                val vulnerabilityIds = vulnerabilityIdsByPackageId[pkgId].orEmpty()
+                val advisorResult = createResult(vulnerabilityIds, issues)
+                emit(AdvisorUpdate(providerName, pkgId, advisorResult))
+            }
+        }
+
     override suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, AdvisorResult> {
         val startTime = Instant.now()
 
         val vulnerabilitiesForPackage = getVulnerabilitiesForPackage(packages)
 
         return packages.mapNotNull { pkg ->
-            vulnerabilitiesForPackage[pkg.id]?.let { vulnerabilities ->
-                pkg to AdvisorResult(
-                    advisor = details,
-                    summary = AdvisorSummary(
-                        startTime = startTime,
-                        endTime = Instant.now()
-                    ),
-                    vulnerabilities = vulnerabilities.map { it.toOrtVulnerability() }
-                )
-            }
+            val advisorResult = AdvisorResult(
+                advisor = details,
+                summary = AdvisorSummary(
+                    startTime = startTime,
+                    endTime = Instant.now()
+                ),
+                vulnerabilities = vulnerabilitiesForPackage[pkg.id]?.map { it.toOrtVulnerability() }.orEmpty()
+            )
+
+            vulnerabilitiesForPackage[pkg.id]?.let { pkg to advisorResult }
         }.toMap()
     }
 

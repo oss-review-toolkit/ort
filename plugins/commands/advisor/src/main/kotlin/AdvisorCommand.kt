@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.plugins.commands.advisor
 
 import com.github.ajalt.clikt.core.BadParameterValue
-import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.core.terminal
 import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
@@ -32,14 +31,28 @@ import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
-import com.github.ajalt.mordant.rendering.Theme
+import com.github.ajalt.mordant.animation.coroutines.animateInCoroutine
+import com.github.ajalt.mordant.animation.progress.update
+import com.github.ajalt.mordant.table.verticalLayout
+import com.github.ajalt.mordant.terminal.PrintRequest
+import com.github.ajalt.mordant.terminal.Terminal
+import com.github.ajalt.mordant.terminal.TerminalInfo
+import com.github.ajalt.mordant.terminal.TerminalInterface
+import com.github.ajalt.mordant.widgets.progress.completed
+import com.github.ajalt.mordant.widgets.progress.percentage
+import com.github.ajalt.mordant.widgets.progress.progressBar
+import com.github.ajalt.mordant.widgets.progress.progressBarLayout
+import com.github.ajalt.mordant.widgets.progress.text
 
 import io.klogging.Level.INFO
 import io.klogging.config.STDOUT_SIMPLE
 import io.klogging.config.loggingConfiguration
 import io.klogging.context.Context
-import io.klogging.rendering.RENDER_CLEF
-import io.klogging.sending.STDOUT
+import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.transformWhile
+import kotlinx.coroutines.job
+import kotlinx.coroutines.launch
 
 import java.time.Duration
 
@@ -48,13 +61,12 @@ import kotlin.time.toKotlinDuration
 import kotlinx.coroutines.runBlocking
 
 import org.ossreviewtoolkit.advisor.AdviceProviderFactory
-import org.ossreviewtoolkit.advisor.Advisor
+import org.ossreviewtoolkit.advisor.Advisor2
 import org.ossreviewtoolkit.advisor.OrtContext
 import org.ossreviewtoolkit.advisor.PluginContext
-import org.ossreviewtoolkit.advisor.VulnerabilityRegistry
+import org.ossreviewtoolkit.advisor.logger
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
-import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
 import org.ossreviewtoolkit.plugins.commands.api.utils.SeverityStatsPrinter
 import org.ossreviewtoolkit.plugins.commands.api.utils.configurationGroup
@@ -67,6 +79,9 @@ import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.ORT_FAILURE_STATUS_CODE
 import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
+import java.io.ByteArrayOutputStream
+import java.io.OutputStream
+import java.io.PrintStream
 
 class AdvisorCommand : OrtCommand(
     name = "advise",
@@ -148,25 +163,73 @@ class AdvisorCommand : OrtCommand(
         echo("The following advisors are activated:")
         echo("\t" + distinctProviders.joinToString().ifEmpty { "<None>" })
 
-        val advisor = Advisor(distinctProviders, ortConfig.advisor)
-
         val ortResultInput = readOrtResult(ortFile)
-        val vulnerabilityRegistry = VulnerabilityRegistry()
-        val ortResultOutput = runBlocking(OrtContext(ortConfig, Environment(), vulnerabilityRegistry)) {
-            advisor.advise(ortResultInput, skipExcluded || ortConfig.advisor.skipExcluded).mergeLabels(labels)
+
+        val packages = ortResultInput.getPackages(omitExcluded = skipExcluded || ortConfig.advisor.skipExcluded)
+            .mapTo(mutableSetOf()) { it.metadata }
+
+        val adviceProviders = providerFactories.map {
+            val providerConfig = ortConfig.advisor.config?.get(it.type)
+            it.create(providerConfig?.options.orEmpty(), providerConfig?.secrets.orEmpty())
         }
 
-        val vulnerabilities = vulnerabilityRegistry.getVulnerabilities()
-        println("Got ${vulnerabilities.size} vulnerabilities from VulnerabilityRegistry.")
+        val advisor = Advisor2(adviceProviders, packages, ortConfig.advisor)
+
+        // Redirect the terminal to stdout/stderr.
+        val redirectInterface = RedirectingTerminalInterface(System.out, System.err, Terminal().info)
+        val term = Terminal(terminalInterface = redirectInterface)
+
+        // Redirect System.out to the terminal.
+        System.setOut(PrintStreamWrapper(term, System.out))
+
+        val progressByProvider = adviceProviders.map { it.providerName }.associateWith {
+            progressBarLayout {
+                text("${it.padEnd(15).take(15)}:")
+                completed()
+                text(" packages")
+                progressBar()
+                percentage()
+                text(" done  ")
+            }
+        }
+
+        runBlocking(OrtContext(ortConfig, Environment())) {
+            val animatorByProvider = progressByProvider.mapValues { (_, progress) ->
+                progress.animateInCoroutine(term).also {
+                    it.update { total = packages.size.toLong() }
+                    launch { it.execute() }
+                }
+            }
+
+            launch {
+                advisor.getUpdates().collect { update ->
+                    logger.info("Received update: ${update.provider} - ${update.pkg.toCoordinates()} - ${update.result.vulnerabilities.size} vulnerabilities - ${update.result.summary.issues.size} issues")
+                }
+            }
+
+            launch {
+                advisor.getState().transformWhile {
+                    emit(it)
+                    !it.finished
+                }.collect { state ->
+                    animatorByProvider.forEach { (providerName, animator) ->
+                        animator.update(state.providerProgress[providerName]?.completedPackages ?: 0)
+                    }
+                }
+            }
+
+            advisor.execute()
+
+            delay(100) // Delay a bit to ensure the progress bars are fully updated.
+            coroutineContext.job.cancelChildren()
+        }
+
+        val advisorRun = advisor.getRun()
+
+        val ortResultOutput = ortResultInput.copy(advisor = advisorRun)
 
         outputDir.safeMkdirs()
         writeOrtResult(ortResultOutput, outputFiles, terminal)
-
-        val advisorRun = ortResultOutput.advisor
-        if (advisorRun == null) {
-            echo(Theme.Default.danger("No advisor run was created."))
-            throw ProgramResult(1)
-        }
 
         val duration = with(advisorRun) { Duration.between(startTime, endTime).toKotlinDuration() }
         echo("The advice took $duration.")
@@ -191,4 +254,54 @@ class AdvisorCommand : OrtCommand(
         SeverityStatsPrinter(terminal, resolutionProvider).stats(issues)
             .print().conclude(ortConfig.severeIssueThreshold, ORT_FAILURE_STATUS_CODE)
     }
+}
+
+class RedirectingTerminalInterface(
+    private val out: PrintStream,
+    private val err: PrintStream,
+    override val info: TerminalInfo
+) : TerminalInterface {
+    override fun completePrintRequest(request: PrintRequest) {
+        when {
+            request.stderr -> {
+                if (request.trailingLinebreak) {
+                    err.println(request.text)
+                } else {
+                    err.print(request.text)
+                }
+            }
+
+            request.trailingLinebreak -> {
+                if (request.text.isEmpty()) {
+                    out.println()
+                } else {
+                    out.println(request.text)
+                }
+            }
+
+            else -> out.print(request.text)
+        }
+    }
+
+    override fun readLineOrNull(hideInput: Boolean): String? = readlnOrNull()
+}
+
+class PrintStreamWrapper(val terminal: Terminal, out: PrintStream) : PrintStream(ByteArrayOutputStream()) {
+    private val contentBuilder = StringBuilder()
+
+    override fun write(buf: ByteArray, off: Int, len: Int) {
+        terminal.print(String(buf, off, len))
+//        contentBuilder.append(String(buf, off, len))
+    }
+
+    override fun write(b: Int) {
+        terminal.print(b.toChar().toString())
+//        contentBuilder.append(b.toChar())
+    }
+
+//    override fun flush() {
+//        val content = contentBuilder.toString()
+//        contentBuilder.clear()
+//        terminal.print(content)
+//    }
 }

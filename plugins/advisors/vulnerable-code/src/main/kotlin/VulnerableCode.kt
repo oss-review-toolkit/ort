@@ -19,6 +19,10 @@
 
 package org.ossreviewtoolkit.plugins.advisors.vulnerablecode
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.datetime.Clock
+import kotlinx.datetime.toJavaInstant
 import java.net.URI
 import java.time.Instant
 import java.util.concurrent.TimeUnit
@@ -27,6 +31,7 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.advisor.AdviceProvider
 import org.ossreviewtoolkit.advisor.AdviceProviderFactory
+import org.ossreviewtoolkit.advisor.AdvisorUpdate
 import org.ossreviewtoolkit.clients.vulnerablecode.VulnerableCodeService
 import org.ossreviewtoolkit.clients.vulnerablecode.VulnerableCodeService.PackagesWrapper
 import org.ossreviewtoolkit.model.AdvisorCapability
@@ -94,6 +99,79 @@ class VulnerableCode(name: String, config: VulnerableCodeConfiguration) : Advice
 
         VulnerableCodeService.create(config.serverUrl, config.apiKey, client)
     }
+
+    override suspend fun execute(packages: Set<Package>): Flow<AdvisorUpdate> =
+        flow {
+            val startTime = Clock.System.now()
+
+            val (packagesWithPurl, packagesWithoutPurl) = packages.partition { it.purl.isNotEmpty() }
+
+            val remainingPackages = packages.toMutableSet()
+
+            fun createResult(vulnerabilities: List<Vulnerability>, issues: List<Issue> = emptyList()) =
+                AdvisorResult(
+                    advisor = details,
+                    summary = AdvisorSummary(
+                        startTime = startTime.toJavaInstant(),
+                        endTime = Clock.System.now().toJavaInstant(),
+                        issues = issues
+                    ),
+                    vulnerabilities = vulnerabilities
+                )
+
+            // Emit updates for packages without a purl.
+            packagesWithoutPurl.forEach { pkg ->
+                val issue = Issue(
+                    source = providerName,
+                    message = "Package '${pkg.id.toCoordinates()}' does not have a valid package URL.",
+                    severity = Severity.WARNING
+                )
+                val result = createResult(emptyList(), listOf(issue))
+                emit(AdvisorUpdate(providerName, pkg.id, result))
+                remainingPackages -= pkg
+            }
+
+            val purls = packagesWithPurl.map { it.purl }
+            val chunks = purls.chunked(BULK_REQUEST_SIZE)
+
+            chunks.forEach { chunk ->
+                runCatching {
+                    val chunkVulnerabilities = service.getPackageVulnerabilities(PackagesWrapper(chunk))
+                        .associate { it.purl to it.affectedByVulnerabilities }
+
+                    // Emit updates for packages with a result.
+                    chunk.forEach { purl ->
+                        packages.find { it.purl == purl }?.let { pkg ->
+                            val vulnerabilities = chunkVulnerabilities[purl].orEmpty()
+                            val result = createResult(vulnerabilities.map { it.toModel(mutableListOf()) })
+                            emit(AdvisorUpdate(providerName, pkg.id, result))
+                            remainingPackages -= pkg
+                        }
+                    }
+                }.onFailure { e ->
+                    // Emit updates for packages with a failure.
+                    val issue = Issue(source = providerName, message = e.collectMessages())
+                    chunk.forEach { purl ->
+                        packages.find { it.purl == purl }?.let { pkg ->
+                            val result = createResult(emptyList(), listOf(issue))
+                            emit(AdvisorUpdate(providerName, pkg.id, result))
+                            remainingPackages -= pkg
+                        }
+                    }
+                }
+            }
+
+            // Emit updates for packages which were not completed for some reason.
+            remainingPackages.forEach {
+                val issue = Issue(
+                    source = providerName,
+                    message = "No result was obtained for package '${it.id.toCoordinates()}'.",
+                    severity = Severity.WARNING
+                )
+                val result = createResult(emptyList(), listOf(issue))
+                emit(AdvisorUpdate(providerName, it.id, result))
+            }
+        }
 
     override suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, AdvisorResult> {
         val startTime = Instant.now()

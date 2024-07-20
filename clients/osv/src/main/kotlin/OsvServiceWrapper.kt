@@ -20,11 +20,26 @@
 package org.ossreviewtoolkit.clients.osv
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
 import java.io.IOException
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.atomic.AtomicReference
 
 import kotlinx.coroutines.async
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.joinAll
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 import okhttp3.OkHttpClient
@@ -94,4 +109,39 @@ class OsvServiceWrapper(serverUrl: String? = null, httpClient: OkHttpClient? = n
             failureThrowable.get()?.let { Result.failure(it) }
                 ?: Result.success(result.toList())
         }
+
+    suspend fun getVulnerabilities(ids: Set<String>): Flow<VulnerabilityResult> =
+        channelFlow {
+            ids.forEach { id ->
+                launch {
+                    val response = service.getVulnerabilityForId(id)
+
+                    val result = when {
+                        response.isSuccessful -> {
+                            val vulnerability = response.body()
+                            if (vulnerability != null) {
+                                VulnerabilityResult.Success(id, vulnerability)
+                            } else {
+                                val message = "Response body for vulnerability '$id' is empty."
+                                VulnerabilityResult.Failure(id, message)
+                            }
+                        }
+
+                        else -> {
+                            val message = "Could not get vulnerability information for '$id': ${response.message()}"
+                            VulnerabilityResult.Failure(id, message)
+                        }
+                    }
+
+                    channel.send(result)
+                }
+            }
+        }
+}
+
+sealed class VulnerabilityResult {
+    abstract val id: String
+
+    data class Success(override val id: String, val vulnerability: Vulnerability) : VulnerabilityResult()
+    data class Failure(override val id: String, val error: String) : VulnerabilityResult()
 }

@@ -29,6 +29,9 @@ import kotlin.coroutines.CoroutineContext
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.takeWhile
+import kotlinx.coroutines.flow.transformWhile
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 import org.ossreviewtoolkit.model.AdvisorResult
@@ -40,34 +43,6 @@ import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.utils.ort.Environment
-
-class VulnerabilityRegistry {
-    private val vulnerabilities = mutableListOf<Vulnerability>()
-
-    fun addVulnerability(vulnerability: Vulnerability) {
-        vulnerabilities += vulnerability
-    }
-
-    fun getVulnerabilities(): List<Vulnerability> = vulnerabilities
-}
-
-data class OrtContext(
-    val config: OrtConfiguration,
-    val environment: Environment,
-    val vulnerabilityRegistry: VulnerabilityRegistry
-) : AbstractCoroutineContextElement(OrtContext) {
-    companion object Key : CoroutineContext.Key<OrtContext>
-
-    override val key: CoroutineContext.Key<*> get() = Key
-}
-
-data class PluginContext(
-    val name: String
-) : AbstractCoroutineContextElement(PluginContext) {
-    companion object Key : CoroutineContext.Key<PluginContext>
-
-    override val key: CoroutineContext.Key<*> get() = Key
-}
 
 inline val <reified T> T.logger: Klogger
     get() = logger(T::class)
@@ -121,11 +96,6 @@ class Advisor(
                         logger.info("Getting advice from {provider}...", provider.providerName)
 
                         val providerResults = provider.retrievePackageFindings(packages)
-
-                        providerResults.values.forEach { result ->
-                            result.vulnerabilities.forEach { vulnerability ->
-                                coroutineContext[OrtContext]?.vulnerabilityRegistry?.addVulnerability(vulnerability)}
-                        }
 
                         logger.info {
                             "Found ${providerResults.values.flatMap { it.vulnerabilities }.distinct().size} distinct " +
