@@ -153,6 +153,10 @@ All contributions are welcome.
 If you are interested in contributing code, please read our [contributing guide](https://github.com/oss-review-toolkit/.github/blob/main/CONTRIBUTING.md).
 For everything from reporting bugs to asking questions, please go through the [issue workflow](https://github.com/oss-review-toolkit/ort/issues/new/choose).
 
+## Statistics
+
+![Alt](https://repobeats.axiom.co/api/embed/39cfad4ac09c3b4a361a1365ccf1a65c612a8ed0.svg "Repobeats analytics image")
+
 # License
 
 Copyright (C) 2017-2024 [The ORT Project Authors](./NOTICE).
