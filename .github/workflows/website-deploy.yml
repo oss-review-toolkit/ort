@@ -10,8 +10,8 @@ jobs:
     name: Website Build
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - uses: actions/setup-node@1a4442cacd436585916779262731d5b162bc6ec7 # v3
         with:
           node-version: 18
           cache: npm
@@ -22,7 +22,7 @@ jobs:
       - name: Build website
         run: npm run build
         working-directory: website
-      - uses: actions/upload-pages-artifact@v2
+      - uses: actions/upload-pages-artifact@a753861a5debcf57bf8b404356158c8e1e33150c # v2
         with:
           path: website/build
   deploy:
@@ -36,4 +36,4 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/deploy-pages@v2
+      - uses: actions/deploy-pages@de14547edc9944350dc0481aa5b7afb08e75f254 # v2
