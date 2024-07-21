@@ -37,6 +37,10 @@
       ],
       "matchUpdateTypes": ["patch"],
       "enabled": false
+    },
+    {
+      "matchManagers": ["npm"],
+      "schedule": "after 9pm on sunday"
     }
   ]
 }
