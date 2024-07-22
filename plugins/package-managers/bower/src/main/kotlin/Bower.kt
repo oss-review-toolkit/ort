@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.collectDependencies
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.plugins.packagemanagers.bower.PackageInfo.Endpoint
@@ -77,11 +78,6 @@ class Bower(
         stashDirectories(workingDir.resolve("bower_components")).use { _ ->
             val projectPackageInfo = getProjectPackageInfo(workingDir)
 
-            val packages = projectPackageInfo
-                .getTransitiveDependencies()
-                .distinctBy { it.key }
-                .mapTo(mutableSetOf()) { it.toPackage() }
-
             val scopes = SCOPE_NAMES.mapTo(mutableSetOf()) { scopeName ->
                 Scope(
                     name = scopeName,
@@ -90,6 +86,13 @@ class Bower(
             }
 
             val project = projectPackageInfo.toProject(definitionFile, scopes)
+
+            val referencedPackages = scopes.collectDependencies()
+            val packages = projectPackageInfo
+                .getTransitiveDependencies()
+                .distinctBy { it.key }
+                .map { it.toPackage() }
+                .filterTo(mutableSetOf()) { it.id in referencedPackages }
 
             return listOf(ProjectAnalyzerResult(project, packages))
         }
