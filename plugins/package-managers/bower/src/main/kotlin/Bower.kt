@@ -83,7 +83,7 @@ class Bower(
             val scopes = SCOPE_NAMES.mapTo(mutableSetOf()) { scopeName ->
                 Scope(
                     name = scopeName,
-                    dependencies = parseDependencyTree(projectPackageInfo, scopeName, packageInfoForName)
+                    dependencies = projectPackageInfo.toPackageReferences(scopeName, packageInfoForName)
                 )
             }
 
@@ -171,23 +171,21 @@ private fun PackageInfo.toProject(definitionFile: File, scopes: Set<Scope>) =
         )
     }
 
-private fun parseDependencyTree(
-    info: PackageInfo,
+private fun PackageInfo.toPackageReferences(
     scopeName: String,
     packageInfoForName: Map<String, PackageInfo>
 ): Set<PackageReference> =
-    info.getScopeDependencies(scopeName).mapTo(mutableSetOf()) { name ->
+    getScopeDependencies(scopeName).mapTo(mutableSetOf()) { name ->
         // Bower leaves out a dependency entry for a child if there exists a similar entry to its parent entry
         // with the exact same name and resolved target. This makes it necessary to retrieve the information
         // about the subtree rooted at the parent from that other entry containing the full dependency
         // information.
         // See https://github.com/bower/bower/blob/6bc778d/lib/core/Manager.js#L557 and below.
-        val childInfo = info.dependencies[name] ?: packageInfoForName.getValue(name)
+        val childInfo = dependencies[name] ?: packageInfoForName.getValue(name)
 
         PackageReference(
             id = childInfo.toId(),
-            dependencies = parseDependencyTree(
-                info = childInfo,
+            dependencies = childInfo.toPackageReferences(
                 scopeName = SCOPE_NAME_DEPENDENCIES,
                 packageInfoForName = packageInfoForName
             )
