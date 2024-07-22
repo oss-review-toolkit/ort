@@ -183,11 +183,13 @@ private fun parseDependencyTree(
         // information.
         // See https://github.com/bower/bower/blob/6bc778d/lib/core/Manager.js#L557 and below.
         val childInfo = info.dependencies[name] ?: packageInfoForName.getValue(name)
-        val childScope = SCOPE_NAME_DEPENDENCIES
-        val childDependencies = parseDependencyTree(childInfo, childScope, packageInfoForName)
 
         PackageReference(
             id = childInfo.toId(),
-            dependencies = childDependencies
+            dependencies = parseDependencyTree(
+                info = childInfo,
+                scopeName = SCOPE_NAME_DEPENDENCIES,
+                packageInfoForName = packageInfoForName
+            )
         )
     }
