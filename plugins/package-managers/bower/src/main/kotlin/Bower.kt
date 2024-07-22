@@ -192,8 +192,8 @@ private fun parseDependencyTree(
         // about the subtree rooted at the parent from that other entry containing the full dependency
         // information.
         // See https://github.com/bower/bower/blob/6bc778d/lib/core/Manager.js#L557 and below.
-        val alternativeNode = alternativeInfos.getValue(info.key)
-        return parseDependencyTree(alternativeNode, scopeName, alternativeInfos)
+        val alternativeInfo = alternativeInfos.getValue(info.key)
+        return parseDependencyTree(alternativeInfo, scopeName, alternativeInfos)
     }
 
     info.getScopeDependencies(scopeName).forEach {
