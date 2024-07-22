@@ -24,6 +24,7 @@ import java.util.LinkedList
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManager.Companion.processProjectVcs
 import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
@@ -88,17 +89,7 @@ class Bower(
                 )
             }
 
-            val projectPackage = projectPackageInfo.toPackage()
-            val project = Project(
-                id = projectPackage.id,
-                definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-                authors = projectPackage.authors,
-                declaredLicenses = projectPackage.declaredLicenses,
-                vcs = projectPackage.vcs,
-                vcsProcessed = processProjectVcs(workingDir, projectPackage.vcs, projectPackage.homepageUrl),
-                homepageUrl = projectPackage.homepageUrl,
-                scopeDependencies = scopes
-            )
+            val project = projectPackageInfo.toProject(definitionFile, scopes)
 
             return listOf(ProjectAnalyzerResult(project, packages))
         }
@@ -165,6 +156,20 @@ private fun PackageInfo.toPackage() =
         sourceArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
         vcs = toVcsInfo()
     )
+
+private fun PackageInfo.toProject(definitionFile: File, scopes: Set<Scope>) =
+    with(toPackage()) {
+        Project(
+            id = id,
+            definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+            authors = authors,
+            declaredLicenses = declaredLicenses,
+            vcs = vcs,
+            vcsProcessed = processProjectVcs(definitionFile.parentFile, vcs, homepageUrl),
+            homepageUrl = homepageUrl,
+            scopeDependencies = scopes
+        )
+    }
 
 private fun hasCompleteDependencies(info: PackageInfo, scopeName: String): Boolean {
     val dependencyKeys = info.dependencies.keys
