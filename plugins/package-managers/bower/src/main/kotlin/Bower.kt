@@ -39,7 +39,6 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.collectDependencies
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.plugins.packagemanagers.bower.PackageInfo.Endpoint
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.stashDirectories
@@ -77,20 +76,21 @@ class Bower(
 
         stashDirectories(workingDir.resolve("bower_components")).use { _ ->
             val projectPackageInfo = getProjectPackageInfo(workingDir)
+            val packageInfoForName = projectPackageInfo
+                .getTransitiveDependencies()
+                .associateBy { checkNotNull(it.pkgMeta.name) }
 
             val scopes = SCOPE_NAMES.mapTo(mutableSetOf()) { scopeName ->
                 Scope(
                     name = scopeName,
-                    dependencies = parseDependencyTree(projectPackageInfo, scopeName)
+                    dependencies = parseDependencyTree(projectPackageInfo, scopeName, packageInfoForName)
                 )
             }
 
             val project = projectPackageInfo.toProject(definitionFile, scopes)
 
             val referencedPackages = scopes.collectDependencies()
-            val packages = projectPackageInfo
-                .getTransitiveDependencies()
-                .distinctBy { it.key }
+            val packages = packageInfoForName.values
                 .map { it.toPackage() }
                 .filterTo(mutableSetOf()) { it.id in referencedPackages }
 
@@ -108,9 +108,6 @@ class Bower(
 private const val SCOPE_NAME_DEPENDENCIES = "dependencies"
 private const val SCOPE_NAME_DEV_DEPENDENCIES = "devDependencies"
 private val SCOPE_NAMES = setOf(SCOPE_NAME_DEPENDENCIES, SCOPE_NAME_DEV_DEPENDENCIES)
-
-private val PackageInfo.key: Endpoint
-    get() = endpoint
 
 private fun PackageInfo.getScopeDependencies(scopeName: String): Set<String> =
     when (scopeName) {
@@ -174,40 +171,22 @@ private fun PackageInfo.toProject(definitionFile: File, scopes: Set<Scope>) =
         )
     }
 
-private fun hasCompleteDependencies(info: PackageInfo, scopeName: String): Boolean {
-    val dependencyKeys = info.dependencies.keys
-    val dependencyRefKeys = info.getScopeDependencies(scopeName)
-
-    return dependencyKeys.containsAll(dependencyRefKeys)
-}
-
-private fun getPackageInfosWithCompleteDependencies(root: PackageInfo): Map<Endpoint, PackageInfo> =
-    (root.getTransitiveDependencies() + root).associateBy { it.key }.filter { (_, info) ->
-        hasCompleteDependencies(info, SCOPE_NAME_DEPENDENCIES)
-            && hasCompleteDependencies(info, SCOPE_NAME_DEV_DEPENDENCIES)
-    }
-
 private fun parseDependencyTree(
     info: PackageInfo,
     scopeName: String,
-    alternativeInfos: Map<Endpoint, PackageInfo> = getPackageInfosWithCompleteDependencies(info)
+    packageInfoForName: Map<String, PackageInfo>
 ): Set<PackageReference> {
     val result = mutableSetOf<PackageReference>()
 
-    if (!hasCompleteDependencies(info, scopeName)) {
+    info.getScopeDependencies(scopeName).forEach { name ->
         // Bower leaves out a dependency entry for a child if there exists a similar entry to its parent entry
         // with the exact same name and resolved target. This makes it necessary to retrieve the information
         // about the subtree rooted at the parent from that other entry containing the full dependency
         // information.
         // See https://github.com/bower/bower/blob/6bc778d/lib/core/Manager.js#L557 and below.
-        val alternativeInfo = alternativeInfos.getValue(info.key)
-        return parseDependencyTree(alternativeInfo, scopeName, alternativeInfos)
-    }
-
-    info.getScopeDependencies(scopeName).forEach { name ->
-        val childInfo = info.dependencies.getValue(name)
+        val childInfo = info.dependencies[name] ?: packageInfoForName.getValue(name)
         val childScope = SCOPE_NAME_DEPENDENCIES
-        val childDependencies = parseDependencyTree(childInfo, childScope, alternativeInfos)
+        val childDependencies = parseDependencyTree(childInfo, childScope, packageInfoForName)
         val packageReference = PackageReference(
             id = childInfo.toId(),
             dependencies = childDependencies
