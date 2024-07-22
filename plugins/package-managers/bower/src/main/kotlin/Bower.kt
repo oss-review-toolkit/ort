@@ -74,9 +74,7 @@ class Bower(
         val workingDir = definitionFile.parentFile
 
         stashDirectories(workingDir.resolve("bower_components")).use { _ ->
-            installDependencies(workingDir)
-            val dependenciesJson = listDependencies(workingDir)
-            val projectPackageInfo = parsePackageInfoJson(dependenciesJson)
+            val projectPackageInfo = getProjectPackageInfo(workingDir)
 
             val packages = projectPackageInfo
                 .getTransitiveDependencies()
@@ -106,9 +104,11 @@ class Bower(
         }
     }
 
-    private fun installDependencies(workingDir: File) = run(workingDir, "--allow-root", "install")
-
-    private fun listDependencies(workingDir: File) = run(workingDir, "--allow-root", "list", "--json").stdout
+    private fun getProjectPackageInfo(workingDir: File): PackageInfo {
+        run(workingDir, "--allow-root", "install").requireSuccess()
+        val json = run(workingDir, "--allow-root", "list", "--json").stdout
+        return parsePackageInfoJson(json)
+    }
 }
 
 private const val SCOPE_NAME_DEPENDENCIES = "dependencies"
