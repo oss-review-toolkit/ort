@@ -31,6 +31,7 @@ import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.Hash
+import org.ossreviewtoolkit.model.collectDependencies
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
@@ -106,7 +107,7 @@ class PubFunTest : WordSpec({
 private fun AnalyzerResult.reduceToPubProjects(): AnalyzerResult {
     val pubProjects = projects.filterTo(mutableSetOf()) { it.id.type == "Pub" }
     val scopes = pubProjects.flatMap { it.scopes }
-    val dependencies = scopes.flatMap { it.collectDependencies() }
+    val dependencies = scopes.collectDependencies()
 
     return AnalyzerResult(
         projects = pubProjects,

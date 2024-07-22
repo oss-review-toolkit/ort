@@ -38,6 +38,7 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.collectDependencies
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
@@ -116,7 +117,7 @@ class CocoaPods(
             val lockfileData = parseLockfile(lockfile)
 
             scopes += Scope(SCOPE_NAME, lockfileData.dependencies)
-            packages += scopes.flatMapTo(mutableSetOf()) { it.collectDependencies() }.map {
+            packages += scopes.collectDependencies().map {
                 lockfileData.packagesFromCheckoutOptionsForId[it] ?: getPackage(it, workingDir)
             }
         } else {

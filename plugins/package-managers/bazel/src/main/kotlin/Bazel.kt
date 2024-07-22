@@ -46,6 +46,7 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.collectDependencies
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.orEmpty
@@ -139,7 +140,7 @@ class Bazel(
     }
 
     private fun getPackages(scopes: Set<Scope>, registry: BazelModuleRegistryService): Set<Package> {
-        val ids = scopes.flatMapTo(mutableSetOf()) { it.collectDependencies() }
+        val ids = scopes.collectDependencies()
         val moduleMetadataForId = ids.associateWith { getModuleMetadata(it, registry) }
         val moduleSourceInfoForId = ids.associateWith { getModuleSourceInfo(it, registry) }
         return ids.mapTo(mutableSetOf()) { getPackage(it, moduleMetadataForId[it], moduleSourceInfoForId[it]) }
