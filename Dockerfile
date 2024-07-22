@@ -404,15 +404,15 @@ COPY --from=dotnetbuild /opt/dotnet /opt/dotnet
 # BAZEL
 FROM base as bazelbuild
 
-ARG BAZEL_VERSION
+ARG BAZELISK_VERSION
 
 ENV BAZEL_HOME=/opt/bazel
 
 RUN mkdir -p $BAZEL_HOME/bin \
     && if [ "$(arch)" = "aarch64" ]; then \
-    curl -L https://github.com/bazelbuild/bazel/releases/download/$BAZEL_VERSION/bazel-$BAZEL_VERSION-linux-arm64 -o $BAZEL_HOME/bin/bazel; \
+    curl -L https://github.com/bazelbuild/bazelisk/releases/download/v$BAZELISK_VERSION/bazelisk-linux-arm64 -o $BAZEL_HOME/bin/bazel; \
     else \
-    curl -L https://github.com/bazelbuild/bazel/releases/download/$BAZEL_VERSION/bazel-$BAZEL_VERSION-linux-x86_64 -o $BAZEL_HOME/bin/bazel; \
+    curl -L https://github.com/bazelbuild/bazelisk/releases/download/v$BAZELISK_VERSION/bazelisk-linux-amd64 -o $BAZEL_HOME/bin/bazel; \
     fi \
     && chmod a+x $BAZEL_HOME/bin/bazel
 

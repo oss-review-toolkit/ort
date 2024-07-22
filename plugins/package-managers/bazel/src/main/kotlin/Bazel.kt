@@ -59,6 +59,7 @@ import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
 
+private const val BAZEL_FALLBACK_VERSION = "7.0.1"
 private const val LOCKFILE_NAME = "MODULE.bazel.lock"
 
 class Bazel(
@@ -84,7 +85,10 @@ class Bazel(
             args = args,
             workingDir = workingDir,
             // Disable the optional wrapper script under `tools/bazel`, to ensure the --version option works.
-            environment = environment + mapOf("BAZELISK_SKIP_WRAPPER" to "true")
+            environment = environment + mapOf(
+                "BAZELISK_SKIP_WRAPPER" to "true",
+                "USE_BAZEL_FALLBACK_VERSION" to BAZEL_FALLBACK_VERSION
+            )
         )
 
     override fun transformVersion(output: String) = output.removePrefix("bazel ")
