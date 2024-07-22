@@ -204,8 +204,8 @@ private fun parseDependencyTree(
         return parseDependencyTree(alternativeInfo, scopeName, alternativeInfos)
     }
 
-    info.getScopeDependencies(scopeName).forEach {
-        val childInfo = info.dependencies.getValue(it)
+    info.getScopeDependencies(scopeName).forEach { name ->
+        val childInfo = info.dependencies.getValue(name)
         val childScope = SCOPE_NAME_DEPENDENCIES
         val childDependencies = parseDependencyTree(childInfo, childScope, alternativeInfos)
         val packageReference = PackageReference(
