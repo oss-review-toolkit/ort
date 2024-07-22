@@ -175,10 +175,8 @@ private fun parseDependencyTree(
     info: PackageInfo,
     scopeName: String,
     packageInfoForName: Map<String, PackageInfo>
-): Set<PackageReference> {
-    val result = mutableSetOf<PackageReference>()
-
-    info.getScopeDependencies(scopeName).forEach { name ->
+): Set<PackageReference> =
+    info.getScopeDependencies(scopeName).mapTo(mutableSetOf()) { name ->
         // Bower leaves out a dependency entry for a child if there exists a similar entry to its parent entry
         // with the exact same name and resolved target. This makes it necessary to retrieve the information
         // about the subtree rooted at the parent from that other entry containing the full dependency
@@ -187,12 +185,9 @@ private fun parseDependencyTree(
         val childInfo = info.dependencies[name] ?: packageInfoForName.getValue(name)
         val childScope = SCOPE_NAME_DEPENDENCIES
         val childDependencies = parseDependencyTree(childInfo, childScope, packageInfoForName)
-        val packageReference = PackageReference(
+
+        PackageReference(
             id = childInfo.toId(),
             dependencies = childDependencies
         )
-        result += packageReference
     }
-
-    return result
-}
