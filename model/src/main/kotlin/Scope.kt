@@ -74,3 +74,5 @@ data class Scope(
     fun findReferences(id: Identifier) =
         dependencies.filter { it.id == id } + dependencies.flatMap { it.findReferences(id) }
 }
+
+fun Collection<Scope>.collectDependencies(): Set<Identifier> = flatMapTo(mutableSetOf()) { it.collectDependencies() }

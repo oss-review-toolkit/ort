@@ -40,6 +40,7 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.collectDependencies
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.utils.toPurl
@@ -99,7 +100,7 @@ class Stack(
             dependencies.toScope(name, packageForName)
         }
 
-        val referencedPackages = scopes.flatMapTo(mutableSetOf()) { it.collectDependencies() }
+        val referencedPackages = scopes.collectDependencies()
         val packages = packageForName.values.filterTo(mutableSetOf()) { it.id in referencedPackages }
         val project = getProject(definitionFile, scopes)
 
