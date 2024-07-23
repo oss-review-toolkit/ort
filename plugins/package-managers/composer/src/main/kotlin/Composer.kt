@@ -26,6 +26,7 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManager.Companion.processPackageVcs
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
@@ -232,35 +233,11 @@ class Composer(
         )
     }
 
-    private fun parseInstalledPackages(lockfile: Lockfile): Map<String, Package> {
-        val packages = mutableMapOf<String, Package>()
-
-        (lockfile.packages + lockfile.packagesDev).forEach { pkgInfo ->
-            val rawName = checkNotNull(pkgInfo.name)
-            val version = pkgInfo.version.orEmpty()
-            val homepageUrl = pkgInfo.homepage.orEmpty()
-            val vcsFromPackage = parseVcsInfo(pkgInfo)
-
-            packages[rawName] = Package(
-                id = Identifier(
-                    type = "Composer",
-                    namespace = rawName.substringBefore('/'),
-                    name = rawName.substringAfter('/'),
-                    version = version
-                ),
-                authors = parseAuthors(pkgInfo),
-                declaredLicenses = parseDeclaredLicenses(pkgInfo),
-                description = pkgInfo.description.orEmpty(),
-                homepageUrl = homepageUrl,
-                binaryArtifact = RemoteArtifact.EMPTY,
-                sourceArtifact = parseArtifact(pkgInfo),
-                vcs = vcsFromPackage,
-                vcsProcessed = processPackageVcs(vcsFromPackage, homepageUrl)
-            )
-        }
-
-        return packages
-    }
+    private fun parseInstalledPackages(lockfile: Lockfile): Map<String, Package> =
+        (lockfile.packages + lockfile.packagesDev).associateBy(
+            { checkNotNull(it.name) },
+            { it.toPackage() }
+        )
 
     private fun ensureLockfile(workingDir: File): File {
         val lockfile = workingDir.resolve(COMPOSER_LOCK_FILE)
@@ -350,6 +327,30 @@ private fun parseVirtualPackageNames(
 
 private fun parseVirtualNames(packageInfo: PackageInfo): Set<String> =
     packageInfo.replace.keys + packageInfo.provide.keys
+
+private fun PackageInfo.toPackage(): Package {
+    val rawName = checkNotNull(name)
+    val version = version.orEmpty()
+    val homepageUrl = homepage.orEmpty()
+    val vcsFromPackage = parseVcsInfo(this)
+
+    return Package(
+        id = Identifier(
+            type = "Composer",
+            namespace = rawName.substringBefore('/'),
+            name = rawName.substringAfter('/'),
+            version = version
+        ),
+        authors = parseAuthors(this),
+        declaredLicenses = parseDeclaredLicenses(this),
+        description = description.orEmpty(),
+        homepageUrl = homepageUrl,
+        binaryArtifact = RemoteArtifact.EMPTY,
+        sourceArtifact = parseArtifact(this),
+        vcs = vcsFromPackage,
+        vcsProcessed = processPackageVcs(vcsFromPackage, homepageUrl)
+    )
+}
 
 private fun PackageInfo.getScopeDependencies(scopeName: String): Set<String> =
     when (scopeName) {
