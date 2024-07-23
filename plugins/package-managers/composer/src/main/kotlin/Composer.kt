@@ -249,7 +249,7 @@ class Composer(
 
             packages[rawName] = Package(
                 id = Identifier(
-                    type = managerName,
+                    type = "Composer",
                     namespace = rawName.substringBefore('/'),
                     name = rawName.substringAfter('/'),
                     version = version
