@@ -37,7 +37,9 @@ dependencies {
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxUtils)
 
+    implementation(libs.jackson.core)
     implementation(libs.jackson.databind)
+    implementation(libs.jackson.module.kotlin)
 
     funTestImplementation(testFixtures(projects.analyzer))
 }
