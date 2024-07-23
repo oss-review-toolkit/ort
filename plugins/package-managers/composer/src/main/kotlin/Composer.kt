@@ -63,6 +63,7 @@ private const val COMPOSER_PHAR_BINARY = "composer.phar"
 private const val COMPOSER_LOCK_FILE = "composer.lock"
 private const val SCOPE_NAME_REQUIRE = "require"
 private const val SCOPE_NAME_REQUIRE_DEV = "require-dev"
+private val ALL_SCOPE_NAMES = setOf(SCOPE_NAME_REQUIRE, SCOPE_NAME_REQUIRE_DEV)
 
 /**
  * The [Composer](https://getcomposer.org/) package manager for PHP.
@@ -145,10 +146,9 @@ class Composer(
         // the "replacing" package.
         val virtualPackages = parseVirtualPackageNames(packages, manifest, json)
 
-        val scopes = setOf(
-            parseScope(SCOPE_NAME_REQUIRE, manifest, json, packages, virtualPackages),
-            parseScope(SCOPE_NAME_REQUIRE_DEV, manifest, json, packages, virtualPackages)
-        )
+        val scopes = ALL_SCOPE_NAMES.mapTo(mutableSetOf()) { scopeName ->
+            parseScope(scopeName, manifest, json, packages, virtualPackages)
+        }
 
         val project = parseProject(definitionFile, scopes)
         val result = ProjectAnalyzerResult(project, packages.values.toSet())
