@@ -61,6 +61,8 @@ import org.semver4j.Semver
 
 private const val COMPOSER_PHAR_BINARY = "composer.phar"
 private const val COMPOSER_LOCK_FILE = "composer.lock"
+private const val SCOPE_NAME_REQUIRE = "require"
+private const val SCOPE_NAME_REQUIRE_DEV = "require-dev"
 
 /**
  * The [Composer](https://getcomposer.org/) package manager for PHP.
@@ -144,8 +146,8 @@ class Composer(
         val virtualPackages = parseVirtualPackageNames(packages, manifest, json)
 
         val scopes = setOf(
-            parseScope("require", manifest, json, packages, virtualPackages),
-            parseScope("require-dev", manifest, json, packages, virtualPackages)
+            parseScope(SCOPE_NAME_REQUIRE, manifest, json, packages, virtualPackages),
+            parseScope(SCOPE_NAME_REQUIRE_DEV, manifest, json, packages, virtualPackages)
         )
 
         val project = parseProject(definitionFile, scopes)
