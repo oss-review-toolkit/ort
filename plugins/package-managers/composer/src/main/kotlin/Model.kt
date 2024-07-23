@@ -35,6 +35,7 @@ data class Lockfile(
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class PackageInfo(
     val name: String?,
+    // See https://getcomposer.org/doc/04-schema.md#version.
     val version: String?,
     val homepage: String?,
     val description: String?,

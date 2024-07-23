@@ -241,12 +241,6 @@ class Composer(
             val homepageUrl = pkgInfo.homepage.orEmpty()
             val vcsFromPackage = parseVcsInfo(pkgInfo)
 
-            // Just warn if the version is missing as Composer itself declares it as optional, see
-            // https://getcomposer.org/doc/04-schema.md#version.
-            if (version.isEmpty()) {
-                logger.warn { "No version information found for package $rawName." }
-            }
-
             packages[rawName] = Package(
                 id = Identifier(
                     type = "Composer",
