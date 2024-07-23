@@ -311,22 +311,16 @@ private fun parseVirtualPackageNames(
     packages: Map<String, Package>,
     projectPackageInfo: PackageInfo,
     lockfile: Lockfile
-): Set<String> {
-    val replacedNames = mutableSetOf<String>()
+): Set<String> =
+    buildSet {
+        // The contents of the manifest file, which can also define replacements, is not included in the lockfile, so
+        // we parse the manifest file as well.
+        (lockfile.packages + lockfile.packagesDev + projectPackageInfo).flatMapTo(this) {
+            it.replace.keys + it.provide.keys
+        }
 
-    // The contents of the manifest file, which can also define replacements, is not included in the lockfile, so
-    // we parse the manifest file as well.
-    replacedNames += parseVirtualNames(projectPackageInfo)
-
-    (lockfile.packages + lockfile.packagesDev).forEach { pkgInfo ->
-        replacedNames += parseVirtualNames(pkgInfo)
+        removeAll(packages.keys)
     }
-
-    return replacedNames - packages.keys
-}
-
-private fun parseVirtualNames(packageInfo: PackageInfo): Set<String> =
-    packageInfo.replace.keys + packageInfo.provide.keys
 
 private fun PackageInfo.toPackage(): Package {
     val rawName = checkNotNull(name)
