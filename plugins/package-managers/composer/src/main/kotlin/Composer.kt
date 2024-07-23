@@ -279,11 +279,6 @@ private fun getRuntimeDependencies(packageName: String, lockfile: Lockfile): Set
     return emptySet()
 }
 
-private fun parseArtifact(packageInfo: PackageInfo): RemoteArtifact =
-    packageInfo.dist?.let {
-        RemoteArtifact(url = it.url.orEmpty(), hash = Hash.create(it.shasum.orEmpty()))
-    }.orEmpty()
-
 private fun parseAuthors(packageInfo: PackageInfo): Set<String> =
     packageInfo.authors.mapNotNullTo(mutableSetOf()) { it.name }
 
@@ -340,7 +335,12 @@ private fun PackageInfo.toPackage(): Package {
         description = description.orEmpty(),
         homepageUrl = homepageUrl,
         binaryArtifact = RemoteArtifact.EMPTY,
-        sourceArtifact = parseArtifact(this),
+        sourceArtifact = dist?.let {
+            RemoteArtifact(
+                url = it.url.orEmpty(),
+                hash = Hash.create(it.shasum.orEmpty())
+            )
+        }.orEmpty(),
         vcs = vcsFromPackage,
         vcsProcessed = processPackageVcs(vcsFromPackage, homepageUrl)
     )
