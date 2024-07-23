@@ -59,8 +59,8 @@ import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
 import org.semver4j.Semver
 
-const val COMPOSER_PHAR_BINARY = "composer.phar"
-const val COMPOSER_LOCK_FILE = "composer.lock"
+private const val COMPOSER_PHAR_BINARY = "composer.phar"
+private const val COMPOSER_LOCK_FILE = "composer.lock"
 
 /**
  * The [Composer](https://getcomposer.org/) package manager for PHP.
