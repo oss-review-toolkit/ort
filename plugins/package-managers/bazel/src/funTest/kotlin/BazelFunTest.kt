@@ -37,4 +37,13 @@ class BazelFunTest : StringSpec({
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
+
+    "Dependencies are detected correctly for a project with a local registries" {
+        val definitionFile = getAssetFile("projects/synthetic/bazel-local-registry/MODULE.bazel")
+        val expectedResultFile = getAssetFile("projects/synthetic/bazel-expected-output-local-registry.yml")
+
+        val result = create("Bazel").resolveSingleProject(definitionFile)
+
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
 })
