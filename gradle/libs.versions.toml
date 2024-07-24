@@ -153,6 +153,7 @@ maven-resolver-transport-http = { module = "org.apache.maven.resolver:maven-reso
 maven-resolver-transport-wagon = { module = "org.apache.maven.resolver:maven-resolver-transport-wagon", version.ref = "mavenResolver" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 mordant = { module = "com.github.ajalt.mordant:mordant", version.ref = "mordant" }
+mordantCoroutines = { module = "com.github.ajalt.mordant:mordant-coroutines", version.ref = "mordant" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 okhttp-loggingInterceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
 postgres = { module = "org.postgresql:postgresql", version.ref = "postgres" }
