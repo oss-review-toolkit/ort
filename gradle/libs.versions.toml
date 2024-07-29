@@ -62,7 +62,7 @@ svnkit = "1.10.11"
 sw360Client = "17.0.1-m2"
 wiremock = "3.9.1"
 xmlutil = "0.90.1"
-xz = "1.9"
+xz = "1.10"
 
 [plugins]
 dependencyAnalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyAnalysisPlugin" }
