@@ -126,7 +126,7 @@ class PackageBasedPostgresStorage(
         return runCatching {
             database.transaction {
                 ScanResultDao.find {
-                    var expression = (ScanResults.identifier eq pkg.id.toCoordinates())
+                    var expression = ScanResults.identifier eq pkg.id
 
                     scannerMatcher?.regScannerName?.let {
                         expression = expression and (rawParam("scan_result->'scanner'->>'name'") tilde it)
