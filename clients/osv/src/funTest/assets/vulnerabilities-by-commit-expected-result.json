@@ -218,7 +218,7 @@
     {
         "schema_version": "1.6.0",
         "id": "CVE-2022-33068",
-        "modified": "2024-05-22T17:34:04.204626Z",
+        "modified": "2024-07-31T03:02:00.197195Z",
         "published": "2022-06-23T17:15:14Z",
         "related": [
             "ALSA-2022:8384",
@@ -989,6 +989,10 @@
             {
                 "type": "WEB",
                 "url": "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/W56WTC5IY4EIUHVUIHMCXA3BSBZLSZCI/"
+            },
+            {
+                "type": "ADVISORY",
+                "url": "https://security.alpinelinux.org/vuln/CVE-2022-33068"
             }
         ]
     },
