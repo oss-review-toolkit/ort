@@ -549,9 +549,11 @@ ARG COMPOSER_VERSION
 
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
-    sudo apt-get update && \
-    DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends \
-    php${PHP_VERSION} \
+    sudo apt-get update \
+    && sudo apt-get install -y software-properties-common \
+    && sudo add-apt-repository ppa:ondrej/php \
+    && sudo apt-get update \
+    && DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends php${PHP_VERSION} \
     && sudo rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /opt/php/bin \
