@@ -42,6 +42,7 @@ import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -135,11 +136,16 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
 
         val workingTree = VersionControlSystem.forDirectory(info.absoluteProjectPath)
         val vcs = workingTree?.getInfo().orEmpty()
+        val revision = workingTree?.getRevision().orEmpty()
         val nestedVcs = workingTree?.getNested()?.filter { (path, _) ->
             // Only include nested VCS if they are part of the analyzed directory.
             workingTree.getRootPath().resolve(path).startsWith(info.absoluteProjectPath)
         }.orEmpty()
-        val repository = Repository(vcs = vcs, nestedRepositories = nestedVcs, config = info.repositoryConfiguration)
+        val repository = Repository(
+            provenance = RepositoryProvenance(vcs, revision),
+            nestedRepositories = nestedVcs,
+            config = info.repositoryConfiguration
+        )
 
         val endTime = Instant.now()
 
