@@ -24,12 +24,35 @@ import java.io.File
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.decodeFromStream
 
+import org.apache.logging.log4j.kotlin.logger
+
 private const val BAZEL_MODULES_DIR = "modules"
 
 /**
  * A Bazel registry which is located on the local file system.
  */
 class LocalBazelModuleRegistryService(directory: File) : BazelModuleRegistryService {
+    companion object {
+        /** A prefix for URLs pointing to local files. */
+        private const val FILE_URL_PREFIX = "file://"
+
+        /** Constant for a placeholder that is replaced by the current project directory. */
+        private const val WORKSPACE_PLACEHOLDER = "%workspace%"
+
+        /**
+         * Create a [LocalBazelModuleRegistryService] if the given [url] points to a local file. In this case,
+         * also replace the placeholder for the workspace by the given [projectDir]. Return *null* for all other URLs.
+         */
+        fun createForLocalUrl(url: String?, projectDir: File): LocalBazelModuleRegistryService? =
+            url.takeIf { it?.startsWith(FILE_URL_PREFIX) == true }?.let { fileUrl ->
+                val directory = fileUrl.removePrefix(FILE_URL_PREFIX)
+                    .replace(WORKSPACE_PLACEHOLDER, projectDir.absolutePath)
+
+                logger.info { "Creating local Bazel module registry at '$directory'." }
+                LocalBazelModuleRegistryService(File(directory))
+            }
+    }
+
     private val moduleDirectory: File
     private val bazelRegistry: BazelRegistry
 
