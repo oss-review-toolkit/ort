@@ -43,9 +43,10 @@ internal class CompositeBazelModuleRegistryService(
         internal val URL_REGEX = "^(?<server>.*/)modules/(?<package>[^/]+)/[^/]+/source\\.json$".toRegex()
 
         /**
-         * Create a Composite Bazel Module Registry client instance.
+         * Create a Composite Bazel Module Registry client instance. The wrapped [BazelModuleRegistryService]s are
+         * created based on the passed in [urls]; local registries use the given [projectDir] as workspace.
          */
-        fun create(urls: Set<String>): CompositeBazelModuleRegistryService {
+        fun create(urls: Set<String>, projectDir: File): CompositeBazelModuleRegistryService {
             val packageNamesForServer = urls.filter { it.endsWith("source.json") }.mapNotNull { url ->
                 val groups = URL_REGEX.matchEntire(url)?.groups
 
@@ -63,19 +64,8 @@ internal class CompositeBazelModuleRegistryService(
             }.groupByTo(mutableMapOf(), { it.first }) { it.second }.mapValues { it.value.toSet() }
 
             val packageNamesForRegistry = packageNamesForServer.mapKeys { (url, _) ->
-                if (url.startsWith("file://")) {
-                    logger.info {
-                        "Using local Bazel module registry at '$url'."
-                    }
-
-                    LocalBazelModuleRegistryService(File(url))
-                } else {
-                    logger.info {
-                        "Using remote Bazel module registry at '$url'."
-                    }
-
-                    RemoteBazelModuleRegistryService.create(url)
-                }
+                LocalBazelModuleRegistryService.createForLocalUrl(url, projectDir)
+                    ?: RemoteBazelModuleRegistryService.create(url)
             }
 
             return CompositeBazelModuleRegistryService(packageNamesForRegistry)

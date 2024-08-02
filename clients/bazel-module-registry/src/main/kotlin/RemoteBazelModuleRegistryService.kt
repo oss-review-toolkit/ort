@@ -22,6 +22,8 @@ package org.ossreviewtoolkit.clients.bazelmoduleregistry
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 
+import org.apache.logging.log4j.kotlin.logger
+
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import retrofit2.http.GET
@@ -46,9 +48,13 @@ interface RemoteBazelModuleRegistryService : BazelModuleRegistryService {
             val bmrClient = client ?: OkHttpClient()
 
             val contentType = "application/json".toMediaType()
+            val baseUrl = url ?: DEFAULT_URL
+
+            logger.info { "Creating remote Bazel module registry at '$baseUrl'." }
+
             val retrofit = Retrofit.Builder()
                 .client(bmrClient)
-                .baseUrl(url ?: DEFAULT_URL)
+                .baseUrl(baseUrl)
                 .addConverterFactory(JSON.asConverterFactory(contentType))
                 .build()
 

@@ -145,27 +145,13 @@ class Bazel(
         if (lockfile.flags != null) {
             val registryUrl = lockfile.registryUrl()
 
-            return registryUrl.withoutPrefix("file://")?.let {
-                val localRegistryURL = it.replace("%workspace%", projectDir.absolutePath)
-                logger.info {
-                    "Using local Bazel module registry at '$localRegistryURL'."
-                }
-
-                LocalBazelModuleRegistryService(File(localRegistryURL))
-            } ?: RemoteBazelModuleRegistryService.create(registryUrl)
+            return LocalBazelModuleRegistryService.createForLocalUrl(registryUrl, projectDir)
+                ?: RemoteBazelModuleRegistryService.create(registryUrl)
         }
 
         // Bazel version >= 7.2.0.
         if (lockfile.registryFileHashes != null) {
-            val registryFileHashes = lockfile.registryFileHashes.map { (url, _) ->
-                if (url.startsWith("file://")) {
-                    url.replace("%workspace%", projectDir.absolutePath)
-                } else {
-                    url
-                }
-            }.toSet()
-
-            return CompositeBazelModuleRegistryService.create(registryFileHashes)
+            return CompositeBazelModuleRegistryService.create(lockfile.registryFileHashes.keys, projectDir)
         }
 
         val msg = "Bazel registry URL cannot be determined from the lockfile."
