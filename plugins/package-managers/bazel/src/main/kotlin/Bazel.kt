@@ -143,10 +143,7 @@ class Bazel(
     private fun determineRegistry(lockfile: Lockfile, projectDir: File): BazelModuleRegistryService {
         // Bazel version < 7.2.0.
         if (lockfile.flags != null) {
-            val registryUrl = lockfile.registryUrl()
-
-            return LocalBazelModuleRegistryService.createForLocalUrl(registryUrl, projectDir)
-                ?: RemoteBazelModuleRegistryService.create(registryUrl)
+            return MultiBazelModuleRegistryService.create(lockfile.registryUrls(), projectDir)
         }
 
         // Bazel version >= 7.2.0.

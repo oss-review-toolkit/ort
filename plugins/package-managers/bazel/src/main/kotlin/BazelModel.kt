@@ -43,8 +43,11 @@ internal data class Lockfile(
         }
     }
 
-    // TODO Support multiple registries.
-    fun registryUrl(): String? = flags?.cmdRegistries?.getOrElse(0) { null }
+    /**
+     * Return a collection with the URLs of the service registries defined for this project in case the model for
+     * Bazel < 7.2.0 is used.
+     */
+    fun registryUrls(): Collection<String> = flags?.cmdRegistries.orEmpty()
 }
 
 @Serializable
