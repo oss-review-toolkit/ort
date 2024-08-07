@@ -43,17 +43,17 @@ internal data class Lockfile(
         }
     }
 
+    @Serializable
+    data class Flags(
+        val cmdRegistries: List<String>
+    )
+
     /**
      * Return a collection with the URLs of the service registries defined for this project in case the model for
      * Bazel < 7.2.0 is used.
      */
     fun registryUrls(): Collection<String> = flags?.cmdRegistries.orEmpty()
 }
-
-@Serializable
-internal data class Flags(
-    val cmdRegistries: List<String>
-)
 
 internal fun parseLockfile(lockfile: File) = json.decodeFromString<Lockfile>(lockfile.readText())
 
