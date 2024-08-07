@@ -124,8 +124,8 @@ data class SpdxSnippet(
         val offset: Int? = null
     ) {
         init {
-            require((lineNumber != null) xor (offset != null)) {
-                "Either 'lineNumber' or 'offset' must be set for the '$reference' pointer."
+            require((lineNumber == null) xor (offset == null)) {
+                "The '$reference' pointer must either set the 'lineNumber' or the 'offset' property."
             }
         }
     }
