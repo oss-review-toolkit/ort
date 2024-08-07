@@ -38,8 +38,8 @@ internal data class Lockfile(
     val registryFileHashes: Map<String, String>? = null
 ) {
     init {
-        require((flags != null && registryFileHashes == null) || (flags == null && registryFileHashes != null)) {
-            "Exactly one of 'flags' and 'registryFileHashes' must be set."
+        require((flags == null) xor (registryFileHashes == null)) {
+            "A lockfile must either set the 'flags' or the 'registryFileHashes' property."
         }
     }
 
