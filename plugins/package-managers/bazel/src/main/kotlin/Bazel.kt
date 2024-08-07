@@ -226,7 +226,7 @@ class Bazel(
             // cc_test, but according to experiments, it is on.
             // See https://bazel.build/reference/be/c-cpp#cc_binary.linkstatic
             linkage = PackageLinkage.STATIC,
-            dependencies = dependencies.map { it.toPackageReference() }.toSet()
+            dependencies = dependencies.mapTo(mutableSetOf()) { it.toPackageReference() }
         )
 }
 
