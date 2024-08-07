@@ -26,14 +26,14 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import org.ossreviewtoolkit.model.jsonMapper
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class Lockfile(
+internal data class Lockfile(
     val packages: List<PackageInfo> = emptyList(),
     @JsonProperty("packages-dev")
     val packagesDev: List<PackageInfo> = emptyList()
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class PackageInfo(
+internal data class PackageInfo(
     val name: String?,
     // See https://getcomposer.org/doc/04-schema.md#version.
     val version: String?,
@@ -73,6 +73,6 @@ data class PackageInfo(
     )
 }
 
-fun parseLockfile(json: String): Lockfile = jsonMapper.readValue<Lockfile>(json)
+internal fun parseLockfile(json: String): Lockfile = jsonMapper.readValue<Lockfile>(json)
 
-fun parsePackageInfo(json: String): PackageInfo = jsonMapper.readValue<PackageInfo>(json)
+internal fun parsePackageInfo(json: String): PackageInfo = jsonMapper.readValue<PackageInfo>(json)
