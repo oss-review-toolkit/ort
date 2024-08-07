@@ -581,7 +581,7 @@ class Yarn2(
         val dependenciesIds = allDependencies[id]
         return dependenciesIds?.mapNotNull { dependencyId ->
             if (dependencyId in ancestorPackageIds) {
-                logger.debug("Not adding the dependency '$dependencyId' of package '$id' to prevent a cycle.")
+                logger.debug { "Not adding the dependency '$dependencyId' of package '$id' to prevent a cycle." }
                 return@mapNotNull null
             }
 
