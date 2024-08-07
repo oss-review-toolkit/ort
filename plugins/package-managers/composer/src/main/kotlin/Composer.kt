@@ -234,10 +234,9 @@ class Composer(
     }
 
     private fun parseInstalledPackages(lockfile: Lockfile): Map<String, Package> =
-        (lockfile.packages + lockfile.packagesDev).associateBy(
-            { checkNotNull(it.name) },
-            { it.toPackage() }
-        )
+        (lockfile.packages + lockfile.packagesDev).associate {
+            checkNotNull(it.name) to it.toPackage()
+        }
 
     private fun ensureLockfile(workingDir: File): File {
         val lockfile = workingDir.resolve(COMPOSER_LOCK_FILE)
