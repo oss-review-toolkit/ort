@@ -180,8 +180,8 @@ tasks.withType<KotlinCompile>().configureEach {
 
     compilerOptions {
         allWarningsAsErrors = true
-        optIn = optInRequirements
         jvmTarget = maxKotlinJvmTarget
+        optIn = optInRequirements
     }
 }
 
