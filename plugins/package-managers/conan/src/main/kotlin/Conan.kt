@@ -32,6 +32,7 @@ import java.io.File
 
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 
@@ -334,7 +335,9 @@ class Conan(
             }
         }
 
-        return results[field]?.jsonPrimitive?.content
+        // Note that while the console output of "conan inspect" uses "None" for absent values, the JSON output actually
+        // uses null values.
+        return results[field]?.jsonPrimitive?.contentOrNull
     }
 
     /**
