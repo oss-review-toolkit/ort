@@ -230,7 +230,7 @@ class DefaultPackageProvenanceResolver(
                 val result = vcs.updateWorkingTree(workingTree, revision)
 
                 if (pkg.vcsProcessed.path.isNotBlank() &&
-                    !workingTree.workingDir.resolve(pkg.vcsProcessed.path).exists()
+                    !workingTree.getRootPath().resolve(pkg.vcsProcessed.path).exists()
                 ) {
                     addAndLogMessage(
                         "Discarding revision '$revision' because the requested VCS path '${pkg.vcsProcessed.path}' " +

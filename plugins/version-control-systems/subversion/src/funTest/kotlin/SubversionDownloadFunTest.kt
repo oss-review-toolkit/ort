@@ -61,8 +61,8 @@ class SubversionDownloadFunTest : StringSpec() {
             )
 
             val workingTree = svn.download(pkg, outputDir)
-            val actualFiles = workingTree.workingDir.walk().maxDepth(1).mapNotNullTo(mutableListOf()) {
-                it.toRelativeString(workingTree.workingDir).ifEmpty { null }
+            val actualFiles = workingTree.getRootPath().walk().maxDepth(1).mapNotNullTo(mutableListOf()) {
+                it.toRelativeString(workingTree.getRootPath()).ifEmpty { null }
             }.sorted()
 
             workingTree.isValid() shouldBe true
@@ -80,10 +80,10 @@ class SubversionDownloadFunTest : StringSpec() {
             )
 
             val workingTree = svn.download(pkg, outputDir)
-            val actualFiles = workingTree.workingDir.walk()
+            val actualFiles = workingTree.getRootPath().walk()
                 .onEnter { it.name !in VCS_DIRECTORIES }
                 .filter { it.isFile }
-                .mapTo(mutableListOf()) { it.toRelativeString(workingTree.workingDir) }
+                .mapTo(mutableListOf()) { it.toRelativeString(workingTree.getRootPath()) }
                 .sorted()
 
             workingTree.isValid() shouldBe true
@@ -103,8 +103,8 @@ class SubversionDownloadFunTest : StringSpec() {
             )
 
             val workingTree = svn.download(pkg, outputDir)
-            val actualFiles = workingTree.workingDir.walk().maxDepth(1).mapNotNullTo(mutableListOf()) {
-                it.toRelativeString(workingTree.workingDir).ifEmpty { null }
+            val actualFiles = workingTree.getRootPath().walk().maxDepth(1).mapNotNullTo(mutableListOf()) {
+                it.toRelativeString(workingTree.getRootPath()).ifEmpty { null }
             }.sorted()
 
             workingTree.isValid() shouldBe true
@@ -137,7 +137,7 @@ class SubversionDownloadFunTest : StringSpec() {
             )
 
             val workingTree = svn.download(pkg, outputDir)
-            val pathForVersion = workingTree.workingDir.resolve(REPO_PATH_FOR_VERSION)
+            val pathForVersion = workingTree.getRootPath().resolve(REPO_PATH_FOR_VERSION)
             val actualFiles = pathForVersion.walk().maxDepth(1).mapNotNullTo(mutableListOf()) {
                 it.toRelativeString(pathForVersion).ifEmpty { null }
             }.sorted()
