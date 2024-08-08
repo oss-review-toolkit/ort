@@ -76,8 +76,8 @@ class GitDownloadFunTest : StringSpec() {
             )
 
             val workingTree = git.download(pkg, outputDir)
-            val actualFiles = workingTree.workingDir.walk().maxDepth(1).mapNotNullTo(mutableListOf()) {
-                it.toRelativeString(workingTree.workingDir).ifEmpty { null }
+            val actualFiles = workingTree.getRootPath().walk().maxDepth(1).mapNotNullTo(mutableListOf()) {
+                it.toRelativeString(workingTree.getRootPath()).ifEmpty { null }
             }.sorted()
 
             workingTree.isValid() shouldBe true
@@ -95,7 +95,7 @@ class GitDownloadFunTest : StringSpec() {
             )
 
             val workingTree = git.download(pkg, outputDir)
-            val actualFiles = workingTree.workingDir.walkBottomUp()
+            val actualFiles = workingTree.getRootPath().walkBottomUp()
                 .onEnter { it.name != ".git" }
                 .filter { it.isFile }
                 .map { it.relativeTo(outputDir) }
@@ -135,7 +135,7 @@ class GitDownloadFunTest : StringSpec() {
             )
 
             val workingTree = git.download(pkg, outputDir)
-            val actualFiles = workingTree.workingDir.walkBottomUp()
+            val actualFiles = workingTree.getRootPath().walkBottomUp()
                 .onEnter { it.name != ".git" }
                 .filter { it.isFile }
                 .map { it.relativeTo(outputDir) }

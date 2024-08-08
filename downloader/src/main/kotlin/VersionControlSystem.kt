@@ -254,15 +254,15 @@ abstract class VersionControlSystem(
 
         val workingTreeRevision = results.last().getOrElse {
             throw DownloadException(
-                "$type failed to download from ${pkg.vcsProcessed.url} to '${workingTree.workingDir}'.", it
+                "$type failed to download from ${pkg.vcsProcessed.url} to '${workingTree.getRootPath()}'.", it
             )
         }
 
         pkg.vcsProcessed.path.let {
-            if (it.isNotBlank() && !workingTree.workingDir.resolve(it).exists()) {
+            if (it.isNotBlank() && !workingTree.getRootPath().resolve(it).exists()) {
                 throw DownloadException(
-                    "The $type working directory at '${workingTree.workingDir}' does not contain the requested path " +
-                        "'$it'."
+                    "The $type working directory at '${workingTree.getRootPath()}' does not contain the requested " +
+                        "path '$it'."
                 )
             }
         }

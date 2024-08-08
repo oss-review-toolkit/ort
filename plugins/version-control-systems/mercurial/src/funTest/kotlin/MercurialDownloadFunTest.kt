@@ -66,8 +66,8 @@ class MercurialDownloadFunTest : StringSpec() {
             )
 
             val workingTree = hg.download(pkg, outputDir)
-            val actualFiles = workingTree.workingDir.walk().maxDepth(1).mapNotNullTo(mutableListOf()) {
-                it.toRelativeString(workingTree.workingDir).ifEmpty { null }
+            val actualFiles = workingTree.getRootPath().walk().maxDepth(1).mapNotNullTo(mutableListOf()) {
+                it.toRelativeString(workingTree.getRootPath()).ifEmpty { null }
             }.sorted()
 
             workingTree.isValid() shouldBe true
@@ -90,7 +90,7 @@ class MercurialDownloadFunTest : StringSpec() {
                 )
 
                 val workingTree = hg.download(pkg, outputDir)
-                val actualFiles = workingTree.workingDir.walkBottomUp()
+                val actualFiles = workingTree.getRootPath().walkBottomUp()
                     .onEnter { it.name != ".hg" }
                     .filter { it.isFile }
                     .map { it.relativeTo(outputDir) }
@@ -136,7 +136,7 @@ class MercurialDownloadFunTest : StringSpec() {
                 )
 
                 val workingTree = hg.download(pkg, outputDir)
-                val actualFiles = workingTree.workingDir.walkBottomUp()
+                val actualFiles = workingTree.getRootPath().walkBottomUp()
                     .onEnter { it.name != ".hg" }
                     .filter { it.isFile }
                     .map { it.relativeTo(outputDir) }
