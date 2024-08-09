@@ -38,10 +38,15 @@ internal data class Lockfile(
     val registryFileHashes: Map<String, String>? = null
 ) {
     init {
-        require((flags != null && registryFileHashes == null) || (flags == null && registryFileHashes != null)) {
-            "Exactly one of 'flags' and 'registryFileHashes' must be set."
+        require((flags == null) xor (registryFileHashes == null)) {
+            "A lockfile must either set the 'flags' or the 'registryFileHashes' property."
         }
     }
+
+    @Serializable
+    data class Flags(
+        val cmdRegistries: List<String>
+    )
 
     /**
      * Return a collection with the URLs of the service registries defined for this project in case the model for
@@ -49,11 +54,6 @@ internal data class Lockfile(
      */
     fun registryUrls(): Collection<String> = flags?.cmdRegistries.orEmpty()
 }
-
-@Serializable
-internal data class Flags(
-    val cmdRegistries: List<String>
-)
 
 internal fun parseLockfile(lockfile: File) = json.decodeFromString<Lockfile>(lockfile.readText())
 

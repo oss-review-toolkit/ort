@@ -217,14 +217,11 @@ internal suspend fun mapSnippetFindings(
             }
 
             if (isNotOldMarkedAsIdentifiedFile) {
-                val message =
-                    "The configuration contains a snippet choice for the snippet ${snippetChoice.choice.purl} at " +
-                        "${snippetChoice.given.sourceLocation.prettyPrint()}, but the FossID result contains no such " +
-                        "snippet."
-                logger.warn(message)
-                issues += Issue(
+                issues += snippetChoice.createAndLogIssue(
                     source = "FossId",
-                    message = message,
+                    message = "The configuration contains a snippet choice for the snippet " +
+                        "${snippetChoice.choice.purl} at ${snippetChoice.given.sourceLocation.prettyPrint()}, but " +
+                        "the FossID result contains no such snippet.",
                     severity = Severity.WARNING
                 )
             }
