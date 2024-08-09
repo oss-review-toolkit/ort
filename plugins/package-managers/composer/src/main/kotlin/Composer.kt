@@ -130,7 +130,9 @@ class Composer(
             }
         }
 
-        val packages = parseInstalledPackages(lockfile)
+        val packages = (lockfile.packages + lockfile.packagesDev).associate {
+            checkNotNull(it.name) to it.toPackage()
+        }
 
         // Let's also determine the "virtual" (replaced and provided) packages. These can be declared as
         // required, but are not listed in composer.lock as installed.
@@ -235,11 +237,6 @@ class Composer(
             scopeDependencies = scopes
         )
     }
-
-    private fun parseInstalledPackages(lockfile: Lockfile): Map<String, Package> =
-        (lockfile.packages + lockfile.packagesDev).associate {
-            checkNotNull(it.name) to it.toPackage()
-        }
 
     private fun ensureLockfile(workingDir: File): File {
         val lockfile = workingDir.resolve(COMPOSER_LOCK_FILE)
