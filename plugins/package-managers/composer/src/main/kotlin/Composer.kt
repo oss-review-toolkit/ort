@@ -46,6 +46,7 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
+import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 import org.semver4j.RangesList
@@ -122,9 +123,11 @@ class Composer(
             return listOf(result)
         }
 
-        val lockfile = ensureLockfile(workingDir).let {
-            logger.info { "Parsing lockfile at '$it'..." }
-            parseLockfile(it.readText())
+        val lockfile = stashDirectories(workingDir.resolve("vendor")).use { _ ->
+            ensureLockfile(workingDir).let {
+                logger.info { "Parsing lockfile at '$it'..." }
+                parseLockfile(it.readText())
+            }
         }
 
         val packages = parseInstalledPackages(lockfile)
