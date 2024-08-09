@@ -19,11 +19,11 @@
 
 package org.ossreviewtoolkit.plugins.scanners.scanoss
 
+import com.scanoss.dto.ScanFileDetails
+import com.scanoss.dto.ScanFileResult
+
 import java.time.Instant
 
-import org.ossreviewtoolkit.clients.scanoss.FullScanResponse
-import org.ossreviewtoolkit.clients.scanoss.model.IdentificationType
-import org.ossreviewtoolkit.clients.scanoss.model.ScanResponse
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.RepositoryProvenance
@@ -40,23 +40,23 @@ import org.ossreviewtoolkit.utils.spdx.SpdxExpression
  * Generate a summary from the given SCANOSS [result], using [startTime], [endTime] as metadata. This variant can be
  * used if the result is not read from a local file.
  */
-internal fun generateSummary(startTime: Instant, endTime: Instant, result: FullScanResponse): ScanSummary {
+internal fun generateSummary(startTime: Instant, endTime: Instant, results: List<ScanFileResult>): ScanSummary {
     val licenseFindings = mutableSetOf<LicenseFinding>()
     val copyrightFindings = mutableSetOf<CopyrightFinding>()
     val snippetFindings = mutableSetOf<SnippetFinding>()
 
-    result.forEach { (_, scanResponses) ->
-        scanResponses.forEach { scanResponse ->
-            if (scanResponse.id == IdentificationType.FILE) {
-                licenseFindings += getLicenseFindings(scanResponse)
-                copyrightFindings += getCopyrightFindings(scanResponse)
+    results.forEach { result ->
+        result.fileDetails.forEach { details ->
+            if (details.id == "file") {
+                licenseFindings += getLicenseFindings(details)
+                copyrightFindings += getCopyrightFindings(details)
             }
 
-            if (scanResponse.id == IdentificationType.SNIPPET) {
-                val file = requireNotNull(scanResponse.file)
-                val lines = requireNotNull(scanResponse.lines)
+            if (details.id == "snippet") {
+                val file = requireNotNull(details.file)
+                val lines = requireNotNull(details.lines)
                 val sourceLocation = convertLines(file, lines)
-                val snippets = getSnippets(scanResponse)
+                val snippets = getSnippets(details)
 
                 snippets.forEach {
                     // TODO: Aggregate the snippet by source file location.
@@ -76,13 +76,13 @@ internal fun generateSummary(startTime: Instant, endTime: Instant, result: FullS
 }
 
 /**
- * Get the license findings from the given [scanResponse].
+ * Get the license findings from the given [details].
  */
-private fun getLicenseFindings(scanResponse: ScanResponse): List<LicenseFinding> {
-    val path = scanResponse.file ?: return emptyList()
-    val score = scanResponse.matched?.removeSuffix("%")?.toFloatOrNull()
+private fun getLicenseFindings(details: ScanFileDetails): List<LicenseFinding> {
+    val path = details.file ?: return emptyList()
+    val score = details.matched?.removeSuffix("%")?.toFloatOrNull()
 
-    return scanResponse.licenses.map { license ->
+    return details.licenseDetails.orEmpty().map { license ->
         val licenseExpression = runCatching { SpdxExpression.parse(license.name) }.getOrNull()
 
         val validatedLicense = when {
@@ -104,12 +104,12 @@ private fun getLicenseFindings(scanResponse: ScanResponse): List<LicenseFinding>
 }
 
 /**
- * Get the copyright findings from the given [scanResponse].
+ * Get the copyright findings from the given [details].
  */
-private fun getCopyrightFindings(scanResponse: ScanResponse): List<CopyrightFinding> {
-    val path = scanResponse.file ?: return emptyList()
+private fun getCopyrightFindings(details: ScanFileDetails): List<CopyrightFinding> {
+    val path = details.file ?: return emptyList()
 
-    return scanResponse.copyrights.map { copyright ->
+    return details.copyrightDetails.orEmpty().map { copyright ->
         CopyrightFinding(
             statement = copyright.name,
             location = TextLocation(
@@ -122,17 +122,17 @@ private fun getCopyrightFindings(scanResponse: ScanResponse): List<CopyrightFind
 }
 
 /**
- * Get the snippet findings from the given [scanResponse]. If a snippet returned by ScanOSS contains several Purls,
+ * Get the snippet findings from the given [details]. If a snippet returned by ScanOSS contains several Purls,
  * several snippets are created in ORT each containing a single Purl.
  */
-private fun getSnippets(scanResponse: ScanResponse): Set<Snippet> {
-    val matched = requireNotNull(scanResponse.matched)
-    val fileUrl = requireNotNull(scanResponse.fileUrl)
-    val ossLines = requireNotNull(scanResponse.ossLines)
-    val url = requireNotNull(scanResponse.url)
-    val purls = requireNotNull(scanResponse.purl)
+private fun getSnippets(details: ScanFileDetails): Set<Snippet> {
+    val matched = requireNotNull(details.matched)
+    val fileUrl = requireNotNull(details.fileUrl)
+    val ossLines = requireNotNull(details.ossLines)
+    val url = requireNotNull(details.url)
+    val purls = requireNotNull(details.purls)
 
-    val licenses = scanResponse.licenses.map { license ->
+    val licenses = details.licenseDetails.orEmpty().map { license ->
         SpdxExpression.parse(license.name)
     }.toSet()
 

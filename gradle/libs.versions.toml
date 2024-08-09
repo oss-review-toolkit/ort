@@ -54,7 +54,7 @@ reflections = "0.10.2"
 retrofit = "2.11.0"
 s3 = "2.27.1"
 saxonHe = "12.5"
-scanoss = "1.1.6"
+scanoss = "0.7.1"
 semver4j = "5.3.0"
 slf4j = "2.0.16"
 springCore = "5.3.37"
@@ -163,7 +163,7 @@ retrofit-converter-jackson = { module = "com.squareup.retrofit2:converter-jackso
 retrofit-converter-kotlinxSerialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofit" }
 retrofit-converter-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "retrofit" }
 saxonHe = { module = "net.sf.saxon:Saxon-HE", version.ref = "saxonHe" }
-scanoss = { module = "com.scanoss:scanner", version.ref = "scanoss" }
+scanoss = { module = "com.scanoss:scanoss", version.ref = "scanoss" }
 semver4j = { module = "org.semver4j:semver4j", version.ref = "semver4j" }
 slf4j = { module = "org.slf4j:slf4j-api ", version.ref = "slf4j" }
 springCore = { module = "org.springframework:spring-core", version.ref = "springCore" }

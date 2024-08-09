@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.plugins.scanners.scanoss
 
+import com.scanoss.utils.JsonUtils
+
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.haveSize
@@ -30,10 +32,6 @@ import io.kotest.matchers.should
 import java.io.File
 import java.time.Instant
 
-import kotlinx.serialization.json.decodeFromStream
-
-import org.ossreviewtoolkit.clients.scanoss.FullScanResponse
-import org.ossreviewtoolkit.clients.scanoss.ScanOssService
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.RepositoryProvenance
@@ -47,12 +45,12 @@ import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 class ScanOssResultParserTest : WordSpec({
     "generateSummary()" should {
         "properly summarize JUnit 4.12 findings" {
-            val result = File("src/test/assets/scanoss-junit-4.12.json").inputStream().use {
-                ScanOssService.JSON.decodeFromStream<FullScanResponse>(it)
+            val results = File("src/test/assets/scanoss-junit-4.12.json").readText().let {
+                JsonUtils.toScanFileResultsFromObject(JsonUtils.toJsonObject(it))
             }
 
             val time = Instant.now()
-            val summary = generateSummary(time, time, result)
+            val summary = generateSummary(time, time, results)
 
             summary.licenses.map { it.toString() } should containExactlyInAnyOrder(
                 "Apache-2.0",
@@ -85,12 +83,12 @@ class ScanOssResultParserTest : WordSpec({
         }
 
         "properly summarize Semver4j 3.1.0 with snippet findings" {
-            val result = File("src/test/assets/scanoss-semver4j-3.1.0-with-snippet.json").inputStream().use {
-                ScanOssService.JSON.decodeFromStream<FullScanResponse>(it)
+            val results = File("src/test/assets/scanoss-semver4j-3.1.0-with-snippet.json").readText().let {
+                JsonUtils.toScanFileResultsFromObject(JsonUtils.toJsonObject(it))
             }
 
             val time = Instant.now()
-            val summary = generateSummary(time, time, result)
+            val summary = generateSummary(time, time, results)
 
             summary.licenses.map { it.toString() } should containExactlyInAnyOrder(
                 "Apache-2.0",

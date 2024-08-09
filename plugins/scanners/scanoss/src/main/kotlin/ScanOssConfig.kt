@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.plugins.scanners.scanoss
 
-import org.ossreviewtoolkit.clients.scanoss.ScanOssService
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.utils.common.Options
 
@@ -46,7 +45,9 @@ data class ScanOssConfig(
         const val API_KEY_PROPERTY = "apiKey"
 
         fun create(options: Options, secrets: Options): ScanOssConfig {
-            val apiUrl = options[API_URL_PROPERTY] ?: ScanOssService.DEFAULT_API_URL
+            // TODO: Remove the hard-coded default URL once https://github.com/scanoss/scanoss.java/issues/11 is
+            //       resolved.
+            val apiUrl = options[API_URL_PROPERTY] ?: "https://api.osskb.org/"
             val apiKey = secrets[API_KEY_PROPERTY].orEmpty()
 
             return ScanOssConfig(apiUrl, apiKey)

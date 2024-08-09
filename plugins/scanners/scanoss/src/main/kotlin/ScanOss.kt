@@ -19,23 +19,18 @@
 
 package org.ossreviewtoolkit.plugins.scanners.scanoss
 
-import com.scanoss.scanner.Scanner
-import com.scanoss.scanner.Winnowing
+import com.scanoss.Winnowing
+import com.scanoss.dto.ScanFileResult
+import com.scanoss.rest.ScanApi
+import com.scanoss.utils.JsonUtils
+import com.scanoss.utils.PackageDetails
 
 import java.io.File
 import java.time.Instant
-import java.util.Properties
 import java.util.UUID
-
-import kotlinx.coroutines.runBlocking
-
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.toRequestBody
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.clients.scanoss.ScanOssService
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.scanner.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
@@ -44,10 +39,6 @@ import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
-
-// An arbitrary name to use for the multipart body being sent.
-private const val FAKE_WFP_FILE_NAME = "fake.wfp"
-private const val ARG_FIELD_NAME = "file"
 
 class ScanOss internal constructor(
     override val name: String,
@@ -62,13 +53,15 @@ class ScanOss internal constructor(
             ScanOssConfig.create(options, secrets).also { logger.info { "The $type API URL is ${it.apiUrl}." } }
     }
 
-    private val service = ScanOssService.create(config.apiUrl)
+    private val service = ScanApi.builder()
+        // As there is only a single endpoint, the SCANOSS API client expects the path to be part of the API URL.
+        .url(config.apiUrl.removeSuffix("/") + "/scan/direct")
+        .apiKey(config.apiKey)
+        .build()
 
     override val version: String by lazy {
         // TODO: Find out the best / cheapest way to query the SCANOSS server for its version.
-        val pomProperties = "/META-INF/maven/com.scanoss/scanner/pom.properties"
-        val properties = Scanner::class.java.getResourceAsStream(pomProperties).use { Properties().apply { load(it) } }
-        properties.getProperty("version")
+        PackageDetails.getVersion()
     }
 
     override val configuration = ""
@@ -102,26 +95,25 @@ class ScanOss internal constructor(
                 }
         }
 
-        val response = runBlocking {
-            val wfpBody = wfpString.toRequestBody("application/octet-stream".toMediaType())
-            val wfpFile = MultipartBody.Part.createFormData(ARG_FIELD_NAME, FAKE_WFP_FILE_NAME, wfpBody)
-
-            service.scan(wfpFile)
-        }
+        val result = service.scan(
+            wfpString,
+            context.labels["scanOssContext"],
+            context.labels["scanOssId"]?.toIntOrNull() ?: Thread.currentThread().id.toInt()
+        )
 
         // Replace the anonymized UUIDs by their file paths.
-        val resolvedResponse = response.map { entry ->
-            val uuid = UUID.fromString(entry.key)
+        val results = JsonUtils.toScanFileResultsFromObject(JsonUtils.toJsonObject(result)).map {
+            val uuid = UUID.fromString(it.filePath)
 
             val fileName = fileNamesAnonymizationMapping[uuid] ?: throw IllegalArgumentException(
                 "The $name server returned UUID '$uuid' which is not present in the mapping."
             )
 
-            fileName to entry.value
-        }.toMap()
+            ScanFileResult(fileName, it.fileDetails)
+        }
 
         val endTime = Instant.now()
-        return generateSummary(startTime, endTime, resolvedResponse)
+        return generateSummary(startTime, endTime, results)
     }
 
     internal fun generateRandomUUID() = UUID.randomUUID()
@@ -130,7 +122,7 @@ class ScanOss internal constructor(
         generateRandomUUID().let { uuid ->
             // TODO: Let's keep the original file extension to give SCANOSS some hint about the mime type.
             fileNamesAnonymizationMapping[uuid] = file.path
-            return Winnowing.wfpForFile(uuid.toString(), file.path)
+            return Winnowing.builder().build().wfpForFile(file.path, uuid.toString())
         }
     }
 }
