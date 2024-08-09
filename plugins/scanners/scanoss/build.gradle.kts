@@ -28,7 +28,6 @@ dependencies {
     api(projects.model)
     api(projects.scanner)
 
-    implementation(projects.clients.scanossClient)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.spdxUtils)
 

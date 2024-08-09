@@ -24,12 +24,10 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.beEmpty
 
-import org.ossreviewtoolkit.clients.scanoss.ScanOssService
-
 class ScanOssConfigTest : StringSpec({
     "Default values are used" {
         with(ScanOssConfig.create(emptyMap(), emptyMap())) {
-            apiUrl shouldBe ScanOssService.DEFAULT_API_URL
+            apiUrl shouldBe "https://api.osskb.org/"
             apiKey should beEmpty()
         }
     }
