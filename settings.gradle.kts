@@ -34,7 +34,6 @@ include(":clients:github-graphql")
 include(":clients:nexus-iq")
 include(":clients:oss-index")
 include(":clients:osv")
-include(":clients:scanoss")
 include(":clients:vulnerable-code")
 include(":detekt-rules")
 include(":downloader")
@@ -58,7 +57,6 @@ project(":clients:github-graphql").name = "github-graphql-client"
 project(":clients:nexus-iq").name = "nexus-iq-client"
 project(":clients:oss-index").name = "oss-index-client"
 project(":clients:osv").name = "osv-client"
-project(":clients:scanoss").name = "scanoss-client"
 project(":clients:vulnerable-code").name = "vulnerable-code-client"
 
 project(":utils:common").name = "common-utils"
