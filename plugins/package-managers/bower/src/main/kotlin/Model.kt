@@ -51,7 +51,7 @@ internal data class PackageInfo(
 @Serializable
 internal data class PackageMeta(
     val name: String? = null,
-    @Serializable(with = AuthorListSerializer::class)
+    @Serializable(AuthorListSerializer::class)
     val authors: List<Author> = emptyList(),
     val description: String? = null,
     val license: String? = null,
