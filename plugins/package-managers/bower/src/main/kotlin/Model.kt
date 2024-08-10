@@ -21,13 +21,13 @@ package org.ossreviewtoolkit.plugins.packagemanagers.bower
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonTransformingSerializer
 import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.serializer
 
 import org.ossreviewtoolkit.plugins.packagemanagers.bower.PackageMeta.Author
 
@@ -98,7 +98,7 @@ internal fun parsePackageInfoJson(json: String): PackageInfo = JSON.decodeFromSt
  * serializer then can be simplified into a single item deserializer. See also
  * https://github.com/Kotlin/kotlinx.serialization/issues/1169#issuecomment-2083213759.
  */
-private object AuthorListSerializer : JsonTransformingSerializer<List<Author>>(ListSerializer(Author.serializer())) {
+private object AuthorListSerializer : JsonTransformingSerializer<List<Author>>(serializer<List<Author>>()) {
     override fun transformDeserialize(element: JsonElement): JsonElement =
         JsonArray(
             element.jsonArray.map { item ->
