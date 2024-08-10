@@ -32,7 +32,7 @@ import kotlinx.serialization.json.jsonPrimitive
 internal data class Podspec(
     val name: String = "",
     val version: String = "",
-    @Serializable(with = LicenseSerializer::class)
+    @Serializable(LicenseSerializer::class)
     val license: String = "",
     val summary: String = "",
     val homepage: String = "",
