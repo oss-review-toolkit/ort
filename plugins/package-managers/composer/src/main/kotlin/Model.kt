@@ -22,6 +22,10 @@ package org.ossreviewtoolkit.plugins.packagemanagers.composer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonTransformingSerializer
+import kotlinx.serialization.serializer
 
 @Serializable
 internal data class Lockfile(
@@ -39,6 +43,7 @@ internal data class PackageInfo(
     val description: String? = null,
     val source: Source? = null,
     val authors: List<Author> = emptyList(),
+    @Serializable(LicenseListSerializer::class)
     val license: List<String> = emptyList(),
     val provide: Map<String, String> = emptyMap(),
     val replace: Map<String, String> = emptyMap(),
@@ -72,6 +77,11 @@ internal data class PackageInfo(
 }
 
 private val JSON = Json { ignoreUnknownKeys = true }
+
+private object LicenseListSerializer : JsonTransformingSerializer<List<String>>(serializer<List<String>>()) {
+    override fun transformDeserialize(element: JsonElement): JsonElement =
+        if (element !is JsonArray) JsonArray(listOf(element)) else element
+}
 
 internal fun parseLockfile(json: String): Lockfile = JSON.decodeFromString<Lockfile>(json)
 
