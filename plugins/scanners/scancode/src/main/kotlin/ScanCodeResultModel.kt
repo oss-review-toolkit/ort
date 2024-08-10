@@ -20,11 +20,10 @@
 package org.ossreviewtoolkit.plugins.scanners.scancode
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.builtins.ListSerializer
-import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonTransformingSerializer
+import kotlinx.serialization.serializer
 
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
@@ -205,7 +204,7 @@ data class LicenseReference(
  * A serializer that wraps an old primitive input option from ScanCode 3 into an array like it is for recent ScanCode
  * versions. Note that the input option format changed before the output format version property was introduced.
  */
-private object InputListSerializer : JsonTransformingSerializer<List<String>>(ListSerializer(String.serializer())) {
+private object InputListSerializer : JsonTransformingSerializer<List<String>>(serializer<List<String>>()) {
     override fun transformDeserialize(element: JsonElement): JsonElement =
         if (element !is JsonArray) JsonArray(listOf(element)) else element
 }

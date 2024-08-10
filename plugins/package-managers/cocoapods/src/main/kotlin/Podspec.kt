@@ -20,13 +20,13 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.cocoapods
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.JsonTransformingSerializer
 import kotlinx.serialization.json.jsonPrimitive
+import kotlinx.serialization.serializer
 
 @Serializable
 internal data class Podspec(
@@ -71,7 +71,7 @@ internal fun String.parsePodspec(): Podspec = JSON.decodeFromString<Podspec>(thi
  * 1. https://github.com/CocoaPods/Specs/blob/f75c24e7e9df1dac6ffa410a6fb30f01e026d4d6/Specs/8/5/e/SocketIOKit/2.0.1/SocketIOKit.podspec.json#L6-L9
  * 2. https://github.com/CocoaPods/Specs/blob/f75c24e7e9df1dac6ffa410a6fb30f01e026d4d6/Specs/8/5/e/FirebaseObjects/0.0.1/FirebaseObjects.podspec.json#L6
  */
-private object LicenseSerializer : JsonTransformingSerializer<String>(String.serializer()) {
+private object LicenseSerializer : JsonTransformingSerializer<String>(serializer<String>()) {
     override fun transformDeserialize(element: JsonElement): JsonElement =
         if (element is JsonObject) {
             element["type"]?.jsonPrimitive ?: JsonPrimitive("")
