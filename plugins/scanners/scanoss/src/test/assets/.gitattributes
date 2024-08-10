@@ -1,3 +1,4 @@
 # Use Unix line endings for scan results which are misused for also testing the calculation of the SPDX package verification code.
 *.json				text eol=lf
 filesToScan/*.kt	text eol=lf
+wfp/*.license	text eol=lf
