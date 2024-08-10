@@ -19,37 +19,35 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.composer
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.module.kotlin.readValue
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 
-import org.ossreviewtoolkit.model.jsonMapper
-
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Serializable
 internal data class Lockfile(
     val packages: List<PackageInfo> = emptyList(),
-    @JsonProperty("packages-dev")
+    @SerialName("packages-dev")
     val packagesDev: List<PackageInfo> = emptyList()
 )
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Serializable
 internal data class PackageInfo(
-    val name: String?,
+    val name: String? = null,
     // See https://getcomposer.org/doc/04-schema.md#version.
-    val version: String?,
-    val homepage: String?,
-    val description: String?,
+    val version: String? = null,
+    val homepage: String? = null,
+    val description: String? = null,
     val source: Source? = null,
     val authors: List<Author> = emptyList(),
     val license: List<String> = emptyList(),
     val provide: Map<String, String> = emptyMap(),
     val replace: Map<String, String> = emptyMap(),
     val require: Map<String, String> = emptyMap(),
-    @JsonProperty("require-dev")
+    @SerialName("require-dev")
     val requireDev: Map<String, String> = emptyMap(),
     val dist: Dist? = null
 ) {
-    @JsonIgnoreProperties(ignoreUnknown = true)
+    @Serializable
     data class Author(
         val name: String? = null,
         val email: String? = null,
@@ -57,22 +55,24 @@ internal data class PackageInfo(
         val role: String? = null
     )
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
+    @Serializable
     data class Source(
         val type: String? = null,
         val url: String? = null,
         val reference: String? = null
     )
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
+    @Serializable
     data class Dist(
-        val type: String?,
-        val url: String?,
-        val reference: String?,
-        val shasum: String?
+        val type: String? = null,
+        val url: String? = null,
+        val reference: String? = null,
+        val shasum: String? = null
     )
 }
 
-internal fun parseLockfile(json: String): Lockfile = jsonMapper.readValue<Lockfile>(json)
+private val JSON = Json { ignoreUnknownKeys = true }
 
-internal fun parsePackageInfo(json: String): PackageInfo = jsonMapper.readValue<PackageInfo>(json)
+internal fun parseLockfile(json: String): Lockfile = JSON.decodeFromString<Lockfile>(json)
+
+internal fun parsePackageInfo(json: String): PackageInfo = JSON.decodeFromString<PackageInfo>(json)
