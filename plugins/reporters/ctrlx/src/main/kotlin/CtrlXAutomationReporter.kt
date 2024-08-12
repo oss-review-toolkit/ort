@@ -29,6 +29,7 @@ import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
+import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 
 class CtrlXAutomationReporter : Reporter {
     companion object {
@@ -71,9 +72,10 @@ class CtrlXAutomationReporter : Reporter {
                 input.ortResult.getRepositoryLicenseChoices()
             )
             val licenses = effectiveLicense?.decompose()?.map {
-                val id = it.toString()
-                val text = input.licenseTextProvider.getLicenseText(id)
-                License(name = id, spdx = id, text = text.orEmpty())
+                val name = it.toString()
+                val spdxId = SpdxLicense.forId(name)?.id
+                val text = input.licenseTextProvider.getLicenseText(name)
+                License(name = name, spdx = spdxId, text = text.orEmpty())
             }
 
             // The specification requires at least one license.
