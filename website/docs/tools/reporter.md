@@ -15,7 +15,7 @@ Currently, the following formats are supported (reporter names are case-insensit
     * HTML (`-f HtmlTemplate`)
     * DocBook (`-f DocBookTemplate`)
     * Man page (`-f ManPageTemplate`)
-* [ctrlX AUTOMATION](https://apps.boschrexroth.com/microsites/ctrlx-automation/) platform [FOSS information](https://github.com/boschrexroth/json-schema/tree/master/ctrlx-automation/ctrlx-core/apps/fossinfo) (`-f CtrlXAutomation`)
+* [ctrlX AUTOMATION](https://apps.boschrexroth.com/microsites/ctrlx-automation/) platform [FOSS information](https://github.com/boschrexroth/json-schema/tree/master/ctrlx-automation/ctrlx-os/apps/fossinfo) (`-f CtrlXAutomation`)
 * [CycloneDX](https://cyclonedx.org/) BOM (`-f CycloneDx`)
 * FossID report download (HTML, SPDX, and Excel types)
 * [GitLabLicenseModel](https://docs.gitlab.com/ee/ci/pipelines/job_artifacts.html#artifactsreportslicense_scanning-ultimate) (`-f GitLabLicenseModel`)
