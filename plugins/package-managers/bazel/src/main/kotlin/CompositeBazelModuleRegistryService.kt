@@ -64,7 +64,7 @@ internal class CompositeBazelModuleRegistryService(
             }.groupByTo(mutableMapOf(), { it.first }) { it.second }.mapValues { it.value.toSet() }
 
             val packageNamesForRegistry = packageNamesForServer.mapKeys { (url, _) ->
-                LocalBazelModuleRegistryService.createForLocalUrl(url, projectDir)
+                LocalBazelModuleRegistryService.create(url, projectDir)
                     ?: RemoteBazelModuleRegistryService.create(url)
             }
 

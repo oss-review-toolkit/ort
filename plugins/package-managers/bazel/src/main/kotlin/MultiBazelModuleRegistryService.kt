@@ -40,15 +40,14 @@ internal class MultiBazelModuleRegistryService(
 ) : BazelModuleRegistryService {
     companion object {
         /**
-         * Create an instance of [MultiBazelModuleRegistryService] for the given [registryUrls]. Based on the URLs,
-         * concrete [BazelModuleRegistryService] implementations are created. Local registry services use the given
-         * [projectDir] as workspace. These services are then queried in the order defined by the passed in collection.
-         * Note that as the last service a remote module registry for the Bazel Central Registry is added that serves
-         * as a fallback.
+         * Create an instance of [MultiBazelModuleRegistryService] for the given [urls]. Based on the URLs, concrete
+         * [BazelModuleRegistryService] implementations are created. Local registry services use the given [projectDir]
+         * as workspace. These services are then queried in the order defined by the passed in collection. Note that as
+         * the last service a remote module registry for the Bazel Central Registry is added that serves as a fallback.
          */
-        fun create(registryUrls: Collection<String>, projectDir: File): MultiBazelModuleRegistryService {
-            val registryServices = registryUrls.mapTo(mutableListOf()) { url ->
-                LocalBazelModuleRegistryService.createForLocalUrl(url, projectDir)
+        fun create(urls: Collection<String>, projectDir: File): MultiBazelModuleRegistryService {
+            val registryServices = urls.mapTo(mutableListOf()) { url ->
+                LocalBazelModuleRegistryService.create(url, projectDir)
                     ?: RemoteBazelModuleRegistryService.create(url)
             }
 
