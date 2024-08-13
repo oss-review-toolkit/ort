@@ -46,7 +46,7 @@ internal class CompositeBazelModuleRegistryService(
          * Create a Composite Bazel Module Registry client instance. The wrapped [BazelModuleRegistryService]s are
          * created based on the passed in [urls]; local registries use the given [projectDir] as workspace.
          */
-        fun create(urls: Set<String>, projectDir: File): CompositeBazelModuleRegistryService {
+        fun create(urls: Collection<String>, projectDir: File): CompositeBazelModuleRegistryService {
             val packageNamesForServer = urls.filter { it.endsWith("source.json") }.mapNotNull { url ->
                 val groups = URL_REGEX.matchEntire(url)?.groups
 
