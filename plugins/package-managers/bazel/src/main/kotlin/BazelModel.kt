@@ -49,10 +49,10 @@ internal data class Lockfile(
     )
 
     /**
-     * Return a collection with the URLs of the service registries defined for this project in case the model for
-     * Bazel < 7.2.0 is used.
+     * Return a list of URLs for the service registries defined for this project in case Bazel < 7.2.0 is used, or an
+     * empty list otherwise.
      */
-    fun registryUrls(): Collection<String> = flags?.cmdRegistries.orEmpty()
+    fun registryUrls(): List<String> = flags?.cmdRegistries.orEmpty()
 }
 
 internal fun parseLockfile(lockfile: File) = json.decodeFromString<Lockfile>(lockfile.readText())
