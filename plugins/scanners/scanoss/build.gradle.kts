@@ -32,7 +32,10 @@ dependencies {
     implementation(projects.utils.spdxUtils)
 
     implementation(libs.kotlinx.coroutines)
-    implementation(libs.scanoss)
+    implementation(libs.scanoss) {
+        exclude(group = "org.slf4j", module = "slf4j-simple")
+            .because("the logging provider conflicts with ORT's")
+    }
 
     funTestApi(testFixtures(projects.scanner))
 
