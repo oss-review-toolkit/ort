@@ -151,13 +151,13 @@ private class MockRegistryServices(
             val centralRegistry = mockk<RemoteBazelModuleRegistryService>()
 
             every {
-                LocalBazelModuleRegistryService.createForLocalUrl(any(), projectDir)
+                LocalBazelModuleRegistryService.create(any(), projectDir)
             } returns null
             every {
-                LocalBazelModuleRegistryService.createForLocalUrl(registryUrls[0], projectDir)
+                LocalBazelModuleRegistryService.create(registryUrls[0], projectDir)
             } returns localRegistry1
             every {
-                LocalBazelModuleRegistryService.createForLocalUrl(registryUrls[2], projectDir)
+                LocalBazelModuleRegistryService.create(registryUrls[2], projectDir)
             } returns localRegistry2
             every {
                 RemoteBazelModuleRegistryService.create(registryUrls[1])
