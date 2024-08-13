@@ -43,8 +43,8 @@ class LocalBazelModuleRegistryService(directory: File) : BazelModuleRegistryServ
          * Create a [LocalBazelModuleRegistryService] if the given [url] points to a local file. In this case,
          * also replace the placeholder for the workspace by the given [projectDir]. Return *null* for all other URLs.
          */
-        fun createForLocalUrl(url: String?, projectDir: File): LocalBazelModuleRegistryService? =
-            url.takeIf { it?.startsWith(FILE_URL_PREFIX) == true }?.let { fileUrl ->
+        fun createForLocalUrl(url: String, projectDir: File): LocalBazelModuleRegistryService? =
+            url.takeIf { it.startsWith(FILE_URL_PREFIX) }?.let { fileUrl ->
                 val directory = fileUrl.removePrefix(FILE_URL_PREFIX)
                     .replace(WORKSPACE_PLACEHOLDER, projectDir.absolutePath)
 
