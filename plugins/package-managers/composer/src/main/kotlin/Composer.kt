@@ -110,6 +110,19 @@ class Composer(
         checkVersion()
     }
 
+    override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> {
+        val projectFiles = definitionFiles.toMutableList()
+
+        var index = 0
+        while (index < projectFiles.size - 1) {
+            val projectFile = projectFiles[index++]
+            val vendorDir = projectFile.resolveSibling("vendor")
+            projectFiles.subList(index, projectFiles.size).removeAll { it.startsWith(vendorDir) }
+        }
+
+        return projectFiles
+    }
+
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
 
