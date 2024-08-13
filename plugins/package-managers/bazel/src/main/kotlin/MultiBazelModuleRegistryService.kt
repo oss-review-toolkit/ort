@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.packagemanagers.bazel
 import java.io.File
 
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.BazelModuleRegistryService
+import org.ossreviewtoolkit.clients.bazelmoduleregistry.DEFAULT_URL
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.LocalBazelModuleRegistryService
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.ModuleMetadata
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.ModuleSourceInfo
@@ -46,13 +47,13 @@ internal class MultiBazelModuleRegistryService(
          * the last service a remote module registry for the Bazel Central Registry is added that serves as a fallback.
          */
         fun create(urls: Collection<String>, projectDir: File): MultiBazelModuleRegistryService {
-            val registryServices = urls.mapTo(mutableListOf()) { url ->
+            // Add the default Bazel registry as a fallback.
+            val registryUrls = (urls + DEFAULT_URL).distinctBy { it.removeSuffix("/") }
+
+            val registryServices = registryUrls.mapTo(mutableListOf()) { url ->
                 LocalBazelModuleRegistryService.create(url, projectDir)
                     ?: RemoteBazelModuleRegistryService.create(url)
             }
-
-            // Add the default Bazel registry as a fallback.
-            registryServices += RemoteBazelModuleRegistryService.create()
 
             return MultiBazelModuleRegistryService(registryServices)
         }

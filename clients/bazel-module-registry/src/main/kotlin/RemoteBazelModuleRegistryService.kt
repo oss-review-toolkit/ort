@@ -32,7 +32,7 @@ import retrofit2.http.Path
 /**
  * The client uses the Bazel Central Registry by default.
  */
-private const val DEFAULT_URL = "https://bcr.bazel.build"
+const val DEFAULT_URL = "https://bcr.bazel.build"
 
 /**
  * Interface for a Bazel Module Registry, based on the directory structure of https://bcr.bazel.build/ and the Git
