@@ -163,7 +163,7 @@ private class MockRegistryServices(
                 RemoteBazelModuleRegistryService.create(registryUrls[1])
             } returns remoteRegistry
             every {
-                RemoteBazelModuleRegistryService.create(url = null)
+                RemoteBazelModuleRegistryService.create()
             } returns centralRegistry
 
             return MockRegistryServices(listOf(localRegistry1, localRegistry2, remoteRegistry, centralRegistry))

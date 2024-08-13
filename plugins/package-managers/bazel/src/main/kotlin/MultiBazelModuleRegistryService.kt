@@ -53,7 +53,7 @@ internal class MultiBazelModuleRegistryService(
             }
 
             // Add the default Bazel registry as a fallback.
-            registryServices += RemoteBazelModuleRegistryService.create(null)
+            registryServices += RemoteBazelModuleRegistryService.create()
 
             return MultiBazelModuleRegistryService(registryServices)
         }
