@@ -33,6 +33,7 @@ import io.mockk.unmockkAll
 import java.io.File
 
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.BazelModuleRegistryService
+import org.ossreviewtoolkit.clients.bazelmoduleregistry.DEFAULT_URL
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.LocalBazelModuleRegistryService
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.ModuleMetadata
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.ModuleSourceInfo
@@ -163,7 +164,7 @@ private class MockRegistryServices(
                 RemoteBazelModuleRegistryService.create(registryUrls[1])
             } returns remoteRegistry
             every {
-                RemoteBazelModuleRegistryService.create()
+                RemoteBazelModuleRegistryService.create(DEFAULT_URL)
             } returns centralRegistry
 
             return MockRegistryServices(listOf(localRegistry1, localRegistry2, remoteRegistry, centralRegistry))
