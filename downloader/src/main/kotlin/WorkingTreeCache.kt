@@ -24,6 +24,8 @@ import java.io.IOException
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
+import org.apache.logging.log4j.kotlin.logger
+
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
@@ -89,7 +91,13 @@ class DefaultWorkingTreeCache : WorkingTreeCache {
 
             workingTreeMutexes.forEach { (key, workingTreeMutex) ->
                 workingTreeMutex.withLock {
-                    workingTrees[key]?.getRootPath()?.safeDeleteRecursively(force = true)
+                    workingTrees[key]?.run {
+                        logger.debug {
+                            "Deleting cached working tree for ${getRemoteUrl()} from '${getRootPath()}'..."
+                        }
+
+                        getRootPath().safeDeleteRecursively(force = true)
+                    }
                 }
             }
 
