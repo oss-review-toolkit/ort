@@ -21,11 +21,34 @@ package org.ossreviewtoolkit.evaluator.osadl
 
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
 
 class CompatibilityMatrixTest : StringSpec({
     "Deserializing the matrix succeeds" {
         shouldNotThrow<IllegalArgumentException> {
             CompatibilityMatrix.releaseDateAndTime
+        }
+    }
+
+    "An outbound Apache-2.0 license is incompatible with an inbound GPL-2.0-only license" {
+        val info = CompatibilityMatrix.getCompatibilityInfo("Apache-2.0", "GPL-2.0-only")
+
+        with(info) {
+            compatibility shouldBe Compatibility.NO
+            explanation shouldBe "Software under a copyleft license such as the GPL-2.0-only license normally cannot " +
+                "be redistributed under a non-copyleft license such as the Apache-2.0 license, except if it were " +
+                "explicitly permitted in the licenses."
+        }
+    }
+
+    // Note: This might change due to the https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4786638 paper.
+    "An outbound GPL-2.0-only license is incompatible with an inbound Apache-2.0 license" {
+        val info = CompatibilityMatrix.getCompatibilityInfo("GPL-2.0-only", "Apache-2.0")
+
+        with(info) {
+            compatibility shouldBe Compatibility.NO
+            explanation shouldBe "Incompatibility of the Apache-2.0 license with the GPL-2.0-only license is " +
+                "explicitly stated in the GPL-2.0-only license checklist."
         }
     }
 })
