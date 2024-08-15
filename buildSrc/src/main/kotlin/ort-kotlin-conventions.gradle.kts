@@ -164,6 +164,9 @@ tasks.withType<Detekt>().configureEach detekt@{
 }
 
 tasks.register("detektAll") {
+    group = "Verification"
+    description = "Run all detekt tasks with and without type resolution."
+
     dependsOn(tasks.withType<Detekt>())
 }
 
