@@ -5,7 +5,6 @@ dokkatooPlugin = "2.3.1"
 downloadPlugin = "5.6.0"
 gitSemverPlugin = "0.12.10"
 graalVmNativeImagePlugin = "0.10.2"
-graphQlPlugin = "6.8.4"
 ideaExtPlugin = "1.1.8"
 kotlinPlugin = "2.0.10"
 mavenPublishPlugin = "0.29.0"
@@ -68,7 +67,6 @@ xz = "1.10"
 dependencyAnalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyAnalysisPlugin" }
 download = { id = "de.undercouch.download", version.ref = "downloadPlugin" }
 gitSemver = { id = "com.github.jmongard.git-semver-plugin", version.ref = "gitSemverPlugin" }
-graphQl = { id = "com.expediagroup.graphql", version.ref = "graphQlPlugin" }
 ideaExt = { id = "org.jetbrains.gradle.plugin.idea-ext", version.ref = "ideaExtPlugin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinPlugin" }
 versions = { id = "com.github.ben-manes.versions", version.ref = "versionsPlugin" }
@@ -100,7 +98,6 @@ exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "e
 exposed-json = { module = "org.jetbrains.exposed:exposed-json", version.ref = "exposed" }
 flexmark = { module = "com.vladsch.flexmark:flexmark", version.ref = "flexmark" }
 freemarker = { module = "org.freemarker:freemarker", version.ref = "freemarker" }
-graphQlKtorClient = { module = "com.expediagroup:graphql-kotlin-ktor-client", version.ref = "graphQlPlugin" }
 greenmail = { module = "com.icegreen:greenmail", version.ref = "greenmail" }
 hikari = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }
 hoplite-core = { module = "com.sksamuel.hoplite:hoplite-core", version.ref = "hoplite" }
