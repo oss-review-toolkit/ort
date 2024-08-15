@@ -36,9 +36,9 @@ class WebAppReporterFunTest : WordSpec({
             val ortResult = readOrtResult(getAssetFile("scan-result-for-synthetic-gradle-lib.yml"))
             val outputDir = tempdir()
 
-            val reportFileResult = WebAppReporter().generateReport(ReporterInput(ortResult), outputDir)
+            val reportFileResults = WebAppReporter().generateReport(ReporterInput(ortResult), outputDir)
 
-            reportFileResult.shouldBeSingleton {
+            reportFileResults.shouldBeSingleton {
                 it shouldBeSuccess { reportFile ->
                     reportFile.length() should beInRange(1559000L..1589000L)
                 }
