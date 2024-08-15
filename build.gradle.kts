@@ -93,6 +93,9 @@ tasks.named<DependencyUpdatesTask>("dependencyUpdates") {
 // all dependencies at once is beneficial, e.g. for debugging version conflict resolution.
 // [1]: https://docs.gradle.org/current/userguide/viewing_debugging_dependencies.html#sec:listing_dependencies
 tasks.register("allDependencies") {
+    group = "Help"
+    description = "Displays all dependencies declared in all projects."
+
     val dependenciesTasks = getTasksByName("dependencies", /* recursive = */ true).sorted()
     dependsOn(dependenciesTasks)
 
