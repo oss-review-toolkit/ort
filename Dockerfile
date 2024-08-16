@@ -407,6 +407,7 @@ FROM base as bazelbuild
 ARG BAZELISK_VERSION
 
 ENV BAZEL_HOME=/opt/bazel
+ENV GOBIN=/opt/go/bin
 
 RUN mkdir -p $BAZEL_HOME/bin \
     && if [ "$(arch)" = "aarch64" ]; then \
@@ -416,8 +417,13 @@ RUN mkdir -p $BAZEL_HOME/bin \
     fi \
     && chmod a+x $BAZEL_HOME/bin/bazel
 
+COPY --from=gobuild /opt/go /opt/go
+
+RUN $GOBIN/go install github.com/bazelbuild/buildtools/buildozer@latest && chmod a+x $GOBIN/buildozer
+
 FROM scratch as bazel
 COPY --from=bazelbuild /opt/bazel /opt/bazel
+COPY --from=bazelbuild /opt/go/bin/buildozer /opt/go/bin/buildozer
 
 #------------------------------------------------------------------------
 # ORT
@@ -576,6 +582,7 @@ ENV BAZEL_HOME=/opt/bazel
 ENV PATH=$PATH:$BAZEL_HOME/bin
 
 COPY --from=bazel $BAZEL_HOME $BAZEL_HOME
+COPY --from=bazel --chown=$USER:$USER /opt/go/bin/buildozer /opt/go/bin/buildozer
 
 RUN syft $BAZEL_HOME -o spdx-json --output json=/usr/share/doc/ort/ort-bazel.spdx.json
 
