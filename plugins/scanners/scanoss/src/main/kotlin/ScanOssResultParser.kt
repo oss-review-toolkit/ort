@@ -132,16 +132,16 @@ private fun getSnippets(details: ScanFileDetails): Set<Snippet> {
     val url = requireNotNull(details.url)
     val purls = requireNotNull(details.purls)
 
-    val licenses = details.licenseDetails.orEmpty().map { license ->
+    val licenses = details.licenseDetails.orEmpty().mapTo(mutableSetOf()) { license ->
         SpdxExpression.parse(license.name)
-    }.toSet()
+    }
 
     val score = matched.substringBeforeLast("%").toFloat()
     val snippetLocation = convertLines(fileUrl, ossLines)
     // TODO: No resolved revision is available. Should a ArtifactProvenance be created instead ?
     val snippetProvenance = RepositoryProvenance(VcsInfo(VcsType.UNKNOWN, url, ""), ".")
 
-    return purls.map {
+    return purls.mapTo(mutableSetOf()) {
         Snippet(
             score,
             snippetLocation,
@@ -149,7 +149,7 @@ private fun getSnippets(details: ScanFileDetails): Set<Snippet> {
             it,
             licenses.distinct().reduce(SpdxExpression::and).sorted()
         )
-    }.toSet()
+    }
 }
 
 /**
