@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
 
 /**
  * Generate a summary from the given SCANOSS [result], using [startTime], [endTime] as metadata. This variant can be
@@ -147,7 +148,7 @@ private fun getSnippets(details: ScanFileDetails): Set<Snippet> {
             snippetLocation,
             snippetProvenance,
             it,
-            licenses.reduce(SpdxExpression::and).sorted()
+            licenses.reduceOrNull(SpdxExpression::and)?.sorted() ?: SpdxLicenseIdExpression(SpdxConstants.NOASSERTION)
         )
     }
 }
