@@ -7,6 +7,7 @@ gitSemverPlugin = "0.12.10"
 graalVmNativeImagePlugin = "0.10.2"
 ideaExtPlugin = "1.1.8"
 kotlinPlugin = "2.0.20"
+ksp = "2.0.20-1.0.24"
 mavenPublishPlugin = "0.29.0"
 versionsPlugin = "0.51.0"
 
@@ -33,6 +34,7 @@ jslt = "0.1.14"
 jsonSchemaValidator = "1.5.1"
 kaml = "0.61.0"
 kotest = "5.9.1"
+kotlinPoet = "1.18.1"
 kotlinxCoroutines = "1.8.1"
 kotlinxHtml = "0.11.0"
 kotlinxSerialization = "1.7.1"
@@ -69,6 +71,7 @@ download = { id = "de.undercouch.download", version.ref = "downloadPlugin" }
 gitSemver = { id = "com.github.jmongard.git-semver-plugin", version.ref = "gitSemverPlugin" }
 ideaExt = { id = "org.jetbrains.gradle.plugin.idea-ext", version.ref = "ideaExtPlugin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinPlugin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 versions = { id = "com.github.ben-manes.versions", version.ref = "versionsPlugin" }
 
 [libraries]
@@ -124,6 +127,8 @@ kotest-framework-api = { module = "io.kotest:kotest-framework-api", version.ref 
 kotest-framework-datatest = { module = "io.kotest:kotest-framework-datatest", version.ref = "kotest" }
 kotest-framework-engine = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
 kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinPoet"}
+kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version.ref = "kotlinPoet"}
 kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinx-html = { module = "org.jetbrains.kotlinx:kotlinx-html-jvm", version.ref = "kotlinxHtml" }
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerialization" }
@@ -133,6 +138,7 @@ kotlinx-serialization-xml = { module = "io.github.pdvrieze.xmlutil:serialization
 kotlinx-serialization-yaml = { module = "com.charleskorn.kaml:kaml", version.ref = "kaml" }
 ks3-jdk = { module = "io.ks3:ks3-jdk", version.ref = "ks3" }
 ks3-standard = { module = "io.ks3:ks3-standard", version.ref = "ks3" }
+ksp = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp"}
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-okHttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 log4j-api = { module = "org.apache.logging.log4j:log4j-api", version.ref = "log4jApi" }
