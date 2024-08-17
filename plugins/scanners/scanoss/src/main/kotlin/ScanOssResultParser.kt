@@ -147,7 +147,7 @@ private fun getSnippets(details: ScanFileDetails): Set<Snippet> {
             snippetLocation,
             snippetProvenance,
             it,
-            licenses.distinct().reduce(SpdxExpression::and).sorted()
+            licenses.reduce(SpdxExpression::and).sorted()
         )
     }
 }
