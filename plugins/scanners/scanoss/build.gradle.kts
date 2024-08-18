@@ -28,6 +28,7 @@ dependencies {
     api(projects.model)
     api(projects.scanner)
 
+    implementation(projects.downloader)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.spdxUtils)
 

@@ -118,7 +118,7 @@ class ScanOssScannerDirectoryTest : StringSpec({
                                 367
                             ),
                             RepositoryProvenance(
-                                VcsInfo(VcsType.UNKNOWN, "https://github.com/scanoss/ort", ""), "."
+                                VcsInfo(VcsType.GIT, "https://github.com/scanoss/ort.git", ""), "."
                             ),
                             "pkg:github/scanoss/ort",
                             SpdxExpression.parse("Apache-2.0")

@@ -122,7 +122,7 @@ class ScanOssResultParserTest : WordSpec({
                                 710
                             ),
                             RepositoryProvenance(
-                                VcsInfo(VcsType.UNKNOWN, "https://github.com/vdurmont/semver4j", ""),
+                                VcsInfo(VcsType.GIT, "https://github.com/vdurmont/semver4j.git", ""),
                                 "."
                             ),
                             "pkg:github/vdurmont/semver4j",

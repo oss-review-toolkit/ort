@@ -24,6 +24,7 @@ import com.scanoss.dto.ScanFileResult
 
 import java.time.Instant
 
+import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.RepositoryProvenance
@@ -31,8 +32,6 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Snippet
 import org.ossreviewtoolkit.model.SnippetFinding
 import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
@@ -148,7 +147,8 @@ private fun getSnippets(details: ScanFileDetails): Set<Snippet> {
     val score = matched.substringBeforeLast("%").toFloat()
     val snippetLocation = convertLines(fileUrl, ossLines)
     // TODO: No resolved revision is available. Should a ArtifactProvenance be created instead ?
-    val snippetProvenance = RepositoryProvenance(VcsInfo(VcsType.UNKNOWN, url, ""), ".")
+    val vcsInfo = VcsHost.parseUrl(url.takeUnless { it == "none" }.orEmpty())
+    val snippetProvenance = RepositoryProvenance(vcsInfo, ".")
 
     return purls.mapTo(mutableSetOf()) {
         Snippet(
