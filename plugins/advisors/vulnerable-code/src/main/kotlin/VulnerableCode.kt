@@ -40,7 +40,8 @@ import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
-import org.ossreviewtoolkit.utils.common.Options
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.common.percentEncode
@@ -69,23 +70,17 @@ private const val BULK_REQUEST_SIZE = 100
  *
  * * **`apiKey`:** The optional API key to use.
  */
-class VulnerableCode(name: String, config: VulnerableCodeConfiguration) : AdviceProvider(name) {
-    class Factory : AdviceProviderFactory<VulnerableCodeConfiguration>("VulnerableCode") {
-        override fun create(config: VulnerableCodeConfiguration) = VulnerableCode(type, config)
-
-        override fun parseConfig(options: Options, secrets: Options) =
-            VulnerableCodeConfiguration(
-                serverUrl = options["serverUrl"],
-                apiKey = secrets["apiKey"],
-                readTimeout = options["readTimeout"]?.toLongOrNull()
-            )
-    }
-
+@OrtPlugin(
+    name = "VulnerableCode",
+    description = "An advisor that uses a VulnerableCode instance to determine vulnerabilities in dependencies.",
+    factory = AdviceProviderFactory::class
+)
+class VulnerableCode(override val descriptor: PluginDescriptor, config: VulnerableCodeConfiguration) : AdviceProvider {
     /**
      * The details returned with each [AdvisorResult] produced by this instance. As this is constant, it can be
      * created once beforehand.
      */
-    override val details = AdvisorDetails(providerName, enumSetOf(AdvisorCapability.VULNERABILITIES))
+    override val details = AdvisorDetails(descriptor.className, enumSetOf(AdvisorCapability.VULNERABILITIES))
 
     private val service by lazy {
         val client = OkHttpClientHelper.buildClient {
@@ -116,7 +111,7 @@ class VulnerableCode(name: String, config: VulnerableCodeConfiguration) : Advice
                 // issues that are not associated to any package.
                 allVulnerabilities += chunk.associateWith { emptyList() }
 
-                issues += Issue(source = providerName, message = it.collectMessages())
+                issues += Issue(source = descriptor.name, message = it.collectMessages())
 
                 logger.error {
                     "The request of chunk ${index + 1} of ${chunks.size} failed for the following ${chunk.size} " +
@@ -166,7 +161,7 @@ class VulnerableCode(name: String, config: VulnerableCodeConfiguration) : Advice
                 VulnerabilityReference(sourceUri, it.scoringSystem, severity)
             }
         }.onFailure {
-            issues += createAndLogIssue(providerName, "Failed to map $this to ORT model due to $it.", Severity.HINT)
+            issues += createAndLogIssue(descriptor.name, "Failed to map $this to ORT model due to $it.", Severity.HINT)
         }.getOrElse { emptyList() }
 
     /**

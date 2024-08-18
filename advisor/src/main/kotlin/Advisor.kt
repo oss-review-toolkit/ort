@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
+import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.utils.ort.Environment
 
 /**
@@ -40,7 +41,7 @@ import org.ossreviewtoolkit.utils.ort.Environment
  * [OrtResult].
  */
 class Advisor(
-    private val providerFactories: List<AdviceProviderFactory<*>>,
+    private val providerFactories: List<AdviceProviderFactory>,
     private val config: AdvisorConfiguration
 ) {
     /**
@@ -75,8 +76,8 @@ class Advisor(
                 logger.info { "There are no packages to give advice for." }
             } else {
                 val providers = providerFactories.map {
-                    val providerConfig = config.config?.get(it.type)
-                    it.create(providerConfig?.options.orEmpty(), providerConfig?.secrets.orEmpty())
+                    val providerConfig = config.config?.get(it.descriptor.className)
+                    it.create(PluginConfig(providerConfig?.options.orEmpty(), providerConfig?.secrets.orEmpty()))
                 }
 
                 providers.map { provider ->
@@ -85,7 +86,7 @@ class Advisor(
 
                         logger.info {
                             "Found ${providerResults.values.flatMap { it.vulnerabilities }.distinct().size} distinct " +
-                                "vulnerabilities via ${provider.providerName}. "
+                                "vulnerabilities via ${provider.descriptor.name}. "
                         }
 
                         providerResults.keys.takeIf { it.isNotEmpty() }?.let { pkgs ->

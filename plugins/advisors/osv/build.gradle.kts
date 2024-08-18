@@ -20,6 +20,9 @@
 plugins {
     // Apply precompiled plugins.
     id("ort-library-conventions")
+
+    // Apply third-party plugins.
+    alias(libs.plugins.ksp)
 }
 
 dependencies {
@@ -33,4 +36,7 @@ dependencies {
     implementation(libs.cvssCalculator)
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
+
+    ksp(projects.advisor)
+    ksp(projects.plugins.api)
 }

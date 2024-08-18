@@ -281,7 +281,7 @@ class VulnerableCodeTest : WordSpec({
     }
 })
 
-private const val ADVISOR_NAME = "VulnerableCodeTestAdvisor"
+private const val ADVISOR_NAME = "VulnerableCode"
 private const val TEST_FILES_ROOT = "src/test/assets"
 private const val TEST_RESULT_NAME = "ort-analyzer-result.yml"
 
@@ -329,14 +329,14 @@ private fun WireMockServer.stubPackagesRequest(responseFile: String, request: St
  */
 private fun createConfig(server: WireMockServer): VulnerableCodeConfiguration {
     val url = "http://localhost:${server.port()}"
-    return VulnerableCodeConfiguration(url, "")
+    return VulnerableCodeConfiguration(url, null, null)
 }
 
 /**
  * Create a test instance of [VulnerableCode] that communicates with the local [server].
  */
 private fun createVulnerableCode(server: WireMockServer): VulnerableCode =
-    VulnerableCode(ADVISOR_NAME, createConfig(server))
+    VulnerableCode(VulnerableCodeFactory().descriptor, createConfig(server))
 
 /**
  * Return the test file with an analyzer result.

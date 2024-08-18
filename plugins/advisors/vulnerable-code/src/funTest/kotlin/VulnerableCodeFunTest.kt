@@ -29,11 +29,12 @@ import io.kotest.matchers.shouldBe
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.plugins.api.PluginConfig
 
 class VulnerableCodeFunTest : WordSpec({
     "Vulnerable Maven packages" should {
         "return findings for Guava" {
-            val vc = VulnerableCode("VulnerableCode", VulnerableCodeConfiguration())
+            val vc = VulnerableCodeFactory().create(PluginConfig())
             val id = Identifier("Maven:com.google.guava:guava:19.0")
             val pkg = Package.EMPTY.copy(id, purl = id.toPurl())
 
@@ -57,7 +58,7 @@ class VulnerableCodeFunTest : WordSpec({
         }
 
         "return findings for Commons-Compress" {
-            val vc = VulnerableCode("VulnerableCode", VulnerableCodeConfiguration())
+            val vc = VulnerableCodeFactory().create(PluginConfig())
             val id = Identifier("Maven:org.apache.commons:commons-compress:1.23.0")
             val pkg = Package.EMPTY.copy(id, purl = id.toPurl())
 

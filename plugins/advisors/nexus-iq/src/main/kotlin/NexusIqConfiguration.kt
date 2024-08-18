@@ -29,19 +29,19 @@ data class NexusIqConfiguration(
     val serverUrl: String,
 
     /**
-     * A URL to use as a base for browsing vulnerability details. Defaults to the server URL.
+     * A URL to use as a base for browsing vulnerability details. If not set, the [serverUrl] is used.
      */
-    val browseUrl: String = serverUrl,
+    val browseUrl: String?,
 
     /**
      * The username to use for authentication. If not both [username] and [password] are provided, authentication is
      * disabled.
      */
-    val username: String? = null,
+    val username: String?,
 
     /**
      * The password to use for authentication. If not both [username] and [password] are provided, authentication is
      * disabled.
      */
-    val password: String? = null
+    val password: String?
 )

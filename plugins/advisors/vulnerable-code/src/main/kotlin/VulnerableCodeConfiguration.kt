@@ -19,6 +19,9 @@
 
 package org.ossreviewtoolkit.plugins.advisors.vulnerablecode
 
+import org.ossreviewtoolkit.clients.vulnerablecode.VulnerableCodeService
+import org.ossreviewtoolkit.plugins.api.OrtPluginOption
+
 /**
  * The configuration for VulnerableCode as security vulnerability provider.
  */
@@ -26,15 +29,16 @@ data class VulnerableCodeConfiguration(
     /**
      * The base URL of the VulnerableCode REST API. By default, the public VulnerableCode instance is used.
      */
-    val serverUrl: String? = null,
+    @OrtPluginOption(defaultValue = VulnerableCodeService.PUBLIC_SERVER_URL)
+    val serverUrl: String,
 
     /**
      * The optional API key to use.
      */
-    val apiKey: String? = null,
+    val apiKey: String?,
 
     /**
      * The read timeout for the server connection in seconds. Defaults to whatever is the HTTP client's default value.
      */
-    val readTimeout: Long? = null
+    val readTimeout: Long?
 )

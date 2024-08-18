@@ -41,7 +41,8 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
-import org.ossreviewtoolkit.utils.common.Options
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.common.toUri
@@ -59,15 +60,13 @@ import us.springett.cvss.Cvss
  * * **`serverUrl`:** The base URL of the OSV REST API. If undefined, default is the production endpoint of the official
  *   OSV.dev API.
  */
-class Osv(name: String, config: OsvConfiguration) : AdviceProvider(name) {
-    class Factory : AdviceProviderFactory<OsvConfiguration>("OSV") {
-        override fun create(config: OsvConfiguration) = Osv(type, config)
-
-        override fun parseConfig(options: Options, secrets: Options) =
-            OsvConfiguration(serverUrl = options["serverUrl"])
-    }
-
-    override val details: AdvisorDetails = AdvisorDetails(providerName, enumSetOf(AdvisorCapability.VULNERABILITIES))
+@OrtPlugin(
+    name = "OSV",
+    description = "An advisor that retrieves vulnerability information from the Open Source Vulnerabilities database.",
+    factory = AdviceProviderFactory::class
+)
+class Osv(override val descriptor: PluginDescriptor, config: OsvConfiguration) : AdviceProvider {
+    override val details = AdvisorDetails(descriptor.className, enumSetOf(AdvisorCapability.VULNERABILITIES))
 
     private val service = OsvServiceWrapper(
         serverUrl = config.serverUrl,

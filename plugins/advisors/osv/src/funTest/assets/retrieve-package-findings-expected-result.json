@@ -1,7 +1,7 @@
 {
   "NPM::find-my-way:3.0.0" : {
     "advisor" : {
-      "name" : "OSV",
+      "name" : "Osv",
       "capabilities" : [ "VULNERABILITIES" ]
     },
     "summary" : {
@@ -34,7 +34,7 @@
   },
   "NPM::discord-markdown:2.3.0" : {
     "advisor" : {
-      "name" : "OSV",
+      "name" : "Osv",
       "capabilities" : [ "VULNERABILITIES" ]
     },
     "summary" : {
@@ -63,7 +63,7 @@
   },
   "PyPI::donfig:0.2.0" : {
     "advisor" : {
-      "name" : "OSV",
+      "name" : "Osv",
       "capabilities" : [ "VULNERABILITIES" ]
     },
     "summary" : {

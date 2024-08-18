@@ -39,6 +39,8 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
+import org.ossreviewtoolkit.plugins.api.PluginConfig
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 
 class AdvisorTest : WordSpec({
     "retrieveFindings" should {
@@ -117,8 +119,8 @@ private fun createAdvisor(providers: List<AdviceProvider>): Advisor {
     val advisorConfig = AdvisorConfiguration()
 
     val factories = providers.map { provider ->
-        val factory = mockk<AdviceProviderFactory<*>>()
-        every { factory.create(emptyMap(), emptyMap()) } returns provider
+        val factory = mockk<AdviceProviderFactory>()
+        every { factory.create(PluginConfig(emptyMap(), emptyMap())) } returns provider
         factory
     }
 
@@ -146,7 +148,7 @@ private fun createPackage(index: Int): Package =
 
 private fun mockkAdviceProvider(): AdviceProvider =
     mockk<AdviceProvider>().apply {
-        every { providerName } returns "provider"
+        every { descriptor } returns PluginDescriptor("provider", "Provider", "", emptyList())
     }
 
 private fun mockkAdvisorResult(): AdvisorResult =

@@ -24,6 +24,7 @@ plugins {
 
 dependencies {
     api(projects.model)
+    api(projects.plugins.api)
     api(projects.utils.commonUtils)
 
     implementation(projects.utils.ortUtils)
