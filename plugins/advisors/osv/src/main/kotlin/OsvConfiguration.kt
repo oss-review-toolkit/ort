@@ -19,6 +19,9 @@
 
 package org.ossreviewtoolkit.plugins.advisors.osv
 
+import org.ossreviewtoolkit.clients.osv.OsvService
+import org.ossreviewtoolkit.plugins.api.OrtPluginOption
+
 /**
  * The configuration for the Google OSV vulnerability provider.
  */
@@ -26,5 +29,6 @@ data class OsvConfiguration(
     /**
      * The base URL of the OSV REST API. If undefined, default is the production endpoint of the official OSV.dev API.
      */
-    val serverUrl: String? = null
+    @OrtPluginOption(defaultValue = OsvService.PRODUCTION_SERVER_URL)
+    val serverUrl: String
 )

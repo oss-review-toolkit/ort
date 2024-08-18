@@ -21,24 +21,16 @@ package org.ossreviewtoolkit.advisor
 
 import java.util.ServiceLoader
 
-import org.ossreviewtoolkit.utils.common.Plugin
-import org.ossreviewtoolkit.utils.common.TypedConfigurablePluginFactory
+import org.ossreviewtoolkit.plugins.api.PluginFactory
 
 /**
  * A common abstract class for use with [ServiceLoader] that all [AdviceProviderFactory] classes need to implement.
  */
-abstract class AdviceProviderFactory<CONFIG>(override val type: String) :
-    TypedConfigurablePluginFactory<CONFIG, AdviceProvider> {
+interface AdviceProviderFactory : PluginFactory<AdviceProvider> {
     companion object {
         /**
          * All [advice provider factories][AdviceProviderFactory] available in the classpath, associated by their names.
          */
-        val ALL by lazy { Plugin.getAll<AdviceProviderFactory<*>>() }
+        val ALL by lazy { PluginFactory.getAll<AdviceProviderFactory, AdviceProvider>() }
     }
-
-    /**
-     * Return the provider's type here to allow Clikt to display something meaningful when listing the advisors which
-     * are enabled by default via their factories.
-     */
-    override fun toString() = type
 }

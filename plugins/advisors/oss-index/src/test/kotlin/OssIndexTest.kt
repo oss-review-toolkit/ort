@@ -70,7 +70,10 @@ class OssIndexTest : WordSpec({
     "OssIndex" should {
         "return vulnerability information" {
             server.stubComponentsRequest("response_components.json")
-            val ossIndex = OssIndex(ADVISOR_NAME, OssIndexConfiguration("http://localhost:${server.port()}"))
+            val ossIndex = OssIndex(
+                OssIndexFactory().descriptor,
+                OssIndexConfiguration("http://localhost:${server.port()}", null, null)
+            )
             val packages = COMPONENTS_REQUEST_IDS.mapTo(mutableSetOf()) {
                 Package.EMPTY.copy(id = it, purl = it.toPurl())
             }
@@ -114,7 +117,10 @@ class OssIndexTest : WordSpec({
                         aResponse().withStatus(500)
                     )
             )
-            val ossIndex = OssIndex(ADVISOR_NAME, OssIndexConfiguration("http://localhost:${server.port()}"))
+            val ossIndex = OssIndex(
+                OssIndexFactory().descriptor,
+                OssIndexConfiguration("http://localhost:${server.port()}", null, null)
+            )
             val packages = COMPONENTS_REQUEST_IDS.mapTo(mutableSetOf()) {
                 Package.EMPTY.copy(id = it, purl = it.toPurl())
             }
@@ -130,14 +136,17 @@ class OssIndexTest : WordSpec({
         }
 
         "provide correct details" {
-            val ossIndex = OssIndex(ADVISOR_NAME, OssIndexConfiguration("http://localhost:${server.port()}"))
+            val ossIndex = OssIndex(
+                OssIndexFactory().descriptor,
+                OssIndexConfiguration("http://localhost:${server.port()}", null, null)
+            )
 
             ossIndex.details shouldBe AdvisorDetails(ADVISOR_NAME, enumSetOf(AdvisorCapability.VULNERABILITIES))
         }
     }
 })
 
-private const val ADVISOR_NAME = "OssIndexTest"
+private const val ADVISOR_NAME = "OssIndex"
 
 private const val TEST_FILES_ROOT = "src/test/assets"
 

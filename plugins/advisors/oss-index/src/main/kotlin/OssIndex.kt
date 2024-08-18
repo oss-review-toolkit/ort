@@ -38,7 +38,8 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
-import org.ossreviewtoolkit.utils.common.Options
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
@@ -65,25 +66,19 @@ private const val BULK_REQUEST_SIZE = 128
 /**
  * A wrapper for Sonatype's [OSS Index](https://ossindex.sonatype.org/) security vulnerability data.
  */
-class OssIndex(name: String, config: OssIndexConfiguration) : AdviceProvider(name) {
-    class Factory : AdviceProviderFactory<OssIndexConfiguration>("OssIndex") {
-        override fun create(config: OssIndexConfiguration) = OssIndex(type, config)
-
-        override fun parseConfig(options: Options, secrets: Options) =
-            OssIndexConfiguration(
-                serverUrl = options["serverUrl"],
-                username = secrets["username"],
-                password = secrets["password"]
-            )
-    }
-
-    override val details = AdvisorDetails(providerName, enumSetOf(AdvisorCapability.VULNERABILITIES))
+@OrtPlugin(
+    name = "OSS Index",
+    description = "An advisor that uses Sonatype's OSS Index to determine vulnerabilities in dependencies.",
+    factory = AdviceProviderFactory::class
+)
+class OssIndex(override val descriptor: PluginDescriptor, config: OssIndexConfiguration) : AdviceProvider {
+    override val details = AdvisorDetails(descriptor.className, enumSetOf(AdvisorCapability.VULNERABILITIES))
 
     private val service by lazy {
         OssIndexService.create(
             config.serverUrl,
-            config.username,
-            config.password,
+            config.username?.value,
+            config.password?.value,
             OkHttpClientHelper.buildClient()
         )
     }
@@ -118,7 +113,7 @@ class OssIndex(name: String, config: OssIndexConfiguration) : AdviceProvider(nam
                     ComponentReport(purl, reference = "", vulnerabilities = emptyList())
                 }
 
-                issues += Issue(source = providerName, message = it.collectMessages())
+                issues += Issue(source = descriptor.name, message = it.collectMessages())
             }
         }
 

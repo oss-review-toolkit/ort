@@ -19,25 +19,29 @@
 
 package org.ossreviewtoolkit.plugins.advisors.ossindex
 
+import org.ossreviewtoolkit.clients.ossindex.OssIndexService
+import org.ossreviewtoolkit.plugins.api.OrtPluginOption
+import org.ossreviewtoolkit.plugins.api.Secret
+
 /**
  * The configuration for the OSS Index provider.
  */
 data class OssIndexConfiguration(
     /**
-     * The base URL of the OSS Index REST API. If undefined, default base URL for the REST API of the public OSS Index
-     * service.
+     * The base URL of the OSS Index REST API.
      */
-    val serverUrl: String? = null,
+    @OrtPluginOption(defaultValue = OssIndexService.DEFAULT_BASE_URL)
+    val serverUrl: String,
 
     /**
      * The username to use for authentication. If not both [username] and [password] are provided, authentication is
      * disabled.
      */
-    val username: String? = null,
+    val username: Secret?,
 
     /**
      * The password to use for authentication. If not both [username] and [password] are provided, authentication is
      * disabled.
      */
-    val password: String? = null
+    val password: Secret?
 )

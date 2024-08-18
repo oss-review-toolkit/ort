@@ -44,7 +44,8 @@ import org.ossreviewtoolkit.model.utils.PurlType
 import org.ossreviewtoolkit.model.utils.getPurlType
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
-import org.ossreviewtoolkit.utils.common.Options
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
@@ -77,23 +78,13 @@ private val READ_TIMEOUT = Duration.ofSeconds(60)
  *
  * If not both `username` and `password` are provided, authentication is disabled.
  */
-class NexusIq(name: String, private val config: NexusIqConfiguration) : AdviceProvider(name) {
-    class Factory : AdviceProviderFactory<NexusIqConfiguration>("NexusIQ") {
-        override fun create(config: NexusIqConfiguration) = NexusIq(type, config)
-
-        override fun parseConfig(options: Options, secrets: Options): NexusIqConfiguration {
-            val serverUrl = options.getValue("serverUrl")
-
-            return NexusIqConfiguration(
-                serverUrl = serverUrl,
-                browseUrl = options["browseUrl"] ?: serverUrl,
-                username = secrets["username"],
-                password = secrets["password"]
-            )
-        }
-    }
-
-    override val details: AdvisorDetails = AdvisorDetails(providerName, enumSetOf(AdvisorCapability.VULNERABILITIES))
+@OrtPlugin(
+    name = "Nexus IQ",
+    description = "An advisor that uses Sonatype's Nexus IQ Server to determine vulnerabilities in dependencies.",
+    factory = AdviceProviderFactory::class
+)
+class NexusIq(override val descriptor: PluginDescriptor, private val config: NexusIqConfiguration) : AdviceProvider {
+    override val details = AdvisorDetails(descriptor.className, enumSetOf(AdvisorCapability.VULNERABILITIES))
 
     private val service by lazy {
         NexusIqService.create(
@@ -141,7 +132,7 @@ class NexusIq(name: String, private val config: NexusIqConfiguration) : AdvicePr
                     component.packageUrl to ComponentDetails(component, SecurityData(emptyList()))
                 }
 
-                issues += Issue(source = providerName, message = it.collectMessages())
+                issues += Issue(source = descriptor.name, message = it.collectMessages())
             }
         }
 

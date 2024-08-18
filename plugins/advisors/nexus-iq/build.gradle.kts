@@ -20,6 +20,9 @@
 plugins {
     // Apply precompiled plugins.
     id("ort-library-conventions")
+
+    // Apply third-party plugins.
+    alias(libs.plugins.ksp)
 }
 
 dependencies {
@@ -29,4 +32,7 @@ dependencies {
     implementation(projects.clients.nexusIqClient)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
+
+    ksp(projects.advisor)
+    ksp(projects.plugins.api)
 }

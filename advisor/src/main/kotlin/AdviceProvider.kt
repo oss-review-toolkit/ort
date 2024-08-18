@@ -22,20 +22,21 @@ package org.ossreviewtoolkit.advisor
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.plugins.api.Plugin
 
 /**
  * An abstract class that represents a service that can retrieve any kind of advice information
  * for a list of given [Package]s. Examples of such information can be security vulnerabilities, known defects,
  * or code analysis results.
  */
-abstract class AdviceProvider(val providerName: String) {
+interface AdviceProvider : Plugin {
     /**
      * For a given set of [Package]s, retrieve findings and return a map that associates packages with [AdvisorResult]s.
      */
-    abstract suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, AdvisorResult>
+    suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, AdvisorResult>
 
     /**
      * An object with detail information about this [AdviceProvider].
      */
-    abstract val details: AdvisorDetails
+    val details: AdvisorDetails
 }
