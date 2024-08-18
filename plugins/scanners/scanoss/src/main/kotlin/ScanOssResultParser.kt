@@ -48,21 +48,29 @@ internal fun generateSummary(startTime: Instant, endTime: Instant, results: List
 
     results.forEach { result ->
         result.fileDetails.forEach { details ->
-            if (details.id == "file") {
-                licenseFindings += getLicenseFindings(details)
-                copyrightFindings += getCopyrightFindings(details)
-            }
-
-            if (details.id == "snippet") {
-                val file = requireNotNull(details.file)
-                val lines = requireNotNull(details.lines)
-                val sourceLocation = convertLines(file, lines)
-                val snippets = getSnippets(details)
-
-                snippets.forEach {
-                    // TODO: Aggregate the snippet by source file location.
-                    snippetFindings += SnippetFinding(sourceLocation, setOf(it))
+            when (details.id) {
+                "file" -> {
+                    licenseFindings += getLicenseFindings(details)
+                    copyrightFindings += getCopyrightFindings(details)
                 }
+
+                "snippet" -> {
+                    val file = requireNotNull(details.file)
+                    val lines = requireNotNull(details.lines)
+                    val sourceLocation = convertLines(file, lines)
+                    val snippets = getSnippets(details)
+
+                    snippets.forEach {
+                        // TODO: Aggregate the snippet by source file location.
+                        snippetFindings += SnippetFinding(sourceLocation, setOf(it))
+                    }
+                }
+
+                "none" -> {
+                    // Skip if no details are available.
+                }
+
+                else -> throw IllegalArgumentException("Unsupported file details id '${details.id}'.")
             }
         }
     }
