@@ -154,13 +154,14 @@ private fun getSnippets(details: ScanFileDetails): Set<Snippet> {
 }
 
 /**
- * Split a [lineRange] returned by ScanOSS such as 1-321 into a [TextLocation] for the given [file].
+ * Split a [lineRange] returned by ScanOSS such as "1-321" into a [TextLocation] for the given [file].
  */
 private fun convertLines(file: String, lineRange: String): TextLocation {
     val splitLines = lineRange.split("-")
-    return if (splitLines.size == 2) {
-        TextLocation(file, splitLines.first().toInt(), splitLines.last().toInt())
-    } else {
-        TextLocation(file, splitLines.first().toInt())
+
+    return when (splitLines.size) {
+        1 -> TextLocation(file, splitLines.first().toInt())
+        2 -> TextLocation(file, splitLines.first().toInt(), splitLines.last().toInt())
+        else -> throw IllegalArgumentException("Unsupported line range '$lineRange'.")
     }
 }
