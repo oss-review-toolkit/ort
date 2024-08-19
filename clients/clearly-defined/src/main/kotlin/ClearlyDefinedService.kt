@@ -285,9 +285,6 @@ suspend fun <T> ClearlyDefinedService.call(block: suspend ClearlyDefinedService.
         throw IOException(errorMessage, e)
     }
 
-fun <T> ClearlyDefinedService.callBlocking(block: suspend ClearlyDefinedService.() -> T): T =
-    runBlocking(Dispatchers.IO) { call(block) }
-
 fun ClearlyDefinedService.getDefinitionsChunked(
     coordinates: Collection<Coordinates>,
     chunkSize: Int = ClearlyDefinedService.MAX_REQUEST_CHUNK_SIZE
