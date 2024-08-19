@@ -29,9 +29,9 @@ import kotlin.script.experimental.host.toScriptSource
 import kotlin.script.experimental.jvmhost.BasicJvmScriptingHost
 import kotlin.time.measureTimedValue
 
-import kotlinx.coroutines.runBlocking
-
 import org.apache.logging.log4j.kotlin.logger
+
+import org.ossreviewtoolkit.utils.ort.runBlocking
 
 /**
  * A class providing the framework to run Kotlin scripts.

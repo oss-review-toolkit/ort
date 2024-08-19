@@ -24,7 +24,6 @@ import com.fasterxml.jackson.databind.JsonNode
 import java.time.Instant
 
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
 
 import okhttp3.OkHttpClient
 
@@ -58,6 +57,7 @@ import org.ossreviewtoolkit.utils.common.AlphaNumericComparator
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.ort.runBlocking
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 import retrofit2.HttpException

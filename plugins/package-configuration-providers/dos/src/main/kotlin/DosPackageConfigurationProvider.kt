@@ -21,8 +21,6 @@ package org.ossreviewtoolkit.plugins.packageconfigurationproviders.dos
 
 import java.time.Duration
 
-import kotlinx.coroutines.runBlocking
-
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.clients.dos.DosClient
@@ -43,6 +41,7 @@ import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.model.utils.toPurlExtras
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.PackageConfigurationProviderFactory
 import org.ossreviewtoolkit.utils.common.Options
+import org.ossreviewtoolkit.utils.ort.runBlocking
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 data class DosPackageConfigurationProviderConfig(
