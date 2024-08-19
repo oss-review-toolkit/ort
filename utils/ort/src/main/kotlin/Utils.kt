@@ -24,6 +24,13 @@ import java.net.Authenticator
 import java.net.PasswordAuthentication
 import java.net.URI
 
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
+
+import kotlinx.coroutines.CoroutineScope
+
+import org.apache.logging.log4j.kotlin.CoroutineThreadContext
+
 import org.ossreviewtoolkit.utils.common.toSafeUri
 import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.common.withoutPrefix
@@ -211,3 +218,13 @@ fun normalizeVcsUrl(vcsUrl: String): String {
 
     return url
 }
+
+/**
+ * A wrapper for [kotlinx.coroutines.runBlocking] which always adds a [CoroutineThreadContext] to the newly created
+ * coroutine context. This ensures that Log4j's MDC context is not lost when `runBlocking` is used.
+ *
+ * This function should be used instead of [kotlinx.coroutines.runBlocking] in all code that can be used as a library to
+ * preserve any MDC context set by a consumer.
+ */
+fun <T> runBlocking(context: CoroutineContext = EmptyCoroutineContext, block: suspend CoroutineScope.() -> T): T =
+    kotlinx.coroutines.runBlocking(context + CoroutineThreadContext()) { block() }
