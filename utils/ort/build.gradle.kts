@@ -26,11 +26,11 @@ dependencies {
     api(projects.utils.commonUtils)
     api(projects.utils.spdxUtils)
 
+    api(libs.kotlinx.coroutines)
     api(libs.okhttp)
 
     implementation(libs.awsS3)
     implementation(libs.commonsCompress)
-    implementation(libs.kotlinx.coroutines)
 
     testImplementation(libs.mockk)
 }

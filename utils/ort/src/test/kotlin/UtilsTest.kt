@@ -24,6 +24,7 @@ import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSingleElement
+import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -39,6 +40,11 @@ import java.net.Authenticator
 import java.net.PasswordAuthentication
 import java.net.URI
 import java.nio.file.Paths
+
+import kotlin.coroutines.EmptyCoroutineContext
+
+import org.apache.logging.log4j.kotlin.CoroutineThreadContext
+import org.apache.logging.log4j.kotlin.withLoggingContext
 
 class UtilsTest : WordSpec({
     "filterVersionNames" should {
@@ -469,6 +475,20 @@ class UtilsTest : WordSpec({
             auth shouldNotBeNull {
                 userName shouldBe "foo"
                 String(password) shouldBe "bar"
+            }
+        }
+    }
+
+    "runBlocking" should {
+        "preserve Log4j's MDC context which kotlinx.coroutines.runBlocking does not" {
+            withLoggingContext(mapOf("key" to "value")) {
+                kotlinx.coroutines.runBlocking(EmptyCoroutineContext) {
+                    coroutineContext[CoroutineThreadContext.Key]?.contextData?.map?.get("key") should beNull()
+                }
+
+                runBlocking(EmptyCoroutineContext) {
+                    coroutineContext[CoroutineThreadContext.Key]?.contextData?.map?.get("key") shouldBe "value"
+                }
             }
         }
     }
