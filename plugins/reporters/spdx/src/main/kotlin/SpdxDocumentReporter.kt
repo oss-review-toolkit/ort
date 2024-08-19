@@ -42,6 +42,8 @@ import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
  *
  * This reporter supports the following options:
  * - *creationInfo.comment*: Add the corresponding value as metadata to the [SpdxDocument.creationInfo].
+ * - *creationInfo.person*: Add the corresponding value as metadata to the [SpdxDocument.creationInfo].
+ * - *creationInfo.organization*: Add the corresponding value as metadata to the [SpdxDocument.creationInfo].
  * - *document.comment*: Add the corresponding value as metadata to the [SpdxDocument].
  * - *document.name*: The name of the generated [SpdxDocument], defaults to "Unnamed document".
  * - *output.file.formats*: The list of [FileFormat]s to generate, defaults to [FileFormat.YAML].
@@ -53,6 +55,8 @@ class SpdxDocumentReporter : Reporter {
         const val REPORT_BASE_FILENAME = "bom.spdx"
 
         const val OPTION_CREATION_INFO_COMMENT = "creationInfo.comment"
+        const val OPTION_CREATION_INFO_PERSON = "creationInfo.person"
+        const val OPTION_CREATION_INFO_ORGANIZATION = "creationInfo.organization"
         const val OPTION_DOCUMENT_COMMENT = "document.comment"
         const val OPTION_DOCUMENT_NAME = "document.name"
         const val OPTION_OUTPUT_FILE_FORMATS = "output.file.formats"
@@ -77,6 +81,8 @@ class SpdxDocumentReporter : Reporter {
             documentName = config.options.getOrDefault(OPTION_DOCUMENT_NAME, DOCUMENT_NAME_DEFAULT_VALUE),
             documentComment = config.options.getOrDefault(OPTION_DOCUMENT_COMMENT, ""),
             creationInfoComment = config.options.getOrDefault(OPTION_CREATION_INFO_COMMENT, ""),
+            creationInfoPerson = config.options.getOrDefault(OPTION_CREATION_INFO_PERSON, ""),
+            creationInfoOrganization = config.options.getOrDefault(OPTION_CREATION_INFO_ORGANIZATION, ""),
             fileInformationEnabled = config.options.getOrDefault(OPTION_FILE_INFORMATION_ENABLED, "true").toBoolean()
         )
 

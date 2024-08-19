@@ -47,6 +47,8 @@ internal object SpdxDocumentModelMapper {
         val documentName: String,
         val documentComment: String,
         val creationInfoComment: String,
+        val creationInfoPerson: String,
+        val creationInfoOrganization: String,
         val fileInformationEnabled: Boolean
     )
 
@@ -158,12 +160,18 @@ internal object SpdxDocumentModelMapper {
             }
         }
 
+        val creators = listOfNotNull(
+            params.creationInfoPerson.takeUnless { it.isEmpty() }?.let { "${SpdxConstants.PERSON} $it" },
+            params.creationInfoOrganization.takeUnless { it.isEmpty() }?.let { "${SpdxConstants.ORGANIZATION} $it" },
+            "${SpdxConstants.TOOL} $ORT_NAME-${Environment.ORT_VERSION}"
+        )
+
         return SpdxDocument(
             comment = params.documentComment,
             creationInfo = SpdxCreationInfo(
                 comment = params.creationInfoComment,
                 created = Instant.now().truncatedTo(ChronoUnit.SECONDS),
-                creators = listOf("${SpdxConstants.TOOL} $ORT_NAME-${Environment.ORT_VERSION}"),
+                creators = creators,
                 licenseListVersion = SpdxLicense.LICENSE_LIST_VERSION.substringBefore("-")
             ),
             documentNamespace = "spdx://${UUID.randomUUID()}",
