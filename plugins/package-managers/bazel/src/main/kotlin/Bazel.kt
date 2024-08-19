@@ -57,6 +57,7 @@ import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.encodeHex
 import org.ossreviewtoolkit.utils.common.withoutPrefix
+import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
@@ -115,7 +116,9 @@ class Bazel(
         val registry = determineRegistry(parseLockfile(lockfile), projectDir)
 
         val packages = if (registry != null) {
-            getPackages(scopes, registry)
+            val localPathOverrides = getLocalPathOverrides(projectDir)
+
+            getPackages(scopes, registry, localPathOverrides, projectVcs)
         } else {
             issues += createAndLogIssue(managerName, "Bazel registry URL cannot be determined from the lockfile.")
             emptySet()
@@ -144,6 +147,44 @@ class Bazel(
     }
 
     /**
+     * Collect the local path overrides from the `MODULE.bazel` file in [workingDir]. The overrides are collected with
+     * Buildozer and are returned as a map from package names to local path overrides. An empty map is returned if no
+     * override is defined.
+     */
+    private fun getLocalPathOverrides(workingDir: File): Map<String, String> {
+        /**
+         * Normally, it should be possible to just run "buildozer 'print module_name path'
+         * //MODULE.bazel:%local_path_override" to get the local path overrides. However, "path" is a special attribute
+         * of the "print" command and several commands must be run instead.
+         * See https://github.com/bazelbuild/buildtools/issues/1286.
+         */
+        val commandsFile = createOrtTempFile("buildozer").apply {
+            writeText(
+                "rename path not_path|print module_name not_path|" +
+                    "rename not_path path|//MODULE.bazel:%local_path_override"
+            )
+        }
+
+        val process = ProcessCapture(
+            "buildozer",
+            "-f", commandsFile.absolutePath,
+            workingDir = workingDir
+        )
+
+        // Buildozer returns 3 "on success, when no changes were made". This value is returned regardless of whether
+        // local path overrides are present or not.
+        require(process.exitValue == 3) {
+            "Failed to get local path overrides from 'buildozer': ${process.stderr}"
+        }
+
+        return process.stdout.lines().filter { it.isNotEmpty() }.associate { line ->
+            val (moduleName, path) = line.split(' ', limit = 2)
+            logger.info { "Local path override for module '$moduleName' is '$path'." }
+            moduleName to path
+        }
+    }
+
+    /**
      * Determine the Bazel module registry to use based on the Bazel version that generated the given [lockfile]. For
      * Bazel version >= 7.2.0, a [CompositeBazelModuleRegistryService] based on the "registryFileHashes" is returned.
      * For Bazel version < 7.2.0, either a [LocalBazelModuleRegistryService] or a [RemoteBazelModuleRegistryService]
@@ -163,11 +204,39 @@ class Bazel(
         return null
     }
 
-    private fun getPackages(scopes: Set<Scope>, registry: BazelModuleRegistryService): Set<Package> {
+    /**
+     * Get the packages for the dependencies of the given [scopes] using the given [registry], for the dependencies that
+     * do not have a local path override. The dependencies having an override defined in [localPathOverrides] are
+     * created without querying [registry] and will use [projectVcs] as VCS information.
+     */
+    private fun getPackages(
+        scopes: Set<Scope>,
+        registry: BazelModuleRegistryService,
+        localPathOverrides: Map<String, String>,
+        projectVcs: VcsInfo
+    ): Set<Package> {
         val ids = scopes.collectDependencies()
-        val moduleMetadataForId = ids.associateWith { getModuleMetadata(it, registry) }
-        val moduleSourceInfoForId = ids.associateWith { getModuleSourceInfo(it, registry) }
-        return ids.mapTo(mutableSetOf()) { getPackage(it, moduleMetadataForId[it], moduleSourceInfoForId[it]) }
+        val (packageIdsWithPathOverride, otherPackageIds) = ids.partition { it.name in localPathOverrides }
+
+        val result = mutableSetOf<Package>()
+
+        packageIdsWithPathOverride.mapTo(result) {
+            Package(
+                id = it,
+                declaredLicenses = emptySet(),
+                description = "",
+                homepageUrl = "",
+                binaryArtifact = RemoteArtifact.EMPTY,
+                sourceArtifact = RemoteArtifact.EMPTY,
+                vcs = projectVcs.copy(path = localPathOverrides.getValue(it.name))
+            )
+        }
+
+        val moduleMetadataForId = otherPackageIds.associateWith { getModuleMetadata(it, registry) }
+        val moduleSourceInfoForId = otherPackageIds.associateWith { getModuleSourceInfo(it, registry) }
+        return otherPackageIds.mapTo(result) {
+            getPackage(it, moduleMetadataForId[it], moduleSourceInfoForId[it])
+        }
     }
 
     private fun getPackage(id: Identifier, metadata: ModuleMetadata?, sourceInfo: ModuleSourceInfo?) =
