@@ -42,7 +42,6 @@ import org.ossreviewtoolkit.clients.clearlydefined.CurationDescribed
 import org.ossreviewtoolkit.clients.clearlydefined.CurationLicensed
 import org.ossreviewtoolkit.clients.clearlydefined.HarvestStatus
 import org.ossreviewtoolkit.clients.clearlydefined.Patch
-import org.ossreviewtoolkit.clients.clearlydefined.callBlocking
 import org.ossreviewtoolkit.clients.clearlydefined.getDefinitionsChunked
 import org.ossreviewtoolkit.clients.clearlydefined.toCoordinates
 import org.ossreviewtoolkit.model.Package
@@ -55,6 +54,7 @@ import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
 import org.ossreviewtoolkit.plugins.commands.api.utils.inputGroup
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.ort.runBlocking
 
 class UploadCurationsCommand : OrtCommand(
     name = "upload-curations",
@@ -129,7 +129,7 @@ class UploadCurationsCommand : OrtCommand(
                 )
 
                 runCatching {
-                    service.callBlocking { putCuration(patch) }
+                    runBlocking { service.putCuration(patch) }
                 }.onSuccess {
                     echo("was uploaded successfully:\n${it.url}")
                     ++uploadedCurationsCount
