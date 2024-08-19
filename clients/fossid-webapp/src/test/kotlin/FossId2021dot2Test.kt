@@ -28,7 +28,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 
 import io.mockk.clearAllMocks
-import io.mockk.every
+import io.mockk.coEvery
 import io.mockk.mockkObject
 
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanStatus
@@ -51,7 +51,7 @@ class FossId2021dot2Test : StringSpec({
         server.start()
 
         mockkObject(FossIdServiceWithVersion)
-        every { FossIdServiceWithVersion.create(any()) } answers {
+        coEvery { FossIdServiceWithVersion.create(any()) } answers {
             VersionedFossIdService2021dot2(firstArg(), "2021.2.2")
         }
 

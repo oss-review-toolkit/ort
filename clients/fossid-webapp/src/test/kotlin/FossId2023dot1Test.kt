@@ -28,7 +28,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 
 import io.mockk.clearAllMocks
-import io.mockk.every
+import io.mockk.coEvery
 import io.mockk.mockkObject
 
 private const val PROJECT_CODE = "semver4j"
@@ -52,7 +52,7 @@ class FossId2023dot1Test : StringSpec({
         server.start()
 
         mockkObject(FossIdServiceWithVersion.Companion)
-        every { FossIdServiceWithVersion.Companion.create(any()) } answers {
+        coEvery { FossIdServiceWithVersion.Companion.create(any()) } answers {
             VersionedFossIdService2021dot2(firstArg(), "2023.2.0")
         }
 

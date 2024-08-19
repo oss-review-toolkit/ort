@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.clients.fossid
 
-import kotlinx.coroutines.runBlocking
-
 import org.ossreviewtoolkit.clients.fossid.model.status.UnversionedScanDescription
 
 abstract class FossIdServiceWithVersion(val version: String) : FossIdRestService {
@@ -29,15 +27,14 @@ abstract class FossIdServiceWithVersion(val version: String) : FossIdRestService
          * Construct a new instance of [FossIdServiceWithVersion] for given [delegate]. The implementation matching
          * FossID version will be instantiated and returned.
          */
-        fun create(delegate: FossIdRestService): FossIdServiceWithVersion =
-            runBlocking {
-                val version = delegate.getFossIdVersion().orEmpty()
+        suspend fun create(delegate: FossIdRestService): FossIdServiceWithVersion {
+            val version = delegate.getFossIdVersion().orEmpty()
 
-                when {
-                    version >= "2021.2" -> VersionedFossIdService2021dot2(delegate, version)
-                    else -> VersionedFossIdService(delegate, version)
-                }
+            return when {
+                version >= "2021.2" -> VersionedFossIdService2021dot2(delegate, version)
+                else -> VersionedFossIdService(delegate, version)
             }
+        }
     }
 
     /**
