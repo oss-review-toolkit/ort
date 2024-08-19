@@ -98,9 +98,8 @@ class FossIdReporter : Reporter {
             }.getOrNull()
         } ?: SelectionType.INCLUDE_ALL_LICENSES
 
-        val service = FossIdRestService.create(serverUrl)
-
         return runBlocking(Dispatchers.IO) {
+            val service = FossIdRestService.create(serverUrl)
             val scanResults = input.ortResult.getScanResults().values.flatten()
             val scanCodes = scanResults.flatMapTo(mutableSetOf()) {
                 it.additionalData[SCAN_CODE_KEY]?.split(',').orEmpty()

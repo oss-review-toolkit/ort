@@ -29,7 +29,6 @@ import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.coVerifyAll
-import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.mockkStatic
@@ -273,7 +272,7 @@ private fun createReporterMock(): Pair<FossIdRestService, FossIdReporter> {
 
     val serviceMock = mockk<FossIdServiceWithVersion>()
     val reporterMock = spyk<FossIdReporter>()
-    every { FossIdRestService.create(any()) } returns serviceMock
+    coEvery { FossIdRestService.create(any()) } returns serviceMock
 
     coEvery {
         serviceMock.generateReport(any(), any(), any(), any(), any(), any())

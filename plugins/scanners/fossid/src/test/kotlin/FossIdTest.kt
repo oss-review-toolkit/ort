@@ -82,7 +82,7 @@ class FossIdTest : WordSpec({
         mockkObject(FossIdRestService)
         mockkObject(VersionControlSystem)
 
-        every { FossIdRestService.create(any()) } returns createServiceMock()
+        coEvery { FossIdRestService.create(any()) } returns createServiceMock()
         every { VersionControlSystem.forUrl(any()) } returns createVersionControlSystemMock()
     }
 
