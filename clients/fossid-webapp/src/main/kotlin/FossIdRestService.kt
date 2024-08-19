@@ -196,7 +196,7 @@ interface FossIdRestService {
 
             val service = retrofit.create(FossIdRestService::class.java)
 
-            return FossIdServiceWithVersion.instance(service).also {
+            return FossIdServiceWithVersion.create(service).also {
                 if (it.version.isEmpty()) {
                     logger.warn { "The FossID server is running an unknown version." }
                 } else {

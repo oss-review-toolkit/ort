@@ -52,7 +52,7 @@ class FossId2023dot1Test : StringSpec({
         server.start()
 
         mockkObject(FossIdServiceWithVersion.Companion)
-        every { FossIdServiceWithVersion.Companion.instance(any()) } answers {
+        every { FossIdServiceWithVersion.Companion.create(any()) } answers {
             VersionedFossIdService2021dot2(firstArg(), "2023.2.0")
         }
 
@@ -75,7 +75,7 @@ class FossId2023dot1Test : StringSpec({
 
     "Delete scan response can be parsed (2023.1)" {
         // because the service caches the version, we must recreate it
-        service = FossIdServiceWithVersion.instance(service)
+        service = FossIdServiceWithVersion.create(service)
         service.deleteScan("", "", SCAN_CODE_2021_2).shouldNotBeNull().run {
             checkResponse("delete scan")
 
