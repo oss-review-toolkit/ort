@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.scanner.provenance
 
-import kotlinx.coroutines.runBlocking
-
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.downloader.WorkingTreeCache
@@ -38,7 +36,7 @@ interface NestedProvenanceResolver {
      * [NestedProvenance] always contains only the provided [ArtifactProvenance]. For a [RepositoryProvenance] the
      * resolver looks for nested repositories, for example Git submodules or Mercurial subrepositories.
      */
-    fun resolveNestedProvenance(provenance: KnownProvenance): NestedProvenance
+    suspend fun resolveNestedProvenance(provenance: KnownProvenance): NestedProvenance
 }
 
 /**
@@ -48,10 +46,10 @@ class DefaultNestedProvenanceResolver(
     private val storage: NestedProvenanceStorage,
     private val workingTreeCache: WorkingTreeCache
 ) : NestedProvenanceResolver {
-    override fun resolveNestedProvenance(provenance: KnownProvenance): NestedProvenance {
+    override suspend fun resolveNestedProvenance(provenance: KnownProvenance): NestedProvenance {
         return when (provenance) {
             is ArtifactProvenance -> NestedProvenance(root = provenance, subRepositories = emptyMap())
-            is RepositoryProvenance -> runBlocking { resolveNestedRepository(provenance) }
+            is RepositoryProvenance -> resolveNestedRepository(provenance)
         }
     }
 

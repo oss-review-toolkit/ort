@@ -30,6 +30,7 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
@@ -456,9 +457,9 @@ class ScannerTest : WordSpec({
             }
 
             val nestedProvenanceResolver = spyk(FakeNestedProvenanceResolver()) {
-                every { resolveNestedProvenance(pkgCompletelyScanned.repositoryProvenance()) } returns
+                coEvery { resolveNestedProvenance(pkgCompletelyScanned.repositoryProvenance()) } returns
                     nestedProvenanceCompletelyScanned
-                every { resolveNestedProvenance(pkgPartlyScanned.repositoryProvenance()) } returns
+                coEvery { resolveNestedProvenance(pkgPartlyScanned.repositoryProvenance()) } returns
                     nestedProvenancePartlyScanned
             }
 
@@ -597,9 +598,9 @@ class ScannerTest : WordSpec({
             )
 
             val nestedProvenanceResolver = spyk(FakeNestedProvenanceResolver()) {
-                every { resolveNestedProvenance(pkgCompletelyScanned.repositoryProvenance()) } returns
+                coEvery { resolveNestedProvenance(pkgCompletelyScanned.repositoryProvenance()) } returns
                     nestedProvenanceCompletelyScanned
-                every { resolveNestedProvenance(pkgPartlyScanned.repositoryProvenance()) } returns
+                coEvery { resolveNestedProvenance(pkgPartlyScanned.repositoryProvenance()) } returns
                     nestedProvenancePartlyScanned
             }
 
@@ -1006,7 +1007,7 @@ private class FakePackageProvenanceResolver : PackageProvenanceResolver {
  * An implementation of [NestedProvenanceResolver] that always returns a non-nested provenance.
  */
 private class FakeNestedProvenanceResolver : NestedProvenanceResolver {
-    override fun resolveNestedProvenance(provenance: KnownProvenance): NestedProvenance =
+    override suspend fun resolveNestedProvenance(provenance: KnownProvenance): NestedProvenance =
         NestedProvenance(root = provenance, subRepositories = emptyMap())
 }
 
