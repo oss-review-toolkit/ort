@@ -22,8 +22,6 @@ package org.ossreviewtoolkit.scanner.provenance
 import java.io.IOException
 import java.net.HttpURLConnection
 
-import kotlinx.coroutines.runBlocking
-
 import okhttp3.Request
 
 import org.apache.logging.log4j.kotlin.logger
@@ -52,7 +50,7 @@ interface PackageProvenanceResolver {
      *
      * Throws an [IOException] if the provenance cannot be resolved.
      */
-    fun resolveProvenance(pkg: Package, defaultSourceCodeOrigins: List<SourceCodeOrigin>): KnownProvenance
+    suspend fun resolveProvenance(pkg: Package, defaultSourceCodeOrigins: List<SourceCodeOrigin>): KnownProvenance
 }
 
 /**
@@ -69,7 +67,10 @@ class DefaultPackageProvenanceResolver(
      * provided by the [package][pkg] metadata does not exist or is missing, the function tries to guess the tag based
      * on the name and version of the [package][pkg].
      */
-    override fun resolveProvenance(pkg: Package, defaultSourceCodeOrigins: List<SourceCodeOrigin>): KnownProvenance {
+    override suspend fun resolveProvenance(
+        pkg: Package,
+        defaultSourceCodeOrigins: List<SourceCodeOrigin>
+    ): KnownProvenance {
         val errors = mutableMapOf<SourceCodeOrigin, Throwable>()
         val sourceCodeOrigins = pkg.sourceCodeOrigins ?: defaultSourceCodeOrigins
 
@@ -78,13 +79,13 @@ class DefaultPackageProvenanceResolver(
                 when (sourceCodeOrigin) {
                     SourceCodeOrigin.ARTIFACT -> {
                         if (pkg.sourceArtifact != RemoteArtifact.EMPTY) {
-                            return runBlocking { resolveSourceArtifact(pkg) }
+                            return resolveSourceArtifact(pkg)
                         }
                     }
 
                     SourceCodeOrigin.VCS -> {
                         if (pkg.vcsProcessed != VcsInfo.EMPTY) {
-                            return runBlocking { resolveVcs(pkg) }
+                            return resolveVcs(pkg)
                         }
                     }
                 }
