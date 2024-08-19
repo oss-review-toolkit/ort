@@ -22,8 +22,6 @@ package org.ossreviewtoolkit.plugins.packagemanagers.bazel
 import java.io.File
 import java.util.Base64
 
-import kotlinx.coroutines.runBlocking
-
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
@@ -58,6 +56,7 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.encodeHex
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
+import org.ossreviewtoolkit.utils.ort.runBlocking
 
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory

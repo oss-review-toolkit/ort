@@ -31,7 +31,6 @@ import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
 import org.apache.logging.log4j.kotlin.logger
@@ -80,6 +79,7 @@ import org.ossreviewtoolkit.utils.common.realFile
 import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.common.withoutPrefix
+import org.ossreviewtoolkit.utils.ort.runBlocking
 
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory

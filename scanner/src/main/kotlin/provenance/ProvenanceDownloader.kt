@@ -25,8 +25,6 @@ import java.nio.file.StandardCopyOption
 import kotlin.io.path.copyToRecursively
 import kotlin.io.path.moveTo
 
-import kotlinx.coroutines.runBlocking
-
 import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.downloader.Downloader
 import org.ossreviewtoolkit.downloader.WorkingTreeCache
@@ -37,6 +35,7 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
+import org.ossreviewtoolkit.utils.ort.runBlocking
 
 /**
  * An interface that provides functionality to download source code.

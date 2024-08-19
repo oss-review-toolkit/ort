@@ -27,7 +27,6 @@ import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toKotlinDuration
 
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 
 import org.apache.logging.log4j.kotlin.logger
 
@@ -60,6 +59,7 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.packZip
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
+import org.ossreviewtoolkit.utils.ort.runBlocking
 
 /**
  * The DOS scanner wrapper is a client for the scanner API implemented as part of the Double Open Server project at

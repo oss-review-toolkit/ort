@@ -31,7 +31,6 @@ import java.io.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.runBlocking
 
 import org.apache.logging.log4j.kotlin.logger
 
@@ -70,6 +69,7 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
+import org.ossreviewtoolkit.utils.ort.runBlocking
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 import org.semver4j.RangesList

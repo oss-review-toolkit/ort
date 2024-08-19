@@ -24,7 +24,6 @@ import java.io.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.runBlocking
 
 import org.apache.logging.log4j.kotlin.logger
 
@@ -37,6 +36,7 @@ import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.ort.runBlocking
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 class FossIdReporter : Reporter {
