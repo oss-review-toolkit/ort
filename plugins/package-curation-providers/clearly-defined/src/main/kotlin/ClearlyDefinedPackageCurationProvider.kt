@@ -46,6 +46,7 @@ import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCuration
 import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.ort.runBlocking
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression.Strictness
 import org.ossreviewtoolkit.utils.spdx.toSpdxOrNull
@@ -108,7 +109,7 @@ class ClearlyDefinedPackageCurationProvider(
         }
 
         val curations = runCatching {
-            service.getCurationsChunked(coordinatesToIds.keys)
+            runBlocking { service.getCurationsChunked(coordinatesToIds.keys) }
         }.onFailure { e ->
             when (e) {
                 is HttpException -> {
@@ -134,7 +135,7 @@ class ClearlyDefinedPackageCurationProvider(
         }
 
         val filteredCurations = if (config.minTotalLicenseScore > 0) {
-            val definitions = service.getDefinitionsChunked(curations.keys)
+            val definitions = runBlocking { service.getDefinitionsChunked(curations.keys) }
 
             curations.filterKeys { coordinates ->
                 val score = definitions[coordinates]?.licensed?.score?.total

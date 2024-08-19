@@ -92,7 +92,7 @@ class UploadCurationsCommand : OrtCommand(
             pkg.toClearlyDefinedCoordinates()?.let { curation to it }
         }.toMap()
 
-        val definitions = service.getDefinitionsChunked(curationsToCoordinates.values)
+        val definitions = runBlocking { service.getDefinitionsChunked(curationsToCoordinates.values) }
 
         val curationsByHarvestStatus = curations.groupBy { curation ->
             definitions[curationsToCoordinates[curation]]?.getHarvestStatus() ?: logger.warn {

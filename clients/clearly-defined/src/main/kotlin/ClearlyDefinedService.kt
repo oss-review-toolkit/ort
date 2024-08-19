@@ -24,7 +24,7 @@ import java.io.IOException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -285,12 +285,12 @@ suspend fun <T> ClearlyDefinedService.call(block: suspend ClearlyDefinedService.
         throw IOException(errorMessage, e)
     }
 
-fun ClearlyDefinedService.getDefinitionsChunked(
+suspend fun ClearlyDefinedService.getDefinitionsChunked(
     coordinates: Collection<Coordinates>,
     chunkSize: Int = ClearlyDefinedService.MAX_REQUEST_CHUNK_SIZE
 ): Map<Coordinates, ClearlyDefinedService.Defined> =
     buildMap {
-        runBlocking(Dispatchers.IO) {
+        withContext(Dispatchers.IO) {
             coordinates.chunked(chunkSize).map { chunk ->
                 async { call { getDefinitions(chunk) } }
             }.awaitAll()
@@ -299,12 +299,12 @@ fun ClearlyDefinedService.getDefinitionsChunked(
         }
     }
 
-fun ClearlyDefinedService.getCurationsChunked(
+suspend fun ClearlyDefinedService.getCurationsChunked(
     coordinates: Collection<Coordinates>,
     chunkSize: Int = ClearlyDefinedService.MAX_REQUEST_CHUNK_SIZE
 ): Map<Coordinates, Curation> =
     buildMap {
-        runBlocking(Dispatchers.IO) {
+        withContext(Dispatchers.IO) {
             coordinates.chunked(chunkSize).map { chunk ->
                 async { call { getCurations(chunk).values } }
             }.awaitAll()
