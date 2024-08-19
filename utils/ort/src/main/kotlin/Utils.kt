@@ -227,4 +227,5 @@ fun normalizeVcsUrl(vcsUrl: String): String {
  * preserve any MDC context set by a consumer.
  */
 fun <T> runBlocking(context: CoroutineContext = EmptyCoroutineContext, block: suspend CoroutineScope.() -> T): T =
+    @Suppress("ForbiddenMethodCall")
     kotlinx.coroutines.runBlocking(context + CoroutineThreadContext()) { block() }

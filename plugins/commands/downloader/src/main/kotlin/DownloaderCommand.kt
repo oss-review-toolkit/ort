@@ -298,6 +298,7 @@ class DownloaderCommand : OrtCommand(
 
         val packageDownloadDirs = packages.associateWith { outputDir.resolve(it.id.toPath()) }
 
+        @Suppress("ForbiddenMethodCall")
         runBlocking { downloadAllPackages(packageDownloadDirs, failureMessages) }
 
         if (archiveMode == ArchiveMode.BUNDLE && !dryRun) {

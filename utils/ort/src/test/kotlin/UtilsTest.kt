@@ -482,6 +482,7 @@ class UtilsTest : WordSpec({
     "runBlocking" should {
         "preserve Log4j's MDC context which kotlinx.coroutines.runBlocking does not" {
             withLoggingContext(mapOf("key" to "value")) {
+                @Suppress("ForbiddenMethodCall")
                 kotlinx.coroutines.runBlocking(EmptyCoroutineContext) {
                     coroutineContext[CoroutineThreadContext.Key]?.contextData?.map?.get("key") should beNull()
                 }
