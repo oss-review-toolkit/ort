@@ -125,6 +125,8 @@ class AdvisorCommand : OrtCommand(
         val advisor = Advisor(distinctProviders, ortConfig.advisor)
 
         val ortResultInput = readOrtResult(ortFile)
+
+        @Suppress("ForbiddenMethodCall")
         val ortResultOutput = runBlocking {
             advisor.advise(ortResultInput, skipExcluded || ortConfig.advisor.skipExcluded).mergeLabels(labels)
         }

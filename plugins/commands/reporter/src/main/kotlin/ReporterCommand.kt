@@ -281,6 +281,7 @@ class ReporterCommand : OrtCommand(
         }
 
         val reportDurationMap = measureTimedValue {
+            @Suppress("ForbiddenMethodCall")
             runBlocking(Dispatchers.Default) {
                 reportFormats.map { reporter ->
                     async {

@@ -159,6 +159,7 @@ class ScannerCommand : OrtCommand(
             .print().conclude(ortConfig.severeIssueThreshold, ORT_FAILURE_STATUS_CODE)
     }
 
+    @Suppress("ForbiddenMethodCall")
     private fun runScanners(
         scannerWrapperFactories: List<ScannerWrapperFactory<*>>,
         projectScannerWrapperFactories: List<ScannerWrapperFactory<*>>,
