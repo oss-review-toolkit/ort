@@ -51,7 +51,7 @@ class FossId2021dot2Test : StringSpec({
         server.start()
 
         mockkObject(FossIdServiceWithVersion)
-        every { FossIdServiceWithVersion.instance(any()) } answers {
+        every { FossIdServiceWithVersion.create(any()) } answers {
             VersionedFossIdService2021dot2(firstArg(), "2021.2.2")
         }
 
@@ -74,7 +74,7 @@ class FossId2021dot2Test : StringSpec({
 
     "Scan status can be queried (2021.2)" {
         // because the service caches the version, we must recreate it
-        service = FossIdServiceWithVersion.instance(service)
+        service = FossIdServiceWithVersion.create(service)
         service.checkScanStatus("", "", SCAN_CODE_2021_2).shouldNotBeNull().run {
             checkResponse("get scan status")
 

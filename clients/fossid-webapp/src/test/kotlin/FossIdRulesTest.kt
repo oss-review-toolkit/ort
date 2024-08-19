@@ -49,7 +49,7 @@ class FossIdRulesTest : StringSpec({
         server.start()
 
         mockkObject(FossIdServiceWithVersion)
-        every { FossIdServiceWithVersion.instance(any()) } answers {
+        every { FossIdServiceWithVersion.create(any()) } answers {
             VersionedFossIdService2021dot2(firstArg(), "2021.2.2")
         }
 
