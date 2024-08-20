@@ -56,12 +56,14 @@ internal fun generateSummary(startTime: Instant, endTime: Instant, results: List
                 "snippet" -> {
                     val file = requireNotNull(details.file)
                     val lines = requireNotNull(details.lines)
-                    val sourceLocation = convertLines(file, lines)
+                    val sourceLocations = convertLines(file, lines)
                     val snippets = getSnippets(details)
 
-                    snippets.forEach {
-                        // TODO: Aggregate the snippet by source file location.
-                        snippetFindings += SnippetFinding(sourceLocation, setOf(it))
+                    snippets.forEach { snippet ->
+                        sourceLocations.forEach { sourceLocation ->
+                            // TODO: Aggregate the snippet by source file location.
+                            snippetFindings += SnippetFinding(sourceLocation, setOf(snippet))
+                        }
                     }
                 }
 
@@ -145,31 +147,33 @@ private fun getSnippets(details: ScanFileDetails): Set<Snippet> {
     }
 
     val score = matched.substringBeforeLast("%").toFloat()
-    val snippetLocation = convertLines(fileUrl, ossLines)
+    val locations = convertLines(fileUrl, ossLines)
     // TODO: No resolved revision is available. Should a ArtifactProvenance be created instead ?
     val vcsInfo = VcsHost.parseUrl(url.takeUnless { it == "none" }.orEmpty())
-    val snippetProvenance = RepositoryProvenance(vcsInfo, ".")
+    val provenance = RepositoryProvenance(vcsInfo, ".")
 
-    return purls.mapTo(mutableSetOf()) {
-        Snippet(
-            score,
-            snippetLocation,
-            snippetProvenance,
-            it,
-            licenses.reduceOrNull(SpdxExpression::and)?.sorted() ?: SpdxLicenseIdExpression(SpdxConstants.NOASSERTION)
-        )
+    return buildSet {
+        purls.forEach { purl ->
+            locations.forEach { snippetLocation ->
+                val license = licenses.reduceOrNull(SpdxExpression::and)?.sorted()
+                    ?: SpdxLicenseIdExpression(SpdxConstants.NOASSERTION)
+
+                add(Snippet(score, snippetLocation, provenance, purl, license))
+            }
+        }
     }
 }
 
 /**
- * Split a [lineRange] returned by ScanOSS such as "1-321" into a [TextLocation] for the given [file].
+ * Split [lineRanges] returned by ScanOSS such as "32-105,117-199" into [TextLocation]s for the given [file].
  */
-private fun convertLines(file: String, lineRange: String): TextLocation {
-    val splitLines = lineRange.split("-")
+private fun convertLines(file: String, lineRanges: String): List<TextLocation> =
+    lineRanges.split(',').map { lineRange ->
+        val splitLines = lineRange.split("-")
 
-    return when (splitLines.size) {
-        1 -> TextLocation(file, splitLines.first().toInt())
-        2 -> TextLocation(file, splitLines.first().toInt(), splitLines.last().toInt())
-        else -> throw IllegalArgumentException("Unsupported line range '$lineRange'.")
+        when (splitLines.size) {
+            1 -> TextLocation(file, splitLines.first().toInt())
+            2 -> TextLocation(file, splitLines.first().toInt(), splitLines.last().toInt())
+            else -> throw IllegalArgumentException("Unsupported line range '$lineRange'.")
+        }
     }
-}
