@@ -35,6 +35,7 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.options.switch
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
+import com.github.ajalt.clikt.parameters.types.int
 import com.github.ajalt.mordant.animation.coroutines.animateInCoroutine
 import com.github.ajalt.mordant.animation.progress.MultiProgressBarAnimation
 import com.github.ajalt.mordant.animation.progress.addTask
@@ -215,6 +216,11 @@ class DownloaderCommand : OrtCommand(
         help = "Do not actually download anything but just verify that all source code locations are valid."
     ).flag()
 
+    private val maxParallelDownloads by option(
+        "--max-parallel-downloads", "-p",
+        help = "The maximum number of parallel downloads to happen."
+    ).int().default(8)
+
     override fun run() {
         val failureMessages = mutableListOf<String>()
 
@@ -316,7 +322,7 @@ class DownloaderCommand : OrtCommand(
 
         val packageDownloadDirs = packages.associateWith { outputDir.resolve(it.id.toPath()) }
 
-        downloadAllPackages(packageDownloadDirs, failureMessages)
+        downloadAllPackages(packageDownloadDirs, failureMessages, maxParallelDownloads)
 
         if (archiveMode == ArchiveMode.BUNDLE && !dryRun) {
             val zipFile = outputDir.resolve("archive.zip")
@@ -338,7 +344,7 @@ class DownloaderCommand : OrtCommand(
     private fun downloadAllPackages(
         packageDownloadDirs: Map<Package, File>,
         failureMessages: MutableList<String>,
-        maxParallelDownloads: Int = 8
+        maxParallelDownloads: Int
     ) = runBlocking {
         val parallelDownloads = packageDownloadDirs.size.coerceAtMost(maxParallelDownloads)
 
