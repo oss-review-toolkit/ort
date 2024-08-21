@@ -61,7 +61,7 @@ tasks.addRule("Pattern: yarn<Command>") {
                 oldPath
             ).joinToString(File.pathSeparator)
 
-            environment = environment + mapOf("PATH" to newPath)
+            environment = environment + ("PATH" to newPath)
         }
     }
 }
