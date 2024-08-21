@@ -148,6 +148,9 @@ class Conan(
             pkgInspectResults.clear()
         }
 
+    override fun run(vararg args: CharSequence, workingDir: File?, environment: Map<String, String>) =
+        super.run(args = args, workingDir = workingDir, environment = environment + ("CONAN_NON_INTERACTIVE" to "1"))
+
     private fun resolvedDependenciesInternal(definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
 
