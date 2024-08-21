@@ -756,7 +756,7 @@ project:
           - id: "Pub::stack_trace:1.11.1"
             dependencies:
             - id: "Pub::path:1.9.0"
-        - id: "Pub::source_map_stack_trace:2.1.1"
+        - id: "Pub::source_map_stack_trace:2.1.2"
           dependencies:
           - id: "Pub::path:1.9.0"
           - id: "Pub::source_maps:0.10.12"
@@ -1693,8 +1693,8 @@ packages:
     url: "https://github.com/dart-lang/shelf.git"
     revision: ""
     path: "pkgs/shelf_web_socket"
-- id: "Pub::source_map_stack_trace:2.1.1"
-  purl: "pkg:pub/source_map_stack_trace@2.1.1"
+- id: "Pub::source_map_stack_trace:2.1.2"
+  purl: "pkg:pub/source_map_stack_trace@2.1.2"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "A package for applying source maps to stack traces."
@@ -1705,20 +1705,20 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://pub.dev/packages/source_map_stack_trace/versions/2.1.1.tar.gz"
+    url: "https://pub.dev/packages/source_map_stack_trace/versions/2.1.2.tar.gz"
     hash:
-      value: "84cf769ad83aa6bb61e0aa5a18e53aea683395f196a6f39c4c881fb90ed4f7ae"
+      value: "c0713a43e323c3302c2abe2a1cc89aa057a387101ebd280371d6a6c9fa68516b"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
-    url: "https://github.com/dart-lang/source_map_stack_trace.git"
+    url: "https://github.com/dart-lang/tools.git"
     revision: ""
-    path: ""
+    path: "pkgs/source_map_stack_trace"
   vcs_processed:
     type: "Git"
-    url: "https://github.com/dart-lang/source_map_stack_trace.git"
+    url: "https://github.com/dart-lang/tools.git"
     revision: ""
-    path: ""
+    path: "pkgs/source_map_stack_trace"
 - id: "Pub::source_maps:0.10.12"
   purl: "pkg:pub/source_maps@0.10.12"
   declared_licenses: []
