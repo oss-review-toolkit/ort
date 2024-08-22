@@ -183,6 +183,7 @@ tasks.withType<KotlinCompile>().configureEach {
 
     compilerOptions {
         allWarningsAsErrors = true
+        freeCompilerArgs = listOf("-Xconsistent-data-class-copy-visibility")
         jvmTarget = maxKotlinJvmTarget
         optIn = optInRequirements
     }
