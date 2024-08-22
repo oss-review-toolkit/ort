@@ -39,11 +39,6 @@ import java.util.Locale
 inline fun <T> T.alsoIfNull(block: (T) -> Unit): T = this ?: also(block)
 
 /**
- * Return a string of lowercase hexadecimal digits representing the bytes in the array.
- */
-fun ByteArray.encodeHex(): String = joinToString("") { String.format(Locale.ROOT, "%02x", it) }
-
-/**
  * Return a map that associates duplicates as identified by [keySelector] with belonging lists of collection entries.
  */
 fun <T, K> Collection<T>.getDuplicates(keySelector: (T) -> K): Map<K, List<T>> =
@@ -302,14 +297,6 @@ fun Number.bytesToMib(): Double = toDouble() / 1.mebibytes
 fun String.collapseWhitespace() = trim().replace(CONSECUTIVE_WHITESPACE_REGEX, " ")
 
 private val CONSECUTIVE_WHITESPACE_REGEX = Regex("\\s+")
-
-/**
- * Decode a hex-string and return the value as a [ByteArray].
- */
-fun String.decodeHex(): ByteArray {
-    require(length % 2 == 0) { "The string must have an even number of characters." }
-    return chunked(2).map { it.toInt(16).toByte() }.toByteArray()
-}
 
 /**
  * Return the string encoded for safe use as a file name or [emptyValue] encoded for safe use as a file name, if this

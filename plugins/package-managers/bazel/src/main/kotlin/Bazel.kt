@@ -53,7 +53,6 @@ import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.common.encodeHex
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 import org.ossreviewtoolkit.utils.ort.runBlocking
@@ -310,7 +309,7 @@ private fun ModuleMetadata.toVcsInfo() =
 
 private fun ModuleSourceInfo.toRemoteArtifact(): RemoteArtifact {
     val (algo, b64digest) = integrity.split("-", limit = 2)
-    val digest = Base64.getDecoder().decode(b64digest).encodeHex()
+    val digest = Base64.getDecoder().decode(b64digest).toHexString()
 
     val hash = Hash(
         value = digest,
