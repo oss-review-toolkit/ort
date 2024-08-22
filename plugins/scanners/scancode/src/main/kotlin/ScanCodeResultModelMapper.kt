@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.scanners.scancode
 
+import java.io.File
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -64,7 +65,7 @@ fun ScanCodeResult.toScanSummary(preferFileLicense: Boolean = false): ScanSummar
     val issues = mutableListOf<Issue>()
 
     val header = headers.single()
-    val inputName = header.options.input.first().substringAfterLast('/')
+    val inputPath = File(header.options.input.first())
 
     val outputFormatVersion = header.outputFormatVersion?.let { Semver(it) }
     if (outputFormatVersion != null && outputFormatVersion.major > MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION) {
@@ -84,10 +85,12 @@ fun ScanCodeResult.toScanSummary(preferFileLicense: Boolean = false): ScanSummar
 
     filesOfTypeFile.forEach { file ->
         val licensesWithoutReferences = file.licenses.filter {
-            // Note that "fromFile" contains the name of the input directory, see
-            // https://github.com/nexB/scancode-toolkit/issues/3712.
-            it !is LicenseEntry.Version3 || it.fromFile == null || it.fromFile == "$inputName/${file.path}"
-                || it.fromFile == inputName // Input is a single file.
+            it !is LicenseEntry.Version3 || it.fromFile == null
+                // Note that "fromFile" contains the name of the input directory, see
+                // https://github.com/nexB/scancode-toolkit/issues/3712.
+                || inputPath.resolveSibling(it.fromFile) == inputPath.resolve(file.path)
+                // Check if input is a single file.
+                || it.fromFile == inputPath.name
         }
 
         // ScanCode creates separate license entries for each license in an expression. Deduplicate these by grouping by
