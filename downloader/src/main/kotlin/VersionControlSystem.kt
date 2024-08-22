@@ -193,7 +193,7 @@ abstract class VersionControlSystem(
     /**
      * Return true if this VCS can handle the given [vcsType].
      */
-    fun isApplicableType(vcsType: VcsType) = type in vcsType.aliases
+    fun isApplicableType(vcsType: VcsType) = VcsType.forName(type) == vcsType
 
     /**
      * Return true if this [VersionControlSystem] can be used to download from the provided [vcsUrl]. First, try to find
@@ -359,7 +359,7 @@ abstract class VersionControlSystem(
 
         addMetadataRevision(pkg.vcsProcessed.revision)
 
-        if (type in VcsType.GIT.aliases && pkg.vcsProcessed.revision == "master") {
+        if (VcsType.forName(type) == VcsType.GIT && pkg.vcsProcessed.revision == "master") {
             // Also try with Git's upcoming default branch name in case the repository is already using it.
             addMetadataRevision("main")
         }

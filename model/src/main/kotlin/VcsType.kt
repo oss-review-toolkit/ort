@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.JsonValue
  * alias is the definite name. This class is not implemented as an enum as constructing from an unknown type should be
  * supported while maintaining that type as the primary alias for the string representation.
  */
-data class VcsType private constructor(val aliases: List<String>) {
+data class VcsType private constructor(private val aliases: List<String>) {
     /**
      * A constructor that takes a [name] in addition to a variable number of other [aliases] to enforce a non-empty list
      * of final aliases.
