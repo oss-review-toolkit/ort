@@ -26,9 +26,6 @@ import java.io.File
 
 import kotlin.io.encoding.Base64
 
-import org.ossreviewtoolkit.utils.common.decodeHex
-import org.ossreviewtoolkit.utils.common.encodeHex
-
 /**
  * A class that bundles a hash algorithm with its hash value.
  */
@@ -60,7 +57,7 @@ data class Hash(
                 // Support Subresource Integrity (SRI) hashes, see
                 // https://w3c.github.io/webappsec-subresource-integrity/
                 Hash(
-                    value = Base64.decode(splitValue.last()).encodeHex(),
+                    value = Base64.decode(splitValue.last()).toHexString(),
                     algorithm = HashAlgorithm.fromString(splitValue.first())
                 )
             } else {
@@ -83,7 +80,7 @@ data class Hash(
     /**
      * Return the hash in Support Subresource Integrity (SRI) format.
      */
-    fun toSri() = algorithm.name.lowercase() + "-" + Base64.encode(value.decodeHex())
+    fun toSri() = algorithm.name.lowercase() + "-" + Base64.encode(value.hexToByteArray())
 
     /**
      * Verify that the [file] matches this hash.

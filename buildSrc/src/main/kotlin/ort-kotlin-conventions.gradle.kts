@@ -174,6 +174,7 @@ tasks.withType<KotlinCompile>().configureEach {
     val hasSerializationPlugin = plugins.hasPlugin(libs.plugins.kotlinSerialization.get().pluginId)
 
     val optInRequirements = listOfNotNull(
+        "kotlin.ExperimentalStdlibApi",
         "kotlin.contracts.ExperimentalContracts",
         "kotlin.io.encoding.ExperimentalEncodingApi",
         "kotlin.io.path.ExperimentalPathApi",
