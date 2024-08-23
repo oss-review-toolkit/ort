@@ -370,7 +370,20 @@ class Bazel(
     ): Set<Scope> {
         val process = run("mod", "graph", "--output", "json", "--disk_cache=", workingDir = projectDir)
         val mainModule = process.stdout.parseBazelModule()
-        val (mainDeps, devDeps) = mainModule.dependencies.partition { depDirectives[it.key]?.devDependency != true }
+        val (mainDeps, devDeps) = mainModule.dependencies.map { module ->
+            val name = module.name ?: module.key.substringBefore("@", "")
+            val version = module.version ?: module.key.substringAfter("@", "")
+
+            val overriddenKey = "$name@$version"
+            if (overriddenKey != module.key) {
+                logger.info { "Using overridden module key '$overriddenKey' instead of '${module.key}'." }
+                module.copy(key = "$name@$version")
+            } else {
+                module
+            }
+        }.partition {
+            depDirectives[it.key]?.devDependency != true
+        }
 
         return setOf(
             Scope(
@@ -387,16 +400,13 @@ class Bazel(
     /**
      * Convert a [BazelModule] to a [PackageReference].
      */
-    private fun BazelModule.toPackageReference(archiveOverrides: Map<String, ArchiveOverride>): PackageReference {
-        val packageRefName = name ?: key.substringBefore("@", "")
-        val packageRefVersion = version ?: key.substringAfter("@", "")
-
-        return PackageReference(
+    private fun BazelModule.toPackageReference(archiveOverrides: Map<String, ArchiveOverride>): PackageReference =
+        PackageReference(
             id = Identifier(
                 type = managerName,
                 namespace = "",
-                name = packageRefName,
-                version = packageRefVersion
+                name = key.substringBefore("@", ""),
+                version = key.substringAfter("@", "")
             ),
             // Static linking is the default for cc_binary targets. According to the documentation, it is off for
             // cc_test, but according to experiments, it is on.
@@ -404,7 +414,6 @@ class Bazel(
             linkage = PackageLinkage.STATIC,
             dependencies = dependencies.mapTo(mutableSetOf()) { it.toPackageReference(archiveOverrides) }
         )
-    }
 }
 
 private fun String.expandRepositoryUrl(): String = withoutPrefix("github:")?.let { "https://github.com/$it" } ?: this

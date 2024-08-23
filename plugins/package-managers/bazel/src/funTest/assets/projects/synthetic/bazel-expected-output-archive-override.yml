@@ -17,8 +17,6 @@ project:
   homepage_url: ""
   scopes:
   - name: "dev"
-    dependencies: []
-  - name: "main"
     dependencies:
     - id: "Bazel::nanopb:0.4.9"
       linkage: "STATIC"
@@ -171,6 +169,8 @@ project:
           linkage: "STATIC"
         - id: "Bazel::rules_proto:6.0.2"
           linkage: "STATIC"
+  - name: "main"
+    dependencies:
     - id: "Bazel::rules_cuda:0.1.1"
       linkage: "STATIC"
       dependencies:
