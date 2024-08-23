@@ -373,10 +373,10 @@ private fun getLicenseFindingFromSnippetChoice(
     return if (isSnippetChoice) {
         logger.info {
             "Adding snippet choice for ${sourceLocation.prettyPrint()} " +
-                "with license ${snippet.licenses} to the license findings."
+                "with license ${snippet.license} to the license findings."
         }
 
-        LicenseFinding(snippet.licenses, sourceLocation)
+        LicenseFinding(snippet.license, sourceLocation)
     } else {
         null
     }

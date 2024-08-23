@@ -47,9 +47,9 @@ data class Snippet(
     val purl: String,
 
     /**
-     * The license of the component the code snippet is commit from.
+     * The SPDX license expression of the component the code snippet is coming from.
      */
-    val licenses: SpdxExpression,
+    val license: SpdxExpression,
 
     /**
      * A map for scanner-specific snippet data that cannot be mapped into any generalized property, but still needs to
