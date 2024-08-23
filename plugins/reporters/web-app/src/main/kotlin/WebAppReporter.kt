@@ -21,8 +21,10 @@ package org.ossreviewtoolkit.plugins.reporters.webapp
 
 import java.io.File
 import java.io.FileOutputStream
-import java.util.Base64
 import java.util.zip.Deflater
+
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.encodingWith
 
 import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream
 import org.apache.commons.compress.compressors.gzip.GzipParameters
@@ -71,7 +73,7 @@ class WebAppReporter : Reporter {
             outputFile.writeText(prefix)
 
             FileOutputStream(outputFile, /* append = */ true).use { outputStream ->
-                val b64OutputStream = Base64.getEncoder().wrap(outputStream)
+                val b64OutputStream = outputStream.encodingWith(Base64.Mime)
 
                 val gzipParameters = GzipParameters().apply {
                     compressionLevel = Deflater.BEST_COMPRESSION

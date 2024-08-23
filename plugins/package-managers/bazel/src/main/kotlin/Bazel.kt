@@ -21,7 +21,8 @@ package org.ossreviewtoolkit.plugins.packagemanagers.bazel
 
 import java.io.File
 import java.net.URI
-import java.util.Base64
+
+import kotlin.io.encoding.Base64
 
 import org.apache.logging.log4j.kotlin.logger
 
@@ -306,7 +307,7 @@ class Bazel(
 
             val hash = archiveOverride.integrity?.let { integrity ->
                 val (algo, b64digest) = integrity.split('-', limit = 2)
-                val digest = Base64.getDecoder().decode(b64digest).toHexString()
+                val digest = Base64.decode(b64digest).toHexString()
                 Hash(
                     value = digest,
                     algorithm = HashAlgorithm.fromString(algo)
@@ -420,7 +421,7 @@ private fun ModuleMetadata.toVcsInfo() =
 
 private fun ModuleSourceInfo.toRemoteArtifact(): RemoteArtifact {
     val (algo, b64digest) = integrity.split("-", limit = 2)
-    val digest = Base64.getDecoder().decode(b64digest).toHexString()
+    val digest = Base64.decode(b64digest).toHexString()
 
     val hash = Hash(
         value = digest,
