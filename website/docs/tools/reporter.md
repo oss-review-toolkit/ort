@@ -18,7 +18,9 @@ Currently, the following formats are supported (reporter names are case-insensit
     * Man page (`-f ManPageTemplate`)
 * [ctrlX AUTOMATION](https://apps.boschrexroth.com/microsites/ctrlx-automation/) platform [FOSS information](https://github.com/boschrexroth/json-schema/tree/master/ctrlx-automation/ctrlx-os/apps/fossinfo) (`-f CtrlXAutomation`)
 * [CycloneDX](https://cyclonedx.org/) BOM (`-f CycloneDx`)
-* FossID report download (HTML, SPDX, and Excel types)
+* [FossID](https://fossid.com/) report download
+  * HTML, SPDX, and Excel reports (`-f FossId`)
+  * Snippet report (`-f FossIdSnippet`)
 * [GitLabLicenseModel](https://docs.gitlab.com/ee/ci/pipelines/job_artifacts.html#artifactsreportslicense_scanning-ultimate) (`-f GitLabLicenseModel`)
   * There is a [tutorial video](https://youtu.be/dNmH_kYJ34g) by @xlgmokha
 * [NOTICE](https://infra.apache.org/licensing-howto.html) file in two variants
