@@ -315,7 +315,7 @@ class Bazel(
             }
 
             Package(
-                id = it.copy(version = ""),
+                id = it,
                 declaredLicenses = emptySet(),
                 description = "",
                 homepageUrl = "",
@@ -385,14 +385,11 @@ class Bazel(
     }
 
     /**
-     * Convert a [BazelModule] to a [PackageReference]. If an archive override is present in [archiveOverrides], the
-     * version of the package will be removed as Bazel does in the output of "mod graph".
+     * Convert a [BazelModule] to a [PackageReference].
      */
     private fun BazelModule.toPackageReference(archiveOverrides: Map<String, ArchiveOverride>): PackageReference {
         val packageRefName = name ?: key.substringBefore("@", "")
-        val packageRefVersion = archiveOverrides.takeUnless {
-            packageRefName in it
-        }?.let { version ?: key.substringAfter("@", "") }.orEmpty()
+        val packageRefVersion = version ?: key.substringAfter("@", "")
 
         return PackageReference(
             id = Identifier(
