@@ -112,6 +112,7 @@ packages:
     url: ""
     revision: ""
     path: ""
+  is_modified: true
 - id: "Bazel::rules_license:0.0.7"
   purl: "pkg:generic/rules_license@0.0.7"
   declared_licenses: []

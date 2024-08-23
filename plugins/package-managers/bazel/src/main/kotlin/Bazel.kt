@@ -324,7 +324,8 @@ class Bazel(
                     url = archiveOverride.urls.first().toString(),
                     hash = hash ?: Hash.NONE
                 ),
-                vcs = VcsInfo.EMPTY
+                vcs = VcsInfo.EMPTY,
+                isModified = archiveOverride.patches?.isNotEmpty() == true
             )
         }
 
