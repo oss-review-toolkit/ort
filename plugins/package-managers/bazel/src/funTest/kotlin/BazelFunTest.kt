@@ -64,4 +64,13 @@ class BazelFunTest : StringSpec({
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
+
+    "Dependencies are detected correctly for a project with an archive override" {
+        val definitionFile = getAssetFile("projects/synthetic/bazel-archive-override/MODULE.bazel")
+        val expectedResultFile = getAssetFile("projects/synthetic/bazel-expected-output-archive-override.yml")
+
+        val result = create("Bazel").resolveSingleProject(definitionFile)
+
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
 })
