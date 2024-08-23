@@ -27,7 +27,7 @@ Currently, the following formats are supported (reporter names are case-insensit
   * List license texts and copyrights by package (`-f PlainTextTemplate`)
   * Summarize all license texts and copyrights (`-f PlainTextTemplate -O PlainTextTemplate=template.id=NOTICE_SUMMARY`)
   * Customizable with [Apache Freemarker](https://freemarker.apache.org/) templates
-* Opossum input that can be visualized and edited in the [OpossumUI](https://github.com/opossum-tool/opossumUI) (`-f Opossum`)
+* [OpossumUI](https://github.com/opossum-tool/opossumUI) input (`-f Opossum`)
 * [SPDX Document](https://spdx.dev/specifications/), version 2.2 (`-f SpdxDocument`)
 * Static HTML (`-f StaticHtml`)
 * [TrustSource](https://www.trustsource.io/) JSON file (`-f TrustSource`)
