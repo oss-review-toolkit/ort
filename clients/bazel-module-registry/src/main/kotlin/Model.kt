@@ -24,16 +24,16 @@ import io.ks3.java.typealiases.UriAsString
 import kotlinx.serialization.Serializable
 
 /**
- * E.g. https://bcr.bazel.build/modules/glog/metadata.json.
+ * See: https://github.com/bazelbuild/bazel-central-registry/blob/3a298e2c3ec7484905d3ad132a60393571912cd1/metadata.schema.json.
  */
 @Serializable
 data class ModuleMetadata(
-    val homepage: UriAsString?,
-    val maintainers: List<Maintainer>? = null,
+    val homepage: UriAsString,
+    val maintainers: List<Maintainer>,
     val repository: List<String>? = null,
     val versions: List<String>,
     // The key in the map is the version, the value the reason for yanking it.
-    val yankedVersions: Map<String, String>
+    val yankedVersions: Map<String, String>? = null
 ) {
     @Serializable
     data class Maintainer(
