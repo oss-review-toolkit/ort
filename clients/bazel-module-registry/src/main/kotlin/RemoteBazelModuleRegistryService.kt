@@ -50,7 +50,7 @@ interface RemoteBazelModuleRegistryService : BazelModuleRegistryService {
             val contentType = "application/json".toMediaType()
             val baseUrl = url ?: DEFAULT_URL
 
-            logger.info { "Creating remote Bazel module registry at '$baseUrl'." }
+            logger.info { "Creating remote Bazel module registry at $baseUrl." }
 
             val retrofit = Retrofit.Builder()
                 .client(bmrClient)
