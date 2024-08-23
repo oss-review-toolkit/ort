@@ -215,7 +215,7 @@ class Bazel(
         }.associate { line ->
             val (moduleName, urlsAsString, integrity, patchesAsString) = line.split(' ', limit = 4)
             logger.info {
-                "Archive override for module '$moduleName' is '$urlsAsString, $integrity, $patchesAsString'."
+                "Archive override URL(s) for module '$moduleName': ${urlsAsString.removeSurrounding("[", "]")}"
             }
 
             val urls = urlsAsString.removeSurrounding("[", "]").split(',').map { URI.create(it) }
@@ -300,8 +300,8 @@ class Bazel(
 
             if (archiveOverride.urls.size > 1) {
                 logger.warn {
-                    "The module '${it.name}' has multiple URLs ${archiveOverride.urls} defined in the archive " +
-                        "override, but ORT only supports one URL for source artefacts. Only the first URL will be used."
+                    "The module '${it.name}' has multiple archive override URLs defined. Only the first URL of the " +
+                        "following URLs will be used: ${archiveOverride.urls.joinToString()}"
                 }
             }
 
