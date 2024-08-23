@@ -348,7 +348,7 @@ class FreemarkerTemplateProcessor(
          */
         @Suppress("UNUSED") // This function is used in the templates.
         fun collectLicenses(snippetsFindings: Collection<SnippetFinding>): Set<String> =
-            snippetsFindings.flatMap { findings -> findings.snippets }.map { snippet -> snippet.licenses.toString() }
+            snippetsFindings.flatMap { findings -> findings.snippets }.map { snippet -> snippet.license.toString() }
                 .toSet()
 
         /**
