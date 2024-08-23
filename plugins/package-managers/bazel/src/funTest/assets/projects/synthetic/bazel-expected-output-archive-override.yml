@@ -20,7 +20,7 @@ project:
     dependencies: []
   - name: "main"
     dependencies:
-    - id: "Bazel::rules_cuda:"
+    - id: "Bazel::rules_cuda:0.1.1"
       linkage: "STATIC"
       dependencies:
       - id: "Bazel::bazel_skylib:1.3.0"
@@ -86,8 +86,8 @@ packages:
     url: "https://github.com/bazelbuild/platforms.git"
     revision: ""
     path: ""
-- id: "Bazel::rules_cuda:"
-  purl: "pkg:generic/rules_cuda@"
+- id: "Bazel::rules_cuda:0.1.1"
+  purl: "pkg:generic/rules_cuda@0.1.1"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
