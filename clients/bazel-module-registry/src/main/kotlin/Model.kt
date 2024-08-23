@@ -21,6 +21,8 @@ package org.ossreviewtoolkit.clients.bazelmoduleregistry
 
 import io.ks3.java.typealiases.UriAsString
 
+import java.net.URI
+
 import kotlinx.serialization.Serializable
 
 /**
@@ -52,4 +54,14 @@ data class ModuleSourceInfo(
     val patches: Map<String, String>? = null,
     val stripPrefix: String? = null,
     val url: UriAsString
+)
+
+/**
+ * See https://bazel.build/rules/lib/globals/module#archive_override.
+ */
+data class ArchiveOverride(
+    val moduleName: String,
+    val integrity: String? = null,
+    val patches: List<String>? = null,
+    val urls: List<URI>
 )

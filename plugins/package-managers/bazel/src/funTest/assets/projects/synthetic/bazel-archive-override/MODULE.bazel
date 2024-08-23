@@ -1,0 +1,11 @@
+bazel_dep(name = "rules_cuda", version = "0.1.1")
+
+archive_override(
+    module_name = "rules_cuda",
+    integrity = "sha256-3B9PcEylbj1e3Zc/mKRfBIfQ8oxonQpXuiNhEhSLGDM=",
+    patches = [
+        "//rules_cuda_patches:dummy.patch",
+    ],
+    strip_prefix = "rules_cuda-v0.1.2",
+    urls = ["https://github.com/bazel-contrib/rules_cuda/releases/download/v0.1.2/rules_cuda-v0.1.2.tar.gz"],
+)

@@ -1,0 +1,140 @@
+---
+project:
+  id: "Bazel::plugins/package-managers/bazel/src/funTest/assets/projects/synthetic/bazel-archive-override/MODULE.bazel:"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "dev"
+    dependencies: []
+  - name: "main"
+    dependencies:
+    - id: "Bazel::rules_cuda:"
+      linkage: "STATIC"
+      dependencies:
+      - id: "Bazel::bazel_skylib:1.3.0"
+        linkage: "STATIC"
+        dependencies:
+        - id: "Bazel::platforms:0.0.7"
+          linkage: "STATIC"
+      - id: "Bazel::platforms:0.0.7"
+        linkage: "STATIC"
+        dependencies:
+        - id: "Bazel::rules_license:0.0.7"
+          linkage: "STATIC"
+packages:
+- id: "Bazel::bazel_skylib:1.3.0"
+  purl: "pkg:generic/bazel_skylib@1.3.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/bazelbuild/bazel-skylib"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/bazelbuild/bazel-skylib/releases/download/1.3.0/bazel-skylib-1.3.0.tar.gz"
+    hash:
+      value: "74d544d96f4a5bb630d465ca8bbcfe231e3594e5aae57e1edbf17a6eb3ca2506"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/bazelbuild/bazel-skylib"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/bazelbuild/bazel-skylib.git"
+    revision: ""
+    path: ""
+- id: "Bazel::platforms:0.0.7"
+  purl: "pkg:generic/platforms@0.0.7"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/bazelbuild/platforms"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/bazelbuild/platforms/releases/download/0.0.7/platforms-0.0.7.tar.gz"
+    hash:
+      value: "3a561c99e7bdbe9173aa653fd579fe849f1d8d67395780ab4770b1f381431d51"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/bazelbuild/platforms"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/bazelbuild/platforms.git"
+    revision: ""
+    path: ""
+- id: "Bazel::rules_cuda:"
+  purl: "pkg:generic/rules_cuda@"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/bazel-contrib/rules_cuda/releases/download/v0.1.2/rules_cuda-v0.1.2.tar.gz"
+    hash:
+      value: "dc1f4f704ca56e3d5edd973f98a45f0487d0f28c689d0a57ba236112148b1833"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "Bazel::rules_license:0.0.7"
+  purl: "pkg:generic/rules_license@0.0.7"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/bazelbuild/rules_license"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/bazelbuild/rules_license/releases/download/0.0.7/rules_license-0.0.7.tar.gz"
+    hash:
+      value: "4531deccb913639c30e5c7512a054d5d875698daeb75d8cf90f284375fe7c360"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/bazelbuild/rules_license"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/bazelbuild/rules_license.git"
+    revision: ""
+    path: ""

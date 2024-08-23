@@ -20,12 +20,14 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.bazel
 
 import java.io.File
+import java.net.URI
 import java.util.Base64
 
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.clients.bazelmoduleregistry.ArchiveOverride
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.BazelModuleRegistryService
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.LocalBazelModuleRegistryService
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.ModuleMetadata
@@ -62,6 +64,8 @@ import org.semver4j.RangesListFactory
 
 private const val BAZEL_FALLBACK_VERSION = "7.0.1"
 private const val LOCKFILE_NAME = "MODULE.bazel.lock"
+private const val BUILDOZER_COMMAND = "buildozer"
+private const val BUILDOZER_MISSING_VALUE = "(missing)"
 
 class Bazel(
     name: String,
@@ -105,7 +109,8 @@ class Bazel(
         val projectVcs = processProjectVcs(projectDir)
         val moduleMetadata = Parser(definitionFile.readText()).parse()
         val depDirectives = moduleMetadata.dependencies.associateBy { "${it.name}@${it.version}" }
-        val scopes = getDependencyGraph(projectDir, depDirectives)
+        val archiveOverrides = getArchiveOverrides(projectDir)
+        val scopes = getDependencyGraph(projectDir, depDirectives, archiveOverrides)
 
         // If no lockfile is present, getDependencyGraph() runs "bazel mod graph", which creates a "MODULE.bazel.lock"
         // file as a side effect. That file contains the URL of the Bazel module registry that was used for dependency
@@ -116,7 +121,7 @@ class Bazel(
         val packages = if (registry != null) {
             val localPathOverrides = getLocalPathOverrides(projectDir)
 
-            getPackages(scopes, registry, localPathOverrides, projectVcs)
+            getPackages(scopes, registry, localPathOverrides, archiveOverrides, projectVcs)
         } else {
             issues += createAndLogIssue(managerName, "Bazel registry URL cannot be determined from the lockfile.")
             emptySet()
@@ -164,7 +169,7 @@ class Bazel(
         }
 
         val process = ProcessCapture(
-            "buildozer",
+            BUILDOZER_COMMAND,
             "-f", commandsFile.absolutePath,
             workingDir = workingDir
         )
@@ -179,6 +184,58 @@ class Bazel(
             val (moduleName, path) = line.split(' ', limit = 2)
             logger.info { "Local path override for module '$moduleName' is '$path'." }
             moduleName to path
+        }
+    }
+
+    /**
+     * Collect the archive overrides from the `MODULE.bazel` file in [workingDir]. The overrides are collected with
+     * Buildozer and are returned as a map from package names to archive overrides. An empty map is returned if no
+     * override is defined.
+     */
+    private fun getArchiveOverrides(workingDir: File): Map<String, ArchiveOverride> {
+        val process = ProcessCapture(
+            BUILDOZER_COMMAND,
+            "print module_name urls integrity patches",
+            "//MODULE.bazel:%archive_override",
+            workingDir = workingDir
+        )
+
+        require(process.isSuccess) {
+            "Failed to get archive overrides from 'buildozer': ${process.stderr}"
+        }
+
+        // If an optional attribute is missing, buildozer outputs first a warning line and then the result with the
+        // value "(missing"):
+        // $ buildozer 'print integrity patch_cmds ' //MODULE.bazel:%archive_override
+        //      rule "//.:bazel-archive-override" has no attribute "patch_cmds"
+        //      sha256-3B9PcEylbj1e3Zc/mKRfBIfQ8oxonQpXuiNhEhSLGDM= (missing)
+        return process.stdout.lines().filterNot {
+            it.isEmpty() || "has no attribute" in it
+        }.associate { line ->
+            val (moduleName, urlsAsString, integrity, patchesAsString) = line.split(' ', limit = 4)
+            logger.info {
+                "Archive override for module '$moduleName' is '$urlsAsString, $integrity, $patchesAsString'."
+            }
+
+            val urls = urlsAsString.removeSurrounding("[", "]").split(',').map { URI.create(it) }
+
+            val patches = patchesAsString.takeUnless { BUILDOZER_MISSING_VALUE in it }?.let {
+                logger.warn {
+                    "The module $moduleName has patches defined in the archive override, but ORT does not support " +
+                        "patches for source artefacts yet (see issue #8452)."
+                }
+
+                patchesAsString.removeSurrounding("[", "]").split(',')
+            }
+
+            val integrityValue = integrity.takeUnless { BUILDOZER_MISSING_VALUE in it }
+
+            moduleName to ArchiveOverride(
+                moduleName = moduleName,
+                integrity = integrityValue,
+                patches = patches,
+                urls = urls
+            )
         }
     }
 
@@ -204,17 +261,24 @@ class Bazel(
 
     /**
      * Get the packages for the dependencies of the given [scopes] using the given [registry], for the dependencies that
-     * do not have a local path override. The dependencies having an override defined in [localPathOverrides] are
-     * created without querying [registry] and will use [projectVcs] as VCS information.
+     * do not have a local path override. The dependencies having a local path override defined in [localPathOverrides]
+     * are created without querying [registry] and will use [projectVcs] as VCS information. The dependencies having an
+     * archive override defined in [archiveOverrides] are created without querying [registry] and will have their
+     * version suppressed.
      */
     private fun getPackages(
         scopes: Set<Scope>,
         registry: BazelModuleRegistryService,
         localPathOverrides: Map<String, String>,
+        archiveOverrides: Map<String, ArchiveOverride>,
         projectVcs: VcsInfo
     ): Set<Package> {
         val ids = scopes.collectDependencies()
-        val (packageIdsWithPathOverride, otherPackageIds) = ids.partition { it.name in localPathOverrides }
+
+        // Fortunately, two partitions can be done in a row since it can safely be assumed that a package cannot have
+        // both a local path override and an archive override.
+        val (packageIdsWithPathOverride, idsFiltered) = ids.partition { it.name in localPathOverrides }
+        val (packageIdsWithArchiveOverride, otherPackageIds) = idsFiltered.partition { it.name in archiveOverrides }
 
         val result = mutableSetOf<Package>()
 
@@ -227,6 +291,39 @@ class Bazel(
                 binaryArtifact = RemoteArtifact.EMPTY,
                 sourceArtifact = RemoteArtifact.EMPTY,
                 vcs = projectVcs.copy(path = localPathOverrides.getValue(it.name))
+            )
+        }
+
+        packageIdsWithArchiveOverride.mapTo(result) {
+            val archiveOverride = archiveOverrides.getValue(it.name)
+
+            if (archiveOverride.urls.size > 1) {
+                logger.warn {
+                    "The module '${it.name}' has multiple URLs ${archiveOverride.urls} defined in the archive " +
+                        "override, but ORT only supports one URL for source artefacts. Only the first URL will be used."
+                }
+            }
+
+            val hash = archiveOverride.integrity?.let { integrity ->
+                val (algo, b64digest) = integrity.split('-', limit = 2)
+                val digest = Base64.getDecoder().decode(b64digest).toHexString()
+                Hash(
+                    value = digest,
+                    algorithm = HashAlgorithm.fromString(algo)
+                )
+            }
+
+            Package(
+                id = it.copy(version = ""),
+                declaredLicenses = emptySet(),
+                description = "",
+                homepageUrl = "",
+                binaryArtifact = RemoteArtifact.EMPTY,
+                sourceArtifact = RemoteArtifact(
+                    url = archiveOverride.urls.first().toString(),
+                    hash = hash ?: Hash.NONE
+                ),
+                vcs = VcsInfo.EMPTY
             )
         }
 
@@ -264,7 +361,11 @@ class Bazel(
             }
         }.getOrNull()
 
-    private fun getDependencyGraph(projectDir: File, depDirectives: Map<String, BazelDepDirective>): Set<Scope> {
+    private fun getDependencyGraph(
+        projectDir: File,
+        depDirectives: Map<String, BazelDepDirective>,
+        archiveOverrides: Map<String, ArchiveOverride>
+    ): Set<Scope> {
         val process = run("mod", "graph", "--output", "json", "--disk_cache=", workingDir = projectDir)
         val mainModule = process.stdout.parseBazelModule()
         val (mainDeps, devDeps) = mainModule.dependencies.partition { depDirectives[it.key]?.devDependency != true }
@@ -272,29 +373,39 @@ class Bazel(
         return setOf(
             Scope(
                 name = "main",
-                dependencies = mainDeps.mapTo(mutableSetOf()) { it.toPackageReference() }
+                dependencies = mainDeps.mapTo(mutableSetOf()) { it.toPackageReference(archiveOverrides) }
             ),
             Scope(
                 name = "dev",
-                dependencies = devDeps.mapTo(mutableSetOf()) { it.toPackageReference() }
+                dependencies = devDeps.mapTo(mutableSetOf()) { it.toPackageReference(archiveOverrides) }
             )
         )
     }
 
-    private fun BazelModule.toPackageReference(): PackageReference =
-        PackageReference(
+    /**
+     * Convert a [BazelModule] to a [PackageReference]. If an archive override is present in [archiveOverrides], the
+     * version of the package will be removed as Bazel does in the output of "mod graph".
+     */
+    private fun BazelModule.toPackageReference(archiveOverrides: Map<String, ArchiveOverride>): PackageReference {
+        val packageRefName = name ?: key.substringBefore("@", "")
+        val packageRefVersion = archiveOverrides.takeUnless {
+            packageRefName in it
+        }?.let { version ?: key.substringAfter("@", "") }.orEmpty()
+
+        return PackageReference(
             id = Identifier(
                 type = managerName,
                 namespace = "",
-                name = name ?: key.substringBefore("@", ""),
-                version = version ?: key.substringAfter("@", "")
+                name = packageRefName,
+                version = packageRefVersion
             ),
             // Static linking is the default for cc_binary targets. According to the documentation, it is off for
             // cc_test, but according to experiments, it is on.
             // See https://bazel.build/reference/be/c-cpp#cc_binary.linkstatic
             linkage = PackageLinkage.STATIC,
-            dependencies = dependencies.mapTo(mutableSetOf()) { it.toPackageReference() }
+            dependencies = dependencies.mapTo(mutableSetOf()) { it.toPackageReference(archiveOverrides) }
         )
+    }
 }
 
 private fun String.expandRepositoryUrl(): String = withoutPrefix("github:")?.let { "https://github.com/$it" } ?: this
