@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.utils.spdx.toSpdx
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class LicenseFinding(
     /**
-     * The found SPDX expression.
+     * The found license as an SPDX expression.
      */
     val license: SpdxExpression,
 
