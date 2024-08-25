@@ -34,6 +34,34 @@ jobs:
         gradle-home-cache-cleanup: true
     - name: Check copyrights, license headers, and .gitattributes
       run: ./gradlew checkCopyrightsInNoticeFile checkLicenseHeaders checkGitAttributes
+  completions:
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4
+      with:
+        gradle-home-cache-cleanup: true
+    - name: Generate completions
+      run: |
+        ./gradlew -q :cli:installDist
+        cli/build/install/ort/bin/ort --generate-completion=bash > integrations/completions/ort-completion.bash
+        cli/build/install/ort/bin/ort --generate-completion=fish > integrations/completions/ort-completion.fish
+        cli/build/install/ort/bin/ort --generate-completion=zsh > integrations/completions/ort-completion.zsh
+    - name: Check if completions are up-to-date
+      run: |
+        if git diff --exit-code; then
+          echo "Completions are up-to-date."
+        else
+          echo "Completions are not up-to-date."
+          echo "Please always run the commands below when changing CLI commands:"
+          echo "./gradlew -q :cli:installDist"
+          echo "cli/build/install/ort/bin/ort --generate-completion=bash > integrations/completions/ort-completion.bash"
+          echo "cli/build/install/ort/bin/ort --generate-completion=fish > integrations/completions/ort-completion.fish"
+          echo "cli/build/install/ort/bin/ort --generate-completion=zsh > integrations/completions/ort-completion.zsh"
+          exit 1
+        fi
   detekt-issues:
     runs-on: ubuntu-22.04
     permissions:
