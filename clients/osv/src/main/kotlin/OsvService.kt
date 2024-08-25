@@ -49,12 +49,6 @@ interface OsvService {
 
         val JSON = Json { namingStrategy = JsonNamingStrategy.SnakeCase }
 
-        /**
-         * Create a service instance for communicating with the given [server], optionally using a pre-built OkHttp
-         * [client].
-         */
-        fun create(server: Server, client: OkHttpClient? = null): OsvService = create(server.url, client)
-
         fun create(serverUrl: String? = null, client: OkHttpClient? = null): OsvService {
             val converterFactory = JSON.asConverterFactory(contentType = "application/json".toMediaType())
 
