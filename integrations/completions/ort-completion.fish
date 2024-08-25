@@ -22,10 +22,10 @@ complete -c ort -f -n __fish_use_subcommand -a advise -d 'Check dependencies for
 ## Options for advise
 complete -c ort -n "__fish_seen_subcommand_from advise" -l ort-file -s i -r -F -d 'An ORT result file with an analyzer result to use.'
 complete -c ort -n "__fish_seen_subcommand_from advise" -l output-dir -s o -r -F -d 'The directory to write the ORT result file with advisor results to.'
-complete -c ort -n "__fish_seen_subcommand_from advise" -l output-formats -s f -r -fa "JSON XML YAML" -d 'The list of output formats to be used for the ORT result file(s).'
+complete -c ort -n "__fish_seen_subcommand_from advise" -l output-formats -s f -r -fa "JSON YAML" -d 'The list of output formats to be used for the ORT result file(s).'
 complete -c ort -n "__fish_seen_subcommand_from advise" -l label -s l -r -d 'Set a label in the ORT result, overwriting any existing label of the same name. Can be used multiple times. For example: --label distribution=external'
 complete -c ort -n "__fish_seen_subcommand_from advise" -l resolutions-file -r -F -d 'A file containing issue and rule violation resolutions.'
-complete -c ort -n "__fish_seen_subcommand_from advise" -l advisors -s a -r -d 'The comma-separated advisors to use, any of [GitHubDefects, NexusIQ, OssIndex, OSV, VulnerableCode].'
+complete -c ort -n "__fish_seen_subcommand_from advise" -l advisors -s a -r -d 'The comma-separated advisors to use, any of [NexusIQ, OssIndex, OSV, VulnerableCode].'
 complete -c ort -n "__fish_seen_subcommand_from advise" -l skip-excluded -d 'Do not check excluded projects or packages.'
 complete -c ort -n "__fish_seen_subcommand_from advise" -s h -l help -d 'Show this message and exit'
 
@@ -36,7 +36,7 @@ complete -c ort -f -n __fish_use_subcommand -a analyze -d 'Determine dependencie
 ## Options for analyze
 complete -c ort -n "__fish_seen_subcommand_from analyze" -l input-dir -s i -r -F -d 'The project directory to analyze. May point to a definition file if only a single package manager is enabled.'
 complete -c ort -n "__fish_seen_subcommand_from analyze" -l output-dir -s o -r -F -d 'The directory to write the ORT result file with analyzer results to.'
-complete -c ort -n "__fish_seen_subcommand_from analyze" -l output-formats -s f -r -fa "JSON XML YAML" -d 'The list of output formats to be used for the ORT result file(s).'
+complete -c ort -n "__fish_seen_subcommand_from analyze" -l output-formats -s f -r -fa "JSON YAML" -d 'The list of output formats to be used for the ORT result file(s).'
 complete -c ort -n "__fish_seen_subcommand_from analyze" -l repository-configuration-file -r -F -d 'A file containing the repository configuration. If set, overrides any repository configuration contained in a \'.ort.yml\' file in the repository.'
 complete -c ort -n "__fish_seen_subcommand_from analyze" -l resolutions-file -r -F -d 'A file containing issue and rule violation resolutions.'
 complete -c ort -n "__fish_seen_subcommand_from analyze" -l label -s l -r -d 'Set a label in the ORT result, overwriting any existing label of the same name. Can be used multiple times. For example: --label distribution=external'
@@ -89,6 +89,7 @@ complete -c ort -n "__fish_seen_subcommand_from download" -l package-types -r -f
 complete -c ort -n "__fish_seen_subcommand_from download" -l package-ids -r -d 'A comma-separated list of regular expressions for matching package ids from the ORT file\'s analyzer result to limit downloads to. If not specified, all packages are downloaded.'
 complete -c ort -n "__fish_seen_subcommand_from download" -l skip-excluded -d 'Do not download excluded projects or packages. Works only with the \'--ort-file\' parameter.'
 complete -c ort -n "__fish_seen_subcommand_from download" -l dry-run -d 'Do not actually download anything but just verify that all source code locations are valid.'
+complete -c ort -n "__fish_seen_subcommand_from download" -l max-parallel-downloads -s p -r -d 'The maximum number of parallel downloads to happen.'
 complete -c ort -n "__fish_seen_subcommand_from download" -s h -l help -d 'Show this message and exit'
 
 
@@ -98,7 +99,7 @@ complete -c ort -f -n __fish_use_subcommand -a evaluate -d 'Evaluate ORT result 
 ## Options for evaluate
 complete -c ort -n "__fish_seen_subcommand_from evaluate" -l ort-file -s i -r -F -d 'The ORT result file to read as input.'
 complete -c ort -n "__fish_seen_subcommand_from evaluate" -l output-dir -s o -r -F -d 'The directory to write the ORT result file with evaluation results to.  If no output directory is specified, no ORT result file is written and only the exit code signals a success or failure.'
-complete -c ort -n "__fish_seen_subcommand_from evaluate" -l output-formats -s f -r -fa "JSON XML YAML" -d 'The list of output formats to be used for the ORT result file(s).'
+complete -c ort -n "__fish_seen_subcommand_from evaluate" -l output-formats -s f -r -fa "JSON YAML" -d 'The list of output formats to be used for the ORT result file(s).'
 complete -c ort -n "__fish_seen_subcommand_from evaluate" -l rules-file -s r -r -F -d 'The name of a script file containing rules.'
 complete -c ort -n "__fish_seen_subcommand_from evaluate" -l rules-resource -r -d 'The name of a script resource on the classpath that contains rules.'
 complete -c ort -n "__fish_seen_subcommand_from evaluate" -l copyright-garbage-file -r -F -d 'A file containing copyright statements which are marked as garbage.'
@@ -140,7 +141,7 @@ complete -c ort -f -n __fish_use_subcommand -a report -d 'Present Analyzer, Scan
 ## Options for report
 complete -c ort -n "__fish_seen_subcommand_from report" -l ort-file -s i -r -F -d 'The ORT result file to use.'
 complete -c ort -n "__fish_seen_subcommand_from report" -l output-dir -s o -r -F -d 'The output directory to store the generated reports in.'
-complete -c ort -n "__fish_seen_subcommand_from report" -l report-formats -s f -r -d 'The comma-separated reports to generate, any of [CtrlXAutomation, CycloneDx, DocBookTemplate, EvaluatedModel, FossId, FossIdSnippet, GitLabLicenseModel, HtmlTemplate, ManPageTemplate, Opossum, PdfTemplate, PlainTextTemplate, SpdxDocument, StaticHtml, TrustSource, WebApp].'
+complete -c ort -n "__fish_seen_subcommand_from report" -l report-formats -s f -r -d 'A comma-separated list of report formats to generate, any of [AOSD, CtrlXAutomation, CycloneDx, DocBookTemplate, EvaluatedModel, FossId, FossIdSnippet, GitLabLicenseModel, HtmlTemplate, ManPageTemplate, Opossum, PdfTemplate, PlainTextTemplate, SpdxDocument, StaticHtml, TrustSource, WebApp].'
 complete -c ort -n "__fish_seen_subcommand_from report" -l copyright-garbage-file -r -F -d 'A file containing copyright statements which are marked as garbage. This can make the output inconsistent with the evaluator output but is useful when testing copyright garbage.'
 complete -c ort -n "__fish_seen_subcommand_from report" -l custom-license-texts-dir -r -F -d 'A directory which maps custom license IDs to license texts. It should contain one text file per license with the license ID as the filename. A custom license text is used only if its ID has a \'LicenseRef-\' prefix and if the respective license text is not known by ORT.'
 complete -c ort -n "__fish_seen_subcommand_from report" -l how-to-fix-text-provider-script -r -F -d 'The path to a Kotlin script which returns an instance of a \'HowToFixTextProvider\'. That provider injects how-to-fix texts in Markdown format for ORT issues.'
@@ -167,7 +168,7 @@ complete -c ort -f -n __fish_use_subcommand -a scan -d 'Run external license / c
 ## Options for scan
 complete -c ort -n "__fish_seen_subcommand_from scan" -l ort-file -s i -r -F -d 'An ORT result file with an analyzer result to use. Source code is downloaded automatically if needed.'
 complete -c ort -n "__fish_seen_subcommand_from scan" -l output-dir -s o -r -F -d 'The directory to write the ORT result file with scan results to.'
-complete -c ort -n "__fish_seen_subcommand_from scan" -l output-formats -s f -r -fa "JSON XML YAML" -d 'The list of output formats to be used for the ORT result file(s).'
+complete -c ort -n "__fish_seen_subcommand_from scan" -l output-formats -s f -r -fa "JSON YAML" -d 'The list of output formats to be used for the ORT result file(s).'
 complete -c ort -n "__fish_seen_subcommand_from scan" -l label -s l -r -d 'Set a label in the ORT result, overwriting any existing label of the same name. Can be used multiple times. For example: --label distribution=external'
 complete -c ort -n "__fish_seen_subcommand_from scan" -l scanners -s s -r -d 'A comma-separated list of scanners to use.'
 complete -c ort -n "__fish_seen_subcommand_from scan" -l project-scanners -r -d 'A comma-separated list of scanners to use for scanning the source code of projects. By default, projects and packages are scanned with the same scanners as specified by \'--scanners\'.'

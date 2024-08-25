@@ -265,7 +265,7 @@ _ort_advise() {
        COMPREPLY=($(compgen -o default -- "${word}"))
       ;;
     --output-formats)
-      COMPREPLY=($(compgen -W 'JSON XML YAML' -- "${word}"))
+      COMPREPLY=($(compgen -W 'JSON YAML' -- "${word}"))
       ;;
     --label)
       ;;
@@ -371,7 +371,7 @@ _ort_analyze() {
        COMPREPLY=($(compgen -o default -- "${word}"))
       ;;
     --output-formats)
-      COMPREPLY=($(compgen -W 'JSON XML YAML' -- "${word}"))
+      COMPREPLY=($(compgen -W 'JSON YAML' -- "${word}"))
       ;;
     --repository-configuration-file)
        COMPREPLY=($(compgen -o default -- "${word}"))
@@ -651,6 +651,12 @@ _ort_download() {
           in_param=''
           continue
           ;;
+        --max-parallel-downloads|-p)
+          __skip_opt_eq
+          (( i = i + 1 ))
+          [[ ${i} -gt COMP_CWORD ]] && in_param='--max-parallel-downloads' || in_param=''
+          continue
+          ;;
         -h|--help)
           __skip_opt_eq
           in_param=''
@@ -668,7 +674,7 @@ _ort_download() {
   done
   local word="${COMP_WORDS[$COMP_CWORD]}"
   if [[ "${word}" =~ ^[-] ]]; then
-    COMPREPLY=($(compgen -W '--ort-file -i --project-url --project-name --vcs-type --vcs-revision --vcs-path --license-classifications-file --output-dir -o --archive --archive-all --package-types --package-ids --skip-excluded --dry-run -h --help' -- "${word}"))
+    COMPREPLY=($(compgen -W '--ort-file -i --project-url --project-name --vcs-type --vcs-revision --vcs-path --license-classifications-file --output-dir -o --archive --archive-all --package-types --package-ids --skip-excluded --dry-run --max-parallel-downloads -p -h --help' -- "${word}"))
     return
   fi
 
@@ -709,6 +715,8 @@ _ort_download() {
     --skip-excluded)
       ;;
     --dry-run)
+      ;;
+    --max-parallel-downloads)
       ;;
     --help)
       ;;
@@ -847,7 +855,7 @@ _ort_evaluate() {
        COMPREPLY=($(compgen -o default -- "${word}"))
       ;;
     --output-formats)
-      COMPREPLY=($(compgen -W 'JSON XML YAML' -- "${word}"))
+      COMPREPLY=($(compgen -W 'JSON YAML' -- "${word}"))
       ;;
     --rules-file)
        COMPREPLY=($(compgen -o default -- "${word}"))
@@ -1349,7 +1357,7 @@ _ort_scan() {
        COMPREPLY=($(compgen -o default -- "${word}"))
       ;;
     --output-formats)
-      COMPREPLY=($(compgen -W 'JSON XML YAML' -- "${word}"))
+      COMPREPLY=($(compgen -W 'JSON YAML' -- "${word}"))
       ;;
     --label)
       ;;
