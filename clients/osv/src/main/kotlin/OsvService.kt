@@ -47,6 +47,12 @@ interface OsvService {
     companion object {
         const val BATCH_REQUEST_MAX_SIZE = 1000
 
+        /** The URL of the production server. */
+        const val PRODUCTION_SERVER_URL = "https://api.osv.dev"
+
+        /** The URL of the staging server. */
+        const val STAGING_SERVER_URL = "https://api-staging.osv.dev"
+
         val JSON = Json { namingStrategy = JsonNamingStrategy.SnakeCase }
 
         fun create(serverUrl: String? = null, client: OkHttpClient? = null): OsvService {
@@ -54,23 +60,11 @@ interface OsvService {
 
             return Retrofit.Builder()
                 .apply { client(client ?: defaultHttpClient()) }
-                .baseUrl(serverUrl ?: Server.PRODUCTION.url)
+                .baseUrl(serverUrl ?: PRODUCTION_SERVER_URL)
                 .addConverterFactory(converterFactory)
                 .build()
                 .create(OsvService::class.java)
         }
-    }
-
-    enum class Server(val url: String) {
-        /**
-         * The production API server.
-         */
-        PRODUCTION("https://api.osv.dev"),
-
-        /**
-         * The staging API server.
-         */
-        STAGING("https://api-staging.osv.dev")
     }
 
     /**
