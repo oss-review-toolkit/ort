@@ -10,7 +10,7 @@ kotlinPlugin = "2.0.20"
 mavenPublishPlugin = "0.29.0"
 versionsPlugin = "0.51.0"
 
-asciidoctorj = "2.5.13"
+asciidoctorj = "3.0.0"
 asciidoctorjPdf = "2.3.18"
 clikt = "4.4.0"
 commonsCompress = "1.27.1"
