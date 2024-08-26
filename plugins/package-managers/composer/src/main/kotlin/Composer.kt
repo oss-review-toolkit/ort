@@ -156,25 +156,15 @@ class Composer(
         val virtualPackages = parseVirtualPackageNames(packages, projectPackageInfo, lockfile)
 
         val scopes = ALL_SCOPE_NAMES.mapTo(mutableSetOf()) { scopeName ->
-            parseScope(scopeName, projectPackageInfo, lockfile, packages, virtualPackages)
+            val requiredPackages = projectPackageInfo.getScopeDependencies(scopeName)
+            val dependencies = buildDependencyTree(requiredPackages, lockfile, packages, virtualPackages)
+            Scope(scopeName, dependencies)
         }
 
         val project = parseProject(definitionFile, scopes)
         val result = ProjectAnalyzerResult(project, packages.values.toSet())
 
         return listOf(result)
-    }
-
-    private fun parseScope(
-        scopeName: String,
-        projectPackageInfo: PackageInfo,
-        lockfile: Lockfile,
-        packages: Map<String, Package>,
-        virtualPackages: Set<String>
-    ): Scope {
-        val requiredPackages = projectPackageInfo.getScopeDependencies(scopeName)
-        val dependencies = buildDependencyTree(requiredPackages, lockfile, packages, virtualPackages)
-        return Scope(scopeName, dependencies)
     }
 
     private fun buildDependencyTree(
