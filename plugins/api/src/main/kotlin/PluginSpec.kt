@@ -19,12 +19,34 @@
 
 package org.ossreviewtoolkit.plugins.api
 
-import com.google.devtools.ksp.processing.SymbolProcessorEnvironment
-import com.google.devtools.ksp.processing.SymbolProcessorProvider
+import com.google.devtools.ksp.symbol.KSFile
+
+import com.squareup.kotlinpoet.TypeName
 
 /**
- * A [SymbolProcessorProvider] that provides a [PluginProcessor].
+ * A specification for a plugin.
  */
-class PluginProcessorProvider : SymbolProcessorProvider {
-    override fun create(environment: SymbolProcessorEnvironment) = PluginProcessor(environment.codeGenerator)
-}
+data class PluginSpec(
+    val containingFile: KSFile?,
+    val descriptor: PluginDescriptor,
+    val packageName: String,
+    val typeName: TypeName,
+    val configClass: PluginConfigClassSpec?,
+    val factory: PluginFactorySpec
+)
+
+/**
+ * A specification for a plugin configuration class.
+ */
+data class PluginConfigClassSpec(
+    val typeName: TypeName
+)
+
+/**
+ * A specification for a plugin factory. This describes the base factory class that the generated factory should
+ * implement.
+ */
+data class PluginFactorySpec(
+    val typeName: TypeName,
+    val qualifiedName: String
+)
