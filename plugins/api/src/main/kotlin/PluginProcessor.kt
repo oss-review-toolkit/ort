@@ -24,17 +24,19 @@ import com.google.devtools.ksp.getAllSuperTypes
 import com.google.devtools.ksp.getAnnotationsByType
 import com.google.devtools.ksp.getClassDeclarationByName
 import com.google.devtools.ksp.processing.CodeGenerator
-import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.processing.Resolver
 import com.google.devtools.ksp.processing.SymbolProcessor
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 
-class PluginProcessor(private val codeGenerator: CodeGenerator, private val logger: KSPLogger) : SymbolProcessor {
+class PluginProcessor(codeGenerator: CodeGenerator) : SymbolProcessor {
     /**
      * True, if the processor has been invoked in a previous run.
      */
     private var invoked = false
+
+    private val specFactory = PluginSpecFactory()
+    private val factoryGenerator = PluginFactoryGenerator(codeGenerator)
 
     /**
      * Process all classes annotated with [OrtPlugin] to generate plugin factories for them.
@@ -62,7 +64,8 @@ class PluginProcessor(private val codeGenerator: CodeGenerator, private val logg
             val pluginParentClass = getPluginParentClass(pluginFactoryClass)
             checkExtendsPluginClass(pluginClass, pluginParentClass)
 
-            createPluginFactory(pluginAnnotation, pluginClass, pluginFactoryClass)
+            val pluginSpec = specFactory.create(pluginAnnotation, pluginClass, pluginFactoryClass)
+            factoryGenerator.generate(pluginSpec)
         }
 
         invoked = true
@@ -128,17 +131,5 @@ class PluginProcessor(private val codeGenerator: CodeGenerator, private val logg
         require(pluginClass.getAllSuperTypes().any { it.declaration == pluginBaseClass }) {
             "Plugin class $pluginClass does not extend the required super type $pluginBaseClass."
         }
-    }
-
-    /**
-     * Create the plugin factory for the given [ortPlugin].
-     */
-    private fun createPluginFactory(
-        ortPlugin: OrtPlugin,
-        pluginClass: KSClassDeclaration,
-        pluginFactoryClass: KSClassDeclaration
-    ) {
-        val generator = PluginFactoryGenerator(codeGenerator)
-        generator.generate(ortPlugin, pluginClass, pluginFactoryClass)
     }
 }
