@@ -37,6 +37,7 @@ class PluginProcessor(codeGenerator: CodeGenerator) : SymbolProcessor {
 
     private val specFactory = PluginSpecFactory()
     private val factoryGenerator = PluginFactoryGenerator(codeGenerator)
+    private val jsonGenerator = JsonSpecGenerator(codeGenerator)
 
     /**
      * Process all classes annotated with [OrtPlugin] to generate plugin factories for them.
@@ -66,6 +67,7 @@ class PluginProcessor(codeGenerator: CodeGenerator) : SymbolProcessor {
 
             val pluginSpec = specFactory.create(pluginAnnotation, pluginClass, pluginFactoryClass)
             factoryGenerator.generate(pluginSpec)
+            jsonGenerator.generate(pluginSpec)
         }
 
         invoked = true
