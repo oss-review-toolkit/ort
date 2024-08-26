@@ -113,9 +113,10 @@ interface FossIdRestService {
                             boundType.rawClass
                         )
                         val map = JSON_MAPPER.readValue<Map<Any, Any>>(p, mapType)
-                        // we keep only the values of the map: when the FossID functions which return a PolymorphicList
-                        // return a map, this is always the list of elements grouped by id. Since the ids are also
-                        // present in the elements themselves, we don't lose any information by discarding the keys.
+
+                        // Only keep the map's values: If the FossID functions which return a PolymorphicList return a
+                        // map, it always is the list of elements grouped by id. Since the ids are also present in the
+                        // elements themselves, no information is lost by discarding the keys.
                         PolymorphicList(map.values.toList())
                     }
 

@@ -54,7 +54,7 @@ class AnalyzerResultBuilder {
     fun addResult(projectAnalyzerResult: ProjectAnalyzerResult) =
         apply {
             // TODO: It might be, e.g. in the case of PIP "requirements.txt" projects, that different projects with
-            //       the same ID exist. We need to decide how to handle that case.
+            //       the same ID exist. Decide how to handle that case.
             val existingProject = projects.find { it.id == projectAnalyzerResult.project.id }
 
             if (existingProject != null) {
@@ -123,7 +123,7 @@ private fun AnalyzerResult.resolvePackageManagerDependencies(): AnalyzerResult {
         }
 
         // Package managers that do not use the dependency graph representation, might not have a check implemented to
-        // verify that packages exist for all dependencies, so we need to disable the reference check here.
+        // verify that packages exist for all dependencies, so the reference check needs to be disabled here.
         type to builder.build(checkReferences = false)
     }
 

@@ -174,7 +174,7 @@ abstract class PackageManager(
                 val mergedVcs = normalizedVcsFromPackage.merge(fallbackVcs)
                 if (mergedVcs != normalizedVcsFromPackage) {
                     // ... but if indeed metadata was enriched, overwrite the URL with the one from the fallback VCS
-                    // information to ensure we get the correct base URL if additional VCS information (like a revision
+                    // information to ensure to get the correct base URL if additional VCS information (like a revision
                     // or path) has been split from the original URL.
                     return mergedVcs.copy(url = fallbackVcs.url)
                 }

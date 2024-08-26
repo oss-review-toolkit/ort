@@ -219,8 +219,8 @@ class FossId internal constructor(
 
     // A list of all scans created in an ORT run, to be able to delete them in case of error.
     // The reasoning is that either all these scans are successful, either none is created at all (clean slate).
-    // A use case is that an ORT run is created regularly e.g. nightly, and we want to have exactly the same amount
-    // of scans for each package.
+    // A use case is that an ORT run is created regularly, e.g. nightly, and exactly the same amount of scans for each
+    // package is wanted.
     private val createdScans = mutableSetOf<String>()
 
     private val service = runBlocking { FossIdRestService.create(config.serverUrl) }
@@ -433,8 +433,8 @@ class FossId internal constructor(
     ): List<Scan> {
         val scans = filter {
             val isArchived = it.isArchived == true
-            // The scans in the server contain the url with the credentials, so we have to remove it for the
-            // comparison. If we don't, the scans won't be matched if the password changes!
+            // The scans in the server contain the URL with credentials, so these have to be removed for the comparison.
+            // Otherwise scans would not be matched if the password changed.
             val urlWithoutCredentials = it.gitRepoUrl?.replaceCredentialsInUri()
             !isArchived && urlWithoutCredentials == url
         }.sortedByDescending { it.id }
@@ -530,7 +530,7 @@ class FossId internal constructor(
         val mappedUrl = urlProvider.getUrl(urlWithoutCredentials)
         val mappedUrlWithoutCredentials = mappedUrl.replaceCredentialsInUri()
 
-        // we ignore the revision because we want to do a delta scan
+        // Ignore the revision for delta scans.
         val recentScans = scans.recentScansForRepository(
             mappedUrlWithoutCredentials,
             projectRevision = projectRevision,
@@ -755,9 +755,9 @@ class FossId internal constructor(
                 DownloadStatus.FAILED -> error("Could not download scan: ${response.message}.")
 
                 else -> {
-                    // There is a bug with the FossID server version < 20.2: Sometimes the download is complete, but it
-                    // stays in state "NOT FINISHED". Therefore, we check the output of the Git fetch to find out
-                    // whether the download is actually done.
+                    // There is a bug in FossID server version < 20.2: Sometimes the download is complete, but it stays
+                    // in "NOT FINISHED" state. Therefore, check the output of the Git fetch command to find out whether
+                    // the download has actually finished.
                     val message = response.message
                     val currentVersion = checkNotNull(Semver.coerce(version))
                     val minVersion = checkNotNull(Semver.coerce("20.2"))

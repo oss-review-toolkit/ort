@@ -33,8 +33,8 @@ import org.ossreviewtoolkit.utils.spdx.SpdxOperator
 /**
  * A generic descriptor for a software package. It contains all relevant metadata about a package like the name,
  * version, and how to retrieve the package and its source code. It does not contain information about the package's
- * dependencies, however. This is because at this stage we would only be able to get the declared dependencies, whereas
- * we are interested in the resolved dependencies. Resolved dependencies might differ from declared dependencies due to
+ * dependencies, however. This is because at this stage ORT would only be able to get the declared dependencies, whereas
+ * the resolved dependencies are of interest. Resolved dependencies might differ from declared dependencies due to
  * specified version ranges, or change depending on how the package is used in a project due to the build system's
  * dependency resolution process. For example, if multiple versions of the same package are used in a project, the build
  * system might decide to align on a single version of that package.

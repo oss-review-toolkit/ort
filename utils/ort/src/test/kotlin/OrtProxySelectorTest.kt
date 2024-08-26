@@ -111,7 +111,7 @@ class OrtProxySelectorTest : WordSpec({
 })
 
 private fun createProxySelector(protocol: String): OrtProxySelector {
-    // Using a non-null assertion is fine here as we know the URL to be parsable.
+    // Using a non-null assertion is fine here as the URL is known to be parsable.
     val proxy = determineProxyFromUrl("http://fake-proxy:8080")!!
 
     return OrtProxySelector().removeAllProxies().addProxy("test", protocol, proxy)
