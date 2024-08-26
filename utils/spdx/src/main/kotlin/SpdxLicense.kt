@@ -252,6 +252,8 @@ enum class SpdxLicense(
     DL_DE_BY_2_0("DL-DE-BY-2.0", "Data licence Germany – attribution – version 2.0"),
     DL_DE_ZERO_2_0("DL-DE-ZERO-2.0", "Data licence Germany – zero – version 2.0"),
     DOC("DOC", "DOC License"),
+    DOCBOOK_SCHEMA("DocBook-Schema", "DocBook Schema License"),
+    DOCBOOK_XML("DocBook-XML", "DocBook XML License"),
     DOTSEQN("Dotseqn", "Dotseqn License"),
     DRL_1_0("DRL-1.0", "Detection Rule License 1.0"),
     DRL_1_1("DRL-1.1", "Detection Rule License 1.1"),
@@ -346,6 +348,7 @@ enum class SpdxLicense(
     GUTMANN("Gutmann", "Gutmann License"),
     HASKELLREPORT("HaskellReport", "Haskell Language Report License"),
     HDPARM("hdparm", "hdparm License"),
+    HIDAPI("HIDAPI", "HIDAPI License"),
     HIPPOCRATIC_2_1("Hippocratic-2.1", "Hippocratic License 2.1"),
     HPND("HPND", "Historical Permission Notice and Disclaimer"),
     HPND_DEC("HPND-DEC", "Historical Permission Notice and Disclaimer - DEC variant"),
@@ -362,6 +365,7 @@ enum class SpdxLicense(
     HPND_MARKUS_KUHN("HPND-Markus-Kuhn", "Historical Permission Notice and Disclaimer - Markus Kuhn variant"),
     HPND_MERCHANTABILITY_VARIANT("HPND-merchantability-variant", "Historical Permission Notice and Disclaimer - merchantability variant"),
     HPND_MIT_DISCLAIMER("HPND-MIT-disclaimer", "Historical Permission Notice and Disclaimer with MIT disclaimer"),
+    HPND_NETREK("HPND-Netrek", "Historical Permission Notice and Disclaimer - Netrek variant"),
     HPND_PBMPLUS("HPND-Pbmplus", "Historical Permission Notice and Disclaimer - Pbmplus variant"),
     HPND_SELL_MIT_DISCLAIMER_XSERVER("HPND-sell-MIT-disclaimer-xserver", "Historical Permission Notice and Disclaimer - sell xserver variant with MIT disclaimer"),
     HPND_SELL_REGEXPR("HPND-sell-regexpr", "Historical Permission Notice and Disclaimer - sell regexpr variant"),
@@ -492,7 +496,7 @@ enum class SpdxLicense(
     NCL("NCL", "NCL Source Code License"),
     NCSA("NCSA", "University of Illinois/NCSA Open Source License"),
     NETCDF("NetCDF", "NetCDF license"),
-    NET_SNMP("Net-SNMP", "Net-SNMP License"),
+    NET_SNMP("Net-SNMP", "Net-SNMP License", true),
     NEWSLETR("Newsletr", "Newsletr License"),
     NGPL("NGPL", "Nethack General Public License"),
     NICTA_1_0("NICTA-1.0", "NICTA Public Software License, Version 1.0"),
@@ -595,6 +599,7 @@ enum class SpdxLicense(
     RSA_MD("RSA-MD", "RSA Message-Digest License"),
     RSCPL("RSCPL", "Ricoh Source Code Public License"),
     RUBY("Ruby", "Ruby License"),
+    RUBY_PTY("Ruby-pty", "Ruby pty extension license"),
     SAXPATH("Saxpath", "Saxpath License"),
     SAX_PD("SAX-PD", "Sax Public Domain Notice"),
     SAX_PD_2_0("SAX-PD-2.0", "Sax Public Domain Notice 2.0"),
@@ -652,6 +657,7 @@ enum class SpdxLicense(
     TTYP0("TTYP0", "TTYP0 License"),
     TU_BERLIN_1_0("TU-Berlin-1.0", "Technische Universitaet Berlin License 1.0"),
     TU_BERLIN_2_0("TU-Berlin-2.0", "Technische Universitaet Berlin License 2.0"),
+    UBUNTU_FONT_1_0("Ubuntu-font-1.0", "Ubuntu Font Licence v1.0"),
     UCAR("UCAR", "UCAR License"),
     UCL_1_0("UCL-1.0", "Upstream Compatibility License v1.0"),
     ULEM("ulem", "ulem License"),
@@ -678,6 +684,7 @@ enum class SpdxLicense(
     WXWINDOWS("wxWindows", "wxWindows Library License", true),
     X11("X11", "X11 License"),
     X11_DISTRIBUTE_MODIFICATIONS_VARIANT("X11-distribute-modifications-variant", "X11 License Distribution Modification Variant"),
+    X11_SWAPPED("X11-swapped", "X11 swapped final paragraphs"),
     XDEBUG_1_03("Xdebug-1.03", "Xdebug License v 1.03"),
     XEROX("Xerox", "Xerox License"),
     XFIG("Xfig", "Xfig License"),
@@ -708,7 +715,7 @@ enum class SpdxLicense(
         /**
          * The version of the license list.
          */
-        const val LICENSE_LIST_VERSION = "3.24.0"
+        const val LICENSE_LIST_VERSION = "3.25.0"
 
         /**
          * Return the enum value for the given [id], or null if it is no SPDX license id.
