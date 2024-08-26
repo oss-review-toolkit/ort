@@ -104,7 +104,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
         }.toMap(mutableMapOf())
 
         // Check whether there are unmanaged files (because of deactivated, unsupported, or non-present package
-        // managers) which we need to attach to an artificial "unmanaged" project.
+        // managers) which need to get attached to an artificial "unmanaged" project.
         val managedDirs = managedFiles.values.flatten().mapNotNull { it.parentFile }
         val hasOnlyManagedDirs = absoluteProjectPath in managedDirs || absoluteProjectPath.walk().maxDepth(1)
             .all { it.isDirectory && (it in managedDirs || it.name in VCS_DIRECTORIES) }

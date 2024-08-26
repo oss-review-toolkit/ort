@@ -111,7 +111,7 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
     }
 
     return filteredNames.filter {
-        // startsWith("") returns "true" for any string, so we get an unfiltered list if "project" is "null".
+        // startsWith("") returns "true" for any string, so this yields an unfiltered list if "project" is "null".
         it.startsWith(project.orEmpty())
     }.let {
         // Fall back to the original list if filtering by project results in an empty list.
@@ -176,7 +176,7 @@ fun normalizeVcsUrl(vcsUrl: String): String {
         }
     }
 
-    // If we have no protocol by now and the host is Git-specific, assume https.
+    // If there is no protocol by now and the host is Git-specific, assume https.
     if (url.startsWith("github.com") || url.startsWith("gitlab.com")) {
         url = "https://$url"
     }

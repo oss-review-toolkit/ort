@@ -101,8 +101,8 @@ class Downloader(private val config: DownloaderConfiguration) {
         val vcsMark = TimeSource.Monotonic.markNow()
 
         try {
-            // Cargo in general builds from source tarballs, so we prefer source artifacts over VCS, but still use VCS
-            // if no source artifact is given.
+            // Cargo in general builds from source tarballs, so prefer source artifacts over VCS, but still use VCS if
+            // no source artifact is given.
             val isCargoPackageWithSourceArtifact = pkg.id.type == "Cargo" && pkg.sourceArtifact != RemoteArtifact.EMPTY
 
             if (!isCargoPackageWithSourceArtifact) {
@@ -273,8 +273,7 @@ class Downloader(private val config: DownloaderConfiguration) {
         val workingTree = try {
             applicableVcs.download(pkg, outputDirectory, config.allowMovingRevisions, recursive)
         } catch (e: DownloadException) {
-            // TODO: We should introduce something like a "strict" mode and only do these kind of fallbacks in
-            //       non-strict mode.
+            // TODO: Introduce something like a "strict" mode and only do these kind of fallbacks in non-strict mode.
             val vcsUrlNoCredentials = pkg.vcsProcessed.url.replaceCredentialsInUri()
             if (vcsUrlNoCredentials != pkg.vcsProcessed.url) {
                 // Try once more with any username / password stripped from the URL.
@@ -393,7 +392,7 @@ class Downloader(private val config: DownloaderConfiguration) {
 }
 
 /**
- * Consolidate [projects] based on their VcsInfo without taking the path into account. As we store VcsInfo per project
+ * Consolidate [projects] based on their VcsInfo without taking the path into account. As VcsInfo is stored per project
  * but many project definition files actually reside in different subdirectories of the same VCS working tree, it does
  * not make sense to download (and scan) all of them individually, not even if doing sparse checkouts. Return a map that
  * associates packages for projects in distinct VCS working trees with all other projects from the same VCS working
