@@ -83,10 +83,10 @@ kotlin.target.compilations.apply {
 
 configurations.all {
     resolutionStrategy {
-        // Ensure all JRuby versions match our version to avoid Psych YAML library issues.
+        // Ensure all transitive JRuby versions match ORT's version to avoid Psych YAML library issues.
         force(libs.jruby)
 
-        // Ensure that all transitive versions of Kotlin libraries match our version of Kotlin.
+        // Ensure that all transitive versions of Kotlin libraries match ORT's version of Kotlin.
         force("org.jetbrains.kotlin:kotlin-reflect:${libs.versions.kotlinPlugin.get()}")
     }
 }

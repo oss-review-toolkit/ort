@@ -322,9 +322,9 @@ class DependencyReference(
     val dependencies: Set<DependencyReference> = emptySet(),
 
     /**
-     * The type of linkage used for the referred package from its dependent package. As most of our supported
+     * The type of linkage used for the referred package from its dependent package. As most of ORT's supported
      * package managers / languages only support dynamic linking or at least default to it, also use that as the
-     * default value here to not blow up our result files.
+     * default value here to not blow up ORT result files.
      */
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = PackageLinkageValueFilter::class)
     val linkage: PackageLinkage = PackageLinkage.DYNAMIC,
@@ -367,9 +367,9 @@ data class DependencyGraphNode(
     val fragment: Int = 0,
 
     /**
-     * The type of linkage used for the referred package from its dependent package. As most of our supported
+     * The type of linkage used for the referred package from its dependent package. As most of ORT's supported
      * package managers / languages only support dynamic linking or at least default to it, also use that as the
-     * default value here to not blow up our result files.
+     * default value here to not blow up ORT result files.
      */
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = PackageLinkageValueFilter::class)
     val linkage: PackageLinkage = PackageLinkage.DYNAMIC,

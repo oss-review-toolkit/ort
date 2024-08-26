@@ -204,7 +204,7 @@ open class Npm(
         val scopeNames = setOfNotNull(
             // Optional dependencies are just like regular dependencies except that NPM ignores failures when
             // installing them (see https://docs.npmjs.com/files/package.json#optionaldependencies), i.e. they are
-            // not a separate scope in our semantics.
+            // not a separate scope in ORT semantics.
             buildDependencyGraphForScopes(
                 project,
                 workingDir,
