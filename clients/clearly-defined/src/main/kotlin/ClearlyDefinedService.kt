@@ -92,7 +92,7 @@ interface ClearlyDefinedService {
     /**
      * See https://github.com/clearlydefined/service/blob/661934a/schemas/swagger.yaml#L8-L14.
      */
-    enum class Server(val apiUrl: String, val webUrl: String? = null, val contributionUrl: String? = null) {
+    enum class Server(val apiUrl: String, val webUrl: String? = null, val projectUrl: String? = null) {
         /**
          * The production server.
          */
