@@ -219,3 +219,11 @@ val checkGitAttributes by tasks.registering {
         if (hasErrors) throw GradleException("There were stale '.gitattribute' entries.")
     }
 }
+
+tasks.register<GeneratePluginDocsTask>("generatePluginDocs") {
+    inputFiles = fileTree("plugins") {
+        include("**/build/generated/ksp/main/resources/META-INF/plugin/*.json")
+    }
+
+    dependsOn(getTasksByName("kspKotlin", /* recursive = */ true))
+}
