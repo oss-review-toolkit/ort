@@ -19,10 +19,7 @@
 
 plugins {
     // Apply precompiled plugins.
-    id("ort-library-conventions")
-
-    // Apply third-party plugins.
-    alias(libs.plugins.ksp)
+    id("ort-plugin-conventions")
 }
 
 dependencies {
@@ -34,7 +31,6 @@ dependencies {
     implementation(projects.utils.ortUtils)
 
     ksp(projects.advisor)
-    ksp(projects.plugins.compiler)
 
     testImplementation(libs.wiremock)
 }

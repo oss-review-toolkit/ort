@@ -113,37 +113,27 @@ Here, the `serverUrl` property has a default value, the `timeout` property is re
 
 ### Gradle Configuration
 
-A Gradle module that contains an ORT plugin implementation must apply the `com.google.devtools.ksp` Gradle plugin:
+A Gradle module that contains an ORT plugin implementation must apply the `com.google.devtools.ksp` Gradle plugin and add dependencies to the ORT compiler plugin and the API of the implemented extension point to the KSP configuration:
 
 ```kotlin
 plugins {
     id("com.google.devtools.ksp:[version]")
 }
+
+dependencies {
+    ksp("org.ossreviewtoolkit:advisor:[version]")
+    ksp("org.ossreviewtoolkit:compiler:[version]")
+}
 ```
 
-Or in the ORT codebase:
+In the ORT codebase, the `ort-plugin-conventions` should be applied so that only a dependency on the extension point API is required:
 
 ```kotlin
 plugins {
-    alias(libs.plugins.ksp)
+    id("ort-plugin-conventions")
 }
-```
 
-It also must add the ORT plugin API and the API of the implemented extension point to the KSP configuration.
-For example, an advisor plugin implementation would add the following dependencies:
-
-```kotlin
-dependencies {
-    ksp("org.ossreviewtoolkit:advisor:[version]")
-    ksp("org.ossreviewtoolkit:plugins-compiler:[version]")
-}
-```
-
-Or in the ORT codebase:
-
-```kotlin
 dependencies {
     ksp(projects.advisor)
-    ksp(projects.plugins.api)
 }
 ```
