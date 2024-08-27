@@ -40,5 +40,6 @@ dependencies {
     implementation(libs.plugin.dokkatoo)
     implementation(libs.plugin.graalVmNativeImage)
     implementation(libs.plugin.kotlin)
+    implementation(libs.plugin.ksp)
     implementation(libs.plugin.mavenPublish)
 }

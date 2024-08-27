@@ -19,10 +19,7 @@
 
 plugins {
     // Apply precompiled plugins.
-    id("ort-library-conventions")
-
-    // Apply third-party plugins.
-    alias(libs.plugins.ksp)
+    id("ort-plugin-conventions")
 }
 
 dependencies {
@@ -38,5 +35,4 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     ksp(projects.advisor)
-    ksp(projects.plugins.compiler)
 }
