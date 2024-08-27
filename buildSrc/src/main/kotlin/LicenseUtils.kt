@@ -48,6 +48,13 @@ object CopyrightableFiles {
         "website/docs/configuration/_category_.yml",
         "website/docs/getting-started/_category_.yml",
         "website/docs/guides/_category_.yml",
+        "website/docs/plugins/_category_.yml",
+        "website/docs/plugins/advisors/_category_.yml",
+        "website/docs/plugins/package-configuration-providers/_category_.yml",
+        "website/docs/plugins/package-curation-providers/_category_.yml",
+        "website/docs/plugins/package-managers/_category_.yml",
+        "website/docs/plugins/reporters/_category_.yml",
+        "website/docs/plugins/scanners/_category_.yml",
         "website/docs/tools/_category_.yml",
         "website/sidebars.js"
     )
