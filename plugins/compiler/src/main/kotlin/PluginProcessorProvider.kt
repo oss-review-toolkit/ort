@@ -17,36 +17,14 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.api
+package org.ossreviewtoolkit.plugins.compiler
 
-import com.google.devtools.ksp.symbol.KSFile
-
-import com.squareup.kotlinpoet.TypeName
-
-/**
- * A specification for a plugin.
- */
-data class PluginSpec(
-    val containingFile: KSFile?,
-    val descriptor: PluginDescriptor,
-    val packageName: String,
-    val typeName: TypeName,
-    val configClass: PluginConfigClassSpec?,
-    val factory: PluginFactorySpec
-)
+import com.google.devtools.ksp.processing.SymbolProcessorEnvironment
+import com.google.devtools.ksp.processing.SymbolProcessorProvider
 
 /**
- * A specification for a plugin configuration class.
+ * A [SymbolProcessorProvider] that provides a [PluginProcessor].
  */
-data class PluginConfigClassSpec(
-    val typeName: TypeName
-)
-
-/**
- * A specification for a plugin factory. This describes the base factory class that the generated factory should
- * implement.
- */
-data class PluginFactorySpec(
-    val typeName: TypeName,
-    val qualifiedName: String
-)
+class PluginProcessorProvider : SymbolProcessorProvider {
+    override fun create(environment: SymbolProcessorEnvironment) = PluginProcessor(environment.codeGenerator)
+}

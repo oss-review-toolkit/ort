@@ -17,14 +17,16 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.api
+plugins {
+    // Apply precompiled plugins.
+    id("ort-library-conventions")
+}
 
-import com.google.devtools.ksp.processing.SymbolProcessorEnvironment
-import com.google.devtools.ksp.processing.SymbolProcessorProvider
+dependencies {
+    implementation(projects.plugins.api)
 
-/**
- * A [SymbolProcessorProvider] that provides a [PluginProcessor].
- */
-class PluginProcessorProvider : SymbolProcessorProvider {
-    override fun create(environment: SymbolProcessorEnvironment) = PluginProcessor(environment.codeGenerator)
+    implementation(libs.kotlinpoet)
+    implementation(libs.kotlinpoet.ksp)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.ksp)
 }
