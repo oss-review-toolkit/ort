@@ -131,7 +131,6 @@ class ClearlyDefinedServiceFunTest : WordSpec({
             val coordinates = Coordinates(
                 type = ComponentType.NPM,
                 provider = Provider.NPM_JS,
-                namespace = null,
                 name = "eslint-plugin-tsdoc",
                 revision = "0.2.2"
             )
