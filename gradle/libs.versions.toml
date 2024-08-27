@@ -1,5 +1,6 @@
 [versions]
 dependencyAnalysisPlugin = "2.4.2"
+dependencyConflictResolutionPlugin = "2.1.2"
 detektPlugin = "1.23.7"
 dokkatooPlugin = "2.4.0"
 downloadPlugin = "5.6.0"
@@ -76,6 +77,7 @@ versions = { id = "com.github.ben-manes.versions", version.ref = "versionsPlugin
 [libraries]
 # These are Maven coordinates for Gradle plugins, which are required for use in precompiled plugin scripts.
 plugin-dependencyAnalysis = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysisPlugin" }
+plugin-dependencyConflictResolution = { module = "org.gradlex:jvm-dependency-conflict-resolution", version.ref = "dependencyConflictResolutionPlugin" }
 plugin-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detektPlugin" }
 plugin-detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detektPlugin" }
 plugin-dokkatoo = { module = "dev.adamko.dokkatoo:dokkatoo-plugin", version.ref = "dokkatooPlugin" }

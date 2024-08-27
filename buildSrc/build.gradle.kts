@@ -37,6 +37,7 @@ dependencies {
 
     implementation(libs.jgit)
     implementation(libs.plugin.dependencyAnalysis)
+    implementation(libs.plugin.dependencyConflictResolution)
     implementation(libs.plugin.detekt)
     implementation(libs.plugin.dokkatoo)
     implementation(libs.plugin.graalVmNativeImage)

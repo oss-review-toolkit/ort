@@ -17,9 +17,24 @@
  * License-Filename: LICENSE
  */
 
+import org.gradlex.jvm.dependency.conflict.detection.rules.CapabilityDefinition
+
 plugins {
     // Apply third-party plugins.
+    id("org.gradlex.jvm-dependency-conflict-resolution")
     id("org.gradlex.reproducible-builds")
+}
+
+jvmDependencyConflicts {
+    logging {
+        enforceLogback()
+    }
+
+    conflictResolution {
+        select(CapabilityDefinition.JAKARTA_ACTIVATION_API, "jakarta.activation:jakarta.activation-api")
+        select(CapabilityDefinition.JAVAX_ACTIVATION_API, "jakarta.activation:jakarta.activation-api")
+        select(CapabilityDefinition.JAVAX_INJECT_API, "jakarta.inject:jakarta.inject-api")
+    }
 }
 
 repositories {
