@@ -120,7 +120,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
 
             summary.shouldNotBeNull().run {
                 prNumber shouldBeGreaterThan 0
-                url shouldStartWith "https://github.com/clearlydefined/curated-data-dev/pull/"
+                url shouldStartWith "${Server.DEVELOPMENT.projectUrl}/pull/"
             }
         }
     }
