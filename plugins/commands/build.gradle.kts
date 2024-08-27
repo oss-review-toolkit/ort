@@ -19,5 +19,5 @@
 
 plugins {
     // Apply precompiled plugins.
-    id("ort-plugins-conventions")
+    id("ort-plugin-parent-conventions")
 }
