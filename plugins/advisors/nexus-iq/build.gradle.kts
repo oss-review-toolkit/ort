@@ -34,5 +34,5 @@ dependencies {
     implementation(projects.utils.ortUtils)
 
     ksp(projects.advisor)
-    ksp(projects.plugins.api)
+    ksp(projects.plugins.compiler)
 }

@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.api
+package org.ossreviewtoolkit.plugins.compiler
 
 import com.google.devtools.ksp.processing.CodeGenerator
 import com.google.devtools.ksp.processing.Dependencies
@@ -31,6 +31,12 @@ import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.ksp.writeTo
+
+import org.ossreviewtoolkit.plugins.api.PluginConfig
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
+import org.ossreviewtoolkit.plugins.api.PluginOption
+import org.ossreviewtoolkit.plugins.api.PluginOptionType
+import org.ossreviewtoolkit.plugins.api.Secret
 
 class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
     fun generate(pluginSpec: PluginSpec) {
@@ -109,14 +115,14 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
                 }
 
                 // Add the default value if present.
-                if (option.defaultValue != null) {
+                option.defaultValue?.let { defaultValue ->
                     when (option.type) {
-                        PluginOptionType.BOOLEAN -> add(" ?: %L", option.defaultValue.toBoolean())
-                        PluginOptionType.INTEGER -> add(" ?: %L", option.defaultValue.toInt())
-                        PluginOptionType.LONG -> add(" ?: %LL", option.defaultValue.toLong())
-                        PluginOptionType.SECRET -> add(" ?: %T(%S)", Secret::class, option.defaultValue)
-                        PluginOptionType.STRING -> add(" ?: %S", option.defaultValue)
-                        PluginOptionType.STRING_LIST -> add(" ?: %S", option.defaultValue)
+                        PluginOptionType.BOOLEAN -> add(" ?: %L", defaultValue.toBoolean())
+                        PluginOptionType.INTEGER -> add(" ?: %L", defaultValue.toInt())
+                        PluginOptionType.LONG -> add(" ?: %LL", defaultValue.toLong())
+                        PluginOptionType.SECRET -> add(" ?: %T(%S)", Secret::class, defaultValue)
+                        PluginOptionType.STRING -> add(" ?: %S", defaultValue)
+                        PluginOptionType.STRING_LIST -> add(" ?: %S", defaultValue)
                     }
                 }
 

@@ -49,7 +49,7 @@ It uses the service loader mechanism to find the available plugin factories.
 Plugin implementations consist of a class that implements the plugin base class, a factory class that implements the factory interface, and a service loader configuration file.
 If the plugin has configuration options, it must implement an additional data class as a holder for the configuration.
 
-To reduce the amount of boilerplate code, the plugin API provides a compiler plugin that can generate the factory class and the service loader file.
+To reduce the amount of boilerplate code, ORT provides a compiler plugin that can generate the factory class and the service loader file.
 The compiler plugin uses the [Kotlin Symbol Processing (KSP) API](https://kotlinlang.org/docs/ksp-overview.html).
 With this, the plugin implementation only needs to implement the plugin class and the configuration data class.
 
@@ -135,7 +135,7 @@ For example, an advisor plugin implementation would add the following dependenci
 ```kotlin
 dependencies {
     ksp("org.ossreviewtoolkit:advisor:[version]")
-    ksp("org.ossreviewtoolkit:plugins-api:[version]")
+    ksp("org.ossreviewtoolkit:plugins-compiler:[version]")
 }
 ```
 

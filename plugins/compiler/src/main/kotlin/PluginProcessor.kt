@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.api
+package org.ossreviewtoolkit.plugins.compiler
 
 import com.google.devtools.ksp.KspExperimental
 import com.google.devtools.ksp.getAllSuperTypes
@@ -28,6 +28,8 @@ import com.google.devtools.ksp.processing.Resolver
 import com.google.devtools.ksp.processing.SymbolProcessor
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSClassDeclaration
+
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
 
 class PluginProcessor(codeGenerator: CodeGenerator) : SymbolProcessor {
     /**

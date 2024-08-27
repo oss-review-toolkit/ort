@@ -38,5 +38,5 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     ksp(projects.advisor)
-    ksp(projects.plugins.api)
+    ksp(projects.plugins.compiler)
 }
