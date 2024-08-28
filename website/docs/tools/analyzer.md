@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # Analyzer
 
-The *analyzer* is a Software Composition Analysis (SCA) tool that determines the dependencies of software projects inside the specified input directory (`-i`).
+The *analyzer* is a Software Composition Analysis (SCA) tool that determines the dependencies of software projects inside the specified version-controlled input directory (`-i`).
 It does so by querying the detected package managers; **no modifications** to your existing project source code, like applying build system plugins, are necessary for that to work.
 The tree of transitive dependencies per project is written out as part of an [OrtResult](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/OrtResult.kt) in YAML (or JSON, see `-f`) format to a file named `analyzer-result.yml` in the specified output directory (`-o`).
 The output file exactly documents the status quo of all package-related metadata.
