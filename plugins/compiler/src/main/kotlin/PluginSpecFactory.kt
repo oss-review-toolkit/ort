@@ -98,8 +98,8 @@ class PluginSpecFactory {
         }
 
         return requireNotNull(constructors.singleOrNull()) {
-            "Plugin class $pluginClass must have exactly one constructor with a PluginDescriptor and a config " +
-                "argument."
+            "Plugin class $pluginClass must have exactly one constructor with a PluginDescriptor and an optional " +
+                "config argument."
         }
     }
 
