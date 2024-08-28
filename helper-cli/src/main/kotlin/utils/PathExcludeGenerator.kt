@@ -221,7 +221,7 @@ private val PATH_EXCLUDE_REASON_FOR_FILENAME = listOf(
     ".zuul.yml" to BUILD_TOOL_OF,
     "BUILD" to BUILD_TOOL_OF, // Bazel
     "Build.PL" to BUILD_TOOL_OF,
-    "CHANGELOG*" to BUILD_TOOL_OF,
+    "CHANGELOG*" to DOCUMENTATION_OF,
     "CHANGES" to DOCUMENTATION_OF,
     "CHANGES.md" to DOCUMENTATION_OF,
     "CHANGES.txt" to DOCUMENTATION_OF,
@@ -258,7 +258,7 @@ private val PATH_EXCLUDE_REASON_FOR_FILENAME = listOf(
     "build.proj" to BUILD_TOOL_OF,
     "build.rs" to BUILD_TOOL_OF, // Rust build script.
     "build.sbt" to BUILD_TOOL_OF,
-    "changelog*" to BUILD_TOOL_OF,
+    "changelog*" to DOCUMENTATION_OF,
     "checksrc.bat" to BUILD_TOOL_OF,
     "codecov.yml" to BUILD_TOOL_OF,
     "codenarc.groovy" to BUILD_TOOL_OF,
