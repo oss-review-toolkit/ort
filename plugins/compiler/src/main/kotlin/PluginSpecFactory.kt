@@ -97,12 +97,10 @@ class PluginSpecFactory {
             firstArgumentIsDescriptor && optionalSecondArgumentIsCalledConfig
         }
 
-        require(constructors.size == 1) {
+        return requireNotNull(constructors.singleOrNull()) {
             "Plugin class $pluginClass must have exactly one constructor with a PluginDescriptor and a config " +
                 "argument."
         }
-
-        return constructors.first()
     }
 
     /**
@@ -114,11 +112,9 @@ class PluginSpecFactory {
             "Config class $this must be a data class."
         }
 
-        require(getConstructors().toList().size == 1) {
+        val constructor = requireNotNull(getConstructors().singleOrNull()) {
             "Config class $this must have exactly one constructor."
         }
-
-        val constructor = getConstructors().single()
 
         return constructor.parameters.map { param ->
             val paramType = param.type.resolve()
