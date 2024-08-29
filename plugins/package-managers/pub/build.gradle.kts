@@ -39,6 +39,7 @@ dependencies {
 
     implementation(libs.jackson.databind)
     implementation(libs.jackson.dataformat.yaml)
+    implementation(libs.jackson.module.kotlin)
 
     funTestImplementation(projects.plugins.packageManagers.gradlePackageManager)
 

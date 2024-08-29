@@ -19,16 +19,14 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.pub.utils
 
-import com.fasterxml.jackson.databind.JsonNode
-
 import java.io.File
 
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.downloader.VcsHost
+import org.ossreviewtoolkit.plugins.packagemanagers.pub.PackageInfo
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
-import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 
 /**
  * A reader for the Pub cache directory. It looks for files in the ".pub-cache" directory in the user's home
@@ -50,7 +48,7 @@ internal class PubCacheReader(flutterHome: File? = null) {
         flutterHome?.resolve(".pub-cache")?.takeIf { it.isDirectory }
     }
 
-    fun findFile(packageInfo: JsonNode, workingDir: File, filename: String): File? {
+    fun findFile(packageInfo: PackageInfo, workingDir: File, filename: String): File? {
         val artifactRootDir = findProjectRoot(packageInfo, workingDir) ?: return null
         // Try to locate the file directly.
         val file = artifactRootDir.resolve(filename)
@@ -62,15 +60,15 @@ internal class PubCacheReader(flutterHome: File? = null) {
             .find { !it.isSymbolicLink() && it.isFile && it.name == filename }
     }
 
-    fun findProjectRoot(packageInfo: JsonNode, workingDir: File): File? {
-        val packageVersion = packageInfo["version"].textValueOrEmpty()
-        val type = packageInfo["source"].textValueOrEmpty()
-        val description = packageInfo["description"]
-        val packageName = description["name"].textValueOrEmpty()
-        val url = description["url"].textValueOrEmpty()
-        val resolvedRef = description["resolved-ref"].textValueOrEmpty()
-        val resolvedPath = description["path"].textValueOrEmpty()
-        val isPathRelative = description["relative"]?.booleanValue() == true
+    fun findProjectRoot(packageInfo: PackageInfo, workingDir: File): File? {
+        val packageVersion = packageInfo.version.orEmpty()
+        val type = packageInfo.source.orEmpty()
+        val description = packageInfo.description
+        val packageName = description.name.orEmpty()
+        val url = description.url.orEmpty()
+        val resolvedRef = description.resolvedRef.orEmpty()
+        val resolvedPath = description.path.orEmpty()
+        val isPathRelative = description.relative == true
 
         if (type == "path" && resolvedPath.isNotEmpty()) {
             // For "path" packages, the path should be the absolute resolved path
