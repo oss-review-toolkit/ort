@@ -25,7 +25,7 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
-import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.plugins.packagemanagers.pub.PackageInfo
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 
@@ -53,97 +53,72 @@ class PubCacheReaderTest : WordSpec({
 
     "findProjectRoot()" should {
         "resolve the path of a Git dependency without path" {
-            reader.findProjectRoot(
-                jsonMapper.readTree(
-                    """
-                        {
-                            "dependency": "direct main",
-                            "description": {
-                                "resolved-ref": "$RESOLVED_REF",
-                                "url": "https://github.com/oss-review-toolkit/$PACKAGE_NAME.git"
-                            },
-                            "source": "git",
-                            "version": "9.9.9"
-                        }
-                    """.trimIndent()
+            val packageInfo = PackageInfo(
+                dependency = "direct main",
+                description = PackageInfo.Description(
+                    resolvedRef = RESOLVED_REF,
+                    url = "https://github.com/oss-review-toolkit/$PACKAGE_NAME.git"
                 ),
-                ABSOLUTE_PATH
-            ) shouldBe gitPackageCacheDir
+                source = "git",
+                version = "9.9.9"
+            )
+
+            reader.findProjectRoot(packageInfo, ABSOLUTE_PATH) shouldBe gitPackageCacheDir
         }
 
         "resolve the path of a Git dependency with path" {
-            reader.findProjectRoot(
-                jsonMapper.readTree(
-                    """
-                        {
-                            "dependency": "direct main",
-                            "description": {
-                                "path": "$PACKAGE_NAME",
-                                "resolved-ref": "$RESOLVED_REF",
-                                "url": "https://github.com/oss-review-toolkit/$PACKAGE_NAME.git"
-                            },
-                            "source": "git",
-                            "version": "9.9.9"
-                        }
-                    """.trimIndent()
+            val packageInfo = PackageInfo(
+                dependency = "direct main",
+                description = PackageInfo.Description(
+                    path = PACKAGE_NAME,
+                    resolvedRef = RESOLVED_REF,
+                    url = "https://github.com/oss-review-toolkit/$PACKAGE_NAME.git"
                 ),
-                ABSOLUTE_PATH
-            ) shouldBe gitPackageWithPathCacheDir
+                source = "git",
+                version = "9.9.9"
+            )
+
+            reader.findProjectRoot(packageInfo, ABSOLUTE_PATH) shouldBe gitPackageWithPathCacheDir
         }
 
         "resolve the path of a hosted dependency" {
-            reader.findProjectRoot(
-                jsonMapper.readTree(
-                    """
-                        {
-                            "dependency": "transitive",
-                            "description": {
-                                "name": "$PACKAGE_NAME",
-                                "url": "https://oss-review-toolkit.org"
-                            },
-                            "source": "hosted",
-                            "version": "$PACKAGE_VERSION"
-                        }
-                    """.trimIndent()
+            val packageInfo = PackageInfo(
+                dependency = "transitive",
+                description = PackageInfo.Description(
+                    name = PACKAGE_NAME,
+                    url = "https://oss-review-toolkit.org"
                 ),
-                ABSOLUTE_PATH
-            ) shouldBe hostedPackageCacheDir
+                source = "hosted",
+                version = PACKAGE_VERSION
+            )
+
+            reader.findProjectRoot(packageInfo, ABSOLUTE_PATH) shouldBe hostedPackageCacheDir
         }
 
         "resolve the relative path of a local dependency" {
-            reader.findProjectRoot(
-                jsonMapper.readTree(
-                    """
-                        {
-                            "dependency": "transitive",
-                            "description": {
-                                "path": "$RELATIVE_PATH",
-                                "relative": true
-                            },
-                            "source": "path"
-                        }
-                    """.trimIndent()
+            val packageInfo = PackageInfo(
+                dependency = "transitive",
+                description = PackageInfo.Description(
+                    path = RELATIVE_PATH,
+                    relative = true
                 ),
-                ABSOLUTE_PATH
-            ) shouldBe localPackagePathRelative
+                source = "path"
+            )
+
+            reader.findProjectRoot(packageInfo, ABSOLUTE_PATH) shouldBe localPackagePathRelative
         }
 
         "resolve the absolute path of a local dependency" {
-            reader.findProjectRoot(
-                jsonMapper.readTree(
-                    """
-                        {
-                            "dependency": "transitive",
-                            "description": {
-                                "path": "$ABSOLUTE_PATH",
-                                "relative": false
-                            },
-                            "source": "path"
-                        }
-                    """.trimIndent()
+            val packageInfo = PackageInfo(
+                dependency = "transitive",
+                description = PackageInfo.Description(
+                    path = ABSOLUTE_PATH.absolutePath,
+                    relative = false
                 ),
-                ABSOLUTE_PATH
-            ) shouldBe localPackagePathAbsolute
+                source = "path"
+            )
+
+            reader.findProjectRoot(packageInfo, ABSOLUTE_PATH) shouldBe localPackagePathAbsolute
         }
     }
 })
