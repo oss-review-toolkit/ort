@@ -21,8 +21,6 @@ jobs:
       uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@16bf8bc8fe830fa669c3c9f914d3eb147c629707 # v4
-      with:
-        gradle-home-cache-cleanup: true
     - name: Build all classes
       run: ./gradlew classes
   codeql-analysis:
@@ -40,8 +38,6 @@ jobs:
         languages: java
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@16bf8bc8fe830fa669c3c9f914d3eb147c629707 # v4
-      with:
-        gradle-home-cache-cleanup: true
     - name: Build all classes
       run: ./gradlew -Dorg.gradle.jvmargs=-Xmx1g classes
     - name: Perform CodeQL Analysis
@@ -54,8 +50,6 @@ jobs:
       uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@16bf8bc8fe830fa669c3c9f914d3eb147c629707 # v4
-      with:
-        gradle-home-cache-cleanup: true
     - name: Run unit tests
       run: ./gradlew --scan test jacocoTestReport
     - name: Create Test Summary
@@ -105,8 +99,6 @@ jobs:
           pip install --no-cache-dir --constraint requirements.txt scancode-toolkit==$SCANCODE_VERSION
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@16bf8bc8fe830fa669c3c9f914d3eb147c629707 # v4
-      with:
-        gradle-home-cache-cleanup: true
     - name: Run functional tests that do not require external tools
       run: ./gradlew --scan -Ptests.exclude=org.ossreviewtoolkit.plugins.packagemanagers.* funTest jacocoFunTestReport
     - name: Create Test Summary
@@ -140,8 +132,6 @@ jobs:
         cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ github.repository_owner }}/ort:cache
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@16bf8bc8fe830fa669c3c9f914d3eb147c629707 # v4
-      with:
-        gradle-home-cache-cleanup: true
     - name: Run functional tests that do require external tools
       run: |
         # Run the functional tests in the Docker container.
