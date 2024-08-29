@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.plugins.advisors.nexusiq
 
+import org.ossreviewtoolkit.plugins.api.Secret
+
 /**
  * The configuration for Nexus IQ as a security vulnerability provider.
  */
@@ -37,11 +39,11 @@ data class NexusIqConfiguration(
      * The username to use for authentication. If not both [username] and [password] are provided, authentication is
      * disabled.
      */
-    val username: String?,
+    val username: Secret?,
 
     /**
      * The password to use for authentication. If not both [username] and [password] are provided, authentication is
      * disabled.
      */
-    val password: String?
+    val password: Secret?
 )

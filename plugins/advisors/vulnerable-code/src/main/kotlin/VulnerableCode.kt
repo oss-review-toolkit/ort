@@ -87,7 +87,7 @@ class VulnerableCode(override val descriptor: PluginDescriptor, config: Vulnerab
             if (config.readTimeout != null) readTimeout(config.readTimeout, TimeUnit.SECONDS)
         }
 
-        VulnerableCodeService.create(config.serverUrl, config.apiKey, client)
+        VulnerableCodeService.create(config.serverUrl, config.apiKey?.value, client)
     }
 
     override suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, AdvisorResult> {
