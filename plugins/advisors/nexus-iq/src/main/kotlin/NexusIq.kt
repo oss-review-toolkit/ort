@@ -89,8 +89,8 @@ class NexusIq(override val descriptor: PluginDescriptor, private val config: Nex
     private val service by lazy {
         NexusIqService.create(
             config.serverUrl,
-            config.username,
-            config.password,
+            config.username?.value,
+            config.password?.value,
             OkHttpClientHelper.buildClient {
                 readTimeout(READ_TIMEOUT)
             }
