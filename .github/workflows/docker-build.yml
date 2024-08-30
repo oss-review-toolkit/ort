@@ -10,6 +10,11 @@ on:
     tags:
       - "[0-9]+.[0-9]+.[0-9]+"
   workflow_dispatch:
+    inputs:
+      clean:
+        description: "Free disk space cleaning leftovers."
+        required: true
+        type: boolean
 
 env:
   GRADLE_OPTS: -Dorg.gradle.daemon=false
@@ -18,14 +23,17 @@ env:
 jobs:
   disk_space:
     name: Docker Build
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout Repository
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
         with:
           fetch-depth: 0
       - name: Free Disk Space
+        if: ${{ inputs.clean }}
         uses: ./.github/actions/free-disk-space
+        with:
+          clean: "true"
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@16bf8bc8fe830fa669c3c9f914d3eb147c629707 # v4
       - name: Get ORT version

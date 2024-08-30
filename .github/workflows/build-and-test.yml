@@ -7,6 +7,12 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      clean:
+        description: "Free disk space cleaning leftovers."
+        required: true
+        type: boolean
 
 env:
   GRADLE_OPTS: -Dorg.gradle.daemon=false -Dkotest.assertions.multi-line-diff=unified -Dkotest.tags=!ExpensiveTag
@@ -15,65 +21,65 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@16bf8bc8fe830fa669c3c9f914d3eb147c629707 # v4
-    - name: Build all classes
-      run: ./gradlew classes
+      - name: Checkout Repository
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@16bf8bc8fe830fa669c3c9f914d3eb147c629707 # v4
+      - name: Build all classes
+        run: ./gradlew classes
   codeql-analysis:
     needs: build
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     permissions:
       # Needed for SARIF scanning upload.
       security-events: write
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@4dd16135b69a43b6c8efb853346f8437d92d3c93 # v3
-      with:
-        languages: java
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@16bf8bc8fe830fa669c3c9f914d3eb147c629707 # v4
-    - name: Build all classes
-      run: ./gradlew -Dorg.gradle.jvmargs=-Xmx1g classes
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@4dd16135b69a43b6c8efb853346f8437d92d3c93 # v3
+      - name: Checkout Repository
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@4dd16135b69a43b6c8efb853346f8437d92d3c93 # v3
+        with:
+          languages: java
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@16bf8bc8fe830fa669c3c9f914d3eb147c629707 # v4
+      - name: Build all classes
+        run: ./gradlew -Dorg.gradle.jvmargs=-Xmx1g classes
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@4dd16135b69a43b6c8efb853346f8437d92d3c93 # v3
   test:
     needs: build
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@16bf8bc8fe830fa669c3c9f914d3eb147c629707 # v4
-    - name: Run unit tests
-      run: ./gradlew --scan test jacocoTestReport
-    - name: Create Test Summary
-      uses: test-summary/action@31493c76ec9e7aa675f1585d3ed6f1da69269a86 # v2
-      with:
-        paths: "**/test-results/**/TEST-*.xml"
-      if: always()
-    - name: Upload code coverage data
-      uses: codecov/codecov-action@e28ff129e5465c2c0dcc6f003fc735cb6ae0c673 # v4
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        flags: test
+      - name: Checkout Repository
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@16bf8bc8fe830fa669c3c9f914d3eb147c629707 # v4
+      - name: Run unit tests
+        run: ./gradlew --scan test jacocoTestReport
+      - name: Create Test Summary
+        uses: test-summary/action@31493c76ec9e7aa675f1585d3ed6f1da69269a86 # v2
+        with:
+          paths: "**/test-results/**/TEST-*.xml"
+        if: always()
+      - name: Upload code coverage data
+        uses: codecov/codecov-action@e28ff129e5465c2c0dcc6f003fc735cb6ae0c673 # v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: test
   funTest-non-docker:
     needs: build
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
-      with:
-        submodules: recursive
-    - name: Set tool version environment variables
-      run: sed "s/^ARG //" docker/versions.dockerfile >> $GITHUB_ENV
-    - name: Install required tools
-      run: |
+      - name: Checkout Repository
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+        with:
+          submodules: recursive
+      - name: Set tool version environment variables
+        run: sed "s/^ARG //" docker/versions.dockerfile >> $GITHUB_ENV
+      - name: Install required tools
+        run: |
           # Uninstall mono-devel because it contains the "lc" command which conflicts with BoyterLc.
           sudo apt-get -qq remove mono-devel
 
@@ -94,65 +100,73 @@ jobs:
           echo "gem: --bindir $HOME/.local/bin" > $HOME/.gemrc
           gem install --user-install licensee -v $LICENSEE_VERSION
 
-          # Install ScanCode for license texts.
+          # Download scancode requirements.
           curl -Os https://raw.githubusercontent.com/nexB/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt
-          pip install --no-cache-dir --constraint requirements.txt scancode-toolkit==$SCANCODE_VERSION
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@16bf8bc8fe830fa669c3c9f914d3eb147c629707 # v4
-    - name: Run functional tests that do not require external tools
-      run: ./gradlew --scan -Ptests.exclude=org.ossreviewtoolkit.plugins.packagemanagers.* funTest jacocoFunTestReport
-    - name: Create Test Summary
-      uses: test-summary/action@31493c76ec9e7aa675f1585d3ed6f1da69269a86 # v2
-      with:
-        paths: "**/test-results/**/TEST-*.xml"
-      if: always()
-    - name: Upload code coverage data
-      uses: codecov/codecov-action@e28ff129e5465c2c0dcc6f003fc735cb6ae0c673 # v4
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        flags: funTest-non-docker
+      - name: Setup Python 3.10
+        uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3 # v5
+        with:
+          python-version: "3.10"
+          cache: pip
+      - run: pip install --no-cache-dir --constraint requirements.txt scancode-toolkit==$SCANCODE_VERSION
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@16bf8bc8fe830fa669c3c9f914d3eb147c629707 # v4
+      - name: Run functional tests that do not require external tools
+        run: ./gradlew --scan -Ptests.exclude=org.ossreviewtoolkit.plugins.packagemanagers.* funTest jacocoFunTestReport
+      - name: Create Test Summary
+        uses: test-summary/action@31493c76ec9e7aa675f1585d3ed6f1da69269a86 # v2
+        with:
+          paths: "**/test-results/**/TEST-*.xml"
+        if: always()
+      - name: Upload code coverage data
+        uses: codecov/codecov-action@e28ff129e5465c2c0dcc6f003fc735cb6ae0c673 # v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: funTest-non-docker
   funTest-docker:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
-      with:
-        submodules: recursive
-    - name: Free Disk Space
-      uses: ./.github/actions/free-disk-space
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@988b5a0280414f521da01fcc63a27aeeb4b104db # v3
-    - name: Build ORT Docker Image
-      uses: docker/build-push-action@5cd11c3a4ced054e52742c5fd54dca954e0edd85 # v6
-      with:
-        context: .
-        load: true
-        tags: ${{ env.TEST_IMAGE_TAG }}
-        target: all-tools
-        cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ github.repository_owner }}/ort:cache
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@16bf8bc8fe830fa669c3c9f914d3eb147c629707 # v4
-    - name: Run functional tests that do require external tools
-      run: |
-        # Run the functional tests in the Docker container.
-        docker run \
-          -u $(id -u):$(id -g) \
-          -v /etc/group:/etc/group:ro \
-          -v /etc/passwd:/etc/passwd:ro \
-          -v /home/runner:/home/runner \
-          -v ${{ github.workspace }}:/workspace \
-          -w /workspace \
-          -e HOME=/home/runner \
-          -e GRADLE_OPTS="$GRADLE_OPTS" \
-          ${{ env.TEST_IMAGE_TAG }} \
-          -c "./gradlew --scan -Ptests.include=org.ossreviewtoolkit.plugins.packagemanagers.* funTest jacocoFunTestReport"
-    - name: Create Test Summary
-      uses: test-summary/action@31493c76ec9e7aa675f1585d3ed6f1da69269a86 # v2
-      with:
-        paths: "**/test-results/**/TEST-*.xml"
-      if: always()
-    - name: Upload code coverage data
-      uses: codecov/codecov-action@e28ff129e5465c2c0dcc6f003fc735cb6ae0c673 # v4
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        flags: funTest-docker
+      - name: Checkout Repository
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+        with:
+          submodules: recursive
+      - name: Free Disk Space
+        if: ${{ inputs.clean }}
+        uses: ./.github/actions/free-disk-space
+        with:
+          clean: "true"
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@988b5a0280414f521da01fcc63a27aeeb4b104db # v3
+      - name: Build ORT Docker Image
+        uses: docker/build-push-action@5cd11c3a4ced054e52742c5fd54dca954e0edd85 # v6
+        with:
+          context: .
+          load: true
+          tags: ${{ env.TEST_IMAGE_TAG }}
+          target: all-tools
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ github.repository_owner }}/ort:cache
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@16bf8bc8fe830fa669c3c9f914d3eb147c629707 # v4
+      - name: Run functional tests that do require external tools
+        run: |
+          # Run the functional tests in the Docker container.
+          docker run \
+            -u $(id -u):$(id -g) \
+            -v /etc/group:/etc/group:ro \
+            -v /etc/passwd:/etc/passwd:ro \
+            -v /home/runner:/home/runner \
+            -v ${{ github.workspace }}:/workspace \
+            -w /workspace \
+            -e HOME=/home/runner \
+            -e GRADLE_OPTS="$GRADLE_OPTS" \
+            ${{ env.TEST_IMAGE_TAG }} \
+            -c "./gradlew --scan -Ptests.include=org.ossreviewtoolkit.plugins.packagemanagers.* funTest jacocoFunTestReport"
+      - name: Create Test Summary
+        uses: test-summary/action@31493c76ec9e7aa675f1585d3ed6f1da69269a86 # v2
+        with:
+          paths: "**/test-results/**/TEST-*.xml"
+        if: always()
+      - name: Upload code coverage data
+        uses: codecov/codecov-action@e28ff129e5465c2c0dcc6f003fc735cb6ae0c673 # v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: funTest-docker
