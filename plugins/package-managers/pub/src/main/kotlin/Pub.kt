@@ -80,9 +80,12 @@ private const val DEFAULT_FLUTTER_VERSION = "3.19.3-stable"
 private const val DEFAULT_GRADLE_VERSION = "7.3"
 private const val PUBSPEC_YAML = "pubspec.yaml"
 private const val PUB_LOCK_FILE = "pubspec.lock"
+private const val SCOPE_NAME_DEPENDENCIES = "dependencies"
+private const val SCOPE_NAME_DEV_DEPENDENCIES = "dev_dependencies"
 
 private val flutterCommand = if (Os.isWindows) "flutter.bat" else "flutter"
 private val dartCommand = if (Os.isWindows) "dart.bat" else "dart"
+
 
 /**
  * The [Pub](https://pub.dev/) package manager for Dart / Flutter.
@@ -313,9 +316,9 @@ class Pub(
 
             logger.info { "Successfully parsed installed packages." }
 
-            scopes += parseScope("dependencies", manifest, lockfile, parsePackagesResult.packages, labels, workingDir)
+            scopes += parseScope(SCOPE_NAME_DEPENDENCIES, manifest, lockfile, parsePackagesResult.packages, labels, workingDir)
             scopes += parseScope(
-                "dev_dependencies", manifest, lockfile, parsePackagesResult.packages, labels, workingDir
+                SCOPE_NAME_DEV_DEPENDENCIES, manifest, lockfile, parsePackagesResult.packages, labels, workingDir
             )
         }
 
