@@ -39,7 +39,7 @@ To enable this provider, pass `-a OssIndex` on the command line.
 
 ## VulnerableCode
 
-This provider obtains information about security vulnerabilities from a [VulnerableCode](https://github.com/nexB/vulnerablecode) instance.
+This provider obtains information about security vulnerabilities from a [VulnerableCode](https://github.com/aboutcode-org/vulnerablecode) instance.
 The configuration is limited to the server URL, as authentication is not required:
 
 ```yaml

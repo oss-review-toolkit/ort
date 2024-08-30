@@ -157,7 +157,7 @@ RUN ARCH=$(arch | sed s/aarch64/arm64/) \
     &&  if [ "$ARCH" == "arm64" ]; then \
     pip install -U scancode-toolkit-mini==$SCANCODE_VERSION; \
     else \
-    curl -Os https://raw.githubusercontent.com/nexB/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt; \
+    curl -Os https://raw.githubusercontent.com/aboutcode-org/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt; \
     pip install -U --constraint requirements.txt scancode-toolkit==$SCANCODE_VERSION; \
     rm requirements.txt; \
     fi
@@ -394,7 +394,7 @@ RUN mkdir -p $DOTNET_HOME \
     fi
 
 RUN mkdir -p $DOTNET_HOME/bin \
-    && curl -L https://github.com/nexB/nuget-inspector/releases/download/v$NUGET_INSPECTOR_VERSION/nuget-inspector-v$NUGET_INSPECTOR_VERSION-linux-x64.tar.gz \
+    && curl -L https://github.com/aboutcode-org/nuget-inspector/releases/download/v$NUGET_INSPECTOR_VERSION/nuget-inspector-v$NUGET_INSPECTOR_VERSION-linux-x64.tar.gz \
     | tar --strip-components=1 -C $DOTNET_HOME/bin -xz
 
 FROM scratch AS dotnet

@@ -147,7 +147,7 @@ internal fun List<PythonInspector.Package>.toOrtPackages(): Set<Package> =
             declaredLicenses = declaredLicenses,
             declaredLicensesProcessed = declaredLicensesProcessed,
             // Only use the first line of the description because the descriptions provided by python-inspector are
-            // currently far too long, see: https://github.com/nexB/python-inspector/issues/74
+            // currently far too long, see: https://github.com/aboutcode-org/python-inspector/issues/74
             description = pkg.description.lineSequence().firstOrNull { it.isNotBlank() }.orEmpty(),
             homepageUrl = pkg.homepageUrl.orEmpty(),
             binaryArtifact = getArtifact(".whl"),

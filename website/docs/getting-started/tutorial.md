@@ -256,8 +256,8 @@ ORT is designed to integrate lots of different scanners and is not limited to li
 The actual scanner does not have to run on the same computer.
 For example, the [FossID](https://github.com/oss-review-toolkit/ort/blob/main/plugins/scanners/fossid/src/main/kotlin/FossId.kt) uses a remote service to execute the scan.
 
-For this tutorial [ScanCode](https://github.com/nexB/scancode-toolkit) is used as a scanner.
-Please install it according to [these instructions](https://github.com/nexB/scancode-toolkit/#installation) first.
+For this tutorial [ScanCode](https://github.com/aboutcode-org/scancode-toolkit) is used as a scanner.
+Please install it according to [these instructions](https://github.com/aboutcode-org/scancode-toolkit/#installation) first.
 
 As for the *analyzer* you can get the command line options for the `scanner` using the `--help` option:
 

@@ -14,7 +14,7 @@
         "--strip-root": true,
         "--timeout": "300.0"
       },
-      "notice": "Generated with ScanCode and provided on an \"AS IS\" BASIS, WITHOUT WARRANTIES\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\nScanCode should be considered or used as legal advice. Consult an Attorney\nfor any legal advice.\nScanCode is a free software code scanning tool from nexB Inc. and others.\nVisit https://github.com/nexB/scancode-toolkit/ for support and download.",
+      "notice": "Generated with ScanCode and provided on an \"AS IS\" BASIS, WITHOUT WARRANTIES\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\nScanCode should be considered or used as legal advice. Consult an Attorney\nfor any legal advice.\nScanCode is a free software code scanning tool from nexB Inc. and others.\nVisit https://github.com/aboutcode-org/scancode-toolkit/ for support and download.",
       "start_timestamp": "2023-12-08T123156.694438",
       "end_timestamp": "2023-12-08T123226.376157",
       "output_format_version": "3.0.0",
@@ -175,7 +175,7 @@
               "license_expression": "generic-cla AND mit",
               "rule_identifier": "generic-cla_and_mit_1.RULE",
               "rule_relevance": 99,
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/generic-cla_and_mit_1.RULE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/generic-cla_and_mit_1.RULE"
             }
           ],
           "identifier": "generic_cla_and_mit-e300baf2-7b55-d28f-e79e-32577191b77a"
@@ -260,7 +260,7 @@
               "license_expression": "mit",
               "rule_identifier": "mit_27.RULE",
               "rule_relevance": 100,
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/mit_27.RULE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/mit_27.RULE"
             },
             {
               "score": 100.0,
@@ -272,7 +272,7 @@
               "license_expression": "mit",
               "rule_identifier": "mit.LICENSE",
               "rule_relevance": 100,
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/mit.LICENSE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/mit.LICENSE"
             }
           ],
           "identifier": "mit-f7452287-cb8f-dace-dd8d-3e62743150a2"
@@ -336,7 +336,7 @@
               "license_expression": "mit",
               "rule_identifier": "mit_30.RULE",
               "rule_relevance": 100,
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/mit_30.RULE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/mit_30.RULE"
             }
           ],
           "identifier": "mit-3fce6ea2-8abd-6c6b-3ede-a37af7c6efee"
@@ -427,7 +427,7 @@
               "license_expression": "json",
               "rule_identifier": "json_5.RULE",
               "rule_relevance": 100,
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/json_5.RULE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/json_5.RULE"
             },
             {
               "score": 100.0,
@@ -439,7 +439,7 @@
               "license_expression": "json",
               "rule_identifier": "json_5.RULE",
               "rule_relevance": 100,
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/json_5.RULE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/json_5.RULE"
             }
           ],
           "identifier": "json-981d329b-9269-f448-9907-b92bd76e2ea9"
@@ -457,7 +457,7 @@
               "license_expression": "bsd-simplified",
               "rule_identifier": "spdx_license_id_bsd-2-clause_for_bsd-simplified.RULE",
               "rule_relevance": 100,
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/spdx_license_id_bsd-2-clause_for_bsd-simplified.RULE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/spdx_license_id_bsd-2-clause_for_bsd-simplified.RULE"
             },
             {
               "score": 100.0,
@@ -469,7 +469,7 @@
               "license_expression": "bsd-simplified",
               "rule_identifier": "bsd-simplified_136.RULE",
               "rule_relevance": 100,
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/bsd-simplified_136.RULE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/bsd-simplified_136.RULE"
             },
             {
               "score": 100.0,
@@ -481,7 +481,7 @@
               "license_expression": "gpl-2.0 WITH gcc-linking-exception-2.0",
               "rule_identifier": "gpl-2.0_with_gcc-linking-exception-2.0_1.RULE",
               "rule_relevance": 100,
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/gpl-2.0_with_gcc-linking-exception-2.0_1.RULE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/gpl-2.0_with_gcc-linking-exception-2.0_1.RULE"
             },
             {
               "score": 100.0,
@@ -493,7 +493,7 @@
               "license_expression": "gpl-2.0",
               "rule_identifier": "gpl-2.0_1074.RULE",
               "rule_relevance": 100,
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/gpl-2.0_1074.RULE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/gpl-2.0_1074.RULE"
             },
             {
               "score": 50.0,
@@ -505,7 +505,7 @@
               "license_expression": "gcc-linking-exception-2.0",
               "rule_identifier": "spdx_license_id_gcc-exception-2.0_for_gcc-linking-exception-2.0.RULE",
               "rule_relevance": 50,
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/spdx_license_id_gcc-exception-2.0_for_gcc-linking-exception-2.0.RULE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/spdx_license_id_gcc-exception-2.0_for_gcc-linking-exception-2.0.RULE"
             },
             {
               "score": 100.0,
@@ -517,7 +517,7 @@
               "license_expression": "cc-by-3.0",
               "rule_identifier": "cc-by-3.0_106.RULE",
               "rule_relevance": 100,
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/cc-by-3.0_106.RULE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/cc-by-3.0_106.RULE"
             },
             {
               "score": 100.0,
@@ -529,7 +529,7 @@
               "license_expression": "mit",
               "rule_identifier": "mit_1003.RULE",
               "rule_relevance": 100,
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/mit_1003.RULE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/mit_1003.RULE"
             }
           ],
           "identifier": "bsd_simplified_and_gpl_2_0_with_gcc_linking_exception_2_0_and_gpl_2_0_and_gcc_linking_exception_2_0_and_cc_by_3_0_and_mit-db00c765-2211-b14d-f300-f5fb460e6090"
@@ -614,7 +614,7 @@
               "license_expression": "bsd-new",
               "rule_identifier": "bsd-new_10.RULE",
               "rule_relevance": 100,
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/bsd-new_10.RULE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/bsd-new_10.RULE"
             },
             {
               "score": 100.0,
@@ -626,7 +626,7 @@
               "license_expression": "gpl-2.0 WITH gcc-linking-exception-2.0",
               "rule_identifier": "gpl-2.0_with_gcc-linking-exception-2.0_1.RULE",
               "rule_relevance": 100,
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/gpl-2.0_with_gcc-linking-exception-2.0_1.RULE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/gpl-2.0_with_gcc-linking-exception-2.0_1.RULE"
             },
             {
               "score": 100.0,
@@ -638,7 +638,7 @@
               "license_expression": "bsd-new",
               "rule_identifier": "bsd-new_10.RULE",
               "rule_relevance": 100,
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/bsd-new_10.RULE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/bsd-new_10.RULE"
             },
             {
               "score": 100.0,
@@ -650,7 +650,7 @@
               "license_expression": "gpl-2.0 WITH gcc-linking-exception-2.0",
               "rule_identifier": "gpl-2.0_with_gcc-linking-exception-2.0_1.RULE",
               "rule_relevance": 100,
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/gpl-2.0_with_gcc-linking-exception-2.0_1.RULE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/gpl-2.0_with_gcc-linking-exception-2.0_1.RULE"
             },
             {
               "score": 100.0,
@@ -662,7 +662,7 @@
               "license_expression": "bsd-new",
               "rule_identifier": "bsd-new_10.RULE",
               "rule_relevance": 100,
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/bsd-new_10.RULE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/bsd-new_10.RULE"
             },
             {
               "score": 100.0,
@@ -674,7 +674,7 @@
               "license_expression": "gpl-2.0 WITH gcc-linking-exception-2.0",
               "rule_identifier": "gpl-2.0_with_gcc-linking-exception-2.0_1.RULE",
               "rule_relevance": 100,
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/gpl-2.0_with_gcc-linking-exception-2.0_1.RULE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/gpl-2.0_with_gcc-linking-exception-2.0_1.RULE"
             }
           ],
           "identifier": "bsd_new_and_gpl_2_0_with_gcc_linking_exception_2_0-37d4e857-c03b-b6a1-484e-665eb994f0f7"
@@ -692,7 +692,7 @@
               "license_expression": "gpl-2.0",
               "rule_identifier": "gpl-2.0_1074.RULE",
               "rule_relevance": 100,
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/gpl-2.0_1074.RULE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/gpl-2.0_1074.RULE"
             },
             {
               "score": 50.0,
@@ -704,7 +704,7 @@
               "license_expression": "gcc-linking-exception-2.0",
               "rule_identifier": "spdx_license_id_gcc-exception-2.0_for_gcc-linking-exception-2.0.RULE",
               "rule_relevance": 50,
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/spdx_license_id_gcc-exception-2.0_for_gcc-linking-exception-2.0.RULE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/spdx_license_id_gcc-exception-2.0_for_gcc-linking-exception-2.0.RULE"
             }
           ],
           "identifier": "gpl_2_0_and_gcc_linking_exception_2_0-6190574f-5a15-04e2-81cf-952b34277f33"

@@ -24,5 +24,5 @@ ort:
 The `DOS_FRONTEND_URL` is meant to point to the Clearance UI which can be used to inspect scan results and to create license finding curations for use with the [DOS Package Configuration Provider].
 
 [DOS]: https://github.com/doubleopen-project/dos
-[ScanCode]: https://github.com/nexB/scancode-toolkit
+[ScanCode]: https://github.com/aboutcode-org/scancode-toolkit
 [DOS Package Configuration Provider]: ../../package-configuration-providers/dos

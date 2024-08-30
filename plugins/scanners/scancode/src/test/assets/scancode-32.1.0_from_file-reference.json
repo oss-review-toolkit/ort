@@ -14,7 +14,7 @@
         "--strip-root": true,
         "--timeout": "300.0"
       },
-      "notice": "Generated with ScanCode and provided on an \"AS IS\" BASIS, WITHOUT WARRANTIES\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\nScanCode should be considered or used as legal advice. Consult an Attorney\nfor any legal advice.\nScanCode is a free software code scanning tool from nexB Inc. and others.\nVisit https://github.com/nexB/scancode-toolkit/ for support and download.",
+      "notice": "Generated with ScanCode and provided on an \"AS IS\" BASIS, WITHOUT WARRANTIES\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\nScanCode should be considered or used as legal advice. Consult an Attorney\nfor any legal advice.\nScanCode is a free software code scanning tool from nexB Inc. and others.\nVisit https://github.com/aboutcode-org/scancode-toolkit/ for support and download.",
       "start_timestamp": "2024-03-28T110041.376392",
       "end_timestamp": "2024-03-28T110044.147354",
       "output_format_version": "3.1.0",
@@ -54,7 +54,7 @@
           "match_coverage": 100.0,
           "rule_relevance": 100,
           "rule_identifier": "lgpl-2.1.LICENSE",
-          "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/lgpl-2.1.LICENSE"
+          "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/lgpl-2.1.LICENSE"
         }
       ]
     },
@@ -76,7 +76,7 @@
           "match_coverage": 100.0,
           "rule_relevance": 100,
           "rule_identifier": "public-domain_285.RULE",
-          "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_285.RULE"
+          "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_285.RULE"
         },
         {
           "license_expression": "public-domain",
@@ -90,7 +90,7 @@
           "match_coverage": 100.0,
           "rule_relevance": 100,
           "rule_identifier": "public-domain_431.RULE",
-          "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_431.RULE"
+          "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_431.RULE"
         },
         {
           "license_expression": "lgpl-2.1-plus",
@@ -104,7 +104,7 @@
           "match_coverage": 100.0,
           "rule_relevance": 100,
           "rule_identifier": "lgpl-2.1-plus_393.RULE",
-          "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/lgpl-2.1-plus_393.RULE"
+          "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/lgpl-2.1-plus_393.RULE"
         },
         {
           "license_expression": "gpl-2.0-plus",
@@ -118,7 +118,7 @@
           "match_coverage": 100.0,
           "rule_relevance": 100,
           "rule_identifier": "gpl-2.0-plus_991.RULE",
-          "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/gpl-2.0-plus_991.RULE"
+          "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/gpl-2.0-plus_991.RULE"
         },
         {
           "license_expression": "public-domain",
@@ -132,7 +132,7 @@
           "match_coverage": 100.0,
           "rule_relevance": 100,
           "rule_identifier": "public-domain_428.RULE",
-          "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_428.RULE"
+          "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_428.RULE"
         },
         {
           "license_expression": "public-domain",
@@ -146,7 +146,7 @@
           "match_coverage": 100.0,
           "rule_relevance": 100,
           "rule_identifier": "public-domain_429.RULE",
-          "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_429.RULE"
+          "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_429.RULE"
         },
         {
           "license_expression": "public-domain AND gpl-2.0-plus AND gpl-3.0-plus",
@@ -160,7 +160,7 @@
           "match_coverage": 100.0,
           "rule_relevance": 100,
           "rule_identifier": "public-domain_and_gpl-2.0-plus_and_gpl-3.0-plus_1.RULE",
-          "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_and_gpl-2.0-plus_and_gpl-3.0-plus_1.RULE"
+          "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_and_gpl-2.0-plus_and_gpl-3.0-plus_1.RULE"
         },
         {
           "license_expression": "public-domain",
@@ -174,7 +174,7 @@
           "match_coverage": 100.0,
           "rule_relevance": 100,
           "rule_identifier": "public-domain_305.RULE",
-          "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_305.RULE"
+          "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_305.RULE"
         },
         {
           "license_expression": "public-domain",
@@ -188,7 +188,7 @@
           "match_coverage": 100.0,
           "rule_relevance": 70,
           "rule_identifier": "public-domain_bare_words.RULE",
-          "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_bare_words.RULE"
+          "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_bare_words.RULE"
         },
         {
           "license_expression": "other-permissive AND other-copyleft",
@@ -202,7 +202,7 @@
           "match_coverage": 100.0,
           "rule_relevance": 100,
           "rule_identifier": "other-permissive_and_other-copyleft_4.RULE",
-          "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/other-permissive_and_other-copyleft_4.RULE"
+          "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/other-permissive_and_other-copyleft_4.RULE"
         },
         {
           "license_expression": "public-domain-disclaimer",
@@ -216,7 +216,7 @@
           "match_coverage": 96.69,
           "rule_relevance": 100,
           "rule_identifier": "public-domain-disclaimer_72.RULE",
-          "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain-disclaimer_72.RULE"
+          "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain-disclaimer_72.RULE"
         },
         {
           "license_expression": "lgpl-2.1 AND gpl-2.0 AND gpl-3.0",
@@ -230,7 +230,7 @@
           "match_coverage": 100.0,
           "rule_relevance": 100,
           "rule_identifier": "lgpl-2.1_and_gpl-2.0_and_gpl-3.0_3.RULE",
-          "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/lgpl-2.1_and_gpl-2.0_and_gpl-3.0_3.RULE"
+          "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/lgpl-2.1_and_gpl-2.0_and_gpl-3.0_3.RULE"
         },
         {
           "license_expression": "public-domain",
@@ -244,7 +244,7 @@
           "match_coverage": 100.0,
           "rule_relevance": 100,
           "rule_identifier": "public-domain_427.RULE",
-          "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_427.RULE"
+          "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_427.RULE"
         },
         {
           "license_expression": "lgpl-2.1",
@@ -258,7 +258,7 @@
           "match_coverage": 100.0,
           "rule_relevance": 100,
           "rule_identifier": "lgpl-2.1.LICENSE",
-          "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/lgpl-2.1.LICENSE"
+          "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/lgpl-2.1.LICENSE"
         }
       ]
     }
@@ -303,7 +303,7 @@
               "match_coverage": 100.0,
               "rule_relevance": 100,
               "rule_identifier": "public-domain_285.RULE",
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_285.RULE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_285.RULE"
             },
             {
               "license_expression": "public-domain",
@@ -317,7 +317,7 @@
               "match_coverage": 100.0,
               "rule_relevance": 100,
               "rule_identifier": "public-domain_431.RULE",
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_431.RULE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_431.RULE"
             },
             {
               "license_expression": "lgpl-2.1-plus",
@@ -331,7 +331,7 @@
               "match_coverage": 100.0,
               "rule_relevance": 100,
               "rule_identifier": "lgpl-2.1-plus_393.RULE",
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/lgpl-2.1-plus_393.RULE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/lgpl-2.1-plus_393.RULE"
             },
             {
               "license_expression": "gpl-2.0-plus",
@@ -345,7 +345,7 @@
               "match_coverage": 100.0,
               "rule_relevance": 100,
               "rule_identifier": "gpl-2.0-plus_991.RULE",
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/gpl-2.0-plus_991.RULE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/gpl-2.0-plus_991.RULE"
             },
             {
               "license_expression": "public-domain",
@@ -359,7 +359,7 @@
               "match_coverage": 100.0,
               "rule_relevance": 100,
               "rule_identifier": "public-domain_428.RULE",
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_428.RULE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_428.RULE"
             },
             {
               "license_expression": "public-domain",
@@ -373,7 +373,7 @@
               "match_coverage": 100.0,
               "rule_relevance": 100,
               "rule_identifier": "public-domain_429.RULE",
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_429.RULE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_429.RULE"
             },
             {
               "license_expression": "public-domain AND gpl-2.0-plus AND gpl-3.0-plus",
@@ -387,7 +387,7 @@
               "match_coverage": 100.0,
               "rule_relevance": 100,
               "rule_identifier": "public-domain_and_gpl-2.0-plus_and_gpl-3.0-plus_1.RULE",
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_and_gpl-2.0-plus_and_gpl-3.0-plus_1.RULE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_and_gpl-2.0-plus_and_gpl-3.0-plus_1.RULE"
             },
             {
               "license_expression": "public-domain",
@@ -401,7 +401,7 @@
               "match_coverage": 100.0,
               "rule_relevance": 100,
               "rule_identifier": "public-domain_305.RULE",
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_305.RULE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_305.RULE"
             },
             {
               "license_expression": "public-domain",
@@ -415,7 +415,7 @@
               "match_coverage": 100.0,
               "rule_relevance": 70,
               "rule_identifier": "public-domain_bare_words.RULE",
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_bare_words.RULE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_bare_words.RULE"
             },
             {
               "license_expression": "other-permissive AND other-copyleft",
@@ -429,7 +429,7 @@
               "match_coverage": 100.0,
               "rule_relevance": 100,
               "rule_identifier": "other-permissive_and_other-copyleft_4.RULE",
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/other-permissive_and_other-copyleft_4.RULE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/other-permissive_and_other-copyleft_4.RULE"
             },
             {
               "license_expression": "public-domain-disclaimer",
@@ -443,7 +443,7 @@
               "match_coverage": 96.69,
               "rule_relevance": 100,
               "rule_identifier": "public-domain-disclaimer_72.RULE",
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain-disclaimer_72.RULE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain-disclaimer_72.RULE"
             },
             {
               "license_expression": "lgpl-2.1 AND gpl-2.0 AND gpl-3.0",
@@ -457,7 +457,7 @@
               "match_coverage": 100.0,
               "rule_relevance": 100,
               "rule_identifier": "lgpl-2.1_and_gpl-2.0_and_gpl-3.0_3.RULE",
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/lgpl-2.1_and_gpl-2.0_and_gpl-3.0_3.RULE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/lgpl-2.1_and_gpl-2.0_and_gpl-3.0_3.RULE"
             },
             {
               "license_expression": "public-domain",
@@ -471,7 +471,7 @@
               "match_coverage": 100.0,
               "rule_relevance": 100,
               "rule_identifier": "public-domain_427.RULE",
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_427.RULE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/rules/public-domain_427.RULE"
             },
             {
               "license_expression": "lgpl-2.1",
@@ -485,7 +485,7 @@
               "match_coverage": 100.0,
               "rule_relevance": 100,
               "rule_identifier": "lgpl-2.1.LICENSE",
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/lgpl-2.1.LICENSE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/lgpl-2.1.LICENSE"
             }
           ],
           "identifier": "public_domain_and_lgpl_2_1_plus_and_gpl_2_0_plus_and__public_domain_and_gpl_2_0_plus_and_gpl_3_0_plus__and__other_permissive_and_other_copyleft__and_public_domain_disclaimer_and_lgpl_2_1-4b11d70c-b401-ad7e-7036-9e3ec1ab19a9",
@@ -543,7 +543,7 @@
               "match_coverage": 100.0,
               "rule_relevance": 100,
               "rule_identifier": "lgpl-2.1.LICENSE",
-              "rule_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/lgpl-2.1.LICENSE"
+              "rule_url": "https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/lgpl-2.1.LICENSE"
             }
           ],
           "identifier": "lgpl_2_1-9de8e5f7-3171-8985-b4d6-a1ffddf63f3a"
