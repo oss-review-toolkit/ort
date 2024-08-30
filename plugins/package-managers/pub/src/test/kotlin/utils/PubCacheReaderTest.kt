@@ -92,7 +92,7 @@ class PubCacheReaderTest : WordSpec({
         }
 
         "resolve the path of a hosted dependency" {
-            PubCacheReader().findProjectRoot(
+            reader.findProjectRoot(
                 jsonMapper.readTree(
                     """
                         {
@@ -111,7 +111,7 @@ class PubCacheReaderTest : WordSpec({
         }
 
         "resolve the relative path of a local dependency" {
-            PubCacheReader().findProjectRoot(
+            reader.findProjectRoot(
                 jsonMapper.readTree(
                     """
                         {
@@ -129,7 +129,7 @@ class PubCacheReaderTest : WordSpec({
         }
 
         "resolve the absolute path of a local dependency" {
-            PubCacheReader().findProjectRoot(
+            reader.findProjectRoot(
                 jsonMapper.readTree(
                     """
                         {
