@@ -67,7 +67,7 @@ class PubCacheReaderTest : WordSpec({
                         }
                     """.trimIndent()
                 ),
-                ABSOLUTE_PATH // not used
+                ABSOLUTE_PATH
             ) shouldBe gitPackageCacheDir
         }
 
@@ -87,7 +87,7 @@ class PubCacheReaderTest : WordSpec({
                         }
                     """.trimIndent()
                 ),
-                ABSOLUTE_PATH // not used
+                ABSOLUTE_PATH
             ) shouldBe gitPackageWithPathCacheDir
         }
 
@@ -106,7 +106,7 @@ class PubCacheReaderTest : WordSpec({
                         }
                     """.trimIndent()
                 ),
-                ABSOLUTE_PATH // not used
+                ABSOLUTE_PATH
             ) shouldBe hostedPackageCacheDir
         }
 
