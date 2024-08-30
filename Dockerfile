@@ -107,12 +107,6 @@ COPY "$CRT_FILES" /tmp/certificates/
 RUN /etc/scripts/export_proxy_certificates.sh /tmp/certificates/ \
     &&  /etc/scripts/import_certificates.sh /tmp/certificates/
 
-# Add Syft to use as primary SPDX Docker scanner
-# Create docs dir to store future SPDX files
-RUN curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sudo sh -s -- -b /usr/local/bin \
-    && mkdir -p /usr/share/doc/ort \
-    && chown $USER:$USER /usr/share/doc/ort
-
 USER $USER
 WORKDIR $HOME
 
@@ -468,20 +462,16 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     subversion \
     && sudo rm -rf /var/lib/apt/lists/*
 
-RUN syft / --exclude '*/usr/share/doc' --exclude '*/etc' -o spdx-json --output json=/usr/share/doc/ort/ort-base.spdx.json
-
 # Python
 ENV PYENV_ROOT=/opt/python
 ENV PATH=$PATH:$PYENV_ROOT/shims:$PYENV_ROOT/bin
 COPY --from=python --chown=$USER:$USER $PYENV_ROOT $PYENV_ROOT
-RUN syft $PYENV_ROOT -o spdx-json --output json=/usr/share/doc/ort/ort-python.spdx.json
 
 # NodeJS
 ARG NODEJS_VERSION
 ENV NVM_DIR=/opt/nvm
 ENV PATH=$PATH:$NVM_DIR/versions/node/v$NODEJS_VERSION/bin
 COPY --from=nodejs --chown=$USER:$USER $NVM_DIR $NVM_DIR
-RUN syft $NVM_DIR  -o spdx-json --output json=/usr/share/doc/ort/ort-nodejs.spdx.json
 
 # Rust
 ENV RUST_HOME=/opt/rust
@@ -490,19 +480,16 @@ ENV RUSTUP_HOME=$RUST_HOME/rustup
 ENV PATH=$PATH:$CARGO_HOME/bin:$RUSTUP_HOME/bin
 COPY --from=rust --chown=$USER:$USER $RUST_HOME $RUST_HOME
 RUN chmod o+rwx $CARGO_HOME
-RUN syft $RUST_HOME -o spdx-json --output json=/usr/share/doc/ort/ort-rust.spdx.json
 
 # Golang
 ENV PATH=$PATH:/opt/go/bin
 COPY --from=golang --chown=$USER:$USER /opt/go /opt/go
-RUN syft /opt/go -o spdx-json --output json=/usr/share/doc/ort/ort-golang.spdx.json
 
 # Ruby
 ENV RBENV_ROOT=/opt/rbenv/
 ENV GEM_HOME=/var/tmp/gem
 ENV PATH=$PATH:$RBENV_ROOT/bin:$RBENV_ROOT/shims:$RBENV_ROOT/plugins/ruby-install/bin
 COPY --from=ruby --chown=$USER:$USER $RBENV_ROOT $RBENV_ROOT
-RUN syft $RBENV_ROOT -o spdx-json --output json=/usr/share/doc/ort/ort-ruby.spdx.json
 
 #------------------------------------------------------------------------
 # Container with all supported package managers.
@@ -516,29 +503,20 @@ ENV PATH=$PATH:$ANDROID_HOME/platform-tools
 COPY --from=android --chown=$USER:$USER $ANDROID_HOME $ANDROID_HOME
 RUN sudo chmod -R o+rw $ANDROID_HOME
 
-RUN syft $ANDROID_HOME -o spdx-json --output json=/usr/share/doc/ort/ort-android.spdx.json
-
 # Swift
 ENV SWIFT_HOME=/opt/swift
 ENV PATH=$PATH:$SWIFT_HOME/bin
 COPY --from=swift --chown=$USER:$USER $SWIFT_HOME $SWIFT_HOME
-
-RUN syft $SWIFT_HOME -o spdx-json --output json=/usr/share/doc/ort/ort-swift.spdx.json
-
 
 # Scala
 ENV SBT_HOME=/opt/sbt
 ENV PATH=$PATH:$SBT_HOME/bin
 COPY --from=scala --chown=$USER:$USER $SBT_HOME $SBT_HOME
 
-RUN syft $SBT_HOME -o spdx-json --output json=/usr/share/doc/ort/ort-sbt.spdx.json
-
 # Dart
 ENV DART_SDK=/opt/dart-sdk
 ENV PATH=$PATH:$DART_SDK/bin
 COPY --from=dart --chown=$USER:$USER $DART_SDK $DART_SDK
-
-RUN syft $DART_SDK -o spdx-json --output json=/usr/share/doc/ort/ort-golang.dart.json
 
 # Dotnet
 ENV DOTNET_HOME=/opt/dotnet
@@ -546,8 +524,6 @@ ENV NUGET_INSPECTOR_HOME=$DOTNET_HOME
 ENV PATH=$PATH:$DOTNET_HOME:$DOTNET_HOME/tools:$DOTNET_HOME/bin
 
 COPY --from=dotnet --chown=$USER:$USER $DOTNET_HOME $DOTNET_HOME
-
-RUN syft $DOTNET_HOME -o spdx-json --output json=/usr/share/doc/ort/ort-dotnet.spdx.json
 
 # PHP
 ARG PHP_VERSION
@@ -567,15 +543,11 @@ RUN mkdir -p /opt/php/bin \
 
 ENV PATH=$PATH:/opt/php/bin
 
-RUN syft /opt/php -o spdx-json --output json=/usr/share/doc/ort/ort-php.spdx.json
-
 # Haskell
 ENV HASKELL_HOME=/opt/haskell
 ENV PATH=$PATH:$HASKELL_HOME/bin
 
 COPY --from=haskell /opt/haskell /opt/haskell
-
-RUN syft /opt/haskell -o spdx-json --output json=/usr/share/doc/ort/ort-haskell.spdx.json
 
 # Bazel
 ENV BAZEL_HOME=/opt/bazel
@@ -583,8 +555,6 @@ ENV PATH=$PATH:$BAZEL_HOME/bin
 
 COPY --from=bazel $BAZEL_HOME $BAZEL_HOME
 COPY --from=bazel --chown=$USER:$USER /opt/go/bin/buildozer /opt/go/bin/buildozer
-
-RUN syft $BAZEL_HOME -o spdx-json --output json=/usr/share/doc/ort/ort-bazel.spdx.json
 
 #------------------------------------------------------------------------
 # Runtime container with minimal selection of supported package managers pre-installed.

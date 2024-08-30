@@ -9,9 +9,15 @@ on:
       - main
   workflow_dispatch:
     inputs:
-      clean:
-        description: "Free disk space cleaning leftovers."
+      docker:
+        description: "Free docker disk space."
         required: true
+        default: false
+        type: boolean
+      system:
+        description: "Free system disk space."
+        required: true
+        default: true
         type: boolean
 
 env:
@@ -130,10 +136,10 @@ jobs:
         with:
           submodules: recursive
       - name: Free Disk Space
-        if: ${{ inputs.clean }}
         uses: ./.github/actions/free-disk-space
         with:
-          clean: "true"
+          system: ${{ inputs.system || true }}
+          docker: ${{ inputs.docker }}
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@988b5a0280414f521da01fcc63a27aeeb4b104db # v3
       - name: Build ORT Docker Image

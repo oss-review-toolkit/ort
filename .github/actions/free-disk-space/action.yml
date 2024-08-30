@@ -20,11 +20,14 @@ description: "Remove uneeded preinstalled Docker images and software to free dis
 author: "The ORT Project Authors"
 
 inputs:
-  clean:
+  docker:
     default: "false"
-    description: "Enable cleanup tasks. Defaults to false."
+    description: "Clean docker images."
     required: false
-
+  system:
+    default: "false"
+    description: "Clean system files."
+    required: false
 runs:
   using: "composite"
 
@@ -33,11 +36,11 @@ runs:
       shell: bash
       run: df -h
     - name: List Docker Images
-      if: ${{ github.event.inputs.clean == 'true' }}
+      if: ${{ github.event.inputs.docker == 'true' }}
       shell: bash
       run: docker images
     - name: Remove Unneeded Docker Images
-      if: ${{ github.event.inputs.clean == 'true' }}
+      if: ${{ github.event.inputs.docker == 'true' }}
       shell: bash
       run: |
         docker image rm \
@@ -56,7 +59,7 @@ runs:
       shell: bash
       run: df -h
     - name: Get Size of Installed Tools
-      if: ${{ github.event.inputs.clean == 'true' }}
+      if: ${{ github.event.inputs.system == 'true' }}
       shell: bash
       run: |
         sudo du -hsc /usr/lib/*
@@ -64,7 +67,8 @@ runs:
         sudo du -hsc /usr/local/lib/*
         sudo du -hsc /usr/local/share/*
         sudo du -hsc /usr/share/*
-    - name: Remove Unneeded Tools
+    - name: Remove Uneeded Tools
+      if: ${{ github.event.inputs.system == 'true' }}
       shell: bash
       run: |
         sudo rm -rf /usr/local/lib/android
