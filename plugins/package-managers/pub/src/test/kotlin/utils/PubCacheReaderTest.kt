@@ -59,7 +59,6 @@ class PubCacheReaderTest : WordSpec({
                         {
                             "dependency": "direct main",
                             "description": {
-                                "ref": "master",
                                 "resolved-ref": "$RESOLVED_REF",
                                 "url": "https://github.com/oss-review-toolkit/$PACKAGE_NAME.git"
                             },
@@ -80,7 +79,6 @@ class PubCacheReaderTest : WordSpec({
                             "dependency": "direct main",
                             "description": {
                                 "path": "$PACKAGE_NAME",
-                                "ref": "master",
                                 "resolved-ref": "$RESOLVED_REF",
                                 "url": "https://github.com/oss-review-toolkit/$PACKAGE_NAME.git"
                             },
