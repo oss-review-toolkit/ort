@@ -82,10 +82,10 @@ private const val PUBSPEC_YAML = "pubspec.yaml"
 private const val PUB_LOCK_FILE = "pubspec.lock"
 private const val SCOPE_NAME_DEPENDENCIES = "dependencies"
 private const val SCOPE_NAME_DEV_DEPENDENCIES = "dev_dependencies"
+private val ALL_PUB_SCOPE_NAMES = setOf(SCOPE_NAME_DEPENDENCIES, SCOPE_NAME_DEV_DEPENDENCIES)
 
 private val flutterCommand = if (Os.isWindows) "flutter.bat" else "flutter"
 private val dartCommand = if (Os.isWindows) "dart.bat" else "dart"
-
 
 /**
  * The [Pub](https://pub.dev/) package manager for Dart / Flutter.
@@ -316,10 +316,9 @@ class Pub(
 
             logger.info { "Successfully parsed installed packages." }
 
-            scopes += parseScope(SCOPE_NAME_DEPENDENCIES, manifest, lockfile, parsePackagesResult.packages, labels, workingDir)
-            scopes += parseScope(
-                SCOPE_NAME_DEV_DEPENDENCIES, manifest, lockfile, parsePackagesResult.packages, labels, workingDir
-            )
+            ALL_PUB_SCOPE_NAMES.mapTo(scopes) { scopeName ->
+                parseScope(scopeName, manifest, lockfile, parsePackagesResult.packages, labels, workingDir)
+            }
         }
 
         val project = parseProject(definitionFile, manifest, scopes)
