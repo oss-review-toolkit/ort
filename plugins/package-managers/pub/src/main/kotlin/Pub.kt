@@ -533,129 +533,127 @@ class Pub(
         // Flag if the project is a Flutter project.
         var containsFlutter = false
 
-        listOf("packages"/*, "packages-dev"*/).forEach {
-            lockfile[it]?.fields()?.forEach { (packageName, pkgInfoFromLockfile) ->
-                try {
-                    val version = pkgInfoFromLockfile["version"].textValueOrEmpty()
-                    var description = ""
-                    var rawName = ""
-                    var homepageUrl = ""
-                    var vcs = VcsInfo.EMPTY
-                    var authors = emptySet<String>()
+        lockfile["packages"]?.fields()?.forEach { (packageName, pkgInfoFromLockfile) ->
+            try {
+                val version = pkgInfoFromLockfile["version"].textValueOrEmpty()
+                var description = ""
+                var rawName = ""
+                var homepageUrl = ""
+                var vcs = VcsInfo.EMPTY
+                var authors = emptySet<String>()
 
-                    val source = pkgInfoFromLockfile["source"].textValueOrEmpty()
+                val source = pkgInfoFromLockfile["source"].textValueOrEmpty()
 
-                    when {
-                        source == "path" -> {
-                            rawName = packageName
-                            val path = pkgInfoFromLockfile["description"]["path"].textValueOrEmpty()
-                            vcs = VersionControlSystem.forDirectory(workingDir.resolve(path))?.getInfo() ?: run {
-                                logger.warn {
-                                    "Invalid path of package $rawName: " +
-                                        "'$path' is outside of the project root '$workingDir'."
-                                }
-
-                                VcsInfo.EMPTY
+                when {
+                    source == "path" -> {
+                        rawName = packageName
+                        val path = pkgInfoFromLockfile["description"]["path"].textValueOrEmpty()
+                        vcs = VersionControlSystem.forDirectory(workingDir.resolve(path))?.getInfo() ?: run {
+                            logger.warn {
+                                "Invalid path of package $rawName: " +
+                                    "'$path' is outside of the project root '$workingDir'."
                             }
-                        }
 
-                        source == "git" -> {
-                            val pkgInfoFromYamlFile = readPackageInfoFromCache(pkgInfoFromLockfile, workingDir)
-
-                            rawName = pkgInfoFromYamlFile["name"]?.textValue() ?: packageName
-                            description = pkgInfoFromYamlFile["description"].textValueOrEmpty().trim()
-                            homepageUrl = pkgInfoFromYamlFile["homepage"].textValueOrEmpty()
-                            authors = parseAuthors(pkgInfoFromYamlFile)
-
-                            vcs = VcsInfo(
-                                type = VcsType.GIT,
-                                url = normalizeVcsUrl(pkgInfoFromLockfile["description"]["url"].textValueOrEmpty()),
-                                revision = pkgInfoFromLockfile["description"]["resolved-ref"].textValueOrEmpty(),
-                                path = pkgInfoFromLockfile["description"]["path"].textValueOrEmpty()
-                            )
-                        }
-
-                        // For now, we ignore SDKs like the Dart SDK and the Flutter SDK in the analyzer.
-                        source != "sdk" -> {
-                            val pkgInfoFromYamlFile = readPackageInfoFromCache(pkgInfoFromLockfile, workingDir)
-
-                            rawName = pkgInfoFromYamlFile["name"].textValueOrEmpty()
-                            description = pkgInfoFromYamlFile["description"].textValueOrEmpty().trim()
-                            homepageUrl = pkgInfoFromYamlFile["homepage"].textValueOrEmpty()
-                            authors = parseAuthors(pkgInfoFromYamlFile)
-
-                            val repositoryUrl = pkgInfoFromYamlFile["repository"].textValueOrEmpty()
-
-                            // Ignore the revision parsed from the repositoryUrl because the URL often points to the
-                            // main or master branch of the repository but never to the correct revision that matches
-                            // the version of the package.
-                            vcs = VcsHost.parseUrl(repositoryUrl).copy(revision = "")
-                        }
-
-                        pkgInfoFromLockfile["description"].textValueOrEmpty() == "flutter" -> {
-                            // Set Flutter flag, which triggers another scan for iOS and Android native dependencies.
-                            containsFlutter = true
-                            // Set hardcoded package details.
-                            rawName = "flutter"
-                            homepageUrl = "https://github.com/flutter/flutter"
-                            description = "Flutter SDK"
-                        }
-
-                        pkgInfoFromLockfile["description"].textValueOrEmpty() == "flutter_test" -> {
-                            // Set hardcoded package details.
-                            rawName = "flutter_test"
-                            homepageUrl = "https://github.com/flutter/flutter/tree/master/packages/flutter_test"
-                            description = "Flutter Test SDK"
+                            VcsInfo.EMPTY
                         }
                     }
 
-                    if (version.isEmpty()) {
-                        logger.warn { "No version information found for package $rawName." }
-                    }
+                    source == "git" -> {
+                        val pkgInfoFromYamlFile = readPackageInfoFromCache(pkgInfoFromLockfile, workingDir)
 
-                    val hostUrl = pkgInfoFromLockfile["description"]["url"].textValueOrEmpty()
+                        rawName = pkgInfoFromYamlFile["name"]?.textValue() ?: packageName
+                        description = pkgInfoFromYamlFile["description"].textValueOrEmpty().trim()
+                        homepageUrl = pkgInfoFromYamlFile["homepage"].textValueOrEmpty()
+                        authors = parseAuthors(pkgInfoFromYamlFile)
 
-                    val sourceArtifact = if (source == "hosted" && hostUrl.isNotEmpty() && version.isNotEmpty()) {
-                        val sha256 = pkgInfoFromLockfile["description"]["sha256"].textValue()
-
-                        RemoteArtifact(
-                            url = "$hostUrl/packages/$rawName/versions/$version.tar.gz",
-                            hash = Hash(sha256, HashAlgorithm.SHA256)
+                        vcs = VcsInfo(
+                            type = VcsType.GIT,
+                            url = normalizeVcsUrl(pkgInfoFromLockfile["description"]["url"].textValueOrEmpty()),
+                            revision = pkgInfoFromLockfile["description"]["resolved-ref"].textValueOrEmpty(),
+                            path = pkgInfoFromLockfile["description"]["path"].textValueOrEmpty()
                         )
-                    } else {
-                        RemoteArtifact.EMPTY
                     }
 
-                    val id = Identifier(
-                        type = managerName,
-                        namespace = "",
-                        name = rawName,
-                        version = version
-                    )
+                    // For now, we ignore SDKs like the Dart SDK and the Flutter SDK in the analyzer.
+                    source != "sdk" -> {
+                        val pkgInfoFromYamlFile = readPackageInfoFromCache(pkgInfoFromLockfile, workingDir)
 
-                    packages[id] = Package(
-                        id,
-                        authors = authors,
-                        // Pub does not declare any licenses in the pubspec files, therefore we keep this empty.
-                        declaredLicenses = emptySet(),
-                        description = description,
-                        homepageUrl = homepageUrl,
-                        // Pub does not create binary artifacts, therefore use any empty artifact.
-                        binaryArtifact = RemoteArtifact.EMPTY,
-                        sourceArtifact = sourceArtifact,
-                        vcs = vcs,
-                        vcsProcessed = processPackageVcs(vcs, homepageUrl)
-                    )
-                } catch (e: JacksonYAMLParseException) {
-                    e.showStackTrace()
+                        rawName = pkgInfoFromYamlFile["name"].textValueOrEmpty()
+                        description = pkgInfoFromYamlFile["description"].textValueOrEmpty().trim()
+                        homepageUrl = pkgInfoFromYamlFile["homepage"].textValueOrEmpty()
+                        authors = parseAuthors(pkgInfoFromYamlFile)
 
-                    val packageVersion = pkgInfoFromLockfile["version"].textValueOrEmpty()
-                    issues += createAndLogIssue(
-                        source = managerName,
-                        message = "Failed to parse $PUBSPEC_YAML for package $packageName:$packageVersion: " +
-                            e.collectMessages()
-                    )
+                        val repositoryUrl = pkgInfoFromYamlFile["repository"].textValueOrEmpty()
+
+                        // Ignore the revision parsed from the repositoryUrl because the URL often points to the
+                        // main or master branch of the repository but never to the correct revision that matches
+                        // the version of the package.
+                        vcs = VcsHost.parseUrl(repositoryUrl).copy(revision = "")
+                    }
+
+                    pkgInfoFromLockfile["description"].textValueOrEmpty() == "flutter" -> {
+                        // Set Flutter flag, which triggers another scan for iOS and Android native dependencies.
+                        containsFlutter = true
+                        // Set hardcoded package details.
+                        rawName = "flutter"
+                        homepageUrl = "https://github.com/flutter/flutter"
+                        description = "Flutter SDK"
+                    }
+
+                    pkgInfoFromLockfile["description"].textValueOrEmpty() == "flutter_test" -> {
+                        // Set hardcoded package details.
+                        rawName = "flutter_test"
+                        homepageUrl = "https://github.com/flutter/flutter/tree/master/packages/flutter_test"
+                        description = "Flutter Test SDK"
+                    }
                 }
+
+                if (version.isEmpty()) {
+                    logger.warn { "No version information found for package $rawName." }
+                }
+
+                val hostUrl = pkgInfoFromLockfile["description"]["url"].textValueOrEmpty()
+
+                val sourceArtifact = if (source == "hosted" && hostUrl.isNotEmpty() && version.isNotEmpty()) {
+                    val sha256 = pkgInfoFromLockfile["description"]["sha256"].textValue()
+
+                    RemoteArtifact(
+                        url = "$hostUrl/packages/$rawName/versions/$version.tar.gz",
+                        hash = Hash(sha256, HashAlgorithm.SHA256)
+                    )
+                } else {
+                    RemoteArtifact.EMPTY
+                }
+
+                val id = Identifier(
+                    type = managerName,
+                    namespace = "",
+                    name = rawName,
+                    version = version
+                )
+
+                packages[id] = Package(
+                    id,
+                    authors = authors,
+                    // Pub does not declare any licenses in the pubspec files, therefore we keep this empty.
+                    declaredLicenses = emptySet(),
+                    description = description,
+                    homepageUrl = homepageUrl,
+                    // Pub does not create binary artifacts, therefore use any empty artifact.
+                    binaryArtifact = RemoteArtifact.EMPTY,
+                    sourceArtifact = sourceArtifact,
+                    vcs = vcs,
+                    vcsProcessed = processPackageVcs(vcs, homepageUrl)
+                )
+            } catch (e: JacksonYAMLParseException) {
+                e.showStackTrace()
+
+                val packageVersion = pkgInfoFromLockfile["version"].textValueOrEmpty()
+                issues += createAndLogIssue(
+                    source = managerName,
+                    message = "Failed to parse $PUBSPEC_YAML for package $packageName:$packageVersion: " +
+                        e.collectMessages()
+                )
             }
         }
 
