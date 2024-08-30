@@ -87,7 +87,7 @@ fun ScanCodeResult.toScanSummary(preferFileLicense: Boolean = false): ScanSummar
         val licensesWithoutReferences = file.licenses.filter {
             it !is LicenseEntry.Version3 || it.fromFile == null
                 // Note that "fromFile" contains the name of the input directory, see
-                // https://github.com/nexB/scancode-toolkit/issues/3712.
+                // https://github.com/aboutcode-org/scancode-toolkit/issues/3712.
                 || inputPath.resolveSibling(it.fromFile) == inputPath.resolve(file.path)
                 // Check if input is a single file.
                 || it.fromFile == inputPath.name

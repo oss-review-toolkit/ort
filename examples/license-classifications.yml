@@ -1,6 +1,6 @@
 ---
 # Example license-classifications.yml based on categorization from
-# https://github.com/nexB/scancode-toolkit/commit/ed644e4
+# https://github.com/aboutcode-org/scancode-toolkit/commit/ed644e4
 #
 # To demonstrate how one can insert a custom written offer
 # include-source-code-offer-in-notice-file has been set to

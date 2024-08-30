@@ -43,7 +43,7 @@ resolutions:
   issues:
   - message: "ERROR: Timeout after 300 seconds while scanning file 'reporter-web-app/public/index.html'."
     reason: "SCANNER_ISSUE"
-    comment: >- 
+    comment: >-
       The error can be ignored because the file does contain relevant license information.
   - message: "ERROR: Timeout after 300 seconds while scanning file 'scanner/src/test/assets/aws-java-sdk-core-1.11.160_scancode-2.9.7.json'."
     reason: "SCANNER_ISSUE"
@@ -175,7 +175,7 @@ curations:
       This directory contains all non-official SPDX license ids which are used to generate open source notices. SPDX and
       ScanCode license files are licensed under CC0-1.0, see
       https://github.com/spdx/license-list-XML/blob/master/package.json#L33 and
-      https://github.com/nexB/scancode-toolkit/blame/develop/README.rst#L168.
+      https://github.com/aboutcode-org/scancode-toolkit/blame/develop/README.rst#L168.
   - path: "utils/spdx/src/main/resources/licenses/**"
     concluded_license: "CC0-1.0"
     reason: "DATA_OF"
