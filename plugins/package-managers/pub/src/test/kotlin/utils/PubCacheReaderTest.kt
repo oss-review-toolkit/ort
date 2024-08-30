@@ -51,7 +51,7 @@ class PubCacheReaderTest : WordSpec({
         hostedPackageCacheDir.safeMkdirs()
     }
 
-    "findProjectRoot" should {
+    "findProjectRoot()" should {
         "resolve the path of a Git dependency without path" {
             reader.findProjectRoot(
                 jsonMapper.readTree(
