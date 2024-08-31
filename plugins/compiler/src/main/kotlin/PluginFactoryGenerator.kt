@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.plugins.compiler
 
 import com.google.devtools.ksp.processing.CodeGenerator
-import com.google.devtools.ksp.processing.Dependencies
 
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.CodeBlock
@@ -39,9 +38,9 @@ import org.ossreviewtoolkit.plugins.api.PluginOptionType
 import org.ossreviewtoolkit.plugins.api.Secret
 
 class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
-    fun generate(pluginSpec: PluginSpec) {
+    fun generate(pluginSpec: PluginSpec): ServiceLoaderSpec {
         val generatedFactory = generateFactoryClass(pluginSpec)
-        generateServiceLoaderFile(pluginSpec, generatedFactory)
+        return ServiceLoaderSpec(pluginSpec, generatedFactory)
     }
 
     /**
@@ -188,19 +187,4 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
                 """.trimIndent()
             )
         }.build()
-
-    /**
-     * Generate a service loader file for the [generatedFactory].
-     */
-    private fun generateServiceLoaderFile(pluginSpec: PluginSpec, generatedFactory: TypeSpec) {
-        codeGenerator.createNewFileByPath(
-            dependencies = Dependencies(aggregating = true, *listOfNotNull(pluginSpec.containingFile).toTypedArray()),
-            path = "META-INF/services/${pluginSpec.factory.qualifiedName}",
-            extensionName = ""
-        ).use { output ->
-            output.writer().use { writer ->
-                writer.write("${pluginSpec.packageName}.${generatedFactory.name}\n")
-            }
-        }
-    }
 }

@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.compiler
 import com.google.devtools.ksp.symbol.KSFile
 
 import com.squareup.kotlinpoet.TypeName
+import com.squareup.kotlinpoet.TypeSpec
 
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 
@@ -51,4 +52,12 @@ data class PluginConfigClassSpec(
 data class PluginFactorySpec(
     val typeName: TypeName,
     val qualifiedName: String
+)
+
+/**
+ * A specification for a service loader, used to generate service loader files.
+ */
+data class ServiceLoaderSpec(
+    val pluginSpec: PluginSpec,
+    val factory: TypeSpec
 )
