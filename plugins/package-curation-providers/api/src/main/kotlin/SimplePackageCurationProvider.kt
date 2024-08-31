@@ -21,11 +21,27 @@ package org.ossreviewtoolkit.plugins.packagecurationproviders.api
 
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCuration
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
+
+/**
+ * The default [PluginDescriptor] for a [SimplePackageCurationProvider]. Classes inheriting from this class
+ * have to provide their own descriptor.
+ */
+private val pluginDescriptor = PluginDescriptor(
+    id = "Simple",
+    displayName = "Simple Package Curation Provider",
+    description = "A simple package curation provider, which provides a fixed set of package curations."
+)
 
 /**
  * A [PackageCurationProvider] that provides the specified [packageCurations].
  */
-open class SimplePackageCurationProvider(val packageCurations: List<PackageCuration>) : PackageCurationProvider {
+open class SimplePackageCurationProvider(
+    override val descriptor: PluginDescriptor,
+    val packageCurations: List<PackageCuration>
+) : PackageCurationProvider {
+    constructor(packageCurations: List<PackageCuration>) : this(pluginDescriptor, packageCurations)
+
     override fun getCurationsFor(packages: Collection<Package>): Set<PackageCuration> =
         packageCurations.filterTo(mutableSetOf()) { curation ->
             packages.any { pkg -> curation.isApplicable(pkg.id) }

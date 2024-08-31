@@ -31,9 +31,10 @@ import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProvider
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProviderFactory
-import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.encodeOr
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
@@ -41,19 +42,16 @@ import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 private const val ORT_CONFIG_REPOSITORY_BRANCH = "main"
 private const val ORT_CONFIG_REPOSITORY_URL = "https://github.com/oss-review-toolkit/ort-config.git"
 
-class OrtConfigPackageCurationProviderFactory : PackageCurationProviderFactory<Unit> {
-    override val type = "OrtConfig"
-
-    override fun create(config: Unit) = OrtConfigPackageCurationProvider()
-
-    override fun parseConfig(options: Options, secrets: Options) = Unit
-}
-
 /**
  * A [PackageCurationProvider] that provides [PackageCuration]s loaded from the
  * [ort-config repository](https://github.com/oss-review-toolkit/ort-config).
  */
-open class OrtConfigPackageCurationProvider : PackageCurationProvider {
+@OrtPlugin(
+    name = "ort-config",
+    description = "A package curation provider that loads package curations from the ort-config repository.",
+    factory = PackageCurationProviderFactory::class
+)
+open class OrtConfigPackageCurationProvider(override val descriptor: PluginDescriptor) : PackageCurationProvider {
     private val curationsDir by lazy {
         ortDataDirectory.resolve("ort-config").also {
             updateOrtConfig(it)

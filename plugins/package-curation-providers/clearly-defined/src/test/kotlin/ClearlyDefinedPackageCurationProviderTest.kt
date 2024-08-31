@@ -68,7 +68,12 @@ class ClearlyDefinedPackageCurationProviderTest : WordSpec({
                 readTimeout(Duration.ofMillis(1))
             }
 
-            val provider = ClearlyDefinedPackageCurationProvider("http://localhost:${server.port()}", client)
+            val provider = ClearlyDefinedPackageCurationProvider(
+                ClearlyDefinedPackageCurationProviderFactory().descriptor,
+                ClearlyDefinedPackageCurationProviderConfig(serverUrl = "http://localhost:${server.port()}", 0),
+                client
+            )
+
             val id = Identifier("Maven:some-ns:some-component:1.2.3")
             val packages = listOf(Package.EMPTY.copy(id = id))
 

@@ -25,9 +25,12 @@ import java.io.IOException
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.OrtPluginOption
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
+import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProvider
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProviderFactory
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.SimplePackageCurationProvider
-import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.getDuplicates
 import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CURATIONS_DIRNAME
 import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CURATIONS_FILENAME
@@ -37,56 +40,58 @@ data class FilePackageCurationProviderConfig(
     /**
      * The path of the package curation file or directory.
      */
-    val path: File,
+    val path: String,
 
     /**
      * A flag to denote whether the path is required to exist.
      */
+    @OrtPluginOption(defaultValue = "false")
     val mustExist: Boolean
 )
 
-open class FilePackageCurationProviderFactory : PackageCurationProviderFactory<FilePackageCurationProviderConfig> {
-    override val type = "File"
+@OrtPlugin(
+    name = "Default File Package Curation Provider",
+    description = "A package curation provider that loads package curations from the default file.",
+    factory = PackageCurationProviderFactory::class
+)
+class DefaultFilePackageCurationProvider(descriptor: PluginDescriptor) : FilePackageCurationProvider(
+    descriptor,
+    FilePackageCurationProviderConfig(
+        path = ortConfigDirectory.resolve(ORT_PACKAGE_CURATIONS_FILENAME).absolutePath,
+        mustExist = false
+    )
+)
 
-    override fun create(config: FilePackageCurationProviderConfig) = FilePackageCurationProvider(config)
-
-    override fun parseConfig(options: Options, secrets: Options) =
-        FilePackageCurationProviderConfig(
-            path = File(options.getValue("path")),
-            mustExist = options["mustExist"]?.toBooleanStrict() != false
-        )
-}
-
-class DefaultFilePackageCurationProviderFactory : FilePackageCurationProviderFactory() {
-    override val type = "DefaultFile"
-
-    override fun parseConfig(options: Options, secrets: Options) =
-        FilePackageCurationProviderConfig(
-            path = ortConfigDirectory.resolve(ORT_PACKAGE_CURATIONS_FILENAME),
-            mustExist = false
-        )
-}
-
-class DefaultDirPackageCurationProviderFactory : FilePackageCurationProviderFactory() {
-    override val type = "DefaultDir"
-
-    override fun parseConfig(options: Options, secrets: Options) =
-        FilePackageCurationProviderConfig(
-            path = ortConfigDirectory.resolve(ORT_PACKAGE_CURATIONS_DIRNAME),
-            mustExist = false
-        )
-}
+@OrtPlugin(
+    name = "Default Dir Package Curation Provider",
+    description = "A package curation provider that loads package curations from the default directory.",
+    factory = PackageCurationProviderFactory::class
+)
+class DefaultDirPackageCurationProvider(descriptor: PluginDescriptor) : FilePackageCurationProvider(
+    descriptor,
+    FilePackageCurationProviderConfig(
+        path = ortConfigDirectory.resolve(ORT_PACKAGE_CURATIONS_DIRNAME).absolutePath,
+        mustExist = false
+    )
+)
 
 /**
  * A [PackageCurationProvider] that loads [PackageCuration]s from all given curation files. Supports all file formats
  * specified in [FileFormat].
  */
-class FilePackageCurationProvider(
-    vararg paths: File?
-) : SimplePackageCurationProvider(readCurationFiles(paths.filterNotNull())) {
-    constructor(config: FilePackageCurationProviderConfig) : this(
-        config.path.takeUnless { !it.exists() && !config.mustExist }
+@OrtPlugin(
+    name = "File Package Curation Provider",
+    description = "A package curation provider that loads package curations from files.",
+    factory = PackageCurationProviderFactory::class
+)
+open class FilePackageCurationProvider(descriptor: PluginDescriptor, vararg paths: File?) :
+    SimplePackageCurationProvider(descriptor, readCurationFiles(paths.filterNotNull())) {
+    constructor(descriptor: PluginDescriptor, config: FilePackageCurationProviderConfig) : this(
+        descriptor,
+        File(config.path).takeUnless { !it.exists() && !config.mustExist }
     )
+
+    constructor(vararg paths: File?) : this(FilePackageCurationProviderFactory().descriptor, *paths)
 
     companion object {
         /**
