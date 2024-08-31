@@ -40,6 +40,7 @@ class PluginProcessor(codeGenerator: CodeGenerator) : SymbolProcessor {
     private val specFactory = PluginSpecFactory()
     private val factoryGenerator = PluginFactoryGenerator(codeGenerator)
     private val jsonGenerator = JsonSpecGenerator(codeGenerator)
+    private val serviceLoaderGenerator = ServiceLoaderGenerator(codeGenerator)
 
     /**
      * Process all classes annotated with [OrtPlugin] to generate plugin factories for them.
@@ -53,6 +54,8 @@ class PluginProcessor(codeGenerator: CodeGenerator) : SymbolProcessor {
         requireNotNull(ortPluginClassName) {
             "Could not get qualified name of OrtPlugin annotation."
         }
+
+        val serviceLoaderSpecs = mutableListOf<ServiceLoaderSpec>()
 
         resolver.getSymbolsWithAnnotation(ortPluginClassName).forEach { pluginClass ->
             require(pluginClass is KSClassDeclaration) {
@@ -68,9 +71,11 @@ class PluginProcessor(codeGenerator: CodeGenerator) : SymbolProcessor {
             checkExtendsPluginClass(pluginClass, pluginParentClass)
 
             val pluginSpec = specFactory.create(pluginAnnotation, pluginClass, pluginFactoryClass)
-            factoryGenerator.generate(pluginSpec)
+            serviceLoaderSpecs += factoryGenerator.generate(pluginSpec)
             jsonGenerator.generate(pluginSpec)
         }
+
+        serviceLoaderGenerator.generate(serviceLoaderSpecs)
 
         invoked = true
 
