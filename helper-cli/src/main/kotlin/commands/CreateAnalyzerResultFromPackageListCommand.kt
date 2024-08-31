@@ -51,9 +51,9 @@ import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.model.orEmpty
-import org.ossreviewtoolkit.model.utils.setPackageCurations
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProviderFactory
 import org.ossreviewtoolkit.utils.common.expandTilde
+import org.ossreviewtoolkit.utils.config.setPackageCurations
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory

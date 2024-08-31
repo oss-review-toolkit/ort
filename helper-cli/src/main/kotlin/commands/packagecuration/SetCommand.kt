@@ -28,10 +28,10 @@ import com.github.ajalt.clikt.parameters.types.file
 import org.ossreviewtoolkit.helper.utils.readOrtResult
 import org.ossreviewtoolkit.helper.utils.writeOrtResult
 import org.ossreviewtoolkit.model.ResolvedPackageCurations.Companion.REPOSITORY_CONFIGURATION_PROVIDER_ID
-import org.ossreviewtoolkit.model.utils.setPackageCurations
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.SimplePackageCurationProvider
 import org.ossreviewtoolkit.plugins.packagecurationproviders.file.FilePackageCurationProvider
 import org.ossreviewtoolkit.utils.common.expandTilde
+import org.ossreviewtoolkit.utils.config.setPackageCurations
 
 internal class SetCommand : CliktCommand(
     help = "(Re-)set all package curations for a given ORT file to the curations specified via package curations " +

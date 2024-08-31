@@ -58,9 +58,6 @@ import org.ossreviewtoolkit.model.readValueOrDefault
 import org.ossreviewtoolkit.model.utils.CompositePackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
-import org.ossreviewtoolkit.model.utils.setPackageConfigurations
-import org.ossreviewtoolkit.model.utils.setPackageCurations
-import org.ossreviewtoolkit.model.utils.setResolutions
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
 import org.ossreviewtoolkit.plugins.commands.api.utils.SeverityStatsPrinter
 import org.ossreviewtoolkit.plugins.commands.api.utils.configurationGroup
@@ -75,6 +72,9 @@ import org.ossreviewtoolkit.plugins.packagecurationproviders.api.SimplePackageCu
 import org.ossreviewtoolkit.plugins.packagecurationproviders.file.FilePackageCurationProvider
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.safeMkdirs
+import org.ossreviewtoolkit.utils.config.setPackageConfigurations
+import org.ossreviewtoolkit.utils.config.setPackageCurations
+import org.ossreviewtoolkit.utils.config.setResolutions
 import org.ossreviewtoolkit.utils.ort.ORT_COPYRIGHT_GARBAGE_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_EVALUATOR_RULES_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_LICENSE_CLASSIFICATIONS_FILENAME

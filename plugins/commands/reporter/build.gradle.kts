@@ -33,6 +33,7 @@ dependencies {
     implementation(projects.model)
     implementation(projects.reporter)
     implementation(projects.utils.commonUtils)
+    implementation(projects.utils.configUtils)
     implementation(projects.utils.ortUtils)
 
     implementation(libs.clikt)

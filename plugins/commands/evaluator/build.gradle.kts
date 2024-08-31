@@ -35,6 +35,7 @@ dependencies {
     implementation(projects.evaluator)
     implementation(projects.model)
     implementation(projects.utils.commonUtils)
+    implementation(projects.utils.configUtils)
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxUtils)
 
