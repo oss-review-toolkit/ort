@@ -19,4 +19,3 @@ ENV SWIFT_HOME=/opt/swift
 ENV PATH=$PATH:$SWIFT_HOME/bin
 COPY --from=ghcr.io/oss-review-toolkit/swift --chown=$USER:$USER $SWIFT_HOME $SWIFT_HOME
 
-RUN syft $SWIFT_HOME -o spdx-json --file /usr/share/doc/ort/ort-swift.spdx.json

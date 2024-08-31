@@ -23,4 +23,3 @@ ENV PATH=$PATH:$ANDROID_HOME/platform-tools
 COPY --from=ghcr.io/oss-review-toolkit/android --chown=$USER:$USER $ANDROID_HOME $ANDROID_HOME
 RUN sudo chmod -R o+rw $ANDROID_HOME
 
-RUN syft $ANDROID_HOME -o spdx-json --file /usr/share/doc/ort/ort-android.spdx.json

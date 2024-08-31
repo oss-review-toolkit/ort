@@ -63,6 +63,7 @@ jobs:
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ github.repository_owner }}/ort:cache
           cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ github.repository_owner }}/ort:cache,mode=max
           build-args: ORT_VERSION=${{ env.ORT_VERSION }}
+          sbom: true
       - name: Build 'ort' Docker Image
         if: ${{ github.event_name == 'pull_request' }}
         uses: docker/build-push-action@5cd11c3a4ced054e52742c5fd54dca954e0edd85 # v6
@@ -72,6 +73,7 @@ jobs:
           labels: ${{ steps.meta-ort.outputs.labels }}
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ github.repository_owner }}/ort:cache
           build-args: ORT_VERSION=${{ env.ORT_VERSION }}
+          sbom: true
       - name: Extract Metadata for 'ort-minimal' Docker Image
         id: meta-ort-minimal
         uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81 # v5
@@ -96,5 +98,6 @@ jobs:
           target: minimal
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ github.repository_owner }}/ort:cache
           build-args: ORT_VERSION=${{ env.ORT_VERSION }}
+          sbom: true
       - name: Print Disk Space
         run: df -h

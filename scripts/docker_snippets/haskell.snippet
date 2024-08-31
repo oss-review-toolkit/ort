@@ -20,5 +20,3 @@ ENV HASKELL_HOME=/opt/haskell
 ENV PATH=$PATH:$HASKELL_HOME/bin
 
 COPY --from=ghcr.io/oss-review-toolkit/haskell /opt/haskell /opt/haskell
-
-RUN syft /opt/haskell -o spdx-json --file /usr/share/doc/ort/ort-haskell.spdx.json
