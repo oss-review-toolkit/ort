@@ -21,7 +21,6 @@ package org.ossreviewtoolkit.plugins.packagecurationproviders.api
 
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCuration
-import org.ossreviewtoolkit.model.utils.PackageCurationProvider
 
 /**
  * A [PackageCurationProvider] that provides the specified [packageCurations].
