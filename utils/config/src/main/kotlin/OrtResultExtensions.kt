@@ -21,8 +21,8 @@ package org.ossreviewtoolkit.utils.config
 
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
-import org.ossreviewtoolkit.model.utils.PackageCurationProvider
 import org.ossreviewtoolkit.model.utils.ResolutionProvider
+import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProvider
 
 /**
  * Replace the package configurations in [OrtResult.resolvedConfiguration] with the ones obtained from

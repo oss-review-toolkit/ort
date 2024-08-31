@@ -23,7 +23,6 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.ResolvedPackageCurations.Companion.REPOSITORY_CONFIGURATION_PROVIDER_ID
 import org.ossreviewtoolkit.model.config.ProviderPluginConfiguration
-import org.ossreviewtoolkit.model.utils.PackageCurationProvider
 import org.ossreviewtoolkit.utils.common.Plugin
 import org.ossreviewtoolkit.utils.common.TypedConfigurablePluginFactory
 import org.ossreviewtoolkit.utils.common.getDuplicates
