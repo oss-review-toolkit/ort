@@ -30,5 +30,3 @@ RUN mkdir -p /opt/php/bin \
     && curl -ksS https://getcomposer.org/installer | php -- --install-dir=/opt/php/bin --filename=composer --$COMPOSER_VERSION
 
 ENV PATH=$PATH:/opt/php/bin
-
-RUN syft /opt/php -o spdx-json --file /usr/share/doc/ort/ort-php.spdx.json

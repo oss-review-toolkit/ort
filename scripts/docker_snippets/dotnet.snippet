@@ -21,4 +21,3 @@ ENV PATH=$PATH:$DOTNET_HOME:$DOTNET_HOME/tools:$DOTNET_HOME/bin
 
 COPY --from=ghcr.io/oss-review-toolkit/dotnet --chown=$USER:$USER $DOTNET_HOME $DOTNET_HOME
 
-RUN syft $DOTNET_HOME -o spdx-json --file /usr/share/doc/ort/ort-dotnet.spdx.json

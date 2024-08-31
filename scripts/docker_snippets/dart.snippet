@@ -19,4 +19,3 @@ ENV DART_SDK=/opt/dart-sdk
 ENV PATH=$PATH:$DART_SDK/bin
 COPY --from=ghcr.io/oss-review-toolkit/dart --chown=$USER:$USER $DART_SDK $DART_SDK
 
-RUN syft $DART_SDK -o spdx-json --file /usr/share/doc/ort/ort-golang.dart.json

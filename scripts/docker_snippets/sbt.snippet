@@ -19,4 +19,3 @@ ENV SBT_HOME=/opt/sbt
 ENV PATH=$PATH:$SBT_HOME/bin
 COPY --from=ghcr.io/oss-review-toolkit/sbt --chown=$USER:$USER $SBT_HOME $SBT_HOME
 
-RUN syft $SBT_HOME -o spdx-json --file /usr/share/doc/ort/ort-sbt.spdx.json
