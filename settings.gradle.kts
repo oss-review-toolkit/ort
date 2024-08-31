@@ -43,6 +43,7 @@ include(":notifier")
 include(":reporter")
 include(":scanner")
 include(":utils:common")
+include(":utils:config")
 include(":utils:ort")
 include(":utils:scripting")
 include(":utils:spdx")
@@ -58,6 +59,7 @@ project(":clients:osv").name = "osv-client"
 project(":clients:vulnerable-code").name = "vulnerable-code-client"
 
 project(":utils:common").name = "common-utils"
+project(":utils:config").name = "config-utils"
 project(":utils:ort").name = "ort-utils"
 project(":utils:scripting").name = "scripting-utils"
 project(":utils:spdx").name = "spdx-utils"

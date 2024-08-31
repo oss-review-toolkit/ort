@@ -39,6 +39,7 @@ dependencies {
     implementation(projects.plugins.packageCurationProviders.filePackageCurationProvider)
 
     implementation(projects.scanner)
+    implementation(projects.utils.configUtils)
     implementation(projects.utils.ortUtils)
 
     implementation(libs.clikt)

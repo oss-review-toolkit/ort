@@ -27,45 +27,6 @@ import org.ossreviewtoolkit.model.licenses.DefaultLicenseInfoProvider
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 
 /**
- * Replace the package configurations in [OrtResult.resolvedConfiguration] with the ones obtained from
- * [packageConfigurationProvider].
- */
-fun OrtResult.setPackageConfigurations(packageConfigurationProvider: PackageConfigurationProvider): OrtResult {
-    val packageConfigurations = ConfigurationResolver.resolvePackageConfigurations(
-        identifiers = getUncuratedPackages().mapTo(mutableSetOf()) { it.id },
-        scanResultProvider = { id -> getScanResultsForId(id) },
-        packageConfigurationProvider = packageConfigurationProvider
-    )
-
-    return copy(resolvedConfiguration = resolvedConfiguration.copy(packageConfigurations = packageConfigurations))
-}
-
-/**
- * Replace the package curations in [OrtResult.resolvedConfiguration] with the ones obtained from
- * [packageCurationProviders]. The [packageCurationProviders] must be ordered highest-priority-first.
- */
-fun OrtResult.setPackageCurations(packageCurationProviders: List<Pair<String, PackageCurationProvider>>): OrtResult {
-    val packageCurations =
-        ConfigurationResolver.resolvePackageCurations(getUncuratedPackages(), packageCurationProviders)
-
-    return copy(resolvedConfiguration = resolvedConfiguration.copy(packageCurations = packageCurations))
-}
-
-/**
- * Replace the resolutions in [OrtResult.resolvedConfiguration] with the ones obtained from [resolutionProvider].
- */
-fun OrtResult.setResolutions(resolutionProvider: ResolutionProvider): OrtResult {
-    val resolutions = ConfigurationResolver.resolveResolutions(
-        issues = getIssues().values.flatten(),
-        ruleViolations = getRuleViolations(),
-        vulnerabilities = getVulnerabilities().values.flatten(),
-        resolutionProvider = resolutionProvider
-    )
-
-    return copy(resolvedConfiguration = resolvedConfiguration.copy(resolutions = resolutions))
-}
-
-/**
  * Create a [LicenseInfoResolver] for [this] [OrtResult]. If the resolver is used multiple times it should be stored
  * instead of calling this function multiple times for better performance.
  */

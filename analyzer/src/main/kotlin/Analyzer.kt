@@ -47,9 +47,9 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.model.utils.PackageCurationProvider
-import org.ossreviewtoolkit.model.utils.setPackageCurations
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
+import org.ossreviewtoolkit.utils.config.setPackageCurations
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.runBlocking
 
