@@ -21,11 +21,12 @@ package org.ossreviewtoolkit.plugins.packagecurationproviders.api
 
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCuration
+import org.ossreviewtoolkit.plugins.api.Plugin
 
 /**
  * A provider for [PackageCuration]s.
  */
-fun interface PackageCurationProvider {
+interface PackageCurationProvider : Plugin {
     /**
      * Return all available [PackageCuration]s which are applicable to any of the given [packages].
      */

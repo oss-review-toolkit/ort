@@ -19,12 +19,14 @@
 
 plugins {
     // Apply precompiled plugins.
-    id("ort-library-conventions")
+    id("ort-plugin-conventions")
 }
 
 dependencies {
     api(projects.clients.clearlyDefinedClient)
     api(projects.plugins.packageCurationProviders.packageCurationProviderApi)
+
+    ksp(projects.plugins.packageCurationProviders.packageCurationProviderApi)
 
     testImplementation(libs.wiremock)
 }

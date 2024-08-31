@@ -31,11 +31,12 @@ import kotlin.time.Duration.Companion.seconds
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
     "The production server" should {
-        val provider = ClearlyDefinedPackageCurationProvider()
+        val provider = ClearlyDefinedPackageCurationProviderFactory().create(PluginConfig())
 
         "return an existing curation for the javax.servlet-api Maven package" {
             val packages = createPackagesFromIds("Maven:javax.servlet:javax.servlet-api:3.1.0")
@@ -76,7 +77,10 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
                 serverUrl = Server.PRODUCTION.apiUrl,
                 minTotalLicenseScore = 80
             )
-            val provider = ClearlyDefinedPackageCurationProvider(config)
+            val provider = ClearlyDefinedPackageCurationProvider(
+                ClearlyDefinedPackageCurationProviderFactory().descriptor,
+                config
+            )
 
             // Use an id which is known to have non-empty results from an earlier test.
             val packages = createPackagesFromIds("Maven:org.slf4j:slf4j-log4j12:1.7.30")
@@ -89,7 +93,7 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
         }
 
         "be retrieved for packages without a namespace" {
-            val provider = ClearlyDefinedPackageCurationProvider()
+            val provider = ClearlyDefinedPackageCurationProviderFactory().create(PluginConfig())
             val packages = createPackagesFromIds("NPM::acorn:0.6.0")
 
             withRetry {

@@ -26,14 +26,17 @@ import io.kotest.matchers.shouldNot
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.plugins.api.PluginConfig
 
 class OrtConfigPackageCurationProviderFunTest : StringSpec({
+    fun createProvider() = OrtConfigPackageCurationProviderFactory().create(PluginConfig())
+
     "The provider succeeds to return known curations for packages" {
         val azureCore = Identifier("NuGet:Azure:Core:1.22.0")
         val azureCoreAmqp = Identifier("NuGet:Azure.Core:Amqp:1.2.0")
         val packages = createPackagesFromIds(azureCore, azureCoreAmqp)
 
-        val curations = OrtConfigPackageCurationProvider().getCurationsFor(packages)
+        val curations = createProvider().getCurationsFor(packages)
 
         curations.filter { it.isApplicable(azureCore) } shouldNot beEmpty()
         curations.filter { it.isApplicable(azureCoreAmqp) } shouldNot beEmpty()
@@ -43,7 +46,7 @@ class OrtConfigPackageCurationProviderFunTest : StringSpec({
         val xrd4j = Identifier("Maven:org.niis.xrd4j:foo:0.0.0")
         val packages = createPackagesFromIds(xrd4j)
 
-        val curations = OrtConfigPackageCurationProvider().getCurationsFor(packages)
+        val curations = createProvider().getCurationsFor(packages)
 
         curations.filter { it.isApplicable(xrd4j) } shouldNot beEmpty()
     }
@@ -51,7 +54,7 @@ class OrtConfigPackageCurationProviderFunTest : StringSpec({
     "The provider does not fail for packages which have no curations" {
         val packages = createPackagesFromIds(Identifier("Some:Bogus:Package:Id"))
 
-        val curations = OrtConfigPackageCurationProvider().getCurationsFor(packages)
+        val curations = createProvider().getCurationsFor(packages)
 
         curations should beEmpty()
     }

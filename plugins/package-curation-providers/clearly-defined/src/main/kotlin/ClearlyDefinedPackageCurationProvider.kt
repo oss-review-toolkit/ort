@@ -26,7 +26,6 @@ import okhttp3.OkHttpClient
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
-import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
 import org.ossreviewtoolkit.clients.clearlydefined.ComponentType
 import org.ossreviewtoolkit.clients.clearlydefined.Coordinates
 import org.ossreviewtoolkit.clients.clearlydefined.SourceLocation
@@ -41,9 +40,11 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfoCurationData
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedCoordinates
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.OrtPluginOption
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProvider
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProviderFactory
-import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.runBlocking
@@ -57,40 +58,32 @@ data class ClearlyDefinedPackageCurationProviderConfig(
     /**
      * The URL of the ClearlyDefined server to use.
      */
+    @OrtPluginOption(defaultValue = "https://api.clearlydefined.io")
     val serverUrl: String,
 
     /**
      * The minimum total score for a curation to be accepted. Must lie within 0 to 100.
      */
+    @OrtPluginOption(defaultValue = "0")
     val minTotalLicenseScore: Int
 )
-
-class ClearlyDefinedPackageCurationProviderFactory :
-    PackageCurationProviderFactory<ClearlyDefinedPackageCurationProviderConfig> {
-    override val type = "ClearlyDefined"
-
-    override fun create(config: ClearlyDefinedPackageCurationProviderConfig) =
-        ClearlyDefinedPackageCurationProvider(config)
-
-    override fun parseConfig(options: Options, secrets: Options) =
-        ClearlyDefinedPackageCurationProviderConfig(
-            serverUrl = options["serverUrl"] ?: Server.PRODUCTION.apiUrl,
-            minTotalLicenseScore = options["minTotalLicenseScore"]?.toInt() ?: 0
-        )
-}
 
 /**
  * A provider for curated package metadata from the [ClearlyDefined](https://clearlydefined.io/) service.
  */
+@OrtPlugin(
+    name = "ClearlyDefined",
+    description = "Provides package curation data from the ClearlyDefined service.",
+    factory = PackageCurationProviderFactory::class
+)
 class ClearlyDefinedPackageCurationProvider(
+    override val descriptor: PluginDescriptor,
     private val config: ClearlyDefinedPackageCurationProviderConfig,
     client: OkHttpClient? = null
 ) : PackageCurationProvider {
-    constructor(serverUrl: String, client: OkHttpClient? = null) : this(
-        ClearlyDefinedPackageCurationProviderConfig(serverUrl, minTotalLicenseScore = 0), client
+    constructor(descriptor: PluginDescriptor, config: ClearlyDefinedPackageCurationProviderConfig) : this(
+        descriptor, config, null
     )
-
-    constructor(server: Server = Server.PRODUCTION) : this(server.apiUrl)
 
     private val service by lazy {
         ClearlyDefinedService.create(config.serverUrl, client ?: OkHttpClientHelper.buildClient())

@@ -39,41 +39,78 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.PackageCurationData
 import org.ossreviewtoolkit.model.RemoteArtifact
-import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.orEmpty
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.OrtPluginOption
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
+import org.ossreviewtoolkit.plugins.api.Secret
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProvider
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProviderFactory
-import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
-class Sw360PackageCurationProviderFactory : PackageCurationProviderFactory<Sw360StorageConfiguration> {
-    override val type = "SW360"
+/**
+ * A class to hold the configuration for SW360.
+ */
+data class Sw360PackageCurationProviderConfig(
+    /**
+     * The REST API URL of SW360.
+     */
+    val restUrl: String,
 
-    override fun create(config: Sw360StorageConfiguration) = Sw360PackageCurationProvider(config)
+    /**
+     * The authentication URL of your SW360 instance.
+     */
+    val authUrl: String,
 
-    override fun parseConfig(options: Options, secrets: Options) =
-        Sw360StorageConfiguration(
-            restUrl = options.getValue("restUrl"),
-            authUrl = options.getValue("authUrl"),
-            username = secrets.getValue("username"),
-            password = secrets["password"].orEmpty(),
-            clientId = secrets.getValue("clientId"),
-            clientPassword = secrets["clientPassword"].orEmpty(),
-            token = secrets["token"].orEmpty()
-        )
-}
+    /**
+     * The username for the requests to SW360.
+     */
+    val username: Secret,
+
+    /**
+     * The password of the SW360 user.
+     */
+    @OrtPluginOption(defaultValue = "")
+    val password: Secret,
+
+    /**
+     * The client ID of the SW360 instance for the two-step authentication.
+     */
+    val clientId: Secret,
+
+    /**
+     * The password of the client ID.
+     */
+    @OrtPluginOption(defaultValue = "")
+    val clientPassword: Secret,
+
+    /**
+     * Optional access token that can be used instead of the [authUrl], [username], [password], [clientId] and
+     * [clientPassword] if the token is already known.
+     */
+    @OrtPluginOption(defaultValue = "")
+    val token: Secret
+)
 
 /**
  * A [PackageCurationProvider] for curated package metadata from the configured SW360 instance using the REST API.
  */
-class Sw360PackageCurationProvider(config: Sw360StorageConfiguration) : PackageCurationProvider {
+@OrtPlugin(
+    name = "SW360 Package Curation Provider",
+    description = "Provides package metadata from the configured SW360 instance using the REST API.",
+    factory = PackageCurationProviderFactory::class
+)
+class Sw360PackageCurationProvider(
+    override val descriptor: PluginDescriptor,
+    config: Sw360PackageCurationProviderConfig
+) : PackageCurationProvider {
     companion object {
         val JSON_MAPPER: ObjectMapper = jsonMapper.copy()
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 
-        fun createConnection(config: Sw360StorageConfiguration): SW360Connection {
+        fun createConnection(config: Sw360PackageCurationProviderConfig): SW360Connection {
             val httpClientConfig = HttpClientConfig
                 .basicConfig()
                 .withObjectMapper(JSON_MAPPER)
@@ -83,11 +120,11 @@ class Sw360PackageCurationProvider(config: Sw360StorageConfiguration) : PackageC
             val sw360ClientConfig = SW360ClientConfig.createConfig(
                 config.restUrl,
                 config.authUrl,
-                config.username,
-                config.password,
-                config.clientId,
-                config.clientPassword,
-                config.token,
+                config.username.value,
+                config.password.value,
+                config.clientId.value,
+                config.clientPassword.value,
+                config.token.value,
                 httpClient,
                 JSON_MAPPER
             )
