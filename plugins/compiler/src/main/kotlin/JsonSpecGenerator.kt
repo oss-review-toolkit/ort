@@ -40,8 +40,8 @@ class JsonSpecGenerator(private val codeGenerator: CodeGenerator) {
     fun generate(pluginSpec: PluginSpec) {
         val jsonObject = buildJsonObject {
             putJsonObject("descriptor") {
-                put("displayName", pluginSpec.descriptor.displayName)
                 put("id", pluginSpec.descriptor.id)
+                put("displayName", pluginSpec.descriptor.displayName)
                 put("description", pluginSpec.descriptor.description)
 
                 putJsonArray("options") {
