@@ -86,7 +86,7 @@ class Advisor(
 
                         logger.info {
                             "Found ${providerResults.values.flatMap { it.vulnerabilities }.distinct().size} distinct " +
-                                "vulnerabilities via ${provider.descriptor.name}. "
+                                "vulnerabilities via ${provider.descriptor.displayName}. "
                         }
 
                         providerResults.keys.takeIf { it.isNotEmpty() }?.let { pkgs ->

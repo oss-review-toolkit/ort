@@ -113,7 +113,7 @@ class OssIndex(override val descriptor: PluginDescriptor, config: OssIndexConfig
                     ComponentReport(purl, reference = "", vulnerabilities = emptyList())
                 }
 
-                issues += Issue(source = descriptor.name, message = it.collectMessages())
+                issues += Issue(source = descriptor.displayName, message = it.collectMessages())
             }
         }
 
