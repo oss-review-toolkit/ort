@@ -132,7 +132,7 @@ class NexusIq(override val descriptor: PluginDescriptor, private val config: Nex
                     component.packageUrl to ComponentDetails(component, SecurityData(emptyList()))
                 }
 
-                issues += Issue(source = descriptor.name, message = it.collectMessages())
+                issues += Issue(source = descriptor.displayName, message = it.collectMessages())
             }
         }
 

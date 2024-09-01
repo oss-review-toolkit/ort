@@ -111,7 +111,7 @@ class VulnerableCode(override val descriptor: PluginDescriptor, config: Vulnerab
                 // issues that are not associated to any package.
                 allVulnerabilities += chunk.associateWith { emptyList() }
 
-                issues += Issue(source = descriptor.name, message = it.collectMessages())
+                issues += Issue(source = descriptor.displayName, message = it.collectMessages())
 
                 logger.error {
                     "The request of chunk ${index + 1} of ${chunks.size} failed for the following ${chunk.size} " +
@@ -161,7 +161,11 @@ class VulnerableCode(override val descriptor: PluginDescriptor, config: Vulnerab
                 VulnerabilityReference(sourceUri, it.scoringSystem, severity)
             }
         }.onFailure {
-            issues += createAndLogIssue(descriptor.name, "Failed to map $this to ORT model due to $it.", Severity.HINT)
+            issues += createAndLogIssue(
+                descriptor.displayName,
+                "Failed to map $this to ORT model due to $it.",
+                Severity.HINT
+            )
         }.getOrElse { emptyList() }
 
     /**
