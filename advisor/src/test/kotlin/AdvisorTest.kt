@@ -148,7 +148,7 @@ private fun createPackage(index: Int): Package =
 
 private fun mockkAdviceProvider(): AdviceProvider =
     mockk<AdviceProvider>().apply {
-        every { descriptor } returns PluginDescriptor("provider", "Provider", "", emptyList())
+        every { descriptor } returns PluginDescriptor("Provider", "provider", "", emptyList())
     }
 
 private fun mockkAdvisorResult(): AdvisorResult =

@@ -148,14 +148,14 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
             add(
                 """
                 PluginDescriptor(
-                    displayName = %S,
                     id = %S,
+                    displayName = %S,
                     description = %S,
                     options = listOf(
             
                 """.trimIndent(),
-                descriptor.displayName,
                 descriptor.id,
+                descriptor.displayName,
                 descriptor.description
             )
 
