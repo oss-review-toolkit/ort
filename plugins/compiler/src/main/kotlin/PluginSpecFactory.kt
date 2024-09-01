@@ -45,6 +45,7 @@ class PluginSpecFactory {
     fun create(
         ortPlugin: OrtPlugin,
         pluginClass: KSClassDeclaration,
+        pluginParentClass: KSClassDeclaration,
         pluginFactoryClass: KSClassDeclaration
     ): PluginSpec {
         val pluginType = pluginClass.asType(emptyList()).toTypeName()
@@ -63,7 +64,7 @@ class PluginSpecFactory {
         return PluginSpec(
             containingFile = pluginClass.containingFile,
             descriptor = PluginDescriptor(
-                id = pluginClass.simpleName.asString(),
+                id = pluginClass.simpleName.asString().removeSuffix(pluginParentClass.simpleName.asString()),
                 displayName = ortPlugin.name,
                 description = ortPlugin.description,
                 options = pluginOptions
