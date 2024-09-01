@@ -24,12 +24,12 @@ package org.ossreviewtoolkit.plugins.api
  */
 data class PluginDescriptor(
     /**
-     * The display name of the plugin. Must be unique among all plugins for the same factory class.
+     * The display name of the plugin.
      */
     val displayName: String,
 
     /**
-     * The name of the plugin class.
+     * The name of the plugin class. Must be unique among all plugins for the same factory class.
      */
     val className: String,
 
