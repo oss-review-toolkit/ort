@@ -76,7 +76,7 @@ class Advisor(
                 logger.info { "There are no packages to give advice for." }
             } else {
                 val providers = providerFactories.map {
-                    val providerConfig = config.config?.get(it.descriptor.className)
+                    val providerConfig = config.config?.get(it.descriptor.id)
                     it.create(PluginConfig(providerConfig?.options.orEmpty(), providerConfig?.secrets.orEmpty()))
                 }
 

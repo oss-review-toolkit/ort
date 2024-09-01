@@ -35,7 +35,7 @@ interface PluginFactory<out PLUGIN : Plugin> {
                 .iterator()
                 .asSequence()
                 .associateByTo(sortedMapOf(String.CASE_INSENSITIVE_ORDER)) {
-                    it.descriptor.className
+                    it.descriptor.id
                 }
     }
 

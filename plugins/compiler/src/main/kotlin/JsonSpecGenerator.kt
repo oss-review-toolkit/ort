@@ -41,7 +41,7 @@ class JsonSpecGenerator(private val codeGenerator: CodeGenerator) {
         val jsonObject = buildJsonObject {
             putJsonObject("descriptor") {
                 put("displayName", pluginSpec.descriptor.displayName)
-                put("className", pluginSpec.descriptor.className)
+                put("id", pluginSpec.descriptor.id)
                 put("description", pluginSpec.descriptor.description)
 
                 putJsonArray("options") {
@@ -63,7 +63,7 @@ class JsonSpecGenerator(private val codeGenerator: CodeGenerator) {
 
         codeGenerator.createNewFileByPath(
             dependencies = Dependencies(aggregating = true, *listOfNotNull(pluginSpec.containingFile).toTypedArray()),
-            path = "META-INF/plugin/${pluginSpec.packageName}.${pluginSpec.descriptor.className}",
+            path = "META-INF/plugin/${pluginSpec.packageName}.${pluginSpec.descriptor.id}",
             extensionName = "json"
         ).use { output ->
             json.encodeToStream(jsonObject, output)

@@ -84,7 +84,7 @@ private val READ_TIMEOUT = Duration.ofSeconds(60)
     factory = AdviceProviderFactory::class
 )
 class NexusIq(override val descriptor: PluginDescriptor, private val config: NexusIqConfiguration) : AdviceProvider {
-    override val details = AdvisorDetails(descriptor.className, enumSetOf(AdvisorCapability.VULNERABILITIES))
+    override val details = AdvisorDetails(descriptor.id, enumSetOf(AdvisorCapability.VULNERABILITIES))
 
     private val service by lazy {
         NexusIqService.create(

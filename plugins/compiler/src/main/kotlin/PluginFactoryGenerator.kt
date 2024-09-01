@@ -75,7 +75,7 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
         }.build()
 
         // Create the factory class.
-        val className = "${pluginSpec.descriptor.className}Factory"
+        val className = "${pluginSpec.descriptor.id}Factory"
         val classSpec = TypeSpec.classBuilder(className)
             .addSuperinterface(pluginSpec.factory.typeName)
             .addProperty(descriptorProperty)
@@ -83,7 +83,7 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
             .build()
 
         // Write the factory class to a file.
-        FileSpec.builder(ClassName(pluginSpec.packageName, "${pluginSpec.descriptor.className}Factory"))
+        FileSpec.builder(ClassName(pluginSpec.packageName, "${pluginSpec.descriptor.id}Factory"))
             .addType(classSpec)
             .build()
             .writeTo(codeGenerator, aggregating = true, originatingKSFiles = listOfNotNull(pluginSpec.containingFile))
@@ -149,13 +149,13 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
                 """
                 PluginDescriptor(
                     displayName = %S,
-                    className = %S,
+                    id = %S,
                     description = %S,
                     options = listOf(
             
                 """.trimIndent(),
                 descriptor.displayName,
-                descriptor.className,
+                descriptor.id,
                 descriptor.description
             )
 
