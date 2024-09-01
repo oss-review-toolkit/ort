@@ -70,7 +70,7 @@ class PluginProcessor(codeGenerator: CodeGenerator) : SymbolProcessor {
             val pluginParentClass = getPluginParentClass(pluginFactoryClass)
             checkExtendsPluginClass(pluginClass, pluginParentClass)
 
-            val pluginSpec = specFactory.create(pluginAnnotation, pluginClass, pluginFactoryClass)
+            val pluginSpec = specFactory.create(pluginAnnotation, pluginClass, pluginParentClass, pluginFactoryClass)
             serviceLoaderSpecs += factoryGenerator.generate(pluginSpec)
             jsonGenerator.generate(pluginSpec)
         }
