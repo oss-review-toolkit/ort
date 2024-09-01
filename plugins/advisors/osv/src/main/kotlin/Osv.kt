@@ -66,7 +66,7 @@ import us.springett.cvss.Cvss
     factory = AdviceProviderFactory::class
 )
 class Osv(override val descriptor: PluginDescriptor, config: OsvConfiguration) : AdviceProvider {
-    override val details = AdvisorDetails(descriptor.className, enumSetOf(AdvisorCapability.VULNERABILITIES))
+    override val details = AdvisorDetails(descriptor.id, enumSetOf(AdvisorCapability.VULNERABILITIES))
 
     private val service = OsvServiceWrapper(
         serverUrl = config.serverUrl,

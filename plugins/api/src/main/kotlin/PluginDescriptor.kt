@@ -31,7 +31,7 @@ data class PluginDescriptor(
     /**
      * The name of the plugin class. Must be unique among all plugins for the same factory class.
      */
-    val className: String,
+    val id: String,
 
     /**
      * The description of the plugin.

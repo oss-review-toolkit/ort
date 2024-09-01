@@ -80,7 +80,7 @@ class VulnerableCode(override val descriptor: PluginDescriptor, config: Vulnerab
      * The details returned with each [AdvisorResult] produced by this instance. As this is constant, it can be
      * created once beforehand.
      */
-    override val details = AdvisorDetails(descriptor.className, enumSetOf(AdvisorCapability.VULNERABILITIES))
+    override val details = AdvisorDetails(descriptor.id, enumSetOf(AdvisorCapability.VULNERABILITIES))
 
     private val service by lazy {
         val client = OkHttpClientHelper.buildClient {
