@@ -54,8 +54,16 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
 
         // Create the plugin descriptor property.
         val descriptorInitializer = getDescriptorInitializer(pluginSpec.descriptor)
-        val descriptorProperty = PropertySpec.builder("descriptor", PluginDescriptor::class, KModifier.OVERRIDE)
+        val descriptorProperty = PropertySpec.builder("descriptor", PluginDescriptor::class)
             .initializer(descriptorInitializer)
+            .build()
+
+        val companionObject = TypeSpec.companionObjectBuilder()
+            .addProperty(descriptorProperty)
+            .build()
+
+        val descriptorDelegateProperty = PropertySpec.builder("descriptor", PluginDescriptor::class, KModifier.OVERRIDE)
+            .delegate("Companion::descriptor")
             .build()
 
         // Create the create function that initializes the plugin with the descriptor and the config object.
@@ -77,7 +85,8 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
         val className = "${pluginSpec.typeName.toString().substringAfterLast('.')}Factory"
         val classSpec = TypeSpec.classBuilder(className)
             .addSuperinterface(pluginSpec.factory.typeName)
-            .addProperty(descriptorProperty)
+            .addType(companionObject)
+            .addProperty(descriptorDelegateProperty)
             .addFunction(createFunction)
             .build()
 
