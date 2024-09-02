@@ -527,29 +527,29 @@ open class Npm(
             )
         }
 
-    private fun parseProject(packageJson: File): Project {
-        logger.debug { "Parsing project info from '$packageJson'." }
+    private fun parseProject(packageJsonFile: File): Project {
+        logger.debug { "Parsing project info from '$packageJsonFile'." }
 
-        val json = jsonMapper.readTree(packageJson)
+        val json = jsonMapper.readTree(packageJsonFile)
 
         val rawName = json["name"].textValueOrEmpty()
         val (namespace, name) = splitNpmNamespaceAndName(rawName)
 
         val projectName = name.ifBlank {
-            getFallbackProjectName(analysisRoot, packageJson).also {
-                logger.warn { "'$packageJson' does not define a name, falling back to '$it'." }
+            getFallbackProjectName(analysisRoot, packageJsonFile).also {
+                logger.warn { "'$packageJsonFile' does not define a name, falling back to '$it'." }
             }
         }
 
         val version = json["version"].textValueOrEmpty()
         if (version.isBlank()) {
-            logger.warn { "'$packageJson' does not define a version." }
+            logger.warn { "'$packageJsonFile' does not define a version." }
         }
 
         val declaredLicenses = parseNpmLicenses(json)
         val authors = parseNpmAuthors(json)
         val homepageUrl = json["homepage"].textValueOrEmpty()
-        val projectDir = packageJson.parentFile
+        val projectDir = packageJsonFile.parentFile
         val vcsFromPackage = parseNpmVcsInfo(json)
 
         return Project(
@@ -559,7 +559,7 @@ open class Npm(
                 name = projectName,
                 version = version
             ),
-            definitionFilePath = VersionControlSystem.getPathInfo(packageJson).path,
+            definitionFilePath = VersionControlSystem.getPathInfo(packageJsonFile).path,
             authors = authors,
             declaredLicenses = declaredLicenses,
             vcs = vcsFromPackage,
