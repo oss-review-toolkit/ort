@@ -36,7 +36,6 @@ import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.VulnerabilityResolution
 import org.ossreviewtoolkit.model.config.orEmpty
-import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.ResolutionProvider
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.utils.common.zipWithCollections
@@ -89,7 +88,7 @@ data class OrtResult(
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val labels: Map<String, String> = emptyMap()
-) : ResolutionProvider, PackageConfigurationProvider {
+) : ResolutionProvider {
     companion object {
         /**
          * A constant for an [OrtResult] with an empty repository and all other properties `null`.
@@ -363,7 +362,7 @@ data class OrtResult(
     /**
      * Return a list of [PackageConfiguration]s for the given [packageId] and [provenance].
      */
-    override fun getPackageConfigurations(packageId: Identifier, provenance: Provenance): List<PackageConfiguration> =
+    fun getPackageConfigurations(packageId: Identifier, provenance: Provenance): List<PackageConfiguration> =
         packageConfigurationsById[packageId].orEmpty().filter { it.matches(packageId, provenance) }
 
     /**
