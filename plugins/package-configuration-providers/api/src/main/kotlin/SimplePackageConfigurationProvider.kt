@@ -23,7 +23,6 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.VcsMatcher
-import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 
 /**
  * A [PackageConfigurationProvider] that provides the [PackageConfiguration]s specified in the collection. Throws an
