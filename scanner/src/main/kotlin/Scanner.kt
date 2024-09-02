@@ -609,7 +609,7 @@ class Scanner(
                 ScanResult(provenance, scanner.details, summaryWithMappedLicenses)
             }
         } finally {
-            downloadDir.safeDeleteRecursively(force = true)
+            downloadDir.safeDeleteRecursively()
         }
     }
 
@@ -718,7 +718,7 @@ class Scanner(
                         )
                     )
                 } finally {
-                    dir?.safeDeleteRecursively(force = true)
+                    dir?.safeDeleteRecursively()
                 }
             }
         }

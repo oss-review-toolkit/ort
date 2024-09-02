@@ -89,7 +89,7 @@ class MavenFunTest : StringSpec({
         // Delete the parent POM from the local repository to make sure it has to be resolved from Maven central.
         Os.userHomeDirectory
             .resolve(".m2/repository/org/springframework/boot/spring-boot-starter-parent/1.5.3.RELEASE")
-            .safeDeleteRecursively(force = true)
+            .safeDeleteRecursively()
 
         val definitionFile = getAssetFile("projects/synthetic/maven-parent/pom.xml")
         val expectedResultFile = getAssetFile("projects/synthetic/maven-parent-expected-output-root.yml")

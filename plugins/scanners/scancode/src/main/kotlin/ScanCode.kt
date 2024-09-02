@@ -152,7 +152,7 @@ class ScanCode internal constructor(
             // Do not throw yet if the process exited with an error as some errors might turn out to be tolerable during
             // parsing.
 
-            resultFile.readText().also { resultFile.parentFile.safeDeleteRecursively(force = true) }
+            resultFile.readText().also { resultFile.parentFile.safeDeleteRecursively() }
         }
     }
 

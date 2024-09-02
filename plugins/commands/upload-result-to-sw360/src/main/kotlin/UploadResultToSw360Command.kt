@@ -122,7 +122,7 @@ class UploadResultToSw360Command : OrtCommand(
                             logger.error { "Could not upload source attachment: " + uploadResult.failedUploads() }
                         }
                     } finally {
-                        tempDirectory.safeDeleteRecursively(force = true)
+                        tempDirectory.safeDeleteRecursively()
                     }
                 }
 

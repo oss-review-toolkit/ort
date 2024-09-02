@@ -42,7 +42,7 @@ class PythonInspectorFunTest : StringSpec({
                 analyzeSetupPyInsecurely = true
             )
         } finally {
-            workingDir.resolve(".cache").safeDeleteRecursively(force = true)
+            workingDir.resolve(".cache").safeDeleteRecursively()
         }
 
         result.projects should haveSize(2)
@@ -63,7 +63,7 @@ class PythonInspectorFunTest : StringSpec({
                 analyzeSetupPyInsecurely = false
             )
         } finally {
-            workingDir.resolve(".cache").safeDeleteRecursively(force = true)
+            workingDir.resolve(".cache").safeDeleteRecursively()
         }
 
         result.projects should haveSize(1)

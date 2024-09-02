@@ -132,7 +132,7 @@ class Pip(
                     analyzeSetupPyInsecurely = analyzeSetupPyInsecurely
                 )
             } finally {
-                workingDir.resolve(".cache").safeDeleteRecursively(force = true)
+                workingDir.resolve(".cache").safeDeleteRecursively()
             }
         }.onFailure { e ->
             e.showStackTrace()

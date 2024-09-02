@@ -175,7 +175,7 @@ class DosScanner internal constructor(
         val zipFile = tmpDir.resolve(zipName)
 
         sourceDir.packZip(zipFile)
-        sourceDir.safeDeleteRecursively(force = true)
+        sourceDir.safeDeleteRecursively()
 
         val uploadUrl = client.getUploadUrl(zipName)
         if (uploadUrl == null) {

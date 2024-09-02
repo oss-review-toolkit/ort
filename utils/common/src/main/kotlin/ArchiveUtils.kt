@@ -229,7 +229,7 @@ fun File.unpackDeb(targetDirectory: File, filter: (ArchiveEntry) -> Boolean = { 
             file.unpack(subDirectory, filter = filter)
         }
     } finally {
-        tempDir.safeDeleteRecursively(force = true)
+        tempDir.safeDeleteRecursively()
     }
 }
 

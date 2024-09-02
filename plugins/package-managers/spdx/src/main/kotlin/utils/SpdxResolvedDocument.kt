@@ -385,7 +385,7 @@ private fun SpdxExternalDocumentReference.resolveFromDownload(
 
         ResolutionResult(document, uri, verifyChecksum(file, baseUri, managerName))
     } finally {
-        tempDir.safeDeleteRecursively(force = true)
+        tempDir.safeDeleteRecursively()
     }
 }
 

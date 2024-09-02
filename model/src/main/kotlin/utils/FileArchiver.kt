@@ -95,7 +95,7 @@ class FileArchiver(
 
         logger.info { "Wrote archive of directory '$directory' to storage in $writeDuration." }
 
-        zipFile.parentFile.safeDeleteRecursively(force = true)
+        zipFile.parentFile.safeDeleteRecursively()
     }
 
     /**

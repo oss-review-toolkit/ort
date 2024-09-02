@@ -117,12 +117,11 @@ fun File.isSymbolicLink(): Boolean =
 fun File.realFile(): File = toPath().toRealPath().toFile()
 
 /**
- * Delete files recursively without following symbolic links (Unix) or junctions (Windows). If [force] is `true`, files
- * which were not deleted in the first attempt are set to be writable and then tried to be deleted again. If
- * [baseDirectory] is given, all empty parent directories along the path to [baseDirectory] are also deleted;
- * [baseDirectory] itself is not deleted. Throws an [IOException] if a file could not be deleted.
+ * Delete a directory recursively without following symbolic links (Unix) or junctions (Windows). If a [baseDirectory]
+ * is provided, all empty parent directories along the path to [baseDirectory] are also deleted; [baseDirectory] itself
+ * is not deleted. Throws an [IOException] if a directory or file could not be deleted.
  */
-fun File.safeDeleteRecursively(force: Boolean = false, baseDirectory: File? = null) {
+fun File.safeDeleteRecursively(baseDirectory: File? = null) {
     // Note that Kotlin's `File.deleteRecursively()` extension function does not work here to delete files with
     // unmappable characters in their names, so use the `Path.deleteRecursively()` extension function instead.
     toPath().deleteRecursively()

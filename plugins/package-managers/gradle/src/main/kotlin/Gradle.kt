@@ -247,7 +247,7 @@ class Gradle(
                     }
                 }
 
-                initScriptFile.parentFile.safeDeleteRecursively(force = true)
+                initScriptFile.parentFile.safeDeleteRecursively()
 
                 val repositories = dependencyTreeModel.repositories.map {
                     // TODO: Also handle authentication and snapshot policy.

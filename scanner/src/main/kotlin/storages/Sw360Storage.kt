@@ -105,7 +105,7 @@ class Sw360Storage(
             throw ScanStorageException(message)
         }
 
-        tempScanResultFile.safeDeleteRecursively(force = true)
+        tempScanResultFile.safeDeleteRecursively()
 
         return result
     }
@@ -136,7 +136,7 @@ class Sw360Storage(
             throw ScanStorageException(message)
         }
 
-        tempScanResultFile.safeDeleteRecursively(force = true)
+        tempScanResultFile.safeDeleteRecursively()
 
         return result
     }
