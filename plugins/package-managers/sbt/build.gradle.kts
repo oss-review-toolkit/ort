@@ -36,6 +36,6 @@ dependencies {
     implementation(projects.plugins.packageManagers.mavenPackageManager)
     implementation(projects.utils.ortUtils)
 
-    funTestImplementation(projects.downloader)
+    funTestImplementation(projects.plugins.versionControlSystems.gitVersionControlSystem)
     funTestImplementation(testFixtures(projects.analyzer))
 }

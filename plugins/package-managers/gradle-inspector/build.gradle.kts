@@ -40,6 +40,7 @@ dependencies {
 
     implementation("org.gradle:gradle-tooling-api:${gradle.gradleVersion}")
 
+    funTestImplementation(projects.plugins.versionControlSystems.gitVersionControlSystem)
     funTestImplementation(testFixtures(projects.analyzer))
 }
 
