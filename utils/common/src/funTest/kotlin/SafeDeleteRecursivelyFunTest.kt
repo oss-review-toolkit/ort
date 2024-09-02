@@ -20,11 +20,17 @@
 package org.ossreviewtoolkit.utils.common
 
 import io.kotest.assertions.throwables.shouldNotThrow
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.shouldBe
 
 import java.io.IOException
+
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.Git
 
 class SafeDeleteRecursivelyFunTest : WordSpec({
     "File.safeDeleteRecursively()" should {
@@ -41,6 +47,27 @@ class SafeDeleteRecursivelyFunTest : WordSpec({
             }
 
             dir.exists() shouldBe false
+        }
+
+        "be able to delete files with non-UTF8 characters in their name" {
+            val pkg = Package.EMPTY.copy(
+                vcsProcessed = VcsInfo(
+                    VcsType.GIT,
+                    "https://github.com/oss-review-toolkit/ort-test-fork-node-dir.git",
+                    "a57c3b1b571dd91f464ae398090ba40f64ba38a2"
+                )
+            )
+
+            val nodeDir = tempdir().resolve("node-dir")
+            Git().download(pkg, nodeDir)
+
+            // TODO: Fix the implementation so that this does not throw.
+            shouldThrow<IOException> {
+                nodeDir.safeDeleteRecursively(force = true)
+            }
+
+            // TODO: Expect "false" once the implementation is fixed.
+            nodeDir.exists() shouldBe true
         }
 
         "delete empty parent directories below a base directory" {

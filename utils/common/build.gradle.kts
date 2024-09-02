@@ -32,4 +32,6 @@ dependencies {
     implementation(libs.springCore)
 
     runtimeOnly(libs.xz)
+
+    funTestImplementation(projects.plugins.versionControlSystems.gitVersionControlSystem)
 }
