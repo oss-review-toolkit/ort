@@ -41,7 +41,7 @@ data class PluginDescriptor(
     /**
      * The configuration options supported by the plugin.
      */
-    val options: List<PluginOption>
+    val options: List<PluginOption> = emptyList()
 )
 
 /**
