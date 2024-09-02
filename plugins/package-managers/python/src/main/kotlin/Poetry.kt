@@ -126,7 +126,7 @@ class Poetry(
         return Pip(managerName, analysisRoot, analyzerConfig, repoConfig).runPythonInspector(requirementsFile) {
             detectPythonVersion(workingDir)
         }.also {
-            requirementsFile.parentFile.safeDeleteRecursively(force = true)
+            requirementsFile.parentFile.safeDeleteRecursively()
         }
     }
 

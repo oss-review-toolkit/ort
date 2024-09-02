@@ -128,8 +128,8 @@ class Downloader(private val config: DownloaderConfiguration) {
                     "took ${vcsMark.elapsedNow()}."
             }
 
-            // Clean up any left-over files (force to delete read-only files in ".git" directories on Windows).
-            outputDirectory.safeDeleteRecursively(force = true, baseDirectory = outputDirectory)
+            // Clean up any left-over files.
+            outputDirectory.safeDeleteRecursively(baseDirectory = outputDirectory)
 
             exception.addSuppressed(e)
         }
@@ -169,7 +169,7 @@ class Downloader(private val config: DownloaderConfiguration) {
             }
 
             // Clean up any left-over files.
-            outputDirectory.safeDeleteRecursively(force = true, baseDirectory = outputDirectory)
+            outputDirectory.safeDeleteRecursively(baseDirectory = outputDirectory)
 
             exception.addSuppressed(e)
         }
@@ -283,7 +283,7 @@ class Downloader(private val config: DownloaderConfiguration) {
                 }
 
                 // Clean up any files left from the failed VCS download (i.e. a ".git" directory).
-                outputDirectory.safeDeleteRecursively(force = true, baseDirectory = outputDirectory)
+                outputDirectory.safeDeleteRecursively(baseDirectory = outputDirectory)
 
                 val fallbackPkg = pkg.copy(vcsProcessed = pkg.vcsProcessed.copy(url = vcsUrlNoCredentials))
                 applicableVcs.download(fallbackPkg, outputDirectory, config.allowMovingRevisions, recursive)
@@ -331,7 +331,7 @@ class Downloader(private val config: DownloaderConfiguration) {
         } else {
             tempDir = createOrtTempDir()
             okHttpClient.downloadFile(sourceArtifact.url, tempDir).getOrElse {
-                tempDir.safeDeleteRecursively(force = true)
+                tempDir.safeDeleteRecursively()
                 throw DownloadException("Failed to download source artifact from ${sourceArtifact.url}.", it)
             }
         }
@@ -354,7 +354,7 @@ class Downloader(private val config: DownloaderConfiguration) {
                     "Cannot verify source artifact with ${sourceArtifact.hash}, skipping verification."
                 }
             } else if (!sourceArtifact.hash.verify(sourceArchive)) {
-                tempDir?.safeDeleteRecursively(force = true)
+                tempDir?.safeDeleteRecursively()
                 throw DownloadException("Source artifact does not match expected ${sourceArtifact.hash}.")
             }
         }
@@ -369,7 +369,7 @@ class Downloader(private val config: DownloaderConfiguration) {
                     sourceArchive.unpack(gemDirectory)
                     dataFile.unpack(outputDirectory)
                 } finally {
-                    gemDirectory.safeDeleteRecursively(force = true)
+                    gemDirectory.safeDeleteRecursively()
                 }
             } else {
                 sourceArchive.unpackTryAllTypes(outputDirectory)
@@ -379,7 +379,7 @@ class Downloader(private val config: DownloaderConfiguration) {
                 "Could not unpack source artifact '${sourceArchive.absolutePath}': ${e.collectMessages()}"
             }
 
-            tempDir?.safeDeleteRecursively(force = true)
+            tempDir?.safeDeleteRecursively()
             throw DownloadException(e)
         }
 
@@ -387,7 +387,7 @@ class Downloader(private val config: DownloaderConfiguration) {
             "Successfully unpacked ${sourceArtifact.url} to '${outputDirectory.absolutePath}'..."
         }
 
-        tempDir?.safeDeleteRecursively(force = true)
+        tempDir?.safeDeleteRecursively()
         return ArtifactProvenance(sourceArtifact)
     }
 }

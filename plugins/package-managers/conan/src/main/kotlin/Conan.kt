@@ -177,7 +177,7 @@ class Conan(
             }
 
             val pkgInfos = parsePackageInfos(jsonFile)
-            jsonFile.parentFile.safeDeleteRecursively(force = true)
+            jsonFile.parentFile.safeDeleteRecursively()
 
             val packageList = removeProjectPackage(pkgInfos, definitionFile.name)
             val packages = parsePackages(packageList, workingDir)
@@ -334,7 +334,7 @@ class Conan(
             val jsonFile = createOrtTempDir().resolve("inspect.json")
             run(workingDir, "inspect", pkgName, "--json", jsonFile.absolutePath)
             Json.parseToJsonElement(jsonFile.readText()).jsonObject.also {
-                jsonFile.parentFile.safeDeleteRecursively(force = true)
+                jsonFile.parentFile.safeDeleteRecursively()
             }
         }
 

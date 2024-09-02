@@ -42,7 +42,7 @@ class SafeDeleteRecursivelyFunTest : WordSpec({
             }
 
             shouldNotThrow<IOException> {
-                dir.safeDeleteRecursively(force = true)
+                dir.safeDeleteRecursively()
             }
 
             dir.exists() shouldBe false
@@ -61,7 +61,7 @@ class SafeDeleteRecursivelyFunTest : WordSpec({
             Git().download(pkg, nodeDir)
 
             shouldNotThrow<IOException> {
-                nodeDir.safeDeleteRecursively(force = true)
+                nodeDir.safeDeleteRecursively()
             }
 
             nodeDir.exists() shouldBe false
@@ -73,7 +73,7 @@ class SafeDeleteRecursivelyFunTest : WordSpec({
             val deleteDir = baseDir.resolve("c/delete").apply { safeMkdirs() }
 
             shouldNotThrow<IOException> {
-                deleteDir.safeDeleteRecursively(force = true, baseDir)
+                deleteDir.safeDeleteRecursively(baseDir)
             }
 
             deleteDir.exists() shouldBe false

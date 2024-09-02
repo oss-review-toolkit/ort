@@ -76,7 +76,7 @@ internal class VerifySourceArtifactCurationsCommand : CliktCommand(
                     println(message)
                     false
                 } finally {
-                    tempDir.safeDeleteRecursively(force = true)
+                    tempDir.safeDeleteRecursively()
                 }
             } != false
         }

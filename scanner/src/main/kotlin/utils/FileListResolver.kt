@@ -50,7 +50,7 @@ internal class FileListResolver(
             try {
                 storage.putFileList(provenance, it)
             } finally {
-                dir.safeDeleteRecursively(force = true)
+                dir.safeDeleteRecursively()
             }
         }
     }

@@ -87,7 +87,7 @@ class BoyterLc internal constructor(name: String, private val wrapperConfig: Sca
             if (stderr.isNotBlank()) logger.debug { stderr }
             if (isError) throw ScanException(errorMessage)
 
-            resultFile.readText().also { resultFile.parentFile.safeDeleteRecursively(force = true) }
+            resultFile.readText().also { resultFile.parentFile.safeDeleteRecursively() }
         }
     }
 

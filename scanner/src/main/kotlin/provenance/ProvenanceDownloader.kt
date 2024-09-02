@@ -108,7 +108,7 @@ class DefaultProvenanceDownloader(
             // Make sure that all nested repositories are removed. Even though we do not clone recursively above, nested
             // repositories could exist if the same working tree was previously cloned recursively.
             workingTree.getNested().forEach { (path, _) ->
-                root.resolve(path).safeDeleteRecursively(force = true)
+                root.resolve(path).safeDeleteRecursively()
             }
 
             // We need to make a copy of the working tree, because it could be used by another coroutine after this

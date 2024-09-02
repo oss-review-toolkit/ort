@@ -154,7 +154,7 @@ private fun TestConfiguration.createFile(dir: String, content: String): File {
     val parent = File("build/classes/kotlin/test/$dir").safeMkdirs()
 
     afterTest {
-        parent.safeDeleteRecursively(force = true)
+        parent.safeDeleteRecursively()
     }
 
     return File(parent, "Test.kt").apply { writeText(content) }
