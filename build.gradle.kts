@@ -27,7 +27,6 @@ import org.jetbrains.gradle.ext.settings
 
 plugins {
     // Apply third-party plugins.
-    alias(libs.plugins.dependencyAnalysis)
     alias(libs.plugins.gitSemver)
     alias(libs.plugins.ideaExt)
     alias(libs.plugins.versions)
