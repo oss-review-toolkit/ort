@@ -91,7 +91,7 @@ open class FilePackageCurationProvider(descriptor: PluginDescriptor, vararg path
         File(config.path).takeUnless { !it.exists() && !config.mustExist }
     )
 
-    constructor(vararg paths: File?) : this(FilePackageCurationProviderFactory().descriptor, *paths)
+    constructor(vararg paths: File?) : this(FilePackageCurationProviderFactory.descriptor, *paths)
 
     companion object {
         /**

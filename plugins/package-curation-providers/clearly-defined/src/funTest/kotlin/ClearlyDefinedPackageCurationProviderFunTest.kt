@@ -78,7 +78,7 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
                 minTotalLicenseScore = 80
             )
             val provider = ClearlyDefinedPackageCurationProvider(
-                ClearlyDefinedPackageCurationProviderFactory().descriptor,
+                ClearlyDefinedPackageCurationProviderFactory.descriptor,
                 config
             )
 
