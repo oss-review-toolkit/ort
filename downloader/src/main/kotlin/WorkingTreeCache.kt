@@ -93,7 +93,8 @@ class DefaultWorkingTreeCache : WorkingTreeCache {
                 workingTreeMutex.withLock {
                     workingTrees[key]?.run {
                         logger.debug {
-                            "Deleting cached working tree for ${getRemoteUrl()} from '${getRootPath()}'..."
+                            "Deleting cached working tree at '${getRootPath()}' for ${getRemoteUrl()} and revision " +
+                                "${getRevision()} ..."
                         }
 
                         getRootPath().safeDeleteRecursively(force = true)
