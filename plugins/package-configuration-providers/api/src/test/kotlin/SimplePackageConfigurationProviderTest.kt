@@ -37,7 +37,7 @@ class SimplePackageConfigurationProviderTest : WordSpec({
             val configurations = listOf(packageConfig, packageConfig.copy())
 
             shouldThrow<IllegalArgumentException> {
-                SimplePackageConfigurationProvider(configurations)
+                SimplePackageConfigurationProvider(configurations = configurations)
             }
         }
 
@@ -53,7 +53,7 @@ class SimplePackageConfigurationProviderTest : WordSpec({
             val configurations = listOf(packageConfig, packageConfig.copy())
 
             shouldThrow<IllegalArgumentException> {
-                SimplePackageConfigurationProvider(configurations)
+                SimplePackageConfigurationProvider(configurations = configurations)
             }
         }
     }

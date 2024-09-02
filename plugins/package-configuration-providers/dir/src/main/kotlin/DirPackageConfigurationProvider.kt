@@ -25,9 +25,12 @@ import java.io.IOException
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.OrtPluginOption
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
+import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.PackageConfigurationProvider
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.PackageConfigurationProviderFactory
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.SimplePackageConfigurationProvider
-import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.getDuplicates
 import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CONFIGURATIONS_DIRNAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
@@ -36,46 +39,46 @@ data class DirPackageConfigurationProviderConfig(
     /**
      * The path of the package configuration directory.
      */
-    val path: File,
+    val path: String,
 
     /**
      * A flag to denote whether the path is required to exist.
      */
+    @OrtPluginOption(defaultValue = "false")
     val mustExist: Boolean
 )
 
-open class DirPackageConfigurationProviderFactory :
-    PackageConfigurationProviderFactory<DirPackageConfigurationProviderConfig> {
-    override val type = "Dir"
-
-    override fun create(config: DirPackageConfigurationProviderConfig) = DirPackageConfigurationProvider(config)
-
-    override fun parseConfig(options: Options, secrets: Options) =
-        DirPackageConfigurationProviderConfig(
-            path = File(options.getValue("path")),
-            mustExist = options["mustExist"]?.toBooleanStrict() != false
-        )
-}
-
-class DefaultDirPackageConfigurationProviderFactory : DirPackageConfigurationProviderFactory() {
-    override val type = "DefaultDir"
-
-    override fun parseConfig(options: Options, secrets: Options) =
-        DirPackageConfigurationProviderConfig(
-            path = ortConfigDirectory.resolve(ORT_PACKAGE_CONFIGURATIONS_DIRNAME),
-            mustExist = false
-        )
-}
+@OrtPlugin(
+    name = "Default Dir Package Configuration Provider",
+    description = "A package configuration provider that loads package curations from the default directory.",
+    factory = PackageConfigurationProviderFactory::class
+)
+class DefaultDirPackageConfigurationProvider(descriptor: PluginDescriptor) : DirPackageConfigurationProvider(
+    descriptor,
+    DirPackageConfigurationProviderConfig(
+        path = ortConfigDirectory.resolve(ORT_PACKAGE_CONFIGURATIONS_DIRNAME).absolutePath,
+        mustExist = false
+    )
+)
 
 /**
  * A [PackageConfigurationProvider] that loads [PackageConfiguration]s from all given package configuration files.
  * Supports all file formats specified in [FileFormat].
  */
-class DirPackageConfigurationProvider(
+@OrtPlugin(
+    name = "Dir Package Configuration Provider",
+    description = "Provides package configurations from a directory.",
+    factory = PackageConfigurationProviderFactory::class
+)
+open class DirPackageConfigurationProvider(
+    descriptor: PluginDescriptor = DirPackageConfigurationProviderFactory.descriptor,
     vararg paths: File?
-) : SimplePackageConfigurationProvider(readConfigurationFiles(paths.filterNotNull())) {
-    constructor(config: DirPackageConfigurationProviderConfig) : this(
-        config.path.takeUnless { !it.exists() && !config.mustExist }
+) : SimplePackageConfigurationProvider(descriptor, readConfigurationFiles(paths.filterNotNull())) {
+    constructor(vararg paths: File?) : this(DirPackageConfigurationProviderFactory.descriptor, *paths)
+
+    constructor(descriptor: PluginDescriptor, config: DirPackageConfigurationProviderConfig) : this(
+        descriptor,
+        File(config.path).takeUnless { !it.exists() && !config.mustExist }
     )
 
     companion object {

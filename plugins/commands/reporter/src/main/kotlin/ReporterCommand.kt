@@ -216,12 +216,14 @@ class ReporterCommand : OrtCommand(
         val resolvedPackageConfigurations = ortResult.resolvedConfiguration.packageConfigurations
         val packageConfigurationProvider = when {
             resolvedPackageConfigurations != null && packageConfigurationsDir == null -> {
-                SimplePackageConfigurationProvider(resolvedPackageConfigurations)
+                SimplePackageConfigurationProvider(configurations = resolvedPackageConfigurations)
             }
 
             ortConfig.enableRepositoryPackageConfigurations -> {
                 CompositePackageConfigurationProvider(
-                    SimplePackageConfigurationProvider(ortResult.repository.config.packageConfigurations),
+                    SimplePackageConfigurationProvider(
+                        configurations = ortResult.repository.config.packageConfigurations
+                    ),
                     DirPackageConfigurationProvider(packageConfigurationsDir)
                 )
             }

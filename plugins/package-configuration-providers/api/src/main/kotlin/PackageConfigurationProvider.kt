@@ -22,11 +22,12 @@ package org.ossreviewtoolkit.plugins.packageconfigurationproviders.api
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.config.PackageConfiguration
+import org.ossreviewtoolkit.plugins.api.Plugin
 
 /**
  * A provider for [PackageConfiguration]s.
  */
-fun interface PackageConfigurationProvider {
+interface PackageConfigurationProvider : Plugin {
     /**
      * Return a list of [PackageConfiguration]s for the given [packageId] and [provenance].
      */

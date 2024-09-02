@@ -38,9 +38,10 @@ import org.ossreviewtoolkit.model.config.VcsMatcher
 import org.ossreviewtoolkit.model.utils.associateLicensesWithExceptions
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.model.utils.toPurlExtras
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.PackageConfigurationProvider
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.PackageConfigurationProviderFactory
-import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.ort.runBlocking
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
@@ -55,24 +56,19 @@ data class DosPackageConfigurationProviderConfig(
     val timeout: Long?
 )
 
-class DosPackageConfigurationProviderFactory :
-    PackageConfigurationProviderFactory<DosPackageConfigurationProviderConfig> {
-    override val type = "DOS"
-
-    override fun create(config: DosPackageConfigurationProviderConfig) = DosPackageConfigurationProvider(config)
-
-    override fun parseConfig(options: Options, secrets: Options) =
-        DosPackageConfigurationProviderConfig(
-            url = options.getValue("url"),
-            token = secrets.getValue("token"),
-            timeout = options["timeout"]?.toLongOrNull()
-        )
-}
-
 /**
  * A [PackageConfigurationProvider] that loads [PackageConfiguration]s from a Double Open Server instance.
  */
-class DosPackageConfigurationProvider(config: DosPackageConfigurationProviderConfig) : PackageConfigurationProvider {
+@OrtPlugin(
+    name = "Double Open Server Package Configuration Provider",
+    description = "A package configuration provider that loads package configurations from a Double Open Server " +
+        "instance.",
+    factory = PackageConfigurationProviderFactory::class
+)
+class DosPackageConfigurationProvider(
+    override val descriptor: PluginDescriptor,
+    config: DosPackageConfigurationProviderConfig
+) : PackageConfigurationProvider {
     private val service = DosService.create(config.url, config.token, config.timeout?.let { Duration.ofSeconds(it) })
     private val client = DosClient(service)
 
