@@ -71,7 +71,7 @@ class OssIndexTest : WordSpec({
         "return vulnerability information" {
             server.stubComponentsRequest("response_components.json")
             val ossIndex = OssIndex(
-                OssIndexFactory().descriptor,
+                OssIndexFactory.descriptor,
                 OssIndexConfiguration("http://localhost:${server.port()}", null, null)
             )
             val packages = COMPONENTS_REQUEST_IDS.mapTo(mutableSetOf()) {
@@ -118,7 +118,7 @@ class OssIndexTest : WordSpec({
                     )
             )
             val ossIndex = OssIndex(
-                OssIndexFactory().descriptor,
+                OssIndexFactory.descriptor,
                 OssIndexConfiguration("http://localhost:${server.port()}", null, null)
             )
             val packages = COMPONENTS_REQUEST_IDS.mapTo(mutableSetOf()) {
@@ -137,7 +137,7 @@ class OssIndexTest : WordSpec({
 
         "provide correct details" {
             val ossIndex = OssIndex(
-                OssIndexFactory().descriptor,
+                OssIndexFactory.descriptor,
                 OssIndexConfiguration("http://localhost:${server.port()}", null, null)
             )
 

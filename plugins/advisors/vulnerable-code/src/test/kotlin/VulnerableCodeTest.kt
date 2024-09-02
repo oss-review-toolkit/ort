@@ -336,7 +336,7 @@ private fun createConfig(server: WireMockServer): VulnerableCodeConfiguration {
  * Create a test instance of [VulnerableCode] that communicates with the local [server].
  */
 private fun createVulnerableCode(server: WireMockServer): VulnerableCode =
-    VulnerableCode(VulnerableCodeFactory().descriptor, createConfig(server))
+    VulnerableCode(VulnerableCodeFactory.descriptor, createConfig(server))
 
 /**
  * Return the test file with an analyzer result.

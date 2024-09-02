@@ -69,7 +69,7 @@ class ClearlyDefinedPackageCurationProviderTest : WordSpec({
             }
 
             val provider = ClearlyDefinedPackageCurationProvider(
-                ClearlyDefinedPackageCurationProviderFactory().descriptor,
+                ClearlyDefinedPackageCurationProviderFactory.descriptor,
                 ClearlyDefinedPackageCurationProviderConfig(serverUrl = "http://localhost:${server.port()}", 0),
                 client
             )
