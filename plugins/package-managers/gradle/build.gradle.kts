@@ -36,6 +36,7 @@ dependencies {
     implementation(libs.maven.core)
     implementation(libs.maven.resolver.api)
 
+    funTestImplementation(projects.plugins.versionControlSystems.gitVersionControlSystem)
     funTestImplementation(testFixtures(projects.analyzer))
 
     testImplementation(projects.utils.spdxUtils)
