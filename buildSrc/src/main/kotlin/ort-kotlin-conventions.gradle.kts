@@ -45,8 +45,10 @@ plugins {
     id("ort-base-conventions")
 
     // Apply third-party plugins.
+    id("com.autonomousapps.dependency-analysis")
     id("dev.adamko.dokkatoo")
     id("io.gitlab.arturbosch.detekt")
+
     kotlin("jvm")
 }
 
