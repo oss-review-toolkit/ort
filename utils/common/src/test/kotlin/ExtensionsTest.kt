@@ -99,6 +99,23 @@ class ExtensionsTest : WordSpec({
         }
     }
 
+    "File.safeDeleteRecursively()" should {
+        "be able to delete files that are not writable" {
+            val dir = tempdir().apply {
+                resolve("read-only.txt").apply {
+                    writeText("Hello!")
+                    check(setWritable(false))
+                }
+            }
+
+            shouldNotThrow<IOException> {
+                dir.safeDeleteRecursively(force = true)
+            }
+
+            dir.exists() shouldBe false
+        }
+    }
+
     "File.expandTilde()" should {
         "expand the path if the SHELL environment variable is set".config(enabled = Os.env["SHELL"] != null) {
             File("~/Desktop").expandTilde() shouldBe Os.userHomeDirectory.resolve("Desktop")
