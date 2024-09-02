@@ -24,5 +24,6 @@ plugins {
 
 dependencies {
     api(projects.model)
+    api(projects.plugins.packageConfigurationProviders.packageConfigurationProviderApi)
     api(projects.plugins.packageCurationProviders.packageCurationProviderApi)
 }
