@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.utils.common
 
 import io.kotest.assertions.throwables.shouldNotThrow
-import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.shouldBe
@@ -61,13 +60,11 @@ class SafeDeleteRecursivelyFunTest : WordSpec({
             val nodeDir = tempdir().resolve("node-dir")
             Git().download(pkg, nodeDir)
 
-            // TODO: Fix the implementation so that this does not throw.
-            shouldThrow<IOException> {
+            shouldNotThrow<IOException> {
                 nodeDir.safeDeleteRecursively(force = true)
             }
 
-            // TODO: Expect "false" once the implementation is fixed.
-            nodeDir.exists() shouldBe true
+            nodeDir.exists() shouldBe false
         }
 
         "delete empty parent directories below a base directory" {

@@ -33,6 +33,8 @@ import java.nio.file.attribute.BasicFileAttributes
 import java.util.EnumSet
 import java.util.Locale
 
+import kotlin.io.path.deleteRecursively
+
 /**
  * Call [also] only if the receiver is null, e.g. for error handling, and return the receiver in any case.
  */
@@ -121,19 +123,13 @@ fun File.realFile(): File = toPath().toRealPath().toFile()
  * [baseDirectory] itself is not deleted. Throws an [IOException] if a file could not be deleted.
  */
 fun File.safeDeleteRecursively(force: Boolean = false, baseDirectory: File? = null) {
-    if (isDirectory && !isSymbolicLink()) {
-        Files.newDirectoryStream(toPath()).use { stream ->
-            stream.forEach { path ->
-                path.toFile().safeDeleteRecursively(force)
-            }
-        }
-    }
+    // Note that Kotlin's `File.deleteRecursively()` extension function does not work here to delete files with
+    // unmappable characters in their names, so use the `Path.deleteRecursively()` extension function instead.
+    toPath().deleteRecursively()
 
-    if (baseDirectory == this) return
-
-    if (!delete() && force && setWritable(true)) {
-        // Try again.
-        delete()
+    if (baseDirectory == this) {
+        safeMkdirs()
+        return
     }
 
     if (baseDirectory != null) {
@@ -142,8 +138,6 @@ fun File.safeDeleteRecursively(force: Boolean = false, baseDirectory: File? = nu
             parent = parent.parentFile
         }
     }
-
-    if (exists()) throw IOException("Could not delete file '$absolutePath'.")
 }
 
 /**
