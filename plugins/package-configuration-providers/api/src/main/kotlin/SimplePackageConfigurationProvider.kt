@@ -23,12 +23,24 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.VcsMatcher
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
+
+/**
+ * The default [PluginDescriptor] for a [SimplePackageConfigurationProvider]. Classes inheriting from this class
+ * have to provide their own descriptor.
+ */
+private val pluginDescriptor = PluginDescriptor(
+    id = "Simple",
+    displayName = "Simple Package Configuration Provider",
+    description = "A simple package configuration provider, which provides a fixed set of package configurations."
+)
 
 /**
  * A [PackageConfigurationProvider] that provides the [PackageConfiguration]s specified in the collection. Throws an
  * exception if there is more than one configuration per [Identifier] and [Provenance].
  */
 open class SimplePackageConfigurationProvider(
+    override val descriptor: PluginDescriptor = pluginDescriptor,
     configurations: Collection<PackageConfiguration>
 ) : PackageConfigurationProvider {
     private val configurationsById: Map<Identifier, List<PackageConfiguration>>

@@ -22,21 +22,20 @@ package org.ossreviewtoolkit.plugins.packageconfigurationproviders.api
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.config.ProviderPluginConfiguration
-import org.ossreviewtoolkit.utils.common.Plugin
-import org.ossreviewtoolkit.utils.common.TypedConfigurablePluginFactory
+import org.ossreviewtoolkit.plugins.api.PluginConfig
+import org.ossreviewtoolkit.plugins.api.PluginFactory
 import org.ossreviewtoolkit.utils.common.getDuplicates
 
 /**
  * The extension point for [PackageConfigurationProvider]s.
  */
-interface PackageConfigurationProviderFactory<CONFIG> :
-    TypedConfigurablePluginFactory<CONFIG, PackageConfigurationProvider> {
+interface PackageConfigurationProviderFactory : PluginFactory<PackageConfigurationProvider> {
     companion object {
         /**
          * All [package configuration provider factories][PackageConfigurationProviderFactory] available in the
          * classpath, associated by their names.
          */
-        val ALL by lazy { Plugin.getAll<PackageConfigurationProviderFactory<*>>() }
+        val ALL by lazy { PluginFactory.getAll<PackageConfigurationProviderFactory, PackageConfigurationProvider>() }
 
         /**
          * Create a new (identifier, provider instance) tuple for each
@@ -50,7 +49,7 @@ interface PackageConfigurationProviderFactory<CONFIG> :
                 it.enabled
             }.mapNotNull {
                 ALL[it.type]?.let { factory ->
-                    it.id to factory.create(it.options, it.secrets)
+                    it.id to factory.create(PluginConfig(it.options, it.secrets))
                 }.also { factory ->
                     factory ?: logger.error {
                         "Configuration provider of type '${it.type}' is enabled in configuration but not available " +

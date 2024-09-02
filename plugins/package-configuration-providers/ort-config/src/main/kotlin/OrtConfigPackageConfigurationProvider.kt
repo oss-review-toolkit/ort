@@ -29,10 +29,11 @@ import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.PackageConfiguration
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.PackageConfigurationProvider
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.PackageConfigurationProviderFactory
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.dir.DirPackageConfigurationProvider
-import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 
@@ -40,19 +41,18 @@ private const val ORT_CONFIG_REPOSITORY_BRANCH = "main"
 private const val ORT_CONFIG_REPOSITORY_URL = "https://github.com/oss-review-toolkit/ort-config.git"
 private const val PACKAGE_CONFIGURATIONS_DIR = "package-configurations"
 
-class OrtConfigPackageConfigurationProviderFactory : PackageConfigurationProviderFactory<Unit> {
-    override val type = "OrtConfig"
-
-    override fun create(config: Unit): PackageConfigurationProvider = OrtConfigPackageConfigurationProvider()
-
-    override fun parseConfig(options: Options, secrets: Options) = Unit
-}
-
 /**
  * A [PackageConfigurationProvider] that provides [PackageConfiguration]s from the
  * [ort-config repository](https://github.com/oss-review-toolkit/ort-config).
  */
-class OrtConfigPackageConfigurationProvider : PackageConfigurationProvider {
+@OrtPlugin(
+    name = "ort-config",
+    description = "A package configuration provider that loads package configurations from the ort-config repository.",
+    factory = PackageConfigurationProviderFactory::class
+)
+class OrtConfigPackageConfigurationProvider(
+    override val descriptor: PluginDescriptor = OrtConfigPackageConfigurationProviderFactory.descriptor
+) : PackageConfigurationProvider {
     private val configurationsDir by lazy {
         ortDataDirectory.resolve("ort-config").also {
             updateOrtConfig(it)

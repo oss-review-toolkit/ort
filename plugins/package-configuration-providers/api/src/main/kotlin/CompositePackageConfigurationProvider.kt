@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.packageconfigurationproviders.api
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.config.PackageConfiguration
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 
 /**
  * A [PackageConfigurationProvider] that combines the provided [providers] into a single provider. The order of the
@@ -31,6 +32,12 @@ class CompositePackageConfigurationProvider(
     private val providers: List<PackageConfigurationProvider>
 ) : PackageConfigurationProvider {
     constructor(vararg providers: PackageConfigurationProvider) : this(providers.asList())
+
+    override val descriptor = PluginDescriptor(
+        id = "Composite",
+        displayName = "Composite Package Configuration Provider",
+        description = "A package configuration provider that combines multiple package configuration providers."
+    )
 
     override fun getPackageConfigurations(packageId: Identifier, provenance: Provenance): List<PackageConfiguration> =
         providers.flatMap { it.getPackageConfigurations(packageId, provenance) }

@@ -19,7 +19,7 @@
 
 plugins {
     // Apply precompiled plugins.
-    id("ort-library-conventions")
+    id("ort-plugin-conventions")
 }
 
 dependencies {
@@ -27,4 +27,6 @@ dependencies {
 
     implementation(projects.clients.dosClient)
     implementation(libs.kotlinx.coroutines)
+
+    ksp(projects.plugins.packageConfigurationProviders.packageConfigurationProviderApi)
 }

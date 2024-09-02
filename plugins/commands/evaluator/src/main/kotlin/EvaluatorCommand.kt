@@ -286,7 +286,7 @@ class EvaluatorCommand : OrtCommand(
             val repositoryPackageConfigurations = ortResultInput.repository.config.packageConfigurations
 
             if (ortConfig.enableRepositoryPackageConfigurations) {
-                add(SimplePackageConfigurationProvider(repositoryPackageConfigurations))
+                add(SimplePackageConfigurationProvider(configurations = repositoryPackageConfigurations))
             } else {
                 if (repositoryPackageConfigurations.isNotEmpty()) {
                     logger.info { "Local package configurations were not applied because the feature is not enabled." }
