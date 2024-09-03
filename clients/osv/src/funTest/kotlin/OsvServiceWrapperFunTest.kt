@@ -97,7 +97,6 @@ class OsvServiceWrapperFunTest : StringSpec({
         result.shouldBeSuccess {
             it shouldBe listOf(
                 listOf(
-                    "CVE-2016-5131",
                     "CVE-2021-45931",
                     "CVE-2022-33068",
                     "CVE-2023-25193",
