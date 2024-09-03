@@ -103,7 +103,7 @@ class PackageManagerFunTest : WordSpec({
                     "conan-txt/conanfile.txt"
                 )
                 managedFilesByName["GoMod"] should containExactly("gomod/go.mod")
-                managedFilesByName["Gradle"] should containExactlyInAnyOrder(
+                managedFilesByName["GradleInspector"] should containExactlyInAnyOrder(
                     "gradle-groovy/build.gradle",
                     "gradle-kotlin/build.gradle.kts"
                 )
@@ -139,7 +139,7 @@ class PackageManagerFunTest : WordSpec({
             val managedFiles = PackageManager.findManagedFiles(
                 projectDir,
                 setOf(
-                    PackageManagerFactory.ALL.getValue("Gradle"),
+                    PackageManagerFactory.ALL.getValue("GradleInspector"),
                     PackageManagerFactory.ALL.getValue("Pip"),
                     PackageManagerFactory.ALL.getValue("Sbt")
                 )
@@ -149,7 +149,7 @@ class PackageManagerFunTest : WordSpec({
 
             val managedFilesByName = managedFiles.groupByName(projectDir)
 
-            managedFilesByName["Gradle"] should containExactlyInAnyOrder(
+            managedFilesByName["GradleInspector"] should containExactlyInAnyOrder(
                 "gradle-groovy/build.gradle",
                 "gradle-kotlin/build.gradle.kts"
             )
@@ -178,7 +178,7 @@ class PackageManagerFunTest : WordSpec({
 
             val managedFilesByName = PackageManager.findManagedFiles(rootDir, excludes = excludes).groupByName(rootDir)
 
-            managedFilesByName["Gradle"] should containExactlyInAnyOrder(
+            managedFilesByName["GradleInspector"] should containExactlyInAnyOrder(
                 "gradle-groovy/build.gradle",
                 "gradle-kotlin/build.gradle.kts"
             )
@@ -193,7 +193,7 @@ class PackageManagerFunTest : WordSpec({
             val managedFiles = PackageManager.findManagedFiles(projectDir, excludes = excludes)
             val managedFilesByName = managedFiles.groupByName(projectDir)
 
-            managedFilesByName["Gradle"] should containExactly(
+            managedFilesByName["GradleInspector"] should containExactly(
                 "gradle-kotlin/build.gradle.kts"
             )
         }

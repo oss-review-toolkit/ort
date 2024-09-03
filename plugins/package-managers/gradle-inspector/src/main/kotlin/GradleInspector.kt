@@ -95,7 +95,7 @@ class GradleInspector(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
-    class Factory : AbstractPackageManagerFactory<GradleInspector>("GradleInspector", isEnabledByDefault = false) {
+    class Factory : AbstractPackageManagerFactory<GradleInspector>("GradleInspector") {
         // Gradle prefers Groovy ".gradle" files over Kotlin ".gradle.kts" files, but "build" files have to come before
         // "settings" files as we should consider "settings" files only if the same directory does not also contain a
         // "build" file.

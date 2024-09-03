@@ -321,10 +321,10 @@ packages:
     \ a composable structure on top."
   homepage_url: "https://developer.android.com/jetpack/androidx"
   binary_artifact:
-    url: ""
+    url: "https://dl.google.com/dl/android/maven2/androidx/activity/activity/1.0.0/activity-1.0.0.aar"
     hash:
-      value: ""
-      algorithm: ""
+      value: "ed7a64df6e3fbebf7d3d3dfc30b0f47efcc707f7"
+      algorithm: "SHA-1"
   source_artifact:
     url: "https://dl.google.com/dl/android/maven2/androidx/activity/activity/1.0.0/activity-1.0.0-sources.jar"
     hash:
@@ -355,10 +355,10 @@ packages:
     \ versions or utility APIs that aren't a part of the framework APIs."
   homepage_url: "https://developer.android.com/jetpack/androidx/releases/annotation#1.2.0"
   binary_artifact:
-    url: ""
+    url: "https://dl.google.com/dl/android/maven2/androidx/annotation/annotation/1.2.0/annotation-1.2.0.jar"
     hash:
-      value: ""
-      algorithm: ""
+      value: "57136ff68ee784c6e19db34ed4a175338fadfde1"
+      algorithm: "SHA-1"
   source_artifact:
     url: "https://dl.google.com/dl/android/maven2/androidx/annotation/annotation/1.2.0/annotation-1.2.0-sources.jar"
     hash:
@@ -389,10 +389,10 @@ packages:
     \ provides functional parity with Kotlin's Experimental annotation."
   homepage_url: "https://developer.android.com/jetpack/androidx/releases/annotation#1.1.0"
   binary_artifact:
-    url: ""
+    url: "https://dl.google.com/dl/android/maven2/androidx/annotation/annotation-experimental/1.1.0/annotation-experimental-1.1.0.aar"
     hash:
-      value: ""
-      algorithm: ""
+      value: "5481c9aca18271c977d67b30e26f484f3f8f1c02"
+      algorithm: "SHA-1"
   source_artifact:
     url: "https://dl.google.com/dl/android/maven2/androidx/annotation/annotation-experimental/1.1.0/annotation-experimental-1.1.0-sources.jar"
     hash:
@@ -421,10 +421,10 @@ packages:
   description: "Android Arch-Common"
   homepage_url: "https://developer.android.com/topic/libraries/architecture/index.html"
   binary_artifact:
-    url: ""
+    url: "https://dl.google.com/dl/android/maven2/androidx/arch/core/core-common/2.1.0/core-common-2.1.0.jar"
     hash:
-      value: ""
-      algorithm: ""
+      value: "b3152fc64428c9354344bd89848ecddc09b6f07e"
+      algorithm: "SHA-1"
   source_artifact:
     url: "https://dl.google.com/dl/android/maven2/androidx/arch/core/core-common/2.1.0/core-common-2.1.0-sources.jar"
     hash:
@@ -453,10 +453,10 @@ packages:
   description: "Android Arch-Runtime"
   homepage_url: "https://developer.android.com/topic/libraries/architecture/index.html"
   binary_artifact:
-    url: ""
+    url: "https://dl.google.com/dl/android/maven2/androidx/arch/core/core-runtime/2.0.0/core-runtime-2.0.0.aar"
     hash:
-      value: ""
-      algorithm: ""
+      value: "c5be9edf9ca9135a465d23939f6e7d0e1cf90b41"
+      algorithm: "SHA-1"
   source_artifact:
     url: "https://dl.google.com/dl/android/maven2/androidx/arch/core/core-runtime/2.0.0/core-runtime-2.0.0-sources.jar"
     hash:
@@ -485,10 +485,10 @@ packages:
   description: "Standalone efficient collections."
   homepage_url: "http://developer.android.com/tools/extras/support-library.html"
   binary_artifact:
-    url: ""
+    url: "https://dl.google.com/dl/android/maven2/androidx/collection/collection/1.1.0/collection-1.1.0.jar"
     hash:
-      value: ""
-      algorithm: ""
+      value: "1f27220b47669781457de0d600849a5de0e89909"
+      algorithm: "SHA-1"
   source_artifact:
     url: "https://dl.google.com/dl/android/maven2/androidx/collection/collection/1.1.0/collection-1.1.0-sources.jar"
     hash:
@@ -520,10 +520,10 @@ packages:
     \ on devices running API 14 or later."
   homepage_url: "https://developer.android.com/jetpack/androidx/releases/core#1.6.0"
   binary_artifact:
-    url: ""
+    url: "https://dl.google.com/dl/android/maven2/androidx/core/core/1.6.0/core-1.6.0.aar"
     hash:
-      value: ""
-      algorithm: ""
+      value: "10775f024a338475a5e374033f4532a7b3d8994f"
+      algorithm: "SHA-1"
   source_artifact:
     url: "https://dl.google.com/dl/android/maven2/androidx/core/core/1.6.0/core-1.6.0-sources.jar"
     hash:
@@ -555,10 +555,10 @@ packages:
     \ on devices running API 14 or later."
   homepage_url: "http://developer.android.com/tools/extras/support-library.html"
   binary_artifact:
-    url: ""
+    url: "https://dl.google.com/dl/android/maven2/androidx/customview/customview/1.0.0/customview-1.0.0.aar"
     hash:
-      value: ""
-      algorithm: ""
+      value: "30f5ff6075d112f8076e733b24410e68159735b6"
+      algorithm: "SHA-1"
   source_artifact:
     url: "https://dl.google.com/dl/android/maven2/androidx/customview/customview/1.0.0/customview-1.0.0-sources.jar"
     hash:
@@ -590,10 +590,10 @@ packages:
     \ on devices running API 14 or later."
   homepage_url: "https://developer.android.com/jetpack/androidx"
   binary_artifact:
-    url: ""
+    url: "https://dl.google.com/dl/android/maven2/androidx/fragment/fragment/1.1.0/fragment-1.1.0.aar"
     hash:
-      value: ""
-      algorithm: ""
+      value: "5f9efc7569e651415a0958d6b3e6226ef2825c24"
+      algorithm: "SHA-1"
   source_artifact:
     url: "https://dl.google.com/dl/android/maven2/androidx/fragment/fragment/1.1.0/fragment-1.1.0-sources.jar"
     hash:
@@ -622,10 +622,10 @@ packages:
   description: "Android Lifecycle-Common"
   homepage_url: "https://developer.android.com/topic/libraries/architecture/index.html"
   binary_artifact:
-    url: ""
+    url: "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-common/2.2.0/lifecycle-common-2.2.0.jar"
     hash:
-      value: ""
-      algorithm: ""
+      value: "4ef09a745007778eef83b92f8f23987a8ea59496"
+      algorithm: "SHA-1"
   source_artifact:
     url: "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-common/2.2.0/lifecycle-common-2.2.0-sources.jar"
     hash:
@@ -654,10 +654,10 @@ packages:
   description: "Android Lifecycle-Common for Java 8 Language"
   homepage_url: "https://developer.android.com/topic/libraries/architecture/index.html"
   binary_artifact:
-    url: ""
+    url: "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-common-java8/2.2.0/lifecycle-common-java8-2.2.0.jar"
     hash:
-      value: ""
-      algorithm: ""
+      value: "cd3478503da69b1a7e0319bd2d1389943db9b364"
+      algorithm: "SHA-1"
   source_artifact:
     url: "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-common-java8/2.2.0/lifecycle-common-java8-2.2.0-sources.jar"
     hash:
@@ -686,10 +686,10 @@ packages:
   description: "Android Lifecycle LiveData"
   homepage_url: "https://developer.android.com/topic/libraries/architecture/index.html"
   binary_artifact:
-    url: ""
+    url: "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-livedata/2.0.0/lifecycle-livedata-2.0.0.aar"
     hash:
-      value: ""
-      algorithm: ""
+      value: "c17007cd0b21d6401910b0becdd16c438c68a9af"
+      algorithm: "SHA-1"
   source_artifact:
     url: "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-livedata/2.0.0/lifecycle-livedata-2.0.0-sources.jar"
     hash:
@@ -718,10 +718,10 @@ packages:
   description: "Android Lifecycle LiveData Core"
   homepage_url: "https://developer.android.com/topic/libraries/architecture/index.html"
   binary_artifact:
-    url: ""
+    url: "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-livedata-core/2.0.0/lifecycle-livedata-core-2.0.0.aar"
     hash:
-      value: ""
-      algorithm: ""
+      value: "1a7cee84b43fa935231b016f0665cd56a72fa9db"
+      algorithm: "SHA-1"
   source_artifact:
     url: "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-livedata-core/2.0.0/lifecycle-livedata-core-2.0.0-sources.jar"
     hash:
@@ -750,10 +750,10 @@ packages:
   description: "Android Lifecycle Runtime"
   homepage_url: "https://developer.android.com/topic/libraries/architecture/index.html"
   binary_artifact:
-    url: ""
+    url: "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime/2.2.0/lifecycle-runtime-2.2.0.aar"
     hash:
-      value: ""
-      algorithm: ""
+      value: "62fab579508713b8bbb6d251b0abff6e538e8f46"
+      algorithm: "SHA-1"
   source_artifact:
     url: "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime/2.2.0/lifecycle-runtime-2.2.0-sources.jar"
     hash:
@@ -782,10 +782,10 @@ packages:
   description: "Android Lifecycle ViewModel"
   homepage_url: "https://developer.android.com/topic/libraries/architecture/index.html"
   binary_artifact:
-    url: ""
+    url: "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel/2.1.0/lifecycle-viewmodel-2.1.0.aar"
     hash:
-      value: ""
-      algorithm: ""
+      value: "682d06cc95e0632efdb9cfcc18828840ac941148"
+      algorithm: "SHA-1"
   source_artifact:
     url: "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel/2.1.0/lifecycle-viewmodel-2.1.0-sources.jar"
     hash:
@@ -817,10 +817,10 @@ packages:
     \ on devices running API 14 or later."
   homepage_url: "http://developer.android.com/tools/extras/support-library.html"
   binary_artifact:
-    url: ""
+    url: "https://dl.google.com/dl/android/maven2/androidx/loader/loader/1.0.0/loader-1.0.0.aar"
     hash:
-      value: ""
-      algorithm: ""
+      value: "8af8b6cec0da85c207d03e15840e0722cbc71e70"
+      algorithm: "SHA-1"
   source_artifact:
     url: "https://dl.google.com/dl/android/maven2/androidx/loader/loader/1.0.0/loader-1.0.0-sources.jar"
     hash:
@@ -850,10 +850,10 @@ packages:
     \ a composable structure on top."
   homepage_url: "https://developer.android.com/jetpack/androidx"
   binary_artifact:
-    url: ""
+    url: "https://dl.google.com/dl/android/maven2/androidx/savedstate/savedstate/1.0.0/savedstate-1.0.0.aar"
     hash:
-      value: ""
-      algorithm: ""
+      value: "6d39721808cd67e3d3d0d60f194907615fcaa69c"
+      algorithm: "SHA-1"
   source_artifact:
     url: "https://dl.google.com/dl/android/maven2/androidx/savedstate/savedstate/1.0.0/savedstate-1.0.0-sources.jar"
     hash:
@@ -882,10 +882,10 @@ packages:
   description: "Android Tracing"
   homepage_url: "https://developer.android.com/jetpack/androidx/releases/tracing#1.0.0"
   binary_artifact:
-    url: ""
+    url: "https://dl.google.com/dl/android/maven2/androidx/tracing/tracing/1.0.0/tracing-1.0.0.aar"
     hash:
-      value: ""
-      algorithm: ""
+      value: "69cef34711dffbc517e7a0a419ec4a98f84f496a"
+      algorithm: "SHA-1"
   source_artifact:
     url: "https://dl.google.com/dl/android/maven2/androidx/tracing/tracing/1.0.0/tracing-1.0.0-sources.jar"
     hash:
@@ -915,10 +915,10 @@ packages:
     \ that can be passed across processes or persisted safely."
   homepage_url: "http://developer.android.com/tools/extras/support-library.html"
   binary_artifact:
-    url: ""
+    url: "https://dl.google.com/dl/android/maven2/androidx/versionedparcelable/versionedparcelable/1.1.1/versionedparcelable-1.1.1.aar"
     hash:
-      value: ""
-      algorithm: ""
+      value: "18e18071e7715679e0593c570217edeb5ca48b9e"
+      algorithm: "SHA-1"
   source_artifact:
     url: "https://dl.google.com/dl/android/maven2/androidx/versionedparcelable/versionedparcelable/1.1.1/versionedparcelable-1.1.1-sources.jar"
     hash:
@@ -950,10 +950,10 @@ packages:
     \ on devices running API 14 or later."
   homepage_url: "http://developer.android.com/tools/extras/support-library.html"
   binary_artifact:
-    url: ""
+    url: "https://dl.google.com/dl/android/maven2/androidx/viewpager/viewpager/1.0.0/viewpager-1.0.0.aar"
     hash:
-      value: ""
-      algorithm: ""
+      value: "1f90e13820f96c2fb868f9674079a551678d68b2"
+      algorithm: "SHA-1"
   source_artifact:
     url: "https://dl.google.com/dl/android/maven2/androidx/viewpager/viewpager/1.0.0/viewpager-1.0.0-sources.jar"
     hash:
@@ -983,10 +983,10 @@ packages:
     \ functionality on foldable devices."
   homepage_url: "https://developer.android.com/jetpack/androidx/releases/window#1.0.0-beta04"
   binary_artifact:
-    url: ""
+    url: "https://dl.google.com/dl/android/maven2/androidx/window/window/1.0.0-beta04/window-1.0.0-beta04.aar"
     hash:
-      value: ""
-      algorithm: ""
+      value: "a48b0773f8c0b0e0e8bbc7c1d1fa8f8beb44de37"
+      algorithm: "SHA-1"
   source_artifact:
     url: "https://dl.google.com/dl/android/maven2/androidx/window/window/1.0.0-beta04/window-1.0.0-beta04-sources.jar"
     hash:
@@ -1015,10 +1015,10 @@ packages:
   description: "WindowManager Java Support"
   homepage_url: "https://developer.android.com/jetpack/androidx/releases/window#1.0.0-beta04"
   binary_artifact:
-    url: ""
+    url: "https://dl.google.com/dl/android/maven2/androidx/window/window-java/1.0.0-beta04/window-java-1.0.0-beta04.aar"
     hash:
-      value: ""
-      algorithm: ""
+      value: "ef1688d892f6dc05c9e1568cbb6355d35f2428d6"
+      algorithm: "SHA-1"
   source_artifact:
     url: "https://dl.google.com/dl/android/maven2/androidx/window/window-java/1.0.0-beta04/window-java-1.0.0-beta04-sources.jar"
     hash:
@@ -1046,7 +1046,7 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: ""
+    url: "https://storage.googleapis.com/download.flutter.io/io/flutter/arm64_v8a_release/1.0.0-2e4ba9c6fb499ccd4e81420543783cc7267ae406/arm64_v8a_release-1.0.0-2e4ba9c6fb499ccd4e81420543783cc7267ae406-sources.jar"
     hash:
       value: ""
       algorithm: ""
@@ -1072,7 +1072,7 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: ""
+    url: "https://storage.googleapis.com/download.flutter.io/io/flutter/armeabi_v7a_release/1.0.0-2e4ba9c6fb499ccd4e81420543783cc7267ae406/armeabi_v7a_release-1.0.0-2e4ba9c6fb499ccd4e81420543783cc7267ae406-sources.jar"
     hash:
       value: ""
       algorithm: ""
@@ -1124,7 +1124,7 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: ""
+    url: "https://storage.googleapis.com/download.flutter.io/io/flutter/x86_64_release/1.0.0-2e4ba9c6fb499ccd4e81420543783cc7267ae406/x86_64_release-1.0.0-2e4ba9c6fb499ccd4e81420543783cc7267ae406-sources.jar"
     hash:
       value: ""
       algorithm: ""
@@ -1151,10 +1151,10 @@ packages:
   description: "A set of annotations used for code inspection support and code documentation."
   homepage_url: "http://www.jetbrains.org"
   binary_artifact:
-    url: ""
+    url: "https://repo.maven.apache.org/maven2/org/jetbrains/annotations/13.0/annotations-13.0.jar"
     hash:
-      value: ""
-      algorithm: ""
+      value: "919f0dfe192fb4e063e7dacadee7f8bb9a2672a9"
+      algorithm: "SHA-1"
   source_artifact:
     url: "https://repo.maven.apache.org/maven2/org/jetbrains/annotations/13.0/annotations-13.0-sources.jar"
     hash:
@@ -1183,10 +1183,10 @@ packages:
   description: "Kotlin Standard Library for JVM"
   homepage_url: "https://kotlinlang.org/"
   binary_artifact:
-    url: ""
+    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/1.5.31/kotlin-stdlib-1.5.31.jar"
     hash:
-      value: ""
-      algorithm: ""
+      value: "6628d61d0f5603568e72d2d5915d2c034b4f1c55"
+      algorithm: "SHA-1"
   source_artifact:
     url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/1.5.31/kotlin-stdlib-1.5.31-sources.jar"
     hash:
@@ -1215,10 +1215,10 @@ packages:
   description: "Kotlin Common Standard Library"
   homepage_url: "https://kotlinlang.org/"
   binary_artifact:
-    url: ""
+    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-common/1.5.31/kotlin-stdlib-common-1.5.31.jar"
     hash:
-      value: ""
-      algorithm: ""
+      value: "043331609c7de811fed085e0dfd150874b157c32"
+      algorithm: "SHA-1"
   source_artifact:
     url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-common/1.5.31/kotlin-stdlib-common-1.5.31-sources.jar"
     hash:
@@ -1247,10 +1247,10 @@ packages:
   description: "Kotlin Standard Library JDK 7 extension"
   homepage_url: "https://kotlinlang.org/"
   binary_artifact:
-    url: ""
+    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk7/1.5.30/kotlin-stdlib-jdk7-1.5.30.jar"
     hash:
-      value: ""
-      algorithm: ""
+      value: "525f5a7fa6d7790a571c07dd24214ed2dda352fe"
+      algorithm: "SHA-1"
   source_artifact:
     url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk7/1.5.30/kotlin-stdlib-jdk7-1.5.30-sources.jar"
     hash:
@@ -1279,10 +1279,10 @@ packages:
   description: "Kotlin Standard Library JDK 8 extension"
   homepage_url: "https://kotlinlang.org/"
   binary_artifact:
-    url: ""
+    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk8/1.5.30/kotlin-stdlib-jdk8-1.5.30.jar"
     hash:
-      value: ""
-      algorithm: ""
+      value: "5fd47535cc85f9e24996f939c2de6583991481b0"
+      algorithm: "SHA-1"
   source_artifact:
     url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk8/1.5.30/kotlin-stdlib-jdk8-1.5.30-sources.jar"
     hash:
@@ -1311,10 +1311,10 @@ packages:
   description: "Coroutines support libraries for Kotlin"
   homepage_url: "https://github.com/Kotlin/kotlinx.coroutines"
   binary_artifact:
-    url: ""
+    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-android/1.5.2/kotlinx-coroutines-android-1.5.2.jar"
     hash:
-      value: ""
-      algorithm: ""
+      value: "d246a704a55b7bddb79407cce4348890eaa341d9"
+      algorithm: "SHA-1"
   source_artifact:
     url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-android/1.5.2/kotlinx-coroutines-android-1.5.2-sources.jar"
     hash:
@@ -1343,10 +1343,10 @@ packages:
   description: "Coroutines support libraries for Kotlin"
   homepage_url: "https://github.com/Kotlin/kotlinx.coroutines"
   binary_artifact:
-    url: ""
+    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core/1.5.2/kotlinx-coroutines-core-1.5.2.pom"
     hash:
-      value: ""
-      algorithm: ""
+      value: "a7c7e93534ced240c9b3df6530ef5e40339c8a23"
+      algorithm: "SHA-1"
   source_artifact:
     url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core/1.5.2/kotlinx-coroutines-core-1.5.2-sources.jar"
     hash:
@@ -1375,10 +1375,10 @@ packages:
   description: "Coroutines support libraries for Kotlin"
   homepage_url: "https://github.com/Kotlin/kotlinx.coroutines"
   binary_artifact:
-    url: ""
+    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core-jvm/1.5.2/kotlinx-coroutines-core-jvm-1.5.2.jar"
     hash:
-      value: ""
-      algorithm: ""
+      value: "f4cc07a50437659e0043e7da762809a46932b6a0"
+      algorithm: "SHA-1"
   source_artifact:
     url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core-jvm/1.5.2/kotlinx-coroutines-core-jvm-1.5.2-sources.jar"
     hash:
