@@ -1,0 +1,216 @@
+# SPDX-FileCopyrightText: 2024 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+# SPDX-License-Identifier: CC0-1.0
+
+version = 1
+SPDX-PackageName = "OSS Review Toolkit"
+SPDX-PackageDownloadLocation = "https://github.com/oss-review-toolkit/ort"
+
+[[annotations]]
+path = ".**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = "**/.gitattributes"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2018 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = "**/.gitignore"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = "**.json"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = "**.md"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = "**.yml"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2022 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = "NOTICE"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2022 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = "**/src/main/resources/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = "**/src/funTest/assets/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = "**/src/test/assets/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = "ci/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = "clients/fossid-webapp/src/test/assets/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = "clients/github-graphql/src/main/assets/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2021 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = "docker/versions.dockerfile"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2024 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = "examples/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = "integrations/completions/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2022 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = "integrations/jenkins/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2022 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = "integrations/schemas/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2021 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = "integrations/tekton/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2022 Google, LLC."
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = "logos/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = "plugins/reporters/web-app-template/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = "website/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = "gradlew**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2007-2020 The original author or authors <info@gradle.com>"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = "gradle/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2007-2020 The original author or authors <info@gradle.com>"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = "clients/github-graphql/src/main/assets/schema.graphql"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2017 Gregor Martynus"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "clients/osv/src/test/assets/vulnerability/examples/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2021-2022 OSV Schema Authors"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = "evaluator/src/main/resources/rules/matrixseqexpl.json"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2021 Open Source Automation Development Lab (OSADL) eG"
+SPDX-License-Identifier = "CC-BY-4.0"
+
+[[annotations]]
+path = "plugins/reporters/asciidoc/src/main/resources/fonts/FiraSans-**.ttf"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2012-2015 The Mozilla Foundation and Telefonica S.A."
+SPDX-License-Identifier = "OFL-1.1"
+
+[[annotations]]
+path = "plugins/reporters/spdx/src/funTest/assets/spdx-schema.json"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2020-2022 Linux Foundation and its Contributors"
+SPDX-License-Identifier = "CC-BY-3.0"
+
+[[annotations]]
+path = "reporter/src/funTest/assets/sample.fossinfo.json"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2020-2021 Bosch Rexroth AG"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "reporter/src/main/resources/prismjs/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2012 Lea Verou"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "utils/spdx/src/main/resources/exceptions/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2010-2020 Linux Foundation and its Contributors"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = "utils/spdx/src/main/resources/licenses/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2010-2020 Linux Foundation and its Contributors"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = "utils/spdx/src/main/resources/licenserefs/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2010-2020 Linux Foundation and its Contributors"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = "utils/spdx/src/test/assets/spdx-spec-examples/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2010-2020 Linux Foundation and its Contributors"
+SPDX-License-Identifier = "CC-BY-3.0"
