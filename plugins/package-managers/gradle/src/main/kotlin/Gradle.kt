@@ -93,7 +93,7 @@ class Gradle(
         const val OPTION_GRADLE_VERSION = "gradleVersion"
     }
 
-    class Factory : AbstractPackageManagerFactory<Gradle>("Gradle") {
+    class Factory : AbstractPackageManagerFactory<Gradle>("Gradle", isEnabledByDefault = false) {
         // Gradle prefers Groovy ".gradle" files over Kotlin ".gradle.kts" files, but "build" files have to come before
         // "settings" files as we should consider "settings" files only if the same directory does not also contain a
         // "build" file.

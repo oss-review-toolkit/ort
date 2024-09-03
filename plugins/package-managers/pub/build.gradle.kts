@@ -46,7 +46,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.yaml)
 
-    funTestImplementation(projects.plugins.packageManagers.gradlePackageManager)
+    funTestImplementation(projects.plugins.packageManagers.gradleInspector)
 
     funTestImplementation(testFixtures(projects.analyzer))
 }

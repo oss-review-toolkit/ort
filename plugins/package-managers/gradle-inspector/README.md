@@ -1,17 +1,10 @@
 # GradleInspector
 
-The [GradleInspector] is an alternative analyzer for projects that use the Gradle package manager.
-It is supposed to address [several] [shortcomings] of the "legacy" [Gradle] analyzer, but to not interfere with it, the [GradleInspector] is disabled by default.
+The [GradleInspector] is the default analyzer for projects that use the Gradle package manager.
+It is supposed to address [several] [shortcomings] of the "legacy" [Gradle] analyzer, which is disabled by default.
 
-## Usage
-
-As the [GradleInspector] is disabled by default, it needs to be enabled explicitly (along with any other package managers that should be enabled):
-
-```shell
-ort -P ort.analyzer.enabledPackageManagers=GradleInspector[,...] analyze
-```
-
-It is recommended to *not* also enable the "legacy" [Gradle] analyzer at the same time, as both analyzers would find the same definition files.
+> [!NOTE]
+> It is *not* recommended to also enable the "legacy" [Gradle] analyzer at the same time, as both analyzers would find the same definition files.
 
 ## Implementation
 
