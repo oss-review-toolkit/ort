@@ -31,11 +31,12 @@ Execution of the Gradle plugin will be blocked until the remote debugger is atta
 
 ## Limitations
 
-The retrieval of the checksum values for remote artifacts is currently done via plain OkHttp calls, which means it will not work out of the box for private repositories.
-To work around this, credentials need to be configured in `.netrc` additionally to in Gradle.
-This is similar to how the "legacy" [Gradle] analyzer required to additionally configure credentials in Maven.
+Currently, the [GradleInspector] has the following known limitations:
 
-Also, the `isModified` check which compares with artifacts of the same name in Maven Central is not implemented yet.
+* The retrieval of the checksum values for remote artifacts is currently done via plain OkHttp calls, which means it will not work out of the box for private repositories.
+  To work around this, credentials need to be configured in a `.netrc` file in addition to the Gradle build.
+* The `isModified` check which compares build artifacts with artifacts of the same name in Maven Central is not implemented yet.
+* The implementation [cannot deal with classifiers and / or non-JAR artifacts].
 
 [GradleInspector]: ./src/main/kotlin/GradleInspector.kt
 [several]: https://github.com/oss-review-toolkit/ort/issues/4694
@@ -46,3 +47,4 @@ Also, the `isModified` check which compares with artifacts of the same name in M
 [Gradle plugin]: ../gradle-plugin/src/main/kotlin/OrtModelPlugin.kt
 [OrtModelBuilder]: ../gradle-plugin/src/main/kotlin/OrtModelBuilder.kt
 [data model for Gradle projects]: ../gradle-model/src/main/kotlin/GradleModel.kt
+[cannot deal with classifiers and / or non-JAR artifacts]: https://github.com/oss-review-toolkit/ort/issues/7995
