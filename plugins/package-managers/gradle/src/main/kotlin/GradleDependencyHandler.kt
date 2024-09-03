@@ -60,7 +60,7 @@ internal class GradleDependencyHandler(
 
     override fun identifierFor(dependency: OrtDependency): Identifier =
         Identifier(
-            type = dependency.dependencyType(),
+            type = dependency.dependencyType,
             namespace = dependency.groupId,
             name = dependency.artifactId,
             version = dependency.version
@@ -88,11 +88,11 @@ internal class GradleDependencyHandler(
         )
 
     override fun linkageFor(dependency: OrtDependency): PackageLinkage =
-        if (dependency.isProjectDependency()) PackageLinkage.PROJECT_DYNAMIC else PackageLinkage.DYNAMIC
+        if (dependency.isProjectDependency) PackageLinkage.PROJECT_DYNAMIC else PackageLinkage.DYNAMIC
 
     override fun createPackage(dependency: OrtDependency, issues: MutableCollection<Issue>): Package? {
         // Only look for a package if there was no error resolving the dependency and it is no project dependency.
-        if (dependency.error != null || dependency.isProjectDependency()) return null
+        if (dependency.error != null || dependency.isProjectDependency) return null
 
         val artifact = DefaultArtifact(
             dependency.groupId, dependency.artifactId, dependency.classifier,

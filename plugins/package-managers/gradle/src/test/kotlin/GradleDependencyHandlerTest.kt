@@ -390,7 +390,7 @@ private fun createMavenSupport(): MavenSupport {
 /**
  * Returns an [Identifier] for this [OrtDependency].
  */
-private fun OrtDependency.toId() = Identifier(dependencyType(), groupId, artifactId, version)
+private fun OrtDependency.toId() = Identifier(dependencyType, groupId, artifactId, version)
 
 /**
  * Return the package references from the given [scopes] associated with the scope with the given [scopeName].
