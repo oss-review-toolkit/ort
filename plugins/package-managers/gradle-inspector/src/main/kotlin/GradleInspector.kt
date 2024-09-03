@@ -350,14 +350,11 @@ private fun Collection<OrtDependency>.toPackageRefs(
     packageDependencies: MutableCollection<OrtDependency>
 ): Set<PackageReference> =
     mapTo(mutableSetOf()) { dep ->
-        val (id, linkage) = if (dep.localPath != null) {
-            val id = Identifier("Gradle", dep.groupId, dep.artifactId, dep.version)
-            id to PackageLinkage.PROJECT_DYNAMIC
+        val id = Identifier(dep.dependencyType, dep.groupId, dep.artifactId, dep.version)
+        val linkage = if (dep.isProjectDependency) {
+            PackageLinkage.PROJECT_DYNAMIC
         } else {
-            packageDependencies += dep
-
-            val id = Identifier("Maven", dep.groupId, dep.artifactId, dep.version)
-            id to PackageLinkage.DYNAMIC
+            PackageLinkage.DYNAMIC
         }
 
         PackageReference(id, linkage, dep.dependencies.toPackageRefs(packageDependencies))
