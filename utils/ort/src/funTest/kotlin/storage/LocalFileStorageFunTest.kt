@@ -69,7 +69,7 @@ class LocalFileStorageFunTest : WordSpec({
         }
     }
 
-    "Reading a file" should {
+    "read()" should {
         "succeed if the file exists" {
             storage { storage, directory ->
                 val file = directory.resolve("existing-file")
@@ -98,7 +98,7 @@ class LocalFileStorageFunTest : WordSpec({
         }
     }
 
-    "Writing a file" should {
+    "write()" should {
         "succeed if the file does not exist" {
             storage { storage, directory ->
                 storage.write("target/file", "content".byteInputStream())
