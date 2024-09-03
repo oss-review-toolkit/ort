@@ -26,33 +26,31 @@ import io.kotest.matchers.shouldBe
 import java.io.BufferedReader
 import java.io.File
 
-class XZCompressedLocalFileStorageFunTest : StringSpec() {
-    private fun storage(block: (XZCompressedLocalFileStorage, File) -> Unit) {
+class XZCompressedLocalFileStorageFunTest : StringSpec({
+    fun storage(block: (XZCompressedLocalFileStorage, File) -> Unit) {
         val directory = tempdir()
         val storage = XZCompressedLocalFileStorage(directory)
         block(storage, directory)
     }
 
-    init {
-        "Can read written compressed data" {
-            storage { storage, _ ->
-                storage.write("new-file", "content".byteInputStream())
+    "Can read written compressed data" {
+        storage { storage, _ ->
+            storage.write("new-file", "content".byteInputStream())
 
-                val content = storage.read("new-file").bufferedReader().use(BufferedReader::readText)
+            val content = storage.read("new-file").bufferedReader().use(BufferedReader::readText)
 
-                content shouldBe "content"
-            }
-        }
-
-        "Can read existing uncompressed data" {
-            storage { storage, directory ->
-                val file = directory.resolve("existing-file")
-                file.writeText("content")
-
-                val content = storage.read("existing-file").bufferedReader().use(BufferedReader::readText)
-
-                content shouldBe "content"
-            }
+            content shouldBe "content"
         }
     }
-}
+
+    "Can read existing uncompressed data" {
+        storage { storage, directory ->
+            val file = directory.resolve("existing-file")
+            file.writeText("content")
+
+            val content = storage.read("existing-file").bufferedReader().use(BufferedReader::readText)
+
+            content shouldBe "content"
+        }
+    }
+})
