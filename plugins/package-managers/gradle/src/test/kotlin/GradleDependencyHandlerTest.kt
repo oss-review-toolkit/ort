@@ -57,6 +57,7 @@ import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
+import org.ossreviewtoolkit.plugins.packagemanagers.gradlemodel.dependencyType
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.MavenSupport
 
 /**
@@ -131,7 +132,7 @@ class GradleDependencyHandlerTest : WordSpec({
 
             val scopes = graph.createScopes()
 
-            scopeDependencies(scopes, scope).single { it.id.type == NAME }
+            scopeDependencies(scopes, scope).single { it.id.type == "Gradle" }
         }
 
         "collect information about packages" {
@@ -312,22 +313,19 @@ class GradleDependencyHandlerTest : WordSpec({
             val issues = mutableListOf<Issue>()
 
             every { maven.parsePackage(any(), any(), useReposFromDependencies = false) } throws exception
-            val handler = GradleDependencyHandler(NAME, maven)
+            val handler = GradleDependencyHandler("Gradle", maven)
 
             handler.createPackage(dep, issues) should beNull()
 
             issues should haveSize(1)
             with(issues.first()) {
-                source shouldBe NAME
+                source shouldBe "Gradle"
                 severity shouldBe Severity.ERROR
                 message should contain("${dep.groupId}:${dep.artifactId}:${dep.version}")
             }
         }
     }
 })
-
-/** The name of the package manager. */
-private const val NAME = "GradleTest"
 
 /** Remote repositories used by the test. */
 private val remoteRepositories = listOf(mockk<RemoteRepository>())
@@ -361,7 +359,7 @@ private fun createDependency(
  * this class.
  */
 private fun createGraphBuilder(): DependencyGraphBuilder<OrtDependency> {
-    val dependencyHandler = GradleDependencyHandler(NAME, createMavenSupport())
+    val dependencyHandler = GradleDependencyHandler("Gradle", createMavenSupport())
     dependencyHandler.repositories = remoteRepositories
     return DependencyGraphBuilder(dependencyHandler)
 }
@@ -390,19 +388,9 @@ private fun createMavenSupport(): MavenSupport {
 }
 
 /**
- * Determine the type of the [Identifier] for this dependency.
- */
-private fun OrtDependency.type(): String =
-    if (localPath != null) {
-        NAME
-    } else {
-        "Maven"
-    }
-
-/**
  * Returns an [Identifier] for this [OrtDependency].
  */
-private fun OrtDependency.toId() = Identifier(type(), groupId, artifactId, version)
+private fun OrtDependency.toId() = Identifier(dependencyType(), groupId, artifactId, version)
 
 /**
  * Return the package references from the given [scopes] associated with the scope with the given [scopeName].

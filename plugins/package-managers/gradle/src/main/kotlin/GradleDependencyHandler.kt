@@ -34,6 +34,8 @@ import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyHandler
+import org.ossreviewtoolkit.plugins.packagemanagers.gradlemodel.dependencyType
+import org.ossreviewtoolkit.plugins.packagemanagers.gradlemodel.isProjectDependency
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.MavenSupport
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.identifier
 import org.ossreviewtoolkit.utils.common.collectMessages
@@ -117,21 +119,4 @@ internal class GradleDependencyHandler(
             }
         }
     }
-
-    /**
-     * Determine the type of this dependency. This manager implementation uses Maven to resolve packages, so
-     * the type of dependencies to packages is typically _Maven_ unless no pom is available. Only for module
-     * dependencies, the type of this manager is used.
-     */
-    private fun OrtDependency.dependencyType(): String =
-        if (isProjectDependency()) {
-            managerName
-        } else {
-            pomFile?.let { "Maven" } ?: "Unknown"
-        }
 }
-
-/**
- * Return a flag whether this dependency references another project in the current build.
- */
-private fun OrtDependency.isProjectDependency() = localPath != null
