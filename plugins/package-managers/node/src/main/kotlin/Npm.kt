@@ -267,12 +267,12 @@ open class Npm(
      * Construct a [Package] by parsing its _package.json_ file and - if applicable - querying additional
      * content via the `npm view` command. The result is a [Pair] with the raw identifier and the new package.
      */
-    internal suspend fun parsePackage(workingDir: File, packageFile: File): Pair<String, Package> {
-        val packageDir = packageFile.parentFile
+    internal suspend fun parsePackage(workingDir: File, packageJsonFile: File): Pair<String, Package> {
+        val packageDir = packageJsonFile.parentFile
 
         logger.debug { "Found a 'package.json' file in '$packageDir'." }
 
-        val json = packageFile.readValue<ObjectNode>()
+        val json = packageJsonFile.readValue<ObjectNode>()
 
         // The "name" and "version" fields are only required if the package is going to be published, otherwise they are
         // optional, see
