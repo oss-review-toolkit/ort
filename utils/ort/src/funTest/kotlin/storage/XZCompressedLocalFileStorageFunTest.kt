@@ -19,27 +19,165 @@
 
 package org.ossreviewtoolkit.utils.ort.storage
 
-import io.kotest.core.spec.style.StringSpec
+import io.kotest.assertions.throwables.shouldNotThrowAny
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
+import io.kotest.engine.spec.tempfile
+import io.kotest.matchers.file.aFile
+import io.kotest.matchers.file.exist
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNot
 
 import java.io.BufferedReader
 import java.io.File
+import java.io.FileNotFoundException
+import java.io.InputStream
 
-class XZCompressedLocalFileStorageFunTest : StringSpec({
+import org.ossreviewtoolkit.utils.common.safeMkdirs
+
+class XZCompressedLocalFileStorageFunTest : WordSpec({
     fun storage(block: (XZCompressedLocalFileStorage, File) -> Unit) {
         val directory = tempdir()
         val storage = XZCompressedLocalFileStorage(directory)
         block(storage, directory)
     }
 
-    "Can read written compressed data" {
-        storage { storage, _ ->
-            storage.write("new-file", "content".byteInputStream())
+    "Creating the storage" should {
+        "succeed if the directory exists" {
+            shouldNotThrowAny {
+                XZCompressedLocalFileStorage(tempdir())
+            }
+        }
 
-            val content = storage.read("new-file").bufferedReader().use(BufferedReader::readText)
+        "succeed if the directory does not exist and must be created" {
+            val directory = tempdir()
+            val storageDirectory = directory.resolve("create/storage")
 
-            content shouldBe "content"
+            XZCompressedLocalFileStorage(storageDirectory).write("file", InputStream.nullInputStream())
+
+            storageDirectory.isDirectory shouldBe true
+        }
+
+        "fail if the directory is a file" {
+            val storageDirectory = tempfile()
+
+            shouldThrow<java.io.IOException> {
+                XZCompressedLocalFileStorage(storageDirectory)
+                    .write("file", InputStream.nullInputStream())
+            }
+        }
+    }
+
+    "exists()" should {
+        "return true if the file exists" {
+            storage { storage, directory ->
+                directory.resolve(storage.transformPath("existing-file")).writeText("content")
+
+                storage.exists("existing-file") shouldBe true
+            }
+        }
+
+        "return false if the file does not exist" {
+            storage { storage, _ ->
+                storage.exists("file-does-not-exist") shouldBe false
+            }
+        }
+    }
+
+    "read()" should {
+        "succeed if the file exists" {
+            storage { storage, directory ->
+                storage.write("existing-file", "content".byteInputStream())
+
+                val content = storage.read("existing-file").bufferedReader().use(BufferedReader::readText)
+
+                content shouldBe "content"
+            }
+        }
+
+        "fail if the file does not exist" {
+            storage { storage, _ ->
+                shouldThrow<FileNotFoundException> {
+                    storage.read("file-does-not-exist")
+                }
+            }
+        }
+
+        "fail if the requested path is not inside the storage directory" {
+            storage { storage, _ ->
+                shouldThrow<IllegalArgumentException> {
+                    storage.read("../file")
+                }
+            }
+        }
+    }
+
+    "write()" should {
+        "succeed if the file does not exist" {
+            storage { storage, directory ->
+                storage.write("target/file", "content".byteInputStream())
+
+                val file = directory.resolve(storage.transformPath("target/file"))
+
+                file shouldBe aFile()
+                storage.read("target/file").bufferedReader().use(BufferedReader::readText) shouldBe "content"
+            }
+        }
+
+        "succeed if the file does exist" {
+            storage { storage, directory ->
+                val file = directory.resolve("file")
+                file.writeText("old content")
+
+                storage.write("file", "content".byteInputStream())
+
+                file shouldBe aFile()
+                storage.read("file").bufferedReader().use(BufferedReader::readText) shouldBe "content"
+            }
+        }
+
+        "fail if the target path is not inside the storage directory" {
+            storage { storage, directory ->
+                shouldThrow<IllegalArgumentException> {
+                    storage.write("../file", "content".byteInputStream())
+                }
+
+                val file = directory.resolve("../file")
+
+                file shouldNot exist()
+            }
+        }
+
+        "fail if the target path is a directory" {
+            storage { storage, directory ->
+                val dir = directory.resolve(storage.transformPath("dir")).safeMkdirs()
+
+                shouldThrow<FileNotFoundException> {
+                    storage.write("dir", "content".byteInputStream())
+                }
+
+                dir.isDirectory shouldBe true
+            }
+        }
+    }
+
+    "delete()" should {
+        "return true if the file exists" {
+            storage { storage, directory ->
+                val file = directory.resolve(storage.transformPath("file"))
+                file.writeText("content")
+
+                storage.delete("file") shouldBe true
+
+                file shouldNot exist()
+            }
+        }
+
+        "return false if the file does not exist" {
+            storage { storage, _ ->
+                storage.delete("file-does-not-exist") shouldBe false
+            }
         }
     }
 })

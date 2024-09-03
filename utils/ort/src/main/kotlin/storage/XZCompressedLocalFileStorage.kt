@@ -35,7 +35,7 @@ class XZCompressedLocalFileStorage(
 ) : LocalFileStorage(directory) {
     override fun transformPath(path: String) = "$path.xz"
 
-    override fun read(path: String) = XZCompressorInputStream(super.read(transformPath(path)))
+    override fun read(path: String) = XZCompressorInputStream(super.read(path))
 
-    override fun safeOutputStream(path: String) = XZCompressorOutputStream(super.safeOutputStream(transformPath(path)))
+    override fun safeOutputStream(path: String) = XZCompressorOutputStream(super.safeOutputStream(path))
 }
