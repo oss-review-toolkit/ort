@@ -64,6 +64,7 @@ private fun ProvenanceFileStorage.putFileList(provenance: KnownProvenance, fileL
 }
 
 private fun ProvenanceFileStorage.getFileList(provenance: KnownProvenance): FileList? {
+    if (!hasData(provenance)) return null
     val data = getData(provenance) ?: return null
     return data.use { yamlMapper.readValue<FileList>(it) }
 }

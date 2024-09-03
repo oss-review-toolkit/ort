@@ -102,6 +102,11 @@ class FileArchiver(
      * Unarchive the archive corresponding to [provenance].
      */
     fun unarchive(directory: File, provenance: KnownProvenance): Boolean {
+        if (!storage.hasData(provenance)) {
+            logger.info { "Could not find archive of directory '$directory'." }
+            return false
+        }
+
         val (zipInputStream, readDuration) = measureTimedValue { storage.getData(provenance) }
 
         logger.info { "Read archive of directory '$directory' from storage in $readDuration." }
