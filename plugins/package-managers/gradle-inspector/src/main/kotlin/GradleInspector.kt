@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.gradleinspector
 
-import OrtDependency
 import OrtDependencyTreeModel
 
 import java.io.ByteArrayOutputStream
@@ -36,38 +35,25 @@ import org.gradle.tooling.model.build.BuildEnvironment
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
-import org.ossreviewtoolkit.downloader.VcsHost
+import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.model.Hash
-import org.ossreviewtoolkit.model.HashAlgorithm
+import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
-import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.PackageLinkage
-import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
-import org.ossreviewtoolkit.model.RemoteArtifact
-import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
-import org.ossreviewtoolkit.model.orEmpty
-import org.ossreviewtoolkit.model.utils.parseRepoManifestPath
+import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.unquote
-import org.ossreviewtoolkit.utils.common.withoutPrefix
-import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
-import org.ossreviewtoolkit.utils.ort.downloadText
-import org.ossreviewtoolkit.utils.ort.okHttpClient
 import org.ossreviewtoolkit.utils.ort.ortToolsDirectory
-import org.ossreviewtoolkit.utils.spdx.SpdxOperator
 
 import org.semver4j.Semver
 
@@ -117,6 +103,7 @@ class GradleInspector(
         ) = GradleInspector(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
+    private val graphBuilder = DependencyGraphBuilder(GradleDependencyHandler())
     private val initScriptFile by lazy { extractInitScript() }
 
     private fun extractInitScript(): File {
@@ -232,12 +219,15 @@ class GradleInspector(
             version = dependencyTreeModel.version
         )
 
-        val packageDependencies = mutableSetOf<OrtDependency>()
-
-        val scopes = dependencyTreeModel.configurations.filterNot {
+        dependencyTreeModel.configurations.filterNot {
             excludes.isScopeExcluded(it.name)
-        }.mapTo(mutableSetOf()) {
-            Scope(name = it.name, dependencies = it.dependencies.toPackageRefs(packageDependencies))
+        }.forEach { configuration ->
+            configuration.dependencies.forEach { dependency ->
+                graphBuilder.addDependency(
+                    DependencyGraph.qualifyScope(projectId, configuration.name),
+                    dependency
+                )
+            }
         }
 
         val project = Project(
@@ -248,69 +238,15 @@ class GradleInspector(
             vcs = VcsInfo.EMPTY,
             vcsProcessed = processProjectVcs(definitionFile.parentFile),
             homepageUrl = "",
-            scopeDependencies = scopes
+            scopeNames = graphBuilder.scopesFor(projectId)
         )
 
-        val packages = packageDependencies.associateBy {
-            // Deduplicate OrtDependency serialization proxy objects by Identifier.
-            Identifier("Maven", it.groupId, it.artifactId, it.version)
-        }.mapNotNullTo(mutableSetOf()) { (id, dep) ->
-            val model = dep.mavenModel ?: run {
-                issues += createAndLogIssue(
-                    source = "Gradle",
-                    message = "No Maven model available for '${id.toCoordinates()}'."
-                )
-
-                return@mapNotNullTo Package.EMPTY.copy(id = id)
-            }
-
-            val isSpringMetadataProject = with(id) {
-                listOf("boot", "cloud").any {
-                    namespace == "org.springframework.$it"
-                        && (name.startsWith("spring-$it-starter") || name.startsWith("spring-$it-contract-spec"))
-                }
-            }
-
-            val isMetadataOnly = dep.extension == "pom" || isSpringMetadataProject
-
-            val binaryArtifact = when {
-                isMetadataOnly -> RemoteArtifact.EMPTY
-                else -> createRemoteArtifact(dep.pomFile, dep.classifier, dep.extension.takeUnless { it == "bundle" })
-            }
-
-            val sourceArtifact = when {
-                isMetadataOnly -> RemoteArtifact.EMPTY
-                else -> createRemoteArtifact(dep.pomFile, "sources", "jar")
-            }
-
-            val vcs = dep.toVcsInfo()
-            val vcsFallbackUrls = listOfNotNull(model.vcs?.browsableUrl, model.homepageUrl).toTypedArray()
-            val vcsProcessed = processPackageVcs(vcs, *vcsFallbackUrls)
-
-            Package(
-                id = id,
-                authors = model.authors,
-                declaredLicenses = model.licenses,
-                declaredLicensesProcessed = DeclaredLicenseProcessor.process(
-                    model.licenses,
-                    // See http://maven.apache.org/ref/3.6.3/maven-model/maven.html#project saying: "If multiple
-                    // licenses are listed, it is assumed that the user can select any of them, not that they must
-                    // accept all."
-                    operator = SpdxOperator.OR
-                ),
-                description = model.description.orEmpty(),
-                homepageUrl = model.homepageUrl.orEmpty(),
-                binaryArtifact = binaryArtifact,
-                sourceArtifact = sourceArtifact,
-                vcs = vcs,
-                vcsProcessed = vcsProcessed,
-                isMetadataOnly = isMetadataOnly
-            )
-        }
-
-        val result = ProjectAnalyzerResult(project, packages, issues)
+        val result = ProjectAnalyzerResult(project, emptySet(), issues)
         return listOf(result)
     }
+
+    override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =
+        PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
 }
 
 /**
@@ -341,166 +277,3 @@ private fun readGradleProperties(projectDir: File): Map<String, String> {
 
     return gradleProperties.toMap()
 }
-
-/**
- * Recursively convert a collection of [OrtDependency] objects to a set of [PackageReference] objects for use in [Scope]
- * while flattening all dependencies into the [packageDependencies] collection.
- */
-private fun Collection<OrtDependency>.toPackageRefs(
-    packageDependencies: MutableCollection<OrtDependency>
-): Set<PackageReference> =
-    mapTo(mutableSetOf()) { dep ->
-        val id = Identifier(dep.dependencyType, dep.groupId, dep.artifactId, dep.version)
-        val linkage = if (dep.isProjectDependency) {
-            PackageLinkage.PROJECT_DYNAMIC
-        } else {
-            PackageLinkage.DYNAMIC
-        }
-
-        PackageReference(id, linkage, dep.dependencies.toPackageRefs(packageDependencies))
-    }
-
-/**
- * Create a [RemoteArtifact] based on the given [pomUrl], [classifier] and [extension]. The hash value is retrieved
- * remotely.
- */
-private fun GradleInspector.createRemoteArtifact(
-    pomUrl: String?,
-    classifier: String? = null,
-    extension: String? = null
-): RemoteArtifact {
-    val algorithm = "sha1"
-    val artifactBaseUrl = pomUrl?.removeSuffix(".pom") ?: return RemoteArtifact.EMPTY
-
-    val artifactUrl = buildString {
-        append(artifactBaseUrl)
-        if (!classifier.isNullOrEmpty()) append("-$classifier")
-        if (!extension.isNullOrEmpty()) append(".$extension") else append(".jar")
-    }
-
-    // TODO: How to handle authentication for private repositories here, or rely on Gradle for the download?
-    val checksum = okHttpClient.downloadText("$artifactUrl.$algorithm")
-        .getOrElse { return RemoteArtifact.EMPTY }
-
-    val hash = parseChecksum(checksum, algorithm)
-
-    // Ignore file with zero byte size, because it cannot be a valid archive.
-    if (hash.value == HashAlgorithm.SHA1.emptyValue) {
-        logger.info { "Ignoring zero byte size artifact: $artifactUrl" }
-        return RemoteArtifact.EMPTY
-    }
-
-    return RemoteArtifact(artifactUrl, hash)
-}
-
-/**
- * Split the provided [checksum] by whitespace and return a [Hash] for the first element that matches the provided
- * algorithm. If no element matches, return [Hash.NONE]. This works around the issue that Maven checksum files sometimes
- * contain arbitrary strings before or after the actual checksum.
- */
-private fun parseChecksum(checksum: String, algorithm: String) =
-    checksum.splitOnWhitespace().firstNotNullOfOrNull {
-        runCatching { Hash(it, algorithm) }.getOrNull()
-    } ?: Hash.NONE
-
-// See http://maven.apache.org/pom.html#SCM.
-private val SCM_REGEX = Regex("scm:(?<type>[^:@]+):(?<url>.+)")
-private val USER_HOST_REGEX = Regex("scm:(?<user>[^:@]+)@(?<host>[^:]+)[:/](?<path>.+)")
-
-private fun OrtDependency.toVcsInfo() =
-    mavenModel?.vcs?.run {
-        @Suppress("UnsafeCallOnNullableType")
-        SCM_REGEX.matchEntire(connection)?.let { match ->
-            val type = match.groups["type"]!!.value
-            val url = match.groups["url"]!!.value
-
-            handleValidScmInfo(type, url, tag)
-        } ?: handleInvalidScmInfo(connection, tag)
-    }.orEmpty()
-
-private fun OrtDependency.handleValidScmInfo(type: String, url: String, tag: String) =
-    when {
-        // Maven does not officially support git-repo as an SCM, see http://maven.apache.org/scm/scms-overview.html, so
-        // come up with the convention to use the "manifest" query parameter for the path to the manifest inside the
-        // repository. An earlier version of this workaround expected the query string to be only the path to the
-        // manifest, for backward compatibility convert such URLs to the new syntax.
-        type == "git-repo" -> {
-            val manifestPath = url.parseRepoManifestPath()
-                ?: url.substringAfter('?').takeIf { it.isNotBlank() && it.endsWith(".xml") }
-            val urlWithManifest = url.takeIf { manifestPath == null }
-                ?: "${url.substringBefore('?')}?manifest=$manifestPath"
-
-            VcsInfo(
-                type = VcsType.GIT_REPO,
-                url = urlWithManifest,
-                revision = tag
-            )
-        }
-
-        type == "svn" -> {
-            val revision = tag.takeIf { it.isEmpty() } ?: "tags/$tag"
-            VcsInfo(type = VcsType.SUBVERSION, url = url, revision = revision)
-        }
-
-        url.startsWith("//") -> {
-            // Work around the common mistake to omit the Maven SCM provider.
-            val fixedUrl = "$type:$url"
-
-            // Try to detect the Maven SCM provider from the URL only, e.g. by looking at the host or special URL paths.
-            VcsHost.parseUrl(fixedUrl).copy(revision = tag).also {
-                logger.info {
-                    "Fixed up invalid SCM connection without a provider in '$groupId:$artifactId:$version' to $it."
-                }
-            }
-        }
-
-        else -> {
-            val trimmedUrl = if (!url.startsWith("git://")) url.removePrefix("git:") else url
-
-            VcsHost.fromUrl(trimmedUrl)?.let { host ->
-                host.toVcsInfo(trimmedUrl)?.let { vcsInfo ->
-                    // Fixup paths that are specified as part of the URL and contain the project name as a prefix.
-                    val projectPrefix = "${host.getProject(trimmedUrl)}-"
-                    vcsInfo.path.withoutPrefix(projectPrefix)?.let { path ->
-                        vcsInfo.copy(path = path)
-                    }
-                }
-            } ?: VcsInfo(type = VcsType.forName(type), url = trimmedUrl, revision = tag)
-        }
-    }
-
-private fun OrtDependency.handleInvalidScmInfo(connection: String, tag: String) =
-    @Suppress("UnsafeCallOnNullableType")
-    USER_HOST_REGEX.matchEntire(connection)?.let { match ->
-        // Some projects omit the provider and use the SCP-like Git URL syntax, for example
-        // "scm:git@github.com:facebook/facebook-android-sdk.git".
-        val user = match.groups["user"]!!.value
-        val host = match.groups["host"]!!.value
-        val path = match.groups["path"]!!.value
-
-        if (user == "git" || host.startsWith("git")) {
-            VcsInfo(type = VcsType.GIT, url = "https://$host/$path", revision = tag)
-        } else {
-            VcsInfo.EMPTY
-        }
-    } ?: run {
-        val dep = "$groupId:$artifactId:$version"
-
-        if (connection.startsWith("git://") || connection.endsWith(".git")) {
-            // It is a common mistake to omit the "scm:[provider]:" prefix. Add fall-backs for nevertheless clear
-            // cases.
-            logger.info {
-                "Maven SCM connection '$connection' in '$dep' lacks the required 'scm' prefix."
-            }
-
-            VcsInfo(type = VcsType.GIT, url = connection, revision = tag)
-        } else {
-            if (connection.isNotEmpty()) {
-                logger.info {
-                    "Ignoring Maven SCM connection '$connection' in '$dep' due to an unexpected format."
-                }
-            }
-
-            VcsInfo.EMPTY
-        }
-    }
