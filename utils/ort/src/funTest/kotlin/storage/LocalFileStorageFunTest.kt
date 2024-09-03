@@ -69,6 +69,22 @@ class LocalFileStorageFunTest : WordSpec({
         }
     }
 
+    "exists()" should {
+        "return true if the file exists" {
+            storage { storage, directory ->
+                directory.resolve("existing-file").writeText("content")
+
+                storage.exists("existing-file") shouldBe true
+            }
+        }
+
+        "return false if the file does not exist" {
+            storage { storage, _ ->
+                storage.exists("file-does-not-exist") shouldBe false
+            }
+        }
+    }
+
     "read()" should {
         "succeed if the file exists" {
             storage { storage, directory ->
@@ -143,6 +159,25 @@ class LocalFileStorageFunTest : WordSpec({
                 }
 
                 dir.isDirectory shouldBe true
+            }
+        }
+    }
+
+    "delete()" should {
+        "return true if the file exists" {
+            storage { storage, directory ->
+                val file = directory.resolve("file")
+                file.writeText("content")
+
+                storage.delete("file") shouldBe true
+
+                file shouldNot exist()
+            }
+        }
+
+        "return false if the file does not exist" {
+            storage { storage, _ ->
+                storage.delete("file-does-not-exist") shouldBe false
             }
         }
     }
