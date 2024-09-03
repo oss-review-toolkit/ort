@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.utils.ort.storage
 
 import java.io.File
-import java.io.FileNotFoundException
 
 import org.apache.commons.compress.compressors.xz.XZCompressorInputStream
 import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream
@@ -36,18 +35,7 @@ class XZCompressedLocalFileStorage(
 ) : LocalFileStorage(directory) {
     override fun transformPath(path: String) = "$path.xz"
 
-    override fun read(path: String) =
-        try {
-            XZCompressorInputStream(super.read(transformPath(path)))
-        } catch (compressedFileNotFoundException: FileNotFoundException) {
-            // Fall back to try reading the uncompressed file.
-            @Suppress("SwallowedException")
-            try {
-                super.read(path)
-            } catch (uncompressedFileNotFoundException: FileNotFoundException) {
-                throw uncompressedFileNotFoundException.initCause(compressedFileNotFoundException)
-            }
-        }
+    override fun read(path: String) = XZCompressorInputStream(super.read(transformPath(path)))
 
     override fun safeOutputStream(path: String) = XZCompressorOutputStream(super.safeOutputStream(transformPath(path)))
 }

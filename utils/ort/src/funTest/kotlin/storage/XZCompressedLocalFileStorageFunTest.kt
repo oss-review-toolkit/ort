@@ -42,15 +42,4 @@ class XZCompressedLocalFileStorageFunTest : StringSpec({
             content shouldBe "content"
         }
     }
-
-    "Can read existing uncompressed data" {
-        storage { storage, directory ->
-            val file = directory.resolve("existing-file")
-            file.writeText("content")
-
-            val content = storage.read("existing-file").bufferedReader().use(BufferedReader::readText)
-
-            content shouldBe "content"
-        }
-    }
 })
