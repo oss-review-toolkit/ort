@@ -88,12 +88,12 @@ class OrtImportOrder(config: Config) : Rule(config) {
 
         val sortedImportPathsWithDotAndBlankLines = createImportListWithBlankLines(importPathsWithDot)
 
-        if (importPathsWithoutDot.isNotEmpty()) {
-            expectedImportPaths += importPathsWithoutDot
-            expectedImportPaths += ""
-        }
+        expectedImportPaths += importPathsWithoutDot
+        if (expectedImportPaths.isNotEmpty()) expectedImportPaths += ""
 
         expectedImportPaths += sortedImportPathsWithDotAndBlankLines
+        if (expectedImportPaths.isNotEmpty()) expectedImportPaths.removeLast()
+
         return expectedImportPaths
     }
 
@@ -104,8 +104,6 @@ class OrtImportOrder(config: Config) : Rule(config) {
             pathsWithBlankLines += it.value
             pathsWithBlankLines += ""
         }
-
-        pathsWithBlankLines.removeLast()
 
         return pathsWithBlankLines
     }
