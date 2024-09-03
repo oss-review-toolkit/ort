@@ -25,6 +25,7 @@ object CopyrightableFiles {
     private val excludedPaths = listOf(
         "LICENSE",
         "NOTICE",
+        "REUSE.toml",
         "gradlew",
         "gradle/",
         "docker/versions.dockerfile",
