@@ -114,6 +114,20 @@ class ExtensionsTest : WordSpec({
 
             dir.exists() shouldBe false
         }
+
+        "delete empty parent directories below a base directory" {
+            val tempDir = tempdir()
+            val baseDir = tempDir.resolve("a/basedir")
+            val deleteDir = baseDir.resolve("c/delete").apply { safeMkdirs() }
+
+            shouldNotThrow<IOException> {
+                deleteDir.safeDeleteRecursively(force = true, baseDir)
+            }
+
+            deleteDir.exists() shouldBe false
+            deleteDir.parentFile.exists() shouldBe false
+            baseDir.exists() shouldBe true
+        }
     }
 
     "File.expandTilde()" should {
