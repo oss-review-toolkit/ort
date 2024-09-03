@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+@file:Suppress("TooManyFunctions")
+
 package org.ossreviewtoolkit.plugins.packagemanagers.swiftpm
 
 import java.io.File
@@ -192,16 +194,39 @@ class SwiftPm(
     }
 }
 
-private fun SwiftPackage.toId(pinsByIdentity: Map<String, PinV2>): Identifier =
-    pinsByIdentity[identity]?.toId() ?: Identifier(
-        type = PACKAGE_TYPE,
-        namespace = "",
-        name = getCanonicalName(url),
-        version = version.takeUnless { it == "unspecified" }.orEmpty()
-    )
+private fun SwiftPackage.toId(pinsByIdentity: Map<String, PinV2>): Identifier {
+    pinsByIdentity[identity]?.let { return it.toId() }
 
-private fun SwiftPackage.toVcsInfo(pinsByIdentity: Map<String, PinV2>): VcsInfo =
-    pinsByIdentity[identity]?.toVcsInfo() ?: VcsHost.parseUrl(url)
+    return if (isLocal()) {
+        val vcsInfo = toVcsInfo(pinsByIdentity)
+
+        Identifier(
+            type = PACKAGE_TYPE,
+            namespace = "",
+            name = getCanonicalName(vcsInfo.url),
+            version = vcsInfo.revision
+        )
+    } else {
+        Identifier(
+            type = PACKAGE_TYPE,
+            namespace = "",
+            name = getCanonicalName(url),
+            version = version.takeUnless { it == "unspecified" }.orEmpty()
+        )
+    }
+}
+
+private fun SwiftPackage.toVcsInfo(pinsByIdentity: Map<String, PinV2>): VcsInfo {
+    pinsByIdentity[identity]?.let { return it.toVcsInfo() }
+
+    return if (isLocal()) {
+        VersionControlSystem.forDirectory(File(url))?.getInfo().orEmpty()
+    } else {
+        VcsHost.parseUrl(url)
+    }
+}
+
+private fun SwiftPackage.isLocal(): Boolean = url == path
 
 private fun SwiftPackage.toPackage(pinsByIdentity: Map<String, PinV2>): Package =
     createPackage(toId(pinsByIdentity), toVcsInfo(pinsByIdentity))
