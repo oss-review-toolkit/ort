@@ -27,7 +27,11 @@ import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.Project
 
-internal data class PackageManagerDependency(
+/**
+ * A class to model a [linkage]-type of dependency on the results of another [packageManager] when resolving [scope]
+ * from [definitionFile].
+ */
+data class PackageManagerDependency(
     val packageManager: String,
     val definitionFile: String,
     val scope: String,
