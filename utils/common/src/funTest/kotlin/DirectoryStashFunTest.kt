@@ -30,7 +30,7 @@ import io.kotest.matchers.shouldNot
 
 import java.io.File
 
-class DirectoryStashTest : StringSpec() {
+class DirectoryStashFunTest : StringSpec() {
     private lateinit var sandboxDir: File
     private lateinit var a: File
     private lateinit var a1: File

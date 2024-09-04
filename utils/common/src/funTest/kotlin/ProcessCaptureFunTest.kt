@@ -24,7 +24,7 @@ import io.kotest.extensions.system.withEnvironment
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 
-class ProcessCaptureTest : StringSpec({
+class ProcessCaptureFunTest : StringSpec({
     "Environment variables should be passed correctly" {
         val env = mapOf("PREFIX" to "This is some path: ", "SOME_PATH" to "/foo/bar")
         val proc = if (Os.isWindows) {
