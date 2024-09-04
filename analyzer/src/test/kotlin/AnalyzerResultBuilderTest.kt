@@ -34,7 +34,6 @@ import io.kotest.matchers.types.beTheSameInstanceAs
 
 import java.time.Instant
 
-import org.ossreviewtoolkit.analyzer.managers.utils.PackageManagerDependencyHandler
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.DependencyReference
