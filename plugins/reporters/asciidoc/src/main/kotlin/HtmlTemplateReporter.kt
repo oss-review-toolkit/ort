@@ -26,4 +26,7 @@ import org.ossreviewtoolkit.reporter.Reporter
  *
  * [1]: https://freemarker.apache.org
  */
-class HtmlTemplateReporter : AsciiDocTemplateReporter("html", "HtmlTemplate")
+class HtmlTemplateReporter : AsciiDocTemplateReporter() {
+    override val backend = "html"
+    override val type = "HtmlTemplate"
+}

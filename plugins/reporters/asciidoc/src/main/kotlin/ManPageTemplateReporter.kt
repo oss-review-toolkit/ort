@@ -26,4 +26,7 @@ import org.ossreviewtoolkit.reporter.Reporter
  *
  * [1]: https://freemarker.apache.org
  */
-class ManPageTemplateReporter : AsciiDocTemplateReporter("manpage", "ManPageTemplate")
+class ManPageTemplateReporter : AsciiDocTemplateReporter() {
+    override val backend = "manpage"
+    override val type = "ManPageTemplate"
+}

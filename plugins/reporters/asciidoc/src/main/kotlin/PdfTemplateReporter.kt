@@ -52,11 +52,14 @@ import org.ossreviewtoolkit.reporter.Reporter
  * [4]: https://github.com/asciidoctor/asciidoctorj-pdf
  * [5]: https://docs.asciidoctor.org/pdf-converter/latest/theme/
  */
-class PdfTemplateReporter : AsciiDocTemplateReporter("pdf", "PdfTemplate") {
+class PdfTemplateReporter : AsciiDocTemplateReporter() {
     companion object {
         private const val OPTION_PDF_THEME_FILE = "pdf.theme.file"
         private const val OPTION_PDF_FONTS_DIR = "pdf.fonts.dir"
     }
+
+    override val backend = "pdf"
+    override val type = "PdfTemplate"
 
     override fun processTemplateOptions(outputDir: File, options: MutableMap<String, String>): Attributes =
         Attributes.builder().apply {

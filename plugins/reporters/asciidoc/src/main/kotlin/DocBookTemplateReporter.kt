@@ -27,4 +27,7 @@ import org.ossreviewtoolkit.reporter.Reporter
  * [1]: https://docbook.org
  * [2]: https://freemarker.apache.org
  */
-class DocBookTemplateReporter : AsciiDocTemplateReporter("docbook", "DocBookTemplate")
+class DocBookTemplateReporter : AsciiDocTemplateReporter() {
+    override val backend = "docbook"
+    override val type = "DocBookTemplate"
+}
