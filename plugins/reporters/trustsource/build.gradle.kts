@@ -19,7 +19,7 @@
 
 plugins {
     // Apply precompiled plugins.
-    id("ort-library-conventions")
+    id("ort-plugin-conventions")
 
     // Apply third-party plugins.
     alias(libs.plugins.kotlinSerialization)
@@ -27,6 +27,8 @@ plugins {
 
 dependencies {
     api(projects.reporter)
+
+    ksp(projects.reporter)
 
     implementation(projects.downloader)
     implementation(projects.model)

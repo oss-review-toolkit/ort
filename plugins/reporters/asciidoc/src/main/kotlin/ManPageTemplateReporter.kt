@@ -19,14 +19,22 @@
 
 package org.ossreviewtoolkit.plugins.reporters.asciidoc
 
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.reporter.Reporter
+import org.ossreviewtoolkit.reporter.ReporterFactory
 
 /**
  * A [Reporter] that creates man pages from [Apache Freemarker][1] templates.
  *
  * [1]: https://freemarker.apache.org
  */
-class ManPageTemplateReporter : AsciiDocTemplateReporter() {
+@OrtPlugin(
+    displayName = "Man Page Template Reporter",
+    description = "Generates manpages from AsciiDoc files from Apache Freemarker templates.",
+    factory = ReporterFactory::class
+)
+class ManPageTemplateReporter(override val descriptor: PluginDescriptor = ManPageTemplateReporterFactory.descriptor) :
+    AsciiDocTemplateReporter() {
     override val backend = "manpage"
-    override val type = "ManPageTemplate"
 }

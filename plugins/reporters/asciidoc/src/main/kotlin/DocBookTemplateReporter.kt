@@ -19,7 +19,10 @@
 
 package org.ossreviewtoolkit.plugins.reporters.asciidoc
 
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.reporter.Reporter
+import org.ossreviewtoolkit.reporter.ReporterFactory
 
 /**
  * A [Reporter] that creates [DocBook][1] files from [Apache Freemarker][2] templates.
@@ -27,7 +30,12 @@ import org.ossreviewtoolkit.reporter.Reporter
  * [1]: https://docbook.org
  * [2]: https://freemarker.apache.org
  */
-class DocBookTemplateReporter : AsciiDocTemplateReporter() {
+@OrtPlugin(
+    displayName = "DocBook Template Reporter",
+    description = "Generates DocBook from AsciiDoc files from Apache Freemarker templates.",
+    factory = ReporterFactory::class
+)
+class DocBookTemplateReporter(override val descriptor: PluginDescriptor = DocBookTemplateReporterFactory.descriptor) :
+    AsciiDocTemplateReporter() {
     override val backend = "docbook"
-    override val type = "DocBookTemplate"
 }

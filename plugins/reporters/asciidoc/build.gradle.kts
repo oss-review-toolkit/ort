@@ -19,11 +19,13 @@
 
 plugins {
     // Apply precompiled plugins.
-    id("ort-library-conventions")
+    id("ort-plugin-conventions")
 }
 
 dependencies {
     api(projects.reporter)
+
+    ksp(projects.reporter)
 
     implementation(projects.model)
     implementation(projects.plugins.reporters.freemarkerReporter)

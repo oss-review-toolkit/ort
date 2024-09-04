@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+ * Copyright (C) 2024 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,22 +17,18 @@
  * License-Filename: LICENSE
  */
 
-plugins {
-    // Apply precompiled plugins.
-    id("ort-plugin-conventions")
-}
+package org.ossreviewtoolkit.reporter
 
-dependencies {
-    api(projects.reporter)
+import org.ossreviewtoolkit.plugins.api.PluginFactory
 
-    ksp(projects.reporter)
-
-    implementation(projects.model)
-    implementation(projects.utils.commonUtils)
-    implementation(projects.utils.ortUtils)
-    implementation(projects.utils.spdxUtils)
-
-    implementation(libs.jackson.databind)
-
-    funTestImplementation(libs.jsonSchemaValidator)
+/**
+ * A factory interface for creating [Reporter] instances.
+ */
+interface ReporterFactory : PluginFactory<Reporter> {
+    companion object {
+        /**
+         * All [reporter factories][ReporterFactory] available in the classpath, associated by their ids.
+         */
+        val ALL by lazy { PluginFactory.getAll<ReporterFactory, Reporter>() }
+    }
 }

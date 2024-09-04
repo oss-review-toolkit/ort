@@ -23,7 +23,10 @@ import java.io.File
 
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.config.PluginConfiguration
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.reporter.Reporter
+import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
 
 /**
@@ -34,14 +37,18 @@ import org.ossreviewtoolkit.reporter.ReporterInput
  * - *deduplicateDependencyTree*: Controls whether subtrees occurring multiple times in the dependency tree are
  *   stripped.
  */
-class EvaluatedModelReporter : Reporter {
+@OrtPlugin(
+    displayName = "Evaluated Model Reporter",
+    description = "Generates an evaluated model of the ORT result.",
+    factory = ReporterFactory::class
+)
+class EvaluatedModelReporter(override val descriptor: PluginDescriptor = EvaluatedModelReporterFactory.descriptor) :
+    Reporter {
     companion object {
         const val OPTION_OUTPUT_FILE_FORMATS = "output.file.formats"
 
         const val OPTION_DEDUPLICATE_DEPENDENCY_TREE = "deduplicateDependencyTree"
     }
-
-    override val type = "EvaluatedModel"
 
     override fun generateReport(
         input: ReporterInput,

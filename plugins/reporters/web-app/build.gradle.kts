@@ -19,7 +19,7 @@
 
 plugins {
     // Apply precompiled plugins.
-    id("ort-library-conventions")
+    id("ort-plugin-conventions")
 }
 
 val generatedResourcesDir = layout.buildDirectory.dir("generated-resources/main")
@@ -38,6 +38,8 @@ sourceSets.main.get().output.dir(mapOf("builtBy" to copyWebAppTemplate), generat
 
 dependencies {
     api(projects.reporter)
+
+    ksp(projects.reporter)
 
     implementation(projects.plugins.reporters.evaluatedModelReporter)
 

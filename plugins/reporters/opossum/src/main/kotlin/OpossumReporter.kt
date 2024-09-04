@@ -45,7 +45,10 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.utils.getPurlType
 import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.reporter.Reporter
+import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.packZip
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
@@ -79,7 +82,12 @@ internal fun resolvePath(pieces: List<String>) = pieces.reduce { right, left -> 
  * This reporter supports the following option:
  * - *scanner.maxDepth*: The depth to which the full file level scanner information is added
  */
-class OpossumReporter : Reporter {
+@OrtPlugin(
+    displayName = "Opossum Reporter",
+    description = "Generates a report in the Opossum format.",
+    factory = ReporterFactory::class
+)
+class OpossumReporter(override val descriptor: PluginDescriptor = OpossumReporterFactory.descriptor) : Reporter {
     companion object {
         const val OPTION_SCANNER_MAX_DEPTH = "scanner.maxDepth"
     }
@@ -487,8 +495,6 @@ class OpossumReporter : Reporter {
             }
         }
     }
-
-    override val type = "Opossum"
 
     private fun writeReport(outputFile: File, opossumInput: OpossumInput) {
         val jsonFile = createOrtTempDir().resolve("input.json")
