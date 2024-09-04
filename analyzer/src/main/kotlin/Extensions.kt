@@ -24,6 +24,9 @@ import org.apache.logging.log4j.kotlin.logger
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.utils.common.alsoIfNull
 
+internal fun String.encodeColon() = replace(':', '\u0000')
+internal fun String.decodeColon() = replace('\u0000', ':')
+
 /**
  * Return the list of enabled [PackageManager]s based on the [AnalyzerConfiguration.enabledPackageManagers] and
  * [AnalyzerConfiguration.disabledPackageManagers] configuration properties and the

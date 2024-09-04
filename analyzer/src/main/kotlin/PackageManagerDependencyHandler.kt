@@ -19,10 +19,6 @@
 
 package org.ossreviewtoolkit.analyzer
 
-import kotlin.contracts.contract
-
-import org.apache.logging.log4j.kotlin.logger
-
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.DependencyGraphNavigator
 import org.ossreviewtoolkit.model.DependencyNode
@@ -31,7 +27,6 @@ import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.PackageReference
-import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 
 private const val TYPE = "PackageManagerDependency"
@@ -107,67 +102,3 @@ class PackageManagerDependencyHandler(
             }
         } ?: listOf(DependencyNodeDelegate(dependency.getStableReference()))
 }
-
-private data class PackageManagerDependency(
-    val packageManager: String,
-    val definitionFile: String,
-    val scope: String,
-    val linkage: PackageLinkage
-) {
-    fun findProjects(analyzerResult: AnalyzerResult): List<Project> =
-        analyzerResult.projects.filter { it.definitionFilePath == definitionFile }.also { projects ->
-            if (projects.isEmpty()) {
-                logger.warn { "Could not find any project for definition file '$definitionFile'." }
-            }
-
-            projects.forEach { verify(it) }
-        }
-
-    fun verify(project: Project?) {
-        contract {
-            returns() implies (project != null)
-        }
-
-        requireNotNull(project) {
-            "Could not find a project for the definition file '$definitionFile'."
-        }
-
-        require(project.id.type == packageManager) {
-            "The project '${project.id.toCoordinates()}' from definition file '$definitionFile' uses the wrong " +
-                "package manager '${project.id.type}', expected is '$packageManager'."
-        }
-
-        requireNotNull(project.scopeNames) {
-            "The project '${project.id.toCoordinates()}' from definition file '$definitionFile' does not use a " +
-                "dependency graph."
-        }
-
-        if (scope !in project.scopeNames.orEmpty()) {
-            logger.warn {
-                "The project '${project.id.toCoordinates()}' from definition file '$definitionFile' does not contain " +
-                    "the requested scope '$scope'."
-            }
-        }
-    }
-}
-
-sealed class ResolvableDependencyNode : DependencyNode
-
-class ProjectScopeDependencyNode(
-    override val id: Identifier,
-    override val linkage: PackageLinkage,
-    override val issues: List<Issue>,
-    private val dependencies: Sequence<DependencyNode>
-) : ResolvableDependencyNode() {
-    override fun <T> visitDependencies(block: (Sequence<DependencyNode>) -> T): T = block(dependencies)
-}
-
-class DependencyNodeDelegate(private val node: DependencyNode) : ResolvableDependencyNode() {
-    override val id: Identifier = node.id
-    override val linkage = node.linkage
-    override val issues = node.issues
-    override fun <T> visitDependencies(block: (Sequence<DependencyNode>) -> T): T = node.visitDependencies(block)
-}
-
-private fun String.encodeColon() = replace(':', '\u0000')
-private fun String.decodeColon() = replace('\u0000', ':')
