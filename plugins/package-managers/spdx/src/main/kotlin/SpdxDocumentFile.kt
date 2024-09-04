@@ -27,8 +27,9 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
-import org.ossreviewtoolkit.analyzer.PackageManagerDependencyHandler
+import org.ossreviewtoolkit.analyzer.PackageManagerDependency
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
+import org.ossreviewtoolkit.analyzer.toPackageReference
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.HashAlgorithm
@@ -373,13 +374,12 @@ class SpdxDocumentFile(
                 if (files.any { it.canonicalPath == packageFile.canonicalPath }) {
                     // TODO: The data from the spdxPackage is currently ignored, check if some fields need to be
                     //       preserved somehow.
-                    return PackageManagerDependencyHandler.createPackageManagerDependency(
+                    return PackageManagerDependency(
                         packageManager = factory.type,
                         definitionFile = VersionControlSystem.getPathInfo(packageFile).path,
                         scope = scope,
-                        linkage = PackageLinkage.PROJECT_STATIC, // TODO: Set linkage based on SPDX reference type.
-                        issues = issues
-                    )
+                        linkage = PackageLinkage.PROJECT_STATIC // TODO: Set linkage based on SPDX reference type.
+                    ).toPackageReference(issues)
                 }
             }
         }

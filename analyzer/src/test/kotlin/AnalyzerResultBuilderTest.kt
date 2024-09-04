@@ -326,12 +326,12 @@ class AnalyzerResultBuilderTest : WordSpec() {
             }
 
             "resolve package manager dependencies" {
-                val packageManagerDependency = PackageManagerDependencyHandler.createPackageManagerDependency(
+                val packageManagerDependency = PackageManagerDependency(
                     packageManager = project1.id.type,
                     definitionFile = project1.definitionFilePath,
                     scope = scope1.name,
                     linkage = PackageLinkage.PROJECT_DYNAMIC
-                )
+                ).toPackageReference()
 
                 val scope = Scope(
                     name = "scope",

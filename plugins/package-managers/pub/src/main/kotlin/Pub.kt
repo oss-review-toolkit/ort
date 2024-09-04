@@ -29,11 +29,12 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
-import org.ossreviewtoolkit.analyzer.PackageManagerDependencyHandler
+import org.ossreviewtoolkit.analyzer.PackageManagerDependency
 import org.ossreviewtoolkit.analyzer.PackageManagerDependencyResult
 import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.analyzer.parseAuthorString
+import org.ossreviewtoolkit.analyzer.toPackageReference
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
@@ -291,12 +292,12 @@ class Pub(
 
                     if (gradleDefinitionFiles.isNotEmpty()) {
                         val gradleDependencies = gradleDefinitionFiles.mapTo(mutableSetOf()) {
-                            PackageManagerDependencyHandler.createPackageManagerDependency(
+                            PackageManagerDependency(
                                 packageManager = gradleFactory.type,
                                 definitionFile = VersionControlSystem.getPathInfo(it).path,
                                 scope = "releaseCompileClasspath",
                                 linkage = PackageLinkage.PROJECT_STATIC
-                            )
+                            ).toPackageReference()
                         }
 
                         scopes += Scope("android", gradleDependencies)
