@@ -20,6 +20,9 @@
 plugins {
     // Apply precompiled plugins.
     id("ort-library-conventions")
+
+    // Apply third-party plugins.
+    alias(libs.plugins.kotlinSerialization)
 }
 
 dependencies {
@@ -40,6 +43,8 @@ dependencies {
     implementation(libs.jackson.databind)
     implementation(libs.jackson.dataformat.yaml)
     implementation(libs.jackson.module.kotlin)
+    implementation(libs.kotlinx.serialization.core)
+    implementation(libs.kotlinx.serialization.yaml)
 
     funTestImplementation(projects.plugins.packageManagers.gradlePackageManager)
 

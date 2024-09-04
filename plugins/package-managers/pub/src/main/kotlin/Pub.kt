@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.pub
 
-import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.dataformat.yaml.JacksonYAMLParseException
 
 import java.io.File
@@ -37,7 +36,6 @@ import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.analyzer.toPackageReference
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
@@ -56,17 +54,15 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
-import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.plugins.packagemanagers.pub.Pubspec.Dependency
 import org.ossreviewtoolkit.plugins.packagemanagers.pub.utils.PubCacheReader
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.common.isNotEmpty
 import org.ossreviewtoolkit.utils.common.realFile
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
-import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.common.unpack
 import org.ossreviewtoolkit.utils.ort.downloadFile
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
@@ -262,11 +258,9 @@ class Pub(
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
-        val manifest = yamlMapper.readTree(definitionFile)
+        val manifest = parsePubspec(definitionFile)
 
-        val hasDependencies = manifest.fields().asSequence().any { (key, value) ->
-            key.startsWith("dependencies") && value.isNotEmpty()
-        }
+        val hasDependencies = manifest.getScopeDependencies(SCOPE_NAME_DEPENDENCIES).isNotEmpty()
 
         val packages = mutableMapOf<Identifier, Package>()
         val scopes = mutableSetOf<Scope>()
@@ -331,24 +325,24 @@ class Pub(
 
     private fun parseScope(
         scopeName: String,
-        manifest: JsonNode,
+        manifest: Pubspec,
         lockfile: Lockfile,
         packages: Map<Identifier, Package>,
         labels: Map<String, String>,
         workingDir: File
     ): Scope {
-        val packageName = manifest["name"].textValue()
+        val packageName = manifest.name
 
         logger.info { "Parsing scope '$scopeName' for package '$packageName'." }
 
-        val requiredPackages = manifest[scopeName]?.fieldNames()?.asSequence().orEmpty().toList()
+        val requiredPackages = manifest.getScopeDependencies(scopeName).keys.toList()
         val dependencies = buildDependencyTree(requiredPackages, manifest, lockfile, packages, labels, workingDir)
         return Scope(scopeName, dependencies)
     }
 
     private fun buildDependencyTree(
         dependencies: List<String>,
-        manifest: JsonNode,
+        manifest: Pubspec?,
         lockfile: Lockfile,
         packages: Map<Identifier, Package>,
         labels: Map<String, String>,
@@ -356,7 +350,7 @@ class Pub(
         processedPackages: Set<String> = emptySet()
     ): Set<PackageReference> {
         val packageReferences = mutableSetOf<PackageReference>()
-        val nameOfCurrentPackage = manifest["name"].textValue()
+        val nameOfCurrentPackage = manifest?.name.orEmpty()
         val containsFlutter = "flutter" in dependencies
 
         logger.debug { "Building dependency tree for package '$nameOfCurrentPackage'." }
@@ -382,13 +376,12 @@ class Pub(
             val packageInfo = packages[id] ?: throw IOException("Could not find package info for $packageName")
 
             try {
-                val dependencyYamlFile = readPackageInfoFromCache(pkgInfoFromLockfile, workingDir)
-                val requiredPackages =
-                    dependencyYamlFile["dependencies"]?.fieldNames()?.asSequence()?.toList().orEmpty()
+                val pubspec = readPackageInfoFromCache(pkgInfoFromLockfile, workingDir)
+                val requiredPackages = pubspec?.dependencies.orEmpty().keys.toList()
 
                 val transitiveDependencies = buildDependencyTree(
                     dependencies = requiredPackages,
-                    manifest = dependencyYamlFile,
+                    manifest = pubspec,
                     lockfile = lockfile,
                     packages = packages,
                     labels = labels,
@@ -496,11 +489,11 @@ class Pub(
         return ProjectAnalyzerResult(Project.EMPTY, emptySet(), listOf(issue))
     }
 
-    private fun parseProject(definitionFile: File, pubspec: JsonNode, scopes: Set<Scope>): Project {
+    private fun parseProject(definitionFile: File, pubspec: Pubspec, scopes: Set<Scope>): Project {
         // See https://dart.dev/tools/pub/pubspec for supported fields.
-        val rawName = pubspec["name"]?.textValue() ?: getFallbackProjectName(analysisRoot, definitionFile)
-        val homepageUrl = pubspec["homepage"].textValueOrEmpty()
-        val repositoryUrl = pubspec["repository"].textValueOrEmpty()
+        val rawName = pubspec.name
+        val homepageUrl = pubspec.homepage.orEmpty()
+        val repositoryUrl = pubspec.repository.orEmpty()
         val authors = parseAuthors(pubspec)
 
         val vcs = VcsHost.parseUrl(repositoryUrl)
@@ -510,7 +503,7 @@ class Pub(
                 type = managerName,
                 namespace = "",
                 name = rawName,
-                version = pubspec["version"].textValueOrEmpty()
+                version = pubspec.version.orEmpty()
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             authors = authors,
@@ -564,10 +557,10 @@ class Pub(
                     source == "git" -> {
                         val pkgInfoFromYamlFile = readPackageInfoFromCache(packageInfo, workingDir)
 
-                        rawName = pkgInfoFromYamlFile["name"]?.textValue() ?: packageName
-                        description = pkgInfoFromYamlFile["description"].textValueOrEmpty().trim()
-                        homepageUrl = pkgInfoFromYamlFile["homepage"].textValueOrEmpty()
-                        authors = parseAuthors(pkgInfoFromYamlFile)
+                        rawName = pkgInfoFromYamlFile?.name ?: packageName
+                        description = pkgInfoFromYamlFile?.description.orEmpty().trim()
+                        homepageUrl = pkgInfoFromYamlFile?.homepage.orEmpty()
+                        authors = pkgInfoFromYamlFile?.let { parseAuthors(it) }.orEmpty()
 
                         vcs = VcsInfo(
                             type = VcsType.GIT,
@@ -581,12 +574,12 @@ class Pub(
                     source != "sdk" -> {
                         val pkgInfoFromYamlFile = readPackageInfoFromCache(packageInfo, workingDir)
 
-                        rawName = pkgInfoFromYamlFile["name"].textValueOrEmpty()
-                        description = pkgInfoFromYamlFile["description"].textValueOrEmpty().trim()
-                        homepageUrl = pkgInfoFromYamlFile["homepage"].textValueOrEmpty()
-                        authors = parseAuthors(pkgInfoFromYamlFile)
+                        rawName = pkgInfoFromYamlFile?.name.orEmpty()
+                        description = pkgInfoFromYamlFile?.description.orEmpty().trim()
+                        homepageUrl = pkgInfoFromYamlFile?.homepage.orEmpty()
+                        authors = pkgInfoFromYamlFile?.let { parseAuthors(it) }.orEmpty()
 
-                        val repositoryUrl = pkgInfoFromYamlFile["repository"].textValueOrEmpty()
+                        val repositoryUrl = pkgInfoFromYamlFile?.repository.orEmpty()
 
                         // Ignore the revision parsed from the repositoryUrl because the URL often points to the
                         // main or master branch of the repository but never to the correct revision that matches
@@ -688,7 +681,7 @@ class Pub(
         return ParsePackagesResult(packages, issues)
     }
 
-    private fun readPackageInfoFromCache(packageInfo: PackageInfo, workingDir: File): JsonNode {
+    private fun readPackageInfoFromCache(packageInfo: PackageInfo, workingDir: File): Pubspec? {
         val definitionFile = reader.findFile(packageInfo, workingDir, PUBSPEC_YAML)
         if (definitionFile == null) {
             createAndLogIssue(
@@ -697,10 +690,10 @@ class Pub(
                 severity = Severity.WARNING
             )
 
-            return EMPTY_JSON_NODE
+            return null
         }
 
-        return yamlMapper.readTree(definitionFile)
+        return parsePubspec(definitionFile)
     }
 
     override fun getVersion(workingDir: File?): String {
@@ -755,9 +748,9 @@ class Pub(
      * Check the [PUBSPEC_YAML] within [workingDir] if the project contains the Flutter SDK.
      */
     private fun containsFlutterSdk(workingDir: File): Boolean {
-        val specFile = yamlMapper.readTree(workingDir.resolve(PUBSPEC_YAML))
+        val pubspec = parsePubspec(workingDir.resolve(PUBSPEC_YAML))
 
-        return specFile?.get("dependencies")?.get("flutter")?.get("sdk")?.textValue() == "flutter"
+        return (pubspec.dependencies?.get("flutter") as? Pubspec.SdkDependency)?.sdk == "flutter"
     }
 
     /**
@@ -777,12 +770,17 @@ class Pub(
 /**
  * Extract information about package authors from the given [pubspec].
  */
-private fun parseAuthors(pubspec: JsonNode): Set<String> =
-    (setOfNotNull(pubspec["author"]) + pubspec["authors"]?.toSet().orEmpty()).mapNotNullTo(mutableSetOf()) {
-        parseAuthorString(it.textValue())
-    }
+private fun parseAuthors(pubspec: Pubspec): Set<String> =
+    (pubspec.authors + pubspec.author).mapNotNullTo(mutableSetOf()) { parseAuthorString(it) }
 
 private fun ProjectAnalyzerResult.collectPackagesByScope(scopeName: String): List<Package> {
     val scope = project.scopes.find { it.name == scopeName } ?: return emptyList()
     return packages.filter { it.id in scope }
 }
+
+private fun Pubspec.getScopeDependencies(scopeName: String): Map<String, Dependency> =
+    when (scopeName) {
+        SCOPE_NAME_DEPENDENCIES -> dependencies.orEmpty()
+        SCOPE_NAME_DEV_DEPENDENCIES -> devDependencies.orEmpty()
+        else -> error("Invalid scope name: '$scopeName'.")
+    }
