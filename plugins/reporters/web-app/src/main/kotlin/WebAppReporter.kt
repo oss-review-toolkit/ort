@@ -30,8 +30,11 @@ import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream
 import org.apache.commons.compress.compressors.gzip.GzipParameters
 
 import org.ossreviewtoolkit.model.config.PluginConfiguration
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.reporters.evaluatedmodel.EvaluatedModel
 import org.ossreviewtoolkit.reporter.Reporter
+import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
 
 private const val PLACEHOLDER = "ORT_REPORT_DATA_PLACEHOLDER"
@@ -43,12 +46,15 @@ private const val PLACEHOLDER = "ORT_REPORT_DATA_PLACEHOLDER"
  * - *deduplicateDependencyTree*: Controls whether subtrees occurring multiple times in the dependency tree are
  *   stripped.
  */
-class WebAppReporter : Reporter {
+@OrtPlugin(
+    displayName = "WebApp Reporter",
+    description = "Generates a web application to browse an ORT result interactively.",
+    factory = ReporterFactory::class
+)
+class WebAppReporter(override val descriptor: PluginDescriptor = WebAppReporterFactory.descriptor) : Reporter {
     companion object {
         const val OPTION_DEDUPLICATE_DEPENDENCY_TREE = "deduplicateDependencyTree"
     }
-
-    override val type = "WebApp"
 
     private val reportFilename = "scan-report-web-app.html"
 

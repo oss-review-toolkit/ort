@@ -19,14 +19,22 @@
 
 package org.ossreviewtoolkit.plugins.reporters.asciidoc
 
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.reporter.Reporter
+import org.ossreviewtoolkit.reporter.ReporterFactory
 
 /**
  * A [Reporter] that creates HTML files from [Apache Freemarker][1] templates.
  *
  * [1]: https://freemarker.apache.org
  */
-class HtmlTemplateReporter : AsciiDocTemplateReporter() {
+@OrtPlugin(
+    displayName = "HTML Template Reporter",
+    description = "Generates HTML from AsciiDoc files from Apache Freemarker templates.",
+    factory = ReporterFactory::class
+)
+class HtmlTemplateReporter(override val descriptor: PluginDescriptor = HtmlTemplateReporterFactory.descriptor) :
+    AsciiDocTemplateReporter() {
     override val backend = "html"
-    override val type = "HtmlTemplate"
 }

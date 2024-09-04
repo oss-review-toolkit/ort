@@ -1,4 +1,0 @@
-org.ossreviewtoolkit.plugins.reporters.asciidoc.DocBookTemplateReporter
-org.ossreviewtoolkit.plugins.reporters.asciidoc.HtmlTemplateReporter
-org.ossreviewtoolkit.plugins.reporters.asciidoc.ManPageTemplateReporter
-org.ossreviewtoolkit.plugins.reporters.asciidoc.PdfTemplateReporter

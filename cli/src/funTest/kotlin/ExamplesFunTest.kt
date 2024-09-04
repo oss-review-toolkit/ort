@@ -58,8 +58,9 @@ import org.ossreviewtoolkit.model.config.SendMailConfiguration
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.notifier.Notifier
+import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
-import org.ossreviewtoolkit.reporter.Reporter
+import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CURATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
@@ -125,12 +126,12 @@ class ExamplesFunTest : StringSpec({
     }
 
     "The Asciidoctor PDF theme file is a valid" {
-        val reporter = Reporter.ALL.getValue("PdfTemplate")
+        val reporter = ReporterFactory.ALL.getValue("PdfTemplate")
         val outputDir = tempdir()
 
         takeExampleFile("asciidoctor-pdf-theme.yml")
 
-        val report = reporter.generateReport(
+        val report = reporter.create(PluginConfig()).generateReport(
             ReporterInput(OrtResult.EMPTY),
             outputDir,
             PluginConfiguration(

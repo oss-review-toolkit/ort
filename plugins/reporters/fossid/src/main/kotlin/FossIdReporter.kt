@@ -33,13 +33,22 @@ import org.ossreviewtoolkit.clients.fossid.model.report.ReportType
 import org.ossreviewtoolkit.clients.fossid.model.report.SelectionType
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.config.PluginConfiguration
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.reporter.Reporter
+import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.runBlocking
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
-class FossIdReporter : Reporter {
+@OrtPlugin(
+    id = "FossID",
+    displayName = "FossID Reporter",
+    description = "Export reports from FossID.",
+    factory = ReporterFactory::class
+)
+class FossIdReporter(override val descriptor: PluginDescriptor = FossIdReporterFactory.descriptor) : Reporter {
     companion object {
         /** Name of the configuration property for the server URL. */
         const val SERVER_URL_PROPERTY = "serverUrl"
@@ -66,8 +75,6 @@ class FossIdReporter : Reporter {
          */
         const val SCAN_CODE_KEY = "scancode"
     }
-
-    override val type = "FossId"
 
     override fun generateReport(
         input: ReporterInput,

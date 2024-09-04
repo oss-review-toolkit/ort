@@ -53,6 +53,7 @@ import org.ossreviewtoolkit.model.licenses.orEmpty
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.readValueOrDefault
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
+import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
 import org.ossreviewtoolkit.plugins.commands.api.utils.configurationGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.inputGroup
@@ -63,7 +64,7 @@ import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.SimplePack
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.dir.DirPackageConfigurationProvider
 import org.ossreviewtoolkit.reporter.DefaultLicenseTextProvider
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
-import org.ossreviewtoolkit.reporter.Reporter
+import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.expandTilde
@@ -103,9 +104,10 @@ class ReporterCommand : OrtCommand(
 
     private val reportFormats by option(
         "--report-formats", "-f",
-        help = "A comma-separated list of report formats to generate, any of ${Reporter.ALL.keys}."
+        help = "A comma-separated list of report formats to generate, any of ${ReporterFactory.ALL.keys}."
     ).convert { name ->
-        Reporter.ALL[name] ?: throw BadParameterValue("Report formats must be one or more of ${Reporter.ALL.keys}.")
+        ReporterFactory.ALL[name]
+            ?: throw BadParameterValue("Report formats must be one or more of ${ReporterFactory.ALL.keys}.")
     }.split(",").required().outputGroup()
 
     private val copyrightGarbageFile by option(
@@ -191,8 +193,8 @@ class ReporterCommand : OrtCommand(
             "format, and the value is an arbitrary key-value pair. For example: " +
             "-O PlainTextTemplate=template.id=NOTICE_SUMMARY"
     ).splitPair().convert { (format, option) ->
-        require(format in Reporter.ALL.keys) {
-            "Report formats must be one or more of ${Reporter.ALL.keys}."
+        require(format in ReporterFactory.ALL.keys) {
+            "Report formats must be one or more of ${ReporterFactory.ALL.keys}."
         }
 
         format to Pair(option.substringBefore("="), option.substringAfter("=", ""))
@@ -288,11 +290,12 @@ class ReporterCommand : OrtCommand(
                 reportFormats.map { reporter ->
                     async {
                         val threadName = Thread.currentThread().name
-                        echo("Generating the '${reporter.type}' report in thread '$threadName'...")
+                        echo("Generating the '${reporter.descriptor.id}' report in thread '$threadName'...")
 
                         reporter to measureTimedValue {
-                            val options = reportConfigMap[reporter.type] ?: PluginConfiguration.EMPTY
-                            reporter.generateReport(input, outputDir, options)
+                            val options = reportConfigMap[reporter.descriptor.id] ?: PluginConfiguration.EMPTY
+                            reporter.create(PluginConfig(options.options, options.secrets))
+                                .generateReport(input, outputDir, options)
                         }
                     }
                 }.awaitAll()
@@ -302,7 +305,7 @@ class ReporterCommand : OrtCommand(
         var failureCount = 0
 
         reportDurationMap.value.forEach { (reporter, timedValue) ->
-            val name = reporter.type
+            val name = reporter.descriptor.id
             val fileResults = timedValue.value
 
             fileResults.forEach { fileResult ->

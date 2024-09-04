@@ -26,12 +26,21 @@ import kotlinx.serialization.json.encodeToStream
 
 import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.licenses.LicenseView
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.reporter.Reporter
+import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 
-class CtrlXAutomationReporter : Reporter {
+@OrtPlugin(
+    displayName = "CtrlX Automation Reporter",
+    description = "A reporter for the ctrlX Automation format.",
+    factory = ReporterFactory::class
+)
+class CtrlXAutomationReporter(override val descriptor: PluginDescriptor = CtrlXAutomationReporterFactory.descriptor) :
+    Reporter {
     companion object {
         const val REPORT_FILENAME = "fossinfo.json"
 
@@ -43,8 +52,6 @@ class CtrlXAutomationReporter : Reporter {
             text = ""
         )
     }
-
-    override val type = "CtrlXAutomation"
 
     override fun generateReport(
         input: ReporterInput,

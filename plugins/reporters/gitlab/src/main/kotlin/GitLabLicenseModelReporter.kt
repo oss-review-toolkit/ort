@@ -26,7 +26,10 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
 
 import org.ossreviewtoolkit.model.config.PluginConfiguration
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.reporter.Reporter
+import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
 
 /**
@@ -38,7 +41,14 @@ import org.ossreviewtoolkit.reporter.ReporterInput
  * This reporter supports the following options:
  * - *skip.excluded*: Set to 'true' to omit excluded packages in the report. Defaults to 'false'.
  */
-class GitLabLicenseModelReporter : Reporter {
+@OrtPlugin(
+    displayName = "GitLab License Model Reporter",
+    description = "Creates YAML documents according to the GitLab license model schema version 2.1.",
+    factory = ReporterFactory::class
+)
+class GitLabLicenseModelReporter(
+    override val descriptor: PluginDescriptor = GitLabLicenseModelReporterFactory.descriptor
+) : Reporter {
     companion object {
         const val OPTION_SKIP_EXCLUDED = "skip.excluded"
 
@@ -49,8 +59,6 @@ class GitLabLicenseModelReporter : Reporter {
             prettyPrintIndent = "  "
         }
     }
-
-    override val type = "GitLabLicenseModel"
 
     private val reportFilename = "gl-license-scanning-report.json"
 

@@ -49,7 +49,10 @@ import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.reporter.Reporter
+import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.alsoIfNull
 import org.ossreviewtoolkit.utils.ort.Environment
@@ -69,7 +72,13 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicense
  * - *output.file.formats*: A comma-separated list of (case-insensitive) output formats to export to. Supported are XML
  *                          and JSON.
  */
-class CycloneDxReporter : Reporter {
+@OrtPlugin(
+    id = "CycloneDX",
+    displayName = "CycloneDX Reporter",
+    description = "Creates software bills of materials (SBOM) in the CycloneDX format.",
+    factory = ReporterFactory::class
+)
+class CycloneDxReporter(override val descriptor: PluginDescriptor = CycloneDxReporterFactory.descriptor) : Reporter {
     companion object {
         val DEFAULT_SCHEMA_VERSION = Version.VERSION_15
         val DEFAULT_DATA_LICENSE = SpdxLicense.CC0_1_0
@@ -81,8 +90,6 @@ class CycloneDxReporter : Reporter {
         const val OPTION_SINGLE_BOM = "single.bom"
         const val OPTION_OUTPUT_FILE_FORMATS = "output.file.formats"
     }
-
-    override val type = "CycloneDx"
 
     private fun Bom.addExternalReference(type: ExternalReference.Type, url: String, comment: String? = null) {
         if (url.isBlank()) return

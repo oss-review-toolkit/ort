@@ -23,7 +23,10 @@ import java.io.File
 
 import org.asciidoctor.Attributes
 
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.reporter.Reporter
+import org.ossreviewtoolkit.reporter.ReporterFactory
 
 /**
  * A [Reporter] that creates PDF files using a combination of [Apache Freemarker][1] templates and [AsciiDoc][2]
@@ -52,14 +55,19 @@ import org.ossreviewtoolkit.reporter.Reporter
  * [4]: https://github.com/asciidoctor/asciidoctorj-pdf
  * [5]: https://docs.asciidoctor.org/pdf-converter/latest/theme/
  */
-class PdfTemplateReporter : AsciiDocTemplateReporter() {
+@OrtPlugin(
+    displayName = "PDF Template Reporter",
+    description = "Generates PDF from AsciiDoc files from Apache Freemarker templates.",
+    factory = ReporterFactory::class
+)
+class PdfTemplateReporter(override val descriptor: PluginDescriptor = PdfTemplateReporterFactory.descriptor) :
+    AsciiDocTemplateReporter() {
     companion object {
         private const val OPTION_PDF_THEME_FILE = "pdf.theme.file"
         private const val OPTION_PDF_FONTS_DIR = "pdf.fonts.dir"
     }
 
     override val backend = "pdf"
-    override val type = "PdfTemplate"
 
     override fun processTemplateOptions(outputDir: File, options: MutableMap<String, String>): Attributes =
         Attributes.builder().apply {
