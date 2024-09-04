@@ -42,7 +42,7 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempDir
  * [3]: https://github.com/asciidoctor/asciidoctorj
  * [4]: https://docs.asciidoctor.org/asciidoctor/latest/convert/available
  */
-open class AsciiDocTemplateReporter(private val backend: String, override val type: String) : Reporter {
+abstract class AsciiDocTemplateReporter : Reporter {
     companion object {
         private const val ASCII_DOC_FILE_PREFIX = "AsciiDoc_"
         private const val ASCII_DOC_FILE_EXTENSION = "adoc"
@@ -52,6 +52,8 @@ open class AsciiDocTemplateReporter(private val backend: String, override val ty
         private const val VULNERABILITY_TEMPLATE_ID = "vulnerability_report"
         private const val DEFECT_TEMPLATE_ID = "defect_report"
     }
+
+    protected abstract val backend: String
 
     private val templateProcessor = FreemarkerTemplateProcessor(
         ASCII_DOC_TEMPLATE_DIRECTORY,
