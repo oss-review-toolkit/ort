@@ -258,9 +258,9 @@ class Pub(
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
-        val manifest = parsePubspec(definitionFile)
+        val pubspec = parsePubspec(definitionFile)
 
-        val hasDependencies = manifest.getScopeDependencies(SCOPE_NAME_DEPENDENCIES).isNotEmpty()
+        val hasDependencies = pubspec.getScopeDependencies(SCOPE_NAME_DEPENDENCIES).isNotEmpty()
 
         val packages = mutableMapOf<Identifier, Package>()
         val scopes = mutableSetOf<Scope>()
@@ -312,11 +312,11 @@ class Pub(
             logger.info { "Successfully parsed installed packages." }
 
             ALL_PUB_SCOPE_NAMES.mapTo(scopes) { scopeName ->
-                parseScope(scopeName, manifest, lockfile, parsePackagesResult.packages, labels, workingDir)
+                parseScope(scopeName, pubspec, lockfile, parsePackagesResult.packages, labels, workingDir)
             }
         }
 
-        val project = parseProject(definitionFile, manifest, scopes)
+        val project = parseProject(definitionFile, pubspec, scopes)
 
         projectAnalyzerResults += ProjectAnalyzerResult(project, packages.values.toSet(), issues)
 
@@ -325,24 +325,24 @@ class Pub(
 
     private fun parseScope(
         scopeName: String,
-        manifest: Pubspec,
+        pubspec: Pubspec,
         lockfile: Lockfile,
         packages: Map<Identifier, Package>,
         labels: Map<String, String>,
         workingDir: File
     ): Scope {
-        val packageName = manifest.name
+        val packageName = pubspec.name
 
         logger.info { "Parsing scope '$scopeName' for package '$packageName'." }
 
-        val requiredPackages = manifest.getScopeDependencies(scopeName).keys.toList()
-        val dependencies = buildDependencyTree(requiredPackages, manifest, lockfile, packages, labels, workingDir)
+        val requiredPackages = pubspec.getScopeDependencies(scopeName).keys.toList()
+        val dependencies = buildDependencyTree(requiredPackages, pubspec, lockfile, packages, labels, workingDir)
         return Scope(scopeName, dependencies)
     }
 
     private fun buildDependencyTree(
         dependencies: List<String>,
-        manifest: Pubspec?,
+        pubspec: Pubspec?,
         lockfile: Lockfile,
         packages: Map<Identifier, Package>,
         labels: Map<String, String>,
@@ -350,7 +350,7 @@ class Pub(
         processedPackages: Set<String> = emptySet()
     ): Set<PackageReference> {
         val packageReferences = mutableSetOf<PackageReference>()
-        val nameOfCurrentPackage = manifest?.name.orEmpty()
+        val nameOfCurrentPackage = pubspec?.name.orEmpty()
         val containsFlutter = "flutter" in dependencies
 
         logger.debug { "Building dependency tree for package '$nameOfCurrentPackage'." }
@@ -381,7 +381,7 @@ class Pub(
 
                 val transitiveDependencies = buildDependencyTree(
                     dependencies = requiredPackages,
-                    manifest = dependencyPubspec,
+                    pubspec = dependencyPubspec,
                     lockfile = lockfile,
                     packages = packages,
                     labels = labels,
