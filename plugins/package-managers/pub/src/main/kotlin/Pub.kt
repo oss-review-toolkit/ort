@@ -491,22 +491,18 @@ class Pub(
 
     private fun parseProject(definitionFile: File, pubspec: Pubspec, scopes: Set<Scope>): Project {
         // See https://dart.dev/tools/pub/pubspec for supported fields.
-        val rawName = pubspec.name
         val homepageUrl = pubspec.homepage.orEmpty()
-        val repositoryUrl = pubspec.repository.orEmpty()
-        val authors = parseAuthors(pubspec)
-
-        val vcs = VcsHost.parseUrl(repositoryUrl)
+        val vcs = VcsHost.parseUrl(pubspec.repository.orEmpty())
 
         return Project(
             id = Identifier(
                 type = managerName,
                 namespace = "",
-                name = rawName,
+                name = pubspec.name,
                 version = pubspec.version.orEmpty()
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-            authors = authors,
+            authors = parseAuthors(pubspec),
             // Pub does not declare any licenses in the pubspec files, therefore we keep this empty.
             declaredLicenses = emptySet(),
             vcs = vcs,
