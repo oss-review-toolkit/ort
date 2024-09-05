@@ -376,12 +376,12 @@ class Pub(
             val packageInfo = packages[id] ?: throw IOException("Could not find package info for $packageName")
 
             try {
-                val pubspec = readPackageInfoFromCache(pkgInfoFromLockfile, workingDir)
-                val requiredPackages = pubspec?.dependencies.orEmpty().keys.toList()
+                val dependencyPubspec = readPackageInfoFromCache(pkgInfoFromLockfile, workingDir)
+                val requiredPackages = dependencyPubspec?.dependencies.orEmpty().keys.toList()
 
                 val transitiveDependencies = buildDependencyTree(
                     dependencies = requiredPackages,
-                    manifest = pubspec,
+                    manifest = dependencyPubspec,
                     lockfile = lockfile,
                     packages = packages,
                     labels = labels,
