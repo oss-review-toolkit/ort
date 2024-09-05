@@ -125,7 +125,7 @@ class GradleInspector(
         val toolsDir = ortToolsDirectory.resolve(managerName).apply { safeMkdirs() }
         val pluginJar = extractResource("/gradle-plugin.jar", toolsDir.resolve("gradle-plugin.jar"))
 
-        val initScriptText = javaClass.getResource("/init.gradle.template").readText()
+        val initScriptText = javaClass.getResource("/template.init.gradle").readText()
             .replace("<REPLACE_PLUGIN_JAR>", pluginJar.invariantSeparatorsPath)
 
         val initScript = toolsDir.resolve("init.gradle")
