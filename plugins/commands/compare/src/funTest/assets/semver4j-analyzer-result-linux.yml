@@ -1,15 +1,12 @@
 ---
 repository:
-  vcs:
-    type: "Git"
-    url: "https://github.com/vdurmont/semver4j.git"
-    revision: "7653e418d610ffcd2811bcb55fd72d00d420950b"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/vdurmont/semver4j.git"
-    revision: "7653e418d610ffcd2811bcb55fd72d00d420950b"
-    path: ""
+  provenance:
+    vcs_info:
+      type: "Git"
+      url: "https://github.com/vdurmont/semver4j.git"
+      revision: "7653e418d610ffcd2811bcb55fd72d00d420950b"
+      path: ""
+    resolved_revision: "7653e418d610ffcd2811bcb55fd72d00d420950b"
   config: {}
 analyzer:
   start_time: "2023-11-22T08:58:09.135241769Z"

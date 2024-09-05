@@ -1,15 +1,12 @@
 ---
 repository:
-  vcs:
-    type: "Git"
-    url: "https://github.com/oss-review-toolkit/ort.git"
-    revision: "d27a886818b8ebba8e97e914133ec3cc650a534b"
-    path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/oss-review-toolkit/ort.git"
-    revision: "d27a886818b8ebba8e97e914133ec3cc650a534b"
-    path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
+  provenance:
+    vcs_info:
+      type: "Git"
+      url: "https://github.com/oss-review-toolkit/ort.git"
+      revision: "d27a886818b8ebba8e97e914133ec3cc650a534b"
+      path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
+    resolved_revision: "d27a886818b8ebba8e97e914133ec3cc650a534b"
   config:
     excludes:
       paths:

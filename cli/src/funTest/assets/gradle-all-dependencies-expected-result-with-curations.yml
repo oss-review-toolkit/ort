@@ -1,15 +1,12 @@
 ---
 repository:
-  vcs:
-    type: "Git"
-    url: "<REPLACE_URL>"
-    revision: "<REPLACE_REVISION>"
-    path: "plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/gradle"
-  vcs_processed:
-    type: "Git"
-    url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REVISION>"
-    path: "plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/gradle"
+  provenance:
+    vcs_info:
+      type: "Git"
+      url: "<REPLACE_URL>"
+      revision: "<REPLACE_REVISION>"
+      path: "plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/gradle"
+    resolved_revision: "<REPLACE_REVISION>"
   config:
     excludes:
       paths:

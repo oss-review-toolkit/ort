@@ -83,9 +83,9 @@ class OrtResultTest : WordSpec({
 
     "getDefinitionFilePathRelativeToAnalyzerRoot()" should {
         "use the correct vcs" {
-            val vcs = VcsInfo(type = VcsType.GIT, url = "https://example.com/git", revision = "")
-            val nestedVcs1 = VcsInfo(type = VcsType.GIT, url = "https://example.com/git1", revision = "")
-            val nestedVcs2 = VcsInfo(type = VcsType.GIT, url = "https://example.com/git2", revision = "")
+            val vcs = VcsInfo(type = VcsType.GIT, url = "https://example.com/git", revision = "main")
+            val nestedVcs1 = VcsInfo(type = VcsType.GIT, url = "https://example.com/git1", revision = "main")
+            val nestedVcs2 = VcsInfo(type = VcsType.GIT, url = "https://example.com/git2", revision = "main")
             val project1 = Project.EMPTY.copy(
                 id = Identifier("Gradle:org.ossreviewtoolkit:project1:1.0"),
                 definitionFilePath = "project1/build.gradle",
@@ -106,7 +106,7 @@ class OrtResultTest : WordSpec({
             )
             val ortResult = OrtResult(
                 Repository(
-                    vcs = vcs,
+                    provenance = RepositoryProvenance(vcs, vcs.revision),
                     nestedRepositories = mapOf(
                         "path/1" to nestedVcs1,
                         "path/2" to nestedVcs2
@@ -123,9 +123,9 @@ class OrtResultTest : WordSpec({
         }
 
         "fail if no vcs matches" {
-            val vcs = VcsInfo(type = VcsType.GIT, url = "https://example.com/git", revision = "")
-            val nestedVcs1 = VcsInfo(type = VcsType.GIT, url = "https://example.com/git1", revision = "")
-            val nestedVcs2 = VcsInfo(type = VcsType.GIT, url = "https://example.com/git2", revision = "")
+            val vcs = VcsInfo(type = VcsType.GIT, url = "https://example.com/git", revision = "main")
+            val nestedVcs1 = VcsInfo(type = VcsType.GIT, url = "https://example.com/git1", revision = "main")
+            val nestedVcs2 = VcsInfo(type = VcsType.GIT, url = "https://example.com/git2", revision = "main")
             val project = Project.EMPTY.copy(
                 id = Identifier("Gradle:org.ossreviewtoolkit:project1:1.0"),
                 definitionFilePath = "build.gradle",
@@ -134,7 +134,7 @@ class OrtResultTest : WordSpec({
             )
             val ortResult = OrtResult(
                 Repository(
-                    vcs = vcs,
+                    provenance = RepositoryProvenance(vcs, vcs.revision),
                     nestedRepositories = mapOf(
                         "path/1" to nestedVcs1
                     )
@@ -260,8 +260,7 @@ class OrtResultTest : WordSpec({
 
             val ortResult = OrtResult.EMPTY.copy(
                 repository = Repository.EMPTY.copy(
-                    vcs = vcs,
-                    vcsProcessed = vcs,
+                    provenance = RepositoryProvenance(vcs, vcs.revision),
                     config = RepositoryConfiguration(
                         excludes = Excludes(
                             paths = listOf(

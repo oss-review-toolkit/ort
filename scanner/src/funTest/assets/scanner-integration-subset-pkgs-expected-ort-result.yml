@@ -1,15 +1,12 @@
 ---
 repository:
-  vcs:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
+  provenance:
+    vcs_info:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    resolved_revision: ""
   config: {}
 analyzer:
   start_time: "1970-01-01T00:00:00Z"
