@@ -345,9 +345,9 @@ class AnalyzerResultBuilderTest : WordSpec() {
                 )
 
                 val project = Project.EMPTY.copy(
-                    id = Identifier("type", "namespace", "project", "version"),
+                    id = project2.id,
                     scopeDependencies = setOf(scope),
-                    definitionFilePath = "project"
+                    definitionFilePath = project2.definitionFilePath
                 )
 
                 val projectAnalyzerResult = ProjectAnalyzerResult(
