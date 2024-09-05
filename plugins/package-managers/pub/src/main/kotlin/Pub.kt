@@ -55,6 +55,7 @@ import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.plugins.packagemanagers.pub.Pubspec.Dependency
+import org.ossreviewtoolkit.plugins.packagemanagers.pub.Pubspec.SdkDependency
 import org.ossreviewtoolkit.plugins.packagemanagers.pub.utils.PubCacheReader
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
@@ -744,9 +745,8 @@ class Pub(
      * Check the [PUBSPEC_YAML] within [workingDir] if the project contains the Flutter SDK.
      */
     private fun containsFlutterSdk(workingDir: File): Boolean {
-        val pubspec = parsePubspec(workingDir.resolve(PUBSPEC_YAML))
-
-        return (pubspec.dependencies?.get("flutter") as? Pubspec.SdkDependency)?.sdk == "flutter"
+        val dependencies = parsePubspec(workingDir.resolve(PUBSPEC_YAML)).dependencies ?: return false
+        return dependencies.values.filterIsInstance<SdkDependency>().any { it.sdk == "flutter" }
     }
 
     /**
