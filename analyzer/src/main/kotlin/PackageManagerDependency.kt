@@ -55,11 +55,6 @@ data class PackageManagerDependency(
             "Could not find a project for the definition file '$definitionFile'."
         }
 
-        require(project.id.type == packageManager) {
-            "The project '${project.id.toCoordinates()}' from definition file '$definitionFile' uses the wrong " +
-                "package manager '${project.id.type}', expected is '$packageManager'."
-        }
-
         requireNotNull(project.scopeNames) {
             "The project '${project.id.toCoordinates()}' from definition file '$definitionFile' does not use a " +
                 "dependency graph."
