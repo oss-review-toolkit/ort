@@ -45,9 +45,9 @@ class DependencyGraphNavigator(
     override fun scopeNames(project: Project): Set<String> = project.scopeNames.orEmpty()
 
     override fun directDependencies(project: Project, scopeName: String): Sequence<DependencyNode> {
-        val graph = graphForManager(project.managerName)
+        val graph = graphForManager(project.id.type)
         val rootDependencies = graph.scopes[DependencyGraph.qualifyScope(project, scopeName)].orEmpty().map { root ->
-            referenceFor(project.managerName, root)
+            referenceFor(project.id.type, root)
         }
 
         return dependenciesSequence(graph, rootDependencies)
@@ -186,13 +186,6 @@ private class DependencyRefCursor(
      */
     override fun hashCode(): Int = current.hashCode()
 }
-
-/**
- * Return the name of the package manager that constructed this [Project]. This is required to find the
- * [DependencyGraph] for this project.
- */
-private val Project.managerName: String
-    get() = id.type
 
 /**
  * Construct a data structure that allows fast access to all [DependencyGraphNode]s contained in this
