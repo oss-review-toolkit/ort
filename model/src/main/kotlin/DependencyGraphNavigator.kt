@@ -45,9 +45,18 @@ class DependencyGraphNavigator(
     override fun scopeNames(project: Project): Set<String> = project.scopeNames.orEmpty()
 
     override fun directDependencies(project: Project, scopeName: String): Sequence<DependencyNode> {
-        val graph = graphForManager(project.id.type)
+        // TODO: Relax the assumption that package manager name start with the name of the type of project
+        //       they manage, for example that "GradleInspector" manages "Gradle" projects.
+        val managers = graphs.keys.filter { it.startsWith(project.id.type) }
+
+        val manager = requireNotNull(managers.singleOrNull()) {
+            "All of the $managers managers are able to manage '${project.id.type}' projects. Please enable only one " +
+                "of them."
+        }
+
+        val graph = graphForManager(manager)
         val rootDependencies = graph.scopes[DependencyGraph.qualifyScope(project, scopeName)].orEmpty().map { root ->
-            referenceFor(project.id.type, root)
+            referenceFor(manager, root)
         }
 
         return dependenciesSequence(graph, rootDependencies)
