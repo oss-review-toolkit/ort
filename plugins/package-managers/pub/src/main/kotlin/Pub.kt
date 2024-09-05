@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.pub
 
-import com.fasterxml.jackson.dataformat.yaml.JacksonYAMLParseException
-
 import java.io.File
 import java.io.IOException
 
@@ -535,7 +533,7 @@ class Pub(
         var containsFlutter = false
 
         lockfile.packages.forEach { (packageName, packageInfo) ->
-            try {
+            runCatching {
                 val version = packageInfo.version.orEmpty()
                 var description = ""
                 var rawName = ""
@@ -646,14 +644,14 @@ class Pub(
                     vcs = vcs,
                     vcsProcessed = processPackageVcs(vcs, homepageUrl)
                 )
-            } catch (e: JacksonYAMLParseException) {
-                e.showStackTrace()
+            }.onFailure {
+                it.showStackTrace()
 
                 val packageVersion = packageInfo.version
                 issues += createAndLogIssue(
                     source = managerName,
                     message = "Failed to parse $PUBSPEC_YAML for package $packageName:$packageVersion: " +
-                        e.collectMessages()
+                        it.collectMessages()
                 )
             }
         }
