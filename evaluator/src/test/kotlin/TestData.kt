@@ -232,7 +232,9 @@ val ortResult = OrtResult(
                                 VulnerabilityReference(
                                     url = URI("https://oss-review-toolkit.org"),
                                     scoringSystem = "CVSS3",
-                                    severity = "9.0"
+                                    severity = "CRITICAL",
+                                    score = 9.0f,
+                                    vector = null
                                 )
                             )
                         ),
@@ -242,7 +244,9 @@ val ortResult = OrtResult(
                                 VulnerabilityReference(
                                     url = URI("https://oss-review-toolkit.org"),
                                     scoringSystem = "CVSS3",
-                                    severity = "2.0"
+                                    severity = "LOW",
+                                    score = 2.0f,
+                                    vector = null
                                 )
                             )
                         )

@@ -157,7 +157,7 @@ class NexusIq(override val descriptor: PluginDescriptor, private val config: Nex
         val references = mutableListOf<VulnerabilityReference>()
 
         val browseUrl = URI("${config.browseUrl}/assets/index.html#/vulnerabilities/$reference")
-        val nexusIqReference = VulnerabilityReference(browseUrl, scoringSystem(), severity.toString())
+        val nexusIqReference = VulnerabilityReference(browseUrl, scoringSystem(), threatCategory, severity, null)
 
         references += nexusIqReference
         url.takeIf { it != browseUrl }?.let { references += nexusIqReference.copy(url = it) }

@@ -97,12 +97,16 @@ class OssIndexTest : WordSpec({
                                         "&utm_content=5.0"
                                 ),
                                 scoringSystem = "CVSS:3.0",
-                                severity = "5.5"
+                                severity = "MEDIUM",
+                                score = 5.5f,
+                                vector = "CVSS:3.0/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N"
                             ),
                             VulnerabilityReference(
                                 url = URI("https://nvd.nist.gov/vuln/detail/CVE-2020-15250"),
                                 scoringSystem = "CVSS:3.0",
-                                severity = "5.5"
+                                severity = "MEDIUM",
+                                score = 5.5f,
+                                vector = "CVSS:3.0/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N"
                             )
                         )
                     )

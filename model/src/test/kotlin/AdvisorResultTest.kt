@@ -289,12 +289,13 @@ private fun createVulnerability(
     id: String,
     uriPrefix: String = "http://cve.mitre.org/cgi-bin/cvename.cgi?name=",
     scoringSystem: String = "cvssv3.1_qr",
-    severity: String = "MODERATE"
+    severity: String = "MEDIUM",
+    score: Float = 5.0f
 ): Vulnerability =
     Vulnerability(
         id = id,
         references = listOf(
-            VulnerabilityReference(URI("$uriPrefix$id"), scoringSystem, severity)
+            VulnerabilityReference(URI("$uriPrefix$id"), scoringSystem, severity, score, null)
         )
     )
 

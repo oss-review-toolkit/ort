@@ -15,20 +15,28 @@
       "description" : "This affects the package find-my-way before 2.2.5, from 3.0.0 and before 3.0.5. It accepts the Accept-Version' header by default, and if versioned routes are not being used, this could lead to a denial of service. Accept-Version can be used as an unkeyed header in a cache poisoning attack.",
       "references" : [ {
         "url" : "https://nvd.nist.gov/vuln/detail/CVE-2020-7764",
-        "scoring_system" : "CVSS:3.1",
-        "severity" : "5.9"
+        "scoring_system" : "CVSS_V3",
+        "severity": "MODERATE",
+        "score": 5.9,
+        "vector" : "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
       }, {
         "url" : "https://github.com/delvedor/find-my-way/commit/ab408354690e6b9cf3c4724befb3b3fa4bb90aac",
-        "scoring_system" : "CVSS:3.1",
-        "severity" : "5.9"
+        "scoring_system" : "CVSS_V3",
+        "severity": "MODERATE",
+        "score": 5.9,
+        "vector" : "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
       }, {
         "url" : "https://snyk.io/vuln/SNYK-JS-FINDMYWAY-1038269",
-        "scoring_system" : "CVSS:3.1",
-        "severity" : "5.9"
+        "scoring_system" : "CVSS_V3",
+        "severity": "MODERATE",
+        "score": 5.9,
+        "vector" : "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
       }, {
         "url" : "https://www.npmjs.com/package/find-my-way",
-        "scoring_system" : "CVSS:3.1",
-        "severity" : "5.9"
+        "scoring_system" : "CVSS_V3",
+        "severity": "MODERATE",
+        "score": 5.9,
+        "vector" : "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
       } ]
     } ]
   },
@@ -49,15 +57,21 @@
       "references" : [ {
         "url" : "https://github.com/brussell98/discord-markdown/security/advisories/GHSA-9r27-994c-4xch",
         "scoring_system" : null,
-        "severity" : "HIGH"
+        "severity" : "HIGH",
+        "score" : null,
+        "vector" : null
       }, {
         "url" : "https://github.com/brussell98/discord-markdown/issues/13",
         "scoring_system" : null,
-        "severity" : "HIGH"
+        "severity" : "HIGH",
+        "score" : null,
+        "vector" : null
       }, {
         "url" : "https://github.com/brussell98/discord-markdown/commit/7ce2eb66520815dcf5e97ef2bc8a2d5979da66e7",
         "scoring_system" : null,
-        "severity" : "HIGH"
+        "severity" : "HIGH",
+        "score" : null,
+        "vector" : null
       } ]
     } ]
   },
@@ -77,16 +91,22 @@
       "description" : "An issue was discovered in Donfig 0.3.0. There is a vulnerability in the `collect_yaml` method in `config_obj.py`. It can execute arbitrary Python commands, resulting in command execution.",
       "references" : [ {
         "url" : "https://nvd.nist.gov/vuln/detail/CVE-2019-7537",
-        "scoring_system" : "CVSS:3.0",
-        "severity" : "9.8"
+        "scoring_system" : "CVSS_V3",
+        "severity": "CRITICAL",
+        "score": 9.8,
+        "vector" : "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
       }, {
         "url" : "https://github.com/pytroll/donfig/issues/5",
-        "scoring_system" : "CVSS:3.0",
-        "severity" : "9.8"
+        "scoring_system" : "CVSS_V3",
+        "severity": "CRITICAL",
+        "score": 9.8,
+        "vector" : "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
       }, {
         "url" : "https://github.com/pytroll/donfig",
-        "scoring_system" : "CVSS:3.0",
-        "severity" : "9.8"
+        "scoring_system" : "CVSS_V3",
+        "severity": "CRITICAL",
+        "score": 9.8,
+        "vector" : "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
       } ]
     }, {
       "id" : "PYSEC-2019-21",
@@ -94,11 +114,15 @@
       "references" : [ {
         "url" : "https://github.com/pytroll/donfig/issues/5",
         "scoring_system" : null,
-        "severity" : null
+        "severity" : null,
+        "score" : null,
+        "vector" : null
       }, {
         "url" : "https://github.com/pytroll/donfig/commits/master",
         "scoring_system" : null,
-        "severity" : null
+        "severity" : null,
+        "score" : null,
+        "vector" : null
       } ]
     } ]
   }
