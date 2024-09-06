@@ -67,6 +67,10 @@ data class Vulnerability(
     val credits: Set<Credit> = emptySet()
 )
 
+/**
+ * The affected package and versions, meaning those that contain the vulnerability.
+ * See https://ossf.github.io/osv-schema/#affected-fields.
+ */
 @Serializable
 data class Affected(
     @SerialName("package")
@@ -78,6 +82,10 @@ data class Affected(
     val databaseSpecific: JsonObject? = null
 )
 
+/**
+ * A way to give credit for the discovery, confirmation, patch, or other events in the life cycle of a vulnerability.
+ * See https://ossf.github.io/osv-schema/#credits-fields.
+ */
 @Serializable
 data class Credit(
     val name: String,
@@ -122,6 +130,10 @@ object Ecosystem {
     const val SWIFT_URL = "SwiftURL"
 }
 
+/**
+ * A representation of a status change for an affected package.
+ * See https://ossf.github.io/osv-schema/#affectedrangesevents-fields.
+ */
 @Serializable(EventSerializer::class)
 data class Event(
     val type: Type,
@@ -135,6 +147,10 @@ data class Event(
     }
 }
 
+/**
+ * A class to identify the the affected code library or command provided by the package.
+ * See https://ossf.github.io/osv-schema/#affectedpackage-field.
+ */
 @Serializable
 data class Package(
     /** See also [Ecosystem]. */
@@ -143,6 +159,11 @@ data class Package(
     val purl: String? = null
 )
 
+/**
+ * A class to store information about the affected version range of the given [type] and optional [repo] URL. Each of
+ * [events] describes the event that occurred in a single version.
+ * See https://ossf.github.io/osv-schema/#affectedranges-field.
+ */
 @Serializable
 data class Range(
     val type: Type,
@@ -167,6 +188,10 @@ data class Range(
     }
 }
 
+/**
+ * A class to specify the [type] of reference, and the fully-qualified URL (including the scheme, typically “https://”)
+ * linking to additional information. See https://ossf.github.io/osv-schema/#references-field.
+ */
 @Serializable
 data class Reference(
     val type: Type,
@@ -187,6 +212,10 @@ data class Reference(
     }
 }
 
+/**
+ * A class to escribe the quantitative [type] method used to calculate the associated [score].
+ * See https://ossf.github.io/osv-schema/#severitytype-field.
+ */
 @Serializable
 data class Severity(
     val type: Type,
