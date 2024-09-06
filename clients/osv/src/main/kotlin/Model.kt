@@ -55,8 +55,8 @@ data class Vulnerability(
     val details: String? = null,
 
     /**
-     * The severity of this [Vulnerability]. This is a list in order to allow for providing multiple representations,
-     * using different scoring systems. See https://github.com/google/osv.dev/issues/545#issuecomment-1190880767 and
+     * The severity is a collection in order to allow for providing multiple representations using different scoring
+     * systems. See https://github.com/google/osv.dev/issues/545#issuecomment-1190880767 and
      * https://ossf.github.io/osv-schema/#severity-field.
      */
     val severity: Set<Severity> = emptySet(),
