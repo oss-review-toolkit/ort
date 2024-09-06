@@ -1100,7 +1100,8 @@ vulnerabilities:
   - url: "https://registry.vulnerability-url/"
     scoring_system: "SCORING_SYSTEM_NAME"
     severity: "ERROR"
-    severity_rating: "UNKNOWN"
+    score: null
+    vector: null
   resolutions: []
 statistics:
   repository_configuration:

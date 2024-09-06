@@ -51,8 +51,10 @@ class VulnerableCodeFunTest : WordSpec({
                 getValue("CVE-2023-2976").references.find {
                     it.url.toString() == "https://nvd.nist.gov/vuln/detail/CVE-2023-2976"
                 } shouldNotBeNull {
-                    severity shouldBe "7.1"
-                    severityRating shouldBe "HIGH"
+                    scoringSystem shouldBe "cvssv3"
+                    severity shouldBe "HIGH"
+                    score shouldBe 7.1f
+                    vector shouldBe "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N"
                 }
             }
         }
@@ -73,8 +75,10 @@ class VulnerableCodeFunTest : WordSpec({
                 getValue("CVE-2023-42503").references.find {
                     it.url.toString() == "https://nvd.nist.gov/vuln/detail/CVE-2023-42503"
                 } shouldNotBeNull {
-                    severity shouldBe "5.5"
-                    severityRating shouldBe "MEDIUM"
+                    scoringSystem shouldBe "cvssv3"
+                    severity shouldBe "MEDIUM"
+                    score shouldBe 5.5f
+                    vector shouldBe "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H"
                 }
             }
         }

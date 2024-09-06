@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.config.PluginConfiguration
+import org.ossreviewtoolkit.model.vulnerabilities.Cvss2Rating
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
@@ -136,11 +137,11 @@ class OssIndex(override val descriptor: PluginDescriptor, config: OssIndexConfig
      * [OssIndexService.Vulnerability].
      */
     private fun OssIndexService.Vulnerability.toVulnerability(): Vulnerability {
-        val reference = VulnerabilityReference(
-            url = URI(reference),
-            scoringSystem = cvssVector?.substringBefore('/'),
-            severity = cvssScore.toString()
-        )
+        // Only CVSS version 2 vectors do not contain the "CVSS:" label and version prefix.
+        val scoringSystem = cvssVector?.substringBefore('/', Cvss2Rating.NAMES.first())
+
+        val severity = VulnerabilityReference.getQualitativeRating(scoringSystem, cvssScore)?.name
+        val reference = VulnerabilityReference(URI(reference), scoringSystem, severity, cvssScore, cvssVector)
 
         val references = mutableListOf(reference)
         externalReferences?.mapTo(references) { reference.copy(url = URI(it)) }

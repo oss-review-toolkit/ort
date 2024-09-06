@@ -30,7 +30,6 @@ import org.ossreviewtoolkit.advisor.AdviceProvider
 import org.ossreviewtoolkit.advisor.AdviceProviderFactory
 import org.ossreviewtoolkit.clients.osv.Ecosystem
 import org.ossreviewtoolkit.clients.osv.OsvServiceWrapper
-import org.ossreviewtoolkit.clients.osv.Severity
 import org.ossreviewtoolkit.clients.osv.VulnerabilitiesForPackageRequest
 import org.ossreviewtoolkit.clients.osv.Vulnerability
 import org.ossreviewtoolkit.model.AdvisorCapability
@@ -187,27 +186,9 @@ private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.vulne
     // However, only one representation is actually possible currently, because the enum 'Severity.Type' contains just a
     // single element / scoring system. So, picking first severity is fine, in particular because ORT only supports a
     // single severity representation.
-    var (scoringSystem, severity) = severity.firstOrNull()?.let {
-        require(it.type == Severity.Type.CVSS_V3) {
-            "The severity mapping for type '${it.type}' is not implemented."
-        }
-
-        Cvss.fromVector(it.score)?.let { cvss ->
-            it.score.substringBefore("/") to "${cvss.calculateScore().baseScore}"
-        } ?: run {
-            logger.debug { "Could not parse CVSS vector '${it.score}'." }
-            null to it.score
-        }
+    val (scoringSystem, severity) = severity.firstOrNull()?.let {
+        it.type.name to it.score
     } ?: (null to null)
-
-    val specificSeverity = databaseSpecific?.get("severity")
-    if (severity == null && specificSeverity != null) {
-        // Fallback to the 'severity' property of the unspecified 'databaseSpecific' object.
-        // See also https://github.com/google/osv.dev/issues/484.
-        if (specificSeverity is JsonPrimitive) {
-            severity = specificSeverity.contentOrNull
-        }
-    }
 
     val references = references.mapNotNull { reference ->
         val url = reference.url.trim().let { if (it.startsWith("://")) "https$it" else it }
@@ -215,11 +196,15 @@ private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.vulne
         url.toUri().onFailure {
             logger.debug { "Could not parse reference URL for vulnerability '$id': ${it.message}." }
         }.map {
-            VulnerabilityReference(
-                url = it,
-                scoringSystem = scoringSystem,
-                severity = severity
-            )
+            // Use the 'severity' property of the unspecified 'databaseSpecific' object.
+            // See also https://github.com/google/osv.dev/issues/484.
+            val specificSeverity = databaseSpecific?.get("severity")
+
+            val baseScore = Cvss.fromVector(severity)?.calculateScore()?.baseScore?.toFloat()
+            val severityRating = (specificSeverity as? JsonPrimitive)?.contentOrNull
+                ?: VulnerabilityReference.getQualitativeRating(scoringSystem, baseScore)?.name
+
+            VulnerabilityReference(it, scoringSystem, severityRating, baseScore, severity)
         }.getOrNull()
     }
 
