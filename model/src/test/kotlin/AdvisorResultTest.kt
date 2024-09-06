@@ -277,15 +277,6 @@ class AdvisorResultTest : WordSpec({
     }
 })
 
-/** The prefix for URIs pointing to the source of vulnerabilities. */
-private const val SOURCE_URI_PREFIX = "http://cve.mitre.org/cgi-bin/cvename.cgi?name="
-
-/** A scoring system used by vulnerabilities. */
-private const val SCORING_SYSTEM = "cvssv3.1_qr"
-
-/** The default severity assigned to vulnerabilities. */
-private const val DEFAULT_SEVERITY = "MODERATE"
-
 /** Test package identifiers. */
 private val langId = Identifier("Maven", "org.apache.commons", "commons-lang3", "3.8")
 private val queryId = Identifier("NPM", "", "jQuery", "2.1.4")
@@ -296,9 +287,9 @@ private val queryId = Identifier("NPM", "", "jQuery", "2.1.4")
  */
 private fun createVulnerability(
     id: String,
-    uriPrefix: String = SOURCE_URI_PREFIX,
-    scoringSystem: String = SCORING_SYSTEM,
-    severity: String = DEFAULT_SEVERITY
+    uriPrefix: String = "http://cve.mitre.org/cgi-bin/cvename.cgi?name=",
+    scoringSystem: String = "cvssv3.1_qr",
+    severity: String = "MODERATE"
 ): Vulnerability =
     Vulnerability(
         id = id,
