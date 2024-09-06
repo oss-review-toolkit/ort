@@ -217,7 +217,6 @@ data class Reference(
         DISCUSSION,
         EVIDENCE,
         FIX,
-        GIT,
         INTRODUCED,
         PACKAGE,
         REPORT,
