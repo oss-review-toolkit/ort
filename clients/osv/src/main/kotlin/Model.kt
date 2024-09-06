@@ -109,25 +109,38 @@ data class Credit(
  * Defined package ecosystem values, see https://ossf.github.io/osv-schema/#affectedpackage-field.
  */
 object Ecosystem {
+    const val ALMA_LINUX = "AlmaLinux"
     const val ALPINE = "Alpine"
     const val ANDROID = "Android"
+    const val BIOCONDUCTOR = "Bioconductor"
+    const val BITNAMI = "Bitnami"
+    const val CHAINGUARD = "Chainguard"
     const val CONAN_CENTER = "ConanCenter"
+    const val CRAN = "CRAN"
     const val CRATES_IO = "crates.io"
     const val DEBIAN = "Debian"
+    const val GHC = "GHC"
     const val GIHUB_ACTIONS = "GitHub Actions"
     const val GO = "Go"
     const val HACKAGE = "Hackage"
     const val HEX = "Hex"
     const val LINUX = "Linux"
+    const val MAGEIA = "Mageia"
     const val MAVEN = "Maven"
     const val NPM = "npm"
     const val NUGET = "NuGet"
     const val OSS_FUZZ = "OSS-Fuzz"
+    const val OPEN_SUSE = "openSUSE"
     const val PACKAGIST = "Packagist"
+    const val PHOTON_OS = "Photon OS"
     const val PUB = "Pub"
     const val PYPI = "PyPI"
+    const val RED_HAT = "Red Hat"
+    const val ROCKY_LINUX = "Rocky Linux"
     const val RUBY_GEMS = "RubyGems"
+    const val SUSE = "SUSE"
     const val SWIFT_URL = "SwiftURL"
+    const val UBUNTU = "Ubuntu"
 }
 
 /**
