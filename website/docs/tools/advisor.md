@@ -14,22 +14,6 @@ The providers require specific configuration in the [ORT configuration file](htt
 When executing the advisor, the providers to enable are selected with the `--advisors` option (or its short alias `-a`); here a comma-separated list with provider IDs is expected.
 The following sections describe the providers supported by the advisor:
 
-## NexusIQ
-
-A security data provider that queries [Nexus IQ Server](https://help.sonatype.com/iqserver).
-In the configuration, the URL of the Nexus IQ Server the credentials must be provided:
-
-```yaml
-ort:
-  advisor:
-    nexusIq:
-      serverUrl: "https://nexusiq.ossreviewtoolkit.org"
-      username: myUser
-      password: myPassword
-```
-
-To enable this provider, pass `-a NexusIQ` on the command line.
-
 ## OSS Index
 
 This vulnerability provider does not require any further configuration as it uses the public service at https://ossindex.sonatype.org/.

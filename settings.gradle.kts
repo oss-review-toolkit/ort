@@ -30,7 +30,6 @@ include(":clients:bazel-module-registry")
 include(":clients:clearly-defined")
 include(":clients:dos")
 include(":clients:fossid-webapp")
-include(":clients:nexus-iq")
 include(":clients:oss-index")
 include(":clients:osv")
 include(":clients:vulnerable-code")
@@ -53,7 +52,6 @@ project(":clients:bazel-module-registry").name = "bazel-module-registry-client"
 project(":clients:clearly-defined").name = "clearly-defined-client"
 project(":clients:dos").name = "dos-client"
 project(":clients:fossid-webapp").name = "fossid-webapp-client"
-project(":clients:nexus-iq").name = "nexus-iq-client"
 project(":clients:oss-index").name = "oss-index-client"
 project(":clients:osv").name = "osv-client"
 project(":clients:vulnerable-code").name = "vulnerable-code-client"
