@@ -143,18 +143,6 @@ class OrtConfigurationTest : WordSpec({
                         )
                     }
 
-                    get("NexusIQ") shouldNotBeNull {
-                        options shouldContainExactly mapOf(
-                            "serverUrl" to "https://rest-api-url-of-your-nexus-iq-server",
-                            "browseUrl" to "https://web-browsing-url-of-your-nexus-iq-server"
-                        )
-
-                        secrets shouldContainExactly mapOf(
-                            "username" to "username",
-                            "password" to "password"
-                        )
-                    }
-
                     get("OssIndex") shouldNotBeNull {
                         options shouldContainExactly mapOf(
                             "serverUrl" to "https://ossindex.sonatype.org/"

@@ -770,10 +770,6 @@ advisor:
     tool_versions: {}
   config:
     config:
-      NexusIQ:
-        options:
-          server_url: "https://rest-api-url-of-your-nexus-iq-server"
-          browse_url: "https://web-browsing-url-of-your-nexus-iq-server"
       Vulnerable_code:
         options:
           server_url: "http://localhost:8000"

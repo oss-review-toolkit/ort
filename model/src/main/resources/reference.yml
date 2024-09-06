@@ -136,14 +136,6 @@ ort:
         secrets:
           token: githubAccessToken
 
-      NexusIQ:
-        options:
-          serverUrl: 'https://rest-api-url-of-your-nexus-iq-server'
-          browseUrl: 'https://web-browsing-url-of-your-nexus-iq-server'
-        secrets:
-          username: username
-          password: password
-
       OssIndex:
         options:
           serverUrl: 'https://ossindex.sonatype.org/'
