@@ -182,43 +182,48 @@ private fun createRequest(pkg: Package): VulnerabilitiesForPackageRequest? {
 }
 
 private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.vulnerabilities.Vulnerability {
-    // OSV uses a list in order to support multiple representations of the severity using different scoring systems.
-    // However, only one representation is actually possible currently, because the enum 'Severity.Type' contains just a
-    // single element / scoring system. So, picking first severity is fine, in particular because ORT only supports a
-    // single severity representation.
-    val (scoringSystem, severity) = severity.firstOrNull()?.let {
+    // The ORT and OSV vulnerability data models are different in that ORT uses a severity for each reference (assuming
+    // that different references could use different severities), whereas OSV manages severities and references on the
+    // same level, which means it is not possible to identify whether a reference belongs to a specific severity.
+    // To map between these different model, simply use the "cartesian product" to create an ORT reference for each
+    // combination of an OSV severity and reference.
+    val ortReferences = mutableListOf<VulnerabilityReference>()
+
+    severity.map {
         it.type.name to it.score
-    } ?: (null to null)
+    }.ifEmpty {
+        listOf(null to null)
+    }.forEach { (scoringSystem, severity) ->
+        references.mapNotNullTo(ortReferences) { reference ->
+            val url = reference.url.trim().let { if (it.startsWith("://")) "https$it" else it }
 
-    val references = references.mapNotNull { reference ->
-        val url = reference.url.trim().let { if (it.startsWith("://")) "https$it" else it }
+            url.toUri().onFailure {
+                logger.debug { "Could not parse reference URL for vulnerability '$id': ${it.collectMessages()}." }
+            }.map {
+                // Use the 'severity' property of the unspecified 'databaseSpecific' object.
+                // See also https://github.com/google/osv.dev/issues/484.
+                val specificSeverity = databaseSpecific?.get("severity")
 
-        url.toUri().onFailure {
-            logger.debug { "Could not parse reference URL for vulnerability '$id': ${it.collectMessages()}." }
-        }.map {
-            // Use the 'severity' property of the unspecified 'databaseSpecific' object.
-            // See also https://github.com/google/osv.dev/issues/484.
-            val specificSeverity = databaseSpecific?.get("severity")
+                // Note that the CVSS Calculator does not support CVSS 4.0 yet:
+                // https://github.com/stevespringett/cvss-calculator/issues/78
+                val baseScore = runCatching {
+                    Cvss.fromVector(severity)?.calculateScore()?.baseScore?.toFloat()
+                }.onFailure {
+                    logger.debug { "Unable to parse CVSS vector '$severity': ${it.collectMessages()}." }
+                }.getOrNull()
 
-            // Note that the CVSS Calculator does not support CVSS 4.0 yet:
-            // https://github.com/stevespringett/cvss-calculator/issues/78
-            val baseScore = runCatching {
-                Cvss.fromVector(severity)?.calculateScore()?.baseScore?.toFloat()
-            }.onFailure {
-                logger.debug { "Unable to parse CVSS vector '$severity': ${it.collectMessages()}." }
+                val severityRating = (specificSeverity as? JsonPrimitive)?.contentOrNull
+                    ?: VulnerabilityReference.getQualitativeRating(scoringSystem, baseScore)?.name
+
+                VulnerabilityReference(it, scoringSystem, severityRating, baseScore, severity)
             }.getOrNull()
-
-            val severityRating = (specificSeverity as? JsonPrimitive)?.contentOrNull
-                ?: VulnerabilityReference.getQualitativeRating(scoringSystem, baseScore)?.name
-
-            VulnerabilityReference(it, scoringSystem, severityRating, baseScore, severity)
-        }.getOrNull()
+        }
     }
 
     return org.ossreviewtoolkit.model.vulnerabilities.Vulnerability(
         id = id,
         summary = summary,
         description = details,
-        references = references
+        references = ortReferences
     )
 }
