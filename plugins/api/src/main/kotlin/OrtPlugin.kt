@@ -31,6 +31,12 @@ import kotlin.reflect.KClass
  */
 @Target(AnnotationTarget.CLASS)
 annotation class OrtPlugin(
+    /**
+     * The id of the plugin. Must be unique among all plugins for the same extension point. If empty, the id is derived
+     * from the class name.
+     */
+    val id: String = "",
+
     /** The display name of the plugin. */
     val displayName: String,
 
