@@ -22,11 +22,21 @@ package org.ossreviewtoolkit.plugins.api
 import kotlin.reflect.KClass
 
 /**
- * An annotation to mark a class as an ORT plugin.
+ * An annotation to mark a class as an ORT plugin. It is used to generate a factory class to create instances of the
+ * plugin.
+ *
+ * Each ORT extension point is represented by a class that extends [PluginFactory] and each plugin must provide a
+ * factory class that implements the extension point. The plugin factory class is responsible for creating instances of
+ * the plugins, handling the [PluginConfig], and providing the [PluginDescriptor].
  */
 @Target(AnnotationTarget.CLASS)
 annotation class OrtPlugin(
+    /** The display name of the plugin. */
     val displayName: String,
+
+    /** The description of the plugin. */
     val description: String,
+
+    /** The factory class that represents the ORT extension point for this plugin. */
     val factory: KClass<*>
 )
