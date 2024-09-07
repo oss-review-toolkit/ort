@@ -47,6 +47,7 @@ private const val ORT_CONFIG_REPOSITORY_URL = "https://github.com/oss-review-too
  * [ort-config repository](https://github.com/oss-review-toolkit/ort-config).
  */
 @OrtPlugin(
+    id = "ORTConfig",
     displayName = "ort-config",
     description = "A package curation provider that loads package curations from the ort-config repository.",
     factory = PackageCurationProviderFactory::class

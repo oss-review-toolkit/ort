@@ -79,6 +79,7 @@ private val READ_TIMEOUT = Duration.ofSeconds(60)
  * If not both `username` and `password` are provided, authentication is disabled.
  */
 @OrtPlugin(
+    id = "NexusIQ",
     displayName = "Nexus IQ",
     description = "An advisor that uses Sonatype's Nexus IQ Server to determine vulnerabilities in dependencies.",
     factory = AdviceProviderFactory::class
