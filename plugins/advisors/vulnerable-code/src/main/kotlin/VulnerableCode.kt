@@ -71,7 +71,7 @@ private const val BULK_REQUEST_SIZE = 100
  * * **`apiKey`:** The optional API key to use.
  */
 @OrtPlugin(
-    name = "VulnerableCode",
+    displayName = "VulnerableCode",
     description = "An advisor that uses a VulnerableCode instance to determine vulnerabilities in dependencies.",
     factory = AdviceProviderFactory::class
 )

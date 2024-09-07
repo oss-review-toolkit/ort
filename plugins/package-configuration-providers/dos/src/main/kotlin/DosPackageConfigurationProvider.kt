@@ -60,7 +60,7 @@ data class DosPackageConfigurationProviderConfig(
  * A [PackageConfigurationProvider] that loads [PackageConfiguration]s from a Double Open Server instance.
  */
 @OrtPlugin(
-    name = "Double Open Server Package Configuration Provider",
+    displayName = "Double Open Server Package Configuration Provider",
     description = "A package configuration provider that loads package configurations from a Double Open Server " +
         "instance.",
     factory = PackageConfigurationProviderFactory::class

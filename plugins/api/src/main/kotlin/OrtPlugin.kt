@@ -26,7 +26,7 @@ import kotlin.reflect.KClass
  */
 @Target(AnnotationTarget.CLASS)
 annotation class OrtPlugin(
-    val name: String,
+    val displayName: String,
     val description: String,
     val factory: KClass<*>
 )
