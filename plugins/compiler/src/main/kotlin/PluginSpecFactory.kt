@@ -65,7 +65,7 @@ class PluginSpecFactory {
             containingFile = pluginClass.containingFile,
             descriptor = PluginDescriptor(
                 id = pluginClass.simpleName.asString().removeSuffix(pluginParentClass.simpleName.asString()),
-                displayName = ortPlugin.name,
+                displayName = ortPlugin.displayName,
                 description = ortPlugin.description,
                 options = pluginOptions
             ),

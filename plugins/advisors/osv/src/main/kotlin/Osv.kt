@@ -61,7 +61,7 @@ import us.springett.cvss.Cvss
  *   OSV.dev API.
  */
 @OrtPlugin(
-    name = "OSV",
+    displayName = "OSV",
     description = "An advisor that retrieves vulnerability information from the Open Source Vulnerabilities database.",
     factory = AdviceProviderFactory::class
 )

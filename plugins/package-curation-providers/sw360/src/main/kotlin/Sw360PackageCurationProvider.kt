@@ -98,7 +98,7 @@ data class Sw360PackageCurationProviderConfig(
  * A [PackageCurationProvider] for curated package metadata from the configured SW360 instance using the REST API.
  */
 @OrtPlugin(
-    name = "SW360 Package Curation Provider",
+    displayName = "SW360 Package Curation Provider",
     description = "Provides package metadata from the configured SW360 instance using the REST API.",
     factory = PackageCurationProviderFactory::class
 )
