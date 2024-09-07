@@ -347,7 +347,7 @@ project:
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::meta:1.15.0"
-        - id: "Pub::shelf_static:1.1.2"
+        - id: "Pub::shelf_static:1.1.3"
           dependencies:
           - id: "Pub::convert:3.1.1"
             dependencies:
@@ -409,7 +409,7 @@ project:
                 dependencies:
                 - id: "Pub::collection:1.18.0"
                 - id: "Pub::meta:1.15.0"
-      - id: "Pub::shelf_static:1.1.2"
+      - id: "Pub::shelf_static:1.1.3"
         dependencies:
         - id: "Pub::convert:3.1.1"
           dependencies:
@@ -1641,8 +1641,8 @@ packages:
     url: "https://github.com/dart-lang/shelf.git"
     revision: ""
     path: "pkgs/shelf_packages_handler"
-- id: "Pub::shelf_static:1.1.2"
-  purl: "pkg:pub/shelf_static@1.1.2"
+- id: "Pub::shelf_static:1.1.3"
+  purl: "pkg:pub/shelf_static@1.1.3"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "Static file server support for the shelf package and ecosystem."
@@ -1653,9 +1653,9 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://pub.dev/packages/shelf_static/versions/1.1.2.tar.gz"
+    url: "https://pub.dev/packages/shelf_static/versions/1.1.3.tar.gz"
     hash:
-      value: "a41d3f53c4adf0f57480578c1d61d90342cd617de7fc8077b1304643c2d85c1e"
+      value: "c87c3875f91262785dade62d135760c2c69cb217ac759485334c5857ad89f6e3"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
