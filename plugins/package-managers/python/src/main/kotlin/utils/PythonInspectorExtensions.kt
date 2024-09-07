@@ -100,7 +100,7 @@ private fun PythonInspector.Result.resolveIdentifier(
         else -> PackageManager.getFallbackProjectName(analysisRoot, definitionFile)
     }
 
-    val projectVersion = setupVersion.takeIf { it.isNotEmpty() } ?: requirementsVersion
+    val projectVersion = setupVersion.ifEmpty { requirementsVersion }
 
     return Identifier(
         type = managerName,

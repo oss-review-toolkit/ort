@@ -184,7 +184,7 @@ class AnalyzerCommand : OrtCommand(
                 echo("Found ${files.size} $manager definition file(s) at:")
 
                 files.forEach { file ->
-                    val relativePath = file.toRelativeString(inputDir).takeIf { it.isNotEmpty() } ?: "."
+                    val relativePath = file.toRelativeString(inputDir).ifEmpty { "." }
                     echo("\t$relativePath")
                 }
             }

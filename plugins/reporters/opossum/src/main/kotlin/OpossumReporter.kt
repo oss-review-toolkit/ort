@@ -249,7 +249,7 @@ class OpossumReporter : Reporter {
             if (idFromPath in baseUrlsForSources) return
 
             if (VcsHost.GITHUB.isApplicable(vcs)) {
-                val revision = vcs.revision.takeIf { it.isNotBlank() } ?: "HEAD"
+                val revision = vcs.revision.ifBlank { "HEAD" }
                 val baseUrl = vcs.url
                     .replace("ssh://git@github.com/", "https://github.com/")
                     .replace(Regex("\\.git$"), "")
