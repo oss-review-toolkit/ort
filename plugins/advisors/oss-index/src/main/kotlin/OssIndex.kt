@@ -67,6 +67,7 @@ private const val BULK_REQUEST_SIZE = 128
  * A wrapper for Sonatype's [OSS Index](https://ossindex.sonatype.org/) security vulnerability data.
  */
 @OrtPlugin(
+    id = "OSSIndex",
     displayName = "OSS Index",
     description = "An advisor that uses Sonatype's OSS Index to determine vulnerabilities in dependencies.",
     factory = AdviceProviderFactory::class

@@ -146,7 +146,7 @@ class OssIndexTest : WordSpec({
     }
 })
 
-private const val ADVISOR_NAME = "OssIndex"
+private const val ADVISOR_NAME = "OSSIndex"
 
 private const val TEST_FILES_ROOT = "src/test/assets"
 
