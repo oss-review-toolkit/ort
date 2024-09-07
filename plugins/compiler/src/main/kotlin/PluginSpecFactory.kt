@@ -61,10 +61,14 @@ class PluginSpecFactory {
 
         val pluginOptions = configClass?.getPluginOptions().orEmpty()
 
+        val pluginId = ortPlugin.id.ifEmpty {
+            pluginClass.simpleName.asString().removeSuffix(pluginParentClass.simpleName.asString())
+        }
+
         return PluginSpec(
             containingFile = pluginClass.containingFile,
             descriptor = PluginDescriptor(
-                id = pluginClass.simpleName.asString().removeSuffix(pluginParentClass.simpleName.asString()),
+                id = pluginId,
                 displayName = ortPlugin.displayName,
                 description = ortPlugin.description,
                 options = pluginOptions
