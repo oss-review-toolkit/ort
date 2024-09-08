@@ -176,7 +176,7 @@ class OrtMain : CliktCommand(
     private fun getOrtHeader(version: String): Widget =
         grid {
             column(0) {
-                width = ColumnWidth.Custom(width = null, expandWeight = null, priority = HIGHEST_PRIORITY_FOR_WIDTH)
+                width = ColumnWidth(width = null, expandWeight = null, priority = HIGHEST_PRIORITY_FOR_WIDTH)
             }
 
             column(1) { verticalAlign = VerticalAlign.BOTTOM }
