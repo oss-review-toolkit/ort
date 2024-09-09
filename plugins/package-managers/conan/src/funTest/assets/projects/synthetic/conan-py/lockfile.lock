@@ -39,7 +39,7 @@
     "context": "host"
    },
    "4": {
-    "ref": "expat/2.6.2",
+    "ref": "expat/2.6.3",
     "options": "char_type=char\nfPIC=True\nlarge_size=False\nshared=False",
     "package_id": "a1ba772dbe13186199f7ecf8dde362ba9613ecf7",
     "context": "host"
