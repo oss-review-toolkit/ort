@@ -249,8 +249,14 @@ pipeline {
 
         booleanParam(
             name: 'RUN_ADVISOR',
-            description: 'Run the advisor tool. Both the OSV and VulnerableCode providers will be used by default.',
+            description: 'Run the advisor tool.',
             defaultValue: true
+        )
+
+        string(
+            name: 'ADVISORS',
+            description: 'A comma-separated list of advisors to use.',
+            defaultValue: 'OSV,VulnerableCode'
         )
 
         /*
@@ -777,7 +783,9 @@ pipeline {
                             ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
                         fi
 
-                        ADVISOR_OPTIONS="-a OSV,VulnerableCode"
+                        if [ -n "$ADVISORS" ]; then
+                            ADVISOR_OPTIONS="-a $ADVISORS"
+                        fi
 
                         rm -fr out/results/advisor
                         /opt/ort/bin/ort $ORT_OPTIONS advise $ADVISOR_OPTIONS -i out/results/current-result.yml -o out/results/advisor
