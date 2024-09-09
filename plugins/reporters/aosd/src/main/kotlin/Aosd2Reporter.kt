@@ -34,8 +34,8 @@ import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 
-class AudiOpenSourceDiagnosticsReporter : Reporter {
-    override val type = "AOSD"
+class Aosd2Reporter : Reporter {
+    override val type = "AOSD2"
 
     override fun generateReport(
         input: ReporterInput,
