@@ -41,21 +41,15 @@ jobs:
       uses: gradle/actions/setup-gradle@16bf8bc8fe830fa669c3c9f914d3eb147c629707 # v4
     - name: Generate completions
       run: |
-        ./gradlew -q :cli:installDist
-        cli/build/install/ort/bin/ort --generate-completion=bash > integrations/completions/ort-completion.bash
-        cli/build/install/ort/bin/ort --generate-completion=fish > integrations/completions/ort-completion.fish
-        cli/build/install/ort/bin/ort --generate-completion=zsh > integrations/completions/ort-completion.zsh
+        ./scripts/generate_completion_scripts.sh
     - name: Check if completions are up-to-date
       run: |
         if git diff --exit-code; then
           echo "Completions are up-to-date."
         else
           echo "Completions are not up-to-date."
-          echo "Please always run the commands below when changing CLI commands:"
-          echo "./gradlew -q :cli:installDist"
-          echo "cli/build/install/ort/bin/ort --generate-completion=bash > integrations/completions/ort-completion.bash"
-          echo "cli/build/install/ort/bin/ort --generate-completion=fish > integrations/completions/ort-completion.fish"
-          echo "cli/build/install/ort/bin/ort --generate-completion=zsh > integrations/completions/ort-completion.zsh"
+          echo "Please always run the script below when changing CLI commands:"
+          echo "./scripts/generate_completion_scripts.sh"
           exit 1
         fi
   detekt-issues:
