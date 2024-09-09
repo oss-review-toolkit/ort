@@ -43,7 +43,7 @@ resolutions:
   issues:
   - message: "ERROR: Timeout after 300 seconds while scanning file 'reporter-web-app/public/index.html'."
     reason: "SCANNER_ISSUE"
-    comment: >- 
+    comment: >-
       The error can be ignored because the file does contain relevant license information.
   - message: "ERROR: Timeout after 300 seconds while scanning file 'scanner/src/test/assets/aws-java-sdk-core-1.11.160_scancode-2.9.7.json'."
     reason: "SCANNER_ISSUE"
