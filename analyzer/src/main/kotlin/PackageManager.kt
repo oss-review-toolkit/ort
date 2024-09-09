@@ -334,8 +334,7 @@ abstract class PackageManager(
 
     protected fun requireLockfile(workingDir: File, condition: () -> Boolean) {
         require(analyzerConfig.allowDynamicVersions || condition()) {
-            val relativePathString = workingDir.relativeTo(analysisRoot).invariantSeparatorsPath
-                .takeUnless { it.isEmpty() } ?: "."
+            val relativePathString = workingDir.relativeTo(analysisRoot).invariantSeparatorsPath.ifEmpty { "." }
 
             "No lockfile found in '$relativePathString'. This potentially results in unstable versions of " +
                 "dependencies. To support this, enable the 'allowDynamicVersions' option in '$ORT_CONFIG_FILENAME'."

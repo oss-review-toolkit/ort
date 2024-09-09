@@ -143,7 +143,7 @@ internal fun Collection<NuGetInspector.PackageData>.toOrtPackages(): Set<Package
 
         Package(
             id = id,
-            purl = pkg.purl.takeUnless { it.isEmpty() } ?: id.toPurl(),
+            purl = pkg.purl.ifEmpty { id.toPurl() },
             authors = pkg.parties.toAuthors(),
             declaredLicenses = declaredLicenses,
             declaredLicensesProcessed = DeclaredLicenseProcessor.process(declaredLicenses),

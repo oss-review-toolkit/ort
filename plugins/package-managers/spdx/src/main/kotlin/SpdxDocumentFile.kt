@@ -289,7 +289,7 @@ class SpdxDocumentFile(
      * Create a [Package] out of this [SpdxPackage].
      */
     private fun SpdxPackage.toPackage(definitionFile: File?, doc: SpdxResolvedDocument): Package {
-        val packageDescription = description.takeUnless { it.isEmpty() } ?: summary
+        val packageDescription = description.ifEmpty { summary }
 
         // If the VCS information cannot be determined from the VCS working tree itself, fall back to try getting it
         // from the download location.
