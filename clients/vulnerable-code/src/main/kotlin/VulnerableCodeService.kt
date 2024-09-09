@@ -84,6 +84,9 @@ interface VulnerableCodeService {
         /** The name of the scoring system. */
         val scoringSystem: String,
 
+        /** The individual scoring elements, usually a CVSS vector. */
+        val scoringElements: String? = null,
+
         /**
          * The value in this scoring system. This is a string to support scoring systems that do not use numeric
          * scores, but literals like _LOW_, _MEDIUM_, etc.
