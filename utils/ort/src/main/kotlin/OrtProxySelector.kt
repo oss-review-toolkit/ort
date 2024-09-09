@@ -191,7 +191,7 @@ class OrtProxySelector(private val fallback: ProxySelector? = null) : ProxySelec
 
         // Quote from the upstream documentation for select: When no proxy is available, the list will contain one
         // element of type Proxy that represents a direct connection.
-        return proxies.takeUnless { it.isEmpty() } ?: fallback?.select(uri) ?: NO_PROXY_LIST
+        return proxies.ifEmpty { fallback?.select(uri) ?: NO_PROXY_LIST }
     }
 
     override fun connectFailed(uri: URI?, sa: SocketAddress?, ioe: IOException?) {

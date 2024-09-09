@@ -483,11 +483,11 @@ internal data class GemInfo(
         return GemInfo(
             name,
             version,
-            homepageUrl.takeUnless { it.isEmpty() } ?: other.homepageUrl,
-            authors.takeUnless { it.isEmpty() } ?: other.authors,
-            declaredLicenses.takeUnless { it.isEmpty() } ?: other.declaredLicenses,
-            description.takeUnless { it.isEmpty() } ?: other.description,
-            runtimeDependencies.takeUnless { it.isEmpty() } ?: other.runtimeDependencies,
+            homepageUrl.ifEmpty { other.homepageUrl },
+            authors.ifEmpty { other.authors },
+            declaredLicenses.ifEmpty { other.declaredLicenses },
+            description.ifEmpty { other.description },
+            runtimeDependencies.ifEmpty { other.runtimeDependencies },
             vcs.takeUnless { it == VcsInfo.EMPTY } ?: other.vcs,
             artifact.takeUnless { it == RemoteArtifact.EMPTY } ?: other.artifact
         )

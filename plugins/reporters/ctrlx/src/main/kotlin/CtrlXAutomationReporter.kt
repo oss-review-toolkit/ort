@@ -79,7 +79,7 @@ class CtrlXAutomationReporter : Reporter {
             }
 
             // The specification requires at least one license.
-            val componentLicenses = licenses.takeUnless { it.isNullOrEmpty() } ?: listOf(LICENSE_NOASSERTION)
+            val componentLicenses = licenses.orEmpty().ifEmpty { listOf(LICENSE_NOASSERTION) }
 
             Component(
                 name = qualifiedName,
