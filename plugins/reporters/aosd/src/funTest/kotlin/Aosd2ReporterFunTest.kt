@@ -38,7 +38,7 @@ import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.test.getAssetFile
 
-class AudiOpenSourceDiagnosticsReporterFunTest : WordSpec({
+class Aosd2ReporterFunTest : WordSpec({
     "The example JSON report" should {
         "be valid according to the schema" {
             val schemaFile = getAssetFile("aosd.schema.json")
@@ -64,7 +64,7 @@ class AudiOpenSourceDiagnosticsReporterFunTest : WordSpec({
     "The generated report" should {
         "match the expected result" {
             val outputDir = tempdir()
-            val reportFiles = AudiOpenSourceDiagnosticsReporter().generateReport(ReporterInput(ORT_RESULT), outputDir)
+            val reportFiles = Aosd2Reporter().generateReport(ReporterInput(ORT_RESULT), outputDir)
 
             reportFiles shouldHaveSize 2
 
