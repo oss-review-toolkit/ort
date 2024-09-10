@@ -125,7 +125,11 @@ internal fun parseNpmLicenses(json: JsonNode): Set<String> {
         licenseNode["type"]?.textValue()
     }
 
-    return declaredLicenses.mapNotNullTo(mutableSetOf()) { declaredLicense ->
+    return declaredLicenses.mapNpmLicenses()
+}
+
+internal fun Collection<String>.mapNpmLicenses(): Set<String> =
+    mapNotNullTo(mutableSetOf()) { declaredLicense ->
         when {
             // NPM does not mean https://unlicense.org/ here, but the wish to not "grant others the right to use
             // a private or unpublished package under any terms", which corresponds to SPDX's "NONE".
@@ -138,7 +142,6 @@ internal fun parseNpmLicenses(json: JsonNode): Set<String> {
             else -> declaredLicense.takeUnless { it.isBlank() }
         }
     }
-}
 
 /**
  * Parse information about the VCS from the [package.json][node] file of a module.
