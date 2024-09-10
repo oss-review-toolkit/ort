@@ -88,6 +88,8 @@ const val OPTION_JAVA_HOME = "javaHome"
  * This package manager supports the following [options][PackageManagerConfiguration.options]:
  * - *gradleVersion*: The version of Gradle to use when analyzing projects. Defaults to the version defined in the
  *   Gradle wrapper properties.
+ * - *javaHome*: The directory of the Java home to use when analyzing projects. By default, the same Java home as for
+ *   ORT itself it used.
  */
 class GradleInspector(
     name: String,
