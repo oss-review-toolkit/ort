@@ -246,16 +246,18 @@ private fun createRemoteArtifact(
     }
 
     // TODO: How to handle authentication for private repositories here, or rely on Gradle for the download?
-    val checksum = okHttpClient.downloadText("$artifactUrl.$algorithm")
-        .getOrElse { return RemoteArtifact.EMPTY }
+    val hash = okHttpClient.downloadText("$artifactUrl.$algorithm")
+        .mapCatching { checksum ->
+            parseChecksum(checksum, algorithm).also {
+                require(it.value != HashAlgorithm.SHA1.emptyValue) {
+                    "Ignoring invalid artifact of zero size at $artifactUrl."
+                }
+            }
+        }.getOrElse {
+            logger.warn("Unable to get a valid artifact checksum.", it)
 
-    val hash = parseChecksum(checksum, algorithm)
-
-    // Ignore file with zero byte size, because it cannot be a valid archive.
-    if (hash.value == HashAlgorithm.SHA1.emptyValue) {
-        logger.info { "Ignoring zero byte size artifact: $artifactUrl" }
-        return RemoteArtifact.EMPTY
-    }
+            Hash.NONE
+        }
 
     return RemoteArtifact(artifactUrl, hash)
 }
