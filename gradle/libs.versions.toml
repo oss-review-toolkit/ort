@@ -18,6 +18,7 @@ commonsCompress = "1.27.1"
 cvssCalculator = "1.4.3"
 cyclonedx = "9.0.5"
 diffUtils = "4.12"
+discoClient = "2.0.39"
 diskLruCache = "2.0.2"
 exposed = "0.54.0"
 flexmark = "0.64.8"
@@ -93,6 +94,7 @@ cyclonedx = { module = "org.cyclonedx:cyclonedx-core-java", version.ref = "cyclo
 detekt-api = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detektPlugin" }
 detekt-test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version.ref = "detektPlugin" }
 diffUtils = { module = "io.github.java-diff-utils:java-diff-utils", version.ref = "diffUtils" }
+discoClient = { module = "io.foojay.api:discoclient", version.ref = "discoClient" }
 diskLruCache = { module = "com.jakewharton:disklrucache", version.ref = "diskLruCache" }
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
 exposed-dao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed" }

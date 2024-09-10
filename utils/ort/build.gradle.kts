@@ -31,6 +31,7 @@ dependencies {
 
     implementation(libs.awsS3)
     implementation(libs.commonsCompress)
+    implementation(libs.discoClient)
 
     testImplementation(libs.mockk)
 }
