@@ -83,17 +83,17 @@ internal class GradleDependencyHandler : DependencyHandler<OrtDependency> {
             }
         }
 
-        val isMetadataOnly = dependency.extension == "pom" || isSpringMetadataProject
+        val hasNoArtifacts = dependency.pomFile == null || isSpringMetadataProject
 
         val binaryArtifact = when {
-            isMetadataOnly -> RemoteArtifact.EMPTY
+            hasNoArtifacts -> RemoteArtifact.EMPTY
             else -> with(dependency) {
                 createRemoteArtifact(pomFile, classifier, extension.takeUnless { it == "bundle" })
             }
         }
 
         val sourceArtifact = when {
-            isMetadataOnly -> RemoteArtifact.EMPTY
+            hasNoArtifacts -> RemoteArtifact.EMPTY
             else -> createRemoteArtifact(dependency.pomFile, "sources", "jar")
         }
 
@@ -118,7 +118,7 @@ internal class GradleDependencyHandler : DependencyHandler<OrtDependency> {
             sourceArtifact = sourceArtifact,
             vcs = vcs,
             vcsProcessed = vcsProcessed,
-            isMetadataOnly = isMetadataOnly
+            isMetadataOnly = hasNoArtifacts
         )
     }
 }
