@@ -32,6 +32,9 @@ project:
       - id: "Maven:org.jetbrains.kotlin:kotlin-reflect:1.7.20"
         dependencies:
         - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+          dependencies:
+          - id: "Maven:org.jetbrains:annotations:13.0"
+          - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
       - id: "Maven:org.jetbrains.kotlin:kotlin-script-runtime:1.7.20"
       - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
         dependencies:
@@ -53,9 +56,23 @@ project:
           dependencies:
           - id: "Maven:org.jetbrains.kotlin:kotlin-script-runtime:1.7.20"
           - id: "Maven:org.jetbrains.kotlin:kotlin-scripting-common:1.7.20"
+            dependencies:
+            - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+              dependencies:
+              - id: "Maven:org.jetbrains:annotations:13.0"
+              - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
           - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+            dependencies:
+            - id: "Maven:org.jetbrains:annotations:13.0"
+            - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
         - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+          dependencies:
+          - id: "Maven:org.jetbrains:annotations:13.0"
+          - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
       - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+        dependencies:
+        - id: "Maven:org.jetbrains:annotations:13.0"
+        - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
   - name: "kotlinCompilerPluginClasspathTest"
     dependencies:
     - id: "Maven:org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:1.7.20"
@@ -72,9 +89,23 @@ project:
           dependencies:
           - id: "Maven:org.jetbrains.kotlin:kotlin-script-runtime:1.7.20"
           - id: "Maven:org.jetbrains.kotlin:kotlin-scripting-common:1.7.20"
+            dependencies:
+            - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+              dependencies:
+              - id: "Maven:org.jetbrains:annotations:13.0"
+              - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
           - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+            dependencies:
+            - id: "Maven:org.jetbrains:annotations:13.0"
+            - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
         - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+          dependencies:
+          - id: "Maven:org.jetbrains:annotations:13.0"
+          - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
       - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+        dependencies:
+        - id: "Maven:org.jetbrains:annotations:13.0"
+        - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
   - name: "kotlinKlibCommonizerClasspath"
     dependencies:
     - id: "Maven:org.jetbrains.kotlin:kotlin-klib-commonizer-embeddable:1.7.20"
@@ -87,8 +118,14 @@ project:
         - id: "Maven:org.jetbrains.kotlin:kotlin-reflect:1.7.20"
           dependencies:
           - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+            dependencies:
+            - id: "Maven:org.jetbrains:annotations:13.0"
+            - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
         - id: "Maven:org.jetbrains.kotlin:kotlin-script-runtime:1.7.20"
         - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+          dependencies:
+          - id: "Maven:org.jetbrains:annotations:13.0"
+          - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
       - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
         dependencies:
         - id: "Maven:org.jetbrains:annotations:13.0"
