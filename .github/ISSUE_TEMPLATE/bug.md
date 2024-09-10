@@ -33,7 +33,7 @@ No screenshots of plain text please, to keep text searchable.
 
 ### Environment
 
-Output of the `ort requirements` command:
+Output of the `ort requirements -l commands` command:
 
 ```
 <copy & paste console output to here; no screenshots please>
