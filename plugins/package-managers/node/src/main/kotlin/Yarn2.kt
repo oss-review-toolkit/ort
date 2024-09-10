@@ -267,12 +267,12 @@ class Yarn2(
 
         // First pass: Parse the headers and query each package details.
         val packagesHeaders: Map<String, PackageHeader>
-        val packagedDetails = mutableMapOf<String, AdditionalData>()
+        val packageDetails = mutableMapOf<String, AdditionalData>()
         jsonMapper.createParser(process.stdout).use {
             val iterator = jsonMapper.readValues<ObjectNode>(it)
 
             packagesHeaders = parsePackageHeaders(iterator)
-            packagedDetails += queryPackageDetails(workingDir, packagesHeaders)
+            packageDetails += queryPackageDetails(workingDir, packagesHeaders)
         }
 
         // Second pass: Parse the packages.
@@ -281,7 +281,7 @@ class Yarn2(
 
             logger.info { "Parsing packages..." }
 
-            val allProjects = parseAllPackages(iterator, definitionFile, packagesHeaders, packagedDetails)
+            val allProjects = parseAllPackages(iterator, definitionFile, packagesHeaders, packageDetails)
             val scopeNames = YarnDependencyType.entries.mapTo(mutableSetOf()) { it.type }
             return allProjects.values.map { project ->
                 ProjectAnalyzerResult(project.copy(scopeNames = scopeNames), emptySet(), issues)
