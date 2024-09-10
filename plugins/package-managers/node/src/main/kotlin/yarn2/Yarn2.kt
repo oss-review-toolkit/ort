@@ -19,9 +19,6 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.node.yarn2
 
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.MappingIterator
-import com.fasterxml.jackson.databind.node.NullNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.module.kotlin.contains
 import com.fasterxml.jackson.module.kotlin.readValues
@@ -60,8 +57,8 @@ import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NpmDetection
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.fixNpmDownloadUrl
+import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.mapNpmLicenses
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.parseNpmAuthors
-import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.parseNpmLicenses
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.parseNpmVcsInfo
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.splitNpmNamespaceAndName
 import org.ossreviewtoolkit.utils.common.CommandLineTool
@@ -264,39 +261,29 @@ class Yarn2(
             environment = mapOf("YARN_NODE_LINKER" to "pnp")
         )
 
-        // First pass: Parse the headers and query each package details.
-        val packageHeaders: Map<String, PackageHeader>
-        val packageDetails = mutableMapOf<String, AdditionalData>()
-        jsonMapper.createParser(process.stdout).use {
-            val iterator = jsonMapper.readValues<ObjectNode>(it)
+        logger.info { "Parsing packages..." }
 
-            packageHeaders = parsePackageHeaders(iterator)
-            packageDetails += queryPackageDetails(workingDir, packageHeaders)
-        }
+        val packageInfos = parsePackageInfos(process.stdout)
+        val packageHeaders = parsePackageHeaders(packageInfos)
+        val packageDetails = queryPackageDetails(workingDir, packageHeaders)
 
-        // Second pass: Parse the packages.
-        jsonMapper.createParser(process.stdout).use { parser ->
-            val iterator = jsonMapper.readValues<ObjectNode>(parser)
+        val allProjects = parseAllPackages(packageInfos, definitionFile, packageHeaders, packageDetails)
+        val scopeNames = YarnDependencyType.entries.mapTo(mutableSetOf()) { it.type }
 
-            logger.info { "Parsing packages..." }
-
-            val allProjects = parseAllPackages(iterator, definitionFile, packageHeaders, packageDetails)
-            val scopeNames = YarnDependencyType.entries.mapTo(mutableSetOf()) { it.type }
-            return allProjects.values.map { project ->
-                ProjectAnalyzerResult(project.copy(scopeNames = scopeNames), emptySet(), issues)
-            }.toList()
-        }
+        return allProjects.values.map { project ->
+            ProjectAnalyzerResult(project.copy(scopeNames = scopeNames), emptySet(), issues)
+        }.toList()
     }
 
     /**
      * Parse several packages and construct their headers i.e. their representations as a triple : rawName/type/locator.
      * [iterator] should come from a NDJSON file. Return the headers mapped by package id.
      */
-    private fun parsePackageHeaders(iterator: MappingIterator<ObjectNode>): Map<String, PackageHeader> {
+    private fun parsePackageHeaders(packageInfos: Collection<PackageInfo>): Map<String, PackageHeader> {
         logger.info { "Parsing packages headers..." }
 
-        return iterator.asSequence().mapNotNull { json ->
-            val value = json["value"].textValue()
+        return packageInfos.mapNotNull { info ->
+            val value = info.value
             val nameMatcher = EXTRACT_FROM_LOCATOR_PATTERN.matchEntire(value)
             if (nameMatcher == null) {
                 issues += createAndLogIssue(
@@ -370,7 +357,7 @@ class Yarn2(
      * appended to the dependency graph.
      */
     private fun parseAllPackages(
-        iterator: MappingIterator<ObjectNode>,
+        packageInfos: Collection<PackageInfo>,
         definitionFile: File,
         packagesHeaders: Map<String, PackageHeader>,
         packagesDetails: Map<String, AdditionalData>
@@ -378,8 +365,8 @@ class Yarn2(
         val allDependencies = mutableMapOf<YarnDependencyType, MutableMap<Identifier, List<Identifier>>>()
         // Create packages for all modules found in the workspace and add them to the graph builder. They are reused
         // when they are referenced by scope dependencies.
-        iterator.forEach { node ->
-            val dependencyMapping = parsePackage(node, definitionFile, packagesHeaders, packagesDetails)
+        packageInfos.forEach { info ->
+            val dependencyMapping = parsePackage(info, definitionFile, packagesHeaders, packagesDetails)
             dependencyMapping.forEach {
                 val mapping = allDependencies.getOrPut(it.key) { mutableMapOf() }
                 mapping += it.value
@@ -450,12 +437,12 @@ class Yarn2(
      * The list of dependencies of the constructed object is returned.
      */
     private fun parsePackage(
-        json: ObjectNode,
+        packageInfo: PackageInfo,
         definitionFile: File,
         packagesHeaders: Map<String, PackageHeader>,
         packagesDetails: Map<String, AdditionalData>
     ): Map<YarnDependencyType, Pair<Identifier, List<Identifier>>> {
-        val value = json["value"].textValue()
+        val value = packageInfo.value
         val header = packagesHeaders[value]
         if (header == null) {
             issues += createAndLogIssue(
@@ -467,20 +454,11 @@ class Yarn2(
         }
 
         val (namespace, name) = splitNpmNamespaceAndName(header.rawName)
-        val childrenNode = json["children"]
-        val version = childrenNode["Version"].textValue()
+        val version = packageInfo.children.version
 
-        val manifest = childrenNode["Manifest"] as ObjectNode
-        // Yarn's manifests contain licenses in an element with an uppercase 'L'. To leverage existing license parsing
-        // code, an extra property with lowercase 'L' is added.
-        manifest["License"].takeUnless {
-            it is NullNode
-        }?.also {
-            manifest.set<ObjectNode>("license", it)
-        }
-
-        val declaredLicenses = parseNpmLicenses(manifest)
-        var homepageUrl = manifest["Homepage"].textValueOrEmpty()
+        val manifest = packageInfo.children.manifest
+        val declaredLicenses = manifest.license.orEmpty().let { setOf(it).mapNpmLicenses() }
+        var homepageUrl = manifest.homepage.orEmpty()
 
         val id = if (header.type == "workspace") {
             val projectFile = definitionFile.resolveSibling(header.version).resolve(definitionFile.name)
@@ -550,8 +528,7 @@ class Yarn2(
             id
         }
 
-        val rawDependencies = childrenNode.withArray<JsonNode>("Dependencies")
-        val dependencies = processDependencies(rawDependencies)
+        val dependencies = processDependencies(packageInfo.children.dependencies)
 
         val dependencyToType = listDependenciesByType(definitionFile)
 
@@ -635,9 +612,9 @@ class Yarn2(
      * Process [dependencies], the `Dependencies` sub-element of a single node returned by `yarn info`.
      * The dependencies are returned as a list.
      */
-    private fun processDependencies(dependencies: JsonNode): List<Identifier> =
+    private fun processDependencies(dependencies: Collection<PackageInfo.Dependency>): List<Identifier> =
         dependencies.mapNotNull { dependency ->
-            val locator = dependency["locator"].textValue()
+            val locator = dependency.locator
             val locatorMatcher = EXTRACT_FROM_LOCATOR_PATTERN.matchEntire(locator)
             if (locatorMatcher == null) {
                 issues += createAndLogIssue(
