@@ -452,7 +452,7 @@ class Pub(
 
             val gradleAnalyzerConfig = analyzerConfig.withPackageManagerOption(
                 "Gradle",
-                gradleFactory.type,
+                OPTION_GRADLE_VERSION,
                 pubGradleVersion
             )
 
