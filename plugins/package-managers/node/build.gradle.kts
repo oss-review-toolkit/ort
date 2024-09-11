@@ -42,10 +42,6 @@ dependencies {
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxUtils)
 
-    implementation(libs.jackson.annotations)
-    implementation(libs.jackson.core)
-    implementation(libs.jackson.dataformat.yaml)
-    implementation(libs.jackson.module.kotlin)
     implementation(libs.kotlinx.coroutines)
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
