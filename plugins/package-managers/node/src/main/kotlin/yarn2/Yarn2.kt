@@ -19,6 +19,10 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.node.yarn2
 
+import com.charleskorn.kaml.Yaml
+import com.charleskorn.kaml.YamlScalar
+import com.charleskorn.kaml.yamlMap
+
 import java.io.File
 
 import kotlinx.coroutines.Dispatchers
@@ -48,7 +52,6 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.model.utils.DependencyHandler
-import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJsons
@@ -63,7 +66,6 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.yarn2.Yarn2.Companion.Y
 import org.ossreviewtoolkit.plugins.packagemanagers.node.yarn2.Yarn2.Companion.YARN_PATH_PROPERTY_NAME
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.ort.runBlocking
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
@@ -739,10 +741,10 @@ private fun PackageJson.getScopeDependencies(type: YarnDependencyType) =
 
 private fun getYarnExecutable(workingDir: File): File {
     val yarnrcFile = workingDir.resolve(YARN2_RESOURCE_FILE)
-    val yarnConfig = yamlMapper.readTree(yarnrcFile)
-    val yarnPath = requireNotNull(yarnConfig[YARN_PATH_PROPERTY_NAME].textValueOrEmpty().ifBlank { null }) {
-        "No Yarn 2+ executable could be found in '$YARN2_RESOURCE_FILE'."
-    }
+    val yarnConfig = Yaml.default.parseToYamlNode(yarnrcFile.readText()).yamlMap
+    val yarnPath = yarnConfig.get<YamlScalar>(YARN_PATH_PROPERTY_NAME)?.content
+
+    require(!yarnPath.isNullOrEmpty()) { "No Yarn 2+ executable could be found in '$YARN2_RESOURCE_FILE'." }
 
     return workingDir.resolve(yarnPath)
 }
