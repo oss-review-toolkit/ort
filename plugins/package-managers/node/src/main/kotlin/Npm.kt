@@ -383,7 +383,7 @@ open class Npm(
         }
 
     protected open fun getRemotePackageDetails(workingDir: File, packageName: String): JsonNode {
-        val process = run(workingDir, "view", "--json", packageName)
+        val process = run(workingDir, "info", "--json", packageName)
         return jsonMapper.readTree(process.stdout)
     }
 
