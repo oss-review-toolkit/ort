@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.node
 
-import com.fasterxml.jackson.databind.JsonNode
-
 import java.io.File
 
 import kotlin.time.Duration.Companion.days
@@ -82,16 +80,18 @@ class Yarn(
 
     override fun runInstall(workingDir: File) = run(workingDir, "install", "--ignore-scripts", "--ignore-engines")
 
-    override fun getRemotePackageDetails(workingDir: File, packageName: String): JsonNode {
-        yarnInfoCache.read(packageName)?.let { return jsonMapper.readTree(it) }
+    override fun getRemotePackageDetails(workingDir: File, packageName: String): PackageJson {
+        yarnInfoCache.read(packageName)?.let { return parsePackageJson(it) }
 
         val process = run(workingDir, "info", "--json", packageName)
 
-        return jsonMapper.readTree(process.stdout)["data"]?.also {
+        return jsonMapper.readTree(process.stdout)["data"]?.let {
             yarnInfoCache.write(packageName, it.toString())
+            parsePackageJson(it.toString())
         } ?: run {
-            jsonMapper.readTree(process.stderr)["data"].also {
+            jsonMapper.readTree(process.stderr)["data"].let {
                 logger.warn { "Error running '${process.commandLine}' in directory $workingDir: $it" }
+                parsePackageJson(it.toString())
             }
         }
     }
