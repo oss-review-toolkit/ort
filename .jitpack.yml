@@ -1,6 +1,0 @@
-jdk:
-  - openjdk11
-
-install:
-  # Exclude generation of docs artifacts to save build time.
-  - ./gradlew --no-daemon --stacktrace -x dokkatooGeneratePublicationJavadoc publishToMavenLocal
