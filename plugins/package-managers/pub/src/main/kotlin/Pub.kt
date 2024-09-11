@@ -30,8 +30,8 @@ import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerDependency
 import org.ossreviewtoolkit.analyzer.PackageManagerDependencyResult
-import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
+import org.ossreviewtoolkit.analyzer.determineEnabledPackageManagers
 import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.analyzer.toPackageReference
 import org.ossreviewtoolkit.downloader.VcsHost
@@ -132,7 +132,7 @@ class Pub(
 
     private val flutterAbsolutePath = flutterHome.resolve("bin")
 
-    private val gradleFactory = PackageManagerFactory.ALL["Gradle"]
+    private val gradleFactory = analyzerConfig.determineEnabledPackageManagers().find { it.type.startsWith("Gradle") }
 
     private data class ParsePackagesResult(
         val packages: Map<Identifier, Package>,
@@ -451,7 +451,7 @@ class Pub(
             }
 
             val gradleAnalyzerConfig = analyzerConfig.withPackageManagerOption(
-                "Gradle",
+                gradleFactory.type,
                 OPTION_GRADLE_VERSION,
                 pubGradleVersion
             )
