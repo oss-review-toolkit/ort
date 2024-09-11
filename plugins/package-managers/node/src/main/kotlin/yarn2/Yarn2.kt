@@ -326,8 +326,6 @@ class Yarn2(
                     val process = run(
                         "npm",
                         "info",
-                        "--fields",
-                        "description,repository,dist,homepage,author,gitHead,version",
                         "--json",
                         *chunk.toTypedArray(),
                         workingDir = workingDir,
