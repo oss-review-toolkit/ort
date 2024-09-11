@@ -106,6 +106,8 @@ data class PackageJson(
     @SerialName("_integrity")
     val integrity: String? = null,
     val packageManager: String? = null,
+    val dependencies: Map<String, String> = emptyMap(),
+    val devDependencies: Map<String, String> = emptyMap(),
     /** This property does not belong to package.json but to the JSON returned by 'npm info'. */
     val dist: Distribution? = null
 ) {
