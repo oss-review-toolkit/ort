@@ -64,19 +64,30 @@ class Aosd2Reporter(override val descriptor: PluginDescriptor = Aosd2ReporterFac
     }
 }
 
-private fun Package.toExternalDependency(input: ReporterInput): ExternalDependency =
-    ExternalDependency(
+private fun Package.toExternalDependency(input: ReporterInput): ExternalDependency {
+    val licenses = toLicenses(input)
+
+    // There has to be at least one part. As nothing is known about the logical layout of the external dependency,
+    // assume that there are no separate parts and always create a default one.
+    val defaultPart = AOSD2.Part(
+        name = "default",
+        providers = listOf(AOSD2.Provider(additionalLicenses = licenses))
+    )
+
+    return ExternalDependency(
         id = id.toCoordinates(),
         name = id.name,
         scmUrl = vcsProcessed.url.takeUnless { it.isEmpty() },
         description = description.takeUnless { it.isEmpty() },
         version = id.version,
-        licenses = toLicenses(input),
+        licenses = licenses,
+        parts = listOf(defaultPart),
         deployPackage = binaryArtifact.toDeployPackage(),
         externalDependencies = input.ortResult.getDependencies(id, maxLevel = 1, omitExcluded = true).map {
             it.toCoordinates()
         }
     )
+}
 
 private fun Package.toLicenses(input: ReporterInput): List<AOSD2.License> {
     val licenses = mutableListOf<AOSD2.License>()
