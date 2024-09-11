@@ -46,7 +46,6 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
-import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.model.yamlMapper
@@ -645,10 +644,11 @@ class Yarn2(
      * See also https://classic.yarnpkg.com/en/docs/dependency-types (documentation for Yarn 1).
      */
     private fun listDependenciesByType(definitionFile: File): Map<String, YarnDependencyType> {
-        val json = jsonMapper.readTree(definitionFile)
+        val packageJson = parsePackageJson(definitionFile)
         val result = mutableMapOf<String, YarnDependencyType>()
+
         YarnDependencyType.entries.forEach { dependencyType ->
-            json[dependencyType.type]?.fieldNames()?.asSequence()?.forEach {
+            packageJson.getScopeDependencies(dependencyType).keys.forEach {
                 result += it to dependencyType
             }
         }
@@ -732,3 +732,9 @@ class Yarn2(
         val author: Set<String> = emptySet()
     )
 }
+
+private fun PackageJson.getScopeDependencies(type: YarnDependencyType) =
+    when (type) {
+        YarnDependencyType.DEPENDENCIES -> dependencies
+        YarnDependencyType.DEV_DEPENDENCIES -> devDependencies
+    }
