@@ -59,8 +59,11 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.mapNpmLicenses
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.parseNpmAuthor
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.parseNpmVcsInfo
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.splitNpmNamespaceAndName
+import org.ossreviewtoolkit.plugins.packagemanagers.node.yarn2.Yarn2.Companion.YARN2_RESOURCE_FILE
+import org.ossreviewtoolkit.plugins.packagemanagers.node.yarn2.Yarn2.Companion.YARN_PATH_PROPERTY_NAME
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.ort.runBlocking
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
@@ -189,12 +192,7 @@ class Yarn2(
         if (corepackEnabled) return DEFAULT_EXECUTABLE_NAME
 
         return yarn2ExecutablesByPath.getOrPut(workingDir) {
-            val yarnConfig = yamlMapper.readTree(workingDir.resolve(YARN2_RESOURCE_FILE))
-            val yarnCommand = requireNotNull(yarnConfig[YARN_PATH_PROPERTY_NAME]) {
-                "No Yarn 2+ executable could be found in 'yarnrc.yml'."
-            }
-
-            val yarnExecutable = workingDir.resolve(yarnCommand.textValue())
+            val yarnExecutable = getYarnExecutable(workingDir)
 
             // TODO: Yarn2 executable is a `cjs` file. Check if under Windows it needs to be run with `node`.
 
@@ -738,3 +736,13 @@ private fun PackageJson.getScopeDependencies(type: YarnDependencyType) =
         YarnDependencyType.DEPENDENCIES -> dependencies
         YarnDependencyType.DEV_DEPENDENCIES -> devDependencies
     }
+
+private fun getYarnExecutable(workingDir: File): File {
+    val yarnrcFile = workingDir.resolve(YARN2_RESOURCE_FILE)
+    val yarnConfig = yamlMapper.readTree(yarnrcFile)
+    val yarnPath = requireNotNull(yarnConfig[YARN_PATH_PROPERTY_NAME].textValueOrEmpty().ifBlank { null }) {
+        "No Yarn 2+ executable could be found in 'yarnrc.yml'."
+    }
+
+    return workingDir.resolve(yarnPath)
+}
