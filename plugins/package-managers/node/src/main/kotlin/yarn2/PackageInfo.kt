@@ -19,38 +19,40 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.node.yarn2
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.module.kotlin.readValues
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeToSequence
 
-import org.ossreviewtoolkit.model.jsonMapper
+private val JSON = Json { ignoreUnknownKeys = true }
 
 internal fun parsePackageInfos(info: String): List<PackageInfo> =
-    jsonMapper.createParser(info).use { parser ->
-        jsonMapper.readValues<PackageInfo>(parser).readAll()
-    }
+    info.byteInputStream().use { JSON.decodeToSequence<PackageInfo>(it) }.toList()
 
+@Serializable
 internal data class PackageInfo(
     val value: String,
     val children: Children
 ) {
-    @JsonIgnoreProperties(ignoreUnknown = true)
+    @Serializable
     data class Children(
-        @JsonProperty("Version")
+        @SerialName("Version")
         val version: String,
-        @JsonProperty("Manifest")
+        @SerialName("Manifest")
         val manifest: Manifest,
-        @JsonProperty("Dependencies")
+        @SerialName("Dependencies")
         val dependencies: List<Dependency> = emptyList()
     )
 
+    @Serializable
     data class Manifest(
-        @JsonProperty("License")
+        @SerialName("License")
         val license: String? = null,
-        @JsonProperty("Homepage")
+        @SerialName("Homepage")
         val homepage: String? = null
     )
 
+    @Serializable
     data class Dependency(
         val descriptor: String,
         val locator: String
