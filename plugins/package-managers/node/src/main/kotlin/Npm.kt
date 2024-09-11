@@ -61,7 +61,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NpmModuleInfo
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.expandNpmShortcutUrl
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.fixNpmDownloadUrl
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.mapNpmLicenses
-import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.parseNpmAuthors
+import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.parseNpmAuthor
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.parseNpmVcsInfo
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.splitNpmNamespaceAndName
 import org.ossreviewtoolkit.utils.common.CommandLineTool
@@ -279,7 +279,7 @@ open class Npm(
         val version = packageJson.version ?: NON_EXISTING_SEMVER
 
         val declaredLicenses = packageJson.licenses.mapNpmLicenses()
-        val authors = parseNpmAuthors(packageJson.author)
+        val authors = parseNpmAuthor(packageJson.author)
 
         var description = packageJson.description.orEmpty()
         var homepageUrl = packageJson.homepage.orEmpty()
@@ -542,7 +542,7 @@ open class Npm(
         }
 
         val declaredLicenses = packageJson.licenses.mapNpmLicenses()
-        val authors = parseNpmAuthors(packageJson.author)
+        val authors = parseNpmAuthor(packageJson.author)
         val homepageUrl = packageJson.homepage.orEmpty()
         val projectDir = packageJsonFile.parentFile
         val vcsFromPackage = parseNpmVcsInfo(packageJson)

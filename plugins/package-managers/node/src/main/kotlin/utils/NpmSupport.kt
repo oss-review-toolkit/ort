@@ -87,7 +87,7 @@ private val ARTIFACTORY_API_PATH_PATTERN = Regex("(.*artifactory.*)/api/npm/(.*)
  * https://docs.npmjs.com/files/package.json#people-fields-author-contributors, there are two formats to
  * specify the author of a package: An object with multiple properties or a single string.
  */
-internal fun parseNpmAuthors(author: PackageJson.Author?): Set<String> =
+internal fun parseNpmAuthor(author: PackageJson.Author?): Set<String> =
     author?.let {
         if (it.url == null && it.email == null) {
             // The author might either originate from a textual node or from an object node. The former to

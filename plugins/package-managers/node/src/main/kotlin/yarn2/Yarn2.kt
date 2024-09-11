@@ -59,7 +59,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NodePackageManage
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NpmDetection
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.fixNpmDownloadUrl
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.mapNpmLicenses
-import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.parseNpmAuthors
+import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.parseNpmAuthor
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.parseNpmVcsInfo
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.splitNpmNamespaceAndName
 import org.ossreviewtoolkit.utils.common.CommandLineTool
@@ -579,7 +579,7 @@ class Yarn2(
         val description = packageJson.description.orEmpty()
         val vcsFromPackage = parseNpmVcsInfo(packageJson)
         val homepage = packageJson.homepage.orEmpty()
-        val author = parseNpmAuthors(packageJson.author)
+        val author = parseNpmAuthor(packageJson.author)
         val downloadUrl = packageJson.dist?.tarball.orEmpty().fixNpmDownloadUrl()
 
         val hash = Hash.create(packageJson.dist?.shasum.orEmpty())
