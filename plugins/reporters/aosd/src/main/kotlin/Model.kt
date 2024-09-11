@@ -23,6 +23,7 @@ package org.ossreviewtoolkit.plugins.reporters.aosd
 
 import java.io.File
 
+import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -136,8 +137,11 @@ internal data class AOSD2(
      */
     @Serializable
     data class Provider(
-        val additionalLicenses: List<License>,
+        @EncodeDefault
+        val additionalLicenses: List<License> = emptyList(),
+        @EncodeDefault
         val modified: Boolean = false,
+        @EncodeDefault
         val usage: Usage = Usage.DYNAMIC_LINKING
     )
 
