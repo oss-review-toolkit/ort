@@ -63,7 +63,6 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.parseNpmVcsInfo
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.splitNpmNamespaceAndName
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.ort.runBlocking
 import org.ossreviewtoolkit.utils.ort.showStackTrace
@@ -460,9 +459,9 @@ class Yarn2(
 
         val id = if (header.type == "workspace") {
             val projectFile = definitionFile.resolveSibling(header.version).resolve(definitionFile.name)
-            val workingDir = definitionFile.parentFile
+            val packageJson = jsonMapper.readTree(projectFile) as ObjectNode
+            val additionalData = processAdditionalPackageInfo(packageJson)
 
-            val additionalData = getProjectAdditionalData(workingDir, name, version)
             val id = Identifier("Yarn2", namespace, name, version)
             allProjects += id to Project(
                 id = id.copy(type = managerName),
@@ -686,35 +685,6 @@ class Yarn2(
         // Rewrite some dependencies to make them compatible with Identifier.
         // E.g. typescript@patch:typescript@npm%3A4.0.2#~builtin<compat/typescript>::version=4.0.2&hash=ddd1e8
         return result.replace(":", "%3A")
-    }
-
-    /**
-     * With Yarn 2+, it is currently not possible with a native command to get the repository information for a project
-     * package. Therefore, this function runs a low-level NPM command to fetch this information.
-     * Note that the project must have been installed first with `yarn install`.
-     */
-    private fun getProjectAdditionalData(
-        workingDir: File,
-        packageName: String,
-        packageVersion: String
-    ): AdditionalData {
-        // Notice that a ProcessCapture is directly called to avoid the `requiredSuccess`: NPM sets exit code to 1 if
-        // some peer dependencies cannot be resolved (see https://github.com/npm/npm/issues/17624).
-        val process = ProcessCapture(
-            if (Os.isWindows) "npm.cmd" else "npm",
-            "list",
-            "-l",
-            "--json",
-            "$packageName@$packageVersion",
-            workingDir = workingDir
-        )
-        val json = jsonMapper.readTree(process.stdout)
-
-        val vcsFromPackage = parseNpmVcsInfo(json)
-        val name = json["name"].textValueOrEmpty()
-        val version = json["version"].textValueOrEmpty()
-        val description = json["description"].textValueOrEmpty()
-        return AdditionalData(name, version, description, vcsFromPackage, VcsInfo.EMPTY)
     }
 
     override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =
