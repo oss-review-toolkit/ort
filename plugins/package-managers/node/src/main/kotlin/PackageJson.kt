@@ -51,7 +51,7 @@ internal fun parsePackageJsons(jsons: String): List<PackageJson> =
         JSON.decodeToSequence<JsonElement>(input).mapTo(mutableListOf()) { parsePackageJson(it) }
     }
 
-private fun parsePackageJson(element: JsonElement): PackageJson {
+internal fun parsePackageJson(element: JsonElement): PackageJson {
     val transformedElement = transformPackageJson(element)
     return JSON.decodeFromJsonElement<PackageJson>(transformedElement)
 }
