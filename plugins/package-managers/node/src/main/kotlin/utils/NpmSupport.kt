@@ -67,20 +67,18 @@ internal fun expandNpmShortcutUrl(url: String): String {
 }
 
 /**
- * Do various replacements in [downloadUrl]. Return the transformed URL.
+ * Return the result of doing various replacements in this URL.
  */
-internal fun fixNpmDownloadUrl(downloadUrl: String): String {
+internal fun String.fixNpmDownloadUrl(): String =
     @Suppress("HttpUrlsUsage")
-    return downloadUrl
-        // Work around the issue described at
-        // https://npm.community/t/some-packages-have-dist-tarball-as-http-and-not-https/285/19.
-        .replace("http://registry.npmjs.org/", "https://registry.npmjs.org/")
+    // Work around the issue described at
+    // https://npm.community/t/some-packages-have-dist-tarball-as-http-and-not-https/285/19.
+    replace("http://registry.npmjs.org/", "https://registry.npmjs.org/")
         // Work around Artifactory returning API URLs instead of download URLs.
         // See these somewhat related issues:
         // - https://www.jfrog.com/jira/browse/RTFACT-8727
         // - https://www.jfrog.com/jira/browse/RTFACT-18463
         .replace(ARTIFACTORY_API_PATH_PATTERN, "$1/$2")
-}
 
 private val ARTIFACTORY_API_PATH_PATTERN = Regex("(.*artifactory.*)/api/npm/(.*)")
 
