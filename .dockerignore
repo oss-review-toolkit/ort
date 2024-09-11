@@ -13,7 +13,6 @@ integrations/jenkins/Jenkinsfile
 .codecov.yml
 .commitlintrc.yml
 .editorconfig
-.jitpack.yml
 .mailmap
 .markdownlint-cli2.yaml
 .markdownlint.yaml
