@@ -741,7 +741,7 @@ private fun getYarnExecutable(workingDir: File): File {
     val yarnrcFile = workingDir.resolve(YARN2_RESOURCE_FILE)
     val yarnConfig = yamlMapper.readTree(yarnrcFile)
     val yarnPath = requireNotNull(yarnConfig[YARN_PATH_PROPERTY_NAME].textValueOrEmpty().ifBlank { null }) {
-        "No Yarn 2+ executable could be found in 'yarnrc.yml'."
+        "No Yarn 2+ executable could be found in '$YARN2_RESOURCE_FILE'."
     }
 
     return workingDir.resolve(yarnPath)
