@@ -4,28 +4,24 @@
 
 [![Slack][1]][2]
 
-[![Wrapper Validation][3]][4] [![Static Analysis][5]][6]
+[![Static Analysis][3]][4] [![Build and Test][5]][6] [![Code coverage][7]][8]
 
-[![Build and Test][7]][8] [![Code coverage][9]][10]
-
-[![REUSE status][11]][12] [![OpenSSF Scorecard][13]][14] [![OpenSSF Best Practices][15]][16]
+[![REUSE status][9]][10] [![OpenSSF Scorecard][11]][12] [![OpenSSF Best Practices][13]][14]
 
 [1]: https://img.shields.io/badge/Join_us_on_Slack!-ort--talk-blue.svg?longCache=true&logo=slack
 [2]: http://slack.oss-review-toolkit.org
-[3]: https://github.com/oss-review-toolkit/ort/actions/workflows/wrapper-validation.yml/badge.svg
-[4]: https://github.com/oss-review-toolkit/ort/actions/workflows/wrapper-validation.yml
-[5]: https://github.com/oss-review-toolkit/ort/actions/workflows/static-analysis.yml/badge.svg
-[6]: https://github.com/oss-review-toolkit/ort/actions/workflows/static-analysis.yml
-[7]: https://github.com/oss-review-toolkit/ort/actions/workflows/build-and-test.yml/badge.svg
-[8]: https://github.com/oss-review-toolkit/ort/actions/workflows/build-and-test.yml
-[9]: https://codecov.io/gh/oss-review-toolkit/ort/branch/main/graph/badge.svg?token=QD2tCSUTVN
-[10]: https://app.codecov.io/gh/oss-review-toolkit/ort
-[11]: https://api.reuse.software/badge/github.com/oss-review-toolkit/ort
-[12]: https://api.reuse.software/info/github.com/oss-review-toolkit/ort
-[13]: https://api.scorecard.dev/projects/github.com/oss-review-toolkit/ort/badge
-[14]: https://scorecard.dev/viewer/?uri=github.com/oss-review-toolkit/ort
-[15]: https://www.bestpractices.dev/projects/4618/badge
-[16]: https://www.bestpractices.dev/projects/4618
+[3]: https://github.com/oss-review-toolkit/ort/actions/workflows/static-analysis.yml/badge.svg
+[4]: https://github.com/oss-review-toolkit/ort/actions/workflows/static-analysis.yml
+[5]: https://github.com/oss-review-toolkit/ort/actions/workflows/build-and-test.yml/badge.svg
+[6]: https://github.com/oss-review-toolkit/ort/actions/workflows/build-and-test.yml
+[7]: https://codecov.io/gh/oss-review-toolkit/ort/branch/main/graph/badge.svg?token=QD2tCSUTVN
+[8]: https://app.codecov.io/gh/oss-review-toolkit/ort
+[9]: https://api.reuse.software/badge/github.com/oss-review-toolkit/ort
+[10]: https://api.reuse.software/info/github.com/oss-review-toolkit/ort
+[11]: https://api.scorecard.dev/projects/github.com/oss-review-toolkit/ort/badge
+[12]: https://scorecard.dev/viewer/?uri=github.com/oss-review-toolkit/ort
+[13]: https://www.bestpractices.dev/projects/4618/badge
+[14]: https://www.bestpractices.dev/projects/4618
 
 # Introduction
 
