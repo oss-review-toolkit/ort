@@ -6,7 +6,7 @@
 
 [![Static Analysis][3]][4] [![Build and Test][5]][6] [![Code coverage][7]][8]
 
-[![REUSE status][9]][10] [![OpenSSF Scorecard][11]][12] [![OpenSSF Best Practices][13]][14]
+[![REUSE status][9]][10] [![OpenSSF Best Practices][11]][12] [![OpenSSF Scorecard][13]][14]
 
 [1]: https://img.shields.io/badge/Join_us_on_Slack!-ort--talk-blue.svg?longCache=true&logo=slack
 [2]: http://slack.oss-review-toolkit.org
@@ -18,10 +18,10 @@
 [8]: https://app.codecov.io/gh/oss-review-toolkit/ort
 [9]: https://api.reuse.software/badge/github.com/oss-review-toolkit/ort
 [10]: https://api.reuse.software/info/github.com/oss-review-toolkit/ort
-[11]: https://api.scorecard.dev/projects/github.com/oss-review-toolkit/ort/badge
-[12]: https://scorecard.dev/viewer/?uri=github.com/oss-review-toolkit/ort
-[13]: https://www.bestpractices.dev/projects/4618/badge
-[14]: https://www.bestpractices.dev/projects/4618
+[11]: https://www.bestpractices.dev/projects/4618/badge
+[12]: https://www.bestpractices.dev/projects/4618
+[13]: https://api.scorecard.dev/projects/github.com/oss-review-toolkit/ort/badge
+[14]: https://scorecard.dev/viewer/?uri=github.com/oss-review-toolkit/ort
 
 # Introduction
 
