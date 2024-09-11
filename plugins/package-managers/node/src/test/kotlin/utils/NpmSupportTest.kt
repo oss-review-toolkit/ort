@@ -93,17 +93,17 @@ class NpmSupportTest : WordSpec({
         }
     }
 
-    "parseNpmAuthors()" should {
+    "parseNpmAuthor()" should {
         "get authors from a text node" {
             val author = Author(name = "Jane Doe <jane.doe@example.com>")
 
-            parseNpmAuthors(author) shouldBe setOf("Jane Doe")
+            parseNpmAuthor(author) shouldBe setOf("Jane Doe")
         }
 
         "get authors from an object node" {
             val author = Author(name = "John Doe")
 
-            parseNpmAuthors(author) shouldBe setOf("John Doe")
+            parseNpmAuthor(author) shouldBe setOf("John Doe")
         }
     }
 
