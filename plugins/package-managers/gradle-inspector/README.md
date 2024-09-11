@@ -42,7 +42,7 @@ Also, the `isModified` check which compares with artifacts of the same name in M
 [shortcomings]: https://github.com/oss-review-toolkit/ort/issues/5782
 [Gradle]: ../gradle/src/main/kotlin/Gradle.kt
 [initialization script]: https://docs.gradle.org/current/userguide/init_scripts.html
-[init.gradle]: ./src/main/resources/init.gradle.template
+[init.gradle]: ./src/main/resources/template.init.gradle
 [Gradle plugin]: ../gradle-plugin/src/main/kotlin/OrtModelPlugin.kt
 [OrtModelBuilder]: ../gradle-plugin/src/main/kotlin/OrtModelBuilder.kt
 [data model for Gradle projects]: ../gradle-model/src/main/kotlin/GradleModel.kt
