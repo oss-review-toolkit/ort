@@ -21,9 +21,6 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.node
 
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.node.ObjectNode
-
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 
@@ -53,10 +50,8 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.readTree
-import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NON_EXISTING_SEMVER
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NodePackageManager
@@ -65,8 +60,8 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NpmDetection
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NpmModuleInfo
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.expandNpmShortcutUrl
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.fixNpmDownloadUrl
+import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.mapNpmLicenses
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.parseNpmAuthors
-import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.parseNpmLicenses
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.parseNpmVcsInfo
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.splitNpmNamespaceAndName
 import org.ossreviewtoolkit.utils.common.CommandLineTool
@@ -127,7 +122,7 @@ open class Npm(
 
     private val graphBuilder by lazy { DependencyGraphBuilder(NpmDependencyHandler(this)) }
 
-    private val npmViewCache = ConcurrentHashMap<String, Deferred<JsonNode>>()
+    private val npmViewCache = ConcurrentHashMap<String, Deferred<PackageJson>>()
 
     protected open fun hasLockfile(projectDir: File) = NodePackageManager.NPM.hasLockfile(projectDir)
 
@@ -272,33 +267,33 @@ open class Npm(
 
         logger.debug { "Found a 'package.json' file in '$packageDir'." }
 
-        val json = packageJsonFile.readValue<ObjectNode>()
+        val packageJson = parsePackageJson(packageJsonFile)
 
         // The "name" and "version" fields are only required if the package is going to be published, otherwise they are
         // optional, see
         // - https://docs.npmjs.com/cli/v10/configuring-npm/package-json#name
         // - https://docs.npmjs.com/cli/v10/configuring-npm/package-json#version
         // So, projects analyzed by ORT might not have these fields set.
-        val rawName = json["name"].textValue() // TODO: Fall back to a generated name if the name is unset.
+        val rawName = packageJson.name.orEmpty() // TODO: Fall back to a generated name if the name is unset.
         val (namespace, name) = splitNpmNamespaceAndName(rawName)
-        val version = json["version"]?.textValue() ?: NON_EXISTING_SEMVER
+        val version = packageJson.version ?: NON_EXISTING_SEMVER
 
-        val declaredLicenses = parseNpmLicenses(json)
-        val authors = parseNpmAuthors(json)
+        val declaredLicenses = packageJson.licenses.mapNpmLicenses()
+        val authors = parseNpmAuthors(packageJson.author)
 
-        var description = json["description"].textValueOrEmpty()
-        var homepageUrl = json["homepage"].textValueOrEmpty()
+        var description = packageJson.description.orEmpty()
+        var homepageUrl = packageJson.homepage.orEmpty()
 
         // Note that all fields prefixed with "_" are considered private to NPM and should not be relied on.
-        var downloadUrl = expandNpmShortcutUrl(json["_resolved"].textValueOrEmpty()).ifEmpty {
+        var downloadUrl = expandNpmShortcutUrl(packageJson.resolved.orEmpty()).ifEmpty {
             // If the normalized form of the specified dependency contains a URL as the version, expand and use it.
-            val fromVersion = json["_from"].textValueOrEmpty().substringAfterLast('@')
+            val fromVersion = packageJson.from.orEmpty().substringAfterLast('@')
             expandNpmShortcutUrl(fromVersion).takeIf { it != fromVersion }.orEmpty()
         }
 
-        var hash = Hash.create(json["_integrity"].textValueOrEmpty())
+        var hash = Hash.create(packageJson.integrity.orEmpty())
 
-        var vcsFromPackage = parseNpmVcsInfo(json)
+        var vcsFromPackage = parseNpmVcsInfo(packageJson)
 
         val id = Identifier("NPM", namespace, name, version)
 
@@ -321,13 +316,13 @@ open class Npm(
                 runCatching {
                     getRemotePackageDetailsAsync(workingDir, "$rawName@$version").await()
                 }.onSuccess { details ->
-                    if (description.isEmpty()) description = details["description"].textValueOrEmpty()
-                    if (homepageUrl.isEmpty()) homepageUrl = details["homepage"].textValueOrEmpty()
+                    if (description.isEmpty()) description = details.description.orEmpty()
+                    if (homepageUrl.isEmpty()) homepageUrl = details.homepage.orEmpty()
 
-                    details["dist"]?.let { dist ->
+                    details.dist?.let { dist ->
                         if (downloadUrl.isEmpty() || hash == Hash.NONE) {
-                            downloadUrl = dist["tarball"].textValueOrEmpty()
-                            hash = Hash.create(dist["shasum"].textValueOrEmpty())
+                            downloadUrl = dist.tarball.orEmpty()
+                            hash = Hash.create(dist.shasum.orEmpty())
                         }
                     }
 
@@ -373,7 +368,7 @@ open class Npm(
         return Pair(id.toCoordinates(), module)
     }
 
-    private suspend fun getRemotePackageDetailsAsync(workingDir: File, packageName: String): Deferred<JsonNode> =
+    private suspend fun getRemotePackageDetailsAsync(workingDir: File, packageName: String): Deferred<PackageJson> =
         withContext(Dispatchers.IO) {
             npmViewCache.getOrPut(packageName) {
                 async {
@@ -382,9 +377,9 @@ open class Npm(
             }
         }
 
-    protected open fun getRemotePackageDetails(workingDir: File, packageName: String): JsonNode {
+    protected open fun getRemotePackageDetails(workingDir: File, packageName: String): PackageJson {
         val process = run(workingDir, "info", "--json", packageName)
-        return jsonMapper.readTree(process.stdout)
+        return parsePackageJson(process.stdout)
     }
 
     /** Cache for submodules identified by its moduleDir absolutePath */
@@ -530,9 +525,9 @@ open class Npm(
     private fun parseProject(packageJsonFile: File): Project {
         logger.debug { "Parsing project info from '$packageJsonFile'." }
 
-        val json = jsonMapper.readTree(packageJsonFile)
+        val packageJson = parsePackageJson(packageJsonFile)
 
-        val rawName = json["name"].textValueOrEmpty()
+        val rawName = packageJson.name.orEmpty()
         val (namespace, name) = splitNpmNamespaceAndName(rawName)
 
         val projectName = name.ifBlank {
@@ -541,16 +536,16 @@ open class Npm(
             }
         }
 
-        val version = json["version"].textValueOrEmpty()
+        val version = packageJson.version.orEmpty()
         if (version.isBlank()) {
             logger.warn { "'$packageJsonFile' does not define a version." }
         }
 
-        val declaredLicenses = parseNpmLicenses(json)
-        val authors = parseNpmAuthors(json)
-        val homepageUrl = json["homepage"].textValueOrEmpty()
+        val declaredLicenses = packageJson.licenses.mapNpmLicenses()
+        val authors = parseNpmAuthors(packageJson.author)
+        val homepageUrl = packageJson.homepage.orEmpty()
         val projectDir = packageJsonFile.parentFile
-        val vcsFromPackage = parseNpmVcsInfo(json)
+        val vcsFromPackage = parseNpmVcsInfo(packageJson)
 
         return Project(
             id = Identifier(

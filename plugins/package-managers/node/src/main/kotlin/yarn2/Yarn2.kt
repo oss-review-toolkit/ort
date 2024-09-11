@@ -19,9 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.node.yarn2
 
-import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.module.kotlin.contains
-import com.fasterxml.jackson.module.kotlin.readValues
 
 import java.io.File
 
@@ -54,6 +52,9 @@ import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
+import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
+import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJsons
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NpmDetection
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.fixNpmDownloadUrl
@@ -63,7 +64,6 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.parseNpmVcsInfo
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.splitNpmNamespaceAndName
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.ort.runBlocking
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
@@ -332,14 +332,12 @@ class Yarn2(
                             .takeIf { disableRegistryCertificateVerification }
                             .orEmpty()
                     )
-                    jsonMapper.createParser(process.stdout).use {
-                        val detailsIterator =
-                            jsonMapper.readValues<ObjectNode>(it)
-                        detailsIterator.asSequence().map { json ->
-                            processAdditionalPackageInfo(json)
-                        }.toList()
-                    }.also {
-                        logger.info { "Chunk #$index packages details have been fetched." }
+                    val packageJsons = parsePackageJsons(process.stdout)
+
+                    logger.info { "Chunk #$index packages details have been fetched." }
+
+                    packageJsons.map { packageJson ->
+                        processAdditionalPackageInfo(packageJson)
                     }
                 }
             }.awaitAll().flatten().associateBy { "${it.name}@${it.version}" }
@@ -459,7 +457,7 @@ class Yarn2(
 
         val id = if (header.type == "workspace") {
             val projectFile = definitionFile.resolveSibling(header.version).resolve(definitionFile.name)
-            val packageJson = jsonMapper.readTree(projectFile) as ObjectNode
+            val packageJson = parsePackageJson(projectFile)
             val additionalData = processAdditionalPackageInfo(packageJson)
 
             val id = Identifier("Yarn2", namespace, name, version)
@@ -575,20 +573,19 @@ class Yarn2(
     /**
      * Process the [json] result of `yarn npm info` for a given package and return a populated [AdditionalData].
      */
-    private fun processAdditionalPackageInfo(json: ObjectNode): AdditionalData {
-        val name = json["name"].textValue()
-        val version = json["version"].textValue()
-        val description = json["description"].textValueOrEmpty()
-        val vcsFromPackage = parseNpmVcsInfo(json)
-        val homepage = json["homepage"].textValueOrEmpty()
-        val author = parseNpmAuthors(json)
+    private fun processAdditionalPackageInfo(packageJson: PackageJson): AdditionalData {
+        val name = checkNotNull(packageJson.name)
+        val version = checkNotNull(packageJson.version)
+        val description = packageJson.description.orEmpty()
+        val vcsFromPackage = parseNpmVcsInfo(packageJson)
+        val homepage = packageJson.homepage.orEmpty()
+        val author = parseNpmAuthors(packageJson.author)
 
-        val dist = json["dist"]
-        var downloadUrl = dist?.get("tarball").textValueOrEmpty()
+        var downloadUrl = packageJson.dist?.tarball.orEmpty()
 
         downloadUrl = fixNpmDownloadUrl(downloadUrl)
 
-        val hash = Hash.create(dist?.get("shasum").textValueOrEmpty())
+        val hash = Hash.create(packageJson.dist?.shasum.orEmpty())
 
         val vcsFromDownloadUrl = VcsHost.parseUrl(downloadUrl)
 

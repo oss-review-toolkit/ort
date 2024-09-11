@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.utils.common.textValueOrEmpty
+import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 
@@ -89,19 +89,20 @@ private val ARTIFACTORY_API_PATH_PATTERN = Regex("(.*artifactory.*)/api/npm/(.*)
  * https://docs.npmjs.com/files/package.json#people-fields-author-contributors, there are two formats to
  * specify the author of a package: An object with multiple properties or a single string.
  */
-internal fun parseNpmAuthors(json: JsonNode): Set<String> =
-    buildSet {
-        json["author"]?.let { authorNode ->
-            when {
-                authorNode.isObject -> authorNode["name"]?.textValue()
-                authorNode.isTextual -> parseAuthorString(authorNode.textValue(), '<', '(')
-                else -> null
-            }
-        }?.let { add(it) }
-    }
+internal fun parseNpmAuthors(author: PackageJson.Author?): Set<String> =
+    author?.let {
+        if (it.url == null && it.email == null) {
+            // The author might either originate from a textual node or from an object node. The former to
+            // further process the author string.
+            parseAuthorString(it.name, '<', '(')
+        } else {
+            // The author must have come from an object node, so applying parseAuthorString() is not necessary.
+            it.name
+        }
+    }.let { setOfNotNull(it) }
 
 /**
- * Parse information about licenses from the [package.json][json] file of a module.
+ * Map the licenses from a package.json file of a module.
  */
 internal fun parseNpmLicenses(json: JsonNode): Set<String> {
     val declaredLicenses = mutableListOf<String>()
@@ -146,19 +147,19 @@ internal fun Collection<String>.mapNpmLicenses(): Set<String> =
 /**
  * Parse information about the VCS from the [package.json][node] file of a module.
  */
-internal fun parseNpmVcsInfo(node: JsonNode): VcsInfo {
+internal fun parseNpmVcsInfo(packageJson: PackageJson): VcsInfo {
     // See https://github.com/npm/read-package-json/issues/7 for some background info.
-    val head = node["gitHead"].textValueOrEmpty()
+    val head = packageJson.gitHead.orEmpty()
 
-    val repository = node["repository"] ?: return VcsInfo(
+    val repository = packageJson.repository ?: return VcsInfo(
         type = VcsType.UNKNOWN,
         url = "",
         revision = head
     )
 
-    val type = repository["type"].textValueOrEmpty()
-    val url = repository.textValue() ?: repository["url"].textValueOrEmpty()
-    val path = repository["directory"].textValueOrEmpty()
+    val type = repository.type.orEmpty()
+    val url = repository.url
+    val path = repository.directory.orEmpty()
 
     return VcsInfo(
         type = VcsType.forName(type),
