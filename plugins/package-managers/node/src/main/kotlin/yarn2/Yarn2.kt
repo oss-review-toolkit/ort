@@ -585,11 +585,11 @@ class Yarn2(
         val author = parseNpmAuthors(json)
 
         val dist = json["dist"]
-        var downloadUrl = dist["tarball"].textValueOrEmpty()
+        var downloadUrl = dist?.get("tarball").textValueOrEmpty()
 
         downloadUrl = fixNpmDownloadUrl(downloadUrl)
 
-        val hash = Hash.create(dist["shasum"].textValueOrEmpty())
+        val hash = Hash.create(dist?.get("shasum").textValueOrEmpty())
 
         val vcsFromDownloadUrl = VcsHost.parseUrl(downloadUrl)
 
