@@ -335,7 +335,7 @@ open class Npm(
             }
         }
 
-        downloadUrl = fixNpmDownloadUrl(downloadUrl)
+        downloadUrl = downloadUrl.fixNpmDownloadUrl()
 
         val vcsFromDownloadUrl = VcsHost.parseUrl(downloadUrl)
         if (vcsFromDownloadUrl.url != downloadUrl) {

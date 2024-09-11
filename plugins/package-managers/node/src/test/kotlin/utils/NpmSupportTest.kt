@@ -82,13 +82,13 @@ class NpmSupportTest : WordSpec({
 
     "fixNpmDownloadUrl()" should {
         "replace HTTP with HTTPS for the NPM registry only" {
-            fixNpmDownloadUrl("http://registry.npmjs.org/babel-cli/-/babel-cli-6.26.0.tgz") shouldBe
+            "http://registry.npmjs.org/babel-cli/-/babel-cli-6.26.0.tgz".fixNpmDownloadUrl() shouldBe
                 "https://registry.npmjs.org/babel-cli/-/babel-cli-6.26.0.tgz"
-            fixNpmDownloadUrl("http://oss-review-toolkit.org/") shouldBe "http://oss-review-toolkit.org/"
+            "http://oss-review-toolkit.org/".fixNpmDownloadUrl() shouldBe "http://oss-review-toolkit.org/"
         }
 
         "correct Artifactory API URLS" {
-            fixNpmDownloadUrl("http://my.repo/artifactory/api/npm/npm/all") shouldBe
+            "http://my.repo/artifactory/api/npm/npm/all".fixNpmDownloadUrl() shouldBe
                 "http://my.repo/artifactory/npm/all"
         }
     }
