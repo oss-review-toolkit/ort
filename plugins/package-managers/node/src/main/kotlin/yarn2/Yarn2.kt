@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.node.yarn2
 
-import com.fasterxml.jackson.module.kotlin.contains
-
 import java.io.File
 
 import kotlinx.coroutines.Dispatchers
@@ -131,11 +129,6 @@ class Yarn2(
         private const val MANIFEST_FILE = "package.json"
 
         /**
-         * The name of the property that defines the package manager and its version if Corepack is enabled.
-         */
-        private const val PACKAGE_MANAGER_PROPERTY = "packageManager"
-
-        /**
          * The name of the default executable. This is used when the [OPTION_COREPACK_OVERRIDE] option is set.
          */
         private const val DEFAULT_EXECUTABLE_NAME = "yarn"
@@ -146,7 +139,8 @@ class Yarn2(
          */
         private fun isCorepackEnabledInManifest(workingDir: File): Boolean =
             runCatching {
-                PACKAGE_MANAGER_PROPERTY in jsonMapper.readTree(workingDir.resolve(MANIFEST_FILE))
+                val packageJson = parsePackageJson(workingDir.resolve(MANIFEST_FILE))
+                !packageJson.packageManager.isNullOrEmpty()
             }.getOrDefault(false)
     }
 
