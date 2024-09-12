@@ -400,13 +400,12 @@ class Yarn2(
         }
 
         val (namespace, name) = splitNpmNamespaceAndName(header.rawName)
-        val version = packageInfo.children.version
-
         val manifest = packageInfo.children.manifest
         val declaredLicenses = manifest.license.orEmpty().let { setOf(it).mapNpmLicenses() }
         var homepageUrl = manifest.homepage.orEmpty()
 
         val id = if (header.type == "workspace") {
+            val version = packageInfo.children.version
             val projectFile = definitionFile.resolveSibling(header.version).resolve(definitionFile.name)
             val packageJson = parsePackageJson(projectFile)
             val additionalData = processAdditionalPackageInfo(packageJson)
