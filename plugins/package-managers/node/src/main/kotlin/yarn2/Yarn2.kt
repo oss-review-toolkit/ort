@@ -684,8 +684,6 @@ private fun getYarnExecutable(workingDir: File): File {
 
     val yarnExecutable = workingDir.resolve(yarnPath)
 
-    // TODO: Yarn2 executable is a `cjs` file. Check if under Windows it needs to be run with `node`.
-
     // TODO: This is a security risk to blindly run code coming from a repository other than ORT's. ORT
     //       should download the Yarn2 binary from the official repository and run it.
     require(yarnExecutable.isFile) {
