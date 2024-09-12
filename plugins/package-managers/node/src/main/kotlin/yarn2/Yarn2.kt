@@ -62,7 +62,6 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.mapNpmLicenses
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.parseNpmAuthor
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.parseNpmVcsInfo
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.splitNpmNamespaceAndName
-import org.ossreviewtoolkit.plugins.packagemanagers.node.yarn2.Yarn2.Companion.YARN2_RESOURCE_FILE
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.ort.runBlocking
@@ -70,6 +69,26 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
+
+/**
+ * The name of Yarn 2+ resource file.
+ */
+private const val YARN2_RESOURCE_FILE = ".yarnrc.yml"
+
+/**
+ * The pattern to extract rawName, type and version from a Yarn 2+ locator e.g. @babel/preset-env@npm:7.11.0.
+ */
+private val EXTRACT_FROM_LOCATOR_PATTERN = Regex("(.+)@(\\w+):(.+)")
+
+/**
+ * The amount of package details to query at once with `yarn npm info`.
+ */
+private const val BULK_DETAILS_SIZE = 1000
+
+/**
+ * The name of the manifest file used by Yarn 2+.
+ */
+private const val MANIFEST_FILE = "package.json"
 
 // The various Yarn dependency types supported by this package manager.
 private enum class YarnDependencyType(val type: String) {
@@ -105,36 +124,6 @@ class Yarn2(
          * The name of the option that allows overriding the automatic detection of Corepack.
          */
         const val OPTION_COREPACK_OVERRIDE = "corepackOverride"
-
-        /**
-         * The name of Yarn 2+ resource file.
-         */
-        const val YARN2_RESOURCE_FILE = ".yarnrc.yml"
-
-        /**
-         * The pattern to extract rawName, type and version from a Yarn 2+ locator e.g. @babel/preset-env@npm:7.11.0.
-         */
-        private val EXTRACT_FROM_LOCATOR_PATTERN = Regex("(.+)@(\\w+):(.+)")
-
-        /**
-         * The amount of package details to query at once with `yarn npm info`.
-         */
-        private const val BULK_DETAILS_SIZE = 1000
-
-        /**
-         * The name of the manifest file used by Yarn 2+.
-         */
-        private const val MANIFEST_FILE = "package.json"
-
-        /**
-         * Check whether Corepack is enabled based on the `package.json` file in [workingDir]. If no such file is found
-         * or if it cannot be read, assume that this is not the case.
-         */
-        private fun isCorepackEnabledInManifest(workingDir: File): Boolean =
-            runCatching {
-                val packageJson = parsePackageJson(workingDir.resolve(MANIFEST_FILE))
-                !packageJson.packageManager.isNullOrEmpty()
-            }.getOrDefault(false)
     }
 
     class Factory : AbstractPackageManagerFactory<Yarn2>("Yarn2") {
@@ -737,3 +726,13 @@ private fun getYarnExecutable(workingDir: File): File {
 
     return workingDir.resolve(yarnPath)
 }
+
+/**
+ * Check whether Corepack is enabled based on the `package.json` file in [workingDir]. If no such file is found
+ * or if it cannot be read, assume that this is not the case.
+ */
+private fun isCorepackEnabledInManifest(workingDir: File): Boolean =
+    runCatching {
+        val packageJson = parsePackageJson(workingDir.resolve(MANIFEST_FILE))
+        !packageJson.packageManager.isNullOrEmpty()
+    }.getOrDefault(false)
