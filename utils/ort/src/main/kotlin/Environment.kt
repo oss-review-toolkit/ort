@@ -40,7 +40,7 @@ data class Environment(
     val buildJdk: String = BUILD_JDK,
 
     /**
-     * The version of Java used.
+     * The version of Java used to run ORT.
      */
     val javaVersion: String = System.getProperty("java.version"),
 
@@ -78,7 +78,7 @@ data class Environment(
         val ORT_VERSION by lazy { this::class.java.`package`.implementationVersion ?: "IDE-SNAPSHOT" }
 
         /**
-         * The version of the OSS Review Toolkit as a string.
+         * The version of Java used to build ORT.
          */
         val BUILD_JDK: String by lazy {
             runCatching {
