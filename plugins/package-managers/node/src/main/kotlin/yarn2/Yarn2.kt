@@ -615,100 +615,79 @@ class Yarn2(
             }
         }.toList()
 
-    /**
-     * Parse the [definitionFile] (package.json) to find the scope of a dependency. Unfortunately, `yarn info -A -R`
-     * does not deliver this information.
-     * Return the dependencies present in the file mapped to their scope.
-     * See also https://classic.yarnpkg.com/en/docs/dependency-types (documentation for Yarn 1).
-     */
-    private fun listDependenciesByType(definitionFile: File): Map<String, YarnDependencyType> {
-        val packageJson = parsePackageJson(definitionFile)
-        val result = mutableMapOf<String, YarnDependencyType>()
-
-        YarnDependencyType.entries.forEach { dependencyType ->
-            packageJson.getScopeDependencies(dependencyType).keys.forEach {
-                result += it to dependencyType
-            }
-        }
-
-        return result
-    }
-
-    /**
-     * Clean the [rawVersion] string contained in a Yarn 2+ locator to have it compatible with NPM/Semver.
-     */
-    private fun cleanYarn2VersionString(rawVersion: String): String {
-        // 'Patch' locators are complex expressions such as
-        // resolve@npm%3A2.0.0-next.3#~builtin<compat/resolve>%3A%3Aversion=2.0.0-next.3&hash=07638b
-        // Therefore, the version has to be extracted (here '2.0.0-next.3').
-        var result = rawVersion.substringAfter("version=")
-            .substringBefore("&")
-
-        // Remove the archive URLs that can be present due to private registries.
-        // See https://github.com/yarnpkg/berry/issues/2192.
-        result = result.substringBefore("::__archiveUrl")
-
-        // Rewrite some dependencies to make them compatible with Identifier.
-        // E.g. typescript@patch:typescript@npm%3A4.0.2#~builtin<compat/typescript>::version=4.0.2&hash=ddd1e8
-        return result.replace(":", "%3A")
-    }
-
     override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =
         PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
+}
 
-    /**
-     * A data class storing information about a specific Yarn 2+ module and its dependencies.
-     */
-    private data class YarnModuleInfo(
-        /** The identifier for the represented module. */
-        val id: Identifier,
+/**
+ * A data class storing information about a specific Yarn 2+ module and its dependencies.
+ */
+private data class YarnModuleInfo(
+    /** The identifier for the represented module. */
+    val id: Identifier,
 
-        /** Package that represent the current dependency or `null` if the dependency is a project dependency. */
-        val pkg: Package?,
+    /** Package that represent the current dependency or `null` if the dependency is a project dependency. */
+    val pkg: Package?,
 
-        /** A set with information about the modules this module depends on. */
-        val dependencies: Set<YarnModuleInfo>
-    )
+    /** A set with information about the modules this module depends on. */
+    val dependencies: Set<YarnModuleInfo>
+)
 
-    /**
-     * A specialized [DependencyHandler] implementation for Yarn 2+.
-     */
-    private class Yarn2DependencyHandler : DependencyHandler<YarnModuleInfo> {
-        override fun identifierFor(dependency: YarnModuleInfo): Identifier = dependency.id
+/**
+ * A specialized [DependencyHandler] implementation for Yarn 2+.
+ */
+private class Yarn2DependencyHandler : DependencyHandler<YarnModuleInfo> {
+    override fun identifierFor(dependency: YarnModuleInfo): Identifier = dependency.id
 
-        override fun dependenciesFor(dependency: YarnModuleInfo): List<YarnModuleInfo> =
-            dependency.dependencies.toList()
+    override fun dependenciesFor(dependency: YarnModuleInfo): List<YarnModuleInfo> = dependency.dependencies.toList()
 
-        override fun linkageFor(dependency: YarnModuleInfo): PackageLinkage =
-            if (dependency.pkg == null) PackageLinkage.PROJECT_DYNAMIC else PackageLinkage.DYNAMIC
+    override fun linkageFor(dependency: YarnModuleInfo): PackageLinkage =
+        if (dependency.pkg == null) PackageLinkage.PROJECT_DYNAMIC else PackageLinkage.DYNAMIC
 
-        override fun createPackage(dependency: YarnModuleInfo, issues: MutableCollection<Issue>): Package? =
-            dependency.pkg
-    }
+    override fun createPackage(dependency: YarnModuleInfo, issues: MutableCollection<Issue>): Package? = dependency.pkg
+}
 
-    /**
-     * The header of a NPM package, coming from a Yarn 2+ locator raw version string.
-     */
-    private data class PackageHeader(
-        val rawName: String,
-        val type: String,
-        val version: String
-    )
+/**
+ * The header of a NPM package, coming from a Yarn 2+ locator raw version string.
+ */
+private data class PackageHeader(
+    val rawName: String,
+    val type: String,
+    val version: String
+)
 
-    /**
-     * Class containing additional data returned by `yarn npm info`.
-     */
-    private data class AdditionalData(
-        val name: String,
-        val version: String,
-        val description: String,
-        val vcsFromPackage: VcsInfo,
-        val vcsFromDownloadUrl: VcsInfo,
-        val homepage: String = "",
-        val downloadUrl: String = "",
-        val hash: Hash = Hash.NONE,
-        val author: Set<String> = emptySet()
-    )
+/**
+ * Class containing additional data returned by `yarn npm info`.
+ */
+private data class AdditionalData(
+    val name: String,
+    val version: String,
+    val description: String,
+    val vcsFromPackage: VcsInfo,
+    val vcsFromDownloadUrl: VcsInfo,
+    val homepage: String = "",
+    val downloadUrl: String = "",
+    val hash: Hash = Hash.NONE,
+    val author: Set<String> = emptySet()
+)
+
+/**
+ * Clean the [rawVersion] string contained in a Yarn 2+ locator to have it compatible with NPM/Semver.
+ */
+private fun cleanYarn2VersionString(rawVersion: String): String {
+    // 'Patch' locators are complex expressions such as
+    // resolve@npm%3A2.0.0-next.3#~builtin<compat/resolve>%3A%3Aversion=2.0.0-next.3&hash=07638b
+    // Therefore, the version has to be extracted (here '2.0.0-next.3').
+    var result = rawVersion.substringAfter("version=")
+        .substringBefore("&")
+
+    // Remove the archive URLs that can be present due to private registries.
+    // See https://github.com/yarnpkg/berry/issues/2192.
+    result = result.substringBefore("::__archiveUrl")
+
+    // Rewrite some dependencies to make them compatible with Identifier.
+    // E.g. typescript@patch:typescript@npm%3A4.0.2#~builtin<compat/typescript>::version=4.0.2&hash=ddd1e8
+    return result.replace(":", "%3A")
 }
 
 private fun PackageJson.getScopeDependencies(type: YarnDependencyType) =
@@ -736,3 +715,22 @@ private fun isCorepackEnabledInManifest(workingDir: File): Boolean =
         val packageJson = parsePackageJson(workingDir.resolve(MANIFEST_FILE))
         !packageJson.packageManager.isNullOrEmpty()
     }.getOrDefault(false)
+
+/**
+ * Parse the [definitionFile] (package.json) to find the scope of a dependency. Unfortunately, `yarn info -A -R`
+ * does not deliver this information.
+ * Return the dependencies present in the file mapped to their scope.
+ * See also https://classic.yarnpkg.com/en/docs/dependency-types (documentation for Yarn 1).
+ */
+private fun listDependenciesByType(definitionFile: File): Map<String, YarnDependencyType> {
+    val packageJson = parsePackageJson(definitionFile)
+    val result = mutableMapOf<String, YarnDependencyType>()
+
+    YarnDependencyType.entries.forEach { dependencyType ->
+        packageJson.getScopeDependencies(dependencyType).keys.forEach {
+            result += it to dependencyType
+        }
+    }
+
+    return result
+}
