@@ -127,11 +127,6 @@ class Yarn2(
         private const val MANIFEST_FILE = "package.json"
 
         /**
-         * The name of the default executable. This is used when the [OPTION_COREPACK_OVERRIDE] option is set.
-         */
-        private const val DEFAULT_EXECUTABLE_NAME = "yarn"
-
-        /**
          * Check whether Corepack is enabled based on the `package.json` file in [workingDir]. If no such file is found
          * or if it cannot be read, assume that this is not the case.
          */
@@ -185,7 +180,7 @@ class Yarn2(
             isCorepackEnabledInManifest(workingDir)
         }
 
-        if (corepackEnabled) return DEFAULT_EXECUTABLE_NAME
+        if (corepackEnabled) return "yarn"
 
         return yarn2ExecutablesByPath.getOrPut(workingDir) {
             val yarnExecutable = getYarnExecutable(workingDir)
