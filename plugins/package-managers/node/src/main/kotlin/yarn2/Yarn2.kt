@@ -143,7 +143,7 @@ class Yarn2(
      * This map holds the mapping between the directory and their Yarn 2+ executables. It is only used if Yarn has not
      * been installed via Corepack; then it is accessed under a default name.
      */
-    private val yarn2ExecutablesByPath: MutableMap<File, String> = mutableMapOf()
+    private val yarn2ExecutablesByPath: MutableMap<File, File> = mutableMapOf()
 
     private val disableRegistryCertificateVerification =
         options[OPTION_DISABLE_REGISTRY_CERTIFICATE_VERIFICATION].toBoolean()
@@ -164,29 +164,8 @@ class Yarn2(
         if (workingDir == null) return ""
         if (isCorepackEnabled(workingDir)) return "yarn"
 
-        return yarn2ExecutablesByPath.getOrPut(workingDir) {
-            val yarnExecutable = getYarnExecutable(workingDir)
-
-            // TODO: Yarn2 executable is a `cjs` file. Check if under Windows it needs to be run with `node`.
-
-            // TODO: This is a security risk to blindly run code coming from a repository other than ORT's. ORT
-            //       should download the Yarn2 binary from the official repository and run it.
-            require(yarnExecutable.isFile) {
-                "The Yarn 2+ program '${yarnExecutable.name}' does not exist."
-            }
-
-            if (!yarnExecutable.canExecute()) {
-                logger.warn {
-                    "The Yarn 2+ program '${yarnExecutable.name}' should be executable. Changing its rights."
-                }
-
-                require(yarnExecutable.setExecutable(true)) {
-                    "Cannot set the Yarn 2+ program to be executable."
-                }
-            }
-
-            if (Os.isWindows) "node ${yarnExecutable.absolutePath}" else yarnExecutable.absolutePath
-        }
+        val executablePath = yarn2ExecutablesByPath.getOrPut(workingDir) { getYarnExecutable(workingDir) }.absolutePath
+        return executablePath.takeUnless { Os.isWindows } ?: "node $executablePath"
     }
 
     override fun getVersion(workingDir: File?): String =
@@ -703,7 +682,27 @@ private fun getYarnExecutable(workingDir: File): File {
 
     require(!yarnPath.isNullOrEmpty()) { "No Yarn 2+ executable could be found in '$YARN2_RESOURCE_FILE'." }
 
-    return workingDir.resolve(yarnPath)
+    val yarnExecutable = workingDir.resolve(yarnPath)
+
+    // TODO: Yarn2 executable is a `cjs` file. Check if under Windows it needs to be run with `node`.
+
+    // TODO: This is a security risk to blindly run code coming from a repository other than ORT's. ORT
+    //       should download the Yarn2 binary from the official repository and run it.
+    require(yarnExecutable.isFile) {
+        "The Yarn 2+ program '${yarnExecutable.name}' does not exist."
+    }
+
+    if (!yarnExecutable.canExecute()) {
+        Yarn2.logger.warn {
+            "The Yarn 2+ program '${yarnExecutable.name}' should be executable. Changing its rights."
+        }
+
+        require(yarnExecutable.setExecutable(true)) {
+            "Cannot set the Yarn 2+ program to be executable."
+        }
+    }
+
+    return yarnExecutable
 }
 
 /**
