@@ -162,14 +162,7 @@ class Yarn2(
 
     override fun command(workingDir: File?): String {
         if (workingDir == null) return ""
-
-        val corepackEnabled = if (OPTION_COREPACK_OVERRIDE in options) {
-            options[OPTION_COREPACK_OVERRIDE].toBoolean()
-        } else {
-            isCorepackEnabledInManifest(workingDir)
-        }
-
-        if (corepackEnabled) return "yarn"
+        if (isCorepackEnabled(workingDir)) return "yarn"
 
         return yarn2ExecutablesByPath.getOrPut(workingDir) {
             val yarnExecutable = getYarnExecutable(workingDir)
@@ -204,6 +197,13 @@ class Yarn2(
         if (workingDir == null) "" else super.getVersion(workingDir)
 
     override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=2.0.0")
+
+    private fun isCorepackEnabled(workingDir: File): Boolean =
+        if (OPTION_COREPACK_OVERRIDE in options) {
+            options[OPTION_COREPACK_OVERRIDE].toBoolean()
+        } else {
+            isCorepackEnabledInManifest(workingDir)
+        }
 
     override fun mapDefinitionFiles(definitionFiles: List<File>) =
         NpmDetection(definitionFiles).filterApplicable(NodePackageManager.YARN2)
