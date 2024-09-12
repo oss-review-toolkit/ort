@@ -421,13 +421,13 @@ class Yarn2(
             )
             id
         } else {
-            val versionFromLocator = header.version.cleanVersionString()
-            val details = packagesDetails["${header.rawName}@$versionFromLocator"]
+            val version = header.version.cleanVersionString()
+            val details = packagesDetails["${header.rawName}@$version"]
 
             if (details == null) {
                 issues += createAndLogIssue(
                     managerName,
-                    "No package details found for '${header.rawName}' at version '$versionFromLocator'.",
+                    "No package details found for '${header.rawName}' at version '$version'.",
                     Severity.ERROR
                 )
                 return emptyMap()
