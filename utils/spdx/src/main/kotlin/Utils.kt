@@ -148,7 +148,7 @@ private fun getLicenseTextFile(id: String, dir: File): File? =
             idWithoutLicenseRefNamespace,
             "$idWithoutLicenseRefNamespace.LICENSE",
             "x11-xconsortium_veillard.LICENSE".takeIf {
-                // Work around for https://github.com/nexB/scancode-toolkit/issues/2813.
+                // Work around for https://github.com/aboutcode-org/scancode-toolkit/issues/2813.
                 id == "LicenseRef-scancode-x11-xconsortium-veillard"
             }
         ).firstNotNullOfOrNull { filename ->
