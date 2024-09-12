@@ -40,6 +40,7 @@ import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.model.utils.toPurlExtras
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
+import org.ossreviewtoolkit.plugins.api.Secret
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.PackageConfigurationProvider
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.PackageConfigurationProviderFactory
 import org.ossreviewtoolkit.utils.ort.runBlocking
@@ -50,7 +51,7 @@ data class DosPackageConfigurationProviderConfig(
     val url: String,
 
     /** The secret token to use with the DOS backend. */
-    val token: String,
+    val token: Secret,
 
     /** The timeout for communicating with the DOS backend, in seconds. */
     val timeout: Long?
@@ -70,7 +71,8 @@ class DosPackageConfigurationProvider(
     override val descriptor: PluginDescriptor,
     config: DosPackageConfigurationProviderConfig
 ) : PackageConfigurationProvider {
-    private val service = DosService.create(config.url, config.token, config.timeout?.let { Duration.ofSeconds(it) })
+    private val service =
+        DosService.create(config.url, config.token.value, config.timeout?.let { Duration.ofSeconds(it) })
     private val client = DosClient(service)
 
     override fun getPackageConfigurations(packageId: Identifier, provenance: Provenance): List<PackageConfiguration> {
