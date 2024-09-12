@@ -199,7 +199,7 @@ open class Npm(
         // Create packages for all modules found in the workspace and add them to the graph builder. They are
         // reused when they are referenced by scope dependencies.
         val packages = parseInstalledModules(workingDir)
-        graphBuilder.addPackages(packages.values)
+        graphBuilder.addPackages(packages)
 
         val scopeNames = setOfNotNull(
             // Optional dependencies are just like regular dependencies except that NPM ignores failures when
@@ -232,7 +232,7 @@ open class Npm(
         )
     }
 
-    private fun parseInstalledModules(rootDirectory: File): Map<String, Package> {
+    private fun parseInstalledModules(rootDirectory: File): List<Package> {
         val nodeModulesDir = rootDirectory.resolve("node_modules")
 
         logger.info { "Searching for 'package.json' files in '$nodeModulesDir'..." }
@@ -250,11 +250,11 @@ open class Npm(
             nodeModulesFiles.mapTo(mutableListOf()) { file ->
                 logger.debug { "Starting to parse '$file'..." }
                 async {
-                    parsePackage(rootDirectory, file).also { (id, _) ->
-                        logger.debug { "Finished parsing '$file' to '$id'." }
+                    parsePackage(rootDirectory, file).also { pkg ->
+                        logger.debug { "Finished parsing '$file' to '${pkg.id}'." }
                     }
                 }
-            }.awaitAll().toMap()
+            }.awaitAll().distinctBy { it.id }
         }
     }
 
@@ -262,7 +262,7 @@ open class Npm(
      * Construct a [Package] by parsing its _package.json_ file and - if applicable - querying additional
      * content via the `npm view` command. The result is a [Pair] with the raw identifier and the new package.
      */
-    internal suspend fun parsePackage(workingDir: File, packageJsonFile: File): Pair<String, Package> {
+    internal suspend fun parsePackage(workingDir: File, packageJsonFile: File): Package {
         val packageDir = packageJsonFile.parentFile
 
         logger.debug { "Found a 'package.json' file in '$packageDir'." }
@@ -365,7 +365,7 @@ open class Npm(
             "Generated package info for '${id.toCoordinates()}' has no version."
         }
 
-        return Pair(id.toCoordinates(), module)
+        return module
     }
 
     private suspend fun getRemotePackageDetailsAsync(workingDir: File, packageName: String): Deferred<PackageJson> =
