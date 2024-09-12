@@ -265,7 +265,7 @@ class Yarn2(
         logger.info { "Fetching packages details..." }
 
         val chunks = packagesHeaders.filterValues { it.type != "workspace" }.values.map {
-            "${it.rawName}@${cleanYarn2VersionString(it.version)}"
+            "${it.rawName}@${it.version.cleanVersionString()}"
         }.chunked(BULK_DETAILS_SIZE)
 
         return runBlocking(Dispatchers.IO) {
@@ -422,7 +422,7 @@ class Yarn2(
             )
             id
         } else {
-            val versionFromLocator = cleanYarn2VersionString(header.version)
+            val versionFromLocator = header.version.cleanVersionString()
             val details = packagesDetails["${header.rawName}@$versionFromLocator"]
 
             if (details == null) {
@@ -573,7 +573,7 @@ class Yarn2(
             val locatorVersion = locatorMatcher.groupValues[3]
 
             val (locatorNamespace, locatorName) = splitNpmNamespaceAndName(locatorRawName)
-            val version = cleanYarn2VersionString(locatorVersion)
+            val version = locatorVersion.cleanVersionString()
 
             val identifierType = if ("workspace" in locatorType) "Yarn2" else "NPM"
             when {
@@ -653,23 +653,21 @@ private data class AdditionalData(
 )
 
 /**
- * Clean the [rawVersion] string contained in a Yarn 2+ locator to have it compatible with NPM/Semver.
+ * Clean this Yarn2 version string (originating from a Yarn 2+ locator) for compatibility with NPM/Semver.
  */
-private fun cleanYarn2VersionString(rawVersion: String): String {
-    // 'Patch' locators are complex expressions such as
-    // resolve@npm%3A2.0.0-next.3#~builtin<compat/resolve>%3A%3Aversion=2.0.0-next.3&hash=07638b
-    // Therefore, the version has to be extracted (here '2.0.0-next.3').
-    var result = rawVersion.substringAfter("version=")
+private fun String.cleanVersionString(): String =
+    this
+        // 'Patch' locators are complex expressions such as
+        // resolve@npm%3A2.0.0-next.3#~builtin<compat/resolve>%3A%3Aversion=2.0.0-next.3&hash=07638b
+        // Therefore, the version has to be extracted (here '2.0.0-next.3').
+        .substringAfter("version=")
         .substringBefore("&")
-
-    // Remove the archive URLs that can be present due to private registries.
-    // See https://github.com/yarnpkg/berry/issues/2192.
-    result = result.substringBefore("::__archiveUrl")
-
-    // Rewrite some dependencies to make them compatible with Identifier.
-    // E.g. typescript@patch:typescript@npm%3A4.0.2#~builtin<compat/typescript>::version=4.0.2&hash=ddd1e8
-    return result.replace(":", "%3A")
-}
+        // Remove the archive URLs that can be present due to private registries.
+        // See https://github.com/yarnpkg/berry/issues/2192.
+        .substringBefore("::__archiveUrl")
+        // Rewrite some dependencies to make them compatible with Identifier.
+        // E.g. typescript@patch:typescript@npm%3A4.0.2#~builtin<compat/typescript>::version=4.0.2&hash=ddd1e8
+        .replace(":", "%3A")
 
 private fun PackageJson.getScopeDependencies(type: YarnDependencyType) =
     when (type) {
