@@ -63,7 +63,6 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.parseNpmAuthor
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.parseNpmVcsInfo
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.splitNpmNamespaceAndName
 import org.ossreviewtoolkit.plugins.packagemanagers.node.yarn2.Yarn2.Companion.YARN2_RESOURCE_FILE
-import org.ossreviewtoolkit.plugins.packagemanagers.node.yarn2.Yarn2.Companion.YARN_PATH_PROPERTY_NAME
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.ort.runBlocking
@@ -111,11 +110,6 @@ class Yarn2(
          * The name of Yarn 2+ resource file.
          */
         const val YARN2_RESOURCE_FILE = ".yarnrc.yml"
-
-        /**
-         * The property in `.yarnrc.yml` containing the path to the Yarn2+ executable.
-         */
-        const val YARN_PATH_PROPERTY_NAME = "yarnPath"
 
         /**
          * The pattern to extract rawName, type and version from a Yarn 2+ locator e.g. @babel/preset-env@npm:7.11.0.
@@ -742,7 +736,7 @@ private fun PackageJson.getScopeDependencies(type: YarnDependencyType) =
 private fun getYarnExecutable(workingDir: File): File {
     val yarnrcFile = workingDir.resolve(YARN2_RESOURCE_FILE)
     val yarnConfig = Yaml.default.parseToYamlNode(yarnrcFile.readText()).yamlMap
-    val yarnPath = yarnConfig.get<YamlScalar>(YARN_PATH_PROPERTY_NAME)?.content
+    val yarnPath = yarnConfig.get<YamlScalar>("yarnPath")?.content
 
     require(!yarnPath.isNullOrEmpty()) { "No Yarn 2+ executable could be found in '$YARN2_RESOURCE_FILE'." }
 
