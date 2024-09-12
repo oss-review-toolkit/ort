@@ -72,6 +72,6 @@ internal class NpmDependencyHandler(private val npm: Npm) : DependencyHandler<Np
 
     override fun createPackage(dependency: NpmModuleInfo, issues: MutableCollection<Issue>): Package =
         runBlocking {
-            npm.parsePackage(dependency.workingDir, dependency.packageFile).second
+            npm.parsePackage(dependency.workingDir, dependency.packageFile)
         }
 }
