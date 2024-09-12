@@ -55,7 +55,7 @@ private const val BULK_REQUEST_SIZE = 100
 
 /**
  * An [AdviceProvider] implementation that obtains security vulnerability information from a
- * [VulnerableCode][https://github.com/nexB/vulnerablecode] instance.
+ * [VulnerableCode][https://github.com/aboutcode-org/vulnerablecode] instance.
  *
  * This [AdviceProvider] offers the following configuration options:
  *
@@ -155,7 +155,7 @@ class VulnerableCode(override val descriptor: PluginDescriptor, config: Vulnerab
             if (scores.isEmpty()) return listOf(VulnerabilityReference(sourceUri, null, null))
             return scores.map {
                 // VulnerableCode returns MODERATE instead of MEDIUM in case of cvssv3.1_qr, see:
-                // https://github.com/nexB/vulnerablecode/issues/1186
+                // https://github.com/aboutcode-org/vulnerablecode/issues/1186
                 val severity = if (it.scoringSystem == "cvssv3.1_qr" && it.value == "MODERATE") "MEDIUM" else it.value
 
                 VulnerabilityReference(sourceUri, it.scoringSystem, severity)

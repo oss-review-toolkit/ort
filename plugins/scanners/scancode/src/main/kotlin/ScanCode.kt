@@ -46,7 +46,7 @@ import org.semver4j.RangesListFactory
 import org.semver4j.Semver
 
 /**
- * A wrapper for [ScanCode](https://github.com/nexB/scancode-toolkit).
+ * A wrapper for [ScanCode](https://github.com/aboutcode-org/scancode-toolkit).
  *
  * This scanner can be configured in [ScannerConfiguration.config] using the key "ScanCode". It offers the following
  * configuration [options][PluginConfiguration.options]:

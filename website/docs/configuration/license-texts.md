@@ -1,6 +1,6 @@
 # License Texts
 
-ORT does provide the license texts for all [SPDX licenses](https://spdx.org/licenses/) and for all license references from [ScanCode](https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses).
+ORT does provide the license texts for all [SPDX licenses](https://spdx.org/licenses/) and for all license references from [ScanCode](https://github.com/aboutcode-org/scancode-toolkit/tree/develop/src/licensedcode/data/licenses).
 These license texts will be used when generating open source notices using the [PlainTextTemplateReporter](reporter-templates.md#plain-text-templates).
 
 If you need a license text not provided by ORT, you can put it in the custom license texts directory.

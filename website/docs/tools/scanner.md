@@ -10,7 +10,7 @@ If passed an ORT result file with an analyzer result (`-i`), the *scanner* will 
 We recommend using ORT with any of the following scanners as their integrations have been thoroughly tested (in alphabetical order):
 
 * [FossID](https://fossid.com/) (snippet scanner, commercial)
-* [ScanCode](https://github.com/nexB/scancode-toolkit)
+* [ScanCode](https://github.com/aboutcode-org/scancode-toolkit)
 
 Additionally, the following reference implementations exist (in alphabetical order):
 
