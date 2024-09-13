@@ -87,14 +87,12 @@ class Yarn(
 
         val process = run(workingDir, "info", "--json", packageName)
 
-        return Json.parseToJsonElement(process.stdout).jsonObject["data"]?.let {
+        val data = Json.parseToJsonElement(process.stdout).jsonObject["data"]?.also {
             yarnInfoCache.write(packageName, it.toString())
-            parsePackageJson(it)
-        } ?: run {
-            Json.parseToJsonElement(process.stderr).jsonObject["data"].let {
-                logger.warn { "Error running '${process.commandLine}' in directory $workingDir: $it" }
-                parsePackageJson(checkNotNull(it))
-            }
+        } ?: checkNotNull(Json.parseToJsonElement(process.stderr).jsonObject["data"]).also {
+            logger.warn { "Error running '${process.commandLine}' in directory $workingDir: $it" }
         }
+
+        return parsePackageJson(data)
     }
 }
