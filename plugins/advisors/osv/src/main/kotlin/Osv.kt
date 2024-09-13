@@ -194,13 +194,20 @@ private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.vulne
         val url = reference.url.trim().let { if (it.startsWith("://")) "https$it" else it }
 
         url.toUri().onFailure {
-            logger.debug { "Could not parse reference URL for vulnerability '$id': ${it.message}." }
+            logger.debug { "Could not parse reference URL for vulnerability '$id': ${it.collectMessages()}." }
         }.map {
             // Use the 'severity' property of the unspecified 'databaseSpecific' object.
             // See also https://github.com/google/osv.dev/issues/484.
             val specificSeverity = databaseSpecific?.get("severity")
 
-            val baseScore = Cvss.fromVector(severity)?.calculateScore()?.baseScore?.toFloat()
+            // Note that the CVSS Calculator does not support CVSS 4.0 yet:
+            // https://github.com/stevespringett/cvss-calculator/issues/78
+            val baseScore = runCatching {
+                Cvss.fromVector(severity)?.calculateScore()?.baseScore?.toFloat()
+            }.onFailure {
+                logger.debug { "Unable to parse CVSS vector '$severity': ${it.collectMessages()}." }
+            }.getOrNull()
+
             val severityRating = (specificSeverity as? JsonPrimitive)?.contentOrNull
                 ?: VulnerabilityReference.getQualitativeRating(scoringSystem, baseScore)?.name
 
