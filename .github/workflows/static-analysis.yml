@@ -29,7 +29,7 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@16bf8bc8fe830fa669c3c9f914d3eb147c629707 # v4
+      uses: gradle/actions/setup-gradle@d156388eb19639ec20ade50009f3d199ce1e2808 # v4
     - name: Check copyrights, license headers, and .gitattributes
       run: ./gradlew checkCopyrightsInNoticeFile checkLicenseHeaders checkGitAttributes
   completions:
@@ -38,7 +38,7 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@16bf8bc8fe830fa669c3c9f914d3eb147c629707 # v4
+      uses: gradle/actions/setup-gradle@d156388eb19639ec20ade50009f3d199ce1e2808 # v4
     - name: Generate completions
       run: |
         ./scripts/generate_completion_scripts.sh
@@ -61,7 +61,7 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@16bf8bc8fe830fa669c3c9f914d3eb147c629707 # v4
+      uses: gradle/actions/setup-gradle@d156388eb19639ec20ade50009f3d199ce1e2808 # v4
     - name: Check for Detekt Issues
       run: ./gradlew detektAll
     - name: Upload SARIF File

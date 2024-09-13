@@ -27,7 +27,7 @@ jobs:
       - name: Free Disk Space
         uses: ./.github/actions/free-disk-space
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@16bf8bc8fe830fa669c3c9f914d3eb147c629707 # v4
+        uses: gradle/actions/setup-gradle@d156388eb19639ec20ade50009f3d199ce1e2808 # v4
       - name: Get ORT version
         run: |
           ORT_VERSION=$(./gradlew -q properties --property version | sed -nr "s/version: (.+)/\1/p")
