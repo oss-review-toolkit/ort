@@ -98,7 +98,7 @@ class ScanOss internal constructor(
         val result = service.scan(
             wfpString,
             context.labels["scanOssContext"],
-            context.labels["scanOssId"]?.toIntOrNull() ?: Thread.currentThread().id.toInt()
+            context.labels["scanOssId"]?.toIntOrNull() ?: Thread.currentThread().threadId().toInt()
         )
 
         // Replace the anonymized UUIDs by their file paths.
