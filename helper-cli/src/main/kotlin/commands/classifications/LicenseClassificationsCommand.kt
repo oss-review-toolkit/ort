@@ -19,14 +19,13 @@
 
 package org.ossreviewtoolkit.helper.commands.classifications
 
+import com.github.ajalt.clikt.core.Context
 import com.github.ajalt.clikt.core.NoOpCliktCommand
 import com.github.ajalt.clikt.core.subcommands
 
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 
-internal class LicenseClassificationsCommand : NoOpCliktCommand(
-    help = "Commands for working with license classifications."
-) {
+internal class LicenseClassificationsCommand : NoOpCliktCommand() {
     init {
         subcommands(
             FilterCommand(),
@@ -34,6 +33,8 @@ internal class LicenseClassificationsCommand : NoOpCliktCommand(
             MergeCommand()
         )
     }
+
+    override fun help(context: Context) = "Commands for working with license classifications."
 }
 
 internal fun LicenseClassifications.prefixCategoryNames(prefix: String) =

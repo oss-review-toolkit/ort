@@ -19,12 +19,11 @@
 
 package org.ossreviewtoolkit.helper.commands.repoconfig
 
+import com.github.ajalt.clikt.core.Context
 import com.github.ajalt.clikt.core.NoOpCliktCommand
 import com.github.ajalt.clikt.core.subcommands
 
-internal class RepositoryConfigurationCommand : NoOpCliktCommand(
-    help = "Commands for working with package configurations."
-) {
+internal class RepositoryConfigurationCommand : NoOpCliktCommand() {
     init {
         subcommands(
             ExportLicenseFindingCurationsCommand(),
@@ -39,4 +38,6 @@ internal class RepositoryConfigurationCommand : NoOpCliktCommand(
             SortCommand()
         )
     }
+
+    override fun help(context: Context) = "Commands for working with package configurations."
 }

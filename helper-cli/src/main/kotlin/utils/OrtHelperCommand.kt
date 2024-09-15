@@ -20,5 +20,8 @@
 package org.ossreviewtoolkit.helper.utils
 
 import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.core.Context
 
-internal abstract class OrtHelperCommand(name: String? = null, help: String) : CliktCommand(name = name, help = help)
+internal abstract class OrtHelperCommand(name: String? = null, private val help: String) : CliktCommand(name) {
+    override fun help(context: Context) = help
+}

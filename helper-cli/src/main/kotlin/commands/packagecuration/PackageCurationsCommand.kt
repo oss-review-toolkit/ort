@@ -19,12 +19,11 @@
 
 package org.ossreviewtoolkit.helper.commands.packagecuration
 
+import com.github.ajalt.clikt.core.Context
 import com.github.ajalt.clikt.core.NoOpCliktCommand
 import com.github.ajalt.clikt.core.subcommands
 
-internal class PackageCurationsCommand : NoOpCliktCommand(
-    help = "Commands for working with package curations."
-) {
+internal class PackageCurationsCommand : NoOpCliktCommand() {
     init {
         subcommands(
             CreateCommand(),
@@ -32,4 +31,6 @@ internal class PackageCurationsCommand : NoOpCliktCommand(
             SplitCommand()
         )
     }
+
+    override fun help(context: Context) = "Commands for working with package curations."
 }

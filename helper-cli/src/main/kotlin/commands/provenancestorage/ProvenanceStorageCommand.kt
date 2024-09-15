@@ -19,15 +19,16 @@
 
 package org.ossreviewtoolkit.helper.commands.provenancestorage
 
+import com.github.ajalt.clikt.core.Context
 import com.github.ajalt.clikt.core.NoOpCliktCommand
 import com.github.ajalt.clikt.core.subcommands
 
-internal class ProvenanceStorageCommand : NoOpCliktCommand(
-    help = "Commands for working with provenance storages."
-) {
+internal class ProvenanceStorageCommand : NoOpCliktCommand() {
     init {
         subcommands(
             DeleteCommand()
         )
     }
+
+    override fun help(context: Context) = "Commands for working with provenance storages."
 }
