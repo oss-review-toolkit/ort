@@ -17,6 +17,11 @@
  * License-Filename: LICENSE
  */
 
+plugins {
+    // Apply third-party plugins.
+    id("org.gradlex.reproducible-builds")
+}
+
 repositories {
     mavenCentral()
 
@@ -40,11 +45,6 @@ repositories {
             includeGroup("org.gradle")
         }
     }
-}
-
-tasks.withType<AbstractArchiveTask>().configureEach {
-    isPreserveFileTimestamps = false
-    isReproducibleFileOrder = true
 }
 
 tasks.withType<Jar>().configureEach {

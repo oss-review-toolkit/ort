@@ -9,6 +9,7 @@ ideaExtPlugin = "1.1.8"
 kotlinPlugin = "2.0.20"
 ksp = "2.0.20-1.0.25"
 mavenPublishPlugin = "0.29.0"
+reproducibleBuildsPlugin = "1.0"
 versionsPlugin = "0.51.0"
 
 asciidoctorj = "3.0.0"
@@ -83,6 +84,7 @@ plugin-graalVmNativeImage = { module = "org.graalvm.buildtools:native-gradle-plu
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlinPlugin" }
 plugin-ksp = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 plugin-mavenPublish = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "mavenPublishPlugin" }
+plugin-reproducibleBuilds = { module = "org.gradlex:reproducible-builds", version.ref = "reproducibleBuildsPlugin" }
 
 asciidoctorj = { module = "org.asciidoctor:asciidoctorj", version.ref = "asciidoctorj" }
 asciidoctorj-pdf = { module = "org.asciidoctor:asciidoctorj-pdf", version.ref = "asciidoctorjPdf" }
