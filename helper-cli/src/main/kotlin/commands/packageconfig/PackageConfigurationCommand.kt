@@ -19,12 +19,11 @@
 
 package org.ossreviewtoolkit.helper.commands.packageconfig
 
+import com.github.ajalt.clikt.core.Context
 import com.github.ajalt.clikt.core.NoOpCliktCommand
 import com.github.ajalt.clikt.core.subcommands
 
-internal class PackageConfigurationCommand : NoOpCliktCommand(
-    help = "Commands for working with package configurations."
-) {
+internal class PackageConfigurationCommand : NoOpCliktCommand() {
     init {
         subcommands(
             CreateCommand(),
@@ -38,4 +37,6 @@ internal class PackageConfigurationCommand : NoOpCliktCommand(
             RemoveEntriesCommand()
         )
     }
+
+    override fun help(context: Context) = "Commands for working with package configurations."
 }

@@ -19,15 +19,16 @@
 
 package org.ossreviewtoolkit.helper.commands.dev
 
+import com.github.ajalt.clikt.core.Context
 import com.github.ajalt.clikt.core.NoOpCliktCommand
 import com.github.ajalt.clikt.core.subcommands
 
-internal class DevCommand : NoOpCliktCommand(
-    help = "Commands for development."
-) {
+internal class DevCommand : NoOpCliktCommand() {
     init {
         subcommands(
             RewriteTestAssetsCommand()
         )
     }
+
+    override fun help(context: Context) = "Commands for development."
 }

@@ -23,7 +23,9 @@ import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.Logger
 
 import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.core.Context
 import com.github.ajalt.clikt.core.context
+import com.github.ajalt.clikt.core.main
 import com.github.ajalt.clikt.core.subcommands
 import com.github.ajalt.clikt.output.MordantHelpFormatter
 import com.github.ajalt.clikt.parameters.options.default
@@ -57,10 +59,7 @@ fun main(args: Array<String>) {
 
 private const val REQUIRED_OPTION_MARKER = "*"
 
-internal class HelperMain : CliktCommand(
-    name = ORTH_NAME,
-    epilog = "$REQUIRED_OPTION_MARKER denotes required options."
-) {
+internal class HelperMain : CliktCommand(ORTH_NAME) {
     private val logLevel by option(help = "Set the verbosity level of log output.").switch(
         "--error" to Level.ERROR,
         "--warn" to Level.WARN,
@@ -72,7 +71,6 @@ internal class HelperMain : CliktCommand(
 
     init {
         context {
-            expandArgumentFiles = false
             helpFormatter = { MordantHelpFormatter(context = it, REQUIRED_OPTION_MARKER, showDefaultValues = true) }
         }
 
@@ -106,6 +104,8 @@ internal class HelperMain : CliktCommand(
             VerifySourceArtifactCurationsCommand()
         )
     }
+
+    override fun helpEpilog(context: Context) = "$REQUIRED_OPTION_MARKER denotes required options."
 
     override fun run() {
         // This is somewhat dirty: For logging, ORT uses the Log4j API (because of its nice Kotlin API), but Logback as
