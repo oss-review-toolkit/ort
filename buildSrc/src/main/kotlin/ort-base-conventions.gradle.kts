@@ -43,7 +43,6 @@ repositories {
 }
 
 tasks.withType<AbstractArchiveTask>().configureEach {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     isPreserveFileTimestamps = false
     isReproducibleFileOrder = true
 }
