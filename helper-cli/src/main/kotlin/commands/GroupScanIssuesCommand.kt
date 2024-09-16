@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.common.expandTilde
 
-class GroupScanIssuesCommand : CliktCommand(
+internal class GroupScanIssuesCommand : CliktCommand(
     help = "Shows the amount of affected dependencies for each scan issue category."
 ) {
     private val ortFile by option(
