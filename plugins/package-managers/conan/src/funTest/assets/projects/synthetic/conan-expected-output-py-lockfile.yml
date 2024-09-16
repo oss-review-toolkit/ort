@@ -1,0 +1,336 @@
+---
+project:
+  id: "Conan::poco:"
+  definition_file_path: "plugins/package-managers/conan/src/funTest/assets/projects/synthetic/conan-py-lockfile/conanfile.py"
+  declared_licenses:
+  - "BSL-1.0"
+  declared_licenses_processed:
+    spdx_expression: "BSL-1.0"
+  vcs:
+    type: "Git"
+    url: "https://github.com/conan-io/conan-center-index.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: "https://pocoproject.org"
+  scopes:
+  - name: "build_requires"
+    dependencies: []
+  - name: "requires"
+    dependencies:
+    - id: "Conan::expat:2.6.3"
+    - id: "Conan::libmysqlclient:8.1.0"
+      dependencies:
+      - id: "Conan::lz4:1.9.4"
+      - id: "Conan::openssl:3.3.1"
+        dependencies:
+        - id: "Conan::zlib:1.3.1"
+      - id: "Conan::zlib:1.3.1"
+      - id: "Conan::zstd:1.5.5"
+    - id: "Conan::libpq:15.4"
+    - id: "Conan::openssl:3.3.1"
+      dependencies:
+      - id: "Conan::zlib:1.3.1"
+    - id: "Conan::pcre2:10.42"
+      dependencies:
+      - id: "Conan::bzip2:1.0.8"
+      - id: "Conan::zlib:1.3.1"
+    - id: "Conan::sqlite3:3.45.0"
+    - id: "Conan::zlib:1.3.1"
+packages:
+- id: "Conan::bzip2:1.0.8"
+  purl: "pkg:conan/bzip2@1.0.8"
+  declared_licenses:
+  - "bzip2-1.0.8"
+  declared_licenses_processed:
+    unmapped:
+    - "bzip2-1.0.8"
+  description: "bzip2 is a free and open-source file compression program that uses\
+    \ the Burrows Wheeler algorithm."
+  homepage_url: "https://sourceware.org/bzip2"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz"
+    hash:
+      value: "ab5a03176ee106d3f0fa90e381da478ddae405918153cca248e682cd0c4a2269"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "Conan::expat:2.6.3"
+  purl: "pkg:conan/expat@2.6.3"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Fast streaming XML parser written in C."
+  homepage_url: "https://github.com/libexpat/libexpat"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/libexpat/libexpat/releases/download/R_2_6_3/expat-2.6.3.tar.xz"
+    hash:
+      value: "274db254a6979bde5aad404763a704956940e465843f2a9bd9ed7af22e2c0efc"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/libexpat/libexpat.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/libexpat/libexpat.git"
+    revision: ""
+    path: ""
+- id: "Conan::libmysqlclient:8.1.0"
+  purl: "pkg:conan/libmysqlclient@8.1.0"
+  declared_licenses:
+  - "GPL-2.0"
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-only"
+    mapped:
+      GPL-2.0: "GPL-2.0-only"
+  description: "A MySQL client library for C development."
+  homepage_url: "https://dev.mysql.com/downloads/mysql/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://dev.mysql.com/get/Downloads/MySQL-8.1/mysql-8.1.0.tar.gz"
+    hash:
+      value: "3dd017a940734aa90796a4c65e125e6712f64bbbbe3388d36469deaa87b599eb"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  is_modified: true
+- id: "Conan::libpq:15.4"
+  purl: "pkg:conan/libpq@15.4"
+  declared_licenses:
+  - "PostgreSQL"
+  declared_licenses_processed:
+    spdx_expression: "PostgreSQL"
+  description: "The library used by all the standard PostgreSQL tools."
+  homepage_url: "https://www.postgresql.org/docs/current/static/libpq.html"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://ftp.postgresql.org/pub/source/v15.4/postgresql-15.4.tar.bz2"
+    hash:
+      value: "baec5a4bdc4437336653b6cb5d9ed89be5bd5c0c58b94e0becee0a999e63c8f9"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  is_modified: true
+- id: "Conan::lz4:1.9.4"
+  purl: "pkg:conan/lz4@1.9.4"
+  declared_licenses:
+  - "BSD-2-Clause"
+  - "BSD-3-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-2-Clause AND BSD-3-Clause"
+  description: "Extremely Fast Compression algorithm"
+  homepage_url: "https://github.com/lz4/lz4"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/lz4/lz4/archive/v1.9.4.tar.gz"
+    hash:
+      value: "0b0e3aa07c8c063ddf40b082bdf7e37a1562bda40a0ff5272957f3e987e0e54b"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/lz4/lz4.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/lz4/lz4.git"
+    revision: ""
+    path: ""
+  is_modified: true
+- id: "Conan::openssl:3.3.1"
+  purl: "pkg:conan/openssl@3.3.1"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: "A toolkit for the Transport Layer Security (TLS) and Secure Sockets\
+    \ Layer (SSL) protocols"
+  homepage_url: "https://github.com/openssl/openssl"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/openssl/openssl/releases/download/openssl-3.3.1/openssl-3.3.1.tar.gz"
+    hash:
+      value: "777cd596284c883375a2a7a11bf5d2786fc5413255efab20c50d6ffe6d020b7e"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/openssl/openssl.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/openssl/openssl.git"
+    revision: ""
+    path: ""
+- id: "Conan::pcre2:10.42"
+  purl: "pkg:conan/pcre2@10.42"
+  declared_licenses:
+  - "BSD-3-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+  description: "Perl Compatible Regular Expressions"
+  homepage_url: "https://www.pcre.org/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.42/pcre2-10.42.tar.bz2"
+    hash:
+      value: "8d36cd8cb6ea2a4c2bb358ff6411b0c788633a2a45dabbf1aeb4b701d1b5e840"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "Conan::sqlite3:3.45.0"
+  purl: "pkg:conan/sqlite3@3.45.0"
+  declared_licenses:
+  - "Unlicense"
+  declared_licenses_processed:
+    spdx_expression: "Unlicense"
+  description: "Self-contained, serverless, in-process SQL database engine."
+  homepage_url: "https://www.sqlite.org"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://sqlite.org/2024/sqlite-amalgamation-3450000.zip"
+    hash:
+      value: "bde30d13ebdf84926ddd5e8b6df145be03a577a48fd075a087a5dd815bcdf740"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "Conan::zlib:1.3.1"
+  purl: "pkg:conan/zlib@1.3.1"
+  declared_licenses:
+  - "Zlib"
+  declared_licenses_processed:
+    spdx_expression: "Zlib"
+  description: "A Massively Spiffy Yet Delicately Unobtrusive Compression Library\
+    \ (Also Free, Not to Mention Unencumbered by Patents)"
+  homepage_url: "https://zlib.net"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://zlib.net/fossils/zlib-1.3.1.tar.gz"
+    hash:
+      value: "9a93b2b7dfdac77ceba5a558a580e74667dd6fede4585b91eefb60f03b72df23"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  is_modified: true
+- id: "Conan::zstd:1.5.5"
+  purl: "pkg:conan/zstd@1.5.5"
+  declared_licenses:
+  - "BSD-3-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+  description: "Zstandard - Fast real-time compression algorithm"
+  homepage_url: "https://github.com/facebook/zstd"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/facebook/zstd/releases/download/v1.5.5/zstd-1.5.5.tar.gz"
+    hash:
+      value: "9c4396cc829cfae319a6e2615202e82aad41372073482fce286fac78646d3ee4"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/facebook/zstd.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/facebook/zstd.git"
+    revision: ""
+    path: ""
+  is_modified: true
