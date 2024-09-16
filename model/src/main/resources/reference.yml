@@ -193,7 +193,7 @@ ort:
           schema: public
           username: username
           password: password
-          sslmode: required
+          sslmode: require
           sslcert: /defaultdir/postgresql.crt
           sslkey: /defaultdir/postgresql.pk8
           sslrootcert: /defaultdir/root.crt
@@ -222,7 +222,7 @@ ort:
           schema: public
           username: username
           password: password
-          sslmode: required
+          sslmode: require
           sslcert: /defaultdir/postgresql.crt
           sslkey: /defaultdir/postgresql.pk8
           sslrootcert: /defaultdir/root.crt
@@ -320,7 +320,7 @@ ort:
           schema: public
           username: username
           password: password
-          sslmode: required
+          sslmode: require
           sslcert: /defaultdir/postgresql.crt
           sslkey: /defaultdir/postgresql.pk8
           sslrootcert: /defaultdir/root.crt
@@ -361,7 +361,7 @@ ort:
           schema: public
           username: username
           password: password
-          sslmode: required
+          sslmode: require
           sslcert: /defaultdir/postgresql.crt
           sslkey: /defaultdir/postgresql.pk8
           sslrootcert: /defaultdir/root.crt
