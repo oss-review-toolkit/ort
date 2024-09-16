@@ -59,7 +59,7 @@ import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
 internal class CreateAnalyzerResultFromPackageListCommand : CliktCommand(
-    "A command which turns a package list file into an analyzer result."
+    help = "A command which turns a package list file into an analyzer result."
 ) {
     private val packageListFile by option(
         "--package-list-file", "-i",
