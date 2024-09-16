@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.helper.commands
 
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
@@ -33,6 +32,7 @@ import java.util.regex.Pattern
 
 import org.ossreviewtoolkit.analyzer.AnalyzerResultBuilder
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
+import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
@@ -54,7 +54,7 @@ import org.ossreviewtoolkit.utils.common.expandTilde
  * files can contain placeholders, which make them invalid (e.g. a placeholder for a numeric value causes serialization
  * to fail). Therefore, a special mode can be enabled, in which well-known placeholders are handled.
  */
-internal class SetDependencyRepresentationCommand : CliktCommand(
+internal class SetDependencyRepresentationCommand : OrtHelperCommand(
     help = "Set the dependency representation of an ORT result to a specific target format."
 ) {
     /**

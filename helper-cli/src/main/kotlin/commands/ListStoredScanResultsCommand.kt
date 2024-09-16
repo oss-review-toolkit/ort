@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.helper.commands
 
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
@@ -30,6 +29,7 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import org.apache.logging.log4j.kotlin.logger
 
+import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.config.OrtConfiguration
@@ -39,7 +39,7 @@ import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
-internal class ListStoredScanResultsCommand : CliktCommand(
+internal class ListStoredScanResultsCommand : OrtHelperCommand(
     help = "Lists the provenance of all stored scan results for a given package identifier."
 ) {
     private val configFile by option(

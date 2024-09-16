@@ -19,12 +19,12 @@
 
 package org.ossreviewtoolkit.helper.commands.packagecuration
 
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.helper.utils.readOrtResult
 import org.ossreviewtoolkit.helper.utils.writeOrtResult
 import org.ossreviewtoolkit.model.ResolvedPackageCurations.Companion.REPOSITORY_CONFIGURATION_PROVIDER_ID
@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.plugins.packagecurationproviders.file.FilePackageCur
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.config.setPackageCurations
 
-internal class SetCommand : CliktCommand(
+internal class SetCommand : OrtHelperCommand(
     help = "(Re-)set all package curations for a given ORT file to the curations specified via package curations " +
         "file and directory. If no curations are given then all curations get removed."
 ) {

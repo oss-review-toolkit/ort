@@ -19,17 +19,17 @@
 
 package org.ossreviewtoolkit.helper.commands
 
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.helper.utils.readOrtResult
 import org.ossreviewtoolkit.helper.utils.write
 import org.ossreviewtoolkit.utils.common.expandTilde
 
-internal class ExtractRepositoryConfigurationCommand : CliktCommand(
+internal class ExtractRepositoryConfigurationCommand : OrtHelperCommand(
     help = "Extract the repository configuration from the given ORT result file."
 ) {
     private val ortFile by option(

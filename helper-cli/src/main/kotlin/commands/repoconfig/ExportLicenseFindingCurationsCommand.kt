@@ -19,13 +19,13 @@
 
 package org.ossreviewtoolkit.helper.commands.repoconfig
 
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.helper.utils.RepositoryLicenseFindingCurations
 import org.ossreviewtoolkit.helper.utils.VcsUrlMapping
 import org.ossreviewtoolkit.helper.utils.getLicenseFindingCurationsByRepository
@@ -38,7 +38,7 @@ import org.ossreviewtoolkit.helper.utils.write
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.common.expandTilde
 
-internal class ExportLicenseFindingCurationsCommand : CliktCommand(
+internal class ExportLicenseFindingCurationsCommand : OrtHelperCommand(
     help = "Export the license finding curations to a file which maps repository URLs to the license finding " +
         "curations for the respective repository."
 ) {

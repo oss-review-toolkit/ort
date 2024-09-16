@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.helper.commands
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator
 
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
@@ -31,12 +30,13 @@ import com.github.ajalt.clikt.parameters.types.file
 import java.text.Collator
 import java.util.Locale
 
+import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.expandTilde
 
-internal class ImportCopyrightGarbageCommand : CliktCommand(
+internal class ImportCopyrightGarbageCommand : OrtHelperCommand(
     help = "Import copyright garbage from a plain text file containing one copyright statement per line into the " +
         "given copyright garbage file."
 ) {

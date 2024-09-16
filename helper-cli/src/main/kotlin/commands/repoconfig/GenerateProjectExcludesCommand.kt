@@ -19,12 +19,12 @@
 
 package org.ossreviewtoolkit.helper.commands.repoconfig
 
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.helper.utils.readOrtResult
 import org.ossreviewtoolkit.helper.utils.replacePathExcludes
 import org.ossreviewtoolkit.helper.utils.sortPathExcludes
@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.common.expandTilde
 
-internal class GenerateProjectExcludesCommand : CliktCommand(
+internal class GenerateProjectExcludesCommand : OrtHelperCommand(
     help = "Generates path excludes for all definition files which are not yet excluded. The output is written to " +
         "the given repository configuration file."
 ) {

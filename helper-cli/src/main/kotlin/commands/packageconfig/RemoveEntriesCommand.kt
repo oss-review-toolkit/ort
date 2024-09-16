@@ -19,12 +19,12 @@
 
 package org.ossreviewtoolkit.helper.commands.packageconfig
 
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.helper.utils.getScanResultFor
 import org.ossreviewtoolkit.helper.utils.readOrtResult
 import org.ossreviewtoolkit.helper.utils.write
@@ -34,7 +34,7 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.utils.common.expandTilde
 
-internal class RemoveEntriesCommand : CliktCommand(
+internal class RemoveEntriesCommand : OrtHelperCommand(
     help = "Removes all path excludes and license finding curations which do not match any files or license findings."
 ) {
     private val packageConfigurationFile by option(

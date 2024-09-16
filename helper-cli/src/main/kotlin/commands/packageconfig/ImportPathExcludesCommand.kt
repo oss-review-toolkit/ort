@@ -19,13 +19,13 @@
 
 package org.ossreviewtoolkit.helper.commands.packageconfig
 
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.helper.utils.VcsUrlMapping
 import org.ossreviewtoolkit.helper.utils.findFilesRecursive
 import org.ossreviewtoolkit.helper.utils.findRepositoryPaths
@@ -38,7 +38,7 @@ import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.common.expandTilde
 
-internal class ImportPathExcludesCommand : CliktCommand(
+internal class ImportPathExcludesCommand : OrtHelperCommand(
     help = "Import path excludes by repository from a file into the given package configuration."
 ) {
     private val pathExcludesFile by option(

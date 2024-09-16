@@ -19,19 +19,19 @@
 
 package org.ossreviewtoolkit.helper.commands
 
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.model.licenses.LicenseCategorization
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.common.expandTilde
 
-internal class ListLicenseCategoriesCommand : CliktCommand(
+internal class ListLicenseCategoriesCommand : OrtHelperCommand(
     help = "Lists the license categories."
 ) {
     private val licenseClassificationsFile by option(

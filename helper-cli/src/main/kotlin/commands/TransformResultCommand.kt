@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.helper.commands
 
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
@@ -27,6 +26,7 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import com.schibsted.spt.data.jslt.Parser
 
+import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.model.readTree
 import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.utils.common.expandTilde
@@ -36,7 +36,7 @@ import org.ossreviewtoolkit.utils.common.expandTilde
  *
  * See https://github.com/schibsted/jslt.
  */
-internal class TransformResultCommand : CliktCommand(
+internal class TransformResultCommand : OrtHelperCommand(
     name = "transform", help = "Implements a JSLT transformation on the given ORT result file."
 ) {
     private val ortFile by option(

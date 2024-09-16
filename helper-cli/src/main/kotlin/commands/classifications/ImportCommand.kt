@@ -21,7 +21,6 @@ package org.ossreviewtoolkit.helper.commands.classifications
 
 import com.fasterxml.jackson.module.kotlin.readValue
 
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.option
@@ -33,6 +32,7 @@ import java.net.URI
 
 import org.apache.logging.log4j.kotlin.logger
 
+import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.licenses.LicenseCategorization
 import org.ossreviewtoolkit.model.licenses.LicenseCategory
@@ -42,7 +42,7 @@ import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 
-internal class ImportCommand : CliktCommand(
+internal class ImportCommand : OrtHelperCommand(
     help = "Import license classifications from supported providers to ORT format."
 ) {
     private val provider by argument(

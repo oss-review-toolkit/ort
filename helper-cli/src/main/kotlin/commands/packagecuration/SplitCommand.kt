@@ -19,19 +19,19 @@
 
 package org.ossreviewtoolkit.helper.commands.packagecuration
 
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.helper.utils.formatComment
 import org.ossreviewtoolkit.helper.utils.getSplitCurationFile
 import org.ossreviewtoolkit.helper.utils.readPackageCurations
 import org.ossreviewtoolkit.helper.utils.writeAsYaml
 import org.ossreviewtoolkit.utils.common.expandTilde
 
-internal class SplitCommand : CliktCommand(
+internal class SplitCommand : OrtHelperCommand(
     help = "Split a single curations file into a directory structure using the format '<type>/<namespace>/<name>.yml'."
 ) {
     private val inputCurationsFile by option(

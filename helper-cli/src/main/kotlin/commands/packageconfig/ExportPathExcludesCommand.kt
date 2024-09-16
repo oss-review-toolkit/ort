@@ -19,13 +19,13 @@
 
 package org.ossreviewtoolkit.helper.commands.packageconfig
 
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.helper.utils.RepositoryPathExcludes
 import org.ossreviewtoolkit.helper.utils.VcsUrlMapping
 import org.ossreviewtoolkit.helper.utils.findRepositories
@@ -38,7 +38,7 @@ import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.common.expandTilde
 
-internal class ExportPathExcludesCommand : CliktCommand(
+internal class ExportPathExcludesCommand : OrtHelperCommand(
     help = "Export the path excludes to a path excludes file which maps repository URLs to the path excludes for the " +
         "respective repository"
 ) {

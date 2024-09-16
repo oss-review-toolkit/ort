@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.helper.commands.repoconfig
 
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
@@ -27,6 +26,7 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import org.apache.logging.log4j.kotlin.logger
 
+import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.helper.utils.minimize
 import org.ossreviewtoolkit.helper.utils.readOrtResult
 import org.ossreviewtoolkit.helper.utils.replaceScopeExcludes
@@ -39,7 +39,7 @@ import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.common.expandTilde
 
-internal class GenerateScopeExcludesCommand : CliktCommand(
+internal class GenerateScopeExcludesCommand : OrtHelperCommand(
     help = "Generate scope excludes based on common default for the package managers. The generated scope excludes " +
         "get written to the given repository configuration file, replacing any existing scope excludes."
 ) {
