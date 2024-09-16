@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.helper.commands.repoconfig
 
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
@@ -28,6 +27,7 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.helper.utils.readOrtResult
 import org.ossreviewtoolkit.helper.utils.replaceRuleViolationResolutions
 import org.ossreviewtoolkit.helper.utils.write
@@ -38,7 +38,7 @@ import org.ossreviewtoolkit.model.config.RuleViolationResolutionReason
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.common.expandTilde
 
-internal class GenerateRuleViolationResolutionsCommand : CliktCommand(
+internal class GenerateRuleViolationResolutionsCommand : OrtHelperCommand(
     help = "Generates resolutions for all unresolved rule violations. The output is written to the given repository " +
         "configuration file."
 ) {

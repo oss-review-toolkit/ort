@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.helper.commands.provenancestorage
 
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.terminal
 import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
@@ -31,6 +30,7 @@ import com.github.ajalt.clikt.parameters.types.file
 import com.github.ajalt.mordant.rendering.Theme
 import com.github.ajalt.mordant.terminal.YesNoPrompt
 
+import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.scanner.ScanStorages
@@ -38,7 +38,7 @@ import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
-internal class DeleteCommand : CliktCommand(
+internal class DeleteCommand : OrtHelperCommand(
     help = "Deletes stored provenance results matching the options."
 ) {
     private val configFile by option(

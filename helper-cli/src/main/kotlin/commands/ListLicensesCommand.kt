@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.helper.commands
 
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
@@ -33,6 +32,7 @@ import com.github.ajalt.clikt.parameters.types.file
 import java.io.File
 import java.lang.IllegalArgumentException
 
+import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.helper.utils.downloadSources
 import org.ossreviewtoolkit.helper.utils.getLicenseFindingsById
 import org.ossreviewtoolkit.helper.utils.getScannedProvenance
@@ -51,7 +51,7 @@ import org.ossreviewtoolkit.utils.common.FileMatcher
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
-internal class ListLicensesCommand : CliktCommand(
+internal class ListLicensesCommand : OrtHelperCommand(
     help = "Lists the license findings for a given package as distinct text locations."
 ) {
     private val ortFile by option(

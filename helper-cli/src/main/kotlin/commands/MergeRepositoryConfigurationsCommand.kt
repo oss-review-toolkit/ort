@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.helper.commands
 
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
@@ -28,13 +27,14 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.File
 
+import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.helper.utils.merge
 import org.ossreviewtoolkit.helper.utils.write
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.common.expandTilde
 
-internal class MergeRepositoryConfigurationsCommand : CliktCommand(
+internal class MergeRepositoryConfigurationsCommand : OrtHelperCommand(
     help = "Merges the given list of input repository configuration files and writes the result to the given output " +
         "repository configuration file."
 ) {

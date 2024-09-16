@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.helper.commands
 
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.arguments.convert
@@ -27,6 +26,7 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.IOException
 
+import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.common.collectMessages
@@ -36,7 +36,7 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.ort.downloadFile
 import org.ossreviewtoolkit.utils.ort.okHttpClient
 
-internal class VerifySourceArtifactCurationsCommand : CliktCommand(
+internal class VerifySourceArtifactCurationsCommand : OrtHelperCommand(
     help = "Verifies that all curated source artifacts can be downloaded and that the hashes are correct."
 ) {
     private val packageCurationsFile by argument(

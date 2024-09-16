@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.helper.commands.dev
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
@@ -33,6 +32,7 @@ import java.io.File
 import kotlin.reflect.KClass
 
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
+import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.EvaluatorRun
@@ -43,7 +43,7 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.utils.common.expandTilde
 
-internal class RewriteTestAssetsCommand : CliktCommand(
+internal class RewriteTestAssetsCommand : OrtHelperCommand(
     help = "Searches all test assets directories in the given ORT sources directory for recognized serialized files " +
         "and tries to de-serialize and serialize the file. The command can be used to update the test assets " +
         "after making changes to the corresponding model classes or serializer configuration, e.g. after " +

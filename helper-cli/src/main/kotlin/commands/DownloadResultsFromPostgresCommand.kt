@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.helper.commands
 
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
@@ -35,6 +34,7 @@ import kotlin.time.measureTime
 import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream
 
 import org.ossreviewtoolkit.helper.utils.ORTH_NAME
+import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration
@@ -43,7 +43,7 @@ import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
-internal class DownloadResultsFromPostgresCommand : CliktCommand(
+internal class DownloadResultsFromPostgresCommand : OrtHelperCommand(
     name = "download-results-from-postgres",
     help = "Download an ORT result from a PostgreSQL database. The symmetric command to ORT's " +
         " upload-result-to-postgres command."

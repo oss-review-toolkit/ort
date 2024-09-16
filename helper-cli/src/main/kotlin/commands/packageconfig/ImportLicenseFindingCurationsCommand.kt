@@ -19,13 +19,13 @@
 
 package org.ossreviewtoolkit.helper.commands.packageconfig
 
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.helper.utils.VcsUrlMapping
 import org.ossreviewtoolkit.helper.utils.findRepositoryPaths
 import org.ossreviewtoolkit.helper.utils.getScanResultFor
@@ -40,7 +40,7 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.utils.common.expandTilde
 
-internal class ImportLicenseFindingCurationsCommand : CliktCommand(
+internal class ImportLicenseFindingCurationsCommand : OrtHelperCommand(
     help = "Import license finding curations from a license finding curations file and merge them into the given "
         + "package configuration."
 ) {

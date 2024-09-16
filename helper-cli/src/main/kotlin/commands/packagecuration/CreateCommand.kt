@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.helper.commands.packagecuration
 
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
@@ -27,6 +26,7 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.IOException
 
+import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.helper.utils.formatComment
 import org.ossreviewtoolkit.helper.utils.getSplitCurationFile
 import org.ossreviewtoolkit.helper.utils.readPackageCurations
@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.PackageCurationData
 import org.ossreviewtoolkit.utils.common.expandTilde
 
-internal class CreateCommand : CliktCommand(
+internal class CreateCommand : OrtHelperCommand(
     help = "Create a curation file for a package id using a hierarchical directory structure."
 ) {
     private val packageId by option(

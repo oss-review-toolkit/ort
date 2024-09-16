@@ -19,18 +19,18 @@
 
 package org.ossreviewtoolkit.helper.commands
 
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.helper.utils.processAllCopyrightStatements
 import org.ossreviewtoolkit.helper.utils.readOrtResult
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.utils.common.expandTilde
 
-internal class MapCopyrightsCommand : CliktCommand(
+internal class MapCopyrightsCommand : OrtHelperCommand(
     help = "Reads processed copyright statements from the input file, maps them to unprocessed copyright statements " +
         "using the given ORT file, and writes those mapped statements to the given output file."
 ) {

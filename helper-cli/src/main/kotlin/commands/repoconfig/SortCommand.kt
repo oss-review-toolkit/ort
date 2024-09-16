@@ -19,18 +19,18 @@
 
 package org.ossreviewtoolkit.helper.commands.repoconfig
 
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.arguments.convert
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.helper.utils.sortEntries
 import org.ossreviewtoolkit.helper.utils.write
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.common.expandTilde
 
-internal class SortCommand : CliktCommand(
+internal class SortCommand : OrtHelperCommand(
     help = "Sorts all exclude and curation entries of the given repository configuration alphabetically. The output " +
         "is written to the given repository configuration file."
 ) {

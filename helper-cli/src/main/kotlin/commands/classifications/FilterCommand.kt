@@ -19,19 +19,19 @@
 
 package org.ossreviewtoolkit.helper.commands.classifications
 
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.common.expandTilde
 
-internal class FilterCommand : CliktCommand(
+internal class FilterCommand : OrtHelperCommand(
     help = "Filter license classifications from a given license classifications file."
 ) {
     private val licenseClassificationsFile by option(

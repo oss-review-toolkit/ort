@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.helper.commands
 
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
@@ -31,6 +30,7 @@ import java.sql.Connection
 import java.time.Instant
 
 import org.ossreviewtoolkit.helper.utils.ORTH_NAME
+import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.helper.utils.writeOrtResult
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
@@ -56,7 +56,7 @@ import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
-internal class CreateAnalyzerResultCommand : CliktCommand(
+internal class CreateAnalyzerResultCommand : OrtHelperCommand(
     help = "Creates an analyzer result that contains packages for the given list of package ids. The result contains " +
         "only packages which have a corresponding ScanCode scan result in the postgres storage."
 ) {

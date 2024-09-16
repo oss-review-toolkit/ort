@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.helper.commands.packageconfig
 
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
@@ -31,6 +30,7 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.File
 
+import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.helper.utils.PathExcludeGenerator
 import org.ossreviewtoolkit.helper.utils.sortPathExcludes
 import org.ossreviewtoolkit.helper.utils.write
@@ -48,7 +48,7 @@ import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 
-internal class CreateCommand : CliktCommand(
+internal class CreateCommand : OrtHelperCommand(
     help = "Creates one package configuration for the source artifact scan and one for the VCS scan, if " +
         "a corresponding scan result exists in the given ORT result for the respective provenance. The output " +
         "package configuration YAML files are written to the given output directory."

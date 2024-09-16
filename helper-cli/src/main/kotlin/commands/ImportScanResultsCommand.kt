@@ -19,18 +19,18 @@
 
 package org.ossreviewtoolkit.helper.commands
 
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.helper.utils.readOrtResult
 import org.ossreviewtoolkit.scanner.storages.PackageBasedFileStorage
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 
-internal class ImportScanResultsCommand : CliktCommand(
+internal class ImportScanResultsCommand : OrtHelperCommand(
     help = "Import all scan results from the given ORT result file to the file based scan results storage directory."
 ) {
     private val ortFile by option(
