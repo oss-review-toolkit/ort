@@ -6,6 +6,6 @@
 
 
   <ItemGroup>
-    <PackageReference Include="xunit.analyzers" Version="1.2.0-pre.7" />
+    <PackageReference Include="xunit.analyzers" Version="1.16.0" />
   </ItemGroup>
 </Project>
