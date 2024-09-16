@@ -2,7 +2,7 @@
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
     <PackageReference Include="System.Globalization" Version="4.3.0"/>
     <PackageReference Include="System.Threading" Version="4.0.11"/>
-    <PackageReference Include="WebGrease" Version="1.5.2">
+    <PackageReference Include="WebGrease" Version="1.6.0">
         <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="foobar" Version="1.2.3"/>
