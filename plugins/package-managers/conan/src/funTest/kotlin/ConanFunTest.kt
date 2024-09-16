@@ -55,8 +55,8 @@ class ConanFunTest : StringSpec({
      * system. The `package id` is set to the one calculated on Linux.
      */
     "Project dependencies are detected correctly with the lockfile".config(enabled = Os.isLinux) {
-        val definitionFile = getAssetFile("projects/synthetic/conan-py/conanfile.py")
-        val expectedResultFile = getAssetFile("projects/synthetic/conan-expected-output-py.yml")
+        val definitionFile = getAssetFile("projects/synthetic/conan-py-lockfile/conanfile.py")
+        val expectedResultFile = getAssetFile("projects/synthetic/conan-expected-output-py-lockfile.yml")
 
         val result = create("Conan", OPTION_LOCKFILE_NAME to "lockfile.lock").resolveSingleProject(definitionFile)
 
