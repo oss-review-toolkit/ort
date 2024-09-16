@@ -42,5 +42,8 @@
       "matchManagers": ["npm"],
       "schedule": "after 9pm on sunday"
     }
-  ]
+  ],
+  "nuget": {
+    "enabled": false
+  }
 }
