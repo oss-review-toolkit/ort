@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
     <PackageReference Include="System.Globalization" Version="4.3.0"/>
-    <PackageReference Include="System.Threading" Version="4.0.11"/>
+    <PackageReference Include="System.Threading" Version="4.3.0"/>
     <PackageReference Include="WebGrease" Version="1.5.2">
         <PrivateAssets>all</PrivateAssets>
     </PackageReference>
