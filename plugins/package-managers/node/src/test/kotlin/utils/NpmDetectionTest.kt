@@ -226,7 +226,7 @@ class NpmDetectionTest : WordSpec({
             val filteredFiles = NpmDetection(definitionFiles).filterApplicable(YARN)
 
             filteredFiles.map { it.toRelativeString(projectDir) } shouldContainExactlyInAnyOrder listOf(
-                "yarn/package.json",
+                "yarn-project-with-lockfile/package.json",
                 "yarn-workspaces/package.json"
             )
         }
