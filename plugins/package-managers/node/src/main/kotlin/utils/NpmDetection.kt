@@ -115,12 +115,18 @@ enum class NodePackageManager(
     val markerFileName: String? = null,
     val workspaceFileName: String = NodePackageManager.DEFINITION_FILE
 ) {
-    NPM("package-lock.json", markerFileName = "npm-shrinkwrap.json") {
+    NPM(
+        lockfileName = "package-lock.json", // See https://docs.npmjs.com/cli/v7/configuring-npm/package-lock-json.
+        markerFileName = "npm-shrinkwrap.json" // See https://docs.npmjs.com/cli/v6/configuring-npm/shrinkwrap-json.
+    ) {
         override fun hasLockfile(projectDir: File): Boolean =
             super.hasLockfile(projectDir) || hasNonEmptyFile(projectDir, markerFileName)
     },
 
-    PNPM("pnpm-lock.yaml", workspaceFileName = "pnpm-workspace.yaml") {
+    PNPM(
+        lockfileName = "pnpm-lock.yaml", // See https://pnpm.io/git#lockfiles.
+        workspaceFileName = "pnpm-workspace.yaml"
+    ) {
         override fun getWorkspaces(projectDir: File): List<String>? {
             val workspaceFile = projectDir.resolve(workspaceFileName)
             if (!workspaceFile.isFile) return null
@@ -135,7 +141,9 @@ enum class NodePackageManager(
         }
     },
 
-    YARN("yarn.lock") {
+    YARN(
+        lockfileName = "yarn.lock" // See https://classic.yarnpkg.com/en/docs/yarn-lock.
+    ) {
         private val lockfileMarker = "# yarn lockfile v1"
 
         override fun hasLockfile(projectDir: File): Boolean {
@@ -148,7 +156,10 @@ enum class NodePackageManager(
         }
     },
 
-    YARN2("yarn.lock", markerFileName = ".yarnrc.yml") {
+    YARN2(
+        lockfileName = "yarn.lock", // See https://classic.yarnpkg.com/en/docs/yarn-lock.
+        markerFileName = ".yarnrc.yml"
+    ) {
         private val lockfileMarker = "__metadata:"
 
         override fun hasLockfile(projectDir: File): Boolean {
