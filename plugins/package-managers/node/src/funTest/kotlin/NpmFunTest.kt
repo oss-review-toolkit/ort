@@ -130,5 +130,17 @@ class NpmFunTest : WordSpec({
 
             result.withInvariantIssues() shouldBe expectedResult.withInvariantIssues()
         }
+
+        "resolve dependencies with URLs as versions correctly" {
+            val definitionFile = getAssetFile("projects/synthetic/npm-version-urls/package.json")
+            val expectedResultFile = getAssetFile("projects/synthetic/npm-version-urls-expected-output.yml")
+            val expectedResult = patchExpectedResult(expectedResultFile, definitionFile)
+                .fromYaml<ProjectAnalyzerResult>()
+
+            val result = create("NPM", allowDynamicVersions = true)
+                .resolveSingleProject(definitionFile, resolveScopes = true)
+
+            result.withInvariantIssues().toYaml() shouldBe expectedResult.withInvariantIssues().toYaml()
+        }
     }
 })
