@@ -40,7 +40,7 @@ import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class NpmFunTest : WordSpec({
     "NPM" should {
-        "resolve shrinkwrap dependencies correctly" {
+        "resolve dependencies for a project with a 'shrinkwrap.json' correctly" {
             val definitionFile = getAssetFile("projects/synthetic/npm/shrinkwrap/package.json")
             val expectedResultFile = getAssetFile("projects/synthetic/npm-expected-output.yml")
 
