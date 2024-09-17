@@ -1,7 +1,7 @@
 {
-  "name": "npm-yarn",
+  "name": "yarn-package-with-lockfile",
   "version": "1.0.0",
-  "description": "NPM test project with yarn.lock.",
+  "description": "Yarn test project with yarn.lock.",
   "repository": {
     "type": "git",
     "url": "https://github.com/oss-review-toolkit/ort.git"

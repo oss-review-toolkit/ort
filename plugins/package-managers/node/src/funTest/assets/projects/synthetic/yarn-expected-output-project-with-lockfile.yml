@@ -1,6 +1,6 @@
 ---
 project:
-  id: "Yarn::npm-yarn:1.0.0"
+  id: "Yarn::yarn-package-with-lockfile:1.0.0"
   definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
   declared_licenses:
   - "Apache-2.0"
