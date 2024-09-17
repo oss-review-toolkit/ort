@@ -45,6 +45,9 @@ tasks.register<Jar>("fatJar") {
 
     archiveClassifier = "fat"
 
+    // Handle duplicate `META-INF/DEPENDENCIES` files.
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
     from(sourceSets.main.get().output)
     dependsOn(configurations.runtimeClasspath)
 
