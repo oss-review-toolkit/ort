@@ -30,9 +30,9 @@ enum class Cvss2Rating(private val upperBound: Float) {
 
     companion object {
         /**
-         * A set of names that refer to the CVSS version 2 scoring system.
+         * A set of prefixes that refer to the CVSS version 2 scoring system.
          */
-        val NAMES = setOf("CVSS2", "CVSSV2", "CVSS_V2", "CVSS:2.0")
+        val PREFIXES = setOf("CVSS2", "CVSSV2", "CVSS_V2", "CVSS:2")
 
         /**
          * Get the [Cvss2Rating] from a [score], or null if the [score] does not map to any [Cvss2Rating].

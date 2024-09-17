@@ -138,7 +138,7 @@ class OssIndex(override val descriptor: PluginDescriptor, config: OssIndexConfig
      */
     private fun OssIndexService.Vulnerability.toVulnerability(): Vulnerability {
         // Only CVSS version 2 vectors do not contain the "CVSS:" label and version prefix.
-        val scoringSystem = cvssVector?.substringBefore('/', Cvss2Rating.NAMES.first())
+        val scoringSystem = cvssVector?.substringBefore('/', Cvss2Rating.PREFIXES.first())
 
         val severity = VulnerabilityReference.getQualitativeRating(scoringSystem, cvssScore)?.name
         val reference = VulnerabilityReference(URI(reference), scoringSystem, severity, cvssScore, cvssVector)
