@@ -144,7 +144,7 @@ class NpmDetectionTest : WordSpec({
         }
 
         "parse workspace files" {
-            val projectDir = getAssetFile("projects/synthetic/npm-workspaces")
+            val projectDir = getAssetFile("projects/synthetic/npm/workspaces")
 
             NPM.getWorkspaces(projectDir) shouldNotBeNull {
                 mapNotNull { it.withoutPrefix(projectDir.path) }.shouldContainExactly("/packages/**", "/apps/**")
@@ -162,9 +162,9 @@ class NpmDetectionTest : WordSpec({
                 "npm/node-modules/package.json",
                 "npm/package-lock/package.json",
                 "npm/shrinkwrap/package.json",
-                "npm-babel/package.json",
-                "npm-version-urls/package.json",
-                "npm-workspaces/package.json"
+                "npm/babel/package.json",
+                "npm/version-urls/package.json",
+                "npm/workspaces/package.json"
             )
         }
     }
