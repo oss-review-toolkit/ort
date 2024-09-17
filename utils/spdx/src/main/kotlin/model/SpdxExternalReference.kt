@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.utils.spdx.model
 
+import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonValue
 import com.fasterxml.jackson.core.JsonParser
@@ -56,10 +57,20 @@ data class SpdxExternalReference(
      */
     val referenceLocator: String
 ) {
+    /**
+     * See https://spdx.github.io/spdx-spec/v2.2.2/package-information/#721-external-reference-field for valid category
+     * values. Note that early versions of the version 2.2 JSON schema erroneously used underscores instead of dashes.
+     * Follow the proposed practice to support both for compatibility.
+     */
     enum class Category {
         SECURITY,
+
+        @JsonAlias("PACKAGE-MANAGER")
         PACKAGE_MANAGER,
+
+        @JsonAlias("PERSISTENT-ID")
         PERSISTENT_ID,
+
         OTHER
     }
 
