@@ -110,11 +110,12 @@ open class PackageRule(
 
                 val severities = matchingSystems
                     .mapNotNull { it.severity }
-                    .mapNotNull {
-                        when (scoringSystem.uppercase()) {
-                            in Cvss2Rating.NAMES -> enumValueOf<Cvss2Rating>(it)
-                            in Cvss3Rating.NAMES -> enumValueOf<Cvss3Rating>(it)
-                            in Cvss4Rating.NAMES -> enumValueOf<Cvss4Rating>(it)
+                    .mapNotNull { severity ->
+                        val system = scoringSystem.uppercase()
+                        when {
+                            Cvss2Rating.PREFIXES.any { system.startsWith(it) } -> enumValueOf<Cvss2Rating>(severity)
+                            Cvss3Rating.PREFIXES.any { system.startsWith(it) } -> enumValueOf<Cvss3Rating>(severity)
+                            Cvss4Rating.PREFIXES.any { system.startsWith(it) } -> enumValueOf<Cvss4Rating>(severity)
                             else -> null
                         }
                     }
