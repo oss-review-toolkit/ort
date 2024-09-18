@@ -19,28 +19,25 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.bazel
 
-import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.nulls.shouldNotBeNull
-import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.analyzer.analyze
+import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
+import org.ossreviewtoolkit.utils.test.matchExpectedResult
+import org.ossreviewtoolkit.utils.test.patchActualResult
 
 class BazelDetectionTest : StringSpec({
     "MODULE.bazel files present in a local registry should not be considered as definition files" {
         val definitionFile = getAssetFile("projects/synthetic/bazel-local-registry2/MODULE.bazel")
+        val expectedResultFile = getAssetFile("projects/synthetic/bazel-expected-output-local-registry2.yml")
 
-        val exception = shouldThrow<IllegalArgumentException> {
-            analyze(definitionFile.parentFile, packageManagers = listOf(Bazel.Factory()))
-        }
+        val result = analyze(definitionFile.parentFile, packageManagers = listOf(Bazel.Factory()))
 
-        exception.shouldNotBeNull {
-            // Running the Analyzer on a project depending on packages present in a local registry currently fails
-            // with this message (issue #9076). This is because the "MODULE.bazel" files present in the local
-            // registry should not be considered as definition files.
-            message shouldContain
-                "Unable to create the AnalyzerResult as it contains packages and projects with the same ids"
-        }
+        patchActualResult(result.toYaml(), patchStartAndEndTime = true) should matchExpectedResult(
+            expectedResultFile,
+            definitionFile
+        )
     }
 })
