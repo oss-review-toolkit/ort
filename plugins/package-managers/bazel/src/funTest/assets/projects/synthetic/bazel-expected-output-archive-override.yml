@@ -461,12 +461,12 @@ packages:
       algorithm: "SHA-256"
   vcs:
     type: "Git"
-    url: "https://github.com/bazelbuild/rules_jvm_external"
+    url: "https://github.com/bazel-contrib/rules_jvm_external"
     revision: ""
     path: ""
   vcs_processed:
     type: "Git"
-    url: "https://github.com/bazelbuild/rules_jvm_external.git"
+    url: "https://github.com/bazel-contrib/rules_jvm_external.git"
     revision: ""
     path: ""
 - id: "Bazel::rules_license:0.0.7"
