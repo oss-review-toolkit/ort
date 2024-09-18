@@ -5,8 +5,8 @@
       "capabilities" : [ "VULNERABILITIES" ]
     },
     "summary" : {
-      "start_time" : "2024-09-18T17:41:05.058536346Z",
-      "end_time" : "2024-09-18T17:41:06.322005244Z"
+      "start_time" : "2024-09-18T19:52:02.927524100Z",
+      "end_time" : "2024-09-18T19:52:04.337674200Z"
     },
     "vulnerabilities" : [ {
       "id" : "GHSA-jgrh-5m3h-9c5f",
@@ -48,6 +48,12 @@
         "score" : 7.5,
         "vector" : "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
       }, {
+        "url" : "https://nvd.nist.gov/vuln/detail/CVE-2024-45813",
+        "scoring_system" : "CVSS_V3",
+        "severity" : "HIGH",
+        "score" : 7.5,
+        "vector" : "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+      }, {
         "url" : "https://github.com/delvedor/find-my-way/commit/17fae694dcefc056045da201681c1530f0f80518",
         "scoring_system" : "CVSS_V3",
         "severity" : "HIGH",
@@ -79,6 +85,12 @@
         "vector" : "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
       }, {
         "url" : "https://github.com/delvedor/find-my-way/security/advisories/GHSA-rrr8-f88r-h8q6",
+        "scoring_system" : "CVSS_V4",
+        "severity" : "HIGH",
+        "score" : null,
+        "vector" : "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N"
+      }, {
+        "url" : "https://nvd.nist.gov/vuln/detail/CVE-2024-45813",
         "scoring_system" : "CVSS_V4",
         "severity" : "HIGH",
         "score" : null,
@@ -122,8 +134,8 @@
       "capabilities" : [ "VULNERABILITIES" ]
     },
     "summary" : {
-      "start_time" : "2024-09-18T17:41:05.058536346Z",
-      "end_time" : "2024-09-18T17:41:06.333000599Z"
+      "start_time" : "2024-09-18T19:52:02.927524100Z",
+      "end_time" : "2024-09-18T19:52:04.349672600Z"
     },
     "vulnerabilities" : [ {
       "id" : "GHSA-9r27-994c-4xch",
@@ -156,8 +168,8 @@
       "capabilities" : [ "VULNERABILITIES" ]
     },
     "summary" : {
-      "start_time" : "2024-09-18T17:41:05.058536346Z",
-      "end_time" : "2024-09-18T17:41:06.333038662Z"
+      "start_time" : "2024-09-18T19:52:02.927524100Z",
+      "end_time" : "2024-09-18T19:52:04.349672600Z"
     },
     "vulnerabilities" : [ {
       "id" : "GHSA-3qr5-h7w4-3gx3",
