@@ -27,6 +27,8 @@ import kotlinx.serialization.json.decodeFromStream
 import org.apache.logging.log4j.kotlin.logger
 
 private const val BAZEL_MODULES_DIR = "modules"
+const val METADATA_JSON = "metadata.json"
+const val SOURCE_JSON = "source.json"
 
 /**
  * A Bazel registry which is located on the local file system.
@@ -71,7 +73,7 @@ class LocalBazelModuleRegistryService(directory: File) : BazelModuleRegistryServ
     }
 
     override suspend fun getModuleMetadata(name: String): ModuleMetadata {
-        val metadataJson = moduleDirectory.resolve(name).resolve("metadata.json")
+        val metadataJson = moduleDirectory.resolve(name).resolve(METADATA_JSON)
         require(metadataJson.isFile)
         return metadataJson.inputStream().use {
             JSON.decodeFromStream<ModuleMetadata>(it)
@@ -79,7 +81,7 @@ class LocalBazelModuleRegistryService(directory: File) : BazelModuleRegistryServ
     }
 
     override suspend fun getModuleSourceInfo(name: String, version: String): ModuleSourceInfo {
-        val sourceJson = moduleDirectory.resolve(name).resolve(version).resolve("source.json")
+        val sourceJson = moduleDirectory.resolve(name).resolve(version).resolve(SOURCE_JSON)
         require(sourceJson.isFile)
         return sourceJson.inputStream().use {
             JSON.decodeFromStream<ModuleSourceInfo>(it)

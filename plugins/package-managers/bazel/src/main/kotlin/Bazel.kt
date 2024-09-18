@@ -31,9 +31,11 @@ import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.ArchiveOverride
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.BazelModuleRegistryService
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.LocalBazelModuleRegistryService
+import org.ossreviewtoolkit.clients.bazelmoduleregistry.METADATA_JSON
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.ModuleMetadata
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.ModuleSourceInfo
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.RemoteBazelModuleRegistryService
+import org.ossreviewtoolkit.clients.bazelmoduleregistry.SOURCE_JSON
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.HashAlgorithm
@@ -55,6 +57,7 @@ import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.ProcessCapture
+import org.ossreviewtoolkit.utils.common.alsoIfNull
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
@@ -85,6 +88,20 @@ class Bazel(
     }
 
     override fun command(workingDir: File?) = "bazel"
+
+    /**
+     * To avoid processing the module files in a local registry as definition files, ignore them if they are aside a
+     * source.json file and under a directory with a metadata.json file. This simple metric avoids parsing the .bazelrc
+     * in the top directory of the project to find out if a MODULE.bazel file is part of a local registry or not.
+     */
+    override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> =
+        definitionFiles.mapNotNull { file ->
+            file.takeUnless {
+                it.resolveSibling(SOURCE_JSON).isFile && it.parentFile.resolveSibling(METADATA_JSON).isFile
+            }.alsoIfNull {
+                logger.info { "Ignoring definition file '$file' as it is a module of a local registry." }
+            }
+        }
 
     override fun run(vararg args: CharSequence, workingDir: File?, environment: Map<String, String>): ProcessCapture =
         super.run(
