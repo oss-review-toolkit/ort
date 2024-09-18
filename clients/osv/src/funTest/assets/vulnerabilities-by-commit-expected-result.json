@@ -2,7 +2,7 @@
     {
         "schema_version": "1.6.0",
         "id": "CVE-2021-45931",
-        "modified": "2024-05-14T11:02:51.854812Z",
+        "modified": "2024-09-03T03:58:59.161681Z",
         "published": "2022-01-01T01:15:08Z",
         "details": "HarfBuzz 2.9.0 has an out-of-bounds write in hb_bit_set_invertible_t::set (called from hb_sparseset_t<hb_bit_set_invertible_t>::set and hb_set_copy).",
         "severity": [
@@ -218,7 +218,7 @@
     {
         "schema_version": "1.6.0",
         "id": "CVE-2022-33068",
-        "modified": "2024-07-31T03:02:00.197195Z",
+        "modified": "2024-09-18T03:25:06.426746Z",
         "published": "2022-06-23T17:15:14Z",
         "related": [
             "ALSA-2022:8384",
@@ -778,6 +778,100 @@
                 }
             },
             {
+                "package": {
+                    "ecosystem": "Debian:11",
+                    "name": "harfbuzz",
+                    "purl": "pkg:deb/debian/harfbuzz?arch=source"
+                },
+                "ranges": [
+                    {
+                        "type": "ECOSYSTEM",
+                        "events": [
+                            {
+                                "introduced": "0"
+                            }
+                        ]
+                    }
+                ],
+                "versions": [
+                    "2.7.4-1",
+                    "5.1.0-1",
+                    "5.2.0-1",
+                    "5.2.0-2",
+                    "5.3.1-1",
+                    "5.3.1-2",
+                    "6.0.0+dfsg-1",
+                    "6.0.0+dfsg-2",
+                    "6.0.0+dfsg-3",
+                    "6.0.0-1",
+                    "8.0.0-1",
+                    "8.0.0-2",
+                    "8.0.0-3",
+                    "8.0.1-1",
+                    "8.3.0-1",
+                    "8.3.0-2",
+                    "9.0.0-1"
+                ],
+                "ecosystem_specific": {
+                    "urgency": "not yet assigned"
+                },
+                "database_specific": {
+                    "source": "https://storage.googleapis.com/cve-osv-conversion/osv-output/CVE-2022-33068.json"
+                }
+            },
+            {
+                "package": {
+                    "ecosystem": "Debian:12",
+                    "name": "harfbuzz",
+                    "purl": "pkg:deb/debian/harfbuzz?arch=source"
+                },
+                "ranges": [
+                    {
+                        "type": "ECOSYSTEM",
+                        "events": [
+                            {
+                                "introduced": "0"
+                            },
+                            {
+                                "fixed": "5.2.0-2"
+                            }
+                        ]
+                    }
+                ],
+                "ecosystem_specific": {
+                    "urgency": "not yet assigned"
+                },
+                "database_specific": {
+                    "source": "https://storage.googleapis.com/cve-osv-conversion/osv-output/CVE-2022-33068.json"
+                }
+            },
+            {
+                "package": {
+                    "ecosystem": "Debian:13",
+                    "name": "harfbuzz",
+                    "purl": "pkg:deb/debian/harfbuzz?arch=source"
+                },
+                "ranges": [
+                    {
+                        "type": "ECOSYSTEM",
+                        "events": [
+                            {
+                                "introduced": "0"
+                            },
+                            {
+                                "fixed": "5.2.0-2"
+                            }
+                        ]
+                    }
+                ],
+                "ecosystem_specific": {
+                    "urgency": "not yet assigned"
+                },
+                "database_specific": {
+                    "source": "https://storage.googleapis.com/cve-osv-conversion/osv-output/CVE-2022-33068.json"
+                }
+            },
+            {
                 "ranges": [
                     {
                         "type": "GIT",
@@ -993,13 +1087,17 @@
             {
                 "type": "ADVISORY",
                 "url": "https://security.alpinelinux.org/vuln/CVE-2022-33068"
+            },
+            {
+                "type": "ADVISORY",
+                "url": "https://security-tracker.debian.org/tracker/CVE-2022-33068"
             }
         ]
     },
     {
         "schema_version": "1.6.0",
         "id": "CVE-2023-25193",
-        "modified": "2024-05-14T12:45:06.716714Z",
+        "modified": "2024-09-18T03:23:42.126030Z",
         "published": "2023-02-04T20:15:08Z",
         "related": [
             "ALSA-2023:4158",
@@ -1018,6 +1116,110 @@
             }
         ],
         "affected": [
+            {
+                "package": {
+                    "ecosystem": "Debian:11",
+                    "name": "harfbuzz",
+                    "purl": "pkg:deb/debian/harfbuzz?arch=source"
+                },
+                "ranges": [
+                    {
+                        "type": "ECOSYSTEM",
+                        "events": [
+                            {
+                                "introduced": "0"
+                            }
+                        ]
+                    }
+                ],
+                "versions": [
+                    "2.7.4-1",
+                    "5.1.0-1",
+                    "5.2.0-1",
+                    "5.2.0-2",
+                    "5.3.1-1",
+                    "5.3.1-2",
+                    "6.0.0+dfsg-1",
+                    "6.0.0+dfsg-2",
+                    "6.0.0+dfsg-3",
+                    "6.0.0-1",
+                    "8.0.0-1",
+                    "8.0.0-2",
+                    "8.0.0-3",
+                    "8.0.1-1",
+                    "8.3.0-1",
+                    "8.3.0-2",
+                    "9.0.0-1"
+                ],
+                "ecosystem_specific": {
+                    "urgency": "not yet assigned"
+                },
+                "database_specific": {
+                    "source": "https://storage.googleapis.com/cve-osv-conversion/osv-output/CVE-2023-25193.json"
+                }
+            },
+            {
+                "package": {
+                    "ecosystem": "Debian:12",
+                    "name": "harfbuzz",
+                    "purl": "pkg:deb/debian/harfbuzz?arch=source"
+                },
+                "ranges": [
+                    {
+                        "type": "ECOSYSTEM",
+                        "events": [
+                            {
+                                "introduced": "0"
+                            }
+                        ]
+                    }
+                ],
+                "versions": [
+                    "6.0.0+dfsg-3",
+                    "8.0.0-1",
+                    "8.0.0-2",
+                    "8.0.0-3",
+                    "8.0.1-1",
+                    "8.3.0-1",
+                    "8.3.0-2",
+                    "9.0.0-1"
+                ],
+                "ecosystem_specific": {
+                    "urgency": "not yet assigned"
+                },
+                "database_specific": {
+                    "source": "https://storage.googleapis.com/cve-osv-conversion/osv-output/CVE-2023-25193.json"
+                }
+            },
+            {
+                "package": {
+                    "ecosystem": "Debian:13",
+                    "name": "harfbuzz",
+                    "purl": "pkg:deb/debian/harfbuzz?arch=source"
+                },
+                "ranges": [
+                    {
+                        "type": "ECOSYSTEM",
+                        "events": [
+                            {
+                                "introduced": "0"
+                            },
+                            {
+                                "fixed": "8.0.0-1"
+                            }
+                        ]
+                    }
+                ],
+                "versions": [
+                    "6.0.0+dfsg-3"
+                ],
+                "ecosystem_specific": {
+                    "urgency": "not yet assigned"
+                },
+                "database_specific": {
+                    "source": "https://storage.googleapis.com/cve-osv-conversion/osv-output/CVE-2023-25193.json"
+                }
+            },
             {
                 "ranges": [
                     {
@@ -1239,6 +1441,10 @@
             {
                 "type": "WEB",
                 "url": "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/YZ5M2GSAIHFPLHYJXUPQ2QDJCLWXUGO3/"
+            },
+            {
+                "type": "ADVISORY",
+                "url": "https://security-tracker.debian.org/tracker/CVE-2023-25193"
             }
         ]
     },
