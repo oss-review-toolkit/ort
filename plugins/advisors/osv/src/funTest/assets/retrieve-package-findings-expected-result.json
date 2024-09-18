@@ -5,10 +5,9 @@
       "capabilities" : [ "VULNERABILITIES" ]
     },
     "summary" : {
-      "start_time" : "2022-07-08T09:17:44.773547238Z",
-      "end_time" : "2022-07-08T09:17:45.267886427Z"
+      "start_time" : "2024-09-18T17:41:05.058536346Z",
+      "end_time" : "2024-09-18T17:41:06.322005244Z"
     },
-    "defects" : [ ],
     "vulnerabilities" : [ {
       "id" : "GHSA-jgrh-5m3h-9c5f",
       "summary" : "Web Cache Poisoning in find-my-way",
@@ -16,27 +15,104 @@
       "references" : [ {
         "url" : "https://nvd.nist.gov/vuln/detail/CVE-2020-7764",
         "scoring_system" : "CVSS_V3",
-        "severity": "MODERATE",
-        "score": 5.9,
+        "severity" : "MODERATE",
+        "score" : 5.9,
         "vector" : "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
       }, {
         "url" : "https://github.com/delvedor/find-my-way/commit/ab408354690e6b9cf3c4724befb3b3fa4bb90aac",
         "scoring_system" : "CVSS_V3",
-        "severity": "MODERATE",
-        "score": 5.9,
+        "severity" : "MODERATE",
+        "score" : 5.9,
         "vector" : "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
       }, {
         "url" : "https://snyk.io/vuln/SNYK-JS-FINDMYWAY-1038269",
         "scoring_system" : "CVSS_V3",
-        "severity": "MODERATE",
-        "score": 5.9,
+        "severity" : "MODERATE",
+        "score" : 5.9,
         "vector" : "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
       }, {
         "url" : "https://www.npmjs.com/package/find-my-way",
         "scoring_system" : "CVSS_V3",
-        "severity": "MODERATE",
-        "score": 5.9,
+        "severity" : "MODERATE",
+        "score" : 5.9,
         "vector" : "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+      } ]
+    }, {
+      "id" : "GHSA-rrr8-f88r-h8q6",
+      "summary" : "find-my-way has a ReDoS vulnerability in multiparametric routes",
+      "description" : "### Impact\n\nA bad regular expression is generated any time you have two parameters within a single segment, when adding a `-` at the end, like `/:a-:b-`.\n\n### Patches\n\nUpdate to find-my-way v8.2.2 or v9.0.1. or subsequent versions.\n\n### Workarounds\n\nNo known workarounds.\n\n### References\n\n- [CVE-2024-45296](https://github.com/advisories/GHSA-9wv6-86v2-598j)\n- [Detailed blog post about `path-to-regexp` vulnerability](https://blakeembrey.com/posts/2024-09-web-redos/)",
+      "references" : [ {
+        "url" : "https://github.com/delvedor/find-my-way/security/advisories/GHSA-rrr8-f88r-h8q6",
+        "scoring_system" : "CVSS_V3",
+        "severity" : "HIGH",
+        "score" : 7.5,
+        "vector" : "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+      }, {
+        "url" : "https://github.com/delvedor/find-my-way/commit/17fae694dcefc056045da201681c1530f0f80518",
+        "scoring_system" : "CVSS_V3",
+        "severity" : "HIGH",
+        "score" : 7.5,
+        "vector" : "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+      }, {
+        "url" : "https://github.com/delvedor/find-my-way/commit/5e9e0eb5d8d438e06a185d5e536a896572dd0440",
+        "scoring_system" : "CVSS_V3",
+        "severity" : "HIGH",
+        "score" : 7.5,
+        "vector" : "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+      }, {
+        "url" : "https://blakeembrey.com/posts/2024-09-web-redos",
+        "scoring_system" : "CVSS_V3",
+        "severity" : "HIGH",
+        "score" : 7.5,
+        "vector" : "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+      }, {
+        "url" : "https://github.com/advisories/GHSA-9wv6-86v2-598j",
+        "scoring_system" : "CVSS_V3",
+        "severity" : "HIGH",
+        "score" : 7.5,
+        "vector" : "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+      }, {
+        "url" : "https://github.com/delvedor/find-my-way",
+        "scoring_system" : "CVSS_V3",
+        "severity" : "HIGH",
+        "score" : 7.5,
+        "vector" : "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+      }, {
+        "url" : "https://github.com/delvedor/find-my-way/security/advisories/GHSA-rrr8-f88r-h8q6",
+        "scoring_system" : "CVSS_V4",
+        "severity" : "HIGH",
+        "score" : null,
+        "vector" : "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N"
+      }, {
+        "url" : "https://github.com/delvedor/find-my-way/commit/17fae694dcefc056045da201681c1530f0f80518",
+        "scoring_system" : "CVSS_V4",
+        "severity" : "HIGH",
+        "score" : null,
+        "vector" : "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N"
+      }, {
+        "url" : "https://github.com/delvedor/find-my-way/commit/5e9e0eb5d8d438e06a185d5e536a896572dd0440",
+        "scoring_system" : "CVSS_V4",
+        "severity" : "HIGH",
+        "score" : null,
+        "vector" : "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N"
+      }, {
+        "url" : "https://blakeembrey.com/posts/2024-09-web-redos",
+        "scoring_system" : "CVSS_V4",
+        "severity" : "HIGH",
+        "score" : null,
+        "vector" : "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N"
+      }, {
+        "url" : "https://github.com/advisories/GHSA-9wv6-86v2-598j",
+        "scoring_system" : "CVSS_V4",
+        "severity" : "HIGH",
+        "score" : null,
+        "vector" : "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N"
+      }, {
+        "url" : "https://github.com/delvedor/find-my-way",
+        "scoring_system" : "CVSS_V4",
+        "severity" : "HIGH",
+        "score" : null,
+        "vector" : "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N"
       } ]
     } ]
   },
@@ -46,10 +122,9 @@
       "capabilities" : [ "VULNERABILITIES" ]
     },
     "summary" : {
-      "start_time" : "2022-07-11T11:43:59.561110209Z",
-      "end_time" : "2022-07-11T11:44:00.397553119Z"
+      "start_time" : "2024-09-18T17:41:05.058536346Z",
+      "end_time" : "2024-09-18T17:41:06.333000599Z"
     },
-    "defects" : [ ],
     "vulnerabilities" : [ {
       "id" : "GHSA-9r27-994c-4xch",
       "summary" : "discord-html not escaping HTML code blocks when lacking a language identifier",
@@ -81,10 +156,9 @@
       "capabilities" : [ "VULNERABILITIES" ]
     },
     "summary" : {
-      "start_time" : "2023-07-20T09:15:42.635321500Z",
-      "end_time" : "2023-07-20T09:15:43.653138200Z"
+      "start_time" : "2024-09-18T17:41:05.058536346Z",
+      "end_time" : "2024-09-18T17:41:06.333038662Z"
     },
-    "defects" : [ ],
     "vulnerabilities" : [ {
       "id" : "GHSA-3qr5-h7w4-3gx3",
       "summary" : "Donfig Command Injection in collect_yaml method",
@@ -92,20 +166,20 @@
       "references" : [ {
         "url" : "https://nvd.nist.gov/vuln/detail/CVE-2019-7537",
         "scoring_system" : "CVSS_V3",
-        "severity": "CRITICAL",
-        "score": 9.8,
+        "severity" : "CRITICAL",
+        "score" : 9.8,
         "vector" : "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
       }, {
         "url" : "https://github.com/pytroll/donfig/issues/5",
         "scoring_system" : "CVSS_V3",
-        "severity": "CRITICAL",
-        "score": 9.8,
+        "severity" : "CRITICAL",
+        "score" : 9.8,
         "vector" : "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
       }, {
         "url" : "https://github.com/pytroll/donfig",
         "scoring_system" : "CVSS_V3",
-        "severity": "CRITICAL",
-        "score": 9.8,
+        "severity" : "CRITICAL",
+        "score" : 9.8,
         "vector" : "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
       } ]
     }, {
