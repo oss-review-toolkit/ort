@@ -20,4 +20,4 @@ profile:
   name: qodana.recommended
 include:
   - name: CheckDependencyLicenses
-linter: jetbrains/qodana-jvm-community:2024.1
+linter: jetbrains/qodana-jvm-community
