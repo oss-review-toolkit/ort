@@ -23,6 +23,7 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.comparables.shouldBeGreaterThan
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeTypeOf
 
 class BazelModuleRegistryClientFunTest : WordSpec({
     val client = RemoteBazelModuleRegistryService.create()
@@ -42,6 +43,7 @@ class BazelModuleRegistryClientFunTest : WordSpec({
         "include URL and hash data" {
             val sourceInfo = client.getModuleSourceInfo("glog", "0.5.0")
 
+            sourceInfo.shouldBeTypeOf<ArchiveSourceInfo>()
             sourceInfo.url.toString() shouldBe "$repoUrl/archive/refs/tags/v0.5.0.tar.gz"
             sourceInfo.integrity shouldBe "sha256-7t5x8oNxvzmqabRd4jsynTchQBbiBVJps7Xnz9QLWfU="
         }
