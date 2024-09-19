@@ -144,6 +144,7 @@ ARG CONAN_VERSION
 ARG PYTHON_INSPECTOR_VERSION
 ARG PYTHON_PIPENV_VERSION
 ARG PYTHON_POETRY_VERSION
+ARG PYTHON_SETUPTOOLS_VERSION
 ARG PIPTOOL_VERSION
 ARG SCANCODE_VERSION
 
@@ -164,7 +165,8 @@ RUN pip install --no-cache-dir -U \
     conan=="$CONAN_VERSION" \
     pipenv=="$PYTHON_PIPENV_VERSION" \
     poetry=="$PYTHON_POETRY_VERSION" \
-    python-inspector=="$PYTHON_INSPECTOR_VERSION"
+    python-inspector=="$PYTHON_INSPECTOR_VERSION" \
+    setuptools=="$PYTHON_SETUPTOOLS_VERSION"
 
 FROM scratch AS python
 COPY --from=pythonbuild /opt/python /opt/python
