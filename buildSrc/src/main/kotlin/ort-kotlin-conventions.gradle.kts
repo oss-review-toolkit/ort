@@ -112,6 +112,7 @@ detekt {
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(javaLanguageVersion)
+        vendor = JvmVendorSpec.ADOPTIUM
     }
 }
 
