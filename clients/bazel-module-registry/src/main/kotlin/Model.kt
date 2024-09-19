@@ -23,6 +23,7 @@ import io.ks3.java.typealiases.UriAsString
 
 import java.net.URI
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
@@ -45,16 +46,24 @@ data class ModuleMetadata(
 }
 
 /**
+ * An abstraction of a module source info.
+ */
+@Serializable
+sealed class ModuleSourceInfo
+
+/**
+ * A module source info with type 'archive'.
  * E.g. https://bcr.bazel.build/modules/glog/0.5.0/source.json.
  */
 @Serializable
-data class ModuleSourceInfo(
+@SerialName("archive")
+class ArchiveSourceInfo(
     val integrity: String,
     val patchStrip: Int? = null,
     val patches: Map<String, String>? = null,
     val stripPrefix: String? = null,
     val url: UriAsString
-)
+) : ModuleSourceInfo()
 
 /**
  * See https://bazel.build/rules/lib/globals/module#archive_override.

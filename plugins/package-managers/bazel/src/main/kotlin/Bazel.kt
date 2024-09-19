@@ -29,6 +29,7 @@ import org.apache.logging.log4j.kotlin.logger
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.ArchiveOverride
+import org.ossreviewtoolkit.clients.bazelmoduleregistry.ArchiveSourceInfo
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.BazelModuleRegistryService
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.LocalBazelModuleRegistryService
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.METADATA_JSON
@@ -444,13 +445,17 @@ private fun ModuleMetadata.toVcsInfo() =
     )
 
 private fun ModuleSourceInfo.toRemoteArtifact(): RemoteArtifact {
-    val (algo, b64digest) = integrity.split("-", limit = 2)
-    val digest = Base64.decode(b64digest).toHexString()
+    when (this) {
+        is ArchiveSourceInfo -> {
+            val (algo, b64digest) = integrity.split("-", limit = 2)
+            val digest = Base64.decode(b64digest).toHexString()
 
-    val hash = Hash(
-        value = digest,
-        algorithm = HashAlgorithm.fromString(algo)
-    )
+            val hash = Hash(
+                value = digest,
+                algorithm = HashAlgorithm.fromString(algo)
+            )
 
-    return RemoteArtifact(url = url.toString(), hash = hash)
+            return RemoteArtifact(url = url.toString(), hash = hash)
+        }
+    }
 }
