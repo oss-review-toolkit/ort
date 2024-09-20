@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.clients.bazelmoduleregistry.ArchiveSourceInfo
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.BazelModuleRegistryService
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.GitRepositorySourceInfo
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.LocalBazelModuleRegistryService
+import org.ossreviewtoolkit.clients.bazelmoduleregistry.LocalRepositorySourceInfo
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.METADATA_JSON
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.ModuleMetadata
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.ModuleSourceInfo
@@ -446,6 +447,8 @@ class Bazel(
                 path = ""
             )
 
+            is LocalRepositorySourceInfo -> vcs
+
             is ArchiveSourceInfo -> null
         }
 }
@@ -474,9 +477,9 @@ private fun ModuleSourceInfo.toRemoteArtifact(): RemoteArtifact? {
             return RemoteArtifact(url = url.toString(), hash = hash)
         }
 
-        is GitRepositorySourceInfo -> {
-            // In case of a Git repository, no source artifact is available and the repository information will be used
-            // by the `vcs` and 'vcs_processed' properties.
+        is GitRepositorySourceInfo, is LocalRepositorySourceInfo -> {
+            // In case of a Git repository or a local path repository, no source artifact is available and the
+            // repository information will be used by the `vcs` and 'vcs_processed' properties.
             return null
         }
     }

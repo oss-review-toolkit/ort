@@ -26,6 +26,8 @@ import kotlinx.serialization.json.decodeFromStream
 
 import org.apache.logging.log4j.kotlin.logger
 
+import org.ossreviewtoolkit.downloader.VersionControlSystem
+
 private const val BAZEL_MODULES_DIR = "modules"
 const val METADATA_JSON = "metadata.json"
 const val SOURCE_JSON = "source.json"
@@ -83,9 +85,36 @@ class LocalBazelModuleRegistryService(directory: File) : BazelModuleRegistryServ
     override suspend fun getModuleSourceInfo(name: String, version: String): ModuleSourceInfo {
         val sourceJson = moduleDirectory.resolve(name).resolve(version).resolve(SOURCE_JSON)
         require(sourceJson.isFile)
-        return sourceJson.inputStream().use {
+        val sourceInfo = sourceJson.inputStream().use {
             JSON.decodeFromStream<ModuleSourceInfo>(it)
         }
+
+        if (sourceInfo is LocalRepositorySourceInfo) {
+            val moduleBasePathAsFile = File(bazelRegistry.moduleBasePath)
+            val pathAsFile = File(sourceInfo.path)
+
+            when {
+                moduleBasePathAsFile.isAbsolute -> logger.warn {
+                    "ORT does not support a Bazel registry module base path with an absolute path: " +
+                        "$moduleBasePathAsFile."
+                }
+
+                pathAsFile.isAbsolute -> logger.warn {
+                    "ORT does not support a Bazel module path with an absolute path: ${sourceInfo.path}."
+                }
+
+                else -> {
+                    // According to the specification, if path and module_base_path are both relative paths, the path
+                    // to the module source is <registry_path>/<module_base_path>/<path>.
+                    val registryPath = moduleDirectory.parentFile
+                    val modulePath = registryPath.resolve(moduleBasePathAsFile).resolve(pathAsFile)
+                    VersionControlSystem.getPathInfo(modulePath)
+                    sourceInfo.vcs = VersionControlSystem.getPathInfo(modulePath)
+                }
+            }
+        }
+
+        return sourceInfo
     }
 }
 

@@ -82,4 +82,15 @@ class BazelFunTest : StringSpec({
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
+
+    "Source artifact of a dependency with a 'local_path' type is resolved correctly" {
+        val definitionFile = getAssetFile("projects/synthetic/bazel-local-registry-with-local-path/MODULE.bazel")
+        val expectedResultFile = getAssetFile(
+            "projects/synthetic/bazel-expected-output-local-registry-with-local-path.yml"
+        )
+
+        val result = create("Bazel").resolveSingleProject(definitionFile)
+
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
 })

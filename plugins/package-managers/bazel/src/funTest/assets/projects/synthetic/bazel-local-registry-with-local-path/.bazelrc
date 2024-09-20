@@ -1,0 +1,3 @@
+common --registry=file://%workspace%/registry/
+
+common --registry=https://raw.githubusercontent.com/bazelbuild/bazel-central-registry/main/
