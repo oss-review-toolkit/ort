@@ -96,8 +96,12 @@ private val dartCommand = if (Os.isWindows) "dart.bat" else "dart"
  * This package manager supports the following [options][PackageManagerConfiguration.options]:
  * - *flutterVersion*: The version to use when bootstrapping Flutter. If Flutter is already on the path, this option is
  *   ignored.
- * - *gradleVersion*: The version of Gradle to use when analyzing Gradle projects. Defaults to [DEFAULT_GRADLE_VERSION].
  * - *pubDependenciesOnly*: Only scan Pub dependencies and skip native ones for Android (Gradle) and iOS (CocoaPods).
+ * - *gradleVersion*: The version of Gradle to use when analyzing Gradle projects. Defaults to [DEFAULT_GRADLE_VERSION].
+ * - *javaVersion*: The version of Java to use when analyzing Gradle projects. By default, the same Java version as for
+ *   ORT itself it used. Overrides `javaHome` if both are specified.
+ * - *javaHome*: The directory of the Java home to use when analyzing Gradle projects. By default, the same Java home as
+ *   for ORT itself is used.
  */
 @Suppress("TooManyFunctions")
 class Pub(
@@ -108,8 +112,11 @@ class Pub(
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
     companion object {
         const val OPTION_FLUTTER_VERSION = "flutterVersion"
-        const val OPTION_GRADLE_VERSION = "gradleVersion"
         const val OPTION_PUB_DEPENDENCIES_ONLY = "pubDependenciesOnly"
+
+        const val OPTION_GRADLE_VERSION = "gradleVersion"
+        const val OPTION_GRADLE_JAVA_VERSION = "javaVersion"
+        const val OPTION_GRADLE_JAVA_HOME = "javaHome"
     }
 
     class Factory : AbstractPackageManagerFactory<Pub>("Pub") {
@@ -450,11 +457,16 @@ class Pub(
                 "Analyzing Android dependencies for package '$packageName' using Gradle version $pubGradleVersion."
             }
 
-            val gradleAnalyzerConfig = analyzerConfig.withPackageManagerOption(
-                gradleFactory.type,
-                OPTION_GRADLE_VERSION,
-                pubGradleVersion
-            )
+            val gradleAnalyzerConfig = analyzerConfig
+                .withPackageManagerOption(gradleFactory.type, OPTION_GRADLE_VERSION, pubGradleVersion).apply {
+                    options[OPTION_GRADLE_JAVA_VERSION]?.also { javaVersion ->
+                        withPackageManagerOption(gradleFactory.type, OPTION_GRADLE_JAVA_VERSION, javaVersion)
+                    }
+
+                    options[OPTION_GRADLE_JAVA_HOME]?.also { javaHome ->
+                        withPackageManagerOption(gradleFactory.type, OPTION_GRADLE_JAVA_HOME, javaHome)
+                    }
+                }
 
             val gradle = gradleFactory.create(androidDir, gradleAnalyzerConfig, repoConfig)
             gradle.resolveDependencies(listOf(definitionFile), labels).run {
