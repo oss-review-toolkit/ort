@@ -5,8 +5,8 @@
       "capabilities" : [ "VULNERABILITIES" ]
     },
     "summary" : {
-      "start_time" : "2024-09-18T19:52:02.927524100Z",
-      "end_time" : "2024-09-18T19:52:04.337674200Z"
+      "start_time" : "2024-09-20T17:06:02.063849743Z",
+      "end_time" : "2024-09-20T17:06:03.290312055Z"
     },
     "vulnerabilities" : [ {
       "id" : "GHSA-jgrh-5m3h-9c5f",
@@ -134,8 +134,8 @@
       "capabilities" : [ "VULNERABILITIES" ]
     },
     "summary" : {
-      "start_time" : "2024-09-18T19:52:02.927524100Z",
-      "end_time" : "2024-09-18T19:52:04.349672600Z"
+      "start_time" : "2024-09-20T17:06:02.063849743Z",
+      "end_time" : "2024-09-20T17:06:03.304464351Z"
     },
     "vulnerabilities" : [ {
       "id" : "GHSA-9r27-994c-4xch",
@@ -168,8 +168,8 @@
       "capabilities" : [ "VULNERABILITIES" ]
     },
     "summary" : {
-      "start_time" : "2024-09-18T19:52:02.927524100Z",
-      "end_time" : "2024-09-18T19:52:04.349672600Z"
+      "start_time" : "2024-09-20T17:06:02.063849743Z",
+      "end_time" : "2024-09-20T17:06:03.304512942Z"
     },
     "vulnerabilities" : [ {
       "id" : "GHSA-3qr5-h7w4-3gx3",
@@ -188,11 +188,65 @@
         "score" : 9.8,
         "vector" : "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
       }, {
+        "url" : "https://github.com/pytroll/donfig/commit/1f9dbf83b17419a06d63c14ef3fbd29dbc1b8ce5",
+        "scoring_system" : "CVSS_V3",
+        "severity" : "CRITICAL",
+        "score" : 9.8,
+        "vector" : "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+      }, {
+        "url" : "https://github.com/pypa/advisory-database/tree/main/vulns/donfig/PYSEC-2019-21.yaml",
+        "scoring_system" : "CVSS_V3",
+        "severity" : "CRITICAL",
+        "score" : 9.8,
+        "vector" : "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+      }, {
         "url" : "https://github.com/pytroll/donfig",
         "scoring_system" : "CVSS_V3",
         "severity" : "CRITICAL",
         "score" : 9.8,
         "vector" : "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+      }, {
+        "url" : "https://github.com/pytroll/donfig/commits/master",
+        "scoring_system" : "CVSS_V3",
+        "severity" : "CRITICAL",
+        "score" : 9.8,
+        "vector" : "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+      }, {
+        "url" : "https://nvd.nist.gov/vuln/detail/CVE-2019-7537",
+        "scoring_system" : "CVSS_V4",
+        "severity" : "CRITICAL",
+        "score" : null,
+        "vector" : "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N"
+      }, {
+        "url" : "https://github.com/pytroll/donfig/issues/5",
+        "scoring_system" : "CVSS_V4",
+        "severity" : "CRITICAL",
+        "score" : null,
+        "vector" : "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N"
+      }, {
+        "url" : "https://github.com/pytroll/donfig/commit/1f9dbf83b17419a06d63c14ef3fbd29dbc1b8ce5",
+        "scoring_system" : "CVSS_V4",
+        "severity" : "CRITICAL",
+        "score" : null,
+        "vector" : "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N"
+      }, {
+        "url" : "https://github.com/pypa/advisory-database/tree/main/vulns/donfig/PYSEC-2019-21.yaml",
+        "scoring_system" : "CVSS_V4",
+        "severity" : "CRITICAL",
+        "score" : null,
+        "vector" : "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N"
+      }, {
+        "url" : "https://github.com/pytroll/donfig",
+        "scoring_system" : "CVSS_V4",
+        "severity" : "CRITICAL",
+        "score" : null,
+        "vector" : "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N"
+      }, {
+        "url" : "https://github.com/pytroll/donfig/commits/master",
+        "scoring_system" : "CVSS_V4",
+        "severity" : "CRITICAL",
+        "score" : null,
+        "vector" : "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N"
       } ]
     }, {
       "id" : "PYSEC-2019-21",
