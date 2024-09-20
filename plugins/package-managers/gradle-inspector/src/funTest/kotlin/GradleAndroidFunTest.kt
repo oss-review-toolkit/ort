@@ -33,7 +33,8 @@ class GradleAndroidFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/gradle-android/build.gradle").toGradle()
         val expectedResultFile = getAssetFile("projects/synthetic/gradle-android-expected-output-root.yml")
 
-        val result = create("GradleInspector").resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = create("GradleInspector", "javaVersion" to "17")
+            .resolveSingleProject(definitionFile, resolveScopes = true)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -42,7 +43,8 @@ class GradleAndroidFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/gradle-android/app/build.gradle").toGradle()
         val expectedResultFile = getAssetFile("projects/synthetic/gradle-android-expected-output-app.yml")
 
-        val result = create("GradleInspector").resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = create("GradleInspector", "javaVersion" to "17")
+            .resolveSingleProject(definitionFile, resolveScopes = true)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -51,7 +53,8 @@ class GradleAndroidFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/gradle-android/lib/build.gradle").toGradle()
         val expectedResultFile = getAssetFile("projects/synthetic/gradle-android-expected-output-lib.yml")
 
-        val result = create("GradleInspector").resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = create("GradleInspector", "javaVersion" to "17")
+            .resolveSingleProject(definitionFile, resolveScopes = true)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -63,7 +66,8 @@ class GradleAndroidFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/gradle-android-cyclic/app/build.gradle").toGradle()
         val expectedResultFile = getAssetFile("projects/synthetic/gradle-android-cyclic-expected-output-app.yml")
 
-        val result = create("GradleInspector").resolveDependencies(listOf(definitionFile), emptyMap())
+        val result = create("GradleInspector", "javaVersion" to "17")
+            .resolveDependencies(listOf(definitionFile), emptyMap())
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }

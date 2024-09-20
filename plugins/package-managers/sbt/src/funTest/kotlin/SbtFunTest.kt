@@ -23,6 +23,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.analyzer.analyze
+import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.GitCommand
 import org.ossreviewtoolkit.utils.test.getAssetFile
@@ -38,7 +39,13 @@ class SbtFunTest : StringSpec({
         // Clean any previously generated POM files / target directories.
         GitCommand.run(definitionFile.parentFile, "clean", "-fd")
 
-        val ortResult = analyze(definitionFile.parentFile, packageManagers = setOf(Sbt.Factory()))
+        val ortResult = analyze(
+            definitionFile.parentFile,
+            packageManagers = setOf(Sbt.Factory()),
+            packageManagerConfiguration = mapOf(
+                "SBT" to PackageManagerConfiguration(options = mapOf(OPTION_JAVA_VERSION to "11"))
+            )
+        )
 
         patchActualResult(ortResult.toYaml(), patchStartAndEndTime = true) shouldBe expectedResult
     }
@@ -51,7 +58,13 @@ class SbtFunTest : StringSpec({
         // Clean any previously generated POM files / target directories.
         GitCommand.run(definitionFile.parentFile, "clean", "-fd")
 
-        val ortResult = analyze(definitionFile.parentFile, packageManagers = setOf(Sbt.Factory()))
+        val ortResult = analyze(
+            definitionFile.parentFile,
+            packageManagers = setOf(Sbt.Factory()),
+            packageManagerConfiguration = mapOf(
+                "SBT" to PackageManagerConfiguration(options = mapOf(OPTION_JAVA_VERSION to "11"))
+            )
+        )
 
         patchActualResult(ortResult.toYaml(), patchStartAndEndTime = true) shouldBe expectedResult
     }

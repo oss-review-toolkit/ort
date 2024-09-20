@@ -69,7 +69,8 @@ class GradleFunTest : StringSpec() {
             val definitionFile = getAssetFile("projects/synthetic/gradle/build.gradle").toGradle()
             val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-root.yml")
 
-            val result = create("GradleInspector").resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = create("GradleInspector", "javaVersion" to "17")
+                .resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -81,7 +82,8 @@ class GradleFunTest : StringSpec() {
             val definitionFile = getAssetFile("projects/synthetic/gradle/app/build.gradle").toGradle()
             val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-app.yml")
 
-            val result = create("GradleInspector").resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = create("GradleInspector", "javaVersion" to "17")
+                .resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -93,7 +95,8 @@ class GradleFunTest : StringSpec() {
             val definitionFile = getAssetFile("projects/synthetic/gradle/lib/build.gradle").toGradle()
             val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-lib.yml")
 
-            val result = create("GradleInspector").resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = create("GradleInspector", "javaVersion" to "17")
+                .resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -102,7 +105,8 @@ class GradleFunTest : StringSpec() {
             val definitionFile = getAssetFile("projects/synthetic/gradle/lib-without-repo/build.gradle").toGradle()
             val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-lib-without-repo.yml")
 
-            val result = create("GradleInspector").resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = create("GradleInspector", "javaVersion" to "17")
+                .resolveSingleProject(definitionFile, resolveScopes = true)
 
             patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -114,7 +118,7 @@ class GradleFunTest : StringSpec() {
             val definitionFile = getAssetFile("projects/synthetic/gradle/app/build.gradle").toGradle()
             val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-scopes-excludes.yml")
 
-            val result = create("GradleInspector", excludedScopes = setOf("test.*"))
+            val result = create("GradleInspector", "javaVersion" to "17", excludedScopes = setOf("test.*"))
                 .resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
@@ -128,7 +132,8 @@ class GradleFunTest : StringSpec() {
             val definitionFile = getAssetFile("projects/synthetic/gradle-unsupported-version/build.gradle").toGradle()
             val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-unsupported-version.yml")
 
-            val result = create("GradleInspector").resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = create("GradleInspector", "javaVersion" to "17")
+                .resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -180,7 +185,8 @@ class GradleFunTest : StringSpec() {
                 val definitionFile = getAssetFile("projects/synthetic/app/build.gradle").toGradle()
                 val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-app$suffix.yml")
 
-                val result = create("GradleInspector").resolveSingleProject(definitionFile, resolveScopes = true)
+                val result = create("GradleInspector", "javaVersion" to "17")
+                    .resolveSingleProject(definitionFile, resolveScopes = true)
 
                 result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
             }

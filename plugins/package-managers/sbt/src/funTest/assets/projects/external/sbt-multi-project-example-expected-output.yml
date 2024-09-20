@@ -25,6 +25,10 @@ analyzer:
     tool_versions: {}
   config:
     allow_dynamic_versions: false
+    package_managers:
+      SBT:
+        options:
+          javaVersion: "11"
     skip_excluded: false
   result:
     projects:

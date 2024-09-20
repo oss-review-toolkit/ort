@@ -33,7 +33,8 @@ class GradleKotlinScriptFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/multi-kotlin-project/build.gradle.kts").toGradle()
         val expectedResultFile = getAssetFile("projects/synthetic/multi-kotlin-project-expected-output-root.yml")
 
-        val result = create("GradleInspector").resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = create("GradleInspector", "javaVersion" to "17")
+            .resolveSingleProject(definitionFile, resolveScopes = true)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -42,7 +43,8 @@ class GradleKotlinScriptFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/multi-kotlin-project/core/build.gradle.kts").toGradle()
         val expectedResultFile = getAssetFile("projects/synthetic/multi-kotlin-project-expected-output-core.yml")
 
-        val result = create("GradleInspector").resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = create("GradleInspector", "javaVersion" to "17")
+            .resolveSingleProject(definitionFile, resolveScopes = true)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -51,7 +53,8 @@ class GradleKotlinScriptFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/multi-kotlin-project/cli/build.gradle.kts").toGradle()
         val expectedResultFile = getAssetFile("projects/synthetic/multi-kotlin-project-expected-output-cli.yml")
 
-        val result = create("GradleInspector").resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = create("GradleInspector", "javaVersion" to "17")
+            .resolveSingleProject(definitionFile, resolveScopes = true)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
