@@ -25,6 +25,9 @@ import java.net.URI
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
+
+import org.ossreviewtoolkit.model.VcsInfo
 
 /**
  * See: https://github.com/bazelbuild/bazel-central-registry/blob/3a298e2c3ec7484905d3ad132a60393571912cd1/metadata.schema.json.
@@ -78,6 +81,19 @@ class GitRepositorySourceInfo(
     val initSubmodules: Boolean? = null,
     val verbose: Boolean? = null,
     val stripPrefix: String? = null
+) : ModuleSourceInfo()
+
+/**
+ * A module source info with type 'local_path'.
+ */
+@Serializable
+@SerialName("local_path")
+class LocalRepositorySourceInfo(
+    val path: String,
+    // The following variable is not part of the 'source.json' specification: It will be populated by the
+    // [LocalBazelModuleRegistryService].
+    @Transient
+    var vcs: VcsInfo? = null
 ) : ModuleSourceInfo()
 
 /**
