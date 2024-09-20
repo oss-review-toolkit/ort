@@ -142,7 +142,9 @@ class Sbt(
         }
 
         fun getSbtOptions(sbtVersion: String?, javaHome: File?): List<String> =
-            mutableListOf(BATCH_MODE, CI_MODE, NO_COLOR, DISABLE_JLINE, FIXED_USER_HOME).apply {
+            buildList {
+                addAll(DEFAULT_SBT_OPTIONS)
+
                 sbtVersion?.also {
                     add("--sbt-version")
                     add(it)
@@ -226,25 +228,28 @@ class Sbt(
 private val PROJECT_REGEX = Regex("\\[info] \t [ *] (\\S+)")
 private val POM_REGEX = Regex("\\[info] Wrote (.+\\.pom)")
 
-// Batch mode (which suppresses interactive prompts) is not supported on Windows, compare
-// https://github.com/sbt/sbt-launcher-package/blob/25c1b96/src/universal/bin/sbt.bat#L861 with
-// https://github.com/sbt/sbt-launcher-package/blob/25c1b96/src/universal/bin/sbt#L449.
-private val BATCH_MODE = "-batch".takeUnless { Os.isWindows }.orEmpty()
+private val DEFAULT_SBT_OPTIONS = listOfNotNull(
+    // Batch mode (which suppresses interactive prompts) is not supported on Windows, compare
+    // https://github.com/sbt/sbt-launcher-package/blob/25c1b96/src/universal/bin/sbt.bat#L861 with
+    // https://github.com/sbt/sbt-launcher-package/blob/25c1b96/src/universal/bin/sbt#L449.
+    "-batch".takeUnless { Os.isWindows },
 
-// Enable the CI mode which disables console colors and supershell, see
-// https://www.scala-sbt.org/1.x/docs/Command-Line-Reference.html#Command+Line+Options.
-private val CI_MODE = "-Dsbt.ci=true".addQuotesOnWindows()
+    // Enable the CI mode which disables console colors and supershell, see
+    // https://www.scala-sbt.org/1.x/docs/Command-Line-Reference.html#Command+Line+Options.
+    "-Dsbt.ci=true",
 
-// Disable console colors explicitly as in some cases CI_MODE is not enough.
-private val NO_COLOR = "-Dsbt.color=false".addQuotesOnWindows()
+    // Disable console colors explicitly as in some cases CI_MODE is not enough.
+    "-Dsbt.color=false",
 
-// Disable the JLine terminal. Without this the JLine terminal can occasionally send a signal that causes the
-// parent process to suspend, for example IntelliJ can be suspended while running the SbtTest.
-private val DISABLE_JLINE = "-Djline.terminal=none".addQuotesOnWindows()
+    // Disable the JLine terminal. Without this the JLine terminal can occasionally send a signal that causes the
+    // parent process to suspend, for example IntelliJ can be suspended while running the SbtTest.
+    "-Djline.terminal=none",
 
-private val FIXED_USER_HOME = "-Duser.home=${Os.userHomeDirectory}".addQuotesOnWindows()
-
-private fun String.addQuotesOnWindows() = if (Os.isWindows) "\"$this\"" else this
+    // Set the correct user home dorectory in some Docker scenarios.
+    "-Duser.home=${Os.userHomeDirectory}"
+).map {
+    if (Os.isWindows) "\"$it\"" else it
+}
 
 private fun moveGeneratedPom(pomFile: File): Result<File> {
     val targetDirParent = pomFile.parentFile.searchUpwardsForSubdirectory("target")
