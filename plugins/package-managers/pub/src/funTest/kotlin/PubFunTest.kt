@@ -32,7 +32,9 @@ import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.collectDependencies
+import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.toYaml
+import org.ossreviewtoolkit.plugins.packagemanagers.gradleinspector.OPTION_JAVA_VERSION
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
@@ -82,7 +84,12 @@ class PubFunTest : WordSpec({
                 "projects/synthetic/pub-expected-output-with-flutter-android-and-cocoapods.yml"
             )
 
-            val ortResult = analyze(definitionFile.parentFile)
+            val ortResult = analyze(
+                definitionFile.parentFile,
+                packageManagerConfiguration = mapOf(
+                    "GradleInspector" to PackageManagerConfiguration(options = mapOf(OPTION_JAVA_VERSION to "17"))
+                )
+            )
 
             ortResult.analyzer shouldNotBeNull {
                 result.patchPackages().reduceToPubProjects().toYaml() should
