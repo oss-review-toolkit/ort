@@ -34,6 +34,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.ort.runBlocking
 
@@ -64,7 +65,7 @@ fun interface ProvenanceDownloader {
 
         nestedProvenance.subRepositories.forEach { (path, provenance) ->
             val tempDir = download(provenance)
-            val targetDir = root.resolve(path)
+            val targetDir = root.resolve(path).apply { parentFile.safeMkdirs() }
             tempDir.toPath().moveTo(targetDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
         }
 
