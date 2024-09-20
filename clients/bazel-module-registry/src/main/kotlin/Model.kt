@@ -66,6 +66,21 @@ class ArchiveSourceInfo(
 ) : ModuleSourceInfo()
 
 /**
+ * A module source info with type 'git_repository'.
+ */
+@Serializable
+@SerialName("git_repository")
+class GitRepositorySourceInfo(
+    val remote: String,
+    val commit: String? = null,
+    val shallowSince: String? = null,
+    val tag: String? = null,
+    val initSubmodules: Boolean? = null,
+    val verbose: Boolean? = null,
+    val stripPrefix: String? = null
+) : ModuleSourceInfo()
+
+/**
  * See https://bazel.build/rules/lib/globals/module#archive_override.
  */
 data class ArchiveOverride(

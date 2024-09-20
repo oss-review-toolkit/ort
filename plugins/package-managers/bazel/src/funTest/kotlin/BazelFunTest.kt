@@ -73,4 +73,13 @@ class BazelFunTest : StringSpec({
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
+
+    "Source artifact of a dependency with a 'git_repository' type is resolved correctly" {
+        val definitionFile = getAssetFile("projects/synthetic/bazel-git-repository/MODULE.bazel")
+        val expectedResultFile = getAssetFile("projects/synthetic/bazel-expected-output-git-repository.yml")
+
+        val result = create("Bazel").resolveSingleProject(definitionFile)
+
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
 })

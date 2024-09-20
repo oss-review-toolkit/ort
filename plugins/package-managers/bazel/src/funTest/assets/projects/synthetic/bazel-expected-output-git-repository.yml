@@ -1,0 +1,51 @@
+---
+project:
+  id: "Bazel::plugins/package-managers/bazel/src/funTest/assets/projects/synthetic/bazel-git-repository/MODULE.bazel:"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "dev"
+    dependencies: []
+  - name: "main"
+    dependencies:
+    - id: "Bazel::module_c:0.0.1"
+      linkage: "STATIC"
+packages:
+- id: "Bazel::module_c:0.0.1"
+  purl: "pkg:generic/module_c@0.0.1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://example.com/module_c.git"
+    revision: "main"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://example.com/module_c.git"
+    revision: "main"
+    path: ""

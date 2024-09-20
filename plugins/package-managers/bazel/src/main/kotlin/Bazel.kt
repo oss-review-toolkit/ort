@@ -31,6 +31,7 @@ import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.ArchiveOverride
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.ArchiveSourceInfo
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.BazelModuleRegistryService
+import org.ossreviewtoolkit.clients.bazelmoduleregistry.GitRepositorySourceInfo
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.LocalBazelModuleRegistryService
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.METADATA_JSON
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.ModuleMetadata
@@ -354,15 +355,15 @@ class Bazel(
         }
     }
 
-    private fun getPackage(id: Identifier, metadata: ModuleMetadata?, sourceInfo: ModuleSourceInfo?) =
+    private fun getPackage(id: Identifier, metadata: ModuleMetadata?, sourceInfo: ModuleSourceInfo?): Package =
         Package(
             id = id,
             declaredLicenses = emptySet(),
             description = "",
             homepageUrl = metadata?.homepage?.toString().orEmpty(),
             binaryArtifact = RemoteArtifact.EMPTY,
-            sourceArtifact = sourceInfo?.toRemoteArtifact().orEmpty(),
-            vcs = metadata?.toVcsInfo().orEmpty()
+            sourceArtifact = sourceInfo?.toRemoteArtifact() ?: RemoteArtifact.EMPTY,
+            vcs = sourceInfo?.toVcsInfo() ?: metadata?.toVcsInfo().orEmpty()
         )
 
     private fun getModuleMetadata(id: Identifier, registry: BazelModuleRegistryService): ModuleMetadata? =
@@ -432,6 +433,21 @@ class Bazel(
             linkage = PackageLinkage.STATIC,
             dependencies = dependencies.mapTo(mutableSetOf()) { it.toPackageReference(archiveOverrides) }
         )
+
+    /**
+     * Convert a module source info to a [VcsInfo] or return 'null' if the VCS is not relevant for this module.
+     */
+    private fun ModuleSourceInfo.toVcsInfo(): VcsInfo? =
+        when (this) {
+            is GitRepositorySourceInfo -> VcsInfo(
+                type = VcsType.GIT,
+                url = remote,
+                revision = commit.orEmpty(),
+                path = ""
+            )
+
+            is ArchiveSourceInfo -> null
+        }
 }
 
 private fun String.expandRepositoryUrl(): String = withoutPrefix("github:")?.let { "https://github.com/$it" } ?: this
@@ -444,7 +460,7 @@ private fun ModuleMetadata.toVcsInfo() =
         path = ""
     )
 
-private fun ModuleSourceInfo.toRemoteArtifact(): RemoteArtifact {
+private fun ModuleSourceInfo.toRemoteArtifact(): RemoteArtifact? {
     when (this) {
         is ArchiveSourceInfo -> {
             val (algo, b64digest) = integrity.split("-", limit = 2)
@@ -456,6 +472,12 @@ private fun ModuleSourceInfo.toRemoteArtifact(): RemoteArtifact {
             )
 
             return RemoteArtifact(url = url.toString(), hash = hash)
+        }
+
+        is GitRepositorySourceInfo -> {
+            // In case of a Git repository, no source artifact is available and the repository information will be used
+            // by the `vcs` and 'vcs_processed' properties.
+            return null
         }
     }
 }
