@@ -36,12 +36,14 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.Maven
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.getCommonParentFile
 import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
 import org.ossreviewtoolkit.utils.common.suppressInput
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.JavaBootstrapper
+import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 
 import org.semver4j.Semver
 
@@ -117,7 +119,7 @@ class Sbt(
                 logger.warn { "The build configures multiple different $managerName versions to be used: $sbtVersions" }
         }
 
-        val lowestSbtVersion = sbtVersion?.let { Semver(it) } ?: sbtVersions.firstOrNull()
+        val lowestSbtVersion = sbtVersion?.let { Semver(it) } ?: sbtVersions.firstOrNull() ?: getGlobalSbtVersion()
         require(lowestSbtVersion?.isLowerThan(Semver(LOWEST_SUPPORTED_SBT_VERSION)) != true) {
             "Build $managerName version $lowestSbtVersion is lower than version $LOWEST_SUPPORTED_SBT_VERSION."
         }
@@ -214,6 +216,27 @@ class Sbt(
         return versions
     }
 
+    private fun getGlobalSbtVersion(): Semver? {
+        // Avoid newer Sbt versions to warn about "Neither build.sbt nor a 'project' directory in the current directory"
+        // and prompt the user to continue or quit on Windows where the "-batch" option is not supported.
+        val dummyProjectDir = createOrtTempDir(managerName).apply {
+            resolve("project").mkdir()
+        }
+
+        val process = ProcessCapture(
+            command(),
+            *DEFAULT_SBT_OPTIONS.toTypedArray(),
+            "sbtVersion",
+            workingDir = dummyProjectDir
+        )
+
+        val versions = process.stdout.lines().mapNotNull { line ->
+            VERSION_REGEX.matchEntire(line)?.groupValues?.getOrNull(1)
+        }
+
+        return versions.firstOrNull()?.let { Semver(it) }
+    }
+
     override fun resolveDependencies(definitionFiles: List<File>, labels: Map<String, String>) =
         // Simply pass on the list of POM files to Maven, ignoring the SBT build files here.
         Maven(managerName, analysisRoot, analyzerConfig, repoConfig)
@@ -225,6 +248,10 @@ class Sbt(
         throw NotImplementedError()
 }
 
+// See https://github.com/sbt/sbt/blob/v1.5.1/launcher-package/integration-test/src/test/scala/RunnerTest.scala#L9.
+private const val SBT_VERSION_PATTERN = "\\d(\\.\\d+){2}(-\\w+)?"
+
+private val VERSION_REGEX = Regex("\\[info]\\s+($SBT_VERSION_PATTERN)")
 private val PROJECT_REGEX = Regex("\\[info] \t [ *] (\\S+)")
 private val POM_REGEX = Regex("\\[info] Wrote (.+\\.pom)")
 
