@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.packagemanagers.sbt
 import java.io.File
 import java.nio.file.StandardCopyOption
 import java.util.Properties
+import java.util.SortedSet
 
 import kotlin.io.path.moveTo
 
@@ -34,12 +35,16 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.Maven
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.common.alsoIfNull
 import org.ossreviewtoolkit.utils.common.getCommonParentFile
 import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
 import org.ossreviewtoolkit.utils.common.suppressInput
 
 import org.semver4j.Semver
+
+// We need at least sbt version 0.13.0 to be able to use "makePom" instead of the deprecated hyphenated
+// form "make-pom" and to support declaring Maven-style repositories, see
+// http://www.scala-sbt.org/0.13/docs/Publishing.html#Modifying+the+generated+POM.
+const val LOWEST_SUPPORTED_SBT_VERSION = "0.13.0"
 
 /**
  * The [SBT](https://www.scala-sbt.org/) package manager for Scala.
@@ -70,7 +75,22 @@ class Sbt(
 
         logger.info { "Determined '$workingDir' as the $managerName project root directory." }
 
-        checkConfiguredSbtVersions(workingDir)
+        val sbtVersions = getBuildSbtVersions(workingDir)
+        when {
+            sbtVersions.isEmpty() ->
+                logger.info { "The build does not configure any $managerName version to be used." }
+
+            sbtVersions.size == 1 ->
+                logger.info { "The build configures $managerName version ${sbtVersions.first()} to be used." }
+
+            else ->
+                logger.warn { "The build configures multiple different $managerName versions to be used: $sbtVersions" }
+        }
+
+        val lowestSbtVersion = sbtVersions.firstOrNull()
+        require(lowestSbtVersion?.isLowerThan(Semver(LOWEST_SUPPORTED_SBT_VERSION)) != true) {
+            "Build $managerName version $lowestSbtVersion is lower than version $LOWEST_SUPPORTED_SBT_VERSION."
+        }
 
         fun runSbt(vararg command: String) =
             suppressInput {
@@ -113,7 +133,7 @@ class Sbt(
         }
     }
 
-    private fun checkConfiguredSbtVersions(workingDir: File): Semver? {
+    private fun getBuildSbtVersions(workingDir: File): SortedSet<Semver> {
         // Determine the SBT version(s) being used.
         val propertiesFiles = workingDir.walkBottomUp().filterTo(mutableListOf()) {
             it.isFile && it.name == "build.properties"
@@ -127,27 +147,7 @@ class Sbt(
             props.getProperty("sbt.version")?.let { versions += Semver(it) }
         }
 
-        val lowestConfiguredSbtVersion = versions.firstOrNull().alsoIfNull {
-            logger.warn { "No $managerName version configured in any of: ${propertiesFiles.joinToString()}" }
-        }
-
-        if (versions.size == 1) {
-            logger.info { "Configured $managerName version: $lowestConfiguredSbtVersion" }
-        } else {
-            logger.warn { "Different $managerName versions found: ${versions.joinToString()}" }
-        }
-
-        // We need at least sbt version 0.13.0 to be able to use "makePom" instead of the deprecated hyphenated
-        // form "make-pom" and to support declaring Maven-style repositories, see
-        // http://www.scala-sbt.org/0.13/docs/Publishing.html#Modifying+the+generated+POM.
-        val lowestSupportedSbtVersion = Semver("0.13.0")
-
-        require(lowestConfiguredSbtVersion?.isLowerThan(lowestSupportedSbtVersion) != true) {
-            "Configured $managerName version $lowestConfiguredSbtVersion is lower than version " +
-                "$lowestSupportedSbtVersion."
-        }
-
-        return lowestConfiguredSbtVersion
+        return versions
     }
 
     override fun resolveDependencies(definitionFiles: List<File>, labels: Map<String, String>) =
