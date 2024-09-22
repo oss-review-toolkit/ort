@@ -24,26 +24,43 @@ import java.io.File
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
 
+data class EvaluatedModelReporterConfig(
+    /**
+     * Controls whether subtrees occurring multiple times in the dependency tree are stripped.
+     */
+    @OrtPluginOption(
+        defaultValue = "false"
+    )
+    val deduplicateDependencyTree: Boolean,
+
+    /**
+     * The list of file formats to generate, defaults to JSON. Supported formats are JSON and YAML.
+     */
+    @OrtPluginOption(
+        defaultValue = "JSON",
+        aliases = ["output.file.formats"]
+    )
+    val outputFileFormats: List<String>
+)
+
 /**
  * A [Reporter] that generates an [EvaluatedModel].
- *
- * This reporter supports the following options:
- * - *output.file.formats*: The list of [FileFormat]s to generate, defaults to [FileFormat.JSON].
- * - *deduplicateDependencyTree*: Controls whether subtrees occurring multiple times in the dependency tree are
- *   stripped.
  */
 @OrtPlugin(
     displayName = "Evaluated Model Reporter",
     description = "Generates an evaluated model of the ORT result.",
     factory = ReporterFactory::class
 )
-class EvaluatedModelReporter(override val descriptor: PluginDescriptor = EvaluatedModelReporterFactory.descriptor) :
-    Reporter {
+class EvaluatedModelReporter(
+    override val descriptor: PluginDescriptor = EvaluatedModelReporterFactory.descriptor,
+    private val config: EvaluatedModelReporterConfig
+) : Reporter {
     companion object {
         const val OPTION_OUTPUT_FILE_FORMATS = "output.file.formats"
 
@@ -55,15 +72,9 @@ class EvaluatedModelReporter(override val descriptor: PluginDescriptor = Evaluat
         outputDir: File,
         config: PluginConfiguration
     ): List<Result<File>> {
-        val evaluatedModel = EvaluatedModel.create(
-            input,
-            config.options[OPTION_DEDUPLICATE_DEPENDENCY_TREE].toBoolean()
-        )
+        val evaluatedModel = EvaluatedModel.create(input, this.config.deduplicateDependencyTree)
 
-        val outputFileFormats = config.options[OPTION_OUTPUT_FILE_FORMATS]
-            ?.split(',')
-            ?.mapTo(mutableSetOf()) { FileFormat.forExtension(it) }
-            ?: setOf(FileFormat.JSON)
+        val outputFileFormats = this.config.outputFileFormats.map { FileFormat.forExtension(it) }
 
         return outputFileFormats.map { fileFormat ->
             runCatching {
