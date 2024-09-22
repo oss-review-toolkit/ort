@@ -28,5 +28,9 @@ annotation class OrtPluginOption(
     /**
      * The default value of the option.
      */
-    val defaultValue: String
-)
+    val defaultValue: String = NO_DEFAULT_VALUE
+) {
+    companion object {
+        const val NO_DEFAULT_VALUE = "[NO_DEFAULT_VALUE]"
+    }
+}
