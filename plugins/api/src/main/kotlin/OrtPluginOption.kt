@@ -28,7 +28,13 @@ annotation class OrtPluginOption(
     /**
      * The default value of the option.
      */
-    val defaultValue: String = NO_DEFAULT_VALUE
+    val defaultValue: String = NO_DEFAULT_VALUE,
+
+    /**
+     * An array of alternative names for the option. This can be used to make renaming options backward-compatible.
+     * Aliases are tried in the order they are defined until a value is found.
+     */
+    val aliases: Array<String> = []
 ) {
     companion object {
         const val NO_DEFAULT_VALUE = "[NO_DEFAULT_VALUE]"
