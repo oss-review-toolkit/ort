@@ -139,7 +139,15 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
                         PluginOptionType.LONG -> add(" ?: %LL", defaultValue.toLong())
                         PluginOptionType.SECRET -> add(" ?: %T(%S)", Secret::class, defaultValue)
                         PluginOptionType.STRING -> add(" ?: %S", defaultValue)
-                        PluginOptionType.STRING_LIST -> add(" ?: %S", defaultValue)
+                        PluginOptionType.STRING_LIST -> {
+                            add(" ?: listOf(")
+
+                            defaultValue.split(",").forEach { value ->
+                                add("%S,", value.trim())
+                            }
+
+                            add(")")
+                        }
                     }
                 }
 
