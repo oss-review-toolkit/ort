@@ -26,7 +26,7 @@ import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.config.PluginConfiguration
+import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.test.getAssetAsString
@@ -54,7 +54,7 @@ class EvaluatedModelReporterFunTest : WordSpec({
             val ortResult = readOrtResult("src/funTest/assets/reporter-test-input.yml")
             val options = mapOf(
                 EvaluatedModelReporter.OPTION_OUTPUT_FILE_FORMATS to FileFormat.YAML.fileExtension,
-                EvaluatedModelReporter.OPTION_DEDUPLICATE_DEPENDENCY_TREE to "True"
+                EvaluatedModelReporter.OPTION_DEDUPLICATE_DEPENDENCY_TREE to "true"
             )
 
             generateReport(ortResult, options) shouldBe expectedResult
@@ -70,6 +70,6 @@ private fun TestConfiguration.generateReport(ortResult: OrtResult, options: Map<
 
     val outputDir = tempdir()
 
-    return EvaluatedModelReporter().generateReport(input, outputDir, PluginConfiguration(options))
+    return EvaluatedModelReporterFactory().create(PluginConfig(options)).generateReport(input, outputDir)
         .single().getOrThrow().readText().normalizeLineBreaks()
 }
