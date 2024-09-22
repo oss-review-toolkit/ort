@@ -174,6 +174,7 @@ class PluginSpecFactory {
                 description = prop.docString?.trim().orEmpty(),
                 type = type,
                 defaultValue = defaultValue,
+                aliases = annotation?.aliases?.asList().orEmpty(),
                 isRequired = !paramType.isMarkedNullable && defaultValue == null
             )
         }
