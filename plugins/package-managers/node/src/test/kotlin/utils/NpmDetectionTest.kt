@@ -242,7 +242,7 @@ class NpmDetectionTest : WordSpec({
         }
 
         "parse workspace files" {
-            val projectDir = getAssetFile("projects/synthetic/yarn2-workspaces")
+            val projectDir = getAssetFile("projects/synthetic/yarn2/workspaces")
 
             YARN2.getWorkspaces(projectDir) shouldNotBeNull {
                 mapNotNull { it.withoutPrefix(projectDir.path) }.shouldContainExactly("/packages/**")
@@ -256,8 +256,8 @@ class NpmDetectionTest : WordSpec({
             val filteredFiles = NpmDetection(definitionFiles).filterApplicable(YARN2)
 
             filteredFiles.map { it.toRelativeString(projectDir) } shouldContainExactlyInAnyOrder listOf(
-                "yarn2-project-with-lockfile/package.json",
-                "yarn2-workspaces/package.json"
+                "yarn2/project-with-lockfile/package.json",
+                "yarn2/workspaces/package.json"
             )
         }
     }
