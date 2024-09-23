@@ -33,7 +33,7 @@ class Yarn2FunTest : WordSpec({
     "Yarn 2" should {
         "resolve dependencies for a project with lockfile correctly" {
             val definitionFile = getAssetFile("projects/synthetic/yarn2/project-with-lockfile/package.json")
-            val expectedResultFile = getAssetFile("projects/synthetic/yarn2-project-with-lockfile-expected-output.yml")
+            val expectedResultFile = getAssetFile("projects/synthetic/yarn2/project-with-lockfile-expected-output.yml")
 
             val result = create("Yarn2").resolveSingleProject(definitionFile, resolveScopes = true)
 
@@ -43,7 +43,7 @@ class Yarn2FunTest : WordSpec({
         "resolved dependencies for a project with lockfile correctly and skip excluded scopes" {
             val definitionFile = getAssetFile("projects/synthetic/yarn2/project-with-lockfile/package.json")
             val expectedResultFile = getAssetFile(
-                "projects/synthetic/yarn2-project-with-lockfile-skip-excluded-scopes-expected-output.yml"
+                "projects/synthetic/yarn2/project-with-lockfile-skip-excluded-scopes-expected-output.yml"
             )
 
             val result = create("Yarn2", excludedScopes = setOf("devDependencies"))
@@ -54,7 +54,7 @@ class Yarn2FunTest : WordSpec({
 
         "resolve dependencies for a workspaces project correctly" {
             val definitionFile = getAssetFile("projects/synthetic/yarn2/workspaces/package.json")
-            val expectedResultFile = getAssetFile("projects/synthetic/yarn2-workspaces-expected-output.yml")
+            val expectedResultFile = getAssetFile("projects/synthetic/yarn2/workspaces-expected-output.yml")
 
             val result = create("Yarn2").collateMultipleProjects(definitionFile).withResolvedScopes()
 

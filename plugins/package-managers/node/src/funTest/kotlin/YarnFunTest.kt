@@ -32,7 +32,7 @@ class YarnFunTest : WordSpec({
     "yarn" should {
         "resolve dependencies correctly" {
             val definitionFile = getAssetFile("projects/synthetic/yarn/project-with-lockfile/package.json")
-            val expectedResultFile = getAssetFile("projects/synthetic/yarn-project-with-lockfile-expected-output.yml")
+            val expectedResultFile = getAssetFile("projects/synthetic/yarn/project-with-lockfile-expected-output.yml")
 
             val result = create("Yarn").resolveSingleProject(definitionFile, resolveScopes = true)
 
@@ -43,7 +43,7 @@ class YarnFunTest : WordSpec({
             // This test case illustrates the lack of Yarn workspaces support, in particular not all workspace
             // dependencies get assigned to a scope.
             val definitionFile = getAssetFile("projects/synthetic/yarn/workspaces/package.json")
-            val expectedResultFile = getAssetFile("projects/synthetic/yarn-workspaces-expected-output.yml")
+            val expectedResultFile = getAssetFile("projects/synthetic/yarn/workspaces-expected-output.yml")
 
             val result = create("Yarn").resolveSingleProject(definitionFile, resolveScopes = true)
 

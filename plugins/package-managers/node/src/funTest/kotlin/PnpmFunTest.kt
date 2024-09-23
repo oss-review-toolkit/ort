@@ -34,7 +34,7 @@ class PnpmFunTest : WordSpec({
     "Pnpm" should {
         "resolve dependencies for a project with lockfile correctly" {
             val definitionFile = getAssetFile("projects/synthetic/pnpm/project-with-lockfile/package.json")
-            val expectedResultFile = getAssetFile("projects/synthetic/pnpm-project-with-lockfile-expected-output.yml")
+            val expectedResultFile = getAssetFile("projects/synthetic/pnpm/project-with-lockfile-expected-output.yml")
 
             val result = create("PNPM").resolveSingleProject(definitionFile, resolveScopes = true)
 
@@ -43,7 +43,7 @@ class PnpmFunTest : WordSpec({
 
         "resolve dependencies correctly in a workspaces project" {
             val definitionFile = getAssetFile("projects/synthetic/pnpm/workspaces/packages.json")
-            val expectedResultFile = getAssetFile("projects/synthetic/pnpm-workspaces-expected-output.yml")
+            val expectedResultFile = getAssetFile("projects/synthetic/pnpm/workspaces-expected-output.yml")
 
             val result = analyze(definitionFile.parentFile, packageManagers = setOf(Pnpm.Factory()))
 
