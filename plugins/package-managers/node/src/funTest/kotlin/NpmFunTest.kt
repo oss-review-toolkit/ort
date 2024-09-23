@@ -42,7 +42,7 @@ class NpmFunTest : WordSpec({
     "NPM" should {
         "resolve dependencies for a project with a 'shrinkwrap.json' correctly" {
             val definitionFile = getAssetFile("projects/synthetic/npm/shrinkwrap/package.json")
-            val expectedResultFile = getAssetFile("projects/synthetic/npm-expected-output.yml")
+            val expectedResultFile = getAssetFile("projects/synthetic/npm-shrinkwrap-expected-output.yml")
 
             val result = create("NPM").resolveSingleProject(definitionFile, resolveScopes = true)
 
@@ -68,7 +68,7 @@ class NpmFunTest : WordSpec({
 
         "resolve package-lock dependencies correctly" {
             val definitionFile = getAssetFile("projects/synthetic/npm/package-lock/package.json")
-            val expectedResultFile = getAssetFile("projects/synthetic/npm-expected-output.yml")
+            val expectedResultFile = getAssetFile("projects/synthetic/npm-package-lock-expected-output.yml")
 
             val result = create("NPM").resolveSingleProject(definitionFile, resolveScopes = true)
 
@@ -106,7 +106,7 @@ class NpmFunTest : WordSpec({
 
         "resolve dependencies even if the 'node_modules' directory already exists" {
             val definitionFile = getAssetFile("projects/synthetic/npm/node-modules/package.json")
-            val expectedResultFile = getAssetFile("projects/synthetic/npm-expected-output.yml")
+            val expectedResultFile = getAssetFile("projects/synthetic/npm-node-modules-expected-output.yml")
 
             val result = create("NPM").resolveSingleProject(definitionFile, resolveScopes = true)
 
