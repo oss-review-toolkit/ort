@@ -226,20 +226,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"npm-yarn@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "npm-yarn@workspace:."
-  dependencies:
-    cheerio: 1.0.0-rc.1
-    cson: ~4.1.0
-    long: ^3.2.0
-    promise: ~7.3.1
-  dependenciesMeta:
-    promise:
-      optional: true
-  languageName: unknown
-  linkType: soft
-
 "nth-check@npm:~1.0.1":
   version: 1.0.2
   resolution: "nth-check@npm:1.0.2"
@@ -337,3 +323,17 @@ __metadata:
   checksum: 474acf1146cb2701fe3b074892217553dfcf9a031280919ba1b8d651a068c9b15d863b7303cb15bd00a862b498e6cf4ad7b4a08fb134edd5a6f7641681cb54a2
   languageName: node
   linkType: hard
+
+"yarn2-package-with-lockfile@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "yarn2-package-with-lockfile@workspace:."
+  dependencies:
+    cheerio: 1.0.0-rc.1
+    cson: ~4.1.0
+    long: ^3.2.0
+    promise: ~7.3.1
+  dependenciesMeta:
+    promise:
+      optional: true
+  languageName: unknown
+  linkType: soft
