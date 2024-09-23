@@ -58,7 +58,9 @@ class NpmFunTest : WordSpec({
 
         "exclude scopes if configured" {
             val definitionFile = getAssetFile("projects/synthetic/npm/shrinkwrap/package.json")
-            val expectedResultFile = getAssetFile("projects/synthetic/npm-expected-output-scope-excludes.yml")
+            val expectedResultFile = getAssetFile(
+                "projects/synthetic/npm-shrinkwrap-skip-excluded-scopes-expected-output.yml"
+            )
 
             val result = create("NPM", excludedScopes = setOf("devDependencies"))
                 .resolveSingleProject(definitionFile, resolveScopes = true)
@@ -84,7 +86,7 @@ class NpmFunTest : WordSpec({
 
         "show an error if no lockfile is present" {
             val definitionFile = getAssetFile("projects/synthetic/npm/no-lockfile/package.json")
-            val expectedResultFile = getAssetFile("projects/synthetic/npm-expected-output-no-lockfile.yml")
+            val expectedResultFile = getAssetFile("projects/synthetic/npm-no-lockfile-expected-output.yml")
 
             val result = create("NPM").resolveSingleProject(definitionFile)
 
