@@ -1,5 +1,5 @@
 {
-  "name": "pnpm-test",
+  "name": "pnpm-package-with-lockfile",
   "version": "1.0.0",
   "description": "PNPM project with pnpm-lock.yaml.",
   "repository": {

@@ -32,9 +32,9 @@ import org.ossreviewtoolkit.utils.test.patchActualResult
 
 class PnpmFunTest : WordSpec({
     "Pnpm" should {
-        "resolve dependencies correctly in a simple project" {
-            val definitionFile = getAssetFile("projects/synthetic/pnpm/package.json")
-            val expectedResultFile = getAssetFile("projects/synthetic/pnpm-expected-output.yml")
+        "resolve dependencies for a project with lockfile correctly" {
+            val definitionFile = getAssetFile("projects/synthetic/pnpm-project-with-lockfile/package.json")
+            val expectedResultFile = getAssetFile("projects/synthetic/pnpm-project-with-lockfile-expected-output.yml")
 
             val result = create("PNPM").resolveSingleProject(definitionFile, resolveScopes = true)
 
