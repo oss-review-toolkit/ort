@@ -298,14 +298,24 @@
     {
         "schema_version": "1.6.0",
         "id": "GHSA-fqh9-2qgg-h84h",
-        "modified": "2023-11-08T03:57:29.971954Z",
+        "modified": "2024-09-23T20:03:14.751414Z",
         "published": "2022-05-17T04:01:00Z",
         "aliases": [
             "CVE-2014-0012",
             "PYSEC-2014-82"
         ],
         "summary": "Insecure Temporary File in Jinja2",
-        "details": "FileSystemBytecodeCache in Jinja2 2.7.2 does not properly create temporary directories, which allows local users to gain privileges by pre-creating a temporary directory with a user's uid.  NOTE: this vulnerability exists because of an incomplete fix for CVE-2014-1402.",
+        "details": "FileSystemBytecodeCache in Jinja2 prior to version 2.7.2 does not properly create temporary directories, which allows local users to gain privileges by pre-creating a temporary directory with a user's uid. NOTE: this vulnerability exists because of an incomplete fix for CVE-2014-1402.",
+        "severity": [
+            {
+                "type": "CVSS_V3",
+                "score": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N"
+            },
+            {
+                "type": "CVSS_V4",
+                "score": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:N/VC:N/VI:H/VA:N/SC:N/SI:N/SA:N"
+            }
+        ],
         "affected": [
             {
                 "package": {
@@ -359,6 +369,14 @@
             },
             {
                 "type": "WEB",
+                "url": "https://github.com/mitsuhiko/jinja2/pull/292"
+            },
+            {
+                "type": "WEB",
+                "url": "https://github.com/mitsuhiko/jinja2/pull/296"
+            },
+            {
+                "type": "WEB",
                 "url": "https://github.com/pallets/jinja2/pull/292"
             },
             {
@@ -367,7 +385,15 @@
             },
             {
                 "type": "WEB",
+                "url": "https://github.com/mitsuhiko/jinja2/commit/acb672b6a179567632e032f547582f30fa2f4aa7"
+            },
+            {
+                "type": "WEB",
                 "url": "https://github.com/pallets/jinja/commit/acb672b6a179567632e032f547582f30fa2f4aa7"
+            },
+            {
+                "type": "WEB",
+                "url": "https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=734747"
             },
             {
                 "type": "WEB",
@@ -379,6 +405,10 @@
             },
             {
                 "type": "WEB",
+                "url": "https://github.com/pypa/advisory-database/tree/main/vulns/jinja2/PYSEC-2014-82.yaml"
+            },
+            {
+                "type": "WEB",
                 "url": "http://seclists.org/oss-sec/2014/q1/73"
             },
             {
@@ -387,12 +417,12 @@
             }
         ],
         "database_specific": {
+            "github_reviewed_at": "2023-02-14T00:58:39Z",
+            "github_reviewed": true,
+            "severity": "MODERATE",
             "cwe_ids": [
                 "CWE-377"
             ],
-            "github_reviewed": true,
-            "severity": "MODERATE",
-            "github_reviewed_at": "2023-02-14T00:58:39Z",
             "nvd_published_at": "2014-05-19T14:55:00Z"
         }
     },
