@@ -31,6 +31,8 @@ jobs:
           fetch-depth: 0
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@d156388eb19639ec20ade50009f3d199ce1e2808 # v4
+        with:
+          dependency-graph: generate-and-submit
       - name: Publish to OSSRH
         env:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.OSSRH_USERNAME }}
