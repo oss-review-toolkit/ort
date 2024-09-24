@@ -80,7 +80,8 @@ class Yarn(
         // fixed minor version to be sure to get consistent results.
         checkVersion()
 
-    override fun runInstall(workingDir: File) = run(workingDir, "install", "--ignore-scripts", "--ignore-engines")
+    override fun runInstall(workingDir: File) =
+        run(workingDir, "install", "--ignore-scripts", "--ignore-engines", "--immutable")
 
     override fun getRemotePackageDetails(workingDir: File, packageName: String): PackageJson {
         yarnInfoCache.read(packageName)?.let { return parsePackageJson(it) }
