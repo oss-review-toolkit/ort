@@ -84,7 +84,7 @@ private val EXTRACT_FROM_LOCATOR_PATTERN = Regex("(.+)@(\\w+):(.+)")
 /**
  * The amount of package details to query at once with `yarn npm info`.
  */
-private const val BULK_DETAILS_SIZE = 1000
+private const val YARN_NPM_INFO_CHUNK_SIZE = 1000
 
 /**
  * The name of the manifest file used by Yarn 2+.
@@ -266,7 +266,7 @@ class Yarn2(
 
         val chunks = packagesHeaders.filterValues { it.type != "workspace" }.values.map {
             "${it.rawName}@${it.version.cleanVersionString()}"
-        }.chunked(BULK_DETAILS_SIZE)
+        }.chunked(YARN_NPM_INFO_CHUNK_SIZE)
 
         return runBlocking(Dispatchers.IO) {
             chunks.mapIndexed { index, chunk ->
