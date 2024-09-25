@@ -587,31 +587,46 @@ class Scanner(
             }
         }
 
-        return try {
-            scanners.associateWith { scanner ->
-                logger.info { "Scan of $provenance with path scanner '${scanner.name}' started." }
+        val results = scanners.associateWith { scanner ->
+            logger.info { "Scan of $provenance with path scanner '${scanner.name}' started." }
 
-                // Filter the scan context to hide the excludes from scanner with scan matcher.
-                val filteredContext = if (scanner.matcher == null) context else context.copy(excludes = null)
-                val summary = scanner.scanPath(downloadDir, filteredContext)
+            // Filter the scan context to hide the excludes from scanner with scan matcher.
+            val filteredContext = if (scanner.matcher == null) context else context.copy(excludes = null)
 
-                logger.info { "Scan of $provenance with path scanner '${scanner.name}' finished." }
-
-                val summaryWithMappedLicenses = summary.copy(
-                    licenseFindings = summary.licenseFindings.mapTo(mutableSetOf()) {
-                        val licenseString = it.license.toString()
-                        it.copy(
-                            license = licenseString.mapLicense(scannerConfig.detectedLicenseMapping).toSpdx(),
-                            location = it.location.withRelativePath(downloadDir)
-                        )
-                    }
+            val summary = runCatching {
+                scanner.scanPath(downloadDir, filteredContext)
+            }.getOrElse { e ->
+                val issue = createAndLogIssue(
+                    scanner.name,
+                    "Failed to scan $provenance with path scanner '${scanner.name}': ${e.collectMessages()}"
                 )
 
-                ScanResult(provenance, scanner.details, summaryWithMappedLicenses)
+                val time = Instant.now()
+                ScanSummary(
+                    startTime = time,
+                    endTime = time,
+                    issues = listOf(issue)
+                )
             }
-        } finally {
-            downloadDir.safeDeleteRecursively()
+
+            logger.info { "Scan of $provenance with path scanner '${scanner.name}' finished." }
+
+            val summaryWithMappedLicenses = summary.copy(
+                licenseFindings = summary.licenseFindings.mapTo(mutableSetOf()) {
+                    val licenseString = it.license.toString()
+                    it.copy(
+                        license = licenseString.mapLicense(scannerConfig.detectedLicenseMapping).toSpdx(),
+                        location = it.location.withRelativePath(downloadDir)
+                    )
+                }
+            )
+
+            ScanResult(provenance, scanner.details, summaryWithMappedLicenses)
         }
+
+        downloadDir.safeDeleteRecursively()
+
+        return results
     }
 
     private fun storeProvenanceScanResult(provenance: KnownProvenance, scanResult: ScanResult) {
