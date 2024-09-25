@@ -102,6 +102,7 @@ class ScanCodeTest : WordSpec({
 
             val process = mockk<ProcessCapture>()
             every { process.isError } returns true
+            every { process.stdout } returns ""
             every { process.stderr } returns "some error"
 
             val scannerSpy = spyk(scanner)

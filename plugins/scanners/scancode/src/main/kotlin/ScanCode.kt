@@ -149,6 +149,7 @@ class ScanCode internal constructor(
         return with(process) {
             // Do not throw yet if the process exited with an error as some errors might turn out to be tolerable during
             // parsing.
+            if (isError && stdout.isNotBlank()) logger.debug { stdout }
             if (stderr.isNotBlank()) logger.debug { stderr }
 
             resultFile.readText().also { resultFile.parentFile.safeDeleteRecursively() }
