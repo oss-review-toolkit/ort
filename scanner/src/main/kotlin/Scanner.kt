@@ -571,9 +571,10 @@ class Scanner(
                 "Downloader", "Could not download provenance $provenance: ${e.collectMessages()}"
             )
 
+            val time = Instant.now()
             val summary = ScanSummary(
-                startTime = Instant.now(),
-                endTime = Instant.now(),
+                startTime = time,
+                endTime = time,
                 issues = listOf(issue)
             )
 
