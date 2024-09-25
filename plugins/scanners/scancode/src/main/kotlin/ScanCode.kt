@@ -147,10 +147,9 @@ class ScanCode internal constructor(
         val process = runScanCode(path, resultFile)
 
         return with(process) {
-            if (stderr.isNotBlank()) logger.debug { stderr }
-
             // Do not throw yet if the process exited with an error as some errors might turn out to be tolerable during
             // parsing.
+            if (stderr.isNotBlank()) logger.debug { stderr }
 
             resultFile.readText().also { resultFile.parentFile.safeDeleteRecursively() }
         }
