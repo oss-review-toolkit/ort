@@ -57,10 +57,12 @@ import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.MavenSupport
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.identifier
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.temporaryProperties
 import org.ossreviewtoolkit.utils.common.unquote
+import org.ossreviewtoolkit.utils.ort.JavaBootstrapper
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 
 import org.semver4j.Semver
@@ -79,6 +81,10 @@ private const val JAVA_MAX_HEAP_SIZE_VALUE = "8g"
  * This package manager supports the following [options][PackageManagerConfiguration.options]:
  * - *gradleVersion*: The version of Gradle to use when analyzing projects. Defaults to the version defined in the
  *   Gradle wrapper properties.
+ * - *javaVersion*: The version of Java to use when analyzing projects. By default, the same Java version as for ORT
+ *   itself it used. Overrides `javaHome` if both are specified.
+ * - *javaHome*: The directory of the Java home to use when analyzing projects. By default, the same Java home as for
+ *   ORT itself is used.
  */
 class Gradle(
     name: String,
@@ -91,6 +97,16 @@ class Gradle(
          * The name of the option to specify the Gradle version.
          */
         const val OPTION_GRADLE_VERSION = "gradleVersion"
+
+        /**
+         * The name of the option to specify the Java version to use.
+         */
+        const val OPTION_JAVA_VERSION = "javaVersion"
+
+        /**
+         * The name of the option to specify the Java home to use.
+         */
+        const val OPTION_JAVA_HOME = "javaHome"
     }
 
     class Factory : AbstractPackageManagerFactory<Gradle>("Gradle", isEnabledByDefault = false) {
@@ -220,11 +236,26 @@ class Gradle(
 
                 logger.info { "The project at '$projectDir' uses Gradle version $buildGradleVersion." }
 
+                val issues = mutableListOf<Issue>()
+
                 val dependencyTreeModel = connection.model(OrtDependencyTreeModel::class.java)
                     .apply {
                         // Work around https://github.com/gradle/gradle/issues/28464.
                         if (logger.delegate.isDebugEnabled && buildGradleVersion?.isEqualTo("8.5.0") != true) {
                             addProgressListener(ProgressListener { logger.debug(it.displayName) })
+                        }
+
+                        val javaHome = options[OPTION_JAVA_VERSION]
+                            ?.takeUnless { JavaBootstrapper.isRunningOnJdk(it) }
+                            ?.let {
+                                JavaBootstrapper.installJdk("TEMURIN", it)
+                                    .onFailure { e -> issues += createAndLogIssue(managerName, e.collectMessages()) }
+                                    .getOrNull()
+                            } ?: options[OPTION_JAVA_HOME]?.let { File(it) }
+
+                        javaHome?.also {
+                            logger.info { "Setting Java home for project analysis to '$it'." }
+                            setJavaHome(it)
                         }
                     }
                     .addJvmArguments(jvmArgs)
@@ -289,8 +320,6 @@ class Gradle(
                     homepageUrl = "",
                     scopeNames = graphBuilder.scopesFor(projectId)
                 )
-
-                val issues = mutableListOf<Issue>()
 
                 dependencyTreeModel.errors.mapTo(issues) {
                     createAndLogIssue(source = managerName, message = it, severity = Severity.ERROR)
