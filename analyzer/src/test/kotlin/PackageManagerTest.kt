@@ -26,6 +26,34 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 
 class PackageManagerTest : WordSpec({
+    "parseAuthorString()" should {
+        "return the name, email, and URL" {
+            parseAuthorString("Brandon Alexander <baalexander@gmail.com> (https://github.com/baalexander)") shouldBe
+                AuthorInfo("Brandon Alexander", "baalexander@gmail.com", "https://github.com/baalexander")
+        }
+
+        "work if any property is not present" {
+            parseAuthorString("Brandon Alexander <baalexander@gmail.com>") shouldBe
+                AuthorInfo("Brandon Alexander", "baalexander@gmail.com", null)
+
+            parseAuthorString("Brandon Alexander") shouldBe
+                AuthorInfo("Brandon Alexander", null, null)
+
+            parseAuthorString("") shouldBe
+                AuthorInfo(null, null, null)
+        }
+
+        "work for mixed strings" {
+            parseAuthorString("Nuxi (https://nuxi.nl/) and contributors") shouldBe
+                AuthorInfo("Nuxi and contributors", null, "https://nuxi.nl/")
+        }
+
+        "return the full string as the name if no email or homepage is matched" {
+            parseAuthorString("Brandon Alexander baalexander@gmail.com https://github.com/baalexander") shouldBe
+                AuthorInfo("Brandon Alexander baalexander@gmail.com https://github.com/baalexander", null, null)
+        }
+    }
+
     "processPackageVcs()" should {
         "split a GitHub browsing URL into its components" {
             val vcsFromPackage = VcsInfo(

@@ -434,8 +434,7 @@ class Conan(
      * Parse information about the package author from the given [package info][pkgInfo]. If present, return a set
      * containing the author name; otherwise, return an empty set.
      */
-    private fun parseAuthors(pkgInfo: PackageInfo): Set<String> =
-        setOfNotNull(parseAuthorString(pkgInfo.author.orEmpty(), '<', '('))
+    private fun parseAuthors(pkgInfo: PackageInfo): Set<String> = setOfNotNull(parseAuthorString(pkgInfo.author).name)
 }
 
 private data class ConanData(
