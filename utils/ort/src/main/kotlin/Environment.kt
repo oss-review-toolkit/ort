@@ -42,7 +42,7 @@ data class Environment(
     /**
      * The version of Java used to run ORT.
      */
-    val javaVersion: String = System.getProperty("java.version"),
+    val javaVersion: String = JAVA_VERSION,
 
     /**
      * Name of the operating system, defaults to [Os.name].
@@ -86,8 +86,13 @@ data class Environment(
                 JarFile(codeSource?.location?.file).use {
                     it.manifest.mainAttributes.getValue("Build-Jdk")
                 }
-            }.getOrDefault(System.getProperty("java.version"))
+            }.getOrDefault(JAVA_VERSION)
         }
+
+        /**
+         * The version of Java used to run ORT.
+         */
+        val JAVA_VERSION: String by lazy { System.getProperty("java.version") }
 
         /**
          * A string that is supposed to be used as the User Agent when using ORT as an HTTP client.

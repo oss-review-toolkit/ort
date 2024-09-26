@@ -135,7 +135,7 @@ fun patchActualResult(
 
     return custom.entries.fold(result) { text, (pattern, replacement) -> text.replace(pattern.toRegex(), replacement) }
         .replace(ORT_VERSION_REGEX) { "${it.groupValues[1]}: \"HEAD\"" }
-        .replace(JAVA_VERSION_REGEX) { "${it.groupValues[1]}: \"${System.getProperty("java.version")}\"" }
+        .replace(JAVA_VERSION_REGEX) { "${it.groupValues[1]}: \"${Environment.JAVA_VERSION}\"" }
         .replace(ENV_VAR_REGEX) { "${it.groupValues[1]} {}" }
         .replace(ENV_TOOL_REGEX) { "${it.groupValues[1]} {}" }
         .replace(TIMESTAMP_REGEX) { "${it.groupValues[1]}: \"${Instant.EPOCH}\"" }

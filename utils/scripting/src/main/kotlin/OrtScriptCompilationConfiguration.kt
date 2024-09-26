@@ -41,7 +41,7 @@ import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 
 class OrtScriptCompilationConfiguration : ScriptCompilationConfiguration({
-    compilerOptions("-jvm-target", Environment().javaVersion.substringBefore('.'))
+    compilerOptions("-jvm-target", Environment.JAVA_VERSION.substringBefore('.'))
 
     defaultImports(
         "org.apache.logging.log4j.kotlin.logger",
