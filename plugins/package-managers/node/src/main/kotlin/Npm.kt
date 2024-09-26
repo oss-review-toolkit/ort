@@ -279,7 +279,7 @@ open class Npm(
         val version = packageJson.version ?: NON_EXISTING_SEMVER
 
         val declaredLicenses = packageJson.licenses.mapNpmLicenses()
-        val authors = parseNpmAuthor(packageJson.author)
+        val authors = parseNpmAuthor(packageJson.authors.firstOrNull()) // TODO: parse all authors.
 
         var description = packageJson.description.orEmpty()
         var homepageUrl = packageJson.homepage.orEmpty()
@@ -542,7 +542,7 @@ open class Npm(
         }
 
         val declaredLicenses = packageJson.licenses.mapNpmLicenses()
-        val authors = parseNpmAuthor(packageJson.author)
+        val authors = parseNpmAuthor(packageJson.authors.firstOrNull()) // TODO: parse all authors.
         val homepageUrl = packageJson.homepage.orEmpty()
         val projectDir = packageJsonFile.parentFile
         val vcsFromPackage = parseNpmVcsInfo(packageJson)

@@ -530,7 +530,7 @@ class Yarn2(
         val description = packageJson.description.orEmpty()
         val vcsFromPackage = parseNpmVcsInfo(packageJson)
         val homepage = packageJson.homepage.orEmpty()
-        val author = parseNpmAuthor(packageJson.author)
+        val author = parseNpmAuthor(packageJson.authors.firstOrNull())
         val downloadUrl = packageJson.dist?.tarball.orEmpty().fixNpmDownloadUrl()
 
         val hash = Hash.create(packageJson.dist?.shasum.orEmpty())
