@@ -30,12 +30,12 @@ import org.ossreviewtoolkit.utils.common.Os
  */
 data class Environment(
     /**
-     * The version of ORT used.
+     * The version of the OSS Review Toolkit as a string.
      */
     val ortVersion: String = ORT_VERSION,
 
     /**
-     * The JDK version ORT was built with.
+     * The version of Java used to build ORT.
      */
     val buildJdk: String = BUILD_JDK,
 
