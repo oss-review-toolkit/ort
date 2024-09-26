@@ -41,7 +41,6 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.getCommonParentFile
 import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
 import org.ossreviewtoolkit.utils.common.suppressInput
-import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.JavaBootstrapper
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 
@@ -127,12 +126,10 @@ class Sbt(
         // TODO: Consider auto-detecting the Java version based on the SBT version. See:
         //       https://docs.scala-lang.org/overviews/jdk-compatibility/overview.html#build-tool-compatibility-table
         val javaHome = options[OPTION_JAVA_VERSION]?.let {
-            val requestedVersion = Semver.coerce(it)
-            val runningVersion = Semver.coerce(Environment.JAVA_VERSION)
-            if (requestedVersion != runningVersion) {
+            if (!JavaBootstrapper.isRunningOnJdk(it)) {
                 JavaBootstrapper.installJdk("TEMURIN", it)
                     .onFailure { e ->
-                        logger.error { "Failed to bootstrap JDK version $requestedVersion: ${e.collectMessages()}" }
+                        logger.error { "Failed to bootstrap JDK version $it: ${e.collectMessages()}" }
                     }.getOrNull()
             } else {
                 null

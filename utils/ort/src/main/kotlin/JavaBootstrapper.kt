@@ -41,6 +41,8 @@ import org.apache.logging.log4j.kotlin.logger
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.unpack
 
+import org.semver4j.Semver
+
 object JavaBootstrapper {
     private val discoClient by lazy { DiscoClient(Environment.ORT_USER_AGENT) }
 
@@ -49,6 +51,15 @@ object JavaBootstrapper {
      */
     private fun File.singleContainedDirectoryOrThis() =
         walk().maxDepth(1).filter { it != this && it.isDirectory }.singleOrNull() ?: this
+
+    /**
+     * Return whether ORT is running on a JDK (not JRE) of the specified [version].
+     */
+    fun isRunningOnJdk(version: String): Boolean {
+        val requestedVersion = Semver.coerce(version)
+        val runningVersion = Semver.coerce(Environment.JAVA_VERSION)
+        return requestedVersion == runningVersion
+    }
 
     /**
      * Install a JDK matching [distributionName] and [version] below [ortToolsDirectory] and return its directory on
