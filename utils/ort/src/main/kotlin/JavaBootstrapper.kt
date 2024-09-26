@@ -38,6 +38,7 @@ import kotlin.time.measureTimedValue
 
 import org.apache.logging.log4j.kotlin.logger
 
+import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.unpack
 
@@ -58,7 +59,11 @@ object JavaBootstrapper {
     fun isRunningOnJdk(version: String): Boolean {
         val requestedVersion = Semver.coerce(version)
         val runningVersion = Semver.coerce(Environment.JAVA_VERSION)
-        return requestedVersion == runningVersion
+        if (requestedVersion != runningVersion) return false
+
+        val javaHome = System.getProperty("java.home") ?: return false
+        val javac = File(javaHome).resolve("bin").resolve("javac")
+        return Os.resolveExecutable(javac) != null
     }
 
     /**
