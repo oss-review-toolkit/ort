@@ -16,34 +16,13 @@
 # License-Filename: LICENSE
 
 name: "Free Disk Space"
-description: "Remove unneeded preinstalled Docker images and software to free disk space."
+description: "Remove unneeded software to free disk space."
 author: "The ORT Project Authors"
 
 runs:
   using: "composite"
 
   steps:
-    - name: Print Disk Space
-      shell: bash
-      run: df -h
-    - name: List Docker Images
-      if: ${{ false }} # Can be enabled if the 'Remove Unneeded Docker Images' step below needs to be updated.
-      shell: bash
-      run: docker images
-    - name: Remove Unneeded Docker Images
-      shell: bash
-      run: |
-        docker image rm \
-          node:16 \
-          node:16-alpine \
-          node:18 \
-          node:18-alpine \
-          node:20 \
-          node:20-alpine \
-          debian:10 \
-          debian:11 \
-          ubuntu:20.04 \
-          ubuntu:22.04
     - name: Print Disk Space
       shell: bash
       run: df -h
@@ -59,18 +38,22 @@ runs:
     - name: Remove Unneeded Tools
       shell: bash
       run: |
+        sudo rm -rf /usr/lib/dotnet
+        sudo rm -rf /usr/lib/firefox
+        sudo rm -rf /usr/local/aws-cli
+        sudo rm -rf /usr/local/aws-sam-cli
         sudo rm -rf /usr/local/lib/android
         sudo rm -rf /usr/local/lib/node_modules
         sudo rm -rf /usr/local/share/chromium
         sudo rm -rf /usr/local/share/powershell
-        sudo rm -rf /usr/share/az_11.3.1
-        sudo rm -rf /usr/share/dotnet
+        sudo rm -rf /usr/local/share/vcpkg
+        sudo rm -rf /usr/share/az_12.1.0
         sudo rm -rf /usr/share/kotlinc
         sudo rm -rf /usr/share/mecab
         sudo rm -rf /usr/share/miniconda
         sudo rm -rf /usr/share/ri
-        sudo rm -rf /usr/share/sbt
         sudo rm -rf /usr/share/swift
+        sudo rm -rf /usr/share/vim
     - name: Print Disk Space
       shell: bash
       run: df -h

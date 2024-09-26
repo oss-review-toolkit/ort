@@ -15,7 +15,7 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
     - name: Checkout Repository
       uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
@@ -25,7 +25,7 @@ jobs:
       run: ./gradlew classes
   codeql-analysis:
     needs: build
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     permissions:
       # Needed for SARIF scanning upload.
       security-events: write
@@ -44,7 +44,7 @@ jobs:
       uses: github/codeql-action/analyze@461ef6c76dfe95d5c364de2f431ddbd31a417628 # v3
   test:
     needs: build
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
     - name: Checkout Repository
       uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
@@ -64,7 +64,7 @@ jobs:
         flags: test
   funTest-non-docker:
     needs: build
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
     - name: Checkout Repository
       uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
@@ -96,7 +96,7 @@ jobs:
 
           # Install ScanCode for license texts.
           curl -Os https://raw.githubusercontent.com/nexB/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt
-          pip install --no-cache-dir --constraint requirements.txt scancode-toolkit==$SCANCODE_VERSION
+          pipx install --pip-args="--no-cache-dir --constraint requirements.txt" scancode-toolkit==$SCANCODE_VERSION
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@d156388eb19639ec20ade50009f3d199ce1e2808 # v4
     - name: Run functional tests that do not require external tools
@@ -112,7 +112,7 @@ jobs:
         token: ${{ secrets.CODECOV_TOKEN }}
         flags: funTest-non-docker
   funTest-docker:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
     - name: Checkout Repository
       uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
