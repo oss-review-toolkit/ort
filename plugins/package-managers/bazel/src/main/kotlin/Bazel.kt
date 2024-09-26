@@ -388,7 +388,15 @@ class Bazel(
         depDirectives: Map<String, BazelDepDirective>,
         archiveOverrides: Map<String, ArchiveOverride>
     ): Set<Scope> {
-        val process = run("mod", "graph", "--output", "json", "--disk_cache=", workingDir = projectDir)
+        val process = run(
+            "mod",
+            "graph",
+            "--output",
+            "json",
+            "--disk_cache=",
+            "--lockfile_mode=update",
+            workingDir = projectDir
+        )
         val mainModule = process.stdout.parseBazelModule()
         val (mainDeps, devDeps) = mainModule.dependencies.map { module ->
             val name = module.name ?: module.key.substringBefore("@", "")
