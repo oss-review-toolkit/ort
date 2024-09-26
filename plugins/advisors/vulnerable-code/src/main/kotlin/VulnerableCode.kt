@@ -93,7 +93,7 @@ class VulnerableCode(override val descriptor: PluginDescriptor, config: Vulnerab
     override suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, AdvisorResult> {
         val startTime = Instant.now()
 
-        val purls = packages.mapNotNull { pkg -> pkg.purl.takeUnless { it.isEmpty() } }
+        val purls = packages.mapNotNull { pkg -> pkg.purl.ifEmpty { null } }
         val chunks = purls.chunked(BULK_REQUEST_SIZE)
 
         val allVulnerabilities = mutableMapOf<String, List<VulnerableCodeService.Vulnerability>>()

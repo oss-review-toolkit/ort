@@ -472,7 +472,7 @@ internal data class GemInfo(
         }
 
         private fun Collection<String>?.mapToSetOfNotEmptyStrings(): Set<String> =
-            this?.mapNotNullTo(mutableSetOf()) { string -> string.trim().takeUnless { it.isEmpty() } }.orEmpty()
+            this?.mapNotNullTo(mutableSetOf()) { string -> string.trim().ifEmpty { null } }.orEmpty()
     }
 
     fun merge(other: GemInfo): GemInfo {

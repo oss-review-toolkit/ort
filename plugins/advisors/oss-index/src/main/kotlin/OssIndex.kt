@@ -93,7 +93,7 @@ class OssIndex(override val descriptor: PluginDescriptor, config: OssIndexConfig
     override suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, AdvisorResult> {
         val startTime = Instant.now()
 
-        val purls = packages.mapNotNull { pkg -> pkg.purl.takeUnless { it.isEmpty() } }
+        val purls = packages.mapNotNull { pkg -> pkg.purl.ifEmpty { null } }
         val chunks = purls.chunked(BULK_REQUEST_SIZE)
 
         val componentReports = mutableMapOf<String, ComponentReport>()
