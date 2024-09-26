@@ -33,13 +33,14 @@ import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.GitCommand
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
+import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
 
 class GradleFunTest : StringSpec() {
     private val projectDir = getAssetFile("projects/synthetic/gradle").toGradle()
-    private val isJava9OrAbove = System.getProperty("java.version").split('.').first().toInt() >= 9
+    private val isJava9OrAbove = Environment.JAVA_VERSION.split('.').first().toInt() >= 9
 
     private fun installGradleWrapper(version: String) {
         println("Installing Gradle wrapper version $version.")

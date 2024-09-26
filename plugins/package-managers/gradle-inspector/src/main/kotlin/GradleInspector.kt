@@ -183,7 +183,7 @@ class GradleInspector(
 
                     val javaHome = options[OPTION_JAVA_VERSION]?.let {
                         val requestedVersion = Semver.coerce(it)
-                        val runningVersion = Semver.coerce(Environment().javaVersion)
+                        val runningVersion = Semver.coerce(Environment.JAVA_VERSION)
                         if (requestedVersion != runningVersion) {
                             JavaBootstrapper.installJdk("TEMURIN", it)
                                 .onFailure { e ->
