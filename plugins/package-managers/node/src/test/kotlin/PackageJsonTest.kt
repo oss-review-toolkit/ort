@@ -24,6 +24,8 @@ import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson.Author
+
 class PackageJsonTest : WordSpec({
     "parsePackageJson()" should {
         "deserialize the author from a textual node" {
@@ -35,7 +37,9 @@ class PackageJsonTest : WordSpec({
 
             val packageJson = parsePackageJson(json)
 
-            packageJson.authors.map { it.name } should containExactlyInAnyOrder("Jane Doe <jane.doe@example.com>")
+            packageJson.authors should containExactlyInAnyOrder(
+                Author(name = "Jane Doe", email = "jane.doe@example.com")
+            )
         }
 
         "deserialize the author from an object node" {
@@ -64,9 +68,9 @@ class PackageJsonTest : WordSpec({
 
             val packageJson = parsePackageJson(json)
 
-            packageJson.authors.map { it.name } should containExactlyInAnyOrder(
-                "Jane Doe <jane.doe@example.com>",
-                "John Doe"
+            packageJson.authors should containExactlyInAnyOrder(
+                Author(name = "Jane Doe", email = "jane.doe@example.com"),
+                Author(name = "John Doe")
             )
         }
 
