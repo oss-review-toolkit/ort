@@ -25,7 +25,6 @@ import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.model.readJsonTree
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson.Author
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson.Repository
@@ -104,76 +103,6 @@ class NpmSupportTest : WordSpec({
             val author = Author(name = "John Doe")
 
             parseNpmAuthor(author) shouldBe setOf("John Doe")
-        }
-    }
-
-    "parseNpmLicenses()" should {
-        "get a singular 'license' from a text node" {
-            val node = """
-            {
-              "license": "Apache-2.0"
-            }
-            """.trimIndent().readJsonTree()
-
-            parseNpmLicenses(node) shouldBe setOf("Apache-2.0")
-        }
-
-        "get a singular 'license' from an array node" {
-            val node = """
-            {
-              "license": [
-                "Apache-2.0"
-              ]
-            }
-            """.readJsonTree()
-
-            parseNpmLicenses(node) shouldBe setOf("Apache-2.0")
-        }
-
-        "get a singular 'license' from an object node" {
-            val node = """
-            {
-              "license": {
-                "type": "Apache-2.0"
-              }
-            }
-            """.readJsonTree()
-
-            parseNpmLicenses(node) shouldBe setOf("Apache-2.0")
-        }
-
-        "get plural 'licenses' from an object node" {
-            val node = """
-            {
-              "licenses": [
-                {
-                  "type": "Apache-2.0"
-                }
-              ]
-            }
-            """.readJsonTree()
-
-            parseNpmLicenses(node) shouldBe setOf("Apache-2.0")
-        }
-
-        "map 'UNLICENSED' to 'NONE'" {
-            val node = """
-            {
-              "license": "UNLICENSED"
-            }    
-            """.trimIndent().readJsonTree()
-
-            parseNpmLicenses(node) shouldBe setOf("NONE")
-        }
-
-        "map 'SEE LICENSE IN ...' to 'NOASSERTION'" {
-            val node = """
-            {
-              "license": "SEE LICENSE IN ..."
-            }
-            """.trimIndent().readJsonTree()
-
-            parseNpmLicenses(node) shouldBe setOf("NOASSERTION")
         }
     }
 

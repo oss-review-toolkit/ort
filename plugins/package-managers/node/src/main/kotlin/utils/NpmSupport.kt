@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.node.utils
 
-import com.fasterxml.jackson.databind.JsonNode
-
 import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -98,34 +96,6 @@ internal fun parseNpmAuthor(author: PackageJson.Author?): Set<String> =
             it.name
         }
     }.let { setOfNotNull(it) }
-
-/**
- * Map the licenses from a package.json file of a module.
- */
-internal fun parseNpmLicenses(json: JsonNode): Set<String> {
-    val declaredLicenses = mutableListOf<String>()
-
-    // See https://docs.npmjs.com/files/package.json#license. Some old packages use a "license" (singular) node
-    // which ...
-    json["license"]?.let { licenseNode ->
-        // ... can either be a direct text value, an array of text values (which is not officially supported),
-        // or an object containing nested "type" (and "url") text nodes.
-        when {
-            licenseNode.isTextual -> declaredLicenses += licenseNode.textValue()
-            licenseNode.isArray -> licenseNode.mapNotNullTo(declaredLicenses) { it.textValue() }
-            licenseNode.isObject -> declaredLicenses += licenseNode["type"].textValue()
-            else -> throw IllegalArgumentException("Unsupported node type in '$licenseNode'.")
-        }
-    }
-
-    // New packages use a "licenses" (plural) node containing an array of objects with nested "type" (and "url")
-    // text nodes.
-    json["licenses"]?.mapNotNullTo(declaredLicenses) { licenseNode ->
-        licenseNode["type"]?.textValue()
-    }
-
-    return declaredLicenses.mapNpmLicenses()
-}
 
 internal fun Collection<String>.mapNpmLicenses(): Set<String> =
     mapNotNullTo(mutableSetOf()) { declaredLicense ->
