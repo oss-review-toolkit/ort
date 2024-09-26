@@ -94,8 +94,9 @@ data class PackageJson(
     val homepage: String? = null,
     val description: String? = null,
     val licenses: List<String> = emptyList(),
-    @Serializable(AuthorSerializer::class)
-    val author: Author? = null,
+    @Serializable(AuthorListSerializer::class)
+    @SerialName("author")
+    val authors: List<Author> = emptyList(),
     val gitHead: String? = null,
     @Serializable(RepositorySerializer::class)
     val repository: Repository? = null,
@@ -132,10 +133,17 @@ data class PackageJson(
     )
 }
 
-private object AuthorSerializer : JsonTransformingSerializer<Author>(serializer<Author>()) {
+private object AuthorListSerializer : JsonTransformingSerializer<List<Author>>(serializer<List<Author>>()) {
     override fun transformDeserialize(element: JsonElement): JsonElement =
         // TODO: The string from the JSON primitive could be parsed into the dedicated author properties.
-        (element as? JsonObject) ?: JsonObject(mapOf("name" to element.jsonPrimitive))
+        when (element) {
+            is JsonObject -> JsonArray(listOf(element))
+            is JsonPrimitive -> JsonArray(listOf(element.transform()))
+            is JsonArray -> JsonArray(element.map { it.transform() })
+        }
+
+    private fun JsonElement.transform(): JsonElement =
+        takeUnless { this is JsonPrimitive } ?: JsonObject(mapOf("name" to jsonPrimitive))
 }
 
 private object RepositorySerializer : JsonTransformingSerializer<Repository>(serializer<Repository>()) {
