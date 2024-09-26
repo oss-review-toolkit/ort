@@ -13,7 +13,7 @@ env:
 
 jobs:
   commit-lint:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout Repository
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
@@ -24,7 +24,7 @@ jobs:
         with:
           configFile: .commitlintrc.yml
   code-base-checks:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
     - name: Checkout Repository
       uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
@@ -33,7 +33,7 @@ jobs:
     - name: Check copyrights, license headers, and .gitattributes
       run: ./gradlew checkCopyrightsInNoticeFile checkLicenseHeaders checkGitAttributes
   completions:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
     - name: Checkout Repository
       uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
@@ -53,7 +53,7 @@ jobs:
           exit 1
         fi
   detekt-issues:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     permissions:
       # Needed for SARIF scanning upload.
       security-events: write
@@ -70,7 +70,7 @@ jobs:
       with:
         sarif_file: build/reports/detekt/merged.sarif
   markdown-links:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
     - name: Checkout Repository
       uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
@@ -82,7 +82,7 @@ jobs:
         max-depth: 2
         use-quiet-mode: yes
   markdownlint:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout Repository
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
@@ -96,7 +96,7 @@ jobs:
           npx markdownlint-cli2
   qodana-scan:
     if: ${{ github.event_name == 'pull_request' }}
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     permissions:
       # Needed for SARIF scanning upload.
       security-events: write
@@ -115,7 +115,7 @@ jobs:
       with:
         sarif_file: ${{ runner.temp }}/qodana/results/qodana.sarif.json
   reuse-tool:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
     - name: Checkout Repository
       uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
