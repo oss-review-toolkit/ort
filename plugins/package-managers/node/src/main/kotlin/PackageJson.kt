@@ -23,19 +23,23 @@ import java.io.File
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.JsonTransformingSerializer
+import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.decodeFromJsonElement
 import kotlinx.serialization.json.decodeToSequence
+import kotlinx.serialization.json.encodeToJsonElement
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.serializer
 
+import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson.Author
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson.Repository
 
@@ -141,11 +145,22 @@ data class PackageJson(
 
 private object AuthorListSerializer : JsonTransformingSerializer<List<Author>>(serializer<List<Author>>()) {
     override fun transformDeserialize(element: JsonElement): JsonElement =
-        // TODO: The string from the JSON primitive could be parsed into the dedicated author properties.
         when (element) {
             is JsonObject -> JsonArray(listOf(element))
-            is JsonPrimitive -> JsonArray(listOf(element.wrapPrimitiveInObject("name")))
-            is JsonArray -> JsonArray(element.map { it.wrapPrimitiveInObject("name") })
+            is JsonPrimitive -> JsonArray(listOf(element.toAuthorObject()))
+            is JsonArray -> JsonArray(element.map { it.toAuthorObject() })
+        }
+
+    private fun JsonElement.toAuthorObject(): JsonElement =
+        when (this) {
+            is JsonObject -> this
+
+            is JsonPrimitive -> {
+                val author = parseAuthorString(contentOrNull).run { Author(name ?: content, email, homepage) }
+                JSON.encodeToJsonElement(author)
+            }
+
+            else -> throw SerializationException("Unexpected JSON element.")
         }
 }
 
