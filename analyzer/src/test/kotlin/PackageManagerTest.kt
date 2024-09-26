@@ -26,7 +26,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 
 class PackageManagerTest : WordSpec({
-    "processPackageVcs" should {
+    "processPackageVcs()" should {
         "split a GitHub browsing URL into its components" {
             val vcsFromPackage = VcsInfo(
                 type = VcsType.GIT,
