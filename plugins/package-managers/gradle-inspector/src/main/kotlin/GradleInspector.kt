@@ -54,7 +54,6 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.unquote
-import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.JavaBootstrapper
 import org.ossreviewtoolkit.utils.ort.ortToolsDirectory
 
@@ -182,9 +181,7 @@ class GradleInspector(
                     }
 
                     val javaHome = options[OPTION_JAVA_VERSION]?.let {
-                        val requestedVersion = Semver.coerce(it)
-                        val runningVersion = Semver.coerce(Environment.JAVA_VERSION)
-                        if (requestedVersion != runningVersion) {
+                        if (!JavaBootstrapper.isRunningOnJdk(it)) {
                             JavaBootstrapper.installJdk("TEMURIN", it)
                                 .onFailure { e ->
                                     issues += createAndLogIssue(managerName, e.collectMessages())
