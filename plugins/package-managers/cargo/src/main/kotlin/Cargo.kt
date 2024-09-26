@@ -237,7 +237,7 @@ private fun CargoMetadata.Package.toPackage(hashes: Map<String, String>): Packag
             name = name,
             version = version
         ),
-        authors = authors.mapNotNullTo(mutableSetOf()) { parseAuthorString(it) },
+        authors = authors.mapNotNullTo(mutableSetOf()) { parseAuthorString(it).name },
         declaredLicenses = declaredLicenses,
         declaredLicensesProcessed = declaredLicensesProcessed,
         description = description.orEmpty(),

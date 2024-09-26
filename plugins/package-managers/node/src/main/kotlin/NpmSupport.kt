@@ -107,7 +107,7 @@ internal fun parseNpmAuthor(author: PackageJson.Author?): Set<String> =
         if (it.url == null && it.email == null) {
             // The author might either originate from a textual node or from an object node. The former to
             // further process the author string.
-            parseAuthorString(it.name, '<', '(')
+            parseAuthorString(it.name).name
         } else {
             // The author must have come from an object node, so applying parseAuthorString() is not necessary.
             it.name

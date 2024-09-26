@@ -226,7 +226,7 @@ packages:
 - id: "Crate::cloudabi:0.0.3"
   purl: "pkg:cargo/cloudabi@0.0.3"
   authors:
-  - "Nuxi (https://nuxi.nl/) and contributors"
+  - "Nuxi and contributors"
   declared_licenses:
   - "BSD-2-Clause"
   declared_licenses_processed:

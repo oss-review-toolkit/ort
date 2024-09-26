@@ -148,7 +148,7 @@ private fun PackageInfo.toPackage() =
     Package(
         id = toId(),
         // See https://github.com/bower/spec/blob/master/json.md#authors.
-        authors = pkgMeta.authors.mapNotNullTo(mutableSetOf()) { parseAuthorString(it.name, '<', '(') },
+        authors = pkgMeta.authors.mapNotNullTo(mutableSetOf()) { parseAuthorString(it.name).name },
         declaredLicenses = setOfNotNull(pkgMeta.license?.takeUnless { it.isEmpty() }),
         description = pkgMeta.description.orEmpty(),
         homepageUrl = pkgMeta.homepage.orEmpty(),
