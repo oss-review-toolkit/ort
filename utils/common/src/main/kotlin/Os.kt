@@ -126,6 +126,6 @@ object Os {
     fun resolveExecutable(executable: File): File? {
         val extensions = env["PATHEXT"]?.splitToSequence(File.pathSeparatorChar).orEmpty()
         return extensions.map { File(executable.path + it.lowercase()) }.find { it.isFile }
-            ?: executable.takeIf { it.isFile }
+            ?: executable.takeIf { it.isFile && it.canExecute() }
     }
 }
