@@ -134,19 +134,19 @@ import Sbt from '!!raw-loader!@site/../examples/sbt.ort.yml'
 import Stack from '!!raw-loader!@site/../examples/stack.ort.yml'
 import Yarn from '!!raw-loader!@site/../examples/yarn.ort.yml'
 
-<CodeBlock language="yml" title="bower.ort.yml">{Bower}</CodeBlock>
-<CodeBlock language="yml" title="bundler.ort.yml">{Bundler}</CodeBlock>
-<CodeBlock language="yml" title="cargo.ort.yml">{Cargo}</CodeBlock>
-<CodeBlock language="yml" title="composer.ort.yml">{Composer}</CodeBlock>
-<CodeBlock language="yml" title="go-mod.ort.yml">{GoMod}</CodeBlock>
-<CodeBlock language="yml" title="gradle.ort.yml">{Gradle}</CodeBlock>
-<CodeBlock language="yml" title="gradle-android.ort.yml">{GradleAndroid}</CodeBlock>
-<CodeBlock language="yml" title="maven.ort.yml">{Maven}</CodeBlock>
-<CodeBlock language="yml" title="npm.ort.yml">{Npm}</CodeBlock>
-<CodeBlock language="yml" title="pip.ort.yml">{Pip}</CodeBlock>
-<CodeBlock language="yml" title="sbt.ort.yml">{Sbt}</CodeBlock>
-<CodeBlock language="yml" title="stack.ort.yml">{Stack}</CodeBlock>
-<CodeBlock language="yml" title="yarn.ort.yml">{Yarn}</CodeBlock>
+<CodeBlock language="yml" title="Bower">{Bower}</CodeBlock>
+<CodeBlock language="yml" title="Bundler">{Bundler}</CodeBlock>
+<CodeBlock language="yml" title="Cargo">{Cargo}</CodeBlock>
+<CodeBlock language="yml" title="Composer">{Composer}</CodeBlock>
+<CodeBlock language="yml" title="Go Mod">{GoMod}</CodeBlock>
+<CodeBlock language="yml" title="Gradle">{Gradle}</CodeBlock>
+<CodeBlock language="yml" title="Gradle Android">{GradleAndroid}</CodeBlock>
+<CodeBlock language="yml" title="Maven">{Maven}</CodeBlock>
+<CodeBlock language="yml" title="npm">{Npm}</CodeBlock>
+<CodeBlock language="yml" title="pip">{Pip}</CodeBlock>
+<CodeBlock language="yml" title="sbt">{Sbt}</CodeBlock>
+<CodeBlock language="yml" title="Stack">{Stack}</CodeBlock>
+<CodeBlock language="yml" title="Yarn">{Yarn}</CodeBlock>
 ```
 
 ## Resolutions
