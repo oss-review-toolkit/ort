@@ -29,7 +29,6 @@ import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.beNull
-import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.contain
@@ -80,9 +79,7 @@ class GradleDependencyHandlerTest : WordSpec({
                 .addDependency(scope2, dep1)
                 .build()
 
-            graph.nodes shouldNotBeNull {
-                this shouldHaveSize 3
-            }
+            graph.nodes shouldHaveSize 3
 
             val scopes = graph.createScopes()
             scopes.map { it.name } should containExactlyInAnyOrder(scope1, scope2)
@@ -174,10 +171,8 @@ class GradleDependencyHandlerTest : WordSpec({
                 .build()
 
             graph.scopeRoots should beEmpty()
-            graph.nodes shouldNotBeNull {
-                this shouldHaveSize 5
-                all { it.fragment == 0 } shouldBe true
-            }
+            graph.nodes shouldHaveSize 5
+            graph.nodes.all { it.fragment == 0 } shouldBe true
 
             val scopes = graph.createScopes()
             val scopeDependencies1 = scopeDependencies(scopes, scope1)
