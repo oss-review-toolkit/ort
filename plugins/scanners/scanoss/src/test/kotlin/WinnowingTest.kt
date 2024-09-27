@@ -438,7 +438,7 @@ class WinnowingTest : StringSpec({
     }
 
     "The fingerprint should be calculated correctly for the Winnowing paper" {
-        // Note that the ".pdf" file extension is hard-coded to be skipped for snippet caclulation.
+        // Note that the ".pdf" file extension is hard-coded to be skipped for snippet calculation.
         calculate(File("src/test/assets/wfp/sigmod03.pdf")) shouldBe """
             file=232512a681d2488f61ade07516f899b5,155473,sigmod03.pdf
 
