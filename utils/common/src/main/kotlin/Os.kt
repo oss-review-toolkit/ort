@@ -108,7 +108,7 @@ object Os {
 
             paths.firstNotNullOfOrNull { path ->
                 val expandedPath = path.expandVariable(referencePattern)
-                resolveWindowsExecutable(File(expandedPath, executable))
+                resolveExecutable(File(expandedPath, executable))
             }
         } else {
             val referencePattern = Regex("\\$\\{?(\\w+)}?")
@@ -121,9 +121,9 @@ object Os {
     }
 
     /**
-     * Resolve the Windows [executable] to its full name including the optional extension.
+     * Resolve the [executable] to its full name including any optional Windows extension.
      */
-    fun resolveWindowsExecutable(executable: File): File? {
+    fun resolveExecutable(executable: File): File? {
         val extensions = env["PATHEXT"]?.splitToSequence(File.pathSeparatorChar).orEmpty()
         return extensions.map { File(executable.path + it.lowercase()) }.find { it.isFile }
             ?: executable.takeIf { it.isFile }
