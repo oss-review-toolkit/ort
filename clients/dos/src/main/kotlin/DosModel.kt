@@ -136,7 +136,7 @@ data class JobStateResponseBody(
 
 @Serializable
 data class PackageConfigurationRequestBody(
-    /** The purl of the package to request configuraion for. */
+    /** The purl of the package to request configuration for. */
     val purl: String
 )
 
