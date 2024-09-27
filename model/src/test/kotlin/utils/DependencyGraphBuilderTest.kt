@@ -27,7 +27,6 @@ import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
@@ -60,10 +59,7 @@ class DependencyGraphBuilderTest : WordSpec({
 
             graph.scopeRoots should beEmpty()
             graph.nodes shouldHaveSize 3
-
-            graph.edges shouldNotBeNull {
-                this should beEmpty()
-            }
+            graph.edges should beEmpty()
 
             val scopes = graph.createScopes()
 
