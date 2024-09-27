@@ -90,6 +90,11 @@ const val OPTION_JAVA_VERSION = "javaVersion"
 const val OPTION_JAVA_HOME = "javaHome"
 
 /**
+ * The name of the option to specify the Gradle template file.
+ */
+const val OPTION_GRADLE_INIT_TEMPLATE = "gradleInitTemplate"
+
+/**
  * The [Gradle](https://gradle.org/) package manager for Java.
  *
  * This package manager supports the following [options][PackageManagerConfiguration.options]:
@@ -140,15 +145,21 @@ class GradleInspector(
 
         val toolsDir = ortToolsDirectory.resolve(managerName).apply { safeMkdirs() }
         val pluginJar = extractResource("/gradle-plugin.jar", toolsDir.resolve("gradle-plugin.jar"))
+        val customInitScript = options[OPTION_GRADLE_INIT_TEMPLATE]
 
-        val initScriptText = javaClass.getResource("/template.init.gradle").readText()
-            .replace("<REPLACE_PLUGIN_JAR>", pluginJar.invariantSeparatorsPath)
+        // Use the custom init.gradle if provided, otherwise use the default template.
+        val initScriptText = customInitScript?.let {
+            File(it).readText()
+        } ?: javaClass.getResource("/template.init.gradle").readText()
+
+        // execute replacement both on default template or on custom script.
+        val finalInitScriptText = initScriptText.replace("<REPLACE_PLUGIN_JAR>", pluginJar.invariantSeparatorsPath)
 
         val initScript = toolsDir.resolve("init.gradle")
 
         logger.debug { "Extracting Gradle init script to '$initScript'..." }
 
-        return initScript.apply { writeText(initScriptText) }
+        return initScript.apply { writeText(finalInitScriptText) }
     }
 
     private fun GradleConnector.getOrtDependencyTreeModel(

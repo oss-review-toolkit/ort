@@ -110,6 +110,10 @@ ort:
           # itself is run with will be used.
           javaHome: "/path/to/java/home"
 
+          # An optional file path to the 'init.gradle' template to use for Gradle project analysis.
+          # By default the template is taken from plugins/package-managers/gradle-inspector/src/main/resources/template.init.gradle
+          gradleInitTemplate: "/path/to/init.gradle"
+
       Yarn2:
         options:
           # If set to true, disable verification of HTTPS certificate of remote registries. Useful when using a proxy to
