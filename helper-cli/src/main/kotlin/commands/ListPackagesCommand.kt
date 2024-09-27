@@ -30,6 +30,7 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.helper.utils.readOrtResult
+import org.ossreviewtoolkit.helper.utils.replaceConfig
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.PackageType.PACKAGE
@@ -82,8 +83,15 @@ internal class ListPackagesCommand : OrtHelperCommand(
         help = "Only list packages distinct by type, namespace and name."
     ).flag()
 
+    private val repositoryConfigurationFile by option(
+        "--repository-configuration-file",
+        help = "Override the repository configuration contained in the ORT result."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
+
     override fun run() {
-        val ortResult = readOrtResult(ortFile)
+        val ortResult = readOrtResult(ortFile).replaceConfig(repositoryConfigurationFile)
 
         val licenseInfoResolver = ortResult.createLicenseInfoResolver()
 
