@@ -125,16 +125,13 @@ class Sbt(
 
         // TODO: Consider auto-detecting the Java version based on the SBT version. See:
         //       https://docs.scala-lang.org/overviews/jdk-compatibility/overview.html#build-tool-compatibility-table
-        val javaHome = options[OPTION_JAVA_VERSION]?.let {
-            if (!JavaBootstrapper.isRunningOnJdk(it)) {
+        val javaHome = options[OPTION_JAVA_VERSION]
+            ?.takeUnless { JavaBootstrapper.isRunningOnJdk(it) }
+            ?.let {
                 JavaBootstrapper.installJdk("TEMURIN", it)
-                    .onFailure { e ->
-                        logger.error { "Failed to bootstrap JDK version $it: ${e.collectMessages()}" }
-                    }.getOrNull()
-            } else {
-                null
-            }
-        } ?: options[OPTION_JAVA_HOME]?.let { File(it) }
+                    .onFailure { e -> logger.error { "Failed to bootstrap JDK version $it: ${e.collectMessages()}" } }
+                    .getOrNull()
+            } ?: options[OPTION_JAVA_HOME]?.let { File(it) }
 
         javaHome?.also {
             logger.info { "Setting Java home for project analysis to '$it'." }

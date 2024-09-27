@@ -180,16 +180,13 @@ class GradleInspector(
                         addProgressListener(ProgressListener { logger.debug(it.displayName) })
                     }
 
-                    val javaHome = options[OPTION_JAVA_VERSION]?.let {
-                        if (!JavaBootstrapper.isRunningOnJdk(it)) {
+                    val javaHome = options[OPTION_JAVA_VERSION]
+                        ?.takeUnless { JavaBootstrapper.isRunningOnJdk(it) }
+                        ?.let {
                             JavaBootstrapper.installJdk("TEMURIN", it)
-                                .onFailure { e ->
-                                    issues += createAndLogIssue(managerName, e.collectMessages())
-                                }.getOrNull()
-                        } else {
-                            null
-                        }
-                    } ?: options[OPTION_JAVA_HOME]?.let { File(it) }
+                                .onFailure { e -> issues += createAndLogIssue(managerName, e.collectMessages()) }
+                                .getOrNull()
+                        } ?: options[OPTION_JAVA_HOME]?.let { File(it) }
 
                     javaHome?.also {
                         logger.info { "Setting Java home for project analysis to '$it'." }
