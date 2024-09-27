@@ -106,7 +106,7 @@ data class DependencyGraph(
      * determined.
      */
     @JsonSerialize(converter = DependencyGraphEdgeSortedSetConverter::class)
-    val edges: Set<DependencyGraphEdge>? = null
+    val edges: Set<DependencyGraphEdge> = emptySet()
 ) {
     companion object {
         /**
@@ -222,7 +222,7 @@ data class DependencyGraph(
      */
     private fun constructNodeDependencies(): NodeDependencies =
         when {
-            nodes.isNotEmpty() && edges != null -> constructNodeDependenciesFromGraph(nodes, edges)
+            nodes.isNotEmpty() -> constructNodeDependenciesFromGraph(nodes, edges)
             else -> constructNodeDependenciesFromScopeRoots(scopeRoots)
         }
 
