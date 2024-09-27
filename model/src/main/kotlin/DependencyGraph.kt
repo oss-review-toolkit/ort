@@ -99,7 +99,7 @@ data class DependencyGraph(
      * list, there can be multiple nodes for a single package. The order of nodes in this list is relevant; the
      * edges of the graph reference their nodes by numeric indices.
      */
-    val nodes: List<DependencyGraphNode>? = null,
+    val nodes: List<DependencyGraphNode> = emptyList(),
 
     /**
      * A set with the edges of this dependency graph. By traversing the edges, the dependencies of packages can be
@@ -187,7 +187,7 @@ data class DependencyGraph(
      */
     private fun constructReferenceMapping(): Map<String, PackageReference> {
         val refMapping = mutableMapOf<String, PackageReference>()
-        val allNodes = nodes ?: scopeRoots.map(DependencyReference::toGraphNode)
+        val allNodes = nodes.takeUnless { it.isEmpty() } ?: scopeRoots.map(DependencyReference::toGraphNode)
 
         allNodes.forEach { constructReferenceTree(it, refMapping) }
 
@@ -222,7 +222,7 @@ data class DependencyGraph(
      */
     private fun constructNodeDependencies(): NodeDependencies =
         when {
-            nodes != null && edges != null -> constructNodeDependenciesFromGraph(nodes, edges)
+            nodes.isNotEmpty() && edges != null -> constructNodeDependenciesFromGraph(nodes, edges)
             else -> constructNodeDependenciesFromScopeRoots(scopeRoots)
         }
 
@@ -247,7 +247,7 @@ data class DependencyGraph(
             addIssues(ref)
         }
 
-        nodes?.forEach { node ->
+        nodes.forEach { node ->
             addIssues(node.pkg, node.issues)
         }
 

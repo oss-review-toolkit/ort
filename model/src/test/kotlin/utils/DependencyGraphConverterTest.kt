@@ -161,7 +161,7 @@ class DependencyGraphConverterTest : WordSpec({
                 graph.dependencies[node]?.forEach(::collectIssues)
             }
 
-            graph.nodes?.forEach(::collectIssues)
+            graph.nodes.forEach(::collectIssues)
             issues shouldNot beEmpty()
         }
 
@@ -181,10 +181,7 @@ class DependencyGraphConverterTest : WordSpec({
             val convertedResult = DependencyGraphConverter.convert(mixedResult)
 
             convertedResult.dependencyGraphs["Gradle"] shouldNotBeNull {
-                nodes shouldNotBeNull {
-                    this shouldNot beEmpty()
-                }
-
+                nodes shouldNot beEmpty()
                 scopes.keys shouldNot beEmpty()
             }
         }
