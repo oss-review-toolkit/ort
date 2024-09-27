@@ -35,6 +35,7 @@ jobs:
           dependency-graph: generate-and-submit
       - name: Publish to OSSRH
         env:
+          GITHUB_DEPENDENCY_GRAPH_REF: refs/heads/main
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.OSSRH_USERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.OSSRH_PASSWORD }}
           ORG_GRADLE_PROJECT_RELEASE_SIGNING_ENABLED: true
