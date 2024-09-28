@@ -109,7 +109,7 @@ class GoMod(
         val projectDir = definitionFile.parentFile
 
         stashDirectories(projectDir.resolve("vendor")).use { _ ->
-            val moduleInfoForModuleName = getModuleInfos(projectDir).associateBy { it.path }
+            val moduleInfoForModuleName = getModuleInfos(projectDir, "all").associateBy { it.path }
             val graph = getModuleGraph(projectDir, moduleInfoForModuleName)
             val packages = graph.nodes.mapNotNullTo(mutableSetOf()) {
                 moduleInfoForModuleName.getValue(it.name).toPackage()
@@ -215,12 +215,18 @@ class GoMod(
     }
 
     /**
-     * Return the list of all modules available via the `go list` command.
+     * Return a sequence of module information for [packages] in [projectDir].
      */
-    private fun getModuleInfos(projectDir: File): List<ModuleInfo> {
-        val list = runGo("list", "-m", "-json", "-buildvcs=false", "all", workingDir = projectDir)
+    private fun getModuleInfos(projectDir: File, vararg packages: String): Sequence<ModuleInfo> {
+        projectDir.resolve("go.mod").also { goModFile ->
+            require(goModFile.isFile) {
+                "The expected '$goModFile' file does not exist."
+            }
+        }
 
-        return list.stdout.byteInputStream().use { JSON.decodeToSequence<ModuleInfo>(it) }.toList()
+        val list = runGo("list", "-m", "-json", "-buildvcs=false", *packages, workingDir = projectDir)
+
+        return list.stdout.byteInputStream().use { JSON.decodeToSequence<ModuleInfo>(it) }
     }
 
     /**
@@ -260,18 +266,6 @@ class GoMod(
     private fun runGo(vararg args: CharSequence, workingDir: File? = null) =
         run(args = args, workingDir = workingDir, environment = environment)
 
-    private fun getProjectName(projectDir: File): String {
-        projectDir.resolve("go.mod").also { goModFile ->
-            require(goModFile.isFile) {
-                "Expected file '$goModFile' which does not exist."
-            }
-        }
-
-        val list = runGo("list", "-m", "-json", "-buildvcs=false", workingDir = projectDir)
-
-        return list.stdout.byteInputStream().use { JSON.decodeToSequence<ModuleInfo>(it) }.single().path
-    }
-
     private fun ModuleInfo.toId(): Identifier {
         if (replace != null) return replace.toId() // Apply replace directive.
 
@@ -289,7 +283,7 @@ class GoMod(
             Identifier(
                 type = managerName,
                 namespace = "",
-                name = getProjectName(projectDir),
+                name = getModuleInfos(projectDir).single().path,
                 version = processProjectVcs(projectDir).revision
             )
         } else {
