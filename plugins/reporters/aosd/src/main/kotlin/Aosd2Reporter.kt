@@ -29,14 +29,21 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.licenses.LicenseView
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.reporters.aosd.AOSD2.ExternalDependency
 import org.ossreviewtoolkit.reporter.Reporter
+import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 
-class Aosd2Reporter : Reporter {
-    override val type = "AOSD2"
-
+@OrtPlugin(
+    id = "AOSD2",
+    displayName = "Audi Open Source Diagnostics 2 Reporter",
+    description = "A reporter for the Audi Open Source Diagnostics 2 (AOSD2) format.",
+    factory = ReporterFactory::class
+)
+class Aosd2Reporter(override val descriptor: PluginDescriptor = Aosd2ReporterFactory.descriptor) : Reporter {
     override fun generateReport(
         input: ReporterInput,
         outputDir: File,

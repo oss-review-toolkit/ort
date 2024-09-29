@@ -17,26 +17,18 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.api
+package org.ossreviewtoolkit.reporter
+
+import org.ossreviewtoolkit.plugins.api.PluginFactory
 
 /**
- * An annotation to mark a property as an option for an ORT plugin. The annotation is only required to set a default
- * value for the option.
+ * A factory interface for creating [Reporter] instances.
  */
-@Target(AnnotationTarget.PROPERTY)
-annotation class OrtPluginOption(
-    /**
-     * The default value of the option.
-     */
-    val defaultValue: String = NO_DEFAULT_VALUE,
-
-    /**
-     * A list of alternative names for the option. This can be used to make renaming options backward-compatible.
-     * Aliases are tried in the order they are defined until a value is found.
-     */
-    val aliases: Array<String> = []
-) {
+interface ReporterFactory : PluginFactory<Reporter> {
     companion object {
-        const val NO_DEFAULT_VALUE = "[NO_DEFAULT_VALUE]"
+        /**
+         * All [reporter factories][ReporterFactory] available in the classpath, associated by their ids.
+         */
+        val ALL by lazy { PluginFactory.getAll<ReporterFactory, Reporter>() }
     }
 }

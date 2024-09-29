@@ -39,7 +39,7 @@ import org.cyclonedx.parsers.JsonParser
 import org.cyclonedx.parsers.XmlParser
 
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.config.PluginConfiguration
+import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.plugins.reporters.cyclonedx.CycloneDxReporter.Companion.REPORT_BASE_FILENAME
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ORT_RESULT_WITH_VULNERABILITIES
@@ -49,15 +49,11 @@ import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.test.getAssetAsString
 
 class CycloneDxReporterFunTest : WordSpec({
-    val defaultSchemaVersion = CycloneDxReporter.DEFAULT_SCHEMA_VERSION.versionString
+    val defaultSchemaVersion = DEFAULT_SCHEMA_VERSION.versionString
     val outputDir = tempdir()
 
-    fun CycloneDxReporter.generateReport(result: OrtResult, options: Options): List<Result<File>> =
-        generateReport(
-            ReporterInput(result),
-            outputDir,
-            PluginConfiguration(options)
-        )
+    fun generateReport(result: OrtResult, options: Options): List<Result<File>> =
+        CycloneDxReporterFactory().create(PluginConfig(options)).generateReport(ReporterInput(result), outputDir)
 
     "BOM generation with single option" should {
         val optionSingle = mapOf("single.bom" to "true")
@@ -65,7 +61,7 @@ class CycloneDxReporterFunTest : WordSpec({
         "create just one file" {
             val jsonOptions = optionSingle + mapOf("output.file.formats" to "json")
 
-            val bomFileResults = CycloneDxReporter().generateReport(ORT_RESULT, jsonOptions)
+            val bomFileResults = generateReport(ORT_RESULT, jsonOptions)
 
             bomFileResults.shouldBeSingleton {
                 it shouldBeSuccess outputDir.resolve("$REPORT_BASE_FILENAME.json")
@@ -75,13 +71,13 @@ class CycloneDxReporterFunTest : WordSpec({
         "be valid XML according to schema version $defaultSchemaVersion" {
             val xmlOptions = optionSingle + mapOf("output.file.formats" to "xml")
 
-            val bomFileResults = CycloneDxReporter().generateReport(ORT_RESULT, xmlOptions)
+            val bomFileResults = generateReport(ORT_RESULT, xmlOptions)
 
             bomFileResults.shouldBeSingleton {
                 it shouldBeSuccess { bomFile ->
                     bomFile shouldBe aFile()
                     bomFile shouldNotBe emptyFile()
-                    XmlParser().validate(bomFile, CycloneDxReporter.DEFAULT_SCHEMA_VERSION) should beEmpty()
+                    XmlParser().validate(bomFile, DEFAULT_SCHEMA_VERSION) should beEmpty()
                 }
             }
         }
@@ -90,7 +86,7 @@ class CycloneDxReporterFunTest : WordSpec({
             val expectedBom = getAssetAsString("cyclonedx-reporter-expected-result.xml")
             val xmlOptions = optionSingle + mapOf("output.file.formats" to "xml")
 
-            val bomFileResults = CycloneDxReporter().generateReport(ORT_RESULT_WITH_VULNERABILITIES, xmlOptions)
+            val bomFileResults = generateReport(ORT_RESULT_WITH_VULNERABILITIES, xmlOptions)
 
             bomFileResults.shouldBeSingleton {
                 it shouldBeSuccess { bomFile ->
@@ -106,13 +102,13 @@ class CycloneDxReporterFunTest : WordSpec({
         "be valid JSON according to schema version $defaultSchemaVersion" {
             val jsonOptions = optionSingle + mapOf("output.file.formats" to "json")
 
-            val bomFileResults = CycloneDxReporter().generateReport(ORT_RESULT_WITH_VULNERABILITIES, jsonOptions)
+            val bomFileResults = generateReport(ORT_RESULT_WITH_VULNERABILITIES, jsonOptions)
 
             bomFileResults.shouldBeSingleton {
                 it shouldBeSuccess { bomFile ->
                     bomFile shouldBe aFile()
                     bomFile shouldNotBe emptyFile()
-                    JsonParser().validate(bomFile, CycloneDxReporter.DEFAULT_SCHEMA_VERSION) should beEmpty()
+                    JsonParser().validate(bomFile, DEFAULT_SCHEMA_VERSION) should beEmpty()
                 }
             }
         }
@@ -121,7 +117,7 @@ class CycloneDxReporterFunTest : WordSpec({
             val expectedBom = getAssetAsString("cyclonedx-reporter-expected-result.json")
             val jsonOptions = optionSingle + mapOf("output.file.formats" to "json")
 
-            val bomFileResults = CycloneDxReporter().generateReport(ORT_RESULT_WITH_VULNERABILITIES, jsonOptions)
+            val bomFileResults = generateReport(ORT_RESULT_WITH_VULNERABILITIES, jsonOptions)
 
             bomFileResults.shouldBeSingleton {
                 it shouldBeSuccess { bomFile ->
@@ -141,7 +137,7 @@ class CycloneDxReporterFunTest : WordSpec({
         "create one file per project" {
             val jsonOptions = optionMulti + mapOf("output.file.formats" to "json")
 
-            val bomFileResults = CycloneDxReporter().generateReport(ORT_RESULT_WITH_VULNERABILITIES, jsonOptions)
+            val bomFileResults = generateReport(ORT_RESULT_WITH_VULNERABILITIES, jsonOptions)
 
             bomFileResults shouldHaveSize 2
             bomFileResults.forAll { it.shouldBeSuccess() }
@@ -150,50 +146,50 @@ class CycloneDxReporterFunTest : WordSpec({
         "generate valid XML files according to schema version $defaultSchemaVersion" {
             val xmlOptions = optionMulti + mapOf("output.file.formats" to "xml")
 
-            val (bomFileResultWithFindings, bomFileResultWithoutFindings) = CycloneDxReporter()
-                .generateReport(ORT_RESULT_WITH_VULNERABILITIES, xmlOptions).also {
+            val (bomFileResultWithFindings, bomFileResultWithoutFindings) =
+                generateReport(ORT_RESULT_WITH_VULNERABILITIES, xmlOptions).also {
                     it shouldHaveSize 2
                 }
 
             bomFileResultWithFindings shouldBeSuccess { bomFile ->
                 bomFile shouldBe aFile()
                 bomFile shouldNotBe emptyFile()
-                XmlParser().validate(bomFile, CycloneDxReporter.DEFAULT_SCHEMA_VERSION) should beEmpty()
+                XmlParser().validate(bomFile, DEFAULT_SCHEMA_VERSION) should beEmpty()
             }
 
             bomFileResultWithoutFindings shouldBeSuccess { bomFile ->
                 bomFile shouldBe aFile()
                 bomFile shouldNotBe emptyFile()
-                XmlParser().validate(bomFile, CycloneDxReporter.DEFAULT_SCHEMA_VERSION) should beEmpty()
+                XmlParser().validate(bomFile, DEFAULT_SCHEMA_VERSION) should beEmpty()
             }
         }
 
         "generate valid JSON files according to schema version $defaultSchemaVersion" {
             val jsonOptions = optionMulti + mapOf("output.file.formats" to "json")
 
-            val (bomFileResultWithFindings, bomFileResultWithoutFindings) = CycloneDxReporter()
-                .generateReport(ORT_RESULT_WITH_VULNERABILITIES, jsonOptions).also {
+            val (bomFileResultWithFindings, bomFileResultWithoutFindings) =
+                generateReport(ORT_RESULT_WITH_VULNERABILITIES, jsonOptions).also {
                     it shouldHaveSize 2
                 }
 
             bomFileResultWithFindings shouldBeSuccess { bomFile ->
                 bomFile shouldBe aFile()
                 bomFile shouldNotBe emptyFile()
-                JsonParser().validate(bomFile, CycloneDxReporter.DEFAULT_SCHEMA_VERSION) should beEmpty()
+                JsonParser().validate(bomFile, DEFAULT_SCHEMA_VERSION) should beEmpty()
             }
 
             bomFileResultWithoutFindings shouldBeSuccess { bomFile ->
                 bomFile shouldBe aFile()
                 bomFile shouldNotBe emptyFile()
-                JsonParser().validate(bomFile, CycloneDxReporter.DEFAULT_SCHEMA_VERSION) should beEmpty()
+                JsonParser().validate(bomFile, DEFAULT_SCHEMA_VERSION) should beEmpty()
             }
         }
 
         "generate expected JSON files" {
             val jsonOptions = optionMulti + mapOf("output.file.formats" to "json")
 
-            val (bomFileResultWithFindings, bomFileResultWithoutFindings) = CycloneDxReporter()
-                .generateReport(ORT_RESULT, jsonOptions).also {
+            val (bomFileResultWithFindings, bomFileResultWithoutFindings) =
+                generateReport(ORT_RESULT, jsonOptions).also {
                     it shouldHaveSize 2
                 }
 

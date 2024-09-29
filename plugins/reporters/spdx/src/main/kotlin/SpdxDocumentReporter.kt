@@ -24,7 +24,10 @@ import java.io.File
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.config.PluginConfiguration
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.reporter.Reporter
+import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.spdx.SpdxCompoundExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants.LICENSE_REF_PREFIX
@@ -50,7 +53,13 @@ import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
  * - *file.information.enabled*: Toggle whether the output document should contain information on file granularity
  *                               about files containing findings.
  */
-class SpdxDocumentReporter : Reporter {
+@OrtPlugin(
+    displayName = "SPDX Document Reporter",
+    description = "Creates SPDX documents in YAML and JSON format.",
+    factory = ReporterFactory::class
+)
+class SpdxDocumentReporter(override val descriptor: PluginDescriptor = SpdxDocumentReporterFactory.descriptor) :
+    Reporter {
     companion object {
         const val REPORT_BASE_FILENAME = "bom.spdx"
 
@@ -64,8 +73,6 @@ class SpdxDocumentReporter : Reporter {
 
         private const val DOCUMENT_NAME_DEFAULT_VALUE = "Unnamed document"
     }
-
-    override val type = "SpdxDocument"
 
     override fun generateReport(
         input: ReporterInput,

@@ -27,15 +27,22 @@ import kotlinx.serialization.json.encodeToStream
 import org.ossreviewtoolkit.model.DependencyNode
 import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.licenses.LicenseView
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.reporter.Reporter
+import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
 
-class TrustSourceReporter : Reporter {
+@OrtPlugin(
+    displayName = "TrustSource Reporter",
+    description = "Generates a report in the TrustSource JSON format.",
+    factory = ReporterFactory::class
+)
+class TrustSourceReporter(override val descriptor: PluginDescriptor = TrustSourceReporterFactory.descriptor) :
+    Reporter {
     companion object {
         val JSON = Json { encodeDefaults = false }
     }
-
-    override val type = "TrustSource"
 
     private val reportFilename = "trustsource-report.json"
 

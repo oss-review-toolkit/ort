@@ -19,7 +19,7 @@
 
 plugins {
     // Apply precompiled plugins.
-    id("ort-library-conventions")
+    id("ort-plugin-conventions")
 }
 
 dependencies {
@@ -29,6 +29,8 @@ dependencies {
 
     api(libs.jackson.annotations)
     api(libs.jackson.databind)
+
+    ksp(projects.reporter)
 
     implementation(projects.utils.ortUtils)
 

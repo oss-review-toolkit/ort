@@ -24,6 +24,7 @@ import com.google.devtools.ksp.processing.Dependencies
 
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.addAll
 import kotlinx.serialization.json.addJsonObject
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.encodeToStream
@@ -51,6 +52,11 @@ class JsonSpecGenerator(private val codeGenerator: CodeGenerator) {
                             put("type", it.type.name)
                             put("description", it.description)
                             put("default", it.defaultValue)
+
+                            putJsonArray("aliases") {
+                                addAll(it.aliases)
+                            }
+
                             put("isRequired", it.isRequired)
                         }
                     }

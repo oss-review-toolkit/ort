@@ -19,13 +19,15 @@
 
 plugins {
     // Apply precompiled plugins.
-    id("ort-library-conventions")
+    id("ort-plugin-conventions")
 }
 
 dependencies {
     api(projects.model)
     api(projects.reporter)
     api(projects.utils.spdxUtils)
+
+    ksp(projects.reporter)
 
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
