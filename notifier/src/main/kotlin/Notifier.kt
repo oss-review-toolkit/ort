@@ -43,15 +43,20 @@ class Notifier(
 ) : ScriptRunner() {
     private val customProperties = buildMap {
         put("ortResult", ortResult)
-
-        config.mail?.let { put("mailClient", MailNotifier(it)) }
-        config.jira?.let { put("jiraClient", JiraNotifier(it)) }
-
+        put("mailClient", config.mail?.let { MailNotifier(it) })
+        put("jiraClient", config.jira?.let { JiraNotifier(it) })
         put("resolutionProvider", resolutionProvider)
     }
 
+    private val customPropertyTypes = mapOf(
+        "ortResult" to KotlinType(OrtResult::class),
+        "mailClient" to KotlinType(MailNotifier::class, isNullable = true),
+        "jiraClient" to KotlinType(JiraNotifier::class, isNullable = true),
+        "resolutionProvider" to KotlinType(ResolutionProvider::class)
+    )
+
     override val compConfig = createJvmCompilationConfigurationFromTemplate<NotificationsScriptTemplate> {
-        providedProperties(customProperties.mapValues { (_, v) -> KotlinType(v::class) })
+        providedProperties(customPropertyTypes)
     }
 
     override val evalConfig = ScriptEvaluationConfiguration {
