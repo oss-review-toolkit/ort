@@ -23,6 +23,7 @@ import com.sksamuel.hoplite.ConfigLoaderBuilder
 import com.sksamuel.hoplite.PropertySource
 import com.sksamuel.hoplite.addEnvironmentSource
 import com.sksamuel.hoplite.fp.getOrElse
+import com.sksamuel.hoplite.resolver.context.ContextResolverMode
 
 import java.io.File
 
@@ -172,7 +173,7 @@ data class OrtConfiguration(
             val loader = ConfigLoaderBuilder.default()
                 .addEnvironmentSource()
                 .addPropertySources(sources)
-                .allowUnresolvedSubstitutions()
+                .withContextResolverMode(ContextResolverMode.SkipUnresolved)
                 .build()
 
             val config = loader.loadConfig<OrtConfigurationWrapper>()
