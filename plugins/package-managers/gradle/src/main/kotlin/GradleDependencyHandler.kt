@@ -46,7 +46,7 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
  */
 internal class GradleDependencyHandler(
     /** The name of the associated package manager. */
-    val managerName: String,
+    private val managerName: String,
 
     /** The helper object to resolve packages via Maven. */
     private val maven: MavenSupport
