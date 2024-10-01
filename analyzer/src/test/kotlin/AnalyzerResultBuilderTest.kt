@@ -211,7 +211,7 @@ class AnalyzerResultBuilderTest : WordSpec() {
 
                 analyzerResult.getAllIssues() should containExactly(
                     package1.id to setOf(issue1),
-                    package3.id to setOf(issue2),
+                    package3.id to setOf(issue2, issue5),
                     project1.id to setOf(issue3, issue4),
                     project2.id to setOf(issue4)
                 )

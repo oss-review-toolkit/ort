@@ -108,23 +108,20 @@ private fun AnalyzerResult.resolvePackageManagerDependencies(): AnalyzerResult {
     val handler = PackageManagerDependencyHandler(this)
     val navigator = DependencyGraphNavigator(dependencyGraphs)
 
-    val graphs = projects.groupBy { it.id.type }.entries.associate { (type, projectsForType) ->
+    val graphs = dependencyGraphs.mapValues { (packageManagerName, graph) ->
         val builder = DependencyGraphBuilder(handler)
 
-        projectsForType.forEach { project ->
-            project.scopeNames?.forEach { scopeName ->
-                val qualifiedScopeName = DependencyGraph.qualifyScope(project, scopeName)
-                navigator.directDependencies(project, scopeName).forEach { node ->
-                    handler.resolvePackageManagerDependency(node).forEach {
-                        builder.addDependency(qualifiedScopeName, it)
-                    }
+        graph.scopes.forEach { (scopeName, rootIndices) ->
+            navigator.dependenciesAccessor(packageManagerName, graph, rootIndices).forEach { node ->
+                handler.resolvePackageManagerDependency(node).forEach {
+                    builder.addDependency(scopeName, it)
                 }
             }
         }
 
         // Package managers that do not use the dependency graph representation might not have a check implemented to
         // verify that packages exist for all dependencies, so the reference check needs to be disabled here.
-        type to builder.build(checkReferences = false)
+        builder.build(checkReferences = false)
     }
 
     return copy(dependencyGraphs = graphs)
