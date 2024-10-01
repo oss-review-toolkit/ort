@@ -122,7 +122,7 @@ private fun AnalyzerResult.resolvePackageManagerDependencies(): AnalyzerResult {
             }
         }
 
-        // Package managers that do not use the dependency graph representation, might not have a check implemented to
+        // Package managers that do not use the dependency graph representation might not have a check implemented to
         // verify that packages exist for all dependencies, so the reference check needs to be disabled here.
         type to builder.build(checkReferences = false)
     }
