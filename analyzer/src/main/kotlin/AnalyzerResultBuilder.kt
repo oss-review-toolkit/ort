@@ -103,7 +103,7 @@ class AnalyzerResultBuilder {
 }
 
 private fun AnalyzerResult.resolvePackageManagerDependencies(): AnalyzerResult {
-    if (dependencyGraphs.isEmpty()) return this
+    if (dependencyGraphs.size < 2) return this
 
     val handler = PackageManagerDependencyHandler(this)
     val navigator = DependencyGraphNavigator(dependencyGraphs)
