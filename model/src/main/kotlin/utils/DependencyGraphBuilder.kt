@@ -142,7 +142,7 @@ class DependencyGraphBuilder<D>(
 
     /**
      * Add the given [dependency] for the scope with the given [scopeName] to this builder. This function needs to be
-     * called all the direct dependencies of all scopes. That way the builder gets sufficient information to construct
+     * called for all direct dependencies of all scopes. That way the builder gets sufficient information to construct
      * the [DependencyGraph].
      */
     fun addDependency(scopeName: String, dependency: D): DependencyGraphBuilder<D> =
