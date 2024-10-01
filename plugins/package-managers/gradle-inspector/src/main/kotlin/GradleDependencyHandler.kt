@@ -54,7 +54,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxOperator
 /**
  * A specialized [DependencyHandler] implementation for Gradle's dependency model.
  */
-internal class GradleDependencyHandler : DependencyHandler<OrtDependency> {
+internal class GradleDependencyHandler(private val managerName: String) : DependencyHandler<OrtDependency> {
     override fun identifierFor(dependency: OrtDependency): Identifier =
         with(dependency) { Identifier(dependencyType, groupId, artifactId, version) }
 
@@ -70,7 +70,7 @@ internal class GradleDependencyHandler : DependencyHandler<OrtDependency> {
         val id = identifierFor(dependency)
         val model = dependency.mavenModel ?: run {
             issues += createAndLogIssue(
-                source = "Gradle",
+                source = managerName,
                 message = "No Maven model available for '${id.toCoordinates()}'."
             )
 
