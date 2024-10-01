@@ -55,7 +55,10 @@ packages:
   filesAnalyzed: false
   homepage: "first package's homepage URL"
   licenseConcluded: "BSD-2-Clause AND BSD-3-Clause AND MIT"
-  licenseDeclared: "BSD-3-Clause AND (MIT OR GPL-2.0-only)"
+  licenseDeclared: "Apache-2.0 AND BSD-2-Clause AND BSD-2-Clause AND BSD-2-Clause\
+    \ AND BSD-2-Clause AND BSD-3-Clause AND BSD-3-Clause AND BSD-3-Clause AND BSD-3-Clause\
+    \ AND BSD-3-Clause AND BSD-3-Clause AND (GPL-2.0-only OR MIT) AND (GPL-2.0-only\
+    \ OR MIT) AND (GPL-2.0-only OR MIT) AND MIT AND MIT AND MIT"
   name: "first-package"
   summary: "A package with all supported attributes set, with a VCS URL containing\
     \ a user name, and with two scan results for the VCS containing copyright findings\
@@ -75,7 +78,10 @@ packages:
   - "SPDXRef-File-1"
   homepage: "first package's homepage URL"
   licenseConcluded: "NOASSERTION"
-  licenseDeclared: "BSD-3-Clause AND (MIT OR GPL-2.0-only)"
+  licenseDeclared: "Apache-2.0 AND BSD-2-Clause AND BSD-2-Clause AND BSD-2-Clause\
+    \ AND BSD-2-Clause AND BSD-3-Clause AND BSD-3-Clause AND BSD-3-Clause AND BSD-3-Clause\
+    \ AND BSD-3-Clause AND BSD-3-Clause AND (GPL-2.0-only OR MIT) AND (GPL-2.0-only\
+    \ OR MIT) AND (GPL-2.0-only OR MIT) AND MIT AND MIT AND MIT"
   licenseInfoFromFiles:
   - "Apache-2.0"
   - "BSD-2-Clause"
@@ -101,7 +107,10 @@ packages:
   filesAnalyzed: false
   homepage: "first package's homepage URL"
   licenseConcluded: "NOASSERTION"
-  licenseDeclared: "BSD-3-Clause AND (MIT OR GPL-2.0-only)"
+  licenseDeclared: "Apache-2.0 AND BSD-2-Clause AND BSD-2-Clause AND BSD-2-Clause\
+    \ AND BSD-2-Clause AND BSD-3-Clause AND BSD-3-Clause AND BSD-3-Clause AND BSD-3-Clause\
+    \ AND BSD-3-Clause AND BSD-3-Clause AND (GPL-2.0-only OR MIT) AND (GPL-2.0-only\
+    \ OR MIT) AND (GPL-2.0-only OR MIT) AND MIT AND MIT AND MIT"
   name: "first-package"
   summary: "A package with all supported attributes set, with a VCS URL containing\
     \ a user name, and with two scan results for the VCS containing copyright findings\
@@ -117,7 +126,7 @@ packages:
   filesAnalyzed: false
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
-  licenseDeclared: "MIT AND NOASSERTION"
+  licenseDeclared: "MIT"
   name: "fourth-package"
   summary: "A package with partially mapped declared license."
   versionInfo: "0.0.1"
@@ -131,7 +140,7 @@ packages:
   filesAnalyzed: false
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
-  licenseDeclared: "NOASSERTION"
+  licenseDeclared: "NONE"
   name: "second-package"
   summary: "A package with minimal attributes set."
   versionInfo: "0.0.1"
@@ -145,7 +154,7 @@ packages:
   filesAnalyzed: false
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
-  licenseDeclared: "NOASSERTION"
+  licenseDeclared: "GPL-3.0-only"
   name: "seventh-package"
   summary: "A package with a source artifact scan result."
   versionInfo: "0.0.1"
@@ -165,7 +174,7 @@ packages:
   - "SPDXRef-File-3"
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
-  licenseDeclared: "NOASSERTION"
+  licenseDeclared: "GPL-3.0-only"
   licenseInfoFromFiles:
   - "GPL-3.0-only"
   name: "seventh-package"
@@ -197,7 +206,7 @@ packages:
   filesAnalyzed: false
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
-  licenseDeclared: "NOASSERTION"
+  licenseDeclared: "NONE"
   name: "third-package"
   summary: "A package with only unmapped declared license."
   versionInfo: "0.0.1"
