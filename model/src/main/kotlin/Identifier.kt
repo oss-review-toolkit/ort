@@ -68,11 +68,11 @@ data class Identifier(
             .thenComparing({ it.version }, AlphaNumericComparator)
     }
 
-    private constructor(components: List<String>) : this(
-        type = components.getOrElse(0) { "" },
-        namespace = components.getOrElse(1) { "" },
-        name = components.getOrElse(2) { "" },
-        version = components.getOrElse(3) { "" }
+    private constructor(properties: List<String>) : this(
+        type = properties.getOrElse(0) { "" },
+        namespace = properties.getOrElse(1) { "" },
+        name = properties.getOrElse(2) { "" },
+        version = properties.getOrElse(3) { "" }
     )
 
     /**
@@ -82,12 +82,12 @@ data class Identifier(
     @JsonCreator
     constructor(identifier: String) : this(identifier.split(':', limit = 4))
 
-    private val sanitizedComponents = listOf(type, namespace, name, version).map { component ->
+    private val sanitizedProperties = listOf(type, namespace, name, version).map { component ->
         component.trim().filterNot { it < ' ' }
     }
 
     init {
-        require(sanitizedComponents.none { ":" in it }) {
+        require(sanitizedProperties.none { ":" in it }) {
             "An identifier's properties must not contain ':' because that character is used as a separator in the " +
                 "string representation: type='$type', namespace='$namespace', name='$name', version='$version'."
         }
@@ -116,12 +116,12 @@ data class Identifier(
      * Create Maven-like coordinates based on the properties of the [Identifier].
      */
     @JsonValue
-    fun toCoordinates() = sanitizedComponents.joinToString(":")
+    fun toCoordinates() = sanitizedProperties.joinToString(":")
 
     /**
      * Create a file system path based on the properties of the [Identifier]. All properties are encoded using
      * [encodeOr] with [emptyValue] as parameter.
      */
     fun toPath(separator: String = "/", emptyValue: String = "unknown"): String =
-        sanitizedComponents.joinToString(separator) { it.encodeOr(emptyValue) }
+        sanitizedProperties.joinToString(separator) { it.encodeOr(emptyValue) }
 }
