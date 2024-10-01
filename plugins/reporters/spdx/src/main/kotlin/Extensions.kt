@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.licenses.Findings
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.licenses.LicenseView
@@ -42,6 +43,7 @@ import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.prependedPath
 import org.ossreviewtoolkit.reporter.LicenseTextProvider
+import org.ossreviewtoolkit.utils.common.FileMatcher
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
@@ -154,6 +156,26 @@ internal fun Package.toSpdxPackage(
         .filterExcluded()
         .filter(LicenseView.ONLY_DETECTED)
 
+    val declaredPackageLicenses = declaredLicensesProcessed.toSpdxDeclaredLicense()
+    val foundPackageLicenses = declaredPackageLicenses.takeUnless {
+        it == SpdxConstants.NOASSERTION && type == SpdxPackageType.VCS_PACKAGE
+    } ?: run {
+        // If there are of declared licenses and the package type is a VCS, which never have metadata, fall back to
+        // determine the package's license from what is detected in root license files.
+        val patterns = LicenseFilePatterns.getInstance()
+
+        val detectedPackageLicenses = detectedLicenses.filter { licenseInfo ->
+            licenseInfo.locations.any {
+                FileMatcher.match(patterns.allLicenseFilenames, it.location.path, ignoreCase = true)
+            }
+        }
+
+        detectedPackageLicenses
+            .mapNotNull { it.license.takeIf { it.isValid(SpdxExpression.Strictness.ALLOW_DEPRECATED) } }
+            .reduceOrNull(SpdxExpression::and)
+            .nullOrBlankToSpdxNoassertionOrNone()
+    }
+
     return SpdxPackage(
         spdxId = id.toSpdxId(type),
         checksums = when (type) {
@@ -178,7 +200,7 @@ internal fun Package.toSpdxPackage(
             SpdxPackageType.VCS_PACKAGE -> SpdxConstants.NOASSERTION
             else -> concludedLicense.nullOrBlankToSpdxNoassertionOrNone()
         },
-        licenseDeclared = declaredLicensesProcessed.toSpdxDeclaredLicense(),
+        licenseDeclared = foundPackageLicenses,
         licenseInfoFromFiles = if (packageVerificationCode == null) {
             emptyList()
         } else {
