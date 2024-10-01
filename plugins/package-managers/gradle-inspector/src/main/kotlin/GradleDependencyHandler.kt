@@ -43,6 +43,7 @@ import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.model.utils.parseRepoManifestPath
 import org.ossreviewtoolkit.plugins.packagemanagers.gradlemodel.dependencyType
 import org.ossreviewtoolkit.plugins.packagemanagers.gradlemodel.isProjectDependency
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
@@ -254,7 +255,9 @@ private fun createRemoteArtifact(
                 }
             }
         }.getOrElse {
-            logger.warn("Unable to get a valid artifact checksum.", it)
+            logger.warn {
+                "Unable to get a valid '$algorithm' checksum for the artifact at $artifactUrl: ${it.collectMessages()}"
+            }
 
             Hash.NONE
         }
