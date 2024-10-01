@@ -32,7 +32,7 @@ packages:
   filesAnalyzed: false
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
-  licenseDeclared: "NOASSERTION"
+  licenseDeclared: "MIT"
   name: "github.com/mercedes-benz/disclosure-cli"
   summary: "NONE"
   versionInfo: "388ae2bdf6032a3d5b0ed06ac45267dfc0376a3d"
@@ -46,7 +46,7 @@ packages:
   filesAnalyzed: false
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
-  licenseDeclared: "NOASSERTION"
+  licenseDeclared: "(Apache-2.0 OR MIT) AND MIT"
   name: "github.com/BurntSushi/toml"
   summary: "NONE"
   versionInfo: "1.4.0"
@@ -60,7 +60,7 @@ packages:
   filesAnalyzed: false
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
-  licenseDeclared: "NOASSERTION"
+  licenseDeclared: "(Apache-2.0 OR MIT) AND MIT"
   name: "github.com/BurntSushi/toml"
   summary: "NONE"
   versionInfo: "1.4.0"
@@ -74,7 +74,7 @@ packages:
   filesAnalyzed: false
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
-  licenseDeclared: "NOASSERTION"
+  licenseDeclared: "ISC"
   name: "github.com/davecgh/go-spew"
   summary: "NONE"
   versionInfo: "1.1.1"
@@ -88,7 +88,7 @@ packages:
   filesAnalyzed: false
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
-  licenseDeclared: "NOASSERTION"
+  licenseDeclared: "ISC"
   name: "github.com/davecgh/go-spew"
   summary: "NONE"
   versionInfo: "1.1.1"
@@ -102,7 +102,7 @@ packages:
   filesAnalyzed: false
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
-  licenseDeclared: "NOASSERTION"
+  licenseDeclared: "Apache-2.0"
   name: "github.com/inconshreveable/mousetrap"
   summary: "NONE"
   versionInfo: "1.1.0"
@@ -116,7 +116,7 @@ packages:
   filesAnalyzed: false
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
-  licenseDeclared: "NOASSERTION"
+  licenseDeclared: "Apache-2.0"
   name: "github.com/inconshreveable/mousetrap"
   summary: "NONE"
   versionInfo: "1.1.0"
@@ -130,7 +130,7 @@ packages:
   filesAnalyzed: false
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
-  licenseDeclared: "NOASSERTION"
+  licenseDeclared: "MIT"
   name: "github.com/jinzhu/configor"
   summary: "NONE"
   versionInfo: "1.2.2"
@@ -144,7 +144,7 @@ packages:
   filesAnalyzed: false
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
-  licenseDeclared: "NOASSERTION"
+  licenseDeclared: "MIT"
   name: "github.com/jinzhu/configor"
   summary: "NONE"
   versionInfo: "1.2.2"
@@ -158,7 +158,7 @@ packages:
   filesAnalyzed: false
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
-  licenseDeclared: "NOASSERTION"
+  licenseDeclared: "BSD-3-Clause"
   name: "github.com/pmezard/go-difflib"
   summary: "NONE"
   versionInfo: "1.0.0"
@@ -172,7 +172,7 @@ packages:
   filesAnalyzed: false
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
-  licenseDeclared: "NOASSERTION"
+  licenseDeclared: "BSD-3-Clause"
   name: "github.com/pmezard/go-difflib"
   summary: "NONE"
   versionInfo: "1.0.0"
@@ -186,7 +186,7 @@ packages:
   filesAnalyzed: false
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
-  licenseDeclared: "NOASSERTION"
+  licenseDeclared: "Apache-2.0"
   name: "github.com/spf13/cobra"
   summary: "NONE"
   versionInfo: "1.8.1"
@@ -200,7 +200,7 @@ packages:
   filesAnalyzed: false
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
-  licenseDeclared: "NOASSERTION"
+  licenseDeclared: "Apache-2.0"
   name: "github.com/spf13/cobra"
   summary: "NONE"
   versionInfo: "1.8.1"
@@ -215,7 +215,7 @@ packages:
   filesAnalyzed: false
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
-  licenseDeclared: "NOASSERTION"
+  licenseDeclared: "BSD-3-Clause"
   name: "github.com/spf13/pflag"
   summary: "NONE"
   versionInfo: "1.0.5"
@@ -230,7 +230,7 @@ packages:
   filesAnalyzed: false
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
-  licenseDeclared: "NOASSERTION"
+  licenseDeclared: "BSD-3-Clause"
   name: "github.com/spf13/pflag"
   summary: "NONE"
   versionInfo: "1.0.5"
@@ -244,7 +244,7 @@ packages:
   filesAnalyzed: false
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
-  licenseDeclared: "NOASSERTION"
+  licenseDeclared: "MIT"
   name: "github.com/stretchr/testify"
   summary: "NONE"
   versionInfo: "1.8.2"
@@ -258,7 +258,7 @@ packages:
   filesAnalyzed: false
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
-  licenseDeclared: "NOASSERTION"
+  licenseDeclared: "MIT"
   name: "github.com/stretchr/testify"
   summary: "NONE"
   versionInfo: "1.8.2"
@@ -273,7 +273,7 @@ packages:
   filesAnalyzed: false
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
-  licenseDeclared: "NOASSERTION"
+  licenseDeclared: "Apache-2.0 AND Apache-2.0 AND Apache-2.0 AND MIT AND MIT AND MIT"
   name: "gopkg.in/yaml.v3"
   summary: "NONE"
   versionInfo: "3.0.1"
@@ -288,7 +288,7 @@ packages:
   filesAnalyzed: false
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
-  licenseDeclared: "NOASSERTION"
+  licenseDeclared: "Apache-2.0 AND Apache-2.0 AND Apache-2.0 AND MIT AND MIT AND MIT"
   name: "gopkg.in/yaml.v3"
   summary: "NONE"
   versionInfo: "3.0.1"

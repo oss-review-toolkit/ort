@@ -35,15 +35,16 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.licenses.Findings
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
+import org.ossreviewtoolkit.model.utils.PathLicenseMatcher
 import org.ossreviewtoolkit.model.utils.prependedPath
 import org.ossreviewtoolkit.reporter.LicenseTextProvider
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
-import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
@@ -56,7 +57,6 @@ import org.ossreviewtoolkit.utils.spdx.model.SpdxFile
 import org.ossreviewtoolkit.utils.spdx.model.SpdxPackage
 import org.ossreviewtoolkit.utils.spdx.model.SpdxPackageVerificationCode
 import org.ossreviewtoolkit.utils.spdx.nullOrBlankToSpdxNoassertionOrNone
-import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.spdx.toSpdxId
 
 /**
@@ -153,6 +153,27 @@ internal fun Package.toSpdxPackage(
 
     val resolvedLicenseExpressions = licenseInfoResolver.resolveLicenseInfo(id).filterExcluded()
 
+    val declaredPackageLicenses = resolvedLicenseExpressions.filter(LicenseView.ONLY_DECLARED)
+
+    val matcher = PathLicenseMatcher(LicenseFilePatterns.getInstance())
+    val licensePaths = resolvedLicenseExpressions.flatMap { licenseInfo ->
+        licenseInfo.locations.map { it.location.path }
+    }
+
+    val packageRootPath = vcsProcessed.path.takeIf { type == SpdxPackageType.VCS_PACKAGE }.orEmpty()
+    val applicableLicensePaths = matcher.getApplicableLicenseFilesForDirectories(licensePaths, listOf(packageRootPath))
+    val applicableLicenseFiles = applicableLicensePaths[packageRootPath].orEmpty()
+
+    val detectedPackageLicenses = resolvedLicenseExpressions.filterTo(mutableSetOf()) { licenseInfo ->
+        licenseInfo.locations.any {
+            it.location.path in applicableLicenseFiles
+        }
+    }
+
+    val packageLicenseExpressions = (declaredPackageLicenses.licenses + detectedPackageLicenses)
+        .flatMap { it.originalExpressions }
+        .map { it.expression }
+
     return SpdxPackage(
         spdxId = id.toSpdxId(type),
         checksums = when (type) {
@@ -177,7 +198,13 @@ internal fun Package.toSpdxPackage(
             SpdxPackageType.VCS_PACKAGE -> SpdxConstants.NOASSERTION
             else -> concludedLicense.nullOrBlankToSpdxNoassertionOrNone()
         },
-        licenseDeclared = declaredLicensesProcessed.toSpdxDeclaredLicense(),
+        licenseDeclared = if (packageLicenseExpressions.isEmpty()) {
+            SpdxConstants.NONE
+        } else {
+            packageLicenseExpressions.reduce(SpdxExpression::and)
+                .sorted()
+                .nullOrBlankToSpdxNoassertionOrNone()
+        },
         licenseInfoFromFiles = if (packageVerificationCode == null) {
             emptyList()
         } else {
@@ -205,25 +232,6 @@ private fun OrtResult.getPackageVerificationCode(id: Identifier, type: SpdxPacka
         else -> null
     }?.let { fileList ->
         calculatePackageVerificationCode(fileList.files.map { it.sha1 }.asSequence())
-    }
-
-/**
- * Convert processed declared licenses to SPDX. Unmapped licenses are represented as `NOASSERTION`.
- */
-private fun ProcessedDeclaredLicense.toSpdxDeclaredLicense(): String =
-    when {
-        // If there are unmapped licenses, represent this by adding NOASSERTION.
-        unmapped.isNotEmpty() -> {
-            spdxExpression?.let {
-                if (SpdxConstants.NOASSERTION !in it.licenses()) {
-                    (it and SpdxConstants.NOASSERTION.toSpdx()).toString()
-                } else {
-                    it.toString()
-                }
-            } ?: SpdxConstants.NOASSERTION
-        }
-
-        else -> spdxExpression.nullOrBlankToSpdxNoassertionOrNone()
     }
 
 /**
