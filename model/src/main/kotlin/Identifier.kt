@@ -26,28 +26,28 @@ import org.ossreviewtoolkit.utils.common.AlphaNumericComparator
 import org.ossreviewtoolkit.utils.common.encodeOr
 
 /**
- * A unique identifier for a software package.
+ * A unique identifier for a software component.
  */
 data class Identifier(
     /**
-     * The type of package. When used in the context of a [Project], the type is the name of the package manager that
-     * manages the project (e.g. "Gradle" for a Gradle project). When used in the context of a [Package], the type is
-     * the name of the package type or protocol (e.g. "Maven" for a file from a Maven repository).
+     * The type of component this identifier describes. When used in the context of a [Project], the type equals the one
+     * of the package manager that manages the project (e.g. "Gradle" for a Gradle project). When used in the context of
+     * a [Package], the type is the name of the artifact ecosystem (e.g. "Maven" for a file from a Maven repository).
      */
     val type: String,
 
     /**
-     * The namespace of the package, for example the group for "Maven" or the scope for "NPM".
+     * The namespace of the component, for example the group for "Maven" or the scope for "NPM".
      */
     val namespace: String,
 
     /**
-     * The name of the package.
+     * The name of the component.
      */
     val name: String,
 
     /**
-     * The version of the package.
+     * The version of the component.
      */
     val version: String
 ) : Comparable<Identifier> {
