@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.utils.ort
 import java.io.File
 import java.io.IOException
 import java.lang.invoke.MethodHandles
+import java.net.URI
 import java.time.Duration
 import java.util.concurrent.ConcurrentHashMap
 
@@ -143,11 +144,17 @@ fun OkHttpClient.Builder.addBasicAuthorization(username: String, password: Strin
  * Download from [url] and return a [Result] with a file inside [directory] that holds the response body content on
  * success, or a [Result] wrapping an [IOException] (which might be a [HttpDownloadError]) on failure.
  */
-fun OkHttpClient.downloadFile(url: String, directory: File): Result<File> =
+fun OkHttpClient.downloadFile(url: String, directory: File): Result<File> {
+    if (url.startsWith("file:/")) {
+        val source = File(URI.create(url))
+        val target = directory.resolve(source.name)
+        return runCatching { source.copyTo(target) }
+    }
+
     // Disable transparent gzip compression, as otherwise we might end up writing a tar file to disk while
     // expecting to find a tar.gz file, and fail to unpack the archive. See
     // https://github.com/square/okhttp/blob/parent-3.10.0/okhttp/src/main/java/okhttp3/internal/http/BridgeInterceptor.java#L79
-    download(url, acceptEncoding = "identity").mapCatching { (response, body) ->
+    return download(url, acceptEncoding = "identity").mapCatching { (response, body) ->
 
         // Depending on the server, we may only get a useful target file name when looking at the response
         // header or at a redirected URL. In case of the Crates registry, for example, we want to resolve
@@ -186,15 +193,19 @@ fun OkHttpClient.downloadFile(url: String, directory: File): Result<File> =
 
         file
     }
+}
 
 /**
  * Download from [url] and return a [Result] with a string representing the response body content on success, or a
  * [Result] wrapping an [IOException] (which might be a [HttpDownloadError]) on failure.
  */
-fun OkHttpClient.downloadText(url: String): Result<String> =
-    download(url).mapCatching { (_, body) ->
+fun OkHttpClient.downloadText(url: String): Result<String> {
+    if (url.startsWith("file:/")) return runCatching { File(URI.create(url)).readText() }
+
+    return download(url).mapCatching { (_, body) ->
         body.use { it.string() }
     }
+}
 
 /**
  * Download from [url] with optional [acceptEncoding] and return a [Result] with the [Response] and non-nullable
