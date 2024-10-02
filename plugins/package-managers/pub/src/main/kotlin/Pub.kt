@@ -132,7 +132,15 @@ class Pub(
 
     private val flutterAbsolutePath = flutterHome.resolve("bin")
 
-    private val gradleFactory = analyzerConfig.determineEnabledPackageManagers().find { it.type.startsWith("Gradle") }
+    private val gradleFactory = analyzerConfig.determineEnabledPackageManagers()
+        .filter { it.type.startsWith("Gradle") }
+        .let { managers ->
+            require(managers.size < 2) {
+                "All of the $managers managers are able to manage 'Gradle' projects. Please enable only one of them."
+            }
+
+            managers.firstOrNull()
+        }
 
     private data class ParsePackagesResult(
         val packages: Map<Identifier, Package>,
