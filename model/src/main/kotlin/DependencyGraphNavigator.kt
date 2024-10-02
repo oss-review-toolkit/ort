@@ -54,7 +54,10 @@ class DependencyGraphNavigator(
                 "of them."
         }
 
-        val graph = graphForManager(manager)
+        val graph = requireNotNull(graphs[manager]) {
+            "No DependencyGraph for package manager '$manager' available."
+        }
+
         val rootDependencies = graph.scopes[DependencyGraph.qualifyScope(project, scopeName)].orEmpty().map { root ->
             referenceFor(manager, root)
         }
@@ -97,13 +100,6 @@ class DependencyGraphNavigator(
 
         return dependencies
     }
-
-    /**
-     * Return the [DependencyGraph] for the given [package manager][manager] or throw an exception if no such graph
-     * exists.
-     */
-    private fun graphForManager(manager: String): DependencyGraph =
-        requireNotNull(graphs[manager]) { "No DependencyGraph for package manager '$manager' available." }
 
     /**
      * Resolve a [DependencyGraphNode] in the [DependencyGraph] for the specified [package manager][manager] with the
