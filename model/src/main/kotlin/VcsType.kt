@@ -38,7 +38,7 @@ data class VcsType private constructor(private val aliases: List<String>) {
         /**
          * [Git](https://git-scm.com/) - the stupid content tracker.
          */
-        val GIT = VcsType("Git")
+        val GIT = VcsType("Git", "GitHub", "GitLab")
 
         /**
          * [Repo](https://source.android.com/setup/develop/repo) complements Git by simplifying work across multiple
