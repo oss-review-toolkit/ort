@@ -102,21 +102,15 @@ class DependencyGraphNavigator(
     }
 
     /**
-     * Resolve a [DependencyGraphNode] in the [DependencyGraph] for the specified [package manager][manager] with the
-     * given [pkgIndex] and [fragment]. Throw an exception if no such node can be found.
-     */
-    private fun referenceFor(manager: String, pkgIndex: Int, fragment: Int): DependencyGraphNode =
-        requireNotNull(graphDependencyRefMappings[manager])[pkgIndex].find { it.fragment == fragment }
-            ?: throw IllegalArgumentException(
-                "Could not resolve a DependencyReference for index = $pkgIndex and fragment $fragment."
-            )
-
-    /**
      * Resolve a [DependencyGraphNode] in the [DependencyGraph] for the specified [package manager][manager] that
      * corresponds to the given [rootIndex]. Throw an exception if no such reference can be found.
      */
     private fun referenceFor(manager: String, rootIndex: RootDependencyIndex): DependencyGraphNode =
-        referenceFor(manager, rootIndex.root, rootIndex.fragment)
+        requireNotNull(graphDependencyRefMappings[manager])[rootIndex.root].find { it.fragment == rootIndex.fragment }
+            ?: throw IllegalArgumentException(
+                "Could not resolve a DependencyReference for index = ${rootIndex.root} and fragment " +
+                    "${rootIndex.fragment}."
+            )
 }
 
 /**
