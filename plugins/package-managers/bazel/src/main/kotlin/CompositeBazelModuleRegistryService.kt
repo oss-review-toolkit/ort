@@ -72,6 +72,8 @@ internal class CompositeBazelModuleRegistryService(
         }
     }
 
+    override val urls = packagesPerRegistry.keys.flatMap { it.urls }
+
     override suspend fun getModuleMetadata(name: String): ModuleMetadata {
         val registry = packagesPerRegistry.entries.find { name in it.value }
             ?: throw IllegalArgumentException("No registry found for package '$name'.")
