@@ -58,8 +58,17 @@ class DependencyGraphNavigator(
             "No DependencyGraph for package manager '$manager' available."
         }
 
-        val rootDependencies = graph.scopes[DependencyGraph.qualifyScope(project, scopeName)].orEmpty().map { root ->
-            referenceFor(manager, root)
+        val rootIndices = graph.scopes[DependencyGraph.qualifyScope(project, scopeName)].orEmpty()
+        return dependenciesAccessor(manager, graph, rootIndices)
+    }
+
+    fun dependenciesAccessor(
+        manager: String,
+        graph: DependencyGraph,
+        rootIndices: List<RootDependencyIndex>
+    ): Sequence<DependencyNode> {
+        val rootDependencies = rootIndices.map { rootIndex ->
+            referenceFor(manager, rootIndex)
         }
 
         return dependenciesSequence(graph, rootDependencies)
