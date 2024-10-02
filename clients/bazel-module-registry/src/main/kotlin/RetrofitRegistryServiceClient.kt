@@ -19,39 +19,24 @@
 
 package org.ossreviewtoolkit.clients.bazelmoduleregistry
 
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonNamingStrategy
-import kotlinx.serialization.modules.SerializersModule
+import retrofit2.http.GET
+import retrofit2.http.Path
 
 /**
- * The JSON (de-)serialization object used by this client.
+ * A Retrofit client for remote bazel module registries.
  */
-internal val JSON = Json {
-    ignoreUnknownKeys = true
-    namingStrategy = JsonNamingStrategy.SnakeCase
-    serializersModule = SerializersModule {
-        polymorphicDefaultDeserializer(ModuleSourceInfo::class) {
-            ArchiveSourceInfo.serializer()
-        }
-    }
-}
-
-/**
- * A Bazel registry which is either local or remote.
- */
-interface BazelModuleRegistryService {
-    /**
-     * The URLs of this registry service.
-     */
-    val urls: List<String>
-
+interface RetrofitRegistryServiceClient {
     /**
      * Retrieve the metadata for a module.
+     * E.g. https://bcr.bazel.build/modules/glog/metadata.json.
      */
-    suspend fun getModuleMetadata(name: String): ModuleMetadata
+    @GET("modules/{name}/metadata.json")
+    suspend fun getModuleMetadata(@Path("name") name: String): ModuleMetadata
 
     /**
      * Retrieve information about the source code for a specific version of a module.
+     * E.g. https://bcr.bazel.build/modules/glog/0.5.0/source.json.
      */
-    suspend fun getModuleSourceInfo(name: String, version: String): ModuleSourceInfo
+    @GET("modules/{name}/{version}/source.json")
+    suspend fun getModuleSourceInfo(@Path("name") name: String, @Path("version") version: String): ModuleSourceInfo
 }

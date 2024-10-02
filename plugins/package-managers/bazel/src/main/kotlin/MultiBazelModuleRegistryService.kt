@@ -21,6 +21,8 @@ package org.ossreviewtoolkit.plugins.packagemanagers.bazel
 
 import java.io.File
 
+import org.apache.logging.log4j.kotlin.logger
+
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.BazelModuleRegistryService
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.DEFAULT_URL
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.LocalBazelModuleRegistryService
@@ -50,6 +52,8 @@ internal class MultiBazelModuleRegistryService(
             // Add the default Bazel registry as a fallback.
             val registryUrls = (urls + DEFAULT_URL).distinctBy { it.removeSuffix("/") }
 
+            logger.info { "Creating a multi Bazel module registry:" }
+
             val registryServices = registryUrls.mapTo(mutableListOf()) { url ->
                 LocalBazelModuleRegistryService.create(url, projectDir)
                     ?: RemoteBazelModuleRegistryService.create(url)
@@ -61,11 +65,13 @@ internal class MultiBazelModuleRegistryService(
         /**
          * Return an exception with a message that combines the messages of all [Throwable]s in this list.
          */
-        private fun List<Throwable>.combinedException(caption: String): Throwable =
+        private fun List<String>.combinedException(caption: String): Throwable =
             IllegalArgumentException(
-                "$caption:\n${joinToString("\n") { it.message.orEmpty() }}"
+                "$caption:\n${joinToString("\n")}"
             )
     }
+
+    override val urls = registryServices.flatMap { it.urls }
 
     override suspend fun getModuleMetadata(name: String): ModuleMetadata =
         queryRegistryServices(
@@ -88,20 +94,26 @@ internal class MultiBazelModuleRegistryService(
         errorMessage: () -> String,
         query: suspend (BazelModuleRegistryService) -> T
     ): T {
-        val failures = mutableListOf<Throwable>()
+        val failures = mutableListOf<String>()
 
         tailrec suspend fun queryServices(itServices: Iterator<BazelModuleRegistryService>): T? =
             if (!itServices.hasNext()) {
                 null
             } else {
-                val triedResult = runCatching { query(itServices.next()) }
+                val nextRegistry = itServices.next()
+                val triedResult = runCatching { query(nextRegistry) }
                 val result = triedResult.getOrNull()
 
                 // The Elvis operator does not work here because of the tailrec modifier.
                 if (result != null) {
                     result
                 } else {
-                    triedResult.exceptionOrNull()?.let(failures::add)
+                    triedResult.exceptionOrNull()?.let {
+                        failures += "${nextRegistry.urls.joinToString()}: ${
+                            it.message.orEmpty().ifEmpty { "<no message>" }
+                        }"
+                    }
+
                     queryServices(itServices)
                 }
             }

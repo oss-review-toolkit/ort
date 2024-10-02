@@ -137,6 +137,10 @@ private val registryUrls = listOf(
 private class MockRegistryServices(
     val registryServices: List<BazelModuleRegistryService>
 ) {
+    init {
+        prepareGetUrls()
+    }
+
     companion object {
         /** An exception thrown by mock registries to simulate a failure. */
         private val testException = Exception("Test exception: Registry invocation failed.")
@@ -187,6 +191,15 @@ private class MockRegistryServices(
             services.forEach { service ->
                 coEvery { service.getModuleSourceInfo(PACKAGE_NAME, PACKAGE_VERSION) } throws testException
             }
+        }
+    }
+
+    /**
+     * Prepare the mock registries to return a URL if requested.
+     */
+    fun prepareGetUrls() {
+        registryServices.forEach { service ->
+            every { service.urls } returns listOf("")
         }
     }
 

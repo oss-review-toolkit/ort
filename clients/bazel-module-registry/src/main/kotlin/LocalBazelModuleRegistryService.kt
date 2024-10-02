@@ -33,9 +33,10 @@ const val METADATA_JSON = "metadata.json"
 const val SOURCE_JSON = "source.json"
 
 /**
- * A Bazel registry which is located on the local file system.
+ * A Bazel registry for the workspace [directory] which is located on the local file system. It is configured as [url]
+ * in the '.bazelrc' file.
  */
-class LocalBazelModuleRegistryService(directory: File) : BazelModuleRegistryService {
+class LocalBazelModuleRegistryService(url: String, directory: File) : BazelModuleRegistryService {
     companion object {
         /** A prefix for URLs pointing to local files. */
         private const val FILE_URL_PREFIX = "file://"
@@ -53,7 +54,7 @@ class LocalBazelModuleRegistryService(directory: File) : BazelModuleRegistryServ
                     .replace(WORKSPACE_PLACEHOLDER, projectDir.absolutePath)
 
                 logger.info { "Creating local Bazel module registry at '$directory'." }
-                LocalBazelModuleRegistryService(File(directory))
+                LocalBazelModuleRegistryService(url, File(directory))
             }
     }
 
@@ -73,6 +74,8 @@ class LocalBazelModuleRegistryService(directory: File) : BazelModuleRegistryServ
 
         moduleDirectory = registryFile.resolveSibling(BAZEL_MODULES_DIR)
     }
+
+    override val urls: List<String> = listOf(url)
 
     override suspend fun getModuleMetadata(name: String): ModuleMetadata {
         val metadataJson = moduleDirectory.resolve(name).resolve(METADATA_JSON)
