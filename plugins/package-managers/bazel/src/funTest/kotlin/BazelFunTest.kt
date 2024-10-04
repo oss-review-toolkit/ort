@@ -93,4 +93,15 @@ class BazelFunTest : StringSpec({
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
+
+    "Dependencies are detected correctly even if no lock file is present and its generation is disabled" {
+        val definitionFile = getAssetFile("projects/synthetic/bazel-no-lock-file/MODULE.bazel")
+        val expectedResultFile = getAssetFile(
+            "projects/synthetic/bazel-expected-output-no-lock-file.yml"
+        )
+
+        val result = create("Bazel").resolveSingleProject(definitionFile)
+
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
 })
