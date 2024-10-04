@@ -90,7 +90,8 @@ const val OPTION_JAVA_VERSION = "javaVersion"
 const val OPTION_JAVA_HOME = "javaHome"
 
 /**
- * The [Gradle](https://gradle.org/) package manager for Java.
+ * The [Gradle](https://gradle.org/) package manager for Java. Also see the
+ * [compatibility matrix](https://docs.gradle.org/current/userguide/compatibility.html).
  *
  * This package manager supports the following [options][PackageManagerConfiguration.options]:
  * - *gradleVersion*: The version of Gradle to use when analyzing projects. Defaults to the version defined in the
