@@ -44,6 +44,7 @@ data class ModuleMetadata(
     @Serializable
     data class Maintainer(
         val email: String? = null,
+        val github: String? = null,
         val name: String? = null
     )
 }
