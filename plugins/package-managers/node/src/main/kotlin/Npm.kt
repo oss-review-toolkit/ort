@@ -198,8 +198,11 @@ open class Npm(
 
         // Create packages for all modules found in the workspace and add them to the graph builder. They are
         // reused when they are referenced by scope dependencies.
-        val packages = parseInstalledModules(workingDir)
-        graphBuilder.addPackages(packages)
+        val isWorkspacesProject = (findWorkspaceSubmodules(workingDir) - workingDir).isNotEmpty()
+        if (isWorkspacesProject) {
+            val packages = parseInstalledModules(workingDir)
+            graphBuilder.addPackages(packages)
+        }
 
         val scopeNames = setOfNotNull(
             // Optional dependencies are just like regular dependencies except that NPM ignores failures when
