@@ -110,9 +110,9 @@ class Bazel(
         super.run(
             args = args,
             workingDir = workingDir,
-            // Disable the optional wrapper script under `tools/bazel`, to ensure the --version option works.
+            // Disable the optional wrapper script under `tools/bazel` only for the "--version" call.
             environment = environment + mapOf(
-                "BAZELISK_SKIP_WRAPPER" to "true",
+                "BAZELISK_SKIP_WRAPPER" to "${args[0] == getVersionArguments()}",
                 "USE_BAZEL_FALLBACK_VERSION" to BAZEL_FALLBACK_VERSION
             )
         )
