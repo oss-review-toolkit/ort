@@ -28,6 +28,42 @@ analyzer:
     skip_excluded: false
   result:
     projects:
+    - id: "PNPM::pnpm-app-example:1.1.4"
+      definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/app/package.json"
+      authors:
+      - "DavidWells"
+      declared_licenses:
+      - "ISC"
+      declared_licenses_processed:
+        spdx_expression: "ISC"
+      vcs:
+        type: ""
+        url: ""
+        revision: ""
+        path: ""
+      vcs_processed:
+        type: "Git"
+        url: "<REPLACE_URL_PROCESSED>"
+        revision: "<REPLACE_REVISION>"
+        path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/app"
+      homepage_url: ""
+      scopes:
+      - name: "dependencies"
+        dependencies:
+        - id: "PNPM::testing-pnpm-package-a:1.0.2"
+          linkage: "PROJECT_DYNAMIC"
+          dependencies:
+          - id: "NPM::chalk:5.0.1"
+          - id: "NPM::is-even:1.0.0"
+            dependencies:
+            - id: "NPM::is-odd:0.1.2"
+              dependencies:
+              - id: "NPM::is-number:3.0.0"
+                dependencies:
+                - id: "NPM::kind-of:3.2.2"
+                  dependencies:
+                  - id: "NPM::is-buffer:1.1.6"
+          - id: "NPM::sax:1.2.4"
     - id: "PNPM::pnpm-workspaces:1.0.1"
       definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/package.json"
       authors:
@@ -50,16 +86,31 @@ analyzer:
       scopes:
       - name: "dependencies"
         dependencies:
-        - id: "NPM::chalk:4.0.0"
+        - id: "NPM::json-stable-stringify:1.0.1"
           dependencies:
-          - id: "NPM::ansi-styles:4.3.0"
-            dependencies:
-            - id: "NPM::color-convert:2.0.1"
-              dependencies:
-              - id: "NPM::color-name:1.1.4"
-          - id: "NPM::supports-color:7.2.0"
-            dependencies:
-            - id: "NPM::has-flag:4.0.0"
+          - id: "NPM::jsonify:0.0.0"
+    - id: "PNPM::testing-pnpm-package-a:1.0.2"
+      definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/packages/package-a/package.json"
+      authors:
+      - "Marcel Bochtler"
+      declared_licenses:
+      - "ISC"
+      declared_licenses_processed:
+        spdx_expression: "ISC"
+      vcs:
+        type: ""
+        url: ""
+        revision: ""
+        path: ""
+      vcs_processed:
+        type: "Git"
+        url: "<REPLACE_URL_PROCESSED>"
+        revision: "<REPLACE_REVISION>"
+        path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/packages/package-a"
+      homepage_url: ""
+      scopes:
+      - name: "dependencies"
+        dependencies:
         - id: "NPM::chalk:5.0.1"
         - id: "NPM::is-even:1.0.0"
           dependencies:
@@ -70,28 +121,7 @@ analyzer:
               - id: "NPM::kind-of:3.2.2"
                 dependencies:
                 - id: "NPM::is-buffer:1.1.6"
-        - id: "NPM::json-stable-stringify:1.0.1"
-          dependencies:
-          - id: "NPM::jsonify:0.0.0"
-        - id: "NPM::pnpm-workspaces:1.0.1"
-          dependencies:
-          - id: "NPM::json-stable-stringify:1.0.1"
-            dependencies:
-            - id: "NPM::jsonify:0.0.0"
         - id: "NPM::sax:1.2.4"
-        - id: "NPM::testing-pnpm-package-a:1.0.2"
-          dependencies:
-          - id: "NPM::chalk:5.0.1"
-          - id: "NPM::is-even:1.0.0"
-            dependencies:
-            - id: "NPM::is-odd:0.1.2"
-              dependencies:
-              - id: "NPM::is-number:3.0.0"
-                dependencies:
-                - id: "NPM::kind-of:3.2.2"
-                  dependencies:
-                  - id: "NPM::is-buffer:1.1.6"
-          - id: "NPM::sax:1.2.4"
       - name: "devDependencies"
         dependencies:
         - id: "NPM::require-uncached:2.0.0"
@@ -100,6 +130,38 @@ analyzer:
             dependencies:
             - id: "NPM::callsites:0.2.0"
           - id: "NPM::resolve-from:1.0.1"
+    - id: "PNPM::testing-pnpm-package-b:1.0.2"
+      definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/packages/package-b/package.json"
+      authors:
+      - "Marcel Bochtler"
+      declared_licenses:
+      - "ISC"
+      declared_licenses_processed:
+        spdx_expression: "ISC"
+      vcs:
+        type: ""
+        url: ""
+        revision: ""
+        path: ""
+      vcs_processed:
+        type: "Git"
+        url: "<REPLACE_URL_PROCESSED>"
+        revision: "<REPLACE_REVISION>"
+        path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/packages/package-b"
+      homepage_url: ""
+      scopes:
+      - name: "dependencies"
+        dependencies:
+        - id: "NPM::chalk:4.0.0"
+          dependencies:
+          - id: "NPM::ansi-styles:4.3.0"
+            dependencies:
+            - id: "NPM::color-convert:2.0.1"
+              dependencies:
+              - id: "NPM::color-name:1.1.4"
+          - id: "NPM::supports-color:7.2.0"
+            dependencies:
+            - id: "NPM::has-flag:4.0.0"
     - id: "PNPM::testing-pnpm-package-c:1.0.0"
       definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/non-workspace/package-c/package.json"
       authors:
@@ -604,66 +666,6 @@ analyzer:
         url: "https://github.com/dcodeIO/long.js.git"
         revision: "088e44e5e3343ef967698565678384fa474b003b"
         path: ""
-    - id: "NPM::pnpm-app-example:1.1.4"
-      purl: "pkg:npm/pnpm-app-example@1.1.4"
-      authors:
-      - "DavidWells"
-      declared_licenses:
-      - "ISC"
-      declared_licenses_processed:
-        spdx_expression: "ISC"
-      description: ""
-      homepage_url: ""
-      binary_artifact:
-        url: ""
-        hash:
-          value: ""
-          algorithm: ""
-      source_artifact:
-        url: ""
-        hash:
-          value: ""
-          algorithm: ""
-      vcs:
-        type: "Git"
-        url: "<REPLACE_URL>"
-        revision: "<REPLACE_REVISION>"
-        path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/app"
-      vcs_processed:
-        type: "Git"
-        url: "<REPLACE_URL_PROCESSED>"
-        revision: "<REPLACE_REVISION>"
-        path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/app"
-    - id: "NPM::pnpm-workspaces:1.0.1"
-      purl: "pkg:npm/pnpm-workspaces@1.0.1"
-      authors:
-      - "Marcel Bochtler"
-      declared_licenses:
-      - "MIT"
-      declared_licenses_processed:
-        spdx_expression: "MIT"
-      description: "PNPM workspaces test"
-      homepage_url: ""
-      binary_artifact:
-        url: ""
-        hash:
-          value: ""
-          algorithm: ""
-      source_artifact:
-        url: ""
-        hash:
-          value: ""
-          algorithm: ""
-      vcs:
-        type: "Git"
-        url: "<REPLACE_URL>"
-        revision: "<REPLACE_REVISION>"
-        path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces"
-      vcs_processed:
-        type: "Git"
-        url: "<REPLACE_URL_PROCESSED>"
-        revision: "<REPLACE_REVISION>"
-        path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces"
     - id: "NPM::require-uncached:2.0.0"
       purl: "pkg:npm/require-uncached@2.0.0"
       authors:
@@ -785,66 +787,6 @@ analyzer:
         url: "https://github.com/chalk/supports-color.git"
         revision: "c5edf46896d1fc1826cb1183a60d61eecb65d749"
         path: ""
-    - id: "NPM::testing-pnpm-package-a:1.0.2"
-      purl: "pkg:npm/testing-pnpm-package-a@1.0.2"
-      authors:
-      - "Marcel Bochtler"
-      declared_licenses:
-      - "ISC"
-      declared_licenses_processed:
-        spdx_expression: "ISC"
-      description: ""
-      homepage_url: ""
-      binary_artifact:
-        url: ""
-        hash:
-          value: ""
-          algorithm: ""
-      source_artifact:
-        url: ""
-        hash:
-          value: ""
-          algorithm: ""
-      vcs:
-        type: "Git"
-        url: "<REPLACE_URL>"
-        revision: "<REPLACE_REVISION>"
-        path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/packages/package-a"
-      vcs_processed:
-        type: "Git"
-        url: "<REPLACE_URL_PROCESSED>"
-        revision: "<REPLACE_REVISION>"
-        path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/packages/package-a"
-    - id: "NPM::testing-pnpm-package-b:1.0.2"
-      purl: "pkg:npm/testing-pnpm-package-b@1.0.2"
-      authors:
-      - "Marcel Bochtler"
-      declared_licenses:
-      - "ISC"
-      declared_licenses_processed:
-        spdx_expression: "ISC"
-      description: ""
-      homepage_url: ""
-      binary_artifact:
-        url: ""
-        hash:
-          value: ""
-          algorithm: ""
-      source_artifact:
-        url: ""
-        hash:
-          value: ""
-          algorithm: ""
-      vcs:
-        type: "Git"
-        url: "<REPLACE_URL>"
-        revision: "<REPLACE_REVISION>"
-        path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/packages/package-b"
-      vcs_processed:
-        type: "Git"
-        url: "<REPLACE_URL_PROCESSED>"
-        revision: "<REPLACE_REVISION>"
-        path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/packages/package-b"
 scanner: null
 advisor: null
 evaluator: null
