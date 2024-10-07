@@ -17,8 +17,6 @@
  * License-Filename: LICENSE
  */
 
-import com.vanniktech.maven.publish.SonatypeHost
-
 plugins {
     // Apply third-party plugins.
     id("com.vanniktech.maven.publish")
@@ -29,7 +27,7 @@ mavenPublishing {
         parent?.let { "${getGroupId(it.parent)}.${it.name.replace("-", "")}" }.orEmpty()
 
     coordinates(groupId = "org${getGroupId(parent)}")
-    publishToMavenCentral(SonatypeHost.DEFAULT)
+    publishToMavenCentral()
 
     pom {
         name = project.name
