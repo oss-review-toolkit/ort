@@ -475,7 +475,12 @@ open class Npm(
             }
         }
 
-        return NpmModuleInfo(moduleId, moduleDir, moduleInfo.packageJson, dependencies)
+        return NpmModuleInfo(
+            id = moduleId,
+            workingDir = moduleDir,
+            packageFile = moduleInfo.packageJson,
+            dependencies = dependencies
+        )
     }
 
     /**
