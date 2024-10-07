@@ -113,6 +113,9 @@ data class FossIdConfig(
     /** A limit on the amount of snippets to fetch. **/
     val snippetsLimit: Int,
 
+    /** The sensitivity of the scan. */
+    val sensitivity: Int,
+
     /** Stores the map with FossID-specific configuration options. */
     private val options: Map<String, String>
 ) {
@@ -157,6 +160,9 @@ data class FossIdConfig(
         /** Name of the configuration property defining the limit on the amount of snippets to fetch. */
         private const val PROP_SNIPPETS_LIMIT = "snippetsLimit"
 
+        /** Name of the configuration property defining the sensitivity of the scan. */
+        private const val PROP_SENSITIVITY = "sensitivity"
+
         /**
          * The scanner options beginning with this prefix will be used to parameterize project and scan names.
          */
@@ -173,6 +179,12 @@ data class FossIdConfig(
          */
         @JvmStatic
         private val DEFAULT_SNIPPETS_LIMIT = 500
+
+        /**
+         * Default scan sensitivity.
+         */
+        @JvmStatic
+        private val DEFAULT_SENSITIVITY = 10
 
         fun create(options: Options, secrets: Options): FossIdConfig {
             require(options.isNotEmpty()) { "No FossID Scanner configuration found." }
@@ -198,8 +210,14 @@ data class FossIdConfig(
             val fetchSnippetMatchedLines = options[PROP_FETCH_SNIPPET_MATCHED_LINES]?.toBoolean() == true
             val snippetsLimit = options[PROP_SNIPPETS_LIMIT]?.toInt() ?: DEFAULT_SNIPPETS_LIMIT
 
+            val sensitivity = options[PROP_SENSITIVITY]?.toInt() ?: DEFAULT_SENSITIVITY
+
             require(deltaScanLimit > 0) {
                 "deltaScanLimit must be > 0, current value is $deltaScanLimit."
+            }
+
+            require(sensitivity in 0..20) {
+                "Sensitivity must be between 0 and 20, current value is $sensitivity."
             }
 
             logger.info { "waitForResult parameter is set to '$waitForResult'" }
@@ -217,7 +235,8 @@ data class FossIdConfig(
                 timeout = timeout,
                 fetchSnippetMatchedLines = fetchSnippetMatchedLines,
                 options = options,
-                snippetsLimit = snippetsLimit
+                snippetsLimit = snippetsLimit,
+                sensitivity = sensitivity
             )
         }
     }

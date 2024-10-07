@@ -137,7 +137,8 @@ internal fun createConfig(
         timeout = 60,
         fetchSnippetMatchedLines = fetchSnippetMatchedLines,
         options = emptyMap(),
-        snippetsLimit = snippetsLimit
+        snippetsLimit = snippetsLimit,
+        sensitivity = 10
     )
 
     val namingProvider = createNamingProviderMock()

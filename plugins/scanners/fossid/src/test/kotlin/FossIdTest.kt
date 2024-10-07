@@ -459,7 +459,8 @@ class FossIdTest : WordSpec({
                     scanCode,
                     mapOf(
                         "auto_identification_detect_declaration" to "0",
-                        "auto_identification_detect_copyright" to "0"
+                        "auto_identification_detect_copyright" to "0",
+                        "sensitivity" to "10"
                     )
                 )
             } returns EntityResponseBody(status = 1)
@@ -475,7 +476,8 @@ class FossIdTest : WordSpec({
                     scanCode,
                     mapOf(
                         "auto_identification_detect_declaration" to "0",
-                        "auto_identification_detect_copyright" to "0"
+                        "auto_identification_detect_copyright" to "0",
+                        "sensitivity" to "10"
                     )
                 )
             }
@@ -504,7 +506,8 @@ class FossIdTest : WordSpec({
                     scanCode,
                     mapOf(
                         "auto_identification_detect_declaration" to "0",
-                        "auto_identification_detect_copyright" to "0"
+                        "auto_identification_detect_copyright" to "0",
+                        "sensitivity" to "10"
                     )
                 )
             } returns EntityResponseBody(
@@ -523,7 +526,8 @@ class FossIdTest : WordSpec({
                     scanCode,
                     mapOf(
                         "auto_identification_detect_declaration" to "0",
-                        "auto_identification_detect_copyright" to "0"
+                        "auto_identification_detect_copyright" to "0",
+                        "sensitivity" to "10"
                     )
                 )
             }
@@ -551,7 +555,8 @@ class FossIdTest : WordSpec({
                     scanCode,
                     mapOf(
                         "auto_identification_detect_declaration" to "0",
-                        "auto_identification_detect_copyright" to "0"
+                        "auto_identification_detect_copyright" to "0",
+                        "sensitivity" to "10"
                     )
                 )
             } returns EntityResponseBody(status = 1)
@@ -642,7 +647,8 @@ class FossIdTest : WordSpec({
                     mapOf(
                         *FossId.deltaScanRunParameters(originCode),
                         "auto_identification_detect_declaration" to "0",
-                        "auto_identification_detect_copyright" to "0"
+                        "auto_identification_detect_copyright" to "0",
+                        "sensitivity" to "10"
                     )
                 )
             }
@@ -690,7 +696,8 @@ class FossIdTest : WordSpec({
                     mapOf(
                         *FossId.deltaScanRunParameters(originCode),
                         "auto_identification_detect_declaration" to "0",
-                        "auto_identification_detect_copyright" to "0"
+                        "auto_identification_detect_copyright" to "0",
+                        "sensitivity" to "10"
                     )
                 )
             }
@@ -738,7 +745,8 @@ class FossIdTest : WordSpec({
                     mapOf(
                         *FossId.deltaScanRunParameters(originCode2),
                         "auto_identification_detect_declaration" to "0",
-                        "auto_identification_detect_copyright" to "0"
+                        "auto_identification_detect_copyright" to "0",
+                        "sensitivity" to "10"
                     )
                 )
             }
@@ -786,7 +794,8 @@ class FossIdTest : WordSpec({
                     mapOf(
                         *FossId.deltaScanRunParameters(originCode2),
                         "auto_identification_detect_declaration" to "0",
-                        "auto_identification_detect_copyright" to "0"
+                        "auto_identification_detect_copyright" to "0",
+                        "sensitivity" to "10"
                     )
                 )
             }
@@ -830,7 +839,8 @@ class FossIdTest : WordSpec({
                     mapOf(
                         *FossId.deltaScanRunParameters(originCode),
                         "auto_identification_detect_declaration" to "0",
-                        "auto_identification_detect_copyright" to "0"
+                        "auto_identification_detect_copyright" to "0",
+                        "sensitivity" to "10"
                     )
                 )
                 service.listIgnoreRules(USER, API_KEY, originCode)
@@ -884,7 +894,8 @@ class FossIdTest : WordSpec({
                     mapOf(
                         *FossId.deltaScanRunParameters(originCode),
                         "auto_identification_detect_declaration" to "0",
-                        "auto_identification_detect_copyright" to "0"
+                        "auto_identification_detect_copyright" to "0",
+                        "sensitivity" to "10"
                     )
                 )
                 service.listIgnoreRules(USER, API_KEY, originCode)
@@ -931,7 +942,8 @@ class FossIdTest : WordSpec({
                     scanCode,
                     mapOf(
                         "auto_identification_detect_declaration" to "0",
-                        "auto_identification_detect_copyright" to "0"
+                        "auto_identification_detect_copyright" to "0",
+                        "sensitivity" to "10"
                     )
                 )
             }

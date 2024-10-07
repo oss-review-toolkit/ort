@@ -74,7 +74,8 @@ class FossIdConfigTest : WordSpec({
                 timeout = 300,
                 fetchSnippetMatchedLines = true,
                 options = options,
-                snippetsLimit = 1000
+                snippetsLimit = 1000,
+                sensitivity = 10
             )
         }
 
@@ -101,7 +102,8 @@ class FossIdConfigTest : WordSpec({
                 timeout = 60,
                 fetchSnippetMatchedLines = false,
                 options = options,
-                snippetsLimit = 500
+                snippetsLimit = 500,
+                sensitivity = 10
             )
         }
 
@@ -132,6 +134,20 @@ class FossIdConfigTest : WordSpec({
             val options = mapOf(
                 "serverUrl" to SERVER_URL,
                 "deltaScanLimit" to "0"
+            )
+
+            val secrets = mapOf(
+                "user" to USER,
+                "apiKey" to API_KEY
+            )
+
+            shouldThrow<IllegalArgumentException> { FossIdConfig.create(options, secrets) }
+        }
+
+        "throw if the sensitivity is invalid" {
+            val options = mapOf(
+                "serverUrl" to SERVER_URL,
+                "sensitivity" to "21"
             )
 
             val secrets = mapOf(
