@@ -418,12 +418,11 @@ open class Npm(
     private fun getModuleDependencies(moduleDir: File, scopes: Set<String>): Set<NpmModuleInfo> {
         val workspaceModuleDirs = findWorkspaceSubmodules(moduleDir)
 
-        @Suppress("UnsafeCallOnNullableType")
         return buildSet {
-            addAll(getModuleInfo(moduleDir, scopes)!!.dependencies)
+            addAll(checkNotNull(getModuleInfo(moduleDir, scopes)).dependencies)
 
             workspaceModuleDirs.forEach { workspaceModuleDir ->
-                addAll(getModuleInfo(workspaceModuleDir, scopes, listOf(moduleDir))!!.dependencies)
+                addAll(checkNotNull(getModuleInfo(workspaceModuleDir, scopes, listOf(moduleDir))).dependencies)
             }
         }
     }
