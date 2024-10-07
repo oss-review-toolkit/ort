@@ -134,15 +134,15 @@ open class Npm(
     /**
      * Load the submodule directories of the project defined in [moduleDir].
      */
-    protected open fun loadWorkspaceSubmodules(moduleDir: File): List<File> {
+    protected open fun loadWorkspaceSubmodules(moduleDir: File): Set<File> {
         val nodeModulesDir = moduleDir.resolve("node_modules")
-        if (!nodeModulesDir.isDirectory) return emptyList()
+        if (!nodeModulesDir.isDirectory) return emptySet()
 
         val searchDirs = nodeModulesDir.walk().maxDepth(1).filter {
             (it.isDirectory && it.name.startsWith("@")) || it == nodeModulesDir
         }
 
-        return searchDirs.flatMapTo(mutableListOf()) { dir ->
+        return searchDirs.flatMapTo(mutableSetOf()) { dir ->
             dir.walk().maxDepth(1).filter {
                 it.isDirectory && it.isSymbolicLink() && it != dir
             }
@@ -386,12 +386,12 @@ open class Npm(
     }
 
     /** Cache for submodules identified by its moduleDir absolutePath */
-    private val submodulesCache = ConcurrentHashMap<String, List<File>>()
+    private val submodulesCache = ConcurrentHashMap<String, Set<File>>()
 
     /**
      * Find the directories which are defined as submodules of the project within [moduleDir].
      */
-    protected fun findWorkspaceSubmodules(moduleDir: File): List<File> =
+    protected fun findWorkspaceSubmodules(moduleDir: File): Set<File> =
         submodulesCache.getOrPut(moduleDir.absolutePath) {
             loadWorkspaceSubmodules(moduleDir)
         }
