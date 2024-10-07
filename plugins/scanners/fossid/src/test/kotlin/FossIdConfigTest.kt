@@ -141,6 +141,20 @@ class FossIdConfigTest : WordSpec({
 
             shouldThrow<IllegalArgumentException> { FossIdConfig.create(options, secrets) }
         }
+
+        "throw if the sensitivity is invalid" {
+            val options = mapOf(
+                "serverUrl" to SERVER_URL,
+                "sensitivity" to "21"
+            )
+
+            val secrets = mapOf(
+                "user" to USER,
+                "apiKey" to API_KEY
+            )
+
+            shouldThrow<IllegalArgumentException> { FossIdConfig.create(options, secrets) }
+        }
     }
 
     "createNamingProvider" should {
