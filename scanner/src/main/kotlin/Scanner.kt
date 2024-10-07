@@ -357,7 +357,7 @@ class Scanner(
                 }
 
                 val provenanceScanResultsToStore = mutableSetOf<Pair<KnownProvenance, ScanResult>>()
-                packagesWithIncompleteScanResult.forEach processResults@{ pkg ->
+                packagesWithIncompleteScanResult.forEach { pkg ->
                     val nestedProvenanceScanResult = scanResult.toNestedProvenanceScanResult(nestedProvenance)
                     controller.addNestedScanResult(scanner, nestedProvenanceScanResult)
 
