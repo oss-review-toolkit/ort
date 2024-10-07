@@ -55,10 +55,10 @@ class Pnpm(
 
     override fun File.isWorkspaceDir() = realFile() in findWorkspaceSubmodules(analysisRoot)
 
-    override fun loadWorkspaceSubmodules(moduleDir: File): List<File> {
+    override fun loadWorkspaceSubmodules(moduleDir: File): Set<File> {
         val process = run(moduleDir, "list", "--recursive", "--depth=-1", "--parseable")
 
-        return process.stdout.lines().filter { it.isNotEmpty() }.map { File(it) }
+        return process.stdout.lines().filter { it.isNotEmpty() }.mapTo(mutableSetOf()) { File(it) }
     }
 
     override fun command(workingDir: File?) = if (Os.isWindows) "pnpm.cmd" else "pnpm"
