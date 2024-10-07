@@ -91,7 +91,9 @@ object DeclaredLicenseProcessor {
             ?: SpdxDeclaredLicenseMapping.map(strippedLicense.removePrefix(SpdxConstants.TAG).trim())
 
         val processedLicense = mappedLicense ?: strippedLicense.toSpdxOrNull()
-        return processedLicense?.normalize()?.takeIf { it.isValid() || it.toString() == SpdxConstants.NONE }
+        return processedLicense?.normalize()?.takeIf {
+            it.isValid(SpdxExpression.Strictness.ALLOW_LICENSEREF_EXCEPTIONS) || it.toString() == SpdxConstants.NONE
+        }
     }
 
     /**
