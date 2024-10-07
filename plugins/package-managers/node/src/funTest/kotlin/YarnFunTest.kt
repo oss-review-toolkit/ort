@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.packagemanagers.node
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.should
 
+import org.ossreviewtoolkit.analyzer.collateMultipleProjects
 import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.toYaml
@@ -45,7 +46,7 @@ class YarnFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/yarn/workspaces/package.json")
             val expectedResultFile = getAssetFile("projects/synthetic/yarn/workspaces-expected-output.yml")
 
-            val result = create("Yarn").resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = create("Yarn").collateMultipleProjects(definitionFile).withResolvedScopes()
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }

@@ -27,7 +27,6 @@ import java.util.concurrent.ConcurrentHashMap
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
 
 import org.apache.logging.log4j.kotlin.logger
@@ -50,7 +49,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.model.orEmpty
+import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.readTree
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NON_EXISTING_SEMVER
@@ -74,7 +73,6 @@ import org.ossreviewtoolkit.utils.common.realFile
 import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.common.withoutPrefix
-import org.ossreviewtoolkit.utils.ort.runBlocking
 
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
@@ -184,79 +182,66 @@ open class Npm(
         // Actually installing the dependencies is the easiest way to get the metadata of all transitive
         // dependencies (i.e. their respective "package.json" files). As NPM uses a global cache, the same
         // dependency is only ever downloaded once.
-        val issues = installDependencies(workingDir)
+        val installIssues = installDependencies(workingDir)
 
-        val project = runCatching {
-            parseProject(definitionFile)
-        }.getOrElse {
-            logger.error { "Failed to parse project information: ${it.collectMessages()}" }
-            Project.EMPTY
+        if (installIssues.any { it.severity == Severity.ERROR }) {
+            val project = runCatching {
+                parseProject(definitionFile)
+            }.getOrElse {
+                logger.error { "Failed to parse project information: ${it.collectMessages()}" }
+                Project.EMPTY
+            }
+
+            return listOf(ProjectAnalyzerResult(project, emptySet(), installIssues))
         }
 
-        if (issues.any { it.severity == Severity.ERROR }) {
-            return listOf(ProjectAnalyzerResult(project, emptySet(), issues))
-        }
+        val projectDirs = findWorkspaceSubmodules(workingDir).toSet() + definitionFile.parentFile
 
-        // Create packages for all modules found in the workspace and add them to the graph builder. They are
-        // reused when they are referenced by scope dependencies.
-        val isWorkspacesProject = (findWorkspaceSubmodules(workingDir) - workingDir).isNotEmpty()
-        if (isWorkspacesProject) {
-            val packages = parseInstalledModules(workingDir)
-            graphBuilder.addPackages(packages)
-        }
+        return projectDirs.map { projectDir ->
+            val issues = mutableListOf<Issue>().apply {
+                if (projectDir == workingDir) addAll(installIssues)
+            }
 
-        val scopeNames = setOfNotNull(
-            // Optional dependencies are just like regular dependencies except that NPM ignores failures when
-            // installing them (see https://docs.npmjs.com/files/package.json#optionaldependencies), i.e. they are
-            // not a separate scope in ORT semantics.
-            buildDependencyGraphForScopes(
-                project,
-                workingDir,
-                setOf(DEPENDENCIES_SCOPE, OPTIONAL_DEPENDENCIES_SCOPE),
-                DEPENDENCIES_SCOPE
-            ),
+            val project = runCatching {
+                parseProject(projectDir.resolve("package.json"))
+            }.getOrElse {
+                issues += createAndLogIssue(
+                    source = managerName,
+                    message = "Failed to parse project information: ${it.collectMessages()}"
+                )
 
-            buildDependencyGraphForScopes(
-                project,
-                workingDir,
-                setOf(DEV_DEPENDENCIES_SCOPE),
-                DEV_DEPENDENCIES_SCOPE
+                Project.EMPTY
+            }
+
+            val scopeNames = setOfNotNull(
+                // Optional dependencies are just like regular dependencies except that NPM ignores failures when
+                // installing them (see https://docs.npmjs.com/files/package.json#optionaldependencies), i.e. they are
+                // not a separate scope in ORT semantics.
+                buildDependencyGraphForScopes(
+                    project,
+                    projectDir,
+                    setOf(DEPENDENCIES_SCOPE, OPTIONAL_DEPENDENCIES_SCOPE),
+                    DEPENDENCIES_SCOPE,
+                    projectDirs,
+                    workspaceDir = workingDir
+                ),
+
+                buildDependencyGraphForScopes(
+                    project,
+                    projectDir,
+                    setOf(DEV_DEPENDENCIES_SCOPE),
+                    DEV_DEPENDENCIES_SCOPE,
+                    projectDirs,
+                    workspaceDir = workingDir
+                )
             )
-        )
 
-        return listOf(
             ProjectAnalyzerResult(
                 project = project.copy(scopeNames = scopeNames),
                 // Packages are set later by createPackageManagerResult().
                 packages = emptySet(),
                 issues = issues
             )
-        )
-    }
-
-    private fun parseInstalledModules(rootDirectory: File): List<Package> {
-        val nodeModulesDir = rootDirectory.resolve("node_modules")
-
-        logger.info { "Searching for 'package.json' files in '$nodeModulesDir'..." }
-
-        val visitedDirs = mutableSetOf<File>()
-
-        val nodeModulesFiles = nodeModulesDir.walk().onEnter { dir ->
-            !dir.isSymbolicLink() || visitedDirs.add(dir.realFile())
-        }.filter {
-            it.isFile && it.name == "package.json" &&
-                isValidNodeModulesDirectory(nodeModulesDir, nodeModulesDirForPackageJson(it))
-        }
-
-        return runBlocking(Dispatchers.IO) {
-            nodeModulesFiles.mapTo(mutableListOf()) { file ->
-                logger.debug { "Starting to parse '$file'..." }
-                async {
-                    parsePackage(rootDirectory, file).also { pkg ->
-                        logger.debug { "Finished parsing '$file' to '${pkg.id}'." }
-                    }
-                }
-            }.awaitAll().distinctBy { it.id }
         }
     }
 
@@ -299,41 +284,28 @@ open class Npm(
 
         val id = Identifier("NPM", namespace, name, version)
 
-        if (packageDir.isWorkspaceDir()) {
-            val realPackageDir = packageDir.realFile()
+        val hasIncompleteData = description.isEmpty() || homepageUrl.isEmpty() || downloadUrl.isEmpty()
+            || hash == Hash.NONE || vcsFromPackage == VcsInfo.EMPTY
 
-            logger.debug { "The package directory '$packageDir' links to '$realPackageDir'." }
+        if (hasIncompleteData) {
+            runCatching {
+                getRemotePackageDetailsAsync(workingDir, "$rawName@$version").await()
+            }.onSuccess { details ->
+                if (description.isEmpty()) description = details.description.orEmpty()
+                if (homepageUrl.isEmpty()) homepageUrl = details.homepage.orEmpty()
 
-            // Yarn workspaces refer to project dependencies from the same workspace via symbolic links. Use that
-            // as the trigger to get VcsInfo locally instead of querying the NPM registry.
-            logger.debug { "Resolving the package info for '${id.toCoordinates()}' locally from '$realPackageDir'." }
-
-            val vcsFromDirectory = VersionControlSystem.forDirectory(realPackageDir)?.getInfo().orEmpty()
-            vcsFromPackage = vcsFromPackage.merge(vcsFromDirectory)
-        } else {
-            val hasIncompleteData = description.isEmpty() || homepageUrl.isEmpty() || downloadUrl.isEmpty()
-                || hash == Hash.NONE || vcsFromPackage == VcsInfo.EMPTY
-
-            if (hasIncompleteData) {
-                runCatching {
-                    getRemotePackageDetailsAsync(workingDir, "$rawName@$version").await()
-                }.onSuccess { details ->
-                    if (description.isEmpty()) description = details.description.orEmpty()
-                    if (homepageUrl.isEmpty()) homepageUrl = details.homepage.orEmpty()
-
-                    details.dist?.let { dist ->
-                        if (downloadUrl.isEmpty() || hash == Hash.NONE) {
-                            downloadUrl = dist.tarball.orEmpty()
-                            hash = Hash.create(dist.shasum.orEmpty())
-                        }
+                details.dist?.let { dist ->
+                    if (downloadUrl.isEmpty() || hash == Hash.NONE) {
+                        downloadUrl = dist.tarball.orEmpty()
+                        hash = Hash.create(dist.shasum.orEmpty())
                     }
-
-                    // Do not replace but merge, because it happens that `package.json` has VCS info while
-                    // `npm view` doesn't, for example for dependencies hosted on GitLab package registry.
-                    vcsFromPackage = vcsFromPackage.merge(parseNpmVcsInfo(details))
-                }.onFailure { e ->
-                    logger.debug { "Unable to get package details from a remote registry: ${e.collectMessages()}" }
                 }
+
+                // Do not replace but merge, because it happens that `package.json` has VCS info while
+                // `npm view` doesn't, for example for dependencies hosted on GitLab package registry.
+                vcsFromPackage = vcsFromPackage.merge(parseNpmVcsInfo(details))
+            }.onFailure { e ->
+                logger.debug { "Unable to get package details from a remote registry: ${e.collectMessages()}" }
             }
         }
 
@@ -403,39 +375,31 @@ open class Npm(
         project: Project,
         workingDir: File,
         scopes: Set<String>,
-        targetScope: String
+        targetScope: String,
+        projectDirs: Set<File>,
+        workspaceDir: File? = null
     ): String? {
         if (excludes.isScopeExcluded(targetScope)) return null
 
         val qualifiedScopeName = DependencyGraph.qualifyScope(project, targetScope)
-        val moduleDependencies = getModuleDependencies(workingDir, scopes)
+        val moduleInfo = checkNotNull(getModuleInfo(workingDir, scopes, projectDirs, listOfNotNull(workspaceDir)))
 
-        moduleDependencies.forEach { graphBuilder.addDependency(qualifiedScopeName, it) }
+        moduleInfo.dependencies.forEach { graphBuilder.addDependency(qualifiedScopeName, it) }
 
-        return targetScope.takeUnless { moduleDependencies.isEmpty() }
-    }
-
-    private fun getModuleDependencies(moduleDir: File, scopes: Set<String>): Set<NpmModuleInfo> {
-        val workspaceModuleDirs = findWorkspaceSubmodules(moduleDir)
-
-        return buildSet {
-            addAll(checkNotNull(getModuleInfo(moduleDir, scopes)).dependencies)
-
-            workspaceModuleDirs.forEach { workspaceModuleDir ->
-                addAll(checkNotNull(getModuleInfo(workspaceModuleDir, scopes, listOf(moduleDir))).dependencies)
-            }
-        }
+        return targetScope.takeUnless { moduleInfo.dependencies.isEmpty() }
     }
 
     private fun getModuleInfo(
         moduleDir: File,
         scopes: Set<String>,
+        projectDirs: Set<File>,
         ancestorModuleDirs: List<File> = emptyList(),
-        ancestorModuleIds: List<Identifier> = emptyList(),
-        packageType: String = managerName
+        ancestorModuleIds: List<Identifier> = emptyList()
     ): NpmModuleInfo? {
         val moduleInfo = parsePackageJson(moduleDir, scopes)
         val dependencies = mutableSetOf<NpmModuleInfo>()
+        val packageType = managerName.takeIf { moduleDir.realFile() in projectDirs } ?: "NPM"
+
         val moduleId = splitNpmNamespaceAndName(moduleInfo.name).let { (namespace, name) ->
             Identifier(packageType, namespace, name, moduleInfo.version)
         }
@@ -458,9 +422,9 @@ open class Npm(
                 getModuleInfo(
                     moduleDir = dependencyModuleDir,
                     scopes = setOf("dependencies", "optionalDependencies"),
+                    projectDirs,
                     ancestorModuleDirs = dependencyModuleDirPath.subList(1, dependencyModuleDirPath.size),
-                    ancestorModuleIds = ancestorModuleIds + moduleId,
-                    packageType = "NPM"
+                    ancestorModuleIds = ancestorModuleIds + moduleId
                 )?.let { dependencies += it }
 
                 return@forEach
@@ -477,7 +441,8 @@ open class Npm(
             id = moduleId,
             workingDir = moduleDir,
             packageFile = moduleInfo.packageJson,
-            dependencies = dependencies
+            dependencies = dependencies,
+            isProject = moduleDir.realFile() in projectDirs
         )
     }
 
@@ -550,7 +515,7 @@ open class Npm(
         val declaredLicenses = packageJson.licenses.mapNpmLicenses()
         val authors = parseNpmAuthor(packageJson.authors.firstOrNull()) // TODO: parse all authors.
         val homepageUrl = packageJson.homepage.orEmpty()
-        val projectDir = packageJsonFile.parentFile
+        val projectDir = packageJsonFile.parentFile.realFile()
         val vcsFromPackage = parseNpmVcsInfo(packageJson)
 
         return Project(
@@ -560,7 +525,7 @@ open class Npm(
                 name = projectName,
                 version = version
             ),
-            definitionFilePath = VersionControlSystem.getPathInfo(packageJsonFile).path,
+            definitionFilePath = VersionControlSystem.getPathInfo(packageJsonFile.realFile()).path,
             authors = authors,
             declaredLicenses = declaredLicenses,
             vcs = vcsFromPackage,
@@ -617,33 +582,6 @@ private fun findDependencyModuleDir(dependencyName: String, searchModuleDirs: Li
     }
 
     return emptyList()
-}
-
-private fun isValidNodeModulesDirectory(rootModulesDir: File, modulesDir: File?): Boolean {
-    if (modulesDir == null) return false
-
-    var currentDir: File = modulesDir
-    while (currentDir != rootModulesDir) {
-        if (currentDir.name != "node_modules") {
-            return false
-        }
-
-        currentDir = currentDir.parentFile.parentFile
-        if (currentDir.name.startsWith("@")) {
-            currentDir = currentDir.parentFile
-        }
-    }
-
-    return true
-}
-
-private fun nodeModulesDirForPackageJson(packageJson: File): File? {
-    var modulesDir = packageJson.parentFile.parentFile
-    if (modulesDir.name.startsWith("@")) {
-        modulesDir = modulesDir.parentFile
-    }
-
-    return modulesDir.takeIf { it.name == "node_modules" }
 }
 
 internal fun List<String>.groupLines(vararg markers: String): List<String> {

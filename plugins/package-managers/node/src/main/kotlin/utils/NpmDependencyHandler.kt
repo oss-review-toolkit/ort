@@ -25,6 +25,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
+import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.plugins.packagemanagers.node.Npm
 import org.ossreviewtoolkit.utils.ort.runBlocking
@@ -47,7 +48,10 @@ internal data class NpmModuleInfo(
     val packageFile: File,
 
     /** A set with information about the modules this module depends on. */
-    val dependencies: Set<NpmModuleInfo>
+    val dependencies: Set<NpmModuleInfo>,
+
+    /** A flag indicating whether this module is a [Project] or a [Package]. */
+    val isProject: Boolean
 ) {
     /**
      * [workingDir] and [packageFile] are not relevant when adding this [NpmModuleInfo] to the dependency graph.
@@ -68,10 +72,11 @@ internal class NpmDependencyHandler(private val npm: Npm) : DependencyHandler<Np
 
     override fun dependenciesFor(dependency: NpmModuleInfo): List<NpmModuleInfo> = dependency.dependencies.toList()
 
-    override fun linkageFor(dependency: NpmModuleInfo): PackageLinkage = PackageLinkage.DYNAMIC
+    override fun linkageFor(dependency: NpmModuleInfo): PackageLinkage =
+        PackageLinkage.DYNAMIC.takeUnless { dependency.isProject } ?: PackageLinkage.PROJECT_DYNAMIC
 
-    override fun createPackage(dependency: NpmModuleInfo, issues: MutableCollection<Issue>): Package =
+    override fun createPackage(dependency: NpmModuleInfo, issues: MutableCollection<Issue>): Package? =
         runBlocking {
-            npm.parsePackage(dependency.workingDir, dependency.packageFile)
+            npm.takeUnless { dependency.isProject }?.parsePackage(dependency.workingDir, dependency.packageFile)
         }
 }
