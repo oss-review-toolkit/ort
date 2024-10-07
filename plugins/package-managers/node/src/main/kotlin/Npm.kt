@@ -177,6 +177,7 @@ open class Npm(
         }
     }
 
+    // TODO: Add support for bundledDependencies.
     private fun resolveDependenciesInternal(definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
 
@@ -222,8 +223,6 @@ open class Npm(
                 DEV_DEPENDENCIES_SCOPE
             )
         )
-
-        // TODO: Add support for bundledDependencies.
 
         return listOf(
             ProjectAnalyzerResult(
