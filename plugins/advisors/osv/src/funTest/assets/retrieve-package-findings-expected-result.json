@@ -5,8 +5,8 @@
       "capabilities" : [ "VULNERABILITIES" ]
     },
     "summary" : {
-      "start_time" : "2024-09-20T17:06:02.063849743Z",
-      "end_time" : "2024-09-20T17:06:03.290312055Z"
+      "start_time" : "2024-10-08T15:05:07.107271709Z",
+      "end_time" : "2024-10-08T15:05:08.507721093Z"
     },
     "vulnerabilities" : [ {
       "id" : "GHSA-jgrh-5m3h-9c5f",
@@ -37,95 +37,6 @@
         "score" : 5.9,
         "vector" : "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
       } ]
-    }, {
-      "id" : "GHSA-rrr8-f88r-h8q6",
-      "summary" : "find-my-way has a ReDoS vulnerability in multiparametric routes",
-      "description" : "### Impact\n\nA bad regular expression is generated any time you have two parameters within a single segment, when adding a `-` at the end, like `/:a-:b-`.\n\n### Patches\n\nUpdate to find-my-way v8.2.2 or v9.0.1. or subsequent versions.\n\n### Workarounds\n\nNo known workarounds.\n\n### References\n\n- [CVE-2024-45296](https://github.com/advisories/GHSA-9wv6-86v2-598j)\n- [Detailed blog post about `path-to-regexp` vulnerability](https://blakeembrey.com/posts/2024-09-web-redos/)",
-      "references" : [ {
-        "url" : "https://github.com/delvedor/find-my-way/security/advisories/GHSA-rrr8-f88r-h8q6",
-        "scoring_system" : "CVSS_V3",
-        "severity" : "HIGH",
-        "score" : 7.5,
-        "vector" : "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-      }, {
-        "url" : "https://nvd.nist.gov/vuln/detail/CVE-2024-45813",
-        "scoring_system" : "CVSS_V3",
-        "severity" : "HIGH",
-        "score" : 7.5,
-        "vector" : "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-      }, {
-        "url" : "https://github.com/delvedor/find-my-way/commit/17fae694dcefc056045da201681c1530f0f80518",
-        "scoring_system" : "CVSS_V3",
-        "severity" : "HIGH",
-        "score" : 7.5,
-        "vector" : "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-      }, {
-        "url" : "https://github.com/delvedor/find-my-way/commit/5e9e0eb5d8d438e06a185d5e536a896572dd0440",
-        "scoring_system" : "CVSS_V3",
-        "severity" : "HIGH",
-        "score" : 7.5,
-        "vector" : "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-      }, {
-        "url" : "https://blakeembrey.com/posts/2024-09-web-redos",
-        "scoring_system" : "CVSS_V3",
-        "severity" : "HIGH",
-        "score" : 7.5,
-        "vector" : "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-      }, {
-        "url" : "https://github.com/advisories/GHSA-9wv6-86v2-598j",
-        "scoring_system" : "CVSS_V3",
-        "severity" : "HIGH",
-        "score" : 7.5,
-        "vector" : "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-      }, {
-        "url" : "https://github.com/delvedor/find-my-way",
-        "scoring_system" : "CVSS_V3",
-        "severity" : "HIGH",
-        "score" : 7.5,
-        "vector" : "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-      }, {
-        "url" : "https://github.com/delvedor/find-my-way/security/advisories/GHSA-rrr8-f88r-h8q6",
-        "scoring_system" : "CVSS_V4",
-        "severity" : "HIGH",
-        "score" : null,
-        "vector" : "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N"
-      }, {
-        "url" : "https://nvd.nist.gov/vuln/detail/CVE-2024-45813",
-        "scoring_system" : "CVSS_V4",
-        "severity" : "HIGH",
-        "score" : null,
-        "vector" : "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N"
-      }, {
-        "url" : "https://github.com/delvedor/find-my-way/commit/17fae694dcefc056045da201681c1530f0f80518",
-        "scoring_system" : "CVSS_V4",
-        "severity" : "HIGH",
-        "score" : null,
-        "vector" : "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N"
-      }, {
-        "url" : "https://github.com/delvedor/find-my-way/commit/5e9e0eb5d8d438e06a185d5e536a896572dd0440",
-        "scoring_system" : "CVSS_V4",
-        "severity" : "HIGH",
-        "score" : null,
-        "vector" : "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N"
-      }, {
-        "url" : "https://blakeembrey.com/posts/2024-09-web-redos",
-        "scoring_system" : "CVSS_V4",
-        "severity" : "HIGH",
-        "score" : null,
-        "vector" : "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N"
-      }, {
-        "url" : "https://github.com/advisories/GHSA-9wv6-86v2-598j",
-        "scoring_system" : "CVSS_V4",
-        "severity" : "HIGH",
-        "score" : null,
-        "vector" : "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N"
-      }, {
-        "url" : "https://github.com/delvedor/find-my-way",
-        "scoring_system" : "CVSS_V4",
-        "severity" : "HIGH",
-        "score" : null,
-        "vector" : "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N"
-      } ]
     } ]
   },
   "NPM::discord-markdown:2.3.0" : {
@@ -134,8 +45,8 @@
       "capabilities" : [ "VULNERABILITIES" ]
     },
     "summary" : {
-      "start_time" : "2024-09-20T17:06:02.063849743Z",
-      "end_time" : "2024-09-20T17:06:03.304464351Z"
+      "start_time" : "2024-10-08T15:05:07.107271709Z",
+      "end_time" : "2024-10-08T15:05:08.513407606Z"
     },
     "vulnerabilities" : [ {
       "id" : "GHSA-9r27-994c-4xch",
@@ -168,8 +79,8 @@
       "capabilities" : [ "VULNERABILITIES" ]
     },
     "summary" : {
-      "start_time" : "2024-09-20T17:06:02.063849743Z",
-      "end_time" : "2024-09-20T17:06:03.304512942Z"
+      "start_time" : "2024-10-08T15:05:07.107271709Z",
+      "end_time" : "2024-10-08T15:05:08.513458413Z"
     },
     "vulnerabilities" : [ {
       "id" : "GHSA-3qr5-h7w4-3gx3",
