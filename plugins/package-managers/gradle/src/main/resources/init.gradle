@@ -409,7 +409,7 @@ class AbstractOrtDependencyTreePlugin<T> implements Plugin<T> {
             // available since Gradle 6.0.
             boolean isDeprecatedForResolving = false
             if (configuration.metaClass.respondsTo(configuration, 'getResolutionAlternatives')) {
-                isDeprecatedForResolving = configuration.getResolutionAlternatives() != null
+                isDeprecatedForResolving = configuration.getResolutionAlternatives()
             }
 
             return canBeResolved && !isDeprecatedForResolving
