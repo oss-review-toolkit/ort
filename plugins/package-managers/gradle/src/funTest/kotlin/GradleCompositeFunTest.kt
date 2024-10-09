@@ -33,7 +33,8 @@ class GradleCompositeFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/gradle-composite/project1/build.gradle.kts")
         val expectedResultFile = getAssetFile("projects/synthetic/gradle-composite-expected-output.yml")
 
-        val result = create("Gradle").resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = create("Gradle", "javaVersion" to "17")
+            .resolveSingleProject(definitionFile, resolveScopes = true)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
