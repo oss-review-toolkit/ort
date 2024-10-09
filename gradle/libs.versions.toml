@@ -42,7 +42,6 @@ kotlinxHtml = "0.11.0"
 kotlinxSerialization = "1.7.3"
 ks3 = "0.6.0"
 tomlkt = "0.4.0"
-ktor = "2.3.12"
 log4jApi = "2.24.1"
 log4jApiKotlin = "1.5.0"
 logback = "1.5.9"
@@ -143,8 +142,6 @@ kotlinx-serialization-yaml = { module = "com.charleskorn.kaml:kaml", version.ref
 ks3-jdk = { module = "io.ks3:ks3-jdk", version.ref = "ks3" }
 ks3-standard = { module = "io.ks3:ks3-standard", version.ref = "ks3" }
 ksp = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp"}
-ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
-ktor-client-okHttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 log4j-api = { module = "org.apache.logging.log4j:log4j-api", version.ref = "log4jApi" }
 log4j-api-kotlin = { module = "org.apache.logging.log4j:log4j-api-kotlin", version.ref = "log4jApiKotlin" }
 log4j-api-slf4j = { module = "org.apache.logging.log4j:log4j-to-slf4j", version.ref = "log4jApi" }
