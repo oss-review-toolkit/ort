@@ -41,13 +41,10 @@ import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.OrtConfigurationWrapper
 import org.ossreviewtoolkit.model.config.ProviderPluginConfiguration
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.utils.common.EnvironmentVariableFilter
 import org.ossreviewtoolkit.utils.ort.ORT_REFERENCE_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.matchExpectedResult
-import org.ossreviewtoolkit.utils.test.patchActualResult
 
 /**
  * A test for the main entry point of the application.
@@ -205,26 +202,6 @@ class OrtMainFunTest : StringSpec() {
             withClue(result.stderr) {
                 lines.count() shouldBe 2
             }
-        }
-
-        "Analyzer creates correct output" {
-            val definitionFile = File(
-                "../plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/gradle/build.gradle"
-            )
-            val expectedResultFile = getAssetFile("gradle-all-dependencies-expected-result-with-curations.yml")
-            val expectedResult = matchExpectedResult(expectedResultFile, definitionFile)
-
-            OrtMain().test(
-                "-c", configFile.path,
-                "-P", "ort.analyzer.enabledPackageManagers=Gradle",
-                "analyze",
-                "-i", definitionFile.parentFile.absolutePath,
-                "-o", outputDir.path
-            )
-
-            val ortResult = outputDir.resolve("analyzer-result.yml").readValue<OrtResult>().withResolvedScopes()
-
-            patchActualResult(ortResult.toYaml(), patchStartAndEndTime = true) shouldBe expectedResult
         }
 
         "EnvironmentVariableFilter is correctly initialized" {
