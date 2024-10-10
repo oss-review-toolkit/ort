@@ -19,25 +19,31 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.pub
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer
-import com.fasterxml.jackson.module.kotlin.readValue
+import com.charleskorn.kaml.Yaml
+import com.charleskorn.kaml.YamlConfiguration
+import com.charleskorn.kaml.YamlInput
+import com.charleskorn.kaml.YamlScalar
+import com.charleskorn.kaml.yamlMap
 
 import java.io.File
 
-import org.ossreviewtoolkit.model.yamlMapper
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.descriptors.serialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
+
 import org.ossreviewtoolkit.plugins.packagemanagers.pub.PackageInfo.Description
 
-internal fun parseLockfile(lockfile: File) = yamlMapper.readValue<Lockfile>(lockfile)
+private val YAML = Yaml(configuration = YamlConfiguration(strictMode = false))
+
+internal fun parseLockfile(lockfile: File) = YAML.decodeFromString<Lockfile>(lockfile.readText())
 
 /**
  * See https://github.com/dart-lang/pub/blob/d86e3c979a3889fed61b68dae9f9156d0891704d/lib/src/lock_file.dart#L18.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Serializable
 internal data class Lockfile(
     val packages: Map<String, PackageInfo> = emptyMap()
 )
@@ -45,33 +51,46 @@ internal data class Lockfile(
 /**
  * See https://github.com/dart-lang/pub/blob/d86e3c979a3889fed61b68dae9f9156d0891704d/lib/src/package_name.dart#L73.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Serializable
 internal data class PackageInfo(
     val dependency: String,
-    @JsonDeserialize(using = DescriptionDeserializer::class)
+    @Serializable(DescriptionDeserializer::class)
     val description: Description,
     val source: String? = null,
     val version: String? = null
 ) {
-    @JsonIgnoreProperties(ignoreUnknown = true)
     data class Description(
         val name: String? = null,
         val url: String? = null,
         val path: String? = null,
-        @JsonProperty("resolved-ref")
         val resolvedRef: String? = null,
         val relative: Boolean? = null,
         val sha256: String? = null
     )
 }
 
-internal class DescriptionDeserializer : StdDeserializer<Description>(Description::class.java) {
-    override fun deserialize(parser: JsonParser, context: DeserializationContext): Description {
-        val node = context.readTree(parser)
-        return if (node.isTextual) {
-            Description(name = node.textValue())
+private class DescriptionDeserializer : KSerializer<Description> {
+    override val descriptor = serialDescriptor<Description>()
+
+    override fun serialize(encoder: Encoder, value: Description) {
+        TODO("Not yet implemented")
+    }
+
+    override fun deserialize(decoder: Decoder): Description {
+        val node = (decoder.beginStructure(descriptor) as YamlInput).node
+        return if (node is YamlScalar) {
+            Description(name = node.content)
         } else {
-            parser.codec.readValue(node.traverse(), Description::class.java)
+            fun scalar(key: String) = node.yamlMap.getScalar(key)?.content
+
+            Description(
+                name = scalar("name"),
+                url = scalar("url"),
+                path = scalar("path"),
+                resolvedRef = scalar("resolved-ref"),
+                relative = scalar("relative").toBoolean(),
+                sha256 = scalar("sha256")
+            )
         }
     }
 }
