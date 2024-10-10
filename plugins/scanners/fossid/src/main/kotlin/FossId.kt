@@ -708,7 +708,8 @@ class FossId internal constructor(
 
             val optionsFromConfig = arrayOf(
                 "auto_identification_detect_declaration" to "${config.detectLicenseDeclarations.compareTo(false)}",
-                "auto_identification_detect_copyright" to "${config.detectCopyrightStatements.compareTo(false)}"
+                "auto_identification_detect_copyright" to "${config.detectCopyrightStatements.compareTo(false)}",
+                "sensitivity" to "${config.sensitivity}"
             )
 
             val scanResult = service.runScan(

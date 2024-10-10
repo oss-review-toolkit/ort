@@ -267,6 +267,8 @@ ort:
 
           urlMappingExample: "https://my-repo.example.org(?<repoPath>.*) -> ssh://my-mapped-repo.example.org${repoPath}"
 
+          sensitivity: 10
+
         secrets:
           user: user
           apiKey: XYZ
