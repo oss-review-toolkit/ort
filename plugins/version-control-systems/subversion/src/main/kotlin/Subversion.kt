@@ -28,6 +28,7 @@ import java.nio.file.Paths
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.downloader.VersionControlSystemConfiguration
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -126,21 +127,21 @@ class Subversion : VersionControlSystem() {
         return pathRevisions.single()
     }
 
-    override fun updateWorkingTree(workingTree: WorkingTree, revision: String, path: String, recursive: Boolean) =
+    override fun updateWorkingTree(workingTree: WorkingTree, config: VersionControlSystemConfiguration) =
         runCatching {
             // Note that the path should never be part of the URL as that would root the working tree at that path, but
             // the path should be available in the working tree.
-            val (svnUrl, svnRevision) = revision.toLongOrNull()?.let { numericRevision ->
+            val (svnUrl, svnRevision) = config.revision.toLongOrNull()?.let { numericRevision ->
                 val url = workingTree.getRemoteUrl()
 
                 SVNURL.parseURIEncoded(url) to SVNRevision.create(numericRevision)
             } ?: run {
-                val url = listOf(workingTree.getRemoteUrl(), revision).joinToString("/")
+                val url = listOf(workingTree.getRemoteUrl(), config.revision).joinToString("/")
 
                 SVNURL.parseURIEncoded(url) to SVNRevision.HEAD
             }
 
-            clientManager.updateClient.isIgnoreExternals = !recursive
+            clientManager.updateClient.isIgnoreExternals = !config.recursive
 
             logger.info {
                 val printableRevision = svnRevision.name ?: svnRevision.number
@@ -153,16 +154,16 @@ class Subversion : VersionControlSystem() {
                 svnUrl,
                 /* pegRevision = */ SVNRevision.HEAD,
                 /* revision = */ svnRevision,
-                if (path.isEmpty()) SVNDepth.INFINITY else SVNDepth.EMPTY,
+                if (config.path.isEmpty()) SVNDepth.INFINITY else SVNDepth.EMPTY,
                 /* allowUnversionedObstructions = */ false,
                 /* depthIsSticky = */ true
             )
 
             logger.info { "$type working tree '${workingTree.workingDir}' is at revision $workingTreeRevision." }
 
-            if (path.isNotEmpty()) {
-                logger.info { "Deepening path '$path' in $type working tree '${workingTree.workingDir}'." }
-                val pathRevision = deepenWorkingTreePath(workingTree, path, svnRevision)
+            if (config.path.isNotEmpty()) {
+                logger.info { "Deepening path '${config.path}' in $type working tree '${workingTree.workingDir}'." }
+                val pathRevision = deepenWorkingTreePath(workingTree, config.path, svnRevision)
                 check(pathRevision == workingTreeRevision)
             }
 

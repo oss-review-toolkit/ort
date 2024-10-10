@@ -24,6 +24,7 @@ import java.io.File
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.downloader.VersionControlSystemConfiguration
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -93,18 +94,18 @@ class Mercurial : VersionControlSystem(MercurialCommand) {
         return getWorkingTree(targetDir)
     }
 
-    override fun updateWorkingTree(workingTree: WorkingTree, revision: String, path: String, recursive: Boolean) =
+    override fun updateWorkingTree(workingTree: WorkingTree, config: VersionControlSystemConfiguration) =
         runCatching {
             // To safe network bandwidth, only pull exactly the revision we want. Do not use "-u" to update the
             // working tree just yet, as Mercurial would only update if new changesets were pulled. But that might
             // not be the case if the requested revision is already available locally.
-            MercurialCommand.run(workingTree.getRootPath(), "pull", "-r", revision)
+            MercurialCommand.run(workingTree.getRootPath(), "pull", "-r", config.revision)
 
             // TODO: Implement updating of subrepositories.
 
             // Explicitly update the working tree to the desired revision.
-            MercurialCommand.run(workingTree.getRootPath(), "update", revision).isSuccess
+            MercurialCommand.run(workingTree.getRootPath(), "update", config.revision).isSuccess
         }.map {
-            revision
+            config.revision
         }
 }

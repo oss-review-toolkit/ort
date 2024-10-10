@@ -26,6 +26,7 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
+import org.ossreviewtoolkit.downloader.VersionControlSystemConfiguration
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -62,21 +63,21 @@ class GitFunTest : WordSpec({
     "updateWorkingTree" should {
         "update the working tree to the correct revision" {
             branches.values.forEach { revision ->
-                git.updateWorkingTree(workingTree, revision) shouldBeSuccess revision
+                git.updateWorkingTree(workingTree, VersionControlSystemConfiguration(revision)) shouldBeSuccess revision
                 workingTree.getRevision() shouldBe revision
             }
         }
 
         "update the working tree to the correct tag" {
             tags.forEach { (tag, revision) ->
-                git.updateWorkingTree(workingTree, tag) shouldBeSuccess tag
+                git.updateWorkingTree(workingTree, VersionControlSystemConfiguration(tag)) shouldBeSuccess tag
                 workingTree.getRevision() shouldBe revision
             }
         }
 
         "update the working tree to the correct branch" {
             branches.forEach { (branch, revision) ->
-                git.updateWorkingTree(workingTree, branch) shouldBeSuccess branch
+                git.updateWorkingTree(workingTree, VersionControlSystemConfiguration(branch)) shouldBeSuccess branch
                 workingTree.getRevision() shouldBe revision
             }
         }
@@ -85,10 +86,10 @@ class GitFunTest : WordSpec({
             val branch = "branch1"
             val revision = branches.getValue(branch)
 
-            git.updateWorkingTree(workingTree, branch)
+            git.updateWorkingTree(workingTree, VersionControlSystemConfiguration(branch))
             GitCommand.run("reset", "--hard", "HEAD~1", workingDir = repoDir)
 
-            git.updateWorkingTree(workingTree, branch) shouldBeSuccess branch
+            git.updateWorkingTree(workingTree, VersionControlSystemConfiguration(branch)) shouldBeSuccess branch
             workingTree.getRevision() shouldBe revision
         }
     }

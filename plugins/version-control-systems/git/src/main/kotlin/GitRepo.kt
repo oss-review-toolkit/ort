@@ -33,6 +33,7 @@ import org.apache.logging.log4j.kotlin.logger
 import org.eclipse.jgit.lib.SymbolicRef
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.downloader.VersionControlSystemConfiguration
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -190,11 +191,9 @@ class GitRepo : VersionControlSystem(GitRepoCommand) {
 
     override fun updateWorkingTree(
         workingTree: WorkingTree,
-        revision: String,
-        path: String,
-        recursive: Boolean
+        config: VersionControlSystemConfiguration
     ): Result<String> {
-        val manifestRevision = revision.takeUnless { it.isBlank() }
+        val manifestRevision = config.revision.takeUnless { it.isBlank() }
         val manifestPath = workingTree.getInfo().url.parseRepoManifestPath()
 
         val manifestOptions = listOfNotNull(
@@ -211,7 +210,7 @@ class GitRepo : VersionControlSystem(GitRepoCommand) {
             // want to be able to download such projects, so specify "--force-sync" to work around that issue.
             val syncArgs = mutableListOf("sync", "-c", "--force-sync")
 
-            if (recursive) syncArgs += "--fetch-submodules"
+            if (config.recursive) syncArgs += "--fetch-submodules"
 
             runRepo(workingTree.workingDir, *syncArgs.toTypedArray())
 
@@ -225,7 +224,7 @@ class GitRepo : VersionControlSystem(GitRepoCommand) {
                 "Failed to sync the working tree$revisionDetails$pathDetails: ${e.collectMessages()}"
             }
         }.map {
-            revision
+            config.revision
         }
     }
 

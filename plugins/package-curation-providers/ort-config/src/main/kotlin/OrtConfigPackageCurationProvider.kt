@@ -25,6 +25,7 @@ import java.io.IOException
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.downloader.VersionControlSystemConfiguration
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCuration
@@ -96,7 +97,10 @@ private fun updateOrtConfig(dir: File) {
 
     vcs.apply {
         val workingTree = initWorkingTree(dir, vcsInfo)
-        val revision = updateWorkingTree(workingTree, ORT_CONFIG_REPOSITORY_BRANCH).getOrThrow()
+        val revision = updateWorkingTree(
+            workingTree,
+            VersionControlSystemConfiguration(ORT_CONFIG_REPOSITORY_BRANCH)
+        ).getOrThrow()
         logger.info {
             "Successfully cloned $revision from $ORT_CONFIG_REPOSITORY_URL."
         }

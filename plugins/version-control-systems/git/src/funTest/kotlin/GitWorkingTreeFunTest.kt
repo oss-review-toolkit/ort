@@ -29,6 +29,7 @@ import io.kotest.matchers.shouldBe
 import java.io.File
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.downloader.VersionControlSystemConfiguration
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -47,7 +48,7 @@ class GitWorkingTreeFunTest : StringSpec({
     beforeSpec {
         println("Cloning ${vcsInfo.url} to '$repoDir'...")
         workingTree = git.initWorkingTree(repoDir, vcsInfo)
-        git.updateWorkingTree(workingTree, "main")
+        git.updateWorkingTree(workingTree, VersionControlSystemConfiguration("main"))
     }
 
     "Git detects non-working-trees" {

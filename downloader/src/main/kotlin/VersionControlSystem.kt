@@ -248,7 +248,10 @@ abstract class VersionControlSystem(
 
         for ((index, revision) in revisionCandidates.withIndex()) {
             logger.info { "Trying revision candidate '$revision' (${index + 1} of ${revisionCandidates.size})..." }
-            results += updateWorkingTree(workingTree, revision, pkg.vcsProcessed.path, recursive)
+            results += updateWorkingTree(
+                workingTree,
+                VersionControlSystemConfiguration(revision, pkg.vcsProcessed.path, recursive)
+            )
             if (results.last().isSuccess) break
         }
 
@@ -379,16 +382,9 @@ abstract class VersionControlSystem(
     abstract fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree
 
     /**
-     * Update the [working tree][workingTree] by checking out the given [revision], optionally limited to the given
-     * [path] and [recursively][recursive] updating any nested working trees. Return a [Result] that encapsulates the
-     * originally requested [revision] on success, or the occurred exception on failure.
+     * Update the [working tree][workingTree] using a VCS configuration [config].
      */
-    abstract fun updateWorkingTree(
-        workingTree: WorkingTree,
-        revision: String,
-        path: String = "",
-        recursive: Boolean = false
-    ): Result<String>
+    abstract fun updateWorkingTree(workingTree: WorkingTree, config: VersionControlSystemConfiguration): Result<String>
 
     /**
      * Check whether the given [revision] is likely to name a fixed revision that does not move. Return a [Result] with

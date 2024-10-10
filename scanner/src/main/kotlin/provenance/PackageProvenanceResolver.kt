@@ -26,6 +26,7 @@ import okhttp3.Request
 
 import org.apache.logging.log4j.kotlin.logger
 
+import org.ossreviewtoolkit.downloader.VersionControlSystemConfiguration
 import org.ossreviewtoolkit.downloader.WorkingTreeCache
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
@@ -228,7 +229,7 @@ class DefaultPackageProvenanceResolver(
 
             revisionCandidates.forEachIndexed { index, revision ->
                 logger.info { "Trying revision candidate '$revision' (${index + 1} of ${revisionCandidates.size})." }
-                val result = vcs.updateWorkingTree(workingTree, revision)
+                val result = vcs.updateWorkingTree(workingTree, VersionControlSystemConfiguration(revision))
 
                 if (pkg.vcsProcessed.path.isNotBlank() &&
                     !workingTree.getRootPath().resolve(pkg.vcsProcessed.path).exists()
