@@ -17,17 +17,35 @@
  * License-Filename: LICENSE
  */
 
+@file:Suppress("DEPRECATION") // For deprecated ArtifactRepository interface.
 package org.ossreviewtoolkit.plugins.packagemanagers.maven.utils
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.slot
+import io.mockk.verify
+
+import org.apache.maven.artifact.repository.ArtifactRepository
+import org.apache.maven.artifact.repository.Authentication
+import org.apache.maven.bridge.MavenRepositorySystem
 import org.apache.maven.model.Scm
 import org.apache.maven.project.MavenProject
+import org.apache.maven.repository.Proxy as MavenProxy
+
+import org.eclipse.aether.RepositorySystemSession
+import org.eclipse.aether.repository.Proxy
+import org.eclipse.aether.repository.RemoteRepository
+import org.eclipse.aether.util.repository.AuthenticationBuilder
 
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.MavenSupport.Companion.toArtifactRepository
 
 class MavenSupportTest : WordSpec({
     "getOriginalScm()" should {
@@ -208,6 +226,120 @@ class MavenSupportTest : WordSpec({
                 checksum = "prefix 868c0792233fc78d8c9bac29ac79ade988301318 suffix",
                 algorithm = "SHA1"
             ) shouldBe Hash("868c0792233fc78d8c9bac29ac79ade988301318", "SHA1")
+        }
+    }
+
+    "toArtifactRepository()" should {
+        "create a plain artifact repository from a remote repository" {
+            val repositoryId = "aTestRepository"
+            val repositoryUrl = "https://example.com/repo"
+            val repository = RemoteRepository.Builder("ignoredId", null, repositoryUrl).build()
+
+            val session = mockk<RepositorySystemSession>()
+            val artifactRepository = mockk<ArtifactRepository>()
+            val repositorySystem = mockk<MavenRepositorySystem> {
+                every {
+                    createRepository(repositoryUrl, repositoryId, true, null, true, null, null)
+                } returns artifactRepository
+            }
+
+            repository.toArtifactRepository(session, repositorySystem, repositoryId) shouldBe artifactRepository
+        }
+
+        "create an artifact repository with a configured proxy" {
+            val repository = RemoteRepository.Builder("someId", "someType", "https://example.com/repo")
+                .setProxy(Proxy("http", "proxy.example.com", 8080))
+                .build()
+
+            val session = mockk<RepositorySystemSession>()
+            val artifactRepository = mockk<ArtifactRepository> {
+                every { proxy = any() } just runs
+            }
+
+            val repositorySystem = mockk<MavenRepositorySystem> {
+                every {
+                    createRepository(any(), any(), true, null, true, null, null)
+                } returns artifactRepository
+            }
+
+            repository.toArtifactRepository(session, repositorySystem, "id") shouldBe artifactRepository
+
+            val slotProxy = slot<MavenProxy>()
+            verify {
+                artifactRepository.proxy = capture(slotProxy)
+            }
+
+            val mavenProxy = slotProxy.captured
+            mavenProxy.host shouldBe "proxy.example.com"
+            mavenProxy.port shouldBe 8080
+            mavenProxy.protocol shouldBe "http"
+        }
+
+        "create an artifact repository with authentication" {
+            val repository = RemoteRepository.Builder("someId", "someType", "https://example.com/repo")
+                .setAuthentication(
+                    AuthenticationBuilder()
+                        .addUsername("scott")
+                        .addPassword("tiger".toCharArray())
+                        .addPrivateKey("privateKeyPath", "passphrase")
+                        .build()
+                ).build()
+
+            val session = mockk<RepositorySystemSession>()
+            val artifactRepository = mockk<ArtifactRepository> {
+                every { authentication = any() } just runs
+            }
+
+            val repositorySystem = mockk<MavenRepositorySystem> {
+                every {
+                    createRepository(any(), any(), true, null, true, null, null)
+                } returns artifactRepository
+            }
+
+            repository.toArtifactRepository(session, repositorySystem, "id") shouldBe artifactRepository
+
+            val slotAuth = slot<Authentication>()
+            verify {
+                artifactRepository.authentication = capture(slotAuth)
+            }
+
+            val mavenAuth = slotAuth.captured
+            mavenAuth.username shouldBe "scott"
+            mavenAuth.password shouldBe "tiger"
+            mavenAuth.privateKey shouldBe "privateKeyPath"
+            mavenAuth.passphrase shouldBe "passphrase"
+        }
+
+        "create an artifact repository with a configured proxy that requires authentication" {
+            val proxyAuth = AuthenticationBuilder()
+                .addUsername("proxyUser")
+                .addPassword("proxyPassword".toCharArray())
+                .build()
+            val repository = RemoteRepository.Builder("someId", "someType", "https://example.com/repo")
+                .setProxy(Proxy("http", "proxy.example.com", 8080, proxyAuth))
+                .build()
+
+            val session = mockk<RepositorySystemSession>()
+            val artifactRepository = mockk<ArtifactRepository> {
+                every { proxy = any() } just runs
+            }
+
+            val repositorySystem = mockk<MavenRepositorySystem> {
+                every {
+                    createRepository(any(), any(), true, null, true, null, null)
+                } returns artifactRepository
+            }
+
+            repository.toArtifactRepository(session, repositorySystem, "id") shouldBe artifactRepository
+
+            val slotProxy = slot<MavenProxy>()
+            verify {
+                artifactRepository.proxy = capture(slotProxy)
+            }
+
+            val mavenProxy = slotProxy.captured
+            mavenProxy.userName shouldBe "proxyUser"
+            mavenProxy.password shouldBe "proxyPassword"
         }
     }
 })
