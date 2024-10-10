@@ -28,7 +28,9 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManager.Companion.getFallbackProjectName
 import org.ossreviewtoolkit.analyzer.PackageManager.Companion.processPackageVcs
+import org.ossreviewtoolkit.analyzer.PackageManager.Companion.processProjectVcs
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -182,7 +184,7 @@ open class Npm(
 
         if (installIssues.any { it.severity == Severity.ERROR }) {
             val project = runCatching {
-                parseProject(definitionFile)
+                parseProject(definitionFile, analysisRoot, managerName)
             }.getOrElse {
                 logger.error { "Failed to parse project information: ${it.collectMessages()}" }
                 Project.EMPTY
@@ -199,7 +201,7 @@ open class Npm(
             }
 
             val project = runCatching {
-                parseProject(projectDir.resolve("package.json"))
+                parseProject(projectDir.resolve("package.json"), analysisRoot, managerName)
             }.getOrElse {
                 issues += createAndLogIssue(
                     source = managerName,
@@ -391,47 +393,6 @@ open class Npm(
                 packageJson = packageJsonFile
             )
         }
-
-    private fun parseProject(packageJsonFile: File): Project {
-        logger.debug { "Parsing project info from '$packageJsonFile'." }
-
-        val packageJson = parsePackageJson(packageJsonFile)
-
-        val rawName = packageJson.name.orEmpty()
-        val (namespace, name) = splitNpmNamespaceAndName(rawName)
-
-        val projectName = name.ifBlank {
-            getFallbackProjectName(analysisRoot, packageJsonFile).also {
-                logger.warn { "'$packageJsonFile' does not define a name, falling back to '$it'." }
-            }
-        }
-
-        val version = packageJson.version.orEmpty()
-        if (version.isBlank()) {
-            logger.warn { "'$packageJsonFile' does not define a version." }
-        }
-
-        val declaredLicenses = packageJson.licenses.mapNpmLicenses()
-        val authors = parseNpmAuthor(packageJson.authors.firstOrNull()) // TODO: parse all authors.
-        val homepageUrl = packageJson.homepage.orEmpty()
-        val projectDir = packageJsonFile.parentFile.realFile()
-        val vcsFromPackage = parseNpmVcsInfo(packageJson)
-
-        return Project(
-            id = Identifier(
-                type = managerName,
-                namespace = namespace,
-                name = projectName,
-                version = version
-            ),
-            definitionFilePath = VersionControlSystem.getPathInfo(packageJsonFile.realFile()).path,
-            authors = authors,
-            declaredLicenses = declaredLicenses,
-            vcs = vcsFromPackage,
-            vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, homepageUrl),
-            homepageUrl = homepageUrl
-        )
-    }
 
     /**
      * Install dependencies using the given package manager command.
@@ -640,4 +601,45 @@ internal fun parsePackage(
     }
 
     return module
+}
+
+private fun parseProject(packageJsonFile: File, analysisRoot: File, managerName: String): Project {
+    Npm.logger.debug { "Parsing project info from '$packageJsonFile'." }
+
+    val packageJson = parsePackageJson(packageJsonFile)
+
+    val rawName = packageJson.name.orEmpty()
+    val (namespace, name) = splitNpmNamespaceAndName(rawName)
+
+    val projectName = name.ifBlank {
+        getFallbackProjectName(analysisRoot, packageJsonFile).also {
+            Npm.logger.warn { "'$packageJsonFile' does not define a name, falling back to '$it'." }
+        }
+    }
+
+    val version = packageJson.version.orEmpty()
+    if (version.isBlank()) {
+        Npm.logger.warn { "'$packageJsonFile' does not define a version." }
+    }
+
+    val declaredLicenses = packageJson.licenses.mapNpmLicenses()
+    val authors = parseNpmAuthor(packageJson.authors.firstOrNull()) // TODO: parse all authors.
+    val homepageUrl = packageJson.homepage.orEmpty()
+    val projectDir = packageJsonFile.parentFile.realFile()
+    val vcsFromPackage = parseNpmVcsInfo(packageJson)
+
+    return Project(
+        id = Identifier(
+            type = managerName,
+            namespace = namespace,
+            name = projectName,
+            version = version
+        ),
+        definitionFilePath = VersionControlSystem.getPathInfo(packageJsonFile.realFile()).path,
+        authors = authors,
+        declaredLicenses = declaredLicenses,
+        vcs = vcsFromPackage,
+        vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, homepageUrl),
+        homepageUrl = homepageUrl
+    )
 }
