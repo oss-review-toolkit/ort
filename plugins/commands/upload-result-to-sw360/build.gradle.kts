@@ -33,5 +33,10 @@ dependencies {
     implementation(projects.utils.spdxUtils)
 
     implementation(libs.clikt)
-    implementation(libs.sw360Client)
+    implementation(libs.sw360Client) {
+        constraints {
+            implementation("commons-io:commons-io:2.17.0")
+                .because("commons-io 2.11.0 is vulnerable by CVE-2024-47554")
+        }
+    }
 }
