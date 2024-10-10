@@ -166,8 +166,6 @@ private class VersionControlSystemTestImpl(
 
     override fun updateWorkingTree(
         workingTree: WorkingTree,
-        revision: String,
-        path: String,
-        recursive: Boolean
+        config: VersionControlSystemConfiguration
     ): Result<String> = Result.failure(UnsupportedOperationException("Unexpected invocation."))
 }

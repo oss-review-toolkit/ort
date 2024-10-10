@@ -45,6 +45,7 @@ import org.eclipse.jgit.transport.sshd.ServerKeyDatabase
 import org.eclipse.jgit.transport.sshd.SshdSessionFactory
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.downloader.VersionControlSystemConfiguration
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -168,19 +169,17 @@ class Git : VersionControlSystem(GitCommand) {
 
     override fun updateWorkingTree(
         workingTree: WorkingTree,
-        revision: String,
-        path: String,
-        recursive: Boolean
+        config: VersionControlSystemConfiguration
     ): Result<String> =
         (workingTree as GitWorkingTree).useRepo {
             Git(this).use { git ->
                 logger.info { "Updating working tree from ${workingTree.getRemoteUrl()}." }
 
-                updateWorkingTreeWithoutSubmodules(workingTree, git, revision).mapCatching {
+                updateWorkingTreeWithoutSubmodules(workingTree, git, config.revision).mapCatching {
                     // In case this throws the exception gets encapsulated as a failure.
-                    if (recursive) updateSubmodules(workingTree)
+                    if (config.recursive) updateSubmodules(workingTree)
 
-                    revision
+                    config.revision
                 }
             }
         }

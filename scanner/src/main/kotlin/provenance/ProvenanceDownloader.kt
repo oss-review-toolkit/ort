@@ -27,6 +27,7 @@ import kotlin.io.path.moveTo
 
 import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.downloader.Downloader
+import org.ossreviewtoolkit.downloader.VersionControlSystemConfiguration
 import org.ossreviewtoolkit.downloader.WorkingTreeCache
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
@@ -102,7 +103,7 @@ class DefaultProvenanceDownloader(
 
     private suspend fun downloadFromVcs(provenance: RepositoryProvenance, downloadDir: File) {
         workingTreeCache.use(provenance.vcsInfo) { vcs, workingTree ->
-            vcs.updateWorkingTree(workingTree, provenance.resolvedRevision)
+            vcs.updateWorkingTree(workingTree, VersionControlSystemConfiguration(provenance.resolvedRevision))
 
             val root = workingTree.getRootPath()
 

@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.scanner.provenance
 
 import org.apache.logging.log4j.kotlin.logger
 
+import org.ossreviewtoolkit.downloader.VersionControlSystemConfiguration
 import org.ossreviewtoolkit.downloader.WorkingTreeCache
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
@@ -78,8 +79,10 @@ class DefaultNestedProvenanceResolver(
         return workingTreeCache.use(provenance.vcsInfo) { vcs, workingTree ->
             vcs.updateWorkingTree(
                 workingTree,
-                provenance.resolvedRevision,
-                recursive = true
+                VersionControlSystemConfiguration(
+                    revision = provenance.resolvedRevision,
+                    recursive = true
+                )
             ).onFailure { throw it }
 
             val subRepositories = workingTree.getNested().mapValues { (_, nestedVcs) ->
