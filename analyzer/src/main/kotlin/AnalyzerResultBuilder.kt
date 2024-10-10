@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.analyzer
 
+import org.apache.logging.log4j.kotlin.logger
+
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.DependencyGraphNavigator
@@ -41,9 +43,23 @@ class AnalyzerResultBuilder {
 
     fun build(excludes: Excludes = Excludes.EMPTY): AnalyzerResult {
         val duplicates = (projects.map { it.toPackage() } + packages).getDuplicates { it.id }
-        require(duplicates.isEmpty()) {
-            "Unable to create the AnalyzerResult as it contains packages and projects with the same ids: " +
-                duplicates.values
+        if (duplicates.isNotEmpty()) {
+            logger.warn {
+                "AnalyzerResult contains packages and projects with the same ids: ${duplicates.values}"
+            }
+            // Log duplicates as issues
+            for ((key, items) in duplicates) {
+                val issue = createAndLogIssue(
+                    source = "analyzer",
+                    message = "AnalyzerResult contains packages and projects with the same ids: ${items}"
+                )
+
+                val existingIssues = issues.getOrDefault(key, emptyList())
+                issues[key] = existingIssues + issue
+            }
+            // Remove duplicates from packages, to avoid side effects by having duplicate entries in the dependency tree
+            packages.removeAll { it.id in duplicates.keys.toSet() }
+
         }
 
         return AnalyzerResult(projects, packages, issues, dependencyGraphs)
