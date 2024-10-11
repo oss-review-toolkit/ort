@@ -17,13 +17,14 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packagemanagers.node
+package org.ossreviewtoolkit.plugins.packagemanagers.node.pnpm
 
 import java.io.File
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.plugins.packagemanagers.node.Npm
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NpmDetection
 import org.ossreviewtoolkit.utils.common.Os
