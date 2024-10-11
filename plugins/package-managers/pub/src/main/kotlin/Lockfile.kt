@@ -19,25 +19,36 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.pub
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer
-import com.fasterxml.jackson.module.kotlin.readValue
+import com.charleskorn.kaml.Yaml
+import com.charleskorn.kaml.YamlConfiguration
+import com.charleskorn.kaml.YamlInput
+import com.charleskorn.kaml.YamlScalar
 
 import java.io.File
 
-import org.ossreviewtoolkit.model.yamlMapper
+import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.KeepGeneratedSerializer
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.descriptors.SerialKind
+import kotlinx.serialization.descriptors.buildSerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+
 import org.ossreviewtoolkit.plugins.packagemanagers.pub.PackageInfo.Description
 
-internal fun parseLockfile(lockfile: File) = yamlMapper.readValue<Lockfile>(lockfile)
+private val YAML = Yaml(configuration = YamlConfiguration(strictMode = false))
+
+internal fun parseLockfile(lockfile: File) = YAML.decodeFromString<Lockfile>(lockfile.readText())
 
 /**
  * See https://github.com/dart-lang/pub/blob/d86e3c979a3889fed61b68dae9f9156d0891704d/lib/src/lock_file.dart#L18.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Serializable
 internal data class Lockfile(
     val packages: Map<String, PackageInfo> = emptyMap()
 )
@@ -45,33 +56,47 @@ internal data class Lockfile(
 /**
  * See https://github.com/dart-lang/pub/blob/d86e3c979a3889fed61b68dae9f9156d0891704d/lib/src/package_name.dart#L73.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Serializable
 internal data class PackageInfo(
     val dependency: String,
-    @JsonDeserialize(using = DescriptionDeserializer::class)
     val description: Description,
     val source: String? = null,
     val version: String? = null
 ) {
-    @JsonIgnoreProperties(ignoreUnknown = true)
+    @KeepGeneratedSerializer
+    @Serializable(DescriptionDeserializer::class)
     data class Description(
         val name: String? = null,
         val url: String? = null,
         val path: String? = null,
-        @JsonProperty("resolved-ref")
+        @SerialName("resolved-ref")
         val resolvedRef: String? = null,
         val relative: Boolean? = null,
         val sha256: String? = null
     )
 }
 
-internal class DescriptionDeserializer : StdDeserializer<Description>(Description::class.java) {
-    override fun deserialize(parser: JsonParser, context: DeserializationContext): Description {
-        val node = context.readTree(parser)
-        return if (node.isTextual) {
-            Description(name = node.textValue())
-        } else {
-            parser.codec.readValue(node.traverse(), Description::class.java)
+private class DescriptionDeserializer : KSerializer<Description> by Description.generatedSerializer() {
+    @OptIn(InternalSerializationApi::class)
+    override val descriptor: SerialDescriptor by lazy {
+        val serialName = checkNotNull(Description::class.qualifiedName)
+
+        buildSerialDescriptor(serialName, SerialKind.CONTEXTUAL) {
+            element("object", Description.generatedSerializer().descriptor)
+            element("string", PrimitiveSerialDescriptor("description", PrimitiveKind.STRING))
         }
+    }
+
+    override fun deserialize(decoder: Decoder): Description {
+        val input = decoder.beginStructure(descriptor) as YamlInput
+
+        val result = when (val node = input.node) {
+            is YamlScalar -> Description(name = node.content)
+            else -> Description.generatedSerializer().deserialize(decoder)
+        }
+
+        input.endStructure(descriptor)
+
+        return result
     }
 }
