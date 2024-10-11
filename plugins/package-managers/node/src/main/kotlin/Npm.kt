@@ -603,7 +603,7 @@ internal fun parsePackage(
     return module
 }
 
-private fun parseProject(packageJsonFile: File, analysisRoot: File, managerName: String): Project {
+internal fun parseProject(packageJsonFile: File, analysisRoot: File, managerName: String): Project {
     Npm.logger.debug { "Parsing project info from '$packageJsonFile'." }
 
     val packageJson = parsePackageJson(packageJsonFile)
