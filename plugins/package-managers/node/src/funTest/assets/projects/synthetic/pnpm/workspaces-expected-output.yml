@@ -89,6 +89,14 @@ analyzer:
         - id: "NPM::json-stable-stringify:1.0.1"
           dependencies:
           - id: "NPM::jsonify:0.0.0"
+        - id: "PNPM::pnpm-workspaces:1.0.1"
+          linkage: "PROJECT_DYNAMIC"
+          dependencies:
+          - id: "NPM::json-stable-stringify:1.0.1"
+            dependencies:
+            - id: "NPM::jsonify:0.0.0"
+          - id: "PNPM::pnpm-workspaces:1.0.1"
+            linkage: "PROJECT_DYNAMIC"
     - id: "PNPM::testing-pnpm-package-a:1.0.2"
       definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/packages/package-a/package.json"
       authors:
