@@ -167,6 +167,17 @@ ort:
 
     sourceCodeOrigins: [VCS, ARTIFACT]
 
+    # Optional VCS-specific configuration options.
+    versionControlSystems:
+      Git:
+        options:
+          # Depth of the commit history to fetch when updating submodules
+          submoduleHistoryDepth: 10
+
+          # A flag to control whether nested submodules should be updated (true), or if only the submodules
+          # on the first layer should be considered (false).
+          updateNestedSubmodules: true
+
   scanner:
     skipConcluded: true
     skipExcluded: true

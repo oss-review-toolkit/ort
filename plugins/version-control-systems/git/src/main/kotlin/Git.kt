@@ -48,6 +48,7 @@ import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.VersionControlSystemConfiguration
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.collectMessages
@@ -170,7 +171,8 @@ class Git : VersionControlSystem(GitCommand) {
         workingTree: WorkingTree,
         revision: String,
         path: String,
-        recursive: Boolean
+        recursive: Boolean,
+        vcsConfiguration: VersionControlSystemConfiguration? // Git-specific configuration only
     ): Result<String> =
         (workingTree as GitWorkingTree).useRepo {
             Git(this).use { git ->

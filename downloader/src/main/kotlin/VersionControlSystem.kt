@@ -28,6 +28,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
+import org.ossreviewtoolkit.model.config.VersionControlSystemConfiguration
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Plugin
@@ -223,6 +224,7 @@ abstract class VersionControlSystem(
      * Download the source code as specified by the [pkg] information to [targetDir]. [allowMovingRevisions] toggles
      * whether to allow downloads using symbolic names that point to moving revisions, like Git branches. If [recursive]
      * is `true`, any nested repositories (like Git submodules or Mercurial subrepositories) are downloaded, too.
+     * VCS-specific configurations can be supplied via [vcsConfiguration].
      *
      * @return An object describing the downloaded working tree.
      *
@@ -232,7 +234,8 @@ abstract class VersionControlSystem(
         pkg: Package,
         targetDir: File,
         allowMovingRevisions: Boolean = false,
-        recursive: Boolean = true
+        recursive: Boolean = true,
+        vcsConfiguration: VersionControlSystemConfiguration? = null
     ): WorkingTree {
         val workingTree = try {
             initWorkingTree(targetDir, pkg.vcsProcessed)
@@ -248,7 +251,7 @@ abstract class VersionControlSystem(
 
         for ((index, revision) in revisionCandidates.withIndex()) {
             logger.info { "Trying revision candidate '$revision' (${index + 1} of ${revisionCandidates.size})..." }
-            results += updateWorkingTree(workingTree, revision, pkg.vcsProcessed.path, recursive)
+            results += updateWorkingTree(workingTree, revision, pkg.vcsProcessed.path, recursive, vcsConfiguration)
             if (results.last().isSuccess) break
         }
 
@@ -380,14 +383,17 @@ abstract class VersionControlSystem(
 
     /**
      * Update the [working tree][workingTree] by checking out the given [revision], optionally limited to the given
-     * [path] and [recursively][recursive] updating any nested working trees. Return a [Result] that encapsulates the
-     * originally requested [revision] on success, or the occurred exception on failure.
+     * [path] and [recursively][recursive] updating any nested working trees.
+     * Optionally, a VCS-specific configuration can be supplied via [vcsConfiguration].
+     * Return a [Result] that encapsulates the originally requested [revision] on success,
+     * or the occurred exception on failure.
      */
     abstract fun updateWorkingTree(
         workingTree: WorkingTree,
         revision: String,
         path: String = "",
-        recursive: Boolean = false
+        recursive: Boolean = false,
+        vcsConfiguration: VersionControlSystemConfiguration? = null
     ): Result<String>
 
     /**

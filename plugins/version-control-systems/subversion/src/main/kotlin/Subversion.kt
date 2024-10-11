@@ -31,6 +31,7 @@ import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.VersionControlSystemConfiguration
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.OrtAuthenticator
 import org.ossreviewtoolkit.utils.ort.OrtProxySelector
@@ -126,7 +127,13 @@ class Subversion : VersionControlSystem() {
         return pathRevisions.single()
     }
 
-    override fun updateWorkingTree(workingTree: WorkingTree, revision: String, path: String, recursive: Boolean) =
+    override fun updateWorkingTree(
+        workingTree: WorkingTree,
+        revision: String,
+        path: String,
+        recursive: Boolean,
+        vcsConfiguration: VersionControlSystemConfiguration? // Subversion-specific configuration only.
+    ) =
         runCatching {
             // Note that the path should never be part of the URL as that would root the working tree at that path, but
             // the path should be available in the working tree.
