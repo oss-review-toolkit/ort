@@ -42,6 +42,10 @@ import org.eclipse.jgit.transport.CredentialItem
 import org.eclipse.jgit.transport.CredentialsProvider
 import org.eclipse.jgit.transport.URIish
 
+import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.OptionKey.Companion.getOrDefault
+import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.OptionKey.HISTORY_DEPTH
+import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.OptionKey.UPDATE_NESTED_SUBMODULES
+import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 
 class GitTest : WordSpec({
@@ -149,6 +153,86 @@ class GitTest : WordSpec({
             val credentialProvider = CredentialsProvider.getDefault()
 
             credentialProvider.isInteractive shouldBe false
+        }
+    }
+
+    "The validation of git-specific configuration options" should {
+        "succeed if valid configuration options are provided" {
+            val options: Options = mapOf(
+                "historyDepth" to "1",
+                "updateNestedSubmodules" to "false"
+            )
+
+            val result = OptionKey.validate(options)
+
+            result.isSuccess shouldBe true
+            result.errors shouldBe emptyList()
+            result.warnings shouldBe emptyList()
+
+            val historyDepth: Int? = getOrDefault(options, HISTORY_DEPTH).toInt()
+            historyDepth shouldBe 1
+
+            val updateNestedSubmodules: Boolean? = getOrDefault(options, UPDATE_NESTED_SUBMODULES).toBoolean()
+            updateNestedSubmodules shouldBe false
+        }
+
+        "fail if invalid configuration options are provided" {
+            val options: Options = mapOf(
+                "historyDepth" to "1",
+                "updateNestedSubmodules" to "false",
+                "invalidOption" to "value"
+            )
+
+            val result = OptionKey.validate(options)
+
+            result.isSuccess shouldBe false
+            result.errors.count() shouldBe 1
+            result.warnings shouldBe emptyList()
+        }
+
+        "return deprecated warning for deprecated configuration options" {
+            val options: Options = mapOf(
+                "historyDepth" to "1",
+                "updateNestedSubmodules" to "false",
+                "doNotUse" to "true"
+            )
+
+            val result = OptionKey.validate(options)
+
+            result.isSuccess shouldBe true
+            result.errors shouldBe emptyList()
+            result.warnings.count() shouldBe 1
+
+            val historyDepth: Int? = getOrDefault(options, HISTORY_DEPTH).toInt()
+            historyDepth shouldBe 1
+
+            val updateNestedSubmodules: Boolean? = getOrDefault(options, UPDATE_NESTED_SUBMODULES).toBoolean()
+            updateNestedSubmodules shouldBe false
+        }
+    }
+
+    "The helper for getting configuration options" should {
+        "return the correct values if the options are set" {
+            val options: Options = mapOf(
+                "historyDepth" to "1",
+                "updateNestedSubmodules" to "false"
+            )
+
+            val historyDepth: Int? = getOrDefault(options, HISTORY_DEPTH).toInt()
+            historyDepth shouldBe 1
+
+            val updateNestedSubmodules: Boolean? = getOrDefault(options, UPDATE_NESTED_SUBMODULES).toBoolean()
+            updateNestedSubmodules shouldBe false
+        }
+
+        "return the default value if the option is not set" {
+            val options: Options = emptyMap()
+
+            val historyDepth: Int? = getOrDefault(options, HISTORY_DEPTH).toInt()
+            historyDepth shouldBe 50
+
+            val updateNestedSubmodules: Boolean? = getOrDefault(options, UPDATE_NESTED_SUBMODULES).toBoolean()
+            updateNestedSubmodules shouldBe true
         }
     }
 })
