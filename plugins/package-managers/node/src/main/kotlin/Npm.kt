@@ -123,11 +123,6 @@ open class Npm(
     protected open fun hasLockfile(projectDir: File) = NodePackageManager.NPM.hasLockfile(projectDir)
 
     /**
-     * Check if [this] represents a workspace within a `node_modules` directory.
-     */
-    protected open fun File.isWorkspaceDir() = isSymbolicLink()
-
-    /**
      * Load the submodule directories of the project defined in [moduleDir].
      */
     protected open fun loadWorkspaceSubmodules(moduleDir: File): Set<File> {
@@ -263,7 +258,7 @@ open class Npm(
     /**
      * Find the directories which are defined as submodules of the project within [moduleDir].
      */
-    protected fun findWorkspaceSubmodules(moduleDir: File): Set<File> =
+    private fun findWorkspaceSubmodules(moduleDir: File): Set<File> =
         submodulesCache.getOrPut(moduleDir.absolutePath) {
             loadWorkspaceSubmodules(moduleDir)
         }
@@ -603,7 +598,7 @@ internal fun parsePackage(
     return module
 }
 
-private fun parseProject(packageJsonFile: File, analysisRoot: File, managerName: String): Project {
+internal fun parseProject(packageJsonFile: File, analysisRoot: File, managerName: String): Project {
     Npm.logger.debug { "Parsing project info from '$packageJsonFile'." }
 
     val packageJson = parsePackageJson(packageJsonFile)
