@@ -1,4 +1,4 @@
 org.ossreviewtoolkit.plugins.packagemanagers.node.Npm$Factory
-org.ossreviewtoolkit.plugins.packagemanagers.node.Pnpm$Factory
+org.ossreviewtoolkit.plugins.packagemanagers.node.pnpm.Pnpm$Factory
 org.ossreviewtoolkit.plugins.packagemanagers.node.Yarn$Factory
 org.ossreviewtoolkit.plugins.packagemanagers.node.yarn2.Yarn2$Factory
