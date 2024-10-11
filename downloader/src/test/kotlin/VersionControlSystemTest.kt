@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.Git
 import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.utils.common.Options
 
 class VersionControlSystemTest : WordSpec({
     val vcsRoot = File("..").absoluteFile.normalize()
@@ -168,6 +169,7 @@ private class VersionControlSystemTestImpl(
         workingTree: WorkingTree,
         revision: String,
         path: String,
-        recursive: Boolean
+        recursive: Boolean,
+        options: Options // VersionControlSystemTestImpl-specific configuration options only
     ): Result<String> = Result.failure(UnsupportedOperationException("Unexpected invocation."))
 }
