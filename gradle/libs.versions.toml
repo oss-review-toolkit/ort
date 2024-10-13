@@ -8,7 +8,7 @@ graalVmNativeImagePlugin = "0.10.3"
 ideaExtPlugin = "1.1.9"
 kotlinPlugin = "2.0.21"
 ksp = "2.0.21-1.0.25"
-mavenPublishPlugin = "0.29.0"
+mavenPublishPlugin = "0.30.0"
 reproducibleBuildsPlugin = "1.0"
 versionsPlugin = "0.51.0"
 
