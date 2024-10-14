@@ -170,7 +170,7 @@ project:
       - id: "Pub::collection:1.18.0"
       - id: "Pub::coverage:1.8.0"
         dependencies:
-        - id: "Pub::args:2.5.0"
+        - id: "Pub::args:2.6.0"
         - id: "Pub::logging:1.2.0"
         - id: "Pub::package_config:2.1.0"
           dependencies:
@@ -666,7 +666,7 @@ project:
                 - id: "Pub::collection:1.18.0"
                 - id: "Pub::path:1.9.0"
                 - id: "Pub::term_glyph:1.2.1"
-        - id: "Pub::args:2.5.0"
+        - id: "Pub::args:2.6.0"
         - id: "Pub::async:2.11.0"
           dependencies:
           - id: "Pub::collection:1.18.0"
@@ -688,7 +688,7 @@ project:
         - id: "Pub::collection:1.18.0"
         - id: "Pub::coverage:1.8.0"
           dependencies:
-          - id: "Pub::args:2.5.0"
+          - id: "Pub::args:2.6.0"
           - id: "Pub::logging:1.2.0"
           - id: "Pub::package_config:2.1.0"
             dependencies:
@@ -946,8 +946,8 @@ packages:
     url: "https://github.com/dart-lang/sdk.git"
     revision: ""
     path: "pkg/analyzer"
-- id: "Pub::args:2.5.0"
-  purl: "pkg:pub/args@2.5.0"
+- id: "Pub::args:2.6.0"
+  purl: "pkg:pub/args@2.6.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "Library for defining parsers for parsing raw command-line arguments\
@@ -959,20 +959,20 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://pub.dev/packages/args/versions/2.5.0.tar.gz"
+    url: "https://pub.dev/packages/args/versions/2.6.0.tar.gz"
     hash:
-      value: "7cf60b9f0cc88203c5a190b4cd62a99feea42759a7fa695010eb5de1c0b2252a"
+      value: "bf9f5caeea8d8fe6721a9c358dd8a5c1947b27f1cfaa18b39c301273594919e6"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
-    url: "https://github.com/dart-lang/args.git"
+    url: "https://github.com/dart-lang/core.git"
     revision: ""
-    path: ""
+    path: "main/pkgs/args"
   vcs_processed:
     type: "Git"
-    url: "https://github.com/dart-lang/args.git"
+    url: "https://github.com/dart-lang/core.git"
     revision: ""
-    path: ""
+    path: "main/pkgs/args"
 - id: "Pub::async:2.11.0"
   purl: "pkg:pub/async@2.11.0"
   declared_licenses: []
