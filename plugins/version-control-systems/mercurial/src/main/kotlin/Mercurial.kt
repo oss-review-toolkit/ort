@@ -28,6 +28,7 @@ import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 
 const val MERCURIAL_LARGE_FILES_EXTENSION = "largefiles = "
@@ -93,7 +94,13 @@ class Mercurial : VersionControlSystem(MercurialCommand) {
         return getWorkingTree(targetDir)
     }
 
-    override fun updateWorkingTree(workingTree: WorkingTree, revision: String, path: String, recursive: Boolean) =
+    override fun updateWorkingTree(
+        workingTree: WorkingTree,
+        revision: String,
+        path: String,
+        recursive: Boolean,
+        options: Options // Mercurial-specific configuration options only
+    ) =
         runCatching {
             // To safe network bandwidth, only pull exactly the revision we want. Do not use "-u" to update the
             // working tree just yet, as Mercurial would only update if new changesets were pulled. But that might
