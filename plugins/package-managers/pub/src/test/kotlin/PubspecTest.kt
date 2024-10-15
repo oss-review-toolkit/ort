@@ -60,11 +60,11 @@ class PubspecTest : WordSpec({
                     version = "^1.0.0"
                 ),
                 "pkg-2" to HostedDependency(
-                    url = "https://some-package-server.com",
+                    hosted = "https://some-package-server.com",
                     version = "^1.4.0"
                 ),
                 "pkg-3" to HostedDependency(
-                    url = "https://some-other-package-server.com",
+                    hosted = "https://some-other-package-server.com",
                     version = "^1.4.0"
                 )
             )

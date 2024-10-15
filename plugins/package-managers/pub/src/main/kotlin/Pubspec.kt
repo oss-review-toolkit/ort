@@ -77,7 +77,7 @@ internal data class Pubspec(
     @Serializable
     data class HostedDependency(
         val version: String,
-        val url: String? = null
+        val hosted: String? = null
     ) : Dependency
 
     /** See https://dart.dev/tools/pub/dependencies#git-packages. */
