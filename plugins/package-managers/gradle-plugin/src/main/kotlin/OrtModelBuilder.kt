@@ -58,11 +58,14 @@ internal class OrtModelBuilder : ToolingModelBuilder {
     override fun canBuild(modelName: String): Boolean = modelName == OrtDependencyTreeModel::class.java.name
 
     override fun buildAll(modelName: String, project: Project): OrtDependencyTreeModel {
-        // There currently is no way to access Gradle settings without using internal API, see
-        // https://github.com/gradle/gradle/issues/18616.
-        val settings = (project.gradle as GradleInternal).settings
+        if (GradleVersion.current() >= GradleVersion.version("6.8")) {
+            // There currently is no way to access Gradle settings without using internal API, see
+            // https://github.com/gradle/gradle/issues/18616.
+            val settings = (project.gradle as GradleInternal).settings
 
-        settings.dependencyResolutionManagement.repositories.associateNamesWithUrlsTo(repositories)
+            settings.dependencyResolutionManagement.repositories.associateNamesWithUrlsTo(repositories)
+        }
+
         project.repositories.associateNamesWithUrlsTo(repositories)
 
         val relevantConfigurations = project.configurations.filter { it.isRelevant() }
