@@ -73,22 +73,26 @@ internal data class Pubspec(
     @Serializable
     sealed interface Dependency
 
+    /** See https://dart.dev/tools/pub/dependencies#hosted-packages. */
     @Serializable
     data class HostedDependency(
         val version: String,
         val url: String? = null
     ) : Dependency
 
+    /** See https://dart.dev/tools/pub/dependencies#path-packages. */
     @Serializable
     data class PathDependency(
         val path: String
     ) : Dependency
 
+    /** See https://dart.dev/tools/pub/dependencies#sdk. */
     @Serializable
     data class SdkDependency(
         val sdk: String
     ) : Dependency
 
+    /** See https://dart.dev/tools/pub/dependencies#git-packages. */
     @Serializable
     data class GitDependency(
         val url: String,
