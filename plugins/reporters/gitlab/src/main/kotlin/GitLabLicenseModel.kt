@@ -100,12 +100,12 @@ internal data class GitLabLicenseModel(
     )
 }
 
-private class SortedDependenciesListSerializer :
+private object SortedDependenciesListSerializer :
     KSerializer<List<GitLabLicenseModel.Dependency>> by sortedListSerializer(
         compareBy({ it.packageManager }, { it.name }, { it.version })
     )
 
-private class SortedLicenseSetSerializer :
+private object SortedLicenseSetSerializer :
     KSerializer<Set<GitLabLicenseModel.License>> by sortedSetSerializer(compareBy { it.id })
 
-private class SortedStringSetSerializer : KSerializer<Set<String>> by sortedSetSerializer(compareBy { it })
+private object SortedStringSetSerializer : KSerializer<Set<String>> by sortedSetSerializer(compareBy { it })
