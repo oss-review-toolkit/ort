@@ -101,7 +101,7 @@ internal data class Pubspec(
  * If transformations like for JSON were available in kaml, this serializer could be simplified, see also
  * https://github.com/charleskorn/kaml/issues/29.
  */
-private class DependencyMapSerializer : KSerializer<Map<String, Dependency>> {
+private object DependencyMapSerializer : KSerializer<Map<String, Dependency>> {
     override val descriptor = serialDescriptor<Map<String, Dependency>>()
 
     override fun serialize(encoder: Encoder, value: Map<String, Dependency>) {
