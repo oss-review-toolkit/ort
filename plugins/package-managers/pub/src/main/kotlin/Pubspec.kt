@@ -35,9 +35,8 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.descriptors.serialDescriptor
 import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.serializer
 
 import org.ossreviewtoolkit.plugins.packagemanagers.pub.Pubspec.Dependency
 import org.ossreviewtoolkit.plugins.packagemanagers.pub.Pubspec.GitDependency
@@ -105,13 +104,7 @@ internal data class Pubspec(
  * If transformations like for JSON were available in kaml, this serializer could be simplified, see also
  * https://github.com/charleskorn/kaml/issues/29.
  */
-private object DependencyMapSerializer : KSerializer<Map<String, Dependency>> {
-    override val descriptor = serialDescriptor<Map<String, Dependency>>()
-
-    override fun serialize(encoder: Encoder, value: Map<String, Dependency>) {
-        TODO("Not implemented yet.")
-    }
-
+private object DependencyMapSerializer : KSerializer<Map<String, Dependency>> by serializer<Map<String, Dependency>>() {
     override fun deserialize(decoder: Decoder): Map<String, Dependency> {
         val input = decoder.beginStructure(descriptor) as YamlInput
 
