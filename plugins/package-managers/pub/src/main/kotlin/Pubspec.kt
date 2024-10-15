@@ -80,6 +80,14 @@ internal data class Pubspec(
         val url: String? = null
     ) : Dependency
 
+    /** See https://dart.dev/tools/pub/dependencies#git-packages. */
+    @Serializable
+    data class GitDependency(
+        val url: String,
+        val path: String? = null,
+        val ref: String? = null
+    ) : Dependency
+
     /** See https://dart.dev/tools/pub/dependencies#path-packages. */
     @Serializable
     data class PathDependency(
@@ -90,14 +98,6 @@ internal data class Pubspec(
     @Serializable
     data class SdkDependency(
         val sdk: String
-    ) : Dependency
-
-    /** See https://dart.dev/tools/pub/dependencies#git-packages. */
-    @Serializable
-    data class GitDependency(
-        val url: String,
-        val path: String? = null,
-        val ref: String? = null
     ) : Dependency
 }
 
