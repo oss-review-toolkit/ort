@@ -76,7 +76,7 @@ internal data class PackageInfo(
     )
 }
 
-private class DescriptionDeserializer : KSerializer<Description> by Description.generatedSerializer() {
+private object DescriptionDeserializer : KSerializer<Description> by Description.generatedSerializer() {
     @OptIn(InternalSerializationApi::class)
     override val descriptor: SerialDescriptor by lazy {
         val serialName = checkNotNull(Description::class.qualifiedName)
