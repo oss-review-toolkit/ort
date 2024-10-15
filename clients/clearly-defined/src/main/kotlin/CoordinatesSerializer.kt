@@ -31,7 +31,7 @@ import kotlinx.serialization.json.jsonPrimitive
 /**
  * A (de-)serializer for ClearlyDefined [Coordinates] instances from / to strings, or from a nested structure.
  */
-object CoordinatesSerializer : KSerializer<Coordinates> by stringSerializer(::Coordinates) {
+internal object CoordinatesSerializer : KSerializer<Coordinates> by stringSerializer(::Coordinates) {
     override fun deserialize(decoder: Decoder): Coordinates {
         require(decoder is JsonDecoder)
         return when (val element = decoder.decodeJsonElement()) {
