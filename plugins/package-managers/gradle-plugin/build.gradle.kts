@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+import com.gradleup.gr8.FilterTransform
+
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -27,6 +29,9 @@ plugins {
 
     // Apply precompiled plugins.
     id("ort-kotlin-conventions")
+
+    // Apply third-party plugins.
+    alias(libs.plugins.gr8)
 }
 
 gradlePlugin {
@@ -36,11 +41,52 @@ gradlePlugin {
     }
 }
 
+val shadow by configurations.creating
+
+repositories {
+    google()
+}
+
 dependencies {
     api(projects.plugins.packageManagers.gradleModel)
 
-    api(libs.maven.model)
-    api(libs.maven.model.builder)
+    shadow(libs.maven.model)
+    shadow(libs.maven.model.builder)
+
+    compileOnly(gradleApi())
+}
+
+val compileOnlyR8 by configurations.creating {
+    attributes {
+        attribute(Usage.USAGE_ATTRIBUTE, project.objects.named<Usage>(Usage.JAVA_API))
+        attribute(ArtifactTypeDefinition.ARTIFACT_TYPE_ATTRIBUTE, FilterTransform.artifactType)
+    }
+
+    extendsFrom(configurations.compileOnly.get())
+}
+
+gr8 {
+    val shadowedJar = create("plugin") {
+        addProgramJarsFrom(tasks.named<Jar>("jar"))
+        addProgramJarsFrom(shadow)
+
+        // Classpath JARs are only used by R8 for analysis but are not included in the shadowed JAR.
+        addClassPathJarsFrom(compileOnlyR8)
+
+        // See https://issuetracker.google.com/u/1/issues/380805015 for why this is required.
+        registerFilterTransform(listOf(".*/impldep/META-INF/versions/.*"))
+
+        proguardFile("rules.pro")
+    }
+
+    // Remove the Gradle API dependency that the "java-gradle-plugin" automatically adds.
+    removeGradleApiFromApi()
+
+    // Replace the regular JAR with the shadowed one in the publication.
+    replaceOutgoingJar(shadowedJar)
+
+    // Allow to compile the module without exposing the shadowed dependencies downstream.
+    configurations.compileOnly.get().extendsFrom(shadow)
 }
 
 // Classes that are sent to the build via custom build actions need to target the lowest supported Java version, which
@@ -61,31 +107,4 @@ tasks.named<KotlinCompile>("compileKotlin") {
         languageVersion = @Suppress("DEPRECATION") KotlinVersion.KOTLIN_1_8
         apiVersion = @Suppress("DEPRECATION") KotlinVersion.KOTLIN_1_8
     }
-}
-
-tasks.register<Jar>("fatJar") {
-    description = "Creates a fat JAR that includes all required runtime dependencies."
-    group = "Build"
-
-    archiveClassifier = "fat"
-
-    // Handle duplicate `META-INF/DEPENDENCIES` files.
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
-    from(sourceSets.main.get().output)
-    dependsOn(configurations.runtimeClasspath)
-
-    from({
-        configurations.runtimeClasspath.get().filter {
-            check(it.extension == "jar")
-
-            val isGradleDependency = "gradle" in it.path && "-${gradle.gradleVersion}" in it.path
-            if (isGradleDependency) logger.lifecycle("Filtering out '$it' from '${archiveFile.get().asFile.name}'.")
-
-            // Omit JARs for Gradle dependencies from the fat JAR.
-            !isGradleDependency
-        }.map {
-            zipTree(it)
-        }
-    })
 }
