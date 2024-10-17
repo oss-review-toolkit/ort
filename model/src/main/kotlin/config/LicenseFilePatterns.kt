@@ -21,26 +21,30 @@ package org.ossreviewtoolkit.model.config
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 
+/**
+ * A class that holds various filename patterns for files that typically contain license-related information. All
+ * patterns are supposed to be used case-insensitively.
+ */
 data class LicenseFilePatterns(
     /**
-     * A list of globs that match default license file names. The patterns are supposed to be used case-insensitively.
+     * A list of globs that match typical license filenames.
      */
     val licenseFilenames: List<String>,
 
     /**
-     * A list of globs that match default patent file names. The patterns are supposed to be used case-insensitively.
+     * A list of globs that match typical patent filenames.
      */
     val patentFilenames: List<String>,
 
     /**
-     * A list of globs that match files that often define the root license of a project, but are no license files and
-     * are therefore not contained in [licenseFilenames]. The patterns are supposed to be used case-insensitively.
+     * A list of globs that match files that often contain the license of a project, but that are no license files and
+     * are therefore not contained in [licenseFilenames].
      */
     val rootLicenseFilenames: List<String>
 ) {
     /**
-     * A list of globs that match all kind of license file names, equaling the union of [licenseFilenames],
-     * [patentFilenames] and [rootLicenseFilenames]. The patterns are supposed to be used case-insensitively.
+     * A list of globs that match all kind of license filenames, equaling the union of [licenseFilenames],
+     * [patentFilenames] and [rootLicenseFilenames].
      */
     @JsonIgnore
     val allLicenseFilenames = (licenseFilenames + patentFilenames + rootLicenseFilenames).distinct()
