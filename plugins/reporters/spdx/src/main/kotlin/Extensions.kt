@@ -150,6 +150,10 @@ internal fun Package.toSpdxPackage(
         SpdxPackageVerificationCode(packageVerificationCodeValue = it)
     }
 
+    val detectedLicenses = licenseInfoResolver.resolveLicenseInfo(id)
+        .filterExcluded()
+        .filter(LicenseView.ONLY_DETECTED)
+
     return SpdxPackage(
         spdxId = id.toSpdxId(type),
         checksums = when (type) {
@@ -178,15 +182,12 @@ internal fun Package.toSpdxPackage(
         licenseInfoFromFiles = if (packageVerificationCode == null) {
             emptyList()
         } else {
-            licenseInfoResolver.resolveLicenseInfo(id)
-                .filterExcluded()
-                .filter(LicenseView.ONLY_DETECTED)
-                .map { resolvedLicense ->
-                    resolvedLicense.license.takeIf { it.isValid(SpdxExpression.Strictness.ALLOW_DEPRECATED) }
-                        .nullOrBlankToSpdxNoassertionOrNone()
-                }
-                .distinct()
-                .sorted()
+            detectedLicenses.map { resolvedLicense ->
+                resolvedLicense.license.takeIf { it.isValid(SpdxExpression.Strictness.ALLOW_DEPRECATED) }
+                    .nullOrBlankToSpdxNoassertionOrNone()
+            }
+            .distinct()
+            .sorted()
         },
         packageVerificationCode = packageVerificationCode,
         name = id.name,
