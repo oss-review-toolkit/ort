@@ -182,12 +182,10 @@ internal fun Package.toSpdxPackage(
         licenseInfoFromFiles = if (packageVerificationCode == null) {
             emptyList()
         } else {
-            detectedLicenses.map { resolvedLicense ->
+            detectedLicenses.mapTo(mutableSetOf()) { resolvedLicense ->
                 resolvedLicense.license.takeIf { it.isValid(SpdxExpression.Strictness.ALLOW_DEPRECATED) }
                     .nullOrBlankToSpdxNoassertionOrNone()
-            }
-            .distinct()
-            .sorted()
+            }.sorted()
         },
         packageVerificationCode = packageVerificationCode,
         name = id.name,
