@@ -17,13 +17,14 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.model
+package org.ossreviewtoolkit.model.utils
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
+import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.utils.common.uppercaseFirstChar
 
 private val COMMONLY_USED_LICENSE_FILE_NAMES = listOf(
