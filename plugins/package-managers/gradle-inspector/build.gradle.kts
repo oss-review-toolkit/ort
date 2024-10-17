@@ -48,8 +48,10 @@ dependencies {
 
 val processResources = tasks.named<Copy>("processResources") {
     val gradlePluginProject = project.project(projects.plugins.packageManagers.gradlePlugin.path)
-    val gradlePluginJarTask = gradlePluginProject.tasks.named<Jar>("fatJar")
-    val gradlePluginJarFile = gradlePluginJarTask.get().outputs.files.singleFile
+
+    // The task is of type "Gr8Task" and also outputs a "mapping.txt" file.
+    val gradlePluginJarTask = gradlePluginProject.tasks.named("gr8PluginShadowedJar")
+    val gradlePluginJarFile = gradlePluginJarTask.get().outputs.files.single { it.extension == "jar" }
 
     // As the Copy-task simply skips non-existing files, add explicit dependencies on the Jar-tasks.
     dependsOn(gradlePluginJarTask)

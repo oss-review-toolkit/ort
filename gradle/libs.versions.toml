@@ -5,6 +5,7 @@ detektPlugin = "1.23.8"
 dokkatooPlugin = "2.4.0"
 downloadPlugin = "5.6.0"
 gitSemverPlugin = "0.16.0"
+gr8Plugin = "0.11.2"
 graalVmNativeImagePlugin = "0.10.6"
 ideaExtPlugin = "1.1.10"
 jakartaMigrationPlugin = "0.24.0"
@@ -77,6 +78,7 @@ xz = "1.10"
 buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildConfigPlugin" }
 download = { id = "de.undercouch.download", version.ref = "downloadPlugin" }
 gitSemver = { id = "com.github.jmongard.git-semver-plugin", version.ref = "gitSemverPlugin" }
+gr8 = { id = "com.gradleup.gr8", version.ref = "gr8Plugin" }
 ideaExt = { id = "org.jetbrains.gradle.plugin.idea-ext", version.ref = "ideaExtPlugin" }
 jakartaMigration = { id = "com.netflix.nebula.jakartaee-migration", version.ref = "jakartaMigrationPlugin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinPlugin" }
