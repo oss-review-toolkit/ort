@@ -17,17 +17,17 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packagemanagers.pub
+package org.ossreviewtoolkit.plugins.packagemanagers.pub.model
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.plugins.packagemanagers.pub.Pubspec.GitDependency
-import org.ossreviewtoolkit.plugins.packagemanagers.pub.Pubspec.HostedDependency
-import org.ossreviewtoolkit.plugins.packagemanagers.pub.Pubspec.PathDependency
-import org.ossreviewtoolkit.plugins.packagemanagers.pub.Pubspec.SdkDependency
+import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.Pubspec.GitDependency
+import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.Pubspec.HostedDependency
+import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.Pubspec.PathDependency
+import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.Pubspec.SdkDependency
 
 class PubspecTest : WordSpec({
     "parsePubspec()" should {
@@ -60,11 +60,11 @@ class PubspecTest : WordSpec({
                     version = "^1.0.0"
                 ),
                 "pkg-2" to HostedDependency(
-                    url = "https://some-package-server.com",
+                    hosted = "https://some-package-server.com",
                     version = "^1.4.0"
                 ),
                 "pkg-3" to HostedDependency(
-                    url = "https://some-other-package-server.com",
+                    hosted = "https://some-other-package-server.com",
                     version = "^1.4.0"
                 )
             )

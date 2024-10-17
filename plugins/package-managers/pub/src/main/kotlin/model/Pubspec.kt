@@ -17,10 +17,8 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packagemanagers.pub
+package org.ossreviewtoolkit.plugins.packagemanagers.pub.model
 
-import com.charleskorn.kaml.Yaml
-import com.charleskorn.kaml.YamlConfiguration
 import com.charleskorn.kaml.YamlInput
 import com.charleskorn.kaml.YamlMap
 import com.charleskorn.kaml.YamlNode
@@ -35,17 +33,14 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.descriptors.serialDescriptor
 import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.serializer
 
-import org.ossreviewtoolkit.plugins.packagemanagers.pub.Pubspec.Dependency
-import org.ossreviewtoolkit.plugins.packagemanagers.pub.Pubspec.GitDependency
-import org.ossreviewtoolkit.plugins.packagemanagers.pub.Pubspec.HostedDependency
-import org.ossreviewtoolkit.plugins.packagemanagers.pub.Pubspec.PathDependency
-import org.ossreviewtoolkit.plugins.packagemanagers.pub.Pubspec.SdkDependency
-
-private val YAML = Yaml(configuration = YamlConfiguration(strictMode = false))
+import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.Pubspec.Dependency
+import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.Pubspec.GitDependency
+import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.Pubspec.HostedDependency
+import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.Pubspec.PathDependency
+import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.Pubspec.SdkDependency
 
 internal fun parsePubspec(pubspecFile: File): Pubspec = parsePubspec(pubspecFile.readText())
 
@@ -73,27 +68,31 @@ internal data class Pubspec(
     @Serializable
     sealed interface Dependency
 
+    /** See https://dart.dev/tools/pub/dependencies#hosted-packages. */
     @Serializable
     data class HostedDependency(
         val version: String,
-        val url: String? = null
+        val hosted: String? = null
     ) : Dependency
 
-    @Serializable
-    data class PathDependency(
-        val path: String
-    ) : Dependency
-
-    @Serializable
-    data class SdkDependency(
-        val sdk: String
-    ) : Dependency
-
+    /** See https://dart.dev/tools/pub/dependencies#git-packages. */
     @Serializable
     data class GitDependency(
         val url: String,
         val path: String? = null,
         val ref: String? = null
+    ) : Dependency
+
+    /** See https://dart.dev/tools/pub/dependencies#path-packages. */
+    @Serializable
+    data class PathDependency(
+        val path: String
+    ) : Dependency
+
+    /** See https://dart.dev/tools/pub/dependencies#sdk. */
+    @Serializable
+    data class SdkDependency(
+        val sdk: String
     ) : Dependency
 }
 
@@ -101,21 +100,11 @@ internal data class Pubspec(
  * If transformations like for JSON were available in kaml, this serializer could be simplified, see also
  * https://github.com/charleskorn/kaml/issues/29.
  */
-private object DependencyMapSerializer : KSerializer<Map<String, Dependency>> {
-    override val descriptor = serialDescriptor<Map<String, Dependency>>()
-
-    override fun serialize(encoder: Encoder, value: Map<String, Dependency>) {
-        TODO("Not implemented yet.")
-    }
-
+private object DependencyMapSerializer : KSerializer<Map<String, Dependency>> by serializer<Map<String, Dependency>>() {
     override fun deserialize(decoder: Decoder): Map<String, Dependency> {
         val input = decoder.beginStructure(descriptor) as YamlInput
 
-        val result = when (val node = input.node) {
-            is YamlScalar -> emptyMap()
-            is YamlMap -> node.entries.asSequence().associateBy({ it.key.content }, { it.value.decodeDependency() })
-            else -> throw SerializationException("Unexpected YAML node type: ${node.javaClass.simpleName}.")
-        }
+        val result = input.node.yamlMap.entries.asSequence().associate { it.key.content to it.value.decodeDependency() }
 
         input.endStructure(descriptor)
 
@@ -124,14 +113,6 @@ private object DependencyMapSerializer : KSerializer<Map<String, Dependency>> {
 
     private fun YamlNode.decodeDependency(): Dependency {
         if (this is YamlScalar) return HostedDependency(yamlScalar.content)
-
-        yamlMap.get<YamlScalar>("sdk")?.let { sdk ->
-            return SdkDependency(sdk = sdk.content)
-        }
-
-        yamlMap.get<YamlScalar>("path")?.let { path ->
-            return PathDependency(path = path.content)
-        }
 
         yamlMap.get<YamlNode>("hosted")?.let { hosted ->
             val version = checkNotNull(yamlMap.get<YamlScalar>("version")).content
@@ -154,6 +135,14 @@ private object DependencyMapSerializer : KSerializer<Map<String, Dependency>> {
             } else {
                 GitDependency(url = git.yamlScalar.content)
             }
+        }
+
+        yamlMap.get<YamlScalar>("path")?.let { path ->
+            return PathDependency(path = path.content)
+        }
+
+        yamlMap.get<YamlScalar>("sdk")?.let { sdk ->
+            return SdkDependency(sdk = sdk.content)
         }
 
         throw SerializationException("Unexpected dependency node format.")

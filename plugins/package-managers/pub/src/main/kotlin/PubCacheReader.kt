@@ -17,14 +17,14 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packagemanagers.pub.utils
+package org.ossreviewtoolkit.plugins.packagemanagers.pub
 
 import java.io.File
 
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.downloader.VcsHost
-import org.ossreviewtoolkit.plugins.packagemanagers.pub.PackageInfo
+import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.PackageInfo
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
 
