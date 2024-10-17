@@ -17,17 +17,17 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packagemanagers.pub
+package org.ossreviewtoolkit.plugins.packagemanagers.pub.model
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.plugins.packagemanagers.pub.Pubspec.GitDependency
-import org.ossreviewtoolkit.plugins.packagemanagers.pub.Pubspec.HostedDependency
-import org.ossreviewtoolkit.plugins.packagemanagers.pub.Pubspec.PathDependency
-import org.ossreviewtoolkit.plugins.packagemanagers.pub.Pubspec.SdkDependency
+import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.Pubspec.GitDependency
+import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.Pubspec.HostedDependency
+import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.Pubspec.PathDependency
+import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.Pubspec.SdkDependency
 
 class PubspecTest : WordSpec({
     "parsePubspec()" should {

@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packagemanagers.pub.utils
+package org.ossreviewtoolkit.plugins.packagemanagers.pub
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
@@ -25,7 +25,7 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
-import org.ossreviewtoolkit.plugins.packagemanagers.pub.PackageInfo
+import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.PackageInfo
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 
