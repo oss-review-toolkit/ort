@@ -27,31 +27,31 @@ import com.fasterxml.jackson.annotation.JsonIgnore
  */
 data class LicenseFilePatterns(
     /**
-     * A list of globs that match typical license filenames.
+     * A set of globs that match typical license filenames.
      */
-    val licenseFilenames: List<String>,
+    val licenseFilenames: Set<String>,
 
     /**
-     * A list of globs that match typical patent filenames.
+     * A set of globs that match typical patent filenames.
      */
-    val patentFilenames: List<String>,
+    val patentFilenames: Set<String>,
 
     /**
-     * A list of globs that match files that often contain the license of a project, but that are no license files and
+     * A set of globs that match files that often contain the license of a project, but that are no license files and
      * are therefore not contained in [licenseFilenames].
      */
-    val rootLicenseFilenames: List<String>
+    val rootLicenseFilenames: Set<String>
 ) {
     /**
-     * A list of globs that match all kind of license filenames, equaling the union of [licenseFilenames],
+     * A set of globs that match all kind of license filenames, equaling the union of [licenseFilenames],
      * [patentFilenames] and [rootLicenseFilenames].
      */
     @JsonIgnore
-    val allLicenseFilenames = (licenseFilenames + patentFilenames + rootLicenseFilenames).distinct()
+    val allLicenseFilenames = licenseFilenames + patentFilenames + rootLicenseFilenames
 
     companion object {
         val DEFAULT = LicenseFilePatterns(
-            licenseFilenames = listOf(
+            licenseFilenames = setOf(
                 "copying*",
                 "copyright",
                 "licence*",
@@ -61,10 +61,10 @@ data class LicenseFilePatterns(
                 "unlicence",
                 "unlicense"
             ),
-            patentFilenames = listOf(
+            patentFilenames = setOf(
                 "patents"
             ),
-            rootLicenseFilenames = listOf(
+            rootLicenseFilenames = setOf(
                 "readme*"
             )
         )
