@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.pub.model
 
-import com.charleskorn.kaml.Yaml
-import com.charleskorn.kaml.YamlConfiguration
 import com.charleskorn.kaml.YamlInput
 import com.charleskorn.kaml.YamlScalar
 
@@ -40,8 +38,6 @@ import kotlinx.serialization.descriptors.buildSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 
 import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.PackageInfo.Description
-
-private val YAML = Yaml(configuration = YamlConfiguration(strictMode = false))
 
 internal fun parseLockfile(lockfile: File) = YAML.decodeFromString<Lockfile>(lockfile.readText())
 
