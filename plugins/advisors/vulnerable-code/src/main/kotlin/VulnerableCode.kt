@@ -93,23 +93,35 @@ class VulnerableCode(override val descriptor: PluginDescriptor, config: Vulnerab
     override suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, AdvisorResult> {
         val startTime = Instant.now()
 
-        val purls = packages.mapNotNull { pkg -> pkg.purl.ifEmpty { null } }
-        val chunks = purls.chunked(BULK_REQUEST_SIZE)
+        // Workaround for #9298
+        // Create a list of pairs, where the first element is the purl without percent encoding
+        // and the second element is the original purl (with percent encoding).
+        val purlPairs = packages
+            .mapNotNull { pkg -> pkg.purl.ifEmpty { null } }
+            .map { it.replace("%2F", "/", ignoreCase = true) to it }
+
+        purlPairs.forEach(logger::info)
+
+        val chunks = purlPairs.chunked(BULK_REQUEST_SIZE)
 
         val allVulnerabilities = mutableMapOf<String, List<VulnerableCodeService.Vulnerability>>()
         val issues = mutableListOf<Issue>()
 
         chunks.forEachIndexed { index, chunk ->
             runCatching {
-                val chunkVulnerabilities = service.getPackageVulnerabilities(PackagesWrapper(chunk)).filter {
+                // Use list of purls without percent encoding for the request to VulnerableCode
+                val purlsWithoutPercentEncoding = chunk.map { it.first }
+                service.getPackageVulnerabilities(PackagesWrapper(purlsWithoutPercentEncoding)).filter {
                     it.affectedByVulnerabilities.isNotEmpty()
+                }.map {
+                    val purlWithPercentEncoding = chunk.first { purlPair -> purlPair.first == it.purl }.second
+                    allVulnerabilities += purlWithPercentEncoding to it.affectedByVulnerabilities
                 }
-
-                allVulnerabilities += chunkVulnerabilities.associate { it.purl to it.affectedByVulnerabilities }
             }.onFailure {
                 // Create dummy entries for all packages in the chunk as the current data model does not allow to return
                 // issues that are not associated to any package.
-                allVulnerabilities += chunk.associateWith { emptyList() }
+                val allOriginalPurls = chunk.map { purlPair -> purlPair.second }
+                allVulnerabilities += allOriginalPurls.associateWith { emptyList() }
 
                 issues += Issue(source = descriptor.displayName, message = it.collectMessages())
 
