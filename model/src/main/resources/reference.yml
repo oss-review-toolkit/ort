@@ -37,7 +37,7 @@ ort:
   licenseFilePatterns:
     licenseFilenames: ['license*']
     patentFilenames: ['patents']
-    rootLicenseFilenames: ['readme*']
+    otherLicenseFilenames: ['readme*']
 
   # Package configurations have to be unique by ID and provenance. Ensure that different providers do not provide
   # configurations for the same package, see https://github.com/oss-review-toolkit/ort/issues/6972 for details.

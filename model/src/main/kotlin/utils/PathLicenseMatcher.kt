@@ -31,21 +31,21 @@ import org.ossreviewtoolkit.utils.common.getAllAncestorDirectories
  *
  * For any given directory the heuristic tries to assign license files by utilizing
  * [LicenseFilePatterns.licenseFilenames] and patent files by utilizing [LicenseFilePatterns.patentFilenames]
- * independently of one another. The [LicenseFilePatterns.rootLicenseFilenames] serve only as fallback to find
+ * independently of one another. The [LicenseFilePatterns.otherLicenseFilenames] serve only as fallback to find
  * license files if there isn't any match for [LicenseFilePatterns.licenseFilenames].
  *
  * To determine the (root) license files applicable for a specific directory, all filenames in that directory are
  * matched against [LicenseFilePatterns.licenseFilenames]. If there are matches then these are used as result,
  * otherwise that search is repeated recursively in the parent directory. If there is no parent directory (because the
  * root was already searched but no result was found) then start from scratch using the fallback pattern
- * [LicenseFilePatterns.rootLicenseFilenames].
+ * [LicenseFilePatterns.otherLicenseFilenames].
  *
  * Patent files are assigned in an analog way, but without any fallback pattern.
  */
 class PathLicenseMatcher(licenseFilePatterns: LicenseFilePatterns = LicenseFilePatterns.DEFAULT) {
     private val licenseFileMatcher = createFileMatcher(licenseFilePatterns.licenseFilenames)
     private val patentFileMatcher = createFileMatcher(licenseFilePatterns.patentFilenames)
-    private val rootLicenseFileMatcher = createFileMatcher(licenseFilePatterns.rootLicenseFilenames)
+    private val otherLicenseFileMatcher = createFileMatcher(licenseFilePatterns.otherLicenseFilenames)
 
     /**
      * Return a mapping from the given relative [directories] to the licenses findings for the (root) license files
@@ -84,7 +84,7 @@ class PathLicenseMatcher(licenseFilePatterns: LicenseFilePatterns = LicenseFileP
 
         val licenseFiles = filePathsByDir(licenseFileMatcher)
         val patentFiles = filePathsByDir(patentFileMatcher)
-        val rootLicenseFiles = filePathsByDir(rootLicenseFileMatcher)
+        val otherLicenseFiles = filePathsByDir(otherLicenseFileMatcher)
 
         val result = mutableMapOf<String, MutableSet<String>>()
 
@@ -104,7 +104,7 @@ class PathLicenseMatcher(licenseFilePatterns: LicenseFilePatterns = LicenseFileP
             addApplicableLicenseFiles(licenseFiles)
 
             if (licenseFilesForDirectory.isEmpty()) {
-                addApplicableLicenseFiles(rootLicenseFiles)
+                addApplicableLicenseFiles(otherLicenseFiles)
             }
 
             addApplicableLicenseFiles(patentFiles)
