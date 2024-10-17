@@ -46,7 +46,10 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseLocation
 import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.reporter.Reporter
+import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.isValidUri
 import org.ossreviewtoolkit.utils.common.joinNonBlank
@@ -63,9 +66,13 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicenseWithExceptionExpression
 private const val RULE_VIOLATION_TABLE_ID = "rule-violation-summary"
 
 @Suppress("LargeClass", "TooManyFunctions")
-class StaticHtmlReporter : Reporter {
-    override val type = "StaticHtml"
-
+@OrtPlugin(
+    id = "StaticHTML",
+    displayName = "Static HTML Reporter",
+    description = "Generates a static HTML report.",
+    factory = ReporterFactory::class
+)
+class StaticHtmlReporter(override val descriptor: PluginDescriptor = StaticHtmlReporterFactory.descriptor) : Reporter {
     private val reportFilename = "scan-report.html"
     private val css = javaClass.getResource("/static-html-reporter.css").readText()
     private val licensesSha1 = mutableMapOf<String, String>()

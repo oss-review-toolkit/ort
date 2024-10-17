@@ -109,17 +109,26 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
             pluginOptions.forEach { option ->
                 add("    ${option.name} = ")
 
+                fun readOption(name: String) =
+                    when (option.type) {
+                        PluginOptionType.BOOLEAN -> add("config.options[%S]?.toBooleanStrict()", name)
+                        PluginOptionType.INTEGER -> add("config.options[%S]?.toInt()", name)
+                        PluginOptionType.LONG -> add("config.options[%S]?.toLong()", name)
+                        PluginOptionType.SECRET -> add("config.secrets[%S]?.let { %T(it) }", name, Secret::class)
+                        PluginOptionType.STRING -> add("config.options[%S]", name)
+                        PluginOptionType.STRING_LIST -> add(
+                            "config.options[%S]?.split(\",\")?.map { it.trim() }",
+                            name
+                        )
+                    }
+
                 // Add code to read the option from the options or secrets maps based on its type.
-                when (option.type) {
-                    PluginOptionType.BOOLEAN -> add("config.options[%S]?.toBooleanStrict()", option.name)
-                    PluginOptionType.INTEGER -> add("config.options[%S]?.toInt()", option.name)
-                    PluginOptionType.LONG -> add("config.options[%S]?.toLong()", option.name)
-                    PluginOptionType.SECRET -> add("config.secrets[%S]?.let { %T(it) }", option.name, Secret::class)
-                    PluginOptionType.STRING -> add("config.options[%S]", option.name)
-                    PluginOptionType.STRING_LIST -> add(
-                        "config.options[%S]?.split(\",\")?.map { it.trim() }",
-                        option.name
-                    )
+                readOption(option.name)
+
+                // Add code to handle aliases.
+                option.aliases.forEach { alias ->
+                    add(" ?: ")
+                    readOption(alias)
                 }
 
                 // Add the default value if present.
@@ -130,7 +139,15 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
                         PluginOptionType.LONG -> add(" ?: %LL", defaultValue.toLong())
                         PluginOptionType.SECRET -> add(" ?: %T(%S)", Secret::class, defaultValue)
                         PluginOptionType.STRING -> add(" ?: %S", defaultValue)
-                        PluginOptionType.STRING_LIST -> add(" ?: %S", defaultValue)
+                        PluginOptionType.STRING_LIST -> {
+                            add(" ?: listOf(")
+
+                            defaultValue.split(",").forEach { value ->
+                                add("%S,", value.trim())
+                            }
+
+                            add(")")
+                        }
                     }
                 }
 
@@ -175,16 +192,27 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
                     |            description = %S,
                     |            type = %T.%L,
                     |            defaultValue = %S,
-                    |            isRequired = %L
-                    |        ),
-                    |
+                    |            aliases = listOf(
                     """.trimMargin(),
                     PluginOption::class,
                     it.name,
                     it.description,
                     PluginOptionType::class,
                     it.type.name,
-                    it.defaultValue,
+                    it.defaultValue
+                )
+
+                it.aliases.forEach { alias ->
+                    add("                %S,", alias)
+                }
+
+                add(
+                    """    
+                    |            ),
+                    |            isRequired = %L
+                    |        ),
+                    |
+                    """.trimMargin(),
                     it.isRequired
                 )
             }

@@ -167,13 +167,14 @@ class PluginSpecFactory {
                 )
             }
 
-            val defaultValue = annotation?.defaultValue
+            val defaultValue = annotation?.defaultValue?.takeIf { it != OrtPluginOption.NO_DEFAULT_VALUE }
 
             PluginOption(
                 name = param.name?.asString().orEmpty(),
                 description = prop.docString?.trim().orEmpty(),
                 type = type,
                 defaultValue = defaultValue,
+                aliases = annotation?.aliases?.asList().orEmpty(),
                 isRequired = !paramType.isMarkedNullable && defaultValue == null
             )
         }

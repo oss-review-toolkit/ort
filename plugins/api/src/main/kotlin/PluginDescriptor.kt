@@ -92,6 +92,11 @@ data class PluginOption(
     val defaultValue: String?,
 
     /**
+     * A list of alternative names for the option.
+     */
+    val aliases: List<String>,
+
+    /**
      * Whether the option is required.
      */
     val isRequired: Boolean
