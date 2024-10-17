@@ -40,14 +40,14 @@ data class LicenseFilePatterns(
      * A set of globs that match files that often contain the license of a project, but that are no license files and
      * are therefore not contained in [licenseFilenames].
      */
-    val rootLicenseFilenames: Set<String>
+    val otherLicenseFilenames: Set<String>
 ) {
     /**
      * A set of globs that match all kind of license filenames, equaling the union of [licenseFilenames],
-     * [patentFilenames] and [rootLicenseFilenames].
+     * [patentFilenames] and [otherLicenseFilenames].
      */
     @JsonIgnore
-    val allLicenseFilenames = licenseFilenames + patentFilenames + rootLicenseFilenames
+    val allLicenseFilenames = licenseFilenames + patentFilenames + otherLicenseFilenames
 
     companion object {
         val DEFAULT = LicenseFilePatterns(
@@ -64,7 +64,7 @@ data class LicenseFilePatterns(
             patentFilenames = setOf(
                 "patents"
             ),
-            rootLicenseFilenames = setOf(
+            otherLicenseFilenames = setOf(
                 "readme*"
             )
         )

@@ -50,7 +50,7 @@ class LicenseInfoResolver(
     private val resolvedLicenseInfo = ConcurrentHashMap<Identifier, ResolvedLicenseInfo>()
     private val resolvedLicenseFiles = ConcurrentHashMap<Identifier, ResolvedLicenseFileInfo>()
     private val pathLicenseMatcher = PathLicenseMatcher(
-        licenseFilePatterns = licenseFilePatterns.copy(rootLicenseFilenames = emptySet())
+        licenseFilePatterns = licenseFilePatterns.copy(otherLicenseFilenames = emptySet())
     )
     private val findingsMatcher = FindingsMatcher(PathLicenseMatcher(licenseFilePatterns))
 

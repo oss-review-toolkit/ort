@@ -108,7 +108,7 @@
                         "type": "string"
                     }
                 },
-                "rootLicenseFilenames": {
+                "otherLicenseFilenames": {
                     "type": "array",
                     "items": {
                         "type": "string"
