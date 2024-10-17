@@ -41,6 +41,7 @@ jobs:
           ORG_GRADLE_PROJECT_RELEASE_SIGNING_ENABLED: true
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
+          SONATYPE_CONNECT_TIMEOUT_SECONDS: 300
         run: ./gradlew --no-configuration-cache publishAndReleaseToMavenCentral
       - name: Build ORT Distributions
         env:
