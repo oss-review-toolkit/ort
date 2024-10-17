@@ -52,9 +52,13 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
-import org.ossreviewtoolkit.plugins.packagemanagers.pub.Pubspec.Dependency
-import org.ossreviewtoolkit.plugins.packagemanagers.pub.Pubspec.SdkDependency
-import org.ossreviewtoolkit.plugins.packagemanagers.pub.utils.PubCacheReader
+import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.Lockfile
+import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.PackageInfo
+import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.Pubspec
+import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.Pubspec.Dependency
+import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.Pubspec.SdkDependency
+import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.parseLockfile
+import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.parsePubspec
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
