@@ -27,6 +27,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.post
 import com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
+import io.kotest.assertions.withClue
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
@@ -270,6 +271,16 @@ class VulnerableCodeTest : WordSpec({
                 ADVISOR_NAME,
                 enumSetOf(AdvisorCapability.VULNERABILITIES)
             )
+        }
+
+        "assume that Go package names are percent-encoded" {
+            // The code therefore replaces the percent-encoded slashes with actual slashes.
+            // If this assumption is not valid any longer, then this conversion can be removed from the code.
+            val idQuicGo = Identifier("Go::github.com/quic-go/quic-go:0.40.0")
+
+            withClue("Encoding strategy of slashes in Go-purls has changed: ") {
+                idQuicGo.toPurl() shouldBe "pkg:golang/github.com%2Fquic-go%2Fquic-go@0.40.0"
+            }
         }
     }
 
