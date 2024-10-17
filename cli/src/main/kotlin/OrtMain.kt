@@ -50,9 +50,11 @@ import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
 import org.ossreviewtoolkit.utils.common.EnvironmentVariableFilter
+import org.ossreviewtoolkit.utils.common.MaskedString
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.mebibytes
+import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_DIR_ENV_NAME
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
@@ -208,7 +210,8 @@ class OrtMain : CliktCommand(ORT_NAME) {
                     ORT_DATA_DIR_ENV_NAME to ortDataDirectory.path,
                     *env.variables.toList().toTypedArray()
                 ).mapTo(content) { (key, value) ->
-                    "${Theme.Default.info(key)} = ${Theme.Default.warning(value)}"
+                    val safeValue = value.replaceCredentialsInUri(MaskedString.DEFAULT_MASK)
+                    "${Theme.Default.info(key)} = ${Theme.Default.warning(safeValue)}"
                 }
 
                 cell(content.joinToString("\n")) { columnSpan = 2 }
