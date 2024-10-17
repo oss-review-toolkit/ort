@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.pub.model
 
-import com.charleskorn.kaml.Yaml
-import com.charleskorn.kaml.YamlConfiguration
 import com.charleskorn.kaml.YamlInput
 import com.charleskorn.kaml.YamlMap
 import com.charleskorn.kaml.YamlNode
@@ -43,8 +41,6 @@ import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.Pubspec.GitDepende
 import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.Pubspec.HostedDependency
 import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.Pubspec.PathDependency
 import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.Pubspec.SdkDependency
-
-private val YAML = Yaml(configuration = YamlConfiguration(strictMode = false))
 
 internal fun parsePubspec(pubspecFile: File): Pubspec = parsePubspec(pubspecFile.readText())
 
