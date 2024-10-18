@@ -202,12 +202,12 @@ class ClearlyDefinedStorageTest : WordSpec({
 
         "use information from a source artifact if available" {
             val sourceArtifact = RemoteArtifact("https://source-artifact.org/test", Hash.NONE)
-            val expUrl = COORDINATES.copy(type = ComponentType.SOURCE_ARCHIVE)
+            val coordinates = COORDINATES.copy(type = ComponentType.SOURCE_ARCHIVE)
             val pkg = TEST_PACKAGE.copy(sourceArtifact = sourceArtifact)
-            val tools = listOf(toolUrl(expUrl, "scancode", SCANCODE_VERSION))
-            stubHarvestTools(server, expUrl, tools)
-            stubHarvestToolResponse(server, expUrl)
-            stubDefinitions(server, expUrl)
+            val tools = listOf(toolUrl(coordinates, "scancode", SCANCODE_VERSION))
+            stubHarvestTools(server, coordinates, tools)
+            stubHarvestToolResponse(server, coordinates)
+            stubDefinitions(server, coordinates)
 
             val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
