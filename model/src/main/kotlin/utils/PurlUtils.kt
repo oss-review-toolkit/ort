@@ -57,7 +57,7 @@ enum class PurlType(private val value: String) {
 }
 
 /**
- * Extra data than can be appended to a "clean" PURL via qualifiers or a subpath.
+ * Extra data than can be appended to a "clean" purl via qualifiers or a subpath.
  */
 data class PurlExtras(
     /**

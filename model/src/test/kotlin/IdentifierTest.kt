@@ -124,7 +124,7 @@ class IdentifierTest : WordSpec({
         }
     }
 
-    "Purl representations" should {
+    "purl representations" should {
         "not suffix the scheme with '//'" {
             val purl = Identifier("type", "namespace", "name", "version").toPurl()
 

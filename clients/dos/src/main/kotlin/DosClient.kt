@@ -48,7 +48,7 @@ class DosClient(private val service: DosService) {
         return if (response.isSuccessful && responseBody != null) {
             responseBody
         } else {
-            logger.error { "Error getting the package configuration for PURL $purl: ${response.errorBody()?.string()}" }
+            logger.error { "Error getting the package configuration for purl $purl: ${response.errorBody()?.string()}" }
 
             null
         }
