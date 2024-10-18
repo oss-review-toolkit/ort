@@ -16,6 +16,7 @@ asciidoctorj = "3.0.0"
 asciidoctorjPdf = "2.3.18"
 clikt = "5.0.1"
 commonsCompress = "1.27.1"
+commonsText = "1.12.0"
 cvssCalculator = "1.4.3"
 cyclonedx = "9.1.0"
 diffUtils = "4.12"
@@ -90,6 +91,7 @@ asciidoctorj-pdf = { module = "org.asciidoctor:asciidoctorj-pdf", version.ref = 
 awsS3 = { module = "software.amazon.awssdk:s3", version.ref = "s3" }
 clikt = { module = "com.github.ajalt.clikt:clikt", version.ref = "clikt" }
 commonsCompress = { module = "org.apache.commons:commons-compress", version.ref = "commonsCompress" }
+commonsText = { module = "org.apache.commons:commons-text", version.ref = "commonsText" }
 cvssCalculator = { module = "us.springett:cvss-calculator", version.ref = "cvssCalculator" }
 cyclonedx = { module = "org.cyclonedx:cyclonedx-core-java", version.ref = "cyclonedx" }
 detekt-api = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detektPlugin" }

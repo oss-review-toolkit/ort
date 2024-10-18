@@ -427,4 +427,31 @@ val ADVISOR_WITH_VULNERABILITIES = AdvisorRun(
     )
 )
 
+val SCANNER_WITH_ILLEGAL_COPYRIGHTS = scannerRunOf(
+    Identifier("NPM:@ort:no-license-file:1.0") to listOf(
+        ScanResult(
+            provenance = UnknownProvenance,
+            scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
+            summary = ScanSummary.EMPTY.copy(
+                licenseFindings = setOf(
+                    LicenseFinding(
+                        license = "MIT",
+                        location = TextLocation("file", 1)
+                    )
+                ),
+                copyrightFindings = setOf(
+                    CopyrightFinding(
+                        statement = "Portions created by the Initial Developer are Copyright (c) 2002 the Initial " +
+                            "Developer, holder is Tim Hudson (tjh@cryptsoft.com), Objc, (c) Objv, " +
+                            "\u0002 \u0002 \u0001A\u0002\u0002\u0001o\u0002\u0012 AB, Copyright (c)",
+                        location = TextLocation("file", 1)
+                    )
+                )
+            )
+        )
+    )
+)
+
 val ORT_RESULT_WITH_VULNERABILITIES = ORT_RESULT.copy(advisor = ADVISOR_WITH_VULNERABILITIES)
+
+val ORT_RESULT_WITH_ILLEGAL_COPYRIGHTS = ORT_RESULT.copy(scanner = SCANNER_WITH_ILLEGAL_COPYRIGHTS)

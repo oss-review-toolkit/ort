@@ -32,6 +32,8 @@ dependencies {
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxUtils)
 
+    implementation(libs.commonsText)
+
     funTestImplementation(testFixtures(projects.reporter))
 
     funTestImplementation(libs.kotest.assertions.json)

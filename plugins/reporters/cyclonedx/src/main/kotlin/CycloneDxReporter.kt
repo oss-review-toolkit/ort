@@ -24,6 +24,7 @@ import java.util.Date
 import java.util.SortedSet
 import java.util.UUID
 
+import org.apache.commons.text.StringEscapeUtils
 import org.apache.logging.log4j.kotlin.logger
 
 import org.cyclonedx.Format
@@ -341,7 +342,9 @@ class CycloneDxReporter : Reporter {
 
             // TODO: Find a way to associate copyrights to the license they belong to, see
             //       https://github.com/CycloneDX/cyclonedx-core-java/issues/58
-            copyright = resolvedLicenseInfo.getCopyrights().joinToString().takeUnless { it.isEmpty() }
+            copyright = StringEscapeUtils.escapeXml11(
+                resolvedLicenseInfo.getCopyrights().joinToString().takeUnless { it.isEmpty() }
+            )
 
             purl = pkg.purl + purlQualifier
             isModified = pkg.isModified
