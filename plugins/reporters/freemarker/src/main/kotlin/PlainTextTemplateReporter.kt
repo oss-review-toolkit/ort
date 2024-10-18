@@ -22,7 +22,10 @@ package org.ossreviewtoolkit.plugins.reporters.freemarker
 import java.io.File
 
 import org.ossreviewtoolkit.model.config.PluginConfiguration
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.reporter.Reporter
+import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
 
 /**
@@ -38,14 +41,19 @@ import org.ossreviewtoolkit.reporter.ReporterInput
  *
  * [1]: https://freemarker.apache.org
  */
-class PlainTextTemplateReporter : Reporter {
+@OrtPlugin(
+    displayName = "Plain Text Template Reporter",
+    description = "Generates plain text files using Apache Freemarker templates.",
+    factory = ReporterFactory::class
+)
+class PlainTextTemplateReporter(
+    override val descriptor: PluginDescriptor = PlainTextTemplateReporterFactory.descriptor
+) : Reporter {
     companion object {
         private const val TEMPLATE_DIRECTORY = "plain-text"
 
         private const val DEFAULT_TEMPLATE_ID = "NOTICE_DEFAULT"
     }
-
-    override val type = "PlainTextTemplate"
 
     private val templateProcessor = FreemarkerTemplateProcessor(TEMPLATE_DIRECTORY)
 

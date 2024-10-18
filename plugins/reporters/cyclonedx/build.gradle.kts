@@ -19,13 +19,15 @@
 
 plugins {
     // Apply precompiled plugins.
-    id("ort-library-conventions")
+    id("ort-plugin-conventions")
 }
 
 dependencies {
     api(projects.reporter)
 
     api(libs.cyclonedx)
+
+    ksp(projects.reporter)
 
     implementation(projects.model)
     implementation(projects.utils.commonUtils)

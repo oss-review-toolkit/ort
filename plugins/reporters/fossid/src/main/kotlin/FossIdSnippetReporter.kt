@@ -22,19 +22,26 @@ package org.ossreviewtoolkit.plugins.reporters.fossid
 import java.io.File
 
 import org.ossreviewtoolkit.model.config.PluginConfiguration
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.reporters.asciidoc.HtmlTemplateReporter
 import org.ossreviewtoolkit.plugins.reporters.freemarker.FreemarkerTemplateProcessor
 import org.ossreviewtoolkit.reporter.Reporter
+import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
 
-class FossIdSnippetReporter : Reporter by delegateReporter {
+@OrtPlugin(
+    displayName = "FossID Snippet Reporter",
+    description = "Generates a detailed report of the FossID snippet findings.",
+    factory = ReporterFactory::class
+)
+class FossIdSnippetReporter(override val descriptor: PluginDescriptor = FossIdSnippetReporterFactory.descriptor) :
+    Reporter by delegateReporter {
     companion object {
         private const val TEMPLATE_NAME = "fossid_snippet"
 
-        private val delegateReporter = HtmlTemplateReporter()
+        private val delegateReporter = HtmlTemplateReporter(FossIdSnippetReporterFactory.descriptor)
     }
-
-    override val type = "FossIdSnippet"
 
     override fun generateReport(
         input: ReporterInput,
