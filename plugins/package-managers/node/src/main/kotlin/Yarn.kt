@@ -23,8 +23,12 @@ import java.io.File
 
 import kotlin.time.Duration.Companion.days
 
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.decodeToSequence
 
 import org.apache.logging.log4j.kotlin.logger
 
@@ -88,12 +92,27 @@ class Yarn(
 
         val process = run(workingDir, "info", "--json", packageName)
 
-        val data = Json.parseToJsonElement(process.stdout).jsonObject["data"]?.also {
-            yarnInfoCache.write(packageName, it.toString())
-        } ?: checkNotNull(Json.parseToJsonElement(process.stderr).jsonObject["data"]).also {
+        return parseYarnInfo(process.stdout)?.also {
+            yarnInfoCache.write(packageName, Json.encodeToString(it))
+        } ?: checkNotNull(parseYarnInfo(process.stderr)).also {
             logger.warn { "Error running '${process.commandLine}' in directory $workingDir: $it" }
         }
-
-        return parsePackageJson(data)
     }
 }
+
+/**
+ * Parse the given [output] of a Yarn _info_ command to a [JsonElement] that can be further processed. The output is
+ * typically a JSON object with the metadata of the package that was queried. However, under certain circumstances,
+ * Yarn may return multiple JSON objects separated by newlines; for instance, if the operation is retried due to
+ * network problems. This function filters for the object with the data based on the _type_ field. Result is *null* if
+ * no matching object is found or the input is not valid JSON.
+ */
+internal fun parseYarnInfo(output: String): PackageJson? =
+    runCatching {
+        output.byteInputStream().use { inputStream ->
+            Json.decodeToSequence<JsonObject>(inputStream)
+                .firstOrNull { (it["type"] as? JsonPrimitive)?.content == "inspect" }?.let {
+                    it["data"]?.let(::parsePackageJson)
+                }
+        }
+    }.getOrNull()
