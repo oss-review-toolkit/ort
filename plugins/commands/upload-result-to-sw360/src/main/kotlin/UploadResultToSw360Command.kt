@@ -142,7 +142,7 @@ class UploadResultToSw360Command : OrtCommand(
         val sw360Project = SW360Project()
             .setName(project.id.name)
             .setVersion(project.id.version)
-            .setDescription("A ${project.id.type} project with the PURL ${project.id.toPurl()}.")
+            .setDescription("A ${project.id.type} project with the purl ${project.id.toPurl()}.")
             .setVisibility(SW360Visibility.BUISNESSUNIT_AND_MODERATORS)
 
         return try {

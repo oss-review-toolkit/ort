@@ -102,7 +102,7 @@ fun Provenance.toPurlExtras(): PurlExtras =
     }
 
 /**
- * Decode [Provenance] from extra qualifying data / a subpath of the PURL represented by this [String]. Return
+ * Decode [Provenance] from extra qualifying data / a subpath of the purl represented by this [String]. Return
  * [UnknownProvenance] if extra data is not present.
  */
 fun String.toProvenance(): Provenance {
