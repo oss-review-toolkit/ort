@@ -21,6 +21,9 @@
 
 package org.ossreviewtoolkit.model.utils
 
+import java.io.File
+
+import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.utils.common.percentEncode
 
 /**
@@ -92,28 +95,47 @@ internal fun createPurl(
 ): String =
     buildString {
         append("pkg:")
-        append(type)
+        append(type.lowercase())
+        append('/')
 
         if (namespace.isNotEmpty()) {
+            append(namespace.trim('/').split('/').joinToString("/") { it.percentEncode() })
             append('/')
-            append(namespace.percentEncode())
         }
 
-        append('/')
-        append(name.percentEncode())
+        append(name.trim('/').percentEncode())
 
-        append('@')
-        append(version.percentEncode())
+        if (version.isNotEmpty()) {
+            append('@')
 
-        qualifiers.onEachIndexed { index, entry ->
+            // See https://github.com/package-url/purl-spec/blob/master/PURL-SPECIFICATION.rst#character-encoding which
+            // says "the '#', '?', '@' and ':' characters must NOT be encoded when used as separators".
+            val isChecksum = HashAlgorithm.VERIFIABLE.any { version.startsWith("${it.name.lowercase()}:") }
+            if (isChecksum) append(version) else append(version.percentEncode())
+        }
+
+        qualifiers.filterValues { it.isNotEmpty() }.toSortedMap().onEachIndexed { index, entry ->
             if (index == 0) append("?") else append("&")
-            append(entry.key.percentEncode())
+
+            val key = entry.key.lowercase()
+            append(key)
+
             append("=")
-            append(entry.value.percentEncode())
+
+            if (key in KNOWN_QUALIFIER_KEYS) append(entry.value) else append(entry.value.percentEncode())
         }
 
         if (subpath.isNotEmpty()) {
-            val value = subpath.split('/').joinToString("/", prefix = "#") { it.percentEncode() }
+            val value = subpath.trim('/').split('/')
+                .filter { it.isNotEmpty() }
+                .joinToString("/", prefix = "#") {
+                    // Instead of just discarding "." and "..", resolve them by normalizing.
+                    File(it).normalize().path.percentEncode()
+                }
+
             append(value)
         }
     }
+
+// See https://github.com/package-url/purl-spec/blob/master/PURL-SPECIFICATION.rst#known-qualifiers-keyvalue-pairs.
+private val KNOWN_QUALIFIER_KEYS = setOf("repository_url", "download_url", "vcs_url", "file_name", "checksum")
