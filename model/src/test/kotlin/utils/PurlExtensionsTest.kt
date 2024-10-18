@@ -78,7 +78,7 @@ class PurlExtensionsTest : StringSpec({
         purl.toProvenance() shouldBe provenance
     }
 
-    "A clean PURL has unknown provenance" {
+    "A PURL without qualifiers has unknown provenance" {
         "pkg:npm/mime-db@1.33.0".toProvenance() shouldBe UnknownProvenance
     }
 })
