@@ -17,10 +17,8 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packagemanagers.pub
+package org.ossreviewtoolkit.plugins.packagemanagers.pub.model
 
-import com.charleskorn.kaml.Yaml
-import com.charleskorn.kaml.YamlConfiguration
 import com.charleskorn.kaml.YamlInput
 import com.charleskorn.kaml.YamlScalar
 
@@ -39,9 +37,7 @@ import kotlinx.serialization.descriptors.SerialKind
 import kotlinx.serialization.descriptors.buildSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 
-import org.ossreviewtoolkit.plugins.packagemanagers.pub.PackageInfo.Description
-
-private val YAML = Yaml(configuration = YamlConfiguration(strictMode = false))
+import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.PackageInfo.Description
 
 internal fun parseLockfile(lockfile: File) = YAML.decodeFromString<Lockfile>(lockfile.readText())
 
@@ -76,7 +72,7 @@ internal data class PackageInfo(
     )
 }
 
-private class DescriptionDeserializer : KSerializer<Description> by Description.generatedSerializer() {
+private object DescriptionDeserializer : KSerializer<Description> by Description.generatedSerializer() {
     @OptIn(InternalSerializationApi::class)
     override val descriptor: SerialDescriptor by lazy {
         val serialName = checkNotNull(Description::class.qualifiedName)
