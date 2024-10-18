@@ -38,6 +38,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.utils.parseRepoManifestPath
 import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.collectMessages
@@ -192,7 +193,8 @@ class GitRepo : VersionControlSystem(GitRepoCommand) {
         workingTree: WorkingTree,
         revision: String,
         path: String,
-        recursive: Boolean
+        recursive: Boolean,
+        options: Options // GitRepo-specific configuration options only.
     ): Result<String> {
         val manifestRevision = revision.takeUnless { it.isBlank() }
         val manifestPath = workingTree.getInfo().url.parseRepoManifestPath()

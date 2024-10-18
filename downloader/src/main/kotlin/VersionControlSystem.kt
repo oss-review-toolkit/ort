@@ -30,6 +30,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.Plugin
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.uppercaseFirstChar
@@ -387,7 +388,8 @@ abstract class VersionControlSystem(
         workingTree: WorkingTree,
         revision: String,
         path: String = "",
-        recursive: Boolean = false
+        recursive: Boolean = false,
+        options: Options = emptyMap() // VCS-specific options only
     ): Result<String>
 
     /**
