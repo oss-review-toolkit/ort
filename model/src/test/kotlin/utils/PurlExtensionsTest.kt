@@ -68,10 +68,10 @@ class PurlExtensionsTest : WordSpec({
             purl shouldBe "pkg:generic/name@version"
         }
 
-        "percent-encode namespaces with segments" {
-            val purl = Identifier("generic", "name/space", "name", "version").toPurl()
+        "percent-encode namespace segments" {
+            val purl = Identifier("generic", "name space/with spaces", "name", "version").toPurl()
 
-            purl shouldBe "pkg:generic/name%2Fspace/name@version"
+            purl shouldBe "pkg:generic/name%20space/with%20spaces/name@version"
         }
 
         "percent-encode the name" {
@@ -95,7 +95,7 @@ class PurlExtensionsTest : WordSpec({
                 mapOf("argName" to "argValue")
             )
 
-            purl shouldBe "pkg:type/namespace/name@version?argName=argValue"
+            purl shouldBe "pkg:type/namespace/name@version?argname=argValue"
         }
 
         "allow multiple qualifiers" {
@@ -107,7 +107,7 @@ class PurlExtensionsTest : WordSpec({
                 mapOf("argName1" to "argValue1", "argName2" to "argValue2")
             )
 
-            purl shouldBe "pkg:type/namespace/name@version?argName1=argValue1&argName2=argValue2"
+            purl shouldBe "pkg:type/namespace/name@version?argname1=argValue1&argname2=argValue2"
         }
 
         "allow subpath" {
@@ -140,8 +140,8 @@ class PurlExtensionsTest : WordSpec({
             val purl = id.toPurl(extras.qualifiers, extras.subpath)
 
             purl shouldBe "pkg:maven/com.example/sources@1.2.3?" +
-                "download_url=https%3A%2F%2Fexample.com%2Fsources.zip&" +
-                "checksum=md5%3Addce269a1e3d054cae349621c198dd52"
+                "checksum=md5%3Addce269a1e3d054cae349621c198dd52&" +
+                "download_url=https%3A%2F%2Fexample.com%2Fsources.zip"
             purl.toProvenance() shouldBe provenance
         }
 
@@ -161,10 +161,10 @@ class PurlExtensionsTest : WordSpec({
             val purl = id.toPurl(extras.qualifiers, extras.subpath)
 
             purl shouldBe "pkg:maven/com.example/sources@1.2.3?" +
-                "vcs_type=Git&" +
-                "vcs_url=https%3A%2F%2Fgithub.com%2Fapache%2Fcommons-text.git&" +
+                "resolved_revision=7643b12421100d29fd2b78053e77bcb04a251b2e&" +
                 "vcs_revision=7643b12421100d29fd2b78053e77bcb04a251b2e&" +
-                "resolved_revision=7643b12421100d29fd2b78053e77bcb04a251b2e" +
+                "vcs_type=Git&" +
+                "vcs_url=https%3A%2F%2Fgithub.com%2Fapache%2Fcommons-text.git" +
                 "#subpath"
             purl.toProvenance() shouldBe provenance
         }
