@@ -51,7 +51,7 @@ packages:
     revision: "eb51f949cdd0c9d88abba9ce79d37eb7ea1231d0"
     path: ""
 - id: "Swift::github.com/apple/swift-crypto:"
-  purl: "pkg:swift/github.com%2Fapple%2Fswift-crypto@"
+  purl: "pkg:swift/github.com%2Fapple%2Fswift-crypto"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""

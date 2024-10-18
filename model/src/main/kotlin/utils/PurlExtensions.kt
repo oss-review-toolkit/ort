@@ -114,9 +114,8 @@ fun String.toProvenance(): Provenance {
         "download_url=" in extras -> {
             val encodedUrl = getQualifierValue("download_url")
 
-            val percentEncodedColon = "%3A"
             val checksum = getQualifierValue("checksum")
-            val (algorithm, value) = checksum.split(percentEncodedColon, limit = 2)
+            val (algorithm, value) = checksum.split(':', limit = 2)
 
             ArtifactProvenance(
                 sourceArtifact = RemoteArtifact(
