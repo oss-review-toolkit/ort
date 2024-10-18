@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.model.utils
 
-import io.kotest.core.spec.style.StringSpec
+import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
@@ -32,53 +32,55 @@ import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 
-class PurlExtensionsTest : StringSpec({
-    "Artifact provenance can be converted to PURL extras and back" {
-        val provenance = ArtifactProvenance(
-            sourceArtifact = RemoteArtifact(
-                url = "https://example.com/sources.zip",
-                hash = Hash(
-                    value = "ddce269a1e3d054cae349621c198dd52",
-                    algorithm = HashAlgorithm.MD5
+class PurlExtensionsTest : WordSpec({
+    "Provenance conversion" should {
+        "work for extras of an artifact's provenance" {
+            val provenance = ArtifactProvenance(
+                sourceArtifact = RemoteArtifact(
+                    url = "https://example.com/sources.zip",
+                    hash = Hash(
+                        value = "ddce269a1e3d054cae349621c198dd52",
+                        algorithm = HashAlgorithm.MD5
+                    )
                 )
             )
-        )
-        val id = Identifier("Maven:com.example:sources:1.2.3")
+            val id = Identifier("Maven:com.example:sources:1.2.3")
 
-        val extras = provenance.toPurlExtras()
-        val purl = id.toPurl(extras.qualifiers, extras.subpath)
+            val extras = provenance.toPurlExtras()
+            val purl = id.toPurl(extras.qualifiers, extras.subpath)
 
-        purl shouldBe "pkg:maven/com.example/sources@1.2.3?" +
-            "download_url=https%3A%2F%2Fexample.com%2Fsources.zip&" +
-            "checksum=md5%3Addce269a1e3d054cae349621c198dd52"
-        purl.toProvenance() shouldBe provenance
-    }
+            purl shouldBe "pkg:maven/com.example/sources@1.2.3?" +
+                "download_url=https%3A%2F%2Fexample.com%2Fsources.zip&" +
+                "checksum=md5%3Addce269a1e3d054cae349621c198dd52"
+            purl.toProvenance() shouldBe provenance
+        }
 
-    "Repository provenance can be converted to PURL extras and back" {
-        val provenance = RepositoryProvenance(
-            vcsInfo = VcsInfo(
-                type = VcsType.GIT,
-                url = "https://github.com/apache/commons-text.git",
-                revision = "7643b12421100d29fd2b78053e77bcb04a251b2e",
-                path = "subpath"
-            ),
-            resolvedRevision = "7643b12421100d29fd2b78053e77bcb04a251b2e"
-        )
-        val id = Identifier("Maven:com.example:sources:1.2.3")
+        "work for extras of a repository's provenance" {
+            val provenance = RepositoryProvenance(
+                vcsInfo = VcsInfo(
+                    type = VcsType.GIT,
+                    url = "https://github.com/apache/commons-text.git",
+                    revision = "7643b12421100d29fd2b78053e77bcb04a251b2e",
+                    path = "subpath"
+                ),
+                resolvedRevision = "7643b12421100d29fd2b78053e77bcb04a251b2e"
+            )
+            val id = Identifier("Maven:com.example:sources:1.2.3")
 
-        val extras = provenance.toPurlExtras()
-        val purl = id.toPurl(extras.qualifiers, extras.subpath)
+            val extras = provenance.toPurlExtras()
+            val purl = id.toPurl(extras.qualifiers, extras.subpath)
 
-        purl shouldBe "pkg:maven/com.example/sources@1.2.3?" +
-            "vcs_type=Git&" +
-            "vcs_url=https%3A%2F%2Fgithub.com%2Fapache%2Fcommons-text.git&" +
-            "vcs_revision=7643b12421100d29fd2b78053e77bcb04a251b2e&" +
-            "resolved_revision=7643b12421100d29fd2b78053e77bcb04a251b2e" +
-            "#subpath"
-        purl.toProvenance() shouldBe provenance
-    }
+            purl shouldBe "pkg:maven/com.example/sources@1.2.3?" +
+                "vcs_type=Git&" +
+                "vcs_url=https%3A%2F%2Fgithub.com%2Fapache%2Fcommons-text.git&" +
+                "vcs_revision=7643b12421100d29fd2b78053e77bcb04a251b2e&" +
+                "resolved_revision=7643b12421100d29fd2b78053e77bcb04a251b2e" +
+                "#subpath"
+            purl.toProvenance() shouldBe provenance
+        }
 
-    "A PURL without qualifiers has unknown provenance" {
-        "pkg:npm/mime-db@1.33.0".toProvenance() shouldBe UnknownProvenance
+        "work for a PURL without qualifiers" {
+            "pkg:npm/mime-db@1.33.0".toProvenance() shouldBe UnknownProvenance
+        }
     }
 })
