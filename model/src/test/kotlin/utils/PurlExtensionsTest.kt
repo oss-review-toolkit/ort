@@ -79,7 +79,7 @@ class PurlExtensionsTest : WordSpec({
             purl.toProvenance() shouldBe provenance
         }
 
-        "work for a PURL without qualifiers" {
+        "work for a purl without qualifiers" {
             "pkg:npm/mime-db@1.33.0".toProvenance() shouldBe UnknownProvenance
         }
     }

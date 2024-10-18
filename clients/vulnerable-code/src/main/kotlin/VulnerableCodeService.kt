@@ -138,7 +138,7 @@ interface VulnerableCodeService {
      */
     @Serializable
     data class PackageVulnerabilities(
-        /** The PURL identifying this package. */
+        /** The purl identifying this package. */
         val purl: String,
 
         /** An optional list with vulnerabilities that have not yet been resolved. */
