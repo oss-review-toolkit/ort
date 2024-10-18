@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
-import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
+import org.ossreviewtoolkit.model.utils.PathLicenseMatcher
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.dir.DirPackageConfigurationProvider
 import org.ossreviewtoolkit.scanner.ScanStorages
@@ -94,7 +94,7 @@ internal class GetPackageLicensesCommand : OrtHelperCommand(
 
             val detectedLicense = curatedFindings.toSpdxExpression()
 
-            val rootLicense = RootLicenseMatcher().getApplicableRootLicenseFindingsForDirectories(
+            val rootLicense = PathLicenseMatcher().getApplicableLicenseFindingsForDirectories(
                 licenseFindings = curatedFindings,
                 directories = listOf("") // TODO: use the proper VCS path.
             ).values.flatten().toSpdxExpression()

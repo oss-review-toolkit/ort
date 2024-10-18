@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
+import org.ossreviewtoolkit.model.utils.PathLicenseMatcher
 
 /**
  * The result of a single scan of a single package.
@@ -51,7 +51,7 @@ data class ScanResult(
 ) {
     /**
      * Filter all detected licenses and copyrights from the [summary] which are underneath [path], and set the [path]
-     * for [provenance]. Findings which [RootLicenseMatcher] assigns as root license files for [path] are also kept.
+     * for [provenance]. Findings which [PathLicenseMatcher] assigns as root license files for [path] are also kept.
      */
     fun filterByPath(path: String): ScanResult =
         when {

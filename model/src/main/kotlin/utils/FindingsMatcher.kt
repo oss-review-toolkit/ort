@@ -40,10 +40,10 @@ import org.ossreviewtoolkit.utils.spdx.toSpdx
 /**
  * A class for matching copyright findings to license findings. Copyright statements may be matched either to license
  * findings located nearby in the same file or to a license found in a license file whereas the given
- * [rootLicenseMatcher] determines whether a file is a license file.
+ * [pathLicenseMatcher] determines whether a file is a license file.
  */
 class FindingsMatcher(
-    private val rootLicenseMatcher: RootLicenseMatcher = RootLicenseMatcher(),
+    private val pathLicenseMatcher: PathLicenseMatcher = PathLicenseMatcher(),
     private val toleranceLines: Int = DEFAULT_TOLERANCE_LINES,
     private val expandToleranceLines: Int = DEFAULT_EXPAND_TOLERANCE_LINES
 ) {
@@ -137,7 +137,7 @@ class FindingsMatcher(
      * Associate the [copyrightFindings] to the [licenseFindings]. Copyright findings are matched to license findings
      * located nearby in the same file. Copyright findings that are not located close to a license finding are
      * associated to the root licenses instead. The root licenses are the licenses found in any of the license files
-     * defined by [rootLicenseMatcher].
+     * defined by [pathLicenseMatcher].
      */
     fun match(licenseFindings: Set<LicenseFinding>, copyrightFindings: Set<CopyrightFinding>): FindingsMatcherResult {
         val licenseFindingsByPath = licenseFindings.groupBy { it.location.path }
@@ -172,7 +172,7 @@ class FindingsMatcher(
         licenseFindings: Set<LicenseFinding>,
         copyrightFindings: Set<CopyrightFinding>
     ): Map<LicenseFinding, Set<CopyrightFinding>> {
-        val rootLicensesForDirectories = rootLicenseMatcher.getApplicableRootLicenseFindingsForDirectories(
+        val rootLicensesForDirectories = pathLicenseMatcher.getApplicableLicenseFindingsForDirectories(
             licenseFindings = licenseFindings,
             directories = copyrightFindings.map { it.location.directory() }
         )

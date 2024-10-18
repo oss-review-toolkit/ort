@@ -42,7 +42,7 @@ import org.ossreviewtoolkit.utils.common.getAllAncestorDirectories
  *
  * Patent files are assigned in an analog way, but without any fallback pattern.
  */
-class RootLicenseMatcher(licenseFilePatterns: LicenseFilePatterns = LicenseFilePatterns.DEFAULT) {
+class PathLicenseMatcher(licenseFilePatterns: LicenseFilePatterns = LicenseFilePatterns.DEFAULT) {
     private val licenseFileMatcher = createFileMatcher(licenseFilePatterns.licenseFilenames)
     private val patentFileMatcher = createFileMatcher(licenseFilePatterns.patentFilenames)
     private val rootLicenseFileMatcher = createFileMatcher(licenseFilePatterns.rootLicenseFilenames)
@@ -52,7 +52,7 @@ class RootLicenseMatcher(licenseFilePatterns: LicenseFilePatterns = LicenseFileP
      * applicable to the respective directory. The values of the map entries are subsets of the given
      * [licenseFindings].
      */
-    fun getApplicableRootLicenseFindingsForDirectories(
+    fun getApplicableLicenseFindingsForDirectories(
         licenseFindings: Collection<LicenseFinding>,
         directories: Collection<String>
     ): Map<String, Set<LicenseFinding>> {
@@ -60,8 +60,8 @@ class RootLicenseMatcher(licenseFilePatterns: LicenseFilePatterns = LicenseFileP
 
         return getApplicableLicenseFilesForDirectories(
             licenseFindingsByPath.keys, directories
-        ).mapValues { (_, rootLicenseFilePath) ->
-            rootLicenseFilePath.flatMapTo(mutableSetOf()) { licenseFindingsByPath.getValue(it) }
+        ).mapValues { (_, licenseFilePath) ->
+            licenseFilePath.flatMapTo(mutableSetOf()) { licenseFindingsByPath.getValue(it) }
         }
     }
 
