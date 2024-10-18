@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.FindingsMatcher
-import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
+import org.ossreviewtoolkit.model.utils.ParentLicenseMatcher
 import org.ossreviewtoolkit.model.utils.prependedPath
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
@@ -49,10 +49,10 @@ class LicenseInfoResolver(
 ) {
     private val resolvedLicenseInfo = ConcurrentHashMap<Identifier, ResolvedLicenseInfo>()
     private val resolvedLicenseFiles = ConcurrentHashMap<Identifier, ResolvedLicenseFileInfo>()
-    private val rootLicenseMatcher = RootLicenseMatcher(
+    private val parentLicenseMatcher = ParentLicenseMatcher(
         licenseFilePatterns = licenseFilePatterns.copy(rootLicenseFilenames = emptyList())
     )
-    private val findingsMatcher = FindingsMatcher(RootLicenseMatcher(licenseFilePatterns))
+    private val findingsMatcher = FindingsMatcher(ParentLicenseMatcher(licenseFilePatterns))
 
     /**
      * Get the [ResolvedLicenseInfo] for the project or package identified by [id].
@@ -268,7 +268,7 @@ class LicenseInfoResolver(
             }
 
             val directory = (provenance as? RepositoryProvenance)?.vcsInfo?.path.orEmpty()
-            val rootLicenseFiles = rootLicenseMatcher.getApplicableLicenseFilesForDirectories(
+            val rootLicenseFiles = parentLicenseMatcher.getApplicableLicenseFilesForDirectories(
                 relativeFilePaths = archiveDir.walk().filter { it.isFile }.mapTo(mutableSetOf()) {
                     it.toRelativeString(archiveDir)
                 },
