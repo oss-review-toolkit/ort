@@ -57,7 +57,7 @@ enum class PurlType(private val value: String) {
 }
 
 /**
- * Extra data than can be appended to a "clean" PURL via qualifiers or a subpath.
+ * Extra data than can be appended to a "clean" purl via qualifiers or a subpath.
  */
 data class PurlExtras(
     /**
@@ -92,28 +92,33 @@ internal fun createPurl(
 ): String =
     buildString {
         append("pkg:")
-        append(type)
+        append(type.lowercase())
+        append('/')
 
         if (namespace.isNotEmpty()) {
+            append(namespace.trim('/').split('/').joinToString("/") { it.percentEncode() })
             append('/')
-            append(namespace.percentEncode())
+            append(name.trim('/').percentEncode())
+        } else {
+            append(name.percentEncode())
         }
 
-        append('/')
-        append(name.percentEncode())
+        if (version.isNotEmpty()) {
+            append('@')
+            append(version.percentEncode())
+        }
 
-        append('@')
-        append(version.percentEncode())
-
-        qualifiers.onEachIndexed { index, entry ->
+        qualifiers.filterValues { it.isNotEmpty() }.toSortedMap().onEachIndexed { index, entry ->
             if (index == 0) append("?") else append("&")
-            append(entry.key.percentEncode())
+            append(entry.key.lowercase())
             append("=")
             append(entry.value.percentEncode())
         }
 
         if (subpath.isNotEmpty()) {
-            val value = subpath.split('/').joinToString("/", prefix = "#") { it.percentEncode() }
+            val value = subpath.trim('/').split('/')
+                .filter { it.isNotEmpty() && it != "." && it != ".." }
+                .joinToString("/", prefix = "#") { it.percentEncode() }
             append(value)
         }
     }

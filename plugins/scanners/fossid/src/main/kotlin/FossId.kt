@@ -124,7 +124,7 @@ class FossId internal constructor(
         private val GIT_FETCH_DONE_REGEX = Regex("-> FETCH_HEAD(?: Already up to date.)*$")
 
         /**
-         * A regular expression to extract the artifact and version from a Purl returned by FossID.
+         * A regular expression to extract the artifact and version from a purl returned by FossID.
          */
         @JvmStatic
         private val SNIPPET_PURL_REGEX = Regex("^.*/(?<artifact>[^@]+)@(?<version>.+)")

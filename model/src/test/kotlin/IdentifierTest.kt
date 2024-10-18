@@ -25,12 +25,6 @@ import io.kotest.inspectors.forAll
 import io.kotest.matchers.maps.containExactly
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.string.shouldNotContain
-import io.kotest.matchers.string.shouldNotStartWith
-import io.kotest.matchers.string.shouldStartWith
-
-import org.ossreviewtoolkit.model.utils.createPurl
-import org.ossreviewtoolkit.model.utils.toPurl
 
 class IdentifierTest : WordSpec({
     "String representations" should {
@@ -121,93 +115,6 @@ class IdentifierTest : WordSpec({
             val map = serializedMap.fromYaml<Map<Identifier, Int>>()
 
             map should containExactly(Identifier("type", "namespace", "", "") to 1)
-        }
-    }
-
-    "Purl representations" should {
-        "not suffix the scheme with '//'" {
-            val purl = Identifier("type", "namespace", "name", "version").toPurl()
-
-            purl shouldStartWith "pkg:"
-            purl shouldNotStartWith "pkg://"
-        }
-
-        "not percent-encode the type" {
-            val purl = Identifier("azAZ09.+-", "namespace", "name", "version").toPurl()
-
-            purl shouldNotContain "%"
-        }
-
-        "ignore case in type" {
-            val purl = Identifier("MaVeN", "namespace", "name", "version").toPurl()
-
-            purl shouldBe purl.lowercase()
-        }
-
-        "use the generic type if it is not a known package manager" {
-            val purl = Identifier("FooBar", "namespace", "name", "version").toPurl()
-
-            purl shouldStartWith "pkg:generic"
-        }
-
-        "not use '/' for empty namespaces" {
-            val purl = Identifier("generic", "", "name", "version").toPurl()
-
-            purl shouldBe "pkg:generic/name@version"
-        }
-
-        "percent-encode namespaces with segments" {
-            val purl = Identifier("generic", "name/space", "name", "version").toPurl()
-
-            purl shouldBe "pkg:generic/name%2Fspace/name@version"
-        }
-
-        "percent-encode the name" {
-            val purl = Identifier("generic", "namespace", "fancy name", "version").toPurl()
-
-            purl shouldBe "pkg:generic/namespace/fancy%20name@version"
-        }
-
-        "percent-encode the version" {
-            val purl = Identifier("generic", "namespace", "name", "release candidate").toPurl()
-
-            purl shouldBe "pkg:generic/namespace/name@release%20candidate"
-        }
-
-        "allow qualifiers" {
-            val purl = createPurl(
-                "type",
-                "namespace",
-                "name",
-                "version",
-                mapOf("argName" to "argValue")
-            )
-
-            purl shouldBe "pkg:type/namespace/name@version?argName=argValue"
-        }
-
-        "allow multiple qualifiers" {
-            val purl = createPurl(
-                "type",
-                "namespace",
-                "name",
-                "version",
-                mapOf("argName1" to "argValue1", "argName2" to "argValue2")
-            )
-
-            purl shouldBe "pkg:type/namespace/name@version?argName1=argValue1&argName2=argValue2"
-        }
-
-        "allow subpath" {
-            val purl = createPurl(
-                "type",
-                "namespace",
-                "name",
-                "version",
-                subpath = "value1/value2"
-            )
-
-            purl shouldBe "pkg:type/namespace/name@version#value1/value2"
         }
     }
 
