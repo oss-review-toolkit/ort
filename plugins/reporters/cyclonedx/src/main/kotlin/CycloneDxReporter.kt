@@ -372,7 +372,11 @@ class CycloneDxReporter(
 
             // TODO: Find a way to associate copyrights to the license they belong to, see
             //       https://github.com/CycloneDX/cyclonedx-core-java/issues/58
-            copyright = resolvedLicenseInfo.getCopyrights().joinToString().takeUnless { it.isEmpty() }
+            copyright = resolvedLicenseInfo.getCopyrights().joinToString {
+                it.filterNot { character ->
+                    character.isIdentifierIgnorable()
+                }
+            }.takeUnless { it.isEmpty() }
 
             purl = pkg.purl + purlQualifier
             isModified = pkg.isModified
