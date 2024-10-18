@@ -54,6 +54,7 @@ internal class OrtModelBuilder : ToolingModelBuilder {
     private val logger = Logging.getLogger(OrtModelBuilder::class.java)
     private val errors = mutableListOf<String>()
     private val warnings = mutableListOf<String>()
+    private val globalDependencySubtrees = mutableMapOf<String, List<OrtDependency>>()
 
     override fun canBuild(modelName: String): Boolean = modelName == OrtDependencyTreeModel::class.java.name
 
@@ -205,7 +206,10 @@ internal class OrtModelBuilder : ToolingModelBuilder {
                                 warnings += message
                             }
 
-                            val dependencies = selectedComponent.dependencies.toOrtDependencies(poms, visited + id)
+                            // Check if we have scanned the dependencies of this subtree before, and if so, reuse them.
+                            val dependencies = globalDependencySubtrees.getOrPut(id.displayName) {
+                                selectedComponent.dependencies.toOrtDependencies(poms, visited + id)
+                            }
 
                             OrtDependencyImpl(
                                 groupId = id.group,
