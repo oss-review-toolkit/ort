@@ -42,6 +42,7 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.plugins.reporters.cyclonedx.CycloneDxReporter.Companion.REPORT_BASE_FILENAME
 import org.ossreviewtoolkit.reporter.ORT_RESULT
+import org.ossreviewtoolkit.reporter.ORT_RESULT_WITH_ILLEGAL_COPYRIGHTS
 import org.ossreviewtoolkit.reporter.ORT_RESULT_WITH_VULNERABILITIES
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.Options
@@ -95,6 +96,19 @@ class CycloneDxReporterFunTest : WordSpec({
 
                     val actualBom = bomFile.readText().patchCycloneDxResult().normalizeLineBreaks()
                     actualBom shouldBe expectedBom
+                }
+            }
+        }
+
+        "the expected XML file even if some copyrights contain non printable characters" {
+            val xmlOptions = optionSingle + mapOf("output.file.formats" to "xml")
+
+            val bomFileResults = generateReport(ORT_RESULT_WITH_ILLEGAL_COPYRIGHTS, xmlOptions)
+
+            bomFileResults.shouldBeSingleton {
+                it shouldBeSuccess { bomFile ->
+                    bomFile shouldBe aFile()
+                    bomFile shouldNotBe emptyFile()
                 }
             }
         }
