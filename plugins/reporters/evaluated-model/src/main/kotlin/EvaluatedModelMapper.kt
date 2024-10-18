@@ -48,7 +48,7 @@ import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.FindingsMatcher
-import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
+import org.ossreviewtoolkit.model.utils.PathLicenseMatcher
 import org.ossreviewtoolkit.model.utils.filterByVcsPath
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.reporter.ReporterInput
@@ -78,7 +78,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     private val vulnerabilitiesResolutions = mutableListOf<VulnerabilityResolution>()
 
     private val curationsMatcher = FindingCurationMatcher()
-    private val findingsMatcher = FindingsMatcher(RootLicenseMatcher(input.ortConfig.licenseFilePatterns))
+    private val findingsMatcher = FindingsMatcher(PathLicenseMatcher(input.ortConfig.licenseFilePatterns))
 
     private data class PackageExcludeInfo(
         var id: Identifier,

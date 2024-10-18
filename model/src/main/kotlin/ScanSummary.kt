@@ -32,7 +32,7 @@ import java.time.Instant
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.utils.CopyrightFindingSortedSetConverter
 import org.ossreviewtoolkit.model.utils.LicenseFindingSortedSetConverter
-import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
+import org.ossreviewtoolkit.model.utils.PathLicenseMatcher
 import org.ossreviewtoolkit.model.utils.SnippetFindingSortedSetConverter
 import org.ossreviewtoolkit.utils.common.FileMatcher
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
@@ -100,19 +100,19 @@ data class ScanSummary(
 
     /**
      * Filter all detected licenses and copyrights from this [ScanSummary] which are underneath [path]. Findings which
-     * [RootLicenseMatcher] assigns as root license files for [path] are also kept.
+     * [PathLicenseMatcher] assigns as root license files for [path] are also kept.
      */
     fun filterByPath(path: String): ScanSummary = filterByPaths(listOf(path))
 
     /**
      * Filter all detected licenses and copyrights from this [ScanSummary] which are underneath the given [paths].
-     * Findings which [RootLicenseMatcher] assigns as root license files for path in [paths] are also kept.
+     * Findings which [PathLicenseMatcher] assigns as root license files for path in [paths] are also kept.
      */
     fun filterByPaths(paths: Collection<String>): ScanSummary {
         if (paths.any { it.isBlank() }) return this
 
-        val rootLicenseMatcher = RootLicenseMatcher(LicenseFilePatterns.getInstance())
-        val applicableLicenseFiles = rootLicenseMatcher.getApplicableRootLicenseFindingsForDirectories(
+        val pathLicenseMatcher = PathLicenseMatcher(LicenseFilePatterns.getInstance())
+        val applicableLicenseFiles = pathLicenseMatcher.getApplicableLicenseFindingsForDirectories(
             licenseFindings = licenseFindings,
             directories = paths
         ).values.flatten().mapTo(mutableSetOf()) { it.location.path }
