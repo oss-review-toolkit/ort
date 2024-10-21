@@ -76,7 +76,7 @@ internal data class Pubspec(
          * https://dart.dev/tools/pub/dependencies says that "The version constraint is optional but recommended. If no
          * version constraint is given, any is assumed.".
          */
-        val version: String?,
+        val version: String? = null,
         val url: String? = null
     ) : Dependency
 
@@ -118,7 +118,7 @@ private object DependencyMapSerializer : KSerializer<Map<String, Dependency>> by
 
     private fun YamlNode.decodeDependency(): Dependency {
         if (this is YamlScalar) return HostedDependency(yamlScalar.content)
-        if (this is YamlNull) return HostedDependency(version = null)
+        if (this is YamlNull) return HostedDependency()
 
         yamlMap.get<YamlNode>("hosted")?.let { hosted ->
             val version = checkNotNull(yamlMap.get<YamlScalar>("version")).content
