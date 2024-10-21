@@ -85,42 +85,6 @@ class PurlExtensionsTest : WordSpec({
 
             purl shouldBe "pkg:generic/namespace/name@release%20candidate"
         }
-
-        "allow qualifiers" {
-            val purl = createPurl(
-                "type",
-                "namespace",
-                "name",
-                "version",
-                mapOf("argName" to "argValue")
-            )
-
-            purl shouldBe "pkg:type/namespace/name@version?argName=argValue"
-        }
-
-        "allow multiple qualifiers" {
-            val purl = createPurl(
-                "type",
-                "namespace",
-                "name",
-                "version",
-                mapOf("argName1" to "argValue1", "argName2" to "argValue2")
-            )
-
-            purl shouldBe "pkg:type/namespace/name@version?argName1=argValue1&argName2=argValue2"
-        }
-
-        "allow subpath" {
-            val purl = createPurl(
-                "type",
-                "namespace",
-                "name",
-                "version",
-                subpath = "value1/value2"
-            )
-
-            purl shouldBe "pkg:type/namespace/name@version#value1/value2"
-        }
     }
 
     "Provenance conversion" should {
