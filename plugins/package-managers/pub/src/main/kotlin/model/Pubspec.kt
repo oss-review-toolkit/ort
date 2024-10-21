@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.packagemanagers.pub.model
 import com.charleskorn.kaml.YamlInput
 import com.charleskorn.kaml.YamlMap
 import com.charleskorn.kaml.YamlNode
+import com.charleskorn.kaml.YamlNull
 import com.charleskorn.kaml.YamlScalar
 import com.charleskorn.kaml.yamlMap
 import com.charleskorn.kaml.yamlScalar
@@ -71,7 +72,7 @@ internal data class Pubspec(
     /** See https://dart.dev/tools/pub/dependencies#hosted-packages. */
     @Serializable
     data class HostedDependency(
-        val version: String,
+        val version: String?,
         val url: String? = null
     ) : Dependency
 
@@ -113,6 +114,9 @@ private object DependencyMapSerializer : KSerializer<Map<String, Dependency>> by
 
     private fun YamlNode.decodeDependency(): Dependency {
         if (this is YamlScalar) return HostedDependency(yamlScalar.content)
+        // https://dart.dev/tools/pub/dependencies says that "The version constraint is optional but recommended. If no
+        // version constraint is given, any is assumed.".
+        if (this is YamlNull) return HostedDependency(version = null)
 
         yamlMap.get<YamlNode>("hosted")?.let { hosted ->
             val version = checkNotNull(yamlMap.get<YamlScalar>("version")).content
