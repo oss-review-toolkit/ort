@@ -52,7 +52,8 @@ class PubspecTest : WordSpec({
                     hosted:
                       name: pkg-3
                       url: https://some-other-package-server.com
-                    version: ^1.4.0  
+                    version: ^1.4.0
+                  pkg-4:
             """.trimIndent()
 
             parsePubspec(yaml).dependencies shouldBe mapOf(
@@ -66,6 +67,10 @@ class PubspecTest : WordSpec({
                 "pkg-3" to HostedDependency(
                     url = "https://some-other-package-server.com",
                     version = "^1.4.0"
+                ),
+                "pkg-4" to HostedDependency(
+                    url = null,
+                    version = null
                 )
             )
         }
