@@ -28,7 +28,6 @@ import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.plugins.packagemanagers.node.Npm
-import org.ossreviewtoolkit.utils.ort.runBlocking
 
 /**
  * A data class storing information about a specific NPM module and its dependencies.
@@ -76,7 +75,5 @@ internal class NpmDependencyHandler(private val npm: Npm) : DependencyHandler<Np
         PackageLinkage.DYNAMIC.takeUnless { dependency.isProject } ?: PackageLinkage.PROJECT_DYNAMIC
 
     override fun createPackage(dependency: NpmModuleInfo, issues: MutableCollection<Issue>): Package? =
-        runBlocking {
-            npm.takeUnless { dependency.isProject }?.parsePackage(dependency.workingDir, dependency.packageFile)
-        }
+        npm.takeUnless { dependency.isProject }?.parsePackage(dependency.workingDir, dependency.packageFile)
 }

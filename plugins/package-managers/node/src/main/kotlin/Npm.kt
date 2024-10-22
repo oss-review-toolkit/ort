@@ -24,11 +24,6 @@ package org.ossreviewtoolkit.plugins.packagemanagers.node
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.withContext
-
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
@@ -120,7 +115,7 @@ open class Npm(
 
     private val graphBuilder by lazy { DependencyGraphBuilder(NpmDependencyHandler(this)) }
 
-    private val npmViewCache = ConcurrentHashMap<String, Deferred<PackageJson>>()
+    private val npmViewCache = mutableMapOf<String, PackageJson>()
 
     protected open fun hasLockfile(projectDir: File) = NodePackageManager.NPM.hasLockfile(projectDir)
 
@@ -249,7 +244,7 @@ open class Npm(
      * Construct a [Package] by parsing its _package.json_ file and - if applicable - querying additional
      * content via the `npm view` command. The result is a [Pair] with the raw identifier and the new package.
      */
-    internal suspend fun parsePackage(workingDir: File, packageJsonFile: File): Package {
+    internal fun parsePackage(workingDir: File, packageJsonFile: File): Package {
         val packageDir = packageJsonFile.parentFile
 
         logger.debug { "Found a 'package.json' file in '$packageDir'." }
@@ -289,7 +284,7 @@ open class Npm(
 
         if (hasIncompleteData) {
             runCatching {
-                getRemotePackageDetailsAsync(workingDir, "$rawName@$version").await()
+                getRemotePackageDetails(workingDir, "$rawName@$version")
             }.onSuccess { details ->
                 if (description.isEmpty()) description = details.description.orEmpty()
                 if (homepageUrl.isEmpty()) homepageUrl = details.homepage.orEmpty()
@@ -342,19 +337,11 @@ open class Npm(
         return module
     }
 
-    private suspend fun getRemotePackageDetailsAsync(workingDir: File, packageName: String): Deferred<PackageJson> =
-        withContext(Dispatchers.IO) {
-            npmViewCache.getOrPut(packageName) {
-                async {
-                    getRemotePackageDetails(workingDir, packageName)
-                }
-            }
+    protected open fun getRemotePackageDetails(workingDir: File, packageName: String): PackageJson =
+        npmViewCache.getOrPut(packageName) {
+            val process = run(workingDir, "info", "--json", packageName)
+            parsePackageJson(process.stdout)
         }
-
-    protected open fun getRemotePackageDetails(workingDir: File, packageName: String): PackageJson {
-        val process = run(workingDir, "info", "--json", packageName)
-        return parsePackageJson(process.stdout)
-    }
 
     /** Cache for submodules identified by its moduleDir absolutePath */
     private val submodulesCache = ConcurrentHashMap<String, Set<File>>()
