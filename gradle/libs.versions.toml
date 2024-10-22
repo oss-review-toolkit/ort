@@ -62,7 +62,7 @@ slf4j = "2.0.16"
 springCore = "5.3.39"
 svnkit = "1.10.11"
 sw360Client = "17.0.1-m2"
-wiremock = "3.9.1"
+wiremock = "3.9.2"
 xmlutil = "0.90.2"
 xz = "1.10"
 
