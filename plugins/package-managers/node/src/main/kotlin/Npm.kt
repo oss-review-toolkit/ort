@@ -245,10 +245,6 @@ open class Npm(
      * content via the `npm view` command. The result is a [Pair] with the raw identifier and the new package.
      */
     internal fun parsePackage(workingDir: File, packageJsonFile: File): Package {
-        val packageDir = packageJsonFile.parentFile
-
-        logger.debug { "Found a 'package.json' file in '$packageDir'." }
-
         val packageJson = parsePackageJson(packageJsonFile)
 
         // The "name" and "version" fields are only required if the package is going to be published, otherwise they are
