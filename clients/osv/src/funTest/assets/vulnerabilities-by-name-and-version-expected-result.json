@@ -600,6 +600,7 @@
             "CVE-2024-22195"
         ],
         "related": [
+            "CGA-493q-4x4c-mfjv",
             "CGA-f27q-c9f6-2v7h",
             "CGA-hgvf-wwm9-3343"
         ],
@@ -737,14 +738,16 @@
     {
         "schema_version": "1.6.0",
         "id": "GHSA-h75v-3vvj-5mfj",
-        "modified": "2024-06-10T19:01:19.951105Z",
+        "modified": "2024-10-22T05:28:58.900249Z",
         "published": "2024-05-06T14:20:59Z",
         "aliases": [
+            "CGA-g5xx-83xq-8g5j",
             "CVE-2024-34064"
         ],
         "related": [
             "CGA-3h69-x6cf-g5c9",
             "CGA-8hp4-mxq9-cfjp",
+            "CGA-8q5r-j4hw-jrcv",
             "CGA-j4qq-j23r-522f",
             "CGA-ph4r-hmw2-vp9r",
             "CGA-rwrm-vm7r-mrmj",
