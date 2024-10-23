@@ -241,7 +241,7 @@ open class Npm(
         }
     }
 
-    internal open fun getRemotePackageDetails(workingDir: File, packageName: String): PackageJson? {
+    protected open fun getRemotePackageDetails(workingDir: File, packageName: String): PackageJson? {
         npmViewCache[packageName]?.let { return it }
 
         return runCatching {
