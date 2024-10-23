@@ -28,6 +28,7 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManager.Companion.processPackageVcs
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -240,96 +241,7 @@ open class Npm(
         }
     }
 
-    /**
-     * Construct a [Package] by parsing its _package.json_ file and - if applicable - querying additional
-     * content via the `npm view` command. The result is a [Pair] with the raw identifier and the new package.
-     */
-    internal fun parsePackage(workingDir: File, packageJsonFile: File): Package {
-        val packageJson = parsePackageJson(packageJsonFile)
-
-        // The "name" and "version" fields are only required if the package is going to be published, otherwise they are
-        // optional, see
-        // - https://docs.npmjs.com/cli/v10/configuring-npm/package-json#name
-        // - https://docs.npmjs.com/cli/v10/configuring-npm/package-json#version
-        // So, projects analyzed by ORT might not have these fields set.
-        val rawName = packageJson.name.orEmpty() // TODO: Fall back to a generated name if the name is unset.
-        val (namespace, name) = splitNpmNamespaceAndName(rawName)
-        val version = packageJson.version ?: NON_EXISTING_SEMVER
-
-        val declaredLicenses = packageJson.licenses.mapNpmLicenses()
-        val authors = parseNpmAuthor(packageJson.authors.firstOrNull()) // TODO: parse all authors.
-
-        var description = packageJson.description.orEmpty()
-        var homepageUrl = packageJson.homepage.orEmpty()
-
-        // Note that all fields prefixed with "_" are considered private to NPM and should not be relied on.
-        var downloadUrl = expandNpmShortcutUrl(packageJson.resolved.orEmpty()).ifEmpty {
-            // If the normalized form of the specified dependency contains a URL as the version, expand and use it.
-            val fromVersion = packageJson.from.orEmpty().substringAfterLast('@')
-            expandNpmShortcutUrl(fromVersion).takeIf { it != fromVersion }.orEmpty()
-        }
-
-        var hash = Hash.create(packageJson.integrity.orEmpty())
-
-        var vcsFromPackage = parseNpmVcsInfo(packageJson)
-
-        val id = Identifier("NPM", namespace, name, version)
-
-        val hasIncompleteData = description.isEmpty() || homepageUrl.isEmpty() || downloadUrl.isEmpty()
-            || hash == Hash.NONE || vcsFromPackage == VcsInfo.EMPTY
-
-        if (hasIncompleteData) {
-            getRemotePackageDetails(workingDir, "$rawName@$version")?.let { details ->
-                if (description.isEmpty()) description = details.description.orEmpty()
-                if (homepageUrl.isEmpty()) homepageUrl = details.homepage.orEmpty()
-
-                details.dist?.let { dist ->
-                    if (downloadUrl.isEmpty() || hash == Hash.NONE) {
-                        downloadUrl = dist.tarball.orEmpty()
-                        hash = Hash.create(dist.shasum.orEmpty())
-                    }
-                }
-
-                // Do not replace but merge, because it happens that `package.json` has VCS info while
-                // `npm view` doesn't, for example for dependencies hosted on GitLab package registry.
-                vcsFromPackage = vcsFromPackage.merge(parseNpmVcsInfo(details))
-            }
-        }
-
-        downloadUrl = downloadUrl.fixNpmDownloadUrl()
-
-        val vcsFromDownloadUrl = VcsHost.parseUrl(downloadUrl)
-        if (vcsFromDownloadUrl.url != downloadUrl) {
-            vcsFromPackage = vcsFromPackage.merge(vcsFromDownloadUrl)
-        }
-
-        val module = Package(
-            id = id,
-            authors = authors,
-            declaredLicenses = declaredLicenses,
-            description = description,
-            homepageUrl = homepageUrl,
-            binaryArtifact = RemoteArtifact.EMPTY,
-            sourceArtifact = RemoteArtifact(
-                url = VcsHost.toArchiveDownloadUrl(vcsFromDownloadUrl) ?: downloadUrl,
-                hash = hash
-            ),
-            vcs = vcsFromPackage,
-            vcsProcessed = processPackageVcs(vcsFromPackage, homepageUrl)
-        )
-
-        require(module.id.name.isNotEmpty()) {
-            "Generated package info for '${id.toCoordinates()}' has no name."
-        }
-
-        require(module.id.version.isNotEmpty()) {
-            "Generated package info for '${id.toCoordinates()}' has no version."
-        }
-
-        return module
-    }
-
-    protected open fun getRemotePackageDetails(workingDir: File, packageName: String): PackageJson? {
+    internal open fun getRemotePackageDetails(workingDir: File, packageName: String): PackageJson? {
         npmViewCache[packageName]?.let { return it }
 
         return runCatching {
@@ -635,4 +547,97 @@ internal fun List<String>.groupLines(vararg markers: String): List<String> {
     } else {
         nonFooterLines.map { it.trim() }
     }
+}
+
+/**
+ * Construct a [Package] by parsing its _package.json_ file and - if applicable - querying additional
+ * content via the `npm view` command. The result is a [Pair] with the raw identifier and the new package.
+ */
+internal fun parsePackage(
+    workingDir: File,
+    packageJsonFile: File,
+    getRemotePackageDetails: (workingDir: File, packageName: String) -> PackageJson?
+): Package {
+    val packageJson = parsePackageJson(packageJsonFile)
+
+    // The "name" and "version" fields are only required if the package is going to be published, otherwise they are
+    // optional, see
+    // - https://docs.npmjs.com/cli/v10/configuring-npm/package-json#name
+    // - https://docs.npmjs.com/cli/v10/configuring-npm/package-json#version
+    // So, projects analyzed by ORT might not have these fields set.
+    val rawName = packageJson.name.orEmpty() // TODO: Fall back to a generated name if the name is unset.
+    val (namespace, name) = splitNpmNamespaceAndName(rawName)
+    val version = packageJson.version ?: NON_EXISTING_SEMVER
+
+    val declaredLicenses = packageJson.licenses.mapNpmLicenses()
+    val authors = parseNpmAuthor(packageJson.authors.firstOrNull()) // TODO: parse all authors.
+
+    var description = packageJson.description.orEmpty()
+    var homepageUrl = packageJson.homepage.orEmpty()
+
+    // Note that all fields prefixed with "_" are considered private to NPM and should not be relied on.
+    var downloadUrl = expandNpmShortcutUrl(packageJson.resolved.orEmpty()).ifEmpty {
+        // If the normalized form of the specified dependency contains a URL as the version, expand and use it.
+        val fromVersion = packageJson.from.orEmpty().substringAfterLast('@')
+        expandNpmShortcutUrl(fromVersion).takeIf { it != fromVersion }.orEmpty()
+    }
+
+    var hash = Hash.create(packageJson.integrity.orEmpty())
+
+    var vcsFromPackage = parseNpmVcsInfo(packageJson)
+
+    val id = Identifier("NPM", namespace, name, version)
+
+    val hasIncompleteData = description.isEmpty() || homepageUrl.isEmpty() || downloadUrl.isEmpty()
+        || hash == Hash.NONE || vcsFromPackage == VcsInfo.EMPTY
+
+    if (hasIncompleteData) {
+        getRemotePackageDetails(workingDir, "$rawName@$version")?.let { details ->
+            if (description.isEmpty()) description = details.description.orEmpty()
+            if (homepageUrl.isEmpty()) homepageUrl = details.homepage.orEmpty()
+
+            details.dist?.let { dist ->
+                if (downloadUrl.isEmpty() || hash == Hash.NONE) {
+                    downloadUrl = dist.tarball.orEmpty()
+                    hash = Hash.create(dist.shasum.orEmpty())
+                }
+            }
+
+            // Do not replace but merge, because it happens that `package.json` has VCS info while
+            // `npm view` doesn't, for example for dependencies hosted on GitLab package registry.
+            vcsFromPackage = vcsFromPackage.merge(parseNpmVcsInfo(details))
+        }
+    }
+
+    downloadUrl = downloadUrl.fixNpmDownloadUrl()
+
+    val vcsFromDownloadUrl = VcsHost.parseUrl(downloadUrl)
+    if (vcsFromDownloadUrl.url != downloadUrl) {
+        vcsFromPackage = vcsFromPackage.merge(vcsFromDownloadUrl)
+    }
+
+    val module = Package(
+        id = id,
+        authors = authors,
+        declaredLicenses = declaredLicenses,
+        description = description,
+        homepageUrl = homepageUrl,
+        binaryArtifact = RemoteArtifact.EMPTY,
+        sourceArtifact = RemoteArtifact(
+            url = VcsHost.toArchiveDownloadUrl(vcsFromDownloadUrl) ?: downloadUrl,
+            hash = hash
+        ),
+        vcs = vcsFromPackage,
+        vcsProcessed = processPackageVcs(vcsFromPackage, homepageUrl)
+    )
+
+    require(module.id.name.isNotEmpty()) {
+        "Generated package info for '${id.toCoordinates()}' has no name."
+    }
+
+    require(module.id.version.isNotEmpty()) {
+        "Generated package info for '${id.toCoordinates()}' has no version."
+    }
+
+    return module
 }
