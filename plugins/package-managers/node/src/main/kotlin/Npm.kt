@@ -279,11 +279,7 @@ open class Npm(
             || hash == Hash.NONE || vcsFromPackage == VcsInfo.EMPTY
 
         if (hasIncompleteData) {
-            runCatching {
-                getRemotePackageDetails(workingDir, "$rawName@$version")
-            }.onFailure { e ->
-                logger.debug { "Unable to get package details from a remote registry: ${e.collectMessages()}" }
-            }.getOrNull()?.let { details ->
+            getRemotePackageDetails(workingDir, "$rawName@$version")?.let { details ->
                 if (description.isEmpty()) description = details.description.orEmpty()
                 if (homepageUrl.isEmpty()) homepageUrl = details.homepage.orEmpty()
 
