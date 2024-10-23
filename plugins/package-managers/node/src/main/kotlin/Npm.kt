@@ -281,7 +281,9 @@ open class Npm(
         if (hasIncompleteData) {
             runCatching {
                 getRemotePackageDetails(workingDir, "$rawName@$version")
-            }.onSuccess { details ->
+            }.onFailure { e ->
+                logger.debug { "Unable to get package details from a remote registry: ${e.collectMessages()}" }
+            }.getOrNull()?.let { details ->
                 if (description.isEmpty()) description = details.description.orEmpty()
                 if (homepageUrl.isEmpty()) homepageUrl = details.homepage.orEmpty()
 
@@ -295,8 +297,6 @@ open class Npm(
                 // Do not replace but merge, because it happens that `package.json` has VCS info while
                 // `npm view` doesn't, for example for dependencies hosted on GitLab package registry.
                 vcsFromPackage = vcsFromPackage.merge(parseNpmVcsInfo(details))
-            }.onFailure { e ->
-                logger.debug { "Unable to get package details from a remote registry: ${e.collectMessages()}" }
             }
         }
 
@@ -333,7 +333,7 @@ open class Npm(
         return module
     }
 
-    protected open fun getRemotePackageDetails(workingDir: File, packageName: String): PackageJson =
+    protected open fun getRemotePackageDetails(workingDir: File, packageName: String): PackageJson? =
         npmViewCache.getOrPut(packageName) {
             val process = run(workingDir, "info", "--json", packageName)
             parsePackageJson(process.stdout)

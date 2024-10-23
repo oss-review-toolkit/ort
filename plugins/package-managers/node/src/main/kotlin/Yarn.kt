@@ -86,7 +86,7 @@ class Yarn(
     override fun runInstall(workingDir: File) =
         run(workingDir, "install", "--ignore-scripts", "--ignore-engines", "--immutable")
 
-    override fun getRemotePackageDetails(workingDir: File, packageName: String): PackageJson {
+    override fun getRemotePackageDetails(workingDir: File, packageName: String): PackageJson? {
         yarnInfoCache.read(packageName)?.let { return parsePackageJson(it) }
 
         val process = run(workingDir, "info", "--json", packageName)
