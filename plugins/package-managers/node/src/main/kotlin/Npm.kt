@@ -333,11 +333,19 @@ open class Npm(
         return module
     }
 
-    protected open fun getRemotePackageDetails(workingDir: File, packageName: String): PackageJson? =
-        npmViewCache.getOrPut(packageName) {
+    protected open fun getRemotePackageDetails(workingDir: File, packageName: String): PackageJson? {
+        npmViewCache[packageName]?.let { return it }
+
+        return runCatching {
             val process = run(workingDir, "info", "--json", packageName)
+
             parsePackageJson(process.stdout)
-        }
+        }.onFailure { e ->
+            logger.warn { "Error getting details for $packageName in directory $workingDir: ${e.message.orEmpty()}" }
+        }.onSuccess {
+            npmViewCache[packageName] = it
+        }.getOrNull()
+    }
 
     /** Cache for submodules identified by its moduleDir absolutePath */
     private val submodulesCache = ConcurrentHashMap<String, Set<File>>()
