@@ -21,8 +21,6 @@ package org.ossreviewtoolkit.model.config
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 
-import com.sksamuel.hoplite.ConfigAlias
-
 import org.ossreviewtoolkit.utils.common.ConfigurablePluginFactory
 import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.Plugin
@@ -37,7 +35,6 @@ data class ProviderPluginConfiguration(
     /**
      * The [type][Plugin.type] of the provider.
      */
-    @ConfigAlias("name")
     val type: String,
 
     /**
@@ -53,7 +50,6 @@ data class ProviderPluginConfiguration(
     /**
      * The configuration options of the provider. See the specific implementation for available configuration options.
      */
-    @ConfigAlias("config")
     val options: Options = emptyMap(),
 
     /**
