@@ -83,4 +83,34 @@ class VulnerableCodeFunTest : WordSpec({
             }
         }
     }
+
+    "Vulnerable Go packages" should {
+        "return findings for QUIC" {
+            val vc = VulnerableCodeFactory().create(PluginConfig())
+
+            // TODO: To work-around issue #9298, this hard-codes the `Identifier` to have a namespace although ORT
+            //       produces Go `Identifier`s without namespaces. This way `toPurl()` produces purl conforming to the
+            //       specification which does treat Go packages as if they had namespaces.
+            val id = Identifier("Go:github.com/quic-go:quic-go:0.40.0")
+            val pkg = Package.EMPTY.copy(id, purl = id.toPurl())
+
+            val findings = vc.retrievePackageFindings(setOf(pkg))
+
+            findings.values.flatMap { it.summary.issues } should beEmpty()
+            with(findings.values.flatMap { it.vulnerabilities }.associateBy { it.id }) {
+                keys shouldContainAll setOf(
+                    "CVE-2023-49295"
+                )
+
+                getValue("CVE-2023-49295").references.find {
+                    it.url.toString() == "https://nvd.nist.gov/vuln/detail/CVE-2023-49295"
+                } shouldNotBeNull {
+                    scoringSystem shouldBe "cvssv3"
+                    severity shouldBe "MEDIUM"
+                    score shouldBe 6.5f
+                    vector shouldBe "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H"
+                }
+            }
+        }
+    }
 })
