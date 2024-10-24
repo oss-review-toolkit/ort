@@ -96,7 +96,7 @@ class DosScanner internal constructor(
         val issues = mutableListOf<Issue>()
 
         val scanResults = runBlocking {
-            val provenance = nestedProvenance?.root ?: run {
+            nestedProvenance?.root ?: run {
                 logger.warn {
                     val cleanPurls = context.coveredPackages.joinToString { it.purl }
                     "Skipping scan as no provenance information is available for these packages: $cleanPurls"
@@ -105,7 +105,9 @@ class DosScanner internal constructor(
                 return@runBlocking null
             }
 
-            val packages = context.coveredPackages.getDosPackages(provenance)
+            val packages = nestedProvenance.allProvenances.flatMap {
+                context.coveredPackages.getDosPackages(it)
+            }
 
             logger.info { "Packages requested for scanning: ${packages.joinToString { it.purl }}" }
 
@@ -123,7 +125,7 @@ class DosScanner internal constructor(
                     val downloader = DefaultProvenanceDownloader(DownloaderConfiguration(), DefaultWorkingTreeCache())
 
                     runCatching {
-                        downloader.download(provenance)
+                        downloader.downloadRecursively(nestedProvenance)
                     }.mapCatching { sourceDir ->
                         runBackendScan(packages, sourceDir, startTime, issues)
                     }.onFailure {
