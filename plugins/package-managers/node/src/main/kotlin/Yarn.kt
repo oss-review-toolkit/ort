@@ -100,7 +100,7 @@ class Yarn(
 }
 
 /**
- * Parse the given [output] of a Yarn _info_ command to a [PackageJson]. The output is typically a JSON object with the
+ * Parse the given [stdout] of a Yarn _info_ command to a [PackageJson]. The output is typically a JSON object with the
  * metadata of the package that was queried. However, under certain circumstances, Yarn may return multiple JSON objects
  * separated by newlines; for instance, if the operation is retried due to network problems. This function filters for
  * the object with the data based on the _type_ field. Result is *null* if no matching object is found or the input is
@@ -109,9 +109,9 @@ class Yarn(
  * Note: The mentioned network issue can be reproduced by setting the network timeout to be very short via the command
  * line option '--network-timeout'.
  */
-internal fun parseYarnInfo(output: String): PackageJson? =
+internal fun parseYarnInfo(stdout: String): PackageJson? =
     runCatching {
-        output.byteInputStream().use { inputStream ->
+        stdout.byteInputStream().use { inputStream ->
             Json.decodeToSequence<JsonObject>(inputStream)
                 .firstOrNull { (it["type"] as? JsonPrimitive)?.content == "inspect" }?.let {
                     it["data"]?.let(::parsePackageJson)
