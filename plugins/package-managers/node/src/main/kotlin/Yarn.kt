@@ -25,7 +25,6 @@ import kotlin.time.Duration.Companion.days
 
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.decodeToSequence
@@ -101,11 +100,11 @@ class Yarn(
 }
 
 /**
- * Parse the given [output] of a Yarn _info_ command to a [JsonElement] that can be further processed. The output is
- * typically a JSON object with the metadata of the package that was queried. However, under certain circumstances,
- * Yarn may return multiple JSON objects separated by newlines; for instance, if the operation is retried due to
- * network problems. This function filters for the object with the data based on the _type_ field. Result is *null* if
- * no matching object is found or the input is not valid JSON.
+ * Parse the given [output] of a Yarn _info_ command to a [PackageJson]. The output is typically a JSON object with the
+ * metadata of the package that was queried. However, under certain circumstances, Yarn may return multiple JSON objects
+ * separated by newlines; for instance, if the operation is retried due to network problems. This function filters for
+ * the object with the data based on the _type_ field. Result is *null* if no matching object is found or the input is
+ * not valid JSON.
  */
 internal fun parseYarnInfo(output: String): PackageJson? =
     runCatching {
