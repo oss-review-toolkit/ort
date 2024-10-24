@@ -92,15 +92,12 @@ interface OsvService {
 }
 
 @Serializable
-class VulnerabilitiesForPackageRequest private constructor(
+class VulnerabilitiesForPackageRequest(
     val commit: String? = null,
     @SerialName("package")
     val pkg: Package? = null,
     val version: String? = null
-) {
-    constructor(commit: String, pkg: Package? = null) : this(commit = commit, pkg = pkg, version = null)
-    constructor(pkg: Package, version: String) : this(commit = null, pkg = pkg, version = version)
-}
+)
 
 @Serializable
 data class VulnerabilitiesForPackageResponse(
