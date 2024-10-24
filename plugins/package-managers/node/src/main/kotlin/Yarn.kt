@@ -105,6 +105,9 @@ class Yarn(
  * separated by newlines; for instance, if the operation is retried due to network problems. This function filters for
  * the object with the data based on the _type_ field. Result is *null* if no matching object is found or the input is
  * not valid JSON.
+ *
+ * Note: The mentioned network issue can be reproduced by setting the network timeout to be very short via the command
+ * line option '--network-timeout'.
  */
 internal fun parseYarnInfo(output: String): PackageJson? =
     runCatching {
