@@ -71,7 +71,14 @@ fun Identifier.getPurlType() =
  */
 @JvmOverloads
 fun Identifier.toPurl(qualifiers: Map<String, String> = emptyMap(), subpath: String = "") =
-    if (this == Identifier.EMPTY) "" else createPurl(getPurlType(), namespace, name, version, qualifiers, subpath)
+    if (this == Identifier.EMPTY) {
+        ""
+    } else {
+        val combined = "$namespace/$name"
+        val purlNamespace = combined.substringBeforeLast('/')
+        val purlName = combined.substringAfterLast('/')
+        createPurl(getPurlType(), purlNamespace, purlName, version, qualifiers, subpath)
+    }
 
 fun Identifier.toPurl(extras: PurlExtras) = toPurl(extras.qualifiers, extras.subpath)
 

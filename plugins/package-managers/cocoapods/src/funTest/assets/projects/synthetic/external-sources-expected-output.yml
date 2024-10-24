@@ -61,7 +61,7 @@ packages:
     revision: "3.2.1"
     path: ""
 - id: "Pod::AFNetworking/NSURLSession:3.2.1"
-  purl: "pkg:cocoapods/AFNetworking%2FNSURLSession@3.2.1"
+  purl: "pkg:cocoapods/AFNetworking/NSURLSession@3.2.1"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -89,7 +89,7 @@ packages:
     revision: "3.2.1"
     path: ""
 - id: "Pod::AFNetworking/Reachability:3.2.1"
-  purl: "pkg:cocoapods/AFNetworking%2FReachability@3.2.1"
+  purl: "pkg:cocoapods/AFNetworking/Reachability@3.2.1"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -117,7 +117,7 @@ packages:
     revision: "3.2.1"
     path: ""
 - id: "Pod::AFNetworking/Security:3.2.1"
-  purl: "pkg:cocoapods/AFNetworking%2FSecurity@3.2.1"
+  purl: "pkg:cocoapods/AFNetworking/Security@3.2.1"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -145,7 +145,7 @@ packages:
     revision: "3.2.1"
     path: ""
 - id: "Pod::AFNetworking/Serialization:3.2.1"
-  purl: "pkg:cocoapods/AFNetworking%2FSerialization@3.2.1"
+  purl: "pkg:cocoapods/AFNetworking/Serialization@3.2.1"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:

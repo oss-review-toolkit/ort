@@ -87,11 +87,7 @@ class VulnerableCodeFunTest : WordSpec({
     "Vulnerable Go packages" should {
         "return findings for QUIC" {
             val vc = VulnerableCodeFactory().create(PluginConfig())
-
-            // TODO: To work-around issue #9298, this hard-codes the `Identifier` to have a namespace although ORT
-            //       produces Go `Identifier`s without namespaces. This way `toPurl()` produces purl conforming to the
-            //       specification which does treat Go packages as if they had namespaces.
-            val id = Identifier("Go:github.com/quic-go:quic-go:0.40.0")
+            val id = Identifier("Go::github.com/quic-go/quic-go:0.40.0")
             val pkg = Package.EMPTY.copy(id, purl = id.toPurl())
 
             val findings = vc.retrievePackageFindings(setOf(pkg))

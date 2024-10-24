@@ -150,7 +150,7 @@ packages:
     revision: "v0.27.3"
     path: ""
 - id: "Pod::RestKit/Core:0.27.3"
-  purl: "pkg:cocoapods/RestKit%2FCore@0.27.3"
+  purl: "pkg:cocoapods/RestKit/Core@0.27.3"
   declared_licenses:
   - "Apache License, Version 2.0"
   declared_licenses_processed:
@@ -181,7 +181,7 @@ packages:
     revision: "v0.27.3"
     path: ""
 - id: "Pod::RestKit/CoreData:0.27.3"
-  purl: "pkg:cocoapods/RestKit%2FCoreData@0.27.3"
+  purl: "pkg:cocoapods/RestKit/CoreData@0.27.3"
   declared_licenses:
   - "Apache License, Version 2.0"
   declared_licenses_processed:
@@ -212,7 +212,7 @@ packages:
     revision: "v0.27.3"
     path: ""
 - id: "Pod::RestKit/Network:0.27.3"
-  purl: "pkg:cocoapods/RestKit%2FNetwork@0.27.3"
+  purl: "pkg:cocoapods/RestKit/Network@0.27.3"
   declared_licenses:
   - "Apache License, Version 2.0"
   declared_licenses_processed:
@@ -243,7 +243,7 @@ packages:
     revision: "v0.27.3"
     path: ""
 - id: "Pod::RestKit/ObjectMapping:0.27.3"
-  purl: "pkg:cocoapods/RestKit%2FObjectMapping@0.27.3"
+  purl: "pkg:cocoapods/RestKit/ObjectMapping@0.27.3"
   declared_licenses:
   - "Apache License, Version 2.0"
   declared_licenses_processed:
@@ -274,7 +274,7 @@ packages:
     revision: "v0.27.3"
     path: ""
 - id: "Pod::RestKit/Support:0.27.3"
-  purl: "pkg:cocoapods/RestKit%2FSupport@0.27.3"
+  purl: "pkg:cocoapods/RestKit/Support@0.27.3"
   declared_licenses:
   - "Apache License, Version 2.0"
   declared_licenses_processed:
