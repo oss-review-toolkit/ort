@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.node
 
 import java.io.File
+import java.lang.invoke.MethodHandles
 
 import kotlin.time.Duration.Companion.days
 
@@ -29,8 +30,9 @@ import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.decodeToSequence
+import kotlinx.serialization.json.jsonPrimitive
 
-import org.apache.logging.log4j.kotlin.logger
+import org.apache.logging.log4j.kotlin.loggerOf
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
@@ -39,6 +41,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NodePackageManage
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NpmDetection
 import org.ossreviewtoolkit.utils.common.DiskCache
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.alsoIfNull
 import org.ossreviewtoolkit.utils.common.mebibytes
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 
@@ -92,13 +95,13 @@ class Yarn(
 
         val process = run(workingDir, "info", "--json", packageName)
 
-        return parseYarnInfo(process.stdout)?.also {
+        return parseYarnInfo(process.stdout, process.stderr)?.also {
             yarnInfoCache.write(packageName, Json.encodeToString(it))
-        } ?: checkNotNull(parseYarnInfo(process.stderr)).also {
-            logger.warn { "Error running '${process.commandLine}' in directory $workingDir: $it" }
         }
     }
 }
+
+private val logger = loggerOf(MethodHandles.lookup().lookupClass())
 
 /**
  * Parse the given [stdout] of a Yarn _info_ command to a [PackageJson]. The output is typically a JSON object with the
@@ -110,8 +113,12 @@ class Yarn(
  * Note: The mentioned network issue can be reproduced by setting the network timeout to be very short via the command
  * line option '--network-timeout'.
  */
-internal fun parseYarnInfo(stdout: String): PackageJson? =
-    extractDataNodes(stdout, "inspect").firstOrNull()?.let(::parsePackageJson)
+internal fun parseYarnInfo(stdout: String, stderr: String): PackageJson? =
+    extractDataNodes(stdout, "inspect").firstOrNull()?.let(::parsePackageJson).alsoIfNull {
+        extractDataNodes(stderr, "error").forEach {
+            logger.warn { "Error parsing Yarn info: ${it.jsonPrimitive.content}" }
+        }
+    }
 
 private fun extractDataNodes(output: String, type: String): Set<JsonElement> =
     runCatching {
