@@ -92,7 +92,7 @@ project:
         linkage: "PROJECT_STATIC"
 packages:
 - id: "Go::github.com/golang/snappy:0.0.1"
-  purl: "pkg:golang/github.com%2Fgolang%2Fsnappy@0.0.1"
+  purl: "pkg:golang/github.com/golang/snappy@0.0.1"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -118,7 +118,7 @@ packages:
     revision: "2a8bb927dd31d8daada140a5d09578521ce5c36a"
     path: ""
 - id: "Go::github.com/klauspost/compress:1.13.6"
-  purl: "pkg:golang/github.com%2Fklauspost%2Fcompress@1.13.6"
+  purl: "pkg:golang/github.com/klauspost/compress@1.13.6"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -144,7 +144,7 @@ packages:
     revision: "38d4ba985ac157cb858763e016645e14e74c13c4"
     path: ""
 - id: "Go::github.com/montanaflynn/stats:0.0.0-20171201202039-1bf9dbcd8cbe"
-  purl: "pkg:golang/github.com%2Fmontanaflynn%2Fstats@0.0.0-20171201202039-1bf9dbcd8cbe"
+  purl: "pkg:golang/github.com/montanaflynn/stats@0.0.0-20171201202039-1bf9dbcd8cbe"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -170,7 +170,7 @@ packages:
     revision: "1bf9dbcd8cbe1fdb75add3785b1d4a9a646269ab"
     path: ""
 - id: "Go::github.com/xdg-go/pbkdf2:1.0.0"
-  purl: "pkg:golang/github.com%2Fxdg-go%2Fpbkdf2@1.0.0"
+  purl: "pkg:golang/github.com/xdg-go/pbkdf2@1.0.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -196,7 +196,7 @@ packages:
     revision: "7f452ef1dac88350356f1bb84a23748205e64b96"
     path: ""
 - id: "Go::github.com/xdg-go/scram:1.1.2"
-  purl: "pkg:golang/github.com%2Fxdg-go%2Fscram@1.1.2"
+  purl: "pkg:golang/github.com/xdg-go/scram@1.1.2"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -222,7 +222,7 @@ packages:
     revision: "17629a50d5ce12875d83f9095809ae43b765c303"
     path: ""
 - id: "Go::github.com/xdg-go/stringprep:1.0.4"
-  purl: "pkg:golang/github.com%2Fxdg-go%2Fstringprep@1.0.4"
+  purl: "pkg:golang/github.com/xdg-go/stringprep@1.0.4"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -248,7 +248,7 @@ packages:
     revision: "dabf77401b04b57597914595d170883092e0df3c"
     path: ""
 - id: "Go::github.com/youmark/pkcs8:0.0.0-20181117223130-1be2e3e5546d"
-  purl: "pkg:golang/github.com%2Fyoumark%2Fpkcs8@0.0.0-20181117223130-1be2e3e5546d"
+  purl: "pkg:golang/github.com/youmark/pkcs8@0.0.0-20181117223130-1be2e3e5546d"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -274,7 +274,7 @@ packages:
     revision: "1be2e3e5546da8a58903ff4adcfab015022538ea"
     path: ""
 - id: "Go::go.mongodb.org/mongo-driver:1.12.0"
-  purl: "pkg:golang/go.mongodb.org%2Fmongo-driver@1.12.0"
+  purl: "pkg:golang/go.mongodb.org/mongo-driver@1.12.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -300,7 +300,7 @@ packages:
     revision: "e113d80138eabfce810c6369d25e57b146aac917"
     path: ""
 - id: "Go::golang.org/x/crypto:0.0.0-20220622213112-05595931fe9d"
-  purl: "pkg:golang/golang.org%2Fx%2Fcrypto@0.0.0-20220622213112-05595931fe9d"
+  purl: "pkg:golang/golang.org/x/crypto@0.0.0-20220622213112-05595931fe9d"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -326,7 +326,7 @@ packages:
     revision: "05595931fe9d3f8894ab063e1981d28e9873e2cb"
     path: ""
 - id: "Go::golang.org/x/sync:0.0.0-20220722155255-886fb9371eb4"
-  purl: "pkg:golang/golang.org%2Fx%2Fsync@0.0.0-20220722155255-886fb9371eb4"
+  purl: "pkg:golang/golang.org/x/sync@0.0.0-20220722155255-886fb9371eb4"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -352,7 +352,7 @@ packages:
     revision: "886fb9371eb4b47af10bff9c8025a8c9e1554b92"
     path: ""
 - id: "Go::golang.org/x/text:0.7.0"
-  purl: "pkg:golang/golang.org%2Fx%2Ftext@0.7.0"
+  purl: "pkg:golang/golang.org/x/text@0.7.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""

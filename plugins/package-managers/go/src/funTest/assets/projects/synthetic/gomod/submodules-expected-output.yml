@@ -108,7 +108,7 @@ projects:
         linkage: "PROJECT_STATIC"
 packages:
 - id: "Go::github.com/fatih/color:1.15.0"
-  purl: "pkg:golang/github.com%2Ffatih%2Fcolor@1.15.0"
+  purl: "pkg:golang/github.com/fatih/color@1.15.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -134,7 +134,7 @@ packages:
     revision: "12126ed593697635c525b302836b292b657ea573"
     path: ""
 - id: "Go::github.com/google/uuid:1.0.0"
-  purl: "pkg:golang/github.com%2Fgoogle%2Fuuid@1.0.0"
+  purl: "pkg:golang/github.com/google/uuid@1.0.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -160,7 +160,7 @@ packages:
     revision: "d460ce9f8df2e77fb1ba55ca87fafed96c607494"
     path: ""
 - id: "Go::github.com/mattn/go-colorable:0.1.13"
-  purl: "pkg:golang/github.com%2Fmattn%2Fgo-colorable@0.1.13"
+  purl: "pkg:golang/github.com/mattn/go-colorable@0.1.13"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -186,7 +186,7 @@ packages:
     revision: "11a925cff3d38c293ddc8c05a16b504e3e2c63be"
     path: ""
 - id: "Go::github.com/mattn/go-isatty:0.0.17"
-  purl: "pkg:golang/github.com%2Fmattn%2Fgo-isatty@0.0.17"
+  purl: "pkg:golang/github.com/mattn/go-isatty@0.0.17"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -212,7 +212,7 @@ packages:
     revision: "ed75e619dc0f0489fd4062163a7d061eaa249b9c"
     path: ""
 - id: "Go::github.com/pborman/uuid:1.2.1"
-  purl: "pkg:golang/github.com%2Fpborman%2Fuuid@1.2.1"
+  purl: "pkg:golang/github.com/pborman/uuid@1.2.1"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -238,7 +238,7 @@ packages:
     revision: "5b6091a6a160ee5ce12917b21ab96acec2a4fdc0"
     path: ""
 - id: "Go::golang.org/x/sys:0.6.0"
-  purl: "pkg:golang/golang.org%2Fx%2Fsys@0.6.0"
+  purl: "pkg:golang/golang.org/x/sys@0.6.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
