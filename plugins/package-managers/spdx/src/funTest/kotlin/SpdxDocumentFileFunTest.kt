@@ -207,6 +207,17 @@ class SpdxDocumentFileFunTest : WordSpec({
                 result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
             }
         }
+
+        "handle cycles in dependencies gracefully" {
+            val definitionFile = projectDir.resolve("cyclic-references/project-cyclic.spdx.yml")
+            val expectedResultFile = getAssetFile(
+                "projects/synthetic/spdx-project-cyclic-expected-output.yml"
+            )
+
+            val actualResult = create("SpdxDocumentFile").resolveSingleProject(definitionFile).toYaml()
+
+            actualResult should matchExpectedResult(expectedResultFile, definitionFile)
+        }
     }
 
     "mapDefinitionFiles()" should {
