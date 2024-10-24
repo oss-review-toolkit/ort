@@ -26,6 +26,7 @@ import org.ossreviewtoolkit.analyzer.analyze
 import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.toYaml
+import org.ossreviewtoolkit.plugins.packagemanagers.node.pnpm.Pnpm
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
