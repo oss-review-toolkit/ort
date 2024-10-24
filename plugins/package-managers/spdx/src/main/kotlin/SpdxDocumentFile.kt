@@ -336,26 +336,36 @@ class SpdxDocumentFile(
     /**
      * Return the dependencies of the package with the given [pkgId] defined in [doc] of the
      * [SpdxRelationship.Type.DEPENDENCY_OF] type. Identified dependencies are mapped to ORT [Package]s and then
-     * added to [packages].
+     * added to [packages]. The [ancestorIds] set contains the IDs of the package that have already been encountered;
+     * it is used to detect circular dependencies.
      */
     private fun getDependencies(
         pkgId: String,
         doc: SpdxResolvedDocument,
-        packages: MutableSet<Package>
-    ): Set<PackageReference> =
-        getDependencies(pkgId, doc, packages, SpdxRelationship.Type.DEPENDENCY_OF) { target ->
+        packages: MutableSet<Package>,
+        ancestorIds: MutableSet<String>
+    ): Set<PackageReference> {
+        logger.debug { "Retrieving dependencies for package '$pkgId'." }
+
+        if (!ancestorIds.add(pkgId)) {
+            logger.warn { "A cycle was detected in the dependencies for packages $ancestorIds." }
+            return emptySet()
+        }
+
+        return getDependencies(pkgId, doc, packages, ancestorIds, SpdxRelationship.Type.DEPENDENCY_OF) { target ->
             val issues = mutableListOf<Issue>()
             getPackageManagerDependency(target, doc) ?: doc.getSpdxPackageForId(target, issues)?.let { dependency ->
                 packages += dependency.toPackage(doc.getDefinitionFile(target), doc)
 
                 PackageReference(
                     id = dependency.toIdentifier(),
-                    dependencies = getDependencies(target, doc, packages),
+                    dependencies = getDependencies(target, doc, packages, ancestorIds),
                     linkage = getLinkageForDependency(dependency, pkgId, doc.relationships),
                     issues = issues
                 )
             }
-        }
+        }.also { ancestorIds.remove(pkgId) }
+    }
 
     internal fun getPackageManagerDependency(pkgId: String, doc: SpdxResolvedDocument): PackageReference? {
         val issues = mutableListOf<Issue>()
@@ -391,11 +401,13 @@ class SpdxDocumentFile(
      * Return the dependencies of the package with the given [pkgId] defined in [doc] of the given
      * [dependencyOfRelation] type. Optionally, the [SpdxRelationship.Type.DEPENDS_ON] type is handled by
      * [dependsOnCase]. Identified dependencies are mapped to ORT [Package]s and then added to [packages].
+     * Use the given [ancestorIds] set to detect cyclic dependencies.
      */
     private fun getDependencies(
         pkgId: String,
         doc: SpdxResolvedDocument,
         packages: MutableSet<Package>,
+        ancestorIds: MutableSet<String>,
         dependencyOfRelation: SpdxRelationship.Type,
         dependsOnCase: (String) -> PackageReference? = { null }
     ): Set<PackageReference> =
@@ -421,7 +433,7 @@ class SpdxDocumentFile(
                             packages += dependency.toPackage(doc.getDefinitionFile(source), doc)
                             PackageReference(
                                 id = dependency.toIdentifier(),
-                                dependencies = getDependencies(source, doc, packages),
+                                dependencies = getDependencies(source, doc, packages, ancestorIds),
                                 issues = issues,
                                 linkage = getLinkageForDependency(dependency, target, doc.relationships)
                             )
@@ -456,7 +468,7 @@ class SpdxDocumentFile(
         relation: SpdxRelationship.Type,
         packages: MutableSet<Package>
     ): Scope? =
-        getDependencies(projectPackageId, spdxDocument, packages, relation).takeUnless {
+        getDependencies(projectPackageId, spdxDocument, packages, mutableSetOf(), relation).takeUnless {
             it.isEmpty()
         }?.let {
             Scope(
@@ -511,7 +523,7 @@ class SpdxDocumentFile(
 
         scopes += Scope(
             name = DEFAULT_SCOPE_NAME,
-            dependencies = getDependencies(projectPackage.spdxId, transitiveDocument, packages)
+            dependencies = getDependencies(projectPackage.spdxId, transitiveDocument, packages, mutableSetOf())
         )
 
         val project = Project(

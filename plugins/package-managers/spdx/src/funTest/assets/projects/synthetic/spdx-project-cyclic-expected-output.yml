@@ -1,0 +1,196 @@
+---
+project:
+  id: "SpdxDocumentFile::xyz:0.1.0"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  authors:
+  - "Thomas Steenbergen"
+  declared_licenses:
+  - "Apache-2.0 AND curl AND LicenseRef-Proprietary-ExampleInc"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0 AND LicenseRef-Proprietary-ExampleInc AND curl"
+  vcs:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: "https://example.com/products/xyz"
+  scopes:
+  - name: "default"
+    dependencies:
+    - id: "SpdxDocumentFile::abc:0.1.1"
+      dependencies:
+      - id: "SpdxDocumentFile::def:0.1.0"
+        dependencies:
+        - id: "SpdxDocumentFile::xyz:0.1.0"
+    - id: "SpdxDocumentFile::zlib:1.2.11"
+      linkage: "STATIC"
+    - id: "SpdxDocumentFile:OpenSSL Development Team:openssl:1.1.1g"
+  - name: "test"
+    dependencies:
+    - id: "SpdxDocumentFile::curl:7.70.0"
+packages:
+- id: "SpdxDocumentFile::abc:0.1.1"
+  purl: "pkg:generic/abc@0.1.1"
+  authors:
+  - "Thomas Steenbergen"
+  declared_licenses:
+  - "Apache-2.0 AND curl AND LicenseRef-Proprietary-ExampleInc"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0 AND LicenseRef-Proprietary-ExampleInc AND curl"
+  description: "Awesome library created by Example Inc."
+  homepage_url: "https://example.com/products/abc"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "plugins/package-managers/spdx/src/funTest/assets/projects/synthetic/cyclic-references"
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "plugins/package-managers/spdx/src/funTest/assets/projects/synthetic/cyclic-references"
+- id: "SpdxDocumentFile::curl:7.70.0"
+  purl: "pkg:generic/curl@7.70.0?download_url=https://github.com/curl/curl/releases/download/curl-7_70_0/curl-7.70.0.tar.gz"
+  cpe: "cpe:2.3:a:http:curl:7.70.0:*:*:*:*:*:*:*"
+  authors:
+  - "Daniel Stenberg (daniel@haxx.se)"
+  declared_licenses:
+  - "curl"
+  declared_licenses_processed:
+    spdx_expression: "curl"
+  description: "A command line tool and library for transferring data with URL syntax,\
+    \ supporting HTTP, HTTPS, FTP, FTPS, GOPHER, TFTP, SCP, SFTP, SMB, TELNET, DICT,\
+    \ LDAP, LDAPS, MQTT, FILE, IMAP, SMTP, POP3, RTSP and RTMP. libcurl offers a myriad\
+    \ of powerful features."
+  homepage_url: "https://curl.haxx.se/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/curl/curl/releases/download/curl-7_70_0/curl-7.70.0.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "plugins/package-managers/spdx/src/funTest/assets/projects/synthetic/libs/curl"
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "plugins/package-managers/spdx/src/funTest/assets/projects/synthetic/libs/curl"
+- id: "SpdxDocumentFile::def:0.1.0"
+  purl: "pkg:generic/def@0.1.0"
+  authors:
+  - "Thomas Steenbergen"
+  declared_licenses:
+  - "Apache-2.0 AND curl AND LicenseRef-Proprietary-ExampleInc"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0 AND LicenseRef-Proprietary-ExampleInc AND curl"
+  description: "Another awesome library created by Example Inc."
+  homepage_url: "https://example.com/products/def"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "plugins/package-managers/spdx/src/funTest/assets/projects/synthetic/cyclic-references"
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "plugins/package-managers/spdx/src/funTest/assets/projects/synthetic/cyclic-references"
+- id: "SpdxDocumentFile::zlib:1.2.11"
+  purl: "pkg:generic/zlib@1.2.11?download_url=http://zlib.net/zlib-1.2.11.tar.gz"
+  cpe: "cpe:/a:compress:zlib:1.2.11:::en-us"
+  authors:
+  - "Jean-loup Gailly"
+  - "Mark Adler"
+  declared_licenses:
+  - "Zlib"
+  declared_licenses_processed:
+    spdx_expression: "Zlib"
+  description: "zlib 1.2.11 is a general purpose data compression library."
+  homepage_url: "http://zlib.net"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "http://zlib.net/zlib-1.2.11.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "plugins/package-managers/spdx/src/funTest/assets/projects/synthetic/libs/zlib"
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "plugins/package-managers/spdx/src/funTest/assets/projects/synthetic/libs/zlib"
+- id: "SpdxDocumentFile:OpenSSL Development Team:openssl:1.1.1g"
+  purl: "pkg:a-name/openssl@1.1.1g"
+  cpe: "cpe:2.3:a:a-name:openssl:1.1.1g:*:*:*:*:*:*:*"
+  authors:
+  - "OpenSSL Development Team"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: "OpenSSL is a robust, commercial-grade, full-featured Open Source Toolkit\
+    \ for the Transport Layer Security (TLS) protocol formerly known as the Secure\
+    \ Sockets Layer (SSL) protocol. The protocol implementation is based on a full-strength\
+    \ general purpose cryptographic library, which can also be used stand-alone."
+  homepage_url: "https://www.openssl.org/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "plugins/package-managers/spdx/src/funTest/assets/projects/synthetic/libs/openssl"
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "plugins/package-managers/spdx/src/funTest/assets/projects/synthetic/libs/openssl"
