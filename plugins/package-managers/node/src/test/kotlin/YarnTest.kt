@@ -33,7 +33,7 @@ class YarnTest : WordSpec({
         "parse a valid JSON string" {
             val json = fileWithRetries.readLines()[3]
 
-            val packageJson = parseYarnInfo(json)
+            val packageJson = parseYarnInfo(json, "")
 
             packageJson?.homepage shouldBe "https://github.com/watson/bonjour/local"
         }
@@ -44,13 +44,13 @@ class YarnTest : WordSpec({
                 Also not on any line.
             """.trimIndent()
 
-            parseYarnInfo(json) should beNull()
+            parseYarnInfo(json, "") should beNull()
         }
 
         "parse a JSON string with multiple objects" {
             val json = fileWithRetries.readText()
 
-            val packageJson = parseYarnInfo(json)
+            val packageJson = parseYarnInfo(json, "")
 
             packageJson?.homepage shouldBe "https://github.com/watson/bonjour/local"
         }
@@ -58,7 +58,7 @@ class YarnTest : WordSpec({
         "handle a type property that is not a primitive" {
             val json = File("src/test/assets/yarn-package-data-with-wrong-type.txt").readText()
 
-            val packageJson = parseYarnInfo(json)
+            val packageJson = parseYarnInfo(json, "")
 
             packageJson?.homepage shouldBe "https://github.com/watson/bonjour/local"
         }
