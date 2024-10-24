@@ -25,6 +25,7 @@ import kotlin.time.Duration.Companion.days
 
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.decodeToSequence
@@ -110,11 +111,13 @@ class Yarn(
  * line option '--network-timeout'.
  */
 internal fun parseYarnInfo(stdout: String): PackageJson? =
+    extractDataNodes(stdout, "inspect").firstOrNull()?.let(::parsePackageJson)
+
+private fun extractDataNodes(output: String, type: String): Set<JsonElement> =
     runCatching {
-        stdout.byteInputStream().use { inputStream ->
+        output.byteInputStream().use { inputStream ->
             Json.decodeToSequence<JsonObject>(inputStream)
-                .firstOrNull { (it["type"] as? JsonPrimitive)?.content == "inspect" }?.let {
-                    it["data"]?.let(::parsePackageJson)
-                }
+                .filter { (it["type"] as? JsonPrimitive)?.content == type }
+                .mapNotNullTo(mutableSetOf()) { it["data"] }
         }
-    }.getOrNull()
+    }.getOrDefault(emptySet())
