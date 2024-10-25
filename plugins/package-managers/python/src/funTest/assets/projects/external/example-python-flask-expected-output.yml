@@ -25,7 +25,7 @@ project:
       - id: "PyPI::jinja2:2.8.1"
         dependencies:
         - id: "PyPI::markupsafe:3.0.2"
-      - id: "PyPI::werkzeug:3.0.4"
+      - id: "PyPI::werkzeug:3.0.5"
         dependencies:
         - id: "PyPI::markupsafe:3.0.2"
     - id: "PyPI::gunicorn:19.6.0"
@@ -221,8 +221,8 @@ packages:
     url: "https://github.com/pallets/markupsafe.git"
     revision: ""
     path: ""
-- id: "PyPI::werkzeug:3.0.4"
-  purl: "pkg:pypi/werkzeug@3.0.4"
+- id: "PyPI::werkzeug:3.0.5"
+  purl: "pkg:pypi/werkzeug@3.0.5"
   declared_licenses:
   - "BSD License"
   declared_licenses_processed:
@@ -231,14 +231,14 @@ packages:
   description: "The comprehensive WSGI web application library."
   homepage_url: ""
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/4b/84/997bbf7c2bf2dc3f09565c6d0b4959fefe5355c18c4096cfd26d83e0785b/werkzeug-3.0.4-py3-none-any.whl"
+    url: "https://files.pythonhosted.org/packages/66/bd/3773fa5a55f78a8ba99b87cdf02029417056c63c6200f1a7ba275013746f/werkzeug-3.0.5-py3-none-any.whl"
     hash:
-      value: "02c9eb92b7d6c06f31a782811505d2157837cea66aaede3e217c7c27c039476c"
+      value: "6e589e0b303561b8b1a61d363ee05b1d7de6ca12f27a3a25269ae6ee93e363fd"
       algorithm: "SHA-256"
   source_artifact:
-    url: "https://files.pythonhosted.org/packages/0f/e2/6dbcaab07560909ff8f654d3a2e5a60552d937c909455211b1b36d7101dc/werkzeug-3.0.4.tar.gz"
+    url: "https://files.pythonhosted.org/packages/f3/bf/720c3f5b7910d3918ac3b2d4c41465502a3ef34a9b9ec43a49cdf0ea6937/werkzeug-3.0.5.tar.gz"
     hash:
-      value: "34f2371506b250df4d4f84bfe7b0921e4762525762bbd936614909fe25cd7306"
+      value: "033bc3783777078517f32ae3ba9e86e9bc38bdbf139b1a5a3af9679a64ed1293"
       algorithm: "SHA-256"
   vcs:
     type: ""
