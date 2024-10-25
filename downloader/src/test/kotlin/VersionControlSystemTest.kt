@@ -33,6 +33,7 @@ import java.lang.UnsupportedOperationException
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.VersionControlSystemConfiguration
 import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.Git
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 
@@ -168,6 +169,7 @@ private class VersionControlSystemTestImpl(
         workingTree: WorkingTree,
         revision: String,
         path: String,
-        recursive: Boolean
+        recursive: Boolean,
+        vcsConfiguration: VersionControlSystemConfiguration?
     ): Result<String> = Result.failure(UnsupportedOperationException("Unexpected invocation."))
 }

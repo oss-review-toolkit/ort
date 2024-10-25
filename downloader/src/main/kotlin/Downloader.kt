@@ -270,8 +270,13 @@ class Downloader(private val config: DownloaderConfiguration) {
             return RepositoryProvenance(pkg.vcsProcessed, pkg.vcsProcessed.revision)
         }
 
+        val vcsConfig = config.getVersionControlSystemConfiguration(applicableVcs.type)
+        if (vcsConfig != null) {
+            logger.info { "Using ${applicableVcs.type}-specific configuration $vcsConfig." }
+        }
+
         val workingTree = try {
-            applicableVcs.download(pkg, outputDirectory, config.allowMovingRevisions, recursive)
+            applicableVcs.download(pkg, outputDirectory, config.allowMovingRevisions, recursive, vcsConfig)
         } catch (e: DownloadException) {
             // TODO: Introduce something like a "strict" mode and only do these kind of fallbacks in non-strict mode.
             val vcsUrlNoCredentials = pkg.vcsProcessed.url.replaceCredentialsInUri()
@@ -285,7 +290,7 @@ class Downloader(private val config: DownloaderConfiguration) {
                 outputDirectory.safeDeleteRecursively(baseDirectory = outputDirectory)
 
                 val fallbackPkg = pkg.copy(vcsProcessed = pkg.vcsProcessed.copy(url = vcsUrlNoCredentials))
-                applicableVcs.download(fallbackPkg, outputDirectory, config.allowMovingRevisions, recursive)
+                applicableVcs.download(fallbackPkg, outputDirectory, config.allowMovingRevisions, recursive, vcsConfig)
             } else {
                 throw e
             }
