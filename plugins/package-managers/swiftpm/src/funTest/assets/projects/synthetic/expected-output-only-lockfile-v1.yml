@@ -25,7 +25,7 @@ project:
     - id: "Swift::github.com/grpc/grpc-swift:revision-efb67a324eaf1696b50e66bc471a53690e41fbf6"
 packages:
 - id: "Swift::github.com/apple/swift-argument-parser:0.2.0"
-  purl: "pkg:swift/github.com%2Fapple%2Fswift-argument-parser@0.2.0"
+  purl: "pkg:swift/github.com/apple/swift-argument-parser@0.2.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -51,7 +51,7 @@ packages:
     revision: "eb51f949cdd0c9d88abba9ce79d37eb7ea1231d0"
     path: ""
 - id: "Swift::github.com/apple/swift-crypto:"
-  purl: "pkg:swift/github.com%2Fapple%2Fswift-crypto"
+  purl: "pkg:swift/github.com/apple/swift-crypto"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -77,7 +77,7 @@ packages:
     revision: ""
     path: ""
 - id: "Swift::github.com/apple/swift-llbuild:9.0.8"
-  purl: "pkg:swift/github.com%2Fapple%2Fswift-llbuild@9.0.8"
+  purl: "pkg:swift/github.com/apple/swift-llbuild@9.0.8"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -103,7 +103,7 @@ packages:
     revision: ""
     path: ""
 - id: "Swift::github.com/braze-inc/braze-ios-sdk:branch-master"
-  purl: "pkg:swift/github.com%2Fbraze-inc%2Fbraze-ios-sdk@branch-master"
+  purl: "pkg:swift/github.com/braze-inc/braze-ios-sdk@branch-master"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -129,7 +129,7 @@ packages:
     revision: ""
     path: ""
 - id: "Swift::github.com/grpc/grpc-swift:revision-efb67a324eaf1696b50e66bc471a53690e41fbf6"
-  purl: "pkg:swift/github.com%2Fgrpc%2Fgrpc-swift@revision-efb67a324eaf1696b50e66bc471a53690e41fbf6"
+  purl: "pkg:swift/github.com/grpc/grpc-swift@revision-efb67a324eaf1696b50e66bc471a53690e41fbf6"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""

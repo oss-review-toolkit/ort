@@ -188,7 +188,7 @@ packages:
     revision: "4.0.1"
     path: ""
 - id: "Pod::AFNetworking/NSURLSession:4.0.1"
-  purl: "pkg:cocoapods/AFNetworking%2FNSURLSession@4.0.1"
+  purl: "pkg:cocoapods/AFNetworking/NSURLSession@4.0.1"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -216,7 +216,7 @@ packages:
     revision: "4.0.1"
     path: ""
 - id: "Pod::AFNetworking/Reachability:4.0.1"
-  purl: "pkg:cocoapods/AFNetworking%2FReachability@4.0.1"
+  purl: "pkg:cocoapods/AFNetworking/Reachability@4.0.1"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -244,7 +244,7 @@ packages:
     revision: "4.0.1"
     path: ""
 - id: "Pod::AFNetworking/Security:4.0.1"
-  purl: "pkg:cocoapods/AFNetworking%2FSecurity@4.0.1"
+  purl: "pkg:cocoapods/AFNetworking/Security@4.0.1"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -272,7 +272,7 @@ packages:
     revision: "4.0.1"
     path: ""
 - id: "Pod::AFNetworking/Serialization:4.0.1"
-  purl: "pkg:cocoapods/AFNetworking%2FSerialization@4.0.1"
+  purl: "pkg:cocoapods/AFNetworking/Serialization@4.0.1"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -300,7 +300,7 @@ packages:
     revision: "4.0.1"
     path: ""
 - id: "Pod::AFNetworking/UIKit:4.0.1"
-  purl: "pkg:cocoapods/AFNetworking%2FUIKit@4.0.1"
+  purl: "pkg:cocoapods/AFNetworking/UIKit@4.0.1"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -534,7 +534,7 @@ packages:
     revision: "1.6.26"
     path: ""
 - id: "Pod::DTCoreText/Core:1.6.26"
-  purl: "pkg:cocoapods/DTCoreText%2FCore@1.6.26"
+  purl: "pkg:cocoapods/DTCoreText/Core@1.6.26"
   declared_licenses:
   - "BSD"
   declared_licenses_processed:
@@ -564,7 +564,7 @@ packages:
     revision: "1.6.26"
     path: ""
 - id: "Pod::DTFoundation/Core:1.7.18"
-  purl: "pkg:cocoapods/DTFoundation%2FCore@1.7.18"
+  purl: "pkg:cocoapods/DTFoundation/Core@1.7.18"
   declared_licenses:
   - "BSD"
   declared_licenses_processed:
@@ -594,7 +594,7 @@ packages:
     revision: "1.7.18"
     path: ""
 - id: "Pod::DTFoundation/DTAnimatedGIF:1.7.18"
-  purl: "pkg:cocoapods/DTFoundation%2FDTAnimatedGIF@1.7.18"
+  purl: "pkg:cocoapods/DTFoundation/DTAnimatedGIF@1.7.18"
   declared_licenses:
   - "BSD"
   declared_licenses_processed:
@@ -624,7 +624,7 @@ packages:
     revision: "1.7.18"
     path: ""
 - id: "Pod::DTFoundation/DTHTMLParser:1.7.18"
-  purl: "pkg:cocoapods/DTFoundation%2FDTHTMLParser@1.7.18"
+  purl: "pkg:cocoapods/DTFoundation/DTHTMLParser@1.7.18"
   declared_licenses:
   - "BSD"
   declared_licenses_processed:
@@ -654,7 +654,7 @@ packages:
     revision: "1.7.18"
     path: ""
 - id: "Pod::DTFoundation/UIKit:1.7.18"
-  purl: "pkg:cocoapods/DTFoundation%2FUIKit@1.7.18"
+  purl: "pkg:cocoapods/DTFoundation/UIKit@1.7.18"
   declared_licenses:
   - "BSD"
   declared_licenses_processed:
@@ -801,7 +801,7 @@ packages:
     revision: "6.6.0"
     path: ""
 - id: "Pod::GBDeviceInfo/Core:6.6.0"
-  purl: "pkg:cocoapods/GBDeviceInfo%2FCore@6.6.0"
+  purl: "pkg:cocoapods/GBDeviceInfo/Core@6.6.0"
   declared_licenses:
   - "Apache License, Version 2.0"
   declared_licenses_processed:
@@ -1100,7 +1100,7 @@ packages:
     revision: "v0.23.18"
     path: ""
 - id: "Pod::MatrixSDK/Core:0.23.18"
-  purl: "pkg:cocoapods/MatrixSDK%2FCore@0.23.18"
+  purl: "pkg:cocoapods/MatrixSDK/Core@0.23.18"
   declared_licenses:
   - "Apache License, Version 2.0"
   declared_licenses_processed:
@@ -1130,7 +1130,7 @@ packages:
     revision: "v0.23.18"
     path: ""
 - id: "Pod::MatrixSDK/CryptoSDK:0.23.18"
-  purl: "pkg:cocoapods/MatrixSDK%2FCryptoSDK@0.23.18"
+  purl: "pkg:cocoapods/MatrixSDK/CryptoSDK@0.23.18"
   declared_licenses:
   - "Apache License, Version 2.0"
   declared_licenses_processed:
@@ -1160,7 +1160,7 @@ packages:
     revision: "v0.23.18"
     path: ""
 - id: "Pod::MatrixSDK/JingleCallStack:0.23.18"
-  purl: "pkg:cocoapods/MatrixSDK%2FJingleCallStack@0.23.18"
+  purl: "pkg:cocoapods/MatrixSDK/JingleCallStack@0.23.18"
   declared_licenses:
   - "Apache License, Version 2.0"
   declared_licenses_processed:
@@ -1250,7 +1250,7 @@ packages:
     revision: "3.2.12"
     path: ""
 - id: "Pod::OLMKit/olmc:3.2.12"
-  purl: "pkg:cocoapods/OLMKit%2Folmc@3.2.12"
+  purl: "pkg:cocoapods/OLMKit/olmc@3.2.12"
   declared_licenses:
   - "Apache License, Version 2.0"
   declared_licenses_processed:
@@ -1280,7 +1280,7 @@ packages:
     revision: "3.2.12"
     path: ""
 - id: "Pod::OLMKit/olmcpp:3.2.12"
-  purl: "pkg:cocoapods/OLMKit%2Folmcpp@3.2.12"
+  purl: "pkg:cocoapods/OLMKit/olmcpp@3.2.12"
   declared_licenses:
   - "Apache License, Version 2.0"
   declared_licenses_processed:
@@ -1398,7 +1398,7 @@ packages:
     revision: "v10.27.0"
     path: ""
 - id: "Pod::Realm/Headers:10.27.0"
-  purl: "pkg:cocoapods/Realm%2FHeaders@10.27.0"
+  purl: "pkg:cocoapods/Realm/Headers@10.27.0"
   declared_licenses:
   - "Apache 2.0"
   declared_licenses_processed:
@@ -1458,7 +1458,7 @@ packages:
     revision: "4.1.2"
     path: ""
 - id: "Pod::Reusable/Storyboard:4.1.2"
-  purl: "pkg:cocoapods/Reusable%2FStoryboard@4.1.2"
+  purl: "pkg:cocoapods/Reusable/Storyboard@4.1.2"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1487,7 +1487,7 @@ packages:
     revision: "4.1.2"
     path: ""
 - id: "Pod::Reusable/View:4.1.2"
-  purl: "pkg:cocoapods/Reusable%2FView@4.1.2"
+  purl: "pkg:cocoapods/Reusable/View@4.1.2"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1546,7 +1546,7 @@ packages:
     revision: "7.15.0"
     path: ""
 - id: "Pod::Sentry/Core:7.15.0"
-  purl: "pkg:cocoapods/Sentry%2FCore@7.15.0"
+  purl: "pkg:cocoapods/Sentry/Core@7.15.0"
   declared_licenses:
   - "mit"
   declared_licenses_processed:
@@ -1863,7 +1863,7 @@ packages:
     revision: "3.6.5"
     path: ""
 - id: "Pod::ZXingObjC/All:3.6.5"
-  purl: "pkg:cocoapods/ZXingObjC%2FAll@3.6.5"
+  purl: "pkg:cocoapods/ZXingObjC/All@3.6.5"
   declared_licenses:
   - "Apache License 2.0"
   declared_licenses_processed:

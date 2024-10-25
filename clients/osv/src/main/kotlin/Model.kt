@@ -167,8 +167,8 @@ data class Event(
 @Serializable
 data class Package(
     /** See also [Ecosystem]. */
-    val ecosystem: String,
-    val name: String,
+    val ecosystem: String? = null,
+    val name: String? = null,
     val purl: String? = null
 )
 

@@ -21,7 +21,7 @@ project:
     - id: "Swift::github.com/alamofire/alamofire:5.4.4"
 packages:
 - id: "Swift::github.com/alamofire/alamofire:5.4.4"
-  purl: "pkg:swift/github.com%2Falamofire%2Falamofire@5.4.4"
+  purl: "pkg:swift/github.com/alamofire/alamofire@5.4.4"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""

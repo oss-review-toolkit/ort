@@ -181,7 +181,7 @@ project:
           - id: "Swift::github.com/apple/swift-system:1.2.1"
 packages:
 - id: "Swift::github.com/apple/swift-algorithms:1.2.0"
-  purl: "pkg:swift/github.com%2Fapple%2Fswift-algorithms@1.2.0"
+  purl: "pkg:swift/github.com/apple/swift-algorithms@1.2.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -207,7 +207,7 @@ packages:
     revision: "f6919dfc309e7f1b56224378b11e28bab5bccc42"
     path: ""
 - id: "Swift::github.com/apple/swift-atomics:1.2.0"
-  purl: "pkg:swift/github.com%2Fapple%2Fswift-atomics@1.2.0"
+  purl: "pkg:swift/github.com/apple/swift-atomics@1.2.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -233,7 +233,7 @@ packages:
     revision: "cd142fd2f64be2100422d658e7411e39489da985"
     path: ""
 - id: "Swift::github.com/apple/swift-collections:1.0.6"
-  purl: "pkg:swift/github.com%2Fapple%2Fswift-collections@1.0.6"
+  purl: "pkg:swift/github.com/apple/swift-collections@1.0.6"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -259,7 +259,7 @@ packages:
     revision: "d029d9d39c87bed85b1c50adee7c41795261a192"
     path: ""
 - id: "Swift::github.com/apple/swift-crypto:2.6.0"
-  purl: "pkg:swift/github.com%2Fapple%2Fswift-crypto@2.6.0"
+  purl: "pkg:swift/github.com/apple/swift-crypto@2.6.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -285,7 +285,7 @@ packages:
     revision: "60f13f60c4d093691934dc6cfdf5f508ada1f894"
     path: ""
 - id: "Swift::github.com/apple/swift-http-types:1.0.3"
-  purl: "pkg:swift/github.com%2Fapple%2Fswift-http-types@1.0.3"
+  purl: "pkg:swift/github.com/apple/swift-http-types@1.0.3"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -311,7 +311,7 @@ packages:
     revision: "12358d55a3824bd5fed310b999ea8cf83a9a1a65"
     path: ""
 - id: "Swift::github.com/apple/swift-log:1.5.4"
-  purl: "pkg:swift/github.com%2Fapple%2Fswift-log@1.5.4"
+  purl: "pkg:swift/github.com/apple/swift-log@1.5.4"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -337,7 +337,7 @@ packages:
     revision: "e97a6fcb1ab07462881ac165fdbb37f067e205d5"
     path: ""
 - id: "Swift::github.com/apple/swift-metrics:2.4.1"
-  purl: "pkg:swift/github.com%2Fapple%2Fswift-metrics@2.4.1"
+  purl: "pkg:swift/github.com/apple/swift-metrics@2.4.1"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -363,7 +363,7 @@ packages:
     revision: "971ba26378ab69c43737ee7ba967a896cb74c0d1"
     path: ""
 - id: "Swift::github.com/apple/swift-nio:2.63.0"
-  purl: "pkg:swift/github.com%2Fapple%2Fswift-nio@2.63.0"
+  purl: "pkg:swift/github.com/apple/swift-nio@2.63.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -389,7 +389,7 @@ packages:
     revision: "635b2589494c97e48c62514bc8b37ced762e0a62"
     path: ""
 - id: "Swift::github.com/apple/swift-nio-extras:1.21.0"
-  purl: "pkg:swift/github.com%2Fapple%2Fswift-nio-extras@1.21.0"
+  purl: "pkg:swift/github.com/apple/swift-nio-extras@1.21.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -415,7 +415,7 @@ packages:
     revision: "363da63c1966405764f380c627409b2f9d9e710b"
     path: ""
 - id: "Swift::github.com/apple/swift-nio-http2:1.30.0"
-  purl: "pkg:swift/github.com%2Fapple%2Fswift-nio-http2@1.30.0"
+  purl: "pkg:swift/github.com/apple/swift-nio-http2@1.30.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -441,7 +441,7 @@ packages:
     revision: "0904bf0feb5122b7e5c3f15db7df0eabe623dd87"
     path: ""
 - id: "Swift::github.com/apple/swift-nio-ssl:2.26.0"
-  purl: "pkg:swift/github.com%2Fapple%2Fswift-nio-ssl@2.26.0"
+  purl: "pkg:swift/github.com/apple/swift-nio-ssl@2.26.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -467,7 +467,7 @@ packages:
     revision: "7c381eb6083542b124a6c18fae742f55001dc2b5"
     path: ""
 - id: "Swift::github.com/apple/swift-nio-transport-services:1.20.1"
-  purl: "pkg:swift/github.com%2Fapple%2Fswift-nio-transport-services@1.20.1"
+  purl: "pkg:swift/github.com/apple/swift-nio-transport-services@1.20.1"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -493,7 +493,7 @@ packages:
     revision: "6cbe0ed2b394f21ab0d46b9f0c50c6be964968ce"
     path: ""
 - id: "Swift::github.com/apple/swift-numerics:1.0.2"
-  purl: "pkg:swift/github.com%2Fapple%2Fswift-numerics@1.0.2"
+  purl: "pkg:swift/github.com/apple/swift-numerics@1.0.2"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -519,7 +519,7 @@ packages:
     revision: "0a5bc04095a675662cf24757cc0640aa2204253b"
     path: ""
 - id: "Swift::github.com/apple/swift-system:1.2.1"
-  purl: "pkg:swift/github.com%2Fapple%2Fswift-system@1.2.1"
+  purl: "pkg:swift/github.com/apple/swift-system@1.2.1"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -545,7 +545,7 @@ packages:
     revision: "025bcb1165deab2e20d4eaba79967ce73013f496"
     path: ""
 - id: "Swift::github.com/swift-server/async-http-client:1.20.1"
-  purl: "pkg:swift/github.com%2Fswift-server%2Fasync-http-client@1.20.1"
+  purl: "pkg:swift/github.com/swift-server/async-http-client@1.20.1"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -571,7 +571,7 @@ packages:
     revision: "291438696abdd48d2a83b52465c176efbd94512b"
     path: ""
 - id: "Swift::github.com/swift-server/swift-backtrace:1.3.4"
-  purl: "pkg:swift/github.com%2Fswift-server%2Fswift-backtrace@1.3.4"
+  purl: "pkg:swift/github.com/swift-server/swift-backtrace@1.3.4"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -597,7 +597,7 @@ packages:
     revision: "80746bdd0ac8a7d83aad5d89dac3cbf15de652e6"
     path: ""
 - id: "Swift::github.com/vapor/async-kit:1.19.0"
-  purl: "pkg:swift/github.com%2Fvapor%2Fasync-kit@1.19.0"
+  purl: "pkg:swift/github.com/vapor/async-kit@1.19.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -623,7 +623,7 @@ packages:
     revision: "7ece208cd401687641c88367a00e3ea2b04311f1"
     path: ""
 - id: "Swift::github.com/vapor/console-kit:revision-a31f44ebfbd15a2cc0fda705279676773ac16355"
-  purl: "pkg:swift/github.com%2Fvapor%2Fconsole-kit@revision-a31f44ebfbd15a2cc0fda705279676773ac16355"
+  purl: "pkg:swift/github.com/vapor/console-kit@revision-a31f44ebfbd15a2cc0fda705279676773ac16355"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -649,7 +649,7 @@ packages:
     revision: "a31f44ebfbd15a2cc0fda705279676773ac16355"
     path: ""
 - id: "Swift::github.com/vapor/multipart-kit:4.6.0"
-  purl: "pkg:swift/github.com%2Fvapor%2Fmultipart-kit@4.6.0"
+  purl: "pkg:swift/github.com/vapor/multipart-kit@4.6.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -675,7 +675,7 @@ packages:
     revision: "12ee56f25bd3fc4c2d09c2aa16e69de61dc786e8"
     path: ""
 - id: "Swift::github.com/vapor/routing-kit:4.9.0"
-  purl: "pkg:swift/github.com%2Fvapor%2Frouting-kit@4.9.0"
+  purl: "pkg:swift/github.com/vapor/routing-kit@4.9.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -701,7 +701,7 @@ packages:
     revision: "2a92a7eac411a82fb3a03731be5e76773ebe1b3e"
     path: ""
 - id: "Swift::github.com/vapor/websocket-kit:2.14.0"
-  purl: "pkg:swift/github.com%2Fvapor%2Fwebsocket-kit@2.14.0"
+  purl: "pkg:swift/github.com/vapor/websocket-kit@2.14.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""

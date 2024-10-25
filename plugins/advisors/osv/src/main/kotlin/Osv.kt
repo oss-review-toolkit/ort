@@ -103,8 +103,8 @@ class Osv(override val descriptor: PluginDescriptor, config: OsvConfiguration) :
     }
 
     private fun getVulnerabilityIdsForPackages(packages: Set<Package>): Map<Identifier, List<String>> {
-        val requests = packages.mapNotNull { pkg ->
-            createRequest(pkg)?.let { pkg to it }
+        val requests = packages.map { pkg ->
+            createRequest(pkg).let { pkg to it }
         }
 
         val result = service.getVulnerabilityIdsForPackages(requests.map { it.second })
@@ -139,46 +139,20 @@ class Osv(override val descriptor: PluginDescriptor, config: OsvConfiguration) :
     }
 }
 
-private fun createRequest(pkg: Package): VulnerabilitiesForPackageRequest? {
-    val name = when {
-        pkg.id.namespace.isEmpty() -> pkg.id.name
-        pkg.id.type == "Composer" -> "${pkg.id.namespace}/${pkg.id.name}"
-        else -> "${pkg.id.namespace}:${pkg.id.name}"
-    }
-
-    val ecosystem = when (pkg.id.type) {
-        "Bower" -> null
-        "Composer" -> Ecosystem.PACKAGIST
-        "Conan" -> Ecosystem.CONAN_CENTER
-        "Crate" -> Ecosystem.CRATES_IO
-        "Gem" -> Ecosystem.RUBY_GEMS
-        "Go" -> Ecosystem.GO
-        "Hackage" -> Ecosystem.HACKAGE
-        "NPM" -> Ecosystem.NPM
-        "NuGet" -> Ecosystem.NUGET
-        "Maven" -> Ecosystem.MAVEN
-        "Pub" -> Ecosystem.PUB
-        "PyPI" -> Ecosystem.PYPI
-        "Swift" -> Ecosystem.SWIFT_URL
-        else -> null
-    }
-
-    if (name.isNotBlank() && pkg.id.version.isNotBlank() && !ecosystem.isNullOrBlank()) {
-        return VulnerabilitiesForPackageRequest(
-            // Do not specify the purl here as it is mutually exclusive with the ecosystem.
-            pkg = org.ossreviewtoolkit.clients.osv.Package(
-                name = name,
-                ecosystem = ecosystem
-            ),
-            version = pkg.id.version
-        )
-    }
-
+private fun createRequest(pkg: Package): VulnerabilitiesForPackageRequest {
     // TODO: Support querying vulnerabilities by Git commit hash as described at https://osv.dev/docs/#section/OSV-API.
     //       That would allow to generally support e.g. C / C++ projects that do not use a dedicated package manager
     //       like Conan.
 
-    return null
+    // Work-around for missing purl converters, see https://github.com/google/osv.dev/issues/2402.
+    return if (pkg.id.type == "Swift") {
+        VulnerabilitiesForPackageRequest(
+            pkg = org.ossreviewtoolkit.clients.osv.Package(name = pkg.id.name, ecosystem = Ecosystem.SWIFT_URL),
+            version = pkg.id.version
+        )
+    } else {
+        VulnerabilitiesForPackageRequest(pkg = org.ossreviewtoolkit.clients.osv.Package(purl = pkg.purl))
+    }
 }
 
 private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.vulnerabilities.Vulnerability {

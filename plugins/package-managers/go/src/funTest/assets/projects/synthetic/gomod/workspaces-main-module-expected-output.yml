@@ -32,7 +32,7 @@ project:
         linkage: "PROJECT_STATIC"
 packages:
 - id: "Go::github.com/google/uuid:1.0.0"
-  purl: "pkg:golang/github.com%2Fgoogle%2Fuuid@1.0.0"
+  purl: "pkg:golang/github.com/google/uuid@1.0.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -58,7 +58,7 @@ packages:
     revision: "d460ce9f8df2e77fb1ba55ca87fafed96c607494"
     path: ""
 - id: "Go::github.com/pborman/uuid:1.2.1"
-  purl: "pkg:golang/github.com%2Fpborman%2Fuuid@1.2.1"
+  purl: "pkg:golang/github.com/pborman/uuid@1.2.1"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""

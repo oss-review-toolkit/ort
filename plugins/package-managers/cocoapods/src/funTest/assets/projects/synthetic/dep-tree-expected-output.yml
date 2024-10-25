@@ -348,7 +348,7 @@ packages:
     revision: "v2.0.1"
     path: ""
 - id: "Pod::MaterialComponents/AnimationTiming:124.2.0"
-  purl: "pkg:cocoapods/MaterialComponents%2FAnimationTiming@124.2.0"
+  purl: "pkg:cocoapods/MaterialComponents/AnimationTiming@124.2.0"
   declared_licenses:
   - "Apache 2.0"
   declared_licenses_processed:
@@ -379,7 +379,7 @@ packages:
     revision: "v124.2.0"
     path: ""
 - id: "Pod::MaterialComponents/Availability:124.2.0"
-  purl: "pkg:cocoapods/MaterialComponents%2FAvailability@124.2.0"
+  purl: "pkg:cocoapods/MaterialComponents/Availability@124.2.0"
   declared_licenses:
   - "Apache 2.0"
   declared_licenses_processed:
@@ -410,7 +410,7 @@ packages:
     revision: "v124.2.0"
     path: ""
 - id: "Pod::MaterialComponents/Buttons:124.2.0"
-  purl: "pkg:cocoapods/MaterialComponents%2FButtons@124.2.0"
+  purl: "pkg:cocoapods/MaterialComponents/Buttons@124.2.0"
   declared_licenses:
   - "Apache 2.0"
   declared_licenses_processed:
@@ -441,7 +441,7 @@ packages:
     revision: "v124.2.0"
     path: ""
 - id: "Pod::MaterialComponents/Elevation:124.2.0"
-  purl: "pkg:cocoapods/MaterialComponents%2FElevation@124.2.0"
+  purl: "pkg:cocoapods/MaterialComponents/Elevation@124.2.0"
   declared_licenses:
   - "Apache 2.0"
   declared_licenses_processed:
@@ -472,7 +472,7 @@ packages:
     revision: "v124.2.0"
     path: ""
 - id: "Pod::MaterialComponents/Ink:124.2.0"
-  purl: "pkg:cocoapods/MaterialComponents%2FInk@124.2.0"
+  purl: "pkg:cocoapods/MaterialComponents/Ink@124.2.0"
   declared_licenses:
   - "Apache 2.0"
   declared_licenses_processed:
@@ -503,7 +503,7 @@ packages:
     revision: "v124.2.0"
     path: ""
 - id: "Pod::MaterialComponents/Palettes:124.2.0"
-  purl: "pkg:cocoapods/MaterialComponents%2FPalettes@124.2.0"
+  purl: "pkg:cocoapods/MaterialComponents/Palettes@124.2.0"
   declared_licenses:
   - "Apache 2.0"
   declared_licenses_processed:
@@ -534,7 +534,7 @@ packages:
     revision: "v124.2.0"
     path: ""
 - id: "Pod::MaterialComponents/Ripple:124.2.0"
-  purl: "pkg:cocoapods/MaterialComponents%2FRipple@124.2.0"
+  purl: "pkg:cocoapods/MaterialComponents/Ripple@124.2.0"
   declared_licenses:
   - "Apache 2.0"
   declared_licenses_processed:
@@ -565,7 +565,7 @@ packages:
     revision: "v124.2.0"
     path: ""
 - id: "Pod::MaterialComponents/Shadow:124.2.0"
-  purl: "pkg:cocoapods/MaterialComponents%2FShadow@124.2.0"
+  purl: "pkg:cocoapods/MaterialComponents/Shadow@124.2.0"
   declared_licenses:
   - "Apache 2.0"
   declared_licenses_processed:
@@ -596,7 +596,7 @@ packages:
     revision: "v124.2.0"
     path: ""
 - id: "Pod::MaterialComponents/ShadowElevations:124.2.0"
-  purl: "pkg:cocoapods/MaterialComponents%2FShadowElevations@124.2.0"
+  purl: "pkg:cocoapods/MaterialComponents/ShadowElevations@124.2.0"
   declared_licenses:
   - "Apache 2.0"
   declared_licenses_processed:
@@ -627,7 +627,7 @@ packages:
     revision: "v124.2.0"
     path: ""
 - id: "Pod::MaterialComponents/ShadowLayer:124.2.0"
-  purl: "pkg:cocoapods/MaterialComponents%2FShadowLayer@124.2.0"
+  purl: "pkg:cocoapods/MaterialComponents/ShadowLayer@124.2.0"
   declared_licenses:
   - "Apache 2.0"
   declared_licenses_processed:
@@ -658,7 +658,7 @@ packages:
     revision: "v124.2.0"
     path: ""
 - id: "Pod::MaterialComponents/ShapeLibrary:124.2.0"
-  purl: "pkg:cocoapods/MaterialComponents%2FShapeLibrary@124.2.0"
+  purl: "pkg:cocoapods/MaterialComponents/ShapeLibrary@124.2.0"
   declared_licenses:
   - "Apache 2.0"
   declared_licenses_processed:
@@ -689,7 +689,7 @@ packages:
     revision: "v124.2.0"
     path: ""
 - id: "Pod::MaterialComponents/Shapes:124.2.0"
-  purl: "pkg:cocoapods/MaterialComponents%2FShapes@124.2.0"
+  purl: "pkg:cocoapods/MaterialComponents/Shapes@124.2.0"
   declared_licenses:
   - "Apache 2.0"
   declared_licenses_processed:
@@ -720,7 +720,7 @@ packages:
     revision: "v124.2.0"
     path: ""
 - id: "Pod::MaterialComponents/TextFields:124.2.0"
-  purl: "pkg:cocoapods/MaterialComponents%2FTextFields@124.2.0"
+  purl: "pkg:cocoapods/MaterialComponents/TextFields@124.2.0"
   declared_licenses:
   - "Apache 2.0"
   declared_licenses_processed:
@@ -751,7 +751,7 @@ packages:
     revision: "v124.2.0"
     path: ""
 - id: "Pod::MaterialComponents/Typography:124.2.0"
-  purl: "pkg:cocoapods/MaterialComponents%2FTypography@124.2.0"
+  purl: "pkg:cocoapods/MaterialComponents/Typography@124.2.0"
   declared_licenses:
   - "Apache 2.0"
   declared_licenses_processed:
@@ -782,7 +782,7 @@ packages:
     revision: "v124.2.0"
     path: ""
 - id: "Pod::MaterialComponents/private/Application:124.2.0"
-  purl: "pkg:cocoapods/MaterialComponents%2Fprivate%2FApplication@124.2.0"
+  purl: "pkg:cocoapods/MaterialComponents/private/Application@124.2.0"
   declared_licenses:
   - "Apache 2.0"
   declared_licenses_processed:
@@ -813,7 +813,7 @@ packages:
     revision: "v124.2.0"
     path: ""
 - id: "Pod::MaterialComponents/private/Color:124.2.0"
-  purl: "pkg:cocoapods/MaterialComponents%2Fprivate%2FColor@124.2.0"
+  purl: "pkg:cocoapods/MaterialComponents/private/Color@124.2.0"
   declared_licenses:
   - "Apache 2.0"
   declared_licenses_processed:
@@ -844,7 +844,7 @@ packages:
     revision: "v124.2.0"
     path: ""
 - id: "Pod::MaterialComponents/private/Math:124.2.0"
-  purl: "pkg:cocoapods/MaterialComponents%2Fprivate%2FMath@124.2.0"
+  purl: "pkg:cocoapods/MaterialComponents/private/Math@124.2.0"
   declared_licenses:
   - "Apache 2.0"
   declared_licenses_processed:
@@ -931,7 +931,7 @@ packages:
     revision: "3.3.3"
     path: ""
 - id: "Pod::PhoneNumberKit/PhoneNumberKitCore:3.3.3"
-  purl: "pkg:cocoapods/PhoneNumberKit%2FPhoneNumberKitCore@3.3.3"
+  purl: "pkg:cocoapods/PhoneNumberKit/PhoneNumberKitCore@3.3.3"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -959,7 +959,7 @@ packages:
     revision: "3.3.3"
     path: ""
 - id: "Pod::PhoneNumberKit/UIKit:3.3.3"
-  purl: "pkg:cocoapods/PhoneNumberKit%2FUIKit@3.3.3"
+  purl: "pkg:cocoapods/PhoneNumberKit/UIKit@3.3.3"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:

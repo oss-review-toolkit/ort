@@ -119,7 +119,7 @@ project:
         linkage: "PROJECT_STATIC"
 packages:
 - id: "Go::github.com/atomtree/go-spew:1.1.0"
-  purl: "pkg:golang/github.com%2Fatomtree%2Fgo-spew@1.1.0"
+  purl: "pkg:golang/github.com/atomtree/go-spew@1.1.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -145,7 +145,7 @@ packages:
     revision: "346938d642f2ec3594ed81d874461961cd0faa76"
     path: ""
 - id: "Go::github.com/fatih/color:1.13.0"
-  purl: "pkg:golang/github.com%2Ffatih%2Fcolor@1.13.0"
+  purl: "pkg:golang/github.com/fatih/color@1.13.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -171,7 +171,7 @@ packages:
     revision: "a05da93ebe62ca9fc6791d3376ec4dad01196448"
     path: ""
 - id: "Go::github.com/google/uuid:1.0.0"
-  purl: "pkg:golang/github.com%2Fgoogle%2Fuuid@1.0.0"
+  purl: "pkg:golang/github.com/google/uuid@1.0.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -197,7 +197,7 @@ packages:
     revision: "d460ce9f8df2e77fb1ba55ca87fafed96c607494"
     path: ""
 - id: "Go::github.com/hashicorp/go-secure-stdlib/parseutil:0.1.6"
-  purl: "pkg:golang/github.com%2Fhashicorp%2Fgo-secure-stdlib%2Fparseutil@0.1.6"
+  purl: "pkg:golang/github.com/hashicorp/go-secure-stdlib/parseutil@0.1.6"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -223,7 +223,7 @@ packages:
     revision: "43c607d97e1d4615c5140017131807d1f0b702ff"
     path: "parseutil"
 - id: "Go::github.com/hashicorp/go-secure-stdlib/strutil:0.1.1"
-  purl: "pkg:golang/github.com%2Fhashicorp%2Fgo-secure-stdlib%2Fstrutil@0.1.1"
+  purl: "pkg:golang/github.com/hashicorp/go-secure-stdlib/strutil@0.1.1"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -249,7 +249,7 @@ packages:
     revision: "1b80d53b4662d4b15ea0c23754dd81e3ae21d58b"
     path: "strutil"
 - id: "Go::github.com/hashicorp/go-sockaddr:1.0.2"
-  purl: "pkg:golang/github.com%2Fhashicorp%2Fgo-sockaddr@1.0.2"
+  purl: "pkg:golang/github.com/hashicorp/go-sockaddr@1.0.2"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -275,7 +275,7 @@ packages:
     revision: "c7188e74f6acae5a989bdc959aa779f8b9f42faf"
     path: ""
 - id: "Go::github.com/mattn/go-colorable:0.1.12"
-  purl: "pkg:golang/github.com%2Fmattn%2Fgo-colorable@0.1.12"
+  purl: "pkg:golang/github.com/mattn/go-colorable@0.1.12"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -301,7 +301,7 @@ packages:
     revision: "e1bb79c8d53c38a60962ad4b8f658226cc983710"
     path: ""
 - id: "Go::github.com/mattn/go-isatty:0.0.14"
-  purl: "pkg:golang/github.com%2Fmattn%2Fgo-isatty@0.0.14"
+  purl: "pkg:golang/github.com/mattn/go-isatty@0.0.14"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -327,7 +327,7 @@ packages:
     revision: "504425e14f742f1f517c4586048b49b37f829c8e"
     path: ""
 - id: "Go::github.com/mitchellh/mapstructure:1.4.1"
-  purl: "pkg:golang/github.com%2Fmitchellh%2Fmapstructure@1.4.1"
+  purl: "pkg:golang/github.com/mitchellh/mapstructure@1.4.1"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -353,7 +353,7 @@ packages:
     revision: "8ebf2d61a8b4adcce25fc9fc9b76e8452a00672f"
     path: ""
 - id: "Go::github.com/pborman/uuid:1.2.1"
-  purl: "pkg:golang/github.com%2Fpborman%2Fuuid@1.2.1"
+  purl: "pkg:golang/github.com/pborman/uuid@1.2.1"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -379,7 +379,7 @@ packages:
     revision: "5b6091a6a160ee5ce12917b21ab96acec2a4fdc0"
     path: ""
 - id: "Go::github.com/pmezard/go-difflib:1.0.0"
-  purl: "pkg:golang/github.com%2Fpmezard%2Fgo-difflib@1.0.0"
+  purl: "pkg:golang/github.com/pmezard/go-difflib@1.0.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -405,7 +405,7 @@ packages:
     revision: "792786c7400a136282c1664665ae0a8db921c6c2"
     path: ""
 - id: "Go::github.com/ryanuber/go-glob:1.0.0"
-  purl: "pkg:golang/github.com%2Fryanuber%2Fgo-glob@1.0.0"
+  purl: "pkg:golang/github.com/ryanuber/go-glob@1.0.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -431,7 +431,7 @@ packages:
     revision: "51a8f68e6c24dc43f1e371749c89a267de4ebc53"
     path: ""
 - id: "Go::github.com/stretchr/testify:1.7.2"
-  purl: "pkg:golang/github.com%2Fstretchr%2Ftestify@1.7.2"
+  purl: "pkg:golang/github.com/stretchr/testify@1.7.2"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -457,7 +457,7 @@ packages:
     revision: "41453c009af9a942261b7a25a88521d0d6804e7f"
     path: ""
 - id: "Go::golang.org/x/sys:0.0.0-20220610221304-9f5ed59c137d"
-  purl: "pkg:golang/golang.org%2Fx%2Fsys@0.0.0-20220610221304-9f5ed59c137d"
+  purl: "pkg:golang/golang.org/x/sys@0.0.0-20220610221304-9f5ed59c137d"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -483,7 +483,7 @@ packages:
     revision: "9f5ed59c137dcb0852024edd2e71af63c2d67707"
     path: ""
 - id: "Go::gopkg.in/yaml.v3:3.0.1"
-  purl: "pkg:golang/gopkg.in%2Fyaml.v3@3.0.1"
+  purl: "pkg:golang/gopkg.in/yaml.v3@3.0.1"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
