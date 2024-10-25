@@ -115,6 +115,10 @@ private val logger = loggerOf(MethodHandles.lookup().lookupClass())
  */
 internal fun parseYarnInfo(stdout: String, stderr: String): PackageJson? =
     extractDataNodes(stdout, "inspect").firstOrNull()?.let(::parsePackageJson).alsoIfNull {
+        extractDataNodes(stderr, "warning").forEach {
+            logger.info { "Warning running Yarn info: ${it.jsonPrimitive.content}" }
+        }
+
         extractDataNodes(stderr, "error").forEach {
             logger.warn { "Error parsing Yarn info: ${it.jsonPrimitive.content}" }
         }
