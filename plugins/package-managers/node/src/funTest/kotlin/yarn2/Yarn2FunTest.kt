@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packagemanagers.node
+package org.ossreviewtoolkit.plugins.packagemanagers.node.yarn2
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.should
