@@ -157,9 +157,9 @@ project:
             - id: "NPM::os-homedir:1.0.2"
             - id: "NPM::os-tmpdir:1.0.2"
           - id: "NPM::lodash:4.17.21"
-          - id: "NPM::mkdirp:0.5.5"
+          - id: "NPM::mkdirp:0.5.6"
             dependencies:
-            - id: "NPM::minimist:1.2.5"
+            - id: "NPM::minimist:1.2.8"
           - id: "NPM::source-map-support:0.4.18"
             dependencies:
             - id: "NPM::source-map:0.5.7"
@@ -288,15 +288,13 @@ project:
           - id: "NPM::lodash:4.17.21"
           - id: "NPM::to-fast-properties:1.0.3"
         - id: "NPM::babylon:6.18.0"
-        - id: "NPM::convert-source-map:1.8.0"
-          dependencies:
-          - id: "NPM::safe-buffer:5.1.2"
+        - id: "NPM::convert-source-map:1.9.0"
         - id: "NPM::debug:2.6.9"
           dependencies:
           - id: "NPM::ms:2.0.0"
         - id: "NPM::json5:0.5.1"
         - id: "NPM::lodash:4.17.21"
-        - id: "NPM::minimatch:3.0.4"
+        - id: "NPM::minimatch:3.1.2"
           dependencies:
           - id: "NPM::brace-expansion:1.1.11"
             dependencies:
@@ -564,15 +562,13 @@ project:
             - id: "NPM::lodash:4.17.21"
             - id: "NPM::to-fast-properties:1.0.3"
           - id: "NPM::babylon:6.18.0"
-          - id: "NPM::convert-source-map:1.8.0"
-            dependencies:
-            - id: "NPM::safe-buffer:5.1.2"
+          - id: "NPM::convert-source-map:1.9.0"
           - id: "NPM::debug:2.6.9"
             dependencies:
             - id: "NPM::ms:2.0.0"
           - id: "NPM::json5:0.5.1"
           - id: "NPM::lodash:4.17.21"
-          - id: "NPM::minimatch:3.0.4"
+          - id: "NPM::minimatch:3.1.2"
             dependencies:
             - id: "NPM::brace-expansion:1.1.11"
               dependencies:
@@ -592,9 +588,9 @@ project:
           - id: "NPM::os-homedir:1.0.2"
           - id: "NPM::os-tmpdir:1.0.2"
         - id: "NPM::lodash:4.17.21"
-        - id: "NPM::mkdirp:0.5.5"
+        - id: "NPM::mkdirp:0.5.6"
           dependencies:
-          - id: "NPM::minimist:1.2.5"
+          - id: "NPM::minimist:1.2.8"
         - id: "NPM::source-map-support:0.4.18"
           dependencies:
           - id: "NPM::source-map:0.5.7"
@@ -683,7 +679,7 @@ project:
           - id: "NPM::normalize-path:2.1.1"
             dependencies:
             - id: "NPM::remove-trailing-separator:1.1.0"
-        - id: "NPM::async-each:1.0.3"
+        - id: "NPM::async-each:1.0.6"
         - id: "NPM::glob-parent:2.0.0"
           dependencies:
           - id: "NPM::is-glob:2.0.1"
@@ -699,7 +695,7 @@ project:
         - id: "NPM::path-is-absolute:1.0.1"
         - id: "NPM::readdirp:2.2.1"
           dependencies:
-          - id: "NPM::graceful-fs:4.2.8"
+          - id: "NPM::graceful-fs:4.2.11"
           - id: "NPM::micromatch:3.1.10"
             dependencies:
             - id: "NPM::arr-diff:4.0.0"
@@ -748,7 +744,7 @@ project:
                       - id: "NPM::object-visit:1.0.1"
                         dependencies:
                         - id: "NPM::isobject:3.0.1"
-                    - id: "NPM::component-emitter:1.3.0"
+                    - id: "NPM::component-emitter:1.3.1"
                     - id: "NPM::get-value:2.0.6"
                     - id: "NPM::has-value:1.0.0"
                       dependencies:
@@ -828,70 +824,70 @@ project:
                     - id: "NPM::arr-union:3.1.0"
                     - id: "NPM::define-property:0.2.5"
                       dependencies:
-                      - id: "NPM::is-descriptor:0.1.6"
+                      - id: "NPM::is-descriptor:0.1.7"
                         dependencies:
-                        - id: "NPM::is-accessor-descriptor:0.1.6"
+                        - id: "NPM::is-accessor-descriptor:1.0.1"
                           dependencies:
-                          - id: "NPM::kind-of:3.2.2"
+                          - id: "NPM::hasown:2.0.2"
                             dependencies:
-                            - id: "NPM::is-buffer:1.1.6"
-                        - id: "NPM::is-data-descriptor:0.1.4"
+                            - id: "NPM::function-bind:1.1.2"
+                        - id: "NPM::is-data-descriptor:1.0.1"
                           dependencies:
-                          - id: "NPM::kind-of:3.2.2"
+                          - id: "NPM::hasown:2.0.2"
                             dependencies:
-                            - id: "NPM::is-buffer:1.1.6"
-                        - id: "NPM::kind-of:5.1.0"
+                            - id: "NPM::function-bind:1.1.2"
                     - id: "NPM::isobject:3.0.1"
                     - id: "NPM::static-extend:0.1.2"
                       dependencies:
                       - id: "NPM::define-property:0.2.5"
                         dependencies:
-                        - id: "NPM::is-descriptor:0.1.6"
+                        - id: "NPM::is-descriptor:0.1.7"
                           dependencies:
-                          - id: "NPM::is-accessor-descriptor:0.1.6"
+                          - id: "NPM::is-accessor-descriptor:1.0.1"
                             dependencies:
-                            - id: "NPM::kind-of:3.2.2"
+                            - id: "NPM::hasown:2.0.2"
                               dependencies:
-                              - id: "NPM::is-buffer:1.1.6"
-                          - id: "NPM::is-data-descriptor:0.1.4"
+                              - id: "NPM::function-bind:1.1.2"
+                          - id: "NPM::is-data-descriptor:1.0.1"
                             dependencies:
-                            - id: "NPM::kind-of:3.2.2"
+                            - id: "NPM::hasown:2.0.2"
                               dependencies:
-                              - id: "NPM::is-buffer:1.1.6"
-                          - id: "NPM::kind-of:5.1.0"
+                              - id: "NPM::function-bind:1.1.2"
                       - id: "NPM::object-copy:0.1.0"
                         dependencies:
                         - id: "NPM::copy-descriptor:0.1.1"
                         - id: "NPM::define-property:0.2.5"
                           dependencies:
-                          - id: "NPM::is-descriptor:0.1.6"
+                          - id: "NPM::is-descriptor:0.1.7"
                             dependencies:
-                            - id: "NPM::is-accessor-descriptor:0.1.6"
+                            - id: "NPM::is-accessor-descriptor:1.0.1"
                               dependencies:
-                              - id: "NPM::kind-of:3.2.2"
+                              - id: "NPM::hasown:2.0.2"
                                 dependencies:
-                                - id: "NPM::is-buffer:1.1.6"
-                            - id: "NPM::is-data-descriptor:0.1.4"
+                                - id: "NPM::function-bind:1.1.2"
+                            - id: "NPM::is-data-descriptor:1.0.1"
                               dependencies:
-                              - id: "NPM::kind-of:3.2.2"
+                              - id: "NPM::hasown:2.0.2"
                                 dependencies:
-                                - id: "NPM::is-buffer:1.1.6"
-                            - id: "NPM::kind-of:5.1.0"
+                                - id: "NPM::function-bind:1.1.2"
                         - id: "NPM::kind-of:3.2.2"
                           dependencies:
                           - id: "NPM::is-buffer:1.1.6"
-                  - id: "NPM::component-emitter:1.3.0"
+                  - id: "NPM::component-emitter:1.3.1"
                   - id: "NPM::define-property:1.0.0"
                     dependencies:
-                    - id: "NPM::is-descriptor:1.0.2"
+                    - id: "NPM::is-descriptor:1.0.3"
                       dependencies:
-                      - id: "NPM::is-accessor-descriptor:1.0.0"
+                      - id: "NPM::is-accessor-descriptor:1.0.1"
                         dependencies:
-                        - id: "NPM::kind-of:6.0.3"
-                      - id: "NPM::is-data-descriptor:1.0.0"
+                        - id: "NPM::hasown:2.0.2"
+                          dependencies:
+                          - id: "NPM::function-bind:1.1.2"
+                      - id: "NPM::is-data-descriptor:1.0.1"
                         dependencies:
-                        - id: "NPM::kind-of:6.0.3"
-                      - id: "NPM::kind-of:6.0.3"
+                        - id: "NPM::hasown:2.0.2"
+                          dependencies:
+                          - id: "NPM::function-bind:1.1.2"
                   - id: "NPM::isobject:3.0.1"
                   - id: "NPM::mixin-deep:1.3.2"
                     dependencies:
@@ -907,19 +903,18 @@ project:
                   - id: "NPM::ms:2.0.0"
                 - id: "NPM::define-property:0.2.5"
                   dependencies:
-                  - id: "NPM::is-descriptor:0.1.6"
+                  - id: "NPM::is-descriptor:0.1.7"
                     dependencies:
-                    - id: "NPM::is-accessor-descriptor:0.1.6"
+                    - id: "NPM::is-accessor-descriptor:1.0.1"
                       dependencies:
-                      - id: "NPM::kind-of:3.2.2"
+                      - id: "NPM::hasown:2.0.2"
                         dependencies:
-                        - id: "NPM::is-buffer:1.1.6"
-                    - id: "NPM::is-data-descriptor:0.1.4"
+                        - id: "NPM::function-bind:1.1.2"
+                    - id: "NPM::is-data-descriptor:1.0.1"
                       dependencies:
-                      - id: "NPM::kind-of:3.2.2"
+                      - id: "NPM::hasown:2.0.2"
                         dependencies:
-                        - id: "NPM::is-buffer:1.1.6"
-                    - id: "NPM::kind-of:5.1.0"
+                        - id: "NPM::function-bind:1.1.2"
                 - id: "NPM::extend-shallow:2.0.1"
                   dependencies:
                   - id: "NPM::is-extendable:0.1.1"
@@ -928,7 +923,7 @@ project:
                 - id: "NPM::source-map-resolve:0.5.3"
                   dependencies:
                   - id: "NPM::atob:2.1.2"
-                  - id: "NPM::decode-uri-component:0.2.0"
+                  - id: "NPM::decode-uri-component:0.2.2"
                   - id: "NPM::resolve-url:0.2.1"
                   - id: "NPM::source-map-url:0.4.1"
                   - id: "NPM::urix:0.1.0"
@@ -937,15 +932,18 @@ project:
                 dependencies:
                 - id: "NPM::define-property:1.0.0"
                   dependencies:
-                  - id: "NPM::is-descriptor:1.0.2"
+                  - id: "NPM::is-descriptor:1.0.3"
                     dependencies:
-                    - id: "NPM::is-accessor-descriptor:1.0.0"
+                    - id: "NPM::is-accessor-descriptor:1.0.1"
                       dependencies:
-                      - id: "NPM::kind-of:6.0.3"
-                    - id: "NPM::is-data-descriptor:1.0.0"
+                      - id: "NPM::hasown:2.0.2"
+                        dependencies:
+                        - id: "NPM::function-bind:1.1.2"
+                    - id: "NPM::is-data-descriptor:1.0.1"
                       dependencies:
-                      - id: "NPM::kind-of:6.0.3"
-                    - id: "NPM::kind-of:6.0.3"
+                      - id: "NPM::hasown:2.0.2"
+                        dependencies:
+                        - id: "NPM::function-bind:1.1.2"
                 - id: "NPM::isobject:3.0.1"
                 - id: "NPM::snapdragon-util:3.0.1"
                   dependencies:
@@ -966,15 +964,18 @@ project:
                 dependencies:
                 - id: "NPM::define-property:2.0.2"
                   dependencies:
-                  - id: "NPM::is-descriptor:1.0.2"
+                  - id: "NPM::is-descriptor:1.0.3"
                     dependencies:
-                    - id: "NPM::is-accessor-descriptor:1.0.0"
+                    - id: "NPM::is-accessor-descriptor:1.0.1"
                       dependencies:
-                      - id: "NPM::kind-of:6.0.3"
-                    - id: "NPM::is-data-descriptor:1.0.0"
+                      - id: "NPM::hasown:2.0.2"
+                        dependencies:
+                        - id: "NPM::function-bind:1.1.2"
+                    - id: "NPM::is-data-descriptor:1.0.1"
                       dependencies:
-                      - id: "NPM::kind-of:6.0.3"
-                    - id: "NPM::kind-of:6.0.3"
+                      - id: "NPM::hasown:2.0.2"
+                        dependencies:
+                        - id: "NPM::function-bind:1.1.2"
                   - id: "NPM::isobject:3.0.1"
                 - id: "NPM::extend-shallow:3.0.2"
                   dependencies:
@@ -1002,15 +1003,18 @@ project:
                   - id: "NPM::ret:0.1.15"
             - id: "NPM::define-property:2.0.2"
               dependencies:
-              - id: "NPM::is-descriptor:1.0.2"
+              - id: "NPM::is-descriptor:1.0.3"
                 dependencies:
-                - id: "NPM::is-accessor-descriptor:1.0.0"
+                - id: "NPM::is-accessor-descriptor:1.0.1"
                   dependencies:
-                  - id: "NPM::kind-of:6.0.3"
-                - id: "NPM::is-data-descriptor:1.0.0"
+                  - id: "NPM::hasown:2.0.2"
+                    dependencies:
+                    - id: "NPM::function-bind:1.1.2"
+                - id: "NPM::is-data-descriptor:1.0.1"
                   dependencies:
-                  - id: "NPM::kind-of:6.0.3"
-                - id: "NPM::kind-of:6.0.3"
+                  - id: "NPM::hasown:2.0.2"
+                    dependencies:
+                    - id: "NPM::function-bind:1.1.2"
               - id: "NPM::isobject:3.0.1"
             - id: "NPM::extend-shallow:3.0.2"
               dependencies:
@@ -1025,15 +1029,18 @@ project:
               - id: "NPM::array-unique:0.3.2"
               - id: "NPM::define-property:1.0.0"
                 dependencies:
-                - id: "NPM::is-descriptor:1.0.2"
+                - id: "NPM::is-descriptor:1.0.3"
                   dependencies:
-                  - id: "NPM::is-accessor-descriptor:1.0.0"
+                  - id: "NPM::is-accessor-descriptor:1.0.1"
                     dependencies:
-                    - id: "NPM::kind-of:6.0.3"
-                  - id: "NPM::is-data-descriptor:1.0.0"
+                    - id: "NPM::hasown:2.0.2"
+                      dependencies:
+                      - id: "NPM::function-bind:1.1.2"
+                  - id: "NPM::is-data-descriptor:1.0.1"
                     dependencies:
-                    - id: "NPM::kind-of:6.0.3"
-                  - id: "NPM::kind-of:6.0.3"
+                    - id: "NPM::hasown:2.0.2"
+                      dependencies:
+                      - id: "NPM::function-bind:1.1.2"
               - id: "NPM::expand-brackets:2.1.4"
                 dependencies:
                 - id: "NPM::debug:2.6.9"
@@ -1041,19 +1048,18 @@ project:
                   - id: "NPM::ms:2.0.0"
                 - id: "NPM::define-property:0.2.5"
                   dependencies:
-                  - id: "NPM::is-descriptor:0.1.6"
+                  - id: "NPM::is-descriptor:0.1.7"
                     dependencies:
-                    - id: "NPM::is-accessor-descriptor:0.1.6"
+                    - id: "NPM::is-accessor-descriptor:1.0.1"
                       dependencies:
-                      - id: "NPM::kind-of:3.2.2"
+                      - id: "NPM::hasown:2.0.2"
                         dependencies:
-                        - id: "NPM::is-buffer:1.1.6"
-                    - id: "NPM::is-data-descriptor:0.1.4"
+                        - id: "NPM::function-bind:1.1.2"
+                    - id: "NPM::is-data-descriptor:1.0.1"
                       dependencies:
-                      - id: "NPM::kind-of:3.2.2"
+                      - id: "NPM::hasown:2.0.2"
                         dependencies:
-                        - id: "NPM::is-buffer:1.1.6"
-                    - id: "NPM::kind-of:5.1.0"
+                        - id: "NPM::function-bind:1.1.2"
                 - id: "NPM::extend-shallow:2.0.1"
                   dependencies:
                   - id: "NPM::is-extendable:0.1.1"
@@ -1087,7 +1093,7 @@ project:
                         - id: "NPM::object-visit:1.0.1"
                           dependencies:
                           - id: "NPM::isobject:3.0.1"
-                      - id: "NPM::component-emitter:1.3.0"
+                      - id: "NPM::component-emitter:1.3.1"
                       - id: "NPM::get-value:2.0.6"
                       - id: "NPM::has-value:1.0.0"
                         dependencies:
@@ -1167,70 +1173,70 @@ project:
                       - id: "NPM::arr-union:3.1.0"
                       - id: "NPM::define-property:0.2.5"
                         dependencies:
-                        - id: "NPM::is-descriptor:0.1.6"
+                        - id: "NPM::is-descriptor:0.1.7"
                           dependencies:
-                          - id: "NPM::is-accessor-descriptor:0.1.6"
+                          - id: "NPM::is-accessor-descriptor:1.0.1"
                             dependencies:
-                            - id: "NPM::kind-of:3.2.2"
+                            - id: "NPM::hasown:2.0.2"
                               dependencies:
-                              - id: "NPM::is-buffer:1.1.6"
-                          - id: "NPM::is-data-descriptor:0.1.4"
+                              - id: "NPM::function-bind:1.1.2"
+                          - id: "NPM::is-data-descriptor:1.0.1"
                             dependencies:
-                            - id: "NPM::kind-of:3.2.2"
+                            - id: "NPM::hasown:2.0.2"
                               dependencies:
-                              - id: "NPM::is-buffer:1.1.6"
-                          - id: "NPM::kind-of:5.1.0"
+                              - id: "NPM::function-bind:1.1.2"
                       - id: "NPM::isobject:3.0.1"
                       - id: "NPM::static-extend:0.1.2"
                         dependencies:
                         - id: "NPM::define-property:0.2.5"
                           dependencies:
-                          - id: "NPM::is-descriptor:0.1.6"
+                          - id: "NPM::is-descriptor:0.1.7"
                             dependencies:
-                            - id: "NPM::is-accessor-descriptor:0.1.6"
+                            - id: "NPM::is-accessor-descriptor:1.0.1"
                               dependencies:
-                              - id: "NPM::kind-of:3.2.2"
+                              - id: "NPM::hasown:2.0.2"
                                 dependencies:
-                                - id: "NPM::is-buffer:1.1.6"
-                            - id: "NPM::is-data-descriptor:0.1.4"
+                                - id: "NPM::function-bind:1.1.2"
+                            - id: "NPM::is-data-descriptor:1.0.1"
                               dependencies:
-                              - id: "NPM::kind-of:3.2.2"
+                              - id: "NPM::hasown:2.0.2"
                                 dependencies:
-                                - id: "NPM::is-buffer:1.1.6"
-                            - id: "NPM::kind-of:5.1.0"
+                                - id: "NPM::function-bind:1.1.2"
                         - id: "NPM::object-copy:0.1.0"
                           dependencies:
                           - id: "NPM::copy-descriptor:0.1.1"
                           - id: "NPM::define-property:0.2.5"
                             dependencies:
-                            - id: "NPM::is-descriptor:0.1.6"
+                            - id: "NPM::is-descriptor:0.1.7"
                               dependencies:
-                              - id: "NPM::is-accessor-descriptor:0.1.6"
+                              - id: "NPM::is-accessor-descriptor:1.0.1"
                                 dependencies:
-                                - id: "NPM::kind-of:3.2.2"
+                                - id: "NPM::hasown:2.0.2"
                                   dependencies:
-                                  - id: "NPM::is-buffer:1.1.6"
-                              - id: "NPM::is-data-descriptor:0.1.4"
+                                  - id: "NPM::function-bind:1.1.2"
+                              - id: "NPM::is-data-descriptor:1.0.1"
                                 dependencies:
-                                - id: "NPM::kind-of:3.2.2"
+                                - id: "NPM::hasown:2.0.2"
                                   dependencies:
-                                  - id: "NPM::is-buffer:1.1.6"
-                              - id: "NPM::kind-of:5.1.0"
+                                  - id: "NPM::function-bind:1.1.2"
                           - id: "NPM::kind-of:3.2.2"
                             dependencies:
                             - id: "NPM::is-buffer:1.1.6"
-                    - id: "NPM::component-emitter:1.3.0"
+                    - id: "NPM::component-emitter:1.3.1"
                     - id: "NPM::define-property:1.0.0"
                       dependencies:
-                      - id: "NPM::is-descriptor:1.0.2"
+                      - id: "NPM::is-descriptor:1.0.3"
                         dependencies:
-                        - id: "NPM::is-accessor-descriptor:1.0.0"
+                        - id: "NPM::is-accessor-descriptor:1.0.1"
                           dependencies:
-                          - id: "NPM::kind-of:6.0.3"
-                        - id: "NPM::is-data-descriptor:1.0.0"
+                          - id: "NPM::hasown:2.0.2"
+                            dependencies:
+                            - id: "NPM::function-bind:1.1.2"
+                        - id: "NPM::is-data-descriptor:1.0.1"
                           dependencies:
-                          - id: "NPM::kind-of:6.0.3"
-                        - id: "NPM::kind-of:6.0.3"
+                          - id: "NPM::hasown:2.0.2"
+                            dependencies:
+                            - id: "NPM::function-bind:1.1.2"
                     - id: "NPM::isobject:3.0.1"
                     - id: "NPM::mixin-deep:1.3.2"
                       dependencies:
@@ -1246,19 +1252,18 @@ project:
                     - id: "NPM::ms:2.0.0"
                   - id: "NPM::define-property:0.2.5"
                     dependencies:
-                    - id: "NPM::is-descriptor:0.1.6"
+                    - id: "NPM::is-descriptor:0.1.7"
                       dependencies:
-                      - id: "NPM::is-accessor-descriptor:0.1.6"
+                      - id: "NPM::is-accessor-descriptor:1.0.1"
                         dependencies:
-                        - id: "NPM::kind-of:3.2.2"
+                        - id: "NPM::hasown:2.0.2"
                           dependencies:
-                          - id: "NPM::is-buffer:1.1.6"
-                      - id: "NPM::is-data-descriptor:0.1.4"
+                          - id: "NPM::function-bind:1.1.2"
+                      - id: "NPM::is-data-descriptor:1.0.1"
                         dependencies:
-                        - id: "NPM::kind-of:3.2.2"
+                        - id: "NPM::hasown:2.0.2"
                           dependencies:
-                          - id: "NPM::is-buffer:1.1.6"
-                      - id: "NPM::kind-of:5.1.0"
+                          - id: "NPM::function-bind:1.1.2"
                   - id: "NPM::extend-shallow:2.0.1"
                     dependencies:
                     - id: "NPM::is-extendable:0.1.1"
@@ -1267,7 +1272,7 @@ project:
                   - id: "NPM::source-map-resolve:0.5.3"
                     dependencies:
                     - id: "NPM::atob:2.1.2"
-                    - id: "NPM::decode-uri-component:0.2.0"
+                    - id: "NPM::decode-uri-component:0.2.2"
                     - id: "NPM::resolve-url:0.2.1"
                     - id: "NPM::source-map-url:0.4.1"
                     - id: "NPM::urix:0.1.0"
@@ -1276,15 +1281,18 @@ project:
                   dependencies:
                   - id: "NPM::define-property:2.0.2"
                     dependencies:
-                    - id: "NPM::is-descriptor:1.0.2"
+                    - id: "NPM::is-descriptor:1.0.3"
                       dependencies:
-                      - id: "NPM::is-accessor-descriptor:1.0.0"
+                      - id: "NPM::is-accessor-descriptor:1.0.1"
                         dependencies:
-                        - id: "NPM::kind-of:6.0.3"
-                      - id: "NPM::is-data-descriptor:1.0.0"
+                        - id: "NPM::hasown:2.0.2"
+                          dependencies:
+                          - id: "NPM::function-bind:1.1.2"
+                      - id: "NPM::is-data-descriptor:1.0.1"
                         dependencies:
-                        - id: "NPM::kind-of:6.0.3"
-                      - id: "NPM::kind-of:6.0.3"
+                        - id: "NPM::hasown:2.0.2"
+                          dependencies:
+                          - id: "NPM::function-bind:1.1.2"
                     - id: "NPM::isobject:3.0.1"
                   - id: "NPM::extend-shallow:3.0.2"
                     dependencies:
@@ -1345,7 +1353,7 @@ project:
                       - id: "NPM::object-visit:1.0.1"
                         dependencies:
                         - id: "NPM::isobject:3.0.1"
-                    - id: "NPM::component-emitter:1.3.0"
+                    - id: "NPM::component-emitter:1.3.1"
                     - id: "NPM::get-value:2.0.6"
                     - id: "NPM::has-value:1.0.0"
                       dependencies:
@@ -1425,70 +1433,70 @@ project:
                     - id: "NPM::arr-union:3.1.0"
                     - id: "NPM::define-property:0.2.5"
                       dependencies:
-                      - id: "NPM::is-descriptor:0.1.6"
+                      - id: "NPM::is-descriptor:0.1.7"
                         dependencies:
-                        - id: "NPM::is-accessor-descriptor:0.1.6"
+                        - id: "NPM::is-accessor-descriptor:1.0.1"
                           dependencies:
-                          - id: "NPM::kind-of:3.2.2"
+                          - id: "NPM::hasown:2.0.2"
                             dependencies:
-                            - id: "NPM::is-buffer:1.1.6"
-                        - id: "NPM::is-data-descriptor:0.1.4"
+                            - id: "NPM::function-bind:1.1.2"
+                        - id: "NPM::is-data-descriptor:1.0.1"
                           dependencies:
-                          - id: "NPM::kind-of:3.2.2"
+                          - id: "NPM::hasown:2.0.2"
                             dependencies:
-                            - id: "NPM::is-buffer:1.1.6"
-                        - id: "NPM::kind-of:5.1.0"
+                            - id: "NPM::function-bind:1.1.2"
                     - id: "NPM::isobject:3.0.1"
                     - id: "NPM::static-extend:0.1.2"
                       dependencies:
                       - id: "NPM::define-property:0.2.5"
                         dependencies:
-                        - id: "NPM::is-descriptor:0.1.6"
+                        - id: "NPM::is-descriptor:0.1.7"
                           dependencies:
-                          - id: "NPM::is-accessor-descriptor:0.1.6"
+                          - id: "NPM::is-accessor-descriptor:1.0.1"
                             dependencies:
-                            - id: "NPM::kind-of:3.2.2"
+                            - id: "NPM::hasown:2.0.2"
                               dependencies:
-                              - id: "NPM::is-buffer:1.1.6"
-                          - id: "NPM::is-data-descriptor:0.1.4"
+                              - id: "NPM::function-bind:1.1.2"
+                          - id: "NPM::is-data-descriptor:1.0.1"
                             dependencies:
-                            - id: "NPM::kind-of:3.2.2"
+                            - id: "NPM::hasown:2.0.2"
                               dependencies:
-                              - id: "NPM::is-buffer:1.1.6"
-                          - id: "NPM::kind-of:5.1.0"
+                              - id: "NPM::function-bind:1.1.2"
                       - id: "NPM::object-copy:0.1.0"
                         dependencies:
                         - id: "NPM::copy-descriptor:0.1.1"
                         - id: "NPM::define-property:0.2.5"
                           dependencies:
-                          - id: "NPM::is-descriptor:0.1.6"
+                          - id: "NPM::is-descriptor:0.1.7"
                             dependencies:
-                            - id: "NPM::is-accessor-descriptor:0.1.6"
+                            - id: "NPM::is-accessor-descriptor:1.0.1"
                               dependencies:
-                              - id: "NPM::kind-of:3.2.2"
+                              - id: "NPM::hasown:2.0.2"
                                 dependencies:
-                                - id: "NPM::is-buffer:1.1.6"
-                            - id: "NPM::is-data-descriptor:0.1.4"
+                                - id: "NPM::function-bind:1.1.2"
+                            - id: "NPM::is-data-descriptor:1.0.1"
                               dependencies:
-                              - id: "NPM::kind-of:3.2.2"
+                              - id: "NPM::hasown:2.0.2"
                                 dependencies:
-                                - id: "NPM::is-buffer:1.1.6"
-                            - id: "NPM::kind-of:5.1.0"
+                                - id: "NPM::function-bind:1.1.2"
                         - id: "NPM::kind-of:3.2.2"
                           dependencies:
                           - id: "NPM::is-buffer:1.1.6"
-                  - id: "NPM::component-emitter:1.3.0"
+                  - id: "NPM::component-emitter:1.3.1"
                   - id: "NPM::define-property:1.0.0"
                     dependencies:
-                    - id: "NPM::is-descriptor:1.0.2"
+                    - id: "NPM::is-descriptor:1.0.3"
                       dependencies:
-                      - id: "NPM::is-accessor-descriptor:1.0.0"
+                      - id: "NPM::is-accessor-descriptor:1.0.1"
                         dependencies:
-                        - id: "NPM::kind-of:6.0.3"
-                      - id: "NPM::is-data-descriptor:1.0.0"
+                        - id: "NPM::hasown:2.0.2"
+                          dependencies:
+                          - id: "NPM::function-bind:1.1.2"
+                      - id: "NPM::is-data-descriptor:1.0.1"
                         dependencies:
-                        - id: "NPM::kind-of:6.0.3"
-                      - id: "NPM::kind-of:6.0.3"
+                        - id: "NPM::hasown:2.0.2"
+                          dependencies:
+                          - id: "NPM::function-bind:1.1.2"
                   - id: "NPM::isobject:3.0.1"
                   - id: "NPM::mixin-deep:1.3.2"
                     dependencies:
@@ -1504,19 +1512,18 @@ project:
                   - id: "NPM::ms:2.0.0"
                 - id: "NPM::define-property:0.2.5"
                   dependencies:
-                  - id: "NPM::is-descriptor:0.1.6"
+                  - id: "NPM::is-descriptor:0.1.7"
                     dependencies:
-                    - id: "NPM::is-accessor-descriptor:0.1.6"
+                    - id: "NPM::is-accessor-descriptor:1.0.1"
                       dependencies:
-                      - id: "NPM::kind-of:3.2.2"
+                      - id: "NPM::hasown:2.0.2"
                         dependencies:
-                        - id: "NPM::is-buffer:1.1.6"
-                    - id: "NPM::is-data-descriptor:0.1.4"
+                        - id: "NPM::function-bind:1.1.2"
+                    - id: "NPM::is-data-descriptor:1.0.1"
                       dependencies:
-                      - id: "NPM::kind-of:3.2.2"
+                      - id: "NPM::hasown:2.0.2"
                         dependencies:
-                        - id: "NPM::is-buffer:1.1.6"
-                    - id: "NPM::kind-of:5.1.0"
+                        - id: "NPM::function-bind:1.1.2"
                 - id: "NPM::extend-shallow:2.0.1"
                   dependencies:
                   - id: "NPM::is-extendable:0.1.1"
@@ -1525,7 +1532,7 @@ project:
                 - id: "NPM::source-map-resolve:0.5.3"
                   dependencies:
                   - id: "NPM::atob:2.1.2"
-                  - id: "NPM::decode-uri-component:0.2.0"
+                  - id: "NPM::decode-uri-component:0.2.2"
                   - id: "NPM::resolve-url:0.2.1"
                   - id: "NPM::source-map-url:0.4.1"
                   - id: "NPM::urix:0.1.0"
@@ -1534,15 +1541,18 @@ project:
                 dependencies:
                 - id: "NPM::define-property:2.0.2"
                   dependencies:
-                  - id: "NPM::is-descriptor:1.0.2"
+                  - id: "NPM::is-descriptor:1.0.3"
                     dependencies:
-                    - id: "NPM::is-accessor-descriptor:1.0.0"
+                    - id: "NPM::is-accessor-descriptor:1.0.1"
                       dependencies:
-                      - id: "NPM::kind-of:6.0.3"
-                    - id: "NPM::is-data-descriptor:1.0.0"
+                      - id: "NPM::hasown:2.0.2"
+                        dependencies:
+                        - id: "NPM::function-bind:1.1.2"
+                    - id: "NPM::is-data-descriptor:1.0.1"
                       dependencies:
-                      - id: "NPM::kind-of:6.0.3"
-                    - id: "NPM::kind-of:6.0.3"
+                      - id: "NPM::hasown:2.0.2"
+                        dependencies:
+                        - id: "NPM::function-bind:1.1.2"
                   - id: "NPM::isobject:3.0.1"
                 - id: "NPM::extend-shallow:3.0.2"
                   dependencies:
@@ -1578,15 +1588,18 @@ project:
               - id: "NPM::array-unique:0.3.2"
               - id: "NPM::define-property:2.0.2"
                 dependencies:
-                - id: "NPM::is-descriptor:1.0.2"
+                - id: "NPM::is-descriptor:1.0.3"
                   dependencies:
-                  - id: "NPM::is-accessor-descriptor:1.0.0"
+                  - id: "NPM::is-accessor-descriptor:1.0.1"
                     dependencies:
-                    - id: "NPM::kind-of:6.0.3"
-                  - id: "NPM::is-data-descriptor:1.0.0"
+                    - id: "NPM::hasown:2.0.2"
+                      dependencies:
+                      - id: "NPM::function-bind:1.1.2"
+                  - id: "NPM::is-data-descriptor:1.0.1"
                     dependencies:
-                    - id: "NPM::kind-of:6.0.3"
-                  - id: "NPM::kind-of:6.0.3"
+                    - id: "NPM::hasown:2.0.2"
+                      dependencies:
+                      - id: "NPM::function-bind:1.1.2"
                 - id: "NPM::isobject:3.0.1"
               - id: "NPM::extend-shallow:3.0.2"
                 dependencies:
@@ -1633,7 +1646,7 @@ project:
                       - id: "NPM::object-visit:1.0.1"
                         dependencies:
                         - id: "NPM::isobject:3.0.1"
-                    - id: "NPM::component-emitter:1.3.0"
+                    - id: "NPM::component-emitter:1.3.1"
                     - id: "NPM::get-value:2.0.6"
                     - id: "NPM::has-value:1.0.0"
                       dependencies:
@@ -1713,70 +1726,70 @@ project:
                     - id: "NPM::arr-union:3.1.0"
                     - id: "NPM::define-property:0.2.5"
                       dependencies:
-                      - id: "NPM::is-descriptor:0.1.6"
+                      - id: "NPM::is-descriptor:0.1.7"
                         dependencies:
-                        - id: "NPM::is-accessor-descriptor:0.1.6"
+                        - id: "NPM::is-accessor-descriptor:1.0.1"
                           dependencies:
-                          - id: "NPM::kind-of:3.2.2"
+                          - id: "NPM::hasown:2.0.2"
                             dependencies:
-                            - id: "NPM::is-buffer:1.1.6"
-                        - id: "NPM::is-data-descriptor:0.1.4"
+                            - id: "NPM::function-bind:1.1.2"
+                        - id: "NPM::is-data-descriptor:1.0.1"
                           dependencies:
-                          - id: "NPM::kind-of:3.2.2"
+                          - id: "NPM::hasown:2.0.2"
                             dependencies:
-                            - id: "NPM::is-buffer:1.1.6"
-                        - id: "NPM::kind-of:5.1.0"
+                            - id: "NPM::function-bind:1.1.2"
                     - id: "NPM::isobject:3.0.1"
                     - id: "NPM::static-extend:0.1.2"
                       dependencies:
                       - id: "NPM::define-property:0.2.5"
                         dependencies:
-                        - id: "NPM::is-descriptor:0.1.6"
+                        - id: "NPM::is-descriptor:0.1.7"
                           dependencies:
-                          - id: "NPM::is-accessor-descriptor:0.1.6"
+                          - id: "NPM::is-accessor-descriptor:1.0.1"
                             dependencies:
-                            - id: "NPM::kind-of:3.2.2"
+                            - id: "NPM::hasown:2.0.2"
                               dependencies:
-                              - id: "NPM::is-buffer:1.1.6"
-                          - id: "NPM::is-data-descriptor:0.1.4"
+                              - id: "NPM::function-bind:1.1.2"
+                          - id: "NPM::is-data-descriptor:1.0.1"
                             dependencies:
-                            - id: "NPM::kind-of:3.2.2"
+                            - id: "NPM::hasown:2.0.2"
                               dependencies:
-                              - id: "NPM::is-buffer:1.1.6"
-                          - id: "NPM::kind-of:5.1.0"
+                              - id: "NPM::function-bind:1.1.2"
                       - id: "NPM::object-copy:0.1.0"
                         dependencies:
                         - id: "NPM::copy-descriptor:0.1.1"
                         - id: "NPM::define-property:0.2.5"
                           dependencies:
-                          - id: "NPM::is-descriptor:0.1.6"
+                          - id: "NPM::is-descriptor:0.1.7"
                             dependencies:
-                            - id: "NPM::is-accessor-descriptor:0.1.6"
+                            - id: "NPM::is-accessor-descriptor:1.0.1"
                               dependencies:
-                              - id: "NPM::kind-of:3.2.2"
+                              - id: "NPM::hasown:2.0.2"
                                 dependencies:
-                                - id: "NPM::is-buffer:1.1.6"
-                            - id: "NPM::is-data-descriptor:0.1.4"
+                                - id: "NPM::function-bind:1.1.2"
+                            - id: "NPM::is-data-descriptor:1.0.1"
                               dependencies:
-                              - id: "NPM::kind-of:3.2.2"
+                              - id: "NPM::hasown:2.0.2"
                                 dependencies:
-                                - id: "NPM::is-buffer:1.1.6"
-                            - id: "NPM::kind-of:5.1.0"
+                                - id: "NPM::function-bind:1.1.2"
                         - id: "NPM::kind-of:3.2.2"
                           dependencies:
                           - id: "NPM::is-buffer:1.1.6"
-                  - id: "NPM::component-emitter:1.3.0"
+                  - id: "NPM::component-emitter:1.3.1"
                   - id: "NPM::define-property:1.0.0"
                     dependencies:
-                    - id: "NPM::is-descriptor:1.0.2"
+                    - id: "NPM::is-descriptor:1.0.3"
                       dependencies:
-                      - id: "NPM::is-accessor-descriptor:1.0.0"
+                      - id: "NPM::is-accessor-descriptor:1.0.1"
                         dependencies:
-                        - id: "NPM::kind-of:6.0.3"
-                      - id: "NPM::is-data-descriptor:1.0.0"
+                        - id: "NPM::hasown:2.0.2"
+                          dependencies:
+                          - id: "NPM::function-bind:1.1.2"
+                      - id: "NPM::is-data-descriptor:1.0.1"
                         dependencies:
-                        - id: "NPM::kind-of:6.0.3"
-                      - id: "NPM::kind-of:6.0.3"
+                        - id: "NPM::hasown:2.0.2"
+                          dependencies:
+                          - id: "NPM::function-bind:1.1.2"
                   - id: "NPM::isobject:3.0.1"
                   - id: "NPM::mixin-deep:1.3.2"
                     dependencies:
@@ -1792,19 +1805,18 @@ project:
                   - id: "NPM::ms:2.0.0"
                 - id: "NPM::define-property:0.2.5"
                   dependencies:
-                  - id: "NPM::is-descriptor:0.1.6"
+                  - id: "NPM::is-descriptor:0.1.7"
                     dependencies:
-                    - id: "NPM::is-accessor-descriptor:0.1.6"
+                    - id: "NPM::is-accessor-descriptor:1.0.1"
                       dependencies:
-                      - id: "NPM::kind-of:3.2.2"
+                      - id: "NPM::hasown:2.0.2"
                         dependencies:
-                        - id: "NPM::is-buffer:1.1.6"
-                    - id: "NPM::is-data-descriptor:0.1.4"
+                        - id: "NPM::function-bind:1.1.2"
+                    - id: "NPM::is-data-descriptor:1.0.1"
                       dependencies:
-                      - id: "NPM::kind-of:3.2.2"
+                      - id: "NPM::hasown:2.0.2"
                         dependencies:
-                        - id: "NPM::is-buffer:1.1.6"
-                    - id: "NPM::kind-of:5.1.0"
+                        - id: "NPM::function-bind:1.1.2"
                 - id: "NPM::extend-shallow:2.0.1"
                   dependencies:
                   - id: "NPM::is-extendable:0.1.1"
@@ -1813,7 +1825,7 @@ project:
                 - id: "NPM::source-map-resolve:0.5.3"
                   dependencies:
                   - id: "NPM::atob:2.1.2"
-                  - id: "NPM::decode-uri-component:0.2.0"
+                  - id: "NPM::decode-uri-component:0.2.2"
                   - id: "NPM::resolve-url:0.2.1"
                   - id: "NPM::source-map-url:0.4.1"
                   - id: "NPM::urix:0.1.0"
@@ -1822,15 +1834,18 @@ project:
                 dependencies:
                 - id: "NPM::define-property:2.0.2"
                   dependencies:
-                  - id: "NPM::is-descriptor:1.0.2"
+                  - id: "NPM::is-descriptor:1.0.3"
                     dependencies:
-                    - id: "NPM::is-accessor-descriptor:1.0.0"
+                    - id: "NPM::is-accessor-descriptor:1.0.1"
                       dependencies:
-                      - id: "NPM::kind-of:6.0.3"
-                    - id: "NPM::is-data-descriptor:1.0.0"
+                      - id: "NPM::hasown:2.0.2"
+                        dependencies:
+                        - id: "NPM::function-bind:1.1.2"
+                    - id: "NPM::is-data-descriptor:1.0.1"
                       dependencies:
-                      - id: "NPM::kind-of:6.0.3"
-                    - id: "NPM::kind-of:6.0.3"
+                      - id: "NPM::hasown:2.0.2"
+                        dependencies:
+                        - id: "NPM::function-bind:1.1.2"
                   - id: "NPM::isobject:3.0.1"
                 - id: "NPM::extend-shallow:3.0.2"
                   dependencies:
@@ -1888,7 +1903,7 @@ project:
                     - id: "NPM::object-visit:1.0.1"
                       dependencies:
                       - id: "NPM::isobject:3.0.1"
-                  - id: "NPM::component-emitter:1.3.0"
+                  - id: "NPM::component-emitter:1.3.1"
                   - id: "NPM::get-value:2.0.6"
                   - id: "NPM::has-value:1.0.0"
                     dependencies:
@@ -1968,70 +1983,70 @@ project:
                   - id: "NPM::arr-union:3.1.0"
                   - id: "NPM::define-property:0.2.5"
                     dependencies:
-                    - id: "NPM::is-descriptor:0.1.6"
+                    - id: "NPM::is-descriptor:0.1.7"
                       dependencies:
-                      - id: "NPM::is-accessor-descriptor:0.1.6"
+                      - id: "NPM::is-accessor-descriptor:1.0.1"
                         dependencies:
-                        - id: "NPM::kind-of:3.2.2"
+                        - id: "NPM::hasown:2.0.2"
                           dependencies:
-                          - id: "NPM::is-buffer:1.1.6"
-                      - id: "NPM::is-data-descriptor:0.1.4"
+                          - id: "NPM::function-bind:1.1.2"
+                      - id: "NPM::is-data-descriptor:1.0.1"
                         dependencies:
-                        - id: "NPM::kind-of:3.2.2"
+                        - id: "NPM::hasown:2.0.2"
                           dependencies:
-                          - id: "NPM::is-buffer:1.1.6"
-                      - id: "NPM::kind-of:5.1.0"
+                          - id: "NPM::function-bind:1.1.2"
                   - id: "NPM::isobject:3.0.1"
                   - id: "NPM::static-extend:0.1.2"
                     dependencies:
                     - id: "NPM::define-property:0.2.5"
                       dependencies:
-                      - id: "NPM::is-descriptor:0.1.6"
+                      - id: "NPM::is-descriptor:0.1.7"
                         dependencies:
-                        - id: "NPM::is-accessor-descriptor:0.1.6"
+                        - id: "NPM::is-accessor-descriptor:1.0.1"
                           dependencies:
-                          - id: "NPM::kind-of:3.2.2"
+                          - id: "NPM::hasown:2.0.2"
                             dependencies:
-                            - id: "NPM::is-buffer:1.1.6"
-                        - id: "NPM::is-data-descriptor:0.1.4"
+                            - id: "NPM::function-bind:1.1.2"
+                        - id: "NPM::is-data-descriptor:1.0.1"
                           dependencies:
-                          - id: "NPM::kind-of:3.2.2"
+                          - id: "NPM::hasown:2.0.2"
                             dependencies:
-                            - id: "NPM::is-buffer:1.1.6"
-                        - id: "NPM::kind-of:5.1.0"
+                            - id: "NPM::function-bind:1.1.2"
                     - id: "NPM::object-copy:0.1.0"
                       dependencies:
                       - id: "NPM::copy-descriptor:0.1.1"
                       - id: "NPM::define-property:0.2.5"
                         dependencies:
-                        - id: "NPM::is-descriptor:0.1.6"
+                        - id: "NPM::is-descriptor:0.1.7"
                           dependencies:
-                          - id: "NPM::is-accessor-descriptor:0.1.6"
+                          - id: "NPM::is-accessor-descriptor:1.0.1"
                             dependencies:
-                            - id: "NPM::kind-of:3.2.2"
+                            - id: "NPM::hasown:2.0.2"
                               dependencies:
-                              - id: "NPM::is-buffer:1.1.6"
-                          - id: "NPM::is-data-descriptor:0.1.4"
+                              - id: "NPM::function-bind:1.1.2"
+                          - id: "NPM::is-data-descriptor:1.0.1"
                             dependencies:
-                            - id: "NPM::kind-of:3.2.2"
+                            - id: "NPM::hasown:2.0.2"
                               dependencies:
-                              - id: "NPM::is-buffer:1.1.6"
-                          - id: "NPM::kind-of:5.1.0"
+                              - id: "NPM::function-bind:1.1.2"
                       - id: "NPM::kind-of:3.2.2"
                         dependencies:
                         - id: "NPM::is-buffer:1.1.6"
-                - id: "NPM::component-emitter:1.3.0"
+                - id: "NPM::component-emitter:1.3.1"
                 - id: "NPM::define-property:1.0.0"
                   dependencies:
-                  - id: "NPM::is-descriptor:1.0.2"
+                  - id: "NPM::is-descriptor:1.0.3"
                     dependencies:
-                    - id: "NPM::is-accessor-descriptor:1.0.0"
+                    - id: "NPM::is-accessor-descriptor:1.0.1"
                       dependencies:
-                      - id: "NPM::kind-of:6.0.3"
-                    - id: "NPM::is-data-descriptor:1.0.0"
+                      - id: "NPM::hasown:2.0.2"
+                        dependencies:
+                        - id: "NPM::function-bind:1.1.2"
+                    - id: "NPM::is-data-descriptor:1.0.1"
                       dependencies:
-                      - id: "NPM::kind-of:6.0.3"
-                    - id: "NPM::kind-of:6.0.3"
+                      - id: "NPM::hasown:2.0.2"
+                        dependencies:
+                        - id: "NPM::function-bind:1.1.2"
                 - id: "NPM::isobject:3.0.1"
                 - id: "NPM::mixin-deep:1.3.2"
                   dependencies:
@@ -2047,19 +2062,18 @@ project:
                 - id: "NPM::ms:2.0.0"
               - id: "NPM::define-property:0.2.5"
                 dependencies:
-                - id: "NPM::is-descriptor:0.1.6"
+                - id: "NPM::is-descriptor:0.1.7"
                   dependencies:
-                  - id: "NPM::is-accessor-descriptor:0.1.6"
+                  - id: "NPM::is-accessor-descriptor:1.0.1"
                     dependencies:
-                    - id: "NPM::kind-of:3.2.2"
+                    - id: "NPM::hasown:2.0.2"
                       dependencies:
-                      - id: "NPM::is-buffer:1.1.6"
-                  - id: "NPM::is-data-descriptor:0.1.4"
+                      - id: "NPM::function-bind:1.1.2"
+                  - id: "NPM::is-data-descriptor:1.0.1"
                     dependencies:
-                    - id: "NPM::kind-of:3.2.2"
+                    - id: "NPM::hasown:2.0.2"
                       dependencies:
-                      - id: "NPM::is-buffer:1.1.6"
-                  - id: "NPM::kind-of:5.1.0"
+                      - id: "NPM::function-bind:1.1.2"
               - id: "NPM::extend-shallow:2.0.1"
                 dependencies:
                 - id: "NPM::is-extendable:0.1.1"
@@ -2068,7 +2082,7 @@ project:
               - id: "NPM::source-map-resolve:0.5.3"
                 dependencies:
                 - id: "NPM::atob:2.1.2"
-                - id: "NPM::decode-uri-component:0.2.0"
+                - id: "NPM::decode-uri-component:0.2.2"
                 - id: "NPM::resolve-url:0.2.1"
                 - id: "NPM::source-map-url:0.4.1"
                 - id: "NPM::urix:0.1.0"
@@ -2077,15 +2091,18 @@ project:
               dependencies:
               - id: "NPM::define-property:2.0.2"
                 dependencies:
-                - id: "NPM::is-descriptor:1.0.2"
+                - id: "NPM::is-descriptor:1.0.3"
                   dependencies:
-                  - id: "NPM::is-accessor-descriptor:1.0.0"
+                  - id: "NPM::is-accessor-descriptor:1.0.1"
                     dependencies:
-                    - id: "NPM::kind-of:6.0.3"
-                  - id: "NPM::is-data-descriptor:1.0.0"
+                    - id: "NPM::hasown:2.0.2"
+                      dependencies:
+                      - id: "NPM::function-bind:1.1.2"
+                  - id: "NPM::is-data-descriptor:1.0.1"
                     dependencies:
-                    - id: "NPM::kind-of:6.0.3"
-                  - id: "NPM::kind-of:6.0.3"
+                    - id: "NPM::hasown:2.0.2"
+                      dependencies:
+                      - id: "NPM::function-bind:1.1.2"
                 - id: "NPM::isobject:3.0.1"
               - id: "NPM::extend-shallow:3.0.2"
                 dependencies:
@@ -2111,7 +2128,7 @@ project:
               - id: "NPM::safe-regex:1.1.0"
                 dependencies:
                 - id: "NPM::ret:0.1.15"
-          - id: "NPM::readable-stream:2.3.7"
+          - id: "NPM::readable-stream:2.3.8"
             dependencies:
             - id: "NPM::core-util-is:1.0.3"
             - id: "NPM::inherits:2.0.4"
@@ -2123,11 +2140,9 @@ project:
               - id: "NPM::safe-buffer:5.1.2"
             - id: "NPM::util-deprecate:1.0.2"
       - id: "NPM::commander:2.20.3"
-      - id: "NPM::convert-source-map:1.8.0"
-        dependencies:
-        - id: "NPM::safe-buffer:5.1.2"
+      - id: "NPM::convert-source-map:1.9.0"
       - id: "NPM::fs-readdir-recursive:1.1.0"
-      - id: "NPM::glob:7.2.0"
+      - id: "NPM::glob:7.2.3"
         dependencies:
         - id: "NPM::fs.realpath:1.0.0"
         - id: "NPM::inflight:1.0.6"
@@ -2137,7 +2152,7 @@ project:
             - id: "NPM::wrappy:1.0.2"
           - id: "NPM::wrappy:1.0.2"
         - id: "NPM::inherits:2.0.4"
-        - id: "NPM::minimatch:3.0.4"
+        - id: "NPM::minimatch:3.1.2"
           dependencies:
           - id: "NPM::brace-expansion:1.1.11"
             dependencies:
@@ -2150,10 +2165,10 @@ project:
       - id: "NPM::lodash:4.17.21"
       - id: "NPM::output-file-sync:1.1.2"
         dependencies:
-        - id: "NPM::graceful-fs:4.2.8"
-        - id: "NPM::mkdirp:0.5.5"
+        - id: "NPM::graceful-fs:4.2.11"
+        - id: "NPM::mkdirp:0.5.6"
           dependencies:
-          - id: "NPM::minimist:1.2.5"
+          - id: "NPM::minimist:1.2.8"
         - id: "NPM::object-assign:4.1.1"
       - id: "NPM::path-is-absolute:1.0.1"
       - id: "NPM::slash:1.0.0"
@@ -2469,8 +2484,8 @@ packages:
     url: "https://github.com/jonschlinkert/assign-symbols.git"
     revision: "2df01f26fce8359fa75688eb89e2a1c65de6f237"
     path: ""
-- id: "NPM::async-each:1.0.3"
-  purl: "pkg:npm/async-each@1.0.3"
+- id: "NPM::async-each:1.0.6"
+  purl: "pkg:npm/async-each@1.0.6"
   authors:
   - "Paul Miller"
   declared_licenses:
@@ -2486,19 +2501,19 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/async-each/-/async-each-1.0.3.tgz"
+    url: "https://registry.npmjs.org/async-each/-/async-each-1.0.6.tgz"
     hash:
-      value: "b727dbf87d7651602f06f4d4ac387f47d91b0cbf"
+      value: "52f1d9403818c179b7561e11a5d1b77eb2160e77"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git://github.com/paulmillr/async-each.git"
-    revision: "9c0980f671fd649e4523e15f5b281aaa5294409e"
+    url: "git+https://github.com/paulmillr/async-each.git"
+    revision: "5a27da144b89c6b9cbf34e017c424801734ef6e2"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/paulmillr/async-each.git"
-    revision: "9c0980f671fd649e4523e15f5b281aaa5294409e"
+    revision: "5a27da144b89c6b9cbf34e017c424801734ef6e2"
     path: ""
 - id: "NPM::atob:2.1.2"
   purl: "pkg:npm/atob@2.1.2"
@@ -3286,32 +3301,32 @@ packages:
     url: "https://github.com/tj/commander.js.git"
     revision: "6b8499b24f4f6498ad630c50c8a00c9579a8536b"
     path: ""
-- id: "NPM::component-emitter:1.3.0"
-  purl: "pkg:npm/component-emitter@1.3.0"
+- id: "NPM::component-emitter:1.3.1"
+  purl: "pkg:npm/component-emitter@1.3.1"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Event emitter"
-  homepage_url: "https://github.com/component/emitter#readme"
+  homepage_url: "https://github.com/sindresorhus/component-emitter#readme"
   binary_artifact:
     url: ""
     hash:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/component-emitter/-/component-emitter-1.3.0.tgz"
+    url: "https://registry.npmjs.org/component-emitter/-/component-emitter-1.3.1.tgz"
     hash:
-      value: "16e4070fba8ae29b679f2215853ee181ab2eabc0"
+      value: "ef1d5796f7d93f135ee6fb684340b26403c97d17"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "https://github.com/component/emitter.git"
+    url: "https://github.com/sindresorhus/component-emitter.git"
     revision: "6bd7817e8a444cb16e8abdf7dd2d7f04d5ca3dc8"
     path: ""
   vcs_processed:
     type: "Git"
-    url: "https://github.com/component/emitter.git"
+    url: "https://github.com/sindresorhus/component-emitter.git"
     revision: "6bd7817e8a444cb16e8abdf7dd2d7f04d5ca3dc8"
     path: ""
 - id: "NPM::concat-map:0.0.1"
@@ -3344,8 +3359,8 @@ packages:
     url: "https://github.com/substack/node-concat-map.git"
     revision: ""
     path: ""
-- id: "NPM::convert-source-map:1.8.0"
-  purl: "pkg:npm/convert-source-map@1.8.0"
+- id: "NPM::convert-source-map:1.9.0"
+  purl: "pkg:npm/convert-source-map@1.9.0"
   authors:
   - "Thorsten Lorenz"
   declared_licenses:
@@ -3361,19 +3376,19 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/convert-source-map/-/convert-source-map-1.8.0.tgz"
+    url: "https://registry.npmjs.org/convert-source-map/-/convert-source-map-1.9.0.tgz"
     hash:
-      value: "f3373c32d21b4d780dd8004514684fb791ca4369"
+      value: "7faae62353fb4213366d0ca98358d22e8368b05f"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "git://github.com/thlorenz/convert-source-map.git"
-    revision: "df4deb60fcdc20ec2dcaff7fc284bfb139d1b2fc"
+    revision: "46c2b78aa56d25a77d3ea237051aeb5d9e7f750c"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/thlorenz/convert-source-map.git"
-    revision: "df4deb60fcdc20ec2dcaff7fc284bfb139d1b2fc"
+    revision: "46c2b78aa56d25a77d3ea237051aeb5d9e7f750c"
     path: ""
 - id: "NPM::copy-descriptor:0.1.1"
   purl: "pkg:npm/copy-descriptor@0.1.1"
@@ -3493,8 +3508,8 @@ packages:
     url: "https://github.com/visionmedia/debug.git"
     revision: "13abeae468fea297d0dccc50bc55590809241083"
     path: ""
-- id: "NPM::decode-uri-component:0.2.0"
-  purl: "pkg:npm/decode-uri-component@0.2.0"
+- id: "NPM::decode-uri-component:0.2.2"
+  purl: "pkg:npm/decode-uri-component@0.2.2"
   authors:
   - "Sam Verschueren"
   declared_licenses:
@@ -3502,26 +3517,26 @@ packages:
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "A better decodeURIComponent"
-  homepage_url: "https://github.com/samverschueren/decode-uri-component#readme"
+  homepage_url: "https://github.com/SamVerschueren/decode-uri-component#readme"
   binary_artifact:
     url: ""
     hash:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/decode-uri-component/-/decode-uri-component-0.2.0.tgz"
+    url: "https://registry.npmjs.org/decode-uri-component/-/decode-uri-component-0.2.2.tgz"
     hash:
-      value: "eb3913333458775cb84cd1a1fae062106bb87545"
+      value: "e69dbe25d37941171dd540e024c444cd5188e1e9"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "https://github.com/SamVerschueren/decode-uri-component.git"
-    revision: "52782a347527a6a05fed02434ffcf8f2ba1b19a3"
+    revision: "a0eea469d26eb0df668b081672cdb9581feb78eb"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/SamVerschueren/decode-uri-component.git"
-    revision: "52782a347527a6a05fed02434ffcf8f2ba1b19a3"
+    revision: "a0eea469d26eb0df668b081672cdb9581feb78eb"
     path: ""
 - id: "NPM::define-property:0.2.5"
   purl: "pkg:npm/define-property@0.2.5"
@@ -4164,6 +4179,36 @@ packages:
     url: "https://github.com/isaacs/fs.realpath.git"
     revision: "03e7c884431fe185dfebbc9b771aeca339c1807a"
     path: ""
+- id: "NPM::function-bind:1.1.2"
+  purl: "pkg:npm/function-bind@1.1.2"
+  authors:
+  - "Raynos"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Implementation of Function.prototype.bind"
+  homepage_url: "https://github.com/Raynos/function-bind"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/function-bind/-/function-bind-1.1.2.tgz"
+    hash:
+      value: "2c02d864d97f3ea6c8830c464cbd11ab6eab7a1c"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/Raynos/function-bind.git"
+    revision: "40197beb5f4cf89dd005f0b268256c1e4716ea81"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/Raynos/function-bind.git"
+    revision: "40197beb5f4cf89dd005f0b268256c1e4716ea81"
+    path: ""
 - id: "NPM::get-value:2.0.6"
   purl: "pkg:npm/get-value@2.0.6"
   authors:
@@ -4194,8 +4239,8 @@ packages:
     url: "https://github.com/jonschlinkert/get-value.git"
     revision: "5dc7466a65eec37e3b9e3d94f274b7aba193ea60"
     path: ""
-- id: "NPM::glob:7.2.0"
-  purl: "pkg:npm/glob@7.2.0"
+- id: "NPM::glob:7.2.3"
+  purl: "pkg:npm/glob@7.2.3"
   authors:
   - "Isaac Z. Schlueter"
   declared_licenses:
@@ -4210,19 +4255,19 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/glob/-/glob-7.2.0.tgz"
+    url: "https://registry.npmjs.org/glob/-/glob-7.2.3.tgz"
     hash:
-      value: "d15535af7732e02e948f4c41628bd910293f6023"
+      value: "b8df0fb802bbfa8e89bd1d938b4e16578ed44f2b"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "git://github.com/isaacs/node-glob.git"
-    revision: "3bfec21dd180ddf4672880176ad33af6296a167e"
+    revision: "c3cd57ae128faa0e9190492acc743bb779ac4054"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/isaacs/node-glob.git"
-    revision: "3bfec21dd180ddf4672880176ad33af6296a167e"
+    revision: "c3cd57ae128faa0e9190492acc743bb779ac4054"
     path: ""
 - id: "NPM::glob-base:0.3.0"
   purl: "pkg:npm/glob-base@0.3.0"
@@ -4314,8 +4359,8 @@ packages:
     url: "https://github.com/sindresorhus/globals.git"
     revision: "09ba8754235e5953507b8d0543d65098bc7bb78d"
     path: ""
-- id: "NPM::graceful-fs:4.2.8"
-  purl: "pkg:npm/graceful-fs@4.2.8"
+- id: "NPM::graceful-fs:4.2.11"
+  purl: "pkg:npm/graceful-fs@4.2.11"
   declared_licenses:
   - "ISC"
   declared_licenses_processed:
@@ -4328,19 +4373,19 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.8.tgz"
+    url: "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.11.tgz"
     hash:
-      value: "e412b8d33f5e006593cbd3cee6df9f2cebbe802a"
+      value: "4183e4e8bf08bb6e05bbb2f7d2e0c8f712ca40e3"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "https://github.com/isaacs/node-graceful-fs"
-    revision: "9ec3413c8eb1c073c42262bf5a2a8cdf556f68a7"
+    revision: "514861c372899df14beb7aaecca4cdbb498d7d11"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/isaacs/node-graceful-fs.git"
-    revision: "9ec3413c8eb1c073c42262bf5a2a8cdf556f68a7"
+    revision: "514861c372899df14beb7aaecca4cdbb498d7d11"
     path: ""
 - id: "NPM::has-ansi:2.0.0"
   purl: "pkg:npm/has-ansi@2.0.0"
@@ -4496,6 +4541,36 @@ packages:
     url: "https://github.com/jonschlinkert/has-values.git"
     revision: "fead695044aafcfb337c7125af5479c7eaf1c92c"
     path: ""
+- id: "NPM::hasown:2.0.2"
+  purl: "pkg:npm/hasown@2.0.2"
+  authors:
+  - "Jordan Harband"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A robust, ES3 compatible, \"has own property\" predicate."
+  homepage_url: "https://github.com/inspect-js/hasOwn#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/hasown/-/hasown-2.0.2.tgz"
+    hash:
+      value: "003eaf91be7adc372e84ec59dc37252cedb80003"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/inspect-js/hasOwn.git"
+    revision: "d00d35005baf16a33d691a13f8ad627f35040742"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/inspect-js/hasOwn.git"
+    revision: "d00d35005baf16a33d691a13f8ad627f35040742"
+    path: ""
 - id: "NPM::home-or-tmp:2.0.0"
   purl: "pkg:npm/home-or-tmp@2.0.0"
   authors:
@@ -4615,8 +4690,8 @@ packages:
     url: "https://github.com/zertosh/invariant.git"
     revision: "ce95a9badeee1c97daff1bca0d1f6cec5dda4fe8"
     path: ""
-- id: "NPM::is-accessor-descriptor:0.1.6"
-  purl: "pkg:npm/is-accessor-descriptor@0.1.6"
+- id: "NPM::is-accessor-descriptor:1.0.1"
+  purl: "pkg:npm/is-accessor-descriptor@1.0.1"
   authors:
   - "Jon Schlinkert"
   declared_licenses:
@@ -4625,57 +4700,26 @@ packages:
     spdx_expression: "MIT"
   description: "Returns true if a value has the characteristics of a valid JavaScript\
     \ accessor descriptor."
-  homepage_url: "https://github.com/jonschlinkert/is-accessor-descriptor"
+  homepage_url: "https://github.com/inspect-js/is-accessor-descriptor"
   binary_artifact:
     url: ""
     hash:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/is-accessor-descriptor/-/is-accessor-descriptor-0.1.6.tgz"
+    url: "https://registry.npmjs.org/is-accessor-descriptor/-/is-accessor-descriptor-1.0.1.tgz"
     hash:
-      value: "a9e12cb3ae8d876727eeef3843f8a0897b5c98d6"
+      value: "3223b10628354644b86260db29b3e693f5ceedd4"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "https://github.com/jonschlinkert/is-accessor-descriptor.git"
-    revision: "e64ae49c456c9f31dab47934b0183e2a9938b5bd"
+    url: "git+https://github.com/inspect-js/is-accessor-descriptor.git"
+    revision: "57637b356840c949c35949c533e3f2cdeb468534"
     path: ""
   vcs_processed:
     type: "Git"
-    url: "https://github.com/jonschlinkert/is-accessor-descriptor.git"
-    revision: "e64ae49c456c9f31dab47934b0183e2a9938b5bd"
-    path: ""
-- id: "NPM::is-accessor-descriptor:1.0.0"
-  purl: "pkg:npm/is-accessor-descriptor@1.0.0"
-  authors:
-  - "Jon Schlinkert"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "Returns true if a value has the characteristics of a valid JavaScript\
-    \ accessor descriptor."
-  homepage_url: "https://github.com/jonschlinkert/is-accessor-descriptor"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/is-accessor-descriptor/-/is-accessor-descriptor-1.0.0.tgz"
-    hash:
-      value: "169c2f6d3df1f992618072365c9b0ea1f6878656"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "https://github.com/jonschlinkert/is-accessor-descriptor.git"
-    revision: "22b0a2617ccbebd131247c29e3700ca860d37d06"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/jonschlinkert/is-accessor-descriptor.git"
-    revision: "22b0a2617ccbebd131247c29e3700ca860d37d06"
+    url: "https://github.com/inspect-js/is-accessor-descriptor.git"
+    revision: "57637b356840c949c35949c533e3f2cdeb468534"
     path: ""
 - id: "NPM::is-binary-path:1.0.1"
   purl: "pkg:npm/is-binary-path@1.0.1"
@@ -4737,8 +4781,8 @@ packages:
     url: "https://github.com/feross/is-buffer.git"
     revision: "1e84e7ee31cf6b660b12500f3111a05501da387f"
     path: ""
-- id: "NPM::is-data-descriptor:0.1.4"
-  purl: "pkg:npm/is-data-descriptor@0.1.4"
+- id: "NPM::is-data-descriptor:1.0.1"
+  purl: "pkg:npm/is-data-descriptor@1.0.1"
   authors:
   - "Jon Schlinkert"
   declared_licenses:
@@ -4747,60 +4791,29 @@ packages:
     spdx_expression: "MIT"
   description: "Returns true if a value has the characteristics of a valid JavaScript\
     \ data descriptor."
-  homepage_url: "https://github.com/jonschlinkert/is-data-descriptor"
+  homepage_url: "https://github.com/inspect-js/is-data-descriptor"
   binary_artifact:
     url: ""
     hash:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/is-data-descriptor/-/is-data-descriptor-0.1.4.tgz"
+    url: "https://registry.npmjs.org/is-data-descriptor/-/is-data-descriptor-1.0.1.tgz"
     hash:
-      value: "0b5ee648388e2c860282e793f1856fec3f301b56"
+      value: "2109164426166d32ea38c405c1e0945d9e6a4eeb"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "https://github.com/jonschlinkert/is-data-descriptor.git"
-    revision: "e6317dbcb27a95281a60120bac83f5938dda4e2c"
+    url: "git+https://github.com/inspect-js/is-data-descriptor.git"
+    revision: "0a9ea4a135a60200819a2ac4aad00debfd28d105"
     path: ""
   vcs_processed:
     type: "Git"
-    url: "https://github.com/jonschlinkert/is-data-descriptor.git"
-    revision: "e6317dbcb27a95281a60120bac83f5938dda4e2c"
+    url: "https://github.com/inspect-js/is-data-descriptor.git"
+    revision: "0a9ea4a135a60200819a2ac4aad00debfd28d105"
     path: ""
-- id: "NPM::is-data-descriptor:1.0.0"
-  purl: "pkg:npm/is-data-descriptor@1.0.0"
-  authors:
-  - "Jon Schlinkert"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "Returns true if a value has the characteristics of a valid JavaScript\
-    \ data descriptor."
-  homepage_url: "https://github.com/jonschlinkert/is-data-descriptor"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/is-data-descriptor/-/is-data-descriptor-1.0.0.tgz"
-    hash:
-      value: "d84876321d0e7add03990406abbbbd36ba9268c7"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "https://github.com/jonschlinkert/is-data-descriptor.git"
-    revision: "42dcba2627fe655daa21aec843ca8de849f26cd6"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/jonschlinkert/is-data-descriptor.git"
-    revision: "42dcba2627fe655daa21aec843ca8de849f26cd6"
-    path: ""
-- id: "NPM::is-descriptor:0.1.6"
-  purl: "pkg:npm/is-descriptor@0.1.6"
+- id: "NPM::is-descriptor:0.1.7"
+  purl: "pkg:npm/is-descriptor@0.1.7"
   authors:
   - "Jon Schlinkert"
   declared_licenses:
@@ -4809,29 +4822,29 @@ packages:
     spdx_expression: "MIT"
   description: "Returns true if a value has the characteristics of a valid JavaScript\
     \ descriptor. Works for data descriptors and accessor descriptors."
-  homepage_url: "https://github.com/jonschlinkert/is-descriptor"
+  homepage_url: "https://github.com/inspect-js/is-descriptor"
   binary_artifact:
     url: ""
     hash:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/is-descriptor/-/is-descriptor-0.1.6.tgz"
+    url: "https://registry.npmjs.org/is-descriptor/-/is-descriptor-0.1.7.tgz"
     hash:
-      value: "366d8240dde487ca51823b1ab9f07a10a78251ca"
+      value: "2727eb61fd789dcd5bdf0ed4569f551d2fe3be33"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "https://github.com/jonschlinkert/is-descriptor.git"
-    revision: "7559403830553097fcdd56ae93fe69d4ef2b21db"
+    url: "git+https://github.com/inspect-js/is-descriptor.git"
+    revision: "839ee8f13f3e6e53226132d8828073d8c2b4a543"
     path: ""
   vcs_processed:
     type: "Git"
-    url: "https://github.com/jonschlinkert/is-descriptor.git"
-    revision: "7559403830553097fcdd56ae93fe69d4ef2b21db"
+    url: "https://github.com/inspect-js/is-descriptor.git"
+    revision: "839ee8f13f3e6e53226132d8828073d8c2b4a543"
     path: ""
-- id: "NPM::is-descriptor:1.0.2"
-  purl: "pkg:npm/is-descriptor@1.0.2"
+- id: "NPM::is-descriptor:1.0.3"
+  purl: "pkg:npm/is-descriptor@1.0.3"
   authors:
   - "Jon Schlinkert"
   declared_licenses:
@@ -4840,26 +4853,26 @@ packages:
     spdx_expression: "MIT"
   description: "Returns true if a value has the characteristics of a valid JavaScript\
     \ descriptor. Works for data descriptors and accessor descriptors."
-  homepage_url: "https://github.com/jonschlinkert/is-descriptor"
+  homepage_url: "https://github.com/inspect-js/is-descriptor"
   binary_artifact:
     url: ""
     hash:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/is-descriptor/-/is-descriptor-1.0.2.tgz"
+    url: "https://registry.npmjs.org/is-descriptor/-/is-descriptor-1.0.3.tgz"
     hash:
-      value: "3b159746a66604b04f8c81524ba365c5f14d86ec"
+      value: "92d27cb3cd311c4977a4db47df457234a13cb306"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "https://github.com/jonschlinkert/is-descriptor.git"
-    revision: "324635c990dc7f1e6d169deecd19769dea72114c"
+    url: "git+https://github.com/inspect-js/is-descriptor.git"
+    revision: "ad08ba5a0d0359777a11e04952992e1a65963c64"
     path: ""
   vcs_processed:
     type: "Git"
-    url: "https://github.com/jonschlinkert/is-descriptor.git"
-    revision: "324635c990dc7f1e6d169deecd19769dea72114c"
+    url: "https://github.com/inspect-js/is-descriptor.git"
+    revision: "ad08ba5a0d0359777a11e04952992e1a65963c64"
     path: ""
 - id: "NPM::is-dotfile:1.0.3"
   purl: "pkg:npm/is-dotfile@1.0.3"
@@ -5531,36 +5544,6 @@ packages:
     url: "https://github.com/jonschlinkert/kind-of.git"
     revision: "30bee16e8dffa67417ba35d31bd9bc31517a2d83"
     path: ""
-- id: "NPM::kind-of:5.1.0"
-  purl: "pkg:npm/kind-of@5.1.0"
-  authors:
-  - "Jon Schlinkert"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "Get the native type of a value."
-  homepage_url: "https://github.com/jonschlinkert/kind-of"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/kind-of/-/kind-of-5.1.0.tgz"
-    hash:
-      value: "729c91e2d857b7a419a1f9aa65685c4c33f5845d"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "https://github.com/jonschlinkert/kind-of.git"
-    revision: "ed479b6ee194dc1edff852f17095ae1de40bafbc"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/jonschlinkert/kind-of.git"
-    revision: "ed479b6ee194dc1edff852f17095ae1de40bafbc"
-    path: ""
 - id: "NPM::kind-of:6.0.3"
   purl: "pkg:npm/kind-of@6.0.3"
   authors:
@@ -5806,8 +5789,8 @@ packages:
     url: "https://github.com/micromatch/micromatch.git"
     revision: "0628af9a111c791ca69c809a6f8555337813cc05"
     path: ""
-- id: "NPM::minimatch:3.0.4"
-  purl: "pkg:npm/minimatch@3.0.4"
+- id: "NPM::minimatch:3.1.2"
+  purl: "pkg:npm/minimatch@3.1.2"
   authors:
   - "Isaac Z. Schlueter"
   declared_licenses:
@@ -5822,22 +5805,22 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/minimatch/-/minimatch-3.0.4.tgz"
+    url: "https://registry.npmjs.org/minimatch/-/minimatch-3.1.2.tgz"
     hash:
-      value: "5166e286457f03306064be5497e8dbb0c3d32083"
+      value: "19cd194bfd3e428f049a70817c038d89ab4be35b"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "git://github.com/isaacs/minimatch.git"
-    revision: "e46989a323d5f0aa4781eff5e2e6e7aafa223321"
+    revision: "699c459443a6bd98f5b28197978f76e7f71467ac"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/isaacs/minimatch.git"
-    revision: "e46989a323d5f0aa4781eff5e2e6e7aafa223321"
+    revision: "699c459443a6bd98f5b28197978f76e7f71467ac"
     path: ""
-- id: "NPM::minimist:1.2.5"
-  purl: "pkg:npm/minimist@1.2.5"
+- id: "NPM::minimist:1.2.8"
+  purl: "pkg:npm/minimist@1.2.8"
   authors:
   - "James Halliday"
   declared_licenses:
@@ -5845,26 +5828,26 @@ packages:
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "parse argument options"
-  homepage_url: "https://github.com/substack/minimist"
+  homepage_url: "https://github.com/minimistjs/minimist"
   binary_artifact:
     url: ""
     hash:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/minimist/-/minimist-1.2.5.tgz"
+    url: "https://registry.npmjs.org/minimist/-/minimist-1.2.8.tgz"
     hash:
-      value: "67d66014b66a6a8aaa0c083c5fd58df4e4e97602"
+      value: "c1a464e7693302e082a075cee0c057741ac4772c"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git://github.com/substack/minimist.git"
-    revision: "aeb3e27dae0412de5c0494e9563a5f10c82cc7a9"
+    url: "git://github.com/minimistjs/minimist.git"
+    revision: "6901ee286bc4c16da6830b48b46ce1574703cea1"
     path: ""
   vcs_processed:
     type: "Git"
-    url: "https://github.com/substack/minimist.git"
-    revision: "aeb3e27dae0412de5c0494e9563a5f10c82cc7a9"
+    url: "https://github.com/minimistjs/minimist.git"
+    revision: "6901ee286bc4c16da6830b48b46ce1574703cea1"
     path: ""
 - id: "NPM::mixin-deep:1.3.2"
   purl: "pkg:npm/mixin-deep@1.3.2"
@@ -5897,8 +5880,8 @@ packages:
     url: "https://github.com/jonschlinkert/mixin-deep.git"
     revision: "754f0c20e1bc13ea5a21a64fbc7d6ba5f7b359b9"
     path: ""
-- id: "NPM::mkdirp:0.5.5"
-  purl: "pkg:npm/mkdirp@0.5.5"
+- id: "NPM::mkdirp:0.5.6"
+  purl: "pkg:npm/mkdirp@0.5.6"
   authors:
   - "James Halliday"
   declared_licenses:
@@ -5913,19 +5896,19 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.5.tgz"
+    url: "https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.6.tgz"
     hash:
-      value: "d91cefd62d1436ca0f41620e251288d420099def"
+      value: "7def03d2432dcae4ba1d611445c48396062255f6"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "https://github.com/substack/node-mkdirp.git"
-    revision: "049cf185c9e91727bc505b796a2d16a4fe70d64d"
+    revision: "92f086d2e28c6848951776fbe8ecadcf54c80c29"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/substack/node-mkdirp.git"
-    revision: "049cf185c9e91727bc505b796a2d16a4fe70d64d"
+    revision: "92f086d2e28c6848951776fbe8ecadcf54c80c29"
     path: ""
 - id: "NPM::ms:2.0.0"
   purl: "pkg:npm/ms@2.0.0"
@@ -6533,8 +6516,8 @@ packages:
     url: "https://github.com/jonschlinkert/randomatic.git"
     revision: "b7451f4dac44a9920790f76a4d8a1dd081c37a5a"
     path: ""
-- id: "NPM::readable-stream:2.3.7"
-  purl: "pkg:npm/readable-stream@2.3.7"
+- id: "NPM::readable-stream:2.3.8"
+  purl: "pkg:npm/readable-stream@2.3.8"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -6547,19 +6530,19 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/readable-stream/-/readable-stream-2.3.7.tgz"
+    url: "https://registry.npmjs.org/readable-stream/-/readable-stream-2.3.8.tgz"
     hash:
-      value: "1eca1cf711aef814c04f62252a36a62f6cb23b57"
+      value: "91125e8042bba1b9887f49345f6277027ce8be9b"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "git://github.com/nodejs/readable-stream"
-    revision: "2eb8861e029107b7e079e22c826835cad6ae7854"
+    revision: "c85db76d4c41f64fd082c9263c3a918bec6f38a0"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/nodejs/readable-stream.git"
-    revision: "2eb8861e029107b7e079e22c826835cad6ae7854"
+    revision: "c85db76d4c41f64fd082c9263c3a918bec6f38a0"
     path: ""
 - id: "NPM::readdirp:2.2.1"
   purl: "pkg:npm/readdirp@2.2.1"
@@ -7770,20 +7753,33 @@ packages:
 issues:
 - timestamp: "1970-01-01T00:00:00Z"
   source: "NPM"
-  message: "deprecated chokidar@1.7.0: Chokidar 2 will break on node v14+. Upgrade\
-    \ to chokidar 3 with 15x less dependencies."
+  message: "deprecated core-js@2.6.12: core-js@<3.23.3 is no longer maintained and\
+    \ not recommended for usage due to the number of issues. Because of the V8 engine\
+    \ whims, feature detection in old core-js versions could cause a slowdown up to\
+    \ 100x even if nothing is polyfilled. Some versions have web compatibility issues.\
+    \ Please, upgrade your dependencies to the actual version of core-js."
   severity: "HINT"
 - timestamp: "1970-01-01T00:00:00Z"
   source: "NPM"
-  message: "deprecated core-js@2.6.12: core-js@<3.3 is no longer maintained and not\
-    \ recommended for usage due to the number of issues. Because of the V8 engine\
-    \ whims, feature detection in old core-js versions could cause a slowdown up to\
-    \ 100x even if nothing is polyfilled. Please, upgrade your dependencies to the\
-    \ actual version of core-js."
+  message: "deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported"
+  severity: "HINT"
+- timestamp: "1970-01-01T00:00:00Z"
+  source: "NPM"
+  message: "deprecated inflight@1.0.6: This module is not supported, and leaks memory.\
+    \ Do not use it. Check out lru-cache if you want a good and tested way to coalesce\
+    \ async requests by a key value, which is much more comprehensive and powerful."
   severity: "HINT"
 - timestamp: "1970-01-01T00:00:00Z"
   source: "NPM"
   message: "deprecated resolve-url@0.2.1: https://github.com/lydell/resolve-url#deprecated"
+  severity: "HINT"
+- timestamp: "1970-01-01T00:00:00Z"
+  source: "NPM"
+  message: "deprecated source-map-resolve@0.5.3: See https://github.com/lydell/source-map-resolve#deprecated"
+  severity: "HINT"
+- timestamp: "1970-01-01T00:00:00Z"
+  source: "NPM"
+  message: "deprecated source-map-url@0.4.1: See https://github.com/lydell/source-map-url#deprecated"
   severity: "HINT"
 - timestamp: "1970-01-01T00:00:00Z"
   source: "NPM"
