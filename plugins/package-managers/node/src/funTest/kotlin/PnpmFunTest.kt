@@ -41,6 +41,15 @@ class PnpmFunTest : WordSpec({
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
+        "resolve dependencies for a project depending on Babel correctly" {
+            val definitionFile = getAssetFile("projects/synthetic/pnpm/babel/package.json")
+            val expectedResultFile = getAssetFile("projects/synthetic/pnpm/babel-expected-output.yml")
+
+            val result = create("PNPM").resolveSingleProject(definitionFile, resolveScopes = true)
+
+            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+        }
+
         "resolve dependencies correctly in a workspaces project" {
             val definitionFile = getAssetFile("projects/synthetic/pnpm/workspaces/packages.json")
             val expectedResultFile = getAssetFile("projects/synthetic/pnpm/workspaces-expected-output.yml")

@@ -1,0 +1,4310 @@
+---
+project:
+  id: "PNPM::npm-project-that-depends-on-babel:1.0.0"
+  definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/babel/package.json"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  vcs:
+    type: "Git"
+    url: "https://github.com/oss-review-toolkit/ort.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/babel"
+  homepage_url: ""
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "NPM::babel-cli:6.26.0"
+      dependencies:
+      - id: "NPM::babel-core:6.26.3"
+        dependencies:
+        - id: "NPM::babel-code-frame:6.26.0"
+          dependencies:
+          - id: "NPM::chalk:1.1.3"
+            dependencies:
+            - id: "NPM::ansi-styles:2.2.1"
+            - id: "NPM::escape-string-regexp:1.0.5"
+            - id: "NPM::has-ansi:2.0.0"
+              dependencies:
+              - id: "NPM::ansi-regex:2.1.1"
+            - id: "NPM::strip-ansi:3.0.1"
+              dependencies:
+              - id: "NPM::ansi-regex:2.1.1"
+            - id: "NPM::supports-color:2.0.0"
+          - id: "NPM::esutils:2.0.3"
+          - id: "NPM::js-tokens:3.0.2"
+        - id: "NPM::babel-generator:6.26.1"
+          dependencies:
+          - id: "NPM::babel-messages:6.23.0"
+            dependencies:
+            - id: "NPM::babel-runtime:6.26.0"
+              dependencies:
+              - id: "NPM::core-js:2.6.12"
+              - id: "NPM::regenerator-runtime:0.10.5"
+          - id: "NPM::babel-runtime:6.26.0"
+            dependencies:
+            - id: "NPM::core-js:2.6.12"
+            - id: "NPM::regenerator-runtime:0.10.5"
+          - id: "NPM::babel-types:6.26.0"
+            dependencies:
+            - id: "NPM::babel-runtime:6.26.0"
+              dependencies:
+              - id: "NPM::core-js:2.6.12"
+              - id: "NPM::regenerator-runtime:0.10.5"
+            - id: "NPM::esutils:2.0.3"
+            - id: "NPM::lodash:4.17.21"
+            - id: "NPM::to-fast-properties:1.0.3"
+          - id: "NPM::detect-indent:4.0.0"
+            dependencies:
+            - id: "NPM::repeating:2.0.1"
+              dependencies:
+              - id: "NPM::is-finite:1.1.0"
+          - id: "NPM::jsesc:1.3.0"
+          - id: "NPM::lodash:4.17.21"
+          - id: "NPM::source-map:0.5.7"
+          - id: "NPM::trim-right:1.0.1"
+        - id: "NPM::babel-helpers:6.24.1"
+          dependencies:
+          - id: "NPM::babel-runtime:6.26.0"
+            dependencies:
+            - id: "NPM::core-js:2.6.12"
+            - id: "NPM::regenerator-runtime:0.10.5"
+          - id: "NPM::babel-template:6.26.0"
+            dependencies:
+            - id: "NPM::babel-runtime:6.26.0"
+              dependencies:
+              - id: "NPM::core-js:2.6.12"
+              - id: "NPM::regenerator-runtime:0.10.5"
+            - id: "NPM::babel-traverse:6.26.0"
+              dependencies:
+              - id: "NPM::babel-code-frame:6.26.0"
+                dependencies:
+                - id: "NPM::chalk:1.1.3"
+                  dependencies:
+                  - id: "NPM::ansi-styles:2.2.1"
+                  - id: "NPM::escape-string-regexp:1.0.5"
+                  - id: "NPM::has-ansi:2.0.0"
+                    dependencies:
+                    - id: "NPM::ansi-regex:2.1.1"
+                  - id: "NPM::strip-ansi:3.0.1"
+                    dependencies:
+                    - id: "NPM::ansi-regex:2.1.1"
+                  - id: "NPM::supports-color:2.0.0"
+                - id: "NPM::esutils:2.0.3"
+                - id: "NPM::js-tokens:3.0.2"
+              - id: "NPM::babel-messages:6.23.0"
+                dependencies:
+                - id: "NPM::babel-runtime:6.26.0"
+                  dependencies:
+                  - id: "NPM::core-js:2.6.12"
+                  - id: "NPM::regenerator-runtime:0.10.5"
+              - id: "NPM::babel-runtime:6.26.0"
+                dependencies:
+                - id: "NPM::core-js:2.6.12"
+                - id: "NPM::regenerator-runtime:0.10.5"
+              - id: "NPM::babel-types:6.26.0"
+                dependencies:
+                - id: "NPM::babel-runtime:6.26.0"
+                  dependencies:
+                  - id: "NPM::core-js:2.6.12"
+                  - id: "NPM::regenerator-runtime:0.10.5"
+                - id: "NPM::esutils:2.0.3"
+                - id: "NPM::lodash:4.17.21"
+                - id: "NPM::to-fast-properties:1.0.3"
+              - id: "NPM::babylon:6.18.0"
+              - id: "NPM::debug:2.6.9"
+                dependencies:
+                - id: "NPM::ms:2.0.0"
+              - id: "NPM::globals:9.18.0"
+              - id: "NPM::invariant:2.2.4"
+                dependencies:
+                - id: "NPM::loose-envify:1.4.0"
+                  dependencies:
+                  - id: "NPM::js-tokens:3.0.2"
+              - id: "NPM::lodash:4.17.21"
+            - id: "NPM::babel-types:6.26.0"
+              dependencies:
+              - id: "NPM::babel-runtime:6.26.0"
+                dependencies:
+                - id: "NPM::core-js:2.6.12"
+                - id: "NPM::regenerator-runtime:0.10.5"
+              - id: "NPM::esutils:2.0.3"
+              - id: "NPM::lodash:4.17.21"
+              - id: "NPM::to-fast-properties:1.0.3"
+            - id: "NPM::babylon:6.18.0"
+            - id: "NPM::lodash:4.17.21"
+        - id: "NPM::babel-messages:6.23.0"
+          dependencies:
+          - id: "NPM::babel-runtime:6.26.0"
+            dependencies:
+            - id: "NPM::core-js:2.6.12"
+            - id: "NPM::regenerator-runtime:0.10.5"
+        - id: "NPM::babel-register:6.26.0"
+          dependencies:
+          - id: "NPM::babel-runtime:6.26.0"
+            dependencies:
+            - id: "NPM::core-js:2.6.12"
+            - id: "NPM::regenerator-runtime:0.10.5"
+          - id: "NPM::core-js:2.6.12"
+          - id: "NPM::home-or-tmp:2.0.0"
+            dependencies:
+            - id: "NPM::os-homedir:1.0.2"
+            - id: "NPM::os-tmpdir:1.0.2"
+          - id: "NPM::lodash:4.17.21"
+          - id: "NPM::mkdirp:0.5.6"
+            dependencies:
+            - id: "NPM::minimist:1.2.8"
+          - id: "NPM::source-map-support:0.4.18"
+            dependencies:
+            - id: "NPM::source-map:0.5.7"
+        - id: "NPM::babel-runtime:6.26.0"
+          dependencies:
+          - id: "NPM::core-js:2.6.12"
+          - id: "NPM::regenerator-runtime:0.10.5"
+        - id: "NPM::babel-template:6.26.0"
+          dependencies:
+          - id: "NPM::babel-runtime:6.26.0"
+            dependencies:
+            - id: "NPM::core-js:2.6.12"
+            - id: "NPM::regenerator-runtime:0.10.5"
+          - id: "NPM::babel-traverse:6.26.0"
+            dependencies:
+            - id: "NPM::babel-code-frame:6.26.0"
+              dependencies:
+              - id: "NPM::chalk:1.1.3"
+                dependencies:
+                - id: "NPM::ansi-styles:2.2.1"
+                - id: "NPM::escape-string-regexp:1.0.5"
+                - id: "NPM::has-ansi:2.0.0"
+                  dependencies:
+                  - id: "NPM::ansi-regex:2.1.1"
+                - id: "NPM::strip-ansi:3.0.1"
+                  dependencies:
+                  - id: "NPM::ansi-regex:2.1.1"
+                - id: "NPM::supports-color:2.0.0"
+              - id: "NPM::esutils:2.0.3"
+              - id: "NPM::js-tokens:3.0.2"
+            - id: "NPM::babel-messages:6.23.0"
+              dependencies:
+              - id: "NPM::babel-runtime:6.26.0"
+                dependencies:
+                - id: "NPM::core-js:2.6.12"
+                - id: "NPM::regenerator-runtime:0.10.5"
+            - id: "NPM::babel-runtime:6.26.0"
+              dependencies:
+              - id: "NPM::core-js:2.6.12"
+              - id: "NPM::regenerator-runtime:0.10.5"
+            - id: "NPM::babel-types:6.26.0"
+              dependencies:
+              - id: "NPM::babel-runtime:6.26.0"
+                dependencies:
+                - id: "NPM::core-js:2.6.12"
+                - id: "NPM::regenerator-runtime:0.10.5"
+              - id: "NPM::esutils:2.0.3"
+              - id: "NPM::lodash:4.17.21"
+              - id: "NPM::to-fast-properties:1.0.3"
+            - id: "NPM::babylon:6.18.0"
+            - id: "NPM::debug:2.6.9"
+              dependencies:
+              - id: "NPM::ms:2.0.0"
+            - id: "NPM::globals:9.18.0"
+            - id: "NPM::invariant:2.2.4"
+              dependencies:
+              - id: "NPM::loose-envify:1.4.0"
+                dependencies:
+                - id: "NPM::js-tokens:3.0.2"
+            - id: "NPM::lodash:4.17.21"
+          - id: "NPM::babel-types:6.26.0"
+            dependencies:
+            - id: "NPM::babel-runtime:6.26.0"
+              dependencies:
+              - id: "NPM::core-js:2.6.12"
+              - id: "NPM::regenerator-runtime:0.10.5"
+            - id: "NPM::esutils:2.0.3"
+            - id: "NPM::lodash:4.17.21"
+            - id: "NPM::to-fast-properties:1.0.3"
+          - id: "NPM::babylon:6.18.0"
+          - id: "NPM::lodash:4.17.21"
+        - id: "NPM::babel-traverse:6.26.0"
+          dependencies:
+          - id: "NPM::babel-code-frame:6.26.0"
+            dependencies:
+            - id: "NPM::chalk:1.1.3"
+              dependencies:
+              - id: "NPM::ansi-styles:2.2.1"
+              - id: "NPM::escape-string-regexp:1.0.5"
+              - id: "NPM::has-ansi:2.0.0"
+                dependencies:
+                - id: "NPM::ansi-regex:2.1.1"
+              - id: "NPM::strip-ansi:3.0.1"
+                dependencies:
+                - id: "NPM::ansi-regex:2.1.1"
+              - id: "NPM::supports-color:2.0.0"
+            - id: "NPM::esutils:2.0.3"
+            - id: "NPM::js-tokens:3.0.2"
+          - id: "NPM::babel-messages:6.23.0"
+            dependencies:
+            - id: "NPM::babel-runtime:6.26.0"
+              dependencies:
+              - id: "NPM::core-js:2.6.12"
+              - id: "NPM::regenerator-runtime:0.10.5"
+          - id: "NPM::babel-runtime:6.26.0"
+            dependencies:
+            - id: "NPM::core-js:2.6.12"
+            - id: "NPM::regenerator-runtime:0.10.5"
+          - id: "NPM::babel-types:6.26.0"
+            dependencies:
+            - id: "NPM::babel-runtime:6.26.0"
+              dependencies:
+              - id: "NPM::core-js:2.6.12"
+              - id: "NPM::regenerator-runtime:0.10.5"
+            - id: "NPM::esutils:2.0.3"
+            - id: "NPM::lodash:4.17.21"
+            - id: "NPM::to-fast-properties:1.0.3"
+          - id: "NPM::babylon:6.18.0"
+          - id: "NPM::debug:2.6.9"
+            dependencies:
+            - id: "NPM::ms:2.0.0"
+          - id: "NPM::globals:9.18.0"
+          - id: "NPM::invariant:2.2.4"
+            dependencies:
+            - id: "NPM::loose-envify:1.4.0"
+              dependencies:
+              - id: "NPM::js-tokens:3.0.2"
+          - id: "NPM::lodash:4.17.21"
+        - id: "NPM::babel-types:6.26.0"
+          dependencies:
+          - id: "NPM::babel-runtime:6.26.0"
+            dependencies:
+            - id: "NPM::core-js:2.6.12"
+            - id: "NPM::regenerator-runtime:0.10.5"
+          - id: "NPM::esutils:2.0.3"
+          - id: "NPM::lodash:4.17.21"
+          - id: "NPM::to-fast-properties:1.0.3"
+        - id: "NPM::babylon:6.18.0"
+        - id: "NPM::convert-source-map:1.9.0"
+        - id: "NPM::debug:2.6.9"
+          dependencies:
+          - id: "NPM::ms:2.0.0"
+        - id: "NPM::json5:0.5.1"
+        - id: "NPM::lodash:4.17.21"
+        - id: "NPM::minimatch:3.1.2"
+          dependencies:
+          - id: "NPM::brace-expansion:1.1.11"
+            dependencies:
+            - id: "NPM::balanced-match:1.0.2"
+            - id: "NPM::concat-map:0.0.1"
+        - id: "NPM::path-is-absolute:1.0.1"
+        - id: "NPM::private:0.1.8"
+        - id: "NPM::slash:1.0.0"
+        - id: "NPM::source-map:0.5.7"
+      - id: "NPM::babel-polyfill:6.26.0"
+        dependencies:
+        - id: "NPM::babel-runtime:6.26.0"
+          dependencies:
+          - id: "NPM::core-js:2.6.12"
+          - id: "NPM::regenerator-runtime:0.10.5"
+        - id: "NPM::core-js:2.6.12"
+        - id: "NPM::regenerator-runtime:0.10.5"
+      - id: "NPM::babel-register:6.26.0"
+        dependencies:
+        - id: "NPM::babel-core:6.26.3"
+          dependencies:
+          - id: "NPM::babel-code-frame:6.26.0"
+            dependencies:
+            - id: "NPM::chalk:1.1.3"
+              dependencies:
+              - id: "NPM::ansi-styles:2.2.1"
+              - id: "NPM::escape-string-regexp:1.0.5"
+              - id: "NPM::has-ansi:2.0.0"
+                dependencies:
+                - id: "NPM::ansi-regex:2.1.1"
+              - id: "NPM::strip-ansi:3.0.1"
+                dependencies:
+                - id: "NPM::ansi-regex:2.1.1"
+              - id: "NPM::supports-color:2.0.0"
+            - id: "NPM::esutils:2.0.3"
+            - id: "NPM::js-tokens:3.0.2"
+          - id: "NPM::babel-generator:6.26.1"
+            dependencies:
+            - id: "NPM::babel-messages:6.23.0"
+              dependencies:
+              - id: "NPM::babel-runtime:6.26.0"
+                dependencies:
+                - id: "NPM::core-js:2.6.12"
+                - id: "NPM::regenerator-runtime:0.10.5"
+            - id: "NPM::babel-runtime:6.26.0"
+              dependencies:
+              - id: "NPM::core-js:2.6.12"
+              - id: "NPM::regenerator-runtime:0.10.5"
+            - id: "NPM::babel-types:6.26.0"
+              dependencies:
+              - id: "NPM::babel-runtime:6.26.0"
+                dependencies:
+                - id: "NPM::core-js:2.6.12"
+                - id: "NPM::regenerator-runtime:0.10.5"
+              - id: "NPM::esutils:2.0.3"
+              - id: "NPM::lodash:4.17.21"
+              - id: "NPM::to-fast-properties:1.0.3"
+            - id: "NPM::detect-indent:4.0.0"
+              dependencies:
+              - id: "NPM::repeating:2.0.1"
+                dependencies:
+                - id: "NPM::is-finite:1.1.0"
+            - id: "NPM::jsesc:1.3.0"
+            - id: "NPM::lodash:4.17.21"
+            - id: "NPM::source-map:0.5.7"
+            - id: "NPM::trim-right:1.0.1"
+          - id: "NPM::babel-helpers:6.24.1"
+            dependencies:
+            - id: "NPM::babel-runtime:6.26.0"
+              dependencies:
+              - id: "NPM::core-js:2.6.12"
+              - id: "NPM::regenerator-runtime:0.10.5"
+            - id: "NPM::babel-template:6.26.0"
+              dependencies:
+              - id: "NPM::babel-runtime:6.26.0"
+                dependencies:
+                - id: "NPM::core-js:2.6.12"
+                - id: "NPM::regenerator-runtime:0.10.5"
+              - id: "NPM::babel-traverse:6.26.0"
+                dependencies:
+                - id: "NPM::babel-code-frame:6.26.0"
+                  dependencies:
+                  - id: "NPM::chalk:1.1.3"
+                    dependencies:
+                    - id: "NPM::ansi-styles:2.2.1"
+                    - id: "NPM::escape-string-regexp:1.0.5"
+                    - id: "NPM::has-ansi:2.0.0"
+                      dependencies:
+                      - id: "NPM::ansi-regex:2.1.1"
+                    - id: "NPM::strip-ansi:3.0.1"
+                      dependencies:
+                      - id: "NPM::ansi-regex:2.1.1"
+                    - id: "NPM::supports-color:2.0.0"
+                  - id: "NPM::esutils:2.0.3"
+                  - id: "NPM::js-tokens:3.0.2"
+                - id: "NPM::babel-messages:6.23.0"
+                  dependencies:
+                  - id: "NPM::babel-runtime:6.26.0"
+                    dependencies:
+                    - id: "NPM::core-js:2.6.12"
+                    - id: "NPM::regenerator-runtime:0.10.5"
+                - id: "NPM::babel-runtime:6.26.0"
+                  dependencies:
+                  - id: "NPM::core-js:2.6.12"
+                  - id: "NPM::regenerator-runtime:0.10.5"
+                - id: "NPM::babel-types:6.26.0"
+                  dependencies:
+                  - id: "NPM::babel-runtime:6.26.0"
+                    dependencies:
+                    - id: "NPM::core-js:2.6.12"
+                    - id: "NPM::regenerator-runtime:0.10.5"
+                  - id: "NPM::esutils:2.0.3"
+                  - id: "NPM::lodash:4.17.21"
+                  - id: "NPM::to-fast-properties:1.0.3"
+                - id: "NPM::babylon:6.18.0"
+                - id: "NPM::debug:2.6.9"
+                  dependencies:
+                  - id: "NPM::ms:2.0.0"
+                - id: "NPM::globals:9.18.0"
+                - id: "NPM::invariant:2.2.4"
+                  dependencies:
+                  - id: "NPM::loose-envify:1.4.0"
+                    dependencies:
+                    - id: "NPM::js-tokens:3.0.2"
+                - id: "NPM::lodash:4.17.21"
+              - id: "NPM::babel-types:6.26.0"
+                dependencies:
+                - id: "NPM::babel-runtime:6.26.0"
+                  dependencies:
+                  - id: "NPM::core-js:2.6.12"
+                  - id: "NPM::regenerator-runtime:0.10.5"
+                - id: "NPM::esutils:2.0.3"
+                - id: "NPM::lodash:4.17.21"
+                - id: "NPM::to-fast-properties:1.0.3"
+              - id: "NPM::babylon:6.18.0"
+              - id: "NPM::lodash:4.17.21"
+          - id: "NPM::babel-messages:6.23.0"
+            dependencies:
+            - id: "NPM::babel-runtime:6.26.0"
+              dependencies:
+              - id: "NPM::core-js:2.6.12"
+              - id: "NPM::regenerator-runtime:0.10.5"
+          - id: "NPM::babel-runtime:6.26.0"
+            dependencies:
+            - id: "NPM::core-js:2.6.12"
+            - id: "NPM::regenerator-runtime:0.10.5"
+          - id: "NPM::babel-template:6.26.0"
+            dependencies:
+            - id: "NPM::babel-runtime:6.26.0"
+              dependencies:
+              - id: "NPM::core-js:2.6.12"
+              - id: "NPM::regenerator-runtime:0.10.5"
+            - id: "NPM::babel-traverse:6.26.0"
+              dependencies:
+              - id: "NPM::babel-code-frame:6.26.0"
+                dependencies:
+                - id: "NPM::chalk:1.1.3"
+                  dependencies:
+                  - id: "NPM::ansi-styles:2.2.1"
+                  - id: "NPM::escape-string-regexp:1.0.5"
+                  - id: "NPM::has-ansi:2.0.0"
+                    dependencies:
+                    - id: "NPM::ansi-regex:2.1.1"
+                  - id: "NPM::strip-ansi:3.0.1"
+                    dependencies:
+                    - id: "NPM::ansi-regex:2.1.1"
+                  - id: "NPM::supports-color:2.0.0"
+                - id: "NPM::esutils:2.0.3"
+                - id: "NPM::js-tokens:3.0.2"
+              - id: "NPM::babel-messages:6.23.0"
+                dependencies:
+                - id: "NPM::babel-runtime:6.26.0"
+                  dependencies:
+                  - id: "NPM::core-js:2.6.12"
+                  - id: "NPM::regenerator-runtime:0.10.5"
+              - id: "NPM::babel-runtime:6.26.0"
+                dependencies:
+                - id: "NPM::core-js:2.6.12"
+                - id: "NPM::regenerator-runtime:0.10.5"
+              - id: "NPM::babel-types:6.26.0"
+                dependencies:
+                - id: "NPM::babel-runtime:6.26.0"
+                  dependencies:
+                  - id: "NPM::core-js:2.6.12"
+                  - id: "NPM::regenerator-runtime:0.10.5"
+                - id: "NPM::esutils:2.0.3"
+                - id: "NPM::lodash:4.17.21"
+                - id: "NPM::to-fast-properties:1.0.3"
+              - id: "NPM::babylon:6.18.0"
+              - id: "NPM::debug:2.6.9"
+                dependencies:
+                - id: "NPM::ms:2.0.0"
+              - id: "NPM::globals:9.18.0"
+              - id: "NPM::invariant:2.2.4"
+                dependencies:
+                - id: "NPM::loose-envify:1.4.0"
+                  dependencies:
+                  - id: "NPM::js-tokens:3.0.2"
+              - id: "NPM::lodash:4.17.21"
+            - id: "NPM::babel-types:6.26.0"
+              dependencies:
+              - id: "NPM::babel-runtime:6.26.0"
+                dependencies:
+                - id: "NPM::core-js:2.6.12"
+                - id: "NPM::regenerator-runtime:0.10.5"
+              - id: "NPM::esutils:2.0.3"
+              - id: "NPM::lodash:4.17.21"
+              - id: "NPM::to-fast-properties:1.0.3"
+            - id: "NPM::babylon:6.18.0"
+            - id: "NPM::lodash:4.17.21"
+          - id: "NPM::babel-traverse:6.26.0"
+            dependencies:
+            - id: "NPM::babel-code-frame:6.26.0"
+              dependencies:
+              - id: "NPM::chalk:1.1.3"
+                dependencies:
+                - id: "NPM::ansi-styles:2.2.1"
+                - id: "NPM::escape-string-regexp:1.0.5"
+                - id: "NPM::has-ansi:2.0.0"
+                  dependencies:
+                  - id: "NPM::ansi-regex:2.1.1"
+                - id: "NPM::strip-ansi:3.0.1"
+                  dependencies:
+                  - id: "NPM::ansi-regex:2.1.1"
+                - id: "NPM::supports-color:2.0.0"
+              - id: "NPM::esutils:2.0.3"
+              - id: "NPM::js-tokens:3.0.2"
+            - id: "NPM::babel-messages:6.23.0"
+              dependencies:
+              - id: "NPM::babel-runtime:6.26.0"
+                dependencies:
+                - id: "NPM::core-js:2.6.12"
+                - id: "NPM::regenerator-runtime:0.10.5"
+            - id: "NPM::babel-runtime:6.26.0"
+              dependencies:
+              - id: "NPM::core-js:2.6.12"
+              - id: "NPM::regenerator-runtime:0.10.5"
+            - id: "NPM::babel-types:6.26.0"
+              dependencies:
+              - id: "NPM::babel-runtime:6.26.0"
+                dependencies:
+                - id: "NPM::core-js:2.6.12"
+                - id: "NPM::regenerator-runtime:0.10.5"
+              - id: "NPM::esutils:2.0.3"
+              - id: "NPM::lodash:4.17.21"
+              - id: "NPM::to-fast-properties:1.0.3"
+            - id: "NPM::babylon:6.18.0"
+            - id: "NPM::debug:2.6.9"
+              dependencies:
+              - id: "NPM::ms:2.0.0"
+            - id: "NPM::globals:9.18.0"
+            - id: "NPM::invariant:2.2.4"
+              dependencies:
+              - id: "NPM::loose-envify:1.4.0"
+                dependencies:
+                - id: "NPM::js-tokens:3.0.2"
+            - id: "NPM::lodash:4.17.21"
+          - id: "NPM::babel-types:6.26.0"
+            dependencies:
+            - id: "NPM::babel-runtime:6.26.0"
+              dependencies:
+              - id: "NPM::core-js:2.6.12"
+              - id: "NPM::regenerator-runtime:0.10.5"
+            - id: "NPM::esutils:2.0.3"
+            - id: "NPM::lodash:4.17.21"
+            - id: "NPM::to-fast-properties:1.0.3"
+          - id: "NPM::babylon:6.18.0"
+          - id: "NPM::convert-source-map:1.9.0"
+          - id: "NPM::debug:2.6.9"
+            dependencies:
+            - id: "NPM::ms:2.0.0"
+          - id: "NPM::json5:0.5.1"
+          - id: "NPM::lodash:4.17.21"
+          - id: "NPM::minimatch:3.1.2"
+            dependencies:
+            - id: "NPM::brace-expansion:1.1.11"
+              dependencies:
+              - id: "NPM::balanced-match:1.0.2"
+              - id: "NPM::concat-map:0.0.1"
+          - id: "NPM::path-is-absolute:1.0.1"
+          - id: "NPM::private:0.1.8"
+          - id: "NPM::slash:1.0.0"
+          - id: "NPM::source-map:0.5.7"
+        - id: "NPM::babel-runtime:6.26.0"
+          dependencies:
+          - id: "NPM::core-js:2.6.12"
+          - id: "NPM::regenerator-runtime:0.10.5"
+        - id: "NPM::core-js:2.6.12"
+        - id: "NPM::home-or-tmp:2.0.0"
+          dependencies:
+          - id: "NPM::os-homedir:1.0.2"
+          - id: "NPM::os-tmpdir:1.0.2"
+        - id: "NPM::lodash:4.17.21"
+        - id: "NPM::mkdirp:0.5.6"
+          dependencies:
+          - id: "NPM::minimist:1.2.8"
+        - id: "NPM::source-map-support:0.4.18"
+          dependencies:
+          - id: "NPM::source-map:0.5.7"
+      - id: "NPM::babel-runtime:6.26.0"
+        dependencies:
+        - id: "NPM::core-js:2.6.12"
+        - id: "NPM::regenerator-runtime:0.10.5"
+      - id: "NPM::chokidar:1.7.0"
+        dependencies:
+        - id: "NPM::anymatch:1.3.2"
+          dependencies:
+          - id: "NPM::micromatch:2.3.11"
+            dependencies:
+            - id: "NPM::arr-diff:2.0.0"
+              dependencies:
+              - id: "NPM::arr-flatten:1.1.0"
+            - id: "NPM::array-unique:0.2.1"
+            - id: "NPM::braces:1.8.5"
+              dependencies:
+              - id: "NPM::expand-range:1.8.2"
+                dependencies:
+                - id: "NPM::fill-range:4.0.0"
+                  dependencies:
+                  - id: "NPM::extend-shallow:3.0.2"
+                    dependencies:
+                    - id: "NPM::assign-symbols:1.0.0"
+                    - id: "NPM::is-extendable:1.0.1"
+                      dependencies:
+                      - id: "NPM::is-plain-object:2.0.4"
+                        dependencies:
+                        - id: "NPM::isobject:3.0.1"
+                  - id: "NPM::is-number:3.0.0"
+                    dependencies:
+                    - id: "NPM::kind-of:3.2.2"
+                      dependencies:
+                      - id: "NPM::is-buffer:1.1.6"
+                  - id: "NPM::repeat-string:1.6.1"
+                  - id: "NPM::to-regex-range:2.1.1"
+                    dependencies:
+                    - id: "NPM::is-number:3.0.0"
+                      dependencies:
+                      - id: "NPM::kind-of:3.2.2"
+                        dependencies:
+                        - id: "NPM::is-buffer:1.1.6"
+                    - id: "NPM::repeat-string:1.6.1"
+              - id: "NPM::preserve:0.2.0"
+              - id: "NPM::repeat-element:1.1.4"
+            - id: "NPM::expand-brackets:0.1.5"
+              dependencies:
+              - id: "NPM::is-posix-bracket:0.1.1"
+            - id: "NPM::extglob:0.3.2"
+              dependencies:
+              - id: "NPM::is-extglob:1.0.0"
+            - id: "NPM::filename-regex:2.0.1"
+            - id: "NPM::is-extglob:1.0.0"
+            - id: "NPM::is-glob:2.0.1"
+              dependencies:
+              - id: "NPM::is-extglob:1.0.0"
+            - id: "NPM::kind-of:3.2.2"
+              dependencies:
+              - id: "NPM::is-buffer:1.1.6"
+            - id: "NPM::normalize-path:2.1.1"
+              dependencies:
+              - id: "NPM::remove-trailing-separator:1.1.0"
+            - id: "NPM::object.omit:2.0.1"
+              dependencies:
+              - id: "NPM::for-own:0.1.5"
+                dependencies:
+                - id: "NPM::for-in:1.0.2"
+              - id: "NPM::is-extendable:1.0.1"
+                dependencies:
+                - id: "NPM::is-plain-object:2.0.4"
+                  dependencies:
+                  - id: "NPM::isobject:3.0.1"
+            - id: "NPM::parse-glob:3.0.4"
+              dependencies:
+              - id: "NPM::glob-base:0.3.0"
+                dependencies:
+                - id: "NPM::glob-parent:2.0.0"
+                  dependencies:
+                  - id: "NPM::is-glob:2.0.1"
+                    dependencies:
+                    - id: "NPM::is-extglob:1.0.0"
+                - id: "NPM::is-glob:2.0.1"
+                  dependencies:
+                  - id: "NPM::is-extglob:1.0.0"
+              - id: "NPM::is-dotfile:1.0.3"
+              - id: "NPM::is-extglob:1.0.0"
+              - id: "NPM::is-glob:2.0.1"
+                dependencies:
+                - id: "NPM::is-extglob:1.0.0"
+            - id: "NPM::regex-cache:0.4.4"
+              dependencies:
+              - id: "NPM::is-equal-shallow:0.1.3"
+                dependencies:
+                - id: "NPM::is-primitive:2.0.0"
+          - id: "NPM::normalize-path:2.1.1"
+            dependencies:
+            - id: "NPM::remove-trailing-separator:1.1.0"
+        - id: "NPM::async-each:1.0.6"
+        - id: "NPM::glob-parent:2.0.0"
+          dependencies:
+          - id: "NPM::is-glob:2.0.1"
+            dependencies:
+            - id: "NPM::is-extglob:1.0.0"
+        - id: "NPM::inherits:2.0.4"
+        - id: "NPM::is-binary-path:1.0.1"
+          dependencies:
+          - id: "NPM::binary-extensions:1.13.1"
+        - id: "NPM::is-glob:2.0.1"
+          dependencies:
+          - id: "NPM::is-extglob:1.0.0"
+        - id: "NPM::path-is-absolute:1.0.1"
+        - id: "NPM::readdirp:2.2.1"
+          dependencies:
+          - id: "NPM::graceful-fs:4.2.11"
+          - id: "NPM::micromatch:2.3.11"
+            dependencies:
+            - id: "NPM::arr-diff:2.0.0"
+              dependencies:
+              - id: "NPM::arr-flatten:1.1.0"
+            - id: "NPM::array-unique:0.2.1"
+            - id: "NPM::braces:1.8.5"
+              dependencies:
+              - id: "NPM::expand-range:1.8.2"
+                dependencies:
+                - id: "NPM::fill-range:4.0.0"
+                  dependencies:
+                  - id: "NPM::extend-shallow:3.0.2"
+                    dependencies:
+                    - id: "NPM::assign-symbols:1.0.0"
+                    - id: "NPM::is-extendable:1.0.1"
+                      dependencies:
+                      - id: "NPM::is-plain-object:2.0.4"
+                        dependencies:
+                        - id: "NPM::isobject:3.0.1"
+                  - id: "NPM::is-number:3.0.0"
+                    dependencies:
+                    - id: "NPM::kind-of:3.2.2"
+                      dependencies:
+                      - id: "NPM::is-buffer:1.1.6"
+                  - id: "NPM::repeat-string:1.6.1"
+                  - id: "NPM::to-regex-range:2.1.1"
+                    dependencies:
+                    - id: "NPM::is-number:3.0.0"
+                      dependencies:
+                      - id: "NPM::kind-of:3.2.2"
+                        dependencies:
+                        - id: "NPM::is-buffer:1.1.6"
+                    - id: "NPM::repeat-string:1.6.1"
+              - id: "NPM::preserve:0.2.0"
+              - id: "NPM::repeat-element:1.1.4"
+            - id: "NPM::expand-brackets:0.1.5"
+              dependencies:
+              - id: "NPM::is-posix-bracket:0.1.1"
+            - id: "NPM::extglob:0.3.2"
+              dependencies:
+              - id: "NPM::is-extglob:1.0.0"
+            - id: "NPM::filename-regex:2.0.1"
+            - id: "NPM::is-extglob:1.0.0"
+            - id: "NPM::is-glob:2.0.1"
+              dependencies:
+              - id: "NPM::is-extglob:1.0.0"
+            - id: "NPM::kind-of:3.2.2"
+              dependencies:
+              - id: "NPM::is-buffer:1.1.6"
+            - id: "NPM::normalize-path:2.1.1"
+              dependencies:
+              - id: "NPM::remove-trailing-separator:1.1.0"
+            - id: "NPM::object.omit:2.0.1"
+              dependencies:
+              - id: "NPM::for-own:0.1.5"
+                dependencies:
+                - id: "NPM::for-in:1.0.2"
+              - id: "NPM::is-extendable:1.0.1"
+                dependencies:
+                - id: "NPM::is-plain-object:2.0.4"
+                  dependencies:
+                  - id: "NPM::isobject:3.0.1"
+            - id: "NPM::parse-glob:3.0.4"
+              dependencies:
+              - id: "NPM::glob-base:0.3.0"
+                dependencies:
+                - id: "NPM::glob-parent:2.0.0"
+                  dependencies:
+                  - id: "NPM::is-glob:2.0.1"
+                    dependencies:
+                    - id: "NPM::is-extglob:1.0.0"
+                - id: "NPM::is-glob:2.0.1"
+                  dependencies:
+                  - id: "NPM::is-extglob:1.0.0"
+              - id: "NPM::is-dotfile:1.0.3"
+              - id: "NPM::is-extglob:1.0.0"
+              - id: "NPM::is-glob:2.0.1"
+                dependencies:
+                - id: "NPM::is-extglob:1.0.0"
+            - id: "NPM::regex-cache:0.4.4"
+              dependencies:
+              - id: "NPM::is-equal-shallow:0.1.3"
+                dependencies:
+                - id: "NPM::is-primitive:2.0.0"
+          - id: "NPM::readable-stream:2.3.8"
+            dependencies:
+            - id: "NPM::core-util-is:1.0.3"
+            - id: "NPM::inherits:2.0.4"
+            - id: "NPM::isarray:1.0.0"
+            - id: "NPM::process-nextick-args:2.0.1"
+            - id: "NPM::safe-buffer:5.1.2"
+            - id: "NPM::string_decoder:1.1.1"
+              dependencies:
+              - id: "NPM::safe-buffer:5.1.2"
+            - id: "NPM::util-deprecate:1.0.2"
+      - id: "NPM::commander:2.20.3"
+      - id: "NPM::convert-source-map:1.9.0"
+      - id: "NPM::fs-readdir-recursive:1.1.0"
+      - id: "NPM::glob:7.2.3"
+        dependencies:
+        - id: "NPM::fs.realpath:1.0.0"
+        - id: "NPM::inflight:1.0.6"
+          dependencies:
+          - id: "NPM::once:1.4.0"
+            dependencies:
+            - id: "NPM::wrappy:1.0.2"
+          - id: "NPM::wrappy:1.0.2"
+        - id: "NPM::inherits:2.0.4"
+        - id: "NPM::minimatch:3.1.2"
+          dependencies:
+          - id: "NPM::brace-expansion:1.1.11"
+            dependencies:
+            - id: "NPM::balanced-match:1.0.2"
+            - id: "NPM::concat-map:0.0.1"
+        - id: "NPM::once:1.4.0"
+          dependencies:
+          - id: "NPM::wrappy:1.0.2"
+        - id: "NPM::path-is-absolute:1.0.1"
+      - id: "NPM::lodash:4.17.21"
+      - id: "NPM::output-file-sync:1.1.2"
+        dependencies:
+        - id: "NPM::graceful-fs:4.2.11"
+        - id: "NPM::mkdirp:0.5.6"
+          dependencies:
+          - id: "NPM::minimist:1.2.8"
+        - id: "NPM::object-assign:4.1.1"
+      - id: "NPM::path-is-absolute:1.0.1"
+      - id: "NPM::slash:1.0.0"
+      - id: "NPM::source-map:0.5.7"
+      - id: "NPM::v8flags:2.1.1"
+        dependencies:
+        - id: "NPM::user-home:1.1.1"
+packages:
+- id: "NPM::ansi-regex:2.1.1"
+  purl: "pkg:npm/ansi-regex@2.1.1"
+  authors:
+  - "Sindre Sorhus"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Regular expression for matching ANSI escape codes"
+  homepage_url: "https://github.com/chalk/ansi-regex#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/ansi-regex/-/ansi-regex-2.1.1.tgz"
+    hash:
+      value: "c3b33ab5ee360d86e0e628f0468ae7ef27d654df"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/chalk/ansi-regex.git"
+    revision: "7c908e7b4eb6cd82bfe1295e33fdf6d166c7ed85"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/chalk/ansi-regex.git"
+    revision: "7c908e7b4eb6cd82bfe1295e33fdf6d166c7ed85"
+    path: ""
+- id: "NPM::ansi-styles:2.2.1"
+  purl: "pkg:npm/ansi-styles@2.2.1"
+  authors:
+  - "Sindre Sorhus"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "ANSI escape codes for styling strings in the terminal"
+  homepage_url: "https://github.com/chalk/ansi-styles#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/ansi-styles/-/ansi-styles-2.2.1.tgz"
+    hash:
+      value: "b432dd3358b634cf75e1e4664368240533c1ddbe"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/chalk/ansi-styles.git"
+    revision: "95c59b23be760108b6530ca1c89477c21b258032"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/chalk/ansi-styles.git"
+    revision: "95c59b23be760108b6530ca1c89477c21b258032"
+    path: ""
+- id: "NPM::anymatch:1.3.2"
+  purl: "pkg:npm/anymatch@1.3.2"
+  authors:
+  - "Elan Shanker"
+  declared_licenses:
+  - "ISC"
+  declared_licenses_processed:
+    spdx_expression: "ISC"
+  description: "Matches strings against configurable strings, globs, regular expressions,\
+    \ and/or functions"
+  homepage_url: "https://github.com/es128/anymatch"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/anymatch/-/anymatch-1.3.2.tgz"
+    hash:
+      value: "553dcb8f91e3c889845dfdba34c77721b90b9d7a"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/es128/anymatch"
+    revision: "a16f5bd07f1e36c4eef08c1291c6c119d1663639"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/es128/anymatch.git"
+    revision: "a16f5bd07f1e36c4eef08c1291c6c119d1663639"
+    path: ""
+- id: "NPM::arr-diff:2.0.0"
+  purl: "pkg:npm/arr-diff@2.0.0"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Returns an array with only the unique values from the first array,\
+    \ by excluding all values from additional arrays using strict equality for comparisons."
+  homepage_url: "https://github.com/jonschlinkert/arr-diff"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/arr-diff/-/arr-diff-2.0.0.tgz"
+    hash:
+      value: "8f3b827f955a8bd669697e4a4256ac3ceae356cf"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/arr-diff.git"
+    revision: "b89f54eb88ca51afd0e0ea6be9a4a63e5ccecf27"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/arr-diff.git"
+    revision: "b89f54eb88ca51afd0e0ea6be9a4a63e5ccecf27"
+    path: ""
+- id: "NPM::arr-flatten:1.1.0"
+  purl: "pkg:npm/arr-flatten@1.1.0"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Recursively flatten an array or arrays."
+  homepage_url: "https://github.com/jonschlinkert/arr-flatten"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/arr-flatten/-/arr-flatten-1.1.0.tgz"
+    hash:
+      value: "36048bbff4e7b47e136644316c99669ea5ae91f1"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/arr-flatten.git"
+    revision: "76a1ae28b03fdb1cbe5d49fa521bc4807b9f94d3"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/arr-flatten.git"
+    revision: "76a1ae28b03fdb1cbe5d49fa521bc4807b9f94d3"
+    path: ""
+- id: "NPM::array-unique:0.2.1"
+  purl: "pkg:npm/array-unique@0.2.1"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Return an array free of duplicate values. Fastest ES5 implementation."
+  homepage_url: "https://github.com/jonschlinkert/array-unique"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/array-unique/-/array-unique-0.2.1.tgz"
+    hash:
+      value: "a1d97ccafcbc2625cc70fadceb36a50c58b01a53"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/jonschlinkert/array-unique.git"
+    revision: "36fde8e586fb7cf880b8b3aa6515df889e64ed85"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/array-unique.git"
+    revision: "36fde8e586fb7cf880b8b3aa6515df889e64ed85"
+    path: ""
+- id: "NPM::assign-symbols:1.0.0"
+  purl: "pkg:npm/assign-symbols@1.0.0"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Assign the enumerable es6 Symbol properties from an object (or objects)\
+    \ to the first object passed on the arguments. Can be used as a supplement to\
+    \ other extend, assign or merge methods as a polyfill for the Symbols part of\
+    \ the es6 Object.assign method."
+  homepage_url: "https://github.com/jonschlinkert/assign-symbols"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/assign-symbols/-/assign-symbols-1.0.0.tgz"
+    hash:
+      value: "59667f41fadd4f20ccbc2bb96b8d4f7f78ec0367"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/assign-symbols.git"
+    revision: "2df01f26fce8359fa75688eb89e2a1c65de6f237"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/assign-symbols.git"
+    revision: "2df01f26fce8359fa75688eb89e2a1c65de6f237"
+    path: ""
+- id: "NPM::async-each:1.0.6"
+  purl: "pkg:npm/async-each@1.0.6"
+  authors:
+  - "Paul Miller"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "No-bullshit, ultra-simple, 35-lines-of-code async parallel forEach\
+    \ / map function for JavaScript."
+  homepage_url: "https://github.com/paulmillr/async-each/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/async-each/-/async-each-1.0.6.tgz"
+    hash:
+      value: "52f1d9403818c179b7561e11a5d1b77eb2160e77"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/paulmillr/async-each.git"
+    revision: "5a27da144b89c6b9cbf34e017c424801734ef6e2"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/paulmillr/async-each.git"
+    revision: "5a27da144b89c6b9cbf34e017c424801734ef6e2"
+    path: ""
+- id: "NPM::babel-cli:6.26.0"
+  purl: "pkg:npm/babel-cli@6.26.0"
+  authors:
+  - "Sebastian McKenzie"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Babel command line."
+  homepage_url: "https://babeljs.io/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/babel-cli/-/babel-cli-6.26.0.tgz"
+    hash:
+      value: "502ab54874d7db88ad00b887a06383ce03d002f1"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/babel/babel/tree/master/packages/babel-cli"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/babel/babel.git"
+    revision: "master"
+    path: "packages/babel-cli"
+- id: "NPM::babel-code-frame:6.26.0"
+  purl: "pkg:npm/babel-code-frame@6.26.0"
+  authors:
+  - "Sebastian McKenzie"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Generate errors that contain a code frame that point to source locations."
+  homepage_url: "https://babeljs.io/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/babel-code-frame/-/babel-code-frame-6.26.0.tgz"
+    hash:
+      value: "63fd43f7dc1e3bb7ce35947db8fe369a3f58c74b"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/babel/babel/tree/master/packages/babel-code-frame"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/babel/babel.git"
+    revision: "master"
+    path: "packages/babel-code-frame"
+- id: "NPM::babel-core:6.26.3"
+  purl: "pkg:npm/babel-core@6.26.3"
+  authors:
+  - "Sebastian McKenzie"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Babel compiler core."
+  homepage_url: "https://babeljs.io/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/babel-core/-/babel-core-6.26.3.tgz"
+    hash:
+      value: "b2e2f09e342d0f0c88e2f02e067794125e75c207"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/babel/babel/tree/master/packages/babel-core"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/babel/babel.git"
+    revision: "master"
+    path: "packages/babel-core"
+- id: "NPM::babel-generator:6.26.1"
+  purl: "pkg:npm/babel-generator@6.26.1"
+  authors:
+  - "Sebastian McKenzie"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Turns an AST into code."
+  homepage_url: "https://babeljs.io/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/babel-generator/-/babel-generator-6.26.1.tgz"
+    hash:
+      value: "1844408d3b8f0d35a404ea7ac180f087a601bd90"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/babel/babel/tree/master/packages/babel-generator"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/babel/babel.git"
+    revision: "master"
+    path: "packages/babel-generator"
+- id: "NPM::babel-helpers:6.24.1"
+  purl: "pkg:npm/babel-helpers@6.24.1"
+  authors:
+  - "Sebastian McKenzie"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Collection of helper functions used by Babel transforms."
+  homepage_url: "https://babeljs.io/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/babel-helpers/-/babel-helpers-6.24.1.tgz"
+    hash:
+      value: "3471de9caec388e5c850e597e58a26ddf37602b2"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/babel/babel/tree/master/packages/babel-helpers"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/babel/babel.git"
+    revision: "master"
+    path: "packages/babel-helpers"
+- id: "NPM::babel-messages:6.23.0"
+  purl: "pkg:npm/babel-messages@6.23.0"
+  authors:
+  - "Sebastian McKenzie"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Collection of debug messages used by Babel."
+  homepage_url: "https://babeljs.io/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/babel-messages/-/babel-messages-6.23.0.tgz"
+    hash:
+      value: "f3cdf4703858035b2a2951c6ec5edf6c62f2630e"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/babel/babel/tree/master/packages/babel-messages"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/babel/babel.git"
+    revision: "master"
+    path: "packages/babel-messages"
+- id: "NPM::babel-polyfill:6.26.0"
+  purl: "pkg:npm/babel-polyfill@6.26.0"
+  authors:
+  - "Sebastian McKenzie"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Provides polyfills necessary for a full ES2015+ environment"
+  homepage_url: "https://babeljs.io/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/babel-polyfill/-/babel-polyfill-6.26.0.tgz"
+    hash:
+      value: "379937abc67d7895970adc621f284cd966cf2153"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/babel/babel/tree/master/packages/babel-polyfill"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/babel/babel.git"
+    revision: "master"
+    path: "packages/babel-polyfill"
+- id: "NPM::babel-register:6.26.0"
+  purl: "pkg:npm/babel-register@6.26.0"
+  authors:
+  - "Sebastian McKenzie"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "babel require hook"
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/babel-register/-/babel-register-6.26.0.tgz"
+    hash:
+      value: "6ed021173e2fcb486d7acb45c6009a856f647071"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/babel/babel/tree/master/packages/babel-register"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/babel/babel.git"
+    revision: "master"
+    path: "packages/babel-register"
+- id: "NPM::babel-runtime:6.26.0"
+  purl: "pkg:npm/babel-runtime@6.26.0"
+  authors:
+  - "Sebastian McKenzie"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "babel selfContained runtime"
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/babel-runtime/-/babel-runtime-6.26.0.tgz"
+    hash:
+      value: "965c7058668e82b55d7bfe04ff2337bc8b5647fe"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/babel/babel/tree/master/packages/babel-runtime"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/babel/babel.git"
+    revision: "master"
+    path: "packages/babel-runtime"
+- id: "NPM::babel-template:6.26.0"
+  purl: "pkg:npm/babel-template@6.26.0"
+  authors:
+  - "Sebastian McKenzie"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Generate an AST from a string template."
+  homepage_url: "https://babeljs.io/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/babel-template/-/babel-template-6.26.0.tgz"
+    hash:
+      value: "de03e2d16396b069f46dd9fff8521fb1a0e35e02"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/babel/babel/tree/master/packages/babel-template"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/babel/babel.git"
+    revision: "master"
+    path: "packages/babel-template"
+- id: "NPM::babel-traverse:6.26.0"
+  purl: "pkg:npm/babel-traverse@6.26.0"
+  authors:
+  - "Sebastian McKenzie"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "The Babel Traverse module maintains the overall tree state, and is\
+    \ responsible for replacing, removing, and adding nodes"
+  homepage_url: "https://babeljs.io/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/babel-traverse/-/babel-traverse-6.26.0.tgz"
+    hash:
+      value: "46a9cbd7edcc62c8e5c064e2d2d8d0f4035766ee"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/babel/babel/tree/master/packages/babel-traverse"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/babel/babel.git"
+    revision: "master"
+    path: "packages/babel-traverse"
+- id: "NPM::babel-types:6.26.0"
+  purl: "pkg:npm/babel-types@6.26.0"
+  authors:
+  - "Sebastian McKenzie"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Babel Types is a Lodash-esque utility library for AST nodes"
+  homepage_url: "https://babeljs.io/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/babel-types/-/babel-types-6.26.0.tgz"
+    hash:
+      value: "a3b073f94ab49eb6fa55cd65227a334380632497"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/babel/babel/tree/master/packages/babel-types"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/babel/babel.git"
+    revision: "master"
+    path: "packages/babel-types"
+- id: "NPM::babylon:6.18.0"
+  purl: "pkg:npm/babylon@6.18.0"
+  authors:
+  - "Sebastian McKenzie"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A JavaScript parser"
+  homepage_url: "https://babeljs.io/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/babylon/-/babylon-6.18.0.tgz"
+    hash:
+      value: "af2f3b88fa6f5c1e4c634d1a0f8eac4f55b395e3"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/babel/babylon"
+    revision: "da66d3f65b0d305c0bb042873d57f26f0c0b0538"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/babel/babylon.git"
+    revision: "da66d3f65b0d305c0bb042873d57f26f0c0b0538"
+    path: ""
+- id: "NPM::balanced-match:1.0.2"
+  purl: "pkg:npm/balanced-match@1.0.2"
+  authors:
+  - "Julian Gruber"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Match balanced character pairs, like \"{\" and \"}\""
+  homepage_url: "https://github.com/juliangruber/balanced-match"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/balanced-match/-/balanced-match-1.0.2.tgz"
+    hash:
+      value: "e83e3a7e3f300b34cb9d87f615fa0cbf357690ee"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/juliangruber/balanced-match.git"
+    revision: "c7412e09b95d6ad97fd1e2996f6adca7626a9ae8"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/juliangruber/balanced-match.git"
+    revision: "c7412e09b95d6ad97fd1e2996f6adca7626a9ae8"
+    path: ""
+- id: "NPM::binary-extensions:1.13.1"
+  purl: "pkg:npm/binary-extensions@1.13.1"
+  authors:
+  - "Sindre Sorhus"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "List of binary file extensions"
+  homepage_url: "https://github.com/sindresorhus/binary-extensions#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/binary-extensions/-/binary-extensions-1.13.1.tgz"
+    hash:
+      value: "598afe54755b2868a5330d2aff9d4ebb53209b65"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/sindresorhus/binary-extensions.git"
+    revision: "187f5ab83698150abdc4ec8020c233ebe7303f0f"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/sindresorhus/binary-extensions.git"
+    revision: "187f5ab83698150abdc4ec8020c233ebe7303f0f"
+    path: ""
+- id: "NPM::brace-expansion:1.1.11"
+  purl: "pkg:npm/brace-expansion@1.1.11"
+  authors:
+  - "Julian Gruber"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Brace expansion as known from sh/bash"
+  homepage_url: "https://github.com/juliangruber/brace-expansion"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/brace-expansion/-/brace-expansion-1.1.11.tgz"
+    hash:
+      value: "3c7fcbf529d87226f3d2f52b966ff5271eb441dd"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/juliangruber/brace-expansion.git"
+    revision: "01a21de7441549d26ac0c0a9ff91385d16e5c21c"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/juliangruber/brace-expansion.git"
+    revision: "01a21de7441549d26ac0c0a9ff91385d16e5c21c"
+    path: ""
+- id: "NPM::braces:1.8.5"
+  purl: "pkg:npm/braces@1.8.5"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Fastest brace expansion for node.js, with the most complete support\
+    \ for the Bash 4.3 braces specification."
+  homepage_url: "https://github.com/jonschlinkert/braces"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/braces/-/braces-1.8.5.tgz"
+    hash:
+      value: "ba77962e12dff969d6b76711e914b737857bf6a7"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/braces.git"
+    revision: "24874614ebeda1c5405180f1f6c9f374bcf384ce"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/braces.git"
+    revision: "24874614ebeda1c5405180f1f6c9f374bcf384ce"
+    path: ""
+- id: "NPM::chalk:1.1.3"
+  purl: "pkg:npm/chalk@1.1.3"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Terminal string styling done right. Much color."
+  homepage_url: "https://github.com/chalk/chalk#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/chalk/-/chalk-1.1.3.tgz"
+    hash:
+      value: "a8115c55e4a702fe4d150abd3872822a7e09fc98"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/chalk/chalk.git"
+    revision: "0d8d8c204eb87a4038219131ad4d8369c9f59d24"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/chalk/chalk.git"
+    revision: "0d8d8c204eb87a4038219131ad4d8369c9f59d24"
+    path: ""
+- id: "NPM::chokidar:1.7.0"
+  purl: "pkg:npm/chokidar@1.7.0"
+  authors:
+  - "Paul Miller"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A neat wrapper around node.js fs.watch / fs.watchFile / fsevents."
+  homepage_url: "https://github.com/paulmillr/chokidar"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/chokidar/-/chokidar-1.7.0.tgz"
+    hash:
+      value: "798e689778151c8076b4b360e5edd28cda2bb468"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/paulmillr/chokidar.git"
+    revision: "3b1071a6dd82397842f4f7dc63b72c703bd06275"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/paulmillr/chokidar.git"
+    revision: "3b1071a6dd82397842f4f7dc63b72c703bd06275"
+    path: ""
+- id: "NPM::commander:2.20.3"
+  purl: "pkg:npm/commander@2.20.3"
+  authors:
+  - "TJ Holowaychuk"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "the complete solution for node.js command-line programs"
+  homepage_url: "https://github.com/tj/commander.js#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/commander/-/commander-2.20.3.tgz"
+    hash:
+      value: "fd485e84c03eb4881c20722ba48035e8531aeb33"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/tj/commander.js.git"
+    revision: "6b8499b24f4f6498ad630c50c8a00c9579a8536b"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/tj/commander.js.git"
+    revision: "6b8499b24f4f6498ad630c50c8a00c9579a8536b"
+    path: ""
+- id: "NPM::concat-map:0.0.1"
+  purl: "pkg:npm/concat-map@0.0.1"
+  authors:
+  - "James Halliday"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "concatenative mapdashery"
+  homepage_url: "https://github.com/substack/node-concat-map"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz"
+    hash:
+      value: "d8a96bd77fd68df7793a73036a3ba0d5405d477b"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/substack/node-concat-map.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/substack/node-concat-map.git"
+    revision: ""
+    path: ""
+- id: "NPM::convert-source-map:1.9.0"
+  purl: "pkg:npm/convert-source-map@1.9.0"
+  authors:
+  - "Thorsten Lorenz"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Converts a source-map from/to  different formats and allows adding/changing\
+    \ properties."
+  homepage_url: "https://github.com/thlorenz/convert-source-map"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/convert-source-map/-/convert-source-map-1.9.0.tgz"
+    hash:
+      value: "7faae62353fb4213366d0ca98358d22e8368b05f"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/thlorenz/convert-source-map.git"
+    revision: "46c2b78aa56d25a77d3ea237051aeb5d9e7f750c"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/thlorenz/convert-source-map.git"
+    revision: "46c2b78aa56d25a77d3ea237051aeb5d9e7f750c"
+    path: ""
+- id: "NPM::core-js:2.6.12"
+  purl: "pkg:npm/core-js@2.6.12"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Standard library"
+  homepage_url: "https://github.com/zloirock/core-js#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/core-js/-/core-js-2.6.12.tgz"
+    hash:
+      value: "d9333dfa7b065e347cc5682219d6f690859cc2ec"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/zloirock/core-js.git"
+    revision: "ffb783b746849c2b14258e6bef6106f1dcab2a66"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/zloirock/core-js.git"
+    revision: "ffb783b746849c2b14258e6bef6106f1dcab2a66"
+    path: ""
+- id: "NPM::core-util-is:1.0.3"
+  purl: "pkg:npm/core-util-is@1.0.3"
+  authors:
+  - "Isaac Z. Schlueter"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "The `util.is*` functions introduced in Node v0.12."
+  homepage_url: "https://github.com/isaacs/core-util-is#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/core-util-is/-/core-util-is-1.0.3.tgz"
+    hash:
+      value: "a6042d3634c2b27e9328f837b965fac83808db85"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/isaacs/core-util-is"
+    revision: "85f4620829d1b6079fd7b351f040b6ea7e184970"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/isaacs/core-util-is.git"
+    revision: "85f4620829d1b6079fd7b351f040b6ea7e184970"
+    path: ""
+- id: "NPM::debug:2.6.9"
+  purl: "pkg:npm/debug@2.6.9"
+  authors:
+  - "TJ Holowaychuk"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "small debugging utility"
+  homepage_url: "https://github.com/visionmedia/debug#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/debug/-/debug-2.6.9.tgz"
+    hash:
+      value: "5d128515df134ff327e90a4c93f4e077a536341f"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/visionmedia/debug.git"
+    revision: "13abeae468fea297d0dccc50bc55590809241083"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/visionmedia/debug.git"
+    revision: "13abeae468fea297d0dccc50bc55590809241083"
+    path: ""
+- id: "NPM::detect-indent:4.0.0"
+  purl: "pkg:npm/detect-indent@4.0.0"
+  authors:
+  - "Sindre Sorhus"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Detect the indentation of code"
+  homepage_url: "https://github.com/sindresorhus/detect-indent"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/detect-indent/-/detect-indent-4.0.0.tgz"
+    hash:
+      value: "f76d064352cdf43a1cb6ce619c4ee3a9475de208"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/sindresorhus/detect-indent.git"
+    revision: "dbbc78fcb37907116eb120a8324070a1df0e8d86"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/sindresorhus/detect-indent.git"
+    revision: "dbbc78fcb37907116eb120a8324070a1df0e8d86"
+    path: ""
+- id: "NPM::escape-string-regexp:1.0.5"
+  purl: "pkg:npm/escape-string-regexp@1.0.5"
+  authors:
+  - "Sindre Sorhus"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Escape RegExp special characters"
+  homepage_url: "https://github.com/sindresorhus/escape-string-regexp"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz"
+    hash:
+      value: "1b61c0562190a8dff6ae3bb2cf0200ca130b86d4"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/sindresorhus/escape-string-regexp.git"
+    revision: "db124a3e1aae9d692c4899e42a5c6c3e329eaa20"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/sindresorhus/escape-string-regexp.git"
+    revision: "db124a3e1aae9d692c4899e42a5c6c3e329eaa20"
+    path: ""
+- id: "NPM::esutils:2.0.3"
+  purl: "pkg:npm/esutils@2.0.3"
+  declared_licenses:
+  - "BSD-2-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-2-Clause"
+  description: "utility box for ECMAScript language tools"
+  homepage_url: "https://github.com/estools/esutils"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/esutils/-/esutils-2.0.3.tgz"
+    hash:
+      value: "74d2eb4de0b8da1293711910d50775b9b710ef64"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "http://github.com/estools/esutils.git"
+    revision: "8c2741c0154723fb92da137a0c97845b03b0943a"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/estools/esutils.git"
+    revision: "8c2741c0154723fb92da137a0c97845b03b0943a"
+    path: ""
+- id: "NPM::expand-brackets:0.1.5"
+  purl: "pkg:npm/expand-brackets@0.1.5"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Expand POSIX bracket expressions (character classes) in glob patterns."
+  homepage_url: "https://github.com/jonschlinkert/expand-brackets"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/expand-brackets/-/expand-brackets-0.1.5.tgz"
+    hash:
+      value: "df07284e342a807cd733ac5af72411e581d1177b"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/expand-brackets.git"
+    revision: "1b07fda8ee8b6426d95e6539785b74c57e9ee542"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/expand-brackets.git"
+    revision: "1b07fda8ee8b6426d95e6539785b74c57e9ee542"
+    path: ""
+- id: "NPM::expand-range:1.8.2"
+  purl: "pkg:npm/expand-range@1.8.2"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Fast, bash-like range expansion. Expand a range of numbers or letters,\
+    \ uppercase or lowercase. See the benchmarks. Used by micromatch."
+  homepage_url: "https://github.com/jonschlinkert/expand-range"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/expand-range/-/expand-range-1.8.2.tgz"
+    hash:
+      value: "a299effd335fe2721ebae8e257ec79644fc85337"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/expand-range.git"
+    revision: "4c873af0870df8382bafc66a93d5c89e3aad3d4d"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/expand-range.git"
+    revision: "4c873af0870df8382bafc66a93d5c89e3aad3d4d"
+    path: ""
+- id: "NPM::extend-shallow:3.0.2"
+  purl: "pkg:npm/extend-shallow@3.0.2"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Extend an object with the properties of additional objects. node.js/javascript\
+    \ util."
+  homepage_url: "https://github.com/jonschlinkert/extend-shallow"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/extend-shallow/-/extend-shallow-3.0.2.tgz"
+    hash:
+      value: "26a71aaf073b39fb2127172746131c2704028db8"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/extend-shallow.git"
+    revision: "33698c3df7804f0d0e3ea98caa64d53f09c37bd4"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/extend-shallow.git"
+    revision: "33698c3df7804f0d0e3ea98caa64d53f09c37bd4"
+    path: ""
+- id: "NPM::extglob:0.3.2"
+  purl: "pkg:npm/extglob@0.3.2"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Convert extended globs to regex-compatible strings. Add (almost) the\
+    \ expressive power of regular expressions to glob patterns."
+  homepage_url: "https://github.com/jonschlinkert/extglob"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/extglob/-/extglob-0.3.2.tgz"
+    hash:
+      value: "2e18ff3d2f49ab2765cec9023f011daa8d8349a1"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/jonschlinkert/extglob.git"
+    revision: "8c3f38bbd9e0afaf31a87e411c0d15532434ef41"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/extglob.git"
+    revision: "8c3f38bbd9e0afaf31a87e411c0d15532434ef41"
+    path: ""
+- id: "NPM::filename-regex:2.0.1"
+  purl: "pkg:npm/filename-regex@2.0.1"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Regular expression for matching file names, with or without extension."
+  homepage_url: "https://github.com/regexhq/filename-regex"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/filename-regex/-/filename-regex-2.0.1.tgz"
+    hash:
+      value: "c1c4b9bee3e09725ddb106b75c1e301fe2f18b26"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/regexhq/filename-regex.git"
+    revision: "821fec482acdb1ce3f23a804ce8a86724d02b4e6"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/regexhq/filename-regex.git"
+    revision: "821fec482acdb1ce3f23a804ce8a86724d02b4e6"
+    path: ""
+- id: "NPM::fill-range:4.0.0"
+  purl: "pkg:npm/fill-range@4.0.0"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Fill in a range of numbers or letters, optionally passing an increment\
+    \ or `step` to use, or create a regex-compatible range with `options.toRegex`"
+  homepage_url: "https://github.com/jonschlinkert/fill-range"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/fill-range/-/fill-range-4.0.0.tgz"
+    hash:
+      value: "d544811d428f98eb06a63dc402d2403c328c38f7"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/fill-range.git"
+    revision: "e5a21feaac23f3f34bb4d7ca8e65393e18b451b6"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/fill-range.git"
+    revision: "e5a21feaac23f3f34bb4d7ca8e65393e18b451b6"
+    path: ""
+- id: "NPM::for-in:1.0.2"
+  purl: "pkg:npm/for-in@1.0.2"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Iterate over the own and inherited enumerable properties of an object,\
+    \ and return an object with properties that evaluate to true from the callback.\
+    \ Exit early by returning `false`. JavaScript/Node.js"
+  homepage_url: "https://github.com/jonschlinkert/for-in"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/for-in/-/for-in-1.0.2.tgz"
+    hash:
+      value: "81068d295a8142ec0ac726c6e2200c30fb6d5e80"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/for-in.git"
+    revision: "5f97ad4f6556e938d9b71614259ddd8044a081e3"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/for-in.git"
+    revision: "5f97ad4f6556e938d9b71614259ddd8044a081e3"
+    path: ""
+- id: "NPM::for-own:0.1.5"
+  purl: "pkg:npm/for-own@0.1.5"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Iterate over the own enumerable properties of an object, and return\
+    \ an object with properties that evaluate to true from the callback. Exit early\
+    \ by returning `false`. JavaScript/Node.js."
+  homepage_url: "https://github.com/jonschlinkert/for-own"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/for-own/-/for-own-0.1.5.tgz"
+    hash:
+      value: "5265c681a4f294dabbf17c9509b6763aa84510ce"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/for-own.git"
+    revision: "e64ee3492f218c812011ec3feff4194e9272d2a1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/for-own.git"
+    revision: "e64ee3492f218c812011ec3feff4194e9272d2a1"
+    path: ""
+- id: "NPM::fs-readdir-recursive:1.1.0"
+  purl: "pkg:npm/fs-readdir-recursive@1.1.0"
+  authors:
+  - "Jonathan Ong"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Recursively read a directory"
+  homepage_url: "https://github.com/fs-utils/fs-readdir-recursive#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/fs-readdir-recursive/-/fs-readdir-recursive-1.1.0.tgz"
+    hash:
+      value: "e32fc030a2ccee44a6b5371308da54be0b397d27"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/fs-utils/fs-readdir-recursive.git"
+    revision: "f810b44477696081ebef9c0d5eafb24005c8e82b"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/fs-utils/fs-readdir-recursive.git"
+    revision: "f810b44477696081ebef9c0d5eafb24005c8e82b"
+    path: ""
+- id: "NPM::fs.realpath:1.0.0"
+  purl: "pkg:npm/fs.realpath@1.0.0"
+  authors:
+  - "Isaac Z. Schlueter"
+  declared_licenses:
+  - "ISC"
+  declared_licenses_processed:
+    spdx_expression: "ISC"
+  description: "Use node's fs.realpath, but fall back to the JS implementation if\
+    \ the native one fails"
+  homepage_url: "https://github.com/isaacs/fs.realpath#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz"
+    hash:
+      value: "1504ad2523158caa40db4a2787cb01411994ea4f"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/isaacs/fs.realpath.git"
+    revision: "03e7c884431fe185dfebbc9b771aeca339c1807a"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/isaacs/fs.realpath.git"
+    revision: "03e7c884431fe185dfebbc9b771aeca339c1807a"
+    path: ""
+- id: "NPM::glob:7.2.3"
+  purl: "pkg:npm/glob@7.2.3"
+  authors:
+  - "Isaac Z. Schlueter"
+  declared_licenses:
+  - "ISC"
+  declared_licenses_processed:
+    spdx_expression: "ISC"
+  description: "a little globber"
+  homepage_url: "https://github.com/isaacs/node-glob#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/glob/-/glob-7.2.3.tgz"
+    hash:
+      value: "b8df0fb802bbfa8e89bd1d938b4e16578ed44f2b"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/isaacs/node-glob.git"
+    revision: "c3cd57ae128faa0e9190492acc743bb779ac4054"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/isaacs/node-glob.git"
+    revision: "c3cd57ae128faa0e9190492acc743bb779ac4054"
+    path: ""
+- id: "NPM::glob-base:0.3.0"
+  purl: "pkg:npm/glob-base@0.3.0"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Returns an object with the (non-glob) base path and the actual pattern."
+  homepage_url: "https://github.com/jonschlinkert/glob-base"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/glob-base/-/glob-base-0.3.0.tgz"
+    hash:
+      value: "dbb164f6221b1c0b1ccf82aea328b497df0ea3c4"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/jonschlinkert/glob-base.git"
+    revision: "adbc0ab07ec8a85f76ffd1b54dd41cdb9d1d0b83"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/glob-base.git"
+    revision: "adbc0ab07ec8a85f76ffd1b54dd41cdb9d1d0b83"
+    path: ""
+- id: "NPM::glob-parent:2.0.0"
+  purl: "pkg:npm/glob-parent@2.0.0"
+  authors:
+  - "Elan Shanker"
+  declared_licenses:
+  - "ISC"
+  declared_licenses_processed:
+    spdx_expression: "ISC"
+  description: "Strips glob magic from a string to provide the parent path"
+  homepage_url: "https://github.com/es128/glob-parent"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/glob-parent/-/glob-parent-2.0.0.tgz"
+    hash:
+      value: "81383d72db054fcccf5336daa902f182f6edbb28"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/es128/glob-parent"
+    revision: "a956910c7ccb5eafd1b3fe900ceb6335cc5b6d3d"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/es128/glob-parent.git"
+    revision: "a956910c7ccb5eafd1b3fe900ceb6335cc5b6d3d"
+    path: ""
+- id: "NPM::globals:9.18.0"
+  purl: "pkg:npm/globals@9.18.0"
+  authors:
+  - "Sindre Sorhus"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Global identifiers from different JavaScript environments"
+  homepage_url: "https://github.com/sindresorhus/globals#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/globals/-/globals-9.18.0.tgz"
+    hash:
+      value: "aa3896b3e69b487f17e31ed2143d69a8e30c2d8a"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/sindresorhus/globals.git"
+    revision: "09ba8754235e5953507b8d0543d65098bc7bb78d"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/sindresorhus/globals.git"
+    revision: "09ba8754235e5953507b8d0543d65098bc7bb78d"
+    path: ""
+- id: "NPM::graceful-fs:4.2.11"
+  purl: "pkg:npm/graceful-fs@4.2.11"
+  declared_licenses:
+  - "ISC"
+  declared_licenses_processed:
+    spdx_expression: "ISC"
+  description: "A drop-in replacement for fs, making various improvements."
+  homepage_url: "https://github.com/isaacs/node-graceful-fs#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.11.tgz"
+    hash:
+      value: "4183e4e8bf08bb6e05bbb2f7d2e0c8f712ca40e3"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/isaacs/node-graceful-fs"
+    revision: "514861c372899df14beb7aaecca4cdbb498d7d11"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/isaacs/node-graceful-fs.git"
+    revision: "514861c372899df14beb7aaecca4cdbb498d7d11"
+    path: ""
+- id: "NPM::has-ansi:2.0.0"
+  purl: "pkg:npm/has-ansi@2.0.0"
+  authors:
+  - "Sindre Sorhus"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Check if a string has ANSI escape codes"
+  homepage_url: "https://github.com/sindresorhus/has-ansi"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/has-ansi/-/has-ansi-2.0.0.tgz"
+    hash:
+      value: "34f5049ce1ecdf2b0649af3ef24e45ed35416d91"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/sindresorhus/has-ansi.git"
+    revision: "0722275e1bef139fcd09137da6e5550c3cd368b9"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/sindresorhus/has-ansi.git"
+    revision: "0722275e1bef139fcd09137da6e5550c3cd368b9"
+    path: ""
+- id: "NPM::home-or-tmp:2.0.0"
+  purl: "pkg:npm/home-or-tmp@2.0.0"
+  authors:
+  - "Sindre Sorhus"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Get the user home directory with fallback to the system temp directory"
+  homepage_url: "https://github.com/sindresorhus/home-or-tmp"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/home-or-tmp/-/home-or-tmp-2.0.0.tgz"
+    hash:
+      value: "e36c3f2d2cae7d746a857e38d18d5f32a7882db8"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/sindresorhus/home-or-tmp.git"
+    revision: "dd1411a0b2531a4e2c592ae733fd45dd0f9c7163"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/sindresorhus/home-or-tmp.git"
+    revision: "dd1411a0b2531a4e2c592ae733fd45dd0f9c7163"
+    path: ""
+- id: "NPM::inflight:1.0.6"
+  purl: "pkg:npm/inflight@1.0.6"
+  authors:
+  - "Isaac Z. Schlueter"
+  declared_licenses:
+  - "ISC"
+  declared_licenses_processed:
+    spdx_expression: "ISC"
+  description: "Add callbacks to requests in flight to avoid async duplication"
+  homepage_url: "https://github.com/isaacs/inflight"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/inflight/-/inflight-1.0.6.tgz"
+    hash:
+      value: "49bd6331d7d02d0c09bc910a1075ba8165b56df9"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/npm/inflight.git"
+    revision: "a547881738c8f57b27795e584071d67cf6ac1a57"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/npm/inflight.git"
+    revision: "a547881738c8f57b27795e584071d67cf6ac1a57"
+    path: ""
+- id: "NPM::inherits:2.0.4"
+  purl: "pkg:npm/inherits@2.0.4"
+  declared_licenses:
+  - "ISC"
+  declared_licenses_processed:
+    spdx_expression: "ISC"
+  description: "Browser-friendly inheritance fully compatible with standard node.js\
+    \ inherits()"
+  homepage_url: "https://github.com/isaacs/inherits#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/inherits/-/inherits-2.0.4.tgz"
+    hash:
+      value: "0fa2c64f932917c3433a0ded55363aae37416b7c"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/isaacs/inherits"
+    revision: "9a2c29400c6d491e0b7beefe0c32efa3b462545d"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/isaacs/inherits.git"
+    revision: "9a2c29400c6d491e0b7beefe0c32efa3b462545d"
+    path: ""
+- id: "NPM::invariant:2.2.4"
+  purl: "pkg:npm/invariant@2.2.4"
+  authors:
+  - "Andres Suarez"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "invariant"
+  homepage_url: "https://github.com/zertosh/invariant#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/invariant/-/invariant-2.2.4.tgz"
+    hash:
+      value: "610f3c92c9359ce1db616e538008d23ff35158e6"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/zertosh/invariant"
+    revision: "ce95a9badeee1c97daff1bca0d1f6cec5dda4fe8"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/zertosh/invariant.git"
+    revision: "ce95a9badeee1c97daff1bca0d1f6cec5dda4fe8"
+    path: ""
+- id: "NPM::is-binary-path:1.0.1"
+  purl: "pkg:npm/is-binary-path@1.0.1"
+  authors:
+  - "Sindre Sorhus"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Check if a filepath is a binary file"
+  homepage_url: "https://github.com/sindresorhus/is-binary-path"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/is-binary-path/-/is-binary-path-1.0.1.tgz"
+    hash:
+      value: "75f16642b480f187a711c814161fd3a4a7655898"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/sindresorhus/is-binary-path.git"
+    revision: "ed26bd7be5e29dad159c2771cb99dd48913f9de0"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/sindresorhus/is-binary-path.git"
+    revision: "ed26bd7be5e29dad159c2771cb99dd48913f9de0"
+    path: ""
+- id: "NPM::is-buffer:1.1.6"
+  purl: "pkg:npm/is-buffer@1.1.6"
+  authors:
+  - "Feross Aboukhadijeh"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Determine if an object is a Buffer"
+  homepage_url: "https://github.com/feross/is-buffer#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/is-buffer/-/is-buffer-1.1.6.tgz"
+    hash:
+      value: "efaa2ea9daa0d7ab2ea13a97b2b8ad51fefbe8be"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/feross/is-buffer.git"
+    revision: "1e84e7ee31cf6b660b12500f3111a05501da387f"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/feross/is-buffer.git"
+    revision: "1e84e7ee31cf6b660b12500f3111a05501da387f"
+    path: ""
+- id: "NPM::is-dotfile:1.0.3"
+  purl: "pkg:npm/is-dotfile@1.0.3"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Return true if a file path is (or has) a dotfile. Returns false if\
+    \ the path is a dot directory."
+  homepage_url: "https://github.com/jonschlinkert/is-dotfile"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/is-dotfile/-/is-dotfile-1.0.3.tgz"
+    hash:
+      value: "a6a2f32ffd2dfb04f5ca25ecd0f6b83cf798a1e1"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/is-dotfile.git"
+    revision: "1548d0045c182dfb0ac7b747e2d484dcd382b09d"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/is-dotfile.git"
+    revision: "1548d0045c182dfb0ac7b747e2d484dcd382b09d"
+    path: ""
+- id: "NPM::is-equal-shallow:0.1.3"
+  purl: "pkg:npm/is-equal-shallow@0.1.3"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Does a shallow comparison of two objects, returning false if the keys\
+    \ or values differ."
+  homepage_url: "https://github.com/jonschlinkert/is-equal-shallow"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/is-equal-shallow/-/is-equal-shallow-0.1.3.tgz"
+    hash:
+      value: "2238098fc221de0bcfa5d9eac4c45d638aa1c534"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/jonschlinkert/is-equal-shallow.git"
+    revision: "dceb47dd9c9c21066958116e3b54b3c8c251ee4a"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/is-equal-shallow.git"
+    revision: "dceb47dd9c9c21066958116e3b54b3c8c251ee4a"
+    path: ""
+- id: "NPM::is-extendable:1.0.1"
+  purl: "pkg:npm/is-extendable@1.0.1"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Returns true if a value is a plain object, array or function."
+  homepage_url: "https://github.com/jonschlinkert/is-extendable"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/is-extendable/-/is-extendable-1.0.1.tgz"
+    hash:
+      value: "a7470f9e426733d81bd81e1155264e3a3507cab4"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/is-extendable.git"
+    revision: "230717f6be5be812c16916ec8a745d6252dfa7a5"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/is-extendable.git"
+    revision: "230717f6be5be812c16916ec8a745d6252dfa7a5"
+    path: ""
+- id: "NPM::is-extglob:1.0.0"
+  purl: "pkg:npm/is-extglob@1.0.0"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Returns true if a string has an extglob."
+  homepage_url: "https://github.com/jonschlinkert/is-extglob"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/is-extglob/-/is-extglob-1.0.0.tgz"
+    hash:
+      value: "ac468177c4943405a092fc8f29760c6ffc6206c0"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/is-extglob.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/is-extglob.git"
+    revision: ""
+    path: ""
+- id: "NPM::is-finite:1.1.0"
+  purl: "pkg:npm/is-finite@1.1.0"
+  authors:
+  - "Sindre Sorhus"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "ES2015 Number.isFinite() ponyfill"
+  homepage_url: "https://github.com/sindresorhus/is-finite#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/is-finite/-/is-finite-1.1.0.tgz"
+    hash:
+      value: "904135c77fb42c0641d6aa1bcdbc4daa8da082f3"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/sindresorhus/is-finite.git"
+    revision: "1001187ed027a76051c066408358e769fb61786e"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/sindresorhus/is-finite.git"
+    revision: "1001187ed027a76051c066408358e769fb61786e"
+    path: ""
+- id: "NPM::is-glob:2.0.1"
+  purl: "pkg:npm/is-glob@2.0.1"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Returns `true` if the given string looks like a glob pattern or an\
+    \ extglob pattern. This makes it easy to create code that only uses external modules\
+    \ like node-glob when necessary, resulting in much faster code execution and initialization\
+    \ time, and a better user experience."
+  homepage_url: "https://github.com/jonschlinkert/is-glob"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/is-glob/-/is-glob-2.0.1.tgz"
+    hash:
+      value: "d096f926a3ded5600f3fdfd91198cb0888c2d863"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/is-glob.git"
+    revision: "d7db1b2dd559b3d5a73f89dbe72d9e9f4d6587d7"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/is-glob.git"
+    revision: "d7db1b2dd559b3d5a73f89dbe72d9e9f4d6587d7"
+    path: ""
+- id: "NPM::is-number:3.0.0"
+  purl: "pkg:npm/is-number@3.0.0"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Returns true if the value is a number. comprehensive tests."
+  homepage_url: "https://github.com/jonschlinkert/is-number"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/is-number/-/is-number-3.0.0.tgz"
+    hash:
+      value: "24fd6201a4782cf50561c810276afc7d12d71195"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/is-number.git"
+    revision: "af885e2e890b9ef0875edd2b117305119ee5bdc5"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/is-number.git"
+    revision: "af885e2e890b9ef0875edd2b117305119ee5bdc5"
+    path: ""
+- id: "NPM::is-plain-object:2.0.4"
+  purl: "pkg:npm/is-plain-object@2.0.4"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Returns true if an object was created by the `Object` constructor."
+  homepage_url: "https://github.com/jonschlinkert/is-plain-object"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/is-plain-object/-/is-plain-object-2.0.4.tgz"
+    hash:
+      value: "2c163b3fafb1b606d9d17928f05c2a1c38e07677"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/is-plain-object.git"
+    revision: "81345df0d1700a5c285f379cbdca0e273388910d"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/is-plain-object.git"
+    revision: "81345df0d1700a5c285f379cbdca0e273388910d"
+    path: ""
+- id: "NPM::is-posix-bracket:0.1.1"
+  purl: "pkg:npm/is-posix-bracket@0.1.1"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Returns true if the given string is a POSIX bracket expression (POSIX\
+    \ character class)."
+  homepage_url: "https://github.com/jonschlinkert/is-posix-bracket"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/is-posix-bracket/-/is-posix-bracket-0.1.1.tgz"
+    hash:
+      value: "3334dc79774368e92f016e6fbc0a88f5cd6e6bc4"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/is-posix-bracket.git"
+    revision: "43972556cfdbb681a15072da75c97952c4e4deba"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/is-posix-bracket.git"
+    revision: "43972556cfdbb681a15072da75c97952c4e4deba"
+    path: ""
+- id: "NPM::is-primitive:2.0.0"
+  purl: "pkg:npm/is-primitive@2.0.0"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Returns `true` if the value is a primitive. "
+  homepage_url: "https://github.com/jonschlinkert/is-primitive"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/is-primitive/-/is-primitive-2.0.0.tgz"
+    hash:
+      value: "207bab91638499c07b2adf240a41a87210034575"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/jonschlinkert/is-primitive.git"
+    revision: "c512b7c95fb049aa9b1f039ddc0670611b66cce2"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/is-primitive.git"
+    revision: "c512b7c95fb049aa9b1f039ddc0670611b66cce2"
+    path: ""
+- id: "NPM::isarray:1.0.0"
+  purl: "pkg:npm/isarray@1.0.0"
+  authors:
+  - "Julian Gruber"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Array#isArray for older browsers"
+  homepage_url: "https://github.com/juliangruber/isarray"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/isarray/-/isarray-1.0.0.tgz"
+    hash:
+      value: "bb935d48582cba168c06834957a54a3e07124f11"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/juliangruber/isarray.git"
+    revision: "2a23a281f369e9ae06394c0fb4d2381355a6ba33"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/juliangruber/isarray.git"
+    revision: "2a23a281f369e9ae06394c0fb4d2381355a6ba33"
+    path: ""
+- id: "NPM::isobject:3.0.1"
+  purl: "pkg:npm/isobject@3.0.1"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Returns true if the value is an object and not an array or null."
+  homepage_url: "https://github.com/jonschlinkert/isobject"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/isobject/-/isobject-3.0.1.tgz"
+    hash:
+      value: "4e431e92b11a9731636aa1f9c8d1ccbcfdab78df"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/isobject.git"
+    revision: "7ad1fc405d19f144a21e2bfe947fa82801baa7aa"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/isobject.git"
+    revision: "7ad1fc405d19f144a21e2bfe947fa82801baa7aa"
+    path: ""
+- id: "NPM::js-tokens:3.0.2"
+  purl: "pkg:npm/js-tokens@3.0.2"
+  authors:
+  - "Simon Lydell"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A regex that tokenizes JavaScript."
+  homepage_url: "https://github.com/lydell/js-tokens#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/js-tokens/-/js-tokens-3.0.2.tgz"
+    hash:
+      value: "9866df395102130e38f7f996bceb65443209c25b"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/lydell/js-tokens.git"
+    revision: "8315904c840b14d28de1b0a4968194555f61bea3"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/lydell/js-tokens.git"
+    revision: "8315904c840b14d28de1b0a4968194555f61bea3"
+    path: ""
+- id: "NPM::jsesc:1.3.0"
+  purl: "pkg:npm/jsesc@1.3.0"
+  authors:
+  - "Mathias Bynens"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A JavaScript library for escaping JavaScript strings while generating\
+    \ the shortest possible valid output."
+  homepage_url: "https://mths.be/jsesc"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/jsesc/-/jsesc-1.3.0.tgz"
+    hash:
+      value: "46c3fec8c1892b12b0833db9bc7622176dbab34b"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/mathiasbynens/jsesc.git"
+    revision: "2c43a8a223e297155b2b2ccca344df4d6ee4233c"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/mathiasbynens/jsesc.git"
+    revision: "2c43a8a223e297155b2b2ccca344df4d6ee4233c"
+    path: ""
+- id: "NPM::json5:0.5.1"
+  purl: "pkg:npm/json5@0.5.1"
+  authors:
+  - "Aseem Kishore"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "JSON for the ES5 era."
+  homepage_url: "http://json5.org/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/json5/-/json5-0.5.1.tgz"
+    hash:
+      value: "1eade7acc012034ad84e2396767ead9fa5495821"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/aseemk/json5.git"
+    revision: "6be6a70e250e6fbbf42db75cd1f6a1aadeeeeb07"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/aseemk/json5.git"
+    revision: "6be6a70e250e6fbbf42db75cd1f6a1aadeeeeb07"
+    path: ""
+- id: "NPM::kind-of:3.2.2"
+  purl: "pkg:npm/kind-of@3.2.2"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Get the native type of a value."
+  homepage_url: "https://github.com/jonschlinkert/kind-of"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/kind-of/-/kind-of-3.2.2.tgz"
+    hash:
+      value: "31ea21a734bab9bbb0f32466d893aea51e4a3c64"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/kind-of.git"
+    revision: "0ffe67cf12f5396047c1bacf04232b7deeb24063"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/kind-of.git"
+    revision: "0ffe67cf12f5396047c1bacf04232b7deeb24063"
+    path: ""
+- id: "NPM::lodash:4.17.21"
+  purl: "pkg:npm/lodash@4.17.21"
+  authors:
+  - "John-David Dalton"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Lodash modular utilities."
+  homepage_url: "https://lodash.com/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
+    hash:
+      value: "679591c564c3bffaae8454cf0b3df370c3d6911c"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/lodash/lodash.git"
+    revision: "c6e281b878b315c7a10d90f9c2af4cdb112d9625"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/lodash/lodash.git"
+    revision: "c6e281b878b315c7a10d90f9c2af4cdb112d9625"
+    path: ""
+- id: "NPM::loose-envify:1.4.0"
+  purl: "pkg:npm/loose-envify@1.4.0"
+  authors:
+  - "Andres Suarez"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Fast (and loose) selective `process.env` replacer using js-tokens\
+    \ instead of an AST"
+  homepage_url: "https://github.com/zertosh/loose-envify"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/loose-envify/-/loose-envify-1.4.0.tgz"
+    hash:
+      value: "71ee51fa7be4caec1a63839f7e682d8132d30caf"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/zertosh/loose-envify.git"
+    revision: "a8fdd02e3a435195f526053882d64537d627b3e6"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/zertosh/loose-envify.git"
+    revision: "a8fdd02e3a435195f526053882d64537d627b3e6"
+    path: ""
+- id: "NPM::micromatch:2.3.11"
+  purl: "pkg:npm/micromatch@2.3.11"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Glob matching for javascript/node.js. A drop-in replacement and faster\
+    \ alternative to minimatch and multimatch."
+  homepage_url: "https://github.com/jonschlinkert/micromatch"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/micromatch/-/micromatch-2.3.11.tgz"
+    hash:
+      value: "86677c97d1720b363431d04d0d15293bd38c1565"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/micromatch.git"
+    revision: "f194c187d04677b03047bb7d8d25643725f7a577"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/micromatch.git"
+    revision: "f194c187d04677b03047bb7d8d25643725f7a577"
+    path: ""
+- id: "NPM::minimatch:3.1.2"
+  purl: "pkg:npm/minimatch@3.1.2"
+  authors:
+  - "Isaac Z. Schlueter"
+  declared_licenses:
+  - "ISC"
+  declared_licenses_processed:
+    spdx_expression: "ISC"
+  description: "a glob matcher in javascript"
+  homepage_url: "https://github.com/isaacs/minimatch#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/minimatch/-/minimatch-3.1.2.tgz"
+    hash:
+      value: "19cd194bfd3e428f049a70817c038d89ab4be35b"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/isaacs/minimatch.git"
+    revision: "699c459443a6bd98f5b28197978f76e7f71467ac"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/isaacs/minimatch.git"
+    revision: "699c459443a6bd98f5b28197978f76e7f71467ac"
+    path: ""
+- id: "NPM::minimist:1.2.8"
+  purl: "pkg:npm/minimist@1.2.8"
+  authors:
+  - "James Halliday"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "parse argument options"
+  homepage_url: "https://github.com/minimistjs/minimist"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/minimist/-/minimist-1.2.8.tgz"
+    hash:
+      value: "c1a464e7693302e082a075cee0c057741ac4772c"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/minimistjs/minimist.git"
+    revision: "6901ee286bc4c16da6830b48b46ce1574703cea1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/minimistjs/minimist.git"
+    revision: "6901ee286bc4c16da6830b48b46ce1574703cea1"
+    path: ""
+- id: "NPM::mkdirp:0.5.6"
+  purl: "pkg:npm/mkdirp@0.5.6"
+  authors:
+  - "James Halliday"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Recursively mkdir, like `mkdir -p`"
+  homepage_url: "https://github.com/substack/node-mkdirp#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.6.tgz"
+    hash:
+      value: "7def03d2432dcae4ba1d611445c48396062255f6"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/substack/node-mkdirp.git"
+    revision: "92f086d2e28c6848951776fbe8ecadcf54c80c29"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/substack/node-mkdirp.git"
+    revision: "92f086d2e28c6848951776fbe8ecadcf54c80c29"
+    path: ""
+- id: "NPM::ms:2.0.0"
+  purl: "pkg:npm/ms@2.0.0"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Tiny milisecond conversion utility"
+  homepage_url: "https://github.com/zeit/ms#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/ms/-/ms-2.0.0.tgz"
+    hash:
+      value: "5608aeadfc00be6c2901df5f9861788de0d597c8"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/zeit/ms.git"
+    revision: "9b88d1568a52ec9bb67ecc8d2aa224fa38fd41f4"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/zeit/ms.git"
+    revision: "9b88d1568a52ec9bb67ecc8d2aa224fa38fd41f4"
+    path: ""
+- id: "NPM::normalize-path:2.1.1"
+  purl: "pkg:npm/normalize-path@2.1.1"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Normalize file path slashes to be unix-like forward slashes. Also\
+    \ condenses repeat slashes to a single slash and removes and trailing slashes\
+    \ unless disabled."
+  homepage_url: "https://github.com/jonschlinkert/normalize-path"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/normalize-path/-/normalize-path-2.1.1.tgz"
+    hash:
+      value: "1ab28b556e198363a8c1a6f7e6fa20137fe6aed9"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/normalize-path.git"
+    revision: "da1a45e7a514910ce39875b5327b1d0fa9be3d3e"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/normalize-path.git"
+    revision: "da1a45e7a514910ce39875b5327b1d0fa9be3d3e"
+    path: ""
+- id: "NPM::object-assign:4.1.1"
+  purl: "pkg:npm/object-assign@4.1.1"
+  authors:
+  - "Sindre Sorhus"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "ES2015 `Object.assign()` ponyfill"
+  homepage_url: "https://github.com/sindresorhus/object-assign#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/object-assign/-/object-assign-4.1.1.tgz"
+    hash:
+      value: "2109adc7965887cfc05cbbd442cac8bfbb360863"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/sindresorhus/object-assign.git"
+    revision: "a89774b252c91612203876984bbd6addbe3b5a0e"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/sindresorhus/object-assign.git"
+    revision: "a89774b252c91612203876984bbd6addbe3b5a0e"
+    path: ""
+- id: "NPM::object.omit:2.0.1"
+  purl: "pkg:npm/object.omit@2.0.1"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Return a copy of an object excluding the given key, or array of keys.\
+    \ Also accepts an optional filter function as the last argument."
+  homepage_url: "https://github.com/jonschlinkert/object.omit"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/object.omit/-/object.omit-2.0.1.tgz"
+    hash:
+      value: "1a9c744829f39dbb858c76ca3579ae2a54ebd1fa"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/object.omit.git"
+    revision: "6634673e6e88c65796f1df4bcb787dede6dc7ffc"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/object.omit.git"
+    revision: "6634673e6e88c65796f1df4bcb787dede6dc7ffc"
+    path: ""
+- id: "NPM::once:1.4.0"
+  purl: "pkg:npm/once@1.4.0"
+  authors:
+  - "Isaac Z. Schlueter"
+  declared_licenses:
+  - "ISC"
+  declared_licenses_processed:
+    spdx_expression: "ISC"
+  description: "Run a function exactly one time"
+  homepage_url: "https://github.com/isaacs/once#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/once/-/once-1.4.0.tgz"
+    hash:
+      value: "583b1aa775961d4b113ac17d9c50baef9dd76bd1"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/isaacs/once"
+    revision: "0e614d9f5a7e6f0305c625f6b581f6d80b33b8a6"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/isaacs/once.git"
+    revision: "0e614d9f5a7e6f0305c625f6b581f6d80b33b8a6"
+    path: ""
+- id: "NPM::os-homedir:1.0.2"
+  purl: "pkg:npm/os-homedir@1.0.2"
+  authors:
+  - "Sindre Sorhus"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Node.js 4 `os.homedir()` ponyfill"
+  homepage_url: "https://github.com/sindresorhus/os-homedir#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/os-homedir/-/os-homedir-1.0.2.tgz"
+    hash:
+      value: "ffbc4988336e0e833de0c168c7ef152121aa7fb3"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/sindresorhus/os-homedir.git"
+    revision: "b1b0ae70a5965fef7005ff6509a5dd1a78c95e36"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/sindresorhus/os-homedir.git"
+    revision: "b1b0ae70a5965fef7005ff6509a5dd1a78c95e36"
+    path: ""
+- id: "NPM::os-tmpdir:1.0.2"
+  purl: "pkg:npm/os-tmpdir@1.0.2"
+  authors:
+  - "Sindre Sorhus"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Node.js os.tmpdir() ponyfill"
+  homepage_url: "https://github.com/sindresorhus/os-tmpdir#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/os-tmpdir/-/os-tmpdir-1.0.2.tgz"
+    hash:
+      value: "bbe67406c79aa85c5cfec766fe5734555dfa1274"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/sindresorhus/os-tmpdir.git"
+    revision: "1abf9cf5611b4be7377060ea67054b45cbf6813c"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/sindresorhus/os-tmpdir.git"
+    revision: "1abf9cf5611b4be7377060ea67054b45cbf6813c"
+    path: ""
+- id: "NPM::output-file-sync:1.1.2"
+  purl: "pkg:npm/output-file-sync@1.1.2"
+  authors:
+  - "Shinnosuke Watanabe"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Synchronously write a file and create its ancestor directories if\
+    \ needed"
+  homepage_url: "https://github.com/shinnn/output-file-sync#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/output-file-sync/-/output-file-sync-1.1.2.tgz"
+    hash:
+      value: "d0a33eefe61a205facb90092e826598d5245ce76"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/shinnn/output-file-sync.git"
+    revision: "42d4b6792bbaee919805b2cb9afc95233addb239"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/shinnn/output-file-sync.git"
+    revision: "42d4b6792bbaee919805b2cb9afc95233addb239"
+    path: ""
+- id: "NPM::parse-glob:3.0.4"
+  purl: "pkg:npm/parse-glob@3.0.4"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Parse a glob pattern into an object of tokens."
+  homepage_url: "https://github.com/jonschlinkert/parse-glob"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/parse-glob/-/parse-glob-3.0.4.tgz"
+    hash:
+      value: "b2c376cfb11f35513badd173ef0bb6e3a388391c"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/parse-glob.git"
+    revision: "9bfccb63acdeb3b1ed62035b3adef0e5081d8fc6"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/parse-glob.git"
+    revision: "9bfccb63acdeb3b1ed62035b3adef0e5081d8fc6"
+    path: ""
+- id: "NPM::path-is-absolute:1.0.1"
+  purl: "pkg:npm/path-is-absolute@1.0.1"
+  authors:
+  - "Sindre Sorhus"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Node.js 0.12 path.isAbsolute() ponyfill"
+  homepage_url: "https://github.com/sindresorhus/path-is-absolute#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/path-is-absolute/-/path-is-absolute-1.0.1.tgz"
+    hash:
+      value: "174b9268735534ffbc7ace6bf53a5a9e1b5c5f5f"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/sindresorhus/path-is-absolute.git"
+    revision: "edc91d348b21dac2ab65ea2fbec2868e2eff5eb6"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/sindresorhus/path-is-absolute.git"
+    revision: "edc91d348b21dac2ab65ea2fbec2868e2eff5eb6"
+    path: ""
+- id: "NPM::preserve:0.2.0"
+  purl: "pkg:npm/preserve@0.2.0"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Temporarily substitute tokens in the given `string` with placeholders,\
+    \ then put them back after transforming the string."
+  homepage_url: "https://github.com/jonschlinkert/preserve"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/preserve/-/preserve-0.2.0.tgz"
+    hash:
+      value: "815ed1f6ebc65926f865b310c0713bcb3315ce4b"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/jonschlinkert/preserve.git"
+    revision: "1bf405d35e4aea06a2ee83db2d34dc54abc0a1f9"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/preserve.git"
+    revision: "1bf405d35e4aea06a2ee83db2d34dc54abc0a1f9"
+    path: ""
+- id: "NPM::private:0.1.8"
+  purl: "pkg:npm/private@0.1.8"
+  authors:
+  - "Ben Newman"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Utility for associating truly private state with any JavaScript object"
+  homepage_url: "http://github.com/benjamn/private"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/private/-/private-0.1.8.tgz"
+    hash:
+      value: "2381edb3689f7a53d653190060fcf822d2f368ff"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/benjamn/private.git"
+    revision: "8fde2c4c9f760c0ae17f3ff375c02d6498472fbc"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/benjamn/private.git"
+    revision: "8fde2c4c9f760c0ae17f3ff375c02d6498472fbc"
+    path: ""
+- id: "NPM::process-nextick-args:2.0.1"
+  purl: "pkg:npm/process-nextick-args@2.0.1"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "process.nextTick but always with args"
+  homepage_url: "https://github.com/calvinmetcalf/process-nextick-args"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/process-nextick-args/-/process-nextick-args-2.0.1.tgz"
+    hash:
+      value: "7820d9b16120cc55ca9ae7792680ae7dba6d7fe2"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/calvinmetcalf/process-nextick-args.git"
+    revision: "b96d59913025441b00c4fd40e6894ddfa8e1c398"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/calvinmetcalf/process-nextick-args.git"
+    revision: "b96d59913025441b00c4fd40e6894ddfa8e1c398"
+    path: ""
+- id: "NPM::readable-stream:2.3.8"
+  purl: "pkg:npm/readable-stream@2.3.8"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Streams3, a user-land copy of the stream library from Node.js"
+  homepage_url: "https://github.com/nodejs/readable-stream#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/readable-stream/-/readable-stream-2.3.8.tgz"
+    hash:
+      value: "91125e8042bba1b9887f49345f6277027ce8be9b"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/nodejs/readable-stream"
+    revision: "c85db76d4c41f64fd082c9263c3a918bec6f38a0"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/nodejs/readable-stream.git"
+    revision: "c85db76d4c41f64fd082c9263c3a918bec6f38a0"
+    path: ""
+- id: "NPM::readdirp:2.2.1"
+  purl: "pkg:npm/readdirp@2.2.1"
+  authors:
+  - "Thorsten Lorenz"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Recursive version of fs.readdir with streaming api."
+  homepage_url: "https://github.com/paulmillr/readdirp"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/readdirp/-/readdirp-2.2.1.tgz"
+    hash:
+      value: "0e87622a3325aa33e892285caf8b4e846529a525"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/paulmillr/readdirp.git"
+    revision: "d0f58fd435d7918706128df1742b69bf5f81dac8"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/paulmillr/readdirp.git"
+    revision: "d0f58fd435d7918706128df1742b69bf5f81dac8"
+    path: ""
+- id: "NPM::regenerator-runtime:0.10.5"
+  purl: "pkg:npm/regenerator-runtime@0.10.5"
+  authors:
+  - "Ben Newman"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Runtime for Regenerator-compiled generator and async functions."
+  homepage_url: "https://github.com/facebook/regenerator/tree/main#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/regenerator-runtime/-/regenerator-runtime-0.10.5.tgz"
+    hash:
+      value: "336c3efc1220adcedda2c9fab67b5a7955a33658"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/facebook/regenerator/tree/master/packages/regenerator-runtime"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/facebook/regenerator.git"
+    revision: "master"
+    path: "packages/regenerator-runtime"
+- id: "NPM::regex-cache:0.4.4"
+  purl: "pkg:npm/regex-cache@0.4.4"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Memoize the results of a call to the RegExp constructor, avoiding\
+    \ repetitious runtime compilation of the same string and options, resulting in\
+    \ surprising performance improvements."
+  homepage_url: "https://github.com/jonschlinkert/regex-cache"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/regex-cache/-/regex-cache-0.4.4.tgz"
+    hash:
+      value: "75bdc58a2a1496cec48a12835bc54c8d562336dd"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/regex-cache.git"
+    revision: "e5ced08e45d2cc2d286a9e7b5a574963f6577712"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/regex-cache.git"
+    revision: "e5ced08e45d2cc2d286a9e7b5a574963f6577712"
+    path: ""
+- id: "NPM::remove-trailing-separator:1.1.0"
+  purl: "pkg:npm/remove-trailing-separator@1.1.0"
+  authors:
+  - "darsain"
+  declared_licenses:
+  - "ISC"
+  declared_licenses_processed:
+    spdx_expression: "ISC"
+  description: "Removes separators from the end of the string."
+  homepage_url: "https://github.com/darsain/remove-trailing-separator#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/remove-trailing-separator/-/remove-trailing-separator-1.1.0.tgz"
+    hash:
+      value: "c24bce2a283adad5bc3f58e0d48249b92379d8ef"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/darsain/remove-trailing-separator.git"
+    revision: "f4e8acca09106efeef5a5164f1ad2192fe97fd69"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/darsain/remove-trailing-separator.git"
+    revision: "f4e8acca09106efeef5a5164f1ad2192fe97fd69"
+    path: ""
+- id: "NPM::repeat-element:1.1.4"
+  purl: "pkg:npm/repeat-element@1.1.4"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Create an array by repeating the given value n times."
+  homepage_url: "https://github.com/jonschlinkert/repeat-element"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/repeat-element/-/repeat-element-1.1.4.tgz"
+    hash:
+      value: "be681520847ab58c7568ac75fbfad28ed42d39e9"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/repeat-element.git"
+    revision: "874e2b3843fb0ae342cb41f40e387f4908ee048d"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/repeat-element.git"
+    revision: "874e2b3843fb0ae342cb41f40e387f4908ee048d"
+    path: ""
+- id: "NPM::repeat-string:1.6.1"
+  purl: "pkg:npm/repeat-string@1.6.1"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Repeat the given string n times. Fastest implementation for repeating\
+    \ a string."
+  homepage_url: "https://github.com/jonschlinkert/repeat-string"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/repeat-string/-/repeat-string-1.6.1.tgz"
+    hash:
+      value: "8dcae470e1c88abc2d600fff4a776286da75e637"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/repeat-string.git"
+    revision: "1a95c5d99a02999ccd2cf4663959a18bd2def7b8"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/repeat-string.git"
+    revision: "1a95c5d99a02999ccd2cf4663959a18bd2def7b8"
+    path: ""
+- id: "NPM::repeating:2.0.1"
+  purl: "pkg:npm/repeating@2.0.1"
+  authors:
+  - "Sindre Sorhus"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Repeat a string - fast"
+  homepage_url: "https://github.com/sindresorhus/repeating#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/repeating/-/repeating-2.0.1.tgz"
+    hash:
+      value: "5214c53a926d3552707527fbab415dbc08d06dda"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/sindresorhus/repeating.git"
+    revision: "be02bcaf9a674b3c155477b3bf282136bcf44770"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/sindresorhus/repeating.git"
+    revision: "be02bcaf9a674b3c155477b3bf282136bcf44770"
+    path: ""
+- id: "NPM::safe-buffer:5.1.2"
+  purl: "pkg:npm/safe-buffer@5.1.2"
+  authors:
+  - "Feross Aboukhadijeh"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Safer Node.js Buffer API"
+  homepage_url: "https://github.com/feross/safe-buffer"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.1.2.tgz"
+    hash:
+      value: "991ec69d296e0313747d59bdfd2b745c35f8828d"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/feross/safe-buffer.git"
+    revision: "649435cc8e2d1f3ecdc7caf323f1cb1187307a16"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/feross/safe-buffer.git"
+    revision: "649435cc8e2d1f3ecdc7caf323f1cb1187307a16"
+    path: ""
+- id: "NPM::slash:1.0.0"
+  purl: "pkg:npm/slash@1.0.0"
+  authors:
+  - "Sindre Sorhus"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Convert Windows backslash paths to slash paths"
+  homepage_url: "https://github.com/sindresorhus/slash"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/slash/-/slash-1.0.0.tgz"
+    hash:
+      value: "c41f2f6c39fc16d1cd17ad4b5d896114ae470d55"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/sindresorhus/slash.git"
+    revision: "c801dd4568ad9380b534067eabe88942394f82ff"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/sindresorhus/slash.git"
+    revision: "c801dd4568ad9380b534067eabe88942394f82ff"
+    path: ""
+- id: "NPM::source-map:0.5.7"
+  purl: "pkg:npm/source-map@0.5.7"
+  authors:
+  - "Nick Fitzgerald"
+  declared_licenses:
+  - "BSD-3-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+  description: "Generates and consumes source maps"
+  homepage_url: "https://github.com/mozilla/source-map"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/source-map/-/source-map-0.5.7.tgz"
+    hash:
+      value: "8a039d2d1021d22d1ea14c80d8ea468ba2ef3fcc"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "http://github.com/mozilla/source-map.git"
+    revision: "326dd955a366569759d9537ef5f0f167c89d92d2"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/mozilla/source-map.git"
+    revision: "326dd955a366569759d9537ef5f0f167c89d92d2"
+    path: ""
+- id: "NPM::source-map-support:0.4.18"
+  purl: "pkg:npm/source-map-support@0.4.18"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Fixes stack traces for files with source maps"
+  homepage_url: "https://github.com/evanw/node-source-map-support#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/source-map-support/-/source-map-support-0.4.18.tgz"
+    hash:
+      value: "0286a6de8be42641338594e97ccea75f0a2c585f"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/evanw/node-source-map-support"
+    revision: "b9b5a5576272916237a253393220770c858685d6"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/evanw/node-source-map-support.git"
+    revision: "b9b5a5576272916237a253393220770c858685d6"
+    path: ""
+- id: "NPM::string_decoder:1.1.1"
+  purl: "pkg:npm/string_decoder@1.1.1"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "The string_decoder module from Node core"
+  homepage_url: "https://github.com/nodejs/string_decoder"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/string_decoder/-/string_decoder-1.1.1.tgz"
+    hash:
+      value: "9cf1611ba62685d7030ae9e4ba34149c3af03fc8"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/nodejs/string_decoder.git"
+    revision: "18c7f89c894ced5f610505bb006dfde9a3d1ac5e"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/nodejs/string_decoder.git"
+    revision: "18c7f89c894ced5f610505bb006dfde9a3d1ac5e"
+    path: ""
+- id: "NPM::strip-ansi:3.0.1"
+  purl: "pkg:npm/strip-ansi@3.0.1"
+  authors:
+  - "Sindre Sorhus"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Strip ANSI escape codes"
+  homepage_url: "https://github.com/chalk/strip-ansi"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/strip-ansi/-/strip-ansi-3.0.1.tgz"
+    hash:
+      value: "6a385fb8853d952d5ff05d0e8aaf94278dc63dcf"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/chalk/strip-ansi.git"
+    revision: "8270705c704956da865623e564eba4875c3ea17f"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/chalk/strip-ansi.git"
+    revision: "8270705c704956da865623e564eba4875c3ea17f"
+    path: ""
+- id: "NPM::supports-color:2.0.0"
+  purl: "pkg:npm/supports-color@2.0.0"
+  authors:
+  - "Sindre Sorhus"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Detect whether a terminal supports color"
+  homepage_url: "https://github.com/chalk/supports-color"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/supports-color/-/supports-color-2.0.0.tgz"
+    hash:
+      value: "535d045ce6b6363fa40117084629995e9df324c7"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/chalk/supports-color.git"
+    revision: "8400d98ade32b2adffd50902c06d9e725a5c6588"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/chalk/supports-color.git"
+    revision: "8400d98ade32b2adffd50902c06d9e725a5c6588"
+    path: ""
+- id: "NPM::to-fast-properties:1.0.3"
+  purl: "pkg:npm/to-fast-properties@1.0.3"
+  authors:
+  - "Sindre Sorhus"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Force V8 to use fast properties for an object"
+  homepage_url: "https://github.com/sindresorhus/to-fast-properties#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/to-fast-properties/-/to-fast-properties-1.0.3.tgz"
+    hash:
+      value: "b83571fa4d8c25b82e231b06e3a3055de4ca1a47"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/sindresorhus/to-fast-properties.git"
+    revision: "76e30a0b6040781a705cb351fb2e4a1d879f1adb"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/sindresorhus/to-fast-properties.git"
+    revision: "76e30a0b6040781a705cb351fb2e4a1d879f1adb"
+    path: ""
+- id: "NPM::to-regex-range:2.1.1"
+  purl: "pkg:npm/to-regex-range@2.1.1"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Pass two numbers, get a regex-compatible source string for matching\
+    \ ranges. Validated against more than 2.78 million test assertions."
+  homepage_url: "https://github.com/micromatch/to-regex-range"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/to-regex-range/-/to-regex-range-2.1.1.tgz"
+    hash:
+      value: "7c80c17b9dfebe599e27367e0d4dd5590141db38"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/micromatch/to-regex-range.git"
+    revision: "de34e5079dbf33f8ac992d87914fa5e3507fa07d"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/micromatch/to-regex-range.git"
+    revision: "de34e5079dbf33f8ac992d87914fa5e3507fa07d"
+    path: ""
+- id: "NPM::trim-right:1.0.1"
+  purl: "pkg:npm/trim-right@1.0.1"
+  authors:
+  - "Sindre Sorhus"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Similar to String#trim() but removes only whitespace on the right"
+  homepage_url: "https://github.com/sindresorhus/trim-right"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/trim-right/-/trim-right-1.0.1.tgz"
+    hash:
+      value: "cb2e1203067e0c8de1f614094b9fe45704ea6003"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/sindresorhus/trim-right.git"
+    revision: "105fb46669afb0deb49d14bd688b276297e59dff"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/sindresorhus/trim-right.git"
+    revision: "105fb46669afb0deb49d14bd688b276297e59dff"
+    path: ""
+- id: "NPM::user-home:1.1.1"
+  purl: "pkg:npm/user-home@1.1.1"
+  authors:
+  - "Sindre Sorhus"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Get the path to the user home directory"
+  homepage_url: "https://github.com/sindresorhus/user-home"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/user-home/-/user-home-1.1.1.tgz"
+    hash:
+      value: "2b5be23a32b63a7c9deb8d0f28d485724a3df190"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/sindresorhus/user-home.git"
+    revision: "cf6ba885d3e6bf625fb3c15ad0334fa623968481"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/sindresorhus/user-home.git"
+    revision: "cf6ba885d3e6bf625fb3c15ad0334fa623968481"
+    path: ""
+- id: "NPM::util-deprecate:1.0.2"
+  purl: "pkg:npm/util-deprecate@1.0.2"
+  authors:
+  - "Nathan Rajlich"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "The Node.js `util.deprecate()` function with browser support"
+  homepage_url: "https://github.com/TooTallNate/util-deprecate"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz"
+    hash:
+      value: "450d4dc9fa70de732762fbd2d4a28981419a0ccf"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/TooTallNate/util-deprecate.git"
+    revision: "475fb6857cd23fafff20c1be846c1350abf8e6d4"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/TooTallNate/util-deprecate.git"
+    revision: "475fb6857cd23fafff20c1be846c1350abf8e6d4"
+    path: ""
+- id: "NPM::v8flags:2.1.1"
+  purl: "pkg:npm/v8flags@2.1.1"
+  authors:
+  - "Tyler Kellen"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Get available v8 flags."
+  homepage_url: "https://github.com/tkellen/node-v8flags"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/v8flags/-/v8flags-2.1.1.tgz"
+    hash:
+      value: "aab1a1fa30d45f88dd321148875ac02c0b55e5b4"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/tkellen/node-v8flags.git"
+    revision: "4c628146efa7eda11df0e10c73b3d8687873569e"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/tkellen/node-v8flags.git"
+    revision: "4c628146efa7eda11df0e10c73b3d8687873569e"
+    path: ""
+- id: "NPM::wrappy:1.0.2"
+  purl: "pkg:npm/wrappy@1.0.2"
+  authors:
+  - "Isaac Z. Schlueter"
+  declared_licenses:
+  - "ISC"
+  declared_licenses_processed:
+    spdx_expression: "ISC"
+  description: "Callback wrapping utility"
+  homepage_url: "https://github.com/npm/wrappy"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/wrappy/-/wrappy-1.0.2.tgz"
+    hash:
+      value: "b5243d8f3ec1aa35f1364605bc0d1036e30ab69f"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/npm/wrappy"
+    revision: "71d91b6dc5bdeac37e218c2cf03f9ab55b60d214"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/npm/wrappy.git"
+    revision: "71d91b6dc5bdeac37e218c2cf03f9ab55b60d214"
+    path: ""

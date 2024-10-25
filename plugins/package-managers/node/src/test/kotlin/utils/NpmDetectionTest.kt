@@ -195,6 +195,7 @@ class NpmDetectionTest : WordSpec({
             val filteredFiles = NpmDetection(definitionFiles).filterApplicable(PNPM)
 
             filteredFiles.map { it.toRelativeString(projectDir) } shouldContainExactlyInAnyOrder listOf(
+                "pnpm/babel/package.json",
                 "pnpm/project-with-lockfile/package.json",
                 "pnpm/workspaces/package.json",
                 "pnpm/workspaces/src/non-workspace/package-c/package.json"
