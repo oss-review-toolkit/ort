@@ -93,7 +93,11 @@ class VulnerableCode(override val descriptor: PluginDescriptor, config: Vulnerab
     override suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, AdvisorResult> {
         val startTime = Instant.now()
 
-        val purls = packages.mapNotNull { pkg -> pkg.purl.ifEmpty { null } }
+        // VulnerableCode cannot deal with percent-encoded purls.
+        val purls = packages.mapNotNull { pkg ->
+            pkg.purl.replace("%2F", "/", ignoreCase = true).ifEmpty { null }
+        }
+
         val chunks = purls.chunked(BULK_REQUEST_SIZE)
 
         val allVulnerabilities = mutableMapOf<String, List<VulnerableCodeService.Vulnerability>>()
@@ -124,8 +128,9 @@ class VulnerableCode(override val descriptor: PluginDescriptor, config: Vulnerab
 
         val endTime = Instant.now()
 
-        return packages.mapNotNullTo(mutableListOf()) { pkg ->
-            allVulnerabilities[pkg.purl]?.let { packageVulnerabilities ->
+        return packages.mapNotNull { pkg ->
+            val vcPurl = pkg.purl.replace("%2F", "/", ignoreCase = true)
+            allVulnerabilities[vcPurl]?.let { packageVulnerabilities ->
                 val vulnerabilities = packageVulnerabilities.map { it.toModel(issues) }
                 val summary = AdvisorSummary(startTime, endTime, issues)
                 pkg to AdvisorResult(details, summary, vulnerabilities = vulnerabilities)
