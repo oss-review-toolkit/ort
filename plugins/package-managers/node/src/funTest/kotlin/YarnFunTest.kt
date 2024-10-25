@@ -40,6 +40,15 @@ class YarnFunTest : WordSpec({
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
+        "resolve dependencies for a project depending on Babel correctly" {
+            val definitionFile = getAssetFile("projects/synthetic/yarn/babel/package.json")
+            val expectedResultFile = getAssetFile("projects/synthetic/yarn/babel-expected-output.yml")
+
+            val result = create("Yarn").resolveSingleProject(definitionFile, resolveScopes = true)
+
+            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+        }
+
         "resolve workspace dependencies correctly" {
             // This test case illustrates the lack of Yarn workspaces support, in particular not all workspace
             // dependencies get assigned to a scope.
