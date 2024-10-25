@@ -22,10 +22,6 @@ package org.ossreviewtoolkit.model.utils
 import io.kotest.assertions.assertSoftly
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNot
-import io.kotest.matchers.string.beEmpty
-import io.kotest.matchers.string.shouldNotContain
-import io.kotest.matchers.string.shouldNotContainIgnoringCase
 
 import java.io.File
 
@@ -34,7 +30,13 @@ import org.ossreviewtoolkit.model.readValue
 class PurlUtilsTest : StringSpec({
     val testDataFile = File("src/test/assets/test-suite-data.json")
     val testData = testDataFile.readValue<List<TestSuiteData>>()
-    val testCases = testData.filterNot { it.isInvalid }
+    val testCases = testData.filterNot { it.isInvalid }.also { testCases ->
+        // Perform some sanity checks on the test data itself.
+        check(testCases.none { it.namespace?.isEmpty() == true })
+
+        val slashes = setOf("/", "%2F", "%2f")
+        check(testCases.none { slashes.any { slash -> it.name != null && slash in it.name } })
+    }
 
     "The purl test suite should pass" {
         assertSoftly {
@@ -49,23 +51,6 @@ class PurlUtilsTest : StringSpec({
                 )
 
                 purl shouldBe testCase.canonicalPurl
-            }
-        }
-    }
-
-    "The purl test cases should never have an empty namespace" {
-        assertSoftly {
-            testCases.filter { it.namespace != null }.forEach { testCase ->
-                testCase.namespace shouldNot beEmpty()
-            }
-        }
-    }
-
-    "The purl test cases should never contain slashes in names" {
-        assertSoftly {
-            testCases.forEach { testCase ->
-                testCase.name shouldNotContain "/"
-                testCase.name shouldNotContainIgnoringCase "%2F" // Encoded "/".
             }
         }
     }
