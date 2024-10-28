@@ -122,8 +122,14 @@ fun File.realFile(): File = toPath().toRealPath().toFile()
  * is not deleted. Throws an [IOException] if a directory or file could not be deleted.
  */
 fun File.safeDeleteRecursively(baseDirectory: File? = null) {
-    // Note that Kotlin's `File.deleteRecursively()` extension function does not work here to delete files with
-    // unmappable characters in their names, so use the `Path.deleteRecursively()` extension function instead.
+    if (Os.isWindows) {
+        // Note that Kotlin's `Path.deleteRecursively()` extension function cannot delete files on Windows that have the
+        // read-only attribute set, so fall back to manually making them writable.
+        walkBottomUp().onEnter { !it.isSymbolicLink() }.forEach { it.setWritable(true) }
+    }
+
+    // Note that Kotlin's `File.deleteRecursively()` extension function cannot delete files on Linux with unmappable
+    // characters in their names, so use `Path.deleteRecursively()` instead.
     toPath().deleteRecursively()
 
     if (baseDirectory == this) {
