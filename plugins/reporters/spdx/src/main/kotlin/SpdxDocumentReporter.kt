@@ -117,8 +117,9 @@ class SpdxDocumentReporter : Reporter {
 
 private fun SpdxDocument.getLicenseRefExceptions(): Set<String> {
     val licenses = buildSet {
-        files.flatMapTo(this) { it.licenseInfoInFiles }
         packages.flatMapTo(this) { it.licenseInfoFromFiles }
+        files.flatMapTo(this) { it.licenseInfoInFiles }
+        snippets.flatMapTo(this) { it.licenseInfoInSnippets }
     }
 
     return buildSet {
