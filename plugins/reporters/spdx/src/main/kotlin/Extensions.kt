@@ -181,10 +181,7 @@ internal fun Package.toSpdxPackage(
             licenseInfoResolver.resolveLicenseInfo(id)
                 .filterExcluded()
                 .filter(LicenseView.ONLY_DETECTED)
-                .map { resolvedLicense ->
-                    resolvedLicense.license.takeIf { it.isValid(SpdxExpression.Strictness.ALLOW_DEPRECATED) }
-                        .nullOrBlankToSpdxNoassertionOrNone()
-                }
+                .map { it.license.nullOrBlankToSpdxNoassertionOrNone() }
                 .distinct()
                 .sorted()
         },
