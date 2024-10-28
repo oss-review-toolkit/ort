@@ -28,8 +28,8 @@ import org.ossreviewtoolkit.utils.spdx.SpdxExpression.Strictness.ALLOW_LICENSERE
 import org.ossreviewtoolkit.utils.spdx.isSpdxExpressionOrNotPresent
 
 /**
- * A Snippet can be used when a file is known to have some content that has been included from another original source.
- * It can be used to denote when a part of a file may have been originally created under another license.
+ * Information about a snippet that has different licenses and / or copyright than the containing file.
+ * See https://spdx.github.io/spdx-spec/v2.2.2/snippet-information/.
  */
 @JsonIgnoreProperties("ranges") // TODO: Implement ranges which is broken in the specification examples.
 data class SpdxSnippet(

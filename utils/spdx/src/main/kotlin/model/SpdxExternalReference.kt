@@ -29,8 +29,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 
 /**
- *  References an external source of additional information, metadata, enumerations, asset identifiers, or downloadable
- *  content believed to be relevant to the Package.
+ *  A reference to an external source of additional information for an [SpdxPackage].
+ *  See https://spdx.github.io/spdx-spec/v2.2.2/package-information/#721-external-reference-field.
  */
 data class SpdxExternalReference(
     /**
