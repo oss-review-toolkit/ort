@@ -124,7 +124,7 @@ private fun SpdxDocument.getLicenseRefExceptions(): Set<String> {
 
     return buildSet {
         licenses.forEach { license ->
-            SpdxExpression.parse(license, SpdxExpression.Strictness.ALLOW_ANY).getLicenseRefExceptions(this)
+            SpdxExpression.parse(license).getLicenseRefExceptions(this)
         }
     }
 }
