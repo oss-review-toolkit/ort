@@ -181,8 +181,7 @@ internal fun Package.toSpdxPackage(
             licenseInfoResolver.resolveLicenseInfo(id)
                 .filterExcluded()
                 .filter(LicenseView.ONLY_DETECTED)
-                .map { it.license.nullOrBlankToSpdxNoassertionOrNone() }
-                .distinct()
+                .mapTo(mutableSetOf()) { it.license.nullOrBlankToSpdxNoassertionOrNone() }
                 .sorted()
         },
         packageVerificationCode = packageVerificationCode,
