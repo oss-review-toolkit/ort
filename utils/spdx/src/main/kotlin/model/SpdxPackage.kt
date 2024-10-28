@@ -125,8 +125,9 @@ data class SpdxPackage(
     val licenseDeclared: String,
 
     /**
-     * The license information found in the package as SPDX expression. To represent a not present value
-     * [SpdxConstants.NONE] or [SpdxConstants.NOASSERTION] must be used.
+     * A list of all licenses found in the package. These are simply license ID strings, no SPDX license expressions,
+     * and license operators are not maintained. To represent a not present value [SpdxConstants.NONE] or
+     * [SpdxConstants.NOASSERTION] must be used.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val licenseInfoFromFiles: List<String> = emptyList(),
