@@ -20,7 +20,8 @@
 package org.ossreviewtoolkit.utils.spdx.model
 
 /**
- * Specifies checksum value and algorithm.
+ * A checksum for an [SpdxFile].
+ * See https://spdx.github.io/spdx-spec/v2.2.2/file-information/#84-file-checksum-field.
  */
 data class SpdxChecksum(
     /**

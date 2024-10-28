@@ -22,8 +22,8 @@ package org.ossreviewtoolkit.utils.spdx.model
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 
 /**
- * [SpdxExternalDocumentReference]s are used by [SpdxDocument]s to list all external documents which are referenced from
- * that particular [SpdxDocument].
+ * A reference from one [SpdxDocument] to another external [SpdxDocument].
+ * See https://spdx.github.io/spdx-spec/v2.2.2/document-creation-information/#66-external-document-references-field.
  */
 data class SpdxExternalDocumentReference(
     /**

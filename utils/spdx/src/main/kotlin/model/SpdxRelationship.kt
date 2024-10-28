@@ -22,7 +22,8 @@ package org.ossreviewtoolkit.utils.spdx.model
 import com.fasterxml.jackson.annotation.JsonInclude
 
 /**
- * A relationship between two SPDX documents, packages or files.
+ * A relationship between two [SpdxDocument]s, [SpdxPackage]s or [SpdxFile]s.
+ * See https://spdx.github.io/spdx-spec/v2.2.2/relationships-between-SPDX-elements/.
  */
 data class SpdxRelationship(
     /**

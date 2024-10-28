@@ -22,7 +22,8 @@ package org.ossreviewtoolkit.utils.spdx.model
 import com.fasterxml.jackson.annotation.JsonInclude
 
 /**
- * A unique identifier based on the file contents of a package.
+ * An identifier for an [SpdxPackage] based on its file contents.
+ * See https://spdx.github.io/spdx-spec/v2.2.2/package-information/#79-package-verification-code-field.
  */
 data class SpdxPackageVerificationCode(
     /**

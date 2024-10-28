@@ -29,7 +29,8 @@ import org.ossreviewtoolkit.utils.spdx.SpdxExpression.Strictness.ALLOW_LICENSERE
 import org.ossreviewtoolkit.utils.spdx.isSpdxExpressionOrNotPresent
 
 /**
- * Provides important metadata about a particular file of a software package.
+ * Information about a file used in an [SpdxDocument].
+ * See https://spdx.github.io/spdx-spec/v2.2.2/file-information/.
  */
 @JsonIgnoreProperties("ranges") // TODO: Implement ranges which is broken in the specification examples.
 data class SpdxFile(

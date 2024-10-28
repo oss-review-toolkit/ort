@@ -27,7 +27,8 @@ import org.ossreviewtoolkit.utils.spdx.SpdxExpression.Strictness.ALLOW_LICENSERE
 import org.ossreviewtoolkit.utils.spdx.isSpdxExpressionOrNotPresent
 
 /**
- * Describes a software package.
+ * Information about a package used in an [SpdxDocument].
+ * See https://spdx.github.io/spdx-spec/v2.2.2/package-information/.
  */
 data class SpdxPackage(
     /**
