@@ -29,6 +29,16 @@ import org.ossreviewtoolkit.utils.spdx.SpdxExpression.Strictness
 private val logger = loggerOf(MethodHandles.lookup().lookupClass())
 
 /**
+ * Convert an [SpdxExpression] to `NOASSERTION` if null, to `NONE` if blank, or to its string representation otherwise.
+ */
+fun SpdxExpression?.nullOrBlankToSpdxNoassertionOrNone(): String =
+    when {
+        this == null -> SpdxConstants.NOASSERTION
+        toString().isBlank() -> SpdxConstants.NONE
+        else -> toString()
+    }
+
+/**
  * Create an [SpdxLicenseIdExpression] from this [SpdxLicense].
  */
 fun SpdxLicense.toExpression(): SpdxLicenseIdExpression {
