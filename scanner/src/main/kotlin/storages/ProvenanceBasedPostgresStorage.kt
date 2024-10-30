@@ -36,6 +36,7 @@ import org.jetbrains.exposed.sql.selectAll
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
+import org.ossreviewtoolkit.model.RemoteProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
@@ -137,7 +138,7 @@ class ProvenanceBasedPostgresStorage(
 
         requireEmptyVcsPath(provenance)
 
-        if (provenance !is KnownProvenance) {
+        if (provenance !is RemoteProvenance) {
             throw ScanStorageException("Scan result must have a known provenance, but it is $provenance.")
         }
 

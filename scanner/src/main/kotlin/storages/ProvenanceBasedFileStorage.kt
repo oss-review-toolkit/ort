@@ -29,6 +29,7 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
+import org.ossreviewtoolkit.model.RemoteProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.yamlMapper
@@ -80,7 +81,7 @@ class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceB
 
         requireEmptyVcsPath(provenance)
 
-        if (provenance !is KnownProvenance) {
+        if (provenance !is RemoteProvenance) {
             throw ScanStorageException("Scan result must have a known provenance, but it is $provenance.")
         }
 
