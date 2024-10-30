@@ -28,7 +28,6 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.advisor.AdviceProvider
 import org.ossreviewtoolkit.advisor.AdviceProviderFactory
-import org.ossreviewtoolkit.clients.osv.Ecosystem
 import org.ossreviewtoolkit.clients.osv.OsvServiceWrapper
 import org.ossreviewtoolkit.clients.osv.VulnerabilitiesForPackageRequest
 import org.ossreviewtoolkit.clients.osv.Vulnerability
@@ -104,7 +103,14 @@ class Osv(override val descriptor: PluginDescriptor, config: OsvConfiguration) :
 
     private fun getVulnerabilityIdsForPackages(packages: Set<Package>): Map<Identifier, List<String>> {
         val requests = packages.map { pkg ->
-            createRequest(pkg).let { pkg to it }
+            // TODO: Support querying vulnerabilities by Git commit hash as described at
+            //       https://google.github.io/osv.dev/post-v1-query/. That would allow to generally support e.g. C / C++
+            //       projects that do not use a dedicated package manager, like Conan.
+            val request = VulnerabilitiesForPackageRequest(
+                pkg = org.ossreviewtoolkit.clients.osv.Package(purl = pkg.purl)
+            )
+
+            pkg to request
         }
 
         val result = service.getVulnerabilityIdsForPackages(requests.map { it.second })
@@ -136,22 +142,6 @@ class Osv(override val descriptor: PluginDescriptor, config: OsvConfiguration) :
 
             emptyList()
         }
-    }
-}
-
-private fun createRequest(pkg: Package): VulnerabilitiesForPackageRequest {
-    // TODO: Support querying vulnerabilities by Git commit hash as described at https://osv.dev/docs/#section/OSV-API.
-    //       That would allow to generally support e.g. C / C++ projects that do not use a dedicated package manager
-    //       like Conan.
-
-    // Work-around for missing purl converters, see https://github.com/google/osv.dev/issues/2402.
-    return if (pkg.id.type == "Swift") {
-        VulnerabilitiesForPackageRequest(
-            pkg = org.ossreviewtoolkit.clients.osv.Package(name = pkg.id.name, ecosystem = Ecosystem.SWIFT_URL),
-            version = pkg.id.version
-        )
-    } else {
-        VulnerabilitiesForPackageRequest(pkg = org.ossreviewtoolkit.clients.osv.Package(purl = pkg.purl))
     }
 }
 
