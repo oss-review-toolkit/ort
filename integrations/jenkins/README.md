@@ -12,6 +12,8 @@ Please follow the regular [installation instructions](https://www.jenkins.io/doc
 
 Also ensure that [Docker is installed](https://docs.docker.com/engine/install/) on your system with [BuildKit enabled](https://docs.docker.com/develop/develop-images/build_enhancements/#to-enable-buildkit-builds), and that Jenkins is allowed to run Docker (you might need to run `usermod -aG docker jenkins` to add the `jenkins` user to the `docker` group).
 
+If you are running Jenkins as a Docker image as opposed to using the Java WAR, you need to [install Docker inside the Jenkins container](https://docs.docker.com/engine/install/debian/).
+
 Next, on the *Dashboard* click *New Item*, enter e.g. "ORT" as the name, select *Pipeline* and then click *OK*.
 In the *Pipeline* section of the job configuration, choose "Pipeline script from SCM" and the following settings:
 
