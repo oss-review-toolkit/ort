@@ -55,6 +55,7 @@ import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
+import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.ort.Environment
@@ -109,10 +110,23 @@ class SpdxDocumentReporterFunTest : WordSpec({
     }
 
     "Reporting to YAML" should {
-        "create the expected document" {
+        "create the expected document for a synthetic ORT result" {
             val expectedResultFile = getAssetFile("spdx-document-reporter-expected-output.spdx.yml")
 
             val yamlSpdxDocument = generateReport(ortResult, FileFormat.YAML)
+
+            yamlSpdxDocument should matchExpectedResult(
+                expectedResultFile,
+                custom = fromYaml<SpdxDocument>(yamlSpdxDocument).getCustomReplacements()
+            )
+        }
+
+        "create the expected document for the ORT result of a Go project" {
+            val ortResultFile = getAssetFile("disclosure-cli-analyzer-and-scanner-result.yml")
+            val ortResultForGoProject = ortResultFile.readValue<OrtResult>()
+            val expectedResultFile = getAssetFile("disclosure-cli-expected-output.spdx.yml")
+
+            val yamlSpdxDocument = generateReport(ortResultForGoProject, FileFormat.YAML)
 
             yamlSpdxDocument should matchExpectedResult(
                 expectedResultFile,
