@@ -43,6 +43,8 @@ data object UnknownProvenance : Provenance {
 
 sealed interface KnownProvenance : Provenance
 
+sealed interface RemoteProvenance : KnownProvenance
+
 /**
  * Provenance information for a source artifact.
  */
@@ -51,7 +53,7 @@ data class ArtifactProvenance(
      * The source artifact that was downloaded.
      */
     val sourceArtifact: RemoteArtifact
-) : KnownProvenance {
+) : RemoteProvenance {
     override fun matches(pkg: Package): Boolean = sourceArtifact == pkg.sourceArtifact
 }
 
@@ -70,7 +72,7 @@ data class RepositoryProvenance(
      * like a branch or tag name, but a fixed revision (e.g. the SHA1 of a Git commit).
      */
     val resolvedRevision: String
-) : KnownProvenance {
+) : RemoteProvenance {
     init {
         require(resolvedRevision.isNotBlank()) { "The resolved revision must not be blank." }
     }
