@@ -6,6 +6,7 @@ This example allows you to run ORT in a [Jenkins](https://www.jenkins.io/) [pipe
 
 Please follow the regular [installation instructions](https://www.jenkins.io/doc/book/installing/) and additionally ensure to have the following Jenkins plugins installed:
 
+* [Copy Artifact](https://plugins.jenkins.io/copyartifact/)
 * [Docker Pipeline](https://plugins.jenkins.io/docker-workflow)
 * [File Parameter](https://plugins.jenkins.io/file-parameters/)
 * [Pipeline Utility Steps](https://plugins.jenkins.io/pipeline-utility-steps)
