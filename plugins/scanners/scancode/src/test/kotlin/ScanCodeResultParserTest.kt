@@ -21,7 +21,6 @@ package org.ossreviewtoolkit.plugins.scanners.scancode
 
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.Matcher
-import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSingleElement
@@ -42,39 +41,6 @@ import org.ossreviewtoolkit.utils.test.transformingCollectionMatcher
 
 class ScanCodeResultParserTest : FreeSpec({
     "generateSummary()" - {
-        "for ScanCode 3.0.2 should" - {
-            "get correct counts" {
-                val resultFile = getAssetFile("scancode-3.0.2_mime-types-2.1.18.json")
-
-                val summary = parseResult(resultFile).toScanSummary()
-
-                summary.licenseFindings shouldHaveSize 4
-                summary.copyrightFindings shouldHaveSize 4
-                summary.issues should beEmpty()
-            }
-        }
-
-        "for ScanCode 3.2.1rc2 should" - {
-            "properly parse license expressions" {
-                val resultFile = getAssetFile("scancode-3.2.1rc2_h2database-1.4.200.json")
-
-                val summary = parseResult(resultFile).toScanSummary()
-
-                summary.licenseFindings should containExactlyInAnyOrder(
-                    LicenseFinding(
-                        license = "(MPL-2.0 OR EPL-1.0) AND LicenseRef-scancode-proprietary-license",
-                        location = TextLocation("h2/src/main/org/h2/table/Column.java", 2, 3),
-                        score = 20.37f
-                    ),
-                    LicenseFinding(
-                        license = "LicenseRef-scancode-public-domain",
-                        location = TextLocation("h2/src/main/org/h2/table/Column.java", 317),
-                        score = 70.0f
-                    )
-                )
-            }
-        }
-
         "for ScanCode 32.0.8 should" - {
             "get license mappings even without '--license-references'" {
                 val resultFile = getAssetFile("scancode-32.0.8_spdx-expression-parse_no-license-references.json")
