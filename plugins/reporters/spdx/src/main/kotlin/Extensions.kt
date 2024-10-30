@@ -55,6 +55,7 @@ import org.ossreviewtoolkit.utils.spdx.model.SpdxExtractedLicenseInfo
 import org.ossreviewtoolkit.utils.spdx.model.SpdxFile
 import org.ossreviewtoolkit.utils.spdx.model.SpdxPackage
 import org.ossreviewtoolkit.utils.spdx.model.SpdxPackageVerificationCode
+import org.ossreviewtoolkit.utils.spdx.nullOrBlankToSpdxNoassertionOrNone
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.spdx.toSpdxId
 
@@ -250,16 +251,6 @@ internal fun SpdxDocument.addExtractedLicenseInfo(licenseTextProvider: LicenseTe
 
     return copy(hasExtractedLicensingInfos = extractedLicenseInfo)
 }
-
-/**
- * Convert an [SpdxExpression] to `NOASSERTION` if null, to `NONE` if blank, or to its string representation otherwise.
- */
-private fun SpdxExpression?.nullOrBlankToSpdxNoassertionOrNone(): String =
-    when {
-        this == null -> SpdxConstants.NOASSERTION
-        toString().isBlank() -> SpdxConstants.NONE
-        else -> toString()
-    }
 
 /**
  * Convert a null or blank [String] to `NONE`.
