@@ -273,7 +273,7 @@ packages:
   filesAnalyzed: false
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
-  licenseDeclared: "Apache-2.0 AND MIT AND MIT"
+  licenseDeclared: "Apache-2.0 AND MIT"
   name: "gopkg.in/yaml.v3"
   summary: "NONE"
   versionInfo: "3.0.1"
@@ -288,7 +288,7 @@ packages:
   filesAnalyzed: false
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
-  licenseDeclared: "Apache-2.0 AND MIT AND MIT"
+  licenseDeclared: "Apache-2.0 AND MIT"
   name: "gopkg.in/yaml.v3"
   summary: "NONE"
   versionInfo: "3.0.1"
