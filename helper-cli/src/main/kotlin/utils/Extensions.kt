@@ -219,8 +219,8 @@ internal fun OrtResult.getViolatedRulesByLicense(
 /**
  * Return the [Provenance] of the first scan result matching the given [id] or null if there is no match.
  */
-internal fun OrtResult.getScannedProvenance(id: Identifier): KnownProvenance? =
-    getScanResultsForId(id).firstNotNullOfOrNull { it.provenance as? KnownProvenance }
+internal fun OrtResult.getScannedProvenance(id: Identifier): RemoteProvenance? =
+    getScanResultsForId(id).firstNotNullOfOrNull { it.provenance as? RemoteProvenance }
 
 /**
  * Return the [SourceCodeOrigin] for this provenance.
