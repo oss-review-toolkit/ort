@@ -404,9 +404,8 @@ class FreemarkerTemplateProcessor(
 }
 
 /**
- * Return a map with wrapper beans for the enum classes that are relevant for templates.These enums can then be
- * referenced directly by templates.
- * See https://freemarker.apache.org/docs/pgui_misc_beanwrapper.html#jdk_15_enums.
+ * Return a map with wrapper beans for the enum classes that are relevant for templates. These enums can then be
+ * referenced directly by templates, see https://freemarker.apache.org/docs/pgui_misc_beanwrapper.html#jdk_15_enums.
  */
 private fun enumModel(): Map<String, Any> {
     val beansWrapper = BeansWrapperBuilder(Configuration.VERSION_2_3_30).build()
