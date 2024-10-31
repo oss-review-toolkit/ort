@@ -55,10 +55,8 @@ packages:
   filesAnalyzed: false
   homepage: "first package's homepage URL"
   licenseConcluded: "BSD-2-Clause AND BSD-3-Clause AND MIT"
-  licenseDeclared: "Apache-2.0 AND BSD-2-Clause AND BSD-2-Clause AND BSD-2-Clause\
-    \ AND BSD-2-Clause AND BSD-3-Clause AND BSD-3-Clause AND BSD-3-Clause AND BSD-3-Clause\
-    \ AND BSD-3-Clause AND BSD-3-Clause AND (GPL-2.0-only OR MIT) AND (GPL-2.0-only\
-    \ OR MIT) AND (GPL-2.0-only OR MIT) AND MIT AND MIT AND MIT"
+  licenseDeclared: "Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND (GPL-2.0-only\
+    \ OR MIT) AND MIT"
   name: "first-package"
   summary: "A package with all supported attributes set, with a VCS URL containing\
     \ a user name, and with two scan results for the VCS containing copyright findings\
@@ -78,10 +76,8 @@ packages:
   - "SPDXRef-File-1"
   homepage: "first package's homepage URL"
   licenseConcluded: "NOASSERTION"
-  licenseDeclared: "Apache-2.0 AND BSD-2-Clause AND BSD-2-Clause AND BSD-2-Clause\
-    \ AND BSD-2-Clause AND BSD-3-Clause AND BSD-3-Clause AND BSD-3-Clause AND BSD-3-Clause\
-    \ AND BSD-3-Clause AND BSD-3-Clause AND (GPL-2.0-only OR MIT) AND (GPL-2.0-only\
-    \ OR MIT) AND (GPL-2.0-only OR MIT) AND MIT AND MIT AND MIT"
+  licenseDeclared: "Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND (GPL-2.0-only\
+    \ OR MIT) AND MIT"
   licenseInfoFromFiles:
   - "Apache-2.0"
   - "BSD-2-Clause"
@@ -107,10 +103,8 @@ packages:
   filesAnalyzed: false
   homepage: "first package's homepage URL"
   licenseConcluded: "NOASSERTION"
-  licenseDeclared: "Apache-2.0 AND BSD-2-Clause AND BSD-2-Clause AND BSD-2-Clause\
-    \ AND BSD-2-Clause AND BSD-3-Clause AND BSD-3-Clause AND BSD-3-Clause AND BSD-3-Clause\
-    \ AND BSD-3-Clause AND BSD-3-Clause AND (GPL-2.0-only OR MIT) AND (GPL-2.0-only\
-    \ OR MIT) AND (GPL-2.0-only OR MIT) AND MIT AND MIT AND MIT"
+  licenseDeclared: "Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND (GPL-2.0-only\
+    \ OR MIT) AND MIT"
   name: "first-package"
   summary: "A package with all supported attributes set, with a VCS URL containing\
     \ a user name, and with two scan results for the VCS containing copyright findings\

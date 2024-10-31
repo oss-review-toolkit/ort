@@ -204,6 +204,7 @@ internal fun Package.toSpdxPackage(
             SpdxConstants.NONE
         } else {
             packageLicenseExpressions.reduce(SpdxExpression::and)
+                .simplify()
                 .sorted()
                 .nullOrBlankToSpdxNoassertionOrNone()
         },
