@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.utils.spdx
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.shouldBe
 
 class SpdxCompoundExpressionTest : WordSpec({
     "Creating a compound expression" should {
@@ -32,6 +33,51 @@ class SpdxCompoundExpressionTest : WordSpec({
             shouldThrow<IllegalArgumentException> {
                 SpdxCompoundExpression(SpdxOperator.AND, listOf(SpdxLicenseIdExpression("license")))
             }
+        }
+    }
+
+    "Simplifying a compound expression" should {
+        "inline nested children of the same operator" {
+            val expression = SpdxCompoundExpression(
+                SpdxOperator.AND,
+                listOf(
+                    SpdxCompoundExpression(
+                        SpdxOperator.AND,
+                        listOf(
+                            SpdxLicenseIdExpression("MIT"),
+                            SpdxCompoundExpression(
+                                SpdxOperator.AND,
+                                listOf(
+                                    SpdxLicenseIdExpression("MIT"),
+                                    SpdxLicenseIdExpression("Apache-2.0")
+                                )
+                            )
+                        )
+                    ),
+                    SpdxLicenseIdExpression("Apache-2.0")
+                )
+            )
+
+            // Compare string representations to not rely on semantic equality.
+            expression.simplify().toString() shouldBe SpdxCompoundExpression(
+                SpdxOperator.AND,
+                listOf(
+                    SpdxLicenseIdExpression("MIT"),
+                    SpdxLicenseIdExpression("Apache-2.0")
+                )
+            ).toString()
+        }
+
+        "create a single expression for equal operands" {
+            val expression = SpdxCompoundExpression(
+                SpdxOperator.AND,
+                listOf(
+                    SpdxLicenseIdExpression("MIT"),
+                    SpdxLicenseIdExpression("MIT")
+                )
+            )
+
+            expression.simplify() shouldBe SpdxLicenseIdExpression("MIT")
         }
     }
 })
