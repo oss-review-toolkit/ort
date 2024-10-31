@@ -30,7 +30,7 @@ dependencies {
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.ortUtils)
 
-    implementation(libs.cvssCalculator)
+    implementation(libs.aeSecurity)
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
 

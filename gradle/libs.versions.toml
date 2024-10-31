@@ -12,11 +12,11 @@ mavenPublishPlugin = "0.30.0"
 reproducibleBuildsPlugin = "1.0"
 versionsPlugin = "0.51.0"
 
+aeSecurity = "0.125.0"
 asciidoctorj = "3.0.0"
 asciidoctorjPdf = "2.3.19"
 clikt = "5.0.1"
 commonsCompress = "1.27.1"
-cvssCalculator = "1.4.3"
 cyclonedx = "9.1.0"
 diffUtils = "4.12"
 discoClient = "21.0.1"
@@ -85,12 +85,12 @@ plugin-ksp = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.
 plugin-mavenPublish = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "mavenPublishPlugin" }
 plugin-reproducibleBuilds = { module = "org.gradlex:reproducible-builds", version.ref = "reproducibleBuildsPlugin" }
 
+aeSecurity = { module = "org.metaeffekt.core:ae-security", version.ref = "aeSecurity" }
 asciidoctorj = { module = "org.asciidoctor:asciidoctorj", version.ref = "asciidoctorj" }
 asciidoctorj-pdf = { module = "org.asciidoctor:asciidoctorj-pdf", version.ref = "asciidoctorjPdf" }
 awsS3 = { module = "software.amazon.awssdk:s3", version.ref = "s3" }
 clikt = { module = "com.github.ajalt.clikt:clikt", version.ref = "clikt" }
 commonsCompress = { module = "org.apache.commons:commons-compress", version.ref = "commonsCompress" }
-cvssCalculator = { module = "us.springett:cvss-calculator", version.ref = "cvssCalculator" }
 cyclonedx = { module = "org.cyclonedx:cyclonedx-core-java", version.ref = "cyclonedx" }
 detekt-api = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detektPlugin" }
 detekt-test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version.ref = "detektPlugin" }
