@@ -152,6 +152,8 @@ internal fun Package.toSpdxPackage(
     }
 
     val resolvedLicenseExpressions = licenseInfoResolver.resolveLicenseInfo(id).filterExcluded()
+        .applyChoices(ortResult.getPackageLicenseChoices(id))
+        .applyChoices(ortResult.getRepositoryLicenseChoices())
 
     val declaredPackageLicenses = resolvedLicenseExpressions.filter(LicenseView.ONLY_DECLARED)
 
