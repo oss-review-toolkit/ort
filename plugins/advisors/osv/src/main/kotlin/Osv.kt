@@ -26,6 +26,8 @@ import kotlinx.serialization.json.contentOrNull
 
 import org.apache.logging.log4j.kotlin.logger
 
+import org.metaeffekt.core.security.cvss.CvssVector
+
 import org.ossreviewtoolkit.advisor.AdviceProvider
 import org.ossreviewtoolkit.advisor.AdviceProviderFactory
 import org.ossreviewtoolkit.clients.osv.OsvServiceWrapper
@@ -45,8 +47,6 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
-
-import us.springett.cvss.Cvss
 
 /**
  * An advice provider that obtains vulnerability information from Open Source Vulnerabilities (https://osv.dev/).
@@ -168,10 +168,8 @@ private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.vulne
                 // See also https://github.com/google/osv.dev/issues/484.
                 val specificSeverity = databaseSpecific?.get("severity")
 
-                // Note that the CVSS Calculator does not support CVSS 4.0 yet:
-                // https://github.com/stevespringett/cvss-calculator/issues/78
                 val baseScore = runCatching {
-                    Cvss.fromVector(severity)?.calculateScore()?.baseScore?.toFloat()
+                    CvssVector.parseVector(severity)?.baseScore?.toFloat()
                 }.onFailure {
                     logger.debug { "Unable to parse CVSS vector '$severity': ${it.collectMessages()}." }
                 }.getOrNull()
