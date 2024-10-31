@@ -97,9 +97,9 @@ ${copyrights?join("\n", "")}
         are configured not to be included in notice files, and filter all licenses that are contained in the license
         files already printed above.
     --]
-    [#assign licensesFilteredBySource = LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED.filter(package.license.licenses)]
+    [#assign resolvedLicenseInfo = LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED.filter(package.license, package.licenseChoices)]
     [#assign resolvedLicenses = helper.filterForCategory(
-        package.licensesNotInLicenseFiles(licensesFilteredBySource),
+        package.licensesNotInLicenseFiles(resolvedLicenseInfo.licenses),
         noticeCategoryName
     )]
     [#assign isFirst = true]
