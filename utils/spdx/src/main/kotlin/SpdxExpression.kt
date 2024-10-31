@@ -114,6 +114,11 @@ sealed class SpdxExpression {
     abstract fun normalize(mapDeprecated: Boolean = true): SpdxExpression
 
     /**
+     * Return a simplified expression that has e.g. redundancies removed.
+     */
+    open fun simplify(): SpdxExpression = this
+
+    /**
      * Return this expression sorted lexicographically.
      */
     open fun sorted(): SpdxExpression = this
@@ -243,6 +248,21 @@ class SpdxCompoundExpression(
 
     override fun normalize(mapDeprecated: Boolean) =
         SpdxCompoundExpression(operator, children.map { it.normalize(mapDeprecated) })
+
+    override fun simplify(): SpdxExpression {
+        val flattenedChildren = children.flatMapTo(mutableSetOf()) { child ->
+            val simplifiedChild = child.simplify()
+
+            if (simplifiedChild is SpdxCompoundExpression && simplifiedChild.operator == operator) {
+                // Inline nested children of the same operator.
+                simplifiedChild.children.map { it.simplify() }
+            } else {
+                setOf(simplifiedChild)
+            }
+        }
+
+        return flattenedChildren.singleOrNull() ?: SpdxCompoundExpression(operator, flattenedChildren)
+    }
 
     override fun sorted(): SpdxExpression {
         /**
