@@ -109,4 +109,30 @@ class VulnerableCodeFunTest : WordSpec({
             }
         }
     }
+
+    "Vulnerable NPM packages" should {
+        "return findings for Elliptic" {
+            val vc = VulnerableCodeFactory().create(PluginConfig())
+            val id = Identifier("NPM::elliptic:6.5.7")
+            val pkg = Package.EMPTY.copy(id, purl = id.toPurl())
+
+            val findings = vc.retrievePackageFindings(setOf(pkg))
+
+            findings.values.flatMap { it.summary.issues } should beEmpty()
+            with(findings.values.flatMap { it.vulnerabilities }.associateBy { it.id }) {
+                keys shouldContainAll setOf(
+                    "CVE-2024-48948"
+                )
+
+                getValue("CVE-2024-48948").references.find {
+                    it.url.toString() == "https://github.com/indutny/elliptic"
+                } shouldNotBeNull {
+                    scoringSystem shouldBe "cvssv3.1"
+                    severity shouldBe "MEDIUM"
+                    score shouldBe 5.3f
+                    vector shouldBe "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N"
+                }
+            }
+        }
+    }
 })
