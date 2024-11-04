@@ -476,11 +476,11 @@ pipeline {
                     cat >"$ORT_CONFIG_DIR/config.yml" <<EOF
                 ort:
                   packageCurationProviders:
-                    - name: DefaultFile
-                    - name: DefaultDir
-                    - name: OrtConfig
+                    - type: DefaultFile
+                    - type: DefaultDir
+                    - type: OrtConfig
                       enabled: ${USE_ORT_CONFIG_CURATIONS}
-                    - name: ClearlyDefined
+                    - type: ClearlyDefined
                       enabled: ${USE_CLEARLY_DEFINED_CURATIONS}
                 EOF
                 fi

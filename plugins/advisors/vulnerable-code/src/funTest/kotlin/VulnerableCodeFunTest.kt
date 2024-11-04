@@ -32,6 +32,32 @@ import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.plugins.api.PluginConfig
 
 class VulnerableCodeFunTest : WordSpec({
+    "Vulnerable Go packages" should {
+        "return findings for QUIC" {
+            val vc = VulnerableCodeFactory().create(PluginConfig())
+            val id = Identifier("Go::github.com/quic-go/quic-go:0.40.0")
+            val pkg = Package.EMPTY.copy(id, purl = id.toPurl())
+
+            val findings = vc.retrievePackageFindings(setOf(pkg))
+
+            findings.values.flatMap { it.summary.issues } should beEmpty()
+            with(findings.values.flatMap { it.vulnerabilities }.associateBy { it.id }) {
+                keys shouldContainAll setOf(
+                    "CVE-2023-49295"
+                )
+
+                getValue("CVE-2023-49295").references.find {
+                    it.url.toString() == "https://nvd.nist.gov/vuln/detail/CVE-2023-49295"
+                } shouldNotBeNull {
+                    scoringSystem shouldBe "cvssv3"
+                    severity shouldBe "MEDIUM"
+                    score shouldBe 6.5f
+                    vector shouldBe "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H"
+                }
+            }
+        }
+    }
+
     "Vulnerable Maven packages" should {
         "return findings for Guava" {
             val vc = VulnerableCodeFactory().create(PluginConfig())
@@ -84,10 +110,10 @@ class VulnerableCodeFunTest : WordSpec({
         }
     }
 
-    "Vulnerable Go packages" should {
-        "return findings for QUIC" {
+    "Vulnerable NPM packages" should {
+        "return findings for Elliptic" {
             val vc = VulnerableCodeFactory().create(PluginConfig())
-            val id = Identifier("Go::github.com/quic-go/quic-go:0.40.0")
+            val id = Identifier("NPM::elliptic:6.5.7")
             val pkg = Package.EMPTY.copy(id, purl = id.toPurl())
 
             val findings = vc.retrievePackageFindings(setOf(pkg))
@@ -95,16 +121,16 @@ class VulnerableCodeFunTest : WordSpec({
             findings.values.flatMap { it.summary.issues } should beEmpty()
             with(findings.values.flatMap { it.vulnerabilities }.associateBy { it.id }) {
                 keys shouldContainAll setOf(
-                    "CVE-2023-49295"
+                    "CVE-2024-48948"
                 )
 
-                getValue("CVE-2023-49295").references.find {
-                    it.url.toString() == "https://nvd.nist.gov/vuln/detail/CVE-2023-49295"
+                getValue("CVE-2024-48948").references.find {
+                    it.url.toString() == "https://github.com/indutny/elliptic"
                 } shouldNotBeNull {
-                    scoringSystem shouldBe "cvssv3"
+                    scoringSystem shouldBe "cvssv3.1"
                     severity shouldBe "MEDIUM"
-                    score shouldBe 6.5f
-                    vector shouldBe "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H"
+                    score shouldBe 5.3f
+                    vector shouldBe "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N"
                 }
             }
         }
