@@ -164,25 +164,47 @@ tasks.named<BuildNativeImageTask>("nativeCompile") {
     }
 }
 
-tasks.named<CreateStartScripts>("startScripts") {
-    doLast {
+val jar by tasks.getting(Jar::class)
+
+val pathingJar by tasks.registering(Jar::class) {
+    archiveClassifier = "pathing"
+
+    manifest {
         // Work around the command line length limit on Windows when passing the classpath to Java, see
-        // https://github.com/gradle/gradle/issues/1989#issuecomment-395001392.
+        // https://github.com/gradle/gradle/issues/1989.
+        attributes["Class-Path"] = configurations.runtimeClasspath.get().joinToString(" ") { it.name }
+    }
+}
+
+tasks.named<CreateStartScripts>("startScripts") {
+    classpath = jar.outputs.files + pathingJar.get().outputs.files
+
+    doLast {
+        // Append the plugin directory to the Windows classpath.
         val windowsScriptText = windowsScript.readText(Charset.defaultCharset())
         windowsScript.writeText(
             windowsScriptText.replace(
-                Regex("set CLASSPATH=%APP_HOME%\\\\lib\\\\.*"),
-                "set CLASSPATH=%APP_HOME%\\\\lib\\\\*;%APP_HOME%\\\\plugin\\\\*"
+                Regex("(set CLASSPATH=%APP_HOME%\\\\lib\\\\.*)"), "$1;%APP_HOME%\\\\plugin\\\\*"
             )
         )
 
+        // Append the plugin directory to the Unix classpath.
         val unixScriptText = unixScript.readText(Charset.defaultCharset())
         unixScript.writeText(
             unixScriptText.replace(
-                Regex("CLASSPATH=\\\$APP_HOME/lib/.*"),
-                "CLASSPATH=\\\$APP_HOME/lib/*:\\\$APP_HOME/plugin/*"
+                Regex("(CLASSPATH=\\\$APP_HOME/lib/.*)"), "$1:\\\$APP_HOME/plugin/*"
             )
         )
+    }
+}
+
+distributions {
+    main {
+        contents {
+            from(pathingJar) {
+                into("lib")
+            }
+        }
     }
 }
 
