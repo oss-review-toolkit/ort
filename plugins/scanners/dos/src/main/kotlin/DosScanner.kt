@@ -228,7 +228,10 @@ class DosScanner internal constructor(
                 }
 
                 "failed" -> {
-                    issues += createAndLogIssue(name, "Scan failed in DOS API")
+                    issues += createAndLogIssue(
+                        name,
+                        "Scan failed for job with ID '$jobId': ${jobState.state.message}"
+                    )
                     return null
                 }
 
