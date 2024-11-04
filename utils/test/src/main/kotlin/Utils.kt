@@ -152,7 +152,9 @@ fun readOrtResult(file: File) = file.mapper().readValue<OrtResult>(patchExpected
 fun scannerRunOf(vararg pkgScanResults: Pair<Identifier, List<ScanResult>>): ScannerRun {
     val pkgScanResultsWithKnownProvenance = pkgScanResults.associate { (id, scanResultsForId) ->
         id to scanResultsForId.map { scanResult ->
-            scanResult.takeIf { scanResult.provenance is KnownProvenance } ?: scanResult.copy(
+            scanResult.takeIf {
+                scanResult.provenance is RepositoryProvenance || scanResult.provenance is ArtifactProvenance
+            } ?: scanResult.copy(
                 provenance = ArtifactProvenance(
                     sourceArtifact = RemoteArtifact(
                         url = id.toPurl(),

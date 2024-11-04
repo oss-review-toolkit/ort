@@ -136,7 +136,7 @@ class ProvenanceBasedPostgresStorage(
 
         requireEmptyVcsPath(provenance)
 
-        if (provenance !is KnownProvenance) {
+        if (provenance !is RepositoryProvenance && provenance !is ArtifactProvenance) {
             throw ScanStorageException("Scan result must have a known provenance, but it is $provenance.")
         }
 

@@ -169,7 +169,9 @@ internal fun OrtResult.getLicenseFindingsById(
             packageConfigurationProvider.getPackageConfigurations(id, provenance).flatMap { it.licenseFindingCurations }
         }
 
-    getScanResultsForId(id).filter { it.provenance is KnownProvenance }.map {
+    getScanResultsForId(id).filter {
+        it.provenance is RepositoryProvenance || it.provenance is ArtifactProvenance
+    }.map {
         // If a VCS path curation has been applied after the scanning stage, it is possible to apply that
         // curation without re-scanning in case the new VCS path is a subdirectory of the scanned VCS path.
         // So, filter by VCS path to enable the user to see the effect on the detected license with a shorter

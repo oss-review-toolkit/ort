@@ -108,7 +108,7 @@ data class ScannerRun(
 
     init {
         scanResults.forEach { scanResult ->
-            require(scanResult.provenance is KnownProvenance) {
+            require(scanResult.provenance is RepositoryProvenance || scanResult.provenance is ArtifactProvenance) {
                 "Found a scan result with an unknown provenance, which is not allowed."
             }
 

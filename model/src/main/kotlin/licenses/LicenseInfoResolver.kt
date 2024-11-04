@@ -19,11 +19,11 @@
 
 package org.ossreviewtoolkit.model.licenses
 
+import org.ossreviewtoolkit.model.ArtifactProvenance
 import java.util.concurrent.ConcurrentHashMap
 
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
@@ -264,7 +264,8 @@ class LicenseInfoResolver(
 
             when (provenance) {
                 is UnknownProvenance -> return@forEach
-                is KnownProvenance -> if (!archiver.unarchive(archiveDir, provenance)) return@forEach
+                is RepositoryProvenance -> if (!archiver.unarchive(archiveDir, provenance)) return@forEach
+                is ArtifactProvenance -> if (!archiver.unarchive(archiveDir, provenance)) return@forEach
             }
 
             val directory = (provenance as? RepositoryProvenance)?.vcsInfo?.path.orEmpty()
