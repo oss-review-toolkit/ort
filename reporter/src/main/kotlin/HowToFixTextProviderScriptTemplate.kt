@@ -23,6 +23,7 @@ import kotlin.script.experimental.annotations.KotlinScript
 import kotlin.script.experimental.api.ScriptCompilationConfiguration
 import kotlin.script.experimental.api.defaultImports
 
+import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.utils.scripting.OrtScriptCompilationConfiguration
 
 @KotlinScript(
@@ -30,7 +31,9 @@ import org.ossreviewtoolkit.utils.scripting.OrtScriptCompilationConfiguration
     fileExtension = "how-to-fix-text-provider.kts",
     compilationConfiguration = HowToFixTextProviderScriptCompilationConfiguration::class
 )
-open class HowToFixTextProviderScriptTemplate
+open class HowToFixTextProviderScriptTemplate(
+    val ortResult: OrtResult
+)
 
 class HowToFixTextProviderScriptCompilationConfiguration : ScriptCompilationConfiguration(
     OrtScriptCompilationConfiguration(),

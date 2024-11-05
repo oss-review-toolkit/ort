@@ -19,11 +19,17 @@
 
 package org.ossreviewtoolkit.evaluator
 
+import java.time.Instant
+
 import kotlin.script.experimental.annotations.KotlinScript
 import kotlin.script.experimental.api.ScriptCompilationConfiguration
 import kotlin.script.experimental.api.defaultImports
 
+import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RuleViolation
+import org.ossreviewtoolkit.model.licenses.LicenseClassifications
+import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
+import org.ossreviewtoolkit.model.utils.ResolutionProvider
 import org.ossreviewtoolkit.utils.scripting.OrtScriptCompilationConfiguration
 
 @KotlinScript(
@@ -31,7 +37,13 @@ import org.ossreviewtoolkit.utils.scripting.OrtScriptCompilationConfiguration
     fileExtension = "rules.kts",
     compilationConfiguration = RulesScriptCompilationConfiguration::class
 )
-open class RulesScriptTemplate {
+open class RulesScriptTemplate(
+    val ortResult: OrtResult,
+    val licenseInfoResolver: LicenseInfoResolver,
+    val resolutionProvider: ResolutionProvider,
+    val licenseClassifications: LicenseClassifications,
+    val time: Instant
+) {
     val ruleViolations = mutableListOf<RuleViolation>()
 }
 

@@ -23,6 +23,7 @@ import kotlin.script.experimental.annotations.KotlinScript
 import kotlin.script.experimental.api.ScriptCompilationConfiguration
 import kotlin.script.experimental.api.defaultImports
 
+import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.utils.scripting.OrtScriptCompilationConfiguration
 
 @KotlinScript(
@@ -30,7 +31,9 @@ import org.ossreviewtoolkit.utils.scripting.OrtScriptCompilationConfiguration
     fileExtension = "notifications.kts",
     compilationConfiguration = NotificationsScriptCompilationConfiguration::class
 )
-open class NotificationsScriptTemplate
+open class NotificationsScriptTemplate(
+    val ortResult: OrtResult
+)
 
 class NotificationsScriptCompilationConfiguration : ScriptCompilationConfiguration(
     OrtScriptCompilationConfiguration(),
