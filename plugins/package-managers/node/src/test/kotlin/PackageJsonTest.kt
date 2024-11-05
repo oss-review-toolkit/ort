@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.packagemanagers.node
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
 
 class PackageJsonTest : WordSpec({
     "parsePackageJson()" should {
@@ -67,6 +68,18 @@ class PackageJsonTest : WordSpec({
                 "Jane Doe <jane.doe@example.com>",
                 "John Doe"
             )
+        }
+
+        "deserialize the repository from an empty node" {
+            val json = """
+            {
+                "repository": {}
+            }
+            """.trimIndent()
+
+            val packageJson = parsePackageJson(json)
+
+            packageJson.repository shouldBe null
         }
     }
 })

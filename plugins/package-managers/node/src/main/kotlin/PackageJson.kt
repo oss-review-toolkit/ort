@@ -74,6 +74,13 @@ private fun transformPackageJson(element: JsonElement): JsonElement {
     val entries = obj.entries.associateTo(mutableMapOf()) { it.toPair() }.apply {
         remove("license")
         put("licenses", JsonArray(licenses.map { JsonPrimitive(it) }))
+
+        (obj["repository"] as? JsonObject)?.let { repository ->
+            // A repository object node without a `url` does not make sense. However, some packages use 'repository: {}'
+            // to describe the absence of a repository, see https://github.com/oss-review-toolkit/ort/issues/9378.
+            // Remove the repository node, so that Repository.url can remain non-nullable.
+            if ("url" !in repository.keys) remove("repository")
+        }
     }
 
     return JsonObject(entries)
