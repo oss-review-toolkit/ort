@@ -63,26 +63,27 @@ internal fun parsePackageJson(element: JsonElement): PackageJson {
  * class.
  */
 private fun transformPackageJson(element: JsonElement): JsonElement {
-    val obj = element.jsonObject
+    val content = element.jsonObject.toMutableMap()
 
+    // Collect all nested licenses and remove them temporarily.
     val licenses = listOfNotNull(
-        obj["license"],
-        obj["licenses"]
-    ).flatMapTo(mutableSetOf()) { it.parseLicenses() }
-
-    val entries = obj.entries.associateTo(mutableMapOf()) { it.toPair() }.apply {
-        remove("license")
-        put("licenses", JsonArray(licenses.map { JsonPrimitive(it) }))
-
-        (obj["repository"] as? JsonObject)?.let { repository ->
-            // A repository object node without a `url` does not make sense. However, some packages use 'repository: {}'
-            // to describe the absence of a repository, see https://github.com/oss-review-toolkit/ort/issues/9378.
-            // Remove the repository node, so that Repository.url can remain non-nullable.
-            if ("url" !in repository.keys) remove("repository")
-        }
+        content.remove("license"),
+        content.remove("licenses")
+    ).flatMapTo(mutableSetOf()) {
+        it.parseLicenses()
     }
 
-    return JsonObject(entries)
+    // Readd licenses as plain primitives.
+    content["licenses"] = JsonArray(licenses.map { JsonPrimitive(it) })
+
+    (content["repository"] as? JsonObject)?.also {
+        // A repository object node without a `url` does not make sense. However, some packages use 'repository: {}'
+        // to describe the absence of a repository, see https://github.com/oss-review-toolkit/ort/issues/9378.
+        // Remove the repository node, so that Repository.url can remain non-nullable.
+        if ("url" !in it.keys) content.remove("repository")
+    }
+
+    return JsonObject(content)
 }
 
 private fun JsonElement.parseLicenses(): Set<String> =
