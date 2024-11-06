@@ -20,8 +20,9 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.node.utils
 
 import java.io.File
+import java.lang.invoke.MethodHandles
 
-import org.apache.logging.log4j.kotlin.logger
+import org.apache.logging.log4j.kotlin.loggerOf
 
 import org.ossreviewtoolkit.analyzer.PackageManager.Companion.getFallbackProjectName
 import org.ossreviewtoolkit.analyzer.PackageManager.Companion.processPackageVcs
@@ -37,7 +38,6 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
-import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.Npm
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.utils.common.realFile
 import org.ossreviewtoolkit.utils.common.toUri
@@ -247,8 +247,10 @@ internal fun parsePackage(
     return module
 }
 
+private val logger = loggerOf(MethodHandles.lookup().lookupClass())
+
 internal fun parseProject(packageJsonFile: File, analysisRoot: File, managerName: String): Project {
-    Npm.logger.debug { "Parsing project info from '$packageJsonFile'." }
+    logger.debug { "Parsing project info from '$packageJsonFile'." }
 
     val packageJson = parsePackageJson(packageJsonFile)
 
@@ -257,13 +259,13 @@ internal fun parseProject(packageJsonFile: File, analysisRoot: File, managerName
 
     val projectName = name.ifBlank {
         getFallbackProjectName(analysisRoot, packageJsonFile).also {
-            Npm.logger.warn { "'$packageJsonFile' does not define a name, falling back to '$it'." }
+            logger.warn { "'$packageJsonFile' does not define a name, falling back to '$it'." }
         }
     }
 
     val version = packageJson.version.orEmpty()
     if (version.isBlank()) {
-        Npm.logger.warn { "'$packageJsonFile' does not define a version." }
+        logger.warn { "'$packageJsonFile' does not define a version." }
     }
 
     val declaredLicenses = packageJson.licenses.mapNpmLicenses()
