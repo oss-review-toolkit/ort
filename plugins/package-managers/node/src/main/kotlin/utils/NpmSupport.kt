@@ -45,6 +45,8 @@ import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 
 internal const val NON_EXISTING_SEMVER = "0.0.0"
 
+private val logger = loggerOf(MethodHandles.lookup().lookupClass())
+
 /**
  * Expand an NPM shortcut [url] to a regular URL as used for dependencies, see
  * https://docs.npmjs.com/cli/v7/configuring-npm/package-json#urls-as-dependencies.
@@ -246,8 +248,6 @@ internal fun parsePackage(
 
     return module
 }
-
-private val logger = loggerOf(MethodHandles.lookup().lookupClass())
 
 internal fun parseProject(packageJsonFile: File, analysisRoot: File, managerName: String): Project {
     logger.debug { "Parsing project info from '$packageJsonFile'." }
