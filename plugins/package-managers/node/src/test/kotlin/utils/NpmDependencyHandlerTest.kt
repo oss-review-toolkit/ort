@@ -100,7 +100,7 @@ private fun createModuleInfo(
 ): NpmModuleInfo = NpmModuleInfo(id, packageFile.parentFile, packageFile, dependencies, isProject)
 
 /**
- * Creates an [NpmDependencyHandler] instance to be used by test cases.
+ * Creates an [YarnDependencyHandler] instance to be used by test cases.
  */
 private fun createHandler() =
-    NpmDependencyHandler(Npm("NPM", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration()))
+    YarnDependencyHandler(Npm("NPM", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration()))
