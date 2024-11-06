@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packagemanagers.node.utils
+package org.ossreviewtoolkit.plugins.packagemanagers.node.yarn
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.containExactly
@@ -32,11 +32,9 @@ import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.Npm
-import org.ossreviewtoolkit.plugins.packagemanagers.node.yarn.NpmModuleInfo
-import org.ossreviewtoolkit.plugins.packagemanagers.node.yarn.YarnDependencyHandler
 import org.ossreviewtoolkit.utils.test.USER_DIR
 
-class NpmDependencyHandlerTest : StringSpec({
+class YarnDependencyHandlerTest : StringSpec({
     "identifierFor extracts the correct identifier" {
         val id = createIdentifier("foo")
         val module = createModuleInfo(id)
