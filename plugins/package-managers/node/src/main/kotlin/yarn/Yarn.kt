@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packagemanagers.node
+package org.ossreviewtoolkit.plugins.packagemanagers.node.yarn
 
 import java.io.File
 import java.lang.invoke.MethodHandles
@@ -50,10 +50,11 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.readTree
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
+import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
+import org.ossreviewtoolkit.plugins.packagemanagers.node.groupLines
+import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NpmDetection
-import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NpmModuleInfo
-import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.YarnDependencyHandler
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.parseProject
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.splitNpmNamespaceAndName
 import org.ossreviewtoolkit.utils.common.CommandLineTool
