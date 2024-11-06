@@ -27,7 +27,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.utils.DependencyHandler
-import org.ossreviewtoolkit.plugins.packagemanagers.node.Npm
+import org.ossreviewtoolkit.plugins.packagemanagers.node.Yarn
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackage
 
 /**
@@ -67,7 +67,7 @@ internal data class NpmModuleInfo(
 /**
  * A specialized [DependencyHandler] implementation for NPM.
  */
-internal class NpmDependencyHandler(private val npm: Npm) : DependencyHandler<NpmModuleInfo> {
+internal class YarnDependencyHandler(private val npm: Yarn) : DependencyHandler<NpmModuleInfo> {
     override fun identifierFor(dependency: NpmModuleInfo): Identifier = dependency.id
 
     override fun dependenciesFor(dependency: NpmModuleInfo): List<NpmModuleInfo> = dependency.dependencies.toList()
