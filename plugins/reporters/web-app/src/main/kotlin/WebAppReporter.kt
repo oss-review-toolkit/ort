@@ -31,6 +31,7 @@ import org.apache.commons.compress.compressors.gzip.GzipParameters
 
 import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.reporters.evaluatedmodel.EvaluatedModel
 import org.ossreviewtoolkit.reporter.Reporter
@@ -39,23 +40,26 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 
 private const val PLACEHOLDER = "ORT_REPORT_DATA_PLACEHOLDER"
 
+data class WebAppReporterConfig(
+    /**
+     * If true, subtrees occurring multiple times in the dependency tree are stripped.
+     */
+    @OrtPluginOption(defaultValue = "false")
+    val deduplicateDependencyTree: Boolean
+)
+
 /**
  * A [Reporter] that generates a web application that allows browsing an ORT result interactively.
- *
- * This reporter supports the following options:
- * - *deduplicateDependencyTree*: Controls whether subtrees occurring multiple times in the dependency tree are
- *   stripped.
  */
 @OrtPlugin(
     displayName = "WebApp Reporter",
     description = "Generates a web application to browse an ORT result interactively.",
     factory = ReporterFactory::class
 )
-class WebAppReporter(override val descriptor: PluginDescriptor = WebAppReporterFactory.descriptor) : Reporter {
-    companion object {
-        const val OPTION_DEDUPLICATE_DEPENDENCY_TREE = "deduplicateDependencyTree"
-    }
-
+class WebAppReporter(
+    override val descriptor: PluginDescriptor = WebAppReporterFactory.descriptor,
+    private val config: WebAppReporterConfig
+) : Reporter {
     private val reportFilename = "scan-report-web-app.html"
 
     override fun generateReport(
@@ -64,10 +68,7 @@ class WebAppReporter(override val descriptor: PluginDescriptor = WebAppReporterF
         config: PluginConfiguration
     ): List<Result<File>> {
         val template = javaClass.getResource("/scan-report-template.html").readText()
-        val evaluatedModel = EvaluatedModel.create(
-            input,
-            config.options[OPTION_DEDUPLICATE_DEPENDENCY_TREE].toBoolean()
-        )
+        val evaluatedModel = EvaluatedModel.create(input, this.config.deduplicateDependencyTree)
 
         val index = template.indexOf(PLACEHOLDER)
         val prefix = template.substring(0, index)
