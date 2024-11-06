@@ -51,7 +51,6 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.Excludes
-import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
@@ -100,7 +99,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
             val jsonSpdxDocument = generateReport(
                 ortResult,
                 FileFormat.JSON,
-                SpdxDocumentReporter.OPTION_FILE_INFORMATION_ENABLED to "false"
+                defaultConfig.copy(fileInformationEnabled = false)
             )
 
             val document = fromJson<SpdxDocument>(jsonSpdxDocument)
@@ -136,23 +135,27 @@ class SpdxDocumentReporterFunTest : WordSpec({
     }
 })
 
+private val defaultConfig = SpdxDocumentReporterConfig(
+    creationInfoComment = "some creation info comment",
+    creationInfoPerson = "some creation info person",
+    creationInfoOrganization = "some creation info organization",
+    documentComment = "some document comment",
+    documentName = "some document name",
+    fileInformationEnabled = true,
+    outputFileFormats = emptyList()
+)
+
 private fun TestConfiguration.generateReport(
     ortResult: OrtResult,
     format: FileFormat,
-    vararg extraReporterOptions: Pair<String, String>
+    config: SpdxDocumentReporterConfig = defaultConfig
 ): String {
     val input = ReporterInput(ortResult)
 
     val outputDir = tempdir()
 
-    val reportOptions = mapOf(
-        SpdxDocumentReporter.OPTION_CREATION_INFO_COMMENT to "some creation info comment",
-        SpdxDocumentReporter.OPTION_DOCUMENT_COMMENT to "some document comment",
-        SpdxDocumentReporter.OPTION_DOCUMENT_NAME to "some document name",
-        SpdxDocumentReporter.OPTION_OUTPUT_FILE_FORMATS to format.toString()
-    ) + extraReporterOptions
-
-    return SpdxDocumentReporter().generateReport(input, outputDir, PluginConfiguration(reportOptions))
+    return SpdxDocumentReporter(config = config.copy(outputFileFormats = listOf(format.name)))
+        .generateReport(input, outputDir)
         .single()
         .getOrThrow()
         .readText()
