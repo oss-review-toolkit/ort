@@ -29,6 +29,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.common.unpackZip
@@ -61,7 +62,8 @@ private fun TestConfiguration.generateReport(ortResult: OrtResult): String {
     val input = ReporterInput(ortResult)
     val outputDir = tempdir()
 
-    OpossumReporter().generateReport(input, outputDir).single().getOrThrow().unpackZip(outputDir)
+    OpossumReporterFactory().create(PluginConfig())
+        .generateReport(input, outputDir).single().getOrThrow().unpackZip(outputDir)
 
     return outputDir.resolve("input.json").readText()
 }
