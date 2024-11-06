@@ -118,7 +118,7 @@ open class Yarn(
     /**
      * Load the submodule directories of the project defined in [moduleDir].
      */
-    protected open fun loadWorkspaceSubmodules(moduleDir: File): Set<File> {
+    private fun loadWorkspaceSubmodules(moduleDir: File): Set<File> {
         val nodeModulesDir = moduleDir.resolve("node_modules")
         if (!nodeModulesDir.isDirectory) return emptySet()
 
