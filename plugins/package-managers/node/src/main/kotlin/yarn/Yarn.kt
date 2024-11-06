@@ -50,13 +50,13 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.readTree
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
+import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
+import org.ossreviewtoolkit.plugins.packagemanagers.node.NpmDetection
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.groupLines
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
-import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NodePackageManager
-import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NpmDetection
-import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.parseProject
-import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.splitNpmNamespaceAndName
+import org.ossreviewtoolkit.plugins.packagemanagers.node.parseProject
+import org.ossreviewtoolkit.plugins.packagemanagers.node.splitNpmNamespaceAndName
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.DiskCache
 import org.ossreviewtoolkit.utils.common.Os

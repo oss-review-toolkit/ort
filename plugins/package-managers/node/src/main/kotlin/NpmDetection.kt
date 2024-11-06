@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packagemanagers.node.utils
+package org.ossreviewtoolkit.plugins.packagemanagers.node
 
 import java.io.File
 import java.nio.file.FileSystems
