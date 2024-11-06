@@ -25,6 +25,7 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterFactory
@@ -36,42 +37,65 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicenseWithExceptionExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper.FileFormat
 import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
 
+data class SpdxDocumentReporterConfig(
+    /**
+     * The comment to add to the [SpdxDocument.creationInfo].
+     */
+    val creationInfoComment: String?,
+
+    /**
+     * The person to add to the [SpdxDocument.creationInfo].
+     */
+    val creationInfoPerson: String?,
+
+    /**
+     * The organization to add to the [SpdxDocument.creationInfo].
+     */
+    val creationInfoOrganization: String?,
+
+    /**
+     * The comment to add to the [SpdxDocument].
+     */
+    val documentComment: String?,
+
+    /**
+     * The name of the generated [SpdxDocument].
+     */
+    @OrtPluginOption(defaultValue = "Unnamed document")
+    val documentName: String,
+
+    /**
+     * The list of file formats to generate. Supported values are "YAML" and "JSON".
+     */
+    @OrtPluginOption(defaultValue = "YAML")
+    val outputFileFormats: List<String>,
+
+    /**
+     * Toggle whether the output document should contain information on file granularity about files containing
+     * findings.
+     */
+    @OrtPluginOption(defaultValue = "true")
+    val fileInformationEnabled: Boolean
+)
+
 /**
  * Creates YAML and JSON SPDX documents mainly targeting the use case of sharing information about the dependencies
  * used, similar to e.g. a NOTICE file. Information about the project / submodule structure as well as project VCS
  * locations are deliberately omitted. The underlying idea is to clearly separate this mentioned use case from a maximum
  * detailed report which could be preferred for archiving or internal use only. The latter could be implemented either
  * as a future extension of this [SpdxDocumentReporter] or as a separate [Reporter].
- *
- * This reporter supports the following options:
- * - *creationInfo.comment*: Add the corresponding value as metadata to the [SpdxDocument.creationInfo].
- * - *creationInfo.person*: Add the corresponding value as metadata to the [SpdxDocument.creationInfo].
- * - *creationInfo.organization*: Add the corresponding value as metadata to the [SpdxDocument.creationInfo].
- * - *document.comment*: Add the corresponding value as metadata to the [SpdxDocument].
- * - *document.name*: The name of the generated [SpdxDocument], defaults to "Unnamed document".
- * - *output.file.formats*: The list of [FileFormat]s to generate, defaults to [FileFormat.YAML].
- * - *file.information.enabled*: Toggle whether the output document should contain information on file granularity
- *                               about files containing findings.
  */
 @OrtPlugin(
     displayName = "SPDX Document Reporter",
     description = "Creates software bills of materials (SBOM) in the SPDX format.",
     factory = ReporterFactory::class
 )
-class SpdxDocumentReporter(override val descriptor: PluginDescriptor = SpdxDocumentReporterFactory.descriptor) :
-    Reporter {
+class SpdxDocumentReporter(
+    override val descriptor: PluginDescriptor = SpdxDocumentReporterFactory.descriptor,
+    private val config: SpdxDocumentReporterConfig
+) : Reporter {
     companion object {
         const val REPORT_BASE_FILENAME = "bom.spdx"
-
-        const val OPTION_CREATION_INFO_COMMENT = "creationInfo.comment"
-        const val OPTION_CREATION_INFO_PERSON = "creationInfo.person"
-        const val OPTION_CREATION_INFO_ORGANIZATION = "creationInfo.organization"
-        const val OPTION_DOCUMENT_COMMENT = "document.comment"
-        const val OPTION_DOCUMENT_NAME = "document.name"
-        const val OPTION_OUTPUT_FILE_FORMATS = "output.file.formats"
-        const val OPTION_FILE_INFORMATION_ENABLED = "file.information.enabled"
-
-        private const val DOCUMENT_NAME_DEFAULT_VALUE = "Unnamed document"
     }
 
     override fun generateReport(
@@ -79,18 +103,16 @@ class SpdxDocumentReporter(override val descriptor: PluginDescriptor = SpdxDocum
         outputDir: File,
         config: PluginConfiguration
     ): List<Result<File>> {
-        val outputFileFormats = config.options[OPTION_OUTPUT_FILE_FORMATS]
-            ?.split(',')
-            ?.mapTo(mutableSetOf()) { FileFormat.valueOf(it.uppercase()) }
-            ?: setOf(FileFormat.YAML)
+        val outputFileFormats = this.config.outputFileFormats
+            .mapTo(mutableSetOf()) { FileFormat.valueOf(it.uppercase()) }
 
         val params = SpdxDocumentModelMapper.SpdxDocumentParams(
-            documentName = config.options.getOrDefault(OPTION_DOCUMENT_NAME, DOCUMENT_NAME_DEFAULT_VALUE),
-            documentComment = config.options.getOrDefault(OPTION_DOCUMENT_COMMENT, ""),
-            creationInfoComment = config.options.getOrDefault(OPTION_CREATION_INFO_COMMENT, ""),
-            creationInfoPerson = config.options.getOrDefault(OPTION_CREATION_INFO_PERSON, ""),
-            creationInfoOrganization = config.options.getOrDefault(OPTION_CREATION_INFO_ORGANIZATION, ""),
-            fileInformationEnabled = config.options.getOrDefault(OPTION_FILE_INFORMATION_ENABLED, "true").toBoolean()
+            documentName = this.config.documentName,
+            documentComment = this.config.documentComment.orEmpty(),
+            creationInfoComment = this.config.creationInfoComment.orEmpty(),
+            creationInfoPerson = this.config.creationInfoPerson.orEmpty(),
+            creationInfoOrganization = this.config.creationInfoOrganization.orEmpty(),
+            fileInformationEnabled = this.config.fileInformationEnabled
         )
 
         val spdxDocument = SpdxDocumentModelMapper.map(
