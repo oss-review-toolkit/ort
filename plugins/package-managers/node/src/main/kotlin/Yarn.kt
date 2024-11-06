@@ -54,6 +54,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NodePackageManage
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NpmDetection
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NpmModuleInfo
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.YarnDependencyHandler
+import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.parseProject
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.splitNpmNamespaceAndName
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.DiskCache
