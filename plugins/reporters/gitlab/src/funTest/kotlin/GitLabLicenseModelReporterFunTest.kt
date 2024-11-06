@@ -37,7 +37,6 @@ import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
-import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
@@ -66,10 +65,9 @@ class GitLabLicenseModelReporterFunTest : WordSpec({
 })
 
 private fun TestConfiguration.generateReport(ortResult: OrtResult, skipExcluded: Boolean): String =
-    GitLabLicenseModelReporter().generateReport(
+    GitLabLicenseModelReporter(config = GitLabLicenseModelReporterConfig(skipExcluded = skipExcluded)).generateReport(
         input = ReporterInput(ortResult = ortResult),
-        outputDir = tempdir(),
-        config = PluginConfiguration(mapOf(GitLabLicenseModelReporter.OPTION_SKIP_EXCLUDED to skipExcluded.toString()))
+        outputDir = tempdir()
     ).single().getOrThrow().readText().normalizeLineBreaks()
 
 private fun createOrtResult(): OrtResult {
