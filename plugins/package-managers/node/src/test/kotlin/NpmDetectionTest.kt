@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packagemanagers.node.utils
+package org.ossreviewtoolkit.plugins.packagemanagers.node
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
@@ -30,10 +30,10 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.analyzer.PackageManager
-import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NodePackageManager.NPM
-import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NodePackageManager.PNPM
-import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NodePackageManager.YARN
-import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NodePackageManager.YARN2
+import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager.NPM
+import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager.PNPM
+import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager.YARN
+import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager.YARN2
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.test.getAssetFile
 

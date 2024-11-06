@@ -29,10 +29,10 @@ import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
+import org.ossreviewtoolkit.plugins.packagemanagers.node.NpmDetection
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
-import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NodePackageManager
-import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NpmDetection
 import org.ossreviewtoolkit.plugins.packagemanagers.node.yarn.Yarn
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
