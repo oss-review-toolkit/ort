@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 /**
  * A class to detect the package managers used for the give [definitionFiles].
  */
-class NpmDetection(private val definitionFiles: Collection<File>) {
+internal class NpmDetection(private val definitionFiles: Collection<File>) {
     /**
      * A map of project directories to the set of package managers that are most likely responsible for the project. If
      * the set is empty, none of the package managers is responsible.
@@ -110,7 +110,7 @@ class NpmDetection(private val definitionFiles: Collection<File>) {
 /**
  * An enum of all supported Node package managers.
  */
-enum class NodePackageManager(
+internal enum class NodePackageManager(
     val lockfileName: String,
     val markerFileName: String? = null,
     val workspaceFileName: String = NodePackageManager.DEFINITION_FILE
