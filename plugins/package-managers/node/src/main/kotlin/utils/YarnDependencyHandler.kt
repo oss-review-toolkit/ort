@@ -28,7 +28,6 @@ import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.plugins.packagemanagers.node.Yarn
-import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackage
 
 /**
  * A data class storing information about a specific NPM module and its dependencies.

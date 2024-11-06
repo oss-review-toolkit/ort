@@ -33,9 +33,9 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
-import org.ossreviewtoolkit.plugins.packagemanagers.node.parseProject
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NpmDetection
+import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.parseProject
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.stashDirectories

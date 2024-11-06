@@ -27,9 +27,9 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
-import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackage
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.pnpm.ModuleInfo.Dependency
+import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.parsePackage
 import org.ossreviewtoolkit.utils.common.realFile
 
 internal class PnpmDependencyHandler(private val pnpm: Pnpm) : DependencyHandler<Dependency> {
