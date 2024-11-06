@@ -28,7 +28,6 @@ import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.plugins.packagemanagers.python.Pip.Companion.OPTION_PYTHON_VERSION
-import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
@@ -58,8 +57,7 @@ class PipFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/external/example-python-flask/requirements.txt")
 
             // Note: The expected results were generated with Python 3.8 and are incorrect for versions < 3.8.
-            val suffix = "-windows".takeIf { Os.isWindows }.orEmpty()
-            val expectedResultFile = getAssetFile("projects/external/example-python-flask-expected-output$suffix.yml")
+            val expectedResultFile = getAssetFile("projects/external/example-python-flask-expected-output.yml")
 
             val result = create("Pip", OPTION_PYTHON_VERSION to "3.10").resolveSingleProject(definitionFile)
 

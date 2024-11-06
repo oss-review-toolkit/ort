@@ -25,7 +25,6 @@ import io.kotest.matchers.should
 import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.toYaml
-import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
@@ -33,10 +32,7 @@ class StackFunTest : WordSpec({
     "Resolving project dependencies" should {
         "succeed for quickcheck-state-machine" {
             val definitionFile = getAssetFile("projects/external/quickcheck-state-machine/stack.yaml")
-            val suffix = "-windows".takeIf { Os.isWindows }.orEmpty()
-            val expectedResultFile = getAssetFile(
-                "projects/external/quickcheck-state-machine-expected-output$suffix.yml"
-            )
+            val expectedResultFile = getAssetFile("projects/external/quickcheck-state-machine-expected-output.yml")
 
             val result = create("Stack").resolveSingleProject(definitionFile)
 
