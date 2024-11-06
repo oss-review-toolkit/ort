@@ -200,6 +200,8 @@ class DosScanner internal constructor(
             return null
         }
 
+        logger.info { "Scan job added with ID '$id'." }
+
         // In case of multiple PURLs, they all point to packages with the same provenance. So if one package scan is
         // complete, all package scans are complete, which is why it is enough to arbitrarily pool for the first
         // package here.
@@ -223,7 +225,7 @@ class DosScanner internal constructor(
 
             when (jobState.state.status) {
                 "completed" -> {
-                    logger.info { "Scan completed" }
+                    logger.info { "Scan completed for job with ID '$jobId'." }
                     return client.getScanResults(listOf(pkg), config.fetchConcluded)
                 }
 
