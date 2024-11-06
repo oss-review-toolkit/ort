@@ -19,7 +19,7 @@
 
 @file:Suppress("TooManyFunctions")
 
-package org.ossreviewtoolkit.plugins.packagemanagers.node
+package org.ossreviewtoolkit.plugins.packagemanagers.node.npm
 
 import java.io.File
 
@@ -29,6 +29,7 @@ import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.NpmDetection
 import org.ossreviewtoolkit.plugins.packagemanagers.node.yarn.Yarn
@@ -94,7 +95,7 @@ class Npm(
         return runCatching {
             val process = run(workingDir, "info", "--json", packageName)
 
-            parsePackageJson(process.stdout)
+            org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson(process.stdout)
         }.onFailure { e ->
             logger.warn { "Error getting details for $packageName in directory $workingDir: ${e.message.orEmpty()}" }
         }.onSuccess {

@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.plugins.packagemanagers.node.Npm
+import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.Npm
 import org.ossreviewtoolkit.plugins.packagemanagers.node.yarn.NpmModuleInfo
 import org.ossreviewtoolkit.plugins.packagemanagers.node.yarn.YarnDependencyHandler
 import org.ossreviewtoolkit.utils.test.USER_DIR
