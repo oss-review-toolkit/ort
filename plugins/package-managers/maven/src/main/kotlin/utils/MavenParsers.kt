@@ -53,7 +53,7 @@ private val logger = loggerOf(MethodHandles.lookup().lookupClass())
  * To address this, determine the SCM connection and URL of the parent (if any) that is closest to the root POM
  * and whose SCM connection / URL still is a prefix of the child POM's SCM values.
  */
-fun getOriginalScm(mavenProject: MavenProject): Scm? {
+internal fun getOriginalScm(mavenProject: MavenProject): Scm? {
     val scm = mavenProject.scm
     var parent = mavenProject.parent
 
@@ -132,7 +132,7 @@ private fun getVcsInfo(type: String, url: String, tag: String) =
         }
     }
 
-fun parseAuthors(mavenProject: MavenProject): Set<String> =
+internal fun parseAuthors(mavenProject: MavenProject): Set<String> =
     buildSet {
         mavenProject.organization?.let {
             if (!it.name.isNullOrEmpty()) add(it.name)
@@ -152,13 +152,13 @@ internal fun parseChecksum(checksum: String, algorithm: String) =
         runCatching { Hash(it, algorithm) }.getOrNull()
     } ?: Hash.NONE
 
-fun parseLicenses(mavenProject: MavenProject): Set<String> =
+internal fun parseLicenses(mavenProject: MavenProject): Set<String> =
     mavenProject.licenses.mapNotNullTo(mutableSetOf()) { license ->
         listOfNotNull(license.name, license.url, license.comments).firstOrNull { it.isNotBlank() }
     }
 
 @Suppress("UnsafeCallOnNullableType")
-fun parseVcsInfo(project: MavenProject): VcsInfo {
+internal fun parseVcsInfo(project: MavenProject): VcsInfo {
     val scm = getOriginalScm(project)
     val connection = scm?.connection
     if (connection.isNullOrEmpty()) return VcsInfo.EMPTY
@@ -205,7 +205,7 @@ fun parseVcsInfo(project: MavenProject): VcsInfo {
     }
 }
 
-fun processDeclaredLicenses(licenses: Set<String>): ProcessedDeclaredLicense =
+internal fun processDeclaredLicenses(licenses: Set<String>): ProcessedDeclaredLicense =
     // See http://maven.apache.org/ref/3.6.3/maven-model/maven.html#project which says: "If multiple licenses
     // are listed, it is assumed that the user can select any of them, not that they must accept all."
     DeclaredLicenseProcessor.process(licenses, operator = SpdxOperator.OR)
