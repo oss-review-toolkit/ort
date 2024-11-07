@@ -22,22 +22,32 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.node.npm
 
 import java.io.File
+import java.util.LinkedList
 
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
+import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManagerResult
+import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.Issue
+import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NpmDetection
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
-import org.ossreviewtoolkit.plugins.packagemanagers.node.yarn.Yarn
+import org.ossreviewtoolkit.plugins.packagemanagers.node.parseProject
+import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
+import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 
 import org.semver4j.RangesList
@@ -57,7 +67,7 @@ class Npm(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : Yarn(name, analysisRoot, analyzerConfig, repoConfig) {
+) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
     companion object {
         /** Name of the configuration option to toggle legacy peer dependency support. */
         const val OPTION_LEGACY_PEER_DEPS = "legacyPeerDeps"
@@ -74,10 +84,54 @@ class Npm(
     }
 
     private val legacyPeerDeps = options[OPTION_LEGACY_PEER_DEPS].toBoolean()
-
     private val npmViewCache = mutableMapOf<String, PackageJson>()
+    private val handler = NpmDependencyHandler(this)
+    private val graphBuilder by lazy { DependencyGraphBuilder(handler) }
 
-    override fun hasLockfile(projectDir: File) = NodePackageManager.NPM.hasLockfile(projectDir)
+    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> =
+        stashDirectories(definitionFile.resolveSibling("node_modules")).use {
+            resolveDependencies(definitionFile)
+        }
+
+    private fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
+        val workingDir = definitionFile.parentFile
+        val installIssues = installDependencies(workingDir)
+
+        if (installIssues.any { it.severity == Severity.ERROR }) {
+            val project = runCatching {
+                parseProject(definitionFile, analysisRoot, managerName)
+            }.getOrElse {
+                logger.error { "Failed to parse project information: ${it.collectMessages()}" }
+                Project.EMPTY
+            }
+
+            return listOf(ProjectAnalyzerResult(project, emptySet(), installIssues))
+        }
+
+        val project = parseProject(definitionFile, analysisRoot, managerName)
+        val projectModuleInfo = listModules(workingDir).undoDeduplication()
+
+        val scopeNames = Scope.entries
+            .filterNot { excludes.isScopeExcluded(it.descriptor) }
+            .mapTo(mutableSetOf()) { scope ->
+                val scopeName = scope.descriptor
+                val qualifiedScopeName = DependencyGraph.qualifyScope(project, scopeName)
+
+                projectModuleInfo.getScopeDependencies(scope).forEach { dependency ->
+                    graphBuilder.addDependency(qualifiedScopeName, dependency)
+                }
+
+                scopeName
+            }
+
+        return ProjectAnalyzerResult(
+            project = project.copy(scopeNames = scopeNames),
+            packages = emptySet(),
+            issues = installIssues
+        ).let { listOf(it) }
+    }
+
+    private fun hasLockfile(projectDir: File) = NodePackageManager.NPM.hasLockfile(projectDir)
 
     override fun command(workingDir: File?) = if (Os.isWindows) "npm.cmd" else "npm"
 
@@ -92,7 +146,16 @@ class Npm(
         checkVersion()
     }
 
-    override fun getRemotePackageDetails(workingDir: File, packageName: String): PackageJson? {
+    override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =
+        PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
+
+    private fun listModules(workingDir: File): ModuleInfo {
+        val json = run(workingDir, "list", "--depth", "Infinity", "--json", "--long").stdout
+
+        return parseNpmList(json)
+    }
+
+    internal fun getRemotePackageDetails(workingDir: File, packageName: String): PackageJson? {
         npmViewCache[packageName]?.let { return it }
 
         return runCatching {
@@ -106,7 +169,9 @@ class Npm(
         }.getOrNull()
     }
 
-    override fun runInstall(workingDir: File): ProcessCapture {
+    private fun installDependencies(workingDir: File): List<Issue> {
+        requireLockfile(workingDir) { hasLockfile(workingDir) }
+
         val options = listOfNotNull(
             "--ignore-scripts",
             "--no-audit",
@@ -114,8 +179,55 @@ class Npm(
         )
 
         val subcommand = if (hasLockfile(workingDir)) "ci" else "install"
-        return ProcessCapture(workingDir, command(workingDir), subcommand, *options.toTypedArray())
+
+        val process = ProcessCapture(workingDir, command(workingDir), subcommand, *options.toTypedArray())
+
+        return process.extractNpmIssues()
     }
+}
+
+private enum class Scope(val descriptor: String) {
+    DEPENDENCIES("dependencies"),
+    DEV_DEPENDENCIES("devDependencies")
+}
+
+private fun ModuleInfo.getScopeDependencies(scope: Scope) =
+    when (scope) {
+        Scope.DEPENDENCIES -> dependencies.values.filter { !it.dev }
+        Scope.DEV_DEPENDENCIES -> dependencies.values.filter { it.dev && !it.optional }
+    }
+
+private fun ModuleInfo.undoDeduplication(): ModuleInfo {
+    val replacements = getNonDeduplicatedModuleInfosForId()
+
+    fun ModuleInfo.undoDeduplicationRec(ancestorsIds: Set<String> = emptySet()): ModuleInfo {
+        val dependencyAncestorIds = ancestorsIds + setOfNotNull(id)
+        val dependencies = (replacements[id] ?: this)
+            .dependencies
+            .filter { it.value.id !in dependencyAncestorIds } // break cycles.
+            .mapValues { it.value.undoDeduplicationRec(dependencyAncestorIds) }
+
+        return copy(dependencies = dependencies)
+    }
+
+    return undoDeduplicationRec()
+}
+
+private fun ModuleInfo.getNonDeduplicatedModuleInfosForId(): Map<String, ModuleInfo> {
+    val queue = LinkedList<ModuleInfo>().apply { add(this@getNonDeduplicatedModuleInfosForId) }
+    val result = mutableMapOf<String, ModuleInfo>()
+
+    while (queue.isNotEmpty()) {
+        val info = queue.removeFirst()
+
+        if (info.id != null && info.dependencyConstraints.keys.subtract(info.dependencies.keys).isEmpty()) {
+            result[info.id] = info
+        }
+
+        queue += info.dependencies.values
+    }
+
+    return result
 }
 
 internal fun List<String>.groupLines(vararg markers: String): List<String> {
