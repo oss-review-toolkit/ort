@@ -38,8 +38,6 @@ import org.eclipse.aether.repository.Proxy
 import org.eclipse.aether.repository.RemoteRepository
 import org.eclipse.aether.util.repository.AuthenticationBuilder
 
-import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.MavenSupport.Companion.toArtifactRepository
-
 class MavenSupportTest : WordSpec({
     @Suppress("DEPRECATION") // For deprecated ArtifactRepository interface.
     "toArtifactRepository()" should {
