@@ -44,7 +44,6 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
-import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
@@ -53,14 +52,12 @@ import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NpmDetection
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
-import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.extractNpmIssues
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parseProject
 import org.ossreviewtoolkit.plugins.packagemanagers.node.splitNpmNamespaceAndName
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.DiskCache
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.alsoIfNull
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.fieldNamesOrEmpty
@@ -178,25 +175,12 @@ open class Yarn(
         // Actually installing the dependencies is the easiest way to get the metadata of all transitive
         // dependencies (i.e. their respective "package.json" files). As NPM uses a global cache, the same
         // dependency is only ever downloaded once.
-        val installIssues = installDependencies(workingDir)
-
-        if (installIssues.any { it.severity == Severity.ERROR }) {
-            val project = runCatching {
-                parseProject(definitionFile, analysisRoot, managerName)
-            }.getOrElse {
-                logger.error { "Failed to parse project information: ${it.collectMessages()}" }
-                Project.EMPTY
-            }
-
-            return listOf(ProjectAnalyzerResult(project, emptySet(), installIssues))
-        }
+        installDependencies(workingDir)
 
         val projectDirs = findWorkspaceSubmodules(workingDir).toSet() + definitionFile.parentFile
 
         return projectDirs.map { projectDir ->
-            val issues = mutableListOf<Issue>().apply {
-                if (projectDir == workingDir) addAll(installIssues)
-            }
+            val issues = mutableListOf<Issue>()
 
             val project = runCatching {
                 parseProject(projectDir.resolve("package.json"), analysisRoot, managerName)
@@ -367,17 +351,12 @@ open class Yarn(
     /**
      * Install dependencies using the given package manager command.
      */
-    private fun installDependencies(workingDir: File): List<Issue> {
+    private fun installDependencies(workingDir: File) {
         requireLockfile(workingDir) { hasLockfile(workingDir) }
 
         // Install all NPM dependencies to enable NPM to list dependencies.
-        val process = runInstall(workingDir)
-
-        return process.extractNpmIssues()
-    }
-
-    protected open fun runInstall(workingDir: File): ProcessCapture =
         run(workingDir, "install", "--ignore-scripts", "--ignore-engines", "--immutable")
+    }
 
     internal open fun getRemotePackageDetails(workingDir: File, packageName: String): PackageJson? {
         yarnInfoCache.read(packageName)?.let { return parsePackageJson(it) }
