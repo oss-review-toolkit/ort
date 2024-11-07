@@ -23,23 +23,40 @@ import java.io.File
 
 import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
-import org.ossreviewtoolkit.plugins.reporters.freemarker.FreemarkerTemplateProcessor.Companion.OPTION_TEMPLATE_ID
-import org.ossreviewtoolkit.plugins.reporters.freemarker.FreemarkerTemplateProcessor.Companion.OPTION_TEMPLATE_PATH
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
 
+data class PlainTextTemplateReporterConfig(
+    /**
+     * A comma-separated list of IDs of templates provided by ORT. Currently, only the "NOTICE_DEFAULT" and
+     * "NOTICE_SUMMARY" templates are available.
+     * If no template id or path is provided, the "NOTICE_DEFAULT" template is used.
+     */
+    @OrtPluginOption(aliases = ["templateId"])
+    val templateIds: List<String>?,
+
+    /**
+     * A comma-separated list of paths to template files provided by the user.
+     */
+    @OrtPluginOption(aliases = ["templatePath"])
+    val templatePaths: List<String>?
+) {
+    companion object {
+        internal val DEFAULT = PlainTextTemplateReporterConfig(
+            templateIds = listOf("NOTICE_DEFAULT"),
+            templatePaths = null
+        )
+    }
+}
+
 /**
- * A [Reporter] that creates plain text files using [Apache Freemarker][1] templates. For each template provided using
- * the options described below a separate output file is created. If no options are provided the "NOTICE_DEFAULT"
- * template is used. The name of the template id or template path (without extension) is used for the generated file, so
- * be careful to not use two different templates with the same name.
- *
- * This reporter supports the following options:
- * - *template.id*: A comma-separated list of IDs of templates provided by ORT. Currently, only the "NOTICE_DEFAULT"
- *                  and "NOTICE_SUMMARY" templates are available.
- * - *template.path*: A comma-separated list of paths to template files provided by the user.
+ * A [Reporter] that creates plain text files using [Apache Freemarker][1] templates. For each template provided in the
+ * [config], a separate output file is created. If no templates are provided, the "NOTICE_DEFAULT" template is used.
+ * The name of the template id or template path (without extension) is used for the generated file, so be careful to not
+ * use two different templates with the same name.
  *
  * [1]: https://freemarker.apache.org
  */
@@ -49,12 +66,11 @@ import org.ossreviewtoolkit.reporter.ReporterInput
     factory = ReporterFactory::class
 )
 class PlainTextTemplateReporter(
-    override val descriptor: PluginDescriptor = PlainTextTemplateReporterFactory.descriptor
+    override val descriptor: PluginDescriptor = PlainTextTemplateReporterFactory.descriptor,
+    private val config: PlainTextTemplateReporterConfig
 ) : Reporter {
     companion object {
         private const val TEMPLATE_DIRECTORY = "plain-text"
-
-        private const val DEFAULT_TEMPLATE_ID = "NOTICE_DEFAULT"
     }
 
     private val templateProcessor = FreemarkerTemplateProcessor(TEMPLATE_DIRECTORY)
@@ -64,17 +80,15 @@ class PlainTextTemplateReporter(
         outputDir: File,
         config: PluginConfiguration
     ): List<Result<File>> {
-        val templateOptions = config.options.toMutableMap()
-
-        if (FreemarkerTemplateProcessor.OPTION_TEMPLATE_PATH !in templateOptions) {
-            templateOptions.putIfAbsent(FreemarkerTemplateProcessor.OPTION_TEMPLATE_ID, DEFAULT_TEMPLATE_ID)
-        }
+        val actualConfig = this.config.takeIf {
+            it.templateIds?.isNotEmpty() == true || it.templatePaths?.isNotEmpty() == true
+        } ?: PlainTextTemplateReporterConfig.DEFAULT
 
         return templateProcessor.processTemplates(
             input,
             outputDir,
-            config.options[OPTION_TEMPLATE_ID]?.split(',').orEmpty(),
-            config.options[OPTION_TEMPLATE_PATH]?.split(',').orEmpty()
+            actualConfig.templateIds.orEmpty(),
+            actualConfig.templatePaths.orEmpty()
         )
     }
 }
