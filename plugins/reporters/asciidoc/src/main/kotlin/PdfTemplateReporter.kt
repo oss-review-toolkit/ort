@@ -60,11 +60,11 @@ data class PdfTemplateReporterConfig(
 /**
  * A [Reporter] that creates PDF files using a combination of [Apache Freemarker][1] templates and [AsciiDoc][2]
  * with [AsciidoctorJ][3] as Java interface and [AsciidoctorJ PDF][4] as PDF file generator.
- * For each Freemarker template provided using the options described below a separate intermediate file is created
+ * For each Freemarker template provided using the options described below, a separate intermediate file is created
  * that can be processed by AsciidoctorJ. If no options are provided, the "disclosure_document" template is used, and if
  * security vulnerability information is available also the "vulnerability_report" template.
  *
- * After the intermediate files are generated, they are processed by  AsciidoctorJ PDF.
+ * After the intermediate files are generated, they are processed by AsciidoctorJ PDF.
  * A PDF theme can be handed over to AsciidoctorJ PDF in which properties like fonts or images displayed in the PDF can
  * be adjusted; see the [Theme Guide][5].
  * The path to this theme can be set in the options as described below.
