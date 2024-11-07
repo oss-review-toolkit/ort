@@ -23,7 +23,6 @@ import java.io.File
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
@@ -98,21 +97,17 @@ class SpdxDocumentReporter(
         const val REPORT_BASE_FILENAME = "bom.spdx"
     }
 
-    override fun generateReport(
-        input: ReporterInput,
-        outputDir: File,
-        config: PluginConfiguration
-    ): List<Result<File>> {
-        val outputFileFormats = this.config.outputFileFormats
+    override fun generateReport(input: ReporterInput, outputDir: File): List<Result<File>> {
+        val outputFileFormats = config.outputFileFormats
             .mapTo(mutableSetOf()) { FileFormat.valueOf(it.uppercase()) }
 
         val params = SpdxDocumentModelMapper.SpdxDocumentParams(
-            documentName = this.config.documentName,
-            documentComment = this.config.documentComment.orEmpty(),
-            creationInfoComment = this.config.creationInfoComment.orEmpty(),
-            creationInfoPerson = this.config.creationInfoPerson.orEmpty(),
-            creationInfoOrganization = this.config.creationInfoOrganization.orEmpty(),
-            fileInformationEnabled = this.config.fileInformationEnabled
+            documentName = config.documentName,
+            documentComment = config.documentComment.orEmpty(),
+            creationInfoComment = config.creationInfoComment.orEmpty(),
+            creationInfoPerson = config.creationInfoPerson.orEmpty(),
+            creationInfoOrganization = config.creationInfoOrganization.orEmpty(),
+            fileInformationEnabled = config.fileInformationEnabled
         )
 
         val spdxDocument = SpdxDocumentModelMapper.map(

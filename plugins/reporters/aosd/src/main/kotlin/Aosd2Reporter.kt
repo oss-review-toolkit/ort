@@ -27,7 +27,6 @@ import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
-import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
@@ -44,11 +43,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicense
     factory = ReporterFactory::class
 )
 class Aosd2Reporter(override val descriptor: PluginDescriptor = Aosd2ReporterFactory.descriptor) : Reporter {
-    override fun generateReport(
-        input: ReporterInput,
-        outputDir: File,
-        config: PluginConfiguration
-    ): List<Result<File>> {
+    override fun generateReport(input: ReporterInput, outputDir: File): List<Result<File>> {
         val reportFiles = input.ortResult.getProjects(omitExcluded = true).map { project ->
             val directDependencies = input.ortResult.getDependencies(project.id, maxLevel = 1, omitExcluded = true)
                 .map { it.toCoordinates() }

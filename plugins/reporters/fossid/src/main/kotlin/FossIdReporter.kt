@@ -32,7 +32,6 @@ import org.ossreviewtoolkit.clients.fossid.generateReport
 import org.ossreviewtoolkit.clients.fossid.model.report.ReportType
 import org.ossreviewtoolkit.clients.fossid.model.report.SelectionType
 import org.ossreviewtoolkit.model.ScanResult
-import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
@@ -93,16 +92,12 @@ class FossIdReporter(
         const val SCAN_CODE_KEY = "scancode"
     }
 
-    override fun generateReport(
-        input: ReporterInput,
-        outputDir: File,
-        config: PluginConfiguration
-    ): List<Result<File>> {
-        val reportType = ReportType.valueOf(this.config.reportType)
-        val selectionType = SelectionType.valueOf(this.config.selectionType)
+    override fun generateReport(input: ReporterInput, outputDir: File): List<Result<File>> {
+        val reportType = ReportType.valueOf(config.reportType)
+        val selectionType = SelectionType.valueOf(config.selectionType)
 
         return runBlocking(Dispatchers.IO) {
-            val service = FossIdRestService.create(this@FossIdReporter.config.serverUrl)
+            val service = FossIdRestService.create(config.serverUrl)
             val scanResults = input.ortResult.getScanResults().values.flatten()
             val scanCodes = scanResults.flatMapTo(mutableSetOf()) {
                 it.additionalData[SCAN_CODE_KEY]?.split(',').orEmpty()
@@ -113,8 +108,8 @@ class FossIdReporter(
                     logger.info { "Generating report for scan $scanCode." }
 
                     service.generateReport(
-                        this@FossIdReporter.config.user.value,
-                        this@FossIdReporter.config.apiKey.value,
+                        config.user.value,
+                        config.apiKey.value,
                         scanCode,
                         reportType,
                         selectionType,

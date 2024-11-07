@@ -26,7 +26,6 @@ import org.asciidoctor.Attributes
 import org.asciidoctor.Options
 import org.asciidoctor.SafeMode
 
-import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.reporters.freemarker.FreemarkerTemplateProcessor
 import org.ossreviewtoolkit.reporter.Reporter
@@ -85,11 +84,7 @@ abstract class AsciiDocTemplateReporter(private val config: AsciiDocTemplateRepo
      */
     protected open fun generateAsciiDocAttributes(outputDir: File): Attributes = Attributes.builder().build()
 
-    final override fun generateReport(
-        input: ReporterInput,
-        outputDir: File,
-        config: PluginConfiguration
-    ): List<Result<File>> {
+    final override fun generateReport(input: ReporterInput, outputDir: File): List<Result<File>> {
         val asciiDocOutputDir = createOrtTempDir("asciidoc")
 
         val asciidoctorAttributes = generateAsciiDocAttributes(asciiDocOutputDir)

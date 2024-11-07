@@ -21,7 +21,6 @@ package org.ossreviewtoolkit.plugins.reporters.fossid
 
 import java.io.File
 
-import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.reporters.asciidoc.AsciiDocTemplateReporterConfig
@@ -44,11 +43,7 @@ class FossIdSnippetReporter(override val descriptor: PluginDescriptor = FossIdSn
         )
     }
 
-    override fun generateReport(
-        input: ReporterInput,
-        outputDir: File,
-        config: PluginConfiguration
-    ): List<Result<File>> {
+    override fun generateReport(input: ReporterInput, outputDir: File): List<Result<File>> {
         val hasFossIdResults = input.ortResult.scanner?.scanResults?.any { it.scanner.name == "FossId" } == true
         require(hasFossIdResults) { "No FossID scan results have been found." }
 

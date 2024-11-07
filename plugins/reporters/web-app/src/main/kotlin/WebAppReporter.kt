@@ -29,7 +29,6 @@ import kotlin.io.encoding.encodingWith
 import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream
 import org.apache.commons.compress.compressors.gzip.GzipParameters
 
-import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
@@ -62,13 +61,9 @@ class WebAppReporter(
 ) : Reporter {
     private val reportFilename = "scan-report-web-app.html"
 
-    override fun generateReport(
-        input: ReporterInput,
-        outputDir: File,
-        config: PluginConfiguration
-    ): List<Result<File>> {
+    override fun generateReport(input: ReporterInput, outputDir: File): List<Result<File>> {
         val template = javaClass.getResource("/scan-report-template.html").readText()
-        val evaluatedModel = EvaluatedModel.create(input, this.config.deduplicateDependencyTree)
+        val evaluatedModel = EvaluatedModel.create(input, config.deduplicateDependencyTree)
 
         val index = template.indexOf(PLACEHOLDER)
         val prefix = template.substring(0, index)

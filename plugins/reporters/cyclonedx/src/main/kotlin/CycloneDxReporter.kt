@@ -45,7 +45,6 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
-import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
@@ -171,21 +170,17 @@ class CycloneDxReporter(
             }
         }
 
-    override fun generateReport(
-        input: ReporterInput,
-        outputDir: File,
-        config: PluginConfiguration
-    ): List<Result<File>> {
+    override fun generateReport(input: ReporterInput, outputDir: File): List<Result<File>> {
         val reportFileResults = mutableListOf<Result<File>>()
 
         val projects = input.ortResult.getProjects(omitExcluded = true).sortedBy { it.id }
         val packages = input.ortResult.getPackages(omitExcluded = true).sortedBy { it.metadata.id }
 
         val schemaVersion = Version.entries.find {
-            it.versionString == this.config.schemaVersion
-        } ?: throw IllegalArgumentException("Unsupported CycloneDX schema version '${this.config.schemaVersion}'.")
+            it.versionString == config.schemaVersion
+        } ?: throw IllegalArgumentException("Unsupported CycloneDX schema version '${config.schemaVersion}'.")
 
-        val outputFileExtensions = this.config.outputFileFormats.mapNotNullTo(mutableSetOf()) {
+        val outputFileExtensions = config.outputFileFormats.mapNotNullTo(mutableSetOf()) {
             val extension = it.trim().lowercase()
             extension.toFormat().alsoIfNull {
                 logger.warn { "No CycloneDX format supports the '$extension' extension." }
@@ -208,10 +203,10 @@ class CycloneDxReporter(
                 )
             }
 
-            licenses = LicenseChoice().apply { expression = Expression(this@CycloneDxReporter.config.dataLicense) }
+            licenses = LicenseChoice().apply { expression = Expression(config.dataLicense) }
         }
 
-        if (this.config.singleBom) {
+        if (config.singleBom) {
             val bom = Bom().apply {
                 serialNumber = "urn:uuid:${UUID.randomUUID()}"
                 this.metadata = metadata

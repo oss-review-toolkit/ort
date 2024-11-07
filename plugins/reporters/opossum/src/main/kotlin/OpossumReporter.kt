@@ -42,7 +42,6 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.utils.getPurlType
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
@@ -545,13 +544,9 @@ class OpossumReporter(
         return opossumInput
     }
 
-    override fun generateReport(
-        input: ReporterInput,
-        outputDir: File,
-        config: PluginConfiguration
-    ): List<Result<File>> {
+    override fun generateReport(input: ReporterInput, outputDir: File): List<Result<File>> {
         val reportFileResult = runCatching {
-            val opossumInput = generateOpossumInput(input, this.config.maxDepth)
+            val opossumInput = generateOpossumInput(input, config.maxDepth)
 
             outputDir.resolve("report.opossum").also {
                 writeReport(it, opossumInput)
