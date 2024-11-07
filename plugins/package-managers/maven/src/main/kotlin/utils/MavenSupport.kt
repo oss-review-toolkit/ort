@@ -101,107 +101,6 @@ private val File?.safePath: String
     get() = this?.invariantSeparatorsPath ?: "<unknown file>"
 
 class MavenSupport(private val workspaceReader: WorkspaceReader) {
-    companion object {
-        private val PACKAGING_TYPES = setOf(
-            // Core packaging types, see https://maven.apache.org/pom.html#packaging.
-            "pom", "jar", "maven-plugin", "ejb", "war", "ear", "rar",
-            // Custom packaging types, see "resources/META-INF/plexus/components.xml".
-            "aar", "apk", "bundle", "dll", "dylib", "eclipse-plugin", "gwt-app", "gwt-lib", "hk2-jar", "hpi",
-            "jenkins-module", "orbit", "so", "zip"
-        )
-
-        private val remoteArtifactCache = DiskCache(
-            directory = ortDataDirectory.resolve("cache/analyzer/maven/remote-artifacts"),
-            maxCacheSizeInBytes = 1.gibibytes,
-            maxCacheEntryAgeInSeconds = 6.hours.inWholeSeconds
-        )
-
-        private fun createContainer(): PlexusContainer {
-            val configuration = DefaultContainerConfiguration().apply {
-                autoWiring = true
-                classPathScanning = PlexusConstants.SCANNING_INDEX
-                classWorld = ClassWorld("plexus.core", javaClass.classLoader)
-            }
-
-            return DefaultPlexusContainer(configuration).apply {
-                loggerManager = object : BaseLoggerManager() {
-                    override fun createLogger(name: String) = MavenLogger(logger.delegate.level)
-                }
-            }
-        }
-
-        /**
-         * Convert this [RemoteRepository] to a repository in the format used by the Maven Repository System.
-         * Make sure that all relevant properties are set, especially the proxy and authentication.
-         */
-        internal fun RemoteRepository.toArtifactRepository(
-            repositorySystemSession: RepositorySystemSession,
-            repositorySystem: MavenRepositorySystem,
-            id: String
-        ) = repositorySystem.createRepository(url, id, true, null, true, null, null).apply {
-            this@toArtifactRepository.proxy?.also { repoProxy ->
-                proxy = Proxy().apply {
-                    host = repoProxy.host
-                    port = repoProxy.port
-                    protocol = repoProxy.type
-                    toMavenAuthentication(
-                        AuthenticationContext.forProxy(
-                            repositorySystemSession,
-                            this@toArtifactRepository
-                        )
-                    )?.also { authentication ->
-                        userName = authentication.username
-                        password = authentication.password
-                    }
-                }
-            }
-
-            this@toArtifactRepository.authentication?.also {
-                authentication = toMavenAuthentication(
-                    AuthenticationContext.forRepository(
-                        repositorySystemSession,
-                        this@toArtifactRepository
-                    )
-                )
-            }
-        }
-
-        /**
-         * Return authentication information for an artifact repository based on the given [authContext]. The
-         * libraries involved use different approaches to model authentication.
-         */
-        private fun toMavenAuthentication(authContext: AuthenticationContext?): Authentication? =
-            authContext?.let {
-                Authentication(
-                    it[AuthenticationContext.USERNAME],
-                    it[AuthenticationContext.PASSWORD]
-                ).apply {
-                    passphrase = it[AuthenticationContext.PRIVATE_KEY_PASSPHRASE]
-                    privateKey = it[AuthenticationContext.PRIVATE_KEY_PATH]
-                }
-            }
-
-        /**
-         * Return true if an artifact that has not been requested from Maven Central is also available on Maven Central
-         * but with a different hash, otherwise return false.
-         */
-        private fun isArtifactModified(artifact: Artifact, remoteArtifact: RemoteArtifact): Boolean =
-            with(remoteArtifact) {
-                if (url.isBlank() || PackageProvider.get(url) == PackageProvider.MAVEN_CENTRAL) return false
-
-                val name = url.substringAfterLast('/')
-                val algorithm = hash.algorithm.name.lowercase()
-
-                val mavenCentralUrl = with(artifact) {
-                    val group = groupId.replace('.', '/')
-                    "https://repo.maven.apache.org/maven2/$group/$artifactId/$version/$name.$algorithm"
-                }
-
-                val checksum = okHttpClient.downloadText(mavenCentralUrl).getOrElse { return false }
-                !hash.verify(parseChecksum(checksum, hash.algorithm.name))
-            }
-    }
-
     private val container = createContainer()
     private val repositorySystemSession = createRepositorySystemSession(workspaceReader)
 
@@ -689,3 +588,102 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
         }
     }
 }
+
+private val PACKAGING_TYPES = setOf(
+    // Core packaging types, see https://maven.apache.org/pom.html#packaging.
+    "pom", "jar", "maven-plugin", "ejb", "war", "ear", "rar",
+    // Custom packaging types, see "resources/META-INF/plexus/components.xml".
+    "aar", "apk", "bundle", "dll", "dylib", "eclipse-plugin", "gwt-app", "gwt-lib", "hk2-jar", "hpi",
+    "jenkins-module", "orbit", "so", "zip"
+)
+
+private val remoteArtifactCache = DiskCache(
+    directory = ortDataDirectory.resolve("cache/analyzer/maven/remote-artifacts"),
+    maxCacheSizeInBytes = 1.gibibytes,
+    maxCacheEntryAgeInSeconds = 6.hours.inWholeSeconds
+)
+
+private fun createContainer(): PlexusContainer {
+    val configuration = DefaultContainerConfiguration().apply {
+        autoWiring = true
+        classPathScanning = PlexusConstants.SCANNING_INDEX
+        classWorld = ClassWorld("plexus.core", javaClass.classLoader)
+    }
+
+    return DefaultPlexusContainer(configuration).apply {
+        loggerManager = object : BaseLoggerManager() {
+            override fun createLogger(name: String) = MavenLogger(logger.delegate.level)
+        }
+    }
+}
+
+/**
+ * Convert this [RemoteRepository] to a repository in the format used by the Maven Repository System.
+ * Make sure that all relevant properties are set, especially the proxy and authentication.
+ */
+internal fun RemoteRepository.toArtifactRepository(
+    repositorySystemSession: RepositorySystemSession,
+    repositorySystem: MavenRepositorySystem,
+    id: String
+) = repositorySystem.createRepository(url, id, true, null, true, null, null).apply {
+    this@toArtifactRepository.proxy?.also { repoProxy ->
+        proxy = Proxy().apply {
+            host = repoProxy.host
+            port = repoProxy.port
+            protocol = repoProxy.type
+            toMavenAuthentication(
+                AuthenticationContext.forProxy(
+                    repositorySystemSession,
+                    this@toArtifactRepository
+                )
+            )?.also { authentication ->
+                userName = authentication.username
+                password = authentication.password
+            }
+        }
+    }
+
+    this@toArtifactRepository.authentication?.also {
+        authentication = toMavenAuthentication(
+            AuthenticationContext.forRepository(
+                repositorySystemSession,
+                this@toArtifactRepository
+            )
+        )
+    }
+}
+
+/**
+ * Return authentication information for an artifact repository based on the given [authContext]. The
+ * libraries involved use different approaches to model authentication.
+ */
+private fun toMavenAuthentication(authContext: AuthenticationContext?): Authentication? =
+    authContext?.let {
+        Authentication(
+            it[AuthenticationContext.USERNAME],
+            it[AuthenticationContext.PASSWORD]
+        ).apply {
+            passphrase = it[AuthenticationContext.PRIVATE_KEY_PASSPHRASE]
+            privateKey = it[AuthenticationContext.PRIVATE_KEY_PATH]
+        }
+    }
+
+/**
+ * Return true if an artifact that has not been requested from Maven Central is also available on Maven Central
+ * but with a different hash, otherwise return false.
+ */
+private fun isArtifactModified(artifact: Artifact, remoteArtifact: RemoteArtifact): Boolean =
+    with(remoteArtifact) {
+        if (url.isBlank() || PackageProvider.get(url) == PackageProvider.MAVEN_CENTRAL) return false
+
+        val name = url.substringAfterLast('/')
+        val algorithm = hash.algorithm.name.lowercase()
+
+        val mavenCentralUrl = with(artifact) {
+            val group = groupId.replace('.', '/')
+            "https://repo.maven.apache.org/maven2/$group/$artifactId/$version/$name.$algorithm"
+        }
+
+        val checksum = okHttpClient.downloadText(mavenCentralUrl).getOrElse { return false }
+        !hash.verify(parseChecksum(checksum, hash.algorithm.name))
+    }
