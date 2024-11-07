@@ -237,20 +237,29 @@ class Conan(
             return
         }
 
-        // Iterate over configured remotes.
-        remoteList.stdout.lines().forEach { line ->
+        val remotes = parseConanRemoteList(remoteList.stdout)
+        configureUserAuthentication(remotes)
+    }
+
+    private fun parseConanRemoteList(remoteList: String): List<Pair<String, String>> =
+        remoteList.lines().mapNotNull { line ->
             // Extract the remote URL.
             val trimmedLine = line.trim()
-            if (trimmedLine.isEmpty() || trimmedLine.startsWith('#')) return@forEach
+            if (trimmedLine.isEmpty() || trimmedLine.startsWith('#')) return@mapNotNull null
 
             val wordIterator = trimmedLine.splitToSequence(' ').iterator()
 
-            if (!wordIterator.hasNext()) return@forEach
+            if (!wordIterator.hasNext()) return@mapNotNull null
             val remoteName = wordIterator.next()
 
-            if (!wordIterator.hasNext()) return@forEach
+            if (!wordIterator.hasNext()) return@mapNotNull null
             val remoteUrl = wordIterator.next()
 
+            remoteName to remoteUrl
+        }
+
+    private fun configureUserAuthentication(remotes: List<Pair<String, String>>) =
+        remotes.forEach { (remoteName, remoteUrl) ->
             remoteUrl.toUri().onSuccess { uri ->
                 logger.info { "Found remote '$remoteName' pointing to URL $remoteUrl." }
 
@@ -269,7 +278,6 @@ class Conan(
                 logger.warn { "The remote '$remoteName' points to invalid URL $remoteUrl." }
             }
         }
-    }
 
     /**
      * Return the dependency tree for the given [direct scope dependencies][requires].
