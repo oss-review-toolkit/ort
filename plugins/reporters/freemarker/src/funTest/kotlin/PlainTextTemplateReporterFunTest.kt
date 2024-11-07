@@ -29,7 +29,6 @@ import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
 import org.ossreviewtoolkit.model.config.FileStorageConfiguration
 import org.ossreviewtoolkit.model.config.LocalFileStorageConfiguration
 import org.ossreviewtoolkit.model.config.OrtConfiguration
-import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.licenses.LicenseCategorization
 import org.ossreviewtoolkit.model.licenses.LicenseCategory
@@ -76,7 +75,10 @@ class PlainTextTemplateReporterFunTest : WordSpec({
         "generate the correct license notes" {
             val expectedText = getAssetAsString("plain-text-template-reporter-expected-results-summary")
 
-            val report = generateReport(ORT_RESULT, options = mapOf("template.id" to "NOTICE_SUMMARY"))
+            val report = generateReport(
+                ORT_RESULT,
+                config = PlainTextTemplateReporterConfig(templateIds = listOf("NOTICE_SUMMARY"), templatePaths = null)
+            )
 
             report shouldBe expectedText
         }
@@ -85,19 +87,18 @@ class PlainTextTemplateReporterFunTest : WordSpec({
 
 private fun TestConfiguration.generateReport(
     ortResult: OrtResult,
-    config: OrtConfiguration = OrtConfiguration(),
-    options: Map<String, String> = emptyMap()
+    ortConfig: OrtConfiguration = OrtConfiguration(),
+    config: PlainTextTemplateReporterConfig = PlainTextTemplateReporterConfig(templateIds = null, templatePaths = null)
 ): String {
     val input = ReporterInput(
         ortResult,
-        config,
+        ortConfig,
         licenseClassifications = createLicenseClassifications()
     )
 
     val outputDir = tempdir()
-    val reporterConfig = PluginConfiguration(options)
 
-    return PlainTextTemplateReporter().generateReport(input, outputDir, reporterConfig).single().getOrThrow().readText()
+    return PlainTextTemplateReporter(config = config).generateReport(input, outputDir).single().getOrThrow().readText()
 }
 
 private fun createLicenseClassifications(): LicenseClassifications {
