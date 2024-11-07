@@ -25,7 +25,6 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
 
-import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
@@ -67,12 +66,8 @@ class GitLabLicenseModelReporter(
 
     private val reportFilename = "gl-license-scanning-report.json"
 
-    override fun generateReport(
-        input: ReporterInput,
-        outputDir: File,
-        config: PluginConfiguration
-    ): List<Result<File>> {
-        val licenseModel = GitLabLicenseModelMapper.map(input.ortResult, this.config.skipExcluded)
+    override fun generateReport(input: ReporterInput, outputDir: File): List<Result<File>> {
+        val licenseModel = GitLabLicenseModelMapper.map(input.ortResult, config.skipExcluded)
 
         val reportFileResult = runCatching {
             val licenseModelJson = JSON.encodeToString(licenseModel)

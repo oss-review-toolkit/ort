@@ -21,7 +21,6 @@ package org.ossreviewtoolkit.plugins.reporters.freemarker
 
 import java.io.File
 
-import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
@@ -75,12 +74,8 @@ class PlainTextTemplateReporter(
 
     private val templateProcessor = FreemarkerTemplateProcessor(TEMPLATE_DIRECTORY)
 
-    override fun generateReport(
-        input: ReporterInput,
-        outputDir: File,
-        config: PluginConfiguration
-    ): List<Result<File>> {
-        val actualConfig = this.config.takeIf {
+    override fun generateReport(input: ReporterInput, outputDir: File): List<Result<File>> {
+        val actualConfig = config.takeIf {
             it.templateIds?.isNotEmpty() == true || it.templatePaths?.isNotEmpty() == true
         } ?: PlainTextTemplateReporterConfig.DEFAULT
 

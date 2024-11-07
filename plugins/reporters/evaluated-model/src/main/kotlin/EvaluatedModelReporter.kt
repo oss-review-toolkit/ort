@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.plugins.reporters.evaluatedmodel
 import java.io.File
 
 import org.ossreviewtoolkit.model.FileFormat
-import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
@@ -67,14 +66,10 @@ class EvaluatedModelReporter(
         const val OPTION_DEDUPLICATE_DEPENDENCY_TREE = "deduplicateDependencyTree"
     }
 
-    override fun generateReport(
-        input: ReporterInput,
-        outputDir: File,
-        config: PluginConfiguration
-    ): List<Result<File>> {
-        val evaluatedModel = EvaluatedModel.create(input, this.config.deduplicateDependencyTree)
+    override fun generateReport(input: ReporterInput, outputDir: File): List<Result<File>> {
+        val evaluatedModel = EvaluatedModel.create(input, config.deduplicateDependencyTree)
 
-        val outputFileFormats = this.config.outputFileFormats.map { FileFormat.forExtension(it) }
+        val outputFileFormats = config.outputFileFormats.map { FileFormat.forExtension(it) }
 
         return outputFileFormats.map { fileFormat ->
             runCatching {

@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.reporter
 import java.io.File
 
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.plugins.api.Plugin
 
 /**
@@ -31,13 +30,9 @@ import org.ossreviewtoolkit.plugins.api.Plugin
 interface Reporter : Plugin {
     /**
      * Generate a report for the provided [input] and write the generated file(s) to the [outputDir]. If and how the
-     * [input] data is used depends on the specific reporter implementation, taking into account any format-specific
-     * [config]. Return a list of [Result]s that wrap the generated report file on success, or a file specific failure
-     * if something went wrong.
+     * [input] data is used depends on the specific reporter implementation.
+     * Return a list of [Result]s that wrap the generated report file on success, or a file specific failure if
+     * something went wrong.
      */
-    fun generateReport(
-        input: ReporterInput,
-        outputDir: File,
-        config: PluginConfiguration = PluginConfiguration.EMPTY
-    ): List<Result<File>>
+    fun generateReport(input: ReporterInput, outputDir: File): List<Result<File>>
 }

@@ -295,7 +295,7 @@ class ReporterCommand : OrtCommand(
                         reporter to measureTimedValue {
                             val options = reportConfigMap[reporter.descriptor.id] ?: PluginConfiguration.EMPTY
                             reporter.create(PluginConfig(options.options, options.secrets))
-                                .generateReport(input, outputDir, options)
+                                .generateReport(input, outputDir)
                         }
                     }
                 }.awaitAll()
