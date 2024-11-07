@@ -165,8 +165,6 @@ private object AuthorListSerializer : JsonTransformingSerializer<List<Author>>(s
 }
 
 private object RepositorySerializer : JsonTransformingSerializer<Repository>(serializer<Repository>()) {
-    override fun transformDeserialize(element: JsonElement): JsonElement = element.wrapPrimitiveInObject("url")
+    override fun transformDeserialize(element: JsonElement): JsonElement =
+        (element as? JsonObject) ?: JsonObject(mapOf("url" to element.jsonPrimitive))
 }
-
-private fun JsonElement.wrapPrimitiveInObject(key: String) =
-    takeUnless { this is JsonPrimitive } ?: JsonObject(mapOf(key to jsonPrimitive))
