@@ -231,8 +231,9 @@ class Conan(
         }
 
         // List configured remotes in "remotes.txt" format.
-        val remoteList = run("remote", "list", "--raw")
-        if (remoteList.isError) {
+        val remoteList = runCatching {
+            run("remote", "list", "--raw")
+        }.getOrElse {
             logger.warn { "Failed to list remotes." }
             return
         }
