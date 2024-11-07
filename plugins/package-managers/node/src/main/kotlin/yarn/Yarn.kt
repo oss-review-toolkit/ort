@@ -53,7 +53,7 @@ import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NpmDetection
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
-import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.groupLines
+import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.extractNpmIssues
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parseProject
 import org.ossreviewtoolkit.plugins.packagemanagers.node.splitNpmNamespaceAndName
@@ -373,21 +373,7 @@ open class Yarn(
         // Install all NPM dependencies to enable NPM to list dependencies.
         val process = runInstall(workingDir)
 
-        val lines = process.stderr.lines()
-        val issues = mutableListOf<Issue>()
-
-        // Generally forward issues from the NPM CLI to the ORT NPM package manager. Lower the severity of warnings to
-        // hints, as warnings usually do not prevent the ORT NPM package manager from getting the dependencies right.
-        lines.groupLines("npm WARN ", "npm warn ").mapTo(issues) {
-            Issue(source = managerName, message = it, severity = Severity.HINT)
-        }
-
-        // For errors, however, something clearly went wrong, so keep the severity here.
-        lines.groupLines("npm ERR! ", "npm error ").mapTo(issues) {
-            Issue(source = managerName, message = it, severity = Severity.ERROR)
-        }
-
-        return issues
+        return process.extractNpmIssues()
     }
 
     protected open fun runInstall(workingDir: File): ProcessCapture =
