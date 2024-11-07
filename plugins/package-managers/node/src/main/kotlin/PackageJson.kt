@@ -143,15 +143,14 @@ private object AuthorListSerializer : JsonTransformingSerializer<List<Author>>(s
         // TODO: The string from the JSON primitive could be parsed into the dedicated author properties.
         when (element) {
             is JsonObject -> JsonArray(listOf(element))
-            is JsonPrimitive -> JsonArray(listOf(element.transform()))
-            is JsonArray -> JsonArray(element.map { it.transform() })
+            is JsonPrimitive -> JsonArray(listOf(element.wrapPrimitiveInObject("name")))
+            is JsonArray -> JsonArray(element.map { it.wrapPrimitiveInObject("name") })
         }
-
-    private fun JsonElement.transform(): JsonElement =
-        takeUnless { this is JsonPrimitive } ?: JsonObject(mapOf("name" to jsonPrimitive))
 }
 
 private object RepositorySerializer : JsonTransformingSerializer<Repository>(serializer<Repository>()) {
-    override fun transformDeserialize(element: JsonElement): JsonElement =
-        (element as? JsonObject) ?: JsonObject(mapOf("url" to element.jsonPrimitive))
+    override fun transformDeserialize(element: JsonElement): JsonElement = element.wrapPrimitiveInObject("url")
 }
+
+private fun JsonElement.wrapPrimitiveInObject(key: String) =
+    takeUnless { this is JsonPrimitive } ?: JsonObject(mapOf(key to jsonPrimitive))
