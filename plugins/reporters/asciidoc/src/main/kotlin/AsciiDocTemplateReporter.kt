@@ -27,13 +27,28 @@ import org.asciidoctor.Options
 import org.asciidoctor.SafeMode
 
 import org.ossreviewtoolkit.model.config.PluginConfiguration
+import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.reporters.freemarker.FreemarkerTemplateProcessor
-import org.ossreviewtoolkit.plugins.reporters.freemarker.FreemarkerTemplateProcessor.Companion.OPTION_TEMPLATE_ID
-import org.ossreviewtoolkit.plugins.reporters.freemarker.FreemarkerTemplateProcessor.Companion.OPTION_TEMPLATE_PATH
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
+
+data class AsciiDocTemplateReporterConfig(
+    /**
+     * A comma-separated list of IDs of templates provided by ORT.
+     * If no template id or path is provided, the "disclosure_document" template is used, and if the ORT result contains
+     * an advisor run, the "vulnerability_report" and "defect_report" templates are used as well.
+     */
+    @OrtPluginOption(aliases = ["templateId"])
+    val templateIds: List<String>?,
+
+    /**
+     * A comma-separated list of paths to template files provided by the user.
+     */
+    @OrtPluginOption(aliases = ["templatePath"])
+    val templatePaths: List<String>?
+)
 
 /**
  * An abstract [Reporter] that uses [Apache Freemarker][1] templates and [AsciiDoc][2] with [AsciidoctorJ][3] to create
@@ -44,7 +59,7 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempDir
  * [3]: https://github.com/asciidoctor/asciidoctorj
  * [4]: https://docs.asciidoctor.org/asciidoctor/latest/convert/available
  */
-abstract class AsciiDocTemplateReporter : Reporter {
+abstract class AsciiDocTemplateReporter(private val config: AsciiDocTemplateReporterConfig) : Reporter {
     companion object {
         private const val ASCII_DOC_FILE_PREFIX = "AsciiDoc_"
         private const val ASCII_DOC_FILE_EXTENSION = "adoc"
@@ -66,11 +81,9 @@ abstract class AsciiDocTemplateReporter : Reporter {
     internal val asciidoctor by lazy { Asciidoctor.Factory.create() }
 
     /**
-     * Turn recognized [options] into [Attributes] and remove them from [options] afterwards to mark them as processed.
-     * By default no [options] are processed and the returned [Attributes] are empty.
+     * Subclasses can override this function to add additional AsciiDoc attributes. By default, no attributes are added.
      */
-    protected open fun processTemplateOptions(outputDir: File, options: MutableMap<String, String>): Attributes =
-        Attributes.builder().build()
+    protected open fun generateAsciiDocAttributes(outputDir: File): Attributes = Attributes.builder().build()
 
     final override fun generateReport(
         input: ReporterInput,
@@ -79,9 +92,8 @@ abstract class AsciiDocTemplateReporter : Reporter {
     ): List<Result<File>> {
         val asciiDocOutputDir = createOrtTempDir("asciidoc")
 
-        val templateOptions = config.options.toMutableMap()
-        val asciidoctorAttributes = processTemplateOptions(asciiDocOutputDir, templateOptions)
-        val asciiDocFileResults = generateAsciiDocFiles(input, asciiDocOutputDir, templateOptions)
+        val asciidoctorAttributes = generateAsciiDocAttributes(asciiDocOutputDir)
+        val asciiDocFileResults = generateAsciiDocFiles(input, asciiDocOutputDir)
         val reportFileResults = processAsciiDocFiles(input, outputDir, asciiDocFileResults, asciidoctorAttributes)
 
         asciiDocOutputDir.safeDeleteRecursively()
@@ -90,31 +102,28 @@ abstract class AsciiDocTemplateReporter : Reporter {
     }
 
     /**
-     * Generate the AsciiDoc files from the templates defined in [options] in [outputDir].
+     * Generate the AsciiDoc files from the templates defined in [config] in [outputDir].
      */
-    private fun generateAsciiDocFiles(
-        input: ReporterInput,
-        outputDir: File,
-        options: MutableMap<String, String>
-    ): List<Result<File>> {
-        if (FreemarkerTemplateProcessor.OPTION_TEMPLATE_PATH !in options) {
-            options.putIfAbsent(
-                FreemarkerTemplateProcessor.OPTION_TEMPLATE_ID,
-                buildString {
-                    append(DISCLOSURE_TEMPLATE_ID)
+    private fun generateAsciiDocFiles(input: ReporterInput, outputDir: File): List<Result<File>> {
+        val actualConfig = config.takeIf {
+            it.templateIds?.isNotEmpty() == true || it.templatePaths?.isNotEmpty() == true
+        } ?: AsciiDocTemplateReporterConfig(
+            templateIds = buildList {
+                add(DISCLOSURE_TEMPLATE_ID)
 
-                    if (input.ortResult.getAdvisorResults().isNotEmpty()) {
-                        append(",$VULNERABILITY_TEMPLATE_ID,$DEFECT_TEMPLATE_ID")
-                    }
+                if (input.ortResult.getAdvisorResults().isNotEmpty()) {
+                    add(VULNERABILITY_TEMPLATE_ID)
+                    add(DEFECT_TEMPLATE_ID)
                 }
-            )
-        }
+            },
+            templatePaths = null
+        )
 
         return templateProcessor.processTemplates(
             input,
             outputDir,
-            options[OPTION_TEMPLATE_ID]?.split(',').orEmpty(),
-            options[OPTION_TEMPLATE_PATH]?.split(',').orEmpty()
+            actualConfig.templateIds.orEmpty(),
+            actualConfig.templatePaths.orEmpty()
         )
     }
 

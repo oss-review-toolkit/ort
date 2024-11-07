@@ -34,7 +34,9 @@ import org.ossreviewtoolkit.reporter.ReporterFactory
     description = "Generates HTML from AsciiDoc files from Apache Freemarker templates.",
     factory = ReporterFactory::class
 )
-class HtmlTemplateReporter(override val descriptor: PluginDescriptor = HtmlTemplateReporterFactory.descriptor) :
-    AsciiDocTemplateReporter() {
+class HtmlTemplateReporter(
+    override val descriptor: PluginDescriptor = HtmlTemplateReporterFactory.descriptor,
+    config: AsciiDocTemplateReporterConfig
+) : AsciiDocTemplateReporter(config) {
     override val backend = "html"
 }

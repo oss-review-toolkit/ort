@@ -34,7 +34,9 @@ import org.ossreviewtoolkit.reporter.ReporterFactory
     description = "Generates manpages from AsciiDoc files from Apache Freemarker templates.",
     factory = ReporterFactory::class
 )
-class ManPageTemplateReporter(override val descriptor: PluginDescriptor = ManPageTemplateReporterFactory.descriptor) :
-    AsciiDocTemplateReporter() {
+class ManPageTemplateReporter(
+    override val descriptor: PluginDescriptor = ManPageTemplateReporterFactory.descriptor,
+    config: AsciiDocTemplateReporterConfig
+) : AsciiDocTemplateReporter(config) {
     override val backend = "manpage"
 }

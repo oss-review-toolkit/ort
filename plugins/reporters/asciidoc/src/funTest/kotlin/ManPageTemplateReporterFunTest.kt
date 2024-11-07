@@ -25,6 +25,7 @@ import io.kotest.matchers.should
 
 import java.time.LocalDate
 
+import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.test.getAssetFile
@@ -33,7 +34,7 @@ import org.ossreviewtoolkit.utils.test.matchExpectedResult
 class ManPageTemplateReporterFunTest : StringSpec({
     "ManPage report is created from default template" {
         val expectedResultFile = getAssetFile("manpage-template-reporter-expected-result.1")
-        val reporter = ManPageTemplateReporter()
+        val reporter = ManPageTemplateReporterFactory().create(PluginConfig())
 
         val reportContent = reporter.generateReport(ReporterInput(ORT_RESULT), tempdir())
             .single().getOrThrow().readText()

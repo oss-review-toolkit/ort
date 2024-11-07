@@ -29,14 +29,15 @@ import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.model.config.PluginConfiguration
+import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ORT_RESULT_WITH_VULNERABILITIES
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.utils.common.Options
 
 class PdfTemplateReporterFunTest : StringSpec({
     "The report is created successfully from an existing result and default template" {
-        val reportFileResults = PdfTemplateReporter().generateReport(ReporterInput(ORT_RESULT), tempdir())
+        val reportFileResults = createReporter().generateReport(ReporterInput(ORT_RESULT), tempdir())
 
         reportFileResults.shouldBeSingleton {
             it shouldBeSuccess { reportFile ->
@@ -53,26 +54,20 @@ class PdfTemplateReporterFunTest : StringSpec({
 
     "Report generation is aborted when path to non-existing PDF theme file is given" {
         shouldThrow<IllegalArgumentException> {
-            PdfTemplateReporter().generateReport(
-                ReporterInput(ORT_RESULT),
-                tempdir(),
-                PluginConfiguration(mapOf("pdf.theme.file" to "dummy.file"))
-            )
+            createReporter(mapOf("pdf.theme.file" to "dummy.file"))
+                .generateReport(ReporterInput(ORT_RESULT), tempdir())
         }
     }
 
     "Report generation is aborted when a non-existent PDF fonts directory is given" {
         shouldThrow<IllegalArgumentException> {
-            PdfTemplateReporter().generateReport(
-                ReporterInput(ORT_RESULT),
-                tempdir(),
-                PluginConfiguration(mapOf("pdf.fonts.dir" to "fake.path"))
-            )
+            createReporter(mapOf("pdf.fonts.dir" to "fake.path"))
+                .generateReport(ReporterInput(ORT_RESULT), tempdir())
         }
     }
 
     "Advisor reports are generated if the result contains an advisor section" {
-        val reportFileResults = PdfTemplateReporter().generateReport(
+        val reportFileResults = createReporter().generateReport(
             ReporterInput(ORT_RESULT_WITH_VULNERABILITIES),
             tempdir()
         )
@@ -81,3 +76,6 @@ class PdfTemplateReporterFunTest : StringSpec({
         reportFileNames.shouldContainAll("AsciiDoc_vulnerability_report.pdf", "AsciiDoc_defect_report.pdf")
     }
 })
+
+private fun createReporter(options: Options = emptyMap()) =
+    PdfTemplateReporterFactory().create(PluginConfig(options = options))
