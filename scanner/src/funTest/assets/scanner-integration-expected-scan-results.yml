@@ -214,7 +214,7 @@ Dummy::pkg4:1.0.0:
         path: "pkg4/subrepo/pkg-s2/pkg-s2.txt"
         start_line: -1
         end_line: -1
-Dummy::project:1.0.0:
+DummyProject::project:1.0.0:
 - provenance: {}
   scanner:
     name: "ProvenanceResolver"
@@ -226,6 +226,6 @@ Dummy::project:1.0.0:
     issues:
     - timestamp: "1970-01-01T00:00:00Z"
       source: "scanner"
-      message: "IOException: Could not resolve provenance for package 'Dummy::project:1.0.0'\
+      message: "IOException: Could not resolve provenance for package 'DummyProject::project:1.0.0'\
         \ for source code origins [VCS, ARTIFACT]."
       severity: "ERROR"

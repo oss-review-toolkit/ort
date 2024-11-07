@@ -1,6 +1,6 @@
 ---
 project:
-  id: "PNPM::npm-project-that-depends-on-babel:1.0.0"
+  id: "PNPMProject::npm-project-that-depends-on-babel:1.0.0"
   definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/babel/package.json"
   declared_licenses:
   - "Apache-2.0"

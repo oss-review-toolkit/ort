@@ -90,7 +90,15 @@ class AnalyzerResultBuilder {
      * Add the given [project] to this builder. This function can be used for projects that have been obtained
      * independently of a [ProjectAnalyzerResult].
      */
-    fun addProject(project: Project) = apply { projects += project }
+    fun addProject(project: Project) =
+        apply {
+            if (project.id.type.endsWith("Project")) {
+                projects += project
+            } else {
+                val projectId = project.id.copy(type = "${project.id.type}Project")
+                projects += project.copy(id = projectId)
+            }
+        }
 
     /**
      * Add the given [packageSet] to this builder. This function can be used for packages that have been obtained

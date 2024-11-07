@@ -1,6 +1,6 @@
 ---
 project:
-  id: "Bundler::test-project:1.0.0"
+  id: "BundlerProject::test-project:1.0.0"
   definition_file_path: "plugins/package-managers/bundler/src/funTest/assets/projects/synthetic/gemspec/Gemfile"
   authors:
   - "Bob Example"

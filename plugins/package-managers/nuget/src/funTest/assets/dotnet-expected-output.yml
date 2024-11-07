@@ -1,6 +1,6 @@
 ---
 project:
-  id: "NuGet::src/funTest/assets/dotnet/subProjectTest/test.csproj:"
+  id: "NuGetProject::src/funTest/assets/dotnet/subProjectTest/test.csproj:"
   definition_file_path: "plugins/package-managers/nuget/src/funTest/assets/dotnet/subProjectTest/test.csproj"
   declared_licenses: []
   declared_licenses_processed: {}

@@ -132,7 +132,7 @@ private fun createAnalyzerResult(vararg packages: Package): OrtResult {
     )
 
     val project = Project.EMPTY.copy(
-        id = createId("project"),
+        id = createId("project", isProject = true),
         scopeDependencies = setOf(scope)
     )
 
@@ -146,7 +146,8 @@ private fun createAnalyzerResult(vararg packages: Package): OrtResult {
     return OrtResult.EMPTY.copy(analyzer = analyzerRun)
 }
 
-private fun createId(name: String): Identifier = Identifier("Dummy::$name:1.0.0")
+private fun createId(name: String, isProject: Boolean = false): Identifier =
+    Identifier("Dummy${"Project".takeIf { isProject }.orEmpty()}::$name:1.0.0")
 
 private fun createPackage(name: String, vcs: VcsInfo): Package =
     Package.EMPTY.copy(

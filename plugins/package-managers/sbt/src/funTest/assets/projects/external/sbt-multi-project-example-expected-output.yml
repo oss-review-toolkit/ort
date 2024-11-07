@@ -32,7 +32,7 @@ analyzer:
     skip_excluded: false
   result:
     projects:
-    - id: "SBT:com.pbassiner:common_2.12:0.1.0-SNAPSHOT"
+    - id: "SBTProject:com.pbassiner:common_2.12:0.1.0-SNAPSHOT"
       definition_file_path: "common/target-scala-2.12-common_2.12-0.1.0-SNAPSHOT.pom"
       authors:
       - "com.pbassiner"
@@ -85,7 +85,7 @@ analyzer:
           - id: "Maven:org.scala-lang.modules:scala-parser-combinators_2.12:1.0.4"
           - id: "Maven:org.scala-lang.modules:scala-xml_2.12:1.0.5"
           - id: "Maven:org.scalactic:scalactic_2.12:3.0.4"
-    - id: "SBT:com.pbassiner:multi1_2.12:0.1.0-SNAPSHOT"
+    - id: "SBTProject:com.pbassiner:multi1_2.12:0.1.0-SNAPSHOT"
       definition_file_path: "multi1/target-scala-2.12-multi1_2.12-0.1.0-SNAPSHOT.pom"
       authors:
       - "com.pbassiner"
@@ -134,7 +134,7 @@ analyzer:
             - id: "Maven:com.fasterxml.jackson.core:jackson-core:2.8.9"
         - id: "Maven:org.scala-lang:scala-library:2.12.15"
         - id: "Maven:org.slf4j:jcl-over-slf4j:1.7.25"
-        - id: "SBT:com.pbassiner:common_2.12:0.1.0-SNAPSHOT"
+        - id: "SBTProject:com.pbassiner:common_2.12:0.1.0-SNAPSHOT"
           linkage: "PROJECT_DYNAMIC"
       - name: "test"
         dependencies:
@@ -146,7 +146,7 @@ analyzer:
           - id: "Maven:org.scala-lang.modules:scala-parser-combinators_2.12:1.0.4"
           - id: "Maven:org.scala-lang.modules:scala-xml_2.12:1.0.5"
           - id: "Maven:org.scalactic:scalactic_2.12:3.0.4"
-    - id: "SBT:com.pbassiner:multi2_2.12:0.1.0-SNAPSHOT"
+    - id: "SBTProject:com.pbassiner:multi2_2.12:0.1.0-SNAPSHOT"
       definition_file_path: "multi2/target-scala-2.12-multi2_2.12-0.1.0-SNAPSHOT.pom"
       authors:
       - "com.pbassiner"
@@ -196,7 +196,7 @@ analyzer:
             - id: "Maven:com.fasterxml.jackson.core:jackson-core:2.8.9"
         - id: "Maven:org.scala-lang:scala-library:2.12.15"
         - id: "Maven:org.slf4j:jcl-over-slf4j:1.7.25"
-        - id: "SBT:com.pbassiner:common_2.12:0.1.0-SNAPSHOT"
+        - id: "SBTProject:com.pbassiner:common_2.12:0.1.0-SNAPSHOT"
           linkage: "PROJECT_DYNAMIC"
       - name: "test"
         dependencies:
@@ -208,7 +208,7 @@ analyzer:
           - id: "Maven:org.scala-lang.modules:scala-parser-combinators_2.12:1.0.4"
           - id: "Maven:org.scala-lang.modules:scala-xml_2.12:1.0.5"
           - id: "Maven:org.scalactic:scalactic_2.12:3.0.4"
-    - id: "SBT:com.pbassiner:sbt-multi-project-example_2.12:0.1.0-SNAPSHOT"
+    - id: "SBTProject:com.pbassiner:sbt-multi-project-example_2.12:0.1.0-SNAPSHOT"
       definition_file_path: "target-scala-2.12-sbt-multi-project-example_2.12-0.1.0-SNAPSHOT.pom"
       authors:
       - "com.pbassiner"

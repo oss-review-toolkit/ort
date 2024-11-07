@@ -1,6 +1,6 @@
 ---
 project:
-  id: "Gradle:org.ossreviewtoolkit.gradle.example:app:1.0.0"
+  id: "GradleProject:org.ossreviewtoolkit.gradle.example:app:1.0.0"
   definition_file_path: "plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/gradle-android/app/build.gradle"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -18,14 +18,14 @@ project:
   scopes:
   - name: "amazonDemoDebugAndroidTestCompileClasspath"
     dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+    - id: "GradleProject:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
       linkage: "PROJECT_DYNAMIC"
     - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
       dependencies:
       - id: "Maven:com.squareup.okio:okio:1.14.0"
   - name: "amazonDemoDebugAndroidTestRuntimeClasspath"
     dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+    - id: "GradleProject:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
       linkage: "PROJECT_DYNAMIC"
       dependencies:
       - id: "Maven:org.apache.commons:commons-compress:1.17"
@@ -37,14 +37,14 @@ project:
       - id: "Maven:com.squareup.okio:okio:1.14.0"
   - name: "amazonDemoDebugCompileClasspath"
     dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+    - id: "GradleProject:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
       linkage: "PROJECT_DYNAMIC"
     - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
       dependencies:
       - id: "Maven:com.squareup.okio:okio:1.14.0"
   - name: "amazonDemoDebugRuntimeClasspath"
     dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+    - id: "GradleProject:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
       linkage: "PROJECT_DYNAMIC"
       dependencies:
       - id: "Maven:org.apache.commons:commons-compress:1.17"
@@ -56,7 +56,7 @@ project:
       - id: "Maven:com.squareup.okio:okio:1.14.0"
   - name: "amazonDemoDebugUnitTestCompileClasspath"
     dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+    - id: "GradleProject:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
       linkage: "PROJECT_DYNAMIC"
     - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
       dependencies:
@@ -66,7 +66,7 @@ project:
       - id: "Maven:org.hamcrest:hamcrest-core:1.3"
   - name: "amazonDemoDebugUnitTestRuntimeClasspath"
     dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+    - id: "GradleProject:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
       linkage: "PROJECT_DYNAMIC"
       dependencies:
       - id: "Maven:org.apache.commons:commons-compress:1.17"
@@ -81,14 +81,14 @@ project:
       - id: "Maven:org.hamcrest:hamcrest-core:1.3"
   - name: "amazonDemoReleaseCompileClasspath"
     dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+    - id: "GradleProject:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
       linkage: "PROJECT_DYNAMIC"
     - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
       dependencies:
       - id: "Maven:com.squareup.okio:okio:1.14.0"
   - name: "amazonDemoReleaseRuntimeClasspath"
     dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+    - id: "GradleProject:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
       linkage: "PROJECT_DYNAMIC"
       dependencies:
       - id: "Maven:org.apache.commons:commons-compress:1.17"
@@ -100,7 +100,7 @@ project:
       - id: "Maven:com.squareup.okio:okio:1.14.0"
   - name: "amazonDemoReleaseUnitTestCompileClasspath"
     dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+    - id: "GradleProject:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
       linkage: "PROJECT_DYNAMIC"
     - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
       dependencies:
@@ -110,7 +110,7 @@ project:
       - id: "Maven:org.hamcrest:hamcrest-core:1.3"
   - name: "amazonDemoReleaseUnitTestRuntimeClasspath"
     dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+    - id: "GradleProject:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
       linkage: "PROJECT_DYNAMIC"
       dependencies:
       - id: "Maven:org.apache.commons:commons-compress:1.17"
@@ -125,7 +125,7 @@ project:
       - id: "Maven:org.hamcrest:hamcrest-core:1.3"
   - name: "amazonFullDebugAndroidTestCompileClasspath"
     dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+    - id: "GradleProject:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
       linkage: "PROJECT_DYNAMIC"
     - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
       dependencies:

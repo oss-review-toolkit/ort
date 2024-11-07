@@ -1,6 +1,6 @@
 ---
 project:
-  id: "PIP::spdx-tools:0.5.4"
+  id: "PIPProject::spdx-tools:0.5.4"
   definition_file_path: "setup.py"
   authors:
   - "Ahmed H. Ismail <ahm3d.hisham@gmail.com>"

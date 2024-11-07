@@ -35,7 +35,7 @@ analyzer:
     allow_dynamic_versions: false
   result:
     projects:
-    - id: "Maven:com.vdurmont:semver4j:3.1.0"
+    - id: "MavenProject:com.vdurmont:semver4j:3.1.0"
       definition_file_path: "pom.xml"
       declared_licenses:
       - "The MIT License"

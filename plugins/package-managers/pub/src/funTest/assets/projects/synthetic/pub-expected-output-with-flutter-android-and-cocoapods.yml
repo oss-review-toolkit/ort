@@ -1,6 +1,6 @@
 ---
 projects:
-- id: "Pub::flutter_example:1.0.0+1"
+- id: "PubProject::flutter_example:1.0.0+1"
   definition_file_path: "plugins/package-managers/pub/src/funTest/assets/projects/synthetic/flutter-project-with-android-and-cocoapods/pubspec.yaml"
   declared_licenses: []
   declared_licenses_processed: {}
