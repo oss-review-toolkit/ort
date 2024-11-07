@@ -157,7 +157,6 @@ internal fun parseLicenses(mavenProject: MavenProject): Set<String> =
         listOfNotNull(license.name, license.url, license.comments).firstOrNull { it.isNotBlank() }
     }
 
-@Suppress("UnsafeCallOnNullableType")
 internal fun parseVcsInfo(project: MavenProject): VcsInfo {
     val scm = getOriginalScm(project)
     val connection = scm?.connection
@@ -166,17 +165,13 @@ internal fun parseVcsInfo(project: MavenProject): VcsInfo {
     val tag = scm.tag?.takeIf { it != "HEAD" }.orEmpty()
 
     return SCM_REGEX.matchEntire(connection)?.let { match ->
-        val type = match.groups["type"]!!.value
-        val url = match.groups["url"]!!.value
-
+        val (type, url) = match.destructured
         getVcsInfo(type, url, tag)
     } ?: run {
         USER_HOST_REGEX.matchEntire(connection)?.let { match ->
             // Some projects omit the provider and use the SCP-like Git URL syntax, for example
             // "scm:git@github.com:facebook/facebook-android-sdk.git".
-            val user = match.groups["user"]!!.value
-            val host = match.groups["host"]!!.value
-            val path = match.groups["path"]!!.value
+            val (user, host, path) = match.destructured
 
             if (user == "git" || host.startsWith("git")) {
                 VcsInfo(type = VcsType.GIT, url = "https://$host/$path", revision = tag)
