@@ -26,6 +26,8 @@ import java.io.File
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
+import org.ossreviewtoolkit.model.Issue
+import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -180,4 +182,22 @@ internal fun List<String>.groupLines(vararg markers: String): List<String> {
     } else {
         nonFooterLines.map { it.trim() }
     }
+}
+
+internal fun ProcessCapture.extractNpmIssues(): List<Issue> {
+    val lines = stderr.lines()
+    val issues = mutableListOf<Issue>()
+
+    // Generally forward issues from the NPM CLI to the ORT NPM package manager. Lower the severity of warnings to
+    // hints, as warnings usually do not prevent the ORT NPM package manager from getting the dependencies right.
+    lines.groupLines("npm WARN ", "npm warn ").mapTo(issues) {
+        Issue(source = "NPM", message = it, severity = Severity.HINT)
+    }
+
+    // For errors, however, something clearly went wrong, so keep the severity here.
+    lines.groupLines("npm ERR! ", "npm error ").mapTo(issues) {
+        Issue(source = "NPM", message = it, severity = Severity.ERROR)
+    }
+
+    return issues
 }
