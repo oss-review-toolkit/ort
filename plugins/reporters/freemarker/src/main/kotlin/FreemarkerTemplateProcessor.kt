@@ -93,8 +93,12 @@ class FreemarkerTemplateProcessor(
      * Process all Freemarker templates referenced in "template.id" and "template.path" options and returns the
      * generated files.
      */
-    fun processTemplates(input: ReporterInput, outputDir: File, options: Map<String, String>): List<Result<File>> =
-        processTemplatesInternal(createDataModel(input), outputDir, options)
+    fun processTemplates(
+        input: ReporterInput,
+        outputDir: File,
+        templateIds: List<String>,
+        templatePaths: List<String>
+    ): List<Result<File>> = processTemplatesInternal(createDataModel(input), outputDir, templateIds, templatePaths)
 
     /**
      * Process all Freemarker templates referenced in "template.id" and "template.path" options and returns the
@@ -103,11 +107,9 @@ class FreemarkerTemplateProcessor(
     private fun processTemplatesInternal(
         dataModel: Map<String, Any>,
         outputDir: File,
-        options: Map<String, String>
+        templateIds: List<String>,
+        templatePaths: List<String>
     ): List<Result<File>> {
-        val templatePaths = options[OPTION_TEMPLATE_PATH]?.split(',').orEmpty()
-        val templateIds = options[OPTION_TEMPLATE_ID]?.split(',').orEmpty()
-
         val templateFiles = templatePaths.map { path ->
             File(path).expandTilde().also {
                 require(it.isFile) { "Could not find template file at ${it.absolutePath}." }
