@@ -60,7 +60,6 @@ import org.eclipse.aether.artifact.DefaultArtifact
 import org.eclipse.aether.impl.RemoteRepositoryManager
 import org.eclipse.aether.impl.RepositoryConnectorProvider
 import org.eclipse.aether.repository.AuthenticationContext
-import org.eclipse.aether.repository.MirrorSelector
 import org.eclipse.aether.repository.RemoteRepository
 import org.eclipse.aether.repository.WorkspaceReader
 import org.eclipse.aether.resolution.ArtifactDescriptorRequest
@@ -687,82 +686,6 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
         } finally {
             sessionScope.exit()
             legacySupport.session = null
-        }
-    }
-}
-
-/**
- * Several Maven repositories have disabled HTTP access and require HTTPS now. To be able to still analyze old Maven
- * projects that use the HTTP URLs, this [MirrorSelector] implementation automatically creates an HTTPS mirror if a
- * [RemoteRepository] uses a disabled HTTP URL. Without that Maven would abort with an exception as soon as it tries to
- * download an Artifact from any of those repositories.
- *
- * **See also:**
- *
- * [GitHub Security Lab issue](https://github.com/github/security-lab/issues/21)
- * [Medium article](https://medium.com/p/d069d253fe23)
- */
-private class HttpsMirrorSelector(private val originalMirrorSelector: MirrorSelector?) : MirrorSelector {
-    companion object {
-        private val DISABLED_HTTP_REPOSITORY_URLS = listOf(
-            "http://jcenter.bintray.com",
-            "http://repo.maven.apache.org",
-            "http://repo1.maven.org",
-            "http://repo.spring.io"
-        )
-    }
-
-    override fun getMirror(repository: RemoteRepository?): RemoteRepository? {
-        originalMirrorSelector?.getMirror(repository)?.let { return it }
-
-        if (repository == null || DISABLED_HTTP_REPOSITORY_URLS.none { repository.url.startsWith(it) }) return null
-
-        logger.debug {
-            "HTTP access to ${repository.id} (${repository.url}) was disabled. Automatically switching to HTTPS."
-        }
-
-        return RemoteRepository.Builder(
-            "${repository.id}-https-mirror",
-            repository.contentType,
-            "https://${repository.url.removePrefix("http://")}"
-        ).apply {
-            setRepositoryManager(false)
-            setSnapshotPolicy(repository.getPolicy(true))
-            setReleasePolicy(repository.getPolicy(false))
-            setMirroredRepositories(listOf(repository))
-        }.build()
-    }
-}
-
-/**
- * A specialized [WorkspaceReader] implementation used when building a Maven project that prevents unnecessary
- * downloads of binary artifacts.
- *
- * When building a Maven project from a POM using Maven's [ProjectBuilder] API clients have no control over the
- * downloads of dependencies: If dependencies are to be resolved, all the artifacts of these dependencies are
- * automatically downloaded. For the purpose of just constructing the dependency tree, this is not needed and only
- * costs time and bandwidth.
- *
- * Unfortunately, there is no official API to prevent the download of dependencies. However, Maven can be tricked to
- * believe that the artifacts are already present on the local disk - then the download is skipped. This is what
- * this implementation does. It reports that all binary artifacts are available locally, and only treats POMs
- * correctly, as they may be required for the dependency analysis.
- */
-private class SkipBinaryDownloadsWorkspaceReader(
-    /** The real workspace reader to delegate to. */
-    val delegate: WorkspaceReader
-) : WorkspaceReader by delegate {
-    /**
-     * Locate the given artifact on the local disk. This implementation does a correct location only for POM files;
-     * for all other artifacts it returns a non-null file. Note: For the purpose of analyzing the project's
-     * dependencies the artifact files are never accessed. Therefore, the concrete file returned here does not
-     * actually matter; it just has to be non-null to indicate that the artifact is present locally.
-     */
-    override fun findArtifact(artifact: Artifact): File? {
-        return if (artifact.extension == "pom") {
-            delegate.findArtifact(artifact)
-        } else {
-            File(artifact.artifactId)
         }
     }
 }
