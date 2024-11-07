@@ -67,11 +67,6 @@ class FreemarkerTemplateProcessor(
     private val filePrefix: String = "",
     private val fileExtension: String = ""
 ) {
-    companion object {
-        const val OPTION_TEMPLATE_ID = "template.id"
-        const val OPTION_TEMPLATE_PATH = "template.path"
-    }
-
     private val freemarkerConfig: Configuration by lazy {
         Configuration(Configuration.VERSION_2_3_30).apply {
             defaultEncoding = "UTF-8"
