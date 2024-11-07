@@ -43,7 +43,12 @@ import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.MavenDependencyHandler
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.MavenSupport
+import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.getOriginalScm
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.identifier
+import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.parseAuthors
+import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.parseLicenses
+import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.parseVcsInfo
+import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.processDeclaredLicenses
 import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
 
 /**
@@ -121,10 +126,10 @@ class Maven(
                 graphBuilder.addDependency(DependencyGraph.qualifyScope(projectId, node.dependency.scope), node)
             }
 
-        val declaredLicenses = MavenSupport.parseLicenses(mavenProject)
-        val declaredLicensesProcessed = MavenSupport.processDeclaredLicenses(declaredLicenses)
+        val declaredLicenses = parseLicenses(mavenProject)
+        val declaredLicensesProcessed = processDeclaredLicenses(declaredLicenses)
 
-        val vcsFromPackage = MavenSupport.parseVcsInfo(mavenProject)
+        val vcsFromPackage = parseVcsInfo(mavenProject)
 
         // If running in SBT mode expect that POM files were generated in a "target" subdirectory and that the correct
         // project directory is the parent directory of this.
@@ -134,14 +139,14 @@ class Maven(
             workingDir
         }
 
-        val browsableScmUrl = MavenSupport.getOriginalScm(mavenProject)?.url
+        val browsableScmUrl = getOriginalScm(mavenProject)?.url
         val homepageUrl = mavenProject.url
         val vcsFallbackUrls = listOfNotNull(browsableScmUrl, homepageUrl).toTypedArray()
 
         val project = Project(
             id = projectId,
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-            authors = MavenSupport.parseAuthors(mavenProject),
+            authors = parseAuthors(mavenProject),
             declaredLicenses = declaredLicenses,
             declaredLicensesProcessed = declaredLicensesProcessed,
             vcs = vcsFromPackage,
