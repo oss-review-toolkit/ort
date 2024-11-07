@@ -19,11 +19,9 @@
 
 package org.ossreviewtoolkit.plugins.reporters.fossid
 
-import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.shouldBeSingleton
 import io.kotest.matchers.result.shouldBeSuccess
-import io.kotest.matchers.throwable.shouldHaveMessage
 
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
@@ -51,23 +49,23 @@ import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.Excludes
-import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
+import org.ossreviewtoolkit.plugins.api.Secret
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.test.scannerRunOf
 
 private const val SERVER_URL_SAMPLE = "https://fossid.example.com/instance/"
 private const val API_KEY_SAMPLE = "XYZ"
 private const val USER_KEY_SAMPLE = "user"
-private val DEFAULT_OPTIONS = mapOf(
-    FossIdReporter.SERVER_URL_PROPERTY to SERVER_URL_SAMPLE
-)
-private val DEFAULT_SECRETS = mapOf(
-    FossIdReporter.API_KEY_PROPERTY to API_KEY_SAMPLE,
-    FossIdReporter.USER_PROPERTY to USER_KEY_SAMPLE
+
+private val DEFAULT_CONFIG = FossIdReporterConfig(
+    serverUrl = SERVER_URL_SAMPLE,
+    apiKey = Secret(API_KEY_SAMPLE),
+    user = Secret(USER_KEY_SAMPLE),
+    reportType = "HTML_DYNAMIC",
+    selectionType = "INCLUDE_ALL_LICENSES"
 )
 
 private const val SCANCODE_1 = "scancode1"
@@ -85,45 +83,6 @@ class FossIdReporterTest : WordSpec({
     }
 
     "generateReport of FossIdReport " should {
-        "check if a server URL was given" {
-            val reporter = FossIdReporter()
-            val exception = shouldThrow<IllegalArgumentException> {
-                val input = createReporterInput()
-                reporter.generateReport(
-                    input,
-                    DEFAULT_OPTIONS.filterNot { it.key == FossIdReporter.SERVER_URL_PROPERTY }
-                )
-            }
-
-            exception shouldHaveMessage "No FossID server URL configuration found."
-        }
-
-        "check if an API key was given" {
-            val reporter = FossIdReporter()
-            val exception = shouldThrow<IllegalArgumentException> {
-                val input = createReporterInput()
-                reporter.generateReport(
-                    input,
-                    secrets = DEFAULT_SECRETS.filterNot { it.key == FossIdReporter.API_KEY_PROPERTY }
-                )
-            }
-
-            exception shouldHaveMessage "No FossID API Key configuration found."
-        }
-
-        "check if a user was given" {
-            val reporter = FossIdReporter()
-            val exception = shouldThrow<IllegalArgumentException> {
-                val input = createReporterInput()
-                reporter.generateReport(
-                    input,
-                    secrets = DEFAULT_SECRETS.filterNot { it.key == FossIdReporter.USER_PROPERTY }
-                )
-            }
-
-            exception shouldHaveMessage "No FossID User configuration found."
-        }
-
         "do nothing if no scancode is passed" {
             val (serviceMock, reporterMock) = createReporterMock()
             val input = createReporterInput()
@@ -154,13 +113,10 @@ class FossIdReporterTest : WordSpec({
         }
 
         "allow to specify a report type" {
-            val (serviceMock, reporterMock) = createReporterMock()
+            val (serviceMock, reporterMock) = createReporterMock(DEFAULT_CONFIG.copy(reportType = "XLSX"))
             val input = createReporterInput(SCANCODE_1)
 
-            reporterMock.generateReport(
-                input,
-                DEFAULT_OPTIONS + (FossIdReporter.REPORT_TYPE_PROPERTY to ReportType.XLSX.name)
-            )
+            reporterMock.generateReport(input)
 
             coVerify(exactly = 1) {
                 serviceMock.generateReport(
@@ -193,13 +149,12 @@ class FossIdReporterTest : WordSpec({
         }
 
         "allow to specify a selection type" {
-            val (serviceMock, reporterMock) = createReporterMock()
+            val (serviceMock, reporterMock) = createReporterMock(
+                DEFAULT_CONFIG.copy(selectionType = "INCLUDE_COPYLEFT")
+            )
             val input = createReporterInput(SCANCODE_1)
 
-            reporterMock.generateReport(
-                input,
-                DEFAULT_OPTIONS + (FossIdReporter.SELECTION_TYPE_PROPERTY to SelectionType.INCLUDE_COPYLEFT.name)
-            )
+            reporterMock.generateReport(input)
 
             coVerify(exactly = 1) {
                 serviceMock.generateReport(
@@ -261,17 +216,13 @@ class FossIdReporterTest : WordSpec({
     }
 })
 
-private fun FossIdReporter.generateReport(
-    input: ReporterInput,
-    options: Options = DEFAULT_OPTIONS,
-    secrets: Options = DEFAULT_SECRETS
-) = generateReport(input, DIRECTORY_SAMPLE, PluginConfiguration(options, secrets))
+private fun FossIdReporter.generateReport(input: ReporterInput) = generateReport(input, DIRECTORY_SAMPLE)
 
-private fun createReporterMock(): Pair<FossIdRestService, FossIdReporter> {
+private fun createReporterMock(config: FossIdReporterConfig = DEFAULT_CONFIG): Pair<FossIdRestService, FossIdReporter> {
     mockkObject(FossIdRestService)
 
     val serviceMock = mockk<FossIdServiceWithVersion>()
-    val reporterMock = spyk<FossIdReporter>()
+    val reporterMock = spyk(FossIdReporter(config = config))
     coEvery { FossIdRestService.create(any()) } returns serviceMock
 
     coEvery {
