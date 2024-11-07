@@ -171,10 +171,6 @@ open class Yarn(
     // TODO: Add support for bundledDependencies.
     private fun resolveDependenciesInternal(definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
-
-        // Actually installing the dependencies is the easiest way to get the metadata of all transitive
-        // dependencies (i.e. their respective "package.json" files). As NPM uses a global cache, the same
-        // dependency is only ever downloaded once.
         installDependencies(workingDir)
 
         val projectDirs = findWorkspaceSubmodules(workingDir).toSet() + definitionFile.parentFile
@@ -348,13 +344,9 @@ open class Yarn(
     override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =
         PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
 
-    /**
-     * Install dependencies using the given package manager command.
-     */
     private fun installDependencies(workingDir: File) {
         requireLockfile(workingDir) { hasLockfile(workingDir) }
 
-        // Install all NPM dependencies to enable NPM to list dependencies.
         run(workingDir, "install", "--ignore-scripts", "--ignore-engines", "--immutable")
     }
 
