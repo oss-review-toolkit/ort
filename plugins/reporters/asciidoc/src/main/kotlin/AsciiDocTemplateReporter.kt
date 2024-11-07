@@ -28,6 +28,8 @@ import org.asciidoctor.SafeMode
 
 import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.plugins.reporters.freemarker.FreemarkerTemplateProcessor
+import org.ossreviewtoolkit.plugins.reporters.freemarker.FreemarkerTemplateProcessor.Companion.OPTION_TEMPLATE_ID
+import org.ossreviewtoolkit.plugins.reporters.freemarker.FreemarkerTemplateProcessor.Companion.OPTION_TEMPLATE_PATH
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
@@ -108,7 +110,12 @@ abstract class AsciiDocTemplateReporter : Reporter {
             )
         }
 
-        return templateProcessor.processTemplates(input, outputDir, options)
+        return templateProcessor.processTemplates(
+            input,
+            outputDir,
+            options[OPTION_TEMPLATE_ID]?.split(',').orEmpty(),
+            options[OPTION_TEMPLATE_PATH]?.split(',').orEmpty()
+        )
     }
 
     /**

@@ -24,6 +24,8 @@ import java.io.File
 import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
+import org.ossreviewtoolkit.plugins.reporters.freemarker.FreemarkerTemplateProcessor.Companion.OPTION_TEMPLATE_ID
+import org.ossreviewtoolkit.plugins.reporters.freemarker.FreemarkerTemplateProcessor.Companion.OPTION_TEMPLATE_PATH
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
@@ -68,6 +70,11 @@ class PlainTextTemplateReporter(
             templateOptions.putIfAbsent(FreemarkerTemplateProcessor.OPTION_TEMPLATE_ID, DEFAULT_TEMPLATE_ID)
         }
 
-        return templateProcessor.processTemplates(input, outputDir, templateOptions)
+        return templateProcessor.processTemplates(
+            input,
+            outputDir,
+            config.options[OPTION_TEMPLATE_ID]?.split(',').orEmpty(),
+            config.options[OPTION_TEMPLATE_PATH]?.split(',').orEmpty()
+        )
     }
 }
