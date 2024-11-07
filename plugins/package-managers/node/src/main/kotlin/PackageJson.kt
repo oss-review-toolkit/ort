@@ -23,7 +23,6 @@ import java.io.File
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
@@ -91,7 +90,6 @@ private fun JsonElement.parseLicenses(): Set<String> =
         is JsonPrimitive -> setOf(jsonPrimitive.content)
         is JsonArray -> jsonArray.flatMapTo(mutableSetOf()) { it.parseLicenses() }
         is JsonObject -> jsonObject.getValue("type").parseLicenses()
-        else -> throw SerializationException("Unexpected JSON element.")
     }
 
 @Serializable
