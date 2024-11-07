@@ -35,7 +35,9 @@ import org.ossreviewtoolkit.reporter.ReporterFactory
     description = "Generates DocBook from AsciiDoc files from Apache Freemarker templates.",
     factory = ReporterFactory::class
 )
-class DocBookTemplateReporter(override val descriptor: PluginDescriptor = DocBookTemplateReporterFactory.descriptor) :
-    AsciiDocTemplateReporter() {
+class DocBookTemplateReporter(
+    override val descriptor: PluginDescriptor = DocBookTemplateReporterFactory.descriptor,
+    config: AsciiDocTemplateReporterConfig
+) : AsciiDocTemplateReporter(config) {
     override val backend = "docbook"
 }

@@ -51,7 +51,6 @@ import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.NotifierConfiguration
-import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.config.SendMailConfiguration
@@ -131,13 +130,9 @@ class ExamplesFunTest : StringSpec({
 
         takeExampleFile("asciidoctor-pdf-theme.yml")
 
-        val report = reporter.create(PluginConfig()).generateReport(
-            ReporterInput(OrtResult.EMPTY),
-            outputDir,
-            PluginConfiguration(
-                mapOf("pdf.theme.file" to examplesDir.resolve("asciidoctor-pdf-theme.yml").path)
-            )
-        )
+        val report = reporter.create(
+            PluginConfig(options = mapOf("pdf.theme.file" to examplesDir.resolve("asciidoctor-pdf-theme.yml").path))
+        ).generateReport(ReporterInput(OrtResult.EMPTY), outputDir)
 
         report shouldHaveSize 1
     }

@@ -25,6 +25,7 @@ import io.kotest.matchers.should
 
 import java.time.LocalDate
 
+import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.test.getAssetFile
@@ -34,7 +35,8 @@ class DocBookTemplateReporterFunTest : StringSpec({
     "DocBook report is created from default template" {
         val expectedResultFile = getAssetFile("docbook-template-reporter-expected-result.xml")
 
-        val reportContent = DocBookTemplateReporter().generateReport(ReporterInput(ORT_RESULT), tempdir())
+        val reportContent = DocBookTemplateReporterFactory().create(PluginConfig())
+            .generateReport(ReporterInput(ORT_RESULT), tempdir())
             .single().getOrThrow().readText()
 
         reportContent should matchExpectedResult(
