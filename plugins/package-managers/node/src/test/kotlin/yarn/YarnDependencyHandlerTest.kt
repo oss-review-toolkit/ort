@@ -31,7 +31,6 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.Npm
 import org.ossreviewtoolkit.utils.test.USER_DIR
 
 class YarnDependencyHandlerTest : StringSpec({
@@ -103,4 +102,4 @@ private fun createModuleInfo(
  * Creates an [YarnDependencyHandler] instance to be used by test cases.
  */
 private fun createHandler() =
-    YarnDependencyHandler(Npm("NPM", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration()))
+    YarnDependencyHandler(Yarn("Yarn", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration()))
