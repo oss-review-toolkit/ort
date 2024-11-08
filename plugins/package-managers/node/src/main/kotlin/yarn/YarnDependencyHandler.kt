@@ -19,49 +19,12 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.node.yarn
 
-import java.io.File
-
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
-import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackage
-
-/**
- * A data class storing information about a specific NPM module and its dependencies.
- *
- * Instances of this class are used as the dependency node type when constructing a dependency graph for NPM. They
- * contain all the information required to identify a module, construct a [Package] from it, and traverse its
- * dependency tree.
- */
-internal data class NpmModuleInfo(
-    /** The identifier for the represented module. */
-    val id: Identifier,
-
-    /** The working directory of the NPM project. */
-    val workingDir: File,
-
-    /** The file pointing to the package.json for this module. */
-    val packageFile: File,
-
-    /** A set with information about the modules this module depends on. */
-    val dependencies: Set<NpmModuleInfo>,
-
-    /** A flag indicating whether this module is a [Project] or a [Package]. */
-    val isProject: Boolean
-) {
-    /**
-     * [workingDir] and [packageFile] are not relevant when adding this [NpmModuleInfo] to the dependency graph.
-     * However, if these values differ the same dependencies are added as duplicates to the set which is used to create
-     * the dependency graph. Therefore, remove them from the equals check.
-     */
-    override fun equals(other: Any?): Boolean =
-        (other === this) || (other is NpmModuleInfo && other.id == id && other.dependencies == dependencies)
-
-    override fun hashCode() = 31 * id.hashCode() + dependencies.hashCode()
-}
 
 /**
  * A specialized [DependencyHandler] implementation for NPM.
