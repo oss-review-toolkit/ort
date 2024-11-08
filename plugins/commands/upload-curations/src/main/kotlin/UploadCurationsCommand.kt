@@ -53,7 +53,7 @@ import org.ossreviewtoolkit.model.utils.toClearlyDefinedSourceLocation
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
 import org.ossreviewtoolkit.plugins.commands.api.utils.inputGroup
 import org.ossreviewtoolkit.utils.common.expandTilde
-import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.ort.okHttpClient
 import org.ossreviewtoolkit.utils.ort.runBlocking
 
 class UploadCurationsCommand : OrtCommand(
@@ -74,7 +74,7 @@ class UploadCurationsCommand : OrtCommand(
         help = "The ClearlyDefined server to upload to. Must be one of ${Server.entries.map { it.name }}."
     ).enum<Server>().default(Server.DEVELOPMENT)
 
-    private val service by lazy { ClearlyDefinedService.create(server, OkHttpClientHelper.buildClient()) }
+    private val service by lazy { ClearlyDefinedService.create(server, okHttpClient) }
 
     override fun run() {
         val allCurations = inputFile.readValueOrDefault(emptyList<PackageCuration>())
