@@ -240,6 +240,7 @@ packages:
   purl: "pkg:npm/cson@4.1.0"
   authors:
   - "2012+ Bevry Pty Ltd"
+  - "Benjamin Lupton"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -634,6 +635,7 @@ packages:
 - id: "NPM::extract-opts:3.4.0"
   purl: "pkg:npm/extract-opts@3.4.0"
   authors:
+  - "2011+ Benjamin Lupton"
   - "2013+ Bevry Pty Ltd"
   declared_licenses:
   - "MIT"
@@ -930,6 +932,7 @@ packages:
 - id: "NPM::requirefresh:2.3.0"
   purl: "pkg:npm/requirefresh@2.3.0"
   authors:
+  - "2011+ Benjamin Lupton"
   - "2013+ Bevry Pty Ltd"
   declared_licenses:
   - "MIT"
@@ -990,6 +993,7 @@ packages:
 - id: "NPM::safefs:4.2.0"
   purl: "pkg:npm/safefs@4.2.0"
   authors:
+  - "2011-2012 Benjamin Lupton"
   - "2013+ Bevry Pty Ltd"
   declared_licenses:
   - "MIT"
@@ -1077,6 +1081,7 @@ packages:
 - id: "NPM::typechecker:4.11.0"
   purl: "pkg:npm/typechecker@4.11.0"
   authors:
+  - "2011-2012 Benjamin Lupton"
   - "2013+ Bevry Pty Ltd"
   declared_licenses:
   - "MIT"

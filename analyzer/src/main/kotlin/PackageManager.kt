@@ -374,31 +374,30 @@ fun parseAuthorString(
     author: String?,
     emailDelimiters: Pair<Char, Char> = '<' to '>',
     homepageDelimiters: Pair<Char, Char> = '(' to ')'
-): AuthorInfo {
-    if (author == null) return AuthorInfo(null, null, null)
+): Set<AuthorInfo> =
+    author?.split(',', '\n')?.mapTo(mutableSetOf()) { singleAuthor ->
+        var cleanedAuthor = singleAuthor
+        var email: String? = null
+        var homepage: String? = null
 
-    var cleanedAuthor = author
-    var email: String? = null
-    var homepage: String? = null
+        // Extract an email address and remove it from the original autgor string.
+        val e = emailDelimiters.toList().map { Regex.escape(it.toString()) }
+        val emailRegex = Regex("${e.first()}(.+@.+)${e.last()}")
+        cleanedAuthor = cleanedAuthor.replace(emailRegex) {
+            email = it.groupValues.last()
+            ""
+        }
 
-    // Extract an email address and remove it from the original autgor string.
-    val e = emailDelimiters.toList().map { Regex.escape(it.toString()) }
-    val emailRegex = Regex("${e.first()}(.+@.+)${e.last()}")
-    cleanedAuthor = cleanedAuthor.replace(emailRegex) {
-        email = it.groupValues.last()
-        ""
-    }
+        // Extract a homepage URL and remove it from the original autgor string.
+        val h = homepageDelimiters.toList().map { Regex.escape(it.toString()) }
+        val homepageRegex = Regex("${h.first()}(.+(?:://|www|.).+)${h.last()}")
+        cleanedAuthor = cleanedAuthor.replace(homepageRegex) {
+            homepage = it.groupValues.last()
+            ""
+        }
 
-    // Extract a homepage URL and remove it from the original autgor string.
-    val h = homepageDelimiters.toList().map { Regex.escape(it.toString()) }
-    val homepageRegex = Regex("${h.first()}(.+(?:://|www|.).+)${h.last()}")
-    cleanedAuthor = cleanedAuthor.replace(homepageRegex) {
-        homepage = it.groupValues.last()
-        ""
-    }
-
-    return AuthorInfo(cleanedAuthor.collapseWhitespace().ifEmpty { null }, email, homepage)
-}
+        AuthorInfo(cleanedAuthor.collapseWhitespace().ifEmpty { null }, email, homepage)
+    }.orEmpty()
 
 /**
  * Information about an author, including the [name], [email] address, and [homepage] URL.

@@ -3183,7 +3183,8 @@ packages:
 - id: "NPM::chokidar:1.7.0"
   purl: "pkg:npm/chokidar@1.7.0"
   authors:
-  - "Paul Miller , Elan Shanker"
+  - "Elan Shanker"
+  - "Paul Miller"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:

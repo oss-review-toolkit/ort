@@ -34,6 +34,7 @@ import org.apache.logging.log4j.kotlin.logger
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
+import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.DependencyGraph
@@ -58,7 +59,6 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.NpmDetection
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.fixNpmDownloadUrl
 import org.ossreviewtoolkit.plugins.packagemanagers.node.mapNpmLicenses
-import org.ossreviewtoolkit.plugins.packagemanagers.node.parseNpmAuthor
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parseNpmVcsInfo
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJsons
@@ -530,7 +530,7 @@ class Yarn2(
         val description = packageJson.description.orEmpty()
         val vcsFromPackage = parseNpmVcsInfo(packageJson)
         val homepage = packageJson.homepage.orEmpty()
-        val author = parseNpmAuthor(packageJson.authors.firstOrNull())
+        val author = packageJson.authors.flatMap { parseAuthorString(it.name) }.mapNotNullTo(mutableSetOf()) { it.name }
         val downloadUrl = packageJson.dist?.tarball.orEmpty().fixNpmDownloadUrl()
 
         val hash = Hash.create(packageJson.dist?.shasum.orEmpty())

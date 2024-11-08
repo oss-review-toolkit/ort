@@ -312,11 +312,7 @@ private fun parseCabalFile(cabal: String, identifierType: String): Package {
 
     return Package(
         id = id,
-        authors = map["author"].orEmpty()
-            .split(',')
-            .map(String::trim)
-            .filter(String::isNotEmpty)
-            .mapNotNullTo(mutableSetOf()) { parseAuthorString(it).name },
+        authors = parseAuthorString(map["author"]).mapNotNullTo(mutableSetOf()) { it.name },
         declaredLicenses = setOfNotNull(map["license"]),
         description = map["description"].orEmpty(),
         homepageUrl = homepageUrl,

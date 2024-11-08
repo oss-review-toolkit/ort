@@ -147,17 +147,19 @@ private object AuthorListSerializer : JsonTransformingSerializer<List<Author>>(s
     override fun transformDeserialize(element: JsonElement): JsonElement =
         when (element) {
             is JsonObject -> JsonArray(listOf(element))
-            is JsonPrimitive -> JsonArray(listOf(element.toAuthorObject()))
-            is JsonArray -> JsonArray(element.map { it.toAuthorObject() })
+            is JsonPrimitive -> JsonArray(element.toAuthorObject())
+            is JsonArray -> JsonArray(element.flatMap { it.toAuthorObject() })
         }
 
-    private fun JsonElement.toAuthorObject(): JsonElement =
+    private fun JsonElement.toAuthorObject(): List<JsonElement> =
         when (this) {
-            is JsonObject -> this
+            is JsonObject -> listOf(this)
 
             is JsonPrimitive -> {
-                val author = parseAuthorString(contentOrNull).run { Author(name ?: content, email, homepage) }
-                JSON.encodeToJsonElement(author)
+                parseAuthorString(contentOrNull)
+                    .filter { it.name != null }
+                    .map { Author(checkNotNull(it.name), it.email, it.homepage) }
+                    .map { JSON.encodeToJsonElement(it) }
             }
 
             else -> throw SerializationException("Unexpected JSON element.")
