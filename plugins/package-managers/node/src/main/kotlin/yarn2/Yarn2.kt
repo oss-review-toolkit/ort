@@ -438,7 +438,7 @@ class Yarn2(
             }
 
             val hash = details.hash
-            val authors = details.author
+            val authors = details.authors
             var vcsFromPackage = details.vcsFromPackage
 
             if (details.vcsFromDownloadUrl.url != details.downloadUrl) {
@@ -530,7 +530,9 @@ class Yarn2(
         val description = packageJson.description.orEmpty()
         val vcsFromPackage = parseNpmVcsInfo(packageJson)
         val homepage = packageJson.homepage.orEmpty()
-        val author = packageJson.authors.flatMap { parseAuthorString(it.name) }.mapNotNullTo(mutableSetOf()) { it.name }
+        val authors = packageJson.authors
+            .flatMap { parseAuthorString(it.name) }
+            .mapNotNullTo(mutableSetOf()) { it.name }
         val downloadUrl = packageJson.dist?.tarball.orEmpty().fixNpmDownloadUrl()
 
         val hash = Hash.create(packageJson.dist?.shasum.orEmpty())
@@ -546,7 +548,7 @@ class Yarn2(
             homepage,
             downloadUrl,
             hash,
-            author
+            authors
         )
     }
 
@@ -648,7 +650,7 @@ private data class AdditionalData(
     val homepage: String = "",
     val downloadUrl: String = "",
     val hash: Hash = Hash.NONE,
-    val author: Set<String> = emptySet()
+    val authors: Set<String> = emptySet()
 )
 
 /**
