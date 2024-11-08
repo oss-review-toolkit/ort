@@ -102,10 +102,14 @@ class VulnerableCode(override val descriptor: PluginDescriptor, config: Vulnerab
         chunks.forEachIndexed { index, chunk ->
             runCatching {
                 val chunkVulnerabilities = service.getPackageVulnerabilities(PackagesWrapper(chunk)).filter {
-                    it.affectedByVulnerabilities.isNotEmpty()
+                    // ORT does not currently distinguish between vulnerabilities for which no fix is available at all
+                    // and those that have been fixed already (in a later version of the same package).
+                    it.affectedByVulnerabilities.isNotEmpty() || it.fixingVulnerabilities.isNotEmpty()
                 }
 
-                allVulnerabilities += chunkVulnerabilities.associate { it.purl to it.affectedByVulnerabilities }
+                allVulnerabilities += chunkVulnerabilities.associate {
+                    it.purl to (it.affectedByVulnerabilities + it.fixingVulnerabilities)
+                }
             }.onFailure {
                 // Create dummy entries for all packages in the chunk as the current data model does not allow to return
                 // issues that are not associated to any package.
