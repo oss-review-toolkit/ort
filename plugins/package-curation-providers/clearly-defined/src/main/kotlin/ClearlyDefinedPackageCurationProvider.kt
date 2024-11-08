@@ -46,7 +46,7 @@ import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProvider
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProviderFactory
 import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.ort.okHttpClient
 import org.ossreviewtoolkit.utils.ort.runBlocking
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression.Strictness
@@ -86,7 +86,7 @@ class ClearlyDefinedPackageCurationProvider(
     )
 
     private val service by lazy {
-        ClearlyDefinedService.create(config.serverUrl, client ?: OkHttpClientHelper.buildClient())
+        ClearlyDefinedService.create(config.serverUrl, client ?: okHttpClient)
     }
 
     override fun getCurationsFor(packages: Collection<Package>): Set<PackageCuration> {

@@ -56,7 +56,7 @@ import org.ossreviewtoolkit.scanner.storages.utils.getScanCodeDetails
 import org.ossreviewtoolkit.utils.common.AlphaNumericComparator
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.withoutPrefix
-import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.ort.okHttpClient
 import org.ossreviewtoolkit.utils.ort.runBlocking
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
@@ -79,7 +79,7 @@ class ClearlyDefinedStorage(
 
     /** The service for interacting with ClearlyDefined. */
     private val service by lazy {
-        ClearlyDefinedService.create(config.serverUrl, client ?: OkHttpClientHelper.buildClient())
+        ClearlyDefinedService.create(config.serverUrl, client ?: okHttpClient)
     }
 
     override fun readInternal(pkg: Package, scannerMatcher: ScannerMatcher?): Result<List<ScanResult>> =
