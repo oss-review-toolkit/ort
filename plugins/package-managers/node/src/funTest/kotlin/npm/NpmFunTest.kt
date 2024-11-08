@@ -130,7 +130,7 @@ class NpmFunTest : WordSpec({
 
             val result = create("NPM").resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.withInvariantIssues() shouldBe expectedResult.withInvariantIssues()
+            result.withInvariantIssues().toYaml() shouldBe expectedResult.withInvariantIssues().toYaml()
         }
 
         "resolve dependencies with URLs as versions correctly" {
