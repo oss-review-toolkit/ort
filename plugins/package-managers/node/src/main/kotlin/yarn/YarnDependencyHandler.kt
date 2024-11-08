@@ -26,9 +26,6 @@ import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackage
 
-/**
- * A specialized [DependencyHandler] implementation for NPM.
- */
 internal class YarnDependencyHandler(private val npm: Yarn) : DependencyHandler<NpmModuleInfo> {
     override fun identifierFor(dependency: NpmModuleInfo): Identifier = dependency.id
 
