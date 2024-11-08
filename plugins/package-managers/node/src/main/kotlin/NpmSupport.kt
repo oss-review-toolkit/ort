@@ -97,23 +97,6 @@ internal fun String.fixNpmDownloadUrl(): String =
 
 private val ARTIFACTORY_API_PATH_PATTERN = Regex("(.*artifactory.*)/api/npm/(.*)")
 
-/**
- * Parse information about the author from the [package.json][json] file of a module. According to
- * https://docs.npmjs.com/files/package.json#people-fields-author-contributors, there are two formats to
- * specify the author of a package: An object with multiple properties or a single string.
- */
-internal fun parseNpmAuthor(author: PackageJson.Author?): Set<String> =
-    author?.let {
-        if (it.url == null && it.email == null) {
-            // The author might either originate from a textual node or from an object node. The former to
-            // further process the author string.
-            parseAuthorString(it.name).name
-        } else {
-            // The author must have come from an object node, so applying parseAuthorString() is not necessary.
-            it.name
-        }
-    }.let { setOfNotNull(it) }
-
 internal fun Collection<String>.mapNpmLicenses(): Set<String> =
     mapNotNullTo(mutableSetOf()) { declaredLicense ->
         when {
@@ -175,7 +158,7 @@ internal fun parsePackage(
     val version = packageJson.version ?: NON_EXISTING_SEMVER
 
     val declaredLicenses = packageJson.licenses.mapNpmLicenses()
-    val authors = parseNpmAuthor(packageJson.authors.firstOrNull()) // TODO: parse all authors.
+    val authors = packageJson.authors.flatMap { parseAuthorString(it.name) }.mapNotNullTo(mutableSetOf()) { it.name }
 
     var description = packageJson.description.orEmpty()
     var homepageUrl = packageJson.homepage.orEmpty()
@@ -267,7 +250,7 @@ internal fun parseProject(packageJsonFile: File, analysisRoot: File, managerName
     }
 
     val declaredLicenses = packageJson.licenses.mapNpmLicenses()
-    val authors = parseNpmAuthor(packageJson.authors.firstOrNull()) // TODO: parse all authors.
+    val authors = packageJson.authors.flatMap { parseAuthorString(it.name) }.mapNotNullTo(mutableSetOf()) { it.name }
     val homepageUrl = packageJson.homepage.orEmpty()
     val projectDir = packageJsonFile.parentFile.realFile()
     val vcsFromPackage = parseNpmVcsInfo(packageJson)

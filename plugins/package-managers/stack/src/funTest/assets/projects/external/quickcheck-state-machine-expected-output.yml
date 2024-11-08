@@ -1783,7 +1783,8 @@ packages:
 - id: "Hackage:Data:hashable:1.2.7.0"
   purl: "pkg:hackage/Data/hashable@1.2.7.0"
   authors:
-  - "Milan Straka Johan Tibell"
+  - "Johan Tibell"
+  - "Milan Straka"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:

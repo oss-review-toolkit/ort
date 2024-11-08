@@ -777,7 +777,7 @@ class Pub(
  * Extract information about package authors from the given [pubspec].
  */
 private fun parseAuthors(pubspec: Pubspec): Set<String> =
-    (pubspec.authors + pubspec.author).mapNotNullTo(mutableSetOf()) { parseAuthorString(it).name }
+    (pubspec.authors + pubspec.author).flatMap { parseAuthorString(it) }.mapNotNullTo(mutableSetOf()) { it.name }
 
 private fun ProjectAnalyzerResult.collectPackagesByScope(scopeName: String): List<Package> {
     val scope = project.scopes.find { it.name == scopeName } ?: return emptyList()

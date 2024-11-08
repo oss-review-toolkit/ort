@@ -25,7 +25,6 @@ import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson.Author
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson.Repository
 
 class NpmSupportTest : WordSpec({
@@ -88,20 +87,6 @@ class NpmSupportTest : WordSpec({
         "correct Artifactory API URLS" {
             "http://my.repo/artifactory/api/npm/npm/all".fixNpmDownloadUrl() shouldBe
                 "http://my.repo/artifactory/npm/all"
-        }
-    }
-
-    "parseNpmAuthor()" should {
-        "get authors from a text node" {
-            val author = Author(name = "Jane Doe <jane.doe@example.com>")
-
-            parseNpmAuthor(author) shouldBe setOf("Jane Doe")
-        }
-
-        "get authors from an object node" {
-            val author = Author(name = "John Doe")
-
-            parseNpmAuthor(author) shouldBe setOf("John Doe")
         }
     }
 
