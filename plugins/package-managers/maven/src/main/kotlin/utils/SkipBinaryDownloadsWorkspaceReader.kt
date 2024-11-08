@@ -42,7 +42,7 @@ import org.eclipse.aether.repository.WorkspaceReader
  */
 internal class SkipBinaryDownloadsWorkspaceReader(
     /** The real workspace reader to delegate to. */
-    val delegate: WorkspaceReader
+    private val delegate: WorkspaceReader
 ) : WorkspaceReader by delegate {
     /**
      * Locate the given artifact on the local disk. This implementation does a correct location only for POM files;
