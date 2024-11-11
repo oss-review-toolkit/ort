@@ -72,23 +72,23 @@ class FossIdClientReturnTypeTest : StringSpec({
     }
 
     "Single scan can be queried" {
-        service.getScan("", "", SCAN_CODE_2).shouldNotBeNull().run {
+        service.getScan("", "", SCAN_CODE_2).shouldNotBeNull {
             checkResponse("get scan")
             data.shouldBeTypeOf<Scan>()
         }
     }
 
     "Scans for project can be listed when there is none" {
-        service.listScansForProject("", "", PROJECT_CODE_1).shouldNotBeNull().run {
+        service.listScansForProject("", "", PROJECT_CODE_1).shouldNotBeNull {
             checkResponse("list scans")
             data.shouldNotBeNull() should beEmpty()
         }
     }
 
     "Scans for project can be listed when there is exactly one" {
-        service.listScansForProject("", "", PROJECT_CODE_3).shouldNotBeNull().run {
+        service.listScansForProject("", "", PROJECT_CODE_3).shouldNotBeNull {
             checkResponse("list scans")
-            data.shouldNotBeNull().run {
+            data.shouldNotBeNull {
                 size shouldBe 1
                 first().shouldBeTypeOf<Scan>()
             }
@@ -96,9 +96,9 @@ class FossIdClientReturnTypeTest : StringSpec({
     }
 
     "Scans for project can be listed when there is some" {
-        service.listScansForProject("", "", PROJECT_CODE_2).shouldNotBeNull().run {
+        service.listScansForProject("", "", PROJECT_CODE_2).shouldNotBeNull {
             checkResponse("list scans")
-            data.shouldNotBeNull().run {
+            data.shouldNotBeNull {
                 this shouldNot beEmpty()
                 first().shouldBeTypeOf<Scan>()
             }
@@ -106,16 +106,16 @@ class FossIdClientReturnTypeTest : StringSpec({
     }
 
     "Scan results can be listed when there is none" {
-        service.listScanResults("", "", SCAN_CODE_1).shouldNotBeNull().run {
+        service.listScanResults("", "", SCAN_CODE_1).shouldNotBeNull {
             checkResponse("list scan results")
             data.shouldNotBeNull() should beEmpty()
         }
     }
 
     "Scan results can be listed when there is some" {
-        service.listScanResults("", "", SCAN_CODE_2).shouldNotBeNull().run {
+        service.listScanResults("", "", SCAN_CODE_2).shouldNotBeNull {
             checkResponse("list scan results")
-            data.shouldNotBeNull().run {
+            data.shouldNotBeNull {
                 this shouldNot beEmpty()
                 forEach {
                     it.shouldBeTypeOf<FossIdScanResult>()
@@ -130,9 +130,9 @@ class FossIdClientReturnTypeTest : StringSpec({
             "",
             SCAN_CODE_2,
             "src/main/java/com/vdurmont/semver4j/Requirement.java"
-        ).shouldNotBeNull().run {
+        ).shouldNotBeNull {
             checkResponse("list snippets")
-            data.shouldNotBeNull().run {
+            data.shouldNotBeNull {
                 this shouldNot beEmpty()
                 forEach {
                     it.shouldBeTypeOf<Snippet>()
@@ -147,9 +147,9 @@ class FossIdClientReturnTypeTest : StringSpec({
             "",
             SCAN_CODE_1,
             "src/main/java/com/vdurmont/semver4j/Requirement.java"
-        ).shouldNotBeNull().run {
+        ).shouldNotBeNull {
             checkResponse("list snippets")
-            data.shouldNotBeNull().run {
+            data.shouldNotBeNull {
                 this shouldNot beEmpty()
                 forEach {
                     it.shouldBeTypeOf<Snippet>()
@@ -165,9 +165,9 @@ class FossIdClientReturnTypeTest : StringSpec({
             SCAN_CODE_2,
             "src/main/java/com/vdurmont/semver4j/Requirement.java",
             119
-        ).shouldNotBeNull().run {
+        ).shouldNotBeNull {
             checkResponse("list matched lines")
-            data.shouldNotBeNull().run {
+            data.shouldNotBeNull {
                 localFile shouldNot beEmpty()
                 mirrorFile shouldNot beEmpty()
             }
@@ -175,16 +175,16 @@ class FossIdClientReturnTypeTest : StringSpec({
     }
 
     "Identified files can be listed when there is none" {
-        service.listIdentifiedFiles("", "", SCAN_CODE_1).shouldNotBeNull().run {
+        service.listIdentifiedFiles("", "", SCAN_CODE_1).shouldNotBeNull {
             checkResponse("list identified files")
             data.shouldNotBeNull() should beEmpty()
         }
     }
 
     "Identified files can be listed when there is some" {
-        service.listIdentifiedFiles("", "", SCAN_CODE_2).shouldNotBeNull().run {
+        service.listIdentifiedFiles("", "", SCAN_CODE_2).shouldNotBeNull {
             checkResponse("list identified files")
-            data.shouldNotBeNull().run {
+            data.shouldNotBeNull {
                 this shouldNot beEmpty()
                 forEach {
                     it.shouldBeTypeOf<IdentifiedFile>()
@@ -194,16 +194,16 @@ class FossIdClientReturnTypeTest : StringSpec({
     }
 
     "Marked as identified  files can be listed when there is none" {
-        service.listMarkedAsIdentifiedFiles("", "", SCAN_CODE_1).shouldNotBeNull().run {
+        service.listMarkedAsIdentifiedFiles("", "", SCAN_CODE_1).shouldNotBeNull {
             checkResponse("list marked as identified files")
             data.shouldNotBeNull() should beEmpty()
         }
     }
 
     "Marked as identified  files can be listed when there is some" {
-        service.listMarkedAsIdentifiedFiles("", "", SCAN_CODE_2).shouldNotBeNull().run {
+        service.listMarkedAsIdentifiedFiles("", "", SCAN_CODE_2).shouldNotBeNull {
             checkResponse("list marked as identified files")
-            data.shouldNotBeNull().run {
+            data.shouldNotBeNull {
                 this shouldNot beEmpty()
                 forEach {
                     it.shouldBeTypeOf<MarkedAsIdentifiedFile>()
@@ -213,16 +213,16 @@ class FossIdClientReturnTypeTest : StringSpec({
     }
 
     "Ignored files can be listed when there is none" {
-        service.listIgnoredFiles("", "", SCAN_CODE_1).shouldNotBeNull().run {
+        service.listIgnoredFiles("", "", SCAN_CODE_1).shouldNotBeNull {
             checkResponse("list ignored files")
             data.shouldNotBeNull() should beEmpty()
         }
     }
 
     "Ignored files can be listed when there is some" {
-        service.listIgnoredFiles("", "", SCAN_CODE_2).shouldNotBeNull().run {
+        service.listIgnoredFiles("", "", SCAN_CODE_2).shouldNotBeNull {
             checkResponse("list ignored files")
-            data.shouldNotBeNull().run {
+            data.shouldNotBeNull {
                 this shouldNot beEmpty()
                 forEach {
                     it.shouldBeTypeOf<IgnoredFile>()
@@ -232,16 +232,16 @@ class FossIdClientReturnTypeTest : StringSpec({
     }
 
     "Pending files can be listed when there is none" {
-        service.listPendingFiles("", "", SCAN_CODE_1).shouldNotBeNull().run {
+        service.listPendingFiles("", "", SCAN_CODE_1).shouldNotBeNull {
             checkResponse("list pending files")
             data.shouldNotBeNull() should beEmpty()
         }
     }
 
     "Pending files can be listed when there is some" {
-        service.listPendingFiles("", "", SCAN_CODE_2).shouldNotBeNull().run {
+        service.listPendingFiles("", "", SCAN_CODE_2).shouldNotBeNull {
             checkResponse("list pending files")
-            data.shouldNotBeNull().run {
+            data.shouldNotBeNull {
                 this shouldNot beEmpty()
                 forEach {
                     it.shouldBeTypeOf<String>()
@@ -251,7 +251,7 @@ class FossIdClientReturnTypeTest : StringSpec({
     }
 
     "When the scan to delete does not exist, no exception is thrown" {
-        service.deleteScan("", "", SCAN_CODE_1).shouldNotBeNull().run {
+        service.deleteScan("", "", SCAN_CODE_1).shouldNotBeNull {
             error shouldBe "Classes.TableRepository.row_not_found"
         }
     }
@@ -263,7 +263,7 @@ class FossIdClientReturnTypeTest : StringSpec({
             SCAN_CODE_1,
             "src/main/java/com/vdurmont/semver4j/Range.java",
             false
-        ).shouldNotBeNull().run {
+        ).shouldNotBeNull {
             checkResponse("mark file as identified")
         }
     }
@@ -275,7 +275,7 @@ class FossIdClientReturnTypeTest : StringSpec({
             SCAN_CODE_1,
             "src/main/java/com/vdurmont/semver4j/Range.java",
             false
-        ).shouldNotBeNull().run {
+        ).shouldNotBeNull {
             checkResponse("unmark file as identified")
         }
     }
@@ -289,7 +289,7 @@ class FossIdClientReturnTypeTest : StringSpec({
             "Apache-2.0",
             LicenseMatchType.SNIPPET,
             false
-        ).shouldNotBeNull().run {
+        ).shouldNotBeNull {
             checkResponse("add license identification")
         }
     }
@@ -304,7 +304,7 @@ class FossIdClientReturnTypeTest : StringSpec({
             "3.0.0",
             isDirectory = false,
             preserveExistingIdentifications = false
-        ).shouldNotBeNull().run {
+        ).shouldNotBeNull {
             checkResponse("add component identification")
         }
     }
@@ -316,7 +316,7 @@ class FossIdClientReturnTypeTest : StringSpec({
             SCAN_CODE_1,
             "src/main/java/com/vdurmont/semver4j/Range.java",
             "TestORT"
-        ).shouldNotBeNull().run {
+        ).shouldNotBeNull {
             checkResponse("add file comment")
         }
     }

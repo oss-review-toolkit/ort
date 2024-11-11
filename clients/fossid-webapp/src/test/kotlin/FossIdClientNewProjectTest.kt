@@ -68,21 +68,21 @@ class FossIdClientNewProjectTest : StringSpec({
     }
 
     "Projects can be listed when there is none" {
-        service.getProject("", "", PROJECT_CODE).shouldNotBeNull().run {
+        service.getProject("", "", PROJECT_CODE).shouldNotBeNull {
             status shouldBe 0
             data should beNull()
         }
     }
 
     "Project can be created" {
-        service.createProject("", "", PROJECT_CODE, PROJECT_CODE).shouldNotBeNull().run {
+        service.createProject("", "", PROJECT_CODE, PROJECT_CODE).shouldNotBeNull {
             checkResponse("create project")
             data.shouldNotBeNull() shouldContain("project_id" to "405")
         }
     }
 
     "Scans for project can be listed when there is no scan" {
-        service.listScansForProject("", "", PROJECT_CODE).shouldNotBeNull().run {
+        service.listScansForProject("", "", PROJECT_CODE).shouldNotBeNull {
             checkResponse("list scans")
             data.shouldNotBeNull() should beEmpty()
         }
@@ -99,26 +99,26 @@ class FossIdClientNewProjectTest : StringSpec({
     }
 
     "Download from Git can be triggered" {
-        service.downloadFromGit("", "", SCAN_CODE).shouldNotBeNull().run {
+        service.downloadFromGit("", "", SCAN_CODE).shouldNotBeNull {
             checkResponse("download data from Git", false)
         }
     }
 
     "Download status can be queried" {
-        service.checkDownloadStatus("", "", SCAN_CODE).shouldNotBeNull().run {
+        service.checkDownloadStatus("", "", SCAN_CODE).shouldNotBeNull {
             checkResponse("check download status")
             data shouldBe DownloadStatus.FINISHED
         }
     }
 
     "A scan can be run" {
-        service.runScan("", "", SCAN_CODE).shouldNotBeNull().run {
+        service.runScan("", "", SCAN_CODE).shouldNotBeNull {
             checkResponse("trigger scan", false)
         }
     }
 
     "A scan can be deleted" {
-        service.deleteScan("", "", SCAN_CODE).shouldNotBeNull().run {
+        service.deleteScan("", "", SCAN_CODE).shouldNotBeNull {
             checkResponse("delete scan")
 
             data?.value shouldBe 2976
@@ -127,7 +127,7 @@ class FossIdClientNewProjectTest : StringSpec({
     }
 
     "Scan status can be queried" {
-        service.checkScanStatus("", "", SCAN_CODE).shouldNotBeNull().run {
+        service.checkScanStatus("", "", SCAN_CODE).shouldNotBeNull {
             checkResponse("get scan status")
 
             data.shouldNotBeNull().status shouldBe ScanStatus.FINISHED
@@ -135,9 +135,9 @@ class FossIdClientNewProjectTest : StringSpec({
     }
 
     "Scan results can be listed" {
-        service.listScanResults("", "", SCAN_CODE).shouldNotBeNull().run {
+        service.listScanResults("", "", SCAN_CODE).shouldNotBeNull {
             checkResponse("list scan results")
-            data.shouldNotBeNull().run {
+            data.shouldNotBeNull {
                 size shouldBe 58
                 last().localPath shouldBe "pom.xml"
             }
@@ -145,12 +145,12 @@ class FossIdClientNewProjectTest : StringSpec({
     }
 
     "Identified files can be listed" {
-        service.listIdentifiedFiles("", "", SCAN_CODE).shouldNotBeNull().run {
+        service.listIdentifiedFiles("", "", SCAN_CODE).shouldNotBeNull {
             checkResponse("list identified files")
-            data.shouldNotBeNull().run {
+            data.shouldNotBeNull {
                 size shouldBe 40
                 last().should {
-                    it.file.shouldNotBeNull().run {
+                    it.file.shouldNotBeNull {
                         path shouldBe "LICENSE.md"
                         licenseIdentifier shouldBe "MIT"
                         licenseIsFoss shouldBe true
@@ -164,16 +164,16 @@ class FossIdClientNewProjectTest : StringSpec({
     }
 
     "Marked files can be listed when there are none" {
-        service.listMarkedAsIdentifiedFiles("", "", SCAN_CODE).shouldNotBeNull().run {
+        service.listMarkedAsIdentifiedFiles("", "", SCAN_CODE).shouldNotBeNull {
             checkResponse("list marked as identified files")
             data.shouldNotBeNull() should beEmpty()
         }
     }
 
     "Ignored files can be listed" {
-        service.listIgnoredFiles("", "", SCAN_CODE).shouldNotBeNull().run {
+        service.listIgnoredFiles("", "", SCAN_CODE).shouldNotBeNull {
             checkResponse("list ignored files")
-            data.shouldNotBeNull().run {
+            data.shouldNotBeNull {
                 size shouldBe 32
                 first() should { ignoredFile ->
                     ignoredFile.path shouldBe ".git/hooks/fsmonitor-watchman.sample"
@@ -184,9 +184,9 @@ class FossIdClientNewProjectTest : StringSpec({
     }
 
     "Pending files can be listed" {
-        service.listPendingFiles("", "", SCAN_CODE).shouldNotBeNull().run {
+        service.listPendingFiles("", "", SCAN_CODE).shouldNotBeNull {
             checkResponse("list pending files")
-            data.shouldNotBeNull().run {
+            data.shouldNotBeNull {
                 size shouldBe 2
                 first() shouldBe "src/extra_file.txt"
             }

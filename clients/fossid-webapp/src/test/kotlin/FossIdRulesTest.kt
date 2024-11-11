@@ -66,10 +66,10 @@ class FossIdRulesTest : StringSpec({
     }
 
     "Ignore rules can be listed" {
-        service.listIgnoreRules("", "", SCAN_CODE).shouldNotBeNull().run {
+        service.listIgnoreRules("", "", SCAN_CODE).shouldNotBeNull {
             checkResponse("list ignore rules")
 
-            data.shouldNotBeNull().run {
+            data.shouldNotBeNull {
                 shouldHaveSize(3)
 
                 shouldContainExactly(
