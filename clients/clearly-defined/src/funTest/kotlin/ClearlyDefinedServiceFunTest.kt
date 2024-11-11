@@ -48,8 +48,10 @@ class ClearlyDefinedServiceFunTest : WordSpec({
                 ClearlyDefinedService.JSON.decodeFromStream<Curation>(it)
             }
 
-            curation.described?.facets?.dev.shouldNotBeNull() should beEmpty()
-            curation.described?.facets?.tests.shouldNotBeNull() should beEmpty()
+            curation.described?.facets.shouldNotBeNull {
+                dev.shouldNotBeNull() should beEmpty()
+                tests.shouldNotBeNull() should beEmpty()
+            }
         }
     }
 
