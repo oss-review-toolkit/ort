@@ -45,7 +45,7 @@ dependencies {
 }
 
 val processResources = tasks.named<Copy>("processResources") {
-    val gradlePluginProject = projects.plugins.packageManagers.gradlePlugin.dependencyProject
+    val gradlePluginProject = project.project(projects.plugins.packageManagers.gradlePlugin.path)
     val gradlePluginJarTask = gradlePluginProject.tasks.named<Jar>("fatJar")
     val gradlePluginJarFile = gradlePluginJarTask.get().outputs.files.singleFile
 
@@ -76,7 +76,7 @@ tasks.named<JacocoReport>("jacocoFunTestReport") {
 }
 
 tasks.named<Test>("funTest") {
-    val gradlePackageManagerProject = projects.plugins.packageManagers.gradlePackageManager.dependencyProject
+    val gradlePackageManagerProject = project.project(projects.plugins.packageManagers.gradlePackageManager.path)
     val gradlePackageManagerFunTestTask = gradlePackageManagerProject.tasks.named<Test>("funTest")
 
     // Enforce ordering to avoid conflicts e.g. during Android SDK component installation.
