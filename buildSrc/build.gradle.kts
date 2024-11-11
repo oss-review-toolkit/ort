@@ -17,11 +17,6 @@
  * License-Filename: LICENSE
  */
 
-import org.gradle.accessors.dm.LibrariesForLibs
-
-private val Project.libs: LibrariesForLibs
-    get() = extensions.getByType()
-
 plugins {
     // Use Kotlin DSL to write precompiled script plugins.
     `kotlin-dsl`
