@@ -89,6 +89,28 @@
                     "items": {
                         "$ref": "#/definitions/SourceCodeOrigins"
                     }
+                },
+                "versionControlSystems": {
+                    "type": "object",
+                    "properties": {
+                        "Git": {
+                            "type": "object",
+                            "properties": {
+                                "options": {
+                                    "type": "object",
+                                    "properties": {
+                                        "submoduleHistoryDepth": {
+                                            "type": "integer",
+                                            "minimum": 1
+                                        },
+                                        "updateNestedSubmodules": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         },

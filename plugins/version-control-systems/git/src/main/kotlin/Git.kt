@@ -45,10 +45,13 @@ import org.eclipse.jgit.transport.sshd.ServerKeyDatabase
 import org.eclipse.jgit.transport.sshd.SshdSessionFactory
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.downloader.VersionControlSystemConfiguration
+import org.ossreviewtoolkit.downloader.VersionControlSystemFactory
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeMkdirs
@@ -117,8 +120,17 @@ class Git : VersionControlSystem(GitCommand) {
     }
 
     override val type = VcsType.GIT.toString()
-    override val priority = 100
     override val latestRevisionNames = listOf("HEAD", "@")
+
+    class Factory : VersionControlSystemFactory<VersionControlSystemConfiguration>(VcsType.GIT.toString(), 100) {
+        override fun create(config: VersionControlSystemConfiguration): VersionControlSystem {
+            return Git()
+        }
+
+        override fun parseConfig(options: Options, secrets: Options): VersionControlSystemConfiguration {
+            return VersionControlSystemConfiguration() // No specific Subversion configuration yet.
+        }
+    }
 
     override fun getVersion() = GitCommand.getVersion(null)
 

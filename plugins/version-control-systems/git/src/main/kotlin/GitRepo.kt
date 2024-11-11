@@ -33,11 +33,14 @@ import org.apache.logging.log4j.kotlin.logger
 import org.eclipse.jgit.lib.SymbolicRef
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.downloader.VersionControlSystemConfiguration
+import org.ossreviewtoolkit.downloader.VersionControlSystemFactory
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.utils.parseRepoManifestPath
 import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.collectMessages
@@ -86,10 +89,21 @@ object GitRepoCommand : CommandLineTool {
     override fun displayName(): String = "GitRepo"
 }
 
-class GitRepo : VersionControlSystem(GitRepoCommand) {
+@Suppress("UnusedPrivateProperty")
+class GitRepo internal constructor() : VersionControlSystem(GitRepoCommand) {
+
     override val type = VcsType.GIT_REPO.toString()
-    override val priority = 50
     override val latestRevisionNames = listOf("HEAD", "@")
+
+    class Factory : VersionControlSystemFactory<VersionControlSystemConfiguration>(VcsType.GIT_REPO.toString(), 50) {
+        override fun create(config: VersionControlSystemConfiguration): VersionControlSystem {
+            return GitRepo()
+        }
+
+        override fun parseConfig(options: Options, secrets: Options): VersionControlSystemConfiguration {
+            return VersionControlSystemConfiguration() // No specific configuration for GitRepo yet.
+        }
+    }
 
     override fun getVersion() = GitRepoCommand.getVersion(null)
 
@@ -136,7 +150,8 @@ class GitRepo : VersionControlSystem(GitRepoCommand) {
 
                     paths.forEach { path ->
                         // Add the nested Repo project.
-                        val workingTree = Git().getWorkingTree(getRootPath().resolve(path))
+                        val workingTree = Git.Factory().create(VersionControlSystemConfiguration())
+                            .getWorkingTree(getRootPath().resolve(path))
                         nested[path] = workingTree.getInfo()
 
                         // Add the Git submodules of the nested Repo project.

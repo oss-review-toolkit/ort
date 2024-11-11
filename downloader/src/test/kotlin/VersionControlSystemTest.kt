@@ -87,7 +87,8 @@ class VersionControlSystemTest : WordSpec({
 
             every { workingTree.guessRevisionName(any(), any()) } returns "v1.6.0"
 
-            Git().getRevisionCandidates(workingTree, pkg, allowMovingRevisions = true) shouldBeSuccess listOf(
+            Git.Factory().create(VersionControlSystemConfiguration())
+                .getRevisionCandidates(workingTree, pkg, allowMovingRevisions = true) shouldBeSuccess listOf(
                 "v1.6.0"
             )
         }
@@ -110,7 +111,8 @@ class VersionControlSystemTest : WordSpec({
             every { workingTree.listRemoteBranches() } returns listOf("main")
             every { workingTree.listRemoteTags() } returns emptyList()
 
-            Git().getRevisionCandidates(workingTree, pkg, allowMovingRevisions = true) shouldBeSuccess listOf(
+            Git.Factory().create(VersionControlSystemConfiguration())
+                .getRevisionCandidates(workingTree, pkg, allowMovingRevisions = true) shouldBeSuccess listOf(
                 "master",
                 "main"
             )
