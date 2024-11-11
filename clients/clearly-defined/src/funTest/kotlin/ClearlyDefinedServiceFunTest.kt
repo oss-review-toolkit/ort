@@ -119,7 +119,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
 
             val summary = service.putCuration(ContributionPatch(info, listOf(patch)))
 
-            summary.shouldNotBeNull().run {
+            summary.shouldNotBeNull {
                 prNumber shouldBeGreaterThan 0
                 url shouldStartWith "${Server.DEVELOPMENT.projectUrl}/pull/"
             }
@@ -139,7 +139,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
             val curations = service.getDefinitions(listOf(coordinates))
 
             curations shouldHaveSize 1
-            curations[coordinates]?.files?.get(11)?.facets.shouldNotBeNull().run {
+            curations[coordinates]?.files?.get(11)?.facets.shouldNotBeNull {
                 this shouldContain "tests"
             }
         }
