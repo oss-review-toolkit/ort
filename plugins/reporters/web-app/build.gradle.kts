@@ -24,9 +24,10 @@ plugins {
 
 val generatedResourcesDir = layout.buildDirectory.dir("generated-resources/main")
 val copyWebAppTemplate by tasks.registering(Copy::class) {
-    dependsOn(projects.plugins.reporters.webAppTemplate.dependencyProject.tasks["yarnBuild"])
+    val webAppTemplateProject = project.project(projects.plugins.reporters.webAppTemplate.path)
+    dependsOn(webAppTemplateProject.tasks["yarnBuild"])
 
-    from(projects.plugins.reporters.webAppTemplate.dependencyProject.file("build")) {
+    from(webAppTemplateProject.file("build")) {
         include("scan-report-template.html")
     }
 
