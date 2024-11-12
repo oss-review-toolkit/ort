@@ -64,7 +64,6 @@ import org.ossreviewtoolkit.utils.spdx.model.SpdxPackage
 import org.ossreviewtoolkit.utils.spdx.model.SpdxRelationship
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
-private const val MANAGER_NAME = "SpdxDocumentFile"
 private const val DEFAULT_SCOPE_NAME = "default"
 
 private val SPDX_LINKAGE_RELATIONSHIPS = mapOf(
@@ -261,7 +260,7 @@ class SpdxDocumentFile(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(managerName, analysisRoot, analyzerConfig, repoConfig) {
-    class Factory : AbstractPackageManagerFactory<SpdxDocumentFile>(MANAGER_NAME) {
+    class Factory : AbstractPackageManagerFactory<SpdxDocumentFile>("SpdxDocumentFile") {
         override val globsForDefinitionFiles = listOf("*.spdx.yml", "*.spdx.yaml", "*.spdx.json")
 
         override fun create(
