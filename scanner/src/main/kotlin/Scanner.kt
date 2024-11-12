@@ -71,7 +71,6 @@ import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 const val TOOL_NAME = "scanner"
 
-@Suppress("TooManyFunctions")
 class Scanner(
     val scannerConfig: ScannerConfiguration,
     val downloaderConfig: DownloaderConfiguration,
