@@ -81,6 +81,7 @@ private fun KnownProvenance.hash(): String {
     val key = when (this) {
         is ArtifactProvenance -> "${sourceArtifact.url}${sourceArtifact.hash.value}"
         is RepositoryProvenance -> "${vcsInfo.type}${vcsInfo.url}$resolvedRevision"
+        else -> ""
     }
 
     return HashAlgorithm.SHA1.calculate(key.toByteArray())
