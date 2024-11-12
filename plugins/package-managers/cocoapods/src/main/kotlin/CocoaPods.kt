@@ -68,7 +68,7 @@ class CocoaPods(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, "CocoaPods", analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
     class Factory : AbstractPackageManagerFactory<CocoaPods>("CocoaPods") {
         override val globsForDefinitionFiles = listOf("Podfile")
 

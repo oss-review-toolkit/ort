@@ -51,7 +51,7 @@ class Pnpm(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, "PNPM", analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
     class Factory : AbstractPackageManagerFactory<Pnpm>("PNPM") {
         override val globsForDefinitionFiles = listOf("package.json", "pnpm-lock.yaml")
 

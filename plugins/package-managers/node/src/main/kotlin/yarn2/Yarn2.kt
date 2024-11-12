@@ -114,7 +114,7 @@ class Yarn2(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, "Yarn2", analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
     companion object {
         /**
          * The name of the option to disable HTTPS server certificate verification.

@@ -54,12 +54,13 @@ typealias ManagedProjectFiles = Map<PackageManagerFactory, List<File>>
 typealias ProjectResults = Map<File, List<ProjectAnalyzerResult>>
 
 /**
- * A class representing a package manager that handles software dependencies. The package manager is referred to by its
- * [managerName]. The analysis of any projects and their dependencies starts in the [analysisRoot] directory using the
+ * A class to represent a package manager of the given [managerName] that handles dependencies for the given
+ * [projectType]. The analysis of any projects and their dependencies starts in the [analysisRoot] directory using the
  * given general [analyzerConfig]. Per-repository configuration is passed in [repoConfig].
  */
 abstract class PackageManager(
     val managerName: String,
+    val projectType: String,
     val analysisRoot: File,
     val analyzerConfig: AnalyzerConfiguration,
     val repoConfig: RepositoryConfiguration

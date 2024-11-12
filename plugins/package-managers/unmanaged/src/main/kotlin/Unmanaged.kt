@@ -45,7 +45,7 @@ class Unmanaged(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
+) : PackageManager(name, "Unmanaged", analysisRoot, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Unmanaged>("Unmanaged") {
         // The empty list returned here deliberately causes this special package manager to never be considered in
         // PackageManager.findManagedFiles(). Instead, it will only be explicitly instantiated as part of
