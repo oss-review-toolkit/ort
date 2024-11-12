@@ -39,7 +39,7 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@d156388eb19639ec20ade50009f3d199ce1e2808 # v4
     - name: Build all classes
-      run: ./gradlew -Dorg.gradle.jvmargs=-Xmx1g classes
+      run: ./gradlew -Dorg.gradle.jvmargs=-Xmx1g --no-build-cache classes
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@9278e421667d5d90a2839487a482448c4ec7df4d # v3
   test:
