@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.analyzer
 
+import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.DependencyGraphNavigator
@@ -58,12 +59,16 @@ class AnalyzerResultBuilder {
             val existingProject = projects.find { it.id == projectAnalyzerResult.project.id }
 
             if (existingProject != null) {
-                val existingDefinitionFileUrl = existingProject.let {
-                    "${it.vcsProcessed.url}/${it.definitionFilePath}"
+                val existingDefinitionFileUrl = with(existingProject) {
+                    VcsHost.fromUrl(vcsProcessed.url)
+                        ?.toPermalink(vcsProcessed.copy(path = definitionFilePath))
+                        ?: "${vcsProcessed.url}/$definitionFilePath"
                 }
 
-                val incomingDefinitionFileUrl = projectAnalyzerResult.project.let {
-                    "${it.vcsProcessed.url}/${it.definitionFilePath}"
+                val incomingDefinitionFileUrl = with(projectAnalyzerResult.project) {
+                    VcsHost.fromUrl(vcsProcessed.url)
+                        ?.toPermalink(vcsProcessed.copy(path = definitionFilePath))
+                        ?: "${vcsProcessed.url}/$definitionFilePath"
                 }
 
                 val issue = createAndLogIssue(
