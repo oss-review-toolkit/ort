@@ -62,7 +62,6 @@ private val ALL_SCOPE_NAMES = setOf(SCOPE_NAME_REQUIRE, SCOPE_NAME_REQUIRE_DEV)
 /**
  * The [Composer](https://getcomposer.org/) package manager for PHP.
  */
-@Suppress("TooManyFunctions")
 class Composer(
     name: String,
     analysisRoot: File,
