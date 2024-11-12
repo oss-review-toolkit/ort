@@ -23,7 +23,6 @@ import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -78,6 +77,6 @@ private fun createRepositoryProvenance(
 ) = RepositoryProvenance(vcsInfo, resolvedRevision)
 
 private fun createNestedProvenance(
-    root: KnownProvenance,
+    root: RepositoryProvenance,
     subRepositories: Map<String, RepositoryProvenance> = emptyMap()
 ) = NestedProvenance(root, subRepositories)
