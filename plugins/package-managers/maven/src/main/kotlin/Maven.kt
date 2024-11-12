@@ -59,7 +59,7 @@ class Maven(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
+) : PackageManager(name, "Maven", analysisRoot, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Maven>("Maven") {
         override val globsForDefinitionFiles = listOf("pom.xml")
 

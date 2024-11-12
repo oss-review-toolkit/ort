@@ -83,7 +83,7 @@ class Conan(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, "Conan", analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
     companion object {
         /**
          * The name of the option to specify the name of the lockfile.

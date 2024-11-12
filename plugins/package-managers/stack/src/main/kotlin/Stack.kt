@@ -66,7 +66,7 @@ class Stack(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, "Stack", analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
     class Factory : AbstractPackageManagerFactory<Stack>("Stack") {
         override val globsForDefinitionFiles = listOf("stack.yaml")
 

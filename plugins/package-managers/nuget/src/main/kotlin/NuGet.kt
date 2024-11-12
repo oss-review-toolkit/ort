@@ -41,7 +41,7 @@ class NuGet(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
+) : PackageManager(name, "NuGet", analysisRoot, analyzerConfig, repoConfig) {
     companion object {
         const val OPTION_NUGET_CONFIG = "nugetConfigFile"
     }

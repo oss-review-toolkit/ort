@@ -61,7 +61,7 @@ class Pip(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
+) : PackageManager(name, "PIP", analysisRoot, analyzerConfig, repoConfig) {
     companion object {
         const val OPTION_OPERATING_SYSTEM = "operatingSystem"
         const val OPTION_PYTHON_VERSION = "pythonVersion"

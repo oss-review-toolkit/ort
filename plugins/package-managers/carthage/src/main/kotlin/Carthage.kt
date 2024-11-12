@@ -51,7 +51,7 @@ class Carthage(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
+) : PackageManager(name, "Carthage", analysisRoot, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Carthage>("Carthage") {
         // TODO: Add support for the Cartfile.
         //       This would require to resolve the actual dependency versions as a Cartfile supports dynamic versions.

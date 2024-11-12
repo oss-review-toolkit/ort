@@ -67,7 +67,7 @@ class Npm(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, "NPM", analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
     companion object {
         /** Name of the configuration option to toggle legacy peer dependency support. */
         const val OPTION_LEGACY_PEER_DEPS = "legacyPeerDeps"

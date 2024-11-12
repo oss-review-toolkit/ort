@@ -79,7 +79,7 @@ class Bazel(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, "Bazel", analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
     class Factory : AbstractPackageManagerFactory<Bazel>("Bazel") {
         override val globsForDefinitionFiles = listOf("MODULE", "MODULE.bazel")
 

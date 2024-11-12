@@ -54,7 +54,7 @@ class Bower(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, "Bower", analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
     class Factory : AbstractPackageManagerFactory<Bower>("Bower") {
         override val globsForDefinitionFiles = listOf("bower.json")
 

@@ -59,7 +59,7 @@ class SwiftPm(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, "SwiftPM", analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
     class Factory : AbstractPackageManagerFactory<SwiftPm>("SwiftPM") {
         override val globsForDefinitionFiles = listOf(PACKAGE_SWIFT_NAME, PACKAGE_RESOLVED_NAME)
 
