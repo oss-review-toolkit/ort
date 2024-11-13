@@ -322,7 +322,7 @@ class Yarn2(
             .forEach { (dependencyType, allScopedDependencies) ->
                 allProjects.values.forEach { project ->
                     val dependencies = allScopedDependencies[project.id]
-                    val dependenciesInfo = dependencies?.mapNotNull { dependency ->
+                    val dependenciesInfo = dependencies?.mapNotNullTo(mutableSetOf()) { dependency ->
                         if ("Yarn2" in dependency.type) {
                             val projectAsDependency = allProjects.entries.find { entry ->
                                 entry.key.type == "Yarn2" && entry.key.name == dependency.name &&
@@ -360,7 +360,7 @@ class Yarn2(
                                 )
                             }
                         }
-                    }?.toSet().orEmpty()
+                    }.orEmpty()
 
                     graphBuilder.addDependencies(project.id, dependencyType.type, dependenciesInfo)
                 }
