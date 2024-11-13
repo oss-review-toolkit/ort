@@ -94,7 +94,8 @@ interface ClearlyDefinedService {
      */
     enum class Server(val apiUrl: String, val webUrl: String? = null, val projectUrl: String? = null) {
         /**
-         * The production server.
+         * The production server. Endpoints are rate limited (e.g. "/curations" to 250 requests per minute), see
+         * https://docs.clearlydefined.io/docs/get-involved/using-data#production-instance-rate-limits
          */
         PRODUCTION(
             "https://api.clearlydefined.io",
@@ -103,7 +104,8 @@ interface ClearlyDefinedService {
         ),
 
         /**
-         * The development server.
+         * The development server. Endpoints are rate limited (e.g. "/curations" to 250 requests per minute), see
+         * https://docs.clearlydefined.io/docs/get-involved/using-data#development-instance-rate-limits.
          */
         DEVELOPMENT(
             "https://dev-api.clearlydefined.io",
