@@ -36,13 +36,9 @@ import org.gradle.tooling.model.build.BuildEnvironment
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
-import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
-import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.Severity
-import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -243,29 +239,13 @@ class GradleInspector(
             createAndLogIssue(source = managerName, message = it, severity = Severity.WARNING)
         }
 
-        val projectId = Identifier(
-            type = "Gradle",
-            namespace = dependencyTreeModel.group,
-            name = dependencyTreeModel.name,
-            version = dependencyTreeModel.version
-        )
+        val project = with(dependencyTreeModel) { graphBuilder.createProject(group, name, version, definitionFile) }
 
         dependencyTreeModel.configurations.filterNot {
             excludes.isScopeExcluded(it.name)
         }.forEach { configuration ->
-            graphBuilder.addDependencies(projectId, configuration.name, configuration.dependencies)
+            graphBuilder.addDependencies(project.id, configuration.name, configuration.dependencies)
         }
-
-        val project = Project(
-            id = projectId,
-            definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-            authors = emptySet(),
-            declaredLicenses = emptySet(),
-            vcs = VcsInfo.EMPTY,
-            vcsProcessed = processProjectVcs(definitionFile.parentFile),
-            homepageUrl = "",
-            scopeNames = graphBuilder.scopesFor(projectId)
-        )
 
         val result = ProjectAnalyzerResult(project, emptySet(), issues)
         return listOf(result)
