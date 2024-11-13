@@ -17,8 +17,6 @@
  * License-Filename: LICENSE
  */
 
-@file:Suppress("TooManyFunctions")
-
 package org.ossreviewtoolkit.plugins.packagemanagers.node.npm
 
 import java.io.File
