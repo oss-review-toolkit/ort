@@ -121,10 +121,11 @@ class Maven(
             version = mavenProject.version
         )
 
-        projectBuildingResult.dependencies.filterNot { excludes.isScopeExcluded(it.dependency.scope) }
-            .forEach { node ->
-                graphBuilder.addDependency(DependencyGraph.qualifyScope(projectId, node.dependency.scope), node)
-            }
+        projectBuildingResult.dependencies.filterNot {
+            excludes.isScopeExcluded(it.dependency.scope)
+        }.forEach { node ->
+            graphBuilder.addDependency(DependencyGraph.qualifyScope(projectId, node.dependency.scope), node)
+        }
 
         val declaredLicenses = parseLicenses(mavenProject)
         val declaredLicensesProcessed = processDeclaredLicenses(declaredLicenses)
