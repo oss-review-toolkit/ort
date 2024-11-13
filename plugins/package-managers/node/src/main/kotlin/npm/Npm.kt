@@ -29,7 +29,6 @@ import org.apache.logging.log4j.kotlin.logger
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
-import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
@@ -115,11 +114,8 @@ class Npm(
             .filterNot { excludes.isScopeExcluded(it.descriptor) }
             .mapTo(mutableSetOf()) { scope ->
                 val scopeName = scope.descriptor
-                val qualifiedScopeName = DependencyGraph.qualifyScope(project, scopeName)
 
-                projectModuleInfo.getScopeDependencies(scope).forEach { dependency ->
-                    graphBuilder.addDependency(qualifiedScopeName, dependency)
-                }
+                graphBuilder.addDependencies(project.id, scopeName, projectModuleInfo.getScopeDependencies(scope))
 
                 scopeName
             }

@@ -39,7 +39,6 @@ import org.apache.logging.log4j.kotlin.loggerOf
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
-import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Project
@@ -292,10 +291,9 @@ open class Yarn(
     ): String? {
         if (excludes.isScopeExcluded(targetScope)) return null
 
-        val qualifiedScopeName = DependencyGraph.qualifyScope(project, targetScope)
         val moduleInfo = checkNotNull(getModuleInfo(workingDir, scopes, projectDirs, listOfNotNull(workspaceDir)))
 
-        moduleInfo.dependencies.forEach { graphBuilder.addDependency(qualifiedScopeName, it) }
+        graphBuilder.addDependencies(project.id, targetScope, moduleInfo.dependencies)
 
         return targetScope.takeUnless { moduleInfo.dependencies.isEmpty() }
     }

@@ -26,7 +26,6 @@ import org.apache.logging.log4j.kotlin.logger
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
-import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -85,12 +84,9 @@ class Pnpm(
 
             val scopeNames = Scope.entries.mapTo(mutableSetOf()) { scope ->
                 val scopeName = scope.descriptor
-                val qualifiedScopeName = DependencyGraph.qualifyScope(project, scopeName)
                 val moduleInfo = moduleInfosForScope.getValue(scope).single { it.path == projectDir.absolutePath }
 
-                moduleInfo.getScopeDependencies(scope).forEach { dependency ->
-                    graphBuilder.addDependency(qualifiedScopeName, dependency)
-                }
+                graphBuilder.addDependencies(project.id, scopeName, moduleInfo.getScopeDependencies(scope))
 
                 scopeName
             }

@@ -37,7 +37,6 @@ import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Project
@@ -254,12 +253,7 @@ class GradleInspector(
         dependencyTreeModel.configurations.filterNot {
             excludes.isScopeExcluded(it.name)
         }.forEach { configuration ->
-            configuration.dependencies.forEach { dependency ->
-                graphBuilder.addDependency(
-                    DependencyGraph.qualifyScope(projectId, configuration.name),
-                    dependency
-                )
-            }
+            graphBuilder.addDependencies(projectId, configuration.name, configuration.dependencies)
         }
 
         val project = Project(
