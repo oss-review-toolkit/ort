@@ -150,7 +150,7 @@ class GitRepo internal constructor() : VersionControlSystem(GitRepoCommand) {
 
                     paths.forEach { path ->
                         // Add the nested Repo project.
-                        val workingTree = Git.Factory().create(VersionControlSystemConfiguration())
+                        val workingTree = Git.Factory().create(GitConfiguration())
                             .getWorkingTree(getRootPath().resolve(path))
                         nested[path] = workingTree.getInfo()
 

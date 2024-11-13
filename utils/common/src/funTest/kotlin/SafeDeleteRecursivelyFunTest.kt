@@ -26,11 +26,11 @@ import io.kotest.matchers.shouldBe
 
 import java.io.IOException
 
-import org.ossreviewtoolkit.downloader.VersionControlSystemConfiguration
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.Git
+import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.GitConfiguration
 
 class SafeDeleteRecursivelyFunTest : WordSpec({
     "File.safeDeleteRecursively()" should {
@@ -59,7 +59,7 @@ class SafeDeleteRecursivelyFunTest : WordSpec({
             )
 
             val nodeDir = tempdir().resolve("node-dir")
-            Git.Factory().create(VersionControlSystemConfiguration())
+            Git.Factory().create(GitConfiguration())
                 .download(pkg, nodeDir)
 
             shouldNotThrow<IOException> {

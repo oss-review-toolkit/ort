@@ -34,6 +34,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.Git
+import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.GitConfiguration
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 
 class VersionControlSystemTest : WordSpec({
@@ -87,7 +88,7 @@ class VersionControlSystemTest : WordSpec({
 
             every { workingTree.guessRevisionName(any(), any()) } returns "v1.6.0"
 
-            Git.Factory().create(VersionControlSystemConfiguration())
+            Git.Factory().create(GitConfiguration())
                 .getRevisionCandidates(workingTree, pkg, allowMovingRevisions = true) shouldBeSuccess listOf(
                 "v1.6.0"
             )
@@ -111,7 +112,7 @@ class VersionControlSystemTest : WordSpec({
             every { workingTree.listRemoteBranches() } returns listOf("main")
             every { workingTree.listRemoteTags() } returns emptyList()
 
-            Git.Factory().create(VersionControlSystemConfiguration())
+            Git.Factory().create(GitConfiguration())
                 .getRevisionCandidates(workingTree, pkg, allowMovingRevisions = true) shouldBeSuccess listOf(
                 "master",
                 "main"
