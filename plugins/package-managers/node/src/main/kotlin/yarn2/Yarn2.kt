@@ -37,7 +37,6 @@ import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
@@ -322,7 +321,6 @@ class Yarn2(
         allDependencies.filterNot { excludes.isScopeExcluded(it.key.type) }
             .forEach { (dependencyType, allScopedDependencies) ->
                 allProjects.values.forEach { project ->
-                    val qualifiedScopeName = DependencyGraph.qualifyScope(project.id, dependencyType.type)
                     val dependencies = allScopedDependencies[project.id]
                     val dependenciesInfo = dependencies?.mapNotNull { dependency ->
                         if ("Yarn2" in dependency.type) {
@@ -364,9 +362,7 @@ class Yarn2(
                         }
                     }?.toSet().orEmpty()
 
-                    dependenciesInfo.forEach {
-                        graphBuilder.addDependency(qualifiedScopeName, it)
-                    }
+                    graphBuilder.addDependencies(project.id, dependencyType.type, dependenciesInfo)
                 }
             }
 

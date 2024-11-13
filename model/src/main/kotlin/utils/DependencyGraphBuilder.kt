@@ -149,6 +149,15 @@ class DependencyGraphBuilder<D>(
         apply { addDependencyToGraph(scopeName, dependency, transitive = false, emptySet()) }
 
     /**
+     * Add all [dependencies] to the qualified scope name generated from the [projectId] and unqualified [scopeName].
+     */
+    fun addDependencies(projectId: Identifier, scopeName: String, dependencies: Collection<D>) =
+        apply {
+            val qualifiedScopeName = DependencyGraph.qualifyScope(projectId, scopeName)
+            dependencies.forEach { addDependency(qualifiedScopeName, it) }
+        }
+
+    /**
      * Add the given [packages] to this builder. They are stored internally and also returned when querying the set of
      * known packages. This function can be used by package managers that have to deal with packages not part of
      * normal scope dependencies. One example would be Yarn; here packages can be defined in the workspace and are not
