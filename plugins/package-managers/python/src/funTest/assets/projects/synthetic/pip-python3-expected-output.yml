@@ -21,7 +21,7 @@ project:
     - id: "PyPI::django:2.2.20"
       dependencies:
       - id: "PyPI::pytz:2024.2"
-      - id: "PyPI::sqlparse:0.5.1"
+      - id: "PyPI::sqlparse:0.5.2"
 packages:
 - id: "PyPI::django:2.2.20"
   purl: "pkg:pypi/django@2.2.20"
@@ -91,8 +91,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "PyPI::sqlparse:0.5.1"
-  purl: "pkg:pypi/sqlparse@0.5.1"
+- id: "PyPI::sqlparse:0.5.2"
+  purl: "pkg:pypi/sqlparse@0.5.2"
   authors:
   - "Andi Albrecht <albrecht.andi@gmail.com>"
   declared_licenses:
@@ -103,14 +103,14 @@ packages:
   description: "A non-validating SQL parser."
   homepage_url: ""
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/5d/a5/b2860373aa8de1e626b2bdfdd6df4355f0565b47e51f7d0c54fe70faf8fe/sqlparse-0.5.1-py3-none-any.whl"
+    url: "https://files.pythonhosted.org/packages/7a/13/5f6654c9d915077fae255686ca6fa42095b62b7337e3e1aa9e82caa6f43a/sqlparse-0.5.2-py3-none-any.whl"
     hash:
-      value: "773dcbf9a5ab44a090f3441e2180efe2560220203dc2f8c0b0fa141e18b505e4"
+      value: "e99bc85c78160918c3e1d9230834ab8d80fc06c59d03f8db2618f65f65dda55e"
       algorithm: "SHA-256"
   source_artifact:
-    url: "https://files.pythonhosted.org/packages/73/82/dfa23ec2cbed08a801deab02fe7c904bfb00765256b155941d789a338c68/sqlparse-0.5.1.tar.gz"
+    url: "https://files.pythonhosted.org/packages/57/61/5bc3aff85dc5bf98291b37cf469dab74b3d0aef2dd88eade9070a200af05/sqlparse-0.5.2.tar.gz"
     hash:
-      value: "bb6b4df465655ef332548e24f08e205afc81b9ab86cb1c45657a7ff173a3a00e"
+      value: "9e37b35e16d1cc652a2545f0997c1deb23ea28fa1f3eefe609eee3063c3b105f"
       algorithm: "SHA-256"
   vcs:
     type: ""
