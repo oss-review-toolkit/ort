@@ -34,6 +34,7 @@ import io.mockk.spyk
 import java.io.File
 
 import org.ossreviewtoolkit.model.PackageType
+import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
 import org.ossreviewtoolkit.utils.common.ProcessCapture
@@ -142,6 +143,21 @@ class ScanCodeTest : WordSpec({
                     SPDX License list version: 3.16
                 """.trimIndent()
             ) shouldBe "31.0.0b4"
+        }
+    }
+
+    "parseDetails()" should {
+        "return details for a raw scan result" {
+            val resultFile = File("src/test/assets/scancode-with-issues.json")
+            val result = resultFile.readText()
+
+            scanner.parseDetails(result) shouldBe ScannerDetails(
+                name = "ScanCode",
+                version = "30.1.0",
+                configuration = "--copyright true --info true " +
+                    "--json-pp C:\\temp\\ort\\projects\\test-result\\result.json --license true --max-in-memory 5000 " +
+                    "--processes 3 --strip-root true --timeout 300.0"
+            )
         }
     }
 })
