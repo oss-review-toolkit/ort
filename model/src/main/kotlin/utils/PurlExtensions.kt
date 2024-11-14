@@ -102,6 +102,8 @@ fun Provenance.toPurlExtras(): PurlExtras =
         }
 
         is UnknownProvenance -> PurlExtras()
+
+        else -> PurlExtras()
     }
 
 /**
