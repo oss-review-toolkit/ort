@@ -19,8 +19,15 @@
 
 package org.ossreviewtoolkit.scanner.utils
 
+import java.io.File
+
+import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.ProvenanceResolutionResult
 import org.ossreviewtoolkit.model.RepositoryProvenance
+import org.ossreviewtoolkit.model.ScanResult
+import org.ossreviewtoolkit.model.utils.getKnownProvenancesWithoutVcsPath
+import org.ossreviewtoolkit.model.utils.vcsPath
 import org.ossreviewtoolkit.scanner.ScanStorageException
 
 /**
@@ -31,3 +38,55 @@ internal fun requireEmptyVcsPath(provenance: Provenance) {
         throw ScanStorageException("Repository provenances with a non-empty VCS path are not supported.")
     }
 }
+
+/**
+ * Return a map of VCS paths for each [KnownProvenance] contained in [provenances].
+ */
+fun getVcsPathsForProvenances(provenances: Set<ProvenanceResolutionResult>) =
+    buildMap<KnownProvenance, MutableSet<String>> {
+        provenances.forEach { provenance ->
+            val packageVcsPath = provenance.packageProvenance?.vcsPath.orEmpty()
+
+            provenance.getKnownProvenancesWithoutVcsPath().forEach { (repositoryPath, provenance) ->
+                getVcsPathForRepositoryOrNull(packageVcsPath, repositoryPath)?.let { vcsPath ->
+                    getOrPut(provenance) { mutableSetOf() } += vcsPath
+                }
+            }
+        }
+    }
+
+/**
+ * Filter [ScanResult]s by the VCS paths of the [KnownProvenance]s contained in [vcsPathsForProvenances].
+ */
+fun filterScanResultsByVcsPaths(
+    allScanResults: List<ScanResult>,
+    vcsPathsForProvenances: Map<KnownProvenance, MutableSet<String>>
+) = allScanResults.map { scanResult ->
+    scanResult.copy(provenance = scanResult.provenance.alignRevisions())
+}.mapNotNullTo(mutableSetOf()) { scanResult ->
+    vcsPathsForProvenances[scanResult.provenance]?.let {
+        scanResult.copy(summary = scanResult.summary.filterByPaths(it))
+    }
+}
+
+/**
+ * Return the VCS path applicable to a (sub-) repository which appears under [repositoryPath] in the source tree of
+ * a package residing in [vcsPath], or null if the subtrees for [repositoryPath] and [vcsPath] are disjoint.
+ */
+private fun getVcsPathForRepositoryOrNull(vcsPath: String, repositoryPath: String): String? {
+    val repoPathFile = File(repositoryPath)
+    val vcsPathFile = File(vcsPath)
+
+    return if (repoPathFile.startsWith(vcsPathFile)) {
+        ""
+    } else {
+        runCatching { vcsPathFile.toRelativeString(repoPathFile) }.getOrNull()
+    }
+}
+
+internal fun <T : Provenance> T.alignRevisions(): Provenance =
+    if (this is RepositoryProvenance) {
+        copy(vcsInfo = vcsInfo.copy(revision = resolvedRevision))
+    } else {
+        this
+    }

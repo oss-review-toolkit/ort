@@ -39,9 +39,7 @@ import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageType
-import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.ProvenanceResolutionResult
-import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerRun
@@ -54,7 +52,6 @@ import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.mapLicense
 import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.model.utils.ProvenanceFileStorage
-import org.ossreviewtoolkit.model.utils.getKnownProvenancesWithoutVcsPath
 import org.ossreviewtoolkit.model.utils.vcsPath
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceResolver
@@ -62,6 +59,9 @@ import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceScanResult
 import org.ossreviewtoolkit.scanner.provenance.PackageProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.ProvenanceDownloader
 import org.ossreviewtoolkit.scanner.utils.FileListResolver
+import org.ossreviewtoolkit.scanner.utils.alignRevisions
+import org.ossreviewtoolkit.scanner.utils.filterScanResultsByVcsPaths
+import org.ossreviewtoolkit.scanner.utils.getVcsPathsForProvenances
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
@@ -190,25 +190,9 @@ class Scanner(
             ).filterByVcsPath()
         }
 
-        val vcsPathsForProvenances = buildMap<KnownProvenance, MutableSet<String>> {
-            provenances.forEach { provenance ->
-                val packageVcsPath = provenance.packageProvenance?.vcsPath.orEmpty()
+        val vcsPathsForProvenances = getVcsPathsForProvenances(provenances)
 
-                provenance.getKnownProvenancesWithoutVcsPath().forEach { (repositoryPath, provenance) ->
-                    getVcsPathForRepositoryOrNull(packageVcsPath, repositoryPath)?.let { vcsPath ->
-                        getOrPut(provenance) { mutableSetOf() } += vcsPath
-                    }
-                }
-            }
-        }
-
-        val scanResults = controller.getAllScanResults().map { scanResult ->
-            scanResult.copy(provenance = scanResult.provenance.alignRevisions())
-        }.mapNotNullTo(mutableSetOf()) { scanResult ->
-            vcsPathsForProvenances[scanResult.provenance]?.let {
-                scanResult.copy(summary = scanResult.summary.filterByPaths(it))
-            }
-        }
+        val filteredScanResults = filterScanResultsByVcsPaths(controller.getAllScanResults(), vcsPathsForProvenances)
 
         val files = controller.getAllFileLists().mapTo(mutableSetOf()) { (provenance, fileList) ->
             FileList(
@@ -229,7 +213,7 @@ class Scanner(
         return ScannerRun.EMPTY.copy(
             config = scannerConfig,
             provenances = provenances,
-            scanResults = scanResults,
+            scanResults = filteredScanResults,
             files = files,
             scanners = scanners
         )
@@ -782,13 +766,6 @@ fun ScanResult.toNestedProvenanceScanResult(nestedProvenance: NestedProvenance):
     return NestedProvenanceScanResult(nestedProvenance, scanResultsByProvenance)
 }
 
-fun <T : Provenance> T.alignRevisions(): Provenance =
-    if (this is RepositoryProvenance) {
-        copy(vcsInfo = vcsInfo.copy(revision = resolvedRevision))
-    } else {
-        this
-    }
-
 private fun ScanController.getSubRepositories(id: Identifier): Map<String, VcsInfo> {
     val nestedProvenance = getNestedProvenance(id) ?: return emptyMap()
 
@@ -801,21 +778,6 @@ private fun ProvenanceResolutionResult.filterByVcsPath(): ProvenanceResolutionRe
             File(path).startsWith(packageProvenance?.vcsPath.orEmpty())
         }
     )
-
-/**
- * Return the VCS path applicable to a (sub-) repository which appears under [repositoryPath] in the source tree of
- * a package residing in [vcsPath], or null if the subtrees for [repositoryPath] and [vcsPath] are disjoint.
- */
-private fun getVcsPathForRepositoryOrNull(vcsPath: String, repositoryPath: String): String? {
-    val repoPathFile = File(repositoryPath)
-    val vcsPathFile = File(vcsPath)
-
-    return if (repoPathFile.startsWith(vcsPathFile)) {
-        ""
-    } else {
-        runCatching { vcsPathFile.toRelativeString(repoPathFile) }.getOrNull()
-    }
-}
 
 private fun FileList.filterByVcsPaths(paths: Collection<String>): FileList =
     if (paths.any { it.isBlank() }) {
