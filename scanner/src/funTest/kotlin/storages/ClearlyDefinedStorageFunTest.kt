@@ -75,7 +75,7 @@ class ClearlyDefinedStorageFunTest : StringSpec({
                     scanner = ScannerDetails(
                         name = "ScanCode",
                         version = "30.1.0",
-                        configuration = "input /tmp/cd-BxlI4n --classify true --copyright true --email true " +
+                        configuration = "--classify true --copyright true --email true " +
                             "--generated true --info true --is-license-text true --json-pp /tmp/cd-d8WH1p " +
                             "--license true --license-clarity-score true --license-text true " +
                             "--license-text-diagnostics true --package true --processes 2 --strip-root true " +
@@ -138,7 +138,7 @@ class ClearlyDefinedStorageFunTest : StringSpec({
                     scanner = ScannerDetails(
                         name = "ScanCode",
                         version = "30.1.0",
-                        configuration = "input /tmp/cd-5bxzho --classify true --copyright true --email true " +
+                        configuration = "--classify true --copyright true --email true " +
                             "--generated true --info true --is-license-text true --json-pp /tmp/cd-ZLZNNN " +
                             "--license true --license-clarity-score true --license-text true " +
                             "--license-text-diagnostics true --package true --processes 2 --strip-root true " +

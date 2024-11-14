@@ -22,14 +22,20 @@ package org.ossreviewtoolkit.plugins.scanners.licensee
 import java.io.File
 import java.time.Instant
 
+import kotlin.collections.joinToString
+
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
+import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
@@ -84,6 +90,20 @@ class Licensee internal constructor(name: String, private val wrapperConfig: Sca
 
             stdout
         }
+    }
+
+    override fun parseDetails(result: String): ScannerDetails {
+        val details = JSON.parseToJsonElement(result).jsonObject
+        val version = details.getValue("version").jsonPrimitive.content
+
+        val parameters = details.getValue("parameters").jsonArray
+
+        return ScannerDetails(
+            name = name,
+            version = version,
+            // TODO: Filter out parameters that have no influence on scan results.
+            configuration = parameters.joinToString(" ") { it.jsonPrimitive.content }
+        )
     }
 
     override fun createSummary(result: String, startTime: Instant, endTime: Instant): ScanSummary {

@@ -23,6 +23,7 @@ import java.io.File
 import java.time.Instant
 
 import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 
 /**
@@ -42,6 +43,12 @@ abstract class CommandLinePathScannerWrapper(override val name: String) : PathSc
      * Run the scanner on the given [path] with the given [context].
      */
     abstract fun runScanner(path: File, context: ScanContext): String
+
+    /**
+     * Create [ScannerDetails] from parsing [result] in a scanner-specific way. This function can be used if a scan
+     * storage provider returns raw scan results in the native format of the scanner.
+     */
+    open fun parseDetails(result: String): ScannerDetails = throw NotImplementedError()
 
     /**
      * Create a [ScanSummary] from the scan [result] in a scanner-native format. If the [result] itself does not contain

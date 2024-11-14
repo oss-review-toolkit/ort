@@ -156,6 +156,20 @@ class ScanCode internal constructor(
         }
     }
 
+    override fun parseDetails(result: String): ScannerDetails {
+        val details = parseResult(result)
+        val header = details.headers.single()
+
+        val options = header.getPrimitiveOptions()
+
+        return ScannerDetails(
+            name = name,
+            version = header.toolVersion,
+            // TODO: Filter out options that have no influence on scan results.
+            configuration = options.joinToString(" ") { "${it.first} ${it.second}" }
+        )
+    }
+
     override fun createSummary(result: String, startTime: Instant, endTime: Instant): ScanSummary =
         parseResult(result).toScanSummary(config.preferFileLicense)
 

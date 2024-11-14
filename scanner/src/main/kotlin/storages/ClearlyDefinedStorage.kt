@@ -42,7 +42,6 @@ import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
-import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.config.ClearlyDefinedStorageConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
@@ -52,7 +51,6 @@ import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanStorageException
 import org.ossreviewtoolkit.scanner.ScannerMatcher
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
-import org.ossreviewtoolkit.scanner.storages.utils.getScanCodeDetails
 import org.ossreviewtoolkit.utils.common.AlphaNumericComparator
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.withoutPrefix
@@ -128,8 +126,9 @@ class ClearlyDefinedStorage(
                 when (cliScanner.name) {
                     "ScanCode" -> {
                         data["content"]?.let { result ->
-                            val details = getScanCodeDetails(cliScanner.name, result)
-                            val summary = cliScanner.createSummary(result.toString(), startTime, endTime)
+                            val resultString = result.toString()
+                            val details = cliScanner.parseDetails(resultString)
+                            val summary = cliScanner.createSummary(resultString, startTime, endTime)
 
                             ScanResult(provenance, details, summary)
                         }
@@ -137,11 +136,7 @@ class ClearlyDefinedStorage(
 
                     "Licensee" -> {
                         data["licensee"]?.let { result ->
-                            val details = ScannerDetails(
-                                name = name,
-                                version = result["version"].textValue(),
-                                configuration = result["parameters"].joinToString(" ")
-                            )
+                            val details = cliScanner.parseDetails(result.toString())
                             val output = result["output"]["content"].toString()
                             val summary = cliScanner.createSummary(output, startTime, endTime)
 
