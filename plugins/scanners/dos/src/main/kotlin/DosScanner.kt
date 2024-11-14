@@ -170,7 +170,9 @@ class DosScanner internal constructor(
         startTime: Instant,
         issues: MutableList<Issue>
     ): ScanResultsResponseBody? {
-        logger.info { "Initiating a backend scan for ${packages.map { it.purl }}." }
+        logger.info {
+            "Initiating a backend scan for the following packages:\n${packages.joinToString("\n") { it.purl }}"
+        }
 
         val tmpDir = createOrtTempDir()
         val zipName = "${sourceDir.name}.zip"
@@ -196,7 +198,10 @@ class DosScanner internal constructor(
         val id = jobResponse?.scannerJobId
 
         if (id == null) {
-            issues += createAndLogIssue(name, "Failed to add scan job for '$zipName' and ${packages.map { it.purl }}.")
+            issues += createAndLogIssue(
+                name,
+                "Failed to add scan job for the following packages:\n${packages.joinToString("\n") { it.purl }}"
+            )
             return null
         }
 
