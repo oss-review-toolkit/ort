@@ -266,6 +266,7 @@ class LicenseInfoResolver(
                 is UnknownProvenance -> return@forEach
                 is RepositoryProvenance -> if (!archiver.unarchive(archiveDir, provenance)) return@forEach
                 is ArtifactProvenance -> if (!archiver.unarchive(archiveDir, provenance)) return@forEach
+                else -> return@forEach
             }
 
             val directory = (provenance as? RepositoryProvenance)?.vcsInfo?.path.orEmpty()

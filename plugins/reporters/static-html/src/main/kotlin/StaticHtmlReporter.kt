@@ -695,6 +695,8 @@ private fun EM.provenanceLink(provenance: Provenance?) {
         +" (from "
         a(href = provenance.vcsInfo.url) { +"VCS" }
         +")"
+    } else {
+        +""
     }
 }
 

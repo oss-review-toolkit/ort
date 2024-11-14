@@ -77,6 +77,7 @@ data class PackageConfiguration(
             is UnknownProvenance -> false
             is ArtifactProvenance -> sourceArtifactUrl != null && sourceArtifactUrl == provenance.sourceArtifact.url
             is RepositoryProvenance -> vcs != null && vcs.matches(provenance)
+            else -> false
         }
     }
 }
