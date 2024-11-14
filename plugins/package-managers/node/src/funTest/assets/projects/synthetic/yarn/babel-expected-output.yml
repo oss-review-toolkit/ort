@@ -1,6 +1,6 @@
 ---
 project:
-  id: "Yarn::npm-project-that-depends-on-babel:1.0.0"
+  id: "YarnProject::npm-project-that-depends-on-babel:1.0.0"
   definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/yarn/babel/package.json"
   declared_licenses:
   - "Apache-2.0"

@@ -1,6 +1,6 @@
 ---
 project:
-  id: "GoMod::github.com/oss-review-toolkit/ort/gomod-workspaces:<REPLACE_REVISION>"
+  id: "GoModProject::github.com/oss-review-toolkit/ort/gomod-workspaces:<REPLACE_REVISION>"
   definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
   declared_licenses: []
   declared_licenses_processed: {}

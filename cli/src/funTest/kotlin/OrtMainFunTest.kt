@@ -161,7 +161,7 @@ class OrtMainFunTest : StringSpec() {
 
             ortResult.analyzer shouldNotBeNull {
                 result.projects should haveSize(1)
-                result.projects.single().id.type shouldBe "Unmanaged"
+                result.projects.single().id.type shouldBe "UnmanagedProject"
             }
         }
 

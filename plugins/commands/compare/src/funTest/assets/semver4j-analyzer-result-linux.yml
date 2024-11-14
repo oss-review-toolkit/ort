@@ -30,7 +30,7 @@ analyzer:
     skip_excluded: false
   result:
     projects:
-    - id: "Maven:com.vdurmont:semver4j:3.1.0"
+    - id: "MavenProject:com.vdurmont:semver4j:3.1.0"
       definition_file_path: "pom.xml"
       authors:
       - "Vincent DURMONT"

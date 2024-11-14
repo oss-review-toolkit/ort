@@ -1,6 +1,6 @@
 ---
 project:
-  id: "GoMod::gomod_dangling_embed:<REPLACE_REVISION>"
+  id: "GoModProject::gomod_dangling_embed:<REPLACE_REVISION>"
   definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
   declared_licenses: []
   declared_licenses_processed: {}

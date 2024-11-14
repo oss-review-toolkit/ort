@@ -73,16 +73,16 @@ class AnalyzerResultBuilderTest : WordSpec() {
     private val scope2 = Scope("scope-2", setOf(pkgRef2))
 
     private val project1 = Project.EMPTY.copy(
-        id = Identifier("type-1", "namespace-1", "project-1", "version-1"),
+        id = Identifier("Type1Project", "namespace-1", "project-1", "version-1"),
         scopeDependencies = setOf(scope1),
         definitionFilePath = "project1"
     )
     private val project2 = Project.EMPTY.copy(
-        id = Identifier("type-2", "namespace-2", "project-2", "version-2"),
+        id = Identifier("Type2Project", "namespace-2", "project-2", "version-2"),
         scopeDependencies = setOf(scope1, scope2)
     )
     private val project3 = Project.EMPTY.copy(
-        id = Identifier("type-1", "namespace-3", "project-1.2", "version-1"),
+        id = Identifier("Type1Project", "namespace-3", "project-1.2", "version-1"),
         scopeNames = setOf("scope-2"),
         scopeDependencies = null
     )
@@ -297,7 +297,7 @@ class AnalyzerResultBuilderTest : WordSpec() {
                     .addResult(analyzerResult2)
                     .build()
 
-                mergedResults.dependencyGraphs.keys should containExactlyInAnyOrder("type-1", "type-2")
+                mergedResults.dependencyGraphs.keys should containExactlyInAnyOrder("Type1Project", "Type2Project")
             }
 
             "apply scope excludes" {

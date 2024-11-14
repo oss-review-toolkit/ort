@@ -67,7 +67,7 @@ analyzer:
     allow_dynamic_versions: false
   result:
     projects:
-    - id: "Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0"
+    - id: "GradleProject:org.ossreviewtoolkit:nested-fake-project:1.0.0"
       definition_file_path: "project/build.gradle"
       declared_licenses:
       - "GPL-3.0-only WITH GCC-exception-3.1 AND CC-BY-NC-3.0"
@@ -85,7 +85,7 @@ analyzer:
         path: "project"
       homepage_url: ""
       scopes: []
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+    - id: "GradleProject:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
       definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle"
       declared_licenses: []
       declared_licenses_processed: {}

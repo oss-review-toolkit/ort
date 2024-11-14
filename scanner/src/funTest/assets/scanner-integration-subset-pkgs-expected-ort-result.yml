@@ -28,7 +28,7 @@ analyzer:
     skip_excluded: false
   result:
     projects:
-    - id: "Dummy::project:1.0.0"
+    - id: "DummyProject::project:1.0.0"
       definition_file_path: ""
       declared_licenses: []
       declared_licenses_processed: {}
@@ -164,11 +164,11 @@ scanner:
         url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo.git"
         revision: "a732695e03efcbd74539208af98c297ee86e49d5"
         path: ""
-  - id: "Dummy::project:1.0.0"
+  - id: "DummyProject::project:1.0.0"
     package_provenance_resolution_issue:
       timestamp: "1970-01-01T00:00:00Z"
       source: "scanner"
-      message: "IOException: Could not resolve provenance for package 'Dummy::project:1.0.0'\
+      message: "IOException: Could not resolve provenance for package 'DummyProject::project:1.0.0'\
         \ for source code origins [VCS, ARTIFACT]."
       severity: "ERROR"
   scan_results:
@@ -237,7 +237,7 @@ scanner:
     - "Dummy"
     Dummy::pkg3:1.0.0:
     - "Dummy"
-    Dummy::project:1.0.0:
+    DummyProject::project:1.0.0:
     - "Dummy"
   files:
   - provenance:

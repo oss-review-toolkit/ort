@@ -1,6 +1,6 @@
 ---
 project:
-  id: "Gradle:org.gradle.kotlin.dsl.samples.multiproject:cli:1.0"
+  id: "GradleProject:org.gradle.kotlin.dsl.samples.multiproject:cli:1.0"
   definition_file_path: "plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/multi-kotlin-project/cli/build.gradle.kts"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -18,7 +18,7 @@ project:
   scopes:
   - name: "compileClasspath"
     dependencies:
-    - id: "Gradle:org.gradle.kotlin.dsl.samples.multiproject:core:1.0"
+    - id: "GradleProject:org.gradle.kotlin.dsl.samples.multiproject:core:1.0"
       linkage: "PROJECT_DYNAMIC"
     - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
       dependencies:
@@ -26,7 +26,7 @@ project:
       - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
   - name: "implementationDependenciesMetadata"
     dependencies:
-    - id: "Gradle:org.gradle.kotlin.dsl.samples.multiproject:core:1.0"
+    - id: "GradleProject:org.gradle.kotlin.dsl.samples.multiproject:core:1.0"
       linkage: "PROJECT_DYNAMIC"
     - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
       dependencies:
@@ -142,7 +142,7 @@ project:
         - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
   - name: "runtimeClasspath"
     dependencies:
-    - id: "Gradle:org.gradle.kotlin.dsl.samples.multiproject:core:1.0"
+    - id: "GradleProject:org.gradle.kotlin.dsl.samples.multiproject:core:1.0"
       linkage: "PROJECT_DYNAMIC"
       dependencies:
       - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
@@ -155,7 +155,7 @@ project:
       - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
   - name: "testCompileClasspath"
     dependencies:
-    - id: "Gradle:org.gradle.kotlin.dsl.samples.multiproject:core:1.0"
+    - id: "GradleProject:org.gradle.kotlin.dsl.samples.multiproject:core:1.0"
       linkage: "PROJECT_DYNAMIC"
     - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
       dependencies:
@@ -163,7 +163,7 @@ project:
       - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
   - name: "testImplementationDependenciesMetadata"
     dependencies:
-    - id: "Gradle:org.gradle.kotlin.dsl.samples.multiproject:core:1.0"
+    - id: "GradleProject:org.gradle.kotlin.dsl.samples.multiproject:core:1.0"
       linkage: "PROJECT_DYNAMIC"
     - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
       dependencies:
@@ -171,7 +171,7 @@ project:
       - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
   - name: "testRuntimeClasspath"
     dependencies:
-    - id: "Gradle:org.gradle.kotlin.dsl.samples.multiproject:core:1.0"
+    - id: "GradleProject:org.gradle.kotlin.dsl.samples.multiproject:core:1.0"
       linkage: "PROJECT_DYNAMIC"
       dependencies:
       - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"

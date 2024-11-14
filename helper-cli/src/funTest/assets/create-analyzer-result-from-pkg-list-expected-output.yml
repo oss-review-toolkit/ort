@@ -31,7 +31,7 @@ analyzer:
     skip_excluded: false
   result:
     projects:
-    - id: "Unmanaged::Example project name:"
+    - id: "UnmanagedProject::Example project name:"
       definition_file_path: ""
       declared_licenses: []
       declared_licenses_processed: {}

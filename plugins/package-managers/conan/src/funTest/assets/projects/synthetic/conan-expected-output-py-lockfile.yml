@@ -1,6 +1,6 @@
 ---
 project:
-  id: "Conan::poco:"
+  id: "ConanProject::poco:"
   definition_file_path: "plugins/package-managers/conan/src/funTest/assets/projects/synthetic/conan-py-lockfile/conanfile.py"
   declared_licenses:
   - "BSL-1.0"

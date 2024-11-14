@@ -47,7 +47,8 @@ class DependencyGraphNavigator(
     override fun directDependencies(project: Project, scopeName: String): Sequence<DependencyNode> {
         // TODO: Relax this assumption that package manager names start with the name of the type of project
         //       they manage, for example that "GradleInspector" manages "Gradle" projects.
-        val managers = graphs.keys.filter { it.startsWith(project.id.type) }
+        val projectType = project.id.type.removeSuffix("Project")
+        val managers = graphs.keys.filter { it.startsWith(projectType) }
 
         val manager = requireNotNull(managers.singleOrNull()) {
             "All of the $managers managers are able to manage '${project.id.type}' projects. Please enable only one " +

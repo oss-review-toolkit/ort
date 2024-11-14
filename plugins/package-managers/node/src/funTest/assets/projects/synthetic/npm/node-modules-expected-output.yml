@@ -1,6 +1,6 @@
 ---
 project:
-  id: "NPM::<REPLACE_PROJECT_NAME>:1.0.0"
+  id: "NPMProject::<REPLACE_PROJECT_NAME>:1.0.0"
   definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
   authors:
   - "The Author"

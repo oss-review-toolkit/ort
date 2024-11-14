@@ -1,6 +1,6 @@
 ---
 project:
-  id: "Composer:ort:composer-test-project:0.1.0"
+  id: "ComposerProject:ort:composer-test-project:0.1.0"
   definition_file_path: "plugins/package-managers/composer/src/funTest/assets/projects/synthetic/with-provide/composer.json"
   declared_licenses:
   - "Apache-2.0"

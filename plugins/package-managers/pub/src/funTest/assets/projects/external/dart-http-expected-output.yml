@@ -1,6 +1,6 @@
 ---
 project:
-  id: "Pub::http:0.13.0"
+  id: "PubProject::http:0.13.0"
   definition_file_path: "pubspec.yaml"
   declared_licenses: []
   declared_licenses_processed: {}
