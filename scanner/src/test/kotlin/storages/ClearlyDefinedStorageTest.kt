@@ -355,7 +355,7 @@ private fun stubHarvestToolResponse(server: WireMockServer, coordinates: Coordin
     val urlPath = "/harvest/${toolUrl(coordinates, "scancode", SCANCODE_VERSION)}"
     server.stubFor(
         get(urlPathEqualTo(urlPath))
-            .withQueryParam("form", equalTo("streamed"))
+            .withQueryParam("form", equalTo("raw"))
             .willReturn(
                 aResponse().withStatus(200)
                     .withBodyFile("$TEST_FILES_DIRECTORY/$RESPONSE_FILE")
