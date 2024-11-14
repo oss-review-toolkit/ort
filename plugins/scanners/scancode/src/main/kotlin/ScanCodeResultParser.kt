@@ -24,10 +24,10 @@ import java.io.File
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonNamingStrategy
+import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.decodeFromJsonElement
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.modules.SerializersModule
 
 import org.semver4j.Semver
@@ -40,11 +40,16 @@ private fun parseResult(result: JsonElement): ScanCodeResult {
     // As even the structure of the header itself may change with the output format version, first operate on raw JSON
     // elements to get the version, and then parse the JSON elements into the appropriate data classes.
     val header = result.jsonObject.getValue("headers").jsonArray.single().jsonObject
-    val outputFormatVersion = header["output_format_version"]?.let { Semver(it.jsonPrimitive.content) }
+
+    val outputFormatVersionPrimitive = requireNotNull(header["output_format_version"] as? JsonPrimitive) {
+        "ScanCode results that do not define an 'output_format_version' are not supported anymore."
+    }
+
+    val outputFormatVersion = Semver(outputFormatVersionPrimitive.content)
 
     // Select the correct set of (de-)serializers bundled in a module for parsing the respective format version.
-    val module = when (outputFormatVersion?.major) {
-        null, 1 -> SerializersModule {
+    val module = when (outputFormatVersion.major) {
+        1 -> SerializersModule {
             polymorphicDefaultDeserializer(FileEntry::class) { FileEntry.Version1.serializer() }
             polymorphicDefaultDeserializer(LicenseEntry::class) { LicenseEntry.Version1.serializer() }
             polymorphicDefaultDeserializer(CopyrightEntry::class) { CopyrightEntry.Version1.serializer() }
