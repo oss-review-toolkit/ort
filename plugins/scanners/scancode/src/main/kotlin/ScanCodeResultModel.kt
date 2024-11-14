@@ -89,11 +89,8 @@ sealed interface FileEntry {
                 "${ScanCode.SCANNER_NAME.lowercase()}-"
 
             private fun getSpdxId(spdxLicenseKey: String?, key: String): String {
-                // There is a bug in ScanCode 3.0.2 that returns an empty string instead of null for licenses unknown to
-                // SPDX.
-                val spdxId = spdxLicenseKey.orEmpty().toSpdxId(allowPlusSuffix = true)
-
-                if (spdxId.isNotEmpty()) return spdxId
+                val spdxId = spdxLicenseKey?.toSpdxId(allowPlusSuffix = true)
+                if (spdxId != null) return spdxId
 
                 // Fall back to building an ID based on the ScanCode-specific "key".
                 return "$LICENSE_REF_PREFIX_SCAN_CODE${key.toSpdxId(allowPlusSuffix = true)}"
