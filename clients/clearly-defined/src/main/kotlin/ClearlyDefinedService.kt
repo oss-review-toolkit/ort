@@ -265,7 +265,7 @@ interface ClearlyDefinedService {
      * sense for the provider), see
      * https://api.clearlydefined.io/api-docs/#/harvest/get_harvest__type___provider___namespace___name___revision___tool___toolVersion_
      */
-    @GET("harvest/{coordinates}/{tool}/{toolVersion}?form=streamed")
+    @GET("harvest/{coordinates}/{tool}/{toolVersion}?form=raw")
     suspend fun harvestToolData(
         @Path("coordinates", encoded = true) coordinates: Coordinates,
         @Path("tool") tool: String,
