@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.plugins.scanners.scancode
 
-import java.io.File
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -65,7 +64,7 @@ fun ScanCodeResult.toScanSummary(preferFileLicense: Boolean = false): ScanSummar
     val issues = mutableListOf<Issue>()
 
     val header = headers.single()
-    val inputPath = File(header.options.input.first())
+    val inputPath = header.getInput()
 
     val outputFormatVersion = header.outputFormatVersion?.let { Semver(it) }
     if (outputFormatVersion != null && outputFormatVersion.major > MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION) {

@@ -19,11 +19,14 @@
 
 package org.ossreviewtoolkit.plugins.scanners.scancode
 
+import java.io.File
+
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonTransformingSerializer
-import kotlinx.serialization.serializer
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.jsonPrimitive
 
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
@@ -42,17 +45,26 @@ data class ScanCodeResult(
 data class HeaderEntry(
     val toolName: String,
     val toolVersion: String,
-    val options: Options,
+    val options: Map<String, JsonElement>,
     val startTimestamp: String,
     val endTimestamp: String,
     val outputFormatVersion: String? = null // This might be missing in JSON.
-)
+) {
+    fun getInput(): File {
+        val inputPath = when (val input = options.getValue("input")) {
+            is JsonPrimitive -> input.content
+            is JsonArray -> input.first().jsonPrimitive.content
+            else -> throw SerializationException("Unknown input elememt type.")
+        }
 
-@Serializable
-data class Options(
-    @Serializable(InputListSerializer::class)
-    val input: List<String>
-)
+        return File(inputPath)
+    }
+
+    fun getPrimitiveOptions(): List<Pair<String, String>> =
+        options.mapNotNull { entry ->
+            (entry.value as? JsonPrimitive)?.let { entry.key to it.content }
+        }
+}
 
 sealed interface FileEntry {
     val path: String
@@ -199,12 +211,3 @@ data class LicenseReference(
     val key: String,
     val spdxLicenseKey: String
 )
-
-/**
- * A serializer that wraps an old primitive input option from ScanCode 3 into an array like it is for recent ScanCode
- * versions. Note that the input option format changed before the output format version property was introduced.
- */
-private object InputListSerializer : JsonTransformingSerializer<List<String>>(serializer<List<String>>()) {
-    override fun transformDeserialize(element: JsonElement): JsonElement =
-        if (element !is JsonArray) JsonArray(listOf(element)) else element
-}
