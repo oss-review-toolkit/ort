@@ -48,7 +48,7 @@ data class HeaderEntry(
     val options: Map<String, JsonElement>,
     val startTimestamp: String,
     val endTimestamp: String,
-    val outputFormatVersion: String? = null // This might be missing in JSON.
+    val outputFormatVersion: String
 ) {
     fun getInput(): File {
         val inputPath = when (val input = options.getValue("input")) {

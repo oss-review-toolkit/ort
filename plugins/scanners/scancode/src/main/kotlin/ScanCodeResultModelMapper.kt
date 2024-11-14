@@ -66,8 +66,9 @@ fun ScanCodeResult.toScanSummary(preferFileLicense: Boolean = false): ScanSummar
     val header = headers.single()
     val inputPath = header.getInput()
 
-    val outputFormatVersion = header.outputFormatVersion?.let { Semver(it) }
-    if (outputFormatVersion != null && outputFormatVersion.major > MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION) {
+    val outputFormatVersion = Semver(header.outputFormatVersion)
+
+    if (outputFormatVersion.major > MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION) {
         issues += createAndLogIssue(
             source = ScanCode.SCANNER_NAME,
             message = "The output format version $outputFormatVersion exceeds the supported major version " +
