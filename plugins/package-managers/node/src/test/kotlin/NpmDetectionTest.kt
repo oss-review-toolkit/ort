@@ -160,7 +160,7 @@ class NpmDetectionTest : WordSpec({
             filteredFiles.map { it.toRelativeString(projectDir) } shouldContainExactlyInAnyOrder listOf(
                 "npm/no-lockfile/package.json",
                 "npm/node-modules/package.json",
-                "npm/package-lock/package.json",
+                "npm/project-with-lockfile/package.json",
                 "npm/shrinkwrap/package.json",
                 "npm/babel/package.json",
                 "npm/version-urls/package.json",
