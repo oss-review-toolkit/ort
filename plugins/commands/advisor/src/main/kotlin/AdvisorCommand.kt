@@ -120,7 +120,7 @@ class AdvisorCommand : OrtCommand(
 
         val distinctProviders = providerFactories.distinct()
         echo("The following advisors are activated:")
-        echo("\t" + distinctProviders.joinToString().ifEmpty { "<None>" })
+        echo("\t" + distinctProviders.joinToString { it.descriptor.id }.ifEmpty { "<None>" })
 
         val advisor = Advisor(distinctProviders, ortConfig.advisor)
 
