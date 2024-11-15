@@ -68,9 +68,9 @@ class NpmFunTest : WordSpec({
             patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
-        "resolve package-lock dependencies correctly" {
-            val definitionFile = getAssetFile("projects/synthetic/npm/package-lock/package.json")
-            val expectedResultFile = getAssetFile("projects/synthetic/npm/package-lock-expected-output.yml")
+        "resolve dependencies for a project with lockfile correctly" {
+            val definitionFile = getAssetFile("projects/synthetic/npm/project-with-lockfile/package.json")
+            val expectedResultFile = getAssetFile("projects/synthetic/npm/project-with-lockfile-expected-output.yml")
 
             val result = create("NPM").resolveSingleProject(definitionFile, resolveScopes = true)
 
