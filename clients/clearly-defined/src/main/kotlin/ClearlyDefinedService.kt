@@ -51,10 +51,10 @@ import retrofit2.http.Query
 interface ClearlyDefinedService {
     companion object {
         /**
-         * The maximum number of elements to request at once in a chunked request. This value was chosen more or less
-         * arbitrary to keep the size of responses reasonably small.
+         * The maximum number of elements to request at once in a chunked request. The value is based on feedback from
+         * the ClearlyDefined team.
          */
-        const val MAX_REQUEST_CHUNK_SIZE = 100
+        const val MAX_REQUEST_CHUNK_SIZE = 500
 
         /**
          * The JSON (de-)serialization object used by this service.
