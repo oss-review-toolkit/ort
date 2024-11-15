@@ -14,6 +14,9 @@ importers:
       long:
         specifier: ^3.2.0
         version: 3.2.0
+      web-animations-js:
+        specifier: github:web-animations/web-animations-js#2.3.2
+        version: https://codeload.github.com/web-animations/web-animations-js/tar.gz/64d83730282fdbce733460d44be52c132d6c04e9
     optionalDependencies:
       promise:
         specifier: ~7.3.1
@@ -145,6 +148,10 @@ packages:
 
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
+
+  web-animations-js@https://codeload.github.com/web-animations/web-animations-js/tar.gz/64d83730282fdbce733460d44be52c132d6c04e9:
+    resolution: {tarball: https://codeload.github.com/web-animations/web-animations-js/tar.gz/64d83730282fdbce733460d44be52c132d6c04e9}
+    version: 2.3.2
 
 snapshots:
 
@@ -286,3 +293,5 @@ snapshots:
       editions: 2.3.1
 
   util-deprecate@1.0.2: {}
+
+  web-animations-js@https://codeload.github.com/web-animations/web-animations-js/tar.gz/64d83730282fdbce733460d44be52c132d6c04e9: {}

@@ -9,8 +9,9 @@
   "license": "Apache-2.0",
   "private": true,
   "dependencies": {
+    "cheerio": "1.0.0-rc.1",
     "long": "^3.2.0",
-    "cheerio": "1.0.0-rc.1"
+    "web-animations-js": "github:web-animations/web-animations-js#2.3.2"
   },
   "devDependencies": {
     "cson": "~4.1.0"
