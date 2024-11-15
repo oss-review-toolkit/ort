@@ -38,7 +38,10 @@ import retrofit2.http.POST
  */
 interface VulnerableCodeService {
     companion object {
-        const val PUBLIC_SERVER_URL = "https://public.vulnerablecode.io"
+        /**
+         * The URL to version 1 of the API. Version 2 is currently in the works.
+         */
+        const val PUBLIC_SERVER_URL = "https://public.vulnerablecode.io/api/"
 
         /**
          * The JSON (de-)serialization object used by this service.
@@ -165,6 +168,6 @@ interface VulnerableCodeService {
      * Return a list with information about packages including the resolved and unresolved vulnerabilities for these
      * packages.
      */
-    @POST("api/packages/bulk_search")
+    @POST("packages/bulk_search")
     suspend fun getPackageVulnerabilities(@Body packageUrls: PackagesWrapper): List<PackageVulnerabilities>
 }
