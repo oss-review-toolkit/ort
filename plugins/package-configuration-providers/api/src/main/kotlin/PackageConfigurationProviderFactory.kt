@@ -33,7 +33,7 @@ interface PackageConfigurationProviderFactory : PluginFactory<PackageConfigurati
     companion object {
         /**
          * All [package configuration provider factories][PackageConfigurationProviderFactory] available in the
-         * classpath, associated by their names.
+         * classpath, associated by their ids.
          */
         val ALL by lazy { PluginFactory.getAll<PackageConfigurationProviderFactory, PackageConfigurationProvider>() }
 

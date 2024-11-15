@@ -34,7 +34,7 @@ interface PackageCurationProviderFactory : PluginFactory<PackageCurationProvider
     companion object {
         /**
          * All [package curation provider factories][PackageCurationProviderFactory] available in the classpath,
-         * associated by their names.
+         * associated by their ids.
          */
         val ALL by lazy { PluginFactory.getAll<PackageCurationProviderFactory, PackageCurationProvider>() }
 

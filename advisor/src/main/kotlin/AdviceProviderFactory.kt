@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.plugins.api.PluginFactory
 interface AdviceProviderFactory : PluginFactory<AdviceProvider> {
     companion object {
         /**
-         * All [advice provider factories][AdviceProviderFactory] available in the classpath, associated by their names.
+         * All [advice provider factories][AdviceProviderFactory] available in the classpath, associated by their ids.
          */
         val ALL by lazy { PluginFactory.getAll<AdviceProviderFactory, AdviceProvider>() }
     }
