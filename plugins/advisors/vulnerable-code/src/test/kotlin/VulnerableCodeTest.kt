@@ -31,7 +31,7 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
-import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.collections.shouldBeSingleton
 import io.kotest.matchers.maps.shouldNotBeEmpty
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
@@ -219,7 +219,7 @@ class VulnerableCodeTest : WordSpec({
 
         "handle a failure response from the server" {
             server.stubFor(
-                post(urlPathEqualTo("/api/packages/bulk_search/"))
+                post(urlPathEqualTo("/packages/bulk_search"))
                     .willReturn(
                         aResponse().withStatus(500)
                     )
@@ -236,8 +236,10 @@ class VulnerableCodeTest : WordSpec({
                     with(getValue(pkg)) {
                         advisor shouldBe vulnerableCode.details
                         vulnerabilities should beEmpty()
-                        summary.issues shouldHaveSize 1
-                        summary.issues.first().severity shouldBe Severity.ERROR
+                        summary.issues.shouldBeSingleton { issue ->
+                            issue.severity shouldBe Severity.ERROR
+                            issue.message shouldBe "HttpException: HTTP 500 Server Error"
+                        }
                     }
                 }
             }
