@@ -41,6 +41,18 @@ class PnpmFunTest : WordSpec({
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
+        "exclude scopes if configured" {
+            val definitionFile = getAssetFile("projects/synthetic/pnpm/project-with-lockfile/package.json")
+            val expectedResultFile = getAssetFile(
+                "projects/synthetic/pnpm/project-with-lockfile-skip-excluded-scopes-expected-output.yml"
+            )
+
+            val result = create("PNPM", excludedScopes = setOf("devDependencies"))
+                .resolveSingleProject(definitionFile, resolveScopes = true)
+
+            patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
+        }
+
         "resolve dependencies for a project depending on Babel correctly" {
             val definitionFile = getAssetFile("projects/synthetic/pnpm/babel/package.json")
             val expectedResultFile = getAssetFile("projects/synthetic/pnpm/babel-expected-output.yml")

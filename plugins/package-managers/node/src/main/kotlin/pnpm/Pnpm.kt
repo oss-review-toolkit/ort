@@ -77,12 +77,13 @@ class Pnpm(
         val workspaceModuleDirs = getWorkspaceModuleDirs(workingDir)
         handler.setWorkspaceModuleDirs(workspaceModuleDirs)
 
-        val moduleInfosForScope = Scope.entries.associateWith { scope -> listModules(workingDir, scope) }
+        val scopes = Scope.entries.filterNot { scope -> excludes.isScopeExcluded(scope.descriptor) }
+        val moduleInfosForScope = scopes.associateWith { scope -> listModules(workingDir, scope) }
 
         return workspaceModuleDirs.map { projectDir ->
             val project = parseProject(projectDir.resolve("package.json"), analysisRoot, managerName)
 
-            val scopeNames = Scope.entries.mapTo(mutableSetOf()) { scope ->
+            val scopeNames = scopes.mapTo(mutableSetOf()) { scope ->
                 val scopeName = scope.descriptor
                 val moduleInfo = moduleInfosForScope.getValue(scope).single { it.path == projectDir.absolutePath }
 
