@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
 class YarnFunTest : WordSpec({
     "yarn" should {
-        "resolve dependencies correctly" {
+        "resolve dependencies for a project with lockfile correctly" {
             val definitionFile = getAssetFile("projects/synthetic/yarn/project-with-lockfile/package.json")
             val expectedResultFile = getAssetFile("projects/synthetic/yarn/project-with-lockfile-expected-output.yml")
 
