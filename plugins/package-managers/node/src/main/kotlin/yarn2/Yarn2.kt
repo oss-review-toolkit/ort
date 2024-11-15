@@ -405,6 +405,9 @@ class Yarn2(
             val projectFile = definitionFile.resolveSibling(header.version).resolve(definitionFile.name)
             val packageJson = parsePackageJson(projectFile)
             val additionalData = processAdditionalPackageInfo(packageJson)
+            val authors = packageJson.authors
+                .flatMap { parseAuthorString(it.name) }
+                .mapNotNullTo(mutableSetOf()) { it.name }
 
             val id = Identifier("Yarn2", namespace, name, version)
             allProjects += id to Project(
@@ -413,7 +416,8 @@ class Yarn2(
                 declaredLicenses = declaredLicenses,
                 vcs = additionalData.vcsFromPackage,
                 vcsProcessed = processProjectVcs(definitionFile.parentFile, additionalData.vcsFromPackage, homepageUrl),
-                homepageUrl = homepageUrl
+                homepageUrl = homepageUrl,
+                authors = authors
             )
             id
         } else {
