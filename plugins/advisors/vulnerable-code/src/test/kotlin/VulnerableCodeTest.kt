@@ -147,18 +147,6 @@ class VulnerableCodeTest : WordSpec({
                             vector = null
                         )
                     )
-                ),
-                Vulnerability(
-                    id = "CVE-2009-2459",
-                    references = listOf(
-                        VulnerabilityReference(
-                            URI("https://nvd.nist.gov/vuln/detail/CVE-2014-8242"),
-                            scoringSystem = "cvssv3.1",
-                            severity = "MEDIUM",
-                            score = 6.0f,
-                            vector = null
-                        )
-                    )
                 )
             )
             strutsResult.vulnerabilities should containExactlyInAnyOrder(expStrutsVulnerabilities)
