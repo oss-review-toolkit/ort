@@ -108,10 +108,7 @@ class NpmFunTest : WordSpec({
             patchActualResult(result.toYaml()) should matchExpectedResult(
                 expectedResultFile,
                 definitionFile,
-                custom = mapOf(
-                    "<REPLACE_PROJECT_NAME>" to "npm-${definitionFile.parentFile.name}",
-                    "<REPLACE_LOCKFILE_NAME>" to "package-lock.json"
-                )
+                custom = mapOf("<REPLACE_LOCKFILE_NAME>" to "package-lock.json")
             )
         }
 
