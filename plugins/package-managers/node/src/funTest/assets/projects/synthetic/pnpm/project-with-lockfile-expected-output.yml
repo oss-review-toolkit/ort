@@ -58,7 +58,7 @@ project:
           - id: "NPM::domelementtype:1.3.1"
         - id: "NPM::entities:1.1.2"
         - id: "NPM::inherits:2.0.4"
-        - id: "NPM::readable-stream:3.6.0"
+        - id: "NPM::readable-stream:3.6.2"
           dependencies:
           - id: "NPM::inherits:2.0.4"
           - id: "NPM::string_decoder:1.3.0"
@@ -68,7 +68,9 @@ project:
       - id: "NPM::lodash:4.17.21"
       - id: "NPM::parse5:3.0.3"
         dependencies:
-        - id: "NPM:@types:node:18.0.6"
+        - id: "NPM:@types:node:22.9.0"
+          dependencies:
+          - id: "NPM::undici-types:6.19.8"
     - id: "NPM::long:3.2.0"
     - id: "NPM::promise:7.3.1"
       dependencies:
@@ -89,36 +91,36 @@ project:
           - id: "NPM::editions:2.3.1"
             dependencies:
             - id: "NPM::errlop:2.2.0"
-            - id: "NPM::semver:6.3.0"
+            - id: "NPM::semver:6.3.1"
           - id: "NPM::typechecker:4.11.0"
             dependencies:
             - id: "NPM::editions:2.3.1"
               dependencies:
               - id: "NPM::errlop:2.2.0"
-              - id: "NPM::semver:6.3.0"
+              - id: "NPM::semver:6.3.1"
         - id: "NPM::editions:2.3.1"
           dependencies:
           - id: "NPM::errlop:2.2.0"
-          - id: "NPM::semver:6.3.0"
+          - id: "NPM::semver:6.3.1"
         - id: "NPM::typechecker:4.11.0"
           dependencies:
           - id: "NPM::editions:2.3.1"
             dependencies:
             - id: "NPM::errlop:2.2.0"
-            - id: "NPM::semver:6.3.0"
+            - id: "NPM::semver:6.3.1"
       - id: "NPM::requirefresh:2.3.0"
         dependencies:
         - id: "NPM::editions:2.3.1"
           dependencies:
           - id: "NPM::errlop:2.2.0"
-          - id: "NPM::semver:6.3.0"
+          - id: "NPM::semver:6.3.1"
       - id: "NPM::safefs:4.2.0"
         dependencies:
         - id: "NPM::editions:2.3.1"
           dependencies:
           - id: "NPM::errlop:2.2.0"
-          - id: "NPM::semver:6.3.0"
-        - id: "NPM::graceful-fs:4.2.10"
+          - id: "NPM::semver:6.3.1"
+        - id: "NPM::graceful-fs:4.2.11"
 packages:
 - id: "NPM::asap:2.0.6"
   purl: "pkg:npm/asap@2.0.6"
@@ -666,8 +668,8 @@ packages:
     url: "https://github.com/bevry/extract-opts.git"
     revision: "be6ba5f1d865d3d547350fe3f379251792936ed8"
     path: ""
-- id: "NPM::graceful-fs:4.2.10"
-  purl: "pkg:npm/graceful-fs@4.2.10"
+- id: "NPM::graceful-fs:4.2.11"
+  purl: "pkg:npm/graceful-fs@4.2.11"
   declared_licenses:
   - "ISC"
   declared_licenses_processed:
@@ -680,19 +682,19 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.10.tgz"
+    url: "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.11.tgz"
     hash:
-      value: "147d3a006da4ca3ce14728c7aefc287c367d7a6c"
+      value: "4183e4e8bf08bb6e05bbb2f7d2e0c8f712ca40e3"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "https://github.com/isaacs/node-graceful-fs"
-    revision: "1f19b0b467e4144260b397343cd60f37c5bdcfda"
+    revision: "514861c372899df14beb7aaecca4cdbb498d7d11"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/isaacs/node-graceful-fs.git"
-    revision: "1f19b0b467e4144260b397343cd60f37c5bdcfda"
+    revision: "514861c372899df14beb7aaecca4cdbb498d7d11"
     path: ""
 - id: "NPM::htmlparser2:3.10.1"
   purl: "pkg:npm/htmlparser2@3.10.1"
@@ -904,8 +906,8 @@ packages:
     url: "https://github.com/then/promise.git"
     revision: "cebfa6049cc08843f428c6fc92dde918f8687e6d"
     path: ""
-- id: "NPM::readable-stream:3.6.0"
-  purl: "pkg:npm/readable-stream@3.6.0"
+- id: "NPM::readable-stream:3.6.2"
+  purl: "pkg:npm/readable-stream@3.6.2"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -918,19 +920,19 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/readable-stream/-/readable-stream-3.6.0.tgz"
+    url: "https://registry.npmjs.org/readable-stream/-/readable-stream-3.6.2.tgz"
     hash:
-      value: "337bbda3adc0706bd3e024426a286d4b4b2c9198"
+      value: "56a9b36ea965c00c5a93ef31eb111a0f11056967"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "git://github.com/nodejs/readable-stream"
-    revision: "bed7ffa274f5b9e6d0d5c22369e6fe825ded03d2"
+    revision: "6c32003bd8607da54f8ca1b096c4411778b060bc"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/nodejs/readable-stream.git"
-    revision: "bed7ffa274f5b9e6d0d5c22369e6fe825ded03d2"
+    revision: "6c32003bd8607da54f8ca1b096c4411778b060bc"
     path: ""
 - id: "NPM::requirefresh:2.3.0"
   purl: "pkg:npm/requirefresh@2.3.0"
@@ -1025,8 +1027,10 @@ packages:
     url: "https://github.com/bevry/safefs.git"
     revision: "f57353e1353147252e8c306eb5f06321631ea46a"
     path: ""
-- id: "NPM::semver:6.3.0"
-  purl: "pkg:npm/semver@6.3.0"
+- id: "NPM::semver:6.3.1"
+  purl: "pkg:npm/semver@6.3.1"
+  authors:
+  - "GitHub Inc."
   declared_licenses:
   - "ISC"
   declared_licenses_processed:
@@ -1039,19 +1043,19 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/semver/-/semver-6.3.0.tgz"
+    url: "https://registry.npmjs.org/semver/-/semver-6.3.1.tgz"
     hash:
-      value: "ee0a64c8af5e8ceea67687b133761e1becbd1d3d"
+      value: "556d2ef8689146e46dcea4bfdd095f3434dffcb4"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "https://github.com/npm/node-semver"
-    revision: "0eeceecfba490d136eb3ccae3a8dc118a28565a0"
+    url: "https://github.com/npm/node-semver.git"
+    revision: "b717044e57bd132c7e5aa50e9af9a03f10d4655a"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/npm/node-semver.git"
-    revision: "0eeceecfba490d136eb3ccae3a8dc118a28565a0"
+    revision: "b717044e57bd132c7e5aa50e9af9a03f10d4655a"
     path: ""
 - id: "NPM::string_decoder:1.3.0"
   purl: "pkg:npm/string_decoder@1.3.0"
@@ -1113,6 +1117,34 @@ packages:
     url: "https://github.com/bevry/typechecker.git"
     revision: "3a3868d30834a52522ecb1032dc475af5e8ecc2c"
     path: ""
+- id: "NPM::undici-types:6.19.8"
+  purl: "pkg:npm/undici-types@6.19.8"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A stand-alone types package for Undici"
+  homepage_url: "https://undici.nodejs.org"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/undici-types/-/undici-types-6.19.8.tgz"
+    hash:
+      value: "35111c9d1437ab83a7cdc0abae2f26d88eda0a02"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/nodejs/undici.git"
+    revision: "3d3ce0695c8c3f9a8f3c8af90dd42d0569d3f0bb"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/nodejs/undici.git"
+    revision: "3d3ce0695c8c3f9a8f3c8af90dd42d0569d3f0bb"
+    path: ""
 - id: "NPM::util-deprecate:1.0.2"
   purl: "pkg:npm/util-deprecate@1.0.2"
   authors:
@@ -1171,13 +1203,13 @@ packages:
     url: "https://github.com/web-animations/web-animations-js.git"
     revision: "64d83730282fdbce733460d44be52c132d6c04e9"
     path: ""
-- id: "NPM:@types:node:18.0.6"
-  purl: "pkg:npm/%40types/node@18.0.6"
+- id: "NPM:@types:node:22.9.0"
+  purl: "pkg:npm/%40types/node@22.9.0"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
     spdx_expression: "MIT"
-  description: "TypeScript definitions for Node.js"
+  description: "TypeScript definitions for node"
   homepage_url: "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/node"
   binary_artifact:
     url: ""
@@ -1185,9 +1217,9 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/@types/node/-/node-18.0.6.tgz"
+    url: "https://registry.npmjs.org/@types/node/-/node-22.9.0.tgz"
     hash:
-      value: "0ba49ac517ad69abe7a1508bc9b3a5483df9d5d7"
+      value: "b7f16e5c3384788542c72dc3d561a7ceae2c0365"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
