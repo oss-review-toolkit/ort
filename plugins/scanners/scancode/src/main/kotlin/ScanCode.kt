@@ -120,15 +120,10 @@ class ScanCode internal constructor(
 
     override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=30.0.0")
 
-    override fun transformVersion(output: String): String {
-        // On first use, the output is prefixed by "Configuring ScanCode for first use...". The version string can be
-        // something like:
-        // ScanCode version 2.0.1.post1.fb67a181
-        // ScanCode version: 31.0.0b4
-        return output.lineSequence().firstNotNullOfOrNull { line ->
+    override fun transformVersion(output: String): String =
+        output.lineSequence().firstNotNullOfOrNull { line ->
             line.withoutPrefix("ScanCode version")?.removePrefix(":")?.trim()
         }.orEmpty()
-    }
 
     override fun runScanner(path: File, context: ScanContext): String {
         val resultFile = createOrtTempDir().resolve("result.json")
