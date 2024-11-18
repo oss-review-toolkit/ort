@@ -61,9 +61,15 @@ private fun parseResult(result: JsonElement): ScanCodeResult {
             polymorphicDefaultDeserializer(CopyrightEntry::class) { CopyrightEntry.Version2.serializer() }
         }
 
-        else -> SerializersModule {
+        3 -> SerializersModule {
             polymorphicDefaultDeserializer(FileEntry::class) { FileEntry.Version3.serializer() }
             polymorphicDefaultDeserializer(LicenseEntry::class) { LicenseEntry.Version3.serializer() }
+            polymorphicDefaultDeserializer(CopyrightEntry::class) { CopyrightEntry.Version2.serializer() }
+        }
+
+        else -> SerializersModule {
+            polymorphicDefaultDeserializer(FileEntry::class) { FileEntry.Version3.serializer() }
+            polymorphicDefaultDeserializer(LicenseEntry::class) { LicenseEntry.Version4.serializer() }
             polymorphicDefaultDeserializer(CopyrightEntry::class) { CopyrightEntry.Version2.serializer() }
         }
     }

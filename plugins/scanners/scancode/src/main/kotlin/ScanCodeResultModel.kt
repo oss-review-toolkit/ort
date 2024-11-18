@@ -172,6 +172,17 @@ sealed interface LicenseEntry {
         val fromFile: String? = null, // This might be missing in JSON.
         override val matchedText: String? = null
     ) : LicenseEntry
+
+    @Serializable
+    data class Version4(
+        override val score: Float,
+        override val startLine: Int,
+        override val endLine: Int,
+        override val licenseExpression: String,
+        val licenseExpressionSpdx: String? = null, // This might be missing in JSON.
+        val fromFile: String? = null, // This might be missing in JSON.
+        override val matchedText: String? = null
+    ) : LicenseEntry
 }
 
 @Serializable
