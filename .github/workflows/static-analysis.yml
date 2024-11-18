@@ -29,7 +29,7 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@473878a77f1b98e2b5ac4af93489d1656a80a5ed # v4
+      uses: gradle/actions/setup-gradle@cc4fc85e6b35bafd578d5ffbc76a5518407e1af0 # v4
     - name: Check copyrights, license headers, and .gitattributes
       run: ./gradlew checkCopyrightsInNoticeFile checkLicenseHeaders checkGitAttributes
   completions:
@@ -43,7 +43,7 @@ jobs:
         distribution: temurin
         java-version: 21
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@473878a77f1b98e2b5ac4af93489d1656a80a5ed # v4
+      uses: gradle/actions/setup-gradle@cc4fc85e6b35bafd578d5ffbc76a5518407e1af0 # v4
     - name: Generate completions
       run: |
         ./scripts/generate_completion_scripts.sh
@@ -66,7 +66,7 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@473878a77f1b98e2b5ac4af93489d1656a80a5ed # v4
+      uses: gradle/actions/setup-gradle@cc4fc85e6b35bafd578d5ffbc76a5518407e1af0 # v4
     - name: Check for Detekt Issues
       run: ./gradlew detektAll
     - name: Upload SARIF File
