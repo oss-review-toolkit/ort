@@ -130,7 +130,7 @@ class ScanCode internal constructor(
             }
         }
 
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=3.0.0")
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=30.0.0")
 
     override fun transformVersion(output: String): String {
         // On first use, the output is prefixed by "Configuring ScanCode for first use...". The version string can be
