@@ -58,17 +58,19 @@ project:
           - id: "NPM::domelementtype:1.3.1"
         - id: "NPM::entities:1.1.2"
         - id: "NPM::inherits:2.0.4"
-        - id: "NPM::readable-stream:3.4.0"
+        - id: "NPM::readable-stream:3.6.2"
           dependencies:
           - id: "NPM::inherits:2.0.4"
-          - id: "NPM::string_decoder:1.2.0"
+          - id: "NPM::string_decoder:1.3.0"
             dependencies:
-            - id: "NPM::safe-buffer:5.1.2"
+            - id: "NPM::safe-buffer:5.2.1"
           - id: "NPM::util-deprecate:1.0.2"
-      - id: "NPM::lodash:4.17.15"
+      - id: "NPM::lodash:4.17.21"
       - id: "NPM::parse5:3.0.3"
         dependencies:
-        - id: "NPM:@types:node:12.6.8"
+        - id: "NPM:@types:node:22.9.0"
+          dependencies:
+          - id: "NPM::undici-types:6.19.8"
     - id: "NPM::long:3.2.0"
     - id: "NPM::promise:7.3.1"
       dependencies:
@@ -82,34 +84,43 @@ project:
       - id: "NPM::cson-parser:1.3.5"
         dependencies:
         - id: "NPM::coffee-script:1.12.7"
-      - id: "NPM::extract-opts:3.3.1"
+      - id: "NPM::extract-opts:3.4.0"
         dependencies:
-        - id: "NPM::eachr:3.2.0"
+        - id: "NPM::eachr:3.3.0"
           dependencies:
-          - id: "NPM::editions:1.3.4"
-          - id: "NPM::typechecker:4.7.0"
+          - id: "NPM::editions:2.3.1"
             dependencies:
-            - id: "NPM::editions:2.1.3"
+            - id: "NPM::errlop:2.2.0"
+            - id: "NPM::semver:6.3.1"
+          - id: "NPM::typechecker:4.11.0"
+            dependencies:
+            - id: "NPM::editions:2.3.1"
               dependencies:
-              - id: "NPM::errlop:1.1.1"
-              - id: "NPM::semver:5.7.0"
-        - id: "NPM::editions:1.3.4"
-        - id: "NPM::typechecker:4.7.0"
+              - id: "NPM::errlop:2.2.0"
+              - id: "NPM::semver:6.3.1"
+        - id: "NPM::editions:2.3.1"
           dependencies:
-          - id: "NPM::editions:2.1.3"
+          - id: "NPM::errlop:2.2.0"
+          - id: "NPM::semver:6.3.1"
+        - id: "NPM::typechecker:4.11.0"
+          dependencies:
+          - id: "NPM::editions:2.3.1"
             dependencies:
-            - id: "NPM::errlop:1.1.1"
-            - id: "NPM::semver:5.7.0"
-      - id: "NPM::requirefresh:2.2.0"
+            - id: "NPM::errlop:2.2.0"
+            - id: "NPM::semver:6.3.1"
+      - id: "NPM::requirefresh:2.3.0"
         dependencies:
-        - id: "NPM::editions:2.1.3"
+        - id: "NPM::editions:2.3.1"
           dependencies:
-          - id: "NPM::errlop:1.1.1"
-          - id: "NPM::semver:5.7.0"
-      - id: "NPM::safefs:4.1.0"
+          - id: "NPM::errlop:2.2.0"
+          - id: "NPM::semver:6.3.1"
+      - id: "NPM::safefs:4.2.0"
         dependencies:
-        - id: "NPM::editions:1.3.4"
-        - id: "NPM::graceful-fs:4.2.0"
+        - id: "NPM::editions:2.3.1"
+          dependencies:
+          - id: "NPM::errlop:2.2.0"
+          - id: "NPM::semver:6.3.1"
+        - id: "NPM::graceful-fs:4.2.11"
 packages:
 - id: "NPM::asap:2.0.6"
   purl: "pkg:npm/asap@2.0.6"
@@ -472,8 +483,8 @@ packages:
     url: "https://github.com/FB55/domutils.git"
     revision: "7d4bd16cd36ffce62362ef91616806ea27e30d95"
     path: ""
-- id: "NPM::eachr:3.2.0"
-  purl: "pkg:npm/eachr@3.2.0"
+- id: "NPM::eachr:3.3.0"
+  purl: "pkg:npm/eachr@3.3.0"
   authors:
   - "2011+ Bevry Pty Ltd"
   declared_licenses:
@@ -490,22 +501,22 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/eachr/-/eachr-3.2.0.tgz"
+    url: "https://registry.npmjs.org/eachr/-/eachr-3.3.0.tgz"
     hash:
-      value: "2c35e43ea086516f7997cf80b7aa64d55a4a4484"
+      value: "11f7287be7d31d6b99947fe0d8a79de99ac2a469"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "http://github.com/bevry/eachr.git"
-    revision: "57ef794d001c16fd906b2558137e8ea51c1f6330"
+    url: "https://github.com/bevry/eachr.git"
+    revision: "0d1b43cc12c83f9ddb8d49a1acaf8718a026f863"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/bevry/eachr.git"
-    revision: "57ef794d001c16fd906b2558137e8ea51c1f6330"
+    revision: "0d1b43cc12c83f9ddb8d49a1acaf8718a026f863"
     path: ""
-- id: "NPM::editions:1.3.4"
-  purl: "pkg:npm/editions@1.3.4"
+- id: "NPM::editions:2.3.1"
+  purl: "pkg:npm/editions@2.3.1"
   authors:
   - "2016+ Bevry Pty Ltd"
   declared_licenses:
@@ -521,50 +532,19 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/editions/-/editions-1.3.4.tgz"
+    url: "https://registry.npmjs.org/editions/-/editions-2.3.1.tgz"
     hash:
-      value: "3662cb592347c3168eb8e498a0ff73271d67f50b"
+      value: "3bc9962f1978e801312fbd0aebfed63b49bfe698"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "https://github.com/bevry/editions.git"
-    revision: "5580800dc3935e988b7aa2cf8d571f3e9fa2d8f9"
+    revision: "b03745b7cd5a09a6fb4984dcab9544f20a794078"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/bevry/editions.git"
-    revision: "5580800dc3935e988b7aa2cf8d571f3e9fa2d8f9"
-    path: ""
-- id: "NPM::editions:2.1.3"
-  purl: "pkg:npm/editions@2.1.3"
-  authors:
-  - "2016+ Bevry Pty Ltd"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "Publish multiple editions for your JavaScript packages consistently\
-    \ and easily (e.g. source edition, esnext edition, es2015 edition)"
-  homepage_url: "https://github.com/bevry/editions"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/editions/-/editions-2.1.3.tgz"
-    hash:
-      value: "727ccf3ec2c7b12dcc652c71000f16c4824d6f7d"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "https://github.com/bevry/editions.git"
-    revision: "84f536320f7eff6385e867d9f5c1de0dfb92fa88"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/bevry/editions.git"
-    revision: "84f536320f7eff6385e867d9f5c1de0dfb92fa88"
+    revision: "b03745b7cd5a09a6fb4984dcab9544f20a794078"
     path: ""
 - id: "NPM::entities:1.1.2"
   purl: "pkg:npm/entities@1.1.2"
@@ -596,8 +576,8 @@ packages:
     url: "https://github.com/fb55/entities.git"
     revision: "54a5717d85d886c4aafa2ac5ff83d8d3d730337c"
     path: ""
-- id: "NPM::errlop:1.1.1"
-  purl: "pkg:npm/errlop@1.1.1"
+- id: "NPM::errlop:2.2.0"
+  purl: "pkg:npm/errlop@2.2.0"
   authors:
   - "2018+ Benjamin Lupton"
   declared_licenses:
@@ -613,22 +593,22 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/errlop/-/errlop-1.1.1.tgz"
+    url: "https://registry.npmjs.org/errlop/-/errlop-2.2.0.tgz"
     hash:
-      value: "d9ae4c76c3e64956c5d79e6e035d6343bfd62250"
+      value: "1ff383f8f917ae328bebb802d6ca69666a42d21b"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "https://github.com/bevry/errlop.git"
-    revision: "ca13727bd3a227cd937d104b3217d1cd778cc99b"
+    revision: "df73707a467967d1da36176e9199f2c98a314220"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/bevry/errlop.git"
-    revision: "ca13727bd3a227cd937d104b3217d1cd778cc99b"
+    revision: "df73707a467967d1da36176e9199f2c98a314220"
     path: ""
-- id: "NPM::extract-opts:3.3.1"
-  purl: "pkg:npm/extract-opts@3.3.1"
+- id: "NPM::extract-opts:3.4.0"
+  purl: "pkg:npm/extract-opts@3.4.0"
   authors:
   - "2011+ Benjamin Lupton"
   - "2013+ Bevry Pty Ltd"
@@ -644,22 +624,22 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/extract-opts/-/extract-opts-3.3.1.tgz"
+    url: "https://registry.npmjs.org/extract-opts/-/extract-opts-3.4.0.tgz"
     hash:
-      value: "5abbedc98c0d5202e3278727f9192d7e086c6be1"
+      value: "ab07a7873896a1a7e350f27e2d52645c2ceba9ac"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "http://github.com/bevry/extract-opts.git"
-    revision: "87e349bbf92a6f95d1ecc8b064a1631def105dc8"
+    url: "https://github.com/bevry/extract-opts.git"
+    revision: "be6ba5f1d865d3d547350fe3f379251792936ed8"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/bevry/extract-opts.git"
-    revision: "87e349bbf92a6f95d1ecc8b064a1631def105dc8"
+    revision: "be6ba5f1d865d3d547350fe3f379251792936ed8"
     path: ""
-- id: "NPM::graceful-fs:4.2.0"
-  purl: "pkg:npm/graceful-fs@4.2.0"
+- id: "NPM::graceful-fs:4.2.11"
+  purl: "pkg:npm/graceful-fs@4.2.11"
   declared_licenses:
   - "ISC"
   declared_licenses_processed:
@@ -672,19 +652,19 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.0.tgz"
+    url: "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.11.tgz"
     hash:
-      value: "8d8fdc73977cb04104721cb53666c1ca64cd328b"
+      value: "4183e4e8bf08bb6e05bbb2f7d2e0c8f712ca40e3"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "https://github.com/isaacs/node-graceful-fs"
-    revision: "585df780323740a2b562677caa08a80de1f56c62"
+    revision: "514861c372899df14beb7aaecca4cdbb498d7d11"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/isaacs/node-graceful-fs.git"
-    revision: "585df780323740a2b562677caa08a80de1f56c62"
+    revision: "514861c372899df14beb7aaecca4cdbb498d7d11"
     path: ""
 - id: "NPM::htmlparser2:3.10.1"
   purl: "pkg:npm/htmlparser2@3.10.1"
@@ -745,8 +725,8 @@ packages:
     url: "https://github.com/isaacs/inherits.git"
     revision: "9a2c29400c6d491e0b7beefe0c32efa3b462545d"
     path: ""
-- id: "NPM::lodash:4.17.15"
-  purl: "pkg:npm/lodash@4.17.15"
+- id: "NPM::lodash:4.17.21"
+  purl: "pkg:npm/lodash@4.17.21"
   authors:
   - "John-David Dalton"
   declared_licenses:
@@ -761,19 +741,19 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/lodash/-/lodash-4.17.15.tgz"
+    url: "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
     hash:
-      value: "b447f6670a0455bbfeedd11392eff330ea097548"
+      value: "679591c564c3bffaae8454cf0b3df370c3d6911c"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "https://github.com/lodash/lodash.git"
-    revision: ""
+    revision: "c6e281b878b315c7a10d90f9c2af4cdb112d9625"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/lodash/lodash.git"
-    revision: ""
+    revision: "c6e281b878b315c7a10d90f9c2af4cdb112d9625"
     path: ""
 - id: "NPM::long:3.2.0"
   purl: "pkg:npm/long@3.2.0"
@@ -896,8 +876,8 @@ packages:
     url: "https://github.com/then/promise.git"
     revision: "cebfa6049cc08843f428c6fc92dde918f8687e6d"
     path: ""
-- id: "NPM::readable-stream:3.4.0"
-  purl: "pkg:npm/readable-stream@3.4.0"
+- id: "NPM::readable-stream:3.6.2"
+  purl: "pkg:npm/readable-stream@3.6.2"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -910,22 +890,22 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/readable-stream/-/readable-stream-3.4.0.tgz"
+    url: "https://registry.npmjs.org/readable-stream/-/readable-stream-3.6.2.tgz"
     hash:
-      value: "a51c26754658e0a3c21dbf59163bd45ba6f447fc"
+      value: "56a9b36ea965c00c5a93ef31eb111a0f11056967"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "git://github.com/nodejs/readable-stream"
-    revision: "4ba93f84cf8812ca2af793c7304a5c16de72088a"
+    revision: "6c32003bd8607da54f8ca1b096c4411778b060bc"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/nodejs/readable-stream.git"
-    revision: "4ba93f84cf8812ca2af793c7304a5c16de72088a"
+    revision: "6c32003bd8607da54f8ca1b096c4411778b060bc"
     path: ""
-- id: "NPM::requirefresh:2.2.0"
-  purl: "pkg:npm/requirefresh@2.2.0"
+- id: "NPM::requirefresh:2.3.0"
+  purl: "pkg:npm/requirefresh@2.3.0"
   authors:
   - "2011+ Benjamin Lupton"
   - "2013+ Bevry Pty Ltd"
@@ -941,22 +921,22 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/requirefresh/-/requirefresh-2.2.0.tgz"
+    url: "https://registry.npmjs.org/requirefresh/-/requirefresh-2.3.0.tgz"
     hash:
-      value: "68298ae66af9da3d6843375adf8351dd29d73789"
+      value: "fb09387b57f5ed335ff4a4beea3d8c0bf2367306"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "https://github.com/bevry/requirefresh.git"
-    revision: "f389cbc33b5891468bde8db479bc0f129b0fcc57"
+    revision: "aecc77a6b41d1486ca63b317cb31dd07b4f56629"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/bevry/requirefresh.git"
-    revision: "f389cbc33b5891468bde8db479bc0f129b0fcc57"
+    revision: "aecc77a6b41d1486ca63b317cb31dd07b4f56629"
     path: ""
-- id: "NPM::safe-buffer:5.1.2"
-  purl: "pkg:npm/safe-buffer@5.1.2"
+- id: "NPM::safe-buffer:5.2.1"
+  purl: "pkg:npm/safe-buffer@5.2.1"
   authors:
   - "Feross Aboukhadijeh"
   declared_licenses:
@@ -971,22 +951,22 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.1.2.tgz"
+    url: "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.2.1.tgz"
     hash:
-      value: "991ec69d296e0313747d59bdfd2b745c35f8828d"
+      value: "1eaf9fa9bdb1fdd4ec75f58f9cdb4e6b7827eec6"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "git://github.com/feross/safe-buffer.git"
-    revision: "649435cc8e2d1f3ecdc7caf323f1cb1187307a16"
+    revision: "89d3d5b4abd6308c6008499520373d204ada694b"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/feross/safe-buffer.git"
-    revision: "649435cc8e2d1f3ecdc7caf323f1cb1187307a16"
+    revision: "89d3d5b4abd6308c6008499520373d204ada694b"
     path: ""
-- id: "NPM::safefs:4.1.0"
-  purl: "pkg:npm/safefs@4.1.0"
+- id: "NPM::safefs:4.2.0"
+  purl: "pkg:npm/safefs@4.2.0"
   authors:
   - "2011-2012 Benjamin Lupton"
   - "2013+ Bevry Pty Ltd"
@@ -1003,22 +983,24 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/safefs/-/safefs-4.1.0.tgz"
+    url: "https://registry.npmjs.org/safefs/-/safefs-4.2.0.tgz"
     hash:
-      value: "f82aeb4bdd7ae51f653eb20f6728b3058c8d6445"
+      value: "6d60d3aecc47c3d02b0ecf39ee0a3798cb363218"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "http://github.com/bevry/safefs.git"
-    revision: "51d15eaa03e53aaedd3002dc67814355073e8a55"
+    url: "https://github.com/bevry/safefs.git"
+    revision: "f57353e1353147252e8c306eb5f06321631ea46a"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/bevry/safefs.git"
-    revision: "51d15eaa03e53aaedd3002dc67814355073e8a55"
+    revision: "f57353e1353147252e8c306eb5f06321631ea46a"
     path: ""
-- id: "NPM::semver:5.7.0"
-  purl: "pkg:npm/semver@5.7.0"
+- id: "NPM::semver:6.3.1"
+  purl: "pkg:npm/semver@6.3.1"
+  authors:
+  - "GitHub Inc."
   declared_licenses:
   - "ISC"
   declared_licenses_processed:
@@ -1031,22 +1013,22 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/semver/-/semver-5.7.0.tgz"
+    url: "https://registry.npmjs.org/semver/-/semver-6.3.1.tgz"
     hash:
-      value: "790a7cf6fea5459bac96110b29b60412dc8ff96b"
+      value: "556d2ef8689146e46dcea4bfdd095f3434dffcb4"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "https://github.com/npm/node-semver"
-    revision: "8055dda0aee91372e3bfc47754a62f40e8a63b98"
+    url: "https://github.com/npm/node-semver.git"
+    revision: "b717044e57bd132c7e5aa50e9af9a03f10d4655a"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/npm/node-semver.git"
-    revision: "8055dda0aee91372e3bfc47754a62f40e8a63b98"
+    revision: "b717044e57bd132c7e5aa50e9af9a03f10d4655a"
     path: ""
-- id: "NPM::string_decoder:1.2.0"
-  purl: "pkg:npm/string_decoder@1.2.0"
+- id: "NPM::string_decoder:1.3.0"
+  purl: "pkg:npm/string_decoder@1.3.0"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1059,22 +1041,22 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/string_decoder/-/string_decoder-1.2.0.tgz"
+    url: "https://registry.npmjs.org/string_decoder/-/string_decoder-1.3.0.tgz"
     hash:
-      value: "fe86e738b19544afe70469243b2a1ee9240eae8d"
+      value: "42f114594a46cf1a8e30b0a84f56c78c3edac21e"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "git://github.com/nodejs/string_decoder.git"
-    revision: "6e0a9286ed4497badebd4ec6a9a7a4d37793aae8"
+    revision: "60db81e031c126112039157ba9437484b1329dff"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/nodejs/string_decoder.git"
-    revision: "6e0a9286ed4497badebd4ec6a9a7a4d37793aae8"
+    revision: "60db81e031c126112039157ba9437484b1329dff"
     path: ""
-- id: "NPM::typechecker:4.7.0"
-  purl: "pkg:npm/typechecker@4.7.0"
+- id: "NPM::typechecker:4.11.0"
+  purl: "pkg:npm/typechecker@4.11.0"
   authors:
   - "2011-2012 Benjamin Lupton"
   - "2013+ Bevry Pty Ltd"
@@ -1091,19 +1073,47 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/typechecker/-/typechecker-4.7.0.tgz"
+    url: "https://registry.npmjs.org/typechecker/-/typechecker-4.11.0.tgz"
     hash:
-      value: "5249f427358f45b7250c4924fd4d01ed9ba435e9"
+      value: "8219cd90d2f7b585a3f5af9c146c8a23891f1eac"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "https://github.com/bevry/typechecker.git"
-    revision: "69008d42927749d7e21cfe9816e478dd8d15ab88"
+    revision: "3a3868d30834a52522ecb1032dc475af5e8ecc2c"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/bevry/typechecker.git"
-    revision: "69008d42927749d7e21cfe9816e478dd8d15ab88"
+    revision: "3a3868d30834a52522ecb1032dc475af5e8ecc2c"
+    path: ""
+- id: "NPM::undici-types:6.19.8"
+  purl: "pkg:npm/undici-types@6.19.8"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A stand-alone types package for Undici"
+  homepage_url: "https://undici.nodejs.org"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/undici-types/-/undici-types-6.19.8.tgz"
+    hash:
+      value: "35111c9d1437ab83a7cdc0abae2f26d88eda0a02"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/nodejs/undici.git"
+    revision: "3d3ce0695c8c3f9a8f3c8af90dd42d0569d3f0bb"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/nodejs/undici.git"
+    revision: "3d3ce0695c8c3f9a8f3c8af90dd42d0569d3f0bb"
     path: ""
 - id: "NPM::util-deprecate:1.0.2"
   purl: "pkg:npm/util-deprecate@1.0.2"
@@ -1163,13 +1173,13 @@ packages:
     url: "https://github.com/web-animations/web-animations-js.git"
     revision: "64d83730282fdbce733460d44be52c132d6c04e9"
     path: ""
-- id: "NPM:@types:node:12.6.8"
-  purl: "pkg:npm/%40types/node@12.6.8"
+- id: "NPM:@types:node:22.9.0"
+  purl: "pkg:npm/%40types/node@22.9.0"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
     spdx_expression: "MIT"
-  description: "TypeScript definitions for Node.js"
+  description: "TypeScript definitions for node"
   homepage_url: "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/node"
   binary_artifact:
     url: ""
@@ -1177,9 +1187,9 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/@types/node/-/node-12.6.8.tgz"
+    url: "https://registry.npmjs.org/@types/node/-/node-22.9.0.tgz"
     hash:
-      value: "e469b4bf9d1c9832aee4907ba8a051494357c12c"
+      value: "b7f16e5c3384788542c72dc3d561a7ceae2c0365"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
@@ -1192,12 +1202,6 @@ packages:
     revision: ""
     path: "types/node"
 issues:
-- timestamp: "1970-01-01T00:00:00Z"
-  source: "NPM"
-  message: "The <REPLACE_LOCKFILE_NAME> file was created with an old version of npm, so\
-    \ supplemental metadata must be fetched from the registry. This is a one-time\
-    \ fix-up, please be patient..."
-  severity: "HINT"
 - timestamp: "1970-01-01T00:00:00Z"
   source: "NPM"
   message: "deprecated coffee-script@1.12.7: CoffeeScript on NPM has moved to \"coffeescript\"\

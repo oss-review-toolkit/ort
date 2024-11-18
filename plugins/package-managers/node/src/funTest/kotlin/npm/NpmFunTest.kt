@@ -74,11 +74,7 @@ class NpmFunTest : WordSpec({
 
             val result = create("NPM").resolveSingleProject(definitionFile, resolveScopes = true)
 
-            patchActualResult(result.toYaml()) should matchExpectedResult(
-                expectedResultFile,
-                definitionFile,
-                custom = mapOf("<REPLACE_LOCKFILE_NAME>" to "package-lock.json")
-            )
+            patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "show an error if no lockfile is present" {

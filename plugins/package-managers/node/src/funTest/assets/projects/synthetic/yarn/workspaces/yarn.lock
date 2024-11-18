@@ -3,32 +3,20 @@
 
 
 "@here/harp-fetch@^0.11.0":
-  "integrity" "sha512-Yp+3VQdDR9r66MRJ4zSSu6XemnkAz9ahz2e+RRWhdoM4OHih8zvmVbSH1H4WDCW0qkZM2W8z8c66jKPCJoHAPw=="
-  "resolved" "https://registry.npmjs.org/@here/harp-fetch/-/harp-fetch-0.11.0.tgz"
-  "version" "0.11.0"
+  version "0.11.0"
+  resolved "https://registry.npmjs.org/@here/harp-fetch/-/harp-fetch-0.11.0.tgz"
+  integrity sha512-Yp+3VQdDR9r66MRJ4zSSu6XemnkAz9ahz2e+RRWhdoM4OHih8zvmVbSH1H4WDCW0qkZM2W8z8c66jKPCJoHAPw==
   dependencies:
-    "node-fetch" "^2.2.0"
+    node-fetch "^2.2.0"
 
 "@here/harp-fetch@^0.3.6":
-  "integrity" "sha512-KtpnHQXymwfwvYWVqXh5ZV16SXLW7n8hQb1wZYDbcm+5OX/LzYWmwEzEKzxluaNxbo2vt/hM/jeqDlSEGMDelA=="
-  "resolved" "https://registry.npmjs.org/@here/harp-fetch/-/harp-fetch-0.3.6.tgz"
-  "version" "0.3.6"
+  version "0.3.6"
+  resolved "https://registry.npmjs.org/@here/harp-fetch/-/harp-fetch-0.3.6.tgz"
+  integrity sha512-KtpnHQXymwfwvYWVqXh5ZV16SXLW7n8hQb1wZYDbcm+5OX/LzYWmwEzEKzxluaNxbo2vt/hM/jeqDlSEGMDelA==
   dependencies:
-    "node-fetch" "^2.2.0"
+    node-fetch "^2.2.0"
 
-"@scope1/pkg1@file:/home/sse1be/Development/GitHub/oss-review-toolkit/ort/analyzer/src/funTest/assets/projects/synthetic/yarn-workspaces/packages/pkg1":
-  "resolved" "file:packages/pkg1"
-  "version" "1.0.0"
-  dependencies:
-    "@here/harp-fetch" "^0.11.0"
-
-"node-fetch@^2.2.0":
-  "integrity" "sha512-8dG4H5ujfvFiqDmVu9fQ5bOHUC15JMjMY/Zumv26oOvvVJjM67KF8koCWIabKQ1GJIa9r2mMZscBq/TbdOcmNA=="
-  "resolved" "https://registry.npmjs.org/node-fetch/-/node-fetch-2.6.0.tgz"
-  "version" "2.6.0"
-
-"pkg2@file:/home/sse1be/Development/GitHub/oss-review-toolkit/ort/analyzer/src/funTest/assets/projects/synthetic/yarn-workspaces/packages/pkg2":
-  "resolved" "file:packages/pkg2"
-  "version" "1.0.0"
-  dependencies:
-    "@here/harp-fetch" "^0.3.6"
+node-fetch@^2.2.0:
+  version "2.6.0"
+  resolved "https://registry.npmjs.org/node-fetch/-/node-fetch-2.6.0.tgz"
+  integrity sha512-8dG4H5ujfvFiqDmVu9fQ5bOHUC15JMjMY/Zumv26oOvvVJjM67KF8koCWIabKQ1GJIa9r2mMZscBq/TbdOcmNA==
