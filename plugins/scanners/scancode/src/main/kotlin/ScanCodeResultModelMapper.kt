@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.model.utils.associateLicensesWithExceptions
 
 import org.semver4j.Semver
 
-const val MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION = 3
+const val MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION = 4
 
 private val TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HHmmss.n").withZone(ZoneId.of("UTC"))
 
@@ -118,6 +118,10 @@ fun ScanCodeResult.toScanSummary(preferFileLicense: Boolean = false): ScanSummar
                 val spdxLicenseExpression = when {
                     license is LicenseEntry.Version3 && license.spdxLicenseExpression != null -> {
                         license.spdxLicenseExpression
+                    }
+
+                    license is LicenseEntry.Version4 && license.licenseExpressionSpdx != null -> {
+                        license.licenseExpressionSpdx
                     }
 
                     else -> license.licenseExpression.mapLicense(scanCodeKeyToSpdxIdMappings)
