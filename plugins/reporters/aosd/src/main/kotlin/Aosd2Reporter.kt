@@ -142,8 +142,7 @@ private fun RemoteArtifact.toDeployPackage(): AOSD2.DeployPackage =
 
 private fun Hash.toChecksums(): AOSD2.Checksums =
     when (algorithm) {
-        HashAlgorithm.MD5 -> AOSD2.Checksums(md5 = value)
-        HashAlgorithm.SHA1 -> AOSD2.Checksums(sha1 = value)
+        // Other algorithms than SHA256 create an error message when importing.
         HashAlgorithm.SHA256 -> AOSD2.Checksums(sha256 = value)
         else -> AOSD2.Checksums(integrity = value)
     }
