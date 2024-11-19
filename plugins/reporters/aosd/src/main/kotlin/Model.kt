@@ -130,6 +130,10 @@ internal data class AOSD2(
         val external: Boolean? = null
     )
 
+    /**
+     * If the version has been divided into individual parts, then these can be made available for third-party use by
+     * providing the usage features and license information if necessary (e.g. dual licensing).
+     */
     @Serializable
     data class Provider(
         val additionalLicenses: List<License>,
