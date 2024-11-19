@@ -274,8 +274,22 @@
                     "$ref": "#/definitions/S3FileStorage"
                 }
             },
-            "required": [
-                "localFileStorage"
+            "oneOf": [
+                {
+                    "required": [
+                        "localFileStorage"
+                    ]
+                },
+                {
+                    "required": [
+                        "httpFileStorage"
+                    ]
+                },
+                {
+                    "required": [
+                        "s3FileStorage"
+                    ]
+                }
             ]
         },
         "LocalFileStorage": {
