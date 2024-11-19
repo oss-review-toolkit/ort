@@ -30,19 +30,19 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
-import org.ossreviewtoolkit.plugins.reporters.aosd.AOSD2.ExternalDependency
+import org.ossreviewtoolkit.plugins.reporters.aosd.AOSD20.ExternalDependency
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 
 @OrtPlugin(
-    id = "AOSD2",
-    displayName = "Audi Open Source Diagnostics 2 Reporter",
-    description = "A reporter for the Audi Open Source Diagnostics 2 (AOSD2) format.",
+    id = "AOSD2.0",
+    displayName = "Audi Open Source Diagnostics 2.0 Reporter",
+    description = "A reporter for the Audi Open Source Diagnostics (AOSD) 2.0 format.",
     factory = ReporterFactory::class
 )
-class Aosd2Reporter(override val descriptor: PluginDescriptor = Aosd2ReporterFactory.descriptor) : Reporter {
+class Aosd20Reporter(override val descriptor: PluginDescriptor = Aosd20ReporterFactory.descriptor) : Reporter {
     override fun generateReport(input: ReporterInput, outputDir: File): List<Result<File>> {
         val reportFiles = input.ortResult.getProjects(omitExcluded = true).map { project ->
             val directDependencies = input.ortResult.getDependencies(project.id, maxLevel = 1, omitExcluded = true)
@@ -53,10 +53,10 @@ class Aosd2Reporter(override val descriptor: PluginDescriptor = Aosd2ReporterFac
             }
 
             runCatching {
-                val model = AOSD2(directDependencies = directDependencies, dependencies = dependencies)
+                val model = AOSD20(directDependencies = directDependencies, dependencies = dependencies)
                 val projectName = project.id.toPath("-")
 
-                outputDir.resolve("aosd.$projectName.json").writeReport(model)
+                outputDir.resolve("aosd20.$projectName.json").writeReport(model)
             }
         }
 
@@ -69,9 +69,9 @@ private fun Package.toExternalDependency(input: ReporterInput): ExternalDependen
 
     // There has to be at least one part. As nothing is known about the logical layout of the external dependency,
     // assume that there are no separate parts and always create a default one.
-    val defaultPart = AOSD2.Part(
+    val defaultPart = AOSD20.Part(
         name = "default",
-        providers = listOf(AOSD2.Provider(additionalLicenses = licenses))
+        providers = listOf(AOSD20.Provider(additionalLicenses = licenses))
     )
 
     return ExternalDependency(
@@ -89,15 +89,15 @@ private fun Package.toExternalDependency(input: ReporterInput): ExternalDependen
     )
 }
 
-private fun Package.toLicenses(input: ReporterInput): List<AOSD2.License> {
-    val licenses = mutableListOf<AOSD2.License>()
+private fun Package.toLicenses(input: ReporterInput): List<AOSD20.License> {
+    val licenses = mutableListOf<AOSD20.License>()
     val resolvedLicenseInfo = input.licenseInfoResolver.resolveLicenseInfo(id).filterExcluded()
 
     fun getLicenses(
         licenseView: LicenseView,
-        origin: AOSD2.Origin,
+        origin: AOSD20.Origin,
         copyrights: List<String> = emptyList()
-    ): List<AOSD2.License> {
+    ): List<AOSD20.License> {
         val effectiveLicense = resolvedLicenseInfo.effectiveLicense(
             licenseView,
             input.ortResult.getPackageLicenseChoices(id),
@@ -108,11 +108,11 @@ private fun Package.toLicenses(input: ReporterInput): List<AOSD2.License> {
             val name = licenseExpression.toString()
             val text = input.licenseTextProvider.getLicenseText(name)
 
-            AOSD2.License(
+            AOSD20.License(
                 name = name,
                 spdxId = SpdxLicense.forId(name)?.id,
                 text = text.orEmpty(),
-                copyrights = copyrights.takeUnless { it.isEmpty() }?.let { AOSD2.Copyrights(copyrights) },
+                copyrights = copyrights.takeUnless { it.isEmpty() }?.let { AOSD20.Copyrights(copyrights) },
                 origin = origin
             )
         }.orEmpty()
@@ -121,20 +121,20 @@ private fun Package.toLicenses(input: ReporterInput): List<AOSD2.License> {
     val copyrights = resolvedLicenseInfo.getCopyrights().toList()
 
     // Declared licenses come from package management metadata.
-    licenses += getLicenses(LicenseView.ONLY_DECLARED, AOSD2.Origin.PACKAGE_MANAGEMENT)
+    licenses += getLicenses(LicenseView.ONLY_DECLARED, AOSD20.Origin.PACKAGE_MANAGEMENT)
 
     // Group licenses detected by a scanner by their provenance / origin.
     val provenance = input.ortResult.scanner?.provenances?.find { it.id == id }?.packageProvenance
     when (provenance) {
         is RepositoryProvenance -> licenses += getLicenses(
             LicenseView.ONLY_DETECTED,
-            AOSD2.Origin.SCM,
+            AOSD20.Origin.SCM,
             copyrights
         )
 
         is ArtifactProvenance -> licenses += getLicenses(
             LicenseView.ONLY_DETECTED,
-            AOSD2.Origin.LICENSE_FILE,
+            AOSD20.Origin.LICENSE_FILE,
             copyrights
         )
 
@@ -144,16 +144,16 @@ private fun Package.toLicenses(input: ReporterInput): List<AOSD2.License> {
     return licenses
 }
 
-private fun RemoteArtifact.toDeployPackage(): AOSD2.DeployPackage =
-    AOSD2.DeployPackage(
+private fun RemoteArtifact.toDeployPackage(): AOSD20.DeployPackage =
+    AOSD20.DeployPackage(
         name = "default",
         downloadUrl = url.takeUnless { it.isEmpty() },
         checksums = hash.takeIf { it.algorithm.isVerifiable }?.toChecksums()
     )
 
-private fun Hash.toChecksums(): AOSD2.Checksums =
+private fun Hash.toChecksums(): AOSD20.Checksums =
     when (algorithm) {
         // Other algorithms than SHA256 create an error message when importing.
-        HashAlgorithm.SHA256 -> AOSD2.Checksums(sha256 = value)
-        else -> AOSD2.Checksums(integrity = value)
+        HashAlgorithm.SHA256 -> AOSD20.Checksums(sha256 = value)
+        else -> AOSD20.Checksums(integrity = value)
     }

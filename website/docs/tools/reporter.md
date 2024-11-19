@@ -7,7 +7,7 @@ sidebar_position: 6
 The *reporter* generates a wide variety of documents in different formats from ORT result files.
 Currently, the following formats are supported (reporter names are case-insensitive):
 
-* [Audi Open Source Diagnostics 2](https://www.aosd.cloud.audi/help) (`-f AOSD2`)
+* [Audi Open Source Diagnostics 2.0](https://www.aosd.cloud.audi/help) (`-f AOSD2.0`)
 * [AsciiDoc Template](../configuration/reporter-templates.md#asciidoc-templates) (`-f AsciiDocTemplate`)
   * Customizable with [Apache Freemarker](https://freemarker.apache.org/) templates and [AsciiDoc](https://asciidoc.org/)
   * PDF style customizable with Asciidoctor [PDF themes](https://docs.asciidoctor.org/pdf-converter/latest/theme/)

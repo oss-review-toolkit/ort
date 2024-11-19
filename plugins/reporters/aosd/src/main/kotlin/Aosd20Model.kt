@@ -33,7 +33,7 @@ import kotlinx.serialization.json.encodeToStream
  * The JSON format for importing product dependencies into AOSD 2.0, see https://www.aosd.cloud.audi/jsonschemadoc/.
  */
 @Serializable
-internal data class AOSD2(
+internal data class AOSD20(
     /** The reference to the official JSON schema. */
     @SerialName("\$schema")
     val schema: String = "https://www.aosd.cloud.audi/jsonschemadoc/static/aosd.schema.json",
@@ -194,4 +194,4 @@ internal data class AOSD2(
 
 internal val JSON = Json { encodeDefaults = false }
 
-internal fun File.writeReport(model: AOSD2): File = apply { outputStream().use { JSON.encodeToStream(model, it) } }
+internal fun File.writeReport(model: AOSD20): File = apply { outputStream().use { JSON.encodeToStream(model, it) } }
