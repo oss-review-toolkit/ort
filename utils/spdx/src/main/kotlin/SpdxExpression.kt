@@ -305,7 +305,13 @@ class SpdxCompoundExpression(
                         child.validChoices()
                     } else {
                         child.validChoices().flatMapTo(mutableSetOf()) { childChoice ->
-                            acc.map { it and childChoice }
+                            acc.map { operand ->
+                                // Do not use the "and" operator here which performs an optimization for equal operands
+                                // that could lead to endless recursion. However, perform a similar optimization that at
+                                // least handles equal string representations.
+                                operand.takeIf { it.toString() == childChoice.toString() }
+                                    ?: SpdxCompoundExpression(SpdxOperator.AND, listOf(operand, childChoice))
+                            }
                         }
                     }
                 }
