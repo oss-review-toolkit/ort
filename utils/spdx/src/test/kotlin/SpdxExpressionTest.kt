@@ -552,6 +552,18 @@ class SpdxExpressionTest : WordSpec({
         }
     }
 
+    "and" should {
+        "work for complex expression" {
+            val string1 = "Apache-1.1 AND OFL-1.1 AND Apache-2.0 AND Apache-2.0 AND Artistic-1.0-Perl AND Artistic-2.0 AND BSD-2-Clause AND BSD-2-Clause-Darwin AND BSD-2-Clause-Views AND BSD-3-Clause AND BSL-1.0"
+            val string2 = "Apache-1.1 AND OFL-1.1 AND Apache-2.0 AND Apache-2.0 AND Artistic-1.0-Perl AND Artistic-2.0 AND BSD-2-Clause AND BSD-2-Clause-Darwin AND BSD-2-Clause-Views AND BSD-3-Clause AND BSL-1.0 AND CC-BY-2.5 AND CC-BY-4.0 AND CDDL-1.0 AND CDDL-1.1 AND CPL-1.0 AND EPL-1.0 AND EPL-2.0 AND GPL-1.0-or-later AND GPL-2.0-only AND GPL-2.0-only WITH Classpath-exception-2.0 AND GPL-2.0-or-later AND GPL-2.0-or-later WITH Classpath-exception-2.0 AND ICU AND ISC AND JSON AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND LPPL-1.3c AND MIT AND MPL-1.0 AND MPL-1.1 AND MPL-2.0 AND NTP AND Noweb AND Python-2.0 AND Ruby AND Unicode-DFS-2016 AND W3C AND W3C-19980720 AND W3C-20150513"
+
+            val expression1 = string1.toSpdx()
+            val expression2 = string2.toSpdx()
+
+            expression1 and expression2 shouldBe expression2
+        }
+    }
+
     "toString()" should {
         "return the textual SPDX expression" {
             val expression = "a+ AND (b WITH exception1 OR c+) AND d WITH exception2"
