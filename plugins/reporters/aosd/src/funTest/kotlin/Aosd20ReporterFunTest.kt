@@ -38,21 +38,21 @@ import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.test.getAssetFile
 
-class Aosd2ReporterFunTest : WordSpec({
+class Aosd20ReporterFunTest : WordSpec({
     "The example JSON report" should {
         "be valid according to the schema" {
-            val schemaFile = getAssetFile("aosd.schema.json")
+            val schemaFile = getAssetFile("aosd20/aosd.schema.json")
             val schema = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7).getSchema(schemaFile.toURI())
 
-            val exampleFile = getAssetFile("aosd.example.json")
+            val exampleFile = getAssetFile("aosd20/aosd.example.json")
             val errors = schema.validate(exampleFile.readText(), InputFormat.JSON)
 
             errors should beEmpty()
         }
 
         "deserialize correctly" {
-            val aosdFile = getAssetFile("aosd.example.json")
-            val aosd = aosdFile.inputStream().use { JSON.decodeFromStream<AOSD2>(it) }
+            val aosdFile = getAssetFile("aosd20/aosd.example.json")
+            val aosd = aosdFile.inputStream().use { JSON.decodeFromStream<AOSD20>(it) }
 
             with(aosd) {
                 directDependencies shouldHaveSize 1
@@ -64,21 +64,21 @@ class Aosd2ReporterFunTest : WordSpec({
     "The generated report" should {
         "match the expected result" {
             val outputDir = tempdir()
-            val reportFiles = Aosd2Reporter().generateReport(ReporterInput(ORT_RESULT), outputDir)
+            val reportFiles = Aosd20Reporter().generateReport(ReporterInput(ORT_RESULT), outputDir)
 
             reportFiles shouldHaveSize 2
 
             assertSoftly {
                 with(reportFiles[0]) {
                     this shouldBeSuccess { actualFile ->
-                        val expectedFile = getAssetFile("aosd.NPM-%40ort-project-with-findings-1.0.json")
+                        val expectedFile = getAssetFile("aosd20/aosd.NPM-%40ort-project-with-findings-1.0.json")
                         actualFile.readText() shouldEqualJson expectedFile.readText()
                     }
                 }
 
                 with(reportFiles[1]) {
                     this shouldBeSuccess { actualFile ->
-                        val expectedFile = getAssetFile("aosd.NPM-%40ort-project-without-findings-1.0.json")
+                        val expectedFile = getAssetFile("aosd20/aosd.NPM-%40ort-project-without-findings-1.0.json")
                         actualFile.readText() shouldEqualJson expectedFile.readText()
                     }
                 }
