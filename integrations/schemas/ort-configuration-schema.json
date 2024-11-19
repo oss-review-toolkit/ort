@@ -268,10 +268,10 @@
                     "$ref": "#/definitions/LocalFileStorage"
                 },
                 "httpFileStorage": {
-                    "§ref": "#/definitions/HttpFileStorage"
+                    "$ref": "#/definitions/HttpFileStorage"
                 },
                 "s3FileStorage": {
-                    "§ref": "#/definitions/S3FileStorage"
+                    "$ref": "#/definitions/S3FileStorage"
                 }
             },
             "required": [
