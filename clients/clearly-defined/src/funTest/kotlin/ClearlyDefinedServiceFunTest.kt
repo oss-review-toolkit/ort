@@ -72,7 +72,8 @@ class ClearlyDefinedServiceFunTest : WordSpec({
             curation.licensed?.declared shouldBe "CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0"
         }
 
-        "return bulk curation data" {
+        // TODO: Enable again once HTTP 429 "Too Many Requests" errors are resolved.
+        "return bulk curation data".config(enabled = false) {
             val service = ClearlyDefinedService.create(client = okHttpClient)
 
             val curations = service.getCurations(listOf(coordinates))
@@ -129,7 +130,8 @@ class ClearlyDefinedServiceFunTest : WordSpec({
     }
 
     "Definitions" should {
-        "contain facets for file entries" {
+        // TODO: Enable again once HTTP 429 "Too Many Requests" errors are resolved.
+        "contain facets for file entries".config(enabled = false) {
             val service = ClearlyDefinedService.create(client = okHttpClient)
             val coordinates = Coordinates(
                 type = ComponentType.NPM,
