@@ -28,8 +28,8 @@ internal fun parsePnpmList(json: String): List<ModuleInfo> = JSON.decodeFromStri
 
 @Serializable
 internal data class ModuleInfo(
-    val name: String,
-    val version: String,
+    val name: String? = null,
+    val version: String? = null,
     val path: String,
     val private: Boolean,
     val dependencies: Map<String, Dependency> = emptyMap(),
