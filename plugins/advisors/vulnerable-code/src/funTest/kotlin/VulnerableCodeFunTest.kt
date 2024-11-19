@@ -130,7 +130,7 @@ class VulnerableCodeFunTest : WordSpec({
                     scoringSystem shouldBe "cvssv3.1"
                     severity shouldBe "MEDIUM"
                     score shouldBe 4.8f
-                    vector shouldBe "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N"
+                    vector shouldBe "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:L"
                 }
             }
         }
