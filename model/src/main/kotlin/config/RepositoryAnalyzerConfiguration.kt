@@ -74,8 +74,7 @@ data class RepositoryAnalyzerConfiguration(
         packageManagers?.toSortedMap(String.CASE_INSENSITIVE_ORDER)
 
     init {
-        val duplicatePackageManagers =
-            packageManagers?.keys.orEmpty() - packageManagersCaseInsensitive?.keys?.toSet().orEmpty()
+        val duplicatePackageManagers = packageManagers?.keys.orEmpty() - packageManagersCaseInsensitive?.keys.orEmpty()
 
         require(duplicatePackageManagers.isEmpty()) {
             "The following package managers have duplicate configuration: ${duplicatePackageManagers.joinToString()}."
