@@ -507,9 +507,9 @@ class SpdxLicenseWithExceptionExpression(
 
             is SpdxExpression -> {
                 val decomposed = other.decompose()
-                decomposed.size == 1 && decomposed.first().let {
+                decomposed.singleOrNull()?.let {
                     it is SpdxLicenseWithExceptionExpression && it.license == license && it.exception == exception
-                }
+                } == true
             }
 
             else -> false
@@ -571,9 +571,9 @@ class SpdxLicenseIdExpression(
 
             is SpdxExpression -> {
                 val decomposed = other.decompose()
-                decomposed.size == 1 && decomposed.first().let {
+                decomposed.singleOrNull()?.let {
                     it is SpdxLicenseIdExpression && it.id == id && it.orLaterVersion == orLaterVersion
-                }
+                } == true
             }
 
             else -> false
@@ -620,7 +620,7 @@ data class SpdxLicenseReferenceExpression(
 
             is SpdxExpression -> {
                 val decomposed = other.decompose()
-                decomposed.size == 1 && decomposed.first().let { it is SpdxLicenseReferenceExpression && it.id == id }
+                decomposed.singleOrNull()?.let { it is SpdxLicenseReferenceExpression && it.id == id } == true
             }
 
             else -> false
