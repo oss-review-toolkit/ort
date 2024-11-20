@@ -33,7 +33,6 @@ import io.mockk.unmockkAll
 import java.time.LocalDateTime
 
 class FossIdNamingProviderTest : WordSpec() {
-
     override suspend fun afterEach(testCase: TestCase, result: TestResult) {
         unmockkAll()
     }
