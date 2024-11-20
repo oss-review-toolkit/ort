@@ -1,4 +1,5 @@
 {
+  "$schema": "https://www.aosd.cloud.audi/jsonschemadoc/static/aosd.schema.json",
   "directDependencies": [
     "NPM:@ort:no-license-file:1.0",
     "NPM:@ort:license-file:1.0",

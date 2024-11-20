@@ -35,6 +35,7 @@ import kotlinx.serialization.json.encodeToStream
 @Serializable
 internal data class AOSD20(
     /** The reference to the official JSON schema. */
+    @EncodeDefault
     @SerialName("\$schema")
     val schema: String = "https://www.aosd.cloud.audi/jsonschemadoc/static/aosd.schema.json",
     /** Ids of dependencies directly related to the project. */

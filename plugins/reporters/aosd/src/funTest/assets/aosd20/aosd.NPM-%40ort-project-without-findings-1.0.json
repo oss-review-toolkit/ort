@@ -1,4 +1,5 @@
 {
+  "$schema": "https://www.aosd.cloud.audi/jsonschemadoc/static/aosd.schema.json",
   "directDependencies": [],
   "dependencies": [
     {
