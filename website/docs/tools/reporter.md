@@ -21,8 +21,6 @@ Currently, the following formats are supported (reporter names are case-insensit
 * [FossID](https://fossid.com/) report download
   * HTML, SPDX, and Excel reports (`-f FossId`)
   * Snippet report (`-f FossIdSnippet`)
-* [GitLabLicenseModel](https://docs.gitlab.com/ee/ci/pipelines/job_artifacts.html#artifactsreportslicense_scanning-ultimate) (`-f GitLabLicenseModel`)
-  * There is a [tutorial video](https://youtu.be/dNmH_kYJ34g) by @xlgmokha
 * [NOTICE](https://infra.apache.org/licensing-howto.html) file in two variants
   * List license texts and copyrights by package (`-f PlainTextTemplate`)
   * Summarize all license texts and copyrights (`-f PlainTextTemplate -O PlainTextTemplate=template.id=NOTICE_SUMMARY`)

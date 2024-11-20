@@ -1,2 +1,0 @@
-# Use Unix line endings for expected test results for consistency across platforms.
-*-expected-*	text eol=lf
