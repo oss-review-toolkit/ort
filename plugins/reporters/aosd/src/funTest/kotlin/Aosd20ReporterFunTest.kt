@@ -33,8 +33,6 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.should
 
-import kotlinx.serialization.json.decodeFromStream
-
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.test.getAssetFile
@@ -53,7 +51,7 @@ class Aosd20ReporterFunTest : WordSpec({
 
         "deserialize correctly" {
             val aosdFile = getAssetFile("aosd20/aosd.example.json")
-            val aosd = aosdFile.inputStream().use { JSON.decodeFromStream<AOSD20>(it) }
+            val aosd = aosdFile.readAosd20Report()
 
             with(aosd) {
                 directDependencies shouldHaveSize 1

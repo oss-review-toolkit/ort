@@ -27,6 +27,7 @@ import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.json.encodeToStream
 
 /**
@@ -193,6 +194,8 @@ internal data class AOSD20(
     )
 }
 
-internal val JSON = Json.Default
+private val JSON = Json.Default
 
 internal fun File.writeReport(model: AOSD20): File = apply { outputStream().use { JSON.encodeToStream(model, it) } }
+
+internal fun File.readAosd20Report(): AOSD20 = inputStream().use { JSON.decodeFromStream<AOSD20>(it) }
