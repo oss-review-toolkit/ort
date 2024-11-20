@@ -59,7 +59,7 @@ interface ClearlyDefinedService {
         /**
          * The JSON (de-)serialization object used by this service.
          */
-        val JSON = Json { encodeDefaults = false }
+        val JSON = Json.Default
 
         /**
          * The JSON (de-)serialization object used by this service for errors.

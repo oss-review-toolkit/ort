@@ -192,6 +192,6 @@ internal data class AOSD20(
     )
 }
 
-internal val JSON = Json { encodeDefaults = false }
+internal val JSON = Json.Default
 
 internal fun File.writeReport(model: AOSD20): File = apply { outputStream().use { JSON.encodeToStream(model, it) } }

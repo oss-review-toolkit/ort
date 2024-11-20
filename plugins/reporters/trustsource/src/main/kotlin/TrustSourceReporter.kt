@@ -40,7 +40,7 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 class TrustSourceReporter(override val descriptor: PluginDescriptor = TrustSourceReporterFactory.descriptor) :
     Reporter {
     companion object {
-        val JSON = Json { encodeDefaults = false }
+        val JSON = Json.Default
     }
 
     private val reportFilename = "trustsource-report.json"

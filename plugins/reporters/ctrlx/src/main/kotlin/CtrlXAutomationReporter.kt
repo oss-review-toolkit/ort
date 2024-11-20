@@ -43,7 +43,7 @@ class CtrlXAutomationReporter(override val descriptor: PluginDescriptor = CtrlXA
     companion object {
         const val REPORT_FILENAME = "fossinfo.json"
 
-        val JSON = Json { encodeDefaults = false }
+        val JSON = Json.Default
 
         private val LICENSE_NOASSERTION = License(
             name = SpdxConstants.NOASSERTION,
