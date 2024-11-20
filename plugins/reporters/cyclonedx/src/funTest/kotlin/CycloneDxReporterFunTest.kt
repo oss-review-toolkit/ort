@@ -37,17 +37,25 @@ import java.io.File
 
 import org.cyclonedx.parsers.JsonParser
 import org.cyclonedx.parsers.XmlParser
+import org.ossreviewtoolkit.model.CopyrightFinding
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.LicenseFinding
 
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.ScanResult
+import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.ScannerDetails
+import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.plugins.reporters.cyclonedx.CycloneDxReporter.Companion.REPORT_BASE_FILENAME
 import org.ossreviewtoolkit.reporter.ORT_RESULT
-import org.ossreviewtoolkit.reporter.ORT_RESULT_WITH_ILLEGAL_COPYRIGHTS
 import org.ossreviewtoolkit.reporter.ORT_RESULT_WITH_VULNERABILITIES
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.test.getAssetAsString
+import org.ossreviewtoolkit.utils.test.scannerRunOf
 
 class CycloneDxReporterFunTest : WordSpec({
     val defaultSchemaVersion = DEFAULT_SCHEMA_VERSION.versionString
@@ -235,3 +243,30 @@ private fun String.patchCycloneDxResult(): String =
         """(version[>"](\s*:\s*")?)[\w.+-]+""".toRegex(),
         "$1deadbeef"
     )
+
+private val SCANNER_RUN_WITH_NON_PRINTABLE_COPYRIGHTS = scannerRunOf(
+    Identifier("NPM:@ort:no-license-file:1.0") to listOf(
+        ScanResult(
+            provenance = UnknownProvenance,
+            scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
+            summary = ScanSummary.EMPTY.copy(
+                licenseFindings = setOf(
+                    LicenseFinding(
+                        license = "MIT",
+                        location = TextLocation("file", 1)
+                    )
+                ),
+                copyrightFindings = setOf(
+                    CopyrightFinding(
+                        statement = "Portions created by the Initial Developer are Copyright (c) 2002 the Initial " +
+                            "Developer, holder is Tim Hudson (tjh@cryptsoft.com), Objc, (c) Objv, " +
+                            "\u0002 \u0002 \u0001A\u0002\u0002\u0001o\u0002\u0012 AB, Copyright (c)",
+                        location = TextLocation("file", 1)
+                    )
+                )
+            )
+        )
+    )
+)
+
+private val ORT_RESULT_WITH_ILLEGAL_COPYRIGHTS = ORT_RESULT.copy(scanner = SCANNER_RUN_WITH_NON_PRINTABLE_COPYRIGHTS)
