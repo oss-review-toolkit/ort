@@ -35,12 +35,11 @@ class DependencyGraphTest : WordSpec({
                 id("org.apache.commons", "commons-collections4", "4.4"),
                 id(group = "org.junit", artifact = "junit", version = "5")
             )
-            val fragments =
-                sortedSetOf(
-                    DependencyReference(0),
-                    DependencyReference(1),
-                    DependencyReference(2)
-                )
+            val fragments = setOf(
+                DependencyReference(0),
+                DependencyReference(1),
+                DependencyReference(2)
+            )
             val scopeMap = mapOf(
                 "p1:scope1" to listOf(RootDependencyIndex(0), RootDependencyIndex(1)),
                 "p2:scope2" to listOf(RootDependencyIndex(1), RootDependencyIndex(2))
@@ -63,12 +62,11 @@ class DependencyGraphTest : WordSpec({
                 id("org.apache.commons", "commons-collections4", "4.4"),
                 id("org.junit", "junit", "5")
             )
-            val fragments =
-                sortedSetOf(
-                    DependencyReference(0),
-                    DependencyReference(1),
-                    DependencyReference(2)
-                )
+            val fragments = setOf(
+                DependencyReference(0),
+                DependencyReference(1),
+                DependencyReference(2)
+            )
             val scopeMap = mapOf(
                 qualifiedScopeName to listOf(RootDependencyIndex(0), RootDependencyIndex(1)),
                 DependencyGraph.qualifyScope(qualifier, "scope2") to listOf(
@@ -95,7 +93,7 @@ class DependencyGraphTest : WordSpec({
             val refCollections = DependencyReference(1)
             val refConfig = DependencyReference(2, dependencies = setOf(refLang, refCollections))
             val refCsv = DependencyReference(3, dependencies = setOf(refConfig))
-            val fragments = sortedSetOf(DependencyGraph.DEPENDENCY_REFERENCE_COMPARATOR, refCsv)
+            val fragments = setOf(refCsv)
             val scopeMap = mapOf("s" to listOf(RootDependencyIndex(3)))
             val graph = DependencyGraph(ids, fragments, scopeMap)
             val scopes = graph.createScopes()
@@ -117,7 +115,7 @@ class DependencyGraphTest : WordSpec({
             val refConfig1 = DependencyReference(2, dependencies = setOf(refLang, refCollections1))
             val refConfig2 =
                 DependencyReference(2, fragment = 1, dependencies = setOf(refLang, refCollections2))
-            val fragments = sortedSetOf(refConfig1, refConfig2)
+            val fragments = setOf(refConfig1, refConfig2)
             val scopeMap = mapOf(
                 "s1" to listOf(RootDependencyIndex(2)),
                 "s2" to listOf(RootDependencyIndex(2, fragment = 1))
@@ -156,7 +154,12 @@ class DependencyGraphTest : WordSpec({
                 "s2" to listOf(RootDependencyIndex(2, fragment = 1))
             )
 
-            val graph = DependencyGraph(ids, sortedSetOf(), scopeMap, nodes, edges)
+            val graph = DependencyGraph(
+                packages = ids,
+                scopes = scopeMap,
+                nodes = nodes,
+                edges = edges
+            )
             val scopes = graph.createScopes()
 
             scopeDependencies(scopes, "s1") shouldBe "${ids[2]}<${ids[1]}${ids[0]}>"
@@ -171,7 +174,7 @@ class DependencyGraphTest : WordSpec({
             val issue = Issue(source = "analyzer", message = "Could not analyze :-(")
             val refLang = DependencyReference(0, linkage = PackageLinkage.PROJECT_DYNAMIC)
             val refCol = DependencyReference(1, issues = listOf(issue), dependencies = setOf(refLang))
-            val trees = sortedSetOf(refCol)
+            val trees = setOf(refCol)
             val scopeMap = mapOf("s" to listOf(RootDependencyIndex(1)))
 
             val graph = DependencyGraph(ids, trees, scopeMap)
