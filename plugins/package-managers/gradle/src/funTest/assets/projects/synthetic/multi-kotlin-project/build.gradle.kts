@@ -4,7 +4,6 @@ plugins {
 }
 
 allprojects {
-
     group = "org.gradle.kotlin.dsl.samples.multiproject"
 
     version = "1.0"
