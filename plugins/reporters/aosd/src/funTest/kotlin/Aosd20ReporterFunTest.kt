@@ -27,6 +27,7 @@ import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.json.shouldEqualJson
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
+import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.result.shouldBeSuccess
@@ -62,10 +63,22 @@ class Aosd20ReporterFunTest : WordSpec({
     }
 
     "The generated report" should {
-        "match the expected result" {
-            val outputDir = tempdir()
-            val reportFiles = Aosd20Reporter().generateReport(ReporterInput(ORT_RESULT), outputDir)
+        val outputDir = tempdir()
+        val reportFiles = Aosd20Reporter().generateReport(ReporterInput(ORT_RESULT), outputDir)
 
+        "be valid according to the schema" {
+            val schemaFile = getAssetFile("aosd20/aosd.schema.json")
+            val schema = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7).getSchema(schemaFile.toURI())
+
+            reportFiles.forAll {
+                it.shouldBeSuccess { reportFile ->
+                    val errors = schema.validate(reportFile.readText(), InputFormat.JSON)
+                    errors should beEmpty()
+                }
+            }
+        }
+
+        "match the expected result" {
             reportFiles shouldHaveSize 2
 
             assertSoftly {
