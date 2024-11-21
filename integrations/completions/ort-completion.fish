@@ -3,7 +3,7 @@
 
 
 ### Setup for ort
-set -l ort_subcommands 'advise analyze compare config download evaluate migrate notify report requirements scan upload-curations upload-result-to-postgres upload-result-to-sw360'
+set -l ort_subcommands 'advise analyze compare config download evaluate migrate notify plugins report requirements scan upload-curations upload-result-to-postgres upload-result-to-sw360'
 
 ## Options for ort
 complete -c ort -n "not __fish_seen_subcommand_from $ort_subcommands" -l config -s c -r -F -d 'The path to a configuration file.'
@@ -133,6 +133,14 @@ complete -c ort -n "__fish_seen_subcommand_from notify" -l notifications-file -s
 complete -c ort -n "__fish_seen_subcommand_from notify" -l resolutions-file -r -F -d 'A file containing issue and rule violation resolutions.'
 complete -c ort -n "__fish_seen_subcommand_from notify" -l label -s l -r -d 'Set a label in the ORT result passed to the notifier script, overwriting any existing label of the same name. Can be used multiple times. For example: --label distribution=external'
 complete -c ort -n "__fish_seen_subcommand_from notify" -s h -l help -d 'Show this message and exit'
+
+
+### Setup for plugins
+complete -c ort -f -n __fish_use_subcommand -a plugins -d 'Print information about the installed ORT plugins.'
+
+## Options for plugins
+complete -c ort -n "__fish_seen_subcommand_from plugins" -l types -r -d 'A comma-separated list plugin types to show.'
+complete -c ort -n "__fish_seen_subcommand_from plugins" -s h -l help -d 'Show this message and exit'
 
 
 ### Setup for report
