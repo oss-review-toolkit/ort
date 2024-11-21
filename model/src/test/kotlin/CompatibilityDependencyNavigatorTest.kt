@@ -150,7 +150,7 @@ class CompatibilityDependencyNavigatorTest : WordSpec() {
                 val treeNavigator = mockk<DependencyNavigator>()
                 val graphNavigator = mockk<DependencyNavigator>()
                 every {
-                    treeNavigator.dependenciesForScope(
+                    treeNavigator.scopeDependencies(
                         treeProject,
                         scopeName,
                         maxDepth,
@@ -160,7 +160,7 @@ class CompatibilityDependencyNavigatorTest : WordSpec() {
 
                 val navigator = CompatibilityDependencyNavigator(graphNavigator, treeNavigator)
 
-                navigator.dependenciesForScope(treeProject, scopeName, maxDepth, matcher) shouldBe dependencies
+                navigator.scopeDependencies(treeProject, scopeName, maxDepth, matcher) shouldBe dependencies
             }
 
             "return the dependencies of a dependency graph project" {
@@ -171,7 +171,7 @@ class CompatibilityDependencyNavigatorTest : WordSpec() {
                 val treeNavigator = mockk<DependencyNavigator>()
                 val graphNavigator = mockk<DependencyNavigator>()
                 every {
-                    graphNavigator.dependenciesForScope(
+                    graphNavigator.scopeDependencies(
                         graphProject,
                         scopeName,
                         maxDepth,
@@ -181,7 +181,7 @@ class CompatibilityDependencyNavigatorTest : WordSpec() {
 
                 val navigator = CompatibilityDependencyNavigator(graphNavigator, treeNavigator)
 
-                navigator.dependenciesForScope(graphProject, scopeName, maxDepth, matcher) shouldBe dependencies
+                navigator.scopeDependencies(graphProject, scopeName, maxDepth, matcher) shouldBe dependencies
             }
         }
 

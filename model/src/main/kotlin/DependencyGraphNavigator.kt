@@ -74,7 +74,7 @@ class DependencyGraphNavigator(
         return dependenciesSequence(graph, rootDependencies)
     }
 
-    override fun dependenciesForScope(
+    override fun scopeDependencies(
         project: Project,
         scopeName: String,
         maxDepth: Int,
