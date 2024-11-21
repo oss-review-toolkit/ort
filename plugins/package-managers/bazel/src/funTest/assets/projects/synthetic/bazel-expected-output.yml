@@ -52,7 +52,7 @@ project:
         linkage: "STATIC"
 packages:
 - id: "Bazel::abseil-cpp:20230125.1"
-  purl: "pkg:generic/abseil-cpp@20230125.1"
+  purl: "pkg:bazel/abseil-cpp@20230125.1"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -78,7 +78,7 @@ packages:
     revision: ""
     path: ""
 - id: "Bazel::bazel_skylib:1.4.1"
-  purl: "pkg:generic/bazel_skylib@1.4.1"
+  purl: "pkg:bazel/bazel_skylib@1.4.1"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -104,7 +104,7 @@ packages:
     revision: ""
     path: ""
 - id: "Bazel::gflags:2.2.2"
-  purl: "pkg:generic/gflags@2.2.2"
+  purl: "pkg:bazel/gflags@2.2.2"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -130,7 +130,7 @@ packages:
     revision: ""
     path: ""
 - id: "Bazel::glog:0.5.0"
-  purl: "pkg:generic/glog@0.5.0"
+  purl: "pkg:bazel/glog@0.5.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -156,7 +156,7 @@ packages:
     revision: ""
     path: ""
 - id: "Bazel::googletest:1.14.0"
-  purl: "pkg:generic/googletest@1.14.0"
+  purl: "pkg:bazel/googletest@1.14.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -182,7 +182,7 @@ packages:
     revision: ""
     path: ""
 - id: "Bazel::platforms:0.0.7"
-  purl: "pkg:generic/platforms@0.0.7"
+  purl: "pkg:bazel/platforms@0.0.7"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -208,7 +208,7 @@ packages:
     revision: ""
     path: ""
 - id: "Bazel::rules_cc:0.0.9"
-  purl: "pkg:generic/rules_cc@0.0.9"
+  purl: "pkg:bazel/rules_cc@0.0.9"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -234,7 +234,7 @@ packages:
     revision: ""
     path: ""
 - id: "Bazel::rules_license:0.0.7"
-  purl: "pkg:generic/rules_license@0.0.7"
+  purl: "pkg:bazel/rules_license@0.0.7"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""

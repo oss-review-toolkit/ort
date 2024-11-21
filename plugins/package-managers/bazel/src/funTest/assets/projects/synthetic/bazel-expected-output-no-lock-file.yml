@@ -27,7 +27,7 @@ project:
         linkage: "STATIC"
 packages:
 - id: "Bazel::gflags:2.2.2"
-  purl: "pkg:generic/gflags@2.2.2"
+  purl: "pkg:bazel/gflags@2.2.2"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -53,7 +53,7 @@ packages:
     revision: ""
     path: ""
 - id: "Bazel::glog:0.5.0"
-  purl: "pkg:generic/glog@0.5.0"
+  purl: "pkg:bazel/glog@0.5.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""

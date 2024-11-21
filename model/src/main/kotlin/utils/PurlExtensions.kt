@@ -38,6 +38,7 @@ import org.ossreviewtoolkit.model.VcsType
  */
 fun Identifier.getPurlType() =
     when (type.lowercase()) {
+        "bazel" -> PurlType.BAZEL
         "bower" -> PurlType.BOWER
         "carthage" -> PurlType.CARTHAGE
         "composer" -> PurlType.COMPOSER

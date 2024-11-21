@@ -53,7 +53,7 @@ analyzer:
             linkage: "STATIC"
     packages:
     - id: "Bazel::module_a:0.0.1"
-      purl: "pkg:generic/module_a@0.0.1"
+      purl: "pkg:bazel/module_a@0.0.1"
       declared_licenses: []
       declared_licenses_processed: {}
       description: ""
@@ -79,7 +79,7 @@ analyzer:
         revision: ""
         path: ""
     - id: "Bazel::module_b:0.0.1"
-      purl: "pkg:generic/module_b@0.0.1"
+      purl: "pkg:bazel/module_b@0.0.1"
       declared_licenses: []
       declared_licenses_processed: {}
       description: ""
