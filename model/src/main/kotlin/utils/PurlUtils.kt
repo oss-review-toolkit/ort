@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.utils.common.percentEncode
 enum class PurlType(private val value: String) {
     ALPINE("alpine"),
     A_NAME("a-name"),
+    BAZEL("bazel"),
     BOWER("bower"),
     CARGO("cargo"),
     CARTHAGE("carthage"),

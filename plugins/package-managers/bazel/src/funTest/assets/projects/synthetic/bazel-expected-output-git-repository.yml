@@ -24,7 +24,7 @@ project:
       linkage: "STATIC"
 packages:
 - id: "Bazel::module_c:0.0.1"
-  purl: "pkg:generic/module_c@0.0.1"
+  purl: "pkg:bazel/module_c@0.0.1"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
