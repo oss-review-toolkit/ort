@@ -29,22 +29,16 @@ object DependencyTreeNavigator : DependencyNavigator {
     override fun directDependencies(project: Project, scopeName: String): Sequence<DependencyNode> =
         project.findScope(scopeName)?.dependencies?.asSequence().orEmpty()
 
-    override fun dependenciesForScope(
+    override fun scopeDependencies(
         project: Project,
         scopeName: String,
         maxDepth: Int,
         matcher: DependencyMatcher
     ): Set<Identifier> = project.findScope(scopeName)?.collectDependencies(maxDepth) { matcher(it) }.orEmpty()
 
-    override fun scopeDependencies(
-        project: Project,
-        maxDepth: Int,
-        matcher: DependencyMatcher
-    ): Map<String, Set<Identifier>> =
+    override fun projectDependencies(project: Project, maxDepth: Int, matcher: DependencyMatcher): Set<Identifier> =
         // Override the base implementation because a more efficient access to single scopes is possible.
-        project.scopes.associate { scope ->
-            scope.name to scope.collectDependencies(maxDepth, matcher.forReference())
-        }
+        project.scopes.flatMapTo(mutableSetOf()) { it.collectDependencies(maxDepth, matcher.forReference()) }
 
     override fun packageDependencies(
         project: Project,

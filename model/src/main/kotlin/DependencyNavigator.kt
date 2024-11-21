@@ -48,16 +48,9 @@ interface DependencyNavigator {
         /**
          * A pre-defined [DependencyMatcher] that matches only dependencies with a linkage indicating subprojects.
          */
-        private val MATCH_SUB_PROJECTS: DependencyMatcher = { node ->
+        val MATCH_SUB_PROJECTS: DependencyMatcher = { node ->
             node.linkage in PackageLinkage.PROJECT_LINKAGE
         }
-
-        /**
-         * Return a set with all the [Identifier]s contained in the given map of scope dependencies. This is useful if
-         * all dependencies are needed independent of the scope they belong to.
-         */
-        private fun Map<String, Set<Identifier>>.collectDependencies(): Set<Identifier> =
-            values.flatMapTo(mutableSetOf()) { it }
 
         /**
          * Return a map with all [Issue]s found in the dependency graph spawned by [dependencies] grouped by their
@@ -94,11 +87,11 @@ interface DependencyNavigator {
     fun directDependencies(project: Project, scopeName: String): Sequence<DependencyNode>
 
     /**
-     * Return a set with information of the dependencies of a specific [scope][scopeName] of a [project]. With
-     * [maxDepth] the depth of the dependency tree to be traversed can be restricted; negative values mean that there
-     * is no restriction. Use the specified [matcher] to filter for specific dependencies.
+     * Return a set with the [Identifier]s of the dependencies of a [scope][scopeName] of a [project]. With [maxDepth]
+     * the depth of the dependency tree to be traversed can be restricted; negative values mean that there is no
+     * restriction. Use the specified [matcher] to filter for specific dependencies.
      */
-    fun dependenciesForScope(
+    fun scopeDependencies(
         project: Project,
         scopeName: String,
         maxDepth: Int = -1,
@@ -106,16 +99,15 @@ interface DependencyNavigator {
     ): Set<Identifier>
 
     /**
-     * Return a map with information of the dependencies of a [project] grouped by scopes. This is equivalent to
-     * calling [dependenciesForScope] for all the scopes of the given [project]. (This base implementation does
-     * exactly this.)
+     * Return a set with the [Identifier]s of the dependencies of a [project]. This is equivalent to calling
+     * [scopeDependencies] for all the scopes of the given [project].
      */
-    fun scopeDependencies(
+    fun projectDependencies(
         project: Project,
         maxDepth: Int = -1,
         matcher: DependencyMatcher = MATCH_ALL
-    ): Map<String, Set<Identifier>> =
-        scopeNames(project).associateWith { dependenciesForScope(project, it, maxDepth, matcher) }
+    ): Set<Identifier> =
+        scopeNames(project).flatMapTo(mutableSetOf()) { scopeDependencies(project, it, maxDepth, matcher) }
 
     /**
      * Return a set with the [Identifier]s of packages that are dependencies of the package with the given [packageId]
@@ -147,22 +139,6 @@ interface DependencyNavigator {
     }
 
     /**
-     * Return the set of [Identifier]s that refer to subprojects of the given [project].
-     */
-    fun collectSubProjects(project: Project): Set<Identifier> =
-        scopeDependencies(project, matcher = MATCH_SUB_PROJECTS).collectDependencies()
-
-    /**
-     * Return a set with the [Identifier]s of all dependencies of the given [project] across all scopes. As usual,
-     * it is possible to restrict the dependencies to be fetched with [maxDepth] and [matcher].
-     */
-    fun projectDependencies(
-        project: Project,
-        maxDepth: Int = -1,
-        matcher: DependencyMatcher = MATCH_ALL
-    ): Set<Identifier> = scopeDependencies(project, maxDepth, matcher).collectDependencies()
-
-    /**
      * Return the depth of the dependency tree rooted at the given [project] associated with this [scopeName]. If the
      * scope cannot be resolved, return -1.
      */
@@ -177,10 +153,10 @@ interface DependencyNavigator {
 
     /**
      * Determine the map of the shortest paths for all the dependencies of a [project], given its map of
-     * [scopeDependencies].
+     * [projectDependencies].
      */
     private fun getShortestPathForScope(project: Project, scope: String): Map<Identifier, List<Identifier>> =
-        getShortestPathsForScope(directDependencies(project, scope), dependenciesForScope(project, scope))
+        getShortestPathsForScope(directDependencies(project, scope), scopeDependencies(project, scope))
 
     /**
      * Determine the map of the shortest paths for a specific scope given its direct dependency [nodes] and a set with

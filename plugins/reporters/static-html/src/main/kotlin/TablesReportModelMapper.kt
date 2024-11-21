@@ -72,8 +72,8 @@ private fun OrtResult.getScopesForDependencies(project: Project): Map<Identifier
     val result = mutableMapOf<Identifier, MutableMap<String, List<ScopeExclude>>>()
     val excludes = getExcludes()
 
-    dependencyNavigator.scopeDependencies(project).forEach { (scopeName, dependencies) ->
-        dependencies.forEach { dependency ->
+    dependencyNavigator.scopeNames(project).forEach { scopeName ->
+        dependencyNavigator.scopeDependencies(project, scopeName).forEach { dependency ->
             result.getOrPut(dependency) { mutableMapOf() }
                 .getOrPut(scopeName) { excludes.findScopeExcludes(scopeName) }
         }

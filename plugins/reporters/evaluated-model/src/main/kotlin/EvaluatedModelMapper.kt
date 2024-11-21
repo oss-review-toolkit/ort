@@ -187,17 +187,19 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
                 }
             }
 
-            input.ortResult.dependencyNavigator.scopeDependencies(project).forEach { (scopeName, dependencies) ->
+            input.ortResult.dependencyNavigator.scopeNames(project).forEach { scopeName ->
+                val scopeDependencies = input.ortResult.dependencyNavigator.scopeDependencies(project, scopeName)
                 val scopeExcludes = input.ortResult.getExcludes().findScopeExcludes(scopeName)
+
                 if (scopeExcludes.isNotEmpty()) {
-                    dependencies.forEach { id ->
+                    scopeDependencies.forEach { id ->
                         val info = packageExcludeInfo.getOrPut(id) { PackageExcludeInfo(id, true) }
                         if (info.isExcluded) {
                             info.scopeExcludes += scopeExcludes
                         }
                     }
                 } else if (pathExcludes.isEmpty()) {
-                    dependencies.forEach { id ->
+                    scopeDependencies.forEach { id ->
                         val info = packageExcludeInfo.getOrPut(id) { PackageExcludeInfo(id, true) }
                         info.isExcluded = false
                         info.pathExcludes.clear()

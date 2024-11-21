@@ -26,6 +26,7 @@ import java.lang.invoke.MethodHandles
 
 import org.apache.logging.log4j.kotlin.loggerOf
 
+import org.ossreviewtoolkit.model.DependencyNavigator.Companion.MATCH_SUB_PROJECTS
 import org.ossreviewtoolkit.model.ResolvedPackageCurations.Companion.REPOSITORY_CONFIGURATION_PROVIDER_ID
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.IssueResolution
@@ -129,12 +130,14 @@ data class OrtResult(
         val includedDependencies = mutableSetOf<Identifier>()
 
         projects.forEach { project ->
-            dependencyNavigator.scopeDependencies(project).forEach { (scopeName, dependencies) ->
-                val isScopeExcluded = getExcludes().isScopeExcluded(scopeName)
-                allDependencies += dependencies
+            dependencyNavigator.scopeNames(project).forEach { scopeName ->
+                dependencyNavigator.scopeDependencies(project, scopeName).forEach { dependencies ->
+                    val isScopeExcluded = getExcludes().isScopeExcluded(scopeName)
+                    allDependencies += dependencies
 
-                if (!isProjectExcluded(project.id) && !isScopeExcluded) {
-                    includedDependencies += dependencies
+                    if (!isProjectExcluded(project.id) && !isScopeExcluded) {
+                        includedDependencies += dependencies
+                    }
                 }
             }
         }
@@ -434,7 +437,7 @@ data class OrtResult(
 
         if (!includeSubProjects) {
             val subProjectIds = projects.flatMapTo(mutableSetOf()) {
-                dependencyNavigator.collectSubProjects(it)
+                dependencyNavigator.projectDependencies(it, matcher = MATCH_SUB_PROJECTS)
             }
 
             projects.removeAll { it.id in subProjectIds }
