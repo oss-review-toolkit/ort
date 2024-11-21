@@ -58,7 +58,7 @@ jobs:
         paths: "**/test-results/**/TEST-*.xml"
       if: always()
     - name: Upload code coverage data
-      uses: codecov/codecov-action@985343d70564a82044c1b7fcb84c2fa05405c1a2 # v5
+      uses: codecov/codecov-action@015f24e6818733317a2da2edd6290ab26238649a # v5
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         flags: test
@@ -107,7 +107,7 @@ jobs:
         paths: "**/test-results/**/TEST-*.xml"
       if: always()
     - name: Upload code coverage data
-      uses: codecov/codecov-action@985343d70564a82044c1b7fcb84c2fa05405c1a2 # v5
+      uses: codecov/codecov-action@015f24e6818733317a2da2edd6290ab26238649a # v5
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         flags: funTest-non-docker
@@ -152,7 +152,7 @@ jobs:
         paths: "**/test-results/**/TEST-*.xml"
       if: always()
     - name: Upload code coverage data
-      uses: codecov/codecov-action@985343d70564a82044c1b7fcb84c2fa05405c1a2 # v5
+      uses: codecov/codecov-action@015f24e6818733317a2da2edd6290ab26238649a # v5
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         flags: funTest-docker
