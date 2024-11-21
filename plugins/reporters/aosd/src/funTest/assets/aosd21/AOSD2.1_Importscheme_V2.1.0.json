@@ -1,0 +1,152 @@
+{
+    "title": "The AOSD2 JSON import schema - version 2.1.0",
+    "description": "Defines the JSON format for automated and manual import for software components and their dependencies into AOSD. - All fields in this schema are mandatory but not all values. - Fields with optional values are marked with default value in the description.",
+    "type": "object",
+    "required": ["schemaVersion", "externalId", "scanned", "directDependencies", "components"],
+    "properties": {
+        "schemaVersion": {
+            "type": "string",
+            "minLength": 5,
+            "pattern": "[0-99].[0-99].[0-99]",
+            "description": "Field and value are mandatory - Version of the schema according to SemVer."
+        },
+        "externalId": {
+            "type": "string",
+            "description": "Field is mandatory but value is optional default is empty string - This is a label that can be used in AOSD for search and identification of custom information as optional field. This can be also used for linking your system with AOSD.",
+            "default": ""
+        },
+        "scanned": {
+            "type": "boolean",
+            "description": "Field and value are mandatory - Flag to mark if the software component information is the output from a scan tool like BlackDuck Deep License Scan, ScanCode, Fossology e.g. or if it was prepared manually."
+        },
+        "directDependencies": {
+            "type": "array",
+            "uniqueItems": true,
+            "description": "Field and value are mandatory - Array with ID's of top level dependencies directly related to the product. However, transitive dependencies, i.e. components that are only included via direct dependencies, do not have to be listed here but as transitiveDependencies. - A product must at least contain one direct dependency.",
+            "items": {
+                "type": "integer"
+            }
+        },
+        "components": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "description": "Mandatory - Array with all software components used in this product. - A product must at least contain one component.",
+            "items": {
+                "type": "object",
+                "description": "Mandatory - Software component with all needed information.",
+                "required": ["id", "componentName", "componentVersion", "scmUrl", "modified", "linking", "transitiveDependencies", "subcomponents"],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "description": "Field and value are mandatory - Id of the component in this file as mandatory field. The ID must be unique!"
+                    },
+                    "componentName": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "[0-9a-zA-Z]+",
+                        "description": "Field and value are mandatory - Name of the software component as mandatory field."
+                    },
+                    "componentVersion": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 50,
+                        "pattern": "[0-9a-zA-Z]+",
+                        "description": "Field and value are mandatory - Exact version of the software component as mandatory field."
+                    },
+                    "scmUrl": {
+                        "type": "string",
+                        "minLength": 5,
+                        "description": "Field and value are mandatory - Url for the source code repository / alternatively the homepage URL for the component."
+                    },
+                    "modified": {
+                        "type": ["boolean", "null"],
+                        "description": "Field is mandatory and value is optional, default is null, except for licenses with conditions for modification e.g. copyleft licenses - Information about modification of source code of the component.",
+                        "default": null
+                    },
+                    "linking": {
+                        "type": ["string", "null"],
+                        "description": "Field is mandatory and value is optional, default is null, except for copyleft licenses - Information about the linking type of this component with its higher level code.",
+                        "enum": [
+                            "dynamic_linking",
+                            "static_linking",
+                            "sys_call",
+                            "process_call",
+                            null
+                        ],
+                        "default": null
+                    },
+                    "transitiveDependencies": {
+                        "type": "array",
+                        "description": "Field is mandatory and value is optional, default is an empty array, except if the component has further dependencies. Such further dependencies are also known as transitive dependencies. These transitive dependencies need to be listed as specific components with ID's in the component list. The ID's of this components shall be referenced here.",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "default": []
+                    },
+                    "subcomponents": {
+                        "type": "array",
+                        "minItems": 1,
+                        "description": "Mandatory - Array with all subcomponents of the specific software component. A subcomponent is a finding in a software component with license and / or copyright information (sometimes also referred to as part). Usually there is a main license of the component and further subcomponent licenses in individual directories or files of the component. - Important hint: The first subcomponent in every component block must be named main!",
+                        "items": {
+                            "type": "object",
+                            "description": "Mandatory - for every license identified within all files of the softwarecomponent shall a subcomponent be provided. - The first subcomponent in a component block should contain the main license of the component and must be named main. - All following subcomponents inside a component can be freely assigned.",
+                            "required": ["subcomponentName", "spdxId", "copyrights", "authors", "licenseText", "licenseTextUrl", "selectedLicense", "additionalLicenseInfos"],
+                            "properties": {
+                                "subcomponentName": {
+                                    "type": "string",
+                                    "minLength": 1,
+                                    "description": "Field and value are mandatory - label of the subcomponent as mandatory field. You could use 'GPL-PARTS' / 'BSD-PARTS' or 'A' / 'B' for example- Minimum length 1 character. - Hint: The first subcomponent in a component block must be named main!"
+                                },
+                                "spdxId": {
+                                    "type": "string",
+                                    "minLength": 1,
+                                    "description": "Field and value are mandatory - can be spdx ID or scancode identifier. Please see https://spdx.org/licenses/ and https://scancode-licensedb.aboutcode.org/index.html - if license exceptions are in use, please follow spdx instructions and connect license identifier and exception identifier using the operator 'with'. In case of alternative licensing connect the referring license identifier with the operator 'or' in between and provide the selectedlicense information."
+                                },
+                                "copyrights": {
+                                    "type": "array",
+                                    "description": "Field is mandatory and value is optional, default is an empty array - except the subcomponent has copyrights - may only be an empty array if no Copyrights were found. - Array with all copyrights that are linked to this license subcomponent.",
+                                    "items": {
+                                        "type": "string",
+                                        "description": "Every item here is a copyright line / note."
+                                    },
+                                    "default": []
+                                },
+                                "authors": {
+                                    "type": "array",
+                                    "description": "Field is mandatory and value is optional, default is empty array - except the subcomponent has no copyrights but authors - Array with all authors that are related to this subcomponent's license.",
+                                    "items": {
+                                        "type": "string",
+                                        "description": "Authors are normally listed by their names."
+                                    },
+                                    "default": []
+                                },
+                                "licenseText": {
+                                    "type": "string",
+                                    "minLength": 20,
+                                    "description": "Field and value are mandatory - complete license text or permission note that was found for this specific subcomponent in the source code. Make sure to include the individualized license text if the specific license provides such variable parts e.g. BSD-3-Clause in clause 3 and disclaimer."
+                                },
+                                "licenseTextUrl": {
+                                    "type": "string",
+                                    "description": "Field is mandatory and value is optional, default is empty string - value is mandatory if the license information are not the result of a file level scan - in this case the link to the specific license text for this subcomponent from the source code is necessary.",
+                                    "default": ""
+                                },
+                                "selectedLicense": {
+                                    "type": "string",
+                                    "description": "Field is mandatory and value is optional, default is empty string - in case of alternative licensing for the subcomponent you should include the license identifier of the license you elect. Otherwise you have to elect the license in the tool later on. - If used please choose one of the license identifiers you provided in spdxId of this subcomponent.",
+                                    "default": ""
+                                },
+                                "additionalLicenseInfos": {
+                                    "type": "string",
+                                    "description": "Field is mandatory and value is optional, default is empty string - the field is not for any specific information but can be used for notes regarding the licenses. (e.g. text is a permission note)",
+                                    "default": ""
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
