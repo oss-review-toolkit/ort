@@ -98,6 +98,9 @@ class DependencyGraphNavigator(
                 node.visitDependencies { collectDependencies(it, maxDepth, matcher, dependencies) }
             }
 
+            // This continues to visit dependencies even after a matching node has been found as there could be multiple
+            // nodes with the same ID in the graph, that each could have different dependencies due to custom resolution
+            // configuration in the build system.
             node.visitDependencies { dependencies ->
                 dependencies.forEach(::traverse)
             }
