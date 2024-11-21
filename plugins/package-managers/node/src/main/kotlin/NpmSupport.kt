@@ -137,17 +137,21 @@ internal fun parseNpmVcsInfo(packageJson: PackageJson): VcsInfo {
     )
 }
 
+internal fun parsePackage(
+    workingDir: File,
+    packageJsonFile: File,
+    getRemotePackageDetails: (workingDir: File, packageName: String) -> PackageJson?
+) = parsePackage(workingDir, parsePackageJson(packageJsonFile), getRemotePackageDetails)
+
 /**
  * Construct a [Package] by parsing its _package.json_ file and - if applicable - querying additional
  * content via the `npm view` command. The result is a [Pair] with the raw identifier and the new package.
  */
 internal fun parsePackage(
     workingDir: File,
-    packageJsonFile: File,
+    packageJson: PackageJson,
     getRemotePackageDetails: (workingDir: File, packageName: String) -> PackageJson?
 ): Package {
-    val packageJson = parsePackageJson(packageJsonFile)
-
     // The "name" and "version" fields are only required if the package is going to be published, otherwise they are
     // optional, see
     // - https://docs.npmjs.com/cli/v10/configuring-npm/package-json#name
