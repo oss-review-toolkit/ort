@@ -199,6 +199,19 @@ class Yarn2(
 
         run("install", workingDir = workingDir)
 
+        val packageInfos = getPackageInfos(workingDir)
+        val packageHeaders = parsePackageHeaders(packageInfos)
+        val packageDetails = queryPackageDetails(workingDir, packageHeaders)
+
+        val allProjects = parseAllPackages(packageInfos, definitionFile, packageHeaders, packageDetails)
+        val scopeNames = YarnDependencyType.entries.mapTo(mutableSetOf()) { it.type }
+
+        return allProjects.values.map { project ->
+            ProjectAnalyzerResult(project.copy(scopeNames = scopeNames), emptySet(), issues)
+        }.toList()
+    }
+
+    private fun getPackageInfos(workingDir: File): List<PackageInfo> {
         // Query the list of all packages with their dependencies. The output is in NDJSON format.
         val process = run(
             "info",
@@ -212,16 +225,7 @@ class Yarn2(
 
         logger.info { "Parsing packages..." }
 
-        val packageInfos = parsePackageInfos(process.stdout)
-        val packageHeaders = parsePackageHeaders(packageInfos)
-        val packageDetails = queryPackageDetails(workingDir, packageHeaders)
-
-        val allProjects = parseAllPackages(packageInfos, definitionFile, packageHeaders, packageDetails)
-        val scopeNames = YarnDependencyType.entries.mapTo(mutableSetOf()) { it.type }
-
-        return allProjects.values.map { project ->
-            ProjectAnalyzerResult(project.copy(scopeNames = scopeNames), emptySet(), issues)
-        }.toList()
+        return parsePackageInfos(process.stdout)
     }
 
     /**
