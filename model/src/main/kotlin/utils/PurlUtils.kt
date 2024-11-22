@@ -61,6 +61,10 @@ enum class PurlType(private val value: String) {
     RPM("rpm"),
     SWIFT("swift");
 
+    init {
+        check(value == value.lowercase()) { "The type must be in canonical lowercase form." }
+    }
+
     companion object {
         @JvmStatic
         fun fromString(value: String): PurlType =
@@ -105,7 +109,7 @@ internal fun createPurl(
 ): String =
     buildString {
         append("pkg:")
-        append(type.toString().lowercase())
+        append(type.toString())
         append('/')
 
         if (namespace.isNotEmpty()) {
