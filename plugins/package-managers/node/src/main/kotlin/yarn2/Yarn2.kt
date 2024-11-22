@@ -265,7 +265,7 @@ class Yarn2(
         logger.info { "Fetching packages details..." }
 
         val chunks = packagesHeaders
-            .filterValues { it.type != "workspace" }
+            .filterValues { !it.isProject }
             .values.map { it.moduleId }
             .chunked(YARN_NPM_INFO_CHUNK_SIZE)
 
@@ -402,7 +402,7 @@ class Yarn2(
         val declaredLicenses = manifest.license.orEmpty().let { setOf(it).mapNpmLicenses() }
         var homepageUrl = manifest.homepage.orEmpty()
 
-        val id = if (header.type == "workspace") {
+        val id = if (header.isProject) {
             val version = packageInfo.children.version
             val projectFile = definitionFile.resolveSibling(header.version).resolve(definitionFile.name)
             val packageJson = parsePackageJson(projectFile)
@@ -639,6 +639,8 @@ private data class PackageHeader(
     val type: String,
     val version: String
 )
+
+private val PackageHeader.isProject: Boolean get() = type == "workspace"
 
 private val PackageHeader.moduleId: String get() = "$rawName@${version.cleanVersionString()}"
 
