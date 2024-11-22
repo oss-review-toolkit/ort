@@ -264,9 +264,10 @@ class Yarn2(
     ): Map<String, AdditionalData> {
         logger.info { "Fetching packages details..." }
 
-        val chunks = packagesHeaders.filterValues { it.type != "workspace" }.values.map {
-            "${it.rawName}@${it.version.cleanVersionString()}"
-        }.chunked(YARN_NPM_INFO_CHUNK_SIZE)
+        val chunks = packagesHeaders
+            .filterValues { it.type != "workspace" }
+            .values.map { it.moduleId }
+            .chunked(YARN_NPM_INFO_CHUNK_SIZE)
 
         return runBlocking(Dispatchers.IO) {
             chunks.mapIndexed { index, chunk ->
@@ -638,6 +639,8 @@ private data class PackageHeader(
     val type: String,
     val version: String
 )
+
+private val PackageHeader.moduleId: String get() = "$rawName@${version.cleanVersionString()}"
 
 /**
  * Class containing additional data returned by `yarn npm info`.
