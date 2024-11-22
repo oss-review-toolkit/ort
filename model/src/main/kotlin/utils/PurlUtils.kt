@@ -29,35 +29,39 @@ import org.ossreviewtoolkit.utils.common.percentEncode
 /**
  * A subset of the Package URL types defined at https://github.com/package-url/purl-spec/blob/ad8a673/PURL-TYPES.rst.
  */
-enum class PurlType(private val value: String) {
-    APK("apk"),
-    BAZEL("bazel"),
-    BITBUCKET("bitbucket"),
+enum class PurlType(
+    private val value: String,
+    val nameNormalization: (String) -> String = { it },
+    val namespaceNormalization: (String) -> String = { it }
+) {
+    APK("apk", { it.lowercase() }, { it.lowercase() }),
+    BAZEL("bazel", { it.lowercase() }),
+    BITBUCKET("bitbucket", { it.lowercase() }, { it.lowercase() }),
     BOWER("bower"),
     CARGO("cargo"),
     CARTHAGE("carthage"),
     COCOAPODS("cocoapods"),
-    COMPOSER("composer"),
+    COMPOSER("composer", { it.lowercase() }, { it.lowercase() }),
     CONAN("conan"),
     CONDA("conda"),
     CRAN("cran"),
-    DEBIAN("deb"),
+    DEBIAN("deb", { it.lowercase() }, { it.lowercase() }),
     DOCKER("docker"),
     DRUPAL("drupal"),
     GEM("gem"),
     GENERIC("generic"),
-    GITHUB("github"),
+    GITHUB("github", { it.lowercase() }, { it.lowercase() }),
     GITLAB("gitlab"),
-    GOLANG("golang"),
+    GOLANG("golang", { it.lowercase() }, { it.lowercase() }),
     HACKAGE("hackage"),
     HUGGING_FACE("huggingface"),
     MAVEN("maven"),
     MLFLOW("mlflow"),
-    NPM("npm"),
+    NPM("npm", { it.lowercase() }),
     NUGET("nuget"),
-    PUB("pub"),
-    PYPI("pypi"),
-    RPM("rpm"),
+    PUB("pub", { it.lowercase() }),
+    PYPI("pypi", { it.lowercase() }),
+    RPM("rpm", namespaceNormalization = { it.lowercase() }),
     SWIFT("swift");
 
     init {
@@ -112,11 +116,15 @@ internal fun createPurl(
         append('/')
 
         if (namespace.isNotEmpty()) {
-            append(namespace.trim('/').split('/').joinToString("/") { it.percentEncode() })
+            append(
+                namespace.trim('/').split('/').joinToString("/") { segment ->
+                    type.namespaceNormalization(segment).percentEncode()
+                }
+            )
             append('/')
         }
 
-        append(name.trim('/').percentEncode())
+        append(type.nameNormalization(name.trim('/')).percentEncode())
 
         if (version.isNotEmpty()) {
             append('@')
