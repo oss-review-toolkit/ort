@@ -176,15 +176,16 @@ data class OrtConfiguration(
                 .withContextResolverMode(ContextResolverMode.SkipUnresolved)
                 .build()
 
-            val config = loader.loadConfig<OrtConfigurationWrapper>()
-
-            return config.getOrElse { failure ->
+            val configResult = loader.loadConfig<OrtConfigurationWrapper>()
+            val wrappedConfig = configResult.getOrElse { failure ->
                 require(sources.isEmpty()) {
                     "Failed to load ORT configuration: ${failure.description()}"
                 }
 
                 OrtConfigurationWrapper(OrtConfiguration())
-            }.ort
+            }
+
+            return wrappedConfig.ort
         }
     }
 }
