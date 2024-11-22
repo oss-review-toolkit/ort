@@ -193,8 +193,7 @@ class Yarn2(
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
-
-        run("install", workingDir = workingDir)
+        installDependencies(workingDir)
 
         val packageInfos = getPackageInfos(workingDir)
         val packageHeaders = parsePackageHeaders(packageInfos)
@@ -206,6 +205,10 @@ class Yarn2(
         return allProjects.values.map { project ->
             ProjectAnalyzerResult(project.copy(scopeNames = scopeNames), emptySet(), issues)
         }.toList()
+    }
+
+    private fun installDependencies(workingDir: File) {
+        run("install", workingDir = workingDir)
     }
 
     private fun getPackageInfos(workingDir: File): List<PackageInfo> {
