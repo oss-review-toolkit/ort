@@ -59,16 +59,11 @@ fun Identifier.getPurlType() =
 
 /**
  * Create the canonical [package URL](https://github.com/package-url/purl-spec) ("purl") based on the properties of
- * the [Identifier]. Some issues remain with this specification
- * (see e.g. https://github.com/package-url/purl-spec/issues/33).
+ * the [Identifier].
  * Optional [qualifiers] may be given and will be appended to the purl as query parameters e.g.
  * pkg:deb/debian/curl@7.50.3-1?arch=i386&distro=jessie
  * Optional [subpath] may be given and will be appended to the purl e.g.
  * pkg:golang/google.golang.org/genproto#googleapis/api/annotations
- *
- * This implementation uses the package type as 'type' purl element as it is used
- * [in the documentation](https://github.com/package-url/purl-spec/blob/master/README.rst#purl).
- * E.g. 'maven' for Gradle projects.
  */
 @JvmOverloads
 fun Identifier.toPurl(qualifiers: Map<String, String> = emptyMap(), subpath: String = "") =
