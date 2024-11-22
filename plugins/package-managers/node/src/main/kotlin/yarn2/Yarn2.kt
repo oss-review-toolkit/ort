@@ -194,9 +194,6 @@ class Yarn2(
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
 
-        // Running `yarn install` before `yarn info` allows to get the real local package version. Otherwise, it will be
-        // a generic one such as '0.0.0-use.local'.
-
         run("install", workingDir = workingDir)
 
         val packageInfos = getPackageInfos(workingDir)
@@ -212,7 +209,6 @@ class Yarn2(
     }
 
     private fun getPackageInfos(workingDir: File): List<PackageInfo> {
-        // Query the list of all packages with their dependencies. The output is in NDJSON format.
         val process = run(
             "info",
             "-A",
