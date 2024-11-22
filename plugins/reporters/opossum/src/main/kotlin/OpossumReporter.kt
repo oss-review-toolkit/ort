@@ -116,7 +116,7 @@ class OpossumReporter(
                         "documentConfidence" to 80
                     ),
                     "attributionConfidence" to 80,
-                    "packageType" to id?.getPurlType(),
+                    "packageType" to id?.getPurlType().toString(),
                     "packageNamespace" to id?.namespace,
                     "packageName" to id?.name,
                     "packageVersion" to id?.version,
