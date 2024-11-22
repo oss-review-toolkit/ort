@@ -31,7 +31,6 @@ import org.ossreviewtoolkit.utils.common.percentEncode
  */
 enum class PurlType(private val value: String) {
     APK("apk"),
-    A_NAME("a-name"),
     BAZEL("bazel"),
     BITBUCKET("bitbucket"),
     BOWER("bower"),
