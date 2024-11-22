@@ -155,7 +155,6 @@ fun OkHttpClient.downloadFile(url: String, directory: File): Result<File> {
     // expecting to find a tar.gz file, and fail to unpack the archive. See
     // https://github.com/square/okhttp/blob/parent-3.10.0/okhttp/src/main/java/okhttp3/internal/http/BridgeInterceptor.java#L79
     return download(url, acceptEncoding = "identity").mapCatching { (response, body) ->
-
         // Depending on the server, we may only get a useful target file name when looking at the response
         // header or at a redirected URL. In case of the Crates registry, for example, we want to resolve
         //     https://crates.io/api/v1/crates/cfg-if/0.1.9/download
