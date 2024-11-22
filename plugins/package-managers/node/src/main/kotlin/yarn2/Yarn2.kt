@@ -223,8 +223,6 @@ class Yarn2(
             environment = mapOf("YARN_NODE_LINKER" to "pnp")
         )
 
-        logger.info { "Parsing packages..." }
-
         return parsePackageInfos(process.stdout)
     }
 
