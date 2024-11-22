@@ -84,7 +84,6 @@ data class PurlExtras(
  * pkg:deb/debian/curl@7.50.3-1?arch=i386&distro=jessie
  * Optional [subpath] may be given and will be appended to the purl e.g.
  * pkg:golang/google.golang.org/genproto#googleapis/api/annotations
- *
  */
 internal fun createPurl(
     type: String,
