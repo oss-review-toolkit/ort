@@ -471,7 +471,7 @@ project:
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::meta:1.16.0"
-      - id: "Pub::shelf_web_socket:2.0.0"
+      - id: "Pub::shelf_web_socket:2.0.1"
         dependencies:
         - id: "Pub::shelf:1.4.1"
           dependencies:
@@ -1667,8 +1667,8 @@ packages:
     url: "https://github.com/dart-lang/shelf.git"
     revision: ""
     path: "pkgs/shelf_static"
-- id: "Pub::shelf_web_socket:2.0.0"
-  purl: "pkg:pub/shelf_web_socket@2.0.0"
+- id: "Pub::shelf_web_socket:2.0.1"
+  purl: "pkg:pub/shelf_web_socket@2.0.1"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "A shelf handler that wires up a listener for every connection."
@@ -1679,9 +1679,9 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://pub.dev/packages/shelf_web_socket/versions/2.0.0.tar.gz"
+    url: "https://pub.dev/packages/shelf_web_socket/versions/2.0.1.tar.gz"
     hash:
-      value: "073c147238594ecd0d193f3456a5fe91c4b0abbcc68bf5cd95b36c4e194ac611"
+      value: "cc36c297b52866d203dbf9332263c94becc2fe0ceaa9681d07b6ef9807023b67"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
