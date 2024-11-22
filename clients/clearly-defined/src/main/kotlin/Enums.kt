@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.clients.clearlydefined
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.encoding.CompositeDecoder
 
 /**
  * See https://github.com/clearlydefined/service/blob/48f2c97/schemas/definition-1.0.json#L32-L48.
@@ -43,8 +44,12 @@ enum class ComponentType(val defaultProvider: Provider? = null) {
 
     companion object {
         @JvmStatic
-        fun fromString(value: String) =
-            ComponentType.entries[ComponentType.serializer().descriptor.getElementIndex(value)]
+        fun fromString(value: String): ComponentType =
+            ComponentType.serializer().descriptor.getElementIndex(value).takeUnless {
+                it == CompositeDecoder.UNKNOWN_NAME
+            }?.let {
+                ComponentType.entries[it]
+            } ?: throw IllegalArgumentException("Unknown component type: $value")
     }
 
     // Align the string representation with the serial name to make Retrofit's GET request work. Also see:
@@ -74,7 +79,12 @@ enum class Provider {
 
     companion object {
         @JvmStatic
-        fun fromString(value: String) = Provider.entries[Provider.serializer().descriptor.getElementIndex(value)]
+        fun fromString(value: String): Provider =
+            Provider.serializer().descriptor.getElementIndex(value).takeUnless {
+                it == CompositeDecoder.UNKNOWN_NAME
+            }?.let {
+                Provider.entries[it]
+            } ?: throw IllegalArgumentException("Unknown provider type: $value")
     }
 
     // Align the string representation with the serial name to make Retrofit's GET request work. Also see:
