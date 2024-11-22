@@ -41,8 +41,11 @@ class PurlUtilsTest : StringSpec({
     "The purl test suite should pass" {
         assertSoftly {
             testCases.forEach { testCase ->
+                // Invalid cases have been filtered out before.
+                val type = checkNotNull(testCase.type)
+
                 val purl = createPurl(
-                    testCase.type.orEmpty(),
+                    PurlType.fromString(type),
                     testCase.namespace.orEmpty(),
                     testCase.name.orEmpty(),
                     testCase.version.orEmpty(),

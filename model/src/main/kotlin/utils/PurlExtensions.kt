@@ -55,7 +55,7 @@ fun Identifier.getPurlType() =
         "pypi" -> PurlType.PYPI
         "swift" -> PurlType.SWIFT
         else -> PurlType.GENERIC
-    }.toString()
+    }
 
 /**
  * Create the canonical [package URL](https://github.com/package-url/purl-spec) ("purl") based on the properties of
