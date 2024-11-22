@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.utils.common.percentEncode
  * A subset of the Package URL types defined at https://github.com/package-url/purl-spec/blob/ad8a673/PURL-TYPES.rst.
  */
 enum class PurlType(private val value: String) {
-    ALPINE("alpine"),
+    APK("apk"),
     A_NAME("a-name"),
     BAZEL("bazel"),
     BITBUCKET("bitbucket"),
