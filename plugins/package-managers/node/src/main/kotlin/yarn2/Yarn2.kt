@@ -197,7 +197,10 @@ class Yarn2(
 
         val packageInfos = getPackageInfos(workingDir)
         val packageHeaders = parsePackageHeaders(packageInfos)
-        val packageDetails = queryPackageDetails(workingDir, packageHeaders)
+        val packageDetails = queryPackageDetails(
+            workingDir,
+            moduleIds = packageHeaders.values.filterNot { it.isProject }.mapTo(mutableSetOf()) { it.moduleId }
+        )
 
         val allProjects = parseAllPackages(packageInfos, definitionFile, packageHeaders, packageDetails)
         val scopeNames = YarnDependencyType.entries.mapTo(mutableSetOf()) { it.type }
@@ -252,22 +255,15 @@ class Yarn2(
     }
 
     /**
-     * Query the details of several packages. [iterator] should come from a NDJSON file. [packagesHeaders] should be
-     * the package representations as a triple: rawName/type/locator, mapped by package id.
+     * Query the details for the given NPM [moduleIds].
      * The packages are separated in chunks and queried with `npm file` in [workingDir]. Unfortunately, under the hood,
      * NPM does a request per package. However, if a solution to batch these requests arise, the code is ready for it.
      * From the response to `npm file`, package details are extracted and returned.
      */
-    private fun queryPackageDetails(
-        workingDir: File,
-        packagesHeaders: Map<String, PackageHeader>
-    ): Map<String, AdditionalData> {
+    private fun queryPackageDetails(workingDir: File, moduleIds: Set<String>): Map<String, AdditionalData> {
         logger.info { "Fetching packages details..." }
 
-        val chunks = packagesHeaders
-            .filterValues { !it.isProject }
-            .values.map { it.moduleId }
-            .chunked(YARN_NPM_INFO_CHUNK_SIZE)
+        val chunks = moduleIds.chunked(YARN_NPM_INFO_CHUNK_SIZE)
 
         return runBlocking(Dispatchers.IO) {
             chunks.mapIndexed { index, chunk ->
