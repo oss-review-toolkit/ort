@@ -31,12 +31,11 @@ import kotlin.time.Duration.Companion.seconds
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
     "The production server" should {
-        val provider = ClearlyDefinedPackageCurationProviderFactory().create(PluginConfig())
+        val provider = ClearlyDefinedPackageCurationProviderFactory.create()
 
         "return an existing curation for the javax.servlet-api Maven package" {
             val packages = createPackagesFromIds("Maven:javax.servlet:javax.servlet-api:3.1.0")
@@ -93,7 +92,7 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
         }
 
         "be retrieved for packages without a namespace" {
-            val provider = ClearlyDefinedPackageCurationProviderFactory().create(PluginConfig())
+            val provider = ClearlyDefinedPackageCurationProviderFactory.create()
             val packages = createPackagesFromIds("NPM::acorn:0.6.0")
 
             withRetry {

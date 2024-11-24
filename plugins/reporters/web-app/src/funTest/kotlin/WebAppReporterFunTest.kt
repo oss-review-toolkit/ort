@@ -26,7 +26,6 @@ import io.kotest.matchers.longs.beInRange
 import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.should
 
-import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.readOrtResult
@@ -37,7 +36,7 @@ class WebAppReporterFunTest : WordSpec({
             val ortResult = readOrtResult(getAssetFile("scan-result-for-synthetic-gradle-lib.yml"))
             val outputDir = tempdir()
 
-            val reportFileResults = WebAppReporterFactory().create(PluginConfig())
+            val reportFileResults = WebAppReporterFactory.create()
                 .generateReport(ReporterInput(ortResult), outputDir)
 
             reportFileResults.shouldBeSingleton {

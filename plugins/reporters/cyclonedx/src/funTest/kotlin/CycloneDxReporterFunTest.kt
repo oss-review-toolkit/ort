@@ -33,19 +33,14 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
-import java.io.File
-
 import org.cyclonedx.parsers.JsonParser
 import org.cyclonedx.parsers.XmlParser
 
-import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.plugins.reporters.cyclonedx.CycloneDxReporter.Companion.REPORT_BASE_FILENAME
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ORT_RESULT_WITH_ILLEGAL_COPYRIGHTS
 import org.ossreviewtoolkit.reporter.ORT_RESULT_WITH_VULNERABILITIES
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.test.getAssetAsString
 
@@ -53,16 +48,12 @@ class CycloneDxReporterFunTest : WordSpec({
     val defaultSchemaVersion = DEFAULT_SCHEMA_VERSION.versionString
     val outputDir = tempdir()
 
-    fun generateReport(result: OrtResult, options: Options): List<Result<File>> =
-        CycloneDxReporterFactory().create(PluginConfig(options)).generateReport(ReporterInput(result), outputDir)
-
     "BOM generation with single option" should {
-        val optionSingle = mapOf("single.bom" to "true")
-
         "create just one file" {
-            val jsonOptions = optionSingle + mapOf("output.file.formats" to "json")
-
-            val bomFileResults = generateReport(ORT_RESULT, jsonOptions)
+            val bomFileResults = CycloneDxReporterFactory.create(
+                singleBom = true,
+                outputFileFormats = listOf("json")
+            ).generateReport(ReporterInput(ORT_RESULT), outputDir)
 
             bomFileResults.shouldBeSingleton {
                 it shouldBeSuccess outputDir.resolve("$REPORT_BASE_FILENAME.json")
@@ -70,9 +61,10 @@ class CycloneDxReporterFunTest : WordSpec({
         }
 
         "be valid XML according to schema version $defaultSchemaVersion" {
-            val xmlOptions = optionSingle + mapOf("output.file.formats" to "xml")
-
-            val bomFileResults = generateReport(ORT_RESULT, xmlOptions)
+            val bomFileResults = CycloneDxReporterFactory.create(
+                singleBom = true,
+                outputFileFormats = listOf("xml")
+            ).generateReport(ReporterInput(ORT_RESULT), outputDir)
 
             bomFileResults.shouldBeSingleton {
                 it shouldBeSuccess { bomFile ->
@@ -85,9 +77,11 @@ class CycloneDxReporterFunTest : WordSpec({
 
         "create the expected XML file" {
             val expectedBom = getAssetAsString("cyclonedx-reporter-expected-result.xml")
-            val xmlOptions = optionSingle + mapOf("output.file.formats" to "xml")
 
-            val bomFileResults = generateReport(ORT_RESULT_WITH_VULNERABILITIES, xmlOptions)
+            val bomFileResults = CycloneDxReporterFactory.create(
+                singleBom = true,
+                outputFileFormats = listOf("xml")
+            ).generateReport(ReporterInput(ORT_RESULT_WITH_VULNERABILITIES), outputDir)
 
             bomFileResults.shouldBeSingleton {
                 it shouldBeSuccess { bomFile ->
@@ -101,9 +95,10 @@ class CycloneDxReporterFunTest : WordSpec({
         }
 
         "the expected XML file even if some copyrights contain non printable characters" {
-            val xmlOptions = optionSingle + mapOf("output.file.formats" to "xml")
-
-            val bomFileResults = generateReport(ORT_RESULT_WITH_ILLEGAL_COPYRIGHTS, xmlOptions)
+            val bomFileResults = CycloneDxReporterFactory.create(
+                singleBom = true,
+                outputFileFormats = listOf("xml")
+            ).generateReport(ReporterInput(ORT_RESULT_WITH_ILLEGAL_COPYRIGHTS), outputDir)
 
             bomFileResults.shouldBeSingleton {
                 it shouldBeSuccess { bomFile ->
@@ -114,9 +109,10 @@ class CycloneDxReporterFunTest : WordSpec({
         }
 
         "be valid JSON according to schema version $defaultSchemaVersion" {
-            val jsonOptions = optionSingle + mapOf("output.file.formats" to "json")
-
-            val bomFileResults = generateReport(ORT_RESULT_WITH_VULNERABILITIES, jsonOptions)
+            val bomFileResults = CycloneDxReporterFactory.create(
+                singleBom = true,
+                outputFileFormats = listOf("json")
+            ).generateReport(ReporterInput(ORT_RESULT_WITH_VULNERABILITIES), outputDir)
 
             bomFileResults.shouldBeSingleton {
                 it shouldBeSuccess { bomFile ->
@@ -129,9 +125,11 @@ class CycloneDxReporterFunTest : WordSpec({
 
         "create the expected JSON file" {
             val expectedBom = getAssetAsString("cyclonedx-reporter-expected-result.json")
-            val jsonOptions = optionSingle + mapOf("output.file.formats" to "json")
 
-            val bomFileResults = generateReport(ORT_RESULT_WITH_VULNERABILITIES, jsonOptions)
+            val bomFileResults = CycloneDxReporterFactory.create(
+                singleBom = true,
+                outputFileFormats = listOf("json")
+            ).generateReport(ReporterInput(ORT_RESULT_WITH_VULNERABILITIES), outputDir)
 
             bomFileResults.shouldBeSingleton {
                 it shouldBeSuccess { bomFile ->
@@ -146,22 +144,22 @@ class CycloneDxReporterFunTest : WordSpec({
     }
 
     "BOM generation with multi option" should {
-        val optionMulti = mapOf("single.bom" to "false")
-
         "create one file per project" {
-            val jsonOptions = optionMulti + mapOf("output.file.formats" to "json")
-
-            val bomFileResults = generateReport(ORT_RESULT_WITH_VULNERABILITIES, jsonOptions)
+            val bomFileResults = CycloneDxReporterFactory.create(
+                singleBom = false,
+                outputFileFormats = listOf("json")
+            ).generateReport(ReporterInput(ORT_RESULT_WITH_VULNERABILITIES), outputDir)
 
             bomFileResults shouldHaveSize 2
             bomFileResults.forAll { it.shouldBeSuccess() }
         }
 
         "generate valid XML files according to schema version $defaultSchemaVersion" {
-            val xmlOptions = optionMulti + mapOf("output.file.formats" to "xml")
-
             val (bomFileResultWithFindings, bomFileResultWithoutFindings) =
-                generateReport(ORT_RESULT_WITH_VULNERABILITIES, xmlOptions).also {
+                CycloneDxReporterFactory.create(
+                    singleBom = false,
+                    outputFileFormats = listOf("xml")
+                ).generateReport(ReporterInput(ORT_RESULT_WITH_VULNERABILITIES), outputDir).also {
                     it shouldHaveSize 2
                 }
 
@@ -179,10 +177,11 @@ class CycloneDxReporterFunTest : WordSpec({
         }
 
         "generate valid JSON files according to schema version $defaultSchemaVersion" {
-            val jsonOptions = optionMulti + mapOf("output.file.formats" to "json")
-
             val (bomFileResultWithFindings, bomFileResultWithoutFindings) =
-                generateReport(ORT_RESULT_WITH_VULNERABILITIES, jsonOptions).also {
+                CycloneDxReporterFactory.create(
+                    singleBom = false,
+                    outputFileFormats = listOf("json")
+                ).generateReport(ReporterInput(ORT_RESULT_WITH_VULNERABILITIES), outputDir).also {
                     it shouldHaveSize 2
                 }
 
@@ -200,10 +199,11 @@ class CycloneDxReporterFunTest : WordSpec({
         }
 
         "generate expected JSON files" {
-            val jsonOptions = optionMulti + mapOf("output.file.formats" to "json")
-
             val (bomFileResultWithFindings, bomFileResultWithoutFindings) =
-                generateReport(ORT_RESULT, jsonOptions).also {
+                CycloneDxReporterFactory.create(
+                    singleBom = false,
+                    outputFileFormats = listOf("json")
+                ).generateReport(ReporterInput(ORT_RESULT), outputDir).also {
                     it shouldHaveSize 2
                 }
 

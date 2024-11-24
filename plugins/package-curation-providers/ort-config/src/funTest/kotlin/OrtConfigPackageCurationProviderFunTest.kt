@@ -26,10 +26,9 @@ import io.kotest.matchers.shouldNot
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.plugins.api.PluginConfig
 
 class OrtConfigPackageCurationProviderFunTest : StringSpec({
-    fun createProvider() = OrtConfigPackageCurationProviderFactory().create(PluginConfig())
+    fun createProvider() = OrtConfigPackageCurationProviderFactory.create()
 
     "The provider succeeds to return known curations for packages" {
         val azureCore = Identifier("NuGet:Azure:Core:1.22.0")

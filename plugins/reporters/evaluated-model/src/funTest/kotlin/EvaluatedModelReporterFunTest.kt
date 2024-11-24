@@ -19,57 +19,51 @@
 
 package org.ossreviewtoolkit.plugins.reporters.evaluatedmodel
 
-import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.test.getAssetAsString
 import org.ossreviewtoolkit.utils.test.readOrtResult
 
 class EvaluatedModelReporterFunTest : WordSpec({
+    fun EvaluatedModelReporter.generateReport(ortResult: OrtResult) =
+        generateReport(
+            input = ReporterInput(
+                ortResult = ortResult,
+                howToFixTextProvider = { "Some how to fix text." }
+            ),
+            outputDir = tempdir()
+        ).single().getOrThrow().readText().normalizeLineBreaks()
+
     "EvaluatedModelReporter" should {
         "create the expected JSON output" {
             val expectedResult = getAssetAsString("evaluated-model-reporter-test-expected-output.json")
             val ortResult = readOrtResult("src/funTest/assets/reporter-test-input.yml")
 
-            generateReport(ortResult) shouldBe expectedResult
+            EvaluatedModelReporterFactory.create().generateReport(ortResult) shouldBe expectedResult
         }
 
         "create the expected YAML output" {
             val expectedResult = getAssetAsString("evaluated-model-reporter-test-expected-output.yml")
             val ortResult = readOrtResult("src/funTest/assets/reporter-test-input.yml")
-            val options = mapOf(EvaluatedModelReporter.OPTION_OUTPUT_FILE_FORMATS to FileFormat.YAML.fileExtension)
 
-            generateReport(ortResult, options) shouldBe expectedResult
+            EvaluatedModelReporterFactory.create(
+                outputFileFormats = listOf("yml")
+            ).generateReport(ortResult) shouldBe expectedResult
         }
 
         "create the expected YAML output with dependency tree de-duplication enabled" {
             val expectedResult = getAssetAsString("evaluated-model-reporter-test-deduplicate-expected-output.yml")
             val ortResult = readOrtResult("src/funTest/assets/reporter-test-input.yml")
-            val options = mapOf(
-                EvaluatedModelReporter.OPTION_OUTPUT_FILE_FORMATS to FileFormat.YAML.fileExtension,
-                EvaluatedModelReporter.OPTION_DEDUPLICATE_DEPENDENCY_TREE to "true"
-            )
 
-            generateReport(ortResult, options) shouldBe expectedResult
+            EvaluatedModelReporterFactory.create(
+                outputFileFormats = listOf("yml"),
+                deduplicateDependencyTree = true
+            ).generateReport(ortResult) shouldBe expectedResult
         }
     }
 })
-
-private fun TestConfiguration.generateReport(ortResult: OrtResult, options: Map<String, String> = emptyMap()): String {
-    val input = ReporterInput(
-        ortResult = ortResult,
-        howToFixTextProvider = { "Some how to fix text." }
-    )
-
-    val outputDir = tempdir()
-
-    return EvaluatedModelReporterFactory().create(PluginConfig(options)).generateReport(input, outputDir)
-        .single().getOrThrow().readText().normalizeLineBreaks()
-}

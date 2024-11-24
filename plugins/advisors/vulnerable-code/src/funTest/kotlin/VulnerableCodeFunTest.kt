@@ -29,12 +29,11 @@ import io.kotest.matchers.shouldBe
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.utils.toPurl
-import org.ossreviewtoolkit.plugins.api.PluginConfig
 
 class VulnerableCodeFunTest : WordSpec({
     "Vulnerable Go packages" should {
         "return findings for QUIC" {
-            val vc = VulnerableCodeFactory().create(PluginConfig())
+            val vc = VulnerableCodeFactory.create()
             val id = Identifier("Go::github.com/quic-go/quic-go:0.40.0")
             val pkg = Package.EMPTY.copy(id, purl = id.toPurl())
 
@@ -60,7 +59,7 @@ class VulnerableCodeFunTest : WordSpec({
 
     "Vulnerable Maven packages" should {
         "return findings for Guava" {
-            val vc = VulnerableCodeFactory().create(PluginConfig())
+            val vc = VulnerableCodeFactory.create()
             val id = Identifier("Maven:com.google.guava:guava:19.0")
             val pkg = Package.EMPTY.copy(id, purl = id.toPurl())
 
@@ -86,7 +85,7 @@ class VulnerableCodeFunTest : WordSpec({
         }
 
         "return findings for Commons-Compress" {
-            val vc = VulnerableCodeFactory().create(PluginConfig())
+            val vc = VulnerableCodeFactory.create()
             val id = Identifier("Maven:org.apache.commons:commons-compress:1.23.0")
             val pkg = Package.EMPTY.copy(id, purl = id.toPurl())
 
@@ -112,7 +111,7 @@ class VulnerableCodeFunTest : WordSpec({
 
     "Vulnerable NPM packages" should {
         "return findings for Elliptic" {
-            val vc = VulnerableCodeFactory().create(PluginConfig())
+            val vc = VulnerableCodeFactory.create()
             val id = Identifier("NPM::elliptic:6.5.7")
             val pkg = Package.EMPTY.copy(id, purl = id.toPurl())
 

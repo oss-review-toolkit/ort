@@ -23,7 +23,6 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.test.getAssetFile
@@ -33,7 +32,7 @@ class HtmlTemplateReporterFunTest : StringSpec({
     "HTML report is created from default template" {
         val expectedResultFile = getAssetFile("html-template-reporter-expected-result.html")
 
-        val reporter = HtmlTemplateReporterFactory().create(PluginConfig())
+        val reporter = HtmlTemplateReporterFactory.create()
         val reportContent = reporter.generateReport(ReporterInput(ORT_RESULT), tempdir())
             .single().getOrThrow().readText()
 
