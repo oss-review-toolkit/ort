@@ -58,7 +58,6 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
-import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.scannerRunOf
@@ -103,7 +102,7 @@ class OpossumReporterTest : WordSpec({
 
     "generateOpossumInput()" should {
         val result = createOrtResult()
-        val opossumInput = OpossumReporterFactory().create(PluginConfig()).generateOpossumInput(ReporterInput(result))
+        val opossumInput = OpossumReporterFactory.create().generateOpossumInput(ReporterInput(result))
 
         "create input that is somehow valid" {
             opossumInput shouldNotBeNull {
@@ -233,8 +232,7 @@ class OpossumReporterTest : WordSpec({
 
     "generateOpossumInput() with excluded scopes" should {
         val result = createOrtResult().setScopeExcludes("devDependencies")
-        val opossumInputWithExcludedScopes =
-            OpossumReporterFactory().create(PluginConfig()).generateOpossumInput(ReporterInput(result))
+        val opossumInputWithExcludedScopes = OpossumReporterFactory.create().generateOpossumInput(ReporterInput(result))
         val fileListWithExcludedScopes = opossumInputWithExcludedScopes.resources.toFileList()
 
         "exclude scopes" {
