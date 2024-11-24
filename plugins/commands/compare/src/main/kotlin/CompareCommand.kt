@@ -43,15 +43,21 @@ import java.time.Instant
 
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.mapper
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
+import org.ossreviewtoolkit.plugins.commands.api.OrtCommandFactory
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.getCommonParentFile
 import org.ossreviewtoolkit.utils.ort.Environment
 
-class CompareCommand : OrtCommand(
-    name = "compare",
-    help = "Compare two ORT results with various methods."
-) {
+@OrtPlugin(
+    id = "compare",
+    displayName = "compare command",
+    description = "Compare two ORT results with various methods.",
+    factory = OrtCommandFactory::class
+)
+class CompareCommand(descriptor: PluginDescriptor = CompareCommandFactory.descriptor) : OrtCommand(descriptor) {
     private enum class CompareMethod { SEMANTIC_DIFF, TEXT_DIFF }
 
     private val fileA by argument(help = "The first ORT result file to compare.")

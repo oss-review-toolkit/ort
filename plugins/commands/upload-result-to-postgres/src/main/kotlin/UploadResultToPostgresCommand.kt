@@ -39,7 +39,10 @@ import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration
 import org.ossreviewtoolkit.model.utils.DatabaseUtils
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.checkDatabaseEncoding
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.tableExists
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
+import org.ossreviewtoolkit.plugins.commands.api.OrtCommandFactory
 import org.ossreviewtoolkit.plugins.commands.api.utils.inputGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.readOrtResult
 import org.ossreviewtoolkit.scanner.storages.utils.jsonb
@@ -47,10 +50,15 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
-class UploadResultToPostgresCommand : OrtCommand(
-    name = "upload-result-to-postgres",
-    help = "Upload an ORT result to a PostgreSQL database."
-) {
+@OrtPlugin(
+    id = "upload-result-to-postgres",
+    displayName = "upload-result-to-postgres command",
+    description = "Upload an ORT result to a PostgreSQL database.",
+    factory = OrtCommandFactory::class
+)
+class UploadResultToPostgresCommand(
+    descriptor: PluginDescriptor = UploadResultToPostgresCommandFactory.descriptor
+) : OrtCommand(descriptor) {
     private val ortFile by option(
         "--ort-file", "-i",
         help = "The ORT result file to read as input."

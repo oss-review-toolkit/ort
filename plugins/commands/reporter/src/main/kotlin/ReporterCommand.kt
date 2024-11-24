@@ -53,8 +53,11 @@ import org.ossreviewtoolkit.model.licenses.orEmpty
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.readValueOrDefault
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginConfig
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
+import org.ossreviewtoolkit.plugins.commands.api.OrtCommandFactory
 import org.ossreviewtoolkit.plugins.commands.api.utils.configurationGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.inputGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.outputGroup
@@ -80,10 +83,13 @@ import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants.LICENSE_REF_PREFIX
 
-class ReporterCommand : OrtCommand(
-    name = "report",
-    help = "Present Analyzer, Scanner and Evaluator results in various formats."
-) {
+@OrtPlugin(
+    id = "report",
+    displayName = "report command",
+    description = "Present Analyzer, Scanner and Evaluator results in various formats.",
+    factory = OrtCommandFactory::class
+)
+class ReporterCommand(descriptor: PluginDescriptor = ReporterCommandFactory.descriptor) : OrtCommand(descriptor) {
     private val ortFile by option(
         "--ort-file", "-i",
         help = "The ORT result file to use."

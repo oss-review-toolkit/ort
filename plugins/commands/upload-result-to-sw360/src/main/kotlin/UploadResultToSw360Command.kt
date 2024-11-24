@@ -43,7 +43,10 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
 import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
+import org.ossreviewtoolkit.plugins.commands.api.OrtCommandFactory
 import org.ossreviewtoolkit.plugins.commands.api.utils.inputGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.readOrtResult
 import org.ossreviewtoolkit.scanner.storages.Sw360Storage
@@ -53,10 +56,15 @@ import org.ossreviewtoolkit.utils.common.packZip
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 
-class UploadResultToSw360Command : OrtCommand(
-    name = "upload-result-to-sw360",
-    help = "Upload an ORT result to SW360."
-) {
+@OrtPlugin(
+    id = "upload-result-to-sw360",
+    displayName = "upload-result-to-sw360 command",
+    description = "Upload an ORT result to SW360.",
+    factory = OrtCommandFactory::class
+)
+class UploadResultToSw360Command(
+    descriptor: PluginDescriptor = UploadResultToSw360CommandFactory.descriptor
+) : OrtCommand(descriptor) {
     private val ortFile by option(
         "--ort-file", "-i",
         help = "The ORT result file to read as input."

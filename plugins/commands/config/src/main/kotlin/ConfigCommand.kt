@@ -31,15 +31,21 @@ import com.github.ajalt.mordant.rendering.Theme
 
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.OrtConfigurationWrapper
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
+import org.ossreviewtoolkit.plugins.commands.api.OrtCommandFactory
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.ort.ORT_REFERENCE_CONFIG_FILENAME
 
-class ConfigCommand : OrtCommand(
-    name = "config",
-    help = "Show different ORT configurations."
-) {
+@OrtPlugin(
+    id = "config",
+    displayName = "config command",
+    description = "Show different ORT configurations.",
+    factory = OrtCommandFactory::class
+)
+class ConfigCommand(descriptor: PluginDescriptor = ConfigCommandFactory.descriptor) : OrtCommand(descriptor) {
     private val showDefault by option(
         "--show-default",
         help = "Show the default configuration used when no custom configuration is present."

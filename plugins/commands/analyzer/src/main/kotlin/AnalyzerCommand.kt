@@ -47,7 +47,10 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.readValueOrNull
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
+import org.ossreviewtoolkit.plugins.commands.api.OrtCommandFactory
 import org.ossreviewtoolkit.plugins.commands.api.utils.SeverityStatsPrinter
 import org.ossreviewtoolkit.plugins.commands.api.utils.configurationGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.inputGroup
@@ -62,10 +65,13 @@ import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
-class AnalyzerCommand : OrtCommand(
-    name = "analyze",
-    help = "Determine dependencies of a software project."
-) {
+@OrtPlugin(
+    id = "analyze",
+    displayName = "analyze command",
+    description = "Determine dependencies of a software project.",
+    factory = OrtCommandFactory::class
+)
+class AnalyzerCommand(descriptor: PluginDescriptor = AnalyzerCommandFactory.descriptor) : OrtCommand(descriptor) {
     private val inputDir by option(
         "--input-dir", "-i",
         help = "The project directory to analyze. May point to a definition file if only a single package manager is " +

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+ * Copyright (C) 2024 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +17,18 @@
  * License-Filename: LICENSE
  */
 
-plugins {
-    // Apply precompiled plugins.
-    id("ort-library-conventions")
-}
+package org.ossreviewtoolkit.plugins.commands.api
 
-dependencies {
-    api(projects.model)
-    api(projects.plugins.api)
+import org.ossreviewtoolkit.plugins.api.PluginFactory
 
-    api(libs.clikt)
-
-    implementation(projects.utils.ortUtils)
-
-    implementation(libs.jackson.core)
-    implementation(libs.jackson.databind)
+/**
+ * A factory interface for creating [OrtCommand] instances.
+ */
+interface OrtCommandFactory : PluginFactory<OrtCommand> {
+    companion object {
+        /**
+         * All [ORT command factories][OrtCommandFactory] available in the classpath, associated by their ids.
+         */
+        val ALL by lazy { PluginFactory.getAll<OrtCommandFactory, OrtCommand>() }
+    }
 }

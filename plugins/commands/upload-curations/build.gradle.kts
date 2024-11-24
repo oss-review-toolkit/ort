@@ -19,11 +19,13 @@
 
 plugins {
     // Apply precompiled plugins.
-    id("ort-library-conventions")
+    id("ort-plugin-conventions")
 }
 
 dependencies {
     api(projects.plugins.commands.commandApi)
+
+    ksp(projects.plugins.commands.commandApi)
 
     implementation(projects.clients.clearlyDefinedClient)
     implementation(projects.model)
