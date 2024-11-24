@@ -44,7 +44,7 @@ import org.ossreviewtoolkit.utils.spdx.nullOrBlankToSpdxNoassertionOrNone
     description = "A reporter for the Audi Open Source Diagnostics (AOSD) 2.1 format.",
     factory = ReporterFactory::class
 )
-class Aosd21Reporter(override val descriptor: PluginDescriptor = Aosd20ReporterFactory.descriptor) : Reporter {
+class Aosd21Reporter(override val descriptor: PluginDescriptor = Aosd21ReporterFactory.descriptor) : Reporter {
     override fun generateReport(input: ReporterInput, outputDir: File): List<Result<File>> {
         val reportFiles = input.ortResult.getProjects(omitExcluded = true).map { project ->
             val indexedPackages = input.ortResult.getPackages(omitExcluded = true).withIndex().associateBy {
