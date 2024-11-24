@@ -26,9 +26,12 @@ import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
+import com.squareup.kotlinpoet.ParameterSpec
+import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.TypeSpec
+import com.squareup.kotlinpoet.asClassName
 import com.squareup.kotlinpoet.ksp.writeTo
 
 import org.ossreviewtoolkit.plugins.api.PluginConfig
@@ -47,9 +50,17 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
      * Generate a factory class for the [pluginSpec].
      */
     private fun generateFactoryClass(pluginSpec: PluginSpec): TypeSpec {
-        // Create the initializer for the plugin config object.
-        val configInitializer = pluginSpec.configClass?.let {
-            getConfigInitializer(it.typeName, pluginSpec.descriptor.options)
+        // Create the initializers for the plugin config object.
+        val configFromMapInitializer = pluginSpec.configClass?.let {
+            getConfigFromMapInitializer(it.typeName, pluginSpec.descriptor.options)
+        }
+
+        val configArguments = pluginSpec.configClass?.let {
+            getConfigArguments(pluginSpec.descriptor.options)
+        }.orEmpty()
+
+        val configFromArgumentsInitializer = pluginSpec.configClass?.let {
+            getConfigFromArgumentsInitializer(it.typeName, pluginSpec.descriptor.options)
         }
 
         // Create the plugin descriptor property.
@@ -58,21 +69,18 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
             .initializer(descriptorInitializer)
             .build()
 
-        val companionObject = TypeSpec.companionObjectBuilder()
-            .addProperty(descriptorProperty)
-            .build()
-
         val descriptorDelegateProperty = PropertySpec.builder("descriptor", PluginDescriptor::class, KModifier.OVERRIDE)
             .delegate("Companion::descriptor")
             .build()
 
-        // Create the create function that initializes the plugin with the descriptor and the config object.
-        val createFunction = FunSpec.builder("create").apply {
+        // Create the factory function that initializes the plugin with the descriptor and the config object, created
+        // from a PluginOptions object.
+        val createFromConfigFunction = FunSpec.builder("create").apply {
             addModifiers(KModifier.OVERRIDE)
             addParameter("config", PluginConfig::class)
 
-            if (configInitializer != null) {
-                addCode(configInitializer)
+            if (configFromMapInitializer != null) {
+                addCode(configFromMapInitializer)
                 addCode("return %T(%N, configObject)", pluginSpec.typeName, descriptorProperty)
             } else {
                 addCode("return %T(%N)", pluginSpec.typeName, descriptorProperty)
@@ -81,13 +89,33 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
             returns(pluginSpec.typeName)
         }.build()
 
+        // Create the factory function that initializes the plugin with the descriptor and the config object, created
+        // from function arguments.
+        val createFromArgumentsFunction = FunSpec.builder("create").apply {
+            configArguments.forEach { addParameter(it) }
+
+            if (configFromArgumentsInitializer != null) {
+                addCode(configFromArgumentsInitializer)
+                addCode("return %T(%N, configObject)", pluginSpec.typeName, descriptorProperty)
+            } else {
+                addCode("return %T(%N)", pluginSpec.typeName, descriptorProperty)
+            }
+
+            returns(pluginSpec.typeName)
+        }.build()
+
+        val companionObject = TypeSpec.companionObjectBuilder()
+            .addProperty(descriptorProperty)
+            .addFunction(createFromArgumentsFunction)
+            .build()
+
         // Create the factory class.
         val className = "${pluginSpec.typeName.toString().substringAfterLast('.')}Factory"
         val classSpec = TypeSpec.classBuilder(className)
             .addSuperinterface(pluginSpec.factory.typeName)
             .addType(companionObject)
             .addProperty(descriptorDelegateProperty)
-            .addFunction(createFunction)
+            .addFunction(createFromConfigFunction)
             .build()
 
         // Write the factory class to a file.
@@ -102,7 +130,7 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
     /**
      * Generate the code block to initialize the config object from the [PluginConfig].
      */
-    private fun getConfigInitializer(configType: TypeName, pluginOptions: List<PluginOption>) =
+    private fun getConfigFromMapInitializer(configType: TypeName, pluginOptions: List<PluginOption>) =
         CodeBlock.builder().apply {
             add("val configObject = %T(\n", configType)
 
@@ -165,6 +193,63 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
             add(")\n\n")
         }.build()
 
+    private fun getConfigArguments(pluginOptions: List<PluginOption>) =
+        pluginOptions.map { option ->
+            val type = when (option.type) {
+                PluginOptionType.BOOLEAN -> Boolean::class.asClassName()
+                PluginOptionType.INTEGER -> Int::class.asClassName()
+                PluginOptionType.LONG -> Long::class.asClassName()
+                PluginOptionType.SECRET -> Secret::class.asClassName()
+                PluginOptionType.STRING -> String::class.asClassName()
+                PluginOptionType.STRING_LIST -> List::class.asClassName().parameterizedBy(String::class.asClassName())
+            }.copy(nullable = option.isNullable)
+
+            val builder = ParameterSpec.builder(option.name, type)
+
+            option.defaultValue?.let { defaultValue ->
+                val codeBlock = CodeBlock.builder().apply {
+                    when (option.type) {
+                        PluginOptionType.BOOLEAN -> add("%L", defaultValue.toBoolean())
+                        PluginOptionType.INTEGER -> add("%L", defaultValue.toInt())
+                        PluginOptionType.LONG -> add("%LL", defaultValue.toLong())
+                        PluginOptionType.SECRET -> add("%T(%S)", Secret::class, defaultValue)
+                        PluginOptionType.STRING -> add("%S", defaultValue)
+                        PluginOptionType.STRING_LIST -> {
+                            add("listOf(")
+
+                            defaultValue.split(",").forEach { value ->
+                                add("%S,", value.trim())
+                            }
+
+                            add(")")
+                        }
+                    }
+                }.build()
+
+                builder.defaultValue(codeBlock)
+            }
+
+            // Default to null for nullable properties even if there is no default value to simplify usage of the
+            // function.
+            if (option.isNullable && option.defaultValue == null) builder.defaultValue("null")
+
+            builder.build()
+        }
+
+    /**
+     * Generate the code block to initialize the config object from function arguments.
+     */
+    private fun getConfigFromArgumentsInitializer(configType: TypeName, pluginOptions: List<PluginOption>) =
+        CodeBlock.builder().apply {
+            add("val configObject = %T(\n", configType)
+
+            pluginOptions.forEach { option ->
+                add("    ${option.name} = ${option.name},\n")
+            }
+
+            add(")\n\n")
+        }.build()
+
     /**
      * Generate the code block to initialize the [PluginDescriptor] for the plugin.
      */
@@ -209,10 +294,12 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
                 add(
                     """    
                     |            ),
+                    |            isNullable = %L,
                     |            isRequired = %L
                     |        ),
                     |
                     """.trimMargin(),
+                    it.isNullable,
                     it.isRequired
                 )
             }

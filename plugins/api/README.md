@@ -90,8 +90,12 @@ To be able to use the compiler plugin, the configuration class must follow certa
 * If a constructor argument is not nullable and has no default value, the argument is required and the generated factory will throw an exception if it cannot be found in the `PluginConfig`.
 * The compiler plugin will use the KDoc of a constructor argument as the description of the option when generating the `PluginDescriptor`.
 
-The generated factory class will take option values from the `PluginConfig.options` map and use them to create an instance of the configuration class.
+The generated factory class contains a factory function with a `PluginConfig` argument.
+The option values are taken from the `PluginConfig.options` map and are used to create an instance of the configuration class.
 The only exception are `Secret` properties which are taken from the `PluginConfig.secrets` map.
+
+In addition, the generated factory class contains a static factory function which takes the properties of the config class as arguments.
+This is convenient when creating plugin instances in test code, because the arguments of this function are type-safe and automatically initialized with the default values defined in the `@OrtPluginOption` annotation.
 
 For example, an advisor plugin configuration could look like this:
 
@@ -110,6 +114,38 @@ data class ExampleConfiguration(
 ```
 
 Here, the `serverUrl` property has a default value, the `timeout` property is required, and the `token` property is optional.
+
+The generated `ExampleAdvisorFactory` class will contain two factory functions:
+
+```kotlin
+class ExampleAdvisorProviderFactory : AdviceProviderFactory {
+    override fun create(config: PluginConfig): ExampleAdvisor {
+        val configObject = ExampleConfiguration(
+            serverUrl = config.options["serverUrl"] ?: "https://example.com",
+            timeout = config.options["timeout"]?.toInt() ?: error("Option timeout is required but not set."),
+            token = config.secrets["token"]
+        )
+
+        return ExampleAdvisor(descriptor, configObject)
+    }
+
+    companion object {
+        fun create(
+            serverUrl: String = "https://example.com",
+            timeout: Int,
+            token: Secret? = null
+        ): ExampleAdvisor {
+            val configObject = ExampleConfiguration(
+                serverUrl = serverUrl,
+                timeout = timeout,
+                token = token
+            )
+
+            return ExampleAdvisor(descriptor, configObject)
+        }
+    }
+}
+```
 
 ### Gradle Configuration
 

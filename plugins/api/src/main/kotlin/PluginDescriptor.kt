@@ -97,6 +97,11 @@ data class PluginOption(
     val aliases: List<String>,
 
     /**
+     * Whether the option is nullable.
+     */
+    val isNullable: Boolean,
+
+    /**
      * Whether the option is required.
      */
     val isRequired: Boolean
