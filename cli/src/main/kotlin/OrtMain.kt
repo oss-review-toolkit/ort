@@ -48,7 +48,8 @@ import kotlin.system.exitProcess
 
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.config.OrtConfiguration
-import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
+import org.ossreviewtoolkit.plugins.api.PluginConfig
+import org.ossreviewtoolkit.plugins.commands.api.OrtCommandFactory
 import org.ossreviewtoolkit.utils.common.EnvironmentVariableFilter
 import org.ossreviewtoolkit.utils.common.MaskedString
 import org.ossreviewtoolkit.utils.common.Os
@@ -123,7 +124,8 @@ class OrtMain : CliktCommand(ORT_NAME) {
             helpFormatter = { MordantHelpFormatter(context = it, REQUIRED_OPTION_MARKER, showDefaultValues = true) }
         }
 
-        subcommands(OrtCommand.ALL.values)
+        // Pass an empty PluginConfig here as commands are not configurable.
+        subcommands(OrtCommandFactory.ALL.map { (_, factory) -> factory.create(PluginConfig()) })
 
         versionOption(
             version = env.ortVersion,

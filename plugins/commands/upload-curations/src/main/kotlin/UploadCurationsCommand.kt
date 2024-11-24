@@ -50,16 +50,24 @@ import org.ossreviewtoolkit.model.PackageCurationData
 import org.ossreviewtoolkit.model.readValueOrDefault
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedCoordinates
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedSourceLocation
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
+import org.ossreviewtoolkit.plugins.commands.api.OrtCommandFactory
 import org.ossreviewtoolkit.plugins.commands.api.utils.inputGroup
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.ort.okHttpClient
 import org.ossreviewtoolkit.utils.ort.runBlocking
 
-class UploadCurationsCommand : OrtCommand(
-    name = "upload-curations",
-    help = "Upload ORT package curations to ClearlyDefined."
-) {
+@OrtPlugin(
+    id = "upload-curations",
+    displayName = "upload-curations command",
+    description = "Upload ORT package curations to ClearlyDefined.",
+    factory = OrtCommandFactory::class
+)
+class UploadCurationsCommand(
+    descriptor: PluginDescriptor = UploadCurationsCommandFactory.descriptor
+) : OrtCommand(descriptor) {
     private val inputFile by option(
         "--input-file", "-i",
         help = "The file with package curations to upload."

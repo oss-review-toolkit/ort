@@ -33,17 +33,23 @@ import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
+import org.ossreviewtoolkit.plugins.commands.api.OrtCommandFactory
 import org.ossreviewtoolkit.plugins.packagecurationproviders.ortconfig.toCurationPath
 import org.ossreviewtoolkit.plugins.packagemanagers.nuget.utils.getIdentifierWithNamespace
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.getCommonParentFile
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 
-class MigrateCommand : OrtCommand(
-    name = "migrate",
-    help = "Assist with migrating ORT configuration to newer ORT versions."
-) {
+@OrtPlugin(
+    id = "migrate",
+    displayName = "migrate command",
+    description = "Assist with migrating ORT configuration to newer ORT versions.",
+    factory = OrtCommandFactory::class
+)
+class MigrateCommand(descriptor: PluginDescriptor = MigrateCommandFactory.descriptor) : OrtCommand(descriptor) {
     private val hoconToYaml by option(
         "--hocon-to-yaml",
         help = "Perform a simple conversion of the given HOCON configuration file to YAML and print the result."

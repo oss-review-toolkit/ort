@@ -30,7 +30,10 @@ import com.github.ajalt.clikt.parameters.types.file
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.notifier.Notifier
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
+import org.ossreviewtoolkit.plugins.commands.api.OrtCommandFactory
 import org.ossreviewtoolkit.plugins.commands.api.utils.configurationGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.inputGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.readOrtResult
@@ -39,10 +42,13 @@ import org.ossreviewtoolkit.utils.ort.ORT_NOTIFIER_SCRIPT_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
-class NotifierCommand : OrtCommand(
-    name = "notify",
-    help = "Create notifications based on an ORT result."
-) {
+@OrtPlugin(
+    id = "notify",
+    displayName = "notify command",
+    description = "Create notifications based on an ORT result.",
+    factory = OrtCommandFactory::class
+)
+class NotifierCommand(descriptor: PluginDescriptor = NotifierCommandFactory.descriptor) : OrtCommand(descriptor) {
     private val ortFile by option(
         "--ort-file", "-i",
         help = "The ORT result file to read as input."

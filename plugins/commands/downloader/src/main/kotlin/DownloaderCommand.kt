@@ -82,7 +82,10 @@ import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
+import org.ossreviewtoolkit.plugins.commands.api.OrtCommandFactory
 import org.ossreviewtoolkit.plugins.commands.api.utils.GroupTypes.FileType
 import org.ossreviewtoolkit.plugins.commands.api.utils.GroupTypes.StringType
 import org.ossreviewtoolkit.plugins.commands.api.utils.OPTION_GROUP_INPUT
@@ -102,10 +105,13 @@ import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseChoice
 
-class DownloaderCommand : OrtCommand(
-    name = "download",
-    help = "Fetch source code from a remote location."
-) {
+@OrtPlugin(
+    id = "download",
+    displayName = "download command",
+    description = "Fetch source code from a remote location.",
+    factory = OrtCommandFactory::class
+)
+class DownloaderCommand(descriptor: PluginDescriptor = DownloaderCommandFactory.descriptor) : OrtCommand(descriptor) {
     private val input by mutuallyExclusiveOptions(
         option(
             "--ort-file", "-i",

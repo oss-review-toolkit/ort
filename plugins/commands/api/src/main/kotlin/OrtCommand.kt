@@ -27,23 +27,15 @@ import com.github.ajalt.clikt.core.requireObject
 import java.io.File
 
 import org.ossreviewtoolkit.model.config.OrtConfiguration
-import org.ossreviewtoolkit.utils.common.Plugin
+import org.ossreviewtoolkit.plugins.api.Plugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
 
 /**
- * An interface for [CliktCommand]-based ORT commands that come as named plugins.
+ * An interface for [CliktCommand]-based ORT commands that come as [Plugin]s.
  */
-abstract class OrtCommand(name: String, private val help: String) : CliktCommand(name), Plugin {
-    companion object {
-        /**
-         * All [ORT commands][OrtCommand] available in the classpath, associated by their names.
-         */
-        val ALL by lazy { Plugin.getAll<OrtCommand>() }
-    }
-
-    override val type = commandName
-
-    override fun help(context: Context) = help
+abstract class OrtCommand(override val descriptor: PluginDescriptor) : CliktCommand(descriptor.id), Plugin {
+    override fun help(context: Context) = descriptor.description
 
     protected val ortConfig by requireObject<OrtConfiguration>()
 

@@ -38,7 +38,10 @@ import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
+import org.ossreviewtoolkit.plugins.commands.api.OrtCommandFactory
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
 import org.ossreviewtoolkit.utils.common.CommandLineTool
@@ -55,10 +58,15 @@ private val DANGER_PREFIX = "\t${Theme.Default.danger("-")} "
 private val WARNING_PREFIX = "\t${Theme.Default.warning("+")} "
 private val SUCCESS_PREFIX = "\t${Theme.Default.success("*")} "
 
-class RequirementsCommand : OrtCommand(
-    name = "requirements",
-    help = "Check for the command line tools required by ORT."
-) {
+@OrtPlugin(
+    id = "requirements",
+    displayName = "requirements command",
+    description = "Check for the command line tools required by ORT.",
+    factory = OrtCommandFactory::class
+)
+class RequirementsCommand(
+    descriptor: PluginDescriptor = RequirementsCommandFactory.descriptor
+) : OrtCommand(descriptor) {
     private enum class RequirementsType { PLUGINS, COMMANDS }
 
     private enum class VersionStatus {

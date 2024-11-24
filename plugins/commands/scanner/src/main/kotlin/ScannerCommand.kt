@@ -50,7 +50,10 @@ import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
+import org.ossreviewtoolkit.plugins.commands.api.OrtCommandFactory
 import org.ossreviewtoolkit.plugins.commands.api.utils.SeverityStatsPrinter
 import org.ossreviewtoolkit.plugins.commands.api.utils.configurationGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.outputGroup
@@ -68,10 +71,13 @@ import org.ossreviewtoolkit.utils.ort.ORT_FAILURE_STATUS_CODE
 import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
-class ScannerCommand : OrtCommand(
-    name = "scan",
-    help = "Run external license / copyright scanners."
-) {
+@OrtPlugin(
+    id = "scan",
+    displayName = "scan command",
+    description = "Run external license / copyright scanners.",
+    factory = OrtCommandFactory::class
+)
+class ScannerCommand(descriptor: PluginDescriptor = ScannerCommandFactory.descriptor) : OrtCommand(descriptor) {
     private val input by option(
         "--ort-file", "-i",
         help = "An ORT result file with an analyzer result to use. Source code is downloaded automatically if needed."

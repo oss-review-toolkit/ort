@@ -45,7 +45,10 @@ import org.ossreviewtoolkit.advisor.Advisor
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
+import org.ossreviewtoolkit.plugins.commands.api.OrtCommandFactory
 import org.ossreviewtoolkit.plugins.commands.api.utils.SeverityStatsPrinter
 import org.ossreviewtoolkit.plugins.commands.api.utils.configurationGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.outputGroup
@@ -57,10 +60,13 @@ import org.ossreviewtoolkit.utils.ort.ORT_FAILURE_STATUS_CODE
 import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
-class AdvisorCommand : OrtCommand(
-    name = "advise",
-    help = "Check dependencies for security vulnerabilities."
-) {
+@OrtPlugin(
+    id = "advise",
+    displayName = "advise command",
+    description = "Check dependencies for security vulnerabilities.",
+    factory = OrtCommandFactory::class
+)
+class AdvisorCommand(descriptor: PluginDescriptor = AdvisorCommandFactory.descriptor) : OrtCommand(descriptor) {
     private val ortFile by option(
         "--ort-file", "-i",
         help = "An ORT result file with an analyzer result to use."
