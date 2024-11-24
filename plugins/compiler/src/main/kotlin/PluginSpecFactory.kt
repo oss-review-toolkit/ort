@@ -175,6 +175,7 @@ class PluginSpecFactory {
                 type = type,
                 defaultValue = defaultValue,
                 aliases = annotation?.aliases?.asList().orEmpty(),
+                isNullable = paramType.isMarkedNullable,
                 isRequired = !paramType.isMarkedNullable && defaultValue == null
             )
         }
