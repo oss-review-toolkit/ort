@@ -12,7 +12,7 @@ mavenPublishPlugin = "0.30.0"
 reproducibleBuildsPlugin = "1.0"
 versionsPlugin = "0.51.0"
 
-aeSecurity = "0.126.0"
+aeSecurity = "0.127.0"
 asciidoctorj = "3.0.0"
 asciidoctorjPdf = "2.3.19"
 clikt = "5.0.1"
