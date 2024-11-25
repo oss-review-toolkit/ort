@@ -40,8 +40,8 @@ interface DependencyHandler<D> {
     fun identifierFor(dependency: D): Identifier
 
     /**
-     * Return a collection with the dependencies of the given [dependency]. [DependencyGraphBuilder] invokes this
-     * function to construct the whole dependency tree spawned by this [dependency].
+     * Return a list with the dependencies of the given [dependency]. [DependencyGraphBuilder] invokes this function to
+     * construct the whole dependency tree spawned by this [dependency].
      */
     fun dependenciesFor(dependency: D): List<D>
 
@@ -60,8 +60,8 @@ interface DependencyHandler<D> {
     fun createPackage(dependency: D, issues: MutableCollection<Issue>): Package?
 
     /**
-     * Return a collection with known issues for the given [dependency]. Some package manager implementations may
-     * already encounter problems when obtaining dependency representations. These can be reported here. This base
+     * Return a list with known issues for the given [dependency]. Some package manager implementations may already
+     * encounter problems when obtaining dependency representations. These can be reported here. This base
      * implementation returns an empty collection.
      */
     fun issuesForDependency(dependency: D): List<Issue> = emptyList()
