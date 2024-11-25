@@ -49,7 +49,7 @@ private val logger = loggerOf(MethodHandles.lookup().lookupClass())
  * Expand an NPM shortcut [url] to a regular URL as used for dependencies, see
  * https://docs.npmjs.com/cli/v7/configuring-npm/package-json#urls-as-dependencies.
  */
-internal fun expandNpmShortcutUrl(url: String): String {
+internal fun expandShortcutUrl(url: String): String {
     // A hierarchical URI looks like
     //     [scheme:][//authority][path][?query][#fragment]
     // where a server-based "authority" has the syntax
@@ -84,7 +84,7 @@ internal fun expandNpmShortcutUrl(url: String): String {
 /**
  * Return the result of doing various replacements in this URL.
  */
-internal fun String.fixNpmDownloadUrl(): String =
+internal fun String.fixDownloadUrl(): String =
     @Suppress("HttpUrlsUsage")
     // Work around the issue described at
     // https://npm.community/t/some-packages-have-dist-tarball-as-http-and-not-https/285/19.
@@ -97,7 +97,7 @@ internal fun String.fixNpmDownloadUrl(): String =
 
 private val ARTIFACTORY_API_PATH_PATTERN = Regex("(.*artifactory.*)/api/npm/(.*)")
 
-internal fun Collection<String>.mapNpmLicenses(): Set<String> =
+internal fun Collection<String>.mapLicenses(): Set<String> =
     mapNotNullTo(mutableSetOf()) { declaredLicense ->
         when {
             // NPM does not mean https://unlicense.org/ here, but the wish to not "grant others the right to use
@@ -115,7 +115,7 @@ internal fun Collection<String>.mapNpmLicenses(): Set<String> =
 /**
  * Parse information about the VCS from the [package.json][node] file of a module.
  */
-internal fun parseNpmVcsInfo(packageJson: PackageJson): VcsInfo {
+internal fun parseVcsInfo(packageJson: PackageJson): VcsInfo {
     // See https://github.com/npm/read-package-json/issues/7 for some background info.
     val head = packageJson.gitHead.orEmpty()
 
@@ -131,7 +131,7 @@ internal fun parseNpmVcsInfo(packageJson: PackageJson): VcsInfo {
 
     return VcsInfo(
         type = VcsType.forName(type),
-        url = expandNpmShortcutUrl(url),
+        url = expandShortcutUrl(url),
         revision = head,
         path = path
     )
@@ -154,25 +154,25 @@ internal fun parsePackage(
     // - https://docs.npmjs.com/cli/v10/configuring-npm/package-json#version
     // So, projects analyzed by ORT might not have these fields set.
     val rawName = packageJson.name.orEmpty() // TODO: Fall back to a generated name if the name is unset.
-    val (namespace, name) = splitNpmNamespaceAndName(rawName)
+    val (namespace, name) = splitNamespaceAndName(rawName)
     val version = packageJson.version ?: NON_EXISTING_SEMVER
 
-    val declaredLicenses = packageJson.licenses.mapNpmLicenses()
+    val declaredLicenses = packageJson.licenses.mapLicenses()
     val authors = packageJson.authors.flatMap { parseAuthorString(it.name) }.mapNotNullTo(mutableSetOf()) { it.name }
 
     var description = packageJson.description.orEmpty()
     var homepageUrl = packageJson.homepage.orEmpty()
 
     // Note that all fields prefixed with "_" are considered private to NPM and should not be relied on.
-    var downloadUrl = expandNpmShortcutUrl(packageJson.resolved.orEmpty()).ifEmpty {
+    var downloadUrl = expandShortcutUrl(packageJson.resolved.orEmpty()).ifEmpty {
         // If the normalized form of the specified dependency contains a URL as the version, expand and use it.
         val fromVersion = packageJson.from.orEmpty().substringAfterLast('@')
-        expandNpmShortcutUrl(fromVersion).takeIf { it != fromVersion }.orEmpty()
+        expandShortcutUrl(fromVersion).takeIf { it != fromVersion }.orEmpty()
     }
 
     var hash = Hash.create(packageJson.integrity.orEmpty())
 
-    var vcsFromPackage = parseNpmVcsInfo(packageJson)
+    var vcsFromPackage = parseVcsInfo(packageJson)
 
     val id = Identifier("NPM", namespace, name, version)
 
@@ -193,11 +193,11 @@ internal fun parsePackage(
 
             // Do not replace but merge, because it happens that `package.json` has VCS info while
             // `npm view` doesn't, for example for dependencies hosted on GitLab package registry.
-            vcsFromPackage = vcsFromPackage.merge(parseNpmVcsInfo(details))
+            vcsFromPackage = vcsFromPackage.merge(parseVcsInfo(details))
         }
     }
 
-    downloadUrl = downloadUrl.fixNpmDownloadUrl()
+    downloadUrl = downloadUrl.fixDownloadUrl()
 
     val vcsFromDownloadUrl = VcsHost.parseUrl(downloadUrl)
     if (vcsFromDownloadUrl.url != downloadUrl) {
@@ -236,7 +236,7 @@ internal fun parseProject(packageJsonFile: File, analysisRoot: File, managerName
     val packageJson = parsePackageJson(packageJsonFile)
 
     val rawName = packageJson.name.orEmpty()
-    val (namespace, name) = splitNpmNamespaceAndName(rawName)
+    val (namespace, name) = splitNamespaceAndName(rawName)
 
     val projectName = name.ifBlank {
         getFallbackProjectName(analysisRoot, packageJsonFile).also {
@@ -249,11 +249,11 @@ internal fun parseProject(packageJsonFile: File, analysisRoot: File, managerName
         logger.warn { "'$packageJsonFile' does not define a version." }
     }
 
-    val declaredLicenses = packageJson.licenses.mapNpmLicenses()
+    val declaredLicenses = packageJson.licenses.mapLicenses()
     val authors = packageJson.authors.flatMap { parseAuthorString(it.name) }.mapNotNullTo(mutableSetOf()) { it.name }
     val homepageUrl = packageJson.homepage.orEmpty()
     val projectDir = packageJsonFile.parentFile.realFile()
-    val vcsFromPackage = parseNpmVcsInfo(packageJson)
+    val vcsFromPackage = parseVcsInfo(packageJson)
 
     return Project(
         id = Identifier(
@@ -274,7 +274,7 @@ internal fun parseProject(packageJsonFile: File, analysisRoot: File, managerName
 /**
  * Split the given [rawName] of a module to a pair with namespace and name.
  */
-internal fun splitNpmNamespaceAndName(rawName: String): Pair<String, String> {
+internal fun splitNamespaceAndName(rawName: String): Pair<String, String> {
     val name = rawName.substringAfterLast("/")
     val namespace = rawName.removeSuffix(name).removeSuffix("/")
     return Pair(namespace, name)
