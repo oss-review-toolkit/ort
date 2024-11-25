@@ -19,13 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.reporters.opossum
 
-import com.fasterxml.jackson.annotation.JsonInclude.Include
-import com.fasterxml.jackson.databind.json.JsonMapper
-
 import java.io.File
-import java.time.LocalDateTime
-import java.util.SortedMap
-import java.util.SortedSet
 import java.util.UUID
 
 import kotlin.math.min
@@ -42,17 +36,16 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.model.utils.getPurlType
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
+import org.ossreviewtoolkit.plugins.reporters.opossum.OpossumSignalFlat.OpossumSignal
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.packZip
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
-import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 
 private const val ISSUE_PRIORITY = 900
@@ -96,156 +89,90 @@ class OpossumReporter(
     override val descriptor: PluginDescriptor = OpossumReporterFactory.descriptor,
     private val config: OpossumReporterConfig
 ) : Reporter {
-    internal data class OpossumSignal(
-        val source: String,
-        val id: Identifier? = null,
-        val url: String? = null,
-        val license: SpdxExpression? = null,
-        val copyright: String? = null,
-        val comment: String? = null,
-        val preselected: Boolean = false,
-        val followUp: Boolean = false,
-        val excludeFromNotice: Boolean = false,
-        val uuid: UUID = UUID.randomUUID()
-    ) {
-        fun toJson(): Map<*, *> =
-            sortedMapOf(
-                uuid.toString() to sortedMapOf(
-                    "source" to sortedMapOf(
-                        "name" to source,
-                        "documentConfidence" to 80
-                    ),
-                    "attributionConfidence" to 80,
-                    "packageType" to id?.getPurlType().toString(),
-                    "packageNamespace" to id?.namespace,
-                    "packageName" to id?.name,
-                    "packageVersion" to id?.version,
-                    "copyright" to copyright,
-                    "licenseName" to license?.toString(),
-                    "url" to url,
-                    "preSelected" to preselected,
-                    "followUp" to "FOLLOW_UP".takeIf { followUp },
-                    "excludeFromNotice" to excludeFromNotice,
-                    "comment" to comment
-                )
-            )
+    override fun generateReport(input: ReporterInput, outputDir: File): List<Result<File>> {
+        val reportFileResult = runCatching {
+            val opossumInput = createOpossumInput(input, config.maxDepth)
 
-        fun matches(other: OpossumSignal): Boolean =
-            source == other.source
-                && id == other.id
-                && url == other.url
-                && license == other.license
-                && copyright == other.copyright
-                && comment == other.comment
-                && preselected == other.preselected
+            outputDir.resolve("report.opossum").also {
+                writeReport(it, opossumInput)
+            }
+        }
+
+        return listOf(reportFileResult)
     }
 
-    internal data class OpossumResources(
-        val tree: MutableMap<String, OpossumResources> = mutableMapOf()
-    ) {
-        private fun addResource(pathPieces: List<String>) {
-            if (pathPieces.isEmpty()) return
+    internal fun createOpossumInput(input: ReporterInput, maxDepth: Int = Int.MAX_VALUE): OpossumInput =
+        OpossumInputCreator().create(input, maxDepth)
 
-            val head = pathPieces.first()
-            val tail = pathPieces.drop(1)
+    private fun writeReport(outputFile: File, opossumInput: OpossumInput) {
+        val inputJson = createOrtTempDir().resolve("input.json")
 
-            if (head !in tree) tree[head] = OpossumResources()
-            tree.getValue(head).addResource(tail)
-        }
+        inputJson.writeReport(opossumInput)
 
-        fun addResource(path: String) {
-            val pathPieces = path.split("/").filter { it.isNotEmpty() }
-
-            addResource(pathPieces)
-        }
-
-        fun isFile() = tree.isEmpty()
-
-        fun isPathAFile(path: String): Boolean {
-            val pathPieces = path.split("/").filter { it.isNotEmpty() }
-
-            return isPathAFile(pathPieces)
-        }
-
-        private fun isPathAFile(pathPieces: List<String>): Boolean {
-            if (pathPieces.isEmpty()) return isFile()
-
-            val head = pathPieces.first()
-            val tail = pathPieces.drop(1)
-
-            return head !in tree || tree.getValue(head).isPathAFile(tail)
-        }
-
-        fun toJson(): Map<*, *> = tree.mapValues { (_, v) -> if (v.isFile()) 1 else v.toJson() }
-
-        fun toFileList(): Set<String> =
-            tree.flatMapTo(mutableSetOf()) { (key, value) ->
-                value.toFileList().map { resolvePath(key, it, isDirectory = false) }
-            }.plus("/")
+        inputJson.packZip(outputFile)
+        inputJson.delete()
     }
 
-    internal data class OpossumFrequentLicense(
-        val shortName: String,
-        val fullName: String?,
-        val defaultText: String?
-    ) : Comparable<OpossumFrequentLicense> {
-        fun toJson(): Map<*, *> =
-            sortedMapOf(
-                "shortName" to shortName,
-                "fullName" to fullName,
-                "defaultText" to defaultText
+    class OpossumInputCreator {
+        private val resources: OpossumResources = OpossumResources()
+        private val uuidToSignals: MutableMap<UUID, OpossumSignal> = mutableMapOf()
+        private val pathToSignals: MutableMap<String, MutableSet<UUID>> = mutableMapOf()
+        private val packageToRoot: MutableMap<Identifier, MutableMap<String, Int>> = mutableMapOf()
+        private val attributionBreakpoints: MutableSet<String> = mutableSetOf()
+        private val filesWithChildren: MutableSet<String> = mutableSetOf()
+        private val frequentLicenses: MutableSet<OpossumFrequentLicense> = mutableSetOf()
+        private val baseUrlsForSources: MutableMap<String, String> = mutableMapOf()
+        private val externalAttributionSources: MutableMap<String, OpossumExternalAttributionSource> = mutableMapOf()
+
+        internal fun create(input: ReporterInput, maxDepth: Int = Int.MAX_VALUE): OpossumInput {
+            addBaseUrl("/", input.ortResult.repository.vcs)
+
+            SpdxLicense.entries.forEach {
+                val licenseText = input.licenseTextProvider.getLicenseText(it.id)
+                frequentLicenses += OpossumFrequentLicense(it.id, it.fullName, licenseText)
+            }
+
+            input.ortResult.getProjects().forEach { project ->
+                addProject(project, input.ortResult)
+            }
+
+            if (input.ortResult.getExcludes().scopes.isEmpty()) {
+                addPackagesThatAreRootless(input.ortResult.getPackages())
+            }
+
+            input.ortResult.analyzer?.result?.issues.orEmpty().forEach { (id, issues) ->
+                issues.forEach { issue ->
+                    val source = addExternalAttributionSource(
+                        key = "ORT-Analyzer-Issues",
+                        name = "ORT-Analyzer Issues",
+                        priority = ISSUE_PRIORITY
+                    )
+
+                    addIssue(issue, id, source)
+                }
+            }
+
+            input.ortResult.getScanResults().forEach { (id, results) ->
+                addScannerResults(id, results, maxDepth)
+            }
+
+            val externalAttributions = uuidToSignals.mapValues { OpossumSignalFlat.create(it.value) }
+            val resourcesToAttributions = pathToSignals.mapKeys {
+                val trailingSlash = if (resources.isPathAFile(it.key)) "" else "/"
+                resolvePath("${it.key}$trailingSlash")
+            }
+
+            return OpossumInput(
+                resources = resources,
+                externalAttributions = externalAttributions,
+                resourcesToAttributions = resourcesToAttributions,
+                attributionBreakpoints = attributionBreakpoints,
+                filesWithChildren = filesWithChildren,
+                baseUrlsForSources = baseUrlsForSources,
+                externalAttributionSources = externalAttributionSources,
+                frequentLicenses = frequentLicenses
             )
-
-        override fun compareTo(other: OpossumFrequentLicense) =
-            compareValuesBy(
-                this,
-                other,
-                { it.shortName },
-                { it.fullName },
-                { it.defaultText }
-            )
-    }
-
-    internal data class OpossumExternalAttributionSource(
-        val name: String,
-        val priority: Int
-    )
-
-    internal data class OpossumInput(
-        val resources: OpossumResources = OpossumResources(),
-        val signals: MutableList<OpossumSignal> = mutableListOf(),
-        val pathToSignal: SortedMap<String, SortedSet<UUID>> = sortedMapOf(),
-        val packageToRoot: SortedMap<Identifier, SortedMap<String, Int>> = sortedMapOf(),
-        val attributionBreakpoints: SortedSet<String> = sortedSetOf(),
-        val filesWithChildren: SortedSet<String> = sortedSetOf(),
-        val frequentLicenses: SortedSet<OpossumFrequentLicense> = sortedSetOf(),
-        val baseUrlsForSources: SortedMap<String, String> = sortedMapOf(),
-        val externalAttributionSources: SortedMap<String, OpossumExternalAttributionSource> = sortedMapOf()
-    ) {
-        fun toJson(): Map<*, *> =
-            sortedMapOf(
-                "metadata" to sortedMapOf(
-                    "projectId" to "0",
-                    "fileCreationDate" to LocalDateTime.now().toString()
-                ),
-                "resources" to resources.toJson(),
-                "externalAttributions" to signals
-                    .map { it.toJson() }
-                    .flatMap { it.toList() }
-                    .toMap(),
-                "resourcesToAttributions" to pathToSignal.mapKeys {
-                    val trailingSlash = if (resources.isPathAFile(it.key)) "" else "/"
-                    resolvePath("${it.key}$trailingSlash")
-                },
-                "attributionBreakpoints" to attributionBreakpoints,
-                "filesWithChildren" to filesWithChildren,
-                "frequentLicenses" to frequentLicenses.map { it.toJson() },
-                "baseUrlsForSources" to baseUrlsForSources,
-                "externalAttributionSources" to externalAttributionSources
-            )
-
-        fun getSignalsForFile(file: String): List<OpossumSignal> =
-            pathToSignal[file].orEmpty().mapNotNull { uuid -> signals.find { it.uuid == uuid } }
+        }
 
         private fun addAttributionBreakpoint(breakpoint: String) {
             attributionBreakpoints += resolvePath(breakpoint, isDirectory = true)
@@ -255,7 +182,7 @@ class OpossumReporter(
             filesWithChildren += resolvePath(fileWithChildren, isDirectory = true)
         }
 
-        fun addBaseUrl(path: String, vcs: VcsInfo) {
+        private fun addBaseUrl(path: String, vcs: VcsInfo) {
             val idFromPath = resolvePath(path, isDirectory = true)
 
             if (idFromPath in baseUrlsForSources) return
@@ -271,7 +198,7 @@ class OpossumReporter(
             }
         }
 
-        fun addExternalAttributionSource(key: String, name: String, priority: Int): String {
+        private fun addExternalAttributionSource(key: String, name: String, priority: Int): String {
             if (key !in externalAttributionSources) {
                 externalAttributionSources[key] = OpossumExternalAttributionSource(name, priority)
             }
@@ -279,8 +206,8 @@ class OpossumReporter(
             return key
         }
 
-        private fun addPackageRoot(id: Identifier, path: String, level: Int = 0, vcs: VcsInfo = VcsInfo.EMPTY) {
-            val mapOfId = packageToRoot.getOrPut(id) { sortedMapOf() }
+        private fun addPackageRoot(id: Identifier, path: String, level: Int, vcs: VcsInfo) {
+            val mapOfId = packageToRoot.getOrPut(id) { mutableMapOf() }
             val oldLevel = mapOfId.getOrDefault(path, level)
             mapOfId[path] = min(level, oldLevel)
 
@@ -288,34 +215,39 @@ class OpossumReporter(
             addBaseUrl(path, vcs)
         }
 
-        private fun addSignal(signal: OpossumSignal, paths: SortedSet<String>) {
+        private fun addSignal(signal: OpossumSignal, paths: Set<String>) {
             if (paths.isEmpty()) return
 
-            val matchingSignal = signals.find { it.matches(signal) }
+            val signalEntry = uuidToSignals.entries.find { it.value == signal }
 
-            val uuidOfSignal = if (matchingSignal == null) {
-                signals += signal
-                signal.uuid
+            val matchingUuid = signalEntry?.key
+            val uuidOfSignal = if (matchingUuid == null) {
+                val uuid = UUID.randomUUID()
+                uuidToSignals[uuid] = signal
+                uuid
             } else {
-                matchingSignal.uuid
+                matchingUuid
             }
 
             paths.forEach { path ->
-                logger.debug { "add signal ${signal.id} of source ${signal.source} to $path" }
+                logger.debug {
+                    "Add signal ${signal.base.packageName} ${signal.base.packageVersion} with namespace " +
+                        "${signal.base.packageNamespace} of of source ${signal.base.source} to $path."
+                }
+
                 resources.addResource(path)
-                pathToSignal.getOrPut(resolvePath(path)) { sortedSetOf() } += uuidOfSignal
+                pathToSignals.getOrPut(resolvePath(path)) { mutableSetOf() } += uuidOfSignal
             }
         }
 
         private fun signalFromPkg(pkg: Package): OpossumSignal {
             val source = addExternalAttributionSource("ORT-Package", "ORT-Package", 180)
-
-            return OpossumSignal(
+            return OpossumSignal.create(
                 source,
                 id = pkg.id,
                 url = pkg.homepageUrl,
                 license = pkg.concludedLicense ?: pkg.declaredLicensesProcessed.spdxExpression,
-                preselected = true
+                preSelected = true
             )
         }
 
@@ -330,7 +262,7 @@ class OpossumReporter(
                 ?: Package.EMPTY.copy(id = dependencyId)
 
             addPackageRoot(dependencyId, dependencyPath, level, dependencyPackage.vcsProcessed)
-            addSignal(signalFromPkg(dependencyPackage), sortedSetOf(dependencyPath))
+            addSignal(signalFromPkg(dependencyPackage), setOf(dependencyPath))
 
             val dependencies = dependency.getDependencies()
 
@@ -352,26 +284,28 @@ class OpossumReporter(
             }
         }
 
-        fun addProject(project: Project, ortResult: OrtResult, relRoot: String = "/") {
+        private fun addProject(project: Project, ortResult: OrtResult, relRoot: String = "/") {
             val projectId = project.id
             val definitionFilePath = resolvePath(relRoot, project.definitionFilePath)
+
             logger.debug { "$definitionFilePath - $projectId - Project" }
+
             val projectRoot = getRootForProject(project, relRoot)
 
             addPackageRoot(projectId, projectRoot, 0, project.toPackage().vcsProcessed)
             addFileWithChildren(definitionFilePath)
 
             val source = addExternalAttributionSource("ORT-Project", "ORT-Project", 200)
-            val signalFromProject = OpossumSignal(
+            val signalFromProject = OpossumSignal.create(
                 source,
                 id = projectId,
                 url = project.homepageUrl,
                 license = project.declaredLicensesProcessed.spdxExpression,
                 copyright = project.authors.joinToString(separator = "\n"),
-                preselected = true
+                preSelected = true
             )
 
-            addSignal(signalFromProject, sortedSetOf(definitionFilePath))
+            addSignal(signalFromProject, setOf(definitionFilePath))
 
             val scopeNames = ortResult.dependencyNavigator.scopeNames(project).filterNot {
                 ortResult.getExcludes().isScopeExcluded(it)
@@ -424,7 +358,7 @@ class OpossumReporter(
                         .distinct()
                         .reduceRightOrNull { left, right -> left and right }
 
-                    val pathSignal = OpossumSignal(
+                    val pathSignal = OpossumSignal.create(
                         source,
                         copyright = copyright,
                         license = license
@@ -432,7 +366,7 @@ class OpossumReporter(
 
                     addSignal(
                         pathSignal,
-                        rootsBelowMaxDepth.map { resolvePath(it, pathFromFinding) }.toSortedSet()
+                        rootsBelowMaxDepth.map { resolvePath(it, pathFromFinding) }.toSet()
                     )
                 }
             }
@@ -449,12 +383,13 @@ class OpossumReporter(
                     .distinct()
                     .reduceRightOrNull { left, right -> left and right }
 
-                val rootSignal = OpossumSignal(
+                val rootSignal = OpossumSignal.create(
                     source,
                     copyright = copyright,
                     license = license
                 )
-                addSignal(rootSignal, rootsAboveMaxDepth.toSortedSet())
+
+                addSignal(rootSignal, rootsAboveMaxDepth.toSet())
             }
 
             val issueSource = addExternalAttributionSource(
@@ -466,11 +401,10 @@ class OpossumReporter(
             result.summary.issues.forEach { addIssue(it, id, issueSource) }
         }
 
-        fun addScannerResults(id: Identifier, results: List<ScanResult>, maxDepth: Int) {
+        private fun addScannerResults(id: Identifier, results: List<ScanResult>, maxDepth: Int) =
             results.forEach { addScannerResult(id, it, maxDepth) }
-        }
 
-        fun addIssue(issue: Issue, id: Identifier, source: String) {
+        private fun addIssue(issue: Issue, id: Identifier, source: String) {
             val roots = packageToRoot[id]
 
             val paths = if (roots.isNullOrEmpty()) {
@@ -480,17 +414,22 @@ class OpossumReporter(
                 roots.keys
             }
 
-            val signal =
-                OpossumSignal(source, comment = issue.toString(), followUp = true, excludeFromNotice = true)
-            addSignal(signal, paths.map { resolvePath(it) }.toSortedSet())
+            val signal = OpossumSignal.create(
+                source,
+                comment = issue.toString(),
+                followUp = true,
+                excludeFromNotice = true
+            )
+
+            addSignal(signal, paths.map { resolvePath(it) }.toSet())
         }
 
-        fun addPackagesThatAreRootless(analyzerResultPackages: Set<CuratedPackage>) {
+        private fun addPackagesThatAreRootless(analyzerResultPackages: Set<CuratedPackage>) {
             val rootlessPackages = analyzerResultPackages.filter { packageToRoot[it.metadata.id] == null }
 
             rootlessPackages.forEach {
                 val path = resolvePath("/lost+found", it.metadata.id.toPurl())
-                addSignal(signalFromPkg(it.metadata), sortedSetOf(path))
+                addSignal(signalFromPkg(it.metadata), setOf(path))
                 addPackageRoot(it.metadata.id, path, Int.MAX_VALUE, it.metadata.vcsProcessed)
             }
 
@@ -498,62 +437,6 @@ class OpossumReporter(
                 logger.warn { "There are ${rootlessPackages.size} packages that had no root." }
             }
         }
-    }
-
-    private fun writeReport(outputFile: File, opossumInput: OpossumInput) {
-        val jsonFile = createOrtTempDir().resolve("input.json")
-        JsonMapper().setSerializationInclusion(Include.NON_NULL).writeValue(jsonFile, opossumInput.toJson())
-        jsonFile.packZip(outputFile)
-        jsonFile.delete()
-    }
-
-    internal fun generateOpossumInput(input: ReporterInput, maxDepth: Int = Int.MAX_VALUE): OpossumInput {
-        val opossumInput = OpossumInput()
-
-        opossumInput.addBaseUrl("/", input.ortResult.repository.vcs)
-
-        SpdxLicense.entries.forEach {
-            val licenseText = input.licenseTextProvider.getLicenseText(it.id)
-            opossumInput.frequentLicenses += OpossumFrequentLicense(it.id, it.fullName, licenseText)
-        }
-
-        input.ortResult.getProjects().forEach { project ->
-            opossumInput.addProject(project, input.ortResult)
-        }
-
-        if (input.ortResult.getExcludes().scopes.isEmpty()) {
-            opossumInput.addPackagesThatAreRootless(input.ortResult.getPackages())
-        }
-
-        input.ortResult.analyzer?.result?.issues.orEmpty().forEach { (id, issues) ->
-            issues.forEach { issue ->
-                val source = opossumInput.addExternalAttributionSource(
-                    key = "ORT-Analyzer-Issues",
-                    name = "ORT-Analyzer Issues",
-                    priority = ISSUE_PRIORITY
-                )
-
-                opossumInput.addIssue(issue, id, source)
-            }
-        }
-
-        input.ortResult.getScanResults().forEach { (id, results) ->
-            opossumInput.addScannerResults(id, results, maxDepth)
-        }
-
-        return opossumInput
-    }
-
-    override fun generateReport(input: ReporterInput, outputDir: File): List<Result<File>> {
-        val reportFileResult = runCatching {
-            val opossumInput = generateOpossumInput(input, config.maxDepth)
-
-            outputDir.resolve("report.opossum").also {
-                writeReport(it, opossumInput)
-            }
-        }
-
-        return listOf(reportFileResult)
     }
 }
 
