@@ -53,7 +53,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.NpmDetection
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parseProject
-import org.ossreviewtoolkit.plugins.packagemanagers.node.splitNpmNamespaceAndName
+import org.ossreviewtoolkit.plugins.packagemanagers.node.splitNamespaceAndName
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.DiskCache
 import org.ossreviewtoolkit.utils.common.Os
@@ -231,7 +231,7 @@ open class Yarn(
         val dependencies = mutableSetOf<NpmModuleInfo>()
         val packageType = managerName.takeIf { moduleDir.realFile() in projectDirs } ?: "NPM"
 
-        val moduleId = splitNpmNamespaceAndName(moduleInfo.name).let { (namespace, name) ->
+        val moduleId = splitNamespaceAndName(moduleInfo.name).let { (namespace, name) ->
             Identifier(packageType, namespace, name, moduleInfo.version)
         }
 

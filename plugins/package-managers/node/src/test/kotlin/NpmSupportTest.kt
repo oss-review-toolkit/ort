@@ -30,11 +30,11 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson.Repository
 class NpmSupportTest : WordSpec({
     "expandNpmShortcutUrl()" should {
         "do nothing for empty URLs" {
-            expandNpmShortcutUrl("") shouldBe ""
+            expandShortcutUrl("") shouldBe ""
         }
 
         "return valid URLs unmodified" {
-            expandNpmShortcutUrl("https://github.com/oss-review-toolkit/ort") shouldBe
+            expandShortcutUrl("https://github.com/oss-review-toolkit/ort") shouldBe
                 "https://github.com/oss-review-toolkit/ort"
         }
 
@@ -57,7 +57,7 @@ class NpmSupportTest : WordSpec({
             )
 
             packages.entries.forAll { (actualUrl, expectedUrl) ->
-                expandNpmShortcutUrl(actualUrl) shouldBe expectedUrl
+                expandShortcutUrl(actualUrl) shouldBe expectedUrl
             }
         }
 
@@ -72,20 +72,20 @@ class NpmSupportTest : WordSpec({
             )
 
             packages.entries.forAll { (actualUrl, expectedUrl) ->
-                expandNpmShortcutUrl(actualUrl) shouldBe expectedUrl
+                expandShortcutUrl(actualUrl) shouldBe expectedUrl
             }
         }
     }
 
     "fixNpmDownloadUrl()" should {
         "replace HTTP with HTTPS for the NPM registry only" {
-            "http://registry.npmjs.org/babel-cli/-/babel-cli-6.26.0.tgz".fixNpmDownloadUrl() shouldBe
+            "http://registry.npmjs.org/babel-cli/-/babel-cli-6.26.0.tgz".fixDownloadUrl() shouldBe
                 "https://registry.npmjs.org/babel-cli/-/babel-cli-6.26.0.tgz"
-            "http://oss-review-toolkit.org/".fixNpmDownloadUrl() shouldBe "http://oss-review-toolkit.org/"
+            "http://oss-review-toolkit.org/".fixDownloadUrl() shouldBe "http://oss-review-toolkit.org/"
         }
 
         "correct Artifactory API URLS" {
-            "http://my.repo/artifactory/api/npm/npm/all".fixNpmDownloadUrl() shouldBe
+            "http://my.repo/artifactory/api/npm/npm/all".fixDownloadUrl() shouldBe
                 "http://my.repo/artifactory/npm/all"
         }
     }
@@ -101,7 +101,7 @@ class NpmSupportTest : WordSpec({
                 )
             )
 
-            parseNpmVcsInfo(packageJson) shouldBe VcsInfo(
+            parseVcsInfo(packageJson) shouldBe VcsInfo(
                 VcsType.GIT,
                 "https://example.com/",
                 "bar",
@@ -117,7 +117,7 @@ class NpmSupportTest : WordSpec({
                 )
             )
 
-            parseNpmVcsInfo(packageJson) shouldBe VcsInfo(
+            parseVcsInfo(packageJson) shouldBe VcsInfo(
                 VcsType.UNKNOWN,
                 "git+ssh://example.com/a/b.git",
                 "bar"
@@ -127,8 +127,8 @@ class NpmSupportTest : WordSpec({
 
     "splitNpmNamespaceAndName()" should {
         "return the namespace and name separately" {
-            splitNpmNamespaceAndName("@babel/core") shouldBe Pair("@babel", "core")
-            splitNpmNamespaceAndName("check-if-windows") shouldBe Pair("", "check-if-windows")
+            splitNamespaceAndName("@babel/core") shouldBe Pair("@babel", "core")
+            splitNamespaceAndName("check-if-windows") shouldBe Pair("", "check-if-windows")
         }
     }
 })
