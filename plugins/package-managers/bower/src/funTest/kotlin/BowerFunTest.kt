@@ -33,7 +33,7 @@ class BowerFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/bower/bower.json")
         val expectedResultFile = getAssetFile("projects/synthetic/bower-expected-output.yml")
 
-        val result = create("Bower").resolveSingleProject(definitionFile)
+        val result = create("Bower").resolveSingleProject(definitionFile, resolveScopes = true)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
