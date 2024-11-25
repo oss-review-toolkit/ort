@@ -21,13 +21,11 @@ package org.ossreviewtoolkit.plugins.reporters.opossum
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
-import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.collections.shouldNotContain
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.nulls.shouldNotBeNull
-import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 import io.kotest.matchers.string.shouldContain
@@ -100,18 +98,24 @@ class OpossumReporterTest : WordSpec({
         }
     }
 
-    "generateOpossumInput()" should {
+    "createOpossumInput()" should {
         val result = createOrtResult()
-        val opossumInput = OpossumReporterFactory.create().generateOpossumInput(ReporterInput(result))
+        val opossumInput = OpossumReporterFactory.create().createOpossumInput(ReporterInput(result))
 
-        "create input that is somehow valid" {
+        "create input that has all expected top level entries" {
             opossumInput shouldNotBeNull {
+                metadata shouldNot beNull()
                 resources shouldNot beNull()
-                signals shouldNot beNull()
-                pathToSignal shouldNot beNull()
-                packageToRoot shouldNot beNull()
+                externalAttributions shouldNot beNull()
+                resourcesToAttributions shouldNot beNull()
                 attributionBreakpoints shouldNot beNull()
+                frequentLicenses shouldNot beNull()
+                filesWithChildren shouldNot beNull()
+                baseUrlsForSources shouldNot beNull()
+                externalAttributionSources shouldNot beNull()
             }
+
+            opossumInput.metadata.projectId shouldBe "0"
         }
 
         val fileList = opossumInput.resources.toFileList()
@@ -129,22 +133,24 @@ class OpossumReporterTest : WordSpec({
         }
 
         "create a file list that contains files from other lists" {
-            opossumInput.pathToSignal.keys.forAll { path -> fileList shouldContain resolvePath(path) }
+            opossumInput.resourcesToAttributions.keys.forAll { path ->
+                val pathWithoutTrailingSlash = if (path != "/") path.removeSuffix("/") else "/"
+                fileList shouldContain resolvePath(pathWithoutTrailingSlash)
+            }
 
             opossumInput.attributionBreakpoints.map { it.replace(Regex("/$"), "") }.forAll { path ->
                 fileList shouldContain resolvePath(path)
-            }
-
-            opossumInput.packageToRoot.values.forAll { levelForPath ->
-                levelForPath.keys.forAll { path ->
-                    fileList shouldContain resolvePath(path)
-                }
             }
         }
 
         "create a result that contains all packages in its signals" {
             result.getPackages().forAll { pkg ->
-                opossumInput.signals.find { it.id == pkg.metadata.id } shouldNot beNull()
+                opossumInput.externalAttributions.values.find {
+                    it.packageType == pkg.metadata.id.type.lowercase()
+                        && it.packageName == pkg.metadata.id.name
+                        && it.packageVersion == pkg.metadata.id.version
+                        && it.packageNamespace == pkg.metadata.id.namespace
+                } shouldNot beNull()
             }
         }
 
@@ -153,8 +159,8 @@ class OpossumReporterTest : WordSpec({
                 "/pom.xml/compile/first-package-group/first-package@0.0.1/LICENSE"
             )
             signals shouldHaveSize 2
-            signals.find { it.source == "ORT-Scanner-SCANNER@1.2.3" } shouldNotBeNull {
-                license.toString() shouldBe "Apache-2.0"
+            signals.find { it.source.name == "ORT-Scanner-SCANNER@1.2.3" } shouldNotBeNull {
+                licenseName shouldBe "Apache-2.0"
             }
         }
 
@@ -164,35 +170,18 @@ class OpossumReporterTest : WordSpec({
             )
 
             signals shouldHaveSize 2
-            signals.find { it.source == "ORT-Scanner-SCANNER@1.2.3" } shouldNotBeNull {
+            signals.find { it.source.name == "ORT-Scanner-SCANNER@1.2.3" } shouldNotBeNull {
                 copyright shouldContain "Copyright 2020 Some copyright holder in source artifact"
                 copyright shouldContain "Copyright 2020 Some other copyright holder in source artifact"
             }
         }
 
         "create signals with all uuids being assigned" {
-            opossumInput.pathToSignal.values.forAll { signal ->
-                signal.forAll { uuid ->
-                    opossumInput.signals.find { it.uuid == uuid } shouldNot beNull()
+            opossumInput.resourcesToAttributions.values.forAll { signals ->
+                signals.forAll { uuid ->
+                    opossumInput.externalAttributions[uuid] shouldNot beNull()
                 }
             }
-        }
-
-        "create an opossumInput JSON with expected top level entries" {
-            val opossumInputJson = opossumInput.toJson()
-
-            opossumInputJson.keys should containExactlyInAnyOrder(
-                "attributionBreakpoints",
-                "baseUrlsForSources",
-                "externalAttributionSources",
-                "externalAttributions",
-                "filesWithChildren",
-                "frequentLicenses",
-                "metadata",
-                "resources",
-                "resourcesToAttributions"
-            )
-            (opossumInputJson["metadata"] as Map<*, *>).keys shouldContain "projectId"
         }
 
         "create frequentLicenses" {
@@ -211,28 +200,29 @@ class OpossumReporterTest : WordSpec({
         }
 
         "create issues containing all issues" {
-            val issuesFromFirstPackage =
-                opossumInput.getSignalsForFile("/pom.xml/compile/first-package-group/first-package@0.0.1")
-                    .filter { it.comment?.contains(Regex("Source-.*Message-")) == true }
+            val issuesFromFirstPackage = opossumInput
+                .getSignalsForFile("/pom.xml/compile/first-package-group/first-package@0.0.1/")
+                .filter { it.comment?.contains(Regex("Source-.*Message-")) == true }
+
             issuesFromFirstPackage shouldHaveSize 4
             issuesFromFirstPackage.forAll {
-                it.followUp shouldBe true
+                it.followUp shouldBe OpossumFollowUp.FOLLOW_UP
                 it.excludeFromNotice shouldBe true
             }
 
             val issuesAttachedToFallbackPath = opossumInput.getSignalsForFile("/")
             issuesAttachedToFallbackPath shouldHaveSize 1
             issuesAttachedToFallbackPath.forAll {
-                it.followUp shouldBe true
+                it.followUp shouldBe OpossumFollowUp.FOLLOW_UP
                 it.excludeFromNotice shouldBe true
                 it.comment shouldContain Regex("Source-.*Message-")
             }
         }
     }
 
-    "generateOpossumInput() with excluded scopes" should {
+    "createOpossumInput() with excluded scopes" should {
         val result = createOrtResult().setScopeExcludes("devDependencies")
-        val opossumInputWithExcludedScopes = OpossumReporterFactory.create().generateOpossumInput(ReporterInput(result))
+        val opossumInputWithExcludedScopes = OpossumReporterFactory.create().createOpossumInput(ReporterInput(result))
         val fileListWithExcludedScopes = opossumInputWithExcludedScopes.resources.toFileList()
 
         "exclude scopes" {
