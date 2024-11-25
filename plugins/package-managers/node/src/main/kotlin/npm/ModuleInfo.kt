@@ -29,8 +29,8 @@ internal fun parseNpmList(json: String): ModuleInfo = JSON.decodeFromString(json
 
 @Serializable
 internal data class ModuleInfo(
-    val name: String = "",
-    val version: String = "",
+    val name: String? = null,
+    val version: String? = null,
     val path: String? = null,
     @SerialName("_id")
     val id: String? = null,
