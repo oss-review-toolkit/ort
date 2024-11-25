@@ -37,11 +37,11 @@ internal class NpmDependencyHandler(private val npm: Npm) : DependencyHandler<Mo
 
     override fun identifierFor(dependency: ModuleInfo): Identifier {
         val type = npm.managerName.takeIf { dependency.isProject } ?: "NPM"
-        val (namespace, name) = splitNamespaceAndName(dependency.name)
+        val (namespace, name) = splitNamespaceAndName(dependency.name.orEmpty())
         val version = if (dependency.isProject) {
             readPackageJson(dependency.packageJsonFile).version.orEmpty()
         } else {
-            dependency.version.takeUnless { it.startsWith("link:") || it.startsWith("file:") }.orEmpty()
+            dependency.version?.takeUnless { it.startsWith("link:") || it.startsWith("file:") }.orEmpty()
         }
 
         return Identifier(type, namespace, name, version)

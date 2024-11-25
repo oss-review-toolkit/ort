@@ -58,9 +58,9 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.NpmDetection
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.fixDownloadUrl
 import org.ossreviewtoolkit.plugins.packagemanagers.node.mapLicenses
-import org.ossreviewtoolkit.plugins.packagemanagers.node.parseVcsInfo
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJsons
+import org.ossreviewtoolkit.plugins.packagemanagers.node.parseVcsInfo
 import org.ossreviewtoolkit.plugins.packagemanagers.node.splitNamespaceAndName
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
