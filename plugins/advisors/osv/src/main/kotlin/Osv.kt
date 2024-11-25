@@ -75,7 +75,7 @@ class Osv(override val descriptor: PluginDescriptor, config: OsvConfiguration) :
     override suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, AdvisorResult> {
         val startTime = Instant.now()
 
-        val vulnerabilitiesForPackage = getVulnerabilitiesForPackage(packages)
+        val vulnerabilitiesForPackage = getVulnerabilitiesForPackages(packages)
 
         return packages.mapNotNull { pkg ->
             vulnerabilitiesForPackage[pkg.id]?.let { vulnerabilities ->
@@ -91,7 +91,7 @@ class Osv(override val descriptor: PluginDescriptor, config: OsvConfiguration) :
         }.toMap()
     }
 
-    private fun getVulnerabilitiesForPackage(packages: Set<Package>): Map<Identifier, List<Vulnerability>> {
+    private fun getVulnerabilitiesForPackages(packages: Set<Package>): Map<Identifier, List<Vulnerability>> {
         val vulnerabilityIdsForPackageId = getVulnerabilityIdsForPackages(packages)
         val allVulnerabilityIds = vulnerabilityIdsForPackageId.values.flatten().toSet()
         val vulnerabilityForId = getVulnerabilitiesForIds(allVulnerabilityIds).associateBy { it.id }
