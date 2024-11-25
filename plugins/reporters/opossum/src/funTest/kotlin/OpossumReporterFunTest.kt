@@ -19,49 +19,37 @@
 
 package org.ossreviewtoolkit.plugins.reporters.opossum
 
-import com.fasterxml.jackson.databind.json.JsonMapper
-
-import io.kotest.core.TestConfiguration
+import io.kotest.assertions.json.shouldEqualSpecifiedJsonIgnoringOrder
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
-import io.kotest.matchers.sequences.shouldContain
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.string.shouldContain
 
-import org.ossreviewtoolkit.model.OrtResult
+import java.time.LocalDateTime
+
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.common.unpackZip
+import org.ossreviewtoolkit.utils.test.getAssetFile
+import org.ossreviewtoolkit.utils.test.patchActualResult
+import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.readOrtResult
 
 class OpossumReporterFunTest : WordSpec({
-    "generateReport()" should {
-        val ortResult = readOrtResult("src/funTest/assets/reporter-test-input.yml")
-        val reportStr = generateReport(ortResult).normalizeLineBreaks()
+    val replacements = mapOf(
+        "\"fileCreationDate\":\"[^\"]+\"" to "\"fileCreationDate\":\"${LocalDateTime.MIN}\"",
+        "\"[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\"" to "\"00000000-0000-0000-0000-000000000000\""
+    )
 
-        "create '.opossum' output containing an 'input.json' with expected string" {
-            reportStr shouldContain "fileCreationDate"
-        }
+    "The generated report" should {
+        "match the expected result" {
+            val ortResult = readOrtResult("src/funTest/assets/reporter-test-input.yml")
+            val input = ReporterInput(ortResult)
 
-        "create a parseable result and contain some expected values" {
-            with(JsonMapper().readTree(reportStr)) {
-                isObject shouldBe true
-                get("metadata").get("projectId").asText() shouldBe "0"
-                get("attributionBreakpoints").size() shouldBe 4
-                get("externalAttributionSources").size() shouldBe 7
-                get("resourcesToAttributions").fieldNames().asSequence() shouldContain
-                    "/analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle/" +
-                    "compile/org.apache.commons/commons-text@1.1/dependencies/org.apache.commons/commons-lang3@3.5"
-            }
+            val outputDir = tempdir()
+            val expectedFile = getAssetFile("reporter-test-output.json")
+
+            OpossumReporterFactory.create().generateReport(input, outputDir).single().getOrThrow().unpackZip(outputDir)
+
+            val actualResult = patchActualResult(outputDir.resolve("input.json").readText(), custom = replacements)
+            actualResult shouldEqualSpecifiedJsonIgnoringOrder patchExpectedResult(expectedFile)
         }
     }
 })
-
-private fun TestConfiguration.generateReport(ortResult: OrtResult): String {
-    val input = ReporterInput(ortResult)
-    val outputDir = tempdir()
-
-    OpossumReporterFactory.create().generateReport(input, outputDir).single().getOrThrow().unpackZip(outputDir)
-
-    return outputDir.resolve("input.json").readText()
-}

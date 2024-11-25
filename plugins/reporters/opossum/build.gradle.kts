@@ -35,4 +35,6 @@ dependencies {
 
     implementation(libs.jackson.annotations)
     implementation(libs.jackson.databind)
+
+    funTestImplementation(libs.kotest.assertions.json)
 }
