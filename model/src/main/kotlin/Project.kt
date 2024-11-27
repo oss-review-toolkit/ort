@@ -86,6 +86,12 @@ data class Project(
     val vcsProcessed: VcsInfo = vcs.normalize(),
 
     /**
+     * The description of project.
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val description: String = "",
+
+    /**
      * The URL to the project's homepage.
      */
     val homepageUrl: String,
