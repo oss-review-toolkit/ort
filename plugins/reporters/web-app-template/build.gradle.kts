@@ -36,10 +36,12 @@ YarnPlugin.apply(rootProject).version = "1.22.19"
 val kotlinNodeJsSetup by rootProject.tasks.existing(NodeJsSetupTask::class)
 val kotlinYarnSetup by rootProject.tasks.existing(YarnSetupTask::class)
 
+@Suppress("DEPRECATION") // Cannot use `destinationProvider` as it is internal.
 val nodeDir = kotlinNodeJsSetup.get().destination
 val nodeBinDir = if (Os.isFamily(Os.FAMILY_WINDOWS)) nodeDir else nodeDir.resolve("bin")
 val nodeExecutable = if (Os.isFamily(Os.FAMILY_WINDOWS)) nodeBinDir.resolve("node.exe") else nodeBinDir.resolve("node")
 
+@Suppress("DEPRECATION") // Cannot use `destinationProvider` as it is internal.
 val yarnDir = kotlinYarnSetup.get().destination
 val yarnJs = yarnDir.resolve("bin/yarn.js")
 
