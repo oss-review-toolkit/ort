@@ -251,6 +251,7 @@ internal fun parseProject(packageJsonFile: File, analysisRoot: File, managerName
 
     val declaredLicenses = packageJson.licenses.mapLicenses()
     val authors = packageJson.authors.flatMap { parseAuthorString(it.name) }.mapNotNullTo(mutableSetOf()) { it.name }
+    val description = packageJson.description.orEmpty()
     val homepageUrl = packageJson.homepage.orEmpty()
     val projectDir = packageJsonFile.parentFile.realFile()
     val vcsFromPackage = parseVcsInfo(packageJson)
@@ -267,6 +268,7 @@ internal fun parseProject(packageJsonFile: File, analysisRoot: File, managerName
         declaredLicenses = declaredLicenses,
         vcs = vcsFromPackage,
         vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, homepageUrl),
+        description = description,
         homepageUrl = homepageUrl
     )
 }

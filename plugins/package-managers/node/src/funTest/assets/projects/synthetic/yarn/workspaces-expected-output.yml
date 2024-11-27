@@ -39,6 +39,7 @@ projects:
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
     path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/yarn/workspaces"
+  description: "Yarn test project using Yarn workspaces."
   homepage_url: ""
   scopes: []
 - id: "Yarn:@scope1:pkg1:1.0.0"

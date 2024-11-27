@@ -16,6 +16,7 @@ project:
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
     path: "<REPLACE_PATH>"
+  description: "An NPM project that uses URLs as versions of dependencies."
   homepage_url: ""
   scopes:
   - name: "dependencies"
