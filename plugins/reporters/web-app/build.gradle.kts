@@ -22,12 +22,17 @@ plugins {
     id("ort-plugin-conventions")
 }
 
+val webAppTemplateConfiguration by configurations.creating {
+    isCanBeConsumed = false
+}
+
+dependencies {
+    webAppTemplateConfiguration(project(":plugins:reporters:web-app-template", "webAppTemplateConfiguration"))
+}
+
 val generatedResourcesDir = layout.buildDirectory.dir("generated-resources/main")
 val copyWebAppTemplate by tasks.registering(Copy::class) {
-    val webAppTemplateProject = project.project(projects.plugins.reporters.webAppTemplate.path)
-    dependsOn(webAppTemplateProject.tasks["yarnBuild"])
-
-    from(webAppTemplateProject.file("build")) {
+    from(webAppTemplateConfiguration) {
         include("scan-report-template.html")
     }
 

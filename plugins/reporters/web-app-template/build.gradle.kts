@@ -118,3 +118,11 @@ tasks.register<Delete>("clean") {
     delete("node_modules")
     delete("yarn-error.log")
 }
+
+val webAppTemplateConfiguration by configurations.creating {
+    isCanBeResolved = false
+}
+
+artifacts {
+    add(webAppTemplateConfiguration.name, yarnBuild)
+}
