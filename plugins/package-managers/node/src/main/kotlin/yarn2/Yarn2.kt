@@ -414,6 +414,7 @@ class Yarn2(
                 declaredLicenses = declaredLicenses,
                 vcs = additionalData.vcsFromPackage,
                 vcsProcessed = processProjectVcs(definitionFile.parentFile, additionalData.vcsFromPackage, homepageUrl),
+                description = additionalData.description,
                 homepageUrl = homepageUrl,
                 authors = authors
             )
