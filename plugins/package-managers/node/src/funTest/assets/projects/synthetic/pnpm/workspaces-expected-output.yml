@@ -82,6 +82,7 @@ analyzer:
         url: "<REPLACE_URL_PROCESSED>"
         revision: "<REPLACE_REVISION>"
         path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces"
+      description: "PNPM workspaces test"
       homepage_url: ""
       scopes:
       - name: "dependencies"
