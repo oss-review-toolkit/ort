@@ -71,36 +71,34 @@ tasks.addRule("Pattern: yarn<Command>") {
  * Further configure rule tasks, e.g. with inputs and outputs.
  */
 
-tasks {
-    "yarnInstall" {
-        description = "Use Yarn to install the Node.js dependencies."
-        group = "Node"
+val yarnInstall = tasks.named("yarnInstall") {
+    description = "Use Yarn to install the Node.js dependencies."
+    group = "Node"
 
-        dependsOn(kotlinYarnSetup)
+    dependsOn(kotlinYarnSetup)
 
-        inputs.files(".yarnrc", "package.json", "yarn.lock")
+    inputs.files(".yarnrc", "package.json", "yarn.lock")
 
-        // Note that "node_modules" cannot be cached due to symlinks, see https://github.com/gradle/gradle/issues/3525.
-        outputs.dir("node_modules")
-    }
+    // Note that "node_modules" cannot be cached due to symlinks, see https://github.com/gradle/gradle/issues/3525.
+    outputs.dir("node_modules")
+}
 
-    "yarnBuild" {
-        description = "Use Yarn to build the Node.js application."
-        group = "Node"
+val yarnBuild = tasks.named("yarnBuild") {
+    description = "Use Yarn to build the Node.js application."
+    group = "Node"
 
-        inputs.files(project.tasks["yarnInstall"].outputs.files)
-        inputs.dir("src")
+    inputs.files(yarnInstall)
+    inputs.dir("src")
 
-        outputs.cacheIf { true }
-        outputs.dir("build")
-    }
+    outputs.cacheIf { true }
+    outputs.dir("build")
+}
 
-    "yarnLint" {
-        description = "Let Yarn run the linter to check for style issues."
-        group = "Node"
+val yarnLint = tasks.named("yarnLint") {
+    description = "Let Yarn run the linter to check for style issues."
+    group = "Node"
 
-        dependsOn("yarnInstall")
-    }
+    dependsOn(yarnInstall)
 }
 
 /*
@@ -108,11 +106,11 @@ tasks {
  */
 
 tasks.register("build") {
-    dependsOn(listOf("yarnBuild", "yarnLint"))
+    dependsOn(yarnBuild, yarnLint)
 }
 
 tasks.register("check") {
-    dependsOn("yarnLint")
+    dependsOn(yarnLint)
 }
 
 tasks.register<Delete>("clean") {
