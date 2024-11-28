@@ -50,6 +50,7 @@ dependencies {
     "pluginClasspath"(platform(projects.plugins.versionControlSystems))
 
     funTestImplementation(platform(projects.plugins.commands))
+    funTestImplementation(platform(projects.plugins.packageCurationProviders))
     funTestImplementation(platform(projects.plugins.packageManagers))
     funTestImplementation(platform(projects.plugins.reporters))
     funTestImplementation(projects.downloader)
