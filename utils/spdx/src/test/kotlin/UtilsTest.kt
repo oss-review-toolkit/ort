@@ -198,6 +198,22 @@ class UtilsTest : WordSpec() {
             }
         }
 
+        "getLicenseTextReader provided a custom dir" should {
+            "call the custom validation lambda if provided" {
+                val id = "LicenseRef-ort-abc"
+                val text = "a\nb\nc"
+                val candidateFilenames = mutableListOf<String>()
+
+                setupTempFile(id, text)
+
+                getLicenseTextReader(id, true, listOf(tempDir)) { directory, filename ->
+                    candidateFilenames += filename
+                    directory.resolve(filename).takeIf { it.isFile }
+                }?.invoke() shouldBe text
+                candidateFilenames shouldBe listOf("LicenseRef-ort-abc")
+            }
+        }
+
         "removeYamlFrontMatter" should {
             "remove a YAML front matter" {
                 val text = """
