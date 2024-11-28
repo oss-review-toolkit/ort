@@ -34,13 +34,13 @@ data class PlainTextTemplateReporterConfig(
      * "NOTICE_SUMMARY" templates are available.
      * If no template id or path is provided, the "NOTICE_DEFAULT" template is used.
      */
-    @OrtPluginOption(aliases = ["templateId"])
+    @OrtPluginOption(aliases = ["template.id"])
     val templateIds: List<String>?,
 
     /**
      * A comma-separated list of paths to template files provided by the user.
      */
-    @OrtPluginOption(aliases = ["templatePath"])
+    @OrtPluginOption(aliases = ["template.path"])
     val templatePaths: List<String>?
 ) {
     companion object {
