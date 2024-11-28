@@ -39,13 +39,13 @@ data class AsciiDocTemplateReporterConfig(
      * If no template id or path is provided, the "disclosure_document" template is used, and if the ORT result contains
      * an advisor run, the "vulnerability_report" and "defect_report" templates are used as well.
      */
-    @OrtPluginOption(aliases = ["templateId"])
+    @OrtPluginOption(aliases = ["template.id"])
     val templateIds: List<String>?,
 
     /**
      * A comma-separated list of paths to template files provided by the user.
      */
-    @OrtPluginOption(aliases = ["templatePath"])
+    @OrtPluginOption(aliases = ["template.path"])
     val templatePaths: List<String>?
 )
 
