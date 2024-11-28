@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.analyzer
 
+import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
@@ -44,8 +45,11 @@ import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RootDependencyIndex
 import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
@@ -198,6 +202,41 @@ class AnalyzerResultBuilderTest : WordSpec() {
                 val deserializedResult = result.toYaml().fromYaml<AnalyzerResult>()
 
                 deserializedResult.withResolvedScopes() shouldBe result.withResolvedScopes()
+            }
+
+            "disregard duplicate ids if the project / package refer to the same VCS location" {
+                val id = Identifier(type = "NPM", namespace = "", name = "acorn-qml", version = "0.0.0")
+
+                val vcsInfo = VcsInfo(
+                    type = VcsType.GIT,
+                    url = "https://git.eclipse.org/r/cdt/org.eclipse.cdt",
+                    revision = "7c6bd5bdcb4cf8c31050aeeb102250a27a157728",
+                    path = "qt/org.eclipse.cdt.qt.core/acorn-qml"
+                )
+
+                val proj = Project(
+                    id = id,
+                    definitionFilePath = "qt/org.eclipse.cdt.qt.core/acorn-qml/package.json",
+                    declaredLicenses = setOf("EPL-1.0"),
+                    vcs = VcsInfo.EMPTY,
+                    vcsProcessed = vcsInfo,
+                    homepageUrl = ""
+                )
+
+                val pkg = Package(
+                    id = id,
+                    declaredLicenses = setOf("EPL-1.0"),
+                    description = "QML Parser",
+                    homepageUrl = "",
+                    binaryArtifact = RemoteArtifact.EMPTY,
+                    sourceArtifact = RemoteArtifact.EMPTY,
+                    vcs = vcsInfo,
+                    vcsProcessed = vcsInfo
+                )
+
+                shouldNotThrow<IllegalArgumentException> {
+                    AnalyzerResultBuilder().addProject(proj).addPackages(setOf(pkg)).build()
+                }
             }
         }
 
