@@ -99,8 +99,8 @@ class Advisor(
                     }
                 }.forEach { providerResults ->
                     providerResults.await().forEach { (pkg, advisorResults) ->
-                        results.merge(pkg.id, listOf(advisorResults)) { oldResults, newResults ->
-                            oldResults + newResults
+                        results.merge(pkg.id, listOf(advisorResults)) { existingResults, additionalResults ->
+                            existingResults + additionalResults
                         }
                     }
                 }
