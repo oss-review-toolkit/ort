@@ -154,4 +154,5 @@ private fun mockkAdviceProvider(): AdviceProvider =
 private fun mockkAdvisorResult(): AdvisorResult =
     mockk<AdvisorResult>().apply {
         every { vulnerabilities } returns emptyList()
+        every { copy(vulnerabilities = any()) } returns this
     }

@@ -28,6 +28,7 @@ import io.kotest.matchers.shouldNot
 
 import java.time.Instant
 
+import org.ossreviewtoolkit.advisor.normalizeVulnerabilityData
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
@@ -94,7 +95,7 @@ private fun createOsv(): Osv = OsvFactory.create()
 
 private fun Map<Identifier, AdvisorResult>.patchTimes(): Map<Identifier, AdvisorResult> =
     mapValues { (_, advisorResult) ->
-        advisorResult.copy(
+        advisorResult.normalizeVulnerabilityData().copy(
             summary = advisorResult.summary.copy(
                 startTime = Instant.EPOCH,
                 endTime = Instant.EPOCH

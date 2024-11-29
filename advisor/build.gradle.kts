@@ -29,6 +29,7 @@ dependencies {
 
     implementation(projects.utils.ortUtils)
 
+    implementation(libs.aeSecurity)
     implementation(libs.kotlinx.coroutines)
 
     testImplementation(libs.mockk)
