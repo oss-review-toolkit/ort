@@ -98,6 +98,8 @@ class Advisor(
                         providerResults
                     }
                 }.forEach { providerResults ->
+                    // Merge results from different providers into a single map keyed by the package ID. The original
+                    // provider is still maintained as part of the AdvisorResult's AdvisorDetails.
                     providerResults.await().forEach { (pkg, advisorResults) ->
                         results.merge(pkg.id, listOf(advisorResults)) { existingResults, additionalResults ->
                             existingResults + additionalResults
