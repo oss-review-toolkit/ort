@@ -157,7 +157,7 @@ private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.vulne
         it.type.name to it.score
     }.ifEmpty {
         listOf(null to null)
-    }.forEach { (scoringSystem, severity) ->
+    }.forEach { (scoringSystem, vector) ->
         references.mapNotNullTo(ortReferences) { reference ->
             val url = reference.url.trim().let { if (it.startsWith("://")) "https$it" else it }
 
@@ -169,15 +169,15 @@ private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.vulne
                 val specificSeverity = databaseSpecific?.get("severity")
 
                 val baseScore = runCatching {
-                    CvssVector.parseVector(severity)?.baseScore?.toFloat()
+                    CvssVector.parseVector(vector)?.baseScore?.toFloat()
                 }.onFailure {
-                    logger.debug { "Unable to parse CVSS vector '$severity': ${it.collectMessages()}." }
+                    logger.debug { "Unable to parse CVSS vector '$vector': ${it.collectMessages()}." }
                 }.getOrNull()
 
                 val severityRating = (specificSeverity as? JsonPrimitive)?.contentOrNull
                     ?: VulnerabilityReference.getQualitativeRating(scoringSystem, baseScore)?.name
 
-                VulnerabilityReference(it, scoringSystem, severityRating, baseScore, severity)
+                VulnerabilityReference(it, scoringSystem, severityRating, baseScore, vector)
             }.getOrNull()
         }
     }
