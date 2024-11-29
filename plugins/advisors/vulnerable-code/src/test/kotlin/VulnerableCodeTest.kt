@@ -40,6 +40,7 @@ import io.kotest.matchers.shouldBe
 import java.io.File
 import java.net.URI
 
+import org.ossreviewtoolkit.advisor.normalizeVulnerabilityData
 import org.ossreviewtoolkit.model.AdvisorCapability
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.Identifier
@@ -111,7 +112,7 @@ class VulnerableCodeTest : WordSpec({
                     )
                 )
             )
-            langResult.vulnerabilities should containExactly(expLangVulnerability)
+            langResult.vulnerabilities.normalizeVulnerabilityData() should containExactly(expLangVulnerability)
 
             val strutsResult = result.getValue(idStruts)
             strutsResult.advisor shouldBe vulnerableCode.details
@@ -149,7 +150,8 @@ class VulnerableCodeTest : WordSpec({
                     )
                 )
             )
-            strutsResult.vulnerabilities should containExactlyInAnyOrder(expStrutsVulnerabilities)
+            strutsResult.vulnerabilities.normalizeVulnerabilityData() should
+                containExactlyInAnyOrder(expStrutsVulnerabilities)
         }
 
         "extract the CVE ID from an alias" {
@@ -178,7 +180,8 @@ class VulnerableCodeTest : WordSpec({
                     )
                 )
             )
-            result.getValue(idJUnit).vulnerabilities should containExactly(expJunitVulnerability)
+            result.getValue(idJUnit).vulnerabilities.normalizeVulnerabilityData() should
+                containExactly(expJunitVulnerability)
         }
 
         "extract other official identifiers from aliases" {
@@ -214,7 +217,8 @@ class VulnerableCodeTest : WordSpec({
                     )
                 )
             )
-            result.getValue(idLog4j).vulnerabilities should containExactlyInAnyOrder(expLog4jVulnerabilities)
+            result.getValue(idLog4j).vulnerabilities.normalizeVulnerabilityData() should
+                containExactlyInAnyOrder(expLog4jVulnerabilities)
         }
 
         "handle a failure response from the server" {

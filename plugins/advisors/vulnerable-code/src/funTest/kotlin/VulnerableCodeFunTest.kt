@@ -26,6 +26,7 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.advisor.normalizeVulnerabilityData
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.utils.toPurl
@@ -37,10 +38,10 @@ class VulnerableCodeFunTest : WordSpec({
             val id = Identifier("Go::github.com/quic-go/quic-go:0.40.0")
             val pkg = Package.EMPTY.copy(id, purl = id.toPurl())
 
-            val findings = vc.retrievePackageFindings(setOf(pkg))
+            val results = vc.retrievePackageFindings(setOf(pkg)).values.map { it.normalizeVulnerabilityData() }
 
-            findings.values.flatMap { it.summary.issues } should beEmpty()
-            with(findings.values.flatMap { it.vulnerabilities }.associateBy { it.id }) {
+            results.flatMap { it.summary.issues } should beEmpty()
+            with(results.flatMap { it.vulnerabilities }.associateBy { it.id }) {
                 keys shouldContainAll setOf(
                     "CVE-2023-49295"
                 )
@@ -63,10 +64,10 @@ class VulnerableCodeFunTest : WordSpec({
             val id = Identifier("Maven:com.google.guava:guava:19.0")
             val pkg = Package.EMPTY.copy(id, purl = id.toPurl())
 
-            val findings = vc.retrievePackageFindings(setOf(pkg))
+            val results = vc.retrievePackageFindings(setOf(pkg)).values.map { it.normalizeVulnerabilityData() }
 
-            findings.values.flatMap { it.summary.issues } should beEmpty()
-            with(findings.values.flatMap { it.vulnerabilities }.associateBy { it.id }) {
+            results.flatMap { it.summary.issues } should beEmpty()
+            with(results.flatMap { it.vulnerabilities }.associateBy { it.id }) {
                 keys shouldContainAll setOf(
                     "CVE-2018-10237",
                     "CVE-2020-8908",
@@ -89,10 +90,10 @@ class VulnerableCodeFunTest : WordSpec({
             val id = Identifier("Maven:org.apache.commons:commons-compress:1.23.0")
             val pkg = Package.EMPTY.copy(id, purl = id.toPurl())
 
-            val findings = vc.retrievePackageFindings(setOf(pkg))
+            val results = vc.retrievePackageFindings(setOf(pkg)).values.map { it.normalizeVulnerabilityData() }
 
-            findings.values.flatMap { it.summary.issues } should beEmpty()
-            with(findings.values.flatMap { it.vulnerabilities }.associateBy { it.id }) {
+            results.flatMap { it.summary.issues } should beEmpty()
+            with(results.flatMap { it.vulnerabilities }.associateBy { it.id }) {
                 keys shouldContainAll setOf(
                     "CVE-2023-42503"
                 )
@@ -115,10 +116,10 @@ class VulnerableCodeFunTest : WordSpec({
             val id = Identifier("NPM::elliptic:6.5.7")
             val pkg = Package.EMPTY.copy(id, purl = id.toPurl())
 
-            val findings = vc.retrievePackageFindings(setOf(pkg))
+            val results = vc.retrievePackageFindings(setOf(pkg)).values.map { it.normalizeVulnerabilityData() }
 
-            findings.values.flatMap { it.summary.issues } should beEmpty()
-            with(findings.values.flatMap { it.vulnerabilities }.associateBy { it.id }) {
+            results.flatMap { it.summary.issues } should beEmpty()
+            with(results.flatMap { it.vulnerabilities }.associateBy { it.id }) {
                 keys shouldContainAll setOf(
                     "CVE-2024-48948"
                 )

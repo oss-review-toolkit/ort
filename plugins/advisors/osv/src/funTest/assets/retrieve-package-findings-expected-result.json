@@ -15,25 +15,25 @@
       "references" : [ {
         "url" : "https://nvd.nist.gov/vuln/detail/CVE-2020-7764",
         "scoring_system" : "CVSS_V3",
-        "severity" : "MODERATE",
+        "severity" : "MEDIUM",
         "score" : 5.9,
         "vector" : "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
       }, {
         "url" : "https://github.com/delvedor/find-my-way/commit/ab408354690e6b9cf3c4724befb3b3fa4bb90aac",
         "scoring_system" : "CVSS_V3",
-        "severity" : "MODERATE",
+        "severity" : "MEDIUM",
         "score" : 5.9,
         "vector" : "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
       }, {
         "url" : "https://snyk.io/vuln/SNYK-JS-FINDMYWAY-1038269",
         "scoring_system" : "CVSS_V3",
-        "severity" : "MODERATE",
+        "severity" : "MEDIUM",
         "score" : 5.9,
         "vector" : "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
       }, {
         "url" : "https://www.npmjs.com/package/find-my-way",
         "scoring_system" : "CVSS_V3",
-        "severity" : "MODERATE",
+        "severity" : "MEDIUM",
         "score" : 5.9,
         "vector" : "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
       } ]

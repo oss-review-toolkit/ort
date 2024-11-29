@@ -26,8 +26,6 @@ import kotlinx.serialization.json.contentOrNull
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.metaeffekt.core.security.cvss.CvssVector
-
 import org.ossreviewtoolkit.advisor.AdviceProvider
 import org.ossreviewtoolkit.advisor.AdviceProviderFactory
 import org.ossreviewtoolkit.clients.osv.OsvServiceWrapper
@@ -167,17 +165,10 @@ private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.vulne
                 // Use the 'severity' property of the unspecified 'databaseSpecific' object.
                 // See also https://github.com/google/osv.dev/issues/484.
                 val specificSeverity = databaseSpecific?.get("severity")
-
-                val baseScore = runCatching {
-                    CvssVector.parseVector(vector)?.baseScore?.toFloat()
-                }.onFailure {
-                    logger.debug { "Unable to parse CVSS vector '$vector': ${it.collectMessages()}." }
-                }.getOrNull()
-
                 val severityRating = (specificSeverity as? JsonPrimitive)?.contentOrNull
-                    ?: VulnerabilityReference.getQualitativeRating(scoringSystem, baseScore)?.name
 
-                VulnerabilityReference(it, scoringSystem, severityRating, baseScore, vector)
+                // OSV never provides the numeric base score as it can be calculated from the vector string.
+                VulnerabilityReference(it, scoringSystem, severityRating, null, vector)
             }.getOrNull()
         }
     }

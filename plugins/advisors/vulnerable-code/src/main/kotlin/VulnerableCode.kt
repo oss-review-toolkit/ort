@@ -155,18 +155,14 @@ class VulnerableCode(override val descriptor: PluginDescriptor, config: Vulnerab
 
             if (scores.isEmpty()) return listOf(VulnerabilityReference(sourceUri, null, null, null, null))
 
-            return scores.map { (scoringSystem, scoringElements, value) ->
-                val score = value.toFloatOrNull()
+            return scores.map {
+                // In VulnerableCode's data model, a Score class's value is either a numeric score or a severity string.
+                val score = it.value.toFloatOrNull()
+                val severity = it.value.takeUnless { score != null }
 
-                val severity = if (score != null) {
-                    VulnerabilityReference.getQualitativeRating(scoringSystem, score)?.name
-                } else {
-                    // VulnerableCode returns "MODERATE" instead of "MEDIUM" in case of the "cvssv3.1_qr" scoring
-                    // system, see https://github.com/aboutcode-org/vulnerablecode/issues/1186.
-                    value.takeUnless { it == "MODERATE" && scoringSystem == "cvssv3.1_qr" } ?: "MEDIUM"
-                }
+                val vector = it.scoringElements?.ifEmpty { null }
 
-                VulnerabilityReference(sourceUri, scoringSystem, severity, score, scoringElements?.ifEmpty { null })
+                VulnerabilityReference(sourceUri, it.scoringSystem, severity, score, vector)
             }
         }.onFailure {
             issues += createAndLogIssue(
