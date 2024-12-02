@@ -55,6 +55,11 @@ class FileListResolver(
         }
     }
 
+    /**
+     * Get the [FileList] associated with the provided [provenance], or null if it is not available in the [storage].
+     */
+    fun get(provenance: KnownProvenance): FileList? = storage.getFileList(provenance)
+
     fun has(provenance: KnownProvenance): Boolean = storage.hasData(provenance)
 }
 

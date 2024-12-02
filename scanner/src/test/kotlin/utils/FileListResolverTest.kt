@@ -23,8 +23,11 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
+import io.kotest.engine.spec.tempfile
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.file.aDirectory
+import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldNotBe
 
@@ -91,6 +94,59 @@ class FileListResolverTest : WordSpec({
             }
 
             dir shouldNotBe aDirectory()
+        }
+    }
+
+    "get()" should {
+        "return the requested file list" {
+            val resolver = FileListResolver(
+                storage = FileProvenanceFileStorage(
+                    storage = LocalFileStorage(tempdir()),
+                    filename = "bytes"
+                ),
+                provenanceDownloader = {
+                    createTempDirWithFiles(
+                        ".git/index",
+                        "LICENSE",
+                        "src/cli/main.cpp"
+                    )
+                }
+            )
+
+            resolver.resolve(ArtifactProvenance(sourceArtifact = RemoteArtifact.EMPTY))
+
+            val fileList = resolver.get(ArtifactProvenance(sourceArtifact = RemoteArtifact.EMPTY))
+
+            fileList.shouldNotBeNull {
+                ignorePatterns should containExactlyInAnyOrder(
+                    "**/.bzr",
+                    "**/.git",
+                    "**/.hg",
+                    "**/.repo",
+                    "**/.svn",
+                    "**/CVS",
+                    "**/CVSROOT"
+                )
+
+                files should containExactlyInAnyOrder(
+                    FileList.FileEntry("LICENSE", "356a192b7913b04c54574d18c28d46e6395428ab"),
+                    FileList.FileEntry("src/cli/main.cpp", "da4b9237bacccdf19c0760cab7aec4a8359010b0")
+                )
+            }
+        }
+
+        "return null if no file list is available" {
+            val resolver = FileListResolver(
+                storage = object : ProvenanceFileStorage {
+                    override fun hasData(provenance: KnownProvenance) = false
+                    override fun getData(provenance: KnownProvenance) = null
+                    override fun putData(provenance: KnownProvenance, data: InputStream, size: Long) =
+                        throw IOException()
+                },
+                provenanceDownloader = { tempfile() }
+            )
+
+            resolver.get(ArtifactProvenance(sourceArtifact = RemoteArtifact.EMPTY)) should beNull()
         }
     }
 })
