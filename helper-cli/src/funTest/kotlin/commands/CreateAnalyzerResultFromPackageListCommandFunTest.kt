@@ -25,11 +25,15 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.shouldBe
 
+import java.io.File
+
 import org.ossreviewtoolkit.helper.HelperMain
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.ResolvedConfiguration
+import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.ort.Environment
+import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 import org.ossreviewtoolkit.utils.test.getAssetFile
 
 class CreateAnalyzerResultFromPackageListCommandFunTest : WordSpec({
@@ -38,9 +42,12 @@ class CreateAnalyzerResultFromPackageListCommandFunTest : WordSpec({
             val inputFile = getAssetFile("package-list.yml")
             val outputFile = tempdir().resolve("analyzer-result.yml")
             val expectedOutputFile = getAssetFile("create-analyzer-result-from-pkg-list-expected-output.yml")
+            val ortConfigFile = createOrtConfig()
 
             HelperMain().test(
                 "create-analyzer-result-from-package-list",
+                "--config",
+                ortConfigFile.absolutePath,
                 "--package-list-file",
                 inputFile.absolutePath,
                 "--ort-file",
@@ -53,8 +60,17 @@ class CreateAnalyzerResultFromPackageListCommandFunTest : WordSpec({
     }
 })
 
+private fun createOrtConfig(): File {
+    val config = OrtConfiguration().copy(packageCurationProviders = emptyList())
+
+    val ortConfigFile = createOrtTempFile(suffix = "config.yml").apply {
+        writeText(mapOf("ort" to config).toYaml())
+    }
+
+    return ortConfigFile
+}
+
 private fun OrtResult.patchAnalyzerResult(): OrtResult =
     copy(
-        analyzer = analyzer?.copy(environment = Environment()),
-        resolvedConfiguration = ResolvedConfiguration()
+        analyzer = analyzer?.copy(environment = Environment())
     )
