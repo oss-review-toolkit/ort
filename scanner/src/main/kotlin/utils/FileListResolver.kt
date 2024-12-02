@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 
-internal class FileListResolver(
+class FileListResolver(
     private val storage: ProvenanceFileStorage,
     private val provenanceDownloader: ProvenanceDownloader
 ) {
