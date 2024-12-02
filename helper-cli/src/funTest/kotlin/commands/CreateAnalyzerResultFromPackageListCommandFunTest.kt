@@ -28,8 +28,13 @@ import io.kotest.matchers.shouldBe
 import java.io.File
 
 import org.ossreviewtoolkit.helper.HelperMain
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.PackageCuration
+import org.ossreviewtoolkit.model.PackageCurationData
+import org.ossreviewtoolkit.model.VcsInfoCurationData
 import org.ossreviewtoolkit.model.config.OrtConfiguration
+import org.ossreviewtoolkit.model.config.ProviderPluginConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.ort.Environment
@@ -60,8 +65,32 @@ class CreateAnalyzerResultFromPackageListCommandFunTest : WordSpec({
     }
 })
 
+private val PACKAGE_CURATION = PackageCuration(
+    id = Identifier("NPM::example-dependency-one:1.0.0"),
+    data = PackageCurationData(
+        comment = "Example curation.",
+        vcs = VcsInfoCurationData(
+            revision = "v1.0.0"
+        )
+    )
+)
+
 private fun createOrtConfig(): File {
-    val config = OrtConfiguration().copy(packageCurationProviders = emptyList())
+    val packageCurationsFile = createOrtTempFile(suffix = ".yml").apply {
+        writeText(listOf(PACKAGE_CURATION).toYaml())
+    }
+
+    val config = OrtConfiguration().copy(
+        packageCurationProviders = listOf(
+            ProviderPluginConfiguration(
+                type = "File",
+                options = mapOf(
+                    "path" to packageCurationsFile.absolutePath,
+                    "mustExist" to "true"
+                )
+            )
+        )
+    )
 
     val ortConfigFile = createOrtTempFile(suffix = "config.yml").apply {
         writeText(mapOf("ort" to config).toYaml())
