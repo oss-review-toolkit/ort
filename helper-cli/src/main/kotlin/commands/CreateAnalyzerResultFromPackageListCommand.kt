@@ -190,10 +190,13 @@ private fun Collection<Dependency>.toScope(name: String): Scope =
 private fun Dependency.toPackage(): Package {
     val vcsInfo = vcs.toVcsInfo()
 
-    return Package.EMPTY.copy(
+    return Package(
         id = id,
         sourceArtifact = sourceArtifact?.let { RemoteArtifact(url = it.url, it.hash ?: Hash.NONE) }.orEmpty(),
         vcs = vcsInfo,
-        vcsProcessed = vcsInfo.normalize()
+        declaredLicenses = emptySet(),
+        description = "",
+        homepageUrl = "",
+        binaryArtifact = RemoteArtifact.EMPTY
     )
 }

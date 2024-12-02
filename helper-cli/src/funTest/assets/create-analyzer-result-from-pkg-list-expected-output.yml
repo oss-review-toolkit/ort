@@ -56,7 +56,7 @@ analyzer:
           linkage: "STATIC"
     packages:
     - id: "NPM::example-dependency-one:1.0.0"
-      purl: ""
+      purl: "pkg:npm/example-dependency-one@1.0.0"
       declared_licenses: []
       declared_licenses_processed: {}
       description: ""
@@ -82,7 +82,7 @@ analyzer:
         revision: "0000000000000000000000000000000000000000"
         path: "vcs-path/dependency-one"
     - id: "NPM::example-dependency-two:2.0.0"
-      purl: ""
+      purl: "pkg:npm/example-dependency-two@2.0.0"
       declared_licenses: []
       declared_licenses_processed: {}
       description: ""
