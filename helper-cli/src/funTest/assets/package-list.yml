@@ -17,6 +17,7 @@ dependencies:
     isExcluded: true
     isDynamicallyLinked: true
   - id: "NPM::example-dependency-two:2.0.0"
+    purl: "pkg:github/example-org/example-dependency-two@v2.0.0"
     vcs:
       type: "Git"
       url: "https://github.com/example/depedency-1.git"
