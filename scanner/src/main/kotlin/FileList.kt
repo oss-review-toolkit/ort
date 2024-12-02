@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.utils.common.getDuplicates
 /**
  * The model to store a file list for a resolved provenance.
  */
-internal data class FileList(
+data class FileList(
     /**
      * The set of glob expressions which have been used to match directories to be excluded from the file list.
      */
