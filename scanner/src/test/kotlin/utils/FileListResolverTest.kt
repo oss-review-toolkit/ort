@@ -23,20 +23,20 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.engine.spec.tempdir
+import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.file.aDirectory
-import io.kotest.matchers.shouldBe
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldNotBe
 
-import java.io.File
 import java.io.IOException
 import java.io.InputStream
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.RemoteArtifact
-import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.model.utils.FileProvenanceFileStorage
 import org.ossreviewtoolkit.model.utils.ProvenanceFileStorage
+import org.ossreviewtoolkit.scanner.FileList
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 
 class FileListResolverTest : StringSpec({
@@ -57,7 +57,20 @@ class FileListResolverTest : StringSpec({
 
         val fileList = resolver.resolve(ArtifactProvenance(sourceArtifact = RemoteArtifact.EMPTY))
 
-        fileList.toYaml() shouldBe File("src/test/assets/expected-file-list.yml").readText()
+        fileList.ignorePatterns should containExactlyInAnyOrder(
+            "**/.bzr",
+            "**/.git",
+            "**/.hg",
+            "**/.repo",
+            "**/.svn",
+            "**/CVS",
+            "**/CVSROOT"
+        )
+
+        fileList.files should containExactlyInAnyOrder(
+            FileList.FileEntry("LICENSE", "356a192b7913b04c54574d18c28d46e6395428ab"),
+            FileList.FileEntry("src/cli/main.cpp", "da4b9237bacccdf19c0760cab7aec4a8359010b0")
+        )
     }
 
     "resolve() should delete the temporary directory even on an exception" {
