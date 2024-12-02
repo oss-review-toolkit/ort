@@ -37,10 +37,24 @@ import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 
+/**
+ * A resolver for [FileList]s that are associated with [KnownProvenance]s.
+ */
 class FileListResolver(
+    /**
+     * The [ProvenanceFileStorage] to use for storing and retrieving [FileList]s.
+     */
     private val storage: ProvenanceFileStorage,
+
+    /**
+     * The [ProvenanceDownloader] to use for downloading [KnownProvenance]s.
+     */
     private val provenanceDownloader: ProvenanceDownloader
 ) {
+    /**
+     * Get the [FileList] associated with the provided [provenance]. If it is not available in the [storage], download
+     * the provenance and create the [FileList] from it.
+     */
     fun resolve(provenance: KnownProvenance): FileList {
         storage.getFileList(provenance)?.let { return it }
 
@@ -60,6 +74,9 @@ class FileListResolver(
      */
     fun get(provenance: KnownProvenance): FileList? = storage.getFileList(provenance)
 
+    /**
+     * Return true if the [storage] has a [FileList] associated with the provided [provenance].
+     */
     fun has(provenance: KnownProvenance): Boolean = storage.hasData(provenance)
 }
 
