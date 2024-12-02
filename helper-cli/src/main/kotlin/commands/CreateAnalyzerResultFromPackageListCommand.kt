@@ -51,6 +51,7 @@ import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.model.orEmpty
+import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProviderFactory
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.config.setPackageCurations
@@ -146,6 +147,7 @@ private data class PackageList(
 
 private data class Dependency(
     val id: Identifier,
+    val purl: String?,
     val vcs: Vcs? = null,
     val sourceArtifact: SourceArtifact? = null,
     val isExcluded: Boolean = false,
@@ -192,6 +194,7 @@ private fun Dependency.toPackage(): Package {
 
     return Package(
         id = id,
+        purl = purl ?: id.toPurl(),
         sourceArtifact = sourceArtifact?.let { RemoteArtifact(url = it.url, it.hash ?: Hash.NONE) }.orEmpty(),
         vcs = vcsInfo,
         declaredLicenses = emptySet(),
