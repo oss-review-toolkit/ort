@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.scanner.utils
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.Spec
-import io.kotest.core.spec.style.StringSpec
+import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.file.aDirectory
@@ -39,56 +39,59 @@ import org.ossreviewtoolkit.model.utils.ProvenanceFileStorage
 import org.ossreviewtoolkit.scanner.FileList
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 
-class FileListResolverTest : StringSpec({
-    "resolve() should create the expected file list" {
-        val resolver = FileListResolver(
-            storage = FileProvenanceFileStorage(
-                storage = LocalFileStorage(tempdir()),
-                filename = "bytes"
-            ),
-            provenanceDownloader = {
-                createTempDirWithFiles(
-                    ".git/index",
-                    "LICENSE",
-                    "src/cli/main.cpp"
-                )
-            }
-        )
+class FileListResolverTest : WordSpec({
+    "resolve()" should {
+        "create the expected file list" {
+            val resolver = FileListResolver(
+                storage = FileProvenanceFileStorage(
+                    storage = LocalFileStorage(tempdir()),
+                    filename = "bytes"
+                ),
+                provenanceDownloader = {
+                    createTempDirWithFiles(
+                        ".git/index",
+                        "LICENSE",
+                        "src/cli/main.cpp"
+                    )
+                }
+            )
 
-        val fileList = resolver.resolve(ArtifactProvenance(sourceArtifact = RemoteArtifact.EMPTY))
+            val fileList = resolver.resolve(ArtifactProvenance(sourceArtifact = RemoteArtifact.EMPTY))
 
-        fileList.ignorePatterns should containExactlyInAnyOrder(
-            "**/.bzr",
-            "**/.git",
-            "**/.hg",
-            "**/.repo",
-            "**/.svn",
-            "**/CVS",
-            "**/CVSROOT"
-        )
+            fileList.ignorePatterns should containExactlyInAnyOrder(
+                "**/.bzr",
+                "**/.git",
+                "**/.hg",
+                "**/.repo",
+                "**/.svn",
+                "**/CVS",
+                "**/CVSROOT"
+            )
 
-        fileList.files should containExactlyInAnyOrder(
-            FileList.FileEntry("LICENSE", "356a192b7913b04c54574d18c28d46e6395428ab"),
-            FileList.FileEntry("src/cli/main.cpp", "da4b9237bacccdf19c0760cab7aec4a8359010b0")
-        )
-    }
-
-    "resolve() should delete the temporary directory even on an exception" {
-        val dir = createTempDirWithFiles(".git/index", "LICENSE", "src/cli/main.cpp")
-        val resolver = FileListResolver(
-            storage = object : ProvenanceFileStorage {
-                override fun hasData(provenance: KnownProvenance) = true
-                override fun getData(provenance: KnownProvenance) = null
-                override fun putData(provenance: KnownProvenance, data: InputStream, size: Long) = throw IOException()
-            },
-            provenanceDownloader = { dir }
-        )
-
-        shouldThrow<IOException> {
-            resolver.resolve(ArtifactProvenance(sourceArtifact = RemoteArtifact.EMPTY))
+            fileList.files should containExactlyInAnyOrder(
+                FileList.FileEntry("LICENSE", "356a192b7913b04c54574d18c28d46e6395428ab"),
+                FileList.FileEntry("src/cli/main.cpp", "da4b9237bacccdf19c0760cab7aec4a8359010b0")
+            )
         }
 
-        dir shouldNotBe aDirectory()
+        "delete the temporary directory even on an exception" {
+            val dir = createTempDirWithFiles(".git/index", "LICENSE", "src/cli/main.cpp")
+            val resolver = FileListResolver(
+                storage = object : ProvenanceFileStorage {
+                    override fun hasData(provenance: KnownProvenance) = true
+                    override fun getData(provenance: KnownProvenance) = null
+                    override fun putData(provenance: KnownProvenance, data: InputStream, size: Long) =
+                        throw IOException()
+                },
+                provenanceDownloader = { dir }
+            )
+
+            shouldThrow<IOException> {
+                resolver.resolve(ArtifactProvenance(sourceArtifact = RemoteArtifact.EMPTY))
+            }
+
+            dir shouldNotBe aDirectory()
+        }
     }
 })
 
