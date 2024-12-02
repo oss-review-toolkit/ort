@@ -99,7 +99,4 @@ private fun createOrtConfig(): File {
     return ortConfigFile
 }
 
-private fun OrtResult.patchAnalyzerResult(): OrtResult =
-    copy(
-        analyzer = analyzer?.copy(environment = Environment())
-    )
+private fun OrtResult.patchAnalyzerResult(): OrtResult = copy(analyzer = analyzer?.copy(environment = Environment()))
