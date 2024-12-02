@@ -110,4 +110,13 @@ analyzer:
 scanner: null
 advisor: null
 evaluator: null
-resolved_configuration: {}
+resolved_configuration:
+  package_curations:
+  - provider:
+      id: "File"
+    curations:
+    - id: "NPM::example-dependency-one:1.0.0"
+      curations:
+        comment: "Example curation."
+        vcs:
+          revision: "v1.0.0"
