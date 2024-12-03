@@ -82,5 +82,5 @@ cli/build/install/ort/bin/ort report
   -o [reporter-output-dir]
   --report-formats PlainTextTemplate,WebApp
   --license-classifications-file $ORT_CONFIG_DIR/license-classifications.yml
-  --package-configuration-dir $ORT_CONFIG_DIR/packages
+  --package-configurations-dir $ORT_CONFIG_DIR/packages
 ```
