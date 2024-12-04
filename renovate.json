@@ -27,12 +27,6 @@
     },
     {
       "matchPackageNames": [
-        "org.springframework:spring-core"
-      ],
-      "allowedVersions": "< 6.0.0"
-    },
-    {
-      "matchPackageNames": [
         "software.amazon.awssdk:s3"
       ],
       "matchUpdateTypes": ["patch"],
