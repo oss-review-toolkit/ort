@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.model.FileList
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.KnownProvenance
+import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageType
@@ -43,6 +44,7 @@ import org.ossreviewtoolkit.model.ProvenanceResolutionResult
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerRun
+import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
@@ -192,8 +194,6 @@ class Scanner(
 
         val vcsPathsForProvenances = getVcsPathsForProvenances(provenances)
 
-        val filteredScanResults = filterScanResultsByVcsPaths(controller.getAllScanResults(), vcsPathsForProvenances)
-
         val files = controller.getAllFileLists().mapTo(mutableSetOf()) { (provenance, fileList) ->
             FileList(
                 provenance = provenance.alignRevisions() as KnownProvenance,
@@ -206,6 +206,40 @@ class Scanner(
                 fileList.filterByVcsPaths(it)
             }
         }
+
+        val filteredScanResults = filterScanResultsByVcsPaths(controller.getAllScanResults(), vcsPathsForProvenances)
+            .mapTo(mutableSetOf()) { scanResult ->
+                val licenseFiles = scanResult.summary.licenseFindings.mapTo(mutableSetOf()) { licenseFinding ->
+                    licenseFinding.location.path
+                }
+
+                if (!scannerConfig.includeUnlicensed) {
+                    scanResult.copy(provenance = scanResult.provenance.alignRevisions())
+                } else {
+                    // Adds files without license to the scanned results
+                    val scanSummary =
+                        controller.getAllFileLists()[scanResult.provenance]?.files
+                            .orEmpty().asSequence().mapNotNull { fileEntry ->
+                                if (fileEntry.path in licenseFiles) {
+                                    null
+                                } else {
+                                    fileEntry.path
+                                }
+                            }.toSet().let {
+                                (it subtract licenseFiles).mapTo(mutableSetOf()) {
+                                    LicenseFinding(license = "NONE", location = TextLocation(it, 1))
+                                }.let {
+                                    val allFindings = scanResult.summary.licenseFindings union it
+                                    scanResult.summary.copy(licenseFindings = allFindings)
+                                }
+                            }
+
+                    scanResult.copy(
+                        provenance = scanResult.provenance.alignRevisions(),
+                        summary = scanSummary
+                    )
+                }
+            }
 
         val scannerNames = scannerWrappers.mapTo(mutableSetOf()) { it.name }
         val scanners = packages.associateBy({ it.id }) { scannerNames }
