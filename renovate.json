@@ -30,7 +30,7 @@
         "software.amazon.awssdk:s3"
       ],
       "matchUpdateTypes": ["patch"],
-      "enabled": false
+      "schedule": "after 9pm on sunday"
     },
     {
       "matchManagers": ["npm"],
