@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.model.FileList
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.KnownProvenance
+import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageType
@@ -43,6 +44,8 @@ import org.ossreviewtoolkit.model.ProvenanceResolutionResult
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerRun
+import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.TextLocation.Companion.UNKNOWN_LINE
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
@@ -67,6 +70,7 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.showStackTrace
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 class Scanner(
@@ -205,13 +209,36 @@ class Scanner(
             }
         }
 
+        val scanResults = if (scannerConfig.includeFilesWithoutFindings) {
+            filteredScanResults.mapTo(mutableSetOf()) { scanResult ->
+                val allPaths = controller.getAllFileLists()[scanResult.provenance]?.files?.mapTo(mutableSetOf()) {
+                    it.path
+                }.orEmpty()
+
+                val pathsWithFindings = scanResult.summary.licenseFindings.mapTo(mutableSetOf()) { it.location.path }
+                val pathsWithoutFindings = allPaths - pathsWithFindings
+
+                val findingsThatAreNone = pathsWithoutFindings.mapTo(mutableSetOf()) {
+                    LicenseFinding(SpdxConstants.NONE, TextLocation(it, UNKNOWN_LINE))
+                }
+
+                scanResult.copy(
+                    summary = scanResult.summary.copy(
+                        licenseFindings = scanResult.summary.licenseFindings + findingsThatAreNone
+                    )
+                )
+            }
+        } else {
+            filteredScanResults
+        }
+
         val scannerNames = scannerWrappers.mapTo(mutableSetOf()) { it.name }
         val scanners = packages.associateBy({ it.id }) { scannerNames }
 
         return ScannerRun.EMPTY.copy(
             config = scannerConfig,
             provenances = provenances,
-            scanResults = filteredScanResults,
+            scanResults = scanResults,
             files = files,
             scanners = scanners
         )

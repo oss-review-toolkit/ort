@@ -45,6 +45,11 @@ data class ScannerConfiguration(
     val skipExcluded: Boolean = false,
 
     /**
+     * A flag to indicate whether the scanner should add files without license to the scanner results.
+     */
+    val includeFilesWithoutFindings: Boolean = false,
+
+    /**
      * Configuration of a [FileArchiver] that archives certain scanned files in an external [FileStorage].
      */
     val archive: FileArchiverConfiguration? = null,
