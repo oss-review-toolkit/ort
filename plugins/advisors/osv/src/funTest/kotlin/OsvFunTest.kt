@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.advisors.osv
 
-import io.kotest.core.spec.style.StringSpec
+import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
@@ -35,53 +35,55 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.test.getAssetFile
 
-class OsvFunTest : StringSpec({
-    "retrievePackageFindings() returns vulnerabilities for the supported ecosystems" {
-        val osv = createOsv()
-        val packages = setOf(
-            "Crate::sys-info:0.7.0",
-            "Composer:thorsten:phpmyfaq:3.0.7",
-            "Gem::rack:2.0.4",
-            "Go::github.com/nats-io/nats-server/v2:2.1.0",
-            "Hackage::xml-conduit:0.5.0",
-            "Maven:com.jfinal:jfinal:1.4",
-            "NPM::rebber:1.0.0",
-            "NuGet::Bunkum:4.0.0",
-            "Pub::http:0.13.1",
-            "PyPI::django:3.2",
-            "Swift::github.com/apple/swift-nio:2.41.0"
-        ).mapTo(mutableSetOf()) {
-            identifierToPackage(it)
+class OsvFunTest : WordSpec({
+    "retrievePackageFindings()" should {
+        "return the vulnerabilities for the supported ecosystems" {
+            val osv = createOsv()
+            val packages = setOf(
+                "Crate::sys-info:0.7.0",
+                "Composer:thorsten:phpmyfaq:3.0.7",
+                "Gem::rack:2.0.4",
+                "Go::github.com/nats-io/nats-server/v2:2.1.0",
+                "Hackage::xml-conduit:0.5.0",
+                "Maven:com.jfinal:jfinal:1.4",
+                "NPM::rebber:1.0.0",
+                "NuGet::Bunkum:4.0.0",
+                "Pub::http:0.13.1",
+                "PyPI::django:3.2",
+                "Swift::github.com/apple/swift-nio:2.41.0"
+            ).mapTo(mutableSetOf()) {
+                identifierToPackage(it)
+            }
+
+            val packageFindings = osv.retrievePackageFindings(packages)
+
+            packageFindings.keys shouldContainExactlyInAnyOrder packages
+            packageFindings.keys.forAll { pkg ->
+                packageFindings.getValue(pkg).vulnerabilities shouldNot beEmpty()
+            }
         }
 
-        val packageFindings = osv.retrievePackageFindings(packages)
+        "return the expected result for the given package(s)" {
+            val expectedResult = getAssetFile("retrieve-package-findings-expected-result.json")
+                .readValue<Map<Identifier, AdvisorResult>>()
+            val osv = createOsv()
+            // The following packages have been chosen because they have only one vulnerability with the oldest possible
+            // modified date from the current OSV database, in order to hopefully minimize the flakiness.
+            val packages = setOf(
+                // Package with severity:
+                "NPM::find-my-way:3.0.0",
+                // Package without severity, but with severity inside the databaseSpecific JSON object:
+                "NPM::discord-markdown:2.3.0",
+                // Package without severity:
+                "PyPI::donfig:0.2.0"
+            ).mapTo(mutableSetOf()) {
+                identifierToPackage(it)
+            }
 
-        packageFindings.keys shouldContainExactlyInAnyOrder packages
-        packageFindings.keys.forAll { pkg ->
-            packageFindings.getValue(pkg).vulnerabilities shouldNot beEmpty()
+            val packageFindings = osv.retrievePackageFindings(packages).mapKeys { it.key.id }
+
+            packageFindings.patchTimes() shouldBe expectedResult.patchTimes()
         }
-    }
-
-    "retrievePackageFindings() returns the expected result for the given package(s)" {
-        val expectedResult = getAssetFile("retrieve-package-findings-expected-result.json")
-            .readValue<Map<Identifier, AdvisorResult>>()
-        val osv = createOsv()
-        // The following packages have been chosen because they have only one vulnerability with the oldest possible
-        // modified date from the current OSV database, in order to hopefully minimize the flakiness.
-        val packages = setOf(
-            // Package with severity:
-            "NPM::find-my-way:3.0.0",
-            // Package without severity, but with severity inside the databaseSpecific JSON object:
-            "NPM::discord-markdown:2.3.0",
-            // Package without severity:
-            "PyPI::donfig:0.2.0"
-        ).mapTo(mutableSetOf()) {
-            identifierToPackage(it)
-        }
-
-        val packageFindings = osv.retrievePackageFindings(packages).mapKeys { it.key.id }
-
-        packageFindings.patchTimes() shouldBe expectedResult.patchTimes()
     }
 })
 
