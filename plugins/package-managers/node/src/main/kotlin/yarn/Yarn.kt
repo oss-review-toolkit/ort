@@ -111,7 +111,7 @@ open class Yarn(
 
     private val graphBuilder by lazy { DependencyGraphBuilder(YarnDependencyHandler(this)) }
 
-    protected open fun hasLockfile(projectDir: File) = NodePackageManager.YARN.hasLockfile(projectDir)
+    protected fun hasLockfile(projectDir: File) = NodePackageManager.YARN.hasLockfile(projectDir)
 
     /**
      * Load the submodule directories of the project defined in [moduleDir].
@@ -348,7 +348,7 @@ open class Yarn(
         run(workingDir, "install", "--ignore-scripts", "--ignore-engines", "--immutable")
     }
 
-    internal open fun getRemotePackageDetails(workingDir: File, packageName: String): PackageJson? {
+    internal fun getRemotePackageDetails(workingDir: File, packageName: String): PackageJson? {
         yarnInfoCache.read(packageName)?.let { return parsePackageJson(it) }
 
         val process = run(workingDir, "info", "--json", packageName)
