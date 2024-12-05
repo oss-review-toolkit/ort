@@ -37,7 +37,6 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
-import org.ossreviewtoolkit.plugins.packagemanagers.node.parseProject
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
@@ -101,7 +100,7 @@ class Npm(
 
         if (issues.any { it.severity == Severity.ERROR }) {
             val project = runCatching {
-                parseProject(definitionFile, analysisRoot, managerName)
+                parseProject(definitionFile, analysisRoot)
             }.getOrElse {
                 logger.error { "Failed to parse project information: ${it.collectMessages()}" }
                 Project.EMPTY
@@ -110,7 +109,7 @@ class Npm(
             return listOf(ProjectAnalyzerResult(project, emptySet(), issues))
         }
 
-        val project = parseProject(definitionFile, analysisRoot, managerName)
+        val project = parseProject(definitionFile, analysisRoot)
         val projectModuleInfo = listModules(workingDir, issues).undoDeduplication()
 
         val scopeNames = Scope.entries

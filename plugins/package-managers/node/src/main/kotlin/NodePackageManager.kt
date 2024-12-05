@@ -21,12 +21,19 @@ package org.ossreviewtoolkit.plugins.packagemanagers.node
 
 import java.io.File
 
+import org.apache.logging.log4j.kotlin.logger
+
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
+import org.ossreviewtoolkit.analyzer.parseAuthorString
+import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
+import org.ossreviewtoolkit.utils.common.realFile
 
 abstract class NodePackageManager(
     managerName: String,
@@ -36,6 +43,50 @@ abstract class NodePackageManager(
     repoConfig: RepositoryConfiguration
 ) : PackageManager(managerName, managerType.projectType, analysisRoot, analyzerConfig, repoConfig) {
     protected abstract val graphBuilder: DependencyGraphBuilder<*>
+
+    protected fun parseProject(packageJsonFile: File, analysisRoot: File): Project {
+        logger.debug { "Parsing project info from '$packageJsonFile'." }
+
+        val packageJson = parsePackageJson(packageJsonFile)
+
+        val rawName = packageJson.name.orEmpty()
+        val (namespace, name) = splitNamespaceAndName(rawName)
+
+        val projectName = name.ifBlank {
+            getFallbackProjectName(analysisRoot, packageJsonFile).also {
+                logger.warn { "'$packageJsonFile' does not define a name, falling back to '$it'." }
+            }
+        }
+
+        val version = packageJson.version.orEmpty()
+        if (version.isBlank()) {
+            logger.warn { "'$packageJsonFile' does not define a version." }
+        }
+
+        val declaredLicenses = packageJson.licenses.mapLicenses()
+        val authors = packageJson.authors.flatMap { parseAuthorString(it.name) }
+            .mapNotNullTo(mutableSetOf()) { it.name }
+        val description = packageJson.description.orEmpty()
+        val homepageUrl = packageJson.homepage.orEmpty()
+        val projectDir = packageJsonFile.parentFile.realFile()
+        val vcsFromPackage = parseVcsInfo(packageJson)
+
+        return Project(
+            id = Identifier(
+                type = managerName,
+                namespace = namespace,
+                name = projectName,
+                version = version
+            ),
+            definitionFilePath = VersionControlSystem.getPathInfo(packageJsonFile.realFile()).path,
+            authors = authors,
+            declaredLicenses = declaredLicenses,
+            vcs = vcsFromPackage,
+            vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, homepageUrl),
+            description = description,
+            homepageUrl = homepageUrl
+        )
+    }
 
     override fun mapDefinitionFiles(definitionFiles: List<File>) =
         NodePackageManagerDetection(definitionFiles).filterApplicable(managerType)

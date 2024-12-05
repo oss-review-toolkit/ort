@@ -49,7 +49,6 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
-import org.ossreviewtoolkit.plugins.packagemanagers.node.parseProject
 import org.ossreviewtoolkit.plugins.packagemanagers.node.splitNamespaceAndName
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.DiskCache
@@ -173,7 +172,7 @@ open class Yarn(
 
             val project = runCatching {
                 val packageJsonFile = projectDir.resolve(NodePackageManagerType.DEFINITION_FILE)
-                parseProject(packageJsonFile, analysisRoot, managerName)
+                parseProject(packageJsonFile, analysisRoot)
             }.getOrElse {
                 issues += createAndLogIssue(
                     source = managerName,
