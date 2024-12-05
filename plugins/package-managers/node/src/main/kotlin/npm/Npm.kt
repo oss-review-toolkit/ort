@@ -35,8 +35,8 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
-import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
-import org.ossreviewtoolkit.plugins.packagemanagers.node.NpmDetection
+import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerDetection
+import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parseProject
@@ -77,7 +77,7 @@ class Npm(
     }
 
     class Factory : AbstractPackageManagerFactory<Npm>("NPM") {
-        override val globsForDefinitionFiles = listOf(NodePackageManager.DEFINITION_FILE)
+        override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE)
 
         override fun create(
             analysisRoot: File,
@@ -131,10 +131,10 @@ class Npm(
         ).let { listOf(it) }
     }
 
-    private fun hasLockfile(projectDir: File) = NodePackageManager.NPM.hasLockfile(projectDir)
+    private fun hasLockfile(projectDir: File) = NodePackageManagerType.NPM.hasLockfile(projectDir)
 
     override fun mapDefinitionFiles(definitionFiles: List<File>) =
-        NpmDetection(definitionFiles).filterApplicable(NodePackageManager.NPM)
+        NodePackageManagerDetection(definitionFiles).filterApplicable(NodePackageManagerType.NPM)
 
     override fun beforeResolution(definitionFiles: List<File>) {
         // We do not actually depend on any features specific to an NPM version, but we still want to stick to a

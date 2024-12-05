@@ -31,15 +31,15 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 /**
  * A class to detect the package managers used for the give [definitionFiles].
  */
-internal class NpmDetection(private val definitionFiles: Collection<File>) {
+internal class NodePackageManagerDetection(private val definitionFiles: Collection<File>) {
     /**
      * A map of project directories to the set of package managers that are most likely responsible for the project. If
      * the set is empty, none of the package managers is responsible.
      */
-    private val projectDirManagers: Map<File, Set<NodePackageManager>> by lazy {
+    private val projectDirManagers: Map<File, Set<NodePackageManagerType>> by lazy {
         definitionFiles.associate { file ->
             val projectDir = file.parentFile
-            projectDir to NodePackageManager.forDirectory(projectDir)
+            projectDir to NodePackageManagerType.forDirectory(projectDir)
         }
     }
 
@@ -50,7 +50,7 @@ internal class NpmDetection(private val definitionFiles: Collection<File>) {
     private val workspacePatterns: Map<File, List<PathMatcher>> by lazy {
         definitionFiles.associate { file ->
             val projectDir = file.parentFile
-            val patterns = NodePackageManager.entries.mapNotNull { it.getWorkspaces(projectDir) }.flatten()
+            val patterns = NodePackageManagerType.entries.mapNotNull { it.getWorkspaces(projectDir) }.flatten()
             projectDir to patterns.map {
                 FileSystems.getDefault().getPathMatcher("glob:${it.removeSuffix("/")}")
             }
@@ -70,7 +70,7 @@ internal class NpmDetection(private val definitionFiles: Collection<File>) {
     /**
      * Return those [definitionFiles] that define root projects for the given [manager].
      */
-    fun filterApplicable(manager: NodePackageManager): List<File> =
+    fun filterApplicable(manager: NodePackageManagerType): List<File> =
         definitionFiles.filter { file ->
             val projectDir = file.parentFile
 
@@ -103,17 +103,17 @@ internal class NpmDetection(private val definitionFiles: Collection<File>) {
                 "Any of $managersFromFiles could be the package manager for '$file'. Assuming it is an NPM project."
             }
 
-            manager == NodePackageManager.NPM
+            manager == NodePackageManagerType.NPM
         }
 }
 
 /**
  * An enum of all supported Node package managers.
  */
-internal enum class NodePackageManager(
+internal enum class NodePackageManagerType(
     val lockfileName: String,
     val markerFileName: String? = null,
-    val workspaceFileName: String = NodePackageManager.DEFINITION_FILE
+    val workspaceFileName: String = NodePackageManagerType.DEFINITION_FILE
 ) {
     NPM(
         lockfileName = "package-lock.json", // See https://docs.npmjs.com/cli/v7/configuring-npm/package-lock-json.
@@ -186,8 +186,8 @@ internal enum class NodePackageManager(
         /**
          * Return the set of package managers that are most likely responsible for the given [projectDir].
          */
-        fun forDirectory(projectDir: File): Set<NodePackageManager> {
-            val scores = NodePackageManager.entries.associateWith {
+        fun forDirectory(projectDir: File): Set<NodePackageManagerType> {
+            val scores = NodePackageManagerType.entries.associateWith {
                 it.getFileScore(projectDir)
             }
 

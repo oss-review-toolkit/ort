@@ -27,7 +27,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.plugins.packagemanagers.node.GetPackageDetailsFun
-import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
+import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackage
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
@@ -80,7 +80,7 @@ internal class PnpmDependencyHandler(
 
 private val Dependency.workingDir: File get() = File(path)
 
-private val Dependency.packageJsonFile: File get() = workingDir.resolve(NodePackageManager.DEFINITION_FILE)
+private val Dependency.packageJsonFile: File get() = workingDir.resolve(NodePackageManagerType.DEFINITION_FILE)
 
 /**
  * pnpm install skips optional dependencies which are not compatible with the environment. In this case the path
