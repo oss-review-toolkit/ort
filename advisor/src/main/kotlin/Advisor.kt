@@ -89,7 +89,7 @@ class Advisor(
                                 "vulnerabilities via ${provider.descriptor.displayName}. "
                         }
 
-                        providerResults.keys.takeIf { it.isNotEmpty() }?.let { pkgs ->
+                        providerResults.keys.takeIf { it.isNotEmpty() }?.also { pkgs ->
                             logger.debug {
                                 "Affected packages:\n\n${pkgs.joinToString("\n") { it.id.toCoordinates() }}\n"
                             }
