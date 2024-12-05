@@ -20,30 +20,20 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.node
 
 import java.io.File
-import java.lang.invoke.MethodHandles
 
-import org.apache.logging.log4j.kotlin.loggerOf
-
-import org.ossreviewtoolkit.analyzer.PackageManager.Companion.getFallbackProjectName
 import org.ossreviewtoolkit.analyzer.PackageManager.Companion.processPackageVcs
-import org.ossreviewtoolkit.analyzer.PackageManager.Companion.processProjectVcs
 import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.downloader.VcsHost
-import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.utils.common.realFile
 import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 
 internal const val NON_EXISTING_SEMVER = "0.0.0"
-
-private val logger = loggerOf(MethodHandles.lookup().lookupClass())
 
 /**
  * Expand an NPM shortcut [url] to a regular URL as used for dependencies, see
@@ -226,49 +216,6 @@ internal fun parsePackage(packageJsonFile: File, getPackageDetails: GetPackageDe
     }
 
     return module
-}
-
-internal fun parseProject(packageJsonFile: File, analysisRoot: File, managerName: String): Project {
-    logger.debug { "Parsing project info from '$packageJsonFile'." }
-
-    val packageJson = parsePackageJson(packageJsonFile)
-
-    val rawName = packageJson.name.orEmpty()
-    val (namespace, name) = splitNamespaceAndName(rawName)
-
-    val projectName = name.ifBlank {
-        getFallbackProjectName(analysisRoot, packageJsonFile).also {
-            logger.warn { "'$packageJsonFile' does not define a name, falling back to '$it'." }
-        }
-    }
-
-    val version = packageJson.version.orEmpty()
-    if (version.isBlank()) {
-        logger.warn { "'$packageJsonFile' does not define a version." }
-    }
-
-    val declaredLicenses = packageJson.licenses.mapLicenses()
-    val authors = packageJson.authors.flatMap { parseAuthorString(it.name) }.mapNotNullTo(mutableSetOf()) { it.name }
-    val description = packageJson.description.orEmpty()
-    val homepageUrl = packageJson.homepage.orEmpty()
-    val projectDir = packageJsonFile.parentFile.realFile()
-    val vcsFromPackage = parseVcsInfo(packageJson)
-
-    return Project(
-        id = Identifier(
-            type = managerName,
-            namespace = namespace,
-            name = projectName,
-            version = version
-        ),
-        definitionFilePath = VersionControlSystem.getPathInfo(packageJsonFile.realFile()).path,
-        authors = authors,
-        declaredLicenses = declaredLicenses,
-        vcs = vcsFromPackage,
-        vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, homepageUrl),
-        description = description,
-        homepageUrl = homepageUrl
-    )
 }
 
 /**
