@@ -27,7 +27,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.plugins.packagemanagers.node.GetPackageDetailsFun
-import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
+import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackage
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
@@ -75,7 +75,7 @@ private val ModuleInfo.isProject: Boolean get() = resolved == null
 private val ModuleInfo.packageJsonFile: File get() =
     File(
         checkNotNull(path) {
-            "The path to '${NodePackageManager.DEFINITION_FILE}' is null in $this."
+            "The path to '${NodePackageManagerType.DEFINITION_FILE}' is null in $this."
         },
-        NodePackageManager.DEFINITION_FILE
+        NodePackageManagerType.DEFINITION_FILE
     )

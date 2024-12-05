@@ -30,17 +30,17 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.analyzer.PackageManager
-import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager.NPM
-import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager.PNPM
-import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager.YARN
-import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager.YARN2
+import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType.NPM
+import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType.PNPM
+import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType.YARN
+import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType.YARN2
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.test.getAssetFile
 
 class NpmDetectionTest : WordSpec({
     "All Node package manager detections" should {
         "ignore empty lockfiles" {
-            NodePackageManager.entries.forAll {
+            NodePackageManagerType.entries.forAll {
                 val lockfile = tempdir().resolve(it.lockfileName).apply {
                     writeText("")
                 }
@@ -50,7 +50,7 @@ class NpmDetectionTest : WordSpec({
         }
 
         "ignore empty workspace files" {
-            NodePackageManager.entries.forAll {
+            NodePackageManagerType.entries.forAll {
                 val workspaceFile = tempdir().resolve(it.workspaceFileName).apply {
                     writeText("")
                 }
@@ -66,7 +66,8 @@ class NpmDetectionTest : WordSpec({
                 resolve("package.json").writeText("{}")
             }
 
-            NodePackageManager.forDirectory(projectDir) shouldContainExactlyInAnyOrder NodePackageManager.entries
+            NodePackageManagerType.forDirectory(projectDir) shouldContainExactlyInAnyOrder
+                NodePackageManagerType.entries
         }
 
         "return only those managers whose lockfiles are present" {
@@ -76,7 +77,7 @@ class NpmDetectionTest : WordSpec({
                 resolve(PNPM.lockfileName).writeText("#")
             }
 
-            NodePackageManager.forDirectory(projectDir).shouldContainExactlyInAnyOrder(NPM, PNPM)
+            NodePackageManagerType.forDirectory(projectDir).shouldContainExactlyInAnyOrder(NPM, PNPM)
         }
 
         "return only NPM if distinguished by lockfile" {
@@ -85,7 +86,7 @@ class NpmDetectionTest : WordSpec({
                 resolve(NPM.lockfileName).writeText("{}")
             }
 
-            NodePackageManager.forDirectory(projectDir).shouldContainExactlyInAnyOrder(NPM)
+            NodePackageManagerType.forDirectory(projectDir).shouldContainExactlyInAnyOrder(NPM)
         }
 
         "return only NPM if distinguished by other file" {
@@ -94,7 +95,7 @@ class NpmDetectionTest : WordSpec({
                 NPM.markerFileName?.also { resolve(it).writeText("{}") }
             }
 
-            NodePackageManager.forDirectory(projectDir).shouldContainExactlyInAnyOrder(NPM)
+            NodePackageManagerType.forDirectory(projectDir).shouldContainExactlyInAnyOrder(NPM)
         }
 
         "return only PNPM if distinguished by lockfile" {
@@ -103,7 +104,7 @@ class NpmDetectionTest : WordSpec({
                 resolve(PNPM.lockfileName).writeText("#")
             }
 
-            NodePackageManager.forDirectory(projectDir).shouldContainExactlyInAnyOrder(PNPM)
+            NodePackageManagerType.forDirectory(projectDir).shouldContainExactlyInAnyOrder(PNPM)
         }
 
         "return only PNPM if distinguished by workspace file" {
@@ -112,7 +113,7 @@ class NpmDetectionTest : WordSpec({
                 resolve(PNPM.workspaceFileName).writeText("#")
             }
 
-            NodePackageManager.forDirectory(projectDir).shouldContainExactlyInAnyOrder(PNPM)
+            NodePackageManagerType.forDirectory(projectDir).shouldContainExactlyInAnyOrder(PNPM)
         }
 
         "return only YARN if distinguished by lockfile" {
@@ -121,7 +122,7 @@ class NpmDetectionTest : WordSpec({
                 resolve(YARN.lockfileName).writeText(YARN_LOCK_FILE_HEADER)
             }
 
-            NodePackageManager.forDirectory(projectDir).shouldContainExactlyInAnyOrder(YARN)
+            NodePackageManagerType.forDirectory(projectDir).shouldContainExactlyInAnyOrder(YARN)
         }
 
         "return only YARN2 if distinguished by lockfile" {
@@ -130,7 +131,7 @@ class NpmDetectionTest : WordSpec({
                 resolve(YARN2.lockfileName).writeText(YARN2_LOCK_FILE_HEADER)
             }
 
-            NodePackageManager.forDirectory(projectDir).shouldContainExactlyInAnyOrder(YARN2)
+            NodePackageManagerType.forDirectory(projectDir).shouldContainExactlyInAnyOrder(YARN2)
         }
     }
 
@@ -156,7 +157,7 @@ class NpmDetectionTest : WordSpec({
             val projectDir = getAssetFile("projects/synthetic")
             val definitionFiles = PackageManager.findManagedFiles(projectDir).values.flatten().toSet()
 
-            val filteredFiles = NpmDetection(definitionFiles).filterApplicable(NPM)
+            val filteredFiles = NodePackageManagerDetection(definitionFiles).filterApplicable(NPM)
 
             filteredFiles.map { it.relativeTo(projectDir).invariantSeparatorsPath }.shouldContainExactlyInAnyOrder(
                 "npm/no-lockfile/package.json",
@@ -193,7 +194,7 @@ class NpmDetectionTest : WordSpec({
             val projectDir = getAssetFile("projects/synthetic")
             val definitionFiles = PackageManager.findManagedFiles(projectDir).values.flatten().toSet()
 
-            val filteredFiles = NpmDetection(definitionFiles).filterApplicable(PNPM)
+            val filteredFiles = NodePackageManagerDetection(definitionFiles).filterApplicable(PNPM)
 
             filteredFiles.map { it.relativeTo(projectDir).invariantSeparatorsPath }.shouldContainExactlyInAnyOrder(
                 "pnpm/babel/package.json",
@@ -225,7 +226,7 @@ class NpmDetectionTest : WordSpec({
             val projectDir = getAssetFile("projects/synthetic")
             val definitionFiles = PackageManager.findManagedFiles(projectDir).values.flatten().toSet()
 
-            val filteredFiles = NpmDetection(definitionFiles).filterApplicable(YARN)
+            val filteredFiles = NodePackageManagerDetection(definitionFiles).filterApplicable(YARN)
 
             filteredFiles.map { it.relativeTo(projectDir).invariantSeparatorsPath }.shouldContainExactlyInAnyOrder(
                 "yarn/babel/package.json",
@@ -256,7 +257,7 @@ class NpmDetectionTest : WordSpec({
             val projectDir = getAssetFile("projects/synthetic")
             val definitionFiles = PackageManager.findManagedFiles(projectDir).values.flatten().toSet()
 
-            val filteredFiles = NpmDetection(definitionFiles).filterApplicable(YARN2)
+            val filteredFiles = NodePackageManagerDetection(definitionFiles).filterApplicable(YARN2)
 
             filteredFiles.map { it.relativeTo(projectDir).invariantSeparatorsPath }.shouldContainExactlyInAnyOrder(
                 "yarn2/project-with-lockfile/package.json",

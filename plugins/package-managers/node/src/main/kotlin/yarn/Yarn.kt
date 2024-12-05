@@ -47,8 +47,8 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.readTree
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
-import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
-import org.ossreviewtoolkit.plugins.packagemanagers.node.NpmDetection
+import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerDetection
+import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parseProject
@@ -100,7 +100,7 @@ open class Yarn(
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, "Yarn", analysisRoot, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Yarn>("Yarn") {
-        override val globsForDefinitionFiles = listOf(NodePackageManager.DEFINITION_FILE)
+        override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE)
 
         override fun create(
             analysisRoot: File,
@@ -116,7 +116,7 @@ open class Yarn(
 
     private val graphBuilder by lazy { DependencyGraphBuilder(YarnDependencyHandler(this)) }
 
-    protected fun hasLockfile(projectDir: File) = NodePackageManager.YARN.hasLockfile(projectDir)
+    protected fun hasLockfile(projectDir: File) = NodePackageManagerType.YARN.hasLockfile(projectDir)
 
     /**
      * Load the submodule directories of the project defined in [moduleDir].
@@ -137,7 +137,7 @@ open class Yarn(
     }
 
     override fun mapDefinitionFiles(definitionFiles: List<File>) =
-        NpmDetection(definitionFiles).filterApplicable(NodePackageManager.YARN)
+        NodePackageManagerDetection(definitionFiles).filterApplicable(NodePackageManagerType.YARN)
 
     override fun beforeResolution(definitionFiles: List<File>) =
         // We do not actually depend on any features specific to a Yarn version, but we still want to stick to a
@@ -179,7 +179,7 @@ open class Yarn(
             val issues = mutableListOf<Issue>()
 
             val project = runCatching {
-                val packageJsonFile = projectDir.resolve(NodePackageManager.DEFINITION_FILE)
+                val packageJsonFile = projectDir.resolve(NodePackageManagerType.DEFINITION_FILE)
                 parseProject(packageJsonFile, analysisRoot, managerName)
             }.getOrElse {
                 issues += createAndLogIssue(
@@ -302,7 +302,7 @@ open class Yarn(
 
     private fun parsePackageJson(moduleDir: File, scopes: Set<String>): RawModuleInfo =
         rawModuleInfoCache.getOrPut(moduleDir to scopes) {
-            val packageJsonFile = moduleDir.resolve(NodePackageManager.DEFINITION_FILE)
+            val packageJsonFile = moduleDir.resolve(NodePackageManagerType.DEFINITION_FILE)
             logger.debug { "Parsing module info from '${packageJsonFile.absolutePath}'." }
             val json = packageJsonFile.readTree()
 

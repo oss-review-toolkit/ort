@@ -53,8 +53,8 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.model.utils.DependencyHandler
-import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
-import org.ossreviewtoolkit.plugins.packagemanagers.node.NpmDetection
+import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerDetection
+import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.fixDownloadUrl
 import org.ossreviewtoolkit.plugins.packagemanagers.node.mapLicenses
@@ -122,7 +122,7 @@ class Yarn2(
     }
 
     class Factory : AbstractPackageManagerFactory<Yarn2>("Yarn2") {
-        override val globsForDefinitionFiles = listOf(NodePackageManager.DEFINITION_FILE)
+        override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE)
 
         override fun create(
             analysisRoot: File,
@@ -180,7 +180,7 @@ class Yarn2(
         }
 
     override fun mapDefinitionFiles(definitionFiles: List<File>) =
-        NpmDetection(definitionFiles).filterApplicable(NodePackageManager.YARN2)
+        NodePackageManagerDetection(definitionFiles).filterApplicable(NodePackageManagerType.YARN2)
 
     override fun beforeResolution(definitionFiles: List<File>) =
         // We depend on a version >= 2, so we check the version for safety.
@@ -709,7 +709,7 @@ private fun getYarnExecutable(workingDir: File): File {
  */
 private fun isCorepackEnabledInManifest(workingDir: File): Boolean =
     runCatching {
-        val packageJson = parsePackageJson(workingDir.resolve(NodePackageManager.DEFINITION_FILE))
+        val packageJson = parsePackageJson(workingDir.resolve(NodePackageManagerType.DEFINITION_FILE))
         !packageJson.packageManager.isNullOrEmpty()
     }.getOrDefault(false)
 
