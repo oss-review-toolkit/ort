@@ -20,13 +20,13 @@
 
 ort:
   allowedProcessEnvironmentVariableNames:
-    - PASSPORT
-    - USER_HOME
+  - PASSPORT
+  - USER_HOME
   deniedProcessEnvironmentVariablesSubstrings:
-    - PASS
-    - SECRET
-    - TOKEN
-    - USER
+  - PASS
+  - SECRET
+  - TOKEN
+  - USER
 
   enableRepositoryPackageConfigurations: true
   enableRepositoryPackageCurations: true
