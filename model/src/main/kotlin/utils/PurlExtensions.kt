@@ -44,8 +44,8 @@ fun Identifier.getPurlType() =
         "composer" -> PurlType.COMPOSER
         "conan" -> PurlType.CONAN
         "crate" -> PurlType.CARGO
-        "go" -> PurlType.GOLANG
         "gem" -> PurlType.GEM
+        "go" -> PurlType.GOLANG
         "hackage" -> PurlType.HACKAGE
         "maven" -> PurlType.MAVEN
         "npm" -> PurlType.NPM
