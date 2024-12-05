@@ -110,7 +110,7 @@ internal class NodePackageManagerDetection(private val definitionFiles: Collecti
 /**
  * An enum of all supported Node package managers.
  */
-internal enum class NodePackageManagerType(
+enum class NodePackageManagerType(
     val projectType: String,
     val lockfileName: String,
     val markerFileName: String? = null,

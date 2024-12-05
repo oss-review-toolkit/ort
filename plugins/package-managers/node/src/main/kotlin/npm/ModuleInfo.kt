@@ -31,7 +31,7 @@ internal fun parseNpmList(json: String): ModuleInfo = JSON.decodeFromString(json
  * Module information for installed NPM packages.
  */
 @Serializable
-internal data class ModuleInfo(
+data class ModuleInfo(
     /** The name of the package. */
     val name: String? = null,
 

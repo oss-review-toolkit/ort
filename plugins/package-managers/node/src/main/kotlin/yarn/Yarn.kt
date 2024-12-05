@@ -36,8 +36,6 @@ import org.apache.logging.log4j.kotlin.logger
 import org.apache.logging.log4j.kotlin.loggerOf
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
-import org.ossreviewtoolkit.analyzer.PackageManager
-import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Project
@@ -47,7 +45,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.readTree
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
-import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerDetection
+import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
@@ -98,7 +96,7 @@ open class Yarn(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Yarn", analysisRoot, analyzerConfig, repoConfig) {
+) : NodePackageManager(name, NodePackageManagerType.YARN, analysisRoot, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Yarn>("Yarn") {
         override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE)
 
@@ -114,9 +112,7 @@ open class Yarn(
 
     private val rawModuleInfoCache = mutableMapOf<Pair<File, Set<String>>, RawModuleInfo>()
 
-    private val graphBuilder by lazy { DependencyGraphBuilder(YarnDependencyHandler(this)) }
-
-    protected fun hasLockfile(projectDir: File) = NodePackageManagerType.YARN.hasLockfile(projectDir)
+    override val graphBuilder by lazy { DependencyGraphBuilder(YarnDependencyHandler(this)) }
 
     /**
      * Load the submodule directories of the project defined in [moduleDir].
@@ -135,9 +131,6 @@ open class Yarn(
             }
         }
     }
-
-    override fun mapDefinitionFiles(definitionFiles: List<File>) =
-        NodePackageManagerDetection(definitionFiles).filterApplicable(NodePackageManagerType.YARN)
 
     override fun beforeResolution(definitionFiles: List<File>) =
         // We do not actually depend on any features specific to a Yarn version, but we still want to stick to a
@@ -341,11 +334,8 @@ open class Yarn(
             loadWorkspaceSubmodules(moduleDir)
         }
 
-    override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =
-        PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
-
     private fun installDependencies(workingDir: File) {
-        requireLockfile(workingDir) { hasLockfile(workingDir) }
+        requireLockfile(workingDir) { managerType.hasLockfile(workingDir) }
 
         YarnCommand.run(workingDir, "install", "--ignore-scripts", "--ignore-engines", "--immutable").requireSuccess()
     }
