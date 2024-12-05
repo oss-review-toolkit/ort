@@ -30,7 +30,7 @@ project:
       dependencies:
       - id: "PyPI::isodate:0.7.0"
       - id: "PyPI::pyparsing:2.4.7"
-      - id: "PyPI::six:1.16.0"
+      - id: "PyPI::six:1.17.0"
 packages:
 - id: "PyPI::isodate:0.7.0"
   purl: "pkg:pypi/isodate@0.7.0"
@@ -161,8 +161,8 @@ packages:
     url: "https://github.com/RDFLib/rdflib.git"
     revision: ""
     path: ""
-- id: "PyPI::six:1.16.0"
-  purl: "pkg:pypi/six@1.16.0"
+- id: "PyPI::six:1.17.0"
+  purl: "pkg:pypi/six@1.17.0"
   authors:
   - "Benjamin Peterson <benjamin@python.org>"
   declared_licenses:
@@ -175,14 +175,14 @@ packages:
   description: "Python 2 and 3 compatibility utilities"
   homepage_url: "https://github.com/benjaminp/six"
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/d9/5a/e7c31adbe875f2abbb91bd84cf2dc52d792b5a01506781dbcf25c91daf11/six-1.16.0-py2.py3-none-any.whl"
+    url: "https://files.pythonhosted.org/packages/b7/ce/149a00dd41f10bc29e5921b496af8b574d8413afcd5e30dfa0ed46c2cc5e/six-1.17.0-py2.py3-none-any.whl"
     hash:
-      value: "8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"
+      value: "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274"
       algorithm: "SHA-256"
   source_artifact:
-    url: "https://files.pythonhosted.org/packages/71/39/171f1c67cd00715f190ba0b100d606d440a28c93c7714febeca8b79af85e/six-1.16.0.tar.gz"
+    url: "https://files.pythonhosted.org/packages/94/e7/b2c673351809dca68a0e064b6af791aa332cf192da575fd474ed7d6f16a2/six-1.17.0.tar.gz"
     hash:
-      value: "1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"
+      value: "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
       algorithm: "SHA-256"
   vcs:
     type: ""
