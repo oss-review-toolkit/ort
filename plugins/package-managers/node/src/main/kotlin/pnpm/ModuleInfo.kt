@@ -27,7 +27,7 @@ private val JSON = Json { ignoreUnknownKeys = true }
 internal fun parsePnpmList(json: String): List<ModuleInfo> = JSON.decodeFromString(json)
 
 @Serializable
-internal data class ModuleInfo(
+data class ModuleInfo(
     val name: String? = null,
     val version: String? = null,
     val path: String,

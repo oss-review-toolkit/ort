@@ -32,8 +32,6 @@ import kotlinx.coroutines.awaitAll
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
-import org.ossreviewtoolkit.analyzer.PackageManager
-import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -53,7 +51,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.model.utils.DependencyHandler
-import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerDetection
+import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.fixDownloadUrl
@@ -108,7 +106,7 @@ class Yarn2(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Yarn2", analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : NodePackageManager(name, NodePackageManagerType.YARN2, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
     companion object {
         /**
          * The name of the option to disable HTTPS server certificate verification.
@@ -143,9 +141,6 @@ class Yarn2(
     private val disableRegistryCertificateVerification =
         options[OPTION_DISABLE_REGISTRY_CERTIFICATE_VERIFICATION].toBoolean()
 
-    // A builder to build the dependency graph of the project.
-    private val graphBuilder = DependencyGraphBuilder(Yarn2DependencyHandler())
-
     // All the packages parsed by this package manager, mapped by their ids.
     private val allPackages = mutableMapOf<Identifier, Package>()
 
@@ -154,6 +149,9 @@ class Yarn2(
 
     // The issues that have been found when resolving the dependencies.
     private val issues = mutableListOf<Issue>()
+
+    // A builder to build the dependency graph of the project.
+    override val graphBuilder = DependencyGraphBuilder(Yarn2DependencyHandler())
 
     override fun command(workingDir: File?): String {
         if (workingDir == null) return ""
@@ -178,9 +176,6 @@ class Yarn2(
         } else {
             isCorepackEnabledInManifest(workingDir)
         }
-
-    override fun mapDefinitionFiles(definitionFiles: List<File>) =
-        NodePackageManagerDetection(definitionFiles).filterApplicable(NodePackageManagerType.YARN2)
 
     override fun beforeResolution(definitionFiles: List<File>) =
         // We depend on a version >= 2, so we check the version for safety.
@@ -591,15 +586,12 @@ class Yarn2(
                 }
             }
         }.toList()
-
-    override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =
-        PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
 }
 
 /**
  * A data class storing information about a specific Yarn 2+ module and its dependencies.
  */
-private data class YarnModuleInfo(
+data class YarnModuleInfo(
     /** The identifier for the represented module. */
     val id: Identifier,
 
