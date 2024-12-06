@@ -747,7 +747,7 @@ class Pub(
         } else {
             // The "get" command creates a "pubspec.lock" file (if not yet present) except for projects without any
             // dependencies, see https://dart.dev/tools/pub/cmd/pub-get.
-            run(workingDir, "get")
+            run(workingDir, "get").requireSuccess()
         }
     }
 

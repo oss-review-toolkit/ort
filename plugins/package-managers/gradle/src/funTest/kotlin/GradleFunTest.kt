@@ -61,7 +61,7 @@ class GradleFunTest : StringSpec() {
 
     override suspend fun afterSpec(spec: Spec) {
         // Reset the Gradle wrapper files to the committed state.
-        GitCommand.run(projectDir, "checkout", "gradle/", "gradlew*")
+        GitCommand.run(projectDir, "checkout", "gradle/", "gradlew*").requireSuccess()
     }
 
     init {

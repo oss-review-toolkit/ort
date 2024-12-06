@@ -211,7 +211,7 @@ class Yarn2(
     }
 
     private fun installDependencies(workingDir: File) {
-        run("install", workingDir = workingDir)
+        run("install", workingDir = workingDir).requireSuccess()
     }
 
     private fun getPackageInfos(workingDir: File): List<PackageInfo> {
@@ -223,7 +223,7 @@ class Yarn2(
             "--json",
             workingDir = workingDir,
             environment = mapOf("YARN_NODE_LINKER" to "pnp")
-        )
+        ).requireSuccess()
 
         return parsePackageInfos(process.stdout)
     }
@@ -279,7 +279,8 @@ class Yarn2(
                         environment = mapOf("NODE_TLS_REJECT_UNAUTHORIZED" to "0")
                             .takeIf { disableRegistryCertificateVerification }
                             .orEmpty()
-                    )
+                    ).requireSuccess()
+
                     val packageJsons = parsePackageJsons(process.stdout)
 
                     logger.info { "Chunk #$index packages details have been fetched." }

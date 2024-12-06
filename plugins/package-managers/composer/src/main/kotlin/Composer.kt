@@ -254,7 +254,7 @@ class Composer(
             "--no-install".takeIf { composerVersion.major >= 2 }
         )
 
-        run(workingDir, *args.toTypedArray())
+        run(workingDir, *args.toTypedArray()).requireSuccess()
 
         return lockfile
     }

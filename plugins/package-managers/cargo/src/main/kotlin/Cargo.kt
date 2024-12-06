@@ -129,7 +129,7 @@ class Cargo(
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
-        val metadataProcess = run(workingDir, "metadata", "--format-version=1")
+        val metadataProcess = run(workingDir, "metadata", "--format-version=1").requireSuccess()
         val metadata = json.decodeFromString<CargoMetadata>(metadataProcess.stdout)
 
         val projectId = requireNotNull(metadata.resolve.root) {

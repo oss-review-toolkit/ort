@@ -90,7 +90,7 @@ internal object PythonInspector : CommandLineTool {
         }
 
         return try {
-            run(workingDir, *commandLineOptions.toTypedArray())
+            run(workingDir, *commandLineOptions.toTypedArray()).requireSuccess()
             outputFile.inputStream().use { json.decodeFromStream(it) }
         } finally {
             outputFile.parentFile.safeDeleteRecursively()

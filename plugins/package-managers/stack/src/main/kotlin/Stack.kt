@@ -111,7 +111,7 @@ class Stack(
         // Delete any left-overs from interrupted stack runs.
         workingDir.resolve(".stack-work").safeDeleteRecursively()
 
-        return run(workingDir, *command)
+        return run(workingDir, *command).requireSuccess()
     }
 
     private fun listDependencies(workingDir: File, scope: String): List<Dependency> {

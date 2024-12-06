@@ -396,7 +396,8 @@ class Bazel(
             "--disk_cache=",
             "--lockfile_mode=update",
             workingDir = projectDir
-        )
+        ).requireSuccess()
+
         val mainModule = process.stdout.parseBazelModule()
         val (mainDeps, devDeps) = mainModule.dependencies.map { module ->
             val name = module.name ?: module.key.substringBefore("@", "")

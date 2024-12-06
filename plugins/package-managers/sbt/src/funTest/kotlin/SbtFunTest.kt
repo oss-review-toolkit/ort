@@ -37,7 +37,7 @@ class SbtFunTest : StringSpec({
         val expectedResult = matchExpectedResult(expectedResultFile, definitionFile)
 
         // Clean any previously generated POM files / target directories.
-        GitCommand.run(definitionFile.parentFile, "clean", "-fd")
+        GitCommand.run(definitionFile.parentFile, "clean", "-fd").requireSuccess()
 
         val ortResult = analyze(
             definitionFile.parentFile,
@@ -56,7 +56,7 @@ class SbtFunTest : StringSpec({
         val expectedResult = matchExpectedResult(expectedResultFile, definitionFile)
 
         // Clean any previously generated POM files / target directories.
-        GitCommand.run(definitionFile.parentFile, "clean", "-fd")
+        GitCommand.run(definitionFile.parentFile, "clean", "-fd").requireSuccess()
 
         val ortResult = analyze(
             definitionFile.parentFile,

@@ -71,7 +71,8 @@ class Mercurial : VersionControlSystem(MercurialCommand) {
             extensionsList += MERCURIAL_SPARSE_EXTENSION
         }
 
-        MercurialCommand.run(targetDir, "init")
+        MercurialCommand.run(targetDir, "init").requireSuccess()
+
         targetDir.resolve(".hg/hgrc").writeText(
             """
                 [paths]
@@ -88,6 +89,7 @@ class Mercurial : VersionControlSystem(MercurialCommand) {
             val globPatterns = getSparseCheckoutGlobPatterns() + "${vcs.path}/**"
 
             MercurialCommand.run(targetDir, "debugsparse", *globPatterns.flatMap { listOf("-I", it) }.toTypedArray())
+                .requireSuccess()
         }
 
         return getWorkingTree(targetDir)
@@ -98,7 +100,7 @@ class Mercurial : VersionControlSystem(MercurialCommand) {
             // To safe network bandwidth, only pull exactly the revision we want. Do not use "-u" to update the
             // working tree just yet, as Mercurial would only update if new changesets were pulled. But that might
             // not be the case if the requested revision is already available locally.
-            MercurialCommand.run(workingTree.getRootPath(), "pull", "-r", revision)
+            MercurialCommand.run(workingTree.getRootPath(), "pull", "-r", revision).requireSuccess()
 
             // TODO: Implement updating of subrepositories.
 
