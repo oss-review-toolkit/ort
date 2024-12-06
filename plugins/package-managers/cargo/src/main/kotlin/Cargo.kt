@@ -55,6 +55,15 @@ private const val DEFAULT_KIND_NAME = "normal"
 private const val DEV_KIND_NAME = "dev"
 private const val BUILD_KIND_NAME = "build"
 
+internal object CargoCommand : CommandLineTool {
+    override fun command(workingDir: File?) = "cargo"
+
+    override fun transformVersion(output: String) =
+        // The version string can be something like:
+        // cargo 1.35.0 (6f3e9c367 2019-04-04)
+        output.removePrefix("cargo ").substringBefore(' ')
+}
+
 /**
  * The [Cargo](https://doc.rust-lang.org/cargo/) package manager for Rust.
  */
@@ -63,7 +72,7 @@ class Cargo(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Cargo", analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, "Cargo", analysisRoot, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Cargo>("Cargo") {
         override val globsForDefinitionFiles = listOf("Cargo.toml")
 
@@ -73,13 +82,6 @@ class Cargo(
             repoConfig: RepositoryConfiguration
         ) = Cargo(type, analysisRoot, analyzerConfig, repoConfig)
     }
-
-    override fun command(workingDir: File?) = "cargo"
-
-    override fun transformVersion(output: String) =
-        // The version string can be something like:
-        // cargo 1.35.0 (6f3e9c367 2019-04-04)
-        output.removePrefix("cargo ").substringBefore(' ')
 
     /**
      * Cargo.lock is located next to Cargo.toml or in one of the parent directories. The latter is the case when the
@@ -129,7 +131,7 @@ class Cargo(
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
-        val metadataProcess = run(workingDir, "metadata", "--format-version=1").requireSuccess()
+        val metadataProcess = CargoCommand.run(workingDir, "metadata", "--format-version=1").requireSuccess()
         val metadata = json.decodeFromString<CargoMetadata>(metadataProcess.stdout)
 
         val projectId = requireNotNull(metadata.resolve.root) {

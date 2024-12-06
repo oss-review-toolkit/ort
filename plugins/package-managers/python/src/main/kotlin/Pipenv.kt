@@ -29,7 +29,6 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.common.CommandLineTool
-import org.ossreviewtoolkit.utils.common.ProcessCapture
 
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
@@ -40,12 +39,23 @@ import org.semver4j.Semver
  */
 private val REQUIREMENTS_COMMAND_VERSION = Semver("2022.4.8")
 
+internal object PipenvCommand : CommandLineTool {
+    override fun command(workingDir: File?) = "pipenv"
+
+    override fun transformVersion(output: String) =
+        // The version string can be something like:
+        // pipenv, version 2018.11.26
+        output.removePrefix("pipenv, version ")
+
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create("[2018.10.9,)")
+}
+
 class Pipenv(
     name: String,
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Pipenv", analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, "Pipenv", analysisRoot, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Pipenv>("Pipenv") {
         override val globsForDefinitionFiles = listOf("Pipfile.lock")
 
@@ -56,16 +66,7 @@ class Pipenv(
         ) = Pipenv(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
-    override fun command(workingDir: File?) = "pipenv"
-
-    override fun transformVersion(output: String) =
-        // The version string can be something like:
-        // pipenv, version 2018.11.26
-        output.removePrefix("pipenv, version ")
-
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create("[2018.10.9,)")
-
-    override fun beforeResolution(definitionFiles: List<File>) = checkVersion()
+    override fun beforeResolution(definitionFiles: List<File>) = PipenvCommand.checkVersion()
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         // For an overview, dependency resolution involves the following steps:
@@ -77,10 +78,10 @@ class Pipenv(
 
         logger.info { "Generating '${requirementsFile.name}' file in '$workingDir' directory..." }
 
-        val requirements = if (Semver(getVersion()) >= REQUIREMENTS_COMMAND_VERSION) {
-            ProcessCapture(workingDir, command(), "requirements")
+        val requirements = if (Semver(PipenvCommand.getVersion()) >= REQUIREMENTS_COMMAND_VERSION) {
+            PipenvCommand.run(workingDir, "requirements")
         } else {
-            ProcessCapture(workingDir, command(), "lock", "--requirements")
+            PipenvCommand.run(workingDir, "lock", "--requirements")
         }.requireSuccess().stdout
 
         requirementsFile.writeText(requirements)

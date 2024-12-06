@@ -51,6 +51,12 @@ private const val PACKAGE_TYPE = "Swift"
 
 private const val DEPENDENCIES_SCOPE_NAME = "dependencies"
 
+internal object SwiftCommand : CommandLineTool {
+    override fun command(workingDir: File?) = if (Os.isWindows) "swift.exe" else "swift"
+
+    override fun transformVersion(output: String) = output.substringAfter("version ").substringBefore(" (")
+}
+
 /**
  * The [Swift Package Manager](https://github.com/apple/swift-package-manager).
  */
@@ -59,7 +65,7 @@ class SwiftPm(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "SwiftPM", analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, "SwiftPM", analysisRoot, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<SwiftPm>("SwiftPM") {
         override val globsForDefinitionFiles = listOf(PACKAGE_SWIFT_NAME, PACKAGE_RESOLVED_NAME)
 
@@ -69,10 +75,6 @@ class SwiftPm(
             repoConfig: RepositoryConfiguration
         ) = SwiftPm(type, analysisRoot, analyzerConfig, repoConfig)
     }
-
-    override fun command(workingDir: File?) = if (Os.isWindows) "swift.exe" else "swift"
-
-    override fun transformVersion(output: String) = output.substringAfter("version ").substringBefore(" (")
 
     override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> {
         return definitionFiles.filterNot { file -> file.path.contains(".build/checkouts") }
@@ -158,7 +160,7 @@ class SwiftPm(
 
     private fun getSwiftPackage(packageSwiftFile: File): SwiftPackage {
         // TODO: Handle errors from stderr.
-        val result = run(
+        val result = SwiftCommand.run(
             packageSwiftFile.parentFile,
             "package",
             "show-dependencies",

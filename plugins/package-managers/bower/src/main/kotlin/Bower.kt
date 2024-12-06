@@ -46,6 +46,12 @@ import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
 
+internal object BowerCommand : CommandLineTool {
+    override fun command(workingDir: File?) = if (Os.isWindows) "bower.cmd" else "bower"
+
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=1.8.8")
+}
+
 /**
  * The [Bower](https://bower.io/) package manager for JavaScript.
  */
@@ -54,7 +60,7 @@ class Bower(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Bower", analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, "Bower", analysisRoot, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Bower>("Bower") {
         override val globsForDefinitionFiles = listOf("bower.json")
 
@@ -65,11 +71,7 @@ class Bower(
         ) = Bower(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
-    override fun command(workingDir: File?) = if (Os.isWindows) "bower.cmd" else "bower"
-
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=1.8.8")
-
-    override fun beforeResolution(definitionFiles: List<File>) = checkVersion()
+    override fun beforeResolution(definitionFiles: List<File>) = BowerCommand.checkVersion()
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
@@ -99,8 +101,8 @@ class Bower(
     }
 
     private fun getProjectPackageInfo(workingDir: File): PackageInfo {
-        run(workingDir, "--allow-root", "install").requireSuccess()
-        val json = run(workingDir, "--allow-root", "list", "--json").requireSuccess().stdout
+        BowerCommand.run(workingDir, "--allow-root", "install").requireSuccess()
+        val json = BowerCommand.run(workingDir, "--allow-root", "list", "--json").requireSuccess().stdout
         return parsePackageInfoJson(json)
     }
 }

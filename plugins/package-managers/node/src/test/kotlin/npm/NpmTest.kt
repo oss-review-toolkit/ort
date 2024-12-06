@@ -26,11 +26,10 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-import io.mockk.EqMatcher
-import io.mockk.VarargMatcher
 import io.mockk.every
-import io.mockk.mockkConstructor
-import io.mockk.unmockkConstructor
+import io.mockk.mockk
+import io.mockk.mockkObject
+import io.mockk.unmockkObject
 
 import java.io.File
 
@@ -51,7 +50,7 @@ class NpmTest : WordSpec({
             val errorFile = File("src/test/assets/npm-err.txt")
             val errorText = errorFile.readText()
 
-            mockkConstructor(ProcessCapture::class)
+            mockkObject(NpmCommand)
             try {
                 val analyzerName = "test-npm"
 
@@ -65,22 +64,11 @@ class NpmTest : WordSpec({
 
                 val npm = Npm(analyzerName, workingDir, analyzerConfig, RepositoryConfiguration())
 
-                every {
-                    constructedWith<ProcessCapture>(
-                        EqMatcher(workingDir),
-                        VarargMatcher(
-                            all = true,
-                            matcher = { true },
-                            prefix = listOf(
-                                EqMatcher(npm.command()),
-                                EqMatcher("install"),
-                                EqMatcher("--ignore-scripts"),
-                                EqMatcher("--no-audit"),
-                                EqMatcher("--legacy-peer-deps")
-                            )
-                        )
-                    ).stderr
-                } returns errorText
+                val process = mockk<ProcessCapture>()
+                every { process.isError } returns true
+                every { process.stdout } returns ""
+                every { process.stderr } returns errorText
+                every { NpmCommand.run(workingDir, "install", *anyVararg()) } returns process
 
                 val results = npm.resolveDependencies(definitionFile, emptyMap())
 
@@ -92,7 +80,7 @@ class NpmTest : WordSpec({
                     issues[0].severity shouldBe Severity.ERROR
                 }
             } finally {
-                unmockkConstructor(ProcessCapture::class)
+                unmockkObject(NpmCommand)
             }
         }
     }

@@ -59,25 +59,7 @@ private const val SCOPE_NAME_REQUIRE = "require"
 private const val SCOPE_NAME_REQUIRE_DEV = "require-dev"
 private val ALL_SCOPE_NAMES = setOf(SCOPE_NAME_REQUIRE, SCOPE_NAME_REQUIRE_DEV)
 
-/**
- * The [Composer](https://getcomposer.org/) package manager for PHP.
- */
-class Composer(
-    name: String,
-    analysisRoot: File,
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Composer", analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
-    class Factory : AbstractPackageManagerFactory<Composer>("Composer") {
-        override val globsForDefinitionFiles = listOf("composer.json")
-
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = Composer(type, analysisRoot, analyzerConfig, repoConfig)
-    }
-
+internal object ComposerCommand : CommandLineTool {
     override fun command(workingDir: File?) =
         if (workingDir?.resolve(COMPOSER_PHAR_BINARY)?.isFile == true) {
             "php $COMPOSER_PHAR_BINARY"
@@ -98,6 +80,26 @@ class Composer(
         output.splitOnWhitespace().dropLast(2).last().removeSurrounding("(", ")")
 
     override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=1.5")
+}
+
+/**
+ * The [Composer](https://getcomposer.org/) package manager for PHP.
+ */
+class Composer(
+    name: String,
+    analysisRoot: File,
+    analyzerConfig: AnalyzerConfiguration,
+    repoConfig: RepositoryConfiguration
+) : PackageManager(name, "Composer", analysisRoot, analyzerConfig, repoConfig) {
+    class Factory : AbstractPackageManagerFactory<Composer>("Composer") {
+        override val globsForDefinitionFiles = listOf("composer.json")
+
+        override fun create(
+            analysisRoot: File,
+            analyzerConfig: AnalyzerConfiguration,
+            repoConfig: RepositoryConfiguration
+        ) = Composer(type, analysisRoot, analyzerConfig, repoConfig)
+    }
 
     override fun beforeResolution(definitionFiles: List<File>) {
         // If all directories we are analyzing contain a composer.phar, no global installation of Composer is required
@@ -106,7 +108,7 @@ class Composer(
 
         // We do not actually depend on any features specific to a version of Composer, but we still want to stick to
         // fixed versions to be sure to get consistent results.
-        checkVersion()
+        ComposerCommand.checkVersion()
     }
 
     override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> {
@@ -249,9 +251,9 @@ class Composer(
         if (hasLockfile) return lockfile
 
         // Ensure that the build is not configured to disallow the creation of lockfiles.
-        run(workingDir, "--no-interaction", "config", "--unset", "lock").requireSuccess()
+        ComposerCommand.run(workingDir, "--no-interaction", "config", "--unset", "lock").requireSuccess()
 
-        val composerVersion = Semver(getVersion(workingDir))
+        val composerVersion = Semver(ComposerCommand.getVersion(workingDir))
         val args = buildList {
             add("--no-interaction")
             add("update")
@@ -263,7 +265,7 @@ class Composer(
             }
         }
 
-        run(workingDir, *args.toTypedArray()).requireSuccess()
+        ComposerCommand.run(workingDir, *args.toTypedArray()).requireSuccess()
 
         return lockfile
     }
