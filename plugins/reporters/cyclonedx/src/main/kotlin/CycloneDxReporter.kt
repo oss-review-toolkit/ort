@@ -338,6 +338,7 @@ class CycloneDxReporter(
                             severity = org.cyclonedx.model.vulnerability.Vulnerability.Rating.Severity
                                 .fromString(reference.severity?.lowercase())
                             this.method = method
+                            vector = reference.vector
                         }
                     }
 
