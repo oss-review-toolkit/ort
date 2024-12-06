@@ -296,15 +296,15 @@ class CycloneDxReporter(
     }
 
     private fun addVulnerabilitiesToBom(advisorVulnerabilities: Map<Identifier, List<Vulnerability>>, bom: Bom) {
-        val vulnerabilities = mutableListOf<org.cyclonedx.model.vulnerability.Vulnerability>()
-        advisorVulnerabilities.forEach {
-            val vulnerabilityBomRef = it.key.toCoordinates()
-            it.value.forEach {
-                val vulnerability = org.cyclonedx.model.vulnerability.Vulnerability().apply {
-                    id = it.id
-                    description = it.description
-                    detail = it.summary
-                    ratings = it.references.map { reference ->
+        val allVulnerabilities = mutableListOf<org.cyclonedx.model.vulnerability.Vulnerability>()
+
+        advisorVulnerabilities.forEach { (id, vulnerabilities) ->
+            vulnerabilities.forEach { ortVulnerability ->
+                val cdxVulnerability = org.cyclonedx.model.vulnerability.Vulnerability().apply {
+                    this.id = ortVulnerability.id
+                    description = ortVulnerability.description
+                    detail = ortVulnerability.summary
+                    ratings = ortVulnerability.references.map { reference ->
                         org.cyclonedx.model.vulnerability.Vulnerability.Rating().apply {
                             source = org.cyclonedx.model.vulnerability.Vulnerability.Source()
                                 .apply { url = reference.url.toString() }
@@ -318,14 +318,14 @@ class CycloneDxReporter(
 
                     affects = mutableListOf(
                         org.cyclonedx.model.vulnerability.Vulnerability.Affect()
-                            .apply { ref = vulnerabilityBomRef }
+                            .apply { ref = id.toCoordinates() }
                     )
                 }
 
-                vulnerabilities.add(vulnerability)
+                allVulnerabilities.add(cdxVulnerability)
             }
 
-            bom.vulnerabilities = vulnerabilities
+            bom.vulnerabilities = allVulnerabilities
         }
     }
 
