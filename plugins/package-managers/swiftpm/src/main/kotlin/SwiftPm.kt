@@ -164,7 +164,7 @@ class SwiftPm(
             "show-dependencies",
             "--format",
             "json"
-        ).stdout
+        ).requireSuccess().stdout
 
         return parseSwiftPackage(result)
     }

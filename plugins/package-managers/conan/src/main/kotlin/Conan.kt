@@ -172,8 +172,10 @@ class Conan(
             if (lockfileName != null) {
                 verifyLockfileBelongsToProject(workingDir, lockfileName)
                 run(workingDir, "info", definitionFile.name, "-l", lockfileName, "--json", jsonFile.absolutePath)
+                    .requireSuccess()
             } else {
                 run(workingDir, "info", definitionFile.name, "--json", jsonFile.absolutePath, *DUMMY_COMPILER_SETTINGS)
+                    .requireSuccess()
             }
 
             val pkgInfos = parsePackageInfos(jsonFile)
@@ -227,12 +229,12 @@ class Conan(
     private fun configureRemoteAuthentication(conanConfig: File?) {
         // Install configuration from a local directory if available.
         conanConfig?.let {
-            run("config", "install", it.absolutePath)
+            run("config", "install", it.absolutePath).requireSuccess()
         }
 
         // List configured remotes in "remotes.txt" format.
         val remoteList = runCatching {
-            run("remote", "list", "--raw")
+            run("remote", "list", "--raw").requireSuccess()
         }.getOrElse {
             logger.warn { "Failed to list remotes." }
             return
@@ -271,6 +273,7 @@ class Conan(
                     // Configure Conan's authentication based on ORT's authentication for the remote.
                     runCatching {
                         run("user", "-r", remoteName, "-p", String(auth.password).masked(), auth.userName.masked())
+                            .requireSuccess()
                     }.onFailure {
                         logger.error { "Failed to configure user authentication for remote '$remoteName'." }
                     }
@@ -341,7 +344,9 @@ class Conan(
             // Note: While Conan 2 supports inspect output to stdout, Conan 1 does not and a temporary file is required,
             // see https://github.com/conan-io/conan/issues/6972.
             val jsonFile = createOrtTempDir().resolve("inspect.json")
-            run(workingDir, "inspect", pkgName, "--json", jsonFile.absolutePath)
+
+            run(workingDir, "inspect", pkgName, "--json", jsonFile.absolutePath).requireSuccess()
+
             Json.parseToJsonElement(jsonFile.readText()).jsonObject.also {
                 jsonFile.parentFile.safeDeleteRecursively()
             }

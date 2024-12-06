@@ -92,7 +92,7 @@ class CocoaPods(
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> =
         stashDirectories(Os.userHomeDirectory.resolve(".cocoapods/repos")).use {
             // Ensure to use the CDN instead of the monolithic specs repo.
-            run("repo", "add-cdn", "trunk", "https://cdn.cocoapods.org", "--allow-root")
+            run("repo", "add-cdn", "trunk", "https://cdn.cocoapods.org", "--allow-root").requireSuccess()
 
             try {
                 resolveDependenciesInternal(definitionFile)
@@ -188,7 +188,7 @@ class CocoaPods(
                 "--allow-root",
                 "--regex",
                 workingDir = workingDir
-            )
+            ).requireSuccess()
         }.getOrElse {
             val messages = it.collectMessages()
 

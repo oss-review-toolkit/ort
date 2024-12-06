@@ -73,7 +73,7 @@ interface CommandLineTool {
             *args,
             workingDir = workingDir,
             environment = environment
-        ).requireSuccess()
+        )
 
     /**
      * Run the command in the [workingDir] directory with arguments as specified by [args].
@@ -85,7 +85,7 @@ interface CommandLineTool {
      * Get the version of the command by parsing its output.
      */
     fun getVersion(workingDir: File? = null): String {
-        val version = run(workingDir, *getVersionArguments().splitOnWhitespace().toTypedArray())
+        val version = run(workingDir, *getVersionArguments().splitOnWhitespace().toTypedArray()).requireSuccess()
 
         // Some tools actually report the version to stderr, so try that as a fallback.
         val versionString = sequenceOf(version.stdout, version.stderr).map {

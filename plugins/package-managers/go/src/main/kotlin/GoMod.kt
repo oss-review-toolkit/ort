@@ -264,7 +264,7 @@ class GoMod(
     }
 
     private fun runGo(vararg args: CharSequence, workingDir: File? = null) =
-        run(args = args, workingDir = workingDir, environment = environment)
+        run(args = args, workingDir = workingDir, environment = environment).requireSuccess()
 
     private fun ModuleInfo.toId(): Identifier {
         if (replace != null) return replace.toId() // Apply replace directive.

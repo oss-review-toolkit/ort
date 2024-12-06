@@ -100,7 +100,7 @@ class Bower(
 
     private fun getProjectPackageInfo(workingDir: File): PackageInfo {
         run(workingDir, "--allow-root", "install").requireSuccess()
-        val json = run(workingDir, "--allow-root", "list", "--json").stdout
+        val json = run(workingDir, "--allow-root", "list", "--json").requireSuccess().stdout
         return parsePackageInfoJson(json)
     }
 }

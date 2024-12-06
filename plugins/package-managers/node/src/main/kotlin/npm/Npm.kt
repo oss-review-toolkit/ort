@@ -144,7 +144,7 @@ class Npm(
         PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
 
     private fun listModules(workingDir: File): ModuleInfo {
-        val json = run(workingDir, "list", "--depth", "Infinity", "--json", "--long").stdout
+        val json = run(workingDir, "list", "--depth", "Infinity", "--json", "--long").requireSuccess().stdout
 
         return parseNpmList(json)
     }
@@ -153,7 +153,7 @@ class Npm(
         npmViewCache[packageName]?.let { return it }
 
         return runCatching {
-            val process = run(workingDir, "info", "--json", packageName)
+            val process = run(workingDir, "info", "--json", packageName).requireSuccess()
 
             parsePackageJson(process.stdout)
         }.onFailure { e ->

@@ -103,7 +103,7 @@ class Pnpm(
     override fun command(workingDir: File?) = if (Os.isWindows) "pnpm.cmd" else "pnpm"
 
     private fun getWorkspaceModuleDirs(workingDir: File): Set<File> {
-        val json = run(workingDir, "list", "--json", "--only-projects", "--recursive").stdout
+        val json = run(workingDir, "list", "--json", "--only-projects", "--recursive").requireSuccess().stdout
 
         return parsePnpmList(json).mapTo(mutableSetOf()) { File(it.path) }
     }
@@ -114,7 +114,8 @@ class Pnpm(
             Scope.DEV_DEPENDENCIES -> "--dev"
         }
 
-        val json = run(workingDir, "list", "--json", "--recursive", "--depth", "Infinity", scopeOption).stdout
+        val json = run(workingDir, "list", "--json", "--recursive", "--depth", "Infinity", scopeOption).requireSuccess()
+            .stdout
 
         return parsePnpmList(json)
     }
@@ -134,7 +135,7 @@ class Pnpm(
             "--ignore-scripts",
             "--frozen-lockfile", // Use the existing lockfile instead of updating an outdated one.
             workingDir = workingDir
-        )
+        ).requireSuccess()
 
     override fun beforeResolution(definitionFiles: List<File>) =
         // We do not actually depend on any features specific to a PNPM version, but we still want to stick to a
@@ -145,7 +146,7 @@ class Pnpm(
         packageDetailsCache[packageName]?.let { return it }
 
         return runCatching {
-            val process = run(workingDir, "info", "--json", packageName)
+            val process = run(workingDir, "info", "--json", packageName).requireSuccess()
 
             parsePackageJson(process.stdout)
         }.onFailure { e ->

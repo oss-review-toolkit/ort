@@ -154,7 +154,7 @@ class Sbt(
 
         fun runSbt(vararg command: String) =
             suppressInput {
-                run(workingDir, *getSbtOptions(sbtVersion, javaHome).toTypedArray(), *command)
+                run(workingDir, *getSbtOptions(sbtVersion, javaHome).toTypedArray(), *command).requireSuccess()
             }
 
         // Get the list of project names.

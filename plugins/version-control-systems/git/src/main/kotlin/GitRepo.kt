@@ -238,6 +238,6 @@ class GitRepo : VersionControlSystem(GitRepoCommand) {
             // interpreter. As of repo version 2.4, Python 3.6 is required also on Windows.
             ProcessCapture(targetDir, "py", "-3", repo.absolutePath, *args).requireSuccess()
         } else {
-            GitRepoCommand.run(targetDir, *args)
+            GitRepoCommand.run(targetDir, *args).requireSuccess()
         }
 }

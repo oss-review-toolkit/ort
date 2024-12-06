@@ -86,7 +86,7 @@ class GitFunTest : WordSpec({
             val revision = branches.getValue(branch)
 
             git.updateWorkingTree(workingTree, branch)
-            GitCommand.run("reset", "--hard", "HEAD~1", workingDir = repoDir)
+            GitCommand.run("reset", "--hard", "HEAD~1", workingDir = repoDir).requireSuccess()
 
             git.updateWorkingTree(workingTree, branch) shouldBeSuccess branch
             workingTree.getRevision() shouldBe revision
