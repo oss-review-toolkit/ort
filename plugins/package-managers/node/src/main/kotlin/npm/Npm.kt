@@ -50,6 +50,12 @@ import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
 
+internal object NpmCommand : CommandLineTool {
+    override fun command(workingDir: File?) = if (Os.isWindows) "npm.cmd" else "npm"
+
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create("6.* - 10.*")
+}
+
 /**
  * The [Node package manager](https://www.npmjs.com/) for JavaScript.
  *
@@ -64,7 +70,7 @@ class Npm(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "NPM", analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, "NPM", analysisRoot, analyzerConfig, repoConfig) {
     companion object {
         /** Name of the configuration option to toggle legacy peer dependency support. */
         const val OPTION_LEGACY_PEER_DEPS = "legacyPeerDeps"
@@ -127,24 +133,20 @@ class Npm(
 
     private fun hasLockfile(projectDir: File) = NodePackageManager.NPM.hasLockfile(projectDir)
 
-    override fun command(workingDir: File?) = if (Os.isWindows) "npm.cmd" else "npm"
-
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create("6.* - 10.*")
-
     override fun mapDefinitionFiles(definitionFiles: List<File>) =
         NpmDetection(definitionFiles).filterApplicable(NodePackageManager.NPM)
 
     override fun beforeResolution(definitionFiles: List<File>) {
         // We do not actually depend on any features specific to an NPM version, but we still want to stick to a
         // fixed minor version to be sure to get consistent results.
-        checkVersion()
+        NpmCommand.checkVersion()
     }
 
     override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =
         PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
 
     private fun listModules(workingDir: File): ModuleInfo {
-        val json = run(workingDir, "list", "--depth", "Infinity", "--json", "--long").requireSuccess().stdout
+        val json = NpmCommand.run(workingDir, "list", "--depth", "Infinity", "--json", "--long").requireSuccess().stdout
 
         return parseNpmList(json)
     }
@@ -153,7 +155,7 @@ class Npm(
         npmViewCache[packageName]?.let { return it }
 
         return runCatching {
-            val process = run(workingDir, "info", "--json", packageName).requireSuccess()
+            val process = NpmCommand.run(workingDir, "info", "--json", packageName).requireSuccess()
 
             parsePackageJson(process.stdout)
         }.onFailure { e ->
@@ -174,7 +176,7 @@ class Npm(
 
         val subcommand = if (hasLockfile(workingDir)) "ci" else "install"
 
-        val process = ProcessCapture(workingDir, command(workingDir), subcommand, *options.toTypedArray())
+        val process = NpmCommand.run(workingDir, subcommand, *options.toTypedArray())
 
         return process.extractNpmIssues()
     }

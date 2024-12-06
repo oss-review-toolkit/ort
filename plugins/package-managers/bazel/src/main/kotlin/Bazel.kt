@@ -74,12 +74,34 @@ private const val LOCKFILE_NAME = "MODULE.bazel.lock"
 private const val BUILDOZER_COMMAND = "buildozer"
 private const val BUILDOZER_MISSING_VALUE = "(missing)"
 
+internal object BazelCommand : CommandLineTool {
+    override fun command(workingDir: File?) = "bazel"
+
+    override fun run(vararg args: CharSequence, workingDir: File?, environment: Map<String, String>): ProcessCapture =
+        super.run(
+            args = args,
+            workingDir,
+            // Disable the optional wrapper script under `tools/bazel` only for the "--version" call.
+            environment + mapOf(
+                "BAZELISK_SKIP_WRAPPER" to "${args[0] == getVersionArguments()}",
+                "USE_BAZEL_FALLBACK_VERSION" to BAZEL_FALLBACK_VERSION
+            )
+        )
+
+    override fun transformVersion(output: String) = output.removePrefix("bazel ")
+
+    // Bazel 6.0 already supports bzlmod but it is not enabled by default.
+    // Supporting it would require adding the flag "--enable_bzlmod=true" at the correct position of all bazel
+    // invocations.
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=7.0")
+}
+
 class Bazel(
     name: String,
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Bazel", analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, "Bazel", analysisRoot, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Bazel>("Bazel") {
         override val globsForDefinitionFiles = listOf("MODULE", "MODULE.bazel")
 
@@ -89,8 +111,6 @@ class Bazel(
             repoConfig: RepositoryConfiguration
         ) = Bazel(type, analysisRoot, analyzerConfig, repoConfig)
     }
-
-    override fun command(workingDir: File?) = "bazel"
 
     /**
      * To avoid processing the module files in a local registry as definition files, ignore them if they are aside a
@@ -105,24 +125,6 @@ class Bazel(
                 logger.info { "Ignoring definition file '$file' as it is a module of a local registry." }
             }
         }
-
-    override fun run(vararg args: CharSequence, workingDir: File?, environment: Map<String, String>): ProcessCapture =
-        super.run(
-            args = args,
-            workingDir = workingDir,
-            // Disable the optional wrapper script under `tools/bazel` only for the "--version" call.
-            environment = environment + mapOf(
-                "BAZELISK_SKIP_WRAPPER" to "${args[0] == getVersionArguments()}",
-                "USE_BAZEL_FALLBACK_VERSION" to BAZEL_FALLBACK_VERSION
-            )
-        )
-
-    override fun transformVersion(output: String) = output.removePrefix("bazel ")
-
-    // Bazel 6.0 already supports bzlmod but it is not enabled by default.
-    // Supporting it would require adding the flag "--enable_bzlmod=true" at the correct position of all bazel
-    // invocations.
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=7.0")
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val projectDir = definitionFile.parentFile
@@ -388,7 +390,7 @@ class Bazel(
         depDirectives: Map<String, BazelDepDirective>,
         archiveOverrides: Map<String, ArchiveOverride>
     ): Set<Scope> {
-        val process = run(
+        val process = BazelCommand.run(
             "mod",
             "graph",
             "--output",

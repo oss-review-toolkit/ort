@@ -42,6 +42,12 @@ import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
 
+internal object PnpmCommand : CommandLineTool {
+    override fun command(workingDir: File?) = if (Os.isWindows) "pnpm.cmd" else "pnpm"
+
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create("5.* - 9.*")
+}
+
 /**
  * The [fast, disk space efficient package manager](https://pnpm.io/).
  */
@@ -50,7 +56,7 @@ class Pnpm(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "PNPM", analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, "PNPM", analysisRoot, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Pnpm>("PNPM") {
         override val globsForDefinitionFiles = listOf("package.json", "pnpm-lock.yaml")
 
@@ -100,10 +106,9 @@ class Pnpm(
         }
     }
 
-    override fun command(workingDir: File?) = if (Os.isWindows) "pnpm.cmd" else "pnpm"
-
     private fun getWorkspaceModuleDirs(workingDir: File): Set<File> {
-        val json = run(workingDir, "list", "--json", "--only-projects", "--recursive").requireSuccess().stdout
+        val json = PnpmCommand.run(workingDir, "list", "--json", "--only-projects", "--recursive").requireSuccess()
+            .stdout
 
         return parsePnpmList(json).mapTo(mutableSetOf()) { File(it.path) }
     }
@@ -114,8 +119,8 @@ class Pnpm(
             Scope.DEV_DEPENDENCIES -> "--dev"
         }
 
-        val json = run(workingDir, "list", "--json", "--recursive", "--depth", "Infinity", scopeOption).requireSuccess()
-            .stdout
+        val json = PnpmCommand.run(workingDir, "list", "--json", "--recursive", "--depth", "Infinity", scopeOption)
+            .requireSuccess().stdout
 
         return parsePnpmList(json)
     }
@@ -123,13 +128,11 @@ class Pnpm(
     override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =
         PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
 
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create("5.* - 9.*")
-
     override fun mapDefinitionFiles(definitionFiles: List<File>) =
         NpmDetection(definitionFiles).filterApplicable(NodePackageManager.PNPM)
 
     private fun installDependencies(workingDir: File) =
-        run(
+        PnpmCommand.run(
             "install",
             "--ignore-pnpmfile",
             "--ignore-scripts",
@@ -140,13 +143,13 @@ class Pnpm(
     override fun beforeResolution(definitionFiles: List<File>) =
         // We do not actually depend on any features specific to a PNPM version, but we still want to stick to a
         // fixed major version to be sure to get consistent results.
-        checkVersion()
+        PnpmCommand.checkVersion()
 
     internal fun getRemotePackageDetails(workingDir: File, packageName: String): PackageJson? {
         packageDetailsCache[packageName]?.let { return it }
 
         return runCatching {
-            val process = run(workingDir, "info", "--json", packageName).requireSuccess()
+            val process = PnpmCommand.run(workingDir, "info", "--json", packageName).requireSuccess()
 
             parsePackageJson(process.stdout)
         }.onFailure { e ->

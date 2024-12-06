@@ -55,32 +55,10 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
 
-/**
- * The [Go Modules](https://go.dev/ref/mod) package manager for Go. Also see the [usage and troubleshooting guide]
- * (https://github.com/golang/go/wiki/Modules).
- *
- * Note: The file `go.sum` is not a lockfile as Go modules already allows for reproducible builds without that file.
- * Thus, no logic for handling the [AnalyzerConfiguration.allowDynamicVersions] is needed.
- */
-class GoMod(
-    name: String,
-    analysisRoot: File,
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Go", analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
-    class Factory : AbstractPackageManagerFactory<GoMod>("GoMod") {
-        override val globsForDefinitionFiles = listOf("go.mod")
-
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = GoMod(type, analysisRoot, analyzerConfig, repoConfig)
-    }
-
+internal object GoCommand : CommandLineTool {
     private val goPath by lazy { createOrtTempDir() }
 
-    private val environment by lazy {
+    private val goEnvironment by lazy {
         mapOf(
             "GOPATH" to goPath.absolutePath,
             "GOPROXY" to "direct",
@@ -95,6 +73,33 @@ class GoMod(
     override fun transformVersion(output: String) = output.removePrefix("go version go").substringBefore(' ')
 
     override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=1.21.1")
+
+    override fun run(vararg args: CharSequence, workingDir: File?, environment: Map<String, String>) =
+        super.run(args = args, workingDir, environment + goEnvironment)
+}
+
+/**
+ * The [Go Modules](https://go.dev/ref/mod) package manager for Go. Also see the [usage and troubleshooting guide]
+ * (https://github.com/golang/go/wiki/Modules).
+ *
+ * Note: The file `go.sum` is not a lockfile as Go modules already allows for reproducible builds without that file.
+ * Thus, no logic for handling the [AnalyzerConfiguration.allowDynamicVersions] is needed.
+ */
+class GoMod(
+    name: String,
+    analysisRoot: File,
+    analyzerConfig: AnalyzerConfiguration,
+    repoConfig: RepositoryConfiguration
+) : PackageManager(name, "Go", analysisRoot, analyzerConfig, repoConfig) {
+    class Factory : AbstractPackageManagerFactory<GoMod>("GoMod") {
+        override val globsForDefinitionFiles = listOf("go.mod")
+
+        override fun create(
+            analysisRoot: File,
+            analyzerConfig: AnalyzerConfiguration,
+            repoConfig: RepositoryConfiguration
+        ) = GoMod(type, analysisRoot, analyzerConfig, repoConfig)
+    }
 
     override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> =
         definitionFiles.filterNot { definitionFile ->
@@ -168,7 +173,7 @@ class GoMod(
 
         var graph = Graph<GoModule>().apply { addNode(mainModule) }
 
-        val edges = runGo("mod", "graph", workingDir = projectDir)
+        val edges = GoCommand.run("mod", "graph", workingDir = projectDir).requireSuccess()
 
         edges.stdout.lines().forEach { line ->
             if (line.isBlank()) return@forEach
@@ -224,7 +229,8 @@ class GoMod(
             }
         }
 
-        val list = runGo("list", "-m", "-json", "-buildvcs=false", *packages, workingDir = projectDir)
+        val list = GoCommand.run("list", "-m", "-json", "-buildvcs=false", *packages, workingDir = projectDir)
+            .requireSuccess()
 
         return list.stdout.byteInputStream().use { JSON.decodeToSequence<ModuleInfo>(it) }
     }
@@ -234,7 +240,8 @@ class GoMod(
      */
     private fun getTransitiveMainModuleDependencies(projectDir: File): Set<String> {
         // See https://pkg.go.dev/text/template for the format syntax.
-        val list = runGo("list", "-deps", "-json=Module", "-buildvcs=false", "./...", workingDir = projectDir)
+        val list = GoCommand.run("list", "-deps", "-json=Module", "-buildvcs=false", "./...", workingDir = projectDir)
+            .requireSuccess()
 
         val depInfos = list.stdout.byteInputStream().use { JSON.decodeToSequence<DepInfo>(it) }
 
@@ -255,16 +262,14 @@ class GoMod(
             val moduleNames = ids.map { it.name }.toTypedArray()
             // Use the ´-m´ switch to use module names because the graph also uses module names, not package names.
             // This fixes the accidental dropping of some modules.
-            val why = runGo("mod", "why", "-m", "-vendor", *moduleNames, workingDir = projectDir)
+            val why = GoCommand.run("mod", "why", "-m", "-vendor", *moduleNames, workingDir = projectDir)
+                .requireSuccess()
 
             vendorModuleNames += parseWhyOutput(why.stdout)
         }
 
         return graph.nodes.filterTo(mutableSetOf()) { it.name in vendorModuleNames }
     }
-
-    private fun runGo(vararg args: CharSequence, workingDir: File? = null) =
-        run(args = args, workingDir = workingDir, environment = environment).requireSuccess()
 
     private fun ModuleInfo.toId(): Identifier {
         if (replace != null) return replace.toId() // Apply replace directive.

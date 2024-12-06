@@ -85,6 +85,12 @@ private const val OPTIONAL_DEPENDENCIES_SCOPE = "optionalDependencies"
 /** Name of the scope with development dependencies. */
 private const val DEV_DEPENDENCIES_SCOPE = "devDependencies"
 
+internal object YarnCommand : CommandLineTool {
+    override fun command(workingDir: File?) = if (Os.isWindows) "yarn.cmd" else "yarn"
+
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create("1.3.* - 1.22.*")
+}
+
 /**
  * The [Yarn](https://classic.yarnpkg.com/) package manager for JavaScript.
  */
@@ -93,7 +99,7 @@ open class Yarn(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Yarn", analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, "Yarn", analysisRoot, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Yarn>("Yarn") {
         override val globsForDefinitionFiles = listOf("package.json")
 
@@ -131,17 +137,13 @@ open class Yarn(
         }
     }
 
-    override fun command(workingDir: File?) = if (Os.isWindows) "yarn.cmd" else "yarn"
-
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create("1.3.* - 1.22.*")
-
     override fun mapDefinitionFiles(definitionFiles: List<File>) =
         NpmDetection(definitionFiles).filterApplicable(NodePackageManager.YARN)
 
     override fun beforeResolution(definitionFiles: List<File>) =
         // We do not actually depend on any features specific to a Yarn version, but we still want to stick to a
         // fixed minor version to be sure to get consistent results.
-        checkVersion()
+        YarnCommand.checkVersion()
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
@@ -345,13 +347,13 @@ open class Yarn(
     private fun installDependencies(workingDir: File) {
         requireLockfile(workingDir) { hasLockfile(workingDir) }
 
-        run(workingDir, "install", "--ignore-scripts", "--ignore-engines", "--immutable").requireSuccess()
+        YarnCommand.run(workingDir, "install", "--ignore-scripts", "--ignore-engines", "--immutable").requireSuccess()
     }
 
     internal fun getRemotePackageDetails(workingDir: File, packageName: String): PackageJson? {
         yarnInfoCache.read(packageName)?.let { return parsePackageJson(it) }
 
-        val process = run(workingDir, "info", "--json", packageName).requireSuccess()
+        val process = YarnCommand.run(workingDir, "info", "--json", packageName).requireSuccess()
 
         return parseYarnInfo(process.stdout, process.stderr)?.also {
             yarnInfoCache.write(packageName, Json.encodeToString(it))

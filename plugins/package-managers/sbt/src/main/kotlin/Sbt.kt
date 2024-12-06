@@ -36,7 +36,6 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.Maven
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.getCommonParentFile
 import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
@@ -66,6 +65,10 @@ const val OPTION_JAVA_VERSION = "javaVersion"
  */
 const val OPTION_JAVA_HOME = "javaHome"
 
+internal object SbtCommand : CommandLineTool {
+    override fun command(workingDir: File?) = if (Os.isWindows) "sbt.bat" else "sbt"
+}
+
 /**
  * The [SBT](https://www.scala-sbt.org/) package manager for Scala.
  *
@@ -82,7 +85,7 @@ class Sbt(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "SBT", analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, "SBT", analysisRoot, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Sbt>("SBT") {
         override val globsForDefinitionFiles = listOf("build.sbt", "build.scala")
 
@@ -92,8 +95,6 @@ class Sbt(
             repoConfig: RepositoryConfiguration
         ) = Sbt(type, analysisRoot, analyzerConfig, repoConfig)
     }
-
-    override fun command(workingDir: File?) = if (Os.isWindows) "sbt.bat" else "sbt"
 
     override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> {
         // Some SBT projects do not have a build file in their root, but they still require "sbt" to be run from the
@@ -154,7 +155,8 @@ class Sbt(
 
         fun runSbt(vararg command: String) =
             suppressInput {
-                run(workingDir, *getSbtOptions(sbtVersion, javaHome).toTypedArray(), *command).requireSuccess()
+                SbtCommand.run(workingDir, *getSbtOptions(sbtVersion, javaHome).toTypedArray(), *command)
+                    .requireSuccess()
             }
 
         // Get the list of project names.
@@ -217,11 +219,10 @@ class Sbt(
             resolve("project").mkdir()
         }
 
-        val process = ProcessCapture(
-            command(),
+        val process = SbtCommand.run(
+            dummyProjectDir,
             *DEFAULT_SBT_OPTIONS.toTypedArray(),
-            "sbtVersion",
-            workingDir = dummyProjectDir
+            "sbtVersion"
         )
 
         val versions = process.stdout.lines().mapNotNull { line ->

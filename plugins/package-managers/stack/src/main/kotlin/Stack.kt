@@ -58,6 +58,22 @@ private const val TEST_SCOPE_NAME = "test"
 private const val BENCH_SCOPE_NAME = "bench"
 private val SCOPE_NAMES = setOf(EXTERNAL_SCOPE_NAME, TEST_SCOPE_NAME, BENCH_SCOPE_NAME)
 
+internal object StackCommand : CommandLineTool {
+    override fun command(workingDir: File?) = "stack"
+
+    override fun transformVersion(output: String) =
+        output.removePrefix("Version ").substringBefore(',').substringBefore(' ')
+
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=2.1.1")
+
+    override fun run(vararg args: CharSequence, workingDir: File?, environment: Map<String, String>): ProcessCapture {
+        // Delete any left-overs from interrupted stack runs.
+        workingDir?.resolve(".stack-work")?.safeDeleteRecursively()
+
+        return super.run(args = args, workingDir, environment)
+    }
+}
+
 /**
  * The [Stack](https://haskellstack.org/) package manager for Haskell.
  */
@@ -66,7 +82,7 @@ class Stack(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Stack", analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, "Stack", analysisRoot, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Stack>("Stack") {
         override val globsForDefinitionFiles = listOf("stack.yaml")
 
@@ -77,14 +93,7 @@ class Stack(
         ) = Stack(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
-    override fun command(workingDir: File?) = "stack"
-
-    override fun transformVersion(output: String) =
-        output.removePrefix("Version ").substringBefore(',').substringBefore(' ')
-
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=2.1.1")
-
-    override fun beforeResolution(definitionFiles: List<File>) = checkVersion()
+    override fun beforeResolution(definitionFiles: List<File>) = StackCommand.checkVersion()
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
@@ -107,13 +116,6 @@ class Stack(
         return listOf(ProjectAnalyzerResult(project, packages))
     }
 
-    private fun runStack(workingDir: File, vararg command: String): ProcessCapture {
-        // Delete any left-overs from interrupted stack runs.
-        workingDir.resolve(".stack-work").safeDeleteRecursively()
-
-        return run(workingDir, *command).requireSuccess()
-    }
-
     private fun listDependencies(workingDir: File, scope: String): List<Dependency> {
         val scopeOptions = listOfNotNull(
             "--$scope",
@@ -121,10 +123,10 @@ class Stack(
             "--no-$EXTERNAL_SCOPE_NAME".takeIf { scope != EXTERNAL_SCOPE_NAME }
         )
 
-        val dependenciesJson = runStack(
+        val dependenciesJson = StackCommand.run(
             // Use a hints file for global packages to not require installing the Glasgow Haskell Compiler (GHC).
-            workingDir, "ls", "dependencies", "json", "--global-hints", *scopeOptions.toTypedArray()
-        ).stdout
+            "ls", "dependencies", "json", "--global-hints", *scopeOptions.toTypedArray(), workingDir = workingDir
+        ).requireSuccess().stdout
 
         return dependenciesJson.parseDependencies()
     }

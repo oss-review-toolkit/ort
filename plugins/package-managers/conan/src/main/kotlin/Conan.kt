@@ -69,6 +69,20 @@ import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
 
+internal object ConanCommand : CommandLineTool {
+    override fun command(workingDir: File?) = "conan"
+
+    override fun transformVersion(output: String) =
+        // Conan could report version strings like:
+        // Conan version 1.18.0
+        output.removePrefix("Conan version ")
+
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=1.44.0 <2.0")
+
+    override fun run(vararg args: CharSequence, workingDir: File?, environment: Map<String, String>) =
+        super.run(args = args, workingDir, environment + ("CONAN_NON_INTERACTIVE" to "1"))
+}
+
 /**
  * The [Conan](https://conan.io/) package manager for C / C++.
  *
@@ -83,7 +97,7 @@ class Conan(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Conan", analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, "Conan", analysisRoot, analyzerConfig, repoConfig) {
     companion object {
         /**
          * The name of the option to specify the name of the lockfile.
@@ -123,18 +137,9 @@ class Conan(
 
     private val pkgInspectResults = mutableMapOf<String, JsonObject>()
 
-    override fun command(workingDir: File?) = "conan"
-
     private fun hasLockfile(file: String) = File(file).isFile
 
-    override fun transformVersion(output: String) =
-        // Conan could report version strings like:
-        // Conan version 1.18.0
-        output.removePrefix("Conan version ")
-
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=1.44.0 <2.0")
-
-    override fun beforeResolution(definitionFiles: List<File>) = checkVersion()
+    override fun beforeResolution(definitionFiles: List<File>) = ConanCommand.checkVersion()
 
     /**
      * Primary method for resolving dependencies from [definitionFile].
@@ -147,9 +152,6 @@ class Conan(
             // could overwrite the remotes and result in different metadata for packages with the same name and version.
             pkgInspectResults.clear()
         }
-
-    override fun run(vararg args: CharSequence, workingDir: File?, environment: Map<String, String>) =
-        super.run(args = args, workingDir = workingDir, environment = environment + ("CONAN_NON_INTERACTIVE" to "1"))
 
     private fun resolvedDependenciesInternal(definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
@@ -171,11 +173,19 @@ class Conan(
             val jsonFile = createOrtTempDir().resolve("info.json")
             if (lockfileName != null) {
                 verifyLockfileBelongsToProject(workingDir, lockfileName)
-                run(workingDir, "info", definitionFile.name, "-l", lockfileName, "--json", jsonFile.absolutePath)
-                    .requireSuccess()
+                ConanCommand.run(
+                    workingDir,
+                    "info", definitionFile.name,
+                    "-l", lockfileName,
+                    "--json", jsonFile.absolutePath
+                ).requireSuccess()
             } else {
-                run(workingDir, "info", definitionFile.name, "--json", jsonFile.absolutePath, *DUMMY_COMPILER_SETTINGS)
-                    .requireSuccess()
+                ConanCommand.run(
+                    workingDir,
+                    "info", definitionFile.name,
+                    "--json", jsonFile.absolutePath,
+                    *DUMMY_COMPILER_SETTINGS
+                ).requireSuccess()
             }
 
             val pkgInfos = parsePackageInfos(jsonFile)
@@ -230,11 +240,11 @@ class Conan(
         val remoteList = runCatching {
             // Install configuration from a local directory if available.
             conanConfig?.let {
-                run("config", "install", it.absolutePath).requireSuccess()
+                ConanCommand.run("config", "install", it.absolutePath).requireSuccess()
             }
 
             // List configured remotes in "remotes.txt" format.
-            run("remote", "list", "--raw").requireSuccess()
+            ConanCommand.run("remote", "list", "--raw").requireSuccess()
         }.getOrElse {
             logger.warn { "Failed to list remotes." }
             return
@@ -272,8 +282,12 @@ class Conan(
                 if (auth != null) {
                     // Configure Conan's authentication based on ORT's authentication for the remote.
                     runCatching {
-                        run("user", "-r", remoteName, "-p", String(auth.password).masked(), auth.userName.masked())
-                            .requireSuccess()
+                        ConanCommand.run(
+                            "user",
+                            "-r", remoteName,
+                            "-p", String(auth.password).masked(),
+                            auth.userName.masked()
+                        ).requireSuccess()
                     }.onFailure {
                         logger.error { "Failed to configure user authentication for remote '$remoteName'." }
                     }
@@ -345,7 +359,7 @@ class Conan(
             // see https://github.com/conan-io/conan/issues/6972.
             val jsonFile = createOrtTempDir().resolve("inspect.json")
 
-            run(workingDir, "inspect", pkgName, "--json", jsonFile.absolutePath).requireSuccess()
+            ConanCommand.run(workingDir, "inspect", pkgName, "--json", jsonFile.absolutePath).requireSuccess()
 
             Json.parseToJsonElement(jsonFile.readText()).jsonObject.also {
                 jsonFile.parentFile.safeDeleteRecursively()

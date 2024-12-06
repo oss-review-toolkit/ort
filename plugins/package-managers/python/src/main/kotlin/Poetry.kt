@@ -36,7 +36,6 @@ import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.PythonInspector
 import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.toOrtPackages
 import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.toPackageReferences
 import org.ossreviewtoolkit.utils.common.CommandLineTool
-import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.common.withoutSuffix
@@ -44,6 +43,12 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 
 import org.semver4j.RangesListFactory
 import org.semver4j.Semver
+
+internal object PoetryCommand : CommandLineTool {
+    override fun command(workingDir: File?) = "poetry"
+
+    override fun transformVersion(output: String) = output.substringAfter("version ").removeSuffix(")")
+}
 
 /**
  * [Poetry](https://python-poetry.org/) package manager for Python.
@@ -53,7 +58,7 @@ class Poetry(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Poetry", analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, "Poetry", analysisRoot, analyzerConfig, repoConfig) {
     companion object {
         /**
          * The name of the build system requirements and information file used by modern Python packages.
@@ -70,10 +75,6 @@ class Poetry(
             repoConfig: RepositoryConfiguration
         ) = Poetry(type, analysisRoot, analyzerConfig, repoConfig)
     }
-
-    override fun command(workingDir: File?) = "poetry"
-
-    override fun transformVersion(output: String) = output.substringAfter("version ").removeSuffix(")")
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val scopeName = parseScopeNamesFromPyproject(definitionFile.resolveSibling(PYPROJECT_FILENAME))
@@ -112,15 +113,14 @@ class Poetry(
 
         logger.info { "Generating '${requirementsFile.name}' file in '$workingDir' directory..." }
 
-        val command = listOf(
-            command(),
+        val options = listOf(
             "export",
             "--without-hashes",
             "--format=requirements.txt",
             "--only=$dependencyGroupName"
         )
 
-        val requirements = ProcessCapture(workingDir, *command.toTypedArray()).requireSuccess().stdout
+        val requirements = PoetryCommand.run(workingDir, *options.toTypedArray()).requireSuccess().stdout
         requirementsFile.writeText(requirements)
 
         return Pip(managerName, analysisRoot, analyzerConfig, repoConfig).runPythonInspector(requirementsFile) {

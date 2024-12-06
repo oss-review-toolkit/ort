@@ -52,6 +52,14 @@ import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
 
+internal object CocoaPodsCommand : CommandLineTool {
+    override fun command(workingDir: File?) = if (Os.isWindows) "pod.bat" else "pod"
+
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=1.11.0")
+
+    override fun getVersionArguments() = "--version --allow-root"
+}
+
 /**
  * The [CocoaPods](https://cocoapods.org/) package manager for Objective-C.
  *
@@ -68,7 +76,7 @@ class CocoaPods(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "CocoaPods", analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, "CocoaPods", analysisRoot, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<CocoaPods>("CocoaPods") {
         override val globsForDefinitionFiles = listOf("Podfile")
 
@@ -81,18 +89,13 @@ class CocoaPods(
 
     private val podspecCache = mutableMapOf<String, Podspec>()
 
-    override fun command(workingDir: File?) = if (Os.isWindows) "pod.bat" else "pod"
-
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=1.11.0")
-
-    override fun getVersionArguments() = "--version --allow-root"
-
-    override fun beforeResolution(definitionFiles: List<File>) = checkVersion()
+    override fun beforeResolution(definitionFiles: List<File>) = CocoaPodsCommand.checkVersion()
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> =
         stashDirectories(Os.userHomeDirectory.resolve(".cocoapods/repos")).use {
             // Ensure to use the CDN instead of the monolithic specs repo.
-            run("repo", "add-cdn", "trunk", "https://cdn.cocoapods.org", "--allow-root").requireSuccess()
+            CocoaPodsCommand.run("repo", "add-cdn", "trunk", "https://cdn.cocoapods.org", "--allow-root")
+                .requireSuccess()
 
             try {
                 resolveDependenciesInternal(definitionFile)
@@ -182,7 +185,7 @@ class CocoaPods(
         val podspecName = id.name.substringBefore("/")
 
         val podspecCommand = runCatching {
-            run(
+            CocoaPodsCommand.run(
                 "spec", "which", "^$podspecName$",
                 "--version=${id.version}",
                 "--allow-root",
