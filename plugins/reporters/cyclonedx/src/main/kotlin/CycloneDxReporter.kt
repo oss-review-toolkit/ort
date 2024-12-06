@@ -308,22 +308,36 @@ class CycloneDxReporter(
                     this.id = ortVulnerability.id
                     description = ortVulnerability.description
                     detail = ortVulnerability.summary
-                    ratings = ortVulnerability.references.map { reference ->
+                    ratings = ortVulnerability.references.mapNotNull { reference ->
+                        val score = reference.score?.toDouble()
                         val system = reference.scoringSystem?.uppercase()
+
+                        val method = when {
+                            system == null -> null
+                            Cvss2Rating.PREFIXES.any { system.startsWith(it) } -> Method.CVSSV2
+                            Cvss3Rating.PREFIXES.any { system.startsWith(it) } -> Method.CVSSV3
+                            Cvss4Rating.PREFIXES.any { system.startsWith(it) } -> Method.CVSSV4
+                            else -> Method.fromString(reference.scoringSystem) ?: Method.OTHER
+                        }
+
+                        // Skip scores whose serialized value causes problems with validation, see
+                        // https://github.com/oss-review-toolkit/ort/issues/9556.
+                        if (method == Method.OTHER && "E" in "$score") {
+                            logger.warn {
+                                "Skipping score $score from ${reference.url} as it would cause problems with document" +
+                                    " validation."
+                            }
+
+                            return@mapNotNull null
+                        }
 
                         org.cyclonedx.model.vulnerability.Vulnerability.Rating().apply {
                             source = org.cyclonedx.model.vulnerability.Vulnerability.Source()
                                 .apply { url = reference.url.toString() }
+                            this.score = score
                             severity = org.cyclonedx.model.vulnerability.Vulnerability.Rating.Severity
                                 .fromString(reference.severity?.lowercase())
-                            score = reference.score?.toDouble()
-                            method = when {
-                                system == null -> null
-                                Cvss2Rating.PREFIXES.any { system.startsWith(it) } -> Method.CVSSV2
-                                Cvss3Rating.PREFIXES.any { system.startsWith(it) } -> Method.CVSSV3
-                                Cvss4Rating.PREFIXES.any { system.startsWith(it) } -> Method.CVSSV4
-                                else -> Method.fromString(reference.scoringSystem) ?: Method.OTHER
-                            }
+                            this.method = method
                         }
                     }
 
