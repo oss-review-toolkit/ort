@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.utils.common.ProcessCapture
 const val MERCURIAL_LARGE_FILES_EXTENSION = "largefiles = "
 const val MERCURIAL_SPARSE_EXTENSION = "sparse = "
 
-object MercurialCommand : CommandLineTool {
+internal object MercurialCommand : CommandLineTool {
     private val versionRegex = Regex("Mercurial .*\\([Vv]ersion (?<version>[\\d.]+)\\)")
 
     override fun command(workingDir: File?) = "hg"
