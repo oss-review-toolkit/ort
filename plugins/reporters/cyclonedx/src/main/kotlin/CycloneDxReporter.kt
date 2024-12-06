@@ -40,6 +40,7 @@ import org.cyclonedx.model.LicenseChoice
 import org.cyclonedx.model.Metadata
 import org.cyclonedx.model.license.Expression
 import org.cyclonedx.model.metadata.ToolInformation
+import org.cyclonedx.model.vulnerability.Vulnerability.Rating.Method
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
@@ -47,6 +48,9 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.model.vulnerabilities.Cvss2Rating
+import org.ossreviewtoolkit.model.vulnerabilities.Cvss3Rating
+import org.ossreviewtoolkit.model.vulnerabilities.Cvss4Rating
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
@@ -305,14 +309,21 @@ class CycloneDxReporter(
                     description = ortVulnerability.description
                     detail = ortVulnerability.summary
                     ratings = ortVulnerability.references.map { reference ->
+                        val system = reference.scoringSystem?.uppercase()
+
                         org.cyclonedx.model.vulnerability.Vulnerability.Rating().apply {
                             source = org.cyclonedx.model.vulnerability.Vulnerability.Source()
                                 .apply { url = reference.url.toString() }
                             severity = org.cyclonedx.model.vulnerability.Vulnerability.Rating.Severity
                                 .fromString(reference.severity?.lowercase())
                             score = reference.score?.toDouble()
-                            method = org.cyclonedx.model.vulnerability.Vulnerability.Rating.Method
-                                .fromString(reference.scoringSystem)
+                            method = when {
+                                system == null -> null
+                                Cvss2Rating.PREFIXES.any { system.startsWith(it) } -> Method.CVSSV2
+                                Cvss3Rating.PREFIXES.any { system.startsWith(it) } -> Method.CVSSV3
+                                Cvss4Rating.PREFIXES.any { system.startsWith(it) } -> Method.CVSSV4
+                                else -> Method.fromString(reference.scoringSystem) ?: Method.OTHER
+                            }
                         }
                     }
 
