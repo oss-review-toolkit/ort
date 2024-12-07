@@ -245,6 +245,18 @@
       "comment": "URL to the Git repository of the projects"
     }
   ],
+  "dependencies": [
+    {
+      "ref": "https://github.com/oss-review-toolkit/ort.git@main",
+      "dependsOn": [
+        "NPM:@ort:no-license-file:1.0",
+        "NPM:@ort:license-file:1.0",
+        "NPM:@ort:license-file-and-additional-licenses:1.0",
+        "NPM:@ort:concluded-license:1.0",
+        "NPM:@ort:declared-license:1.0"
+      ]
+    }
+  ],
   "vulnerabilities": [
     {
       "id": "CVE-2021-1234",

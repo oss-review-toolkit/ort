@@ -361,6 +361,15 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       <comment>URL to the Git repository of the projects</comment>
     </reference>
   </externalReferences>
+  <dependencies>
+    <dependency ref="https://github.com/oss-review-toolkit/ort.git@main">
+      <dependency ref="NPM:@ort:no-license-file:1.0"/>
+      <dependency ref="NPM:@ort:license-file:1.0"/>
+      <dependency ref="NPM:@ort:license-file-and-additional-licenses:1.0"/>
+      <dependency ref="NPM:@ort:concluded-license:1.0"/>
+      <dependency ref="NPM:@ort:declared-license:1.0"/>
+    </dependency>
+  </dependencies>
   <vulnerabilities>
     <vulnerability>
       <id>CVE-2021-1234</id>

@@ -263,5 +263,17 @@
       "url": "pkg:npm/%40ort/project-with-findings@1.0",
       "comment": "Package-URL of the project"
     }
+  ],
+  "dependencies": [
+    {
+      "ref": "NPM:@ort:project-with-findings:1.0",
+      "dependsOn": [
+        "NPM:@ort:no-license-file:1.0",
+        "NPM:@ort:license-file:1.0",
+        "NPM:@ort:license-file-and-additional-licenses:1.0",
+        "NPM:@ort:concluded-license:1.0",
+        "NPM:@ort:declared-license:1.0"
+      ]
+    }
   ]
 }
