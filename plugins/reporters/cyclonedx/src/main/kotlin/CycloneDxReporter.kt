@@ -148,8 +148,8 @@ class CycloneDxReporter(
         )
     }
 
-    private fun mapHash(hash: org.ossreviewtoolkit.model.Hash): Hash? =
-        Hash.Algorithm.entries.find { it.spec == hash.algorithm.toString() }?.let { Hash(it, hash.value) }
+    private fun org.ossreviewtoolkit.model.Hash.toCycloneDx(): Hash? =
+        Hash.Algorithm.entries.find { it.spec == algorithm.toString() }?.let { Hash(it, value) }
 
     private fun Collection<String>.mapNamesToLicenses(origin: String, input: ReporterInput): List<License> =
         map { licenseName ->
@@ -242,12 +242,12 @@ class CycloneDxReporter(
 
             packages.forEach { (pkg, _) ->
                 val dependencyType = if (pkg.id in allDirectDependencies) "direct" else "transitive"
-                addPackageToBom(input, pkg, bom, dependencyType)
+                bom.addPackage(input, pkg, dependencyType)
             }
 
-            addVulnerabilitiesToBom(input.ortResult.getVulnerabilities(), bom)
+            bom.addVulnerabilities(input.ortResult.getVulnerabilities())
 
-            reportFileResults += writeBom(bom, schemaVersion, outputDir, REPORT_BASE_FILENAME, outputFileExtensions)
+            reportFileResults += bom.writeFormats(schemaVersion, outputDir, REPORT_BASE_FILENAME, outputFileExtensions)
         } else {
             projects.forEach { project ->
                 val bom = Bom().apply {
@@ -286,20 +286,20 @@ class CycloneDxReporter(
                 val directDependencies = input.ortResult.dependencyNavigator.projectDependencies(project, maxDepth = 1)
                 dependencyPackages.forEach { pkg ->
                     val dependencyType = if (pkg.id in directDependencies) "direct" else "transitive"
-                    addPackageToBom(input, pkg, bom, dependencyType)
+                    bom.addPackage(input, pkg, dependencyType)
                 }
 
-                addVulnerabilitiesToBom(input.ortResult.getVulnerabilities(), bom)
+                bom.addVulnerabilities(input.ortResult.getVulnerabilities())
 
                 val reportName = "$REPORT_BASE_FILENAME-${project.id.toPath("-")}"
-                reportFileResults += writeBom(bom, schemaVersion, outputDir, reportName, outputFileExtensions)
+                reportFileResults += bom.writeFormats(schemaVersion, outputDir, reportName, outputFileExtensions)
             }
         }
 
         return reportFileResults
     }
 
-    private fun addVulnerabilitiesToBom(advisorVulnerabilities: Map<Identifier, List<Vulnerability>>, bom: Bom) {
+    private fun Bom.addVulnerabilities(advisorVulnerabilities: Map<Identifier, List<Vulnerability>>) {
         val allVulnerabilities = mutableListOf<org.cyclonedx.model.vulnerability.Vulnerability>()
 
         advisorVulnerabilities.forEach { (id, vulnerabilities) ->
@@ -351,11 +351,11 @@ class CycloneDxReporter(
                 allVulnerabilities.add(cdxVulnerability)
             }
 
-            bom.vulnerabilities = allVulnerabilities
+            this.vulnerabilities = allVulnerabilities
         }
     }
 
-    private fun addPackageToBom(input: ReporterInput, pkg: Package, bom: Bom, dependencyType: String) {
+    private fun Bom.addPackage(input: ReporterInput, pkg: Package, dependencyType: String) {
         val resolvedLicenseInfo = input.licenseInfoResolver.resolveLicenseInfo(pkg.id).filterExcluded()
             .applyChoices(input.ortResult.getPackageLicenseChoices(pkg.id))
             .applyChoices(input.ortResult.getRepositoryLicenseChoices())
@@ -369,8 +369,8 @@ class CycloneDxReporter(
             declaredLicenseNames.mapNamesToLicenses("declared license", input) +
             detectedLicenseNames.mapNamesToLicenses("detected license", input)
 
-        val binaryHash = mapHash(pkg.binaryArtifact.hash)
-        val sourceHash = mapHash(pkg.sourceArtifact.hash)
+        val binaryHash = pkg.binaryArtifact.hash.toCycloneDx()
+        val sourceHash = pkg.sourceArtifact.hash.toCycloneDx()
 
         val (hash, purlQualifier) = if (binaryHash == null && sourceHash != null) {
             Pair(sourceHash, "?classifier=sources")
@@ -415,11 +415,10 @@ class CycloneDxReporter(
 
         component.addExternalReference(ExternalReference.Type.WEBSITE, pkg.homepageUrl)
 
-        bom.addComponent(component)
+        addComponent(component)
     }
 
-    private fun writeBom(
-        bom: Bom,
+    private fun Bom.writeFormats(
         schemaVersion: Version,
         outputDir: File,
         outputName: String,
@@ -427,7 +426,7 @@ class CycloneDxReporter(
     ): List<Result<File>> =
         outputFormats.map { format ->
             runCatching {
-                val bomString = generateBom(bom, schemaVersion, format)
+                val bomString = createFormat(schemaVersion, format)
 
                 outputDir.resolve("$outputName.${format.extension}").apply {
                     bufferedWriter().use { it.write(bomString) }
@@ -448,33 +447,31 @@ private fun ResolvedLicenseInfo.getLicenseNames(vararg sources: LicenseSource): 
     licenses.filter { license -> sources.any { it in license.sources } }.mapTo(sortedSetOf()) { it.license.toString() }
 
 /**
- * Return the string representation for the given [bom], [schemaVersion] and [format].
+ * Return the string representation for this [Bom], [schemaVersion] and [format].
  */
-private fun generateBom(bom: Bom, schemaVersion: Version, format: Format): String =
+private fun Bom.createFormat(schemaVersion: Version, format: Format): String =
     when (format) {
-        Format.XML -> BomGeneratorFactory.createXml(schemaVersion, bom).toXmlString()
+        Format.XML -> BomGeneratorFactory.createXml(schemaVersion, this).toXmlString()
         Format.JSON -> {
             // JSON output cannot handle extensible types (see [1]), so simply remove them. As JSON output is guaranteed
             // to be the last format serialized, it is okay to modify the BOM here without doing a deep copy first.
             //
             // [1] https://github.com/CycloneDX/cyclonedx-core-java/issues/99.
-            val bomWithoutExtensibleTypes = bom.apply {
-                components.forEach { component ->
-                    // Clear the "dependencyType".
-                    component.extensibleTypes = null
+            components.forEach { component ->
+                // Clear the "dependencyType".
+                component.extensibleTypes = null
 
-                    if (component.licenses?.licenses != null) {
-                        component.licenses.licenses.forEach { license ->
-                            // Clear the "origin".
-                            license.extensibleTypes = null
-                        }
-
-                        // Remove duplicates that may occur due to clearing the distinguishing extensive type.
-                        component.licenses.licenses = component.licenses.licenses.distinct()
+                if (component.licenses?.licenses != null) {
+                    component.licenses.licenses.forEach { license ->
+                        // Clear the "origin".
+                        license.extensibleTypes = null
                     }
+
+                    // Remove duplicates that may occur due to clearing the distinguishing extensive type.
+                    component.licenses.licenses = component.licenses.licenses.distinct()
                 }
             }
 
-            BomGeneratorFactory.createJson(schemaVersion, bomWithoutExtensibleTypes).toJsonString()
+            BomGeneratorFactory.createJson(schemaVersion, this).toJsonString()
         }
     }
