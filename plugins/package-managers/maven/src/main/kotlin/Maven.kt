@@ -31,10 +31,7 @@ import org.eclipse.aether.repository.WorkspaceRepository
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
-import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.DependencyGraph
-import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
@@ -50,6 +47,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.parseLicenses
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.parseVcsInfo
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.processDeclaredLicenses
 import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
+import org.ossreviewtoolkit.utils.spdx.SpdxOperator
 
 /**
  * The [Maven](https://maven.apache.org/) package manager for Java.
@@ -112,25 +110,6 @@ class Maven(
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
-        val projectBuildingResult = mvn.buildMavenProject(definitionFile)
-        val mavenProject = projectBuildingResult.project
-        val projectId = Identifier(
-            type = managerName,
-            namespace = mavenProject.groupId,
-            name = mavenProject.artifactId,
-            version = mavenProject.version
-        )
-
-        projectBuildingResult.dependencies.filterNot {
-            excludes.isScopeExcluded(it.dependency.scope)
-        }.forEach { node ->
-            graphBuilder.addDependency(DependencyGraph.qualifyScope(projectId, node.dependency.scope), node)
-        }
-
-        val declaredLicenses = parseLicenses(mavenProject)
-        val declaredLicensesProcessed = processDeclaredLicenses(declaredLicenses)
-
-        val vcsFromPackage = parseVcsInfo(mavenProject)
 
         // If running in SBT mode expect that POM files were generated in a "target" subdirectory and that the correct
         // project directory is the parent directory of this.
@@ -140,21 +119,39 @@ class Maven(
             workingDir
         }
 
+        val projectBuildingResult = mvn.buildMavenProject(definitionFile)
+        val mavenProject = projectBuildingResult.project
+
+        val declaredLicenses = parseLicenses(mavenProject)
+
+        val vcsFromProject = parseVcsInfo(mavenProject)
+
         val browsableScmUrl = getOriginalScm(mavenProject)?.url
         val homepageUrl = mavenProject.url
         val vcsFallbackUrls = listOfNotNull(browsableScmUrl, homepageUrl).toTypedArray()
 
-        val project = Project(
-            id = projectId,
-            definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-            authors = parseAuthors(mavenProject),
-            declaredLicenses = declaredLicenses,
-            declaredLicensesProcessed = declaredLicensesProcessed,
-            vcs = vcsFromPackage,
-            vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, *vcsFallbackUrls),
-            homepageUrl = homepageUrl.orEmpty(),
-            scopeNames = graphBuilder.scopesFor(projectId)
-        )
+        val project = with(mavenProject) {
+            graphBuilder.createProject(
+                namespace = groupId,
+                name = artifactId,
+                version = version,
+                definitionFile = definitionFile,
+                authors = parseAuthors(mavenProject),
+                homepageUrl = homepageUrl.orEmpty(),
+                vcsFallbackUrls = vcsFallbackUrls,
+                declaredLicenses = declaredLicenses,
+                // See http://maven.apache.org/ref/3.6.3/maven-model/maven.html#project saying: "If multiple licenses
+                // are listed, it is assumed that the user can select any of them, not that they must accept all."
+                licenseOperator = SpdxOperator.OR,
+                vcsFromProject = vcsFromProject
+            )
+        }
+
+        projectBuildingResult.dependencies.filterNot {
+            excludes.isScopeExcluded(it.dependency.scope)
+        }.forEach { node ->
+            graphBuilder.addDependency(DependencyGraph.qualifyScope(project.id, node.dependency.scope), node)
+        }
 
         val issues = graphBuilder.packages().mapNotNull { pkg ->
             if (pkg.description == "POM was created by Sonatype Nexus") {

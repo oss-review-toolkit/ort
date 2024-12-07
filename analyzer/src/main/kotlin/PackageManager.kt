@@ -41,14 +41,17 @@ import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.common.collapseWhitespace
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
+import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.ort.showStackTrace
+import org.ossreviewtoolkit.utils.spdx.SpdxOperator
 
 typealias ManagedProjectFiles = Map<PackageManagerFactory, List<File>>
 typealias ProjectResults = Map<File, List<ProjectAnalyzerResult>>
@@ -258,6 +261,36 @@ abstract class PackageManager(
      * Optional step to run after dependency resolution, like cleaning up temporary files.
      */
     protected open fun afterResolution(definitionFiles: List<File>) {}
+
+    /**
+     * Conveniently create a [Project] for implementations that use the [DependencyGraphBuilder].
+     */
+    fun DependencyGraphBuilder<*>.createProject(
+        namespace: String,
+        name: String,
+        version: String,
+        definitionFile: File,
+        projectDir: File = definitionFile.parentFile,
+        authors: Set<String> = emptySet(),
+        homepageUrl: String = "",
+        declaredLicenses: Set<String> = emptySet(),
+        licenseOperator: SpdxOperator = SpdxOperator.AND,
+        vcsFromProject: VcsInfo = VcsInfo.EMPTY,
+        vararg vcsFallbackUrls: String
+    ): Project {
+        val id = Identifier(projectType, namespace, name, version)
+        return Project(
+            id = id,
+            definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+            authors = authors,
+            declaredLicenses = declaredLicenses,
+            declaredLicensesProcessed = DeclaredLicenseProcessor.process(declaredLicenses, operator = licenseOperator),
+            vcs = vcsFromProject,
+            vcsProcessed = processProjectVcs(projectDir, vcsFromProject, *vcsFallbackUrls),
+            homepageUrl = homepageUrl,
+            scopeNames = scopesFor(id)
+        )
+    }
 
     /**
      * Generate the final result to be returned by this package manager. This function is called at the very end of the

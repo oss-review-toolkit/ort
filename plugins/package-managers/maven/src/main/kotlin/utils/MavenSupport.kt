@@ -85,12 +85,14 @@ import org.ossreviewtoolkit.utils.common.DiskCache
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.gibibytes
 import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
+import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.OrtAuthenticator
 import org.ossreviewtoolkit.utils.ort.OrtProxySelector
 import org.ossreviewtoolkit.utils.ort.downloadText
 import org.ossreviewtoolkit.utils.ort.okHttpClient
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 import org.ossreviewtoolkit.utils.ort.showStackTrace
+import org.ossreviewtoolkit.utils.spdx.SpdxOperator
 
 fun Artifact.identifier() = "$groupId:$artifactId:$version"
 
@@ -490,7 +492,10 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
         }
 
         val declaredLicenses = parseLicenses(mavenProject)
-        val declaredLicensesProcessed = processDeclaredLicenses(declaredLicenses)
+
+        // See http://maven.apache.org/ref/3.6.3/maven-model/maven.html#project saying: "If multiple licenses
+        // are listed, it is assumed that the user can select any of them, not that they must accept all."
+        val declaredLicensesProcessed = DeclaredLicenseProcessor.process(declaredLicenses, operator = SpdxOperator.OR)
 
         val binaryRemoteArtifact = localProject?.let {
             RemoteArtifact.EMPTY

@@ -199,8 +199,3 @@ internal fun parseVcsInfo(project: MavenProject): VcsInfo {
         }
     }
 }
-
-internal fun processDeclaredLicenses(licenses: Set<String>): ProcessedDeclaredLicense =
-    // See http://maven.apache.org/ref/3.6.3/maven-model/maven.html#project which says: "If multiple licenses
-    // are listed, it is assumed that the user can select any of them, not that they must accept all."
-    DeclaredLicenseProcessor.process(licenses, operator = SpdxOperator.OR)
