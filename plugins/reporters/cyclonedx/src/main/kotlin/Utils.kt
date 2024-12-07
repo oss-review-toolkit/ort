@@ -35,6 +35,9 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.ort.ORT_NAME
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 
+/**
+ * Map each name of a license in the collection to a license object with the appropriate license text.
+ */
 internal fun Collection<String>.mapNamesToLicenses(origin: String, input: ReporterInput): List<License> =
     map { licenseName ->
         val spdxId = SpdxLicense.forId(licenseName)?.id
@@ -69,5 +72,8 @@ internal fun ResolvedLicenseInfo.getLicenseNames(vararg sources: LicenseSource):
  */
 internal fun String.toFormat(): Format? = Format.entries.find { this == it.extension }
 
+/**
+ * Map an ORT hash object to a CycloneDX hash object.
+ */
 internal fun org.ossreviewtoolkit.model.Hash.toCycloneDx(): Hash? =
     Hash.Algorithm.entries.find { it.spec == algorithm.toString() }?.let { Hash(it, value) }
