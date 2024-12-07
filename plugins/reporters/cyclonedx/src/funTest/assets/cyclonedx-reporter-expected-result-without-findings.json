@@ -14,6 +14,14 @@
         }
       ]
     },
+    "component": {
+      "type": "application",
+      "bom-ref": "NPM:@ort:project-without-findings:1.0",
+      "group": "@ort",
+      "name": "project-without-findings",
+      "version": "1.0",
+      "description": ""
+    },
     "licenses": [
       {
         "expression": "CC0-1.0"

@@ -31,6 +31,7 @@ import org.cyclonedx.model.Component
 import org.cyclonedx.model.ExternalReference
 import org.cyclonedx.model.LicenseChoice
 import org.cyclonedx.model.Metadata
+import org.cyclonedx.model.OrganizationalContact
 import org.cyclonedx.model.license.Expression
 import org.cyclonedx.model.metadata.ToolInformation
 
@@ -146,7 +147,21 @@ class CycloneDxReporter(
         if (config.singleBom) {
             val bom = Bom().apply {
                 serialNumber = "urn:uuid:${UUID.randomUUID()}"
-                this.metadata = metadata
+
+                this.metadata = metadata.apply {
+                    component = Component().apply {
+                        // There is no component type for repositories.
+                        type = Component.Type.FILE
+
+                        with(input.ortResult.repository.vcsProcessed) {
+                            bomRef = "$url@$revision"
+
+                            name = url
+                            version = revision
+                        }
+                    }
+                }
+
                 components = mutableListOf()
             }
 
@@ -185,7 +200,23 @@ class CycloneDxReporter(
             projects.forEach { project ->
                 val bom = Bom().apply {
                     serialNumber = "urn:uuid:${UUID.randomUUID()}"
-                    this.metadata = metadata
+
+                    this.metadata = metadata.apply {
+                        component = Component().apply {
+                            // Actually the project could be a library as well, but there is no automatic way to tell.
+                            type = Component.Type.APPLICATION
+
+                            bomRef = project.id.toCoordinates()
+
+                            group = project.id.namespace
+                            name = project.id.name
+                            version = project.id.version
+
+                            authors = project.authors.map { OrganizationalContact().apply { name = it } }
+                            description = project.description
+                        }
+                    }
+
                     components = mutableListOf()
                 }
 
