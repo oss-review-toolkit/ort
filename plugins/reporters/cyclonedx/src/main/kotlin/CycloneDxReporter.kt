@@ -193,6 +193,8 @@ class CycloneDxReporter(
                 bom.addComponent(input, pkg, dependencyType)
             }
 
+            bom.addDependencies(input, bom.metadata.component.bomRef, allDirectDependencies)
+
             bom.addVulnerabilities(input.ortResult.getVulnerabilities())
 
             reportFileResults += bom.writeFormats(schemaVersion, outputDir, REPORT_BASE_FILENAME, outputFileExtensions)
@@ -252,6 +254,8 @@ class CycloneDxReporter(
                     val dependencyType = if (pkg.id in directDependencies) "direct" else "transitive"
                     bom.addComponent(input, pkg, dependencyType)
                 }
+
+                bom.addDependencies(input, bom.metadata.component.bomRef, directDependencies)
 
                 bom.addVulnerabilities(input.ortResult.getVulnerabilities())
 

@@ -33,6 +33,7 @@ import org.cyclonedx.Version
 import org.cyclonedx.generators.BomGeneratorFactory
 import org.cyclonedx.model.Bom
 import org.cyclonedx.model.Component
+import org.cyclonedx.model.Dependency
 import org.cyclonedx.model.ExtensibleType
 import org.cyclonedx.model.ExternalReference
 import org.cyclonedx.model.LicenseChoice
@@ -47,6 +48,23 @@ import org.ossreviewtoolkit.model.vulnerabilities.Cvss4Rating
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.ort.ORT_NAME
+
+/**
+ * Enrich this [Bom] with information about the hierarchy of dependencies, starting with the [parentRef] and its direct
+ * dependencies given as ORT [ids].
+ */
+internal fun Bom.addDependencies(input: ReporterInput, parentRef: String, ids: Set<Identifier>) {
+    val dependency = Dependency(parentRef).apply {
+        dependencies = ids.map { id -> Dependency(id.toCoordinates()) }
+    }
+
+    if (dependency.dependencies.isNotEmpty()) addDependency(dependency)
+
+    ids.forEach { id ->
+        val directDependencies = input.ortResult.getDependencies(id, maxLevel = 1, omitExcluded = true)
+        addDependencies(input, id.toCoordinates(), directDependencies)
+    }
+}
 
 /**
  * Add a [ExternalReference] of the given [type] to this [Bom] which points to [url] and has an optional [comment].
