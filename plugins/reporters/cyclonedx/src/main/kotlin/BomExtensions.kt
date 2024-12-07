@@ -48,6 +48,9 @@ import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.ort.ORT_NAME
 
+/**
+ * Add a [ExternalReference] of the given [type] to this [Bom] which points to [url] and has an optional [comment].
+ */
 internal fun Bom.addExternalReference(type: ExternalReference.Type, url: String, comment: String? = null) {
     if (url.isBlank()) return
 
@@ -60,6 +63,10 @@ internal fun Bom.addExternalReference(type: ExternalReference.Type, url: String,
     )
 }
 
+/**
+ * Add the given [ORT package][pkg] to this [Bom] by converting it to a CycloneDX [Component] using the metdata from
+ * [input]. The [dependencyType] is added as an [ExtensibleType] to indicate "direct" vs "transitive" dependencies.
+ */
 internal fun Bom.addPackage(input: ReporterInput, pkg: Package, dependencyType: String) {
     val resolvedLicenseInfo = input.licenseInfoResolver.resolveLicenseInfo(pkg.id).filterExcluded()
         .applyChoices(input.ortResult.getPackageLicenseChoices(pkg.id))
@@ -123,6 +130,10 @@ internal fun Bom.addPackage(input: ReporterInput, pkg: Package, dependencyType: 
     addComponent(component)
 }
 
+/**
+ * Add the [advisorVulnerabilities] to this [Bom] by converting them from [ORT vulnerability objects][Vulnerability] to
+ * [CycloneDX vulnerability objects][org.cyclonedx.model.vulnerability.Vulnerability].
+ */
 internal fun Bom.addVulnerabilities(advisorVulnerabilities: Map<Identifier, List<Vulnerability>>) {
     val allVulnerabilities = mutableListOf<org.cyclonedx.model.vulnerability.Vulnerability>()
 
@@ -209,6 +220,10 @@ internal fun Bom.createFormat(schemaVersion: Version, format: Format): String =
         }
     }
 
+/**
+ * Write this [Bom] at the given [schemaVersion] in all [outputFormats] to the [outputDir] with [outputName] as
+ * prefixes.
+ */
 internal fun Bom.writeFormats(
     schemaVersion: Version,
     outputDir: File,
@@ -225,6 +240,10 @@ internal fun Bom.writeFormats(
         }
     }
 
+/**
+ * Add a [ExternalReference] of the given [type] to this [Component] which points to [url] and has an optional
+ * [comment].
+ */
 internal fun Component.addExternalReference(type: ExternalReference.Type, url: String, comment: String? = null) {
     if (url.isBlank()) return
 
