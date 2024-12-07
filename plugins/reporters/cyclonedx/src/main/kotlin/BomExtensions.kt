@@ -67,7 +67,7 @@ internal fun Bom.addExternalReference(type: ExternalReference.Type, url: String,
  * Add the given [ORT package][pkg] to this [Bom] by converting it to a CycloneDX [Component] using the metdata from
  * [input]. The [dependencyType] is added as an [ExtensibleType] to indicate "direct" vs "transitive" dependencies.
  */
-internal fun Bom.addPackage(input: ReporterInput, pkg: Package, dependencyType: String) {
+internal fun Bom.addComponent(input: ReporterInput, pkg: Package, dependencyType: String) {
     val resolvedLicenseInfo = input.licenseInfoResolver.resolveLicenseInfo(pkg.id).filterExcluded()
         .applyChoices(input.ortResult.getPackageLicenseChoices(pkg.id))
         .applyChoices(input.ortResult.getRepositoryLicenseChoices())
