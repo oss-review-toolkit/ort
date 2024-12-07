@@ -447,7 +447,9 @@ class DownloaderCommand : OrtCommand(
                 echo("Downloading $archiveType artifact from $projectUrl...")
                 Package.EMPTY.copy(id = dummyId, sourceArtifact = RemoteArtifact.EMPTY.copy(url = projectUrl))
             } else {
-                val vcs = VersionControlSystem.forUrl(projectUrl)
+                val vcs = VersionControlSystem.forUrl(
+                    projectUrl, ortConfig.downloader.getCaseInsensitiveVersionControlSystems()
+                )
                 val vcsType = listOfNotNull(vcsTypeOption, vcs?.type).map { VcsType.forName(it) }.firstOrNull()
                     ?: VcsType.UNKNOWN
                 val vcsRevision = vcsRevisionOption ?: vcs?.getDefaultBranchName(projectUrl).orEmpty()

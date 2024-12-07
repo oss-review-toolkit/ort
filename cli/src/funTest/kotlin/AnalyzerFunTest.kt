@@ -29,6 +29,7 @@ import java.util.concurrent.TimeUnit
 import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.analyzer.analyze
+import org.ossreviewtoolkit.downloader.VersionControlSystemConfiguration
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -52,7 +53,10 @@ class AnalyzerFunTest : WordSpec({
                     revision = "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
                 )
             )
-            val outputDir = tempdir().also { GitRepo().download(pkg, it) }
+            val outputDir = tempdir().also {
+                GitRepo.Factory().create(VersionControlSystemConfiguration())
+                    .download(pkg, it)
+            }
 
             val result = analyze(outputDir, packageManagers = emptySet()).toYaml()
 

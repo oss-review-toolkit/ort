@@ -30,6 +30,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.Git
+import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.GitConfiguration
 
 class SafeDeleteRecursivelyFunTest : WordSpec({
     "File.safeDeleteRecursively()" should {
@@ -58,7 +59,8 @@ class SafeDeleteRecursivelyFunTest : WordSpec({
             )
 
             val nodeDir = tempdir().resolve("node-dir")
-            Git().download(pkg, nodeDir)
+            Git.Factory().create(GitConfiguration())
+                .download(pkg, nodeDir)
 
             shouldNotThrow<IOException> {
                 nodeDir.safeDeleteRecursively()

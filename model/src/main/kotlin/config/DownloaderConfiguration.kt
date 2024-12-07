@@ -44,9 +44,35 @@ data class DownloaderConfiguration(
      * Configuration of the considered source code origins and their priority order. This must not be empty and not
      * contain any duplicates.
      */
-    val sourceCodeOrigins: List<SourceCodeOrigin> = listOf(SourceCodeOrigin.VCS, SourceCodeOrigin.ARTIFACT)
+    val sourceCodeOrigins: List<SourceCodeOrigin> = listOf(SourceCodeOrigin.VCS, SourceCodeOrigin.ARTIFACT),
+
+    /**
+     * Version control system specific configurations. The key needs to match VCS type,
+     * e.g. "Git" for the Git version control system.
+     */
+    val versionControlSystems: Map<String, VersionControlSystemConfiguration> = emptyMap()
 ) {
+    /**
+     * A copy of [versionControlSystems] with case-insensitive keys.
+     */
+    private val versionControlSystemsCaseInsensitive: Map<String, VersionControlSystemConfiguration> =
+        versionControlSystems.toSortedMap(String.CASE_INSENSITIVE_ORDER)
+
     init {
         sourceCodeOrigins.requireNotEmptyNoDuplicates()
+
+        val duplicateVersionControlSystems =
+            versionControlSystems.keys - versionControlSystemsCaseInsensitive.keys.toSet()
+
+        require(duplicateVersionControlSystems.isEmpty()) {
+            "The following version control systems have duplicate configuration: " +
+                "${duplicateVersionControlSystems.joinToString()}."
+        }
     }
+
+    /**
+     * Get a [VersionControlSystemConfiguration] from [versionControlSystems].
+     * The difference to accessing the map directly is that VCS type can be case-insensitive.
+     */
+    fun getCaseInsensitiveVersionControlSystems() = versionControlSystemsCaseInsensitive
 }
