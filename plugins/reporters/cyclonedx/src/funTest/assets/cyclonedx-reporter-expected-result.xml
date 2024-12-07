@@ -10,6 +10,10 @@
         </component>
       </components>
     </tools>
+    <component type="file" bom-ref="https://github.com/oss-review-toolkit/ort.git@main">
+      <name>https://github.com/oss-review-toolkit/ort.git</name>
+      <version>main</version>
+    </component>
     <licenses>
       <expression>CC0-1.0</expression>
     </licenses>

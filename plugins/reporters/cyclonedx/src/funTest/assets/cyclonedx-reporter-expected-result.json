@@ -14,6 +14,12 @@
         }
       ]
     },
+    "component": {
+      "type": "file",
+      "bom-ref": "https://github.com/oss-review-toolkit/ort.git@main",
+      "name": "https://github.com/oss-review-toolkit/ort.git",
+      "version": "main"
+    },
     "licenses": [
       {
         "expression": "CC0-1.0"
