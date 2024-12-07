@@ -91,11 +91,16 @@ internal fun Bom.addComponent(input: ReporterInput, pkg: Package, dependencyType
     }
 
     val component = Component().apply {
+        // See https://github.com/CycloneDX/specification/issues/17 for how this differs from FRAMEWORK.
+        type = Component.Type.LIBRARY
+
+        bomRef = pkg.id.toCoordinates()
+
         group = pkg.id.namespace
         name = pkg.id.name
         version = pkg.id.version
+
         description = pkg.description
-        bomRef = pkg.id.toCoordinates()
 
         // TODO: Map package-manager-specific OPTIONAL scopes.
         scope = if (input.ortResult.isExcluded(pkg.id)) {
@@ -118,9 +123,6 @@ internal fun Bom.addComponent(input: ReporterInput, pkg: Package, dependencyType
 
         purl = pkg.purl + purlQualifier
         isModified = pkg.isModified
-
-        // See https://github.com/CycloneDX/specification/issues/17 for how this differs from FRAMEWORK.
-        type = Component.Type.LIBRARY
 
         extensibleTypes = listOf(ExtensibleType(ORT_NAME, "dependencyType", dependencyType))
     }
