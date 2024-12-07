@@ -181,7 +181,7 @@ data class Project(
             id = id,
             authors = authors,
             declaredLicenses = declaredLicenses,
-            description = "",
+            description = description,
             homepageUrl = homepageUrl,
             binaryArtifact = RemoteArtifact.EMPTY,
             sourceArtifact = RemoteArtifact.EMPTY,
