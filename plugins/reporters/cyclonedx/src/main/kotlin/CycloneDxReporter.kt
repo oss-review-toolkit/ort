@@ -175,7 +175,7 @@ class CycloneDxReporter(
 
             packages.forEach { (pkg, _) ->
                 val dependencyType = if (pkg.id in allDirectDependencies) "direct" else "transitive"
-                bom.addPackage(input, pkg, dependencyType)
+                bom.addComponent(input, pkg, dependencyType)
             }
 
             bom.addVulnerabilities(input.ortResult.getVulnerabilities())
@@ -219,7 +219,7 @@ class CycloneDxReporter(
                 val directDependencies = input.ortResult.dependencyNavigator.projectDependencies(project, maxDepth = 1)
                 dependencyPackages.forEach { pkg ->
                     val dependencyType = if (pkg.id in directDependencies) "direct" else "transitive"
-                    bom.addPackage(input, pkg, dependencyType)
+                    bom.addComponent(input, pkg, dependencyType)
                 }
 
                 bom.addVulnerabilities(input.ortResult.getVulnerabilities())
