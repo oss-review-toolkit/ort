@@ -15,7 +15,10 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        os: [ubuntu-24.04, windows-2022]
+    runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout Repository
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
@@ -43,8 +46,11 @@ jobs:
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@aa578102511db1f4524ed59b8cc2bae4f6e88195 # v3
   test:
+    strategy:
+      matrix:
+        os: [ubuntu-24.04, windows-2022]
+    runs-on: ${{ matrix.os }}
     needs: build
-    runs-on: ubuntu-24.04
     steps:
     - name: Checkout Repository
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
@@ -61,7 +67,7 @@ jobs:
       uses: codecov/codecov-action@7f8b4b4bde536c465e797be725718b88c5d95e0e # v5
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        flags: test
+        flags: test-${{ matrix.os }}
   funTest-non-docker:
     needs: build
     runs-on: ubuntu-24.04
