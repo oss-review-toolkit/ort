@@ -108,7 +108,7 @@ object JavaBootstrapper {
         val pkg = pkgs.sortedBy { it.id }.find { it.distributionName == distributionName }
             ?: return Result.failure(
                 IllegalArgumentException(
-                    "No package found for JDK '$distributionName' in version '$version'."
+                    "No JDK package for distribution '$distributionName' in version '$version' found for bootstrapping."
                 )
             )
 
