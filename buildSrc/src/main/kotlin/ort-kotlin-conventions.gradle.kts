@@ -228,6 +228,7 @@ tasks.withType<Test>().configureEach {
         // See https://kotest.io/docs/next/extensions/system_extensions.html#system-environment.
         jvmArgs(
             "--add-opens", "java.base/java.io=ALL-UNNAMED",
+            "--add-opens", "java.base/java.lang=ALL-UNNAMED",
             "--add-opens", "java.base/java.util=ALL-UNNAMED",
             "--add-opens", "java.base/sun.nio.ch=ALL-UNNAMED"
         )
