@@ -90,7 +90,7 @@ object JavaBootstrapper {
         val pkgs = discoClient.getPkgs(
             /* distributions = */ null,
             semVer.versionNumber,
-            Latest.PER_VERSION,
+            Latest.AVAILABLE,
             operatingSystem,
             libcType,
             architecture,
