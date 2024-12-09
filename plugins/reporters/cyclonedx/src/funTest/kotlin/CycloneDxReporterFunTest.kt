@@ -227,7 +227,7 @@ class CycloneDxReporterFunTest : WordSpec({
 private fun String.patchCycloneDxResult(): String =
     replaceFirst(
         """urn:uuid:[a-f0-9]{8}(?:-[a-f0-9]{4}){4}[a-f0-9]{8}""".toRegex(),
-        "urn:uuid:01234567-0123-0123-0123-01234567"
+        "urn:uuid:12345678-1234-1234-1234-123456789012"
     ).replaceFirst(
         """(timestamp[>"](\s*:\s*")?)\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z""".toRegex(),
         "$11970-01-01T00:00:00Z"
