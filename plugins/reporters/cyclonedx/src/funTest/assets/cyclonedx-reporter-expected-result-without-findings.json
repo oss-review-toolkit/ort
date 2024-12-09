@@ -8,9 +8,9 @@
     "tools": {
       "components": [
         {
+          "type": "application",
           "name": "OSS Review Toolkit",
-          "version": "deadbeef",
-          "type": "application"
+          "version": "deadbeef"
         }
       ]
     },
