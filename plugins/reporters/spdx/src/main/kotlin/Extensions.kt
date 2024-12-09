@@ -215,8 +215,8 @@ internal fun Package.toSpdxPackage(
                 .mapTo(mutableSetOf()) { it.license.nullOrBlankToSpdxNoassertionOrNone() }
                 .sorted()
         },
-        packageVerificationCode = packageVerificationCode,
         name = id.name,
+        packageVerificationCode = packageVerificationCode,
         summary = description.nullOrBlankToSpdxNone(),
         versionInfo = id.version
     )
