@@ -227,13 +227,13 @@ class Conan(
     }
 
     private fun configureRemoteAuthentication(conanConfig: File?) {
-        // Install configuration from a local directory if available.
-        conanConfig?.let {
-            run("config", "install", it.absolutePath).requireSuccess()
-        }
-
-        // List configured remotes in "remotes.txt" format.
         val remoteList = runCatching {
+            // Install configuration from a local directory if available.
+            conanConfig?.let {
+                run("config", "install", it.absolutePath).requireSuccess()
+            }
+
+            // List configured remotes in "remotes.txt" format.
             run("remote", "list", "--raw").requireSuccess()
         }.getOrElse {
             logger.warn { "Failed to list remotes." }
