@@ -184,6 +184,7 @@ internal fun Package.toSpdxPackage(
             else -> emptyList()
         },
         copyrightText = licenseInfoResolver.getSpdxCopyrightText(id),
+        description = description,
         downloadLocation = when (type) {
             SpdxPackageType.PROJECT -> SpdxConstants.NONE
             SpdxPackageType.BINARY_PACKAGE -> binaryArtifact.url.nullOrBlankToSpdxNone()
@@ -217,7 +218,6 @@ internal fun Package.toSpdxPackage(
         },
         name = id.name,
         packageVerificationCode = packageVerificationCode,
-        summary = description.nullOrBlankToSpdxNone(),
         versionInfo = id.version
     )
 }
