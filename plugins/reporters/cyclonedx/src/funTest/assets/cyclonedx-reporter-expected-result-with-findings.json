@@ -234,6 +234,11 @@
   ],
   "externalReferences": [
     {
+      "type": "vcs",
+      "url": "https://github.com/oss-review-toolkit/ort.git",
+      "comment": "URL to the project's Git repository"
+    },
+    {
       "type": "website",
       "url": "https://github.com/oss-review-toolkit/ort"
     },

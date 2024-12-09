@@ -351,6 +351,12 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       </externalReferences><ort:dependencyType xmlns:ort="http://www.w3.org/1999/xhtml">direct</ort:dependencyType>
     </component>
   </components>
+  <externalReferences>
+    <reference type="vcs">
+      <url>https://github.com/oss-review-toolkit/ort.git</url>
+      <comment>URL to the Git repository of the projects</comment>
+    </reference>
+  </externalReferences>
   <vulnerabilities>
     <vulnerability>
       <id>CVE-2021-1234</id>

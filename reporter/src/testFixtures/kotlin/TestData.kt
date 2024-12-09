@@ -48,6 +48,7 @@ import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PathExclude
@@ -65,7 +66,11 @@ import org.ossreviewtoolkit.utils.test.scannerRunOf
 // TODO: Create a way to reduce the code required to prepare an OrtResult for testing.
 val ORT_RESULT = OrtResult(
     repository = Repository(
-        vcs = VcsInfo.EMPTY,
+        vcs = VcsInfo(
+            type = VcsType.GIT,
+            url = "https://github.com/oss-review-toolkit/ort.git",
+            revision = "main"
+        ),
         config = RepositoryConfiguration(
             excludes = Excludes(
                 paths = listOf(
@@ -90,7 +95,11 @@ val ORT_RESULT = OrtResult(
                     id = Identifier("NPM:@ort:project-with-findings:1.0"),
                     definitionFilePath = "project-with-findings/package.json",
                     declaredLicenses = emptySet(),
-                    vcs = VcsInfo.EMPTY,
+                    vcs = VcsInfo(
+                        type = VcsType.GIT,
+                        url = "https://github.com/oss-review-toolkit/ort.git",
+                        revision = "main"
+                    ),
                     homepageUrl = "https://github.com/oss-review-toolkit/ort",
                     scopeDependencies = setOf(
                         Scope(
@@ -127,7 +136,11 @@ val ORT_RESULT = OrtResult(
                     id = Identifier("NPM:@ort:project-without-findings:1.0"),
                     definitionFilePath = "project-without-findings/package.json",
                     declaredLicenses = emptySet(),
-                    vcs = VcsInfo.EMPTY,
+                    vcs = VcsInfo(
+                        type = VcsType.GIT,
+                        url = "https://github.com/oss-review-toolkit/ort.git",
+                        revision = "main"
+                    ),
                     homepageUrl = "https://github.com/oss-review-toolkit/ort",
                     scopeDependencies = setOf(
                         Scope(
@@ -140,7 +153,11 @@ val ORT_RESULT = OrtResult(
                     id = Identifier("NPM:@ort:excluded-project:1.0"),
                     definitionFilePath = "excluded-project/package.json",
                     declaredLicenses = setOf("BSD-2-Clause"),
-                    vcs = VcsInfo.EMPTY,
+                    vcs = VcsInfo(
+                        type = VcsType.GIT,
+                        url = "https://github.com/oss-review-toolkit/ort.git",
+                        revision = "main"
+                    ),
                     homepageUrl = "https://github.com/oss-review-toolkit/ort",
                     scopeDependencies = emptySet()
                 )
