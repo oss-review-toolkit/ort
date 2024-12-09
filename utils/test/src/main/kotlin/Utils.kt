@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.ProvenanceResolutionResult
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RemoteProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScannerRun
@@ -152,7 +153,7 @@ fun readOrtResult(file: File) = file.mapper().readValue<OrtResult>(patchExpected
 fun scannerRunOf(vararg pkgScanResults: Pair<Identifier, List<ScanResult>>): ScannerRun {
     val pkgScanResultsWithKnownProvenance = pkgScanResults.associate { (id, scanResultsForId) ->
         id to scanResultsForId.map { scanResult ->
-            scanResult.takeIf { scanResult.provenance is KnownProvenance } ?: scanResult.copy(
+            scanResult.takeIf { scanResult.provenance is RemoteProvenance } ?: scanResult.copy(
                 provenance = ArtifactProvenance(
                     sourceArtifact = RemoteArtifact(
                         url = id.toPurl(),

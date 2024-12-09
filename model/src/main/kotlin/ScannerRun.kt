@@ -167,8 +167,8 @@ data class ScannerRun(
         provenances.associateBy { it.id }
     }
 
-    private val scanResultsByProvenance: Map<KnownProvenance, List<ScanResult>> by lazy {
-        scanResults.groupBy { it.provenance as KnownProvenance }
+    private val scanResultsByProvenance: Map<RemoteProvenance, List<ScanResult>> by lazy {
+        scanResults.groupBy { it.provenance as RemoteProvenance }
     }
 
     private val scanResultsById: Map<Identifier, List<ScanResult>> by lazy {
