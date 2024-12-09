@@ -71,7 +71,7 @@ private data class Include(
     val name: String
 )
 
-object GitRepoCommand : CommandLineTool {
+internal object GitRepoCommand : CommandLineTool {
     override fun command(workingDir: File?) = "repo"
 
     override fun transformVersion(output: String): String {
