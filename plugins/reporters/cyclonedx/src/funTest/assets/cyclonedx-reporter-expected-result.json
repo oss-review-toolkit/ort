@@ -232,6 +232,13 @@
       ]
     }
   ],
+  "externalReferences": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/oss-review-toolkit/ort.git",
+      "comment": "URL to the Git repository of the projects"
+    }
+  ],
   "vulnerabilities": [
     {
       "id": "CVE-2021-1234",
