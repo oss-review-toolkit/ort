@@ -28,7 +28,6 @@
     "licenseConcluded" : "NOASSERTION",
     "licenseDeclared" : "MIT",
     "name" : "first-project-name",
-    "summary" : "NONE",
     "versionInfo" : "0.0.1"
   }, {
     "SPDXID" : "SPDXRef-Package-Maven-first-package-group-first-package-0.0.1",
@@ -37,6 +36,7 @@
       "checksumValue" : "0000000000000000000000000000000000000000"
     } ],
     "copyrightText" : "Copyright 2020 Some copyright holder in VCS\nCopyright 2020 Some copyright holder in source artifact\nCopyright 2020 Some other copyright holder in source artifact",
+    "description" : "A package with all supported attributes set, with a VCS URL containing a user name, and with two scan results for the VCS containing copyright findings matched to a license finding.",
     "downloadLocation" : "https://some-host/first-package.jar",
     "externalRefs" : [ {
       "referenceCategory" : "PACKAGE_MANAGER",
@@ -48,11 +48,11 @@
     "licenseConcluded" : "BSD-2-Clause AND BSD-3-Clause AND MIT",
     "licenseDeclared" : "Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND (GPL-2.0-only OR MIT) AND MIT",
     "name" : "first-package",
-    "summary" : "A package with all supported attributes set, with a VCS URL containing a user name, and with two scan results for the VCS containing copyright findings matched to a license finding.",
     "versionInfo" : "0.0.1"
   }, {
     "SPDXID" : "SPDXRef-Package-Maven-first-package-group-first-package-0.0.1-vcs",
     "copyrightText" : "Copyright 2020 Some copyright holder in VCS\nCopyright 2020 Some copyright holder in source artifact\nCopyright 2020 Some other copyright holder in source artifact",
+    "description" : "A package with all supported attributes set, with a VCS URL containing a user name, and with two scan results for the VCS containing copyright findings matched to a license finding.",
     "downloadLocation" : "git+ssh://github.com/path/first-package-repo.git@deadbeef#project-path",
     "externalRefs" : [ {
       "referenceCategory" : "PACKAGE_MANAGER",
@@ -69,7 +69,6 @@
     "packageVerificationCode" : {
       "packageVerificationCodeValue" : "3700a1e8575c082653af662ac024337faf78990f"
     },
-    "summary" : "A package with all supported attributes set, with a VCS URL containing a user name, and with two scan results for the VCS containing copyright findings matched to a license finding.",
     "versionInfo" : "0.0.1"
   }, {
     "SPDXID" : "SPDXRef-Package-Maven-first-package-group-first-package-0.0.1-source-artifact",
@@ -78,6 +77,7 @@
       "checksumValue" : "0000000000000000000000000000000000000000"
     } ],
     "copyrightText" : "Copyright 2020 Some copyright holder in VCS\nCopyright 2020 Some copyright holder in source artifact\nCopyright 2020 Some other copyright holder in source artifact",
+    "description" : "A package with all supported attributes set, with a VCS URL containing a user name, and with two scan results for the VCS containing copyright findings matched to a license finding.",
     "downloadLocation" : "https://some-host/first-package-sources.jar",
     "externalRefs" : [ {
       "referenceCategory" : "PACKAGE_MANAGER",
@@ -89,11 +89,11 @@
     "licenseConcluded" : "NOASSERTION",
     "licenseDeclared" : "Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND (GPL-2.0-only OR MIT) AND MIT",
     "name" : "first-package",
-    "summary" : "A package with all supported attributes set, with a VCS URL containing a user name, and with two scan results for the VCS containing copyright findings matched to a license finding.",
     "versionInfo" : "0.0.1"
   }, {
     "SPDXID" : "SPDXRef-Package-Maven-fourth-package-group-fourth-package-0.0.1",
     "copyrightText" : "NONE",
+    "description" : "A package with partially mapped declared license.",
     "downloadLocation" : "NONE",
     "externalRefs" : [ {
       "referenceCategory" : "PACKAGE_MANAGER",
@@ -105,11 +105,11 @@
     "licenseConcluded" : "NOASSERTION",
     "licenseDeclared" : "MIT",
     "name" : "fourth-package",
-    "summary" : "A package with partially mapped declared license.",
     "versionInfo" : "0.0.1"
   }, {
     "SPDXID" : "SPDXRef-Package-Maven-second-package-group-second-package-0.0.1",
     "copyrightText" : "NONE",
+    "description" : "A package with minimal attributes set.",
     "downloadLocation" : "NONE",
     "externalRefs" : [ {
       "referenceCategory" : "PACKAGE_MANAGER",
@@ -121,11 +121,11 @@
     "licenseConcluded" : "NOASSERTION",
     "licenseDeclared" : "NONE",
     "name" : "second-package",
-    "summary" : "A package with minimal attributes set.",
     "versionInfo" : "0.0.1"
   }, {
     "SPDXID" : "SPDXRef-Package-Maven-seventh-package-group-seventh-package-0.0.1",
     "copyrightText" : "Copyright 2020 Some copyright holder in source artifact",
+    "description" : "A package with a source artifact scan result.",
     "downloadLocation" : "NONE",
     "externalRefs" : [ {
       "referenceCategory" : "PACKAGE_MANAGER",
@@ -137,7 +137,6 @@
     "licenseConcluded" : "NOASSERTION",
     "licenseDeclared" : "GPL-3.0-only",
     "name" : "seventh-package",
-    "summary" : "A package with a source artifact scan result.",
     "versionInfo" : "0.0.1"
   }, {
     "SPDXID" : "SPDXRef-Package-Maven-seventh-package-group-seventh-package-0.0.1-source-artifact",
@@ -146,6 +145,7 @@
       "checksumValue" : "0000000000000000000000000000000000000000"
     } ],
     "copyrightText" : "Copyright 2020 Some copyright holder in source artifact",
+    "description" : "A package with a source artifact scan result.",
     "downloadLocation" : "https://some-host/seventh-package-sources.jar",
     "externalRefs" : [ {
       "referenceCategory" : "PACKAGE_MANAGER",
@@ -162,11 +162,11 @@
     "packageVerificationCode" : {
       "packageVerificationCodeValue" : "e14acc46fad3a38a1ef2830067619812b51cb4bc"
     },
-    "summary" : "A package with a source artifact scan result.",
     "versionInfo" : "0.0.1"
   }, {
     "SPDXID" : "SPDXRef-Package-Maven-sixth-package-group-sixth-package-0.0.1",
     "copyrightText" : "NONE",
+    "description" : "A package with non-SPDX license IDs in the declared and concluded license.",
     "downloadLocation" : "NONE",
     "externalRefs" : [ {
       "referenceCategory" : "PACKAGE_MANAGER",
@@ -178,11 +178,11 @@
     "licenseConcluded" : "LicenseRef-scancode-srgb",
     "licenseDeclared" : "LicenseRef-scancode-asmus",
     "name" : "sixth-package",
-    "summary" : "A package with non-SPDX license IDs in the declared and concluded license.",
     "versionInfo" : "0.0.1"
   }, {
     "SPDXID" : "SPDXRef-Package-Maven-third-package-group-third-package-0.0.1",
     "copyrightText" : "NONE",
+    "description" : "A package with only unmapped declared license.",
     "downloadLocation" : "NONE",
     "externalRefs" : [ {
       "referenceCategory" : "PACKAGE_MANAGER",
@@ -194,7 +194,6 @@
     "licenseConcluded" : "NOASSERTION",
     "licenseDeclared" : "NONE",
     "name" : "third-package",
-    "summary" : "A package with only unmapped declared license.",
     "versionInfo" : "0.0.1"
   } ],
   "files" : [ {
