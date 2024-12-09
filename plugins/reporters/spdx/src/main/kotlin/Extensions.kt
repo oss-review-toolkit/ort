@@ -217,7 +217,9 @@ internal fun Package.toSpdxPackage(
                 .sorted()
         },
         name = id.name,
+        originator = authors.takeUnless { it.isEmpty() }?.joinToString(prefix = SpdxConstants.PERSON),
         packageVerificationCode = packageVerificationCode,
+        supplier = authors.takeUnless { it.isEmpty() }?.joinToString(prefix = SpdxConstants.PERSON),
         versionInfo = id.version
     )
 }
