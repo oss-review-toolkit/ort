@@ -8,9 +8,9 @@
     "tools": {
       "components": [
         {
+          "type": "application",
           "name": "OSS Review Toolkit",
-          "version": "deadbeef",
-          "type": "application"
+          "version": "deadbeef"
         }
       ]
     },
@@ -22,6 +22,8 @@
   },
   "components": [
     {
+      "type": "library",
+      "bom-ref": "NPM:@ort:concluded-license:1.0",
       "group": "@ort",
       "name": "concluded-license",
       "version": "1.0",
@@ -75,11 +77,11 @@
           "type": "website",
           "url": "https://github.com/oss-review-toolkit/ort"
         }
-      ],
-      "type": "library",
-      "bom-ref": "NPM:@ort:concluded-license:1.0"
+      ]
     },
     {
+      "type": "library",
+      "bom-ref": "NPM:@ort:declared-license:1.0",
       "group": "@ort",
       "name": "declared-license",
       "version": "1.0",
@@ -119,11 +121,11 @@
           "type": "website",
           "url": "https://github.com/oss-review-toolkit/ort"
         }
-      ],
-      "type": "library",
-      "bom-ref": "NPM:@ort:declared-license:1.0"
+      ]
     },
     {
+      "type": "library",
+      "bom-ref": "NPM:@ort:license-file:1.0",
       "group": "@ort",
       "name": "license-file",
       "version": "1.0",
@@ -154,11 +156,11 @@
           "type": "website",
           "url": "https://github.com/oss-review-toolkit/ort"
         }
-      ],
-      "type": "library",
-      "bom-ref": "NPM:@ort:license-file:1.0"
+      ]
     },
     {
+      "type": "library",
+      "bom-ref": "NPM:@ort:license-file-and-additional-licenses:1.0",
       "group": "@ort",
       "name": "license-file-and-additional-licenses",
       "version": "1.0",
@@ -198,11 +200,11 @@
           "type": "website",
           "url": "https://github.com/oss-review-toolkit/ort"
         }
-      ],
-      "type": "library",
-      "bom-ref": "NPM:@ort:license-file-and-additional-licenses:1.0"
+      ]
     },
     {
+      "type": "library",
+      "bom-ref": "NPM:@ort:no-license-file:1.0",
       "group": "@ort",
       "name": "no-license-file",
       "version": "1.0",
@@ -227,9 +229,7 @@
           "type": "website",
           "url": "https://github.com/oss-review-toolkit/ort"
         }
-      ],
-      "type": "library",
-      "bom-ref": "NPM:@ort:no-license-file:1.0"
+      ]
     }
   ],
   "externalReferences": [
