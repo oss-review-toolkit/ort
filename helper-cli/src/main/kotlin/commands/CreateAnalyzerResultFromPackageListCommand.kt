@@ -147,7 +147,7 @@ private data class PackageList(
 
 private data class Dependency(
     val id: Identifier,
-    val purl: String?,
+    val purl: String? = null,
     val vcs: Vcs? = null,
     val sourceArtifact: SourceArtifact? = null,
     val isExcluded: Boolean = false,
