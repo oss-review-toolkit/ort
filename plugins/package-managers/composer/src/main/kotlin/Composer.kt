@@ -250,6 +250,7 @@ class Composer(
 
         val composerVersion = Semver(getVersion(workingDir))
         val args = buildList {
+            add("--no-interaction")
             add("update")
             add("--ignore-platform-reqs")
 
