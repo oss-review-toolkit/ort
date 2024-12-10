@@ -37,6 +37,8 @@ import org.cyclonedx.model.Dependency
 import org.cyclonedx.model.ExtensibleType
 import org.cyclonedx.model.ExternalReference
 import org.cyclonedx.model.LicenseChoice
+import org.cyclonedx.model.OrganizationalContact
+import org.cyclonedx.model.OrganizationalEntity
 import org.cyclonedx.model.vulnerability.Vulnerability.Rating.Method
 
 import org.ossreviewtoolkit.model.Identifier
@@ -117,6 +119,11 @@ internal fun Bom.addComponent(input: ReporterInput, pkg: Package, dependencyType
         group = pkg.id.namespace
         name = pkg.id.name
         version = pkg.id.version
+
+        authors = pkg.authors.map { OrganizationalContact().apply { name = it } }
+        supplier = authors.takeUnless { it.isEmpty() }?.let {
+            OrganizationalEntity().apply { contacts = authors }
+        }
 
         description = pkg.description
 

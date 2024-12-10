@@ -32,6 +32,7 @@ import org.cyclonedx.model.ExternalReference
 import org.cyclonedx.model.LicenseChoice
 import org.cyclonedx.model.Metadata
 import org.cyclonedx.model.OrganizationalContact
+import org.cyclonedx.model.OrganizationalEntity
 import org.cyclonedx.model.license.Expression
 import org.cyclonedx.model.metadata.ToolInformation
 
@@ -215,6 +216,10 @@ class CycloneDxReporter(
                             version = project.id.version
 
                             authors = project.authors.map { OrganizationalContact().apply { name = it } }
+                            supplier = authors.takeUnless { it.isEmpty() }?.let {
+                                OrganizationalEntity().apply { contacts = authors }
+                            }
+
                             description = project.description
                         }
                     }
