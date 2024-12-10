@@ -249,11 +249,15 @@ class Composer(
         if (hasLockfile) return lockfile
 
         val composerVersion = Semver(getVersion(workingDir))
-        val args = listOfNotNull(
-            "update",
-            "--ignore-platform-reqs",
-            "--no-install".takeIf { composerVersion.major >= 2 }
-        )
+        val args = buildList {
+            add("update")
+            add("--ignore-platform-reqs")
+
+            if (composerVersion.major >= 2) {
+                add("--no-install")
+                add("--no-audit")
+            }
+        }
 
         run(workingDir, *args.toTypedArray()).requireSuccess()
 
