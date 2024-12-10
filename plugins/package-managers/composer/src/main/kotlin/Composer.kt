@@ -248,6 +248,9 @@ class Composer(
         requireLockfile(workingDir) { hasLockfile }
         if (hasLockfile) return lockfile
 
+        // Ensure that the build is not configured to disallow the creation of lockfiles.
+        run(workingDir, "--no-interaction", "config", "--unset", "lock").requireSuccess()
+
         val composerVersion = Semver(getVersion(workingDir))
         val args = buildList {
             add("--no-interaction")
