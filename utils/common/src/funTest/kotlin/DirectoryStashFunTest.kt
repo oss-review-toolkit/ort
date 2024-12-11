@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.utils.common
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
 import io.kotest.engine.spec.tempdir
@@ -29,6 +30,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 
 import java.io.File
+import java.io.IOException
 
 class DirectoryStashFunTest : StringSpec() {
     private lateinit var sandboxDir: File
@@ -130,6 +132,16 @@ class DirectoryStashFunTest : StringSpec() {
 
             stashDirectories(nonExistingDir).use {
                 nonExistingDir.mkdirs() shouldBe true
+            }
+
+            sandboxDirShouldBeInOriginalState()
+        }
+
+        "stashed directories are restored even if an exception is thrown" {
+            shouldThrow<IOException> {
+                stashDirectories(a, b).use {
+                    throw IOException()
+                }
             }
 
             sandboxDirShouldBeInOriginalState()
