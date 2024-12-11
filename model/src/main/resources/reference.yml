@@ -167,6 +167,20 @@ ort:
 
     sourceCodeOrigins: [VCS, ARTIFACT]
 
+    # Optional VCS-specific configuration options that allow to add VCS-specific configurations to leverage certain
+    # features directly in a VCS plugin. The effects are limited to usage through the command-line interface of the
+    # Downloader tool, designed primarily for scripted operations. In other stages of the ORT pipeline these
+    # configuration options have no effect.
+    versionControlSystems:
+      Git:
+        options:
+          # Depth of the commit history to fetch when updating submodules
+          submoduleHistoryDepth: 10
+
+          # A flag to control whether nested submodules should be updated (true), or if only the submodules
+          # on the first layer should be considered (false).
+          updateNestedSubmodules: true
+
   scanner:
     skipConcluded: true
     skipExcluded: true

@@ -232,7 +232,9 @@ class Downloader(private val config: DownloaderConfiguration) {
         var applicableVcs: VersionControlSystem? = null
 
         if (pkg.vcsProcessed.type != VcsType.UNKNOWN) {
-            applicableVcs = VersionControlSystem.forType(pkg.vcsProcessed.type)
+            applicableVcs = VersionControlSystem.forType(
+                pkg.vcsProcessed.type, config.getCaseInsensitiveVersionControlSystems()
+            )
             logger.info {
                 applicableVcs?.let {
                     "Detected VCS type '${it.type}' from type name '${pkg.vcsProcessed.type}'."
@@ -241,7 +243,9 @@ class Downloader(private val config: DownloaderConfiguration) {
         }
 
         if (applicableVcs == null) {
-            applicableVcs = VersionControlSystem.forUrl(pkg.vcsProcessed.url)
+            applicableVcs = VersionControlSystem.forUrl(
+                pkg.vcsProcessed.url, config.getCaseInsensitiveVersionControlSystems()
+            )
             logger.info {
                 applicableVcs?.let {
                     "Detected VCS type '${it.type}' from URL ${pkg.vcsProcessed.url}."
