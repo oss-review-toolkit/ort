@@ -21,14 +21,14 @@ project:
     - id: "Pub::http_parser:4.0.2"
       dependencies:
       - id: "Pub::collection:1.18.0"
-      - id: "Pub::source_span:1.10.0"
+      - id: "Pub::source_span:1.10.1"
         dependencies:
         - id: "Pub::collection:1.18.0"
         - id: "Pub::path:1.9.0"
         - id: "Pub::term_glyph:1.2.1"
       - id: "Pub::string_scanner:1.4.0"
         dependencies:
-        - id: "Pub::source_span:1.10.0"
+        - id: "Pub::source_span:1.10.1"
           dependencies:
           - id: "Pub::collection:1.18.0"
           - id: "Pub::path:1.9.0"
@@ -51,14 +51,14 @@ project:
       - id: "Pub::http_parser:4.0.2"
         dependencies:
         - id: "Pub::collection:1.18.0"
-        - id: "Pub::source_span:1.10.0"
+        - id: "Pub::source_span:1.10.1"
           dependencies:
           - id: "Pub::collection:1.18.0"
           - id: "Pub::path:1.9.0"
           - id: "Pub::term_glyph:1.2.1"
         - id: "Pub::string_scanner:1.4.0"
           dependencies:
-          - id: "Pub::source_span:1.10.0"
+          - id: "Pub::source_span:1.10.1"
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::path:1.9.0"
@@ -108,7 +108,7 @@ project:
           - id: "Pub::path:1.9.0"
           - id: "Pub::string_scanner:1.4.0"
             dependencies:
-            - id: "Pub::source_span:1.10.0"
+            - id: "Pub::source_span:1.10.1"
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
@@ -122,7 +122,7 @@ project:
           dependencies:
           - id: "Pub::collection:1.18.0"
           - id: "Pub::meta:1.16.0"
-        - id: "Pub::source_span:1.10.0"
+        - id: "Pub::source_span:1.10.1"
           dependencies:
           - id: "Pub::collection:1.18.0"
           - id: "Pub::path:1.9.0"
@@ -137,14 +137,14 @@ project:
         - id: "Pub::yaml:3.1.2"
           dependencies:
           - id: "Pub::collection:1.18.0"
-          - id: "Pub::source_span:1.10.0"
+          - id: "Pub::source_span:1.10.1"
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::path:1.9.0"
             - id: "Pub::term_glyph:1.2.1"
           - id: "Pub::string_scanner:1.4.0"
             dependencies:
-            - id: "Pub::source_span:1.10.0"
+            - id: "Pub::source_span:1.10.1"
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
@@ -155,14 +155,14 @@ project:
         - id: "Pub::meta:1.16.0"
       - id: "Pub::boolean_selector:2.1.2"
         dependencies:
-        - id: "Pub::source_span:1.10.0"
+        - id: "Pub::source_span:1.10.1"
           dependencies:
           - id: "Pub::collection:1.18.0"
           - id: "Pub::path:1.9.0"
           - id: "Pub::term_glyph:1.2.1"
         - id: "Pub::string_scanner:1.4.0"
           dependencies:
-          - id: "Pub::source_span:1.10.0"
+          - id: "Pub::source_span:1.10.1"
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::path:1.9.0"
@@ -176,9 +176,9 @@ project:
           dependencies:
           - id: "Pub::path:1.9.0"
         - id: "Pub::path:1.9.0"
-        - id: "Pub::source_maps:0.10.12"
+        - id: "Pub::source_maps:0.10.13"
           dependencies:
-          - id: "Pub::source_span:1.10.0"
+          - id: "Pub::source_span:1.10.1"
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::path:1.9.0"
@@ -199,7 +199,7 @@ project:
         - id: "Pub::path:1.9.0"
         - id: "Pub::string_scanner:1.4.0"
           dependencies:
-          - id: "Pub::source_span:1.10.0"
+          - id: "Pub::source_span:1.10.1"
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::path:1.9.0"
@@ -224,21 +224,21 @@ project:
             - id: "Pub::meta:1.16.0"
           - id: "Pub::boolean_selector:2.1.2"
             dependencies:
-            - id: "Pub::source_span:1.10.0"
+            - id: "Pub::source_span:1.10.1"
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
               - id: "Pub::term_glyph:1.2.1"
             - id: "Pub::string_scanner:1.4.0"
               dependencies:
-              - id: "Pub::source_span:1.10.0"
+              - id: "Pub::source_span:1.10.1"
                 dependencies:
                 - id: "Pub::collection:1.18.0"
                 - id: "Pub::path:1.9.0"
                 - id: "Pub::term_glyph:1.2.1"
           - id: "Pub::collection:1.18.0"
           - id: "Pub::meta:1.16.0"
-          - id: "Pub::source_span:1.10.0"
+          - id: "Pub::source_span:1.10.1"
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::path:1.9.0"
@@ -254,7 +254,7 @@ project:
               - id: "Pub::meta:1.16.0"
           - id: "Pub::string_scanner:1.4.0"
             dependencies:
-            - id: "Pub::source_span:1.10.0"
+            - id: "Pub::source_span:1.10.1"
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
@@ -284,14 +284,14 @@ project:
         - id: "Pub::http_parser:4.0.2"
           dependencies:
           - id: "Pub::collection:1.18.0"
-          - id: "Pub::source_span:1.10.0"
+          - id: "Pub::source_span:1.10.1"
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::path:1.9.0"
             - id: "Pub::term_glyph:1.2.1"
           - id: "Pub::string_scanner:1.4.0"
             dependencies:
-            - id: "Pub::source_span:1.10.0"
+            - id: "Pub::source_span:1.10.1"
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
@@ -322,14 +322,14 @@ project:
           - id: "Pub::http_parser:4.0.2"
             dependencies:
             - id: "Pub::collection:1.18.0"
-            - id: "Pub::source_span:1.10.0"
+            - id: "Pub::source_span:1.10.1"
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
               - id: "Pub::term_glyph:1.2.1"
             - id: "Pub::string_scanner:1.4.0"
               dependencies:
-              - id: "Pub::source_span:1.10.0"
+              - id: "Pub::source_span:1.10.1"
                 dependencies:
                 - id: "Pub::collection:1.18.0"
                 - id: "Pub::path:1.9.0"
@@ -357,14 +357,14 @@ project:
           - id: "Pub::http_parser:4.0.2"
             dependencies:
             - id: "Pub::collection:1.18.0"
-            - id: "Pub::source_span:1.10.0"
+            - id: "Pub::source_span:1.10.1"
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
               - id: "Pub::term_glyph:1.2.1"
             - id: "Pub::string_scanner:1.4.0"
               dependencies:
-              - id: "Pub::source_span:1.10.0"
+              - id: "Pub::source_span:1.10.1"
                 dependencies:
                 - id: "Pub::collection:1.18.0"
                 - id: "Pub::path:1.9.0"
@@ -384,14 +384,14 @@ project:
             - id: "Pub::http_parser:4.0.2"
               dependencies:
               - id: "Pub::collection:1.18.0"
-              - id: "Pub::source_span:1.10.0"
+              - id: "Pub::source_span:1.10.1"
                 dependencies:
                 - id: "Pub::collection:1.18.0"
                 - id: "Pub::path:1.9.0"
                 - id: "Pub::term_glyph:1.2.1"
               - id: "Pub::string_scanner:1.4.0"
                 dependencies:
-                - id: "Pub::source_span:1.10.0"
+                - id: "Pub::source_span:1.10.1"
                   dependencies:
                   - id: "Pub::collection:1.18.0"
                   - id: "Pub::path:1.9.0"
@@ -419,14 +419,14 @@ project:
         - id: "Pub::http_parser:4.0.2"
           dependencies:
           - id: "Pub::collection:1.18.0"
-          - id: "Pub::source_span:1.10.0"
+          - id: "Pub::source_span:1.10.1"
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::path:1.9.0"
             - id: "Pub::term_glyph:1.2.1"
           - id: "Pub::string_scanner:1.4.0"
             dependencies:
-            - id: "Pub::source_span:1.10.0"
+            - id: "Pub::source_span:1.10.1"
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
@@ -446,14 +446,14 @@ project:
           - id: "Pub::http_parser:4.0.2"
             dependencies:
             - id: "Pub::collection:1.18.0"
-            - id: "Pub::source_span:1.10.0"
+            - id: "Pub::source_span:1.10.1"
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
               - id: "Pub::term_glyph:1.2.1"
             - id: "Pub::string_scanner:1.4.0"
               dependencies:
-              - id: "Pub::source_span:1.10.0"
+              - id: "Pub::source_span:1.10.1"
                 dependencies:
                 - id: "Pub::collection:1.18.0"
                 - id: "Pub::path:1.9.0"
@@ -483,14 +483,14 @@ project:
           - id: "Pub::http_parser:4.0.2"
             dependencies:
             - id: "Pub::collection:1.18.0"
-            - id: "Pub::source_span:1.10.0"
+            - id: "Pub::source_span:1.10.1"
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
               - id: "Pub::term_glyph:1.2.1"
             - id: "Pub::string_scanner:1.4.0"
               dependencies:
-              - id: "Pub::source_span:1.10.0"
+              - id: "Pub::source_span:1.10.1"
                 dependencies:
                 - id: "Pub::collection:1.18.0"
                 - id: "Pub::path:1.9.0"
@@ -535,7 +535,7 @@ project:
           - id: "Pub::web_socket:0.1.6"
             dependencies:
             - id: "Pub::web:0.5.1"
-      - id: "Pub::source_span:1.10.0"
+      - id: "Pub::source_span:1.10.1"
         dependencies:
         - id: "Pub::collection:1.18.0"
         - id: "Pub::path:1.9.0"
@@ -557,21 +557,21 @@ project:
           - id: "Pub::meta:1.16.0"
         - id: "Pub::boolean_selector:2.1.2"
           dependencies:
-          - id: "Pub::source_span:1.10.0"
+          - id: "Pub::source_span:1.10.1"
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::path:1.9.0"
             - id: "Pub::term_glyph:1.2.1"
           - id: "Pub::string_scanner:1.4.0"
             dependencies:
-            - id: "Pub::source_span:1.10.0"
+            - id: "Pub::source_span:1.10.1"
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
               - id: "Pub::term_glyph:1.2.1"
         - id: "Pub::collection:1.18.0"
         - id: "Pub::meta:1.16.0"
-        - id: "Pub::source_span:1.10.0"
+        - id: "Pub::source_span:1.10.1"
           dependencies:
           - id: "Pub::collection:1.18.0"
           - id: "Pub::path:1.9.0"
@@ -587,7 +587,7 @@ project:
             - id: "Pub::meta:1.16.0"
         - id: "Pub::string_scanner:1.4.0"
           dependencies:
-          - id: "Pub::source_span:1.10.0"
+          - id: "Pub::source_span:1.10.1"
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::path:1.9.0"
@@ -625,7 +625,7 @@ project:
             - id: "Pub::path:1.9.0"
             - id: "Pub::string_scanner:1.4.0"
               dependencies:
-              - id: "Pub::source_span:1.10.0"
+              - id: "Pub::source_span:1.10.1"
                 dependencies:
                 - id: "Pub::collection:1.18.0"
                 - id: "Pub::path:1.9.0"
@@ -639,7 +639,7 @@ project:
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::meta:1.16.0"
-          - id: "Pub::source_span:1.10.0"
+          - id: "Pub::source_span:1.10.1"
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::path:1.9.0"
@@ -654,14 +654,14 @@ project:
           - id: "Pub::yaml:3.1.2"
             dependencies:
             - id: "Pub::collection:1.18.0"
-            - id: "Pub::source_span:1.10.0"
+            - id: "Pub::source_span:1.10.1"
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
               - id: "Pub::term_glyph:1.2.1"
             - id: "Pub::string_scanner:1.4.0"
               dependencies:
-              - id: "Pub::source_span:1.10.0"
+              - id: "Pub::source_span:1.10.1"
                 dependencies:
                 - id: "Pub::collection:1.18.0"
                 - id: "Pub::path:1.9.0"
@@ -673,14 +673,14 @@ project:
           - id: "Pub::meta:1.16.0"
         - id: "Pub::boolean_selector:2.1.2"
           dependencies:
-          - id: "Pub::source_span:1.10.0"
+          - id: "Pub::source_span:1.10.1"
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::path:1.9.0"
             - id: "Pub::term_glyph:1.2.1"
           - id: "Pub::string_scanner:1.4.0"
             dependencies:
-            - id: "Pub::source_span:1.10.0"
+            - id: "Pub::source_span:1.10.1"
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
@@ -694,9 +694,9 @@ project:
             dependencies:
             - id: "Pub::path:1.9.0"
           - id: "Pub::path:1.9.0"
-          - id: "Pub::source_maps:0.10.12"
+          - id: "Pub::source_maps:0.10.13"
             dependencies:
-            - id: "Pub::source_span:1.10.0"
+            - id: "Pub::source_span:1.10.1"
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
@@ -726,7 +726,7 @@ project:
           - id: "Pub::path:1.9.0"
           - id: "Pub::string_scanner:1.4.0"
             dependencies:
-            - id: "Pub::source_span:1.10.0"
+            - id: "Pub::source_span:1.10.1"
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
@@ -737,7 +737,7 @@ project:
           - id: "Pub::path:1.9.0"
           - id: "Pub::string_scanner:1.4.0"
             dependencies:
-            - id: "Pub::source_span:1.10.0"
+            - id: "Pub::source_span:1.10.1"
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
@@ -759,9 +759,9 @@ project:
         - id: "Pub::source_map_stack_trace:2.1.2"
           dependencies:
           - id: "Pub::path:1.9.0"
-          - id: "Pub::source_maps:0.10.12"
+          - id: "Pub::source_maps:0.10.13"
             dependencies:
-            - id: "Pub::source_span:1.10.0"
+            - id: "Pub::source_span:1.10.1"
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
@@ -769,14 +769,14 @@ project:
           - id: "Pub::stack_trace:1.11.1"
             dependencies:
             - id: "Pub::path:1.9.0"
-        - id: "Pub::source_maps:0.10.12"
+        - id: "Pub::source_maps:0.10.13"
           dependencies:
-          - id: "Pub::source_span:1.10.0"
+          - id: "Pub::source_span:1.10.1"
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::path:1.9.0"
             - id: "Pub::term_glyph:1.2.1"
-        - id: "Pub::source_span:1.10.0"
+        - id: "Pub::source_span:1.10.1"
           dependencies:
           - id: "Pub::collection:1.18.0"
           - id: "Pub::path:1.9.0"
@@ -798,21 +798,21 @@ project:
             - id: "Pub::meta:1.16.0"
           - id: "Pub::boolean_selector:2.1.2"
             dependencies:
-            - id: "Pub::source_span:1.10.0"
+            - id: "Pub::source_span:1.10.1"
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
               - id: "Pub::term_glyph:1.2.1"
             - id: "Pub::string_scanner:1.4.0"
               dependencies:
-              - id: "Pub::source_span:1.10.0"
+              - id: "Pub::source_span:1.10.1"
                 dependencies:
                 - id: "Pub::collection:1.18.0"
                 - id: "Pub::path:1.9.0"
                 - id: "Pub::term_glyph:1.2.1"
           - id: "Pub::collection:1.18.0"
           - id: "Pub::meta:1.16.0"
-          - id: "Pub::source_span:1.10.0"
+          - id: "Pub::source_span:1.10.1"
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::path:1.9.0"
@@ -828,7 +828,7 @@ project:
               - id: "Pub::meta:1.16.0"
           - id: "Pub::string_scanner:1.4.0"
             dependencies:
-            - id: "Pub::source_span:1.10.0"
+            - id: "Pub::source_span:1.10.1"
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
@@ -838,14 +838,14 @@ project:
         - id: "Pub::yaml:3.1.2"
           dependencies:
           - id: "Pub::collection:1.18.0"
-          - id: "Pub::source_span:1.10.0"
+          - id: "Pub::source_span:1.10.1"
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::path:1.9.0"
             - id: "Pub::term_glyph:1.2.1"
           - id: "Pub::string_scanner:1.4.0"
             dependencies:
-            - id: "Pub::source_span:1.10.0"
+            - id: "Pub::source_span:1.10.1"
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
@@ -880,14 +880,14 @@ project:
       - id: "Pub::yaml:3.1.2"
         dependencies:
         - id: "Pub::collection:1.18.0"
-        - id: "Pub::source_span:1.10.0"
+        - id: "Pub::source_span:1.10.1"
           dependencies:
           - id: "Pub::collection:1.18.0"
           - id: "Pub::path:1.9.0"
           - id: "Pub::term_glyph:1.2.1"
         - id: "Pub::string_scanner:1.4.0"
           dependencies:
-          - id: "Pub::source_span:1.10.0"
+          - id: "Pub::source_span:1.10.1"
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::path:1.9.0"
@@ -1719,8 +1719,8 @@ packages:
     url: "https://github.com/dart-lang/tools.git"
     revision: ""
     path: "pkgs/source_map_stack_trace"
-- id: "Pub::source_maps:0.10.12"
-  purl: "pkg:pub/source_maps@0.10.12"
+- id: "Pub::source_maps:0.10.13"
+  purl: "pkg:pub/source_maps@0.10.13"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "A library to programmatically manipulate source map files."
@@ -1731,22 +1731,22 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://pub.dev/packages/source_maps/versions/0.10.12.tar.gz"
+    url: "https://pub.dev/packages/source_maps/versions/0.10.13.tar.gz"
     hash:
-      value: "708b3f6b97248e5781f493b765c3337db11c5d2c81c3094f10904bfa8004c703"
+      value: "190222579a448b03896e0ca6eca5998fa810fda630c1d65e2f78b3f638f54812"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
-    url: "https://github.com/dart-lang/source_maps.git"
+    url: "https://github.com/dart-lang/tools.git"
     revision: ""
-    path: ""
+    path: "pkgs/source_maps"
   vcs_processed:
     type: "Git"
-    url: "https://github.com/dart-lang/source_maps.git"
+    url: "https://github.com/dart-lang/tools.git"
     revision: ""
-    path: ""
-- id: "Pub::source_span:1.10.0"
-  purl: "pkg:pub/source_span@1.10.0"
+    path: "pkgs/source_maps"
+- id: "Pub::source_span:1.10.1"
+  purl: "pkg:pub/source_span@1.10.1"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "Provides a standard representation for source code locations and spans."
@@ -1757,20 +1757,20 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://pub.dev/packages/source_span/versions/1.10.0.tar.gz"
+    url: "https://pub.dev/packages/source_span/versions/1.10.1.tar.gz"
     hash:
-      value: "53e943d4206a5e30df338fd4c6e7a077e02254531b138a15aec3bd143c1a8b3c"
+      value: "254ee5351d6cb365c859e20ee823c3bb479bf4a293c22d17a9f1bf144ce86f7c"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
-    url: "https://github.com/dart-lang/source_span.git"
+    url: "https://github.com/dart-lang/tools.git"
     revision: ""
-    path: ""
+    path: "pkgs/source_span"
   vcs_processed:
     type: "Git"
-    url: "https://github.com/dart-lang/source_span.git"
+    url: "https://github.com/dart-lang/tools.git"
     revision: ""
-    path: ""
+    path: "pkgs/source_span"
 - id: "Pub::stack_trace:1.11.1"
   purl: "pkg:pub/stack_trace@1.11.1"
   declared_licenses: []
