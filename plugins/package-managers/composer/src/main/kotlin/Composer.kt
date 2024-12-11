@@ -51,10 +51,8 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
-import org.semver4j.Semver
 
 private const val COMPOSER_PHAR_BINARY = "composer.phar"
-private const val COMPOSER_LOCK_FILE = "composer.lock"
 private const val SCOPE_NAME_REQUIRE = "require"
 private const val SCOPE_NAME_REQUIRE_DEV = "require-dev"
 private val ALL_SCOPE_NAMES = setOf(SCOPE_NAME_REQUIRE, SCOPE_NAME_REQUIRE_DEV)
@@ -139,7 +137,11 @@ class Composer(
         }
 
         val lockfile = stashDirectories(workingDir.resolve("vendor")).use { _ ->
-            ensureLockfile(workingDir).let {
+            val lockfileProvider = LockfileProvider(definitionFile)
+
+            requireLockfile(workingDir) { lockfileProvider.lockfile.isFile }
+
+            lockfileProvider.ensureLockfile {
                 logger.info { "Parsing lockfile at '$it'..." }
                 parseLockfile(it.readText())
             }
@@ -241,33 +243,6 @@ class Composer(
             homepageUrl = homepageUrl,
             scopeDependencies = scopes
         )
-    }
-
-    private fun ensureLockfile(workingDir: File): File {
-        val lockfile = workingDir.resolve(COMPOSER_LOCK_FILE)
-
-        val hasLockfile = lockfile.isFile
-        requireLockfile(workingDir) { hasLockfile }
-        if (hasLockfile) return lockfile
-
-        // Ensure that the build is not configured to disallow the creation of lockfiles.
-        ComposerCommand.run(workingDir, "--no-interaction", "config", "--unset", "lock").requireSuccess()
-
-        val composerVersion = Semver(ComposerCommand.getVersion(workingDir))
-        val args = buildList {
-            add("--no-interaction")
-            add("update")
-            add("--ignore-platform-reqs")
-
-            if (composerVersion.major >= 2) {
-                add("--no-install")
-                add("--no-audit")
-            }
-        }
-
-        ComposerCommand.run(workingDir, *args.toTypedArray()).requireSuccess()
-
-        return lockfile
     }
 }
 
