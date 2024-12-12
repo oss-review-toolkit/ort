@@ -53,9 +53,18 @@ import org.ossreviewtoolkit.utils.ort.ORT_NAME
 
 /**
  * Enrich this [Bom] with information about the hierarchy of dependencies, starting with the [parentRef] and its direct
- * dependencies given as ORT [ids].
+ * dependencies given as ORT [ids]. The [visited] set internally tracks the already visited parents to break cycles.
  */
-internal fun Bom.addDependencies(input: ReporterInput, parentRef: String, ids: Set<Identifier>) {
+internal fun Bom.addDependencies(
+    input: ReporterInput,
+    parentRef: String,
+    ids: Set<Identifier>,
+    visited: MutableSet<String> = mutableSetOf()
+) {
+    // Skip if dependencies for this parent have already been recorded.
+    if (parentRef in visited) return
+    visited += parentRef
+
     val dependency = Dependency(parentRef).apply {
         dependencies = ids.map { id -> Dependency(id.toCoordinates()) }
     }
@@ -64,7 +73,7 @@ internal fun Bom.addDependencies(input: ReporterInput, parentRef: String, ids: S
 
     ids.forEach { id ->
         val directDependencies = input.ortResult.getDependencies(id, maxLevel = 1, omitExcluded = true)
-        addDependencies(input, id.toCoordinates(), directDependencies)
+        addDependencies(input, id.toCoordinates(), directDependencies, visited)
     }
 }
 
