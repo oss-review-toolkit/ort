@@ -116,15 +116,42 @@ fun getLicenseText(
     licenseTextDirectories: List<File> = emptyList()
 ): String? = getLicenseTextReader(id, handleExceptions, addScanCodeLicenseTextsDir(licenseTextDirectories))?.invoke()
 
+/**
+ * Get a lambda that allows to read the full text of the license with the provided SPDX [id]. Several locations are
+ * searched for the license text: [licenseTextDirectories], the ScanCode license texts directory, the ORT's list of SPDX
+ * licenses and the resources of this module. If [handleExceptions] is enabled, the [id] may also refer to a license
+ * with an SPDX exception.
+ */
 fun getLicenseTextReader(
     id: String,
     handleExceptions: Boolean = false,
     licenseTextDirectories: List<File> = emptyList()
 ): (() -> String)? {
+    return getLicenseTextReader(id, handleExceptions, licenseTextDirectories) { dir, filename ->
+        dir.resolve(filename).takeIf { it.isFile }
+    }
+}
+
+/**
+ * Get a lambda that allows to read the full text of the license with the provided SPDX [id]. Several locations are
+ * searched for the license text: [licenseTextDirectories], the ScanCode license texts directory, the ORT's list of SPDX
+ * licenses and the resources of this module. If [handleExceptions] is enabled, the [id] may also refer to a license
+ * with an SPDX exception.
+ * [validateFile] is a lambda that is called with the directory and filename to look if the license file exists. It
+ * should return the file if it exists, null otherwise.
+ */
+fun getLicenseTextReader(
+    id: String,
+    handleExceptions: Boolean = false,
+    licenseTextDirectories: List<File> = emptyList(),
+    validateFile: (File, String) -> File?
+): (() -> String)? {
     return if (id.startsWith(LICENSE_REF_PREFIX)) {
         getLicenseTextResource(id)?.let { { it.readText() } }
             ?: addScanCodeLicenseTextsDir(licenseTextDirectories).firstNotNullOfOrNull { dir ->
-                getLicenseTextFile(id, dir)?.let { file ->
+                getLicenseTextFile(id) { filename ->
+                    validateFile(dir, filename)
+                }?.let { file ->
                     {
                         file.readText().removeYamlFrontMatter()
                     }
@@ -140,7 +167,7 @@ private fun getLicenseTextResource(id: String): URL? = object {}.javaClass.getRe
 
 private val LICENSE_REF_FILENAME_REGEX by lazy { Regex("^$LICENSE_REF_PREFIX\\w+-") }
 
-private fun getLicenseTextFile(id: String, dir: File): File? =
+fun getLicenseTextFile(id: String, validateFile: (String) -> File?): File? =
     id.replace(LICENSE_REF_FILENAME_REGEX, "").let { idWithoutLicenseRefNamespace ->
         listOfNotNull(
             id,
@@ -153,7 +180,7 @@ private fun getLicenseTextFile(id: String, dir: File): File? =
                 id == "LicenseRef-scancode-x11-xconsortium-veillard"
             }
         ).firstNotNullOfOrNull { filename ->
-            dir.resolve(filename).takeIf { it.isFile }
+            validateFile(filename)
         }
     }
 
