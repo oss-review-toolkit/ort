@@ -30,6 +30,7 @@ import java.io.File
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.utils.common.Os
 
 class Yarn2Test : WordSpec({
     "command" should {
@@ -121,7 +122,9 @@ class Yarn2Test : WordSpec({
  */
 private fun checkExecutableFromYarnRc(workingDir: File, config: AnalyzerConfiguration = AnalyzerConfiguration()) {
     val executable = "yarn-wrapper.js"
+
     workingDir.resolve(".yarnrc.yml").writeText("yarnPath: $executable")
+
     val executableFile = workingDir.resolve(executable).apply {
         writeText("#!/usr/bin/env node\nconsole.log('yarn')")
     }
@@ -129,7 +132,11 @@ private fun checkExecutableFromYarnRc(workingDir: File, config: AnalyzerConfigur
     val yarn = Yarn2("Yarn2", workingDir, config, RepositoryConfiguration())
     val command = yarn.command(workingDir)
 
-    command shouldBe executableFile.absolutePath
+    if (Os.isWindows) {
+        command shouldBe "node ${executableFile.absolutePath}"
+    } else {
+        command shouldBe executableFile.absolutePath
+    }
 }
 
 /**
