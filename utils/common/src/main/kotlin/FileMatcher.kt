@@ -55,10 +55,7 @@ class FileMatcher(
          * separators, if it contains any.
          */
         fun match(patterns: Collection<String>, path: String, ignoreCase: Boolean = false) =
-            when (ignoreCase) {
-                true -> patterns.any { pattern -> matchCaseInsensitive(pattern, path) }
-                false -> patterns.any { pattern -> matchCaseSensitive(pattern, path) }
-            }
+            patterns.any { pattern -> match(pattern, path, ignoreCase) }
     }
 
     constructor(vararg patterns: String, ignoreCase: Boolean = false) : this(patterns.asList(), ignoreCase)
