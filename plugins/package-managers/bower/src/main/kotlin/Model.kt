@@ -56,8 +56,11 @@ internal data class PackageMeta(
     val description: String? = null,
     val license: String? = null,
     val homepage: String? = null,
+
+    // These map dependency names to version specifications.
     val dependencies: Map<String, String> = emptyMap(),
     val devDependencies: Map<String, String> = emptyMap(),
+
     val version: String? = null,
     @SerialName("_resolution")
     val resolution: Resolution? = null,
