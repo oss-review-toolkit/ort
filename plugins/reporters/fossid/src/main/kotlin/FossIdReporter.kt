@@ -96,7 +96,7 @@ class FossIdReporter(
         val reportType = ReportType.valueOf(config.reportType)
         val selectionType = SelectionType.valueOf(config.selectionType)
 
-        return runBlocking(Dispatchers.IO) {
+        return runBlocking(Dispatchers.IO.limitedParallelism(20)) {
             val service = FossIdRestService.create(config.serverUrl)
             val scanResults = input.ortResult.getScanResults().values.flatten()
             val scanCodes = scanResults.flatMapTo(mutableSetOf()) {

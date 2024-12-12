@@ -292,7 +292,7 @@ suspend fun ClearlyDefinedService.getDefinitionsChunked(
     chunkSize: Int = ClearlyDefinedService.MAX_REQUEST_CHUNK_SIZE
 ): Map<Coordinates, ClearlyDefinedService.Defined> =
     buildMap {
-        withContext(Dispatchers.IO) {
+        withContext(Dispatchers.IO.limitedParallelism(20)) {
             coordinates.chunked(chunkSize).map { chunk ->
                 async { call { getDefinitions(chunk) } }
             }.awaitAll()
@@ -306,7 +306,7 @@ suspend fun ClearlyDefinedService.getCurationsChunked(
     chunkSize: Int = ClearlyDefinedService.MAX_REQUEST_CHUNK_SIZE
 ): Map<Coordinates, Curation> =
     buildMap {
-        withContext(Dispatchers.IO) {
+        withContext(Dispatchers.IO.limitedParallelism(20)) {
             coordinates.chunked(chunkSize).map { chunk ->
                 async { call { getCurations(chunk).values } }
             }.awaitAll()

@@ -265,7 +265,7 @@ class Yarn2(
 
         val chunks = moduleIds.chunked(YARN_NPM_INFO_CHUNK_SIZE)
 
-        return runBlocking(Dispatchers.IO) {
+        return runBlocking(Dispatchers.IO.limitedParallelism(20)) {
             chunks.mapIndexed { index, chunk ->
                 async {
                     logger.info { "Fetching packages details chunk #$index." }

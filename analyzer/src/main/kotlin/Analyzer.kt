@@ -317,7 +317,7 @@ private class PackageManagerRunner(
     private suspend fun run() {
         logger.info { "Starting ${manager.managerName} analysis." }
 
-        withContext(Dispatchers.IO) {
+        withContext(Dispatchers.IO.limitedParallelism(20)) {
             val result = manager.resolveDependencies(definitionFiles, labels)
 
             logger.info { "Finished ${manager.managerName} analysis." }
