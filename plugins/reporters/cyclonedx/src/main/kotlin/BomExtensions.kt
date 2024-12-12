@@ -53,9 +53,21 @@ import org.ossreviewtoolkit.utils.ort.ORT_NAME
 
 /**
  * Enrich this [Bom] with information about the hierarchy of dependencies, starting with the [parentRef] and its direct
- * dependencies given as ORT [ids].
+ * dependencies given as ORT [ids]. The [visited] set internally tracks the already visited parents to break cycles.
  */
-internal fun Bom.addDependencies(input: ReporterInput, parentRef: String, ids: Set<Identifier>) {
+internal fun Bom.addDependencies(
+    input: ReporterInput,
+    parentRef: String,
+    ids: Set<Identifier>,
+    visited: MutableSet<String> = mutableSetOf()
+) {
+    // Return early if dependencies for this parent have already been recorded. Note that this disregards the case where
+    // dependencies of a parent differ depending e.g. on the project scope due to version conflict resultion. That is
+    // because CycloneDX itself only records dependency information globally at the BOM level, and does not support
+    // different dependencies for a given parent depending on context.
+    if (parentRef in visited) return
+    visited += parentRef
+
     val dependency = Dependency(parentRef).apply {
         dependencies = ids.map { id -> Dependency(id.toCoordinates()) }
     }
@@ -64,7 +76,7 @@ internal fun Bom.addDependencies(input: ReporterInput, parentRef: String, ids: S
 
     ids.forEach { id ->
         val directDependencies = input.ortResult.getDependencies(id, maxLevel = 1, omitExcluded = true)
-        addDependencies(input, id.toCoordinates(), directDependencies)
+        addDependencies(input, id.toCoordinates(), directDependencies, visited)
     }
 }
 
