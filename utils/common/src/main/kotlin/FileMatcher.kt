@@ -48,10 +48,7 @@ class FileMatcher(
          * contains any.
          */
         fun match(pattern: String, path: String, ignoreCase: Boolean = false) =
-            when (ignoreCase) {
-                true -> matchCaseInsensitive(pattern, path)
-                false -> matchCaseSensitive(pattern, path)
-            }
+            if (ignoreCase) matchCaseInsensitive(pattern, path) else matchCaseSensitive(pattern, path)
 
         /**
          * Return true if [path] is matched by any of [patterns], false otherwise. The [path] must use '/' as
