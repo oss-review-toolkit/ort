@@ -23,14 +23,12 @@ import java.io.File
 
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.utils.common.ProcessCapture
 
 internal class MercurialWorkingTree(workingDir: File, vcsType: VcsType) : WorkingTree(workingDir, vcsType) {
     override fun isValid(): Boolean {
         if (!workingDir.isDirectory) return false
 
-        // Do not use runMercurialCommand() here as we do not require the command to succeed.
-        val hgRootPath = ProcessCapture(workingDir, "hg", "root")
+        val hgRootPath = MercurialCommand.run(workingDir, "root")
         return hgRootPath.isSuccess && workingDir.path.startsWith(hgRootPath.stdout.trimEnd())
     }
 
