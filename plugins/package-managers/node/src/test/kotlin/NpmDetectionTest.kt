@@ -147,7 +147,8 @@ class NpmDetectionTest : WordSpec({
             val projectDir = getAssetFile("projects/synthetic/npm/workspaces")
 
             NPM.getWorkspaces(projectDir) shouldNotBeNull {
-                mapNotNull { it.withoutPrefix(projectDir.path) }.shouldContainExactly("/packages/**", "/apps/**")
+                mapNotNull { it.withoutPrefix(projectDir.invariantSeparatorsPath) }
+                    .shouldContainExactly("/packages/**", "/apps/**")
             }
         }
 
@@ -157,7 +158,7 @@ class NpmDetectionTest : WordSpec({
 
             val filteredFiles = NpmDetection(definitionFiles).filterApplicable(NPM)
 
-            filteredFiles.map { it.toRelativeString(projectDir) } shouldContainExactlyInAnyOrder listOf(
+            filteredFiles.map { it.relativeTo(projectDir).invariantSeparatorsPath }.shouldContainExactlyInAnyOrder(
                 "npm/no-lockfile/package.json",
                 "npm/node-modules/package.json",
                 "npm/project-with-lockfile/package.json",
@@ -182,9 +183,8 @@ class NpmDetectionTest : WordSpec({
             val projectDir = getAssetFile("projects/synthetic/pnpm/workspaces")
 
             PNPM.getWorkspaces(projectDir) shouldNotBeNull {
-                mapNotNull {
-                    it.withoutPrefix(projectDir.path)
-                }.shouldContainExactly("/src/app/", "/src/packages/**")
+                mapNotNull { it.withoutPrefix(projectDir.invariantSeparatorsPath) }
+                    .shouldContainExactly("/src/app/", "/src/packages/**")
             }
         }
 
@@ -194,7 +194,7 @@ class NpmDetectionTest : WordSpec({
 
             val filteredFiles = NpmDetection(definitionFiles).filterApplicable(PNPM)
 
-            filteredFiles.map { it.toRelativeString(projectDir) } shouldContainExactlyInAnyOrder listOf(
+            filteredFiles.map { it.relativeTo(projectDir).invariantSeparatorsPath }.shouldContainExactlyInAnyOrder(
                 "pnpm/babel/package.json",
                 "pnpm/project-with-lockfile/package.json",
                 "pnpm/workspaces/package.json",
@@ -216,7 +216,7 @@ class NpmDetectionTest : WordSpec({
             val projectDir = getAssetFile("projects/synthetic/yarn/workspaces")
 
             YARN.getWorkspaces(projectDir) shouldNotBeNull {
-                mapNotNull { it.withoutPrefix(projectDir.path) }.shouldContainExactly("/packages/**")
+                mapNotNull { it.withoutPrefix(projectDir.invariantSeparatorsPath) }.shouldContainExactly("/packages/**")
             }
         }
 
@@ -226,7 +226,7 @@ class NpmDetectionTest : WordSpec({
 
             val filteredFiles = NpmDetection(definitionFiles).filterApplicable(YARN)
 
-            filteredFiles.map { it.toRelativeString(projectDir) } shouldContainExactlyInAnyOrder listOf(
+            filteredFiles.map { it.relativeTo(projectDir).invariantSeparatorsPath }.shouldContainExactlyInAnyOrder(
                 "yarn/babel/package.json",
                 "yarn/project-with-lockfile/package.json",
                 "yarn/workspaces/package.json"
@@ -247,7 +247,7 @@ class NpmDetectionTest : WordSpec({
             val projectDir = getAssetFile("projects/synthetic/yarn2/workspaces")
 
             YARN2.getWorkspaces(projectDir) shouldNotBeNull {
-                mapNotNull { it.withoutPrefix(projectDir.path) }.shouldContainExactly("/packages/**")
+                mapNotNull { it.withoutPrefix(projectDir.invariantSeparatorsPath) }.shouldContainExactly("/packages/**")
             }
         }
 
@@ -257,7 +257,7 @@ class NpmDetectionTest : WordSpec({
 
             val filteredFiles = NpmDetection(definitionFiles).filterApplicable(YARN2)
 
-            filteredFiles.map { it.toRelativeString(projectDir) } shouldContainExactlyInAnyOrder listOf(
+            filteredFiles.map { it.relativeTo(projectDir).invariantSeparatorsPath }.shouldContainExactlyInAnyOrder(
                 "yarn2/project-with-lockfile/package.json",
                 "yarn2/workspaces/package.json"
             )
