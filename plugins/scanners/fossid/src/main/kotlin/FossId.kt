@@ -994,7 +994,7 @@ class FossId internal constructor(
         val licenseFindingsByPath = licenseFindings.groupBy { it.location.path }
         val result = mutableListOf<String>()
 
-        runBlocking(Dispatchers.IO) {
+        runBlocking(Dispatchers.IO.limitedParallelism(20)) {
             val candidatePathsToMark = snippetChoices.groupBy({ it.given.sourceLocation.path }) {
                 it.choice.reason
             }

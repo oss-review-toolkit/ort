@@ -223,7 +223,7 @@ class Scanner(
         logger.info { "Resolving provenance for ${controller.packages.size} package(s)." }
 
         val duration = measureTime {
-            withContext(Dispatchers.IO) {
+            withContext(Dispatchers.IO.limitedParallelism(20)) {
                 controller.packages.map { pkg ->
                     async {
                         pkg to runCatching {
@@ -250,7 +250,7 @@ class Scanner(
         logger.info { "Resolving nested provenances for ${controller.packages.size} package(s)." }
 
         val duration = measureTime {
-            withContext(Dispatchers.IO) {
+            withContext(Dispatchers.IO.limitedParallelism(20)) {
                 controller.getPackageProvenancesWithoutVcsPath().map { provenance ->
                     async {
                         provenance to runCatching {
@@ -649,7 +649,7 @@ class Scanner(
         logger.info { "Creating file lists for ${provenances.size} provenances." }
 
         val duration = measureTime {
-            withContext(Dispatchers.IO) {
+            withContext(Dispatchers.IO.limitedParallelism(20)) {
                 provenances.mapIndexed { index, provenance ->
                     async {
                         logger.info {
