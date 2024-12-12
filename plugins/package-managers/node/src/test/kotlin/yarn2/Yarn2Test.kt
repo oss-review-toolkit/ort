@@ -31,91 +31,89 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 
-class Yarn2Test : WordSpec() {
-    init {
-        "command" should {
-            "return the executable defined in .yarnrc.yml if no package.json is present" {
-                checkExecutableFromYarnRc(tempdir())
+class Yarn2Test : WordSpec({
+    "command" should {
+        "return the executable defined in .yarnrc.yml if no package.json is present" {
+            checkExecutableFromYarnRc(tempdir())
+        }
+
+        "return the executable defined in .yarnrc.yml if no package manager is defined" {
+            val workingDir = tempdir()
+            writePackageJson(workingDir, null)
+
+            checkExecutableFromYarnRc(workingDir)
+        }
+
+        "return the executable defined in .yarnrc.yml if package.json is invalid" {
+            val workingDir = tempdir()
+            workingDir.resolve("package.json").writeText("invalid-json")
+
+            checkExecutableFromYarnRc(workingDir)
+        }
+
+        "throw if no executable is defined in .yarnrc.yml" {
+            val workingDir = tempdir()
+            workingDir.resolve(".yarnrc.yml").writeText("someProperty: some-value")
+
+            val yarn = Yarn2("yarn", workingDir, AnalyzerConfiguration(), RepositoryConfiguration())
+
+            val exception = shouldThrow<IllegalArgumentException> {
+                yarn.command(workingDir)
             }
 
-            "return the executable defined in .yarnrc.yml if no package manager is defined" {
-                val workingDir = tempdir()
-                writePackageJson(workingDir, null)
+            exception.localizedMessage shouldContain "No Yarn 2+ executable"
+        }
 
-                checkExecutableFromYarnRc(workingDir)
+        "throw if the executable defined in .yarnrc.yml does not exist" {
+            val workingDir = tempdir()
+            val executable = "non-existing-yarn-wrapper.js"
+            workingDir.resolve(".yarnrc.yml").writeText("yarnPath: $executable")
+
+            val yarn = Yarn2("yarn", workingDir, AnalyzerConfiguration(), RepositoryConfiguration())
+
+            val exception = shouldThrow<IllegalArgumentException> {
+                yarn.command(workingDir)
             }
 
-            "return the executable defined in .yarnrc.yml if package.json is invalid" {
-                val workingDir = tempdir()
-                workingDir.resolve("package.json").writeText("invalid-json")
+            exception.localizedMessage shouldContain executable
+        }
 
-                checkExecutableFromYarnRc(workingDir)
-            }
+        "return the default executable name if Corepack is enabled based on the configuration option" {
+            val workingDir = tempdir()
+            val yarn2Options = mapOf("corepackOverride" to "true")
+            val analyzerConfiguration = AnalyzerConfiguration(
+                packageManagers = mapOf("Yarn2" to PackageManagerConfiguration(options = yarn2Options))
+            )
 
-            "throw if no executable is defined in .yarnrc.yml" {
-                val workingDir = tempdir()
-                workingDir.resolve(".yarnrc.yml").writeText("someProperty: some-value")
+            val yarn = Yarn2("Yarn2", workingDir, analyzerConfiguration, RepositoryConfiguration())
+            val command = yarn.command(workingDir)
 
-                val yarn = Yarn2("yarn", workingDir, AnalyzerConfiguration(), RepositoryConfiguration())
+            command shouldBe "yarn"
+        }
 
-                val exception = shouldThrow<IllegalArgumentException> {
-                    yarn.command(workingDir)
-                }
+        "return the default executable name if Corepack is enabled based on the package.json" {
+            val workingDir = tempdir()
+            writePackageJson(workingDir, "yarn@4.0.0")
 
-                exception.localizedMessage shouldContain "No Yarn 2+ executable"
-            }
+            val yarn = Yarn2("Yarn2", workingDir, AnalyzerConfiguration(), RepositoryConfiguration())
+            val command = yarn.command(workingDir)
 
-            "throw if the executable defined in .yarnrc.yml does not exist" {
-                val workingDir = tempdir()
-                val executable = "non-existing-yarn-wrapper.js"
-                workingDir.resolve(".yarnrc.yml").writeText("yarnPath: $executable")
+            command shouldBe "yarn"
+        }
 
-                val yarn = Yarn2("yarn", workingDir, AnalyzerConfiguration(), RepositoryConfiguration())
+        "return the executable defined in .yarnrc.yml if Corepack detection is turned off" {
+            val workingDir = tempdir()
+            writePackageJson(workingDir, "yarn@4.0.0")
 
-                val exception = shouldThrow<IllegalArgumentException> {
-                    yarn.command(workingDir)
-                }
+            val yarn2Options = mapOf("corepackOverride" to "false")
+            val analyzerConfiguration = AnalyzerConfiguration(
+                packageManagers = mapOf("Yarn2" to PackageManagerConfiguration(options = yarn2Options))
+            )
 
-                exception.localizedMessage shouldContain executable
-            }
-
-            "return the default executable name if Corepack is enabled based on the configuration option" {
-                val workingDir = tempdir()
-                val yarn2Options = mapOf("corepackOverride" to "true")
-                val analyzerConfiguration = AnalyzerConfiguration(
-                    packageManagers = mapOf("Yarn2" to PackageManagerConfiguration(options = yarn2Options))
-                )
-
-                val yarn = Yarn2("Yarn2", workingDir, analyzerConfiguration, RepositoryConfiguration())
-                val command = yarn.command(workingDir)
-
-                command shouldBe "yarn"
-            }
-
-            "return the default executable name if Corepack is enabled based on the package.json" {
-                val workingDir = tempdir()
-                writePackageJson(workingDir, "yarn@4.0.0")
-
-                val yarn = Yarn2("Yarn2", workingDir, AnalyzerConfiguration(), RepositoryConfiguration())
-                val command = yarn.command(workingDir)
-
-                command shouldBe "yarn"
-            }
-
-            "return the executable defined in .yarnrc.yml if Corepack detection is turned off" {
-                val workingDir = tempdir()
-                writePackageJson(workingDir, "yarn@4.0.0")
-
-                val yarn2Options = mapOf("corepackOverride" to "false")
-                val analyzerConfiguration = AnalyzerConfiguration(
-                    packageManagers = mapOf("Yarn2" to PackageManagerConfiguration(options = yarn2Options))
-                )
-
-                checkExecutableFromYarnRc(workingDir, analyzerConfiguration)
-            }
+            checkExecutableFromYarnRc(workingDir, analyzerConfiguration)
         }
     }
-}
+})
 
 /**
  * Check whether an executable defined in a `.yarnrc.yml` file is used when invoked with the given [workingDir]
