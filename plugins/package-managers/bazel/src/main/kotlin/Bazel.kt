@@ -71,7 +71,6 @@ import org.semver4j.RangesListFactory
 
 private const val BAZEL_FALLBACK_VERSION = "7.0.1"
 private const val LOCKFILE_NAME = "MODULE.bazel.lock"
-private const val BUILDOZER_COMMAND = "buildozer"
 private const val BUILDOZER_MISSING_VALUE = "(missing)"
 
 internal object BazelCommand : CommandLineTool {
@@ -94,6 +93,10 @@ internal object BazelCommand : CommandLineTool {
     // Supporting it would require adding the flag "--enable_bzlmod=true" at the correct position of all bazel
     // invocations.
     override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=7.0")
+}
+
+internal object BuildozerCommand : CommandLineTool {
+    override fun command(workingDir: File?) = "buildozer"
 }
 
 class Bazel(
@@ -191,8 +194,7 @@ class Bazel(
             )
         }
 
-        val process = ProcessCapture(
-            BUILDOZER_COMMAND,
+        val process = BuildozerCommand.run(
             "-f", commandsFile.absolutePath,
             workingDir = workingDir
         )
@@ -216,16 +218,11 @@ class Bazel(
      * override is defined.
      */
     private fun getArchiveOverrides(workingDir: File): Map<String, ArchiveOverride> {
-        val process = ProcessCapture(
-            BUILDOZER_COMMAND,
+        val process = BuildozerCommand.run(
             "print module_name urls integrity patches",
             "//MODULE.bazel:%archive_override",
             workingDir = workingDir
-        )
-
-        require(process.isSuccess) {
-            "Failed to get archive overrides from 'buildozer': ${process.stderr}"
-        }
+        ).requireSuccess()
 
         // If an optional attribute is missing, buildozer outputs first a warning line and then the result with the
         // value "(missing"):

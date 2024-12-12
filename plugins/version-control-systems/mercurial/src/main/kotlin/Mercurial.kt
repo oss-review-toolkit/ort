@@ -28,7 +28,6 @@ import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.CommandLineTool
-import org.ossreviewtoolkit.utils.common.ProcessCapture
 
 const val MERCURIAL_LARGE_FILES_EXTENSION = "largefiles = "
 const val MERCURIAL_SPARSE_EXTENSION = "sparse = "
@@ -59,7 +58,7 @@ class Mercurial : VersionControlSystem(MercurialCommand) {
     override fun getWorkingTree(vcsDirectory: File): WorkingTree =
         MercurialWorkingTree(vcsDirectory, VcsType.forName(type))
 
-    override fun isApplicableUrlInternal(vcsUrl: String) = ProcessCapture("hg", "identify", vcsUrl).isSuccess
+    override fun isApplicableUrlInternal(vcsUrl: String) = MercurialCommand.run("identify", vcsUrl).isSuccess
 
     override fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree {
         // We cannot detect beforehand if the Large Files extension would be required, so enable it by default.
