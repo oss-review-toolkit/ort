@@ -54,8 +54,12 @@ class FileMatcher(
          * Return true if [path] is matched by any of [patterns], false otherwise. The [path] must use '/' as
          * separators, if it contains any.
          */
-        fun match(patterns: Collection<String>, path: String, ignoreCase: Boolean = false) =
-            patterns.any { pattern -> match(pattern, path, ignoreCase) }
+        fun match(patterns: Collection<String>, path: String, ignoreCase: Boolean = false): Boolean {
+            // Only decide once for all patterns which function to call.
+            val match = if (ignoreCase) matchCaseInsensitive else matchCaseSensitive
+
+            return patterns.any { pattern -> match(pattern, path) }
+        }
     }
 
     constructor(vararg patterns: String, ignoreCase: Boolean = false) : this(patterns.asList(), ignoreCase)
