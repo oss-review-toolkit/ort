@@ -115,23 +115,23 @@ class Yarn2Test : WordSpec() {
             }
         }
     }
+}
 
-    /**
-     * Check whether an executable defined in a `.yarnrc.yml` file is used when invoked with the given [workingDir]
-     * and [config]. This should be the case when Corepack is not enabled.
-     */
-    private fun checkExecutableFromYarnRc(workingDir: File, config: AnalyzerConfiguration = AnalyzerConfiguration()) {
-        val executable = "yarn-wrapper.js"
-        workingDir.resolve(".yarnrc.yml").writeText("yarnPath: $executable")
-        val executableFile = workingDir.resolve(executable).apply {
-            writeText("#!/usr/bin/env node\nconsole.log('yarn')")
-        }
-
-        val yarn = Yarn2("Yarn2", workingDir, config, RepositoryConfiguration())
-        val command = yarn.command(workingDir)
-
-        command shouldBe executableFile.absolutePath
+/**
+ * Check whether an executable defined in a `.yarnrc.yml` file is used when invoked with the given [workingDir]
+ * and [config]. This should be the case when Corepack is not enabled.
+ */
+private fun checkExecutableFromYarnRc(workingDir: File, config: AnalyzerConfiguration = AnalyzerConfiguration()) {
+    val executable = "yarn-wrapper.js"
+    workingDir.resolve(".yarnrc.yml").writeText("yarnPath: $executable")
+    val executableFile = workingDir.resolve(executable).apply {
+        writeText("#!/usr/bin/env node\nconsole.log('yarn')")
     }
+
+    val yarn = Yarn2("Yarn2", workingDir, config, RepositoryConfiguration())
+    val command = yarn.command(workingDir)
+
+    command shouldBe executableFile.absolutePath
 }
 
 /**
