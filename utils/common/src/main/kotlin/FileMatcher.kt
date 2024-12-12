@@ -39,8 +39,6 @@ class FileMatcher(
      */
     ignoreCase: Boolean = false
 ) {
-    constructor(vararg patterns: String, ignoreCase: Boolean = false) : this(patterns.asList(), ignoreCase)
-
     companion object {
         private val matchCaseInsensitive = AntPathMatcher().apply { setCaseSensitive(false) }::match
         private val matchCaseSensitive = AntPathMatcher().apply { setCaseSensitive(true) }::match
@@ -65,6 +63,8 @@ class FileMatcher(
                 false -> patterns.any { pattern -> matchCaseSensitive(pattern, path) }
             }
     }
+
+    constructor(vararg patterns: String, ignoreCase: Boolean = false) : this(patterns.asList(), ignoreCase)
 
     private val match = if (ignoreCase) matchCaseInsensitive else matchCaseSensitive
 
