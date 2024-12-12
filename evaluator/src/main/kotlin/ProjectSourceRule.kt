@@ -69,7 +69,8 @@ open class ProjectSourceRule(
      */
     fun projectSourceFindDirectories(vararg patterns: String): List<File> =
         projectSourcesDir.walkBottomUp().filterTo(mutableListOf()) {
-            it.isDirectory && FileMatcher.match(patterns.toList(), it.relativeTo(projectSourcesDir).path)
+            val path = it.relativeTo(projectSourcesDir).invariantSeparatorsPath
+            it.isDirectory && FileMatcher.match(patterns.asList(), path)
         }
 
     /**
@@ -77,7 +78,8 @@ open class ProjectSourceRule(
      */
     fun projectSourceFindFiles(vararg patterns: String): List<File> =
         projectSourcesDir.walkBottomUp().filterTo(mutableListOf()) {
-            it.isFile && FileMatcher.match(patterns.toList(), it.relativeTo(projectSourcesDir).path)
+            val path = it.relativeTo(projectSourcesDir).invariantSeparatorsPath
+            it.isFile && FileMatcher.match(patterns.asList(), path)
         }
 
     /**
@@ -85,7 +87,7 @@ open class ProjectSourceRule(
      */
     fun projectSourceGetDetectedLicensesByFilePath(vararg patterns: String): Map<String, Set<String>> =
         detectedLicensesForFilePath.filter { (filePath, _) ->
-            FileMatcher.match(patterns.toList(), filePath)
+            FileMatcher.match(patterns.asList(), filePath)
         }
 
     /**
