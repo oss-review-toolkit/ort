@@ -31,10 +31,9 @@ import java.time.Instant
 import org.ossreviewtoolkit.advisor.normalizeVulnerabilityData
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.test.getAssetFile
+import org.ossreviewtoolkit.utils.test.identifierToPackage
 
 class OsvFunTest : WordSpec({
     "retrievePackageFindings()" should {
@@ -87,9 +86,6 @@ class OsvFunTest : WordSpec({
         }
     }
 })
-
-private fun identifierToPackage(id: String): Package =
-    Identifier(id).let { Package.EMPTY.copy(id = it, purl = it.toPurl()) }
 
 private fun createOsv(): Osv = OsvFactory.create()
 
