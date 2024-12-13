@@ -33,6 +33,7 @@ dependencies {
 
     implementation(projects.utils.spdxUtils)
 
+    implementation(libs.bundles.ks3)
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
 
