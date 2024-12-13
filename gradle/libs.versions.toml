@@ -15,6 +15,8 @@ versionsPlugin = "0.51.0"
 aeSecurity = "0.132.0"
 asciidoctorj = "3.0.0"
 asciidoctorjPdf = "2.3.19"
+blackduckCommon = "67.0.3"
+blackduckCommonApi = "2023.10.0.6"
 clikt = "5.0.2"
 commonsCompress = "1.27.1"
 cyclonedx = "10.1.0"
@@ -25,6 +27,7 @@ exposed = "0.57.0"
 flexmark = "0.64.8"
 freemarker = "2.3.34"
 greenmail = "2.1.2"
+gson = "2.11.0"
 hikari = "6.2.1"
 hoplite = "2.9.0"
 jackson = "2.18.2"
@@ -90,6 +93,8 @@ aeSecurity = { module = "org.metaeffekt.core:ae-security", version.ref = "aeSecu
 asciidoctorj = { module = "org.asciidoctor:asciidoctorj", version.ref = "asciidoctorj" }
 asciidoctorj-pdf = { module = "org.asciidoctor:asciidoctorj-pdf", version.ref = "asciidoctorjPdf" }
 awsS3 = { module = "software.amazon.awssdk:s3", version.ref = "s3" }
+blackduck-common = { module = "com.blackduck.integration:blackduck-common", version.ref = "blackduckCommon" }
+blackduck-common-api = { module = "com.blackduck.integration:blackduck-common-api", version.ref = "blackduckCommonApi" }
 clikt = { module = "com.github.ajalt.clikt:clikt", version.ref = "clikt" }
 commonsCompress = { module = "org.apache.commons:commons-compress", version.ref = "commonsCompress" }
 cyclonedx = { module = "org.cyclonedx:cyclonedx-core-java", version.ref = "cyclonedx" }
@@ -106,6 +111,7 @@ exposed-json = { module = "org.jetbrains.exposed:exposed-json", version.ref = "e
 flexmark = { module = "com.vladsch.flexmark:flexmark", version.ref = "flexmark" }
 freemarker = { module = "org.freemarker:freemarker", version.ref = "freemarker" }
 greenmail = { module = "com.icegreen:greenmail", version.ref = "greenmail" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 hikari = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }
 hoplite-core = { module = "com.sksamuel.hoplite:hoplite-core", version.ref = "hoplite" }
 hoplite-yaml = { module = "com.sksamuel.hoplite:hoplite-yaml", version.ref = "hoplite" }
