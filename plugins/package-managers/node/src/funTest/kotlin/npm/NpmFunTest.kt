@@ -21,9 +21,14 @@ package org.ossreviewtoolkit.plugins.packagemanagers.node.npm
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
+import io.kotest.inspectors.forAll
 import io.kotest.inspectors.forAtLeastOne
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.shouldHaveSingleElement
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNot
 import io.kotest.matchers.string.shouldContain
 
 import org.ossreviewtoolkit.analyzer.create
@@ -97,6 +102,21 @@ class NpmFunTest : WordSpec({
                 it.severity shouldBe Severity.ERROR
                 it.message shouldContain "Unexpected token"
             }
+        }
+
+        "create issues for list errors" {
+            val definitionFile = getAssetFile("projects/synthetic/npm/list-issues/package.json")
+
+            val result = create("NPM", "legacyPeerDeps" to "true").resolveSingleProject(definitionFile)
+
+            result.issues shouldNot beEmpty()
+            val elsproblems = result.issues.filter { it.message.startsWith("invalid: ") }
+
+            elsproblems shouldHaveSize 2
+            elsproblems.forAll { it.severity shouldBe Severity.ERROR }
+
+            elsproblems shouldHaveSingleElement { it.message.startsWith("invalid: react@18.2.0") }
+            elsproblems shouldHaveSingleElement { it.message.startsWith("invalid: react-dom@18.2.0") }
         }
 
         "resolve dependencies even if the 'node_modules' directory already exists" {

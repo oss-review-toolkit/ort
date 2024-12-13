@@ -163,6 +163,7 @@ class NpmDetectionTest : WordSpec({
                 "npm/node-modules/package.json",
                 "npm/project-with-lockfile/package.json",
                 "npm/shrinkwrap/package.json",
+                "npm/list-issues/package.json",
                 "npm/babel/package.json",
                 "npm/version-urls/package.json",
                 "npm/workspaces/package.json"

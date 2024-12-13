@@ -98,7 +98,7 @@ class Npm(
 
     private fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
-        val issues = installDependencies(workingDir)
+        val issues = installDependencies(workingDir).toMutableList()
 
         if (issues.any { it.severity == Severity.ERROR }) {
             val project = runCatching {
@@ -112,7 +112,7 @@ class Npm(
         }
 
         val project = parseProject(definitionFile, analysisRoot, managerName)
-        val projectModuleInfo = listModules(workingDir).undoDeduplication()
+        val projectModuleInfo = listModules(workingDir, issues).undoDeduplication()
 
         val scopeNames = Scope.entries
             .filterNot { excludes.isScopeExcluded(it.descriptor) }
@@ -145,10 +145,11 @@ class Npm(
     override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =
         PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
 
-    private fun listModules(workingDir: File): ModuleInfo {
-        val json = NpmCommand.run(workingDir, "list", "--depth", "Infinity", "--json", "--long").requireSuccess().stdout
+    private fun listModules(workingDir: File, issues: MutableList<Issue>): ModuleInfo {
+        val listProcess = NpmCommand.run(workingDir, "list", "--depth", "Infinity", "--json", "--long")
+        issues += listProcess.extractNpmIssues()
 
-        return parseNpmList(json)
+        return parseNpmList(listProcess.stdout)
     }
 
     internal fun getRemotePackageDetails(workingDir: File, packageName: String): PackageJson? {
