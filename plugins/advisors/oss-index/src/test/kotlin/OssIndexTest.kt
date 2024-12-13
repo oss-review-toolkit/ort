@@ -122,13 +122,15 @@ class OssIndexTest : WordSpec({
                 OssIndexConfiguration("http://localhost:${server.port()}", null, null)
             )
 
-            val result = ossIndex.retrievePackageFindings(PACKAGES).mapKeys { it.key.id }
+            val result = ossIndex.retrievePackageFindings(PACKAGES).mapKeys { it.key.id.toCoordinates() }
 
-            result.keys shouldContainExactlyInAnyOrder PACKAGES.map { it.id }
-            result.forAll { (_, advisorResult) ->
-                advisorResult.advisor shouldBe ossIndex.details
-                advisorResult.vulnerabilities should beEmpty()
-                advisorResult.summary.issues shouldHaveSingleElement { it.severity == Severity.ERROR }
+            result.keys shouldContainExactlyInAnyOrder PACKAGES.map { it.id.toCoordinates() }
+            result.keys.forAll { coordinates ->
+                with(result.getValue(coordinates)) {
+                    advisor shouldBe ossIndex.details
+                    vulnerabilities should beEmpty()
+                    summary.issues shouldHaveSingleElement { it.severity == Severity.ERROR }
+                }
             }
         }
 
