@@ -56,11 +56,11 @@ class OsvFunTest : WordSpec({
                 identifierToPackage(it)
             }
 
-            val packageFindings = osv.retrievePackageFindings(packages)
+            val packageFindings = osv.retrievePackageFindings(packages).mapKeys { it.key.id.toCoordinates() }
 
-            packageFindings.keys shouldContainExactlyInAnyOrder packages
-            packageFindings.keys.forAll { pkg ->
-                packageFindings.getValue(pkg).vulnerabilities shouldNot beEmpty()
+            packageFindings.keys shouldContainExactlyInAnyOrder packages.map { it.id.toCoordinates() }
+            packageFindings.keys.forAll { coordinates ->
+                packageFindings.getValue(coordinates).vulnerabilities shouldNot beEmpty()
             }
         }
 
