@@ -34,6 +34,7 @@ import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.ProvenanceResolutionResult
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
@@ -212,3 +213,5 @@ fun scannerRunOf(vararg pkgScanResults: Pair<Identifier, List<ScanResult>>): Sca
         scanners = scanners
     )
 }
+
+fun identifierToPackage(id: String): Package = Identifier(id).let { Package.EMPTY.copy(id = it, purl = it.toPurl()) }
