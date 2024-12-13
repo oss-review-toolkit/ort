@@ -80,7 +80,7 @@ private fun Map<Identifier, IndexedValue<CuratedPackage>>.toComponents(
 ): Set<Component> =
     values.mapTo(mutableSetOf()) { (index, pkg) ->
         val dependencies = input.ortResult.getDependencies(pkg.metadata.id, maxLevel = 1, omitExcluded = true)
-        val node = input.ortResult.dependencyNavigator.findNode(project, pkg.metadata.id)
+        val node = input.ortResult.dependencyNavigator.findBreadthFirst(project, pkg.metadata.id)
 
         val nonExcludedLicenseInfo = input.licenseInfoResolver.resolveLicenseInfo(pkg.metadata.id).filterExcluded()
         val relevantLicenseInfo = nonExcludedLicenseInfo.filter(LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED)
@@ -124,24 +124,21 @@ private fun Map<Identifier, IndexedValue<CuratedPackage>>.toComponents(
         }
     }
 
-private fun DependencyNavigator.findNode(project: Project, id: Identifier): DependencyNode? {
-    fun traverse(node: DependencyNode): DependencyNode? {
-        if (node.id == id) return node
+private fun DependencyNavigator.findBreadthFirst(project: Project, nodeId: Identifier): DependencyNode? {
+    fun Sequence<DependencyNode>.findBreadthFirst(id: Identifier): DependencyNode? {
+        // This also turns the sequence into a list so it can be consumed twice, see below.
+        val directDependencies = mapTo(mutableListOf()) { it.getStableReference() }
 
-        node.visitDependencies { dependencies ->
-            dependencies.forEach(::traverse)
-        }
+        directDependencies.find { node -> node.id == id }?.also { return it }
 
-        return null
-    }
-
-    scopeNames(project).forEach { scopeName ->
-        directDependencies(project, scopeName).forEach { node ->
-            traverse(node)?.also { return it }
+        return directDependencies.firstNotNullOfOrNull { node ->
+            node.visitDependencies { it.findBreadthFirst(id) }
         }
     }
 
-    return null
+    return scopeNames(project).asSequence().mapNotNull { scopeName ->
+        directDependencies(project, scopeName).findBreadthFirst(nodeId)
+    }.firstOrNull()
 }
 
 private fun ResolvedLicenseInfo.toSimplifiedCompoundExpression(): SpdxExpression =
