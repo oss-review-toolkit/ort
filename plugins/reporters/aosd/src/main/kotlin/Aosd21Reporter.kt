@@ -92,6 +92,7 @@ private fun Map<Identifier, IndexedValue<CuratedPackage>>.toComponents(
             .applyChoices(input.ortResult.getRepositoryLicenseChoices())
 
         val selectedExpressions = selectedLicenseInfo.toSimplifiedCompoundExpression()
+            .takeUnless { it == licenseExpressions }
 
         val licenseTexts = licenseExpressions.licenses().mapNotNullTo(mutableSetOf()) { license ->
             input.licenseTextProvider.getLicenseText(license)
@@ -116,7 +117,7 @@ private fun Map<Identifier, IndexedValue<CuratedPackage>>.toComponents(
                         licenseText = licenseTexts,
                         // Can be empty as the license information is the result of a file level scan.
                         licenseTextUrl = "",
-                        selectedLicense = selectedExpressions.nullOrBlankToSpdxNoassertionOrNone()
+                        selectedLicense = selectedExpressions?.toString().orEmpty()
                     ).validate()
                 )
             ).validate()
