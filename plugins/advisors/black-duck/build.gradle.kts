@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+ * Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,34 +18,15 @@
  */
 
 plugins {
+    // Apply precompiled plugins.
+    id("ort-plugin-conventions")
+
     // Apply third-party plugins.
-    id("org.gradlex.reproducible-builds")
+    alias(libs.plugins.kotlinSerialization)
 }
 
 repositories {
     mavenCentral()
-
-    exclusiveContent {
-        forRepository {
-            maven("https://packages.atlassian.com/maven-external")
-        }
-
-        filter {
-            includeGroupByRegex("(com|io)\\.atlassian\\..*")
-            includeVersionByRegex("log4j", "log4j", ".*-atlassian-.*")
-        }
-    }
-
-    exclusiveContent {
-        forRepository {
-            maven("https://repo.gradle.org/gradle/libs-releases/")
-        }
-
-        filter {
-            includeGroup("org.gradle")
-        }
-    }
-
     maven {
         // com.blackducksoftware.bdio:bdio2
         url = uri("https://sig-repo.synopsys.com/bds-bdio-release")
@@ -56,10 +37,20 @@ repositories {
     }
 }
 
-tasks.withType<Jar>().configureEach {
-    manifest {
-        attributes["Implementation-Version"] = version
-    }
-}
+dependencies {
+    api(projects.advisor)
+    api(projects.model)
 
-if (project != rootProject) version = rootProject.version
+    implementation(projects.utils.ortUtils)
+
+    implementation(libs.blackduck.common)
+    implementation(libs.blackduck.common.api)
+    implementation(libs.bundles.ks3)
+    implementation(libs.kotlinx.serialization.core)
+    implementation(libs.kotlinx.serialization.json)
+
+    implementation(projects.utils.commonUtils)
+    implementation(projects.utils.ortUtils)
+
+    ksp(projects.advisor)
+}

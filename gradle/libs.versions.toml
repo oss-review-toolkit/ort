@@ -15,6 +15,8 @@ versionsPlugin = "0.51.0"
 aeSecurity = "0.132.0"
 asciidoctorj = "3.0.0"
 asciidoctorjPdf = "2.3.19"
+blackduckCommon = "66.2.19"
+blackduckCommonApi = "2023.10.0.4"
 clikt = "5.0.2"
 commonsCompress = "1.27.1"
 cyclonedx = "10.0.0"
@@ -89,6 +91,8 @@ aeSecurity = { module = "org.metaeffekt.core:ae-security", version.ref = "aeSecu
 asciidoctorj = { module = "org.asciidoctor:asciidoctorj", version.ref = "asciidoctorj" }
 asciidoctorj-pdf = { module = "org.asciidoctor:asciidoctorj-pdf", version.ref = "asciidoctorjPdf" }
 awsS3 = { module = "software.amazon.awssdk:s3", version.ref = "s3" }
+blackduck-common = { module = "com.synopsys.integration:blackduck-common", version.ref = "blackduckCommon" }
+blackduck-common-api = { module = "com.synopsys.integration:blackduck-common-api", version.ref = "blackduckCommonApi" }
 clikt = { module = "com.github.ajalt.clikt:clikt", version.ref = "clikt" }
 commonsCompress = { module = "org.apache.commons:commons-compress", version.ref = "commonsCompress" }
 cyclonedx = { module = "org.cyclonedx:cyclonedx-core-java", version.ref = "cyclonedx" }
