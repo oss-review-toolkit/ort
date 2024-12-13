@@ -85,7 +85,7 @@ data class CycloneDxReporterConfig(
      * A comma-separated list of (case-insensitive) output formats to export to. Supported are XML and JSON.
      */
     @OrtPluginOption(
-        defaultValue = "XML",
+        defaultValue = "JSON",
         aliases = ["output.file.formats"]
     )
     val outputFileFormats: List<String>
