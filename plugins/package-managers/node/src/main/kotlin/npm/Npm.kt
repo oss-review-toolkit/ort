@@ -98,9 +98,9 @@ class Npm(
 
     private fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
-        val installIssues = installDependencies(workingDir)
+        val issues = installDependencies(workingDir)
 
-        if (installIssues.any { it.severity == Severity.ERROR }) {
+        if (issues.any { it.severity == Severity.ERROR }) {
             val project = runCatching {
                 parseProject(definitionFile, analysisRoot, managerName)
             }.getOrElse {
@@ -108,7 +108,7 @@ class Npm(
                 Project.EMPTY
             }
 
-            return listOf(ProjectAnalyzerResult(project, emptySet(), installIssues))
+            return listOf(ProjectAnalyzerResult(project, emptySet(), issues))
         }
 
         val project = parseProject(definitionFile, analysisRoot, managerName)
@@ -127,7 +127,7 @@ class Npm(
         return ProjectAnalyzerResult(
             project = project.copy(scopeNames = scopeNames),
             packages = emptySet(),
-            issues = installIssues
+            issues = issues
         ).let { listOf(it) }
     }
 
