@@ -68,7 +68,10 @@ private fun PackageInfo.toPackage() =
         description = pkgMeta.description.orEmpty(),
         homepageUrl = pkgMeta.homepage.orEmpty(),
         binaryArtifact = RemoteArtifact.EMPTY,
-        sourceArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
+        // TODO: Get the URL for tarballs hosted on private registries. Note that the public Bower registry does not
+        //       contain any actual source (or binary) packages. Instead, it is a simple key-value store pointing from a
+        //       package name to its belonging Git repository.
+        sourceArtifact = RemoteArtifact.EMPTY,
         vcs = toVcsInfo()
     )
 
