@@ -236,15 +236,15 @@ private fun collectDependencies(
     ids: MutableSet<Identifier>,
     visited: MutableSet<DependencyGraphNode> = mutableSetOf()
 ) {
-    if (maxDepth != 0) {
-        nodes.forEach { node ->
-            val cursor = node as DependencyRefCursor
-            if (cursor.current !in visited) {
-                visited += cursor.current
-                if (matcher(node)) ids += node.id
+    if (maxDepth == 0) return
 
-                node.visitDependencies { collectDependencies(it, maxDepth - 1, matcher, ids, visited) }
-            }
+    nodes.forEach { node ->
+        val cursor = node as DependencyRefCursor
+        if (cursor.current !in visited) {
+            visited += cursor.current
+            if (matcher(node)) ids += node.id
+
+            node.visitDependencies { collectDependencies(it, maxDepth - 1, matcher, ids, visited) }
         }
     }
 }
