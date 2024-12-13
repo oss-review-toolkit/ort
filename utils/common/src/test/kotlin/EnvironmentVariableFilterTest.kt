@@ -80,4 +80,18 @@ class EnvironmentVariableFilterTest : StringSpec({
 
         environment should containExactly(filteredEnvironment)
     }
+
+    "An empty deny list should not deny anything" {
+        EnvironmentVariableFilter.reset(denySubstrings = emptyList())
+
+        EnvironmentVariableFilter.DEFAULT_DENY_SUBSTRINGS.forAll {
+            EnvironmentVariableFilter.isAllowed(it) shouldBe true
+        }
+
+        EnvironmentVariableFilter.DEFAULT_ALLOW_NAMES.forAll {
+            EnvironmentVariableFilter.isAllowed(it) shouldBe true
+        }
+
+        EnvironmentVariableFilter.isAllowed("PATH") shouldBe true
+    }
 })
