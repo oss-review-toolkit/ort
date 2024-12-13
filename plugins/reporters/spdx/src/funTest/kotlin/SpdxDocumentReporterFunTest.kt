@@ -164,7 +164,7 @@ private fun TestConfiguration.generateReport(
 
 private fun SpdxDocument.getCustomReplacements() =
     mapOf(
-        "<REPLACE_LICENSE_LIST_VERSION>" to SpdxLicense.LICENSE_LIST_VERSION.substringBefore("-"),
+        "<REPLACE_LICENSE_LIST_VERSION>" to SpdxLicense.LICENSE_LIST_VERSION.split('.').take(2).joinToString("."),
         "<REPLACE_ORT_VERSION>" to Environment.ORT_VERSION,
         "<REPLACE_CREATION_DATE_AND_TIME>" to creationInfo.created.toString(),
         "<REPLACE_DOCUMENT_NAMESPACE>" to documentNamespace

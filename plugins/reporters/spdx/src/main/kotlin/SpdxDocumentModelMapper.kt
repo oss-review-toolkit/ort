@@ -172,7 +172,7 @@ internal object SpdxDocumentModelMapper {
                 comment = params.creationInfoComment,
                 created = Instant.now().truncatedTo(ChronoUnit.SECONDS),
                 creators = creators,
-                licenseListVersion = SpdxLicense.LICENSE_LIST_VERSION.substringBefore("-")
+                licenseListVersion = SpdxLicense.LICENSE_LIST_VERSION.split('.').take(2).joinToString(".")
             ),
             documentNamespace = "spdx://${UUID.randomUUID()}",
             documentDescribes = projectPackages.map { it.spdxId },
