@@ -60,7 +60,7 @@ class EnvironmentVariableFilterTest : StringSpec({
     "Allowed names can be changed" {
         val allowedSecret = "MAVEN_REPO_PASSWORD"
 
-        EnvironmentVariableFilter.reset(allowNames = setOf(allowedSecret))
+        EnvironmentVariableFilter.reset(allowNames = listOf(allowedSecret))
 
         EnvironmentVariableFilter.isAllowed(allowedSecret) shouldBe true
     }
