@@ -21,8 +21,11 @@
 
 package org.ossreviewtoolkit.plugins.reporters.aosd
 
+import io.ks3.standard.sortedSetSerializer
+
 import java.io.File
 
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
@@ -51,6 +54,7 @@ internal data class AOSD21(
     val directDependencies: Set<Long>,
 
     /** A set with all software components used in this product. */
+    @Serializable(SortedComponentSetSerializer::class)
     val components: Set<Component>
 ) {
     fun validate(): AOSD21 =
@@ -190,6 +194,10 @@ internal data class AOSD21(
 }
 
 private val JSON = Json { encodeDefaults = true }
+
+private object SortedComponentSetSerializer : KSerializer<Set<AOSD21.Component>> by sortedSetSerializer(
+    compareBy { it.componentName }
+)
 
 internal fun File.writeReport(model: AOSD21): File = apply { outputStream().use { JSON.encodeToStream(model, it) } }
 
