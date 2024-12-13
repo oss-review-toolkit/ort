@@ -98,23 +98,7 @@ class LicenseInfoResolver(
                 }.keys
 
                 licenseInfo.declaredLicenseInfo.authors.takeIf { it.isNotEmpty() && addAuthorsToCopyrights }?.also {
-                    locations += ResolvedLicenseLocation(
-                        provenance = UnknownProvenance,
-                        location = UNDEFINED_TEXT_LOCATION,
-                        appliedCuration = null,
-                        matchingPathExcludes = emptyList(),
-                        copyrights = it.mapTo(mutableSetOf()) { author ->
-                            val statement = "Copyright (C) $author".takeUnless {
-                                author.contains("Copyright", ignoreCase = true)
-                            } ?: author
-
-                            ResolvedCopyrightFinding(
-                                statement = statement,
-                                location = UNDEFINED_TEXT_LOCATION,
-                                matchingPathExcludes = emptyList()
-                            )
-                        }
-                    )
+                    locations += resolveCopyrightFromAuthors(it)
                 }
             }
         }
@@ -287,6 +271,25 @@ class LicenseInfoResolver(
 
         return ResolvedLicenseFileInfo(id, licenseFiles)
     }
+
+    private fun resolveCopyrightFromAuthors(authors: Set<String>): ResolvedLicenseLocation =
+        ResolvedLicenseLocation(
+            provenance = UnknownProvenance,
+            location = UNDEFINED_TEXT_LOCATION,
+            appliedCuration = null,
+            matchingPathExcludes = emptyList(),
+            copyrights = authors.mapTo(mutableSetOf()) { author ->
+                val statement = "Copyright (C) $author".takeUnless {
+                    author.contains("Copyright", ignoreCase = true)
+                } ?: author
+
+                ResolvedCopyrightFinding(
+                    statement = statement,
+                    location = UNDEFINED_TEXT_LOCATION,
+                    matchingPathExcludes = emptyList()
+                )
+            }
+        )
 }
 
 private class ResolvedLicenseBuilder(val license: SpdxSingleLicenseExpression) {
