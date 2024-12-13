@@ -33,4 +33,5 @@ dependencies {
     ksp(projects.advisor)
 
     testImplementation(libs.wiremock)
+    testImplementation(projects.utils.testUtils)
 }

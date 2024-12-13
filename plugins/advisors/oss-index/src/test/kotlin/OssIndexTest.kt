@@ -31,6 +31,7 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSingleElement
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
@@ -40,13 +41,11 @@ import java.net.URI
 
 import org.ossreviewtoolkit.model.AdvisorCapability
 import org.ossreviewtoolkit.model.AdvisorDetails
-import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Severity
-import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
 import org.ossreviewtoolkit.utils.common.enumSetOf
+import org.ossreviewtoolkit.utils.test.identifierToPackage
 
 class OssIndexTest : WordSpec({
     val server = WireMockServer(
@@ -74,14 +73,11 @@ class OssIndexTest : WordSpec({
                 OssIndexFactory.descriptor,
                 OssIndexConfiguration("http://localhost:${server.port()}", null, null)
             )
-            val packages = COMPONENTS_REQUEST_IDS.mapTo(mutableSetOf()) {
-                Package.EMPTY.copy(id = it, purl = it.toPurl())
-            }
 
-            val result = ossIndex.retrievePackageFindings(packages).mapKeys { it.key.id }
+            val result = ossIndex.retrievePackageFindings(PACKAGES).mapKeys { it.key.id }
 
-            result.keys should containExactly(ID_JUNIT)
-            result[ID_JUNIT] shouldNotBeNull {
+            result.keys should containExactly(PKG_JUNIT.id)
+            result[PKG_JUNIT.id] shouldNotBeNull {
                 advisor shouldBe ossIndex.details
                 vulnerabilities should containExactly(
                     Vulnerability(
@@ -125,13 +121,10 @@ class OssIndexTest : WordSpec({
                 OssIndexFactory.descriptor,
                 OssIndexConfiguration("http://localhost:${server.port()}", null, null)
             )
-            val packages = COMPONENTS_REQUEST_IDS.mapTo(mutableSetOf()) {
-                Package.EMPTY.copy(id = it, purl = it.toPurl())
-            }
 
-            val result = ossIndex.retrievePackageFindings(packages).mapKeys { it.key.id }
+            val result = ossIndex.retrievePackageFindings(PACKAGES).mapKeys { it.key.id }
 
-            result.keys shouldBe COMPONENTS_REQUEST_IDS
+            result.keys shouldContainExactlyInAnyOrder PACKAGES.map { it.id }
             result.forAll { (_, advisorResult) ->
                 advisorResult.advisor shouldBe ossIndex.details
                 advisorResult.vulnerabilities should beEmpty()
@@ -154,14 +147,15 @@ private const val ADVISOR_NAME = "OSSIndex"
 
 private const val TEST_FILES_ROOT = "src/test/assets"
 
-private val ID_HAMCREST = Identifier("Maven:org.hamcrest:hamcrest-core:1.3")
-private val ID_JUNIT = Identifier("Maven:junit:junit:4.12")
-
+private val PKG_HAMCREST = identifierToPackage("Maven:org.hamcrest:hamcrest-core:1.3")
+private val PKG_JUNIT = identifierToPackage("Maven:junit:junit:4.12")
 private const val COMPONENTS_REQUEST_URL = "/api/v3/component-report"
-private val COMPONENTS_REQUEST_IDS = setOf(ID_HAMCREST, ID_JUNIT)
+private val PACKAGES = setOf(PKG_HAMCREST, PKG_JUNIT)
 
 private val COMPONENTS_REQUEST_JSON =
-    COMPONENTS_REQUEST_IDS.joinToString(prefix = "{ \"coordinates\": [", postfix = "] }") { "\"${it.toPurl()}\"" }
+    PACKAGES.joinToString(prefix = "{ \"coordinates\": [", postfix = "] }") {
+        "\"${it.purl}\""
+    }
 
 private fun WireMockServer.stubComponentsRequest(responseFile: String) {
     stubFor(
