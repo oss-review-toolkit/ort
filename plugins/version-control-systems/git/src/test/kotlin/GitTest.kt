@@ -153,7 +153,7 @@ class GitTest : WordSpec({
     }
 })
 
-private val TestUri = URIish(URI.create("https://www.example.org:8080/foo").toURL())
+private val TestUri = URIish(URI("https://www.example.org:8080/foo").toURL())
 
 /**
  * Mocks the utility function to query password authentication for the test URI. Return the [result] provided.

@@ -284,7 +284,7 @@ class VulnerableCodeTest : WordSpec({
         "fixup a wrongly escaped ampersand" {
             val u = """https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true&query=cpe:2.3:a:oracle:retail_category_management_planning_\\&_optimization:16.0.3:*:*:*:*:*:*:*"""
 
-            URI.create(u.fixupUrlEscaping()) shouldBe URI(
+            URI(u.fixupUrlEscaping()) shouldBe URI(
                 """https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true&query=cpe:2.3:a:oracle:retail_category_management_planning_%26_optimization:16.0.3:*:*:*:*:*:*:*"""
             )
         }
@@ -292,7 +292,7 @@ class VulnerableCodeTest : WordSpec({
         "fixup a wrongly escaped slash" {
             val u = """https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true&query=cpe:2.3:a:apple:swiftnio_http\/2:*:*:*:*:*:swift:*:*"""
 
-            URI.create(u.fixupUrlEscaping()) shouldBe URI(
+            URI(u.fixupUrlEscaping()) shouldBe URI(
                 """https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true&query=cpe:2.3:a:apple:swiftnio_http/2:*:*:*:*:*:swift:*:*"""
             )
         }
@@ -300,7 +300,7 @@ class VulnerableCodeTest : WordSpec({
         "fixup a wrongly escaped plus" {
             val u = """https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true&query=cpe:2.3:a:oracle:hyperion_bi\+:*:*:*:*:*:*:*:*"""
 
-            URI.create(u.fixupUrlEscaping()) shouldBe URI(
+            URI(u.fixupUrlEscaping()) shouldBe URI(
                 """https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true&query=cpe:2.3:a:oracle:hyperion_bi%2B:*:*:*:*:*:*:*:*"""
             )
         }

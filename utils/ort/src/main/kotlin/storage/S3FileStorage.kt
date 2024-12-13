@@ -76,7 +76,7 @@ class S3FileStorage(
             S3Client.builder()
                 .region(Region.of(awsRegion))
                 .credentialsProvider(provider)
-                .endpointOverride(if (customEndpoint != null) URI.create(customEndpoint) else null)
+                .endpointOverride(if (customEndpoint != null) URI(customEndpoint) else null)
                 .build()
         } else {
             if (awsRegion != null) {

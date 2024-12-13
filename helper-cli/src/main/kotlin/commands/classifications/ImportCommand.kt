@@ -83,11 +83,11 @@ private data class EclipseLicenses(
 
 private enum class LicenseClassificationProvider(val url: String) {
     DOUBLE_OPEN("https://github.com/doubleopen-project/policy-configuration/raw/main/license-classifications.yml") {
-        override fun getClassifications(): LicenseClassifications = yamlMapper.readValue(URI.create(url).toURL())
+        override fun getClassifications(): LicenseClassifications = yamlMapper.readValue(URI(url).toURL())
     },
     ECLIPSE("https://www.eclipse.org/legal/licenses.json") {
         override fun getClassifications(): LicenseClassifications {
-            val json = jsonMapper.readValue<EclipseLicenses>(URI.create(url).toURL())
+            val json = jsonMapper.readValue<EclipseLicenses>(URI(url).toURL())
 
             logger.info { "Importing Eclipse license classifications dated ${json.meta["updated"]}." }
 
@@ -110,7 +110,7 @@ private enum class LicenseClassificationProvider(val url: String) {
         }
     },
     LDB_COLLECTOR("https://github.com/maxhbr/LDBcollector/raw/generated/ort/license-classifications.yml") {
-        override fun getClassifications(): LicenseClassifications = yamlMapper.readValue(URI.create(url).toURL())
+        override fun getClassifications(): LicenseClassifications = yamlMapper.readValue(URI(url).toURL())
     };
 
     abstract fun getClassifications(): LicenseClassifications
