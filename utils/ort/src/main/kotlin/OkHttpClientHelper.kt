@@ -146,7 +146,7 @@ fun OkHttpClient.Builder.addBasicAuthorization(username: String, password: Strin
  */
 fun OkHttpClient.downloadFile(url: String, directory: File): Result<File> {
     if (url.startsWith("file:/")) {
-        val source = File(URI.create(url))
+        val source = File(URI(url))
         val target = directory.resolve(source.name)
         return runCatching { source.copyTo(target) }
     }
@@ -199,7 +199,7 @@ fun OkHttpClient.downloadFile(url: String, directory: File): Result<File> {
  * [Result] wrapping an [IOException] (which might be a [HttpDownloadError]) on failure.
  */
 fun OkHttpClient.downloadText(url: String): Result<String> {
-    if (url.startsWith("file:/")) return runCatching { File(URI.create(url)).readText() }
+    if (url.startsWith("file:/")) return runCatching { File(URI(url)).readText() }
 
     return download(url).mapCatching { (_, body) ->
         body.use { it.string() }

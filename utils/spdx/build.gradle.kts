@@ -79,7 +79,7 @@ class ScanCodeLicenseTextProvider : SpdxLicenseTextProvider {
 
     private val spdxIdToScanCodeKeyMap: Map<String, String> by lazy {
         val jsonSlurper = JsonSlurper()
-        val url = URI.create("https://scancode-licensedb.aboutcode.org/index.json").toURL()
+        val url = URI("https://scancode-licensedb.aboutcode.org/index.json").toURL()
 
         logger.quiet("Downloading ScanCode license index...")
 

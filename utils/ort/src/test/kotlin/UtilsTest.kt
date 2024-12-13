@@ -459,7 +459,7 @@ class UtilsTest : WordSpec({
             val host = "www.example.org"
             val port = 442
             val scheme = "https"
-            val url = URI.create("https://foo:bar@www.example.org").toURL()
+            val url = URI("https://foo:bar@www.example.org").toURL()
 
             val auth = OrtAuthenticator().requestPasswordAuthenticationInstance(
                 host,

@@ -237,7 +237,7 @@ class Bazel(
                 "Archive override URL(s) for module '$moduleName': ${urlsAsString.removeSurrounding("[", "]")}"
             }
 
-            val urls = urlsAsString.removeSurrounding("[", "]").split(',').map { URI.create(it) }
+            val urls = urlsAsString.removeSurrounding("[", "]").split(',').map { URI(it) }
 
             val patches = patchesAsString.takeUnless { BUILDOZER_MISSING_VALUE in it }?.let {
                 logger.warn {
