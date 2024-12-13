@@ -44,6 +44,27 @@ repositories {
             includeGroup("org.gradle")
         }
     }
+
+    exclusiveContent {
+        forRepository {
+            maven("https://repo.blackduck.com/bds-integrations-release")
+        }
+
+        filter {
+            includeGroup("com.blackduck.integration")
+            includeGroup("com.blackducksoftware.magpie")
+        }
+    }
+
+    exclusiveContent {
+        forRepository {
+            maven("https://sig-repo.synopsys.com/bds-bdio-release")
+        }
+
+        filter {
+            includeGroup("com.blackducksoftware.bdio")
+        }
+    }
 }
 
 tasks.withType<Jar>().configureEach {
