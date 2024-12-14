@@ -19,6 +19,10 @@
   "labels": ["dependencies"],
   "packageRules": [
     {
+      "matchManagers": ["gradle"],
+      "commitMessageTopic": "{{depName}}"
+    },
+    {
       "matchPackageNames": [
         "com.atlassian.jira:jira-rest-java-client-api",
         "com.atlassian.jira:jira-rest-java-client-app"
