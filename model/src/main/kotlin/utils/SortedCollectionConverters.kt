@@ -105,16 +105,16 @@ class SnippetFindingSortedSetConverter : StdConverter<Set<SnippetFinding>, Sorte
 
 private fun Provenance.getSortKey(): String =
     buildList {
-        this += javaClass.canonicalName
+        add(javaClass.canonicalName)
 
         when (this@getSortKey) {
             is RepositoryProvenance -> {
-                this += vcsInfo.type.toString()
-                this += vcsInfo.url
+                add(vcsInfo.type.toString())
+                add(vcsInfo.url)
             }
 
             is ArtifactProvenance -> {
-                this += sourceArtifact.url
+                add(sourceArtifact.url)
             }
 
             else -> {

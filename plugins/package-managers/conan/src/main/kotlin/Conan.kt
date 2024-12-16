@@ -314,7 +314,7 @@ class Conan(
                     val dependencies = parseDependencyTree(pkgInfos, pkgInfo.requires, workingDir) +
                         parseDependencyTree(pkgInfos, pkgInfo.buildRequires, workingDir)
 
-                    this += PackageReference(id, dependencies = dependencies)
+                    add(PackageReference(id, dependencies = dependencies))
                 }
             }
         }

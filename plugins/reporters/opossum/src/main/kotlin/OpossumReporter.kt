@@ -443,6 +443,6 @@ class OpossumReporter(
 private fun DependencyNode.getDependencies(): List<DependencyNode> =
     buildList {
         visitDependencies { dependencyNodes ->
-            this += dependencyNodes.map { it.getStableReference() }
+            addAll(dependencyNodes.map { it.getStableReference() })
         }
     }
