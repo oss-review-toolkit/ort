@@ -157,6 +157,11 @@ RUN ARCH=$(arch | sed s/aarch64/arm64/) \
     rm requirements.txt; \
     fi
 
+# Extract ScanCode license texts to a directory.
+RUN scancode-license-data --path /opt/scancode-license-data \
+    && find /opt/scancode-license-data -type f -not -name "*.LICENSE" -exec rm -f {} + \
+    && rm -rf /opt/scancode-license-data/static
+
 RUN pip install --no-cache-dir -U \
     pip=="$PIPTOOL_VERSION" \
     wheel \
@@ -170,6 +175,9 @@ RUN pip install --no-cache-dir -U \
 
 FROM scratch AS python
 COPY --from=pythonbuild /opt/python /opt/python
+
+FROM scratch as scancode-license-data
+COPY --from=pythonbuild /opt/scancode-license-data /opt/scancode-license-data
 
 #------------------------------------------------------------------------
 # NODEJS - Build NodeJS as a separate component with nvm
@@ -492,6 +500,8 @@ ENV RBENV_ROOT=/opt/rbenv/
 ENV GEM_HOME=/var/tmp/gem
 ENV PATH=$PATH:$RBENV_ROOT/bin:$RBENV_ROOT/shims:$RBENV_ROOT/plugins/ruby-install/bin
 COPY --from=ruby --chown=$USER:$USER $RBENV_ROOT $RBENV_ROOT
+
+COPY --from=scancode-license-data --chown=$USER:$USER /opt/scancode-license-data /opt/scancode-license-data
 
 #------------------------------------------------------------------------
 # Container with all supported package managers.
