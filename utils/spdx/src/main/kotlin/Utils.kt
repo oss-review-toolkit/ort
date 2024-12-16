@@ -49,7 +49,8 @@ val scanCodeLicenseTextDir by lazy {
     val pythonBinDir = listOf("bin", "Scripts")
     val scanCodeBaseDir = scanCodeExeDir?.takeUnless { it.name in pythonBinDir } ?: scanCodeExeDir?.parentFile
 
-    scanCodeBaseDir?.walkTopDown()?.find { it.isDirectory && it.endsWith("licensedcode/data/licenses") }
+    scanCodeBaseDir?.walkTopDown()?.find { it.isDirectory && it.endsWith("licensedcode/data/licenses") } ?:
+        File("/opt/scancode-license-data").takeIf { it.isDirectory }
 }
 
 /**
