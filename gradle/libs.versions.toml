@@ -29,8 +29,9 @@ hikari = "6.2.1"
 hoplite = "2.9.0"
 jackson = "2.18.2"
 jakartaMail = "2.0.1"
+jakartaRestApi = "2.1.6"
 jgit = "7.1.0.202411261347-r"
-jiraRestClient = "5.2.7"
+jiraRestClient = "6.0.1"
 jruby = "9.4.9.0"
 jslt = "0.1.14"
 jsonSchemaValidator = "1.5.4"
@@ -115,6 +116,7 @@ jackson-dataformat-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-d
 jackson-datatype-jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson" }
 jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
 jakartaMail = { module = "com.sun.mail:jakarta.mail", version.ref = "jakartaMail" }
+jakartaRestApi = { module = "jakarta.ws.rs:jakarta.ws.rs-api", version.ref = "jakartaRestApi" }
 jgit = { module = "org.eclipse.jgit:org.eclipse.jgit", version.ref = "jgit" }
 jgit-ssh-apache = { module = "org.eclipse.jgit:org.eclipse.jgit.ssh.apache", version.ref = "jgit" }
 jgit-ssh-apache-agent = { module = "org.eclipse.jgit:org.eclipse.jgit.ssh.apache.agent", version.ref = "jgit" }
