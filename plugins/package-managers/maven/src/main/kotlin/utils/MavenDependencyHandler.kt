@@ -28,6 +28,8 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
+import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.Maven
@@ -112,7 +114,24 @@ class MavenDependencyHandler(
                 message = "Could not get package information for dependency '" +
                     "${dependency.artifact.identifier()}': ${e.collectMessages()}"
             )
-        }.getOrNull()
+        }.getOrElse {
+            Package(
+                id = dependency.artifact.run {
+                    Identifier(
+                        type = "Maven",
+                        namespace = groupId,
+                        name = artifactId,
+                        version = version
+                    )
+                },
+                binaryArtifact = RemoteArtifact.EMPTY,
+                declaredLicenses = emptySet(),
+                description = "",
+                homepageUrl = "",
+                sourceArtifact = RemoteArtifact.EMPTY,
+                vcs = VcsInfo.EMPTY
+            )
+        }
     }
 
     /**
