@@ -137,7 +137,13 @@ data class Package(
      * default is used. If not null, this must not be empty and not contain any duplicates.
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    val sourceCodeOrigins: List<SourceCodeOrigin>? = null
+    val sourceCodeOrigins: List<SourceCodeOrigin>? = null,
+
+    /**
+     * The BlackDuck Origin (component) belonging to this package.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val blackDuckOrigin: BlackDuckOriginReference? = null
 ) {
     companion object {
         /**
