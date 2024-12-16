@@ -227,7 +227,13 @@ private fun ModuleInfo.getNonDeduplicatedModuleInfosForId(): Map<String, ModuleI
 }
 
 internal fun List<String>.groupLines(vararg markers: String): List<String> {
-    val ignorableLinePrefixes = setOf("code ", "errno ", "path ", "syscall ")
+    val ignorableLinePrefixes = setOf(
+        "A complete log of this run can be found in: ",
+        "code ",
+        "errno ",
+        "path ",
+        "syscall "
+    )
     val singleLinePrefixes =
         setOf("deprecated ", "invalid: ", "missing: ", "skipping integrity check for git dependency ")
     val minCommonPrefixLength = 5
