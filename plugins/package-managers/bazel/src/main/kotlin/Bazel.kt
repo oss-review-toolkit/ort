@@ -97,6 +97,9 @@ internal object BazelCommand : CommandLineTool {
 
 internal object BuildozerCommand : CommandLineTool {
     override fun command(workingDir: File?) = "buildozer"
+
+    override fun transformVersion(output: String) =
+        output.lineSequence().first().trim().removePrefix("buildozer version: ")
 }
 
 class Bazel(
