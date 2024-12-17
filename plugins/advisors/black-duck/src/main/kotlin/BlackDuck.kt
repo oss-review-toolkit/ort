@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.plugins.advisors.blackduck
 
+import com.synopsys.integration.bdio.model.Forge
+import com.synopsys.integration.bdio.model.externalid.ExternalId
 import com.synopsys.integration.blackduck.api.generated.view.VulnerabilityView
 
 import java.time.Instant
@@ -40,6 +42,8 @@ import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.alsoIfNull
 import org.ossreviewtoolkit.utils.common.enumSetOf
 
+// TODO: Add handling for request execution exceptions.
+
 @OrtPlugin(
     id = "BlackDuck",
     displayName = "BlackDuck",
@@ -56,7 +60,11 @@ class BlackDuck(override val descriptor: PluginDescriptor, config: BlackDuckConf
 
         // TODO: run in parallel.
         val result = packages.map { pkg ->
-            val vulnerabilities = getVulnerabilitiesByPurl(pkg).orEmpty()
+            val vulnerabilities = if (pkg.blackDuckOrigin != null) {
+                getVulnerabilitiesByExternalId(pkg).orEmpty()
+            } else {
+                getVulnerabilitiesByPurl(pkg).orEmpty()
+            }
 
             pkg to AdvisorResult(
                 advisor = details,
@@ -71,6 +79,37 @@ class BlackDuck(override val descriptor: PluginDescriptor, config: BlackDuckConf
         return result
     }
 
+    private fun getVulnerabilitiesByExternalId(pkg: Package): List<Vulnerability>? {
+        val ref = pkg.blackDuckOrigin!!
+        logger.info { "Get vulnerabilities for ${pkg.id.toCoordinates()} by external ID: '${ref.toCoordinates()}'." }
+
+        val forge = Forge.getKnownForges()[ref.externalNamespace] ?: run {
+            logger.error("Unknown forge: '${ref.externalNamespace}")
+            return null
+        }
+
+        val externalId = ExternalId.createFromExternalId(forge, ref.externalId, null, null)
+
+        val searchResults = componentService.getAllSearchResults(externalId)
+        logger.info { "Found ${searchResults.size} search results for external ID: '${ref.toCoordinates()}'." }
+
+        val originViews = searchResults.mapNotNull { searchResult ->
+            componentService.getOriginView(searchResult).alsoIfNull {
+                // A purl matches on the granularity of a component variant / origin. So, This should not happen.
+                logger.warn { "Could not get origin details for '${searchResult.variant}' matched by '${pkg.purl}'." }
+            }
+        }
+
+        val vulnerabilities = originViews.flatMap { componentService.getVulnerabilities(it) }.distinctBy { it.name }
+
+        logger.info {
+            "Found ${vulnerabilities.size} vulnerabilities by ${ref.toCoordinates()} for package " +
+                "${pkg.id.toCoordinates()}'"
+        }
+
+        return vulnerabilities.map { it.toOrtVulnerability() }
+    }
+
     private fun getVulnerabilitiesByPurl(pkg: Package): List<Vulnerability>? {
         logger.info { "Get vulnerabilities for ${pkg.id.toCoordinates()} by purl: '${pkg.purl}'." }
 
@@ -80,10 +119,11 @@ class BlackDuck(override val descriptor: PluginDescriptor, config: BlackDuckConf
         }
 
         val searchResults = componentService.searchKbComponentsByPurl(purl)
+
         val originViews = searchResults.mapNotNull { searchResult ->
             componentService.getOriginView(searchResult).alsoIfNull {
                 // A purl matches on the granularity of a component variant / origin. So, This should not happen.
-                logger.warn { "Could details for variant '${searchResult.variant}' matched by '${pkg.purl}'." }
+                logger.warn { "Could not get origin details for '${searchResult.variant}' matched by '${pkg.purl}'." }
             }
         }
 

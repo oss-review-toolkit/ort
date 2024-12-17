@@ -22,7 +22,10 @@ package org.ossreviewtoolkit.plugins.advisors.blackduck
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.collections.shouldNotContain
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 
@@ -30,6 +33,7 @@ import java.time.Instant
 
 import org.ossreviewtoolkit.advisor.normalizeVulnerabilityData
 import org.ossreviewtoolkit.model.AdvisorResult
+import org.ossreviewtoolkit.model.BlackDuckOriginReference
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.test.getAssetFile
@@ -75,6 +79,42 @@ class BlackDuckFunTest : WordSpec({
             val packageFindings = blackDuck.retrievePackageFindings(packages).mapKeys { it.key.id }
 
             packageFindings.patchTimes() shouldBe expectedResult.patchTimes()
+        }
+
+        "return the vulnerabilities for the BlackDuck origin if specified, instead of for the purl" {
+            val blackDuck = createBlackDuck()
+            val pkg = identifierToPackage("Crate::sys-info:0.7.0").copy(
+                blackDuckOrigin = BlackDuckOriginReference(
+                    externalNamespace = "gitlab",
+                    externalId = "libtiff/libtiff:v4.5.0"
+                )
+            )
+
+            val advisorResult = blackDuck.retrievePackageFindings(setOf(pkg)).getValue(pkg)
+
+            with(advisorResult.vulnerabilities.map { it.id }) {
+                // Vulnerability in libtiff:
+                this shouldContain "CVE-2024-7006"
+                // Vulnerability in sysinfo, see also 'retrieve-package-findings-expected-result.yml'.
+                this shouldNotContain "CVE-2020-36434"
+            }
+        }
+
+        "return no vulnerabilities if the reference refers to a component, but not to a specific origin" {
+            val blackDuck = createBlackDuck()
+            val pkg = identifierToPackage("PyPI::django:3.2").copy(
+                blackDuckOrigin = BlackDuckOriginReference(
+                    externalNamespace = "gitlab",
+                    externalId = "libtiff/libtiff"
+                )
+            )
+
+            val advisorResult = blackDuck.retrievePackageFindings(setOf(pkg)).getValue(pkg)
+
+            with(advisorResult) {
+                vulnerabilities should beEmpty()
+                // TODO: Report an issue
+            }
         }
     }
 })
