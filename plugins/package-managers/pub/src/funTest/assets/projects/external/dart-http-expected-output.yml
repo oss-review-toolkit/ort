@@ -25,14 +25,14 @@ project:
         dependencies:
         - id: "Pub::collection:1.18.0"
         - id: "Pub::path:1.9.0"
-        - id: "Pub::term_glyph:1.2.1"
-      - id: "Pub::string_scanner:1.4.0"
+        - id: "Pub::term_glyph:1.2.2"
+      - id: "Pub::string_scanner:1.4.1"
         dependencies:
         - id: "Pub::source_span:1.10.1"
           dependencies:
           - id: "Pub::collection:1.18.0"
           - id: "Pub::path:1.9.0"
-          - id: "Pub::term_glyph:1.2.1"
+          - id: "Pub::term_glyph:1.2.2"
       - id: "Pub::typed_data:1.3.2"
         dependencies:
         - id: "Pub::collection:1.18.0"
@@ -55,14 +55,14 @@ project:
           dependencies:
           - id: "Pub::collection:1.18.0"
           - id: "Pub::path:1.9.0"
-          - id: "Pub::term_glyph:1.2.1"
-        - id: "Pub::string_scanner:1.4.0"
+          - id: "Pub::term_glyph:1.2.2"
+        - id: "Pub::string_scanner:1.4.1"
           dependencies:
           - id: "Pub::source_span:1.10.1"
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::path:1.9.0"
-            - id: "Pub::term_glyph:1.2.1"
+            - id: "Pub::term_glyph:1.2.2"
         - id: "Pub::typed_data:1.3.2"
           dependencies:
           - id: "Pub::collection:1.18.0"
@@ -106,13 +106,13 @@ project:
             - id: "Pub::meta:1.16.0"
             - id: "Pub::path:1.9.0"
           - id: "Pub::path:1.9.0"
-          - id: "Pub::string_scanner:1.4.0"
+          - id: "Pub::string_scanner:1.4.1"
             dependencies:
             - id: "Pub::source_span:1.10.1"
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
-              - id: "Pub::term_glyph:1.2.1"
+              - id: "Pub::term_glyph:1.2.2"
         - id: "Pub::meta:1.16.0"
         - id: "Pub::package_config:2.1.0"
           dependencies:
@@ -126,8 +126,8 @@ project:
           dependencies:
           - id: "Pub::collection:1.18.0"
           - id: "Pub::path:1.9.0"
-          - id: "Pub::term_glyph:1.2.1"
-        - id: "Pub::watcher:1.1.0"
+          - id: "Pub::term_glyph:1.2.2"
+        - id: "Pub::watcher:1.1.1"
           dependencies:
           - id: "Pub::async:2.11.0"
             dependencies:
@@ -141,14 +141,14 @@ project:
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::path:1.9.0"
-            - id: "Pub::term_glyph:1.2.1"
-          - id: "Pub::string_scanner:1.4.0"
+            - id: "Pub::term_glyph:1.2.2"
+          - id: "Pub::string_scanner:1.4.1"
             dependencies:
             - id: "Pub::source_span:1.10.1"
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
-              - id: "Pub::term_glyph:1.2.1"
+              - id: "Pub::term_glyph:1.2.2"
       - id: "Pub::async:2.11.0"
         dependencies:
         - id: "Pub::collection:1.18.0"
@@ -159,14 +159,14 @@ project:
           dependencies:
           - id: "Pub::collection:1.18.0"
           - id: "Pub::path:1.9.0"
-          - id: "Pub::term_glyph:1.2.1"
-        - id: "Pub::string_scanner:1.4.0"
+          - id: "Pub::term_glyph:1.2.2"
+        - id: "Pub::string_scanner:1.4.1"
           dependencies:
           - id: "Pub::source_span:1.10.1"
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::path:1.9.0"
-            - id: "Pub::term_glyph:1.2.1"
+            - id: "Pub::term_glyph:1.2.2"
       - id: "Pub::collection:1.18.0"
       - id: "Pub::coverage:1.8.0"
         dependencies:
@@ -182,7 +182,7 @@ project:
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::path:1.9.0"
-            - id: "Pub::term_glyph:1.2.1"
+            - id: "Pub::term_glyph:1.2.2"
         - id: "Pub::stack_trace:1.11.1"
           dependencies:
           - id: "Pub::path:1.9.0"
@@ -197,13 +197,13 @@ project:
         dependencies:
         - id: "Pub::meta:1.16.0"
         - id: "Pub::path:1.9.0"
-        - id: "Pub::string_scanner:1.4.0"
+        - id: "Pub::string_scanner:1.4.1"
           dependencies:
           - id: "Pub::source_span:1.10.1"
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::path:1.9.0"
-            - id: "Pub::term_glyph:1.2.1"
+            - id: "Pub::term_glyph:1.2.2"
       - id: "Pub::js:0.7.1"
       - id: "Pub::matcher:0.12.16+1"
         dependencies:
@@ -215,7 +215,7 @@ project:
         - id: "Pub::stack_trace:1.11.1"
           dependencies:
           - id: "Pub::path:1.9.0"
-        - id: "Pub::term_glyph:1.2.1"
+        - id: "Pub::term_glyph:1.2.2"
         - id: "Pub::test_api:0.7.2"
           dependencies:
           - id: "Pub::async:2.11.0"
@@ -228,21 +228,21 @@ project:
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
-              - id: "Pub::term_glyph:1.2.1"
-            - id: "Pub::string_scanner:1.4.0"
+              - id: "Pub::term_glyph:1.2.2"
+            - id: "Pub::string_scanner:1.4.1"
               dependencies:
               - id: "Pub::source_span:1.10.1"
                 dependencies:
                 - id: "Pub::collection:1.18.0"
                 - id: "Pub::path:1.9.0"
-                - id: "Pub::term_glyph:1.2.1"
+                - id: "Pub::term_glyph:1.2.2"
           - id: "Pub::collection:1.18.0"
           - id: "Pub::meta:1.16.0"
           - id: "Pub::source_span:1.10.1"
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::path:1.9.0"
-            - id: "Pub::term_glyph:1.2.1"
+            - id: "Pub::term_glyph:1.2.2"
           - id: "Pub::stack_trace:1.11.1"
             dependencies:
             - id: "Pub::path:1.9.0"
@@ -252,14 +252,14 @@ project:
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::meta:1.16.0"
-          - id: "Pub::string_scanner:1.4.0"
+          - id: "Pub::string_scanner:1.4.1"
             dependencies:
             - id: "Pub::source_span:1.10.1"
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
-              - id: "Pub::term_glyph:1.2.1"
-          - id: "Pub::term_glyph:1.2.1"
+              - id: "Pub::term_glyph:1.2.2"
+          - id: "Pub::term_glyph:1.2.2"
       - id: "Pub::node_preamble:2.0.2"
       - id: "Pub::package_config:2.1.0"
         dependencies:
@@ -288,14 +288,14 @@ project:
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::path:1.9.0"
-            - id: "Pub::term_glyph:1.2.1"
-          - id: "Pub::string_scanner:1.4.0"
+            - id: "Pub::term_glyph:1.2.2"
+          - id: "Pub::string_scanner:1.4.1"
             dependencies:
             - id: "Pub::source_span:1.10.1"
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
-              - id: "Pub::term_glyph:1.2.1"
+              - id: "Pub::term_glyph:1.2.2"
           - id: "Pub::typed_data:1.3.2"
             dependencies:
             - id: "Pub::collection:1.18.0"
@@ -326,14 +326,14 @@ project:
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
-              - id: "Pub::term_glyph:1.2.1"
-            - id: "Pub::string_scanner:1.4.0"
+              - id: "Pub::term_glyph:1.2.2"
+            - id: "Pub::string_scanner:1.4.1"
               dependencies:
               - id: "Pub::source_span:1.10.1"
                 dependencies:
                 - id: "Pub::collection:1.18.0"
                 - id: "Pub::path:1.9.0"
-                - id: "Pub::term_glyph:1.2.1"
+                - id: "Pub::term_glyph:1.2.2"
             - id: "Pub::typed_data:1.3.2"
               dependencies:
               - id: "Pub::collection:1.18.0"
@@ -361,14 +361,14 @@ project:
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
-              - id: "Pub::term_glyph:1.2.1"
-            - id: "Pub::string_scanner:1.4.0"
+              - id: "Pub::term_glyph:1.2.2"
+            - id: "Pub::string_scanner:1.4.1"
               dependencies:
               - id: "Pub::source_span:1.10.1"
                 dependencies:
                 - id: "Pub::collection:1.18.0"
                 - id: "Pub::path:1.9.0"
-                - id: "Pub::term_glyph:1.2.1"
+                - id: "Pub::term_glyph:1.2.2"
             - id: "Pub::typed_data:1.3.2"
               dependencies:
               - id: "Pub::collection:1.18.0"
@@ -388,14 +388,14 @@ project:
                 dependencies:
                 - id: "Pub::collection:1.18.0"
                 - id: "Pub::path:1.9.0"
-                - id: "Pub::term_glyph:1.2.1"
-              - id: "Pub::string_scanner:1.4.0"
+                - id: "Pub::term_glyph:1.2.2"
+              - id: "Pub::string_scanner:1.4.1"
                 dependencies:
                 - id: "Pub::source_span:1.10.1"
                   dependencies:
                   - id: "Pub::collection:1.18.0"
                   - id: "Pub::path:1.9.0"
-                  - id: "Pub::term_glyph:1.2.1"
+                  - id: "Pub::term_glyph:1.2.2"
               - id: "Pub::typed_data:1.3.2"
                 dependencies:
                 - id: "Pub::collection:1.18.0"
@@ -423,14 +423,14 @@ project:
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::path:1.9.0"
-            - id: "Pub::term_glyph:1.2.1"
-          - id: "Pub::string_scanner:1.4.0"
+            - id: "Pub::term_glyph:1.2.2"
+          - id: "Pub::string_scanner:1.4.1"
             dependencies:
             - id: "Pub::source_span:1.10.1"
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
-              - id: "Pub::term_glyph:1.2.1"
+              - id: "Pub::term_glyph:1.2.2"
           - id: "Pub::typed_data:1.3.2"
             dependencies:
             - id: "Pub::collection:1.18.0"
@@ -450,14 +450,14 @@ project:
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
-              - id: "Pub::term_glyph:1.2.1"
-            - id: "Pub::string_scanner:1.4.0"
+              - id: "Pub::term_glyph:1.2.2"
+            - id: "Pub::string_scanner:1.4.1"
               dependencies:
               - id: "Pub::source_span:1.10.1"
                 dependencies:
                 - id: "Pub::collection:1.18.0"
                 - id: "Pub::path:1.9.0"
-                - id: "Pub::term_glyph:1.2.1"
+                - id: "Pub::term_glyph:1.2.2"
             - id: "Pub::typed_data:1.3.2"
               dependencies:
               - id: "Pub::collection:1.18.0"
@@ -487,14 +487,14 @@ project:
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
-              - id: "Pub::term_glyph:1.2.1"
-            - id: "Pub::string_scanner:1.4.0"
+              - id: "Pub::term_glyph:1.2.2"
+            - id: "Pub::string_scanner:1.4.1"
               dependencies:
               - id: "Pub::source_span:1.10.1"
                 dependencies:
                 - id: "Pub::collection:1.18.0"
                 - id: "Pub::path:1.9.0"
-                - id: "Pub::term_glyph:1.2.1"
+                - id: "Pub::term_glyph:1.2.2"
             - id: "Pub::typed_data:1.3.2"
               dependencies:
               - id: "Pub::collection:1.18.0"
@@ -539,7 +539,7 @@ project:
         dependencies:
         - id: "Pub::collection:1.18.0"
         - id: "Pub::path:1.9.0"
-        - id: "Pub::term_glyph:1.2.1"
+        - id: "Pub::term_glyph:1.2.2"
       - id: "Pub::stack_trace:1.11.1"
         dependencies:
         - id: "Pub::path:1.9.0"
@@ -561,21 +561,21 @@ project:
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::path:1.9.0"
-            - id: "Pub::term_glyph:1.2.1"
-          - id: "Pub::string_scanner:1.4.0"
+            - id: "Pub::term_glyph:1.2.2"
+          - id: "Pub::string_scanner:1.4.1"
             dependencies:
             - id: "Pub::source_span:1.10.1"
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
-              - id: "Pub::term_glyph:1.2.1"
+              - id: "Pub::term_glyph:1.2.2"
         - id: "Pub::collection:1.18.0"
         - id: "Pub::meta:1.16.0"
         - id: "Pub::source_span:1.10.1"
           dependencies:
           - id: "Pub::collection:1.18.0"
           - id: "Pub::path:1.9.0"
-          - id: "Pub::term_glyph:1.2.1"
+          - id: "Pub::term_glyph:1.2.2"
         - id: "Pub::stack_trace:1.11.1"
           dependencies:
           - id: "Pub::path:1.9.0"
@@ -585,14 +585,14 @@ project:
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::meta:1.16.0"
-        - id: "Pub::string_scanner:1.4.0"
+        - id: "Pub::string_scanner:1.4.1"
           dependencies:
           - id: "Pub::source_span:1.10.1"
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::path:1.9.0"
-            - id: "Pub::term_glyph:1.2.1"
-        - id: "Pub::term_glyph:1.2.1"
+            - id: "Pub::term_glyph:1.2.2"
+        - id: "Pub::term_glyph:1.2.2"
       - id: "Pub::test_core:0.6.4"
         dependencies:
         - id: "Pub::analyzer:6.4.1"
@@ -623,13 +623,13 @@ project:
               - id: "Pub::meta:1.16.0"
               - id: "Pub::path:1.9.0"
             - id: "Pub::path:1.9.0"
-            - id: "Pub::string_scanner:1.4.0"
+            - id: "Pub::string_scanner:1.4.1"
               dependencies:
               - id: "Pub::source_span:1.10.1"
                 dependencies:
                 - id: "Pub::collection:1.18.0"
                 - id: "Pub::path:1.9.0"
-                - id: "Pub::term_glyph:1.2.1"
+                - id: "Pub::term_glyph:1.2.2"
           - id: "Pub::meta:1.16.0"
           - id: "Pub::package_config:2.1.0"
             dependencies:
@@ -643,8 +643,8 @@ project:
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::path:1.9.0"
-            - id: "Pub::term_glyph:1.2.1"
-          - id: "Pub::watcher:1.1.0"
+            - id: "Pub::term_glyph:1.2.2"
+          - id: "Pub::watcher:1.1.1"
             dependencies:
             - id: "Pub::async:2.11.0"
               dependencies:
@@ -658,14 +658,14 @@ project:
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
-              - id: "Pub::term_glyph:1.2.1"
-            - id: "Pub::string_scanner:1.4.0"
+              - id: "Pub::term_glyph:1.2.2"
+            - id: "Pub::string_scanner:1.4.1"
               dependencies:
               - id: "Pub::source_span:1.10.1"
                 dependencies:
                 - id: "Pub::collection:1.18.0"
                 - id: "Pub::path:1.9.0"
-                - id: "Pub::term_glyph:1.2.1"
+                - id: "Pub::term_glyph:1.2.2"
         - id: "Pub::args:2.6.0"
         - id: "Pub::async:2.11.0"
           dependencies:
@@ -677,14 +677,14 @@ project:
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::path:1.9.0"
-            - id: "Pub::term_glyph:1.2.1"
-          - id: "Pub::string_scanner:1.4.0"
+            - id: "Pub::term_glyph:1.2.2"
+          - id: "Pub::string_scanner:1.4.1"
             dependencies:
             - id: "Pub::source_span:1.10.1"
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
-              - id: "Pub::term_glyph:1.2.1"
+              - id: "Pub::term_glyph:1.2.2"
         - id: "Pub::collection:1.18.0"
         - id: "Pub::coverage:1.8.0"
           dependencies:
@@ -700,7 +700,7 @@ project:
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
-              - id: "Pub::term_glyph:1.2.1"
+              - id: "Pub::term_glyph:1.2.2"
           - id: "Pub::stack_trace:1.11.1"
             dependencies:
             - id: "Pub::path:1.9.0"
@@ -724,24 +724,24 @@ project:
             - id: "Pub::meta:1.16.0"
             - id: "Pub::path:1.9.0"
           - id: "Pub::path:1.9.0"
-          - id: "Pub::string_scanner:1.4.0"
+          - id: "Pub::string_scanner:1.4.1"
             dependencies:
             - id: "Pub::source_span:1.10.1"
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
-              - id: "Pub::term_glyph:1.2.1"
+              - id: "Pub::term_glyph:1.2.2"
         - id: "Pub::io:1.0.4"
           dependencies:
           - id: "Pub::meta:1.16.0"
           - id: "Pub::path:1.9.0"
-          - id: "Pub::string_scanner:1.4.0"
+          - id: "Pub::string_scanner:1.4.1"
             dependencies:
             - id: "Pub::source_span:1.10.1"
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
-              - id: "Pub::term_glyph:1.2.1"
+              - id: "Pub::term_glyph:1.2.2"
         - id: "Pub::meta:1.16.0"
         - id: "Pub::package_config:2.1.0"
           dependencies:
@@ -765,7 +765,7 @@ project:
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
-              - id: "Pub::term_glyph:1.2.1"
+              - id: "Pub::term_glyph:1.2.2"
           - id: "Pub::stack_trace:1.11.1"
             dependencies:
             - id: "Pub::path:1.9.0"
@@ -775,12 +775,12 @@ project:
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::path:1.9.0"
-            - id: "Pub::term_glyph:1.2.1"
+            - id: "Pub::term_glyph:1.2.2"
         - id: "Pub::source_span:1.10.1"
           dependencies:
           - id: "Pub::collection:1.18.0"
           - id: "Pub::path:1.9.0"
-          - id: "Pub::term_glyph:1.2.1"
+          - id: "Pub::term_glyph:1.2.2"
         - id: "Pub::stack_trace:1.11.1"
           dependencies:
           - id: "Pub::path:1.9.0"
@@ -802,21 +802,21 @@ project:
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
-              - id: "Pub::term_glyph:1.2.1"
-            - id: "Pub::string_scanner:1.4.0"
+              - id: "Pub::term_glyph:1.2.2"
+            - id: "Pub::string_scanner:1.4.1"
               dependencies:
               - id: "Pub::source_span:1.10.1"
                 dependencies:
                 - id: "Pub::collection:1.18.0"
                 - id: "Pub::path:1.9.0"
-                - id: "Pub::term_glyph:1.2.1"
+                - id: "Pub::term_glyph:1.2.2"
           - id: "Pub::collection:1.18.0"
           - id: "Pub::meta:1.16.0"
           - id: "Pub::source_span:1.10.1"
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::path:1.9.0"
-            - id: "Pub::term_glyph:1.2.1"
+            - id: "Pub::term_glyph:1.2.2"
           - id: "Pub::stack_trace:1.11.1"
             dependencies:
             - id: "Pub::path:1.9.0"
@@ -826,14 +826,14 @@ project:
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::meta:1.16.0"
-          - id: "Pub::string_scanner:1.4.0"
+          - id: "Pub::string_scanner:1.4.1"
             dependencies:
             - id: "Pub::source_span:1.10.1"
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
-              - id: "Pub::term_glyph:1.2.1"
-          - id: "Pub::term_glyph:1.2.1"
+              - id: "Pub::term_glyph:1.2.2"
+          - id: "Pub::term_glyph:1.2.2"
         - id: "Pub::vm_service:14.3.1"
         - id: "Pub::yaml:3.1.2"
           dependencies:
@@ -842,14 +842,14 @@ project:
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::path:1.9.0"
-            - id: "Pub::term_glyph:1.2.1"
-          - id: "Pub::string_scanner:1.4.0"
+            - id: "Pub::term_glyph:1.2.2"
+          - id: "Pub::string_scanner:1.4.1"
             dependencies:
             - id: "Pub::source_span:1.10.1"
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::path:1.9.0"
-              - id: "Pub::term_glyph:1.2.1"
+              - id: "Pub::term_glyph:1.2.2"
       - id: "Pub::typed_data:1.3.2"
         dependencies:
         - id: "Pub::collection:1.18.0"
@@ -884,14 +884,14 @@ project:
           dependencies:
           - id: "Pub::collection:1.18.0"
           - id: "Pub::path:1.9.0"
-          - id: "Pub::term_glyph:1.2.1"
-        - id: "Pub::string_scanner:1.4.0"
+          - id: "Pub::term_glyph:1.2.2"
+        - id: "Pub::string_scanner:1.4.1"
           dependencies:
           - id: "Pub::source_span:1.10.1"
             dependencies:
             - id: "Pub::collection:1.18.0"
             - id: "Pub::path:1.9.0"
-            - id: "Pub::term_glyph:1.2.1"
+            - id: "Pub::term_glyph:1.2.2"
 packages:
 - id: "Pub::_fe_analyzer_shared:67.0.0"
   purl: "pkg:pub/_fe_analyzer_shared@67.0.0"
@@ -1824,8 +1824,8 @@ packages:
     url: "https://github.com/dart-lang/stream_channel.git"
     revision: ""
     path: ""
-- id: "Pub::string_scanner:1.4.0"
-  purl: "pkg:pub/string_scanner@1.4.0"
+- id: "Pub::string_scanner:1.4.1"
+  purl: "pkg:pub/string_scanner@1.4.1"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "A class for parsing strings using a sequence of patterns."
@@ -1836,22 +1836,22 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://pub.dev/packages/string_scanner/versions/1.4.0.tar.gz"
+    url: "https://pub.dev/packages/string_scanner/versions/1.4.1.tar.gz"
     hash:
-      value: "0bd04f5bb74fcd6ff0606a888a30e917af9bd52820b178eaa464beb11dca84b6"
+      value: "921cd31725b72fe181906c6a94d987c78e3b98c2e205b397ea399d4054872b43"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
-    url: "https://github.com/dart-lang/string_scanner.git"
+    url: "https://github.com/dart-lang/tools.git"
     revision: ""
-    path: ""
+    path: "pkgs/string_scanner"
   vcs_processed:
     type: "Git"
-    url: "https://github.com/dart-lang/string_scanner.git"
+    url: "https://github.com/dart-lang/tools.git"
     revision: ""
-    path: ""
-- id: "Pub::term_glyph:1.2.1"
-  purl: "pkg:pub/term_glyph@1.2.1"
+    path: "pkgs/string_scanner"
+- id: "Pub::term_glyph:1.2.2"
+  purl: "pkg:pub/term_glyph@1.2.2"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "Useful Unicode glyphs and ASCII substitutes."
@@ -1862,20 +1862,20 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://pub.dev/packages/term_glyph/versions/1.2.1.tar.gz"
+    url: "https://pub.dev/packages/term_glyph/versions/1.2.2.tar.gz"
     hash:
-      value: "a29248a84fbb7c79282b40b8c72a1209db169a2e0542bce341da992fe1bc7e84"
+      value: "7f554798625ea768a7518313e58f83891c7f5024f88e46e7182a4558850a4b8e"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
-    url: "https://github.com/dart-lang/term_glyph.git"
+    url: "https://github.com/dart-lang/tools.git"
     revision: ""
-    path: ""
+    path: "pkgs/term_glyph"
   vcs_processed:
     type: "Git"
-    url: "https://github.com/dart-lang/term_glyph.git"
+    url: "https://github.com/dart-lang/tools.git"
     revision: ""
-    path: ""
+    path: "pkgs/term_glyph"
 - id: "Pub::test:1.25.7"
   purl: "pkg:pub/test@1.25.7"
   declared_licenses: []
@@ -2008,8 +2008,8 @@ packages:
     url: "https://github.com/dart-lang/sdk.git"
     revision: ""
     path: "pkg/vm_service"
-- id: "Pub::watcher:1.1.0"
-  purl: "pkg:pub/watcher@1.1.0"
+- id: "Pub::watcher:1.1.1"
+  purl: "pkg:pub/watcher@1.1.1"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "A file system watcher. It monitors changes to contents of directories\
@@ -2021,20 +2021,20 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://pub.dev/packages/watcher/versions/1.1.0.tar.gz"
+    url: "https://pub.dev/packages/watcher/versions/1.1.1.tar.gz"
     hash:
-      value: "3d2ad6751b3c16cf07c7fca317a1413b3f26530319181b37e3b9039b84fc01d8"
+      value: "69da27e49efa56a15f8afe8f4438c4ec02eff0a117df1b22ea4aad194fe1c104"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
-    url: "https://github.com/dart-lang/watcher.git"
+    url: "https://github.com/dart-lang/tools.git"
     revision: ""
-    path: ""
+    path: "pkgs/watcher"
   vcs_processed:
     type: "Git"
-    url: "https://github.com/dart-lang/watcher.git"
+    url: "https://github.com/dart-lang/tools.git"
     revision: ""
-    path: ""
+    path: "pkgs/watcher"
 - id: "Pub::web:0.5.1"
   purl: "pkg:pub/web@0.5.1"
   declared_licenses: []
