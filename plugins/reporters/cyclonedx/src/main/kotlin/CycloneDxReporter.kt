@@ -49,12 +49,12 @@ import org.ossreviewtoolkit.utils.common.alsoIfNull
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.ORT_FULL_NAME
 
-internal const val DEFAULT_SCHEMA_VERSION_NAME = "1.5" // Version.VERSION_15.versionString
+internal const val DEFAULT_SCHEMA_VERSION_NAME = "1.6" // Version.VERSION_16.versionString
 internal val DEFAULT_SCHEMA_VERSION = Version.entries.single { it.versionString == DEFAULT_SCHEMA_VERSION_NAME }
 
 data class CycloneDxReporterConfig(
     /**
-     * The CycloneDX schema version to use. Defaults to "1.5".
+     * The CycloneDX schema version to use. Defaults to "1.6".
      */
     @OrtPluginOption(
         defaultValue = DEFAULT_SCHEMA_VERSION_NAME,
