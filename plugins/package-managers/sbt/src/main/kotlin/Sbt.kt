@@ -235,7 +235,7 @@ class Sbt(
     override fun resolveDependencies(definitionFiles: List<File>, labels: Map<String, String>) =
         // Simply pass on the list of POM files to Maven, ignoring the SBT build files here.
         Maven(managerName, analysisRoot, analyzerConfig, repoConfig)
-            .enableSbtMode()
+            //.enableSbtMode()
             .resolveDependencies(definitionFiles, labels)
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>) =

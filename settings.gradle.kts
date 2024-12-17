@@ -72,7 +72,7 @@ file("plugins").walk().maxDepth(3).filter {
 
     // Give API and package-manager projects a dedicated name that includes the type of plugin, but keep the names of
     // accompanying project as-is.
-    val accompanyingProjects = setOf("gradle-inspector", "gradle-model", "gradle-plugin", "web-app-template")
+    val accompanyingProjects = setOf("gradle-inspector", "gradle-model", "gradle-plugin", "maven-plugin", "web-app-template")
 
     val parts = projectPath.split(':')
     if (parts.size == 3 && parts[2] !in accompanyingProjects) {

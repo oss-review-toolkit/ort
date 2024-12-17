@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+ * Copyright (C) 2024 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,26 +18,15 @@
  */
 
 plugins {
-    // Apply core plugins.
-    `java-platform`
-
     // Apply precompiled plugins.
-    id("ort-base-conventions")
-    id("ort-publication-conventions")
-}
+    id("ort-kotlin-conventions")
 
-javaPlatform {
-    allowDependencies()
+    // Apply third-party plugins.
+    alias(libs.plugins.mavenPluginDevelopment)
 }
 
 dependencies {
-    // Accompanying projects that are embedded into the artifacts of other projects, and thus should not be published on
-    // their own.
-    val embeddedProjects = setOf("gradle-plugin", "maven-plugin", "web-app-template")
+    compileOnly(libs.maven.plugin.annotations)
 
-    childProjects.values.filter {
-        it.name !in embeddedProjects
-    }.forEach {
-        api(it)
-    }
+    implementation(libs.maven.plugin.api)
 }

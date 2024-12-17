@@ -8,6 +8,7 @@ graalVmNativeImagePlugin = "0.10.4"
 ideaExtPlugin = "1.1.9"
 kotlinPlugin = "2.1.0"
 ksp = "2.1.0-1.0.29"
+mavenPluginDevelopmentPlugin = "0.4.3"
 mavenPublishPlugin = "0.30.0"
 reproducibleBuildsPlugin = "1.0"
 versionsPlugin = "0.51.0"
@@ -46,6 +47,8 @@ log4jApi = "2.24.3"
 log4jApiKotlin = "1.5.0"
 logback = "1.5.12"
 maven = "3.9.9"
+mavenDependencyTree = "3.3.0"
+mavenPluginAnnotations = "3.15.0"
 mavenResolver = "1.9.22"
 mockk = "1.13.13"
 mordant = "3.0.1"
@@ -71,6 +74,7 @@ download = { id = "de.undercouch.download", version.ref = "downloadPlugin" }
 gitSemver = { id = "com.github.jmongard.git-semver-plugin", version.ref = "gitSemverPlugin" }
 ideaExt = { id = "org.jetbrains.gradle.plugin.idea-ext", version.ref = "ideaExtPlugin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinPlugin" }
+mavenPluginDevelopment = { id = "de.benediktritter.maven-plugin-development", version.ref = "mavenPluginDevelopmentPlugin" }
 versions = { id = "com.github.ben-manes.versions", version.ref = "versionsPlugin" }
 
 [libraries]
@@ -148,9 +152,16 @@ log4j-api-slf4j = { module = "org.apache.logging.log4j:log4j-to-slf4j", version.
 logbackClassic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 maven-compat = { module = "org.apache.maven:maven-compat", version.ref = "maven" }
 maven-core = { module = "org.apache.maven:maven-core", version.ref = "maven" }
+maven-dependency-tree = { module = "org.apache.maven.shared:maven-dependency-tree", version.ref = "mavenDependencyTree" }
+maven-invoker = { module = "org.apache.maven.shared:maven-invoker", version.ref = "mavenDependencyTree" }
 maven-model = { module = "org.apache.maven:maven-model", version.ref = "maven" }
 maven-model-builder = { module = "org.apache.maven:maven-model-builder", version.ref = "maven" }
+maven-plugin-api = { module = "org.apache.maven:maven-plugin-api", version.ref = "maven" }
+maven-plugin-annotations = { module = "org.apache.maven.plugin-tools:maven-plugin-annotations", version.ref = "mavenPluginAnnotations" }
 maven-resolver-api = { module = "org.apache.maven.resolver:maven-resolver-api", version.ref = "mavenResolver" }
+maven-resolver-impl = { module = "org.apache.maven.resolver:maven-resolver-impl", version.ref = "mavenResolver" }
+maven-resolver-supplier = { module = "org.apache.maven.resolver:maven-resolver-supplier", version.ref = "mavenResolver" }
+maven-resolver-provider = { module = "org.apache.maven:maven-resolver-provider", version.ref = "maven" }
 maven-resolver-connector-basic = { module = "org.apache.maven.resolver:maven-resolver-connector-basic", version.ref = "mavenResolver" }
 maven-resolver-transport-file = { module = "org.apache.maven.resolver:maven-resolver-transport-file", version.ref = "mavenResolver" }
 maven-resolver-transport-http = { module = "org.apache.maven.resolver:maven-resolver-transport-http", version.ref = "mavenResolver" }
