@@ -127,6 +127,12 @@ ort:
     skipExcluded: true
 
     config:
+      BlackDuck:
+        options:
+          serverUrl: 'server-url'
+        secrets:
+          apiToken: 'token'
+
       GitHubDefects:
         options:
           endpointUrl: 'https://api.github.com/graphql'
