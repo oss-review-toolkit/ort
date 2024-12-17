@@ -76,7 +76,7 @@ class ScanCode internal constructor(
         const val SCANNER_NAME = "ScanCode"
 
         private const val LICENSE_REFERENCES_OPTION_VERSION = "32.0.0"
-        private const val OUTPUT_FORMAT_OPTION = "--json-pp"
+        private const val OUTPUT_FORMAT_OPTION = "--json"
     }
 
     class Factory : ScannerWrapperFactory<ScanCodeConfig>(SCANNER_NAME) {
