@@ -28,14 +28,12 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.licenses.LicenseView
-import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.reporters.aosd.AOSD21.Component
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.nullOrBlankToSpdxNoassertionOrNone
 
 @OrtPlugin(
@@ -85,16 +83,17 @@ private fun Map<Identifier, IndexedValue<CuratedPackage>>.toComponents(
         val nonExcludedLicenseInfo = input.licenseInfoResolver.resolveLicenseInfo(pkg.metadata.id).filterExcluded()
         val relevantLicenseInfo = nonExcludedLicenseInfo.filter(LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED)
 
-        val licenseExpression = relevantLicenseInfo.toSimplifiedCompoundExpression()
+        // Use an unsimplified expression here to better document where a license selection might come from.
+        val licenseExpression = relevantLicenseInfo.toCompoundExpression()?.sorted()
 
         val selectedLicenseInfo = relevantLicenseInfo
             .applyChoices(input.ortResult.getPackageLicenseChoices(pkg.metadata.id))
             .applyChoices(input.ortResult.getRepositoryLicenseChoices())
 
-        val selectedExpression = selectedLicenseInfo.toSimplifiedCompoundExpression()
-            .takeUnless { it == licenseExpression }
+        val selectedExpression = selectedLicenseInfo.toCompoundExpression()?.simplify()?.sorted()
+            ?.takeUnless { it.offersChoice() }
 
-        val licenseTexts = licenseExpression.licenses().mapNotNullTo(mutableSetOf()) { license ->
+        val licenseTexts = licenseExpression?.licenses().orEmpty().mapNotNullTo(mutableSetOf()) { license ->
             input.licenseTextProvider.getLicenseText(license)
         }.joinToString("\n--\n") { it.trimEnd() }
 
@@ -140,14 +139,6 @@ private fun DependencyNavigator.findBreadthFirst(project: Project, nodeId: Ident
         directDependencies(project, scopeName).findBreadthFirst(nodeId)
     }.firstOrNull()
 }
-
-private fun ResolvedLicenseInfo.toSimplifiedCompoundExpression(): SpdxExpression =
-    licenses
-        .flatMap { it.originalExpressions }
-        .map { it.expression }
-        .reduce(SpdxExpression::and)
-        .simplify()
-        .sorted()
 
 private fun PackageLinkage.toLinking(): String? =
     when (this) {
