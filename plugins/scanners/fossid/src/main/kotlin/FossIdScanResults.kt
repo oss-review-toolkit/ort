@@ -156,7 +156,8 @@ private fun mapLicense(
     }.onFailure { spdxException ->
         issues += FossId.createAndLogIssue(
             source = "FossId",
-            message = "Failed to parse license '$license' as an SPDX expression: ${spdxException.collectMessages()}"
+            message = "Failed to parse license '$license' as an SPDX expression: ${spdxException.collectMessages()}",
+            affectedPath = location.path
         )
     }.getOrNull()
 }
