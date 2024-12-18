@@ -47,6 +47,7 @@ import org.ossreviewtoolkit.model.config.ClearlyDefinedStorageConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedCoordinates
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedSourceLocation
+import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.scanner.LocalPathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanStorageException
 import org.ossreviewtoolkit.scanner.ScannerMatcher
@@ -109,7 +110,7 @@ class ClearlyDefinedStorage(
             val supportedScanners = toolVersionsByName.mapNotNull { (name, versions) ->
                 // For the ClearlyDefined tool names see https://github.com/clearlydefined/service#tool-name-registry.
                 ScannerWrapperFactory.ALL[name]?.let { factory ->
-                    val scanner = factory.create(emptyMap(), emptyMap())
+                    val scanner = factory.create(PluginConfig())
                     (scanner as? LocalPathScannerWrapper)?.let { cliScanner -> cliScanner to versions.last() }
                 }.also { factory ->
                     factory ?: logger.debug { "Unsupported tool '$name' for coordinates '$coordinates'." }
@@ -118,12 +119,12 @@ class ClearlyDefinedStorage(
 
             supportedScanners.mapNotNull { (cliScanner, version) ->
                 val startTime = Instant.now()
-                val name = cliScanner.name.lowercase()
+                val name = cliScanner.descriptor.id.lowercase()
                 val data = loadToolData(coordinates, name, version)
                 val provenance = getProvenance(coordinates)
                 val endTime = Instant.now()
 
-                when (cliScanner.name) {
+                when (cliScanner.descriptor.id) {
                     "ScanCode" -> {
                         data["content"]?.let { result ->
                             val resultString = result.toString()

@@ -29,17 +29,13 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.plugins.api.Plugin
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
 
 /**
  * The base interface for all types of wrappers for scanners.
  */
-sealed interface ScannerWrapper {
-    /**
-     * The name of the scanner.
-     */
-    val name: String
-
+sealed interface ScannerWrapper : Plugin {
     /**
      * The version of the scanner.
      */
@@ -54,7 +50,7 @@ sealed interface ScannerWrapper {
      * The details of the scanner.
      */
     val details: ScannerDetails
-        get() = ScannerDetails(name, version, configuration)
+        get() = ScannerDetails(descriptor.id, version, configuration)
 
     /**
      * The [ScannerMatcher] object to be used when looking up existing scan results from a scan storage. By default,
