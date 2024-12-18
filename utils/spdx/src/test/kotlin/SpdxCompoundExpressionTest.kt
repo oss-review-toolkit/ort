@@ -59,13 +59,7 @@ class SpdxCompoundExpressionTest : WordSpec({
             )
 
             // Compare string representations to not rely on semantic equality.
-            expression.simplify().toString() shouldBe SpdxCompoundExpression(
-                SpdxOperator.AND,
-                listOf(
-                    SpdxLicenseIdExpression("MIT"),
-                    SpdxLicenseIdExpression("Apache-2.0")
-                )
-            ).toString()
+            expression.simplify().sorted().toString() shouldBe "Apache-2.0 AND MIT"
         }
 
         "create a single expression for equal operands" {
