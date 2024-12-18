@@ -300,6 +300,8 @@ class SpdxCompoundExpression(
     override fun validChoices(): Set<SpdxExpression> =
         when (operator) {
             SpdxOperator.AND -> {
+                // If there is a top-level `AND` in an expression, create the combinations of all choices on the left
+                // and all choices on the right to get the overall valid choices.
                 children.fold(setOf()) { acc, child ->
                     if (acc.isEmpty()) {
                         child.validChoices()
@@ -317,7 +319,11 @@ class SpdxCompoundExpression(
                 }
             }
 
-            SpdxOperator.OR -> children.flatMapTo(mutableSetOf()) { it.validChoices() }
+            SpdxOperator.OR -> {
+                // If there is a top-level `OR` in an expression, the operands already are the choices and just need to
+                // be checked themselves for choices.
+                children.flatMapTo(mutableSetOf()) { it.validChoices() }
+            }
         }
 
     override fun offersChoice(): Boolean =
