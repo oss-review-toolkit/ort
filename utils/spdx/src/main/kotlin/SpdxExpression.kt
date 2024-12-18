@@ -164,7 +164,7 @@ sealed class SpdxExpression {
      * Return true if this expression offers a license choice. This can only be true if this expression contains the
      * [OR operator][SpdxOperator.OR].
      */
-    open fun offersChoice(): Boolean = false
+    fun offersChoice(): Boolean = validChoices().size > 1
 
     /**
      * Apply a license [choice], optionally limited to the given [subExpression], and return an [SpdxExpression] where
@@ -330,12 +330,6 @@ class SpdxCompoundExpression(
                 // be checked themselves for choices.
                 children.flatMapTo(mutableSetOf()) { it.validChoices() }
             }
-        }
-
-    override fun offersChoice(): Boolean =
-        when (operator) {
-            SpdxOperator.OR -> true
-            SpdxOperator.AND -> children.any { it.offersChoice() }
         }
 
     override fun applyChoice(choice: SpdxExpression, subExpression: SpdxExpression): SpdxExpression {
