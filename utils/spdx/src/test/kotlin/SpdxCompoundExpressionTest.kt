@@ -71,7 +71,8 @@ class SpdxCompoundExpressionTest : WordSpec({
                 )
             )
 
-            expression.simplify() shouldBe SpdxLicenseIdExpression("MIT")
+            // Compare string representations to not rely on semantic equality.
+            expression.simplify().toString() shouldBe "MIT"
         }
     }
 })
