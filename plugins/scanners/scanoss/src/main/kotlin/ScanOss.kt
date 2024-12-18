@@ -32,27 +32,25 @@ import java.util.UUID
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.scanner.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScannerMatcher
-import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
+import org.ossreviewtoolkit.scanner.ScannerMatcherConfig
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
-import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 
-class ScanOss internal constructor(
-    override val name: String,
-    config: ScanOssConfig,
-    private val wrapperConfig: ScannerWrapperConfig
+@OrtPlugin(
+    id = "SCANOSS",
+    displayName = "SCANOSS",
+    description = "A wrapper for the SCANOSS snippet scanner.",
+    factory = ScannerWrapperFactory::class
+)
+class ScanOss(
+    override val descriptor: PluginDescriptor = ScanOssFactory.descriptor,
+    config: ScanOssConfig
 ) : PathScannerWrapper {
-    class Factory : ScannerWrapperFactory<ScanOssConfig>("SCANOSS") {
-        override fun create(config: ScanOssConfig, wrapperConfig: ScannerWrapperConfig) =
-            ScanOss(type, config, wrapperConfig)
-
-        override fun parseConfig(options: Options, secrets: Options) =
-            ScanOssConfig.create(options, secrets).also { logger.info { "The $type API URL is ${it.apiUrl}." } }
-    }
-
     private val service = ScanApi.builder()
         // As there is only a single endpoint, the SCANOSS API client expects the path to be part of the API URL.
         .url(config.apiUrl.removeSuffix("/") + "/scan/direct")
@@ -66,11 +64,21 @@ class ScanOss internal constructor(
 
     override val configuration = ""
 
-    override val matcher by lazy { ScannerMatcher.create(details, wrapperConfig.matcherConfig) }
+    override val matcher by lazy {
+        ScannerMatcher.create(
+            details,
+            ScannerMatcherConfig(
+                config.regScannerName,
+                config.minVersion,
+                config.maxVersion,
+                configuration
+            )
+        )
+    }
 
-    override val readFromStorage by lazy { wrapperConfig.readFromStorageWithDefault(matcher) }
+    override val readFromStorage = config.readFromStorage
 
-    override val writeToStorage by lazy { wrapperConfig.writeToStorageWithDefault(matcher) }
+    override val writeToStorage = config.writeToStorage
 
     /**
      * The name of the file corresponding to the fingerprints can be sent to SCANOSS for more precise matches.
@@ -106,7 +114,7 @@ class ScanOss internal constructor(
             val uuid = UUID.fromString(it.filePath)
 
             val fileName = fileNamesAnonymizationMapping[uuid] ?: throw IllegalArgumentException(
-                "The $name server returned UUID '$uuid' which is not present in the mapping."
+                "The ${descriptor.id} server returned UUID '$uuid' which is not present in the mapping."
             )
 
             ScanFileResult(fileName, it.fileDetails)
