@@ -56,7 +56,7 @@ typealias ProjectResults = Map<File, List<ProjectAnalyzerResult>>
 /**
  * A class to represent a package manager with the given [managerName] that handles projects of the given [projectType].
  * The analysis of any projects and their dependencies starts in the [analysisRoot] directory using the given
- * [analyzerConfig]. Any project-specific configuration stored in the repository is passed as [repoConfig].
+ * [analyzerConfig]. Any distribution-specific configuration stored in the repository is passed as [repoConfig].
  */
 abstract class PackageManager(
     val managerName: String,
