@@ -62,9 +62,22 @@ class SpdxCompoundExpressionTest : WordSpec({
             expression.simplify().sorted().toString() shouldBe "Apache-2.0 AND MIT"
         }
 
-        "create a single expression for equal operands" {
+        "create a single expression for equal AND-operands" {
             val expression = SpdxCompoundExpression(
                 SpdxOperator.AND,
+                listOf(
+                    SpdxLicenseIdExpression("MIT"),
+                    SpdxLicenseIdExpression("MIT")
+                )
+            )
+
+            // Compare string representations to not rely on semantic equality.
+            expression.simplify().toString() shouldBe "MIT"
+        }
+
+        "create a single expression for equal OR-operands" {
+            val expression = SpdxCompoundExpression(
+                SpdxOperator.OR,
                 listOf(
                     SpdxLicenseIdExpression("MIT"),
                     SpdxLicenseIdExpression("MIT")
