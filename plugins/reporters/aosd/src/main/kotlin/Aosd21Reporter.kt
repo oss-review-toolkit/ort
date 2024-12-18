@@ -85,16 +85,16 @@ private fun Map<Identifier, IndexedValue<CuratedPackage>>.toComponents(
         val nonExcludedLicenseInfo = input.licenseInfoResolver.resolveLicenseInfo(pkg.metadata.id).filterExcluded()
         val relevantLicenseInfo = nonExcludedLicenseInfo.filter(LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED)
 
-        val licenseExpressions = relevantLicenseInfo.toSimplifiedCompoundExpression()
+        val licenseExpression = relevantLicenseInfo.toSimplifiedCompoundExpression()
 
         val selectedLicenseInfo = relevantLicenseInfo
             .applyChoices(input.ortResult.getPackageLicenseChoices(pkg.metadata.id))
             .applyChoices(input.ortResult.getRepositoryLicenseChoices())
 
-        val selectedExpressions = selectedLicenseInfo.toSimplifiedCompoundExpression()
-            .takeUnless { it == licenseExpressions }
+        val selectedExpression = selectedLicenseInfo.toSimplifiedCompoundExpression()
+            .takeUnless { it == licenseExpression }
 
-        val licenseTexts = licenseExpressions.licenses().mapNotNullTo(mutableSetOf()) { license ->
+        val licenseTexts = licenseExpression.licenses().mapNotNullTo(mutableSetOf()) { license ->
             input.licenseTextProvider.getLicenseText(license)
         }.joinToString("\n--\n") { it.trimEnd() }
 
@@ -111,13 +111,13 @@ private fun Map<Identifier, IndexedValue<CuratedPackage>>.toComponents(
                 subcomponents = listOf(
                     AOSD21.Subcomponent(
                         subcomponentName = FIRST_SUBCOMPONENT_NAME,
-                        spdxId = licenseExpressions.nullOrBlankToSpdxNoassertionOrNone(),
+                        spdxId = licenseExpression.nullOrBlankToSpdxNoassertionOrNone(),
                         copyrights = relevantLicenseInfo.getCopyrights().sorted(),
                         authors = pkg.metadata.authors.sorted(),
                         licenseText = licenseTexts,
                         // Can be empty as the license information is the result of a file level scan.
                         licenseTextUrl = "",
-                        selectedLicense = selectedExpressions?.toString().orEmpty()
+                        selectedLicense = selectedExpression?.toString().orEmpty()
                     ).validate()
                 )
             ).validate()
