@@ -249,13 +249,13 @@ class SpdxCompoundExpression(
     override fun normalize(mapDeprecated: Boolean) =
         SpdxCompoundExpression(operator, children.map { it.normalize(mapDeprecated) })
 
-    override fun simplify(): SpdxExpression {
+    private fun flatten(): SpdxExpression {
         val flattenedChildren = children.flatMapTo(mutableSetOf()) { child ->
             val simplifiedChild = child.simplify()
 
             if (simplifiedChild is SpdxCompoundExpression && simplifiedChild.operator == operator) {
                 // Inline nested children of the same operator.
-                simplifiedChild.children.map { it.simplify() }
+                simplifiedChild.children.map { if (it is SpdxCompoundExpression) it.flatten() else it }
             } else {
                 setOf(simplifiedChild)
             }
@@ -263,6 +263,12 @@ class SpdxCompoundExpression(
 
         return flattenedChildren.singleOrNull() ?: SpdxCompoundExpression(operator, flattenedChildren)
     }
+
+    override fun simplify(): SpdxExpression =
+        // Eliminate redundant choices by creating the set of unique choices and using the choice if there is only one.
+        validChoices().singleOrNull()?.let {
+            if (it is SpdxCompoundExpression) it.flatten() else it
+        } ?: flatten()
 
     override fun sorted(): SpdxExpression {
         /**
