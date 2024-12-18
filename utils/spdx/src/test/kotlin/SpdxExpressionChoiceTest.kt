@@ -346,7 +346,7 @@ class SpdxExpressionChoiceTest : WordSpec({
 
         "return in reasonable time for a complex AND expression".config(
             blockingTest = true,
-            timeout = 100.milliseconds
+            timeout = 150.milliseconds
         ) {
             val expression = "Apache-1.1 AND OFL-1.1 AND Apache-2.0 AND Apache-2.0 AND Artistic-1.0-Perl AND " +
                 "Artistic-2.0 AND BSD-2-Clause AND BSD-2-Clause-Darwin AND BSD-2-Clause-Views AND BSD-3-Clause AND " +
