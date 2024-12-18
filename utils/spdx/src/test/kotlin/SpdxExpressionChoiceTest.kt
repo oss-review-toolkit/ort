@@ -286,6 +286,10 @@ class SpdxExpressionChoiceTest : WordSpec({
             "a AND b".toSpdx().offersChoice() shouldBe false
             "a AND b AND c".toSpdx().offersChoice() shouldBe false
         }
+
+        "return false if the expression contains the OR operator with equal operands" {
+            "a OR a".toSpdx().offersChoice() shouldBe false
+        }
     }
 
     "validChoices()" should {
