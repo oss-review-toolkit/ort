@@ -83,6 +83,10 @@ class LicenseInfoResolver(
                 licenseInfo.concludedLicenseInfo.concludedLicense?.also {
                     originalExpressions += ResolvedOriginalExpression(expression = it, source = LicenseSource.CONCLUDED)
                 }
+
+                licenseInfo.declaredLicenseInfo.authors.takeIf { it.isNotEmpty() && addAuthorsToCopyrights }?.also {
+                    locations += resolveCopyrightFromAuthors(it)
+                }
             }
         }
 
