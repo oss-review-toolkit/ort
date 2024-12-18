@@ -32,14 +32,16 @@ import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.OrtPluginOption
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.scanner.LocalPathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScannerMatcher
-import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
+import org.ossreviewtoolkit.scanner.ScannerMatcherConfig
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.utils.common.CommandLineTool
-import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.Os
 
 private const val CONFIDENCE_NOTICE = "Confidence threshold not high enough for any known license"
@@ -56,23 +58,69 @@ object AskalonoCommand : CommandLineTool {
         output.removePrefix("askalono ")
 }
 
-class Askalono internal constructor(name: String, private val wrapperConfig: ScannerWrapperConfig) :
-    LocalPathScannerWrapper(name) {
-    class Factory : ScannerWrapperFactory<Unit>("Askalono") {
-        override fun create(config: Unit, wrapperConfig: ScannerWrapperConfig) = Askalono(type, wrapperConfig)
+data class AskalonoConfig(
+    /**
+     * A regular expression to match the scanner name when looking up scan results in the storage.
+     */
+    val regScannerName: String?,
 
-        override fun parseConfig(options: Options, secrets: Options) = Unit
-    }
+    /**
+     * The minimum version of stored scan results to use.
+     */
+    val minVersion: String?,
 
+    /**
+     * The maximum version of stored scan results to use.
+     */
+    val maxVersion: String?,
+
+    /**
+     * The configuration to use for the scanner. Only scan results with the same configuration are used when looking up
+     * scan results in the storage.
+     */
+    val configuration: String?,
+
+    /**
+     * Whether to read scan results from the storage.
+     */
+    @OrtPluginOption(defaultValue = "true")
+    val readFromStorage: Boolean,
+
+    /**
+     * Whether to write scan results to the storage.
+     */
+    @OrtPluginOption(defaultValue = "true")
+    val writeToStorage: Boolean
+)
+
+@OrtPlugin(
+    displayName = "askalono",
+    description = "askalono is a library and command-line tool to help detect license texts. It's designed to be " +
+        "fast, accurate, and to support a wide variety of license texts.",
+    factory = ScannerWrapperFactory::class
+)
+class Askalono(
+    override val descriptor: PluginDescriptor = AskalonoFactory.descriptor,
+    config: AskalonoConfig
+) : LocalPathScannerWrapper() {
     override val configuration = ""
 
-    override val matcher by lazy { ScannerMatcher.create(details, wrapperConfig.matcherConfig) }
+    override val matcher by lazy {
+        ScannerMatcher.create(
+            details,
+            ScannerMatcherConfig(
+                config.regScannerName,
+                config.minVersion,
+                config.maxVersion,
+                config.configuration
+            )
+        )
+    }
 
     override val version by lazy { AskalonoCommand.getVersion() }
 
-    override val readFromStorage by lazy { wrapperConfig.readFromStorageWithDefault(matcher) }
-
-    override val writeToStorage by lazy { wrapperConfig.writeToStorageWithDefault(matcher) }
+    override val readFromStorage = config.readFromStorage
+    override val writeToStorage = config.writeToStorage
 
     override fun runScanner(path: File, context: ScanContext): String {
         val process = AskalonoCommand.run(
@@ -95,7 +143,7 @@ class Askalono internal constructor(name: String, private val wrapperConfig: Sca
 
         val issues = mutableListOf(
             Issue(
-                source = name,
+                source = descriptor.id,
                 message = "This scanner is not capable of detecting copyright statements.",
                 severity = Severity.HINT
             )
@@ -112,7 +160,7 @@ class Askalono internal constructor(name: String, private val wrapperConfig: Sca
 
             if (it.error != null) {
                 issues += Issue(
-                    source = name,
+                    source = descriptor.id,
                     message = it.error,
                     severity = if (it.error == CONFIDENCE_NOTICE) Severity.HINT else Severity.ERROR
                 )

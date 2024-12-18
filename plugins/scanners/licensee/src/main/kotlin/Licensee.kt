@@ -38,14 +38,16 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.OrtPluginOption
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.scanner.LocalPathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScannerMatcher
-import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
+import org.ossreviewtoolkit.scanner.ScannerMatcherConfig
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.utils.common.CommandLineTool
-import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.Os
 
 private val JSON = Json {
@@ -60,27 +62,72 @@ object LicenseeCommand : CommandLineTool {
     override fun getVersionArguments() = "version"
 }
 
-class Licensee internal constructor(name: String, private val wrapperConfig: ScannerWrapperConfig) :
-    LocalPathScannerWrapper(name) {
+data class LicenseeConfig(
+    /**
+     * A regular expression to match the scanner name when looking up scan results in the storage.
+     */
+    val regScannerName: String?,
+
+    /**
+     * The minimum version of stored scan results to use.
+     */
+    val minVersion: String?,
+
+    /**
+     * The maximum version of stored scan results to use.
+     */
+    val maxVersion: String?,
+
+    /**
+     * The configuration to use for the scanner. Only scan results with the same configuration are used when looking up
+     * scan results in the storage.
+     */
+    val configuration: String?,
+
+    /**
+     * Whether to read scan results from the storage.
+     */
+    @OrtPluginOption(defaultValue = "true")
+    val readFromStorage: Boolean,
+
+    /**
+     * Whether to write scan results to the storage.
+     */
+    @OrtPluginOption(defaultValue = "true")
+    val writeToStorage: Boolean
+)
+
+@OrtPlugin(
+    displayName = "Licensee",
+    description = "Licensee is a command line tool to detect licenses in a given project.",
+    factory = ScannerWrapperFactory::class
+)
+class Licensee(
+    override val descriptor: PluginDescriptor = LicenseeFactory.descriptor,
+    config: LicenseeConfig
+) : LocalPathScannerWrapper() {
     companion object {
         val CONFIGURATION_OPTIONS = listOf("--json")
     }
 
-    class Factory : ScannerWrapperFactory<Unit>("Licensee") {
-        override fun create(config: Unit, wrapperConfig: ScannerWrapperConfig) = Licensee(type, wrapperConfig)
-
-        override fun parseConfig(options: Options, secrets: Options) = Unit
-    }
-
     override val configuration = CONFIGURATION_OPTIONS.joinToString(" ")
 
-    override val matcher by lazy { ScannerMatcher.create(details, wrapperConfig.matcherConfig) }
+    override val matcher by lazy {
+        ScannerMatcher.create(
+            details,
+            ScannerMatcherConfig(
+                config.regScannerName,
+                config.minVersion,
+                config.maxVersion,
+                config.configuration
+            )
+        )
+    }
 
     override val version by lazy { LicenseeCommand.getVersion() }
 
-    override val readFromStorage by lazy { wrapperConfig.readFromStorageWithDefault(matcher) }
-
-    override val writeToStorage by lazy { wrapperConfig.writeToStorageWithDefault(matcher) }
+    override val readFromStorage = config.readFromStorage
+    override val writeToStorage = config.writeToStorage
 
     override fun runScanner(path: File, context: ScanContext): String {
         val process = LicenseeCommand.run(
@@ -104,7 +151,7 @@ class Licensee internal constructor(name: String, private val wrapperConfig: Sca
         val parameters = details.getValue("parameters").jsonArray
 
         return ScannerDetails(
-            name = name,
+            name = descriptor.id,
             version = version,
             // TODO: Filter out parameters that have no influence on scan results.
             configuration = parameters.joinToString(" ") { it.jsonPrimitive.content }
@@ -128,7 +175,7 @@ class Licensee internal constructor(name: String, private val wrapperConfig: Sca
             licenseFindings = licenseFindings,
             issues = listOf(
                 Issue(
-                    source = name,
+                    source = descriptor.id,
                     message = "This scanner is not capable of detecting copyright statements.",
                     severity = Severity.HINT
                 )

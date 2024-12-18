@@ -21,7 +21,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     // Apply precompiled plugins.
-    id("ort-library-conventions")
+    id("ort-plugin-conventions")
 }
 
 dependencies {
@@ -37,6 +37,8 @@ dependencies {
         exclude(group = "org.slf4j", module = "slf4j-simple")
             .because("the logging provider conflicts with ORT's")
     }
+
+    ksp(projects.scanner)
 
     funTestApi(testFixtures(projects.scanner))
 

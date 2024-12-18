@@ -47,14 +47,14 @@ import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.associateLicensesWithExceptions
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.model.utils.toPurlExtras
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.scanner.PackageScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScannerMatcher
-import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.provenance.DefaultProvenanceDownloader
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
-import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.packZip
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
@@ -66,26 +66,27 @@ import org.ossreviewtoolkit.utils.ort.runBlocking
  * https://github.com/doubleopen-project/dos. The server runs ScanCode in the backend and stores / reuses scan results
  * on a per-file basis and thus uses its own scan storage.
  */
-class DosScanner internal constructor(
-    override val name: String,
-    private val config: DosScannerConfig,
-    wrapperConfig: ScannerWrapperConfig
+@OrtPlugin(
+    id = "DOS",
+    displayName = "Double Open Server",
+    description = "The DOS scanner wrapper is a client for the scanner API implemented as part of the Double Open " +
+        "Server project at https://github.com/doubleopen-project/dos. The server runs ScanCode in the backend and " +
+        "stores / reuses scan results on a per-file basis and thus uses its own scan storage.",
+    factory = ScannerWrapperFactory::class
+)
+class DosScanner(
+    override val descriptor: PluginDescriptor = DosScannerFactory.descriptor,
+    private val config: DosScannerConfig
 ) : PackageScannerWrapper {
-    class Factory : ScannerWrapperFactory<DosScannerConfig>("DOS") {
-        override fun create(config: DosScannerConfig, wrapperConfig: ScannerWrapperConfig) =
-            DosScanner(type, config, wrapperConfig)
-
-        override fun parseConfig(options: Options, secrets: Options) = DosScannerConfig.create(options, secrets)
-    }
-
     // TODO: Introduce a DOS version and expose it through the API to use it here.
     override val version = "1.0.0"
 
     override val configuration = ""
 
     override val matcher: ScannerMatcher? = null
-    override val readFromStorage by lazy { wrapperConfig.readFromStorageWithDefault(matcher) }
-    override val writeToStorage by lazy { wrapperConfig.writeToStorageWithDefault(matcher) }
+
+    override val readFromStorage = false
+    override val writeToStorage = config.writeToStorage
 
     private val service = DosService.create(config.url, config.token, config.timeout?.let { Duration.ofSeconds(it) })
     internal val client = DosClient(service)
@@ -115,9 +116,9 @@ class DosScanner internal constructor(
             val existingScanResults = runCatching {
                 client.getScanResults(packages, config.fetchConcluded)
             }.onFailure {
-                issues += createAndLogIssue(name, it.collectMessages())
+                issues += createAndLogIssue(descriptor.id, it.collectMessages())
             }.onSuccess {
-                if (it == null) issues += createAndLogIssue(name, "Missing scan results response body.")
+                if (it == null) issues += createAndLogIssue(descriptor.id, "Missing scan results response body.")
             }.getOrNull()
 
             when (existingScanResults?.state?.status) {
@@ -129,7 +130,7 @@ class DosScanner internal constructor(
                     }.mapCatching { sourceDir ->
                         runBackendScan(packages, sourceDir, startTime, issues)
                     }.onFailure {
-                        issues += createAndLogIssue(name, it.collectMessages())
+                        issues += createAndLogIssue(descriptor.id, it.collectMessages())
                     }.getOrNull()
                 }
 
@@ -183,14 +184,14 @@ class DosScanner internal constructor(
 
         val uploadUrl = client.getUploadUrl(zipName)
         if (uploadUrl == null) {
-            issues += createAndLogIssue(name, "Unable to get an upload URL for '$zipName'.")
+            issues += createAndLogIssue(descriptor.id, "Unable to get an upload URL for '$zipName'.")
             zipFile.delete()
             return null
         }
 
         val uploadSuccessful = client.uploadFile(zipFile, uploadUrl).also { zipFile.delete() }
         if (!uploadSuccessful) {
-            issues += createAndLogIssue(name, "Uploading '$zipFile' to $uploadUrl failed.")
+            issues += createAndLogIssue(descriptor.id, "Uploading '$zipFile' to $uploadUrl failed.")
             return null
         }
 
@@ -199,7 +200,7 @@ class DosScanner internal constructor(
 
         if (id == null) {
             issues += createAndLogIssue(
-                name,
+                descriptor.id,
                 "Failed to add scan job for the following packages:\n${packages.joinToString("\n") { it.purl }}"
             )
             return null
@@ -236,7 +237,7 @@ class DosScanner internal constructor(
 
                 "failed" -> {
                     issues += createAndLogIssue(
-                        name,
+                        descriptor.id,
                         "Scan failed for job with ID '$jobId': ${jobState.state.message}"
                     )
                     return null

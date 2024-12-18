@@ -237,10 +237,10 @@ ort:
         options:
           # Command line options that affect the ScanCode output. If changed, stored scan results that were created with
           # different options are not reused.
-          commandLine: '--copyright --license --info --strip-root --timeout 300'
+          commandLine: '--copyright,--license,--info,--strip-root,--timeout,300'
 
           # Command line options that do not affect the ScanCode output.
-          commandLineNonConfig: '--processes 4'
+          commandLineNonConfig: '--processes,4'
 
           # Use per-file license findings instead of per-line ones.
           preferFileLicense: false

@@ -33,153 +33,43 @@ import io.kotest.matchers.shouldBe
 import kotlin.IllegalArgumentException
 
 import org.ossreviewtoolkit.clients.fossid.FossIdRestService
+import org.ossreviewtoolkit.plugins.api.Secret
 
 class FossIdConfigTest : WordSpec({
     "create" should {
-        "throw if no options for FossID are provided in the scanner configuration" {
-            shouldThrow<IllegalArgumentException> { FossIdConfig.create(emptyMap(), emptyMap()) }
-        }
-
-        "read all properties from the scanner configuration" {
-            val options = mapOf(
-                "serverUrl" to SERVER_URL,
-                "projectName" to PROJECT,
-                "namingScanPattern" to "#repositoryName_#deltaTag",
-                "waitForResult" to "false",
-                "keepFailedScans" to "true",
-                "deltaScans" to "true",
-                "deltaScanLimit" to "42",
-                "detectLicenseDeclarations" to "true",
-                "detectCopyrightStatements" to "true",
-                "timeout" to "300",
-                "fetchSnippetMatchedLines" to "true",
-                "snippetsLimit" to "1000",
-                "urlMappings" to "https://example.org(?<repoPath>.*) -> ssh://example.org\${repoPath}"
-            )
-
-            val secrets = mapOf(
-                "user" to USER,
-                "apiKey" to API_KEY
-            )
-
-            val fossIdConfig = FossIdConfig.create(options, secrets)
-
-            fossIdConfig shouldBe FossIdConfig(
-                serverUrl = SERVER_URL,
-                user = USER,
-                apiKey = API_KEY,
-                projectName = PROJECT,
-                namingScanPattern = "#repositoryName_#deltaTag",
-                waitForResult = false,
-                keepFailedScans = true,
-                deltaScans = true,
-                deltaScanLimit = 42,
-                detectLicenseDeclarations = true,
-                detectCopyrightStatements = true,
-                timeout = 300,
-                fetchSnippetMatchedLines = true,
-                snippetsLimit = 1000,
-                sensitivity = 10,
-                urlMappings = "https://example.org(?<repoPath>.*) -> ssh://example.org\${repoPath}"
-            )
-        }
-
-        "set default values for optional properties" {
-            val options = mapOf("serverUrl" to SERVER_URL)
-
-            val secrets = mapOf(
-                "user" to USER,
-                "apiKey" to API_KEY
-            )
-
-            val fossIdConfig = FossIdConfig.create(options, secrets)
-
-            fossIdConfig shouldBe FossIdConfig(
-                serverUrl = SERVER_URL,
-                user = USER,
-                apiKey = API_KEY,
-                projectName = null,
-                namingScanPattern = null,
-                waitForResult = true,
-                keepFailedScans = false,
-                deltaScans = false,
-                deltaScanLimit = Int.MAX_VALUE,
-                detectLicenseDeclarations = false,
-                detectCopyrightStatements = false,
-                timeout = 60,
-                fetchSnippetMatchedLines = false,
-                snippetsLimit = 500,
-                sensitivity = 10,
-                urlMappings = null
-            )
-        }
-
-        "throw if the server URL is missing" {
-            val secrets = mapOf(
-                "user" to USER,
-                "apiKey" to API_KEY
-            )
-
-            shouldThrow<IllegalArgumentException> { FossIdConfig.create(emptyMap(), secrets) }
-        }
-
-        "throw if the API key is missing" {
-            val options = mapOf("serverUrl" to SERVER_URL)
-            val secrets = mapOf("user" to USER)
-
-            shouldThrow<IllegalArgumentException> { FossIdConfig.create(options, secrets) }
-        }
-
-        "throw if the user name is missing" {
-            val options = mapOf("serverUrl" to SERVER_URL)
-            val secrets = mapOf("apiKey" to API_KEY)
-
-            shouldThrow<IllegalArgumentException> { FossIdConfig.create(options, secrets) }
-        }
-
         "throw if the deltaScanLimit is invalid" {
-            val options = mapOf(
-                "serverUrl" to SERVER_URL,
-                "deltaScanLimit" to "0"
-            )
-
-            val secrets = mapOf(
-                "user" to USER,
-                "apiKey" to API_KEY
-            )
-
-            shouldThrow<IllegalArgumentException> { FossIdConfig.create(options, secrets) }
+            shouldThrow<IllegalArgumentException> {
+                FossIdFactory.create(
+                    serverUrl = SERVER_URL,
+                    user = Secret(USER),
+                    apiKey = Secret(API_KEY),
+                    deltaScanLimit = 0
+                )
+            }
         }
 
         "throw if the sensitivity is invalid" {
-            val options = mapOf(
-                "serverUrl" to SERVER_URL,
-                "sensitivity" to "21"
-            )
-
-            val secrets = mapOf(
-                "user" to USER,
-                "apiKey" to API_KEY
-            )
-
-            shouldThrow<IllegalArgumentException> { FossIdConfig.create(options, secrets) }
+            shouldThrow<IllegalArgumentException> {
+                FossIdFactory.create(
+                    serverUrl = SERVER_URL,
+                    user = Secret(USER),
+                    apiKey = Secret(API_KEY),
+                    sensitivity = 21
+                )
+            }
         }
     }
 
     "createNamingProvider" should {
         "create a naming provider with a correct scan naming convention" {
-            val options = mapOf(
-                "serverUrl" to SERVER_URL,
-                "namingScanPattern" to "#repositoryName_#deltaTag"
+            val fossId = FossIdFactory.create(
+                serverUrl = SERVER_URL,
+                user = Secret(USER),
+                apiKey = Secret(API_KEY),
+                namingScanPattern = "#repositoryName_#deltaTag"
             )
 
-            val secrets = mapOf(
-                "user" to USER,
-                "apiKey" to API_KEY
-            )
-
-            val fossIdConfig = FossIdConfig.create(options, secrets)
-            val namingProvider = fossIdConfig.createNamingProvider()
+            val namingProvider = fossId.config.createNamingProvider()
 
             val scanCode = namingProvider.createScanCode("TestProject", FossId.DeltaTag.DELTA)
 
@@ -190,18 +80,14 @@ class FossIdConfigTest : WordSpec({
     "createUrlProvider" should {
         "initialize correct URL mappings" {
             val url = "https://changeit.example.org/foo"
-            val options = mapOf(
-                "serverUrl" to SERVER_URL,
-                "urlMappings" to "$url -> $SERVER_URL"
+            val fossId = FossIdFactory.create(
+                serverUrl = SERVER_URL,
+                user = Secret(USER),
+                apiKey = Secret(API_KEY),
+                urlMappings = "$url -> $SERVER_URL"
             )
 
-            val secrets = mapOf(
-                "user" to USER,
-                "apiKey" to API_KEY
-            )
-
-            val fossIdConfig = FossIdConfig.create(options, secrets)
-            val urlProvider = fossIdConfig.createUrlProvider()
+            val urlProvider = fossId.config.createUrlProvider()
 
             urlProvider.getUrl(url) shouldBe SERVER_URL
         }
@@ -215,14 +101,6 @@ class FossIdConfigTest : WordSpec({
             server.start()
 
             try {
-                val serverUrl = "http://localhost:${server.port()}"
-                val options = mapOf("serverUrl" to serverUrl)
-
-                val secrets = mapOf(
-                    "user" to USER,
-                    "apiKey" to API_KEY
-                )
-
                 server.stubFor(
                     get(urlPathEqualTo("/index.php"))
                         .withQueryParam("form", equalTo("login"))
@@ -232,8 +110,7 @@ class FossIdConfigTest : WordSpec({
                         )
                 )
 
-                val fossIdConfig = FossIdConfig.create(options, secrets)
-                val service = FossIdRestService.create(fossIdConfig.serverUrl)
+                val service = FossIdRestService.create("http://localhost:${server.port()}")
 
                 service.getLoginPage().string() shouldBe loginPage
             } finally {
@@ -243,4 +120,4 @@ class FossIdConfigTest : WordSpec({
     }
 })
 
-private const val SERVER_URL = "https://www.example.org/fossid"
+private const val SERVER_URL = "https://www.example.org/fossid/"
