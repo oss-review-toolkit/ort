@@ -87,5 +87,26 @@ class SpdxCompoundExpressionTest : WordSpec({
             // Compare string representations to not rely on semantic equality.
             expression.simplify().toString() shouldBe "MIT"
         }
+
+        "remove redundant choices with a nested expression at the beginning" {
+            val expression = "(Apache-2.0 OR MIT) AND MIT AND Apache-2.0 AND Apache-2.0 AND MIT".toSpdx()
+
+            // Compare string representations to not rely on semantic equality.
+            expression.simplify().sorted().toString() shouldBe "Apache-2.0 AND MIT"
+        }
+
+        "remove redundant choices with a nested expression in the middle" {
+            val expression = "Apache-2.0 AND (Apache-2.0 OR MIT) AND MIT AND MIT".toSpdx()
+
+            // Compare string representations to not rely on semantic equality.
+            expression.simplify().sorted().toString() shouldBe "Apache-2.0 AND MIT"
+        }
+
+        "remove redundant choices with a nested expression at the end" {
+            val expression = "MIT AND Apache-2.0 AND Apache-2.0 AND MIT AND (Apache-2.0 OR MIT)".toSpdx()
+
+            // Compare string representations to not rely on semantic equality.
+            expression.simplify().sorted().toString() shouldBe "Apache-2.0 AND MIT"
+        }
     }
 })
