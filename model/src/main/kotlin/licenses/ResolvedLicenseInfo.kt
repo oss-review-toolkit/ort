@@ -64,6 +64,15 @@ data class ResolvedLicenseInfo(
     operator fun get(license: SpdxSingleLicenseExpression): ResolvedLicense? = find { it.license == license }
 
     /**
+     * Map all original resolved license expressions to a single compound expression with top-level AND-operators, or
+     * return null if there are no licenses.
+     */
+    fun toCompoundExpression(): SpdxExpression? =
+        licenses.flatMapTo(mutableSetOf()) { resolvedLicense ->
+            resolvedLicense.originalExpressions.map { it.expression }
+        }.reduceOrNull(SpdxExpression::and)
+
+    /**
      * Return the effective [SpdxExpression] of this [ResolvedLicenseInfo] based on their [licenses] filtered by the
      * [licenseView] and the applied [licenseChoices]. Effective, in this context, refers to an [SpdxExpression] that
      * can be used as a final license of this [ResolvedLicenseInfo]. [licenseChoices] will be applied in the order they
@@ -72,9 +81,7 @@ data class ResolvedLicenseInfo(
     fun effectiveLicense(licenseView: LicenseView, vararg licenseChoices: List<SpdxLicenseChoice>): SpdxExpression? {
         val resolvedLicenseInfo = filter(licenseView, filterSources = true)
 
-        val resolvedLicenses = resolvedLicenseInfo.licenses.flatMap { resolvedLicense ->
-            resolvedLicense.originalExpressions.map { it.expression }
-        }.toSet().reduceOrNull(SpdxExpression::and)
+        val resolvedLicenses = resolvedLicenseInfo.toCompoundExpression()
 
         val choices = licenseChoices.asList().flatten()
 
