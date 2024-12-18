@@ -22,20 +22,22 @@ package org.ossreviewtoolkit.plugins.scanners.scancode
 import java.io.File
 import java.time.Instant
 
+import kotlin.math.max
+
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.scanner.LocalPathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
-import org.ossreviewtoolkit.scanner.ScanStorage
 import org.ossreviewtoolkit.scanner.ScannerMatcher
-import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
+import org.ossreviewtoolkit.scanner.ScannerMatcherConfig
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.utils.common.CommandLineTool
-import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
@@ -77,14 +79,15 @@ object ScanCodeCommand : CommandLineTool {
  *   file, the end line is set to the maximum of all end lines for per-line findings in that file, and the score is set
  *   to the arithmetic average of the scores of all per-line findings in that file.
  */
-class ScanCode internal constructor(
-    name: String,
-    private val config: ScanCodeConfig,
-    private val wrapperConfig: ScannerWrapperConfig
-) : LocalPathScannerWrapper(name) {
-    // This constructor is required by the `RequirementsCommand`.
-    constructor(name: String, wrapperConfig: ScannerWrapperConfig) : this(name, ScanCodeConfig.DEFAULT, wrapperConfig)
-
+@OrtPlugin(
+    displayName = "ScanCode",
+    description = "A wrapper for [ScanCode](https://github.com/aboutcode-org/scancode-toolkit).",
+    factory = ScannerWrapperFactory::class
+)
+class ScanCode(
+    override val descriptor: PluginDescriptor = ScanCodeFactory.descriptor,
+    private val config: ScanCodeConfig
+) : LocalPathScannerWrapper() {
     companion object {
         const val SCANNER_NAME = "ScanCode"
 
@@ -92,19 +95,18 @@ class ScanCode internal constructor(
         private const val OUTPUT_FORMAT_OPTION = "--json"
     }
 
-    class Factory : ScannerWrapperFactory<ScanCodeConfig>(SCANNER_NAME) {
-        override fun create(config: ScanCodeConfig, wrapperConfig: ScannerWrapperConfig) =
-            ScanCode(type, config, wrapperConfig)
-
-        override fun parseConfig(options: Options, secrets: Options) = ScanCodeConfig.create(options)
-    }
-
     private val commandLineOptions by lazy { getCommandLineOptions(version) }
 
     internal fun getCommandLineOptions(version: String) =
         buildList {
             addAll(config.commandLine)
-            addAll(config.commandLineNonConfig)
+            config.commandLineNonConfig?.let { addAll(it) }
+
+            if ("--processes" !in config.commandLineNonConfig.orEmpty()) {
+                val maxProcesses = max(1, Runtime.getRuntime().availableProcessors() - 1)
+                add("--processes")
+                add(maxProcesses.toString())
+            }
 
             if (Semver(version).isGreaterThanOrEqualTo(LICENSE_REFERENCES_OPTION_VERSION)) {
                 // Required to be able to map ScanCode license keys to SPDX IDs.
@@ -122,13 +124,22 @@ class ScanCode internal constructor(
         }.joinToString(" ")
     }
 
-    override val matcher by lazy { ScannerMatcher.create(details, wrapperConfig.matcherConfig) }
+    override val matcher by lazy {
+        ScannerMatcher.create(
+            details,
+            ScannerMatcherConfig(
+                config.regScannerName,
+                config.minVersion,
+                config.maxVersion,
+                config.configuration
+            )
+        )
+    }
 
     override val version by lazy { ScanCodeCommand.getVersion() }
 
-    override val readFromStorage by lazy { wrapperConfig.readFromStorageWithDefault(matcher) }
-
-    override val writeToStorage by lazy { wrapperConfig.writeToStorageWithDefault(matcher) }
+    override val readFromStorage = config.readFromStorage
+    override val writeToStorage = config.writeToStorage
 
     override fun runScanner(path: File, context: ScanContext): String {
         val resultFile = createOrtTempDir().resolve("result.json")
@@ -151,7 +162,7 @@ class ScanCode internal constructor(
         val options = header.getPrimitiveOptions()
 
         return ScannerDetails(
-            name = name,
+            name = descriptor.id,
             version = header.toolVersion,
             // TODO: Filter out options that have no influence on scan results.
             configuration = options.joinToString(" ") { "${it.first} ${it.second}" }

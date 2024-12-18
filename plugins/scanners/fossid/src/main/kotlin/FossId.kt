@@ -86,14 +86,14 @@ import org.ossreviewtoolkit.model.config.snippet.SnippetChoice
 import org.ossreviewtoolkit.model.config.snippet.SnippetChoiceReason
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.scanner.PackageScannerWrapper
 import org.ossreviewtoolkit.scanner.ProvenanceScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScannerMatcher
-import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
-import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.ort.runBlocking
@@ -110,11 +110,15 @@ import org.semver4j.Semver
  * Therefore, it implements the [PackageScannerWrapper] interface for backward compatibility, even though FossID itself
  * gets a Git repository URL as input and would be a good match for [ProvenanceScannerWrapper].
  */
+@OrtPlugin(
+    displayName = "FossID",
+    description = "The FossID scanner plugin.",
+    factory = ScannerWrapperFactory::class
+)
 @Suppress("LargeClass", "TooManyFunctions")
 class FossId internal constructor(
-    override val name: String,
-    private val config: FossIdConfig,
-    wrapperConfig: ScannerWrapperConfig
+    override val descriptor: PluginDescriptor = FossIdFactory.descriptor,
+    internal val config: FossIdConfig
 ) : PackageScannerWrapper {
     companion object {
         @JvmStatic
@@ -195,13 +199,6 @@ class FossId internal constructor(
             )
     }
 
-    class Factory : ScannerWrapperFactory<FossIdConfig>("FossId") {
-        override fun create(config: FossIdConfig, wrapperConfig: ScannerWrapperConfig) =
-            FossId(type, config, wrapperConfig)
-
-        override fun parseConfig(options: Options, secrets: Options) = FossIdConfig.create(options, secrets)
-    }
-
     /**
      * The qualifier of a scan when delta scans are enabled.
      */
@@ -226,19 +223,19 @@ class FossId internal constructor(
     // package is wanted.
     private val createdScans = mutableSetOf<String>()
 
-    private val service = runBlocking { FossIdRestService.create(config.serverUrl) }
+    private val service by lazy { runBlocking { FossIdRestService.create(config.serverUrl) } }
 
-    override val version = service.version
+    override val version by lazy { service.version }
     override val configuration = ""
 
     override val matcher: ScannerMatcher? = null
 
-    override val readFromStorage by lazy { wrapperConfig.readFromStorageWithDefault(matcher) }
+    override val readFromStorage = false
 
-    override val writeToStorage by lazy { wrapperConfig.writeToStorageWithDefault(matcher) }
+    override val writeToStorage = config.writeToStorage
 
     private suspend fun getProject(projectCode: String): Project? =
-        service.getProject(config.user, config.apiKey, projectCode).run {
+        service.getProject(config.user.value, config.apiKey.value, projectCode).run {
             when {
                 error == null && data != null -> {
                     logger.info { "Project '$projectCode' exists." }
@@ -281,7 +278,7 @@ class FossId internal constructor(
         }
 
         if (issueMessage != null) {
-            val issue = createAndLogIssue(name, issueMessage, Severity.WARNING)
+            val issue = createAndLogIssue(descriptor.id, issueMessage, Severity.WARNING)
             val summary = createSingleIssueSummary(startTime, issue = issue)
             return ScanResult(provenance, details, summary)
         }
@@ -297,11 +294,11 @@ class FossId internal constructor(
                 if (getProject(projectCode) == null) {
                     logger.info { "Creating project '$projectCode'..." }
 
-                    service.createProject(config.user, config.apiKey, projectCode, projectCode)
+                    service.createProject(config.user.value, config.apiKey.value, projectCode, projectCode)
                         .checkResponse("create project")
                 }
 
-                val scans = service.listScansForProject(config.user, config.apiKey, projectCode)
+                val scans = service.listScansForProject(config.user.value, config.apiKey.value, projectCode)
                     .checkResponse("list scans for project").data
                 checkNotNull(scans)
 
@@ -344,7 +341,7 @@ class FossId internal constructor(
                     )
                 } else {
                     val issue = createAndLogIssue(
-                        source = name,
+                        source = descriptor.id,
                         message = "Package '${pkg.id.toCoordinates()}' has been scanned in asynchronous mode. " +
                             "Scan results need to be inspected on the server instance.",
                         severity = Severity.HINT
@@ -366,7 +363,7 @@ class FossId internal constructor(
                 e.showStackTrace()
 
                 val issue = createAndLogIssue(
-                    source = name,
+                    source = descriptor.id,
                     message = "Failed to scan package '${pkg.id.toCoordinates()}' from $url."
                 )
                 val summary = createSingleIssueSummary(startTime, issue = issue)
@@ -401,7 +398,7 @@ class FossId internal constructor(
                 "The code for an existing scan must not be null."
             }
 
-            val response = service.checkScanStatus(config.user, config.apiKey, scanCode)
+            val response = service.checkScanStatus(config.user.value, config.apiKey.value, scanCode)
                 .checkResponse("check scan status", false)
             when (response.data?.status) {
                 ScanStatus.FINISHED -> true
@@ -478,7 +475,7 @@ class FossId internal constructor(
             val scanId = createScan(projectCode, scanCode, newUrl, revision)
 
             logger.info { "Initiating the download..." }
-            service.downloadFromGit(config.user, config.apiKey, scanCode)
+            service.downloadFromGit(config.user.value, config.apiKey.value, scanCode)
                 .checkResponse("download data from Git", false)
 
             val issues = createIgnoreRules(scanCode, context.excludes)
@@ -562,7 +559,7 @@ class FossId internal constructor(
         val scanId = createScan(projectCode, scanCode, mappedUrl, revision, projectRevision.orEmpty())
 
         logger.info { "Initiating the download..." }
-        service.downloadFromGit(config.user, config.apiKey, scanCode)
+        service.downloadFromGit(config.user.value, config.apiKey.value, scanCode)
             .checkResponse("download data from Git", false)
 
         val issues = mutableListOf<Issue>()
@@ -580,7 +577,7 @@ class FossId internal constructor(
 
             // TODO: This is the old way of carrying the rules to the new delta scan, by querying the previous scan.
             //       With the introduction of support for the ORT excludes, this old behavior can be dropped.
-            val ignoreRules = service.listIgnoreRules(config.user, config.apiKey, existingScanCode)
+            val ignoreRules = service.listIgnoreRules(config.user.value, config.apiKey.value, existingScanCode)
                 .checkResponse("list ignore rules")
             ignoreRules.data?.let { rules ->
                 logger.info { "${rules.size} ignore rule(s) have been found." }
@@ -653,8 +650,15 @@ class FossId internal constructor(
 
         val allRules = excludesRules + legacyRules
         allRules.forEach {
-            service.createIgnoreRule(config.user, config.apiKey, scanCode, it.type, it.value, RuleScope.SCAN)
-                .checkResponse("create ignore rules", false)
+            service.createIgnoreRule(
+                config.user.value,
+                config.apiKey.value,
+                scanCode,
+                it.type,
+                it.value,
+                RuleScope.SCAN
+            ).checkResponse("create ignore rules", false)
+
             logger.info {
                 "Ignore rule of type '${it.type}' and value '${it.value}' has been created for the new scan."
             }
@@ -675,15 +679,9 @@ class FossId internal constructor(
     ): String {
         logger.info { "Creating scan '$scanCode'..." }
 
-        val response = service.createScan(
-            config.user,
-            config.apiKey,
-            projectCode,
-            scanCode,
-            url,
-            revision,
-            reference
-        ).checkResponse("create scan")
+        val response = service
+            .createScan(config.user.value, config.apiKey.value, projectCode, scanCode, url, revision, reference)
+            .checkResponse("create scan")
 
         val scanId = response.data?.get("scan_id")
 
@@ -701,7 +699,7 @@ class FossId internal constructor(
     private suspend fun checkScan(scanCode: String, vararg runOptions: Pair<String, String>) {
         waitDownloadComplete(scanCode)
 
-        val response = service.checkScanStatus(config.user, config.apiKey, scanCode)
+        val response = service.checkScanStatus(config.user.value, config.apiKey.value, scanCode)
             .checkResponse("check scan status", false)
 
         check(response.data?.status != ScanStatus.FAILED) { "Triggered scan has failed." }
@@ -716,7 +714,7 @@ class FossId internal constructor(
             )
 
             val scanResult = service.runScan(
-                config.user, config.apiKey, scanCode, mapOf(*runOptions, *optionsFromConfig)
+                config.user.value, config.apiKey.value, scanCode, mapOf(*runOptions, *optionsFromConfig)
             )
 
             // Scans that were added to the queue are interpreted as an error by FossID before version 2021.2.
@@ -750,7 +748,7 @@ class FossId internal constructor(
         val result = wait(config.timeout.minutes, WAIT_DELAY) {
             logger.info { "Checking download status for scan '$scanCode'." }
 
-            val response = service.checkDownloadStatus(config.user, config.apiKey, scanCode)
+            val response = service.checkDownloadStatus(config.user.value, config.apiKey.value, scanCode)
                 .checkResponse("check download status")
 
             when (response.data) {
@@ -790,7 +788,7 @@ class FossId internal constructor(
         val result = wait(config.timeout.minutes, WAIT_DELAY) {
             logger.info { "Waiting for scan '$scanCode' to complete." }
 
-            val response = service.checkScanStatus(config.user, config.apiKey, scanCode)
+            val response = service.checkScanStatus(config.user.value, config.apiKey.value, scanCode)
                 .checkResponse("check scan status", false)
 
             when (response.data?.status) {
@@ -816,7 +814,7 @@ class FossId internal constructor(
      * Delete a scan with [scanCode].
      */
     private suspend fun deleteScan(scanCode: String) {
-        val response = service.deleteScan(config.user, config.apiKey, scanCode)
+        val response = service.deleteScan(config.user.value, config.apiKey.value, scanCode)
         response.error?.let {
             logger.error { "Cannot delete scan '$scanCode': $it." }
         }
@@ -827,12 +825,13 @@ class FossId internal constructor(
      */
     @Suppress("UnsafeCallOnNullableType")
     private suspend fun getRawResults(scanCode: String, snippetChoices: List<SnippetChoice>): RawResults {
-        val identifiedFiles = service.listIdentifiedFiles(config.user, config.apiKey, scanCode)
+        val identifiedFiles = service.listIdentifiedFiles(config.user.value, config.apiKey.value, scanCode)
             .checkResponse("list identified files")
             .data!!
         logger.info { "${identifiedFiles.size} identified files have been returned for scan '$scanCode'." }
 
-        val markedAsIdentifiedFiles = service.listMarkedAsIdentifiedFiles(config.user, config.apiKey, scanCode)
+        val markedAsIdentifiedFiles = service
+            .listMarkedAsIdentifiedFiles(config.user.value, config.apiKey.value, scanCode)
             .checkResponse("list marked as identified files")
             .data!!
         logger.info {
@@ -840,11 +839,11 @@ class FossId internal constructor(
         }
 
         // The "match_type=ignore" info is already in the ScanResult, but here we also get the ignore reason.
-        val listIgnoredFiles = service.listIgnoredFiles(config.user, config.apiKey, scanCode)
+        val listIgnoredFiles = service.listIgnoredFiles(config.user.value, config.apiKey.value, scanCode)
             .checkResponse("list ignored files")
             .data!!
 
-        val pendingFiles = service.listPendingFiles(config.user, config.apiKey, scanCode)
+        val pendingFiles = service.listPendingFiles(config.user.value, config.apiKey.value, scanCode)
             .checkResponse("list pending files")
             .data!!.toMutableList()
         logger.info {
@@ -858,7 +857,7 @@ class FossId internal constructor(
                         "altered: putting it again as 'pending'."
                 }
 
-                service.unmarkAsIdentified(config.user, config.apiKey, scanCode, it, false)
+                service.unmarkAsIdentified(config.user.value, config.apiKey.value, scanCode, it, false)
             }
         }
 
@@ -869,7 +868,7 @@ class FossId internal constructor(
                 val file = pendingFilesIterator.next()
                 logger.info { "Listing snippet for $file..." }
 
-                val snippetResponse = service.listSnippets(config.user, config.apiKey, scanCode, file)
+                val snippetResponse = service.listSnippets(config.user.value, config.apiKey.value, scanCode, file)
                     .checkResponse("list snippets")
                 val snippets = checkNotNull(snippetResponse.data) {
                     "Snippet could not be listed. Response was ${snippetResponse.message}."
@@ -885,9 +884,14 @@ class FossId internal constructor(
                     coroutineScope {
                         filteredSnippets.filter { it.matchType == MatchType.PARTIAL }.map { snippet ->
                             async {
-                                val matchedLinesResponse =
-                                    service.listMatchedLines(config.user, config.apiKey, scanCode, file, snippet.id)
-                                        .checkResponse("list snippets matched lines")
+                                val matchedLinesResponse = service.listMatchedLines(
+                                    config.user.value,
+                                    config.apiKey.value,
+                                    scanCode,
+                                    file,
+                                    snippet.id
+                                ).checkResponse("list snippets matched lines")
+
                                 val lines = checkNotNull(matchedLinesResponse.data) {
                                     "Matched lines could not be listed. Response was " +
                                         "${matchedLinesResponse.message}."
@@ -951,7 +955,7 @@ class FossId internal constructor(
         issues.add(
             0,
             Issue(
-                source = name,
+                source = descriptor.id,
                 message = "This scan has $pendingFilesCount file(s) pending identification in FossID.",
                 severity = Severity.HINT
             )
@@ -1017,7 +1021,7 @@ class FossId internal constructor(
                         }
 
                         requests += async {
-                            service.markAsIdentified(config.user, config.apiKey, scanCode, path, false)
+                            service.markAsIdentified(config.user.value, config.apiKey.value, scanCode, path, false)
                             result += path
                         }
 
@@ -1043,8 +1047,8 @@ class FossId internal constructor(
                                     }
 
                                     service.addComponentIdentification(
-                                        config.user,
-                                        config.apiKey,
+                                        config.user.value,
+                                        config.apiKey.value,
                                         scanCode,
                                         path,
                                         artifact,
@@ -1079,7 +1083,7 @@ class FossId internal constructor(
                                     "relevant count $notRelevantChoicesCount."
                             }
 
-                            service.addFileComment(config.user, config.apiKey, scanCode, path, jsonComment)
+                            service.addFileComment(config.user.value, config.apiKey.value, scanCode, path, jsonComment)
                         }
                     }
                 }

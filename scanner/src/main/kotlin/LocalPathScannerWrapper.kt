@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.model.ScannerDetails
 /**
  * A [PathScannerWrapper] that is executed on the local machine.
  */
-abstract class LocalPathScannerWrapper(override val name: String) : PathScannerWrapper {
+abstract class LocalPathScannerWrapper : PathScannerWrapper {
     final override fun scanPath(path: File, context: ScanContext): ScanSummary {
         val startTime = Instant.now()
         val result = runScanner(path, context)

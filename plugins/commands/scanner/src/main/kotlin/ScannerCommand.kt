@@ -51,6 +51,7 @@ import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommandFactory
@@ -167,34 +168,34 @@ class ScannerCommand(descriptor: PluginDescriptor = ScannerCommandFactory.descri
 
     @Suppress("ForbiddenMethodCall")
     private fun runScanners(
-        scannerWrapperFactories: List<ScannerWrapperFactory<*>>,
-        projectScannerWrapperFactories: List<ScannerWrapperFactory<*>>,
+        scannerWrapperFactories: List<ScannerWrapperFactory>,
+        projectScannerWrapperFactories: List<ScannerWrapperFactory>,
         ortConfig: OrtConfiguration
     ): OrtResult {
         val packageScannerWrappers = scannerWrapperFactories
             .takeIf { PackageType.PACKAGE in packageTypes }.orEmpty()
             .map {
-                val config = ortConfig.scanner.config?.get(it.type)
-                it.create(config?.options.orEmpty(), config?.secrets.orEmpty())
+                val config = ortConfig.scanner.config?.get(it.descriptor.id)
+                it.create(PluginConfig(config?.options.orEmpty(), config?.secrets.orEmpty()))
             }
 
         val projectScannerWrappers = projectScannerWrapperFactories
             .takeIf { PackageType.PROJECT in packageTypes }.orEmpty()
             .map {
-                val config = ortConfig.scanner.config?.get(it.type)
-                it.create(config?.options.orEmpty(), config?.secrets.orEmpty())
+                val config = ortConfig.scanner.config?.get(it.descriptor.id)
+                it.create(PluginConfig(config?.options.orEmpty(), config?.secrets.orEmpty()))
             }
 
         if (projectScannerWrappers.isNotEmpty()) {
             echo("Scanning projects with:")
-            echo(projectScannerWrappers.joinToString { "\t${it.name} (version ${it.version})" })
+            echo(projectScannerWrappers.joinToString { "\t${it.descriptor.displayName} (version ${it.version})" })
         } else {
             echo("Projects will not be scanned.")
         }
 
         if (packageScannerWrappers.isNotEmpty()) {
             echo("Scanning packages with:")
-            echo(packageScannerWrappers.joinToString { "\t${it.name} (version ${it.version})" })
+            echo(packageScannerWrappers.joinToString { "\t${it.descriptor.displayName} (version ${it.version})" })
         } else {
             echo("Packages will not be scanned.")
         }

@@ -50,7 +50,6 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.scanner.ScanContext
-import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
 
 class DosScannerTest : StringSpec({
@@ -65,7 +64,7 @@ class DosScannerTest : StringSpec({
     beforeTest {
         server.start()
 
-        val config = DosScannerConfig(
+        scanner = DosScannerFactory.create(
             url = "http://localhost:${server.port()}/api/",
             token = "",
             timeout = 60L,
@@ -73,8 +72,6 @@ class DosScannerTest : StringSpec({
             fetchConcluded = false,
             frontendUrl = "http://localhost:3000"
         )
-
-        scanner = DosScanner.Factory().create(config, ScannerWrapperConfig.EMPTY)
     }
 
     afterTest {
