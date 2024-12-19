@@ -592,7 +592,7 @@ class LicenseInfoResolverTest : WordSpec({
 
         "resolve copyrights from authors in concluded license" {
             // In case of a concluded license (due to a package curation) verify that the authors named
-            // in the package curation are added as copyright statement under the concluded license
+            // in the package curation are added as copyright statement under the concluded license.
             val licenseInfos = listOf(
                 createLicenseInfo(
                     id = pkgId,
@@ -608,7 +608,7 @@ class LicenseInfoResolverTest : WordSpec({
             val result = resolver.resolveLicenseInfo(pkgId)
             result should containCopyrightStatementsForLicenseExactly(
                 "BSD-2-Clause",
-                // A "Copyright" prefix is added to the author (if it did not already exist)
+                // A "Copyright" prefix is added to the author (if it did not already exist).
                 "Copyright (C) 2024 The Author", "Copyright (C) The Other Author"
             )
         }
