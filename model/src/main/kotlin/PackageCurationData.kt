@@ -107,7 +107,13 @@ data class PackageCurationData(
      * duplicates.
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    val sourceCodeOrigins: List<SourceCodeOrigin>? = null
+    val sourceCodeOrigins: List<SourceCodeOrigin>? = null,
+
+    /**
+     * The BlackDuck Origin (component) belonging to this package.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val blackDuckOrigin: BlackDuckOriginReference? = null
 ) {
     init {
         declaredLicenseMapping.forEach { (key, value) ->
@@ -156,7 +162,8 @@ data class PackageCurationData(
             vcsProcessed = vcsProcessed,
             isMetadataOnly = isMetadataOnly ?: original.isMetadataOnly,
             isModified = isModified ?: original.isModified,
-            sourceCodeOrigins = sourceCodeOrigins ?: original.sourceCodeOrigins
+            sourceCodeOrigins = sourceCodeOrigins ?: original.sourceCodeOrigins,
+            blackDuckOrigin = blackDuckOrigin ?: original.blackDuckOrigin
         )
 
         val declaredLicenseMappingDiff = buildMap {
@@ -197,6 +204,7 @@ data class PackageCurationData(
                 @Suppress("UnsafeCallOnNullableType")
                 (value ?: otherValue)!!
             },
-            sourceCodeOrigins = sourceCodeOrigins ?: other.sourceCodeOrigins
+            sourceCodeOrigins = sourceCodeOrigins ?: other.sourceCodeOrigins,
+            blackDuckOrigin = blackDuckOrigin ?: other.blackDuckOrigin
         )
 }
