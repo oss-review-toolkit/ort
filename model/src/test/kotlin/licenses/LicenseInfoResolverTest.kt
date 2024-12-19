@@ -589,6 +589,45 @@ class LicenseInfoResolverTest : WordSpec({
             result should containCopyrightStatementsForLicenseExactly("LicenseRef-a")
             result should containCopyrightStatementsForLicenseExactly("LicenseRef-b")
         }
+
+        "resolve copyrights from authors in concluded license" {
+            // In case of a concluded license (due to a package curation) verify that the authors named
+            // in the package curation are added as copyright statement under the concluded license
+            val licenseInfos = listOf(
+                createLicenseInfo(
+                    id = pkgId,
+                    // In the curation file, authors might or might not have a "Copyright" prefix.
+                    authors = setOf("Copyright (C) 2024 The Author", "The Other Author"),
+                    declaredLicenses = setOf("MIT"),
+                    concludedLicense = SpdxExpression.parse("BSD-2-Clause")
+                )
+            )
+
+            val resolver = createResolver(licenseInfos, addAuthorsToCopyrights = true)
+
+            val result = resolver.resolveLicenseInfo(pkgId)
+            result should containCopyrightStatementsForLicenseExactly(
+                "BSD-2-Clause",
+                // A "Copyright" prefix is added to the author (if it did not already exist)
+                "Copyright (C) 2024 The Author", "Copyright (C) The Other Author"
+            )
+        }
+
+        "not resolve copyrights from authors in concluded license if disabled" {
+            val licenseInfos = listOf(
+                createLicenseInfo(
+                    id = pkgId,
+                    authors = authors,
+                    declaredLicenses = setOf("MIT"),
+                    concludedLicense = SpdxExpression.parse("BSD-2-Clause")
+                )
+            )
+
+            val resolver = createResolver(licenseInfos, addAuthorsToCopyrights = false)
+
+            val result = resolver.resolveLicenseInfo(pkgId)
+            result should containCopyrightStatementsForLicenseExactly("BSD-2-Clause")
+        }
     }
 
     "resolveLicenseFiles()" should {
