@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.model.utils.ResolutionsFilter
 import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
 
 /**
- * A project specific configuration for ORT which is usually stored in [ORT_REPO_CONFIG_FILENAME] at the root of a
+ * A distribution-specific configuration for ORT which is usually stored in [ORT_REPO_CONFIG_FILENAME] at the root of a
  * repository. It will be included in the analyzer result and can be further processed by the other tools.
  */
 data class RepositoryConfiguration(
