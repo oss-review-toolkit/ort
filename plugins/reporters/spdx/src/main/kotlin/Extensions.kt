@@ -26,6 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
@@ -186,10 +187,10 @@ internal fun Package.toSpdxPackage(
         copyrightText = licenseInfoResolver.getSpdxCopyrightText(id),
         description = description,
         downloadLocation = when (type) {
-            SpdxPackageType.PROJECT -> SpdxConstants.NONE
             SpdxPackageType.BINARY_PACKAGE -> binaryArtifact.url.nullOrBlankToSpdxNone()
             SpdxPackageType.SOURCE_PACKAGE -> sourceArtifact.url.nullOrBlankToSpdxNone()
             SpdxPackageType.VCS_PACKAGE -> vcsProcessed.toSpdxDownloadLocation(ortResult.getResolvedRevision(id))
+            SpdxPackageType.PROJECT -> vcs.url.nullOrBlankToSpdxNone()
         },
         externalRefs = if (type == SpdxPackageType.PROJECT) emptyList() else toSpdxExternalReferences(),
         filesAnalyzed = packageVerificationCode != null,
@@ -199,6 +200,7 @@ internal fun Package.toSpdxPackage(
             SpdxPackageType.SOURCE_PACKAGE -> SpdxConstants.NOASSERTION
             // Clear the concluded license as it might need to be different for the VCS location.
             SpdxPackageType.VCS_PACKAGE -> SpdxConstants.NOASSERTION
+            SpdxPackageType.PROJECT -> concludedLicense.nullOrBlankToSpdxNoassertionOrNone()
             else -> concludedLicense.nullOrBlankToSpdxNoassertionOrNone()
         },
         licenseDeclared = if (packageLicenseExpressions.isEmpty()) {
@@ -234,6 +236,7 @@ private fun OrtResult.getPackageVerificationCode(id: Identifier, type: SpdxPacka
     when (type) {
         SpdxPackageType.VCS_PACKAGE -> getFileListForId(id).takeIf { it?.provenance is RepositoryProvenance }
         SpdxPackageType.SOURCE_PACKAGE -> getFileListForId(id).takeIf { it?.provenance is ArtifactProvenance }
+        SpdxPackageType.PROJECT -> getFileListForId(id).takeIf { it?.provenance is KnownProvenance }
         else -> null
     }?.let { fileList ->
         calculatePackageVerificationCode(fileList.files.map { it.sha1 }.asSequence())

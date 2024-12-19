@@ -30,7 +30,7 @@ packages:
     \ 2023 Mercedes-Benz Tech Innovation GmbH\nCopyright 2009-2010, 2012 The Go Authors\n\
     Copyright 2011-2016 Canonical Ltd.\nCopyright 2022 Alan Shreve\nCopyright 2023-2024\
     \ Mercedes-Benz Tech Innovation GmbH"
-  downloadLocation: "NONE"
+  downloadLocation: "https://github.com/mercedes-benz/disclosure-cli.git"
   filesAnalyzed: false
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
