@@ -22,7 +22,7 @@
   "packages" : [ {
     "SPDXID" : "SPDXRef-Project-Maven-first-project-group-first-project-name-0.0.1",
     "copyrightText" : "NONE",
-    "downloadLocation" : "NONE",
+    "downloadLocation" : "https://github.com/path/first-project.git",
     "filesAnalyzed" : false,
     "homepage" : "first project's homepage",
     "licenseConcluded" : "NOASSERTION",
