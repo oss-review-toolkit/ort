@@ -252,7 +252,9 @@ private fun parseLockfile(podfileLock: File): LockfileData {
         // The version written to the lockfile matches the version specified in the project's ".podspec" file at the
         // given revision, so the same version might be used in different revisions. To still get a unique identifier,
         // append the revision to the version.
-        val versionFromPodspec = checkNotNull(resolvedVersions[name])
+        val versionFromPodspec = checkNotNull(resolvedVersions[name]) {
+            "No version found for '$name' in resolved versions $resolvedVersions."
+        }
         val uniqueVersion = "$versionFromPodspec-$revision"
         val id = Identifier("Pod", "", name, uniqueVersion)
 
