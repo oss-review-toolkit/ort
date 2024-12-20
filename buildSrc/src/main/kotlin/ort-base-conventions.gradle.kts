@@ -37,7 +37,7 @@ repositories {
 
     exclusiveContent {
         forRepository {
-            maven("https://repo.gradle.org/gradle/libs-releases/")
+            maven("https://repo.gradle.org/gradle/libs-releases")
         }
 
         filter {
