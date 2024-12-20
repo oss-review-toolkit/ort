@@ -36,6 +36,12 @@ dependencies {
     // Required due to https://ecosystem.atlassian.net/browse/JRJC-262.
     implementation(libs.jakartaRestApi)
 
+    constraints {
+        implementation(libs.jakartaRestApi) {
+            because("the JIRA REST client still needs a 2.1.x version with the javax package namespace")
+        }
+    }
+
     implementation(libs.jiraRestClient.api)
     implementation(libs.jiraRestClient.app) {
         exclude("org.apache.logging.log4j", "log4j-slf4j2-impl")
