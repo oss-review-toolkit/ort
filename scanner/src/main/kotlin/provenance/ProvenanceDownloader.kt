@@ -66,7 +66,19 @@ fun interface ProvenanceDownloader {
         nestedProvenance.subRepositories.forEach { (path, provenance) ->
             val tempDir = download(provenance)
             val targetDir = root.resolve(path).apply { parentFile.safeMkdirs() }
-            tempDir.toPath().moveTo(targetDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
+
+            if (path == ".") {
+                // Special handling for toplevel project checkouts
+                // https://github.com/GerritCodeReview/git-repo/commit/0458faa502e9992a4305bfbb282fbee344d505bf
+                tempDir.listFiles()?.forEach { file ->
+                    if (file.name != ".repo" ) {
+                        val targetFile = root.resolve(file.name)
+                        file.toPath().moveTo(targetFile.toPath(), StandardCopyOption.ATOMIC_MOVE)
+                    }
+                }
+            } else {
+                tempDir.toPath().moveTo(targetDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
+            }
         }
 
         return root
@@ -109,7 +121,17 @@ class DefaultProvenanceDownloader(
             // Make sure that all nested repositories are removed. Even though we do not clone recursively above, nested
             // repositories could exist if the same working tree was previously cloned recursively.
             workingTree.getNested().forEach { (path, _) ->
-                root.resolve(path).safeDeleteRecursively()
+                if (path == "." ) {
+                    // Special handling for toplevel project checkouts
+                    // https://github.com/GerritCodeReview/git-repo/commit/0458faa502e9992a4305bfbb282fbee344d505bf
+                    root.listFiles()?.forEach { file ->
+                        if (file.name != ".repo" ) {
+                            file.safeDeleteRecursively(force = true)
+                        }
+                    }
+                } else {
+                    root.resolve(path).safeDeleteRecursively()
+                }
             }
 
             // We need to make a copy of the working tree, because it could be used by another coroutine after this
