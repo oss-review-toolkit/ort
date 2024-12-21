@@ -117,7 +117,7 @@ class Git : VersionControlSystem(GitCommand) {
     }
 
     override val type = VcsType.GIT.toString()
-    override val priority = 100
+    override val priority = 50
     override val latestRevisionNames = listOf("HEAD", "@")
 
     override fun getVersion() = GitCommand.getVersion(null)
