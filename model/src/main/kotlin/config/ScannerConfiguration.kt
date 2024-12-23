@@ -40,6 +40,11 @@ data class ScannerConfiguration(
     val skipConcluded: Boolean = false,
 
     /**
+     * A flag to indicate whether the scanner should add files without license to the scanner results.
+     */
+    val includeUnlicensed: Boolean = false,
+
+    /**
      * A flag to control whether excluded scopes and paths should be skipped during the scan.
      */
     val skipExcluded: Boolean = false,
