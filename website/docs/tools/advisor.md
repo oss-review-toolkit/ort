@@ -32,7 +32,8 @@ ort:
   advisor:
     config:
       osv:
-        serverUrl: "https://api-staging.osv.dev"
+        options:
+          serverUrl: "https://api-staging.osv.dev"
 ```
 
 To enable this provider, pass `-a OSV` on the command line.
@@ -47,7 +48,8 @@ ort:
   advisor:
     config:
       vulnerableCode:
-        serverUrl: "http://localhost:8000"
+        options:
+          serverUrl: "http://localhost:8000"
 ```
 
 To enable this provider, pass `-a VulnerableCode` on the command line.
