@@ -30,8 +30,9 @@ The configuration is optional and limited to overriding the server URL.
 ```yaml
 ort:
   advisor:
-    osv:
-      serverUrl: "https://api-staging.osv.dev"
+    config:
+      osv:
+        serverUrl: "https://api-staging.osv.dev"
 ```
 
 To enable this provider, pass `-a OSV` on the command line.
@@ -44,8 +45,9 @@ The configuration is limited to the server URL, as authentication is not require
 ```yaml
 ort:
   advisor:
-    vulnerableCode:
-      serverUrl: "http://localhost:8000"
+    config:
+      vulnerableCode:
+        serverUrl: "http://localhost:8000"
 ```
 
 To enable this provider, pass `-a VulnerableCode` on the command line.
