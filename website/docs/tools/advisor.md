@@ -14,6 +14,30 @@ The providers require specific configuration in the [ORT configuration file](htt
 When executing the advisor, the providers to enable are selected with the `--advisors` option (or its short alias `-a`); here a comma-separated list with provider IDs is expected.
 The following sections describe the providers supported by the advisor:
 
+## Black Duck
+
+This vulnerability provider obtains information about security vulnerabilities from the Black Duck instance specified in the configuration.
+The configuration is mandatory, because authentication is required.
+
+:::note
+The implementation is in *experimental* state.
+:::
+
+Initial experiments indicate that it works with the ecosystems mentioned [over here](https://github.com/oss-review-toolkit/ort/issues/9638).
+
+```yaml
+ort:
+  advisor:
+    config:
+      BlackDuck:
+        options:
+          serverUrl: 'server-url'
+        secrets:
+          apiToken: 'token'
+```
+
+To enable this provider, pass `-a BlackDuck` on the command line.
+
 ## OSS Index
 
 This vulnerability provider does not require any further configuration as it uses the public service at https://ossindex.sonatype.org/.
