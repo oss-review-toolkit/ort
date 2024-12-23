@@ -21,20 +21,6 @@ Before using this provider, please ensure to comply with its [Terms of Service](
 
 To enable this provider, pass `-a OssIndex` on the command line.
 
-## VulnerableCode
-
-This provider obtains information about security vulnerabilities from a [VulnerableCode](https://github.com/aboutcode-org/vulnerablecode) instance.
-The configuration is limited to the server URL, as authentication is not required:
-
-```yaml
-ort:
-  advisor:
-    vulnerableCode:
-      serverUrl: "http://localhost:8000"
-```
-
-To enable this provider, pass `-a VulnerableCode` on the command line.
-
 ## OSV
 
 This provider obtains information about security vulnerabilities from Google [OSV](https://osv.dev/), a distributed vulnerability database for Open Source.
@@ -49,3 +35,17 @@ ort:
 ```
 
 To enable this provider, pass `-a OSV` on the command line.
+
+## VulnerableCode
+
+This provider obtains information about security vulnerabilities from a [VulnerableCode](https://github.com/aboutcode-org/vulnerablecode) instance.
+The configuration is limited to the server URL, as authentication is not required:
+
+```yaml
+ort:
+  advisor:
+    vulnerableCode:
+      serverUrl: "http://localhost:8000"
+```
+
+To enable this provider, pass `-a VulnerableCode` on the command line.
