@@ -88,7 +88,7 @@ internal object GitRepoCommand : CommandLineTool {
 
 class GitRepo : VersionControlSystem(GitRepoCommand) {
     override val type = VcsType.GIT_REPO.toString()
-    override val priority = 50
+    override val priority = 100
     override val latestRevisionNames = listOf("HEAD", "@")
 
     override fun getVersion() = GitRepoCommand.getVersion(null)
