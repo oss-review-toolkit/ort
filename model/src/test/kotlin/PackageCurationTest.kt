@@ -62,7 +62,10 @@ class PackageCurationTest : WordSpec({
                         path = "path"
                     ),
                     isMetadataOnly = true,
-                    isModified = true
+                    isModified = true,
+                    labels = mapOf(
+                        "k1" to "v1"
+                    )
                 )
             )
 
@@ -85,6 +88,7 @@ class PackageCurationTest : WordSpec({
                 vcsProcessed.toCuration() shouldBe curation.data.vcs
                 isMetadataOnly shouldBe true
                 isModified shouldBe true
+                labels shouldBe curation.data.labels
             }
 
             curatedPkg.curations shouldHaveSize 1
@@ -137,6 +141,7 @@ class PackageCurationTest : WordSpec({
                 )
                 isMetadataOnly shouldBe false
                 isModified shouldBe false
+                labels shouldBe pkg.labels
             }
 
             curatedPkg.curations shouldHaveSize 1
@@ -321,6 +326,26 @@ class PackageCurationTest : WordSpec({
         }
     }
 
+    "Applying multiple labels curations" should {
+        "accumulate the map entries and override the entries with same key" {
+            val pkg = Package.EMPTY.copy(
+                id = Identifier("type", "namespace", "name", "version")
+            )
+
+            val curation1 = labelsCuration(pkg.id, "k1" to "v1")
+            val curation2 = labelsCuration(pkg.id, "k2" to "v2")
+            val curation3 = labelsCuration(pkg.id, "k2" to "v2-updated")
+
+            val result1 = curation1.apply(pkg.toCuratedPackage())
+            val result2 = curation2.apply(result1)
+            val result3 = curation3.apply(result2)
+
+            result1.metadata.labels shouldBe mapOf("k1" to "v1")
+            result2.metadata.labels shouldBe mapOf("k1" to "v1", "k2" to "v2")
+            result3.metadata.labels shouldBe mapOf("k1" to "v1", "k2" to "v2-updated")
+        }
+    }
+
     "isApplicable()" should {
         "accept an empty name and / or version" {
             val curation = PackageCuration(
@@ -397,3 +422,6 @@ private fun declaredLicenseMappingCuration(id: Identifier, vararg entries: Pair<
             declaredLicenseMapping = entries.associate { it.first to it.second.toSpdx() }
         )
     )
+
+private fun labelsCuration(id: Identifier, vararg entries: Pair<String, String>): PackageCuration =
+    PackageCuration(id, PackageCurationData(labels = entries.toMap()))

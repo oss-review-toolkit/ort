@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonPropertyOrder
 
 import org.ossreviewtoolkit.utils.common.zip
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
@@ -107,7 +108,15 @@ data class PackageCurationData(
      * duplicates.
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    val sourceCodeOrigins: List<SourceCodeOrigin>? = null
+    val sourceCodeOrigins: List<SourceCodeOrigin>? = null,
+
+    /**
+     * User defined labels associated with this package. The labels are not interpreted by the core of ORT itself, but
+     * can be used in parts of ORT such as plugins, in evaluator rules, or in reporter templates.
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonPropertyOrder(alphabetic = true)
+    val labels: Map<String, String> = emptyMap()
 ) {
     init {
         declaredLicenseMapping.forEach { (key, value) ->
@@ -156,7 +165,8 @@ data class PackageCurationData(
             vcsProcessed = vcsProcessed,
             isMetadataOnly = isMetadataOnly ?: original.isMetadataOnly,
             isModified = isModified ?: original.isModified,
-            sourceCodeOrigins = sourceCodeOrigins ?: original.sourceCodeOrigins
+            sourceCodeOrigins = sourceCodeOrigins ?: original.sourceCodeOrigins,
+            labels = original.labels + labels
         )
 
         return CuratedPackage(pkg, targetPackage.curations + this)
@@ -185,7 +195,8 @@ data class PackageCurationData(
                 @Suppress("UnsafeCallOnNullableType")
                 (value ?: otherValue)!!
             },
-            sourceCodeOrigins = sourceCodeOrigins ?: other.sourceCodeOrigins
+            sourceCodeOrigins = sourceCodeOrigins ?: other.sourceCodeOrigins,
+            labels = labels + other.labels
         )
 }
 
