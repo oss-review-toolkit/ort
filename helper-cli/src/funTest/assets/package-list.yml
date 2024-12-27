@@ -27,3 +27,5 @@ dependencies:
       url: "https://example.org/example-dependency-two.zip"
     isExcluded: false
     isDynamicallyLinked: false
+    labels:
+      key: "value"
