@@ -50,7 +50,11 @@ class PackageCurationDataTest : WordSpec({
         isMetadataOnly = true,
         isModified = true,
         declaredLicenseMapping = mapOf("original" to "LicenseRef-original".toSpdx()),
-        sourceCodeOrigins = listOf(SourceCodeOrigin.ARTIFACT, SourceCodeOrigin.VCS)
+        sourceCodeOrigins = listOf(SourceCodeOrigin.ARTIFACT, SourceCodeOrigin.VCS),
+        labels = mapOf(
+            "k1" to "v1-original",
+            "k2" to "v2-original"
+        )
     )
 
     val other = PackageCurationData(
@@ -78,7 +82,11 @@ class PackageCurationDataTest : WordSpec({
         isMetadataOnly = false,
         isModified = false,
         declaredLicenseMapping = mapOf("other" to "LicenseRef-other".toSpdx()),
-        sourceCodeOrigins = listOf(SourceCodeOrigin.VCS)
+        sourceCodeOrigins = listOf(SourceCodeOrigin.VCS),
+        labels = mapOf(
+            "k2" to "v2-other",
+            "k3" to "v3-other"
+        )
     )
 
     "Merging" should {
@@ -95,7 +103,8 @@ class PackageCurationDataTest : WordSpec({
                 vcs = null,
                 isMetadataOnly = null,
                 declaredLicenseMapping = emptyMap(),
-                sourceCodeOrigins = null
+                sourceCodeOrigins = null,
+                labels = emptyMap()
             )
 
             originalWithSomeUnsetData.merge(other) shouldBe originalWithSomeUnsetData.copy(
@@ -106,7 +115,8 @@ class PackageCurationDataTest : WordSpec({
                 vcs = other.vcs,
                 isMetadataOnly = other.isMetadataOnly,
                 declaredLicenseMapping = other.declaredLicenseMapping,
-                sourceCodeOrigins = other.sourceCodeOrigins
+                sourceCodeOrigins = other.sourceCodeOrigins,
+                labels = other.labels
             )
         }
 
@@ -118,6 +128,11 @@ class PackageCurationDataTest : WordSpec({
                 declaredLicenseMapping = mapOf(
                     "original" to "LicenseRef-original".toSpdx(),
                     "other" to "LicenseRef-other".toSpdx()
+                ),
+                labels = mapOf(
+                    "k1" to "v1-original",
+                    "k2" to "v2-other",
+                    "k3" to "v3-other"
                 )
             )
         }
@@ -128,7 +143,8 @@ class PackageCurationDataTest : WordSpec({
                 authors = original.authors,
                 concludedLicense = original.concludedLicense,
                 declaredLicenseMapping = original.declaredLicenseMapping,
-                sourceCodeOrigins = original.sourceCodeOrigins
+                sourceCodeOrigins = original.sourceCodeOrigins,
+                labels = original.labels
             )
 
             val mergedData = original.merge(otherWithSomeOriginalData)
