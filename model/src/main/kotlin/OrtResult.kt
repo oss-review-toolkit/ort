@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonPropertyOrder
 
 import java.lang.invoke.MethodHandles
 
@@ -88,6 +89,7 @@ data class OrtResult(
      * which are customizable by the user, for example in evaluator rules or in the notice reporter.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonPropertyOrder(alphabetic = true)
     val labels: Map<String, String> = emptyMap()
 ) : ResolutionProvider {
     companion object {
