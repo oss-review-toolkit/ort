@@ -75,3 +75,9 @@
   curations:
     comment: "Scan the source artifact, because the VCS revision and path are hard to figure out."
     source_code_origins: [ARTIFACT]
+
+- id: "Maven:androidx.collection:collection:"
+  curations:
+    comment: "Specify the platform for use within policy rules."
+    labels:
+      platform: "android"
