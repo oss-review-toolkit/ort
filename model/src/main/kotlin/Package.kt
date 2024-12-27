@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonPropertyOrder
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
 import org.ossreviewtoolkit.model.utils.requireNotEmptyNoDuplicates
@@ -137,7 +138,15 @@ data class Package(
      * default is used. If not null, this must not be empty and not contain any duplicates.
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    val sourceCodeOrigins: List<SourceCodeOrigin>? = null
+    val sourceCodeOrigins: List<SourceCodeOrigin>? = null,
+
+    /**
+     * User defined labels associated with this package. The labels are not interpreted by the core of ORT itself, but
+     * can be used in parts of ORT such as plugins, in evaluator rules, or in reporter templates.
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonPropertyOrder(alphabetic = true)
+    val labels: Map<String, String> = emptyMap()
 ) {
     companion object {
         /**
