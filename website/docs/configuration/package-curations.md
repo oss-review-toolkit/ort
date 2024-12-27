@@ -31,6 +31,9 @@ Curations can be used to:
 * set the *source_code_origins* property:
   * Override the source code origins priority configured in the downloader configuration by the given one.
     Possible values: VCS, ARTIFACT.
+* set labels:
+  * Add key-value pairs to the package in order to inject custom per-package data into, for example, policy
+    rules, reporter templates, or custom ORT plugins.
 
 The sections below explain how to create curations in the `curations.yml` file which, if passed to the *analyzer*, is applied to all package metadata found in the analysis.
 If a license detected in the source code of a package needs to be corrected, add a license finding curation in the [.ort.yml](ort-yml.md#curations) file for the project.
@@ -84,6 +87,8 @@ A curation file consists of one or more `id` entries:
     is_metadata_only: true
     is_modified: true
     source_code_origins: [ARTIFACT, VCS]
+    labels:
+      my-key: "my-value"
 ```
 
 Where the list of available options for curations is defined in [PackageCurationData.kt](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/PackageCurationData.kt).
