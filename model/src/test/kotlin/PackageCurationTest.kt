@@ -34,22 +34,8 @@ import org.ossreviewtoolkit.utils.spdx.toSpdx
 class PackageCurationTest : WordSpec({
     "Applying a single curation" should {
         "overwrite the correct values" {
-            val pkg = Package(
-                id = Identifier(
-                    type = "Maven",
-                    namespace = "org.hamcrest",
-                    name = "hamcrest-core",
-                    version = "1.3"
-                ),
-                authors = emptySet(),
-                declaredLicenses = setOf("license a", "license b"),
-                description = "",
-                homepageUrl = "",
-                binaryArtifact = RemoteArtifact.EMPTY,
-                sourceArtifact = RemoteArtifact.EMPTY,
-                vcs = VcsInfo.EMPTY,
-                isMetadataOnly = false,
-                isModified = false
+            val pkg = Package.EMPTY.copy(
+                declaredLicenses = setOf("license a", "license b")
             )
 
             val curation = PackageCuration(
@@ -108,28 +94,18 @@ class PackageCurationTest : WordSpec({
         }
 
         "change only curated fields" {
-            val pkg = Package(
-                id = Identifier(
-                    type = "Maven",
-                    namespace = "org.hamcrest",
-                    name = "hamcrest-core",
-                    version = "1.3"
-                ),
+            val pkg = Package.EMPTY.copy(
                 cpe = "cpe:2.3:a:apache:commons_io:2.8.0:rc2:*:*:*:*:*:*",
                 authors = setOf("author 1", "author 2"),
                 declaredLicenses = setOf("license a", "license b"),
                 description = "description",
                 homepageUrl = "homepageUrl",
-                binaryArtifact = RemoteArtifact.EMPTY,
-                sourceArtifact = RemoteArtifact.EMPTY,
                 vcs = VcsInfo(
                     type = VcsType.GIT,
                     url = "http://url.git",
                     revision = "revision",
                     path = "path"
-                ),
-                isMetadataOnly = false,
-                isModified = false
+                )
             )
 
             val curation = PackageCuration(
@@ -171,19 +147,11 @@ class PackageCurationTest : WordSpec({
         }
 
         "be able to empty VCS information" {
-            val pkg = Package(
-                id = Identifier(
-                    type = "Maven",
-                    namespace = "org.hamcrest",
-                    name = "hamcrest-core",
-                    version = "1.3"
-                ),
+            val pkg = Package.EMPTY.copy(
                 authors = setOf("author 1", "author 2"),
                 declaredLicenses = setOf("license a", "license b"),
                 description = "description",
                 homepageUrl = "homepageUrl",
-                binaryArtifact = RemoteArtifact.EMPTY,
-                sourceArtifact = RemoteArtifact.EMPTY,
                 vcs = VcsInfo(
                     type = VcsType.GIT,
                     url = "http://url.git",
@@ -211,13 +179,7 @@ class PackageCurationTest : WordSpec({
         }
 
         "fail if identifiers do not match" {
-            val pkg = Package(
-                id = Identifier(
-                    type = "Maven",
-                    namespace = "org.hamcrest",
-                    name = "hamcrest-core",
-                    version = "1.3"
-                ),
+            val pkg = Package.EMPTY.copy(
                 authors = emptySet(),
                 declaredLicenses = emptySet(),
                 description = "",
@@ -228,7 +190,7 @@ class PackageCurationTest : WordSpec({
             )
 
             val curation = PackageCuration(
-                id = Identifier.EMPTY,
+                id = pkg.id.copy(type = "Unmatched"),
                 data = PackageCurationData(
                     homepageUrl = "http://home.page",
                     vcs = VcsInfoCurationData(
@@ -245,22 +207,7 @@ class PackageCurationTest : WordSpec({
         }
 
         "be able to clear isMetadataOnly" {
-            val pkg = Package(
-                id = Identifier(
-                    type = "Maven",
-                    namespace = "org.hamcrest",
-                    name = "hamcrest-core",
-                    version = "1.3"
-                ),
-                authors = emptySet(),
-                declaredLicenses = emptySet(),
-                description = "",
-                homepageUrl = "",
-                binaryArtifact = RemoteArtifact.EMPTY,
-                sourceArtifact = RemoteArtifact.EMPTY,
-                vcs = VcsInfo.EMPTY,
-                isMetadataOnly = true
-            )
+            val pkg = Package.EMPTY.copy(isMetadataOnly = true)
 
             val curation = PackageCuration(
                 id = pkg.id,
@@ -275,22 +222,7 @@ class PackageCurationTest : WordSpec({
         }
 
         "be able to clear isModified" {
-            val pkg = Package(
-                id = Identifier(
-                    type = "Maven",
-                    namespace = "org.hamcrest",
-                    name = "hamcrest-core",
-                    version = "1.3"
-                ),
-                authors = emptySet(),
-                declaredLicenses = emptySet(),
-                description = "",
-                homepageUrl = "",
-                binaryArtifact = RemoteArtifact.EMPTY,
-                sourceArtifact = RemoteArtifact.EMPTY,
-                vcs = VcsInfo.EMPTY,
-                isModified = true
-            )
+            val pkg = Package.EMPTY.copy(isModified = true)
 
             val curation = PackageCuration(
                 id = pkg.id,
@@ -340,11 +272,10 @@ class PackageCurationTest : WordSpec({
 
     "Applying multiple curations" should {
         "accumulate curation results to the curated package" {
-            val id = Identifier("type", "namespace", "name", "version")
-            val pkg = Package.EMPTY.copy(id = id)
-            val curation1 = PackageCuration(id, PackageCurationData(description = "description 1"))
-            val curation2 = PackageCuration(id, PackageCurationData(description = "description 2"))
-            val curation3 = PackageCuration(id, PackageCurationData(description = "description 3"))
+            val pkg = Package.EMPTY
+            val curation1 = PackageCuration(pkg.id, PackageCurationData(description = "description 1"))
+            val curation2 = PackageCuration(pkg.id, PackageCurationData(description = "description 2"))
+            val curation3 = PackageCuration(pkg.id, PackageCurationData(description = "description 3"))
 
             val result1 = curation1.apply(pkg.toCuratedPackage())
             val result2 = curation2.apply(result1)
@@ -375,15 +306,8 @@ class PackageCurationTest : WordSpec({
 
     "Applying multiple declared license mapping curations" should {
         "accumulate the map entries and override the entries with same key" {
-            val pkg = Package(
-                id = Identifier("type", "namespace", "name", "version"),
-                authors = emptySet(),
-                declaredLicenses = setOf("license a", "license b", "license c"),
-                description = "",
-                homepageUrl = "",
-                binaryArtifact = RemoteArtifact.EMPTY,
-                sourceArtifact = RemoteArtifact.EMPTY,
-                vcs = VcsInfo.EMPTY
+            val pkg = Package.EMPTY.copy(
+                declaredLicenses = setOf("license a", "license b", "license c")
             )
 
             val curation1 =
