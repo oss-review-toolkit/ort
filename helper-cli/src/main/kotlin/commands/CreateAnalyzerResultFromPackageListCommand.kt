@@ -151,7 +151,8 @@ private data class Dependency(
     val vcs: Vcs? = null,
     val sourceArtifact: SourceArtifact? = null,
     val isExcluded: Boolean = false,
-    val isDynamicallyLinked: Boolean = false
+    val isDynamicallyLinked: Boolean = false,
+    val labels: Map<String, String> = emptyMap()
 )
 
 private data class SourceArtifact(
@@ -200,6 +201,7 @@ private fun Dependency.toPackage(): Package {
         declaredLicenses = emptySet(),
         description = "",
         homepageUrl = "",
-        binaryArtifact = RemoteArtifact.EMPTY
+        binaryArtifact = RemoteArtifact.EMPTY,
+        labels = labels
     )
 }

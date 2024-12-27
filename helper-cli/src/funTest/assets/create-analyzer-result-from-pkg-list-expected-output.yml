@@ -107,6 +107,8 @@ analyzer:
         url: "https://github.com/example/depedency-1.git"
         revision: "1111111111111111111111111111111111111111"
         path: "vcs-path/dependency-two"
+      labels:
+        key: "value"
 scanner: null
 advisor: null
 evaluator: null
