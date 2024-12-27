@@ -19,10 +19,6 @@
 
 package org.ossreviewtoolkit.model
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-
-import org.ossreviewtoolkit.utils.spdx.SpdxExpression
-
 /**
  * A [Package] including the [PackageCurationResult]s that were applied to it, in order to be able to trace back how the
  * original metadata of the package was modified by applying [PackageCuration]s.
@@ -37,10 +33,4 @@ data class CuratedPackage(
      * The curations in the order they were applied.
      */
     val curations: List<PackageCurationResult> = emptyList()
-) {
-    @JsonIgnore
-    fun getDeclaredLicenseMapping(): Map<String, SpdxExpression> =
-        buildMap {
-            curations.forEach { putAll(it.curation.declaredLicenseMapping) }
-        }
-}
+)

@@ -200,3 +200,8 @@ data class PackageCurationData(
             sourceCodeOrigins = sourceCodeOrigins ?: other.sourceCodeOrigins
         )
 }
+
+private fun CuratedPackage.getDeclaredLicenseMapping(): Map<String, SpdxExpression> =
+    buildMap {
+        curations.forEach { putAll(it.curation.declaredLicenseMapping) }
+    }
