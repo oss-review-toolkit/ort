@@ -1,0 +1,29 @@
+---
+Crate::sys-info:0.7.0:
+  advisor:
+    name: "BlackDuck"
+    capabilities:
+    - "VULNERABILITIES"
+  summary:
+    start_time: "1970-01-01T00:00:00Z"
+    end_time: "1970-01-01T00:00:00Z"
+  vulnerabilities:
+  - id: "CVE-2020-36434"
+    description: "An issue was discovered in the sys-info crate before 0.8.0 for Rust.\
+      \ sys_info::disk_info calls can trigger a double free."
+    references:
+    - url: "https://zeiss.app.blackduck.com/api/vulnerabilities/CVE-2020-36434"
+      scoring_system: "CVSS:3.1"
+      severity: "CRITICAL"
+      score: 9.8
+      vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    - url: "https://zeiss.app.blackduck.com/api/cwes/CWE-415"
+      scoring_system: "CVSS:3.1"
+      severity: "CRITICAL"
+      score: 9.8
+      vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    - url: "https://zeiss.app.blackduck.com/api/vulnerabilities/BDSA-2020-4804"
+      scoring_system: "CVSS:3.1"
+      severity: "CRITICAL"
+      score: 9.8
+      vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
