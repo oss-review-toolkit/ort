@@ -20,7 +20,7 @@
 package org.ossreviewtoolkit.model
 
 /**
- * A [Package] including the [PackageCurationResult]s that were applied to it, in order to be able to trace back how the
+ * A [Package] including the [PackageCurationData] that was applied to it, in order to be able to trace back how the
  * original metadata of the package was modified by applying [PackageCuration]s.
  */
 data class CuratedPackage(
@@ -32,5 +32,5 @@ data class CuratedPackage(
     /**
      * The curations in the order they were applied.
      */
-    val curations: List<PackageCurationResult> = emptyList()
+    val curations: List<PackageCurationData> = emptyList()
 )

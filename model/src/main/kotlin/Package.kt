@@ -165,29 +165,6 @@ data class Package(
     }
 
     /**
-     * Compares this package with [other] and creates a [PackageCurationData] containing the values from this package
-     * which are different in [other]. All equal values are set to null. Only the fields present in
-     * [PackageCurationData] are compared.
-     */
-    fun diff(other: Package): PackageCurationData {
-        require(id == other.id) {
-            "Cannot diff packages with different ids: '${id.toCoordinates()}' vs. '${other.id.toCoordinates()}'"
-        }
-
-        return PackageCurationData(
-            authors = authors.takeIf { it != other.authors },
-            description = description.takeIf { it != other.description },
-            homepageUrl = homepageUrl.takeIf { it != other.homepageUrl },
-            binaryArtifact = binaryArtifact.takeIf { it != other.binaryArtifact },
-            sourceArtifact = sourceArtifact.takeIf { it != other.sourceArtifact },
-            vcs = vcsProcessed.takeIf { it != other.vcsProcessed }?.toCuration(),
-            isMetadataOnly = isMetadataOnly.takeIf { it != other.isMetadataOnly },
-            isModified = isModified.takeIf { it != other.isModified },
-            sourceCodeOrigins = sourceCodeOrigins.takeIf { it != other.sourceCodeOrigins }
-        )
-    }
-
-    /**
      * Create a [CuratedPackage] from this package with an empty list of applied curations.
      */
     fun toCuratedPackage() = CuratedPackage(this)

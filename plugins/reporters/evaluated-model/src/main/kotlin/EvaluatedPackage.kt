@@ -26,7 +26,7 @@ import java.util.SortedSet
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.PackageCurationResult
+import org.ossreviewtoolkit.model.PackageCurationData
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.PathExclude
@@ -64,7 +64,7 @@ data class EvaluatedPackage(
     val vcs: VcsInfo,
     val vcsProcessed: VcsInfo = vcs.normalize(),
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val curations: List<PackageCurationResult>,
+    val curations: List<PackageCurationData>,
     @JsonIdentityReference(alwaysAsId = true)
     val paths: MutableList<EvaluatedPackagePath>,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)

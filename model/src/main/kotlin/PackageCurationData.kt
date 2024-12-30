@@ -159,19 +159,7 @@ data class PackageCurationData(
             sourceCodeOrigins = sourceCodeOrigins ?: original.sourceCodeOrigins
         )
 
-        val declaredLicenseMappingDiff = buildMap {
-            val previous = targetPackage.getDeclaredLicenseMapping().toList()
-            val current = declaredLicenseMapping.toList()
-
-            putAll(previous - current)
-        }
-
-        val curations = targetPackage.curations + PackageCurationResult(
-            base = original.diff(pkg).copy(declaredLicenseMapping = declaredLicenseMappingDiff),
-            curation = this
-        )
-
-        return CuratedPackage(pkg, curations)
+        return CuratedPackage(pkg, targetPackage.curations + this)
     }
 
     /**
@@ -203,5 +191,5 @@ data class PackageCurationData(
 
 private fun CuratedPackage.getDeclaredLicenseMapping(): Map<String, SpdxExpression> =
     buildMap {
-        curations.forEach { putAll(it.curation.declaredLicenseMapping) }
+        curations.forEach { putAll(it.declaredLicenseMapping) }
     }
