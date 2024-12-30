@@ -23,9 +23,8 @@ import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.maps.beEmpty
-import io.kotest.matchers.maps.shouldContainExactly
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -89,8 +88,7 @@ class PackageCurationTest : WordSpec({
             }
 
             curatedPkg.curations shouldHaveSize 1
-            curatedPkg.curations.first().base shouldBe pkg.diff(curatedPkg.metadata)
-            curatedPkg.curations.first().curation shouldBe curation.data
+            curatedPkg.curations.first() shouldBe curation.data
         }
 
         "change only curated fields" {
@@ -142,8 +140,7 @@ class PackageCurationTest : WordSpec({
             }
 
             curatedPkg.curations shouldHaveSize 1
-            curatedPkg.curations.first().base shouldBe pkg.diff(curatedPkg.metadata)
-            curatedPkg.curations.first().curation shouldBe curation.data
+            curatedPkg.curations.first() shouldBe curation.data
         }
 
         "be able to empty VCS information" {
@@ -283,24 +280,18 @@ class PackageCurationTest : WordSpec({
 
             result1.metadata.description shouldBe "description 1"
             result1.curations shouldHaveSize 1
-            result1.curations[0].base shouldBe PackageCurationData(description = "")
-            result1.curations[0].curation shouldBe curation1.data
+            result1.curations[0] shouldBe curation1.data
 
             result2.metadata.description shouldBe "description 2"
             result2.curations shouldHaveSize 2
-            result2.curations[0].base shouldBe PackageCurationData(description = "")
-            result2.curations[0].curation shouldBe curation1.data
-            result2.curations[1].base shouldBe PackageCurationData(description = "description 1")
-            result2.curations[1].curation shouldBe curation2.data
+            result2.curations[0] shouldBe curation1.data
+            result2.curations[1] shouldBe curation2.data
 
             result3.metadata.description shouldBe "description 3"
             result3.curations shouldHaveSize 3
-            result3.curations[0].base shouldBe PackageCurationData(description = "")
-            result3.curations[0].curation shouldBe curation1.data
-            result3.curations[1].base shouldBe PackageCurationData(description = "description 1")
-            result3.curations[1].curation shouldBe curation2.data
-            result3.curations[2].base shouldBe PackageCurationData(description = "description 2")
-            result3.curations[2].curation shouldBe curation3.data
+            result3.curations[0] shouldBe curation1.data
+            result3.curations[1] shouldBe curation2.data
+            result3.curations[2] shouldBe curation3.data
         }
     }
 
@@ -326,11 +317,7 @@ class PackageCurationTest : WordSpec({
             result3.metadata.declaredLicensesProcessed.spdxExpression shouldBe
                 "Apache-2.0 AND BSD-3-Clause AND CC-BY-2.0".toSpdx()
 
-            result3.curations[0].base.declaredLicenseMapping should beEmpty()
-            result3.curations[1].base.declaredLicenseMapping should beEmpty()
-            result3.curations[2].base.declaredLicenseMapping.shouldContainExactly(
-                mapOf("license c" to "CC-BY-1.0".toSpdx())
-            )
+            result3.curations shouldContainExactly listOf(curation1, curation2, curation3).map { it.data }
         }
     }
 

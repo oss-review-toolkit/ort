@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.model.licenses
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
-import org.ossreviewtoolkit.model.PackageCurationResult
+import org.ossreviewtoolkit.model.PackageCurationData
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
@@ -66,9 +66,9 @@ data class ConcludedLicenseInfo(
     val concludedLicense: SpdxExpression?,
 
     /**
-     * The list of [PackageCurationResult]s that modified the concluded license.
+     * The list of [PackageCurationData] that modified the concluded license.
      */
-    val appliedCurations: List<PackageCurationResult>
+    val appliedCurations: List<PackageCurationData>
 )
 
 /**
@@ -91,9 +91,9 @@ data class DeclaredLicenseInfo(
     val processed: ProcessedDeclaredLicense,
 
     /**
-     * The list of [PackageCurationResult]s that modified the declared license.
+     * The list of [PackageCurationData] that modified the declared license.
      */
-    val appliedCurations: List<PackageCurationResult>
+    val appliedCurations: List<PackageCurationData>
 )
 
 /**

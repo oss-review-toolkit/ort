@@ -50,7 +50,7 @@ class DefaultLicenseInfoProvider(val ortResult: OrtResult) : LicenseInfoProvider
         ortResult.getPackage(id)?.let { (pkg, curations) ->
             ConcludedLicenseInfo(
                 concludedLicense = pkg.concludedLicense,
-                appliedCurations = curations.filter { it.curation.concludedLicense != null }
+                appliedCurations = curations.filter { it.concludedLicense != null }
             )
         } ?: ConcludedLicenseInfo(concludedLicense = null, appliedCurations = emptyList())
 
@@ -67,7 +67,7 @@ class DefaultLicenseInfoProvider(val ortResult: OrtResult) : LicenseInfoProvider
                 authors = pkg.authors,
                 licenses = pkg.declaredLicenses,
                 processed = pkg.declaredLicensesProcessed,
-                appliedCurations = curations.filter { it.curation.declaredLicenseMapping.isNotEmpty() }
+                appliedCurations = curations.filter { it.declaredLicenseMapping.isNotEmpty() }
             )
         } ?: DeclaredLicenseInfo(
             authors = emptySet(),
