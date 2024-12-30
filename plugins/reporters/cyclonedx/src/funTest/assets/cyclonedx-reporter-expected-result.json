@@ -12,7 +12,8 @@
           "name": "OSS Review Toolkit",
           "version": "deadbeef"
         }
-      ]
+      ],
+      "services": []
     },
     "component": {
       "type": "file",
