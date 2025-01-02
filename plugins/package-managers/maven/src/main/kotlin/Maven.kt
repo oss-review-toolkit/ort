@@ -115,7 +115,7 @@ class Maven(
         val projectBuildingResult = mvn.buildMavenProject(definitionFile)
         val mavenProject = projectBuildingResult.project
         val projectId = Identifier(
-            type = managerName,
+            type = projectType,
             namespace = mavenProject.groupId,
             name = mavenProject.artifactId,
             version = mavenProject.version

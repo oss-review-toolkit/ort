@@ -507,7 +507,7 @@ class Pub(
 
         return Project(
             id = Identifier(
-                type = managerName,
+                type = projectType,
                 namespace = "",
                 name = pubspec.name,
                 version = pubspec.version.orEmpty()

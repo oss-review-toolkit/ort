@@ -66,7 +66,7 @@ class MavenDependencyHandler(
 
     override fun identifierFor(dependency: DependencyNode): Identifier =
         Identifier(
-            type = if (isLocalProject(dependency.identifier())) managerName else "Maven",
+            type = if (isLocalProject(dependency.identifier())) projectType else "Maven",
             namespace = dependency.artifact.groupId,
             name = dependency.artifact.artifactId,
             version = dependency.artifact.version

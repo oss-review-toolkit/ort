@@ -136,7 +136,7 @@ class CocoaPods(
             packages = packages,
             project = Project(
                 id = Identifier(
-                    type = managerName,
+                    type = projectType,
                     namespace = "",
                     name = getFallbackProjectName(analysisRoot, definitionFile),
                     version = ""

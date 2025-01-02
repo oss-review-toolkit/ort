@@ -244,7 +244,7 @@ class GradleInspector(
         }
 
         val projectId = Identifier(
-            type = "Gradle",
+            type = projectType,
             namespace = dependencyTreeModel.group,
             name = dependencyTreeModel.name,
             version = dependencyTreeModel.version

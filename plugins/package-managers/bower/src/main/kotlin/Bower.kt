@@ -87,7 +87,7 @@ class Bower(
                 graphBuilder.addDependencies(projectPackageInfo.toIdentifier(), scopeName, dependencies)
             }
 
-            val project = projectPackageInfo.toProject(definitionFile, SCOPE_NAMES)
+            val project = projectPackageInfo.toProject(definitionFile, projectType, SCOPE_NAMES)
             return listOf(ProjectAnalyzerResult(project, emptySet()))
         }
     }
