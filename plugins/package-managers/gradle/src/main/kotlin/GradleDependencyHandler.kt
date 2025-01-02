@@ -45,8 +45,8 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
  * A specialized [DependencyHandler] implementation for Gradle's dependency model.
  */
 internal class GradleDependencyHandler(
-    /** The name of the associated package manager. */
-    private val managerName: String,
+    /** The name of the source to use when creating [Issue]s. */
+    private val issueSource: String,
 
     /** The helper object to resolve packages via Maven. */
     private val maven: MavenSupport
@@ -72,7 +72,7 @@ internal class GradleDependencyHandler(
         listOfNotNull(
             dependency.error?.let {
                 createAndLogIssue(
-                    source = managerName,
+                    source = issueSource,
                     message = it,
                     severity = Severity.ERROR
                 )
@@ -80,7 +80,7 @@ internal class GradleDependencyHandler(
 
             dependency.warning?.let {
                 createAndLogIssue(
-                    source = managerName,
+                    source = issueSource,
                     message = it,
                     severity = Severity.WARNING
                 )
@@ -107,7 +107,7 @@ internal class GradleDependencyHandler(
                     e.showStackTrace()
 
                     issues += createAndLogIssue(
-                        source = managerName,
+                        source = issueSource,
                         message = "Could not get package information for dependency '${artifact.identifier()}': " +
                             e.collectMessages()
                     )
