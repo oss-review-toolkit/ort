@@ -61,7 +61,7 @@ class NuGet(
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val result = NuGetInspector.inspect(definitionFile, nugetConfig)
 
-        val project = result.toOrtProject(managerName, analysisRoot, definitionFile)
+        val project = result.toOrtProject(projectType, analysisRoot, definitionFile)
         val packages = result.dependencies.toOrtPackages()
 
         return listOf(ProjectAnalyzerResult(project, packages, collectTopLevelIssues(result)))

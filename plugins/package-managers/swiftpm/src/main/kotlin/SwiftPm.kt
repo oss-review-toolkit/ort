@@ -175,7 +175,7 @@ class SwiftPm(
         val vcsInfo = VersionControlSystem.forDirectory(definitionFile.parentFile)?.getInfo().orEmpty()
 
         val projectIdentifier = Identifier(
-            type = managerName,
+            type = projectType,
             version = vcsInfo.revision,
             namespace = "",
             name = getFallbackProjectName(analysisRoot, definitionFile)

@@ -160,7 +160,7 @@ class Bazel(
             ProjectAnalyzerResult(
                 project = Project(
                     id = Identifier(
-                        type = managerName,
+                        type = projectType,
                         namespace = "",
                         name = moduleMetadata.module?.name ?: VersionControlSystem.getPathInfo(definitionFile).path,
                         version = moduleMetadata.module?.version.orEmpty()

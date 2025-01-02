@@ -434,7 +434,7 @@ class Conan(
 
         return Package(
             id = Identifier(
-                type = managerName,
+                type = projectType,
                 namespace = "",
                 name = inspectPyFile("name") ?: pkgInfo.reference.orEmpty(),
                 version = inspectPyFile("version").orEmpty()
