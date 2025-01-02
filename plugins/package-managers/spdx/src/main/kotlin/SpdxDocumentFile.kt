@@ -277,7 +277,7 @@ class SpdxDocumentFile(
      */
     private fun SpdxPackage.toIdentifier() =
         Identifier(
-            type = managerName,
+            type = projectType,
             namespace = listOfNotNull(supplier, originator).firstOrNull()
                 ?.withoutPrefix(SpdxConstants.ORGANIZATION).orEmpty().sanitize(),
             name = name.sanitize(),

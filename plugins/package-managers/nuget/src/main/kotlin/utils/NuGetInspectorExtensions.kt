@@ -51,12 +51,12 @@ private fun List<NuGetInspector.Party>.toAuthors(): Set<String> =
     }
 
 internal fun NuGetInspector.Result.toOrtProject(
-    managerName: String,
+    projectType: String,
     analysisRoot: File,
     definitionFile: File
 ): Project {
     val id = Identifier(
-        type = managerName,
+        type = projectType,
         namespace = "",
         name = definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath,
         version = ""

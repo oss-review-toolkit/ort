@@ -107,7 +107,7 @@ class Pip(
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val result = runPythonInspector(definitionFile) { detectPythonVersion(definitionFile.parentFile) }
 
-        val project = result.toOrtProject(managerName, analysisRoot, definitionFile)
+        val project = result.toOrtProject(projectType, analysisRoot, definitionFile)
         val packages = result.packages.toOrtPackages()
 
         return listOf(ProjectAnalyzerResult(project, packages))

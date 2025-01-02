@@ -75,10 +75,10 @@ private fun PackageInfo.toPackage() =
         vcs = toVcsInfo()
     )
 
-internal fun PackageInfo.toProject(definitionFile: File, scopeNames: Set<String>) =
+internal fun PackageInfo.toProject(definitionFile: File, projectType: String, scopeNames: Set<String>) =
     with(toPackage()) {
         Project(
-            id = id,
+            id = id.copy(type = projectType),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             authors = authors,
             declaredLicenses = declaredLicenses,

@@ -67,13 +67,13 @@ class SpdxDocumentFileFunTest : WordSpec({
 
         "succeed if no project is provided" {
             val curlPackageFile = projectDir.resolve("libs/curl/package.spdx.yml")
-            val curlId = Identifier("SpdxDocumentFile::curl:7.70.0")
+            val curlId = Identifier("SpdxDocument::curl:7.70.0")
 
             val opensslPackageFile = projectDir.resolve("libs/openssl/package.spdx.yml")
-            val opensslId = Identifier("SpdxDocumentFile:OpenSSL Development Team:openssl:1.1.1g")
+            val opensslId = Identifier("SpdxDocument:OpenSSL Development Team:openssl:1.1.1g")
 
             val zlibPackageFile = projectDir.resolve("libs/zlib/package.spdx.yml")
-            val zlibId = Identifier("SpdxDocumentFile::zlib:1.2.11")
+            val zlibId = Identifier("SpdxDocument::zlib:1.2.11")
 
             val definitionFiles = listOf(curlPackageFile, opensslPackageFile, zlibPackageFile)
             val actualResult = create("SpdxDocumentFile").resolveDependencies(definitionFiles, emptyMap())
@@ -148,10 +148,10 @@ class SpdxDocumentFileFunTest : WordSpec({
         }
 
         "retrieve transitive dependencies" {
-            val idCurl = Identifier("SpdxDocumentFile::curl:7.70.0")
-            val idOpenSsl = Identifier("SpdxDocumentFile:OpenSSL Development Team:openssl:1.1.1g")
-            val idZlib = Identifier("SpdxDocumentFile::zlib:1.2.11")
-            val idMyLib = Identifier("SpdxDocumentFile::my-lib:8.88.8")
+            val idCurl = Identifier("SpdxDocument::curl:7.70.0")
+            val idOpenSsl = Identifier("SpdxDocument:OpenSSL Development Team:openssl:1.1.1g")
+            val idZlib = Identifier("SpdxDocument::zlib:1.2.11")
+            val idMyLib = Identifier("SpdxDocument::my-lib:8.88.8")
 
             val projectFile = projectDir.resolve("transitive-dependencies/project-xyz.spdx.yml")
             val definitionFiles = listOf(projectFile)
@@ -177,9 +177,9 @@ class SpdxDocumentFileFunTest : WordSpec({
         }
 
         "retrieve nested DEPENDS_ON dependencies" {
-            val idCurl = Identifier("SpdxDocumentFile::curl:7.70.0")
-            val idOpenSsl = Identifier("SpdxDocumentFile:OpenSSL Development Team:openssl:1.1.1g")
-            val idZlib = Identifier("SpdxDocumentFile::zlib:1.2.11")
+            val idCurl = Identifier("SpdxDocument::curl:7.70.0")
+            val idOpenSsl = Identifier("SpdxDocument:OpenSSL Development Team:openssl:1.1.1g")
+            val idZlib = Identifier("SpdxDocument::zlib:1.2.11")
 
             val projectFile = projectDir.resolve("DEPENDS_ON-packages/project-xyz.spdx.yml")
             val definitionFiles = listOf(projectFile)
@@ -258,13 +258,13 @@ class SpdxDocumentFileFunTest : WordSpec({
             val packageIds = projectResults.flatMap { projResult -> projResult.packages.map { it.id } }
 
             projectIds shouldContainExactlyInAnyOrder listOf(
-                Identifier("SpdxDocumentFile::xyz:0.1.0"),
-                Identifier("SpdxDocumentFile::subproject-xyz:0.1.0")
+                Identifier("SpdxDocument::xyz:0.1.0"),
+                Identifier("SpdxDocument::subproject-xyz:0.1.0")
             )
             packageIds shouldContainExactlyInAnyOrder listOf(
-                Identifier("SpdxDocumentFile::curl:7.70.0"),
-                Identifier("SpdxDocumentFile::my-lib:8.88.8"),
-                Identifier("SpdxDocumentFile:OpenSSL Development Team:openssl:1.1.1g")
+                Identifier("SpdxDocument::curl:7.70.0"),
+                Identifier("SpdxDocument::my-lib:8.88.8"),
+                Identifier("SpdxDocument:OpenSSL Development Team:openssl:1.1.1g")
             )
         }
 

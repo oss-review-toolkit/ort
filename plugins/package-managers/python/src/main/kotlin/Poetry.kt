@@ -88,7 +88,7 @@ class Poetry(
 
         val project = Project.EMPTY.copy(
             id = Identifier(
-                type = managerName,
+                type = projectType,
                 namespace = "",
                 name = definitionFile.relativeTo(analysisRoot).path,
                 version = VersionControlSystem.getCloneInfo(definitionFile.parentFile).revision

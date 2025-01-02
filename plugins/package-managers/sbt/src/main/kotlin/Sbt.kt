@@ -103,26 +103,26 @@ class Sbt(
         // definition file paths.
         val workingDir = getCommonParentFile(definitionFiles)
 
-        logger.info { "Determined '$workingDir' as the $managerName project root directory." }
+        logger.info { "Determined '$workingDir' as the $projectType project root directory." }
 
         val sbtVersion = options[OPTION_SBT_VERSION]
         val sbtVersions = getBuildSbtVersions(workingDir)
         when {
-            sbtVersion != null -> logger.info { "Using configured custom $managerName version $sbtVersion." }
+            sbtVersion != null -> logger.info { "Using configured custom $projectType version $sbtVersion." }
 
             sbtVersions.isEmpty() ->
-                logger.info { "The build does not configure any $managerName version to be used." }
+                logger.info { "The build does not configure any $projectType version to be used." }
 
             sbtVersions.size == 1 ->
-                logger.info { "The build configures $managerName version ${sbtVersions.first()} to be used." }
+                logger.info { "The build configures $projectType version ${sbtVersions.first()} to be used." }
 
             else ->
-                logger.warn { "The build configures multiple different $managerName versions to be used: $sbtVersions" }
+                logger.warn { "The build configures multiple different $projectType versions to be used: $sbtVersions" }
         }
 
         val lowestSbtVersion = sbtVersion?.let { Semver(it) } ?: sbtVersions.firstOrNull() ?: getGlobalSbtVersion()
         require(lowestSbtVersion?.isLowerThan(Semver(LOWEST_SUPPORTED_SBT_VERSION)) != true) {
-            "Build $managerName version $lowestSbtVersion is lower than version $LOWEST_SUPPORTED_SBT_VERSION."
+            "Build $projectType version $lowestSbtVersion is lower than version $LOWEST_SUPPORTED_SBT_VERSION."
         }
 
         // TODO: Consider auto-detecting the Java version based on the SBT version. See:

@@ -145,7 +145,7 @@ class Stack(
             else -> throw IOException("Multiple *.cabal files found in '$cabalFiles'.")
         }
 
-        val projectPackage = parseCabalFile(cabalFile.readText(), managerName)
+        val projectPackage = parseCabalFile(cabalFile.readText(), projectType)
 
         return Project(
             id = projectPackage.id,

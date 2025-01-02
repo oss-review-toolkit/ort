@@ -76,7 +76,7 @@ class Unmanaged(
                 }
 
                 Identifier(
-                    type = managerName,
+                    type = projectType,
                     namespace = "",
                     name = definitionFile.name,
                     version = ""
@@ -89,7 +89,7 @@ class Unmanaged(
                 val manifestPath = vcsInfo.url.parseRepoManifestPath()
 
                 Identifier(
-                    type = managerName,
+                    type = projectType,
                     namespace = manifestPath?.substringBeforeLast('/').orEmpty(),
                     name = manifestPath?.substringAfterLast('/')?.removeSuffix(".xml")
                         ?: vcsInfo.url.split('/').last().removeSuffix(".git"),
@@ -100,7 +100,7 @@ class Unmanaged(
             else -> {
                 // For all non-GitRepo VCSes derive the name from the VCS URL.
                 Identifier(
-                    type = managerName,
+                    type = projectType,
                     namespace = "",
                     name = vcsInfo.url.split('/').last().removeSuffix(".git"),
                     version = vcsInfo.revision

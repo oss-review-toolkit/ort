@@ -400,7 +400,7 @@ class Yarn2(
 
             val id = Identifier("Yarn2", namespace, name, version)
             allProjects += id to Project(
-                id = id.copy(type = managerName),
+                id = id.copy(type = projectType),
                 definitionFilePath = VersionControlSystem.getPathInfo(projectFile).path,
                 declaredLicenses = declaredLicenses,
                 vcs = additionalData.vcsFromPackage,
