@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.bundler
 
-import com.charleskorn.kaml.Yaml
-
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
@@ -29,7 +27,7 @@ import java.net.HttpURLConnection
 
 import kotlin.time.measureTime
 
-import kotlinx.serialization.serializer
+import kotlinx.serialization.decodeFromString
 
 import org.apache.logging.log4j.kotlin.logger
 
@@ -83,9 +81,6 @@ private const val BUNDLER_GEM_NAME = "bundler"
  * The name of the file where Bundler stores locked down dependency information.
  */
 internal const val BUNDLER_LOCKFILE_NAME = "Gemfile.lock"
-
-// TODO: Remove this again once available upstream.
-private inline fun <reified T> Yaml.decodeFromString(string: String): T = decodeFromString(serializer<T>(), string)
 
 private fun runScriptCode(code: String, workingDir: File? = null): String {
     val bytes = ByteArrayOutputStream()
