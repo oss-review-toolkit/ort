@@ -45,7 +45,7 @@ class MavenDependencyHandler(
     private val projectType: String,
 
     /** The helper object to invoke Maven-related functionality. */
-    val support: MavenSupport,
+    internal val support: MavenSupport,
 
     /**
      * A map with information about the local projects in the current Maven build. Dependencies pointing to projects
