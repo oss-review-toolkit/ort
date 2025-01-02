@@ -107,7 +107,7 @@ class CocoaPods(
         val issues = mutableListOf<Issue>()
 
         val projectId = Identifier(
-            type = managerName,
+            type = projectType,
             namespace = "",
             name = getFallbackProjectName(analysisRoot, definitionFile),
             version = ""

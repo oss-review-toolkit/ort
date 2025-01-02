@@ -195,7 +195,7 @@ class Cargo(
 
         val hashes = readHashes(resolveLockfile(metadata))
         val projectPkg = packageById.getValue(projectId).let { cargoPkg ->
-            cargoPkg.toPackage(hashes).let { it.copy(id = it.id.copy(type = managerName)) }
+            cargoPkg.toPackage(hashes).let { it.copy(id = it.id.copy(type = projectType)) }
         }
 
         val project = Project(
