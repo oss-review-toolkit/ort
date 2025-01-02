@@ -103,7 +103,7 @@ class Maven(
         localProjectBuildingResults += mvn.prepareMavenProjects(definitionFiles)
 
         val localProjects = localProjectBuildingResults.mapValues { it.value.project }
-        val dependencyHandler = MavenDependencyHandler(managerName, mvn, localProjects, sbtMode)
+        val dependencyHandler = MavenDependencyHandler(managerName, projectType, mvn, localProjects, sbtMode)
         graphBuilder = DependencyGraphBuilder(dependencyHandler)
     }
 
