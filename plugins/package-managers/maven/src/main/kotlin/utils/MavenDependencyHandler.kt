@@ -38,8 +38,11 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
  * A specialized [DependencyHandler] implementation for the dependency model of Maven.
  */
 class MavenDependencyHandler(
-    /** The name of the associated package manager. */
-    private val managerName: String,
+    /** The source to use for creating issues. */
+    private val issueSource: String,
+
+    /** The type of projects to handle. */
+    private val projectType: String,
 
     /** The helper object to invoke Maven-related functionality. */
     val support: MavenSupport,
@@ -63,7 +66,7 @@ class MavenDependencyHandler(
 
     override fun identifierFor(dependency: DependencyNode): Identifier =
         Identifier(
-            type = if (isLocalProject(dependency)) managerName else "Maven",
+            type = if (isLocalProject(dependency)) projectType else "Maven",
             namespace = dependency.artifact.groupId,
             name = dependency.artifact.artifactId,
             version = dependency.artifact.version
@@ -108,7 +111,7 @@ class MavenDependencyHandler(
             e.showStackTrace()
 
             issues += createAndLogIssue(
-                source = managerName,
+                source = issueSource,
                 message = "Could not get package information for dependency '" +
                     "${dependency.artifact.identifier()}': ${e.collectMessages()}"
             )

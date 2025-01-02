@@ -59,25 +59,25 @@ class MavenDependencyHandlerTest : WordSpec({
 
     "identifierFor" should {
         "return the identifier for an external dependency" {
-            val dependency = createDependency(IDENTIFIER)
+            val dependency = createDependency(PACKAGE_ID_SUFFIX)
 
             val handler = createHandler()
 
-            handler.identifierFor(dependency) shouldBe Identifier("Maven:$IDENTIFIER")
+            handler.identifierFor(dependency) shouldBe Identifier("$PACKAGE_TYPE:$PACKAGE_ID_SUFFIX")
         }
 
         "return the identifier for an inter-project dependency" {
-            val dependency = createDependency(PROJECT_ID)
+            val dependency = createDependency(PROJECT_ID_SUFFIX)
 
             val handler = createHandler()
 
-            handler.identifierFor(dependency) shouldBe Identifier("$MANAGER_NAME:$PROJECT_ID")
+            handler.identifierFor(dependency) shouldBe Identifier("$PROJECT_TYPE:$PROJECT_ID_SUFFIX")
         }
     }
 
     "dependenciesFor" should {
         "return the dependencies of a dependency node" {
-            val dependency = createDependency(IDENTIFIER)
+            val dependency = createDependency(PACKAGE_ID_SUFFIX)
             val child1 = createDependency("child:dep:1")
             val child2 = createDependency("child:dep:2")
 
@@ -89,7 +89,7 @@ class MavenDependencyHandlerTest : WordSpec({
         }
 
         "filter out the dependency to com.sun:tools" {
-            val dependency = createDependency(IDENTIFIER)
+            val dependency = createDependency(PACKAGE_ID_SUFFIX)
             val toolDep = createDependency("com.sun:tools:test-17")
             val child = createDependency("child:dep:1")
 
@@ -101,7 +101,7 @@ class MavenDependencyHandlerTest : WordSpec({
         }
 
         "filter out the dependency to jdk.tools:jdk.tools" {
-            val dependency = createDependency(IDENTIFIER)
+            val dependency = createDependency(PACKAGE_ID_SUFFIX)
             val toolDep = createDependency("jdk.tools:jdk.tools:17-beta")
             val child = createDependency("child:dep:1")
 
@@ -115,7 +115,7 @@ class MavenDependencyHandlerTest : WordSpec({
 
     "linkageFor" should {
         "return PackageLinkage.DYNAMIC for an external dependency" {
-            val dependency = createDependency(IDENTIFIER)
+            val dependency = createDependency(PACKAGE_ID_SUFFIX)
 
             val handler = createHandler()
 
@@ -123,7 +123,7 @@ class MavenDependencyHandlerTest : WordSpec({
         }
 
         "return PackageLinkage.PROJECT_DYNAMIC for an inter-project dependency" {
-            val dependency = createDependency(PROJECT_ID)
+            val dependency = createDependency(PROJECT_ID_SUFFIX)
 
             val handler = createHandler()
 
@@ -133,10 +133,10 @@ class MavenDependencyHandlerTest : WordSpec({
 
     "createPackage" should {
         "create a package for a dependency" {
-            val dependency = createDependency(IDENTIFIER)
+            val dependency = createDependency(PACKAGE_ID_SUFFIX)
             val artifact = dependency.artifact
             val repos = listOf(createRepository(), createRepository())
-            val pkg = createPackage(IDENTIFIER)
+            val pkg = createPackage(PACKAGE_ID_SUFFIX)
             val issues = mutableListOf<Issue>()
 
             val handler = createHandler()
@@ -149,10 +149,10 @@ class MavenDependencyHandlerTest : WordSpec({
         }
 
         "take the sbtMode flag into account" {
-            val dependency = createDependency(IDENTIFIER)
+            val dependency = createDependency(PACKAGE_ID_SUFFIX)
             val artifact = dependency.artifact
             val repos = listOf(createRepository())
-            val pkg = createPackage(IDENTIFIER)
+            val pkg = createPackage(PACKAGE_ID_SUFFIX)
             val issues = mutableListOf<Issue>()
 
             val handler = createHandler(sbtMode = true)
@@ -165,7 +165,7 @@ class MavenDependencyHandlerTest : WordSpec({
         }
 
         "return null for a project dependency" {
-            val projectDependency = createDependency(PROJECT_ID)
+            val projectDependency = createDependency(PROJECT_ID_SUFFIX)
             val issues = mutableListOf<Issue>()
 
             val handler = createHandler()
@@ -175,10 +175,10 @@ class MavenDependencyHandlerTest : WordSpec({
         }
 
         "return null for a package that is resolved to a project dependency" {
-            val dependency = createDependency(IDENTIFIER)
+            val dependency = createDependency(PACKAGE_ID_SUFFIX)
             val artifact = dependency.artifact
             val repos = listOf(createRepository(), createRepository())
-            val pkg = createPackage(PROJECT_ID)
+            val pkg = createPackage(PROJECT_ID_SUFFIX)
 
             val handler = createHandler()
 
@@ -189,10 +189,10 @@ class MavenDependencyHandlerTest : WordSpec({
         }
 
         "report the correct linkage for a package that is resolved to a project dependency" {
-            val dependency = createDependency(IDENTIFIER)
+            val dependency = createDependency(PACKAGE_ID_SUFFIX)
             val artifact = dependency.artifact
             val repos = listOf(createRepository(), createRepository())
-            val pkg = createPackage(PROJECT_ID)
+            val pkg = createPackage(PROJECT_ID_SUFFIX)
 
             val handler = createHandler()
 
@@ -209,7 +209,7 @@ class MavenDependencyHandlerTest : WordSpec({
                 "BrokenProject", "Cannot parse pom.",
                 IOException("General failure when reading hard disk.")
             )
-            val dependency = createDependency(IDENTIFIER)
+            val dependency = createDependency(PACKAGE_ID_SUFFIX)
             val artifact = dependency.artifact
             val repos = listOf(createRepository())
             val issues = mutableListOf<Issue>()
@@ -225,7 +225,7 @@ class MavenDependencyHandlerTest : WordSpec({
             with(issues[0]) {
                 severity shouldBe Severity.ERROR
                 source shouldBe MANAGER_NAME
-                message should contain(IDENTIFIER)
+                message should contain(PACKAGE_ID_SUFFIX)
                 message should contain(exception.message!!)
             }
         }
@@ -233,7 +233,9 @@ class MavenDependencyHandlerTest : WordSpec({
 })
 
 private const val MANAGER_NAME = "MavenTest"
-private const val IDENTIFIER = "org.apache.commons:commons-lang2:3.12"
+private const val PROJECT_TYPE = "MavenProject"
+private const val PACKAGE_TYPE = "Maven"
+private const val PACKAGE_ID_SUFFIX = "org.apache.commons:commons-lang2:3.12"
 
 /**
  * A map simulating local projects. This is required by [MavenSupport] when parsing packages.
@@ -245,13 +247,13 @@ private val LOCAL_PROJECTS = mapOf(
 )
 
 /** ID of an inter-project dependency. */
-private val PROJECT_ID = LOCAL_PROJECTS.toList().first().first
+private val PROJECT_ID_SUFFIX = LOCAL_PROJECTS.keys.first()
 
 /**
  * Return an [Identifier] from the given [mavenId]. The identifiers used by Maven internally are very close to
  * ORT's identifiers; only the type component is missing.
  */
-private fun toOrtIdentifier(mavenId: String): Identifier = Identifier("Maven:$mavenId")
+private fun toOrtIdentifier(mavenId: String): Identifier = Identifier("$PACKAGE_TYPE:$mavenId")
 
 /**
  * Return a mock [Artifact] that is prepared to return the given [identifier][id]. Note: For this to work, the
@@ -286,7 +288,7 @@ private fun createDependency(id: String): DependencyNode {
  */
 private fun createHandler(sbtMode: Boolean = false): MavenDependencyHandler {
     val mvn = mockk<MavenSupport>()
-    return MavenDependencyHandler(MANAGER_NAME, mvn, LOCAL_PROJECTS, sbtMode)
+    return MavenDependencyHandler(MANAGER_NAME, PROJECT_TYPE, mvn, LOCAL_PROJECTS, sbtMode)
 }
 
 /**

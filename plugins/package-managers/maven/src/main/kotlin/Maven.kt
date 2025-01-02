@@ -59,7 +59,14 @@ class Maven(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Maven", analysisRoot, analyzerConfig, repoConfig) {
+) : PackageManager(
+    name,
+    // The "options" convenience property from "PackageManager" is not available here yet.
+    if (analyzerConfig.getPackageManagerConfiguration(name)?.options?.get("sbtMode").toBoolean()) "SBT" else "Maven",
+    analysisRoot,
+    analyzerConfig,
+    repoConfig
+) {
     class Factory : AbstractPackageManagerFactory<Maven>("Maven") {
         override val globsForDefinitionFiles = listOf("pom.xml")
 
@@ -98,7 +105,7 @@ class Maven(
         localProjectBuildingResults += mvn.prepareMavenProjects(definitionFiles)
 
         val localProjects = localProjectBuildingResults.mapValues { it.value.project }
-        val dependencyHandler = MavenDependencyHandler(managerName, mvn, localProjects, sbtMode)
+        val dependencyHandler = MavenDependencyHandler(managerName, projectType, mvn, localProjects, sbtMode)
         graphBuilder = DependencyGraphBuilder(dependencyHandler)
     }
 
