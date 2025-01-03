@@ -46,7 +46,7 @@ internal class PnpmDependencyHandler(private val pnpm: Pnpm) : DependencyHandler
     }
 
     override fun identifierFor(dependency: Dependency): Identifier {
-        val type = pnpm.managerName.takeIf { dependency.isProject() } ?: "NPM"
+        val type = if (dependency.isProject()) pnpm.projectType else "NPM"
         val namespace = dependency.from.substringBeforeLast("/", "")
         val name = dependency.from.substringAfterLast("/")
         val version = if (dependency.isProject()) {

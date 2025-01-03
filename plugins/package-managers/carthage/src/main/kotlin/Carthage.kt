@@ -74,7 +74,7 @@ class Carthage(
             ProjectAnalyzerResult(
                 project = Project(
                     id = Identifier(
-                        type = managerName,
+                        type = projectType,
                         namespace = projectInfo.namespace.orEmpty(),
                         name = projectInfo.projectName.orEmpty(),
                         version = projectInfo.revision.orEmpty()

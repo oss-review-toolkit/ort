@@ -102,7 +102,7 @@ class Npm(
 
         if (issues.any { it.severity == Severity.ERROR }) {
             val project = runCatching {
-                parseProject(definitionFile, analysisRoot, managerName)
+                parseProject(definitionFile, analysisRoot, projectType)
             }.getOrElse {
                 logger.error { "Failed to parse project information: ${it.collectMessages()}" }
                 Project.EMPTY
@@ -111,7 +111,7 @@ class Npm(
             return listOf(ProjectAnalyzerResult(project, emptySet(), issues))
         }
 
-        val project = parseProject(definitionFile, analysisRoot, managerName)
+        val project = parseProject(definitionFile, analysisRoot, projectType)
         val projectModuleInfo = listModules(workingDir, issues).undoDeduplication()
 
         val scopeNames = Scope.entries

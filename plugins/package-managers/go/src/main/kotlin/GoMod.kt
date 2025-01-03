@@ -286,7 +286,7 @@ class GoMod(
             }
 
             Identifier(
-                type = managerName,
+                type = projectType,
                 namespace = "",
                 name = getModuleInfos(projectDir).single().path,
                 version = processProjectVcs(projectDir).revision

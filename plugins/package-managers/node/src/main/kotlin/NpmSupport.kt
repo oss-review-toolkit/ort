@@ -230,7 +230,7 @@ internal fun parsePackage(
     return module
 }
 
-internal fun parseProject(packageJsonFile: File, analysisRoot: File, managerName: String): Project {
+internal fun parseProject(packageJsonFile: File, analysisRoot: File, projectType: String): Project {
     logger.debug { "Parsing project info from '$packageJsonFile'." }
 
     val packageJson = parsePackageJson(packageJsonFile)
@@ -258,7 +258,7 @@ internal fun parseProject(packageJsonFile: File, analysisRoot: File, managerName
 
     return Project(
         id = Identifier(
-            type = managerName,
+            type = projectType,
             namespace = namespace,
             name = projectName,
             version = version

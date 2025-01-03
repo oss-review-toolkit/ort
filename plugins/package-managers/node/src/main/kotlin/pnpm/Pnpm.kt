@@ -87,7 +87,7 @@ class Pnpm(
         val moduleInfosForScope = scopes.associateWith { scope -> listModules(workingDir, scope) }
 
         return workspaceModuleDirs.map { projectDir ->
-            val project = parseProject(projectDir.resolve("package.json"), analysisRoot, managerName)
+            val project = parseProject(projectDir.resolve("package.json"), analysisRoot, projectType)
 
             val scopeNames = scopes.mapTo(mutableSetOf()) { scope ->
                 val scopeName = scope.descriptor
