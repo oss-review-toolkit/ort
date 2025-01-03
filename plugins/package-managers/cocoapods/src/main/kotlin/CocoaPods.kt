@@ -238,7 +238,7 @@ private fun parseLockfile(podfileLock: File): LockfileData {
     logger.info { "There are ${lockfile.dependencies.size} direct dependencies." }
 
     val resolvedVersions = mutableMapOf<String, String>()
-    val dependencyConstraints = mutableMapOf<String, MutableSet<String>>()
+    val dependencyNames = mutableMapOf<String, MutableSet<String>>()
 
     // The "PODS" section lists the resolved dependencies and, nested by one level, any version constraints of their
     // direct dependencies. That is, the nesting never goes deeper than two levels.
@@ -246,7 +246,7 @@ private fun parseLockfile(podfileLock: File): LockfileData {
         resolvedVersions[pod.name] = checkNotNull(pod.version)
 
         if (pod.dependencies.isNotEmpty()) {
-            dependencyConstraints[pod.name] = pod.dependencies.mapTo(mutableSetOf()) {
+            dependencyNames[pod.name] = pod.dependencies.mapTo(mutableSetOf()) {
                 // Discard the version (which is only a constraint in this case) and just take the name.
                 it.name
             }
@@ -288,7 +288,7 @@ private fun parseLockfile(podfileLock: File): LockfileData {
     fun createPackageReference(name: String): PackageReference =
         PackageReference(
             id = Identifier("Pod", "", name, resolvedVersions.getValue(name)),
-            dependencies = dependencyConstraints[name].orEmpty().filter {
+            dependencies = dependencyNames[name].orEmpty().filter {
                 // Only use a constraint as a dependency if it has a resolved version.
                 it in resolvedVersions
             }.mapTo(mutableSetOf()) {
