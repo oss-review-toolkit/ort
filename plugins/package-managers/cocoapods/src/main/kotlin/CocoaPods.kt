@@ -21,8 +21,10 @@ package org.ossreviewtoolkit.plugins.packagemanagers.cocoapods
 
 import java.io.File
 import java.io.IOException
+import java.lang.invoke.MethodHandles
 
 import org.apache.logging.log4j.kotlin.logger
+import org.apache.logging.log4j.kotlin.loggerOf
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -222,6 +224,8 @@ private const val LOCKFILE_FILENAME = "Podfile.lock"
 
 private const val SCOPE_NAME = "dependencies"
 
+private val logger = loggerOf(MethodHandles.lookup().lookupClass())
+
 private data class LockfileData(
     val dependencies: Set<PackageReference>,
     val packagesFromCheckoutOptionsForId: Map<Identifier, Package>
@@ -229,6 +233,10 @@ private data class LockfileData(
 
 private fun parseLockfile(podfileLock: File): LockfileData {
     val lockfile = podfileLock.readText().parseLockfile()
+
+    logger.info { "The lockfile lists ${lockfile.pods.size} dependencies in total." }
+    logger.info { "There are ${lockfile.dependencies.size} direct dependencies." }
+
     val resolvedVersions = mutableMapOf<String, String>()
     val dependencyConstraints = mutableMapOf<String, MutableSet<String>>()
 
@@ -244,6 +252,8 @@ private fun parseLockfile(podfileLock: File): LockfileData {
             }
         }
     }
+
+    logger.info { "There are ${dependencyNames.size} dependencies with transitive dependencies." }
 
     val packagesFromCheckoutOptionsForId = lockfile.checkoutOptions.mapNotNull { (name, checkoutOption) ->
         val url = checkoutOption.git ?: return@mapNotNull null
@@ -272,6 +282,8 @@ private fun parseLockfile(podfileLock: File): LockfileData {
             vcs = VcsInfo(VcsType.GIT, url, revision)
         )
     }.toMap()
+
+    logger.info { "There are ${packagesFromCheckoutOptionsForId.size} dependencies with checkout options." }
 
     fun createPackageReference(name: String): PackageReference =
         PackageReference(
