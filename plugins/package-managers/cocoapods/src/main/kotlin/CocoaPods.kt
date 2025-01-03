@@ -285,12 +285,21 @@ private fun parseLockfile(podfileLock: File): LockfileData {
 
     logger.info { "There are ${packagesFromCheckoutOptionsForId.size} dependencies with checkout options." }
 
+    val visited = mutableSetOf<String>()
+
     fun createPackageReference(name: String): PackageReference {
         val version = resolvedVersions.getValue(name)
 
-        val dependencies = dependencyNames[name].orEmpty().filter {
-            // Only use a constraint as a dependency if it has a resolved version.
-            it in resolvedVersions
+        val dependencies = if (name in visited) {
+            //logger.info { "Breaking cyclic dependencies at package '$name' which has been visited before." }
+
+            emptySet()
+        } else {
+            visited += name
+            dependencyNames[name].orEmpty().filter {
+                // Only use a constraint as a dependency if it has a resolved version.
+                it in resolvedVersions
+            }
         }
 
         return PackageReference(
@@ -305,6 +314,7 @@ private fun parseLockfile(podfileLock: File): LockfileData {
     // resolved versions, and eventually additional information about the source.
     val dependencies = lockfile.dependencies.mapTo(mutableSetOf()) { dependency ->
         // Ignore the version (which is only a constraint in this case) and just take the name.
+        visited.clear()
         createPackageReference(dependency.name)
     }
 
