@@ -285,16 +285,21 @@ private fun parseLockfile(podfileLock: File): LockfileData {
 
     logger.info { "There are ${packagesFromCheckoutOptionsForId.size} dependencies with checkout options." }
 
-    fun createPackageReference(name: String): PackageReference =
-        PackageReference(
-            id = Identifier("Pod", "", name, resolvedVersions.getValue(name)),
-            dependencies = dependencyNames[name].orEmpty().filter {
-                // Only use a constraint as a dependency if it has a resolved version.
-                it in resolvedVersions
-            }.mapTo(mutableSetOf()) {
+    fun createPackageReference(name: String): PackageReference {
+        val version = resolvedVersions.getValue(name)
+
+        val dependencies = dependencyNames[name].orEmpty().filter {
+            // Only use a constraint as a dependency if it has a resolved version.
+            it in resolvedVersions
+        }
+
+        return PackageReference(
+            id = Identifier("Pod", "", name, version),
+            dependencies = dependencies.mapTo(mutableSetOf()) {
                 createPackageReference(it)
             }
         )
+    }
 
     // The "DEPENDENCIES" section lists direct dependencies, but only along with version constraints, not with their
     // resolved versions, and eventually additional information about the source.
