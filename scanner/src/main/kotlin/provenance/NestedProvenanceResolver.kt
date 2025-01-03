@@ -50,6 +50,7 @@ class DefaultNestedProvenanceResolver(
         return when (provenance) {
             is ArtifactProvenance -> NestedProvenance(root = provenance, subRepositories = emptyMap())
             is RepositoryProvenance -> resolveNestedRepository(provenance)
+            else -> NestedProvenance(root = provenance, subRepositories = emptyMap())
         }
     }
 
