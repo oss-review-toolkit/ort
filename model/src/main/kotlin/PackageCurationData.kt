@@ -127,49 +127,49 @@ data class PackageCurationData(
     }
 
     /**
-     * Apply this [PackageCuration] to [targetPackage] by overriding all values of [targetPackage] with non-null values
-     * of this [PackageCurationData], and return the resulting [CuratedPackage].
+     * Apply this [PackageCuration] to [basePackage] by overriding all values of [basePackage] with non-null values of
+     * this [PackageCurationData], and return the resulting [CuratedPackage].
      */
-    fun apply(targetPackage: CuratedPackage): CuratedPackage {
-        val original = targetPackage.metadata
+    fun apply(basePackage: CuratedPackage): CuratedPackage {
+        val base = basePackage.metadata
 
         val vcsProcessed = vcs?.let {
             // Curation data for VCS information is handled specially, so we can curate only individual properties.
             VcsInfo(
-                type = it.type ?: original.vcsProcessed.type,
-                url = it.url ?: original.vcsProcessed.url,
-                revision = it.revision ?: original.vcsProcessed.revision,
-                path = it.path ?: original.vcsProcessed.path
+                type = it.type ?: base.vcsProcessed.type,
+                url = it.url ?: base.vcsProcessed.url,
+                revision = it.revision ?: base.vcsProcessed.revision,
+                path = it.path ?: base.vcsProcessed.path
             ).normalize()
-        } ?: original.vcsProcessed
+        } ?: base.vcsProcessed
 
-        val declaredLicenseMapping = targetPackage.getDeclaredLicenseMapping() + declaredLicenseMapping
+        val declaredLicenseMapping = basePackage.getDeclaredLicenseMapping() + declaredLicenseMapping
         val declaredLicensesProcessed = DeclaredLicenseProcessor.process(
-            original.declaredLicenses,
+            base.declaredLicenses,
             declaredLicenseMapping
         )
 
         val pkg = Package(
-            id = original.id,
-            purl = purl ?: original.purl,
-            cpe = cpe ?: original.cpe,
-            authors = authors ?: original.authors,
-            declaredLicenses = original.declaredLicenses,
+            id = base.id,
+            purl = purl ?: base.purl,
+            cpe = cpe ?: base.cpe,
+            authors = authors ?: base.authors,
+            declaredLicenses = base.declaredLicenses,
             declaredLicensesProcessed = declaredLicensesProcessed,
-            concludedLicense = concludedLicense ?: original.concludedLicense,
-            description = description ?: original.description,
-            homepageUrl = homepageUrl ?: original.homepageUrl,
-            binaryArtifact = binaryArtifact ?: original.binaryArtifact,
-            sourceArtifact = sourceArtifact ?: original.sourceArtifact,
-            vcs = original.vcs,
+            concludedLicense = concludedLicense ?: base.concludedLicense,
+            description = description ?: base.description,
+            homepageUrl = homepageUrl ?: base.homepageUrl,
+            binaryArtifact = binaryArtifact ?: base.binaryArtifact,
+            sourceArtifact = sourceArtifact ?: base.sourceArtifact,
+            vcs = base.vcs,
             vcsProcessed = vcsProcessed,
-            isMetadataOnly = isMetadataOnly ?: original.isMetadataOnly,
-            isModified = isModified ?: original.isModified,
-            sourceCodeOrigins = sourceCodeOrigins ?: original.sourceCodeOrigins,
-            labels = original.labels + labels
+            isMetadataOnly = isMetadataOnly ?: base.isMetadataOnly,
+            isModified = isModified ?: base.isModified,
+            sourceCodeOrigins = sourceCodeOrigins ?: base.sourceCodeOrigins,
+            labels = base.labels + labels
         )
 
-        return CuratedPackage(pkg, targetPackage.curations + this)
+        return CuratedPackage(pkg, basePackage.curations + this)
     }
 
     /**

@@ -103,16 +103,14 @@ data class PackageCuration(
             && (id.version.equalsOrIsBlank(pkgId.version) || isApplicableIvyVersion(pkgId))
 
     /**
-     * Apply the curation [data] to the provided [targetPackage].
-     *
-     * @see [PackageCurationData.apply]
+     * Apply the curation [data] to the provided [basePackage] by calling [PackageCurationData.apply], if applicable.
      */
-    fun apply(targetPackage: CuratedPackage): CuratedPackage {
-        require(isApplicable(targetPackage.metadata.id)) {
+    fun apply(basePackage: CuratedPackage): CuratedPackage {
+        require(isApplicable(basePackage.metadata.id)) {
             "Package curation identifier '${id.toCoordinates()}' does not match package identifier " +
-                "'${targetPackage.metadata.id.toCoordinates()}'."
+                "'${basePackage.metadata.id.toCoordinates()}'."
         }
 
-        return data.apply(targetPackage)
+        return data.apply(basePackage)
     }
 }
