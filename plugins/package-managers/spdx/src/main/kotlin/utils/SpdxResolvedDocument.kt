@@ -56,10 +56,9 @@ internal data class SpdxResolvedDocument(
     val rootDocument: ResolvedSpdxDocument,
 
     /**
-     * The name of the package manager that uses this document. This is mainly used to fill the source in generated
-     * [Issue]s.
+     * The name of the source to use when creating [Issue]s.
      */
-    val managerName: String,
+    val issueSource: String,
 
     /**
      * Holds a map with all [ResolvedSpdxDocument]s that are referenced directly or indirectly from the root document,
@@ -87,14 +86,14 @@ internal data class SpdxResolvedDocument(
     private val issuesByReferenceId: Map<String, Issue>
 ) {
     companion object {
-        fun load(cache: SpdxDocumentCache, rootDocumentFile: File, managerName: String): SpdxResolvedDocument {
+        fun load(cache: SpdxDocumentCache, rootDocumentFile: File, issueSource: String): SpdxResolvedDocument {
             val rootDocument = cache.load(rootDocumentFile).getOrThrow()
 
             val references = mutableMapOf<SpdxExternalDocumentReference, ResolvedSpdxDocument>()
             val issues = mutableMapOf<String, Issue>()
             resolveAllReferences(
                 cache,
-                managerName,
+                issueSource,
                 rootDocument,
                 rootDocumentFile.toURI(),
                 references,
@@ -109,7 +108,7 @@ internal data class SpdxResolvedDocument(
             val packages = collectPackages(references) + rootDocument.getPackages()
             val relations = collectAndQualifyRelations(references) + rootDocument.relationships
 
-            return SpdxResolvedDocument(resolvedRootDocument, managerName, references, relations, packages, issues)
+            return SpdxResolvedDocument(resolvedRootDocument, issueSource, references, relations, packages, issues)
         }
     }
 
@@ -125,7 +124,7 @@ internal data class SpdxResolvedDocument(
             issue?.also { issues += it }
         } else {
             issues += issue ?: createAndLogIssue(
-                source = managerName,
+                source = issueSource,
                 message = "'$identifier' could neither be resolved to a 'package' nor to an 'externalDocumentRef'."
             )
         }
@@ -179,24 +178,24 @@ internal data class ResolvedSpdxDocument(
  * Resolve all external references to SPDX documents contained in [document], and recursively in all referenced
  * documents. Use [cache] to load documents. Resolve relative URLs against [baseUri]. Store all encountered references
  * and the documents they point to in [references]. Store issues encountered when resolving references in [issues] with
- * [managerName] as source of the issues. Use [knownUris] to detect cycles.
+ * [issueSource] as source of the issues. Use [knownUris] to detect cycles.
  */
 private fun resolveAllReferences(
     cache: SpdxDocumentCache,
-    managerName: String,
+    issueSource: String,
     document: SpdxDocument,
     baseUri: URI,
     references: MutableMap<SpdxExternalDocumentReference, ResolvedSpdxDocument>,
     issues: MutableMap<String, Issue>,
     knownUris: MutableSet<URI>
 ) {
-    document.resolveReferences(cache, baseUri, managerName).forEach { (ref, resolvedDoc) ->
+    document.resolveReferences(cache, baseUri, issueSource).forEach { (ref, resolvedDoc) ->
         resolvedDoc.document?.let { document ->
             references += ref to ResolvedSpdxDocument(document, resolvedDoc.uri)
             if (knownUris.add(resolvedDoc.uri)) {
                 resolveAllReferences(
                     cache,
-                    managerName,
+                    issueSource,
                     document,
                     resolvedDoc.uri,
                     references,
@@ -274,7 +273,7 @@ private fun URI.toDefinitionFile(): File? =
 internal fun SpdxExternalDocumentReference.resolve(
     cache: SpdxDocumentCache,
     baseUri: URI,
-    managerName: String
+    issueSource: String
 ): ResolutionResult {
     val uri = runCatching {
         val resolvedUri = baseUri.resolve(spdxDocument)
@@ -284,7 +283,7 @@ internal fun SpdxExternalDocumentReference.resolve(
             document = null,
             uri = baseUri,
             issue = createAndLogIssue(
-                source = managerName,
+                source = issueSource,
                 message = "The SPDX document at '$spdxDocument' cannot be resolved as a URI (referred from $baseUri " +
                     "as part of '$externalDocumentId')."
             )
@@ -292,28 +291,28 @@ internal fun SpdxExternalDocumentReference.resolve(
     }
 
     return if (uri.isLocalDefinitionFile()) {
-        resolveFromFile(uri, cache, baseUri, managerName)
+        resolveFromFile(uri, cache, baseUri, issueSource)
     } else {
-        resolveFromDownload(uri, cache, baseUri, managerName)
+        resolveFromDownload(uri, cache, baseUri, issueSource)
     }
 }
 
 /**
  * Resolve this [SpdxExternalDocumentReference] from [uri] if it points to a file on the local file system. Use
- * [cache] to load the file. In case of a failure, create an [Issue] whose message includes [baseUri], and
- * [managerName].
+ * [cache] to load the file. In case of a failure, create an [Issue] whose message includes [baseUri] and that uses
+ * [issueSource].
  */
 private fun SpdxExternalDocumentReference.resolveFromFile(
     uri: URI,
     cache: SpdxDocumentCache,
     baseUri: URI,
-    managerName: String
+    issueSource: String
 ): ResolutionResult {
     val file = uri.toDefinitionFile() ?: return ResolutionResult(
         document = null,
         uri = baseUri,
         issue = createAndLogIssue(
-            source = managerName,
+            source = issueSource,
             message = "The file pointed to by '$uri' in reference '$externalDocumentId' does not exist."
         )
     )
@@ -323,26 +322,26 @@ private fun SpdxExternalDocumentReference.resolveFromFile(
             document = null,
             uri = uri,
             issue = createAndLogIssue(
-                source = managerName,
+                source = issueSource,
                 message = "Failed to parse the SPDX document pointed to by '$uri' in reference " +
                     "'$externalDocumentId': ${it.message}"
             )
         )
     }
 
-    return ResolutionResult(document, uri, verifyChecksum(file, baseUri, managerName))
+    return ResolutionResult(document, uri, verifyChecksum(file, baseUri, issueSource))
 }
 
 /**
  * Resolve this [SpdxExternalDocumentReference] from [uri] if it requires a download from a server. Use [cache] to
  * parse the document after it has been downloaded. In case of a failure, create an [Issue] whose message includes
- * [baseUri], and [managerName].
+ * [baseUri] and that uses [issueSource].
  */
 private fun SpdxExternalDocumentReference.resolveFromDownload(
     uri: URI,
     cache: SpdxDocumentCache,
     baseUri: URI,
-    managerName: String
+    issueSource: String
 ): ResolutionResult {
     logger.info {
         "Downloading SPDX document from $uri (referred from $baseUri as part of '$externalDocumentId')."
@@ -364,7 +363,7 @@ private fun SpdxExternalDocumentReference.resolveFromDownload(
                 document = null,
                 uri = uri,
                 issue = createAndLogIssue(
-                    source = managerName,
+                    source = issueSource,
                     message = "Failed to download SPDX document from $uri (referred from $baseUri as part of " +
                         "'$externalDocumentId'): ${it.collectMessages()}"
                 )
@@ -376,14 +375,14 @@ private fun SpdxExternalDocumentReference.resolveFromDownload(
                 document = null,
                 uri = uri,
                 issue = createAndLogIssue(
-                    source = managerName,
+                    source = issueSource,
                     message = "Failed to parse SPDX document from $uri (referred from $baseUri as part of " +
                         "'$externalDocumentId'): ${it.message}"
                 )
             )
         }
 
-        ResolutionResult(document, uri, verifyChecksum(file, baseUri, managerName))
+        ResolutionResult(document, uri, verifyChecksum(file, baseUri, issueSource))
     } finally {
         tempDir.safeDeleteRecursively()
     }
@@ -391,14 +390,14 @@ private fun SpdxExternalDocumentReference.resolveFromDownload(
 
 /**
  * Verify that the resolved or downloaded [file] this [SpdxExternalDocumentReference] refers to matches the expected
- * checksum. If not, return an [Issue] based on the document [uri] and [managerName].
+ * checksum. If not, return an [Issue] based on the document [uri] and [issueSource].
  */
-private fun SpdxExternalDocumentReference.verifyChecksum(file: File, uri: URI, managerName: String): Issue? {
+private fun SpdxExternalDocumentReference.verifyChecksum(file: File, uri: URI, issueSource: String): Issue? {
     val hash = Hash(checksum.checksumValue, checksum.algorithm.name)
     if (hash.verify(file)) return null
 
     return SpdxResolvedDocument.createAndLogIssue(
-        source = managerName,
+        source = issueSource,
         severity = Severity.WARNING,
         message = "The SPDX document at '$spdxDocument' does not match the expected $hash (referred from $uri as " +
             "part of '$externalDocumentId')."
@@ -407,14 +406,14 @@ private fun SpdxExternalDocumentReference.verifyChecksum(file: File, uri: URI, m
 
 /**
  * Load all documents referenced by external references in this [SpdxDocument] using [cache]. Resolve relative paths
- * based on [documentUri]. If issues occur, use [managerName] as source.
+ * based on [documentUri]. If issues occur, use [issueSource] as the source.
  */
 private fun SpdxDocument.resolveReferences(
     cache: SpdxDocumentCache,
     documentUri: URI,
-    managerName: String
+    issueSource: String
 ): Map<SpdxExternalDocumentReference, ResolutionResult> =
-    externalDocumentRefs.associateWith { it.resolve(cache, documentUri, managerName) }
+    externalDocumentRefs.associateWith { it.resolve(cache, documentUri, issueSource) }
 
 /**
  * Return a map with all the SPDX packages contained in this document. Keys are the identifiers of the packages,
