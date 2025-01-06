@@ -235,7 +235,7 @@ private fun parseLockfile(podfileLock: File): LockfileData {
     // The "PODS" section lists the resolved dependencies and, nested by one level, any version constraints of their
     // direct dependencies. That is, the nesting never goes deeper than two levels.
     lockfile.pods.map { pod ->
-        resolvedVersions[pod.name] = checkNotNull(pod.version)
+        resolvedVersions[pod.name] = pod.version
 
         if (pod.dependencies.isNotEmpty()) {
             dependencyConstraints[pod.name] = pod.dependencies.mapTo(mutableSetOf()) {
