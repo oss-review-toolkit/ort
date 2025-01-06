@@ -46,7 +46,6 @@ import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.stashDirectories
 
 import org.semver4j.RangesList
@@ -184,31 +183,29 @@ class CocoaPods(
 
         podspecCache[podspecName]?.let { return it }
 
-        val podspecCommand = runCatching {
-            CocoaPodsCommand.run(
-                "spec", "which", "^$podspecName$",
-                "--version=${id.version}",
-                "--allow-root",
-                "--regex"
-            ).requireSuccess()
-        }.getOrElse {
-            val messages = it.collectMessages()
+        val podspecProcess = CocoaPodsCommand.run(
+            "spec", "which", "^$podspecName$",
+            "--version=${id.version}",
+            "--allow-root",
+            "--regex"
+        )
 
+        if (podspecProcess.isError) {
             logger.warn {
-                "Failed to get the '.podspec' file for package '${id.toCoordinates()}': $messages"
+                "Failed to get the '.podspec' file for package '${id.toCoordinates()}': ${podspecProcess.errorMessage}"
             }
 
-            if ("SSL peer certificate or SSH remote key was not OK" in messages) {
+            if (podspecProcess.errorMessage == "SSL peer certificate or SSH remote key was not OK") {
                 // When running into this error (see e.g. https://github.com/CocoaPods/CocoaPods/issues/11159) abort
                 // immediately, because connections are retried multiple times for each package's podspec to retrieve
                 // which would otherwise take a very long time.
-                throw IOException(messages)
+                throw IOException(podspecProcess.errorMessage)
             }
 
             return null
         }
 
-        val podspecFile = File(podspecCommand.stdout.trim())
+        val podspecFile = File(podspecProcess.stdout.trim())
         val podspec = podspecFile.readText().parsePodspec()
 
         podspecCache[podspecName] = podspec
