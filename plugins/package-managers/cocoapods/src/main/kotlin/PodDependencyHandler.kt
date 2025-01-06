@@ -78,7 +78,15 @@ internal class PodDependencyHandler : DependencyHandler<Lockfile.Pod> {
         } else {
             val basePodName = dependency.name.substringBefore('/')
             val podspec = podspecCache.getOrPut(basePodName) {
-                getPodspec(basePodName, dependency.version) ?: return Package.EMPTY.copy(id = id, purl = id.toPurl())
+                // Lazily only call the pod CLI if the podspec is not available from the external source.
+                val podspecFile = sequence {
+                    yield(dependency.externalSource?.podspec)
+                    yield(getPodspecPath(basePodName, dependency.version))
+                }.firstNotNullOfOrNull { path ->
+                    path?.let { File(it) }?.takeIf { it.isFile }
+                }
+
+                podspecFile?.readText()?.parsePodspec() ?: return Package.EMPTY.copy(id = id, purl = id.toPurl())
             }
 
             val vcs = podspec.source?.git?.let { url ->
@@ -103,7 +111,7 @@ internal class PodDependencyHandler : DependencyHandler<Lockfile.Pod> {
         }
     }
 
-    private fun getPodspec(name: String, version: String): Podspec? {
+    private fun getPodspecPath(name: String, version: String): String? {
         val podspecProcess = CocoaPodsCommand.run(
             "spec", "which", "^$name$",
             "--version=$version",
@@ -127,7 +135,6 @@ internal class PodDependencyHandler : DependencyHandler<Lockfile.Pod> {
             return null
         }
 
-        val podspecFile = File(podspecProcess.stdout.trim())
-        return podspecFile.readText().parsePodspec()
+        return podspecProcess.stdout.trim()
     }
 }
