@@ -92,12 +92,7 @@ class Maven(
     /** The builder for the shared dependency graph. */
     private lateinit var graphBuilder: DependencyGraphBuilder<DependencyNode>
 
-    private var sbtMode = false
-
-    /**
-     * Enable compatibility mode with POM files generated from SBT using "sbt makePom".
-     */
-    fun enableSbtMode() = also { sbtMode = true }
+    private val sbtMode = options["sbtMode"].toBoolean()
 
     override fun beforeResolution(definitionFiles: List<File>) {
         localProjectBuildingResults += mvn.prepareMavenProjects(definitionFiles)

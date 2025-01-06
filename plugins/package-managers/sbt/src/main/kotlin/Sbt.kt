@@ -30,6 +30,7 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -232,11 +233,12 @@ class Sbt(
         return versions.firstOrNull()?.let { Semver(it) }
     }
 
-    override fun resolveDependencies(definitionFiles: List<File>, labels: Map<String, String>) =
+    override fun resolveDependencies(definitionFiles: List<File>, labels: Map<String, String>): PackageManagerResult {
         // Simply pass on the list of POM files to Maven, ignoring the SBT build files here.
-        Maven(managerName, analysisRoot, analyzerConfig, repoConfig)
-            .enableSbtMode()
+        val sbtAnalyzerConfig = analyzerConfig.withPackageManagerOption(managerName, "sbtMode", "true")
+        return Maven(managerName, analysisRoot, sbtAnalyzerConfig, repoConfig)
             .resolveDependencies(definitionFiles, labels)
+    }
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>) =
         // This is not implemented in favor over overriding [resolveDependencies].
