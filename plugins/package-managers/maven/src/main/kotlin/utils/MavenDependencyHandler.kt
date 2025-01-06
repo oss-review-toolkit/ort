@@ -63,7 +63,7 @@ class MavenDependencyHandler(
 
     override fun identifierFor(dependency: DependencyNode): Identifier =
         Identifier(
-            type = if (isLocalProject(dependency.identifier())) managerName else "Maven",
+            type = if (isLocalProject(dependency)) managerName else "Maven",
             namespace = dependency.artifact.groupId,
             name = dependency.artifact.artifactId,
             version = dependency.artifact.version
@@ -99,7 +99,7 @@ class MavenDependencyHandler(
             // resolution mechanism might prefer using the project. Therefore, the check whether the dependency
             // is a project must be done after the package resolution again.
             if (isLocalProject(pkg.id)) {
-                localProjectIds += dependency.identifier()
+                localProjectIds += dependency.artifact.identifier()
                 null
             } else {
                 pkg
@@ -118,7 +118,7 @@ class MavenDependencyHandler(
     /**
      * Return a flag whether the given [dependency] references a project in the same multi-module build.
      */
-    private fun isLocalProject(dependency: DependencyNode): Boolean = isLocalProject(dependency.identifier())
+    private fun isLocalProject(dependency: DependencyNode): Boolean = isLocalProject(dependency.artifact.identifier())
 
     /**
      * Return a flag whether the given [id] references a project in the same multi-module build.
@@ -136,8 +136,3 @@ class MavenDependencyHandler(
  * filtered out by [dependenciesFor()].
  */
 private val TOOL_DEPENDENCIES = listOf("com.sun:tools:", "jdk.tools:jdk.tools:")
-
-/**
- * Convenience function to generate the Maven identifier for this [DependencyNode].
- */
-private fun DependencyNode.identifier(): String = artifact.identifier()
