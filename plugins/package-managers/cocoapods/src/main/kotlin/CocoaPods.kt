@@ -121,7 +121,7 @@ class CocoaPods(
 
             scopes += Scope(SCOPE_NAME, lockfileData.dependencies)
             packages += scopes.collectDependencies().map {
-                lockfileData.packagesFromCheckoutOptionsForId[it] ?: getPackage(it, workingDir)
+                lockfileData.packagesFromCheckoutOptionsForId[it] ?: getPackage(it)
             }
         } else {
             issues += createAndLogIssue(
@@ -155,8 +155,8 @@ class CocoaPods(
         return listOf(projectAnalyzerResult)
     }
 
-    private fun getPackage(id: Identifier, workingDir: File): Package {
-        val podspec = getPodspec(id, workingDir) ?: return Package.EMPTY.copy(id = id, purl = id.toPurl())
+    private fun getPackage(id: Identifier): Package {
+        val podspec = getPodspec(id) ?: return Package.EMPTY.copy(id = id, purl = id.toPurl())
 
         val vcs = podspec.source?.git?.let { url ->
             VcsInfo(
@@ -179,7 +179,7 @@ class CocoaPods(
         )
     }
 
-    private fun getPodspec(id: Identifier, workingDir: File): Podspec? {
+    private fun getPodspec(id: Identifier): Podspec? {
         val podspecName = id.name.substringBefore("/")
 
         podspecCache[podspecName]?.let { return it }
@@ -189,8 +189,7 @@ class CocoaPods(
                 "spec", "which", "^$podspecName$",
                 "--version=${id.version}",
                 "--allow-root",
-                "--regex",
-                workingDir = workingDir
+                "--regex"
             ).requireSuccess()
         }.getOrElse {
             val messages = it.collectMessages()
