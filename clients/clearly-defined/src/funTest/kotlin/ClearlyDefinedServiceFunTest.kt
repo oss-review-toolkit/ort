@@ -31,7 +31,6 @@ import io.kotest.matchers.shouldNot
 import io.kotest.matchers.string.include
 import io.kotest.matchers.string.shouldStartWith
 
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.decodeFromStream
 
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionInfo

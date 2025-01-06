@@ -26,8 +26,6 @@ import io.kotest.matchers.shouldBe
 import java.io.File
 import java.net.URI
 
-import kotlinx.serialization.encodeToString
-
 class ClearlyDefinedServiceTest : WordSpec({
     "Serialization to a string representation" should {
         "work for File" {

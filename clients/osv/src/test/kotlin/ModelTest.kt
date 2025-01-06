@@ -25,8 +25,6 @@ import io.kotest.inspectors.forAll
 
 import java.io.File
 
-import kotlinx.serialization.encodeToString
-
 class ModelTest : StringSpec({
     "Deserializing and serializing any vulnerability is idempotent for all official examples" {
         getVulnerabilityExamplesJson().forAll { vulnerabilityJson ->
