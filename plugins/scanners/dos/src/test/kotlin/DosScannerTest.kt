@@ -37,8 +37,6 @@ import io.kotest.matchers.string.shouldStartWith
 
 import java.time.Instant
 
-import kotlinx.serialization.encodeToString
-
 import org.ossreviewtoolkit.clients.dos.JSON
 import org.ossreviewtoolkit.clients.dos.PackageInfo
 import org.ossreviewtoolkit.clients.dos.ScanResultsResponseBody
