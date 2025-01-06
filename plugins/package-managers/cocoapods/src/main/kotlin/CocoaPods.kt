@@ -20,36 +20,29 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.cocoapods
 
 import java.io.File
-import java.io.IOException
-
-import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
-import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
-import org.ossreviewtoolkit.model.RemoteArtifact
-import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.model.collectDependencies
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
-import org.ossreviewtoolkit.model.orEmpty
-import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.stashDirectories
 
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
+
+private const val LOCKFILE_FILENAME = "Podfile.lock"
+private const val SCOPE_NAME = "dependencies"
 
 internal object CocoaPodsCommand : CommandLineTool {
     override fun command(workingDir: File?) = if (Os.isWindows) "pod.bat" else "pod"
@@ -86,7 +79,8 @@ class CocoaPods(
         ) = CocoaPods(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
-    private val podspecCache = mutableMapOf<String, Podspec>()
+    private val dependencyHandler = PodDependencyHandler()
+    private val graphBuilder = DependencyGraphBuilder(dependencyHandler)
 
     override fun beforeResolution(definitionFiles: List<File>) = CocoaPodsCommand.checkVersion()
 
@@ -103,25 +97,40 @@ class CocoaPods(
                 // dependency version. If non-default Specs repositories were supported, then these would also need to
                 // be part of the key. As that's more complicated and not giving much performance prefer the more memory
                 // consumption friendly option of clearing the cache.
-                podspecCache.clear()
+                dependencyHandler.clearPodspecCache()
             }
         }
 
     private fun resolveDependenciesInternal(definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
         val lockfile = workingDir.resolve(LOCKFILE_FILENAME)
-
-        val scopes = mutableSetOf<Scope>()
-        val packages = mutableSetOf<Package>()
         val issues = mutableListOf<Issue>()
 
-        if (lockfile.isFile) {
-            val lockfileData = parseLockfile(lockfile)
+        val projectId = Identifier(
+            type = managerName,
+            namespace = "",
+            name = getFallbackProjectName(analysisRoot, definitionFile),
+            version = ""
+        )
 
-            scopes += Scope(SCOPE_NAME, lockfileData.dependencies)
-            packages += scopes.collectDependencies().map {
-                lockfileData.packagesFromCheckoutOptionsForId[it] ?: getPackage(it)
-            }
+        val project = Project(
+            id = projectId,
+            definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+            authors = emptySet(),
+            declaredLicenses = emptySet(),
+            vcs = VcsInfo.EMPTY,
+            vcsProcessed = processProjectVcs(workingDir),
+            homepageUrl = "",
+            scopeNames = setOf(SCOPE_NAME)
+        )
+
+        if (lockfile.isFile) {
+            val lockfileData = lockfile.readText().parseLockfile()
+
+            // Convert direct dependencies with version constraints to pods with resolved versions.
+            val dependencies = lockfileData.dependencies.mapNotNull { it.resolvedPod }
+
+            graphBuilder.addDependencies(projectId, SCOPE_NAME, dependencies)
         } else {
             issues += createAndLogIssue(
                 source = managerName,
@@ -131,161 +140,9 @@ class CocoaPods(
             )
         }
 
-        val projectAnalyzerResult = ProjectAnalyzerResult(
-            packages = packages,
-            project = Project(
-                id = Identifier(
-                    type = managerName,
-                    namespace = "",
-                    name = getFallbackProjectName(analysisRoot, definitionFile),
-                    version = ""
-                ),
-                definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-                authors = emptySet(),
-                declaredLicenses = emptySet(),
-                vcs = VcsInfo.EMPTY,
-                vcsProcessed = processProjectVcs(workingDir),
-                scopeDependencies = scopes,
-                homepageUrl = ""
-            ),
-            issues = issues
-        )
-
-        return listOf(projectAnalyzerResult)
+        return listOf(ProjectAnalyzerResult(project, emptySet(), issues))
     }
 
-    private fun getPackage(id: Identifier): Package {
-        val podspec = getPodspec(id) ?: return Package.EMPTY.copy(id = id, purl = id.toPurl())
-
-        val vcs = podspec.source?.git?.let { url ->
-            VcsInfo(
-                type = VcsType.GIT,
-                url = url,
-                revision = podspec.source.tag.orEmpty()
-            )
-        }.orEmpty()
-
-        return Package(
-            id = id,
-            authors = emptySet(),
-            declaredLicenses = setOfNotNull(podspec.license.takeUnless { it.isEmpty() }),
-            description = podspec.summary,
-            homepageUrl = podspec.homepage,
-            binaryArtifact = RemoteArtifact.EMPTY,
-            sourceArtifact = podspec.source?.http?.let { RemoteArtifact(it, Hash.NONE) }.orEmpty(),
-            vcs = vcs,
-            vcsProcessed = processPackageVcs(vcs, podspec.homepage)
-        )
-    }
-
-    private fun getPodspec(id: Identifier): Podspec? {
-        val podspecName = id.name.substringBefore("/")
-
-        podspecCache[podspecName]?.let { return it }
-
-        val podspecProcess = CocoaPodsCommand.run(
-            "spec", "which", "^$podspecName$",
-            "--version=${id.version}",
-            "--allow-root",
-            "--regex"
-        )
-
-        if (podspecProcess.isError) {
-            logger.warn {
-                "Failed to get the '.podspec' file for package '${id.toCoordinates()}': ${podspecProcess.errorMessage}"
-            }
-
-            if (podspecProcess.errorMessage == "SSL peer certificate or SSH remote key was not OK") {
-                // When running into this error (see e.g. https://github.com/CocoaPods/CocoaPods/issues/11159) abort
-                // immediately, because connections are retried multiple times for each package's podspec to retrieve
-                // which would otherwise take a very long time.
-                throw IOException(podspecProcess.errorMessage)
-            }
-
-            return null
-        }
-
-        val podspecFile = File(podspecProcess.stdout.trim())
-        val podspec = podspecFile.readText().parsePodspec()
-
-        podspecCache[podspecName] = podspec
-
-        return podspec
-    }
-}
-
-private const val LOCKFILE_FILENAME = "Podfile.lock"
-
-private const val SCOPE_NAME = "dependencies"
-
-private data class LockfileData(
-    val dependencies: Set<PackageReference>,
-    val packagesFromCheckoutOptionsForId: Map<Identifier, Package>
-)
-
-private fun parseLockfile(podfileLock: File): LockfileData {
-    val lockfile = podfileLock.readText().parseLockfile()
-    val resolvedVersions = mutableMapOf<String, String>()
-    val dependencyConstraints = mutableMapOf<String, MutableSet<String>>()
-
-    // The "PODS" section lists the resolved dependencies and, nested by one level, any version constraints of their
-    // direct dependencies. That is, the nesting never goes deeper than two levels.
-    lockfile.pods.map { pod ->
-        resolvedVersions[pod.name] = pod.version
-
-        if (pod.dependencies.isNotEmpty()) {
-            dependencyConstraints[pod.name] = pod.dependencies.mapTo(mutableSetOf()) {
-                // Discard the version (which is only a constraint in this case) and just take the name.
-                it.name
-            }
-        }
-    }
-
-    val packagesFromCheckoutOptionsForId = lockfile.checkoutOptions.mapNotNull { (name, checkoutOption) ->
-        val url = checkoutOption.git ?: return@mapNotNull null
-        val revision = checkoutOption.commit.orEmpty()
-
-        // The version written to the lockfile matches the version specified in the project's ".podspec" file at the
-        // given revision, so the same version might be used in different revisions. To still get a unique identifier,
-        // append the revision to the version.
-        val versionFromPodspec = checkNotNull(resolvedVersions[name]) {
-            "Could not find the resolved version for '$name' in the podspec file."
-        }
-
-        val uniqueVersion = "$versionFromPodspec-$revision"
-        val id = Identifier("Pod", "", name, uniqueVersion)
-
-        // Write the unique version back for correctly associating dependencies below.
-        resolvedVersions[name] = uniqueVersion
-
-        id to Package(
-            id = id,
-            declaredLicenses = emptySet(),
-            description = "",
-            homepageUrl = url,
-            binaryArtifact = RemoteArtifact.EMPTY,
-            sourceArtifact = RemoteArtifact.EMPTY,
-            vcs = VcsInfo(VcsType.GIT, url, revision)
-        )
-    }.toMap()
-
-    fun createPackageReference(name: String): PackageReference =
-        PackageReference(
-            id = Identifier("Pod", "", name, resolvedVersions.getValue(name)),
-            dependencies = dependencyConstraints[name].orEmpty().filter {
-                // Only use a constraint as a dependency if it has a resolved version.
-                it in resolvedVersions
-            }.mapTo(mutableSetOf()) {
-                createPackageReference(it)
-            }
-        )
-
-    // The "DEPENDENCIES" section lists direct dependencies, but only along with version constraints, not with their
-    // resolved versions, and eventually additional information about the source.
-    val dependencies = lockfile.dependencies.mapTo(mutableSetOf()) { dependency ->
-        // Ignore the version (which is only a constraint in this case) and just take the name.
-        createPackageReference(dependency.name)
-    }
-
-    return LockfileData(dependencies, packagesFromCheckoutOptionsForId)
+    override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =
+        PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
 }
