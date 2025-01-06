@@ -47,7 +47,8 @@ internal class PodDependencyHandler : DependencyHandler<Lockfile.Pod> {
             // The version written to the lockfile matches the version specified in the project's ".podspec" file at the
             // given revision, so the same version might be used in different revisions. To still get a unique
             // identifier, append the revision to the version.
-            val uniqueVersion = listOfNotNull(version, checkoutOption?.commit).joinToString("-")
+            val revision = checkoutOption?.commit ?: checkoutOption?.tag ?: checkoutOption?.branch
+            val uniqueVersion = listOfNotNull(version, revision).joinToString("-")
             Identifier("Pod", "", name, uniqueVersion)
         }
 
@@ -60,8 +61,10 @@ internal class PodDependencyHandler : DependencyHandler<Lockfile.Pod> {
         val id = identifierFor(dependency)
 
         return if (dependency.checkoutOption != null) {
-            val url = dependency.checkoutOption.git.orEmpty()
-            val revision = dependency.checkoutOption.commit.orEmpty()
+            val (url, revision) = with(dependency.checkoutOption) {
+                val revision = commit ?: tag ?: branch
+                git.orEmpty() to revision.orEmpty()
+            }
 
             Package(
                 id = id,
