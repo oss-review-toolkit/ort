@@ -33,23 +33,39 @@ import org.ossreviewtoolkit.plugins.packagemanagers.cocoapods.Lockfile.Dependenc
 import org.ossreviewtoolkit.plugins.packagemanagers.cocoapods.Lockfile.Pod
 
 internal data class Lockfile(
+    /** All pods that are transitively used in the project. */
     val pods: List<Pod>,
+
+    /** Details about how to retrieve pods from external sources. */
     val checkoutOptions: Map<String, CheckoutOption>,
+
+    /** The direct dependencies of the project. */
     val dependencies: List<Dependency>
 ) {
     data class Pod(
+        /** The name of this pod. */
         val name: String,
+
+        /** The resolved version of this pod. */
         val version: String? = null,
+
+        /** The direct dependencies of this pod. */
         val dependencies: List<Pod> = emptyList()
     )
 
     data class CheckoutOption(
+        /** The Git repository URL to check out from. */
         val git: String?,
+
+        /** The Git commit hash to check out. */
         val commit: String?
     )
 
     data class Dependency(
+        /** The name of this direct dependency. */
         val name: String,
+
+        /** The version constraint for this direct dependency. */
         val versionConstraint: String?
     )
 }
