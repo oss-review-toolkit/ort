@@ -45,20 +45,6 @@ internal data class Podspec(
         val tag: String? = null,
         val http: String? = null
     )
-
-    fun withSubspecs(): List<Podspec> {
-        val result = mutableListOf<Podspec>()
-
-        fun add(spec: Podspec, namePrefix: String) {
-            val name = "$namePrefix${spec.name}"
-            result += copy(name = "$namePrefix${spec.name}")
-            spec.subspecs.forEach { add(it, "$name/") }
-        }
-
-        add(this, "")
-
-        return result
-    }
 }
 
 private val JSON = Json { ignoreUnknownKeys = true }

@@ -180,9 +180,9 @@ class CocoaPods(
     }
 
     private fun getPodspec(id: Identifier, workingDir: File): Podspec? {
-        podspecCache[id.name]?.let { return it }
-
         val podspecName = id.name.substringBefore("/")
+
+        podspecCache[podspecName]?.let { return it }
 
         val podspecCommand = runCatching {
             CocoaPodsCommand.run(
@@ -212,9 +212,9 @@ class CocoaPods(
         val podspecFile = File(podspecCommand.stdout.trim())
         val podspec = podspecFile.readText().parsePodspec()
 
-        podspec.withSubspecs().associateByTo(podspecCache) { it.name }
+        podspecCache[podspecName] = podspec
 
-        return podspecCache.getValue(id.name)
+        return podspec
     }
 }
 
