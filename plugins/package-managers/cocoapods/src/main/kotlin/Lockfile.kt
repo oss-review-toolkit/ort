@@ -36,11 +36,11 @@ internal data class Lockfile(
     /** All pods that are transitively used in the project. */
     val pods: List<Pod>,
 
-    /** Details about how to retrieve pods from external sources. */
-    val checkoutOptions: Map<String, CheckoutOption>,
-
     /** The direct dependencies of the project. */
-    val dependencies: List<Dependency>
+    val dependencies: List<Dependency>,
+
+    /** Details about how to retrieve pods from external sources. */
+    val checkoutOptions: Map<String, CheckoutOption>
 ) {
     private val podsByName by lazy { pods.associateBy { it.name } }
 
@@ -57,14 +57,6 @@ internal data class Lockfile(
         val checkoutOption = this@Lockfile.checkoutOptions[name]
     }
 
-    data class CheckoutOption(
-        /** The Git repository URL to check out from. */
-        val git: String?,
-
-        /** The Git commit hash to check out. */
-        val commit: String?
-    )
-
     inner class Dependency(
         /** The name of this direct dependency. */
         val name: String,
@@ -74,6 +66,14 @@ internal data class Lockfile(
     ) {
         val resolvedPod by lazy { this@Lockfile.podsByName[name] }
     }
+
+    data class CheckoutOption(
+        /** The Git repository URL to check out from. */
+        val git: String?,
+
+        /** The Git commit hash to check out. */
+        val commit: String?
+    )
 }
 
 internal fun String.parseLockfile(): Lockfile {
@@ -94,7 +94,7 @@ internal fun String.parseLockfile(): Lockfile {
     val pods = mutableListOf<Pod>()
     val dependencies = mutableListOf<Dependency>()
 
-    val lockfile = Lockfile(pods, checkoutOptions, dependencies)
+    val lockfile = Lockfile(pods, dependencies, checkoutOptions)
 
     pods += root.get<YamlList>("PODS")?.items.orEmpty().map { it.toPod(lockfile) }
     dependencies += root.get<YamlList>("DEPENDENCIES")?.items.orEmpty().map { it.toDependency(lockfile) }
