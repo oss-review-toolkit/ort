@@ -30,6 +30,7 @@ import com.charleskorn.kaml.yamlScalar
 
 import org.ossreviewtoolkit.plugins.packagemanagers.cocoapods.Lockfile.CheckoutOption
 import org.ossreviewtoolkit.plugins.packagemanagers.cocoapods.Lockfile.Dependency
+import org.ossreviewtoolkit.plugins.packagemanagers.cocoapods.Lockfile.ExternalSource
 import org.ossreviewtoolkit.plugins.packagemanagers.cocoapods.Lockfile.Pod
 
 internal data class Lockfile(
@@ -38,6 +39,9 @@ internal data class Lockfile(
 
     /** The direct dependencies of the project. */
     val dependencies: List<Dependency>,
+
+    /** Details about where external pods come from. */
+    val externalSources: Map<String, ExternalSource>,
 
     /** Details about how to retrieve pods from external sources. */
     val checkoutOptions: Map<String, CheckoutOption>
@@ -54,6 +58,7 @@ internal data class Lockfile(
         /** The direct dependencies of this pod. */
         val dependencies: List<Dependency> = emptyList()
     ) {
+        val externalSource = this@Lockfile.externalSources[name]
         val checkoutOption = this@Lockfile.checkoutOptions[name]
     }
 
@@ -66,6 +71,14 @@ internal data class Lockfile(
     ) {
         val resolvedPod by lazy { this@Lockfile.podsByName[name] }
     }
+
+    data class ExternalSource(
+        /** The path to the local directory where the pod is hosted. */
+        val path: String? = null,
+
+        /** The path to the local '.podspec' file of the pod. */
+        val podspec: String? = null
+    )
 
     data class CheckoutOption(
         /** The Git repository URL to check out from. */
@@ -85,6 +98,18 @@ internal data class Lockfile(
 internal fun String.parseLockfile(): Lockfile {
     val root = Yaml.default.parseToYamlNode(this).yamlMap
 
+    val externalSources = root.get<YamlMap>("EXTERNAL SOURCES")?.entries.orEmpty().map {
+        val name = it.key.content
+        val node = it.value.yamlMap
+
+        val externalSource = ExternalSource(
+            path = node.get<YamlScalar>(":path")?.content,
+            podspec = node.get<YamlScalar>(":podspec")?.content
+        )
+
+        name to externalSource
+    }.toMap()
+
     val checkoutOptions = root.get<YamlMap>("CHECKOUT OPTIONS")?.entries.orEmpty().map {
         val name = it.key.content
         val node = it.value.yamlMap
@@ -102,7 +127,7 @@ internal fun String.parseLockfile(): Lockfile {
     val pods = mutableListOf<Pod>()
     val dependencies = mutableListOf<Dependency>()
 
-    val lockfile = Lockfile(pods, dependencies, checkoutOptions)
+    val lockfile = Lockfile(pods, dependencies, externalSources, checkoutOptions)
 
     pods += root.get<YamlList>("PODS")?.items.orEmpty().map { it.toPod(lockfile) }
     dependencies += root.get<YamlList>("DEPENDENCIES")?.items.orEmpty().map { it.toDependency(lockfile) }
