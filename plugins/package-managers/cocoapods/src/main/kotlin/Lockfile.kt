@@ -47,10 +47,10 @@ internal data class Lockfile(
         val name: String,
 
         /** The resolved version of this pod. */
-        val version: String? = null,
+        val version: String,
 
         /** The direct dependencies of this pod. */
-        val dependencies: List<Pod> = emptyList()
+        val dependencies: List<Dependency> = emptyList()
     )
 
     data class CheckoutOption(
@@ -86,11 +86,7 @@ internal fun String.parseLockfile(): Lockfile {
         name to checkoutOption
     }.toMap()
 
-    val dependencies = root.get<YamlList>("DEPENDENCIES")?.items.orEmpty().map { node ->
-        val (name, version) = parseNameAndVersion(node.yamlScalar.content)
-        Dependency(name, version)
-    }
-
+    val dependencies = root.get<YamlList>("DEPENDENCIES")?.items.orEmpty().map { it.toDependency() }
     return Lockfile(pods, checkoutOptions, dependencies)
 }
 
@@ -99,19 +95,20 @@ private fun YamlNode.toPod(): Pod =
         this is YamlMap -> {
             val (key, value) = yamlMap.entries.entries.single()
             val (name, version) = parseNameAndVersion(key.content)
-
-            Pod(
-                name = name,
-                version = version,
-                dependencies = value.yamlList.items.map { it.toPod() }
-            )
+            val directDependencies = value.yamlList.items.map { it.toDependency() }
+            Pod(name, checkNotNull(version), directDependencies)
         }
 
         else -> {
             val (name, version) = parseNameAndVersion(yamlScalar.content)
-            Pod(name, version)
+            Pod(name, checkNotNull(version))
         }
     }
+
+private fun YamlNode.toDependency(): Dependency {
+    val (name, version) = parseNameAndVersion(yamlScalar.content)
+    return Dependency(name, version)
+}
 
 private fun parseNameAndVersion(entry: String): Pair<String, String?> {
     val info = entry.split(' ', limit = 2)
