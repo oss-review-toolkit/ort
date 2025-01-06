@@ -72,7 +72,13 @@ internal data class Lockfile(
         val git: String?,
 
         /** The Git commit hash to check out. */
-        val commit: String?
+        val commit: String?,
+
+        /** The Git tag name to check out. */
+        val tag: String?,
+
+        /** The Git branch name to check out. */
+        val branch: String?
     )
 }
 
@@ -85,7 +91,9 @@ internal fun String.parseLockfile(): Lockfile {
 
         val checkoutOption = CheckoutOption(
             git = node.get<YamlScalar>(":git")?.content,
-            commit = node.get<YamlScalar>(":commit")?.content
+            commit = node.get<YamlScalar>(":commit")?.content,
+            tag = node.get<YamlScalar>(":tag")?.content,
+            branch = node.get<YamlScalar>(":branch")?.content
         )
 
         name to checkoutOption
