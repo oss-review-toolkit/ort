@@ -26,7 +26,7 @@ import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackage
 
-internal class YarnDependencyHandler(private val npm: Yarn) : DependencyHandler<NpmModuleInfo> {
+internal class YarnDependencyHandler(private val yarn: Yarn) : DependencyHandler<NpmModuleInfo> {
     override fun identifierFor(dependency: NpmModuleInfo): Identifier = dependency.id
 
     override fun dependenciesFor(dependency: NpmModuleInfo): List<NpmModuleInfo> = dependency.dependencies.toList()
@@ -35,7 +35,7 @@ internal class YarnDependencyHandler(private val npm: Yarn) : DependencyHandler<
         PackageLinkage.DYNAMIC.takeUnless { dependency.isProject } ?: PackageLinkage.PROJECT_DYNAMIC
 
     override fun createPackage(dependency: NpmModuleInfo, issues: MutableCollection<Issue>): Package? =
-        npm.takeUnless { dependency.isProject }?.let {
+        yarn.takeUnless { dependency.isProject }?.let {
             parsePackage(dependency.workingDir, dependency.packageFile, it::getRemotePackageDetails)
         }
 }
