@@ -67,7 +67,6 @@ internal class PnpmDependencyHandler(private val pnpm: Pnpm) : DependencyHandler
     override fun createPackage(dependency: Dependency, issues: MutableCollection<Issue>): Package? =
         dependency.takeUnless { it.isProject() || !it.isInstalled }?.let {
             parsePackage(
-                workingDir = it.workingDir,
                 packageJsonFile = it.packageJsonFile,
                 getRemotePackageDetails = pnpm::getRemotePackageDetails
             )

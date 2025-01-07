@@ -56,7 +56,6 @@ internal class NpmDependencyHandler(private val npm: Npm) : DependencyHandler<Mo
     override fun createPackage(dependency: ModuleInfo, issues: MutableCollection<Issue>): Package? =
         dependency.takeUnless { it.isProject || !it.isInstalled }?.let {
             parsePackage(
-                workingDir = it.workingDir,
                 packageJsonFile = it.packageJsonFile,
                 getRemotePackageDetails = npm::getRemotePackageDetails
             )
@@ -65,8 +64,6 @@ internal class NpmDependencyHandler(private val npm: Npm) : DependencyHandler<Mo
     private fun readPackageJson(packageJsonFile: File): PackageJson =
         packageJsonCache.getOrPut(packageJsonFile.realFile()) { parsePackageJson(packageJsonFile) }
 }
-
-private val ModuleInfo.workingDir: File get() = File(path)
 
 private val ModuleInfo.isInstalled: Boolean get() = path != null
 

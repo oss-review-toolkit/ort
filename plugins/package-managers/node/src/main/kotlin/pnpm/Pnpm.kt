@@ -145,15 +145,15 @@ class Pnpm(
         // fixed major version to be sure to get consistent results.
         PnpmCommand.checkVersion()
 
-    internal fun getRemotePackageDetails(workingDir: File, packageName: String): PackageJson? {
+    internal fun getRemotePackageDetails(packageName: String): PackageJson? {
         packageDetailsCache[packageName]?.let { return it }
 
         return runCatching {
-            val process = PnpmCommand.run(workingDir, "info", "--json", packageName).requireSuccess()
+            val process = PnpmCommand.run("info", "--json", packageName).requireSuccess()
 
             parsePackageJson(process.stdout)
         }.onFailure { e ->
-            logger.warn { "Error getting details for $packageName in directory $workingDir: ${e.message.orEmpty()}" }
+            logger.warn { "Error getting details for $packageName: ${e.message.orEmpty()}" }
         }.onSuccess {
             packageDetailsCache[packageName] = it
         }.getOrNull()

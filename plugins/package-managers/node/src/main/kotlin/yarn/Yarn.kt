@@ -349,10 +349,10 @@ open class Yarn(
         YarnCommand.run(workingDir, "install", "--ignore-scripts", "--ignore-engines", "--immutable").requireSuccess()
     }
 
-    internal fun getRemotePackageDetails(workingDir: File, packageName: String): PackageJson? {
+    internal fun getRemotePackageDetails(packageName: String): PackageJson? {
         yarnInfoCache.read(packageName)?.let { return parsePackageJson(it) }
 
-        val process = YarnCommand.run(workingDir, "info", "--json", packageName).requireSuccess()
+        val process = YarnCommand.run("info", "--json", packageName).requireSuccess()
 
         return parseYarnInfo(process.stdout, process.stderr)?.also {
             yarnInfoCache.write(packageName, Json.encodeToString(it))
