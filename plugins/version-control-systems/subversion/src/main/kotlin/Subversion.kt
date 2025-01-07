@@ -28,9 +28,12 @@ import java.nio.file.Paths
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.downloader.VersionControlSystemFactory
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.VersionControlSystemConfiguration
+import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.OrtAuthenticator
 import org.ossreviewtoolkit.utils.ort.OrtProxySelector
@@ -52,15 +55,24 @@ import org.tmatesoft.svn.core.wc.SVNClientManager
 import org.tmatesoft.svn.core.wc.SVNRevision
 import org.tmatesoft.svn.util.Version
 
-class Subversion : VersionControlSystem() {
+class Subversion internal constructor() : VersionControlSystem() {
     private val ortAuthManager = OrtSVNAuthenticationManager()
     private val clientManager = SVNClientManager.newInstance().apply {
         setAuthenticationManager(ortAuthManager)
     }
 
     override val type = VcsType.SUBVERSION.toString()
-    override val priority = 10
     override val latestRevisionNames = listOf("HEAD")
+
+    class Factory : VersionControlSystemFactory<VersionControlSystemConfiguration>(VcsType.SUBVERSION.toString(), 10) {
+        override fun create(config: VersionControlSystemConfiguration): VersionControlSystem {
+            return Subversion()
+        }
+
+        override fun parseConfig(options: Options, secrets: Options): VersionControlSystemConfiguration {
+            return VersionControlSystemConfiguration() // No specific Subversion configuration yet.
+        }
+    }
 
     override fun getVersion(): String = Version.getVersionString()
 

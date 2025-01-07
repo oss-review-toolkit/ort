@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.VersionControlSystemConfiguration
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.GitRepo
 import org.ossreviewtoolkit.utils.test.getAssetFile
@@ -52,7 +53,9 @@ class AnalyzerFunTest : WordSpec({
                     revision = "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
                 )
             )
-            val outputDir = tempdir().also { GitRepo().download(pkg, it) }
+            val outputDir = tempdir().also {
+                GitRepo.Factory().create(VersionControlSystemConfiguration()).download(pkg, it)
+            }
 
             val result = analyze(outputDir, packageManagers = emptySet()).toYaml()
 
