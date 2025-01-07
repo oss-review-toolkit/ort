@@ -222,8 +222,11 @@ class EvaluatorCommand(descriptor: PluginDescriptor = EvaluatorCommandFactory.de
         val configurationFiles = listOfNotNull(
             copyrightGarbageFile,
             licenseClassificationsFile,
+            packageConfigurationsDir,
             packageCurationsFile,
-            repositoryConfigurationFile
+            packageCurationsDir,
+            repositoryConfigurationFile,
+            resolutionsFile
         )
 
         val configurationInfo = configurationFiles.joinToString("\n\t", postfix = "\n\t") { file ->
