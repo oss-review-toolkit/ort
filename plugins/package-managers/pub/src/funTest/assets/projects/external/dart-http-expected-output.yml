@@ -70,7 +70,7 @@ project:
       - id: "Pub::stack_trace:1.11.1"
         dependencies:
         - id: "Pub::path:1.9.0"
-      - id: "Pub::stream_channel:2.1.3"
+      - id: "Pub::stream_channel:2.1.4"
         dependencies:
         - id: "Pub::async:2.11.0"
           dependencies:
@@ -246,7 +246,7 @@ project:
           - id: "Pub::stack_trace:1.11.1"
             dependencies:
             - id: "Pub::path:1.9.0"
-          - id: "Pub::stream_channel:2.1.3"
+          - id: "Pub::stream_channel:2.1.4"
             dependencies:
             - id: "Pub::async:2.11.0"
               dependencies:
@@ -303,7 +303,7 @@ project:
         - id: "Pub::stack_trace:1.11.1"
           dependencies:
           - id: "Pub::path:1.9.0"
-        - id: "Pub::stream_channel:2.1.3"
+        - id: "Pub::stream_channel:2.1.4"
           dependencies:
           - id: "Pub::async:2.11.0"
             dependencies:
@@ -341,7 +341,7 @@ project:
           - id: "Pub::stack_trace:1.11.1"
             dependencies:
             - id: "Pub::path:1.9.0"
-          - id: "Pub::stream_channel:2.1.3"
+          - id: "Pub::stream_channel:2.1.4"
             dependencies:
             - id: "Pub::async:2.11.0"
               dependencies:
@@ -403,7 +403,7 @@ project:
             - id: "Pub::stack_trace:1.11.1"
               dependencies:
               - id: "Pub::path:1.9.0"
-            - id: "Pub::stream_channel:2.1.3"
+            - id: "Pub::stream_channel:2.1.4"
               dependencies:
               - id: "Pub::async:2.11.0"
                 dependencies:
@@ -465,7 +465,7 @@ project:
           - id: "Pub::stack_trace:1.11.1"
             dependencies:
             - id: "Pub::path:1.9.0"
-          - id: "Pub::stream_channel:2.1.3"
+          - id: "Pub::stream_channel:2.1.4"
             dependencies:
             - id: "Pub::async:2.11.0"
               dependencies:
@@ -502,13 +502,13 @@ project:
           - id: "Pub::stack_trace:1.11.1"
             dependencies:
             - id: "Pub::path:1.9.0"
-          - id: "Pub::stream_channel:2.1.3"
+          - id: "Pub::stream_channel:2.1.4"
             dependencies:
             - id: "Pub::async:2.11.0"
               dependencies:
               - id: "Pub::collection:1.18.0"
               - id: "Pub::meta:1.16.0"
-        - id: "Pub::stream_channel:2.1.3"
+        - id: "Pub::stream_channel:2.1.4"
           dependencies:
           - id: "Pub::async:2.11.0"
             dependencies:
@@ -525,7 +525,7 @@ project:
             - id: "Pub::typed_data:1.3.2"
               dependencies:
               - id: "Pub::collection:1.18.0"
-          - id: "Pub::stream_channel:2.1.3"
+          - id: "Pub::stream_channel:2.1.4"
             dependencies:
             - id: "Pub::async:2.11.0"
               dependencies:
@@ -543,7 +543,7 @@ project:
       - id: "Pub::stack_trace:1.11.1"
         dependencies:
         - id: "Pub::path:1.9.0"
-      - id: "Pub::stream_channel:2.1.3"
+      - id: "Pub::stream_channel:2.1.4"
         dependencies:
         - id: "Pub::async:2.11.0"
           dependencies:
@@ -579,7 +579,7 @@ project:
         - id: "Pub::stack_trace:1.11.1"
           dependencies:
           - id: "Pub::path:1.9.0"
-        - id: "Pub::stream_channel:2.1.3"
+        - id: "Pub::stream_channel:2.1.4"
           dependencies:
           - id: "Pub::async:2.11.0"
             dependencies:
@@ -784,7 +784,7 @@ project:
         - id: "Pub::stack_trace:1.11.1"
           dependencies:
           - id: "Pub::path:1.9.0"
-        - id: "Pub::stream_channel:2.1.3"
+        - id: "Pub::stream_channel:2.1.4"
           dependencies:
           - id: "Pub::async:2.11.0"
             dependencies:
@@ -820,7 +820,7 @@ project:
           - id: "Pub::stack_trace:1.11.1"
             dependencies:
             - id: "Pub::path:1.9.0"
-          - id: "Pub::stream_channel:2.1.3"
+          - id: "Pub::stream_channel:2.1.4"
             dependencies:
             - id: "Pub::async:2.11.0"
               dependencies:
@@ -864,7 +864,7 @@ project:
           - id: "Pub::typed_data:1.3.2"
             dependencies:
             - id: "Pub::collection:1.18.0"
-        - id: "Pub::stream_channel:2.1.3"
+        - id: "Pub::stream_channel:2.1.4"
           dependencies:
           - id: "Pub::async:2.11.0"
             dependencies:
@@ -1797,8 +1797,8 @@ packages:
     url: "https://github.com/dart-lang/stack_trace.git"
     revision: ""
     path: ""
-- id: "Pub::stream_channel:2.1.3"
-  purl: "pkg:pub/stream_channel@2.1.3"
+- id: "Pub::stream_channel:2.1.4"
+  purl: "pkg:pub/stream_channel@2.1.4"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "An abstraction for two-way communication channels based on the Dart\
@@ -1810,9 +1810,9 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://pub.dev/packages/stream_channel/versions/2.1.3.tar.gz"
+    url: "https://pub.dev/packages/stream_channel/versions/2.1.4.tar.gz"
     hash:
-      value: "4ac0537115a24d772c408a2520ecd0abb99bca2ea9c4e634ccbdbfae64fe17ec"
+      value: "969e04c80b8bcdf826f8f16579c7b14d780458bd97f56d107d3950fdbeef059d"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
