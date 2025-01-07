@@ -30,6 +30,7 @@ import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.options.splitPair
 import com.github.ajalt.clikt.parameters.types.file
+import com.github.ajalt.mordant.rendering.Theme
 
 import kotlin.time.measureTimedValue
 
@@ -296,7 +297,7 @@ class ReporterCommand(descriptor: PluginDescriptor = ReporterCommandFactory.desc
                 reportFormats.map { reporter ->
                     async {
                         val threadName = Thread.currentThread().name
-                        echo("Generating the '${reporter.descriptor.id}' report in thread '$threadName'...")
+                        echo("Generating '${reporter.descriptor.id}' report(s) in thread '$threadName'...")
 
                         reporter to measureTimedValue {
                             val options = reportConfigMap[reporter.descriptor.id] ?: PluginConfiguration.EMPTY
@@ -314,16 +315,14 @@ class ReporterCommand(descriptor: PluginDescriptor = ReporterCommandFactory.desc
             val name = reporter.descriptor.id
             val fileResults = timedValue.value
 
+            echo("Generating '$name' report(s) took ${timedValue.duration}.")
+
             fileResults.forEach { fileResult ->
                 fileResult.onSuccess { file ->
-                    echo("Successfully created '$name' report at $file in ${timedValue.duration}.")
+                    echo(Theme.Default.success("Successfully created '$name' report at '$file'."))
                 }.onFailure { e ->
+                    echo(Theme.Default.danger("Failed to create '$name' report: ${e.collectMessages()}"))
                     e.showStackTrace()
-
-                    logger.error {
-                        "Could not create '$name' report in ${timedValue.duration}: ${e.collectMessages()}"
-                    }
-
                     ++failureCount
                 }
             }
