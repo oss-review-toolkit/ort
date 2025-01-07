@@ -142,9 +142,8 @@ internal fun parseVcsInfo(packageJson: PackageJson): VcsInfo {
  * content via the `npm view` command. The result is a [Pair] with the raw identifier and the new package.
  */
 internal fun parsePackage(
-    workingDir: File,
     packageJsonFile: File,
-    getRemotePackageDetails: (workingDir: File, packageName: String) -> PackageJson?
+    getRemotePackageDetails: (packageName: String) -> PackageJson?
 ): Package {
     val packageJson = parsePackageJson(packageJsonFile)
 
@@ -180,7 +179,7 @@ internal fun parsePackage(
         || hash == Hash.NONE || vcsFromPackage == VcsInfo.EMPTY
 
     if (hasIncompleteData) {
-        getRemotePackageDetails(workingDir, "$rawName@$version")?.let { details ->
+        getRemotePackageDetails("$rawName@$version")?.let { details ->
             if (description.isEmpty()) description = details.description.orEmpty()
             if (homepageUrl.isEmpty()) homepageUrl = details.homepage.orEmpty()
 

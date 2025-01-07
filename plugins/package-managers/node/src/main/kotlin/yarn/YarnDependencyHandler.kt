@@ -36,6 +36,6 @@ internal class YarnDependencyHandler(private val yarn: Yarn) : DependencyHandler
 
     override fun createPackage(dependency: NpmModuleInfo, issues: MutableCollection<Issue>): Package? =
         yarn.takeUnless { dependency.isProject }?.let {
-            parsePackage(dependency.workingDir, dependency.packageFile, it::getRemotePackageDetails)
+            parsePackage(dependency.packageFile, it::getRemotePackageDetails)
         }
 }

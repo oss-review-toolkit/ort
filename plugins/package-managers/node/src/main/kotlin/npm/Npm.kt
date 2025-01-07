@@ -152,15 +152,15 @@ class Npm(
         return parseNpmList(listProcess.stdout)
     }
 
-    internal fun getRemotePackageDetails(workingDir: File, packageName: String): PackageJson? {
+    internal fun getRemotePackageDetails(packageName: String): PackageJson? {
         npmViewCache[packageName]?.let { return it }
 
         return runCatching {
-            val process = NpmCommand.run(workingDir, "info", "--json", packageName).requireSuccess()
+            val process = NpmCommand.run("info", "--json", packageName).requireSuccess()
 
             parsePackageJson(process.stdout)
         }.onFailure { e ->
-            logger.warn { "Error getting details for $packageName in directory $workingDir: ${e.message.orEmpty()}" }
+            logger.warn { "Error getting details for $packageName: ${e.message.orEmpty()}" }
         }.onSuccess {
             npmViewCache[packageName] = it
         }.getOrNull()
