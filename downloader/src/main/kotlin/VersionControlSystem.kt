@@ -24,13 +24,14 @@ import java.io.IOException
 
 import org.apache.logging.log4j.kotlin.logger
 
+import org.ossreviewtoolkit.downloader.VersionControlSystemFactory.Companion.ALL
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
+import org.ossreviewtoolkit.model.config.VersionControlSystemConfiguration
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.common.CommandLineTool
-import org.ossreviewtoolkit.utils.common.Plugin
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.uppercaseFirstChar
 import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
@@ -44,21 +45,19 @@ abstract class VersionControlSystem(
      * the version control system is available.
      */
     private val commandLineTool: CommandLineTool? = null
-) : Plugin {
+) {
     companion object {
-        /**
-         * All [version control systems][VersionControlSystem] available in the classpath, sorted by their priority.
-         */
-        val ALL by lazy {
-            Plugin.getAll<VersionControlSystem>().toList().sortedByDescending { (_, vcs) -> vcs.priority }.toMap()
-        }
-
         /**
          * Return the applicable VCS for the given [vcsType], or null if none is applicable.
          */
-        fun forType(vcsType: VcsType) =
-            ALL.values.find {
-                it.isAvailable() && it.isApplicableType(vcsType)
+        fun forType(vcsType: VcsType, configs: Map<String, VersionControlSystemConfiguration> = emptyMap()) =
+            ALL.values.filter { factory ->
+                VcsType.forName(factory.type) == vcsType
+            }.asSequence().map { factory ->
+                val config = configs[factory.type]
+                factory.create(options = config?.options.orEmpty(), secrets = emptyMap())
+            }.find { vcs ->
+                vcs.isAvailable()
             }
 
         /**
@@ -72,7 +71,7 @@ abstract class VersionControlSystem(
          * Return the applicable VCS for the given [vcsUrl], or null if none is applicable.
          */
         @Synchronized
-        fun forUrl(vcsUrl: String) =
+        fun forUrl(vcsUrl: String, configs: Map<String, VersionControlSystemConfiguration> = emptyMap()) =
             // Do not use getOrPut() here as it cannot handle null values, also see
             // https://youtrack.jetbrains.com/issue/KT-21392.
             if (vcsUrl in urlToVcsMap) {
@@ -82,12 +81,15 @@ abstract class VersionControlSystem(
                 when (val type = VcsHost.parseUrl(vcsUrl).type) {
                     VcsType.UNKNOWN -> {
                         // ...then eventually try to determine the type also dynamically.
-                        ALL.values.find {
-                            it.isAvailable() && it.isApplicableUrl(vcsUrl)
+                        ALL.values.asSequence().map { factory ->
+                            val config = configs[factory.type]
+                            factory.create(options = config?.options.orEmpty(), secrets = emptyMap())
+                        }.find { vcs ->
+                            vcs.isAvailable() && vcs.isApplicableUrl(vcsUrl)
                         }
                     }
 
-                    else -> forType(type)
+                    else -> forType(type, configs)
                 }.also {
                     urlToVcsMap[vcsUrl] = it
                 }
@@ -109,7 +111,7 @@ abstract class VersionControlSystem(
             return if (absoluteVcsDirectory in dirToVcsMap) {
                 dirToVcsMap[absoluteVcsDirectory]
             } else {
-                ALL.values.asSequence().mapNotNull {
+                ALL.values.asSequence().map { it.create(options = emptyMap(), secrets = emptyMap()) }.mapNotNull {
                     if (it is CommandLineTool && !it.isInPath()) {
                         null
                     } else {
@@ -165,9 +167,9 @@ abstract class VersionControlSystem(
     }
 
     /**
-     * The priority in which this VCS should be probed. A higher value means a higher priority.
+     * The name of the VCS type this implementation supports.
      */
-    protected open val priority: Int = 0
+    abstract val type: String
 
     /**
      * A list of symbolic names that point to the latest revision.

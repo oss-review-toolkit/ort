@@ -24,10 +24,13 @@ import java.io.File
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.downloader.VersionControlSystemFactory
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.VersionControlSystemConfiguration
 import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.utils.common.Options
 
 const val MERCURIAL_LARGE_FILES_EXTENSION = "largefiles = "
 const val MERCURIAL_SPARSE_EXTENSION = "sparse = "
@@ -46,10 +49,19 @@ internal object MercurialCommand : CommandLineTool {
     override fun displayName(): String = "Mercurial"
 }
 
-class Mercurial : VersionControlSystem(MercurialCommand) {
+class Mercurial internal constructor() : VersionControlSystem(MercurialCommand) {
     override val type = VcsType.MERCURIAL.toString()
-    override val priority = 20
     override val latestRevisionNames = listOf("tip")
+
+    class Factory : VersionControlSystemFactory<VersionControlSystemConfiguration>(VcsType.MERCURIAL.toString(), 20) {
+        override fun create(config: VersionControlSystemConfiguration): VersionControlSystem {
+            return Mercurial()
+        }
+
+        override fun parseConfig(options: Options, secrets: Options): VersionControlSystemConfiguration {
+            return VersionControlSystemConfiguration() // No specific Mercurial configuration yet.
+        }
+    }
 
     override fun getVersion() = MercurialCommand.getVersion(null)
 
