@@ -8,7 +8,7 @@ const darkCodeTheme = themes.dracula;
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'OSS Review Toolkit',
-  tagline: 'A suite of tools to automate software compliance checks.',
+  tagline: 'A suite of CLI tools to automate software compliance checks. Also available as a <a href="https://eclipse-apoapsis.github.io/ort-server/">server</a>.',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
