@@ -605,6 +605,7 @@
             "CGA-9x7g-9rfp-4xhm",
             "CGA-gvvw-7w3r-7m54",
             "CGA-mvqg-6j62-4pjm",
+            "CGA-vj5f-6mc5-q329",
             "CGA-whf8-42p9-686q"
         ],
         "summary": "Jinja has a sandbox breakout through malicious filenames",
@@ -1175,6 +1176,7 @@
             "CVE-2024-56326"
         ],
         "related": [
+            "CGA-48m9-g63w-3pmj",
             "CGA-79fr-pvjg-j9xm",
             "CGA-crfr-r549-cvmg",
             "CGA-f7wq-crqm-v76f",
