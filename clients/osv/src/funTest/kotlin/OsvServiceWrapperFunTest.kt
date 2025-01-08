@@ -108,7 +108,6 @@ class OsvServiceWrapperFunTest : StringSpec({
                     "GHSA-8r7q-cvjq-x353",
                     "GHSA-fqh9-2qgg-h84h",
                     "GHSA-g3rq-g295-4j3m",
-                    "GHSA-gmj6-6f8f-6699",
                     "GHSA-h5c8-rqwp-cp95",
                     "GHSA-h75v-3vvj-5mfj",
                     "GHSA-hj2j-77xm-mc5v",
