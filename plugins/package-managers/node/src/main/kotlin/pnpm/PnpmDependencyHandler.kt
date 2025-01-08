@@ -78,7 +78,7 @@ internal class PnpmDependencyHandler(private val pnpm: Pnpm) : DependencyHandler
 
 private val Dependency.workingDir: File get() = File(path)
 
-private val Dependency.packageJsonFile: File get() = File(path, "package.json")
+private val Dependency.packageJsonFile: File get() = workingDir.resolve("package.json")
 
 /**
  * pnpm install skips optional dependencies which are not compatible with the environment. In this case the path
