@@ -88,10 +88,10 @@ class Cargo(
      * project is part of a workspace. Cargo.lock is then located next to the Cargo.toml file defining the workspace.
      */
     private fun resolveLockfile(metadata: CargoMetadata): File {
-        val workingDir = File(metadata.workspaceRoot)
-        val lockfile = workingDir.resolve("Cargo.lock")
+        val workspaceRoot = File(metadata.workspaceRoot)
+        val lockfile = workspaceRoot.resolve("Cargo.lock")
 
-        requireLockfile(workingDir) { lockfile.isFile }
+        requireLockfile(workspaceRoot) { lockfile.isFile }
 
         return lockfile
     }
