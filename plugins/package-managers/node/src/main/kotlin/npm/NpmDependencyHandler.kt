@@ -26,6 +26,7 @@ import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.utils.DependencyHandler
+import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackage
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
@@ -69,4 +70,4 @@ private val ModuleInfo.isInstalled: Boolean get() = path != null
 
 private val ModuleInfo.isProject: Boolean get() = resolved == null
 
-private val ModuleInfo.packageJsonFile: File get() = File(path, "package.json")
+private val ModuleInfo.packageJsonFile: File get() = File(path, NodePackageManager.DEFINITION_FILE)

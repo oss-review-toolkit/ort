@@ -58,7 +58,7 @@ class Pnpm(
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, "PNPM", analysisRoot, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Pnpm>("PNPM") {
-        override val globsForDefinitionFiles = listOf("package.json", "pnpm-lock.yaml")
+        override val globsForDefinitionFiles = listOf(NodePackageManager.DEFINITION_FILE, "pnpm-lock.yaml")
 
         override fun create(
             analysisRoot: File,
@@ -87,7 +87,8 @@ class Pnpm(
         val moduleInfosForScope = scopes.associateWith { scope -> listModules(workingDir, scope) }
 
         return workspaceModuleDirs.map { projectDir ->
-            val project = parseProject(projectDir.resolve("package.json"), analysisRoot, managerName)
+            val packageJsonFile = projectDir.resolve(NodePackageManager.DEFINITION_FILE)
+            val project = parseProject(packageJsonFile, analysisRoot, managerName)
 
             val scopeNames = scopes.mapTo(mutableSetOf()) { scope ->
                 val scopeName = scope.descriptor
