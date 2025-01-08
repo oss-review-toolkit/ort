@@ -85,11 +85,6 @@ private val EXTRACT_FROM_LOCATOR_PATTERN = Regex("(.+)@(\\w+):(.+)")
  */
 private const val YARN_NPM_INFO_CHUNK_SIZE = 1000
 
-/**
- * The name of the manifest file used by Yarn 2+.
- */
-private const val MANIFEST_FILE = "package.json"
-
 // The various Yarn dependency types supported by this package manager.
 private enum class YarnDependencyType(val type: String) {
     DEPENDENCIES("dependencies"),
@@ -127,7 +122,7 @@ class Yarn2(
     }
 
     class Factory : AbstractPackageManagerFactory<Yarn2>("Yarn2") {
-        override val globsForDefinitionFiles = listOf(MANIFEST_FILE)
+        override val globsForDefinitionFiles = listOf(NodePackageManager.DEFINITION_FILE)
 
         override fun create(
             analysisRoot: File,
@@ -714,7 +709,7 @@ private fun getYarnExecutable(workingDir: File): File {
  */
 private fun isCorepackEnabledInManifest(workingDir: File): Boolean =
     runCatching {
-        val packageJson = parsePackageJson(workingDir.resolve(MANIFEST_FILE))
+        val packageJson = parsePackageJson(workingDir.resolve(NodePackageManager.DEFINITION_FILE))
         !packageJson.packageManager.isNullOrEmpty()
     }.getOrDefault(false)
 

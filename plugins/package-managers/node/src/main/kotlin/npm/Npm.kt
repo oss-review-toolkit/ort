@@ -77,7 +77,7 @@ class Npm(
     }
 
     class Factory : AbstractPackageManagerFactory<Npm>("NPM") {
-        override val globsForDefinitionFiles = listOf("package.json")
+        override val globsForDefinitionFiles = listOf(NodePackageManager.DEFINITION_FILE)
 
         override fun create(
             analysisRoot: File,

@@ -100,7 +100,7 @@ open class Yarn(
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, "Yarn", analysisRoot, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Yarn>("Yarn") {
-        override val globsForDefinitionFiles = listOf("package.json")
+        override val globsForDefinitionFiles = listOf(NodePackageManager.DEFINITION_FILE)
 
         override fun create(
             analysisRoot: File,
@@ -179,7 +179,8 @@ open class Yarn(
             val issues = mutableListOf<Issue>()
 
             val project = runCatching {
-                parseProject(projectDir.resolve("package.json"), analysisRoot, managerName)
+                val packageJsonFile = projectDir.resolve(NodePackageManager.DEFINITION_FILE)
+                parseProject(packageJsonFile, analysisRoot, managerName)
             }.getOrElse {
                 issues += createAndLogIssue(
                     source = managerName,
@@ -301,7 +302,7 @@ open class Yarn(
 
     private fun parsePackageJson(moduleDir: File, scopes: Set<String>): RawModuleInfo =
         rawModuleInfoCache.getOrPut(moduleDir to scopes) {
-            val packageJsonFile = moduleDir.resolve("package.json")
+            val packageJsonFile = moduleDir.resolve(NodePackageManager.DEFINITION_FILE)
             logger.debug { "Parsing module info from '${packageJsonFile.absolutePath}'." }
             val json = packageJsonFile.readTree()
 
