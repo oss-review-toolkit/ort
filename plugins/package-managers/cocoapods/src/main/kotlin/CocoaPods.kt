@@ -21,6 +21,8 @@ package org.ossreviewtoolkit.plugins.packagemanagers.cocoapods
 
 import java.io.File
 
+import org.apache.logging.log4j.kotlin.logger
+
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
@@ -126,6 +128,9 @@ class CocoaPods(
 
         if (lockfile.isFile) {
             val lockfileData = lockfile.readText().parseLockfile()
+
+            logger.info { "The lockfile lists ${lockfileData.pods.size} dependencies in total." }
+            logger.info { "There are ${lockfileData.dependencies.size} direct dependencies." }
 
             // Convert direct dependencies with version constraints to pods with resolved versions.
             val dependencies = lockfileData.dependencies.mapNotNull { it.resolvedPod }
