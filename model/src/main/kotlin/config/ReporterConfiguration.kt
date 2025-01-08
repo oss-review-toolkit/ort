@@ -29,8 +29,8 @@ import org.ossreviewtoolkit.plugins.api.PluginConfig
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class ReporterConfiguration(
     /**
-     * Reporter specific configuration options. The key needs to match the name of the reporter class, e.g. "FossId"
-     * for the FossId reporter. See the documentation of the reporter for available options.
+     * Reporter-specific configuration options. The key needs to match the ID of the reporter plugin, e.g. "FossId" for
+     * the "FossIdReporter" class. See the documentation of the reporter for available options.
      */
     val config: Map<String, PluginConfig>? = null
 )

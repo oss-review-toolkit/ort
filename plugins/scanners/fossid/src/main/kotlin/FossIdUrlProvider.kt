@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 /**
  * An internal helper class that generates the URLs used by [FossId] to check out the repositories to be scanned.
  *
- * The URLs used by FossId can sometimes be different from the normal package URLs. For instance, credentials may need
+ * The URLs used by [FossId] can sometimes be different from the normal package URLs. For instance, credentials may need
  * to be added, or a different protocol may be used. This class takes care of such mappings.
  */
 class FossIdUrlProvider private constructor(
