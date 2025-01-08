@@ -70,4 +70,10 @@ private val ModuleInfo.isInstalled: Boolean get() = path != null
 
 private val ModuleInfo.isProject: Boolean get() = resolved == null
 
-private val ModuleInfo.packageJsonFile: File get() = File(path, NodePackageManager.DEFINITION_FILE)
+private val ModuleInfo.packageJsonFile: File get() =
+    File(
+        checkNotNull(path) {
+            "The path to '${NodePackageManager.DEFINITION_FILE}' is null in $this."
+        },
+        NodePackageManager.DEFINITION_FILE
+    )
