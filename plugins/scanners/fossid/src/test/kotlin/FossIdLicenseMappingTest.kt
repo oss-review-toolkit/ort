@@ -56,7 +56,7 @@ class FossIdLicenseMappingTest : WordSpec({
             findings.licenseFindings should beEmpty()
         }
 
-        "map non-SPDX compliant FossId licenses in a snippet to snippet findings" {
+        "map non-SPDX compliant FossID licenses in a snippet to snippet findings" {
             val rawResults = createSnippet("Apache 2.0")
             val issues = mutableListOf<Issue>()
 
@@ -79,7 +79,7 @@ class FossIdLicenseMappingTest : WordSpec({
             }
         }
 
-        "map deprecated SPDX FossId licenses in a snippet to snippet findings" {
+        "map deprecated SPDX FossID licenses in a snippet to snippet findings" {
             val rawResults = createSnippet("GFDL-1.2")
             val issues = mutableListOf<Issue>()
 
@@ -101,7 +101,7 @@ class FossIdLicenseMappingTest : WordSpec({
             }
         }
 
-        "map SPDX compliant FossId licenses in a snippet to snippet findings" {
+        "map SPDX compliant FossID licenses in a snippet to snippet findings" {
             val rawResults = createSnippet("Apache-2.0")
             val issues = mutableListOf<Issue>()
 

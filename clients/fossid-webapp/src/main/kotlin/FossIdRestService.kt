@@ -173,8 +173,8 @@ interface FossIdRestService {
         /**
          * A class to modify the standard Jackson deserialization to deal with inconsistencies in responses
          * sent by the FossID server.
-         * When deleting a scan, FossId returns the scan id as String in the 'data' property of the response. If no scan
-         * could be found, it returns an empty array. Starting with FossID version 2023.1, the return type of the
+         * When deleting a scan, FossID returns the scan id as a string in the `data` property of the response. If no
+         * scan could be found, it returns an empty array. Starting with FossID version 2023.1, the return type of the
          * [deleteScan] function is now a map of strings to strings. Creating a special [FossIdServiceWithVersion]
          * implementation for this call is an overkill as ORT does not even use the return value. Therefore, this change
          * is also handled by the [PolymorphicIntDeserializer].

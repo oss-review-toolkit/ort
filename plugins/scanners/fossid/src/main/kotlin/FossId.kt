@@ -264,7 +264,7 @@ class FossId internal constructor(
     override fun scanPackage(nestedProvenance: NestedProvenance?, context: ScanContext): ScanResult {
         val startTime = Instant.now()
 
-        // FossId actually never uses the provenance determined by the scanner, but determines the source code to
+        // FossID actually never uses the provenance determined by the scanner, but determines the source code to
         // download itself based on the passed VCS URL and revision, disregarding any VCS path.
         val pkg = context.coveredPackages.first()
         val provenance = pkg.vcsProcessed.revision.takeUnless { it.isBlank() }
