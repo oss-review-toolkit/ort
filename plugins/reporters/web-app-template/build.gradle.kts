@@ -28,11 +28,11 @@ import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnSetupTask
 
 // The Kotlin/JS plugins are only applied programmatically for Kotlin projects that target JavaScript. As we do not
 // directly target JavaScript from Kotlin, manually apply the plugins and configure the tool versions.
-NodeJsRootPlugin.apply(rootProject).version = "20.9.0"
+NodeJsRootPlugin.apply(rootProject).version = "22.13.0"
 
 // The Yarn plugin registers tasks always on the root project, see
 // https://github.com/JetBrains/kotlin/blob/2.1.0/libraries/tools/kotlin-gradle-plugin/src/common/kotlin/org/jetbrains/kotlin/gradle/targets/js/yarn/YarnPlugin.kt#L158-L162
-YarnPlugin.apply(rootProject).version = "1.22.19"
+YarnPlugin.apply(rootProject).version = "1.22.22"
 
 val kotlinNodeJsSetup by rootProject.tasks.existing(NodeJsSetupTask::class)
 val kotlinYarnSetup by rootProject.tasks.existing(YarnSetupTask::class)
