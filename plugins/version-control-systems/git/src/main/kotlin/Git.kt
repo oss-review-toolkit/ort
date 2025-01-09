@@ -61,8 +61,7 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
 
-// TODO: Make this configurable.
-const val GIT_HISTORY_DEPTH = 50
+const val DEFAULT_HISTORY_DEPTH = 50
 
 // Replace prefixes of Git submodule repository URLs.
 private val REPOSITORY_URL_PREFIX_REPLACEMENTS = listOf(
@@ -86,7 +85,16 @@ object GitCommand : CommandLineTool {
     override fun displayName(): String = "Git"
 }
 
-class Git internal constructor() : VersionControlSystem(GitCommand) {
+/**
+ * This class provides functionality for interacting with Git repositories, utilizing either
+ * [JGit][org.eclipse.jgit.api.Git] or the Git CLI for executing operations.
+ *
+ * The following [configuration options][GitConfig] are available:
+ * - *historyDepth*: Depth of the commit history to fetch. Defaults to [DEFAULT_HISTORY_DEPTH].
+ * - *updateNestedSubmodules*: Whether nested submodules should be updated, or if only top-level submodules should be
+ *   considered. Defaults to true.
+ */
+class Git internal constructor(private val config: GitConfig) : VersionControlSystem(GitCommand) {
     companion object {
         init {
             // Make sure that JGit uses the exact same authentication information as ORT itself. This addresses
@@ -118,9 +126,14 @@ class Git internal constructor() : VersionControlSystem(GitCommand) {
         }
     }
 
-    class Factory : VersionControlSystemFactory<Unit>(VcsType.GIT.toString(), 100) {
-        override fun create(config: Unit) = Git()
-        override fun parseConfig(options: Options, secrets: Options) = Unit
+    class Factory : VersionControlSystemFactory<GitConfig>(VcsType.GIT.toString(), 100) {
+        override fun create(config: GitConfig) = Git(config)
+
+        override fun parseConfig(options: Options, secrets: Options) =
+            GitConfig(
+                historyDepth = options["historyDepth"]?.toIntOrNull() ?: DEFAULT_HISTORY_DEPTH,
+                updateNestedSubmodules = options["updateNestedSubmodules"]?.toBooleanStrictOrNull() ?: true
+            )
     }
 
     override val type = VcsType.GIT.toString()
@@ -191,15 +204,19 @@ class Git internal constructor() : VersionControlSystem(GitCommand) {
             }
         }
 
+    /**
+     * Update the [workingTree] using the [git] instance to a specific [revision] without updating any submodules. The
+     * configured [historyDepth][GitConfig.historyDepth] is respected.
+     */
     private fun updateWorkingTreeWithoutSubmodules(
         workingTree: WorkingTree,
         git: JGit,
         revision: String
     ): Result<String> =
         runCatching {
-            logger.info { "Trying to fetch only revision '$revision' with depth limited to $GIT_HISTORY_DEPTH." }
+            logger.info { "Trying to fetch only revision '$revision' with depth limited to ${config.historyDepth}." }
 
-            val fetch = git.fetch().setDepth(GIT_HISTORY_DEPTH)
+            val fetch = git.fetch().setDepth(config.historyDepth)
 
             // See https://git-scm.com/docs/gitrevisions#_specifying_revisions for how Git resolves ambiguous
             // names. In particular, tag names have higher precedence than branch names.
@@ -217,13 +234,13 @@ class Git internal constructor() : VersionControlSystem(GitCommand) {
             it.showStackTrace()
 
             logger.info { "Could not fetch only revision '$revision': ${it.collectMessages()}" }
-            logger.info { "Falling back to fetching all refs with depth limited to $GIT_HISTORY_DEPTH." }
+            logger.info { "Falling back to fetching all refs with depth limited to ${config.historyDepth}." }
 
-            git.fetch().setDepth(GIT_HISTORY_DEPTH).setTagOpt(TagOpt.FETCH_TAGS).call()
+            git.fetch().setDepth(config.historyDepth).setTagOpt(TagOpt.FETCH_TAGS).call()
         }.recoverCatching {
             it.showStackTrace()
 
-            logger.info { "Could not fetch with only a depth of $GIT_HISTORY_DEPTH: ${it.collectMessages()}" }
+            logger.info { "Could not fetch with only a depth of ${config.historyDepth}: ${it.collectMessages()}" }
             logger.info { "Falling back to fetch everything including tags." }
 
             git.fetch().setUnshallow(true).setTagOpt(TagOpt.FETCH_TAGS).call()
@@ -279,8 +296,15 @@ class Git internal constructor() : VersionControlSystem(GitCommand) {
             revision
         }
 
+    /**
+     * Initialize and / or update the submodules in [workingTree], limiting the commit history to the configured
+     * [historyDepth][GitConfig.historyDepth]. If [updateNestedSubmodules][GitConfig.updateNestedSubmodules] is true,
+     * submodules are initialized / updated recursively.
+     */
     private fun updateSubmodules(workingTree: WorkingTree) {
         if (!workingTree.getRootPath().resolve(".gitmodules").isFile) return
+
+        val recursive = "--recursive".takeIf { config.updateNestedSubmodules }
 
         val insteadOf = REPOSITORY_URL_PREFIX_REPLACEMENTS.map { (prefix, replacement) ->
             "url.$replacement.insteadOf $prefix"
@@ -288,14 +312,21 @@ class Git internal constructor() : VersionControlSystem(GitCommand) {
 
         runCatching {
             // TODO: Migrate this to JGit once https://bugs.eclipse.org/bugs/show_bug.cgi?id=580731 is implemented.
-            workingTree.runGit("submodule", "update", "--init", "--recursive", "--depth", "$GIT_HISTORY_DEPTH")
+            val updateArgs = listOfNotNull(
+                "submodule", "update", "--init", recursive, "--depth", "${config.historyDepth}"
+            )
+            workingTree.runGit(*updateArgs.toTypedArray())
 
             insteadOf.forEach {
-                workingTree.runGit("submodule", "foreach", "--recursive", "git config $it")
+                val foreachArgs = listOfNotNull(
+                    "submodule", "foreach", recursive, "git config $it"
+                )
+                workingTree.runGit(*foreachArgs.toTypedArray())
             }
         }.recover {
             // As Git's dumb HTTP transport does not support shallow capabilities, also try to not limit the depth.
-            workingTree.runGit("submodule", "update", "--recursive")
+            val updateArgs = listOfNotNull("submodule", "update", recursive)
+            workingTree.runGit(*updateArgs.toTypedArray())
         }
     }
 
