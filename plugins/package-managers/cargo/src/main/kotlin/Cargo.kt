@@ -129,15 +129,32 @@ class Cargo(
         }
     }
 
+    override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> {
+        fun File.isVirtualWorkspace(): Boolean {
+            var foundWorkspace = false
+            var foundPackage = false
+
+            forEachLine { line ->
+                if (!foundWorkspace && line.startsWith("[workspace]")) foundWorkspace = true
+                if (!foundPackage && line.startsWith("[package]")) foundPackage = true
+            }
+
+            return foundWorkspace && !foundPackage
+        }
+
+        // A virtual workspace does not define any packages and thus can be skipped, see
+        // https://doc.rust-lang.org/cargo/reference/workspaces.html#virtual-workspace.
+        return definitionFiles.mapNotNull { file -> file.takeUnless { it.isVirtualWorkspace() } }
+    }
+
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
         val metadataProcess = CargoCommand.run("metadata", "--format-version=1", "--manifest-path=$definitionFile")
             .requireSuccess()
         val metadata = json.decodeFromString<CargoMetadata>(metadataProcess.stdout)
 
-        val projectId = requireNotNull(metadata.resolve.root) {
-            "Virtual workspaces are not supported."
-        }
+        // Virtual workspaces have been filtered out in "mapDefinitionFiles".
+        val projectId = checkNotNull(metadata.resolve.root)
 
         val projectNode = metadata.resolve.nodes.single { it.id == projectId }
         val depNodesByKind = mutableMapOf<String, MutableList<CargoMetadata.Node>>()
