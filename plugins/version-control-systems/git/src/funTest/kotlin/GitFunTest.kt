@@ -44,7 +44,7 @@ private val tags = mapOf(
 )
 
 class GitFunTest : WordSpec({
-    val git = Git()
+    val git = Git.Factory().create()
     val vcsInfo = VcsInfo(
         type = VcsType.GIT,
         url = "https://github.com/oss-review-toolkit/ort-test-data-git.git",

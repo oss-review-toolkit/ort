@@ -46,7 +46,7 @@ import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 
 class GitTest : WordSpec({
     // Make sure that the initialization logic runs.
-    val git = Git()
+    val git = Git.Factory().create()
 
     var originalCredentialsProvider: CredentialsProvider? = null
     var originalAuthenticator: Authenticator? = null
