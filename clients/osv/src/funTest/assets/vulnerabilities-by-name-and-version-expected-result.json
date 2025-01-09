@@ -1040,8 +1040,10 @@
             "CGA-f7wq-crqm-v76f",
             "CGA-gm37-p355-3fq6",
             "CGA-h3v9-xgx5-mrgr",
+            "CGA-hvm4-vp8w-6q8r",
             "CGA-p9v5-jpj2-q3ww",
-            "CGA-rx48-pgcw-gx64"
+            "CGA-rx48-pgcw-gx64",
+            "CGA-w2xv-8gr2-xp8m"
         ],
         "summary": "Jinja has a sandbox breakout through indirect reference to format method",
         "details": "An oversight in how the Jinja sandboxed environment detects calls to `str.format` allows an attacker that controls the content of a template to execute arbitrary Python code.\n\nTo exploit the vulnerability, an attacker needs to control the content of a template. Whether that is the case depends on the type of application using Jinja. This vulnerability impacts users of applications which execute untrusted templates.\n\nJinja's sandbox does catch calls to `str.format` and ensures they don't escape the sandbox. However, it's possible to store a reference to a malicious string's `format` method, then pass that to a filter that calls it. No such filters are built-in to Jinja, but could be present through custom filters in an application. After the fix, such indirect calls are also handled by the sandbox.",
