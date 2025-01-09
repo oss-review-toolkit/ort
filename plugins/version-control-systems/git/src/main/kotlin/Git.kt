@@ -132,7 +132,7 @@ class Git internal constructor() : VersionControlSystem(GitCommand) {
         }
     }
 
-    override fun getVersion() = GitCommand.getVersion(null)
+    override fun getVersion() = GitCommand.getVersion()
 
     override fun getDefaultBranchName(url: String): String {
         val refs = Git.lsRemoteRepository().setRemote(url).callAsMap()

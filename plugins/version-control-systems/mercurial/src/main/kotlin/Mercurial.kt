@@ -63,7 +63,7 @@ class Mercurial internal constructor() : VersionControlSystem(MercurialCommand) 
         }
     }
 
-    override fun getVersion() = MercurialCommand.getVersion(null)
+    override fun getVersion() = MercurialCommand.getVersion()
 
     override fun getDefaultBranchName(url: String) = "default"
 

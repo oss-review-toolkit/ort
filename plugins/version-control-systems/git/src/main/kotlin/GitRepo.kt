@@ -103,7 +103,7 @@ class GitRepo internal constructor() : VersionControlSystem(GitRepoCommand) {
         }
     }
 
-    override fun getVersion() = GitRepoCommand.getVersion(null)
+    override fun getVersion() = GitRepoCommand.getVersion()
 
     override fun getDefaultBranchName(url: String): String {
         val refs = org.eclipse.jgit.api.Git.lsRemoteRepository().setRemote(url).callAsMap()
