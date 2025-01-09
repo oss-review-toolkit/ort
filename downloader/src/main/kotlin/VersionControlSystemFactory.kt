@@ -25,17 +25,16 @@ import org.ossreviewtoolkit.utils.common.Plugin
 import org.ossreviewtoolkit.utils.common.TypedConfigurablePluginFactory
 
 /**
- * An abstract class to be implemented by factories for [Version Control Systems][VersionControlSystem]
- * for use with the [ServiceLoader] mechanism.
- * The [type] parameter denotes which VCS type is supported by this plugin, while the
+ * An abstract class to be implemented by factories for [Version Control Systems][VersionControlSystem] for use with the
+ * [ServiceLoader] mechanism. The [type] parameter denotes which VCS type is supported by this plugin, while the
  * [priority] parameter defines the order if more than one plugin supports the same VCS type.
  */
 abstract class VersionControlSystemFactory<CONFIG>(override val type: String, val priority: Int) :
     TypedConfigurablePluginFactory<CONFIG, VersionControlSystem> {
     companion object {
         /**
-         * All [Version Control System factories][VersionControlSystemFactory] available in the classpath,
-         * associated by their names, sorted by priority.
+         * All [Version Control System factories][VersionControlSystemFactory] available in the classpath, associated by
+         * their names, sorted by priority.
          */
         val ALL by lazy {
             Plugin.getAll<VersionControlSystemFactory<*>>()
