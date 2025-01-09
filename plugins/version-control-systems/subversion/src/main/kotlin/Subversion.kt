@@ -56,14 +56,6 @@ import org.tmatesoft.svn.core.wc.SVNRevision
 import org.tmatesoft.svn.util.Version
 
 class Subversion internal constructor() : VersionControlSystem() {
-    private val ortAuthManager = OrtSVNAuthenticationManager()
-    private val clientManager = SVNClientManager.newInstance().apply {
-        setAuthenticationManager(ortAuthManager)
-    }
-
-    override val type = VcsType.SUBVERSION.toString()
-    override val latestRevisionNames = listOf("HEAD")
-
     class Factory : VersionControlSystemFactory<VersionControlSystemConfiguration>(VcsType.SUBVERSION.toString(), 10) {
         override fun create(config: VersionControlSystemConfiguration): VersionControlSystem {
             return Subversion()
@@ -73,6 +65,14 @@ class Subversion internal constructor() : VersionControlSystem() {
             return VersionControlSystemConfiguration() // No specific Subversion configuration yet.
         }
     }
+
+    private val ortAuthManager = OrtSVNAuthenticationManager()
+    private val clientManager = SVNClientManager.newInstance().apply {
+        setAuthenticationManager(ortAuthManager)
+    }
+
+    override val type = VcsType.SUBVERSION.toString()
+    override val latestRevisionNames = listOf("HEAD")
 
     override fun getVersion(): String = Version.getVersionString()
 

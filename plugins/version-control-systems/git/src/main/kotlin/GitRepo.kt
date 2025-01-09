@@ -90,9 +90,6 @@ internal object GitRepoCommand : CommandLineTool {
 }
 
 class GitRepo internal constructor() : VersionControlSystem(GitRepoCommand) {
-    override val type = VcsType.GIT_REPO.toString()
-    override val latestRevisionNames = listOf("HEAD", "@")
-
     class Factory : VersionControlSystemFactory<VersionControlSystemConfiguration>(VcsType.GIT_REPO.toString(), 50) {
         override fun create(config: VersionControlSystemConfiguration): VersionControlSystem {
             return GitRepo()
@@ -102,6 +99,9 @@ class GitRepo internal constructor() : VersionControlSystem(GitRepoCommand) {
             return VersionControlSystemConfiguration()
         }
     }
+
+    override val type = VcsType.GIT_REPO.toString()
+    override val latestRevisionNames = listOf("HEAD", "@")
 
     override fun getVersion() = GitRepoCommand.getVersion()
 
