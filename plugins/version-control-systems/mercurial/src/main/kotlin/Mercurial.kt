@@ -50,9 +50,6 @@ internal object MercurialCommand : CommandLineTool {
 }
 
 class Mercurial internal constructor() : VersionControlSystem(MercurialCommand) {
-    override val type = VcsType.MERCURIAL.toString()
-    override val latestRevisionNames = listOf("tip")
-
     class Factory : VersionControlSystemFactory<VersionControlSystemConfiguration>(VcsType.MERCURIAL.toString(), 20) {
         override fun create(config: VersionControlSystemConfiguration): VersionControlSystem {
             return Mercurial()
@@ -62,6 +59,9 @@ class Mercurial internal constructor() : VersionControlSystem(MercurialCommand) 
             return VersionControlSystemConfiguration() // No specific Mercurial configuration yet.
         }
     }
+
+    override val type = VcsType.MERCURIAL.toString()
+    override val latestRevisionNames = listOf("tip")
 
     override fun getVersion() = MercurialCommand.getVersion()
 

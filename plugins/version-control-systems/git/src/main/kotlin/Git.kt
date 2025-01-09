@@ -119,9 +119,6 @@ class Git internal constructor() : VersionControlSystem(GitCommand) {
         }
     }
 
-    override val type = VcsType.GIT.toString()
-    override val latestRevisionNames = listOf("HEAD", "@")
-
     class Factory : VersionControlSystemFactory<VersionControlSystemConfiguration>(VcsType.GIT.toString(), 100) {
         override fun create(config: VersionControlSystemConfiguration): VersionControlSystem {
             return Git()
@@ -131,6 +128,9 @@ class Git internal constructor() : VersionControlSystem(GitCommand) {
             return VersionControlSystemConfiguration()
         }
     }
+
+    override val type = VcsType.GIT.toString()
+    override val latestRevisionNames = listOf("HEAD", "@")
 
     override fun getVersion() = GitCommand.getVersion()
 
