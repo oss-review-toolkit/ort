@@ -63,7 +63,7 @@ interface ConfigurablePluginFactory<out PLUGIN> : Plugin {
     /**
      * Create a new instance of [PLUGIN] from [options] and [secrets].
      */
-    fun create(options: Options, secrets: Options): PLUGIN
+    fun create(options: Options = emptyMap(), secrets: Options = emptyMap()): PLUGIN
 }
 
 /**
