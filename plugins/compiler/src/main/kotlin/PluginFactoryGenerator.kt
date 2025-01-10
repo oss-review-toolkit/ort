@@ -145,7 +145,7 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
                         PluginOptionType.SECRET -> add("config.secrets[%S]?.let { %T(it) }", name, Secret::class)
                         PluginOptionType.STRING -> add("config.options[%S]", name)
                         PluginOptionType.STRING_LIST -> add(
-                            "config.options[%S]?.split(\",\")?.map { it.trim() }",
+                            "config.options[%S]?.split(',')?.map { it.trim() }",
                             name
                         )
                     }
@@ -170,7 +170,7 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
                         PluginOptionType.STRING_LIST -> {
                             add(" ?: listOf(")
 
-                            defaultValue.split(",").forEach { value ->
+                            defaultValue.split(',').forEach { value ->
                                 add("%S,", value.trim())
                             }
 
@@ -217,7 +217,7 @@ class PluginFactoryGenerator(private val codeGenerator: CodeGenerator) {
                         PluginOptionType.STRING_LIST -> {
                             add("listOf(")
 
-                            defaultValue.split(",").forEach { value ->
+                            defaultValue.split(',').forEach { value ->
                                 add("%S,", value.trim())
                             }
 

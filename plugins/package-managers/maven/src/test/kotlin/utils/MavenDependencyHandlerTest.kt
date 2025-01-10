@@ -260,7 +260,7 @@ private fun toOrtIdentifier(mavenId: String): Identifier = Identifier("$PACKAGE_
  * `identifier()` extension function must have been mocked statically.
  */
 private fun createArtifact(id: String): Artifact {
-    val parts = id.split(":")
+    val parts = id.split(':')
     val artifact = mockk<Artifact>()
 
     every { artifact.identifier() } returns id

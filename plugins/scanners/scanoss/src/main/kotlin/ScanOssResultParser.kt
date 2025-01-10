@@ -169,7 +169,7 @@ private fun getSnippets(details: ScanFileDetails): Set<Snippet> {
  */
 private fun convertLines(file: String, lineRanges: String): List<TextLocation> =
     lineRanges.split(',').map { lineRange ->
-        val splitLines = lineRange.split("-")
+        val splitLines = lineRange.split('-')
 
         when (splitLines.size) {
             1 -> TextLocation(file, splitLines.first().toInt())

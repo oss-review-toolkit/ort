@@ -174,7 +174,7 @@ internal fun getPythonVersionConstraint(pyprojectTomlFile: File): String? {
     val dependenciesSection = getTomlSectionContent(pyprojectTomlFile, "tool.poetry.dependencies")
         ?: return null
 
-    return dependenciesSection.split("\n").firstNotNullOfOrNull {
+    return dependenciesSection.split('\n').firstNotNullOfOrNull {
         it.trim().withoutPrefix("python = ")
     }?.removeSurrounding("\"")
 }

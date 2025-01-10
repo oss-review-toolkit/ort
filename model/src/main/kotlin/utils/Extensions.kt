@@ -83,7 +83,7 @@ fun RepositoryProvenance.alignRevisions(): RepositoryProvenance =
 fun String.parseRepoManifestPath() =
     runCatching {
         URI(this).query.splitToSequence("&")
-            .map { it.split("=", limit = 2) }
+            .map { it.split('=', limit = 2) }
             .find { it.first() == "manifest" }
             ?.get(1)
             ?.takeUnless { it.isEmpty() }

@@ -89,7 +89,7 @@ internal data class OpossumResources(
     }
 
     fun addResource(path: String) {
-        val pathPieces = path.split("/").filter { it.isNotEmpty() }
+        val pathPieces = path.split('/').filter { it.isNotEmpty() }
 
         addResource(pathPieces)
     }
@@ -97,7 +97,7 @@ internal data class OpossumResources(
     fun isFile() = tree.isEmpty()
 
     fun isPathAFile(path: String): Boolean {
-        val pathPieces = path.split("/").filter { it.isNotEmpty() }
+        val pathPieces = path.split('/').filter { it.isNotEmpty() }
 
         return isPathAFile(pathPieces)
     }
