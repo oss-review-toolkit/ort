@@ -59,6 +59,7 @@ import org.ossreviewtoolkit.plugins.commands.api.utils.configurationGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.outputGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.readOrtResult
 import org.ossreviewtoolkit.plugins.commands.api.utils.writeOrtResult
+import org.ossreviewtoolkit.scanner.NO_LIMIT_DEPTH
 import org.ossreviewtoolkit.scanner.ScanStorages
 import org.ossreviewtoolkit.scanner.Scanner
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
@@ -123,6 +124,11 @@ class ScannerCommand(descriptor: PluginDescriptor = ScannerCommandFactory.descri
         "--package-types",
         help = "A comma-separated list of the package types from the ORT file's analyzer result to limit scans to."
     ).enum<PackageType>().split(",").default(PackageType.entries)
+
+    private val packagesDepth by option(
+        "--packages-depth",
+        help = "The depth in the packages tree to scan, default is -1 (no limit)"
+    ).convert { it.toInt() }.default(NO_LIMIT_DEPTH)
 
     private val skipExcluded by option(
         "--skip-excluded",
@@ -240,7 +246,7 @@ class ScannerCommand(descriptor: PluginDescriptor = ScannerCommandFactory.descri
 
             val ortResult = readOrtResult(input)
             return runBlocking {
-                scanner.scan(ortResult, skipExcluded || ortConfig.scanner.skipExcluded, labels)
+                scanner.scan(ortResult, skipExcluded || ortConfig.scanner.skipExcluded, labels, packagesDepth)
             }
         } finally {
             runBlocking { workingTreeCache.shutdown() }
