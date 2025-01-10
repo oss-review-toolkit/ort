@@ -69,7 +69,7 @@ internal class PnpmDependencyHandler(private val pnpm: Pnpm) : DependencyHandler
         dependency.takeUnless { it.isProject() || !it.isInstalled }?.let {
             parsePackage(
                 packageJsonFile = it.packageJsonFile,
-                getRemotePackageDetails = pnpm::getRemotePackageDetails
+                getPackageDetails = pnpm::getRemotePackageDetails
             )
         }
 
