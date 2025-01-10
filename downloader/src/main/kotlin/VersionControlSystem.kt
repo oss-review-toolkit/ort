@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
-import org.ossreviewtoolkit.model.config.VersionControlSystemConfiguration
+import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.collectMessages
@@ -50,7 +50,7 @@ abstract class VersionControlSystem(
         /**
          * Return the applicable VCS for the given [vcsType], or null if none is applicable.
          */
-        fun forType(vcsType: VcsType, configs: Map<String, VersionControlSystemConfiguration> = emptyMap()) =
+        fun forType(vcsType: VcsType, configs: Map<String, PluginConfiguration> = emptyMap()) =
             ALL.values.filter { factory ->
                 VcsType.forName(factory.type) == vcsType
             }.asSequence().map { factory ->
@@ -71,7 +71,7 @@ abstract class VersionControlSystem(
          * Return the applicable VCS for the given [vcsUrl], or null if none is applicable.
          */
         @Synchronized
-        fun forUrl(vcsUrl: String, configs: Map<String, VersionControlSystemConfiguration> = emptyMap()) =
+        fun forUrl(vcsUrl: String, configs: Map<String, PluginConfiguration> = emptyMap()) =
             // Do not use getOrPut() here as it cannot handle null values, also see
             // https://youtrack.jetbrains.com/issue/KT-21392.
             if (vcsUrl in urlToVcsMap) {
