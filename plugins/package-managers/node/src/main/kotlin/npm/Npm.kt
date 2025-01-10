@@ -88,7 +88,7 @@ class Npm(
 
     private val legacyPeerDeps = options[OPTION_LEGACY_PEER_DEPS].toBoolean()
     private val npmViewCache = mutableMapOf<String, PackageJson>()
-    private val handler = NpmDependencyHandler(this)
+    private val handler = NpmDependencyHandler(projectType, this::getRemotePackageDetails)
     private val graphBuilder by lazy { DependencyGraphBuilder(handler) }
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> =

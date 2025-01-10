@@ -27,17 +27,21 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
+import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageDetailsFunction
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackage
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.splitNamespaceAndName
 import org.ossreviewtoolkit.utils.common.realFile
 
-internal class NpmDependencyHandler(private val npm: Npm) : DependencyHandler<ModuleInfo> {
+internal class NpmDependencyHandler(
+    private val projectType: String,
+    private val getPackageDetails: PackageDetailsFunction
+) : DependencyHandler<ModuleInfo> {
     private val packageJsonCache = mutableMapOf<File, PackageJson>()
 
     override fun identifierFor(dependency: ModuleInfo): Identifier {
-        val type = npm.managerName.takeIf { dependency.isProject } ?: "NPM"
+        val type = if (dependency.isProject) projectType else "NPM"
         val (namespace, name) = splitNamespaceAndName(dependency.name.orEmpty())
         val version = if (dependency.isProject) {
             val packageJson = packageJsonCache.getOrPut(dependency.packageJsonFile.realFile()) {
@@ -60,10 +64,7 @@ internal class NpmDependencyHandler(private val npm: Npm) : DependencyHandler<Mo
 
     override fun createPackage(dependency: ModuleInfo, issues: MutableCollection<Issue>): Package? =
         dependency.takeUnless { it.isProject || !it.isInstalled }?.let {
-            parsePackage(
-                packageJsonFile = it.packageJsonFile,
-                getPackageDetails = npm::getRemotePackageDetails
-            )
+            parsePackage(it.packageJsonFile, getPackageDetails)
         }
 }
 
