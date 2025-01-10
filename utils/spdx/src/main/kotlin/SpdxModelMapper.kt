@@ -28,7 +28,6 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import java.io.File
-import java.lang.IllegalArgumentException
 
 object SpdxModelMapper {
     /**

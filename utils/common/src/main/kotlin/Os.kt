@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.utils.common
 
 import java.io.File
-import java.lang.IllegalArgumentException
 
 /**
  * Operating-System-specific utility functions.

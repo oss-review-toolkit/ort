@@ -34,7 +34,6 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.io.File
-import java.lang.IllegalArgumentException
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.CopyrightFinding
