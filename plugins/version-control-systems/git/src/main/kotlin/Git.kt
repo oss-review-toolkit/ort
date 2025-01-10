@@ -27,7 +27,7 @@ import java.security.PublicKey
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.eclipse.jgit.api.Git
+import org.eclipse.jgit.api.Git as JGit
 import org.eclipse.jgit.api.LsRemoteCommand
 import org.eclipse.jgit.api.errors.GitAPIException
 import org.eclipse.jgit.errors.UnsupportedCredentialItem
@@ -129,7 +129,7 @@ class Git internal constructor() : VersionControlSystem(GitCommand) {
     override fun getVersion() = GitCommand.getVersion()
 
     override fun getDefaultBranchName(url: String): String {
-        val refs = Git.lsRemoteRepository().setRemote(url).callAsMap()
+        val refs = JGit.lsRemoteRepository().setRemote(url).callAsMap()
         return (refs["HEAD"] as? SymbolicRef)?.target?.name?.removePrefix("refs/heads/") ?: "master"
     }
 
@@ -144,7 +144,7 @@ class Git internal constructor() : VersionControlSystem(GitCommand) {
 
     override fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree {
         try {
-            Git.init().setDirectory(targetDir).call().use { git ->
+            JGit.init().setDirectory(targetDir).call().use { git ->
                 git.remoteAdd().setName("origin").setUri(URIish(vcs.url)).call()
 
                 if (Os.isWindows) {
@@ -179,7 +179,7 @@ class Git internal constructor() : VersionControlSystem(GitCommand) {
         recursive: Boolean
     ): Result<String> =
         (workingTree as GitWorkingTree).useRepo {
-            Git(this).use { git ->
+            JGit(this).use { git ->
                 logger.info { "Updating working tree from ${workingTree.getRemoteUrl()}." }
 
                 updateWorkingTreeWithoutSubmodules(workingTree, git, revision).mapCatching {
@@ -193,7 +193,7 @@ class Git internal constructor() : VersionControlSystem(GitCommand) {
 
     private fun updateWorkingTreeWithoutSubmodules(
         workingTree: WorkingTree,
-        git: Git,
+        git: JGit,
         revision: String
     ): Result<String> =
         runCatching {
