@@ -62,7 +62,7 @@ internal class NpmDependencyHandler(private val npm: Npm) : DependencyHandler<Mo
         dependency.takeUnless { it.isProject || !it.isInstalled }?.let {
             parsePackage(
                 packageJsonFile = it.packageJsonFile,
-                getRemotePackageDetails = npm::getRemotePackageDetails
+                getPackageDetails = npm::getRemotePackageDetails
             )
         }
 }
