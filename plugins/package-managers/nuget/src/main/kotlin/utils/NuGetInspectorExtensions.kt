@@ -135,7 +135,7 @@ internal fun Collection<NuGetInspector.PackageData>.toOrtPackages(): Set<Package
         var vcsUrl = pkg.vcsUrl.orEmpty()
         var commit = ""
 
-        val segments = vcsUrl.split("@", limit = 2)
+        val segments = vcsUrl.split('@', limit = 2)
         if (segments.size == 2) {
             vcsUrl = segments[0]
             commit = segments[1]

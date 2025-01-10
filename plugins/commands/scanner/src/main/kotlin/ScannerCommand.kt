@@ -250,7 +250,7 @@ class ScannerCommand(descriptor: PluginDescriptor = ScannerCommandFactory.descri
 
 private fun RawOption.convertToScannerWrapperFactories() =
     convert { scannerNames ->
-        scannerNames.split(",").map { name ->
+        scannerNames.split(',').map { name ->
             ScannerWrapperFactory.ALL[name]
                 ?: throw BadParameterValue("Scanner '$name' is not one of ${ScannerWrapperFactory.ALL.keys}.")
         }

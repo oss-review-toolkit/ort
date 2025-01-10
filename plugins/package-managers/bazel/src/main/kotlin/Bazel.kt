@@ -477,7 +477,7 @@ private fun ModuleMetadata.toVcsInfo() =
 private fun ModuleSourceInfo.toRemoteArtifact(): RemoteArtifact? {
     when (this) {
         is ArchiveSourceInfo -> {
-            val (algo, b64digest) = integrity.split("-", limit = 2)
+            val (algo, b64digest) = integrity.split('-', limit = 2)
             val digest = Base64.decode(b64digest).toHexString()
 
             val hash = Hash(

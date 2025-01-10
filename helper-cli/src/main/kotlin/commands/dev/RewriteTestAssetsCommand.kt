@@ -177,7 +177,7 @@ private fun JsonNode.replacePath(path: String, target: JsonNode) {
 }
 
 private fun JsonNode.getNodeAtPath(path: String): JsonNode? {
-    val keys = path.split("/").toMutableList()
+    val keys = path.split('/').toMutableList()
     var result: JsonNode? = this
 
     while (keys.isNotEmpty() && result != null) {

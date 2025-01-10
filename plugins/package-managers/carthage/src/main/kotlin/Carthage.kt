@@ -137,7 +137,7 @@ class Carthage(
             DependencyType.GITHUB -> {
                 // ID consists of GitHub username/project or a GitHub enterprise URL.
                 val projectUrl = if (id.split('/').size == 2) {
-                    val (username, project) = id.split("/", limit = 2)
+                    val (username, project) = id.split('/', limit = 2)
                     "https://github.com/$username/$project"
                 } else {
                     id

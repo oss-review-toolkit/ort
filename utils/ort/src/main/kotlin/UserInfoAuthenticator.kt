@@ -30,7 +30,7 @@ class UserInfoAuthenticator : Authenticator() {
     override fun getPasswordAuthentication(): PasswordAuthentication? {
         if (requestorType == RequestorType.SERVER) {
             requestingURL?.userInfo?.let {
-                val credentials = it.split(":", limit = 2)
+                val credentials = it.split(':', limit = 2)
                 if (credentials.size == 2) {
                     return PasswordAuthentication(credentials.first(), credentials.last().toCharArray())
                 }
