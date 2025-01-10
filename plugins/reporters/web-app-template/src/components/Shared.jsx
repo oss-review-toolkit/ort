@@ -26,52 +26,57 @@ import {
     Space
 } from 'antd';
 
-// Implements a customized Ant Design table column search
-const getColumnSearchProps = (dataIndex, filteredInfo, that) => ({
-    filterDropdown: ({
-        setSelectedKeys, selectedKeys, confirm, clearFilters
-    }) => (
+const getColumnSearchProps = (dataIndex, filteredValue, setFilteredValue) => ({
+    filteredValue,
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
         <div style={{ padding: 8 }}>
             <Input
-                placeholder="Search..."
+                placeholder={`Search ${dataIndex}`}
                 value={selectedKeys[0]}
-                style={{ width: 188, marginBottom: 8, display: 'block' }}
-                ref={(node) => {
-                    that.searchInput = node;
-                }}
+                style={{ marginBottom: 8, display: 'block' }}
                 onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
                 onPressEnter={() => confirm()}
             />
             <Space>
                 <Button
-                    size="small"
-                    style={{ width: 90 }}
-                    onClick={() => clearFilters()}
-                >
-                    Reset
-                </Button>
-                <Button
+                    type="primary"
                     icon={<SearchOutlined />}
                     size="small"
-                    style={{ width: 90 }}
-                    type="primary"
-                    onClick={() => confirm()}
+                    onClick={() => {
+                        setFilteredValue(selectedKeys[0] ? [selectedKeys[0]] : []);
+                        confirm();
+                    }}
                 >
                     Search
+                </Button>
+                <Button
+                    size="small"
+                    onClick={() => {
+                        clearFilters && clearFilters();
+                        setFilteredValue([]);
+                    }}
+                >
+                    Reset
                 </Button>
             </Space>
         </div>
     ),
-    filterIcon: (filtered) => (<SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />),
-    filteredValue: filteredInfo[dataIndex] || null,
-    onFilter: (value, record) => (record[dataIndex]
-        ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
-        : false),
-    onFilterDropdownOpenChange: (visible) => {
-        if (visible) {
-            setTimeout(() => that.searchInput.select());
+    filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
+    onFilter: (searchStr, record) => {
+        const searchStrValues = searchStr.split(/[\s,]+/).map(item => item.trim().toLowerCase());
+        let recordValue;
+
+        if (Number.isInteger(record[dataIndex]) || Array.isArray(record[dataIndex])) {
+            recordValue = record[dataIndex].toString().toLowerCase();
+        } else if (record[dataIndex] instanceof Set) {
+            recordValue = Array.from(record[dataIndex]).toString().toLowerCase();
+        } else {
+            recordValue = record[dataIndex].toLowerCase();
         }
-    }
+
+        return !searchStrValues.every(value => !recordValue.includes(value));
+    },
+    render: (text) => text
 });
 
 export { getColumnSearchProps };

@@ -18,7 +18,6 @@
  */
 
 import { Descriptions, List, Steps } from 'antd';
-import PropTypes from 'prop-types';
 
 const { Item } = Descriptions;
 
@@ -113,10 +112,6 @@ const PackagePaths = ({ paths }) => {
             }
         />
     );
-};
-
-PackagePaths.propTypes = {
-    paths: PropTypes.array.isRequired
 };
 
 export default PackagePaths;

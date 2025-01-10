@@ -17,252 +17,143 @@
  * License-Filename: LICENSE
  */
 
-import { Component } from 'react';
-
 import {
-    ControlOutlined,
-    PartitionOutlined,
-    PieChartOutlined,
-    TableOutlined
-} from '@ant-design/icons';
-import {
-    Alert,
-    Col,
-    Progress,
-    Row,
-    Tabs
-} from 'antd';
-import PropTypes from 'prop-types';
+    useEffect,
+    useRef,
+    useState
+} from 'react';
 
-import { connect } from 'react-redux';
+import pako from 'pako';
 
-import AboutModal from './components/AboutModal';
-import SummaryView from './components/SummaryView';
-import TableView from './components/TableView';
-import TreeView from './components/TreeView';
+import WebAppOrtResult from './models/WebAppOrtResult';
+import AppPage from './pages/AppPage';
+import ErrorPage from './pages/ErrorPage';
+import LoadingPage from './pages/LoadingPage';
 import './App.css';
-import {
-    getAppView,
-    getOrtResult
-} from './reducers/selectors';
-import store from './store';
 
-class ReporterApp extends Component {
-    constructor(props) {
-        super(props);
+let webAppOrtResult;
 
-        store.dispatch({ type: 'APP::LOADING_START' });
-    }
+function pause(seconds) {
+    return new Promise((resolve) => {
+        setTimeout(resolve, seconds * 1000);
+    });
+}
 
-    onChangeTab = (activeKey) => {
-        store.dispatch({ type: 'APP::CHANGE_TAB', key: activeKey });
-    }
+async function loadOrtResultData(setLoadingBarStatus) {
+    // Parse JSON report data embedded in HTML page
+    const ortResultDataNode = document.querySelector('script[id="ort-report-data"]');
+    let ortResultData;
 
-    onClickAbout = () => {
-        store.dispatch({ type: 'APP::SHOW_ABOUT_MODAL' });
-    }
+    if (ortResultDataNode) {
+        const { textContent: ortResultDataNodeContents, type: ortResultDataNodeType } = ortResultDataNode;
 
-    render() {
-        const {
-            appView: {
-                loading,
-                showAboutModal,
-                showKey
-            },
-            webAppOrtResult
-        } = this.props;
+        // Check report is WebApp template e.g. contains 'ORT_REPORT_DATA_PLACEHOLDER'
+        if (!!ortResultDataNodeContents && ortResultDataNodeContents.length !== 27) {
+            setLoadingBarStatus({ percentage: 10, text: 'Loading result data...' });
 
-        switch (showKey) {
-            case 'ort-tabs-summary':
-            case 'ort-tabs-table':
-            case 'ort-tabs-tree':
-            case 'ort-tabs': {
-                return (
-                <Row
-                    className="ort-app"
-                    key="ort-tabs"
-                >
-                    <Col span={24}>
-                        {
-                            !!showAboutModal && <AboutModal webAppOrtResult={webAppOrtResult} />
-                        }
-                        <Tabs
-                            activeKey={showKey}
-                            animated={false}
-                            items={[
-                                {
-                                    label: (
-                                        <span>
-                                            <PieChartOutlined />
-                                            Summary
-                                        </span>
-                                    ),
-                                    key: 'ort-tabs-summary',
-                                    children: (
-                                        <SummaryView />
-                                    )
-                                },
-                                {
-                                    label: (
-                                        <span>
-                                            <TableOutlined />
-                                            Table
-                                        </span>
-                                    ),
-                                    key: 'ort-tabs-table',
-                                    children: (
-                                        <TableView />
-                                    )
-                                },
-                                {
-                                    label: (
-                                        <span>
-                                        <PartitionOutlined />
-                                        Tree
-                                        </span>
-                                    ),
-                                    key: 'ort-tabs-tree',
-                                    children: (
-                                        <TreeView />
-                                    )
-                                }
-                            ]}
-                            tabBarExtraContent={(
-                                <ControlOutlined
-                                    className="ort-control"
-                                    onClick={this.onClickAbout}
-                                />
-                            )}
-                            onChange={this.onChangeTab}
-                        />
-                    </Col>
-                </Row>
-                );
+            if (ortResultDataNodeType === 'application/gzip') {
+                // Decode Base64 (convert ASCII to binary).
+                const decodedBase64Data = atob(ortResultDataNodeContents);
+
+                await pause(1);
+
+                // Convert binary string to character-number array.
+                const charData = decodedBase64Data.split('').map((x) => x.charCodeAt(0));
+
+                // Turn number array into byte-array.
+                const binData = new Uint8Array(charData);
+
+                setLoadingBarStatus({ percentage: 20, text: 'Uncompressing result data...' });
+                await pause(1);
+
+                // Decompress byte-array.
+                const data = pako.inflate(binData);
+
+                await pause(1);
+                setLoadingBarStatus({ percentage: 40, text: 'Uncompressed result data...' });
+
+                ortResultData = JSON.parse(new TextDecoder('utf-8').decode(data));
+            } else {
+                await pause(1);
+
+                ortResultData = JSON.parse(ortResultDataNodeContents);
             }
-            case 'ort-loading': {
-                const {
-                    percentage: loadingPercentage,
-                    text: loadingText
-                } = loading;
 
-                return (
-                <Row
-                    align="middle"
-                    justify="space-around"
-                    className="ort-app"
-                    key="ort-loading"
-                    type="flex"
-                >
-                    <Col span={6}>
-                        <a
-                            href="https://github.com/oss-review-toolkit/ort"
-                            rel="noopener noreferrer"
-                            target="_blank"
-                        >
-                            <div className="ort-loading-logo ort-logo" />
-                        </a>
-                        <span>
-                            {loadingText}
-                        </span>
-                        {loadingPercentage === 100
-                            ? (
-                            <Progress percent={100} />
-                                )
-                            : (
-                            <Progress percent={loadingPercentage} status="active" />
-                                )}
-                    </Col>
-                </Row>
-                );
-            }
-            case 'ort-no-report-data':
-                return (
-                <Row
-                    align="middle"
-                    className="ort-app"
-                    justify="space-around"
-                    key="ort-no-report-data"
-                    type="flex"
-                >
-                    <Col span={8}>
-                        <Alert
-                            message="No review results could be loaded..."
-                            type="error"
-                            description={(
-                                <div>
-                                    <p>
-                                        Either something went wrong or you are looking at an ORT report template file.
-                                    </p>
-                                    <p>
-                                        If you believe you found a bug please fill a
-                                        {' '}
-                                        <a
-                                            href="https://github.com/oss-review-toolkit/ort/issues"
-                                            rel="noopener noreferrer"
-                                            target="_blank"
-                                        >
-                                            issue on GitHub
-                                        </a>
-                                        .
-                                    </p>
-                                </div>
-                            )}
-                        />
-                    </Col>
-                </Row>
-                );
-            default:
-                return (
-                <Row
-                    align="middle"
-                    className="ort-app"
-                    justify="space-around"
-                    key="ort-error-msg"
-                    type="flex"
-                >
-                    <Col span={8}>
-                        <Alert
-                            message="Oops, something went wrong..."
-                            type="error"
-                            description={(
-                                <div>
-                                    <p>
-                                        Try reloading this report. If that does not solve the issue please
-                                        contact your OSS Review Toolkit admin(s) for support.
-                                    </p>
-                                    <p>
-                                        If you believe you found a bug please fill a
-                                        {' '}
-                                        <a
-                                            href="https://github.com/oss-review-toolkit/ort/issues"
-                                            rel="noopener noreferrer"
-                                            target="_blank"
-                                        >
-                                            issue on GitHub
-                                        </a>
-                                        .
-                                    </p>
-                                </div>
-                            )}
-                        />
-                    </Col>
-                </Row>
-                );
+            setLoadingBarStatus({ percentage: 55, text: 'Processing result data...' });
+            await pause(2);
+
+            webAppOrtResult = new WebAppOrtResult(ortResultData);
+            await pause(2);
+            setLoadingBarStatus({ percentage: 95, text: 'Processed report data...' });
+
+            // Make webAppOrtResult inspectable via Browser's console
+            window.ORT = webAppOrtResult;
+
+            setLoadingBarStatus({ percentage: 99, text: 'Almost ready to display scan report...' });
+            await pause(2);
+            setLoadingBarStatus({ percentage: 100 });
+        } else {
+            setLoadingBarStatus({ percentage: -2, text: 'No review results could be loaded...' });
         }
+    } else {
+        setLoadingBarStatus({ percentage: -1 });
     }
 }
 
-ReporterApp.propTypes = {
-    appView: PropTypes.object.isRequired,
-    webAppOrtResult: PropTypes.object.isRequired
-};
+function App() {
+    const isOrtResultLoaded = useRef(false);
+    const [currentPage, setCurrentPage] = useState('loading');
+    const [loadingBarStatus, setLoadingBarStatus] = useState({ percentage: 0, text: '' });
 
-const mapStateToProps = (state) => ({
-    appView: getAppView(state),
-    webAppOrtResult: getOrtResult(state)
-});
+    useEffect(() => {
+        if (!isOrtResultLoaded.current) {
+            isOrtResultLoaded.current = true
+            loadOrtResultData(setLoadingBarStatus);
+        }
+    }, []);
 
-export default connect(
-    mapStateToProps,
-    () => ({})
-)(ReporterApp);
+    useEffect(() => {
+        if (loadingBarStatus.percentage === -2) {
+            setCurrentPage('error');
+        }
+
+        if (loadingBarStatus.percentage === -1) {
+            setCurrentPage('loading-error');
+        }
+
+        if (loadingBarStatus.percentage === 100) {
+            setCurrentPage('app');
+        }
+    }, [loadingBarStatus]);
+
+    const renderPage = () => {
+        switch (currentPage) {
+            case 'loading':
+                return (
+                    <LoadingPage status={loadingBarStatus} />
+                );
+            case 'loading-error':
+                return (
+                    <ErrorPage
+                        message="No review results could be loaded..."
+                        submessage="Either something went wrong or you are looking at an ORT report template file."
+                    />
+                );
+            case 'app':
+                return <AppPage webAppOrtResult= { webAppOrtResult }/>;
+            case 'error':
+            default:
+                return (
+                    <ErrorPage
+                        message="Oops, something went wrong..."
+                        submessage="Try reloading this report. If that does not solve the issue please
+                                contact your OSS Review Toolkit admin(s) for support."
+                    />
+                );
+        }
+    };
+
+    return (renderPage())
+}
+
+export default App;

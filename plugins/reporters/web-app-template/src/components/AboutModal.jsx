@@ -27,31 +27,23 @@ import {
     Modal,
     Tabs
 } from 'antd';
-import PropTypes from 'prop-types';
 import yaml from 'react-syntax-highlighter/dist/esm/languages/hljs/yaml';
 import lioshi from 'react-syntax-highlighter/dist/esm/styles/hljs/lioshi';
 
-import { connect } from 'react-redux';
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
-
-import {
-    getOrtResult
-} from '../reducers/selectors';
-import store from '../store';
 
 const { Item } = Descriptions;
 
 SyntaxHighlighter.registerLanguage('yaml', yaml);
 
-const AboutModal = ({ webAppOrtResult }) => {
-    const { repositoryConfiguration } = webAppOrtResult;
+const AboutModal = ({ webAppOrtResult, isModalVisible, handleModalCancel }) => {
     const {
         labels,
-        metadata
+        metadata,
+        repositoryConfiguration
     } = webAppOrtResult;
 
-    const { analyzerStartTime } = metadata;
-    const analyzerStartDate = new Date(analyzerStartTime).toLocaleDateString(
+    const analyzerStartDate = new Date(metadata.analyzerStartTime).toLocaleDateString(
         undefined,
         {
             weekday: 'long',
@@ -64,14 +56,10 @@ const AboutModal = ({ webAppOrtResult }) => {
     return (
         <Modal
             footer={null}
-            open={true}
             height="90%"
             width="90%"
-            onCancel={
-                () => {
-                    store.dispatch({ type: 'APP::HIDE_ABOUT_MODAL' });
-                }
-            }
+            open={isModalVisible}
+            onCancel={handleModalCancel}
         >
             <Tabs
                 animated={false}
@@ -82,7 +70,7 @@ const AboutModal = ({ webAppOrtResult }) => {
                         tabItems.push({
                             label: (
                                 <span>
-                                    <FileTextOutlined />
+                                    <FileTextOutlined style={{ marginRight: 5 }}/>
                                     Excludes (.ort.yml)
                                 </span>
                             ),
@@ -103,7 +91,7 @@ const AboutModal = ({ webAppOrtResult }) => {
                         tabItems.push({
                             label: (
                                 <span>
-                                    <TagsOutlined />
+                                    <TagsOutlined style={{ marginRight: 5 }}/>
                                     Labels
                                 </span>
                             ),
@@ -144,7 +132,7 @@ const AboutModal = ({ webAppOrtResult }) => {
                     tabItems.push({
                         label: (
                             <span>
-                                <InfoCircleOutlined />
+                                <InfoCircleOutlined style={{ marginRight: 5 }}/>
                                 About
                             </span>
                         ),
@@ -158,6 +146,7 @@ const AboutModal = ({ webAppOrtResult }) => {
                                 >
                                     <div
                                         className="ort-about-logo ort-logo"
+                                        style={{ width: '420px', height: '90px', marginBottom: '10px' }}
                                     />
                                 </a>
                                 <p>
@@ -174,8 +163,10 @@ const AboutModal = ({ webAppOrtResult }) => {
                                 </p>
                                 <p>
                                     Licensed under Apache License, Version 2.0 (SPDX: Apache-2.0) but also includes
-                                    third-party software components under other open source licenses.
-                                    See OSS Review Toolkit code repository for further details.
+                                    third-party software components under other open source licenses.<br/>
+                                    See <a href="https://github.com/oss-review-toolkit/ort">
+                                        OSS Review Toolkit code repository
+                                    </a> for further details.
                                 </p>
                                 {
                                     !!analyzerStartDate
@@ -199,15 +190,4 @@ const AboutModal = ({ webAppOrtResult }) => {
     );
 };
 
-AboutModal.propTypes = {
-    webAppOrtResult: PropTypes.object.isRequired
-};
-
-const mapStateToProps = (state) => ({
-    webAppOrtResult: getOrtResult(state)
-});
-
-export default connect(
-    mapStateToProps,
-    () => ({})
-)(AboutModal);
+export default AboutModal;
