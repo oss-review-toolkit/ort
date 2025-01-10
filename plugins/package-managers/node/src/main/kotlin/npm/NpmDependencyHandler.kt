@@ -40,7 +40,11 @@ internal class NpmDependencyHandler(private val npm: Npm) : DependencyHandler<Mo
         val type = npm.managerName.takeIf { dependency.isProject } ?: "NPM"
         val (namespace, name) = splitNamespaceAndName(dependency.name.orEmpty())
         val version = if (dependency.isProject) {
-            readPackageJson(dependency.packageJsonFile).version.orEmpty()
+            val packageJson = packageJsonCache.getOrPut(dependency.packageJsonFile.realFile()) {
+                parsePackageJson(dependency.packageJsonFile)
+            }
+
+            packageJson.version.orEmpty()
         } else {
             dependency.version?.takeUnless { it.startsWith("link:") || it.startsWith("file:") }.orEmpty()
         }
@@ -61,9 +65,6 @@ internal class NpmDependencyHandler(private val npm: Npm) : DependencyHandler<Mo
                 getRemotePackageDetails = npm::getRemotePackageDetails
             )
         }
-
-    private fun readPackageJson(packageJsonFile: File): PackageJson =
-        packageJsonCache.getOrPut(packageJsonFile.realFile()) { parsePackageJson(packageJsonFile) }
 }
 
 private val ModuleInfo.isInstalled: Boolean get() = path != null
