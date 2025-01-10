@@ -35,7 +35,7 @@ function HomepageHeader() {
         <p className="hero__subtitle">
           {siteConfig.tagline}
           <br/>
-          Also available as a <a href="https://eclipse-apoapsis.github.io/ort-server/">server</a>.
+          Also available as a <Link to="https://eclipse-apoapsis.github.io/ort-server/">server</Link>.
         </p>
         <div className={styles.buttons}>
           <Link
