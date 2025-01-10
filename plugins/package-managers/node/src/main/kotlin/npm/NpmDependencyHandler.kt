@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.utils.common.realFile
 
 internal class NpmDependencyHandler(
     private val moduleInfoResolver: ModuleInfoResolver,
+    private val moduleInfoCache: Map<String, List<ModuleInfo>>,
     private val managerType: NodePackageManagerType = NodePackageManagerType.NPM
 ) : DependencyHandler<ModuleInfo> {
     private val packageJsonCache = mutableMapOf<File, PackageJson>()
@@ -58,7 +59,7 @@ internal class NpmDependencyHandler(
     }
 
     override fun dependenciesFor(dependency: ModuleInfo): List<ModuleInfo> =
-        dependency.dependencies.values.filter { it.isInstalled }
+        dependency.id?.let { moduleInfoCache[it] } ?: dependency.dependencies.values.filter { it.isInstalled }
 
     override fun linkageFor(dependency: ModuleInfo): PackageLinkage =
         PackageLinkage.DYNAMIC.takeUnless { dependency.isProject } ?: PackageLinkage.PROJECT_DYNAMIC

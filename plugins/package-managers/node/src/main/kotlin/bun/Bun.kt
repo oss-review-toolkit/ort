@@ -89,7 +89,7 @@ class Bun(override val descriptor: PluginDescriptor = BunFactory.descriptor) :
         }.getOrNull()
     }
 
-    private val handler = NpmDependencyHandler(moduleInfoResolver, NodePackageManagerType.BUN)
+    private val handler = NpmDependencyHandler(moduleInfoResolver, emptyMap(), NodePackageManagerType.BUN)
 
     override val graphBuilder = DependencyGraphBuilder(handler)
 

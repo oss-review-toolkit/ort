@@ -136,7 +136,8 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
         }.getOrNull()
     }
 
-    private val handler = NpmDependencyHandler(moduleInfoResolver)
+    private val moduleInfoCache = mutableMapOf<String, List<ModuleInfo>>()
+    private val handler = NpmDependencyHandler(moduleInfoResolver, moduleInfoCache)
 
     override val graphBuilder = DependencyGraphBuilder(handler)
 
@@ -190,9 +191,11 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
             return listOf(ProjectAnalyzerResult(project, emptySet(), issues))
         }
 
-        val rootModuleInfo = listModules(workingDir, issues).undoDeduplication().filterInstalled()
+        val rootModuleInfo = listModules(workingDir, issues).filterInstalled()
         val scopes = Scope.entries.filterNotTo(mutableSetOf()) { scope -> scope.isExcluded(excludes, includes) }
+
         requestAllPackageDetails(rootModuleInfo, scopes)
+        populateModuleInfoCache(rootModuleInfo, moduleInfoCache)
 
         val workspaceModuleDirs = getWorkspaceModuleDirs(workingDir)
 
@@ -261,6 +264,13 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
             moduleInfoResolver.getModuleInfos(moduleIds)
         }
     }
+}
+
+private fun populateModuleInfoCache(info: ModuleInfo, moduleInfoCache: MutableMap<String, List<ModuleInfo>>) {
+    if (info.id == null || info.id in moduleInfoCache) return
+    val dependencies = info.dependencies.values.filter { it.isInstalled }
+    if (dependencies.isNotEmpty()) moduleInfoCache[info.id] = dependencies
+    dependencies.forEach { populateModuleInfoCache(it, moduleInfoCache) }
 }
 
 internal fun List<String>.groupLines(vararg markers: String): List<String> {
