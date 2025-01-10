@@ -40,7 +40,6 @@ import io.mockk.mockk
 import io.mockk.slot
 
 import java.io.IOException
-import java.lang.IllegalArgumentException
 
 import org.apache.maven.project.ProjectBuildingException
 

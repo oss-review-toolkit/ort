@@ -28,7 +28,6 @@ import io.mockk.mockk
 
 import java.io.File
 import java.io.IOException
-import java.lang.UnsupportedOperationException
 
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo

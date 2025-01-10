@@ -30,7 +30,6 @@ import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.File
-import java.lang.IllegalArgumentException
 
 import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.helper.utils.downloadSources

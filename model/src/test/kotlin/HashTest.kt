@@ -24,7 +24,6 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
 import java.io.File
-import java.lang.IllegalArgumentException
 
 class HashTest : WordSpec({
     "Passing a single string value to create()" should {

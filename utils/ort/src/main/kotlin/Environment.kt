@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.utils.ort
 
 import java.io.File
-import java.lang.Runtime
 import java.util.jar.JarFile
 
 import org.ossreviewtoolkit.utils.common.Os
