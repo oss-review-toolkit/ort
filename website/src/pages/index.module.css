@@ -10,6 +10,11 @@
   overflow: hidden;
 }
 
+.heroBanner a {
+  color: var(--ifm-hero-text-color);
+  font-weight: bold;
+}
+
 @media screen and (max-width: 996px) {
   .heroBanner {
     padding: 2rem;
