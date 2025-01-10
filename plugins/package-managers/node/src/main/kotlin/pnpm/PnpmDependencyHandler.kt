@@ -27,13 +27,17 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
+import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageDetailsFunction
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackage
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.pnpm.ModuleInfo.Dependency
 import org.ossreviewtoolkit.utils.common.realFile
 
-internal class PnpmDependencyHandler(private val pnpm: Pnpm) : DependencyHandler<Dependency> {
+internal class PnpmDependencyHandler(
+    private val projectType: String,
+    private val getPackageDetails: PackageDetailsFunction
+) : DependencyHandler<Dependency> {
     private val workspaceModuleDirs = mutableSetOf<File>()
     private val packageJsonCache = mutableMapOf<File, PackageJson>()
 
@@ -47,7 +51,7 @@ internal class PnpmDependencyHandler(private val pnpm: Pnpm) : DependencyHandler
     }
 
     override fun identifierFor(dependency: Dependency): Identifier {
-        val type = pnpm.managerName.takeIf { dependency.isProject() } ?: "NPM"
+        val type = if (dependency.isProject()) projectType else "NPM"
         val namespace = dependency.from.substringBeforeLast("/", "")
         val name = dependency.from.substringAfterLast("/")
         val version = if (dependency.isProject()) {
@@ -67,10 +71,7 @@ internal class PnpmDependencyHandler(private val pnpm: Pnpm) : DependencyHandler
 
     override fun createPackage(dependency: Dependency, issues: MutableCollection<Issue>): Package? =
         dependency.takeUnless { it.isProject() || !it.isInstalled }?.let {
-            parsePackage(
-                packageJsonFile = it.packageJsonFile,
-                getPackageDetails = pnpm::getRemotePackageDetails
-            )
+            parsePackage(it.packageJsonFile, getPackageDetails)
         }
 
     private fun readPackageJson(packageJsonFile: File): PackageJson =

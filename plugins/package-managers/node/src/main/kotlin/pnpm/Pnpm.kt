@@ -67,7 +67,7 @@ class Pnpm(
         ) = Pnpm(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
-    private val handler = PnpmDependencyHandler(this)
+    private val handler = PnpmDependencyHandler(projectType, this::getRemotePackageDetails)
     private val graphBuilder by lazy { DependencyGraphBuilder(handler) }
     private val packageDetailsCache = mutableMapOf<String, PackageJson>()
 
