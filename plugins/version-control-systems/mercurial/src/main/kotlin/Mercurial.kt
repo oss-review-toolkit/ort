@@ -28,7 +28,6 @@ import org.ossreviewtoolkit.downloader.VersionControlSystemFactory
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.model.config.VersionControlSystemConfiguration
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Options
 
@@ -50,14 +49,9 @@ internal object MercurialCommand : CommandLineTool {
 }
 
 class Mercurial internal constructor() : VersionControlSystem(MercurialCommand) {
-    class Factory : VersionControlSystemFactory<VersionControlSystemConfiguration>(VcsType.MERCURIAL.toString(), 20) {
-        override fun create(config: VersionControlSystemConfiguration): VersionControlSystem {
-            return Mercurial()
-        }
-
-        override fun parseConfig(options: Options, secrets: Options): VersionControlSystemConfiguration {
-            return VersionControlSystemConfiguration() // No specific Mercurial configuration yet.
-        }
+    class Factory : VersionControlSystemFactory<Unit>(VcsType.MERCURIAL.toString(), 20) {
+        override fun create(config: Unit) = Mercurial()
+        override fun parseConfig(options: Options, secrets: Options) = Unit
     }
 
     override val type = VcsType.MERCURIAL.toString()

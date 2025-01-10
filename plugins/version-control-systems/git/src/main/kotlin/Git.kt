@@ -49,7 +49,6 @@ import org.ossreviewtoolkit.downloader.VersionControlSystemFactory
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.model.config.VersionControlSystemConfiguration
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.Os
@@ -119,14 +118,9 @@ class Git internal constructor() : VersionControlSystem(GitCommand) {
         }
     }
 
-    class Factory : VersionControlSystemFactory<VersionControlSystemConfiguration>(VcsType.GIT.toString(), 100) {
-        override fun create(config: VersionControlSystemConfiguration): VersionControlSystem {
-            return Git()
-        }
-
-        override fun parseConfig(options: Options, secrets: Options): VersionControlSystemConfiguration {
-            return VersionControlSystemConfiguration()
-        }
+    class Factory : VersionControlSystemFactory<Unit>(VcsType.GIT.toString(), 100) {
+        override fun create(config: Unit) = Git()
+        override fun parseConfig(options: Options, secrets: Options) = Unit
     }
 
     override val type = VcsType.GIT.toString()

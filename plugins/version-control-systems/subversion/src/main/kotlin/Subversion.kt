@@ -32,7 +32,6 @@ import org.ossreviewtoolkit.downloader.VersionControlSystemFactory
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.model.config.VersionControlSystemConfiguration
 import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.OrtAuthenticator
@@ -56,14 +55,9 @@ import org.tmatesoft.svn.core.wc.SVNRevision
 import org.tmatesoft.svn.util.Version
 
 class Subversion internal constructor() : VersionControlSystem() {
-    class Factory : VersionControlSystemFactory<VersionControlSystemConfiguration>(VcsType.SUBVERSION.toString(), 10) {
-        override fun create(config: VersionControlSystemConfiguration): VersionControlSystem {
-            return Subversion()
-        }
-
-        override fun parseConfig(options: Options, secrets: Options): VersionControlSystemConfiguration {
-            return VersionControlSystemConfiguration() // No specific Subversion configuration yet.
-        }
+    class Factory : VersionControlSystemFactory<Unit>(VcsType.SUBVERSION.toString(), 10) {
+        override fun create(config: Unit) = Subversion()
+        override fun parseConfig(options: Options, secrets: Options) = Unit
     }
 
     private val ortAuthManager = OrtSVNAuthenticationManager()
