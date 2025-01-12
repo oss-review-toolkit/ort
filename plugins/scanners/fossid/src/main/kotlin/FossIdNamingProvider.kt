@@ -37,7 +37,8 @@ import org.apache.logging.log4j.kotlin.logger
  * * **currentTimestamp**: The current time.
  * * **deltaTag** (scan code only): If delta scans are enabled, this qualifies the scan as an *origin* scan or a *delta*
  * scan.
- * * **branch**: The branch name (revision) to scan.
+ * * **branch**: The branch name (revision) to scan. FossID only allows alphanumeric characters and '-' in names, all
+ *   other characters are replaced with underscores. Might be shortened to fit the scan code length limit.
  */
 class FossIdNamingProvider(
     private val namingProjectPattern: String?,
