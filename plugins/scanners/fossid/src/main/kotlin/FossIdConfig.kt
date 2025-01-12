@@ -196,7 +196,7 @@ data class FossIdConfig(
             val apiKey = secrets[PROP_API_KEY]
                 ?: throw IllegalArgumentException("No FossID API Key configuration found.")
 
-            val waitForResult = options[PROP_WAIT_FOR_RESULT]?.toBoolean() != false
+            val waitForResult = options[PROP_WAIT_FOR_RESULT]?.toBooleanStrict() ?: true
 
             val keepFailedScans = options[PROP_KEEP_FAILED_SCANS]?.toBooleanStrict() ?: false
             val deltaScans = options[PROP_DELTA_SCAN]?.toBooleanStrict() ?: false
