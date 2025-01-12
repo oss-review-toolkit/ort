@@ -73,21 +73,18 @@ class FossIdNamingProvider(
         deltaTag: FossId.DeltaTag? = null,
         branch: String = ""
     ): String {
-        val builtins = mutableMapOf("#repositoryName" to repositoryName)
         val defaultPattern = buildString {
             append("#repositoryName_#currentTimestamp")
             if (deltaTag != null) append("_#deltaTag")
             if (branch.isNotBlank()) append("_#branch")
         }
 
-        deltaTag?.let {
-            builtins += "#deltaTag" to deltaTag.name.lowercase()
-        }
+        val builtins = mutableMapOf(
+            "#repositoryName" to repositoryName,
+            "#deltaTag" to deltaTag?.name?.lowercase().orEmpty()
+        )
 
-        if (branch.isNotBlank()) {
-            val branchName = normalizeBranchName(branch, defaultPattern, builtins)
-            builtins += "#branch" to branchName
-        }
+        builtins += "#branch" to normalizeBranchName(branch, defaultPattern, builtins)
 
         return replaceNamingConventionVariables(defaultPattern, builtins, namingConventionVariables)
     }
@@ -98,21 +95,12 @@ class FossIdNamingProvider(
         deltaTag: FossId.DeltaTag? = null,
         branch: String = ""
     ): String {
-        val builtins = mutableMapOf<String, String>()
+        val builtins = mutableMapOf(
+            "#repositoryName" to repositoryName,
+            "#deltaTag" to deltaTag?.name?.lowercase().orEmpty()
+        )
 
-        namingPattern.contains("#repositoryName").let {
-            builtins += "#repositoryName" to repositoryName
-        }
-
-        namingPattern.contains("#deltaTag").let {
-            if (deltaTag != null) {
-                builtins += "#deltaTag" to deltaTag.name.lowercase()
-            }
-        }
-
-        namingPattern.contains("#branch").let {
-            builtins += "#branch" to normalizeBranchName(branch, namingPattern, builtins)
-        }
+        builtins += "#branch" to normalizeBranchName(branch, namingPattern, builtins)
 
         return replaceNamingConventionVariables(namingPattern, builtins, namingConventionVariables)
     }
