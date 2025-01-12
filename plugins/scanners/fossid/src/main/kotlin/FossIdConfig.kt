@@ -84,6 +84,9 @@ data class FossIdConfig(
     /** The API key to access the FossID server. */
     val apiKey: String,
 
+    /** The name of the FossID project. If `null`, the name will be determined from the repository URL. */
+    val projectName: String?,
+
     /** Flag whether the scanner should wait for the completion of FossID scans. */
     val waitForResult: Boolean,
 
@@ -129,11 +132,11 @@ data class FossIdConfig(
         /** Name of the configuration property for the API key. */
         private const val PROP_API_KEY = "apiKey"
 
+        /** Name of the configuration property to set the project name. */
+        private const val PROP_PROJECT_NAME = "projectName"
+
         /** Name of the configuration property controlling whether ORT should wait for FossID results. */
         private const val PROP_WAIT_FOR_RESULT = "waitForResult"
-
-        /** Name of the configuration property defining the naming convention for projects. */
-        private const val PROP_NAMING_PROJECT_PATTERN = "namingProjectPattern"
 
         /** Name of the configuration property defining the naming convention for scans. */
         private const val PROP_NAMING_SCAN_PATTERN = "namingScanPattern"
@@ -196,6 +199,8 @@ data class FossIdConfig(
             val apiKey = secrets[PROP_API_KEY]
                 ?: throw IllegalArgumentException("No FossID API Key configuration found.")
 
+            val projectName = options[PROP_PROJECT_NAME]
+
             val waitForResult = options[PROP_WAIT_FOR_RESULT]?.toBooleanStrict() ?: true
 
             val keepFailedScans = options[PROP_KEEP_FAILED_SCANS]?.toBooleanStrict() ?: false
@@ -226,6 +231,7 @@ data class FossIdConfig(
                 serverUrl = serverUrl,
                 user = user,
                 apiKey = apiKey,
+                projectName = projectName,
                 waitForResult = waitForResult,
                 keepFailedScans = keepFailedScans,
                 deltaScans = deltaScans,
@@ -245,10 +251,6 @@ data class FossIdConfig(
      * Create a [FossIdNamingProvider] helper object based on the configuration stored in this object.
      */
     fun createNamingProvider(): FossIdNamingProvider {
-        val namingProjectPattern = options[PROP_NAMING_PROJECT_PATTERN]?.also {
-            logger.info { "Naming pattern for projects is $it." }
-        }
-
         val namingScanPattern = options[PROP_NAMING_SCAN_PATTERN]?.also {
             logger.info { "Naming pattern for scans is $it." }
         }
@@ -257,7 +259,7 @@ data class FossIdConfig(
             .filterKeys { it.startsWith(NAMING_CONVENTION_VARIABLE_PREFIX) }
             .mapKeys { it.key.substringAfter(NAMING_CONVENTION_VARIABLE_PREFIX) }
 
-        return FossIdNamingProvider(namingProjectPattern, namingScanPattern, namingConventionVariables)
+        return FossIdNamingProvider(namingScanPattern, namingConventionVariables)
     }
 
     /**
