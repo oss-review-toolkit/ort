@@ -74,16 +74,18 @@ class FossIdNamingProvider(
         branch: String = ""
     ): String {
         val builtins = mutableMapOf("#repositoryName" to repositoryName)
-        var defaultPattern = "#repositoryName_#currentTimestamp"
+        val defaultPattern = buildString {
+            append("#repositoryName_#currentTimestamp")
+            if (deltaTag != null) append("_#deltaTag")
+            if (branch.isNotBlank()) append("_#branch")
+        }
 
         deltaTag?.let {
-            defaultPattern += "_#deltaTag"
             builtins += "#deltaTag" to deltaTag.name.lowercase()
         }
 
         if (branch.isNotBlank()) {
             val branchName = normalizeBranchName(branch, defaultPattern, builtins)
-            defaultPattern += "_#branch"
             builtins += "#branch" to branchName
         }
 
