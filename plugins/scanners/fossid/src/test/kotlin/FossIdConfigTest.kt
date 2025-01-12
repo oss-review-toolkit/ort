@@ -43,6 +43,7 @@ class FossIdConfigTest : WordSpec({
         "read all properties from the scanner configuration" {
             val options = mapOf(
                 "serverUrl" to SERVER_URL,
+                "projectName" to PROJECT,
                 "waitForResult" to "false",
                 "keepFailedScans" to "true",
                 "deltaScans" to "true",
@@ -65,6 +66,7 @@ class FossIdConfigTest : WordSpec({
                 serverUrl = SERVER_URL,
                 user = USER,
                 apiKey = API_KEY,
+                projectName = PROJECT,
                 waitForResult = false,
                 keepFailedScans = true,
                 deltaScans = true,
@@ -93,6 +95,7 @@ class FossIdConfigTest : WordSpec({
                 serverUrl = SERVER_URL,
                 user = USER,
                 apiKey = API_KEY,
+                projectName = null,
                 waitForResult = true,
                 keepFailedScans = false,
                 deltaScans = false,
@@ -160,27 +163,6 @@ class FossIdConfigTest : WordSpec({
     }
 
     "createNamingProvider" should {
-        "create a naming provider with a correct project naming convention" {
-            val options = mapOf(
-                "serverUrl" to SERVER_URL,
-                "namingProjectPattern" to "#repositoryName_\$Org_\$Unit",
-                "namingVariableOrg" to "TestOrganization",
-                "namingVariableUnit" to "TestUnit"
-            )
-
-            val secrets = mapOf(
-                "user" to USER,
-                "apiKey" to API_KEY
-            )
-
-            val fossIdConfig = FossIdConfig.create(options, secrets)
-            val namingProvider = fossIdConfig.createNamingProvider()
-
-            val projectName = namingProvider.createProjectCode("TestProject")
-
-            projectName shouldBe "TestProject_TestOrganization_TestUnit"
-        }
-
         "create a naming provider with a correct scan naming convention" {
             val options = mapOf(
                 "serverUrl" to SERVER_URL,
