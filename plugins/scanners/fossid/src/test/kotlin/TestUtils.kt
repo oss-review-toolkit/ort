@@ -118,6 +118,7 @@ internal fun createFossId(config: FossIdConfig): FossId = FossId("FossId", confi
  * Create a standard [FossIdConfig] whose properties can be partly specified.
  */
 internal fun createConfig(
+    projectName: String? = PROJECT,
     waitForResult: Boolean = true,
     deltaScans: Boolean = true,
     deltaScanLimit: Int = Int.MAX_VALUE,
@@ -128,6 +129,7 @@ internal fun createConfig(
         serverUrl = "https://www.example.org/fossid",
         user = USER,
         apiKey = API_KEY,
+        projectName = projectName,
         waitForResult = waitForResult,
         keepFailedScans = false,
         deltaScans = deltaScans,
@@ -155,10 +157,6 @@ internal fun createConfig(
 private fun createNamingProviderMock(): FossIdNamingProvider {
     val counter = AtomicInteger()
     val provider = mockk<FossIdNamingProvider>()
-
-    every { provider.createProjectCode(any()) } answers {
-        projectCode(firstArg())
-    }
 
     every { provider.createScanCode(any(), any(), any()) } answers {
         scanCode(firstArg(), secondArg(), index = counter.incrementAndGet())
@@ -190,11 +188,6 @@ internal fun createVersionControlSystemMock(): VersionControlSystem {
 
     return vcs
 }
-
-/**
- * Generate a project code for the project with the given [name].
- */
-internal fun projectCode(name: String): String = "$name:projectCode"
 
 /**
  * Generate a synthetic scan code for the project with the given [name], [tag], and [index].

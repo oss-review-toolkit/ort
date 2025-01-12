@@ -254,7 +254,7 @@ ort:
         options:
           serverUrl: 'https://fossid.example.com/instance/'
 
-          namingProjectPattern: '$Var1_$Var2'
+          projectName: 'My Project'
           namingScanPattern: '$Var1_#projectBaseCode_$Var3'
           namingVariableVar1: myOrg
           namingVariableVar2: myTeam
