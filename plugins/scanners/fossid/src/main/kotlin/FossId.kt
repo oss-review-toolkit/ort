@@ -169,7 +169,7 @@ class FossId internal constructor(
          * Convert a Git repository URL to a valid project name, e.g.
          * https://github.com/jshttp/mime-types.git -> mime-types
          */
-        fun convertGitUrlToProjectName(gitRepoUrl: String): String {
+        internal fun convertGitUrlToProjectName(gitRepoUrl: String): String {
             val projectNameMatcher = PROJECT_NAME_REGEX.matchEntire(gitRepoUrl)
 
             requireNotNull(projectNameMatcher) { "Git repository URL $gitRepoUrl does not contain a project name." }
