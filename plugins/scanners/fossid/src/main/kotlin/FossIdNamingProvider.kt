@@ -109,8 +109,7 @@ class FossIdNamingProvider(
         }
 
         namingPattern.contains("#branch").let {
-            val namingPatternWithoutBranchPlaceholder = namingPattern.replace("#branch", "")
-            builtins += "#branch" to normalizeBranchName(branch, namingPatternWithoutBranchPlaceholder, builtins)
+            builtins += "#branch" to normalizeBranchName(branch, namingPattern, builtins)
         }
 
         return replaceNamingConventionVariables(namingPattern, builtins, namingConventionVariables)
@@ -127,7 +126,7 @@ class FossIdNamingProvider(
     ): String {
         val noBranchScanCode =
             replaceNamingConventionVariables(
-                scanCodeNamingPattern,
+                scanCodeNamingPattern.replace("#branch", ""),
                 scanCodeVariables,
                 namingConventionVariables
             )
