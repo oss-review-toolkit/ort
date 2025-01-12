@@ -95,8 +95,8 @@ class FossIdNamingProvider(
 
         require(noBranchScanCode.length < MAX_SCAN_CODE_LEN) {
             throw IllegalArgumentException(
-                "FossID scan code '$noBranchScanCode' is too long. " +
-                    "It must not exceed $MAX_SCAN_CODE_LEN characters. Please consider shorter naming scan pattern."
+                "FossID scan code '$noBranchScanCode' exceeds the limit of $MAX_SCAN_CODE_LEN characters. " +
+                    "Please consider a shorter naming scan pattern."
             )
         }
 
