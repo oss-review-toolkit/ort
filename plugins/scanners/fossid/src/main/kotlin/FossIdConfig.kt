@@ -198,16 +198,16 @@ data class FossIdConfig(
 
             val waitForResult = options[PROP_WAIT_FOR_RESULT]?.toBoolean() != false
 
-            val keepFailedScans = options[PROP_KEEP_FAILED_SCANS]?.toBoolean() == true
-            val deltaScans = options[PROP_DELTA_SCAN]?.toBoolean() == true
+            val keepFailedScans = options[PROP_KEEP_FAILED_SCANS]?.toBooleanStrict() ?: false
+            val deltaScans = options[PROP_DELTA_SCAN]?.toBooleanStrict() ?: false
             val deltaScanLimit = options[PROP_DELTA_SCAN_LIMIT]?.toInt() ?: Int.MAX_VALUE
 
-            val detectLicenseDeclarations = options[PROP_DETECT_LICENSE_DECLARATIONS]?.toBoolean() == true
-            val detectCopyrightStatements = options[PROP_DETECT_COPYRIGHT_STATEMENTS]?.toBoolean() == true
+            val detectLicenseDeclarations = options[PROP_DETECT_LICENSE_DECLARATIONS]?.toBooleanStrict() ?: false
+            val detectCopyrightStatements = options[PROP_DETECT_COPYRIGHT_STATEMENTS]?.toBooleanStrict() ?: false
 
             val timeout = options[PROP_TIMEOUT]?.toInt() ?: DEFAULT_TIMEOUT
 
-            val fetchSnippetMatchedLines = options[PROP_FETCH_SNIPPET_MATCHED_LINES]?.toBoolean() == true
+            val fetchSnippetMatchedLines = options[PROP_FETCH_SNIPPET_MATCHED_LINES]?.toBooleanStrict() ?: false
             val snippetsLimit = options[PROP_SNIPPETS_LIMIT]?.toInt() ?: DEFAULT_SNIPPETS_LIMIT
 
             val sensitivity = options[PROP_SENSITIVITY]?.toInt() ?: DEFAULT_SENSITIVITY
