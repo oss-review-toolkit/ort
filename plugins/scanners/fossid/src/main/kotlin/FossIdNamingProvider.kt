@@ -61,19 +61,7 @@ class FossIdNamingProvider(
         } ?: repositoryName
 
     fun createScanCode(repositoryName: String, deltaTag: FossId.DeltaTag? = null, branch: String = ""): String {
-        return namingScanPattern?.let {
-            createScanCodeForCustomPattern(namingScanPattern, repositoryName, deltaTag, branch)
-        } ?: run {
-            createScanCodeForDefaultPattern(repositoryName, deltaTag, branch)
-        }
-    }
-
-    private fun createScanCodeForDefaultPattern(
-        repositoryName: String,
-        deltaTag: FossId.DeltaTag? = null,
-        branch: String = ""
-    ): String {
-        val defaultPattern = buildString {
+        val pattern = namingScanPattern ?: buildString {
             append("#repositoryName_#currentTimestamp")
             if (deltaTag != null) append("_#deltaTag")
             if (branch.isNotBlank()) append("_#branch")
@@ -84,25 +72,9 @@ class FossIdNamingProvider(
             "#deltaTag" to deltaTag?.name?.lowercase().orEmpty()
         )
 
-        builtins += "#branch" to normalizeBranchName(branch, defaultPattern, builtins)
+        builtins += "#branch" to normalizeBranchName(branch, pattern, builtins)
 
-        return replaceNamingConventionVariables(defaultPattern, builtins, namingConventionVariables)
-    }
-
-    private fun createScanCodeForCustomPattern(
-        namingPattern: String,
-        repositoryName: String,
-        deltaTag: FossId.DeltaTag? = null,
-        branch: String = ""
-    ): String {
-        val builtins = mutableMapOf(
-            "#repositoryName" to repositoryName,
-            "#deltaTag" to deltaTag?.name?.lowercase().orEmpty()
-        )
-
-        builtins += "#branch" to normalizeBranchName(branch, namingPattern, builtins)
-
-        return replaceNamingConventionVariables(namingPattern, builtins, namingConventionVariables)
+        return replaceNamingConventionVariables(pattern, builtins, namingConventionVariables)
     }
 
     /**
