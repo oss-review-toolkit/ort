@@ -118,7 +118,7 @@ class FossId internal constructor(
 ) : PackageScannerWrapper {
     companion object {
         @JvmStatic
-        private val PROJECT_NAME_REGEX = Regex("""^.*/([\w.\-]+?)(?:\.git)?$""")
+        private val REPOSITORY_NAME_REGEX = Regex("""^.*/([\w.\-]+?)(?:\.git)?$""")
 
         @JvmStatic
         private val GIT_FETCH_DONE_REGEX = Regex("-> FETCH_HEAD(?: Already up to date.)*$")
@@ -166,19 +166,22 @@ class FossId internal constructor(
         private val SCAN_STATE_FOR_TRIGGER = enumSetOf(ScanStatus.NOT_STARTED, ScanStatus.NEW)
 
         /**
-         * Convert a Git repository URL to a valid project name, e.g.
-         * https://github.com/jshttp/mime-types.git -> mime-types
+         * Try to extract the repository name from a Git repository URL, for example:
+         *
+         * `https://github.com/jshttp/mime-types.git -> mime-types`
+         *
+         * @throws IllegalArgumentException if the repository name cannot be determined.
          */
-        internal fun convertGitUrlToProjectName(gitRepoUrl: String): String {
-            val projectNameMatcher = PROJECT_NAME_REGEX.matchEntire(gitRepoUrl)
+        internal fun extractRepositoryName(gitRepoUrl: String): String {
+            val repositoryNameMatcher = REPOSITORY_NAME_REGEX.matchEntire(gitRepoUrl)
 
-            requireNotNull(projectNameMatcher) { "Git repository URL $gitRepoUrl does not contain a project name." }
+            requireNotNull(repositoryNameMatcher) {
+                "Cannot determine repository name from Git repository URL $gitRepoUrl."
+            }
 
-            val projectName = projectNameMatcher.groupValues[1]
-
-            logger.info { "Found project name '$projectName' in URL $gitRepoUrl." }
-
-            return projectName
+            return repositoryNameMatcher.groupValues[1].also {
+                logger.info { "Found repository name '$it' in URL $gitRepoUrl." }
+            }
         }
 
         /**
@@ -285,11 +288,11 @@ class FossId internal constructor(
 
         val url = pkg.vcsProcessed.url
         val revision = pkg.vcsProcessed.revision
-        val projectName = convertGitUrlToProjectName(url)
+        val repositoryName = extractRepositoryName(url)
 
         val result = runBlocking {
             try {
-                val projectCode = namingProvider.createProjectCode(projectName)
+                val projectCode = namingProvider.createProjectCode(repositoryName)
 
                 if (getProject(projectCode) == null) {
                     logger.info { "Creating project '$projectCode'..." }
@@ -303,9 +306,9 @@ class FossId internal constructor(
                 checkNotNull(scans)
 
                 val result = if (config.deltaScans) {
-                    checkAndCreateDeltaScan(scans, url, revision, projectCode, projectName, context)
+                    checkAndCreateDeltaScan(scans, url, revision, projectCode, repositoryName, context)
                 } else {
-                    checkAndCreateScan(scans, url, revision, projectCode, projectName, context)
+                    checkAndCreateScan(scans, url, revision, projectCode, repositoryName, context)
                 }
 
                 if (config.waitForResult && provenance is RepositoryProvenance) {

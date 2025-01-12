@@ -66,7 +66,7 @@ import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.plugins.scanners.fossid.FossId.Companion.SCAN_CODE_KEY
 import org.ossreviewtoolkit.plugins.scanners.fossid.FossId.Companion.SCAN_ID_KEY
 import org.ossreviewtoolkit.plugins.scanners.fossid.FossId.Companion.SERVER_URL_KEY
-import org.ossreviewtoolkit.plugins.scanners.fossid.FossId.Companion.convertGitUrlToProjectName
+import org.ossreviewtoolkit.plugins.scanners.fossid.FossId.Companion.extractRepositoryName
 
 import org.semver4j.Semver
 
@@ -109,11 +109,11 @@ class FossIdTest : WordSpec({
         }
     }
 
-    "convertGitUrlToProjectName()" should {
+    "extractRepositoryName()" should {
         "extract the repository name from the Git URL without the .git suffix" {
-            convertGitUrlToProjectName("https://github.com/jshttp/mime-types.git") shouldBe "mime-types"
-            convertGitUrlToProjectName("https://github.com/vdurmont/semver4j.git") shouldBe "semver4j"
-            convertGitUrlToProjectName("https://dev.azure.com/org/project/_git/repo") shouldBe "repo"
+            extractRepositoryName("https://github.com/jshttp/mime-types.git") shouldBe "mime-types"
+            extractRepositoryName("https://github.com/vdurmont/semver4j.git") shouldBe "semver4j"
+            extractRepositoryName("https://dev.azure.com/org/project/_git/repo") shouldBe "repo"
         }
     }
 
