@@ -31,13 +31,13 @@ import org.apache.logging.log4j.kotlin.logger
  * [namingScanPattern] and [namingProjectPattern] are patterns describing the name using variables, e.g. "$var1_$var2".
  * Variable values are given in the map [namingConventionVariables].
  *
- * There also are builtin variables. Builtin variables are prefixed in the pattern with "#" e.g. "$var1_#builtin".
- * Available builtin variables:
- * * **projectName**: The name of the project (i.e. the part of the URL before .git).
+ * There are also built-in variables. Built-in variables are prefixed in the pattern with "#" e.g. "$var1_#builtin".
+ * Available built-in variables:
+ * * **projectName**: The name of the project (i.e., the part of the URL before .git).
  * * **currentTimestamp**: The current time.
- * * **deltaTag** (scan code only): If delta scans is enabled, this qualifies the scan as an *origin* scan or a *delta*
+ * * **deltaTag** (scan code only): If delta scans are enabled, this qualifies the scan as an *origin* scan or a *delta*
  * scan.
- * * **branch**: branch name (revision) given to scan
+ * * **branch**: The branch name (revision) to scan.
  */
 class FossIdNamingProvider(
     private val namingProjectPattern: String?,
