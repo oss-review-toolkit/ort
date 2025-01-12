@@ -116,8 +116,8 @@ class FossIdNamingProvider(
     }
 
     /**
-     * Replaces non-standard characters in branch name and trims its length to one that will not exceed
-     * maximum length of FossID scan ID, when combined with the rest of variables
+     * Replace characters in [branch] not matching `[a-zA-Z0-9-_]` with underscores and trim its length so that the
+     * total length of the generated scan code does not exceed [MAX_SCAN_CODE_LEN].
      */
     private fun normalizeBranchName(
         branch: String,
