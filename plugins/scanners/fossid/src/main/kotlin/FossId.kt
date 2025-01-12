@@ -470,7 +470,7 @@ class FossId internal constructor(
         val result = if (existingScan == null) {
             logger.info { "No scan found for $url and revision $revision. Creating scan..." }
 
-            val scanCode = namingProvider.createScanCode(projectName = projectName, branch = revision)
+            val scanCode = namingProvider.createScanCode(repositoryName = projectName, branch = revision)
             val newUrl = urlProvider.getUrl(url)
             val scanId = createScan(projectCode, scanCode, newUrl, revision)
 

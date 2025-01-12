@@ -163,7 +163,7 @@ class FossIdConfigTest : WordSpec({
         "create a naming provider with a correct project naming convention" {
             val options = mapOf(
                 "serverUrl" to SERVER_URL,
-                "namingProjectPattern" to "#projectName_\$Org_\$Unit",
+                "namingProjectPattern" to "#repositoryName_\$Org_\$Unit",
                 "namingVariableOrg" to "TestOrganization",
                 "namingVariableUnit" to "TestUnit"
             )
@@ -184,7 +184,7 @@ class FossIdConfigTest : WordSpec({
         "create a naming provider with a correct scan naming convention" {
             val options = mapOf(
                 "serverUrl" to SERVER_URL,
-                "namingScanPattern" to "#projectName_\$Org_\$Unit_#deltaTag",
+                "namingScanPattern" to "#repositoryName_\$Org_\$Unit_#deltaTag",
                 "namingVariableOrg" to "TestOrganization",
                 "namingVariableUnit" to "TestUnit"
             )

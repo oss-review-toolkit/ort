@@ -33,7 +33,7 @@ import org.apache.logging.log4j.kotlin.logger
  *
  * There are also built-in variables. Built-in variables are prefixed in the pattern with "#" e.g. "$var1_#builtin".
  * Available built-in variables:
- * * **projectName**: The name of the project (i.e., the part of the URL before .git).
+ * * **repositoryName**: The name of the repository (i.e., the part of the URL before .git).
  * * **currentTimestamp**: The current time.
  * * **deltaTag** (scan code only): If delta scans are enabled, this qualifies the scan as an *origin* scan or a *delta*
  * scan.
@@ -51,29 +51,29 @@ class FossIdNamingProvider(
         const val MAX_SCAN_CODE_LEN = 254
     }
 
-    fun createProjectCode(projectName: String): String =
+    fun createProjectCode(repositoryName: String): String =
         namingProjectPattern?.let {
             val builtins = mapOf(
-                "#projectName" to projectName
+                "#repositoryName" to repositoryName
             )
             replaceNamingConventionVariables(namingProjectPattern, builtins, namingConventionVariables)
-        } ?: projectName
+        } ?: repositoryName
 
-    fun createScanCode(projectName: String, deltaTag: FossId.DeltaTag? = null, branch: String = ""): String {
+    fun createScanCode(repositoryName: String, deltaTag: FossId.DeltaTag? = null, branch: String = ""): String {
         return namingScanPattern?.let {
-            createScanCodeForCustomPattern(namingScanPattern, projectName, deltaTag, branch)
+            createScanCodeForCustomPattern(namingScanPattern, repositoryName, deltaTag, branch)
         } ?: run {
-            createScanCodeForDefaultPattern(projectName, deltaTag, branch)
+            createScanCodeForDefaultPattern(repositoryName, deltaTag, branch)
         }
     }
 
     private fun createScanCodeForDefaultPattern(
-        projectName: String,
+        repositoryName: String,
         deltaTag: FossId.DeltaTag? = null,
         branch: String = ""
     ): String {
-        val builtins = mutableMapOf("#projectName" to projectName)
-        var defaultPattern = "#projectName_#currentTimestamp"
+        val builtins = mutableMapOf("#repositoryName" to repositoryName)
+        var defaultPattern = "#repositoryName_#currentTimestamp"
 
         deltaTag?.let {
             defaultPattern += "_#deltaTag"
@@ -91,14 +91,14 @@ class FossIdNamingProvider(
 
     private fun createScanCodeForCustomPattern(
         namingPattern: String,
-        projectName: String,
+        repositoryName: String,
         deltaTag: FossId.DeltaTag? = null,
         branch: String = ""
     ): String {
         val builtins = mutableMapOf<String, String>()
 
-        namingPattern.contains("#projectName").let {
-            builtins += "#projectName" to projectName
+        namingPattern.contains("#repositoryName").let {
+            builtins += "#repositoryName" to repositoryName
         }
 
         namingPattern.contains("#deltaTag").let {
