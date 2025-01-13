@@ -46,6 +46,8 @@ class FossIdNamingProvider(
     private val namingConventionVariables: Map<String, String>
 ) {
     companion object {
+        val ALLOWED_CHARACTERS_REGEX = Regex("[^\\w-]")
+
         @JvmStatic
         val FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")
 
@@ -78,8 +80,8 @@ class FossIdNamingProvider(
     }
 
     /**
-     * Replace characters in [branch] not matching `[a-zA-Z0-9-_]` with underscores and trim its length so that the
-     * total length of the generated scan code does not exceed [MAX_SCAN_CODE_LEN].
+     * Replace characters in [branch] not matching [ALLOWED_CHARACTERS_REGEX] with underscores and trim its length so
+     * that the total length of the generated scan code does not exceed [MAX_SCAN_CODE_LEN].
      */
     private fun normalizeBranchName(
         branch: String,
@@ -101,7 +103,7 @@ class FossIdNamingProvider(
         }
 
         val maxBranchNameLength = MAX_SCAN_CODE_LEN - noBranchScanCode.length
-        return branch.replace(Regex("[^a-zA-Z0-9-_]"), "_").take(maxBranchNameLength)
+        return branch.replace(ALLOWED_CHARACTERS_REGEX, "_").take(maxBranchNameLength)
     }
 
     /**
