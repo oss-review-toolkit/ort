@@ -115,7 +115,7 @@ class Cargo(
         }
 
         return when (contents.version) {
-            null, 2, 3 -> {
+            null, 2, 3, 4 -> {
                 contents.packages.mapNotNull { pkg ->
                     pkg.checksum?.let { checksum ->
                         // Use the same key format as for version 1, see above.
