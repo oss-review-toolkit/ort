@@ -60,12 +60,6 @@ class EvaluatedModelReporter(
     override val descriptor: PluginDescriptor = EvaluatedModelReporterFactory.descriptor,
     private val config: EvaluatedModelReporterConfig
 ) : Reporter {
-    companion object {
-        const val OPTION_OUTPUT_FILE_FORMATS = "output.file.formats"
-
-        const val OPTION_DEDUPLICATE_DEPENDENCY_TREE = "deduplicateDependencyTree"
-    }
-
     override fun generateReport(input: ReporterInput, outputDir: File): List<Result<File>> {
         val evaluatedModel = EvaluatedModel.create(input, config.deduplicateDependencyTree)
 
