@@ -78,6 +78,7 @@ class PackageBasedPostgresStorage(
                     if (!tableExists(TABLE_NAME)) {
                         checkDatabaseEncoding()
 
+                        @Suppress("DEPRECATION")
                         createMissingTablesAndColumns(ScanResults)
 
                         createIdentifierAndScannerVersionIndex()

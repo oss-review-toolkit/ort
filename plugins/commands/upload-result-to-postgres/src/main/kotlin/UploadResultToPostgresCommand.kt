@@ -125,6 +125,7 @@ class UploadResultToPostgresCommand(
                 withDataBaseLock {
                     if (!tableExists(tableName)) {
                         checkDatabaseEncoding()
+                        @Suppress("DEPRECATION")
                         SchemaUtils.createMissingTablesAndColumns(table)
                     }
                 }
