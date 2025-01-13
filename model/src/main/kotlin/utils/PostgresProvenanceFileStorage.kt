@@ -66,6 +66,7 @@ class PostgresProvenanceFileStorage(
                 withDataBaseLock {
                     if (!tableExists(table.tableName)) {
                         checkDatabaseEncoding()
+                        @Suppress("DEPRECATION")
                         createMissingTablesAndColumns(table)
                     }
                 }
