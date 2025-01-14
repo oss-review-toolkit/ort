@@ -28,8 +28,9 @@ import org.ossreviewtoolkit.downloader.VersionControlSystemFactory
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.CommandLineTool
-import org.ossreviewtoolkit.utils.common.Options
 
 const val MERCURIAL_LARGE_FILES_EXTENSION = "largefiles = "
 const val MERCURIAL_SPARSE_EXTENSION = "sparse = "
@@ -48,13 +49,14 @@ internal object MercurialCommand : CommandLineTool {
     override fun displayName(): String = "Mercurial"
 }
 
-class Mercurial internal constructor() : VersionControlSystem() {
-    class Factory : VersionControlSystemFactory<Unit>(VcsType.MERCURIAL.toString(), 20) {
-        override fun create(config: Unit) = Mercurial()
-        override fun parseConfig(options: Options, secrets: Options) = Unit
-    }
-
+@OrtPlugin(
+    displayName = "Mercurial",
+    description = "A VCS implementation to interact with Mercurial repositories.",
+    factory = VersionControlSystemFactory::class
+)
+class Mercurial(override val descriptor: PluginDescriptor = MercurialFactory.descriptor) : VersionControlSystem() {
     override val type = VcsType.MERCURIAL
+    override val priority = 20
     override val latestRevisionNames = listOf("tip")
 
     override fun getVersion() = MercurialCommand.getVersion()

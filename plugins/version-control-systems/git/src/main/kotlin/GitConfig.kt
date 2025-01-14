@@ -19,10 +19,18 @@
 
 package org.ossreviewtoolkit.plugins.versioncontrolsystems.git
 
-/** Git-specific [org.ossreviewtoolkit.downloader.VersionControlSystem] configuration. */
+import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.plugins.api.OrtPluginOption
+
+const val DEFAULT_HISTORY_DEPTH = 50
+
+/** Git-specific [VersionControlSystem] configuration. */
 data class GitConfig(
     /** Depth of the commit history to fetch. */
+    @OrtPluginOption(defaultValue = "$DEFAULT_HISTORY_DEPTH")
     val historyDepth: Int,
+
     /** Whether nested submodules should be updated, or if only top-level submodules should be considered. */
+    @OrtPluginOption(defaultValue = "true")
     val updateNestedSubmodules: Boolean
 )

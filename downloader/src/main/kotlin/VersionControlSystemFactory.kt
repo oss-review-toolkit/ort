@@ -19,28 +19,17 @@
 
 package org.ossreviewtoolkit.downloader
 
-import java.util.ServiceLoader
-
-import org.ossreviewtoolkit.utils.common.Plugin
-import org.ossreviewtoolkit.utils.common.TypedConfigurablePluginFactory
+import org.ossreviewtoolkit.plugins.api.PluginFactory
 
 /**
- * An abstract class to be implemented by factories for [Version Control Systems][VersionControlSystem] for use with the
- * [ServiceLoader] mechanism. The [type] parameter denotes which VCS type is supported by this plugin, while the
- * [priority] parameter defines the order if more than one plugin supports the same VCS type.
+ * A factory interface for creating [VersionControlSystem] instances.
  */
-abstract class VersionControlSystemFactory<CONFIG>(override val type: String, val priority: Int) :
-    TypedConfigurablePluginFactory<CONFIG, VersionControlSystem> {
+interface VersionControlSystemFactory : PluginFactory<VersionControlSystem> {
     companion object {
         /**
          * All [Version Control System factories][VersionControlSystemFactory] available in the classpath, associated by
-         * their names, sorted by priority.
+         * their ids.
          */
-        val ALL by lazy {
-            Plugin.getAll<VersionControlSystemFactory<*>>()
-                .toList()
-                .sortedByDescending { (_, vcsFactory) -> vcsFactory.priority }
-                .toMap()
-        }
+        val ALL by lazy { PluginFactory.getAll<VersionControlSystemFactory, VersionControlSystem>() }
     }
 }

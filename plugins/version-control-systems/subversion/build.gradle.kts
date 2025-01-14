@@ -19,7 +19,7 @@
 
 plugins {
     // Apply precompiled plugins.
-    id("ort-library-conventions")
+    id("ort-plugin-conventions")
 }
 
 dependencies {
@@ -35,4 +35,6 @@ dependencies {
         exclude(group = "org.apache.sshd", module = "sshd-common")
             .because("it is included in JGit's sshd-osgi dependency")
     }
+
+    ksp(projects.downloader)
 }

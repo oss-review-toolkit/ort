@@ -19,7 +19,7 @@
 
 plugins {
     // Apply precompiled plugins.
-    id("ort-library-conventions")
+    id("ort-plugin-conventions")
 
     // Apply third-party plugins.
     alias(libs.plugins.kotlinSerialization)
@@ -42,6 +42,8 @@ dependencies {
     implementation(libs.jgit.ssh.apache)
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.xml)
+
+    ksp(projects.downloader)
 
     runtimeOnly(libs.jgit.ssh.apache.agent) {
         exclude(group = "org.apache.sshd", module = "sshd-sftp")

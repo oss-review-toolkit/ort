@@ -32,7 +32,8 @@ import java.io.IOException
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.Git
+import org.ossreviewtoolkit.plugins.api.PluginConfig
+import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.GitFactory
 
 class VersionControlSystemTest : WordSpec({
     val vcsRoot = File("..").absoluteFile.normalize()
@@ -85,7 +86,7 @@ class VersionControlSystemTest : WordSpec({
 
             every { workingTree.guessRevisionName(any(), any()) } returns "v1.6.0"
 
-            Git.Factory().create()
+            GitFactory().create(PluginConfig())
                 .getRevisionCandidates(workingTree, pkg, allowMovingRevisions = true) shouldBeSuccess listOf(
                 "v1.6.0"
             )
@@ -109,7 +110,7 @@ class VersionControlSystemTest : WordSpec({
             every { workingTree.listRemoteBranches() } returns listOf("main")
             every { workingTree.listRemoteTags() } returns emptyList()
 
-            Git.Factory().create()
+            GitFactory().create(PluginConfig())
                 .getRevisionCandidates(workingTree, pkg, allowMovingRevisions = true) shouldBeSuccess listOf(
                 "master",
                 "main"

@@ -42,11 +42,12 @@ import org.eclipse.jgit.transport.CredentialItem
 import org.eclipse.jgit.transport.CredentialsProvider
 import org.eclipse.jgit.transport.URIish
 
+import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 
 class GitTest : WordSpec({
     // Make sure that the initialization logic runs.
-    val git = Git.Factory().create()
+    val git = GitFactory().create(PluginConfig())
 
     var originalCredentialsProvider: CredentialsProvider? = null
     var originalAuthenticator: Authenticator? = null

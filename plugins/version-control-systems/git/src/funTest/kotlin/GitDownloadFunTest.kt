@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.plugins.api.PluginConfig
 
 private const val PKG_VERSION = "0.4.1"
 
@@ -43,7 +44,7 @@ private const val REPO_REV_FOR_VERSION = "371b23f37da064687518bace268d607a92ecbe
 private const val REPO_PATH_FOR_VERSION = "specs"
 
 class GitDownloadFunTest : StringSpec() {
-    private val git = Git.Factory().create()
+    private val git = GitFactory().create(PluginConfig())
     private lateinit var outputDir: File
 
     override suspend fun beforeTest(testCase: TestCase) {

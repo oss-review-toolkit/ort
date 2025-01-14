@@ -32,7 +32,8 @@ import org.ossreviewtoolkit.downloader.VersionControlSystemFactory
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.utils.common.Options
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.OrtAuthenticator
 import org.ossreviewtoolkit.utils.ort.OrtProxySelector
@@ -54,18 +55,19 @@ import org.tmatesoft.svn.core.wc.SVNClientManager
 import org.tmatesoft.svn.core.wc.SVNRevision
 import org.tmatesoft.svn.util.Version
 
-class Subversion internal constructor() : VersionControlSystem() {
-    class Factory : VersionControlSystemFactory<Unit>(VcsType.SUBVERSION.toString(), 10) {
-        override fun create(config: Unit) = Subversion()
-        override fun parseConfig(options: Options, secrets: Options) = Unit
-    }
-
+@OrtPlugin(
+    displayName = "Subversion",
+    description = "A VCS implementation to interact with Subversion repositories.",
+    factory = VersionControlSystemFactory::class
+)
+class Subversion(override val descriptor: PluginDescriptor = SubversionFactory.descriptor) : VersionControlSystem() {
     private val ortAuthManager = OrtSVNAuthenticationManager()
     private val clientManager = SVNClientManager.newInstance().apply {
         setAuthenticationManager(ortAuthManager)
     }
 
     override val type = VcsType.SUBVERSION
+    override val priority = 10
     override val latestRevisionNames = listOf("HEAD")
 
     override fun getVersion(): String = Version.getVersionString()

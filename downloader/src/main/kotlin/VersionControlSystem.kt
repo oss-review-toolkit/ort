@@ -29,8 +29,9 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
-import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.orEmpty
+import org.ossreviewtoolkit.plugins.api.Plugin
+import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.uppercaseFirstChar
@@ -39,19 +40,22 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 import org.semver4j.Semver
 
-abstract class VersionControlSystem {
+abstract class VersionControlSystem : Plugin {
     companion object {
+        private fun getAllVcsByPriority(configs: Map<String, PluginConfig>) =
+            ALL.map { (id, factory) ->
+                val config = configs[id] ?: PluginConfig()
+                factory.create(config)
+            }.sortedByDescending {
+                it.priority
+            }
+
         /**
          * Return the applicable VCS for the given [vcsType], or null if none is applicable.
          */
-        fun forType(vcsType: VcsType, configs: Map<String, PluginConfiguration> = emptyMap()) =
-            ALL.values.filter { factory ->
-                VcsType.forName(factory.type) == vcsType
-            }.asSequence().map { factory ->
-                val config = configs[factory.type]
-                factory.create(options = config?.options.orEmpty(), secrets = emptyMap())
-            }.find { vcs ->
-                vcs.isAvailable()
+        fun forType(vcsType: VcsType, configs: Map<String, PluginConfig> = emptyMap()) =
+            getAllVcsByPriority(configs).find { vcs ->
+                vcs.type == vcsType && vcs.isAvailable()
             }
 
         /**
@@ -65,7 +69,7 @@ abstract class VersionControlSystem {
          * Return the applicable VCS for the given [vcsUrl], or null if none is applicable.
          */
         @Synchronized
-        fun forUrl(vcsUrl: String, configs: Map<String, PluginConfiguration> = emptyMap()) =
+        fun forUrl(vcsUrl: String, configs: Map<String, PluginConfig> = emptyMap()) =
             // Do not use getOrPut() here as it cannot handle null values, also see
             // https://youtrack.jetbrains.com/issue/KT-21392.
             if (vcsUrl in urlToVcsMap) {
@@ -75,11 +79,8 @@ abstract class VersionControlSystem {
                 when (val type = VcsHost.parseUrl(vcsUrl).type) {
                     VcsType.UNKNOWN -> {
                         // ...then eventually try to determine the type also dynamically.
-                        ALL.values.asSequence().map { factory ->
-                            val config = configs[factory.type]
-                            factory.create(options = config?.options.orEmpty(), secrets = emptyMap())
-                        }.find { vcs ->
-                            vcs.isAvailable() && vcs.isApplicableUrl(vcsUrl)
+                        getAllVcsByPriority(configs).find { vcs ->
+                            vcs.isApplicableUrl(vcsUrl) && vcs.isAvailable()
                         }
                     }
 
@@ -99,16 +100,13 @@ abstract class VersionControlSystem {
          * Return the applicable VCS working tree for the given [vcsDirectory], or null if none is applicable.
          */
         @Synchronized
-        fun forDirectory(vcsDirectory: File, configs: Map<String, PluginConfiguration> = emptyMap()): WorkingTree? {
+        fun forDirectory(vcsDirectory: File, configs: Map<String, PluginConfig> = emptyMap()): WorkingTree? {
             val absoluteVcsDirectory = vcsDirectory.absoluteFile
 
             return if (absoluteVcsDirectory in dirToVcsMap) {
                 dirToVcsMap[absoluteVcsDirectory]
             } else {
-                ALL.values.asSequence().map { factory ->
-                    val config = configs[factory.type]
-                    factory.create(options = config?.options.orEmpty(), secrets = emptyMap())
-                }.mapNotNull {
+                getAllVcsByPriority(configs).mapNotNull {
                     if (it is CommandLineTool && !it.isInPath()) {
                         null
                     } else {
@@ -167,6 +165,12 @@ abstract class VersionControlSystem {
      * The type of VCS supported by this implementation.
      */
     abstract val type: VcsType
+
+    /**
+     *  The [priority] defines the order in which VCS implementaions are to be used. A higher value means a higher
+     *  priority.
+     */
+    abstract val priority: Int
 
     /**
      * A list of symbolic names that point to the latest revision.
