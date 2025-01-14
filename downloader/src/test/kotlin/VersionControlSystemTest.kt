@@ -33,7 +33,6 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.Git
-import org.ossreviewtoolkit.utils.common.CommandLineTool
 
 class VersionControlSystemTest : WordSpec({
     val vcsRoot = File("..").absoluteFile.normalize()
@@ -117,58 +116,4 @@ class VersionControlSystemTest : WordSpec({
             )
         }
     }
-
-    "isAvailable" should {
-        "return true for implementations not based on command line tools" {
-            val vcs = VersionControlSystemTestImpl(null)
-
-            vcs.isAvailable() shouldBe true
-        }
-
-        "return true for command line tools available on the path" {
-            val tool = mockk<CommandLineTool> {
-                every { isInPath() } returns true
-            }
-
-            val vcs = VersionControlSystemTestImpl(tool)
-
-            vcs.isAvailable() shouldBe true
-        }
-
-        "return false for command line tools not available on the path" {
-            val tool = mockk<CommandLineTool> {
-                every { isInPath() } returns false
-            }
-
-            val vcs = VersionControlSystemTestImpl(tool)
-
-            vcs.isAvailable() shouldBe false
-        }
-    }
 })
-
-/**
- * A dummy implementation of [VersionControlSystem] used to test certain functionality.
- */
-private class VersionControlSystemTestImpl(
-    tool: CommandLineTool?,
-    override val type: String = VcsType.UNKNOWN.toString(),
-    override val latestRevisionNames: List<String> = emptyList()
-) : VersionControlSystem(tool) {
-    override fun getVersion(): String = "0"
-
-    override fun getDefaultBranchName(url: String): String = ""
-
-    override fun getWorkingTree(vcsDirectory: File): WorkingTree = mockk()
-
-    override fun isApplicableUrlInternal(vcsUrl: String): Boolean = false
-
-    override fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree = mockk()
-
-    override fun updateWorkingTree(
-        workingTree: WorkingTree,
-        revision: String,
-        path: String,
-        recursive: Boolean
-    ): Result<String> = Result.failure(UnsupportedOperationException("Unexpected invocation."))
-}
