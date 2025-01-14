@@ -65,7 +65,7 @@ class Subversion internal constructor() : VersionControlSystem() {
         setAuthenticationManager(ortAuthManager)
     }
 
-    override val type = VcsType.SUBVERSION.toString()
+    override val type = VcsType.SUBVERSION
     override val latestRevisionNames = listOf("HEAD")
 
     override fun getVersion(): String = Version.getVersionString()
@@ -73,7 +73,7 @@ class Subversion internal constructor() : VersionControlSystem() {
     override fun getDefaultBranchName(url: String) = "trunk"
 
     override fun getWorkingTree(vcsDirectory: File): WorkingTree =
-        SubversionWorkingTree(vcsDirectory, VcsType.forName(type), clientManager)
+        SubversionWorkingTree(vcsDirectory, type, clientManager)
 
     override fun isApplicableUrlInternal(vcsUrl: String) =
         try {

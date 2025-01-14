@@ -136,7 +136,7 @@ class Git internal constructor(private val config: GitConfig) : VersionControlSy
             )
     }
 
-    override val type = VcsType.GIT.toString()
+    override val type = VcsType.GIT
     override val latestRevisionNames = listOf("HEAD", "@")
 
     override fun getVersion() = GitCommand.getVersion()
@@ -146,7 +146,7 @@ class Git internal constructor(private val config: GitConfig) : VersionControlSy
         return (refs["HEAD"] as? SymbolicRef)?.target?.name?.removePrefix("refs/heads/") ?: "master"
     }
 
-    override fun getWorkingTree(vcsDirectory: File): WorkingTree = GitWorkingTree(vcsDirectory, VcsType.forName(type))
+    override fun getWorkingTree(vcsDirectory: File): WorkingTree = GitWorkingTree(vcsDirectory, type)
 
     override fun isAvailable(): Boolean = GitCommand.isInPath()
 

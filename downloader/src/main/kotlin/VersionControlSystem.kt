@@ -164,9 +164,9 @@ abstract class VersionControlSystem {
     }
 
     /**
-     * The name of the VCS type this implementation supports.
+     * The type of VCS supported by this implementation.
      */
-    abstract val type: String
+    abstract val type: VcsType
 
     /**
      * A list of symbolic names that point to the latest revision.
@@ -190,11 +190,6 @@ abstract class VersionControlSystem {
     abstract fun getWorkingTree(vcsDirectory: File): WorkingTree
 
     /**
-     * Return true if this VCS can handle the given [vcsType].
-     */
-    fun isApplicableType(vcsType: VcsType) = VcsType.forName(type) == vcsType
-
-    /**
      * Return true if this [VersionControlSystem] can be used to download from the provided [vcsUrl]. First, try to find
      * this out by only parsing the URL, but as a fallback implementations may actually probe the URL and make a network
      * request.
@@ -202,7 +197,7 @@ abstract class VersionControlSystem {
     fun isApplicableUrl(vcsUrl: String): Boolean {
         if (vcsUrl.isBlank() || vcsUrl.endsWith(".html")) return false
 
-        return isApplicableType(VcsHost.parseUrl(vcsUrl).type) || isApplicableUrlInternal(vcsUrl)
+        return type == VcsHost.parseUrl(vcsUrl).type || isApplicableUrlInternal(vcsUrl)
     }
 
     /**
@@ -358,7 +353,7 @@ abstract class VersionControlSystem {
 
         addMetadataRevision(pkg.vcsProcessed.revision)
 
-        if (VcsType.forName(type) == VcsType.GIT && pkg.vcsProcessed.revision == "master") {
+        if (type == VcsType.GIT && pkg.vcsProcessed.revision == "master") {
             // Also try with Git's upcoming default branch name in case the repository is already using it.
             addMetadataRevision("main")
         }
