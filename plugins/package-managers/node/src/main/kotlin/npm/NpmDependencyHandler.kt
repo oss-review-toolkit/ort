@@ -26,8 +26,8 @@ import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.utils.DependencyHandler
+import org.ossreviewtoolkit.plugins.packagemanagers.node.GetPackageDetailsFun
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
-import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageDetailsFunction
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackage
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
@@ -36,7 +36,7 @@ import org.ossreviewtoolkit.utils.common.realFile
 
 internal class NpmDependencyHandler(
     private val projectType: String,
-    private val getPackageDetails: PackageDetailsFunction
+    private val getPackageDetails: GetPackageDetailsFun
 ) : DependencyHandler<ModuleInfo> {
     private val packageJsonCache = mutableMapOf<File, PackageJson>()
 
