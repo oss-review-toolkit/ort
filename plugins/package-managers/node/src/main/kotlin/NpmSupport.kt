@@ -137,13 +137,13 @@ internal fun parseVcsInfo(packageJson: PackageJson): VcsInfo {
     )
 }
 
-typealias PackageDetailsFunction = (packageName: String) -> PackageJson?
+typealias GetPackageDetailsFun = (packageName: String) -> PackageJson?
 
 /**
  * Construct a [Package] by parsing its _package.json_ file and - if applicable - querying additional
  * content via the `npm view` command. The result is a [Pair] with the raw identifier and the new package.
  */
-internal fun parsePackage(packageJsonFile: File, getPackageDetails: PackageDetailsFunction): Package {
+internal fun parsePackage(packageJsonFile: File, getPackageDetails: GetPackageDetailsFun): Package {
     val packageJson = parsePackageJson(packageJsonFile)
 
     // The "name" and "version" fields are only required if the package is going to be published, otherwise they are
