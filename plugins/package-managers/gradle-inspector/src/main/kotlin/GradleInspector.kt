@@ -119,7 +119,7 @@ class GradleInspector(
         ) = GradleInspector(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
-    private val graphBuilder = DependencyGraphBuilder(GradleDependencyHandler(managerName))
+    private val graphBuilder = DependencyGraphBuilder(GradleDependencyHandler(managerName, projectType))
     private val initScriptFile by lazy { extractInitScript() }
 
     private fun extractInitScript(): File {

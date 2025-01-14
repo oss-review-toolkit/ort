@@ -55,7 +55,7 @@ import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
-import org.ossreviewtoolkit.plugins.packagemanagers.gradlemodel.dependencyType
+import org.ossreviewtoolkit.plugins.packagemanagers.gradlemodel.getIdentifierType
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.MavenSupport
 
 /**
@@ -307,7 +307,7 @@ class GradleDependencyHandlerTest : WordSpec({
             val issues = mutableListOf<Issue>()
 
             every { maven.parsePackage(any(), any(), useReposFromDependencies = false) } throws exception
-            val handler = GradleDependencyHandler("Gradle", maven)
+            val handler = GradleDependencyHandler("Gradle", "Gradle", maven)
 
             handler.createPackage(dep, issues) should beNull()
 
@@ -353,7 +353,7 @@ private fun createDependency(
  * this class.
  */
 private fun createGraphBuilder(): DependencyGraphBuilder<OrtDependency> {
-    val dependencyHandler = GradleDependencyHandler("Gradle", createMavenSupport())
+    val dependencyHandler = GradleDependencyHandler("Gradle", "Gradle", createMavenSupport())
     dependencyHandler.repositories = remoteRepositories
     return DependencyGraphBuilder(dependencyHandler)
 }
@@ -384,7 +384,7 @@ private fun createMavenSupport(): MavenSupport {
 /**
  * Returns an [Identifier] for this [OrtDependency].
  */
-private fun OrtDependency.toId() = Identifier(dependencyType, groupId, artifactId, version)
+private fun OrtDependency.toId() = Identifier(getIdentifierType("Gradle"), groupId, artifactId, version)
 
 /**
  * Return the package references from the given [scopes] associated with the scope with the given [scopeName].

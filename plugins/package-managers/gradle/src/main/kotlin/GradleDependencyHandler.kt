@@ -34,7 +34,7 @@ import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyHandler
-import org.ossreviewtoolkit.plugins.packagemanagers.gradlemodel.dependencyType
+import org.ossreviewtoolkit.plugins.packagemanagers.gradlemodel.getIdentifierType
 import org.ossreviewtoolkit.plugins.packagemanagers.gradlemodel.isProjectDependency
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.MavenSupport
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.identifier
@@ -48,6 +48,9 @@ internal class GradleDependencyHandler(
     /** The name of the source to use when creating [Issue]s. */
     private val issueSource: String,
 
+    /** The type of projects to handle. */
+    private val projectType: String,
+
     /** The helper object to resolve packages via Maven. */
     private val maven: MavenSupport
 ) : DependencyHandler<OrtDependency> {
@@ -59,12 +62,7 @@ internal class GradleDependencyHandler(
     var repositories = emptyList<RemoteRepository>()
 
     override fun identifierFor(dependency: OrtDependency): Identifier =
-        Identifier(
-            type = dependency.dependencyType,
-            namespace = dependency.groupId,
-            name = dependency.artifactId,
-            version = dependency.version
-        )
+        with(dependency) { Identifier(getIdentifierType(projectType), groupId, artifactId, version) }
 
     override fun dependenciesFor(dependency: OrtDependency): List<OrtDependency> = dependency.dependencies
 

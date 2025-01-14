@@ -163,7 +163,7 @@ class Gradle(
     }
 
     private val maven = MavenSupport(GradleCacheReader())
-    private val dependencyHandler = GradleDependencyHandler(managerName, maven)
+    private val dependencyHandler = GradleDependencyHandler(managerName, projectType, maven)
     private val graphBuilder = DependencyGraphBuilder(dependencyHandler)
 
     // The path to the root project. In a single-project, just points to the project path.
