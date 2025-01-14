@@ -51,7 +51,7 @@ import org.ossreviewtoolkit.utils.common.enumSetOf
 @OrtPlugin(
     id = "BlackDuck",
     displayName = "BlackDuck",
-    description = "An advisor that retrieves vulnerability information from a BlackDuck instance.",
+    description = "An advisor that retrieves vulnerability information from a Black Duck instance.",
     factory = AdviceProviderFactory::class
 )
 class BlackDuck(
