@@ -48,7 +48,7 @@ internal object MercurialCommand : CommandLineTool {
     override fun displayName(): String = "Mercurial"
 }
 
-class Mercurial internal constructor() : VersionControlSystem(MercurialCommand) {
+class Mercurial internal constructor() : VersionControlSystem() {
     class Factory : VersionControlSystemFactory<Unit>(VcsType.MERCURIAL.toString(), 20) {
         override fun create(config: Unit) = Mercurial()
         override fun parseConfig(options: Options, secrets: Options) = Unit
@@ -63,6 +63,8 @@ class Mercurial internal constructor() : VersionControlSystem(MercurialCommand) 
 
     override fun getWorkingTree(vcsDirectory: File): WorkingTree =
         MercurialWorkingTree(vcsDirectory, VcsType.forName(type))
+
+    override fun isAvailable() = MercurialCommand.isInPath()
 
     override fun isApplicableUrlInternal(vcsUrl: String) = MercurialCommand.run("identify", vcsUrl).isSuccess
 

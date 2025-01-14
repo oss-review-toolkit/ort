@@ -94,7 +94,7 @@ object GitCommand : CommandLineTool {
  * - *updateNestedSubmodules*: Whether nested submodules should be updated, or if only top-level submodules should be
  *   considered. Defaults to true.
  */
-class Git internal constructor(private val config: GitConfig) : VersionControlSystem(GitCommand) {
+class Git internal constructor(private val config: GitConfig) : VersionControlSystem() {
     companion object {
         init {
             // Make sure that JGit uses the exact same authentication information as ORT itself. This addresses
@@ -147,6 +147,8 @@ class Git internal constructor(private val config: GitConfig) : VersionControlSy
     }
 
     override fun getWorkingTree(vcsDirectory: File): WorkingTree = GitWorkingTree(vcsDirectory, VcsType.forName(type))
+
+    override fun isAvailable(): Boolean = GitCommand.isInPath()
 
     override fun isApplicableUrlInternal(vcsUrl: String): Boolean =
         runCatching {

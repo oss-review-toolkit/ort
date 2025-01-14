@@ -88,7 +88,7 @@ internal object GitRepoCommand : CommandLineTool {
     override fun displayName(): String = "GitRepo"
 }
 
-class GitRepo internal constructor() : VersionControlSystem(GitRepoCommand) {
+class GitRepo internal constructor() : VersionControlSystem() {
     class Factory : VersionControlSystemFactory<Unit>(VcsType.GIT_REPO.toString(), 50) {
         override fun create(config: Unit) = GitRepo()
         override fun parseConfig(options: Options, secrets: Options) = Unit
@@ -159,6 +159,8 @@ class GitRepo internal constructor() : VersionControlSystem(GitRepoCommand) {
             }
         }
     }
+
+    override fun isAvailable(): Boolean = GitRepoCommand.isInPath()
 
     override fun isApplicableUrlInternal(vcsUrl: String) = false
 
