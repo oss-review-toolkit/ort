@@ -45,7 +45,7 @@ internal data class AOSD21(
     val externalId: String = "",
 
     /**
-     *  A flag to mark if the software component information is the output from a scan tool like BlackDuck Deep License
+     *  A flag to mark if the software component information is the output from a scan tool like Black Duck Deep License
      *  Scan, ScanCode, Fossology etc., or if it was prepared manually.
      */
     val scanned: Boolean = true,

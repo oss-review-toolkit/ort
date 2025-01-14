@@ -40,7 +40,7 @@ internal class ResponseCachingComponentServiceClient(
     private val serverUrl: String?,
     apiToken: String?
 ) : ComponentServiceClient {
-    // The BlackDuck library uses GSON to serialize its POJOs. So use GSON, too, because this is the simplest option.
+    // The Black Duck library uses GSON to serialize its POJOs. So use GSON, too, because this is the simplest option.
     private val gson = GsonBuilder().setPrettyPrinting().create()
 
     private val cache = if (overrideFile.isFile) {
