@@ -105,13 +105,16 @@ abstract class VersionControlSystem(
          * Return the applicable VCS working tree for the given [vcsDirectory], or null if none is applicable.
          */
         @Synchronized
-        fun forDirectory(vcsDirectory: File): WorkingTree? {
+        fun forDirectory(vcsDirectory: File, configs: Map<String, PluginConfiguration> = emptyMap()): WorkingTree? {
             val absoluteVcsDirectory = vcsDirectory.absoluteFile
 
             return if (absoluteVcsDirectory in dirToVcsMap) {
                 dirToVcsMap[absoluteVcsDirectory]
             } else {
-                ALL.values.asSequence().map { it.create(options = emptyMap(), secrets = emptyMap()) }.mapNotNull {
+                ALL.values.asSequence().map { factory ->
+                    val config = configs[factory.type]
+                    factory.create(options = config?.options.orEmpty(), secrets = emptyMap())
+                }.mapNotNull {
                     if (it is CommandLineTool && !it.isInPath()) {
                         null
                     } else {
