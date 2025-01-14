@@ -41,7 +41,7 @@ import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.model.utils.parseRepoManifestPath
-import org.ossreviewtoolkit.plugins.packagemanagers.gradlemodel.dependencyType
+import org.ossreviewtoolkit.plugins.packagemanagers.gradlemodel.getIdentifierType
 import org.ossreviewtoolkit.plugins.packagemanagers.gradlemodel.isProjectDependency
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
@@ -56,10 +56,13 @@ import org.ossreviewtoolkit.utils.spdx.SpdxOperator
  */
 internal class GradleDependencyHandler(
     /** The name of the source to use when creating [Issue]s. */
-    private val issueSource: String
+    private val issueSource: String,
+
+    /** The type of projects to handle. */
+    private val projectType: String
 ) : DependencyHandler<OrtDependency> {
     override fun identifierFor(dependency: OrtDependency): Identifier =
-        with(dependency) { Identifier(dependencyType, groupId, artifactId, version) }
+        with(dependency) { Identifier(getIdentifierType(projectType), groupId, artifactId, version) }
 
     override fun dependenciesFor(dependency: OrtDependency): List<OrtDependency> = dependency.dependencies
 

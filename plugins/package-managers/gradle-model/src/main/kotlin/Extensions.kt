@@ -22,14 +22,14 @@ package org.ossreviewtoolkit.plugins.packagemanagers.gradlemodel
 import OrtDependency
 
 /**
- * The type of this Gradle dependency. In case of a project, it is "Gradle". Otherwise it is "Maven" unless there is no
- * POM, then it is "Unknown".
+ * The type of this Gradle dependency. In case of a project, it is [projectType]. Otherwise it is "Maven" unless there
+ * is no POM, then it is "Unknown".
  */
-val OrtDependency.dependencyType: String
-    get() = if (isProjectDependency) {
-        "Gradle"
-    } else {
-        pomFile?.let { "Maven" } ?: "Unknown"
+fun OrtDependency.getIdentifierType(projectType: String) =
+    when {
+        isProjectDependency -> projectType
+        pomFile != null -> "Maven"
+        else -> "Unknown"
     }
 
 /**
