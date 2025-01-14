@@ -39,13 +39,7 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 import org.semver4j.Semver
 
-abstract class VersionControlSystem(
-    /**
-     * The command line tool used by this implementation if any. Via this property, the instance can check whether
-     * the version control system is available.
-     */
-    private val commandLineTool: CommandLineTool? = null
-) {
+abstract class VersionControlSystem {
     companion object {
         /**
          * Return the applicable VCS for the given [vcsType], or null if none is applicable.
@@ -214,7 +208,7 @@ abstract class VersionControlSystem(
     /**
      * Return true if this [VersionControlSystem] is available for use.
      */
-    fun isAvailable(): Boolean = commandLineTool?.isInPath() != false
+    open fun isAvailable(): Boolean = true
 
     /**
      * Test - in a way specific to this [VersionControlSystem] - whether it can be used to download from the provided
