@@ -123,7 +123,10 @@ class Poetry(
         val requirements = PoetryCommand.run(workingDir, *options.toTypedArray()).requireSuccess().stdout
         requirementsFile.writeText(requirements)
 
-        return Pip(managerName, analysisRoot, analyzerConfig, repoConfig).runPythonInspector(requirementsFile) {
+        val poetryAnalyzerConfig = analyzerConfig
+            .withPackageManagerOption(managerName, "overrideProjectType", projectType)
+
+        return Pip(managerName, analysisRoot, poetryAnalyzerConfig, repoConfig).runPythonInspector(requirementsFile) {
             detectPythonVersion(workingDir)
         }.also {
             requirementsFile.parentFile.safeDeleteRecursively()

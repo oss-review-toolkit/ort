@@ -61,7 +61,13 @@ class Pip(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "PIP", analysisRoot, analyzerConfig, repoConfig) {
+) : PackageManager(
+    name,
+    analyzerConfig.getPackageManagerConfiguration(name)?.options?.get("overrideProjectType") ?: "PIP",
+    analysisRoot,
+    analyzerConfig,
+    repoConfig
+) {
     companion object {
         const val OPTION_OPERATING_SYSTEM = "operatingSystem"
         const val OPTION_PYTHON_VERSION = "pythonVersion"

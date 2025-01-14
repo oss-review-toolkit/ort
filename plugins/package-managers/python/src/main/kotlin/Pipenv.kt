@@ -86,7 +86,10 @@ class Pipenv(
 
         requirementsFile.writeText(requirements)
 
-        return Pip(managerName, analysisRoot, analyzerConfig, repoConfig)
+        val pipenvAnalyzerConfig = analyzerConfig
+            .withPackageManagerOption(managerName, "overrideProjectType", projectType)
+
+        return Pip(managerName, analysisRoot, pipenvAnalyzerConfig, repoConfig)
             .resolveDependencies(requirementsFile, labels)
             .also { requirementsFile.delete() }
     }
