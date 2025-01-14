@@ -54,15 +54,14 @@ class Mercurial internal constructor() : VersionControlSystem() {
         override fun parseConfig(options: Options, secrets: Options) = Unit
     }
 
-    override val type = VcsType.MERCURIAL.toString()
+    override val type = VcsType.MERCURIAL
     override val latestRevisionNames = listOf("tip")
 
     override fun getVersion() = MercurialCommand.getVersion()
 
     override fun getDefaultBranchName(url: String) = "default"
 
-    override fun getWorkingTree(vcsDirectory: File): WorkingTree =
-        MercurialWorkingTree(vcsDirectory, VcsType.forName(type))
+    override fun getWorkingTree(vcsDirectory: File): WorkingTree = MercurialWorkingTree(vcsDirectory, type)
 
     override fun isAvailable() = MercurialCommand.isInPath()
 
