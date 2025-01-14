@@ -36,7 +36,8 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.toYaml
-import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.GitRepo
+import org.ossreviewtoolkit.plugins.api.PluginConfig
+import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.GitRepoFactory
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
@@ -53,7 +54,7 @@ class AnalyzerFunTest : WordSpec({
                 )
             )
             val outputDir = tempdir().also {
-                GitRepo.Factory().create().download(pkg, it)
+                GitRepoFactory().create(PluginConfig()).download(pkg, it)
             }
 
             val result = analyze(outputDir, packageManagers = emptySet()).toYaml()

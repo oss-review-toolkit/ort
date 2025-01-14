@@ -49,8 +49,9 @@ import org.ossreviewtoolkit.downloader.VersionControlSystemFactory
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.CommandLineTool
-import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeMkdirs
@@ -60,8 +61,6 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
-
-const val DEFAULT_HISTORY_DEPTH = 50
 
 // Replace prefixes of Git submodule repository URLs.
 private val REPOSITORY_URL_PREFIX_REPLACEMENTS = listOf(
@@ -94,7 +93,15 @@ object GitCommand : CommandLineTool {
  * - *updateNestedSubmodules*: Whether nested submodules should be updated, or if only top-level submodules should be
  *   considered. Defaults to true.
  */
-class Git internal constructor(private val config: GitConfig) : VersionControlSystem() {
+@OrtPlugin(
+    displayName = "Git",
+    description = "A VCS implementation to interact with Git repositories.",
+    factory = VersionControlSystemFactory::class
+)
+class Git(
+    override val descriptor: PluginDescriptor,
+    private val config: GitConfig
+) : VersionControlSystem() {
     companion object {
         init {
             // Make sure that JGit uses the exact same authentication information as ORT itself. This addresses
@@ -126,17 +133,8 @@ class Git internal constructor(private val config: GitConfig) : VersionControlSy
         }
     }
 
-    class Factory : VersionControlSystemFactory<GitConfig>(VcsType.GIT.toString(), 100) {
-        override fun create(config: GitConfig) = Git(config)
-
-        override fun parseConfig(options: Options, secrets: Options) =
-            GitConfig(
-                historyDepth = options["historyDepth"]?.toIntOrNull() ?: DEFAULT_HISTORY_DEPTH,
-                updateNestedSubmodules = options["updateNestedSubmodules"]?.toBooleanStrictOrNull() ?: true
-            )
-    }
-
     override val type = VcsType.GIT
+    override val priority = 100
     override val latestRevisionNames = listOf("HEAD", "@")
 
     override fun getVersion() = GitCommand.getVersion()

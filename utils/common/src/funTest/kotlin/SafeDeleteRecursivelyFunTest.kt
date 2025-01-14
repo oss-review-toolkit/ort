@@ -29,7 +29,8 @@ import java.io.IOException
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.Git
+import org.ossreviewtoolkit.plugins.api.PluginConfig
+import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.GitFactory
 
 class SafeDeleteRecursivelyFunTest : WordSpec({
     "File.safeDeleteRecursively()" should {
@@ -58,7 +59,7 @@ class SafeDeleteRecursivelyFunTest : WordSpec({
             )
 
             val nodeDir = tempdir().resolve("node-dir")
-            Git.Factory().create().download(pkg, nodeDir)
+            GitFactory().create(PluginConfig()).download(pkg, nodeDir)
 
             shouldNotThrow<IOException> {
                 nodeDir.safeDeleteRecursively()

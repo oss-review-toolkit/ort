@@ -29,6 +29,7 @@ import java.io.File
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.plugins.api.PluginConfig
 
 private val branches = mapOf(
     "main" to "6f09f276c4426c387c6663f54bbd45aea8d81dac",
@@ -44,7 +45,7 @@ private val tags = mapOf(
 )
 
 class GitFunTest : WordSpec({
-    val git = Git.Factory().create()
+    val git = GitFactory().create(PluginConfig())
     val vcsInfo = VcsInfo(
         type = VcsType.GIT,
         url = "https://github.com/oss-review-toolkit/ort-test-data-git.git",

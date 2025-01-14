@@ -38,8 +38,9 @@ import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.utils.parseRepoManifestPath
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.CommandLineTool
-import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.collectMessages
@@ -88,13 +89,17 @@ internal object GitRepoCommand : CommandLineTool {
     override fun displayName(): String = "GitRepo"
 }
 
-class GitRepo internal constructor() : VersionControlSystem() {
-    class Factory : VersionControlSystemFactory<Unit>(VcsType.GIT_REPO.toString(), 50) {
-        override fun create(config: Unit) = GitRepo()
-        override fun parseConfig(options: Options, secrets: Options) = Unit
-    }
-
+@OrtPlugin(
+    displayName = "Git-Repo",
+    description = "A VCS implementation to interact with Git-Repo repositories.",
+    factory = VersionControlSystemFactory::class
+)
+class GitRepo(
+    override val descriptor: PluginDescriptor,
+    private val config: GitConfig
+) : VersionControlSystem() {
     override val type = VcsType.GIT_REPO
+    override val priority = 50
     override val latestRevisionNames = listOf("HEAD", "@")
 
     override fun getVersion() = GitRepoCommand.getVersion()
@@ -141,7 +146,7 @@ class GitRepo internal constructor() : VersionControlSystem() {
 
                     paths.forEach { path ->
                         // Add the nested Repo project.
-                        val workingTree = Git.Factory().create().getWorkingTree(getRootPath().resolve(path))
+                        val workingTree = Git(GitFactory.descriptor, config).getWorkingTree(getRootPath().resolve(path))
                         nested[path] = workingTree.getInfo()
 
                         // Add the Git submodules of the nested Repo project.
