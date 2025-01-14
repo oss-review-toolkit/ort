@@ -20,7 +20,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Check Commit Messages
-        uses: wagoid/commitlint-github-action@0184f5a228ee06430bb9e67d65f73a1a6767496a # v6
+        uses: wagoid/commitlint-github-action@b948419dd99f3fd78a6548d48f94e3df7f6bf3ed # v6
         with:
           configFile: .commitlintrc.yml
   code-base-checks:
