@@ -21,6 +21,8 @@ package org.ossreviewtoolkit.model.config
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import org.ossreviewtoolkit.utils.common.zip
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class AnalyzerConfiguration(
     /**
@@ -58,15 +60,9 @@ data class AnalyzerConfiguration(
     /**
      * A copy of [packageManagers] with case-insensitive keys.
      */
-    private val packageManagersCaseInsensitive: Map<String, PackageManagerConfiguration>? =
-        packageManagers?.toSortedMap(String.CASE_INSENSITIVE_ORDER)
-
-    init {
-        val duplicatePackageManagers =
-            packageManagers?.keys.orEmpty() - packageManagersCaseInsensitive?.keys?.toSet().orEmpty()
-
-        require(duplicatePackageManagers.isEmpty()) {
-            "The following package managers have duplicate configuration: ${duplicatePackageManagers.joinToString()}."
+    private val packageManagersCaseInsensitive = packageManagers?.let {
+        sortedMapOf<String, PackageManagerConfiguration>(String.CASE_INSENSITIVE_ORDER).zip(it) { a, b ->
+            a.merge(b)
         }
     }
 
