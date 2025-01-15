@@ -40,7 +40,7 @@ import org.ossreviewtoolkit.model.config.VulnerabilityResolution
 import org.ossreviewtoolkit.model.config.orEmpty
 import org.ossreviewtoolkit.model.utils.ResolutionProvider
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
-import org.ossreviewtoolkit.utils.common.zipWithCollections
+import org.ossreviewtoolkit.utils.common.zipWithSets
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseChoice
 
 /**
@@ -283,8 +283,8 @@ data class OrtResult(
         minSeverity: Severity = Severity.entries.min()
     ): Map<Identifier, Set<Issue>> =
         getAnalyzerIssues()
-            .zipWithCollections(getScannerIssues())
-            .zipWithCollections(getAdvisorIssues())
+            .zipWithSets(getScannerIssues())
+            .zipWithSets(getAdvisorIssues())
             .filterIssues(omitExcluded, omitResolved, minSeverity)
 
     /**
