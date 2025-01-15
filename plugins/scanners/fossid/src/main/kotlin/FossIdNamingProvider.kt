@@ -33,6 +33,7 @@ import org.apache.logging.log4j.kotlin.logger
  *
  * There are also built-in variables. Built-in variables are prefixed in the pattern with "#" e.g. "$var1_#builtin".
  * Available built-in variables:
+ * * **projectName**: The project name, if configured in the scanner options.
  * * **repositoryName**: The name of the repository (i.e., the part of the URL before .git).
  * * **currentTimestamp**: The current time.
  * * **deltaTag** (scan code only): If delta scans are enabled, this qualifies the scan as an *origin* scan or a *delta*
@@ -42,7 +43,8 @@ import org.apache.logging.log4j.kotlin.logger
  */
 class FossIdNamingProvider(
     private val namingScanPattern: String?,
-    private val namingConventionVariables: Map<String, String>
+    private val namingConventionVariables: Map<String, String>,
+    private val projectName: String?
 ) {
     companion object {
         val ALLOWED_CHARACTERS_REGEX = Regex("[^\\w-]")
@@ -61,6 +63,7 @@ class FossIdNamingProvider(
         }
 
         val builtins = mutableMapOf(
+            "#projectName" to projectName.orEmpty(),
             "#repositoryName" to repositoryName,
             "#deltaTag" to deltaTag?.name?.lowercase().orEmpty()
         )

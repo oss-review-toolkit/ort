@@ -43,7 +43,7 @@ class FossIdNamingProviderTest : WordSpec() {
 
     init {
         "createScanCode" should {
-            val namingProvider = FossIdNamingProvider(null, emptyMap())
+            val namingProvider = FossIdNamingProvider(null, emptyMap(), null)
 
             val mockedDateTime = LocalDateTime.of(2024, 4, 1, 10, 0)
             val expectedTimestamp = "20240401_100000"
@@ -114,10 +114,23 @@ class FossIdNamingProviderTest : WordSpec() {
                 }
             }
 
+            "replace all built-in variables" {
+                val customScanPattern = "#projectName_#repositoryName_#currentTimestamp_#deltaTag_#branch"
+                val customNamingProvider = FossIdNamingProvider(customScanPattern, emptyMap(), "projectName")
+
+                mockkStatic(LocalDateTime::class) {
+                    every { LocalDateTime.now() } returns mockedDateTime
+
+                    customNamingProvider.createScanCode(
+                        "repositoryName", FossId.DeltaTag.DELTA, "branch"
+                    ) shouldBeEqual "projectName_repositoryName_${expectedTimestamp}_delta_branch"
+                }
+            }
+
             "create code without branch name form custom naming pattern" {
                 val customScanPattern = "#repositoryName_#currentTimestamp"
 
-                val namingProviderWithLongScanPattern = FossIdNamingProvider(customScanPattern, emptyMap())
+                val namingProviderWithLongScanPattern = FossIdNamingProvider(customScanPattern, emptyMap(), null)
                 mockkStatic(LocalDateTime::class) {
                     every { LocalDateTime.now() } returns mockedDateTime
 
@@ -130,7 +143,7 @@ class FossIdNamingProviderTest : WordSpec() {
             "create code without branch name form custom naming pattern when branch name is provided" {
                 val customScanPattern = "#repositoryName_#currentTimestamp"
 
-                val namingProviderWithLongScanPattern = FossIdNamingProvider(customScanPattern, emptyMap())
+                val namingProviderWithLongScanPattern = FossIdNamingProvider(customScanPattern, emptyMap(), null)
                 mockkStatic(LocalDateTime::class) {
                     every { LocalDateTime.now() } returns mockedDateTime
 
@@ -142,7 +155,7 @@ class FossIdNamingProviderTest : WordSpec() {
 
             "create code without branch name form custom naming pattern when too long branch name is provided" {
                 val customScanPattern = "#repositoryName_#currentTimestamp_#branch"
-                val namingProviderWithLongScanPattern = FossIdNamingProvider(customScanPattern, emptyMap())
+                val namingProviderWithLongScanPattern = FossIdNamingProvider(customScanPattern, emptyMap(), null)
                 mockkStatic(LocalDateTime::class) {
                     every { LocalDateTime.now() } returns mockedDateTime
 
@@ -153,7 +166,7 @@ class FossIdNamingProviderTest : WordSpec() {
             }
 
             "throw an exception if scan code pattern is too long" {
-                val namingProviderWithLongScanPattern = FossIdNamingProvider(longScanPattern, emptyMap())
+                val namingProviderWithLongScanPattern = FossIdNamingProvider(longScanPattern, emptyMap(), null)
                 mockkStatic(LocalDateTime::class) {
                     every { LocalDateTime.now() } returns mockedDateTime
 

@@ -259,7 +259,7 @@ data class FossIdConfig(
             .filterKeys { it.startsWith(NAMING_CONVENTION_VARIABLE_PREFIX) }
             .mapKeys { it.key.substringAfter(NAMING_CONVENTION_VARIABLE_PREFIX) }
 
-        return FossIdNamingProvider(namingScanPattern, namingConventionVariables)
+        return FossIdNamingProvider(namingScanPattern, namingConventionVariables, projectName)
     }
 
     /**
