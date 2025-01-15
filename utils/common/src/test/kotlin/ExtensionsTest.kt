@@ -32,6 +32,7 @@ import io.kotest.matchers.file.aDirectory
 import io.kotest.matchers.file.aFile
 import io.kotest.matchers.file.exist
 import io.kotest.matchers.maps.containExactly
+import io.kotest.matchers.maps.haveKey
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -44,6 +45,7 @@ import java.net.URI
 import java.net.URLDecoder
 import java.time.DayOfWeek
 import java.util.Locale
+import java.util.SortedMap
 
 class ExtensionsTest : WordSpec({
     "ByteArray.toHexString()" should {
@@ -252,6 +254,22 @@ class ExtensionsTest : WordSpec({
             val map = mapOf("1" to 1)
 
             map.zip(emptyMap(), operation) should containExactly("1" to 1)
+        }
+
+        "work for a sorted map with case-insensitive keys" {
+            val map = sortedMapOf(String.CASE_INSENSITIVE_ORDER, "foo" to "bar")
+            val other = mapOf("Foo" to "cafe")
+
+            map.zip(other) { a, b ->
+                a shouldBe "bar"
+                b shouldBe "cafe"
+
+                "resolved"
+            }.apply {
+                this should beInstanceOf<SortedMap<String, String>>()
+                this should containExactly("Foo" to "resolved")
+                this should haveKey("foo")
+            }
         }
     }
 
