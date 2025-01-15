@@ -88,7 +88,7 @@ class Pnpm(
 
         return workspaceModuleDirs.map { projectDir ->
             val packageJsonFile = projectDir.resolve(NodePackageManager.DEFINITION_FILE)
-            val project = parseProject(packageJsonFile, analysisRoot, managerName)
+            val project = parseProject(packageJsonFile, analysisRoot, projectType)
 
             val scopeNames = scopes.mapTo(mutableSetOf()) { scope ->
                 val scopeName = scope.descriptor

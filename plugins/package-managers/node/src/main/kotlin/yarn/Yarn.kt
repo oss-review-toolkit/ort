@@ -180,7 +180,7 @@ open class Yarn(
 
             val project = runCatching {
                 val packageJsonFile = projectDir.resolve(NodePackageManager.DEFINITION_FILE)
-                parseProject(packageJsonFile, analysisRoot, managerName)
+                parseProject(packageJsonFile, analysisRoot, projectType)
             }.getOrElse {
                 issues += createAndLogIssue(
                     source = managerName,
@@ -231,7 +231,7 @@ open class Yarn(
     ): NpmModuleInfo? {
         val moduleInfo = parsePackageJson(moduleDir, scopes)
         val dependencies = mutableSetOf<NpmModuleInfo>()
-        val packageType = managerName.takeIf { moduleDir.realFile() in projectDirs } ?: "NPM"
+        val packageType = if (moduleDir.realFile() in projectDirs) projectType else "NPM"
 
         val moduleId = splitNamespaceAndName(moduleInfo.name).let { (namespace, name) ->
             Identifier(packageType, namespace, name, moduleInfo.version)

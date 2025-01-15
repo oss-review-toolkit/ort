@@ -205,7 +205,7 @@ class Bundler(
         val gemsInfo = resolveGemsInfo(workingDir)
 
         return with(parseProject(definitionFile, gemsInfo)) {
-            val projectId = Identifier(managerName, "", name, version)
+            val projectId = Identifier(projectType, "", name, version)
             val groupedDeps = getDependencyGroups(workingDir)
 
             groupedDeps.forEach { (groupName, dependencyList) ->

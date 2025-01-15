@@ -293,7 +293,7 @@ class Gradle(
                 }
 
                 val projectId = Identifier(
-                    type = managerName,
+                    type = projectType,
                     namespace = dependencyTreeModel.group,
                     name = dependencyTreeModel.name,
                     version = dependencyTreeModel.version

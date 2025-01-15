@@ -26,7 +26,7 @@ projects:
     - id: "Conan::openssl:3.0.0"
       dependencies:
       - id: "Conan::zlib:1.2.12"
-- id: "SpdxDocumentFile::xyz:0.1.0"
+- id: "SpdxDocument::xyz:0.1.0"
   definition_file_path: "plugins/package-managers/spdx/src/funTest/assets/projects/synthetic/subproject-conan/project-xyz.spdx.yml"
   authors:
   - "Thomas Steenbergen"

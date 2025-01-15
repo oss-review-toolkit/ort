@@ -230,7 +230,7 @@ class Composer(
 
         return Project(
             id = Identifier(
-                type = managerName,
+                type = projectType,
                 namespace = namespace,
                 name = name,
                 version = pkgInfo.version.orEmpty()

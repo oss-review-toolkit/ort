@@ -36,11 +36,11 @@ import org.ossreviewtoolkit.model.VcsType
 private const val TYPE = "PyPI"
 
 internal fun PythonInspector.Result.toOrtProject(
-    managerName: String,
+    projectType: String,
     analysisRoot: File,
     definitionFile: File
 ): Project {
-    val id = resolveIdentifier(managerName, analysisRoot, definitionFile)
+    val id = resolveIdentifier(projectType, analysisRoot, definitionFile)
 
     val setupProject = projects.find { it.path.endsWith("/setup.py") }
     val projectData = setupProject?.packageData?.singleOrNull()
@@ -61,7 +61,7 @@ internal fun PythonInspector.Result.toOrtProject(
 }
 
 private fun PythonInspector.Result.resolveIdentifier(
-    managerName: String,
+    projectType: String,
     analysisRoot: File,
     definitionFile: File
 ): Identifier {
@@ -103,7 +103,7 @@ private fun PythonInspector.Result.resolveIdentifier(
     val projectVersion = setupVersion.ifEmpty { requirementsVersion }
 
     return Identifier(
-        type = managerName,
+        type = projectType,
         namespace = "",
         name = projectName,
         version = projectVersion
