@@ -119,7 +119,7 @@ class FossIdTest : WordSpec({
 
     "scanPackages()" should {
         "create issues for packages not hosted in Git" {
-            val projectCode = projectCode(PROJECT)
+            val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
             val config = createConfig(deltaScans = false)
             val vcsInfo = createVcsInfo(type = VcsType.UNKNOWN)
@@ -144,7 +144,7 @@ class FossIdTest : WordSpec({
         }
 
         "create a new scan for an existing project" {
-            val projectCode = projectCode(PROJECT)
+            val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
             val config = createConfig(deltaScans = false)
             val vcsInfo = createVcsInfo()
@@ -174,7 +174,7 @@ class FossIdTest : WordSpec({
         }
 
         "throw an exception if the scan download failed" {
-            val projectCode = projectCode(PROJECT)
+            val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
             val config = createConfig(deltaScans = false)
             val vcsInfo = createVcsInfo()
@@ -206,7 +206,7 @@ class FossIdTest : WordSpec({
         }
 
         "return copyright and license findings from a new scan" {
-            val projectCode = projectCode(PROJECT)
+            val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
             val config = createConfig(deltaScans = false)
             val vcsInfo = createVcsInfo()
@@ -238,7 +238,7 @@ class FossIdTest : WordSpec({
         }
 
         "take ignored files into account" {
-            val projectCode = projectCode(PROJECT)
+            val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
             val config = createConfig(deltaScans = false)
             val vcsInfo = createVcsInfo()
@@ -267,7 +267,7 @@ class FossIdTest : WordSpec({
         }
 
         "fallback to identified files if no marked identified files are available" {
-            val projectCode = projectCode(PROJECT)
+            val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
             val config = createConfig(deltaScans = false)
             val vcsInfo = createVcsInfo()
@@ -299,7 +299,7 @@ class FossIdTest : WordSpec({
         }
 
         "create an issue if there are files pending identification" {
-            val projectCode = projectCode(PROJECT)
+            val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
             val config = createConfig(deltaScans = false)
             val vcsInfo = createVcsInfo()
@@ -331,7 +331,7 @@ class FossIdTest : WordSpec({
         }
 
         "report snippets of pending files" {
-            val projectCode = projectCode(PROJECT)
+            val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
             val config = createConfig(deltaScans = false)
             val vcsInfo = createVcsInfo()
@@ -359,7 +359,7 @@ class FossIdTest : WordSpec({
         }
 
         "list matched lines of snippets" {
-            val projectCode = projectCode(PROJECT)
+            val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
             val config = createConfig(deltaScans = false, fetchSnippetMatchedLines = true)
             val vcsInfo = createVcsInfo()
@@ -414,7 +414,7 @@ class FossIdTest : WordSpec({
         }
 
         "create a new project if none exists yet" {
-            val projectCode = projectCode(PROJECT)
+            val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
             val config = createConfig(deltaScans = false)
             val vcsInfo = createVcsInfo()
@@ -440,7 +440,7 @@ class FossIdTest : WordSpec({
         }
 
         "explicitly start a scan if necessary" {
-            val projectCode = projectCode(PROJECT)
+            val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
             val config = createConfig(deltaScans = false)
             val vcsInfo = createVcsInfo()
@@ -484,7 +484,7 @@ class FossIdTest : WordSpec({
         }
 
         "works if scan was queued in FossID older than 2021.2" {
-            val projectCode = projectCode(PROJECT)
+            val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
             val config = createConfig(deltaScans = false)
             val vcsInfo = createVcsInfo()
@@ -534,7 +534,7 @@ class FossIdTest : WordSpec({
         }
 
         "wait for a scan to complete" {
-            val projectCode = projectCode(PROJECT)
+            val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
             val config = createConfig(deltaScans = false)
             val pkgId = createIdentifier(index = 1)
@@ -576,7 +576,7 @@ class FossIdTest : WordSpec({
 
         "support triggering asynchronous scans" {
             val pkgId = createIdentifier(index = 1)
-            val projectCode = projectCode(PROJECT)
+            val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
             val config = createConfig(deltaScans = false, waitForResult = false)
             val vcsInfo = createVcsInfo()
@@ -611,7 +611,7 @@ class FossIdTest : WordSpec({
         }
 
         "create a delta scan for an existing scan" {
-            val projectCode = projectCode(PROJECT)
+            val projectCode = PROJECT
             val originCode = "originalScanCode"
             val scanCode = scanCode(PROJECT, FossId.DeltaTag.DELTA)
             val config = createConfig()
@@ -657,7 +657,7 @@ class FossIdTest : WordSpec({
         "create a delta scan for a branch (no fallback)" {
             val branchName = "aTestBranch"
 
-            val projectCode = projectCode(PROJECT)
+            val projectCode = PROJECT
             val originCode = "originalScanCode"
             val scanCode = scanCode(PROJECT, FossId.DeltaTag.DELTA)
             val config = createConfig()
@@ -706,7 +706,7 @@ class FossIdTest : WordSpec({
         "create a delta scan for a branch (fallback to default branch)" {
             val branchName = "aTestBranch"
 
-            val projectCode = projectCode(PROJECT)
+            val projectCode = PROJECT
             val originCode = "originalScanCode"
             val scanCode = scanCode(PROJECT, FossId.DeltaTag.DELTA)
             val config = createConfig()
@@ -755,7 +755,7 @@ class FossIdTest : WordSpec({
         "create a delta scan for a branch (fallback to latest scan)" {
             val branchName = "aTestBranch"
 
-            val projectCode = projectCode(PROJECT)
+            val projectCode = PROJECT
             val originCode = "originalScanCode"
             val scanCode = scanCode(PROJECT, FossId.DeltaTag.DELTA)
             val config = createConfig()
@@ -802,7 +802,7 @@ class FossIdTest : WordSpec({
         }
 
         "carry exclusion rules to a delta scan from an existing scan (legacy behavior)" {
-            val projectCode = projectCode(PROJECT)
+            val projectCode = PROJECT
             val originCode = "originalScanCode"
             val scanCode = scanCode(PROJECT, FossId.DeltaTag.DELTA)
             val config = createConfig()
@@ -856,7 +856,7 @@ class FossIdTest : WordSpec({
         }
 
         "carry exclusion rules to a delta scan from path excludes" {
-            val projectCode = projectCode(PROJECT)
+            val projectCode = PROJECT
             val originCode = "originalScanCode"
             val scanCode = scanCode(PROJECT, FossId.DeltaTag.DELTA)
             val config = createConfig()
@@ -911,7 +911,7 @@ class FossIdTest : WordSpec({
         }
 
         "create an origin scan if no scan exists yet" {
-            val projectCode = projectCode(PROJECT)
+            val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, FossId.DeltaTag.ORIGIN)
             val config = createConfig()
             val vcsInfo = createVcsInfo()
@@ -950,7 +950,7 @@ class FossIdTest : WordSpec({
         }
 
         "apply exclusion rules to a non-delta scan" {
-            val projectCode = projectCode(PROJECT)
+            val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
             val config = createConfig(deltaScans = false)
             val vcsInfo = createVcsInfo()
@@ -990,50 +990,53 @@ class FossIdTest : WordSpec({
         }
 
         "delete newly triggered scans if a package cannot be scanned" {
+            val projectCode = PROJECT
+
             val id1 = createIdentifier(index = 1)
             val vcsInfo1 = createVcsInfo()
             val pkg1 = createPackage(id1, vcsInfo1)
-            val projectCode1 = projectCode(PROJECT)
-            val scanCode1 = scanCode(PROJECT, FossId.DeltaTag.ORIGIN)
+            val scanCode1 = scanCode(projectCode, FossId.DeltaTag.ORIGIN)
 
             val failedProject = "failedProject"
             val id2 = createIdentifier(index = 2)
             val failedVcsInfo = createVcsInfo(projectName = failedProject)
             val pkg2 = createPackage(id2, failedVcsInfo)
-            val failedProjectCode = projectCode(failedProject)
 
             val project3 = "project3"
             val id3 = createIdentifier(index = 3)
             val vcsInfo3 = createVcsInfo(projectName = project3)
             val pkg3 = createPackage(id3, vcsInfo3)
-            val projectCode3 = projectCode(project3)
             val scanCode3 = scanCode(project3, FossId.DeltaTag.ORIGIN, index = 2)
 
-            val config = createConfig()
+            val config = createConfig(projectName = null)
 
             val service = FossIdRestService.create(config.serverUrl)
-                .expectProjectRequest(projectCode1)
-                .expectListScans(projectCode1, emptyList())
+                .expectProjectRequest(projectCode)
+                .expectListScans(projectCode, emptyList())
                 .expectCheckScanStatus(scanCode1, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode1, scanCode1, vcsInfo1, "")
+                .expectCreateScan(projectCode, scanCode1, vcsInfo1, "")
                 .expectDownload(scanCode1)
                 .mockFiles(scanCode1, markedRange = 1..2)
 
-            service.expectProjectRequest(failedProjectCode)
-            coEvery { service.listScansForProject(USER, API_KEY, failedProjectCode) } throws IllegalStateException()
+            service.expectProjectRequest(failedProject)
+            coEvery { service.listScansForProject(USER, API_KEY, failedProject) } throws IllegalStateException()
             coEvery { service.deleteScan(any()) } returns EntityResponseBody(status = 1)
 
-            service.expectProjectRequest(projectCode3)
-                .expectListScans(projectCode3, emptyList())
+            service.expectProjectRequest(project3)
+                .expectListScans(project3, emptyList())
                 .expectCheckScanStatus(scanCode3, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode3, scanCode3, vcsInfo3, "")
+                .expectCreateScan(project3, scanCode3, vcsInfo3, "")
                 .expectDownload(scanCode3)
                 .mockFiles(scanCode3, markedRange = 1..2)
 
             val fossId = createFossId(config)
 
             fossId.scan(pkg1)
+
+            coEvery { service.listScansForProject(USER, API_KEY, projectCode) } throws IllegalStateException()
+
             val result = fossId.scan(pkg2)
+
             fossId.scan(pkg3)
 
             result.summary.issues shouldHaveSize 1
@@ -1055,7 +1058,7 @@ class FossIdTest : WordSpec({
         "enforce a limit on the number of delta scans" {
             val numberOfDeltaScans = 8
             val deltaScanLimit = 4
-            val projectCode = projectCode(PROJECT)
+            val projectCode = PROJECT
             val originCode = scanCode(PROJECT, FossId.DeltaTag.ORIGIN, index = 0)
             val scanCode = scanCode(PROJECT, FossId.DeltaTag.DELTA)
             val config = createConfig(deltaScanLimit = deltaScanLimit)
@@ -1114,7 +1117,7 @@ class FossIdTest : WordSpec({
         }
 
         "return scan code of a scan" {
-            val projectCode = projectCode(PROJECT)
+            val projectCode = PROJECT
             val scanCode = scanCode(PROJECT, null)
             val config = createConfig(deltaScans = false)
             val vcsInfo = createVcsInfo()

@@ -292,7 +292,7 @@ class FossId internal constructor(
 
         val result = runBlocking {
             try {
-                val projectCode = namingProvider.createProjectCode(repositoryName)
+                val projectCode = config.projectName ?: repositoryName
 
                 if (getProject(projectCode) == null) {
                     logger.info { "Creating project '$projectCode'..." }

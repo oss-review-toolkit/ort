@@ -25,10 +25,10 @@ import java.time.format.DateTimeFormatter
 import org.apache.logging.log4j.kotlin.logger
 
 /**
- * This class provides names for projects and scans when the FossID scanner creates them, following a given pattern.
- * If one or both patterns is null, a default naming convention is used.
+ * This class provides names for scans when the FossID scanner creates them, based on the provided [namingScanPattern].
+ * If the pattern is null, a default pattern is used.
  *
- * [namingScanPattern] and [namingProjectPattern] are patterns describing the name using variables, e.g. "$var1_$var2".
+ * The pattern can contain variables prefixed with "$", for example, "$var1_$var2".
  * Variable values are given in the map [namingConventionVariables].
  *
  * There are also built-in variables. Built-in variables are prefixed in the pattern with "#" e.g. "$var1_#builtin".
@@ -41,7 +41,6 @@ import org.apache.logging.log4j.kotlin.logger
  *   other characters are replaced with underscores. Might be shortened to fit the scan code length limit.
  */
 class FossIdNamingProvider(
-    private val namingProjectPattern: String?,
     private val namingScanPattern: String?,
     private val namingConventionVariables: Map<String, String>
 ) {
@@ -53,14 +52,6 @@ class FossIdNamingProvider(
 
         const val MAX_SCAN_CODE_LEN = 254
     }
-
-    fun createProjectCode(repositoryName: String): String =
-        namingProjectPattern?.let {
-            val builtins = mapOf(
-                "#repositoryName" to repositoryName
-            )
-            replaceNamingConventionVariables(namingProjectPattern, builtins, namingConventionVariables)
-        } ?: repositoryName
 
     fun createScanCode(repositoryName: String, deltaTag: FossId.DeltaTag? = null, branch: String = ""): String {
         val pattern = namingScanPattern ?: buildString {
