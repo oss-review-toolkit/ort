@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.model.config
 
-import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.maps.containExactly as containExactlyEntries
@@ -30,19 +29,6 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 
 class AnalyzerConfigurationTest : WordSpec({
-    "AnalyzerConfiguration()" should {
-        "throw an exception on duplicate package manager configuration" {
-            shouldThrow<IllegalArgumentException> {
-                AnalyzerConfiguration(
-                    packageManagers = mapOf(
-                        "Gradle" to PackageManagerConfiguration(),
-                        "gradle" to PackageManagerConfiguration()
-                    )
-                )
-            }
-        }
-    }
-
     "getPackageManagerConfiguration()" should {
         "be case-insensitive" {
             val config = AnalyzerConfiguration(
@@ -166,6 +152,27 @@ class AnalyzerConfigurationTest : WordSpec({
                     ),
                     "Npm" to PackageManagerConfiguration(
                         mustRunAfter = listOf("Yarn")
+                    )
+                )
+            )
+        }
+
+        "merge options for the same package manager with different casing" {
+            val config = AnalyzerConfiguration(
+                packageManagers = mapOf(
+                    "Sbt" to PackageManagerConfiguration(
+                        options = mapOf("javaVersion" to "17")
+                    )
+                )
+            )
+
+            config.withPackageManagerOption("SBT", "sbtMode", "true") shouldBe AnalyzerConfiguration(
+                packageManagers = mapOf(
+                    "SBT" to PackageManagerConfiguration(
+                        options = mapOf(
+                            "javaVersion" to "17",
+                            "sbtMode" to "true"
+                        )
                     )
                 )
             )

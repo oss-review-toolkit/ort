@@ -116,13 +116,7 @@ data class AnalyzerConfiguration(
      * and [value] pair, overriding any existing entry.
      */
     fun withPackageManagerOption(name: String, key: String, value: String): AnalyzerConfiguration {
-        val managers = packageManagers.orEmpty().toMutableMap()
-        val configuration = managers[name] ?: PackageManagerConfiguration()
-        val options = configuration.options.orEmpty().toMutableMap()
-
-        options[key] = value
-        managers[name] = configuration.copy(options = options)
-
-        return copy(packageManagers = managers)
+        val override = mapOf(name to PackageManagerConfiguration(options = mapOf(key to value)))
+        return copy(packageManagers = packageManagersCaseInsensitive.orEmpty().zip(override) { a, b -> a.merge(b) })
     }
 }
