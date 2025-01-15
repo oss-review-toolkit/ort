@@ -74,13 +74,6 @@ class FossIdUrlProvider private constructor(
         }
 
         /**
-         * Create a new instance of [FossIdUrlProvider] and configure the URL mappings from the given configuration
-         * [options].
-         */
-        fun create(options: Map<String, String>): FossIdUrlProvider =
-            create(options.filter { it.key.startsWith(PREFIX_URL_MAPPING) }.values)
-
-        /**
          * Try to fetch credentials for [repoUrl] from the current [Authenticator]. Return *null* if no matching host
          * is found.
          */
