@@ -38,6 +38,7 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.RemoteProvenance
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.RuleViolation
@@ -169,7 +170,7 @@ internal fun OrtResult.getLicenseFindingsById(
             packageConfigurationProvider.getPackageConfigurations(id, provenance).flatMap { it.licenseFindingCurations }
         }
 
-    getScanResultsForId(id).filter { it.provenance is KnownProvenance }.map {
+    getScanResultsForId(id).filter { it.provenance is RemoteProvenance }.map {
         // If a VCS path curation has been applied after the scanning stage, it is possible to apply that
         // curation without re-scanning in case the new VCS path is a subdirectory of the scanned VCS path.
         // So, filter by VCS path to enable the user to see the effect on the detected license with a shorter
@@ -218,8 +219,8 @@ internal fun OrtResult.getViolatedRulesByLicense(
 /**
  * Return the [Provenance] of the first scan result matching the given [id] or null if there is no match.
  */
-internal fun OrtResult.getScannedProvenance(id: Identifier): KnownProvenance? =
-    getScanResultsForId(id).firstNotNullOfOrNull { it.provenance as? KnownProvenance }
+internal fun OrtResult.getScannedProvenance(id: Identifier): RemoteProvenance? =
+    getScanResultsForId(id).firstNotNullOfOrNull { it.provenance as? RemoteProvenance }
 
 /**
  * Return the [SourceCodeOrigin] for this provenance.
