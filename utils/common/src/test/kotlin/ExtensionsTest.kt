@@ -255,41 +255,6 @@ class ExtensionsTest : WordSpec({
         }
     }
 
-    "Map.zipWithDefault()" should {
-        val operation = { left: Int, right: Int -> left + right }
-
-        "correctly merge maps" {
-            val map = mapOf(
-                "1" to 1,
-                "2" to 2,
-                "3" to 3
-            )
-            val other = mapOf(
-                "3" to 3,
-                "4" to 4
-            )
-
-            map.zipWithDefault(other, 1, operation) shouldBe mapOf(
-                "1" to 2,
-                "2" to 3,
-                "3" to 6,
-                "4" to 5
-            )
-        }
-
-        "not fail if this map is empty" {
-            val other = mapOf("1" to 1)
-
-            emptyMap<String, Int>().zipWithDefault(other, 1, operation) should containExactly("1" to 2)
-        }
-
-        "not fail if other map is empty" {
-            val map = mapOf("1" to 1)
-
-            map.zipWithDefault(emptyMap(), 1, operation) should containExactly("1" to 2)
-        }
-    }
-
     "Map.zipWithCollections()" should {
         "correctly merge maps with list values" {
             val map = mapOf(

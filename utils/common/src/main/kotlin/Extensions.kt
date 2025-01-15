@@ -242,15 +242,6 @@ inline fun <K, V, W> Map<K, V>.zip(other: Map<K, V>, operation: (V?, V?) -> W): 
     }
 
 /**
- * Merge two maps by iterating over the combined key set of both maps and applying [operation] to the entries for the
- * same key. If there is no entry for a key in one of the maps, [default] is used as the value for that map.
- */
-inline fun <K, V, W> Map<K, V>.zipWithDefault(other: Map<K, V>, default: V, operation: (V, V) -> W): Map<K, W> =
-    (keys + other.keys).associateWith { key ->
-        operation(this[key] ?: default, other[key] ?: default)
-    }
-
-/**
  * Merge two maps which have collections as values by creating the combined key set of both maps and merging the
  * collections. If there is no entry for a key in one of the maps, the value from the other map is used.
  */
