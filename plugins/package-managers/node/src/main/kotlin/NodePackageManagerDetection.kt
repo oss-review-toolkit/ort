@@ -111,11 +111,13 @@ internal class NodePackageManagerDetection(private val definitionFiles: Collecti
  * An enum of all supported Node package managers.
  */
 internal enum class NodePackageManagerType(
+    val projectType: String,
     val lockfileName: String,
     val markerFileName: String? = null,
     val workspaceFileName: String = NodePackageManagerType.DEFINITION_FILE
 ) {
     NPM(
+        projectType = "NPM",
         lockfileName = "package-lock.json", // See https://docs.npmjs.com/cli/v7/configuring-npm/package-lock-json.
         markerFileName = "npm-shrinkwrap.json" // See https://docs.npmjs.com/cli/v6/configuring-npm/shrinkwrap-json.
     ) {
@@ -124,6 +126,7 @@ internal enum class NodePackageManagerType(
     },
 
     PNPM(
+        projectType = "PNPM",
         lockfileName = "pnpm-lock.yaml", // See https://pnpm.io/git#lockfiles.
         workspaceFileName = "pnpm-workspace.yaml"
     ) {
@@ -142,6 +145,7 @@ internal enum class NodePackageManagerType(
     },
 
     YARN(
+        projectType = "Yarn",
         lockfileName = "yarn.lock" // See https://classic.yarnpkg.com/en/docs/yarn-lock.
     ) {
         private val lockfileMarker = "# yarn lockfile v1"
@@ -157,6 +161,7 @@ internal enum class NodePackageManagerType(
     },
 
     YARN2(
+        projectType = "Yarn2",
         lockfileName = "yarn.lock", // See https://classic.yarnpkg.com/en/docs/yarn-lock.
         markerFileName = ".yarnrc.yml"
     ) {
