@@ -268,7 +268,7 @@ ort:
 
           timeout: 60
 
-          urlMappingExample: "https://my-repo.example.org(?<repoPath>.*) -> ssh://my-mapped-repo.example.org${repoPath}"
+          urlMappings: "https://my-repo.example.org(?<repoPath>.*) -> ssh://my-mapped-repo.example.org${repoPath}"
 
           sensitivity: 10
 

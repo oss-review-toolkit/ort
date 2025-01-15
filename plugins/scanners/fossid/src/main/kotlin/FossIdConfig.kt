@@ -115,6 +115,9 @@ data class FossIdConfig(
     /** The sensitivity of the scan. */
     val sensitivity: Int,
 
+    /** A comma-separated list of URL mappings. */
+    val urlMappings: String?,
+
     /** Stores the map with FossID-specific configuration options. */
     private val options: Map<String, String>
 ) {
@@ -162,6 +165,9 @@ data class FossIdConfig(
         /** Name of the configuration property defining the sensitivity of the scan. */
         private const val PROP_SENSITIVITY = "sensitivity"
 
+        /** Name of the configuration property defining the URL mappings. */
+        private const val PROP_URL_MAPPINGS = "urlMappings"
+
         /**
          * Default timeout in minutes for communication with FossID.
          */
@@ -208,6 +214,8 @@ data class FossIdConfig(
 
             val sensitivity = options[PROP_SENSITIVITY]?.toInt() ?: DEFAULT_SENSITIVITY
 
+            val urlMappings = options[PROP_URL_MAPPINGS]
+
             require(deltaScanLimit > 0) {
                 "deltaScanLimit must be > 0, current value is $deltaScanLimit."
             }
@@ -233,7 +241,8 @@ data class FossIdConfig(
                 fetchSnippetMatchedLines = fetchSnippetMatchedLines,
                 options = options,
                 snippetsLimit = snippetsLimit,
-                sensitivity = sensitivity
+                sensitivity = sensitivity,
+                urlMappings = urlMappings,
             )
         }
     }
@@ -252,5 +261,5 @@ data class FossIdConfig(
     /**
      * Create a [FossIdUrlProvider] helper object based on the configuration stored in this object.
      */
-    fun createUrlProvider() = FossIdUrlProvider.create(options)
+    fun createUrlProvider() = FossIdUrlProvider.create(urlMappings?.split(',').orEmpty())
 }

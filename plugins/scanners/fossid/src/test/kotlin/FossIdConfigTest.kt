@@ -52,7 +52,8 @@ class FossIdConfigTest : WordSpec({
                 "detectCopyrightStatements" to "true",
                 "timeout" to "300",
                 "fetchSnippetMatchedLines" to "true",
-                "snippetsLimit" to "1000"
+                "snippetsLimit" to "1000",
+                "urlMappings" to "https://example.org(?<repoPath>.*) -> ssh://example.org\${repoPath}"
             )
 
             val secrets = mapOf(
@@ -77,7 +78,8 @@ class FossIdConfigTest : WordSpec({
                 fetchSnippetMatchedLines = true,
                 options = options,
                 snippetsLimit = 1000,
-                sensitivity = 10
+                sensitivity = 10,
+                urlMappings = "https://example.org(?<repoPath>.*) -> ssh://example.org\${repoPath}"
             )
         }
 
@@ -106,7 +108,8 @@ class FossIdConfigTest : WordSpec({
                 fetchSnippetMatchedLines = false,
                 options = options,
                 snippetsLimit = 500,
-                sensitivity = 10
+                sensitivity = 10,
+                urlMappings = null
             )
         }
 
@@ -188,7 +191,7 @@ class FossIdConfigTest : WordSpec({
             val url = "https://changeit.example.org/foo"
             val options = mapOf(
                 "serverUrl" to SERVER_URL,
-                "urlMappingChangeHost" to "$url -> $SERVER_URL"
+                "urlMappings" to "$url -> $SERVER_URL"
             )
 
             val secrets = mapOf(

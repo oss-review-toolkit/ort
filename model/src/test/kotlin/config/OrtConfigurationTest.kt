@@ -264,7 +264,7 @@ class OrtConfigurationTest : WordSpec({
                             "detectLicenseDeclarations" to "true",
                             "detectCopyrightStatements" to "true",
                             "timeout" to "60",
-                            "urlMappingExample" to urlMapping,
+                            "urlMappings" to urlMapping,
                             "sensitivity" to "10"
                         )
 
