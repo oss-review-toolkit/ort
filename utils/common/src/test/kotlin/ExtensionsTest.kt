@@ -255,7 +255,7 @@ class ExtensionsTest : WordSpec({
         }
     }
 
-    "Map.zipWithCollections()" should {
+    "Map.zipWithSets()" should {
         "correctly merge maps with set values" {
             val map = mapOf(
                 "1" to setOf(1),
@@ -267,7 +267,7 @@ class ExtensionsTest : WordSpec({
                 "4" to setOf(4)
             )
 
-            val result = map.zipWithCollections(other)
+            val result = map.zipWithSets(other)
             result.values.forAll { it should beInstanceOf<Set<Int>>() }
             result shouldBe mapOf(
                 "1" to setOf(1),
