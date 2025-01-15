@@ -256,10 +256,7 @@ class OrtConfigurationTest : WordSpec({
                         options shouldContainExactly mapOf(
                             "serverUrl" to "https://fossid.example.com/instance/",
                             "projectName" to "My Project",
-                            "namingScanPattern" to "\$Var1_#projectBaseCode_\$Var3",
-                            "namingVariableVar1" to "myOrg",
-                            "namingVariableVar2" to "myTeam",
-                            "namingVariableVar3" to "myUnit",
+                            "namingScanPattern" to "#projectName_#repositoryName_#currentTimestamp_#deltaTag_#branch",
                             "waitForResult" to "false",
                             "keepFailedScans" to "false",
                             "deltaScans" to "true",

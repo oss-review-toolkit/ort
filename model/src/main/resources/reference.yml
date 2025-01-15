@@ -255,10 +255,7 @@ ort:
           serverUrl: 'https://fossid.example.com/instance/'
 
           projectName: 'My Project'
-          namingScanPattern: '$Var1_#projectBaseCode_$Var3'
-          namingVariableVar1: myOrg
-          namingVariableVar2: myTeam
-          namingVariableVar3: myUnit
+          namingScanPattern: '#projectName_#repositoryName_#currentTimestamp_#deltaTag_#branch'
 
           waitForResult: false
 

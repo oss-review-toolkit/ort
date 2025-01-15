@@ -166,9 +166,7 @@ class FossIdConfigTest : WordSpec({
         "create a naming provider with a correct scan naming convention" {
             val options = mapOf(
                 "serverUrl" to SERVER_URL,
-                "namingScanPattern" to "#repositoryName_\$Org_\$Unit_#deltaTag",
-                "namingVariableOrg" to "TestOrganization",
-                "namingVariableUnit" to "TestUnit"
+                "namingScanPattern" to "#repositoryName_#deltaTag"
             )
 
             val secrets = mapOf(
@@ -181,7 +179,7 @@ class FossIdConfigTest : WordSpec({
 
             val scanCode = namingProvider.createScanCode("TestProject", FossId.DeltaTag.DELTA)
 
-            scanCode shouldBe "TestProject_TestOrganization_TestUnit_delta"
+            scanCode shouldBe "TestProject_delta"
         }
     }
 

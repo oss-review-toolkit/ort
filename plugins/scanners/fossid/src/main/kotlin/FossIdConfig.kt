@@ -45,12 +45,8 @@ import org.ossreviewtoolkit.utils.common.Options
  *   license declarations.
  * * **"options.detectCopyrightStatements":** When set, the FossID scan is configured to automatically detect copyright
  *   statements.
- *
- * Naming conventions options. If they are not set, default naming conventions are used.
- * * **"options.namingProjectPattern":** A pattern for project names when projects are created on the FossID instance.
- *   Contains variables prefixed by "$" e.g. "$Var1_$Var2". Variables are also passed as options and are prefixed by
- *   [NAMING_CONVENTION_VARIABLE_PREFIX] e.g. namingVariableVar1 = "foo".
- * * **"options.namingScanPattern":** A pattern for scan names when scans are created on the FossID instance.
+ * * **"options.namingScanPattern":** A pattern for scan names when scans are created on the FossID instance. If not
+ *   set, a default pattern is used.
  *
  * URL mapping options. These options allow transforming the URLs of specific repositories before they are passed to
  * the FossID service. This may be necessary if FossID uses a different mechanism to clone a repository, e.g. via SSH
@@ -167,11 +163,6 @@ data class FossIdConfig(
         private const val PROP_SENSITIVITY = "sensitivity"
 
         /**
-         * The scanner options beginning with this prefix will be used to parameterize project and scan names.
-         */
-        private const val NAMING_CONVENTION_VARIABLE_PREFIX = "namingVariable"
-
-        /**
          * Default timeout in minutes for communication with FossID.
          */
         @JvmStatic
@@ -255,11 +246,7 @@ data class FossIdConfig(
             logger.info { "Naming pattern for scans is $it." }
         }
 
-        val namingConventionVariables = options
-            .filterKeys { it.startsWith(NAMING_CONVENTION_VARIABLE_PREFIX) }
-            .mapKeys { it.key.substringAfter(NAMING_CONVENTION_VARIABLE_PREFIX) }
-
-        return FossIdNamingProvider(namingScanPattern, namingConventionVariables, projectName)
+        return FossIdNamingProvider(namingScanPattern, projectName)
     }
 
     /**
