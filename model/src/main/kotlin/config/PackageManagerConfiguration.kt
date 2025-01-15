@@ -41,17 +41,17 @@ data class PackageManagerConfiguration(
     val options: Options? = null
 ) {
     /**
-     * Merge this [PackageManagerConfiguration] with [other]. Values of [other] take precedence.
+     * Merge this [PackageManagerConfiguration] with [override]. Values of [override] take precedence.
      */
-    fun merge(other: PackageManagerConfiguration): PackageManagerConfiguration {
+    fun merge(override: PackageManagerConfiguration): PackageManagerConfiguration {
         val mergedOptions = when {
-            options == null -> other.options
-            other.options == null -> options
-            else -> options.toMutableMap() + other.options
+            options == null -> override.options
+            override.options == null -> options
+            else -> options.toMutableMap() + override.options
         }
 
         return PackageManagerConfiguration(
-            mustRunAfter = other.mustRunAfter ?: mustRunAfter,
+            mustRunAfter = override.mustRunAfter ?: mustRunAfter,
             options = mergedOptions
         )
     }

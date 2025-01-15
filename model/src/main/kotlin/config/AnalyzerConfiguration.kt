@@ -77,23 +77,23 @@ data class AnalyzerConfiguration(
     fun getPackageManagerConfiguration(packageManager: String) = packageManagersCaseInsensitive?.get(packageManager)
 
     /**
-     * Merge this [AnalyzerConfiguration] with [other]. Values of [other] take precedence.
+     * Merge this [AnalyzerConfiguration] with [override]. Values of [override] take precedence.
      */
-    fun merge(other: RepositoryAnalyzerConfiguration): AnalyzerConfiguration {
+    fun merge(override: RepositoryAnalyzerConfiguration): AnalyzerConfiguration {
         val mergedPackageManagers = when {
-            packageManagers == null -> other.packageManagers
-            other.packageManagers == null -> packageManagers
+            packageManagers == null -> override.packageManagers
+            override.packageManagers == null -> packageManagers
             else -> {
                 val keys = sortedSetOf(String.CASE_INSENSITIVE_ORDER).apply {
                     addAll(packageManagers.keys)
-                    addAll(other.packageManagers.keys)
+                    addAll(override.packageManagers.keys)
                 }
 
                 val result = sortedMapOf<String, PackageManagerConfiguration>(String.CASE_INSENSITIVE_ORDER)
 
                 keys.forEach { key ->
                     val configSelf = getPackageManagerConfiguration(key)
-                    val configOther = other.getPackageManagerConfiguration(key)
+                    val configOther = override.getPackageManagerConfiguration(key)
 
                     result[key] = when {
                         configSelf == null -> configOther
@@ -107,11 +107,11 @@ data class AnalyzerConfiguration(
         }
 
         return AnalyzerConfiguration(
-            allowDynamicVersions = other.allowDynamicVersions ?: allowDynamicVersions,
-            enabledPackageManagers = other.enabledPackageManagers ?: enabledPackageManagers,
-            disabledPackageManagers = other.disabledPackageManagers ?: disabledPackageManagers,
+            allowDynamicVersions = override.allowDynamicVersions ?: allowDynamicVersions,
+            enabledPackageManagers = override.enabledPackageManagers ?: enabledPackageManagers,
+            disabledPackageManagers = override.disabledPackageManagers ?: disabledPackageManagers,
             packageManagers = mergedPackageManagers,
-            skipExcluded = other.skipExcluded ?: skipExcluded
+            skipExcluded = override.skipExcluded ?: skipExcluded
         )
     }
 
