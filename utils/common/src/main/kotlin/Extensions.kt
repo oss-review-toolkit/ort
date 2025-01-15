@@ -233,12 +233,20 @@ fun JsonNode.isNotEmpty(): Boolean = !isEmpty
 fun JsonNode?.textValueOrEmpty(): String = this?.textValue().orEmpty()
 
 /**
- * Merge two maps by iterating over the combined key set of both maps and applying [operation] to the entries for the
- * same key. Arguments passed to [operation] can be null if there is no entry for a key in the respective map.
+ * Merge two maps by iterating over the combined key set of both maps and calling [operation] with any conflicting
+ * values for the same key.
  */
-inline fun <K, V, W> Map<K, V>.zip(other: Map<K, V>, operation: (V?, V?) -> W): Map<K, W> =
+inline fun <K, V> Map<K, V>.zip(other: Map<K, V>, operation: (V, V) -> V): Map<K, V> =
     (keys + other.keys).associateWith { key ->
-        operation(this[key], other[key])
+        val a = this[key]
+        val b = other[key]
+
+        when {
+            a != null && b != null -> operation(a, b)
+            a != null -> a
+            b != null -> b
+            else -> error("Either map must have a value for the key '$key'.")
+        }
     }
 
 /**
@@ -247,15 +255,8 @@ inline fun <K, V, W> Map<K, V>.zip(other: Map<K, V>, operation: (V?, V?) -> W): 
  */
 fun <K, V : Set<T>, T> Map<K, V>.zipWithSets(other: Map<K, V>): Map<K, V> =
     zip(other) { a, b ->
-        when {
-            // When iterating over the combined key set, not both values can be null.
-            a == null -> checkNotNull(b)
-            b == null -> a
-            else -> {
-                @Suppress("UNCHECKED_CAST")
-                (a + b) as V
-            }
-        }
+        @Suppress("UNCHECKED_CAST")
+        (a + b) as V
     }
 
 /**
