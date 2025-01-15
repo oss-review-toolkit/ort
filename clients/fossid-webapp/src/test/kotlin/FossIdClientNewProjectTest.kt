@@ -30,7 +30,7 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
-import io.kotest.matchers.types.shouldBeInstanceOf
+import io.kotest.matchers.types.beInstanceOf
 
 import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanStatus
@@ -64,7 +64,7 @@ class FossIdClientNewProjectTest : StringSpec({
 
     "Version can be parsed of login page" {
         service.version shouldBe "2020.1.2"
-        service.shouldBeInstanceOf<VersionedFossIdService>()
+        service should beInstanceOf<VersionedFossIdService>()
     }
 
     "Projects can be listed when there is none" {

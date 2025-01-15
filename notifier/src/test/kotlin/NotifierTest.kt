@@ -23,7 +23,8 @@ import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.types.shouldBeInstanceOf
+import io.kotest.matchers.should
+import io.kotest.matchers.types.beInstanceOf
 
 import kotlin.script.experimental.api.ResultValue
 
@@ -45,7 +46,7 @@ class NotifierTest : WordSpec({
                         resolutionProvider as ResolutionProvider
                         """.trimIndent()
                     )
-                    result.shouldBeInstanceOf<ResultValue.Value>()
+                    result should beInstanceOf<ResultValue.Value>()
                 }
 
                 shouldThrow<RuntimeException> {
@@ -65,7 +66,7 @@ class NotifierTest : WordSpec({
                         resolutionProvider as ResolutionProvider
                         """.trimIndent()
                     )
-                    result.shouldBeInstanceOf<ResultValue.Value>()
+                    result should beInstanceOf<ResultValue.Value>()
                 }
             }
         }

@@ -24,8 +24,9 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.types.shouldBeInstanceOf
+import io.kotest.matchers.types.beInstanceOf
 
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
@@ -70,7 +71,7 @@ class FossId2023dot1Test : StringSpec({
 
     "Version can be parsed of login page (2023.1)" {
         service.version shouldBe "2023.2.0"
-        service.shouldBeInstanceOf<VersionedFossIdService2021dot2>()
+        service should beInstanceOf<VersionedFossIdService2021dot2>()
     }
 
     "Delete scan response can be parsed (2023.1)" {
