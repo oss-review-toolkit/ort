@@ -83,6 +83,9 @@ data class FossIdConfig(
     /** The name of the FossID project. If `null`, the name will be determined from the repository URL. */
     val projectName: String?,
 
+    /** The pattern for scan names when scans are created on the FossID instance. If null, a default pattern is used. */
+    val namingScanPattern: String?,
+
     /** Flag whether the scanner should wait for the completion of FossID scans. */
     val waitForResult: Boolean,
 
@@ -116,10 +119,7 @@ data class FossIdConfig(
     val sensitivity: Int,
 
     /** A comma-separated list of URL mappings. */
-    val urlMappings: String?,
-
-    /** Stores the map with FossID-specific configuration options. */
-    private val options: Map<String, String>
+    val urlMappings: String?
 ) {
     companion object {
         /** Name of the configuration property for the server URL. */
@@ -197,6 +197,7 @@ data class FossIdConfig(
                 ?: throw IllegalArgumentException("No FossID API Key configuration found.")
 
             val projectName = options[PROP_PROJECT_NAME]
+            val namingScanPattern = options[PROP_NAMING_SCAN_PATTERN]
 
             val waitForResult = options[PROP_WAIT_FOR_RESULT]?.toBooleanStrict() ?: true
 
@@ -231,6 +232,7 @@ data class FossIdConfig(
                 user = user,
                 apiKey = apiKey,
                 projectName = projectName,
+                namingScanPattern = namingScanPattern,
                 waitForResult = waitForResult,
                 keepFailedScans = keepFailedScans,
                 deltaScans = deltaScans,
@@ -239,10 +241,9 @@ data class FossIdConfig(
                 detectCopyrightStatements = detectCopyrightStatements,
                 timeout = timeout,
                 fetchSnippetMatchedLines = fetchSnippetMatchedLines,
-                options = options,
                 snippetsLimit = snippetsLimit,
                 sensitivity = sensitivity,
-                urlMappings = urlMappings,
+                urlMappings = urlMappings
             )
         }
     }
@@ -250,13 +251,7 @@ data class FossIdConfig(
     /**
      * Create a [FossIdNamingProvider] helper object based on the configuration stored in this object.
      */
-    fun createNamingProvider(): FossIdNamingProvider {
-        val namingScanPattern = options[PROP_NAMING_SCAN_PATTERN]?.also {
-            logger.info { "Naming pattern for scans is $it." }
-        }
-
-        return FossIdNamingProvider(namingScanPattern, projectName)
-    }
+    fun createNamingProvider() = FossIdNamingProvider(namingScanPattern, projectName)
 
     /**
      * Create a [FossIdUrlProvider] helper object based on the configuration stored in this object.

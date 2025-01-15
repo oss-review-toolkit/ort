@@ -44,6 +44,7 @@ class FossIdConfigTest : WordSpec({
             val options = mapOf(
                 "serverUrl" to SERVER_URL,
                 "projectName" to PROJECT,
+                "namingScanPattern" to "#repositoryName_#deltaTag",
                 "waitForResult" to "false",
                 "keepFailedScans" to "true",
                 "deltaScans" to "true",
@@ -68,6 +69,7 @@ class FossIdConfigTest : WordSpec({
                 user = USER,
                 apiKey = API_KEY,
                 projectName = PROJECT,
+                namingScanPattern = "#repositoryName_#deltaTag",
                 waitForResult = false,
                 keepFailedScans = true,
                 deltaScans = true,
@@ -76,7 +78,6 @@ class FossIdConfigTest : WordSpec({
                 detectCopyrightStatements = true,
                 timeout = 300,
                 fetchSnippetMatchedLines = true,
-                options = options,
                 snippetsLimit = 1000,
                 sensitivity = 10,
                 urlMappings = "https://example.org(?<repoPath>.*) -> ssh://example.org\${repoPath}"
@@ -98,6 +99,7 @@ class FossIdConfigTest : WordSpec({
                 user = USER,
                 apiKey = API_KEY,
                 projectName = null,
+                namingScanPattern = null,
                 waitForResult = true,
                 keepFailedScans = false,
                 deltaScans = false,
@@ -106,7 +108,6 @@ class FossIdConfigTest : WordSpec({
                 detectCopyrightStatements = false,
                 timeout = 60,
                 fetchSnippetMatchedLines = false,
-                options = options,
                 snippetsLimit = 500,
                 sensitivity = 10,
                 urlMappings = null
