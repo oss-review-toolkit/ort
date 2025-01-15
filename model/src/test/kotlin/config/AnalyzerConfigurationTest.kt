@@ -133,7 +133,7 @@ class AnalyzerConfigurationTest : WordSpec({
     }
 
     "withPackageManagerOption()" should {
-        "override an existing entry" {
+        "override an existing option value" {
             val original = AnalyzerConfiguration(
                 packageManagers = mapOf(
                     "GradleInspector" to PackageManagerConfiguration(
@@ -161,7 +161,7 @@ class AnalyzerConfigurationTest : WordSpec({
             original.withPackageManagerOption("GradleInspector", "gradleVersion", "8.0.2") shouldBe patched
         }
 
-        "add a non-existing entry" {
+        "add a non-existing option" {
             val original = AnalyzerConfiguration()
 
             val patched = AnalyzerConfiguration(
