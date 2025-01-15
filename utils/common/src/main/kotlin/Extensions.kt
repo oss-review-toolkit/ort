@@ -242,23 +242,6 @@ inline fun <K, V, W> Map<K, V>.zip(other: Map<K, V>, operation: (V?, V?) -> W): 
     }
 
 /**
- * Merge two maps which have collections as values by creating the combined key set of both maps and merging the
- * collections. If there is no entry for a key in one of the maps, the value from the other map is used.
- */
-fun <K, V : Collection<T>, T> Map<K, V>.zipWithCollections(other: Map<K, V>): Map<K, V> =
-    zip(other) { a, b ->
-        when {
-            // When iterating over the combined key set, not both values can be null.
-            a == null -> checkNotNull(b)
-            b == null -> a
-            else -> {
-                @Suppress("UNCHECKED_CAST")
-                (a + b) as V
-            }
-        }
-    }
-
-/**
  * Merge two maps which have sets as values by creating the combined key set of both maps and merging the sets. If there
  * is no entry for a key in one of the maps, the value from the other map is used.
  */
