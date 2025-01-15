@@ -90,7 +90,7 @@ class GoMod(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Go", analysisRoot, analyzerConfig, repoConfig) {
+) : PackageManager(name, "GoMod", analysisRoot, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<GoMod>("GoMod") {
         override val globsForDefinitionFiles = listOf("go.mod")
 
