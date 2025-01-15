@@ -73,7 +73,7 @@ abstract class NodePackageManager(
 
         return Project(
             id = Identifier(
-                type = managerName,
+                type = projectType,
                 namespace = namespace,
                 name = projectName,
                 version = version
