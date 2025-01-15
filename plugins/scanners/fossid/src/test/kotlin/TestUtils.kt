@@ -130,6 +130,7 @@ internal fun createConfig(
         user = USER,
         apiKey = API_KEY,
         projectName = projectName,
+        namingScanPattern = null,
         waitForResult = waitForResult,
         keepFailedScans = false,
         deltaScans = deltaScans,
@@ -138,7 +139,6 @@ internal fun createConfig(
         detectCopyrightStatements = false,
         timeout = 60,
         fetchSnippetMatchedLines = fetchSnippetMatchedLines,
-        options = emptyMap(),
         snippetsLimit = snippetsLimit,
         sensitivity = 10,
         urlMappings = null
