@@ -146,8 +146,8 @@ class DownloaderCommand(descriptor: PluginDescriptor = DownloaderCommandFactory.
 
     private val vcsPath by option(
         "--vcs-path",
-        help = "The VCS path if '--project-url' points to a VCS. Ignored if '--ort-file' is also specified. " +
-            "(default: the empty root path)"
+        help = "The VCS path to limit the checkout to if '--project-url' points to a VCS. Ignored if '--ort-file' is " +
+            "also specified. (default: no limitation, i.e. the root path is checked out)"
     ).default("").inputGroup()
 
     private val licenseClassificationsFile by option(
