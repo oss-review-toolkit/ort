@@ -108,6 +108,7 @@ ORT:
     active: true
   OrtImportOrder:
     active: true
+    autoCorrect: true
     excludes: ["**/clients/github-graphql/build/generated/**"]
   OrtPackageNaming:
     active: true
