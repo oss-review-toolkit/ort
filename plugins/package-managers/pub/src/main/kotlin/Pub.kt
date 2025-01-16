@@ -378,7 +378,7 @@ class Pub(
             if (pkgInfoFromLockfile == null || pkgInfoFromLockfile.source == "sdk") return@forEach
 
             val id = Identifier(
-                type = managerName,
+                type = "Pub",
                 namespace = "",
                 name = packageName,
                 version = pkgInfoFromLockfile.version.orEmpty()
@@ -629,7 +629,7 @@ class Pub(
                 }
 
                 val id = Identifier(
-                    type = managerName,
+                    type = "Pub",
                     namespace = "",
                     name = rawName,
                     version = version

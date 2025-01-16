@@ -434,7 +434,7 @@ class Bazel(
     private fun BazelModule.toPackageReference(archiveOverrides: Map<String, ArchiveOverride>): PackageReference =
         PackageReference(
             id = Identifier(
-                type = managerName,
+                type = "Bazel",
                 namespace = "",
                 name = key.substringBefore("@", ""),
                 version = key.substringAfter("@", "")

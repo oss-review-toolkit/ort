@@ -183,7 +183,7 @@ class Carthage(
 
         return Package(
             id = Identifier(
-                type = managerName,
+                type = "Carthage",
                 namespace = vcsHost?.getUserOrOrganization(projectUrl).orEmpty(),
                 name = vcsHost?.getProject(projectUrl).orEmpty(),
                 version = revision
@@ -207,7 +207,7 @@ class Carthage(
 
         return Package(
             id = Identifier(
-                type = managerName,
+                type = "Carthage",
                 namespace = "",
                 name = fileUrl.substringAfterLast("/"),
                 version = revision
@@ -225,7 +225,7 @@ class Carthage(
     private fun createPackageFromBinarySpec(binarySpec: Map<String, String>, id: String, revision: String) =
         Package(
             id = Identifier(
-                type = managerName,
+                type = "Carthage",
                 namespace = "",
                 name = id.substringAfterLast("/").removeSuffix(".json"),
                 version = revision
