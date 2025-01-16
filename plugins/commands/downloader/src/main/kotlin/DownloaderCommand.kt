@@ -442,8 +442,9 @@ class DownloaderCommand(descriptor: PluginDescriptor = DownloaderCommandFactory.
     }
 
     private fun downloadFromProjectUrl(projectUrl: String, failureMessages: MutableList<String>) {
-        val archiveType = ArchiveType.getType(projectUrl)
-        val projectNameFromUrl = projectUrl.substringAfterLast('/')
+        val baseUrl = projectUrl.substringBefore('?')
+        val archiveType = ArchiveType.getType(baseUrl)
+        val projectNameFromUrl = baseUrl.substringAfterLast('/')
 
         val projectName = projectNameOption ?: archiveType.extensions.fold(projectNameFromUrl) { name, ext ->
             name.removeSuffix(ext)
