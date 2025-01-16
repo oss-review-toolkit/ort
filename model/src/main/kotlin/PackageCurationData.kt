@@ -127,8 +127,8 @@ data class PackageCurationData(
     }
 
     /**
-     * Apply this [PackageCuration] to [basePackage] by overriding all values of [basePackage] with non-null values of
-     * this [PackageCurationData], and return the resulting [CuratedPackage].
+     * Apply this [PackageCurationData] to [basePackage] by overriding all values of [basePackage] with non-null values
+     * and return the resulting [CuratedPackage].
      */
     fun apply(basePackage: CuratedPackage): CuratedPackage {
         val base = basePackage.metadata
