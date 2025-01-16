@@ -86,10 +86,10 @@ npx commitlint --from=HEAD~2
 It can be executed locally using the Gradle tasks for each source set:
 
 ```shell
-./gradlew detektMain detektTestFixtures detektTest detektFunTest
+./gradlew detektAll
 ```
 
-The above tasks can be slow because they use [type resolution](https://detekt.dev/docs/gettingstarted/type-resolution/).
+The above task can be slow because it uses [type resolution](https://detekt.dev/docs/gettingstarted/type-resolution/).
 To run only the subset of rules that do not require type resolution, use:
 
 ```shell
