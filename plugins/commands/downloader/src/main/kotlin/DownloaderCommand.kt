@@ -73,6 +73,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.licenses.LicenseCategorization
@@ -455,7 +456,12 @@ class DownloaderCommand(descriptor: PluginDescriptor = DownloaderCommandFactory.
         runCatching {
             val dummyPackage = if (archiveType != ArchiveType.NONE) {
                 echo("Downloading $archiveType artifact from $projectUrl...")
-                Package.EMPTY.copy(id = dummyId, sourceArtifact = RemoteArtifact.EMPTY.copy(url = projectUrl))
+
+                Package.EMPTY.copy(
+                    id = dummyId,
+                    sourceArtifact = RemoteArtifact.EMPTY.copy(url = projectUrl),
+                    sourceCodeOrigins = listOf(SourceCodeOrigin.ARTIFACT)
+                )
             } else {
                 val vcs = VersionControlSystem.forUrl(projectUrl)
                 val vcsType = vcsTypeOption?.let { VcsType.forName(it) } ?: vcs?.type ?: VcsType.UNKNOWN
@@ -469,7 +475,13 @@ class DownloaderCommand(descriptor: PluginDescriptor = DownloaderCommandFactory.
                 )
 
                 echo("Downloading from $vcsType VCS at $projectUrl...")
-                Package.EMPTY.copy(id = dummyId, vcs = vcsInfo, vcsProcessed = vcsInfo.normalize())
+
+                Package.EMPTY.copy(
+                    id = dummyId,
+                    vcs = vcsInfo,
+                    vcsProcessed = vcsInfo.normalize(),
+                    sourceCodeOrigins = listOf(SourceCodeOrigin.VCS)
+                )
             }
 
             // Always allow moving revisions when directly downloading a single project only. This is for
