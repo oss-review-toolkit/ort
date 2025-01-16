@@ -241,8 +241,11 @@ class DownloaderCommand(descriptor: PluginDescriptor = DownloaderCommandFactory.
         echo("The $verb took $duration.")
 
         if (failureMessages.isNotEmpty()) {
-            echo(Theme.Default.danger("The following failure(s) occurred:"))
-            failureMessages.joinToString("\n--\n").forEach(::echo)
+            echo(Theme.Default.danger("The following failure(s) occurred:"), trailingNewline = false)
+
+            val separator = Theme.Default.warning("\n--\n")
+            val message = failureMessages.joinToString(separator, separator) { Theme.Default.danger(it) }
+            echo(message)
 
             throw ProgramResult(1)
         }
