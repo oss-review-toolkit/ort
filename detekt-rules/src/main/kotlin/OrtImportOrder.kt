@@ -30,8 +30,13 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 
 import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
+import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl
+import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.kotlin.psi.KtImportList
+import org.jetbrains.kotlin.psi.KtPsiFactory
+import org.jetbrains.kotlin.psi.psiUtil.allChildren
+import org.jetbrains.kotlin.resolve.ImportPath
 
 class OrtImportOrder(config: Config) : Rule(config) {
     private val commonTopLevelDomains = listOf("com", "org", "io")
@@ -66,6 +71,8 @@ class OrtImportOrder(config: Config) : Rule(config) {
         val expectedImportOrder = createExpectedImportOrder(importPaths)
 
         if (importPaths != expectedImportOrder) {
+            if (autoCorrect) fixImportListOrder(importList, expectedImportOrder)
+
             val path = importList.containingKtFile.absolutePath()
             val message = "Imports in file '$path' are not sorted alphabetically or single blank lines are missing " +
                 "between different top-level packages"
@@ -77,6 +84,26 @@ class OrtImportOrder(config: Config) : Rule(config) {
             )
             report(finding)
         }
+    }
+
+    private fun fixImportListOrder(importList: KtImportList, expectedImportOrder: List<String>) {
+        val project = importList.project
+        val factory = KtPsiFactory(project)
+
+        // Remove all existing imports and re-add them in the expected order.
+        importList.allChildren.toList().forEach { it.delete() }
+        expectedImportOrder.forEach { importPath ->
+            if (importPath.isNotEmpty()) {
+                val importDirective = factory.createImportDirective(ImportPath(FqName(importPath), false))
+                importList.add(importDirective)
+                importList.addNewLine()
+            } else {
+                importList.addNewLine()
+            }
+        }
+
+        // Ensure the last empty line is preserved.
+        if (expectedImportOrder.last().isNotEmpty()) importList.addNewLine()
     }
 
     private fun createExpectedImportOrder(importPaths: List<String>): List<String> {
@@ -120,3 +147,5 @@ class OrtImportOrder(config: Config) : Rule(config) {
         return topLevelName
     }
 }
+
+private fun KtImportList.addNewLine() = node.addChild(PsiWhiteSpaceImpl("\n"), null)
