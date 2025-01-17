@@ -1650,7 +1650,8 @@
             "GHSA-qmp9-xqm5-jh6m"
         ],
         "related": [
-            "UBUNTU-CVE-2024-56732"
+            "UBUNTU-CVE-2024-56732",
+            "USN-7214-1"
         ],
         "details": "HarfBuzz is a text shaping engine. Starting with 8.5.0 through 10.0.1, there is a heap-based buffer overflow in the hb_cairo_glyphs_from_buffer function.",
         "affected": [
