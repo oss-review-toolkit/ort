@@ -98,6 +98,28 @@ class ScannerIntegrationFunTest : WordSpec({
                 matchExpectedResult(expectedResultFile)
         }
     }
+
+    "Scanning all hierarchical packages corresponding" should {
+        "return the expected ORT result for depth level 1" {
+            val analyzerResult = createAnalyzerResultWithDependenciesTree(pkg0, pkg1, pkg2, pkg3)
+            val expectedResultFile = getAssetFile("scanner-integration-pkgs-level-1-expected-ort-result.yml")
+
+            val ortResult = createScanner().scan(analyzerResult, skipExcluded = false, emptyMap(), 1)
+
+            patchActualResult(ortResult.toYaml(), patchStartAndEndTime = true) should
+                matchExpectedResult(expectedResultFile)
+        }
+
+        "return the expected ORT result for depth level 3" {
+            val analyzerResult = createAnalyzerResultWithDependenciesTree(pkg0, pkg1, pkg2, pkg3)
+            val expectedResultFile = getAssetFile("scanner-integration-pkgs-level-3-expected-ort-result.yml")
+
+            val ortResult = createScanner().scan(analyzerResult, skipExcluded = false, emptyMap(), 3)
+
+            patchActualResult(ortResult.toYaml(), patchStartAndEndTime = true) should
+                matchExpectedResult(expectedResultFile)
+        }
+    }
 })
 
 internal fun createScanner(scannerWrappers: Map<PackageType, List<ScannerWrapper>>? = null): Scanner {
@@ -129,6 +151,36 @@ private fun createAnalyzerResult(vararg packages: Package): OrtResult {
     val scope = Scope(
         name = "deps",
         dependencies = packages.mapTo(mutableSetOf()) { PackageReference(it.id) }
+    )
+
+    val project = Project.EMPTY.copy(
+        id = createId("project"),
+        scopeDependencies = setOf(scope)
+    )
+
+    val analyzerRun = AnalyzerRun.EMPTY.copy(
+        result = AnalyzerResult.EMPTY.copy(
+            projects = setOf(project),
+            packages = packages.toSet()
+        )
+    )
+
+    return OrtResult.EMPTY.copy(analyzer = analyzerRun)
+}
+
+private fun createAnalyzerResultWithDependenciesTree(vararg packages: Package): OrtResult {
+    val packageReferences = mutableListOf<PackageReference>()
+    packages.forEachIndexed { index, p ->
+        when {
+            index == 0 -> packageReferences.add(PackageReference(id = p.id, dependencies = emptySet()))
+            else -> packageReferences.add(
+                PackageReference(id = p.id, dependencies = setOf(packageReferences[index - 1]))
+            )
+        }
+    }
+    val scope = Scope(
+        name = "deps",
+        dependencies = setOf(packageReferences.last())
     )
 
     val project = Project.EMPTY.copy(
