@@ -21,7 +21,6 @@ package org.ossreviewtoolkit.plugins.packagemanagers.node.pnpm
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.should
-
 import org.ossreviewtoolkit.analyzer.analyze
 import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
@@ -67,6 +66,15 @@ class PnpmFunTest : WordSpec({
             val expectedResultFile = getAssetFile("projects/synthetic/pnpm/workspaces-expected-output.yml")
 
             val result = analyze(definitionFile.parentFile, packageManagers = setOf(Pnpm.Factory()))
+
+            patchActualResult(result.toYaml(), patchStartAndEndTime = true) should
+                matchExpectedResult(expectedResultFile, definitionFile)
+        }
+
+        "resolve dependencies correctly for nested project" {
+            val definitionFile = getAssetFile("projects/synthetic/pnpm/nested-project/package.json")
+            val expectedResultFile = getAssetFile("projects/synthetic/pnpm/nested-project-expected-output.yml")
+            val result = create("PNPM").resolveSingleProject(definitionFile, resolveScopes = true)
 
             patchActualResult(result.toYaml(), patchStartAndEndTime = true) should
                 matchExpectedResult(expectedResultFile, definitionFile)
