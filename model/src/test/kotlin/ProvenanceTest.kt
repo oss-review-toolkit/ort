@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 class ProvenanceTest : WordSpec({
     "UnknownProvenance" should {
         val provenance = UnknownProvenance
-        val json = jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(provenance)
+        val json = provenance.toJson()
 
         "be serializable" {
             json shouldBe "{ }"
@@ -52,7 +52,7 @@ class ProvenanceTest : WordSpec({
             )
         )
 
-        val json = jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(provenance)
+        val json = provenance.toJson()
 
         "be serializable" {
             json.normalizeLineBreaks() shouldBe """
@@ -92,7 +92,7 @@ class ProvenanceTest : WordSpec({
             resolvedRevision = "resolvedRevision"
         )
 
-        val json = jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(provenance)
+        val json = provenance.toJson()
 
         "be serializable" {
             json.normalizeLineBreaks() shouldBe """
