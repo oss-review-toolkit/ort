@@ -96,6 +96,12 @@ To run only the subset of rules that do not require type resolution, use:
 ./gradlew detekt
 ```
 
+To automatically fix some common style issues like the import order or the spacing around operators, use:
+
+```shell
+./gradlew detekt --auto-correct
+```
+
 ### Markdownlint
 
 [Markdownlint](https://github.com/DavidAnson/markdownlint) is used to check the Markdown files.
