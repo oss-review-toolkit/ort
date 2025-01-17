@@ -72,4 +72,14 @@ inline fun <reified T> String.fromYaml(): T = yamlMapper.readValue(this)
 
 fun Any?.toYaml(): String = yamlMapper.writeValueAsString(this)
 
+fun Any?.toJson(prettyPrint: Boolean = true): String {
+    val writer = if (prettyPrint) {
+        jsonMapper.writerWithDefaultPrettyPrinter()
+    } else {
+        jsonMapper.writer()
+    }
+
+    return writer.writeValueAsString(this)
+}
+
 fun String.readJsonTree(): JsonNode = jsonMapper.readTree(this)
