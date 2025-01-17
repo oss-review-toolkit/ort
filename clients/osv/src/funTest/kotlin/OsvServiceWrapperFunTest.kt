@@ -60,7 +60,7 @@ private fun Vulnerability.normalizeUrls(): Vulnerability {
 
 private val emptyJsonObject = JsonObject(emptyMap())
 
-private fun List<Vulnerability>.patchFields() = map { it.patchIgnorableFields().normalizeUrls() }
+private fun List<Vulnerability>.patch() = map { it.patchIgnorableFields().normalizeUrls() }
 
 class OsvServiceWrapperFunTest : StringSpec({
     "getVulnerabilitiesForPackage() returns the expected vulnerability when queried by commit" {
@@ -70,7 +70,7 @@ class OsvServiceWrapperFunTest : StringSpec({
 
         result.shouldBeSuccess { actualData ->
             val expectedData = OsvService.JSON.decodeFromString<List<Vulnerability>>(expectedResult)
-            actualData.patchFields() shouldContainExactlyInAnyOrder expectedData.patchFields()
+            actualData.patch() shouldContainExactlyInAnyOrder expectedData.patch()
         }
     }
 
@@ -81,7 +81,7 @@ class OsvServiceWrapperFunTest : StringSpec({
 
         result.shouldBeSuccess { actualData ->
             val expectedData = OsvService.JSON.decodeFromString<List<Vulnerability>>(expectedResult)
-            actualData.patchFields() shouldContainExactlyInAnyOrder expectedData.patchFields()
+            actualData.patch() shouldContainExactlyInAnyOrder expectedData.patch()
         }
     }
 
