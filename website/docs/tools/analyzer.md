@@ -19,6 +19,7 @@ Currently, the following package managers (grouped by the programming language t
 
 * C / C++
   * [Bazel](https://bazel.build/) (**experimental**) (limitations: see [open tasks](https://github.com/oss-review-toolkit/ort/issues/264))
+  * [BitBake](https://docs.yoctoproject.org/bitbake/) (**experimental**) (limitations: low performance, no resolution of SPDX external document refs)
   * [Conan 1.x](https://conan.io/)
   * Also see: [SPDX documents](#analyzer-for-spdx-documents)
 * Dart / Flutter
