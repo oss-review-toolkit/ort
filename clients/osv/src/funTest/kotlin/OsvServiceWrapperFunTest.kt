@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.clients.osv
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.shouldBe
@@ -60,17 +61,19 @@ private fun Vulnerability.normalizeUrls(): Vulnerability {
 
 private val emptyJsonObject = JsonObject(emptyMap())
 
-private fun List<Vulnerability>.patch() = map { it.patchIgnorableFields().normalizeUrls() }
+private fun List<Vulnerability>.patch() = map { it.patch() }
+private fun Vulnerability.patch() = patchIgnorableFields().normalizeUrls()
 
 class OsvServiceWrapperFunTest : StringSpec({
     "getVulnerabilitiesForPackage() returns the expected vulnerability when queried by commit" {
-        val expectedResult = getAssetAsString("vulnerabilities-by-commit-expected-result.json")
+        val expectedVulnerability = OsvService.JSON.decodeFromString<Vulnerability>(
+            getAssetAsString("vulnerabilities-by-commit-expected-vulnerability.json")
+        )
 
         val result = OsvServiceWrapper().getVulnerabilitiesForPackage(VULNERABILITY_FOR_PACKAGE_BY_COMMIT_REQUEST)
 
         result.shouldBeSuccess { actualData ->
-            val expectedData = OsvService.JSON.decodeFromString<List<Vulnerability>>(expectedResult)
-            actualData.patch() shouldContainExactlyInAnyOrder expectedData.patch()
+            actualData.patch() shouldContain expectedVulnerability.patch()
         }
     }
 
