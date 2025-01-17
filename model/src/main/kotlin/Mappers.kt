@@ -72,6 +72,8 @@ inline fun <reified T> String.fromYaml(): T = yamlMapper.readValue(this)
 
 fun Any?.toYaml(): String = yamlMapper.writeValueAsString(this)
 
+inline fun <reified T> String.fromJson(): T = jsonMapper.readValue(this)
+
 fun Any?.toJson(prettyPrint: Boolean = true): String {
     val writer = if (prettyPrint) {
         jsonMapper.writerWithDefaultPrettyPrinter()
