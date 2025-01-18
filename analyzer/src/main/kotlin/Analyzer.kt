@@ -103,6 +103,15 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
             Pair(manager, mappedFiles).takeIf { mappedFiles.isNotEmpty() }
         }.toMap(mutableMapOf())
 
+        // Fail early if multiple managers for the same project type are enabled.
+        managedFiles.keys.groupBy { it.projectType }.forEach { (projectType, managers) ->
+            val managerNames = managers.map { it.managerName }
+            requireNotNull(managers.singleOrNull()) {
+                "All of the $managerNames managers are able to manage '$projectType' projects. Please enable only " +
+                    "one of them."
+            }
+        }
+
         // Check whether there are unmanaged files (because of deactivated, unsupported, or non-present package
         // managers) which need to get attached to an artificial "unmanaged" project.
         val managedDirs = managedFiles.values.flatten().mapNotNull { it.parentFile }
