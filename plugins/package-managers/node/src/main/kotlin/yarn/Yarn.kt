@@ -131,10 +131,7 @@ open class Yarn(
         }
     }
 
-    override fun beforeResolution(definitionFiles: List<File>) =
-        // We do not actually depend on any features specific to a Yarn version, but we still want to stick to a
-        // fixed minor version to be sure to get consistent results.
-        YarnCommand.checkVersion()
+    override fun beforeResolution(definitionFiles: List<File>) = YarnCommand.checkVersion()
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile

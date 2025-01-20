@@ -133,10 +133,7 @@ class Pnpm(
             workingDir = workingDir
         ).requireSuccess()
 
-    override fun beforeResolution(definitionFiles: List<File>) =
-        // We do not actually depend on any features specific to a PNPM version, but we still want to stick to a
-        // fixed major version to be sure to get consistent results.
-        PnpmCommand.checkVersion()
+    override fun beforeResolution(definitionFiles: List<File>) = PnpmCommand.checkVersion()
 
     internal fun getRemotePackageDetails(packageName: String): PackageJson? {
         packageDetailsCache[packageName]?.let { return it }

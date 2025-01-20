@@ -129,11 +129,7 @@ class Npm(
         ).let { listOf(it) }
     }
 
-    override fun beforeResolution(definitionFiles: List<File>) {
-        // We do not actually depend on any features specific to an NPM version, but we still want to stick to a
-        // fixed minor version to be sure to get consistent results.
-        NpmCommand.checkVersion()
-    }
+    override fun beforeResolution(definitionFiles: List<File>) = NpmCommand.checkVersion()
 
     private fun listModules(workingDir: File, issues: MutableList<Issue>): ModuleInfo {
         val listProcess = NpmCommand.run(workingDir, "list", "--depth", "Infinity", "--json", "--long")
