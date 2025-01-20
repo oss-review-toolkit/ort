@@ -20,9 +20,13 @@
 package org.ossreviewtoolkit.clients.osv
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.containAll
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.result.shouldBeSuccess
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.time.Instant
@@ -98,21 +102,23 @@ class OsvServiceWrapperFunTest : WordSpec({
             val result = OsvServiceWrapper().getVulnerabilityIdsForPackages(requests)
 
             result.shouldBeSuccess {
-                it shouldBe listOf(
-                    listOf(
-                        "CVE-2021-45931",
-                        "CVE-2022-33068",
-                        "CVE-2023-25193",
-                        "CVE-2024-56732",
-                        "OSV-2020-484"
-                    ),
-                    emptyList(),
-                    listOf(
-                        "OSV-2018-115",
-                        "OSV-2018-143",
-                        "OSV-2018-97",
-                        "OSV-2020-484"
-                    )
+                it shouldHaveSize 3
+
+                it[0] should containAll(
+                    "CVE-2021-45931",
+                    "CVE-2022-33068",
+                    "CVE-2023-25193",
+                    "CVE-2024-56732",
+                    "OSV-2020-484"
+                )
+
+                it[1] should beEmpty()
+
+                it[2] should containAll(
+                    "OSV-2018-115",
+                    "OSV-2018-143",
+                    "OSV-2018-97",
+                    "OSV-2020-484"
                 )
             }
         }
