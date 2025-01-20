@@ -38,10 +38,10 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.utils.common.DirectoryStash
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 
 import org.semver4j.RangesList
@@ -83,18 +83,26 @@ class Npm(
         ) = Npm(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
+    private lateinit var stash: DirectoryStash
+
     private val legacyPeerDeps = options[OPTION_LEGACY_PEER_DEPS].toBoolean()
     private val npmViewCache = mutableMapOf<String, PackageJson>()
     private val handler = NpmDependencyHandler(projectType, this::getRemotePackageDetails)
 
     override val graphBuilder by lazy { DependencyGraphBuilder(handler) }
 
-    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> =
-        stashDirectories(definitionFile.resolveSibling("node_modules")).use {
-            resolveDependencies(definitionFile)
-        }
+    override fun beforeResolution(definitionFiles: List<File>) {
+        NpmCommand.checkVersion()
 
-    private fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
+        val directories = definitionFiles.mapTo(mutableSetOf()) { it.resolveSibling("node_modules") }
+        stash = DirectoryStash(directories)
+    }
+
+    override fun afterResolution(definitionFiles: List<File>) {
+        stash.close()
+    }
+
+    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
         val issues = installDependencies(workingDir).toMutableList()
 
@@ -128,8 +136,6 @@ class Npm(
             issues = issues
         ).let { listOf(it) }
     }
-
-    override fun beforeResolution(definitionFiles: List<File>) = NpmCommand.checkVersion()
 
     private fun listModules(workingDir: File, issues: MutableList<Issue>): ModuleInfo {
         val listProcess = NpmCommand.run(workingDir, "list", "--depth", "Infinity", "--json", "--long")

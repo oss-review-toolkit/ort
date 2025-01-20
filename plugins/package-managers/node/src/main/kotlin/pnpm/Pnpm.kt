@@ -33,8 +33,8 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.utils.common.DirectoryStash
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.common.stashDirectories
 
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
@@ -64,17 +64,25 @@ class Pnpm(
         ) = Pnpm(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
+    private lateinit var stash: DirectoryStash
+
     private val packageDetailsCache = mutableMapOf<String, PackageJson>()
     private val handler = PnpmDependencyHandler(projectType, this::getRemotePackageDetails)
 
     override val graphBuilder by lazy { DependencyGraphBuilder(handler) }
 
-    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> =
-        stashDirectories(definitionFile.resolveSibling("node_modules")).use {
-            resolveDependencies(definitionFile)
-        }
+    override fun beforeResolution(definitionFiles: List<File>) {
+        PnpmCommand.checkVersion()
 
-    private fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
+        val directories = definitionFiles.mapTo(mutableSetOf()) { it.resolveSibling("node_modules") }
+        stash = DirectoryStash(directories)
+    }
+
+    override fun afterResolution(definitionFiles: List<File>) {
+        stash.close()
+    }
+
+    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
         installDependencies(workingDir)
 
@@ -132,8 +140,6 @@ class Pnpm(
             "--frozen-lockfile", // Use the existing lockfile instead of updating an outdated one.
             workingDir = workingDir
         ).requireSuccess()
-
-    override fun beforeResolution(definitionFiles: List<File>) = PnpmCommand.checkVersion()
 
     internal fun getRemotePackageDetails(packageName: String): PackageJson? {
         packageDetailsCache[packageName]?.let { return it }
