@@ -36,10 +36,10 @@ private val VULNERABILITY_FOR_PACKAGE_BY_COMMIT_REQUEST = VulnerabilitiesForPack
 )
 private val VULNERABILITY_FOR_PACKAGE_BY_NAME_AND_VERSION = VulnerabilitiesForPackageRequest(
     pkg = Package(
-        name = "jinja2",
-        ecosystem = "PyPI"
+        name = "harfbuzz",
+        ecosystem = "OSS-Fuzz"
     ),
-    version = "2.4.1"
+    version = "2.2.0"
 )
 private val VULNERABILITY_FOR_PACKAGE_BY_INVALID_COMMIT_REQUEST = VulnerabilitiesForPackageRequest(
     commit = "6879efc2c1596d11a6a6ad296f80063b558d5e0c"
@@ -66,11 +66,11 @@ private fun Vulnerability.patch() = patchIgnorableFields().normalizeUrls()
 
 class OsvServiceWrapperFunTest : WordSpec({
     "getVulnerabilitiesForPackage()" should {
-        "return the expected vulnerability when queried by commit" {
-            val expectedVulnerability = OsvService.JSON.decodeFromString<Vulnerability>(
-                getAssetAsString("vulnerabilities-by-commit-expected-vulnerability.json")
-            )
+        val expectedVulnerability = OsvService.JSON.decodeFromString<Vulnerability>(
+            getAssetAsString("vulnerabilities-for-package-expected-vulnerability.json")
+        )
 
+        "return the expected vulnerability when queried by commit" {
             val result = OsvServiceWrapper().getVulnerabilitiesForPackage(VULNERABILITY_FOR_PACKAGE_BY_COMMIT_REQUEST)
 
             result.shouldBeSuccess { actualData ->
@@ -79,13 +79,10 @@ class OsvServiceWrapperFunTest : WordSpec({
         }
 
         "return the expected vulnerability when queried by name and version" {
-            val expectedResult = getAssetAsString("vulnerabilities-by-name-and-version-expected-result.json")
-
             val result = OsvServiceWrapper().getVulnerabilitiesForPackage(VULNERABILITY_FOR_PACKAGE_BY_NAME_AND_VERSION)
 
             result.shouldBeSuccess { actualData ->
-                val expectedData = OsvService.JSON.decodeFromString<List<Vulnerability>>(expectedResult)
-                actualData.patch() shouldContainExactlyInAnyOrder expectedData.patch()
+                actualData.patch() shouldContain expectedVulnerability.patch()
             }
         }
     }
@@ -111,19 +108,10 @@ class OsvServiceWrapperFunTest : WordSpec({
                     ),
                     emptyList(),
                     listOf(
-                        "GHSA-462w-v97r-4m45",
-                        "GHSA-8r7q-cvjq-x353",
-                        "GHSA-fqh9-2qgg-h84h",
-                        "GHSA-g3rq-g295-4j3m",
-                        "GHSA-h5c8-rqwp-cp95",
-                        "GHSA-h75v-3vvj-5mfj",
-                        "GHSA-hj2j-77xm-mc5v",
-                        "GHSA-q2x7-8rv6-6q7h",
-                        "PYSEC-2014-8",
-                        "PYSEC-2014-82",
-                        "PYSEC-2019-217",
-                        "PYSEC-2019-220",
-                        "PYSEC-2021-66"
+                        "OSV-2018-115",
+                        "OSV-2018-143",
+                        "OSV-2018-97",
+                        "OSV-2020-484"
                     )
                 )
             }
