@@ -250,14 +250,18 @@ abstract class PackageManager(
         PackageManagerDependencyResult(mustRunBefore = emptySet(), mustRunAfter = emptySet())
 
     /**
-     * Optional step to run before dependency resolution, like checking for prerequisites.
+     * Optional step to run before dependency resolution, like checking for prerequisites. This function is called
+     * before [resolveDependencies] is called for any enabled package manager. It does not respect any "mustRunAfter"
+     * configuration.
      */
-    protected open fun beforeResolution(definitionFiles: List<File>) {}
+    open fun beforeResolution(definitionFiles: List<File>) {}
 
     /**
-     * Optional step to run after dependency resolution, like cleaning up temporary files.
+     * Optional step to run after dependency resolution, like cleaning up temporary files. This function is called after
+     * [resolveDependencies] has finished for all enabled package managers. It does not respect any "mustRunAfter"
+     * configuration.
      */
-    protected open fun afterResolution(definitionFiles: List<File>) {}
+    open fun afterResolution(definitionFiles: List<File>) {}
 
     /**
      * Generate the final result to be returned by this package manager. This function is called at the very end of the
@@ -282,8 +286,6 @@ abstract class PackageManager(
         }
 
         val result = mutableMapOf<File, List<ProjectAnalyzerResult>>()
-
-        beforeResolution(definitionFiles)
 
         definitionFiles.forEach { definitionFile ->
             val relativePath = definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath.ifEmpty { "." }
@@ -320,8 +322,6 @@ abstract class PackageManager(
 
             logger.info { "$managerName resolved dependencies for path '$relativePath' in $duration." }
         }
-
-        afterResolution(definitionFiles)
 
         return createPackageManagerResult(result).addDependencyGraphIfMissing()
     }

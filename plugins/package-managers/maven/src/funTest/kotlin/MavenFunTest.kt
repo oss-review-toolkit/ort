@@ -52,10 +52,11 @@ class MavenFunTest : StringSpec({
         // The "app" project depends on the "lib" project, so the "pom.xml" of the "lib" project also has to be passed
         // to [resolveDependencies], so that it is available in the [Maven.projectsByIdentifier] cache. Otherwise,
         // resolution of transitive dependencies would not work.
-        val managerResult = create("Maven").resolveDependencies(
-            listOf(definitionFileApp, definitionFileLib),
-            emptyMap()
-        )
+        val managerResult = with(create("Maven")) {
+            val definitionFiles = listOf(definitionFileApp, definitionFileLib)
+            beforeResolution(definitionFiles)
+            resolveDependencies(definitionFiles, emptyMap()).also { afterResolution(definitionFiles) }
+        }
 
         val result = managerResult.projectResults[definitionFileApp]
 

@@ -166,8 +166,13 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
     }
 
     private fun analyzeInParallel(managedFiles: Map<PackageManager, List<File>>): AnalyzerResult {
-        val state = AnalyzerState()
+        logger.info { "Calling before resolution hooks for ${managedFiles.size} manager(s). " }
 
+        managedFiles.forEach { (manager, definitionFiles) ->
+            manager.beforeResolution(definitionFiles)
+        }
+
+        val state = AnalyzerState()
         val packageManagerDependencies = determinePackageManagerDependencies(managedFiles)
 
         runBlocking {
@@ -185,6 +190,12 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
             state.finishedPackageManagersState.first { finishedPackageManagers ->
                 finishedPackageManagers.containsAll(managedFiles.keys.map { it.managerName })
             }
+        }
+
+        logger.info { "Calling after resolution hooks for ${managedFiles.size} manager(s). " }
+
+        managedFiles.forEach { (manager, definitionFiles) ->
+            manager.afterResolution(definitionFiles)
         }
 
         val excludes = managedFiles.keys.firstOrNull()?.excludes ?: Excludes.EMPTY

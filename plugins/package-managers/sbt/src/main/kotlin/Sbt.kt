@@ -235,9 +235,12 @@ class Sbt(
 
     override fun resolveDependencies(definitionFiles: List<File>, labels: Map<String, String>): PackageManagerResult {
         val sbtAnalyzerConfig = analyzerConfig.withPackageManagerOption(managerName, "sbtMode", "true")
-        return Maven(managerName, analysisRoot, sbtAnalyzerConfig, repoConfig)
+        return Maven(managerName, analysisRoot, sbtAnalyzerConfig, repoConfig).run {
+            beforeResolution(definitionFiles)
+
             // Simply pass on the list of POM files to Maven, ignoring the SBT build files here.
-            .resolveDependencies(definitionFiles, labels)
+            resolveDependencies(definitionFiles, labels).also { afterResolution(definitionFiles) }
+        }
     }
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>) =

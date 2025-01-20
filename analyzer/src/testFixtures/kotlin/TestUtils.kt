@@ -20,10 +20,9 @@
 package org.ossreviewtoolkit.analyzer
 
 import io.kotest.inspectors.forAll
-import io.kotest.matchers.collections.haveSize
+import io.kotest.matchers.collections.shouldBeSingleton
 import io.kotest.matchers.collections.shouldHaveAtLeastSize
 import io.kotest.matchers.nulls.shouldNotBeNull
-import io.kotest.matchers.should
 
 import java.io.File
 import java.time.Instant
@@ -45,15 +44,22 @@ import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.utils.test.USER_DIR
 
 fun PackageManager.resolveSingleProject(definitionFile: File, resolveScopes: Boolean = false): ProjectAnalyzerResult {
-    val managerResult = resolveDependencies(listOf(definitionFile), emptyMap())
+    val definitionFiles = listOf(definitionFile)
 
-    return managerResult.projectResults[definitionFile].let { resultList ->
-        resultList.shouldNotBeNull()
-        resultList should haveSize(1)
-        val result = resultList.single()
+    beforeResolution(definitionFiles)
+    val managerResult = resolveDependencies(definitionFiles, emptyMap())
 
-        if (resolveScopes) managerResult.resolveScopes(result) else result
+    val resultList = managerResult.projectResults[definitionFile]
+    resultList.shouldNotBeNull()
+    resultList.shouldBeSingleton()
+
+    val result = resultList.single().let {
+        if (resolveScopes) managerResult.resolveScopes(it) else it
     }
+
+    afterResolution(definitionFiles)
+
+    return result
 }
 
 /**
