@@ -41,7 +41,7 @@ fun stashDirectories(vararg directories: File): Closeable = DirectoryStash(setOf
  * created at the location of an original directory is deleted before the original state is restored. If a specified
  * directory did not exist on initialization, it will also not exist on close.
  */
-private class DirectoryStash(directories: Set<File>) : Closeable {
+class DirectoryStash(directories: Set<File>) : Closeable {
     private val stashedDirectories: Map<File, File?> = directories.associateWith { originalDir ->
         // Check this on each iteration instead of filtering beforehand to properly handle parent / child directories.
         if (originalDir.isDirectory) {

@@ -51,6 +51,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.splitNamespaceAndName
 import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.utils.common.DirectoryStash
 import org.ossreviewtoolkit.utils.common.DiskCache
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.alsoIfNull
@@ -59,7 +60,6 @@ import org.ossreviewtoolkit.utils.common.fieldNamesOrEmpty
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
 import org.ossreviewtoolkit.utils.common.mebibytes
 import org.ossreviewtoolkit.utils.common.realFile
-import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 
@@ -106,6 +106,8 @@ open class Yarn(
         ) = Yarn(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
+    private lateinit var stash: DirectoryStash
+
     /** Cache for submodules identified by its moduleDir absolutePath */
     private val submodulesCache = ConcurrentHashMap<String, Set<File>>()
 
@@ -131,19 +133,23 @@ open class Yarn(
         }
     }
 
-    override fun beforeResolution(definitionFiles: List<File>) = YarnCommand.checkVersion()
+    override fun beforeResolution(definitionFiles: List<File>) {
+        YarnCommand.checkVersion()
 
-    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
-        val workingDir = definitionFile.parentFile
+        val directories = definitionFiles.mapTo(mutableSetOf()) { it.resolveSibling("node_modules") }
+        stash = DirectoryStash(directories)
+    }
 
-        return try {
-            stashDirectories(workingDir.resolve("node_modules")).use {
-                resolveDependenciesInternal(definitionFile)
-            }
+    override fun afterResolution(definitionFiles: List<File>) {
+        stash.close()
+    }
+
+    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> =
+        try {
+            resolveDependenciesInternal(definitionFile)
         } finally {
             rawModuleInfoCache.clear()
         }
-    }
 
     /**
      * An internally used data class with information about a module retrieved from the module's package.json. This
