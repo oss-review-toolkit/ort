@@ -162,8 +162,8 @@ class Gradle(
         override fun getRepository() = workspaceRepository
     }
 
-    private val maven = MavenSupport(GradleCacheReader())
-    private val dependencyHandler = GradleDependencyHandler(managerName, projectType, maven)
+    private val mavenSupport = MavenSupport(GradleCacheReader())
+    private val dependencyHandler = GradleDependencyHandler(managerName, projectType, mavenSupport)
     private val graphBuilder = DependencyGraphBuilder(dependencyHandler)
 
     // The path to the root project. In a single-project, just points to the project path.
@@ -330,6 +330,6 @@ class Gradle(
     }
 
     override fun afterResolution(definitionFiles: List<File>) {
-        maven.close()
+        mavenSupport.close()
     }
 }
