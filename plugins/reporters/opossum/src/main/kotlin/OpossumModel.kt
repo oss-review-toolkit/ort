@@ -237,16 +237,7 @@ internal data class OpossumFrequentLicense(
     val shortName: String,
     val fullName: String?,
     val defaultText: String?
-) : Comparable<OpossumFrequentLicense> {
-    override fun compareTo(other: OpossumFrequentLicense) =
-        compareValuesBy(
-            this,
-            other,
-            { it.shortName },
-            { it.fullName },
-            { it.defaultText }
-        )
-}
+)
 
 @Serializable
 internal data class OpossumExternalAttributionSource(
