@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.clients.osv
 
-import io.kotest.core.spec.style.StringSpec
+import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.result.shouldBeSuccess
@@ -64,86 +64,94 @@ private val emptyJsonObject = JsonObject(emptyMap())
 private fun List<Vulnerability>.patch() = map { it.patch() }
 private fun Vulnerability.patch() = patchIgnorableFields().normalizeUrls()
 
-class OsvServiceWrapperFunTest : StringSpec({
-    "getVulnerabilitiesForPackage() returns the expected vulnerability when queried by commit" {
-        val expectedVulnerability = OsvService.JSON.decodeFromString<Vulnerability>(
-            getAssetAsString("vulnerabilities-by-commit-expected-vulnerability.json")
-        )
-
-        val result = OsvServiceWrapper().getVulnerabilitiesForPackage(VULNERABILITY_FOR_PACKAGE_BY_COMMIT_REQUEST)
-
-        result.shouldBeSuccess { actualData ->
-            actualData.patch() shouldContain expectedVulnerability.patch()
-        }
-    }
-
-    "getVulnerabilitiesForPackage() returns the expected vulnerability when queried by name and version" {
-        val expectedResult = getAssetAsString("vulnerabilities-by-name-and-version-expected-result.json")
-
-        val result = OsvServiceWrapper().getVulnerabilitiesForPackage(VULNERABILITY_FOR_PACKAGE_BY_NAME_AND_VERSION)
-
-        result.shouldBeSuccess { actualData ->
-            val expectedData = OsvService.JSON.decodeFromString<List<Vulnerability>>(expectedResult)
-            actualData.patch() shouldContainExactlyInAnyOrder expectedData.patch()
-        }
-    }
-
-    "getVulnerabilityIdsForPackages() return the vulnerability IDs for the given batch request" {
-        val requests = listOf(
-            VULNERABILITY_FOR_PACKAGE_BY_COMMIT_REQUEST,
-            VULNERABILITY_FOR_PACKAGE_BY_INVALID_COMMIT_REQUEST,
-            VULNERABILITY_FOR_PACKAGE_BY_NAME_AND_VERSION
-        )
-
-        val result = OsvServiceWrapper().getVulnerabilityIdsForPackages(requests)
-
-        result.shouldBeSuccess {
-            it shouldBe listOf(
-                listOf(
-                    "CVE-2021-45931",
-                    "CVE-2022-33068",
-                    "CVE-2023-25193",
-                    "CVE-2024-56732",
-                    "OSV-2020-484"
-                ),
-                emptyList(),
-                listOf(
-                    "GHSA-462w-v97r-4m45",
-                    "GHSA-8r7q-cvjq-x353",
-                    "GHSA-fqh9-2qgg-h84h",
-                    "GHSA-g3rq-g295-4j3m",
-                    "GHSA-h5c8-rqwp-cp95",
-                    "GHSA-h75v-3vvj-5mfj",
-                    "GHSA-hj2j-77xm-mc5v",
-                    "GHSA-q2x7-8rv6-6q7h",
-                    "PYSEC-2014-8",
-                    "PYSEC-2014-82",
-                    "PYSEC-2019-217",
-                    "PYSEC-2019-220",
-                    "PYSEC-2021-66"
-                )
+class OsvServiceWrapperFunTest : WordSpec({
+    "getVulnerabilitiesForPackage()" should {
+        "return the expected vulnerability when queried by commit" {
+            val expectedVulnerability = OsvService.JSON.decodeFromString<Vulnerability>(
+                getAssetAsString("vulnerabilities-by-commit-expected-vulnerability.json")
             )
+
+            val result = OsvServiceWrapper().getVulnerabilitiesForPackage(VULNERABILITY_FOR_PACKAGE_BY_COMMIT_REQUEST)
+
+            result.shouldBeSuccess { actualData ->
+                actualData.patch() shouldContain expectedVulnerability.patch()
+            }
+        }
+
+        "return the expected vulnerability when queried by name and version" {
+            val expectedResult = getAssetAsString("vulnerabilities-by-name-and-version-expected-result.json")
+
+            val result = OsvServiceWrapper().getVulnerabilitiesForPackage(VULNERABILITY_FOR_PACKAGE_BY_NAME_AND_VERSION)
+
+            result.shouldBeSuccess { actualData ->
+                val expectedData = OsvService.JSON.decodeFromString<List<Vulnerability>>(expectedResult)
+                actualData.patch() shouldContainExactlyInAnyOrder expectedData.patch()
+            }
         }
     }
 
-    "getVulnerabilityForId() returns the expected vulnerability for the given ID" {
-        val expectedResult = getAssetAsString("vulnerability-by-id-expected-result.json")
+    "getVulnerabilityIdsForPackages()" should {
+        "return the vulnerability IDs for the given batch request" {
+            val requests = listOf(
+                VULNERABILITY_FOR_PACKAGE_BY_COMMIT_REQUEST,
+                VULNERABILITY_FOR_PACKAGE_BY_INVALID_COMMIT_REQUEST,
+                VULNERABILITY_FOR_PACKAGE_BY_NAME_AND_VERSION
+            )
 
-        val result = OsvServiceWrapper().getVulnerabilityForId("GHSA-xvch-5gv4-984h")
+            val result = OsvServiceWrapper().getVulnerabilityIdsForPackages(requests)
 
-        result.shouldBeSuccess { actualData ->
-            val expectedData = OsvService.JSON.decodeFromString<Vulnerability>(expectedResult)
-            actualData.patchIgnorableFields() shouldBe expectedData.patchIgnorableFields()
+            result.shouldBeSuccess {
+                it shouldBe listOf(
+                    listOf(
+                        "CVE-2021-45931",
+                        "CVE-2022-33068",
+                        "CVE-2023-25193",
+                        "CVE-2024-56732",
+                        "OSV-2020-484"
+                    ),
+                    emptyList(),
+                    listOf(
+                        "GHSA-462w-v97r-4m45",
+                        "GHSA-8r7q-cvjq-x353",
+                        "GHSA-fqh9-2qgg-h84h",
+                        "GHSA-g3rq-g295-4j3m",
+                        "GHSA-h5c8-rqwp-cp95",
+                        "GHSA-h75v-3vvj-5mfj",
+                        "GHSA-hj2j-77xm-mc5v",
+                        "GHSA-q2x7-8rv6-6q7h",
+                        "PYSEC-2014-8",
+                        "PYSEC-2014-82",
+                        "PYSEC-2019-217",
+                        "PYSEC-2019-220",
+                        "PYSEC-2021-66"
+                    )
+                )
+            }
         }
     }
 
-    "getVulnerabilitiesForIds() return the vulnerabilities for the given IDs" {
-        val ids = setOf("GHSA-xvch-5gv4-984h", "PYSEC-2014-82")
+    "getVulnerabilityForId()" should {
+        "return the expected vulnerability for the given ID" {
+            val expectedResult = getAssetAsString("vulnerability-by-id-expected-result.json")
 
-        val result = OsvServiceWrapper().getVulnerabilitiesForIds(ids)
+            val result = OsvServiceWrapper().getVulnerabilityForId("GHSA-xvch-5gv4-984h")
 
-        result.shouldBeSuccess {
-            it.map { vulnerability -> vulnerability.id } shouldContainExactlyInAnyOrder ids
+            result.shouldBeSuccess { actualData ->
+                val expectedData = OsvService.JSON.decodeFromString<Vulnerability>(expectedResult)
+                actualData.patchIgnorableFields() shouldBe expectedData.patchIgnorableFields()
+            }
+        }
+    }
+
+    "getVulnerabilitiesForIds()" should {
+        "return the vulnerabilities for the given IDs" {
+            val ids = setOf("GHSA-xvch-5gv4-984h", "PYSEC-2014-82")
+
+            val result = OsvServiceWrapper().getVulnerabilitiesForIds(ids)
+
+            result.shouldBeSuccess {
+                it.map { vulnerability -> vulnerability.id } shouldContainExactlyInAnyOrder ids
+            }
         }
     }
 })
