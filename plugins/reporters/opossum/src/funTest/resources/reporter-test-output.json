@@ -381,6 +381,10 @@
       "fullName": "BSD 2-Clause pkgconf disclaimer variant"
     },
     {
+      "shortName": "BSD-2-Clause-pos-unchanged",
+      "fullName": "BSD 2-Clause - position unchanged variant"
+    },
+    {
       "shortName": "BSD-3-Clause",
       "fullName": "BSD 3-Clause \"New\" or \"Revised\" License"
     },
@@ -423,6 +427,10 @@
     {
       "shortName": "BSD-3-Clause-Open-MPI",
       "fullName": "BSD 3-Clause Open MPI variant"
+    },
+    {
+      "shortName": "BSD-3-Clause-OpenWebUI",
+      "fullName": "BSD 3-Clause - OpenWebUI variant"
     },
     {
       "shortName": "BSD-3-Clause-Sun",
@@ -485,6 +493,14 @@
       "fullName": "BSD Source Code Attribution"
     },
     {
+      "shortName": "BSD-Source-Code-no-disclaimer",
+      "fullName": "BSD Source Code Attribution - no disclaimer"
+    },
+    {
+      "shortName": "BSD-Source-alt-GPL",
+      "fullName": "BSD Source Code Attribution - GPL alternative"
+    },
+    {
       "shortName": "BSD-Source-beginning-file",
       "fullName": "BSD Source Code Attribution - beginning of file variant"
     },
@@ -495,6 +511,10 @@
     {
       "shortName": "BSD-Systemics-W3Works",
       "fullName": "Systemics W3Works BSD variant license"
+    },
+    {
+      "shortName": "BSD-ask-to-endorse",
+      "fullName": "BSD - ask to endorse"
     },
     {
       "shortName": "BSL-1.0",
@@ -561,8 +581,16 @@
       "fullName": "Brian Gladman 3-Clause License"
     },
     {
+      "shortName": "Brian-Gladman-3-Clause-no-conversion",
+      "fullName": "Brian Gladman 3-Clause License (no conversion clause)"
+    },
+    {
       "shortName": "Buddy",
       "fullName": "Buddy License"
+    },
+    {
+      "shortName": "Bugroff",
+      "fullName": "Bugroff License"
     },
     {
       "shortName": "C-UDA-1.0",
@@ -651,6 +679,10 @@
     {
       "shortName": "CC-BY-NC-3.0-DE",
       "fullName": "Creative Commons Attribution Non Commercial 3.0 Germany"
+    },
+    {
+      "shortName": "CC-BY-NC-3.0-IGO",
+      "fullName": "Creative Commons Attribution Non Commercial 3.0 IGO"
     },
     {
       "shortName": "CC-BY-NC-4.0",
@@ -1101,6 +1133,10 @@
       "fullName": "Fraunhofer FDK AAC Codec Library"
     },
     {
+      "shortName": "FDK-MPEG-H",
+      "fullName": "Fraunhofer FDK MPEG-H Software"
+    },
+    {
       "shortName": "FSFAP",
       "fullName": "FSF All Permissive License"
     },
@@ -1493,6 +1529,10 @@
       "fullName": "Hippocratic License 2.1"
     },
     {
+      "shortName": "Hippocratic-3.0-core",
+      "fullName": "Hippocratic License 3.0"
+    },
+    {
       "shortName": "IBM-pibs",
       "fullName": "IBM PowerPC Initialization and Boot Software"
     },
@@ -1543,6 +1583,10 @@
     {
       "shortName": "Info-ZIP",
       "fullName": "Info-ZIP License"
+    },
+    {
+      "shortName": "Informatica",
+      "fullName": "Informatica License"
     },
     {
       "shortName": "Inner-Net-2.0",
@@ -1859,6 +1903,10 @@
     {
       "shortName": "MTLL",
       "fullName": "Matrix Template Library License"
+    },
+    {
+      "shortName": "MVT-1.1",
+      "fullName": "MVT License 1.1"
     },
     {
       "shortName": "Mackerras-3-Clause",
@@ -2803,6 +2851,10 @@
     {
       "shortName": "any-OSI-perl-modules",
       "fullName": "Any OSI License - Perl Modules"
+    },
+    {
+      "shortName": "atc-game",
+      "fullName": "atc Game License"
     },
     {
       "shortName": "bcrypt-Solar-Designer",
