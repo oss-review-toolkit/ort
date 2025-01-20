@@ -235,7 +235,7 @@ class Scanner(
                 }.onFailure {
                     controller.putPackageProvenanceResolutionIssue(
                         pkg.id,
-                        Issue(source = "scanner", message = it.collectMessages())
+                        Issue(source = "Scanner", message = it.collectMessages())
                     )
                 }
             }
@@ -264,7 +264,7 @@ class Scanner(
                         controller.putNestedProvenanceResolutionIssue(
                             id,
                             Issue(
-                                source = "scanner",
+                                source = "Scanner",
                                 message = "Could not resolve nested provenance for package " +
                                     "'${id.toCoordinates()}': ${it.collectMessages()}"
                             )
