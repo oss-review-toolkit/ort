@@ -82,7 +82,7 @@ fun getAssetFile(path: String): File = File("src/funTest/assets", path).absolute
 /**
  * Return a string representation of the [expectedResultFile] contents that has placeholders replaced. If a
  * [definitionFile] is provided, values that can be derived from it, like the VCS revision, are also replaced.
- * Additionally, [custom] placeholders can be replaced as well.
+ * Additionally, [custom] regex replacements with substitutions can be specified.
  */
 fun patchExpectedResult(
     expectedResultFile: File,
@@ -115,8 +115,8 @@ fun patchExpectedResult(
         putAll(custom)
     }
 
-    return replacements.entries.fold(expectedResultFile.readText()) { text, (oldValue, newValue) ->
-        text.replace(oldValue, newValue)
+    return replacements.entries.fold(expectedResultFile.readText()) { text, (pattern, replacement) ->
+        text.replace(pattern.toRegex(), replacement)
     }
 }
 
