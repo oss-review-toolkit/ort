@@ -69,8 +69,6 @@ import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
-const val TOOL_NAME = "scanner"
-
 class Scanner(
     val scannerConfig: ScannerConfiguration,
     val downloaderConfig: DownloaderConfiguration,
@@ -237,7 +235,7 @@ class Scanner(
                 }.onFailure {
                     controller.putPackageProvenanceResolutionIssue(
                         pkg.id,
-                        Issue(source = TOOL_NAME, message = it.collectMessages())
+                        Issue(source = "scanner", message = it.collectMessages())
                     )
                 }
             }
@@ -266,7 +264,7 @@ class Scanner(
                         controller.putNestedProvenanceResolutionIssue(
                             id,
                             Issue(
-                                source = TOOL_NAME,
+                                source = "scanner",
                                 message = "Could not resolve nested provenance for package " +
                                     "'${id.toCoordinates()}': ${it.collectMessages()}"
                             )

@@ -118,7 +118,7 @@ class ScanStorages(
 }
 
 private fun createDefaultStorage(): ScanStorage {
-    val localFileStorage = XZCompressedLocalFileStorage(ortDataDirectory.resolve("$TOOL_NAME/results"))
+    val localFileStorage = XZCompressedLocalFileStorage(ortDataDirectory.resolve("scanner/results"))
     return ProvenanceBasedFileStorage(localFileStorage)
 }
 
@@ -139,10 +139,10 @@ private fun createFileBasedStorage(config: FileBasedStorageConfiguration) =
 private fun createPostgresStorage(config: PostgresStorageConfiguration) =
     when (config.type) {
         StorageType.PACKAGE_BASED -> PackageBasedPostgresStorage(
-            DatabaseUtils.createHikariDataSource(config = config.connection, applicationNameSuffix = TOOL_NAME)
+            DatabaseUtils.createHikariDataSource(config = config.connection, applicationNameSuffix = "scanner")
         )
         StorageType.PROVENANCE_BASED -> ProvenanceBasedPostgresStorage(
-            DatabaseUtils.createHikariDataSource(config = config.connection, applicationNameSuffix = TOOL_NAME)
+            DatabaseUtils.createHikariDataSource(config = config.connection, applicationNameSuffix = "scanner")
         )
     }
 
