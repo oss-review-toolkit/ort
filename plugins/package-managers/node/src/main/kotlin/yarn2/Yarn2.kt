@@ -177,9 +177,7 @@ class Yarn2(
             isCorepackEnabledInManifest(workingDir)
         }
 
-    override fun beforeResolution(definitionFiles: List<File>) =
-        // We depend on a version >= 2, so we check the version for safety.
-        definitionFiles.forEach { checkVersion(it.parentFile) }
+    override fun beforeResolution(definitionFiles: List<File>) = definitionFiles.forEach { checkVersion(it.parentFile) }
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
