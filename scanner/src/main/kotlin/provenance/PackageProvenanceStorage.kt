@@ -30,7 +30,6 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.utils.DatabaseUtils
-import org.ossreviewtoolkit.scanner.TOOL_NAME
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 
@@ -55,7 +54,7 @@ interface PackageProvenanceStorage {
             }
 
             return FileBasedPackageProvenanceStorage(
-                LocalFileStorage(ortDataDirectory.resolve("$TOOL_NAME/package_provenance"))
+                LocalFileStorage(ortDataDirectory.resolve("scanner/package_provenance"))
             )
         }
     }
