@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.utils.common
 
 import com.jakewharton.disklrucache.DiskLruCache
 
+import java.io.Closeable
 import java.io.File
 import java.io.IOException
 import java.time.Instant
@@ -47,7 +48,7 @@ class DiskCache(
      * Duration in seconds that cache entries are valid.
      */
     private val maxCacheEntryAgeInSeconds: Long
-) {
+) : Closeable {
     companion object {
         const val INDEX_FULL_KEY = 0
         const val INDEX_TIMESTAMP = 1
@@ -145,5 +146,9 @@ class DiskCache(
         }
 
         return false
+    }
+
+    override fun close() {
+        diskLruCache.close()
     }
 }

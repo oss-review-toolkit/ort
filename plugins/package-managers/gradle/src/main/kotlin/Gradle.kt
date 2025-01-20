@@ -328,4 +328,8 @@ class Gradle(
             }
         }
     }
+
+    override fun afterResolution(definitionFiles: List<File>) {
+        maven.close()
+    }
 }
