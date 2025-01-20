@@ -49,9 +49,9 @@ class MavenFunTest : StringSpec({
         val definitionFileLib = getAssetFile("projects/synthetic/maven/lib/pom.xml")
         val expectedResultFile = getAssetFile("projects/synthetic/maven-expected-output-app.yml")
 
-        // app depends on lib, so we also have to pass the pom.xml of lib to resolveDependencies so that it is
-        // available in the Maven.projectsByIdentifier cache. Otherwise, resolution of transitive dependencies would
-        // not work.
+        // The "app" project depends on the "lib" project, so the "pom.xml" of the "lib" project also has to be passed
+        // to [resolveDependencies], so that it is available in the [Maven.projectsByIdentifier] cache. Otherwise,
+        // resolution of transitive dependencies would not work.
         val managerResult = create("Maven").resolveDependencies(
             listOf(definitionFileApp, definitionFileLib),
             emptyMap()
