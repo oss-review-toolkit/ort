@@ -58,7 +58,7 @@ class Poetry(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Poetry", analysisRoot, analyzerConfig, repoConfig) {
+) : PackageManager(name, "PoetryProject", analysisRoot, analyzerConfig, repoConfig) {
     companion object {
         /**
          * The name of the build system requirements and information file used by modern Python packages.

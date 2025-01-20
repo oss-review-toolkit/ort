@@ -32,7 +32,7 @@ analyzer:
     skip_excluded: false
   result:
     projects:
-    - id: "SBT:com.example:http4s-template_2.13:0.0.1-SNAPSHOT"
+    - id: "SBTProject:com.example:http4s-template_2.13:0.0.1-SNAPSHOT"
       definition_file_path: "plugins/package-managers/sbt/src/funTest/assets/projects/synthetic/sbt-http4s-template/target-scala-2.13-http4s-template_2.13-0.0.1-SNAPSHOT.pom"
       authors:
       - "com.example"

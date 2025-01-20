@@ -27,7 +27,7 @@ analyzer:
     allow_dynamic_versions: false
   result:
     projects:
-    - id: "SBT:com.pbassiner:common_2.12:0.1-SNAPSHOT"
+    - id: "SBTProject:com.pbassiner:common_2.12:0.1-SNAPSHOT"
       definition_file_path: "common/target-scala-2.12-common_2.12-0.1-SNAPSHOT.pom"
       authors:
       - "com.pbassiner"
@@ -47,7 +47,7 @@ analyzer:
       scope_names:
       - "compile"
       - "test"
-    - id: "SBT:com.pbassiner:multi1_2.12:0.1-SNAPSHOT"
+    - id: "SBTProject:com.pbassiner:multi1_2.12:0.1-SNAPSHOT"
       definition_file_path: "multi1/target-scala-2.12-multi1_2.12-0.1-SNAPSHOT.pom"
       authors:
       - "com.pbassiner"
@@ -67,7 +67,7 @@ analyzer:
       scope_names:
       - "compile"
       - "test"
-    - id: "SBT:com.pbassiner:multi2_2.12:0.1-SNAPSHOT"
+    - id: "SBTProject:com.pbassiner:multi2_2.12:0.1-SNAPSHOT"
       definition_file_path: "multi2/target-scala-2.12-multi2_2.12-0.1-SNAPSHOT.pom"
       authors:
       - "com.pbassiner"
@@ -87,7 +87,7 @@ analyzer:
       scope_names:
       - "compile"
       - "test"
-    - id: "SBT:com.pbassiner:sbt-multi-project-example_2.12:0.1-SNAPSHOT"
+    - id: "SBTProject:com.pbassiner:sbt-multi-project-example_2.12:0.1-SNAPSHOT"
       definition_file_path: "target-scala-2.12-sbt-multi-project-example_2.12-0.1-SNAPSHOT.pom"
       authors:
       - "com.pbassiner"
@@ -1205,7 +1205,7 @@ analyzer:
         - "Maven:org.scalaz:scalaz-core_2.12:7.2.8"
         - "Maven:com.github.julien-truffaut:monocle-macro_2.12:1.4.0"
         - "Maven:org.typelevel:macro-compat_2.12:1.1.1"
-        - "SBT:com.pbassiner:common_2.12:0.1-SNAPSHOT"
+        - "SBTProject:com.pbassiner:common_2.12:0.1-SNAPSHOT"
         - "Maven:com.github.pureconfig:pureconfig_2.12:0.8.0"
         - "Maven:com.chuusai:shapeless_2.12:2.3.2"
         - "Maven:com.github.pureconfig:pureconfig-macros_2.12:0.8.0"

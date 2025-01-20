@@ -2,7 +2,7 @@
 project_results:
   <REPLACE_ABSOLUTE_DEFINITION_FILE_PATH>:
   - project:
-      id: "Gradle:org.ossreviewtoolkit.gradle.example:app:1.0.0"
+      id: "GradleProject:org.ossreviewtoolkit.gradle.example:app:1.0.0"
       definition_file_path: "plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/gradle-android-cyclic/app/build.gradle"
       declared_licenses: []
       declared_licenses_processed: {}

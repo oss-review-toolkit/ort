@@ -1,6 +1,6 @@
 ---
 projects:
-- id: "Pub::flutter_example:1.0.0+1"
+- id: "PubProject::flutter_example:1.0.0+1"
   definition_file_path: "plugins/package-managers/pub/src/funTest/assets/projects/synthetic/flutter-project-with-android-and-cocoapods/pubspec.yaml"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -18,9 +18,9 @@ projects:
   scopes:
   - name: "android"
     dependencies:
-    - id: "Gradle::android:"
+    - id: "GradleProject::android:"
       linkage: "PROJECT_STATIC"
-    - id: "Gradle:android:app:"
+    - id: "GradleProject:android:app:"
       linkage: "PROJECT_STATIC"
       dependencies:
       - id: "Maven:io.flutter:arm64_v8a_release:1.0.0-2e4ba9c6fb499ccd4e81420543783cc7267ae406"

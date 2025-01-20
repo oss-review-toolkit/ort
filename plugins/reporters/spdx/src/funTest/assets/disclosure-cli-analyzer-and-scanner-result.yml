@@ -50,7 +50,7 @@ analyzer:
     skip_excluded: true
   result:
     projects:
-    - id: "GoMod::github.com/mercedes-benz/disclosure-cli:388ae2bdf6032a3d5b0ed06ac45267dfc0376a3d"
+    - id: "GoModProject::github.com/mercedes-benz/disclosure-cli:388ae2bdf6032a3d5b0ed06ac45267dfc0376a3d"
       definition_file_path: "go.mod"
       declared_licenses: []
       declared_licenses_processed: {}
@@ -483,7 +483,7 @@ scanner:
         revision: "f6f7691b1fdeb513f56608cd2c32c51f8194bf51"
         path: ""
       resolved_revision: "f6f7691b1fdeb513f56608cd2c32c51f8194bf51"
-  - id: "GoMod::github.com/mercedes-benz/disclosure-cli:388ae2bdf6032a3d5b0ed06ac45267dfc0376a3d"
+  - id: "GoModProject::github.com/mercedes-benz/disclosure-cli:388ae2bdf6032a3d5b0ed06ac45267dfc0376a3d"
     package_provenance:
       vcs_info:
         type: "Git"
@@ -2911,7 +2911,7 @@ scanner:
     - "ScanCode"
     Go::gopkg.in/yaml.v3:3.0.1:
     - "ScanCode"
-    GoMod::github.com/mercedes-benz/disclosure-cli:388ae2bdf6032a3d5b0ed06ac45267dfc0376a3d:
+    GoModProject::github.com/mercedes-benz/disclosure-cli:388ae2bdf6032a3d5b0ed06ac45267dfc0376a3d:
     - "ScanCode"
   files: []
 advisor: null

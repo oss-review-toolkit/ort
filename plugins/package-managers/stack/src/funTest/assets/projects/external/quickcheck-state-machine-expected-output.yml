@@ -1,6 +1,6 @@
 ---
 project:
-  id: "Stack:Testing:quickcheck-state-machine:0.6.0"
+  id: "StackProject:Testing:quickcheck-state-machine:0.6.0"
   definition_file_path: "stack.yaml"
   authors:
   - "Stevan Andjelkovic"

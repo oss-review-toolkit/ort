@@ -86,7 +86,7 @@ class Sbt(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "SBT", analysisRoot, analyzerConfig, repoConfig) {
+) : PackageManager(name, "SBTProject", analysisRoot, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Sbt>("SBT") {
         override val globsForDefinitionFiles = listOf("build.sbt", "build.scala")
 

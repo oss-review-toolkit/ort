@@ -108,7 +108,7 @@ class Pub(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Pub", analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, "PubProject", analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
     companion object {
         const val OPTION_FLUTTER_VERSION = "flutterVersion"
         const val OPTION_GRADLE_VERSION = "gradleVersion"
