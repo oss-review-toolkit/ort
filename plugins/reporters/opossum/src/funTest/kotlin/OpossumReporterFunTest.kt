@@ -48,8 +48,9 @@ class OpossumReporterFunTest : WordSpec({
 
             OpossumReporterFactory.create().generateReport(input, outputDir).single().getOrThrow().unpackZip(outputDir)
 
-            val actualResult = patchActualResult(outputDir.resolve("input.json").readText(), custom = replacements)
-            actualResult shouldEqualSpecifiedJsonIgnoringOrder patchExpectedResult(expectedFile)
+            val actualResult = outputDir.resolve("input.json").readText()
+            val patchedActualResult = patchActualResult(actualResult, custom = replacements)
+            patchedActualResult shouldEqualSpecifiedJsonIgnoringOrder patchExpectedResult(expectedFile)
         }
     }
 })
