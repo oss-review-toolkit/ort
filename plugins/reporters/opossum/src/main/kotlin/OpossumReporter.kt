@@ -170,7 +170,7 @@ class OpossumReporter(
                 filesWithChildren = filesWithChildren,
                 baseUrlsForSources = baseUrlsForSources,
                 externalAttributionSources = externalAttributionSources,
-                frequentLicenses = frequentLicenses
+                frequentLicenses = frequentLicenses.toSortedSet(compareBy { it.shortName })
             )
         }
 
