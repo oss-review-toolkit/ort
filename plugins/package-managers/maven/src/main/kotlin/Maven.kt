@@ -172,6 +172,10 @@ class Maven(
 
         return listOf(ProjectAnalyzerResult(project, emptySet(), issues))
     }
+
+    override fun afterResolution(definitionFiles: List<File>) {
+        mvn.close()
+    }
 }
 
 /**

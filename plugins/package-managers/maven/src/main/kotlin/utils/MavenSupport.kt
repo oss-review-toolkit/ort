@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.maven.utils
 
+import java.io.Closeable
 import java.io.File
 import java.net.URI
 
@@ -100,9 +101,15 @@ fun Artifact.identifier() = "$groupId:$artifactId:$version"
 private val File?.safePath: String
     get() = this?.invariantSeparatorsPath ?: "<unknown file>"
 
-class MavenSupport(private val workspaceReader: WorkspaceReader) {
+class MavenSupport(private val workspaceReader: WorkspaceReader) : Closeable {
     private val container = createContainer()
     private val repositorySystemSession = createRepositorySystemSession(workspaceReader)
+
+    private val remoteArtifactCache = DiskCache(
+        directory = ortDataDirectory.resolve("cache/analyzer/maven/remote-artifacts"),
+        maxCacheSizeInBytes = 1.gibibytes,
+        maxCacheEntryAgeInSeconds = 6.hours.inWholeSeconds
+    )
 
     // The MavenSettingsBuilder class is deprecated, but internally it uses its successor SettingsBuilder. Calling
     // MavenSettingsBuilder requires less code than calling SettingsBuilder, so use it until it is removed.
@@ -587,6 +594,10 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             legacySupport.session = null
         }
     }
+
+    override fun close() {
+        remoteArtifactCache.close()
+    }
 }
 
 private val PACKAGING_TYPES = setOf(
@@ -595,12 +606,6 @@ private val PACKAGING_TYPES = setOf(
     // Custom packaging types, see "resources/META-INF/plexus/components.xml".
     "aar", "apk", "bundle", "dll", "dylib", "eclipse-plugin", "gwt-app", "gwt-lib", "hk2-jar", "hpi",
     "jenkins-module", "orbit", "so", "zip"
-)
-
-private val remoteArtifactCache = DiskCache(
-    directory = ortDataDirectory.resolve("cache/analyzer/maven/remote-artifacts"),
-    maxCacheSizeInBytes = 1.gibibytes,
-    maxCacheEntryAgeInSeconds = 6.hours.inWholeSeconds
 )
 
 private fun createContainer(): PlexusContainer {
