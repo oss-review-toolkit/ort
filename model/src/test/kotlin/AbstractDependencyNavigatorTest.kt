@@ -247,7 +247,7 @@ abstract class AbstractDependencyNavigatorTest : WordSpec() {
                 )
             }
 
-            "find all the sub projects of a project" {
+            "find all the sub-projects of a project" {
                 val projectId = Identifier("SBT:com.pbassiner:multi1_2.12:0.1.0-SNAPSHOT")
                 testResult.getProject(projectId) shouldNotBeNull {
                     val subProjectIds = navigator.projectDependencies(this, matcher = MATCH_SUB_PROJECTS)
