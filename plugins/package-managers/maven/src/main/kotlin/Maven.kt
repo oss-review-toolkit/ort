@@ -92,7 +92,7 @@ class Maven(
         override fun getRepository() = workspaceRepository
     }
 
-    private val mvn = MavenSupport(LocalProjectWorkspaceReader())
+    private val mavenSupport = MavenSupport(LocalProjectWorkspaceReader())
 
     private val localProjectBuildingResults = mutableMapOf<String, ProjectBuildingResult>()
 
@@ -102,10 +102,10 @@ class Maven(
     private val sbtMode = options["sbtMode"].toBoolean()
 
     override fun beforeResolution(definitionFiles: List<File>) {
-        localProjectBuildingResults += mvn.prepareMavenProjects(definitionFiles)
+        localProjectBuildingResults += mavenSupport.prepareMavenProjects(definitionFiles)
 
         val localProjects = localProjectBuildingResults.mapValues { it.value.project }
-        val dependencyHandler = MavenDependencyHandler(managerName, projectType, mvn, localProjects, sbtMode)
+        val dependencyHandler = MavenDependencyHandler(managerName, projectType, mavenSupport, localProjects, sbtMode)
         graphBuilder = DependencyGraphBuilder(dependencyHandler)
     }
 
@@ -114,7 +114,7 @@ class Maven(
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
-        val projectBuildingResult = mvn.buildMavenProject(definitionFile)
+        val projectBuildingResult = mavenSupport.buildMavenProject(definitionFile)
         val mavenProject = projectBuildingResult.project
         val projectId = Identifier(
             type = projectType,
@@ -174,7 +174,7 @@ class Maven(
     }
 
     override fun afterResolution(definitionFiles: List<File>) {
-        mvn.close()
+        mavenSupport.close()
     }
 }
 
