@@ -126,7 +126,7 @@ class Gradle(
      * A workspace reader that is backed by the local Gradle artifact cache.
      */
     private class GradleCacheReader : WorkspaceReader {
-        private val workspaceRepository = WorkspaceRepository("gradleCache")
+        private val workspaceRepository = WorkspaceRepository("gradle/remote-artifacts")
         private val gradleCacheRoot = GRADLE_USER_HOME.resolve("caches/modules-2/files-2.1")
 
         override fun findArtifact(artifact: Artifact): File? {

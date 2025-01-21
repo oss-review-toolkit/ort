@@ -106,7 +106,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) : Closeable {
     private val repositorySystemSession = createRepositorySystemSession(workspaceReader)
 
     private val remoteArtifactCache = DiskCache(
-        directory = ortDataDirectory.resolve("cache/analyzer/maven/remote-artifacts"),
+        directory = ortDataDirectory.resolve("cache/analyzer/${workspaceReader.repository.contentType}"),
         maxCacheSizeInBytes = 1.gibibytes,
         maxCacheEntryAgeInSeconds = 6.hours.inWholeSeconds
     )

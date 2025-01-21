@@ -78,7 +78,7 @@ class Maven(
     }
 
     private inner class LocalProjectWorkspaceReader : WorkspaceReader {
-        private val workspaceRepository = WorkspaceRepository()
+        private val workspaceRepository = WorkspaceRepository("maven/remote-artifacts")
 
         override fun findArtifact(artifact: Artifact) =
             artifact.takeIf { it.extension == "pom" }?.let {
