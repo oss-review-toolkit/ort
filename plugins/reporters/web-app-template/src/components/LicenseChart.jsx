@@ -17,19 +17,27 @@
  * License-Filename: LICENSE
  */
 
-import React from 'react';
+import {
+    useState
+} from 'react';
 
-import PropTypes from 'prop-types';
 import {
     Cell, PieChart, Pie, Sector
 } from 'recharts';
 
-const renderActiveShape = (props) => {
+const renderActiveShape = ({
+    cx,
+    cy,
+    midAngle = 0,
+    innerRadius,
+    outerRadius,
+    startAngle = 0,
+    endAngle = 0,
+    payload,
+    percent = 0,
+    value
+}) => {
     const RADIAN = Math.PI / 180;
-    const {
-        cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle,
-        payload, percent, value
-    } = props;
     const sin = Math.sin(-RADIAN * midAngle);
     const cos = Math.cos(-RADIAN * midAngle);
     const sx = cx + (outerRadius + 10) * cos;
@@ -75,115 +83,41 @@ const renderActiveShape = (props) => {
     );
 };
 
-renderActiveShape.propTypes = {
-    cx: PropTypes.number.isRequired,
-    cy: PropTypes.number.isRequired,
-    midAngle: PropTypes.number,
-    innerRadius: PropTypes.number.isRequired,
-    outerRadius: PropTypes.number.isRequired,
-    startAngle: PropTypes.number,
-    endAngle: PropTypes.number,
-    payload: PropTypes.object.isRequired,
-    percent: PropTypes.number,
-    value: PropTypes.string.isRequired
-};
+const LicenseChart = ({
+    cx = 400,
+    cy = 250,
+    dataKey = 'value',
+    height = 500,
+    licenses = [],
+    width = 800
+}) => {
+    /* === Chart state handling === */
+    const [activeIndex, setActiveIndex] = useState(0);
 
-renderActiveShape.defaultProps = {
-    midAngle: 0,
-    startAngle: 0,
-    endAngle: 0,
-    percent: 0
-};
-
-class LicenseChart extends React.Component {
-    constructor(props) {
-        super(props);
-
-        const {
-            cx,
-            cy,
-            dataKey,
-            height,
-            licenses,
-            width
-        } = props;
-
-        this.state = {
-            activeIndex: 0,
-            cx,
-            cy,
-            dataKey,
-            height,
-            licenses,
-            width
-        };
-    }
-
-    static getDerivedStateFromProps(nextProps, prevState) {
-        if (nextProps.licenses.length !== prevState.licenses.length) {
-            return { licenses: nextProps.licenses };
-        }
-
-        return null;
-    }
-
-    render() {
-        const {
-            activeIndex,
-            cx,
-            cy,
-            dataKey,
-            height,
-            licenses,
-            width
-        } = this.state;
-
-        return (
-            <PieChart
-                width={width}
-                height={height}
+    return (
+        <PieChart
+            width={width}
+            height={height}
+        >
+            <Pie
+                activeIndex={activeIndex}
+                activeShape={renderActiveShape}
+                data={licenses}
+                dataKey={dataKey}
+                cx={cx}
+                cy={cy}
+                innerRadius={135}
+                outerRadius={165}
+                onMouseEnter={
+                    (data, index) => setActiveIndex(index)
+                }
             >
-                <Pie
-                    activeIndex={activeIndex}
-                    activeShape={renderActiveShape}
-                    data={licenses}
-                    dataKey={dataKey}
-                    cx={cx}
-                    cy={cy}
-                    innerRadius={135}
-                    outerRadius={165}
-                    onMouseEnter={
-                        (data, index) => {
-                            this.setState({
-                                activeIndex: index
-                            });
-                        }
-                    }
-                >
-                    {
-                        licenses.map((entry) => <Cell key={entry.name} fill={entry.color} />)
-                    }
-                </Pie>
-            </PieChart>
-        );
-    }
-}
-
-LicenseChart.propTypes = {
-    cx: PropTypes.number,
-    cy: PropTypes.number,
-    dataKey: PropTypes.string,
-    height: PropTypes.number,
-    licenses: PropTypes.array.isRequired,
-    width: PropTypes.number
-};
-
-LicenseChart.defaultProps = {
-    cx: 400,
-    cy: 250,
-    dataKey: 'value',
-    height: 500,
-    width: 800
+                {
+                    licenses.map((entry) => <Cell key={entry.name} fill={entry.color} />)
+                }
+            </Pie>
+        </PieChart>
+    );
 };
 
 export default LicenseChart;

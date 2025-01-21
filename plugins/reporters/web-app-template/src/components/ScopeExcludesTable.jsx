@@ -18,9 +18,8 @@
  */
 
 import { Table } from 'antd';
-import PropTypes from 'prop-types';
 
-// Generates the HTML to display webAppScopeExclude(s) as a Table
+// Generates the HTML to display webAppScopeExclude(s) as a table
 const ScopeExcludesTable = ({ excludes }) => {
     const columns = [
         {
@@ -64,10 +63,6 @@ const ScopeExcludesTable = ({ excludes }) => {
             }
         />
     );
-};
-
-ScopeExcludesTable.propTypes = {
-    excludes: PropTypes.array.isRequired
 };
 
 export default ScopeExcludesTable;

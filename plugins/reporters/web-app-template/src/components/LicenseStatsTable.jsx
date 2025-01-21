@@ -17,21 +17,30 @@
  * License-Filename: LICENSE
  */
 
+import {
+    useState
+} from 'react';
+
 import { FileTextOutlined } from '@ant-design/icons';
 import { Table } from 'antd';
-import PropTypes from 'prop-types';
 
-// Generates the HTML to display license stats as a Table
-const LicenseStatsTable = ({
-    emptyText,
-    filter: {
-        sortedInfo = {},
-        filteredInfo = {}
-    },
-    licenses,
-    licenseStats,
-    onChange
-}) => {
+// Generates the HTML to display license stats as a table
+const LicenseStatsTable = ({ emptyText, licenses, licenseStats }) => {
+    /* === Table state handling === */
+
+    // State variable for displaying table in various pages
+    const [pagination, setPagination] = useState({ current: 1, pageSize: 100 });
+
+    // State variable for filtering the contents of table columns
+    const filteredInfoDefault = {
+        license: [],
+        packages: []
+    };
+    const [filteredInfo, setFilteredInfo] = useState(filteredInfoDefault);
+
+    // State variable for sorting table columns
+    const [sortedInfo, setSortedInfo] = useState({});
+
     const columns = [
         {
             title: 'License',
@@ -62,6 +71,17 @@ const LicenseStatsTable = ({
         }
     ];
 
+    // Handle for table pagination changes
+    const handlePaginationChange = (page, pageSize) => {
+        setPagination({ current: page, pageSize });
+    };
+
+    // Handle for any table content changes
+    const handleTableChange = (pagination, filters, sorter) => {
+        setFilteredInfo(filters);
+        setSortedInfo(sorter);
+    };
+
     return (
         <Table
             columns={columns}
@@ -73,23 +93,18 @@ const LicenseStatsTable = ({
             }}
             pagination={
                 {
+                    current: pagination.current,
                     defaultPageSize: 50,
                     hideOnSinglePage: true,
+                    onChange: handlePaginationChange,
                     position: 'bottom',
+                    pageSizeOptions: ['50', '100', '250', '500', '1000', '5000'],
                     showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} results`
                 }
             }
-            onChange={onChange}
+            onChange={handleTableChange}
         />
     );
-};
-
-LicenseStatsTable.propTypes = {
-    emptyText: PropTypes.string.isRequired,
-    filter: PropTypes.object.isRequired,
-    licenses: PropTypes.array.isRequired,
-    licenseStats: PropTypes.array.isRequired,
-    onChange: PropTypes.func.isRequired
 };
 
 export default LicenseStatsTable;

@@ -17,7 +17,10 @@
  * License-Filename: LICENSE
  */
 
-import React from 'react';
+import {
+    useMemo,
+    useState
+} from 'react';
 
 import {
     ExclamationCircleOutlined,
@@ -27,9 +30,12 @@ import {
     IssuesCloseOutlined,
     WarningOutlined
 } from '@ant-design/icons';
-import { Collapse, Table, Tooltip } from 'antd';
+import {
+    Collapse,
+    Table,
+    Tooltip
+} from 'antd';
 import Markdown from 'markdown-to-jsx';
-import PropTypes from 'prop-types';
 
 import PackageDetails from './PackageDetails';
 import PackageFindingsTable from './PackageFindingsTable';
@@ -40,248 +46,298 @@ import ResolutionTable from './ResolutionTable';
 import ScopeExcludesTable from './ScopeExcludesTable';
 import { getColumnSearchProps } from './Shared';
 
-// Generates the HTML to display violations as a Table
-class RuleViolationsTable extends React.Component {
-    render() {
-        const {
-            onChange,
-            ruleViolations,
-            showExcludesColumn,
-            state
-        } = this.props;
-        const {
-            filteredInfo = {},
-            sortedInfo = {}
-        } = state;
+// Generates the HTML to display violations as a table
+const RuleViolationsTable = ({ webAppRuleViolations = [], showExcludesColumn = true }) => {
+    // Convert rule violations as Antd only accepts vanilla objects as input
+    const violations = useMemo(
+        () => {
+            return webAppRuleViolations
+                .map(
+                    (webAppRuleViolation) => ({
+                        isResolved: webAppRuleViolation.isResolved,
+                        key: webAppRuleViolation.key,
+                        message: webAppRuleViolation.message,
+                        packageId: webAppRuleViolation.package.id,
+                        rule: webAppRuleViolation.rule,
+                        severity: webAppRuleViolation.severity,
+                        severityIndex: webAppRuleViolation.severityIndex,
+                        webAppRuleViolation
+                    })
+                )
+        },
+        []
+    );
 
-        // If return null to prevent React render error
-        if (!ruleViolations) {
-            return null;
-        }
+    /* === Table state handling === */
 
-        const columns = [];
+    // State variable for displaying table in various pages
+    const [pagination, setPagination] = useState({ current: 1, pageSize: 100 });
 
-        if (showExcludesColumn) {
-            columns.push({
-                align: 'right',
-                filters: (() => [
-                    {
-                        text: (
-                            <span>
-                                <FileExcelOutlined className="ort-excluded" />
-                                {' '}
-                                Excluded
-                            </span>
-                        ),
-                        value: 'excluded'
-                    },
-                    {
-                        text: (
-                            <span>
-                                <FileAddOutlined />
-                                {' '}
-                                Included
-                            </span>
-                        ),
-                        value: 'included'
-                    }
-                ])(),
-                filteredValue: filteredInfo.excludes || null,
-                key: 'excludes',
-                onFilter: (value, webAppRuleViolation) => {
-                    if (!webAppRuleViolation.hasPackage()) return true;
+    // State variable for filtering the contents of table columns
+    const [filteredInfo, setFilteredInfo] = useState({
+        excludes: [],
+        message: [],
+        packageId: [],
+        rule: [],
+        severityIndex: []
+    });
 
-                    const { isExcluded } = webAppRuleViolation.package;
+    // State variable for sorting table columns
+    const [sortedInfo, setSortedInfo] = useState({
+        columnKey: 'severityIndex',
+        field: 'severityIndex',
+        order: 'ascend'
+    });
 
-                    return (isExcluded && value === 'excluded') || (!isExcluded && value === 'included');
-                },
-                render: (webAppRuleViolation) => {
-                    const webAppPackage = webAppRuleViolation.package;
+    /* === Table columns === */
+    const columns = [];
 
-                    if (webAppPackage) {
-                        return webAppPackage.isExcluded
-                            ? (
-                            <span className="ort-excludes">
-                                <Tooltip
-                                    placement="right"
-                                    title={Array.from(webAppPackage.excludeReasons).join(', ')}
-                                >
-                                    <FileExcelOutlined className="ort-excluded" />
-                                </Tooltip>
-                            </span>
-                                )
-                            : (
-                            <FileAddOutlined />
-                                );
-                    }
-
-                    return null;
-                },
-                responsive: ['md'],
-                width: '2em'
-            });
-        }
-
+    if (showExcludesColumn) {
         columns.push({
-            align: 'center',
-            dataIndex: 'severityIndex',
-            key: 'severityIndex',
-            filters: [
+            align: 'right',
+            filters: (() => [
                 {
-                    text: 'Errors',
-                    value: 0
-                },
-                {
-                    text: 'Warnings',
-                    value: 1
-                },
-                {
-                    text: 'Hint',
-                    value: 2
-                },
-                {
-                    text: 'Resolved',
-                    value: 3
-                }
-            ],
-            filteredValue: filteredInfo.severityIndex || null,
-            onFilter: (value, webAppRuleViolation) => webAppRuleViolation.severityIndex === Number(value),
-            render: (text, webAppRuleViolation) => (
-                webAppRuleViolation.isResolved
-                    ? (
-                        <Tooltip
-                            placement="right"
-                            title={Array.from(webAppRuleViolation.resolutionReasons).join(', ')}
-                        >
-                            <IssuesCloseOutlined
-                                className="ort-ok"
-                            />
-                        </Tooltip>
-                        )
-                    : (
+                    text: (
                         <span>
-                            {
-                                webAppRuleViolation.severity === 'ERROR'
-                                && (
-                                    <ExclamationCircleOutlined
-                                        className="ort-error"
-                                    />
-                                )
-                            }
-                            {
-                                webAppRuleViolation.severity === 'WARNING'
-                                && (
-                                    <WarningOutlined
-                                        className="ort-warning"
-                                    />
-                                )
-                            }
-                            {
-                                webAppRuleViolation.severity === 'HINT'
-                                && (
-                                    <InfoCircleOutlined
-                                        className="ort-hint"
-                                    />
-                                )
-                            }
+                            <FileExcelOutlined className="ort-excluded" />
+                            {' '}
+                            Excluded
                         </span>
-                        )
-            ),
-            sorter: (a, b) => a.severityIndex - b.severityIndex,
-            sortOrder: sortedInfo.field === 'severityIndex' && sortedInfo.order,
-            width: '5em'
+                    ),
+                    value: true
+                },
+                {
+                    text: (
+                        <span>
+                            <FileAddOutlined />
+                            {' '}
+                            Included
+                        </span>
+                    ),
+                    value: false
+                }
+            ])(),
+            filteredValue: filteredInfo.excludes || null,
+            key: 'excludes',
+            onFilter: (value, record) => {
+                if (!record.webAppRuleViolation.hasPackage()) return true;
+
+                const { isExcluded } = record.webAppRuleViolation.package;
+
+                return isExcluded === value;
+            },
+            render: (record) => {
+                const webAppPackage = record.webAppRuleViolation.package;
+
+                if (webAppPackage) {
+                    return webAppPackage.isExcluded
+                        ? (
+                        <span className="ort-excludes">
+                            <Tooltip
+                                placement="right"
+                                title={Array.from(webAppPackage.excludeReasons).join(', ')}
+                            >
+                                <FileExcelOutlined className="ort-excluded" />
+                            </Tooltip>
+                        </span>
+                            )
+                        : (
+                        <FileAddOutlined />
+                            );
+                }
+
+                return null;
+            },
+            responsive: ['md'],
+            width: '2em'
         });
+    }
 
-        columns.push(
+    columns.push({
+        align: 'center',
+        dataIndex: 'severityIndex',
+        key: 'severityIndex',
+        filters: [
             {
-                dataIndex: 'packageName',
-                ellipsis: true,
-                key: 'packageName',
-                responsive: ['md'],
-                sorter: (a, b) => a.packageName.localeCompare(b.packageName),
-                sortOrder: sortedInfo.field === 'packageName' && sortedInfo.order,
-                title: 'Package',
-                width: '25%',
-                ...getColumnSearchProps('packageName', filteredInfo, this)
+                text: 'Errors',
+                value: 0
             },
             {
-                dataIndex: 'rule',
-                key: 'rule',
-                responsive: ['md'],
-                sorter: (a, b) => a.rule.localeCompare(b.rule),
-                sortOrder: sortedInfo.field === 'rule' && sortedInfo.order,
-                title: 'Rule',
-                width: '25%',
-                ...getColumnSearchProps('rule', filteredInfo, this)
+                text: 'Warnings',
+                value: 1
             },
             {
-                dataIndex: 'message',
-                key: 'message',
-                textWrap: 'word-break',
-                title: 'Message',
-                ...getColumnSearchProps('message', filteredInfo, this)
+                text: 'Hint',
+                value: 2
+            },
+            {
+                text: 'Resolved',
+                value: 3
             }
-        );
-
-        return (
-            <Table
-                className="ort-table-rule-violations"
-                columns={columns}
-                dataSource={ruleViolations}
-                rowKey="key"
-                size="small"
-                expandable={{
-                    expandedRowRender: (webAppRuleViolation) => {
-                        let defaultActiveKey = [0];
-                        const webAppPackage = webAppRuleViolation.package;
-
-                        if (webAppRuleViolation.isResolved) {
-                            defaultActiveKey = [1];
+        ],
+        filteredValue: filteredInfo.severityIndex || null,
+        onFilter: (value, record) => record.severityIndex === Number(value),
+        render: (text, record) => (
+            record.isResolved
+                ? (
+                    <Tooltip
+                        placement="right"
+                        title={Array.from(record.webAppRuleViolation.resolutionReasons).join(', ')}
+                    >
+                        <IssuesCloseOutlined
+                            className="ort-ok"
+                        />
+                    </Tooltip>
+                    )
+                : (
+                    <span>
+                        {
+                            record.severity === 'ERROR'
+                            && (
+                                <ExclamationCircleOutlined
+                                    className="ort-error"
+                                />
+                            )
                         }
+                        {
+                            record.severity === 'WARNING'
+                            && (
+                                <WarningOutlined
+                                    className="ort-warning"
+                                />
+                            )
+                        }
+                        {
+                            record.severity === 'HINT'
+                            && (
+                                <InfoCircleOutlined
+                                    className="ort-hint"
+                                />
+                            )
+                        }
+                    </span>
+                    )
+        ),
+        sorter: (a, b) => a.severityIndex - b.severityIndex,
+        sortOrder: sortedInfo.field === 'severityIndex' && sortedInfo.order,
+        width: '5em'
+    });
 
-                        return (
-                            <Collapse
-                                className="ort-package-collapse"
-                                bordered={false}
-                                defaultActiveKey={defaultActiveKey}
-                                items={(() => {
-                                    const collapseItems = [];
+    columns.push(
+        {
+            dataIndex: 'packageId',
+            ellipsis: true,
+            key: 'packageId',
+            responsive: ['md'],
+            sorter: (a, b) => a.packageId.localeCompare(b.packageId),
+            sortOrder: sortedInfo.field === 'packageId' && sortedInfo.order,
+            title: 'Package',
+            width: '25%',
+            ...getColumnSearchProps(
+                'packageId',
+                filteredInfo.packageId,
+                (value) => setFilteredInfo({ ...filteredInfo, packageId: value })
+            )
+        },
+        {
+            dataIndex: 'rule',
+            key: 'rule',
+            responsive: ['md'],
+            sorter: (a, b) => a.rule.localeCompare(b.rule),
+            sortOrder: sortedInfo.field === 'rule' && sortedInfo.order,
+            title: 'Rule',
+            width: '25%',
+            ...getColumnSearchProps(
+                'rule',
+                filteredInfo.rule,
+                (value) => setFilteredInfo({ ...filteredInfo, rule: value })
+            )
+        },
+        {
+            dataIndex: 'message',
+            key: 'message',
+            textWrap: 'word-break',
+            title: 'Message',
+            ...getColumnSearchProps(
+                'message',
+                filteredInfo.message,
+                (value) => setFilteredInfo({ ...filteredInfo, message: value })
+            )
+        }
+    );
 
-                                    if (webAppRuleViolation.hasHowToFix()) {
-                                        collapseItems.push({
-                                            label: 'How to fix',
-                                            key: 'rule-violation-how-to-fix',
-                                            children: (
-                                                <Markdown className="ort-how-to-fix">
-                                                    {webAppRuleViolation.howToFix}
-                                                </Markdown>
-                                            )
-                                        });
-                                    }
+    // Handle for table pagination changes
+    const handlePaginationChange = (page, pageSize) => {
+        setPagination({ current: page, pageSize });
+    };
 
-                                    if (webAppRuleViolation.isResolved) {
-                                        collapseItems.push({
-                                            label: 'Resolutions',
-                                            key: 'rule-violation-resolutions',
-                                            children: (
-                                                <ResolutionTable
-                                                    resolutions={webAppRuleViolation.resolutions}
-                                                />
-                                            )
-                                        });
-                                    }
+    // Handle for any table content changes
+    const handleTableChange = (pagination, filters, sorter) => {
+        setFilteredInfo(filters);
+        setSortedInfo(sorter);
+    };
 
-                                    if (webAppRuleViolation.hasPackage()) {
-                                        collapseItems.push({
-                                            label: 'Details',
-                                            key: 'rule-violation-package-details',
-                                            children: (
-                                                <PackageDetails webAppPackage={webAppPackage} />
-                                            )
-                                        });
-                                    }
+    return (
+        <Table
+            className="ort-table-rule-violations"
+            columns={columns}
+            dataSource={violations}
+            rowKey="key"
+            size="small"
+            expandable={{
+                expandedRowRender: (record) => {
+                    const webAppRuleViolation = record.webAppRuleViolation;
+                    const webAppPackage = webAppRuleViolation.package;
+                    let defaultActiveKey = record.isResolved
+                        ? 'rule-violation-resolutions'
+                        : 'rule-violation-package-details';
 
-                                    if (webAppRuleViolation.hasPackage() && webAppPackage.hasLicenses()) {
+                    if (webAppRuleViolation.hasHowToFix() && !record.isResolved) {
+                        defaultActiveKey = 'rule-violation-how-to-fix';
+                    }
+
+                    return (
+                        <Collapse
+                            className="ort-package-collapse"
+                            bordered={false}
+                            defaultActiveKey={defaultActiveKey}
+                            items={(() => {
+                                const collapseItems = [];
+
+                                if (webAppRuleViolation.hasHowToFix()) {
+                                    collapseItems.push({
+                                        label: 'How to fix',
+                                        key: 'rule-violation-how-to-fix',
+                                        children: (
+                                            <Markdown className="ort-how-to-fix">
+                                                {webAppRuleViolation.howToFix}
+                                            </Markdown>
+                                        )
+                                    });
+                                }
+
+                                if (webAppRuleViolation.isResolved) {
+                                    collapseItems.push({
+                                        label: 'Resolutions',
+                                        key: 'rule-violation-resolutions',
+                                        children: (
+                                            <ResolutionTable
+                                                resolutions={webAppRuleViolation.resolutions}
+                                            />
+                                        )
+                                    });
+                                }
+
+                                if (webAppRuleViolation.hasPackage()) {
+                                    collapseItems.push({
+                                        label: 'Details',
+                                        key: 'rule-violation-package-details',
+                                        children: (
+                                            <PackageDetails webAppPackage={webAppPackage} />
+                                        )
+                                    });
+
+                                    if (webAppPackage.hasLicenses()) {
                                         collapseItems.push({
                                             label: 'Licenses',
                                             key: 'rule-violation-package-licenses',
@@ -291,7 +347,7 @@ class RuleViolationsTable extends React.Component {
                                         });
                                     }
 
-                                    if (webAppRuleViolation.hasPackage() && webAppPackage.hasPaths()) {
+                                    if (webAppPackage.hasPaths()) {
                                         collapseItems.push({
                                             label: 'Paths',
                                             key: 'rule-violation-package-paths',
@@ -301,7 +357,7 @@ class RuleViolationsTable extends React.Component {
                                         });
                                     }
 
-                                    if (webAppRuleViolation.hasPackage() && webAppPackage.hasFindings()) {
+                                    if (webAppPackage.hasFindings()) {
                                         collapseItems.push({
                                             label: 'Scan Results',
                                             key: 'rule-violation-package-scan-results',
@@ -313,7 +369,7 @@ class RuleViolationsTable extends React.Component {
                                         });
                                     }
 
-                                    if (webAppRuleViolation.hasPackage() && webAppPackage.hasPathExcludes()) {
+                                    if (webAppPackage.hasPathExcludes()) {
                                         collapseItems.push({
                                             label: 'Path Excludes',
                                             key: 'rule-violation-package-path-excludes',
@@ -325,7 +381,7 @@ class RuleViolationsTable extends React.Component {
                                         });
                                     }
 
-                                    if (webAppRuleViolation.hasPackage() && webAppPackage.hasScopeExcludes()) {
+                                    if (webAppPackage.hasScopeExcludes()) {
                                         collapseItems.push({
                                             label: 'Scope Excludes',
                                             key: 'rule-violation-package-scope-excludes',
@@ -336,41 +392,32 @@ class RuleViolationsTable extends React.Component {
                                             )
                                         });
                                     }
-                                    return collapseItems;
-                                })()}
-                            />
-                        );
-                    }
-                }}
-                locale={{
-                    emptyText: 'No violations'
-                }}
-                pagination={
-                    {
-                        defaultPageSize: 25,
-                        hideOnSinglePage: true,
-                        pageSizeOptions: ['50', '100', '250', '500', '1000', '5000'],
-                        position: 'bottom',
-                        showQuickJumper: true,
-                        showSizeChanger: true,
-                        showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} violations`
-                    }
+                                }
+
+                                return collapseItems;
+                            })()}
+                        />
+                    );
                 }
-                onChange={onChange}
-            />
-        );
-    }
+            }}
+            locale={{
+                emptyText: 'No violations'
+            }}
+            pagination={
+                {
+                    current: pagination.current,
+                    hideOnSinglePage: true,
+                    onChange: handlePaginationChange,
+                    pageSizeOptions: ['50', '100', '250', '500', '1000', '5000'],
+                    position: 'bottom',
+                    showQuickJumper: true,
+                    showSizeChanger: true,
+                    showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} violations`
+                }
+            }
+            onChange={handleTableChange}
+        />
+    );
 }
-
-RuleViolationsTable.propTypes = {
-    onChange: PropTypes.func.isRequired,
-    ruleViolations: PropTypes.array.isRequired,
-    showExcludesColumn: PropTypes.bool,
-    state: PropTypes.object.isRequired
-};
-
-RuleViolationsTable.defaultProps = {
-    showExcludesColumn: false
-};
 
 export default RuleViolationsTable;

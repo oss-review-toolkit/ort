@@ -17,7 +17,10 @@
  * License-Filename: LICENSE
  */
 
-import React from 'react';
+import {
+    useMemo,
+    useState
+} from 'react';
 
 import {
     ExclamationCircleOutlined,
@@ -29,7 +32,6 @@ import {
 } from '@ant-design/icons';
 import { Collapse, Table, Tooltip } from 'antd';
 import Markdown from 'markdown-to-jsx';
-import PropTypes from 'prop-types';
 
 import PackageDetails from './PackageDetails';
 import PackageFindingsTable from './PackageFindingsTable';
@@ -40,68 +42,90 @@ import ResolutionTable from './ResolutionTable';
 import ScopeExcludesTable from './ScopeExcludesTable';
 import { getColumnSearchProps } from './Shared';
 
-// Generates the HTML to display issues as a Table
-class IssuesTable extends React.Component {
-    render() {
-        const {
-            issues,
-            onChange,
-            showExcludesColumn,
-            state: {
-                filteredInfo = {},
-                sortedInfo = {}
-            }
-        } = this.props;
+// Generates the HTML to display issues as a table
+const IssuesTable = ({ webAppOrtIssues = [], showExcludesColumn = true }) => {
+    // Convert issues as Antd only accepts vanilla objects as input
+    const issues = useMemo(
+        () => {
+            return webAppOrtIssues
+                .map(
+                    (webAppOrtIssue) => ({
+                        isResolved: webAppOrtIssue.isResolved,
+                        key: webAppOrtIssue.key,
+                        message: webAppOrtIssue.message,
+                        packageId: webAppOrtIssue.package.id,
+                        severity: webAppOrtIssue.severity,
+                        severityIndex: webAppOrtIssue.severityIndex,
+                        webAppOrtIssue
+                    })
+                )
+        },
+        []
+    );
 
-        // If return null to prevent React render error
-        if (!issues) {
-            return null;
-        }
+    /* === Table state handling === */
 
-        const columns = [];
+    // State variable for displaying table in various pages
+    const [pagination, setPagination] = useState({ current: 1, pageSize: 100 });
 
-        if (showExcludesColumn) {
-            columns.push({
-                align: 'right',
-                filters: (() => [
-                    {
-                        text: (
-                            <span>
-                                <FileExcelOutlined className="ort-excluded" />
-                                {' '}
-                                Excluded
-                            </span>
-                        ),
-                        value: 'excluded'
-                    },
-                    {
-                        text: (
-                            <span>
-                                <FileAddOutlined />
-                                {' '}
-                                Included
-                            </span>
-                        ),
-                        value: 'included'
-                    }
-                ])(),
-                filteredValue: filteredInfo.excludes || null,
-                key: 'excludes',
-                onFilter: (value, webAppOrtIssue) => {
-                    if (value === 'excluded') {
-                        return webAppOrtIssue.isExcluded;
-                    }
+    // State variable for filtering the contents of table columns
+    const [filteredInfo, setFilteredInfo] = useState({
+        excludes: [],
+        message: [],
+        packageId: [],
+        rule: [],
+        severityIndex: []
+    });
 
-                    if (value === 'included') {
-                        return !webAppOrtIssue.isExcluded;
-                    }
+    // State variable for sorting table columns
+    const [sortedInfo, setSortedInfo] = useState({
+        columnKey: 'severityIndex',
+        field: 'severityIndex',
+        order: 'ascend'
+    });
 
-                    return false;
+    /* === Table columns === */
+    const columns = [];
+
+    if (showExcludesColumn) {
+        columns.push({
+            align: 'right',
+            filters: (() => [
+                {
+                    text: (
+                        <span>
+                            <FileExcelOutlined className="ort-excluded" />
+                            {' '}
+                            Excluded
+                        </span>
+                    ),
+                    value: true
                 },
-                render: (webAppOrtIssue) => {
-                    const webAppPackage = webAppOrtIssue.package;
+                {
+                    text: (
+                        <span>
+                            <FileAddOutlined />
+                            {' '}
+                            Included
+                        </span>
+                    ),
+                    value: false
+                }
+            ])(),
+            filteredValue: filteredInfo.excludes || null,
+            key: 'excludes',
+            onFilter: (value, record) => {
+                if (!record.webAppOrtIssue.hasPackage()) return false;
 
-                    return webAppOrtIssue.isExcluded
+                const { isExcluded } = record.webAppOrtIssue.package;
+
+                return isExcluded === value;
+            },
+            render: (record) => {
+                const webAppPackage = record.webAppOrtIssue.package;
+
+                if (webAppPackage) {
+                    return webAppPackage.isExcluded
                         ? (
                         <span className="ort-excludes">
                             <Tooltip
@@ -115,147 +139,194 @@ class IssuesTable extends React.Component {
                         : (
                         <FileAddOutlined />
                             );
-                },
-                width: '2em'
-            });
-        }
-
-        columns.push({
-            align: 'center',
-            dataIndex: 'severityIndex',
-            filters: [
-                {
-                    text: 'Errors',
-                    value: 0
-                },
-                {
-                    text: 'Warnings',
-                    value: 1
-                },
-                {
-                    text: 'Hint',
-                    value: 2
-                },
-                {
-                    text: 'Resolved',
-                    value: 3
                 }
-            ],
-            filteredValue: filteredInfo.severityIndex || null,
-            onFilter: (value, webAppOrtIssue) => webAppOrtIssue.severityIndex === Number(value),
-            render: (text, webAppOrtIssue) => (
-                webAppOrtIssue.isResolved
-                    ? (
-                        <Tooltip
-                            placement="right"
-                            title={Array.from(webAppOrtIssue.resolutionReasons).join(', ')}
-                        >
-                            <IssuesCloseOutlined
-                                className="ort-ok"
-                            />
-                        </Tooltip>
-                        )
-                    : (
-                        <span>
-                            {
-                                webAppOrtIssue.severity === 'ERROR'
-                                && (
-                                    <ExclamationCircleOutlined
-                                        className="ort-error"
-                                    />
-                                )
-                            }
-                            {
-                                webAppOrtIssue.severity === 'WARNING'
-                                && (
-                                    <WarningOutlined
-                                        className="ort-warning"
-                                    />
-                                )
-                            }
-                            {
-                                webAppOrtIssue.severity === 'HINT'
-                                && (
-                                    <InfoCircleOutlined
-                                        className="ort-hint"
-                                    />
-                                )
-                            }
-                        </span>
-                        )
-            ),
-            sorter: (a, b) => a.severityIndex - b.severityIndex,
-            sortOrder: sortedInfo.field === 'severityIndex' && sortedInfo.order,
-            width: '5em'
-        });
 
-        columns.push(
+                return null;
+            },
+            responsive: ['md'],
+            width: '2em'
+        });
+    }
+
+    columns.push({
+        align: 'center',
+        dataIndex: 'severityIndex',
+        key: 'severityIndex',
+        filters: [
             {
-                ellipsis: true,
-                dataIndex: 'packageName',
-                key: 'packageName',
-                sorter: (a, b) => a.packageName.localeCompare(b.packageName),
-                sortOrder: sortedInfo.field === 'packageName' && sortedInfo.order,
-                title: 'Package',
-                width: '25%',
-                ...getColumnSearchProps('packageName', filteredInfo, this)
+                text: 'Errors',
+                value: 0
             },
             {
-                dataIndex: 'message',
-                key: 'message',
-                textWrap: 'word-break',
-                title: 'Message',
-                render: (text) => <pre>{text}</pre>,
-                ...getColumnSearchProps('message', filteredInfo, this)
+                text: 'Warnings',
+                value: 1
+            },
+            {
+                text: 'Hint',
+                value: 2
+            },
+            {
+                text: 'Resolved',
+                value: 3
             }
-        );
+        ],
+        filteredValue: filteredInfo.severityIndex || null,
+        onFilter: (value, record) => record.severityIndex === Number(value),
+        render: (text, record) => (
+            record.isResolved
+                ? (
+                    <Tooltip
+                        placement="right"
+                        title={Array.from(record.webAppOrtIssue.resolutionReasons).join(', ')}
+                    >
+                        <IssuesCloseOutlined
+                            className="ort-ok"
+                        />
+                    </Tooltip>
+                    )
+                : (
+                    <span>
+                        {
+                            record.severity === 'ERROR'
+                            && (
+                                <ExclamationCircleOutlined
+                                    className="ort-error"
+                                />
+                            )
+                        }
+                        {
+                            record.severity === 'WARNING'
+                            && (
+                                <WarningOutlined
+                                    className="ort-warning"
+                                />
+                            )
+                        }
+                        {
+                            record.severity === 'HINT'
+                            && (
+                                <InfoCircleOutlined
+                                    className="ort-hint"
+                                />
+                            )
+                        }
+                    </span>
+                    )
+        ),
+        sorter: (a, b) => a.severityIndex - b.severityIndex,
+        sortOrder: sortedInfo.field === 'severityIndex' && sortedInfo.order,
+        width: '5em'
+    });
 
-        return (
-            <Table
-                className="ort-table-issues"
-                columns={columns}
-                dataSource={issues}
-                rowKey="key"
-                size="small"
-                expandable={{
-                    expandedRowRender: (webAppOrtIssue) => {
-                        const defaultActiveKey = webAppOrtIssue.isResolved
-                            ? 'issue-how-to-fix'
-                            : 'issue-package-details';
-                        const webAppPackage = webAppOrtIssue.package;
+    columns.push(
+        {
+            dataIndex: 'packageId',
+            ellipsis: true,
+            filteredValue: filteredInfo.packageId || null,
+            key: 'packageId',
+            responsive: ['md'],
+            sorter: (a, b) => a.packageId.localeCompare(b.packageId),
+            sortOrder: sortedInfo.field === 'packageId' && sortedInfo.order,
+            title: 'Package',
+            width: '25%',
+            ...getColumnSearchProps(
+                'packageId',
+                filteredInfo.packageId,
+                (value) => setFilteredInfo({ ...filteredInfo, packageId: value })
+            )
+        },
+        {
+            dataIndex: 'rule',
+            filteredValue: filteredInfo.rule || null,
+            key: 'rule',
+            responsive: ['md'],
+            sorter: (a, b) => a.rule.localeCompare(b.rule),
+            sortOrder: sortedInfo.field === 'rule' && sortedInfo.order,
+            title: 'Rule',
+            width: '25%',
+            ...getColumnSearchProps(
+                'rule',
+                filteredInfo.rule,
+                (value) => setFilteredInfo({ ...filteredInfo, rule: value })
+            )
+        },
+        {
+            dataIndex: 'message',
+            filteredValue: filteredInfo.message || null,
+            key: 'message',
+            textWrap: 'word-break',
+            title: 'Message',
+            ...getColumnSearchProps(
+                'message',
+                filteredInfo.message,
+                (value) => setFilteredInfo({ ...filteredInfo, message: value })
+            )
+        }
+    );
 
-                        return (
-                            <Collapse
-                                className="ort-package-collapse"
-                                bordered={false}
-                                defaultActiveKey={defaultActiveKey}
-                                items={(() => {
-                                    const collapseItems = [];
+    // Handle for table pagination changes
+    const handlePaginationChange = (page, pageSize) => {
+        setPagination({ current: page, pageSize });
+    };
 
-                                    if (webAppOrtIssue.hasHowToFix()) {
-                                        collapseItems.push({
-                                            label: 'How to fix',
-                                            key: 'issue-how-to-fix',
-                                            children: (
-                                                <Markdown className="ort-how-to-fix">
-                                                    {webAppOrtIssue.howToFix}
-                                                </Markdown>
-                                            )
-                                        });
-                                    }
+    // Handle for any table content changes
+    const handleTableChange = (pagination, filters, sorter) => {
+        setFilteredInfo(filters);
+        setSortedInfo(sorter);
+    };
 
-                                    if (webAppOrtIssue.isResolved) {
-                                        collapseItems.push({
-                                            label: 'Resolutions',
-                                            key: 'issue-resolutions',
-                                            children: (
-                                                <ResolutionTable
-                                                    resolutions={webAppOrtIssue.resolutions}
-                                                />
-                                            )
-                                        });
-                                    }
+    return (
+        <Table
+            className="ort-table-issues"
+            columns={columns}
+            dataSource={issues}
+            rowKey="key"
+            size="small"
+            expandable={{
+                expandedRowRender: (record) => {
+                    const webAppOrtIssue = record.webAppOrtIssue;
+                    const webAppPackage = webAppOrtIssue.package;
+                    let defaultActiveKey = record.isResolved
+                        ? 'issue-resolutions'
+                        : 'issue-package-details';
 
+                    if (webAppOrtIssue.hasHowToFix() && !record.isResolved) {
+                        defaultActiveKey = 'issue-how-to-fix';
+                    }
+
+                    return (
+                        <Collapse
+                            className="ort-package-collapse"
+                            bordered={false}
+                            defaultActiveKey={defaultActiveKey}
+                            items={(() => {
+                                const collapseItems = [];
+
+                                if (webAppOrtIssue.hasHowToFix()) {
+                                    collapseItems.push({
+                                        label: 'How to fix',
+                                        key: 'issue-how-to-fix',
+                                        children: (
+                                            <Markdown className="ort-how-to-fix">
+                                                {webAppOrtIssue.howToFix}
+                                            </Markdown>
+                                        )
+                                    });
+                                }
+
+                                if (webAppOrtIssue.isResolved) {
+                                    collapseItems.push({
+                                        label: 'Resolutions',
+                                        key: 'issue-resolutions',
+                                        children: (
+                                            <ResolutionTable
+                                                resolutions={webAppOrtIssue.resolutions}
+                                            />
+                                        )
+                                    });
+                                }
+
+                                if (webAppOrtIssue.hasPackage()) {
                                     collapseItems.push({
                                         label: 'Details',
                                         key: 'issue-package-details',
@@ -319,42 +390,32 @@ class IssuesTable extends React.Component {
                                             )
                                         });
                                     }
+                                }
 
-                                    return collapseItems;
-                                })()}
-                            />
-                        );
-                    }
-                }}
-                locale={{
-                    emptyText: 'No issues'
-                }}
-                pagination={
-                    {
-                        defaultPageSize: 25,
-                        hideOnSinglePage: true,
-                        pageSizeOptions: ['50', '100', '250', '500', '1000', '5000'],
-                        position: 'bottom',
-                        showQuickJumper: true,
-                        showSizeChanger: true,
-                        showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} issues`
-                    }
+                                return collapseItems;
+                            })()}
+                        />
+                    );
                 }
-                onChange={onChange}
-            />
-        );
-    }
+            }}
+            locale={{
+                emptyText: 'No issues'
+            }}
+            pagination={
+                {
+                    current: pagination.current,
+                    hideOnSinglePage: true,
+                    onChange: handlePaginationChange,
+                    pageSizeOptions: ['50', '100', '250', '500', '1000', '5000'],
+                    position: 'bottom',
+                    showQuickJumper: true,
+                    showSizeChanger: true,
+                    showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} issues`
+                }
+            }
+            onChange={handleTableChange}
+        />
+    );
 }
-
-IssuesTable.propTypes = {
-    issues: PropTypes.array.isRequired,
-    onChange: PropTypes.func.isRequired,
-    showExcludesColumn: PropTypes.bool,
-    state: PropTypes.object.isRequired
-};
-
-IssuesTable.defaultProps = {
-    showExcludesColumn: false
-};
 
 export default IssuesTable;
