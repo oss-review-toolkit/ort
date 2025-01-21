@@ -128,6 +128,10 @@ class WebAppRuleViolation {
         return this.#license.id;
     }
 
+    get licenseSource() {
+        return this.#licenseSource;
+    }
+
     get message() {
         return this.#message;
     }
