@@ -146,7 +146,7 @@ ARG PYTHON_PIPENV_VERSION
 ARG PYTHON_POETRY_VERSION
 ARG PYTHON_POETRY_PLUGIN_EXPORT_VERSION
 ARG PYTHON_SETUPTOOLS_VERSION
-ARG PIPTOOL_VERSION
+ARG PIP_VERSION
 ARG SCANCODE_VERSION
 
 RUN ARCH=$(arch | sed s/aarch64/arm64/) \
@@ -164,7 +164,7 @@ RUN scancode-license-data --path /opt/scancode-license-data \
     && rm -rf /opt/scancode-license-data/static
 
 RUN pip install --no-cache-dir -U \
-    pip=="$PIPTOOL_VERSION" \
+    pip=="$PIP_VERSION" \
     wheel \
     && pip install --no-cache-dir -U \
     Mercurial \

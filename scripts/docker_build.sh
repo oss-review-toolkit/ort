@@ -68,7 +68,7 @@ image_build python ort/python "$PYTHON_VERSION" \
     --build-arg PYTHON_INSPECTOR_VERSION="$PYTHON_INSPECTOR_VERSION" \
     --build-arg PYTHON_PIPENV_VERSION="$PYTHON_PIPENV_VERSION" \
     --build-arg PYTHON_POETRY_VERSION="$PYTHON_POETRY_VERSION" \
-    --build-arg PIPTOOL_VERSION="$PIPTOOL_VERSION" \
+    --build-arg PIP_VERSION="$PIP_VERSION" \
     --build-arg SCANCODE_VERSION="$SCANCODE_VERSION" \
     --build-context "base=docker-image://${DOCKER_IMAGE_ROOT}/ort/base:latest" \
     "$@"
