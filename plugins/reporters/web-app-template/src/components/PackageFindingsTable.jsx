@@ -37,6 +37,7 @@ import {
 } from 'antd';
 
 import PathExcludesTable from './PathExcludesTable';
+import { getColumnSearchProps } from './Shared'
 
 // Generates the HTML to display scanFindings as a table
 const PackageFindingsTable = ({ webAppPackage }) => {
@@ -256,7 +257,12 @@ const PackageFindingsTable = ({ webAppPackage }) => {
             key: 'path',
             sorter: (a, b) => a.path.localeCompare(b.path),
             textWrap: 'word-break',
-            title: 'Path'
+            title: 'Path',
+            ...getColumnSearchProps(
+                'path',
+                filteredInfo.path,
+                (value) => setFilteredInfo({ ...filteredInfo, path: value })
+            )
         },
         {
             align: 'center',
@@ -264,7 +270,12 @@ const PackageFindingsTable = ({ webAppPackage }) => {
             key: 'startLine',
             filteredValue: filteredInfo.startLine || null,
             responsive: ['md'],
-            title: 'Start'
+            title: 'Start',
+            ...getColumnSearchProps(
+                'startLine',
+                filteredInfo.startLine,
+                (value) => setFilteredInfo({ ...filteredInfo, startLine: value })
+            )
         },
         {
             align: 'center',
@@ -272,7 +283,12 @@ const PackageFindingsTable = ({ webAppPackage }) => {
             filteredValue: filteredInfo.endLine || null,
             key: 'endLine',
             responsive: ['md'],
-            title: 'End'
+            title: 'End',
+            ...getColumnSearchProps(
+                'endLine',
+                filteredInfo.endLine,
+                (value) => setFilteredInfo({ ...filteredInfo, endLine: value })
+            )
         }
     );
 
