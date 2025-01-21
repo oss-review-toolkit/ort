@@ -1,145 +1,7 @@
-body {
-    background: #fafafa;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    height: auto;
-}
+/* === Styling for Results Summary Tab === */
 
-h1, h2, h3, h4 {
-    color: #262727;
-    margin: 1em 0em 1em 0em;
-}
-
-th {
-    padding-right: 10px;
-}
-
-/* === Ant Design customizations === */
-
-/*
-TODO Switch to use Ant Design customization
-https://ant.design/docs/react/customize-theme
-*/
-.ant-collapse,
-.ant-steps,
-.ant-tabs,
-.ant-tag,
-.ant-table,
-.ant-tree {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-
-/* Reduce margin around <Ant Col> to allow content to be displayed */
-.ant-col-offset-1 {
-    margin-left: 2.66666667%;
-}
-
-.ant-col-22 {
-    width: 94.16666667%;
-}
-
-.ant-descriptions .ant-descriptions-item-label {
-    color: rgba(0, 0, 0, 0.88);
-}
-
-.ant-steps-dot .ant-steps-item-content {
-    width: auto;
-}
-
-.ant-table-small > .ant-table-content > .ant-table-body {
-    margin: 0px;
-}
-
-tr.ant-table-expanded-row, tr.ant-table-expanded-row,
-tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
-    background: #fff;
-}
-
-.ant-tabs-tab .anticon {
-    margin-right: 4px;
-}
-
-/* Styling specific for last item in SummaryView Timeline */
-.ant-timeline-item-last {
-    padding-bottom: 1em;
-}
-
-.ant-timeline-item-last > .ant-timeline-item-content {
-    min-height: 1em;
-}
-
-/* === Styling for shared ORT elements === */
-
-.ort-app {
-    background-color: #fff;
-    border: 1px solid rgba(34,36,38,.15);
-    border-radius: .28rem;
-    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-    font-weight: 300;
-    font-size: 14px;
-    padding: 0em 0.5em 0.5em 0.5em;
-    margin: 0.5em;
-    min-height: 96vh;
-}
-
-/* Control button in top right of main Tabs menu */
-.ort-control {
-    cursor: pointer;
-    margin: 1em 0.4em 0em 0em;
-    height: 1.4em;
-    width: 1.4em;
-}
-
-.ort-control > svg {
-    height: 1.2em;
-    width: 1.2em;
-}
-.ort-control > svg:hover {
-    color: #1890ff;
-}
-
-/* Colors of exclude, error, hint, success and warning icons */
-.ort-critical {
-    color: #c61b10;
-}
-
-.ort-error, .ort-high {
-    color: #f5222d;
-}
-
-.ort-excluded {
-    color: #b0c4de;
-}
-
-.ort-hint, .ort-unknown {
-    color: #84b6eb;
-}
-
-.ort-low, .ort-ok {
-    color: #52c41a;
-}
-
-.ort-warning {
-    color: #ef8f1c;
-}
-
-.ort-medium {
-    color: #d5c920;
-}
-
-.ort-about-logo {
-    width: 420px;
-    height: 90px;
-    margin-bottom: 10px;
-}
-
-.ort-loading-logo {
-    width: 285px;
-    height: 60px;
-}
-
-.ort-word-break-wrap {
-    word-break: break-all;
-    word-wrap: break-word;
+.ort-summary .ant-col-offset-1 {
+    margin-left: 2.5%;
 }
 
 /* === Styling for PackageCollapse === */
@@ -155,13 +17,18 @@ tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
     line-height: 0.9em;
 }
 
-.ort-package-collapse .ant-descriptions-row > td {
-    border-bottom: 0px;
+.ort-package-collapse .ant-descriptions .ant-descriptions-item-label {
+    color: rgba(0, 0, 0, 0.88);
 }
 
+.ort-package-collapse td,
 .ort-package-collapse .ant-descriptions-item-label,
 .ort-package-collapse .ant-descriptions-item-content {
     font-size: 0.9em;
+}
+
+.ort-package-collapse .ant-descriptions-row > td {
+    border-bottom: 0px;
 }
 
 .ort-package-collapse .ort-package-path-description div > table > tbody > tr {
@@ -178,21 +45,8 @@ tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
     font-size: 0.7em;
 }
 
-.ort-package-collapse td {
-    font-size: 0.9em;
-}
-
-.ort-how-to-fix {
-    line-height: 1.1em;
-}
-
-.ort-how-to-fix li {
+.ort-package-collapse .ort-how-to-fix li {
     line-height: 1.3em;
-}
-
-.ort-table-issues, .ort-table-rule-violations, .ort-table-vulnerabilities {
-    background: transparent;
-    border-bottom: 0px;
 }
 
 /* === Styling for PackagePaths === */
@@ -201,58 +55,44 @@ tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
     width: auto;
 }
 
-/* === Styling for TableView  === */
+/* === Styling for LoadingPage === */
 
-/* Styling for 'Clear filters' and 'Show / Hide Columns' buttons in TableView */
-.ort-table-buttons .ant-dropdown-button {
-    overflow: auto;
+.ort-loading-logo {
+    width: 285px;
+    height: 60px;
 }
 
-.ort-table-buttons .ant-dropdown-button .ant-btn {
-    float: right;
-    margin-bottom: 5px;
-    z-index: 999;
+/* === General === */
+
+/* Colors of exclude, error, hint and warning icons */
+.ort-error {
+    color: #f5222d;
 }
 
-.ort-table-toggle-columns .ant-dropdown-menu-item-selected {
-    background-color: transparent;
+.ort-excluded {
+    color: #b0c4de;
 }
 
-/* === Styling for TreeView === */
-
-.ort-tree {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+.ort-hint {
+    color: #84b6eb;
 }
 
-.ort-tree-search {
-    display: flex;
-    margin-bottom: 8px;
+.ort-ok {
+    color: #52c41a;
 }
 
-.ort-tree-search-match {
-    color: #1890ff;
-    font-weight: bold;
+.ort-warning {
+    color: #ef8f1c;
 }
 
-.ort-tree-navigation {
-    display: flex;
-    align-items: center;
-    margin-left: 8px;
-    flex-wrap: nowrap;
+.ort-app {
+    background-color: #fff;
+    border: 1px solid rgba(34,36,38,.15);
+    border-radius: .28rem;
+    padding: 0em 0.5em 0.5em 0.5em;
+    margin: 0.5em;
 }
 
-.ort-tree-navigation-counter {
-    margin-left: 8px;
-    width: 80px;
-}
-
-.ort-tree-wrapper {
-    overflow: auto;
-    flex: auto;
-    height: calc(100vh - 150px);
-}
 
 /* === OSS Review Toolkit logo === */
 
