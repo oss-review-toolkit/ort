@@ -20,8 +20,6 @@
 import WebAppPath from './WebAppPath';
 
 class WebAppTreeNode {
-    #anchestors;
-
     #children = [];
 
     #isExcluded;
@@ -31,8 +29,6 @@ class WebAppTreeNode {
     #packageIndex;
 
     #parent;
-
-    #path;
 
     #pathExcludes = new Set([]);
 
@@ -93,11 +89,11 @@ class WebAppTreeNode {
                 if (Number.isInteger(obj.pkg)) {
                     this.#packageIndex = obj.pkg;
                     this.#package = webAppOrtResult.packages[obj.pkg];
-                    this.title = this.#package.id;
+                    this.#title = this.#package.id;
                 } else if (Number.isInteger(obj.scope)) {
                     this.#scopeIndex = obj.pkg;
                     this.#scope = webAppOrtResult.scopes[obj.scope];
-                    this.title = this.#scope.name;
+                    this.#title = this.#scope.name;
                 }
             }
 
@@ -177,6 +173,10 @@ class WebAppTreeNode {
 
     get scopeIndex() {
         return this.#scopeIndex;
+    }
+
+    get title() {
+        return this.#title;
     }
 
     get webAppPath() {
