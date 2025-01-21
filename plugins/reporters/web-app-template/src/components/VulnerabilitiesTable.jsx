@@ -23,15 +23,10 @@ import {
 } from 'react';
 
 import {
-    CloseCircleOutlined,
-    ExclamationCircleOutlined,
     FileAddOutlined,
     FileExcelOutlined,
     FileProtectOutlined,
-    InfoCircleOutlined,
-    IssuesCloseOutlined,
-    QuestionCircleOutlined,
-    WarningOutlined
+    IssuesCloseOutlined
 } from '@ant-design/icons';
 import {
     Collapse,
@@ -45,6 +40,7 @@ import PathExcludesTable from './PathExcludesTable';
 import ResolutionTable from './ResolutionTable';
 import ScopeExcludesTable from './ScopeExcludesTable';
 import { getColumnSearchProps } from './Shared';
+import VulnerabilityRatingTag from './VulnerabilityRatingTag';
 
 // Generates the HTML to display vulnerabilities as a table
 const VulnerabilitiesTable = ({ webAppVulnerabilities = [], showExcludesColumn = true }) => {
@@ -157,27 +153,27 @@ const VulnerabilitiesTable = ({ webAppVulnerabilities = [], showExcludesColumn =
         key: 'severityIndex',
         filters: [
             {
-                text: 'Critical',
+                text: (<VulnerabilityRatingTag severity={'critical'}/>),
                 value: 0
             },
             {
-                text: 'High',
+                text: (<VulnerabilityRatingTag severity={'high'}/>),
                 value: 1
             },
             {
-                text: 'Medium',
+                text: (<VulnerabilityRatingTag severity={'medium'}/>),
                 value: 2
             },
             {
-                text: 'Low',
+                text: (<VulnerabilityRatingTag severity={'low'}/>),
                 value: 3
             },
             {
-                text: 'Resolved',
+                text: (<VulnerabilityRatingTag severity={'resolved'}/>),
                 value: 5
             },
             {
-                text: 'Unknown',
+                text: (<VulnerabilityRatingTag severity={'none'}/>),
                 value: 4
             }
         ],
@@ -200,41 +196,37 @@ const VulnerabilitiesTable = ({ webAppVulnerabilities = [], showExcludesColumn =
                         {
                             record.severityIndex === 0
                             && (
-                                <CloseCircleOutlined
-                                    className="ort-critical"
-                                />
+                                <VulnerabilityRatingTag severity={'critical'}/>
                             )
                         }
                         {
                             record.severityIndex === 1
                             && (
-                                <ExclamationCircleOutlined
-                                    className="ort-high"
-                                />
+                                <VulnerabilityRatingTag severity={'high'}/>
                             )
                         }
                         {
                             record.severityIndex === 2
                             && (
-                                <WarningOutlined
-                                    className="ort-medium"
-                                />
+                                <VulnerabilityRatingTag severity={'medium'}/>
                             )
                         }
                         {
                             record.severityIndex === 3
                             && (
-                                <InfoCircleOutlined
-                                    className="ort-low"
-                                />
+                                <VulnerabilityRatingTag severity={'low'}/>
                             )
                         }
                         {
                             record.severityIndex === 4
                             && (
-                                <QuestionCircleOutlined
-                                    className="ort-unknown"
-                                />
+                                <VulnerabilityRatingTag severity={'none'}/>
+                            )
+                        }
+                        {
+                            record.severityIndex === 5
+                            && (
+                                <VulnerabilityRatingTag severity={'resolved'}/>
                             )
                         }
                     </span>
@@ -242,7 +234,8 @@ const VulnerabilitiesTable = ({ webAppVulnerabilities = [], showExcludesColumn =
         ),
         sorter: (a, b) => a.severityIndex - b.severityIndex,
         sortOrder: sortedInfo.field === 'severityIndex' && sortedInfo.order,
-        width: '5em'
+        title: 'Severity',
+        width: '10em'
     });
 
     columns.push(
