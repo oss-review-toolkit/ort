@@ -314,10 +314,10 @@ class WebAppPackage {
 
                 this.#detectedLicensesProcessedIndexes = new Set(this.#detectedLicensesIndexes);
 
-                if (this.#detectedExcludedLicensesIndexes.size !== 0) {    
+                if (this.#detectedExcludedLicensesIndexes.size !== 0) {
                     this.#detectedExcludedLicensesIndexes.forEach(value => {
                         this.#detectedLicensesProcessedIndexes.delete(value);
-                    });                    
+                    });
 
                     this.#detectedLicensesProcessed = getLicenseNames(this.#detectedLicensesProcessedIndexes);
                 } else {

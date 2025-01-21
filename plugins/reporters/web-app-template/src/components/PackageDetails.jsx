@@ -18,7 +18,6 @@
  */
 
 import { Descriptions } from 'antd';
-import PropTypes from 'prop-types';
 
 const { Item } = Descriptions;
 
@@ -203,10 +202,6 @@ const PackageDetails = ({ webAppPackage }) => {
             }
         </Descriptions>
     );
-};
-
-PackageDetails.propTypes = {
-    webAppPackage: PropTypes.object.isRequired
 };
 
 export default PackageDetails;

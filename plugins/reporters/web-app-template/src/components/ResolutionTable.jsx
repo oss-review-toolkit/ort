@@ -18,9 +18,8 @@
  */
 
 import { Table } from 'antd';
-import PropTypes from 'prop-types';
 
-// Generates the HTML to display webAppResolution(s) as a Table
+// Generates the HTML to display webAppResolution(s) as a table
 const ResolutionTable = ({ resolutions }) => {
     const columns = [
         {
@@ -64,10 +63,6 @@ const ResolutionTable = ({ resolutions }) => {
             }
         />
     );
-};
-
-ResolutionTable.propTypes = {
-    resolutions: PropTypes.array.isRequired
 };
 
 export default ResolutionTable;

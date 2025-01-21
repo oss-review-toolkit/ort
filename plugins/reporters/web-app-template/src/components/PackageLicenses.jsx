@@ -18,7 +18,6 @@
  */
 
 import { Descriptions } from 'antd';
-import PropTypes from 'prop-types';
 
 const { Item } = Descriptions;
 
@@ -122,10 +121,6 @@ const PackageLicenses = ({ webAppPackage }) => {
             }
         </Descriptions>
     );
-};
-
-PackageLicenses.propTypes = {
-    webAppPackage: PropTypes.object.isRequired
 };
 
 export default PackageLicenses;
