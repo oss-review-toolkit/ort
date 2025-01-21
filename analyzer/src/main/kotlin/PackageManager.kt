@@ -298,7 +298,7 @@ abstract class PackageManager(
                 }.onFailure {
                     it.showStackTrace()
 
-                    val id = Identifier.EMPTY.copy(type = managerName, name = relativePath)
+                    val id = Identifier.EMPTY.copy(type = projectType, name = relativePath)
 
                     val projectWithIssues = Project.EMPTY.copy(
                         id = id,
