@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.scanners.scanoss
 
 import com.scanoss.dto.ScanFileDetails
 import com.scanoss.dto.ScanFileResult
+import com.scanoss.dto.enums.MatchType
 
 import java.time.Instant
 
@@ -47,13 +48,13 @@ internal fun generateSummary(startTime: Instant, endTime: Instant, results: List
 
     results.forEach { result ->
         result.fileDetails.forEach { details ->
-            when (details.id) {
-                "file" -> {
+            when (details.matchType) {
+                MatchType.file -> {
                     licenseFindings += getLicenseFindings(details)
                     copyrightFindings += getCopyrightFindings(details)
                 }
 
-                "snippet" -> {
+                MatchType.snippet -> {
                     val file = requireNotNull(details.file)
                     val lines = requireNotNull(details.lines)
                     val sourceLocations = convertLines(file, lines)
@@ -67,11 +68,11 @@ internal fun generateSummary(startTime: Instant, endTime: Instant, results: List
                     }
                 }
 
-                "none" -> {
+                MatchType.none -> {
                     // Skip if no details are available.
                 }
 
-                else -> throw IllegalArgumentException("Unsupported file details id '${details.id}'.")
+                else -> throw IllegalArgumentException("Unsupported file match type '${details.matchType}'.")
             }
         }
     }
