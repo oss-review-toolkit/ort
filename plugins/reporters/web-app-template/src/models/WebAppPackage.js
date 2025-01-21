@@ -62,6 +62,8 @@ class WebAppPackage {
 
     #detectedLicensesProcessed = new Set();
 
+    #detectedLicensesProcessedIndexes = new Set();
+
     #effectiveLicense;
 
     #excludedFindings;
@@ -310,14 +312,14 @@ class WebAppPackage {
                     this.#detectedLicenses = getLicenseNames(this.#detectedLicensesIndexes);
                 }
 
-                if (this.#detectedExcludedLicensesIndexes.size !== 0) {
-                    this.#detectedExcludedLicenses = getLicenseNames(this.#detectedExcludedLicensesIndexes);
+                this.#detectedLicensesProcessedIndexes = new Set(this.#detectedLicensesIndexes);
 
-                    this.#detectedLicensesProcessed = getLicenseNames(new Set(
-                        [...this.#detectedLicensesIndexes].filter(
-                            (license) => !this.#detectedExcludedLicensesIndexes.has(license)
-                        )
-                    ));
+                if (this.#detectedExcludedLicensesIndexes.size !== 0) {    
+                    this.#detectedExcludedLicensesIndexes.forEach(value => {
+                        this.#detectedLicensesProcessedIndexes.delete(value);
+                    });                    
+
+                    this.#detectedLicensesProcessed = getLicenseNames(this.#detectedLicensesProcessedIndexes);
                 } else {
                     this.#detectedLicensesProcessed = this.#detectedLicenses;
                 }
@@ -393,6 +395,10 @@ class WebAppPackage {
 
     get detectedLicensesProcessed() {
         return this.#detectedLicensesProcessed;
+    }
+
+    get detectedLicensesProcessedIndexes() {
+        return this.#detectedLicensesProcessedIndexes;
     }
 
     get effectiveLicense() {
