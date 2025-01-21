@@ -59,11 +59,11 @@ abstract class VersionControlSystem : Plugin {
             }
 
         /**
-         * A map to cache the [VersionControlSystem], if any, for previously queried URLs. This helps to speed up
-         * subsequent queries for the same URLs as identifying the [VersionControlSystem] for arbitrary URLs might
-         * require network access.
+         * A map to cache the [VersionControlSystem], if any, for previously queried URLs and their respective plugin
+         * configurations. This helps to speed up subsequent queries for the same URLs as identifying the
+         * [VersionControlSystem] for arbitrary URLs might require network access.
          */
-        private val urlToVcsMap = mutableMapOf<String, VersionControlSystem?>()
+        private val urlToVcsMap = mutableMapOf<Pair<String, Map<String, PluginConfig>>, VersionControlSystem?>()
 
         /**
          * Return the applicable VCS for the given [vcsUrl], or null if none is applicable.
@@ -72,8 +72,8 @@ abstract class VersionControlSystem : Plugin {
         fun forUrl(vcsUrl: String, configs: Map<String, PluginConfig> = emptyMap()) =
             // Do not use getOrPut() here as it cannot handle null values, also see
             // https://youtrack.jetbrains.com/issue/KT-21392.
-            if (vcsUrl in urlToVcsMap) {
-                urlToVcsMap[vcsUrl]
+            if (vcsUrl to configs in urlToVcsMap) {
+                urlToVcsMap[vcsUrl to configs]
             } else {
                 // First try to determine the VCS type statically...
                 when (val type = VcsHost.parseUrl(vcsUrl).type) {
@@ -86,15 +86,16 @@ abstract class VersionControlSystem : Plugin {
 
                     else -> forType(type, configs)
                 }.also {
-                    urlToVcsMap[vcsUrl] = it
+                    urlToVcsMap[vcsUrl to configs] = it
                 }
             }
 
         /**
-         * A map to cache the [WorkingTree], if any, for previously queried directories. This helps to speed up
-         * subsequent queries for the same directories and to reduce log output from running external VCS tools.
+         * A map to cache the [WorkingTree], if any, for previously queried directories and their respective plugin
+         * configurations. This helps to speed up subsequent queries for the same directories and to reduce log output
+         * from running external VCS tools.
          */
-        private val dirToVcsMap = mutableMapOf<File, WorkingTree?>()
+        private val dirToVcsMap = mutableMapOf<Pair<File, Map<String, PluginConfig>>, WorkingTree?>()
 
         /**
          * Return the applicable VCS working tree for the given [vcsDirectory], or null if none is applicable.
@@ -103,8 +104,8 @@ abstract class VersionControlSystem : Plugin {
         fun forDirectory(vcsDirectory: File, configs: Map<String, PluginConfig> = emptyMap()): WorkingTree? {
             val absoluteVcsDirectory = vcsDirectory.absoluteFile
 
-            return if (absoluteVcsDirectory in dirToVcsMap) {
-                dirToVcsMap[absoluteVcsDirectory]
+            return if (absoluteVcsDirectory to configs in dirToVcsMap) {
+                dirToVcsMap[absoluteVcsDirectory to configs]
             } else {
                 getAllVcsByPriority(configs).mapNotNull {
                     if (it is CommandLineTool && !it.isInPath()) {
@@ -126,7 +127,7 @@ abstract class VersionControlSystem : Plugin {
                         false
                     }
                 }.also {
-                    dirToVcsMap[absoluteVcsDirectory] = it
+                    dirToVcsMap[absoluteVcsDirectory to configs] = it
                 }
             }
         }
