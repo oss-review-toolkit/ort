@@ -22,6 +22,7 @@ import {
 } from 'react';
 
 import {
+    AppstoreAddOutlined,
     BugOutlined,
     CodeOutlined,
     CheckCircleOutlined,
@@ -47,6 +48,7 @@ const ResultsSummary = ({ webAppOrtResult }) => {
     const {
         declaredLicensesProcessed,
         detectedLicensesProcessed,
+        effectiveLicenses,
         issues,
         levels,
         packages,
@@ -112,6 +114,34 @@ const ResultsSummary = ({ webAppOrtResult }) => {
             } = webAppOrtResult;
 
             detected.forEach((value, name) => {
+                const license = webAppOrtResult.getLicenseByName(name);
+
+                if (license) {
+                    licenses.push({
+                        name,
+                        value,
+                        color: license.color
+                    });
+                }
+            });
+
+            return licenses;
+        },
+        []
+    );
+
+    const effectiveLicensesProcessedAsNameValueColor = useMemo(
+        () => {
+            const licenses = [];
+            const {
+                statistics: {
+                    licenses: {
+                        effective
+                    }
+                }
+            } = webAppOrtResult;
+
+            effective.forEach((value, name) => {
                 const license = webAppOrtResult.getLicenseByName(name);
 
                 if (license) {
@@ -360,7 +390,8 @@ const ResultsSummary = ({ webAppOrtResult }) => {
                 || webAppOrtResult.hasRuleViolations()
                 || webAppOrtResult.hasVulnerabilities()
                 || webAppOrtResult.hasDeclaredLicenses()
-                || webAppOrtResult.hasDetectedLicenses())
+                || webAppOrtResult.hasDetectedLicenses()
+                || webAppOrtResult.hasEffectiveLicenses())
                 && (
                     <Row>
                         <Col span={22} offset={1}>
@@ -429,6 +460,34 @@ const ResultsSummary = ({ webAppOrtResult }) => {
                                             )
                                         }
                                     ];
+
+                                    if (webAppOrtResult.hasEffectiveLicenses()) {
+                                        tabItems.push({
+                                            label: (
+                                                <span>
+                                                    <AppstoreAddOutlined style={{ marginRight: 5 }}/>
+                                                    Effective Licenses ({effectiveLicenses.length})
+                                                </span>
+                                            ),
+                                            key: 'ort-summary-effective-licenses-table',
+                                            children: (
+                                                <Row>
+                                                    <Col xs={24} sm={24} md={24} lg={24} xl={9}>
+                                                        <LicenseStatsTable
+                                                            emptyText="No effective licenses"
+                                                            licenses={effectiveLicenses}
+                                                            licenseStats={effectiveLicensesProcessedAsNameValueColor}
+                                                        />
+                                                    </Col>
+                                                    <Col xs={24} sm={24} md={24} lg={24} xl={15}>
+                                                        <LicenseChart
+                                                            licenses={effectiveLicensesProcessedAsNameValueColor}
+                                                        />
+                                                    </Col>
+                                                </Row>
+                                            )
+                                        });
+                                    }
 
                                     if (webAppOrtResult.hasDeclaredLicensesProcessed()) {
                                         tabItems.push({
