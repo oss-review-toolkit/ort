@@ -174,8 +174,10 @@ const AboutModal = ({ webAppOrtResult }) => {
                                 </p>
                                 <p>
                                     Licensed under Apache License, Version 2.0 (SPDX: Apache-2.0) but also includes
-                                    third-party software components under other open source licenses.
-                                    See OSS Review Toolkit code repository for further details.
+                                    third-party software components under other open source licenses.<br/>
+                                    See the <a href="https://github.com/oss-review-toolkit/ort">
+                                        OSS Review Toolkit code repository
+                                    </a> for further details.
                                 </p>
                                 {
                                     !!analyzerStartDate
