@@ -117,7 +117,7 @@ class FileListResolverTest : WordSpec({
 
             val fileList = resolver.get(ArtifactProvenance(sourceArtifact = RemoteArtifact.EMPTY))
 
-            fileList.shouldNotBeNull {
+            fileList shouldNotBeNull {
                 ignorePatterns should containExactlyInAnyOrder(
                     "**/.bzr",
                     "**/.git",
