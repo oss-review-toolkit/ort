@@ -78,7 +78,7 @@ class FossId2023dot1Test : StringSpec({
         // Recreate the version as the service caches it.
         service = FossIdServiceWithVersion.create(service)
 
-        service.deleteScan("", "", SCAN_CODE_2021_2).shouldNotBeNull {
+        service.deleteScan("", "", SCAN_CODE_2021_2) shouldNotBeNull {
             checkResponse("delete scan")
 
             data.shouldNotBeNull().value shouldBe 522415

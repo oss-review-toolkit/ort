@@ -47,7 +47,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
                 ClearlyDefinedService.JSON.decodeFromStream<Curation>(it)
             }
 
-            curation.described?.facets.shouldNotBeNull {
+            curation.described?.facets shouldNotBeNull {
                 dev.shouldNotBeNull() should beEmpty()
                 tests.shouldNotBeNull() should beEmpty()
             }
@@ -121,7 +121,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
 
             val summary = service.putCuration(ContributionPatch(info, listOf(patch)))
 
-            summary.shouldNotBeNull {
+            summary shouldNotBeNull {
                 prNumber shouldBeGreaterThan 0
                 url shouldStartWith "${Server.DEVELOPMENT.projectUrl}/pull/"
             }
@@ -142,7 +142,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
             val curations = service.getDefinitions(listOf(coordinates))
 
             curations shouldHaveSize 1
-            curations[coordinates]?.files?.get(11)?.facets.shouldNotBeNull {
+            curations[coordinates]?.files?.get(11)?.facets shouldNotBeNull {
                 this shouldContain "tests"
             }
         }
