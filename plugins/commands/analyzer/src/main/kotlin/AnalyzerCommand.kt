@@ -189,9 +189,10 @@ class AnalyzerCommand(descriptor: PluginDescriptor = AnalyzerCommandFactory.desc
                 count += files.size
                 echo("Found ${files.size} $manager definition file(s) at:")
 
-                files.forEach { file ->
-                    val relativePath = file.toRelativeString(inputDir).ifEmpty { "." }
-                    echo("\t$relativePath")
+                files.map {
+                    it.toRelativeString(inputDir).ifEmpty { "." }
+                }.sorted().forEach {
+                    echo("\t$it")
                 }
             }
 
