@@ -58,7 +58,7 @@ class BlackDuckFunTest : WordSpec({
     afterEach { componentServiceClient.flush() }
 
     "retrievePackageFindings()" should {
-        "return the vulnerabilities for the supported ecosystems" {
+        "return the vulnerabilities for the supported ecosystems by purl" {
             val packages = setOf(
                 // TODO: Add hackage / pod
                 "Crate::sys-info:0.7.0",
