@@ -33,6 +33,7 @@ import org.gradle.api.artifacts.component.ProjectComponentIdentifier
 import org.gradle.api.artifacts.component.ProjectComponentSelector
 import org.gradle.api.artifacts.result.DependencyResult
 import org.gradle.api.artifacts.result.ResolvedArtifactResult
+import org.gradle.api.artifacts.result.ResolvedComponentResult
 import org.gradle.api.artifacts.result.ResolvedDependencyResult
 import org.gradle.api.artifacts.result.UnresolvedDependencyResult
 import org.gradle.api.internal.GradleInternal
@@ -55,6 +56,9 @@ internal class OrtModelBuilder : ToolingModelBuilder {
     private val errors = mutableListOf<String>()
     private val warnings = mutableListOf<String>()
     private val globalDependencySubtrees = mutableMapOf<String, List<OrtDependency>>()
+
+    // Only create one "OrtDependency" for each "ResolvedComponentResult".
+    private val ortDependencyCache = mutableMapOf<ResolvedComponentResult, OrtDependency>()
 
     override fun canBuild(modelName: String): Boolean = modelName == OrtDependencyTreeModel::class.java.name
 
@@ -165,6 +169,10 @@ internal class OrtModelBuilder : ToolingModelBuilder {
                     // Cut the graph on cyclic dependencies.
                     if (id in visited) return@mapNotNull null
 
+                    if (selectedComponent in ortDependencyCache) {
+                        return@mapNotNull ortDependencyCache[selectedComponent]
+                    }
+
                     when (id) {
                         is ModuleComponentIdentifier -> {
                             val pomFile = if (selectedComponent is ResolvedComponentResultInternal) {
@@ -231,7 +239,9 @@ internal class OrtModelBuilder : ToolingModelBuilder {
                                     )
                                 },
                                 localPath = null
-                            )
+                            ).also {
+                                ortDependencyCache[selectedComponent] = it
+                            }
                         }
 
                         is ProjectComponentIdentifier -> {
@@ -250,7 +260,9 @@ internal class OrtModelBuilder : ToolingModelBuilder {
                                 pomFile = null,
                                 mavenModel = null,
                                 localPath = id.projectPath
-                            )
+                            ).also {
+                                ortDependencyCache[selectedComponent] = it
+                            }
                         }
 
                         else -> {
