@@ -75,7 +75,7 @@ jobs:
       with:
         sarif_file: build/reports/detekt/merged.sarif
   markdown-links:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
     - name: Checkout Repository
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
