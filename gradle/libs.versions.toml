@@ -10,7 +10,7 @@ kotlinPlugin = "2.1.0"
 ksp = "2.1.0-1.0.29"
 mavenPublishPlugin = "0.30.0"
 reproducibleBuildsPlugin = "1.0"
-versionsPlugin = "0.51.0"
+versionsPlugin = "0.52.0"
 
 aeSecurity = "0.134.0"
 asciidoctorj = "3.0.0"
