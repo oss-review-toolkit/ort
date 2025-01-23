@@ -71,6 +71,38 @@
       }
     ]
   },
+  "componentsViewsForExternalId": {
+    "Bunkum/4.0.0": [
+      {
+        "component": "https://BLACK_DUCK_SERVER_HOST/api/components/3174353e-ed05-4baa-8bab-232b68b697f3",
+        "componentName": "Bunkum",
+        "originId": "Bunkum/4.0.0",
+        "variant": "https://BLACK_DUCK_SERVER_HOST/api/components/3174353e-ed05-4baa-8bab-232b68b697f3/versions/ef8a7df6-7ee9-41ff-93cd-e2242c273983/origins/8cd81233-9ebb-4c22-a1dc-e6ac0d9ee78c",
+        "version": "https://BLACK_DUCK_SERVER_HOST/api/components/3174353e-ed05-4baa-8bab-232b68b697f3/versions/ef8a7df6-7ee9-41ff-93cd-e2242c273983",
+        "versionName": "4.0.0"
+      }
+    ],
+    "donfig/0.2.0": [
+      {
+        "component": "https://BLACK_DUCK_SERVER_HOST/api/components/3d93df1b-ace9-4c6e-846d-57da2953eefc",
+        "componentName": "donfig",
+        "originId": "donfig/0.2.0",
+        "variant": "https://BLACK_DUCK_SERVER_HOST/api/components/3d93df1b-ace9-4c6e-846d-57da2953eefc/versions/666e4e56-80dd-4f24-b913-af62ec56d09b/origins/c86159bb-1057-497e-a91c-d5daf3091abb",
+        "version": "https://BLACK_DUCK_SERVER_HOST/api/components/3d93df1b-ace9-4c6e-846d-57da2953eefc/versions/666e4e56-80dd-4f24-b913-af62ec56d09b",
+        "versionName": "0.2.0"
+      }
+    ],
+    "behdad/harfbuzz:2.2.0": [
+      {
+        "component": "https://BLACK_DUCK_SERVER_HOST/api/components/6c04be22-a0d2-47c4-8156-a26b579723cd",
+        "componentName": "HarfBuzz",
+        "originId": "behdad/harfbuzz:2.2.0",
+        "variant": "https://BLACK_DUCK_SERVER_HOST/api/components/6c04be22-a0d2-47c4-8156-a26b579723cd/versions/f5dbf4bb-3e99-43e3-a230-a112afbcbbb6/origins/19052c5a-1d95-4d73-9b89-e7fd936d997e",
+        "version": "https://BLACK_DUCK_SERVER_HOST/api/components/6c04be22-a0d2-47c4-8156-a26b579723cd/versions/f5dbf4bb-3e99-43e3-a230-a112afbcbbb6",
+        "versionName": "2.2.0"
+      }
+    ]
+  },
   "originViewForComponentsViewKey": {
     "67572a44-f8ee-4a45-8e21-69f56db86d5d/origins/96aa1969-e052-4206-a2e3-76436abecf72": {
       "externalId": "rebber/1.0.0",
@@ -554,6 +586,141 @@
           },
           {
             "href": "https://BLACK_DUCK_SERVER_HOST/api/components/1a52678e-8cbf-403c-81e4-976a5cdedbc3/versions/0dbe6949-559a-4d20-8408-16ce700a7267/origins/77ef257f-0925-462b-b7b7-392b37a25772/copyrights",
+            "rel": "component-origin-copyrights"
+          }
+        ]
+      }
+    },
+    "666e4e56-80dd-4f24-b913-af62ec56d09b/origins/c86159bb-1057-497e-a91c-d5daf3091abb": {
+      "externalId": "donfig/0.2.0",
+      "externalNamespace": "pypi",
+      "license": {
+        "licenseDisplay": "MIT License",
+        "licenses": [
+          {
+            "license": "https://BLACK_DUCK_SERVER_HOST/api/licenses/ad705c59-6893-4980-bdbf-0837f1823cc4",
+            "licenseDisplay": "MIT License",
+            "licenseFamilySummary": {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/license-families/1",
+              "name": "Permissive"
+            },
+            "licenses": [],
+            "name": "MIT License",
+            "ownership": "OPEN_SOURCE"
+          }
+        ],
+        "type": "DISJUNCTIVE"
+      },
+      "originId": "donfig/0.2.0",
+      "originName": "pypi",
+      "originUrl": "https://pypi.org/project/donfig/0.2.0",
+      "packageUrl": "pkg:pypi/donfig@0.2.0",
+      "releasedOn": "Dec 24, 2018, 6:19:24 AM",
+      "source": "KB",
+      "versionName": "0.2.0",
+      "_meta": {
+        "allow": [
+          "GET"
+        ],
+        "href": "https://BLACK_DUCK_SERVER_HOST/api/components/3d93df1b-ace9-4c6e-846d-57da2953eefc/versions/666e4e56-80dd-4f24-b913-af62ec56d09b/origins/c86159bb-1057-497e-a91c-d5daf3091abb",
+        "links": [
+          {
+            "href": "https://BLACK_DUCK_SERVER_HOST/api/components/3d93df1b-ace9-4c6e-846d-57da2953eefc/versions/666e4e56-80dd-4f24-b913-af62ec56d09b",
+            "rel": "version"
+          },
+          {
+            "href": "https://BLACK_DUCK_SERVER_HOST/api/components/3d93df1b-ace9-4c6e-846d-57da2953eefc/versions/666e4e56-80dd-4f24-b913-af62ec56d09b/origin/c86159bb-1057-497e-a91c-d5daf3091abb/vulnerabilities",
+            "rel": "vulnerabilities"
+          },
+          {
+            "href": "https://BLACK_DUCK_SERVER_HOST/api/components/3d93df1b-ace9-4c6e-846d-57da2953eefc/versions/666e4e56-80dd-4f24-b913-af62ec56d09b/origin/c86159bb-1057-497e-a91c-d5daf3091abb/file-licenses",
+            "rel": "file-licenses"
+          },
+          {
+            "href": "https://BLACK_DUCK_SERVER_HOST/api/components/3d93df1b-ace9-4c6e-846d-57da2953eefc/versions/666e4e56-80dd-4f24-b913-af62ec56d09b/origin/c86159bb-1057-497e-a91c-d5daf3091abb/file-licenses-fuzzy",
+            "rel": "file-licenses-fuzzy"
+          },
+          {
+            "href": "https://BLACK_DUCK_SERVER_HOST/api/components/3d93df1b-ace9-4c6e-846d-57da2953eefc/versions/666e4e56-80dd-4f24-b913-af62ec56d09b/origin/c86159bb-1057-497e-a91c-d5daf3091abb/file-copyrights",
+            "rel": "file-copyrights"
+          },
+          {
+            "href": "https://BLACK_DUCK_SERVER_HOST/api/components/3d93df1b-ace9-4c6e-846d-57da2953eefc/versions/666e4e56-80dd-4f24-b913-af62ec56d09b/origins/c86159bb-1057-497e-a91c-d5daf3091abb/upgrade-guidance",
+            "rel": "upgrade-guidance"
+          },
+          {
+            "href": "https://BLACK_DUCK_SERVER_HOST/api/components/3d93df1b-ace9-4c6e-846d-57da2953eefc/versions/666e4e56-80dd-4f24-b913-af62ec56d09b/origins/c86159bb-1057-497e-a91c-d5daf3091abb/transitive-upgrade-guidance",
+            "rel": "transitive-upgrade-guidance"
+          },
+          {
+            "href": "https://BLACK_DUCK_SERVER_HOST/api/components/3d93df1b-ace9-4c6e-846d-57da2953eefc/versions/666e4e56-80dd-4f24-b913-af62ec56d09b/origins/c86159bb-1057-497e-a91c-d5daf3091abb/copyrights",
+            "rel": "component-origin-copyrights"
+          }
+        ]
+      }
+    },
+    "f5dbf4bb-3e99-43e3-a230-a112afbcbbb6/origins/19052c5a-1d95-4d73-9b89-e7fd936d997e": {
+      "externalId": "behdad/harfbuzz:2.2.0",
+      "externalNamespace": "github",
+      "license": {
+        "licenseDisplay": "MIT License",
+        "licenses": [
+          {
+            "license": "https://BLACK_DUCK_SERVER_HOST/api/licenses/ad705c59-6893-4980-bdbf-0837f1823cc4",
+            "licenseDisplay": "MIT License",
+            "licenseFamilySummary": {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/license-families/1",
+              "name": "Permissive"
+            },
+            "licenses": [],
+            "name": "MIT License",
+            "ownership": "OPEN_SOURCE"
+          }
+        ],
+        "type": "DISJUNCTIVE"
+      },
+      "originId": "behdad/harfbuzz:2.2.0",
+      "originName": "github",
+      "packageUrl": "pkg:github/behdad/harfbuzz@2.2.0",
+      "releasedOn": "Nov 29, 2018, 10:54:02 PM",
+      "source": "KB",
+      "versionName": "2.2.0",
+      "_meta": {
+        "allow": [
+          "GET"
+        ],
+        "href": "https://BLACK_DUCK_SERVER_HOST/api/components/6c04be22-a0d2-47c4-8156-a26b579723cd/versions/f5dbf4bb-3e99-43e3-a230-a112afbcbbb6/origins/19052c5a-1d95-4d73-9b89-e7fd936d997e",
+        "links": [
+          {
+            "href": "https://BLACK_DUCK_SERVER_HOST/api/components/6c04be22-a0d2-47c4-8156-a26b579723cd/versions/f5dbf4bb-3e99-43e3-a230-a112afbcbbb6",
+            "rel": "version"
+          },
+          {
+            "href": "https://BLACK_DUCK_SERVER_HOST/api/components/6c04be22-a0d2-47c4-8156-a26b579723cd/versions/f5dbf4bb-3e99-43e3-a230-a112afbcbbb6/origin/19052c5a-1d95-4d73-9b89-e7fd936d997e/vulnerabilities",
+            "rel": "vulnerabilities"
+          },
+          {
+            "href": "https://BLACK_DUCK_SERVER_HOST/api/components/6c04be22-a0d2-47c4-8156-a26b579723cd/versions/f5dbf4bb-3e99-43e3-a230-a112afbcbbb6/origin/19052c5a-1d95-4d73-9b89-e7fd936d997e/file-licenses",
+            "rel": "file-licenses"
+          },
+          {
+            "href": "https://BLACK_DUCK_SERVER_HOST/api/components/6c04be22-a0d2-47c4-8156-a26b579723cd/versions/f5dbf4bb-3e99-43e3-a230-a112afbcbbb6/origin/19052c5a-1d95-4d73-9b89-e7fd936d997e/file-licenses-fuzzy",
+            "rel": "file-licenses-fuzzy"
+          },
+          {
+            "href": "https://BLACK_DUCK_SERVER_HOST/api/components/6c04be22-a0d2-47c4-8156-a26b579723cd/versions/f5dbf4bb-3e99-43e3-a230-a112afbcbbb6/origin/19052c5a-1d95-4d73-9b89-e7fd936d997e/file-copyrights",
+            "rel": "file-copyrights"
+          },
+          {
+            "href": "https://BLACK_DUCK_SERVER_HOST/api/components/6c04be22-a0d2-47c4-8156-a26b579723cd/versions/f5dbf4bb-3e99-43e3-a230-a112afbcbbb6/origins/19052c5a-1d95-4d73-9b89-e7fd936d997e/upgrade-guidance",
+            "rel": "upgrade-guidance"
+          },
+          {
+            "href": "https://BLACK_DUCK_SERVER_HOST/api/components/6c04be22-a0d2-47c4-8156-a26b579723cd/versions/f5dbf4bb-3e99-43e3-a230-a112afbcbbb6/origins/19052c5a-1d95-4d73-9b89-e7fd936d997e/transitive-upgrade-guidance",
+            "rel": "transitive-upgrade-guidance"
+          },
+          {
+            "href": "https://BLACK_DUCK_SERVER_HOST/api/components/6c04be22-a0d2-47c4-8156-a26b579723cd/versions/f5dbf4bb-3e99-43e3-a230-a112afbcbbb6/origins/19052c5a-1d95-4d73-9b89-e7fd936d997e/copyrights",
             "rel": "component-origin-copyrights"
           }
         ]
@@ -4502,6 +4669,250 @@
             },
             {
               "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/BDSA-2019-2490/ranges",
+              "rel": "bdsa-ranges"
+            }
+          ]
+        }
+      }
+    ],
+    "pypi:donfig/0.2.0": [
+      {
+        "bdsaTags": [],
+        "classifications": [],
+        "cvss2": {
+          "accessComplexity": "LOW",
+          "accessVector": "NETWORK",
+          "authentication": "NONE",
+          "availabilityImpact": "PARTIAL",
+          "baseScore": 7.5,
+          "confidentialityImpact": "PARTIAL",
+          "exploitabilitySubscore": 10.0,
+          "impactSubscore": 6.4,
+          "integrityImpact": "PARTIAL",
+          "severity": "HIGH",
+          "vector": "(AV:N/AC:L/Au:N/C:P/I:P/A:P)"
+        },
+        "cvss3": {
+          "attackComplexity": "LOW",
+          "attackVector": "NETWORK",
+          "availabilityImpact": "HIGH",
+          "baseScore": 9.8,
+          "confidentialityImpact": "HIGH",
+          "exploitabilitySubscore": 3.9,
+          "impactSubscore": 5.9,
+          "integrityImpact": "HIGH",
+          "privilegesRequired": "NONE",
+          "scope": "UNCHANGED",
+          "severity": "CRITICAL",
+          "userInteraction": "NONE",
+          "vector": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        "description": "An issue was discovered in Donfig 0.3.0. There is a vulnerability in the collect_yaml method in config_obj.py. It can execute arbitrary Python commands, resulting in command execution.",
+        "name": "CVE-2019-7537",
+        "overallScore": 9.8,
+        "publishedDate": "Mar 21, 2019, 9:29:01 PM",
+        "severity": "CRITICAL",
+        "source": "NVD",
+        "updatedDate": "Nov 21, 2024, 5:48:17 AM",
+        "useCvss3": true,
+        "_meta": {
+          "allow": [],
+          "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/CVE-2019-7537",
+          "links": [
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/cwes/CWE-77",
+              "rel": "cwes"
+            }
+          ]
+        }
+      }
+    ],
+    "github:behdad/harfbuzz:2.2.0": [
+      {
+        "bdsaTags": [],
+        "classifications": [],
+        "cvss2": {},
+        "cvss3": {
+          "attackComplexity": "LOW",
+          "attackVector": "NETWORK",
+          "availabilityImpact": "HIGH",
+          "baseScore": 7.5,
+          "confidentialityImpact": "NONE",
+          "exploitabilitySubscore": 3.9,
+          "impactSubscore": 3.6,
+          "integrityImpact": "NONE",
+          "privilegesRequired": "NONE",
+          "scope": "UNCHANGED",
+          "severity": "HIGH",
+          "userInteraction": "NONE",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        "description": "hb-ot-layout-gsubgpos.hh in HarfBuzz through 6.0.0 allows attackers to trigger O(n^2) growth via consecutive marks during the process of looking back for base glyphs when attaching marks.",
+        "name": "CVE-2023-25193",
+        "overallScore": 7.5,
+        "publishedDate": "Feb 4, 2023, 9:15:08 PM",
+        "severity": "HIGH",
+        "source": "NVD",
+        "updatedDate": "Nov 7, 2023, 5:08:55 AM",
+        "useCvss3": true,
+        "_meta": {
+          "allow": [],
+          "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/CVE-2023-25193",
+          "links": [
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/cwes/CWE-770",
+              "rel": "cwes"
+            },
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/BDSA-2023-0212",
+              "label": "BDSA",
+              "rel": "related-vulnerabilities"
+            },
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/BDSA-2023-0212",
+              "label": "BDSA",
+              "rel": "related-affecting-vulnerability"
+            }
+          ]
+        }
+      },
+      {
+        "bdsaTags": [],
+        "classifications": [],
+        "cvss2": {
+          "accessComplexity": "LOW",
+          "accessVector": "NETWORK",
+          "authentication": "NONE",
+          "availabilityImpact": "PARTIAL",
+          "baseScore": 6.4,
+          "confidentialityImpact": "NONE",
+          "exploitabilitySubscore": 10.0,
+          "impactSubscore": 4.9,
+          "integrityImpact": "PARTIAL",
+          "severity": "MEDIUM",
+          "temporalMetrics": {
+            "exploitability": "PROOF_OF_CONCEPT",
+            "remediationLevel": "OFFICIAL_FIX",
+            "reportConfidence": "CONFIRMED",
+            "score": 5.0
+          },
+          "vector": "(AV:N/AC:L/Au:N/C:N/I:P/A:P/E:POC/RL:OF/RC:C)"
+        },
+        "cvss3": {
+          "attackComplexity": "LOW",
+          "attackVector": "NETWORK",
+          "availabilityImpact": "HIGH",
+          "baseScore": 8.2,
+          "confidentialityImpact": "NONE",
+          "exploitabilitySubscore": 3.9,
+          "impactSubscore": 4.2,
+          "integrityImpact": "LOW",
+          "privilegesRequired": "NONE",
+          "scope": "UNCHANGED",
+          "severity": "HIGH",
+          "temporalMetrics": {
+            "exploitability": "PROOF_OF_CONCEPT",
+            "remediationLevel": "OFFICIAL_FIX",
+            "reportConfidence": "CONFIRMED",
+            "score": 7.4
+          },
+          "userInteraction": "NONE",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:H/E:P/RL:O/RC:C"
+        },
+        "description": "HarfBuzz is vulnerable to undefined behavior due to how an integer overflow can occur in the ` hb-ot-shape-fallback.c` file. An attacker could supply a crafted input in order to trigger the integer overflow issue and cause instability, or negatively impact the integrity of data in the application.",
+        "name": "BDSA-2022-1732",
+        "overallScore": 7.4,
+        "publishedDate": "Jun 23, 2022, 2:58:48 PM",
+        "severity": "HIGH",
+        "source": "BDSA",
+        "updatedDate": "Jul 27, 2022, 11:40:31 AM",
+        "useCvss3": true,
+        "_meta": {
+          "allow": [],
+          "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/BDSA-2022-1732",
+          "links": [
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/cwes/CWE-190",
+              "rel": "cwes"
+            },
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/CVE-2022-33068",
+              "label": "NVD",
+              "rel": "related-vulnerabilities"
+            },
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/BDSA-2022-1732/ranges",
+              "rel": "bdsa-ranges"
+            }
+          ]
+        }
+      },
+      {
+        "bdsaTags": [],
+        "classifications": [],
+        "cvss2": {
+          "accessComplexity": "LOW",
+          "accessVector": "NETWORK",
+          "authentication": "NONE",
+          "availabilityImpact": "PARTIAL",
+          "baseScore": 5.0,
+          "confidentialityImpact": "NONE",
+          "exploitabilitySubscore": 10.0,
+          "impactSubscore": 2.9,
+          "integrityImpact": "NONE",
+          "severity": "LOW",
+          "temporalMetrics": {
+            "exploitability": "PROOF_OF_CONCEPT",
+            "remediationLevel": "OFFICIAL_FIX",
+            "reportConfidence": "CONFIRMED",
+            "score": 3.9
+          },
+          "vector": "(AV:N/AC:L/Au:N/C:N/I:N/A:P/E:POC/RL:OF/RC:C)"
+        },
+        "cvss3": {
+          "attackComplexity": "LOW",
+          "attackVector": "NETWORK",
+          "availabilityImpact": "LOW",
+          "baseScore": 5.3,
+          "confidentialityImpact": "NONE",
+          "exploitabilitySubscore": 3.9,
+          "impactSubscore": 1.4,
+          "integrityImpact": "NONE",
+          "privilegesRequired": "NONE",
+          "scope": "UNCHANGED",
+          "severity": "MEDIUM",
+          "temporalMetrics": {
+            "exploitability": "PROOF_OF_CONCEPT",
+            "remediationLevel": "OFFICIAL_FIX",
+            "reportConfidence": "CONFIRMED",
+            "score": 4.8
+          },
+          "userInteraction": "NONE",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L/E:P/RL:O/RC:C"
+        },
+        "description": "Harfbuzz contains an out-of-bounds write vulnerability. An attacker could exploit this in order to trigger a denial-of-service (DoS) and crash the application.",
+        "name": "BDSA-2021-3920",
+        "overallScore": 4.8,
+        "publishedDate": "Jan 4, 2022, 4:34:19 PM",
+        "severity": "MEDIUM",
+        "source": "BDSA",
+        "updatedDate": "May 30, 2022, 4:08:20 PM",
+        "useCvss3": true,
+        "_meta": {
+          "allow": [],
+          "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/BDSA-2021-3920",
+          "links": [
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/cwes/CWE-787",
+              "rel": "cwes"
+            },
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/CVE-2021-45931",
+              "label": "NVD",
+              "rel": "related-vulnerabilities"
+            },
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/BDSA-2021-3920/ranges",
               "rel": "bdsa-ranges"
             }
           ]

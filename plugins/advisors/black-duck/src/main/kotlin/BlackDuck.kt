@@ -39,6 +39,7 @@ import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.vulnerabilities.Cvss2Rating
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
@@ -48,6 +49,11 @@ import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.enumSetOf
 
+/**
+ * This advice provider by default retrieves vulnerabilities by the purl corresponding to the package. If a package has
+ * the label [BlackDuck.PACKAGE_LABEL_BLACK_DUCK_ORIGIN_ID] set, then the vulnerabilities are retrieved by that
+ * origin-id instead of by the purl.
+ */
 @OrtPlugin(
     displayName = "Black Duck",
     description = "An advisor that retrieves vulnerability information from a Black Duck instance.",
@@ -57,6 +63,14 @@ class BlackDuck(
     override val descriptor: PluginDescriptor,
     private val blackDuckApi: ComponentServiceClient
 ) : AdviceProvider {
+    companion object {
+        /**
+         * The key of the package label for specifying the Black Duck origin-id in the form
+         * "$externalNamespace:$externalId", see also [BlackDuckOriginId.parse].
+         */
+        const val PACKAGE_LABEL_BLACK_DUCK_ORIGIN_ID = "black-duck:origin-id"
+    }
+
     override val details = AdvisorDetails(descriptor.id, enumSetOf(AdvisorCapability.VULNERABILITIES))
 
     constructor(descriptor: PluginDescriptor, config: BlackDuckConfiguration) : this(
@@ -99,14 +113,37 @@ class BlackDuck(
     }
 
     private fun getOrigins(pkg: Package, issues: MutableList<Issue>): List<OriginView> {
-        val searchResults = runCatching {
-            blackDuckApi.searchKbComponentsByPurl(pkg.purl)
+        val externalId = runCatching {
+            pkg.blackDuckOriginId?.let { BlackDuckOriginId.parse(it).toExternalId() }
         }.getOrElse {
             issues += createAndLogIssue(
                 source = descriptor.displayName,
-                message = "Requesting origins for purl ${pkg.purl} failed: ${it.collectMessages()}"
+                message = "Could not parse origin-id '${pkg.blackDuckOriginId}' for '${pkg.id.toCoordinates()}: " +
+                    it.collectMessages()
             )
             return emptyList()
+        }
+
+        val searchResults = if (externalId != null) {
+            runCatching {
+                blackDuckApi.searchKbComponentsByExternalId(externalId)
+            }.getOrElse {
+                issues += createAndLogIssue(
+                    source = descriptor.displayName,
+                    message = "Requesting origins for externalId '$externalId' failed: ${it.collectMessages()}"
+                )
+                return emptyList()
+            }
+        } else {
+            runCatching {
+                blackDuckApi.searchKbComponentsByPurl(pkg.purl)
+            }.getOrElse {
+                issues += createAndLogIssue(
+                    source = descriptor.displayName,
+                    message = "Requesting origins for purl ${pkg.purl} failed: ${it.collectMessages()}"
+                )
+                return emptyList()
+            }
         }
 
         val origins = searchResults.mapNotNull { searchResult ->
@@ -127,6 +164,15 @@ class BlackDuck(
                 "Found ${origins.size} origin(s) for package '${pkg.id.toCoordinates()}': " +
                     "${origins.joinToString { it.identifier }}."
             }
+        }
+
+        if (externalId != null && origins.isEmpty()) {
+            issues += createAndLogIssue(
+                source = descriptor.displayName,
+                message = "The origin-id '${pkg.blackDuckOriginId} of package ${pkg.id.toCoordinates()} does not " +
+                    "match any origin.",
+                severity = Severity.WARNING
+            )
         }
 
         return origins
@@ -195,3 +241,5 @@ private fun Map<Identifier, List<OriginView>>.getSummary(): String =
             }
         }
     }
+
+private val Package.blackDuckOriginId: String? get() = labels[BlackDuck.PACKAGE_LABEL_BLACK_DUCK_ORIGIN_ID]

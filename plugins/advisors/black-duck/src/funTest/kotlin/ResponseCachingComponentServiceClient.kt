@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.advisors.blackduck
 
+import com.blackduck.integration.bdio.model.externalid.ExternalId
 import com.blackduck.integration.blackduck.api.generated.response.ComponentsView
 import com.blackduck.integration.blackduck.api.generated.view.OriginView
 import com.blackduck.integration.blackduck.api.generated.view.VulnerabilityView
@@ -60,6 +61,11 @@ internal class ResponseCachingComponentServiceClient(
             delegate?.searchKbComponentsByPurl(purl).orEmpty()
         }
 
+    override fun searchKbComponentsByExternalId(externalId: ExternalId): List<ComponentsView> =
+        cache.componentsViewsForExternalId.getOrPut(externalId.createExternalId()) {
+            delegate?.searchKbComponentsByExternalId(externalId).orEmpty()
+        }
+
     override fun getOriginView(searchResult: ComponentsView): OriginView? =
         cache.originViewForComponentsViewKey.getOrPut(searchResult.key) {
             delegate?.getOriginView(searchResult)
@@ -80,6 +86,7 @@ internal class ResponseCachingComponentServiceClient(
 
 private class ResponseCache {
     val componentsViewsForPurl = ConcurrentHashMap<String, List<ComponentsView>>()
+    val componentsViewsForExternalId = ConcurrentHashMap<String, List<ComponentsView>>()
     val originViewForComponentsViewKey = ConcurrentHashMap<String, OriginView?>()
     val vulnerabilityViewsForOriginViewKey = ConcurrentHashMap<String, List<VulnerabilityView>>()
 }

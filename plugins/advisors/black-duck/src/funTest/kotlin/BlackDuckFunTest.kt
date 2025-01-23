@@ -31,6 +31,7 @@ import java.time.Instant
 import org.ossreviewtoolkit.advisor.normalizeVulnerabilityData
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.common.Os
@@ -70,6 +71,28 @@ class BlackDuckFunTest : WordSpec({
                 "PyPI::django:3.2"
             ).mapTo(mutableSetOf()) {
                 identifierToPackage(it)
+            }
+
+            val packageFindings = blackDuck.retrievePackageFindings(packages).mapKeys { it.key.id.toCoordinates() }
+
+            packageFindings.keys shouldContainExactlyInAnyOrder packages.map { it.id.toCoordinates() }
+            packageFindings.keys.forAll { id ->
+                packageFindings.getValue(id).vulnerabilities shouldNot beEmpty()
+            }
+        }
+
+        "return the vulnerabilities for some supported namespaces by origin-id" {
+            val packages = setOf(
+                "Github::behdad/harbuzz:2.2.0" to "github:behdad/harfbuzz:2.2.0",
+                "NuGet::Bunkum:4.0.0" to "nuget:Bunkum/4.0.0",
+                "Pypi:donfig:0.2.0" to "pypi:donfig/0.2.0"
+            ).mapTo(mutableSetOf()) { (coordinates, originId) ->
+                Package.EMPTY.copy(
+                    id = Identifier(coordinates),
+                    labels = mapOf(
+                        BlackDuck.PACKAGE_LABEL_BLACK_DUCK_ORIGIN_ID to originId
+                    )
+                )
             }
 
             val packageFindings = blackDuck.retrievePackageFindings(packages).mapKeys { it.key.id.toCoordinates() }

@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.advisors.blackduck
 
+import com.blackduck.integration.bdio.model.externalid.ExternalId
 import com.blackduck.integration.blackduck.api.generated.response.ComponentsView
 import com.blackduck.integration.blackduck.api.generated.view.OriginView
 import com.blackduck.integration.blackduck.api.generated.view.VulnerabilityView
@@ -29,4 +30,6 @@ interface ComponentServiceClient {
     fun getVulnerabilities(originView: OriginView): List<VulnerabilityView>
 
     fun searchKbComponentsByPurl(purl: String): List<ComponentsView>
+
+    fun searchKbComponentsByExternalId(externalId: ExternalId): List<ComponentsView>
 }
