@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.advisors.blackduck
 
+import com.blackduck.integration.bdio.model.externalid.ExternalId
 import com.blackduck.integration.blackduck.api.core.BlackDuckPath
 import com.blackduck.integration.blackduck.api.core.response.LinkMultipleResponses
 import com.blackduck.integration.blackduck.api.generated.discovery.ApiDiscovery
@@ -79,6 +80,9 @@ internal class ExtendedComponentService(
 
         return blackDuckApiClient.getAllResponses(request)
     }
+
+    override fun searchKbComponentsByExternalId(externalId: ExternalId): List<ComponentsView> =
+        getAllSearchResults(externalId)
 
     override fun getComponentView(searchResult: ComponentsView): Optional<ComponentView> {
         // The super function accidentally uses the URL to the version view, while it should use the URL to the
