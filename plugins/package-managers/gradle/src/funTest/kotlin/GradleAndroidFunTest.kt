@@ -66,7 +66,7 @@ class GradleAndroidFunTest : StringSpec({
         val expectedResultFile = getAssetFile("projects/synthetic/gradle-android-cyclic-expected-output-app.yml")
 
         val result = GradleFactory.create(javaVersion = "17")
-            .resolveDependencies(USER_DIR, listOf(definitionFile), Excludes.EMPTY, AnalyzerConfiguration(), emptyMap())
+            .resolveSingleProject(definitionFile, resolveScopes = true)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }

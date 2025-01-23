@@ -23,10 +23,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.toYaml
-import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
@@ -61,15 +58,12 @@ class GradleAndroidFunTest : StringSpec({
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
-    "Cyclic dependencies over multiple libraries can be handled".config(
-        // This requires some work to make results comparable to the serialized PackageManagerResult.
-        enabled = false
-    ) {
+    "Cyclic dependencies over multiple libraries can be handled" {
         val definitionFile = getAssetFile("projects/synthetic/gradle-android-cyclic/app/build.gradle").toGradle()
         val expectedResultFile = getAssetFile("projects/synthetic/gradle-android-cyclic-expected-output-app.yml")
 
         val result = GradleInspectorFactory.create(javaVersion = "17")
-            .resolveDependencies(USER_DIR, listOf(definitionFile), Excludes.EMPTY, AnalyzerConfiguration(), emptyMap())
+            .resolveSingleProject(definitionFile, resolveScopes = true)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
