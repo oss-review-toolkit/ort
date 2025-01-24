@@ -57,6 +57,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.PackageInfo
 import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.Pubspec
 import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.Pubspec.Dependency
 import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.Pubspec.SdkDependency
+import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.isProject
 import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.parseLockfile
 import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.parsePubspec
 import org.ossreviewtoolkit.utils.common.CommandLineTool
@@ -378,7 +379,7 @@ class Pub(
             if (pkgInfoFromLockfile == null || pkgInfoFromLockfile.source == "sdk") return@forEach
 
             val id = Identifier(
-                type = "Pub",
+                type = if (pkgInfoFromLockfile.isProject) projectType else "Pub",
                 namespace = "",
                 name = packageName,
                 version = pkgInfoFromLockfile.version.orEmpty()
@@ -629,7 +630,7 @@ class Pub(
                 }
 
                 val id = Identifier(
-                    type = "Pub",
+                    type = if (packageInfo.isProject) projectType else "Pub",
                     namespace = "",
                     name = rawName,
                     version = version
