@@ -35,7 +35,5 @@ internal class YarnDependencyHandler(private val yarn: Yarn) : DependencyHandler
         PackageLinkage.DYNAMIC.takeUnless { dependency.isProject } ?: PackageLinkage.PROJECT_DYNAMIC
 
     override fun createPackage(dependency: ModuleInfo, issues: MutableCollection<Issue>): Package? =
-        yarn.takeUnless { dependency.isProject }?.let {
-            parsePackage(dependency.packageFile, it::getRemotePackageDetails)
-        }
+        if (dependency.isProject) null else parsePackage(dependency.packageFile, yarn::getRemotePackageDetails)
 }
