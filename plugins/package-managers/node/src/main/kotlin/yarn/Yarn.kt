@@ -251,7 +251,7 @@ open class Yarn(
 
                 getModuleInfo(
                     moduleDir = dependencyModuleDir,
-                    scopes = setOf("dependencies", "optionalDependencies"),
+                    scopes = setOf(DEPENDENCIES_SCOPE, OPTIONAL_DEPENDENCIES_SCOPE),
                     projectDirs,
                     ancestorModuleDirs = dependencyModuleDirPath.subList(1, dependencyModuleDirPath.size),
                     ancestorModuleIds = ancestorModuleIds + moduleId
