@@ -168,7 +168,7 @@ open class Yarn(
         val workingDir = definitionFile.parentFile
         installDependencies(workingDir)
 
-        val projectDirs = findWorkspaceSubmodules(workingDir).toSet() + definitionFile.parentFile
+        val projectDirs = findWorkspaceSubmodules(workingDir) + definitionFile.parentFile
 
         return projectDirs.map { projectDir ->
             val issues = mutableListOf<Issue>()
