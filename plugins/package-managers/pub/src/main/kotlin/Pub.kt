@@ -384,7 +384,7 @@ class Pub(
                 version = pkgInfoFromLockfile.version.orEmpty()
             )
 
-            val packageInfo = packages[id] ?: throw IOException("Could not find package info for $packageName")
+            val packageInfo = requireNotNull(packages[id]) { "Could not find any info for package '$packageName'." }
 
             try {
                 val dependencyPubspec = readPackageInfoFromCache(pkgInfoFromLockfile, workingDir)
