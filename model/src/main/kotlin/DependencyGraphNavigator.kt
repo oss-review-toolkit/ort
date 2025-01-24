@@ -46,21 +46,21 @@ class DependencyGraphNavigator(
 
     override fun directDependencies(project: Project, scopeName: String): Sequence<DependencyNode> {
         // Collect all root indices for all managers whose graphs have projects of the respective type.
-        val rootIndicesForGraphs = graphs.mapNotNull { (manager, graph) ->
-            graph.scopes[DependencyGraph.qualifyScope(project, scopeName)]?.let { Triple(manager, graph, it) }
+        val rootIndicesForGraphs = graphs.mapNotNull { (managerName, graph) ->
+            graph.scopes[DependencyGraph.qualifyScope(project, scopeName)]?.let { Triple(managerName, graph, it) }
         }
 
         if (rootIndicesForGraphs.isEmpty()) return emptySequence()
 
         // TODO: Consider extending the signature of this function to also take a manager name, so that the dependencies
         //       for that manager could be obtained without "guessing" which of the managers created the project.
-        val (manager, graph, rootIndices) = requireNotNull(rootIndicesForGraphs.singleOrNull()) {
-            val managers = rootIndicesForGraphs.map { (manager, _, _) -> manager }
-            "All of the $managers managers are able to manage '${project.id.type}' projects. Please enable only one " +
-                "of them."
+        val (managerName, graph, rootIndices) = requireNotNull(rootIndicesForGraphs.singleOrNull()) {
+            val managerNames = rootIndicesForGraphs.map { (managerName, _, _) -> managerName }
+            "All of the $managerNames managers are able to manage '${project.id.type}' projects. Please enable only " +
+                "one of them."
         }
 
-        return dependenciesAccessor(manager, graph, rootIndices)
+        return dependenciesAccessor(managerName, graph, rootIndices)
     }
 
     fun dependenciesAccessor(
