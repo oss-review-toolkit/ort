@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.node.yarn2
 
-import io.kotest.core.spec.style.WordSpec
+import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.analyzer.collateMultipleProjects
@@ -29,36 +29,34 @@ import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
-class Yarn2FunTest : WordSpec({
-    "Yarn 2" should {
-        "resolve dependencies for a project with lockfile correctly" {
-            val definitionFile = getAssetFile("projects/synthetic/yarn2/project-with-lockfile/package.json")
-            val expectedResultFile = getAssetFile("projects/synthetic/yarn2/project-with-lockfile-expected-output.yml")
+class Yarn2FunTest : StringSpec({
+    "Resolve dependencies for a project with lockfile correctly" {
+        val definitionFile = getAssetFile("projects/synthetic/yarn2/project-with-lockfile/package.json")
+        val expectedResultFile = getAssetFile("projects/synthetic/yarn2/project-with-lockfile-expected-output.yml")
 
-            val result = create("Yarn2").resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = create("Yarn2").resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
-        }
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
 
-        "resolved dependencies for a project with lockfile correctly and skip excluded scopes" {
-            val definitionFile = getAssetFile("projects/synthetic/yarn2/project-with-lockfile/package.json")
-            val expectedResultFile = getAssetFile(
-                "projects/synthetic/yarn2/project-with-lockfile-skip-excluded-scopes-expected-output.yml"
-            )
+    "Resolve dependencies for a project with lockfile correctly and skip excluded scopes" {
+        val definitionFile = getAssetFile("projects/synthetic/yarn2/project-with-lockfile/package.json")
+        val expectedResultFile = getAssetFile(
+            "projects/synthetic/yarn2/project-with-lockfile-skip-excluded-scopes-expected-output.yml"
+        )
 
-            val result = create("Yarn2", excludedScopes = setOf("devDependencies"))
-                .resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = create("Yarn2", excludedScopes = setOf("devDependencies"))
+            .resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
-        }
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
 
-        "resolve dependencies for a workspaces project correctly" {
-            val definitionFile = getAssetFile("projects/synthetic/yarn2/workspaces/package.json")
-            val expectedResultFile = getAssetFile("projects/synthetic/yarn2/workspaces-expected-output.yml")
+    "Resolve dependencies for a workspaces project correctly" {
+        val definitionFile = getAssetFile("projects/synthetic/yarn2/workspaces/package.json")
+        val expectedResultFile = getAssetFile("projects/synthetic/yarn2/workspaces-expected-output.yml")
 
-            val result = create("Yarn2").collateMultipleProjects(definitionFile).withResolvedScopes()
+        val result = create("Yarn2").collateMultipleProjects(definitionFile).withResolvedScopes()
 
-            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
-        }
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 })

@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.node.yarn
 
-import io.kotest.core.spec.style.WordSpec
+import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.analyzer.collateMultipleProjects
@@ -29,35 +29,33 @@ import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
-class YarnFunTest : WordSpec({
-    "yarn" should {
-        "resolve dependencies for a project with lockfile correctly" {
-            val definitionFile = getAssetFile("projects/synthetic/yarn/project-with-lockfile/package.json")
-            val expectedResultFile = getAssetFile("projects/synthetic/yarn/project-with-lockfile-expected-output.yml")
+class YarnFunTest : StringSpec({
+    "Resolve dependencies for a project with lockfile correctly" {
+        val definitionFile = getAssetFile("projects/synthetic/yarn/project-with-lockfile/package.json")
+        val expectedResultFile = getAssetFile("projects/synthetic/yarn/project-with-lockfile-expected-output.yml")
 
-            val result = create("Yarn").resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = create("Yarn").resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
-        }
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
 
-        "resolve dependencies for a project depending on Babel correctly" {
-            val definitionFile = getAssetFile("projects/synthetic/yarn/babel/package.json")
-            val expectedResultFile = getAssetFile("projects/synthetic/yarn/babel-expected-output.yml")
+    "Resolve dependencies for a project depending on Babel correctly" {
+        val definitionFile = getAssetFile("projects/synthetic/yarn/babel/package.json")
+        val expectedResultFile = getAssetFile("projects/synthetic/yarn/babel-expected-output.yml")
 
-            val result = create("Yarn").resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = create("Yarn").resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
-        }
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
 
-        "resolve workspace dependencies correctly" {
-            // This test case illustrates the lack of Yarn workspaces support, in particular not all workspace
-            // dependencies get assigned to a scope.
-            val definitionFile = getAssetFile("projects/synthetic/yarn/workspaces/package.json")
-            val expectedResultFile = getAssetFile("projects/synthetic/yarn/workspaces-expected-output.yml")
+    "Resolve workspace dependencies correctly" {
+        // This test case illustrates the lack of Yarn workspaces support, in particular not all workspace
+        // dependencies get assigned to a scope.
+        val definitionFile = getAssetFile("projects/synthetic/yarn/workspaces/package.json")
+        val expectedResultFile = getAssetFile("projects/synthetic/yarn/workspaces-expected-output.yml")
 
-            val result = create("Yarn").collateMultipleProjects(definitionFile).withResolvedScopes()
+        val result = create("Yarn").collateMultipleProjects(definitionFile).withResolvedScopes()
 
-            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
-        }
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 })
