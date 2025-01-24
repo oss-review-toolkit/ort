@@ -153,8 +153,8 @@ open class Yarn(
 
     /**
      * An internally used data class with information about a module retrieved from the module's package.json. This
-     * information is further processed and eventually converted to an [NpmModuleInfo] object containing everything
-     * required by the Npm package manager.
+     * information is further processed and eventually converted to an [ModuleInfo] object containing everything
+     * required by the Yarn package manager.
      */
     private data class RawModuleInfo(
         val name: String,
@@ -186,9 +186,9 @@ open class Yarn(
             }
 
             val scopeNames = setOfNotNull(
-                // Optional dependencies are just like regular dependencies except that NPM ignores failures when
-                // installing them (see https://docs.npmjs.com/files/package.json#optionaldependencies), i.e. they are
-                // not a separate scope in ORT semantics.
+                // Optional dependencies are just like regular dependencies except that Yarn ignores failures when
+                // installing them (see https://classic.yarnpkg.com/en/docs/package-json#toc-optionaldependencies), i.e.
+                // they are not a separate scope in ORT semantics.
                 buildDependencyGraphForScopes(
                     project,
                     projectDir,
@@ -223,9 +223,9 @@ open class Yarn(
         projectDirs: Set<File>,
         ancestorModuleDirs: List<File> = emptyList(),
         ancestorModuleIds: List<Identifier> = emptyList()
-    ): NpmModuleInfo? {
+    ): ModuleInfo? {
         val moduleInfo = parsePackageJson(moduleDir, scopes)
-        val dependencies = mutableSetOf<NpmModuleInfo>()
+        val dependencies = mutableSetOf<ModuleInfo>()
         val packageType = if (moduleDir.realFile() in projectDirs) projectType else "NPM"
 
         val moduleId = splitNamespaceAndName(moduleInfo.name).let { (namespace, name) ->
@@ -265,7 +265,7 @@ open class Yarn(
             }
         }
 
-        return NpmModuleInfo(
+        return ModuleInfo(
             id = moduleId,
             workingDir = moduleDir,
             packageFile = moduleInfo.packageJson,

@@ -26,15 +26,15 @@ import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackage
 
-internal class YarnDependencyHandler(private val yarn: Yarn) : DependencyHandler<NpmModuleInfo> {
-    override fun identifierFor(dependency: NpmModuleInfo): Identifier = dependency.id
+internal class YarnDependencyHandler(private val yarn: Yarn) : DependencyHandler<ModuleInfo> {
+    override fun identifierFor(dependency: ModuleInfo): Identifier = dependency.id
 
-    override fun dependenciesFor(dependency: NpmModuleInfo): List<NpmModuleInfo> = dependency.dependencies.toList()
+    override fun dependenciesFor(dependency: ModuleInfo): List<ModuleInfo> = dependency.dependencies.toList()
 
-    override fun linkageFor(dependency: NpmModuleInfo): PackageLinkage =
+    override fun linkageFor(dependency: ModuleInfo): PackageLinkage =
         PackageLinkage.DYNAMIC.takeUnless { dependency.isProject } ?: PackageLinkage.PROJECT_DYNAMIC
 
-    override fun createPackage(dependency: NpmModuleInfo, issues: MutableCollection<Issue>): Package? =
+    override fun createPackage(dependency: ModuleInfo, issues: MutableCollection<Issue>): Package? =
         yarn.takeUnless { dependency.isProject }?.let {
             parsePackage(dependency.packageFile, it::getRemotePackageDetails)
         }

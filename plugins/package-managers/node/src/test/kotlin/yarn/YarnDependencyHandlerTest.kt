@@ -88,15 +88,15 @@ private fun createIdentifier(name: String): Identifier =
     Identifier(type = "NPM", namespace = "test", name = name, version = "1.2.3")
 
 /**
- * Convenience function to create an [NpmModuleInfo] instance with default values based on the provided [id],
+ * Convenience function to create an [ModuleInfo] instance with default values based on the provided [id],
  * [packageFile], and [dependencies].
  */
 private fun createModuleInfo(
     id: Identifier,
     packageFile: File = File("project/package.json"),
-    dependencies: Set<NpmModuleInfo> = emptySet(),
+    dependencies: Set<ModuleInfo> = emptySet(),
     isProject: Boolean = false
-): NpmModuleInfo = NpmModuleInfo(id, packageFile.parentFile, packageFile, dependencies, isProject)
+): ModuleInfo = ModuleInfo(id, packageFile.parentFile, packageFile, dependencies, isProject)
 
 /**
  * Creates an [YarnDependencyHandler] instance to be used by test cases.
