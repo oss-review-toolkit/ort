@@ -274,9 +274,7 @@ class AnalyzerResultBuilderTest : WordSpec() {
                     .addResult(analyzerResult2)
                     .build()
 
-                mergedResults.projects.map {
-                    it.withResolvedScopes(mergedResults.dependencyGraphs[it.id.type])
-                } shouldBe setOf(
+                mergedResults.withResolvedScopes().projects shouldBe setOf(
                     project1,
                     project2
                 )
