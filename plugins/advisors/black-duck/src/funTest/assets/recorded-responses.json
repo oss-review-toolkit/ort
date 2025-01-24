@@ -1,5 +1,15 @@
 {
   "componentsViewsForExternalId": {
+    "libtiff/4.6.0@_/_#44d09b1f75a7fd97d4f7daea5e7aed8e:76d7c7f96feb2c0e80e06c3ce83fb313b77d8ef1#4e4eafa7fcd218e85d2fe31ee79c7552": [
+      {
+        "component": "https://BLACK_DUCK_SERVER_HOST/api/components/2ba99dfd-d4d4-48b9-93ad-66d0b2c878f9",
+        "componentName": "libTIFF",
+        "originId": "libtiff/4.6.0@_/_#44d09b1f75a7fd97d4f7daea5e7aed8e:76d7c7f96feb2c0e80e06c3ce83fb313b77d8ef1#4e4eafa7fcd218e85d2fe31ee79c7552",
+        "variant": "https://BLACK_DUCK_SERVER_HOST/api/components/2ba99dfd-d4d4-48b9-93ad-66d0b2c878f9/versions/93c8c5b4-fb1e-4438-8082-7b721eb4b6c0/origins/00a5115a-6b2c-46df-a3d4-755b41b21f2f",
+        "version": "https://BLACK_DUCK_SERVER_HOST/api/components/2ba99dfd-d4d4-48b9-93ad-66d0b2c878f9/versions/93c8c5b4-fb1e-4438-8082-7b721eb4b6c0",
+        "versionName": "4.6.0"
+      }
+    ],
     "Bunkum/4.0.0": [
       {
         "component": "https://BLACK_DUCK_SERVER_HOST/api/components/3174353e-ed05-4baa-8bab-232b68b697f3",
@@ -371,6 +381,73 @@
           },
           {
             "href": "https://BLACK_DUCK_SERVER_HOST/api/components/6dd46c55-176f-47fe-bf04-d4b0b94bd671/versions/60c9a5f2-25a3-4525-bee8-4056c9d6397f/origins/bb54ad3a-6605-4455-8d6e-11ce7639ff7e/copyrights",
+            "rel": "component-origin-copyrights"
+          }
+        ]
+      }
+    },
+    "93c8c5b4-fb1e-4438-8082-7b721eb4b6c0/origins/00a5115a-6b2c-46df-a3d4-755b41b21f2f": {
+      "externalId": "libtiff/4.6.0@_/_#44d09b1f75a7fd97d4f7daea5e7aed8e:76d7c7f96feb2c0e80e06c3ce83fb313b77d8ef1#4e4eafa7fcd218e85d2fe31ee79c7552",
+      "externalNamespace": "conan",
+      "license": {
+        "licenseDisplay": "libtiff License",
+        "licenses": [
+          {
+            "license": "https://BLACK_DUCK_SERVER_HOST/api/licenses/9c251bdf-4eaa-44a3-a2d6-c44d874b4470",
+            "licenseDisplay": "libtiff License",
+            "licenseFamilySummary": {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/license-families/1",
+              "name": "Permissive"
+            },
+            "licenses": [],
+            "name": "libtiff License",
+            "ownership": "OPEN_SOURCE"
+          }
+        ],
+        "type": "DISJUNCTIVE"
+      },
+      "originId": "libtiff/4.6.0@_/_#44d09b1f75a7fd97d4f7daea5e7aed8e:76d7c7f96feb2c0e80e06c3ce83fb313b77d8ef1#4e4eafa7fcd218e85d2fe31ee79c7552",
+      "originName": "conan",
+      "originUrl": "https://conan.io/center/libtiff?version\u003d4.6.0",
+      "releasedOn": "Sep 14, 2023, 12:36:47 PM",
+      "source": "KB",
+      "versionName": "4.6.0",
+      "_meta": {
+        "allow": [
+          "GET"
+        ],
+        "href": "https://BLACK_DUCK_SERVER_HOST/api/components/2ba99dfd-d4d4-48b9-93ad-66d0b2c878f9/versions/93c8c5b4-fb1e-4438-8082-7b721eb4b6c0/origins/00a5115a-6b2c-46df-a3d4-755b41b21f2f",
+        "links": [
+          {
+            "href": "https://BLACK_DUCK_SERVER_HOST/api/components/2ba99dfd-d4d4-48b9-93ad-66d0b2c878f9/versions/93c8c5b4-fb1e-4438-8082-7b721eb4b6c0",
+            "rel": "version"
+          },
+          {
+            "href": "https://BLACK_DUCK_SERVER_HOST/api/components/2ba99dfd-d4d4-48b9-93ad-66d0b2c878f9/versions/93c8c5b4-fb1e-4438-8082-7b721eb4b6c0/origin/00a5115a-6b2c-46df-a3d4-755b41b21f2f/vulnerabilities",
+            "rel": "vulnerabilities"
+          },
+          {
+            "href": "https://BLACK_DUCK_SERVER_HOST/api/components/2ba99dfd-d4d4-48b9-93ad-66d0b2c878f9/versions/93c8c5b4-fb1e-4438-8082-7b721eb4b6c0/origin/00a5115a-6b2c-46df-a3d4-755b41b21f2f/file-licenses",
+            "rel": "file-licenses"
+          },
+          {
+            "href": "https://BLACK_DUCK_SERVER_HOST/api/components/2ba99dfd-d4d4-48b9-93ad-66d0b2c878f9/versions/93c8c5b4-fb1e-4438-8082-7b721eb4b6c0/origin/00a5115a-6b2c-46df-a3d4-755b41b21f2f/file-licenses-fuzzy",
+            "rel": "file-licenses-fuzzy"
+          },
+          {
+            "href": "https://BLACK_DUCK_SERVER_HOST/api/components/2ba99dfd-d4d4-48b9-93ad-66d0b2c878f9/versions/93c8c5b4-fb1e-4438-8082-7b721eb4b6c0/origin/00a5115a-6b2c-46df-a3d4-755b41b21f2f/file-copyrights",
+            "rel": "file-copyrights"
+          },
+          {
+            "href": "https://BLACK_DUCK_SERVER_HOST/api/components/2ba99dfd-d4d4-48b9-93ad-66d0b2c878f9/versions/93c8c5b4-fb1e-4438-8082-7b721eb4b6c0/origins/00a5115a-6b2c-46df-a3d4-755b41b21f2f/upgrade-guidance",
+            "rel": "upgrade-guidance"
+          },
+          {
+            "href": "https://BLACK_DUCK_SERVER_HOST/api/components/2ba99dfd-d4d4-48b9-93ad-66d0b2c878f9/versions/93c8c5b4-fb1e-4438-8082-7b721eb4b6c0/origins/00a5115a-6b2c-46df-a3d4-755b41b21f2f/transitive-upgrade-guidance",
+            "rel": "transitive-upgrade-guidance"
+          },
+          {
+            "href": "https://BLACK_DUCK_SERVER_HOST/api/components/2ba99dfd-d4d4-48b9-93ad-66d0b2c878f9/versions/93c8c5b4-fb1e-4438-8082-7b721eb4b6c0/origins/00a5115a-6b2c-46df-a3d4-755b41b21f2f/copyrights",
             "rel": "component-origin-copyrights"
           }
         ]
@@ -780,6 +857,324 @@
               "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/BDSA-2020-4804",
               "label": "BDSA",
               "rel": "related-vulnerabilities"
+            }
+          ]
+        }
+      }
+    ],
+    "conan:libtiff/4.6.0@_/_#44d09b1f75a7fd97d4f7daea5e7aed8e:76d7c7f96feb2c0e80e06c3ce83fb313b77d8ef1#4e4eafa7fcd218e85d2fe31ee79c7552": [
+      {
+        "bdsaTags": [],
+        "classifications": [],
+        "cvss2": {},
+        "cvss3": {
+          "attackComplexity": "LOW",
+          "attackVector": "NETWORK",
+          "availabilityImpact": "HIGH",
+          "baseScore": 7.5,
+          "confidentialityImpact": "NONE",
+          "exploitabilitySubscore": 3.9,
+          "impactSubscore": 3.6,
+          "integrityImpact": "NONE",
+          "privilegesRequired": "NONE",
+          "scope": "UNCHANGED",
+          "severity": "HIGH",
+          "userInteraction": "NONE",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        "description": "A null pointer dereference flaw was found in Libtiff via `tif_dirinfo.c`. This issue may allow an attacker to trigger memory allocation failures through certain means, such as restricting the heap space size or injecting faults, causing a segmentation fault. This can cause an application crash, eventually leading to a denial of service.",
+        "name": "CVE-2024-7006",
+        "overallScore": 7.5,
+        "publishedDate": "Aug 12, 2024, 3:38:40 PM",
+        "severity": "HIGH",
+        "source": "NVD",
+        "updatedDate": "Nov 6, 2024, 11:15:04 AM",
+        "useCvss3": true,
+        "_meta": {
+          "allow": [],
+          "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/CVE-2024-7006",
+          "links": [
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/cwes/CWE-476",
+              "rel": "cwes"
+            },
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/BDSA-2024-5272",
+              "label": "BDSA",
+              "rel": "related-vulnerabilities"
+            },
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/BDSA-2024-5272",
+              "label": "BDSA",
+              "rel": "related-affecting-vulnerability"
+            }
+          ]
+        }
+      },
+      {
+        "bdsaTags": [],
+        "classifications": [],
+        "cvss2": {
+          "accessComplexity": "HIGH",
+          "accessVector": "LOCAL",
+          "authentication": "MULTIPLE",
+          "availabilityImpact": "NONE",
+          "baseScore": 0.0,
+          "confidentialityImpact": "NONE",
+          "exploitabilitySubscore": 1.2,
+          "impactSubscore": 0.0,
+          "integrityImpact": "NONE",
+          "severity": "LOW",
+          "vector": "(AV:L/AC:H/Au:M/C:N/I:N/A:N)"
+        },
+        "cvss3": {
+          "attackComplexity": "HIGH",
+          "attackVector": "NETWORK",
+          "availabilityImpact": "HIGH",
+          "baseScore": 8.1,
+          "confidentialityImpact": "HIGH",
+          "exploitabilitySubscore": 2.2,
+          "impactSubscore": 5.9,
+          "integrityImpact": "HIGH",
+          "privilegesRequired": "NONE",
+          "scope": "UNCHANGED",
+          "severity": "HIGH",
+          "temporalMetrics": {
+            "exploitability": "PROOF_OF_CONCEPT",
+            "remediationLevel": "OFFICIAL_FIX",
+            "reportConfidence": "REASONABLE",
+            "score": 7.0
+          },
+          "userInteraction": "NONE",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H/E:P/RL:O/RC:R"
+        },
+        "description": "LibTIFF is vulnerable to memory corruption due to a heap-based buffer overflow issue. An attacker could exploit this vulnerability by passing a crafted TIFF file to corrupt memory, cause instability and potentially leverage this to cause further serious confidentiality, integrity, and availability impacts.",
+        "name": "BDSA-2023-3641",
+        "overallScore": 7.0,
+        "publishedDate": "Jan 26, 2024, 3:46:07 PM",
+        "severity": "HIGH",
+        "source": "BDSA",
+        "updatedDate": "Nov 5, 2024, 12:05:37 PM",
+        "useCvss3": true,
+        "_meta": {
+          "allow": [],
+          "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/BDSA-2023-3641",
+          "links": [
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/cwes/CWE-122",
+              "rel": "cwes"
+            },
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/CVE-2023-52356",
+              "label": "NVD",
+              "rel": "related-vulnerabilities"
+            },
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/BDSA-2023-3641/ranges",
+              "rel": "bdsa-ranges"
+            }
+          ]
+        }
+      },
+      {
+        "bdsaTags": [
+          "INFORMATIONAL"
+        ],
+        "classifications": [],
+        "cvss2": {
+          "accessComplexity": "HIGH",
+          "accessVector": "LOCAL",
+          "authentication": "MULTIPLE",
+          "availabilityImpact": "NONE",
+          "baseScore": 0.0,
+          "confidentialityImpact": "NONE",
+          "exploitabilitySubscore": 1.2,
+          "impactSubscore": 0.0,
+          "integrityImpact": "NONE",
+          "severity": "LOW",
+          "vector": "(AV:L/AC:H/Au:M/C:N/I:N/A:N)"
+        },
+        "cvss3": {
+          "attackComplexity": "LOW",
+          "attackVector": "NETWORK",
+          "availabilityImpact": "HIGH",
+          "baseScore": 7.5,
+          "confidentialityImpact": "NONE",
+          "exploitabilitySubscore": 3.9,
+          "impactSubscore": 3.6,
+          "integrityImpact": "NONE",
+          "privilegesRequired": "NONE",
+          "scope": "UNCHANGED",
+          "severity": "MEDIUM",
+          "temporalMetrics": {
+            "exploitability": "PROOF_OF_CONCEPT",
+            "remediationLevel": "OFFICIAL_FIX",
+            "reportConfidence": "CONFIRMED",
+            "score": 6.7
+          },
+          "userInteraction": "NONE",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H/E:P/RL:O/RC:C"
+        },
+        "description": "LibTIFF is vulnerable to denial-of-service (DoS). A remote attacker could exploit this flaw by passing a crafted TIFF file with a size smaller than 379 KB in order to exhaust system memory resources via an out-of-memory issue.",
+        "name": "BDSA-2023-3640",
+        "overallScore": 6.7,
+        "publishedDate": "Jan 26, 2024, 1:06:25 PM",
+        "severity": "MEDIUM",
+        "source": "BDSA",
+        "updatedDate": "Oct 1, 2024, 12:01:51 PM",
+        "useCvss3": true,
+        "_meta": {
+          "allow": [],
+          "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/BDSA-2023-3640",
+          "links": [
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/cwes/CWE-400",
+              "rel": "cwes"
+            },
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/CVE-2023-52355",
+              "label": "NVD",
+              "rel": "related-vulnerabilities"
+            },
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/BDSA-2023-3640/ranges",
+              "rel": "bdsa-ranges"
+            }
+          ]
+        }
+      },
+      {
+        "bdsaTags": [],
+        "classifications": [],
+        "cvss2": {
+          "accessComplexity": "HIGH",
+          "accessVector": "LOCAL",
+          "authentication": "MULTIPLE",
+          "availabilityImpact": "NONE",
+          "baseScore": 0.0,
+          "confidentialityImpact": "NONE",
+          "exploitabilitySubscore": 1.2,
+          "impactSubscore": 0.0,
+          "integrityImpact": "NONE",
+          "severity": "LOW",
+          "vector": "(AV:L/AC:H/Au:M/C:N/I:N/A:N)"
+        },
+        "cvss3": {
+          "attackComplexity": "HIGH",
+          "attackVector": "LOCAL",
+          "availabilityImpact": "HIGH",
+          "baseScore": 7.0,
+          "confidentialityImpact": "HIGH",
+          "exploitabilitySubscore": 1.0,
+          "impactSubscore": 5.9,
+          "integrityImpact": "HIGH",
+          "privilegesRequired": "NONE",
+          "scope": "UNCHANGED",
+          "severity": "MEDIUM",
+          "temporalMetrics": {
+            "exploitability": "PROOF_OF_CONCEPT",
+            "remediationLevel": "OFFICIAL_FIX",
+            "reportConfidence": "REASONABLE",
+            "score": 6.1
+          },
+          "userInteraction": "REQUIRED",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H/E:P/RL:O/RC:R"
+        },
+        "description": "LibTIFF is vulnerable to a memory corruption issue due to the presence of a heap-based buffer overflow flaw that can occur in the `cpStripToTile()` function.\n\nAn attacker could trick a victim user into processing a crafted TIFF file with the `tiffcp` functionality in order to trigger the buffer overflow flaw which could potentially be abused to cause serious confidentiality, integrity or availability impacts.",
+        "name": "BDSA-2023-3488",
+        "overallScore": 6.1,
+        "publishedDate": "Dec 18, 2023, 5:13:54 PM",
+        "severity": "MEDIUM",
+        "source": "BDSA",
+        "updatedDate": "Oct 21, 2024, 3:58:57 PM",
+        "useCvss3": true,
+        "_meta": {
+          "allow": [],
+          "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/BDSA-2023-3488",
+          "links": [
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/cwes/CWE-122",
+              "rel": "cwes"
+            },
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/CVE-2023-6228",
+              "label": "NVD",
+              "rel": "related-vulnerabilities"
+            },
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/BDSA-2023-3488/ranges",
+              "rel": "bdsa-ranges"
+            }
+          ]
+        }
+      },
+      {
+        "bdsaTags": [],
+        "classifications": [],
+        "cvss2": {
+          "accessComplexity": "LOW",
+          "accessVector": "NETWORK",
+          "authentication": "NONE",
+          "availabilityImpact": "PARTIAL",
+          "baseScore": 5.0,
+          "confidentialityImpact": "NONE",
+          "exploitabilitySubscore": 10.0,
+          "impactSubscore": 2.9,
+          "integrityImpact": "NONE",
+          "severity": "LOW",
+          "temporalMetrics": {
+            "exploitability": "PROOF_OF_CONCEPT",
+            "remediationLevel": "OFFICIAL_FIX",
+            "reportConfidence": "CONFIRMED",
+            "score": 3.9
+          },
+          "vector": "(AV:N/AC:L/Au:N/C:N/I:N/A:P/E:POC/RL:OF/RC:C)"
+        },
+        "cvss3": {
+          "attackComplexity": "LOW",
+          "attackVector": "NETWORK",
+          "availabilityImpact": "HIGH",
+          "baseScore": 7.5,
+          "confidentialityImpact": "NONE",
+          "exploitabilitySubscore": 3.9,
+          "impactSubscore": 3.6,
+          "integrityImpact": "NONE",
+          "privilegesRequired": "NONE",
+          "scope": "UNCHANGED",
+          "severity": "MEDIUM",
+          "temporalMetrics": {
+            "exploitability": "PROOF_OF_CONCEPT",
+            "remediationLevel": "OFFICIAL_FIX",
+            "reportConfidence": "CONFIRMED",
+            "score": 6.7
+          },
+          "userInteraction": "NONE",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H/E:P/RL:O/RC:C"
+        },
+        "description": "libtiff was found to be susceptible to an out-of-memory flaw. An attacker could exploit this by supplying a crafted tiff tile, with a size smaller than 379 KB, in order to cause a denial-of-service (DoS) condition.",
+        "name": "BDSA-2023-3286",
+        "overallScore": 6.7,
+        "publishedDate": "Nov 28, 2023, 4:10:22 PM",
+        "severity": "MEDIUM",
+        "source": "BDSA",
+        "updatedDate": "Oct 8, 2024, 5:13:16 PM",
+        "useCvss3": true,
+        "_meta": {
+          "allow": [],
+          "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/BDSA-2023-3286",
+          "links": [
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/cwes/CWE-400",
+              "rel": "cwes"
+            },
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/CVE-2023-6277",
+              "label": "NVD",
+              "rel": "related-vulnerabilities"
+            },
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/BDSA-2023-3286/ranges",
+              "rel": "bdsa-ranges"
             }
           ]
         }
