@@ -346,13 +346,13 @@ class Pub(
 
         logger.info { "Parsing scope '$scopeName' for package '$packageName'." }
 
-        val requiredPackages = pubspec.getScopeDependencies(scopeName).keys.toList()
+        val requiredPackages = pubspec.getScopeDependencies(scopeName).keys
         val dependencies = buildDependencyTree(requiredPackages, pubspec, lockfile, packages, labels, workingDir)
         return Scope(scopeName, dependencies)
     }
 
     private fun buildDependencyTree(
-        dependencies: List<String>,
+        dependencies: Collection<String>,
         pubspec: Pubspec?,
         lockfile: Lockfile,
         packages: Map<Identifier, Package>,
@@ -388,7 +388,7 @@ class Pub(
 
             try {
                 val dependencyPubspec = readPackageInfoFromCache(pkgInfoFromLockfile, workingDir)
-                val requiredPackages = dependencyPubspec?.dependencies.orEmpty().keys.toList()
+                val requiredPackages = dependencyPubspec?.dependencies.orEmpty().keys
 
                 val transitiveDependencies = buildDependencyTree(
                     dependencies = requiredPackages,
