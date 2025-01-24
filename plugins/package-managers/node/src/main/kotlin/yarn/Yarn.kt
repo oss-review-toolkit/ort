@@ -255,7 +255,7 @@ open class Yarn(
                     projectDirs,
                     ancestorModuleDirs = dependencyModuleDirPath.subList(1, dependencyModuleDirPath.size),
                     ancestorModuleIds = ancestorModuleIds + moduleId
-                )?.let { dependencies += it }
+                )?.also { dependencies += it }
 
                 return@forEach
             }
@@ -345,7 +345,7 @@ open class Yarn(
     }
 
     internal fun getRemotePackageDetails(packageName: String): PackageJson? {
-        yarnInfoCache.read(packageName)?.let { return parsePackageJson(it) }
+        yarnInfoCache.read(packageName)?.also { return parsePackageJson(it) }
 
         val process = YarnCommand.run("info", "--json", packageName).requireSuccess()
 
