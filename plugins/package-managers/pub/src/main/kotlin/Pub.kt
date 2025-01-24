@@ -378,7 +378,7 @@ class Pub(
             if (pkgInfoFromLockfile == null || pkgInfoFromLockfile.source == "sdk") return@forEach
 
             val id = Identifier(
-                type = "Pub",
+                type = if (pkgInfoFromLockfile.isProject) projectType else "Pub",
                 namespace = "",
                 name = packageName,
                 version = pkgInfoFromLockfile.version.orEmpty()
@@ -629,7 +629,7 @@ class Pub(
                 }
 
                 val id = Identifier(
-                    type = "Pub",
+                    type = if (packageInfo.isProject) projectType else "Pub",
                     namespace = "",
                     name = rawName,
                     version = version
@@ -772,6 +772,9 @@ class Pub(
         //       removed.
         PackageManagerResult(projectResults.filterProjectPackages())
 }
+
+private val PackageInfo.isProject: Boolean
+    get() = source == "path" && description.url == null
 
 /**
  * Extract information about package authors from the given [pubspec].
