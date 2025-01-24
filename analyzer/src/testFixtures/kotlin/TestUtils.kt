@@ -70,7 +70,7 @@ fun PackageManager.collateMultipleProjects(vararg definitionFiles: File): Analyz
     val managerResult = resolveDependencies(definitionFiles.asList(), emptyMap())
 
     val builder = AnalyzerResultBuilder()
-    managerResult.dependencyGraph?.let {
+    managerResult.dependencyGraph?.also {
         builder.addDependencyGraph(managerName, it).addPackages(managerResult.sharedPackages)
     }
 
