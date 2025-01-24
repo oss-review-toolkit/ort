@@ -226,7 +226,9 @@ open class Yarn(
     ): ModuleInfo? {
         val moduleInfo = parsePackageJson(moduleDir, scopes)
         val dependencies = mutableSetOf<ModuleInfo>()
-        val packageType = if (moduleDir.realFile() in projectDirs) projectType else "NPM"
+
+        val isProject = moduleDir.realFile() in projectDirs
+        val packageType = if (isProject) projectType else "NPM"
 
         val moduleId = splitNamespaceAndName(moduleInfo.name).let { (namespace, name) ->
             Identifier(packageType, namespace, name, moduleInfo.version)
@@ -270,7 +272,7 @@ open class Yarn(
             workingDir = moduleDir,
             packageFile = moduleInfo.packageJson,
             dependencies = dependencies,
-            isProject = moduleDir.realFile() in projectDirs
+            isProject = isProject
         )
     }
 
