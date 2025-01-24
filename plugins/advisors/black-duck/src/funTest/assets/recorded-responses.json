@@ -1,4 +1,36 @@
 {
+  "componentsViewsForExternalId": {
+    "Bunkum/4.0.0": [
+      {
+        "component": "https://BLACK_DUCK_SERVER_HOST/api/components/3174353e-ed05-4baa-8bab-232b68b697f3",
+        "componentName": "Bunkum",
+        "originId": "Bunkum/4.0.0",
+        "variant": "https://BLACK_DUCK_SERVER_HOST/api/components/3174353e-ed05-4baa-8bab-232b68b697f3/versions/ef8a7df6-7ee9-41ff-93cd-e2242c273983/origins/8cd81233-9ebb-4c22-a1dc-e6ac0d9ee78c",
+        "version": "https://BLACK_DUCK_SERVER_HOST/api/components/3174353e-ed05-4baa-8bab-232b68b697f3/versions/ef8a7df6-7ee9-41ff-93cd-e2242c273983",
+        "versionName": "4.0.0"
+      }
+    ],
+    "donfig/0.2.0": [
+      {
+        "component": "https://BLACK_DUCK_SERVER_HOST/api/components/3d93df1b-ace9-4c6e-846d-57da2953eefc",
+        "componentName": "donfig",
+        "originId": "donfig/0.2.0",
+        "variant": "https://BLACK_DUCK_SERVER_HOST/api/components/3d93df1b-ace9-4c6e-846d-57da2953eefc/versions/666e4e56-80dd-4f24-b913-af62ec56d09b/origins/c86159bb-1057-497e-a91c-d5daf3091abb",
+        "version": "https://BLACK_DUCK_SERVER_HOST/api/components/3d93df1b-ace9-4c6e-846d-57da2953eefc/versions/666e4e56-80dd-4f24-b913-af62ec56d09b",
+        "versionName": "0.2.0"
+      }
+    ],
+    "behdad/harfbuzz:2.2.0": [
+      {
+        "component": "https://BLACK_DUCK_SERVER_HOST/api/components/6c04be22-a0d2-47c4-8156-a26b579723cd",
+        "componentName": "HarfBuzz",
+        "originId": "behdad/harfbuzz:2.2.0",
+        "variant": "https://BLACK_DUCK_SERVER_HOST/api/components/6c04be22-a0d2-47c4-8156-a26b579723cd/versions/f5dbf4bb-3e99-43e3-a230-a112afbcbbb6/origins/19052c5a-1d95-4d73-9b89-e7fd936d997e",
+        "version": "https://BLACK_DUCK_SERVER_HOST/api/components/6c04be22-a0d2-47c4-8156-a26b579723cd/versions/f5dbf4bb-3e99-43e3-a230-a112afbcbbb6",
+        "versionName": "2.2.0"
+      }
+    ]
+  },
   "componentsViewsForPurl": {
     "pkg:nuget/Bunkum@4.0.0": [
       {
@@ -68,38 +100,6 @@
         "variant": "https://BLACK_DUCK_SERVER_HOST/api/components/227df150-1760-486e-afdc-93b1aefd5f4d/versions/6e56af11-fecc-4d26-9c3b-44bed45b70c3/origins/c946dbc1-368f-46cf-9a42-64cf8beef6a8",
         "version": "https://BLACK_DUCK_SERVER_HOST/api/components/227df150-1760-486e-afdc-93b1aefd5f4d/versions/6e56af11-fecc-4d26-9c3b-44bed45b70c3",
         "versionName": "0.13.1"
-      }
-    ]
-  },
-  "componentsViewsForExternalId": {
-    "Bunkum/4.0.0": [
-      {
-        "component": "https://BLACK_DUCK_SERVER_HOST/api/components/3174353e-ed05-4baa-8bab-232b68b697f3",
-        "componentName": "Bunkum",
-        "originId": "Bunkum/4.0.0",
-        "variant": "https://BLACK_DUCK_SERVER_HOST/api/components/3174353e-ed05-4baa-8bab-232b68b697f3/versions/ef8a7df6-7ee9-41ff-93cd-e2242c273983/origins/8cd81233-9ebb-4c22-a1dc-e6ac0d9ee78c",
-        "version": "https://BLACK_DUCK_SERVER_HOST/api/components/3174353e-ed05-4baa-8bab-232b68b697f3/versions/ef8a7df6-7ee9-41ff-93cd-e2242c273983",
-        "versionName": "4.0.0"
-      }
-    ],
-    "donfig/0.2.0": [
-      {
-        "component": "https://BLACK_DUCK_SERVER_HOST/api/components/3d93df1b-ace9-4c6e-846d-57da2953eefc",
-        "componentName": "donfig",
-        "originId": "donfig/0.2.0",
-        "variant": "https://BLACK_DUCK_SERVER_HOST/api/components/3d93df1b-ace9-4c6e-846d-57da2953eefc/versions/666e4e56-80dd-4f24-b913-af62ec56d09b/origins/c86159bb-1057-497e-a91c-d5daf3091abb",
-        "version": "https://BLACK_DUCK_SERVER_HOST/api/components/3d93df1b-ace9-4c6e-846d-57da2953eefc/versions/666e4e56-80dd-4f24-b913-af62ec56d09b",
-        "versionName": "0.2.0"
-      }
-    ],
-    "behdad/harfbuzz:2.2.0": [
-      {
-        "component": "https://BLACK_DUCK_SERVER_HOST/api/components/6c04be22-a0d2-47c4-8156-a26b579723cd",
-        "componentName": "HarfBuzz",
-        "originId": "behdad/harfbuzz:2.2.0",
-        "variant": "https://BLACK_DUCK_SERVER_HOST/api/components/6c04be22-a0d2-47c4-8156-a26b579723cd/versions/f5dbf4bb-3e99-43e3-a230-a112afbcbbb6/origins/19052c5a-1d95-4d73-9b89-e7fd936d997e",
-        "version": "https://BLACK_DUCK_SERVER_HOST/api/components/6c04be22-a0d2-47c4-8156-a26b579723cd/versions/f5dbf4bb-3e99-43e3-a230-a112afbcbbb6",
-        "versionName": "2.2.0"
       }
     ]
   },
