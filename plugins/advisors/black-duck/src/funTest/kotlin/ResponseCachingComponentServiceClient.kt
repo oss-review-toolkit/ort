@@ -85,8 +85,8 @@ internal class ResponseCachingComponentServiceClient(
 }
 
 private class ResponseCache {
-    val componentsViewsForPurl = ConcurrentHashMap<String, List<ComponentsView>>()
     val componentsViewsForExternalId = ConcurrentHashMap<String, List<ComponentsView>>()
+    val componentsViewsForPurl = ConcurrentHashMap<String, List<ComponentsView>>()
     val originViewForComponentsViewKey = ConcurrentHashMap<String, OriginView?>()
     val vulnerabilityViewsForOriginViewKey = ConcurrentHashMap<String, List<VulnerabilityView>>()
 }
