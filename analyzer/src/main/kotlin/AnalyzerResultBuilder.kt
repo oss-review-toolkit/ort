@@ -108,9 +108,7 @@ class AnalyzerResultBuilder {
      * [name][packageManagerName] to the result produced by this builder.
      */
     fun addDependencyGraph(packageManagerName: String, graph: DependencyGraph) =
-        apply {
-            dependencyGraphs[packageManagerName] = graph
-        }
+        apply { dependencyGraphs[packageManagerName] = graph }
 }
 
 private fun AnalyzerResult.resolvePackageManagerDependencies(): AnalyzerResult {
