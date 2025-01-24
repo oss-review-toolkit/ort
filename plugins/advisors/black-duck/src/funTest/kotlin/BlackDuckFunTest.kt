@@ -85,7 +85,7 @@ class BlackDuckFunTest : WordSpec({
             val packages = setOf(
                 "Github::behdad/harbuzz:2.2.0" to "github:behdad/harfbuzz:2.2.0",
                 "NuGet::Bunkum:4.0.0" to "nuget:Bunkum/4.0.0",
-                "Pypi:donfig:0.2.0" to "pypi:donfig/0.2.0"
+                "PyPI::donfig:0.2.0" to "pypi:donfig/0.2.0"
             ).mapTo(mutableSetOf()) { (coordinates, originId) ->
                 Package.EMPTY.copy(
                     id = Identifier(coordinates),
