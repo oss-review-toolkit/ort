@@ -1,5 +1,15 @@
 {
   "componentsViewsForExternalId": {
+    "git://code.qt.io/qt/qt5#v6.5.3": [
+      {
+        "component": "https://BLACK_DUCK_SERVER_HOST/api/components/d7ceafb2-f986-49f5-b9c9-518eb9d12b6e",
+        "componentName": "Qt",
+        "originId": "git://code.qt.io/qt/qt5#v6.5.3",
+        "variant": "https://BLACK_DUCK_SERVER_HOST/api/components/d7ceafb2-f986-49f5-b9c9-518eb9d12b6e/versions/4ed127e8-e16e-42f4-8685-97909f2e2957/origins/204113a5-f92b-48bb-8475-b6ab7c8e1e13",
+        "version": "https://BLACK_DUCK_SERVER_HOST/api/components/d7ceafb2-f986-49f5-b9c9-518eb9d12b6e/versions/4ed127e8-e16e-42f4-8685-97909f2e2957",
+        "versionName": "v6.5.3"
+      }
+    ],
     "libtiff/4.6.0@_/_#44d09b1f75a7fd97d4f7daea5e7aed8e:76d7c7f96feb2c0e80e06c3ce83fb313b77d8ef1#4e4eafa7fcd218e85d2fe31ee79c7552": [
       {
         "component": "https://BLACK_DUCK_SERVER_HOST/api/components/2ba99dfd-d4d4-48b9-93ad-66d0b2c878f9",
@@ -245,6 +255,72 @@
           },
           {
             "href": "https://BLACK_DUCK_SERVER_HOST/api/components/26967cbe-6a8d-44a6-bea3-c882176af133/versions/19d4ea91-e696-44c9-a3f4-cf751be63dad/origins/d5a17d3b-1a24-4ad6-b4a2-7c969f15a6b5/copyrights",
+            "rel": "component-origin-copyrights"
+          }
+        ]
+      }
+    },
+    "4ed127e8-e16e-42f4-8685-97909f2e2957/origins/204113a5-f92b-48bb-8475-b6ab7c8e1e13": {
+      "externalId": "git://code.qt.io/qt/qt5#v6.5.3",
+      "externalNamespace": "long_tail",
+      "license": {
+        "licenseDisplay": "GNU Lesser General Public License v3.0 only",
+        "licenses": [
+          {
+            "license": "https://BLACK_DUCK_SERVER_HOST/api/licenses/9aa0050b-acd5-43c3-ae8d-0b10e7070e18",
+            "licenseDisplay": "GNU Lesser General Public License v3.0 only",
+            "licenseFamilySummary": {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/license-families/3",
+              "name": "Weak Reciprocal"
+            },
+            "licenses": [],
+            "name": "GNU Lesser General Public License v3.0 only",
+            "ownership": "OPEN_SOURCE"
+          }
+        ],
+        "type": "DISJUNCTIVE"
+      },
+      "originId": "git://code.qt.io/qt/qt5#v6.5.3",
+      "originName": "long_tail",
+      "releasedOn": "Sep 28, 2023, 12:14:09 PM",
+      "source": "KB",
+      "versionName": "v6.5.3",
+      "_meta": {
+        "allow": [
+          "GET"
+        ],
+        "href": "https://BLACK_DUCK_SERVER_HOST/api/components/d7ceafb2-f986-49f5-b9c9-518eb9d12b6e/versions/4ed127e8-e16e-42f4-8685-97909f2e2957/origins/204113a5-f92b-48bb-8475-b6ab7c8e1e13",
+        "links": [
+          {
+            "href": "https://BLACK_DUCK_SERVER_HOST/api/components/d7ceafb2-f986-49f5-b9c9-518eb9d12b6e/versions/4ed127e8-e16e-42f4-8685-97909f2e2957",
+            "rel": "version"
+          },
+          {
+            "href": "https://BLACK_DUCK_SERVER_HOST/api/components/d7ceafb2-f986-49f5-b9c9-518eb9d12b6e/versions/4ed127e8-e16e-42f4-8685-97909f2e2957/origin/204113a5-f92b-48bb-8475-b6ab7c8e1e13/vulnerabilities",
+            "rel": "vulnerabilities"
+          },
+          {
+            "href": "https://BLACK_DUCK_SERVER_HOST/api/components/d7ceafb2-f986-49f5-b9c9-518eb9d12b6e/versions/4ed127e8-e16e-42f4-8685-97909f2e2957/origin/204113a5-f92b-48bb-8475-b6ab7c8e1e13/file-licenses",
+            "rel": "file-licenses"
+          },
+          {
+            "href": "https://BLACK_DUCK_SERVER_HOST/api/components/d7ceafb2-f986-49f5-b9c9-518eb9d12b6e/versions/4ed127e8-e16e-42f4-8685-97909f2e2957/origin/204113a5-f92b-48bb-8475-b6ab7c8e1e13/file-licenses-fuzzy",
+            "rel": "file-licenses-fuzzy"
+          },
+          {
+            "href": "https://BLACK_DUCK_SERVER_HOST/api/components/d7ceafb2-f986-49f5-b9c9-518eb9d12b6e/versions/4ed127e8-e16e-42f4-8685-97909f2e2957/origin/204113a5-f92b-48bb-8475-b6ab7c8e1e13/file-copyrights",
+            "rel": "file-copyrights"
+          },
+          {
+            "href": "https://BLACK_DUCK_SERVER_HOST/api/components/d7ceafb2-f986-49f5-b9c9-518eb9d12b6e/versions/4ed127e8-e16e-42f4-8685-97909f2e2957/origins/204113a5-f92b-48bb-8475-b6ab7c8e1e13/upgrade-guidance",
+            "rel": "upgrade-guidance"
+          },
+          {
+            "href": "https://BLACK_DUCK_SERVER_HOST/api/components/d7ceafb2-f986-49f5-b9c9-518eb9d12b6e/versions/4ed127e8-e16e-42f4-8685-97909f2e2957/origins/204113a5-f92b-48bb-8475-b6ab7c8e1e13/transitive-upgrade-guidance",
+            "rel": "transitive-upgrade-guidance"
+          },
+          {
+            "href": "https://BLACK_DUCK_SERVER_HOST/api/components/d7ceafb2-f986-49f5-b9c9-518eb9d12b6e/versions/4ed127e8-e16e-42f4-8685-97909f2e2957/origins/204113a5-f92b-48bb-8475-b6ab7c8e1e13/copyrights",
             "rel": "component-origin-copyrights"
           }
         ]
@@ -5378,6 +5454,369 @@
             },
             {
               "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/BDSA-2021-2907/ranges",
+              "rel": "bdsa-ranges"
+            }
+          ]
+        }
+      }
+    ],
+    "long_tail:git://code.qt.io/qt/qt5#v6.5.3": [
+      {
+        "bdsaTags": [],
+        "classifications": [],
+        "cvss2": {
+          "accessComplexity": "HIGH",
+          "accessVector": "LOCAL",
+          "authentication": "MULTIPLE",
+          "availabilityImpact": "NONE",
+          "baseScore": 0.0,
+          "confidentialityImpact": "NONE",
+          "exploitabilitySubscore": 1.2,
+          "impactSubscore": 0.0,
+          "integrityImpact": "NONE",
+          "severity": "LOW",
+          "vector": "(AV:L/AC:H/Au:M/C:N/I:N/A:N)"
+        },
+        "cvss3": {
+          "attackComplexity": "LOW",
+          "attackVector": "NETWORK",
+          "availabilityImpact": "HIGH",
+          "baseScore": 7.5,
+          "confidentialityImpact": "NONE",
+          "exploitabilitySubscore": 3.9,
+          "impactSubscore": 3.6,
+          "integrityImpact": "NONE",
+          "privilegesRequired": "NONE",
+          "scope": "UNCHANGED",
+          "severity": "MEDIUM",
+          "temporalMetrics": {
+            "exploitability": "PROOF_OF_CONCEPT",
+            "remediationLevel": "OFFICIAL_FIX",
+            "reportConfidence": "CONFIRMED",
+            "score": 6.7
+          },
+          "userInteraction": "NONE",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H/E:P/RL:O/RC:C"
+        },
+        "description": "An issue was discovered in Qtsvg before 6.2.11 and 6.3.x through 6.6.x before 6.6.1. When a QML image refers to an image whose content is not known yet, there is an assumption that it is an SVG document, leading to a denial of service (application crash) if it is not actually an SVG document.\n\n**Note: CVE details have been utilized in generating this advisory. The details of the vulnerability have not been independently verified by Black Duck CyRC.**",
+        "name": "BDSA-2024-7067",
+        "overallScore": 6.7,
+        "publishedDate": "Oct 9, 2024, 1:43:44 PM",
+        "severity": "MEDIUM",
+        "source": "BDSA",
+        "updatedDate": "Oct 9, 2024, 1:43:44 PM",
+        "useCvss3": true,
+        "_meta": {
+          "allow": [],
+          "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/BDSA-2024-7067",
+          "links": [
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/cwes/CWE-476",
+              "rel": "cwes"
+            },
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/cwes/CWE-617",
+              "rel": "cwes"
+            },
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/CVE-2023-45872",
+              "label": "NVD",
+              "rel": "related-vulnerabilities"
+            },
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/BDSA-2024-7067/ranges",
+              "rel": "bdsa-ranges"
+            }
+          ]
+        }
+      },
+      {
+        "bdsaTags": [],
+        "classifications": [],
+        "cvss2": {
+          "accessComplexity": "HIGH",
+          "accessVector": "LOCAL",
+          "authentication": "MULTIPLE",
+          "availabilityImpact": "NONE",
+          "baseScore": 0.0,
+          "confidentialityImpact": "NONE",
+          "exploitabilitySubscore": 1.2,
+          "impactSubscore": 0.0,
+          "integrityImpact": "NONE",
+          "severity": "LOW",
+          "vector": "(AV:L/AC:H/Au:M/C:N/I:N/A:N)"
+        },
+        "cvss3": {
+          "attackComplexity": "LOW",
+          "attackVector": "NETWORK",
+          "availabilityImpact": "HIGH",
+          "baseScore": 9.8,
+          "confidentialityImpact": "HIGH",
+          "exploitabilitySubscore": 3.9,
+          "impactSubscore": 5.9,
+          "integrityImpact": "HIGH",
+          "privilegesRequired": "NONE",
+          "scope": "UNCHANGED",
+          "severity": "HIGH",
+          "temporalMetrics": {
+            "exploitability": "UNPROVEN",
+            "remediationLevel": "OFFICIAL_FIX",
+            "reportConfidence": "CONFIRMED",
+            "score": 8.5
+          },
+          "userInteraction": "NONE",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H/E:U/RL:O/RC:C"
+        },
+        "description": "qtnetworkauth uses a weak source (the current system time) for the seed to the pseudo random number generator in the `QAbstractOAuth` network authorization component. This may lead to a weakening of certain cryptographic authorization routines and allow an attacker to leverage a race condition to cause unpredictable behavior, data corruption or system crashes.",
+        "name": "BDSA-2024-2899",
+        "overallScore": 8.5,
+        "publishedDate": "Sep 27, 2024, 4:38:47 PM",
+        "severity": "HIGH",
+        "source": "BDSA",
+        "updatedDate": "Nov 26, 2024, 2:19:21 PM",
+        "useCvss3": true,
+        "_meta": {
+          "allow": [],
+          "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/BDSA-2024-2899",
+          "links": [
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/cwes/CWE-338",
+              "rel": "cwes"
+            },
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/CVE-2024-36048",
+              "label": "NVD",
+              "rel": "related-vulnerabilities"
+            },
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/BDSA-2024-2899/ranges",
+              "rel": "bdsa-ranges"
+            }
+          ]
+        }
+      },
+      {
+        "bdsaTags": [],
+        "classifications": [],
+        "cvss2": {},
+        "cvss3": {
+          "attackComplexity": "HIGH",
+          "attackVector": "NETWORK",
+          "availabilityImpact": "NONE",
+          "baseScore": 5.9,
+          "confidentialityImpact": "HIGH",
+          "exploitabilitySubscore": 2.2,
+          "impactSubscore": 3.6,
+          "integrityImpact": "NONE",
+          "privilegesRequired": "NONE",
+          "scope": "UNCHANGED",
+          "severity": "MEDIUM",
+          "userInteraction": "NONE",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        },
+        "description": "An issue was discovered in HTTP2 in Qt before 5.15.18, 6.x before 6.2.13, 6.3.x through 6.5.x before 6.5.7, and 6.6.x through 6.7.x before 6.7.3. Code to make security-relevant decisions about an established connection may execute too early, because the encrypted() signal has not yet been emitted and processed..",
+        "name": "CVE-2024-39936",
+        "overallScore": 5.9,
+        "publishedDate": "Jul 4, 2024, 11:15:10 PM",
+        "severity": "MEDIUM",
+        "source": "NVD",
+        "updatedDate": "Jul 8, 2024, 6:41:50 PM",
+        "useCvss3": true,
+        "_meta": {
+          "allow": [],
+          "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/CVE-2024-39936",
+          "links": [
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/cwes/CWE-367",
+              "rel": "cwes"
+            },
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/BDSA-2024-4149",
+              "label": "BDSA",
+              "rel": "related-vulnerabilities"
+            },
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/BDSA-2024-4149",
+              "label": "BDSA",
+              "rel": "related-affecting-vulnerability"
+            }
+          ]
+        }
+      },
+      {
+        "bdsaTags": [],
+        "classifications": [],
+        "cvss2": {
+          "accessComplexity": "HIGH",
+          "accessVector": "LOCAL",
+          "authentication": "MULTIPLE",
+          "availabilityImpact": "NONE",
+          "baseScore": 0.0,
+          "confidentialityImpact": "NONE",
+          "exploitabilitySubscore": 1.2,
+          "impactSubscore": 0.0,
+          "integrityImpact": "NONE",
+          "severity": "LOW",
+          "vector": "(AV:L/AC:H/Au:M/C:N/I:N/A:N)"
+        },
+        "cvss3": {
+          "attackComplexity": "HIGH",
+          "attackVector": "NETWORK",
+          "availabilityImpact": "HIGH",
+          "baseScore": 8.1,
+          "confidentialityImpact": "HIGH",
+          "exploitabilitySubscore": 2.2,
+          "impactSubscore": 5.9,
+          "integrityImpact": "HIGH",
+          "privilegesRequired": "NONE",
+          "scope": "UNCHANGED",
+          "severity": "MEDIUM",
+          "temporalMetrics": {
+            "exploitability": "UNPROVEN",
+            "remediationLevel": "OFFICIAL_FIX",
+            "reportConfidence": "REASONABLE",
+            "score": 6.8
+          },
+          "userInteraction": "NONE",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H/E:U/RL:O/RC:R"
+        },
+        "description": "Applications using Qt that rely on `QStringDecoder` are vulnerable to an untrusted pointer dereference. A remote attacker targeting such applications may be able to feed the application a crafted input that specifies a specific codec, that when processed could lead to memory corruption via stack modification.",
+        "name": "BDSA-2024-2471",
+        "overallScore": 6.8,
+        "publishedDate": "May 13, 2024, 5:23:59 PM",
+        "severity": "MEDIUM",
+        "source": "BDSA",
+        "updatedDate": "Jan 13, 2025, 2:46:27 PM",
+        "useCvss3": true,
+        "_meta": {
+          "allow": [],
+          "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/BDSA-2024-2471",
+          "links": [
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/cwes/CWE-822",
+              "rel": "cwes"
+            },
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/BDSA-2024-2471/ranges",
+              "rel": "bdsa-ranges"
+            }
+          ]
+        }
+      },
+      {
+        "bdsaTags": [],
+        "classifications": [],
+        "cvss2": {},
+        "cvss3": {
+          "attackComplexity": "LOW",
+          "attackVector": "NETWORK",
+          "availabilityImpact": "HIGH",
+          "baseScore": 9.8,
+          "confidentialityImpact": "HIGH",
+          "exploitabilitySubscore": 3.9,
+          "impactSubscore": 5.9,
+          "integrityImpact": "HIGH",
+          "privilegesRequired": "NONE",
+          "scope": "UNCHANGED",
+          "severity": "CRITICAL",
+          "userInteraction": "NONE",
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        },
+        "description": "An issue was discovered in the HTTP2 implementation in Qt before 5.15.17, 6.x before 6.2.11, 6.3.x through 6.5.x before 6.5.4, and 6.6.x before 6.6.2. network/access/http2/hpacktable.cpp has an incorrect HPack integer overflow check.",
+        "name": "CVE-2023-51714",
+        "overallScore": 9.8,
+        "publishedDate": "Dec 24, 2023, 10:15:25 PM",
+        "severity": "CRITICAL",
+        "source": "NVD",
+        "updatedDate": "May 1, 2024, 3:15:06 AM",
+        "useCvss3": true,
+        "_meta": {
+          "allow": [],
+          "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/CVE-2023-51714",
+          "links": [
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/cwes/CWE-190",
+              "rel": "cwes"
+            },
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/BDSA-2023-3557",
+              "label": "BDSA",
+              "rel": "related-vulnerabilities"
+            },
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/BDSA-2023-3557",
+              "label": "BDSA",
+              "rel": "related-affecting-vulnerability"
+            }
+          ]
+        }
+      },
+      {
+        "bdsaTags": [],
+        "classifications": [],
+        "cvss2": {
+          "accessComplexity": "LOW",
+          "accessVector": "LOCAL",
+          "authentication": "NONE",
+          "availabilityImpact": "PARTIAL",
+          "baseScore": 2.1,
+          "confidentialityImpact": "NONE",
+          "exploitabilitySubscore": 3.9,
+          "impactSubscore": 2.9,
+          "integrityImpact": "NONE",
+          "severity": "LOW",
+          "temporalMetrics": {
+            "exploitability": "UNPROVEN",
+            "remediationLevel": "OFFICIAL_FIX",
+            "reportConfidence": "CONFIRMED",
+            "score": 1.6
+          },
+          "vector": "(AV:L/AC:L/Au:N/C:N/I:N/A:P/E:U/RL:OF/RC:C)"
+        },
+        "cvss3": {
+          "attackComplexity": "LOW",
+          "attackVector": "LOCAL",
+          "availabilityImpact": "HIGH",
+          "baseScore": 6.2,
+          "confidentialityImpact": "NONE",
+          "exploitabilitySubscore": 2.5,
+          "impactSubscore": 3.6,
+          "integrityImpact": "NONE",
+          "privilegesRequired": "NONE",
+          "scope": "UNCHANGED",
+          "severity": "MEDIUM",
+          "temporalMetrics": {
+            "exploitability": "UNPROVEN",
+            "remediationLevel": "OFFICIAL_FIX",
+            "reportConfidence": "CONFIRMED",
+            "score": 5.4
+          },
+          "userInteraction": "NONE",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H/E:U/RL:O/RC:C"
+        },
+        "description": "Qt for Windows contains a denial-of-service (DoS) vulnerability within the GDI font engine. An attacker could exploit this by loading maliciously crafted or corrupted font data to the application.",
+        "name": "BDSA-2023-2457",
+        "overallScore": 5.4,
+        "publishedDate": "Sep 18, 2023, 11:42:27 AM",
+        "severity": "MEDIUM",
+        "source": "BDSA",
+        "updatedDate": "Nov 11, 2024, 4:55:05 PM",
+        "useCvss3": true,
+        "_meta": {
+          "allow": [],
+          "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/BDSA-2023-2457",
+          "links": [
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/cwes/CWE-20",
+              "rel": "cwes"
+            },
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/CVE-2023-43114",
+              "label": "NVD",
+              "rel": "related-vulnerabilities"
+            },
+            {
+              "href": "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/BDSA-2023-2457/ranges",
               "rel": "bdsa-ranges"
             }
           ]
