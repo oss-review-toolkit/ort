@@ -40,7 +40,7 @@ internal data class BlackDuckOriginId(
     val externalId: String
 ) {
     fun toExternalId(): ExternalId {
-        val forge = requireNotNull(Forge.getKnownForges()[externalNamespace]) {
+        val forge = requireNotNull(KNOWN_FORGES[externalNamespace]) {
             "Unknown forge for namespace: '$externalNamespace'."
         }
 
@@ -58,3 +58,8 @@ internal data class BlackDuckOriginId(
         }
     }
 }
+
+// A replacement for `Forge.getKnownForges()`, because the latter does not contain entries for all forges.
+private val KNOWN_FORGES = Forge.getKnownForges() + listOf(
+    Forge(":", "conan") // See https://github.com/blackducksoftware/integration-bdio/pull/40.
+).associateBy { it.name }
