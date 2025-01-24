@@ -85,6 +85,7 @@ class BlackDuckFunTest : WordSpec({
             val packages = setOf(
                 "Conan::libtiff:4.6.0" to "conan:libtiff/4.6.0@_/_#44d09b1f75a7fd97d4f7daea5e7aed8e:" +
                     "76d7c7f96feb2c0e80e06c3ce83fb313b77d8ef1#4e4eafa7fcd218e85d2fe31ee79c7552",
+                "Git::Qt:6.5.3" to "long_tail:git://code.qt.io/qt/qt5#v6.5.3",
                 "Github::behdad/harbuzz:2.2.0" to "github:behdad/harfbuzz:2.2.0",
                 "NuGet::Bunkum:4.0.0" to "nuget:Bunkum/4.0.0",
                 "PyPI::donfig:0.2.0" to "pypi:donfig/0.2.0"

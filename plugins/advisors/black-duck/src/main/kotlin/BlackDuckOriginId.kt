@@ -59,7 +59,9 @@ internal data class BlackDuckOriginId(
     }
 }
 
-// A replacement for `Forge.getKnownForges()`, because the latter does not contain entries for all forges.
+// A replacement for `Forge.getKnownForges()`, because the latter does not contain entries for all forges and entries
+// which do not work and need to be overridden.
 private val KNOWN_FORGES = Forge.getKnownForges() + listOf(
-    Forge(":", "conan") // See https://github.com/blackducksoftware/integration-bdio/pull/40.
+    Forge(":", "conan"), // See https://github.com/blackducksoftware/integration-bdio/pull/40.
+    Forge(":", Forge.LONG_TAIL.name) // See https://github.com/blackducksoftware/integration-bdio/issues/41.
 ).associateBy { it.name }
