@@ -81,7 +81,7 @@ class WebAppPath {
         return this.#package;
     }
 
-    get packageName() {
+    get packageId() {
         return this.package.id;
     }
 

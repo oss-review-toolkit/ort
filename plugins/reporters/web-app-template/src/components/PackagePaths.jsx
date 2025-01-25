@@ -98,7 +98,7 @@ const PackagePaths = ({ paths }) => {
                         }
                     );
 
-                    stepItems.push({ title: webAppPath.packageName });
+                    stepItems.push({ title: webAppPath.packageId });
 
                     return (
                         <List.Item>
