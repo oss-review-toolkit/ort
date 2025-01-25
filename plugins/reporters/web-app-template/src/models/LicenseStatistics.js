@@ -39,7 +39,7 @@ class LicenseStatistics {
             }
 
             if (obj.effective !== null && obj.effective instanceof Object) {
-                Object.entries(obj.detected).forEach(
+                Object.entries(obj.effective).forEach(
                     ([name, nrPackages]) => this.#effective.set(name, nrPackages)
                 );
             }
