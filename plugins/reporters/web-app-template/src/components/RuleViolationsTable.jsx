@@ -182,11 +182,12 @@ const RuleViolationsTable = ({ webAppRuleViolations = [], showExcludesColumn = t
                     <SeverityTag
                         isResolved={true}
                         severity={record.severity.toLowerCase()}
-                        tooltipText={`Resolved with ${
-                            Array.from(record.webAppRuleViolation.resolutionReasons).join(', ')
-                        } resolution${
-                            record.webAppRuleViolation.resolutionReasons.size > 0 ? 's' : ''
-                        }`}
+                        tooltipText={
+                            `Resolved with ${Array.from(record.webAppRuleViolation.resolutionReasons).join(', ')
+                            } resolution${
+                                record.webAppRuleViolation.resolutionReasons.size > 0 ? 's' : ''
+                            }`
+                        }
                     />
                     )
                 : (
