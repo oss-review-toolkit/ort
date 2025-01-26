@@ -37,9 +37,9 @@ import {
 import PackageDetails from './PackageDetails';
 import PackagePaths from './PackagePaths';
 import PathExcludesTable from './PathExcludesTable';
-import ResolutionTable from './ResolutionTable';
 import ScopeExcludesTable from './ScopeExcludesTable';
 import { getColumnSearchProps } from './Shared';
+import VulnerabilitiesResolutionTable from './VulnerabilitiesResolutionTable';
 import VulnerabilityRatingTag from './VulnerabilityRatingTag';
 
 // Generates the HTML to display vulnerabilities as a table
@@ -396,7 +396,7 @@ const VulnerabilitiesTable = ({ webAppVulnerabilities = [], showExcludesColumn =
                                         label: 'Resolutions',
                                         key: 'vulnerability-resolutions',
                                         children: (
-                                            <ResolutionTable
+                                            <VulnerabilitiesResolutionTable
                                                 resolutions={webAppVulnerability.resolutions}
                                             />
                                         )
