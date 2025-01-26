@@ -126,17 +126,17 @@ const VulnerabilitiesTable = ({ webAppVulnerabilities = [], showExcludesColumn =
                 if (webAppPackage) {
                     return webAppPackage.isExcluded
                         ? (
-                        <span className="ort-excludes">
-                            <Tooltip
-                                placement="right"
-                                title={Array.from(webAppPackage.excludeReasons).join(', ')}
-                            >
-                                <FileExcelOutlined className="ort-excluded" />
-                            </Tooltip>
-                        </span>
+                            <span className="ort-excludes">
+                                <Tooltip
+                                    placement="right"
+                                    title={Array.from(webAppPackage.excludeReasons).join(', ')}
+                                >
+                                    <FileExcelOutlined className="ort-excluded" />
+                                </Tooltip>
+                            </span>
                             )
                         : (
-                        <FileAddOutlined />
+                            <FileAddOutlined />
                             );
                 }
 
@@ -335,7 +335,7 @@ const VulnerabilitiesTable = ({ webAppVulnerabilities = [], showExcludesColumn =
                 expandedRowRender: (record) => {
                     const webAppVulnerability = record.webAppVulnerability;
                     const webAppPackage = webAppVulnerability.package;
-                    let defaultActiveKey = record.isResolved
+                    const defaultActiveKey = record.isResolved
                         ? 'vulnerability-resolutions'
                         : ['vulnerability-package-details', 'vulnerability-package-paths'];
 
