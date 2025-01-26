@@ -33,6 +33,7 @@ import WebAppScope from './WebAppScope';
 import WebAppScopeExclude from './WebAppScopeExclude';
 import WebAppTreeNode from './WebAppTreeNode';
 import WebAppVulnerability from './WebAppVulnerability';
+import WebAppVulnerabilityResolution from './WebAppVulnerabilityResolution';
 
 class WebAppOrtResult {
     #concludedLicensePackages = [];
@@ -328,7 +329,7 @@ class WebAppOrtResult {
                     || obj.vulnerabilitiesResolutions;
 
                 for (let i = 0, len = vulnerabilityResolutions.length; i < len; i++) {
-                    this.#vulnerabilityResolutions.push(new WebAppResolution(vulnerabilityResolutions[i]));
+                    this.#vulnerabilityResolutions.push(new WebAppVulnerabilityResolution(vulnerabilityResolutions[i]));
                 }
             }
 
