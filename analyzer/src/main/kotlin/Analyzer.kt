@@ -166,7 +166,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
     }
 
     private fun analyzeInParallel(managedFiles: Map<PackageManager, List<File>>): AnalyzerResult {
-        logger.info { "Calling before resolution hooks for ${managedFiles.size} manager(s). " }
+        logger.info { "Calling before resolution hooks for ${managedFiles.size} manager(s)." }
 
         managedFiles.forEach { (manager, definitionFiles) ->
             manager.beforeResolution(definitionFiles)
@@ -192,7 +192,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
             }
         }
 
-        logger.info { "Calling after resolution hooks for ${managedFiles.size} manager(s). " }
+        logger.info { "Calling after resolution hooks for ${managedFiles.size} manager(s)." }
 
         managedFiles.forEach { (manager, definitionFiles) ->
             manager.afterResolution(definitionFiles)
