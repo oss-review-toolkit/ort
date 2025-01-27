@@ -81,7 +81,7 @@ object DependencyGraphConverter {
 
             projectsForType.forEach { project ->
                 project.scopes.filterNot { excludes.isScopeExcluded(it.name) }.forEach { scope ->
-                    val scopeName = DependencyGraph.qualifyScope(project, scope.name)
+                    val scopeName = DependencyGraph.qualifyScope(project.id, scope.name)
                     scope.dependencies.forEach { dependency ->
                         builder.addDependency(scopeName, dependency)
                     }

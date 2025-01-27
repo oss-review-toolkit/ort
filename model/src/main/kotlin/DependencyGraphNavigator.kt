@@ -47,7 +47,7 @@ class DependencyGraphNavigator(
     override fun directDependencies(project: Project, scopeName: String): Sequence<DependencyNode> {
         // Collect all root indices for all managers whose graphs have projects of the respective type.
         val rootIndicesForGraphs = graphs.mapNotNull { (managerName, graph) ->
-            graph.scopes[DependencyGraph.qualifyScope(project, scopeName)]?.let { Triple(managerName, graph, it) }
+            graph.scopes[DependencyGraph.qualifyScope(project.id, scopeName)]?.let { Triple(managerName, graph, it) }
         }
 
         if (rootIndicesForGraphs.isEmpty()) return emptySequence()
