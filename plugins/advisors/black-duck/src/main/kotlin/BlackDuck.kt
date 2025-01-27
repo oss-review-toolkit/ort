@@ -229,7 +229,7 @@ private fun Map<Identifier, List<OriginView>>.getSummary(): String =
         if (idsWithMultipleOrigins.isNotEmpty()) {
             appendLine("The following ${idsWithMultipleOrigins.size} packages have multiple matching origins:")
             idsWithMultipleOrigins.forEach { (id, origins) ->
-                appendLine("  $id -> ${origins.joinToString { it.identifier }}")
+                appendLine("  ${id.toCoordinates()} -> ${origins.joinToString { it.identifier }}")
             }
         }
 
