@@ -46,10 +46,14 @@ import org.ossreviewtoolkit.model.RootDependencyIndex
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.licenses.LicenseCategorization
+import org.ossreviewtoolkit.model.licenses.LicenseCategory
+import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.plugins.reporters.ctrlx.CtrlXAutomationReporter.Companion.REPORT_FILENAME
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
+import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.getAssetFile
 
@@ -84,6 +88,35 @@ class CtrlXAutomationReporterFunTest : StringSpec({
                 this shouldHaveSize 2
                 first().name shouldBe "package1"
                 last().name shouldBe "package2"
+            }
+        }
+    }
+
+    "The reporter should only include licenses with the given category" {
+        val category = "include-in-disclosure-document"
+        val categorizations = listOf(
+            LicenseCategorization(
+                SpdxSingleLicenseExpression.parse("MIT"),
+                setOf(category)
+            )
+        )
+        val categories = listOf(LicenseCategory(category))
+        val input = createReporterInput().copy(
+            licenseClassifications = LicenseClassifications(
+                categories = categories,
+                categorizations = categorizations
+            ),
+            licenseCategoriesToInclude = listOf(category)
+        )
+        val reporter = CtrlXAutomationReporter()
+        val outputDir = createOrtTempDir("ctrlx-automation-reporter-test")
+
+        val reporterResult = reporter.generateReport(input, outputDir)
+
+        validateReport(reporterResult) {
+            components.shouldNotBeNull {
+                this shouldHaveSize 1
+                first().name shouldBe "package2"
             }
         }
     }
