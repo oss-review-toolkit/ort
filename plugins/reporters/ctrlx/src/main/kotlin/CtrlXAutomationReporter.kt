@@ -32,13 +32,27 @@ import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
+import org.ossreviewtoolkit.utils.spdx.toSpdx
+
+data class CtrlXAutomationReporterConfig(
+    /**
+     * The categories of the licenses of the packages to include in the report. If a component has a license which has a
+     * category not present in this parameter, the license is removed from the component and not visible in the report.
+     * If a component has ALL its licenses removed this way, it is not displayed in the report. If the parameter is not
+     * set for the reporter, all components and all licenses are present in the report.
+     */
+    val licenseCategoriesToInclude: List<String>?
+)
 
 @OrtPlugin(
     displayName = "CtrlX Automation Reporter",
     description = "A reporter for the ctrlX Automation format.",
     factory = ReporterFactory::class
 )
-class CtrlXAutomationReporter(override val descriptor: PluginDescriptor = CtrlXAutomationReporterFactory.descriptor) :
+class CtrlXAutomationReporter(
+    override val descriptor: PluginDescriptor = CtrlXAutomationReporterFactory.descriptor,
+    private val config: CtrlXAutomationReporterConfig
+) :
     Reporter {
     companion object {
         const val REPORT_FILENAME = "fossinfo.json"
@@ -54,7 +68,11 @@ class CtrlXAutomationReporter(override val descriptor: PluginDescriptor = CtrlXA
 
     override fun generateReport(input: ReporterInput, outputDir: File): List<Result<File>> {
         val packages = input.ortResult.getPackages(omitExcluded = true)
-        val components = packages.mapTo(mutableListOf()) { (pkg, _) ->
+        val licensesToInclude = config.licenseCategoriesToInclude?.flatMap {
+            input.licenseClassifications.licensesByCategory[it].orEmpty()
+        }.orEmpty()
+
+        val components = packages.mapNotNullTo(mutableListOf()) { (pkg, _) ->
             val qualifiedName = when (pkg.id.type) {
                 // At least for NPM packages, CtrlX requires the component name to be prefixed with the scope name,
                 // separated with a slash. Other package managers might require similar handling, but there seems to be
@@ -73,25 +91,41 @@ class CtrlXAutomationReporter(override val descriptor: PluginDescriptor = CtrlXA
                 input.ortResult.getPackageLicenseChoices(pkg.id),
                 input.ortResult.getRepositoryLicenseChoices()
             )
-            val licenses = effectiveLicense?.decompose()?.map {
+            var licenses = effectiveLicense?.decompose()?.map {
                 val name = it.toString()
                 val spdxId = SpdxLicense.forId(name)?.id
                 val text = input.licenseTextProvider.getLicenseText(name)
                 License(name = name, spdx = spdxId, text = text.orEmpty())
             }
 
-            // The specification requires at least one license.
-            val componentLicenses = licenses.orEmpty().ifEmpty { listOf(LICENSE_NOASSERTION) }
+            var componentShouldBeExcluded = false
 
-            Component(
-                name = qualifiedName,
-                version = pkg.id.version,
-                homepage = pkg.homepageUrl.takeUnless { it.isEmpty() },
-                copyright = copyrights?.let { CopyrightInformation(it) },
-                licenses = componentLicenses,
-                usage = if (pkg.isModified) Usage.Modified else Usage.AsIs
-                // TODO: Map the PackageLinkage to an IntegrationMechanism.
-            )
+            if (config.licenseCategoriesToInclude != null) {
+                val filteredLicenses = licenses?.filter { it.name.toSpdx() in licensesToInclude }
+
+                if (filteredLicenses != null && filteredLicenses.isEmpty()) {
+                    componentShouldBeExcluded = true
+                } else {
+                    licenses = filteredLicenses
+                }
+            }
+
+            if (componentShouldBeExcluded) {
+                null
+            } else {
+                // The specification requires at least one license.
+                val componentLicenses = licenses.orEmpty().ifEmpty { listOf(LICENSE_NOASSERTION) }
+
+                Component(
+                    name = qualifiedName,
+                    version = pkg.id.version,
+                    homepage = pkg.homepageUrl.takeUnless { it.isEmpty() },
+                    copyright = copyrights?.let { CopyrightInformation(it) },
+                    licenses = componentLicenses,
+                    usage = if (pkg.isModified) Usage.Modified else Usage.AsIs
+                    // TODO: Map the PackageLinkage to an IntegrationMechanism.
+                )
+            }
         }
 
         val reportFileResult = runCatching {

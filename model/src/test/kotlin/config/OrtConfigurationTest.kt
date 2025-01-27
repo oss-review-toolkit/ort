@@ -372,7 +372,7 @@ class OrtConfigurationTest : WordSpec({
 
             with(ortConfig.reporter) {
                 config shouldNotBeNull {
-                    keys shouldContainExactlyInAnyOrder setOf("CycloneDx", "FossId")
+                    keys shouldContainExactlyInAnyOrder setOf("CycloneDx", "FossId", "CtrlXAutomation")
 
                     get("CycloneDx") shouldNotBeNull {
                         options shouldContainExactly mapOf(
@@ -389,6 +389,13 @@ class OrtConfigurationTest : WordSpec({
                             "user" to "user",
                             "apiKey" to "XYZ"
                         )
+                    }
+
+                    get("CtrlXAutomation") shouldNotBeNull {
+                        options shouldContainExactly mapOf(
+                            "licenseCategoriesToInclude" to "include-in-disclosure-document"
+                        )
+                        secrets should beEmpty()
                     }
                 }
             }

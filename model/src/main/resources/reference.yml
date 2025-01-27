@@ -382,6 +382,10 @@ ort:
           user: user
           apiKey: XYZ
 
+      CtrlXAutomation:
+        options:
+          licenseCategoriesToInclude: 'include-in-disclosure-document'
+
   notifier:
     mail:
       hostName: 'localhost'
