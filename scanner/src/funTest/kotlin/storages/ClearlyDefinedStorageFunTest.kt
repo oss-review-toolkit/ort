@@ -62,7 +62,7 @@ class ClearlyDefinedStorageFunTest : StringSpec({
         withRetry {
             val results = storage.read(pkg)
 
-            results.shouldBeSuccess {
+            results shouldBeSuccess {
                 it shouldContain ScanResult(
                     provenance = RepositoryProvenance(
                         vcsInfo = VcsInfo(
@@ -125,7 +125,7 @@ class ClearlyDefinedStorageFunTest : StringSpec({
         withRetry {
             val results = storage.read(pkg)
 
-            results.shouldBeSuccess {
+            results shouldBeSuccess {
                 it shouldContain ScanResult(
                     provenance = RepositoryProvenance(
                         vcsInfo = VcsInfo(
@@ -168,7 +168,7 @@ class ClearlyDefinedStorageFunTest : StringSpec({
         withRetry {
             val results = storage.read(pkg)
 
-            results.shouldBeSuccess { result ->
+            results shouldBeSuccess { result ->
                 result.map { it.provenance } shouldContain RepositoryProvenance(
                     vcsInfo = VcsInfo(
                         type = VcsType.GIT,

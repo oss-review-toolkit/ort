@@ -66,7 +66,7 @@ class FossIdReportTest : StringSpec({
         val result = service.generateReport(
             "", "", SCAN_CODE, ReportType.HTML_DYNAMIC, SelectionType.INCLUDE_FOSS, directory
         )
-        result.shouldBeSuccess {
+        result shouldBeSuccess {
             it shouldHaveName "fossid-" +
                 "semver4j_semver4j__20220119_094101_delta-" +
                 "cc1267688905d7493df292786a245297c9fd36ee.html"
@@ -80,7 +80,8 @@ class FossIdReportTest : StringSpec({
         val result = service.generateReport(
             "", "", SCAN_CODE, ReportType.XLSX, SelectionType.INCLUDE_FOSS, directory
         )
-        result.shouldBeSuccess {
+
+        result shouldBeSuccess {
             it shouldHaveName "semver4j_semver4j__20220119_094101_delta-4d39359cd861c314020ead401d95ca20dc179495.xlsx"
         }
     }
@@ -89,7 +90,8 @@ class FossIdReportTest : StringSpec({
         val result = service.generateReport(
             "", "", SCAN_CODE, ReportType.HTML_STATIC, SelectionType.INCLUDE_FOSS, directory
         )
-        result.shouldBeSuccess {
+
+        result shouldBeSuccess {
             it.name shouldEndWith "$SCAN_CODE-report.html"
             it.useLines { lines ->
                 lines shouldContain "<html>"
