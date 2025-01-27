@@ -206,13 +206,13 @@ class Pub(
 
         val url = "https://storage.googleapis.com/flutter_infra_release/releases/stable/$archive"
 
-        logger.info { "Downloading flutter-$flutterVersion from $url... " }
+        logger.info { "Downloading flutter-$flutterVersion from $url..." }
         flutterInstallDir.safeMkdirs()
         val flutterArchive = okHttpClient.downloadFile(url, flutterInstallDir).onFailure {
             logger.warn { "Unable to download Flutter $flutterVersion from $url." }
         }.getOrThrow()
 
-        logger.info { "Unpacking '$flutterArchive' to '$flutterInstallDir'... " }
+        logger.info { "Unpacking '$flutterArchive' to '$flutterInstallDir'..." }
         flutterArchive.unpack(flutterInstallDir)
 
         if (!flutterArchive.delete()) {
