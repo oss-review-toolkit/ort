@@ -1,0 +1,5 @@
+analyzer:
+  allow_dynamic_versions: false
+  enabled_package_managers:
+  - Gradle
+  - Maven

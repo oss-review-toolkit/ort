@@ -60,6 +60,26 @@ class JsonSchemaTest : StringSpec({
         }
     }
 
+    "Analyzer configuration within a repository configuration validates successfully" {
+        val repositoryConfiguration = File("src/test/assets/analyzer-repository-configuration.ort.yml").toJsonNode()
+        val analyzerConfiguration = repositoryConfiguration.get("analyzer")
+
+        val errors = schemaV7.getSchema(repositoryConfigurationAnalyzerConfiguration).validate(analyzerConfiguration)
+
+        errors should beEmpty()
+    }
+
+    "Package manager configuration within a repository configuration validates successfully" {
+        val repositoryConfiguration =
+            File("src/test/assets/package-manager-repository-configuration.ort.yml").toJsonNode()
+        val packageManagerConfiguration = repositoryConfiguration.get("analyzer").get("package_managers")
+
+        val errors =
+            schemaV7.getSchema(repositoryConfigurationPackageManagerConfiguration).validate(packageManagerConfiguration)
+
+        errors should beEmpty()
+    }
+
     "The example package curations file validates successfully" {
         val curationsSchema = File("../integrations/schemas/curations-schema.json").toURI()
         val curationsExample = File("../examples/$ORT_PACKAGE_CURATIONS_FILENAME").toJsonNode()
@@ -115,5 +135,11 @@ private val schemaV7 = JsonSchemaFactory
 
 private val repositoryConfigurationSchema =
     File("../integrations/schemas/repository-configuration-schema.json").toURI()
+
+private val repositoryConfigurationAnalyzerConfiguration =
+    File("../integrations/schemas/repository-configurations/analyzer-configuration-schema.json").toURI()
+
+private val repositoryConfigurationPackageManagerConfiguration =
+    File("../integrations/schemas/repository-configurations/package-manager-configuration-schema.json").toURI()
 
 private fun File.toJsonNode() = yamlMapper.readTree(inputStream())

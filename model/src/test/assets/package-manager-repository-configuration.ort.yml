@@ -1,0 +1,7 @@
+analyzer:
+  package_managers:
+    Gradle:
+      must_run_after:
+      - Maven
+      options:
+        foo: bar

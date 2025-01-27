@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://oss-review-toolkit.org/repository-configurations/analyzer-configuration.yml",
+  "title": "ORT repository analyzer configurations",
+  "description": "Configurations for the analyzer of the The OSS-Review-Toolkit (ORT). A full list of all available options can be found at https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/config/AnalyzerConfiguration.kt.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "allow_dynamic_versions": {
+      "type": "boolean"
+    },
+    "enabled_package_managers": {
+      "type": "array",
+      "items": {
+        "$ref": "https://raw.githubusercontent.com/oss-review-toolkit/ort/main/integrations/schemas/package-managers-schema.json"
+      }
+    },
+    "disabled_package_managers": {
+      "type": "array",
+      "items": {
+        "$ref": "https://raw.githubusercontent.com/oss-review-toolkit/ort/main/integrations/schemas/package-managers-schema.json"
+      }
+    },
+    "package_managers": {
+      "$ref": "https://raw.githubusercontent.com/oss-review-toolkit/ort/main/integrations/schemas/repository-configurations/package-manager-configuration-schema.json"
+    },
+    "skip_excluded": {
+      "type": "boolean"
+    }
+  }
+}
