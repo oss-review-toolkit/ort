@@ -201,7 +201,7 @@ class DependencyGraphTest : WordSpec({
                 vcs = VcsInfo.EMPTY
             )
 
-            val qualifiedScopeName = DependencyGraph.qualifyScope(project, scopeName)
+            val qualifiedScopeName = DependencyGraph.qualifyScope(project.id, scopeName)
 
             qualifiedScopeName shouldBe "namespace:name:version:$scopeName"
         }

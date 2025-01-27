@@ -194,5 +194,5 @@ data class Project(
      * extracting the scopes of this project from a shared dependency graph.
      */
     private fun qualifiedScopeNames(): Set<String> =
-        scopeNames.orEmpty().map { DependencyGraph.qualifyScope(this, it) }.toSet()
+        scopeNames.orEmpty().map { DependencyGraph.qualifyScope(id, it) }.toSet()
 }
