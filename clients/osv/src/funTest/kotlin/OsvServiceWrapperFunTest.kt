@@ -77,7 +77,7 @@ class OsvServiceWrapperFunTest : WordSpec({
         "return the expected vulnerability when queried by commit" {
             val result = OsvServiceWrapper().getVulnerabilitiesForPackage(VULNERABILITY_FOR_PACKAGE_BY_COMMIT_REQUEST)
 
-            result.shouldBeSuccess { actualData ->
+            result shouldBeSuccess { actualData ->
                 actualData.patch() shouldContain expectedVulnerability.patch()
             }
         }
@@ -85,7 +85,7 @@ class OsvServiceWrapperFunTest : WordSpec({
         "return the expected vulnerability when queried by name and version" {
             val result = OsvServiceWrapper().getVulnerabilitiesForPackage(VULNERABILITY_FOR_PACKAGE_BY_NAME_AND_VERSION)
 
-            result.shouldBeSuccess { actualData ->
+            result shouldBeSuccess { actualData ->
                 actualData.patch() shouldContain expectedVulnerability.patch()
             }
         }
@@ -101,7 +101,7 @@ class OsvServiceWrapperFunTest : WordSpec({
 
             val result = OsvServiceWrapper().getVulnerabilityIdsForPackages(requests)
 
-            result.shouldBeSuccess {
+            result shouldBeSuccess {
                 it shouldHaveSize 3
 
                 it[0] should containAll(
@@ -130,7 +130,7 @@ class OsvServiceWrapperFunTest : WordSpec({
 
             val result = OsvServiceWrapper().getVulnerabilityForId("GHSA-xvch-5gv4-984h")
 
-            result.shouldBeSuccess { actualData ->
+            result shouldBeSuccess { actualData ->
                 val expectedData = OsvService.JSON.decodeFromString<Vulnerability>(expectedResult)
                 actualData.patchIgnorableFields() shouldBe expectedData.patchIgnorableFields()
             }
@@ -143,7 +143,7 @@ class OsvServiceWrapperFunTest : WordSpec({
 
             val result = OsvServiceWrapper().getVulnerabilitiesForIds(ids)
 
-            result.shouldBeSuccess {
+            result shouldBeSuccess {
                 it.map { vulnerability -> vulnerability.id } shouldContainExactlyInAnyOrder ids
             }
         }

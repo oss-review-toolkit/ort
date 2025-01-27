@@ -150,7 +150,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val result = storage.read(TEST_PACKAGE)
 
-            result.shouldBeFailure {
+            result shouldBeFailure {
                 it.message shouldContain "HttpException"
             }
         }
@@ -161,7 +161,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
-            storage.read(TEST_PACKAGE).shouldBeSuccess {
+            storage.read(TEST_PACKAGE) shouldBeSuccess {
                 it should beEmpty()
             }
         }
@@ -176,7 +176,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
-            storage.read(TEST_PACKAGE).shouldBeFailure {
+            storage.read(TEST_PACKAGE) shouldBeFailure {
                 it.message shouldContain "HttpException"
             }
         }
@@ -263,7 +263,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val result = storage.read(TEST_PACKAGE)
 
-            result.shouldBeFailure {
+            result shouldBeFailure {
                 it.message shouldContain "Connection refused"
             }
         }

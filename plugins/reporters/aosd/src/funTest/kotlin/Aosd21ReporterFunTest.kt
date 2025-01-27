@@ -73,7 +73,7 @@ class Aosd21ReporterFunTest : WordSpec({
             val schema = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7).getSchema(schemaFile.toURI())
 
             reportFiles.forAll {
-                it.shouldBeSuccess { reportFile ->
+                it shouldBeSuccess { reportFile ->
                     val errors = schema.validate(reportFile.readText(), InputFormat.JSON)
                     errors should beEmpty()
                 }

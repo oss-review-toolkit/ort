@@ -105,7 +105,7 @@ class OkHttpClientHelperTest : WordSpec({
             every { client.download(any(), any()) } returns Result.success(response to body)
 
             val result = client.downloadFile(invalidUrl, outputDirectory)
-            result.shouldBeFailure {
+            result shouldBeFailure {
                 it should beInstanceOf<IOException>()
             }
         }
@@ -130,7 +130,7 @@ class OkHttpClientHelperTest : WordSpec({
             every { client.download(any(), any()) } returns Result.success(response to body)
 
             val result = client.downloadText(failureUrl)
-            result.shouldBeFailure {
+            result shouldBeFailure {
                 it shouldBe exception
             }
         }

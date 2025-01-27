@@ -65,7 +65,7 @@ class JiraNotifierTest : WordSpec({
                 avoidDuplicates = false
             )
 
-            resultIssue.shouldBeSuccess {
+            resultIssue shouldBeSuccess {
                 it.id shouldBe 1L
                 it.key shouldBe "${project.key}-${it.id}"
                 it.self shouldBe URI("")
@@ -97,7 +97,7 @@ class JiraNotifierTest : WordSpec({
                 avoidDuplicates = true
             )
 
-            resultIssue.shouldBeFailure {
+            resultIssue shouldBeFailure {
                 it.message shouldContain "more than 1 duplicate issues"
             }
 
@@ -197,7 +197,7 @@ class JiraNotifierTest : WordSpec({
                 avoidDuplicates = false
             )
 
-            result.shouldBeFailure {
+            result shouldBeFailure {
                 it.message shouldContain "'$issueType' is not valid"
             }
         }

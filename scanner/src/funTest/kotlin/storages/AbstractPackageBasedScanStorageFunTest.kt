@@ -118,7 +118,7 @@ abstract class AbstractPackageBasedScanStorageFunTest(vararg listeners: TestList
                 val readResult = storage.read(pkg)
 
                 addResult.shouldBeSuccess()
-                readResult.shouldBeSuccess {
+                readResult shouldBeSuccess {
                     it should containExactly(scanResult)
                 }
             }
@@ -129,12 +129,12 @@ abstract class AbstractPackageBasedScanStorageFunTest(vararg listeners: TestList
                 val addResult = storage.add(id, scanResult)
                 val readResult = storage.read(pkg)
 
-                addResult.shouldBeFailure {
+                addResult shouldBeFailure {
                     it.message shouldBe "Not storing scan result for '${id.toCoordinates()}' because no provenance " +
                         "information is available."
                 }
 
-                readResult.shouldBeSuccess {
+                readResult shouldBeSuccess {
                     it should beEmpty()
                 }
             }
@@ -155,7 +155,7 @@ abstract class AbstractPackageBasedScanStorageFunTest(vararg listeners: TestList
                 addResult2.shouldBeFailure()
 
                 val readResult = storage.read(pkg)
-                readResult.shouldBeSuccess {
+                readResult shouldBeSuccess {
                     it should containExactly(scanResult1)
                 }
             }
@@ -170,7 +170,7 @@ abstract class AbstractPackageBasedScanStorageFunTest(vararg listeners: TestList
                 storage.add(id, scanResult2).shouldBeSuccess()
                 val readResult = storage.read(pkg)
 
-                readResult.shouldBeSuccess {
+                readResult shouldBeSuccess {
                     it should containExactlyInAnyOrder(scanResult1, scanResult2)
                 }
             }
@@ -185,7 +185,7 @@ abstract class AbstractPackageBasedScanStorageFunTest(vararg listeners: TestList
                 storage.add(id, scanResult3).shouldBeSuccess()
                 val readResult = storage.read(pkg, scannerMatcherForDetails1)
 
-                readResult.shouldBeSuccess {
+                readResult shouldBeSuccess {
                     it should containExactlyInAnyOrder(scanResult1, scanResult2)
                 }
             }
@@ -205,7 +205,7 @@ abstract class AbstractPackageBasedScanStorageFunTest(vararg listeners: TestList
                 storage.add(id, scanResult3).shouldBeSuccess()
                 val readResult = storage.read(pkg, matcher)
 
-                readResult.shouldBeSuccess {
+                readResult shouldBeSuccess {
                     it should containExactlyInAnyOrder(scanResult1, scanResult2)
                 }
             }
@@ -225,7 +225,7 @@ abstract class AbstractPackageBasedScanStorageFunTest(vararg listeners: TestList
                 storage.add(id, scanResultIncompatible).shouldBeSuccess()
                 val readResult = storage.read(pkg, scannerMatcherForDetails1)
 
-                readResult.shouldBeSuccess {
+                readResult shouldBeSuccess {
                     it should containExactlyInAnyOrder(scanResult, scanResultCompatible1, scanResultCompatible2)
                 }
             }
@@ -246,7 +246,7 @@ abstract class AbstractPackageBasedScanStorageFunTest(vararg listeners: TestList
                 storage.add(id, scanResultIncompatible).shouldBeSuccess()
                 val readResult = storage.read(pkg, matcher)
 
-                readResult.shouldBeSuccess {
+                readResult shouldBeSuccess {
                     it should containExactlyInAnyOrder(
                         scanResult,
                         scanResultCompatible1,
@@ -280,7 +280,7 @@ abstract class AbstractPackageBasedScanStorageFunTest(vararg listeners: TestList
                 storage.add(id, scanResultVcsNonMatching).shouldBeSuccess()
                 val readResult = storage.read(pkg, scannerMatcherForDetails1)
 
-                readResult.shouldBeSuccess {
+                readResult shouldBeSuccess {
                     it should containExactlyInAnyOrder(scanResultSourceArtifactMatching, scanResultVcsMatching)
                 }
             }
@@ -291,7 +291,7 @@ abstract class AbstractPackageBasedScanStorageFunTest(vararg listeners: TestList
                 storage.add(id, scanResult).shouldBeSuccess()
                 val readResult = storage.read(pkgWithoutRevision, scannerMatcherForDetails1)
 
-                readResult.shouldBeSuccess {
+                readResult shouldBeSuccess {
                     it should containExactly(scanResult)
                 }
             }
@@ -309,7 +309,7 @@ abstract class AbstractPackageBasedScanStorageFunTest(vararg listeners: TestList
 
                 val readResult = storage.read(pkg, scannerMatcherForDetails1)
 
-                readResult.shouldBeSuccess {
+                readResult shouldBeSuccess {
                     it should beEmpty()
                 }
             }
