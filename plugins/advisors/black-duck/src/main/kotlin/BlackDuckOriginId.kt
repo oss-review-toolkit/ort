@@ -51,7 +51,7 @@ internal data class BlackDuckOriginId(
         fun parse(coordinates: String): BlackDuckOriginId {
             val parts = coordinates.split(':', limit = 2)
             require(parts.size == 2) {
-                "Could not parse originId '$coordinates'. Missing ':' separator ."
+                "Could not parse origin-id '$coordinates'. Missing ':' separator ."
             }
 
             return BlackDuckOriginId(externalNamespace = parts[0], externalId = parts[1])
