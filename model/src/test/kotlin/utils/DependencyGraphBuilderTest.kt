@@ -298,7 +298,8 @@ class DependencyGraphBuilderTest : WordSpec({
                 .addDependency(scope1, createDependency("g1", "a1", "1"))
                 .addDependency("anotherScope", createDependency("g2", "a2", "2"))
 
-            builder.scopesFor(projectId, unqualify = false) should containExactlyInAnyOrder(scope2, scope1)
+            builder.scopesFor(projectId).map { DependencyGraph.qualifyScope(projectId, it) } should
+                containExactlyInAnyOrder(scope2, scope1)
         }
     }
 
