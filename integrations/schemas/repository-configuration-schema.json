@@ -6,7 +6,7 @@
   "type": "object",
   "properties": {
     "analyzer": {
-      "$ref": "https://raw.githubusercontent.com/oss-review-toolkit/ort/main/integrations/schemas/analyzer-configuration-schema.json"
+      "$ref": "https://raw.githubusercontent.com/oss-review-toolkit/ort/main/integrations/schemas/repository-configurations/analyzer-configuration-schema.json"
     },
     "excludes": {
       "type": "object",
