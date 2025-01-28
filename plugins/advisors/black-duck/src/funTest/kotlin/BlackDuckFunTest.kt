@@ -61,12 +61,12 @@ class BlackDuckFunTest : WordSpec({
     "retrievePackageFindings()" should {
         "return the vulnerabilities for the supported ecosystems by purl" {
             val packages = setOf(
-                // TODO: Add pod
                 "Crate::sys-info:0.7.0",
                 "Gem::rack:2.0.4",
                 "Maven:com.jfinal:jfinal:1.4",
                 "NPM::rebber:1.0.0",
                 "NuGet::Bunkum:4.0.0",
+                "Pod::AFNetworking:0.10.0",
                 "Pub::http:0.13.1",
                 "PyPI::django:3.2"
             ).mapTo(mutableSetOf()) {
