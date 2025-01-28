@@ -1,0 +1,56 @@
+---
+id: "BDSA-2024-5272"
+description: "Libtiff is vulnerable to a null pointer dereference issue due to a problem\
+  \ in its `_TIFFMergeFields` function. This could allow an attacker to trigger memory\
+  \ allocation failures, causing a segmentation fault and leading to a crash."
+references:
+- url: "https://zeiss.app.blackduck.com/api/vulnerabilities/BDSA-2024-5272"
+  scoring_system: "CVSS:3.1"
+  severity: "MEDIUM"
+  score: 4.8
+  vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L/E:P/RL:O/RC:C"
+- url: "https://zeiss.app.blackduck.com/api/cwes/CWE-476"
+  scoring_system: "CVSS:3.1"
+  severity: "MEDIUM"
+  score: 4.8
+  vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L/E:P/RL:O/RC:C"
+- url: "https://zeiss.app.blackduck.com/api/vulnerabilities/CVE-2024-7006"
+  scoring_system: "CVSS:3.1"
+  severity: "MEDIUM"
+  score: 4.8
+  vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L/E:P/RL:O/RC:C"
+- url: "https://zeiss.app.blackduck.com/api/vulnerabilities/BDSA-2024-5272/ranges"
+  scoring_system: "CVSS:3.1"
+  severity: "MEDIUM"
+  score: 4.8
+  vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L/E:P/RL:O/RC:C"
+- url: "https://access.redhat.com/security/cve/CVE-2024-7006"
+  scoring_system: "CVSS:3.1"
+  severity: "MEDIUM"
+  score: 4.8
+  vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L/E:P/RL:O/RC:C"
+- url: "https://bugzilla.redhat.com/show_bug.cgi?id=2302996"
+  scoring_system: "CVSS:3.1"
+  severity: "MEDIUM"
+  score: 4.8
+  vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L/E:P/RL:O/RC:C"
+- url: "https://gitlab.com/libtiff/libtiff/-/commit/818fb8ce"
+  scoring_system: "CVSS:3.1"
+  severity: "MEDIUM"
+  score: 4.8
+  vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L/E:P/RL:O/RC:C"
+- url: "https://gitlab.com/libtiff/libtiff/-/issues/624"
+  scoring_system: "CVSS:3.1"
+  severity: "MEDIUM"
+  score: 4.8
+  vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L/E:P/RL:O/RC:C"
+- url: "https://gitlab.com/libtiff/libtiff/-/issues/624"
+  scoring_system: "CVSS:3.1"
+  severity: "MEDIUM"
+  score: 4.8
+  vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L/E:P/RL:O/RC:C"
+- url: "https://gitlab.com/libtiff/libtiff/-/tags/v4.7.0rc1"
+  scoring_system: "CVSS:3.1"
+  severity: "MEDIUM"
+  score: 4.8
+  vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L/E:P/RL:O/RC:C"

@@ -197,7 +197,7 @@ class BlackDuck(
         }
 }
 
-private fun VulnerabilityView.toOrtVulnerability(): Vulnerability {
+internal fun VulnerabilityView.toOrtVulnerability(): Vulnerability {
     val referenceUris = listOf(meta.href.uri(), *meta.links.map { it.href.uri() }.toTypedArray())
 
     val references = referenceUris.map { uri ->
