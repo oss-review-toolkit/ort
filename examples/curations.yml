@@ -81,3 +81,9 @@
     comment: "Specify the platform for use within policy rules."
     labels:
       platform: "android"
+
+- id: "NPM:@types:mime-types:2.1.0"
+  curations:
+    comment: "Retrieve the vulnerabilities from Black Duck by the provided origin-id instead of by the purl."
+    labels:
+      black-duck:origin-id: "npmjs:@types/mime-types/2.1.0"
