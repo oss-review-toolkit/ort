@@ -35,5 +35,7 @@ dependencies {
 
     funTestImplementation(libs.gson)
 
+    testImplementation(libs.gson)
+
     ksp(projects.advisor)
 }
