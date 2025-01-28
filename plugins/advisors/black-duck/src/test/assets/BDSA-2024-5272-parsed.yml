@@ -44,11 +44,6 @@ references:
   severity: "MEDIUM"
   score: 4.8
   vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L/E:P/RL:O/RC:C"
-- url: "https://gitlab.com/libtiff/libtiff/-/issues/624"
-  scoring_system: "CVSS:3.1"
-  severity: "MEDIUM"
-  score: 4.8
-  vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L/E:P/RL:O/RC:C"
 - url: "https://gitlab.com/libtiff/libtiff/-/tags/v4.7.0rc1"
   scoring_system: "CVSS:3.1"
   severity: "MEDIUM"
