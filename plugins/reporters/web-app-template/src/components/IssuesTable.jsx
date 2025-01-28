@@ -23,14 +23,15 @@ import {
 } from 'react';
 
 import {
-    ExclamationCircleOutlined,
     FileAddOutlined,
-    FileExcelOutlined,
-    InfoCircleOutlined,
-    IssuesCloseOutlined,
-    WarningOutlined
+    FileExcelOutlined
 } from '@ant-design/icons';
-import { Collapse, Table, Tooltip } from 'antd';
+import {
+    Collapse,
+    Table,
+    Tag,
+    Tooltip
+} from 'antd';
 import Markdown from 'markdown-to-jsx';
 
 import PackageDetails from './PackageDetails';
@@ -40,6 +41,7 @@ import PackagePaths from './PackagePaths';
 import PathExcludesTable from './PathExcludesTable';
 import ResolutionTable from './ResolutionTable';
 import ScopeExcludesTable from './ScopeExcludesTable';
+import SeverityTag from './SeverityTag';
 import { getColumnSearchProps } from './Shared';
 
 // Generates the HTML to display issues as a table
@@ -155,59 +157,65 @@ const IssuesTable = ({ webAppOrtIssues = [], showExcludesColumn = true }) => {
         key: 'severityIndex',
         filters: [
             {
-                text: 'Errors',
+                text: (<SeverityTag severity={'error'} />),
                 value: 0
             },
             {
-                text: 'Warnings',
+                text: (<SeverityTag severity={'warning'} />),
                 value: 1
             },
             {
-                text: 'Hint',
+                text: (<SeverityTag severity={'hint'} />),
                 value: 2
             },
             {
-                text: 'Resolved',
-                value: 3
+                text: (<Tag color="#b0c4de">Resolved</Tag>),
+                value: 10
             }
         ],
         filteredValue: filteredInfo.severityIndex || null,
-        onFilter: (value, record) => record.severityIndex === Number(value),
+        onFilter: (value, record) => record.severityIndex === Number(value)
+            || (record.severityIndex > 10 && Number(value) >= 10),
         render: (text, record) => (
             record.isResolved
                 ? (
-                    <Tooltip
-                        placement="right"
-                        title={Array.from(record.webAppOrtIssue.resolutionReasons).join(', ')}
-                    >
-                        <IssuesCloseOutlined
-                            className="ort-ok"
-                        />
-                    </Tooltip>
+                    <SeverityTag
+                        isResolved={true}
+                        severity={record.severity.toLowerCase()}
+                        tooltipText={
+                            `Resolved with ${Array.from(record.webAppOrtIssue.resolutionReasons).join(', ')
+                            } resolution${
+                                record.webAppOrtIssue.resolutionReasons.size > 0 ? 's' : ''
+                            }`
+                        }
+                    />
                     )
                 : (
                     <span>
                         {
                             record.severity === 'ERROR'
+                            && !record.isResolved
                             && (
-                                <ExclamationCircleOutlined
-                                    className="ort-error"
+                                <SeverityTag
+                                    severity={'error'}
                                 />
                             )
                         }
                         {
                             record.severity === 'WARNING'
+                            && !record.isResolved
                             && (
-                                <WarningOutlined
-                                    className="ort-warning"
+                                <SeverityTag
+                                    severity={'warning'}
                                 />
                             )
                         }
                         {
                             record.severity === 'HINT'
+                            && !record.isResolved
                             && (
-                                <InfoCircleOutlined
-                                    className="ort-hint"
+                                <SeverityTag
+                                    severity={'hint'}
                                 />
                             )
                         }
@@ -216,7 +224,8 @@ const IssuesTable = ({ webAppOrtIssues = [], showExcludesColumn = true }) => {
         ),
         sorter: (a, b) => a.severityIndex - b.severityIndex,
         sortOrder: sortedInfo.field === 'severityIndex' && sortedInfo.order,
-        width: '5em'
+        title: 'Severity',
+        width: '8em'
     });
 
     columns.push(
