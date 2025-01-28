@@ -158,10 +158,10 @@ class BlackDuck(
         }
 
         if (origins.isEmpty()) {
-            logger.info { "No origin found for package '${pkg.id.toCoordinates()}'." }
+            logger.info { "No origin found for package '${pkg.id.toCoordinates()}' (${pkg.requestParam})." }
         } else {
             logger.info {
-                "Found ${origins.size} origin(s) for package '${pkg.id.toCoordinates()}': " +
+                "Found ${origins.size} origin(s) for package '${pkg.id.toCoordinates()}' (${pkg.requestParam}): " +
                     "${origins.joinToString { it.identifier }}."
             }
         }
@@ -243,3 +243,6 @@ private fun Map<Identifier, List<OriginView>>.getSummary(): String =
     }
 
 private val Package.blackDuckOriginId: String? get() = labels[BlackDuck.PACKAGE_LABEL_BLACK_DUCK_ORIGIN_ID]
+
+private val Package.requestParam: String get() =
+    blackDuckOriginId?.let { "origin-id: '$it'" } ?: "purl: '$purl'"
