@@ -27,3 +27,30 @@ Crate::sys-info:0.7.0:
       severity: "CRITICAL"
       score: 9.8
       vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+Pod::AFNetworking:0.10.0:
+  advisor:
+    name: "BlackDuck"
+    capabilities:
+    - "VULNERABILITIES"
+  summary:
+    start_time: "1970-01-01T00:00:00Z"
+    end_time: "1970-01-01T00:00:00Z"
+  vulnerabilities:
+  - id: "CVE-2015-3996"
+    description: "The default AFSecurityPolicy.validatesDomainName configuration for\
+      \ AFSSLPinningModeNone in the AFNetworking framework before 2.5.3, as used in\
+      \ the ownCloud iOS Library, disables verification of a server hostname against\
+      \ the domain name in the subject's Common Name (CN) of the X.509 certificate,\
+      \ which allows man-in-the-middle attackers to spoof SSL servers via an arbitrary\
+      \ valid certificate."
+    references:
+    - url: "https://BLACK_DUCK_SERVER_HOST/api/vulnerabilities/CVE-2015-3996"
+      scoring_system: "CVSS2"
+      severity: "MEDIUM"
+      score: 4.3
+      vector: "AV:N/AC:M/Au:N/C:N/I:P/A:N"
+    - url: "https://BLACK_DUCK_SERVER_HOST/api/cwes/CWE-254"
+      scoring_system: "CVSS2"
+      severity: "MEDIUM"
+      score: 4.3
+      vector: "AV:N/AC:M/Au:N/C:N/I:P/A:N"
