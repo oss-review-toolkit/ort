@@ -76,7 +76,7 @@ const IssuesTable = ({ webAppOrtIssues = [], showExcludesColumn = true }) => {
         excludes: [],
         message: [],
         packageId: [],
-        rule: [],
+        source: [],
         severityIndex: []
     });
 
@@ -247,17 +247,17 @@ const IssuesTable = ({ webAppOrtIssues = [], showExcludesColumn = true }) => {
         },
         {
             dataIndex: 'source',
-            filteredValue: filteredInfo.rule || null,
+            filteredValue: filteredInfo.source || null,
             key: 'source',
             responsive: ['md'],
-            sorter: (a, b) => a.rule.localeCompare(b.rule),
-            sortOrder: sortedInfo.field === 'rule' && sortedInfo.order,
+            sorter: (a, b) => a.source.localeCompare(b.source),
+            sortOrder: sortedInfo.field === 'source' && sortedInfo.order,
             title: 'Source',
             width: '25%',
             ...getColumnSearchProps(
                 'source',
-                filteredInfo.rule,
-                (value) => setFilteredInfo({ ...filteredInfo, rule: value })
+                filteredInfo.source,
+                (value) => setFilteredInfo({ ...filteredInfo, source: value })
             )
         },
         {
