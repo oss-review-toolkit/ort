@@ -111,8 +111,9 @@ class BlackDuckFunTest : WordSpec({
                 .readValue<Map<Identifier, AdvisorResult>>()
             val packages = setOf(
                 // Package using CVSS 3.1 vector:
-                "Crate::sys-info:0.7.0"
-                // Todo: Add a package using CVSS 2 vector:
+                "Crate::sys-info:0.7.0",
+                // Package using CVSS 2 vector only:
+                "Pod::AFNetworking:0.10.0"
             ).mapTo(mutableSetOf()) {
                 identifierToPackage(it)
             }
