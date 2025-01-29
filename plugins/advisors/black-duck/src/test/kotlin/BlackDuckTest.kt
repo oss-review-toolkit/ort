@@ -41,6 +41,15 @@ class BlackDuckTest : WordSpec({
 
             vulnerability.toYaml() shouldBe matchExpectedResult(expectedResultFile)
         }
+
+        "parse a vulnerability with CVSS 2 (only) as expected" {
+            val expectedResultFile = getAssetFile("CVE-2015-3996-parsed.yml")
+            val vulnerabilityView = readVulnerabilityViewAssetFile("CVE-2015-3996.json")
+
+            val vulnerability = vulnerabilityView.toOrtVulnerability()
+
+            vulnerability.toYaml() shouldBe matchExpectedResult(expectedResultFile)
+        }
     }
 })
 
