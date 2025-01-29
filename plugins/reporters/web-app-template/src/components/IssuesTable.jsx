@@ -416,6 +416,7 @@ const IssuesTable = ({ webAppOrtIssues = [], showExcludesColumn = true }) => {
                     current: pagination.current,
                     hideOnSinglePage: true,
                     onChange: handlePaginationChange,
+                    pageSize: pagination.pageSize,
                     pageSizeOptions: ['50', '100', '250', '500', '1000', '5000'],
                     position: 'bottom',
                     showQuickJumper: true,
