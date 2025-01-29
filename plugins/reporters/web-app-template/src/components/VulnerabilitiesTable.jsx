@@ -41,6 +41,7 @@ import ScopeExcludesTable from './ScopeExcludesTable';
 import { getColumnSearchProps } from './Shared';
 import VulnerabilitiesResolutionTable from './VulnerabilitiesResolutionTable';
 import VulnerabilityRatingTag from './VulnerabilityRatingTag';
+import VulnerabilityReferencesList from './VulnerabilityReferencesList';
 
 // Generates the HTML to display vulnerabilities as a table
 const VulnerabilitiesTable = ({ webAppVulnerabilities = [], showExcludesColumn = true }) => {
@@ -380,8 +381,15 @@ const VulnerabilitiesTable = ({ webAppVulnerabilities = [], showExcludesColumn =
                     const webAppVulnerability = record.webAppVulnerability;
                     const webAppPackage = webAppVulnerability.package;
                     const defaultActiveKey = record.isResolved
-                        ? 'vulnerability-resolutions'
-                        : ['vulnerability-package-details', 'vulnerability-package-paths'];
+                        ? [
+                                'vulnerability-resolutions',
+                                'vulnerability-references'
+                            ]
+                        : [
+                                'vulnerability-references',
+                                'vulnerability-package-details',
+                                'vulnerability-package-paths'
+                            ];
 
                     return (
                         <Collapse
@@ -398,6 +406,18 @@ const VulnerabilitiesTable = ({ webAppVulnerabilities = [], showExcludesColumn =
                                         children: (
                                             <VulnerabilitiesResolutionTable
                                                 resolutions={webAppVulnerability.resolutions}
+                                            />
+                                        )
+                                    });
+                                }
+
+                                if (webAppVulnerability.hasReferences()) {
+                                    collapseItems.push({
+                                        label: 'References',
+                                        key: 'vulnerability-references',
+                                        children: (
+                                            <VulnerabilityReferencesList
+                                                references={webAppVulnerability.references}
                                             />
                                         )
                                     });
