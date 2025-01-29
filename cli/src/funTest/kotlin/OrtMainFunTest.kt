@@ -215,5 +215,26 @@ class OrtMainFunTest : StringSpec() {
             EnvironmentVariableFilter.isAllowed("PASSPORT") shouldBe true
             EnvironmentVariableFilter.isAllowed("DB_PASS") shouldBe false
         }
+
+        "shell completions should be up-to-date" {
+            val bashResult = OrtMain().test("--generate-completion=bash")
+            val fishResult = OrtMain().test("--generate-completion=fish")
+            val zshResult = OrtMain().test("--generate-completion=zsh")
+
+            withClue(
+                """
+                    Please update the completions by running the following command:
+                    ```
+                    ort --generate-completion=bash > integrations/completions/ort-completion.bash; \
+                    ort --generate-completion=fish > integrations/completions/ort-completion.fish; \
+                    ort --generate-completion=zsh > integrations/completions/ort-completion.zsh;
+                    ```
+                """.trimIndent()
+            ) {
+                bashResult.stdout shouldBe File("../integrations/completions/ort-completion.bash").readText()
+                fishResult.stdout shouldBe File("../integrations/completions/ort-completion.fish").readText()
+                zshResult.stdout shouldBe File("../integrations/completions/ort-completion.zsh").readText()
+            }
+        }
     }
 }
