@@ -104,6 +104,11 @@ class Git(
 ) : VersionControlSystem() {
     companion object {
         init {
+            if (Os.isLinux) {
+                // Work around a bug in Apache MINA sshd, see https://github.com/eclipse-jgit/jgit/issues/135.
+                System.setProperty("java.security.egd", "file:/dev/./urandom")
+            }
+
             // Make sure that JGit uses the exact same authentication information as ORT itself. This addresses
             // discrepancies in the way .netrc files are interpreted between JGit's and ORT's implementation.
             CredentialsProvider.setDefault(AuthenticatorCredentialsProvider)
