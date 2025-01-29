@@ -23,6 +23,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.analyzer.analyze
+import org.ossreviewtoolkit.analyzer.collateMultipleProjects
 import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.toYaml
@@ -69,5 +70,15 @@ class PnpmFunTest : StringSpec({
 
         patchActualResult(result.toYaml(), patchStartAndEndTime = true) should
             matchExpectedResult(expectedResultFile, definitionFile)
+    }
+
+    "Resolve dependencies correctly for a nested project" {
+        val definitionFile = getAssetFile("projects/synthetic/pnpm/nested-project/package.json")
+        val nestedDefinitionFile = definitionFile.parentFile.resolve("sub/package.json")
+        val expectedResultFile = getAssetFile("projects/synthetic/pnpm/nested-project-expected-output.yml")
+
+        val result = create("PNPM").collateMultipleProjects(definitionFile, nestedDefinitionFile).withResolvedScopes()
+
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 })
