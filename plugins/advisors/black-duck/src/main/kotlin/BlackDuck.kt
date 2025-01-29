@@ -199,9 +199,9 @@ class BlackDuck(
 
 internal fun VulnerabilityView.toOrtVulnerability(): Vulnerability {
     val referenceUris = setOf(meta.href.uri(), *meta.links.map { it.href.uri() }.toTypedArray())
-    val cvssVector = cvss3?.vector ?: cvss2?.vector
+    val vector = cvss3?.vector ?: cvss2?.vector
     // Only CVSS version 2 vectors do not contain the "CVSS:" label and version prefix.
-    val scoringSystem = cvssVector?.substringBefore('/', Cvss2Rating.PREFIXES.first())
+    val scoringSystem = vector?.substringBefore('/', Cvss2Rating.PREFIXES.first())
 
     val references = referenceUris.map { uri ->
         VulnerabilityReference(
@@ -209,7 +209,7 @@ internal fun VulnerabilityView.toOrtVulnerability(): Vulnerability {
             scoringSystem = scoringSystem,
             severity = severity.toString(),
             score = overallScore.toFloat(),
-            vector = cvssVector
+            vector = vector
         )
     }
 
