@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.plugins.advisors.blackduck
 
+import com.blackduck.integration.blackduck.api.generated.component.VulnerabilityCvss2View
+import com.blackduck.integration.blackduck.api.generated.component.VulnerabilityCvss3View
 import com.blackduck.integration.blackduck.api.generated.view.OriginView
 import com.blackduck.integration.blackduck.api.generated.view.VulnerabilityView
 
@@ -42,6 +44,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.vulnerabilities.Cvss2Rating
+import org.ossreviewtoolkit.model.vulnerabilities.Cvss3Rating
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
@@ -199,9 +202,10 @@ class BlackDuck(
 
 internal fun VulnerabilityView.toOrtVulnerability(): Vulnerability {
     val referenceUris = setOf(meta.href.uri(), *meta.links.map { it.href.uri() }.toTypedArray())
-    val vector = cvss3?.vector ?: cvss2?.vector
-    // Only CVSS version 2 vectors do not contain the "CVSS:" label and version prefix.
-    val scoringSystem = vector?.substringBefore('/', Cvss2Rating.PREFIXES.first())
+
+    val (scoringSystem, vector) = cvss3?.getScoringSystemAndVector()
+        ?: cvss2?.getScoringSystemAndVector()
+        ?: (null to null)
 
     val references = referenceUris.map { uri ->
         VulnerabilityReference(
@@ -218,6 +222,17 @@ internal fun VulnerabilityView.toOrtVulnerability(): Vulnerability {
         description = description,
         references = references
     )
+}
+
+private fun VulnerabilityCvss3View.getScoringSystemAndVector(): Pair<String, String> {
+    val scoringSystem = vector.substringBefore('/', "").ifEmpty { Cvss3Rating.PREFIXES.first() }
+    return scoringSystem to vector
+}
+
+private fun VulnerabilityCvss2View.getScoringSystemAndVector(): Pair<String, String> {
+    val scoringSystem = Cvss2Rating.PREFIXES.first()
+    val parsedVector = vector.removeSurrounding("(", ")")
+    return scoringSystem to parsedVector
 }
 
 private val OriginView.identifier get() = "$externalNamespace:$externalId"
