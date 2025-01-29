@@ -112,7 +112,8 @@ class Composer(
     override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> {
         val projectFiles = definitionFiles.toMutableList()
 
-        // Ignore definition files from vendored dependencies to avoid them being recognized as projects.
+        // Ignore definition files from vendor directories that reside next to other definition files, to avoid the
+        // former from being recognized as projects.
         var index = 0
         while (index < projectFiles.size - 1) {
             val projectFile = projectFiles[index++]
