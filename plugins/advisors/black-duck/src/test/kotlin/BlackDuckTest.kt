@@ -34,12 +34,12 @@ import org.ossreviewtoolkit.utils.test.matchExpectedResult
 class BlackDuckTest : WordSpec({
     "toOrtVulnerability()" should {
         "parse a vulnerability with CVSS 3.1 and with duplicate links as expected" {
-            val expectedResult = getAssetFile("BDSA-2024-5272-parsed.yml")
+            val expectedResultFile = getAssetFile("BDSA-2024-5272-parsed.yml")
             val vulnerabilityView = readVulnerabilityViewAssetFile("BDSA-2024-5272.json")
 
             val vulnerability = vulnerabilityView.toOrtVulnerability()
 
-            vulnerability.toYaml() shouldBe matchExpectedResult(expectedResult)
+            vulnerability.toYaml() shouldBe matchExpectedResult(expectedResultFile)
         }
     }
 })
