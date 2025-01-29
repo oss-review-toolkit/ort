@@ -200,7 +200,9 @@ class NpmDetectionTest : WordSpec({
                 "pnpm/babel/package.json",
                 "pnpm/project-with-lockfile/package.json",
                 "pnpm/workspaces/package.json",
-                "pnpm/workspaces/src/non-workspace/package-c/package.json"
+                "pnpm/workspaces/src/non-workspace/package-c/package.json",
+                "pnpm/nested-project/package.json",
+                "pnpm/nested-project/sub/package.json"
             )
         }
     }
