@@ -1,0 +1,28 @@
+[
+  {
+    "name": "some-project",
+    "version": "1.0.0",
+    "path": "/tmp/work/root",
+    "private": false,
+    "dependencies": {
+      "eslint-scope": {
+        "from": "eslint-scope",
+        "version": "link:node_modules/.pnpm/eslint-scope@5.1.1/node_modules/eslint-scope",
+        "path": "/tmp/work/root/node_modules/.pnpm/eslint-scope@5.1.1/node_modules/eslint-scope"
+      }
+    }
+  },
+  {
+    "name": "other-project",
+    "version": "1.0.1",
+    "path": "/tmp/work/other_root",
+    "private": false,
+    "dependencies": {
+      "@types/eslint": {
+        "from": "@types/eslint",
+        "version": "link:node_modules/.pnpm/@types+eslint@8.56.2/node_modules/@types/eslint",
+        "path": "/tmp/work/other_root/node_modules/.pnpm/@types+eslint@8.56.2/node_modules/@types/eslint"
+      }
+    }
+  }
+]
