@@ -19,12 +19,27 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.node.pnpm
 
+import java.io.ByteArrayInputStream
+
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.DecodeSequenceMode
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeToSequence
 
 private val JSON = Json { ignoreUnknownKeys = true }
 
-internal fun parsePnpmList(json: String): List<ModuleInfo> = JSON.decodeFromString(json)
+/**
+ * Parse the given [json] output of a PNPM list command. Normally, the resulting [Sequence] contains only a single
+ * [List] with the [ModuleInfo] objects of the project. If there are nested projects, PNPM outputs multiple arrays,
+ * which leads to syntactically invalid JSON. This is handled by this function by returning a [Sequence] with a
+ * corresponding number of elements. In this case, callers are responsible for correctly mapping the elements to
+ * projects.
+ */
+internal fun parsePnpmList(json: String): Sequence<List<ModuleInfo>> =
+    JSON.decodeToSequence<List<ModuleInfo>>(
+        ByteArrayInputStream(json.toByteArray()),
+        DecodeSequenceMode.WHITESPACE_SEPARATED
+    )
 
 @Serializable
 data class ModuleInfo(

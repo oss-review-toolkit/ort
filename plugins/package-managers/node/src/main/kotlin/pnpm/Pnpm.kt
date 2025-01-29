@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.DirectoryStash
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.nextOrNull
 
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
@@ -117,7 +118,8 @@ class Pnpm(
         val json = PnpmCommand.run(workingDir, "list", "--json", "--only-projects", "--recursive").requireSuccess()
             .stdout
 
-        return parsePnpmList(json).mapTo(mutableSetOf()) { File(it.path) }
+        val listResult = parsePnpmList(json)
+        return listResult.findModulesFor(workingDir).mapTo(mutableSetOf()) { File(it.path) }
     }
 
     private fun listModules(workingDir: File, scope: Scope): List<ModuleInfo> {
@@ -129,7 +131,7 @@ class Pnpm(
         val json = PnpmCommand.run(workingDir, "list", "--json", "--recursive", "--depth", "Infinity", scopeOption)
             .requireSuccess().stdout
 
-        return parsePnpmList(json)
+        return parsePnpmList(json).flatten().toList()
     }
 
     private fun installDependencies(workingDir: File) =
@@ -170,3 +172,21 @@ private fun ModuleInfo.getScopeDependencies(scope: Scope) =
 
         Scope.DEV_DEPENDENCIES -> devDependencies.values.toList()
     }
+
+/**
+ * Find the [List] of [ModuleInfo] objects for the project in the given [workingDir]. If there are nested projects,
+ * the `pnpm list` command yields multiple arrays with modules. In this case, only the top-level project should be
+ * analyzed. This function tries to detect the corresponding [ModuleInfo]s based on the [workingDir]. If this is not
+ * possible, as a fallback the first list of [ModuleInfo] objects is returned.
+ */
+private fun Sequence<List<ModuleInfo>>.findModulesFor(workingDir: File): List<ModuleInfo> {
+    val moduleInfoIterator = iterator()
+    val first = moduleInfoIterator.nextOrNull() ?: return emptyList()
+
+    fun List<ModuleInfo>.matchesWorkingDir() = any { File(it.path).absoluteFile == workingDir }
+
+    fun findMatchingModules(): List<ModuleInfo>? =
+        moduleInfoIterator.nextOrNull()?.takeIf { it.matchesWorkingDir() } ?: findMatchingModules()
+
+    return first.takeIf { it.matchesWorkingDir() } ?: findMatchingModules() ?: first
+}
