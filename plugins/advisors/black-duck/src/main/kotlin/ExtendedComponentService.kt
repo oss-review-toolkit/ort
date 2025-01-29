@@ -24,7 +24,6 @@ import com.blackduck.integration.blackduck.api.core.BlackDuckPath
 import com.blackduck.integration.blackduck.api.core.response.LinkMultipleResponses
 import com.blackduck.integration.blackduck.api.generated.discovery.ApiDiscovery
 import com.blackduck.integration.blackduck.api.generated.response.ComponentsView
-import com.blackduck.integration.blackduck.api.generated.view.ComponentView
 import com.blackduck.integration.blackduck.api.generated.view.OriginView
 import com.blackduck.integration.blackduck.api.generated.view.VulnerabilityView
 import com.blackduck.integration.blackduck.configuration.BlackDuckServerConfigBuilder
@@ -38,7 +37,6 @@ import com.blackduck.integration.log.SilentIntLogger
 import com.blackduck.integration.rest.HttpUrl
 import com.blackduck.integration.util.IntEnvironmentVariables
 
-import java.util.Optional
 import java.util.concurrent.Executors
 
 // Parameter for BlackDuck services factory, see also
@@ -54,7 +52,7 @@ private val KB_COMPONENTS_SEARCH_PATH = BlackDuckPath(
 )
 
 /**
- * This class adds a couple of functions which are missing in the super class and fixes an issue with an override.
+ * This class adds a couple of functions which are missing in the super class.
  */
 internal class ExtendedComponentService(
     blackDuckApiClient: BlackDuckApiClient,
@@ -83,17 +81,6 @@ internal class ExtendedComponentService(
 
     override fun searchKbComponentsByExternalId(externalId: ExternalId): List<ComponentsView> =
         getAllSearchResults(externalId)
-
-    override fun getComponentView(searchResult: ComponentsView): Optional<ComponentView> {
-        // The super function accidentally uses the URL to the version view, while it should use the URL to the
-        // component view. This override fixes that.
-        if (searchResult.component.isNotBlank()) {
-            val url = HttpUrl(searchResult.component)
-            return Optional.ofNullable(blackDuckApiClient.getResponse(url, ComponentView::class.java))
-        } else {
-            return Optional.empty()
-        }
-    }
 
     override fun getOriginView(searchResult: ComponentsView): OriginView? {
         if (searchResult.variant.isNullOrBlank()) return null
