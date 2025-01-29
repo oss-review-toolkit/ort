@@ -202,7 +202,7 @@ internal fun VulnerabilityView.toOrtVulnerability(): Vulnerability {
 
     val references = referenceUris.map { uri ->
         val cvssVector = cvss3?.vector ?: cvss2?.vector
-        // Only CVSS version 2 vectors do not contain the "CVSS:" label and version prefix
+        // Only CVSS version 2 vectors do not contain the "CVSS:" label and version prefix.
         val scoringSystem = cvssVector?.substringBefore('/', Cvss2Rating.PREFIXES.first())
 
         VulnerabilityReference(
