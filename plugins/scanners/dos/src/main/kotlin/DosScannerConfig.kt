@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.scanners.dos
 
-import org.ossreviewtoolkit.utils.common.Options
+import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 
 /**
  * This is the configuration class for DOS Scanner.
@@ -35,27 +35,20 @@ data class DosScannerConfig(
     val timeout: Long?,
 
     /** Interval (in seconds) to use for polling scanjob status from DOS API. **/
+    @OrtPluginOption(defaultValue = "5")
     val pollInterval: Long,
 
     /** Use license conclusions as detected licenses when they exist? **/
+    @OrtPluginOption(defaultValue = "false")
     val fetchConcluded: Boolean,
 
     /** The URL where the DOS / package curation front-end is running. **/
-    val frontendUrl: String
-) {
-    companion object {
-        private const val DEFAULT_FRONT_END_URL = "http://localhost:3000"
-        private const val DEFAULT_POLLING_INTERVAL = 5L
+    @OrtPluginOption(defaultValue = "http://localhost:3000")
+    val frontendUrl: String,
 
-        fun create(options: Options, secrets: Options): DosScannerConfig {
-            return DosScannerConfig(
-                url = options.getValue("url"),
-                token = secrets.getValue("token"),
-                timeout = options["timeout"]?.toLongOrNull(),
-                pollInterval = options["pollInterval"]?.toLongOrNull() ?: DEFAULT_POLLING_INTERVAL,
-                fetchConcluded = options["fetchConcluded"].toBoolean(),
-                frontendUrl = options["frontendUrl"] ?: DEFAULT_FRONT_END_URL
-            )
-        }
-    }
-}
+    /**
+     * Whether to write scan results to the storage.
+     */
+    @OrtPluginOption(defaultValue = "true")
+    val writeToStorage: Boolean
+)

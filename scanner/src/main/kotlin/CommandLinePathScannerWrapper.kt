@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 /**
  * A [PathScannerWrapper] that is executed as a [CommandLineTool] on the local machine.
  */
-abstract class CommandLinePathScannerWrapper(override val name: String) : PathScannerWrapper, CommandLineTool {
+abstract class CommandLinePathScannerWrapper : PathScannerWrapper, CommandLineTool {
     override val version by lazy { getVersion() }
 
     final override fun scanPath(path: File, context: ScanContext): ScanSummary {

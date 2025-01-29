@@ -23,10 +23,9 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.ScannerDetails
-import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
 
 class LicenseeTest : StringSpec({
-    val scanner = Licensee("Licensee", ScannerWrapperConfig.EMPTY)
+    val scanner = LicenseeFactory.create()
 
     "Parsing details from results succeeds" {
         val result = """
@@ -47,7 +46,7 @@ class LicenseeTest : StringSpec({
         """.trimIndent()
 
         scanner.parseDetails(result) shouldBe ScannerDetails(
-            name = "Licensee",
+            name = "licensee",
             version = "9.12.0",
             configuration = "--json --no-readme"
         )

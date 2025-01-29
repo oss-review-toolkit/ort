@@ -80,8 +80,8 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.SnippetChoices
+import org.ossreviewtoolkit.plugins.api.Secret
 import org.ossreviewtoolkit.scanner.ScanContext
-import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
@@ -112,7 +112,7 @@ internal val DEFAULT_IGNORE_RULE_SCOPE = RuleScope.SCAN
 /**
  * Create a new [FossId] instance with the specified [config].
  */
-internal fun createFossId(config: FossIdConfig): FossId = FossId("FossId", config, ScannerWrapperConfig.EMPTY)
+internal fun createFossId(config: FossIdConfig): FossId = FossId(config = config)
 
 /**
  * Create a standard [FossIdConfig] whose properties can be partly specified.
@@ -127,8 +127,8 @@ internal fun createConfig(
 ): FossIdConfig {
     val config = FossIdConfig(
         serverUrl = "https://www.example.org/fossid",
-        user = USER,
-        apiKey = API_KEY,
+        user = Secret(USER),
+        apiKey = Secret(API_KEY),
         projectName = projectName,
         namingScanPattern = null,
         waitForResult = waitForResult,
@@ -141,7 +141,8 @@ internal fun createConfig(
         fetchSnippetMatchedLines = fetchSnippetMatchedLines,
         snippetsLimit = snippetsLimit,
         sensitivity = 10,
-        urlMappings = null
+        urlMappings = null,
+        writeToStorage = false
     )
 
     val namingProvider = createNamingProviderMock()

@@ -22,10 +22,9 @@ package org.ossreviewtoolkit.plugins.scanners.askalono
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.scanner.AbstractPathScannerWrapperFunTest
-import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
 
 class AskalonoFunTest : AbstractPathScannerWrapperFunTest() {
-    override val scanner = Askalono("Askalono", ScannerWrapperConfig.EMPTY)
+    override val scanner = AskalonoFactory.create()
 
     override val expectedFileLicenses = listOf(
         LicenseFinding("Apache-2.0", TextLocation("LICENSE", TextLocation.UNKNOWN_LINE), 1.0f)
