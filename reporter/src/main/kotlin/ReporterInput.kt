@@ -71,6 +71,14 @@ data class ReporterInput(
     val licenseClassifications: LicenseClassifications = LicenseClassifications(),
 
     /**
+     * The categories of the licenses of the packages to include in the report. If in [licenseClassifications] the
+     * license of a package has a category not present in [licenseCategoriesToInclude], the license should be removed
+     * from the package and not visible in the report. If a package has ALL its licenses removed this way, it is not
+     * displayed in the report. If this parameter is null, all components and all licenses are present in the report.
+     */
+    val licenseCategoriesToInclude: List<String>? = null,
+
+    /**
      * A [HowToFixTextProvider], can be used to integrate how to fix texts for [Issue]s into reports.
      */
     val howToFixTextProvider: HowToFixTextProvider = HowToFixTextProvider.NONE

@@ -158,6 +158,12 @@ class ReporterCommand(descriptor: PluginDescriptor = ReporterCommandFactory.desc
         .default(ortConfigDirectory.resolve(ORT_LICENSE_CLASSIFICATIONS_FILENAME))
         .configurationGroup()
 
+    private val licenseCategoriesToInclude by option(
+        "--license-categories-to-include",
+        help = "The licenses of the packages have to be categorized with one of these categories, specified as " +
+            "comma-separated values."
+    ).split(",")
+
     private val packageConfigurationsDir by option(
         "--package-configurations-dir",
         help = "A directory that is searched recursively for package configuration files. Each file must only " +
@@ -274,6 +280,7 @@ class ReporterCommand(descriptor: PluginDescriptor = ReporterCommandFactory.desc
             copyrightGarbage,
             licenseInfoResolver,
             licenseClassifications,
+            licenseCategoriesToInclude,
             howToFixTextProvider
         )
 

@@ -1105,6 +1105,12 @@ _ort_report() {
           [[ ${i} -gt COMP_CWORD ]] && in_param='--license-classifications-file' || in_param=''
           continue
           ;;
+        --license-categories-to-include)
+          __skip_opt_eq
+          (( i = i + 1 ))
+          [[ ${i} -gt COMP_CWORD ]] && in_param='--license-categories-to-include' || in_param=''
+          continue
+          ;;
         --package-configurations-dir)
           __skip_opt_eq
           (( i = i + 1 ))
@@ -1151,7 +1157,7 @@ _ort_report() {
   done
   local word="${COMP_WORDS[$COMP_CWORD]}"
   if [[ "${word}" =~ ^[-] ]]; then
-    COMPREPLY=($(compgen -W '--ort-file -i --output-dir -o --report-formats -f --copyright-garbage-file --custom-license-texts-dir --how-to-fix-text-provider-script --license-classifications-file --package-configurations-dir --refresh-resolutions --repository-configuration-file --resolutions-file --report-option -O -h --help' -- "${word}"))
+    COMPREPLY=($(compgen -W '--ort-file -i --output-dir -o --report-formats -f --copyright-garbage-file --custom-license-texts-dir --how-to-fix-text-provider-script --license-classifications-file --license-categories-to-include --package-configurations-dir --refresh-resolutions --repository-configuration-file --resolutions-file --report-option -O -h --help' -- "${word}"))
     return
   fi
 
@@ -1180,6 +1186,8 @@ _ort_report() {
       ;;
     --license-classifications-file)
        COMPREPLY=($(compgen -o default -- "${word}"))
+      ;;
+    --license-categories-to-include)
       ;;
     --package-configurations-dir)
        COMPREPLY=($(compgen -o default -- "${word}"))
