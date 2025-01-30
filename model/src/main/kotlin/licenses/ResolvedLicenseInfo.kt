@@ -143,6 +143,26 @@ data class ResolvedLicenseInfo(
      * [matching path excludes][ResolvedCopyrightFinding.matchingPathExcludes].
      */
     fun filterExcluded(): ResolvedLicenseInfo = copy(licenses = licenses.filterExcluded())
+
+    /** Filter licenses based on the categories defined in [licenseCategoriesToInclude]: if a license's category is not
+     * contained in this collection, it is excluded. If [licenseCategoriesToInclude] is null, no license is filtered.
+     * [licenseClassifications] contains the license mapping between licenses and their categories.
+     */
+    fun filterNoCategorizedLicenses(
+        licenseClassifications: LicenseClassifications,
+        licenseCategoriesToInclude: List<String>?
+    ): ResolvedLicenseInfo {
+        if (licenseCategoriesToInclude == null) {
+            return this
+        }
+
+        val filteredLicenses = licenses.filter { license ->
+            val categories = licenseClassifications.categoriesByLicense[license.license].orEmpty()
+            categories.any { it in licenseCategoriesToInclude }
+        }
+
+        return copy(licenses = filteredLicenses)
+    }
 }
 
 /**
