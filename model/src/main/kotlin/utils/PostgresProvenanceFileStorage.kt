@@ -36,6 +36,7 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
+import org.ossreviewtoolkit.model.DirectoryProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.checkDatabaseEncoding
@@ -121,4 +122,5 @@ private fun KnownProvenance.storageKey(): String =
         is ArtifactProvenance -> "source-artifact|${sourceArtifact.url}|${sourceArtifact.hash}"
         // The trailing "|" is kept for backward compatibility because there used to be an additional parameter.
         is RepositoryProvenance -> "vcs|${vcsInfo.type}|${vcsInfo.url}|$resolvedRevision|"
+        is DirectoryProvenance -> "directory|$canonicalPath"
     }

@@ -24,6 +24,7 @@ import java.io.InputStream
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
+import org.ossreviewtoolkit.model.DirectoryProvenance
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
@@ -81,6 +82,7 @@ private fun KnownProvenance.hash(): String {
     val key = when (this) {
         is ArtifactProvenance -> "${sourceArtifact.url}${sourceArtifact.hash.value}"
         is RepositoryProvenance -> "${vcsInfo.type}${vcsInfo.url}$resolvedRevision"
+        is DirectoryProvenance -> "$canonicalPath"
     }
 
     return HashAlgorithm.SHA1.calculate(key.toByteArray())

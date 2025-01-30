@@ -26,6 +26,7 @@ import java.io.File
 
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.KnownProvenance
+import org.ossreviewtoolkit.model.RemoteProvenance
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.model.utils.ProvenanceFileStorage
 import org.ossreviewtoolkit.model.yamlMapper
@@ -58,7 +59,7 @@ class FileListResolver(
     fun resolve(provenance: KnownProvenance): FileList {
         storage.getFileList(provenance)?.let { return it }
 
-        val dir = provenanceDownloader.download(provenance)
+        val dir = provenanceDownloader.download(provenance as RemoteProvenance)
 
         return createFileList(dir).also {
             try {
