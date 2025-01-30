@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.model
 
+import java.nio.file.Files
+import java.nio.file.Path
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonNode
@@ -44,6 +46,8 @@ data object UnknownProvenance : Provenance {
 sealed interface KnownProvenance : Provenance
 
 sealed interface RemoteProvenance : KnownProvenance
+
+sealed interface LocalProvenance : KnownProvenance
 
 /**
  * Provenance information for a source artifact.
@@ -81,6 +85,23 @@ data class RepositoryProvenance(
      * Return true if this provenance matches the processed VCS information of the [package][pkg].
      */
     override fun matches(pkg: Package): Boolean = vcsInfo == pkg.vcsProcessed
+}
+
+/**
+ * Provenance information for a local directory path.
+ */
+data class DirectoryProvenance(
+    val directoryPath: Path
+) : LocalProvenance {
+    init {
+        require(Files.exists(directoryPath)) { "The directory path must exist." }
+    }
+
+    /**
+     * Return true if this provenance's directoryPath matches the package URL of the [package][pkg],
+     * as it contains the local file path for non-remote Provenances.
+     */
+    override fun matches(pkg: Package): Boolean = directoryPath.toString() == pkg.purl
 }
 
 /**
