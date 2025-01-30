@@ -45,6 +45,8 @@ sealed interface KnownProvenance : Provenance
 
 sealed interface RemoteProvenance : KnownProvenance
 
+sealed interface LocalProvenance : KnownProvenance
+
 /**
  * Provenance information for a source artifact.
  */
