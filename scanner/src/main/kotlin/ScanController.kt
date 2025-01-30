@@ -24,6 +24,7 @@ import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.RemoteProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
@@ -79,7 +80,7 @@ internal class ScanController(
      * A map of package [Identifier]s to their resolved [KnownProvenance]s. These provenances are used to filter the
      * scan results for a package based on the VCS path.
      */
-    private val packageProvenances = mutableMapOf<Identifier, KnownProvenance>()
+    private val packageProvenances = mutableMapOf<Identifier, RemoteProvenance>()
 
     /**
      * A map of package [Identifier]s to their resolved [KnownProvenance]s with the VCS path removed. These provenances
@@ -130,7 +131,7 @@ internal class ScanController(
     /**
      * Set the [provenance] for the package denoted by [id], overwriting any existing values.
      */
-    fun putPackageProvenance(id: Identifier, provenance: KnownProvenance) {
+    fun putPackageProvenance(id: Identifier, provenance: RemoteProvenance) {
         packageProvenances[id] = provenance
         packageProvenancesWithoutVcsPath[id] = when (provenance) {
             is RepositoryProvenance -> provenance.copy(vcsInfo = provenance.vcsInfo.copy(path = ""))
@@ -267,7 +268,7 @@ internal class ScanController(
     fun getPackagesForProvenanceWithoutVcsPath(provenance: KnownProvenance): Set<Identifier> =
         packageProvenancesWithoutVcsPath.filter { (_, packageProvenance) -> packageProvenance == provenance }.keys
 
-    fun getPackageProvenance(id: Identifier): KnownProvenance? = packageProvenances[id]
+    fun getPackageProvenance(id: Identifier): RemoteProvenance? = packageProvenances[id]
 
     /**
      * Return the package provenanceResolutionIssue associated with the given [id].

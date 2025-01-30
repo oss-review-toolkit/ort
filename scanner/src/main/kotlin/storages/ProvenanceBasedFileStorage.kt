@@ -29,6 +29,7 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
+import org.ossreviewtoolkit.model.RemoteProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.yamlMapper
@@ -45,7 +46,7 @@ class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceB
     override fun read(provenance: KnownProvenance, scannerMatcher: ScannerMatcher?): List<ScanResult> {
         requireEmptyVcsPath(provenance)
 
-        val path = storagePath(provenance)
+        val path = storagePath(provenance as RemoteProvenance)
 
         return runCatching {
             backend.read(path).use { input ->
@@ -97,7 +98,7 @@ class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceB
 
         val scanResults = existingScanResults + scanResult
 
-        val path = storagePath(provenance)
+        val path = storagePath(provenance as RemoteProvenance)
         val yamlBytes = yamlMapper.writeValueAsBytes(scanResults)
         val input = ByteArrayInputStream(yamlBytes)
 
@@ -123,7 +124,7 @@ class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceB
     }
 }
 
-private fun storagePath(provenance: KnownProvenance) =
+private fun storagePath(provenance: RemoteProvenance) =
     when (provenance) {
         is ArtifactProvenance -> "artifact/${provenance.sourceArtifact.url.fileSystemEncode()}/$SCAN_RESULTS_FILE_NAME"
         is RepositoryProvenance -> {

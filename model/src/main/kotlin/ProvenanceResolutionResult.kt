@@ -37,7 +37,7 @@ data class ProvenanceResolutionResult(
      * The resolved provenance of the package. Can only be null if a [packageProvenanceResolutionIssue] occurred.
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    val packageProvenance: KnownProvenance? = null,
+    val packageProvenance: RemoteProvenance? = null,
 
     /**
      * The (recursive) sub-repositories of [packageProvenance]. The map can only be empty if a

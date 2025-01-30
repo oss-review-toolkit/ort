@@ -44,6 +44,7 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.ProvenanceResolutionResult
+import org.ossreviewtoolkit.model.RemoteProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.TextLocation
@@ -235,7 +236,7 @@ class Scanner(
                 }.awaitAll()
             }.forEach { (pkg, result) ->
                 result.onSuccess { provenance ->
-                    controller.putPackageProvenance(pkg.id, provenance)
+                    controller.putPackageProvenance(pkg.id, provenance as RemoteProvenance)
                 }.onFailure {
                     controller.putPackageProvenanceResolutionIssue(
                         pkg.id,
@@ -256,7 +257,7 @@ class Scanner(
                 controller.getPackageProvenancesWithoutVcsPath().map { provenance ->
                     async {
                         provenance to runCatching {
-                            nestedProvenanceResolver.resolveNestedProvenance(provenance)
+                            nestedProvenanceResolver.resolveNestedProvenance(provenance as RemoteProvenance)
                         }.onFailure {
                             if (it is CancellationException) currentCoroutineContext().ensureActive()
                         }
@@ -591,7 +592,7 @@ class Scanner(
         controller: ScanController
     ): Map<PathScannerWrapper, ScanResult> {
         val downloadDir = try {
-            provenanceDownloader.download(provenance)
+            provenanceDownloader.download(provenance as RemoteProvenance)
         } catch (e: DownloadException) {
             val issue = createAndLogIssue(
                 "Downloader", "Could not download provenance $provenance: ${e.collectMessages()}"

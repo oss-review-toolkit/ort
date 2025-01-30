@@ -26,6 +26,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.module.kotlin.treeToValue
 
+import java.io.File
+
 /**
  * Provenance information about the origin of source code.
  */
@@ -44,6 +46,8 @@ data object UnknownProvenance : Provenance {
 sealed interface KnownProvenance : Provenance
 
 sealed interface RemoteProvenance : KnownProvenance
+
+sealed interface LocalProvenance : KnownProvenance
 
 /**
  * Provenance information for a source artifact.
@@ -81,6 +85,19 @@ data class RepositoryProvenance(
      * Return true if this provenance matches the processed VCS information of the [package][pkg].
      */
     override fun matches(pkg: Package): Boolean = vcsInfo == pkg.vcsProcessed
+}
+
+/**
+ * Provenance information for a local directory path.
+ */
+data class DirectoryProvenance(
+    val canonicalPath: File
+) : LocalProvenance {
+    /**
+     * Return false for any [pkg] as a [Package] by definition is coming from a remote, and is not stored in a local
+     * directory path (which would be a [Project]).
+     */
+    override fun matches(pkg: Package): Boolean = false
 }
 
 /**
