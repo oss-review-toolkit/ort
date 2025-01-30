@@ -27,6 +27,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RemoteProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
@@ -101,7 +102,7 @@ fun Provenance.toPurlExtras(): PurlExtras =
             )
         }
 
-        is UnknownProvenance -> PurlExtras()
+        !is RemoteProvenance -> PurlExtras()
     }
 
 /**
