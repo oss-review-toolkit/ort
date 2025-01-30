@@ -45,7 +45,11 @@ import SeverityTag from './SeverityTag';
 import { getColumnSearchProps } from './Shared';
 
 // Generates the HTML to display violations as a table
-const RuleViolationsTable = ({ webAppRuleViolations = [], showExcludesColumn = true }) => {
+const RuleViolationsTable = ({
+    webAppRuleViolations = [],
+    showExcludesColumn = true,
+    severeThreshold
+}) => {
     // Convert rule violations as Antd only accepts vanilla objects as input
     const violations = useMemo(
         () => {
@@ -66,6 +70,19 @@ const RuleViolationsTable = ({ webAppRuleViolations = [], showExcludesColumn = t
         []
     );
 
+    let defaultSeverityIndex = [];
+    switch (severeThreshold) {
+        case 'ERROR':
+            defaultSeverityIndex = [0];
+            break;
+        case 'WARNING':
+            defaultSeverityIndex = [0, 1];
+            break;
+        case 'HINT':
+            defaultSeverityIndex = [0, 1, 2];
+            break;
+    }
+
     /* === Table state handling === */
 
     // State variable for displaying table in various pages
@@ -77,7 +94,7 @@ const RuleViolationsTable = ({ webAppRuleViolations = [], showExcludesColumn = t
         message: [],
         packageId: [],
         rule: [],
-        severityIndex: []
+        severityIndex: defaultSeverityIndex
     });
 
     // State variable for sorting table columns
@@ -130,17 +147,17 @@ const RuleViolationsTable = ({ webAppRuleViolations = [], showExcludesColumn = t
                 if (webAppPackage) {
                     return webAppPackage.isExcluded
                         ? (
-                        <span className="ort-excludes">
-                            <Tooltip
-                                placement="right"
-                                title={Array.from(webAppPackage.excludeReasons).join(', ')}
-                            >
-                                <FileExcelOutlined className="ort-excluded" />
-                            </Tooltip>
-                        </span>
+                            <span className="ort-excludes">
+                                <Tooltip
+                                    placement="right"
+                                    title={Array.from(webAppPackage.excludeReasons).join(', ')}
+                                >
+                                    <FileExcelOutlined className="ort-excluded" />
+                                </Tooltip>
+                            </span>
                             )
                         : (
-                        <FileAddOutlined />
+                            <FileAddOutlined />
                             );
                 }
 
