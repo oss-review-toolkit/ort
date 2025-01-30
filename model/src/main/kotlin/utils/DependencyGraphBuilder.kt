@@ -326,9 +326,19 @@ class DependencyGraphBuilder<D>(
         val dependencies = dependencyHandler.dependenciesFor(dependency)
         if (ref.dependencies.size != dependencies.size) return false
 
-        val dependencies1 = ref.dependencies.map { dependencyIds[it.pkg] }
+        val dependencies1 = ref.dependencies.mapTo(mutableSetOf()) { dependencyIds[it.pkg] }
         val dependencies2 = dependencies.associateBy { dependencyHandler.identifierFor(it) }
-        if (!dependencies2.keys.containsAll(dependencies1)) return false
+
+        if (dependencies1 == dependencies2.keys) {
+            // It is not possible to check for the class instance here as the type comes from a plugin.
+            if (dependencyHandler.javaClass.simpleName == "GradleDependencyHandler") {
+                // In case of Gradle, the costly deep comparison can be skipped, because if the direct dependencies are
+                // the same, their children are also the same.
+                return true
+            }
+        } else {
+            return false
+        }
 
         return ref.dependencies.all { refDep ->
             dependencies2[dependencyIds[refDep.pkg]]?.let { dependencyTreeEquals(refDep, it) } == true
