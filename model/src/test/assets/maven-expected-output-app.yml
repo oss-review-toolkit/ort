@@ -25,7 +25,7 @@ project:
   scopes:
   - name: "compile"
     dependencies:
-    - id: "Maven:org.ossreviewtoolkit.maven:maven-lib:1.0-SNAPSHOT"
+    - id: "MavenProject:org.ossreviewtoolkit.maven:maven-lib:1.0-SNAPSHOT"
       linkage: "PROJECT_DYNAMIC"
       dependencies:
       - id: "Maven:org.apache.beam:beam-parent:2.3.0"

@@ -1,6 +1,6 @@
 ---
 project:
-  id: "GoMod::gomod_unused_deps:<REPLACE_REVISION>"
+  id: "GoModProject::gomod_unused_deps:<REPLACE_REVISION>"
   definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
   declared_licenses: []
   declared_licenses_processed: {}

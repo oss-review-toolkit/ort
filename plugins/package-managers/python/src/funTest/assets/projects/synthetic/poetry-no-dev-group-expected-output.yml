@@ -1,6 +1,6 @@
 ---
 project:
-  id: "Poetry::src/funTest/assets/projects/synthetic/poetry-no-dev-group/poetry.lock:<REPLACE_REVISION>"
+  id: "PoetryProject::src/funTest/assets/projects/synthetic/poetry-no-dev-group/poetry.lock:<REPLACE_REVISION>"
   definition_file_path: "plugins/package-managers/python/src/funTest/assets/projects/synthetic/poetry-no-dev-group/poetry.lock"
   declared_licenses: []
   declared_licenses_processed: {}

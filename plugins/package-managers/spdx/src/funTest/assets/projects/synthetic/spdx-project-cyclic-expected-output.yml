@@ -1,6 +1,6 @@
 ---
 project:
-  id: "SpdxDocument::xyz:0.1.0"
+  id: "SpdxDocumentProject::xyz:0.1.0"
   definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
   authors:
   - "Thomas Steenbergen"

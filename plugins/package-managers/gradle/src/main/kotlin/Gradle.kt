@@ -91,7 +91,7 @@ class Gradle(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Gradle", analysisRoot, analyzerConfig, repoConfig) {
+) : PackageManager(name, "GradleProject", analysisRoot, analyzerConfig, repoConfig) {
     companion object {
         /**
          * The name of the option to specify the Gradle version.

@@ -62,7 +62,11 @@ class Maven(
 ) : PackageManager(
     name,
     // The "options" convenience property from "PackageManager" is not available here yet.
-    if (analyzerConfig.getPackageManagerConfiguration(name)?.options?.get("sbtMode").toBoolean()) "SBT" else "Maven",
+    if (analyzerConfig.getPackageManagerConfiguration(name)?.options?.get("sbtMode").toBoolean()) {
+        "SBTProject"
+    } else {
+        "MavenProject"
+    },
     analysisRoot,
     analyzerConfig,
     repoConfig

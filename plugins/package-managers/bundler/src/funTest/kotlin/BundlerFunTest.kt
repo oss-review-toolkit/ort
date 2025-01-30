@@ -50,7 +50,7 @@ class BundlerFunTest : WordSpec({
 
             with(actualResult) {
                 project.id shouldBe
-                    Identifier("Bundler::src/funTest/assets/projects/synthetic/no-lockfile/Gemfile:")
+                    Identifier("BundlerProject::src/funTest/assets/projects/synthetic/no-lockfile/Gemfile:")
                 project.definitionFilePath shouldBe
                     "plugins/package-managers/bundler/src/funTest/assets/projects/synthetic/no-lockfile/Gemfile"
                 packages should beEmpty()

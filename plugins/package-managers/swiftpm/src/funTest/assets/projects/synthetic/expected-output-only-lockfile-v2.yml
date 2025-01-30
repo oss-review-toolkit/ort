@@ -1,6 +1,6 @@
 ---
 project:
-  id: "SwiftPM::src/funTest/assets/projects/synthetic/only-lockfile-v2/Package.resolved:<REPLACE_REVISION>"
+  id: "SwiftPMProject::src/funTest/assets/projects/synthetic/only-lockfile-v2/Package.resolved:<REPLACE_REVISION>"
   definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
   declared_licenses: []
   declared_licenses_processed: {}

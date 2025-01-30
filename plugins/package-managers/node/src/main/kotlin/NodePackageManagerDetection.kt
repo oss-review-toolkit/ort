@@ -117,7 +117,7 @@ enum class NodePackageManagerType(
     val workspaceFileName: String = NodePackageManagerType.DEFINITION_FILE
 ) {
     NPM(
-        projectType = "NPM",
+        projectType = "NPMProject",
         lockfileName = "package-lock.json", // See https://docs.npmjs.com/cli/v7/configuring-npm/package-lock-json.
         markerFileName = "npm-shrinkwrap.json" // See https://docs.npmjs.com/cli/v6/configuring-npm/shrinkwrap-json.
     ) {
@@ -126,7 +126,7 @@ enum class NodePackageManagerType(
     },
 
     PNPM(
-        projectType = "PNPM",
+        projectType = "PNPMProject",
         lockfileName = "pnpm-lock.yaml", // See https://pnpm.io/git#lockfiles.
         workspaceFileName = "pnpm-workspace.yaml"
     ) {
@@ -145,7 +145,7 @@ enum class NodePackageManagerType(
     },
 
     YARN(
-        projectType = "Yarn",
+        projectType = "YarnProject",
         lockfileName = "yarn.lock" // See https://classic.yarnpkg.com/en/docs/yarn-lock.
     ) {
         private val lockfileMarker = "# yarn lockfile v1"
@@ -161,7 +161,7 @@ enum class NodePackageManagerType(
     },
 
     YARN2(
-        projectType = "Yarn2",
+        projectType = "Yarn2Project",
         lockfileName = "yarn.lock", // See https://classic.yarnpkg.com/en/docs/yarn-lock.
         markerFileName = ".yarnrc.yml"
     ) {

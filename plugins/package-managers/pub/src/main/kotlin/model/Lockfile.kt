@@ -72,6 +72,9 @@ internal data class PackageInfo(
     )
 }
 
+internal val PackageInfo.isProject: Boolean
+    get() = source == "path" && description.url == null
+
 private object DescriptionDeserializer : KSerializer<Description> by Description.generatedSerializer() {
     @OptIn(InternalSerializationApi::class)
     override val descriptor: SerialDescriptor by lazy {

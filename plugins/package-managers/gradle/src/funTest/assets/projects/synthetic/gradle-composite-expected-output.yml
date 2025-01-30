@@ -1,6 +1,6 @@
 ---
 project:
-  id: "Gradle:org.ossreviewtoolkit.gradle.composite.example:my.project1:1.0.0"
+  id: "GradleProject:org.ossreviewtoolkit.gradle.composite.example:my.project1:1.0.0"
   definition_file_path: "plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/gradle-composite/project1/build.gradle.kts"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -18,21 +18,21 @@ project:
   scopes:
   - name: "compileClasspath"
     dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.composite.example3:sub:3.0.0"
+    - id: "GradleProject:org.ossreviewtoolkit.gradle.composite.example3:sub:3.0.0"
       linkage: "PROJECT_DYNAMIC"
   - name: "runtimeClasspath"
     dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.composite.example3:sub:3.0.0"
+    - id: "GradleProject:org.ossreviewtoolkit.gradle.composite.example3:sub:3.0.0"
       linkage: "PROJECT_DYNAMIC"
       dependencies:
       - id: "Maven:log4j:log4j:1.2.17"
   - name: "testCompileClasspath"
     dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.composite.example3:sub:3.0.0"
+    - id: "GradleProject:org.ossreviewtoolkit.gradle.composite.example3:sub:3.0.0"
       linkage: "PROJECT_DYNAMIC"
   - name: "testRuntimeClasspath"
     dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.composite.example3:sub:3.0.0"
+    - id: "GradleProject:org.ossreviewtoolkit.gradle.composite.example3:sub:3.0.0"
       linkage: "PROJECT_DYNAMIC"
       dependencies:
       - id: "Maven:log4j:log4j:1.2.17"

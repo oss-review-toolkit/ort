@@ -62,7 +62,7 @@ class OrtResultTest : WordSpec({
 
     "getProjectsAndPackages()" should {
         val ortResult = readOrtResult("src/test/assets/gradle-all-dependencies-expected-result.yml")
-        val subProjectId = Identifier("Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0")
+        val subProjectId = Identifier("GradleProject:org.ossreviewtoolkit.gradle.example:lib:1.0.0")
 
         "be able to get all ids including sub-projects" {
             val ids = ortResult.getProjectsAndPackages()

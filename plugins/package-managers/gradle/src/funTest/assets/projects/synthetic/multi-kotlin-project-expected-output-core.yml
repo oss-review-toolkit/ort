@@ -1,6 +1,6 @@
 ---
 project:
-  id: "Gradle:org.gradle.kotlin.dsl.samples.multiproject:core:1.0"
+  id: "GradleProject:org.gradle.kotlin.dsl.samples.multiproject:core:1.0"
   definition_file_path: "plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/multi-kotlin-project/core/build.gradle.kts"
   declared_licenses: []
   declared_licenses_processed: {}

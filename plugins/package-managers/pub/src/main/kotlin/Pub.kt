@@ -57,6 +57,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.PackageInfo
 import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.Pubspec
 import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.Pubspec.Dependency
 import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.Pubspec.SdkDependency
+import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.isProject
 import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.parseLockfile
 import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.parsePubspec
 import org.ossreviewtoolkit.utils.common.CommandLineTool
@@ -107,7 +108,7 @@ class Pub(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Pub", analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, "PubProject", analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
     companion object {
         const val OPTION_FLUTTER_VERSION = "flutterVersion"
         const val OPTION_GRADLE_VERSION = "gradleVersion"

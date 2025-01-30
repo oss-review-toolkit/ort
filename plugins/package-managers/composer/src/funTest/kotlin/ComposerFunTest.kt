@@ -68,7 +68,7 @@ class ComposerFunTest : StringSpec({
 
         with(result) {
             project.id shouldBe Identifier(
-                "Composer::src/funTest/assets/projects/synthetic/no-lockfile/composer.json:"
+                "ComposerProject::src/funTest/assets/projects/synthetic/no-lockfile/composer.json:"
             )
             project.definitionFilePath shouldBe "plugins/package-managers/composer/src/funTest/assets/projects/" +
                 "synthetic/no-lockfile/composer.json"

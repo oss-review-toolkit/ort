@@ -28,7 +28,7 @@ analyzer:
     skip_excluded: false
   result:
     projects:
-    - id: "PNPM::pnpm-app-example:1.1.4"
+    - id: "PNPMProject::pnpm-app-example:1.1.4"
       definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/app/package.json"
       authors:
       - "DavidWells"
@@ -50,7 +50,7 @@ analyzer:
       scopes:
       - name: "dependencies"
         dependencies:
-        - id: "PNPM::testing-pnpm-package-a:1.0.2"
+        - id: "PNPMProject::testing-pnpm-package-a:1.0.2"
           linkage: "PROJECT_DYNAMIC"
           dependencies:
           - id: "NPM::chalk:5.0.1"
@@ -64,7 +64,7 @@ analyzer:
                   dependencies:
                   - id: "NPM::is-buffer:1.1.6"
           - id: "NPM::sax:1.2.4"
-    - id: "PNPM::pnpm-workspaces:1.0.1"
+    - id: "PNPMProject::pnpm-workspaces:1.0.1"
       definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/package.json"
       authors:
       - "Marcel Bochtler"
@@ -90,15 +90,15 @@ analyzer:
         - id: "NPM::json-stable-stringify:1.0.1"
           dependencies:
           - id: "NPM::jsonify:0.0.0"
-        - id: "PNPM::pnpm-workspaces:1.0.1"
+        - id: "PNPMProject::pnpm-workspaces:1.0.1"
           linkage: "PROJECT_DYNAMIC"
           dependencies:
           - id: "NPM::json-stable-stringify:1.0.1"
             dependencies:
             - id: "NPM::jsonify:0.0.0"
-          - id: "PNPM::pnpm-workspaces:1.0.1"
+          - id: "PNPMProject::pnpm-workspaces:1.0.1"
             linkage: "PROJECT_DYNAMIC"
-    - id: "PNPM::testing-pnpm-package-a:1.0.2"
+    - id: "PNPMProject::testing-pnpm-package-a:1.0.2"
       definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/packages/package-a/package.json"
       authors:
       - "Marcel Bochtler"
@@ -139,7 +139,7 @@ analyzer:
             dependencies:
             - id: "NPM::callsites:0.2.0"
           - id: "NPM::resolve-from:1.0.1"
-    - id: "PNPM::testing-pnpm-package-b:1.0.2"
+    - id: "PNPMProject::testing-pnpm-package-b:1.0.2"
       definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/packages/package-b/package.json"
       authors:
       - "Marcel Bochtler"
@@ -171,7 +171,7 @@ analyzer:
           - id: "NPM::supports-color:7.2.0"
             dependencies:
             - id: "NPM::has-flag:4.0.0"
-    - id: "PNPM::testing-pnpm-package-c:1.0.0"
+    - id: "PNPMProject::testing-pnpm-package-c:1.0.0"
       definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/non-workspace/package-c/package.json"
       authors:
       - "Marcel Bochtler"

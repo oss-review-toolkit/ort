@@ -1,6 +1,6 @@
 ---
 project:
-  id: "CocoaPods::src/funTest/assets/projects/synthetic/dep-tree/Podfile:"
+  id: "CocoaPodsProject::src/funTest/assets/projects/synthetic/dep-tree/Podfile:"
   definition_file_path: "plugins/package-managers/cocoapods/src/funTest/assets/projects/synthetic/dep-tree/Podfile"
   declared_licenses: []
   declared_licenses_processed: {}

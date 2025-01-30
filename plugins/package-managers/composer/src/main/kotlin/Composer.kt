@@ -88,7 +88,7 @@ class Composer(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Composer", analysisRoot, analyzerConfig, repoConfig) {
+) : PackageManager(name, "ComposerProject", analysisRoot, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Composer>("Composer") {
         override val globsForDefinitionFiles = listOf("composer.json")
 

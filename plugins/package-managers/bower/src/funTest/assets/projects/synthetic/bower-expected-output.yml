@@ -1,6 +1,6 @@
 ---
 project:
-  id: "Bower::a-test-project:"
+  id: "BowerProject::a-test-project:"
   definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
   authors:
   - "author-abc"
