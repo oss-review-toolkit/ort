@@ -77,12 +77,23 @@ If a package manager is not listed there, support for it is integrated directly 
 
 ## From binaries
 
+### CLI distribution
+
 Head over to the [releases](https://github.com/oss-review-toolkit/ort/releases) page.
 From the "Assets" section of your chosen release, download the distribution archive of the desired type.
 Typically that is `.zip` for Windows and `.tgz` otherwise; but the contents of the archives are the same.
 The `ort-*` archives contain the [ORT main](./cli/) distribution, while the `orth-*` archives contain the [ORT helper](./cli-helper/) distribution.
 Unpack the archive to an installation directory.
 The scripts to run ORT are located at `bin/ort` and `bin\ort.bat`, or `bin/orth` and `bin\orth.bat`, respectively.
+
+### Docker distribution
+
+In addition to the CLI, ORT is also distributed as a Docker image that contains all tools required by ORT (see the `ort requirements` command).
+To run ORT from the latest version of that image (which will be downloaded if needed) use:
+
+```shell
+docker run ghcr.io/oss-review-toolkit/ort --help
+```
 
 ## From sources
 
@@ -121,7 +132,7 @@ Change into the directory with ORT's source code and run `./gradlew installDist`
 
 Depending on how ORT was installed, it can be run in the following ways:
 
-* If the Docker image was built, use
+* If the Docker image was built locally as described above, use
 
   ```shell
   docker run ort --help
