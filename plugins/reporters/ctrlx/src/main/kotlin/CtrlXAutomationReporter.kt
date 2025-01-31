@@ -54,7 +54,8 @@ class CtrlXAutomationReporter(override val descriptor: PluginDescriptor = CtrlXA
 
     override fun generateReport(input: ReporterInput, outputDir: File): List<Result<File>> {
         val packages = input.ortResult.getPackages(omitExcluded = true)
-        val components = packages.mapTo(mutableListOf()) { (pkg, _) ->
+
+        val components = packages.mapNotNullTo(mutableListOf()) { (pkg, _) ->
             val qualifiedName = when (pkg.id.type) {
                 // At least for NPM packages, CtrlX requires the component name to be prefixed with the scope name,
                 // separated with a slash. Other package managers might require similar handling, but there seems to be
@@ -67,31 +68,45 @@ class CtrlXAutomationReporter(override val descriptor: PluginDescriptor = CtrlXA
             }
 
             val resolvedLicenseInfo = input.licenseInfoResolver.resolveLicenseInfo(pkg.id).filterExcluded()
-            val copyrights = resolvedLicenseInfo.getCopyrights().joinToString("\n").takeUnless { it.isEmpty() }
-            val effectiveLicense = resolvedLicenseInfo.effectiveLicense(
-                LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED,
-                input.ortResult.getPackageLicenseChoices(pkg.id),
-                input.ortResult.getRepositoryLicenseChoices()
+            val filteredResolvedLicenseInfo = resolvedLicenseInfo.filterNoCategorizedLicenses(
+                input.licenseClassifications,
+                input.licenseCategoriesToInclude
             )
-            val licenses = effectiveLicense?.decompose()?.map {
-                val name = it.toString()
-                val spdxId = SpdxLicense.forId(name)?.id
-                val text = input.licenseTextProvider.getLicenseText(name)
-                License(name = name, spdx = spdxId, text = text.orEmpty())
+
+            // If the license was removed by the classification filter, we don't output it in the report (otherwise it
+            // would be included with NOASSERTION (see underneath).
+            if (filteredResolvedLicenseInfo.licenses.isEmpty() && resolvedLicenseInfo.licenses.isNotEmpty()) {
+                null
+            } else {
+                val copyrights = filteredResolvedLicenseInfo.getCopyrights().joinToString("\n").takeUnless {
+                    it.isEmpty()
+                }
+
+                val effectiveLicense = filteredResolvedLicenseInfo.effectiveLicense(
+                    LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED,
+                    input.ortResult.getPackageLicenseChoices(pkg.id),
+                    input.ortResult.getRepositoryLicenseChoices()
+                )
+                val licenses = effectiveLicense?.decompose()?.map {
+                    val name = it.toString()
+                    val spdxId = SpdxLicense.forId(name)?.id
+                    val text = input.licenseTextProvider.getLicenseText(name)
+                    License(name = name, spdx = spdxId, text = text.orEmpty())
+                }
+
+                // The specification requires at least one license.
+                val componentLicenses = licenses.orEmpty().ifEmpty { listOf(LICENSE_NOASSERTION) }
+
+                Component(
+                    name = qualifiedName,
+                    version = pkg.id.version,
+                    homepage = pkg.homepageUrl.takeUnless { it.isEmpty() },
+                    copyright = copyrights?.let { CopyrightInformation(it) },
+                    licenses = componentLicenses,
+                    usage = if (pkg.isModified) Usage.Modified else Usage.AsIs
+                    // TODO: Map the PackageLinkage to an IntegrationMechanism.
+                )
             }
-
-            // The specification requires at least one license.
-            val componentLicenses = licenses.orEmpty().ifEmpty { listOf(LICENSE_NOASSERTION) }
-
-            Component(
-                name = qualifiedName,
-                version = pkg.id.version,
-                homepage = pkg.homepageUrl.takeUnless { it.isEmpty() },
-                copyright = copyrights?.let { CopyrightInformation(it) },
-                licenses = componentLicenses,
-                usage = if (pkg.isModified) Usage.Modified else Usage.AsIs
-                // TODO: Map the PackageLinkage to an IntegrationMechanism.
-            )
         }
 
         val reportFileResult = runCatching {
