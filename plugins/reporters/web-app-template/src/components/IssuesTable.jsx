@@ -23,14 +23,15 @@ import {
 } from 'react';
 
 import {
-    ExclamationCircleOutlined,
     FileAddOutlined,
-    FileExcelOutlined,
-    InfoCircleOutlined,
-    IssuesCloseOutlined,
-    WarningOutlined
+    FileExcelOutlined
 } from '@ant-design/icons';
-import { Collapse, Table, Tooltip } from 'antd';
+import {
+    Collapse,
+    Table,
+    Tag,
+    Tooltip
+} from 'antd';
 import Markdown from 'markdown-to-jsx';
 
 import PackageDetails from './PackageDetails';
@@ -40,10 +41,15 @@ import PackagePaths from './PackagePaths';
 import PathExcludesTable from './PathExcludesTable';
 import ResolutionTable from './ResolutionTable';
 import ScopeExcludesTable from './ScopeExcludesTable';
+import SeverityTag from './SeverityTag';
 import { getColumnSearchProps } from './Shared';
 
 // Generates the HTML to display issues as a table
-const IssuesTable = ({ webAppOrtIssues = [], showExcludesColumn = true }) => {
+const IssuesTable = ({
+    webAppOrtIssues = [],
+    showExcludesColumn = true,
+    severeThreshold
+}) => {
     // Convert issues as Antd only accepts vanilla objects as input
     const issues = useMemo(
         () => {
@@ -64,6 +70,19 @@ const IssuesTable = ({ webAppOrtIssues = [], showExcludesColumn = true }) => {
         []
     );
 
+    let defaultSeverityIndex = [];
+    switch (severeThreshold) {
+        case 'ERROR':
+            defaultSeverityIndex = [0];
+            break;
+        case 'WARNING':
+            defaultSeverityIndex = [0, 1];
+            break;
+        case 'HINT':
+            defaultSeverityIndex = [0, 1, 2];
+            break;
+    }
+
     /* === Table state handling === */
 
     // State variable for displaying table in various pages
@@ -74,8 +93,8 @@ const IssuesTable = ({ webAppOrtIssues = [], showExcludesColumn = true }) => {
         excludes: [],
         message: [],
         packageId: [],
-        rule: [],
-        severityIndex: []
+        source: [],
+        severityIndex: defaultSeverityIndex
     });
 
     // State variable for sorting table columns
@@ -155,59 +174,65 @@ const IssuesTable = ({ webAppOrtIssues = [], showExcludesColumn = true }) => {
         key: 'severityIndex',
         filters: [
             {
-                text: 'Errors',
+                text: (<SeverityTag severity={'error'} />),
                 value: 0
             },
             {
-                text: 'Warnings',
+                text: (<SeverityTag severity={'warning'} />),
                 value: 1
             },
             {
-                text: 'Hint',
+                text: (<SeverityTag severity={'hint'} />),
                 value: 2
             },
             {
-                text: 'Resolved',
-                value: 3
+                text: (<Tag color="#b0c4de">Resolved</Tag>),
+                value: 10
             }
         ],
         filteredValue: filteredInfo.severityIndex || null,
-        onFilter: (value, record) => record.severityIndex === Number(value),
+        onFilter: (value, record) => record.severityIndex === Number(value)
+            || (record.severityIndex > 10 && Number(value) >= 10),
         render: (text, record) => (
             record.isResolved
                 ? (
-                    <Tooltip
-                        placement="right"
-                        title={Array.from(record.webAppOrtIssue.resolutionReasons).join(', ')}
-                    >
-                        <IssuesCloseOutlined
-                            className="ort-ok"
-                        />
-                    </Tooltip>
+                    <SeverityTag
+                        isResolved={true}
+                        severity={record.severity.toLowerCase()}
+                        tooltipText={
+                            `Resolved with ${Array.from(record.webAppOrtIssue.resolutionReasons).join(', ')
+                            } resolution${
+                                record.webAppOrtIssue.resolutionReasons.size > 0 ? 's' : ''
+                            }`
+                        }
+                    />
                     )
                 : (
                     <span>
                         {
                             record.severity === 'ERROR'
+                            && !record.isResolved
                             && (
-                                <ExclamationCircleOutlined
-                                    className="ort-error"
+                                <SeverityTag
+                                    severity={'error'}
                                 />
                             )
                         }
                         {
                             record.severity === 'WARNING'
+                            && !record.isResolved
                             && (
-                                <WarningOutlined
-                                    className="ort-warning"
+                                <SeverityTag
+                                    severity={'warning'}
                                 />
                             )
                         }
                         {
                             record.severity === 'HINT'
+                            && !record.isResolved
                             && (
-                                <InfoCircleOutlined
-                                    className="ort-hint"
+                                <SeverityTag
+                                    severity={'warning'}
                                 />
                             )
                         }
@@ -216,7 +241,8 @@ const IssuesTable = ({ webAppOrtIssues = [], showExcludesColumn = true }) => {
         ),
         sorter: (a, b) => a.severityIndex - b.severityIndex,
         sortOrder: sortedInfo.field === 'severityIndex' && sortedInfo.order,
-        width: '5em'
+        title: 'Severity',
+        width: '8em'
     });
 
     columns.push(
@@ -238,17 +264,17 @@ const IssuesTable = ({ webAppOrtIssues = [], showExcludesColumn = true }) => {
         },
         {
             dataIndex: 'source',
-            filteredValue: filteredInfo.rule || null,
+            filteredValue: filteredInfo.source || null,
             key: 'source',
             responsive: ['md'],
-            sorter: (a, b) => a.rule.localeCompare(b.rule),
-            sortOrder: sortedInfo.field === 'rule' && sortedInfo.order,
+            sorter: (a, b) => a.source.localeCompare(b.source),
+            sortOrder: sortedInfo.field === 'source' && sortedInfo.order,
             title: 'Source',
             width: '25%',
             ...getColumnSearchProps(
                 'source',
-                filteredInfo.rule,
-                (value) => setFilteredInfo({ ...filteredInfo, rule: value })
+                filteredInfo.source,
+                (value) => setFilteredInfo({ ...filteredInfo, source: value })
             )
         },
         {
@@ -407,6 +433,7 @@ const IssuesTable = ({ webAppOrtIssues = [], showExcludesColumn = true }) => {
                     current: pagination.current,
                     hideOnSinglePage: true,
                     onChange: handlePaginationChange,
+                    pageSize: pagination.pageSize,
                     pageSizeOptions: ['50', '100', '250', '500', '1000', '5000'],
                     position: 'bottom',
                     showQuickJumper: true,

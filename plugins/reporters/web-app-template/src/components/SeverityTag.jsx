@@ -22,13 +22,11 @@ import {
     Tooltip
 } from 'antd';
 
-const VulnerabilityRatingTag = ({ severity, isResolved = false, tooltipText = '' }) => {
+const SeverityTag = ({ severity, isResolved = false, tooltipText = '' }) => {
     const severityColors = {
-        critical: '#e53e3e',
-        high: '#dd6b20',
-        low: '#f6e05e',
-        medium: '#f59e0b',
-        none: '#808080'
+        error: '#e53e3e',
+        warning: '#f59e0b',
+        hint: '#84b6eb'
     };
 
     return isResolved
@@ -47,6 +45,7 @@ const VulnerabilityRatingTag = ({ severity, isResolved = false, tooltipText = ''
             </Tooltip>
             )
         : (
+
             <Tag
                 color={severityColors[severity]}
             >
@@ -55,4 +54,4 @@ const VulnerabilityRatingTag = ({ severity, isResolved = false, tooltipText = ''
             );
 };
 
-export default VulnerabilityRatingTag;
+export default SeverityTag;

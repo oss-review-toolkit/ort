@@ -64,9 +64,9 @@
 
 /* === General === */
 
-/* Colors of exclude, error, hint and warning icons */
+/* Colors of exclude, error, hint and warning icons and texts */
 .ort-error {
-    color: #f5222d;
+    color: #e53e3e;
 }
 
 .ort-excluded {

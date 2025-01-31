@@ -24,6 +24,8 @@ class WebAppRuleViolation {
 
     #howToFix;
 
+    #isResolved;
+
     #license;
 
     #licenseIndex;
@@ -37,6 +39,8 @@ class WebAppRuleViolation {
     #packageIndex;
 
     #severity;
+
+    #severityIndex;
 
     #resolutionIndexes = new Set();
 
@@ -82,6 +86,20 @@ class WebAppRuleViolation {
                 this.#severity = obj.severity;
             }
 
+            switch (this.#severity) {
+                case 'ERROR':
+                    this.#severityIndex = 0;
+                    break;
+                case 'WARNING':
+                    this.#severityIndex = 1;
+                    break;
+                case 'HINT':
+                    this.#severityIndex = 3;
+                    break;
+                default:
+                    this.#severityIndex = 4;
+            }
+
             if (obj.resolutions) {
                 this.#resolutionIndexes = new Set(obj.resolutions);
             }
@@ -104,6 +122,12 @@ class WebAppRuleViolation {
                 }
             }
 
+            this.#isResolved = !!(this.#resolutionIndexes.size > 0);
+
+            if (this.#isResolved) {
+                this.#severityIndex = this.#severityIndex + 10;
+            }
+
             this.key = randomStringGenerator(20);
         }
     }
@@ -113,7 +137,7 @@ class WebAppRuleViolation {
     }
 
     get isResolved() {
-        return this.#resolutionIndexes && this.#resolutionIndexes.size > 0;
+        return this.#isResolved;
     }
 
     get howToFix() {
@@ -189,23 +213,7 @@ class WebAppRuleViolation {
     }
 
     get severityIndex() {
-        if (this.isResolved) {
-            return 3;
-        }
-
-        if (this.#severity === 'ERROR') {
-            return 0;
-        }
-
-        if (this.#severity === 'WARNING') {
-            return 1;
-        }
-
-        if (this.#severity === 'HINT') {
-            return 2;
-        }
-
-        return -1;
+        return this.#severityIndex;
     }
 
     hasHowToFix() {

@@ -29,7 +29,7 @@ const LicenseStatsTable = ({ emptyText, licenses, licenseStats }) => {
     /* === Table state handling === */
 
     // State variable for displaying table in various pages
-    const [pagination, setPagination] = useState({ current: 1, pageSize: 100 });
+    const [pagination, setPagination] = useState({ current: 1, pageSize: 50 });
 
     // State variable for filtering the contents of table columns
     const filteredInfoDefault = {
@@ -94,10 +94,10 @@ const LicenseStatsTable = ({ emptyText, licenses, licenseStats }) => {
             pagination={
                 {
                     current: pagination.current,
-                    defaultPageSize: 50,
                     hideOnSinglePage: true,
                     onChange: handlePaginationChange,
                     position: 'bottom',
+                    pageSize: pagination.pageSize,
                     pageSizeOptions: ['50', '100', '250', '500', '1000', '5000'],
                     showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} results`
                 }

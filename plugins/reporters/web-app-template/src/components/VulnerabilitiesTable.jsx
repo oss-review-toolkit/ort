@@ -25,22 +25,23 @@ import {
 import {
     FileAddOutlined,
     FileExcelOutlined,
-    FileProtectOutlined,
-    IssuesCloseOutlined
+    FileProtectOutlined
 } from '@ant-design/icons';
 import {
     Collapse,
     Table,
+    Tag,
     Tooltip
 } from 'antd';
 
 import PackageDetails from './PackageDetails';
 import PackagePaths from './PackagePaths';
 import PathExcludesTable from './PathExcludesTable';
-import ResolutionTable from './ResolutionTable';
 import ScopeExcludesTable from './ScopeExcludesTable';
 import { getColumnSearchProps } from './Shared';
+import VulnerabilitiesResolutionTable from './VulnerabilitiesResolutionTable';
 import VulnerabilityRatingTag from './VulnerabilityRatingTag';
+import VulnerabilityReferencesList from './VulnerabilityReferencesList';
 
 // Generates the HTML to display vulnerabilities as a table
 const VulnerabilitiesTable = ({ webAppVulnerabilities = [], showExcludesColumn = true }) => {
@@ -55,6 +56,11 @@ const VulnerabilitiesTable = ({ webAppVulnerabilities = [], showExcludesColumn =
                         key: webAppVulnerability.key,
                         packageId: webAppVulnerability.package.id,
                         references: webAppVulnerability.references,
+                        resolutionReasonsText: `Resolved with ${
+                            Array.from(webAppVulnerability.resolutionReasons).join(', ')
+                        } resolution${
+                            webAppVulnerability.resolutionReasons.size > 0 ? 's' : ''
+                        }`,
                         severity: webAppVulnerability.severity,
                         severityIndex: webAppVulnerability.severityIndex,
                         webAppVulnerability
@@ -126,17 +132,17 @@ const VulnerabilitiesTable = ({ webAppVulnerabilities = [], showExcludesColumn =
                 if (webAppPackage) {
                     return webAppPackage.isExcluded
                         ? (
-                        <span className="ort-excludes">
-                            <Tooltip
-                                placement="right"
-                                title={Array.from(webAppPackage.excludeReasons).join(', ')}
-                            >
-                                <FileExcelOutlined className="ort-excluded" />
-                            </Tooltip>
-                        </span>
+                            <span className="ort-excludes">
+                                <Tooltip
+                                    placement="right"
+                                    title={Array.from(webAppPackage.excludeReasons).join(', ')}
+                                >
+                                    <FileExcelOutlined className="ort-excluded" />
+                                </Tooltip>
+                            </span>
                             )
                         : (
-                        <FileAddOutlined />
+                            <FileAddOutlined />
                             );
                 }
 
@@ -169,27 +175,72 @@ const VulnerabilitiesTable = ({ webAppVulnerabilities = [], showExcludesColumn =
                 value: 3
             },
             {
-                text: (<VulnerabilityRatingTag severity={'resolved'}/>),
-                value: 5
-            },
-            {
                 text: (<VulnerabilityRatingTag severity={'none'}/>),
                 value: 4
+            },
+            {
+                text: (<Tag color="#b0c4de">Resolved</Tag>),
+                value: 10
             }
         ],
         filteredValue: filteredInfo.severityIndex || null,
-        onFilter: (value, record) => record.severityIndex === Number(value),
+        onFilter: (value, record) => record.severityIndex === Number(value)
+            || (record.severityIndex > 10 && Number(value) >= 10),
         render: (text, record) => (
             record.isResolved
                 ? (
-                    <Tooltip
-                        placement="right"
-                        title={Array.from(record.webAppVulnerability.resolutionReasons).join(', ')}
-                    >
-                        <IssuesCloseOutlined
-                            className="ort-ok"
-                        />
-                    </Tooltip>
+                    <span>
+                        {
+                            record.severityIndex === 10
+                            && (
+                                <VulnerabilityRatingTag
+                                    isResolved={true}
+                                    severity={'critical'}
+                                    tooltipText={record.resolutionReasonsText}
+                                />
+                            )
+                        }
+                        {
+                            record.severityIndex === 11
+                            && (
+                                <VulnerabilityRatingTag
+                                    isResolved={true}
+                                    severity={'high'}
+                                    tooltipText={record.resolutionReasonsText}
+                                />
+                            )
+                        }
+                        {
+                            record.severityIndex === 12
+                            && (
+                                <VulnerabilityRatingTag
+                                    isResolved={true}
+                                    severity={'medium'}
+                                    tooltipText={record.resolutionReasonsText}
+                                />
+                            )
+                        }
+                        {
+                            record.severityIndex === 13
+                            && (
+                                <VulnerabilityRatingTag
+                                    isResolved={true}
+                                    severity={'low'}
+                                    tooltipText={record.resolutionReasonsText}
+                                />
+                            )
+                        }
+                        {
+                            record.severityIndex === 14
+                            && (
+                                <VulnerabilityRatingTag
+                                    isResolved={true}
+                                    severity={'none'}
+                                    tooltipText={record.resolutionReasonsText}
+                                />
+                            )
+                        }
+                    </span>
                     )
                 : (
                     <span>
@@ -223,19 +274,13 @@ const VulnerabilitiesTable = ({ webAppVulnerabilities = [], showExcludesColumn =
                                 <VulnerabilityRatingTag severity={'none'}/>
                             )
                         }
-                        {
-                            record.severityIndex === 5
-                            && (
-                                <VulnerabilityRatingTag severity={'resolved'}/>
-                            )
-                        }
                     </span>
                     )
         ),
         sorter: (a, b) => a.severityIndex - b.severityIndex,
         sortOrder: sortedInfo.field === 'severityIndex' && sortedInfo.order,
         title: 'Severity',
-        width: '10em'
+        width: '8em'
     });
 
     columns.push(
@@ -335,9 +380,16 @@ const VulnerabilitiesTable = ({ webAppVulnerabilities = [], showExcludesColumn =
                 expandedRowRender: (record) => {
                     const webAppVulnerability = record.webAppVulnerability;
                     const webAppPackage = webAppVulnerability.package;
-                    let defaultActiveKey = record.isResolved
-                        ? 'vulnerability-resolutions'
-                        : ['vulnerability-package-details', 'vulnerability-package-paths'];
+                    const defaultActiveKey = record.isResolved
+                        ? [
+                                'vulnerability-resolutions',
+                                'vulnerability-references'
+                            ]
+                        : [
+                                'vulnerability-references',
+                                'vulnerability-package-details',
+                                'vulnerability-package-paths'
+                            ];
 
                     return (
                         <Collapse
@@ -352,8 +404,20 @@ const VulnerabilitiesTable = ({ webAppVulnerabilities = [], showExcludesColumn =
                                         label: 'Resolutions',
                                         key: 'vulnerability-resolutions',
                                         children: (
-                                            <ResolutionTable
+                                            <VulnerabilitiesResolutionTable
                                                 resolutions={webAppVulnerability.resolutions}
+                                            />
+                                        )
+                                    });
+                                }
+
+                                if (webAppVulnerability.hasReferences()) {
+                                    collapseItems.push({
+                                        label: 'References',
+                                        key: 'vulnerability-references',
+                                        children: (
+                                            <VulnerabilityReferencesList
+                                                references={webAppVulnerability.references}
                                             />
                                         )
                                     });
@@ -415,6 +479,7 @@ const VulnerabilitiesTable = ({ webAppVulnerabilities = [], showExcludesColumn =
                     current: pagination.current,
                     hideOnSinglePage: true,
                     onChange: handlePaginationChange,
+                    pageSize: pagination.pageSize,
                     pageSizeOptions: ['50', '100', '250', '500', '1000', '5000'],
                     position: 'bottom',
                     showQuickJumper: true,

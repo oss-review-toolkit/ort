@@ -418,6 +418,7 @@ const ResultsSummary = ({ webAppOrtResult }) => {
                                                 <RuleViolationsTable
                                                     webAppRuleViolations={webAppOrtResult.ruleViolations}
                                                     showExcludesColumn={webAppOrtResult.hasExcludes()}
+                                                    severeThreshold={webAppOrtResult.severeRuleViolationThreshold}
                                                 />
                                             )
                                         },
@@ -439,6 +440,7 @@ const ResultsSummary = ({ webAppOrtResult }) => {
                                                 <IssuesTable
                                                     webAppOrtIssues={webAppOrtResult.issues}
                                                     showExcludesColumn={webAppOrtResult.hasExcludes()}
+                                                    severeThreshold={webAppOrtResult.severeIssueThreshold}
                                                 />
                                             )
                                         },
