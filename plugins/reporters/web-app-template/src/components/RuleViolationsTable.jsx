@@ -55,7 +55,8 @@ const RuleViolationsTable = ({ webAppRuleViolations = [], showExcludesColumn = t
                         isResolved: webAppRuleViolation.isResolved,
                         key: webAppRuleViolation.key,
                         message: webAppRuleViolation.message,
-                        packageId: webAppRuleViolation.package.id,
+                        packageId: webAppRuleViolation.package 
+                            ? webAppRuleViolation.package.id : '',
                         rule: webAppRuleViolation.rule,
                         severity: webAppRuleViolation.severity,
                         severityIndex: webAppRuleViolation.severityIndex,
