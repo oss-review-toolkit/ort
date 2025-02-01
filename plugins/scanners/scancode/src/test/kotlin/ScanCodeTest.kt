@@ -126,7 +126,7 @@ class ScanCodeTest : WordSpec({
 
     "transformVersion()" should {
         "work with a version output without a colon" {
-            scanner.transformVersion(
+            ScanCodeCommand.transformVersion(
                 """
                     ScanCode version 30.0.1
                     ScanCode Output Format version 1.0.0
@@ -136,7 +136,7 @@ class ScanCodeTest : WordSpec({
         }
 
         "work with a version output with a colon" {
-            scanner.transformVersion(
+            ScanCodeCommand.transformVersion(
                 """
                     ScanCode version: 31.0.0b4
                     ScanCode Output Format version: 2.0.0

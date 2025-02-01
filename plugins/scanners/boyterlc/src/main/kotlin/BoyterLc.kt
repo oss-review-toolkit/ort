@@ -31,12 +31,13 @@ import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
+import org.ossreviewtoolkit.scanner.LocalPathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScannerMatcher
 import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
+import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
@@ -44,8 +45,18 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 
 private val JSON = Json { ignoreUnknownKeys = true }
 
+object BoyterLcCommand : CommandLineTool {
+    override fun command(workingDir: File?) =
+        listOfNotNull(workingDir, if (Os.isWindows) "lc.exe" else "lc").joinToString(File.separator)
+
+    override fun transformVersion(output: String) =
+        // The version string can be something like:
+        // licensechecker version 1.1.1
+        output.removePrefix("licensechecker version ")
+}
+
 class BoyterLc internal constructor(name: String, private val wrapperConfig: ScannerWrapperConfig) :
-    CommandLinePathScannerWrapper(name) {
+    LocalPathScannerWrapper(name) {
     companion object {
         val CONFIGURATION_OPTIONS = listOf(
             "--confidence", "0.95", // Cut-off value to only get most relevant matches.
@@ -63,21 +74,15 @@ class BoyterLc internal constructor(name: String, private val wrapperConfig: Sca
 
     override val matcher by lazy { ScannerMatcher.create(details, wrapperConfig.matcherConfig) }
 
+    override val version by lazy { BoyterLcCommand.getVersion() }
+
     override val readFromStorage by lazy { wrapperConfig.readFromStorageWithDefault(matcher) }
 
     override val writeToStorage by lazy { wrapperConfig.writeToStorageWithDefault(matcher) }
 
-    override fun command(workingDir: File?) =
-        listOfNotNull(workingDir, if (Os.isWindows) "lc.exe" else "lc").joinToString(File.separator)
-
-    override fun transformVersion(output: String) =
-        // The version string can be something like:
-        // licensechecker version 1.1.1
-        output.removePrefix("licensechecker version ")
-
     override fun runScanner(path: File, context: ScanContext): String {
         val resultFile = createOrtTempDir().resolve("result.json")
-        val process = run(
+        val process = BoyterLcCommand.run(
             *CONFIGURATION_OPTIONS.toTypedArray(),
             "--output", resultFile.absolutePath,
             path.absolutePath

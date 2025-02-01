@@ -28,12 +28,13 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
+import org.ossreviewtoolkit.scanner.LocalPathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScanStorage
 import org.ossreviewtoolkit.scanner.ScannerMatcher
 import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
+import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
@@ -44,6 +45,18 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
 import org.semver4j.Semver
+
+object ScanCodeCommand : CommandLineTool {
+    override fun command(workingDir: File?) =
+        listOfNotNull(workingDir, if (Os.isWindows) "scancode.bat" else "scancode").joinToString(File.separator)
+
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=30.0.0")
+
+    override fun transformVersion(output: String): String =
+        output.lineSequence().firstNotNullOfOrNull { line ->
+            line.withoutPrefix("ScanCode version")?.removePrefix(":")?.trim()
+        }.orEmpty()
+}
 
 /**
  * A wrapper for [ScanCode](https://github.com/aboutcode-org/scancode-toolkit).
@@ -68,7 +81,7 @@ class ScanCode internal constructor(
     name: String,
     private val config: ScanCodeConfig,
     private val wrapperConfig: ScannerWrapperConfig
-) : CommandLinePathScannerWrapper(name) {
+) : LocalPathScannerWrapper(name) {
     // This constructor is required by the `RequirementsCommand`.
     constructor(name: String, wrapperConfig: ScannerWrapperConfig) : this(name, ScanCodeConfig.DEFAULT, wrapperConfig)
 
@@ -111,19 +124,11 @@ class ScanCode internal constructor(
 
     override val matcher by lazy { ScannerMatcher.create(details, wrapperConfig.matcherConfig) }
 
+    override val version by lazy { ScanCodeCommand.getVersion() }
+
     override val readFromStorage by lazy { wrapperConfig.readFromStorageWithDefault(matcher) }
 
     override val writeToStorage by lazy { wrapperConfig.writeToStorageWithDefault(matcher) }
-
-    override fun command(workingDir: File?) =
-        listOfNotNull(workingDir, if (Os.isWindows) "scancode.bat" else "scancode").joinToString(File.separator)
-
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=30.0.0")
-
-    override fun transformVersion(output: String): String =
-        output.lineSequence().firstNotNullOfOrNull { line ->
-            line.withoutPrefix("ScanCode version")?.removePrefix(":")?.trim()
-        }.orEmpty()
 
     override fun runScanner(path: File, context: ScanContext): String {
         val resultFile = createOrtTempDir().resolve("result.json")
@@ -161,7 +166,7 @@ class ScanCode internal constructor(
      */
     internal fun runScanCode(path: File, resultFile: File) =
         ProcessCapture(
-            command(),
+            ScanCodeCommand.command(),
             *commandLineOptions.toTypedArray(),
             // The output format option needs to directly precede the result file path.
             OUTPUT_FORMAT_OPTION, resultFile.absolutePath,

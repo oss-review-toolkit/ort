@@ -32,12 +32,13 @@ import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
+import org.ossreviewtoolkit.scanner.LocalPathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScannerMatcher
 import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
+import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Options
 import org.ossreviewtoolkit.utils.common.Os
 
@@ -45,8 +46,18 @@ private const val CONFIDENCE_NOTICE = "Confidence threshold not high enough for 
 
 private val JSON = Json { ignoreUnknownKeys = true }
 
+object AskalonoCommand : CommandLineTool {
+    override fun command(workingDir: File?) =
+        listOfNotNull(workingDir, if (Os.isWindows) "askalono.exe" else "askalono").joinToString(File.separator)
+
+    override fun transformVersion(output: String) =
+        // The version string can be something like:
+        // askalono 0.2.0-beta.1
+        output.removePrefix("askalono ")
+}
+
 class Askalono internal constructor(name: String, private val wrapperConfig: ScannerWrapperConfig) :
-    CommandLinePathScannerWrapper(name) {
+    LocalPathScannerWrapper(name) {
     class Factory : ScannerWrapperFactory<Unit>("Askalono") {
         override fun create(config: Unit, wrapperConfig: ScannerWrapperConfig) = Askalono(type, wrapperConfig)
 
@@ -57,20 +68,14 @@ class Askalono internal constructor(name: String, private val wrapperConfig: Sca
 
     override val matcher by lazy { ScannerMatcher.create(details, wrapperConfig.matcherConfig) }
 
+    override val version by lazy { AskalonoCommand.getVersion() }
+
     override val readFromStorage by lazy { wrapperConfig.readFromStorageWithDefault(matcher) }
 
     override val writeToStorage by lazy { wrapperConfig.writeToStorageWithDefault(matcher) }
 
-    override fun command(workingDir: File?) =
-        listOfNotNull(workingDir, if (Os.isWindows) "askalono.exe" else "askalono").joinToString(File.separator)
-
-    override fun transformVersion(output: String) =
-        // The version string can be something like:
-        // askalono 0.2.0-beta.1
-        output.removePrefix("askalono ")
-
     override fun runScanner(path: File, context: ScanContext): String {
-        val process = run(
+        val process = AskalonoCommand.run(
             "--format", "json",
             "crawl", path.absolutePath
         )
