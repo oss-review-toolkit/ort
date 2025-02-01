@@ -24,14 +24,11 @@ import java.time.Instant
 
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
-import org.ossreviewtoolkit.utils.common.CommandLineTool
 
 /**
- * A [PathScannerWrapper] that is executed as a [CommandLineTool] on the local machine.
+ * A [PathScannerWrapper] that is executed on the local machine.
  */
-abstract class CommandLinePathScannerWrapper(override val name: String) : PathScannerWrapper, CommandLineTool {
-    override val version by lazy { getVersion() }
-
+abstract class LocalPathScannerWrapper(override val name: String) : PathScannerWrapper {
     final override fun scanPath(path: File, context: ScanContext): ScanSummary {
         val startTime = Instant.now()
         val result = runScanner(path, context)

@@ -47,7 +47,7 @@ import org.ossreviewtoolkit.model.config.ClearlyDefinedStorageConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedCoordinates
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedSourceLocation
-import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
+import org.ossreviewtoolkit.scanner.LocalPathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanStorageException
 import org.ossreviewtoolkit.scanner.ScannerMatcher
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
@@ -110,7 +110,7 @@ class ClearlyDefinedStorage(
                 // For the ClearlyDefined tool names see https://github.com/clearlydefined/service#tool-name-registry.
                 ScannerWrapperFactory.ALL[name]?.let { factory ->
                     val scanner = factory.create(emptyMap(), emptyMap())
-                    (scanner as? CommandLinePathScannerWrapper)?.let { cliScanner -> cliScanner to versions.last() }
+                    (scanner as? LocalPathScannerWrapper)?.let { cliScanner -> cliScanner to versions.last() }
                 }.also { factory ->
                     factory ?: logger.debug { "Unsupported tool '$name' for coordinates '$coordinates'." }
                 }

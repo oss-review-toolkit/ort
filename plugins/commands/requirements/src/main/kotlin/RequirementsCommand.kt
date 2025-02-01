@@ -42,8 +42,6 @@ import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommandFactory
-import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
-import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Plugin
 import org.ossreviewtoolkit.utils.common.enumSetOf
@@ -194,6 +192,7 @@ class RequirementsCommand(
 
                         when {
                             it.isBundledPlugin("packagemanagers") -> category = "PackageManager"
+                            it.isBundledPlugin("scanners") -> category = "Scanner"
                             it.isBundledPlugin("versioncontrolsystems") -> category = "VersionControlSystem"
                         }
 
@@ -214,15 +213,6 @@ class RequirementsCommand(
                             AnalyzerConfiguration(),
                             RepositoryConfiguration()
                         )
-                    }
-
-                    CommandLinePathScannerWrapper::class.java.isAssignableFrom(it) -> {
-                        category = "Scanner"
-                        logger.debug { "$it is a $category." }
-                        it.getDeclaredConstructor(
-                            String::class.java,
-                            ScannerWrapperConfig::class.java
-                        ).newInstance("", ScannerWrapperConfig.EMPTY)
                     }
 
                     VersionControlSystem::class.java.isAssignableFrom(it) -> {
