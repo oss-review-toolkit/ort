@@ -35,7 +35,6 @@ import kotlin.reflect.full.companionObjectInstance
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.PackageManager
-import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
@@ -213,12 +212,6 @@ class RequirementsCommand(
                             AnalyzerConfiguration(),
                             RepositoryConfiguration()
                         )
-                    }
-
-                    VersionControlSystem::class.java.isAssignableFrom(it) -> {
-                        category = "VersionControlSystem"
-                        logger.debug { "$it is a $category." }
-                        it.getDeclaredConstructor().newInstance()
                     }
 
                     else -> {
