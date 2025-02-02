@@ -180,7 +180,7 @@ internal class ListLicensesCommand : OrtHelperCommand(
                     !offendingOnly || license.decompose().any { it in violatedRulesByLicense }
                 }.mapValues { (license, locations) ->
                     locations.filter { location ->
-                        val isAllowedFile = fileAllowList.isEmpty() || FileMatcher.match(fileAllowList, location.path)
+                        val isAllowedFile = fileAllowList.isEmpty() || FileMatcher.matches(fileAllowList, location.path)
 
                         val isIncluded = !omitExcluded || !isPathExcluded(provenance, location.path) ||
                             ignoreExcludedRuleIds.intersect(violatedRulesByLicense[license].orEmpty()).isNotEmpty()

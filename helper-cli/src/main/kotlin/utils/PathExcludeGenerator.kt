@@ -59,7 +59,7 @@ internal object PathExcludeGenerator {
 
         dirs.forEach { dir ->
             val (_, reason) = PATH_EXCLUDES_REASON_FOR_DIR_NAME.find { (pattern, _) ->
-                FileMatcher.match(pattern, File(dir).name, ignoreCase = true)
+                FileMatcher.matches(pattern, File(dir).name, ignoreCase = true)
             } ?: return@forEach
 
             dirsToExclude += dir to reason
@@ -101,7 +101,7 @@ internal object PathExcludeGenerator {
 
     internal fun createExcludePatterns(filenamePattern: String, filePaths: Collection<String>): Set<String> {
         val matchingFiles = filePaths.mapNotNull { filePath ->
-            File(filePath).takeIf { FileMatcher.match(filenamePattern, it.name) }
+            File(filePath).takeIf { FileMatcher.matches(filenamePattern, it.name) }
         }.ifEmpty {
             return emptySet()
         }

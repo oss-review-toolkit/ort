@@ -34,7 +34,7 @@ class FindingCurationMatcher {
         curation: LicenseFindingCuration,
         relativeFindingPath: String
     ): Boolean =
-        FileMatcher.match(
+        FileMatcher.matches(
             pattern = curation.path,
             path = finding.location.prependedPath(relativeFindingPath)
         )
