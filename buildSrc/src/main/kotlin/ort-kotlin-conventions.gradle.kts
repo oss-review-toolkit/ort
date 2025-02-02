@@ -142,7 +142,7 @@ tasks.withType<Detekt>().configureEach detekt@{
     if (this != detekt.get()) mustRunAfter(detekt)
 
     exclude {
-        "/build/generated/" in it.file.absolutePath
+        "/build/generated/" in it.file.absoluteFile.invariantSeparatorsPath
     }
 
     reports {
