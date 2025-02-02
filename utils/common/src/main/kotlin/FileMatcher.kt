@@ -24,7 +24,7 @@ import org.springframework.util.AntPathMatcher
 /**
  * A class to determine whether paths are matched by globs. It can either be used via its static [match] functions, or
  * (in case different paths have to be matched against the same patterns in the same way over and over again) by
- * instantiating it with fixed [patterns], optionally [ignoring case][ignoreCase].
+ * instantiating it with fixed [patterns], optionally ignoring case.
  */
 class FileMatcher(
     /**
