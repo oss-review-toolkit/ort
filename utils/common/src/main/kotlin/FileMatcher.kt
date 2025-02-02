@@ -23,7 +23,7 @@ import org.springframework.util.AntPathMatcher
 
 /**
  * A class to determine whether paths are matched by globs. It can either be used via its static
- * [match][FileMatcher.Companion.match] functions, or (in case different paths have to be matched against the same
+ * [match][FileMatcher.Companion.matches] functions, or (in case different paths have to be matched against the same
  * patterns in the same way over and over again) by instantiating it with fixed [patterns], optionally ignoring case.
  */
 class FileMatcher(
@@ -47,14 +47,14 @@ class FileMatcher(
          * Return true if [path] is matched by [pattern], false otherwise. The [path] must use '/' as separators, if it
          * contains any.
          */
-        fun match(pattern: String, path: String, ignoreCase: Boolean = false) =
+        fun matches(pattern: String, path: String, ignoreCase: Boolean = false) =
             if (ignoreCase) matchCaseInsensitive(pattern, path) else matchCaseSensitive(pattern, path)
 
         /**
          * Return true if [path] is matched by any of [patterns], false otherwise. The [path] must use '/' as
          * separators, if it contains any.
          */
-        fun match(patterns: Collection<String>, path: String, ignoreCase: Boolean = false): Boolean {
+        fun matches(patterns: Collection<String>, path: String, ignoreCase: Boolean = false): Boolean {
             // Only decide once for all patterns which function to call.
             val match = if (ignoreCase) matchCaseInsensitive else matchCaseSensitive
 
