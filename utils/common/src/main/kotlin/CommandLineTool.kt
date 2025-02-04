@@ -115,5 +115,5 @@ interface CommandLineTool {
     /**
      * The name to use when referring to this command in user facing output.
      */
-    fun displayName(): String = javaClass.simpleName
+    fun displayName(): String = javaClass.simpleName.removeSuffix("Command")
 }

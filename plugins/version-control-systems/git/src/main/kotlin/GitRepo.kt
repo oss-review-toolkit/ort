@@ -85,8 +85,6 @@ internal object GitRepoCommand : CommandLineTool {
 
         return "$launcherVersion (launcher)"
     }
-
-    override fun displayName(): String = "GitRepo"
 }
 
 @OrtPlugin(
