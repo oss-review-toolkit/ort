@@ -69,9 +69,11 @@ class ClearlyDefinedPackageCurationProviderTest : WordSpec({
             }
 
             val provider = ClearlyDefinedPackageCurationProvider(
-                ClearlyDefinedPackageCurationProviderFactory.descriptor,
-                ClearlyDefinedPackageCurationProviderConfig(serverUrl = "http://localhost:${server.port()}", 0),
-                client
+                config = ClearlyDefinedPackageCurationProviderConfig(
+                    serverUrl = "http://localhost:${server.port()}",
+                    0
+                ),
+                client = client
             )
 
             val id = Identifier("Maven:some-ns:some-component:1.2.3")

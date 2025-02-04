@@ -77,7 +77,7 @@ data class ClearlyDefinedPackageCurationProviderConfig(
     factory = PackageCurationProviderFactory::class
 )
 class ClearlyDefinedPackageCurationProvider(
-    override val descriptor: PluginDescriptor,
+    override val descriptor: PluginDescriptor = ClearlyDefinedPackageCurationProviderFactory.descriptor,
     private val config: ClearlyDefinedPackageCurationProviderConfig,
     client: OkHttpClient? = null
 ) : PackageCurationProvider {

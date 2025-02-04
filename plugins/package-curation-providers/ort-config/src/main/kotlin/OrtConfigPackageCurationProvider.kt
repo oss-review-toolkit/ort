@@ -52,7 +52,9 @@ private const val ORT_CONFIG_REPOSITORY_URL = "https://github.com/oss-review-too
     description = "A package curation provider that loads package curations from the ort-config repository.",
     factory = PackageCurationProviderFactory::class
 )
-open class OrtConfigPackageCurationProvider(override val descriptor: PluginDescriptor) : PackageCurationProvider {
+open class OrtConfigPackageCurationProvider(
+    override val descriptor: PluginDescriptor = OrtConfigPackageCurationProviderFactory.descriptor
+) : PackageCurationProvider {
     private val curationsDir by lazy {
         ortDataDirectory.resolve("ort-config").also {
             updateOrtConfig(it)

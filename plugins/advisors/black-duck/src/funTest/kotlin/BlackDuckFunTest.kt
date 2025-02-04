@@ -54,7 +54,7 @@ class BlackDuckFunTest : WordSpec({
         apiToken = apiToken
     )
 
-    val blackDuck = BlackDuck(BlackDuckFactory.descriptor, componentServiceClient)
+    val blackDuck = BlackDuck(blackDuckApi = componentServiceClient)
 
     afterEach { componentServiceClient.flush() }
 

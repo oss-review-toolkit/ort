@@ -63,7 +63,7 @@ import org.ossreviewtoolkit.utils.common.enumSetOf
     factory = AdviceProviderFactory::class
 )
 class BlackDuck(
-    override val descriptor: PluginDescriptor,
+    override val descriptor: PluginDescriptor = BlackDuckFactory.descriptor,
     private val blackDuckApi: ComponentServiceClient
 ) : AdviceProvider {
     companion object {
@@ -76,7 +76,7 @@ class BlackDuck(
 
     override val details = AdvisorDetails(descriptor.id, enumSetOf(AdvisorCapability.VULNERABILITIES))
 
-    constructor(descriptor: PluginDescriptor, config: BlackDuckConfiguration) : this(
+    constructor(descriptor: PluginDescriptor = BlackDuckFactory.descriptor, config: BlackDuckConfiguration) : this(
         descriptor, ExtendedComponentService.create(config.serverUrl, config.apiToken.value)
     )
 

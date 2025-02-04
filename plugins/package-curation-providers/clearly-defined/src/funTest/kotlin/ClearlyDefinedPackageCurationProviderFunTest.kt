@@ -76,10 +76,7 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
                 serverUrl = Server.PRODUCTION.apiUrl,
                 minTotalLicenseScore = 80
             )
-            val provider = ClearlyDefinedPackageCurationProvider(
-                ClearlyDefinedPackageCurationProviderFactory.descriptor,
-                config
-            )
+            val provider = ClearlyDefinedPackageCurationProvider(config = config)
 
             // Use an id which is known to have non-empty results from an earlier test.
             val packages = createPackagesFromIds("Maven:org.slf4j:slf4j-log4j12:1.7.30")
