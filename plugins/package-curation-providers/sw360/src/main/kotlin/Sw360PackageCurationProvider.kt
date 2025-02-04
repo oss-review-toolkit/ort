@@ -104,7 +104,7 @@ data class Sw360PackageCurationProviderConfig(
     factory = PackageCurationProviderFactory::class
 )
 class Sw360PackageCurationProvider(
-    override val descriptor: PluginDescriptor,
+    override val descriptor: PluginDescriptor = Sw360PackageCurationProviderFactory.descriptor,
     config: Sw360PackageCurationProviderConfig
 ) : PackageCurationProvider {
     companion object {

@@ -73,7 +73,10 @@ private const val BULK_REQUEST_SIZE = 128
     description = "An advisor that uses Sonatype's OSS Index to determine vulnerabilities in dependencies.",
     factory = AdviceProviderFactory::class
 )
-class OssIndex(override val descriptor: PluginDescriptor, config: OssIndexConfiguration) : AdviceProvider {
+class OssIndex(
+    override val descriptor: PluginDescriptor = OssIndexFactory.descriptor,
+    config: OssIndexConfiguration
+) : AdviceProvider {
     override val details = AdvisorDetails(descriptor.id, enumSetOf(AdvisorCapability.VULNERABILITIES))
 
     private val service by lazy {

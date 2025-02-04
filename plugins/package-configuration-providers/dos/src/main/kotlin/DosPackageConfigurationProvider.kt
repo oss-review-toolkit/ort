@@ -68,7 +68,7 @@ data class DosPackageConfigurationProviderConfig(
     factory = PackageConfigurationProviderFactory::class
 )
 class DosPackageConfigurationProvider(
-    override val descriptor: PluginDescriptor,
+    override val descriptor: PluginDescriptor = DosPackageConfigurationProviderFactory.descriptor,
     config: DosPackageConfigurationProviderConfig
 ) : PackageConfigurationProvider {
     private val service =

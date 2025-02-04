@@ -62,7 +62,10 @@ import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
     description = "An advisor that retrieves vulnerability information from the Open Source Vulnerabilities database.",
     factory = AdviceProviderFactory::class
 )
-class Osv(override val descriptor: PluginDescriptor, config: OsvConfiguration) : AdviceProvider {
+class Osv(
+    override val descriptor: PluginDescriptor = OsvFactory.descriptor,
+    config: OsvConfiguration
+) : AdviceProvider {
     override val details = AdvisorDetails(descriptor.id, enumSetOf(AdvisorCapability.VULNERABILITIES))
 
     private val service = OsvServiceWrapper(

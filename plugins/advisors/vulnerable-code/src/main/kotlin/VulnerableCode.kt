@@ -75,7 +75,10 @@ private const val BULK_REQUEST_SIZE = 100
     description = "An advisor that uses a VulnerableCode instance to determine vulnerabilities in dependencies.",
     factory = AdviceProviderFactory::class
 )
-class VulnerableCode(override val descriptor: PluginDescriptor, config: VulnerableCodeConfiguration) : AdviceProvider {
+class VulnerableCode(
+    override val descriptor: PluginDescriptor = VulnerableCodeFactory.descriptor,
+    config: VulnerableCodeConfiguration
+) : AdviceProvider {
     /**
      * The details returned with each [AdvisorResult] produced by this instance. As this is constant, it can be
      * created once beforehand.
