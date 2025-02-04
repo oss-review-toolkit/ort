@@ -49,7 +49,12 @@ data class Identifier(
     /**
      * The version of the component.
      */
-    val version: String
+    val version: String,
+
+    /**
+     * The selected variants of the component.
+     */
+    val variants: Set<String> = emptySet()
 ) : Comparable<Identifier> {
     companion object {
         /**
