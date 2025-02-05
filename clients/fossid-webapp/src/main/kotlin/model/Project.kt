@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.clients.fossid.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Project(
@@ -40,7 +41,9 @@ data class Project(
     val description: String?,
     val comment: String?,
 
-    val isArchived: Int,
+    @JsonDeserialize(using = IntBooleanDeserializer::class)
+    val isArchived: Boolean?,
+
     val jiraProjectKey: String?,
     val creationDate: String,
     val dateLimitDate: String?

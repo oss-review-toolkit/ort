@@ -1,0 +1,26 @@
+{
+  "id" : "fabf2c26-e6b3-4a47-9e11-3bf3f19190c1",
+  "name" : "apiphp",
+  "request" : {
+    "url" : "/api.php",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"action\":\"get_information\",\"group\":\"projects\",\"data\":{\"username\":\"\",\"key\":\"\",\"project_code\":\"semver4j_2024\"}}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{  \"operation\": \"projects_get_information\",  \"status\": \"1\",  \"data\": {    \"id\": 76,    \"creator\": 154,    \"project_code\": \"Test_project\",    \"project_name\": \"Test_project\",    \"limit_date\": null,    \"product_code\": \"\",    \"product_name\": \"\",    \"description\": \"\",    \"comment\": \"Created by ORT\",    \"is_archived\": false,    \"jira_project_key\": \"\",    \"created\": \"2025-02-05 07:20:43\",    \"updated\": \"2025-02-05 07:20:43\",    \"owner_username\": \"user\",    \"owner_name\": \"Infrastructure\",    \"owner_surname\": \"ORT user\",    \"owner_email\": \"ort@example.com\",    \"creation_date\": \"2025-02-05\",    \"date_limit_date\": null,    \"user_id\": 154  }}",
+    "headers" : {
+      "Content-Type" : "text/html; charset=UTF-8",
+      "Date" : "Thu, 03 Dec 2020 08:03:42 GMT",
+      "Server" : "Apache/2.4.38 (Debian)",
+      "Vary" : "Accept-Encoding"
+    }
+  },
+  "uuid" : "fabf2c26-e6b3-4a47-9e11-3bf3f19190c1",
+  "persistent" : true,
+  "insertionIndex" : 2
+}
