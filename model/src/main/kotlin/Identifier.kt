@@ -127,7 +127,21 @@ data class Identifier(
 }
 
 /**
- * Return whether the [type][Identifier.type] of this [Identifier] matches the type of [other] by comparing them
- * case-insensitively.
+ * A map of lowercase aliases for types that were renamed.
  */
-fun Identifier.typeMatches(other: Identifier) = type.equals(other.type, ignoreCase = true)
+private val typeAliases = mapOf(
+    "spdxdocument" to "spdxdocumentfile"
+)
+
+/**
+ * Return whether the [type][Identifier.type] of this [Identifier] matches the type of [other] by comparing them
+ * case-insensitively. Additionally, the [typeAliases] are considered.
+ */
+fun Identifier.typeMatches(other: Identifier): Boolean {
+    val thisType = type.lowercase()
+    val otherType = other.type.lowercase()
+
+    return thisType == otherType ||
+        typeAliases[thisType] == otherType ||
+        typeAliases[otherType] == thisType
+}
