@@ -125,3 +125,9 @@ data class Identifier(
     fun toPath(separator: String = "/", emptyValue: String = "unknown"): String =
         sanitizedProperties.joinToString(separator) { it.encodeOr(emptyValue) }
 }
+
+/**
+ * Return whether the [type][Identifier.type] of this [Identifier] matches the type of [other] by comparing them
+ * case-insensitively.
+ */
+fun Identifier.typeMatches(other: Identifier) = type.equals(other.type, ignoreCase = true)

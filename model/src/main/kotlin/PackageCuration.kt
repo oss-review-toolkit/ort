@@ -58,7 +58,7 @@ data class PackageCuration(
      * disregarding the version.
      */
     private fun isApplicableDisregardingVersion(pkgId: Identifier) =
-        id.type.equals(pkgId.type, ignoreCase = true)
+        id.typeMatches(pkgId)
             && id.namespace == pkgId.namespace
             && id.name.equalsOrIsBlank(pkgId.name)
 

@@ -28,6 +28,7 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.typeMatches
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 
 /**
@@ -72,7 +73,7 @@ data class PackageConfiguration(
 
     fun matches(otherId: Identifier, provenance: Provenance): Boolean {
         @Suppress("ComplexCondition")
-        if (!id.type.equals(otherId.type, ignoreCase = true) ||
+        if (!id.typeMatches(otherId) ||
             id.namespace != otherId.namespace ||
             id.name != otherId.name ||
             id.version != otherId.version
