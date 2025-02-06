@@ -1,0 +1,13 @@
+snippet_choices:
+- provenance:
+    url: "https://example.com/provenance"
+  choices:
+  - given:
+      source_location:
+        path: "custom/path/to/file"
+        start_line: 1
+        end_line: 42
+    choice:
+      purl: "pkg:maven/org.apache.commons/commons-lang3@3.9"
+      comment: "This is a comment."
+      reason: NO_RELEVANT_FINDING

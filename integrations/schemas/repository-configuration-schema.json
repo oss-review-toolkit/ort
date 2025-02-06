@@ -168,23 +168,23 @@
                 "given": {
                   "type": "object",
                   "properties": {
-                    "sourceLocation": {
+                    "source_location": {
                       "type": "object",
                       "properties": {
                         "path": {
                           "type": "string"
                         },
-                        "lineStart": {
+                        "start_line": {
                           "type": "integer"
                         },
-                        "lineEnd": {
+                        "end_line": {
                           "type": "integer"
                         }
                       },
                       "required": [
                         "path",
-                        "lineStart",
-                        "lineEnd"
+                        "start_line",
+                        "end_line"
                       ]
                     }
                   }
@@ -203,8 +203,7 @@
                     }
                   },
                   "required": [
-                    "reason",
-                    "reasoning"
+                    "reason"
                   ]
                 }
               },
