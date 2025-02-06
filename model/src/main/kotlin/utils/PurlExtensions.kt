@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.model.utils
 import java.net.URLDecoder
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
+import org.ossreviewtoolkit.model.DirectoryProvenance
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
@@ -100,6 +101,8 @@ fun Provenance.toPurlExtras(): PurlExtras =
                 subpath = vcsInfo.path
             )
         }
+
+        is DirectoryProvenance -> PurlExtras()
 
         is UnknownProvenance -> PurlExtras()
     }
