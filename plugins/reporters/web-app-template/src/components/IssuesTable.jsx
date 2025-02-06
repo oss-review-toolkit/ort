@@ -45,7 +45,11 @@ import SeverityTag from './SeverityTag';
 import { getColumnSearchProps } from './Shared';
 
 // Generates the HTML to display issues as a table
-const IssuesTable = ({ webAppOrtIssues = [], showExcludesColumn = true }) => {
+const IssuesTable = ({
+    webAppOrtIssues = [],
+    showExcludesColumn = true,
+    severeThreshold
+}) => {
     // Convert issues as Antd only accepts vanilla objects as input
     const issues = useMemo(
         () => {
@@ -66,6 +70,19 @@ const IssuesTable = ({ webAppOrtIssues = [], showExcludesColumn = true }) => {
         []
     );
 
+    let defaultSeverityIndex = [];
+    switch (severeThreshold) {
+        case 'ERROR':
+            defaultSeverityIndex = [0];
+            break;
+        case 'WARNING':
+            defaultSeverityIndex = [0, 1];
+            break;
+        case 'HINT':
+            defaultSeverityIndex = [0, 1, 2];
+            break;
+    }
+
     /* === Table state handling === */
 
     // State variable for displaying table in various pages
@@ -77,7 +94,7 @@ const IssuesTable = ({ webAppOrtIssues = [], showExcludesColumn = true }) => {
         message: [],
         packageId: [],
         source: [],
-        severityIndex: []
+        severityIndex: defaultSeverityIndex
     });
 
     // State variable for sorting table columns
