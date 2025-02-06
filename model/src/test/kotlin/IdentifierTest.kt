@@ -135,4 +135,24 @@ class IdentifierTest : WordSpec({
             }
         }
     }
+
+    "typeMatches()" should {
+        "return true if the type is equal ignoring case" {
+            val id = Identifier.EMPTY.copy(type = "type")
+            id.typeMatches(id) shouldBe true
+            id.typeMatches(Identifier.EMPTY.copy(type = "TYPE")) shouldBe true
+        }
+
+        "return false if the type does not match" {
+            val id = Identifier.EMPTY.copy(type = "type")
+            id.typeMatches(Identifier.EMPTY.copy(type = "other")) shouldBe false
+        }
+
+        "return true if the type matches an alias" {
+            val id = Identifier.EMPTY.copy(type = "SpdxDocument")
+            val otherId = Identifier.EMPTY.copy(type = "spdxdocumentfile")
+            id.typeMatches(otherId) shouldBe true
+            otherId.typeMatches(id) shouldBe true
+        }
+    }
 })

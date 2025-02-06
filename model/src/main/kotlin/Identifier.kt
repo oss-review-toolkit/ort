@@ -125,3 +125,23 @@ data class Identifier(
     fun toPath(separator: String = "/", emptyValue: String = "unknown"): String =
         sanitizedProperties.joinToString(separator) { it.encodeOr(emptyValue) }
 }
+
+/**
+ * A map of lowercase aliases for types that were renamed.
+ */
+private val typeAliases = mapOf(
+    "spdxdocument" to "spdxdocumentfile"
+)
+
+/**
+ * Return whether the [type][Identifier.type] of this [Identifier] matches the type of [other] by comparing them
+ * case-insensitively. Additionally, the [typeAliases] are considered.
+ */
+fun Identifier.typeMatches(other: Identifier): Boolean {
+    val thisType = type.lowercase()
+    val otherType = other.type.lowercase()
+
+    return thisType == otherType ||
+        typeAliases[thisType] == otherType ||
+        typeAliases[otherType] == thisType
+}
