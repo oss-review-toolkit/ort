@@ -136,5 +136,24 @@ class PackageConfigurationTest : WordSpec({
                 )
             ) shouldBe false
         }
+
+        "return true if the identifier type is equal ignoring case" {
+            val config =
+                vcsPackageConfig(name = "some-name", revision = "12345678", url = "ssh://git@host/repo.git").let {
+                    it.copy(id = it.id.copy(type = "Gradle"))
+                }
+
+            config.matches(
+                config.id.copy(type = "gradle"),
+                RepositoryProvenance(
+                    vcsInfo = VcsInfo(
+                        type = VcsType.GIT,
+                        url = "ssh://git@host/repo.git",
+                        revision = ""
+                    ),
+                    resolvedRevision = "12345678"
+                )
+            ) shouldBe true
+        }
     }
 })
