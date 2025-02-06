@@ -124,6 +124,15 @@ class JsonSchemaTest : StringSpec({
 
         errors should beEmpty()
     }
+
+    "Snippet choices validate successfully" {
+        val repositoryConfiguration =
+            File("src/test/assets/snippet-choices-repository-configuration.ort.yml").toJsonNode()
+
+        val errors = schemaV7.getSchema(repositoryConfigurationSchema).validate(repositoryConfiguration)
+
+        errors should beEmpty()
+    }
 })
 
 private val nodeReader = JsonNodeReader.builder().yamlMapper(yamlMapper).build()
