@@ -23,10 +23,9 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.ScannerDetails
-import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
 
 class LicenseeTest : StringSpec({
-    val scanner = Licensee("Licensee", ScannerWrapperConfig.EMPTY)
+    val scanner = LicenseeFactory.create()
 
     "Parsing details from results succeeds" {
         val result = """

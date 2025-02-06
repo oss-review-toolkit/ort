@@ -19,7 +19,7 @@
 
 plugins {
     // Apply precompiled plugins.
-    id("ort-library-conventions")
+    id("ort-plugin-conventions")
 }
 
 dependencies {
@@ -33,6 +33,8 @@ dependencies {
     implementation(projects.utils.spdxUtils)
 
     implementation(libs.kotlinx.coroutines)
+
+    ksp(projects.scanner)
 
     testImplementation(libs.mockk)
     testImplementation(libs.wiremock)
