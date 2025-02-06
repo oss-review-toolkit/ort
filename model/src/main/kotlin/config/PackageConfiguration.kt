@@ -71,7 +71,14 @@ data class PackageConfiguration(
     }
 
     fun matches(otherId: Identifier, provenance: Provenance): Boolean {
-        if (id != otherId) return false
+        @Suppress("ComplexCondition")
+        if (!id.type.equals(otherId.type, ignoreCase = true) ||
+            id.namespace != otherId.namespace ||
+            id.name != otherId.name ||
+            id.version != otherId.version
+        ) {
+            return false
+        }
 
         return when (provenance) {
             is UnknownProvenance -> false
