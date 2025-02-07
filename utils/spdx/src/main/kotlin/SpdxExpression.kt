@@ -205,14 +205,12 @@ sealed class SpdxExpression {
     /**
      * Concatenate [this][SpdxExpression] and [other] using [SpdxOperator.AND].
      */
-    infix fun and(other: SpdxExpression) =
-        takeIf { this == other } ?: SpdxCompoundExpression(SpdxOperator.AND, listOf(this, other))
+    infix fun and(other: SpdxExpression) = SpdxCompoundExpression(SpdxOperator.AND, listOf(this, other))
 
     /**
      * Concatenate [this][SpdxExpression] and [other] using [SpdxOperator.OR].
      */
-    infix fun or(other: SpdxExpression) =
-        takeIf { this == other } ?: SpdxCompoundExpression(SpdxOperator.OR, listOf(this, other))
+    infix fun or(other: SpdxExpression) = SpdxCompoundExpression(SpdxOperator.OR, listOf(this, other))
 }
 
 /**
