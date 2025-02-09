@@ -11,6 +11,17 @@ __skip_opt_eq() {
     fi
 }
 
+__complete_files() {
+   # Generate filename completions
+   local word="$1"
+   local IFS=$'\n'
+
+   # quote each completion to support spaces and special characters
+   COMPREPLY=($(compgen -o filenames -f -- "$word" | while read -r line; do
+       printf "%q\n" "$line"
+   done))
+}
+
 _ort() {
   local i=1
   local in_param=''
@@ -147,22 +158,22 @@ _ort() {
   [[ -z "${in_param}" ]] && in_param=${vararg_name}
 
   case "${in_param}" in
-    --config)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--config")
+       __complete_files "${word}"
       ;;
-    --error)
+    "--error")
       ;;
-    --stacktrace)
+    "--stacktrace")
       ;;
-    -P)
+    "-P")
       ;;
-    --help-all)
+    "--help-all")
       ;;
-    --generate-completion)
+    "--generate-completion")
       ;;
-    --version)
+    "--version")
       ;;
-    --help)
+    "--help")
       ;;
     *)
       COMPREPLY=($(compgen -W 'advise analyze compare config download evaluate migrate notify report requirements scan upload-curations upload-result-to-postgres upload-result-to-sw360' -- "${word}"))
@@ -253,25 +264,25 @@ _ort_advise() {
   [[ -z "${in_param}" ]] && in_param=${vararg_name}
 
   case "${in_param}" in
-    --ort-file)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--ort-file")
+       __complete_files "${word}"
       ;;
-    --output-dir)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--output-dir")
+       __complete_files "${word}"
       ;;
-    --output-formats)
+    "--output-formats")
       COMPREPLY=($(compgen -W 'JSON YAML' -- "${word}"))
       ;;
-    --label)
+    "--label")
       ;;
-    --resolutions-file)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--resolutions-file")
+       __complete_files "${word}"
       ;;
-    --advisors)
+    "--advisors")
       ;;
-    --skip-excluded)
+    "--skip-excluded")
       ;;
-    --help)
+    "--help")
       ;;
   esac
 }
@@ -359,26 +370,26 @@ _ort_analyze() {
   [[ -z "${in_param}" ]] && in_param=${vararg_name}
 
   case "${in_param}" in
-    --input-dir)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--input-dir")
+       __complete_files "${word}"
       ;;
-    --output-dir)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--output-dir")
+       __complete_files "${word}"
       ;;
-    --output-formats)
+    "--output-formats")
       COMPREPLY=($(compgen -W 'JSON YAML' -- "${word}"))
       ;;
-    --repository-configuration-file)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--repository-configuration-file")
+       __complete_files "${word}"
       ;;
-    --resolutions-file)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--resolutions-file")
+       __complete_files "${word}"
       ;;
-    --label)
+    "--label")
       ;;
-    --dry-run)
+    "--dry-run")
       ;;
-    --help)
+    "--help")
       ;;
   esac
 }
@@ -452,24 +463,24 @@ _ort_compare() {
   [[ -z "${in_param}" ]] && in_param=${vararg_name}
 
   case "${in_param}" in
-    --method)
+    "--method")
       COMPREPLY=($(compgen -W 'SEMANTIC_DIFF TEXT_DIFF' -- "${word}"))
       ;;
-    --context-size)
+    "--context-size")
       ;;
-    --ignore-time)
+    "--ignore-time")
       ;;
-    --ignore-environment)
+    "--ignore-environment")
       ;;
-    --ignore-tmp-dir)
+    "--ignore-tmp-dir")
       ;;
-    --help)
+    "--help")
       ;;
-    FILEA)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "FILEA")
+       __complete_files "${word}"
       ;;
-    FILEB)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "FILEB")
+       __complete_files "${word}"
       ;;
   esac
 }
@@ -537,16 +548,16 @@ _ort_config() {
   [[ -z "${in_param}" ]] && in_param=${vararg_name}
 
   case "${in_param}" in
-    --show-default)
+    "--show-default")
       ;;
-    --show-active)
+    "--show-active")
       ;;
-    --show-reference)
+    "--show-reference")
       ;;
-    --check-syntax)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--check-syntax")
+       __complete_files "${word}"
       ;;
-    --help)
+    "--help")
       ;;
   esac
 }
@@ -679,41 +690,41 @@ _ort_download() {
   [[ -z "${in_param}" ]] && in_param=${vararg_name}
 
   case "${in_param}" in
-    --ort-file)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--ort-file")
+       __complete_files "${word}"
       ;;
-    --project-url)
+    "--project-url")
       ;;
-    --project-name)
+    "--project-name")
       ;;
-    --vcs-type)
+    "--vcs-type")
       ;;
-    --vcs-revision)
+    "--vcs-revision")
       ;;
-    --vcs-path)
+    "--vcs-path")
       ;;
-    --license-classifications-file)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--license-classifications-file")
+       __complete_files "${word}"
       ;;
-    --output-dir)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--output-dir")
+       __complete_files "${word}"
       ;;
-    --archive)
+    "--archive")
       ;;
-    --archive-all)
+    "--archive-all")
       ;;
-    --package-types)
+    "--package-types")
       COMPREPLY=($(compgen -W 'PACKAGE PROJECT' -- "${word}"))
       ;;
-    --package-ids)
+    "--package-ids")
       ;;
-    --skip-excluded)
+    "--skip-excluded")
       ;;
-    --dry-run)
+    "--dry-run")
       ;;
-    --max-parallel-downloads)
+    "--max-parallel-downloads")
       ;;
-    --help)
+    "--help")
       ;;
   esac
 }
@@ -843,46 +854,46 @@ _ort_evaluate() {
   [[ -z "${in_param}" ]] && in_param=${vararg_name}
 
   case "${in_param}" in
-    --ort-file)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--ort-file")
+       __complete_files "${word}"
       ;;
-    --output-dir)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--output-dir")
+       __complete_files "${word}"
       ;;
-    --output-formats)
+    "--output-formats")
       COMPREPLY=($(compgen -W 'JSON YAML' -- "${word}"))
       ;;
-    --rules-file)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--rules-file")
+       __complete_files "${word}"
       ;;
-    --rules-resource)
+    "--rules-resource")
       ;;
-    --copyright-garbage-file)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--copyright-garbage-file")
+       __complete_files "${word}"
       ;;
-    --license-classifications-file)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--license-classifications-file")
+       __complete_files "${word}"
       ;;
-    --package-configurations-dir)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--package-configurations-dir")
+       __complete_files "${word}"
       ;;
-    --package-curations-file)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--package-curations-file")
+       __complete_files "${word}"
       ;;
-    --package-curations-dir)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--package-curations-dir")
+       __complete_files "${word}"
       ;;
-    --repository-configuration-file)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--repository-configuration-file")
+       __complete_files "${word}"
       ;;
-    --resolutions-file)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--resolutions-file")
+       __complete_files "${word}"
       ;;
-    --label)
+    "--label")
       ;;
-    --check-syntax)
+    "--check-syntax")
       ;;
-    --help)
+    "--help")
       ;;
   esac
 }
@@ -947,16 +958,16 @@ _ort_migrate() {
   [[ -z "${in_param}" ]] && in_param=${vararg_name}
 
   case "${in_param}" in
-    --hocon-to-yaml)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--hocon-to-yaml")
+       __complete_files "${word}"
       ;;
-    --nuget-ids)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--nuget-ids")
+       __complete_files "${word}"
       ;;
-    --pub-ids)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--pub-ids")
+       __complete_files "${word}"
       ;;
-    --help)
+    "--help")
       ;;
   esac
 }
@@ -1027,18 +1038,18 @@ _ort_notify() {
   [[ -z "${in_param}" ]] && in_param=${vararg_name}
 
   case "${in_param}" in
-    --ort-file)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--ort-file")
+       __complete_files "${word}"
       ;;
-    --notifications-file)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--notifications-file")
+       __complete_files "${word}"
       ;;
-    --resolutions-file)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--resolutions-file")
+       __complete_files "${word}"
       ;;
-    --label)
+    "--label")
       ;;
-    --help)
+    "--help")
       ;;
   esac
 }
@@ -1156,40 +1167,40 @@ _ort_report() {
   [[ -z "${in_param}" ]] && in_param=${vararg_name}
 
   case "${in_param}" in
-    --ort-file)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--ort-file")
+       __complete_files "${word}"
       ;;
-    --output-dir)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--output-dir")
+       __complete_files "${word}"
       ;;
-    --report-formats)
+    "--report-formats")
       ;;
-    --copyright-garbage-file)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--copyright-garbage-file")
+       __complete_files "${word}"
       ;;
-    --custom-license-texts-dir)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--custom-license-texts-dir")
+       __complete_files "${word}"
       ;;
-    --how-to-fix-text-provider-script)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--how-to-fix-text-provider-script")
+       __complete_files "${word}"
       ;;
-    --license-classifications-file)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--license-classifications-file")
+       __complete_files "${word}"
       ;;
-    --package-configurations-dir)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--package-configurations-dir")
+       __complete_files "${word}"
       ;;
-    --refresh-resolutions)
+    "--refresh-resolutions")
       ;;
-    --repository-configuration-file)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--repository-configuration-file")
+       __complete_files "${word}"
       ;;
-    --resolutions-file)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--resolutions-file")
+       __complete_files "${word}"
       ;;
-    --report-option)
+    "--report-option")
       ;;
-    --help)
+    "--help")
       ;;
   esac
 }
@@ -1242,10 +1253,10 @@ _ort_requirements() {
   [[ -z "${in_param}" ]] && in_param=${vararg_name}
 
   case "${in_param}" in
-    --list)
+    "--list")
       COMPREPLY=($(compgen -W 'PLUGINS COMMANDS' -- "${word}"))
       ;;
-    --help)
+    "--help")
       ;;
   esac
 }
@@ -1345,30 +1356,30 @@ _ort_scan() {
   [[ -z "${in_param}" ]] && in_param=${vararg_name}
 
   case "${in_param}" in
-    --ort-file)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--ort-file")
+       __complete_files "${word}"
       ;;
-    --output-dir)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--output-dir")
+       __complete_files "${word}"
       ;;
-    --output-formats)
+    "--output-formats")
       COMPREPLY=($(compgen -W 'JSON YAML' -- "${word}"))
       ;;
-    --label)
+    "--label")
       ;;
-    --scanners)
+    "--scanners")
       ;;
-    --project-scanners)
+    "--project-scanners")
       ;;
-    --package-types)
+    "--package-types")
       COMPREPLY=($(compgen -W 'PACKAGE PROJECT' -- "${word}"))
       ;;
-    --skip-excluded)
+    "--skip-excluded")
       ;;
-    --resolutions-file)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--resolutions-file")
+       __complete_files "${word}"
       ;;
-    --help)
+    "--help")
       ;;
   esac
 }
@@ -1427,13 +1438,13 @@ _ort_upload_curations() {
   [[ -z "${in_param}" ]] && in_param=${vararg_name}
 
   case "${in_param}" in
-    --input-file)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--input-file")
+       __complete_files "${word}"
       ;;
-    --server)
+    "--server")
       COMPREPLY=($(compgen -W 'PRODUCTION DEVELOPMENT LOCAL' -- "${word}"))
       ;;
-    --help)
+    "--help")
       ;;
   esac
 }
@@ -1503,16 +1514,16 @@ _ort_upload_result_to_postgres() {
   [[ -z "${in_param}" ]] && in_param=${vararg_name}
 
   case "${in_param}" in
-    --ort-file)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--ort-file")
+       __complete_files "${word}"
       ;;
-    --table-name)
+    "--table-name")
       ;;
-    --column-name)
+    "--column-name")
       ;;
-    --create-table)
+    "--create-table")
       ;;
-    --help)
+    "--help")
       ;;
   esac
 }
@@ -1570,12 +1581,12 @@ _ort_upload_result_to_sw360() {
   [[ -z "${in_param}" ]] && in_param=${vararg_name}
 
   case "${in_param}" in
-    --ort-file)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    "--ort-file")
+       __complete_files "${word}"
       ;;
-    --attach-sources)
+    "--attach-sources")
       ;;
-    --help)
+    "--help")
       ;;
   esac
 }
