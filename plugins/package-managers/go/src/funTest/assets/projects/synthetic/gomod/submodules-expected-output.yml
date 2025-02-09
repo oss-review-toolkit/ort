@@ -1,6 +1,6 @@
 ---
 projects:
-- id: "GoMod::app:<REPLACE_REVISION>"
+- id: "GoModProject::app:<REPLACE_REVISION>"
   definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -36,7 +36,7 @@ projects:
           linkage: "PROJECT_STATIC"
       - id: "Go::golang.org/x/sys:0.6.0"
         linkage: "PROJECT_STATIC"
-    - id: "GoMod::utils:<REPLACE_REVISION>"
+    - id: "GoModProject::utils:<REPLACE_REVISION>"
       linkage: "PROJECT_STATIC"
       dependencies:
       - id: "Go::github.com/google/uuid:1.0.0"
@@ -66,7 +66,7 @@ projects:
           linkage: "PROJECT_STATIC"
       - id: "Go::golang.org/x/sys:0.6.0"
         linkage: "PROJECT_STATIC"
-    - id: "GoMod::utils:<REPLACE_REVISION>"
+    - id: "GoModProject::utils:<REPLACE_REVISION>"
       linkage: "PROJECT_STATIC"
       dependencies:
       - id: "Go::github.com/google/uuid:1.0.0"
@@ -76,7 +76,7 @@ projects:
         dependencies:
         - id: "Go::github.com/google/uuid:1.0.0"
           linkage: "PROJECT_STATIC"
-- id: "GoMod::utils:<REPLACE_REVISION>"
+- id: "GoModProject::utils:<REPLACE_REVISION>"
   definition_file_path: "<REPLACE_DEFINITION_FILE_PATH_UTILS>"
   declared_licenses: []
   declared_licenses_processed: {}

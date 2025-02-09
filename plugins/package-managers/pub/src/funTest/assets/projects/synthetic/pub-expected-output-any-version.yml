@@ -1,6 +1,6 @@
 ---
 project:
-  id: "Pub::version_any:0.1.0"
+  id: "PubProject::version_any:0.1.0"
   definition_file_path: "plugins/package-managers/pub/src/funTest/assets/projects/synthetic/any-version/pubspec.yaml"
   authors:
   - "Another Author"

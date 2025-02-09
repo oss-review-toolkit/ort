@@ -1,6 +1,6 @@
 ---
 project:
-  id: "PIP::python-inspector:<REPLACE_REVISION>"
+  id: "PIPProject::python-inspector:<REPLACE_REVISION>"
   definition_file_path: "plugins/package-managers/python/src/funTest/assets/projects/synthetic/python-inspector/requirements.txt"
   declared_licenses: []
   declared_licenses_processed: {}

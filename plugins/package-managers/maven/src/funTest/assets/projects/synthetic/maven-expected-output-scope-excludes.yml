@@ -1,6 +1,6 @@
 ---
 project:
-  id: "Maven:org.ossreviewtoolkit.maven:maven-lib:1.0-SNAPSHOT"
+  id: "MavenProject:org.ossreviewtoolkit.maven:maven-lib:1.0-SNAPSHOT"
   definition_file_path: "plugins/package-managers/maven/src/funTest/assets/projects/synthetic/maven/lib/pom.xml"
   authors:
   - "Google"

@@ -248,7 +248,7 @@ abstract class AbstractDependencyNavigatorTest : WordSpec() {
             }
 
             "find all the sub-projects of a project" {
-                val projectId = Identifier("SBT:com.pbassiner:multi1_2.12:0.1.0-SNAPSHOT")
+                val projectId = Identifier("SBTProject:com.pbassiner:multi1_2.12:0.1.0-SNAPSHOT")
                 testResult.getProject(projectId) shouldNotBeNull {
                     val subProjectIds = navigator.projectDependencies(this, matcher = MATCH_SUB_PROJECTS)
 
@@ -325,7 +325,7 @@ abstract class AbstractDependencyNavigatorTest : WordSpec() {
             "return the issues of a project" {
                 val ortResultWithIssues = File(resultWithIssuesFileName).readValue<OrtResult>()
                 val navigator = ortResultWithIssues.dependencyNavigator
-                val projectIdWithIssues = Identifier("SBT:com.pbassiner:common_2.12:0.1-SNAPSHOT")
+                val projectIdWithIssues = Identifier("SBTProject:com.pbassiner:common_2.12:0.1-SNAPSHOT")
                 val project = ortResultWithIssues.getProject(projectIdWithIssues)
 
                 project shouldNotBeNull {
@@ -386,4 +386,4 @@ abstract class AbstractDependencyNavigatorTest : WordSpec() {
 }
 
 /** Identifier of the project used by the tests. */
-private val PROJECT_ID = Identifier("SBT:com.pbassiner:common_2.12:0.1.0-SNAPSHOT")
+private val PROJECT_ID = Identifier("SBTProject:com.pbassiner:common_2.12:0.1.0-SNAPSHOT")

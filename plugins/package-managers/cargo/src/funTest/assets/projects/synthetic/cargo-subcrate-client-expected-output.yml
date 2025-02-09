@@ -1,6 +1,6 @@
 ---
 project:
-  id: "Cargo::client:0.1.0"
+  id: "CargoProject::client:0.1.0"
   definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
   authors:
   - "anon"

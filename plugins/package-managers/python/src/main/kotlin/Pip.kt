@@ -63,7 +63,7 @@ class Pip(
     repoConfig: RepositoryConfiguration
 ) : PackageManager(
     name,
-    analyzerConfig.getPackageManagerConfiguration(name)?.options?.get("overrideProjectType") ?: "PIP",
+    analyzerConfig.getPackageManagerConfiguration(name)?.options?.get("overrideProjectType") ?: "PIPProject",
     analysisRoot,
     analyzerConfig,
     repoConfig

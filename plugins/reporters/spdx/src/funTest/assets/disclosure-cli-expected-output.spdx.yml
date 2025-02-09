@@ -14,9 +14,9 @@ dataLicense: "CC0-1.0"
 comment: "some document comment"
 documentNamespace: "<REPLACE_DOCUMENT_NAMESPACE>"
 documentDescribes:
-- "SPDXRef-Project-GoMod-github.com.mercedes-benz.disclosure-cli-388ae2bdf6032a3d5b0ed06ac45267dfc0376a3d"
+- "SPDXRef-Project-GoModProject-github.com.mercedes-benz.disclosure-cli-388ae2bdf6032a3d5b0ed06ac45267dfc0376a3d"
 packages:
-- SPDXID: "SPDXRef-Project-GoMod-github.com.mercedes-benz.disclosure-cli-388ae2bdf6032a3d5b0ed06ac45267dfc0376a3d"
+- SPDXID: "SPDXRef-Project-GoModProject-github.com.mercedes-benz.disclosure-cli-388ae2bdf6032a3d5b0ed06ac45267dfc0376a3d"
   copyrightText: "(c) Copyright 2010 The Go Authors\n(c) Copyright 2010-2013 (c) Gustavo\
     \ Niemeyer <gustavo@niemeyer.net>\n(c) Copyright 2012-2016 (c) Dave Collins <dave@davec.name>\n\
     (c) Copyright 2012-2020 (c) Mat Ryer, Tyler Bunnell and contributors\n(c) Copyright\
@@ -327,12 +327,12 @@ relationships:
 - spdxElementId: "SPDXRef-Package-Go-gopkg.in.yaml.v3-3.0.1"
   relationshipType: "GENERATED_FROM"
   relatedSpdxElement: "SPDXRef-Package-Go-gopkg.in.yaml.v3-3.0.1-vcs"
-- spdxElementId: "SPDXRef-Project-GoMod-github.com.mercedes-benz.disclosure-cli-388ae2bdf6032a3d5b0ed06ac45267dfc0376a3d"
+- spdxElementId: "SPDXRef-Project-GoModProject-github.com.mercedes-benz.disclosure-cli-388ae2bdf6032a3d5b0ed06ac45267dfc0376a3d"
   relationshipType: "DEPENDS_ON"
   relatedSpdxElement: "SPDXRef-Package-Go-github.com.jinzhu.configor-1.2.2"
-- spdxElementId: "SPDXRef-Project-GoMod-github.com.mercedes-benz.disclosure-cli-388ae2bdf6032a3d5b0ed06ac45267dfc0376a3d"
+- spdxElementId: "SPDXRef-Project-GoModProject-github.com.mercedes-benz.disclosure-cli-388ae2bdf6032a3d5b0ed06ac45267dfc0376a3d"
   relationshipType: "DEPENDS_ON"
   relatedSpdxElement: "SPDXRef-Package-Go-github.com.spf13.cobra-1.8.1"
-- spdxElementId: "SPDXRef-Project-GoMod-github.com.mercedes-benz.disclosure-cli-388ae2bdf6032a3d5b0ed06ac45267dfc0376a3d"
+- spdxElementId: "SPDXRef-Project-GoModProject-github.com.mercedes-benz.disclosure-cli-388ae2bdf6032a3d5b0ed06ac45267dfc0376a3d"
   relationshipType: "DEPENDS_ON"
   relatedSpdxElement: "SPDXRef-Package-Go-github.com.stretchr.testify-1.8.2"

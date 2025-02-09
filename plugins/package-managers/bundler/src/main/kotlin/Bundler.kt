@@ -134,7 +134,7 @@ class Bundler(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Bundler", analysisRoot, analyzerConfig, repoConfig) {
+) : PackageManager(name, "BundlerProject", analysisRoot, analyzerConfig, repoConfig) {
     companion object {
         /**
          * The name of the option to specify the Bundler version.

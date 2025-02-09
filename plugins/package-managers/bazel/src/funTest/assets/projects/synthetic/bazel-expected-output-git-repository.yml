@@ -1,6 +1,6 @@
 ---
 project:
-  id: "Bazel::plugins/package-managers/bazel/src/funTest/assets/projects/synthetic/bazel-git-repository/MODULE.bazel:"
+  id: "BazelProject::plugins/package-managers/bazel/src/funTest/assets/projects/synthetic/bazel-git-repository/MODULE.bazel:"
   definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
   declared_licenses: []
   declared_licenses_processed: {}
