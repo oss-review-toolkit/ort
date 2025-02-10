@@ -315,8 +315,6 @@ class ReporterCommand(descriptor: PluginDescriptor = ReporterCommandFactory.desc
             val name = reporter.descriptor.id
             val fileResults = timedValue.value
 
-            echo("Generating '$name' report(s) took ${timedValue.duration}.")
-
             fileResults.forEach { fileResult ->
                 fileResult.onSuccess { file ->
                     echo(Theme.Default.success("Successfully created '$name' report at '$file'."))
@@ -326,6 +324,8 @@ class ReporterCommand(descriptor: PluginDescriptor = ReporterCommandFactory.desc
                     ++failureCount
                 }
             }
+
+            echo("Generating '$name' report(s) took ${timedValue.duration}.")
         }
 
         val successCount = reportFormats.size - failureCount
