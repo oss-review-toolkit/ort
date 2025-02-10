@@ -60,6 +60,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     openssh-client \
     openssl \
     procps \
+    rng-tools5 \
     rsync \
     sudo \
     tzdata \
