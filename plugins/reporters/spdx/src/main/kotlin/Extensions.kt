@@ -49,6 +49,7 @@ import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
+import org.ossreviewtoolkit.utils.spdx.andOrNull
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 import org.ossreviewtoolkit.utils.spdx.model.SpdxChecksum
 import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
@@ -203,14 +204,12 @@ internal fun Package.toSpdxPackage(
             SpdxPackageType.PROJECT -> concludedLicense.nullOrBlankToSpdxNoassertionOrNone()
             else -> concludedLicense.nullOrBlankToSpdxNoassertionOrNone()
         },
-        licenseDeclared = if (packageLicenseExpressions.isEmpty()) {
-            SpdxConstants.NONE
-        } else {
-            packageLicenseExpressions.reduce(SpdxExpression::and)
-                .simplify()
-                .sorted()
-                .nullOrBlankToSpdxNoassertionOrNone()
-        },
+        licenseDeclared = packageLicenseExpressions
+            .andOrNull()
+            ?.simplify()
+            ?.sorted()
+            ?.nullOrBlankToSpdxNoassertionOrNone()
+            ?: SpdxConstants.NONE,
         licenseInfoFromFiles = if (packageVerificationCode == null) {
             emptyList()
         } else {

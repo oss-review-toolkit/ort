@@ -41,7 +41,7 @@ import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
-import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdx.andOrNull
 
 internal class GetPackageLicensesCommand : OrtHelperCommand(
     help = "Shows the root license and the detected license for a package denoted by the given package identifier."
@@ -113,11 +113,7 @@ internal class GetPackageLicensesCommand : OrtHelperCommand(
 }
 
 private fun Collection<LicenseFinding>.toSpdxExpression(): String =
-    if (isEmpty()) {
-        SpdxConstants.NONE
-    } else {
-        asSequence().map { it.license }.distinct().reduce(SpdxExpression::and).sorted().toString()
-    }
+    map { it.license }.andOrNull()?.sorted()?.toString() ?: SpdxConstants.NONE
 
 private data class Result(
     val detectedLicense: String,

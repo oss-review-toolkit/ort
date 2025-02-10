@@ -26,6 +26,7 @@ import org.ossreviewtoolkit.utils.common.zip
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression.Strictness.ALLOW_LICENSEREF_EXCEPTIONS
+import org.ossreviewtoolkit.utils.spdx.andOrNull
 
 /**
  * This class contains curation data for a package. It is used to amend the automatically detected metadata for a
@@ -183,7 +184,7 @@ data class PackageCurationData(
             purl = purl ?: other.purl,
             cpe = cpe ?: other.cpe,
             authors = authors.orEmpty() + other.authors.orEmpty(),
-            concludedLicense = setOfNotNull(concludedLicense, other.concludedLicense).reduce(SpdxExpression::and),
+            concludedLicense = setOfNotNull(concludedLicense, other.concludedLicense).andOrNull(),
             description = description ?: other.description,
             homepageUrl = homepageUrl ?: other.homepageUrl,
             binaryArtifact = binaryArtifact ?: other.binaryArtifact,

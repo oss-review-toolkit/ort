@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
+import org.ossreviewtoolkit.utils.spdx.andOrNull
 
 /**
  * Generate a summary from the given SCANOSS [result], using [startTime], [endTime] as metadata. This variant can be
@@ -156,8 +157,7 @@ private fun getSnippets(details: ScanFileDetails): Set<Snippet> {
     return buildSet {
         purls.forEach { purl ->
             locations.forEach { snippetLocation ->
-                val license = licenses.reduceOrNull(SpdxExpression::and)?.sorted()
-                    ?: SpdxLicenseIdExpression(SpdxConstants.NOASSERTION)
+                val license = licenses.andOrNull()?.sorted() ?: SpdxLicenseIdExpression(SpdxConstants.NOASSERTION)
 
                 add(Snippet(score, snippetLocation, provenance, purl, license))
             }
