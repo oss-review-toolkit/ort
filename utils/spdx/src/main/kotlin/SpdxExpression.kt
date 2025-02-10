@@ -291,12 +291,7 @@ class SpdxCompoundExpression(
             return children.sortedBy { it.toString() }
         }
 
-        return getSortedChildrenWithSameOperator(this).reduce(
-            when (operator) {
-                SpdxOperator.AND -> SpdxExpression::and
-                SpdxOperator.OR -> SpdxExpression::or
-            }
-        )
+        return getSortedChildrenWithSameOperator(this).concat(operator)
     }
 
     override fun validate(strictness: Strictness) {
@@ -638,3 +633,23 @@ data class SpdxLicenseReferenceExpression(
 
     override fun getLicenseUrl(): String? = null
 }
+
+fun Collection<SpdxExpression>.and(): SpdxExpression = concat(SpdxOperator.AND)
+
+fun Collection<SpdxExpression>.andOrNull(): SpdxExpression? = concatOrNull(SpdxOperator.AND)
+
+fun Collection<SpdxExpression>.or(): SpdxExpression = concat(SpdxOperator.OR)
+
+fun Collection<SpdxExpression>.orOrNull(): SpdxExpression? = concatOrNull(SpdxOperator.OR)
+
+fun Collection<SpdxExpression>.concat(operator: SpdxOperator): SpdxExpression {
+    require(isNotEmpty()) {
+        "Cannot create a concatenated SPDX expression from an empty collection."
+    }
+
+    val distinctExpressions = distinct()
+    return distinctExpressions.singleOrNull() ?: SpdxCompoundExpression(operator, distinctExpressions)
+}
+
+fun Collection<SpdxExpression>.concatOrNull(operator: SpdxOperator): SpdxExpression? =
+    takeIf { it.isNotEmpty() }?.concat(operator)
