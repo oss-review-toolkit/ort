@@ -36,11 +36,10 @@ import java.io.File
 import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.scanner.ScanContext
-import org.ossreviewtoolkit.scanner.ScannerWrapperConfig
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 
 class ScanCodeTest : WordSpec({
-    val scanner = ScanCode("ScanCode", ScanCodeConfig.DEFAULT, ScannerWrapperConfig.EMPTY)
+    val scanner = ScanCodeFactory.create()
 
     "configuration" should {
         "return the default values if the scanner configuration is empty" {
@@ -48,14 +47,10 @@ class ScanCodeTest : WordSpec({
         }
 
         "return the non-config values from the scanner configuration" {
-            val config = ScanCodeConfig.create(
-                mapOf(
-                    "commandLine" to "--command --line",
-                    "commandLineNonConfig" to "--commandLineNonConfig"
-                )
+            val scannerWithConfig = ScanCodeFactory.create(
+                commandLine = listOf("--command", "--line"),
+                commandLineNonConfig = listOf("--commandLineNonConfig")
             )
-
-            val scannerWithConfig = ScanCode("ScanCode", config, ScannerWrapperConfig.EMPTY)
 
             scannerWithConfig.configuration shouldBe "--command --line --json"
         }
@@ -70,30 +65,13 @@ class ScanCodeTest : WordSpec({
         }
 
         "contain the values from the scanner configuration" {
-            val config = ScanCodeConfig.create(
-                mapOf(
-                    "commandLine" to "--command --line",
-                    "commandLineNonConfig" to "--commandLineNonConfig"
-                )
+            val scannerWithConfig = ScanCodeFactory.create(
+                commandLine = listOf("--command", "--line"),
+                commandLineNonConfig = listOf("--commandLineNonConfig")
             )
 
-            val scannerWithConfig = ScanCode("ScanCode", config, ScannerWrapperConfig.EMPTY)
-
-            scannerWithConfig.getCommandLineOptions("31.2.4").joinToString(" ") shouldBe
-                "--command --line --commandLineNonConfig"
-        }
-
-        "be handled correctly when containing multiple spaces" {
-            val config = ScanCodeConfig.create(
-                mapOf(
-                    "commandLine" to " --command  --line  ",
-                    "commandLineNonConfig" to "  -n -c "
-                )
-            )
-
-            val scannerWithConfig = ScanCode("ScanCode", config, ScannerWrapperConfig.EMPTY)
-
-            scannerWithConfig.getCommandLineOptions("31.2.4") shouldBe listOf("--command", "--line", "-n", "-c")
+            scannerWithConfig.getCommandLineOptions("31.2.4").joinToString(" ") shouldMatch
+                "--command --line --commandLineNonConfig --processes \\d+"
         }
     }
 
@@ -126,7 +104,7 @@ class ScanCodeTest : WordSpec({
 
     "transformVersion()" should {
         "work with a version output without a colon" {
-            scanner.transformVersion(
+            ScanCodeCommand.transformVersion(
                 """
                     ScanCode version 30.0.1
                     ScanCode Output Format version 1.0.0
@@ -136,7 +114,7 @@ class ScanCodeTest : WordSpec({
         }
 
         "work with a version output with a colon" {
-            scanner.transformVersion(
+            ScanCodeCommand.transformVersion(
                 """
                     ScanCode version: 31.0.0b4
                     ScanCode Output Format version: 2.0.0

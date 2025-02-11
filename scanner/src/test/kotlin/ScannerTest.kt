@@ -62,6 +62,7 @@ import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.toYaml
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceScanResult
@@ -82,8 +83,8 @@ class ScannerTest : WordSpec({
     "Scanning with different scanners for projects and packages" should {
         "Use the correct scanners for each data entity" {
             val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
-            val packageScannerWrapper = FakePackageScannerWrapper(name = "package scanner")
-            val projectScannerWrapper = FakePackageScannerWrapper(name = "project scanner")
+            val packageScannerWrapper = FakePackageScannerWrapper(id = "package scanner")
+            val projectScannerWrapper = FakePackageScannerWrapper(id = "project scanner")
             val scanner = createScanner(
                 packageScannerWrappers = listOf(packageScannerWrapper),
                 projectScannerWrappers = listOf(projectScannerWrapper)
@@ -916,7 +917,8 @@ class ScannerTest : WordSpec({
  * An implementation of [PackageScannerWrapper] that creates empty scan results.
  */
 @Suppress("RedundantNullableReturnType")
-private class FakePackageScannerWrapper(override val name: String = "fake") : PackageScannerWrapper {
+private class FakePackageScannerWrapper(id: String = "fake") : PackageScannerWrapper {
+    override val descriptor = PluginDescriptor(id = id, displayName = id, description = "")
     override val version = "1.0.0"
     override val configuration = "config"
 
@@ -933,7 +935,7 @@ private class FakePackageScannerWrapper(override val name: String = "fake") : Pa
  * An implementation of [ProvenanceScannerWrapper] that creates empty scan results.
  */
 private class FakeProvenanceScannerWrapper : ProvenanceScannerWrapper {
-    override val name = "fake"
+    override val descriptor = PluginDescriptor(id = "fake", displayName = "fake", description = "")
     override val version = "1.0.0"
     override val configuration = "config"
 
@@ -949,7 +951,7 @@ private class FakeProvenanceScannerWrapper : ProvenanceScannerWrapper {
  * An implementation of [PathScannerWrapper] that creates scan results with one license finding for each file.
  */
 private class FakePathScannerWrapper : PathScannerWrapper {
-    override val name = "fake"
+    override val descriptor = PluginDescriptor(id = "fake", displayName = "fake", description = "")
     override val version = "1.0.0"
     override val configuration = "config"
 
