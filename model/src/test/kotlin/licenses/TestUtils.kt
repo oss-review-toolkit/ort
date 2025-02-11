@@ -23,6 +23,7 @@ import io.kotest.matchers.Matcher
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.neverNullMatcher
 
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 
@@ -33,3 +34,10 @@ fun containLicensesExactly(vararg licenses: String): Matcher<Iterable<ResolvedLi
 
         containExactly(expected).test(actual)
     }
+
+class SimpleLicenseInfoProvider(licenseInfo: List<LicenseInfo>) : LicenseInfoProvider {
+    private val licenseInfoById = licenseInfo.associateBy { it.id }
+
+    override fun get(id: Identifier) =
+        licenseInfoById[id] ?: throw IllegalArgumentException("No license info for '${id.toCoordinates()}' available.")
+}
