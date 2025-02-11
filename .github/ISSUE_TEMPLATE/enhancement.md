@@ -1,11 +1,12 @@
 ---
 name: Enhancement Proposal ⚡
-about: I want to propose to enhance existing functionality.
+about: I want to propose some new functionality.
 title: ''
-labels: ['enhancement', 'to triage']
+type: 'Enhancement'
+labels: ['to triage']
 
 ---
-### What is the existing functionality and how should it be enhanced?
+### What is the functionality you want to propose?
 
 A clear and concise description of what you propose to change and why it is an enhancement.
 
