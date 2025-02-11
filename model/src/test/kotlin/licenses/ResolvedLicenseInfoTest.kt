@@ -31,112 +31,110 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicenseChoice
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
-class ResolvedLicenseInfoTest : WordSpec() {
-    init {
-        "effectiveLicense()" should {
-            "apply choices for LicenseView.ALL on all resolved licenses" {
-                // All: (Apache-2.0 WITH LLVM-exception OR MIT) AND (MIT OR GPL-2.0-only) AND (0BSD OR GPL-2.0-only)
-                val choices = listOf(
-                    SpdxLicenseChoice("$APACHE OR $MIT".toSpdx(), MIT.toSpdx()),
-                    SpdxLicenseChoice("$MIT OR $GPL".toSpdx(), MIT.toSpdx()),
-                    SpdxLicenseChoice("$BSD OR $GPL".toSpdx(), BSD.toSpdx())
-                )
+class ResolvedLicenseInfoTest : WordSpec({
+    "effectiveLicense()" should {
+        "apply choices for LicenseView.ALL on all resolved licenses" {
+            // All: (Apache-2.0 WITH LLVM-exception OR MIT) AND (MIT OR GPL-2.0-only) AND (0BSD OR GPL-2.0-only)
+            val choices = listOf(
+                SpdxLicenseChoice("$APACHE OR $MIT".toSpdx(), MIT.toSpdx()),
+                SpdxLicenseChoice("$MIT OR $GPL".toSpdx(), MIT.toSpdx()),
+                SpdxLicenseChoice("$BSD OR $GPL".toSpdx(), BSD.toSpdx())
+            )
 
-                val effectiveLicense = RESOLVED_LICENSE_INFO.effectiveLicense(LicenseView.ALL, choices)
+            val effectiveLicense = RESOLVED_LICENSE_INFO.effectiveLicense(LicenseView.ALL, choices)
 
-                effectiveLicense shouldBe "$MIT AND $BSD".toSpdx()
-            }
-
-            "apply a choice for a sub-expression only" {
-                // Declared: Apache-2.0 WITH LLVM-exception OR MIT OR GPL-2.0-only
-                val resolvedLicenseInfo = ResolvedLicenseInfo(
-                    id = Identifier.EMPTY,
-                    licenseInfo = mockk(),
-                    licenses = listOf(
-                        ResolvedLicense(
-                            license = APACHE.toSpdx() as SpdxSingleLicenseExpression,
-                            originalDeclaredLicenses = setOf("$APACHE OR $MIT"),
-                            originalExpressions = setOf(
-                                ResolvedOriginalExpression("$APACHE OR $MIT OR $GPL".toSpdx(), LicenseSource.DECLARED)
-                            ),
-                            locations = emptySet()
-                        )
-                    ),
-                    copyrightGarbage = emptyMap(),
-                    unmatchedCopyrights = emptyMap()
-                )
-
-                val choices = listOf(
-                    SpdxLicenseChoice("$APACHE OR $MIT".toSpdx(), MIT.toSpdx())
-                )
-
-                val effectiveLicense = resolvedLicenseInfo.effectiveLicense(LicenseView.ONLY_DECLARED, choices)
-
-                effectiveLicense shouldBe "$MIT OR $GPL".toSpdx()
-            }
-
-            "apply choices for LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED" {
-                // Concluded: 0BSD OR GPL-2.0-only
-                val choices = listOf(
-                    SpdxLicenseChoice("$BSD OR $GPL".toSpdx(), BSD.toSpdx())
-                )
-
-                val effectiveLicense = RESOLVED_LICENSE_INFO.effectiveLicense(
-                    LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED,
-                    choices
-                )
-
-                effectiveLicense shouldBe BSD.toSpdx()
-            }
-
-            "apply choices for LicenseView.ONLY_DECLARED" {
-                // Declared: Apache-2.0 WITH LLVM-exception OR MIT
-                val choices = listOf(
-                    SpdxLicenseChoice("$APACHE OR $MIT".toSpdx(), MIT.toSpdx())
-                )
-
-                val effectiveLicense = RESOLVED_LICENSE_INFO.effectiveLicense(
-                    LicenseView.ONLY_DECLARED,
-                    choices
-                )
-
-                effectiveLicense shouldBe MIT.toSpdx()
-            }
-
-            "apply package and repository license choice for LicenseView.ONLY_CONCLUDED in the correct order" {
-                val repositoryChoices = listOf(
-                    SpdxLicenseChoice("$APACHE OR $MIT".toSpdx(), MIT.toSpdx()),
-                    SpdxLicenseChoice("$BSD OR $GPL".toSpdx(), BSD.toSpdx())
-                )
-                val packageChoices = listOf(
-                    SpdxLicenseChoice("$APACHE OR $MIT".toSpdx(), APACHE.toSpdx())
-                )
-
-                val effectiveLicense = RESOLVED_LICENSE_INFO.effectiveLicense(
-                    LicenseView.ALL,
-                    packageChoices,
-                    repositoryChoices
-                )
-
-                effectiveLicense shouldBe "$APACHE and ($MIT or $GPL) and $BSD".toSpdx()
-            }
+            effectiveLicense shouldBe "$MIT AND $BSD".toSpdx()
         }
 
-        "applyChoices(licenseChoices)" should {
-            "apply license choices on all licenses" {
-                val choices = listOf(
-                    SpdxLicenseChoice("$APACHE OR $MIT".toSpdx(), MIT.toSpdx()),
-                    SpdxLicenseChoice("$MIT OR $GPL".toSpdx(), MIT.toSpdx()),
-                    SpdxLicenseChoice("$BSD OR $GPL".toSpdx(), BSD.toSpdx())
-                )
+        "apply a choice for a sub-expression only" {
+            // Declared: Apache-2.0 WITH LLVM-exception OR MIT OR GPL-2.0-only
+            val resolvedLicenseInfo = ResolvedLicenseInfo(
+                id = Identifier.EMPTY,
+                licenseInfo = mockk(),
+                licenses = listOf(
+                    ResolvedLicense(
+                        license = APACHE.toSpdx() as SpdxSingleLicenseExpression,
+                        originalDeclaredLicenses = setOf("$APACHE OR $MIT"),
+                        originalExpressions = setOf(
+                            ResolvedOriginalExpression("$APACHE OR $MIT OR $GPL".toSpdx(), LicenseSource.DECLARED)
+                        ),
+                        locations = emptySet()
+                    )
+                ),
+                copyrightGarbage = emptyMap(),
+                unmatchedCopyrights = emptyMap()
+            )
 
-                val filteredResolvedLicenseInfo = RESOLVED_LICENSE_INFO.applyChoices(choices)
+            val choices = listOf(
+                SpdxLicenseChoice("$APACHE OR $MIT".toSpdx(), MIT.toSpdx())
+            )
 
-                filteredResolvedLicenseInfo.licenses should containLicensesExactly(MIT, BSD)
-            }
+            val effectiveLicense = resolvedLicenseInfo.effectiveLicense(LicenseView.ONLY_DECLARED, choices)
+
+            effectiveLicense shouldBe "$MIT OR $GPL".toSpdx()
+        }
+
+        "apply choices for LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED" {
+            // Concluded: 0BSD OR GPL-2.0-only
+            val choices = listOf(
+                SpdxLicenseChoice("$BSD OR $GPL".toSpdx(), BSD.toSpdx())
+            )
+
+            val effectiveLicense = RESOLVED_LICENSE_INFO.effectiveLicense(
+                LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED,
+                choices
+            )
+
+            effectiveLicense shouldBe BSD.toSpdx()
+        }
+
+        "apply choices for LicenseView.ONLY_DECLARED" {
+            // Declared: Apache-2.0 WITH LLVM-exception OR MIT
+            val choices = listOf(
+                SpdxLicenseChoice("$APACHE OR $MIT".toSpdx(), MIT.toSpdx())
+            )
+
+            val effectiveLicense = RESOLVED_LICENSE_INFO.effectiveLicense(
+                LicenseView.ONLY_DECLARED,
+                choices
+            )
+
+            effectiveLicense shouldBe MIT.toSpdx()
+        }
+
+        "apply package and repository license choice for LicenseView.ONLY_CONCLUDED in the correct order" {
+            val repositoryChoices = listOf(
+                SpdxLicenseChoice("$APACHE OR $MIT".toSpdx(), MIT.toSpdx()),
+                SpdxLicenseChoice("$BSD OR $GPL".toSpdx(), BSD.toSpdx())
+            )
+            val packageChoices = listOf(
+                SpdxLicenseChoice("$APACHE OR $MIT".toSpdx(), APACHE.toSpdx())
+            )
+
+            val effectiveLicense = RESOLVED_LICENSE_INFO.effectiveLicense(
+                LicenseView.ALL,
+                packageChoices,
+                repositoryChoices
+            )
+
+            effectiveLicense shouldBe "$APACHE and ($MIT or $GPL) and $BSD".toSpdx()
         }
     }
-}
+
+    "applyChoices(licenseChoices)" should {
+        "apply license choices on all licenses" {
+            val choices = listOf(
+                SpdxLicenseChoice("$APACHE OR $MIT".toSpdx(), MIT.toSpdx()),
+                SpdxLicenseChoice("$MIT OR $GPL".toSpdx(), MIT.toSpdx()),
+                SpdxLicenseChoice("$BSD OR $GPL".toSpdx(), BSD.toSpdx())
+            )
+
+            val filteredResolvedLicenseInfo = RESOLVED_LICENSE_INFO.applyChoices(choices)
+
+            filteredResolvedLicenseInfo.licenses should containLicensesExactly(MIT, BSD)
+        }
+    }
+})
 
 private const val MIT = "MIT"
 private const val APACHE = "Apache-2.0 WITH LLVM-exception"
