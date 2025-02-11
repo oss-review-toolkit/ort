@@ -28,8 +28,8 @@ import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 
 fun containLicensesExactly(vararg licenses: String): Matcher<Iterable<ResolvedLicense>?> =
     neverNullMatcher { value ->
-        val expected = licenses.map { SpdxExpression.parse(it) as SpdxSingleLicenseExpression }.toSet()
-        val actual = value.map { it.license }.toSet()
+        val expected = licenses.mapTo(mutableSetOf()) { SpdxExpression.parse(it) as SpdxSingleLicenseExpression }
+        val actual = value.mapTo(mutableSetOf()) { it.license }
 
         containExactly(expected).test(actual)
     }
