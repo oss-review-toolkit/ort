@@ -26,12 +26,10 @@ import io.kotest.matchers.neverNullMatcher
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 
-object TestUtils {
-    fun containLicensesExactly(vararg licenses: String): Matcher<Iterable<ResolvedLicense>?> =
-        neverNullMatcher { value ->
-            val expected = licenses.map { SpdxExpression.parse(it) as SpdxSingleLicenseExpression }.toSet()
-            val actual = value.map { it.license }.toSet()
+fun containLicensesExactly(vararg licenses: String): Matcher<Iterable<ResolvedLicense>?> =
+    neverNullMatcher { value ->
+        val expected = licenses.map { SpdxExpression.parse(it) as SpdxSingleLicenseExpression }.toSet()
+        val actual = value.map { it.license }.toSet()
 
-            containExactly(expected).test(actual)
-        }
-}
+        containExactly(expected).test(actual)
+    }
