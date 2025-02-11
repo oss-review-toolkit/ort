@@ -234,7 +234,7 @@ private val COMPUTATION_HEAVY_RESOLVED_LICENSE_INFO: ResolvedLicenseInfo by lazy
         .subList(0, 200)
         .map { SpdxExpression.parse(it.id) }
 
-    // expressions take from a real world scan with swapped identifiers.
+    // Expressions taken from a real world scan with swapped identifiers.
     val licensesWithChoice = listOf(
         "AAL OR Abstyles",
         "AdaCore-doc OR Adobe-2006",
