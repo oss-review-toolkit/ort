@@ -151,8 +151,6 @@ class ResolvedLicenseInfoTest : WordSpec({
             blockingTest = true,
             timeout = 1.seconds
         ) {
-            // Run non-cancellable operation in such a way that cancellation does not wait for completion, see also
-            // https://github.com/Kotlin/kotlinx.coroutines/issues/1449#issuecomment-522907869.
             runCancellable {
                 COMPUTATION_HEAVY_RESOLVED_LICENSE_INFO.toCompoundExpression()
             }
