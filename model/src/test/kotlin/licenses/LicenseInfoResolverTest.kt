@@ -726,13 +726,6 @@ private fun createLicenseInfo(
     )
 )
 
-private class SimpleLicenseInfoProvider(licenseInfo: List<LicenseInfo>) : LicenseInfoProvider {
-    private val licenseInfoById = licenseInfo.associateBy { it.id }
-
-    override fun get(id: Identifier) =
-        licenseInfoById[id] ?: throw IllegalArgumentException("No license info for '${id.toCoordinates()}' available.")
-}
-
 private fun Map<String, List<TextLocation>>.toFindingsSet(): Set<LicenseFinding> =
     flatMap { (license, locations) ->
         locations.map { LicenseFinding(license, it) }
