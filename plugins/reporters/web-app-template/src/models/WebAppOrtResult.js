@@ -92,6 +92,10 @@ class WebAppOrtResult {
 
     #scopesByNameMap = new Map();
 
+    #severeIssueThreshold = 'WARNING'
+
+    #severeRuleViolationThreshold = 'WARNING'
+
     #statistics = {};
 
     #repository;
@@ -221,6 +225,17 @@ class WebAppOrtResult {
                     this.#scopesByNameMap.set(webAppScope.name, webAppScope);
                 }
             }
+
+            if (obj.severe_issue_threshold || obj.severeIssueThreshold) {
+                this.#severeIssueThreshold = obj.severe_issue_threshold
+                    || obj.severeIssueThreshold;
+            }
+
+            if (obj.severe_rule_violation_threshold || obj.severeRuleViolationThreshold) {
+                this.#severeRuleViolationThreshold = obj.severe_rule_violation_threshold
+                    || obj.severeRuleViolationThreshold;
+            }
+
 
             if (obj.statistics) {
                 const { statistics } = obj;
@@ -481,6 +496,14 @@ class WebAppOrtResult {
 
     get scopes() {
         return this.#scopes;
+    }
+
+    get severeIssueThreshold() {
+        return this.#severeIssueThreshold;
+    }
+
+    get severeRuleViolationThreshold() {
+        return this.#severeRuleViolationThreshold;
     }
 
     get statistics() {
