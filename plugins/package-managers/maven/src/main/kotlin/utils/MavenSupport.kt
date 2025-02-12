@@ -622,6 +622,28 @@ private fun createContainer(): PlexusContainer {
     }
 }
 
+/** The namespace for the Maven Tycho build extension. */
+private const val TYCHO_NAMESPACE = "org.eclipse.tycho"
+
+/** The ID for the Maven Tycho build extension. */
+private const val TYCHO_ID = "tycho-build"
+
+/** The path to the subfolder containing core extensions for Maven. */
+internal const val EXTENSIONS_PATH = ".mvn/extensions.xml"
+
+/**
+ * Return *true* if the given [file] points to a Maven Tycho project. The [file] can either reference the project
+ * folder directly or a file within the project folder.
+ */
+internal fun isTychoProject(file: File): Boolean {
+    val root = file.takeIf { it.isDirectory } ?: file.parentFile
+
+    return root?.resolve(EXTENSIONS_PATH)?.takeIf { it.isFile }?.let { extFile ->
+        val content = extFile.readText()
+        TYCHO_NAMESPACE in content && TYCHO_ID in content
+    } == true
+}
+
 /**
  * Convert this [RemoteRepository] to a repository in the format used by the Maven Repository System.
  * Make sure that all relevant properties are set, especially the proxy and authentication.
