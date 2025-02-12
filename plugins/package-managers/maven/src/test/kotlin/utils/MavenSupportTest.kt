@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.maven.utils
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.shouldBe
 
 import io.mockk.every
@@ -37,6 +38,8 @@ import org.eclipse.aether.RepositorySystemSession
 import org.eclipse.aether.repository.Proxy
 import org.eclipse.aether.repository.RemoteRepository
 import org.eclipse.aether.util.repository.AuthenticationBuilder
+
+import org.ossreviewtoolkit.plugins.packagemanagers.maven.addTychoExtension
 
 class MavenSupportTest : WordSpec({
     @Suppress("DEPRECATION") // For deprecated ArtifactRepository interface.
@@ -154,6 +157,55 @@ class MavenSupportTest : WordSpec({
                 userName shouldBe "proxyUser"
                 password shouldBe "proxyPassword"
             }
+        }
+    }
+
+    "isTychoProject()" should {
+        "return true if the Tycho extension is found" {
+            val projectDir = tempdir()
+            projectDir.addTychoExtension()
+
+            isTychoProject(projectDir) shouldBe true
+        }
+
+        "return false if the extension file does not contain the Tycho extension" {
+            val projectDir = tempdir()
+            projectDir.addTychoExtension(
+                """
+                <extensions>
+                    <extension>
+                        <groupId>org.eclipse.tycho</groupId>
+                        <artifactId>tycho-foo</artifactId>
+                        <version>4.0.0</version>
+                    </extension>
+                </extensions>
+                """.trimIndent()
+            )
+
+            isTychoProject(projectDir) shouldBe false
+        }
+
+        "return false if there is no extension file" {
+            val projectDir = tempdir()
+            val mvnDir = projectDir.resolve(".mvn")
+            mvnDir.mkdirs()
+
+            isTychoProject(projectDir) shouldBe false
+        }
+
+        "return false if there is no .mvn directory" {
+            val projectDir = tempdir()
+
+            isTychoProject(projectDir) shouldBe false
+        }
+
+        "return true for a pom file in a folder that has the Tycho extension" {
+            val projectDir = tempdir()
+            projectDir.addTychoExtension()
+
+            val pomFile = projectDir.resolve("pom.xml")
+
+            isTychoProject(pomFile) shouldBe true
         }
     }
 })
