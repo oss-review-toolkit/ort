@@ -87,6 +87,10 @@ class ProvenanceBasedPostgresStorage(
             return database.transaction {
                 val query = table.selectAll()
 
+                if (provenance !is RemoteProvenance) {
+                    throw ScanStorageException("Scan result must have a known provenance, but it is $provenance.")
+                }
+
                 when (provenance) {
                     is ArtifactProvenance -> {
                         query.andWhere {
@@ -138,7 +142,7 @@ class ProvenanceBasedPostgresStorage(
 
         requireEmptyVcsPath(provenance)
 
-        if (provenance !is KnownProvenance) {
+        if (provenance !is RemoteProvenance) {
             throw ScanStorageException("Scan result must have a known provenance, but it is $provenance.")
         }
 
