@@ -23,10 +23,7 @@ import java.io.File
 
 import org.apache.maven.project.ProjectBuildingResult
 
-import org.eclipse.aether.artifact.Artifact
 import org.eclipse.aether.graph.DependencyNode
-import org.eclipse.aether.repository.WorkspaceReader
-import org.eclipse.aether.repository.WorkspaceRepository
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -41,10 +38,10 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
+import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.LocalProjectWorkspaceReader
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.MavenDependencyHandler
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.MavenSupport
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.getOriginalScm
-import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.identifier
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.parseAuthors
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.parseLicenses
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.parseVcsInfo
@@ -77,22 +74,7 @@ class Maven(
         ) = Maven(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
-    private inner class LocalProjectWorkspaceReader : WorkspaceReader {
-        private val workspaceRepository = WorkspaceRepository("maven/remote-artifacts")
-
-        override fun findArtifact(artifact: Artifact) =
-            artifact.takeIf { it.extension == "pom" }?.let {
-                localProjectBuildingResults[it.identifier()]?.pomFile?.absoluteFile
-            }
-
-        override fun findVersions(artifact: Artifact) =
-            // Avoid resolution of (SNAPSHOT) versions for local projects.
-            localProjectBuildingResults[artifact.identifier()]?.let { listOf(artifact.version) }.orEmpty()
-
-        override fun getRepository() = workspaceRepository
-    }
-
-    private val mavenSupport = MavenSupport(LocalProjectWorkspaceReader())
+    private val mavenSupport = MavenSupport(LocalProjectWorkspaceReader { localProjectBuildingResults[it]?.pomFile })
 
     private val localProjectBuildingResults = mutableMapOf<String, ProjectBuildingResult>()
 
