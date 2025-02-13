@@ -38,7 +38,6 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
-import org.ossreviewtoolkit.model.licenses.LicenseView.Companion.CONCLUDED_OR_DECLARED_AND_DETECTED
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
@@ -97,7 +96,7 @@ class ResolvedLicenseInfoTest : WordSpec({
             )
 
             val effectiveLicense = RESOLVED_LICENSE_INFO.effectiveLicense(
-                CONCLUDED_OR_DECLARED_AND_DETECTED,
+                LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED,
                 choices
             )
 
@@ -141,7 +140,7 @@ class ResolvedLicenseInfoTest : WordSpec({
             timeout = 1.seconds
         ) {
             runCancellable {
-                COMPUTATION_HEAVY_RESOLVED_LICENSE_INFO.effectiveLicense(CONCLUDED_OR_DECLARED_AND_DETECTED)
+                COMPUTATION_HEAVY_RESOLVED_LICENSE_INFO.effectiveLicense(LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED)
             }
         }
     }
