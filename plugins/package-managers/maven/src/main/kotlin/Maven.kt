@@ -42,6 +42,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.LocalProjectWork
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.MavenDependencyHandler
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.MavenSupport
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.getOriginalScm
+import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.isTychoProject
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.parseAuthors
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.parseLicenses
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.parseVcsInfo
@@ -89,6 +90,19 @@ class Maven(
         val localProjects = localProjectBuildingResults.mapValues { it.value.project }
         val dependencyHandler = MavenDependencyHandler(managerName, projectType, mavenSupport, localProjects, sbtMode)
         graphBuilder = DependencyGraphBuilder(dependencyHandler)
+    }
+
+    /**
+     * Map the given [definitionFiles] to a list of files that should be processed. This implementation filters out
+     * projects that require the Tycho build extension.
+     */
+    override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> {
+        val tychoRoots = definitionFiles.filter(::isTychoProject).map { it.parentFile }
+
+        // All pom files under a Tycho project will be handled by Tycho and therefore need to be excluded.
+        return definitionFiles.filterNot { file ->
+            tychoRoots.any { file.startsWith(it) }
+        }
     }
 
     override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =
