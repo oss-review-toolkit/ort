@@ -22,6 +22,7 @@ AGPL-1.0: AGPL-1.0-only
 AGPL-3.0+: AGPL-3.0-or-later
 AGPL-3.0: AGPL-3.0-only
 BSD-2-Clause-FreeBSD: BSD-2-Clause-Views
+BSD-2-Clause-NetBSD: BSD-2-Clause
 GFDL-1.1+: GFDL-1.1-or-later
 GFDL-1.1: GFDL-1.1-only
 GFDL-1.2+: GFDL-1.2-or-later
@@ -47,3 +48,8 @@ LGPL-2.1+: LGPL-2.1-or-later
 LGPL-2.1: LGPL-2.1-only
 LGPL-3.0+: LGPL-3.0-or-later
 LGPL-3.0: LGPL-3.0-only
+Nunit: zlib-acknowledgement
+StandardML-NJ: SMLNJ
+bzip2-1.0.5: bzip2-1.0.6
+eCos-2.0: GPL-2.0-or-later WITH eCos-exception-2.0
+wxWindows: GPL-2.0-or-later WITH WxWindows-exception-3.1
