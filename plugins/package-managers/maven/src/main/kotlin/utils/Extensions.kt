@@ -1,0 +1,82 @@
+/*
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * License-Filename: LICENSE
+ */
+
+package org.ossreviewtoolkit.plugins.packagemanagers.maven.utils
+
+import org.apache.maven.artifact.repository.Authentication
+import org.apache.maven.bridge.MavenRepositorySystem
+import org.apache.maven.repository.Proxy
+
+import org.eclipse.aether.RepositorySystemSession
+import org.eclipse.aether.artifact.Artifact
+import org.eclipse.aether.repository.AuthenticationContext
+import org.eclipse.aether.repository.RemoteRepository
+
+fun Artifact.identifier() = "$groupId:$artifactId:$version"
+
+/**
+ * Convert this [RemoteRepository] to a repository in the format used by the Maven Repository System.
+ * Make sure that all relevant properties are set, especially the proxy and authentication.
+ */
+internal fun RemoteRepository.toArtifactRepository(
+    repositorySystemSession: RepositorySystemSession,
+    repositorySystem: MavenRepositorySystem,
+    id: String
+) = repositorySystem.createRepository(url, id, true, null, true, null, null).apply {
+    this@toArtifactRepository.proxy?.also { repoProxy ->
+        proxy = Proxy().apply {
+            host = repoProxy.host
+            port = repoProxy.port
+            protocol = repoProxy.type
+            toMavenAuthentication(
+                AuthenticationContext.forProxy(
+                    repositorySystemSession,
+                    this@toArtifactRepository
+                )
+            )?.also { authentication ->
+                userName = authentication.username
+                password = authentication.password
+            }
+        }
+    }
+
+    this@toArtifactRepository.authentication?.also {
+        authentication = toMavenAuthentication(
+            AuthenticationContext.forRepository(
+                repositorySystemSession,
+                this@toArtifactRepository
+            )
+        )
+    }
+}
+
+/**
+ * Return authentication information for an artifact repository based on the given [authContext]. The
+ * libraries involved use different approaches to model authentication.
+ */
+private fun toMavenAuthentication(authContext: AuthenticationContext?): Authentication? =
+    authContext?.let {
+        Authentication(
+            it[AuthenticationContext.USERNAME],
+            it[AuthenticationContext.PASSWORD]
+        ).apply {
+            passphrase = it[AuthenticationContext.PRIVATE_KEY_PASSPHRASE]
+            privateKey = it[AuthenticationContext.PRIVATE_KEY_PATH]
+        }
+    }
