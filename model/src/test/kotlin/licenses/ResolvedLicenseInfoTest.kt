@@ -229,10 +229,7 @@ private val RESOLVED_LICENSE_INFO: ResolvedLicenseInfo by lazy {
  * effectiveLicense(), rather computation-heavy.
  */
 private val COMPUTATION_HEAVY_RESOLVED_LICENSE_INFO: ResolvedLicenseInfo by lazy {
-    val licensesWithoutChoice = SpdxLicense.values()
-        .toList()
-        .subList(0, 200)
-        .map { SpdxExpression.parse(it.id) }
+    val licensesWithoutChoice = SpdxLicense.entries.subList(0, 200).map { SpdxExpression.parse(it.id) }
 
     // Expressions taken from a real world scan with swapped identifiers.
     val licensesWithChoice = listOf(
