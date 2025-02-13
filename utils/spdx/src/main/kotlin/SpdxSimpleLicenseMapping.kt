@@ -31,7 +31,7 @@ object SpdxSimpleLicenseMapping {
      * The raw map which associates custom license IDs with their corresponding SPDX license ID.
      */
     internal val customLicenseIdsMap by lazy {
-        val resource = javaClass.getResource("/simple-license-mapping.yml")
+        val resource = checkNotNull(javaClass.getResource("/simple-license-mapping.yml"))
         yamlMapper.readValue<Map<String, SpdxLicense>>(resource)
     }
 
@@ -45,7 +45,7 @@ object SpdxSimpleLicenseMapping {
      * The map of deprecated SPDX license ids associated with their current SPDX expression.
      */
     private val deprecatedLicenseIds by lazy {
-        val resource = javaClass.getResource("/deprecated-license-mapping.yml")
+        val resource = checkNotNull(javaClass.getResource("/deprecated-license-mapping.yml"))
         yamlMapper.readValue<Map<String, SpdxSingleLicenseExpression>>(resource)
     }
 

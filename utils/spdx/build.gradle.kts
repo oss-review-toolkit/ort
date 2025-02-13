@@ -271,7 +271,7 @@ fun Task.generateEnumClass(
         |         * The map which associates SPDX exceptions with their applicable SPDX licenses.
         |         */
         |        val mapping by lazy {
-        |            val resource = SpdxLicenseException::class.java.getResource("/exception-mapping.yml")
+        |            val resource = checkNotNull(SpdxLicenseException::class.java.getResource("/exception-mapping.yml"))
         |            yamlMapper.readValue<Map<String, List<SpdxLicense>>>(resource)
         |        }
         |
@@ -300,7 +300,7 @@ fun Task.generateEnumClass(
         |    /**
         |     * The full $description text as a string.
         |     */
-        |    val text by lazy { javaClass.getResource("/$resourcePath/${'$'}id").readText() }
+        |    val text by lazy { checkNotNull(javaClass.getResource("/$resourcePath/${'$'}id")).readText() }
         |}
         |
         """.trimMargin()
