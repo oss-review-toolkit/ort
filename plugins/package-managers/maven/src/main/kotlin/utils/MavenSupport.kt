@@ -26,7 +26,6 @@ import java.net.URI
 import kotlin.time.Duration.Companion.hours
 
 import org.apache.logging.log4j.kotlin.logger
-import org.apache.maven.artifact.repository.Authentication
 import org.apache.maven.artifact.repository.LegacyLocalRepositoryManager
 import org.apache.maven.bridge.MavenRepositorySystem
 import org.apache.maven.execution.DefaultMavenExecutionRequest
@@ -43,7 +42,6 @@ import org.apache.maven.project.ProjectBuildingException
 import org.apache.maven.project.ProjectBuildingRequest
 import org.apache.maven.project.ProjectBuildingResult
 import org.apache.maven.properties.internal.EnvironmentUtils
-import org.apache.maven.repository.Proxy
 import org.apache.maven.session.scope.internal.SessionScope
 
 import org.codehaus.plexus.DefaultContainerConfiguration
@@ -60,7 +58,6 @@ import org.eclipse.aether.artifact.Artifact
 import org.eclipse.aether.artifact.DefaultArtifact
 import org.eclipse.aether.impl.RemoteRepositoryManager
 import org.eclipse.aether.impl.RepositoryConnectorProvider
-import org.eclipse.aether.repository.AuthenticationContext
 import org.eclipse.aether.repository.RemoteRepository
 import org.eclipse.aether.repository.WorkspaceReader
 import org.eclipse.aether.resolution.ArtifactDescriptorRequest
@@ -92,8 +89,6 @@ import org.ossreviewtoolkit.utils.ort.downloadText
 import org.ossreviewtoolkit.utils.ort.okHttpClient
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 import org.ossreviewtoolkit.utils.ort.showStackTrace
-
-fun Artifact.identifier() = "$groupId:$artifactId:$version"
 
 /**
  * Return the path to this file or a corresponding message if the file is unknown.
@@ -643,57 +638,6 @@ internal fun isTychoProject(file: File): Boolean {
         TYCHO_NAMESPACE in content && TYCHO_ID in content
     } == true
 }
-
-/**
- * Convert this [RemoteRepository] to a repository in the format used by the Maven Repository System.
- * Make sure that all relevant properties are set, especially the proxy and authentication.
- */
-internal fun RemoteRepository.toArtifactRepository(
-    repositorySystemSession: RepositorySystemSession,
-    repositorySystem: MavenRepositorySystem,
-    id: String
-) = repositorySystem.createRepository(url, id, true, null, true, null, null).apply {
-    this@toArtifactRepository.proxy?.also { repoProxy ->
-        proxy = Proxy().apply {
-            host = repoProxy.host
-            port = repoProxy.port
-            protocol = repoProxy.type
-            toMavenAuthentication(
-                AuthenticationContext.forProxy(
-                    repositorySystemSession,
-                    this@toArtifactRepository
-                )
-            )?.also { authentication ->
-                userName = authentication.username
-                password = authentication.password
-            }
-        }
-    }
-
-    this@toArtifactRepository.authentication?.also {
-        authentication = toMavenAuthentication(
-            AuthenticationContext.forRepository(
-                repositorySystemSession,
-                this@toArtifactRepository
-            )
-        )
-    }
-}
-
-/**
- * Return authentication information for an artifact repository based on the given [authContext]. The
- * libraries involved use different approaches to model authentication.
- */
-private fun toMavenAuthentication(authContext: AuthenticationContext?): Authentication? =
-    authContext?.let {
-        Authentication(
-            it[AuthenticationContext.USERNAME],
-            it[AuthenticationContext.PASSWORD]
-        ).apply {
-            passphrase = it[AuthenticationContext.PRIVATE_KEY_PASSPHRASE]
-            privateKey = it[AuthenticationContext.PRIVATE_KEY_PATH]
-        }
-    }
 
 /**
  * Return true if an artifact that has not been requested from Maven Central is also available on Maven Central
