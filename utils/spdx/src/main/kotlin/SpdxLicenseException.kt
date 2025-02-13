@@ -128,7 +128,7 @@ enum class SpdxLicenseException(
          * The map which associates SPDX exceptions with their applicable SPDX licenses.
          */
         val mapping by lazy {
-            val resource = SpdxLicenseException::class.java.getResource("/exception-mapping.yml")
+            val resource = checkNotNull(SpdxLicenseException::class.java.getResource("/exception-mapping.yml"))
             yamlMapper.readValue<Map<String, List<SpdxLicense>>>(resource)
         }
 
@@ -144,5 +144,5 @@ enum class SpdxLicenseException(
     /**
      * The full license exception text as a string.
      */
-    val text by lazy { javaClass.getResource("/exceptions/$id").readText() }
+    val text by lazy { checkNotNull(javaClass.getResource("/exceptions/$id")).readText() }
 }
