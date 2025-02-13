@@ -24,7 +24,6 @@ import java.io.IOException
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.downloader.VersionControlSystemFactory.Companion.ALL
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -43,7 +42,7 @@ import org.semver4j.Semver
 abstract class VersionControlSystem : Plugin {
     companion object {
         private fun getAllVcsByPriority(configs: Map<String, PluginConfig>) =
-            ALL.map { (id, factory) ->
+            VersionControlSystemFactory.ALL.map { (id, factory) ->
                 val config = configs[id] ?: PluginConfig()
                 factory.create(config)
             }.sortedByDescending {
