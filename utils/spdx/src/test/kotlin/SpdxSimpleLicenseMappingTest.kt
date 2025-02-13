@@ -62,8 +62,11 @@ class SpdxSimpleLicenseMappingTest : WordSpec({
 
     "The mapping" should {
         "contain only single ID strings" {
-            SpdxSimpleLicenseMapping.mapping.keys.forAll { declaredLicense ->
-                val tokens = SpdxExpressionLexer(declaredLicense).tokens().toList()
+            val ids = SpdxSimpleLicenseMapping.simpleExpressionMapping.keys +
+                SpdxSimpleLicenseMapping.deprecatedExpressionMapping.keys
+
+            ids.forAll { id ->
+                val tokens = SpdxExpressionLexer(id).tokens().toList()
 
                 tokens shouldHaveAtLeastSize 1
                 tokens shouldHaveAtMostSize 2
@@ -71,7 +74,7 @@ class SpdxSimpleLicenseMappingTest : WordSpec({
                 tokens.first() should beOfType<Token.IDENTIFIER>()
                 tokens.getOrNull(1)?.let { it should beOfType<Token.PLUS>() }
 
-                SpdxExpressionParser(tokens.asSequence()).parse().toString() shouldBe declaredLicense
+                SpdxExpressionParser(tokens.asSequence()).parse().toString() shouldBe id
             }
         }
 
