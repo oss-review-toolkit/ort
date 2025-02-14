@@ -28,10 +28,7 @@ import org.eclipse.aether.graph.DependencyNode
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
-import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.DependencyGraph
-import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
@@ -41,12 +38,9 @@ import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.LocalProjectWorkspaceReader
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.MavenDependencyHandler
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.MavenSupport
-import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.getOriginalScm
+import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.identifier
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.isTychoProject
-import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.parseAuthors
-import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.parseLicenses
-import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.parseVcsInfo
-import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.processDeclaredLicenses
+import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.toOrtProject
 import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
 
 /**
@@ -112,23 +106,7 @@ class Maven(
         val workingDir = definitionFile.parentFile
         val projectBuildingResult = mavenSupport.buildMavenProject(definitionFile)
         val mavenProject = projectBuildingResult.project
-        val projectId = Identifier(
-            type = projectType,
-            namespace = mavenProject.groupId,
-            name = mavenProject.artifactId,
-            version = mavenProject.version
-        )
-
-        projectBuildingResult.dependencies.filterNot {
-            excludes.isScopeExcluded(it.dependency.scope)
-        }.forEach { node ->
-            graphBuilder.addDependency(DependencyGraph.qualifyScope(projectId, node.dependency.scope), node)
-        }
-
-        val declaredLicenses = parseLicenses(mavenProject)
-        val declaredLicensesProcessed = processDeclaredLicenses(declaredLicenses)
-
-        val vcsFromPackage = parseVcsInfo(mavenProject)
+        val projectId = mavenProject.identifier(projectType)
 
         // If running in SBT mode expect that POM files were generated in a "target" subdirectory and that the correct
         // project directory is the parent directory of this.
@@ -138,20 +116,17 @@ class Maven(
             workingDir
         }
 
-        val browsableScmUrl = getOriginalScm(mavenProject)?.url
-        val homepageUrl = mavenProject.url
-        val vcsFallbackUrls = listOfNotNull(browsableScmUrl, homepageUrl).toTypedArray()
+        projectBuildingResult.dependencies.filterNot {
+            excludes.isScopeExcluded(it.dependency.scope)
+        }.forEach { node ->
+            graphBuilder.addDependency(DependencyGraph.qualifyScope(projectId, node.dependency.scope), node)
+        }
 
-        val project = Project(
-            id = projectId,
-            definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-            authors = parseAuthors(mavenProject),
-            declaredLicenses = declaredLicenses,
-            declaredLicensesProcessed = declaredLicensesProcessed,
-            vcs = vcsFromPackage,
-            vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, *vcsFallbackUrls),
-            homepageUrl = homepageUrl.orEmpty(),
-            scopeNames = graphBuilder.scopesFor(projectId)
+        val project = mavenProject.toOrtProject(
+            projectId,
+            definitionFile,
+            projectDir,
+            graphBuilder.scopesFor(projectId)
         )
 
         val issues = graphBuilder.packages().mapNotNull { pkg ->
