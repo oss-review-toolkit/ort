@@ -582,8 +582,8 @@ ENV PATH=$PATH:/opt/ort/bin
 USER $USER
 WORKDIR $HOME
 
-# Ensure that the ORT data directory exists to be able to mount the config into it with correct permissions.
-RUN mkdir -p "$HOME/.ort"
+# Ensure that these directories exist in the container to be able to mount directories from the host into them with correct permissions.
+RUN mkdir -p "$HOME/.ort" "$HOME/.gradle"
 
 ENTRYPOINT ["/opt/ort/bin/ort"]
 
@@ -598,7 +598,7 @@ ENV PATH=$PATH:/opt/ort/bin
 USER $USER
 WORKDIR $HOME
 
-# Ensure that the ORT data directory exists to be able to mount the config into it with correct permissions.
-RUN mkdir -p "$HOME/.ort"
+# Ensure that these directories exist in the container to be able to mount directories from the host into them with correct permissions.
+RUN mkdir -p "$HOME/.ort" "$HOME/.gradle"
 
 ENTRYPOINT ["/opt/ort/bin/ort"]
