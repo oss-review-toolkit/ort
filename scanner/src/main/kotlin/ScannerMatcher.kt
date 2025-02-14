@@ -68,9 +68,9 @@ data class ScannerMatcher(
          * [details]. These defaults can be overridden by the provided [config].
          */
         fun create(details: ScannerDetails, config: ScannerMatcherConfig = ScannerMatcherConfig.EMPTY): ScannerMatcher {
-            val scannerVersion = Semver(normalizeVersion(details.version))
-            val minVersion = parseVersion(config.minVersion) ?: scannerVersion
-            val maxVersion = parseVersion(config.maxVersion) ?: minVersion.nextMinor()
+            val scannerVersion = checkNotNull(Semver.coerce(details.version))
+            val minVersion = Semver.coerce(config.minVersion) ?: scannerVersion
+            val maxVersion = Semver.coerce(config.maxVersion) ?: minVersion.nextMinor()
             val name = config.regScannerName ?: details.name
             val configuration = config.configuration ?: details.configuration
 
@@ -158,17 +158,3 @@ data class ScannerMatcherConfig(
         }
     }
 }
-
-/**
- * Parse the given [versionStr] to a [Semver] while trying to be failure tolerant.
- */
-private fun parseVersion(versionStr: String?): Semver? = versionStr?.let { Semver(normalizeVersion(it)) }
-
-/**
- * Normalize the given [versionStr] to make sure that it can be parsed to a [Semver]. The [Semver] class
- * requires that all components of a semantic version number are present. This function enables a more lenient
- * style when declaring a version. So for instance, the user can just write "2", and this gets expanded to
- * "2.0.0".
- */
-private fun normalizeVersion(versionStr: String): String =
-    versionStr.takeIf { v -> v.count { it == '.' } >= 2 } ?: normalizeVersion("$versionStr.0")
