@@ -80,7 +80,7 @@ private fun getVcsPathForRepositoryOrNull(vcsPath: String, repositoryPath: Strin
     return if (repoPathFile.startsWith(vcsPathFile)) {
         ""
     } else {
-        runCatching { vcsPathFile.toRelativeString(repoPathFile) }.getOrNull()
+        runCatching { vcsPathFile.relativeTo(repoPathFile).invariantSeparatorsPath }.getOrNull()
     }
 }
 
