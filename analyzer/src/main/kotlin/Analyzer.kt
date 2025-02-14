@@ -65,7 +65,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
 
     /**
      * Find files recognized by any of [packageManagers] inside [absoluteProjectPath]. The [repositoryConfiguration] is
-     * taken into account, e.g. for path excludes and packaga manager options. Instantiate only those package managers
+     * taken into account, e.g. for path excludes and package manager options. Instantiate only those package managers
      * that have matching files and return the latter as part of [ManagedFileInfo].
      */
     @JvmOverloads
