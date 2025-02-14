@@ -19,8 +19,11 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.maven.utils
 
+import java.io.File
+
 import org.apache.maven.artifact.repository.Authentication
 import org.apache.maven.bridge.MavenRepositorySystem
+import org.apache.maven.project.MavenProject
 import org.apache.maven.repository.Proxy
 
 import org.eclipse.aether.RepositorySystemSession
@@ -28,7 +31,53 @@ import org.eclipse.aether.artifact.Artifact
 import org.eclipse.aether.repository.AuthenticationContext
 import org.eclipse.aether.repository.RemoteRepository
 
+import org.ossreviewtoolkit.analyzer.PackageManager.Companion.processProjectVcs
+import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Project
+
 fun Artifact.identifier() = "$groupId:$artifactId:$version"
+
+/**
+ * Return an [Identifier] for this [MavenProject] with the given [projectType].
+ */
+internal fun MavenProject.identifier(projectType: String): Identifier =
+    Identifier(
+        type = projectType,
+        namespace = groupId,
+        name = artifactId,
+        version = version
+    )
+
+/**
+ * Convert this [MavenProject] to an ORT [Project] using the given [identifier], the path to the [definitionFile],
+ * the [projectDir], and the set of [scopeNames].
+ */
+internal fun MavenProject.toOrtProject(
+    identifier: Identifier,
+    definitionFile: File,
+    projectDir: File,
+    scopeNames: Set<String>
+): Project {
+    val declaredLicenses = parseLicenses(this)
+    val declaredLicensesProcessed = processDeclaredLicenses(declaredLicenses)
+
+    val vcsFromPackage = parseVcsInfo(this)
+    val browsableScmUrl = getOriginalScm(this)?.url
+    val vcsFallbackUrls = listOfNotNull(browsableScmUrl, this.url).toTypedArray()
+
+    return Project(
+        id = identifier,
+        definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+        authors = parseAuthors(this),
+        declaredLicenses = declaredLicenses,
+        declaredLicensesProcessed = declaredLicensesProcessed,
+        vcs = vcsFromPackage,
+        vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, *vcsFallbackUrls),
+        homepageUrl = url.orEmpty(),
+        scopeNames = scopeNames
+    )
+}
 
 /**
  * Convert this [RemoteRepository] to a repository in the format used by the Maven Repository System.
