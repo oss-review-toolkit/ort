@@ -30,14 +30,22 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType.NPM
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType.PNPM
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType.YARN
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType.YARN2
+import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.Npm
+import org.ossreviewtoolkit.plugins.packagemanagers.node.pnpm.Pnpm
+import org.ossreviewtoolkit.plugins.packagemanagers.node.yarn.Yarn
+import org.ossreviewtoolkit.plugins.packagemanagers.node.yarn2.Yarn2
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.test.getAssetFile
 
 class NpmDetectionTest : WordSpec({
+    val packageManagers = listOf(Npm.Factory(), Pnpm.Factory(), Yarn.Factory(), Yarn2.Factory())
+        .map { it.create(AnalyzerConfiguration()) }
+
     "All Node package manager detections" should {
         "ignore empty lockfiles" {
             NodePackageManagerType.entries.forAll {
@@ -155,7 +163,7 @@ class NpmDetectionTest : WordSpec({
 
         "filter definition files correctly" {
             val projectDir = getAssetFile("projects/synthetic")
-            val definitionFiles = PackageManager.findManagedFiles(projectDir).values.flatten().toSet()
+            val definitionFiles = PackageManager.findManagedFiles(projectDir, packageManagers).values.flatten().toSet()
 
             val filteredFiles = NodePackageManagerDetection(definitionFiles).filterApplicable(NPM)
 
@@ -192,7 +200,7 @@ class NpmDetectionTest : WordSpec({
 
         "filter definition files correctly" {
             val projectDir = getAssetFile("projects/synthetic")
-            val definitionFiles = PackageManager.findManagedFiles(projectDir).values.flatten().toSet()
+            val definitionFiles = PackageManager.findManagedFiles(projectDir, packageManagers).values.flatten().toSet()
 
             val filteredFiles = NodePackageManagerDetection(definitionFiles).filterApplicable(PNPM)
 
@@ -226,7 +234,7 @@ class NpmDetectionTest : WordSpec({
 
         "filter definition files correctly" {
             val projectDir = getAssetFile("projects/synthetic")
-            val definitionFiles = PackageManager.findManagedFiles(projectDir).values.flatten().toSet()
+            val definitionFiles = PackageManager.findManagedFiles(projectDir, packageManagers).values.flatten().toSet()
 
             val filteredFiles = NodePackageManagerDetection(definitionFiles).filterApplicable(YARN)
 
@@ -257,7 +265,7 @@ class NpmDetectionTest : WordSpec({
 
         "filter definition files correctly" {
             val projectDir = getAssetFile("projects/synthetic")
-            val definitionFiles = PackageManager.findManagedFiles(projectDir).values.flatten().toSet()
+            val definitionFiles = PackageManager.findManagedFiles(projectDir, packageManagers).values.flatten().toSet()
 
             val filteredFiles = NodePackageManagerDetection(definitionFiles).filterApplicable(YARN2)
 

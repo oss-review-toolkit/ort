@@ -45,6 +45,7 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.Curations
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
@@ -237,7 +238,7 @@ internal fun KnownProvenance?.getSourceCodeOrigin(): SourceCodeOrigin? =
 internal fun OrtResult.getRepositoryPathExcludes(): RepositoryPathExcludes {
     fun isDefinitionsFile(pathExclude: PathExclude) =
         PackageManagerFactory.ENABLED_BY_DEFAULT.any {
-            it.matchersForDefinitionFiles.any { matcher ->
+            it.create(AnalyzerConfiguration()).matchersForDefinitionFiles.any { matcher ->
                 pathExclude.pattern.endsWith(matcher.toString())
             }
         }

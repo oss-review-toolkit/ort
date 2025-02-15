@@ -74,10 +74,10 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempFile
  */
 class Tycho(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(name, "Tycho", analyzerConfig) {
     class Factory : AbstractPackageManagerFactory<Tycho>("Tycho") {
-        override val globsForDefinitionFiles = listOf("pom.xml")
-
         override fun create(analyzerConfig: AnalyzerConfiguration) = Tycho(type, analyzerConfig)
     }
+
+    override val globsForDefinitionFiles = listOf("pom.xml")
 
     /**
      * The builder to generate the dependency graph. This could actually be a local variable, but it is also needed

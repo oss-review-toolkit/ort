@@ -93,10 +93,10 @@ internal object YarnCommand : CommandLineTool {
 open class Yarn(name: String, analyzerConfig: AnalyzerConfiguration) :
     NodePackageManager(name, NodePackageManagerType.YARN, analyzerConfig) {
     class Factory : AbstractPackageManagerFactory<Yarn>("Yarn") {
-        override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE)
-
         override fun create(analyzerConfig: AnalyzerConfiguration) = Yarn(type, analyzerConfig)
     }
+
+    override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE)
 
     private lateinit var stash: DirectoryStash
 

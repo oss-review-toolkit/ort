@@ -43,13 +43,13 @@ import org.ossreviewtoolkit.model.utils.parseRepoManifestPath
 class Unmanaged(name: String, analyzerConfig: AnalyzerConfiguration) :
     PackageManager(name, "Unmanaged", analyzerConfig) {
     class Factory : AbstractPackageManagerFactory<Unmanaged>("Unmanaged") {
-        // The empty list returned here deliberately causes this special package manager to never be considered in
-        // PackageManager.findManagedFiles(). Instead, it will only be explicitly instantiated as part of
-        // Analyzer.findManagedFiles().
-        override val globsForDefinitionFiles = emptyList<String>()
-
         override fun create(analyzerConfig: AnalyzerConfiguration) = Unmanaged(type, analyzerConfig)
     }
+
+    // The empty list returned here deliberately causes this special package manager to never be considered in
+    // PackageManager.findManagedFiles(). Instead, it will only be explicitly instantiated as part of
+    // Analyzer.findManagedFiles().
+    override val globsForDefinitionFiles = emptyList<String>()
 
     /**
      * Return a list with a single [ProjectAnalyzerResult] for the "unmanaged" [Project] defined by the

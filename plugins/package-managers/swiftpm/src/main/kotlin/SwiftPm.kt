@@ -65,10 +65,10 @@ class SwiftPm(
     analyzerConfig: AnalyzerConfiguration
 ) : PackageManager(name, "SwiftPM", analyzerConfig) {
     class Factory : AbstractPackageManagerFactory<SwiftPm>("SwiftPM") {
-        override val globsForDefinitionFiles = listOf(PACKAGE_SWIFT_NAME, PACKAGE_RESOLVED_NAME)
-
         override fun create(analyzerConfig: AnalyzerConfiguration) = SwiftPm(type, analyzerConfig)
     }
+
+    override val globsForDefinitionFiles = listOf(PACKAGE_SWIFT_NAME, PACKAGE_RESOLVED_NAME)
 
     override fun mapDefinitionFiles(analysisRoot: File, definitionFiles: List<File>): List<File> {
         return definitionFiles.filterNot { file -> file.path.contains(".build/checkouts") }

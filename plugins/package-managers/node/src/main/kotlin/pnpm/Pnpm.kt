@@ -52,10 +52,10 @@ internal object PnpmCommand : CommandLineTool {
 class Pnpm(name: String, analyzerConfig: AnalyzerConfiguration) :
     NodePackageManager(name, NodePackageManagerType.PNPM, analyzerConfig) {
     class Factory : AbstractPackageManagerFactory<Pnpm>("PNPM") {
-        override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE, "pnpm-lock.yaml")
-
         override fun create(analyzerConfig: AnalyzerConfiguration) = Pnpm(type, analyzerConfig)
     }
+
+    override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE, "pnpm-lock.yaml")
 
     private lateinit var stash: DirectoryStash
 

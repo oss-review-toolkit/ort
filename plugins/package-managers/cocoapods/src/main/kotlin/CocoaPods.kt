@@ -66,10 +66,10 @@ internal object CocoaPodsCommand : CommandLineTool {
 class CocoaPods(name: String, analyzerConfig: AnalyzerConfiguration) :
     PackageManager(name, "CocoaPods", analyzerConfig) {
     class Factory : AbstractPackageManagerFactory<CocoaPods>("CocoaPods") {
-        override val globsForDefinitionFiles = listOf("Podfile")
-
         override fun create(analyzerConfig: AnalyzerConfiguration) = CocoaPods(type, analyzerConfig)
     }
+
+    override val globsForDefinitionFiles = listOf("Podfile")
 
     private val dependencyHandler = PodDependencyHandler()
     private val graphBuilder = DependencyGraphBuilder(dependencyHandler)
