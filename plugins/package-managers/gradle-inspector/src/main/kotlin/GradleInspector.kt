@@ -103,13 +103,13 @@ const val OPTION_JAVA_HOME = "javaHome"
 class GradleInspector(name: String, analyzerConfig: AnalyzerConfiguration) :
     PackageManager(name, "Gradle", analyzerConfig) {
     class Factory : AbstractPackageManagerFactory<GradleInspector>("GradleInspector") {
-        // Gradle prefers Groovy ".gradle" files over Kotlin ".gradle.kts" files, but "build" files have to come before
-        // "settings" files as we should consider "settings" files only if the same directory does not also contain a
-        // "build" file.
-        override val globsForDefinitionFiles = GRADLE_BUILD_FILES + GRADLE_SETTINGS_FILES
-
         override fun create(analyzerConfig: AnalyzerConfiguration) = GradleInspector(type, analyzerConfig)
     }
+
+    // Gradle prefers Groovy ".gradle" files over Kotlin ".gradle.kts" files, but "build" files have to come before
+    // "settings" files as we should consider "settings" files only if the same directory does not also contain a
+    // "build" file.
+    override val globsForDefinitionFiles = GRADLE_BUILD_FILES + GRADLE_SETTINGS_FILES
 
     private val graphBuilder = DependencyGraphBuilder(GradleDependencyHandler(managerName, projectType))
     private val initScriptFile by lazy { extractInitScript() }

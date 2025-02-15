@@ -52,10 +52,10 @@ internal object PipenvCommand : CommandLineTool {
 
 class Pipenv(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(name, "Pipenv", analyzerConfig) {
     class Factory : AbstractPackageManagerFactory<Pipenv>("Pipenv") {
-        override val globsForDefinitionFiles = listOf("Pipfile.lock")
-
         override fun create(analyzerConfig: AnalyzerConfiguration) = Pipenv(type, analyzerConfig)
     }
+
+    override val globsForDefinitionFiles = listOf("Pipfile.lock")
 
     override fun beforeResolution(analysisRoot: File, definitionFiles: List<File>) = PipenvCommand.checkVersion()
 

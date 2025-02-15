@@ -69,10 +69,10 @@ internal object CargoCommand : CommandLineTool {
  */
 class Cargo(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(name, "Cargo", analyzerConfig) {
     class Factory : AbstractPackageManagerFactory<Cargo>("Cargo") {
-        override val globsForDefinitionFiles = listOf("Cargo.toml")
-
         override fun create(analyzerConfig: AnalyzerConfiguration) = Cargo(type, analyzerConfig)
     }
+
+    override val globsForDefinitionFiles = listOf("Cargo.toml")
 
     /**
      * Cargo.lock is located next to Cargo.toml or in one of the parent directories. The latter is the case when the

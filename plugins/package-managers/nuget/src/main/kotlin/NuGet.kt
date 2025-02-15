@@ -42,10 +42,10 @@ class NuGet(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManage
     }
 
     class Factory : AbstractPackageManagerFactory<NuGet>("NuGet") {
-        override val globsForDefinitionFiles = listOf("*.csproj", "*.fsproj", "*.vcxproj", "packages.config")
-
         override fun create(analyzerConfig: AnalyzerConfiguration) = NuGet(type, analyzerConfig)
     }
+
+    override val globsForDefinitionFiles = listOf("*.csproj", "*.fsproj", "*.vcxproj", "packages.config")
 
     private val nugetConfig = options[OPTION_NUGET_CONFIG]?.let { File(it) }
 

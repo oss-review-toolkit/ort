@@ -87,10 +87,10 @@ internal object GoCommand : CommandLineTool {
  */
 class GoMod(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(name, "GoMod", analyzerConfig) {
     class Factory : AbstractPackageManagerFactory<GoMod>("GoMod") {
-        override val globsForDefinitionFiles = listOf("go.mod")
-
         override fun create(analyzerConfig: AnalyzerConfiguration) = GoMod(type, analyzerConfig)
     }
+
+    override val globsForDefinitionFiles = listOf("go.mod")
 
     override fun mapDefinitionFiles(analysisRoot: File, definitionFiles: List<File>): List<File> =
         definitionFiles.filterNot { definitionFile ->

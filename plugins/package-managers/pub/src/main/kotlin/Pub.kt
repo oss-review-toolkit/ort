@@ -111,10 +111,10 @@ class Pub(name: String, analyzerConfig: AnalyzerConfiguration) :
     }
 
     class Factory : AbstractPackageManagerFactory<Pub>("Pub") {
-        override val globsForDefinitionFiles = listOf(PUBSPEC_YAML)
-
         override fun create(analyzerConfig: AnalyzerConfiguration) = Pub(type, analyzerConfig)
     }
+
+    override val globsForDefinitionFiles = listOf(PUBSPEC_YAML)
 
     private val flutterVersion = options[OPTION_FLUTTER_VERSION] ?: Os.env["FLUTTER_VERSION"] ?: DEFAULT_FLUTTER_VERSION
     private val flutterInstallDir = ortToolsDirectory.resolve("flutter-$flutterVersion")
@@ -221,7 +221,10 @@ class Pub(name: String, analyzerConfig: AnalyzerConfiguration) :
     ): Map<File, Set<File>> {
         val result = mutableMapOf<File, MutableSet<File>>()
 
-        val gradleDefinitionFiles = findManagedFiles(analysisRoot, setOfNotNull(gradleFactory)).values.flatten()
+        val gradleDefinitionFiles = findManagedFiles(
+            analysisRoot,
+            setOfNotNull(gradleFactory?.create(analyzerConfig))
+        ).values.flatten()
 
         val pubDefinitionFilesWithFlutterSdkSorted = pubDefinitionFiles.filter {
             containsFlutterSdk(it.parentFile)
