@@ -70,10 +70,10 @@ class Npm(name: String, analyzerConfig: AnalyzerConfiguration) :
     }
 
     class Factory : AbstractPackageManagerFactory<Npm>("NPM") {
-        override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE)
-
         override fun create(analyzerConfig: AnalyzerConfiguration) = Npm(type, analyzerConfig)
     }
+
+    override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE)
 
     private lateinit var stash: DirectoryStash
 

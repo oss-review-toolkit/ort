@@ -50,7 +50,7 @@ import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
-typealias ManagedProjectFiles = Map<PackageManagerFactory, List<File>>
+typealias ManagedProjectFiles = Map<PackageManager, List<File>>
 typealias ProjectResults = Map<File, List<ProjectAnalyzerResult>>
 
 /**
@@ -87,7 +87,7 @@ abstract class PackageManager(
          */
         fun findManagedFiles(
             directory: File,
-            packageManagers: Collection<PackageManagerFactory> = PackageManagerFactory.ENABLED_BY_DEFAULT,
+            packageManagers: Collection<PackageManager>,
             excludes: Excludes = Excludes.EMPTY
         ): ManagedProjectFiles {
             require(directory.isDirectory) {
@@ -96,7 +96,7 @@ abstract class PackageManager(
 
             logger.debug { "Searching for managed files using the following excludes: $excludes" }
 
-            val result = mutableMapOf<PackageManagerFactory, MutableList<File>>()
+            val result = mutableMapOf<PackageManager, MutableList<File>>()
             val rootPath = directory.toPath()
             val distinctPackageManagers = packageManagers.distinct()
 
@@ -217,6 +217,18 @@ abstract class PackageManager(
          */
         fun getFallbackProjectName(analysisRoot: File, definitionFile: File) =
             definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath
+    }
+
+    /**
+     * The prioritized list of glob patterns of definition files supported by this package manager. Only all matches of
+     * the first glob having any matches are considered.
+     */
+    abstract val globsForDefinitionFiles: List<String>
+
+    val matchersForDefinitionFiles by lazy {
+        globsForDefinitionFiles.map {
+            FileSystems.getDefault().getPathMatcher("glob:**/$it")
+        }
     }
 
     /**

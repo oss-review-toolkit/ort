@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.analyzer
 
-import java.nio.file.FileSystems
-import java.nio.file.PathMatcher
 import java.util.ServiceLoader
 
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
@@ -43,11 +41,6 @@ interface PackageManagerFactory : Plugin {
     }
 
     /**
-     * The glob matchers for all definition files.
-     */
-    val matchersForDefinitionFiles: List<PathMatcher>
-
-    /**
      * Create a [PackageManager] using the specified [analyzerConfig].
      */
     fun create(analyzerConfig: AnalyzerConfiguration): PackageManager
@@ -60,18 +53,6 @@ abstract class AbstractPackageManagerFactory<out T : PackageManager>(
     override val type: String,
     override val isEnabledByDefault: Boolean = true
 ) : PackageManagerFactory {
-    /**
-     * The prioritized list of glob patterns of definition files supported by this package manager. Only all matches of
-     * the first glob having any matches are considered.
-     */
-    abstract val globsForDefinitionFiles: List<String>
-
-    override val matchersForDefinitionFiles by lazy {
-        globsForDefinitionFiles.map {
-            FileSystems.getDefault().getPathMatcher("glob:**/$it")
-        }
-    }
-
     abstract override fun create(analyzerConfig: AnalyzerConfiguration): T
 
     /**

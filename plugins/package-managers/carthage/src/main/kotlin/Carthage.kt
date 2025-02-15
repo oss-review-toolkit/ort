@@ -48,12 +48,12 @@ import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
  */
 class Carthage(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(name, "Carthage", analyzerConfig) {
     class Factory : AbstractPackageManagerFactory<Carthage>("Carthage") {
-        // TODO: Add support for the Cartfile.
-        //       This would require to resolve the actual dependency versions as a Cartfile supports dynamic versions.
-        override val globsForDefinitionFiles = listOf("Cartfile.resolved")
-
         override fun create(analyzerConfig: AnalyzerConfiguration) = Carthage(type, analyzerConfig)
     }
+
+    // TODO: Add support for the Cartfile.
+    //       This would require to resolve the actual dependency versions as a Cartfile supports dynamic versions.
+    override val globsForDefinitionFiles = listOf("Cartfile.resolved")
 
     override fun resolveDependencies(
         analysisRoot: File,

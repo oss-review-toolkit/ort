@@ -85,10 +85,10 @@ internal object ComposerCommand : CommandLineTool {
  */
 class Composer(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(name, "Composer", analyzerConfig) {
     class Factory : AbstractPackageManagerFactory<Composer>("Composer") {
-        override val globsForDefinitionFiles = listOf("composer.json")
-
         override fun create(analyzerConfig: AnalyzerConfiguration) = Composer(type, analyzerConfig)
     }
+
+    override val globsForDefinitionFiles = listOf("composer.json")
 
     override fun beforeResolution(analysisRoot: File, definitionFiles: List<File>) {
         // If all directories we are analyzing contain a composer.phar, no global installation of Composer is required

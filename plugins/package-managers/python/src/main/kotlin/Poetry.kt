@@ -62,10 +62,10 @@ class Poetry(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManag
     }
 
     class Factory : AbstractPackageManagerFactory<Poetry>("Poetry") {
-        override val globsForDefinitionFiles = listOf("poetry.lock")
-
         override fun create(analyzerConfig: AnalyzerConfiguration) = Poetry(type, analyzerConfig)
     }
+
+    override val globsForDefinitionFiles = listOf("poetry.lock")
 
     override fun resolveDependencies(
         analysisRoot: File,

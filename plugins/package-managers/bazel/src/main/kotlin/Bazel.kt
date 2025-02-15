@@ -104,10 +104,10 @@ internal object BuildozerCommand : CommandLineTool {
 
 class Bazel(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(name, "Bazel", analyzerConfig) {
     class Factory : AbstractPackageManagerFactory<Bazel>("Bazel") {
-        override val globsForDefinitionFiles = listOf("MODULE", "MODULE.bazel")
-
         override fun create(analyzerConfig: AnalyzerConfiguration) = Bazel(type, analyzerConfig)
     }
+
+    override val globsForDefinitionFiles = listOf("MODULE", "MODULE.bazel")
 
     /**
      * To avoid processing the module files in a local registry as definition files, ignore them if they are aside a

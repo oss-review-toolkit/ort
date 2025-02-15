@@ -68,10 +68,10 @@ class Pip(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(
     }
 
     class Factory : AbstractPackageManagerFactory<Pip>("PIP") {
-        override val globsForDefinitionFiles = listOf("*requirements*.txt", "setup.py")
-
         override fun create(analyzerConfig: AnalyzerConfiguration) = Pip(type, analyzerConfig)
     }
+
+    override val globsForDefinitionFiles = listOf("*requirements*.txt", "setup.py")
 
     private val operatingSystemOption = options[OPTION_OPERATING_SYSTEM]?.also { os ->
         require(os.isEmpty() || os in OPERATING_SYSTEMS) {

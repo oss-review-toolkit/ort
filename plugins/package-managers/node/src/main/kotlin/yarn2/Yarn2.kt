@@ -116,10 +116,10 @@ class Yarn2(name: String, analyzerConfig: AnalyzerConfiguration) :
     }
 
     class Factory : AbstractPackageManagerFactory<Yarn2>("Yarn2") {
-        override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE)
-
         override fun create(analyzerConfig: AnalyzerConfiguration) = Yarn2(type, analyzerConfig)
     }
+
+    override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE)
 
     /**
      * The Yarn 2+ executable is not installed globally: The program shipped by the project in `.yarn/releases` is used

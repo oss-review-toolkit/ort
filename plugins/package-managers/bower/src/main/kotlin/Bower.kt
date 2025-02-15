@@ -47,10 +47,10 @@ internal object BowerCommand : CommandLineTool {
  */
 class Bower(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(name, "Bower", analyzerConfig) {
     class Factory : AbstractPackageManagerFactory<Bower>("Bower") {
-        override val globsForDefinitionFiles = listOf("bower.json")
-
         override fun create(analyzerConfig: AnalyzerConfiguration) = Bower(type, analyzerConfig)
     }
+
+    override val globsForDefinitionFiles = listOf("bower.json")
 
     private val graphBuilder = DependencyGraphBuilder(BowerDependencyHandler())
 

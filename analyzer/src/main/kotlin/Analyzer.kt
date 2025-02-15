@@ -80,10 +80,10 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
             "Using the following configuration settings:\n${repositoryConfiguration.toYaml()}"
         }
 
-        val distinctPackageManagers = packageManagers.distinct()
+        val distinctPackageManagers = packageManagers.distinct().map { it.create(config) }
 
         // Associate files by the package manager factory that manages them.
-        val factoryFiles = if (distinctPackageManagers.size == 1 && absoluteProjectPath.isFile) {
+        val managedFiles = if (distinctPackageManagers.size == 1 && absoluteProjectPath.isFile) {
             // If only one package manager is activated and the project path is in fact a file, assume that the file is
             // a definition file for that package manager. This is useful to limit analysis to a single project e.g. for
             // debugging purposes.
@@ -94,11 +94,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
                 distinctPackageManagers,
                 config.excludes(repositoryConfiguration)
             )
-        }
-
-        // Associate mapped files by the package manager that manages them.
-        val managedFiles = factoryFiles.mapNotNull { (factory, files) ->
-            val manager = factory.create(config)
+        }.mapNotNull { (manager, files) ->
             val mappedFiles = manager.mapDefinitionFiles(absoluteProjectPath, files)
             Pair(manager, mappedFiles).takeIf { mappedFiles.isNotEmpty() }
         }.toMap(mutableMapOf())
@@ -119,9 +115,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
             .all { it.isDirectory && (it in managedDirs || it.name in VCS_DIRECTORIES) }
 
         if (!hasOnlyManagedDirs) {
-            val unmanagedPackageManagerFactory = PackageManagerFactory.ALL["Unmanaged"]
-            distinctPackageManagers.find { it == unmanagedPackageManagerFactory }
-                ?.create(config)
+            distinctPackageManagers.find { it.managerName == "Unmanaged" }
                 ?.also { managedFiles[it] = listOf(absoluteProjectPath) }
         }
 

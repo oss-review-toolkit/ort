@@ -138,10 +138,10 @@ class Bundler(name: String, analyzerConfig: AnalyzerConfiguration) : PackageMana
     }
 
     class Factory : AbstractPackageManagerFactory<Bundler>("Bundler") {
-        override val globsForDefinitionFiles = listOf("Gemfile")
-
         override fun create(analyzerConfig: AnalyzerConfiguration) = Bundler(type, analyzerConfig)
     }
+
+    override val globsForDefinitionFiles = listOf("Gemfile")
 
     override fun beforeResolution(analysisRoot: File, definitionFiles: List<File>) {
         // JRuby comes with Bundler as a default Gem, see e.g. [1]. Any manually installed Bundler version will only

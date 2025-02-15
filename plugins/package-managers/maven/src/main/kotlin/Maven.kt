@@ -52,10 +52,10 @@ class Maven(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManage
     analyzerConfig
 ) {
     class Factory : AbstractPackageManagerFactory<Maven>("Maven") {
-        override val globsForDefinitionFiles = listOf("pom.xml")
-
         override fun create(analyzerConfig: AnalyzerConfiguration) = Maven(type, analyzerConfig)
     }
+
+    override val globsForDefinitionFiles = listOf("pom.xml")
 
     private val mavenSupport = MavenSupport(LocalProjectWorkspaceReader { localProjectBuildingResults[it]?.pomFile })
 

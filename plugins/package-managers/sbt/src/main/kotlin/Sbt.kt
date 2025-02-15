@@ -83,10 +83,10 @@ internal object SbtCommand : CommandLineTool {
  */
 class Sbt(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(name, "SBT", analyzerConfig) {
     class Factory : AbstractPackageManagerFactory<Sbt>("SBT") {
-        override val globsForDefinitionFiles = listOf("build.sbt", "build.scala")
-
         override fun create(analyzerConfig: AnalyzerConfiguration) = Sbt(type, analyzerConfig)
     }
+
+    override val globsForDefinitionFiles = listOf("build.sbt", "build.scala")
 
     override fun mapDefinitionFiles(analysisRoot: File, definitionFiles: List<File>): List<File> {
         // Some SBT projects do not have a build file in their root, but they still require "sbt" to be run from the

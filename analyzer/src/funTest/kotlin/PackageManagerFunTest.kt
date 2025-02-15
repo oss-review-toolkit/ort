@@ -32,6 +32,7 @@ import io.kotest.matchers.should
 
 import java.io.File
 
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
@@ -72,6 +73,7 @@ class PackageManagerFunTest : WordSpec({
     )
 
     val projectDir = tempdir()
+    val packageManagers = PackageManagerFactory.ENABLED_BY_DEFAULT.map { it.create(AnalyzerConfiguration()) }
 
     beforeSpec {
         definitionFiles.writeFiles(projectDir)
@@ -79,14 +81,12 @@ class PackageManagerFunTest : WordSpec({
 
     "findManagedFiles" should {
         "find all managed files" {
-            val managedFiles = PackageManager.findManagedFiles(projectDir)
+            val managedFiles = PackageManager.findManagedFiles(projectDir, packageManagers)
 
             // The test project contains at least one file per package manager, so the result should also contain an
             // entry for each package manager.
-            val unmanagedPackageManagerFactory = PackageManagerFactory.ALL.getValue("Unmanaged")
-            managedFiles.keys shouldContainExactlyInAnyOrder PackageManagerFactory.ENABLED_BY_DEFAULT.filterNot {
-                it == unmanagedPackageManagerFactory
-            }
+            managedFiles.keys.map { it.managerName } shouldContainExactlyInAnyOrder
+                PackageManagerFactory.ENABLED_BY_DEFAULT.map { it.type }.filterNot { it == "Unmanaged" }
 
             val managedFilesByName = managedFiles.groupByName(projectDir)
 
@@ -138,11 +138,7 @@ class PackageManagerFunTest : WordSpec({
         "find only files for active package managers" {
             val managedFiles = PackageManager.findManagedFiles(
                 projectDir,
-                setOf(
-                    PackageManagerFactory.ALL.getValue("GradleInspector"),
-                    PackageManagerFactory.ALL.getValue("Pip"),
-                    PackageManagerFactory.ALL.getValue("Sbt")
-                )
+                packageManagers.filter { it.managerName in listOf("GradleInspector", "PIP", "SBT") }
             )
 
             managedFiles shouldHaveSize 3
@@ -176,7 +172,8 @@ class PackageManagerFunTest : WordSpec({
             val pathExclude = PathExclude("$tempDir**", PathExcludeReason.TEST_OF)
             val excludes = Excludes(paths = listOf(pathExclude))
 
-            val managedFilesByName = PackageManager.findManagedFiles(rootDir, excludes = excludes).groupByName(rootDir)
+            val managedFilesByName = PackageManager.findManagedFiles(rootDir, packageManagers, excludes = excludes)
+                .groupByName(rootDir)
 
             managedFilesByName["GradleInspector"] should containExactlyInAnyOrder(
                 "gradle-groovy/build.gradle",
@@ -190,7 +187,7 @@ class PackageManagerFunTest : WordSpec({
             val pathExclude = PathExclude("gradle-groovy/build.gradle", PathExcludeReason.OTHER)
             val excludes = Excludes(paths = listOf(pathExclude))
 
-            val managedFiles = PackageManager.findManagedFiles(projectDir, excludes = excludes)
+            val managedFiles = PackageManager.findManagedFiles(projectDir, packageManagers, excludes = excludes)
             val managedFilesByName = managedFiles.groupByName(projectDir)
 
             managedFilesByName["GradleInspector"] should containExactly(
@@ -200,7 +197,7 @@ class PackageManagerFunTest : WordSpec({
 
         "fail if the provided file is not a directory" {
             shouldThrow<IllegalArgumentException> {
-                PackageManager.findManagedFiles(projectDir.resolve("pom.xml"))
+                PackageManager.findManagedFiles(projectDir.resolve("pom.xml"), packageManagers)
             }
         }
     }
@@ -213,7 +210,7 @@ class PackageManagerFunTest : WordSpec({
  */
 private fun ManagedProjectFiles.groupByName(projectDir: File) =
     map { (manager, files) ->
-        manager.type to files.map { it.relativeTo(projectDir).invariantSeparatorsPath }
+        manager.managerName to files.map { it.relativeTo(projectDir).invariantSeparatorsPath }
     }.toMap()
 
 /**

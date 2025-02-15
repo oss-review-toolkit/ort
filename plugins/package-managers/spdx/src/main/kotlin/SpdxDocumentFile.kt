@@ -28,6 +28,7 @@ import org.apache.logging.log4j.kotlin.logger
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerDependency
+import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.analyzer.toPackageReference
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -257,10 +258,10 @@ private fun hasDefaultScopeLinkage(
 class SpdxDocumentFile(managerName: String, analyzerConfig: AnalyzerConfiguration) :
     PackageManager(managerName, "SpdxDocumentFile", analyzerConfig) {
     class Factory : AbstractPackageManagerFactory<SpdxDocumentFile>("SpdxDocumentFile") {
-        override val globsForDefinitionFiles = listOf("*.spdx.yml", "*.spdx.yaml", "*.spdx.json")
-
         override fun create(analyzerConfig: AnalyzerConfiguration) = SpdxDocumentFile(type, analyzerConfig)
     }
+
+    override val globsForDefinitionFiles = listOf("*.spdx.yml", "*.spdx.yaml", "*.spdx.json")
 
     private val spdxDocumentCache = SpdxDocumentCache()
 
@@ -370,13 +371,17 @@ class SpdxDocumentFile(managerName: String, analyzerConfig: AnalyzerConfiguratio
         val packageFile = definitionFile.resolveSibling(spdxPackage.packageFilename)
 
         if (packageFile.isFile) {
-            val managedFiles = findManagedFiles(packageFile.parentFile)
-            managedFiles.forEach { (factory, files) ->
+            val managedFiles = findManagedFiles(
+                packageFile.parentFile,
+                PackageManagerFactory.ENABLED_BY_DEFAULT.map { it.create(analyzerConfig) }
+            )
+
+            managedFiles.forEach { (manager, files) ->
                 if (files.any { it.canonicalPath == packageFile.canonicalPath }) {
                     // TODO: The data from the spdxPackage is currently ignored, check if some fields need to be
                     //       preserved somehow.
                     return PackageManagerDependency(
-                        packageManager = factory.type,
+                        packageManager = manager.managerName,
                         definitionFile = VersionControlSystem.getPathInfo(packageFile).path,
                         scope = scope,
                         linkage = PackageLinkage.PROJECT_STATIC // TODO: Set linkage based on SPDX reference type.

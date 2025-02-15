@@ -79,10 +79,10 @@ internal object StackCommand : CommandLineTool {
  */
 class Stack(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(name, "Stack", analyzerConfig) {
     class Factory : AbstractPackageManagerFactory<Stack>("Stack") {
-        override val globsForDefinitionFiles = listOf("stack.yaml")
-
         override fun create(analyzerConfig: AnalyzerConfiguration) = Stack(type, analyzerConfig)
     }
+
+    override val globsForDefinitionFiles = listOf("stack.yaml")
 
     override fun beforeResolution(analysisRoot: File, definitionFiles: List<File>) = StackCommand.checkVersion()
 

@@ -57,6 +57,7 @@ class AnalyzerTest : WordSpec({
 
 private class DummyPackageManager(analyzerConfig: AnalyzerConfiguration) :
     PackageManager("Dummy", "Project", analyzerConfig) {
+    override val globsForDefinitionFiles = emptyList<String>()
     val calls = mutableListOf<String>()
 
     override fun beforeResolution(analysisRoot: File, definitionFiles: List<File>) {

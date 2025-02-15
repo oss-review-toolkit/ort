@@ -110,10 +110,10 @@ class Conan(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManage
     }
 
     class Factory : AbstractPackageManagerFactory<Conan>("Conan") {
-        override val globsForDefinitionFiles = listOf("conanfile*.txt", "conanfile*.py")
-
         override fun create(analyzerConfig: AnalyzerConfiguration) = Conan(type, analyzerConfig)
     }
+
+    override val globsForDefinitionFiles = listOf("conanfile*.txt", "conanfile*.py")
 
     private val conanHome = Os.userHomeDirectory.resolve(".conan")
 
