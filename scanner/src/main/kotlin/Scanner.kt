@@ -45,7 +45,6 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.model.TextLocation.Companion.UNKNOWN_LINE
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
@@ -219,7 +218,7 @@ class Scanner(
                 val pathsWithoutFindings = allPaths - pathsWithFindings
 
                 val findingsThatAreNone = pathsWithoutFindings.mapTo(mutableSetOf()) {
-                    LicenseFinding(SpdxConstants.NONE, TextLocation(it, UNKNOWN_LINE))
+                    LicenseFinding(SpdxConstants.NONE, TextLocation(it, TextLocation.UNKNOWN_LINE))
                 }
 
                 scanResult.copy(
