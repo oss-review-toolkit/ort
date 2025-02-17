@@ -55,10 +55,9 @@ internal object PoetryCommand : CommandLineTool {
  */
 class Poetry(
     name: String,
-    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Poetry", analysisRoot, analyzerConfig, repoConfig) {
+) : PackageManager(name, "Poetry", analyzerConfig, repoConfig) {
     companion object {
         /**
          * The name of the build system requirements and information file used by modern Python packages.
@@ -69,14 +68,15 @@ class Poetry(
     class Factory : AbstractPackageManagerFactory<Poetry>("Poetry") {
         override val globsForDefinitionFiles = listOf("poetry.lock")
 
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = Poetry(type, analysisRoot, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+            Poetry(type, analyzerConfig, repoConfig)
     }
 
-    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(
+        analysisRoot: File,
+        definitionFile: File,
+        labels: Map<String, String>
+    ): List<ProjectAnalyzerResult> {
         val scopeName = parseScopeNamesFromPyproject(definitionFile.resolveSibling(PYPROJECT_FILENAME))
         val resultsForScopeName = scopeName.associateWith { inspectLockfile(definitionFile, it) }
 
@@ -126,7 +126,7 @@ class Poetry(
         val poetryAnalyzerConfig = analyzerConfig
             .withPackageManagerOption(managerName, "overrideProjectType", projectType)
 
-        return Pip(managerName, analysisRoot, poetryAnalyzerConfig, repoConfig).runPythonInspector(requirementsFile) {
+        return Pip(managerName, poetryAnalyzerConfig, repoConfig).runPythonInspector(requirementsFile) {
             detectPythonVersion(workingDir)
         }.also {
             requirementsFile.parentFile.safeDeleteRecursively()

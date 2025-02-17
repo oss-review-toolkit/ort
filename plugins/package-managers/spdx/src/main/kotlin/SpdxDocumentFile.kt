@@ -256,18 +256,14 @@ private fun hasDefaultScopeLinkage(
  */
 class SpdxDocumentFile(
     managerName: String,
-    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(managerName, "SpdxDocumentFile", analysisRoot, analyzerConfig, repoConfig) {
+) : PackageManager(managerName, "SpdxDocumentFile", analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<SpdxDocumentFile>("SpdxDocumentFile") {
         override val globsForDefinitionFiles = listOf("*.spdx.yml", "*.spdx.yaml", "*.spdx.json")
 
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = SpdxDocumentFile(type, analysisRoot, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+            SpdxDocumentFile(type, analyzerConfig, repoConfig)
     }
 
     private val spdxDocumentCache = SpdxDocumentCache()
@@ -476,7 +472,7 @@ class SpdxDocumentFile(
             )
         }
 
-    override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> =
+    override fun mapDefinitionFiles(analysisRoot: File, definitionFiles: List<File>): List<File> =
         definitionFiles.associateWith {
             spdxDocumentCache.load(it).getOrNull()
         }.filter { (_, spdxDocument) ->
@@ -495,7 +491,11 @@ class SpdxDocumentFile(
             }
         }.toList()
 
-    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(
+        analysisRoot: File,
+        definitionFile: File,
+        labels: Map<String, String>
+    ): List<ProjectAnalyzerResult> {
         val transitiveDocument = SpdxResolvedDocument.load(spdxDocumentCache, definitionFile, managerName)
 
         val spdxDocument = transitiveDocument.rootDocument.document

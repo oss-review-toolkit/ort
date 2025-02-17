@@ -42,28 +42,28 @@ import org.ossreviewtoolkit.model.utils.parseRepoManifestPath
  */
 class Unmanaged(
     name: String,
-    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Unmanaged", analysisRoot, analyzerConfig, repoConfig) {
+) : PackageManager(name, "Unmanaged", analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Unmanaged>("Unmanaged") {
         // The empty list returned here deliberately causes this special package manager to never be considered in
         // PackageManager.findManagedFiles(). Instead, it will only be explicitly instantiated as part of
         // Analyzer.findManagedFiles().
         override val globsForDefinitionFiles = emptyList<String>()
 
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = Unmanaged(type, analysisRoot, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+            Unmanaged(type, analyzerConfig, repoConfig)
     }
 
     /**
      * Return a list with a single [ProjectAnalyzerResult] for the "unmanaged" [Project] defined by the
      * [definitionFile], which in this case is a directory. No dependency resolution is performed.
      */
-    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(
+        analysisRoot: File,
+        definitionFile: File,
+        labels: Map<String, String>
+    ): List<ProjectAnalyzerResult> {
         val vcsInfo = VersionControlSystem.getCloneInfo(definitionFile)
 
         val id = when {

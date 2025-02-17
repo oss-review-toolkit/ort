@@ -58,13 +58,11 @@ private const val OPTION_ANALYZE_SETUP_PY_INSECURELY_DEFAULT = true
  */
 class Pip(
     name: String,
-    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(
     name,
     analyzerConfig.getPackageManagerConfiguration(name)?.options?.get("overrideProjectType") ?: "PIP",
-    analysisRoot,
     analyzerConfig,
     repoConfig
 ) {
@@ -77,11 +75,8 @@ class Pip(
     class Factory : AbstractPackageManagerFactory<Pip>("PIP") {
         override val globsForDefinitionFiles = listOf("*requirements*.txt", "setup.py")
 
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = Pip(type, analysisRoot, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+            Pip(type, analyzerConfig, repoConfig)
     }
 
     private val operatingSystemOption = options[OPTION_OPERATING_SYSTEM]?.also { os ->
@@ -104,7 +99,11 @@ class Pip(
         }
     }
 
-    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(
+        analysisRoot: File,
+        definitionFile: File,
+        labels: Map<String, String>
+    ): List<ProjectAnalyzerResult> {
         val result = runPythonInspector(definitionFile) { detectPythonVersion(definitionFile.parentFile) }
 
         val project = result.toOrtProject(projectType, analysisRoot, definitionFile)

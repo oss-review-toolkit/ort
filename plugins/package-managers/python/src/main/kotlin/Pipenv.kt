@@ -52,23 +52,23 @@ internal object PipenvCommand : CommandLineTool {
 
 class Pipenv(
     name: String,
-    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Pipenv", analysisRoot, analyzerConfig, repoConfig) {
+) : PackageManager(name, "Pipenv", analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Pipenv>("Pipenv") {
         override val globsForDefinitionFiles = listOf("Pipfile.lock")
 
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = Pipenv(type, analysisRoot, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+            Pipenv(type, analyzerConfig, repoConfig)
     }
 
-    override fun beforeResolution(definitionFiles: List<File>) = PipenvCommand.checkVersion()
+    override fun beforeResolution(analysisRoot: File, definitionFiles: List<File>) = PipenvCommand.checkVersion()
 
-    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(
+        analysisRoot: File,
+        definitionFile: File,
+        labels: Map<String, String>
+    ): List<ProjectAnalyzerResult> {
         // For an overview, dependency resolution involves the following steps:
         // 1. Generate "requirements.txt" file with `pipenv` command
         // 2. Use existing "Pip" PackageManager to do the actual dependency resolution
@@ -89,8 +89,8 @@ class Pipenv(
         val pipenvAnalyzerConfig = analyzerConfig
             .withPackageManagerOption(managerName, "overrideProjectType", projectType)
 
-        return Pip(managerName, analysisRoot, pipenvAnalyzerConfig, repoConfig)
-            .resolveDependencies(requirementsFile, labels)
+        return Pip(managerName, pipenvAnalyzerConfig, repoConfig)
+            .resolveDependencies(analysisRoot, requirementsFile, labels)
             .also { requirementsFile.delete() }
     }
 }

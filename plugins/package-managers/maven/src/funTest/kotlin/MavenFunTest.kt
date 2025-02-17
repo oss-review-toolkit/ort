@@ -30,6 +30,7 @@ import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
@@ -54,8 +55,10 @@ class MavenFunTest : StringSpec({
         // resolution of transitive dependencies would not work.
         val managerResult = with(create("Maven")) {
             val definitionFiles = listOf(definitionFileApp, definitionFileLib)
-            beforeResolution(definitionFiles)
-            resolveDependencies(definitionFiles, emptyMap()).also { afterResolution(definitionFiles) }
+            beforeResolution(USER_DIR, definitionFiles)
+            resolveDependencies(USER_DIR, definitionFiles, emptyMap()).also {
+                afterResolution(USER_DIR, definitionFiles)
+            }
         }
 
         val result = managerResult.projectResults[definitionFileApp]

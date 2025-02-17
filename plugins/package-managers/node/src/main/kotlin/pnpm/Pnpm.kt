@@ -51,18 +51,14 @@ internal object PnpmCommand : CommandLineTool {
  */
 class Pnpm(
     name: String,
-    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : NodePackageManager(name, NodePackageManagerType.PNPM, analysisRoot, analyzerConfig, repoConfig) {
+) : NodePackageManager(name, NodePackageManagerType.PNPM, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Pnpm>("PNPM") {
         override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE, "pnpm-lock.yaml")
 
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = Pnpm(type, analysisRoot, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+            Pnpm(type, analyzerConfig, repoConfig)
     }
 
     private lateinit var stash: DirectoryStash
@@ -72,18 +68,22 @@ class Pnpm(
 
     override val graphBuilder by lazy { DependencyGraphBuilder(handler) }
 
-    override fun beforeResolution(definitionFiles: List<File>) {
+    override fun beforeResolution(analysisRoot: File, definitionFiles: List<File>) {
         PnpmCommand.checkVersion()
 
         val directories = definitionFiles.mapTo(mutableSetOf()) { it.resolveSibling("node_modules") }
         stash = DirectoryStash(directories)
     }
 
-    override fun afterResolution(definitionFiles: List<File>) {
+    override fun afterResolution(analysisRoot: File, definitionFiles: List<File>) {
         stash.close()
     }
 
-    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(
+        analysisRoot: File,
+        definitionFile: File,
+        labels: Map<String, String>
+    ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
         installDependencies(workingDir)
 

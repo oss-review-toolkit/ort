@@ -98,8 +98,8 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
 
         // Associate mapped files by the package manager that manages them.
         val managedFiles = factoryFiles.mapNotNull { (factory, files) ->
-            val manager = factory.create(absoluteProjectPath, config, repositoryConfiguration)
-            val mappedFiles = manager.mapDefinitionFiles(files)
+            val manager = factory.create(config, repositoryConfiguration)
+            val mappedFiles = manager.mapDefinitionFiles(absoluteProjectPath, files)
             Pair(manager, mappedFiles).takeIf { mappedFiles.isNotEmpty() }
         }.toMap(mutableMapOf())
 
@@ -121,7 +121,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
         if (!hasOnlyManagedDirs) {
             val unmanagedPackageManagerFactory = PackageManagerFactory.ALL["Unmanaged"]
             distinctPackageManagers.find { it == unmanagedPackageManagerFactory }
-                ?.create(absoluteProjectPath, config, repositoryConfiguration)
+                ?.create(config, repositoryConfiguration)
                 ?.also { managedFiles[it] = listOf(absoluteProjectPath) }
         }
 
@@ -140,7 +140,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
         val startTime = Instant.now()
 
         // Resolve dependencies per package manager.
-        val analyzerResult = analyzeInParallel(info.managedFiles)
+        val analyzerResult = analyzeInParallel(info)
 
         val workingTree = VersionControlSystem.forDirectory(info.absoluteProjectPath)
         val vcs = workingTree?.getInfo().orEmpty()
@@ -165,21 +165,22 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
         return OrtResult(repository = repository, analyzer = run).setPackageCurations(packageCurationProviders)
     }
 
-    private fun analyzeInParallel(managedFiles: Map<PackageManager, List<File>>): AnalyzerResult {
-        logger.info { "Calling before resolution hooks for ${managedFiles.size} manager(s)." }
+    private fun analyzeInParallel(info: ManagedFileInfo): AnalyzerResult {
+        logger.info { "Calling before resolution hooks for ${info.managedFiles.size} manager(s)." }
 
-        managedFiles.forEach { (manager, definitionFiles) ->
-            manager.beforeResolution(definitionFiles)
+        info.managedFiles.forEach { (manager, definitionFiles) ->
+            manager.beforeResolution(info.absoluteProjectPath, definitionFiles)
         }
 
         val state = AnalyzerState()
-        val packageManagerDependencies = determinePackageManagerDependencies(managedFiles)
+        val packageManagerDependencies = determinePackageManagerDependencies(info)
 
         runBlocking {
-            managedFiles.entries.map { (manager, files) ->
+            info.managedFiles.entries.map { (manager, files) ->
                 PackageManagerRunner(
                     manager = manager,
                     definitionFiles = files,
+                    analysisRoot = info.absoluteProjectPath,
                     labels = labels,
                     mustRunAfter = packageManagerDependencies[manager].orEmpty(),
                     finishedPackageManagersState = state.finishedPackageManagersState,
@@ -188,31 +189,31 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
             }.forEach { launch { it.start() } }
 
             state.finishedPackageManagersState.first { finishedPackageManagers ->
-                finishedPackageManagers.containsAll(managedFiles.keys.map { it.managerName })
+                finishedPackageManagers.containsAll(info.managedFiles.keys.map { it.managerName })
             }
         }
 
-        logger.info { "Calling after resolution hooks for ${managedFiles.size} manager(s)." }
+        logger.info { "Calling after resolution hooks for ${info.managedFiles.size} manager(s)." }
 
-        managedFiles.forEach { (manager, definitionFiles) ->
-            manager.afterResolution(definitionFiles)
+        info.managedFiles.forEach { (manager, definitionFiles) ->
+            manager.afterResolution(info.absoluteProjectPath, definitionFiles)
         }
 
-        val excludes = managedFiles.keys.firstOrNull()?.excludes ?: Excludes.EMPTY
+        val excludes = info.managedFiles.keys.firstOrNull()?.excludes ?: Excludes.EMPTY
         return state.buildResult(excludes)
     }
 
-    private fun determinePackageManagerDependencies(
-        managedFiles: Map<PackageManager, List<File>>
-    ): Map<PackageManager, Set<String>> {
-        val packageManagersWithFiles = managedFiles.keys.associateByTo(sortedMapOf(String.CASE_INSENSITIVE_ORDER)) {
-            it.managerName
-        }
+    private fun determinePackageManagerDependencies(info: ManagedFileInfo): Map<PackageManager, Set<String>> {
+        val packageManagersWithFiles =
+            info.managedFiles.keys.associateByTo(sortedMapOf(String.CASE_INSENSITIVE_ORDER)) {
+                it.managerName
+            }
 
         val result = mutableMapOf<PackageManager, MutableSet<String>>()
 
-        managedFiles.keys.forEach { packageManager ->
-            val dependencies = packageManager.findPackageManagerDependencies(managedFiles)
+        info.managedFiles.keys.forEach { packageManager ->
+            val dependencies =
+                packageManager.findPackageManagerDependencies(info.absoluteProjectPath, info.managedFiles)
             val mustRunAfterConfig = config.getPackageManagerConfiguration(packageManager.managerName)?.mustRunAfter
 
             // Configured mustRunAfter dependencies override programmatic mustRunAfter dependencies.
@@ -292,6 +293,11 @@ private class PackageManagerRunner(
     val definitionFiles: List<File>,
 
     /**
+     * The root directory of the analysis.
+     */
+    val analysisRoot: File,
+
+    /**
      * The labels passed to ORT.
      */
     val labels: Map<String, String>,
@@ -338,7 +344,7 @@ private class PackageManagerRunner(
         logger.info { "Starting ${manager.managerName} analysis." }
 
         withContext(Dispatchers.IO.limitedParallelism(20)) {
-            val result = manager.resolveDependencies(definitionFiles, labels)
+            val result = manager.resolveDependencies(analysisRoot, definitionFiles, labels)
 
             logger.info { "Finished ${manager.managerName} analysis." }
 

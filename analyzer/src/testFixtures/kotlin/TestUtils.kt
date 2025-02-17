@@ -46,8 +46,8 @@ import org.ossreviewtoolkit.utils.test.USER_DIR
 fun PackageManager.resolveSingleProject(definitionFile: File, resolveScopes: Boolean = false): ProjectAnalyzerResult {
     val definitionFiles = listOf(definitionFile)
 
-    beforeResolution(definitionFiles)
-    val managerResult = resolveDependencies(definitionFiles, emptyMap())
+    beforeResolution(USER_DIR, definitionFiles)
+    val managerResult = resolveDependencies(USER_DIR, definitionFiles, emptyMap())
 
     val resultList = managerResult.projectResults[definitionFile]
     resultList.shouldNotBeNull()
@@ -57,7 +57,7 @@ fun PackageManager.resolveSingleProject(definitionFile: File, resolveScopes: Boo
         if (resolveScopes) managerResult.resolveScopes(it) else it
     }
 
-    afterResolution(definitionFiles)
+    afterResolution(USER_DIR, definitionFiles)
 
     return result
 }
@@ -67,7 +67,7 @@ fun PackageManager.resolveSingleProject(definitionFile: File, resolveScopes: Boo
  * be collated in an [AnalyzerResult] with their dependency graph.
  */
 fun PackageManager.collateMultipleProjects(vararg definitionFiles: File): AnalyzerResult {
-    val managerResult = resolveDependencies(definitionFiles.asList(), emptyMap())
+    val managerResult = resolveDependencies(USER_DIR, definitionFiles.asList(), emptyMap())
 
     val builder = AnalyzerResultBuilder()
     managerResult.dependencyGraph?.also {
@@ -144,7 +144,7 @@ fun create(
     managerName: String,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration = RepositoryConfiguration()
-) = PackageManagerFactory.ALL.getValue(managerName).create(USER_DIR, analyzerConfig, repoConfig)
+) = PackageManagerFactory.ALL.getValue(managerName).create(analyzerConfig, repoConfig)
 
 fun create(
     managerName: String,
