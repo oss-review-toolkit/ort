@@ -64,10 +64,9 @@ internal object NpmCommand : CommandLineTool {
  */
 class Npm(
     name: String,
-    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : NodePackageManager(name, NodePackageManagerType.NPM, analysisRoot, analyzerConfig, repoConfig) {
+) : NodePackageManager(name, NodePackageManagerType.NPM, analyzerConfig, repoConfig) {
     companion object {
         /** Name of the configuration option to toggle legacy peer dependency support. */
         const val OPTION_LEGACY_PEER_DEPS = "legacyPeerDeps"
@@ -76,11 +75,8 @@ class Npm(
     class Factory : AbstractPackageManagerFactory<Npm>("NPM") {
         override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE)
 
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = Npm(type, analysisRoot, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+            Npm(type, analyzerConfig, repoConfig)
     }
 
     private lateinit var stash: DirectoryStash
@@ -91,20 +87,24 @@ class Npm(
 
     override val graphBuilder by lazy { DependencyGraphBuilder(handler) }
 
-    override fun beforeResolution(definitionFiles: List<File>) {
+    override fun beforeResolution(analysisRoot: File, definitionFiles: List<File>) {
         NpmCommand.checkVersion()
 
         val directories = definitionFiles.mapTo(mutableSetOf()) { it.resolveSibling("node_modules") }
         stash = DirectoryStash(directories)
     }
 
-    override fun afterResolution(definitionFiles: List<File>) {
+    override fun afterResolution(analysisRoot: File, definitionFiles: List<File>) {
         stash.close()
     }
 
-    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(
+        analysisRoot: File,
+        definitionFile: File,
+        labels: Map<String, String>
+    ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
-        val issues = installDependencies(workingDir).toMutableList()
+        val issues = installDependencies(analysisRoot, workingDir).toMutableList()
 
         if (issues.any { it.severity == Severity.ERROR }) {
             val project = runCatching {
@@ -158,8 +158,8 @@ class Npm(
         }.getOrNull()
     }
 
-    private fun installDependencies(workingDir: File): List<Issue> {
-        requireLockfile(workingDir) { managerType.hasLockfile(workingDir) }
+    private fun installDependencies(analysisRoot: File, workingDir: File): List<Issue> {
+        requireLockfile(analysisRoot, workingDir) { managerType.hasLockfile(workingDir) }
 
         val options = listOfNotNull(
             "--ignore-scripts",

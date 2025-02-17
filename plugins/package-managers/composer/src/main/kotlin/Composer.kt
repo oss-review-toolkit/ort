@@ -85,21 +85,17 @@ internal object ComposerCommand : CommandLineTool {
  */
 class Composer(
     name: String,
-    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Composer", analysisRoot, analyzerConfig, repoConfig) {
+) : PackageManager(name, "Composer", analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Composer>("Composer") {
         override val globsForDefinitionFiles = listOf("composer.json")
 
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = Composer(type, analysisRoot, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+            Composer(type, analyzerConfig, repoConfig)
     }
 
-    override fun beforeResolution(definitionFiles: List<File>) {
+    override fun beforeResolution(analysisRoot: File, definitionFiles: List<File>) {
         // If all directories we are analyzing contain a composer.phar, no global installation of Composer is required
         // and hence we skip the version check.
         if (definitionFiles.all { File(it.parentFile, COMPOSER_PHAR_BINARY).isFile }) return
@@ -109,7 +105,7 @@ class Composer(
         ComposerCommand.checkVersion()
     }
 
-    override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> {
+    override fun mapDefinitionFiles(analysisRoot: File, definitionFiles: List<File>): List<File> {
         val projectFiles = definitionFiles.toMutableList()
 
         // Ignore definition files from vendor directories that reside next to other definition files, to avoid the
@@ -124,14 +120,18 @@ class Composer(
         return projectFiles
     }
 
-    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(
+        analysisRoot: File,
+        definitionFile: File,
+        labels: Map<String, String>
+    ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
 
         val projectPackageInfo = parsePackageInfo(definitionFile.readText())
         val hasDependencies = projectPackageInfo.require.isNotEmpty()
 
         if (!hasDependencies) {
-            val project = parseProject(definitionFile, scopes = emptySet())
+            val project = parseProject(analysisRoot, definitionFile, scopes = emptySet())
             val result = ProjectAnalyzerResult(project, packages = emptySet())
 
             return listOf(result)
@@ -140,7 +140,7 @@ class Composer(
         val lockfile = stashDirectories(workingDir.resolve("vendor")).use { _ ->
             val lockfileProvider = LockfileProvider(definitionFile)
 
-            requireLockfile(workingDir) { lockfileProvider.lockfile.isFile }
+            requireLockfile(analysisRoot, workingDir) { lockfileProvider.lockfile.isFile }
 
             lockfileProvider.ensureLockfile {
                 logger.info { "Parsing lockfile at '$it'..." }
@@ -166,7 +166,7 @@ class Composer(
             Scope(scopeName, dependencies)
         }
 
-        val project = parseProject(definitionFile, scopes)
+        val project = parseProject(analysisRoot, definitionFile, scopes)
         val result = ProjectAnalyzerResult(project, packages.values.toSet())
 
         return listOf(result)
@@ -219,7 +219,7 @@ class Composer(
         return packageReferences
     }
 
-    private fun parseProject(definitionFile: File, scopes: Set<Scope>): Project {
+    private fun parseProject(analysisRoot: File, definitionFile: File, scopes: Set<Scope>): Project {
         logger.info { "Parsing project metadata from '$definitionFile'..." }
 
         val pkgInfo = parsePackageInfo(definitionFile.readText())

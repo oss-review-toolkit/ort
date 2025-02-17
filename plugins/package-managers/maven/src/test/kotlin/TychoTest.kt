@@ -97,8 +97,8 @@ class TychoTest : WordSpec({
                 tychoSubModule
             )
 
-            val tycho = Tycho("Tycho", tempdir(), mockk(relaxed = true), mockk(relaxed = true))
-            val mappedDefinitionFiles = tycho.mapDefinitionFiles(definitionFiles)
+            val tycho = Tycho("Tycho", mockk(relaxed = true), mockk(relaxed = true))
+            val mappedDefinitionFiles = tycho.mapDefinitionFiles(tempdir(), definitionFiles)
 
             mappedDefinitionFiles shouldContainExactlyInAnyOrder listOf(tychoDefinitionFile1, tychoDefinitionFile2)
         }
@@ -111,7 +111,7 @@ class TychoTest : WordSpec({
             val subProject = createMavenProject("sub")
             val projectsList = listOf(rootProject, subProject)
 
-            val tycho = spyk(Tycho("Tycho", tempdir(), mockk(relaxed = true), mockk(relaxed = true)))
+            val tycho = spyk(Tycho("Tycho", mockk(relaxed = true), mockk(relaxed = true)))
             injectCliMock(tycho, projectsList.toJson(), projectsList)
 
             val pkg1 = mockk<Package>(relaxed = true)
@@ -126,7 +126,7 @@ class TychoTest : WordSpec({
 
             every { tycho.createGraphBuilder(any(), any(), any(), any()) } returns graphBuilder
 
-            val results = tycho.resolveDependencies(definitionFile, emptyMap())
+            val results = tycho.resolveDependencies(tempdir(), definitionFile, emptyMap())
 
             val (rootResults, subResults) = results.partition { it.project.id.name == "root" }
 
@@ -148,11 +148,11 @@ class TychoTest : WordSpec({
 
             val buildOutput = listOf(subProject2, rootProject, subProject1).toJson()
 
-            val tycho = spyk(Tycho("Tycho", tempdir(), mockk(relaxed = true), mockk(relaxed = true)))
+            val tycho = spyk(Tycho("Tycho", mockk(relaxed = true), mockk(relaxed = true)))
             injectCliMock(tycho, buildOutput, listOf(subProject1, subProject2))
 
             val exception = shouldThrow<TychoBuildException> {
-                tycho.resolveDependencies(definitionFile, emptyMap())
+                tycho.resolveDependencies(tempdir(), definitionFile, emptyMap())
             }
 
             exception.message shouldContain "Tycho root project could not be built."
@@ -164,10 +164,10 @@ class TychoTest : WordSpec({
             val subProject = createMavenProject("sub")
             val projectsList = listOf(rootProject, subProject)
 
-            val tycho = spyk(Tycho("Tycho", tempdir(), mockk(relaxed = true), mockk(relaxed = true)))
+            val tycho = spyk(Tycho("Tycho", mockk(relaxed = true), mockk(relaxed = true)))
             injectCliMock(tycho, projectsList.toJson(), projectsList, exitCode = 1)
 
-            val results = tycho.resolveDependencies(definitionFile, emptyMap())
+            val results = tycho.resolveDependencies(tempdir(), definitionFile, emptyMap())
 
             val rootResults = results.single { it.project.id.name == "root" }
             with(rootResults.issues.single()) {
@@ -185,10 +185,10 @@ class TychoTest : WordSpec({
             val subProject3 = createMavenProject("sub3")
             val projectsList = listOf(rootProject, subProject1, subProject2, subProject3)
 
-            val tycho = spyk(Tycho("Tycho", tempdir(), mockk(relaxed = true), mockk(relaxed = true)))
+            val tycho = spyk(Tycho("Tycho", mockk(relaxed = true), mockk(relaxed = true)))
             injectCliMock(tycho, projectsList.take(2).toJson(), projectsList, exitCode = 1)
 
-            val results = tycho.resolveDependencies(definitionFile, emptyMap())
+            val results = tycho.resolveDependencies(tempdir(), definitionFile, emptyMap())
 
             val rootResults = results.single { it.project.id.name == "root" }
             rootResults.issues.forAll { issue ->
@@ -227,10 +227,10 @@ class TychoTest : WordSpec({
             val analyzerConfig = AnalyzerConfiguration(skipExcluded = true)
             val repositoryConfig = RepositoryConfiguration(excludes = excludes)
 
-            val tycho = spyk(Tycho("Tycho", analysisRoot, analyzerConfig, repositoryConfig))
+            val tycho = spyk(Tycho("Tycho", analyzerConfig, repositoryConfig))
             val cli = injectCliMock(tycho, listOf(rootProject).toJson(), listOf(rootProject))
 
-            tycho.resolveDependencies(tychoRoot.pom, emptyMap())
+            tycho.resolveDependencies(analysisRoot, tychoRoot.pom, emptyMap())
 
             val slotArgs = slot<Array<String>>()
             verify {
@@ -260,10 +260,10 @@ class TychoTest : WordSpec({
             val analyzerConfig = AnalyzerConfiguration(skipExcluded = true)
             val repositoryConfig = RepositoryConfiguration(excludes = excludes)
 
-            val tycho = spyk(Tycho("Tycho", analysisRoot, analyzerConfig, repositoryConfig))
+            val tycho = spyk(Tycho("Tycho", analyzerConfig, repositoryConfig))
             val cli = injectCliMock(tycho, listOf(rootProject).toJson(), listOf(rootProject))
 
-            tycho.resolveDependencies(tychoRoot.pom, emptyMap())
+            tycho.resolveDependencies(analysisRoot, tychoRoot.pom, emptyMap())
 
             val slotArgs = slot<Array<String>>()
             verify {
@@ -287,10 +287,10 @@ class TychoTest : WordSpec({
             val analyzerConfig = AnalyzerConfiguration()
             val repositoryConfig = RepositoryConfiguration(excludes = excludes)
 
-            val tycho = spyk(Tycho("Tycho", analysisRoot, analyzerConfig, repositoryConfig))
+            val tycho = spyk(Tycho("Tycho", analyzerConfig, repositoryConfig))
             val cli = injectCliMock(tycho, listOf(rootProject).toJson(), listOf(rootProject))
 
-            tycho.resolveDependencies(tychoRoot.pom, emptyMap())
+            tycho.resolveDependencies(analysisRoot, tychoRoot.pom, emptyMap())
 
             val slotArgs = slot<Array<String>>()
             verify {

@@ -62,7 +62,7 @@ class NpmTest : WordSpec({
                     packageManagers = mapOf(analyzerName to npmConfig)
                 )
 
-                val npm = Npm(analyzerName, workingDir, analyzerConfig, RepositoryConfiguration())
+                val npm = Npm(analyzerName, analyzerConfig, RepositoryConfiguration())
 
                 val process = mockk<ProcessCapture>()
                 every { process.isError } returns true
@@ -70,7 +70,7 @@ class NpmTest : WordSpec({
                 every { process.stderr } returns errorText
                 every { NpmCommand.run(workingDir, "install", *anyVararg()) } returns process
 
-                val results = npm.resolveDependencies(definitionFile, emptyMap())
+                val results = npm.resolveDependencies(workingDir, definitionFile, emptyMap())
 
                 results shouldHaveSize 1
 

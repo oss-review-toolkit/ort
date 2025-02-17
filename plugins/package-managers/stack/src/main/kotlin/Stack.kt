@@ -79,23 +79,23 @@ internal object StackCommand : CommandLineTool {
  */
 class Stack(
     name: String,
-    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Stack", analysisRoot, analyzerConfig, repoConfig) {
+) : PackageManager(name, "Stack", analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Stack>("Stack") {
         override val globsForDefinitionFiles = listOf("stack.yaml")
 
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = Stack(type, analysisRoot, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+            Stack(type, analyzerConfig, repoConfig)
     }
 
-    override fun beforeResolution(definitionFiles: List<File>) = StackCommand.checkVersion()
+    override fun beforeResolution(analysisRoot: File, definitionFiles: List<File>) = StackCommand.checkVersion()
 
-    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(
+        analysisRoot: File,
+        definitionFile: File,
+        labels: Map<String, String>
+    ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
 
         val dependenciesForScopeName = SCOPE_NAMES.associateWith { listDependencies(workingDir, it) }

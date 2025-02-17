@@ -94,10 +94,9 @@ internal object ConanCommand : CommandLineTool {
 @Suppress("TooManyFunctions")
 class Conan(
     name: String,
-    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Conan", analysisRoot, analyzerConfig, repoConfig) {
+) : PackageManager(name, "Conan", analyzerConfig, repoConfig) {
     companion object {
         /**
          * The name of the option to specify the name of the lockfile.
@@ -117,11 +116,8 @@ class Conan(
     class Factory : AbstractPackageManagerFactory<Conan>("Conan") {
         override val globsForDefinitionFiles = listOf("conanfile*.txt", "conanfile*.py")
 
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = Conan(type, analysisRoot, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+            Conan(type, analyzerConfig, repoConfig)
     }
 
     private val conanHome = Os.userHomeDirectory.resolve(".conan")
@@ -139,21 +135,25 @@ class Conan(
 
     private fun hasLockfile(file: String) = File(file).isFile
 
-    override fun beforeResolution(definitionFiles: List<File>) = ConanCommand.checkVersion()
+    override fun beforeResolution(analysisRoot: File, definitionFiles: List<File>) = ConanCommand.checkVersion()
 
     /**
      * Primary method for resolving dependencies from [definitionFile].
      */
-    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> =
+    override fun resolveDependencies(
+        analysisRoot: File,
+        definitionFile: File,
+        labels: Map<String, String>
+    ): List<ProjectAnalyzerResult> =
         try {
-            resolvedDependenciesInternal(definitionFile)
+            resolvedDependenciesInternal(analysisRoot, definitionFile)
         } finally {
             // Clear the inspection result cache, because we call "conan config install" for each definition file which
             // could overwrite the remotes and result in different metadata for packages with the same name and version.
             pkgInspectResults.clear()
         }
 
-    private fun resolvedDependenciesInternal(definitionFile: File): List<ProjectAnalyzerResult> {
+    private fun resolvedDependenciesInternal(analysisRoot: File, definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
 
         // TODO: Support customizing the "conan_config" directory name, and also support getting the config from a URL.
@@ -168,7 +168,9 @@ class Conan(
 
             // TODO: Support lockfiles which are located in a different directory than the definition file.
             val lockfileName = options[OPTION_LOCKFILE_NAME]
-            requireLockfile(workingDir) { lockfileName?.let { hasLockfile(workingDir.resolve(it).path) } == true }
+            requireLockfile(analysisRoot, workingDir) {
+                lockfileName?.let { hasLockfile(workingDir.resolve(it).path) } == true
+            }
 
             val jsonFile = createOrtTempDir().resolve("info.json")
             if (lockfileName != null) {

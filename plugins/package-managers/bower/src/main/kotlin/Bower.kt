@@ -47,25 +47,25 @@ internal object BowerCommand : CommandLineTool {
  */
 class Bower(
     name: String,
-    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Bower", analysisRoot, analyzerConfig, repoConfig) {
+) : PackageManager(name, "Bower", analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Bower>("Bower") {
         override val globsForDefinitionFiles = listOf("bower.json")
 
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = Bower(type, analysisRoot, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+            Bower(type, analyzerConfig, repoConfig)
     }
 
     private val graphBuilder = DependencyGraphBuilder(BowerDependencyHandler())
 
-    override fun beforeResolution(definitionFiles: List<File>) = BowerCommand.checkVersion()
+    override fun beforeResolution(analysisRoot: File, definitionFiles: List<File>) = BowerCommand.checkVersion()
 
-    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(
+        analysisRoot: File,
+        definitionFile: File,
+        labels: Map<String, String>
+    ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
 
         stashDirectories(workingDir.resolve("bower_components")).use { _ ->

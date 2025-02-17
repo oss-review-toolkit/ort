@@ -69,29 +69,25 @@ internal object CargoCommand : CommandLineTool {
  */
 class Cargo(
     name: String,
-    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Cargo", analysisRoot, analyzerConfig, repoConfig) {
+) : PackageManager(name, "Cargo", analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Cargo>("Cargo") {
         override val globsForDefinitionFiles = listOf("Cargo.toml")
 
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = Cargo(type, analysisRoot, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+            Cargo(type, analyzerConfig, repoConfig)
     }
 
     /**
      * Cargo.lock is located next to Cargo.toml or in one of the parent directories. The latter is the case when the
      * project is part of a workspace. Cargo.lock is then located next to the Cargo.toml file defining the workspace.
      */
-    private fun resolveLockfile(metadata: CargoMetadata): File {
+    private fun resolveLockfile(analysisRoot: File, metadata: CargoMetadata): File {
         val workspaceRoot = File(metadata.workspaceRoot)
         val lockfile = workspaceRoot.resolve("Cargo.lock")
 
-        requireLockfile(workspaceRoot) { lockfile.isFile }
+        requireLockfile(analysisRoot, workspaceRoot) { lockfile.isFile }
 
         return lockfile
     }
@@ -129,7 +125,7 @@ class Cargo(
         }
     }
 
-    override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> {
+    override fun mapDefinitionFiles(analysisRoot: File, definitionFiles: List<File>): List<File> {
         fun File.isVirtualWorkspace(): Boolean {
             var foundWorkspace = false
             var foundPackage = false
@@ -147,7 +143,11 @@ class Cargo(
         return definitionFiles.mapNotNull { file -> file.takeUnless { it.isVirtualWorkspace() } }
     }
 
-    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(
+        analysisRoot: File,
+        definitionFile: File,
+        labels: Map<String, String>
+    ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
         val metadataProcess = CargoCommand.run("metadata", "--format-version=1", "--manifest-path=$definitionFile")
             .requireSuccess()
@@ -193,7 +193,7 @@ class Cargo(
             depNodesByKind[BUILD_KIND_NAME]?.let { Scope("build-dependencies", it.toPackageReferences()) }
         )
 
-        val hashes = readHashes(resolveLockfile(metadata))
+        val hashes = readHashes(resolveLockfile(analysisRoot, metadata))
         val projectPkg = packageById.getValue(projectId).let { cargoPkg ->
             cargoPkg.toPackage(hashes).let { it.copy(id = it.id.copy(type = projectType)) }
         }

@@ -38,10 +38,9 @@ import org.ossreviewtoolkit.utils.common.realFile
 abstract class NodePackageManager(
     managerName: String,
     val managerType: NodePackageManagerType,
-    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(managerName, managerType.projectType, analysisRoot, analyzerConfig, repoConfig) {
+) : PackageManager(managerName, managerType.projectType, analyzerConfig, repoConfig) {
     protected abstract val graphBuilder: DependencyGraphBuilder<*>
 
     protected fun parseProject(packageJsonFile: File, analysisRoot: File): Project {
@@ -88,7 +87,7 @@ abstract class NodePackageManager(
         )
     }
 
-    override fun mapDefinitionFiles(definitionFiles: List<File>) =
+    override fun mapDefinitionFiles(analysisRoot: File, definitionFiles: List<File>) =
         NodePackageManagerDetection(definitionFiles).filterApplicable(managerType)
 
     override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =

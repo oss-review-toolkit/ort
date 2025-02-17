@@ -92,18 +92,14 @@ internal object YarnCommand : CommandLineTool {
  */
 open class Yarn(
     name: String,
-    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : NodePackageManager(name, NodePackageManagerType.YARN, analysisRoot, analyzerConfig, repoConfig) {
+) : NodePackageManager(name, NodePackageManagerType.YARN, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Yarn>("Yarn") {
         override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE)
 
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = Yarn(type, analysisRoot, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+            Yarn(type, analyzerConfig, repoConfig)
     }
 
     private lateinit var stash: DirectoryStash
@@ -133,20 +129,24 @@ open class Yarn(
         }
     }
 
-    override fun beforeResolution(definitionFiles: List<File>) {
+    override fun beforeResolution(analysisRoot: File, definitionFiles: List<File>) {
         YarnCommand.checkVersion()
 
         val directories = definitionFiles.mapTo(mutableSetOf()) { it.resolveSibling("node_modules") }
         stash = DirectoryStash(directories)
     }
 
-    override fun afterResolution(definitionFiles: List<File>) {
+    override fun afterResolution(analysisRoot: File, definitionFiles: List<File>) {
         stash.close()
     }
 
-    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> =
+    override fun resolveDependencies(
+        analysisRoot: File,
+        definitionFile: File,
+        labels: Map<String, String>
+    ): List<ProjectAnalyzerResult> =
         try {
-            resolveDependenciesInternal(definitionFile)
+            resolveDependenciesInternal(analysisRoot, definitionFile)
         } finally {
             rawModuleInfoCache.clear()
         }
@@ -164,9 +164,9 @@ open class Yarn(
     )
 
     // TODO: Add support for bundledDependencies.
-    private fun resolveDependenciesInternal(definitionFile: File): List<ProjectAnalyzerResult> {
+    private fun resolveDependenciesInternal(analysisRoot: File, definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
-        installDependencies(workingDir)
+        installDependencies(analysisRoot, workingDir)
 
         val projectDirs = findWorkspaceSubmodules(workingDir) + definitionFile.parentFile
 
@@ -338,8 +338,8 @@ open class Yarn(
             loadWorkspaceSubmodules(moduleDir)
         }
 
-    private fun installDependencies(workingDir: File) {
-        requireLockfile(workingDir) { managerType.hasLockfile(workingDir) }
+    private fun installDependencies(analysisRoot: File, workingDir: File) {
+        requireLockfile(analysisRoot, workingDir) { managerType.hasLockfile(workingDir) }
 
         YarnCommand.run(workingDir, "install", "--ignore-scripts", "--ignore-engines", "--immutable").requireSuccess()
     }
