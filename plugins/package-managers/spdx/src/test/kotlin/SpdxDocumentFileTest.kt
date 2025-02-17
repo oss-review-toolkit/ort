@@ -186,7 +186,7 @@ class SpdxDocumentFileTest : WordSpec({
  * Create a [SpdxDocumentFile] instance to be used by tests.
  */
 private fun createPackageManager(): SpdxDocumentFile =
-    SpdxDocumentFile("test", File("."), AnalyzerConfiguration(), RepositoryConfiguration())
+    SpdxDocumentFile("test", AnalyzerConfiguration(), RepositoryConfiguration())
 
 /**
  * Prepare this mock [SpdxResolvedDocument] to return [pkg] when queried for the test package.

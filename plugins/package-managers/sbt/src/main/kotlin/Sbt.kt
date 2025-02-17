@@ -83,21 +83,17 @@ internal object SbtCommand : CommandLineTool {
  */
 class Sbt(
     name: String,
-    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "SBT", analysisRoot, analyzerConfig, repoConfig) {
+) : PackageManager(name, "SBT", analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Sbt>("SBT") {
         override val globsForDefinitionFiles = listOf("build.sbt", "build.scala")
 
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = Sbt(type, analysisRoot, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+            Sbt(type, analyzerConfig, repoConfig)
     }
 
-    override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> {
+    override fun mapDefinitionFiles(analysisRoot: File, definitionFiles: List<File>): List<File> {
         // Some SBT projects do not have a build file in their root, but they still require "sbt" to be run from the
         // project's root directory. In order to determine the root directory, use the common prefix of all
         // definition file paths.
@@ -233,17 +229,23 @@ class Sbt(
         return versions.firstOrNull()?.let { Semver(it) }
     }
 
-    override fun resolveDependencies(definitionFiles: List<File>, labels: Map<String, String>): PackageManagerResult {
+    override fun resolveDependencies(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        labels: Map<String, String>
+    ): PackageManagerResult {
         val sbtAnalyzerConfig = analyzerConfig.withPackageManagerOption(managerName, "sbtMode", "true")
-        return Maven(managerName, analysisRoot, sbtAnalyzerConfig, repoConfig).run {
-            beforeResolution(definitionFiles)
+        return Maven(managerName, sbtAnalyzerConfig, repoConfig).run {
+            beforeResolution(analysisRoot, definitionFiles)
 
             // Simply pass on the list of POM files to Maven, ignoring the SBT build files here.
-            resolveDependencies(definitionFiles, labels).also { afterResolution(definitionFiles) }
+            resolveDependencies(analysisRoot, definitionFiles, labels).also {
+                afterResolution(analysisRoot, definitionFiles)
+            }
         }
     }
 
-    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>) =
+    override fun resolveDependencies(analysisRoot: File, definitionFile: File, labels: Map<String, String>) =
         // This is not implemented in favor over overriding [resolveDependencies].
         throw NotImplementedError()
 }

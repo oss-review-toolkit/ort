@@ -65,33 +65,33 @@ internal object CocoaPodsCommand : CommandLineTool {
  */
 class CocoaPods(
     name: String,
-    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "CocoaPods", analysisRoot, analyzerConfig, repoConfig) {
+) : PackageManager(name, "CocoaPods", analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<CocoaPods>("CocoaPods") {
         override val globsForDefinitionFiles = listOf("Podfile")
 
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = CocoaPods(type, analysisRoot, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+            CocoaPods(type, analyzerConfig, repoConfig)
     }
 
     private val dependencyHandler = PodDependencyHandler()
     private val graphBuilder = DependencyGraphBuilder(dependencyHandler)
 
-    override fun beforeResolution(definitionFiles: List<File>) = CocoaPodsCommand.checkVersion()
+    override fun beforeResolution(analysisRoot: File, definitionFiles: List<File>) = CocoaPodsCommand.checkVersion()
 
-    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> =
+    override fun resolveDependencies(
+        analysisRoot: File,
+        definitionFile: File,
+        labels: Map<String, String>
+    ): List<ProjectAnalyzerResult> =
         stashDirectories(Os.userHomeDirectory.resolve(".cocoapods/repos")).use {
             // Ensure to use the CDN instead of the monolithic specs repo.
             CocoaPodsCommand.run("repo", "add-cdn", "trunk", "https://cdn.cocoapods.org", "--allow-root")
                 .requireSuccess()
 
             try {
-                resolveDependenciesInternal(definitionFile)
+                resolveDependenciesInternal(analysisRoot, definitionFile)
             } finally {
                 // The cache entries are not re-usable across definition files because the keys do not contain the
                 // dependency version. If non-default Specs repositories were supported, then these would also need to
@@ -101,7 +101,7 @@ class CocoaPods(
             }
         }
 
-    private fun resolveDependenciesInternal(definitionFile: File): List<ProjectAnalyzerResult> {
+    private fun resolveDependenciesInternal(analysisRoot: File, definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
         val lockfile = workingDir.resolve(LOCKFILE_FILENAME)
         val issues = mutableListOf<Issue>()

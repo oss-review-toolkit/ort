@@ -104,10 +104,9 @@ private val dartCommand = if (Os.isWindows) "dart.bat" else "dart"
 @Suppress("TooManyFunctions")
 class Pub(
     name: String,
-    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Pub", analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, "Pub", analyzerConfig, repoConfig), CommandLineTool {
     companion object {
         const val OPTION_FLUTTER_VERSION = "flutterVersion"
         const val OPTION_GRADLE_VERSION = "gradleVersion"
@@ -117,11 +116,8 @@ class Pub(
     class Factory : AbstractPackageManagerFactory<Pub>("Pub") {
         override val globsForDefinitionFiles = listOf(PUBSPEC_YAML)
 
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = Pub(type, analysisRoot, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+            Pub(type, analyzerConfig, repoConfig)
     }
 
     private val flutterVersion = options[OPTION_FLUTTER_VERSION] ?: Os.env["FLUTTER_VERSION"] ?: DEFAULT_FLUTTER_VERSION
@@ -158,7 +154,7 @@ class Pub(
 
     override fun getVersionRequirement(): RangesList = RangesListFactory.create("[2.10,)")
 
-    override fun beforeResolution(definitionFiles: List<File>) {
+    override fun beforeResolution(analysisRoot: File, definitionFiles: List<File>) {
         if (pubDependenciesOnly) {
             logger.info {
                 "Only analyzing Pub dependencies, skipping additional package managers for Flutter packages " +
@@ -166,7 +162,7 @@ class Pub(
             }
         } else if (gradleFactory != null) {
             gradleDefinitionFilesForPubDefinitionFiles.clear()
-            gradleDefinitionFilesForPubDefinitionFiles += findGradleDefinitionFiles(definitionFiles)
+            gradleDefinitionFilesForPubDefinitionFiles += findGradleDefinitionFiles(analysisRoot, definitionFiles)
 
             logger.info {
                 "Found ${gradleDefinitionFilesForPubDefinitionFiles.values.flatten().size} Gradle project(s)."
@@ -223,7 +219,10 @@ class Pub(
             .requireSuccess()
     }
 
-    private fun findGradleDefinitionFiles(pubDefinitionFiles: Collection<File>): Map<File, Set<File>> {
+    private fun findGradleDefinitionFiles(
+        analysisRoot: File,
+        pubDefinitionFiles: Collection<File>
+    ): Map<File, Set<File>> {
         val result = mutableMapOf<File, MutableSet<File>>()
 
         val gradleDefinitionFiles = findManagedFiles(analysisRoot, setOfNotNull(gradleFactory)).values.flatten()
@@ -248,6 +247,7 @@ class Pub(
     }
 
     override fun findPackageManagerDependencies(
+        analysisRoot: File,
         managedFiles: Map<PackageManager, List<File>>
     ): PackageManagerDependencyResult {
         if (pubDependenciesOnly) {
@@ -258,16 +258,21 @@ class Pub(
         // that Pub needs to run before Gradle, because Pub generates the required local.properties file which contains
         // the path to the Android SDK.
         val gradle = managedFiles.keys.find { it.managerName == gradleFactory?.type }
-        val mustRunBefore = if (gradle != null && findGradleDefinitionFiles(managedFiles.getValue(this)).isNotEmpty()) {
-            setOf(gradle.managerName)
-        } else {
-            emptySet()
-        }
+        val mustRunBefore =
+            if (gradle != null && findGradleDefinitionFiles(analysisRoot, managedFiles.getValue(this)).isNotEmpty()) {
+                setOf(gradle.managerName)
+            } else {
+                emptySet()
+            }
 
         return PackageManagerDependencyResult(mustRunBefore = mustRunBefore, mustRunAfter = emptySet())
     }
 
-    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(
+        analysisRoot: File,
+        definitionFile: File,
+        labels: Map<String, String>
+    ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
         val pubspec = parsePubspec(definitionFile)
 
@@ -279,7 +284,7 @@ class Pub(
         val projectAnalyzerResults = mutableListOf<ProjectAnalyzerResult>()
 
         if (hasDependencies) {
-            installDependencies(workingDir)
+            installDependencies(analysisRoot, workingDir)
 
             logger.info { "Reading $PUB_LOCK_FILE file in $workingDir." }
 
@@ -466,8 +471,8 @@ class Pub(
                 pubGradleVersion
             )
 
-            val gradle = gradleFactory.create(androidDir, gradleAnalyzerConfig, repoConfig)
-            gradle.resolveDependencies(listOf(definitionFile), labels).run {
+            val gradle = gradleFactory.create(gradleAnalyzerConfig, repoConfig)
+            gradle.resolveDependencies(androidDir, listOf(definitionFile), labels).run {
                 projectResults.getValue(definitionFile).map { result ->
                     val project = result.project.withResolvedScopes(dependencyGraph)
                     result.copy(project = project, packages = sharedPackages)
@@ -736,8 +741,8 @@ class Pub(
         return result
     }
 
-    private fun installDependencies(workingDir: File) {
-        requireLockfile(workingDir) { workingDir.resolve(PUB_LOCK_FILE).isFile }
+    private fun installDependencies(analysisRoot: File, workingDir: File) {
+        requireLockfile(analysisRoot, workingDir) { workingDir.resolve(PUB_LOCK_FILE).isFile }
 
         if (containsFlutterSdk(workingDir)) {
             // For Flutter projects it is not enough to run `dart pub get`. Instead, use `flutter pub get` which

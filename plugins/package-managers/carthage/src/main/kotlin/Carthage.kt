@@ -48,27 +48,27 @@ import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
  */
 class Carthage(
     name: String,
-    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Carthage", analysisRoot, analyzerConfig, repoConfig) {
+) : PackageManager(name, "Carthage", analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Carthage>("Carthage") {
         // TODO: Add support for the Cartfile.
         //       This would require to resolve the actual dependency versions as a Cartfile supports dynamic versions.
         override val globsForDefinitionFiles = listOf("Cartfile.resolved")
 
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = Carthage(type, analysisRoot, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+            Carthage(type, analyzerConfig, repoConfig)
     }
 
-    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(
+        analysisRoot: File,
+        definitionFile: File,
+        labels: Map<String, String>
+    ): List<ProjectAnalyzerResult> {
         // Transitive dependencies are only supported if the dependency itself uses Carthage.
         // See: https://github.com/Carthage/Carthage#nested-dependencies
         val workingDir = definitionFile.parentFile
-        val projectInfo = getProjectInfoFromVcs(definitionFile)
+        val projectInfo = getProjectInfoFromVcs(analysisRoot, definitionFile)
 
         return listOf(
             ProjectAnalyzerResult(
@@ -95,7 +95,7 @@ class Carthage(
     /**
      * As the "Carthage.resolved" file does not provide any project information, trying to retrieve some from VCS.
      */
-    private fun getProjectInfoFromVcs(definitionFile: File): ProjectInfo {
+    private fun getProjectInfoFromVcs(analysisRoot: File, definitionFile: File): ProjectInfo {
         val workingTree = VersionControlSystem.forDirectory(definitionFile.parentFile)
         val vcsInfo = workingTree?.getInfo().orEmpty()
         val normalizedVcsUrl = normalizeVcsUrl(vcsInfo.url)

@@ -25,6 +25,7 @@ import io.kotest.matchers.should
 import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.toYaml
+import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
@@ -64,7 +65,7 @@ class GradleAndroidFunTest : StringSpec({
         val expectedResultFile = getAssetFile("projects/synthetic/gradle-android-cyclic-expected-output-app.yml")
 
         val result = create("Gradle", "javaVersion" to "17")
-            .resolveDependencies(listOf(definitionFile), emptyMap())
+            .resolveDependencies(USER_DIR, listOf(definitionFile), emptyMap())
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }

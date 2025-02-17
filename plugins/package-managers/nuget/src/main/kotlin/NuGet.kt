@@ -38,10 +38,9 @@ import org.ossreviewtoolkit.plugins.packagemanagers.nuget.utils.toOrtProject
  */
 class NuGet(
     name: String,
-    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "NuGet", analysisRoot, analyzerConfig, repoConfig) {
+) : PackageManager(name, "NuGet", analyzerConfig, repoConfig) {
     companion object {
         const val OPTION_NUGET_CONFIG = "nugetConfigFile"
     }
@@ -49,16 +48,17 @@ class NuGet(
     class Factory : AbstractPackageManagerFactory<NuGet>("NuGet") {
         override val globsForDefinitionFiles = listOf("*.csproj", "*.fsproj", "*.vcxproj", "packages.config")
 
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = NuGet(type, analysisRoot, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+            NuGet(type, analyzerConfig, repoConfig)
     }
 
     private val nugetConfig = options[OPTION_NUGET_CONFIG]?.let { File(it) }
 
-    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(
+        analysisRoot: File,
+        definitionFile: File,
+        labels: Map<String, String>
+    ): List<ProjectAnalyzerResult> {
         val result = NuGetInspector.inspect(definitionFile, nugetConfig)
 
         val project = result.toOrtProject(projectType, analysisRoot, definitionFile)

@@ -103,10 +103,9 @@ private enum class YarnDependencyType(val type: String) {
  */
 class Yarn2(
     name: String,
-    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : NodePackageManager(name, NodePackageManagerType.YARN2, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : NodePackageManager(name, NodePackageManagerType.YARN2, analyzerConfig, repoConfig), CommandLineTool {
     companion object {
         /**
          * The name of the option to disable HTTPS server certificate verification.
@@ -122,11 +121,8 @@ class Yarn2(
     class Factory : AbstractPackageManagerFactory<Yarn2>("Yarn2") {
         override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE)
 
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = Yarn2(type, analysisRoot, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+            Yarn2(type, analyzerConfig, repoConfig)
     }
 
     /**
@@ -177,9 +173,14 @@ class Yarn2(
             isCorepackEnabledInManifest(workingDir)
         }
 
-    override fun beforeResolution(definitionFiles: List<File>) = definitionFiles.forEach { checkVersion(it.parentFile) }
+    override fun beforeResolution(analysisRoot: File, definitionFiles: List<File>) =
+        definitionFiles.forEach { checkVersion(it.parentFile) }
 
-    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(
+        analysisRoot: File,
+        definitionFile: File,
+        labels: Map<String, String>
+    ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
         installDependencies(workingDir)
 

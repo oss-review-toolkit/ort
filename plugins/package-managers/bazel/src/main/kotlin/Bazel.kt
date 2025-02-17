@@ -104,18 +104,14 @@ internal object BuildozerCommand : CommandLineTool {
 
 class Bazel(
     name: String,
-    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Bazel", analysisRoot, analyzerConfig, repoConfig) {
+) : PackageManager(name, "Bazel", analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Bazel>("Bazel") {
         override val globsForDefinitionFiles = listOf("MODULE", "MODULE.bazel")
 
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = Bazel(type, analysisRoot, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+            Bazel(type, analyzerConfig, repoConfig)
     }
 
     /**
@@ -123,7 +119,7 @@ class Bazel(
      * source.json file and under a directory with a metadata.json file. This simple metric avoids parsing the .bazelrc
      * in the top directory of the project to find out if a MODULE.bazel file is part of a local registry or not.
      */
-    override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> =
+    override fun mapDefinitionFiles(analysisRoot: File, definitionFiles: List<File>): List<File> =
         definitionFiles.mapNotNull { file ->
             file.takeUnless {
                 it.resolveSibling(SOURCE_JSON).isFile && it.parentFile.resolveSibling(METADATA_JSON).isFile
@@ -132,7 +128,11 @@ class Bazel(
             }
         }
 
-    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(
+        analysisRoot: File,
+        definitionFile: File,
+        labels: Map<String, String>
+    ): List<ProjectAnalyzerResult> {
         val projectDir = definitionFile.parentFile
         val lockfile = projectDir.resolve(LOCKFILE_NAME)
         val projectVcs = processProjectVcs(projectDir)

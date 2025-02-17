@@ -56,7 +56,7 @@ class Yarn2Test : WordSpec({
             val workingDir = tempdir()
             workingDir.resolve(".yarnrc.yml").writeText("someProperty: some-value")
 
-            val yarn = Yarn2("yarn", workingDir, AnalyzerConfiguration(), RepositoryConfiguration())
+            val yarn = Yarn2("yarn", AnalyzerConfiguration(), RepositoryConfiguration())
 
             val exception = shouldThrow<IllegalArgumentException> {
                 yarn.command(workingDir)
@@ -70,7 +70,7 @@ class Yarn2Test : WordSpec({
             val executable = "non-existing-yarn-wrapper.js"
             workingDir.resolve(".yarnrc.yml").writeText("yarnPath: $executable")
 
-            val yarn = Yarn2("yarn", workingDir, AnalyzerConfiguration(), RepositoryConfiguration())
+            val yarn = Yarn2("yarn", AnalyzerConfiguration(), RepositoryConfiguration())
 
             val exception = shouldThrow<IllegalArgumentException> {
                 yarn.command(workingDir)
@@ -86,7 +86,7 @@ class Yarn2Test : WordSpec({
                 packageManagers = mapOf("Yarn2" to PackageManagerConfiguration(options = yarn2Options))
             )
 
-            val yarn = Yarn2("Yarn2", workingDir, analyzerConfiguration, RepositoryConfiguration())
+            val yarn = Yarn2("Yarn2", analyzerConfiguration, RepositoryConfiguration())
             val command = yarn.command(workingDir)
 
             command shouldBe "yarn"
@@ -96,7 +96,7 @@ class Yarn2Test : WordSpec({
             val workingDir = tempdir()
             writePackageJson(workingDir, "yarn@4.0.0")
 
-            val yarn = Yarn2("Yarn2", workingDir, AnalyzerConfiguration(), RepositoryConfiguration())
+            val yarn = Yarn2("Yarn2", AnalyzerConfiguration(), RepositoryConfiguration())
             val command = yarn.command(workingDir)
 
             command shouldBe "yarn"
@@ -129,7 +129,7 @@ private fun checkExecutableFromYarnRc(workingDir: File, config: AnalyzerConfigur
         writeText("#!/usr/bin/env node\nconsole.log('yarn')")
     }
 
-    val yarn = Yarn2("Yarn2", workingDir, config, RepositoryConfiguration())
+    val yarn = Yarn2("Yarn2", config, RepositoryConfiguration())
     val command = yarn.command(workingDir)
 
     if (Os.isWindows) {

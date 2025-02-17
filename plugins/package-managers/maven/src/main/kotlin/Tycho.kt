@@ -75,18 +75,14 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempFile
  */
 class Tycho(
     name: String,
-    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Tycho", analysisRoot, analyzerConfig, repoConfig) {
+) : PackageManager(name, "Tycho", analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Tycho>("Tycho") {
         override val globsForDefinitionFiles = listOf("pom.xml")
 
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = Tycho(type, analysisRoot, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+            Tycho(type, analyzerConfig, repoConfig)
     }
 
     /**
@@ -95,13 +91,18 @@ class Tycho(
      */
     private lateinit var graphBuilder: DependencyGraphBuilder<DependencyNode>
 
-    override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> = definitionFiles.filter(::isTychoProject)
+    override fun mapDefinitionFiles(analysisRoot: File, definitionFiles: List<File>): List<File> =
+        definitionFiles.filter(::isTychoProject)
 
-    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(
+        analysisRoot: File,
+        definitionFile: File,
+        labels: Map<String, String>
+    ): List<ProjectAnalyzerResult> {
         logger.info { "Resolving Tycho dependencies for $definitionFile." }
 
         val collector = TychoProjectsCollector()
-        val (exitCode, buildLog) = runBuild(collector, definitionFile.parentFile)
+        val (exitCode, buildLog) = runBuild(analysisRoot, collector, definitionFile.parentFile)
 
         val resolvedProjects = createMavenSupport(collector).use { mavenSupport ->
             graphBuilder = createGraphBuilder(mavenSupport, collector.mavenProjects)
@@ -172,7 +173,7 @@ class Tycho(
      * Run a Maven build on the Tycho project in [projectRoot] utilizing the given [collector]. Return a pair with
      * the exit code of the Maven project and a [File] that contains the output generated during the build.
      */
-    private fun runBuild(collector: TychoProjectsCollector, projectRoot: File): Pair<Int, File> {
+    private fun runBuild(analysisRoot: File, collector: TychoProjectsCollector, projectRoot: File): Pair<Int, File> {
         // The Maven CLI seems to change the context class loader. This has side effects on ORT's plugin mechanism.
         // To prevent this, store the class loader and restore it at the end of this function.
         val tccl = Thread.currentThread().contextClassLoader
@@ -187,7 +188,7 @@ class Tycho(
             System.setProperty(MavenCli.MULTIMODULE_PROJECT_DIRECTORY, projectRoot.absolutePath)
 
             val exitCode = cli.doMain(
-                generateMavenOptions(projectRoot, buildLog),
+                generateMavenOptions(analysisRoot, projectRoot, buildLog),
                 projectRoot.path,
                 null,
                 null
@@ -260,10 +261,10 @@ class Tycho(
     }
 
     /**
-     * Generate the command line options to be passed to the Maven CLI for the given [root] folder and the
-     * [dependencyTreeFile].
+     * Generate the command line options to be passed to the Maven CLI for the given [analysisRoot] and [root] folders
+     * and the [dependencyTreeFile].
      */
-    private fun generateMavenOptions(root: File, dependencyTreeFile: File): Array<String> =
+    private fun generateMavenOptions(analysisRoot: File, root: File, dependencyTreeFile: File): Array<String> =
         buildList {
             // The "package" goal is required; otherwise the Tycho extension is not activated.
             add("package")
@@ -273,7 +274,7 @@ class Tycho(
             add("-DappendOutput=true")
             add("-Dverbose=true")
 
-            generateModuleExcludes(root)?.takeUnless { it.isEmpty() }?.let { excludedModules ->
+            generateModuleExcludes(analysisRoot, root)?.takeUnless { it.isEmpty() }?.let { excludedModules ->
                 add("-pl")
                 add(excludedModules)
             }
@@ -283,7 +284,7 @@ class Tycho(
      * Generate a list of submodules to be excluded for the Maven build with the given [rootProject] folder based on
      * the configured exclusions. The resulting string (if any) is used as the value of Maven's `-pl` option.
      */
-    private fun generateModuleExcludes(rootProject: File): String? {
+    private fun generateModuleExcludes(analysisRoot: File, rootProject: File): String? {
         if (!analyzerConfig.skipExcluded) return null
 
         val analysisRootPath = analysisRoot.toPath()

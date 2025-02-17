@@ -131,10 +131,9 @@ internal fun parseBundlerVersionFromLockfile(lockfile: File): String? {
  */
 class Bundler(
     name: String,
-    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Bundler", analysisRoot, analyzerConfig, repoConfig) {
+) : PackageManager(name, "Bundler", analyzerConfig, repoConfig) {
     companion object {
         /**
          * The name of the option to specify the Bundler version.
@@ -145,14 +144,11 @@ class Bundler(
     class Factory : AbstractPackageManagerFactory<Bundler>("Bundler") {
         override val globsForDefinitionFiles = listOf("Gemfile")
 
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = Bundler(type, analysisRoot, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+            Bundler(type, analyzerConfig, repoConfig)
     }
 
-    override fun beforeResolution(definitionFiles: List<File>) {
+    override fun beforeResolution(analysisRoot: File, definitionFiles: List<File>) {
         // JRuby comes with Bundler as a default Gem, see e.g. [1]. Any manually installed Bundler version will only
         // take precedence if it is newer than JRuby's default version.
         //
@@ -194,17 +190,21 @@ class Bundler(
         }
     }
 
-    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(
+        analysisRoot: File,
+        definitionFile: File,
+        labels: Map<String, String>
+    ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
 
-        requireLockfile(workingDir) { workingDir.resolve(BUNDLER_LOCKFILE_NAME).isFile }
+        requireLockfile(analysisRoot, workingDir) { workingDir.resolve(BUNDLER_LOCKFILE_NAME).isFile }
 
         val scopes = mutableSetOf<Scope>()
         val issues = mutableListOf<Issue>()
 
         val gemsInfo = resolveGemsInfo(workingDir)
 
-        return with(parseProject(definitionFile, gemsInfo)) {
+        return with(parseProject(analysisRoot, definitionFile, gemsInfo)) {
             val projectId = Identifier(projectType, "", name, version)
             val groupedDeps = getDependencyGroups(workingDir)
 
@@ -320,7 +320,7 @@ class Bundler(
         return gemsInfo
     }
 
-    private fun parseProject(definitionFile: File, gemsInfo: MutableMap<String, GemInfo>) =
+    private fun parseProject(analysisRoot: File, definitionFile: File, gemsInfo: MutableMap<String, GemInfo>) =
         getGemspecFile(definitionFile.parentFile)?.let { gemspecFile ->
             // Project is a Gem, i.e. a library.
             gemsInfo[gemspecFile.nameWithoutExtension]

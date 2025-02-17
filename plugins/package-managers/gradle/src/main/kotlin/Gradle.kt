@@ -88,10 +88,9 @@ private const val JAVA_MAX_HEAP_SIZE_VALUE = "8g"
  */
 class Gradle(
     name: String,
-    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Gradle", analysisRoot, analyzerConfig, repoConfig) {
+) : PackageManager(name, "Gradle", analyzerConfig, repoConfig) {
     companion object {
         /**
          * The name of the option to specify the Gradle version.
@@ -115,11 +114,8 @@ class Gradle(
         // "build" file.
         override val globsForDefinitionFiles = GRADLE_BUILD_FILES + GRADLE_SETTINGS_FILES
 
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = Gradle(type, analysisRoot, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+            Gradle(type, analyzerConfig, repoConfig)
     }
 
     /**
@@ -172,7 +168,11 @@ class Gradle(
     override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =
         PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
 
-    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(
+        analysisRoot: File,
+        definitionFile: File,
+        labels: Map<String, String>
+    ): List<ProjectAnalyzerResult> {
         val gradleProperties = mutableListOf<Pair<String, String>>()
 
         val projectDir = definitionFile.parentFile
@@ -329,7 +329,7 @@ class Gradle(
         }
     }
 
-    override fun afterResolution(definitionFiles: List<File>) {
+    override fun afterResolution(analysisRoot: File, definitionFiles: List<File>) {
         mavenSupport.close()
     }
 }
