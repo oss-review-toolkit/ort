@@ -42,8 +42,8 @@ class TychoFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/tycho/pom.xml")
         val expectedResultFile = getAssetFile("projects/synthetic/tycho-expected-output-scope-excludes.yml")
 
-        val result = create("Tycho", excludedScopes = setOf("test.*"))
-            .collateMultipleProjects(definitionFile).withResolvedScopes()
+        val result = create("Tycho")
+            .collateMultipleProjects(definitionFile, excludedScopes = setOf("test.*")).withResolvedScopes()
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }

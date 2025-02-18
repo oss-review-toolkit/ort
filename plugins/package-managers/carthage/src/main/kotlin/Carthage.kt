@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.unquote
@@ -46,23 +46,19 @@ import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 /**
  * The [Carthage](https://github.com/Carthage/Carthage) package manager for Objective-C / Swift.
  */
-class Carthage(
-    name: String,
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Carthage", analyzerConfig, repoConfig) {
+class Carthage(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(name, "Carthage", analyzerConfig) {
     class Factory : AbstractPackageManagerFactory<Carthage>("Carthage") {
         // TODO: Add support for the Cartfile.
         //       This would require to resolve the actual dependency versions as a Cartfile supports dynamic versions.
         override val globsForDefinitionFiles = listOf("Cartfile.resolved")
 
-        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-            Carthage(type, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration) = Carthage(type, analyzerConfig)
     }
 
     override fun resolveDependencies(
         analysisRoot: File,
         definitionFile: File,
+        excludes: Excludes,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         // Transitive dependencies are only supported if the dependency itself uses Carthage.

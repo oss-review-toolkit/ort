@@ -49,8 +49,8 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.MavenSupport
@@ -86,11 +86,7 @@ private const val JAVA_MAX_HEAP_SIZE_VALUE = "8g"
  * - *javaHome*: The directory of the Java home to use when analyzing projects. By default, the same Java home as for
  *   ORT itself is used.
  */
-class Gradle(
-    name: String,
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Gradle", analyzerConfig, repoConfig) {
+class Gradle(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(name, "Gradle", analyzerConfig) {
     companion object {
         /**
          * The name of the option to specify the Gradle version.
@@ -114,8 +110,7 @@ class Gradle(
         // "build" file.
         override val globsForDefinitionFiles = GRADLE_BUILD_FILES + GRADLE_SETTINGS_FILES
 
-        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-            Gradle(type, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration) = Gradle(type, analyzerConfig)
     }
 
     /**
@@ -171,6 +166,7 @@ class Gradle(
     override fun resolveDependencies(
         analysisRoot: File,
         definitionFile: File,
+        excludes: Excludes,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val gradleProperties = mutableListOf<Pair<String, String>>()

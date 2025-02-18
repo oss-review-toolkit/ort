@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.LocalProjectWorkspaceReader
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.MavenDependencyHandler
@@ -45,22 +45,16 @@ import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
 /**
  * The [Maven](https://maven.apache.org/) package manager for Java.
  */
-class Maven(
-    name: String,
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : PackageManager(
+class Maven(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(
     name,
     // The "options" convenience property from "PackageManager" is not available here yet.
     if (analyzerConfig.getPackageManagerConfiguration(name)?.options?.get("sbtMode").toBoolean()) "SBT" else "Maven",
-    analyzerConfig,
-    repoConfig
+    analyzerConfig
 ) {
     class Factory : AbstractPackageManagerFactory<Maven>("Maven") {
         override val globsForDefinitionFiles = listOf("pom.xml")
 
-        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-            Maven(type, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration) = Maven(type, analyzerConfig)
     }
 
     private val mavenSupport = MavenSupport(LocalProjectWorkspaceReader { localProjectBuildingResults[it]?.pomFile })
@@ -104,6 +98,7 @@ class Maven(
     override fun resolveDependencies(
         analysisRoot: File,
         definitionFile: File,
+        excludes: Excludes,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile

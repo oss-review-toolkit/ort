@@ -74,7 +74,7 @@ class AnalyzerFunTest : WordSpec({
 
             val analyzer = Analyzer(analyzerConfig)
             val gradleFactory = PackageManagerFactory.ALL.getValue("Gradle")
-            val gradle = gradleFactory.create(analyzerConfig, repoConfig)
+            val gradle = gradleFactory.create(analyzerConfig)
             val info = Analyzer.ManagedFileInfo(
                 inputDir,
                 mapOf(gradle to listOf(gradleDefinitionFile)),

@@ -29,6 +29,7 @@ import java.io.IOException
 import org.ossreviewtoolkit.analyzer.Analyzer.ManagedFileInfo
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 
 class AnalyzerTest : WordSpec({
@@ -39,7 +40,7 @@ class AnalyzerTest : WordSpec({
             val analyzer = Analyzer(analyzerConfig)
             val analysisRoot = File(".").absoluteFile
 
-            val manager = DummyPackageManager(analyzerConfig, repoConfig)
+            val manager = DummyPackageManager(analyzerConfig)
 
             val info = ManagedFileInfo(
                 absoluteProjectPath = analysisRoot,
@@ -54,10 +55,8 @@ class AnalyzerTest : WordSpec({
     }
 })
 
-private class DummyPackageManager(
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : PackageManager("Dummy", "Project", analyzerConfig, repoConfig) {
+private class DummyPackageManager(analyzerConfig: AnalyzerConfiguration) :
+    PackageManager("Dummy", "Project", analyzerConfig) {
     val calls = mutableListOf<String>()
 
     override fun beforeResolution(analysisRoot: File, definitionFiles: List<File>) {
@@ -67,6 +66,7 @@ private class DummyPackageManager(
     override fun resolveDependencies(
         analysisRoot: File,
         definitionFile: File,
+        excludes: Excludes,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         calls += "resolveDependencies"

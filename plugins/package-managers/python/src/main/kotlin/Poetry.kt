@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.PythonInspector
 import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.toOrtPackages
 import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.toPackageReferences
@@ -53,11 +53,7 @@ internal object PoetryCommand : CommandLineTool {
 /**
  * [Poetry](https://python-poetry.org/) package manager for Python.
  */
-class Poetry(
-    name: String,
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Poetry", analyzerConfig, repoConfig) {
+class Poetry(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(name, "Poetry", analyzerConfig) {
     companion object {
         /**
          * The name of the build system requirements and information file used by modern Python packages.
@@ -68,13 +64,13 @@ class Poetry(
     class Factory : AbstractPackageManagerFactory<Poetry>("Poetry") {
         override val globsForDefinitionFiles = listOf("poetry.lock")
 
-        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-            Poetry(type, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration) = Poetry(type, analyzerConfig)
     }
 
     override fun resolveDependencies(
         analysisRoot: File,
         definitionFile: File,
+        excludes: Excludes,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val scopeName = parseScopeNamesFromPyproject(definitionFile.resolveSibling(PYPROJECT_FILENAME))
@@ -126,7 +122,7 @@ class Poetry(
         val poetryAnalyzerConfig = analyzerConfig
             .withPackageManagerOption(managerName, "overrideProjectType", projectType)
 
-        return Pip(managerName, poetryAnalyzerConfig, repoConfig).runPythonInspector(requirementsFile) {
+        return Pip(managerName, poetryAnalyzerConfig).runPythonInspector(requirementsFile) {
             detectPythonVersion(workingDir)
         }.also {
             requirementsFile.parentFile.safeDeleteRecursively()

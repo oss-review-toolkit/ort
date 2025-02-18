@@ -26,7 +26,7 @@ import org.apache.logging.log4j.kotlin.logger
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
@@ -49,16 +49,12 @@ internal object PnpmCommand : CommandLineTool {
 /**
  * The [fast, disk space efficient package manager](https://pnpm.io/).
  */
-class Pnpm(
-    name: String,
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : NodePackageManager(name, NodePackageManagerType.PNPM, analyzerConfig, repoConfig) {
+class Pnpm(name: String, analyzerConfig: AnalyzerConfiguration) :
+    NodePackageManager(name, NodePackageManagerType.PNPM, analyzerConfig) {
     class Factory : AbstractPackageManagerFactory<Pnpm>("PNPM") {
         override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE, "pnpm-lock.yaml")
 
-        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-            Pnpm(type, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration) = Pnpm(type, analyzerConfig)
     }
 
     private lateinit var stash: DirectoryStash
@@ -82,6 +78,7 @@ class Pnpm(
     override fun resolveDependencies(
         analysisRoot: File,
         definitionFile: File,
+        excludes: Excludes,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile

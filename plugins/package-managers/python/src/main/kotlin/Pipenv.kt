@@ -27,7 +27,7 @@ import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 
 import org.semver4j.RangesList
@@ -50,16 +50,11 @@ internal object PipenvCommand : CommandLineTool {
     override fun getVersionRequirement(): RangesList = RangesListFactory.create("[2018.10.9,)")
 }
 
-class Pipenv(
-    name: String,
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Pipenv", analyzerConfig, repoConfig) {
+class Pipenv(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(name, "Pipenv", analyzerConfig) {
     class Factory : AbstractPackageManagerFactory<Pipenv>("Pipenv") {
         override val globsForDefinitionFiles = listOf("Pipfile.lock")
 
-        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-            Pipenv(type, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration) = Pipenv(type, analyzerConfig)
     }
 
     override fun beforeResolution(analysisRoot: File, definitionFiles: List<File>) = PipenvCommand.checkVersion()
@@ -67,6 +62,7 @@ class Pipenv(
     override fun resolveDependencies(
         analysisRoot: File,
         definitionFile: File,
+        excludes: Excludes,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         // For an overview, dependency resolution involves the following steps:
@@ -89,8 +85,8 @@ class Pipenv(
         val pipenvAnalyzerConfig = analyzerConfig
             .withPackageManagerOption(managerName, "overrideProjectType", projectType)
 
-        return Pip(managerName, pipenvAnalyzerConfig, repoConfig)
-            .resolveDependencies(analysisRoot, requirementsFile, labels)
+        return Pip(managerName, pipenvAnalyzerConfig)
+            .resolveDependencies(analysisRoot, requirementsFile, excludes, labels)
             .also { requirementsFile.delete() }
     }
 }
