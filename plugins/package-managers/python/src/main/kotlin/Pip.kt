@@ -27,8 +27,8 @@ import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.PythonInspector
 import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.toOrtPackages
 import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.toOrtProject
@@ -56,15 +56,10 @@ private const val OPTION_ANALYZE_SETUP_PY_INSECURELY_DEFAULT = true
  *   "windows". Defaults to [OPTION_OPERATING_SYSTEM_DEFAULT].
  * - *pythonVersion*: The Python version to resolve dependencies for. Defaults to [OPTION_PYTHON_VERSION_DEFAULT].
  */
-class Pip(
-    name: String,
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : PackageManager(
+class Pip(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(
     name,
     analyzerConfig.getPackageManagerConfiguration(name)?.options?.get("overrideProjectType") ?: "PIP",
-    analyzerConfig,
-    repoConfig
+    analyzerConfig
 ) {
     companion object {
         const val OPTION_OPERATING_SYSTEM = "operatingSystem"
@@ -75,8 +70,7 @@ class Pip(
     class Factory : AbstractPackageManagerFactory<Pip>("PIP") {
         override val globsForDefinitionFiles = listOf("*requirements*.txt", "setup.py")
 
-        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-            Pip(type, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration) = Pip(type, analyzerConfig)
     }
 
     private val operatingSystemOption = options[OPTION_OPERATING_SYSTEM]?.also { os ->
@@ -102,6 +96,7 @@ class Pip(
     override fun resolveDependencies(
         analysisRoot: File,
         definitionFile: File,
+        excludes: Excludes,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val result = runPythonInspector(definitionFile) { detectPythonVersion(definitionFile.parentFile) }

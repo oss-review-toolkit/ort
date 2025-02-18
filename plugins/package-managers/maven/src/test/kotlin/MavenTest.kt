@@ -50,7 +50,7 @@ class MavenTest : WordSpec({
                 tychoSubModule
             )
 
-            val maven = Maven("Maven", mockk(relaxed = true), mockk(relaxed = true))
+            val maven = Maven("Maven", mockk(relaxed = true))
             val mappedDefinitionFiles = maven.mapDefinitionFiles(tempdir(), definitionFiles)
 
             mappedDefinitionFiles shouldContainExactlyInAnyOrder listOf(mavenDefinitionFile, mavenSubModule)

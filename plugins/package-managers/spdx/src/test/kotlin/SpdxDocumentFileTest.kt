@@ -32,7 +32,6 @@ import java.io.File
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.SpdxResolvedDocument
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper
@@ -185,8 +184,7 @@ class SpdxDocumentFileTest : WordSpec({
 /**
  * Create a [SpdxDocumentFile] instance to be used by tests.
  */
-private fun createPackageManager(): SpdxDocumentFile =
-    SpdxDocumentFile("test", AnalyzerConfiguration(), RepositoryConfiguration())
+private fun createPackageManager(): SpdxDocumentFile = SpdxDocumentFile("test", AnalyzerConfiguration())
 
 /**
  * Prepare this mock [SpdxResolvedDocument] to return [pkg] when queried for the test package.

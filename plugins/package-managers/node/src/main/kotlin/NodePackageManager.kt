@@ -31,16 +31,14 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.utils.common.realFile
 
 abstract class NodePackageManager(
     managerName: String,
     val managerType: NodePackageManagerType,
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : PackageManager(managerName, managerType.projectType, analyzerConfig, repoConfig) {
+    analyzerConfig: AnalyzerConfiguration
+) : PackageManager(managerName, managerType.projectType, analyzerConfig) {
     protected abstract val graphBuilder: DependencyGraphBuilder<*>
 
     protected fun parseProject(packageJsonFile: File, analysisRoot: File): Project {

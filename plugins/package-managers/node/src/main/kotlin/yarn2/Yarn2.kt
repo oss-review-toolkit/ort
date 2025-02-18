@@ -46,8 +46,8 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.model.utils.DependencyHandler
@@ -101,11 +101,8 @@ private enum class YarnDependencyType(val type: String) {
  *   auto-detection can be disabled, and the enabled status of Corepack can be explicitly specified. This is useful to
  *   force a specific behavior in some environments.
  */
-class Yarn2(
-    name: String,
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : NodePackageManager(name, NodePackageManagerType.YARN2, analyzerConfig, repoConfig), CommandLineTool {
+class Yarn2(name: String, analyzerConfig: AnalyzerConfiguration) :
+    NodePackageManager(name, NodePackageManagerType.YARN2, analyzerConfig), CommandLineTool {
     companion object {
         /**
          * The name of the option to disable HTTPS server certificate verification.
@@ -121,8 +118,7 @@ class Yarn2(
     class Factory : AbstractPackageManagerFactory<Yarn2>("Yarn2") {
         override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE)
 
-        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-            Yarn2(type, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration) = Yarn2(type, analyzerConfig)
     }
 
     /**
@@ -179,6 +175,7 @@ class Yarn2(
     override fun resolveDependencies(
         analysisRoot: File,
         definitionFile: File,
+        excludes: Excludes,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
@@ -191,7 +188,7 @@ class Yarn2(
             moduleIds = packageHeaders.values.filterNot { it.isProject }.mapTo(mutableSetOf()) { it.moduleId }
         )
 
-        val allProjects = parseAllPackages(packageInfos, definitionFile, packageHeaders, packageDetails)
+        val allProjects = parseAllPackages(packageInfos, definitionFile, packageHeaders, packageDetails, excludes)
         val scopeNames = YarnDependencyType.entries.mapTo(mutableSetOf()) { it.type }
 
         return allProjects.values.map { project ->
@@ -293,7 +290,8 @@ class Yarn2(
         packageInfos: Collection<PackageInfo>,
         definitionFile: File,
         packagesHeaders: Map<String, PackageHeader>,
-        packagesDetails: Map<String, AdditionalData>
+        packagesDetails: Map<String, AdditionalData>,
+        excludes: Excludes
     ): Map<Identifier, Project> {
         val allDependencies = mutableMapOf<YarnDependencyType, MutableMap<Identifier, List<Identifier>>>()
         // Create packages for all modules found in the workspace and add them to the graph builder. They are reused

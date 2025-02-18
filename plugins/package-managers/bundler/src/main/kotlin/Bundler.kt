@@ -50,8 +50,8 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.common.AlphaNumericComparator
@@ -129,11 +129,7 @@ internal fun parseBundlerVersionFromLockfile(lockfile: File): String? {
  * [1]: https://bundler.io/
  * [2]: http://yehudakatz.com/2010/12/16/clarifying-the-roles-of-the-gemspec-and-gemfile/
  */
-class Bundler(
-    name: String,
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Bundler", analyzerConfig, repoConfig) {
+class Bundler(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(name, "Bundler", analyzerConfig) {
     companion object {
         /**
          * The name of the option to specify the Bundler version.
@@ -144,8 +140,7 @@ class Bundler(
     class Factory : AbstractPackageManagerFactory<Bundler>("Bundler") {
         override val globsForDefinitionFiles = listOf("Gemfile")
 
-        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-            Bundler(type, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration) = Bundler(type, analyzerConfig)
     }
 
     override fun beforeResolution(analysisRoot: File, definitionFiles: List<File>) {
@@ -193,6 +188,7 @@ class Bundler(
     override fun resolveDependencies(
         analysisRoot: File,
         definitionFile: File,
+        excludes: Excludes,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile

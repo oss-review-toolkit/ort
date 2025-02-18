@@ -98,7 +98,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
 
         // Associate mapped files by the package manager that manages them.
         val managedFiles = factoryFiles.mapNotNull { (factory, files) ->
-            val manager = factory.create(config, repositoryConfiguration)
+            val manager = factory.create(config)
             val mappedFiles = manager.mapDefinitionFiles(absoluteProjectPath, files)
             Pair(manager, mappedFiles).takeIf { mappedFiles.isNotEmpty() }
         }.toMap(mutableMapOf())
@@ -121,7 +121,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
         if (!hasOnlyManagedDirs) {
             val unmanagedPackageManagerFactory = PackageManagerFactory.ALL["Unmanaged"]
             distinctPackageManagers.find { it == unmanagedPackageManagerFactory }
-                ?.create(config, repositoryConfiguration)
+                ?.create(config)
                 ?.also { managedFiles[it] = listOf(absoluteProjectPath) }
         }
 
@@ -174,6 +174,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
 
         val state = AnalyzerState()
         val packageManagerDependencies = determinePackageManagerDependencies(info)
+        val excludes = config.excludes(info.repositoryConfiguration)
 
         runBlocking {
             info.managedFiles.entries.map { (manager, files) ->
@@ -181,6 +182,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
                     manager = manager,
                     definitionFiles = files,
                     analysisRoot = info.absoluteProjectPath,
+                    excludes = excludes,
                     labels = labels,
                     mustRunAfter = packageManagerDependencies[manager].orEmpty(),
                     finishedPackageManagersState = state.finishedPackageManagersState,
@@ -199,7 +201,6 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
             manager.afterResolution(info.absoluteProjectPath, definitionFiles)
         }
 
-        val excludes = info.managedFiles.keys.firstOrNull()?.excludes ?: Excludes.EMPTY
         return state.buildResult(excludes)
     }
 
@@ -298,6 +299,11 @@ private class PackageManagerRunner(
     val analysisRoot: File,
 
     /**
+     * The [Excludes] to apply.
+     */
+    val excludes: Excludes,
+
+    /**
      * The labels passed to ORT.
      */
     val labels: Map<String, String>,
@@ -344,7 +350,7 @@ private class PackageManagerRunner(
         logger.info { "Starting ${manager.managerName} analysis." }
 
         withContext(Dispatchers.IO.limitedParallelism(20)) {
-            val result = manager.resolveDependencies(analysisRoot, definitionFiles, labels)
+            val result = manager.resolveDependencies(analysisRoot, definitionFiles, excludes, labels)
 
             logger.info { "Finished ${manager.managerName} analysis." }
 

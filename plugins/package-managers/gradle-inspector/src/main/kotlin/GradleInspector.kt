@@ -44,8 +44,8 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.utils.common.Os
@@ -100,19 +100,15 @@ const val OPTION_JAVA_HOME = "javaHome"
  * - *javaHome*: The directory of the Java home to use when analyzing projects. By default, the same Java home as for
  *   ORT itself is used.
  */
-class GradleInspector(
-    name: String,
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Gradle", analyzerConfig, repoConfig) {
+class GradleInspector(name: String, analyzerConfig: AnalyzerConfiguration) :
+    PackageManager(name, "Gradle", analyzerConfig) {
     class Factory : AbstractPackageManagerFactory<GradleInspector>("GradleInspector") {
         // Gradle prefers Groovy ".gradle" files over Kotlin ".gradle.kts" files, but "build" files have to come before
         // "settings" files as we should consider "settings" files only if the same directory does not also contain a
         // "build" file.
         override val globsForDefinitionFiles = GRADLE_BUILD_FILES + GRADLE_SETTINGS_FILES
 
-        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-            GradleInspector(type, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration) = GradleInspector(type, analyzerConfig)
     }
 
     private val graphBuilder = DependencyGraphBuilder(GradleDependencyHandler(managerName, projectType))
@@ -215,6 +211,7 @@ class GradleInspector(
     override fun resolveDependencies(
         analysisRoot: File,
         definitionFile: File,
+        excludes: Excludes,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val projectDir = definitionFile.parentFile

@@ -27,7 +27,7 @@ import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.plugins.packagemanagers.nuget.utils.NuGetInspector
 import org.ossreviewtoolkit.plugins.packagemanagers.nuget.utils.toOrtPackages
 import org.ossreviewtoolkit.plugins.packagemanagers.nuget.utils.toOrtProject
@@ -36,11 +36,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.nuget.utils.toOrtProject
  * A package manager implementation for [.NET](https://docs.microsoft.com/en-us/dotnet/core/tools/) project files that
  * embed NuGet package configuration.
  */
-class NuGet(
-    name: String,
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : PackageManager(name, "NuGet", analyzerConfig, repoConfig) {
+class NuGet(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(name, "NuGet", analyzerConfig) {
     companion object {
         const val OPTION_NUGET_CONFIG = "nugetConfigFile"
     }
@@ -48,8 +44,7 @@ class NuGet(
     class Factory : AbstractPackageManagerFactory<NuGet>("NuGet") {
         override val globsForDefinitionFiles = listOf("*.csproj", "*.fsproj", "*.vcxproj", "packages.config")
 
-        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-            NuGet(type, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration) = NuGet(type, analyzerConfig)
     }
 
     private val nugetConfig = options[OPTION_NUGET_CONFIG]?.let { File(it) }
@@ -57,6 +52,7 @@ class NuGet(
     override fun resolveDependencies(
         analysisRoot: File,
         definitionFile: File,
+        excludes: Excludes,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val result = NuGetInspector.inspect(definitionFile, nugetConfig)

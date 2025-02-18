@@ -35,8 +35,8 @@ import java.io.File
 
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 
 class NpmTest : WordSpec({
@@ -62,7 +62,7 @@ class NpmTest : WordSpec({
                     packageManagers = mapOf(analyzerName to npmConfig)
                 )
 
-                val npm = Npm(analyzerName, analyzerConfig, RepositoryConfiguration())
+                val npm = Npm(analyzerName, analyzerConfig)
 
                 val process = mockk<ProcessCapture>()
                 every { process.isError } returns true
@@ -70,7 +70,7 @@ class NpmTest : WordSpec({
                 every { process.stderr } returns errorText
                 every { NpmCommand.run(workingDir, "install", *anyVararg()) } returns process
 
-                val results = npm.resolveDependencies(workingDir, definitionFile, emptyMap())
+                val results = npm.resolveDependencies(workingDir, definitionFile, Excludes.EMPTY, emptyMap())
 
                 results shouldHaveSize 1
 

@@ -45,7 +45,7 @@ import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.utils.toPurl
@@ -254,16 +254,12 @@ private fun hasDefaultScopeLinkage(
  * A "fake" package manager implementation that uses SPDX documents as definition files to declare projects and describe
  * packages. See https://github.com/spdx/spdx-spec/issues/439 for details.
  */
-class SpdxDocumentFile(
-    managerName: String,
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : PackageManager(managerName, "SpdxDocumentFile", analyzerConfig, repoConfig) {
+class SpdxDocumentFile(managerName: String, analyzerConfig: AnalyzerConfiguration) :
+    PackageManager(managerName, "SpdxDocumentFile", analyzerConfig) {
     class Factory : AbstractPackageManagerFactory<SpdxDocumentFile>("SpdxDocumentFile") {
         override val globsForDefinitionFiles = listOf("*.spdx.yml", "*.spdx.yaml", "*.spdx.json")
 
-        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-            SpdxDocumentFile(type, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration) = SpdxDocumentFile(type, analyzerConfig)
     }
 
     private val spdxDocumentCache = SpdxDocumentCache()
@@ -494,6 +490,7 @@ class SpdxDocumentFile(
     override fun resolveDependencies(
         analysisRoot: File,
         definitionFile: File,
+        excludes: Excludes,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val transitiveDocument = SpdxResolvedDocument.load(spdxDocumentCache, definitionFile, managerName)

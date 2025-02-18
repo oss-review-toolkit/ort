@@ -49,8 +49,8 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.Lockfile
 import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.PackageInfo
@@ -102,11 +102,8 @@ private val dartCommand = if (Os.isWindows) "dart.bat" else "dart"
  * - *pubDependenciesOnly*: Only scan Pub dependencies and skip native ones for Android (Gradle) and iOS (CocoaPods).
  */
 @Suppress("TooManyFunctions")
-class Pub(
-    name: String,
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Pub", analyzerConfig, repoConfig), CommandLineTool {
+class Pub(name: String, analyzerConfig: AnalyzerConfiguration) :
+    PackageManager(name, "Pub", analyzerConfig), CommandLineTool {
     companion object {
         const val OPTION_FLUTTER_VERSION = "flutterVersion"
         const val OPTION_GRADLE_VERSION = "gradleVersion"
@@ -116,8 +113,7 @@ class Pub(
     class Factory : AbstractPackageManagerFactory<Pub>("Pub") {
         override val globsForDefinitionFiles = listOf(PUBSPEC_YAML)
 
-        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-            Pub(type, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration) = Pub(type, analyzerConfig)
     }
 
     private val flutterVersion = options[OPTION_FLUTTER_VERSION] ?: Os.env["FLUTTER_VERSION"] ?: DEFAULT_FLUTTER_VERSION
@@ -271,6 +267,7 @@ class Pub(
     override fun resolveDependencies(
         analysisRoot: File,
         definitionFile: File,
+        excludes: Excludes,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
@@ -471,8 +468,8 @@ class Pub(
                 pubGradleVersion
             )
 
-            val gradle = gradleFactory.create(gradleAnalyzerConfig, repoConfig)
-            gradle.resolveDependencies(androidDir, listOf(definitionFile), labels).run {
+            val gradle = gradleFactory.create(gradleAnalyzerConfig)
+            gradle.resolveDependencies(androidDir, listOf(definitionFile), Excludes.EMPTY, labels).run {
                 projectResults.getValue(definitionFile).map { result ->
                     val project = result.project.withResolvedScopes(dependencyGraph)
                     result.copy(project = project, packages = sharedPackages)

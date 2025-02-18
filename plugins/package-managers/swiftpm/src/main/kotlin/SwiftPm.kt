@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
@@ -62,14 +62,12 @@ internal object SwiftCommand : CommandLineTool {
  */
 class SwiftPm(
     name: String,
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : PackageManager(name, "SwiftPM", analyzerConfig, repoConfig) {
+    analyzerConfig: AnalyzerConfiguration
+) : PackageManager(name, "SwiftPM", analyzerConfig) {
     class Factory : AbstractPackageManagerFactory<SwiftPm>("SwiftPM") {
         override val globsForDefinitionFiles = listOf(PACKAGE_SWIFT_NAME, PACKAGE_RESOLVED_NAME)
 
-        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-            SwiftPm(type, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration) = SwiftPm(type, analyzerConfig)
     }
 
     override fun mapDefinitionFiles(analysisRoot: File, definitionFiles: List<File>): List<File> {
@@ -79,6 +77,7 @@ class SwiftPm(
     override fun resolveDependencies(
         analysisRoot: File,
         definitionFile: File,
+        excludes: Excludes,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         if (definitionFile.name != PACKAGE_RESOLVED_NAME) {
