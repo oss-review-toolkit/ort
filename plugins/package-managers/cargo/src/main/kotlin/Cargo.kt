@@ -42,7 +42,7 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.unquote
@@ -67,16 +67,11 @@ internal object CargoCommand : CommandLineTool {
 /**
  * The [Cargo](https://doc.rust-lang.org/cargo/) package manager for Rust.
  */
-class Cargo(
-    name: String,
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Cargo", analyzerConfig, repoConfig) {
+class Cargo(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(name, "Cargo", analyzerConfig) {
     class Factory : AbstractPackageManagerFactory<Cargo>("Cargo") {
         override val globsForDefinitionFiles = listOf("Cargo.toml")
 
-        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-            Cargo(type, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration) = Cargo(type, analyzerConfig)
     }
 
     /**
@@ -146,6 +141,7 @@ class Cargo(
     override fun resolveDependencies(
         analysisRoot: File,
         definitionFile: File,
+        excludes: Excludes,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile

@@ -54,8 +54,8 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.masked
@@ -92,11 +92,7 @@ internal object ConanCommand : CommandLineTool {
  * TODO: Add support for `python_requires`.
  */
 @Suppress("TooManyFunctions")
-class Conan(
-    name: String,
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Conan", analyzerConfig, repoConfig) {
+class Conan(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(name, "Conan", analyzerConfig) {
     companion object {
         /**
          * The name of the option to specify the name of the lockfile.
@@ -116,8 +112,7 @@ class Conan(
     class Factory : AbstractPackageManagerFactory<Conan>("Conan") {
         override val globsForDefinitionFiles = listOf("conanfile*.txt", "conanfile*.py")
 
-        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-            Conan(type, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration) = Conan(type, analyzerConfig)
     }
 
     private val conanHome = Os.userHomeDirectory.resolve(".conan")
@@ -143,6 +138,7 @@ class Conan(
     override fun resolveDependencies(
         analysisRoot: File,
         definitionFile: File,
+        excludes: Excludes,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> =
         try {

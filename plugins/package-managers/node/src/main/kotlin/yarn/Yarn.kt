@@ -41,7 +41,7 @@ import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.readTree
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
@@ -90,16 +90,12 @@ internal object YarnCommand : CommandLineTool {
 /**
  * The [Yarn](https://classic.yarnpkg.com/) package manager for JavaScript.
  */
-open class Yarn(
-    name: String,
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : NodePackageManager(name, NodePackageManagerType.YARN, analyzerConfig, repoConfig) {
+open class Yarn(name: String, analyzerConfig: AnalyzerConfiguration) :
+    NodePackageManager(name, NodePackageManagerType.YARN, analyzerConfig) {
     class Factory : AbstractPackageManagerFactory<Yarn>("Yarn") {
         override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE)
 
-        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-            Yarn(type, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration) = Yarn(type, analyzerConfig)
     }
 
     private lateinit var stash: DirectoryStash
@@ -143,10 +139,11 @@ open class Yarn(
     override fun resolveDependencies(
         analysisRoot: File,
         definitionFile: File,
+        excludes: Excludes,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> =
         try {
-            resolveDependenciesInternal(analysisRoot, definitionFile)
+            resolveDependenciesInternal(analysisRoot, definitionFile, excludes)
         } finally {
             rawModuleInfoCache.clear()
         }
@@ -164,7 +161,11 @@ open class Yarn(
     )
 
     // TODO: Add support for bundledDependencies.
-    private fun resolveDependenciesInternal(analysisRoot: File, definitionFile: File): List<ProjectAnalyzerResult> {
+    private fun resolveDependenciesInternal(
+        analysisRoot: File,
+        definitionFile: File,
+        excludes: Excludes
+    ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
         installDependencies(analysisRoot, workingDir)
 
@@ -195,7 +196,8 @@ open class Yarn(
                     setOf(DEPENDENCIES_SCOPE, OPTIONAL_DEPENDENCIES_SCOPE),
                     DEPENDENCIES_SCOPE,
                     projectDirs,
-                    workspaceDir = workingDir
+                    workspaceDir = workingDir,
+                    excludes = excludes
                 ),
 
                 buildDependencyGraphForScopes(
@@ -204,7 +206,8 @@ open class Yarn(
                     setOf(DEV_DEPENDENCIES_SCOPE),
                     DEV_DEPENDENCIES_SCOPE,
                     projectDirs,
-                    workspaceDir = workingDir
+                    workspaceDir = workingDir,
+                    excludes = excludes
                 )
             )
 
@@ -286,7 +289,8 @@ open class Yarn(
         scopes: Set<String>,
         targetScope: String,
         projectDirs: Set<File>,
-        workspaceDir: File? = null
+        workspaceDir: File? = null,
+        excludes: Excludes
     ): String? {
         if (excludes.isScopeExcluded(targetScope)) return null
 

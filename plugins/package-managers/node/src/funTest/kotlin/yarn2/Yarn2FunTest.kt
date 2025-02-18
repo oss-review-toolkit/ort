@@ -45,8 +45,8 @@ class Yarn2FunTest : StringSpec({
             "projects/synthetic/yarn2/project-with-lockfile-skip-excluded-scopes-expected-output.yml"
         )
 
-        val result = create("Yarn2", excludedScopes = setOf("devDependencies"))
-            .resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = create("Yarn2")
+            .resolveSingleProject(definitionFile, excludedScopes = setOf("devDependencies"), resolveScopes = true)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }

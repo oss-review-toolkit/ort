@@ -42,7 +42,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.collectDependencies
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.ProcessCapture
@@ -77,16 +77,11 @@ internal object StackCommand : CommandLineTool {
 /**
  * The [Stack](https://haskellstack.org/) package manager for Haskell.
  */
-class Stack(
-    name: String,
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Stack", analyzerConfig, repoConfig) {
+class Stack(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(name, "Stack", analyzerConfig) {
     class Factory : AbstractPackageManagerFactory<Stack>("Stack") {
         override val globsForDefinitionFiles = listOf("stack.yaml")
 
-        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-            Stack(type, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration) = Stack(type, analyzerConfig)
     }
 
     override fun beforeResolution(analysisRoot: File, definitionFiles: List<File>) = StackCommand.checkVersion()
@@ -94,6 +89,7 @@ class Stack(
     override fun resolveDependencies(
         analysisRoot: File,
         definitionFile: File,
+        excludes: Excludes,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile

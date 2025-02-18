@@ -32,8 +32,8 @@ import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.Maven
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
@@ -81,16 +81,11 @@ internal object SbtCommand : CommandLineTool {
  * - *javaHome*: The directory of the Java home to use when analyzing projects. By default, the same Java home as for
  *   ORT itself is used.
  */
-class Sbt(
-    name: String,
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : PackageManager(name, "SBT", analyzerConfig, repoConfig) {
+class Sbt(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(name, "SBT", analyzerConfig) {
     class Factory : AbstractPackageManagerFactory<Sbt>("SBT") {
         override val globsForDefinitionFiles = listOf("build.sbt", "build.scala")
 
-        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-            Sbt(type, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration) = Sbt(type, analyzerConfig)
     }
 
     override fun mapDefinitionFiles(analysisRoot: File, definitionFiles: List<File>): List<File> {
@@ -232,22 +227,26 @@ class Sbt(
     override fun resolveDependencies(
         analysisRoot: File,
         definitionFiles: List<File>,
+        excludes: Excludes,
         labels: Map<String, String>
     ): PackageManagerResult {
         val sbtAnalyzerConfig = analyzerConfig.withPackageManagerOption(managerName, "sbtMode", "true")
-        return Maven(managerName, sbtAnalyzerConfig, repoConfig).run {
+        return Maven(managerName, sbtAnalyzerConfig).run {
             beforeResolution(analysisRoot, definitionFiles)
 
             // Simply pass on the list of POM files to Maven, ignoring the SBT build files here.
-            resolveDependencies(analysisRoot, definitionFiles, labels).also {
+            resolveDependencies(analysisRoot, definitionFiles, excludes, labels).also {
                 afterResolution(analysisRoot, definitionFiles)
             }
         }
     }
 
-    override fun resolveDependencies(analysisRoot: File, definitionFile: File, labels: Map<String, String>) =
-        // This is not implemented in favor over overriding [resolveDependencies].
-        throw NotImplementedError()
+    override fun resolveDependencies(
+        analysisRoot: File,
+        definitionFile: File,
+        excludes: Excludes,
+        labels: Map<String, String>
+    ) = throw NotImplementedError() // This is not implemented in favor over overriding [resolveDependencies].
 }
 
 // See https://github.com/sbt/sbt/blob/v1.5.1/launcher-package/integration-test/src/test/scala/RunnerTest.scala#L9.

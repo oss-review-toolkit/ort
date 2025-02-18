@@ -66,8 +66,8 @@ class NpmFunTest : StringSpec({
             "projects/synthetic/npm/shrinkwrap-skip-excluded-scopes-expected-output.yml"
         )
 
-        val result = create("NPM", excludedScopes = setOf("devDependencies"))
-            .resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = create("NPM")
+            .resolveSingleProject(definitionFile, excludedScopes = setOf("devDependencies"), resolveScopes = true)
 
         patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
     }

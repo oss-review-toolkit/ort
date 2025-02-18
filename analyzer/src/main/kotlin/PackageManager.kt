@@ -55,13 +55,11 @@ typealias ProjectResults = Map<File, List<ProjectAnalyzerResult>>
 
 /**
  * A class to represent a package manager with the given [managerName] that handles projects of the given [projectType].
- * Any distribution-specific configuration stored in the repository is passed as [repoConfig].
  */
 abstract class PackageManager(
     val managerName: String,
     val projectType: String,
-    val analyzerConfig: AnalyzerConfiguration,
-    val repoConfig: RepositoryConfiguration
+    val analyzerConfig: AnalyzerConfiguration
 ) {
     companion object {
         private val PACKAGE_MANAGER_DIRECTORIES = setOf(
@@ -227,12 +225,6 @@ abstract class PackageManager(
     protected val options: Options = analyzerConfig.getPackageManagerConfiguration(managerName)?.options.orEmpty()
 
     /**
-     * The [Excludes] to take into account during analysis. The [Excludes] from the [RepositoryConfiguration] are
-     * taken into account only if this is enabled in the [AnalyzerConfiguration].
-     */
-    val excludes by lazy { analyzerConfig.excludes(repoConfig) }
-
-    /**
      * Optional mapping of found [definitionFiles] before dependency resolution.
      */
     open fun mapDefinitionFiles(analysisRoot: File, definitionFiles: List<File>): List<File> = definitionFiles
@@ -280,6 +272,7 @@ abstract class PackageManager(
     open fun resolveDependencies(
         analysisRoot: File,
         definitionFiles: List<File>,
+        excludes: Excludes,
         labels: Map<String, String>
     ): PackageManagerResult {
         definitionFiles.forEach { definitionFile ->
@@ -297,7 +290,7 @@ abstract class PackageManager(
 
             val duration = measureTime {
                 runCatching {
-                    result[definitionFile] = resolveDependencies(analysisRoot, definitionFile, labels)
+                    result[definitionFile] = resolveDependencies(analysisRoot, definitionFile, excludes, labels)
                 }.onFailure {
                     it.showStackTrace()
 
@@ -331,13 +324,14 @@ abstract class PackageManager(
 
     /**
      * Resolve dependencies for a single absolute [definitionFile] and return a list of [ProjectAnalyzerResult]s, with
-     * one result for each project found in the definition file. The given [labels] are parameters to the overall
-     * analysis of the project and to further stages. They are not interpreted by ORT, but can be used to configure
-     * behavior of custom package manager implementations.
+     * one result for each project found in the definition file. The [excludes] define which scopes should be excluded
+     * from analysis. The given [labels] are parameters to the overall analysis of the project and to further stages.
+     * They are not interpreted by ORT, but can be used to configure behavior of custom package manager implementations.
      */
     abstract fun resolveDependencies(
         analysisRoot: File,
         definitionFile: File,
+        excludes: Excludes,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult>
 

@@ -24,7 +24,6 @@ import java.nio.file.PathMatcher
 import java.util.ServiceLoader
 
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.common.Plugin
 
 /**
@@ -49,9 +48,9 @@ interface PackageManagerFactory : Plugin {
     val matchersForDefinitionFiles: List<PathMatcher>
 
     /**
-     * Create a [PackageManager] using the specified [analyzerConfig] and [repoConfig].
+     * Create a [PackageManager] using the specified [analyzerConfig].
      */
-    fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration): PackageManager
+    fun create(analyzerConfig: AnalyzerConfiguration): PackageManager
 }
 
 /**
@@ -73,7 +72,7 @@ abstract class AbstractPackageManagerFactory<out T : PackageManager>(
         }
     }
 
-    abstract override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration): T
+    abstract override fun create(analyzerConfig: AnalyzerConfiguration): T
 
     /**
      * Return the package manager's name here to allow Clikt to display something meaningful when listing the

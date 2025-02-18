@@ -44,7 +44,7 @@ import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.plugins.packagemanagers.go.utils.Graph
 import org.ossreviewtoolkit.utils.common.CommandLineTool
@@ -85,16 +85,11 @@ internal object GoCommand : CommandLineTool {
  * Note: The file `go.sum` is not a lockfile as Go modules already allows for reproducible builds without that file.
  * Thus, no logic for handling the [AnalyzerConfiguration.allowDynamicVersions] is needed.
  */
-class GoMod(
-    name: String,
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : PackageManager(name, "GoMod", analyzerConfig, repoConfig) {
+class GoMod(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(name, "GoMod", analyzerConfig) {
     class Factory : AbstractPackageManagerFactory<GoMod>("GoMod") {
         override val globsForDefinitionFiles = listOf("go.mod")
 
-        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-            GoMod(type, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration) = GoMod(type, analyzerConfig)
     }
 
     override fun mapDefinitionFiles(analysisRoot: File, definitionFiles: List<File>): List<File> =
@@ -109,6 +104,7 @@ class GoMod(
     override fun resolveDependencies(
         analysisRoot: File,
         definitionFile: File,
+        excludes: Excludes,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val projectDir = definitionFile.parentFile

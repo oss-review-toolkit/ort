@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.utils.parseRepoManifestPath
 
 /**
@@ -40,19 +40,15 @@ import org.ossreviewtoolkit.model.utils.parseRepoManifestPath
  * It is required as in ORT's data model e.g. scan results need to be attached to projects (or packages), so files that
  * do not belong to any other project need to be attached to somewhere.
  */
-class Unmanaged(
-    name: String,
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Unmanaged", analyzerConfig, repoConfig) {
+class Unmanaged(name: String, analyzerConfig: AnalyzerConfiguration) :
+    PackageManager(name, "Unmanaged", analyzerConfig) {
     class Factory : AbstractPackageManagerFactory<Unmanaged>("Unmanaged") {
         // The empty list returned here deliberately causes this special package manager to never be considered in
         // PackageManager.findManagedFiles(). Instead, it will only be explicitly instantiated as part of
         // Analyzer.findManagedFiles().
         override val globsForDefinitionFiles = emptyList<String>()
 
-        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-            Unmanaged(type, analyzerConfig, repoConfig)
+        override fun create(analyzerConfig: AnalyzerConfiguration) = Unmanaged(type, analyzerConfig)
     }
 
     /**
@@ -62,6 +58,7 @@ class Unmanaged(
     override fun resolveDependencies(
         analysisRoot: File,
         definitionFile: File,
+        excludes: Excludes,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val vcsInfo = VersionControlSystem.getCloneInfo(definitionFile)

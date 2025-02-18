@@ -109,8 +109,8 @@ class GradleFunTest : StringSpec() {
             val definitionFile = getAssetFile("projects/synthetic/gradle/app/build.gradle")
             val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-scopes-excludes.yml")
 
-            val result = create("Gradle", "javaVersion" to "17", excludedScopes = setOf("test.*"))
-                .resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = create("Gradle", "javaVersion" to "17")
+                .resolveSingleProject(definitionFile, excludedScopes = setOf("test.*"), resolveScopes = true)
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
