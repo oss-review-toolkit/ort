@@ -28,37 +28,39 @@ import com.fasterxml.jackson.module.kotlin.readValue
  */
 object SpdxSimpleLicenseMapping {
     /**
-     * The raw map which associates custom license IDs with their corresponding SPDX license ID.
+     * The map of simple license names associated with their corresponding [SPDX license][SpdxLicense].
      */
-    internal val customLicenseIdsMap by lazy {
-        val resource = javaClass.getResource("/simple-license-mapping.yml")
+    internal val simpleLicenseMapping by lazy {
+        val resource = checkNotNull(javaClass.getResource("/simple-license-mapping.yml"))
         yamlMapper.readValue<Map<String, SpdxLicense>>(resource)
     }
 
     /**
-     * The map of custom license ids associated with their corresponding SPDX expression.
+     * The map of simple license names associated with their corresponding [SPDX expression][SpdxLicenseIdExpression].
      */
-    internal val customLicenseIds = customLicenseIdsMap.mapValues { (_, v) -> v.toExpression() }
-        .toSortedMap(String.CASE_INSENSITIVE_ORDER)
-
-    /**
-     * The map of deprecated SPDX license ids associated with their current SPDX expression.
-     */
-    private val deprecatedLicenseIds by lazy {
-        val resource = javaClass.getResource("/deprecated-license-mapping.yml")
-        yamlMapper.readValue<Map<String, SpdxSingleLicenseExpression>>(resource)
+    val simpleExpressionMapping by lazy {
+        simpleLicenseMapping.mapValuesTo(sortedMapOf(String.CASE_INSENSITIVE_ORDER)) { (_, v) -> v.toExpression() }
     }
 
     /**
-     * The map of varied SPDX license ids associated with their corresponding SPDX expression.
+     * The map of deprecated SPDX license IDs associated with their current [SPDX expression]
+     * [SpdxSingleLicenseExpression].
      */
-    val mapping = (customLicenseIds + deprecatedLicenseIds).toSortedMap(String.CASE_INSENSITIVE_ORDER)
+    val deprecatedExpressionMapping by lazy {
+        val resource = checkNotNull(javaClass.getResource("/deprecated-license-mapping.yml"))
+        val mapping = yamlMapper.readValue<Map<String, SpdxSingleLicenseExpression>>(resource)
+        mapping.toSortedMap(String.CASE_INSENSITIVE_ORDER)
+    }
 
     /**
-     * Return the [SpdxExpression] the [license] id maps to, or null if there is no corresponding expression. If
-     * [mapDeprecated] is true, license ids marked as deprecated in the SPDX standard are mapped to their
-     * corresponding current expression, otherwise they are mapped to their corresponding deprecated expression.
+     * Return the [SpdxSingleLicenseExpression] the [license] maps to, or null if there is no corresponding expression.
+     * If [mapDeprecated] is true, licenses marked as deprecated in the SPDX standard are mapped to their corresponding
+     * current expression. If [mapSimple] is true, licenses that are commonly known abbreviations or aliases are mapped
+     * to their corresponding official expression.
      */
-    fun map(license: String, mapDeprecated: Boolean = true) =
-        (if (mapDeprecated) mapping else customLicenseIds)[license] ?: SpdxLicense.forId(license)?.toExpression()
+    fun map(license: String, mapDeprecated: Boolean = true, mapSimple: Boolean = true): SpdxSingleLicenseExpression? {
+        if (mapDeprecated) deprecatedExpressionMapping[license]?.also { return it }
+        if (mapSimple) simpleExpressionMapping[license]?.also { return it }
+        return SpdxLicense.forId(license)?.toExpression()
+    }
 }

@@ -433,11 +433,11 @@ class SpdxExpressionTest : WordSpec({
                 "LGPL-3.0".toSpdx().normalize() shouldBe LGPL_3_0_ONLY.toExpression()
                 "LGPL-3.0+".toSpdx().normalize() shouldBe SpdxLicenseIdExpression("LGPL-3.0-or-later", true)
 
-                // These have no known successors, so just keep them.
-                "eCos-2.0".toSpdx().normalize() shouldBe ECOS_2_0.toExpression()
-                "Nunit".toSpdx().normalize() shouldBe NUNIT.toExpression()
-                "StandardML-NJ".toSpdx().normalize() shouldBe STANDARDML_NJ.toExpression()
-                "wxWindows".toSpdx().normalize() shouldBe WXWINDOWS.toExpression()
+                "Nunit".toSpdx().normalize() shouldBe ZLIB_ACKNOWLEDGEMENT.toExpression()
+                "StandardML-NJ".toSpdx().normalize() shouldBe SMLNJ.toExpression()
+                "bzip2-1.0.5".toSpdx().normalize() shouldBe BZIP2_1_0_6.toExpression()
+                "eCos-2.0".toSpdx().normalize() shouldBe (GPL_2_0_OR_LATER with ECOS_EXCEPTION_2_0)
+                "wxWindows".toSpdx().normalize() shouldBe (GPL_2_0_OR_LATER with WXWINDOWS_EXCEPTION_3_1)
             }
         }
 
