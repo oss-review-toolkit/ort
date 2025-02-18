@@ -156,6 +156,7 @@ log4j-api-slf4j = { module = "org.apache.logging.log4j:log4j-to-slf4j", version.
 logbackClassic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 maven-compat = { module = "org.apache.maven:maven-compat", version.ref = "maven" }
 maven-core = { module = "org.apache.maven:maven-core", version.ref = "maven" }
+maven-embedder = { module = "org.apache.maven:maven-embedder", version.ref = "maven" }
 maven-model = { module = "org.apache.maven:maven-model", version.ref = "maven" }
 maven-model-builder = { module = "org.apache.maven:maven-model-builder", version.ref = "maven" }
 maven-resolver-api = { module = "org.apache.maven.resolver:maven-resolver-api", version.ref = "mavenResolver" }
