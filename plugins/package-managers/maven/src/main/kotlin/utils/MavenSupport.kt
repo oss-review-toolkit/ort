@@ -219,9 +219,8 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) : Closeable {
                 }
             } else {
                 val project = projectBuildingResult.project
-                val identifier = "${project.groupId}:${project.artifactId}:${project.version}"
 
-                result[identifier] = projectBuildingResult
+                result[project.internalId] = projectBuildingResult
             }
         }
 

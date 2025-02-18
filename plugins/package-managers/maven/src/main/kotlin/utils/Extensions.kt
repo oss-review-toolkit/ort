@@ -50,6 +50,12 @@ internal fun MavenProject.identifier(projectType: String): Identifier =
     )
 
 /**
+ * Return an internal ID string to uniquely identify this [MavenProject] during the currently ongoing analysis.
+ */
+internal val MavenProject.internalId: String
+    get() = "$groupId:$artifactId:$version"
+
+/**
  * Convert this [MavenProject] to an ORT [Project] using the given [identifier], the path to the [definitionFile],
  * the [projectDir], and the set of [scopeNames].
  */

@@ -1,0 +1,9 @@
+<?pde version="3.8"?>
+<target name="MyTarget" sequenceNumber="1">
+ <locations>
+ <location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+ <unit id="org.apache.commons:commons-lang3" version="3.12.0"/>
+ <repository location="https://repo1.maven.org/maven2/"/>
+ </location>
+ </locations>
+</target>
