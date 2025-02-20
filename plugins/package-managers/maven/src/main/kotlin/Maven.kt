@@ -107,6 +107,7 @@ class Maven(
         val projectBuildingResult = mavenSupport.buildMavenProject(definitionFile)
         val mavenProject = projectBuildingResult.project
         val projectId = mavenProject.identifier(projectType)
+        val knownPackages = graphBuilder.packages()
 
         // If running in SBT mode expect that POM files were generated in a "target" subdirectory and that the correct
         // project directory is the parent directory of this.
@@ -129,7 +130,7 @@ class Maven(
             graphBuilder.scopesFor(projectId)
         )
 
-        val issues = graphBuilder.packages().mapNotNull { pkg ->
+        val issues = (graphBuilder.packages() - knownPackages).mapNotNull { pkg ->
             if (pkg.description == "POM was created by Sonatype Nexus") {
                 createAndLogIssue(
                     managerName,
