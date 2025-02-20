@@ -988,7 +988,7 @@ private class FakePackageProvenanceResolver : PackageProvenanceResolver {
     override suspend fun resolveProvenance(
         pkg: Package,
         defaultSourceCodeOrigins: List<SourceCodeOrigin>
-    ): KnownProvenance {
+    ): RemoteProvenance {
         defaultSourceCodeOrigins.forEach { sourceCodeOrigin ->
             when (sourceCodeOrigin) {
                 SourceCodeOrigin.ARTIFACT -> {
@@ -1103,7 +1103,7 @@ private fun createScanResult(
 )
 
 private fun createNestedScanResult(
-    provenance: KnownProvenance,
+    provenance: RemoteProvenance,
     scannerDetails: ScannerDetails,
     subRepositories: Map<String, RepositoryProvenance> = emptyMap()
 ) = NestedProvenanceScanResult(
@@ -1125,7 +1125,7 @@ private fun createStoredScanResult(provenance: Provenance, scannerDetails: Scann
     )
 
 private fun createStoredNestedScanResult(
-    provenance: KnownProvenance,
+    provenance: RemoteProvenance,
     scannerDetails: ScannerDetails,
     subRepositories: Map<String, RepositoryProvenance> = emptyMap()
 ) = NestedProvenanceScanResult(
