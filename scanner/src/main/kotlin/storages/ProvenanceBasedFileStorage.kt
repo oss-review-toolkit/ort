@@ -46,7 +46,11 @@ class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceB
     override fun read(provenance: KnownProvenance, scannerMatcher: ScannerMatcher?): List<ScanResult> {
         requireEmptyVcsPath(provenance)
 
-        val path = storagePath(provenance as RemoteProvenance)
+        if (provenance !is RemoteProvenance) {
+            throw ScanStorageException("Scan result must have a known provenance, but it is $provenance.")
+        }
+
+        val path = storagePath(provenance)
 
         return runCatching {
             backend.read(path).use { input ->
@@ -81,7 +85,7 @@ class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceB
 
         requireEmptyVcsPath(provenance)
 
-        if (provenance !is KnownProvenance) {
+        if (provenance !is RemoteProvenance) {
             throw ScanStorageException("Scan result must have a known provenance, but it is $provenance.")
         }
 
@@ -98,7 +102,7 @@ class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceB
 
         val scanResults = existingScanResults + scanResult
 
-        val path = storagePath(provenance as RemoteProvenance)
+        val path = storagePath(provenance)
         val yamlBytes = yamlMapper.writeValueAsBytes(scanResults)
         val input = ByteArrayInputStream(yamlBytes)
 

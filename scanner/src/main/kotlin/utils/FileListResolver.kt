@@ -56,10 +56,10 @@ class FileListResolver(
      * Get the [FileList] associated with the provided [provenance]. If it is not available in the [storage], download
      * the provenance and create the [FileList] from it.
      */
-    fun resolve(provenance: KnownProvenance): FileList {
+    fun resolve(provenance: RemoteProvenance): FileList {
         storage.getFileList(provenance)?.let { return it }
 
-        val dir = provenanceDownloader.download(provenance as RemoteProvenance)
+        val dir = provenanceDownloader.download(provenance)
 
         return createFileList(dir).also {
             try {

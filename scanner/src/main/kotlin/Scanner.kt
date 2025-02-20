@@ -236,7 +236,7 @@ class Scanner(
                 }.awaitAll()
             }.forEach { (pkg, result) ->
                 result.onSuccess { provenance ->
-                    controller.putPackageProvenance(pkg.id, provenance as RemoteProvenance)
+                    controller.putPackageProvenance(pkg.id, provenance)
                 }.onFailure {
                     controller.putPackageProvenanceResolutionIssue(
                         pkg.id,
@@ -257,7 +257,7 @@ class Scanner(
                 controller.getPackageProvenancesWithoutVcsPath().map { provenance ->
                     async {
                         provenance to runCatching {
-                            nestedProvenanceResolver.resolveNestedProvenance(provenance as RemoteProvenance)
+                            nestedProvenanceResolver.resolveNestedProvenance(provenance)
                         }.onFailure {
                             if (it is CancellationException) currentCoroutineContext().ensureActive()
                         }
@@ -586,13 +586,13 @@ class Scanner(
     }
 
     private fun scanPath(
-        provenance: KnownProvenance,
+        provenance: RemoteProvenance,
         scanners: List<PathScannerWrapper>,
         context: ScanContext,
         controller: ScanController
     ): Map<PathScannerWrapper, ScanResult> {
         val downloadDir = try {
-            provenanceDownloader.download(provenance as RemoteProvenance)
+            provenanceDownloader.download(provenance)
         } catch (e: DownloadException) {
             val issue = createAndLogIssue(
                 "Downloader", "Could not download provenance $provenance: ${e.collectMessages()}"
