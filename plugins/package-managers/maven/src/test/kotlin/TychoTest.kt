@@ -19,10 +19,12 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.maven
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.engine.spec.tempfile
+import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.should
@@ -48,6 +50,7 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.DependencyTreeMojoNode
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.JSON
+import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.identifier
 
 class TychoTest : WordSpec({
     "mapDefinitionFiles()" should {
@@ -115,6 +118,73 @@ class TychoTest : WordSpec({
             }
 
             subResults.single().issues should beEmpty()
+        }
+
+        "throw an exception if the root project could not be built" {
+            val definitionFile = tempfile()
+            val rootProject = createMavenProject("root", definitionFile)
+            val subProject1 = createMavenProject("sub1")
+            val subProject2 = createMavenProject("sub2")
+
+            val buildOutput = listOf(subProject2, rootProject, subProject1).toJson()
+
+            val tycho = spyk(Tycho("Tycho", tempdir(), mockk(relaxed = true), mockk(relaxed = true)))
+            injectCliMock(tycho, buildOutput, listOf(subProject1, subProject2))
+
+            val exception = shouldThrow<TychoBuildException> {
+                tycho.resolveDependencies(definitionFile, emptyMap())
+            }
+
+            exception.message shouldContain "Tycho root project could not be built."
+        }
+
+        "generate an issue if the Maven build had a non-zero exit code" {
+            val definitionFile = tempfile()
+            val rootProject = createMavenProject("root", definitionFile)
+            val subProject = createMavenProject("sub")
+            val projectsList = listOf(rootProject, subProject)
+
+            val tycho = spyk(Tycho("Tycho", tempdir(), mockk(relaxed = true), mockk(relaxed = true)))
+            injectCliMock(tycho, projectsList.toJson(), projectsList, exitCode = 1)
+
+            val results = tycho.resolveDependencies(definitionFile, emptyMap())
+
+            val rootResults = results.single { it.project.id.name == "root" }
+            with(rootResults.issues.single()) {
+                severity shouldBe Severity.ERROR
+                message shouldContain "Maven build failed"
+                source shouldBe "Tycho"
+            }
+        }
+
+        "generate issues for sub projects that do not occur in the build output" {
+            val definitionFile = tempfile()
+            val rootProject = createMavenProject("root", definitionFile)
+            val subProject1 = createMavenProject("sub1")
+            val subProject2 = createMavenProject("sub2")
+            val subProject3 = createMavenProject("sub3")
+            val projectsList = listOf(rootProject, subProject1, subProject2, subProject3)
+
+            val tycho = spyk(Tycho("Tycho", tempdir(), mockk(relaxed = true), mockk(relaxed = true)))
+            injectCliMock(tycho, projectsList.take(2).toJson(), projectsList, exitCode = 1)
+
+            val results = tycho.resolveDependencies(definitionFile, emptyMap())
+
+            val rootResults = results.single { it.project.id.name == "root" }
+            rootResults.issues.forAll { issue ->
+                issue.source shouldBe "Tycho"
+                issue.severity shouldBe Severity.ERROR
+            }
+
+            val regExBuildProjectError = Regex(".*for project '(.*)'.*")
+            val projectIssues = rootResults.issues.mapNotNull { issue ->
+                regExBuildProjectError.matchEntire(issue.message)?.groupValues?.get(1)
+            }
+
+            projectIssues shouldContainExactlyInAnyOrder listOf(
+                subProject2.identifier("Tycho").toCoordinates(),
+                subProject3.identifier("Tycho").toCoordinates()
+            )
         }
     }
 })
