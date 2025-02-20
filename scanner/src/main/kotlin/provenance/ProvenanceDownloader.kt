@@ -64,7 +64,7 @@ fun interface ProvenanceDownloader {
         // Use the provenanceDownloader to download each provenance from nestedProvenance separately, because they are
         // likely already cached if a path scanner wrapper is used.
 
-        val root = download(nestedProvenance.root as RemoteProvenance)
+        val root = download(nestedProvenance.root)
 
         nestedProvenance.subRepositories.forEach { (path, provenance) ->
             val tempDir = download(provenance)
