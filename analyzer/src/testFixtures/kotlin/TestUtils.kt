@@ -138,10 +138,14 @@ fun ProjectAnalyzerResult.withInvariantIssues() =
 fun analyze(
     projectDir: File,
     allowDynamicVersions: Boolean = false,
-    packageManagers: Collection<PackageManagerFactory> = PackageManagerFactory.ENABLED_BY_DEFAULT,
+    packageManagers: Collection<PackageManagerFactory> = PackageManagerFactory.ALL.values,
     packageManagerConfiguration: Map<String, PackageManagerConfiguration>? = null
 ): OrtResult {
-    val config = AnalyzerConfiguration(allowDynamicVersions, packageManagers = packageManagerConfiguration)
+    val config = AnalyzerConfiguration(
+        allowDynamicVersions,
+        enabledPackageManagers = packageManagers.map { it.type },
+        packageManagers = packageManagerConfiguration
+    )
     val analyzer = Analyzer(config)
     val managedFiles = analyzer.findManagedFiles(projectDir, packageManagers)
 

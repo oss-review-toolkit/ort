@@ -28,8 +28,8 @@ import org.apache.logging.log4j.kotlin.logger
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerDependency
-import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
+import org.ossreviewtoolkit.analyzer.determineEnabledPackageManagers
 import org.ossreviewtoolkit.analyzer.toPackageReference
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
@@ -373,7 +373,7 @@ class SpdxDocumentFile(managerName: String, analyzerConfig: AnalyzerConfiguratio
         if (packageFile.isFile) {
             val managedFiles = findManagedFiles(
                 packageFile.parentFile,
-                PackageManagerFactory.ENABLED_BY_DEFAULT.map { it.create(analyzerConfig) }
+                analyzerConfig.determineEnabledPackageManagers().map { it.create(analyzerConfig) }
             )
 
             managedFiles.forEach { (manager, files) ->

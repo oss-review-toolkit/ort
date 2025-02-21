@@ -39,6 +39,7 @@ import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.toYaml
@@ -141,7 +142,8 @@ private fun createAnalyzerResult(vararg packages: Package): OrtResult {
         result = AnalyzerResult.EMPTY.copy(
             projects = setOf(project),
             packages = packages.toSet()
-        )
+        ),
+        config = AnalyzerConfiguration(enabledPackageManagers = emptyList())
     )
 
     return OrtResult.EMPTY.copy(analyzer = analyzerRun)
