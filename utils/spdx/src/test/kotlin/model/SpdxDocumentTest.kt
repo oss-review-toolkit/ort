@@ -30,7 +30,6 @@ import io.kotest.matchers.string.shouldContain
 import java.io.File
 
 import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper
-import org.ossreviewtoolkit.utils.spdx.yamlMapper
 
 /**
  * This test uses the following test assets copied from the SPDX 2.2.2 specification examples.
@@ -107,8 +106,8 @@ private infix fun String.lenientShouldEqualJson(expected: String): String =
     }
 
 private infix fun String.lenientShouldEqualYaml(expected: String): String {
-    val json = yamlMapper.readTree(this).toString()
-    val expectedJson = yamlMapper.readTree(expected).toString()
+    val json = SpdxModelMapper.yamlMapper.readTree(this).toString()
+    val expectedJson = SpdxModelMapper.yamlMapper.readTree(expected).toString()
 
     return json.lenientShouldEqualJson(expectedJson)
 }
