@@ -222,7 +222,7 @@ class Tycho(
     ) {
         val projectId = project.identifier(projectType)
 
-        dependencies.forEach { node ->
+        dependencies.filterNot { excludes.isScopeExcluded(it.dependency.scope) }.forEach { node ->
             graphBuilder.addDependency(DependencyGraph.qualifyScope(projectId, node.dependency.scope), node)
         }
     }
