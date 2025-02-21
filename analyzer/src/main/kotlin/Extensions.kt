@@ -40,14 +40,14 @@ private fun String.decodeColon() = replace('\u0000', ':')
  * [default][PackageManagerFactory.isEnabledByDefault] of the [PackageManager]s.
  */
 fun AnalyzerConfiguration.determineEnabledPackageManagers(): Set<PackageManagerFactory> {
-    val enabled = enabledPackageManagers?.mapNotNull { name ->
+    val enabled = enabledPackageManagers.mapNotNull { name ->
         PackageManagerFactory.ALL[name].alsoIfNull {
             logger.error {
                 "Package manager '$name' is configured to be enabled but is not available in the classpath. It must " +
                     "be one of: ${PackageManagerFactory.ALL.keys.joinToString()}."
             }
         }
-    } ?: PackageManagerFactory.ENABLED_BY_DEFAULT
+    }
 
     val disabled = disabledPackageManagers?.mapNotNull { name ->
         PackageManagerFactory.ALL[name].alsoIfNull {

@@ -33,11 +33,6 @@ interface PackageManagerFactory : Plugin {
          * All [package manager factories][PackageManagerFactory] available in the classpath, associated by their names.
          */
         val ALL by lazy { Plugin.getAll<PackageManagerFactory>() }
-
-        /**
-         * The available [package manager factories][PackageManagerFactory] that are enabled by default.
-         */
-        val ENABLED_BY_DEFAULT by lazy { ALL.values.filter { it.isEnabledByDefault } }
     }
 
     /**

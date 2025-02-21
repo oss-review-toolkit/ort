@@ -73,7 +73,7 @@ class PackageManagerFunTest : WordSpec({
     )
 
     val projectDir = tempdir()
-    val packageManagers = PackageManagerFactory.ENABLED_BY_DEFAULT.map { it.create(AnalyzerConfiguration()) }
+    val packageManagers = PackageManagerFactory.ALL.values.map { it.create(AnalyzerConfiguration()) }
 
     beforeSpec {
         definitionFiles.writeFiles(projectDir)
@@ -86,7 +86,7 @@ class PackageManagerFunTest : WordSpec({
             // The test project contains at least one file per package manager, so the result should also contain an
             // entry for each package manager.
             managedFiles.keys.map { it.managerName } shouldContainExactlyInAnyOrder
-                PackageManagerFactory.ENABLED_BY_DEFAULT.map { it.type }.filterNot { it == "Unmanaged" }
+                PackageManagerFactory.ALL.values.map { it.type }.filterNot { it == "Unmanaged" }
 
             val managedFilesByName = managedFiles.groupByName(projectDir)
 
