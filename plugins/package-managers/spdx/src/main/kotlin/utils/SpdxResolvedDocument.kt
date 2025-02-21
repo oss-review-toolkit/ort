@@ -38,10 +38,10 @@ import org.ossreviewtoolkit.utils.ort.addBasicAuthorization
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.ort.downloadFile
 import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
-import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
-import org.ossreviewtoolkit.utils.spdx.model.SpdxExternalDocumentReference
-import org.ossreviewtoolkit.utils.spdx.model.SpdxPackage
-import org.ossreviewtoolkit.utils.spdx.model.SpdxRelationship
+import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxDocument
+import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxExternalDocumentReference
+import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxPackage
+import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxRelationship
 
 /**
  * A data class storing information about a root SPDX document and all the documents referenced by it.

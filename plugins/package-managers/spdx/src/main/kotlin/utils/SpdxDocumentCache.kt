@@ -24,8 +24,8 @@ import java.io.File
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.plugins.packagemanagers.spdx.SpdxDocumentFile
-import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper
-import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
+import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper
+import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxDocument
 
 /**
  * A helper class for [SpdxDocumentFile] that deals with loading and caching of SPDX documents.

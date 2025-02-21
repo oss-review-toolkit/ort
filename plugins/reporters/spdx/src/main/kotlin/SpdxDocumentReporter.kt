@@ -33,8 +33,8 @@ import org.ossreviewtoolkit.utils.spdx.SpdxCompoundExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants.LICENSE_REF_PREFIX
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseWithExceptionExpression
-import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper.FileFormat
-import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
+import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper.FileFormat
+import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxDocument
 
 data class SpdxDocumentReporterConfig(
     /**

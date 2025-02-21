@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.utils.spdx.model
+package org.ossreviewtoolkit.utils.spdxdocument.model
 
 /**
  * A checksum for an [SpdxFile].

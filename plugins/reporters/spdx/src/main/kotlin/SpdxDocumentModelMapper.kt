@@ -33,11 +33,11 @@ import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.ORT_NAME
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
-import org.ossreviewtoolkit.utils.spdx.model.SpdxCreationInfo
-import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
-import org.ossreviewtoolkit.utils.spdx.model.SpdxFile
-import org.ossreviewtoolkit.utils.spdx.model.SpdxPackage
-import org.ossreviewtoolkit.utils.spdx.model.SpdxRelationship
+import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxCreationInfo
+import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxDocument
+import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxFile
+import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxPackage
+import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxRelationship
 
 /**
  * A class for mapping [OrtResult]s to [SpdxDocument]s.

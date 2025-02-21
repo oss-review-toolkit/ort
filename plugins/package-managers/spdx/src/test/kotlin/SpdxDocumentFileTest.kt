@@ -35,10 +35,10 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.SpdxResolvedDocument
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
-import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper
-import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
-import org.ossreviewtoolkit.utils.spdx.model.SpdxExternalReference
-import org.ossreviewtoolkit.utils.spdx.model.SpdxPackage
+import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper
+import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxDocument
+import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxExternalReference
+import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxPackage
 
 /*
  * The below package data is based on example data taken from the SPDX specification.

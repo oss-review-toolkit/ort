@@ -59,11 +59,11 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
-import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper.FileFormat
-import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper.fromJson
-import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper.fromYaml
-import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
 import org.ossreviewtoolkit.utils.spdx.toSpdx
+import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper.FileFormat
+import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper.fromJson
+import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper.fromYaml
+import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxDocument
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.scannerRunOf

@@ -17,13 +17,13 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.utils.spdx.model
+package org.ossreviewtoolkit.utils.spdxdocument.model
 
 import io.kotest.assertions.json.shouldEqualJson
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.shouldContainExactly
 
-import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper
+import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper
 
 class SpdxExternalReferenceTest : WordSpec({
     "Serializing categories" should {
