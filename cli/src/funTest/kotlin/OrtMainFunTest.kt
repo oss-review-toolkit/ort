@@ -98,7 +98,7 @@ class OrtMainFunTest : StringSpec() {
         }
 
         "Disabling only Gradle works" {
-            val expectedPackageManagers = PackageManagerFactory.ENABLED_BY_DEFAULT.filterNot { it.type == "Gradle" }
+            val expectedPackageManagers = PackageManagerFactory.ALL.values.filterNot { it.type == "Gradle" }
             val markerLine = "The following ${expectedPackageManagers.size} package manager(s) are enabled:"
             val inputDir = tempdir()
 
