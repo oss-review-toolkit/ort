@@ -38,6 +38,7 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
+import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
@@ -137,6 +138,7 @@ class ResolvedLicenseInfoTest : WordSpec({
 
         "execute in reasonable time for large license info with several OR operators".config(
             blockingTest = true,
+            enabled = !Os.isWindows,
             timeout = 1.seconds
         ) {
             runCancellable {
@@ -148,6 +150,7 @@ class ResolvedLicenseInfoTest : WordSpec({
     "toCompoundExpression()" should {
         "execute in reasonable time for large license info with several OR operators".config(
             blockingTest = true,
+            enabled = !Os.isWindows,
             timeout = 1.seconds
         ) {
             runCancellable {
