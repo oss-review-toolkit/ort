@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,21 +19,20 @@
 
 plugins {
     // Apply precompiled plugins.
-    id("ort-plugin-conventions")
+    id("ort-library-conventions")
 }
 
 dependencies {
-    api(projects.reporter)
+    api(libs.jackson.annotations)
+    api(libs.jackson.databind)
 
-    ksp(projects.reporter)
-
-    implementation(projects.model)
     implementation(projects.utils.commonUtils)
-    implementation(projects.utils.ortUtils)
-    implementation(projects.utils.spdxDocument)
     implementation(projects.utils.spdxUtils)
 
-    implementation(libs.jackson.databind)
+    implementation(libs.jackson.core)
+    implementation(libs.jackson.dataformat.yaml)
+    implementation(libs.jackson.datatype.jsr310)
+    implementation(libs.jackson.module.kotlin)
 
-    funTestImplementation(libs.jsonSchemaValidator)
+    testImplementation(libs.kotest.assertions.json)
 }

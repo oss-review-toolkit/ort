@@ -57,12 +57,12 @@ import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
-import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
-import org.ossreviewtoolkit.utils.spdx.model.SpdxExternalDocumentReference
-import org.ossreviewtoolkit.utils.spdx.model.SpdxExternalReference
-import org.ossreviewtoolkit.utils.spdx.model.SpdxPackage
-import org.ossreviewtoolkit.utils.spdx.model.SpdxRelationship
 import org.ossreviewtoolkit.utils.spdx.toSpdx
+import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxDocument
+import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxExternalDocumentReference
+import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxExternalReference
+import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxPackage
+import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxRelationship
 
 private const val DEFAULT_SCOPE_NAME = "default"
 

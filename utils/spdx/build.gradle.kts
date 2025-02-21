@@ -41,7 +41,6 @@ dependencies {
     implementation(projects.utils.commonUtils)
 
     implementation(libs.jackson.dataformat.yaml)
-    implementation(libs.jackson.datatype.jsr310)
     implementation(libs.jackson.module.kotlin)
 
     testImplementation(libs.kotest.assertions.json)

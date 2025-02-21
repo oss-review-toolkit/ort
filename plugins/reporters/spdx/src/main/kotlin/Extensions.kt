@@ -51,15 +51,15 @@ import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 import org.ossreviewtoolkit.utils.spdx.andOrNull
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
-import org.ossreviewtoolkit.utils.spdx.model.SpdxChecksum
-import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
-import org.ossreviewtoolkit.utils.spdx.model.SpdxExternalReference
-import org.ossreviewtoolkit.utils.spdx.model.SpdxExtractedLicenseInfo
-import org.ossreviewtoolkit.utils.spdx.model.SpdxFile
-import org.ossreviewtoolkit.utils.spdx.model.SpdxPackage
-import org.ossreviewtoolkit.utils.spdx.model.SpdxPackageVerificationCode
 import org.ossreviewtoolkit.utils.spdx.nullOrBlankToSpdxNoassertionOrNone
 import org.ossreviewtoolkit.utils.spdx.toSpdxId
+import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxChecksum
+import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxDocument
+import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxExternalReference
+import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxExtractedLicenseInfo
+import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxFile
+import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxPackage
+import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxPackageVerificationCode
 
 /**
  * Convert an ORT [Hash] to an [SpdxChecksum], or return null if a conversion is not possible.

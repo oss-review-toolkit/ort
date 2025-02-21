@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.utils.spdx.model
+package org.ossreviewtoolkit.utils.spdxdocument.model
 
 import com.fasterxml.jackson.databind.exc.ValueInstantiationException
 
@@ -29,7 +29,7 @@ import io.kotest.matchers.string.shouldContain
 
 import java.io.File
 
-import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper
+import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper
 
 /**
  * This test uses the following test assets copied from the SPDX 2.2.2 specification examples.

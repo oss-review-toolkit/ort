@@ -49,12 +49,12 @@ import java.net.URI
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.utils.common.calculateHash
-import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper
-import org.ossreviewtoolkit.utils.spdx.model.SpdxChecksum
-import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
-import org.ossreviewtoolkit.utils.spdx.model.SpdxExternalDocumentReference
-import org.ossreviewtoolkit.utils.spdx.model.SpdxPackage
-import org.ossreviewtoolkit.utils.spdx.model.SpdxRelationship
+import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper
+import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxChecksum
+import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxDocument
+import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxExternalDocumentReference
+import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxPackage
+import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxRelationship
 
 class SpdxResolvedDocumentTest : WordSpec() {
     private lateinit var tempDir: File

@@ -19,7 +19,7 @@
 
 @file:Suppress("Filename", "MatchingDeclarationName")
 
-package org.ossreviewtoolkit.utils.spdx.model
+package org.ossreviewtoolkit.utils.spdxdocument.model
 
 import com.fasterxml.jackson.databind.util.StdConverter
 
