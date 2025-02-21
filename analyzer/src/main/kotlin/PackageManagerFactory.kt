@@ -45,8 +45,7 @@ interface PackageManagerFactory : Plugin {
  * A generic factory class for a [PackageManager].
  */
 abstract class AbstractPackageManagerFactory<out T : PackageManager>(
-    override val type: String,
-    override val isEnabledByDefault: Boolean = true
+    override val type: String
 ) : PackageManagerFactory {
     abstract override fun create(analyzerConfig: AnalyzerConfiguration): T
 

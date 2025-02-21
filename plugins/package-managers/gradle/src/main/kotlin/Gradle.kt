@@ -104,7 +104,7 @@ class Gradle(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManag
         const val OPTION_JAVA_HOME = "javaHome"
     }
 
-    class Factory : AbstractPackageManagerFactory<Gradle>("Gradle", isEnabledByDefault = false) {
+    class Factory : AbstractPackageManagerFactory<Gradle>("Gradle") {
         override fun create(analyzerConfig: AnalyzerConfiguration) = Gradle(type, analyzerConfig)
     }
 
