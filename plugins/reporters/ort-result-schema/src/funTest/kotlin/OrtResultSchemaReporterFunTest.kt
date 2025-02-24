@@ -1,0 +1,66 @@
+/*
+ * Copyright (C) 2025 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * License-Filename: LICENSE
+ */
+
+package org.ossreviewtoolkit.plugins.reporters.ortresultschema
+
+import com.fasterxml.jackson.databind.JsonNode
+
+import com.networknt.schema.JsonSchemaFactory
+import com.networknt.schema.SpecVersion
+import com.networknt.schema.serialization.JsonNodeReader
+
+import io.kotest.core.spec.style.WordSpec
+import io.kotest.engine.spec.tempdir
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.shouldBeSingleton
+import io.kotest.matchers.file.aFile
+import io.kotest.matchers.result.shouldBeSuccess
+import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
+
+import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.reporter.ORT_RESULT
+import org.ossreviewtoolkit.reporter.ReporterInput
+
+class OrtResultSchemaReporterFunTest : WordSpec({
+    "The generated schema" should {
+        "successfully validate the ORT_RESULT constant" {
+            val nodeReader = JsonNodeReader.builder().jsonMapper(jsonMapper).build()
+            val schemaV4 = JsonSchemaFactory
+                .builder(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V4))
+                .jsonNodeReader(nodeReader)
+                .build()
+
+            val outputDir = tempdir()
+            val reportFiles = OrtResultSchemaReporter().generateReport(ReporterInput(ORT_RESULT), outputDir)
+
+            reportFiles.shouldBeSingleton { result ->
+                result shouldBeSuccess { file ->
+                    file shouldBe aFile()
+
+                    val schema = file.readText()
+                    val node = jsonMapper.valueToTree<JsonNode>(ORT_RESULT)
+                    val errors = schemaV4.getSchema(schema).validate(node)
+
+                    errors should beEmpty()
+                }
+            }
+        }
+    }
+})
