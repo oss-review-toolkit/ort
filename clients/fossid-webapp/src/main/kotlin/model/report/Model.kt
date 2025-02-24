@@ -21,11 +21,17 @@ package org.ossreviewtoolkit.clients.fossid.model.report
 
 /**
  * Available FossID report types.
+ * FossID accepts the following report types:
+ * >= 24.2: SPDX, XLSX, STRING_MATCH, DYNAMIC_TOP_MATCHED_COMPONENTS, CYCLONE_DX, SPDX_LITE, HTML.
+ * < 24.2: HTML, STRING_MATCH, DYNAMIC_TOP_MATCHED_COMPONENTS, DYNAMIC_TOP_MATCHED_COMPONENTS,
+ * GENERATE_DYNAMIC_TOP_MATCHED_REPORT, CYCLONE_DX, SPDX_LITE, SPDX, SPDX_LITE, XLSX, DYNAMIC, BASIC, STRING_MATCH,
+ * PRELIMINARY, CYCLONE_DX
  */
 enum class ReportType(private val value: String) {
     /**
      * Interactive and self-contained HTML report providing advanced features for searching, filtering and investigating
-     * the results. Requires Javascript and corresponds to the UI report "Full FossID report".
+     * the results. Requires Javascript and corresponds to the UI report "Full FossID report". This report type has been
+     * removed with FossID 24.2.
      */
     HTML_DYNAMIC("dynamic"),
 
@@ -36,7 +42,8 @@ enum class ReportType(private val value: String) {
     HTML_STATIC("html"),
 
     /**
-     * Software Package Data Exchange (SPDX) conformant XML file. Corresponds to the UI report "SPDX".
+     * Software Package Data Exchange (SPDX) conformant XML file. Corresponds to the UI report "SPDX". This report type
+     * has been removed with FossID 24.2
      */
     SPDX_RDF("spdx"),
 
