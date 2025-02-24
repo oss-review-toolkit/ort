@@ -21,7 +21,10 @@ package org.ossreviewtoolkit.plugins.packagemanagers.maven
 
 import java.io.File
 import java.io.PrintStream
+import java.nio.file.Path
 import java.util.concurrent.atomic.AtomicReference
+
+import kotlin.io.path.invariantSeparatorsPathString
 
 import org.apache.logging.log4j.kotlin.logger
 import org.apache.maven.AbstractMavenLifecycleParticipant
@@ -187,8 +190,7 @@ class Tycho(
                 System.setProperty(MavenCli.MULTIMODULE_PROJECT_DIRECTORY, projectRoot.absolutePath)
 
                 cli.doMain(
-                    // The "package" goal is required; otherwise the Tycho extension is not activated.
-                    arrayOf("package", "dependency:tree", "-DoutputType=json"),
+                    generateMavenOptions(projectRoot),
                     projectRoot.path,
                     null,
                     null
@@ -260,10 +262,46 @@ class Tycho(
 
         return rootIssues
     }
+
+    /**
+     * Generate the command line options to be passed to the Maven CLI for the given [root] folder.
+     */
+    private fun generateMavenOptions(root: File): Array<String> =
+        buildList {
+            // The "package" goal is required; otherwise the Tycho extension is not activated.
+            add("package")
+            add("dependency:tree")
+            add("-DoutputType=json")
+
+            generateModuleExcludes(root)?.takeUnless { it.isEmpty() }?.let { excludedModules ->
+                add("-pl")
+                add(excludedModules)
+            }
+        }.toTypedArray()
+
+    /**
+     * Generate a list of submodules to be excluded for the Maven build with the given [rootProject] folder based on
+     * the configured exclusions. The resulting string (if any) is used as the value of Maven's `-pl` option.
+     */
+    private fun generateModuleExcludes(rootProject: File): String? {
+        if (!analyzerConfig.skipExcluded) return null
+
+        val analysisRootPath = analysisRoot.toPath()
+        val rootProjectPath = rootProject.toPath()
+        return rootProject.walk().filter { it.name == "pom.xml" }
+            .map { it.toPath().parent }
+            .filter { excludes.isPathExcluded(analysisRootPath.relativeSubPath(it)) }
+            .joinToString(",") { "!${rootProjectPath.relativeSubPath(it)}" }
+    }
 }
 
 /** The name of the logger used by the Maven dependency tree plugin. */
 private const val DEPENDENCY_TREE_LOGGER = "org.apache.maven.plugins.dependency.tree.TreeMojo"
+
+/**
+ * Return the relative path of [other] to this [Path].
+ */
+private fun Path.relativeSubPath(other: Path): String = relativize(other).invariantSeparatorsPathString
 
 /**
  * A special exception class to indicate that a Tycho build failed completely.
