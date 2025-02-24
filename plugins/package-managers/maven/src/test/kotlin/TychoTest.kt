@@ -26,14 +26,19 @@ import io.kotest.engine.spec.tempdir
 import io.kotest.engine.spec.tempfile
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.contain
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.comparables.shouldBeGreaterThan
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNot
 import io.kotest.matchers.string.shouldContain
 
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.slot
 import io.mockk.spyk
+import io.mockk.verify
 
 import java.io.File
 import java.io.PrintStream
@@ -47,6 +52,11 @@ import org.eclipse.aether.graph.DependencyNode
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.model.config.PathExcludeReason
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.DependencyTreeMojoNode
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.JSON
@@ -186,6 +196,99 @@ class TychoTest : WordSpec({
                 subProject3.identifier("Tycho").toCoordinates()
             )
         }
+
+        "exclude projects from the build according to path excludes" {
+            val analysisRoot = tempdir()
+            val tychoRoot = analysisRoot.createSubModule("tycho-root")
+            tychoRoot.createSubModule("tycho-sub1")
+            tychoRoot.createSubModule("tycho-sub2")
+            tychoRoot.createSubModule("tycho-excluded-sub1")
+            val module = tychoRoot.createSubModule("tycho-excluded-sub2")
+            module.createSubModule("tycho-excluded-sub2-sub")
+            val rootProject = createMavenProject("root", tychoRoot.pom)
+
+            val excludes = Excludes(
+                paths = listOf(
+                    PathExclude("tycho-root/tycho-excluded-sub1", PathExcludeReason.EXAMPLE_OF),
+                    PathExclude("tycho-root/tycho-excluded-sub2/**", PathExcludeReason.TEST_OF),
+                    PathExclude("other-root/**", PathExcludeReason.EXAMPLE_OF)
+                )
+            )
+            val analyzerConfig = AnalyzerConfiguration(skipExcluded = true)
+            val repositoryConfig = RepositoryConfiguration(excludes = excludes)
+
+            val tycho = spyk(Tycho("Tycho", analysisRoot, analyzerConfig, repositoryConfig))
+            val cli = injectCliMock(tycho, listOf(rootProject).toJson(), listOf(rootProject))
+
+            tycho.resolveDependencies(tychoRoot.pom, emptyMap())
+
+            val slotArgs = slot<Array<String>>()
+            verify {
+                cli.doMain(capture(slotArgs), any(), any(), any())
+            }
+
+            with(slotArgs.captured) {
+                val indexPl = indexOf("-pl")
+                indexPl shouldBeGreaterThan -1
+                val excludedProjects = get(indexPl + 1).split(",")
+                excludedProjects shouldContainExactlyInAnyOrder listOf(
+                    "!tycho-excluded-sub1",
+                    "!tycho-excluded-sub2",
+                    "!tycho-excluded-sub2/tycho-excluded-sub2-sub"
+                )
+            }
+        }
+
+        "not add a -pl option if no projects are excluded" {
+            val analysisRoot = tempdir()
+            val tychoRoot = analysisRoot.createSubModule("tycho-root")
+            tychoRoot.createSubModule("tycho-sub1")
+            tychoRoot.createSubModule("tycho-sub2")
+            val rootProject = createMavenProject("root", tychoRoot.pom)
+
+            val excludes = Excludes(paths = listOf(PathExclude("other-root/**", PathExcludeReason.EXAMPLE_OF)))
+            val analyzerConfig = AnalyzerConfiguration(skipExcluded = true)
+            val repositoryConfig = RepositoryConfiguration(excludes = excludes)
+
+            val tycho = spyk(Tycho("Tycho", analysisRoot, analyzerConfig, repositoryConfig))
+            val cli = injectCliMock(tycho, listOf(rootProject).toJson(), listOf(rootProject))
+
+            tycho.resolveDependencies(tychoRoot.pom, emptyMap())
+
+            val slotArgs = slot<Array<String>>()
+            verify {
+                cli.doMain(capture(slotArgs), any(), any(), any())
+            }
+
+            slotArgs.captured.toList() shouldNot contain("-pl")
+        }
+
+        "not exclude projects if skipExcluded is false" {
+            val analysisRoot = tempdir()
+            val tychoRoot = analysisRoot.createSubModule("tycho-root")
+            tychoRoot.createSubModule("tycho-sub1")
+            tychoRoot.createSubModule("tycho-sub2")
+            tychoRoot.createSubModule("tycho-excluded-sub1")
+            val rootProject = createMavenProject("root", tychoRoot.pom)
+
+            val excludes = Excludes(
+                paths = listOf(PathExclude("tycho-root/tycho-excluded-sub1", PathExcludeReason.EXAMPLE_OF))
+            )
+            val analyzerConfig = AnalyzerConfiguration()
+            val repositoryConfig = RepositoryConfiguration(excludes = excludes)
+
+            val tycho = spyk(Tycho("Tycho", analysisRoot, analyzerConfig, repositoryConfig))
+            val cli = injectCliMock(tycho, listOf(rootProject).toJson(), listOf(rootProject))
+
+            tycho.resolveDependencies(tychoRoot.pom, emptyMap())
+
+            val slotArgs = slot<Array<String>>()
+            verify {
+                cli.doMain(capture(slotArgs), any(), any(), any())
+            }
+
+            slotArgs.captured.toList() shouldNot contain("-pl")
+        }
     }
 })
 
@@ -245,3 +348,19 @@ private fun injectCliMock(
 
     return cli
 }
+
+/**
+ * Return a reference to the Maven pom file in this folder.
+ */
+private val File.pom: File
+    get() = resolve("pom.xml")
+
+/**
+ * Create a sub folder with the given [name] and a pom file to simulate a Maven module. Return the created folder
+ * for the module.
+ */
+private fun File.createSubModule(name: String): File =
+    resolve(name).apply {
+        mkdirs()
+        pom.also { it.writeText("pom-$name") }
+    }
