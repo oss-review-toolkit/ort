@@ -60,7 +60,7 @@ data class FossIdReporterConfig(
     val user: Secret,
 
     /**
-     * The type of report to generate. Allowed values are "HTML_DYNAMIC", "HTML_STATIC", "SPDX_RDF", and "XLSX".
+     * The type of report to generate. See [ReportType].
      */
     @OrtPluginOption(defaultValue = "XLSX")
     val reportType: String,
