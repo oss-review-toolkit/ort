@@ -88,7 +88,8 @@ class DosScanner(
     override val readFromStorage = false
     override val writeToStorage = config.writeToStorage
 
-    private val service = DosService.create(config.url, config.token, config.timeout?.let { Duration.ofSeconds(it) })
+    private val service =
+        DosService.create(config.url, config.token.value, config.timeout?.let { Duration.ofSeconds(it) })
     internal val client = DosClient(service)
 
     override fun scanPackage(nestedProvenance: NestedProvenance?, context: ScanContext): ScanResult {
