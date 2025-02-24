@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.plugins.scanners.dos
 
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
+import org.ossreviewtoolkit.plugins.api.Secret
 
 /**
  * This is the configuration class for DOS Scanner.
@@ -29,7 +30,7 @@ data class DosScannerConfig(
     val url: String,
 
     /** The secret token to use with the DOS backend. */
-    val token: String,
+    val token: Secret,
 
     /** The timeout for communicating with the DOS backend, in seconds. */
     val timeout: Long?,
