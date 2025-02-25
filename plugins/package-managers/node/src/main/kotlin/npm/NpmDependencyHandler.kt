@@ -68,9 +68,9 @@ internal class NpmDependencyHandler(
         }
 }
 
-private val ModuleInfo.isInstalled: Boolean get() = path != null
+internal val ModuleInfo.isInstalled: Boolean get() = path != null
 
-private val ModuleInfo.isProject: Boolean get() = resolved == null
+internal val ModuleInfo.isProject: Boolean get() = resolved == null
 
 private val ModuleInfo.packageJsonFile: File get() =
     File(

@@ -21,6 +21,10 @@ package org.ossreviewtoolkit.plugins.packagemanagers.node.npm
 
 import java.io.File
 import java.util.LinkedList
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.withContext
 
 import org.apache.logging.log4j.kotlin.logger
 
@@ -43,6 +47,7 @@ import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.withoutPrefix
+import org.ossreviewtoolkit.utils.ort.runBlocking
 
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
@@ -120,6 +125,8 @@ class Npm(
         val project = parseProject(definitionFile, analysisRoot)
         val projectModuleInfo = listModules(workingDir, issues).undoDeduplication()
 
+        runBlocking { requestAllPackageDetails(projectModuleInfo) }
+
         val scopeNames = Scope.entries
             .filterNot { excludes.isScopeExcluded(it.descriptor) }
             .mapTo(mutableSetOf()) { scope ->
@@ -129,6 +136,8 @@ class Npm(
 
                 scopeName
             }
+
+
 
         return ProjectAnalyzerResult(
             project = project.copy(scopeNames = scopeNames),
@@ -173,11 +182,35 @@ class Npm(
 
         return process.extractNpmIssues()
     }
+
+    private suspend fun requestAllPackageDetails(projectModuleInfo: ModuleInfo) {
+        projectModuleInfo.getAllPackageNodeModuleIds().parallelStream().forEach { packageName ->
+                println("XXX get $packageName upfront")
+                getRemotePackageDetails(packageName)
+        }
+    }
 }
 
 private enum class Scope(val descriptor: String) {
     DEPENDENCIES("dependencies"),
     DEV_DEPENDENCIES("devDependencies")
+}
+
+private fun ModuleInfo.getAllPackageNodeModuleIds(): Set<String> {
+    val queue = Scope.entries.flatMapTo(LinkedList()) { getScopeDependencies(it) }
+    val result = mutableSetOf<String>()
+
+    while(queue.isNotEmpty()) {
+        val info = queue.removeFirst()
+
+        if (!info.isProject && info.isInstalled && !info.name.isNullOrBlank() && !info.version.isNullOrBlank()) {
+            result += "${info.name}@${info.version}"
+        }
+
+        Scope.entries.flatMapTo(LinkedList()) { info.getScopeDependencies(it) }
+    }
+
+    return result
 }
 
 private fun ModuleInfo.getScopeDependencies(scope: Scope) =
