@@ -3,8 +3,8 @@ project:
   id: "Maven:org.ossreviewtoolkit.maven:maven-project:1.0-SNAPSHOT"
   definition_file_path: "plugins/package-managers/maven/src/funTest/assets/projects/synthetic/maven/pom.xml"
   authors:
-  - "Google"
-  - "The Apache Software Foundation"
+  - "ACME"
+  - "Sirius Cybernetics Corporation"
   declared_licenses:
   - "Apache License, Version 2.0"
   declared_licenses_processed:
