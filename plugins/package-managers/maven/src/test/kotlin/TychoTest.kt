@@ -41,7 +41,6 @@ import io.mockk.spyk
 import io.mockk.verify
 
 import java.io.File
-import java.io.PrintStream
 
 import org.apache.maven.cli.MavenCli
 import org.apache.maven.execution.MavenSession
@@ -330,19 +329,22 @@ private fun injectCliMock(
     exitCode: Int = 0
 ): MavenCli {
     val cli = mockk<MavenCli> {
-        every { doMain(any(), any(), any(), any()) } returns exitCode
+        every { doMain(any(), any(), any(), any()) } answers {
+            val args = firstArg<Array<String>>()
+            val outputFileArg = args.single { arg -> arg.startsWith("-DoutputFile") }
+            val outputFile = File(outputFileArg.substringAfter("="))
+            outputFile.writeText(buildOutput)
+            exitCode
+        }
     }
 
     val session = mockk<MavenSession> {
         every { projects } returns projectsList
     }
 
-    every { tycho.createMavenCli(any(), any()) } answers {
+    every { tycho.createMavenCli(any()) } answers {
         val collector = firstArg<TychoProjectsCollector>()
         collector.afterSessionEnd(session)
-
-        val out = secondArg<PrintStream>()
-        out.println(buildOutput)
         cli
     }
 
