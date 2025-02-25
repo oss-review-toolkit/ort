@@ -18,14 +18,16 @@ project:
   scopes:
   - name: "main"
     dependencies:
-    - id: "Go::go.mongodb.org/mongo-driver:1.12.0"
+    - id: "Go::go.mongodb.org/mongo-driver:1.17.3"
       linkage: "PROJECT_STATIC"
       dependencies:
-      - id: "Go::github.com/golang/snappy:0.0.1"
+      - id: "Go::github.com/golang/snappy:0.0.4"
         linkage: "PROJECT_STATIC"
-      - id: "Go::github.com/klauspost/compress:1.13.6"
+      - id: "Go::github.com/klauspost/compress:1.18.0"
         linkage: "PROJECT_STATIC"
-      - id: "Go::github.com/montanaflynn/stats:0.0.0-20171201202039-1bf9dbcd8cbe"
+      - id: "Go::github.com/montanaflynn/stats:0.7.1"
+        linkage: "PROJECT_STATIC"
+      - id: "Go::github.com/xdg-go/pbkdf2:1.0.0"
         linkage: "PROJECT_STATIC"
       - id: "Go::github.com/xdg-go/scram:1.1.2"
         linkage: "PROJECT_STATIC"
@@ -35,34 +37,36 @@ project:
         - id: "Go::github.com/xdg-go/stringprep:1.0.4"
           linkage: "PROJECT_STATIC"
           dependencies:
-          - id: "Go::golang.org/x/text:0.7.0"
+          - id: "Go::golang.org/x/text:0.22.0"
             linkage: "PROJECT_STATIC"
       - id: "Go::github.com/xdg-go/stringprep:1.0.4"
         linkage: "PROJECT_STATIC"
         dependencies:
-        - id: "Go::golang.org/x/text:0.7.0"
+        - id: "Go::golang.org/x/text:0.22.0"
           linkage: "PROJECT_STATIC"
-      - id: "Go::github.com/youmark/pkcs8:0.0.0-20181117223130-1be2e3e5546d"
-        linkage: "PROJECT_STATIC"
-      - id: "Go::golang.org/x/crypto:0.0.0-20220622213112-05595931fe9d"
+      - id: "Go::github.com/youmark/pkcs8:0.0.0-20240726163527-a2c0da244d78"
         linkage: "PROJECT_STATIC"
         dependencies:
-        - id: "Go::golang.org/x/text:0.7.0"
+        - id: "Go::golang.org/x/crypto:0.35.0"
           linkage: "PROJECT_STATIC"
-      - id: "Go::golang.org/x/sync:0.0.0-20220722155255-886fb9371eb4"
+      - id: "Go::golang.org/x/crypto:0.35.0"
         linkage: "PROJECT_STATIC"
-      - id: "Go::golang.org/x/text:0.7.0"
+      - id: "Go::golang.org/x/sync:0.11.0"
+        linkage: "PROJECT_STATIC"
+      - id: "Go::golang.org/x/text:0.22.0"
         linkage: "PROJECT_STATIC"
   - name: "vendor"
     dependencies:
-    - id: "Go::go.mongodb.org/mongo-driver:1.12.0"
+    - id: "Go::go.mongodb.org/mongo-driver:1.17.3"
       linkage: "PROJECT_STATIC"
       dependencies:
-      - id: "Go::github.com/golang/snappy:0.0.1"
+      - id: "Go::github.com/golang/snappy:0.0.4"
         linkage: "PROJECT_STATIC"
-      - id: "Go::github.com/klauspost/compress:1.13.6"
+      - id: "Go::github.com/klauspost/compress:1.18.0"
         linkage: "PROJECT_STATIC"
-      - id: "Go::github.com/montanaflynn/stats:0.0.0-20171201202039-1bf9dbcd8cbe"
+      - id: "Go::github.com/montanaflynn/stats:0.7.1"
+        linkage: "PROJECT_STATIC"
+      - id: "Go::github.com/xdg-go/pbkdf2:1.0.0"
         linkage: "PROJECT_STATIC"
       - id: "Go::github.com/xdg-go/scram:1.1.2"
         linkage: "PROJECT_STATIC"
@@ -72,27 +76,27 @@ project:
         - id: "Go::github.com/xdg-go/stringprep:1.0.4"
           linkage: "PROJECT_STATIC"
           dependencies:
-          - id: "Go::golang.org/x/text:0.7.0"
+          - id: "Go::golang.org/x/text:0.22.0"
             linkage: "PROJECT_STATIC"
       - id: "Go::github.com/xdg-go/stringprep:1.0.4"
         linkage: "PROJECT_STATIC"
         dependencies:
-        - id: "Go::golang.org/x/text:0.7.0"
+        - id: "Go::golang.org/x/text:0.22.0"
           linkage: "PROJECT_STATIC"
-      - id: "Go::github.com/youmark/pkcs8:0.0.0-20181117223130-1be2e3e5546d"
-        linkage: "PROJECT_STATIC"
-      - id: "Go::golang.org/x/crypto:0.0.0-20220622213112-05595931fe9d"
+      - id: "Go::github.com/youmark/pkcs8:0.0.0-20240726163527-a2c0da244d78"
         linkage: "PROJECT_STATIC"
         dependencies:
-        - id: "Go::golang.org/x/text:0.7.0"
+        - id: "Go::golang.org/x/crypto:0.35.0"
           linkage: "PROJECT_STATIC"
-      - id: "Go::golang.org/x/sync:0.0.0-20220722155255-886fb9371eb4"
+      - id: "Go::golang.org/x/crypto:0.35.0"
         linkage: "PROJECT_STATIC"
-      - id: "Go::golang.org/x/text:0.7.0"
+      - id: "Go::golang.org/x/sync:0.11.0"
+        linkage: "PROJECT_STATIC"
+      - id: "Go::golang.org/x/text:0.22.0"
         linkage: "PROJECT_STATIC"
 packages:
-- id: "Go::github.com/golang/snappy:0.0.1"
-  purl: "pkg:golang/github.com/golang/snappy@0.0.1"
+- id: "Go::github.com/golang/snappy:0.0.4"
+  purl: "pkg:golang/github.com/golang/snappy@0.0.4"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -110,15 +114,15 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/golang/snappy"
-    revision: "2a8bb927dd31d8daada140a5d09578521ce5c36a"
+    revision: "544b4180ac705b7605231d4a4550a1acb22a19fe"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/golang/snappy.git"
-    revision: "2a8bb927dd31d8daada140a5d09578521ce5c36a"
+    revision: "544b4180ac705b7605231d4a4550a1acb22a19fe"
     path: ""
-- id: "Go::github.com/klauspost/compress:1.13.6"
-  purl: "pkg:golang/github.com/klauspost/compress@1.13.6"
+- id: "Go::github.com/klauspost/compress:1.18.0"
+  purl: "pkg:golang/github.com/klauspost/compress@1.18.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -136,15 +140,15 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/klauspost/compress"
-    revision: "38d4ba985ac157cb858763e016645e14e74c13c4"
+    revision: "8e79dc4b98d4c5a09c62a2546b79c14edf7c3e38"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/klauspost/compress.git"
-    revision: "38d4ba985ac157cb858763e016645e14e74c13c4"
+    revision: "8e79dc4b98d4c5a09c62a2546b79c14edf7c3e38"
     path: ""
-- id: "Go::github.com/montanaflynn/stats:0.0.0-20171201202039-1bf9dbcd8cbe"
-  purl: "pkg:golang/github.com/montanaflynn/stats@0.0.0-20171201202039-1bf9dbcd8cbe"
+- id: "Go::github.com/montanaflynn/stats:0.7.1"
+  purl: "pkg:golang/github.com/montanaflynn/stats@0.7.1"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -162,12 +166,12 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/montanaflynn/stats"
-    revision: "1bf9dbcd8cbe1fdb75add3785b1d4a9a646269ab"
+    revision: "249b5aaa10484bb7e8f3b866b0925aaebdac8170"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/montanaflynn/stats.git"
-    revision: "1bf9dbcd8cbe1fdb75add3785b1d4a9a646269ab"
+    revision: "249b5aaa10484bb7e8f3b866b0925aaebdac8170"
     path: ""
 - id: "Go::github.com/xdg-go/pbkdf2:1.0.0"
   purl: "pkg:golang/github.com/xdg-go/pbkdf2@1.0.0"
@@ -247,8 +251,8 @@ packages:
     url: "https://github.com/xdg-go/stringprep.git"
     revision: "dabf77401b04b57597914595d170883092e0df3c"
     path: ""
-- id: "Go::github.com/youmark/pkcs8:0.0.0-20181117223130-1be2e3e5546d"
-  purl: "pkg:golang/github.com/youmark/pkcs8@0.0.0-20181117223130-1be2e3e5546d"
+- id: "Go::github.com/youmark/pkcs8:0.0.0-20240726163527-a2c0da244d78"
+  purl: "pkg:golang/github.com/youmark/pkcs8@0.0.0-20240726163527-a2c0da244d78"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -266,15 +270,15 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/youmark/pkcs8"
-    revision: "1be2e3e5546da8a58903ff4adcfab015022538ea"
+    revision: "a2c0da244d782506f23dd28c916a6efc2b33f9d6"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/youmark/pkcs8.git"
-    revision: "1be2e3e5546da8a58903ff4adcfab015022538ea"
+    revision: "a2c0da244d782506f23dd28c916a6efc2b33f9d6"
     path: ""
-- id: "Go::go.mongodb.org/mongo-driver:1.12.0"
-  purl: "pkg:golang/go.mongodb.org/mongo-driver@1.12.0"
+- id: "Go::go.mongodb.org/mongo-driver:1.17.3"
+  purl: "pkg:golang/go.mongodb.org/mongo-driver@1.17.3"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -292,15 +296,15 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/mongodb/mongo-go-driver.git"
-    revision: "e113d80138eabfce810c6369d25e57b146aac917"
+    revision: "9c48575104ae4feea05b39696e58bb60c13679c0"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/mongodb/mongo-go-driver.git"
-    revision: "e113d80138eabfce810c6369d25e57b146aac917"
+    revision: "9c48575104ae4feea05b39696e58bb60c13679c0"
     path: ""
-- id: "Go::golang.org/x/crypto:0.0.0-20220622213112-05595931fe9d"
-  purl: "pkg:golang/golang.org/x/crypto@0.0.0-20220622213112-05595931fe9d"
+- id: "Go::golang.org/x/crypto:0.35.0"
+  purl: "pkg:golang/golang.org/x/crypto@0.35.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -318,15 +322,15 @@ packages:
   vcs:
     type: "Git"
     url: "https://go.googlesource.com/crypto"
-    revision: "05595931fe9d3f8894ab063e1981d28e9873e2cb"
+    revision: "7292932d45d55c7199324ab0027cc86e8198aa22"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://go.googlesource.com/crypto"
-    revision: "05595931fe9d3f8894ab063e1981d28e9873e2cb"
+    revision: "7292932d45d55c7199324ab0027cc86e8198aa22"
     path: ""
-- id: "Go::golang.org/x/sync:0.0.0-20220722155255-886fb9371eb4"
-  purl: "pkg:golang/golang.org/x/sync@0.0.0-20220722155255-886fb9371eb4"
+- id: "Go::golang.org/x/sync:0.11.0"
+  purl: "pkg:golang/golang.org/x/sync@0.11.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -344,15 +348,15 @@ packages:
   vcs:
     type: "Git"
     url: "https://go.googlesource.com/sync"
-    revision: "886fb9371eb4b47af10bff9c8025a8c9e1554b92"
+    revision: "fe3591bd8a96873abc98bb9d2d5c62f27efca3e9"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://go.googlesource.com/sync"
-    revision: "886fb9371eb4b47af10bff9c8025a8c9e1554b92"
+    revision: "fe3591bd8a96873abc98bb9d2d5c62f27efca3e9"
     path: ""
-- id: "Go::golang.org/x/text:0.7.0"
-  purl: "pkg:golang/golang.org/x/text@0.7.0"
+- id: "Go::golang.org/x/text:0.22.0"
+  purl: "pkg:golang/golang.org/x/text@0.22.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -370,10 +374,10 @@ packages:
   vcs:
     type: "Git"
     url: "https://go.googlesource.com/text"
-    revision: "71a9c9afc4cd710b9412f7f99f0d8e35b10e488a"
+    revision: "3b64043c9e8fa8cd61a019df17dc729630915fa9"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://go.googlesource.com/text"
-    revision: "71a9c9afc4cd710b9412f7f99f0d8e35b10e488a"
+    revision: "3b64043c9e8fa8cd61a019df17dc729630915fa9"
     path: ""
