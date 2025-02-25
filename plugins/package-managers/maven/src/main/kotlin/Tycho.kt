@@ -270,7 +270,7 @@ class Tycho(
         buildList {
             // The "package" goal is required; otherwise the Tycho extension is not activated.
             add("package")
-            add("dependency:tree")
+            add(DEPENDENCY_TREE_GOAL)
             add("-DoutputType=json")
 
             generateModuleExcludes(root)?.takeUnless { it.isEmpty() }?.let { excludedModules ->
@@ -297,6 +297,18 @@ class Tycho(
 
 /** The name of the logger used by the Maven dependency tree plugin. */
 private const val DEPENDENCY_TREE_LOGGER = "org.apache.maven.plugins.dependency.tree.TreeMojo"
+
+/**
+ * The version of the Maven dependency plugin to use. It is necessary to explicitly specify a version to prevent
+ * that during a build, depending on the configured repositories, an outdated version is applied. The version
+ * specified here does not necessarily need to be the most recent one; it is sufficient that this version supports
+ * the functionality used by the Tycho implementation.
+ */
+private const val DEPENDENCY_PLUGIN_VERSION = "3.8.1"
+
+/** The goal to invoke the Maven Dependency Plugin to generate a dependency tree. */
+private const val DEPENDENCY_TREE_GOAL =
+    "org.apache.maven.plugins:maven-dependency-plugin:$DEPENDENCY_PLUGIN_VERSION:tree"
 
 /**
  * Return the relative path of [other] to this [Path].
