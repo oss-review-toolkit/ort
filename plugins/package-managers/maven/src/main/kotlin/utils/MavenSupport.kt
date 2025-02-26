@@ -564,6 +564,16 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) : Closeable {
     }
 
     /**
+     * Return a [PackageResolverFun] that uses functionality provided by this object (mainly the [parsePackage]
+     * function) to resolve a package for a given dependency. The function is configured with the given
+     * [SBT compatibility mode][sbtMode].
+     */
+    fun defaultPackageResolverFun(sbtMode: Boolean = false): PackageResolverFun =
+        { dependencyNode ->
+            parsePackage(dependencyNode.artifact, dependencyNode.repositories, sbtMode = sbtMode)
+        }
+
+    /**
      * Create a [MavenSession] and setup the [LegacySupport] and [SessionScope] because this is required to load
      * extensions using Maven Wagon.
      */

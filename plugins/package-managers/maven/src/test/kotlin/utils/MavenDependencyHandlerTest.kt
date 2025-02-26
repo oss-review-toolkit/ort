@@ -40,7 +40,6 @@ import org.apache.maven.project.ProjectBuildingException
 
 import org.eclipse.aether.artifact.Artifact
 import org.eclipse.aether.graph.DependencyNode
-import org.eclipse.aether.repository.RemoteRepository
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
@@ -134,31 +133,13 @@ class MavenDependencyHandlerTest : WordSpec({
     "createPackage" should {
         "create a package for a dependency" {
             val dependency = createDependency(PACKAGE_ID_SUFFIX)
-            val artifact = dependency.artifact
-            val repos = listOf(createRepository(), createRepository())
             val pkg = createPackage(PACKAGE_ID_SUFFIX)
             val issues = mutableListOf<Issue>()
 
-            val handler = createHandler()
-
-            every { dependency.repositories } returns repos
-            every { handler.support.parsePackage(artifact, repos) } returns pkg
-
-            handler.createPackage(dependency, issues) shouldBe pkg
-            issues should beEmpty()
-        }
-
-        "take the sbtMode flag into account" {
-            val dependency = createDependency(PACKAGE_ID_SUFFIX)
-            val artifact = dependency.artifact
-            val repos = listOf(createRepository())
-            val pkg = createPackage(PACKAGE_ID_SUFFIX)
-            val issues = mutableListOf<Issue>()
-
-            val handler = createHandler(sbtMode = true)
-
-            every { dependency.repositories } returns repos
-            every { handler.support.parsePackage(artifact, repos, sbtMode = true) } returns pkg
+            val handler = createHandler { node ->
+                node shouldBe dependency
+                pkg
+            }
 
             handler.createPackage(dependency, issues) shouldBe pkg
             issues should beEmpty()
@@ -176,28 +157,18 @@ class MavenDependencyHandlerTest : WordSpec({
 
         "return null for a package that is resolved to a project dependency" {
             val dependency = createDependency(PACKAGE_ID_SUFFIX)
-            val artifact = dependency.artifact
-            val repos = listOf(createRepository(), createRepository())
             val pkg = createPackage(PROJECT_ID_SUFFIX)
 
-            val handler = createHandler()
-
-            every { dependency.repositories } returns repos
-            every { handler.support.parsePackage(artifact, repos) } returns pkg
+            val handler = createHandler { pkg }
 
             handler.createPackage(dependency, mutableListOf()) should beNull()
         }
 
         "report the correct linkage for a package that is resolved to a project dependency" {
             val dependency = createDependency(PACKAGE_ID_SUFFIX)
-            val artifact = dependency.artifact
-            val repos = listOf(createRepository(), createRepository())
             val pkg = createPackage(PROJECT_ID_SUFFIX)
 
-            val handler = createHandler()
-
-            every { dependency.repositories } returns repos
-            every { handler.support.parsePackage(artifact, repos) } returns pkg
+            val handler = createHandler { pkg }
 
             handler.createPackage(dependency, mutableListOf())
 
@@ -210,14 +181,9 @@ class MavenDependencyHandlerTest : WordSpec({
                 IOException("General failure when reading hard disk.")
             )
             val dependency = createDependency(PACKAGE_ID_SUFFIX)
-            val artifact = dependency.artifact
-            val repos = listOf(createRepository())
             val issues = mutableListOf<Issue>()
 
-            val handler = createHandler()
-
-            every { dependency.repositories } returns repos
-            every { handler.support.parsePackage(artifact, repos) } throws exception
+            val handler = createHandler { throw exception }
 
             handler.createPackage(dependency, issues) should beNull()
 
@@ -248,6 +214,9 @@ private val LOCAL_PROJECTS = mapOf(
 
 /** ID of an inter-project dependency. */
 private val PROJECT_ID_SUFFIX = LOCAL_PROJECTS.keys.first()
+
+/** Constant for a resolver function that can be used if no interaction with the resolver is expected. */
+private val unusedPackageResolverFun: PackageResolverFun = { throw NotImplementedError() }
 
 /**
  * Return an [Identifier] from the given [mavenId]. The identifiers used by Maven internally are very close to
@@ -283,19 +252,11 @@ private fun createDependency(id: String): DependencyNode {
 }
 
 /**
- * Create the [MavenDependencyHandler] instance to be tested with mock dependencies and test data with the given
- * [sbtMode] flag.
+ * Create the [MavenDependencyHandler] instance to be tested with default parameters and the given
+ * [packageResolverFun].
  */
-private fun createHandler(sbtMode: Boolean = false): MavenDependencyHandler {
-    val mvn = mockk<MavenSupport>()
-    return MavenDependencyHandler(MANAGER_NAME, PROJECT_TYPE, mvn, LOCAL_PROJECTS, sbtMode)
-}
-
-/**
- * Convenience function to create a mock [RemoteRepository]. Note: This function solves some nasty false-positive
- * warnings about explicit type arguments.
- */
-private fun createRepository(): RemoteRepository = mockk()
+private fun createHandler(packageResolverFun: PackageResolverFun = unusedPackageResolverFun): MavenDependencyHandler =
+    MavenDependencyHandler(MANAGER_NAME, PROJECT_TYPE, LOCAL_PROJECTS, packageResolverFun)
 
 /**
  * Convenience function to create a mock [MavenProject]. Note: This function solves some nasty false-positive
