@@ -6,6 +6,7 @@ downloadPlugin = "5.6.0"
 gitSemverPlugin = "0.15.0"
 graalVmNativeImagePlugin = "0.10.5"
 ideaExtPlugin = "1.1.10"
+jakartaMigrationPlugin = "0.24.0"
 kotlinPlugin = "2.1.10"
 ksp = "2.1.10-1.0.30"
 mavenPublishPlugin = "0.30.0"
@@ -32,7 +33,7 @@ hikari = "6.2.1"
 hoplite = "2.9.0"
 jackson = "2.18.2"
 jakartaMail = "2.0.1"
-jakartaRestApi = "2.1.6"
+jerseyCommon = "3.1.10"
 jgit = "7.1.0.202411261347-r"
 jiraRestClient = "6.0.1"
 jruby = "9.4.12.0"
@@ -74,6 +75,7 @@ xz = "1.10"
 download = { id = "de.undercouch.download", version.ref = "downloadPlugin" }
 gitSemver = { id = "com.github.jmongard.git-semver-plugin", version.ref = "gitSemverPlugin" }
 ideaExt = { id = "org.jetbrains.gradle.plugin.idea-ext", version.ref = "ideaExtPlugin" }
+jakartaMigration = { id = "com.netflix.nebula.jakartaee-migration", version.ref = "jakartaMigrationPlugin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinPlugin" }
 versions = { id = "com.github.ben-manes.versions", version.ref = "versionsPlugin" }
 
@@ -122,7 +124,7 @@ jackson-dataformat-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-d
 jackson-datatype-jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson" }
 jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
 jakartaMail = { module = "com.sun.mail:jakarta.mail", version.ref = "jakartaMail" }
-jakartaRestApi = { module = "jakarta.ws.rs:jakarta.ws.rs-api", version.ref = "jakartaRestApi" }
+jerseyCommon = { module = "org.glassfish.jersey.core:jersey-common", version.ref = "jerseyCommon" }
 jgit = { module = "org.eclipse.jgit:org.eclipse.jgit", version.ref = "jgit" }
 jgit-ssh-apache = { module = "org.eclipse.jgit:org.eclipse.jgit.ssh.apache", version.ref = "jgit" }
 jgit-ssh-apache-agent = { module = "org.eclipse.jgit:org.eclipse.jgit.ssh.apache.agent", version.ref = "jgit" }

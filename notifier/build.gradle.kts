@@ -20,6 +20,14 @@
 plugins {
     // Apply precompiled plugins.
     id("ort-library-conventions")
+
+    // Apply third-party plugins.
+    alias(libs.plugins.jakartaMigration)
+}
+
+jakartaeeMigration {
+    includeTransform("com.atlassian.jira:jira-rest-java-client-core")
+    configurations.filterNot { it.isCanBeDeclared }.forEach(::transform)
 }
 
 dependencies {
@@ -32,16 +40,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
 
     implementation(libs.jakartaMail)
-
-    // Required due to https://ecosystem.atlassian.net/browse/JRJC-262.
-    implementation(libs.jakartaRestApi)
-
-    constraints {
-        implementation(libs.jakartaRestApi) {
-            because("the JIRA REST client still needs a 2.1.x version with the javax package namespace")
-        }
-    }
-
+    implementation(libs.jerseyCommon)
     implementation(libs.jiraRestClient.api)
     implementation(libs.jiraRestClient.app) {
         exclude("org.apache.logging.log4j", "log4j-slf4j2-impl")
