@@ -151,7 +151,8 @@ class Tycho(
         mavenSupport: MavenSupport,
         mavenProjects: Map<String, MavenProject>
     ): DependencyGraphBuilder<DependencyNode> {
-        val dependencyHandler = MavenDependencyHandler(managerName, projectType, mavenSupport, mavenProjects, false)
+        val dependencyHandler =
+            MavenDependencyHandler(managerName, projectType, mavenProjects, mavenSupport.defaultPackageResolverFun())
         return DependencyGraphBuilder(dependencyHandler)
     }
 

@@ -30,9 +30,15 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyHandler
-import org.ossreviewtoolkit.plugins.packagemanagers.maven.Maven
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.showStackTrace
+
+/**
+ * Type alias for a function used by [MavenDependencyHandler] to create [Package] objects for detected dependencies.
+ * The function expects the [DependencyNode] representing the dependency. It returns the created [Package] object or
+ * throws an exception if the package could not be created (which will then lead to the creation of issue).
+ */
+typealias PackageResolverFun = (DependencyNode) -> Package
 
 /**
  * A specialized [DependencyHandler] implementation for the dependency model of Maven.
@@ -44,19 +50,14 @@ class MavenDependencyHandler(
     /** The type of projects to handle. */
     private val projectType: String,
 
-    /** The helper object to invoke Maven-related functionality. */
-    internal val support: MavenSupport,
-
     /**
      * A map with information about the local projects in the current Maven build. Dependencies pointing to projects
      * sometimes need to be treated in a special way.
      */
     localProjects: Map<String, MavenProject>,
 
-    /**
-     * A flag whether [SBT compatibility mode][Maven.enableSbtMode] is enabled.
-     */
-    private val sbtMode: Boolean
+    /** The function for creating [Package] objects for detected dependencies. */
+    private val packageResolverFun: PackageResolverFun
 ) : DependencyHandler<DependencyNode> {
     /**
      * A set of identifiers that are known to point to local projects. This is updated for packages that are resolved
@@ -95,7 +96,7 @@ class MavenDependencyHandler(
         if (isLocalProject(dependency)) return null
 
         return runCatching {
-            val pkg = support.parsePackage(dependency.artifact, dependency.repositories, sbtMode = sbtMode)
+            val pkg = packageResolverFun(dependency)
 
             // There is the corner case that a dependency references a project, but in a different version than
             // the one used by the local build. Then, this dependency is actually a package, but Maven's
