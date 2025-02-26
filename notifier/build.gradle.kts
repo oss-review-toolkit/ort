@@ -50,4 +50,5 @@ dependencies {
 
     testImplementation(libs.greenmail)
     testImplementation(libs.mockk)
+    testImplementation(libs.wiremock)
 }
