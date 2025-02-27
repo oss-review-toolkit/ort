@@ -32,8 +32,8 @@ Currently, the following package managers (grouped by the programming language t
   * [Maven](https://maven.apache.org/) (limitations: [default profile only](https://github.com/oss-review-toolkit/ort/issues/1774))
 * JavaScript / Node.js
   * [Bower](https://bower.io/)
-  * [NPM](https://www.npmjs.com/) (limitations: [no peer dependencies](https://github.com/oss-review-toolkit/ort/issues/95))
-  * [PNPM](https://pnpm.io/) (limitations: [no peer dependencies](https://github.com/oss-review-toolkit/ort/issues/95))
+  * [NPM](https://www.npmjs.com/)
+  * [PNPM](https://pnpm.io/)
   * [Yarn 1](https://classic.yarnpkg.com/)
   * [Yarn 2+](https://v2.yarnpkg.com/)
 * .NET
