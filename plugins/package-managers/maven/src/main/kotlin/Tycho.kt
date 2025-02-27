@@ -258,6 +258,7 @@ class Tycho(
             add("-DoutputType=json")
             add("-DoutputFile=${dependencyTreeFile.absolutePath}")
             add("-DappendOutput=true")
+            add("-Dverbose=true")
 
             generateModuleExcludes(root)?.takeUnless { it.isEmpty() }?.let { excludedModules ->
                 add("-pl")
