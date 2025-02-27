@@ -12,7 +12,7 @@ mavenPublishPlugin = "0.30.0"
 reproducibleBuildsPlugin = "1.0"
 versionsPlugin = "0.52.0"
 
-aeSecurity = "0.135.4"
+aeSecurity = "0.135.6"
 asciidoctorj = "3.0.0"
 asciidoctorjPdf = "2.3.19"
 blackduckCommon = "67.0.4"
