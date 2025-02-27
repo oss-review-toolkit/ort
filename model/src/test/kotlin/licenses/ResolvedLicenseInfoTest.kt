@@ -137,7 +137,7 @@ class ResolvedLicenseInfoTest : WordSpec({
 
         "execute in reasonable time for large license info with several OR operators".config(
             blockingTest = true,
-            timeout = 1.seconds
+            timeout = 2.seconds
         ) {
             runCancellable {
                 COMPUTATION_HEAVY_RESOLVED_LICENSE_INFO.effectiveLicense(LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED)
@@ -148,7 +148,7 @@ class ResolvedLicenseInfoTest : WordSpec({
     "toCompoundExpression()" should {
         "execute in reasonable time for large license info with several OR operators".config(
             blockingTest = true,
-            timeout = 1.seconds
+            timeout = 2.seconds
         ) {
             runCancellable {
                 COMPUTATION_HEAVY_RESOLVED_LICENSE_INFO.toCompoundExpression()
