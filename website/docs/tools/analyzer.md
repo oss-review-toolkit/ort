@@ -29,28 +29,19 @@ Currently, the following package managers (grouped by the programming language t
   * [Stack](https://haskellstack.org/)
 * Java
   * [Gradle](https://gradle.org/)
-  * [Maven](https://maven.apache.org/) (limitations:
-    [default profile only](https://github.com/oss-review-toolkit/ort/issues/1774))
+  * [Maven](https://maven.apache.org/) (limitations: [default profile only](https://github.com/oss-review-toolkit/ort/issues/1774))
 * JavaScript / Node.js
   * [Bower](https://bower.io/)
-  * [NPM](https://www.npmjs.com/) (limitations:
-    [no peer dependencies](https://github.com/oss-review-toolkit/ort/issues/95))
-  * [PNPM](https://pnpm.io/) (limitations:
-    [no peer dependencies](https://github.com/oss-review-toolkit/ort/issues/95))
+  * [NPM](https://www.npmjs.com/) (limitations: [no peer dependencies](https://github.com/oss-review-toolkit/ort/issues/95))
+  * [PNPM](https://pnpm.io/) (limitations: [no peer dependencies](https://github.com/oss-review-toolkit/ort/issues/95))
   * [Yarn 1](https://classic.yarnpkg.com/)
   * [Yarn 2+](https://v2.yarnpkg.com/)
 * .NET
-  * [DotNet](https://docs.microsoft.com/en-us/dotnet/core/tools/) (limitations:
-    [no floating versions / ranges](https://github.com/oss-review-toolkit/ort/pull/1303#issue-253860146),
-    [no target framework](https://github.com/oss-review-toolkit/ort/issues/4083))
-  * [NuGet](https://www.nuget.org/) (limitations:
-    [no floating versions / ranges](https://github.com/oss-review-toolkit/ort/pull/1303#issue-253860146),
-    [no target framework](https://github.com/oss-review-toolkit/ort/issues/4083))
+  * [DotNet](https://docs.microsoft.com/en-us/dotnet/core/tools/) (limitations: [no floating versions / ranges](https://github.com/oss-review-toolkit/ort/pull/1303#issue-253860146), [no target framework](https://github.com/oss-review-toolkit/ort/issues/4083))
+  * [NuGet](https://www.nuget.org/) (limitations: [no floating versions / ranges](https://github.com/oss-review-toolkit/ort/pull/1303#issue-253860146), [no target framework](https://github.com/oss-review-toolkit/ort/issues/4083))
 * Objective-C / Swift
-  * [Carthage](https://github.com/Carthage/Carthage) (limitation:
-    [no `cartfile.private`](https://github.com/oss-review-toolkit/ort/issues/3774))
-  * [CocoaPods](https://github.com/CocoaPods/CocoaPods) (limitations:
-    [no custom source repositories](https://github.com/oss-review-toolkit/ort/issues/4188))
+  * [Carthage](https://github.com/Carthage/Carthage) (limitation: [no `cartfile.private`](https://github.com/oss-review-toolkit/ort/issues/3774))
+  * [CocoaPods](https://github.com/CocoaPods/CocoaPods) (limitations: [no custom source repositories](https://github.com/oss-review-toolkit/ort/issues/4188))
   * [SwiftPM](https://www.swift.org/package-manager)
 * PHP
   * [Composer](https://getcomposer.org/)
@@ -59,8 +50,7 @@ Currently, the following package managers (grouped by the programming language t
   * [Pipenv](https://pipenv.pypa.io/en/latest/)
   * [Poetry](https://python-poetry.org/)
 * Ruby
-  * [Bundler](https://bundler.io/) (limitations:
-    [restricted to the version available on the host](https://github.com/oss-review-toolkit/ort/issues/1308))
+  * [Bundler](https://bundler.io/) (limitations: [restricted to the version available on the host](https://github.com/oss-review-toolkit/ort/issues/1308))
 * Rust
   * [Cargo](https://doc.rust-lang.org/cargo/)
 * Scala
