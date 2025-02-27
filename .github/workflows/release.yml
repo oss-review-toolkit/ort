@@ -58,7 +58,7 @@ jobs:
               ./cli/build/distributions/ort-$ORT_VERSION.{tgz,zip}* \
               ./helper-cli/build/distributions/orth-$ORT_VERSION.{tgz,zip}*
       - name: Attest Build Provenance
-        uses: actions/attest-build-provenance@f9eaf234fc1c2e333c1eca18177db0f44fa6ba52 # v2
+        uses: actions/attest-build-provenance@bd77c077858b8d561b7a36cbe48ef4cc642ca39d # v2
         with:
           subject-path: |
             ./cli/build/distributions/ort-${{ env.ORT_VERSION }}.tgz
