@@ -40,40 +40,44 @@ data class SpdxDocumentReporterConfig(
     /**
      * The comment to add to the [SpdxDocument.creationInfo].
      */
+    @OrtPluginOption(aliases = ["creationInfo.comment"])
     val creationInfoComment: String?,
 
     /**
      * The person to add to the [SpdxDocument.creationInfo].
      */
+    @OrtPluginOption(aliases = ["creationInfo.person"])
     val creationInfoPerson: String?,
 
     /**
      * The organization to add to the [SpdxDocument.creationInfo].
      */
+    @OrtPluginOption(aliases = ["creationInfo.organization"])
     val creationInfoOrganization: String?,
 
     /**
      * The comment to add to the [SpdxDocument].
      */
+    @OrtPluginOption(aliases = ["document.comment"])
     val documentComment: String?,
 
     /**
      * The name of the generated [SpdxDocument].
      */
-    @OrtPluginOption(defaultValue = "Unnamed document")
+    @OrtPluginOption(defaultValue = "Unnamed document", aliases = ["document.name"])
     val documentName: String,
 
     /**
      * The list of file formats to generate. Supported values are "YAML" and "JSON".
      */
-    @OrtPluginOption(defaultValue = "YAML")
+    @OrtPluginOption(defaultValue = "YAML", aliases = ["output.file.formats"])
     val outputFileFormats: List<String>,
 
     /**
      * Toggle whether the output document should contain information on file granularity about files containing
      * findings.
      */
-    @OrtPluginOption(defaultValue = "true")
+    @OrtPluginOption(defaultValue = "true", aliases = ["file.information.enabled"])
     val fileInformationEnabled: Boolean
 )
 
