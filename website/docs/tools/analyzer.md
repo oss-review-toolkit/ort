@@ -20,7 +20,7 @@ Currently, the following package managers (grouped by the programming language t
 * C / C++
   * [Bazel](https://bazel.build/) (limitations: see [open tasks](https://github.com/oss-review-toolkit/ort/issues/264))
   * [Conan 1.x](https://conan.io/)
-  * Also see: [SPDX documents](#analyzer-for-spdx-documents)
+  * Also see: [SPDX documents](#spdx-as-fallback-package-manager)
 * Dart / Flutter
   * [Pub](https://pub.dev/)
 * Go
@@ -59,6 +59,6 @@ Currently, the following package managers (grouped by the programming language t
 * Unmanaged
   * This is a special "package manager" that manages all files that cannot be associated with any of the other package managers.
 
-<a name="analyzer-for-spdx-documents"></a>
+## SPDX as Fallback Package Manager
 
 If another package manager that is not part of the list above is used (or no package manager at all), the generic fallback to [SPDX documents](https://spdx.dev/specifications/) can be leveraged to describe [projects](https://github.com/oss-review-toolkit/ort/blob/main/plugins/package-managers/spdx/src/funTest/assets/projects/synthetic/inline-packages/project-xyz.spdx.yml) or [packages](https://github.com/oss-review-toolkit/ort/blob/main/plugins/package-managers/spdx/src/funTest/assets/projects/synthetic/libs/curl/package.spdx.yml).
