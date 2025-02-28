@@ -23,6 +23,7 @@ const config = {
   projectName: 'ort', // Usually your repo name.
   trailingSlash: false,
 
+  onBrokenAnchors: 'throw',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'throw',
 
