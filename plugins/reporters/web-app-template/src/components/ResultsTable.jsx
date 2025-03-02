@@ -57,7 +57,7 @@ const ResultsTable = ({ webAppOrtResult }) => {
             return webAppOrtResult.packages
                 .map(
                     (webAppPackage) => ({
-                        concludedLicenses: webAppPackage.concludedLicense || '',
+                        concludedLicense: webAppPackage.concludedLicense || '',
                         declaredLicenses: webAppPackage.declaredLicenses,
                         declaredLicensesText: Array.from(webAppPackage.declaredLicenses).join(', '),
                         declaredLicensesMapped: webAppPackage.declaredLicensesMapped,
