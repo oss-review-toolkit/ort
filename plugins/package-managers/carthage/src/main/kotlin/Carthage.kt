@@ -24,8 +24,8 @@ import java.net.URI
 
 import kotlinx.serialization.json.Json
 
-import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
@@ -39,6 +39,8 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.orEmpty
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.unquote
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
@@ -46,11 +48,12 @@ import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 /**
  * The [Carthage](https://github.com/Carthage/Carthage) package manager for Objective-C / Swift.
  */
-class Carthage(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(name, "Carthage", analyzerConfig) {
-    class Factory : AbstractPackageManagerFactory<Carthage>("Carthage") {
-        override fun create(analyzerConfig: AnalyzerConfiguration) = Carthage(type, analyzerConfig)
-    }
-
+@OrtPlugin(
+    displayName = "Carthage",
+    description = "The Carthage package manager for Objective-C / Swift.",
+    factory = PackageManagerFactory::class
+)
+class Carthage(override val descriptor: PluginDescriptor = CarthageFactory.descriptor) : PackageManager("Carthage") {
     // TODO: Add support for the Cartfile.
     //       This would require to resolve the actual dependency versions as a Cartfile supports dynamic versions.
     override val globsForDefinitionFiles = listOf("Cartfile.resolved")
@@ -59,6 +62,7 @@ class Carthage(name: String, analyzerConfig: AnalyzerConfiguration) : PackageMan
         analysisRoot: File,
         definitionFile: File,
         excludes: Excludes,
+        analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         // Transitive dependencies are only supported if the dependency itself uses Carthage.

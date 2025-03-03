@@ -19,7 +19,7 @@
 
 plugins {
     // Apply precompiled plugins.
-    id("ort-library-conventions")
+    id("ort-plugin-conventions")
 
     // Apply third-party plugins.
     alias(libs.plugins.kotlinSerialization)
@@ -38,6 +38,8 @@ dependencies {
     implementation(libs.maven.embedder)
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
+
+    ksp(projects.analyzer)
 
     // The classes from the maven-resolver dependencies are not used directly but initialized by the Plexus IoC
     // container automatically. They are required on the classpath for Maven dependency resolution to work.

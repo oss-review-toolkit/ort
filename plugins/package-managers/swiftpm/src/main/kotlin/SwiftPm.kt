@@ -21,8 +21,8 @@ package org.ossreviewtoolkit.plugins.packagemanagers.swiftpm
 
 import java.io.File
 
-import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
@@ -39,6 +39,8 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.orEmpty
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.toUri
@@ -60,14 +62,13 @@ internal object SwiftCommand : CommandLineTool {
 /**
  * The [Swift Package Manager](https://github.com/apple/swift-package-manager).
  */
-class SwiftPm(
-    name: String,
-    analyzerConfig: AnalyzerConfiguration
-) : PackageManager(name, "SwiftPM", analyzerConfig) {
-    class Factory : AbstractPackageManagerFactory<SwiftPm>("SwiftPM") {
-        override fun create(analyzerConfig: AnalyzerConfiguration) = SwiftPm(type, analyzerConfig)
-    }
-
+@OrtPlugin(
+    id = "SwiftPM",
+    displayName = "Swift Package Manager",
+    description = "The Swift Package Manager for Swift.",
+    factory = PackageManagerFactory::class
+)
+class SwiftPm(override val descriptor: PluginDescriptor = SwiftPmFactory.descriptor) : PackageManager("SwiftPM") {
     override val globsForDefinitionFiles = listOf(PACKAGE_SWIFT_NAME, PACKAGE_RESOLVED_NAME)
 
     override fun mapDefinitionFiles(analysisRoot: File, definitionFiles: List<File>): List<File> {
@@ -78,10 +79,11 @@ class SwiftPm(
         analysisRoot: File,
         definitionFile: File,
         excludes: Excludes,
+        analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         if (definitionFile.name != PACKAGE_RESOLVED_NAME) {
-            requireLockfile(analysisRoot, definitionFile.parentFile) {
+            requireLockfile(analysisRoot, definitionFile.parentFile, analyzerConfig.allowDynamicVersions) {
                 definitionFile.resolveSibling(PACKAGE_RESOLVED_NAME).isFile
             }
         }
@@ -111,7 +113,7 @@ class SwiftPm(
                 dependencies = packages.mapTo(mutableSetOf()) { it.toReference(linkage = PackageLinkage.DYNAMIC) }
             )
         }.onFailure {
-            issues += Issue(source = managerName, message = it.message.orEmpty())
+            issues += Issue(source = descriptor.displayName, message = it.message.orEmpty())
         }
 
         return listOf(
@@ -146,7 +148,7 @@ class SwiftPm(
             parseLockfile(lockfile).onSuccess { pins ->
                 pins.associateByTo(pinsByIdentity) { it.identity }
             }.onFailure {
-                issues += Issue(source = managerName, message = it.message.orEmpty())
+                issues += Issue(source = descriptor.displayName, message = it.message.orEmpty())
             }
         }
 

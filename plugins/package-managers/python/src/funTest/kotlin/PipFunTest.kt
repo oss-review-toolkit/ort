@@ -24,10 +24,8 @@ import io.kotest.engine.spec.tempfile
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.should
 
-import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.toYaml
-import org.ossreviewtoolkit.plugins.packagemanagers.python.Pip.Companion.OPTION_PYTHON_VERSION
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
@@ -37,7 +35,7 @@ class PipFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/external/spdx-tools-python/setup.py")
             val expectedResultFile = getAssetFile("projects/external/spdx-tools-python-expected-output.yml")
 
-            val result = create("Pip", OPTION_PYTHON_VERSION to "2.7").resolveSingleProject(definitionFile)
+            val result = PipFactory.create(pythonVersion = "2.7").resolveSingleProject(definitionFile)
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -46,7 +44,7 @@ class PipFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/pip/requirements.txt")
             val expectedResultFile = getAssetFile("projects/synthetic/pip-expected-output.yml")
 
-            val result = create("Pip", OPTION_PYTHON_VERSION to "2.7").resolveSingleProject(definitionFile)
+            val result = PipFactory.create(pythonVersion = "2.7").resolveSingleProject(definitionFile)
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -59,7 +57,7 @@ class PipFunTest : WordSpec({
             // Note: The expected results were generated with Python 3.8 and are incorrect for versions < 3.8.
             val expectedResultFile = getAssetFile("projects/external/example-python-flask-expected-output.yml")
 
-            val result = create("Pip", OPTION_PYTHON_VERSION to "3.10").resolveSingleProject(definitionFile)
+            val result = PipFactory.create(pythonVersion = "3.10").resolveSingleProject(definitionFile)
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -68,7 +66,7 @@ class PipFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/pip-python3/requirements.txt")
             val expectedResultFile = getAssetFile("projects/synthetic/pip-python3-expected-output.yml")
 
-            val result = create("Pip", OPTION_PYTHON_VERSION to "3.10").resolveSingleProject(definitionFile)
+            val result = PipFactory.create(pythonVersion = "3.10").resolveSingleProject(definitionFile)
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -77,7 +75,7 @@ class PipFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/python-inspector/requirements.txt")
             val expectedResultFile = getAssetFile("projects/synthetic/python-inspector-expected-output.yml")
 
-            val result = create("Pip", OPTION_PYTHON_VERSION to "3.10").resolveSingleProject(definitionFile)
+            val result = PipFactory.create(pythonVersion = "3.10").resolveSingleProject(definitionFile)
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -85,7 +83,7 @@ class PipFunTest : WordSpec({
         "not fail if the requirements file is empty" {
             val definitionFile = tempfile("requirements", ".txt")
 
-            val result = create("Pip", OPTION_PYTHON_VERSION to "3.10").resolveSingleProject(definitionFile)
+            val result = PipFactory.create(pythonVersion = "3.10").resolveSingleProject(definitionFile)
 
             result.issues should beEmpty()
         }

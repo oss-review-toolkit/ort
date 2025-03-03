@@ -24,9 +24,9 @@ import java.io.IOException
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManager.Companion.processPackageVcs
+import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
@@ -42,6 +42,8 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.orEmpty
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.collectMessages
@@ -83,14 +85,19 @@ internal object ComposerCommand : CommandLineTool {
 /**
  * The [Composer](https://getcomposer.org/) package manager for PHP.
  */
-class Composer(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(name, "Composer", analyzerConfig) {
-    class Factory : AbstractPackageManagerFactory<Composer>("Composer") {
-        override fun create(analyzerConfig: AnalyzerConfiguration) = Composer(type, analyzerConfig)
-    }
-
+@OrtPlugin(
+    displayName = "Composer",
+    description = "The Composer package manager for PHP.",
+    factory = PackageManagerFactory::class
+)
+class Composer(override val descriptor: PluginDescriptor = ComposerFactory.descriptor) : PackageManager("Composer") {
     override val globsForDefinitionFiles = listOf("composer.json")
 
-    override fun beforeResolution(analysisRoot: File, definitionFiles: List<File>) {
+    override fun beforeResolution(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        analyzerConfig: AnalyzerConfiguration
+    ) {
         // If all directories we are analyzing contain a composer.phar, no global installation of Composer is required
         // and hence we skip the version check.
         if (definitionFiles.all { File(it.parentFile, COMPOSER_PHAR_BINARY).isFile }) return
@@ -119,6 +126,7 @@ class Composer(name: String, analyzerConfig: AnalyzerConfiguration) : PackageMan
         analysisRoot: File,
         definitionFile: File,
         excludes: Excludes,
+        analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
@@ -136,7 +144,9 @@ class Composer(name: String, analyzerConfig: AnalyzerConfiguration) : PackageMan
         val lockfile = stashDirectories(workingDir.resolve("vendor")).use { _ ->
             val lockfileProvider = LockfileProvider(definitionFile)
 
-            requireLockfile(analysisRoot, workingDir) { lockfileProvider.lockfile.isFile }
+            requireLockfile(analysisRoot, workingDir, analyzerConfig.allowDynamicVersions) {
+                lockfileProvider.lockfile.isFile
+            }
 
             lockfileProvider.ensureLockfile {
                 logger.info { "Parsing lockfile at '$it'..." }
@@ -204,7 +214,7 @@ class Composer(name: String, analyzerConfig: AnalyzerConfiguration) : PackageMan
                 packageInfo.toReference(
                     issues = listOf(
                         createAndLogIssue(
-                            source = managerName,
+                            source = descriptor.displayName,
                             message = "Could not resolve dependencies of '$packageName': ${e.collectMessages()}"
                         )
                     )

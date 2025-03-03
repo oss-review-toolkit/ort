@@ -27,7 +27,6 @@ import io.kotest.data.row
 import io.kotest.data.table
 import io.kotest.matchers.should
 
-import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.GitCommand
@@ -69,7 +68,7 @@ class GradleFunTest : StringSpec() {
             val definitionFile = getAssetFile("projects/synthetic/gradle/build.gradle")
             val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-root.yml")
 
-            val result = create("Gradle", "javaVersion" to "17")
+            val result = GradleFactory.create(javaVersion = "17")
                 .resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
@@ -79,7 +78,7 @@ class GradleFunTest : StringSpec() {
             val definitionFile = getAssetFile("projects/synthetic/gradle/app/build.gradle")
             val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-app.yml")
 
-            val result = create("Gradle", "javaVersion" to "17")
+            val result = GradleFactory.create(javaVersion = "17")
                 .resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
@@ -89,7 +88,7 @@ class GradleFunTest : StringSpec() {
             val definitionFile = getAssetFile("projects/synthetic/gradle/lib/build.gradle")
             val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-lib.yml")
 
-            val result = create("Gradle", "javaVersion" to "17")
+            val result = GradleFactory.create(javaVersion = "17")
                 .resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
@@ -99,7 +98,7 @@ class GradleFunTest : StringSpec() {
             val definitionFile = getAssetFile("projects/synthetic/gradle/lib-without-repo/build.gradle")
             val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-lib-without-repo.yml")
 
-            val result = create("Gradle", "javaVersion" to "17")
+            val result = GradleFactory.create(javaVersion = "17")
                 .resolveSingleProject(definitionFile, resolveScopes = true)
 
             patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
@@ -109,7 +108,7 @@ class GradleFunTest : StringSpec() {
             val definitionFile = getAssetFile("projects/synthetic/gradle/app/build.gradle")
             val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-scopes-excludes.yml")
 
-            val result = create("Gradle", "javaVersion" to "17")
+            val result = GradleFactory.create(javaVersion = "17")
                 .resolveSingleProject(definitionFile, excludedScopes = setOf("test.*"), resolveScopes = true)
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
@@ -123,7 +122,7 @@ class GradleFunTest : StringSpec() {
             val definitionFile = getAssetFile("projects/synthetic/gradle-unsupported-version/build.gradle")
             val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-unsupported-version.yml")
 
-            val result = create("Gradle", "javaVersion" to "17")
+            val result = GradleFactory.create(javaVersion = "17")
                 .resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
@@ -176,7 +175,7 @@ class GradleFunTest : StringSpec() {
                 val definitionFile = getAssetFile("projects/synthetic/app/build.gradle")
                 val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-app$suffix.yml")
 
-                val result = create("Gradle", "javaVersion" to "17")
+                val result = GradleFactory.create(javaVersion = "17")
                     .resolveSingleProject(definitionFile, resolveScopes = true)
 
                 result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)

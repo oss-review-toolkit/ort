@@ -24,10 +24,10 @@ import java.io.IOException
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerDependency
 import org.ossreviewtoolkit.analyzer.PackageManagerDependencyResult
+import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.analyzer.determineEnabledPackageManagers
 import org.ossreviewtoolkit.analyzer.parseAuthorString
@@ -50,8 +50,11 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
-import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.OrtPluginOption
+import org.ossreviewtoolkit.plugins.api.PluginConfig
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.Lockfile
 import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.PackageInfo
 import org.ossreviewtoolkit.plugins.packagemanagers.pub.model.Pubspec
@@ -76,8 +79,6 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
 
-private const val DEFAULT_FLUTTER_VERSION = "3.19.3-stable"
-private const val DEFAULT_GRADLE_VERSION = "7.3"
 private const val PUBSPEC_YAML = "pubspec.yaml"
 private const val PUB_LOCK_FILE = "pubspec.lock"
 private const val SCOPE_NAME_DEPENDENCIES = "dependencies"
@@ -125,36 +126,46 @@ internal class PubCommand(private val flutterAbsolutePath: File) : CommandLineTo
     }
 }
 
+data class PubConfig(
+    /**
+     * The version to use when bootstrapping Flutter. If Flutter is already on the path, this option is ignored.
+     */
+    @OrtPluginOption(defaultValue = "3.19.3-stable")
+    val flutterVersion: String,
+
+    /**
+     * The version of Gradle to use when analyzing Gradle projects.
+     */
+    @OrtPluginOption(defaultValue = "7.3")
+    val gradleVersion: String,
+
+    /**
+     * Only scan Pub dependencies and skip native ones for Android (Gradle) and iOS (CocoaPods).
+     */
+    @OrtPluginOption(defaultValue = "false")
+    val pubDependenciesOnly: Boolean
+)
+
 /**
  * The [Pub](https://pub.dev/) package manager for Dart / Flutter.
  *
  * This implementation is using the Pub version distributed with Flutter. If Flutter is not installed on the system, it
  * is automatically downloaded and installed in the `~/.ort/tools` directory. The version of Flutter that is
  * automatically installed can be configured either by the `flutterVersion` package manager option (see below) or by
- * setting the `FLUTTER_VERSION` environment variable.
- *
- * This package manager supports the following [options][PackageManagerConfiguration.options]:
- * - *flutterVersion*: The version to use when bootstrapping Flutter. If Flutter is already on the path, this option is
- *   ignored.
- * - *gradleVersion*: The version of Gradle to use when analyzing Gradle projects. Defaults to [DEFAULT_GRADLE_VERSION].
- * - *pubDependenciesOnly*: Only scan Pub dependencies and skip native ones for Android (Gradle) and iOS (CocoaPods).
+ * setting the `FLUTTER_VERSION` environment variable. Setting the environment variable takes precedence over the
+ * configuration option.
  */
+@OrtPlugin(
+    displayName = "Pub",
+    description = "The Pub package manager for Dart / Flutter.",
+    factory = PackageManagerFactory::class
+)
 @Suppress("TooManyFunctions")
-class Pub(name: String, analyzerConfig: AnalyzerConfiguration) :
-    PackageManager(name, "Pub", analyzerConfig) {
-    companion object {
-        const val OPTION_FLUTTER_VERSION = "flutterVersion"
-        const val OPTION_GRADLE_VERSION = "gradleVersion"
-        const val OPTION_PUB_DEPENDENCIES_ONLY = "pubDependenciesOnly"
-    }
-
-    class Factory : AbstractPackageManagerFactory<Pub>("Pub") {
-        override fun create(analyzerConfig: AnalyzerConfiguration) = Pub(type, analyzerConfig)
-    }
-
+class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, private val config: PubConfig) :
+    PackageManager("Pub") {
     override val globsForDefinitionFiles = listOf(PUBSPEC_YAML)
 
-    private val flutterVersion = options[OPTION_FLUTTER_VERSION] ?: Os.env["FLUTTER_VERSION"] ?: DEFAULT_FLUTTER_VERSION
+    private val flutterVersion = Os.env["FLUTTER_VERSION"] ?: config.flutterVersion
     private val flutterInstallDir = ortToolsDirectory.resolve("flutter-$flutterVersion")
 
     private val flutterHome by lazy {
@@ -164,16 +175,6 @@ class Pub(name: String, analyzerConfig: AnalyzerConfiguration) :
 
     private val flutterAbsolutePath = flutterHome.resolve("bin")
 
-    private val gradleFactory = analyzerConfig.determineEnabledPackageManagers()
-        .filter { it.type.startsWith("Gradle") }
-        .let { managers ->
-            require(managers.size < 2) {
-                "All of the $managers managers are able to manage 'Gradle' projects. Please enable only one of them."
-            }
-
-            managers.firstOrNull()
-        }
-
     private data class ParsePackagesResult(
         val packages: Map<Identifier, Package>,
         val issues: List<Issue>
@@ -182,17 +183,20 @@ class Pub(name: String, analyzerConfig: AnalyzerConfiguration) :
     private val reader = PubCacheReader(flutterHome)
     private val gradleDefinitionFilesForPubDefinitionFiles = mutableMapOf<File, Set<File>>()
 
-    private val pubDependenciesOnly = options[OPTION_PUB_DEPENDENCIES_ONLY].toBoolean()
-
-    override fun beforeResolution(analysisRoot: File, definitionFiles: List<File>) {
-        if (pubDependenciesOnly) {
+    override fun beforeResolution(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        analyzerConfig: AnalyzerConfiguration
+    ) {
+        if (config.pubDependenciesOnly) {
             logger.info {
                 "Only analyzing Pub dependencies, skipping additional package managers for Flutter packages " +
                     "(Gradle for Android, CocoaPods for iOS dependencies)."
             }
-        } else if (gradleFactory != null) {
+        } else if (analyzerConfig.getGradleFactory() != null) {
             gradleDefinitionFilesForPubDefinitionFiles.clear()
-            gradleDefinitionFilesForPubDefinitionFiles += findGradleDefinitionFiles(analysisRoot, definitionFiles)
+            gradleDefinitionFilesForPubDefinitionFiles +=
+                findGradleDefinitionFiles(analysisRoot, definitionFiles, analyzerConfig)
 
             logger.info {
                 "Found ${gradleDefinitionFilesForPubDefinitionFiles.values.flatten().size} Gradle project(s)."
@@ -251,13 +255,19 @@ class Pub(name: String, analyzerConfig: AnalyzerConfiguration) :
 
     private fun findGradleDefinitionFiles(
         analysisRoot: File,
-        pubDefinitionFiles: Collection<File>
+        pubDefinitionFiles: Collection<File>,
+        analyzerConfig: AnalyzerConfiguration
     ): Map<File, Set<File>> {
         val result = mutableMapOf<File, MutableSet<File>>()
 
+        val gradleFactory = analyzerConfig.getGradleFactory()
+        val gradleOptions = gradleFactory?.let {
+            analyzerConfig.getPackageManagerConfiguration(it.descriptor.id)?.options
+        }.orEmpty()
+
         val gradleDefinitionFiles = findManagedFiles(
             analysisRoot,
-            setOfNotNull(gradleFactory?.create(analyzerConfig))
+            setOfNotNull(analyzerConfig.getGradleFactory()?.create(PluginConfig(gradleOptions)))
         ).values.flatten()
 
         val pubDefinitionFilesWithFlutterSdkSorted = pubDefinitionFiles.filter {
@@ -281,19 +291,24 @@ class Pub(name: String, analyzerConfig: AnalyzerConfiguration) :
 
     override fun findPackageManagerDependencies(
         analysisRoot: File,
-        managedFiles: Map<PackageManager, List<File>>
+        managedFiles: Map<PackageManager, List<File>>,
+        analyzerConfig: AnalyzerConfiguration
     ): PackageManagerDependencyResult {
-        if (pubDependenciesOnly) {
+        if (config.pubDependenciesOnly) {
             return PackageManagerDependencyResult(mustRunBefore = emptySet(), mustRunAfter = emptySet())
         }
+
+        val gradleFactory = analyzerConfig.getGradleFactory()
 
         // If there are any Gradle definition files which seem to be associated to a Pub Flutter project, it is likely
         // that Pub needs to run before Gradle, because Pub generates the required local.properties file which contains
         // the path to the Android SDK.
-        val gradle = managedFiles.keys.find { it.managerName == gradleFactory?.type }
+        val gradle = managedFiles.keys.find { it.descriptor.id == gradleFactory?.descriptor?.id }
         val mustRunBefore =
-            if (gradle != null && findGradleDefinitionFiles(analysisRoot, managedFiles.getValue(this)).isNotEmpty()) {
-                setOf(gradle.managerName)
+            if (gradle != null &&
+                findGradleDefinitionFiles(analysisRoot, managedFiles.getValue(this), analyzerConfig).isNotEmpty()
+            ) {
+                setOf(gradle.descriptor.id)
             } else {
                 emptySet()
             }
@@ -305,10 +320,12 @@ class Pub(name: String, analyzerConfig: AnalyzerConfiguration) :
         analysisRoot: File,
         definitionFile: File,
         excludes: Excludes,
+        analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
         val pubspec = parsePubspec(definitionFile)
+        val gradleFactory = analyzerConfig.getGradleFactory()
 
         val hasDependencies = pubspec.getScopeDependencies(SCOPE_NAME_DEPENDENCIES).isNotEmpty()
 
@@ -318,7 +335,7 @@ class Pub(name: String, analyzerConfig: AnalyzerConfiguration) :
         val projectAnalyzerResults = mutableListOf<ProjectAnalyzerResult>()
 
         if (hasDependencies) {
-            installDependencies(analysisRoot, workingDir)
+            installDependencies(analysisRoot, workingDir, analyzerConfig.allowDynamicVersions)
 
             logger.info { "Reading $PUB_LOCK_FILE file in $workingDir." }
 
@@ -326,9 +343,9 @@ class Pub(name: String, analyzerConfig: AnalyzerConfiguration) :
 
             logger.info { "Successfully read lockfile." }
 
-            val parsePackagesResult = parseInstalledPackages(lockfile, labels, workingDir)
+            val parsePackagesResult = parseInstalledPackages(lockfile, labels, workingDir, analyzerConfig)
 
-            if (!pubDependenciesOnly) {
+            if (!config.pubDependenciesOnly) {
                 if (gradleFactory != null) {
                     val gradleDefinitionFiles = gradleDefinitionFilesForPubDefinitionFiles
                         .getValue(definitionFile)
@@ -337,7 +354,7 @@ class Pub(name: String, analyzerConfig: AnalyzerConfiguration) :
                     if (gradleDefinitionFiles.isNotEmpty()) {
                         val gradleDependencies = gradleDefinitionFiles.mapTo(mutableSetOf()) {
                             PackageManagerDependency(
-                                packageManager = gradleFactory.type,
+                                packageManager = gradleFactory.descriptor.id,
                                 definitionFile = VersionControlSystem.getPathInfo(it).path,
                                 scope = "releaseCompileClasspath",
                                 linkage = PackageLinkage.PROJECT_STATIC
@@ -348,7 +365,7 @@ class Pub(name: String, analyzerConfig: AnalyzerConfiguration) :
                     }
                 } else {
                     createAndLogIssue(
-                        source = managerName,
+                        source = descriptor.displayName,
                         message = "The Gradle package manager plugin was not found in the runtime classpath of " +
                             "ORT. Gradle project analysis will be disabled.",
                         severity = Severity.WARNING
@@ -362,7 +379,15 @@ class Pub(name: String, analyzerConfig: AnalyzerConfiguration) :
             logger.info { "Successfully parsed installed packages." }
 
             ALL_PUB_SCOPE_NAMES.mapTo(scopes) { scopeName ->
-                parseScope(scopeName, pubspec, lockfile, parsePackagesResult.packages, labels, workingDir)
+                parseScope(
+                    scopeName,
+                    pubspec,
+                    lockfile,
+                    parsePackagesResult.packages,
+                    labels,
+                    workingDir,
+                    analyzerConfig
+                )
             }
         }
 
@@ -379,17 +404,20 @@ class Pub(name: String, analyzerConfig: AnalyzerConfiguration) :
         lockfile: Lockfile,
         packages: Map<Identifier, Package>,
         labels: Map<String, String>,
-        workingDir: File
+        workingDir: File,
+        analyzerConfig: AnalyzerConfiguration
     ): Scope {
         val packageName = pubspec.name
 
         logger.info { "Parsing scope '$scopeName' for package '$packageName'." }
 
         val requiredPackages = pubspec.getScopeDependencies(scopeName).keys
-        val dependencies = buildDependencyTree(requiredPackages, pubspec, lockfile, packages, labels, workingDir)
+        val dependencies =
+            buildDependencyTree(requiredPackages, pubspec, lockfile, packages, labels, workingDir, analyzerConfig)
         return Scope(scopeName, dependencies)
     }
 
+    @Suppress("LongParameterList")
     private fun buildDependencyTree(
         dependencies: Collection<String>,
         pubspec: Pubspec?,
@@ -397,6 +425,7 @@ class Pub(name: String, analyzerConfig: AnalyzerConfiguration) :
         packages: Map<Identifier, Package>,
         labels: Map<String, String>,
         workingDir: File,
+        analyzerConfig: AnalyzerConfiguration,
         processedPackages: Set<String> = emptySet()
     ): Set<PackageReference> {
         val packageReferences = mutableSetOf<PackageReference>()
@@ -436,14 +465,20 @@ class Pub(name: String, analyzerConfig: AnalyzerConfiguration) :
                     packages = packages,
                     labels = labels,
                     workingDir = workingDir,
+                    analyzerConfig = analyzerConfig,
                     processedPackages = processedPackages + nameOfCurrentPackage
                 )
 
                 // If the project contains Flutter, we need to trigger the analyzer for Gradle and CocoaPods
                 // dependencies for each pub dependency manually, as the analyzer will only scan the
                 // projectRoot, but not the packages in the ".pub-cache" directory.
-                if (containsFlutter && !pubDependenciesOnly) {
-                    analyzeAndroidPackages(pkgInfoFromLockfile, labels, workingDir).forEach { resultAndroid ->
+                if (containsFlutter && !config.pubDependenciesOnly) {
+                    analyzeAndroidPackages(
+                        pkgInfoFromLockfile,
+                        labels,
+                        workingDir,
+                        analyzerConfig
+                    ).forEach { resultAndroid ->
                         packageReferences += packageInfo.toReference(
                             dependencies = resultAndroid.project.scopes
                                 .find { it.name == "releaseCompileClasspath" }
@@ -461,7 +496,7 @@ class Pub(name: String, analyzerConfig: AnalyzerConfiguration) :
                 packageReferences += packageInfo.toReference(
                     issues = listOf(
                         createAndLogIssue(
-                            source = managerName,
+                            source = descriptor.displayName,
                             message = "Could not resolve dependencies of '$packageName': " +
                                 e.collectMessages()
                         )
@@ -478,7 +513,8 @@ class Pub(name: String, analyzerConfig: AnalyzerConfiguration) :
     private fun analyzeAndroidPackages(
         packageInfo: PackageInfo,
         labels: Map<String, String>,
-        workingDir: File
+        workingDir: File,
+        analyzerConfig: AnalyzerConfiguration
     ): List<ProjectAnalyzerResult> {
         val packageName = packageInfo.description.name.orEmpty()
 
@@ -490,23 +526,19 @@ class Pub(name: String, analyzerConfig: AnalyzerConfiguration) :
         val definitionFile = androidDir.resolve("build.gradle")
 
         // Check for build.gradle failed, no Gradle scan required.
+        val gradleFactory = analyzerConfig.getGradleFactory()
         if (gradleFactory == null || !definitionFile.isFile) return emptyList()
 
         return analyzerResultCacheAndroid.getOrPut(packageName) {
-            val pubGradleVersion = options[OPTION_GRADLE_VERSION] ?: DEFAULT_GRADLE_VERSION
-
             logger.info {
-                "Analyzing Android dependencies for package '$packageName' using Gradle version $pubGradleVersion."
+                "Analyzing Android dependencies for package '$packageName' using Gradle version " +
+                    "${config.gradleVersion}."
             }
 
-            val gradleAnalyzerConfig = analyzerConfig.withPackageManagerOption(
-                gradleFactory.type,
-                OPTION_GRADLE_VERSION,
-                pubGradleVersion
-            )
+            val gradleAnalyzerConfig = PluginConfig(mapOf("gradleVersion" to config.gradleVersion))
 
             val gradle = gradleFactory.create(gradleAnalyzerConfig)
-            gradle.resolveDependencies(androidDir, listOf(definitionFile), Excludes.EMPTY, labels).run {
+            gradle.resolveDependencies(androidDir, listOf(definitionFile), Excludes.EMPTY, analyzerConfig, labels).run {
                 projectResults.getValue(definitionFile).map { result ->
                     val project = result.project.withResolvedScopes(dependencyGraph)
                     result.copy(project = project, packages = sharedPackages)
@@ -530,7 +562,7 @@ class Pub(name: String, analyzerConfig: AnalyzerConfiguration) :
         if (!definitionFile.isFile) return null
 
         val issue = createAndLogIssue(
-            source = managerName,
+            source = descriptor.displayName,
             severity = Severity.WARNING,
             message = "Cannot get iOS dependencies for package '$packageName'. Support for CocoaPods is not yet " +
                 "implemented."
@@ -565,7 +597,8 @@ class Pub(name: String, analyzerConfig: AnalyzerConfiguration) :
     private fun parseInstalledPackages(
         lockfile: Lockfile,
         labels: Map<String, String>,
-        workingDir: File
+        workingDir: File,
+        analyzerConfig: AnalyzerConfiguration
     ): ParsePackagesResult {
         logger.info { "Parsing installed Pub packages..." }
 
@@ -692,7 +725,7 @@ class Pub(name: String, analyzerConfig: AnalyzerConfiguration) :
 
                 val packageVersion = packageInfo.version
                 issues += createAndLogIssue(
-                    source = managerName,
+                    source = descriptor.displayName,
                     message = "Failed to parse $PUBSPEC_YAML for package $packageName:$packageVersion: " +
                         it.collectMessages()
                 )
@@ -702,10 +735,10 @@ class Pub(name: String, analyzerConfig: AnalyzerConfiguration) :
         // If the project contains Flutter, we need to trigger the analyzer for Gradle and CocoaPods dependencies for
         // each Pub dependency manually, as the analyzer will only analyze the projectRoot, but not the packages in
         // the ".pub-cache" directory.
-        if (containsFlutter && !pubDependenciesOnly) {
+        if (containsFlutter && !config.pubDependenciesOnly) {
             lockfile.packages.values.forEach { packageInfo ->
                 // As this package contains Flutter, trigger Gradle manually for it.
-                analyzeAndroidPackages(packageInfo, labels, workingDir).forEach { result ->
+                analyzeAndroidPackages(packageInfo, labels, workingDir, analyzerConfig).forEach { result ->
                     result.collectPackagesByScope("releaseCompileClasspath").forEach { pkg ->
                         packages[pkg.id] = pkg
                     }
@@ -731,7 +764,7 @@ class Pub(name: String, analyzerConfig: AnalyzerConfiguration) :
         val definitionFile = reader.findFile(packageInfo, workingDir, PUBSPEC_YAML)
         if (definitionFile == null) {
             createAndLogIssue(
-                source = managerName,
+                source = descriptor.displayName,
                 message = "Could not find '$PUBSPEC_YAML' for '${packageInfo.description.name.orEmpty()}'.",
                 severity = Severity.WARNING
             )
@@ -742,8 +775,8 @@ class Pub(name: String, analyzerConfig: AnalyzerConfiguration) :
         return parsePubspec(definitionFile)
     }
 
-    private fun installDependencies(analysisRoot: File, workingDir: File) {
-        requireLockfile(analysisRoot, workingDir) { workingDir.resolve(PUB_LOCK_FILE).isFile }
+    private fun installDependencies(analysisRoot: File, workingDir: File, allowDynamicVersions: Boolean) {
+        requireLockfile(analysisRoot, workingDir, allowDynamicVersions) { workingDir.resolve(PUB_LOCK_FILE).isFile }
 
         if (containsFlutterSdk(workingDir)) {
             // For Flutter projects it is not enough to run `dart pub get`. Instead, use `flutter pub get` which
@@ -807,3 +840,14 @@ private fun Pubspec.getScopeDependencies(scopeName: String): Map<String, Depende
         SCOPE_NAME_DEV_DEPENDENCIES -> devDependencies.orEmpty()
         else -> error("Invalid scope name: '$scopeName'.")
     }
+
+private fun AnalyzerConfiguration.getGradleFactory() =
+    determineEnabledPackageManagers()
+        .filter { it.descriptor.id.startsWith("Gradle") }
+        .let { managers ->
+            require(managers.size < 2) {
+                "All of the $managers managers are able to manage 'Gradle' projects. Please enable only one of them."
+            }
+
+            managers.firstOrNull()
+        }

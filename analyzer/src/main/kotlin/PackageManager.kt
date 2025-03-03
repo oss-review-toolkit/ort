@@ -41,7 +41,7 @@ import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
-import org.ossreviewtoolkit.utils.common.Options
+import org.ossreviewtoolkit.plugins.api.Plugin
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.common.collapseWhitespace
 import org.ossreviewtoolkit.utils.common.collectMessages
@@ -54,13 +54,9 @@ typealias ManagedProjectFiles = Map<PackageManager, List<File>>
 typealias ProjectResults = Map<File, List<ProjectAnalyzerResult>>
 
 /**
- * A class to represent a package manager with the given [managerName] that handles projects of the given [projectType].
+ * A class to represent a package manager that handles projects of the given [projectType].
  */
-abstract class PackageManager(
-    val managerName: String,
-    val projectType: String,
-    val analyzerConfig: AnalyzerConfiguration
-) {
+abstract class PackageManager(val projectType: String) : Plugin {
     companion object {
         private val PACKAGE_MANAGER_DIRECTORIES = setOf(
             // Ignore intermediate build system directories.
@@ -232,11 +228,6 @@ abstract class PackageManager(
     }
 
     /**
-     * The [Options] from the [PackageManagerConfiguration] for this [package manager][managerName].
-     */
-    protected val options: Options = analyzerConfig.getPackageManagerConfiguration(managerName)?.options.orEmpty()
-
-    /**
      * Optional mapping of found [definitionFiles] before dependency resolution.
      */
     open fun mapDefinitionFiles(analysisRoot: File, definitionFiles: List<File>): List<File> = definitionFiles
@@ -248,7 +239,8 @@ abstract class PackageManager(
      */
     open fun findPackageManagerDependencies(
         analysisRoot: File,
-        managedFiles: Map<PackageManager, List<File>>
+        managedFiles: Map<PackageManager, List<File>>,
+        analyzerConfig: AnalyzerConfiguration
     ): PackageManagerDependencyResult =
         PackageManagerDependencyResult(mustRunBefore = emptySet(), mustRunAfter = emptySet())
 
@@ -257,7 +249,7 @@ abstract class PackageManager(
      * before [resolveDependencies] is called for any enabled package manager. It does not respect any "mustRunAfter"
      * configuration.
      */
-    open fun beforeResolution(analysisRoot: File, definitionFiles: List<File>) {}
+    open fun beforeResolution(analysisRoot: File, definitionFiles: List<File>, analyzerConfig: AnalyzerConfiguration) {}
 
     /**
      * Optional step to run after dependency resolution, like cleaning up temporary files. This function is called after
@@ -285,6 +277,7 @@ abstract class PackageManager(
         analysisRoot: File,
         definitionFiles: List<File>,
         excludes: Excludes,
+        analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
     ): PackageManagerResult {
         definitionFiles.forEach { definitionFile ->
@@ -298,11 +291,12 @@ abstract class PackageManager(
         definitionFiles.forEach { definitionFile ->
             val relativePath = definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath.ifEmpty { "." }
 
-            logger.info { "Using $managerName to resolve dependencies for path '$relativePath'..." }
+            logger.info { "Using ${descriptor.displayName} to resolve dependencies for path '$relativePath'..." }
 
             val duration = measureTime {
                 runCatching {
-                    result[definitionFile] = resolveDependencies(analysisRoot, definitionFile, excludes, labels)
+                    result[definitionFile] =
+                        resolveDependencies(analysisRoot, definitionFile, excludes, analyzerConfig, labels)
                 }.onFailure {
                     it.showStackTrace()
 
@@ -318,9 +312,9 @@ abstract class PackageManager(
 
                     val issues = listOf(
                         createAndLogIssue(
-                            source = managerName,
-                            message = "$managerName failed to resolve dependencies for path '$relativePath': " +
-                                it.collectMessages()
+                            source = descriptor.displayName,
+                            message = "${descriptor.displayName} failed to resolve dependencies for path " +
+                                "'$relativePath': ${it.collectMessages()}"
                         )
                     )
 
@@ -328,7 +322,7 @@ abstract class PackageManager(
                 }
             }
 
-            logger.info { "$managerName resolved dependencies for path '$relativePath' in $duration." }
+            logger.info { "${descriptor.displayName} resolved dependencies for path '$relativePath' in $duration." }
         }
 
         return createPackageManagerResult(result).addDependencyGraphIfMissing()
@@ -344,11 +338,17 @@ abstract class PackageManager(
         analysisRoot: File,
         definitionFile: File,
         excludes: Excludes,
+        analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult>
 
-    protected fun requireLockfile(analysisRoot: File, workingDir: File, condition: () -> Boolean) {
-        require(analyzerConfig.allowDynamicVersions || condition()) {
+    protected fun requireLockfile(
+        analysisRoot: File,
+        workingDir: File,
+        allowDynamicVersions: Boolean,
+        condition: () -> Boolean
+    ) {
+        require(allowDynamicVersions || condition()) {
             val relativePathString = workingDir.relativeTo(analysisRoot).invariantSeparatorsPath.ifEmpty { "." }
 
             "No lockfile found in '$relativePathString'. This potentially results in unstable versions of " +

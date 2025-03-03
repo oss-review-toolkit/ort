@@ -36,7 +36,6 @@ import java.io.File
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
-import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 
 class NpmTest : WordSpec({
@@ -52,17 +51,7 @@ class NpmTest : WordSpec({
 
             mockkObject(NpmCommand)
             try {
-                val analyzerName = "test-npm"
-
-                val npmOptions = mapOf("legacyPeerDeps" to "true")
-                val npmConfig = PackageManagerConfiguration(options = npmOptions)
-
-                val analyzerConfig = AnalyzerConfiguration(
-                    allowDynamicVersions = true,
-                    packageManagers = mapOf(analyzerName to npmConfig)
-                )
-
-                val npm = Npm(analyzerName, analyzerConfig)
+                val npm = NpmFactory.create(legacyPeerDeps = true)
 
                 val process = mockk<ProcessCapture>()
                 every { process.isError } returns true
@@ -70,7 +59,13 @@ class NpmTest : WordSpec({
                 every { process.stderr } returns errorText
                 every { NpmCommand.run(workingDir, "install", *anyVararg()) } returns process
 
-                val results = npm.resolveDependencies(workingDir, definitionFile, Excludes.EMPTY, emptyMap())
+                val results = npm.resolveDependencies(
+                    workingDir,
+                    definitionFile,
+                    Excludes.EMPTY,
+                    AnalyzerConfiguration(allowDynamicVersions = true),
+                    emptyMap()
+                )
 
                 results shouldHaveSize 1
 

@@ -38,8 +38,8 @@ import kotlinx.serialization.json.jsonPrimitive
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -55,7 +55,8 @@ import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
-import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.masked
@@ -83,22 +84,30 @@ internal object ConanCommand : CommandLineTool {
         super.run(args = args, workingDir, environment + ("CONAN_NON_INTERACTIVE" to "1"))
 }
 
+data class ConanConfig(
+    /**
+     * The name of the lockfile, which is used for analysis if allowDynamicVersions is set to false. The lockfile should
+     * be located in the analysis root. Currently only one lockfile is supported per Conan project.
+     */
+    val lockfileName: String?
+)
+
 /**
  * The [Conan](https://conan.io/) package manager for C / C++.
  *
- * This package manager supports the following [options][PackageManagerConfiguration.options]:
- * - *lockfileName*: The name of the lockfile, which is used for analysis if allowDynamicVersions is set to false.
- *   The lockfile should be located in the analysis root. Currently only one lockfile is supported per Conan project.
  * TODO: Add support for `python_requires`.
  */
+@OrtPlugin(
+    displayName = "Conan",
+    description = "The Conan package manager for C / C++.",
+    factory = PackageManagerFactory::class
+)
 @Suppress("TooManyFunctions")
-class Conan(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(name, "Conan", analyzerConfig) {
+class Conan(
+    override val descriptor: PluginDescriptor = ConanFactory.descriptor,
+    private val config: ConanConfig
+) : PackageManager("Conan") {
     companion object {
-        /**
-         * The name of the option to specify the name of the lockfile.
-         */
-        const val OPTION_LOCKFILE_NAME = "lockfileName"
-
         private val DUMMY_COMPILER_SETTINGS = arrayOf(
             "-s", "compiler=gcc",
             "-s", "compiler.libcxx=libstdc++",
@@ -107,10 +116,6 @@ class Conan(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManage
 
         private const val SCOPE_NAME_DEPENDENCIES = "requires"
         private const val SCOPE_NAME_DEV_DEPENDENCIES = "build_requires"
-    }
-
-    class Factory : AbstractPackageManagerFactory<Conan>("Conan") {
-        override fun create(analyzerConfig: AnalyzerConfiguration) = Conan(type, analyzerConfig)
     }
 
     override val globsForDefinitionFiles = listOf("conanfile*.txt", "conanfile*.py")
@@ -130,7 +135,11 @@ class Conan(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManage
 
     private fun hasLockfile(file: String) = File(file).isFile
 
-    override fun beforeResolution(analysisRoot: File, definitionFiles: List<File>) = ConanCommand.checkVersion()
+    override fun beforeResolution(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        analyzerConfig: AnalyzerConfiguration
+    ) = ConanCommand.checkVersion()
 
     /**
      * Primary method for resolving dependencies from [definitionFile].
@@ -139,17 +148,22 @@ class Conan(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManage
         analysisRoot: File,
         definitionFile: File,
         excludes: Excludes,
+        analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> =
         try {
-            resolvedDependenciesInternal(analysisRoot, definitionFile)
+            resolvedDependenciesInternal(analysisRoot, definitionFile, analyzerConfig.allowDynamicVersions)
         } finally {
             // Clear the inspection result cache, because we call "conan config install" for each definition file which
             // could overwrite the remotes and result in different metadata for packages with the same name and version.
             pkgInspectResults.clear()
         }
 
-    private fun resolvedDependenciesInternal(analysisRoot: File, definitionFile: File): List<ProjectAnalyzerResult> {
+    private fun resolvedDependenciesInternal(
+        analysisRoot: File,
+        definitionFile: File,
+        allowDynamicVersions: Boolean
+    ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
 
         // TODO: Support customizing the "conan_config" directory name, and also support getting the config from a URL.
@@ -163,18 +177,17 @@ class Conan(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManage
             configureRemoteAuthentication(conanConfig)
 
             // TODO: Support lockfiles which are located in a different directory than the definition file.
-            val lockfileName = options[OPTION_LOCKFILE_NAME]
-            requireLockfile(analysisRoot, workingDir) {
-                lockfileName?.let { hasLockfile(workingDir.resolve(it).path) } == true
+            requireLockfile(analysisRoot, workingDir, allowDynamicVersions) {
+                config.lockfileName?.let { hasLockfile(workingDir.resolve(it).path) } == true
             }
 
             val jsonFile = createOrtTempDir().resolve("info.json")
-            if (lockfileName != null) {
-                verifyLockfileBelongsToProject(workingDir, lockfileName)
+            if (config.lockfileName != null) {
+                verifyLockfileBelongsToProject(workingDir, config.lockfileName)
                 ConanCommand.run(
                     workingDir,
                     "info", definitionFile.name,
-                    "-l", lockfileName,
+                    "-l", config.lockfileName,
                     "--json", jsonFile.absolutePath
                 ).requireSuccess()
             } else {

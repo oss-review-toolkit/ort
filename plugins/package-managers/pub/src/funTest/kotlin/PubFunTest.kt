@@ -27,14 +27,12 @@ import io.kotest.matchers.should
 import io.kotest.matchers.string.haveSubstring
 
 import org.ossreviewtoolkit.analyzer.analyze
-import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.collectDependencies
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.toYaml
-import org.ossreviewtoolkit.plugins.packagemanagers.gradleinspector.OPTION_JAVA_VERSION
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
@@ -48,7 +46,7 @@ class PubFunTest : WordSpec({
             }
 
             val result = try {
-                create("Pub", allowDynamicVersions = true).resolveSingleProject(definitionFile)
+                PubFactory.create().resolveSingleProject(definitionFile, allowDynamicVersions = true)
             } finally {
                 lockfile.delete()
             }
@@ -60,7 +58,7 @@ class PubFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/any-version/pubspec.yaml")
             val expectedResultFile = getAssetFile("projects/synthetic/pub-expected-output-any-version.yml")
 
-            val result = create("Pub").resolveSingleProject(definitionFile)
+            val result = PubFactory.create().resolveSingleProject(definitionFile)
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -87,7 +85,7 @@ class PubFunTest : WordSpec({
             val ortResult = analyze(
                 definitionFile.parentFile,
                 packageManagerConfiguration = mapOf(
-                    "GradleInspector" to PackageManagerConfiguration(options = mapOf(OPTION_JAVA_VERSION to "17"))
+                    "GradleInspector" to PackageManagerConfiguration(options = mapOf("javaVersion" to "17"))
                 )
             )
 
@@ -100,7 +98,7 @@ class PubFunTest : WordSpec({
         "show an error if no lockfile is present" {
             val definitionFile = getAssetFile("projects/synthetic/no-lockfile/pubspec.yaml")
 
-            val result = create("Pub").resolveSingleProject(definitionFile)
+            val result = PubFactory.create().resolveSingleProject(definitionFile)
 
             with(result) {
                 packages should beEmpty()

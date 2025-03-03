@@ -30,21 +30,21 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.analyzer.PackageManager
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType.NPM
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType.PNPM
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType.YARN
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType.YARN2
-import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.Npm
-import org.ossreviewtoolkit.plugins.packagemanagers.node.pnpm.Pnpm
-import org.ossreviewtoolkit.plugins.packagemanagers.node.yarn.Yarn
-import org.ossreviewtoolkit.plugins.packagemanagers.node.yarn2.Yarn2
+import org.ossreviewtoolkit.plugins.packagemanagers.node.npm.NpmFactory
+import org.ossreviewtoolkit.plugins.packagemanagers.node.pnpm.PnpmFactory
+import org.ossreviewtoolkit.plugins.packagemanagers.node.yarn.YarnFactory
+import org.ossreviewtoolkit.plugins.packagemanagers.node.yarn2.Yarn2Factory
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.test.getAssetFile
 
 class NpmDetectionTest : WordSpec({
-    val packageManagers = listOf(Npm.Factory(), Pnpm.Factory(), Yarn.Factory(), Yarn2.Factory())
-        .map { it.create(AnalyzerConfiguration()) }
+    val packageManagers = listOf(NpmFactory(), PnpmFactory(), YarnFactory(), Yarn2Factory())
+        .map { it.create(PluginConfig()) }
 
     "All Node package manager detections" should {
         "ignore empty lockfiles" {

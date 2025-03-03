@@ -23,12 +23,14 @@ import java.io.File
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
-import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.OrtPluginOption
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.PythonInspector
 import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.toOrtPackages
 import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.toOrtProject
@@ -36,60 +38,63 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
-private const val OPTION_OPERATING_SYSTEM_DEFAULT = "linux"
-private val OPERATING_SYSTEMS = listOf(OPTION_OPERATING_SYSTEM_DEFAULT, "macos", "windows")
+private val OPERATING_SYSTEMS = listOf("linux", "macos", "windows")
 
 private const val OPTION_PYTHON_VERSION_DEFAULT = "3.11"
 internal val PYTHON_VERSIONS = listOf("2.7", "3.6", "3.7", "3.8", "3.9", "3.10", OPTION_PYTHON_VERSION_DEFAULT)
 
-private const val OPTION_ANALYZE_SETUP_PY_INSECURELY_DEFAULT = true
+data class PipConfig(
+    /**
+     * If "true", `python-inspector` resolves dependencies from setup.py files by executing them. This is a potential
+     * security risk.
+     */
+    @OrtPluginOption(defaultValue = "true")
+    val analyzeSetupPyInsecurely: Boolean,
+
+    /**
+     * The name of the operating system to resolve dependencies for. One of "linux", "macos", or "windows".
+     */
+    @OrtPluginOption(defaultValue = "linux")
+    val operatingSystem: String,
+
+    /**
+     * The Python version to resolve dependencies for. If not set, the version is detected from the environment and if
+     * that fails, the default version 3.11 is used.
+     */
+    val pythonVersion: String?
+)
 
 /**
  * The [PIP](https://pip.pypa.io/) package manager for Python. Also see
  * [install_requires vs requirements files](https://packaging.python.org/discussions/install-requires-vs-requirements/)
  * and [setup.py vs. requirements.txt](https://caremad.io/posts/2013/07/setup-vs-requirement/).
- *
- * This package manager supports the following [options][PackageManagerConfiguration.options]:
- * - *analyzeSetupPyInsecurely*: If "true", `python-inspector` resolves dependencies from setup.py files by executing
- *   them. This is a potential security risk. Defaults to [OPTION_ANALYZE_SETUP_PY_INSECURELY_DEFAULT].
- * - *operatingSystem*: The name of the operating system to resolve dependencies for. One of "linux", "macos", or
- *   "windows". Defaults to [OPTION_OPERATING_SYSTEM_DEFAULT].
- * - *pythonVersion*: The Python version to resolve dependencies for. Defaults to [OPTION_PYTHON_VERSION_DEFAULT].
  */
-class Pip(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(
-    name,
-    analyzerConfig.getPackageManagerConfiguration(name)?.options?.get("overrideProjectType") ?: "PIP",
-    analyzerConfig
-) {
-    companion object {
-        const val OPTION_OPERATING_SYSTEM = "operatingSystem"
-        const val OPTION_PYTHON_VERSION = "pythonVersion"
-        const val OPTION_ANALYZE_SETUP_PY_INSECURELY = "analyzeSetupPyInsecurely"
-    }
-
-    class Factory : AbstractPackageManagerFactory<Pip>("PIP") {
-        override fun create(analyzerConfig: AnalyzerConfiguration) = Pip(type, analyzerConfig)
-    }
+@OrtPlugin(
+    id = "PIP",
+    displayName = "PIP",
+    description = "The PIP package manager for Python.",
+    factory = PackageManagerFactory::class
+)
+class Pip internal constructor(
+    override val descriptor: PluginDescriptor = PipFactory.descriptor,
+    private val config: PipConfig,
+    projectType: String
+) :
+    PackageManager(projectType) {
+    constructor(descriptor: PluginDescriptor = PipFactory.descriptor, config: PipConfig) :
+        this(descriptor, config, "PIP")
 
     override val globsForDefinitionFiles = listOf("*requirements*.txt", "setup.py")
 
-    private val operatingSystemOption = options[OPTION_OPERATING_SYSTEM]?.also { os ->
-        require(os.isEmpty() || os in OPERATING_SYSTEMS) {
+    init {
+        require(config.operatingSystem in OPERATING_SYSTEMS) {
             val acceptedValues = OPERATING_SYSTEMS.joinToString { "'$it'" }
-            "The '$OPTION_OPERATING_SYSTEM' option must be one of $acceptedValues, but was '$os'."
+            "The 'operatingSystem' option must be one of $acceptedValues, but was '${config.operatingSystem}'."
         }
-    }
 
-    private val pythonVersionOption = options[OPTION_PYTHON_VERSION]?.also { pythonVersion ->
-        require(pythonVersion in PYTHON_VERSIONS) {
+        require(config.pythonVersion == null || config.pythonVersion in PYTHON_VERSIONS) {
             val acceptedValues = PYTHON_VERSIONS.joinToString { "'$it'" }
-            "The '$OPTION_PYTHON_VERSION' option must be one of $acceptedValues, but was '$pythonVersion'."
-        }
-    }
-
-    private val analyzeSetupPyInsecurelyOption = options[OPTION_ANALYZE_SETUP_PY_INSECURELY]?.also { analyzeSetupPy ->
-        requireNotNull(analyzeSetupPy.toBooleanStrictOrNull()) {
-            "The '$OPTION_ANALYZE_SETUP_PY_INSECURELY' option must be 'true' or 'false', but was '$analyzeSetupPy'."
+            "The 'pythonVersion' option must be one of $acceptedValues, but was '${config.pythonVersion}'."
         }
     }
 
@@ -97,6 +102,7 @@ class Pip(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(
         analysisRoot: File,
         definitionFile: File,
         excludes: Excludes,
+        analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val result = runPythonInspector(definitionFile) { detectPythonVersion(definitionFile.parentFile) }
@@ -111,15 +117,12 @@ class Pip(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(
         definitionFile: File,
         detectPythonVersion: () -> String? = { null }
     ): PythonInspector.Result {
-        val operatingSystem = operatingSystemOption ?: OPTION_OPERATING_SYSTEM_DEFAULT
-        val pythonVersion = pythonVersionOption ?: detectPythonVersion() ?: OPTION_PYTHON_VERSION_DEFAULT
-        val analyzeSetupPyInsecurely = analyzeSetupPyInsecurelyOption?.toBooleanStrict()
-            ?: OPTION_ANALYZE_SETUP_PY_INSECURELY_DEFAULT
+        val pythonVersion = config.pythonVersion ?: detectPythonVersion() ?: OPTION_PYTHON_VERSION_DEFAULT
         val workingDir = definitionFile.parentFile
 
         logger.info {
-            "Resolving dependencies for '${definitionFile.absolutePath}' with Python version '$pythonVersion' " +
-                "and operating system '$operatingSystem'."
+            "Resolving dependencies for '${definitionFile.absolutePath}' with Python version '$pythonVersion' and " +
+                "operating system '${config.operatingSystem}'."
         }
 
         return runCatching {
@@ -128,8 +131,8 @@ class Pip(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(
                     workingDir = workingDir,
                     definitionFile = definitionFile,
                     pythonVersion = pythonVersion.split('.', limit = 3).take(2).joinToString(""),
-                    operatingSystem = operatingSystem,
-                    analyzeSetupPyInsecurely = analyzeSetupPyInsecurely
+                    operatingSystem = config.operatingSystem,
+                    analyzeSetupPyInsecurely = config.analyzeSetupPyInsecurely
                 )
             } finally {
                 workingDir.resolve(".cache").safeDeleteRecursively()

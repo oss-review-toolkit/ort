@@ -23,11 +23,13 @@ import java.io.File
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
+import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
@@ -49,12 +51,14 @@ internal object PnpmCommand : CommandLineTool {
 /**
  * The [fast, disk space efficient package manager](https://pnpm.io/).
  */
-class Pnpm(name: String, analyzerConfig: AnalyzerConfiguration) :
-    NodePackageManager(name, NodePackageManagerType.PNPM, analyzerConfig) {
-    class Factory : AbstractPackageManagerFactory<Pnpm>("PNPM") {
-        override fun create(analyzerConfig: AnalyzerConfiguration) = Pnpm(type, analyzerConfig)
-    }
-
+@OrtPlugin(
+    id = "PNPM",
+    displayName = "PNPM",
+    description = "The PNPM package manager for Node.js.",
+    factory = PackageManagerFactory::class
+)
+class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
+    NodePackageManager(NodePackageManagerType.PNPM) {
     override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE, "pnpm-lock.yaml")
 
     private lateinit var stash: DirectoryStash
@@ -64,7 +68,11 @@ class Pnpm(name: String, analyzerConfig: AnalyzerConfiguration) :
 
     override val graphBuilder by lazy { DependencyGraphBuilder(handler) }
 
-    override fun beforeResolution(analysisRoot: File, definitionFiles: List<File>) {
+    override fun beforeResolution(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        analyzerConfig: AnalyzerConfiguration
+    ) {
         PnpmCommand.checkVersion()
 
         val directories = definitionFiles.mapTo(mutableSetOf()) { it.resolveSibling("node_modules") }
@@ -79,6 +87,7 @@ class Pnpm(name: String, analyzerConfig: AnalyzerConfiguration) :
         analysisRoot: File,
         definitionFile: File,
         excludes: Excludes,
+        analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile

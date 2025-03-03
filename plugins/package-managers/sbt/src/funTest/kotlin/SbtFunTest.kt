@@ -41,9 +41,9 @@ class SbtFunTest : StringSpec({
 
         val ortResult = analyze(
             definitionFile.parentFile,
-            packageManagers = setOf(Sbt.Factory()),
+            packageManagers = setOf(SbtFactory()),
             packageManagerConfiguration = mapOf(
-                "SBT" to PackageManagerConfiguration(options = mapOf(OPTION_JAVA_VERSION to "11"))
+                "SBT" to PackageManagerConfiguration(options = mapOf("javaVersion" to "11"))
             )
         )
 
@@ -60,9 +60,9 @@ class SbtFunTest : StringSpec({
 
         val ortResult = analyze(
             definitionFile.parentFile,
-            packageManagers = setOf(Sbt.Factory()),
+            packageManagers = setOf(SbtFactory()),
             packageManagerConfiguration = mapOf(
-                "SBT" to PackageManagerConfiguration(options = mapOf(OPTION_JAVA_VERSION to "11"))
+                "SBT" to PackageManagerConfiguration(options = mapOf("javaVersion" to "11"))
             )
         )
 

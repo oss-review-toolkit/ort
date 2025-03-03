@@ -31,7 +31,6 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 import io.kotest.matchers.string.shouldContain
 
-import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.analyzer.withInvariantIssues
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
@@ -48,7 +47,7 @@ class NpmFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/npm/shrinkwrap/package.json")
         val expectedResultFile = getAssetFile("projects/synthetic/npm/shrinkwrap-expected-output.yml")
 
-        val result = create("NPM").resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = NpmFactory.create().resolveSingleProject(definitionFile, resolveScopes = true)
 
         patchActualResult(result.toYaml()) should matchExpectedResult(
             expectedResultFile,
@@ -66,7 +65,7 @@ class NpmFunTest : StringSpec({
             "projects/synthetic/npm/shrinkwrap-skip-excluded-scopes-expected-output.yml"
         )
 
-        val result = create("NPM")
+        val result = NpmFactory.create()
             .resolveSingleProject(definitionFile, excludedScopes = setOf("devDependencies"), resolveScopes = true)
 
         patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
@@ -76,7 +75,7 @@ class NpmFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/npm/project-with-lockfile/package.json")
         val expectedResultFile = getAssetFile("projects/synthetic/npm/project-with-lockfile-expected-output.yml")
 
-        val result = create("NPM").resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = NpmFactory.create().resolveSingleProject(definitionFile, resolveScopes = true)
 
         patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -85,7 +84,7 @@ class NpmFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/npm/no-lockfile/package.json")
         val expectedResultFile = getAssetFile("projects/synthetic/npm/no-lockfile-expected-output.yml")
 
-        val result = create("NPM").resolveSingleProject(definitionFile)
+        val result = NpmFactory.create().resolveSingleProject(definitionFile)
 
         patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -94,7 +93,7 @@ class NpmFunTest : StringSpec({
         val workingDir = tempdir()
         val definitionFile = workingDir.resolve("package.json").apply { writeText("<>") }
 
-        val result = create("NPM", allowDynamicVersions = true).resolveSingleProject(definitionFile)
+        val result = NpmFactory.create().resolveSingleProject(definitionFile, allowDynamicVersions = true)
 
         result.issues.forAtLeastOne {
             it.source shouldBe "NPM"
@@ -106,7 +105,7 @@ class NpmFunTest : StringSpec({
     "Create issues for list errors" {
         val definitionFile = getAssetFile("projects/synthetic/npm/list-issues/package.json")
 
-        val result = create("NPM", "legacyPeerDeps" to "true").resolveSingleProject(definitionFile)
+        val result = NpmFactory.create(legacyPeerDeps = true).resolveSingleProject(definitionFile)
 
         result.issues shouldNot beEmpty()
         val elsproblems = result.issues.filter { it.message.startsWith("invalid: ") }
@@ -122,7 +121,7 @@ class NpmFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/npm/node-modules/package.json")
         val expectedResultFile = getAssetFile("projects/synthetic/npm/node-modules-expected-output.yml")
 
-        val result = create("NPM").resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = NpmFactory.create().resolveSingleProject(definitionFile, resolveScopes = true)
 
         patchActualResult(result.toYaml()) should matchExpectedResult(
             expectedResultFile,
@@ -137,7 +136,7 @@ class NpmFunTest : StringSpec({
         val expectedResult = patchExpectedResult(expectedResultFile, definitionFile)
             .fromYaml<ProjectAnalyzerResult>()
 
-        val result = create("NPM").resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = NpmFactory.create().resolveSingleProject(definitionFile, resolveScopes = true)
 
         result.withInvariantIssues().toYaml() shouldBe expectedResult.withInvariantIssues().toYaml()
     }
@@ -148,8 +147,8 @@ class NpmFunTest : StringSpec({
         val expectedResult = patchExpectedResult(expectedResultFile, definitionFile)
             .fromYaml<ProjectAnalyzerResult>()
 
-        val result = create("NPM", allowDynamicVersions = true)
-            .resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = NpmFactory.create()
+            .resolveSingleProject(definitionFile, allowDynamicVersions = true, resolveScopes = true)
 
         result.withInvariantIssues().toYaml() shouldBe expectedResult.withInvariantIssues().toYaml()
     }

@@ -35,7 +35,7 @@ import kotlinx.serialization.json.jsonPrimitive
 import org.apache.logging.log4j.kotlin.logger
 import org.apache.logging.log4j.kotlin.loggerOf
 
-import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
+import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Project
@@ -45,6 +45,8 @@ import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.readTree
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
@@ -90,12 +92,13 @@ internal object YarnCommand : CommandLineTool {
 /**
  * The [Yarn](https://classic.yarnpkg.com/) package manager for JavaScript.
  */
-open class Yarn(name: String, analyzerConfig: AnalyzerConfiguration) :
-    NodePackageManager(name, NodePackageManagerType.YARN, analyzerConfig) {
-    class Factory : AbstractPackageManagerFactory<Yarn>("Yarn") {
-        override fun create(analyzerConfig: AnalyzerConfiguration) = Yarn(type, analyzerConfig)
-    }
-
+@OrtPlugin(
+    displayName = "Yarn",
+    description = "The Yarn package manager for JavaScript.",
+    factory = PackageManagerFactory::class
+)
+open class Yarn(override val descriptor: PluginDescriptor = YarnFactory.descriptor) :
+    NodePackageManager(NodePackageManagerType.YARN) {
     override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE)
 
     private lateinit var stash: DirectoryStash
@@ -125,7 +128,11 @@ open class Yarn(name: String, analyzerConfig: AnalyzerConfiguration) :
         }
     }
 
-    override fun beforeResolution(analysisRoot: File, definitionFiles: List<File>) {
+    override fun beforeResolution(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        analyzerConfig: AnalyzerConfiguration
+    ) {
         YarnCommand.checkVersion()
 
         val directories = definitionFiles.mapTo(mutableSetOf()) { it.resolveSibling("node_modules") }
@@ -140,10 +147,11 @@ open class Yarn(name: String, analyzerConfig: AnalyzerConfiguration) :
         analysisRoot: File,
         definitionFile: File,
         excludes: Excludes,
+        analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> =
         try {
-            resolveDependenciesInternal(analysisRoot, definitionFile, excludes)
+            resolveDependenciesInternal(analysisRoot, definitionFile, excludes, analyzerConfig.allowDynamicVersions)
         } finally {
             rawModuleInfoCache.clear()
         }
@@ -164,10 +172,11 @@ open class Yarn(name: String, analyzerConfig: AnalyzerConfiguration) :
     private fun resolveDependenciesInternal(
         analysisRoot: File,
         definitionFile: File,
-        excludes: Excludes
+        excludes: Excludes,
+        allowDynamicVersions: Boolean
     ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
-        installDependencies(analysisRoot, workingDir)
+        installDependencies(analysisRoot, workingDir, allowDynamicVersions)
 
         val projectDirs = findWorkspaceSubmodules(workingDir) + definitionFile.parentFile
 
@@ -179,7 +188,7 @@ open class Yarn(name: String, analyzerConfig: AnalyzerConfiguration) :
                 parseProject(packageJsonFile, analysisRoot)
             }.getOrElse {
                 issues += createAndLogIssue(
-                    source = managerName,
+                    source = descriptor.displayName,
                     message = "Failed to parse project information: ${it.collectMessages()}"
                 )
 
@@ -342,8 +351,8 @@ open class Yarn(name: String, analyzerConfig: AnalyzerConfiguration) :
             loadWorkspaceSubmodules(moduleDir)
         }
 
-    private fun installDependencies(analysisRoot: File, workingDir: File) {
-        requireLockfile(analysisRoot, workingDir) { managerType.hasLockfile(workingDir) }
+    private fun installDependencies(analysisRoot: File, workingDir: File, allowDynamicVersions: Boolean) {
+        requireLockfile(analysisRoot, workingDir, allowDynamicVersions) { managerType.hasLockfile(workingDir) }
 
         YarnCommand.run(workingDir, "install", "--ignore-scripts", "--ignore-engines", "--immutable").requireSuccess()
     }

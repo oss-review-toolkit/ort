@@ -22,13 +22,15 @@ package org.ossreviewtoolkit.plugins.packagemanagers.bower
 import java.io.File
 import java.util.LinkedList
 
-import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.stashDirectories
@@ -45,21 +47,27 @@ internal object BowerCommand : CommandLineTool {
 /**
  * The [Bower](https://bower.io/) package manager for JavaScript.
  */
-class Bower(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(name, "Bower", analyzerConfig) {
-    class Factory : AbstractPackageManagerFactory<Bower>("Bower") {
-        override fun create(analyzerConfig: AnalyzerConfiguration) = Bower(type, analyzerConfig)
-    }
-
+@OrtPlugin(
+    displayName = "Bower",
+    description = "The Bower package manager for JavaScript.",
+    factory = PackageManagerFactory::class
+)
+class Bower(override val descriptor: PluginDescriptor = BowerFactory.descriptor) : PackageManager("Bower") {
     override val globsForDefinitionFiles = listOf("bower.json")
 
     private val graphBuilder = DependencyGraphBuilder(BowerDependencyHandler())
 
-    override fun beforeResolution(analysisRoot: File, definitionFiles: List<File>) = BowerCommand.checkVersion()
+    override fun beforeResolution(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        analyzerConfig: AnalyzerConfiguration
+    ) = BowerCommand.checkVersion()
 
     override fun resolveDependencies(
         analysisRoot: File,
         definitionFile: File,
         excludes: Excludes,
+        analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile

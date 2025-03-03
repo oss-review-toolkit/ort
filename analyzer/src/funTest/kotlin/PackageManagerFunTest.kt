@@ -32,10 +32,10 @@ import io.kotest.matchers.should
 
 import java.io.File
 
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
+import org.ossreviewtoolkit.plugins.api.PluginConfig
 
 class PackageManagerFunTest : WordSpec({
     val definitionFiles = listOf(
@@ -73,7 +73,7 @@ class PackageManagerFunTest : WordSpec({
     )
 
     val projectDir = tempdir()
-    val packageManagers = PackageManagerFactory.ALL.values.map { it.create(AnalyzerConfiguration()) }
+    val packageManagers = PackageManagerFactory.ALL.values.map { it.create(PluginConfig()) }
 
     beforeSpec {
         definitionFiles.writeFiles(projectDir)
@@ -85,75 +85,75 @@ class PackageManagerFunTest : WordSpec({
 
             // The test project contains at least one file per package manager, so the result should also contain an
             // entry for each package manager.
-            managedFiles.keys.map { it.managerName } shouldContainExactlyInAnyOrder
-                PackageManagerFactory.ALL.values.map { it.type }.filterNot { it == "Unmanaged" }
+            managedFiles.keys.map { it.descriptor.id } shouldContainExactlyInAnyOrder
+                PackageManagerFactory.ALL.values.map { it.descriptor.id }.filterNot { it == "Unmanaged" }
 
-            val managedFilesByName = managedFiles.groupByName(projectDir)
+            val managedFilesById = managedFiles.groupById(projectDir)
 
             assertSoftly {
-                managedFilesByName["Bazel"] should containExactly("bazel/MODULE.bazel")
-                managedFilesByName["Bower"] should containExactly("bower/bower.json")
-                managedFilesByName["Bundler"] should containExactly("bundler/Gemfile")
-                managedFilesByName["Cargo"] should containExactly("cargo/Cargo.toml")
-                managedFilesByName["Carthage"] should containExactly("carthage/Cartfile.resolved")
-                managedFilesByName["CocoaPods"] should containExactly("cocoapods/Podfile")
-                managedFilesByName["Composer"] should containExactly("composer/composer.json")
-                managedFilesByName["Conan"] should containExactlyInAnyOrder(
+                managedFilesById["Bazel"] should containExactly("bazel/MODULE.bazel")
+                managedFilesById["Bower"] should containExactly("bower/bower.json")
+                managedFilesById["Bundler"] should containExactly("bundler/Gemfile")
+                managedFilesById["Cargo"] should containExactly("cargo/Cargo.toml")
+                managedFilesById["Carthage"] should containExactly("carthage/Cartfile.resolved")
+                managedFilesById["CocoaPods"] should containExactly("cocoapods/Podfile")
+                managedFilesById["Composer"] should containExactly("composer/composer.json")
+                managedFilesById["Conan"] should containExactlyInAnyOrder(
                     "conan-py/conanfile.py",
                     "conan-txt/conanfile.txt"
                 )
-                managedFilesByName["GoMod"] should containExactly("gomod/go.mod")
-                managedFilesByName["GradleInspector"] should containExactlyInAnyOrder(
+                managedFilesById["GoMod"] should containExactly("gomod/go.mod")
+                managedFilesById["GradleInspector"] should containExactlyInAnyOrder(
                     "gradle-groovy/build.gradle",
                     "gradle-kotlin/build.gradle.kts"
                 )
-                managedFilesByName["Maven"] should containExactly("maven/pom.xml")
-                managedFilesByName["NPM"] should containExactly("npm-pnpm-and-yarn/package.json")
-                managedFilesByName["NuGet"] should containExactlyInAnyOrder(
+                managedFilesById["Maven"] should containExactly("maven/pom.xml")
+                managedFilesById["NPM"] should containExactly("npm-pnpm-and-yarn/package.json")
+                managedFilesById["NuGet"] should containExactlyInAnyOrder(
                     "dotnet/test.csproj",
                     "nuget/packages.config"
                 )
-                managedFilesByName["PIP"] should containExactlyInAnyOrder(
+                managedFilesById["PIP"] should containExactlyInAnyOrder(
                     "pip-requirements/requirements.txt",
                     "pip-setup/setup.py"
                 )
-                managedFilesByName["Pipenv"] should containExactly("pipenv/Pipfile.lock")
-                managedFilesByName["PNPM"] should containExactly("npm-pnpm-and-yarn/package.json")
-                managedFilesByName["Poetry"] should containExactly("poetry/poetry.lock")
-                managedFilesByName["Pub"] should containExactly("pub/pubspec.yaml")
-                managedFilesByName["SBT"] should containExactly("sbt/build.sbt")
-                managedFilesByName["SpdxDocumentFile"] should containExactlyInAnyOrder(
+                managedFilesById["Pipenv"] should containExactly("pipenv/Pipfile.lock")
+                managedFilesById["PNPM"] should containExactly("npm-pnpm-and-yarn/package.json")
+                managedFilesById["Poetry"] should containExactly("poetry/poetry.lock")
+                managedFilesById["Pub"] should containExactly("pub/pubspec.yaml")
+                managedFilesById["SBT"] should containExactly("sbt/build.sbt")
+                managedFilesById["SpdxDocumentFile"] should containExactlyInAnyOrder(
                     "spdx-package/package.spdx.yml",
                     "spdx-project/project.spdx.yml"
                 )
-                managedFilesByName["SwiftPM"] should containExactlyInAnyOrder(
+                managedFilesById["SwiftPM"] should containExactlyInAnyOrder(
                     "spm-app/Package.resolved",
                     "spm-lib/Package.swift"
                 )
-                managedFilesByName["Stack"] should containExactly("stack/stack.yaml")
-                managedFilesByName["Yarn"] should containExactly("npm-pnpm-and-yarn/package.json")
+                managedFilesById["Stack"] should containExactly("stack/stack.yaml")
+                managedFilesById["Yarn"] should containExactly("npm-pnpm-and-yarn/package.json")
             }
         }
 
         "find only files for active package managers" {
             val managedFiles = PackageManager.findManagedFiles(
                 projectDir,
-                packageManagers.filter { it.managerName in listOf("GradleInspector", "PIP", "SBT") }
+                packageManagers.filter { it.descriptor.id in setOf("GradleInspector", "PIP", "SBT") }
             )
 
             managedFiles shouldHaveSize 3
 
-            val managedFilesByName = managedFiles.groupByName(projectDir)
+            val managedFilesById = managedFiles.groupById(projectDir)
 
-            managedFilesByName["GradleInspector"] should containExactlyInAnyOrder(
+            managedFilesById["GradleInspector"] should containExactlyInAnyOrder(
                 "gradle-groovy/build.gradle",
                 "gradle-kotlin/build.gradle.kts"
             )
-            managedFilesByName["PIP"] should containExactlyInAnyOrder(
+            managedFilesById["PIP"] should containExactlyInAnyOrder(
                 "pip-requirements/requirements.txt",
                 "pip-setup/setup.py"
             )
-            managedFilesByName["SBT"] should containExactly("sbt/build.sbt")
+            managedFilesById["SBT"] should containExactly("sbt/build.sbt")
         }
 
         "find no files if no package managers are active" {
@@ -172,15 +172,15 @@ class PackageManagerFunTest : WordSpec({
             val pathExclude = PathExclude("$tempDir**", PathExcludeReason.TEST_OF)
             val excludes = Excludes(paths = listOf(pathExclude))
 
-            val managedFilesByName = PackageManager.findManagedFiles(rootDir, packageManagers, excludes = excludes)
-                .groupByName(rootDir)
+            val managedFilesById = PackageManager.findManagedFiles(rootDir, packageManagers, excludes = excludes)
+                .groupById(rootDir)
 
-            managedFilesByName["GradleInspector"] should containExactlyInAnyOrder(
+            managedFilesById["GradleInspector"] should containExactlyInAnyOrder(
                 "gradle-groovy/build.gradle",
                 "gradle-kotlin/build.gradle.kts"
             )
-            managedFilesByName["Maven"] should containExactly("maven/pom.xml")
-            managedFilesByName["SBT"] should containExactly("sbt/build.sbt")
+            managedFilesById["Maven"] should containExactly("maven/pom.xml")
+            managedFilesById["SBT"] should containExactly("sbt/build.sbt")
         }
 
         "handle specific excluded definition files" {
@@ -188,9 +188,9 @@ class PackageManagerFunTest : WordSpec({
             val excludes = Excludes(paths = listOf(pathExclude))
 
             val managedFiles = PackageManager.findManagedFiles(projectDir, packageManagers, excludes = excludes)
-            val managedFilesByName = managedFiles.groupByName(projectDir)
+            val managedFilesById = managedFiles.groupById(projectDir)
 
-            managedFilesByName["GradleInspector"] should containExactly(
+            managedFilesById["GradleInspector"] should containExactly(
                 "gradle-kotlin/build.gradle.kts"
             )
         }
@@ -208,9 +208,9 @@ class PackageManagerFunTest : WordSpec({
  * package managers can be easily accessed. The keys in expected and actual maps of definition files are different
  * instances of package manager factories. So to compare values use the package manager types as keys instead.
  */
-private fun ManagedProjectFiles.groupByName(projectDir: File) =
+private fun ManagedProjectFiles.groupById(projectDir: File) =
     map { (manager, files) ->
-        manager.managerName to files.map { it.relativeTo(projectDir).invariantSeparatorsPath }
+        manager.descriptor.id to files.map { it.relativeTo(projectDir).invariantSeparatorsPath }
     }.toMap()
 
 /**

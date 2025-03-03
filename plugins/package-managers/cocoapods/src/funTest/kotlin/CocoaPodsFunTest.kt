@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.plugins.packagemanagers.cocoapods
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.should
 
-import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.analyzer.withInvariantIssues
 import org.ossreviewtoolkit.model.toYaml
@@ -35,7 +34,7 @@ class CocoaPodsFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/regular/Podfile")
             val expectedResultFile = getAssetFile("projects/synthetic/regular-expected-output.yml")
 
-            val result = create("CocoaPods").resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = CocoaPodsFactory.create().resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -44,7 +43,7 @@ class CocoaPodsFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/dep-tree/Podfile")
             val expectedResultFile = getAssetFile("projects/synthetic/dep-tree-expected-output.yml")
 
-            val result = create("CocoaPods").resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = CocoaPodsFactory.create().resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -53,7 +52,7 @@ class CocoaPodsFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/external-sources/Podfile")
             val expectedResultFile = getAssetFile("projects/synthetic/external-sources-expected-output.yml")
 
-            val result = create("CocoaPods").resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = CocoaPodsFactory.create().resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -62,7 +61,7 @@ class CocoaPodsFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/version-resolution/Podfile")
             val expectedResultFile = getAssetFile("projects/synthetic/version-resolution-expected-output.yml")
 
-            val result = create("CocoaPods").resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = CocoaPodsFactory.create().resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -71,7 +70,7 @@ class CocoaPodsFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/no-lockfile/Podfile")
             val expectedResultFile = getAssetFile("projects/synthetic/no-lockfile-expected-output.yml")
 
-            val result = create("CocoaPods").resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = CocoaPodsFactory.create().resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.withInvariantIssues().toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }

@@ -27,8 +27,6 @@ import io.kotest.matchers.string.shouldContain
 
 import java.io.File
 
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.utils.common.Os
 
 class Yarn2Test : WordSpec({
@@ -77,12 +75,7 @@ class Yarn2Test : WordSpec({
         "return the default executable name if Corepack is enabled based on the configuration option" {
             val workingDir = tempdir()
 
-            val yarn2Options = mapOf("corepackOverride" to "true")
-            val analyzerConfiguration = AnalyzerConfiguration(
-                packageManagers = mapOf("Yarn2" to PackageManagerConfiguration(options = yarn2Options))
-            )
-
-            val yarn = Yarn2("Yarn2", analyzerConfiguration)
+            val yarn = Yarn2Factory.create(corepackOverride = true)
             val command = yarn.yarn2Command.command(workingDir)
 
             command shouldBe "yarn"
@@ -101,12 +94,7 @@ class Yarn2Test : WordSpec({
             val workingDir = tempdir()
             writePackageJson(workingDir, "yarn@4.0.0")
 
-            val yarn2Options = mapOf("corepackOverride" to "false")
-            val analyzerConfiguration = AnalyzerConfiguration(
-                packageManagers = mapOf("Yarn2" to PackageManagerConfiguration(options = yarn2Options))
-            )
-
-            checkExecutableFromYarnRc(workingDir, analyzerConfiguration)
+            checkExecutableFromYarnRc(workingDir, corepackOverride = false)
         }
     }
 })
@@ -115,7 +103,7 @@ class Yarn2Test : WordSpec({
  * Check whether an executable defined in a `.yarnrc.yml` file is used when invoked with the given [workingDir]
  * and [config]. This should be the case when Corepack is not enabled.
  */
-private fun checkExecutableFromYarnRc(workingDir: File, config: AnalyzerConfiguration = AnalyzerConfiguration()) {
+private fun checkExecutableFromYarnRc(workingDir: File, corepackOverride: Boolean? = null) {
     val executable = "yarn-wrapper.js"
 
     workingDir.resolve(".yarnrc.yml").writeText("yarnPath: $executable")
@@ -124,7 +112,7 @@ private fun checkExecutableFromYarnRc(workingDir: File, config: AnalyzerConfigur
         writeText("#!/usr/bin/env node\nconsole.log('yarn')")
     }
 
-    val yarn = Yarn2("Yarn2", config)
+    val yarn = Yarn2Factory.create(corepackOverride = corepackOverride)
     val command = yarn.yarn2Command.command(workingDir)
 
     if (Os.isWindows) {
