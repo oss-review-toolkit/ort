@@ -157,8 +157,10 @@ internal fun parseLicenses(mavenProject: MavenProject): Set<String> =
         listOfNotNull(license.name, license.url, license.comments).firstOrNull { it.isNotBlank() }
     }
 
-internal fun parseVcsInfo(project: MavenProject): VcsInfo {
-    val scm = getOriginalScm(project)
+internal fun parseVcsInfo(project: MavenProject): VcsInfo =
+    parseScm(getOriginalScm(project), project.artifact?.toString().orEmpty())
+
+internal fun parseScm(scm: Scm?, artifactId: String): VcsInfo {
     val connection = scm?.connection
     if (connection.isNullOrEmpty()) return VcsInfo.EMPTY
 
@@ -183,14 +185,14 @@ internal fun parseVcsInfo(project: MavenProject): VcsInfo {
                 // It is a common mistake to omit the "scm:[provider]:" prefix. Add fall-backs for nevertheless
                 // clear cases.
                 logger.info {
-                    "Maven SCM connection '$connection' of project ${project.artifact} lacks the required " +
+                    "Maven SCM connection '$connection' of project $artifactId lacks the required " +
                         "'scm' prefix."
                 }
 
                 VcsInfo(type = VcsType.GIT, url = connection, revision = tag)
             } else {
                 logger.info {
-                    "Ignoring Maven SCM connection '$connection' of project ${project.artifact} due to an " +
+                    "Ignoring Maven SCM connection '$connection' of project $artifactId due to an " +
                         "unexpected format."
                 }
 

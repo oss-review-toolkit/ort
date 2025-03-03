@@ -29,6 +29,7 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.contain
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.comparables.shouldBeGreaterThan
+import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
@@ -41,16 +42,24 @@ import io.mockk.spyk
 import io.mockk.verify
 
 import java.io.File
+import java.util.jar.Attributes
+import java.util.jar.JarEntry
+import java.util.jar.JarOutputStream
+import java.util.jar.Manifest
 
 import org.apache.maven.cli.MavenCli
 import org.apache.maven.execution.MavenSession
 import org.apache.maven.project.MavenProject
 
+import org.eclipse.aether.artifact.Artifact
 import org.eclipse.aether.graph.DependencyNode
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PathExclude
@@ -59,7 +68,10 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.DependencyTreeMojoNode
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.JSON
+import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.PackageResolverFun
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.identifier
+import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 class TychoTest : WordSpec({
     "mapDefinitionFiles()" should {
@@ -289,7 +301,205 @@ class TychoTest : WordSpec({
             slotArgs.captured.toList() shouldNot contain("-pl")
         }
     }
+
+    "tychoPackageResolverFunc()" should {
+        "return the package from the delegate function" {
+            val dependency = mockk<DependencyNode>()
+            val pkg = mockk<Package>()
+            val delegate: PackageResolverFun = { node ->
+                node shouldBe dependency
+                pkg
+            }
+
+            val resolver = tychoPackageResolverFun(delegate)
+
+            resolver(dependency) shouldBe pkg
+        }
+
+        "throw the original exception if no artifact is available in the local repository" {
+            val resolver = createResolverFunWithLocalRepo { }
+
+            shouldThrow<RuntimeException> {
+                resolver(testDependency())
+            } shouldBe resolveException
+        }
+
+        "return a Package with undefined metadata for a jar in the local repository without manifest entries" {
+            val resolver = createResolverFunWithLocalRepo { repo ->
+                repo.createRepositoryFolder().createJar(TEST_ARTIFACT_JAR, emptyMap())
+            }
+
+            val pkg = resolver(testDependency())
+
+            with(pkg) {
+                id shouldBe testArtifactIdentifier
+                description should io.kotest.matchers.string.beEmpty()
+                binaryArtifact shouldBe RemoteArtifact.EMPTY
+                sourceArtifact shouldBe RemoteArtifact.EMPTY
+                vcs shouldBe VcsInfo.EMPTY
+                vcsProcessed shouldBe VcsInfo.EMPTY
+                declaredLicenses should beEmpty()
+                declaredLicensesProcessed.spdxExpression should beNull()
+                concludedLicense should beNull()
+                authors should beEmpty()
+            }
+        }
+
+        "return a Package with undefined metadata for a jar in the local repository without a manifest" {
+            val resolver = createResolverFunWithLocalRepo { repo ->
+                repo.createRepositoryFolder().createJar(TEST_ARTIFACT_JAR, null)
+            }
+
+            val pkg = resolver(testDependency())
+
+            with(pkg) {
+                id shouldBe testArtifactIdentifier
+                description should io.kotest.matchers.string.beEmpty()
+                binaryArtifact shouldBe RemoteArtifact.EMPTY
+                sourceArtifact shouldBe RemoteArtifact.EMPTY
+                vcs shouldBe VcsInfo.EMPTY
+                vcsProcessed shouldBe VcsInfo.EMPTY
+                declaredLicenses should beEmpty()
+                declaredLicensesProcessed.spdxExpression should beNull()
+                concludedLicense should beNull()
+                authors should beEmpty()
+            }
+        }
+
+        "return a Package with metadata obtained from an OSGi bundle in the local repository" {
+            val bundleProperties = mapOf(
+                "Bundle-Description" to "Package description",
+                "Bundle-License" to "The Apache License",
+                "Bundle-Vendor" to "Package vendor"
+            )
+
+            val resolver = createResolverFunWithLocalRepo { repo ->
+                repo.createRepositoryFolder().createJar(TEST_ARTIFACT_JAR, bundleProperties)
+            }
+
+            val pkg = resolver(testDependency())
+
+            with(pkg) {
+                id shouldBe testArtifactIdentifier
+                description shouldBe bundleProperties["Bundle-Description"]
+                binaryArtifact shouldBe RemoteArtifact.EMPTY
+                sourceArtifact shouldBe RemoteArtifact.EMPTY
+                vcs shouldBe VcsInfo.EMPTY
+                vcsProcessed shouldBe VcsInfo.EMPTY
+                declaredLicenses shouldContainExactlyInAnyOrder listOf(bundleProperties["Bundle-License"])
+                declaredLicensesProcessed shouldBe ProcessedDeclaredLicense(
+                    spdxExpression = SpdxExpression.parse("Apache-2.0"),
+                    mapped = mapOf("The Apache License" to SpdxExpression.parse("Apache-2.0"))
+                )
+                concludedLicense should beNull()
+                authors shouldContainExactlyInAnyOrder listOf(bundleProperties["Bundle-Vendor"])
+            }
+        }
+    }
+
+    "createPackageFromManifest()" should {
+        "parse a source reference with only a connection" {
+            val manifest = Manifest()
+            manifest.mainAttributes.putValue(
+                "Eclipse-SourceReferences",
+                "git://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git"
+            )
+
+            val pkg = createPackageFromManifest(testDependency().artifact, manifest)
+
+            pkg.vcs shouldBe VcsInfo(
+                type = VcsType.GIT,
+                url = "git://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git",
+                revision = ""
+            )
+            pkg.vcsProcessed shouldBe pkg.vcs
+        }
+
+        "parse a source reference with a connection and a tag" {
+            val manifest = Manifest()
+            manifest.mainAttributes.putValue(
+                "Eclipse-SourceReferences",
+                "git://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git;tag=v20210901-0700"
+            )
+
+            val pkg = createPackageFromManifest(testDependency().artifact, manifest)
+
+            pkg.vcs shouldBe VcsInfo(
+                type = VcsType.GIT,
+                url = "git://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git",
+                revision = "v20210901-0700"
+            )
+            pkg.vcsProcessed shouldBe pkg.vcs
+        }
+
+        "parse a source reference with a connection and a tag in quotes" {
+            val manifest = Manifest()
+            manifest.mainAttributes.putValue(
+                "Eclipse-SourceReferences",
+                "git://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git;tag=\"v20210901-0700\""
+            )
+
+            val pkg = createPackageFromManifest(testDependency().artifact, manifest)
+
+            pkg.vcs shouldBe VcsInfo(
+                type = VcsType.GIT,
+                url = "git://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git",
+                revision = "v20210901-0700"
+            )
+            pkg.vcsProcessed shouldBe pkg.vcs
+        }
+
+        "handle source references with unexpected fields" {
+            val manifest = Manifest()
+            manifest.mainAttributes.putValue(
+                "Eclipse-SourceReferences",
+                "git://git.eclipse.org/eclipse.platform.debug.git;tag=\"v20210901-0700\";foo;bar"
+            )
+
+            val pkg = createPackageFromManifest(testDependency().artifact, manifest)
+
+            pkg.vcs shouldBe VcsInfo(
+                type = VcsType.GIT,
+                url = "git://git.eclipse.org/eclipse.platform.debug.git",
+                revision = "v20210901-0700"
+            )
+            pkg.vcsProcessed shouldBe pkg.vcs
+        }
+
+        "handle multiple source references" {
+            val manifest = Manifest()
+            manifest.mainAttributes.putValue(
+                "Eclipse-SourceReferences",
+                "git://git.eclipse.org/eclipse.platform.debug1.git," +
+                    "git://git.eclipse.org/eclipse.platform.debug2.git;tag=\"v20210901-0700\""
+            )
+
+            val pkg = createPackageFromManifest(testDependency().artifact, manifest)
+
+            pkg.vcs shouldBe VcsInfo(
+                type = VcsType.GIT,
+                url = "git://git.eclipse.org/eclipse.platform.debug1.git",
+                revision = ""
+            )
+            pkg.vcsProcessed shouldBe pkg.vcs
+        }
+    }
 })
+
+/** The group ID of the test project. For OSGi artifacts this typically refers to a repository. */
+private const val TEST_GROUP_ID = "p2.some.repo"
+
+/** ID of a test bundle serving as a dependency. */
+private const val TEST_ARTIFACT_ID = "org.ossreviewtoolkit.test.bundle"
+
+/** The version number of the test dependency. */
+private const val TEST_VERSION = "50.1.2"
+
+/** The file name of the jar for the test artifact in the local repository. */
+private const val TEST_ARTIFACT_JAR = "$TEST_ARTIFACT_ID-$TEST_VERSION"
+
+/** The expected package identifier generated for the test artifact. */
+private val testArtifactIdentifier = Identifier("Maven", TEST_GROUP_ID, TEST_ARTIFACT_ID, TEST_VERSION)
 
 /**
  * Create a mock [MavenProject] with default coordinates and the given [name] and optional [definitionFile].
@@ -366,3 +576,66 @@ private fun File.createSubModule(name: String): File =
         mkdirs()
         pom.also { it.writeText("pom-$name") }
     }
+
+/**
+ * Return a mock [DependencyNode] that is configured to return the properties of the test artifact.
+ */
+private fun testDependency(): DependencyNode {
+    val artifact = mockk<Artifact> {
+        every { groupId } returns TEST_GROUP_ID
+        every { artifactId } returns TEST_ARTIFACT_ID
+        every { version } returns TEST_VERSION
+    }
+
+    return mockk {
+        every { this@mockk.artifact } returns artifact
+    }
+}
+
+/**
+ * Create the folder in which to store data for the test artifact if this [File] was the root of a local repository.
+ */
+private fun File.createRepositoryFolder(): File =
+    resolve("p2/osgi/bundle/$TEST_ARTIFACT_ID/$TEST_VERSION").apply { mkdirs() }
+
+/**
+ * Generate a jar file with the given [name] and [attributes] for the manifest in this folder. If [attributes] is
+ * *null*, the jar will be created without a manifest.
+ */
+private fun File.createJar(name: String, attributes: Map<String, String>?): File {
+    val jarFile = resolve("$name.jar")
+    val manifest = attributes?.let { attributesMap ->
+        Manifest().apply {
+            mainAttributes[Attributes.Name.MANIFEST_VERSION] = "1.0"
+            attributesMap.forEach { (key, value) -> mainAttributes.putValue(key, value) }
+        }
+    }
+
+    val jarStream = manifest?.let { JarOutputStream(jarFile.outputStream(), it) }
+        ?: JarOutputStream(jarFile.outputStream())
+
+    jarStream.use { out ->
+        val entry = JarEntry("foo.class")
+        out.putNextEntry(entry)
+        out.write("someTestData".toByteArray())
+        out.closeEntry()
+    }
+
+    return jarFile
+}
+
+/** An exception that is thrown by the delegate resolver function to force the resolving from the local repository. */
+private val resolveException = RuntimeException("Test exception: Could not resolve the test artifact.")
+
+/**
+ * Return a [PackageResolverFun] to be tested that is configured with a delegate function that throws a well-defined
+ * exception. First create a local repository and invoke the given [block] to populate it accordingly for the
+ * current test case.
+ */
+private fun TestConfiguration.createResolverFunWithLocalRepo(block: (File) -> Unit): PackageResolverFun {
+    val localRepositoryRoot = tempdir()
+    block(localRepositoryRoot)
+
+    val delegateResolverFun: PackageResolverFun = { throw resolveException }
+    return tychoPackageResolverFun(delegateResolverFun, localRepositoryRoot)
+}
