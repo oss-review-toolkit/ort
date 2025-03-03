@@ -21,38 +21,46 @@ package org.ossreviewtoolkit.plugins.packagemanagers.nuget
 
 import java.io.File
 
-import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.nuget.utils.NuGetInspector
 import org.ossreviewtoolkit.plugins.packagemanagers.nuget.utils.toOrtPackages
 import org.ossreviewtoolkit.plugins.packagemanagers.nuget.utils.toOrtProject
+
+data class NuGetConfig(
+    /**
+     * The path to the NuGet configuration file to use.
+     */
+    val nugetConfigFile: String?
+)
 
 /**
  * A package manager implementation for [.NET](https://docs.microsoft.com/en-us/dotnet/core/tools/) project files that
  * embed NuGet package configuration.
  */
-class NuGet(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(name, "NuGet", analyzerConfig) {
-    companion object {
-        const val OPTION_NUGET_CONFIG = "nugetConfigFile"
-    }
-
-    class Factory : AbstractPackageManagerFactory<NuGet>("NuGet") {
-        override fun create(analyzerConfig: AnalyzerConfiguration) = NuGet(type, analyzerConfig)
-    }
-
+@OrtPlugin(
+    displayName = "NuGet",
+    description = "The NuGet package manager for .NET.",
+    factory = PackageManagerFactory::class
+)
+class NuGet(override val descriptor: PluginDescriptor = NuGetFactory.descriptor, private val config: NuGetConfig) :
+    PackageManager("NuGet") {
     override val globsForDefinitionFiles = listOf("*.csproj", "*.fsproj", "*.vcxproj", "packages.config")
 
-    private val nugetConfig = options[OPTION_NUGET_CONFIG]?.let { File(it) }
+    private val nugetConfig = config.nugetConfigFile?.let { File(it) }
 
     override fun resolveDependencies(
         analysisRoot: File,
         definitionFile: File,
         excludes: Excludes,
+        analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val result = NuGetInspector.inspect(definitionFile, nugetConfig)
@@ -66,7 +74,7 @@ class NuGet(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManage
     private fun collectTopLevelIssues(result: NuGetInspector.Result): List<Issue> {
         val errors = (result.headers.flatMap { it.errors } + result.packages.flatMap { it.errors }).map { message ->
             Issue(
-                source = managerName,
+                source = descriptor.displayName,
                 message = message,
                 severity = Severity.ERROR
             )
@@ -74,7 +82,7 @@ class NuGet(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManage
 
         val warnings = result.packages.flatMap { it.warnings }.map { message ->
             Issue(
-                source = managerName,
+                source = descriptor.displayName,
                 message = message,
                 severity = Severity.WARNING
             )

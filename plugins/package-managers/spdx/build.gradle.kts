@@ -19,7 +19,7 @@
 
 plugins {
     // Apply precompiled plugins.
-    id("ort-library-conventions")
+    id("ort-plugin-conventions")
 }
 
 dependencies {
@@ -35,6 +35,8 @@ dependencies {
     implementation(libs.jackson.core)
     implementation(libs.jackson.databind)
     implementation(libs.okhttp)
+
+    ksp(projects.analyzer)
 
     funTestImplementation(projects.plugins.packageManagers.conanPackageManager)
     funTestImplementation(testFixtures(projects.analyzer))

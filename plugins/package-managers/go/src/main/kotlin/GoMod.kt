@@ -29,8 +29,8 @@ import kotlinx.serialization.json.decodeToSequence
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
@@ -46,6 +46,8 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.orEmpty
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.go.utils.Graph
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
@@ -85,11 +87,12 @@ internal object GoCommand : CommandLineTool {
  * Note: The file `go.sum` is not a lockfile as Go modules already allows for reproducible builds without that file.
  * Thus, no logic for handling the [AnalyzerConfiguration.allowDynamicVersions] is needed.
  */
-class GoMod(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(name, "GoMod", analyzerConfig) {
-    class Factory : AbstractPackageManagerFactory<GoMod>("GoMod") {
-        override fun create(analyzerConfig: AnalyzerConfiguration) = GoMod(type, analyzerConfig)
-    }
-
+@OrtPlugin(
+    displayName = "GoMod",
+    description = "The Go Modules package manager for Go.",
+    factory = PackageManagerFactory::class
+)
+class GoMod(override val descriptor: PluginDescriptor = GoModFactory.descriptor) : PackageManager("GoMod") {
     override val globsForDefinitionFiles = listOf("go.mod")
 
     override fun mapDefinitionFiles(analysisRoot: File, definitionFiles: List<File>): List<File> =
@@ -105,6 +108,7 @@ class GoMod(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManage
         analysisRoot: File,
         definitionFile: File,
         excludes: Excludes,
+        analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val projectDir = definitionFile.parentFile

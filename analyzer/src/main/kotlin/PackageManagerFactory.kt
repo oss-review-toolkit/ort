@@ -21,37 +21,16 @@ package org.ossreviewtoolkit.analyzer
 
 import java.util.ServiceLoader
 
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.utils.common.Plugin
+import org.ossreviewtoolkit.plugins.api.PluginFactory
 
 /**
- * A common interface for use with [ServiceLoader] that all [AbstractPackageManagerFactory] classes need to implement.
+ * A common interface for use with [ServiceLoader] that all [PackageManagerFactory] classes need to implement.
  */
-interface PackageManagerFactory : Plugin {
+interface PackageManagerFactory : PluginFactory<PackageManager> {
     companion object {
         /**
          * All [package manager factories][PackageManagerFactory] available in the classpath, associated by their names.
          */
-        val ALL by lazy { Plugin.getAll<PackageManagerFactory>() }
+        val ALL by lazy { PluginFactory.getAll<PackageManagerFactory, PackageManager>() }
     }
-
-    /**
-     * Create a [PackageManager] using the specified [analyzerConfig].
-     */
-    fun create(analyzerConfig: AnalyzerConfiguration): PackageManager
-}
-
-/**
- * A generic factory class for a [PackageManager].
- */
-abstract class AbstractPackageManagerFactory<out T : PackageManager>(
-    override val type: String
-) : PackageManagerFactory {
-    abstract override fun create(analyzerConfig: AnalyzerConfiguration): T
-
-    /**
-     * Return the package manager's name here to allow Clikt to display something meaningful when listing the
-     * package managers which are enabled by default via their factories.
-     */
-    override fun toString() = type
 }

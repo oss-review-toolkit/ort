@@ -26,8 +26,8 @@ import kotlin.io.encoding.Base64
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.ArchiveOverride
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.ArchiveSourceInfo
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.BazelModuleRegistryService
@@ -58,6 +58,8 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.orEmpty
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.alsoIfNull
@@ -102,11 +104,12 @@ internal object BuildozerCommand : CommandLineTool {
         output.lineSequence().first().trim().removePrefix("buildozer version: ")
 }
 
-class Bazel(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(name, "Bazel", analyzerConfig) {
-    class Factory : AbstractPackageManagerFactory<Bazel>("Bazel") {
-        override fun create(analyzerConfig: AnalyzerConfiguration) = Bazel(type, analyzerConfig)
-    }
-
+@OrtPlugin(
+    displayName = "Bazel",
+    description = "The Bazel package manager.",
+    factory = PackageManagerFactory::class
+)
+class Bazel(override val descriptor: PluginDescriptor = BazelFactory.descriptor) : PackageManager("Bazel") {
     override val globsForDefinitionFiles = listOf("MODULE", "MODULE.bazel")
 
     /**
@@ -127,6 +130,7 @@ class Bazel(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManage
         analysisRoot: File,
         definitionFile: File,
         excludes: Excludes,
+        analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val projectDir = definitionFile.parentFile
@@ -148,7 +152,10 @@ class Bazel(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManage
 
             getPackages(scopes, registry, localPathOverrides, archiveOverrides, projectVcs)
         } else {
-            issues += createAndLogIssue(managerName, "Bazel registry URL cannot be determined from the lockfile.")
+            issues += createAndLogIssue(
+                descriptor.displayName,
+                "Bazel registry URL cannot be determined from the lockfile."
+            )
             emptySet()
         }
 

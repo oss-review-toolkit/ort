@@ -30,15 +30,10 @@ import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.utils.common.realFile
 
-abstract class NodePackageManager(
-    managerName: String,
-    val managerType: NodePackageManagerType,
-    analyzerConfig: AnalyzerConfiguration
-) : PackageManager(managerName, managerType.projectType, analyzerConfig) {
+abstract class NodePackageManager(val managerType: NodePackageManagerType) : PackageManager(managerType.projectType) {
     protected abstract val graphBuilder: DependencyGraphBuilder<*>
 
     protected fun parseProject(packageJsonFile: File, analysisRoot: File): Project {

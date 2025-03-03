@@ -26,9 +26,9 @@ import okhttp3.OkHttpClient
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManager.Companion.processPackageVcs
+import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
@@ -44,6 +44,8 @@ import org.ossreviewtoolkit.model.collectDependencies
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
@@ -77,19 +79,25 @@ internal object StackCommand : CommandLineTool {
 /**
  * The [Stack](https://haskellstack.org/) package manager for Haskell.
  */
-class Stack(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(name, "Stack", analyzerConfig) {
-    class Factory : AbstractPackageManagerFactory<Stack>("Stack") {
-        override fun create(analyzerConfig: AnalyzerConfiguration) = Stack(type, analyzerConfig)
-    }
-
+@OrtPlugin(
+    displayName = "Stack",
+    description = "The Stack package manager for Haskell.",
+    factory = PackageManagerFactory::class
+)
+class Stack(override val descriptor: PluginDescriptor = StackFactory.descriptor) : PackageManager("Stack") {
     override val globsForDefinitionFiles = listOf("stack.yaml")
 
-    override fun beforeResolution(analysisRoot: File, definitionFiles: List<File>) = StackCommand.checkVersion()
+    override fun beforeResolution(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        analyzerConfig: AnalyzerConfiguration
+    ) = StackCommand.checkVersion()
 
     override fun resolveDependencies(
         analysisRoot: File,
         definitionFile: File,
         excludes: Excludes,
+        analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
