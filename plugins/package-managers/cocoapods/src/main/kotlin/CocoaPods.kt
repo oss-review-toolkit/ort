@@ -21,8 +21,8 @@ package org.ossreviewtoolkit.plugins.packagemanagers.cocoapods
 
 import java.io.File
 
-import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
@@ -34,6 +34,8 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.stashDirectories
@@ -63,23 +65,28 @@ internal object CocoaPodsCommand : CommandLineTool {
  * The only interactions with the 'pod' command happen in order to obtain metadata for dependencies. Therefore,
  * 'pod spec which' gets executed, which works also under Linux.
  */
-class CocoaPods(name: String, analyzerConfig: AnalyzerConfiguration) :
-    PackageManager(name, "CocoaPods", analyzerConfig) {
-    class Factory : AbstractPackageManagerFactory<CocoaPods>("CocoaPods") {
-        override fun create(analyzerConfig: AnalyzerConfiguration) = CocoaPods(type, analyzerConfig)
-    }
-
+@OrtPlugin(
+    displayName = "CocoaPods",
+    description = "The CocoaPods package manager for Objective-C.",
+    factory = PackageManagerFactory::class
+)
+class CocoaPods(override val descriptor: PluginDescriptor = CocoaPodsFactory.descriptor) : PackageManager("CocoaPods") {
     override val globsForDefinitionFiles = listOf("Podfile")
 
     private val dependencyHandler = PodDependencyHandler()
     private val graphBuilder = DependencyGraphBuilder(dependencyHandler)
 
-    override fun beforeResolution(analysisRoot: File, definitionFiles: List<File>) = CocoaPodsCommand.checkVersion()
+    override fun beforeResolution(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        analyzerConfig: AnalyzerConfiguration
+    ) = CocoaPodsCommand.checkVersion()
 
     override fun resolveDependencies(
         analysisRoot: File,
         definitionFile: File,
         excludes: Excludes,
+        analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> =
         stashDirectories(Os.userHomeDirectory.resolve(".cocoapods/repos")).use {
@@ -130,7 +137,7 @@ class CocoaPods(name: String, analyzerConfig: AnalyzerConfiguration) :
             graphBuilder.addDependencies(projectId, SCOPE_NAME, dependencies)
         } else {
             issues += createAndLogIssue(
-                source = managerName,
+                source = descriptor.displayName,
                 message = "Missing lockfile '${lockfile.relativeTo(analysisRoot).invariantSeparatorsPath}' for " +
                     "definition file '${definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath}'. The " +
                     "analysis of a Podfile without a lockfile is not supported."

@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.plugins.packagemanagers.swiftpm
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.should
 
-import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.analyzer.withInvariantIssues
 import org.ossreviewtoolkit.model.toYaml
@@ -35,7 +34,7 @@ class SwiftPmFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/only-lockfile-v1/Package.resolved")
             val expectedResultFile = getAssetFile("projects/synthetic/expected-output-only-lockfile-v1.yml")
 
-            val result = create("SwiftPM").resolveSingleProject(definitionFile)
+            val result = SwiftPmFactory.create().resolveSingleProject(definitionFile)
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -46,7 +45,7 @@ class SwiftPmFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/only-lockfile-v2/Package.resolved")
             val expectedResultFile = getAssetFile("projects/synthetic/expected-output-only-lockfile-v2.yml")
 
-            val result = create("SwiftPM").resolveSingleProject(definitionFile)
+            val result = SwiftPmFactory.create().resolveSingleProject(definitionFile)
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -57,7 +56,7 @@ class SwiftPmFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/only-lockfile-v3/Package.resolved")
             val expectedResultFile = getAssetFile("projects/synthetic/expected-output-only-lockfile-v3.yml")
 
-            val result = create("SwiftPM").resolveSingleProject(definitionFile)
+            val result = SwiftPmFactory.create().resolveSingleProject(definitionFile)
 
             result.withInvariantIssues().toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -68,7 +67,7 @@ class SwiftPmFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/only-lockfile-v4/Package.resolved")
             val expectedResultFile = getAssetFile("projects/synthetic/expected-output-only-lockfile-v4.yml")
 
-            val result = create("SwiftPM").resolveSingleProject(definitionFile)
+            val result = SwiftPmFactory.create().resolveSingleProject(definitionFile)
 
             result.withInvariantIssues().toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -79,7 +78,7 @@ class SwiftPmFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/project-with-lockfile/Package.swift")
             val expectedResultFile = getAssetFile("projects/synthetic/expected-output-project-with-lockfile.yml")
 
-            val result = create("SwiftPM").resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = SwiftPmFactory.create().resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -92,7 +91,7 @@ class SwiftPmFunTest : WordSpec({
                 "projects/synthetic/expected-output-project-without-lockfile.yml"
             )
 
-            val result = create("SwiftPM").resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = SwiftPmFactory.create().resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.withInvariantIssues().toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -104,8 +103,8 @@ class SwiftPmFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/project-without-deps/Package.swift")
             val expectedResultFile = getAssetFile("projects/synthetic/expected-output-project-without-deps.yml")
 
-            val result = create("SwiftPM", allowDynamicVersions = true)
-                .resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = SwiftPmFactory.create()
+                .resolveSingleProject(definitionFile, allowDynamicVersions = true, resolveScopes = true)
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }

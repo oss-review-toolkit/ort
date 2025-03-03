@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.plugins.packagemanagers.python
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.should
 
-import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
@@ -34,7 +33,7 @@ class PoetryFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/poetry/poetry.lock")
             val expectedResultFile = getAssetFile("projects/synthetic/poetry-expected-output.yml")
 
-            val result = create("Poetry").resolveSingleProject(definitionFile)
+            val result = PoetryFactory.create().resolveSingleProject(definitionFile)
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -43,7 +42,7 @@ class PoetryFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/poetry-no-dev-group/poetry.lock")
             val expectedResultFile = getAssetFile("projects/synthetic/poetry-no-dev-group-expected-output.yml")
 
-            val result = create("Poetry").resolveSingleProject(definitionFile)
+            val result = PoetryFactory.create().resolveSingleProject(definitionFile)
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }

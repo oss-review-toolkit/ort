@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.plugins.packagemanagers.cargo
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.should
 
-import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
@@ -33,7 +32,7 @@ class CargoFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/cargo/Cargo.toml")
         val expectedResultFile = getAssetFile("projects/synthetic/cargo-expected-output.yml")
 
-        val result = create("Cargo").resolveSingleProject(definitionFile)
+        val result = CargoFactory.create().resolveSingleProject(definitionFile)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }

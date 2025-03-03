@@ -22,8 +22,8 @@ package org.ossreviewtoolkit.plugins.packagemanagers.gradleinspector
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.should
 
-import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.USER_DIR
@@ -35,7 +35,7 @@ class GradleAndroidFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/gradle-android/build.gradle").toGradle()
         val expectedResultFile = getAssetFile("projects/synthetic/gradle-android-expected-output-root.yml")
 
-        val result = create("GradleInspector", "javaVersion" to "17")
+        val result = GradleInspectorFactory.create(javaVersion = "17")
             .resolveSingleProject(definitionFile, resolveScopes = true)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
@@ -45,7 +45,7 @@ class GradleAndroidFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/gradle-android/app/build.gradle").toGradle()
         val expectedResultFile = getAssetFile("projects/synthetic/gradle-android-expected-output-app.yml")
 
-        val result = create("GradleInspector", "javaVersion" to "17")
+        val result = GradleInspectorFactory.create(javaVersion = "17")
             .resolveSingleProject(definitionFile, resolveScopes = true)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
@@ -55,7 +55,7 @@ class GradleAndroidFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/gradle-android/lib/build.gradle").toGradle()
         val expectedResultFile = getAssetFile("projects/synthetic/gradle-android-expected-output-lib.yml")
 
-        val result = create("GradleInspector", "javaVersion" to "17")
+        val result = GradleInspectorFactory.create(javaVersion = "17")
             .resolveSingleProject(definitionFile, resolveScopes = true)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
@@ -68,8 +68,8 @@ class GradleAndroidFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/gradle-android-cyclic/app/build.gradle").toGradle()
         val expectedResultFile = getAssetFile("projects/synthetic/gradle-android-cyclic-expected-output-app.yml")
 
-        val result = create("GradleInspector", "javaVersion" to "17")
-            .resolveDependencies(USER_DIR, listOf(definitionFile), Excludes.EMPTY, emptyMap())
+        val result = GradleInspectorFactory.create(javaVersion = "17")
+            .resolveDependencies(USER_DIR, listOf(definitionFile), Excludes.EMPTY, AnalyzerConfiguration(), emptyMap())
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }

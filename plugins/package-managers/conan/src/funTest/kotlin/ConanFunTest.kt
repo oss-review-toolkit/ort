@@ -22,10 +22,8 @@ package org.ossreviewtoolkit.plugins.packagemanagers.conan
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.should
 
-import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.toYaml
-import org.ossreviewtoolkit.plugins.packagemanagers.conan.Conan.Companion.OPTION_LOCKFILE_NAME
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
@@ -36,7 +34,7 @@ class ConanFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/conan-txt/conanfile.txt")
         val expectedResultFile = getAssetFile("projects/synthetic/conan-expected-output-txt.yml")
 
-        val result = create("Conan", allowDynamicVersions = true).resolveSingleProject(definitionFile)
+        val result = ConanFactory.create().resolveSingleProject(definitionFile, allowDynamicVersions = true)
 
         patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -45,7 +43,7 @@ class ConanFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/conan-py/conanfile.py")
         val expectedResultFile = getAssetFile("projects/synthetic/conan-expected-output-py.yml")
 
-        val result = create("Conan", allowDynamicVersions = true).resolveSingleProject(definitionFile)
+        val result = ConanFactory.create().resolveSingleProject(definitionFile, allowDynamicVersions = true)
 
         patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -58,7 +56,7 @@ class ConanFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/conan-py-lockfile/conanfile.py")
         val expectedResultFile = getAssetFile("projects/synthetic/conan-expected-output-py-lockfile.yml")
 
-        val result = create("Conan", OPTION_LOCKFILE_NAME to "lockfile.lock").resolveSingleProject(definitionFile)
+        val result = ConanFactory.create(lockfileName = "lockfile.lock").resolveSingleProject(definitionFile)
 
         patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
     }

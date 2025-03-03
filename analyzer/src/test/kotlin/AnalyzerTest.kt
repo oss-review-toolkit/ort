@@ -31,6 +31,7 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 
 class AnalyzerTest : WordSpec({
     "analyze()" should {
@@ -40,7 +41,7 @@ class AnalyzerTest : WordSpec({
             val analyzer = Analyzer(analyzerConfig)
             val analysisRoot = File(".").absoluteFile
 
-            val manager = DummyPackageManager(analyzerConfig)
+            val manager = DummyPackageManager()
 
             val info = ManagedFileInfo(
                 absoluteProjectPath = analysisRoot,
@@ -55,12 +56,16 @@ class AnalyzerTest : WordSpec({
     }
 })
 
-private class DummyPackageManager(analyzerConfig: AnalyzerConfiguration) :
-    PackageManager("Dummy", "Project", analyzerConfig) {
+private class DummyPackageManager : PackageManager("Project") {
+    override val descriptor = PluginDescriptor("Dummy", "Dummy", "A dummy package manager.")
     override val globsForDefinitionFiles = emptyList<String>()
     val calls = mutableListOf<String>()
 
-    override fun beforeResolution(analysisRoot: File, definitionFiles: List<File>) {
+    override fun beforeResolution(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        analyzerConfig: AnalyzerConfiguration
+    ) {
         calls += "beforeResolution"
     }
 
@@ -68,6 +73,7 @@ private class DummyPackageManager(analyzerConfig: AnalyzerConfiguration) :
         analysisRoot: File,
         definitionFile: File,
         excludes: Excludes,
+        analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         calls += "resolveDependencies"

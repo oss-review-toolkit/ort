@@ -40,18 +40,21 @@ import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
+import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.utils.test.USER_DIR
 
 fun PackageManager.resolveSingleProject(
     definitionFile: File,
     excludedScopes: Collection<String> = emptySet(),
+    allowDynamicVersions: Boolean = false,
     resolveScopes: Boolean = false
 ): ProjectAnalyzerResult {
     val definitionFiles = listOf(definitionFile)
+    val analyzerConfig = AnalyzerConfiguration(allowDynamicVersions = allowDynamicVersions)
 
-    beforeResolution(USER_DIR, definitionFiles)
+    beforeResolution(USER_DIR, definitionFiles, analyzerConfig)
     val excludes = Excludes(scopes = excludedScopes.map { ScopeExclude(it, ScopeExcludeReason.TEST_DEPENDENCY_OF) })
-    val managerResult = resolveDependencies(USER_DIR, definitionFiles, excludes, emptyMap())
+    val managerResult = resolveDependencies(USER_DIR, definitionFiles, excludes, analyzerConfig, emptyMap())
 
     val resultList = managerResult.projectResults[definitionFile]
     resultList.shouldNotBeNull()
@@ -72,14 +75,16 @@ fun PackageManager.resolveSingleProject(
  */
 fun PackageManager.collateMultipleProjects(
     vararg definitionFiles: File,
-    excludedScopes: Collection<String> = emptySet()
+    excludedScopes: Collection<String> = emptySet(),
+    allowDynamicVersions: Boolean = false
 ): AnalyzerResult {
     val excludes = Excludes(scopes = excludedScopes.map { ScopeExclude(it, ScopeExcludeReason.TEST_DEPENDENCY_OF) })
-    val managerResult = resolveDependencies(USER_DIR, definitionFiles.asList(), excludes, emptyMap())
+    val analyzerConfig = AnalyzerConfiguration(allowDynamicVersions = allowDynamicVersions)
+    val managerResult = resolveDependencies(USER_DIR, definitionFiles.asList(), excludes, analyzerConfig, emptyMap())
 
     val builder = AnalyzerResultBuilder()
     managerResult.dependencyGraph?.also {
-        builder.addDependencyGraph(managerName, it).addPackages(managerResult.sharedPackages)
+        builder.addDependencyGraph(descriptor.id, it).addPackages(managerResult.sharedPackages)
     }
 
     definitionFiles.forAll { definitionFile ->
@@ -143,7 +148,7 @@ fun analyze(
 ): OrtResult {
     val config = AnalyzerConfiguration(
         allowDynamicVersions,
-        enabledPackageManagers = packageManagers.map { it.type },
+        enabledPackageManagers = packageManagers.map { it.descriptor.id },
         packageManagers = packageManagerConfiguration
     )
     val analyzer = Analyzer(config)
@@ -152,17 +157,5 @@ fun analyze(
     return analyzer.analyze(managedFiles).withResolvedScopes()
 }
 
-fun create(managerName: String, analyzerConfig: AnalyzerConfiguration) =
-    PackageManagerFactory.ALL.getValue(managerName).create(analyzerConfig)
-
-fun create(managerName: String, vararg options: Pair<String, String>, allowDynamicVersions: Boolean = false) =
-    create(
-        managerName = managerName,
-        analyzerConfig = AnalyzerConfiguration(
-            allowDynamicVersions = allowDynamicVersions,
-            skipExcluded = true,
-            packageManagers = mapOf(
-                managerName to PackageManagerConfiguration(options = mapOf(*options))
-            )
-        )
-    )
+fun create(managerName: String, pluginConfig: PluginConfig) =
+    PackageManagerFactory.ALL.getValue(managerName).create(pluginConfig)

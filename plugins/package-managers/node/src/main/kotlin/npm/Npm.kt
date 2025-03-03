@@ -24,15 +24,17 @@ import java.util.LinkedList
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
+import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
-import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.OrtPluginOption
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
@@ -53,37 +55,43 @@ internal object NpmCommand : CommandLineTool {
     override fun getVersionRequirement(): RangesList = RangesListFactory.create("6.* - 10.*")
 }
 
+data class NpmConfig(
+    /**
+     * If true, the "--legacy-peer-deps" flag is passed to NPM to ignore conflicts in peer dependencies which are
+     * reported since NPM 7. This allows to analyze NPM 6 projects with peer dependency conflicts. For more information
+     * see the [documentation](https://docs.npmjs.com/cli/v8/commands/npm-install#strict-peer-deps) and the
+     * [NPM Blog](https://blog.npmjs.org/post/626173315965468672/npm-v7-series-beta-release-and-semver-major).
+     */
+    @OrtPluginOption(defaultValue = "false")
+    val legacyPeerDeps: Boolean
+)
+
 /**
  * The [Node package manager](https://www.npmjs.com/) for JavaScript.
- *
- * This package manager supports the following [options][PackageManagerConfiguration.options]:
- * - *legacyPeerDeps*: If true, the "--legacy-peer-deps" flag is passed to NPM to ignore conflicts in peer dependencies
- *   which are reported since NPM 7. This allows to analyze NPM 6 projects with peer dependency conflicts. For more
- *   information see the [documentation](https://docs.npmjs.com/cli/v8/commands/npm-install#strict-peer-deps) and the
- *   [NPM Blog](https://blog.npmjs.org/post/626173315965468672/npm-v7-series-beta-release-and-semver-major).
  */
-class Npm(name: String, analyzerConfig: AnalyzerConfiguration) :
-    NodePackageManager(name, NodePackageManagerType.NPM, analyzerConfig) {
-    companion object {
-        /** Name of the configuration option to toggle legacy peer dependency support. */
-        const val OPTION_LEGACY_PEER_DEPS = "legacyPeerDeps"
-    }
-
-    class Factory : AbstractPackageManagerFactory<Npm>("NPM") {
-        override fun create(analyzerConfig: AnalyzerConfiguration) = Npm(type, analyzerConfig)
-    }
+@OrtPlugin(
+    id = "NPM",
+    displayName = "NPM",
+    description = "The Node package manager for JavaScript.",
+    factory = PackageManagerFactory::class
+)
+class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, private val config: NpmConfig) :
+    NodePackageManager(NodePackageManagerType.NPM) {
 
     override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE)
 
     private lateinit var stash: DirectoryStash
 
-    private val legacyPeerDeps = options[OPTION_LEGACY_PEER_DEPS].toBoolean()
     private val npmViewCache = mutableMapOf<String, PackageJson>()
     private val handler = NpmDependencyHandler(projectType, this::getRemotePackageDetails)
 
     override val graphBuilder by lazy { DependencyGraphBuilder(handler) }
 
-    override fun beforeResolution(analysisRoot: File, definitionFiles: List<File>) {
+    override fun beforeResolution(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        analyzerConfig: AnalyzerConfiguration
+    ) {
         NpmCommand.checkVersion()
 
         val directories = definitionFiles.mapTo(mutableSetOf()) { it.resolveSibling("node_modules") }
@@ -98,10 +106,11 @@ class Npm(name: String, analyzerConfig: AnalyzerConfiguration) :
         analysisRoot: File,
         definitionFile: File,
         excludes: Excludes,
+        analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
-        val issues = installDependencies(analysisRoot, workingDir).toMutableList()
+        val issues = installDependencies(analysisRoot, workingDir, analyzerConfig.allowDynamicVersions).toMutableList()
 
         if (issues.any { it.severity == Severity.ERROR }) {
             val project = runCatching {
@@ -155,13 +164,13 @@ class Npm(name: String, analyzerConfig: AnalyzerConfiguration) :
         }.getOrNull()
     }
 
-    private fun installDependencies(analysisRoot: File, workingDir: File): List<Issue> {
-        requireLockfile(analysisRoot, workingDir) { managerType.hasLockfile(workingDir) }
+    private fun installDependencies(analysisRoot: File, workingDir: File, allowDynamicVersions: Boolean): List<Issue> {
+        requireLockfile(analysisRoot, workingDir, allowDynamicVersions) { managerType.hasLockfile(workingDir) }
 
         val options = listOfNotNull(
             "--ignore-scripts",
             "--no-audit",
-            "--legacy-peer-deps".takeIf { legacyPeerDeps }
+            "--legacy-peer-deps".takeIf { config.legacyPeerDeps }
         )
 
         val subcommand = if (managerType.hasLockfile(workingDir)) "ci" else "install"

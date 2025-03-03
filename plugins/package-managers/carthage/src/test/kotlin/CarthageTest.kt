@@ -39,7 +39,7 @@ import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.utils.test.USER_DIR
 
 class CarthageTest : WordSpec() {
-    private val carthage = Carthage("Carthage", AnalyzerConfiguration())
+    private val carthage = CarthageFactory.create()
 
     override fun afterTest(f: suspend (Tuple2<TestCase, TestResult>) -> Unit) {
         unmockkAll()
@@ -50,7 +50,7 @@ class CarthageTest : WordSpec() {
             "parse a github dependency" {
                 val cartfile = File("src/test/assets/Cartfile-github.resolved")
 
-                val result = carthage.resolveDependencies(USER_DIR, cartfile, Excludes.EMPTY, emptyMap()).single()
+                val result = carthage.resolveDependencies(cartfile).single()
 
                 with(result.packages) {
                     size shouldBe 1
@@ -65,7 +65,7 @@ class CarthageTest : WordSpec() {
             "parse a generic git dependency" {
                 val cartfile = File("src/test/assets/Cartfile-generic-git.resolved")
 
-                val result = carthage.resolveDependencies(USER_DIR, cartfile, Excludes.EMPTY, emptyMap()).single()
+                val result = carthage.resolveDependencies(cartfile).single()
 
                 with(result.packages) {
                     size shouldBe 1
@@ -85,7 +85,7 @@ class CarthageTest : WordSpec() {
 
                 val cartfile = File("src/test/assets/Cartfile-binary.resolved")
 
-                val result = carthage.resolveDependencies(USER_DIR, cartfile, Excludes.EMPTY, emptyMap()).single()
+                val result = carthage.resolveDependencies(cartfile).single()
                 with(result.packages) {
                     size shouldBe 1
                     single().apply {
@@ -103,7 +103,7 @@ class CarthageTest : WordSpec() {
 
                 val cartfile = File("src/test/assets/Cartfile-mixed.resolved")
 
-                val result = carthage.resolveDependencies(USER_DIR, cartfile, Excludes.EMPTY, emptyMap()).single()
+                val result = carthage.resolveDependencies(cartfile).single()
 
                 with(result.packages) {
                     size shouldBe 3
@@ -121,9 +121,12 @@ class CarthageTest : WordSpec() {
                 val cartfile = File("src/test/assets/Cartfile-faulty.resolved")
 
                 shouldThrow<IllegalArgumentException> {
-                    carthage.resolveDependencies(USER_DIR, cartfile, Excludes.EMPTY, emptyMap())
+                    carthage.resolveDependencies(cartfile)
                 }
             }
         }
     }
 }
+
+private fun Carthage.resolveDependencies(definitionFile: File) =
+    resolveDependencies(USER_DIR, definitionFile, Excludes.EMPTY, AnalyzerConfiguration(), emptyMap())

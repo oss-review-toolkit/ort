@@ -35,8 +35,8 @@ import org.jruby.embed.LocalContextScope
 import org.jruby.embed.PathType
 import org.jruby.embed.ScriptingContainer
 
-import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
@@ -51,9 +51,10 @@ import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
-import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.orEmpty
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.AlphaNumericComparator
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.HttpDownloadError
@@ -118,32 +119,37 @@ internal fun parseBundlerVersionFromLockfile(lockfile: File): String? {
     return bundledWithLines[1].trim()
 }
 
+data class BundlerConfig(
+    /**
+     * The Bundler version to resolve dependencies for. By default, this is the highest version declared in any present
+     * lockfile, or the version that ships with JRuby if no lockfiles are present. In any case, the value can currently
+     * only be set to a higher version than the version that ships with JRuby.
+     */
+    val bundlerVersion: String?
+)
+
 /**
  * The [Bundler][1] package manager for Ruby. Also see [Clarifying the Roles of the .gemspec and Gemfile][2].
- *
- * This package manager supports the following [options][PackageManagerConfiguration.options]:
- * - *bundlerVersion*: The Bundler version to resolve dependencies for. By default, this is the highest version declared
- *   in any present lockfile, or the version that ships with JRuby if no lockfiles are present. In any case, the value
- *   can currently only be set to a higher version than the version that ships with JRuby.
  *
  * [1]: https://bundler.io/
  * [2]: http://yehudakatz.com/2010/12/16/clarifying-the-roles-of-the-gemspec-and-gemfile/
  */
-class Bundler(name: String, analyzerConfig: AnalyzerConfiguration) : PackageManager(name, "Bundler", analyzerConfig) {
-    companion object {
-        /**
-         * The name of the option to specify the Bundler version.
-         */
-        const val OPTION_BUNDLER_VERSION = "bundlerVersion"
-    }
-
-    class Factory : AbstractPackageManagerFactory<Bundler>("Bundler") {
-        override fun create(analyzerConfig: AnalyzerConfiguration) = Bundler(type, analyzerConfig)
-    }
-
+@OrtPlugin(
+    displayName = "Bundler",
+    description = "The Bundler package manager for Ruby.",
+    factory = PackageManagerFactory::class
+)
+class Bundler(
+    override val descriptor: PluginDescriptor = BundlerFactory.descriptor,
+    private val config: BundlerConfig
+) : PackageManager("Bundler") {
     override val globsForDefinitionFiles = listOf("Gemfile")
 
-    override fun beforeResolution(analysisRoot: File, definitionFiles: List<File>) {
+    override fun beforeResolution(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        analyzerConfig: AnalyzerConfiguration
+    ) {
         // JRuby comes with Bundler as a default Gem, see e.g. [1]. Any manually installed Bundler version will only
         // take precedence if it is newer than JRuby's default version.
         //
@@ -156,8 +162,7 @@ class Bundler(name: String, analyzerConfig: AnalyzerConfiguration) : PackageMana
         val lockfilesBundlerVersion = lockfiles.mapNotNull {
             parseBundlerVersionFromLockfile(it)
         }.sortedWith(AlphaNumericComparator).lastOrNull()
-
-        val bundlerVersion = options[OPTION_BUNDLER_VERSION] ?: lockfilesBundlerVersion
+        val bundlerVersion = config.bundlerVersion ?: lockfilesBundlerVersion
 
         if (bundlerVersion != null) {
             val duration = measureTime {
@@ -189,11 +194,14 @@ class Bundler(name: String, analyzerConfig: AnalyzerConfiguration) : PackageMana
         analysisRoot: File,
         definitionFile: File,
         excludes: Excludes,
+        analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
 
-        requireLockfile(analysisRoot, workingDir) { workingDir.resolve(BUNDLER_LOCKFILE_NAME).isFile }
+        requireLockfile(analysisRoot, workingDir, analyzerConfig.allowDynamicVersions) {
+            workingDir.resolve(BUNDLER_LOCKFILE_NAME).isFile
+        }
 
         val scopes = mutableSetOf<Scope>()
         val issues = mutableListOf<Issue>()
@@ -291,7 +299,7 @@ class Bundler(name: String, analyzerConfig: AnalyzerConfiguration) : PackageMana
             it.showStackTrace()
 
             issues += createAndLogIssue(
-                source = managerName,
+                source = descriptor.displayName,
                 message = "Failed to parse dependency '$gemName' of project '${projectId.toCoordinates()}' in " +
                     "'$workingDir': ${it.collectMessages()}"
             )

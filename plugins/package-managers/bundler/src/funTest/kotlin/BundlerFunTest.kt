@@ -26,7 +26,6 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.haveSubstring
 
-import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.toYaml
@@ -39,14 +38,14 @@ class BundlerFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/lockfile/Gemfile")
             val expectedResultFile = getAssetFile("projects/synthetic/bundler-expected-output-lockfile.yml")
 
-            val actualResult = create("Bundler").resolveSingleProject(definitionFile)
+            val actualResult = BundlerFactory.create().resolveSingleProject(definitionFile)
 
             actualResult.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "show error if no lockfile is present" {
             val definitionFile = getAssetFile("projects/synthetic/no-lockfile/Gemfile")
-            val actualResult = create("Bundler").resolveSingleProject(definitionFile)
+            val actualResult = BundlerFactory.create().resolveSingleProject(definitionFile)
 
             with(actualResult) {
                 project.id shouldBe
@@ -63,7 +62,7 @@ class BundlerFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/gemspec/Gemfile")
             val expectedResultFile = getAssetFile("projects/synthetic/bundler-expected-output-gemspec.yml")
 
-            val actualResult = create("Bundler").resolveSingleProject(definitionFile)
+            val actualResult = BundlerFactory.create().resolveSingleProject(definitionFile)
 
             actualResult.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }

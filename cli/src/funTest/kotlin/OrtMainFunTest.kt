@@ -98,7 +98,7 @@ class OrtMainFunTest : StringSpec() {
         }
 
         "Disabling only Gradle works" {
-            val expectedPackageManagers = PackageManagerFactory.ALL.values.filterNot { it.type == "Gradle" }
+            val expectedPackageManagers = PackageManagerFactory.ALL.values.filterNot { it.descriptor.id == "Gradle" }
             val markerLine = "The following ${expectedPackageManagers.size} package manager(s) are enabled:"
             val inputDir = tempdir()
 
@@ -118,7 +118,7 @@ class OrtMainFunTest : StringSpec() {
 
             withClue(result.stderr) {
                 iterator.hasNext() shouldBe true
-                iterator.next().trim() shouldBe expectedPackageManagers.joinToString { it.type }
+                iterator.next().trim() shouldBe expectedPackageManagers.joinToString { it.descriptor.displayName }
             }
         }
 

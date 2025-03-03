@@ -23,7 +23,6 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.analyzer.collateMultipleProjects
-import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
@@ -33,7 +32,7 @@ class TychoFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/tycho/pom.xml")
         val expectedResultFile = getAssetFile("projects/synthetic/tycho-expected-output.yml")
 
-        val result = create("Tycho").collateMultipleProjects(definitionFile).withResolvedScopes()
+        val result = TychoFactory.create().collateMultipleProjects(definitionFile).withResolvedScopes()
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -42,7 +41,7 @@ class TychoFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/tycho/pom.xml")
         val expectedResultFile = getAssetFile("projects/synthetic/tycho-expected-output-scope-excludes.yml")
 
-        val result = create("Tycho")
+        val result = TychoFactory.create()
             .collateMultipleProjects(definitionFile, excludedScopes = setOf("test.*")).withResolvedScopes()
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)

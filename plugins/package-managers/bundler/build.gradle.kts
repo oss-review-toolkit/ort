@@ -19,7 +19,7 @@
 
 plugins {
     // Apply precompiled plugins.
-    id("ort-library-conventions")
+    id("ort-plugin-conventions")
 
     // Apply third-party plugins.
     alias(libs.plugins.kotlinSerialization)
@@ -37,6 +37,8 @@ dependencies {
     implementation(libs.jruby)
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.yaml)
+
+    ksp(projects.analyzer)
 
     funTestImplementation(testFixtures(projects.analyzer))
 }

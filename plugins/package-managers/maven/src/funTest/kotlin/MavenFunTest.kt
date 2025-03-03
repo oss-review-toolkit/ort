@@ -24,9 +24,9 @@ import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 
-import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveScopes
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.common.Os
@@ -41,7 +41,7 @@ class MavenFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/maven/pom.xml")
         val expectedResultFile = getAssetFile("projects/synthetic/maven-expected-output-root.yml")
 
-        val result = create("Maven").resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = MavenFactory.create().resolveSingleProject(definitionFile, resolveScopes = true)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -54,10 +54,10 @@ class MavenFunTest : StringSpec({
         // The "app" project depends on the "lib" project, so the "pom.xml" of the "lib" project also has to be passed
         // to [resolveDependencies], so that it is available in the [Maven.projectsByIdentifier] cache. Otherwise,
         // resolution of transitive dependencies would not work.
-        val managerResult = with(create("Maven")) {
+        val managerResult = with(MavenFactory.create()) {
             val definitionFiles = listOf(definitionFileApp, definitionFileLib)
-            beforeResolution(USER_DIR, definitionFiles)
-            resolveDependencies(USER_DIR, definitionFiles, Excludes.EMPTY, emptyMap()).also {
+            beforeResolution(USER_DIR, definitionFiles, AnalyzerConfiguration())
+            resolveDependencies(USER_DIR, definitionFiles, Excludes.EMPTY, AnalyzerConfiguration(), emptyMap()).also {
                 afterResolution(USER_DIR, definitionFiles)
             }
         }
@@ -75,7 +75,7 @@ class MavenFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/maven/lib/pom.xml")
         val expectedResultFile = getAssetFile("projects/synthetic/maven-expected-output-lib.yml")
 
-        val result = create("Maven").resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = MavenFactory.create().resolveSingleProject(definitionFile, resolveScopes = true)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -84,7 +84,7 @@ class MavenFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/maven/lib/pom.xml")
         val expectedResultFile = getAssetFile("projects/synthetic/maven-expected-output-scope-excludes.yml")
 
-        val result = create("Maven")
+        val result = MavenFactory.create()
             .resolveSingleProject(definitionFile, excludedScopes = setOf("test.*"), resolveScopes = true)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
@@ -99,7 +99,7 @@ class MavenFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/maven-parent/pom.xml")
         val expectedResultFile = getAssetFile("projects/synthetic/maven-parent-expected-output-root.yml")
 
-        val result = create("Maven").resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = MavenFactory.create().resolveSingleProject(definitionFile, resolveScopes = true)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -108,7 +108,7 @@ class MavenFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/maven-wagon/pom.xml")
         val expectedResultFile = getAssetFile("projects/synthetic/maven-wagon-expected-output.yml")
 
-        val result = create("Maven").resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = MavenFactory.create().resolveSingleProject(definitionFile, resolveScopes = true)
 
         patchActualResult(result.toYaml(), patchStartAndEndTime = true) should matchExpectedResult(
             expectedResultFile, definitionFile

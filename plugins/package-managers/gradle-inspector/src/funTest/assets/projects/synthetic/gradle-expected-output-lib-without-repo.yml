@@ -19,12 +19,12 @@ project:
 packages: []
 issues:
 - timestamp: "1970-01-01T00:00:00Z"
-  source: "GradleInspector"
+  source: "Gradle Inspector"
   message: "Cannot resolve external dependency org.apache.commons:commons-text:1.1\
     \ because no repositories are defined from project :lib-without-repo."
   severity: "ERROR"
 - timestamp: "1970-01-01T00:00:00Z"
-  source: "GradleInspector"
+  source: "Gradle Inspector"
   message: "Cannot resolve external dependency junit:junit:4.12 because no repositories\
     \ are defined from project :lib-without-repo."
   severity: "ERROR"

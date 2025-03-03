@@ -27,6 +27,7 @@ plugins {
 
 dependencies {
     api(projects.model)
+    api(projects.plugins.api)
 
     implementation(projects.downloader)
     implementation(projects.utils.configUtils)

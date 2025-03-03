@@ -19,7 +19,7 @@
 
 plugins {
     // Apply precompiled plugins.
-    id("ort-library-conventions")
+    id("ort-plugin-conventions")
 }
 
 dependencies {
@@ -35,6 +35,8 @@ dependencies {
 
     implementation(projects.plugins.packageManagers.mavenPackageManager)
     implementation(projects.utils.ortUtils)
+
+    ksp(projects.analyzer)
 
     funTestImplementation(projects.plugins.versionControlSystems.gitVersionControlSystem)
     funTestImplementation(testFixtures(projects.analyzer))

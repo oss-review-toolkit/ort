@@ -31,7 +31,6 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.analyzer.analyze
-import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
@@ -40,6 +39,7 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
@@ -53,7 +53,7 @@ class SpdxDocumentFileFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/inline-packages/project-xyz.spdx.yml")
             val expectedResultFile = getAssetFile("projects/synthetic/spdx-project-xyz-expected-output.yml")
 
-            val actualResult = create("SpdxDocumentFile").resolveSingleProject(definitionFile).toYaml()
+            val actualResult = SpdxDocumentFileFactory.create().resolveSingleProject(definitionFile).toYaml()
 
             actualResult should matchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -62,7 +62,7 @@ class SpdxDocumentFileFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/package-references/project-xyz.spdx.yml")
             val expectedResultFile = getAssetFile("projects/synthetic/spdx-project-xyz-expected-output.yml")
 
-            val actualResult = create("SpdxDocumentFile").resolveSingleProject(definitionFile).toYaml()
+            val actualResult = SpdxDocumentFileFactory.create().resolveSingleProject(definitionFile).toYaml()
 
             actualResult should matchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -78,8 +78,8 @@ class SpdxDocumentFileFunTest : WordSpec({
             val zlibId = Identifier("SpdxDocumentFile::zlib:1.2.11")
 
             val definitionFiles = listOf(curlPackageFile, opensslPackageFile, zlibPackageFile)
-            val actualResult = create("SpdxDocumentFile")
-                .resolveDependencies(USER_DIR, definitionFiles, Excludes.EMPTY, emptyMap())
+            val actualResult = SpdxDocumentFileFactory.create()
+                .resolveDependencies(USER_DIR, definitionFiles, Excludes.EMPTY, AnalyzerConfiguration(), emptyMap())
                 // Extract only ProjectAnalyzerResults to avoid depending on other analyzer result specific items (e.g.
                 // the dependency graph).
                 .projectResults.values.flatten().associateBy { it.project.id }
@@ -159,8 +159,8 @@ class SpdxDocumentFileFunTest : WordSpec({
             val projectFile = projectDir.resolve("transitive-dependencies/project-xyz.spdx.yml")
             val definitionFiles = listOf(projectFile)
 
-            val result = create("SpdxDocumentFile")
-                .resolveDependencies(USER_DIR, definitionFiles, Excludes.EMPTY, emptyMap())
+            val result = SpdxDocumentFileFactory.create()
+                .resolveDependencies(USER_DIR, definitionFiles, Excludes.EMPTY, AnalyzerConfiguration(), emptyMap())
 
             result.projectResults[projectFile] shouldNotBeNull {
                 with(single()) {
@@ -188,8 +188,8 @@ class SpdxDocumentFileFunTest : WordSpec({
             val projectFile = projectDir.resolve("DEPENDS_ON-packages/project-xyz.spdx.yml")
             val definitionFiles = listOf(projectFile)
 
-            val result = create("SpdxDocumentFile")
-                .resolveDependencies(USER_DIR, definitionFiles, Excludes.EMPTY, emptyMap())
+            val result = SpdxDocumentFileFactory.create()
+                .resolveDependencies(USER_DIR, definitionFiles, Excludes.EMPTY, AnalyzerConfiguration(), emptyMap())
 
             result.projectResults[projectFile] shouldNotBeNull {
                 with(single()) {
@@ -219,7 +219,7 @@ class SpdxDocumentFileFunTest : WordSpec({
                 "projects/synthetic/spdx-project-cyclic-expected-output.yml"
             )
 
-            val actualResult = create("SpdxDocumentFile").resolveSingleProject(definitionFile).toYaml()
+            val actualResult = SpdxDocumentFileFactory.create().resolveSingleProject(definitionFile).toYaml()
 
             actualResult should matchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -232,7 +232,7 @@ class SpdxDocumentFileFunTest : WordSpec({
 
             val definitionFiles = listOf(projectFile, packageFile)
 
-            val result = create("SpdxDocumentFile").mapDefinitionFiles(USER_DIR, definitionFiles)
+            val result = SpdxDocumentFileFactory.create().mapDefinitionFiles(USER_DIR, definitionFiles)
 
             result should containExactly(projectFile)
         }
@@ -243,7 +243,7 @@ class SpdxDocumentFileFunTest : WordSpec({
 
             val definitionFiles = listOf(packageFileCurl, packageFileZlib)
 
-            val result = create("SpdxDocumentFile").mapDefinitionFiles(USER_DIR, definitionFiles)
+            val result = SpdxDocumentFileFactory.create().mapDefinitionFiles(USER_DIR, definitionFiles)
 
             result should containExactly(definitionFiles)
         }
@@ -257,8 +257,8 @@ class SpdxDocumentFileFunTest : WordSpec({
             val subProjectFile = projectDir.resolve("subproject-dependencies/subproject/subproject-xyz.spdx.yml")
             val definitionFiles = listOf(projectFile, subProjectFile)
 
-            val result = create("SpdxDocumentFile")
-                .resolveDependencies(USER_DIR, definitionFiles, Excludes.EMPTY, emptyMap())
+            val result = SpdxDocumentFileFactory.create()
+                .resolveDependencies(USER_DIR, definitionFiles, Excludes.EMPTY, AnalyzerConfiguration(), emptyMap())
             val projectResults = result.projectResults.values.flatten()
             val projectIds = projectResults.map { it.project.id }
             val packageIds = projectResults.flatMap { projResult -> projResult.packages.map { it.id } }
@@ -279,8 +279,8 @@ class SpdxDocumentFileFunTest : WordSpec({
             val subProjectFile = projectDir.resolve("illegal-chars-external-refs/illegal_chars/package.spdx.yml")
             val definitionFiles = listOf(projectFile, subProjectFile)
 
-            val result = create("SpdxDocumentFile")
-                .resolveDependencies(USER_DIR, definitionFiles, Excludes.EMPTY, emptyMap())
+            val result = SpdxDocumentFileFactory.create()
+                .resolveDependencies(USER_DIR, definitionFiles, Excludes.EMPTY, AnalyzerConfiguration(), emptyMap())
 
             val rootProject = result.projectResults[projectFile.absoluteFile]?.first()
 
