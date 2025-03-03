@@ -339,6 +339,96 @@ class DependencyTreeParserTest : WordSpec({
                 compareNodes(projectNode1, it)
             }
         }
+
+        "remove source code bundles in dependencies" {
+            val projectNode = DependencyTreeMojoNode(
+                "org.ossreviewtoolkit",
+                "module",
+                "1.2.3-SNAPSHOT",
+                "pom",
+                "",
+                "",
+                listOf(
+                    DependencyTreeMojoNode(
+                        "org.apache.commons",
+                        "commons-configuration2",
+                        "2.11.0",
+                        "jar",
+                        "compile",
+                        ""
+                    ),
+                    DependencyTreeMojoNode(
+                        "p2.eclipse.plugin",
+                        "org.objectweb.asm",
+                        "9.1.0",
+                        "jar",
+                        "compile",
+                        ""
+                    ),
+                    DependencyTreeMojoNode(
+                        "p2.eclipse.plugin",
+                        "org.objectweb.asm.source",
+                        "9.1.0",
+                        "jar",
+                        "compile",
+                        ""
+                    )
+                )
+            )
+
+            val projectDependencies = parseDependencyTree(
+                inputStreamFor(projectNode),
+                listOf(createProject("module"))
+            ).toList()
+
+            projectDependencies.shouldBeSingleton { node ->
+                node.children.map { it.artifact.artifactId } shouldContainExactlyInAnyOrder listOf(
+                    "commons-configuration2",
+                    "org.objectweb.asm"
+                )
+            }
+        }
+
+        "only remove source code bundles if there is a matching regular bundle" {
+            val projectNode = DependencyTreeMojoNode(
+                "org.ossreviewtoolkit",
+                "module",
+                "1.2.3-SNAPSHOT",
+                "pom",
+                "",
+                "",
+                listOf(
+                    DependencyTreeMojoNode(
+                        "org.apache.commons",
+                        "commons-configuration2",
+                        "2.11.0",
+                        "jar",
+                        "compile",
+                        ""
+                    ),
+                    DependencyTreeMojoNode(
+                        "p2.eclipse.plugin",
+                        "org.objectweb.asm.source",
+                        "9.1.0",
+                        "jar",
+                        "compile",
+                        ""
+                    )
+                )
+            )
+
+            val projectDependencies = parseDependencyTree(
+                inputStreamFor(projectNode),
+                listOf(createProject("module"))
+            ).toList()
+
+            projectDependencies.shouldBeSingleton { node ->
+                node.children.map { it.artifact.artifactId } shouldContainExactlyInAnyOrder listOf(
+                    "commons-configuration2",
+                    "org.objectweb.asm.source"
+                )
+            }
+        }
     }
 })
 
