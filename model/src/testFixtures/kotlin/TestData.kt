@@ -17,23 +17,8 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.model.licenses
+package org.ossreviewtoolkit.model
 
-import org.ossreviewtoolkit.model.AnalyzerResult
-import org.ossreviewtoolkit.model.AnalyzerRun
-import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.LicenseFinding
-import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.Project
-import org.ossreviewtoolkit.model.Repository
-import org.ossreviewtoolkit.model.ScanResult
-import org.ossreviewtoolkit.model.ScanSummary
-import org.ossreviewtoolkit.model.ScannerDetails
-import org.ossreviewtoolkit.model.Scope
-import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.model.UnknownProvenance
-import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason

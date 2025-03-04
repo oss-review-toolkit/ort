@@ -28,6 +28,15 @@ import io.kotest.matchers.should
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
+import org.ossreviewtoolkit.model.ortResult
+import org.ossreviewtoolkit.model.packageWithConcludedAndDeclaredAndDetectedLicense
+import org.ossreviewtoolkit.model.packageWithConcludedAndDeclaredLicense
+import org.ossreviewtoolkit.model.packageWithConcludedAndDetectedLicense
+import org.ossreviewtoolkit.model.packageWithConcludedLicense
+import org.ossreviewtoolkit.model.packageWithDeclaredAndDetectedLicense
+import org.ossreviewtoolkit.model.packageWithDeclaredLicense
+import org.ossreviewtoolkit.model.packageWithDetectedLicense
+import org.ossreviewtoolkit.model.packageWithoutLicense
 import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.test.createDefault

@@ -20,6 +20,9 @@
 import de.undercouch.gradle.tasks.download.Download
 
 plugins {
+    // Apply core plugins.
+    `java-test-fixtures`
+
     // Apply precompiled plugins.
     id("ort-library-conventions")
 
@@ -40,6 +43,9 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
+
+    testFixturesImplementation(libs.kotlinx.serialization.core)
+    testFixturesImplementation(projects.utils.testUtils)
 
     testImplementation(libs.mockk)
 }
