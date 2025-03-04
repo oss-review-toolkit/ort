@@ -22,19 +22,16 @@ package org.ossreviewtoolkit.plugins.packagemanagers.maven
 import java.io.File
 import java.nio.file.Path
 import java.util.concurrent.atomic.AtomicReference
-import java.util.jar.JarInputStream
 import java.util.jar.Manifest
 
 import kotlin.io.path.invariantSeparatorsPathString
 
 import org.apache.logging.log4j.kotlin.logger
-import org.apache.logging.log4j.kotlin.loggerOf
 import org.apache.maven.AbstractMavenLifecycleParticipant
 import org.apache.maven.cli.MavenCli
 import org.apache.maven.execution.MavenSession
 import org.apache.maven.model.Scm
 import org.apache.maven.project.MavenProject
-import org.apache.maven.repository.RepositorySystem
 
 import org.codehaus.plexus.PlexusContainer
 import org.codehaus.plexus.classworlds.ClassWorld
@@ -57,6 +54,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.LocalProjectWorkspaceReader
+import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.LocalRepositoryHelper
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.MavenDependencyHandler
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.MavenSupport
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.PackageResolverFun
@@ -163,7 +161,7 @@ class Tycho(
         mavenSupport: MavenSupport,
         mavenProjects: Map<String, MavenProject>
     ): DependencyGraphBuilder<DependencyNode> {
-        val resolverFun = tychoPackageResolverFun(mavenSupport.defaultPackageResolverFun())
+        val resolverFun = tychoPackageResolverFun(mavenSupport.defaultPackageResolverFun(), LocalRepositoryHelper())
         val dependencyHandler = MavenDependencyHandler(managerName, projectType, mavenProjects, resolverFun)
         return DependencyGraphBuilder(dependencyHandler)
     }
@@ -342,28 +340,26 @@ internal class TychoProjectsCollector : AbstractMavenLifecycleParticipant() {
     }
 }
 
-private val tychoLogger = loggerOf(Tycho::class.java)
-
 /**
  * Return a [PackageResolverFun] that can handle special OSGi artifacts detected during a Tycho analysis.
  * OSGi bundles retrieved from a P2 repository cannot be handled by the default resolver function, which is not aware
  * of the special repository layout. Also, they do not have a POM with metadata, but may contain some metadata in
  * their OSGi manifest.
  * This function first delegates to the given [delegate] function to handle normal packages in the usual way. If this
- * fails, it checks whether the dependency can be found in the p2 cache of the local Maven repository pointed to by
- * [localRepositoryRoot]. (Since the Tycho project has been built, the cache should be populated.) If this is the case,
+ * fails, it checks whether the dependency can be found in the p2 cache of the local Maven repository managed by
+ * [repositoryHelper]. (Since the Tycho project has been built, the cache should be populated.) If this is the case,
  * it tries to obtain metadata from the OSGi manifest of the bundle. This approach is partly inspired by
  * https://github.com/OpenNTF/p2-layout-provider.
  */
 internal fun tychoPackageResolverFun(
     delegate: PackageResolverFun,
-    localRepositoryRoot: File = RepositorySystem.defaultUserLocalRepository
+    repositoryHelper: LocalRepositoryHelper
 ): PackageResolverFun =
     { dependency ->
         runCatching {
             delegate(dependency)
         }.recoverCatching { exception ->
-            createPackageFromLocalArtifact(dependency.artifact, localRepositoryRoot)
+            createPackageFromLocalArtifact(dependency.artifact, repositoryHelper)
                 ?: throw exception
         }.getOrThrow()
     }
@@ -403,29 +399,11 @@ internal fun createPackageFromManifest(artifact: Artifact, manifest: Manifest): 
     }
 
 /**
- * Try to find an OSGi artifact in the local Maven repository at [localRepositoryRoot] that matches the given
+ * Try to find an OSGi artifact in the local Maven repository managed by [repositoryHelper] that matches the given
  * [artifact]. If found, create a [Package] from the artifact's OSGi manifest.
  */
-private fun createPackageFromLocalArtifact(artifact: Artifact, localRepositoryRoot: File): Package? {
-    val artifactFile = localRepositoryRoot.resolve("p2/osgi/bundle")
-        .resolve(artifact.artifactId)
-        .resolve(artifact.version)
-        .resolve("${artifact.artifactId}-${artifact.version}.jar")
-
-    tychoLogger.debug {
-        "Looking up package metadata for '${artifact.identifier()}' in local repository '$artifactFile'."
-    }
-
-    if (!artifactFile.isFile) return null
-
-    tychoLogger.info {
-        "Reading metadata for '${artifact.identifier()}' from local repository '$artifactFile'."
-    }
-
-    return JarInputStream(artifactFile.inputStream()).use { jar ->
-        createPackageFromManifest(artifact, jar.manifest ?: Manifest())
-    }
-}
+private fun createPackageFromLocalArtifact(artifact: Artifact, repositoryHelper: LocalRepositoryHelper): Package? =
+    repositoryHelper.osgiManifest(artifact)?.let { createPackageFromManifest(artifact, it) }
 
 /**
  * An enumeration that defines the properties to be extracted from a source reference manifest header.
