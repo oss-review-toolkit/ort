@@ -377,8 +377,11 @@ internal fun createPackageFromManifest(artifact: Artifact, manifest: Manifest): 
         val declaredLicenses = setOfNotNull(getValue("Bundle-License"))
         val declaredLicensesProcessed = processDeclaredLicenses(declaredLicenses)
         val authors = setOfNotNull(getValue("Bundle-Vendor"))
+        val homepageUrl = getValue("Bundle-DocURL").orEmpty()
 
-        val vcs = parseScm(getValue("Eclipse-SourceReferences").toScm(), artifact.identifier())
+        val scmProperties = extractScmProperties(getValue("Eclipse-SourceReferences"))
+        val vcs = parseScm(scmProperties.toScm(), artifact.identifier(), scmProperties[ScmProperties.PATH].orEmpty())
+        val vcsProcessed = PackageManager.processPackageVcs(vcs, homepageUrl)
 
         Package(
             id = Identifier(
@@ -391,11 +394,11 @@ internal fun createPackageFromManifest(artifact: Artifact, manifest: Manifest): 
             declaredLicenses = declaredLicenses,
             declaredLicensesProcessed = declaredLicensesProcessed,
             description = getValue("Bundle-Description").orEmpty(),
-            homepageUrl = "",
+            homepageUrl = homepageUrl,
             binaryArtifact = RemoteArtifact.EMPTY,
             sourceArtifact = RemoteArtifact.EMPTY,
             vcs = vcs,
-            vcsProcessed = vcs
+            vcsProcessed = vcsProcessed
         )
     }
 
@@ -425,20 +428,46 @@ private fun createPackageFromLocalArtifact(artifact: Artifact, localRepositoryRo
 }
 
 /**
- * Parse this string with a source references manifest header to a [Scm] structure.
+ * An enumeration that defines the properties to be extracted from a source reference manifest header.
+ */
+private enum class ScmProperties {
+    /** The connection URL. */
+    CONNECTION,
+
+    /** The tag in the source code management system. */
+    TAG,
+
+    /** The path of this component in a monorepo. */
+    PATH
+}
+
+/**
+ * Parse the given [scmInfo] string with a source references manifest header to a map of [ScmProperties].
  * See https://wiki.eclipse.org/PDE/UI/SourceReferences.
  */
-private fun String?.toScm(): Scm? =
-    this?.split(',')?.firstOrNull()
-        ?.let { scmInfo ->
-            val fields = scmInfo.split(';')
-            val properties = fields.drop(1).filter { "=" in it }.associate { field ->
-                val (key, value) = field.split('=')
-                key to value.removeSurrounding("\"")
-            }
+private fun extractScmProperties(scmInfo: String?): Map<ScmProperties, String> =
+    scmInfo?.split(',')?.firstOrNull()?.let { firstScmInfo ->
+        val properties = mutableMapOf<ScmProperties, String>()
+        val fields = firstScmInfo.split(';')
+        properties[ScmProperties.CONNECTION] = fields[0]
 
-            Scm().apply {
-                connection = fields[0]
-                tag = properties["tag"]
+        fields.drop(1).filter { "=" in it }.forEach { field ->
+            val (key, value) = field.split('=')
+            runCatching { // Ignore unknown keys.
+                ScmProperties.valueOf(key.uppercase()).also { properties[it] = value.removeSurrounding("\"") }
             }
         }
+
+        properties
+    }.orEmpty()
+
+/**
+ * Convert this [Map] of [ScmProperties] to a [Scm] structure. Return *null* if mandatory properties are missing.
+ */
+private fun Map<ScmProperties, String>.toScm(): Scm? =
+    get(ScmProperties.CONNECTION)?.let { connection ->
+        Scm().apply {
+            this.connection = connection
+            tag = get(ScmProperties.TAG)
+        }
+    }
