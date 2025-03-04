@@ -155,8 +155,9 @@ data class Project(
      */
     fun withResolvedScopes(graph: DependencyGraph?): Project =
         if (graph != null && scopeNames != null) {
+            val qualifiedScopeNames = scopeNames.mapTo(mutableSetOf()) { DependencyGraph.qualifyScope(id, it) }
             copy(
-                scopeDependencies = graph.createScopes(qualifiedScopeNames()),
+                scopeDependencies = graph.createScopes(qualifiedScopeNames),
                 scopeNames = null
             )
         } else {
@@ -188,11 +189,4 @@ data class Project(
             vcs = vcs,
             vcsProcessed = vcsProcessed
         )
-
-    /**
-     * Return a set with scope names that are qualified by this project's identifier. This is necessary when
-     * extracting the scopes of this project from a shared dependency graph.
-     */
-    private fun qualifiedScopeNames(): Set<String> =
-        scopeNames.orEmpty().map { DependencyGraph.qualifyScope(id, it) }.toSet()
 }
