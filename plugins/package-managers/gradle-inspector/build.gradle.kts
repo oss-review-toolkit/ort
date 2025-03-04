@@ -22,7 +22,7 @@ import org.jetbrains.gradle.ext.taskTriggers
 
 plugins {
     // Apply precompiled plugins.
-    id("ort-library-conventions")
+    id("ort-plugin-conventions")
 
     // Apply third-party plugins.
     alias(libs.plugins.ideaExt)
@@ -39,6 +39,8 @@ dependencies {
     implementation(projects.utils.spdxUtils)
 
     implementation("org.gradle:gradle-tooling-api:${gradle.gradleVersion}")
+
+    ksp(projects.analyzer)
 
     funTestImplementation(projects.plugins.versionControlSystems.gitVersionControlSystem)
     funTestImplementation(testFixtures(projects.analyzer))

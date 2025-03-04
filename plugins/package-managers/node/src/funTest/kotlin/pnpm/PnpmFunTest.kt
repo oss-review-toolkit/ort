@@ -47,8 +47,8 @@ class PnpmFunTest : StringSpec({
             "projects/synthetic/pnpm/project-with-lockfile-skip-excluded-scopes-expected-output.yml"
         )
 
-        val result = create("PNPM", excludedScopes = setOf("devDependencies"))
-            .resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = create("PNPM")
+            .resolveSingleProject(definitionFile, excludedScopes = setOf("devDependencies"), resolveScopes = true)
 
         patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
     }

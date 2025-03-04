@@ -39,6 +39,7 @@ import org.ossreviewtoolkit.utils.test.matchExpectedResult
 class ComposerFunTest : StringSpec({
     "Project files from vendor directories are ignored" {
         val projectFiles = create("Composer").mapDefinitionFiles(
+            File("."),
             listOf(
                 "projectA/composer.json",
                 "projectA/vendor/dependency1/composer.json",

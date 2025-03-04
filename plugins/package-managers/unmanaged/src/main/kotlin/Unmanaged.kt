@@ -23,8 +23,8 @@ import java.io.File
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Project
@@ -32,38 +32,38 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.utils.parseRepoManifestPath
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 
 /**
  * A fake [PackageManager] for projects that do not use any of the known package managers, or no package manager at all.
  * It is required as in ORT's data model e.g. scan results need to be attached to projects (or packages), so files that
  * do not belong to any other project need to be attached to somewhere.
  */
-class Unmanaged(
-    name: String,
-    analysisRoot: File,
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Unmanaged", analysisRoot, analyzerConfig, repoConfig) {
-    class Factory : AbstractPackageManagerFactory<Unmanaged>("Unmanaged") {
-        // The empty list returned here deliberately causes this special package manager to never be considered in
-        // PackageManager.findManagedFiles(). Instead, it will only be explicitly instantiated as part of
-        // Analyzer.findManagedFiles().
-        override val globsForDefinitionFiles = emptyList<String>()
-
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = Unmanaged(type, analysisRoot, analyzerConfig, repoConfig)
-    }
+@OrtPlugin(
+    displayName = "Unmanaged",
+    description = "The Unmanaged package manager for projects that do not use any package manager.",
+    factory = PackageManagerFactory::class
+)
+class Unmanaged(override val descriptor: PluginDescriptor = UnmanagedFactory.descriptor) : PackageManager("Unmanaged") {
+    // The empty list returned here deliberately causes this special package manager to never be considered in
+    // PackageManager.findManagedFiles(). Instead, it will only be explicitly instantiated as part of
+    // Analyzer.findManagedFiles().
+    override val globsForDefinitionFiles = emptyList<String>()
 
     /**
      * Return a list with a single [ProjectAnalyzerResult] for the "unmanaged" [Project] defined by the
      * [definitionFile], which in this case is a directory. No dependency resolution is performed.
      */
-    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(
+        analysisRoot: File,
+        definitionFile: File,
+        excludes: Excludes,
+        analyzerConfig: AnalyzerConfiguration,
+        labels: Map<String, String>
+    ): List<ProjectAnalyzerResult> {
         val vcsInfo = VersionControlSystem.getCloneInfo(definitionFile)
 
         val id = when {

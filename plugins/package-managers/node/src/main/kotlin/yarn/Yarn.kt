@@ -35,16 +35,18 @@ import kotlinx.serialization.json.jsonPrimitive
 import org.apache.logging.log4j.kotlin.logger
 import org.apache.logging.log4j.kotlin.loggerOf
 
-import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
+import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.readTree
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
@@ -90,21 +92,14 @@ internal object YarnCommand : CommandLineTool {
 /**
  * The [Yarn](https://classic.yarnpkg.com/) package manager for JavaScript.
  */
-open class Yarn(
-    name: String,
-    analysisRoot: File,
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : NodePackageManager(name, NodePackageManagerType.YARN, analysisRoot, analyzerConfig, repoConfig) {
-    class Factory : AbstractPackageManagerFactory<Yarn>("Yarn") {
-        override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE)
-
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = Yarn(type, analysisRoot, analyzerConfig, repoConfig)
-    }
+@OrtPlugin(
+    displayName = "Yarn",
+    description = "The Yarn package manager for JavaScript.",
+    factory = PackageManagerFactory::class
+)
+open class Yarn(override val descriptor: PluginDescriptor = YarnFactory.descriptor) :
+    NodePackageManager(NodePackageManagerType.YARN) {
+    override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE)
 
     private lateinit var stash: DirectoryStash
 
@@ -133,20 +128,30 @@ open class Yarn(
         }
     }
 
-    override fun beforeResolution(definitionFiles: List<File>) {
+    override fun beforeResolution(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        analyzerConfig: AnalyzerConfiguration
+    ) {
         YarnCommand.checkVersion()
 
         val directories = definitionFiles.mapTo(mutableSetOf()) { it.resolveSibling("node_modules") }
         stash = DirectoryStash(directories)
     }
 
-    override fun afterResolution(definitionFiles: List<File>) {
+    override fun afterResolution(analysisRoot: File, definitionFiles: List<File>) {
         stash.close()
     }
 
-    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> =
+    override fun resolveDependencies(
+        analysisRoot: File,
+        definitionFile: File,
+        excludes: Excludes,
+        analyzerConfig: AnalyzerConfiguration,
+        labels: Map<String, String>
+    ): List<ProjectAnalyzerResult> =
         try {
-            resolveDependenciesInternal(definitionFile)
+            resolveDependenciesInternal(analysisRoot, definitionFile, excludes, analyzerConfig.allowDynamicVersions)
         } finally {
             rawModuleInfoCache.clear()
         }
@@ -164,9 +169,14 @@ open class Yarn(
     )
 
     // TODO: Add support for bundledDependencies.
-    private fun resolveDependenciesInternal(definitionFile: File): List<ProjectAnalyzerResult> {
+    private fun resolveDependenciesInternal(
+        analysisRoot: File,
+        definitionFile: File,
+        excludes: Excludes,
+        allowDynamicVersions: Boolean
+    ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
-        installDependencies(workingDir)
+        installDependencies(analysisRoot, workingDir, allowDynamicVersions)
 
         val projectDirs = findWorkspaceSubmodules(workingDir) + definitionFile.parentFile
 
@@ -178,7 +188,7 @@ open class Yarn(
                 parseProject(packageJsonFile, analysisRoot)
             }.getOrElse {
                 issues += createAndLogIssue(
-                    source = managerName,
+                    source = descriptor.displayName,
                     message = "Failed to parse project information: ${it.collectMessages()}"
                 )
 
@@ -195,7 +205,8 @@ open class Yarn(
                     setOf(DEPENDENCIES_SCOPE, OPTIONAL_DEPENDENCIES_SCOPE),
                     DEPENDENCIES_SCOPE,
                     projectDirs,
-                    workspaceDir = workingDir
+                    workspaceDir = workingDir,
+                    excludes = excludes
                 ),
 
                 buildDependencyGraphForScopes(
@@ -204,7 +215,8 @@ open class Yarn(
                     setOf(DEV_DEPENDENCIES_SCOPE),
                     DEV_DEPENDENCIES_SCOPE,
                     projectDirs,
-                    workspaceDir = workingDir
+                    workspaceDir = workingDir,
+                    excludes = excludes
                 )
             )
 
@@ -286,7 +298,8 @@ open class Yarn(
         scopes: Set<String>,
         targetScope: String,
         projectDirs: Set<File>,
-        workspaceDir: File? = null
+        workspaceDir: File? = null,
+        excludes: Excludes
     ): String? {
         if (excludes.isScopeExcluded(targetScope)) return null
 
@@ -338,8 +351,8 @@ open class Yarn(
             loadWorkspaceSubmodules(moduleDir)
         }
 
-    private fun installDependencies(workingDir: File) {
-        requireLockfile(workingDir) { managerType.hasLockfile(workingDir) }
+    private fun installDependencies(analysisRoot: File, workingDir: File, allowDynamicVersions: Boolean) {
+        requireLockfile(analysisRoot, workingDir, allowDynamicVersions) { managerType.hasLockfile(workingDir) }
 
         YarnCommand.run(workingDir, "install", "--ignore-scripts", "--ignore-engines", "--immutable").requireSuccess()
     }

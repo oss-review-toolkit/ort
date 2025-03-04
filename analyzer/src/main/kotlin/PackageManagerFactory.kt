@@ -19,75 +19,18 @@
 
 package org.ossreviewtoolkit.analyzer
 
-import java.io.File
-import java.nio.file.FileSystems
-import java.nio.file.PathMatcher
 import java.util.ServiceLoader
 
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.common.Plugin
+import org.ossreviewtoolkit.plugins.api.PluginFactory
 
 /**
- * A common interface for use with [ServiceLoader] that all [AbstractPackageManagerFactory] classes need to implement.
+ * A common interface for use with [ServiceLoader] that all [PackageManagerFactory] classes need to implement.
  */
-interface PackageManagerFactory : Plugin {
+interface PackageManagerFactory : PluginFactory<PackageManager> {
     companion object {
         /**
          * All [package manager factories][PackageManagerFactory] available in the classpath, associated by their names.
          */
-        val ALL by lazy { Plugin.getAll<PackageManagerFactory>() }
-
-        /**
-         * The available [package manager factories][PackageManagerFactory] that are enabled by default.
-         */
-        val ENABLED_BY_DEFAULT by lazy { ALL.values.filter { it.isEnabledByDefault } }
+        val ALL by lazy { PluginFactory.getAll<PackageManagerFactory, PackageManager>() }
     }
-
-    /**
-     * The glob matchers for all definition files.
-     */
-    val matchersForDefinitionFiles: List<PathMatcher>
-
-    /**
-     * Create a [PackageManager] for analyzing the [analysisRoot] directory using the specified [analyzerConfig] and
-     * [repoConfig].
-     */
-    fun create(
-        analysisRoot: File,
-        analyzerConfig: AnalyzerConfiguration,
-        repoConfig: RepositoryConfiguration
-    ): PackageManager
-}
-
-/**
- * A generic factory class for a [PackageManager].
- */
-abstract class AbstractPackageManagerFactory<out T : PackageManager>(
-    override val type: String,
-    override val isEnabledByDefault: Boolean = true
-) : PackageManagerFactory {
-    /**
-     * The prioritized list of glob patterns of definition files supported by this package manager. Only all matches of
-     * the first glob having any matches are considered.
-     */
-    abstract val globsForDefinitionFiles: List<String>
-
-    override val matchersForDefinitionFiles by lazy {
-        globsForDefinitionFiles.map {
-            FileSystems.getDefault().getPathMatcher("glob:**/$it")
-        }
-    }
-
-    abstract override fun create(
-        analysisRoot: File,
-        analyzerConfig: AnalyzerConfiguration,
-        repoConfig: RepositoryConfiguration
-    ): T
-
-    /**
-     * Return the package manager's name here to allow Clikt to display something meaningful when listing the
-     * package managers which are enabled by default via their factories.
-     */
-    override fun toString() = type
 }

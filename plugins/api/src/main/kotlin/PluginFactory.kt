@@ -22,6 +22,12 @@ package org.ossreviewtoolkit.plugins.api
 import org.ossreviewtoolkit.utils.common.getLoaderFor
 
 /**
+ * IDEA:
+ * If a plugin factory class has an abstract property, require the OrtPlugin annotation to reference an object that has
+ * a property with the same name, and use that during code generation.
+ */
+
+/**
  * A factory interface for creating plugins of type [PLUGIN]. The different plugin endpoints ORT provides must inherit
  * from this interface.
  */

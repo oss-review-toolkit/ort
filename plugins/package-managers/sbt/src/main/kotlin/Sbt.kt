@@ -28,12 +28,13 @@ import kotlin.io.path.moveTo
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.Maven
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
@@ -51,53 +52,42 @@ import org.semver4j.Semver
 // http://www.scala-sbt.org/0.13/docs/Publishing.html#Modifying+the+generated+POM.
 const val LOWEST_SUPPORTED_SBT_VERSION = "0.13.0"
 
-/**
- * The name of the option to specify the SBT version.
- */
-const val OPTION_SBT_VERSION = "sbtVersion"
-
-/**
- * The name of the option to specify the Java version to use.
- */
-const val OPTION_JAVA_VERSION = "javaVersion"
-
-/**
- * The name of the option to specify the Java home to use.
- */
-const val OPTION_JAVA_HOME = "javaHome"
-
 internal object SbtCommand : CommandLineTool {
     override fun command(workingDir: File?) = if (Os.isWindows) "sbt.bat" else "sbt"
 }
 
+data class SbtConfig(
+    /**
+     * The version of SBT to use when analyzing projects. Defaults to the version defined in the build properties.
+     */
+    val sbtVersion: String?,
+
+    /**
+     * The version of Java to use when analyzing projects. By default, the same Java version as for ORT itself it used.
+     * Overrides `javaHome` if both are specified.
+     */
+    val javaVersion: String?,
+
+    /**
+     * The directory of the Java home to use when analyzing projects. By default, the same Java home as for ORT itself
+     * is used.
+     */
+    val javaHome: String?
+)
+
 /**
  * The [SBT](https://www.scala-sbt.org/) package manager for Scala.
- *
- * This package manager supports the following [options][PackageManagerConfiguration.options]:
- * - *sbtVersion*: The version of SBT to use when analyzing projects. Defaults to the version defined in the build
- *   properties.
- * - *javaVersion*: The version of Java to use when analyzing projects. By default, the same Java version as for ORT
- *   itself it used. Overrides `javaHome` if both are specified.
- * - *javaHome*: The directory of the Java home to use when analyzing projects. By default, the same Java home as for
- *   ORT itself is used.
  */
-class Sbt(
-    name: String,
-    analysisRoot: File,
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : PackageManager(name, "SBT", analysisRoot, analyzerConfig, repoConfig) {
-    class Factory : AbstractPackageManagerFactory<Sbt>("SBT") {
-        override val globsForDefinitionFiles = listOf("build.sbt", "build.scala")
+@OrtPlugin(
+    displayName = "SBT",
+    description = "The SBT package manager for Scala.",
+    factory = PackageManagerFactory::class
+)
+class Sbt(override val descriptor: PluginDescriptor = SbtFactory.descriptor, private val config: SbtConfig) :
+    PackageManager("SBT") {
+    override val globsForDefinitionFiles = listOf("build.sbt", "build.scala")
 
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = Sbt(type, analysisRoot, analyzerConfig, repoConfig)
-    }
-
-    override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> {
+    override fun mapDefinitionFiles(analysisRoot: File, definitionFiles: List<File>): List<File> {
         // Some SBT projects do not have a build file in their root, but they still require "sbt" to be run from the
         // project's root directory. In order to determine the root directory, use the common prefix of all
         // definition file paths.
@@ -105,10 +95,11 @@ class Sbt(
 
         logger.info { "Determined '$workingDir' as the $projectType project root directory." }
 
-        val sbtVersion = options[OPTION_SBT_VERSION]
         val sbtVersions = getBuildSbtVersions(workingDir)
         when {
-            sbtVersion != null -> logger.info { "Using configured custom $projectType version $sbtVersion." }
+            config.sbtVersion != null -> logger.info {
+                "Using configured custom $projectType version ${config.sbtVersion}."
+            }
 
             sbtVersions.isEmpty() ->
                 logger.info { "The build does not configure any $projectType version to be used." }
@@ -120,20 +111,20 @@ class Sbt(
                 logger.warn { "The build configures multiple different $projectType versions to be used: $sbtVersions" }
         }
 
-        val lowestSbtVersion = sbtVersion?.let { Semver(it) } ?: sbtVersions.firstOrNull() ?: getGlobalSbtVersion()
+        val lowestSbtVersion = config.sbtVersion?.let { Semver(it) } ?: sbtVersions.firstOrNull() ?: getGlobalSbtVersion()
         require(lowestSbtVersion?.isLowerThan(Semver(LOWEST_SUPPORTED_SBT_VERSION)) != true) {
             "Build $projectType version $lowestSbtVersion is lower than version $LOWEST_SUPPORTED_SBT_VERSION."
         }
 
         // TODO: Consider auto-detecting the Java version based on the SBT version. See:
         //       https://docs.scala-lang.org/overviews/jdk-compatibility/overview.html#build-tool-compatibility-table
-        val javaHome = options[OPTION_JAVA_VERSION]
+        val javaHome = config.javaVersion
             ?.takeUnless { JavaBootstrapper.isRunningOnJdk(it) }
             ?.let {
                 JavaBootstrapper.installJdk("TEMURIN", it)
                     .onFailure { e -> logger.error { "Failed to bootstrap JDK version $it: ${e.collectMessages()}" } }
                     .getOrNull()
-            } ?: options[OPTION_JAVA_HOME]?.let { File(it) }
+            } ?: config.javaHome?.let { File(it) }
 
         javaHome?.also {
             logger.info { "Setting Java home for project analysis to '$it'." }
@@ -156,7 +147,7 @@ class Sbt(
 
         fun runSbt(vararg command: String) =
             suppressInput {
-                SbtCommand.run(workingDir, *getSbtOptions(sbtVersion, javaHome).toTypedArray(), *command)
+                SbtCommand.run(workingDir, *getSbtOptions(config.sbtVersion, javaHome).toTypedArray(), *command)
                     .requireSuccess()
             }
 
@@ -216,7 +207,7 @@ class Sbt(
     private fun getGlobalSbtVersion(): Semver? {
         // Avoid newer Sbt versions to warn about "Neither build.sbt nor a 'project' directory in the current directory"
         // and prompt the user to continue or quit on Windows where the "-batch" option is not supported.
-        val dummyProjectDir = createOrtTempDir(managerName).apply {
+        val dummyProjectDir = createOrtTempDir(descriptor.id).apply {
             resolve("project").mkdir()
         }
 
@@ -233,19 +224,30 @@ class Sbt(
         return versions.firstOrNull()?.let { Semver(it) }
     }
 
-    override fun resolveDependencies(definitionFiles: List<File>, labels: Map<String, String>): PackageManagerResult {
-        val sbtAnalyzerConfig = analyzerConfig.withPackageManagerOption(managerName, "sbtMode", "true")
-        return Maven(managerName, analysisRoot, sbtAnalyzerConfig, repoConfig).run {
-            beforeResolution(definitionFiles)
+    override fun resolveDependencies(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        excludes: Excludes,
+        analyzerConfig: AnalyzerConfiguration,
+        labels: Map<String, String>
+    ): PackageManagerResult {
+        return Maven(sbtMode = true).run {
+            beforeResolution(analysisRoot, definitionFiles, analyzerConfig)
 
             // Simply pass on the list of POM files to Maven, ignoring the SBT build files here.
-            resolveDependencies(definitionFiles, labels).also { afterResolution(definitionFiles) }
+            resolveDependencies(analysisRoot, definitionFiles, excludes, analyzerConfig, labels).also {
+                afterResolution(analysisRoot, definitionFiles)
+            }
         }
     }
 
-    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>) =
-        // This is not implemented in favor over overriding [resolveDependencies].
-        throw NotImplementedError()
+    override fun resolveDependencies(
+        analysisRoot: File,
+        definitionFile: File,
+        excludes: Excludes,
+        analyzerConfig: AnalyzerConfiguration,
+        labels: Map<String, String>
+    ) = throw NotImplementedError() // This is not implemented in favor of overriding [resolveDependencies].
 }
 
 // See https://github.com/sbt/sbt/blob/v1.5.1/launcher-package/integration-test/src/test/scala/RunnerTest.scala#L9.

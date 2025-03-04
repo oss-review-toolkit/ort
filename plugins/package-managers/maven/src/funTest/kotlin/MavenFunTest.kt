@@ -27,9 +27,11 @@ import io.kotest.matchers.should
 import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveScopes
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
@@ -54,8 +56,10 @@ class MavenFunTest : StringSpec({
         // resolution of transitive dependencies would not work.
         val managerResult = with(create("Maven")) {
             val definitionFiles = listOf(definitionFileApp, definitionFileLib)
-            beforeResolution(definitionFiles)
-            resolveDependencies(definitionFiles, emptyMap()).also { afterResolution(definitionFiles) }
+            beforeResolution(USER_DIR, definitionFiles)
+            resolveDependencies(USER_DIR, definitionFiles, Excludes.EMPTY, emptyMap()).also {
+                afterResolution(USER_DIR, definitionFiles)
+            }
         }
 
         val result = managerResult.projectResults[definitionFileApp]
@@ -80,8 +84,8 @@ class MavenFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/maven/lib/pom.xml")
         val expectedResultFile = getAssetFile("projects/synthetic/maven-expected-output-scope-excludes.yml")
 
-        val result = create("Maven", excludedScopes = setOf("test.*"))
-            .resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = create("Maven")
+            .resolveSingleProject(definitionFile, excludedScopes = setOf("test.*"), resolveScopes = true)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
