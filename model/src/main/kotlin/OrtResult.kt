@@ -667,16 +667,6 @@ data class OrtResult(
                 }
             )
         )
-
-    /**
-     * Resolves the scopes of all [Project]s in this [OrtResult] with [Project.withResolvedScopes].
-     */
-    fun withResolvedScopes(): OrtResult =
-        copy(
-            analyzer = analyzer?.copy(
-                result = analyzer.result.withResolvedScopes()
-            )
-        )
 }
 
 private val logger = loggerOf(MethodHandles.lookup().lookupClass())

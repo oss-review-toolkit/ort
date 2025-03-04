@@ -21,11 +21,16 @@ package org.ossreviewtoolkit.analyzer
 
 import org.apache.logging.log4j.kotlin.logger
 
+import org.ossreviewtoolkit.model.AnalyzerResult
+import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.DependencyNode
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
+import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.PackageReference
+import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.utils.common.alsoIfNull
 
@@ -86,4 +91,49 @@ internal fun DependencyNode.toPackageManagerDependency(): PackageManagerDependen
             scope = id.version.substringAfter('@'),
             linkage = PackageLinkage.valueOf(id.version.substringBefore('@'))
         )
+    }
+
+/**
+ * Resolves the scopes of all [Project]s in this [OrtResult] with [Project.withResolvedScopes].
+ */
+fun OrtResult.withResolvedScopes(): OrtResult =
+    copy(
+        analyzer = analyzer?.copy(
+            result = checkNotNull(analyzer).result.withResolvedScopes()
+        )
+    )
+
+/**
+ * Return a result, in which all contained [Project]s have their scope information resolved. If this result has shared
+ * dependency graphs, the projects referring to one of these graphs are replaced by corresponding instances that store
+ * their dependencies in the classic [Scope]-based format. Otherwise, this instance is returned without changes.
+ */
+fun AnalyzerResult.withResolvedScopes(): AnalyzerResult =
+    if (dependencyGraphs.isNotEmpty()) {
+        copy(
+            projects = projects.mapTo(mutableSetOf()) { it.withResolvedScopes(dependencyGraphs[it.id.type]) },
+            dependencyGraphs = emptyMap()
+        )
+    } else {
+        this
+    }
+
+/**
+ * Return a [Project] instance that has its scope information directly available, resolved from the given [graph]. This
+ * function can be used to create a fully initialized [Project] if dependency information is available in a shared
+ * [DependencyGraph]. In this case, the set with [Scope]s is constructed as a subset of the provided shared graph.
+ * Otherwise, the result is this same object.
+ */
+fun Project.withResolvedScopes(graph: DependencyGraph?): Project =
+    if (graph != null && scopeNames != null) {
+        val qualifiedScopeNames = checkNotNull(scopeNames).mapTo(mutableSetOf()) {
+            DependencyGraph.qualifyScope(id, it)
+        }
+
+        copy(
+            scopeDependencies = graph.createScopes(qualifiedScopeNames),
+            scopeNames = null
+        )
+    } else {
+        this
     }

@@ -23,6 +23,7 @@ package org.ossreviewtoolkit.helper.utils
 
 import java.io.File
 
+import org.ossreviewtoolkit.analyzer.withResolvedScopes
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult

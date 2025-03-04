@@ -32,6 +32,7 @@ import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.analyzer.analyze
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
+import org.ossreviewtoolkit.analyzer.withResolvedScopes
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Project

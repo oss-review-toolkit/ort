@@ -26,6 +26,7 @@ import java.io.File
 
 import org.ossreviewtoolkit.analyzer.collateMultipleProjects
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
+import org.ossreviewtoolkit.analyzer.withResolvedScopes
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
