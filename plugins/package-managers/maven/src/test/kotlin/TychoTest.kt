@@ -42,9 +42,6 @@ import io.mockk.spyk
 import io.mockk.verify
 
 import java.io.File
-import java.util.jar.Attributes
-import java.util.jar.JarEntry
-import java.util.jar.JarOutputStream
 import java.util.jar.Manifest
 
 import org.apache.maven.cli.MavenCli
@@ -68,6 +65,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.DependencyTreeMojoNode
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.JSON
+import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.LocalRepositoryHelper
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.PackageResolverFun
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.identifier
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
@@ -311,13 +309,15 @@ class TychoTest : WordSpec({
                 pkg
             }
 
-            val resolver = tychoPackageResolverFun(delegate)
+            val resolver = tychoPackageResolverFun(delegate, mockk())
 
             resolver(dependency) shouldBe pkg
         }
 
         "throw the original exception if no artifact is available in the local repository" {
-            val resolver = createResolverFunWithLocalRepo { }
+            val resolver = createResolverFunWithRepositoryHelper {
+                every { osgiManifest(any()) } returns null
+            }
 
             shouldThrow<RuntimeException> {
                 resolver(testDependency())
@@ -325,29 +325,8 @@ class TychoTest : WordSpec({
         }
 
         "return a Package with undefined metadata for a jar in the local repository without manifest entries" {
-            val resolver = createResolverFunWithLocalRepo { repo ->
-                repo.createRepositoryFolder().createJar(TEST_ARTIFACT_JAR, emptyMap())
-            }
-
-            val pkg = resolver(testDependency())
-
-            with(pkg) {
-                id shouldBe testArtifactIdentifier
-                description should io.kotest.matchers.string.beEmpty()
-                binaryArtifact shouldBe RemoteArtifact.EMPTY
-                sourceArtifact shouldBe RemoteArtifact.EMPTY
-                vcs shouldBe VcsInfo.EMPTY
-                vcsProcessed shouldBe VcsInfo.EMPTY
-                declaredLicenses should beEmpty()
-                declaredLicensesProcessed.spdxExpression should beNull()
-                concludedLicense should beNull()
-                authors should beEmpty()
-            }
-        }
-
-        "return a Package with undefined metadata for a jar in the local repository without a manifest" {
-            val resolver = createResolverFunWithLocalRepo { repo ->
-                repo.createRepositoryFolder().createJar(TEST_ARTIFACT_JAR, null)
+            val resolver = createResolverFunWithRepositoryHelper {
+                every { osgiManifest(any()) } returns Manifest()
             }
 
             val pkg = resolver(testDependency())
@@ -374,8 +353,8 @@ class TychoTest : WordSpec({
                 "Bundle-DocURL" to "https://example.com/package"
             )
 
-            val resolver = createResolverFunWithLocalRepo { repo ->
-                repo.createRepositoryFolder().createJar(TEST_ARTIFACT_JAR, bundleProperties)
+            val resolver = createResolverFunWithRepositoryHelper {
+                every { osgiManifest(any()) } returns createManifest(bundleProperties)
             }
 
             val pkg = resolver(testDependency())
@@ -401,10 +380,10 @@ class TychoTest : WordSpec({
 
     "createPackageFromManifest()" should {
         "parse a source reference with only a connection" {
-            val manifest = Manifest()
-            manifest.mainAttributes.putValue(
-                "Eclipse-SourceReferences",
-                "https://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git"
+            val manifest = createManifest(
+                mapOf(
+                    "Eclipse-SourceReferences" to "https://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git"
+                )
             )
 
             val pkg = createPackageFromManifest(testDependency().artifact, manifest)
@@ -418,10 +397,11 @@ class TychoTest : WordSpec({
         }
 
         "parse a source reference with a connection and a tag" {
-            val manifest = Manifest()
-            manifest.mainAttributes.putValue(
-                "Eclipse-SourceReferences",
-                "https://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git;tag=v20210901-0700"
+            val manifest = createManifest(
+                mapOf(
+                    "Eclipse-SourceReferences" to
+                        "https://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git;tag=v20210901-0700"
+                )
             )
 
             val pkg = createPackageFromManifest(testDependency().artifact, manifest)
@@ -435,10 +415,11 @@ class TychoTest : WordSpec({
         }
 
         "parse a source reference with a connection and a tag in quotes" {
-            val manifest = Manifest()
-            manifest.mainAttributes.putValue(
-                "Eclipse-SourceReferences",
-                "https://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git;tag=\"v20210901-0700\""
+            val manifest = createManifest(
+                mapOf(
+                    "Eclipse-SourceReferences" to
+                        "https://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git;tag=\"v20210901-0700\""
+                )
             )
 
             val pkg = createPackageFromManifest(testDependency().artifact, manifest)
@@ -452,10 +433,11 @@ class TychoTest : WordSpec({
         }
 
         "parse a source reference with a connection and a path" {
-            val manifest = Manifest()
-            manifest.mainAttributes.putValue(
-                "Eclipse-SourceReferences",
-                "https://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git;path=\"bundles/debug\""
+            val manifest = createManifest(
+                mapOf(
+                    "Eclipse-SourceReferences" to
+                        "https://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git;path=\"bundles/debug\""
+                )
             )
 
             val pkg = createPackageFromManifest(testDependency().artifact, manifest)
@@ -470,10 +452,11 @@ class TychoTest : WordSpec({
         }
 
         "handle source references with unexpected fields" {
-            val manifest = Manifest()
-            manifest.mainAttributes.putValue(
-                "Eclipse-SourceReferences",
-                "https://git.eclipse.org/eclipse.platform.debug.git;tag=\"v20210901-0700\";foo=bar"
+            val manifest = createManifest(
+                mapOf(
+                    "Eclipse-SourceReferences" to
+                        "https://git.eclipse.org/eclipse.platform.debug.git;tag=\"v20210901-0700\";foo=bar"
+                )
             )
 
             val pkg = createPackageFromManifest(testDependency().artifact, manifest)
@@ -487,11 +470,11 @@ class TychoTest : WordSpec({
         }
 
         "handle multiple source references" {
-            val manifest = Manifest()
-            manifest.mainAttributes.putValue(
-                "Eclipse-SourceReferences",
-                "https://git.eclipse.org/eclipse.platform.debug1.git," +
-                    "git://git.eclipse.org/eclipse.platform.debug2.git;tag=\"v20210901-0700\""
+            val manifest = createManifest(
+                mapOf(
+                    "Eclipse-SourceReferences" to "https://git.eclipse.org/eclipse.platform.debug1.git," +
+                        "git://git.eclipse.org/eclipse.platform.debug2.git;tag=\"v20210901-0700\""
+                )
             )
 
             val pkg = createPackageFromManifest(testDependency().artifact, manifest)
@@ -505,9 +488,8 @@ class TychoTest : WordSpec({
         }
 
         "process package VCS information" {
-            val manifest = Manifest()
-            manifest.mainAttributes.putValue(
-                "Bundle-DocURL", "https://example.com/package.git"
+            val manifest = createManifest(
+                mapOf("Bundle-DocURL" to "https://example.com/package.git")
             )
 
             val pkg = createPackageFromManifest(testDependency().artifact, manifest)
@@ -530,9 +512,6 @@ private const val TEST_ARTIFACT_ID = "org.ossreviewtoolkit.test.bundle"
 
 /** The version number of the test dependency. */
 private const val TEST_VERSION = "50.1.2"
-
-/** The file name of the jar for the test artifact in the local repository. */
-private const val TEST_ARTIFACT_JAR = "$TEST_ARTIFACT_ID-$TEST_VERSION"
 
 /** The expected package identifier generated for the test artifact. */
 private val testArtifactIdentifier = Identifier("Maven", TEST_GROUP_ID, TEST_ARTIFACT_ID, TEST_VERSION)
@@ -628,50 +607,25 @@ private fun testDependency(): DependencyNode {
     }
 }
 
-/**
- * Create the folder in which to store data for the test artifact if this [File] was the root of a local repository.
- */
-private fun File.createRepositoryFolder(): File =
-    resolve("p2/osgi/bundle/$TEST_ARTIFACT_ID/$TEST_VERSION").apply { mkdirs() }
-
-/**
- * Generate a jar file with the given [name] and [attributes] for the manifest in this folder. If [attributes] is
- * *null*, the jar will be created without a manifest.
- */
-private fun File.createJar(name: String, attributes: Map<String, String>?): File {
-    val jarFile = resolve("$name.jar")
-    val manifest = attributes?.let { attributesMap ->
-        Manifest().apply {
-            mainAttributes[Attributes.Name.MANIFEST_VERSION] = "1.0"
-            attributesMap.forEach { (key, value) -> mainAttributes.putValue(key, value) }
-        }
-    }
-
-    val jarStream = manifest?.let { JarOutputStream(jarFile.outputStream(), it) }
-        ?: JarOutputStream(jarFile.outputStream())
-
-    jarStream.use { out ->
-        val entry = JarEntry("foo.class")
-        out.putNextEntry(entry)
-        out.write("someTestData".toByteArray())
-        out.closeEntry()
-    }
-
-    return jarFile
-}
-
 /** An exception that is thrown by the delegate resolver function to force the resolving from the local repository. */
 private val resolveException = RuntimeException("Test exception: Could not resolve the test artifact.")
 
 /**
  * Return a [PackageResolverFun] to be tested that is configured with a delegate function that throws a well-defined
- * exception. First create a local repository and invoke the given [block] to populate it accordingly for the
- * current test case.
+ * exception. First create a mock [LocalRepositoryHelper] and invoke the given [block] to prepare it accordingly for
+ * the current test case.
  */
-private fun TestConfiguration.createResolverFunWithLocalRepo(block: (File) -> Unit): PackageResolverFun {
-    val localRepositoryRoot = tempdir()
-    block(localRepositoryRoot)
+private fun createResolverFunWithRepositoryHelper(block: LocalRepositoryHelper.() -> Unit): PackageResolverFun {
+    val helper = mockk<LocalRepositoryHelper>(block = block)
 
     val delegateResolverFun: PackageResolverFun = { throw resolveException }
-    return tychoPackageResolverFun(delegateResolverFun, localRepositoryRoot)
+    return tychoPackageResolverFun(delegateResolverFun, helper)
 }
+
+/**
+ * Create a new [Manifest] that contains the given [entries].
+ */
+private fun createManifest(entries: Map<String, String>): Manifest =
+    Manifest().apply {
+        entries.forEach { (key, value) -> mainAttributes.putValue(key, value) }
+    }
