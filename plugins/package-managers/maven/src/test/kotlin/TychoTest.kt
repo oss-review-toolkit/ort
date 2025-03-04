@@ -370,7 +370,8 @@ class TychoTest : WordSpec({
             val bundleProperties = mapOf(
                 "Bundle-Description" to "Package description",
                 "Bundle-License" to "The Apache License",
-                "Bundle-Vendor" to "Package vendor"
+                "Bundle-Vendor" to "Package vendor",
+                "Bundle-DocURL" to "https://example.com/package"
             )
 
             val resolver = createResolverFunWithLocalRepo { repo ->
@@ -393,6 +394,7 @@ class TychoTest : WordSpec({
                 )
                 concludedLicense should beNull()
                 authors shouldContainExactlyInAnyOrder listOf(bundleProperties["Bundle-Vendor"])
+                homepageUrl shouldBe "https://example.com/package"
             }
         }
     }
@@ -402,14 +404,14 @@ class TychoTest : WordSpec({
             val manifest = Manifest()
             manifest.mainAttributes.putValue(
                 "Eclipse-SourceReferences",
-                "git://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git"
+                "https://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git"
             )
 
             val pkg = createPackageFromManifest(testDependency().artifact, manifest)
 
             pkg.vcs shouldBe VcsInfo(
                 type = VcsType.GIT,
-                url = "git://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git",
+                url = "https://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git",
                 revision = ""
             )
             pkg.vcsProcessed shouldBe pkg.vcs
@@ -419,14 +421,14 @@ class TychoTest : WordSpec({
             val manifest = Manifest()
             manifest.mainAttributes.putValue(
                 "Eclipse-SourceReferences",
-                "git://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git;tag=v20210901-0700"
+                "https://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git;tag=v20210901-0700"
             )
 
             val pkg = createPackageFromManifest(testDependency().artifact, manifest)
 
             pkg.vcs shouldBe VcsInfo(
                 type = VcsType.GIT,
-                url = "git://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git",
+                url = "https://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git",
                 revision = "v20210901-0700"
             )
             pkg.vcsProcessed shouldBe pkg.vcs
@@ -436,15 +438,33 @@ class TychoTest : WordSpec({
             val manifest = Manifest()
             manifest.mainAttributes.putValue(
                 "Eclipse-SourceReferences",
-                "git://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git;tag=\"v20210901-0700\""
+                "https://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git;tag=\"v20210901-0700\""
             )
 
             val pkg = createPackageFromManifest(testDependency().artifact, manifest)
 
             pkg.vcs shouldBe VcsInfo(
                 type = VcsType.GIT,
-                url = "git://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git",
+                url = "https://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git",
                 revision = "v20210901-0700"
+            )
+            pkg.vcsProcessed shouldBe pkg.vcs
+        }
+
+        "parse a source reference with a connection and a path" {
+            val manifest = Manifest()
+            manifest.mainAttributes.putValue(
+                "Eclipse-SourceReferences",
+                "https://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git;path=\"bundles/debug\""
+            )
+
+            val pkg = createPackageFromManifest(testDependency().artifact, manifest)
+
+            pkg.vcs shouldBe VcsInfo(
+                type = VcsType.GIT,
+                url = "https://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git",
+                revision = "",
+                path = "bundles/debug"
             )
             pkg.vcsProcessed shouldBe pkg.vcs
         }
@@ -453,14 +473,14 @@ class TychoTest : WordSpec({
             val manifest = Manifest()
             manifest.mainAttributes.putValue(
                 "Eclipse-SourceReferences",
-                "git://git.eclipse.org/eclipse.platform.debug.git;tag=\"v20210901-0700\";foo;bar"
+                "https://git.eclipse.org/eclipse.platform.debug.git;tag=\"v20210901-0700\";foo=bar"
             )
 
             val pkg = createPackageFromManifest(testDependency().artifact, manifest)
 
             pkg.vcs shouldBe VcsInfo(
                 type = VcsType.GIT,
-                url = "git://git.eclipse.org/eclipse.platform.debug.git",
+                url = "https://git.eclipse.org/eclipse.platform.debug.git",
                 revision = "v20210901-0700"
             )
             pkg.vcsProcessed shouldBe pkg.vcs
@@ -470,7 +490,7 @@ class TychoTest : WordSpec({
             val manifest = Manifest()
             manifest.mainAttributes.putValue(
                 "Eclipse-SourceReferences",
-                "git://git.eclipse.org/eclipse.platform.debug1.git," +
+                "https://git.eclipse.org/eclipse.platform.debug1.git," +
                     "git://git.eclipse.org/eclipse.platform.debug2.git;tag=\"v20210901-0700\""
             )
 
@@ -478,10 +498,26 @@ class TychoTest : WordSpec({
 
             pkg.vcs shouldBe VcsInfo(
                 type = VcsType.GIT,
-                url = "git://git.eclipse.org/eclipse.platform.debug1.git",
+                url = "https://git.eclipse.org/eclipse.platform.debug1.git",
                 revision = ""
             )
             pkg.vcsProcessed shouldBe pkg.vcs
+        }
+
+        "process package VCS information" {
+            val manifest = Manifest()
+            manifest.mainAttributes.putValue(
+                "Bundle-DocURL", "https://example.com/package.git"
+            )
+
+            val pkg = createPackageFromManifest(testDependency().artifact, manifest)
+
+            pkg.vcs shouldBe VcsInfo.EMPTY
+            pkg.vcsProcessed shouldBe VcsInfo(
+                type = VcsType.GIT,
+                url = "https://example.com/package.git",
+                revision = ""
+            )
         }
     }
 })
