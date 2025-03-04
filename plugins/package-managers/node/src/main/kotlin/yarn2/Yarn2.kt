@@ -89,37 +89,9 @@ private enum class YarnDependencyType(val type: String) {
     DEV_DEPENDENCIES("devDependencies")
 }
 
-/**
- * The [Yarn 2+](https://v2.yarnpkg.com/) package manager for JavaScript.
- *
- * This package manager supports the following [options][PackageManagerConfiguration.options]:
- * - *disableRegistryCertificateVerification*: If true, the `yarn npm info` commands called by this package manager will
- *   not verify the server certificate of the HTTPS connection to the NPM registry. This allows to replace the latter by
- *   a local one, e.g. for intercepting the requests or replaying them.
- * - *corepackOverride*: Per default, this class determines via auto-detection whether Yarn has been installed via
- *   [Corepack](https://yarnpkg.com/corepack), which impacts the name of the executable to use. With this option,
- *   auto-detection can be disabled, and the enabled status of Corepack can be explicitly specified. This is useful to
- *   force a specific behavior in some environments.
- */
-class Yarn2(name: String, analyzerConfig: AnalyzerConfiguration) :
-    NodePackageManager(name, NodePackageManagerType.YARN2, analyzerConfig), CommandLineTool {
-    companion object {
-        /**
-         * The name of the option to disable HTTPS server certificate verification.
-         */
-        const val OPTION_DISABLE_REGISTRY_CERTIFICATE_VERIFICATION = "disableRegistryCertificateVerification"
-
-        /**
-         * The name of the option that allows overriding the automatic detection of Corepack.
-         */
-        const val OPTION_COREPACK_OVERRIDE = "corepackOverride"
-    }
-
-    class Factory : AbstractPackageManagerFactory<Yarn2>("Yarn2") {
-        override fun create(analyzerConfig: AnalyzerConfiguration) = Yarn2(type, analyzerConfig)
-    }
-
-    override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE)
+internal class Yarn2Command(private val enableCorepack: Boolean?) : CommandLineTool {
+    @Suppress("Unused") // The no-arg constructor is required by the requirements command.
+    constructor() : this(null)
 
     /**
      * The Yarn 2+ executable is not installed globally: The program shipped by the project in `.yarn/releases` is used
@@ -129,21 +101,6 @@ class Yarn2(name: String, analyzerConfig: AnalyzerConfiguration) :
      * been installed via Corepack; then it is accessed under a default name.
      */
     private val yarn2ExecutablesByPath: MutableMap<File, File> = mutableMapOf()
-
-    private val disableRegistryCertificateVerification =
-        options[OPTION_DISABLE_REGISTRY_CERTIFICATE_VERIFICATION].toBoolean()
-
-    // All the packages parsed by this package manager, mapped by their ids.
-    private val allPackages = mutableMapOf<Identifier, Package>()
-
-    // All the projects parsed by this package manager, mapped by their ids.
-    private val allProjects = mutableMapOf<Identifier, Project>()
-
-    // The issues that have been found when resolving the dependencies.
-    private val issues = mutableListOf<Issue>()
-
-    // A builder to build the dependency graph of the project.
-    override val graphBuilder = DependencyGraphBuilder(Yarn2DependencyHandler())
 
     override fun command(workingDir: File?): String {
         if (workingDir == null) return ""
@@ -162,15 +119,60 @@ class Yarn2(name: String, analyzerConfig: AnalyzerConfiguration) :
 
     override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=2.0.0")
 
-    private fun isCorepackEnabled(workingDir: File): Boolean =
-        if (OPTION_COREPACK_OVERRIDE in options) {
-            options[OPTION_COREPACK_OVERRIDE].toBoolean()
-        } else {
-            isCorepackEnabledInManifest(workingDir)
-        }
+    private fun isCorepackEnabled(workingDir: File): Boolean = enableCorepack ?: isCorepackEnabledInManifest(workingDir)
+}
+
+/**
+ * The [Yarn 2+](https://v2.yarnpkg.com/) package manager for JavaScript.
+ *
+ * This package manager supports the following [options][PackageManagerConfiguration.options]:
+ * - *disableRegistryCertificateVerification*: If true, the `yarn npm info` commands called by this package manager will
+ *   not verify the server certificate of the HTTPS connection to the NPM registry. This allows to replace the latter by
+ *   a local one, e.g. for intercepting the requests or replaying them.
+ * - *corepackOverride*: Per default, this class determines via auto-detection whether Yarn has been installed via
+ *   [Corepack](https://yarnpkg.com/corepack), which impacts the name of the executable to use. With this option,
+ *   auto-detection can be disabled, and the enabled status of Corepack can be explicitly specified. This is useful to
+ *   force a specific behavior in some environments.
+ */
+class Yarn2(name: String, analyzerConfig: AnalyzerConfiguration) :
+    NodePackageManager(name, NodePackageManagerType.YARN2, analyzerConfig) {
+    companion object {
+        /**
+         * The name of the option to disable HTTPS server certificate verification.
+         */
+        const val OPTION_DISABLE_REGISTRY_CERTIFICATE_VERIFICATION = "disableRegistryCertificateVerification"
+
+        /**
+         * The name of the option that allows overriding the automatic detection of Corepack.
+         */
+        const val OPTION_COREPACK_OVERRIDE = "corepackOverride"
+    }
+
+    class Factory : AbstractPackageManagerFactory<Yarn2>("Yarn2") {
+        override fun create(analyzerConfig: AnalyzerConfiguration) = Yarn2(type, analyzerConfig)
+    }
+
+    override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE)
+
+    private val disableRegistryCertificateVerification =
+        options[OPTION_DISABLE_REGISTRY_CERTIFICATE_VERIFICATION].toBoolean()
+
+    // All the packages parsed by this package manager, mapped by their ids.
+    private val allPackages = mutableMapOf<Identifier, Package>()
+
+    // All the projects parsed by this package manager, mapped by their ids.
+    private val allProjects = mutableMapOf<Identifier, Project>()
+
+    internal val yarn2Command = Yarn2Command(options[OPTION_COREPACK_OVERRIDE].toBoolean())
+
+    // The issues that have been found when resolving the dependencies.
+    private val issues = mutableListOf<Issue>()
+
+    // A builder to build the dependency graph of the project.
+    override val graphBuilder = DependencyGraphBuilder(Yarn2DependencyHandler())
 
     override fun beforeResolution(analysisRoot: File, definitionFiles: List<File>) =
-        definitionFiles.forEach { checkVersion(it.parentFile) }
+        definitionFiles.forEach { yarn2Command.checkVersion(it.parentFile) }
 
     override fun resolveDependencies(
         analysisRoot: File,
@@ -197,11 +199,11 @@ class Yarn2(name: String, analyzerConfig: AnalyzerConfiguration) :
     }
 
     private fun installDependencies(workingDir: File) {
-        run("install", workingDir = workingDir).requireSuccess()
+        yarn2Command.run("install", workingDir = workingDir).requireSuccess()
     }
 
     private fun getPackageInfos(workingDir: File): List<PackageInfo> {
-        val process = run(
+        val process = yarn2Command.run(
             "info",
             "-A",
             "-R",
@@ -256,7 +258,7 @@ class Yarn2(name: String, analyzerConfig: AnalyzerConfiguration) :
                 async {
                     logger.info { "Fetching packages details chunk #$index." }
 
-                    val process = run(
+                    val process = yarn2Command.run(
                         "npm",
                         "info",
                         "--json",

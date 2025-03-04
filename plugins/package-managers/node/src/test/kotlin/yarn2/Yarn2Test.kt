@@ -55,10 +55,8 @@ class Yarn2Test : WordSpec({
             val workingDir = tempdir()
             workingDir.resolve(".yarnrc.yml").writeText("someProperty: some-value")
 
-            val yarn = Yarn2("yarn", AnalyzerConfiguration())
-
             val exception = shouldThrow<IllegalArgumentException> {
-                yarn.command(workingDir)
+                Yarn2Command().command(workingDir)
             }
 
             exception.localizedMessage shouldContain "No Yarn 2+ executable"
@@ -69,10 +67,8 @@ class Yarn2Test : WordSpec({
             val executable = "non-existing-yarn-wrapper.js"
             workingDir.resolve(".yarnrc.yml").writeText("yarnPath: $executable")
 
-            val yarn = Yarn2("yarn", AnalyzerConfiguration())
-
             val exception = shouldThrow<IllegalArgumentException> {
-                yarn.command(workingDir)
+                Yarn2Command().command(workingDir)
             }
 
             exception.localizedMessage shouldContain executable
@@ -80,13 +76,14 @@ class Yarn2Test : WordSpec({
 
         "return the default executable name if Corepack is enabled based on the configuration option" {
             val workingDir = tempdir()
+
             val yarn2Options = mapOf("corepackOverride" to "true")
             val analyzerConfiguration = AnalyzerConfiguration(
                 packageManagers = mapOf("Yarn2" to PackageManagerConfiguration(options = yarn2Options))
             )
 
             val yarn = Yarn2("Yarn2", analyzerConfiguration)
-            val command = yarn.command(workingDir)
+            val command = yarn.yarn2Command.command(workingDir)
 
             command shouldBe "yarn"
         }
@@ -95,8 +92,7 @@ class Yarn2Test : WordSpec({
             val workingDir = tempdir()
             writePackageJson(workingDir, "yarn@4.0.0")
 
-            val yarn = Yarn2("Yarn2", AnalyzerConfiguration())
-            val command = yarn.command(workingDir)
+            val command = Yarn2Command().command(workingDir)
 
             command shouldBe "yarn"
         }
@@ -129,7 +125,7 @@ private fun checkExecutableFromYarnRc(workingDir: File, config: AnalyzerConfigur
     }
 
     val yarn = Yarn2("Yarn2", config)
-    val command = yarn.command(workingDir)
+    val command = yarn.yarn2Command.command(workingDir)
 
     if (Os.isWindows) {
         command shouldBe "node ${executableFile.absolutePath}"
