@@ -32,6 +32,7 @@ import java.util.regex.Pattern
 
 import org.ossreviewtoolkit.analyzer.AnalyzerResultBuilder
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
+import org.ossreviewtoolkit.analyzer.withResolvedScopes
 import org.ossreviewtoolkit.helper.utils.OrtHelperCommand
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.OrtResult
