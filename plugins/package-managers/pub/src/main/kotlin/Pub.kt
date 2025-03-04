@@ -87,6 +87,44 @@ private val ALL_PUB_SCOPE_NAMES = setOf(SCOPE_NAME_DEPENDENCIES, SCOPE_NAME_DEV_
 private val flutterCommand = if (Os.isWindows) "flutter.bat" else "flutter"
 private val dartCommand = if (Os.isWindows) "dart.bat" else "dart"
 
+internal class PubCommand(private val flutterAbsolutePath: File) : CommandLineTool {
+    @Suppress("Unused") // The no-arg constructor is required by the requirements command.
+    constructor() : this(File(""))
+
+    override fun getVersion(workingDir: File?): String {
+        val result = ProcessCapture(workingDir, command(workingDir), getVersionArguments()).requireSuccess()
+
+        return transformVersion(result.stdout)
+    }
+
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create("[2.10,)")
+
+    override fun transformVersion(output: String) = output.removePrefix("Dart SDK version: ").substringBefore(' ')
+
+    override fun command(workingDir: File?): String =
+        if (flutterAbsolutePath.isDirectory) "$flutterAbsolutePath${File.separator}$dartCommand" else dartCommand
+
+    private fun commandPub(): String = "${command()} pub"
+
+    override fun run(workingDir: File?, vararg args: CharSequence): ProcessCapture {
+        var result = ProcessCapture(workingDir, *commandPub().splitOnWhitespace().toTypedArray(), *args)
+        if (result.isError) {
+            // If Pub fails with the message that Flutter should be used instead, fall back to using Flutter.
+            if ("Flutter users should run `flutter" in result.errorMessage) {
+                result = ProcessCapture(
+                    workingDir,
+                    *commandFlutter(flutterAbsolutePath).splitOnWhitespace().toTypedArray(),
+                    *args
+                ).requireSuccess()
+            } else {
+                throw IOException(result.errorMessage)
+            }
+        }
+
+        return result
+    }
+}
+
 /**
  * The [Pub](https://pub.dev/) package manager for Dart / Flutter.
  *
@@ -103,7 +141,7 @@ private val dartCommand = if (Os.isWindows) "dart.bat" else "dart"
  */
 @Suppress("TooManyFunctions")
 class Pub(name: String, analyzerConfig: AnalyzerConfiguration) :
-    PackageManager(name, "Pub", analyzerConfig), CommandLineTool {
+    PackageManager(name, "Pub", analyzerConfig) {
     companion object {
         const val OPTION_FLUTTER_VERSION = "flutterVersion"
         const val OPTION_GRADLE_VERSION = "gradleVersion"
@@ -145,10 +183,6 @@ class Pub(name: String, analyzerConfig: AnalyzerConfiguration) :
     private val gradleDefinitionFilesForPubDefinitionFiles = mutableMapOf<File, Set<File>>()
 
     private val pubDependenciesOnly = options[OPTION_PUB_DEPENDENCIES_ONLY].toBoolean()
-
-    override fun transformVersion(output: String) = output.removePrefix("Dart SDK version: ").substringBefore(' ')
-
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create("[2.10,)")
 
     override fun beforeResolution(analysisRoot: File, definitionFiles: List<File>) {
         if (pubDependenciesOnly) {
@@ -708,39 +742,6 @@ class Pub(name: String, analyzerConfig: AnalyzerConfiguration) :
         return parsePubspec(definitionFile)
     }
 
-    override fun getVersion(workingDir: File?): String {
-        val result = ProcessCapture(workingDir, command(workingDir), getVersionArguments()).requireSuccess()
-
-        return transformVersion(result.stdout)
-    }
-
-    override fun command(workingDir: File?): String =
-        if (flutterAbsolutePath.isDirectory) "$flutterAbsolutePath${File.separator}$dartCommand" else dartCommand
-
-    private fun commandPub(): String = "${command()} pub"
-
-    private fun commandFlutter(): String =
-        if (flutterAbsolutePath.isDirectory) {
-            "$flutterAbsolutePath${File.separator}$flutterCommand pub"
-        } else {
-            "$flutterCommand pub"
-        }
-
-    override fun run(workingDir: File?, vararg args: CharSequence): ProcessCapture {
-        var result = ProcessCapture(workingDir, *commandPub().splitOnWhitespace().toTypedArray(), *args)
-        if (result.isError) {
-            // If Pub fails with the message that Flutter should be used instead, fall back to using Flutter.
-            if ("Flutter users should run `flutter" in result.errorMessage) {
-                result = ProcessCapture(workingDir, *commandFlutter().splitOnWhitespace().toTypedArray(), *args)
-                    .requireSuccess()
-            } else {
-                throw IOException(result.errorMessage)
-            }
-        }
-
-        return result
-    }
-
     private fun installDependencies(analysisRoot: File, workingDir: File) {
         requireLockfile(analysisRoot, workingDir) { workingDir.resolve(PUB_LOCK_FILE).isFile }
 
@@ -748,11 +749,12 @@ class Pub(name: String, analyzerConfig: AnalyzerConfiguration) :
             // For Flutter projects it is not enough to run `dart pub get`. Instead, use `flutter pub get` which
             // installs the required dependencies and also creates the `local.properties` file which is required for
             // the Android analysis.
-            ProcessCapture(workingDir, *commandFlutter().splitOnWhitespace().toTypedArray(), "get").requireSuccess()
+            ProcessCapture(workingDir, *commandFlutter(flutterAbsolutePath).splitOnWhitespace().toTypedArray(), "get")
+                .requireSuccess()
         } else {
             // The "get" command creates a "pubspec.lock" file (if not yet present) except for projects without any
             // dependencies, see https://dart.dev/tools/pub/cmd/pub-get.
-            run(workingDir, "get").requireSuccess()
+            PubCommand(flutterAbsolutePath).run(workingDir, "get").requireSuccess()
         }
     }
 
@@ -777,6 +779,13 @@ class Pub(name: String, analyzerConfig: AnalyzerConfiguration) :
         //       removed.
         PackageManagerResult(projectResults.filterProjectPackages())
 }
+
+private fun commandFlutter(flutterAbsolutePath: File): String =
+    if (flutterAbsolutePath.isDirectory) {
+        "$flutterAbsolutePath${File.separator}$flutterCommand pub"
+    } else {
+        "$flutterCommand pub"
+    }
 
 private val PackageInfo.isProject: Boolean
     get() = source == "path" && description.url == null
