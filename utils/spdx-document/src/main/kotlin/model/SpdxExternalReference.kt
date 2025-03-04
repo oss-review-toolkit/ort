@@ -46,7 +46,7 @@ data class SpdxExternalReference(
 
     /**
      * The references type as specified by
-     * https://github.com/spdx/spdx-spec/blob/master/chapters/appendix-VI-external-repository-identifiers.md.
+     * https://github.com/spdx/spdx-spec/blob/v2.2.2/chapters/appendix-VI-external-repository-identifiers.md.
      */
     @JsonDeserialize(using = ReferenceTypeDeserializer::class)
     val referenceType: Type,
