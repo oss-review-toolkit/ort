@@ -18,6 +18,9 @@
  */
 
 plugins {
+    // Apply core plugins.
+    `java-test-fixtures`
+
     // Apply precompiled plugins.
     id("ort-library-conventions")
 }
