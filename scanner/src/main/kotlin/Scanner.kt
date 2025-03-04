@@ -41,6 +41,7 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.ProvenanceResolutionResult
+import org.ossreviewtoolkit.model.RemoteProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerRun
@@ -568,7 +569,7 @@ class Scanner(
     }
 
     private fun scanPath(
-        provenance: KnownProvenance,
+        provenance: RemoteProvenance,
         scanners: List<PathScannerWrapper>,
         context: ScanContext
     ): Map<PathScannerWrapper, ScanResult> {

@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.scanner.provenance
 
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.RemoteProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
@@ -38,7 +39,7 @@ data class NestedProvenanceScanResult(
     /**
      * A map of [KnownProvenance]s from [nestedProvenance] associated with lists of [ScanResult]s.
      */
-    val scanResults: Map<KnownProvenance, List<ScanResult>>
+    val scanResults: Map<RemoteProvenance, List<ScanResult>>
 ) {
     /**
      * Return true if [scanResults] contains at least one scan result for each of the [KnownProvenance]s contained in
@@ -107,7 +108,7 @@ data class NestedProvenanceScanResult(
             }
         }
 
-        fun KnownProvenance.withVcsPath() =
+        fun RemoteProvenance.withVcsPath() =
             when (this) {
                 is RepositoryProvenance -> {
                     val pathWithinProvenance = pathsWithinProvenances.getValue(this)
