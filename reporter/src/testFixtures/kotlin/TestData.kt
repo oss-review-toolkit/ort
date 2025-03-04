@@ -419,7 +419,7 @@ val ORT_RESULT = OrtResult(
     )
 )
 
-val VULNERABILITY = Vulnerability(
+private val VULNERABILITY = Vulnerability(
     id = "CVE-2021-1234",
     summary = "A vulnerability summary",
     description = "A vulnerability description",
@@ -428,7 +428,7 @@ val VULNERABILITY = Vulnerability(
     )
 )
 
-val ADVISOR_WITH_VULNERABILITIES = AdvisorRun(
+private val ADVISOR_WITH_VULNERABILITIES = AdvisorRun(
     startTime = Instant.now(),
     endTime = Instant.now(),
     environment = Environment(),
@@ -444,7 +444,7 @@ val ADVISOR_WITH_VULNERABILITIES = AdvisorRun(
     )
 )
 
-val SCANNER_WITH_ILLEGAL_COPYRIGHTS = scannerRunOf(
+private val SCANNER_WITH_ILLEGAL_COPYRIGHTS = scannerRunOf(
     Identifier("NPM:@ort:no-license-file:1.0") to listOf(
         ScanResult(
             provenance = UnknownProvenance,
