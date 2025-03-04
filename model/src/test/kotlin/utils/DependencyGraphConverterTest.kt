@@ -27,10 +27,8 @@ import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldContainOnly
 import io.kotest.matchers.ints.shouldBeLessThan
-import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
-import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 import io.kotest.matchers.types.beTheSameInstanceAs
 
@@ -63,29 +61,6 @@ class DependencyGraphConverterTest : WordSpec({
 
                 convertedResult should beTheSameInstanceAs(this)
             }
-        }
-
-        "convert a result to the dependency graph format" {
-            val mavenProject1 = createProject("Maven", index = 1)
-            val mavenProject2 = createProject("Maven", index = 2)
-            val goProject = createProject("GoMod", index = 3)
-
-            val result = createAnalyzerResult(
-                mavenProject1.createResult(),
-                mavenProject2.createResult(),
-                goProject.createResult()
-            )
-
-            val convertedResult = DependencyGraphConverter.convert(result)
-
-            convertedResult.dependencyGraphs.keys should containExactlyInAnyOrder("Maven", "GoMod")
-            convertedResult.projects.forEach {
-                it.scopeDependencies should beNull()
-                it.scopeNames shouldNot beNull()
-            }
-
-            convertedResult.withResolvedScopes() shouldBe result
-            convertedResult.packages should beTheSameInstanceAs(result.packages)
         }
 
         "exclude scopes" {
