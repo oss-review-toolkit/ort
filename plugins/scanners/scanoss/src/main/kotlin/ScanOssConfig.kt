@@ -20,14 +20,16 @@
 package org.ossreviewtoolkit.plugins.scanners.scanoss
 
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
+import org.ossreviewtoolkit.plugins.api.Secret
 
 data class ScanOssConfig(
     /** The URL of the ScanOSS server. */
     @OrtPluginOption(defaultValue = "https://api.osskb.org/")
     val apiUrl: String,
 
-    /** The API key required to authenticate with the ScanOSS server. */
-    val apiKey: String,
+    /** The API key used to authenticate with the ScanOSS server. */
+    @OrtPluginOption(defaultValue = "")
+    val apiKey: Secret,
 
     /**
      * A regular expression to match the scanner name when looking up scan results in the storage.
