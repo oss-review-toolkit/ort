@@ -48,7 +48,7 @@ import org.apache.maven.cli.MavenCli
 import org.apache.maven.execution.MavenSession
 import org.apache.maven.project.MavenProject
 
-import org.eclipse.aether.artifact.Artifact
+import org.eclipse.aether.artifact.DefaultArtifact
 import org.eclipse.aether.graph.DependencyNode
 
 import org.ossreviewtoolkit.model.Identifier
@@ -66,6 +66,7 @@ import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.DependencyTreeMojoNode
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.JSON
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.LocalRepositoryHelper
+import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.P2ArtifactTracker
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.PackageResolverFun
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.identifier
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
@@ -123,7 +124,7 @@ class TychoTest : WordSpec({
                 every { packages() } returns setOf(pkg1, pkg2)
             }
 
-            every { tycho.createGraphBuilder(any(), any()) } returns graphBuilder
+            every { tycho.createGraphBuilder(any(), any(), any(), any()) } returns graphBuilder
 
             val results = tycho.resolveDependencies(definitionFile, emptyMap())
 
@@ -309,7 +310,7 @@ class TychoTest : WordSpec({
                 pkg
             }
 
-            val resolver = tychoPackageResolverFun(delegate, mockk())
+            val resolver = tychoPackageResolverFun(delegate, mockk(), mockk())
 
             resolver(dependency) shouldBe pkg
         }
@@ -386,7 +387,7 @@ class TychoTest : WordSpec({
                 )
             )
 
-            val pkg = createPackageFromManifest(testDependency().artifact, manifest)
+            val pkg = createPackageFromManifest(testArtifact, manifest, createTrackerMock())
 
             pkg.vcs shouldBe VcsInfo(
                 type = VcsType.GIT,
@@ -404,7 +405,7 @@ class TychoTest : WordSpec({
                 )
             )
 
-            val pkg = createPackageFromManifest(testDependency().artifact, manifest)
+            val pkg = createPackageFromManifest(testArtifact, manifest, createTrackerMock())
 
             pkg.vcs shouldBe VcsInfo(
                 type = VcsType.GIT,
@@ -422,7 +423,7 @@ class TychoTest : WordSpec({
                 )
             )
 
-            val pkg = createPackageFromManifest(testDependency().artifact, manifest)
+            val pkg = createPackageFromManifest(testArtifact, manifest, createTrackerMock())
 
             pkg.vcs shouldBe VcsInfo(
                 type = VcsType.GIT,
@@ -440,7 +441,7 @@ class TychoTest : WordSpec({
                 )
             )
 
-            val pkg = createPackageFromManifest(testDependency().artifact, manifest)
+            val pkg = createPackageFromManifest(testArtifact, manifest, createTrackerMock())
 
             pkg.vcs shouldBe VcsInfo(
                 type = VcsType.GIT,
@@ -459,7 +460,7 @@ class TychoTest : WordSpec({
                 )
             )
 
-            val pkg = createPackageFromManifest(testDependency().artifact, manifest)
+            val pkg = createPackageFromManifest(testArtifact, manifest, createTrackerMock())
 
             pkg.vcs shouldBe VcsInfo(
                 type = VcsType.GIT,
@@ -477,7 +478,7 @@ class TychoTest : WordSpec({
                 )
             )
 
-            val pkg = createPackageFromManifest(testDependency().artifact, manifest)
+            val pkg = createPackageFromManifest(testArtifact, manifest, createTrackerMock())
 
             pkg.vcs shouldBe VcsInfo(
                 type = VcsType.GIT,
@@ -492,7 +493,7 @@ class TychoTest : WordSpec({
                 mapOf("Bundle-DocURL" to "https://example.com/package.git")
             )
 
-            val pkg = createPackageFromManifest(testDependency().artifact, manifest)
+            val pkg = createPackageFromManifest(testArtifact, manifest, createTrackerMock())
 
             pkg.vcs shouldBe VcsInfo.EMPTY
             pkg.vcsProcessed shouldBe VcsInfo(
@@ -500,6 +501,24 @@ class TychoTest : WordSpec({
                 url = "https://example.com/package.git",
                 revision = ""
             )
+        }
+
+        "obtain the binary artifact from the tracker" {
+            val binaryArtifact = RemoteArtifact.EMPTY.copy(url = "https://example.com/binary")
+            val tracker = createTrackerMock(binaryArtifact = binaryArtifact)
+
+            val pkg = createPackageFromManifest(testArtifact, Manifest(), tracker)
+
+            pkg.binaryArtifact shouldBe binaryArtifact
+        }
+
+        "obtain the source artifact from the tracker" {
+            val sourceArtifact = RemoteArtifact.EMPTY.copy(url = "https://example.com/source")
+            val tracker = createTrackerMock(sourceArtifact = sourceArtifact)
+
+            val pkg = createPackageFromManifest(testArtifact, Manifest(), tracker)
+
+            pkg.sourceArtifact shouldBe sourceArtifact
         }
     }
 })
@@ -567,7 +586,7 @@ private fun injectCliMock(
         every { projects } returns projectsList
     }
 
-    every { tycho.createMavenCli(any()) } answers {
+    every { tycho.createMavenCli(any(), any()) } answers {
         val collector = firstArg<TychoProjectsCollector>()
         collector.afterSessionEnd(session)
         cli
@@ -592,20 +611,16 @@ private fun File.createSubModule(name: String): File =
         pom.also { it.writeText("pom-$name") }
     }
 
+/** The test artifact used by many tests. */
+private val testArtifact = DefaultArtifact(TEST_GROUP_ID, TEST_ARTIFACT_ID, "jar", TEST_VERSION)
+
 /**
  * Return a mock [DependencyNode] that is configured to return the properties of the test artifact.
  */
-private fun testDependency(): DependencyNode {
-    val artifact = mockk<Artifact> {
-        every { groupId } returns TEST_GROUP_ID
-        every { artifactId } returns TEST_ARTIFACT_ID
-        every { version } returns TEST_VERSION
+private fun testDependency(): DependencyNode =
+    mockk {
+        every { artifact } returns testArtifact
     }
-
-    return mockk {
-        every { this@mockk.artifact } returns artifact
-    }
-}
 
 /** An exception that is thrown by the delegate resolver function to force the resolving from the local repository. */
 private val resolveException = RuntimeException("Test exception: Could not resolve the test artifact.")
@@ -617,9 +632,10 @@ private val resolveException = RuntimeException("Test exception: Could not resol
  */
 private fun createResolverFunWithRepositoryHelper(block: LocalRepositoryHelper.() -> Unit): PackageResolverFun {
     val helper = mockk<LocalRepositoryHelper>(block = block)
+    val tracker = createTrackerMock()
 
     val delegateResolverFun: PackageResolverFun = { throw resolveException }
-    return tychoPackageResolverFun(delegateResolverFun, helper)
+    return tychoPackageResolverFun(delegateResolverFun, helper, tracker)
 }
 
 /**
@@ -629,3 +645,19 @@ private fun createManifest(entries: Map<String, String>): Manifest =
     Manifest().apply {
         entries.forEach { (key, value) -> mainAttributes.putValue(key, value) }
     }
+
+/**
+ * Create a mock [P2ArtifactTracker] that is prepared to return the given [binaryArtifact] and [sourceArtifact] when
+ * queried for the test artifact.
+ */
+private fun createTrackerMock(
+    binaryArtifact: RemoteArtifact = RemoteArtifact.EMPTY,
+    sourceArtifact: RemoteArtifact = RemoteArtifact.EMPTY
+): P2ArtifactTracker {
+    val testArtifact = testArtifact
+
+    return mockk {
+        every { getBinaryArtifactFor(testArtifact) } returns binaryArtifact
+        every { getSourceArtifactFor(testArtifact) } returns sourceArtifact
+    }
+}
