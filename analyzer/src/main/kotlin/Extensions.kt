@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.utils.common.alsoIfNull
 
 private const val TYPE = "PackageManagerDependency"
@@ -110,8 +111,21 @@ fun OrtResult.withResolvedScopes(): OrtResult =
  */
 fun AnalyzerResult.withResolvedScopes(): AnalyzerResult =
     if (dependencyGraphs.isNotEmpty()) {
+        // TODO: Relax the implied assumption that there is only one enabled package manager per project type.
+        val projectTypeToManagerName = PackageManagerFactory.ALL.map { (name, factory) ->
+            val manager = factory.create(PluginConfig())
+            manager.projectType to name
+        }.toMap()
+
         copy(
-            projects = projects.mapTo(mutableSetOf()) { it.withResolvedScopes(dependencyGraphs[it.id.type]) },
+            projects = projects.mapTo(mutableSetOf()) {
+                val managerName = projectTypeToManagerName[it.id.type]
+                    // Note: This fallback should only ever be reached from test code that has no package managers in
+                    // the classpath and uses fake dependency graph map keys based on the project type.
+                    ?: it.id.type
+
+                it.withResolvedScopes(dependencyGraphs[managerName])
+            },
             dependencyGraphs = emptyMap()
         )
     } else {
