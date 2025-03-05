@@ -54,7 +54,7 @@ class ScanOss(
     private val service = ScanApi.builder()
         // As there is only a single endpoint, the SCANOSS API client expects the path to be part of the API URL.
         .url(config.apiUrl.removeSuffix("/") + "/scan/direct")
-        .apiKey(config.apiKey)
+        .apiKey(config.apiKey.value)
         .build()
 
     override val version: String by lazy {

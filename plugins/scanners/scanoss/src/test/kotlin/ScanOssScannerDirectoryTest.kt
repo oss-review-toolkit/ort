@@ -42,6 +42,7 @@ import org.ossreviewtoolkit.model.SnippetFinding
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.plugins.api.Secret
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
@@ -61,7 +62,7 @@ class ScanOssScannerDirectoryTest : StringSpec({
 
     beforeSpec {
         server.start()
-        scanner = spyk(ScanOssFactory.create(apiUrl = "http://localhost:${server.port()}", apiKey = ""))
+        scanner = spyk(ScanOssFactory.create(apiUrl = "http://localhost:${server.port()}", apiKey = Secret("")))
     }
 
     afterSpec {
