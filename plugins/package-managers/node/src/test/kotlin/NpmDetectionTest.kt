@@ -44,7 +44,7 @@ import org.ossreviewtoolkit.utils.test.getAssetFile
 
 class NpmDetectionTest : WordSpec({
     val packageManagers = listOf(NpmFactory(), PnpmFactory(), YarnFactory(), Yarn2Factory())
-        .map { it.create(PluginConfig()) }
+        .map { it.create(PluginConfig.EMPTY) }
 
     "All Node package manager detections" should {
         "ignore empty lockfiles" {

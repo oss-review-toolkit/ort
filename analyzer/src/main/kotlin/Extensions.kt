@@ -113,7 +113,7 @@ fun AnalyzerResult.withResolvedScopes(): AnalyzerResult =
     if (dependencyGraphs.isNotEmpty()) {
         // TODO: Relax the implied assumption that there is only one enabled package manager per project type.
         val projectTypeToManagerName = PackageManagerFactory.ALL.map { (name, factory) ->
-            val manager = factory.create(PluginConfig())
+            val manager = factory.create(PluginConfig.EMPTY)
             manager.projectType to name
         }.toMap()
 

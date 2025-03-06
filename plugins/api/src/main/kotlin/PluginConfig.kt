@@ -40,6 +40,13 @@ data class PluginConfig(
     @JsonIgnore
     val secrets: Options = emptyMap()
 ) {
+    companion object {
+        /**
+         * Constant for an empty [PluginConfig].
+         */
+        val EMPTY = PluginConfig()
+    }
+
     /**
      * Return a string representation that does not contain the [secrets].
      */

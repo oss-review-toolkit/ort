@@ -238,7 +238,7 @@ internal fun KnownProvenance?.getSourceCodeOrigin(): SourceCodeOrigin? =
 internal fun OrtResult.getRepositoryPathExcludes(): RepositoryPathExcludes {
     fun isDefinitionsFile(pathExclude: PathExclude) =
         PackageManagerFactory.ALL.values.any {
-            it.create(PluginConfig()).matchersForDefinitionFiles.any { matcher ->
+            it.create(PluginConfig.EMPTY).matchersForDefinitionFiles.any { matcher ->
                 pathExclude.pattern.endsWith(matcher.toString())
             }
         }

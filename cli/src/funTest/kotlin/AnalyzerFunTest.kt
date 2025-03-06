@@ -54,7 +54,7 @@ class AnalyzerFunTest : WordSpec({
                 )
             )
             val outputDir = tempdir().also {
-                GitRepoFactory().create(PluginConfig()).download(pkg, it)
+                GitRepoFactory().create(PluginConfig.EMPTY).download(pkg, it)
             }
 
             val result = analyze(outputDir, packageManagers = emptySet()).toYaml()

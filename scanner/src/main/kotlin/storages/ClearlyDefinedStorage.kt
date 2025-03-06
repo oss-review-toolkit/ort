@@ -110,7 +110,7 @@ class ClearlyDefinedStorage(
             val supportedScanners = toolVersionsByName.mapNotNull { (name, versions) ->
                 // For the ClearlyDefined tool names see https://github.com/clearlydefined/service#tool-name-registry.
                 ScannerWrapperFactory.ALL[name]?.let { factory ->
-                    val scanner = factory.create(PluginConfig())
+                    val scanner = factory.create(PluginConfig.EMPTY)
                     (scanner as? LocalPathScannerWrapper)?.let { cliScanner -> cliScanner to versions.last() }
                 }.also { factory ->
                     factory ?: logger.debug { "Unsupported tool '$name' for coordinates '$coordinates'." }
