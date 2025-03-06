@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.api
 
-import org.ossreviewtoolkit.utils.common.getLoaderFor
+import java.util.ServiceLoader
 
 /**
  * A factory interface for creating plugins of type [PLUGIN]. The different plugin endpoints ORT provides must inherit
@@ -56,3 +56,8 @@ interface PluginFactory<out PLUGIN : Plugin> {
 interface Plugin {
     val descriptor: PluginDescriptor
 }
+
+/**
+ * Return a [ServiceLoader] that is capable of loading services of type [T].
+ */
+inline fun <reified T : Any> getLoaderFor(): ServiceLoader<T> = ServiceLoader.load(T::class.java)
