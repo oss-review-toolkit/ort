@@ -396,6 +396,6 @@ ort:
       fromAddress: 'no-reply@oss-review-toolkit.org'
 
     jira:
-        host: 'localhost'
+        host: 'http://localhost'
         username: user
         password: password
