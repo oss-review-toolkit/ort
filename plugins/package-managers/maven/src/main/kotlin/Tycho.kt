@@ -470,8 +470,9 @@ private fun extractScmProperties(scmInfo: String?): Map<ScmProperties, String> =
         val fields = firstScmInfo.split(';')
         properties[ScmProperties.CONNECTION] = fields.first()
 
-        fields.drop(1).filter { "=" in it }.forEach { field ->
-            val (key, value) = field.split('=')
+        fields.drop(1).mapNotNull { field ->
+            field.split('=').takeIf { it.size == 2 }
+        }.forEach { (key, value) ->
             runCatching { // Ignore unknown keys.
                 ScmProperties.valueOf(key.uppercase()).also { properties[it] = value.removeSurrounding("\"") }
             }
