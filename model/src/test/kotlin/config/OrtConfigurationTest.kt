@@ -411,7 +411,7 @@ class OrtConfigurationTest : WordSpec({
                 }
 
                 jira shouldNotBeNull {
-                    host shouldBe "localhost"
+                    host shouldBe "http://localhost"
                     username shouldBe "user"
                     password shouldBe "password"
                 }

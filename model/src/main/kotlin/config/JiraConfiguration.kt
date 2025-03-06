@@ -23,7 +23,7 @@ data class JiraConfiguration(
     /**
      * The host for the Jira instance.
      */
-    val host: String = "localhost",
+    val host: String = "http://localhost",
 
     /**
      * The username used for the authentication.
