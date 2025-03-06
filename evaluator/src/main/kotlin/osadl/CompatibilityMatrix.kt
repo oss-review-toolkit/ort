@@ -76,7 +76,7 @@ object CompatibilityMatrix {
                 "%H" -> "HH"
                 "%M" -> "mm"
                 "%S" -> "ss"
-                "%z" -> "ZZZZZ"
+                "%z" -> "XX"
                 else -> {
                     val first = placeholder.first()
                     require(first != '%') { "Unhandled placeholder '$placeholder'." }
