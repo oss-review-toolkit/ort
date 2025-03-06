@@ -53,6 +53,7 @@ import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
+import org.ossreviewtoolkit.plugins.api.orEmpty
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommandFactory
 import org.ossreviewtoolkit.plugins.commands.api.utils.SeverityStatsPrinter
@@ -176,7 +177,7 @@ class ScannerCommand(descriptor: PluginDescriptor = ScannerCommandFactory.descri
             .takeIf { PackageType.PACKAGE in packageTypes }.orEmpty()
             .map {
                 val config = ortConfig.scanner.config?.get(it.descriptor.id)
-                it.create(PluginConfig(config?.options.orEmpty(), config?.secrets.orEmpty()))
+                it.create(config.orEmpty())
             }
 
         val projectScannerWrappers = projectScannerWrapperFactories
