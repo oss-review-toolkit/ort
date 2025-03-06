@@ -36,7 +36,6 @@ import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Severity
-import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
@@ -56,19 +55,6 @@ private const val BULK_REQUEST_SIZE = 100
 /**
  * An [AdviceProvider] implementation that obtains security vulnerability information from a
  * [VulnerableCode][https://github.com/aboutcode-org/vulnerablecode] instance.
- *
- * This [AdviceProvider] offers the following configuration options:
- *
- * #### [Options][PluginConfiguration.options]
- *
- * * **`serverUrl`:** The base URL of the VulnerableCode REST API. By default, the public VulnerableCode instance is
- *   used.
- * * **`readTimeout`:** The read timeout in seconds for requests to the VulnerableCode server. The default timeout is
- *   10 seconds.
- *
- * #### [Secrets][PluginConfiguration.secrets]
- *
- * * **`apiKey`:** The optional API key to use.
  */
 @OrtPlugin(
     displayName = "VulnerableCode",
