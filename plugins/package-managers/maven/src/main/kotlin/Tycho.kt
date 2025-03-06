@@ -468,7 +468,7 @@ private fun extractScmProperties(scmInfo: String?): Map<ScmProperties, String> =
     scmInfo?.split(',')?.firstOrNull()?.let { firstScmInfo ->
         val properties = mutableMapOf<ScmProperties, String>()
         val fields = firstScmInfo.split(';')
-        properties[ScmProperties.CONNECTION] = fields[0]
+        properties[ScmProperties.CONNECTION] = fields.first()
 
         fields.drop(1).filter { "=" in it }.forEach { field ->
             val (key, value) = field.split('=')
