@@ -166,7 +166,6 @@ complete -c ort -n "__fish_seen_subcommand_from report" -s h -l help -d 'Show th
 complete -c ort -f -n __fish_use_subcommand -a requirements -d 'Check for the command line tools required by ORT.'
 
 ## Options for requirements
-complete -c ort -n "__fish_seen_subcommand_from requirements" -l list -s l -r -fa "PLUGINS COMMANDS" -d 'A comma-separated list of requirements to list.'
 complete -c ort -n "__fish_seen_subcommand_from requirements" -s h -l help -d 'Show this message and exit'
 
 
