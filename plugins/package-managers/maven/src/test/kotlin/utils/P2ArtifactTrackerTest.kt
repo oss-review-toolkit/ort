@@ -72,8 +72,8 @@ class P2ArtifactTrackerTest : WordSpec({
                 "d848999d415e1cff07045d9e97d451c16aeed4911045"
             val properties = mapOf(
                 "download.checksum.sha-512" to hashValue,
-                "download.checksum.sha-256" to "SHA-256",
-                "download.checksum.sha-1" to "SHA-1"
+                "download.checksum.sha-256" to hashValue.take(64),
+                "download.checksum.sha-1" to hashValue.take(40)
             )
             val repositoryHelper = mockk<LocalRepositoryHelper> {
                 every { p2Properties(testArtifact) } returns properties
@@ -91,7 +91,7 @@ class P2ArtifactTrackerTest : WordSpec({
             val hashValue = "adf46d5e34940bdf148ecdd26a9ee8eea94496a72034ff7141066b3eea5c4e9d"
             val properties = mapOf(
                 "download.checksum.sha-256" to hashValue,
-                "download.checksum.sha-1" to "SHA-1"
+                "download.checksum.sha-1" to hashValue.take(40)
             )
             val repositoryHelper = mockk<LocalRepositoryHelper> {
                 every { p2Properties(testArtifact) } returns properties
