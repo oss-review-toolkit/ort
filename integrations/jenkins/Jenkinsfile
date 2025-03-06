@@ -375,7 +375,7 @@ pipeline {
                     ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
                 fi
 
-                /opt/ort/bin/ort $ORT_OPTIONS requirements --list plugins
+                /opt/ort/bin/ort $ORT_OPTIONS plugins
                 '''.stripIndent().trim()
             }
         }

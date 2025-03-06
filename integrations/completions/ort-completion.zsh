@@ -1284,12 +1284,6 @@ _ort_requirements() {
           (( i = i + 1 ));
           continue
           ;;
-        --list|-l)
-          __skip_opt_eq
-          (( i = i + 1 ))
-          [[ ${i} -gt COMP_CWORD ]] && in_param='--list' || in_param=''
-          continue
-          ;;
         -h|--help)
           __skip_opt_eq
           in_param=''
@@ -1307,7 +1301,7 @@ _ort_requirements() {
   done
   local word="${COMP_WORDS[$COMP_CWORD]}"
   if [[ "${word}" =~ ^[-] ]]; then
-    COMPREPLY=($(compgen -W '--list -l -h --help' -- "${word}"))
+    COMPREPLY=($(compgen -W '-h --help' -- "${word}"))
     return
   fi
 
@@ -1317,9 +1311,6 @@ _ort_requirements() {
   [[ -z "${in_param}" ]] && in_param=${vararg_name}
 
   case "${in_param}" in
-    "--list")
-      COMPREPLY=($(compgen -W 'PLUGINS COMMANDS' -- "${word}"))
-      ;;
     "--help")
       ;;
   esac
