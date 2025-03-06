@@ -466,19 +466,18 @@ private enum class ScmProperties {
  */
 private fun extractScmProperties(scmInfo: String?): Map<ScmProperties, String> =
     scmInfo?.split(',')?.firstOrNull()?.let { firstScmInfo ->
-        val properties = mutableMapOf<ScmProperties, String>()
-        val fields = firstScmInfo.split(';')
-        properties[ScmProperties.CONNECTION] = fields.first()
+        buildMap {
+            val fields = firstScmInfo.split(';')
+            put(ScmProperties.CONNECTION, fields.first())
 
-        fields.drop(1).mapNotNull { field ->
-            field.split('=').takeIf { it.size == 2 }
-        }.forEach { (key, value) ->
-            runCatching { // Ignore unknown keys.
-                ScmProperties.valueOf(key.uppercase()).also { properties[it] = value.removeSurrounding("\"") }
+            fields.drop(1).mapNotNull { field ->
+                field.split('=').takeIf { it.size == 2 }
+            }.forEach { (key, value) ->
+                runCatching { // Ignore unknown keys.
+                    put(ScmProperties.valueOf(key.uppercase()), value.removeSurrounding("\""))
+                }
             }
         }
-
-        properties
     }.orEmpty()
 
 /**
