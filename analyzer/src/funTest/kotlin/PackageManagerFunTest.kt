@@ -73,7 +73,7 @@ class PackageManagerFunTest : WordSpec({
     )
 
     val projectDir = tempdir()
-    val packageManagers = PackageManagerFactory.ALL.values.map { it.create(PluginConfig()) }
+    val packageManagers = PackageManagerFactory.ALL.values.map { it.create(PluginConfig.EMPTY) }
 
     beforeSpec {
         definitionFiles.writeFiles(projectDir)

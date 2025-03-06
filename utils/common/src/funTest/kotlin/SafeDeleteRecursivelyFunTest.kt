@@ -59,7 +59,7 @@ class SafeDeleteRecursivelyFunTest : WordSpec({
             )
 
             val nodeDir = tempdir().resolve("node-dir")
-            GitFactory().create(PluginConfig()).download(pkg, nodeDir)
+            GitFactory().create(PluginConfig.EMPTY).download(pkg, nodeDir)
 
             shouldNotThrow<IOException> {
                 nodeDir.safeDeleteRecursively()
