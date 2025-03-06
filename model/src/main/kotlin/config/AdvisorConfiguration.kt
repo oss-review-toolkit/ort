@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.model.config
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.utils.common.Plugin
 
 /**
@@ -34,8 +35,7 @@ data class AdvisorConfiguration(
     val skipExcluded: Boolean = false,
 
     /**
-     * A map with [configuration][PluginConfiguration] for advice providers using the [provider type][Plugin.type] as
-     * key.
+     * A map with [configuration][PluginConfig] for advice providers using the [provider type][Plugin.type] as key.
      */
-    val config: Map<String, PluginConfiguration>? = null
+    val config: Map<String, PluginConfig>? = null
 )

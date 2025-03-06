@@ -27,6 +27,7 @@ plugins {
 
 dependencies {
     api(projects.clients.clearlyDefinedClient)
+    api(projects.plugins.api)
     api(projects.utils.ortUtils)
     api(projects.utils.spdxUtils)
 

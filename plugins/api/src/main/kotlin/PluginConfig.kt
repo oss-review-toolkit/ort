@@ -52,3 +52,8 @@ data class PluginConfig(
      */
     override fun toString() = "${this::class.simpleName}(options=$options, secrets=[***])"
 }
+
+/**
+ * Returns this [PluginConfig] if it is not `null`, or the [empty][PluginConfig.EMPTY] [PluginConfig] otherwise.
+ */
+fun PluginConfig?.orEmpty() = this ?: PluginConfig.EMPTY
