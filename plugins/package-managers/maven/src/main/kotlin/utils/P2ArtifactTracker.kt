@@ -31,8 +31,8 @@ import org.codehaus.plexus.logging.Logger
 import org.eclipse.aether.artifact.Artifact
 
 import org.ossreviewtoolkit.model.Hash
-import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.utils.common.withoutPrefix
 
 /**
  * A helper class for Tycho that tracks the artifacts downloaded from P2 repositories.
@@ -60,14 +60,7 @@ class P2ArtifactTracker(
         private val regexDownload = Regex("Downloaded from p2: ((.+)/([^/]*)_(.+)\\.jar).*")
 
         /** The prefix for properties in the local Maven repository that store checksums for downloaded artifacts. */
-        private const val CHECKSUM_PROPERTY_PREFIX = "download.checksum.sha-"
-
-        /** An ordered list with different hash algorithms to try when looking for checksums. */
-        private val hashAlgorithms = listOf(
-            "512" to HashAlgorithm.SHA512,
-            "256" to HashAlgorithm.SHA256,
-            "1" to HashAlgorithm.SHA1
-        )
+        private const val CHECKSUM_PROPERTY_PREFIX = "download.checksum."
 
         /**
          * Perform the necessary setup in the given [container], so that the provided [tracker] receives log messages
@@ -149,9 +142,10 @@ class P2ArtifactTracker(
      */
     private fun findHash(artifact: Artifact): Hash =
         repositoryHelper.p2Properties(artifact)?.let { properties ->
-            hashAlgorithms.firstOrNull { "$CHECKSUM_PROPERTY_PREFIX${it.first}" in properties }
-                ?.let { (size, algorithm) ->
-                    Hash(properties.getValue("${CHECKSUM_PROPERTY_PREFIX}$size"), algorithm)
+            properties.mapNotNull { (key, value) ->
+                key.withoutPrefix(CHECKSUM_PROPERTY_PREFIX)?.let { algorithm ->
+                    Hash(value, algorithm)
                 }
+            }.maxByOrNull { it.value.length }
         } ?: Hash.NONE
 }
