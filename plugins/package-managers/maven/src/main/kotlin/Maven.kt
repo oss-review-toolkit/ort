@@ -74,7 +74,7 @@ class Maven(override val descriptor: PluginDescriptor = MavenFactory.descriptor,
 
         val localProjects = localProjectBuildingResults.mapValues { it.value.project }
         val dependencyHandler = MavenDependencyHandler(
-            descriptor.id,
+            descriptor.displayName,
             projectType,
             localProjects,
             mavenSupport.defaultPackageResolverFun(sbtMode)
