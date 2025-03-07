@@ -21,6 +21,8 @@ package org.ossreviewtoolkit.model.config
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import org.ossreviewtoolkit.plugins.api.PluginConfig
+
 /**
  * The base configuration model of the reporter.
  */
@@ -30,5 +32,5 @@ data class ReporterConfiguration(
      * Reporter specific configuration options. The key needs to match the name of the reporter class, e.g. "FossId"
      * for the FossId reporter. See the documentation of the reporter for available options.
      */
-    val config: Map<String, PluginConfiguration>? = null
+    val config: Map<String, PluginConfig>? = null
 )

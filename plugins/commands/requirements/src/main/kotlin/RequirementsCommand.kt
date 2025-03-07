@@ -20,17 +20,11 @@
 package org.ossreviewtoolkit.plugins.commands.requirements
 
 import com.github.ajalt.clikt.core.ProgramResult
-import com.github.ajalt.clikt.parameters.options.default
-import com.github.ajalt.clikt.parameters.options.option
-import com.github.ajalt.clikt.parameters.options.split
-import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.mordant.rendering.Theme
 
 import java.io.File
 import java.lang.reflect.Modifier
 import java.util.EnumSet
-
-import kotlin.reflect.full.companionObjectInstance
 
 import org.apache.logging.log4j.kotlin.logger
 
@@ -42,7 +36,6 @@ import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommandFactory
 import org.ossreviewtoolkit.utils.common.CommandLineTool
-import org.ossreviewtoolkit.utils.common.Plugin
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.spdx.scanCodeLicenseTextDir
 
@@ -64,8 +57,6 @@ private val SUCCESS_PREFIX = "\t${Theme.Default.success("*")} "
 class RequirementsCommand(
     descriptor: PluginDescriptor = RequirementsCommandFactory.descriptor
 ) : OrtCommand(descriptor) {
-    private enum class RequirementsType { PLUGINS, COMMANDS }
-
     private enum class VersionStatus {
         /** The determined version satisfies ORT's requirements. */
         SATISFIED,
@@ -80,17 +71,10 @@ class RequirementsCommand(
         UNAVAILABLE
     }
 
-    private val list by option(
-        "--list", "-l",
-        help = "A comma-separated list of requirements to list."
-    ).enum<RequirementsType>().split(",").default(RequirementsType.entries)
-
     private val reflections by lazy { Reflections("org.ossreviewtoolkit", Scanners.SubTypes) }
 
     override fun run() {
-        if (RequirementsType.PLUGINS in list) listPlugins()
-
-        val status = if (RequirementsType.COMMANDS in list) checkToolVersions() else enumSetOf(VersionStatus.SATISFIED)
+        val status = checkToolVersions()
 
         echo("Prefix legend:")
         echo("${DANGER_PREFIX}The tool was not found in the PATH environment.")
@@ -125,30 +109,6 @@ class RequirementsCommand(
 
             throw ProgramResult(2)
         }
-    }
-
-    private fun listPlugins() {
-        getPluginsByType().toSortedMap().forEach { (name, all) ->
-            echo(Theme.Default.info("$name plugins:"))
-            echo(all.joinToString("\n", postfix = "\n") { "${SUCCESS_PREFIX}$it" })
-        }
-    }
-
-    internal fun getPluginsByType(): Map<String, Set<String>> {
-        val pluginClasses = reflections.getSubTypesOf(Plugin::class.java)
-
-        val pluginTypes = pluginClasses.mapNotNull { clazz ->
-            val companion = clazz.declaredClasses.find { it.name.endsWith("\$Companion") }
-            val all = runCatching { companion?.getDeclaredMethod("getALL") }.getOrNull()
-
-            all?.let {
-                @Suppress("UNCHECKED_CAST")
-                val plugins = all.invoke(clazz.kotlin.companionObjectInstance) as Map<String, *>
-                clazz.simpleName to plugins.keys
-            }
-        }
-
-        return pluginTypes.toMap()
     }
 
     private fun checkToolVersions(): EnumSet<VersionStatus> {

@@ -97,20 +97,4 @@ data class AnalyzerResult(
                 }
             }
         }
-
-    /**
-     * Return a result, in which all contained [Project]s have their scope information resolved. If this result
-     * has shared dependency graphs, the projects referring to one of these graphs are replaced by corresponding
-     * instances that store their dependencies in the classic [Scope]-based format. Otherwise, this instance is
-     * returned without changes.
-     */
-    fun withResolvedScopes(): AnalyzerResult =
-        if (dependencyGraphs.isNotEmpty()) {
-            copy(
-                projects = projects.mapTo(mutableSetOf()) { it.withResolvedScopes(dependencyGraphs[it.id.type]) },
-                dependencyGraphs = emptyMap()
-            )
-        } else {
-            this
-        }
 }

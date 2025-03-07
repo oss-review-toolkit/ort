@@ -43,7 +43,7 @@ abstract class VersionControlSystem : Plugin {
     companion object {
         private fun getAllVcsByPriority(configs: Map<String, PluginConfig>) =
             VersionControlSystemFactory.ALL.map { (id, factory) ->
-                val config = configs[id] ?: PluginConfig()
+                val config = configs[id] ?: PluginConfig.EMPTY
                 factory.create(config)
             }.sortedByDescending {
                 it.priority

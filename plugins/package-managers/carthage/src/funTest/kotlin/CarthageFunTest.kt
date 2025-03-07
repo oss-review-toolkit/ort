@@ -24,7 +24,6 @@ import io.kotest.matchers.should
 
 import java.io.File
 
-import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -42,7 +41,7 @@ class CarthageFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/carthage/Cartfile.resolved")
         val expectedResultFile = getAssetFile("projects/synthetic/carthage-expected-output.yml")
 
-        val result = create("Carthage").resolveSingleProject(definitionFile)
+        val result = CarthageFactory.create().resolveSingleProject(definitionFile)
 
         result.toYaml() should matchExpectedResult(
             expectedResultFile,

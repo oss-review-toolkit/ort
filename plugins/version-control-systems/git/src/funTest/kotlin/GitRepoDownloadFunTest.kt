@@ -45,7 +45,7 @@ class GitRepoDownloadFunTest : StringSpec() {
 
     override suspend fun beforeSpec(spec: Spec) {
         outputDir = tempdir()
-        workingTree = GitRepoFactory().create(PluginConfig()).download(pkg, outputDir)
+        workingTree = GitRepoFactory().create(PluginConfig.EMPTY).download(pkg, outputDir)
     }
 
     init {
@@ -100,7 +100,7 @@ class GitRepoDownloadFunTest : StringSpec() {
                 "submodules/test-data-npm/long.js"
             ).associateWith { VersionControlSystem.getPathInfo(outputDir.resolve(it)) }
 
-            val workingTree = GitRepoFactory().create(PluginConfig()).getWorkingTree(outputDir)
+            val workingTree = GitRepoFactory().create(PluginConfig.EMPTY).getWorkingTree(outputDir)
             workingTree.getNested() shouldBe expectedSubmodules
         }
     }

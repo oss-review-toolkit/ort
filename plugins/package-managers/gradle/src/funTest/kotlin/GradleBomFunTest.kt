@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.plugins.packagemanagers.gradle
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.should
 
-import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
@@ -33,7 +32,7 @@ class GradleBomFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/gradle-bom/build.gradle")
         val expectedResultFile = getAssetFile("projects/synthetic/gradle-bom-expected-output.yml")
 
-        val result = create("Gradle", "javaVersion" to "17")
+        val result = GradleFactory.create(javaVersion = "17")
             .resolveSingleProject(definitionFile, resolveScopes = true)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)

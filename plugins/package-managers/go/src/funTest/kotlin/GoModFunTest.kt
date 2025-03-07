@@ -25,8 +25,8 @@ import io.kotest.matchers.should
 import java.io.File
 
 import org.ossreviewtoolkit.analyzer.collateMultipleProjects
-import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
+import org.ossreviewtoolkit.analyzer.withResolvedScopes
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
@@ -39,7 +39,7 @@ class GoModFunTest : StringSpec({
         val definitionFile = testDir.resolve("project-with-tests/go.mod")
         val expectedResultFile = testDir.resolve("project-with-tests-expected-output.yml")
 
-        val result = create("GoMod").resolveSingleProject(definitionFile)
+        val result = GoModFactory.create().resolveSingleProject(definitionFile)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -48,7 +48,7 @@ class GoModFunTest : StringSpec({
         val definitionFile = testDir.resolve("subpkg/go.mod")
         val expectedResultFile = testDir.resolve("subpkg-expected-output.yml")
 
-        val result = create("GoMod").resolveSingleProject(definitionFile)
+        val result = GoModFactory.create().resolveSingleProject(definitionFile)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -57,7 +57,7 @@ class GoModFunTest : StringSpec({
         val definitionFile = testDir.resolve("no-deps/go.mod")
         val expectedResultFile = testDir.resolve("no-deps-expected-output.yml")
 
-        val result = create("GoMod").resolveSingleProject(definitionFile)
+        val result = GoModFactory.create().resolveSingleProject(definitionFile)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -66,7 +66,7 @@ class GoModFunTest : StringSpec({
         val definitionFile = testDir.resolve("workspaces/go.mod")
         val expectedResultFile = testDir.resolve("workspaces-main-module-expected-output.yml")
 
-        val result = create("GoMod").resolveSingleProject(definitionFile)
+        val result = GoModFactory.create().resolveSingleProject(definitionFile)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -75,7 +75,7 @@ class GoModFunTest : StringSpec({
         val definitionFile = testDir.resolve("workspaces/other-module/go.mod")
         val expectedResultFile = testDir.resolve("workspaces-sub-module-expected-output.yml")
 
-        val result = create("GoMod").resolveSingleProject(definitionFile)
+        val result = GoModFactory.create().resolveSingleProject(definitionFile)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -84,7 +84,7 @@ class GoModFunTest : StringSpec({
         val definitionFile = testDir.resolve("unused-deps/go.mod")
         val expectedResultFile = testDir.resolve("unused-deps-expected-output.yml")
 
-        val result = create("GoMod").resolveSingleProject(definitionFile)
+        val result = GoModFactory.create().resolveSingleProject(definitionFile)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -93,7 +93,7 @@ class GoModFunTest : StringSpec({
         val definitionFile = testDir.resolve("dangling-embed/go.mod")
         val expectedResultFile = testDir.resolve("dangling-embed-expected-output.yml")
 
-        val result = create("GoMod").resolveSingleProject(definitionFile)
+        val result = GoModFactory.create().resolveSingleProject(definitionFile)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -104,7 +104,7 @@ class GoModFunTest : StringSpec({
         val expectedResultFile = testDir.resolve("submodules-expected-output.yml")
         val expectedDefinitionFilePathUtils = getDefinitionFilePath(definitionFileUtils)
 
-        val result = create("GoMod").collateMultipleProjects(definitionFileApp, definitionFileUtils)
+        val result = GoModFactory.create().collateMultipleProjects(definitionFileApp, definitionFileUtils)
 
         result.withResolvedScopes().toYaml() should matchExpectedResult(
             expectedResultFile,
@@ -120,7 +120,7 @@ class GoModFunTest : StringSpec({
         val definitionFile = testDir.resolve("go-as-dep-with-transitive-deps/go.mod")
         val expectedResultFile = testDir.resolve("go-as-dep-with-transitive-deps-expected-output.yml")
 
-        val result = create("GoMod").resolveSingleProject(definitionFile)
+        val result = GoModFactory.create().resolveSingleProject(definitionFile)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }

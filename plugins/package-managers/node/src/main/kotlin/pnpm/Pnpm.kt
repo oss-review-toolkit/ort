@@ -23,11 +23,13 @@ import java.io.File
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
+import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
@@ -49,21 +51,15 @@ internal object PnpmCommand : CommandLineTool {
 /**
  * The [fast, disk space efficient package manager](https://pnpm.io/).
  */
-class Pnpm(
-    name: String,
-    analysisRoot: File,
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : NodePackageManager(name, NodePackageManagerType.PNPM, analysisRoot, analyzerConfig, repoConfig) {
-    class Factory : AbstractPackageManagerFactory<Pnpm>("PNPM") {
-        override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE, "pnpm-lock.yaml")
-
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = Pnpm(type, analysisRoot, analyzerConfig, repoConfig)
-    }
+@OrtPlugin(
+    id = "PNPM",
+    displayName = "PNPM",
+    description = "The PNPM package manager for Node.js.",
+    factory = PackageManagerFactory::class
+)
+class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
+    NodePackageManager(NodePackageManagerType.PNPM) {
+    override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE, "pnpm-lock.yaml")
 
     private lateinit var stash: DirectoryStash
 
@@ -72,18 +68,28 @@ class Pnpm(
 
     override val graphBuilder by lazy { DependencyGraphBuilder(handler) }
 
-    override fun beforeResolution(definitionFiles: List<File>) {
+    override fun beforeResolution(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        analyzerConfig: AnalyzerConfiguration
+    ) {
         PnpmCommand.checkVersion()
 
         val directories = definitionFiles.mapTo(mutableSetOf()) { it.resolveSibling("node_modules") }
         stash = DirectoryStash(directories)
     }
 
-    override fun afterResolution(definitionFiles: List<File>) {
+    override fun afterResolution(analysisRoot: File, definitionFiles: List<File>) {
         stash.close()
     }
 
-    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(
+        analysisRoot: File,
+        definitionFile: File,
+        excludes: Excludes,
+        analyzerConfig: AnalyzerConfiguration,
+        labels: Map<String, String>
+    ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
         installDependencies(workingDir)
 

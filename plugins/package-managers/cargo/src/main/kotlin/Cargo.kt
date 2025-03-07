@@ -27,8 +27,8 @@ import net.peanuuutz.tomlkt.decodeFromNativeReader
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -42,8 +42,10 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.orEmpty
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.unquote
 import org.ossreviewtoolkit.utils.common.withoutPrefix
@@ -67,31 +69,23 @@ internal object CargoCommand : CommandLineTool {
 /**
  * The [Cargo](https://doc.rust-lang.org/cargo/) package manager for Rust.
  */
-class Cargo(
-    name: String,
-    analysisRoot: File,
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Cargo", analysisRoot, analyzerConfig, repoConfig) {
-    class Factory : AbstractPackageManagerFactory<Cargo>("Cargo") {
-        override val globsForDefinitionFiles = listOf("Cargo.toml")
-
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = Cargo(type, analysisRoot, analyzerConfig, repoConfig)
-    }
+@OrtPlugin(
+    displayName = "Cargo",
+    description = "The Cargo package manager for Rust.",
+    factory = PackageManagerFactory::class
+)
+class Cargo(override val descriptor: PluginDescriptor = CargoFactory.descriptor) : PackageManager("Cargo") {
+    override val globsForDefinitionFiles = listOf("Cargo.toml")
 
     /**
      * Cargo.lock is located next to Cargo.toml or in one of the parent directories. The latter is the case when the
      * project is part of a workspace. Cargo.lock is then located next to the Cargo.toml file defining the workspace.
      */
-    private fun resolveLockfile(metadata: CargoMetadata): File {
+    private fun resolveLockfile(analysisRoot: File, metadata: CargoMetadata, allowDynamicVersions: Boolean): File {
         val workspaceRoot = File(metadata.workspaceRoot)
         val lockfile = workspaceRoot.resolve("Cargo.lock")
 
-        requireLockfile(workspaceRoot) { lockfile.isFile }
+        requireLockfile(analysisRoot, workspaceRoot, allowDynamicVersions) { lockfile.isFile }
 
         return lockfile
     }
@@ -129,7 +123,7 @@ class Cargo(
         }
     }
 
-    override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> {
+    override fun mapDefinitionFiles(analysisRoot: File, definitionFiles: List<File>): List<File> {
         fun File.isVirtualWorkspace(): Boolean {
             var foundWorkspace = false
             var foundPackage = false
@@ -147,7 +141,13 @@ class Cargo(
         return definitionFiles.mapNotNull { file -> file.takeUnless { it.isVirtualWorkspace() } }
     }
 
-    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(
+        analysisRoot: File,
+        definitionFile: File,
+        excludes: Excludes,
+        analyzerConfig: AnalyzerConfiguration,
+        labels: Map<String, String>
+    ): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
         val metadataProcess = CargoCommand.run("metadata", "--format-version=1", "--manifest-path=$definitionFile")
             .requireSuccess()
@@ -193,7 +193,7 @@ class Cargo(
             depNodesByKind[BUILD_KIND_NAME]?.let { Scope("build-dependencies", it.toPackageReferences()) }
         )
 
-        val hashes = readHashes(resolveLockfile(metadata))
+        val hashes = readHashes(resolveLockfile(analysisRoot, metadata, analyzerConfig.allowDynamicVersions))
         val projectPkg = packageById.getValue(projectId).let { cargoPkg ->
             cargoPkg.toPackage(hashes).let { it.copy(id = it.id.copy(type = projectType)) }
         }

@@ -40,8 +40,20 @@ data class PluginConfig(
     @JsonIgnore
     val secrets: Options = emptyMap()
 ) {
+    companion object {
+        /**
+         * Constant for an empty [PluginConfig].
+         */
+        val EMPTY = PluginConfig()
+    }
+
     /**
      * Return a string representation that does not contain the [secrets].
      */
     override fun toString() = "${this::class.simpleName}(options=$options, secrets=[***])"
 }
+
+/**
+ * Returns this [PluginConfig] if it is not `null`, or the [empty][PluginConfig.EMPTY] [PluginConfig] otherwise.
+ */
+fun PluginConfig?.orEmpty() = this ?: PluginConfig.EMPTY

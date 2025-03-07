@@ -33,7 +33,7 @@ class BazelDetectionTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/bazel-local-registry2/MODULE.bazel")
         val expectedResultFile = getAssetFile("projects/synthetic/bazel-expected-output-local-registry2.yml")
 
-        val result = analyze(definitionFile.parentFile, packageManagers = listOf(Bazel.Factory()))
+        val result = analyze(definitionFile.parentFile, packageManagers = listOf(BazelFactory()))
 
         patchActualResult(result.toYaml(), patchStartAndEndTime = true) should matchExpectedResult(
             expectedResultFile,

@@ -154,7 +154,7 @@ class AnalyzerCommand(descriptor: PluginDescriptor = AnalyzerCommandFactory.desc
         val enabledPackageManagers = analyzerConfiguration.determineEnabledPackageManagers()
 
         echo("The following ${enabledPackageManagers.size} package manager(s) are enabled:")
-        echo("\t" + enabledPackageManagers.joinToString().ifEmpty { "<None>" })
+        echo("\t" + enabledPackageManagers.joinToString { it.descriptor.displayName }.ifEmpty { "<None>" })
 
         val analyzer = Analyzer(analyzerConfiguration, labels)
 
@@ -182,7 +182,7 @@ class AnalyzerCommand(descriptor: PluginDescriptor = AnalyzerCommandFactory.desc
         if (info.managedFiles.isEmpty()) {
             echo("No definition files found.")
         } else {
-            val filesPerManager = info.managedFiles.mapKeysTo(sortedMapOf()) { it.key.managerName }
+            val filesPerManager = info.managedFiles.mapKeysTo(sortedMapOf()) { it.key.descriptor.id }
             var count = 0
 
             filesPerManager.forEach { (manager, files) ->

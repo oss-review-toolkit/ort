@@ -29,9 +29,6 @@ import java.io.File
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageLinkage
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.test.USER_DIR
 
 class YarnDependencyHandlerTest : StringSpec({
     "identifierFor extracts the correct identifier" {
@@ -101,5 +98,4 @@ private fun createModuleInfo(
 /**
  * Creates an [YarnDependencyHandler] instance to be used by test cases.
  */
-private fun createHandler() =
-    YarnDependencyHandler(Yarn("Yarn", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration()))
+private fun createHandler() = YarnDependencyHandler(YarnFactory.create())

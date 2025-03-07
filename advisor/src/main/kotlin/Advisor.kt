@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
-import org.ossreviewtoolkit.plugins.api.PluginConfig
+import org.ossreviewtoolkit.plugins.api.orEmpty
 import org.ossreviewtoolkit.utils.ort.Environment
 
 /**
@@ -81,7 +81,7 @@ class Advisor(
             } else {
                 val providers = providerFactories.map {
                     val providerConfig = config.config?.get(it.descriptor.id)
-                    it.create(PluginConfig(providerConfig?.options.orEmpty(), providerConfig?.secrets.orEmpty()))
+                    it.create(providerConfig.orEmpty())
                 }
 
                 providers.map { provider ->

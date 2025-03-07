@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.plugins.packagemanagers.bazel
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.should
 
-import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
@@ -33,7 +32,7 @@ class BazelFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/bazel/MODULE.bazel")
         val expectedResultFile = getAssetFile("projects/synthetic/bazel-expected-output.yml")
 
-        val result = create("Bazel").resolveSingleProject(definitionFile)
+        val result = BazelFactory.create().resolveSingleProject(definitionFile)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -42,7 +41,7 @@ class BazelFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/bazel-local-registry/MODULE.bazel")
         val expectedResultFile = getAssetFile("projects/synthetic/bazel-expected-output-local-registry.yml")
 
-        val result = create("Bazel").resolveSingleProject(definitionFile)
+        val result = BazelFactory.create().resolveSingleProject(definitionFile)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -51,7 +50,7 @@ class BazelFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/bazel-7.2/MODULE.bazel")
         val expectedResultFile = getAssetFile("projects/synthetic/bazel-7.2-expected-output.yml")
 
-        val result = create("Bazel").resolveSingleProject(definitionFile)
+        val result = BazelFactory.create().resolveSingleProject(definitionFile)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -60,7 +59,7 @@ class BazelFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/bazel-local-path-override/MODULE.bazel")
         val expectedResultFile = getAssetFile("projects/synthetic/bazel-expected-output-local-path-override.yml")
 
-        val result = create("Bazel").resolveSingleProject(definitionFile)
+        val result = BazelFactory.create().resolveSingleProject(definitionFile)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -69,7 +68,7 @@ class BazelFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/bazel-archive-override/MODULE.bazel")
         val expectedResultFile = getAssetFile("projects/synthetic/bazel-expected-output-archive-override.yml")
 
-        val result = create("Bazel").resolveSingleProject(definitionFile)
+        val result = BazelFactory.create().resolveSingleProject(definitionFile)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -78,7 +77,7 @@ class BazelFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/bazel-git-repository/MODULE.bazel")
         val expectedResultFile = getAssetFile("projects/synthetic/bazel-expected-output-git-repository.yml")
 
-        val result = create("Bazel").resolveSingleProject(definitionFile)
+        val result = BazelFactory.create().resolveSingleProject(definitionFile)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -89,7 +88,7 @@ class BazelFunTest : StringSpec({
             "projects/synthetic/bazel-expected-output-local-registry-with-local-path.yml"
         )
 
-        val result = create("Bazel").resolveSingleProject(definitionFile)
+        val result = BazelFactory.create().resolveSingleProject(definitionFile)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -100,7 +99,7 @@ class BazelFunTest : StringSpec({
             "projects/synthetic/bazel-expected-output-no-lock-file.yml"
         )
 
-        val result = create("Bazel").resolveSingleProject(definitionFile)
+        val result = BazelFactory.create().resolveSingleProject(definitionFile)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }

@@ -37,7 +37,6 @@ import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
@@ -48,13 +47,6 @@ import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 
 /**
  * An advice provider that obtains vulnerability information from Open Source Vulnerabilities (https://osv.dev/).
- *
- * This [AdviceProvider] offers the following configuration options:
- *
- * #### [Options][PluginConfiguration.options]
- *
- * * **`serverUrl`:** The base URL of the OSV REST API. If undefined, default is the production endpoint of the official
- *   OSV.dev API.
  */
 @OrtPlugin(
     id = "OSV",

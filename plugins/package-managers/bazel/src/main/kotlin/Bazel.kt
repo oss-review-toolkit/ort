@@ -26,8 +26,8 @@ import kotlin.io.encoding.Base64
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.ArchiveOverride
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.ArchiveSourceInfo
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.BazelModuleRegistryService
@@ -55,9 +55,11 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.collectDependencies
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.orEmpty
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.alsoIfNull
@@ -102,28 +104,20 @@ internal object BuildozerCommand : CommandLineTool {
         output.lineSequence().first().trim().removePrefix("buildozer version: ")
 }
 
-class Bazel(
-    name: String,
-    analysisRoot: File,
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Bazel", analysisRoot, analyzerConfig, repoConfig) {
-    class Factory : AbstractPackageManagerFactory<Bazel>("Bazel") {
-        override val globsForDefinitionFiles = listOf("MODULE", "MODULE.bazel")
-
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = Bazel(type, analysisRoot, analyzerConfig, repoConfig)
-    }
+@OrtPlugin(
+    displayName = "Bazel",
+    description = "The Bazel package manager.",
+    factory = PackageManagerFactory::class
+)
+class Bazel(override val descriptor: PluginDescriptor = BazelFactory.descriptor) : PackageManager("Bazel") {
+    override val globsForDefinitionFiles = listOf("MODULE", "MODULE.bazel")
 
     /**
      * To avoid processing the module files in a local registry as definition files, ignore them if they are aside a
      * source.json file and under a directory with a metadata.json file. This simple metric avoids parsing the .bazelrc
      * in the top directory of the project to find out if a MODULE.bazel file is part of a local registry or not.
      */
-    override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> =
+    override fun mapDefinitionFiles(analysisRoot: File, definitionFiles: List<File>): List<File> =
         definitionFiles.mapNotNull { file ->
             file.takeUnless {
                 it.resolveSibling(SOURCE_JSON).isFile && it.parentFile.resolveSibling(METADATA_JSON).isFile
@@ -132,7 +126,13 @@ class Bazel(
             }
         }
 
-    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(
+        analysisRoot: File,
+        definitionFile: File,
+        excludes: Excludes,
+        analyzerConfig: AnalyzerConfiguration,
+        labels: Map<String, String>
+    ): List<ProjectAnalyzerResult> {
         val projectDir = definitionFile.parentFile
         val lockfile = projectDir.resolve(LOCKFILE_NAME)
         val projectVcs = processProjectVcs(projectDir)
@@ -152,7 +152,10 @@ class Bazel(
 
             getPackages(scopes, registry, localPathOverrides, archiveOverrides, projectVcs)
         } else {
-            issues += createAndLogIssue(managerName, "Bazel registry URL cannot be determined from the lockfile.")
+            issues += createAndLogIssue(
+                descriptor.displayName,
+                "Bazel registry URL cannot be determined from the lockfile."
+            )
             emptySet()
         }
 

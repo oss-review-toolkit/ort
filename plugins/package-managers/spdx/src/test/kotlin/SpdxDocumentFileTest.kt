@@ -32,7 +32,6 @@ import java.io.File
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.SpdxResolvedDocument
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper
@@ -125,7 +124,7 @@ class SpdxDocumentFileTest : WordSpec({
 
             val manager = createPackageManager()
 
-            manager.getPackageManagerDependency(pkgForVcs.spdxId, doc) should beNull()
+            manager.getPackageManagerDependency(pkgForVcs.spdxId, doc, AnalyzerConfiguration()) should beNull()
         }
 
         "return null for a missing definition file" {
@@ -136,7 +135,7 @@ class SpdxDocumentFileTest : WordSpec({
 
             val manager = createPackageManager()
 
-            manager.getPackageManagerDependency(pkgForVcs.spdxId, doc) shouldBe null
+            manager.getPackageManagerDependency(pkgForVcs.spdxId, doc, AnalyzerConfiguration()) shouldBe null
         }
 
         "return null for an undefined package file name" {
@@ -146,7 +145,7 @@ class SpdxDocumentFileTest : WordSpec({
 
             val manager = createPackageManager()
 
-            manager.getPackageManagerDependency(pkgForVcs.spdxId, doc) shouldBe null
+            manager.getPackageManagerDependency(pkgForVcs.spdxId, doc, AnalyzerConfiguration()) shouldBe null
         }
 
         "return null if no external reference with a scope is defined" {
@@ -165,7 +164,7 @@ class SpdxDocumentFileTest : WordSpec({
 
             val manager = createPackageManager()
 
-            manager.getPackageManagerDependency(pkgForVcs.spdxId, doc) shouldBe null
+            manager.getPackageManagerDependency(pkgForVcs.spdxId, doc, AnalyzerConfiguration()) shouldBe null
         }
     }
 
@@ -185,8 +184,7 @@ class SpdxDocumentFileTest : WordSpec({
 /**
  * Create a [SpdxDocumentFile] instance to be used by tests.
  */
-private fun createPackageManager(): SpdxDocumentFile =
-    SpdxDocumentFile("test", File("."), AnalyzerConfiguration(), RepositoryConfiguration())
+private fun createPackageManager(): SpdxDocumentFile = SpdxDocumentFileFactory.create()
 
 /**
  * Prepare this mock [SpdxResolvedDocument] to return [pkg] when queried for the test package.

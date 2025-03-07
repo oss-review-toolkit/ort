@@ -25,6 +25,8 @@ analyzer:
     tool_versions: {}
   config:
     allow_dynamic_versions: false
+    enabled_package_managers:
+    - "PNPM"
     skip_excluded: false
   result:
     projects:

@@ -22,6 +22,12 @@ package org.ossreviewtoolkit.model.licenses
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.model.authors
+import org.ossreviewtoolkit.model.ortResult
+import org.ossreviewtoolkit.model.packageWithAuthors
+import org.ossreviewtoolkit.model.project
+import org.ossreviewtoolkit.model.projectAuthors
+
 class DefaultLicenseInfoProviderTest : WordSpec({
     val defaultLicenseInfoProvider = DefaultLicenseInfoProvider(ortResult)
 

@@ -29,7 +29,9 @@ import java.io.IOException
 import org.ossreviewtoolkit.analyzer.Analyzer.ManagedFileInfo
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 
 class AnalyzerTest : WordSpec({
     "analyze()" should {
@@ -39,7 +41,7 @@ class AnalyzerTest : WordSpec({
             val analyzer = Analyzer(analyzerConfig)
             val analysisRoot = File(".").absoluteFile
 
-            val manager = DummyPackageManager(analysisRoot, analyzerConfig, repoConfig)
+            val manager = DummyPackageManager()
 
             val info = ManagedFileInfo(
                 absoluteProjectPath = analysisRoot,
@@ -54,23 +56,31 @@ class AnalyzerTest : WordSpec({
     }
 })
 
-private class DummyPackageManager(
-    analysisRoot: File,
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : PackageManager("Dummy", "Project", analysisRoot, analyzerConfig, repoConfig) {
+private class DummyPackageManager : PackageManager("Project") {
+    override val descriptor = PluginDescriptor("Dummy", "Dummy", "A dummy package manager.")
+    override val globsForDefinitionFiles = emptyList<String>()
     val calls = mutableListOf<String>()
 
-    override fun beforeResolution(definitionFiles: List<File>) {
+    override fun beforeResolution(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        analyzerConfig: AnalyzerConfiguration
+    ) {
         calls += "beforeResolution"
     }
 
-    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(
+        analysisRoot: File,
+        definitionFile: File,
+        excludes: Excludes,
+        analyzerConfig: AnalyzerConfiguration,
+        labels: Map<String, String>
+    ): List<ProjectAnalyzerResult> {
         calls += "resolveDependencies"
         throw IOException()
     }
 
-    override fun afterResolution(definitionFiles: List<File>) {
+    override fun afterResolution(analysisRoot: File, definitionFiles: List<File>) {
         calls += "afterResolution"
     }
 }

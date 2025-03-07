@@ -23,8 +23,8 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.analyzer.collateMultipleProjects
-import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
+import org.ossreviewtoolkit.analyzer.withResolvedScopes
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
@@ -34,7 +34,7 @@ class Yarn2FunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/yarn2/project-with-lockfile/package.json")
         val expectedResultFile = getAssetFile("projects/synthetic/yarn2/project-with-lockfile-expected-output.yml")
 
-        val result = create("Yarn2").resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = Yarn2Factory.create().resolveSingleProject(definitionFile, resolveScopes = true)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -45,8 +45,8 @@ class Yarn2FunTest : StringSpec({
             "projects/synthetic/yarn2/project-with-lockfile-skip-excluded-scopes-expected-output.yml"
         )
 
-        val result = create("Yarn2", excludedScopes = setOf("devDependencies"))
-            .resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = Yarn2Factory.create()
+            .resolveSingleProject(definitionFile, excludedScopes = setOf("devDependencies"), resolveScopes = true)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -55,7 +55,7 @@ class Yarn2FunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/yarn2/workspaces/package.json")
         val expectedResultFile = getAssetFile("projects/synthetic/yarn2/workspaces-expected-output.yml")
 
-        val result = create("Yarn2").collateMultipleProjects(definitionFile).withResolvedScopes()
+        val result = Yarn2Factory.create().collateMultipleProjects(definitionFile).withResolvedScopes()
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }

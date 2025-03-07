@@ -19,15 +19,10 @@
 
 package org.ossreviewtoolkit.model
 
-import io.kotest.assertions.fail
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.shouldBeEmpty
-import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.nulls.beNull
-import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.types.beTheSameInstanceAs
 
 import io.mockk.mockk
 
@@ -41,44 +36,6 @@ private fun readAnalyzerResult(analyzerResultFilename: String): Project =
 private const val MANAGER = "MyManager"
 
 private val projectId = Identifier("$MANAGER:my.example.org:my-project:1.0.0")
-private val exampleId = Identifier("$MANAGER:org.ossreviewtoolkit.gradle.example:lib:1.0.0")
-private val textId = Identifier("$MANAGER:org.apache.commons:commons-text:1.1")
-private val langId = Identifier("$MANAGER:org.apache.commons:commons-lang3:3.5")
-private val strutsId = Identifier("$MANAGER:org.apache.struts:struts2-assembly:2.5.14.1")
-private val csvId = Identifier("$MANAGER:org.apache.commons:commons-csv:1.4")
-
-/**
- * Create a [DependencyGraph] containing some test dependencies, optionally with [qualified] scope names.
- */
-private fun createDependencyGraph(qualified: Boolean = false): DependencyGraph {
-    val dependencies = listOf(
-        langId,
-        textId,
-        strutsId,
-        csvId,
-        exampleId
-    )
-    val langRef = DependencyReference(0)
-    val textRef = DependencyReference(1, dependencies = setOf(langRef))
-    val strutsRef = DependencyReference(2)
-    val csvRef = DependencyReference(3, dependencies = setOf(langRef))
-    val exampleRef = DependencyReference(4, dependencies = setOf(textRef, strutsRef))
-
-    val plainScopeMapping = mapOf(
-        "default" to listOf(RootDependencyIndex(4)),
-        "compile" to listOf(RootDependencyIndex(4)),
-        "test" to listOf(RootDependencyIndex(4), RootDependencyIndex(3)),
-        "partial" to listOf(RootDependencyIndex(1))
-    )
-
-    val scopeMapping = if (qualified) {
-        plainScopeMapping.mapKeys { DependencyGraph.qualifyScope(projectId, it.key) }
-    } else {
-        plainScopeMapping
-    }
-
-    return DependencyGraph(dependencies, sortedSetOf(exampleRef, csvRef), scopeMapping)
-}
 
 class ProjectTest : WordSpec({
     "init" should {
@@ -109,34 +66,6 @@ class ProjectTest : WordSpec({
             )
 
             project.scopes.shouldBeEmpty()
-        }
-    }
-
-    "withResolvedScopes" should {
-        "return the same instance if scope dependencies are available" {
-            val project = readAnalyzerResult("maven-expected-output-app.yml")
-
-            val resolvedProject = project.withResolvedScopes(createDependencyGraph())
-
-            resolvedProject should beTheSameInstanceAs(project)
-        }
-
-        "return an instance with scope information extracted from a sub graph of a shared dependency graph" {
-            val project = Project.EMPTY.copy(
-                id = projectId,
-                definitionFilePath = "/some/path",
-                homepageUrl = "https//www.test-project.org",
-                scopeDependencies = null,
-                scopeNames = setOf("partial")
-            )
-
-            val graph = createDependencyGraph(qualified = true)
-
-            val resolvedProject = project.withResolvedScopes(graph)
-
-            resolvedProject.scopeNames should beNull()
-            resolvedProject.scopes shouldHaveSize 1
-            resolvedProject.scopes.find { it.name == "partial" } ?: fail("Could not resolve scope ${"partial"}.")
         }
     }
 })

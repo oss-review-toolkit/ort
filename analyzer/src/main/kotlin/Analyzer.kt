@@ -46,6 +46,7 @@ import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.toYaml
+import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProvider
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
@@ -71,7 +72,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
     @JvmOverloads
     fun findManagedFiles(
         absoluteProjectPath: File,
-        packageManagers: Collection<PackageManagerFactory> = PackageManagerFactory.ENABLED_BY_DEFAULT,
+        packageManagers: Collection<PackageManagerFactory>,
         repositoryConfiguration: RepositoryConfiguration = RepositoryConfiguration()
     ): ManagedFileInfo {
         require(absoluteProjectPath.isAbsolute)
@@ -80,10 +81,13 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
             "Using the following configuration settings:\n${repositoryConfiguration.toYaml()}"
         }
 
-        val distinctPackageManagers = packageManagers.distinct()
+        val distinctPackageManagers = packageManagers.distinct().map {
+            val pluginOptions = config.getPackageManagerConfiguration(it.descriptor.id)?.options.orEmpty()
+            it.create(PluginConfig(pluginOptions))
+        }
 
         // Associate files by the package manager factory that manages them.
-        val factoryFiles = if (distinctPackageManagers.size == 1 && absoluteProjectPath.isFile) {
+        val managedFiles = if (distinctPackageManagers.size == 1 && absoluteProjectPath.isFile) {
             // If only one package manager is activated and the project path is in fact a file, assume that the file is
             // a definition file for that package manager. This is useful to limit analysis to a single project e.g. for
             // debugging purposes.
@@ -94,18 +98,14 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
                 distinctPackageManagers,
                 config.excludes(repositoryConfiguration)
             )
-        }
-
-        // Associate mapped files by the package manager that manages them.
-        val managedFiles = factoryFiles.mapNotNull { (factory, files) ->
-            val manager = factory.create(absoluteProjectPath, config, repositoryConfiguration)
-            val mappedFiles = manager.mapDefinitionFiles(files)
+        }.mapNotNull { (manager, files) ->
+            val mappedFiles = manager.mapDefinitionFiles(absoluteProjectPath, files)
             Pair(manager, mappedFiles).takeIf { mappedFiles.isNotEmpty() }
         }.toMap(mutableMapOf())
 
         // Fail early if multiple managers for the same project type are enabled.
         managedFiles.keys.groupBy { it.projectType }.forEach { (projectType, managers) ->
-            val managerNames = managers.map { it.managerName }
+            val managerNames = managers.map { it.descriptor.displayName }
             requireNotNull(managers.singleOrNull()) {
                 "All of the $managerNames managers are able to manage '$projectType' projects. Please enable only " +
                     "one of them."
@@ -119,9 +119,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
             .all { it.isDirectory && (it in managedDirs || it.name in VCS_DIRECTORIES) }
 
         if (!hasOnlyManagedDirs) {
-            val unmanagedPackageManagerFactory = PackageManagerFactory.ALL["Unmanaged"]
-            distinctPackageManagers.find { it == unmanagedPackageManagerFactory }
-                ?.create(absoluteProjectPath, config, repositoryConfiguration)
+            distinctPackageManagers.find { it.descriptor.id == "Unmanaged" }
                 ?.also { managedFiles[it] = listOf(absoluteProjectPath) }
         }
 
@@ -140,7 +138,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
         val startTime = Instant.now()
 
         // Resolve dependencies per package manager.
-        val analyzerResult = analyzeInParallel(info.managedFiles)
+        val analyzerResult = analyzeInParallel(info)
 
         val workingTree = VersionControlSystem.forDirectory(info.absoluteProjectPath)
         val vcs = workingTree?.getInfo().orEmpty()
@@ -156,7 +154,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
 
         info.managedFiles.keys.forEach { manager ->
             if (manager is CommandLineTool) {
-                toolVersions[manager.managerName] = manager.getVersion()
+                toolVersions[manager.descriptor.id] = manager.getVersion()
             }
         }
 
@@ -165,21 +163,25 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
         return OrtResult(repository = repository, analyzer = run).setPackageCurations(packageCurationProviders)
     }
 
-    private fun analyzeInParallel(managedFiles: Map<PackageManager, List<File>>): AnalyzerResult {
-        logger.info { "Calling before resolution hooks for ${managedFiles.size} manager(s)." }
+    private fun analyzeInParallel(info: ManagedFileInfo): AnalyzerResult {
+        logger.info { "Calling before resolution hooks for ${info.managedFiles.size} manager(s)." }
 
-        managedFiles.forEach { (manager, definitionFiles) ->
-            manager.beforeResolution(definitionFiles)
+        info.managedFiles.forEach { (manager, definitionFiles) ->
+            manager.beforeResolution(info.absoluteProjectPath, definitionFiles, config)
         }
 
         val state = AnalyzerState()
-        val packageManagerDependencies = determinePackageManagerDependencies(managedFiles)
+        val packageManagerDependencies = determinePackageManagerDependencies(info)
+        val excludes = config.excludes(info.repositoryConfiguration)
 
         runBlocking {
-            managedFiles.entries.map { (manager, files) ->
+            info.managedFiles.entries.map { (manager, files) ->
                 PackageManagerRunner(
                     manager = manager,
                     definitionFiles = files,
+                    analysisRoot = info.absoluteProjectPath,
+                    excludes = excludes,
+                    analyzerConfig = config,
                     labels = labels,
                     mustRunAfter = packageManagerDependencies[manager].orEmpty(),
                     finishedPackageManagersState = state.finishedPackageManagersState,
@@ -188,32 +190,31 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
             }.forEach { launch { it.start() } }
 
             state.finishedPackageManagersState.first { finishedPackageManagers ->
-                finishedPackageManagers.containsAll(managedFiles.keys.map { it.managerName })
+                finishedPackageManagers.containsAll(info.managedFiles.keys.map { it.descriptor.id })
             }
         }
 
-        logger.info { "Calling after resolution hooks for ${managedFiles.size} manager(s)." }
+        logger.info { "Calling after resolution hooks for ${info.managedFiles.size} manager(s)." }
 
-        managedFiles.forEach { (manager, definitionFiles) ->
-            manager.afterResolution(definitionFiles)
+        info.managedFiles.forEach { (manager, definitionFiles) ->
+            manager.afterResolution(info.absoluteProjectPath, definitionFiles)
         }
 
-        val excludes = managedFiles.keys.firstOrNull()?.excludes ?: Excludes.EMPTY
         return state.buildResult(excludes)
     }
 
-    private fun determinePackageManagerDependencies(
-        managedFiles: Map<PackageManager, List<File>>
-    ): Map<PackageManager, Set<String>> {
-        val packageManagersWithFiles = managedFiles.keys.associateByTo(sortedMapOf(String.CASE_INSENSITIVE_ORDER)) {
-            it.managerName
-        }
+    private fun determinePackageManagerDependencies(info: ManagedFileInfo): Map<PackageManager, Set<String>> {
+        val packageManagersWithFiles =
+            info.managedFiles.keys.associateByTo(sortedMapOf(String.CASE_INSENSITIVE_ORDER)) {
+                it.descriptor.id
+            }
 
         val result = mutableMapOf<PackageManager, MutableSet<String>>()
 
-        managedFiles.keys.forEach { packageManager ->
-            val dependencies = packageManager.findPackageManagerDependencies(managedFiles)
-            val mustRunAfterConfig = config.getPackageManagerConfiguration(packageManager.managerName)?.mustRunAfter
+        info.managedFiles.keys.forEach { packageManager ->
+            val dependencies =
+                packageManager.findPackageManagerDependencies(info.absoluteProjectPath, info.managedFiles, config)
+            val mustRunAfterConfig = config.getPackageManagerConfiguration(packageManager.descriptor.id)?.mustRunAfter
 
             // Configured mustRunAfter dependencies override programmatic mustRunAfter dependencies.
             val mustRunAfter = mustRunAfterConfig?.toSet() ?: dependencies.mustRunAfter
@@ -223,8 +224,8 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
 
                 if (managerForName == null) {
                     logger.debug {
-                        "Ignoring that ${packageManager.managerName} must run after $name, because there are no " +
-                            "definition files for $name."
+                        "Ignoring that ${packageManager.descriptor.displayName} must run after $name, because there " +
+                            "are no definition files for $name."
                     }
                 } else {
                     result.getOrPut(packageManager) { mutableSetOf() } += name
@@ -239,11 +240,11 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
 
                 if (managerForName == null) {
                     logger.debug {
-                        "Ignoring that ${packageManager.managerName} must run before $name, because there are no " +
-                            "definition files for $name."
+                        "Ignoring that ${packageManager.descriptor.displayName} must run before $name, because there " +
+                            "are no definition files for $name."
                     }
                 } else {
-                    result.getOrPut(managerForName) { mutableSetOf() } += packageManager.managerName
+                    result.getOrPut(managerForName) { mutableSetOf() } += packageManager.descriptor.id
                 }
             }
         }
@@ -265,10 +266,10 @@ private class AnalyzerState {
             addMutex.withLock {
                 result.projectResults.values.flatten().forEach { builder.addResult(it) }
                 result.dependencyGraph?.let {
-                    builder.addDependencyGraph(manager.managerName, it).addPackages(result.sharedPackages)
+                    builder.addDependencyGraph(manager.descriptor.id, it).addPackages(result.sharedPackages)
                 }
 
-                _finishedPackageManagersState.value = (_finishedPackageManagersState.value + manager.managerName)
+                _finishedPackageManagersState.value = (_finishedPackageManagersState.value + manager.descriptor.id)
                     .toSortedSet(String.CASE_INSENSITIVE_ORDER)
             }
         }
@@ -290,6 +291,21 @@ private class PackageManagerRunner(
      * The list of definition files to analyze.
      */
     val definitionFiles: List<File>,
+
+    /**
+     * The root directory of the analysis.
+     */
+    val analysisRoot: File,
+
+    /**
+     * The [Excludes] to apply.
+     */
+    val excludes: Excludes,
+
+    /**
+     * The [AnalyzerConfiguration] to use.
+     */
+    val analyzerConfig: AnalyzerConfiguration,
 
     /**
      * The labels passed to ORT.
@@ -322,8 +338,8 @@ private class PackageManagerRunner(
 
                 if (remaining.isNotEmpty()) {
                     logger.info {
-                        "${manager.managerName} is waiting for the following package managers to complete: " +
-                            remaining.joinToString(postfix = ".")
+                        "${manager.descriptor.displayName} is waiting for the following package managers to " +
+                            "complete: ${remaining.joinToString(postfix = ".")}"
                     }
                 }
 
@@ -335,12 +351,12 @@ private class PackageManagerRunner(
     }
 
     private suspend fun run() {
-        logger.info { "Starting ${manager.managerName} analysis." }
+        logger.info { "Starting ${manager.descriptor.displayName} analysis." }
 
         withContext(Dispatchers.IO.limitedParallelism(20)) {
-            val result = manager.resolveDependencies(definitionFiles, labels)
+            val result = manager.resolveDependencies(analysisRoot, definitionFiles, excludes, analyzerConfig, labels)
 
-            logger.info { "Finished ${manager.managerName} analysis." }
+            logger.info { "Finished ${manager.descriptor.displayName} analysis." }
 
             onResult(result)
         }

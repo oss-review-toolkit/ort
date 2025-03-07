@@ -28,8 +28,6 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
-import org.ossreviewtoolkit.model.config.PluginConfiguration
-import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.scanner.LocalPathScannerWrapper
@@ -62,22 +60,6 @@ object ScanCodeCommand : CommandLineTool {
 
 /**
  * A wrapper for [ScanCode](https://github.com/aboutcode-org/scancode-toolkit).
- *
- * This scanner can be configured in [ScannerConfiguration.config] using the key "ScanCode". It offers the following
- * configuration [options][PluginConfiguration.options]:
- *
- * * **"commandLine":** Command line options that modify the result. These are added to the [ScannerDetails] when
- *   looking up results from a [ScanStorage]. Defaults to [ScanCodeConfig.DEFAULT_COMMAND_LINE_OPTIONS].
- * * **"commandLineNonConfig":** Command line options that do not modify the result and should therefore not be
- *   considered in [configuration], like "--processes". Defaults to
- *   [ScanCodeConfig.DEFAULT_COMMAND_LINE_NON_CONFIG_OPTIONS].
- * * **preferFileLicense**: A flag to indicate whether the "high-level" per-file license reported by ScanCode starting
- *   with version 32 should be used instead of the individual "low-level" per-line license findings. The per-file
- *   license may be different from the conjunction of per-line licenses and is supposed to contain fewer
- *   false-positives. However, no exact line numbers can be associated to the per-file license anymore. If enabled, the
- *   start line of the per-file license finding is set to the minimum of all start lines for per-line findings in that
- *   file, the end line is set to the maximum of all end lines for per-line findings in that file, and the score is set
- *   to the arithmetic average of the scores of all per-line findings in that file.
  */
 @OrtPlugin(
     displayName = "ScanCode",

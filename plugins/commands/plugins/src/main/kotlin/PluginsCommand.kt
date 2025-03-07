@@ -26,6 +26,7 @@ import com.github.ajalt.mordant.widgets.HorizontalRule
 import com.github.ajalt.mordant.widgets.UnorderedList
 
 import org.ossreviewtoolkit.advisor.AdviceProviderFactory
+import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.downloader.VersionControlSystemFactory
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
@@ -125,8 +126,8 @@ private enum class PluginType(
     ),
     PACKAGE_MANAGERS(
         "package-managers",
-        "Package Managers (TO BE IMPLEMENTED)",
-        lazy { emptyList() }
+        "Package Managers",
+        lazy { PackageManagerFactory.ALL.map { it.value.descriptor } }
     ),
     REPORTERS(
         "reporters",

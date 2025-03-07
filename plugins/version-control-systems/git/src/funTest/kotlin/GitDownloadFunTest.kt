@@ -44,7 +44,7 @@ private const val REPO_REV_FOR_VERSION = "371b23f37da064687518bace268d607a92ecbe
 private const val REPO_PATH_FOR_VERSION = "specs"
 
 class GitDownloadFunTest : StringSpec() {
-    private val git = GitFactory().create(PluginConfig())
+    private val git = GitFactory().create(PluginConfig.EMPTY)
     private lateinit var outputDir: File
 
     override suspend fun beforeTest(testCase: TestCase) {

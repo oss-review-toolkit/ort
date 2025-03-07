@@ -41,7 +41,7 @@ import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
-import org.ossreviewtoolkit.utils.common.Options
+import org.ossreviewtoolkit.plugins.api.Plugin
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.common.collapseWhitespace
 import org.ossreviewtoolkit.utils.common.collectMessages
@@ -50,21 +50,13 @@ import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
-typealias ManagedProjectFiles = Map<PackageManagerFactory, List<File>>
+typealias ManagedProjectFiles = Map<PackageManager, List<File>>
 typealias ProjectResults = Map<File, List<ProjectAnalyzerResult>>
 
 /**
- * A class to represent a package manager with the given [managerName] that handles projects of the given [projectType].
- * The analysis of any projects and their dependencies starts in the [analysisRoot] directory using the given
- * [analyzerConfig]. Any distribution-specific configuration stored in the repository is passed as [repoConfig].
+ * A class to represent a package manager that handles projects of the given [projectType].
  */
-abstract class PackageManager(
-    val managerName: String,
-    val projectType: String,
-    val analysisRoot: File,
-    val analyzerConfig: AnalyzerConfiguration,
-    val repoConfig: RepositoryConfiguration
-) {
+abstract class PackageManager(val projectType: String) : Plugin {
     companion object {
         private val PACKAGE_MANAGER_DIRECTORIES = setOf(
             // Ignore intermediate build system directories.
@@ -91,7 +83,7 @@ abstract class PackageManager(
          */
         fun findManagedFiles(
             directory: File,
-            packageManagers: Collection<PackageManagerFactory> = PackageManagerFactory.ENABLED_BY_DEFAULT,
+            packageManagers: Collection<PackageManager>,
             excludes: Excludes = Excludes.EMPTY
         ): ManagedProjectFiles {
             require(directory.isDirectory) {
@@ -100,7 +92,7 @@ abstract class PackageManager(
 
             logger.debug { "Searching for managed files using the following excludes: $excludes" }
 
-            val result = mutableMapOf<PackageManagerFactory, MutableList<File>>()
+            val result = mutableMapOf<PackageManager, MutableList<File>>()
             val rootPath = directory.toPath()
             val distinctPackageManagers = packageManagers.distinct()
 
@@ -224,20 +216,21 @@ abstract class PackageManager(
     }
 
     /**
-     * The [Options] from the [PackageManagerConfiguration] for this [package manager][managerName].
+     * The prioritized list of glob patterns of definition files supported by this package manager. Only all matches of
+     * the first glob having any matches are considered.
      */
-    protected val options: Options = analyzerConfig.getPackageManagerConfiguration(managerName)?.options.orEmpty()
+    abstract val globsForDefinitionFiles: List<String>
 
-    /**
-     * The [Excludes] to take into account during analysis. The [Excludes] from the [RepositoryConfiguration] are
-     * taken into account only if this is enabled in the [AnalyzerConfiguration].
-     */
-    val excludes by lazy { analyzerConfig.excludes(repoConfig) }
+    val matchersForDefinitionFiles by lazy {
+        globsForDefinitionFiles.map {
+            FileSystems.getDefault().getPathMatcher("glob:**/$it")
+        }
+    }
 
     /**
      * Optional mapping of found [definitionFiles] before dependency resolution.
      */
-    open fun mapDefinitionFiles(definitionFiles: List<File>): List<File> = definitionFiles
+    open fun mapDefinitionFiles(analysisRoot: File, definitionFiles: List<File>): List<File> = definitionFiles
 
     /**
      * Return if this package manager must run before or after certain other package managers. This can manually be
@@ -245,7 +238,9 @@ abstract class PackageManager(
      * determine such dependencies automatically.
      */
     open fun findPackageManagerDependencies(
-        managedFiles: Map<PackageManager, List<File>>
+        analysisRoot: File,
+        managedFiles: Map<PackageManager, List<File>>,
+        analyzerConfig: AnalyzerConfiguration
     ): PackageManagerDependencyResult =
         PackageManagerDependencyResult(mustRunBefore = emptySet(), mustRunAfter = emptySet())
 
@@ -254,14 +249,14 @@ abstract class PackageManager(
      * before [resolveDependencies] is called for any enabled package manager. It does not respect any "mustRunAfter"
      * configuration.
      */
-    open fun beforeResolution(definitionFiles: List<File>) {}
+    open fun beforeResolution(analysisRoot: File, definitionFiles: List<File>, analyzerConfig: AnalyzerConfiguration) {}
 
     /**
      * Optional step to run after dependency resolution, like cleaning up temporary files. This function is called after
      * [resolveDependencies] has finished for all enabled package managers. It does not respect any "mustRunAfter"
      * configuration.
      */
-    open fun afterResolution(definitionFiles: List<File>) {}
+    open fun afterResolution(analysisRoot: File, definitionFiles: List<File>) {}
 
     /**
      * Generate the final result to be returned by this package manager. This function is called at the very end of the
@@ -278,7 +273,13 @@ abstract class PackageManager(
      * to further stages. They are not interpreted by ORT, but can be used to configure behavior of custom package
      * manager implementations.
      */
-    open fun resolveDependencies(definitionFiles: List<File>, labels: Map<String, String>): PackageManagerResult {
+    open fun resolveDependencies(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        excludes: Excludes,
+        analyzerConfig: AnalyzerConfiguration,
+        labels: Map<String, String>
+    ): PackageManagerResult {
         definitionFiles.forEach { definitionFile ->
             requireNotNull(definitionFile.relativeToOrNull(analysisRoot)) {
                 "'$definitionFile' must be an absolute path below '$analysisRoot'."
@@ -290,11 +291,12 @@ abstract class PackageManager(
         definitionFiles.forEach { definitionFile ->
             val relativePath = definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath.ifEmpty { "." }
 
-            logger.info { "Using $managerName to resolve dependencies for path '$relativePath'..." }
+            logger.info { "Using ${descriptor.displayName} to resolve dependencies for path '$relativePath'..." }
 
             val duration = measureTime {
                 runCatching {
-                    result[definitionFile] = resolveDependencies(definitionFile, labels)
+                    result[definitionFile] =
+                        resolveDependencies(analysisRoot, definitionFile, excludes, analyzerConfig, labels)
                 }.onFailure {
                     it.showStackTrace()
 
@@ -310,9 +312,9 @@ abstract class PackageManager(
 
                     val issues = listOf(
                         createAndLogIssue(
-                            source = managerName,
-                            message = "$managerName failed to resolve dependencies for path '$relativePath': " +
-                                it.collectMessages()
+                            source = descriptor.displayName,
+                            message = "${descriptor.displayName} failed to resolve dependencies for path " +
+                                "'$relativePath': ${it.collectMessages()}"
                         )
                     )
 
@@ -320,7 +322,7 @@ abstract class PackageManager(
                 }
             }
 
-            logger.info { "$managerName resolved dependencies for path '$relativePath' in $duration." }
+            logger.info { "${descriptor.displayName} resolved dependencies for path '$relativePath' in $duration." }
         }
 
         return createPackageManagerResult(result).addDependencyGraphIfMissing()
@@ -328,14 +330,25 @@ abstract class PackageManager(
 
     /**
      * Resolve dependencies for a single absolute [definitionFile] and return a list of [ProjectAnalyzerResult]s, with
-     * one result for each project found in the definition file. The given [labels] are parameters to the overall
-     * analysis of the project and to further stages. They are not interpreted by ORT, but can be used to configure
-     * behavior of custom package manager implementations.
+     * one result for each project found in the definition file. The [excludes] define which scopes should be excluded
+     * from analysis. The given [labels] are parameters to the overall analysis of the project and to further stages.
+     * They are not interpreted by ORT, but can be used to configure behavior of custom package manager implementations.
      */
-    abstract fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult>
+    abstract fun resolveDependencies(
+        analysisRoot: File,
+        definitionFile: File,
+        excludes: Excludes,
+        analyzerConfig: AnalyzerConfiguration,
+        labels: Map<String, String>
+    ): List<ProjectAnalyzerResult>
 
-    protected fun requireLockfile(workingDir: File, condition: () -> Boolean) {
-        require(analyzerConfig.allowDynamicVersions || condition()) {
+    protected fun requireLockfile(
+        analysisRoot: File,
+        workingDir: File,
+        allowDynamicVersions: Boolean,
+        condition: () -> Boolean
+    ) {
+        require(allowDynamicVersions || condition()) {
             val relativePathString = workingDir.relativeTo(analysisRoot).invariantSeparatorsPath.ifEmpty { "." }
 
             "No lockfile found in '$relativePathString'. This potentially results in unstable versions of " +

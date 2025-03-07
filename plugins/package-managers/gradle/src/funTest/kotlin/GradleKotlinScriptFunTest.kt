@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.plugins.packagemanagers.gradle
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.should
 
-import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
@@ -33,7 +32,7 @@ class GradleKotlinScriptFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/multi-kotlin-project/build.gradle.kts")
         val expectedResultFile = getAssetFile("projects/synthetic/multi-kotlin-project-expected-output-root.yml")
 
-        val result = create("Gradle", "javaVersion" to "17")
+        val result = GradleFactory.create(javaVersion = "17")
             .resolveSingleProject(definitionFile, resolveScopes = true)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
@@ -43,7 +42,7 @@ class GradleKotlinScriptFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/multi-kotlin-project/core/build.gradle.kts")
         val expectedResultFile = getAssetFile("projects/synthetic/multi-kotlin-project-expected-output-core.yml")
 
-        val result = create("Gradle", "javaVersion" to "17")
+        val result = GradleFactory.create(javaVersion = "17")
             .resolveSingleProject(definitionFile, resolveScopes = true)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
@@ -53,7 +52,7 @@ class GradleKotlinScriptFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/multi-kotlin-project/cli/build.gradle.kts")
         val expectedResultFile = getAssetFile("projects/synthetic/multi-kotlin-project-expected-output-cli.yml")
 
-        val result = create("Gradle", "javaVersion" to "17")
+        val result = GradleFactory.create(javaVersion = "17")
             .resolveSingleProject(definitionFile, resolveScopes = true)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)

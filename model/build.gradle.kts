@@ -18,12 +18,16 @@
  */
 
 plugins {
+    // Apply core plugins.
+    `java-test-fixtures`
+
     // Apply precompiled plugins.
     id("ort-library-conventions")
 }
 
 dependencies {
     api(projects.clients.clearlyDefinedClient)
+    api(projects.plugins.api)
     api(projects.utils.ortUtils)
     api(projects.utils.spdxUtils)
 
@@ -38,6 +42,8 @@ dependencies {
     implementation(libs.jackson.module.kotlin)
     implementation(libs.postgres)
     implementation(libs.semver4j)
+
+    testFixturesImplementation(projects.utils.testUtils)
 
     testImplementation(libs.jsonSchemaValidator)
     testImplementation(libs.mockk)

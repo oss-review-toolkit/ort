@@ -19,7 +19,7 @@
 
 plugins {
     // Apply precompiled plugins.
-    id("ort-library-conventions")
+    id("ort-plugin-conventions")
 }
 
 dependencies {
@@ -28,6 +28,8 @@ dependencies {
 
     implementation(projects.downloader)
     implementation(projects.utils.ortUtils)
+
+    ksp(projects.analyzer)
 
     funTestImplementation(testFixtures(projects.analyzer))
 }

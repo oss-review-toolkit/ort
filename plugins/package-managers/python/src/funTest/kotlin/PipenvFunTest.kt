@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.plugins.packagemanagers.python
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.should
 
-import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
@@ -34,7 +33,7 @@ class PipenvFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/pipenv/Pipfile.lock")
             val expectedResultFile = getAssetFile("projects/synthetic/pipenv-expected-output.yml")
 
-            val result = create("Pipenv").resolveSingleProject(definitionFile)
+            val result = PipenvFactory.create().resolveSingleProject(definitionFile)
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -45,7 +44,7 @@ class PipenvFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/pipenv-python3/Pipfile.lock")
             val expectedResultFile = getAssetFile("projects/synthetic/pipenv-python3-expected-output.yml")
 
-            val result = create("Pipenv").resolveSingleProject(definitionFile)
+            val result = PipenvFactory.create().resolveSingleProject(definitionFile)
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }

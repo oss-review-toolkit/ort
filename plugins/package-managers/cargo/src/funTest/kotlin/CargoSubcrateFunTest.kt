@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.plugins.packagemanagers.cargo
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.should
 
-import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
@@ -33,7 +32,7 @@ class CargoSubcrateFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/cargo-subcrate/Cargo.toml")
         val expectedResultFile = getAssetFile("projects/synthetic/cargo-subcrate-lib-expected-output.yml")
 
-        val result = create("Cargo").resolveSingleProject(definitionFile)
+        val result = CargoFactory.create().resolveSingleProject(definitionFile)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -42,7 +41,7 @@ class CargoSubcrateFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/cargo-subcrate/integration/Cargo.toml")
         val expectedResultFile = getAssetFile("projects/synthetic/cargo-subcrate-integration-expected-output.yml")
 
-        val result = create("Cargo").resolveSingleProject(definitionFile)
+        val result = CargoFactory.create().resolveSingleProject(definitionFile)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -51,7 +50,7 @@ class CargoSubcrateFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/cargo-subcrate/client/Cargo.toml")
         val expectedResultFile = getAssetFile("projects/synthetic/cargo-subcrate-client-expected-output.yml")
 
-        val result = create("Cargo").resolveSingleProject(definitionFile)
+        val result = CargoFactory.create().resolveSingleProject(definitionFile)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }

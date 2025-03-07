@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.plugins.api.PluginConfig
 
 class GitWorkingTreeFunTest : StringSpec({
-    val git = GitFactory().create(PluginConfig())
+    val git = GitFactory().create(PluginConfig.EMPTY)
     val repoDir = tempdir()
     val vcsInfo = VcsInfo(
         type = VcsType.GIT,

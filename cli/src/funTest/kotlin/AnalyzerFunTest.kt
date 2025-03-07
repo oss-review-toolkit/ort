@@ -27,7 +27,6 @@ import io.kotest.matchers.should
 import java.util.concurrent.TimeUnit
 
 import org.ossreviewtoolkit.analyzer.Analyzer
-import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.analyzer.analyze
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
@@ -37,6 +36,7 @@ import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.plugins.api.PluginConfig
+import org.ossreviewtoolkit.plugins.packagemanagers.gradle.GradleFactory
 import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.GitRepoFactory
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
@@ -54,7 +54,7 @@ class AnalyzerFunTest : WordSpec({
                 )
             )
             val outputDir = tempdir().also {
-                GitRepoFactory().create(PluginConfig()).download(pkg, it)
+                GitRepoFactory().create(PluginConfig.EMPTY).download(pkg, it)
             }
 
             val result = analyze(outputDir, packageManagers = emptySet()).toYaml()
@@ -73,8 +73,7 @@ class AnalyzerFunTest : WordSpec({
             val repoConfig = RepositoryConfiguration()
 
             val analyzer = Analyzer(analyzerConfig)
-            val gradleFactory = PackageManagerFactory.ALL.getValue("Gradle")
-            val gradle = gradleFactory.create(inputDir, analyzerConfig, repoConfig)
+            val gradle = GradleFactory.create()
             val info = Analyzer.ManagedFileInfo(
                 inputDir,
                 mapOf(gradle to listOf(gradleDefinitionFile)),

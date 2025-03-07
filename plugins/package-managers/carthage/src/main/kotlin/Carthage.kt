@@ -24,8 +24,8 @@ import java.net.URI
 
 import kotlinx.serialization.json.Json
 
-import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
@@ -37,8 +37,10 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.orEmpty
+import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.unquote
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
@@ -46,29 +48,27 @@ import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 /**
  * The [Carthage](https://github.com/Carthage/Carthage) package manager for Objective-C / Swift.
  */
-class Carthage(
-    name: String,
-    analysisRoot: File,
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : PackageManager(name, "Carthage", analysisRoot, analyzerConfig, repoConfig) {
-    class Factory : AbstractPackageManagerFactory<Carthage>("Carthage") {
-        // TODO: Add support for the Cartfile.
-        //       This would require to resolve the actual dependency versions as a Cartfile supports dynamic versions.
-        override val globsForDefinitionFiles = listOf("Cartfile.resolved")
+@OrtPlugin(
+    displayName = "Carthage",
+    description = "The Carthage package manager for Objective-C / Swift.",
+    factory = PackageManagerFactory::class
+)
+class Carthage(override val descriptor: PluginDescriptor = CarthageFactory.descriptor) : PackageManager("Carthage") {
+    // TODO: Add support for the Cartfile.
+    //       This would require to resolve the actual dependency versions as a Cartfile supports dynamic versions.
+    override val globsForDefinitionFiles = listOf("Cartfile.resolved")
 
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = Carthage(type, analysisRoot, analyzerConfig, repoConfig)
-    }
-
-    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(
+        analysisRoot: File,
+        definitionFile: File,
+        excludes: Excludes,
+        analyzerConfig: AnalyzerConfiguration,
+        labels: Map<String, String>
+    ): List<ProjectAnalyzerResult> {
         // Transitive dependencies are only supported if the dependency itself uses Carthage.
         // See: https://github.com/Carthage/Carthage#nested-dependencies
         val workingDir = definitionFile.parentFile
-        val projectInfo = getProjectInfoFromVcs(definitionFile)
+        val projectInfo = getProjectInfoFromVcs(analysisRoot, definitionFile)
 
         return listOf(
             ProjectAnalyzerResult(
@@ -95,7 +95,7 @@ class Carthage(
     /**
      * As the "Carthage.resolved" file does not provide any project information, trying to retrieve some from VCS.
      */
-    private fun getProjectInfoFromVcs(definitionFile: File): ProjectInfo {
+    private fun getProjectInfoFromVcs(analysisRoot: File, definitionFile: File): ProjectInfo {
         val workingTree = VersionControlSystem.forDirectory(definitionFile.parentFile)
         val vcsInfo = workingTree?.getInfo().orEmpty()
         val normalizedVcsUrl = normalizeVcsUrl(vcsInfo.url)

@@ -42,16 +42,13 @@ import io.mockk.spyk
 import io.mockk.verify
 
 import java.io.File
-import java.util.jar.Attributes
-import java.util.jar.JarEntry
-import java.util.jar.JarOutputStream
 import java.util.jar.Manifest
 
 import org.apache.maven.cli.MavenCli
 import org.apache.maven.execution.MavenSession
 import org.apache.maven.project.MavenProject
 
-import org.eclipse.aether.artifact.Artifact
+import org.eclipse.aether.artifact.DefaultArtifact
 import org.eclipse.aether.graph.DependencyNode
 
 import org.ossreviewtoolkit.model.Identifier
@@ -64,10 +61,11 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.DependencyTreeMojoNode
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.JSON
+import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.LocalRepositoryHelper
+import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.P2ArtifactTracker
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.PackageResolverFun
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.identifier
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
@@ -98,8 +96,8 @@ class TychoTest : WordSpec({
                 tychoSubModule
             )
 
-            val tycho = Tycho("Tycho", tempdir(), mockk(relaxed = true), mockk(relaxed = true))
-            val mappedDefinitionFiles = tycho.mapDefinitionFiles(definitionFiles)
+            val tycho = Tycho()
+            val mappedDefinitionFiles = tycho.mapDefinitionFiles(tempdir(), definitionFiles)
 
             mappedDefinitionFiles shouldContainExactlyInAnyOrder listOf(tychoDefinitionFile1, tychoDefinitionFile2)
         }
@@ -112,7 +110,7 @@ class TychoTest : WordSpec({
             val subProject = createMavenProject("sub")
             val projectsList = listOf(rootProject, subProject)
 
-            val tycho = spyk(Tycho("Tycho", tempdir(), mockk(relaxed = true), mockk(relaxed = true)))
+            val tycho = spyk(Tycho())
             injectCliMock(tycho, projectsList.toJson(), projectsList)
 
             val pkg1 = mockk<Package>(relaxed = true)
@@ -125,9 +123,15 @@ class TychoTest : WordSpec({
                 every { packages() } returns setOf(pkg1, pkg2)
             }
 
-            every { tycho.createGraphBuilder(any(), any()) } returns graphBuilder
+            every { tycho.createGraphBuilder(any(), any(), any(), any()) } returns graphBuilder
 
-            val results = tycho.resolveDependencies(definitionFile, emptyMap())
+            val results = tycho.resolveDependencies(
+                tempdir(),
+                definitionFile,
+                Excludes.EMPTY,
+                AnalyzerConfiguration(),
+                emptyMap()
+            )
 
             val (rootResults, subResults) = results.partition { it.project.id.name == "root" }
 
@@ -149,11 +153,17 @@ class TychoTest : WordSpec({
 
             val buildOutput = listOf(subProject2, rootProject, subProject1).toJson()
 
-            val tycho = spyk(Tycho("Tycho", tempdir(), mockk(relaxed = true), mockk(relaxed = true)))
+            val tycho = spyk(Tycho())
             injectCliMock(tycho, buildOutput, listOf(subProject1, subProject2))
 
             val exception = shouldThrow<TychoBuildException> {
-                tycho.resolveDependencies(definitionFile, emptyMap())
+                tycho.resolveDependencies(
+                    tempdir(),
+                    definitionFile,
+                    Excludes.EMPTY,
+                    AnalyzerConfiguration(),
+                    emptyMap()
+                )
             }
 
             exception.message shouldContain "Tycho root project could not be built."
@@ -165,10 +175,16 @@ class TychoTest : WordSpec({
             val subProject = createMavenProject("sub")
             val projectsList = listOf(rootProject, subProject)
 
-            val tycho = spyk(Tycho("Tycho", tempdir(), mockk(relaxed = true), mockk(relaxed = true)))
+            val tycho = spyk(Tycho())
             injectCliMock(tycho, projectsList.toJson(), projectsList, exitCode = 1)
 
-            val results = tycho.resolveDependencies(definitionFile, emptyMap())
+            val results = tycho.resolveDependencies(
+                tempdir(),
+                definitionFile,
+                Excludes.EMPTY,
+                AnalyzerConfiguration(),
+                emptyMap()
+            )
 
             val rootResults = results.single { it.project.id.name == "root" }
             with(rootResults.issues.single()) {
@@ -186,10 +202,16 @@ class TychoTest : WordSpec({
             val subProject3 = createMavenProject("sub3")
             val projectsList = listOf(rootProject, subProject1, subProject2, subProject3)
 
-            val tycho = spyk(Tycho("Tycho", tempdir(), mockk(relaxed = true), mockk(relaxed = true)))
+            val tycho = spyk(Tycho())
             injectCliMock(tycho, projectsList.take(2).toJson(), projectsList, exitCode = 1)
 
-            val results = tycho.resolveDependencies(definitionFile, emptyMap())
+            val results = tycho.resolveDependencies(
+                tempdir(),
+                definitionFile,
+                Excludes.EMPTY,
+                AnalyzerConfiguration(),
+                emptyMap()
+            )
 
             val rootResults = results.single { it.project.id.name == "root" }
             rootResults.issues.forAll { issue ->
@@ -226,12 +248,11 @@ class TychoTest : WordSpec({
                 )
             )
             val analyzerConfig = AnalyzerConfiguration(skipExcluded = true)
-            val repositoryConfig = RepositoryConfiguration(excludes = excludes)
 
-            val tycho = spyk(Tycho("Tycho", analysisRoot, analyzerConfig, repositoryConfig))
+            val tycho = spyk(Tycho())
             val cli = injectCliMock(tycho, listOf(rootProject).toJson(), listOf(rootProject))
 
-            tycho.resolveDependencies(tychoRoot.pom, emptyMap())
+            tycho.resolveDependencies(analysisRoot, tychoRoot.pom, excludes, analyzerConfig, emptyMap())
 
             val slotArgs = slot<Array<String>>()
             verify {
@@ -259,12 +280,11 @@ class TychoTest : WordSpec({
 
             val excludes = Excludes(paths = listOf(PathExclude("other-root/**", PathExcludeReason.EXAMPLE_OF)))
             val analyzerConfig = AnalyzerConfiguration(skipExcluded = true)
-            val repositoryConfig = RepositoryConfiguration(excludes = excludes)
 
-            val tycho = spyk(Tycho("Tycho", analysisRoot, analyzerConfig, repositoryConfig))
+            val tycho = spyk(Tycho())
             val cli = injectCliMock(tycho, listOf(rootProject).toJson(), listOf(rootProject))
 
-            tycho.resolveDependencies(tychoRoot.pom, emptyMap())
+            tycho.resolveDependencies(analysisRoot, tychoRoot.pom, excludes, analyzerConfig, emptyMap())
 
             val slotArgs = slot<Array<String>>()
             verify {
@@ -286,12 +306,11 @@ class TychoTest : WordSpec({
                 paths = listOf(PathExclude("tycho-root/tycho-excluded-sub1", PathExcludeReason.EXAMPLE_OF))
             )
             val analyzerConfig = AnalyzerConfiguration()
-            val repositoryConfig = RepositoryConfiguration(excludes = excludes)
 
-            val tycho = spyk(Tycho("Tycho", analysisRoot, analyzerConfig, repositoryConfig))
+            val tycho = spyk(Tycho())
             val cli = injectCliMock(tycho, listOf(rootProject).toJson(), listOf(rootProject))
 
-            tycho.resolveDependencies(tychoRoot.pom, emptyMap())
+            tycho.resolveDependencies(analysisRoot, tychoRoot.pom, excludes, analyzerConfig, emptyMap())
 
             val slotArgs = slot<Array<String>>()
             verify {
@@ -311,13 +330,15 @@ class TychoTest : WordSpec({
                 pkg
             }
 
-            val resolver = tychoPackageResolverFun(delegate)
+            val resolver = tychoPackageResolverFun(delegate, mockk(), mockk())
 
             resolver(dependency) shouldBe pkg
         }
 
         "throw the original exception if no artifact is available in the local repository" {
-            val resolver = createResolverFunWithLocalRepo { }
+            val resolver = createResolverFunWithRepositoryHelper {
+                every { osgiManifest(any()) } returns null
+            }
 
             shouldThrow<RuntimeException> {
                 resolver(testDependency())
@@ -325,29 +346,8 @@ class TychoTest : WordSpec({
         }
 
         "return a Package with undefined metadata for a jar in the local repository without manifest entries" {
-            val resolver = createResolverFunWithLocalRepo { repo ->
-                repo.createRepositoryFolder().createJar(TEST_ARTIFACT_JAR, emptyMap())
-            }
-
-            val pkg = resolver(testDependency())
-
-            with(pkg) {
-                id shouldBe testArtifactIdentifier
-                description should io.kotest.matchers.string.beEmpty()
-                binaryArtifact shouldBe RemoteArtifact.EMPTY
-                sourceArtifact shouldBe RemoteArtifact.EMPTY
-                vcs shouldBe VcsInfo.EMPTY
-                vcsProcessed shouldBe VcsInfo.EMPTY
-                declaredLicenses should beEmpty()
-                declaredLicensesProcessed.spdxExpression should beNull()
-                concludedLicense should beNull()
-                authors should beEmpty()
-            }
-        }
-
-        "return a Package with undefined metadata for a jar in the local repository without a manifest" {
-            val resolver = createResolverFunWithLocalRepo { repo ->
-                repo.createRepositoryFolder().createJar(TEST_ARTIFACT_JAR, null)
+            val resolver = createResolverFunWithRepositoryHelper {
+                every { osgiManifest(any()) } returns Manifest()
             }
 
             val pkg = resolver(testDependency())
@@ -370,11 +370,12 @@ class TychoTest : WordSpec({
             val bundleProperties = mapOf(
                 "Bundle-Description" to "Package description",
                 "Bundle-License" to "The Apache License",
-                "Bundle-Vendor" to "Package vendor"
+                "Bundle-Vendor" to "Package vendor",
+                "Bundle-DocURL" to "https://example.com/package"
             )
 
-            val resolver = createResolverFunWithLocalRepo { repo ->
-                repo.createRepositoryFolder().createJar(TEST_ARTIFACT_JAR, bundleProperties)
+            val resolver = createResolverFunWithRepositoryHelper {
+                every { osgiManifest(any()) } returns createManifest(bundleProperties)
             }
 
             val pkg = resolver(testDependency())
@@ -393,95 +394,151 @@ class TychoTest : WordSpec({
                 )
                 concludedLicense should beNull()
                 authors shouldContainExactlyInAnyOrder listOf(bundleProperties["Bundle-Vendor"])
+                homepageUrl shouldBe "https://example.com/package"
             }
         }
     }
 
     "createPackageFromManifest()" should {
         "parse a source reference with only a connection" {
-            val manifest = Manifest()
-            manifest.mainAttributes.putValue(
-                "Eclipse-SourceReferences",
-                "git://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git"
+            val manifest = createManifest(
+                mapOf(
+                    "Eclipse-SourceReferences" to "https://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git"
+                )
             )
 
-            val pkg = createPackageFromManifest(testDependency().artifact, manifest)
+            val pkg = createPackageFromManifest(testArtifact, manifest, createTrackerMock())
 
             pkg.vcs shouldBe VcsInfo(
                 type = VcsType.GIT,
-                url = "git://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git",
+                url = "https://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git",
                 revision = ""
             )
             pkg.vcsProcessed shouldBe pkg.vcs
         }
 
         "parse a source reference with a connection and a tag" {
-            val manifest = Manifest()
-            manifest.mainAttributes.putValue(
-                "Eclipse-SourceReferences",
-                "git://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git;tag=v20210901-0700"
+            val manifest = createManifest(
+                mapOf(
+                    "Eclipse-SourceReferences" to
+                        "https://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git;tag=v20210901-0700"
+                )
             )
 
-            val pkg = createPackageFromManifest(testDependency().artifact, manifest)
+            val pkg = createPackageFromManifest(testArtifact, manifest, createTrackerMock())
 
             pkg.vcs shouldBe VcsInfo(
                 type = VcsType.GIT,
-                url = "git://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git",
+                url = "https://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git",
                 revision = "v20210901-0700"
             )
             pkg.vcsProcessed shouldBe pkg.vcs
         }
 
         "parse a source reference with a connection and a tag in quotes" {
-            val manifest = Manifest()
-            manifest.mainAttributes.putValue(
-                "Eclipse-SourceReferences",
-                "git://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git;tag=\"v20210901-0700\""
+            val manifest = createManifest(
+                mapOf(
+                    "Eclipse-SourceReferences" to
+                        "https://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git;tag=\"v20210901-0700\""
+                )
             )
 
-            val pkg = createPackageFromManifest(testDependency().artifact, manifest)
+            val pkg = createPackageFromManifest(testArtifact, manifest, createTrackerMock())
 
             pkg.vcs shouldBe VcsInfo(
                 type = VcsType.GIT,
-                url = "git://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git",
+                url = "https://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git",
                 revision = "v20210901-0700"
             )
             pkg.vcsProcessed shouldBe pkg.vcs
         }
 
-        "handle source references with unexpected fields" {
-            val manifest = Manifest()
-            manifest.mainAttributes.putValue(
-                "Eclipse-SourceReferences",
-                "git://git.eclipse.org/eclipse.platform.debug.git;tag=\"v20210901-0700\";foo;bar"
+        "parse a source reference with a connection and a path" {
+            val manifest = createManifest(
+                mapOf(
+                    "Eclipse-SourceReferences" to
+                        "https://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git;path=\"bundles/debug\""
+                )
             )
 
-            val pkg = createPackageFromManifest(testDependency().artifact, manifest)
+            val pkg = createPackageFromManifest(testArtifact, manifest, createTrackerMock())
 
             pkg.vcs shouldBe VcsInfo(
                 type = VcsType.GIT,
-                url = "git://git.eclipse.org/eclipse.platform.debug.git",
+                url = "https://git.eclipse.org/gitroot/platform/eclipse.platform.debug.git",
+                revision = "",
+                path = "bundles/debug"
+            )
+            pkg.vcsProcessed shouldBe pkg.vcs
+        }
+
+        "handle source references with unexpected fields" {
+            val manifest = createManifest(
+                mapOf(
+                    "Eclipse-SourceReferences" to
+                        "https://git.eclipse.org/eclipse.platform.debug.git;tag=\"v20210901-0700\";foo=bar"
+                )
+            )
+
+            val pkg = createPackageFromManifest(testArtifact, manifest, createTrackerMock())
+
+            pkg.vcs shouldBe VcsInfo(
+                type = VcsType.GIT,
+                url = "https://git.eclipse.org/eclipse.platform.debug.git",
                 revision = "v20210901-0700"
             )
             pkg.vcsProcessed shouldBe pkg.vcs
         }
 
         "handle multiple source references" {
-            val manifest = Manifest()
-            manifest.mainAttributes.putValue(
-                "Eclipse-SourceReferences",
-                "git://git.eclipse.org/eclipse.platform.debug1.git," +
-                    "git://git.eclipse.org/eclipse.platform.debug2.git;tag=\"v20210901-0700\""
+            val manifest = createManifest(
+                mapOf(
+                    "Eclipse-SourceReferences" to "https://git.eclipse.org/eclipse.platform.debug1.git," +
+                        "git://git.eclipse.org/eclipse.platform.debug2.git;tag=\"v20210901-0700\""
+                )
             )
 
-            val pkg = createPackageFromManifest(testDependency().artifact, manifest)
+            val pkg = createPackageFromManifest(testArtifact, manifest, createTrackerMock())
 
             pkg.vcs shouldBe VcsInfo(
                 type = VcsType.GIT,
-                url = "git://git.eclipse.org/eclipse.platform.debug1.git",
+                url = "https://git.eclipse.org/eclipse.platform.debug1.git",
                 revision = ""
             )
             pkg.vcsProcessed shouldBe pkg.vcs
+        }
+
+        "process package VCS information" {
+            val manifest = createManifest(
+                mapOf("Bundle-DocURL" to "https://example.com/package.git")
+            )
+
+            val pkg = createPackageFromManifest(testArtifact, manifest, createTrackerMock())
+
+            pkg.vcs shouldBe VcsInfo.EMPTY
+            pkg.vcsProcessed shouldBe VcsInfo(
+                type = VcsType.GIT,
+                url = "https://example.com/package.git",
+                revision = ""
+            )
+        }
+
+        "obtain the binary artifact from the tracker" {
+            val binaryArtifact = RemoteArtifact.EMPTY.copy(url = "https://example.com/binary")
+            val tracker = createTrackerMock(binaryArtifact = binaryArtifact)
+
+            val pkg = createPackageFromManifest(testArtifact, Manifest(), tracker)
+
+            pkg.binaryArtifact shouldBe binaryArtifact
+        }
+
+        "obtain the source artifact from the tracker" {
+            val sourceArtifact = RemoteArtifact.EMPTY.copy(url = "https://example.com/source")
+            val tracker = createTrackerMock(sourceArtifact = sourceArtifact)
+
+            val pkg = createPackageFromManifest(testArtifact, Manifest(), tracker)
+
+            pkg.sourceArtifact shouldBe sourceArtifact
         }
     }
 })
@@ -494,9 +551,6 @@ private const val TEST_ARTIFACT_ID = "org.ossreviewtoolkit.test.bundle"
 
 /** The version number of the test dependency. */
 private const val TEST_VERSION = "50.1.2"
-
-/** The file name of the jar for the test artifact in the local repository. */
-private const val TEST_ARTIFACT_JAR = "$TEST_ARTIFACT_ID-$TEST_VERSION"
 
 /** The expected package identifier generated for the test artifact. */
 private val testArtifactIdentifier = Identifier("Maven", TEST_GROUP_ID, TEST_ARTIFACT_ID, TEST_VERSION)
@@ -552,7 +606,7 @@ private fun injectCliMock(
         every { projects } returns projectsList
     }
 
-    every { tycho.createMavenCli(any()) } answers {
+    every { tycho.createMavenCli(any(), any()) } answers {
         val collector = firstArg<TychoProjectsCollector>()
         collector.afterSessionEnd(session)
         cli
@@ -577,65 +631,53 @@ private fun File.createSubModule(name: String): File =
         pom.also { it.writeText("pom-$name") }
     }
 
+/** The test artifact used by many tests. */
+private val testArtifact = DefaultArtifact(TEST_GROUP_ID, TEST_ARTIFACT_ID, "jar", TEST_VERSION)
+
 /**
  * Return a mock [DependencyNode] that is configured to return the properties of the test artifact.
  */
-private fun testDependency(): DependencyNode {
-    val artifact = mockk<Artifact> {
-        every { groupId } returns TEST_GROUP_ID
-        every { artifactId } returns TEST_ARTIFACT_ID
-        every { version } returns TEST_VERSION
+private fun testDependency(): DependencyNode =
+    mockk {
+        every { artifact } returns testArtifact
     }
-
-    return mockk {
-        every { this@mockk.artifact } returns artifact
-    }
-}
-
-/**
- * Create the folder in which to store data for the test artifact if this [File] was the root of a local repository.
- */
-private fun File.createRepositoryFolder(): File =
-    resolve("p2/osgi/bundle/$TEST_ARTIFACT_ID/$TEST_VERSION").apply { mkdirs() }
-
-/**
- * Generate a jar file with the given [name] and [attributes] for the manifest in this folder. If [attributes] is
- * *null*, the jar will be created without a manifest.
- */
-private fun File.createJar(name: String, attributes: Map<String, String>?): File {
-    val jarFile = resolve("$name.jar")
-    val manifest = attributes?.let { attributesMap ->
-        Manifest().apply {
-            mainAttributes[Attributes.Name.MANIFEST_VERSION] = "1.0"
-            attributesMap.forEach { (key, value) -> mainAttributes.putValue(key, value) }
-        }
-    }
-
-    val jarStream = manifest?.let { JarOutputStream(jarFile.outputStream(), it) }
-        ?: JarOutputStream(jarFile.outputStream())
-
-    jarStream.use { out ->
-        val entry = JarEntry("foo.class")
-        out.putNextEntry(entry)
-        out.write("someTestData".toByteArray())
-        out.closeEntry()
-    }
-
-    return jarFile
-}
 
 /** An exception that is thrown by the delegate resolver function to force the resolving from the local repository. */
 private val resolveException = RuntimeException("Test exception: Could not resolve the test artifact.")
 
 /**
  * Return a [PackageResolverFun] to be tested that is configured with a delegate function that throws a well-defined
- * exception. First create a local repository and invoke the given [block] to populate it accordingly for the
- * current test case.
+ * exception. First create a mock [LocalRepositoryHelper] and invoke the given [block] to prepare it accordingly for
+ * the current test case.
  */
-private fun TestConfiguration.createResolverFunWithLocalRepo(block: (File) -> Unit): PackageResolverFun {
-    val localRepositoryRoot = tempdir()
-    block(localRepositoryRoot)
+private fun createResolverFunWithRepositoryHelper(block: LocalRepositoryHelper.() -> Unit): PackageResolverFun {
+    val helper = mockk<LocalRepositoryHelper>(block = block)
+    val tracker = createTrackerMock()
 
     val delegateResolverFun: PackageResolverFun = { throw resolveException }
-    return tychoPackageResolverFun(delegateResolverFun, localRepositoryRoot)
+    return tychoPackageResolverFun(delegateResolverFun, helper, tracker)
+}
+
+/**
+ * Create a new [Manifest] that contains the given [entries].
+ */
+private fun createManifest(entries: Map<String, String>): Manifest =
+    Manifest().apply {
+        entries.forEach { (key, value) -> mainAttributes.putValue(key, value) }
+    }
+
+/**
+ * Create a mock [P2ArtifactTracker] that is prepared to return the given [binaryArtifact] and [sourceArtifact] when
+ * queried for the test artifact.
+ */
+private fun createTrackerMock(
+    binaryArtifact: RemoteArtifact = RemoteArtifact.EMPTY,
+    sourceArtifact: RemoteArtifact = RemoteArtifact.EMPTY
+): P2ArtifactTracker {
+    val testArtifact = testArtifact
+
+    return mockk {
+        every { getBinaryArtifactFor(testArtifact) } returns binaryArtifact
+        every { getSourceArtifactFor(testArtifact) } returns sourceArtifact
+    }
 }

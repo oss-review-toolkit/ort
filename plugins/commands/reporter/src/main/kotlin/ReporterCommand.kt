@@ -43,7 +43,6 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
-import org.ossreviewtoolkit.model.config.PluginConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.model.config.orEmpty
@@ -57,6 +56,7 @@ import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
+import org.ossreviewtoolkit.plugins.api.orEmpty
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommandFactory
 import org.ossreviewtoolkit.plugins.commands.api.utils.configurationGroup
@@ -277,7 +277,7 @@ class ReporterCommand(descriptor: PluginDescriptor = ReporterCommandFactory.desc
             howToFixTextProvider
         )
 
-        val reportConfigMap = sortedMapOf<String, PluginConfiguration>(String.CASE_INSENSITIVE_ORDER)
+        val reportConfigMap = sortedMapOf<String, PluginConfig>(String.CASE_INSENSITIVE_ORDER)
 
         // Obtain reporter-specific options defined in ORT's configuration.
         ortConfig.reporter.config?.forEach { (reporterName, config) ->
@@ -286,7 +286,7 @@ class ReporterCommand(descriptor: PluginDescriptor = ReporterCommandFactory.desc
 
         // Allow overwriting reporter-specific options via the command line.
         reportOptions.forEach { (reporterName, option) ->
-            val reportSpecificConfig = reportConfigMap.getOrPut(reporterName) { PluginConfiguration.EMPTY }
+            val reportSpecificConfig = reportConfigMap.getOrPut(reporterName) { PluginConfig.EMPTY }
             val updatedConfig = reportSpecificConfig.copy(options = reportSpecificConfig.options + option)
             reportConfigMap[reporterName] = updatedConfig
         }
@@ -300,9 +300,8 @@ class ReporterCommand(descriptor: PluginDescriptor = ReporterCommandFactory.desc
                         echo("Generating '${reporter.descriptor.id}' report(s) in thread '$threadName'...")
 
                         reporter to measureTimedValue {
-                            val options = reportConfigMap[reporter.descriptor.id] ?: PluginConfiguration.EMPTY
-                            reporter.create(PluginConfig(options.options, options.secrets))
-                                .generateReport(input, outputDir)
+                            val pluginConfig = reportConfigMap[reporter.descriptor.id].orEmpty()
+                            reporter.create(pluginConfig).generateReport(input, outputDir)
                         }
                     }
                 }.awaitAll()

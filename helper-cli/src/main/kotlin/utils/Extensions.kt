@@ -64,6 +64,7 @@ import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 import org.ossreviewtoolkit.model.utils.filterByVcsPath
 import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.PackageConfigurationProvider
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.CopyrightStatementsProcessor
@@ -236,8 +237,8 @@ internal fun KnownProvenance?.getSourceCodeOrigin(): SourceCodeOrigin? =
  */
 internal fun OrtResult.getRepositoryPathExcludes(): RepositoryPathExcludes {
     fun isDefinitionsFile(pathExclude: PathExclude) =
-        PackageManagerFactory.ENABLED_BY_DEFAULT.any {
-            it.matchersForDefinitionFiles.any { matcher ->
+        PackageManagerFactory.ALL.values.any {
+            it.create(PluginConfig.EMPTY).matchersForDefinitionFiles.any { matcher ->
                 pathExclude.pattern.endsWith(matcher.toString())
             }
         }

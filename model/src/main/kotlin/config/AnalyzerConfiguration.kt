@@ -38,7 +38,34 @@ data class AnalyzerConfiguration(
      * A list of the case-insensitive names of package managers that are enabled. Disabling a package manager in
      * [disabledPackageManagers] overrides enabling it here.
      */
-    val enabledPackageManagers: List<String>? = null,
+    val enabledPackageManagers: List<String> = listOf(
+        "Bazel",
+        "Bower",
+        "Bundler",
+        "Cargo",
+        "Carthage",
+        "CocoaPods",
+        "Composer",
+        "Conan",
+        "GoMod",
+        "GradleInspector",
+        "Maven",
+        "NPM",
+        "NuGet",
+        "PIP",
+        "Pipenv",
+        "PNPM",
+        "Poetry",
+        "Pub",
+        "SBT",
+        "SpdxDocumentFile",
+        "Stack",
+        "SwiftPM",
+        "Tycho",
+        "Unmanaged",
+        "Yarn",
+        "Yarn2"
+    ),
 
     /**
      * A list of the case-insensitive names of package managers that are disabled. Disabling a package manager in this

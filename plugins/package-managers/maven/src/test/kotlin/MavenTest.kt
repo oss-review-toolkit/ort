@@ -23,8 +23,6 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 
-import io.mockk.mockk
-
 class MavenTest : WordSpec({
     "mapDefinitionFiles()" should {
         "filter out Tycho definition files" {
@@ -50,8 +48,8 @@ class MavenTest : WordSpec({
                 tychoSubModule
             )
 
-            val maven = Maven("Maven", tempdir(), mockk(relaxed = true), mockk(relaxed = true))
-            val mappedDefinitionFiles = maven.mapDefinitionFiles(definitionFiles)
+            val maven = Maven()
+            val mappedDefinitionFiles = maven.mapDefinitionFiles(tempdir(), definitionFiles)
 
             mappedDefinitionFiles shouldContainExactlyInAnyOrder listOf(mavenDefinitionFile, mavenSubModule)
         }

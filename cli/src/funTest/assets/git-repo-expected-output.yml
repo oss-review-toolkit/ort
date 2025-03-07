@@ -56,6 +56,7 @@ analyzer:
     tool_versions: {}
   config:
     allow_dynamic_versions: false
+    enabled_package_managers: []
     skip_excluded: false
   result:
     projects: []

@@ -23,8 +23,8 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.analyzer.collateMultipleProjects
-import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
+import org.ossreviewtoolkit.analyzer.withResolvedScopes
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
@@ -34,7 +34,7 @@ class YarnFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/yarn/project-with-lockfile/package.json")
         val expectedResultFile = getAssetFile("projects/synthetic/yarn/project-with-lockfile-expected-output.yml")
 
-        val result = create("Yarn").resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = YarnFactory.create().resolveSingleProject(definitionFile, resolveScopes = true)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -43,7 +43,7 @@ class YarnFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/yarn/babel/package.json")
         val expectedResultFile = getAssetFile("projects/synthetic/yarn/babel-expected-output.yml")
 
-        val result = create("Yarn").resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = YarnFactory.create().resolveSingleProject(definitionFile, resolveScopes = true)
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -54,7 +54,7 @@ class YarnFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/yarn/workspaces/package.json")
         val expectedResultFile = getAssetFile("projects/synthetic/yarn/workspaces-expected-output.yml")
 
-        val result = create("Yarn").collateMultipleProjects(definitionFile).withResolvedScopes()
+        val result = YarnFactory.create().collateMultipleProjects(definitionFile).withResolvedScopes()
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }

@@ -125,7 +125,7 @@ class OrtMain : CliktCommand(ORT_NAME) {
         }
 
         // Pass an empty PluginConfig here as commands are not configurable.
-        subcommands(OrtCommandFactory.ALL.map { (_, factory) -> factory.create(PluginConfig()) })
+        subcommands(OrtCommandFactory.ALL.map { (_, factory) -> factory.create(PluginConfig.EMPTY) })
 
         versionOption(
             version = env.ortVersion,

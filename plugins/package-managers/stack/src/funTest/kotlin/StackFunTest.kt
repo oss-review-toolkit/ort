@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.plugins.packagemanagers.stack
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.should
 
-import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
@@ -34,7 +33,7 @@ class StackFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/external/quickcheck-state-machine/stack.yaml")
             val expectedResultFile = getAssetFile("projects/external/quickcheck-state-machine-expected-output.yml")
 
-            val result = create("Stack").resolveSingleProject(definitionFile)
+            val result = StackFactory.create().resolveSingleProject(definitionFile)
 
             result.toYaml() should matchExpectedResult(expectedResultFile)
         }
@@ -43,7 +42,7 @@ class StackFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/stack-yesodweb-simple/stack.yaml")
             val expectedResultFile = getAssetFile("projects/synthetic/stack-yesodweb-simple-expected-output.yml")
 
-            val result = create("Stack").resolveSingleProject(definitionFile)
+            val result = StackFactory.create().resolveSingleProject(definitionFile)
 
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
