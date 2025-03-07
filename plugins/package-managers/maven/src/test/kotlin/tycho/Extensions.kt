@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packagemanagers.maven
+package org.ossreviewtoolkit.plugins.packagemanagers.maven.tycho
 
 import io.kotest.matchers.shouldBe
 

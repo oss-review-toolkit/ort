@@ -23,6 +23,8 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 
+import org.ossreviewtoolkit.plugins.packagemanagers.maven.tycho.addTychoExtension
+
 class MavenTest : WordSpec({
     "mapDefinitionFiles()" should {
         "filter out Tycho definition files" {

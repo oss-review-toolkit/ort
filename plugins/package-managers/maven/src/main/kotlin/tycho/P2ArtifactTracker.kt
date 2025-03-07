@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packagemanagers.maven.utils
+package org.ossreviewtoolkit.plugins.packagemanagers.maven.tycho
 
 import java.util.concurrent.ConcurrentHashMap
 
@@ -32,6 +32,7 @@ import org.eclipse.aether.artifact.Artifact
 
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.MavenLogger
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 
 /**
@@ -45,7 +46,7 @@ import org.ossreviewtoolkit.utils.common.withoutPrefix
  * source URLs from where they have been loaded. This might be a bit fragile, but it has the advantage that no further
  * steps are required to locate artifacts in repositories; the work done by Tycho during the build is basically reused.
  */
-class P2ArtifactTracker(
+internal class P2ArtifactTracker(
     /** The helper object for accessing the local Maven repository. */
     private val repositoryHelper: LocalRepositoryHelper
 ) {

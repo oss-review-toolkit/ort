@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packagemanagers.maven.utils
+package org.ossreviewtoolkit.plugins.packagemanagers.maven.tycho
 
 import java.io.File
 import java.util.jar.JarInputStream
@@ -32,13 +32,15 @@ import org.apache.maven.repository.RepositorySystem
 
 import org.eclipse.aether.artifact.Artifact
 
+import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.identifier
+
 import org.xml.sax.Attributes
 import org.xml.sax.helpers.DefaultHandler
 
 /**
  * A class providing some helper functionality for accessing artifacts and metadata in the local Maven repository.
  */
-class LocalRepositoryHelper(
+internal class LocalRepositoryHelper(
     /** The root directory of the local Maven repository. */
     private val localRepositoryRoot: File = RepositorySystem.defaultUserLocalRepository
 ) {

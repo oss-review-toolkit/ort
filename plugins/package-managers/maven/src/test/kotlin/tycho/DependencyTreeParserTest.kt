@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packagemanagers.maven.utils
+package org.ossreviewtoolkit.plugins.packagemanagers.maven.tycho
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll

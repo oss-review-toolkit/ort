@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packagemanagers.maven
+package org.ossreviewtoolkit.plugins.packagemanagers.maven.tycho
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.TestConfiguration
@@ -62,10 +62,6 @@ import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
-import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.DependencyTreeMojoNode
-import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.JSON
-import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.LocalRepositoryHelper
-import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.P2ArtifactTracker
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.PackageResolverFun
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.identifier
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense

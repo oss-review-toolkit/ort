@@ -23,7 +23,7 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.plugins.packagemanagers.maven.addTychoExtension
+import org.ossreviewtoolkit.plugins.packagemanagers.maven.tycho.addTychoExtension
 
 class MavenSupportTest : WordSpec({
     "isTychoProject()" should {
