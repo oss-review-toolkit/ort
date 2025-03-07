@@ -112,7 +112,7 @@ class GradleInspector(
     // "build" file.
     override val globsForDefinitionFiles = GRADLE_BUILD_FILES + GRADLE_SETTINGS_FILES
 
-    private val graphBuilder = DependencyGraphBuilder(GradleDependencyHandler(descriptor.id, projectType))
+    private val graphBuilder = DependencyGraphBuilder(GradleDependencyHandler(projectType))
     private val initScriptFile by lazy { extractInitScript() }
 
     private fun extractInitScript(): File {
