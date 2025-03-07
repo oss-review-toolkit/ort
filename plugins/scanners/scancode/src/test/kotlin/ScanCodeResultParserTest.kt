@@ -230,7 +230,7 @@ class ScanCodeResultParserTest : FreeSpec({
 
                 summary.issues.map { it.copy(timestamp = Instant.EPOCH) } shouldHaveSingleElement Issue(
                     timestamp = Instant.EPOCH,
-                    source = ScanCode.SCANNER_NAME,
+                    source = ScanCodeFactory.descriptor.displayName,
                     message = "The output format version ${MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION + 1}.0.0 " +
                         "exceeds the supported major version $MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION. Results may " +
                         "be incomplete or incorrect.",

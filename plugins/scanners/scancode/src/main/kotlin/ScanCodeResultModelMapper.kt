@@ -70,7 +70,7 @@ fun ScanCodeResult.toScanSummary(preferFileLicense: Boolean = false): ScanSummar
 
     if (outputFormatVersion.major > MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION) {
         issues += createAndLogIssue(
-            source = ScanCode.SCANNER_NAME,
+            source = ScanCodeFactory.descriptor.displayName,
             message = "The output format version $outputFormatVersion exceeds the supported major version " +
                 "$MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION. Results may be incomplete or incorrect.",
             severity = Severity.WARNING
@@ -172,7 +172,7 @@ private fun mapScanErrors(result: ScanCodeResult): List<Issue> =
     result.files.flatMap { file ->
         file.scanErrors.map { error ->
             Issue(
-                source = ScanCode.SCANNER_NAME,
+                source = ScanCodeFactory.descriptor.displayName,
                 message = "$error (File: ${file.path})"
             )
         }
