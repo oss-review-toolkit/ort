@@ -38,6 +38,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
@@ -113,7 +114,7 @@ class SwiftPm(override val descriptor: PluginDescriptor = SwiftPmFactory.descrip
                 dependencies = packages.mapTo(mutableSetOf()) { it.toReference(linkage = PackageLinkage.DYNAMIC) }
             )
         }.onFailure {
-            issues += Issue(source = descriptor.displayName, message = it.message.orEmpty())
+            issues += createAndLogIssue(it.message.orEmpty())
         }
 
         return listOf(
@@ -148,7 +149,7 @@ class SwiftPm(override val descriptor: PluginDescriptor = SwiftPmFactory.descrip
             parseLockfile(lockfile).onSuccess { pins ->
                 pins.associateByTo(pinsByIdentity) { it.identity }
             }.onFailure {
-                issues += Issue(source = descriptor.displayName, message = it.message.orEmpty())
+                issues += createAndLogIssue(it.message.orEmpty())
             }
         }
 
