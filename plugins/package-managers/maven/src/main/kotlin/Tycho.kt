@@ -178,7 +178,7 @@ class Tycho(override val descriptor: PluginDescriptor = TychoFactory.descriptor)
     ): DependencyGraphBuilder<DependencyNode> {
         val resolverFun =
             tychoPackageResolverFun(mavenSupport.defaultPackageResolverFun(), repositoryHelper, tracker)
-        val dependencyHandler = MavenDependencyHandler(descriptor.id, projectType, mavenProjects, resolverFun)
+        val dependencyHandler = MavenDependencyHandler(descriptor.displayName, projectType, mavenProjects, resolverFun)
         return DependencyGraphBuilder(dependencyHandler)
     }
 
