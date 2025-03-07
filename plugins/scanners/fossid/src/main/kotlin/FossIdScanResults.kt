@@ -155,7 +155,7 @@ private fun mapLicense(
         licenseFinding.copy(license = licenseFinding.license.normalize())
     }.onFailure { spdxException ->
         issues += FossId.createAndLogIssue(
-            source = "FossId",
+            source = FossIdFactory.descriptor.displayName,
             message = "Failed to parse license '$license' as an SPDX expression: ${spdxException.collectMessages()}",
             affectedPath = location.path
         )
@@ -202,7 +202,7 @@ internal suspend fun mapSnippetFindings(
 
     if (runningSnippetCount >= snippetsLimit) {
         issues += Issue(
-            source = "FossId",
+            source = FossIdFactory.descriptor.displayName,
             message = "The snippets limit of $snippetsLimit has been reached. To see the possible remaining " +
                 "snippets, please perform a snippet choice for the snippets presents in the snippet report an " +
                 "rerun the scan.",
@@ -219,7 +219,7 @@ internal suspend fun mapSnippetFindings(
 
             if (isNotOldMarkedAsIdentifiedFile) {
                 issues += snippetChoice.createAndLogIssue(
-                    source = "FossId",
+                    source = FossIdFactory.descriptor.displayName,
                     message = "The configuration contains a snippet choice for the snippet " +
                         "${snippetChoice.choice.purl} at ${snippetChoice.given.sourceLocation.prettyPrint()}, but " +
                         "the FossID result contains no such snippet.",
