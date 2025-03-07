@@ -19,17 +19,10 @@
 
 package org.ossreviewtoolkit.evaluator.osadl
 
-import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
 class CompatibilityMatrixTest : StringSpec({
-    "Deserializing the matrix succeeds" {
-        shouldNotThrow<IllegalArgumentException> {
-            CompatibilityMatrix.releaseDateAndTime
-        }
-    }
-
     "An outbound Apache-2.0 license is incompatible with an inbound GPL-2.0-only license" {
         val info = CompatibilityMatrix.getCompatibilityInfo("Apache-2.0", "GPL-2.0-only")
 
