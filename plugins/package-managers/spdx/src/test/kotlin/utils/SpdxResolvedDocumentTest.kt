@@ -48,6 +48,7 @@ import java.net.URI
 
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.plugins.packagemanagers.spdx.SpdxDocumentFileFactory
 import org.ossreviewtoolkit.utils.common.calculateHash
 import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxChecksum
@@ -86,7 +87,7 @@ class SpdxResolvedDocumentTest : WordSpec() {
                 val loader = SpdxDocumentCache()
                 val root = loader.load(BASE_DOCUMENT_FILE).getOrThrow()
 
-                val resolvedDoc = SpdxResolvedDocument.load(loader, BASE_DOCUMENT_FILE, MANAGER_NAME)
+                val resolvedDoc = SpdxResolvedDocument.load(loader, BASE_DOCUMENT_FILE)
 
                 resolvedDoc.rootDocument.document should beTheSameInstanceAs(root)
                 resolvedDoc.rootDocument.url shouldBe BASE_DOCUMENT_FILE.toURI()
@@ -95,7 +96,7 @@ class SpdxResolvedDocumentTest : WordSpec() {
             "load a root document without external references" {
                 val rootFile = createSpdxDocument(1, listOf(createPackage(1)))
 
-                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), rootFile, MANAGER_NAME)
+                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), rootFile)
 
                 resolvedDoc.referencedDocuments.keys should beEmpty()
             }
@@ -112,7 +113,7 @@ class SpdxResolvedDocumentTest : WordSpec() {
                 val rootFile =
                     createSpdxDocument(1, packages = listOf(createPackage(1)), references = listOf(ref1, ref2))
 
-                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), rootFile, MANAGER_NAME)
+                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), rootFile)
 
                 resolvedDoc.referencedDocuments.keys should containExactlyInAnyOrder(ref1, ref2)
 
@@ -133,7 +134,7 @@ class SpdxResolvedDocumentTest : WordSpec() {
                 val rootFile =
                     createSpdxDocument(1, packages = listOf(createPackage(1)), references = listOf(ref1, ref2))
 
-                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), rootFile, MANAGER_NAME)
+                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), rootFile)
 
                 resolvedDoc.referencedDocuments.keys should containExactlyInAnyOrder(ref1, ref2, refTrans)
 
@@ -154,7 +155,7 @@ class SpdxResolvedDocumentTest : WordSpec() {
                 createSpdxDocument(3, listOf(createPackage(30)), references = listOf(ref1))
                 val rootFile = createSpdxDocument(0, listOf(createPackage(1)), references = listOf(ref1))
 
-                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), rootFile, MANAGER_NAME)
+                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), rootFile)
 
                 resolvedDoc.referencedDocuments.keys should containExactlyInAnyOrder(ref1, ref2, ref3)
             }
@@ -165,7 +166,7 @@ class SpdxResolvedDocumentTest : WordSpec() {
                 val ref = SpdxExternalDocumentReference("DocumentRef-ort", "../lib/package.spdx.yml", DUMMY_CHECKSUM)
                 val baseUri = URI("http://localhost:${server.port()}/documents/spdx/app/package.spdx.yml?branch=main")
 
-                ref.resolve(SpdxDocumentCache(), baseUri, MANAGER_NAME)
+                ref.resolve(SpdxDocumentCache(), baseUri)
 
                 server.verify(
                     exactly(1),
@@ -176,7 +177,7 @@ class SpdxResolvedDocumentTest : WordSpec() {
 
         "getSpdxPackageForId" should {
             "return a package from the root document" {
-                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), BASE_DOCUMENT_FILE, MANAGER_NAME)
+                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), BASE_DOCUMENT_FILE)
 
                 val issues = mutableListOf<Issue>()
                 resolvedDoc.getSpdxPackageForId("SPDXRef-Package-xyz", issues) shouldNotBeNull {
@@ -196,7 +197,7 @@ class SpdxResolvedDocumentTest : WordSpec() {
                 val rootFile = createSpdxDocument(1, listOf(createPackage(10)), references = listOf(otherRef, ref))
                 val pkgId = "${ref.externalDocumentId}:${externalPackage.spdxId}"
 
-                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), rootFile, MANAGER_NAME)
+                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), rootFile)
 
                 val issues = mutableListOf<Issue>()
                 resolvedDoc.getSpdxPackageForId(pkgId, issues) shouldBe externalPackage
@@ -206,14 +207,14 @@ class SpdxResolvedDocumentTest : WordSpec() {
 
             "create an issue for a package, which cannot be resolved" {
                 val identifier = "unknownPackageId"
-                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), BASE_DOCUMENT_FILE, MANAGER_NAME)
+                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), BASE_DOCUMENT_FILE)
 
                 val issues = mutableListOf<Issue>()
                 resolvedDoc.getSpdxPackageForId(identifier, issues) should beNull()
 
                 with(issues.single()) {
                     severity shouldBe Severity.ERROR
-                    source shouldBe MANAGER_NAME
+                    source shouldBe SpdxDocumentFileFactory.descriptor.displayName
                     message should contain(identifier)
                 }
             }
@@ -223,14 +224,14 @@ class SpdxResolvedDocumentTest : WordSpec() {
                 val identifier = "${reference.externalDocumentId}:somePackage"
                 val doc = createSpdxDocument(1, listOf(createPackage(1)), references = listOf(reference))
 
-                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), doc, MANAGER_NAME)
+                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), doc)
 
                 val issues = mutableListOf<Issue>()
                 resolvedDoc.getSpdxPackageForId(identifier, issues) should beNull()
 
                 with(issues.single()) {
                     severity shouldBe Severity.ERROR
-                    source shouldBe MANAGER_NAME
+                    source shouldBe SpdxDocumentFileFactory.descriptor.displayName
                     message should contain(reference.externalDocumentId)
                     message should contain(reference.spdxDocument)
                 }
@@ -241,14 +242,14 @@ class SpdxResolvedDocumentTest : WordSpec() {
                 val identifier = "${reference.externalDocumentId}:somePackage"
                 val doc = createSpdxDocument(1, listOf(createPackage(1)), references = listOf(reference))
 
-                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), doc, MANAGER_NAME)
+                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), doc)
 
                 val issues = mutableListOf<Issue>()
                 resolvedDoc.getSpdxPackageForId(identifier, issues) should beNull()
 
                 with(issues.single()) {
                     severity shouldBe Severity.ERROR
-                    source shouldBe MANAGER_NAME
+                    source shouldBe SpdxDocumentFileFactory.descriptor.displayName
                     message should contain(reference.externalDocumentId)
                     message should contain(reference.spdxDocument)
                     message should contain("does not exist")
@@ -262,14 +263,14 @@ class SpdxResolvedDocumentTest : WordSpec() {
                 val identifier = "${ref.externalDocumentId}:${externalPackage.spdxId}"
                 val rootDoc = createSpdxDocument(1, listOf(createPackage(1)), references = listOf(ref))
 
-                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), rootDoc, MANAGER_NAME)
+                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), rootDoc)
 
                 val issues = mutableListOf<Issue>()
                 resolvedDoc.getSpdxPackageForId(identifier, issues) shouldBe externalPackage
 
                 with(issues.single()) {
                     severity shouldBe Severity.WARNING
-                    source shouldBe MANAGER_NAME
+                    source shouldBe SpdxDocumentFileFactory.descriptor.displayName
                     message should contain(ref.externalDocumentId)
                     message should contain(ref.spdxDocument)
                     message should contain(DUMMY_CHECKSUM.checksumValue)
@@ -293,7 +294,7 @@ class SpdxResolvedDocumentTest : WordSpec() {
                         )
                 )
 
-                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), rootDoc, MANAGER_NAME)
+                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), rootDoc)
 
                 val issues = mutableListOf<Issue>()
                 resolvedDoc.getSpdxPackageForId(identifier, issues) shouldBe externalPackage
@@ -318,14 +319,14 @@ class SpdxResolvedDocumentTest : WordSpec() {
                         )
                 )
 
-                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), rootDoc, MANAGER_NAME)
+                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), rootDoc)
 
                 val issues = mutableListOf<Issue>()
                 resolvedDoc.getSpdxPackageForId(identifier, issues) shouldBe externalPackage
 
                 with(issues.single()) {
                     severity shouldBe Severity.WARNING
-                    source shouldBe MANAGER_NAME
+                    source shouldBe SpdxDocumentFileFactory.descriptor.displayName
                     message should contain(ref.externalDocumentId)
                     message should contain(ref.spdxDocument)
                     message should contain(DUMMY_CHECKSUM.checksumValue)
@@ -346,14 +347,14 @@ class SpdxResolvedDocumentTest : WordSpec() {
                         .willReturn(aResponse().withStatus(400))
                 )
 
-                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), rootDoc, MANAGER_NAME)
+                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), rootDoc)
 
                 val issues = mutableListOf<Issue>()
                 resolvedDoc.getSpdxPackageForId(identifier, issues) should beNull()
 
                 with(issues.single()) {
                     severity shouldBe Severity.ERROR
-                    source shouldBe MANAGER_NAME
+                    source shouldBe SpdxDocumentFileFactory.descriptor.displayName
                     message should contain(errorRef.externalDocumentId)
                     message should contain(errorRef.spdxDocument)
                     message should contain("download")
@@ -371,7 +372,7 @@ class SpdxResolvedDocumentTest : WordSpec() {
                 val packages = (1..5).map(::createPackage)
                 val rootDoc = createSpdxDocument(1, packages, relations = relations)
 
-                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), rootDoc, MANAGER_NAME)
+                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), rootDoc)
 
                 resolvedDoc.relationships should containExactly(relations)
             }
@@ -436,7 +437,7 @@ class SpdxResolvedDocumentTest : WordSpec() {
                     )
                 )
 
-                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), doc1, MANAGER_NAME)
+                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), doc1)
 
                 resolvedDoc.relationships should containExactlyInAnyOrder(expectedRelations)
             }
@@ -484,7 +485,7 @@ class SpdxResolvedDocumentTest : WordSpec() {
                     references = listOf(ref20)
                 )
 
-                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), doc1, MANAGER_NAME)
+                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), doc1)
 
                 val issues = mutableListOf<Issue>()
                 resolvedDoc.relationships.forEach { relation ->
@@ -506,7 +507,7 @@ class SpdxResolvedDocumentTest : WordSpec() {
                 val pkg = createPackage(1)
                 val doc = createSpdxDocument(1, listOf(pkg, createPackage(2)))
 
-                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), doc, MANAGER_NAME)
+                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), doc)
 
                 resolvedDoc.getDefinitionFile(pkg.spdxId) shouldBe doc
             }
@@ -517,19 +518,19 @@ class SpdxResolvedDocumentTest : WordSpec() {
                 val ref = refDoc.toExternalReference(1)
                 val rootDoc = createSpdxDocument(1, listOf(createPackage(1)), references = listOf(ref))
 
-                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), rootDoc, MANAGER_NAME)
+                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), rootDoc)
 
                 resolvedDoc.getDefinitionFile("${ref.externalDocumentId}:${pkg.spdxId}") shouldBe refDoc
             }
 
             "return null if the identifier refers to a non-existing reference" {
-                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), BASE_DOCUMENT_FILE, MANAGER_NAME)
+                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), BASE_DOCUMENT_FILE)
 
                 resolvedDoc.getDefinitionFile("nonExistingReference:somePackage") should beNull()
             }
 
             "return null if the identifier refers to a non-existing package in the root document" {
-                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), BASE_DOCUMENT_FILE, MANAGER_NAME)
+                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), BASE_DOCUMENT_FILE)
 
                 resolvedDoc.getDefinitionFile("nonExistingPackage") should beNull()
             }
@@ -615,9 +616,6 @@ private const val SPDX_REF = "SPDXRef-Package-Dummy"
 /** References the SPDX file used to define the base document. */
 private val BASE_DOCUMENT_FILE =
     File("src/funTest/assets/projects/synthetic/package-references/project-xyz.spdx.yml")
-
-/** The name of the package manager used by tests. */
-private const val MANAGER_NAME = "TestSpdxDocumentFile"
 
 /** Constant for a checksum to be used in case no correct hash value is needed or available. */
 private val DUMMY_CHECKSUM = SpdxChecksum(SpdxChecksum.Algorithm.SHA1, "0123456789012345678901234567890123456789")

@@ -515,7 +515,7 @@ class SpdxDocumentFile(override val descriptor: PluginDescriptor = SpdxDocumentF
         analyzerConfig: AnalyzerConfiguration,
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
-        val transitiveDocument = SpdxResolvedDocument.load(spdxDocumentCache, definitionFile, descriptor.id)
+        val transitiveDocument = SpdxResolvedDocument.load(spdxDocumentCache, definitionFile)
 
         val spdxDocument = transitiveDocument.rootDocument.document
 
