@@ -50,7 +50,8 @@ object CompatibilityMatrix {
 
     private val matrix by lazy {
         javaClass.getResourceAsStream("/rules/matrixseqexpl.json").use {
-            Json.Default.decodeFromStream<MatrixLicenses>(it)
+            val json = checkNotNull(it)
+            Json.Default.decodeFromStream<MatrixLicenses>(json)
         }
     }
 
