@@ -261,10 +261,7 @@ class Tycho(override val descriptor: PluginDescriptor = TychoFactory.descriptor)
     ): MutableList<Issue> {
         val rootIssues = mutableListOf<Issue>()
         if (exitCode != 0) {
-            rootIssues += createAndLogIssue(
-                descriptor.displayName,
-                "Maven build failed with non-zero exit code $exitCode."
-            )
+            rootIssues += createAndLogIssue("Maven build failed with non-zero exit code $exitCode.")
         }
 
         val missingProjects = collector.mavenProjects.keys - resolvedProjects.mapTo(mutableSetOf()) { it.internalId }
@@ -272,9 +269,7 @@ class Tycho(override val descriptor: PluginDescriptor = TychoFactory.descriptor)
         missingProjects.forEach { projectId ->
             val coordinates = collector.mavenProjects.getValue(projectId).identifier(projectType).toCoordinates()
             rootIssues += createAndLogIssue(
-                descriptor.displayName,
-                "No dependency information found for project '$coordinates'. " +
-                    "This may be caused by a build failure."
+                "No dependency information found for project '$coordinates'. This may be caused by a build failure."
             )
         }
 

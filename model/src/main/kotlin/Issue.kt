@@ -29,6 +29,8 @@ import java.time.Instant
 
 import org.apache.logging.log4j.kotlin.logger
 
+import org.ossreviewtoolkit.plugins.api.Plugin
+import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 
 /**
@@ -88,3 +90,13 @@ inline fun <reified T : Any> T.createAndLogIssue(
     logger.log(issue.severity.toLog4jLevel()) { message }
     return issue
 }
+
+/**
+ * Create an [Issue] and log the message. The log level is aligned with the [severity]. The [source][Issue.source] is
+ * set to the [display name][PluginDescriptor.displayName] of the plugin.
+ */
+inline fun <reified T : Plugin> T.createAndLogIssue(
+    message: String,
+    severity: Severity? = null,
+    affectedPath: String? = null
+) = createAndLogIssue(descriptor.displayName, message, severity, affectedPath)

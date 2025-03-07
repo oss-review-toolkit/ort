@@ -152,10 +152,7 @@ class Bazel(override val descriptor: PluginDescriptor = BazelFactory.descriptor)
 
             getPackages(scopes, registry, localPathOverrides, archiveOverrides, projectVcs)
         } else {
-            issues += createAndLogIssue(
-                descriptor.displayName,
-                "Bazel registry URL cannot be determined from the lockfile."
-            )
+            issues += createAndLogIssue("Bazel registry URL cannot be determined from the lockfile.")
             emptySet()
         }
 

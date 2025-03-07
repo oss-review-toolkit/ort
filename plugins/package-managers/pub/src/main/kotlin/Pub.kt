@@ -366,10 +366,9 @@ class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, pri
                     }
                 } else {
                     createAndLogIssue(
-                        source = descriptor.displayName,
-                        message = "The Gradle package manager plugin was not found in the runtime classpath of " +
-                            "ORT. Gradle project analysis will be disabled.",
-                        severity = Severity.WARNING
+                        "The Gradle package manager plugin was not found in the runtime classpath of ORT. Gradle " +
+                            "project analysis will be disabled.",
+                        Severity.WARNING
                     )
                 }
             }
@@ -496,11 +495,7 @@ class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, pri
 
                 packageReferences += packageInfo.toReference(
                     issues = listOf(
-                        createAndLogIssue(
-                            source = descriptor.displayName,
-                            message = "Could not resolve dependencies of '$packageName': " +
-                                e.collectMessages()
-                        )
+                        createAndLogIssue("Could not resolve dependencies of '$packageName': ${e.collectMessages()}")
                     )
                 )
             }
@@ -563,10 +558,8 @@ class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, pri
         if (!definitionFile.isFile) return null
 
         val issue = createAndLogIssue(
-            source = descriptor.displayName,
-            severity = Severity.WARNING,
-            message = "Cannot get iOS dependencies for package '$packageName'. Support for CocoaPods is not yet " +
-                "implemented."
+            "Cannot get iOS dependencies for package '$packageName'. Support for CocoaPods is not yet implemented.",
+            Severity.WARNING
         )
 
         return ProjectAnalyzerResult(Project.EMPTY, emptySet(), listOf(issue))
@@ -726,9 +719,7 @@ class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, pri
 
                 val packageVersion = packageInfo.version
                 issues += createAndLogIssue(
-                    source = descriptor.displayName,
-                    message = "Failed to parse $PUBSPEC_YAML for package $packageName:$packageVersion: " +
-                        it.collectMessages()
+                    "Failed to parse $PUBSPEC_YAML for package $packageName:$packageVersion: ${it.collectMessages()}"
                 )
             }
         }
@@ -765,9 +756,8 @@ class Pub(override val descriptor: PluginDescriptor = PubFactory.descriptor, pri
         val definitionFile = reader.findFile(packageInfo, workingDir, PUBSPEC_YAML)
         if (definitionFile == null) {
             createAndLogIssue(
-                source = descriptor.displayName,
-                message = "Could not find '$PUBSPEC_YAML' for '${packageInfo.description.name.orEmpty()}'.",
-                severity = Severity.WARNING
+                "Could not find '$PUBSPEC_YAML' for '${packageInfo.description.name.orEmpty()}'.",
+                Severity.WARNING
             )
 
             return null

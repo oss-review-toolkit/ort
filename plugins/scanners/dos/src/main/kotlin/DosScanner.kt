@@ -117,9 +117,9 @@ class DosScanner(
             val existingScanResults = runCatching {
                 client.getScanResults(packages, config.fetchConcluded)
             }.onFailure {
-                issues += createAndLogIssue(descriptor.id, it.collectMessages())
+                issues += createAndLogIssue(it.collectMessages())
             }.onSuccess {
-                if (it == null) issues += createAndLogIssue(descriptor.id, "Missing scan results response body.")
+                if (it == null) issues += createAndLogIssue("Missing scan results response body.")
             }.getOrNull()
 
             when (existingScanResults?.state?.status) {
@@ -131,7 +131,7 @@ class DosScanner(
                     }.mapCatching { sourceDir ->
                         runBackendScan(packages, sourceDir, startTime, issues)
                     }.onFailure {
-                        issues += createAndLogIssue(descriptor.id, it.collectMessages())
+                        issues += createAndLogIssue(it.collectMessages())
                     }.getOrNull()
                 }
 
@@ -185,14 +185,14 @@ class DosScanner(
 
         val uploadUrl = client.getUploadUrl(zipName)
         if (uploadUrl == null) {
-            issues += createAndLogIssue(descriptor.id, "Unable to get an upload URL for '$zipName'.")
+            issues += createAndLogIssue("Unable to get an upload URL for '$zipName'.")
             zipFile.delete()
             return null
         }
 
         val uploadSuccessful = client.uploadFile(zipFile, uploadUrl).also { zipFile.delete() }
         if (!uploadSuccessful) {
-            issues += createAndLogIssue(descriptor.id, "Uploading '$zipFile' to $uploadUrl failed.")
+            issues += createAndLogIssue("Uploading '$zipFile' to $uploadUrl failed.")
             return null
         }
 
@@ -201,7 +201,6 @@ class DosScanner(
 
         if (id == null) {
             issues += createAndLogIssue(
-                descriptor.id,
                 "Failed to add scan job for the following packages:\n${packages.joinToString("\n") { it.purl }}"
             )
             return null
@@ -237,10 +236,7 @@ class DosScanner(
                 }
 
                 "failed" -> {
-                    issues += createAndLogIssue(
-                        descriptor.id,
-                        "Scan failed for job with ID '$jobId': ${jobState.state.message}"
-                    )
+                    issues += createAndLogIssue("Scan failed for job with ID '$jobId': ${jobState.state.message}")
                     return null
                 }
 

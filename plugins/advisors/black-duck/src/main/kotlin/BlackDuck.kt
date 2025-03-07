@@ -120,8 +120,7 @@ class BlackDuck(
             pkg.blackDuckOriginId?.let { BlackDuckOriginId.parse(it).toExternalId() }
         }.getOrElse {
             issues += createAndLogIssue(
-                source = descriptor.displayName,
-                message = "Could not parse origin-id '${pkg.blackDuckOriginId}' for '${pkg.id.toCoordinates()}: " +
+                "Could not parse origin-id '${pkg.blackDuckOriginId}' for '${pkg.id.toCoordinates()}: " +
                     it.collectMessages()
             )
             return emptyList()
@@ -132,8 +131,7 @@ class BlackDuck(
                 blackDuckApi.searchKbComponentsByExternalId(externalId)
             }.getOrElse {
                 issues += createAndLogIssue(
-                    source = descriptor.displayName,
-                    message = "Requesting origins for externalId '$externalId' failed: ${it.collectMessages()}"
+                    "Requesting origins for externalId '$externalId' failed: ${it.collectMessages()}"
                 )
                 return emptyList()
             }
@@ -141,10 +139,7 @@ class BlackDuck(
             runCatching {
                 blackDuckApi.searchKbComponentsByPurl(pkg.purl)
             }.getOrElse {
-                issues += createAndLogIssue(
-                    source = descriptor.displayName,
-                    message = "Requesting origins for purl ${pkg.purl} failed: ${it.collectMessages()}"
-                )
+                issues += createAndLogIssue("Requesting origins for purl ${pkg.purl} failed: ${it.collectMessages()}")
                 return emptyList()
             }
         }
@@ -153,10 +148,7 @@ class BlackDuck(
             runCatching {
                 blackDuckApi.getOriginView(searchResult)
             }.onFailure {
-                issues += createAndLogIssue(
-                    source = descriptor.displayName,
-                    message = "Requesting origin details failed: ${it.collectMessages()}"
-                )
+                issues += createAndLogIssue("Requesting origin details failed: ${it.collectMessages()}")
             }.getOrNull()
         }
 
@@ -171,10 +163,9 @@ class BlackDuck(
 
         if (externalId != null && origins.isEmpty()) {
             issues += createAndLogIssue(
-                source = descriptor.displayName,
-                message = "The origin-id '${pkg.blackDuckOriginId} of package ${pkg.id.toCoordinates()} does not " +
-                    "match any origin.",
-                severity = Severity.WARNING
+                "The origin-id '${pkg.blackDuckOriginId} of package ${pkg.id.toCoordinates()} does not match any " +
+                    "origin.",
+                Severity.WARNING
             )
         }
 
@@ -192,9 +183,7 @@ class BlackDuck(
                 logger.info { "Found ${it.size} vulnerabilities for origin ${origin.identifier}." }
             }.onFailure {
                 issues += createAndLogIssue(
-                    source = descriptor.displayName,
-                    message = "Requesting vulnerabilities for origin ${origin.identifier} failed: " +
-                        it.collectMessages()
+                    "Requesting vulnerabilities for origin ${origin.identifier} failed: ${it.collectMessages()}"
                 )
             }.getOrDefault(emptyList())
         }

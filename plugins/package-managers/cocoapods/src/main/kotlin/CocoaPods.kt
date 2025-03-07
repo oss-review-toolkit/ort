@@ -137,10 +137,9 @@ class CocoaPods(override val descriptor: PluginDescriptor = CocoaPodsFactory.des
             graphBuilder.addDependencies(projectId, SCOPE_NAME, dependencies)
         } else {
             issues += createAndLogIssue(
-                source = descriptor.displayName,
-                message = "Missing lockfile '${lockfile.relativeTo(analysisRoot).invariantSeparatorsPath}' for " +
-                    "definition file '${definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath}'. The " +
-                    "analysis of a Podfile without a lockfile is not supported."
+                "Missing lockfile '${lockfile.relativeTo(analysisRoot).invariantSeparatorsPath}' for definition file " +
+                    "'${definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath}'. The analysis of a Podfile " +
+                    "without a lockfile is not supported."
             )
         }
 

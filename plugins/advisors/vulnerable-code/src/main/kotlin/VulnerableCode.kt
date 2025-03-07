@@ -154,11 +154,7 @@ class VulnerableCode(
                 VulnerabilityReference(sourceUri, it.scoringSystem, severity, score, vector)
             }
         }.onFailure {
-            issues += createAndLogIssue(
-                descriptor.displayName,
-                "Failed to map $this to ORT model due to $it.",
-                Severity.HINT
-            )
+            issues += createAndLogIssue("Failed to map $this to ORT model due to $it.", Severity.HINT)
         }.getOrElse { emptyList() }
 
     /**

@@ -228,11 +228,7 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
             val value = info.value
             val nameMatcher = EXTRACT_FROM_LOCATOR_PATTERN.matchEntire(value)
             if (nameMatcher == null) {
-                issues += createAndLogIssue(
-                    descriptor.displayName,
-                    "Name of package $value cannot be parsed.",
-                    Severity.ERROR
-                )
+                issues += createAndLogIssue("Name of package $value cannot be parsed.", Severity.ERROR)
                 null
             } else {
                 val rawName = nameMatcher.groupValues[1]
@@ -376,11 +372,7 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
         val value = packageInfo.value
         val header = packagesHeaders[value]
         if (header == null) {
-            issues += createAndLogIssue(
-                descriptor.displayName,
-                "No package header found for '$value'.",
-                Severity.ERROR
-            )
+            issues += createAndLogIssue("No package header found for '$value'.", Severity.ERROR)
             return emptyMap()
         }
 
@@ -416,7 +408,6 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
 
             if (details == null) {
                 issues += createAndLogIssue(
-                    descriptor.displayName,
                     "No package details found for '${header.rawName}' at version '$version'.",
                     Severity.ERROR
                 )
@@ -551,11 +542,7 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
             val locator = dependency.locator
             val locatorMatcher = EXTRACT_FROM_LOCATOR_PATTERN.matchEntire(locator)
             if (locatorMatcher == null) {
-                issues += createAndLogIssue(
-                    descriptor.displayName,
-                    "Locator '$locator' cannot be parsed.",
-                    Severity.ERROR
-                )
+                issues += createAndLogIssue("Locator '$locator' cannot be parsed.", Severity.ERROR)
                 return@mapNotNull null
             }
 
@@ -578,7 +565,6 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
                     }.onFailure {
                         it.showStackTrace()
                         issues += createAndLogIssue(
-                            descriptor.displayName,
                             "Cannot build identifier for dependency '$locator.'",
                             Severity.ERROR
                         )
