@@ -23,8 +23,7 @@ import java.io.File
 import java.util.jar.JarInputStream
 import java.util.jar.Manifest
 
-import javax.xml.parsers.SAXParserFactory
-
+import kotlin.collections.getOrPut
 import kotlin.io.resolve
 
 import org.apache.logging.log4j.kotlin.logger
@@ -33,9 +32,6 @@ import org.apache.maven.repository.RepositorySystem
 import org.eclipse.aether.artifact.Artifact
 
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.identifier
-
-import org.xml.sax.Attributes
-import org.xml.sax.helpers.DefaultHandler
 
 /**
  * A class providing some helper functionality for accessing artifacts and metadata in the local Maven repository.
@@ -62,36 +58,19 @@ internal class LocalRepositoryHelper(
          * Parse the given [file] with information about artifacts and extract the properties for the given [artifact].
          */
         private fun parseArtifactsFile(file: File, artifact: Artifact): Map<String, String> {
-            val properties = mutableMapOf<String, MutableMap<String, String>>()
-
-            val handler = object : DefaultHandler() {
-                private var currentArtifactId = ""
-
-                override fun startElement(uri: String?, localName: String, qName: String, attributes: Attributes) {
-                    when (qName) {
-                        "artifact" -> {
-                            currentArtifactId = "${artifact.groupId}:${attributes.getValue("id")}:" +
-                                attributes.getValue("version")
-                        }
-
-                        "property" -> {
-                            val key = attributes.getValue("name")
-                            val value = attributes.getValue("value")
-
-                            val artifactProperties = properties.getOrPut(currentArtifactId) { mutableMapOf() }
-                            artifactProperties[key] = value
-                        }
-                    }
+            val handler = ElementHandler(ParsePropertiesState())
+                .handleElement("artifact") { state, attributes ->
+                    state.withCurrentArtifactId(
+                        bundleIdentifier(attributes.getValue("id"), attributes.getValue("version"))
+                    )
+                }.handleElement("property") { state, attributes ->
+                    state.withProperty(attributes.getValue("name"), attributes.getValue("value"))
                 }
-            }
-
-            val factory = SAXParserFactory.newInstance()
-            val parser = factory.newSAXParser()
 
             logger.info { "Parsing P2 artifacts file '$file'." }
 
-            parser.parse(file, handler)
-            return properties[artifact.identifier()].orEmpty()
+            val result = parseXml(file, handler)
+            return result.properties[bundleIdentifier(artifact.artifactId, artifact.version)].orEmpty()
         }
     }
 
@@ -143,4 +122,36 @@ internal class LocalRepositoryHelper(
                 logger.error(it) { "Could not parse P2 artifacts file '$artifactsFile'." }
             }.getOrDefault(emptyMap())
         }
+}
+
+/**
+ * Generate an identifier for an OSGi bundle artifact based on the given [artifactId] and [version].
+ */
+private fun bundleIdentifier(artifactId: String, version: String) = "$artifactId:$version"
+
+/**
+ * A data class to hold the state while parsing the properties of a P2 artifact.
+ */
+private data class ParsePropertiesState(
+    /** The ID of the artifact whose properties are currently processed. */
+    val currentArtifactId: String = "",
+
+    /** A [Map] with the aggregated properties of all encountered artifacts. */
+    val properties: MutableMap<String, MutableMap<String, String>> = mutableMapOf<String, MutableMap<String, String>>()
+) {
+    /**
+     * Return an update [ParsePropertiesState] instance that has the given [artifactId] set as current artifact.
+     */
+    fun withCurrentArtifactId(artifactId: String) = copy(currentArtifactId = artifactId)
+
+    /**
+     * Return an update [ParsePropertiesState] instance that stores the property defined by the given [key] and [value]
+     * for the current artifact.
+     */
+    fun withProperty(key: String, value: String): ParsePropertiesState {
+        val artifactProperties = properties.getOrPut(currentArtifactId) { mutableMapOf() }
+        artifactProperties[key] = value
+
+        return this
+    }
 }
