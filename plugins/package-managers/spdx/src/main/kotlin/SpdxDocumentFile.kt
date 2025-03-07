@@ -439,10 +439,7 @@ class SpdxDocumentFile(override val descriptor: PluginDescriptor = SpdxDocumentF
                 // Dependencies can either be defined on the target...
                 pkgId.equals(target, ignoreCase = true) && relation == dependencyOfRelation -> {
                     if (pkgId != target) {
-                        issues += createAndLogIssue(
-                            source = descriptor.displayName,
-                            message = "Source '$pkgId' has to match target '$target' case-sensitively."
-                        )
+                        issues += createAndLogIssue("Source '$pkgId' has to match target '$target' case-sensitively.")
                     }
 
                     getPackageManagerDependency(source, doc, analyzerConfig) ?: doc.getSpdxPackageForId(source, issues)
@@ -460,10 +457,7 @@ class SpdxDocumentFile(override val descriptor: PluginDescriptor = SpdxDocumentF
                 // ...or on the source.
                 pkgId.equals(source, ignoreCase = true) && isDependsOnRelation -> {
                     if (pkgId != source) {
-                        issues += createAndLogIssue(
-                            source = descriptor.displayName,
-                            message = "Source '$source' has to match target '$pkgId' case-sensitively."
-                        )
+                        issues += createAndLogIssue("Source '$source' has to match target '$pkgId' case-sensitively.")
                     }
 
                     val pkgRef = dependsOnCase(target)

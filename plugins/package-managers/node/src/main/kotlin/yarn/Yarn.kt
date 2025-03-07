@@ -187,10 +187,7 @@ open class Yarn(override val descriptor: PluginDescriptor = YarnFactory.descript
                 val packageJsonFile = projectDir.resolve(NodePackageManagerType.DEFINITION_FILE)
                 parseProject(packageJsonFile, analysisRoot)
             }.getOrElse {
-                issues += createAndLogIssue(
-                    source = descriptor.displayName,
-                    message = "Failed to parse project information: ${it.collectMessages()}"
-                )
+                issues += createAndLogIssue("Failed to parse project information: ${it.collectMessages()}")
 
                 Project.EMPTY
             }

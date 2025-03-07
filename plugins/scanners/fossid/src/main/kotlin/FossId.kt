@@ -278,7 +278,7 @@ class FossId internal constructor(
         }
 
         if (issueMessage != null) {
-            val issue = createAndLogIssue(descriptor.id, issueMessage, Severity.WARNING)
+            val issue = createAndLogIssue(issueMessage, Severity.WARNING)
             val summary = createSingleIssueSummary(startTime, issue = issue)
             return ScanResult(provenance, details, summary)
         }
@@ -341,10 +341,9 @@ class FossId internal constructor(
                     )
                 } else {
                     val issue = createAndLogIssue(
-                        source = descriptor.id,
-                        message = "Package '${pkg.id.toCoordinates()}' has been scanned in asynchronous mode. " +
+                        "Package '${pkg.id.toCoordinates()}' has been scanned in asynchronous mode. " +
                             "Scan results need to be inspected on the server instance.",
-                        severity = Severity.HINT
+                        Severity.HINT
                     )
                     val summary = createSingleIssueSummary(startTime, issue = issue)
 
@@ -362,10 +361,7 @@ class FossId internal constructor(
             } catch (e: IllegalStateException) {
                 e.showStackTrace()
 
-                val issue = createAndLogIssue(
-                    source = descriptor.id,
-                    message = "Failed to scan package '${pkg.id.toCoordinates()}' from $url."
-                )
+                val issue = createAndLogIssue("Failed to scan package '${pkg.id.toCoordinates()}' from $url.")
                 val summary = createSingleIssueSummary(startTime, issue = issue)
 
                 if (!config.keepFailedScans) {

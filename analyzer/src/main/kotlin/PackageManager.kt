@@ -312,9 +312,8 @@ abstract class PackageManager(val projectType: String) : Plugin {
 
                     val issues = listOf(
                         createAndLogIssue(
-                            source = descriptor.displayName,
-                            message = "${descriptor.displayName} failed to resolve dependencies for path " +
-                                "'$relativePath': ${it.collectMessages()}"
+                            "${descriptor.displayName} failed to resolve dependencies for path '$relativePath': " +
+                                it.collectMessages()
                         )
                     )
 

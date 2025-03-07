@@ -604,8 +604,7 @@ class Scanner(
             val summary = runCatching {
                 scanner.scanPath(downloadDir, filteredContext)
             }.getOrElse { e ->
-                val issue = createAndLogIssue(
-                    scanner.descriptor.id,
+                val issue = scanner.createAndLogIssue(
                     "Failed to scan $provenance with path scanner '${scanner.descriptor.id}': ${e.collectMessages()}"
                 )
 

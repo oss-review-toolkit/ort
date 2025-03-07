@@ -213,10 +213,7 @@ class Composer(override val descriptor: PluginDescriptor = ComposerFactory.descr
 
                 packageInfo.toReference(
                     issues = listOf(
-                        createAndLogIssue(
-                            source = descriptor.displayName,
-                            message = "Could not resolve dependencies of '$packageName': ${e.collectMessages()}"
-                        )
+                        createAndLogIssue("Could not resolve dependencies of '$packageName': ${e.collectMessages()}")
                     )
                 )
             }

@@ -177,7 +177,7 @@ class GradleInspector(
                         ?.takeUnless { JavaBootstrapper.isRunningOnJdk(it) }
                         ?.let {
                             JavaBootstrapper.installJdk("TEMURIN", it).onFailure { e ->
-                                issues += createAndLogIssue(descriptor.displayName, e.collectMessages())
+                                issues += createAndLogIssue(e.collectMessages())
                             }.getOrNull()
                         } ?: config.javaHome?.let { File(it) }
 
@@ -234,11 +234,11 @@ class GradleInspector(
         val dependencyTreeModel = gradleConnector.getOrtDependencyTreeModel(projectDir, issues)
 
         dependencyTreeModel.errors.distinct().mapTo(issues) {
-            createAndLogIssue(source = descriptor.displayName, message = it, severity = Severity.ERROR)
+            createAndLogIssue(it, Severity.ERROR)
         }
 
         dependencyTreeModel.warnings.distinct().mapTo(issues) {
-            createAndLogIssue(source = descriptor.displayName, message = it, severity = Severity.WARNING)
+            createAndLogIssue(it, Severity.WARNING)
         }
 
         val projectId = Identifier(

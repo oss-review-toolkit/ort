@@ -299,9 +299,8 @@ class Bundler(
             it.showStackTrace()
 
             issues += createAndLogIssue(
-                source = descriptor.displayName,
-                message = "Failed to parse dependency '$gemName' of project '${projectId.toCoordinates()}' in " +
-                    "'$workingDir': ${it.collectMessages()}"
+                "Failed to parse dependency '$gemName' of project '${projectId.toCoordinates()}' in '$workingDir': " +
+                    it.collectMessages()
             )
         }
     }

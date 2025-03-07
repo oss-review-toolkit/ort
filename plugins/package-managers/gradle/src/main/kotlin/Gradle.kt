@@ -245,7 +245,7 @@ class Gradle(
                             ?.takeUnless { JavaBootstrapper.isRunningOnJdk(it) }
                             ?.let {
                                 JavaBootstrapper.installJdk("TEMURIN", it).onFailure { e ->
-                                    issues += createAndLogIssue(descriptor.displayName, e.collectMessages())
+                                    issues += createAndLogIssue(e.collectMessages())
                                 }.getOrNull()
                             } ?: config.javaHome?.let { File(it) }
 
@@ -313,11 +313,11 @@ class Gradle(
                 )
 
                 dependencyTreeModel.errors.mapTo(issues) {
-                    createAndLogIssue(source = descriptor.displayName, message = it, severity = Severity.ERROR)
+                    createAndLogIssue(it, Severity.ERROR)
                 }
 
                 dependencyTreeModel.warnings.mapTo(issues) {
-                    createAndLogIssue(source = descriptor.displayName, message = it, severity = Severity.WARNING)
+                    createAndLogIssue(it, Severity.WARNING)
                 }
 
                 listOf(ProjectAnalyzerResult(project, emptySet(), issues))
