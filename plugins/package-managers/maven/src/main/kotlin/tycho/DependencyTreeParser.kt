@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packagemanagers.maven.utils
+package org.ossreviewtoolkit.plugins.packagemanagers.maven.tycho
 
 import java.io.InputStream
 

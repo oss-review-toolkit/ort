@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packagemanagers.maven.utils
+package org.ossreviewtoolkit.plugins.packagemanagers.maven.tycho
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.should
@@ -39,6 +39,7 @@ import org.eclipse.aether.artifact.DefaultArtifact
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.MavenLogger
 
 class P2ArtifactTrackerTest : WordSpec({
     "install()" should {
