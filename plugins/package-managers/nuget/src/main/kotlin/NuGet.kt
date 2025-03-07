@@ -28,6 +28,7 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.nuget.utils.NuGetInspector
@@ -73,19 +74,11 @@ class NuGet(override val descriptor: PluginDescriptor = NuGetFactory.descriptor,
 
     private fun collectTopLevelIssues(result: NuGetInspector.Result): List<Issue> {
         val errors = (result.headers.flatMap { it.errors } + result.packages.flatMap { it.errors }).map { message ->
-            Issue(
-                source = descriptor.displayName,
-                message = message,
-                severity = Severity.ERROR
-            )
+            createAndLogIssue(message, Severity.ERROR)
         }
 
         val warnings = result.packages.flatMap { it.warnings }.map { message ->
-            Issue(
-                source = descriptor.displayName,
-                message = message,
-                severity = Severity.WARNING
-            )
+            createAndLogIssue(message, Severity.WARNING)
         }
 
         return errors + warnings
