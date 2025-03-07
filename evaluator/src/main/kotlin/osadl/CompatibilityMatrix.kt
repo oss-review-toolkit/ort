@@ -19,14 +19,8 @@
 
 package org.ossreviewtoolkit.evaluator.osadl
 
-import java.time.ZoneId
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
-
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
-
-import org.apache.logging.log4j.kotlin.logger
 
 /**
  * An object that represents the OSADL compliance matrix. For details see
@@ -59,38 +53,6 @@ object CompatibilityMatrix {
         matrix.licenses.associate { row ->
             // Use names as keys for faster lookup.
             row.name to row.compatibilities.associate { it.name to Info(it.compatibility, it.explanation) }
-        }
-    }
-
-    /**
-     * The release date and time of the matrix data.
-     */
-    val releaseDateAndTime: ZonedDateTime by lazy {
-        val strftimePlaceholderRegex = Regex("(%[a-zA-Z%])|([^%]+)")
-
-        // Convert a strftime / Python style format string to a JVM format string.
-        val pattern = strftimePlaceholderRegex.findAll(matrix.timeformat).joinToString("") {
-            when (val placeholder = it.value) {
-                "%Y" -> "yyyy"
-                "%m" -> "MM"
-                "%d" -> "dd"
-                "%H" -> "HH"
-                "%M" -> "mm"
-                "%S" -> "ss"
-                "%z" -> "XX"
-                else -> {
-                    val first = placeholder.first()
-                    require(first != '%') { "Unhandled placeholder '$placeholder'." }
-                    if (first.isLetter()) "'$placeholder'" else placeholder
-                }
-            }
-        }
-
-        val zoned = ZonedDateTime.parse(matrix.timestamp, DateTimeFormatter.ofPattern(pattern))
-        zoned.withZoneSameInstant(ZoneId.of("UTC")).also {
-            logger.info {
-                "Successfully deserialized OSADL matrix dated from ${it.toLocalDate()} at ${it.toLocalTime()} (UTC)."
-            }
         }
     }
 
