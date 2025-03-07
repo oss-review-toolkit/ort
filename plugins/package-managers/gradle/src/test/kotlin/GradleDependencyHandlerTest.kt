@@ -307,13 +307,13 @@ class GradleDependencyHandlerTest : WordSpec({
             val issues = mutableListOf<Issue>()
 
             every { maven.parsePackage(any(), any(), useReposFromDependencies = false) } throws exception
-            val handler = GradleDependencyHandler("Gradle", "Gradle", maven)
+            val handler = GradleDependencyHandler("Gradle", maven)
 
             handler.createPackage(dep, issues) should beNull()
 
             issues should haveSize(1)
             with(issues.first()) {
-                source shouldBe "Gradle"
+                source shouldBe GradleFactory.descriptor.displayName
                 severity shouldBe Severity.ERROR
                 message should contain("${dep.groupId}:${dep.artifactId}:${dep.version}")
             }
@@ -353,7 +353,7 @@ private fun createDependency(
  * this class.
  */
 private fun createGraphBuilder(): DependencyGraphBuilder<OrtDependency> {
-    val dependencyHandler = GradleDependencyHandler("Gradle", "Gradle", createMavenSupport())
+    val dependencyHandler = GradleDependencyHandler("Gradle", createMavenSupport())
     dependencyHandler.repositories = remoteRepositories
     return DependencyGraphBuilder(dependencyHandler)
 }
