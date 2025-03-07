@@ -305,12 +305,12 @@ internal fun ProcessCapture.extractNpmIssues(): List<Issue> {
     // Generally forward issues from the NPM CLI to the ORT NPM package manager. Lower the severity of warnings to
     // hints, as warnings usually do not prevent the ORT NPM package manager from getting the dependencies right.
     lines.groupLines("npm WARN ", "npm warn ").mapTo(issues) {
-        Issue(source = "NPM", message = it, severity = Severity.HINT)
+        Issue(source = NpmFactory.descriptor.displayName, message = it, severity = Severity.HINT)
     }
 
     // For errors, however, something clearly went wrong, so keep the severity here.
     lines.groupLines("npm ERR! ", "npm error ").mapTo(issues) {
-        Issue(source = "NPM", message = it, severity = Severity.ERROR)
+        Issue(source = NpmFactory.descriptor.displayName, message = it, severity = Severity.ERROR)
     }
 
     return issues
