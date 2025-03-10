@@ -51,4 +51,5 @@ dependencies {
     funTestImplementation(testFixtures(projects.analyzer))
 
     testImplementation(libs.mockk)
+    testImplementation(libs.wiremock)
 }
