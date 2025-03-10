@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?artifactRepository version='1.1.0'?>
+<repository name='Orbit Repository (Excerpt from build R-R20211213173813-20211213173813)' type='org.eclipse.equinox.p2.artifact.repository.simpleRepository' version='1'>
+    <properties size='3'>
+        <property name='publishPackFilesAsSiblings' value='true'/>
+        <property name='p2.compressed' value='true'/>
+        <property name='p2.timestamp' value='1639417120595'/>
+    </properties>
+    <mappings size='5'>
+        <rule filter='(&amp; (classifier=osgi.bundle) (format=packed))' output='${repoUrl}/plugins/${id}_${version}.jar.pack.gz'/>
+        <rule filter='(&amp; (classifier=osgi.bundle))' output='${repoUrl}/plugins/${id}_${version}.jar'/>
+        <rule filter='(&amp; (classifier=binary))' output='${repoUrl}/binary/${id}_${version}'/>
+        <rule filter='(&amp; (classifier=org.eclipse.update.feature) (format=packed))' output='${repoUrl}/features/${id}_${version}.jar.pack.gz'/>
+        <rule filter='(&amp; (classifier=org.eclipse.update.feature))' output='${repoUrl}/features/${id}_${version}.jar'/>
+    </mappings>
+    <artifacts size='2'>
+        <artifact classifier='osgi.bundle' id='org.apache.commons.io' version='2.8.0.v20210415-0900'>
+            <properties size='8'>
+                <property name='artifact.size' value='309789'/>
+                <property name='download.size' value='309789'/>
+                <property name='maven-groupId' value='org.eclipse.orbit.bundles'/>
+                <property name='maven-artifactId' value='org.apache.commons.io'/>
+                <property name='maven-version' value='2.8.0-SNAPSHOT'/>
+                <property name='download.md5' value='207008892fa64e0021849355606bc0fe'/>
+                <property name='download.checksum.md5' value='207008892fa64e0021849355606bc0fe'/>
+                <property name='download.checksum.sha-256' value='a58e34c958bcf1704e744dee3793484164ba591e82a32b67fc87414426327e85'/>
+            </properties>
+        </artifact>
+        <artifact classifier='osgi.bundle' id='org.apache.commons.codec' version='1.14.0.v20200818-1422'>
+            <properties size='8'>
+                <property name='artifact.size' value='376432'/>
+                <property name='download.size' value='376432'/>
+                <property name='maven-groupId' value='org.eclipse.orbit.bundles'/>
+                <property name='maven-artifactId' value='org.apache.commons.codec'/>
+                <property name='maven-version' value='1.14.0-SNAPSHOT'/>
+                <property name='download.md5' value='5e8271297be763139bc1189b54166424'/>
+                <property name='download.checksum.md5' value='5e8271297be763139bc1189b54166424'/>
+            </properties>
+        </artifact>
+    </artifacts>
+</repository>
