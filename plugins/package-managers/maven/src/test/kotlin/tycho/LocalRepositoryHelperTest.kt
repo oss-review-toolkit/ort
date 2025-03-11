@@ -23,7 +23,6 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.maps.beEmpty
-import io.kotest.matchers.maps.shouldContainExactly
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
@@ -119,96 +118,6 @@ class LocalRepositoryHelperTest : WordSpec({
             val manifest = helper.osgiManifest(testArtifact)
 
             manifest should beNull()
-        }
-    }
-
-    "p2Properties()" should {
-        "return null if the artifact cannot be resolved" {
-            val root = tempdir()
-
-            val helper = LocalRepositoryHelper(root)
-            helper.p2Properties(testArtifact) should beNull()
-        }
-
-        "return an empty map if the XML file does not exist" {
-            val root = tempdir()
-            val folder = root.createRepositoryFolder()
-            folder.createJar("$TEST_ARTIFACT_ID-$TEST_VERSION", null)
-
-            val helper = LocalRepositoryHelper(root)
-            helper.p2Properties(testArtifact).shouldNotBeNull {
-                this should beEmpty()
-            }
-        }
-
-        "return an empty map if the XML file is not valid" {
-            val root = tempdir()
-            val folder = root.createRepositoryFolder()
-            folder.createJar("$TEST_ARTIFACT_ID-$TEST_VERSION", null)
-            val xmlFile = folder.resolve("$TEST_ARTIFACT_ID-$TEST_VERSION-p2artifacts.xml")
-            xmlFile.writeText("invalid XML")
-
-            val helper = LocalRepositoryHelper(root)
-            helper.p2Properties(testArtifact).shouldNotBeNull {
-                this should beEmpty()
-            }
-        }
-
-        "return the properties extracted from the XML file" {
-            val root = tempdir()
-            val artifact = DefaultArtifact("someGroup", "org.objectweb.asm", "jar", "9.7.0")
-            val folder = root.createRepositoryFolder(artifact.artifactId, artifact.version)
-
-            val srcFile = File("src/test/assets/p2artifacts.xml")
-            val xmlFile = folder.resolve("${artifact.artifactId}-${artifact.version}-p2artifacts.xml")
-            srcFile.copyTo(xmlFile)
-
-            val expectedProperties = mapOf(
-                "maven-groupId" to "org.ow2.asm",
-                "maven-artifactId" to "asm",
-                "maven-version" to "9.7",
-                "maven-repository" to "eclipse.maven.central.mirror",
-                "maven-type" to "jar",
-                "download.size" to "125428",
-                "artifact.size" to "125428",
-                "download.checksum.sha-512" to "ada37fcc95884a4d2cbc64495f5f67556c847e7724e26ccfbb15cc42a476436fa54b" +
-                    "5d4fd4d9ed340241d848999d415e1cff07045d9e97d451c16aeed4911045",
-                "download.checksum.sha-256" to "adf46d5e34940bdf148ecdd26a9ee8eea94496a72034ff7141066b3eea5c4e9d",
-                "download.checksum.sha-1" to "073d7b3086e14beb604ced229c302feff6449723"
-            )
-
-            val helper = LocalRepositoryHelper(root)
-            helper.p2Properties(artifact).shouldNotBeNull {
-                this shouldContainExactly expectedProperties
-            }
-        }
-
-        "return only the properties for the correct artifact" {
-            val root = tempdir()
-            val folder = root.createRepositoryFolder()
-            folder.createJar("$TEST_ARTIFACT_ID-$TEST_VERSION", null)
-            val xmlFile = folder.resolve("$TEST_ARTIFACT_ID-$TEST_VERSION-p2artifacts.xml")
-            xmlFile.writeText(
-                """
-                <?xml version="1.0" encoding="UTF-8"?>
-                <artifacts size='1'>
-                    <artifact classifier='osgi.bundle' id='org.objectweb.asm' version='9.6.0'>
-                        <properties size='5'>
-                            <property name='maven-groupId' value='org.ow2.asm'/>
-                            <property name='maven-artifactId' value='asm'/>
-                            <property name='maven-version' value='9.7'/>
-                            <property name='maven-repository' value='eclipse.maven.central.mirror'/>
-                            <property name='maven-type' value='jar'/>
-                        </properties>
-                    </artifact>
-                </artifacts>
-                """.trimIndent()
-            )
-
-            val helper = LocalRepositoryHelper(root)
-            helper.p2Properties(testArtifact).shouldNotBeNull {
-                this should beEmpty()
-            }
         }
     }
 })
