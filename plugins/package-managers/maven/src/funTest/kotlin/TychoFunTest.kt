@@ -28,6 +28,7 @@ import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.tycho.TychoFactory
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
+import org.ossreviewtoolkit.utils.test.patchActualResult
 
 class TychoFunTest : StringSpec({
     "Project dependencies are detected correctly" {
@@ -36,7 +37,7 @@ class TychoFunTest : StringSpec({
 
         val result = TychoFactory.create().collateMultipleProjects(definitionFile).withResolvedScopes()
 
-        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+        patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
     "Scopes can be excluded" {
@@ -46,6 +47,6 @@ class TychoFunTest : StringSpec({
         val result = TychoFactory.create()
             .collateMultipleProjects(definitionFile, excludedScopes = setOf("test.*")).withResolvedScopes()
 
-        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+        patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
     }
 })
