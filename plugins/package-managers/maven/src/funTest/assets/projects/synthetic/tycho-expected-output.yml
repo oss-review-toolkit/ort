@@ -292,3 +292,10 @@ packages:
     url: "ssh://git@github.com/hamcrest/JavaHamcrest.git"
     revision: ""
     path: ""
+issues:
+  Tycho:org.ossreviewtoolkit:tycho-test-aggregator:1.0.0-SNAPSHOT:
+  - timestamp: "1970-01-01T00:00:00Z"
+    source: "Tycho"
+    message: "The P2 repository at 'https://repo1.maven.org/maven2/' does not contain\
+      \ any artifacts or child repositories."
+    severity: "WARNING"

@@ -37,8 +37,10 @@ import io.kotest.matchers.string.shouldContain
 
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkObject
 import io.mockk.slot
 import io.mockk.spyk
+import io.mockk.unmockkAll
 import io.mockk.verify
 
 import java.io.File
@@ -52,6 +54,7 @@ import org.eclipse.aether.artifact.DefaultArtifact
 import org.eclipse.aether.graph.DependencyNode
 
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Severity
@@ -68,6 +71,10 @@ import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 class TychoTest : WordSpec({
+    afterEach {
+        unmockkAll()
+    }
+
     "mapDefinitionFiles()" should {
         "select only Tycho root projects" {
             val tychoProjectDir1 = tempdir()
@@ -224,6 +231,60 @@ class TychoTest : WordSpec({
                 subProject2.identifier("Tycho").toCoordinates(),
                 subProject3.identifier("Tycho").toCoordinates()
             )
+        }
+
+        "set up a P2ArtifactResolver correctly" {
+            val definitionFile = tempfile()
+            val rootProject = createMavenProject("root", definitionFile)
+            val subProject = createMavenProject("sub")
+            val projectsList = listOf(rootProject, subProject)
+
+            val tycho = spyk(Tycho())
+            injectCliMock(tycho, projectsList.toJson(), projectsList)
+
+            tycho.resolveDependencies(
+                tempdir(),
+                definitionFile,
+                Excludes.EMPTY,
+                AnalyzerConfiguration(),
+                emptyMap()
+            )
+
+            val slotProjects = slot<Collection<MavenProject>>()
+            verify {
+                P2ArtifactResolver.create(definitionFile.parentFile, capture(slotProjects))
+            }
+
+            slotProjects.captured shouldContainExactlyInAnyOrder projectsList
+        }
+
+        "add issues from the resolver to the root project" {
+            val definitionFile = tempfile()
+            val rootProject = createMavenProject("root", definitionFile)
+            val subProject = createMavenProject("sub")
+            val projectsList = listOf(rootProject, subProject)
+
+            val issues = listOf(
+                Issue(source = "TychoResolver", message = "Something went wrong with repository 'repo1'."),
+                Issue(source = "TychoResolver", message = "more trouble ahead", severity = Severity.HINT)
+            )
+            val resolver = mockk<P2ArtifactResolver> {
+                every { resolverIssues } returns issues
+            }
+
+            val tycho = spyk(Tycho())
+            injectCliMock(tycho, projectsList.toJson(), projectsList, resolver = resolver)
+
+            val results = tycho.resolveDependencies(
+                tempdir(),
+                definitionFile,
+                Excludes.EMPTY,
+                AnalyzerConfiguration(),
+                emptyMap()
+            )
+
+            val rootResults = results.single { it.project.id.name == "root" }
+            rootResults.issues shouldContainExactlyInAnyOrder issues
         }
 
         "exclude projects from the build according to path excludes" {
@@ -403,7 +464,7 @@ class TychoTest : WordSpec({
                 )
             )
 
-            val pkg = createPackageFromManifest(testArtifact, manifest, createTrackerMock())
+            val pkg = createPackageFromManifest(testArtifact, manifest, createResolverMock())
 
             pkg.vcs shouldBe VcsInfo(
                 type = VcsType.GIT,
@@ -421,7 +482,7 @@ class TychoTest : WordSpec({
                 )
             )
 
-            val pkg = createPackageFromManifest(testArtifact, manifest, createTrackerMock())
+            val pkg = createPackageFromManifest(testArtifact, manifest, createResolverMock())
 
             pkg.vcs shouldBe VcsInfo(
                 type = VcsType.GIT,
@@ -439,7 +500,7 @@ class TychoTest : WordSpec({
                 )
             )
 
-            val pkg = createPackageFromManifest(testArtifact, manifest, createTrackerMock())
+            val pkg = createPackageFromManifest(testArtifact, manifest, createResolverMock())
 
             pkg.vcs shouldBe VcsInfo(
                 type = VcsType.GIT,
@@ -457,7 +518,7 @@ class TychoTest : WordSpec({
                 )
             )
 
-            val pkg = createPackageFromManifest(testArtifact, manifest, createTrackerMock())
+            val pkg = createPackageFromManifest(testArtifact, manifest, createResolverMock())
 
             pkg.vcs shouldBe VcsInfo(
                 type = VcsType.GIT,
@@ -476,7 +537,7 @@ class TychoTest : WordSpec({
                 )
             )
 
-            val pkg = createPackageFromManifest(testArtifact, manifest, createTrackerMock())
+            val pkg = createPackageFromManifest(testArtifact, manifest, createResolverMock())
 
             pkg.vcs shouldBe VcsInfo(
                 type = VcsType.GIT,
@@ -494,7 +555,7 @@ class TychoTest : WordSpec({
                 )
             )
 
-            val pkg = createPackageFromManifest(testArtifact, manifest, createTrackerMock())
+            val pkg = createPackageFromManifest(testArtifact, manifest, createResolverMock())
 
             pkg.vcs shouldBe VcsInfo(
                 type = VcsType.GIT,
@@ -509,7 +570,7 @@ class TychoTest : WordSpec({
                 mapOf("Bundle-DocURL" to "https://example.com/package.git")
             )
 
-            val pkg = createPackageFromManifest(testArtifact, manifest, createTrackerMock())
+            val pkg = createPackageFromManifest(testArtifact, manifest, createResolverMock())
 
             pkg.vcs shouldBe VcsInfo.EMPTY
             pkg.vcsProcessed shouldBe VcsInfo(
@@ -521,7 +582,7 @@ class TychoTest : WordSpec({
 
         "obtain the binary artifact from the tracker" {
             val binaryArtifact = RemoteArtifact.EMPTY.copy(url = "https://example.com/binary")
-            val tracker = createTrackerMock(binaryArtifact = binaryArtifact)
+            val tracker = createResolverMock(binaryArtifact = binaryArtifact)
 
             val pkg = createPackageFromManifest(testArtifact, Manifest(), tracker)
 
@@ -530,7 +591,7 @@ class TychoTest : WordSpec({
 
         "obtain the source artifact from the tracker" {
             val sourceArtifact = RemoteArtifact.EMPTY.copy(url = "https://example.com/source")
-            val tracker = createTrackerMock(sourceArtifact = sourceArtifact)
+            val tracker = createResolverMock(sourceArtifact = sourceArtifact)
 
             val pkg = createPackageFromManifest(testArtifact, Manifest(), tracker)
 
@@ -578,16 +639,20 @@ private fun Collection<MavenProject>.toJson(): String =
     joinToString("\n") { JSON.encodeToString(it.toDependencyTreeMojoNode()) }
 
 /**
- * Create a mock for a [MavenCli] object and configure the given [tycho] spi to use it. The mock CLI simulates a
+ * Create a mock for a [MavenCli] object and configure the given [tycho] spy to use it. The mock CLI simulates a
  * Maven build that produces the given [buildOutput] and detects the given [projectsList]. It returns the given
- * [exitCode].
+ * [exitCode]. In addition, a mock for the [P2ArtifactResolver] is prepared to be used by the Tycho instance.
  */
 private fun injectCliMock(
     tycho: Tycho,
     buildOutput: String,
     projectsList: List<MavenProject>,
-    exitCode: Int = 0
+    exitCode: Int = 0,
+    resolver: P2ArtifactResolver = mockk(relaxed = true)
 ): MavenCli {
+    mockkObject(P2ArtifactResolver)
+    every { P2ArtifactResolver.create(any(), any()) } returns resolver
+
     val cli = mockk<MavenCli> {
         every { doMain(any(), any(), any(), any()) } answers {
             val args = firstArg<Array<String>>()
@@ -602,7 +667,7 @@ private fun injectCliMock(
         every { projects } returns projectsList
     }
 
-    every { tycho.createMavenCli(any(), any()) } answers {
+    every { tycho.createMavenCli(any()) } answers {
         val collector = firstArg<TychoProjectsCollector>()
         collector.afterSessionEnd(session)
         cli
@@ -648,10 +713,10 @@ private val resolveException = RuntimeException("Test exception: Could not resol
  */
 private fun createResolverFunWithRepositoryHelper(block: LocalRepositoryHelper.() -> Unit): PackageResolverFun {
     val helper = mockk<LocalRepositoryHelper>(block = block)
-    val tracker = createTrackerMock()
+    val resolver = createResolverMock()
 
     val delegateResolverFun: PackageResolverFun = { throw resolveException }
-    return tychoPackageResolverFun(delegateResolverFun, helper, tracker)
+    return tychoPackageResolverFun(delegateResolverFun, helper, resolver)
 }
 
 /**
@@ -663,13 +728,13 @@ private fun createManifest(entries: Map<String, String>): Manifest =
     }
 
 /**
- * Create a mock [P2ArtifactTracker] that is prepared to return the given [binaryArtifact] and [sourceArtifact] when
+ * Create a mock [P2ArtifactResolver] that is prepared to return the given [binaryArtifact] and [sourceArtifact] when
  * queried for the test artifact.
  */
-private fun createTrackerMock(
+private fun createResolverMock(
     binaryArtifact: RemoteArtifact = RemoteArtifact.EMPTY,
     sourceArtifact: RemoteArtifact = RemoteArtifact.EMPTY
-): P2ArtifactTracker {
+): P2ArtifactResolver {
     val testArtifact = testArtifact
 
     return mockk {
