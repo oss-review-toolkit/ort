@@ -148,6 +148,7 @@ ARG PYTHON_PIPENV_VERSION
 ARG PYTHON_POETRY_VERSION
 ARG PYTHON_POETRY_PLUGIN_EXPORT_VERSION
 ARG PYTHON_SETUPTOOLS_VERSION
+ARG PYTHON_UV_VERSION
 ARG PIP_VERSION
 ARG SCANCODE_VERSION
 
@@ -175,7 +176,8 @@ RUN pip install --no-cache-dir -U \
     poetry=="$PYTHON_POETRY_VERSION" \
     poetry-plugin-export=="$PYTHON_POETRY_PLUGIN_EXPORT_VERSION" \
     python-inspector=="$PYTHON_INSPECTOR_VERSION" \
-    setuptools=="$PYTHON_SETUPTOOLS_VERSION"
+    setuptools=="$PYTHON_SETUPTOOLS_VERSION" \
+    uv=="${PYTHON_UV_VERSION}"
 RUN mkdir /tmp/conan2 && cd /tmp/conan2 \
     && wget https://github.com/conan-io/conan/releases/download/$CONAN2_VERSION/conan-$CONAN2_VERSION-linux-x86_64.tgz \
     && tar -xvf conan-$CONAN2_VERSION-linux-x86_64.tgz\
