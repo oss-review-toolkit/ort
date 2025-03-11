@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pde?>
+<target name="Tycho Test Target" sequenceNumber="42">
+    <locations>
+        <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+            <repository location="https://p2.example.com/repo/download.eclipse.org/modeling/tmf/xtext/updates/releases/2.37.0/"/>
+            <unit id="org.eclipse.xtext.ui.feature.group" version="0.0.0"/>
+            <unit id="org.eclipse.xtext.docs.feature.group" version="0.0.0"/>
+            <unit id="org.eclipse.xtext.runtime.feature.group" version="0.0.0"/>
+            <unit id="org.eclipse.xtext.xtext.ui.feature.group" version="0.0.0"/>
+            <unit id="org.eclipse.xtext.sdk.feature.group" version="0.0.0"/>
+        </location>
+
+        <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+            <repository location="https://p2.example.org/repo/download.eclipse.org/modeling/emft/mwe/updates/releases/2.20.0/"/>
+            <unit id="org.eclipse.emf.mwe.core.feature.feature.group" version="0.0.0"/>
+            <unit id="org.eclipse.emf.mwe.ui.feature.feature.group" version="0.0.0"/>
+            <unit id="org.eclipse.emf.mwe2.launcher.feature.group" version="0.0.0"/>
+            <unit id="org.eclipse.emf.mwe.sdk.feature.group" version="0.0.0"/>
+        </location>
+
+        <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+            <repository location="https://p2.example.com/repository/download.eclipse.org/releases/2024-12"/>
+            <unit id="org.eclipse.emf.feature.group" version="0.0.0"/>
+            <unit id="org.eclipse.equinox.core.feature.feature.group" version="0.0.0"/>
+            <unit id="org.eclipse.equinox.executable.feature.group" version="0.0.0"/>
+            <unit id="org.eclipse.equinox.p2.core.feature.feature.group" version="0.0.0"/>
+            <unit id="org.eclipse.platform.feature.group" version="0.0.0"/>
+        </location>
+
+        <location includeDependencyDepth="infinite" includeDependencyScopes="compile" includeSource="true" label="maven.libraries.with.transitives" missingManifest="generate" type="Maven">
+            <feature id="maven.libraries.with.transitives" label="maven.libraries.with.transitives" version="1.0.0.qualifier"/>
+            <dependencies>
+                <dependency>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                    <version>1.5.6</version>
+                    <type>jar</type>
+                </dependency>
+                <dependency>
+                    <groupId>com.fasterxml.jackson.dataformat</groupId>
+                    <artifactId>jackson-dataformat-xml</artifactId>
+                    <version>2.15.2</version>
+                    <type>jar</type>
+                </dependency>
+            </dependencies>
+        </location>
+    </locations>
+</target>
