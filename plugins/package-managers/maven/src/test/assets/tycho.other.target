@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pde?>
+<target name="Tycho Alternative Test Target" sequenceNumber="43">
+    <locations>
+        <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+            <repository location="https://p2.other.example.com/repo/other/test/"/>
+            <unit id="org.apache.commons.lang" version="0.0.0"/>
+        </location>
+    </locations>
+</target>
