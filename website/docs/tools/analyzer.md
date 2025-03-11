@@ -50,6 +50,7 @@ Currently, the following package managers (grouped by the programming language t
   * [PIP](https://pip.pypa.io/)
   * [Pipenv](https://pipenv.pypa.io/en/latest/)
   * [Poetry](https://python-poetry.org/)
+  * [Uv](https://github.com/astral-sh/uv)
 * Ruby
   * [Bundler](https://bundler.io/) (limitations: [restricted to the version available on the host](https://github.com/oss-review-toolkit/ort/issues/1308))
 * Rust

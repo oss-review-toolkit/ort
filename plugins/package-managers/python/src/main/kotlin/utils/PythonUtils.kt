@@ -19,19 +19,29 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.python.utils
 
+import java.io.File
 import java.lang.invoke.MethodHandles
 
 import org.apache.logging.log4j.kotlin.loggerOf
 
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
+
+import org.semver4j.RangesListFactory
+import org.semver4j.Semver
 
 private val logger = loggerOf(MethodHandles.lookup().lookupClass())
 
 private const val GENERIC_BSD_LICENSE = "BSD License"
 private const val SHORT_STRING_MAX_CHARS = 200
+
+internal const val OPTION_PYTHON_VERSION_DEFAULT = "3.11"
+internal val PYTHON_VERSIONS = listOf("2.7", "3.6", "3.7", "3.8", "3.9", "3.10", OPTION_PYTHON_VERSION_DEFAULT)
+
+internal const val PYPROJECT_FILENAME = "pyproject.toml"
 
 internal fun getLicenseFromClassifier(classifier: String): String? {
     // Example license classifier (also see https://pypi.org/classifiers/):
@@ -72,4 +82,36 @@ internal fun processDeclaredLicenses(id: Identifier, declaredLicenses: Set<Strin
     }
 
     return declaredLicensesProcessed
+}
+
+internal fun getTomlSectionContent(tomlFile: File, sectionName: String): String? {
+    val lines = tomlFile.takeIf { it.isFile }?.readLines() ?: return null
+
+    val sectionHeaderIndex = lines.indexOfFirst { it.trim() == "[$sectionName]" }
+    if (sectionHeaderIndex == -1) return null
+
+    val sectionLines = lines.subList(sectionHeaderIndex + 1, lines.size).takeWhile { !it.trim().startsWith('[') }
+    return sectionLines.joinToString("\n")
+}
+
+internal fun getPythonVersion(constraint: String): String? {
+    val rangeLists = constraint.split(',')
+        .map { RangesListFactory.create(it) }
+        .takeIf { it.isNotEmpty() } ?: return null
+
+    return PYTHON_VERSIONS.lastOrNull { version ->
+        rangeLists.all { rangeList ->
+            val semver = Semver.coerce(version)
+            semver != null && rangeList.isSatisfiedBy(semver)
+        }
+    }
+}
+
+internal fun getPythonVersionConstraint(pyprojectTomlFile: File, sectionName: String): String? {
+    val dependenciesSection = getTomlSectionContent(pyprojectTomlFile, sectionName)
+        ?: return null
+
+    return dependenciesSection.split('\n').firstNotNullOfOrNull {
+        it.trim().withoutPrefix("python = ")
+    }?.removeSurrounding("\"")
 }

@@ -31,6 +31,8 @@ import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
+import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.OPTION_PYTHON_VERSION_DEFAULT
+import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.PYTHON_VERSIONS
 import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.PythonInspector
 import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.toOrtPackages
 import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.toOrtProject
@@ -39,9 +41,6 @@ import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 private val OPERATING_SYSTEMS = listOf("linux", "macos", "windows")
-
-private const val OPTION_PYTHON_VERSION_DEFAULT = "3.11"
-internal val PYTHON_VERSIONS = listOf("2.7", "3.6", "3.7", "3.8", "3.9", "3.10", OPTION_PYTHON_VERSION_DEFAULT)
 
 data class PipConfig(
     /**

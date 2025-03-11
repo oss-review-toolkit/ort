@@ -291,6 +291,13 @@ private fun getScopeExcludesForPackageManager(packageManagerName: String): List<
                 comment = "Packages for testing only."
             )
         )
+        "Uv" -> listOf(
+            ScopeExclude(
+                pattern = "dev",
+                reason = ScopeExcludeReason.DEV_DEPENDENCY_OF,
+                comment = "Packages for development only."
+            )
+        )
         "SBT" -> listOf(
             ScopeExclude(
                 pattern = "provided",

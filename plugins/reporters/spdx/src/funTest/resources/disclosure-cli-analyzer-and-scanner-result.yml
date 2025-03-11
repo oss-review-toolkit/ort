@@ -43,6 +43,7 @@ analyzer:
     - "Pipenv"
     - "PNPM"
     - "Poetry"
+    - "Uv"
     - "Yarn"
     - "Yarn2"
     - "Unmanaged"
