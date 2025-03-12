@@ -49,4 +49,13 @@ class TychoFunTest : StringSpec({
 
         patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
     }
+
+    "Special Tycho packaging options are supported" {
+        val definitionFile = getAssetFile("projects/synthetic/tycho-feature/pom.xml")
+        val expectedResultFile = getAssetFile("projects/synthetic/tycho-expected-output-feature.yml")
+
+        val result = TychoFactory.create().collateMultipleProjects(definitionFile).withResolvedScopes()
+
+        patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
+    }
 })

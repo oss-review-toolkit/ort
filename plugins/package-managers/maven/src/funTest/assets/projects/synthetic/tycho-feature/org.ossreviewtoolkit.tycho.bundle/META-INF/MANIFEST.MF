@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %Bundle-Name
+Bundle-SymbolicName: org.ossreviewtoolkit.tycho.test.bundle
+Bundle-Version: 1.1.0.qualifier
+Require-Bundle: org.apache.commons.collections4;bundle-version="4.4.0.v20200420-1700"
+Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-ActivationPolicy: lazy
+Bundle-Vendor: ORT
+Automatic-Module-Name: org.ossreviewtoolkit.tycho.test.bundle
