@@ -20,11 +20,14 @@
 package org.ossreviewtoolkit.plugins.scanners.scanoss
 
 import com.scanoss.Scanner
+import com.scanoss.filters.FilterConfig
 import com.scanoss.utils.JsonUtils
 import com.scanoss.utils.PackageDetails
 
 import java.io.File
 import java.time.Instant
+
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
@@ -61,14 +64,39 @@ class ScanOss(
     override fun scanPath(path: File, context: ScanContext): ScanSummary {
         val startTime = Instant.now()
 
+        // basePath: The reference path used for creating relative paths.
+        val basePath = path.toPath()
+
+        val filterConfig = FilterConfig.builder()
+            .customFilter { currentPath ->
+                // currentPath: A Path object representing the file or directory being evaluated by the filter.
+                // This is provided by the Scanner and represents individual files/directories during traversal.
+                // It is an absolute path to a file or directory within the scan target.
+                try {
+                    // relativePath: The path of the current file relative to the base scan directory.
+                    // Example: If basePath is "/project" and currentPath is "/project/src/main/file.kt",
+                    // then relativePath becomes "src/main/file.kt".
+                    // This relative representation is what the exclusion patterns in context.excludes expect.
+                    val relativePath = basePath.relativize(currentPath).toString()
+                    val isExcluded = context.excludes?.isPathExcluded(relativePath) ?: false
+                    logger.debug("Path: $currentPath, relative: $relativePath, isExcluded: $isExcluded")
+                    isExcluded
+                } catch (e: IllegalArgumentException) {
+                    logger.warn("Error processing path $currentPath: ${e.message}")
+                    false
+                }
+            }
+            .build()
+
         val scanoss = Scanner.builder()
             .url(config.apiUrl.removeSuffix("/") + "/scan/direct")
             .apiKey(config.apiKey.value)
+            .filterConfig(filterConfig)
             .build()
 
         val rawResults: List<String> = when {
-            path.isFile -> listOf(scanoss.scanFile(path.absolutePath))
-            else -> scanoss.scanFolder(path.absolutePath)
+            path.isFile -> listOf(scanoss.scanFile(path.toString()))
+            else -> scanoss.scanFolder(path.toString())
         }
 
         val results = JsonUtils.toScanFileResults(rawResults)
