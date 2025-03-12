@@ -70,6 +70,23 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 
 /**
  * A package manager implementation supporting Maven projects using [Tycho](https://github.com/eclipse-tycho/tycho).
+ *
+ * This implementation uses the following strategy to obtain the dependency graph and construct [Package] objects with
+ * metadata:
+ *
+ * Start a Maven build on the analyzed project using the
+ * [Maven Embedder](https://maven.apache.org/ref/3.9.9/maven-embedder/index.html) library with the goals "package" and
+ * "dependency:tree". (The "package" goal is required to activate the Tycho extension.) The dependency plugin is
+ * configured to write the dependency tree information in JSON format to a file; from there it can be read in a
+ * convenient way.
+ *
+ * Resolving of dependencies that are OSGi artifacts hosted in P2 repositories requires a special treatment, since
+ * Maven does not natively support this repository layout. The class obtains the P2 repositories referenced from the
+ * build from the projects encountered during the build and the
+ * [Tycho target platform definition](https://wiki.eclipse.org/Tycho/Target_Platform/). Each P2 repository has a file
+ * listing the artifacts it contains with some metadata. By reading these files and aggregating the information, the
+ * implementation can match the bundle identifiers of OSGi dependencies to the repositories where they can be found
+ * and thus create correct [RemoteArtifact] objects.
  */
 @OrtPlugin(
     displayName = "Tycho",
