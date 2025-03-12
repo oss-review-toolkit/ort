@@ -34,6 +34,7 @@ object CopyrightableFiles {
         "plugins/reporters/asciidoc/src/main/resources/pdf-theme/pdf-theme.yml",
         "plugins/reporters/asciidoc/src/main/resources/templates/freemarker_implicit.ftl",
         "plugins/reporters/fossid/src/main/resources/templates/freemarker_implicit.ftl",
+        "plugins/reporters/scanoss/src/main/resources/templates/freemarker_implicit.ftl",
         "plugins/reporters/freemarker/src/main/resources/templates/freemarker_implicit.ftl",
         "plugins/reporters/static-html/src/main/resources/prismjs/",
         "plugins/reporters/web-app-template/yarn.lock",
