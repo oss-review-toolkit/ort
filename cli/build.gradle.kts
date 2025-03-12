@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+val cliAnalyzerOnly: String? by project
+
 plugins {
     // Apply precompiled plugins.
     id("ort-application-conventions")
@@ -40,14 +42,20 @@ dependencies {
     implementation(libs.mordant)
     implementation(libs.slf4j)
 
-    "pluginClasspath"(platform(projects.plugins.advisors))
-    "pluginClasspath"(platform(projects.plugins.commands))
-    "pluginClasspath"(platform(projects.plugins.packageConfigurationProviders))
-    "pluginClasspath"(platform(projects.plugins.packageCurationProviders))
-    "pluginClasspath"(platform(projects.plugins.packageManagers))
-    "pluginClasspath"(platform(projects.plugins.reporters))
-    "pluginClasspath"(platform(projects.plugins.scanners))
-    "pluginClasspath"(platform(projects.plugins.versionControlSystems))
+    if (cliAnalyzerOnly.toBoolean()) {
+        "pluginClasspath"(projects.plugins.commands.analyzerCommand)
+        "pluginClasspath"(platform(projects.plugins.packageCurationProviders))
+        "pluginClasspath"(platform(projects.plugins.packageManagers))
+    } else {
+        "pluginClasspath"(platform(projects.plugins.advisors))
+        "pluginClasspath"(platform(projects.plugins.commands))
+        "pluginClasspath"(platform(projects.plugins.packageConfigurationProviders))
+        "pluginClasspath"(platform(projects.plugins.packageCurationProviders))
+        "pluginClasspath"(platform(projects.plugins.packageManagers))
+        "pluginClasspath"(platform(projects.plugins.reporters))
+        "pluginClasspath"(platform(projects.plugins.scanners))
+        "pluginClasspath"(platform(projects.plugins.versionControlSystems))
+    }
 
     funTestImplementation(platform(projects.plugins.commands))
     funTestImplementation(platform(projects.plugins.packageCurationProviders))
