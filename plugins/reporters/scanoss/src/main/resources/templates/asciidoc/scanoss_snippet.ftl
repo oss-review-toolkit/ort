@@ -79,9 +79,9 @@ License(s):
 [#assign snippetCount = snippetFinding.snippets?size]
 
 [width=100%]
-[cols="1,3,4,1"]
+[cols="1,3,4,1,2"]
 |===
-| Source Location | pURL | License | Score
+| Source Location | pURL | License | Score | Release Date
 
 .${snippetCount*2}+|
 Partial match +
@@ -93,6 +93,7 @@ ${sourceLocation.startLine?c}-${sourceLocation.endLine?c}
 | ${snippet.purl!""}
 | ${snippet.license!""}
 | ${snippet.score!""}
+| ${snippet.additionalData['release_date']}
 
 4+a|
 .Create a snippet choice for this snippet or mark it as false positive
