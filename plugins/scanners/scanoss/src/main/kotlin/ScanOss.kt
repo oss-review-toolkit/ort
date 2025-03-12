@@ -21,6 +21,11 @@ package org.ossreviewtoolkit.plugins.scanners.scanoss
 
 import com.scanoss.Scanner
 import com.scanoss.filters.FilterConfig
+import com.scanoss.settings.Bom
+import com.scanoss.settings.RemoveRule
+import com.scanoss.settings.ReplaceRule
+import com.scanoss.settings.Rule
+import com.scanoss.settings.ScanossSettings
 import com.scanoss.utils.JsonUtils
 import com.scanoss.utils.PackageDetails
 
@@ -30,6 +35,9 @@ import java.time.Instant
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.config.SnippetChoices
+import org.ossreviewtoolkit.model.config.snippet.SnippetChoice
+import org.ossreviewtoolkit.model.config.snippet.SnippetChoiceReason
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.scanner.PathScannerWrapper
@@ -87,6 +95,7 @@ class ScanOss(
 
         // Build the scanner at function level in case any path-specific settings or filters are needed later.
         val scanoss = scanossBuilder
+            .settings(buildSettingsFromORTContext(context))
             .filterConfig(filterConfig)
             .build()
 
@@ -98,5 +107,71 @@ class ScanOss(
         val results = JsonUtils.toScanFileResults(rawResults)
         val endTime = Instant.now()
         return generateSummary(startTime, endTime, results)
+    }
+
+    data class ProcessedRules(
+        val includeRules: List<Rule>,
+        val ignoreRules: List<Rule>,
+        val replaceRules: List<ReplaceRule>,
+        val removeRules: List<RemoveRule>
+    )
+
+    private fun buildSettingsFromORTContext(context: ScanContext): ScanossSettings {
+        val rules = processSnippetChoices(context.snippetChoices)
+        val bom = Bom.builder()
+            .ignore(rules.ignoreRules)
+            .include(rules.includeRules)
+            .replace(rules.replaceRules)
+            .remove(rules.removeRules)
+            .build()
+        return ScanossSettings.builder().bom(bom).build()
+    }
+
+    fun processSnippetChoices(snippetChoices: List<SnippetChoices>): ProcessedRules {
+        val includeRules = mutableListOf<Rule>()
+        val ignoreRules = mutableListOf<Rule>()
+        val replaceRules = mutableListOf<ReplaceRule>()
+        val removeRules = mutableListOf<RemoveRule>()
+
+        snippetChoices.forEach { snippetChoice ->
+            snippetChoice.choices.forEach { choice ->
+                when (choice.choice.reason) {
+                    SnippetChoiceReason.ORIGINAL_FINDING -> {
+                        includeRules.includeFinding(choice)
+                    }
+
+                    SnippetChoiceReason.NO_RELEVANT_FINDING -> {
+                        removeRules.removeFinding(choice)
+                    }
+
+                    SnippetChoiceReason.OTHER -> {
+                        logger.info {
+                            "Encountered OTHER reason for snippet choice in file ${choice.given.sourceLocation.path}"
+                        }
+                    }
+                }
+            }
+        }
+
+        return ProcessedRules(includeRules, ignoreRules, replaceRules, removeRules)
+    }
+
+    private fun MutableList<Rule>.includeFinding(choice: SnippetChoice) {
+        this += Rule.builder()
+            .purl(choice.choice.purl)
+            .path(choice.given.sourceLocation.path)
+            .build()
+    }
+
+    private fun MutableList<RemoveRule>.removeFinding(choice: SnippetChoice) {
+        this += RemoveRule.builder().apply {
+            path(choice.given.sourceLocation.path)
+
+            // Set line range only if both line positions (startLine and endLine) are known.
+            if (choice.given.sourceLocation.hasLineRange) {
+                startLine(choice.given.sourceLocation.startLine)
+                endLine(choice.given.sourceLocation.endLine)
+            }
+        }.build()
     }
 }
