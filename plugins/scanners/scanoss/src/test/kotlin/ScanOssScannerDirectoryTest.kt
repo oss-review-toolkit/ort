@@ -111,7 +111,8 @@ class ScanOssScannerDirectoryTest : StringSpec({
                                 VcsInfo(VcsType.GIT, "https://github.com/scanoss/ort.git", ""), "."
                             ),
                             "pkg:github/scanoss/ort",
-                            SpdxExpression.parse("Apache-2.0")
+                            SpdxExpression.parse("Apache-2.0"),
+                            additionalData = mapOf("release_date" to "2021-03-18")
                         )
                     )
                 )
