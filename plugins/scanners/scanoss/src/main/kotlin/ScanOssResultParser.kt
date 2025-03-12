@@ -154,12 +154,14 @@ private fun getSnippets(details: ScanFileDetails): Set<Snippet> {
     val vcsInfo = VcsHost.parseUrl(url.takeUnless { it == "none" }.orEmpty())
     val provenance = RepositoryProvenance(vcsInfo, ".")
 
+    val additionalData = mapOf("release_date" to details.releaseDate)
+
     return buildSet {
         purls.forEach { purl ->
             locations.forEach { snippetLocation ->
                 val license = licenses.toExpression()?.sorted() ?: SpdxLicenseIdExpression(SpdxConstants.NOASSERTION)
 
-                add(Snippet(score, snippetLocation, provenance, purl, license))
+                add(Snippet(score, snippetLocation, provenance, purl, license, additionalData))
             }
         }
     }

@@ -125,7 +125,8 @@ class ScanOssResultParserTest : WordSpec({
                                 "."
                             ),
                             "pkg:github/vdurmont/semver4j",
-                            SpdxExpression.parse("CC-BY-SA-2.0")
+                            SpdxExpression.parse("CC-BY-SA-2.0"),
+                            additionalData = mapOf("release_date" to "2019-09-13")
                         )
                     )
                 )
