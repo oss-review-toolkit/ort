@@ -225,12 +225,12 @@ packages:
       algorithm: "SHA-256"
   vcs:
     type: "Git"
-    url: ""
+    url: "https://github.com/bazelbuild/rules_cc"
     revision: ""
     path: ""
   vcs_processed:
     type: "Git"
-    url: ""
+    url: "https://github.com/bazelbuild/rules_cc.git"
     revision: ""
     path: ""
 - id: "Bazel::rules_license:0.0.7"
