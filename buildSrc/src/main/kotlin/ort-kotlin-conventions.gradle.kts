@@ -105,6 +105,8 @@ detekt {
 
 java {
     toolchain {
+        // Note that Gradle currently matches the Java language version exactly and does not consider (backward)
+        // compatibility between versions, see https://github.com/gradle/gradle/issues/16256.
         languageVersion = JavaLanguageVersion.of(javaLanguageVersion)
     }
 }
