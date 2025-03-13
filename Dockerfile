@@ -136,12 +136,13 @@ ARG PYTHON_VERSION
 ARG PYENV_GIT_TAG
 
 ENV PYENV_ROOT=/opt/python
-ENV PATH=$PATH:$PYENV_ROOT/shims:$PYENV_ROOT/bin
+ENV PATH=$PATH:$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PYENV_ROOT/conan2/bin
 RUN curl -kSs https://pyenv.run | bash \
     && pyenv install -v $PYTHON_VERSION \
     && pyenv global $PYTHON_VERSION
 
 ARG CONAN_VERSION
+ARG CONAN2_VERSION
 ARG PYTHON_INSPECTOR_VERSION
 ARG PYTHON_PIPENV_VERSION
 ARG PYTHON_POETRY_VERSION
@@ -175,6 +176,12 @@ RUN pip install --no-cache-dir -U \
     poetry-plugin-export=="$PYTHON_POETRY_PLUGIN_EXPORT_VERSION" \
     python-inspector=="$PYTHON_INSPECTOR_VERSION" \
     setuptools=="$PYTHON_SETUPTOOLS_VERSION"
+RUN mkdir /tmp/conan2 && cd /tmp/conan2 \
+    && wget https://github.com/conan-io/conan/releases/download/$CONAN2_VERSION/conan-$CONAN2_VERSION-linux-x86_64.tgz \
+    && tar -xvf conan-$CONAN2_VERSION-linux-x86_64.tgz\
+    # Rename the Conan 2 executable to "conan2" to be able to call both Conan version from the package manager.
+    && mkdir $PYENV_ROOT/conan2 && mv /tmp/conan2/bin $PYENV_ROOT/conan2/ \
+    && mv $PYENV_ROOT/conan2/bin/conan $PYENV_ROOT/conan2/bin/conan2
 
 FROM scratch AS python
 COPY --from=pythonbuild /opt/python /opt/python
@@ -477,7 +484,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 
 # Python
 ENV PYENV_ROOT=/opt/python
-ENV PATH=$PATH:$PYENV_ROOT/shims:$PYENV_ROOT/bin
+ENV PATH=$PATH:$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PYENV_ROOT/conan2/bin
 COPY --from=python --chown=$USER:$USER $PYENV_ROOT $PYENV_ROOT
 
 # NodeJS
