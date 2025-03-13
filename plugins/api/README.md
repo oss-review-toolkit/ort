@@ -158,7 +158,7 @@ plugins {
 
 dependencies {
     ksp("org.ossreviewtoolkit:advisor:[version]")
-    ksp("org.ossreviewtoolkit:compiler:[version]")
+    ksp("org.ossreviewtoolkit.plugins:compiler:[version]")
 }
 ```
 
