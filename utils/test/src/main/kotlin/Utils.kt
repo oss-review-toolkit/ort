@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.ProvenanceResolutionResult
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RemoteProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScannerRun
@@ -198,7 +199,7 @@ fun scannerRunOf(vararg pkgScanResults: Pair<Identifier, List<ScanResult>>): Sca
 
     return ScannerRun.EMPTY.copy(
         provenances = pkgScanResultsWithKnownProvenance.mapTo(mutableSetOf()) { (id, scanResultsForId) ->
-            val packageProvenance = scanResultsForId.firstOrNull()?.provenance as KnownProvenance
+            val packageProvenance = scanResultsForId.firstOrNull()?.provenance as RemoteProvenance
 
             ProvenanceResolutionResult(
                 id = id,

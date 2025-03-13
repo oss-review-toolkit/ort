@@ -26,6 +26,7 @@ import java.io.File
 
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.KnownProvenance
+import org.ossreviewtoolkit.model.RemoteProvenance
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.model.utils.ProvenanceFileStorage
 import org.ossreviewtoolkit.model.yamlMapper
@@ -55,7 +56,7 @@ class FileListResolver(
      * Get the [FileList] associated with the provided [provenance]. If it is not available in the [storage], download
      * the provenance and create the [FileList] from it.
      */
-    fun resolve(provenance: KnownProvenance): FileList {
+    fun resolve(provenance: RemoteProvenance): FileList {
         storage.getFileList(provenance)?.let { return it }
 
         val dir = provenanceDownloader.download(provenance)
