@@ -1,0 +1,77 @@
+/*
+ * Copyright (C) 2023 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * License-Filename: LICENSE
+ */
+
+package org.ossreviewtoolkit.plugins.packagemanagers.python.utils
+
+import io.kotest.core.spec.style.WordSpec
+import io.kotest.engine.spec.tempdir
+import io.kotest.matchers.shouldBe
+
+class PythonUtilsTest : WordSpec({
+    "getPythonVersion()" should {
+        "return the expected python version" {
+            getPythonVersion("~3.10") shouldBe "3.10"
+            getPythonVersion("^3.10,<3.11") shouldBe "3.10"
+            getPythonVersion("^3.10") shouldBe "3.11"
+            getPythonVersion("^3.11,<4.0") shouldBe "3.11"
+            getPythonVersion("^3.10,<4.0") shouldBe "3.11"
+        }
+
+        "return null if constraint cannot be satisfied" {
+            getPythonVersion("^3.10,<3.10") shouldBe null
+        }
+    }
+
+    "getPythonVersionConstraint()" should {
+        "return the Python version constraint from the pyproject.toml" {
+            val pyprojectFile = tempdir().resolve(PYPROJECT_FILENAME)
+
+            pyprojectFile.writeText(
+                """
+                    [tool.poetry.dependencies]
+                    aiohttp = "3.9.0"
+                    python = "~3.10"
+                    fastapi = "0.97.0"
+                """.trimIndent()
+            )
+
+            getPythonVersionConstraint(
+                pyprojectFile,
+                "tool.poetry.dependencies"
+            ) shouldBe "~3.10"
+        }
+
+        "return null if there is no such constraint in pyproject.toml" {
+            val pyprojectFile = tempdir().resolve(PYPROJECT_FILENAME)
+
+            pyprojectFile.writeText(
+                """
+                    [tool.poetry.dependencies]
+                    aiohttp = "3.9.0"
+                    fastapi = "0.97.0"
+                """.trimIndent()
+            )
+
+            getPythonVersionConstraint(
+                pyprojectFile,
+                "tool.poetry.dependencies"
+            ) shouldBe null
+        }
+    }
+})
