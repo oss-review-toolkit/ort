@@ -118,7 +118,13 @@ class Conan(
 
     override val globsForDefinitionFiles = listOf("conanfile*.txt", "conanfile*.py")
 
-    private val handler = ConanV1Handler(this)
+    private val isConan1 by lazy { command.getVersion().startsWith("1.") }
+
+    private val handler = if (isConan1) {
+        ConanV1Handler(this)
+    } else {
+        ConanV2Handler(this)
+    }
 
     internal val conanHome = Os.userHomeDirectory.resolve(".conan")
 
@@ -308,8 +314,21 @@ class Conan(
     internal fun parseAuthors(pkgInfo: BaseInfo): Set<String> =
         parseAuthorString(pkgInfo.author).mapNotNullTo(mutableSetOf()) { it.name }
 
-    internal fun readConanData(name: String, version: String, conanStorageDir: File): ConanData {
-        val conanDataFile = handler.getConanDataFile(name, version, conanStorageDir)
+    internal fun readConanData(
+        name: String,
+        version: String,
+        conanStorageDir: File,
+        recipeFolder: String? = null
+    ): ConanData {
+        val conanDataFile = handler.getConanDataFile(name, version, conanStorageDir, recipeFolder)
+        if (conanDataFile == null) {
+            logger.error {
+                "readConanData() cannot be called on the first package info, i.e. the conanfile itself."
+            }
+
+            return ConanData(null, null, false)
+        }
+
         val root = Yaml.default.parseToYamlNode(conanDataFile.readText()).yamlMap
 
         val patchesForVersion = root.get<YamlMap>("patches")?.get<YamlList>(version)

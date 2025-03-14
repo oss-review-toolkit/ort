@@ -29,6 +29,11 @@ import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
 
+/**
+ * This test classes performs tests with both Conan 1 and Conan 2.
+ * TODO: In the current state, both Conan version 2 cannot be run at the same time, because the package manager only
+ *   uses one "conan" command.
+ */
 class ConanFunTest : StringSpec({
     "Project dependencies are detected correctly for conanfile.txt" {
         val definitionFile = getAssetFile("projects/synthetic/conan-txt/conanfile.txt")
@@ -57,6 +62,27 @@ class ConanFunTest : StringSpec({
         val expectedResultFile = getAssetFile("projects/synthetic/conan-expected-output-py-lockfile.yml")
 
         val result = ConanFactory.create(lockfileName = "lockfile.lock").resolveSingleProject(definitionFile)
+
+        patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
+    }
+
+    "Project dependencies are detected correctly for conanfile.txt with Conan 2" {
+        // Compared to the results with Conan 1, these results contains an additional package "Conan::libtool:2.4.7".
+        // This is a build dependency of "libcurl", while "libcurl" itself is a dependency the project.
+        val definitionFile = getAssetFile("projects/synthetic/conan-txt/conanfile.txt")
+        val expectedResultFile = getAssetFile("projects/synthetic/conan2-expected-output-txt.yml")
+
+        val result = ConanFactory.create().resolveSingleProject(definitionFile, allowDynamicVersions = true)
+
+        patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
+    }
+
+    "Project dependencies are detected correctly for conanfile.py with Conan 2" {
+        // Conan 2 resolves "Conan::expat" at version 2.6.4 while Conan 1 resolves it at version 2.6.3.
+        val definitionFile = getAssetFile("projects/synthetic/conan-py/conanfile.py")
+        val expectedResultFile = getAssetFile("projects/synthetic/conan2-expected-output-py.yml")
+
+        val result = ConanFactory.create().resolveSingleProject(definitionFile, allowDynamicVersions = true)
 
         patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
     }
