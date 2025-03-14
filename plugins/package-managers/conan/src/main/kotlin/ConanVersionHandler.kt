@@ -49,9 +49,10 @@ internal interface ConanVersionHandler {
     fun process(jsonFile: File, definitionFile: File, workingDir: File, lockFileName: String?): HandlerResults
 
     /**
-     * Get the Conan data file for a package with the given [name] and [version] from the [conanStorageDir].
+     * Get the Conan data file for a package with the given [name] and [version] from the [conanStorageDir]. This file
+     * can also be resolved against a specific [recipeFolder] in case of Conan 2.
      */
-    fun getConanDataFile(name: String, version: String, conanStorageDir: File): File
+    fun getConanDataFile(name: String, version: String, conanStorageDir: File, recipeFolder: String? = null): File?
 
     /**
      * List configured remotes.
