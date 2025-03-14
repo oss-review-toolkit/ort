@@ -52,6 +52,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.masked
@@ -65,8 +66,13 @@ import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
 
-internal object ConanCommand : CommandLineTool {
-    override fun command(workingDir: File?) = "conan"
+internal class ConanCommand(
+    val config: ConanConfig = ConanConfig(
+        lockfileName = null,
+        useConan2 = false
+    )
+) : CommandLineTool {
+    override fun command(workingDir: File?) = if (config.useConan2) "conan2" else "conan"
 
     override fun transformVersion(output: String) =
         // Conan could report version strings like:
@@ -84,7 +90,16 @@ data class ConanConfig(
      * The name of the lockfile, which is used for analysis if allowDynamicVersions is set to false. The lockfile should
      * be located in the analysis root. Currently only one lockfile is supported per Conan project.
      */
-    val lockfileName: String?
+    val lockfileName: String?,
+
+    /**
+     * If true, the Conan package manager with call a command called "conan2" instead of "conan". This is required to
+     * be able to support both Conan 2 in a given environment (e.g. ORT Docker image, local development environment).
+     */
+    @OrtPluginOption(
+        defaultValue = "false"
+    )
+    val useConan2: Boolean
 )
 
 /**
@@ -113,7 +128,7 @@ class Conan(
         internal const val SCOPE_NAME_DEV_DEPENDENCIES = "build_requires"
     }
 
-    internal val command by lazy { ConanCommand }
+    internal val command by lazy { ConanCommand(config) }
 
     override val globsForDefinitionFiles = listOf("conanfile*.txt", "conanfile*.py")
 
