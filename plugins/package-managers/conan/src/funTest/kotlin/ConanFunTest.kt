@@ -30,9 +30,8 @@ import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
 
 /**
- * This test classes performs tests with both Conan 1 and Conan 2.
- * TODO: In the current state, both Conan version 2 cannot be run at the same time, because the package manager only
- *   uses one "conan" command.
+ * This test classes performs tests with both Conan 1 and Conan 2. For it to be successful, it needs both a "conan"
+ * command for Conan 1 and a "conan2" command for Conan 2 in the PATH environment variable (as in ORT Docker image).
  */
 class ConanFunTest : StringSpec({
     "Project dependencies are detected correctly for conanfile.txt" {
@@ -72,7 +71,8 @@ class ConanFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/conan-txt/conanfile.txt")
         val expectedResultFile = getAssetFile("projects/synthetic/conan2-expected-output-txt.yml")
 
-        val result = ConanFactory.create().resolveSingleProject(definitionFile, allowDynamicVersions = true)
+        val result = ConanFactory.create(useConan2 = true)
+            .resolveSingleProject(definitionFile, allowDynamicVersions = true)
 
         patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -82,7 +82,8 @@ class ConanFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/conan-py/conanfile.py")
         val expectedResultFile = getAssetFile("projects/synthetic/conan2-expected-output-py.yml")
 
-        val result = ConanFactory.create().resolveSingleProject(definitionFile, allowDynamicVersions = true)
+        val result = ConanFactory.create(useConan2 = true)
+            .resolveSingleProject(definitionFile, allowDynamicVersions = true)
 
         patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
     }
