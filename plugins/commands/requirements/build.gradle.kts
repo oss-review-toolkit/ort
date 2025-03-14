@@ -28,9 +28,7 @@ dependencies {
     ksp(projects.plugins.commands.commandApi)
 
     implementation(projects.analyzer)
-    implementation(projects.downloader)
     implementation(projects.model)
-    implementation(projects.scanner)
     implementation(projects.utils.commonUtils)
     implementation(projects.utils.spdxUtils)
 
