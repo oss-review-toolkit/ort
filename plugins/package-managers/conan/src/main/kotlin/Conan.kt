@@ -284,7 +284,7 @@ class Conan(
     /**
      * Return the [VcsInfo] contained in [pkgInfo].
      */
-    internal fun parseVcsInfo(pkgInfo: PackageInfo): VcsInfo {
+    internal fun parseVcsInfo(pkgInfo: Info): VcsInfo {
         val revision = pkgInfo.revision.orEmpty()
         val url = pkgInfo.url.orEmpty()
         val vcsInfo = VcsHost.parseUrl(url)
@@ -307,7 +307,7 @@ class Conan(
      * Parse information about the package author from the given [package info][pkgInfo]. If present, return a set
      * containing the author name; otherwise, return an empty set.
      */
-    internal fun parseAuthors(pkgInfo: PackageInfo): Set<String> =
+    internal fun parseAuthors(pkgInfo: Info): Set<String> =
         parseAuthorString(pkgInfo.author).mapNotNullTo(mutableSetOf()) { it.name }
 
     internal fun readConanData(name: String, version: String, conanStorageDir: File): ConanData {

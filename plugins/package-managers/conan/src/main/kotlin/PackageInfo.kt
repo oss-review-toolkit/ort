@@ -30,10 +30,35 @@ private val JSON = Json {
     namingStrategy = JsonNamingStrategy.SnakeCase
 }
 
-internal fun parsePackageInfos(file: File): List<PackageInfo> = JSON.decodeFromString(file.readText())
+internal fun parsePackageInfosV1(file: File): List<PackageInfo> =
+    JSON.decodeFromString<List<PackageInfoRaw>>(file.readText()).map { it.toPackageInfo() }
+
+/**
+ * A class containing the properties common to all [PackageInfo], regardless of their Conan version. Used for
+ * abstracting some functions and keeping them in [Conan].
+ */
+@Serializable
+sealed interface Info {
+    val author: String?
+    val revision: String?
+    val url: String?
+}
 
 @Serializable
 internal data class PackageInfo(
+    override val author: String?,
+    override val revision: String?,
+    override val url: String?,
+    val reference: String? = null,
+    val license: List<String> = emptyList(),
+    val homepage: String? = null,
+    val displayName: String,
+    val requires: List<String> = emptyList(),
+    val buildRequires: List<String> = emptyList()
+) : Info
+
+@Serializable
+private data class PackageInfoRaw(
     val reference: String? = null,
     val author: String? = null,
     val license: List<String> = emptyList(),
@@ -43,4 +68,18 @@ internal data class PackageInfo(
     val displayName: String,
     val requires: List<String> = emptyList(),
     val buildRequires: List<String> = emptyList()
-)
+) {
+    fun toPackageInfo(): PackageInfo {
+        return PackageInfo(
+            author = author,
+            revision = revision,
+            url = url,
+            reference = reference,
+            license = license,
+            homepage = homepage,
+            displayName = displayName,
+            requires = requires,
+            buildRequires = buildRequires
+        )
+    }
+}

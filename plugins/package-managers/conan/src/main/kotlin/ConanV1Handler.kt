@@ -71,7 +71,7 @@ internal class ConanV1Handler(private val conan: Conan) : ConanVersionHandler {
             ).requireSuccess()
         }
 
-        val pkgInfos = parsePackageInfos(jsonFile).also { jsonFile.parentFile.safeDeleteRecursively() }
+        val pkgInfos = parsePackageInfosV1(jsonFile).also { jsonFile.parentFile.safeDeleteRecursively() }
 
         val packageList = removeProjectPackage(pkgInfos, definitionFile.name)
         val packages = parsePackages(packageList, workingDir)
