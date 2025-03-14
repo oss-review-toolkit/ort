@@ -68,7 +68,7 @@ internal class ConanV1Handler(private val conan: Conan) : ConanVersionHandler {
             ).requireSuccess()
         }
 
-        val pkgInfos = parsePackageInfos(jsonFile).also { jsonFile.parentFile.safeDeleteRecursively() }
+        val pkgInfos = parsePackageInfosV1(jsonFile).also { jsonFile.parentFile.safeDeleteRecursively() }
 
         val packageList = removeProjectPackage(pkgInfos, definitionFile.name)
         val packages = parsePackages(packageList, workingDir)
@@ -151,7 +151,7 @@ internal class ConanV1Handler(private val conan: Conan) : ConanVersionHandler {
 
         return Package(
             id = id,
-            authors = conan.parseAuthors(pkgInfo),
+            authors = conan.parseAuthors(pkgInfo.info),
             declaredLicenses = pkgInfo.license.toSet(),
             description = conan.inspectField(pkgInfo.displayName, workingDir, "description").orEmpty(),
             homepageUrl = homepageUrl,
@@ -193,13 +193,13 @@ internal class ConanV1Handler(private val conan: Conan) : ConanVersionHandler {
                 name = inspectPyFile("name") ?: pkgInfo.reference.orEmpty(),
                 version = inspectPyFile("version").orEmpty()
             ),
-            authors = conan.parseAuthors(pkgInfo),
+            authors = conan.parseAuthors(pkgInfo.info),
             declaredLicenses = pkgInfo.license.toSet(),
             description = inspectPyFile("description").orEmpty(),
             homepageUrl = pkgInfo.homepage.orEmpty(),
             binaryArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
             sourceArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
-            vcs = conan.parseVcsInfo(pkgInfo)
+            vcs = conan.parseVcsInfo(pkgInfo.info)
         )
     }
 
