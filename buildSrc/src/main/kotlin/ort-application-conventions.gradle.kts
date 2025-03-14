@@ -102,6 +102,7 @@ graalvmNative {
                 "ch.qos.logback.core.model.processor.ImplicitModelHandler",
                 "ch.qos.logback.core.pattern.FormatInfo",
                 "ch.qos.logback.core.pattern.LiteralConverter",
+                "ch.qos.logback.core.pattern.parser.Parser",
                 "ch.qos.logback.core.spi.AppenderAttachableImpl",
                 "ch.qos.logback.core.spi.ContextAwareImpl",
                 "ch.qos.logback.core.spi.FilterAttachableImpl",
