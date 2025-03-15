@@ -95,11 +95,11 @@ tasks.register("allDependencies") {
     group = "Help"
     description = "Displays all dependencies declared in all projects."
 
-    val dependenciesTasks = getTasksByName("dependencies", /* recursive = */ true).sorted()
+    val dependenciesTasks = getTasksByName("dependencies", /* recursive = */ true)
     dependsOn(dependenciesTasks)
 
     // Ensure deterministic output by requiring to run tasks after each other in always the same order.
-    dependenciesTasks.zipWithNext().forEach { (a, b) ->
+    dependenciesTasks.sorted().zipWithNext().forEach { (a, b) ->
         b.mustRunAfter(a)
     }
 }
