@@ -60,6 +60,9 @@ internal object PipenvCommand : CommandLineTool {
 class Pipenv(
     override val descriptor: PluginDescriptor = PipenvFactory.descriptor, private val config: PipConfig
 ) : PackageManager("Pipenv") {
+    // Usually, definition files should not contain (only) lockfiles, to also support the case when no lockfile is
+    // present. However, there currently is no way to distinguish a Pipenv project from a vanilla Pip project without
+    // looking at the lockfile.
     override val globsForDefinitionFiles = listOf("Pipfile.lock")
 
     override fun beforeResolution(

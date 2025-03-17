@@ -70,6 +70,9 @@ class Poetry(
         internal const val PYPROJECT_FILENAME = "pyproject.toml"
     }
 
+    // Usually, definition files should not contain (only) lockfiles, to also support the case when no lockfile is
+    // present. However, there currently is no way to distinguish a Poetry project from a vanilla Pip project without
+    // looking at the lockfile.
     override val globsForDefinitionFiles = listOf("poetry.lock")
 
     override fun resolveDependencies(
