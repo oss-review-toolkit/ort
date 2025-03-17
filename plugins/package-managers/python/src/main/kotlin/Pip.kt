@@ -79,8 +79,7 @@ class Pip internal constructor(
     override val descriptor: PluginDescriptor = PipFactory.descriptor,
     private val config: PipConfig,
     projectType: String
-) :
-    PackageManager(projectType) {
+) : PackageManager(projectType) {
     constructor(descriptor: PluginDescriptor = PipFactory.descriptor, config: PipConfig) :
         this(descriptor, config, "PIP")
 
