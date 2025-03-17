@@ -20,6 +20,7 @@
 import groovy.json.JsonSlurper
 
 import org.gradle.api.DefaultTask
+import org.gradle.api.GradleException
 import org.gradle.api.file.ConfigurableFileTree
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
@@ -43,8 +44,8 @@ abstract class GeneratePluginDocsTask : DefaultTask() {
 
     @TaskAction
     fun generatePluginDocs() {
-        require(inputFiles.files.isNotEmpty()) {
-            "No plugin descriptions found, make sure to provide input files to this task."
+        if (inputFiles.files.isEmpty()) {
+            throw GradleException("No plugin descriptions found, make sure to provide input files to this task.")
         }
 
         logger.lifecycle("Generating plugin documentation.")
