@@ -49,7 +49,6 @@ abstract class GeneratePluginDocsTask : DefaultTask() {
         }
 
         logger.lifecycle("Generating plugin documentation.")
-        logger.lifecycle("Found a total of ${inputFiles.count()} plugins.")
 
         generatePluginDocs("advisors")
         generatePluginDocs("package-configuration-providers")
@@ -57,6 +56,8 @@ abstract class GeneratePluginDocsTask : DefaultTask() {
         generatePluginDocs("package-managers")
         generatePluginDocs("reporters")
         generatePluginDocs("scanners")
+
+        logger.lifecycle("Found a total of ${inputFiles.count()} plugins.")
     }
 
     private fun generatePluginDocs(pluginType: String) {
