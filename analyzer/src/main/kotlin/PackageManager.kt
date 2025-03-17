@@ -288,7 +288,8 @@ abstract class PackageManager(val projectType: String) : Plugin {
 
         val result = mutableMapOf<File, List<ProjectAnalyzerResult>>()
 
-        definitionFiles.forEach { definitionFile ->
+        // Create a stable order to process the definition files, starting with the ones with the most path segments.
+        definitionFiles.sortedWith(compareBy({ -it.toPath().nameCount }, { it.path })).forEach { definitionFile ->
             val relativePath = definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath.ifEmpty { "." }
 
             logger.info { "Using ${descriptor.displayName} to resolve dependencies for path '$relativePath'..." }
