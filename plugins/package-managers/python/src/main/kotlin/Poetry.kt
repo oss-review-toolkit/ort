@@ -60,8 +60,9 @@ internal object PoetryCommand : CommandLineTool {
     description = "The Poetry package manager for Python.",
     factory = PackageManagerFactory::class
 )
-class Poetry(override val descriptor: PluginDescriptor = PoetryFactory.descriptor, private val config: PipConfig) :
-    PackageManager("Poetry") {
+class Poetry(
+    override val descriptor: PluginDescriptor = PoetryFactory.descriptor, private val config: PipConfig
+) : PackageManager("Poetry") {
     companion object {
         /**
          * The name of the build system requirements and information file used by modern Python packages.

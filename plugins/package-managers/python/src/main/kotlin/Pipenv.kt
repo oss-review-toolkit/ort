@@ -57,8 +57,9 @@ internal object PipenvCommand : CommandLineTool {
     description = "The Pipenv package manager for Python.",
     factory = PackageManagerFactory::class
 )
-class Pipenv(override val descriptor: PluginDescriptor = PipenvFactory.descriptor, private val config: PipConfig) :
-    PackageManager("Pipenv") {
+class Pipenv(
+    override val descriptor: PluginDescriptor = PipenvFactory.descriptor, private val config: PipConfig
+) : PackageManager("Pipenv") {
     override val globsForDefinitionFiles = listOf("Pipfile.lock")
 
     override fun beforeResolution(
