@@ -59,7 +59,7 @@ internal object PnpmCommand : CommandLineTool {
 )
 class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
     NodePackageManager(NodePackageManagerType.PNPM) {
-    override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE, "pnpm-lock.yaml")
+    override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE)
 
     private lateinit var stash: DirectoryStash
 
