@@ -221,9 +221,12 @@ val checkGitAttributes by tasks.registering {
 }
 
 tasks.register<GeneratePluginDocsTask>("generatePluginDocs") {
-    inputFiles = fileTree("plugins") {
-        include("**/build/generated/ksp/main/resources/META-INF/plugin/*.json")
-    }
+    val kspKotlinTasks = getTasksByName("kspKotlin", /* recursive = */ true)
+    val outputFiles = kspKotlinTasks.flatMap { it.outputs.files }
+    inputFiles = files(outputFiles).asFileTree.matching { include("**/META-INF/plugin/*.json") }
 
-    dependsOn(getTasksByName("kspKotlin", /* recursive = */ true))
+    // TODO: This explicit dependency should not be necessary if tasks were following the best practice described at
+    //       https://docs.gradle.org/current/samples/sample_cross_project_output_sharing.html. However, this requires
+    //       larger refactorings.
+    dependsOn(kspKotlinTasks)
 }
