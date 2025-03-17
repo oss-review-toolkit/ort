@@ -88,8 +88,6 @@ class Poetry(
         val packages = resultsForScopeName
             .flatMap { (_, results) -> results.packages }
             .toOrtPackages()
-            .distinctBy { it.id }
-            .toSet()
 
         val project = Project.EMPTY.copy(
             id = Identifier(
