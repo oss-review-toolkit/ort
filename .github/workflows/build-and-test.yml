@@ -41,7 +41,7 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@6bb031afdd8eb862ea3fc1848194185e076637e5 # v3
+      uses: github/codeql-action/init@5f8171a638ada777af81d42b55959a643bb29017 # v3
       with:
         languages: java
     - name: Setup Gradle
@@ -49,7 +49,7 @@ jobs:
     - name: Build all classes
       run: ./gradlew -Dorg.gradle.jvmargs=-Xmx1g --no-build-cache classes
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@6bb031afdd8eb862ea3fc1848194185e076637e5 # v3
+      uses: github/codeql-action/analyze@5f8171a638ada777af81d42b55959a643bb29017 # v3
   test:
     strategy:
       matrix:
