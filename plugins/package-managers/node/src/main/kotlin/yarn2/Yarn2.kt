@@ -577,7 +577,7 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
 /**
  * A data class storing information about a specific Yarn 2+ module and its dependencies.
  */
-data class YarnModuleInfo(
+internal data class YarnModuleInfo(
     /** The identifier for the represented module. */
     val id: Identifier,
 

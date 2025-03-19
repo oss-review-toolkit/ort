@@ -42,7 +42,7 @@ internal fun parsePnpmList(json: String): Sequence<List<ModuleInfo>> =
     )
 
 @Serializable
-data class ModuleInfo(
+internal data class ModuleInfo(
     val name: String? = null,
     val version: String? = null,
     val path: String,
