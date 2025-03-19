@@ -34,9 +34,9 @@ import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.utils.common.realFile
 
 abstract class NodePackageManager(val managerType: NodePackageManagerType) : PackageManager(managerType.projectType) {
-    protected abstract val graphBuilder: DependencyGraphBuilder<*>
+    internal abstract val graphBuilder: DependencyGraphBuilder<*>
 
-    protected fun parseProject(packageJsonFile: File, analysisRoot: File): Project {
+    internal fun parseProject(packageJsonFile: File, analysisRoot: File): Project {
         logger.debug { "Parsing project info from '$packageJsonFile'." }
 
         val packageJson = parsePackageJson(packageJsonFile)
