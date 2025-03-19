@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.model.Project
  * contain all the information required to identify a module, construct a [Package] from it, and traverse its
  * dependency tree.
  */
-data class ModuleInfo(
+internal data class ModuleInfo(
     /** The identifier for the represented module. */
     val id: Identifier,
 
