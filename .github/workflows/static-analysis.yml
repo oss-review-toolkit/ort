@@ -80,7 +80,7 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
     - name: Check Links
-      uses: umbrelladocs/action-linkspector@de84085e0f51452a470558693d7d308fbb2fa261 # v1
+      uses: umbrelladocs/action-linkspector@c6d4525e9f50b27a0e78fc42b537141058d034ef # v1
       with:
         fail_on_error: true
   markdownlint:
