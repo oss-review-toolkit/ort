@@ -70,7 +70,14 @@ class OrtAuthenticator(private val original: Authenticator? = null) : Authentica
 
     // First look if the credentials are already present in the URL, then search for (potentially machine-specific)
     // credentials in a netrc-style file, and finally look for generic credentials passed as environment variables.
-    private val delegateAuthenticators = listOf(UserInfoAuthenticator(), NetRcAuthenticator(), EnvVarAuthenticator())
+    // If none of these can provide credentials, fall back to the original authenticator, if any. This allows tools
+    // that use ORT programmatically to provide a custom authenticator.
+    private val delegateAuthenticators = listOfNotNull(
+        UserInfoAuthenticator(),
+        NetRcAuthenticator(),
+        EnvVarAuthenticator(),
+        original
+    )
 
     private val serverAuthentication: ConcurrentHashMap<String, PasswordAuthentication> = ConcurrentHashMap()
 
