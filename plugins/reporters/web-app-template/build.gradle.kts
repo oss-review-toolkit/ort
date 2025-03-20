@@ -21,20 +21,31 @@ import java.util.Locale
 
 import org.apache.tools.ant.taskdefs.condition.Os
 
-import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin
+import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsEnvSpec
+import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsPlugin
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsSetupTask
 import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnPlugin
+import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnRootEnvSpec
 import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnSetupTask
 
-// The Kotlin/JS plugins are only applied programmatically for Kotlin projects that target JavaScript. As we do not
-// directly target JavaScript from Kotlin, manually apply the plugins and configure the tool versions.
-NodeJsRootPlugin.apply(rootProject).version = "22.13.0"
+// The Kotlin/JS plugins are only applied programmatically for Kotlin projects that target JavaScript. As this project
+// does not directly target JavaScript from Kotlin, manually apply the YarnPlugin and configure the tool versions.
 
-// The Yarn plugin registers tasks always on the root project, see
-// https://github.com/JetBrains/kotlin/blob/2.1.0/libraries/tools/kotlin-gradle-plugin/src/common/kotlin/org/jetbrains/kotlin/gradle/targets/js/yarn/YarnPlugin.kt#L158-L162
-YarnPlugin.apply(rootProject).version = "1.22.22"
+// The YarnPlugin depends on the NodeJsRootPlugin and registers both on the root project, see
+// https://github.com/JetBrains/kotlin/blob/2.1.20/libraries/tools/kotlin-gradle-plugin/src/common/kotlin/org/jetbrains/kotlin/gradle/targets/js/yarn/YarnPlugin.kt#L32
+// https://github.com/JetBrains/kotlin/blob/2.1.20/libraries/tools/kotlin-gradle-plugin/src/common/kotlin/org/jetbrains/kotlin/gradle/targets/js/yarn/YarnPlugin.kt#L159-L163
+YarnPlugin.apply(project)
+
+rootProject.plugins.withType<NodeJsPlugin> {
+    rootProject.the<NodeJsEnvSpec>().version = "22.13.0"
+}
 
 val kotlinNodeJsSetup by rootProject.tasks.existing(NodeJsSetupTask::class)
+
+rootProject.plugins.withType<YarnPlugin> {
+    rootProject.the<YarnRootEnvSpec>().version = "1.22.22"
+}
+
 val kotlinYarnSetup by rootProject.tasks.existing(YarnSetupTask::class)
 
 @Suppress("DEPRECATION") // Cannot use `destinationProvider` as it is internal.
