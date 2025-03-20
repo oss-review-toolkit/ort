@@ -147,7 +147,7 @@ data class Yarn2Config(
  */
 @OrtPlugin(
     displayName = "Yarn 2+",
-    description = "The Yarn 2+ package manager for JavaScript.",
+    description = "The Yarn 2+ package manager for Node.js.",
     factory = PackageManagerFactory::class
 )
 class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor, private val config: Yarn2Config) :

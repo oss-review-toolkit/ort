@@ -94,7 +94,7 @@ internal object YarnCommand : CommandLineTool {
  */
 @OrtPlugin(
     displayName = "Yarn",
-    description = "The Yarn package manager for JavaScript.",
+    description = "The Yarn package manager for Node.js.",
     factory = PackageManagerFactory::class
 )
 open class Yarn(override val descriptor: PluginDescriptor = YarnFactory.descriptor) :
