@@ -19,21 +19,45 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.node.yarn
 
+import java.io.File
+
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.utils.DependencyHandler
+import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackage
 
-internal class YarnDependencyHandler(private val yarn: Yarn) : DependencyHandler<ModuleInfo> {
-    override fun identifierFor(dependency: ModuleInfo): Identifier = dependency.id
+internal class YarnDependencyHandler(private val yarn: Yarn) : DependencyHandler<YarnListNode> {
+    private val packageJsonForModuleId = mutableMapOf<String, PackageJson>()
+    private lateinit var workingDir: File
 
-    override fun dependenciesFor(dependency: ModuleInfo): List<ModuleInfo> = dependency.dependencies.toList()
+    fun setContext(workingDir: File, packageJsonForModuleId: Map<String, PackageJson>) {
+        this.workingDir = workingDir
 
-    override fun linkageFor(dependency: ModuleInfo): PackageLinkage =
-        PackageLinkage.DYNAMIC.takeUnless { dependency.isProject } ?: PackageLinkage.PROJECT_DYNAMIC
+        this.packageJsonForModuleId.apply {
+            clear()
+            putAll(packageJsonForModuleId)
+        }
+    }
 
-    override fun createPackage(dependency: ModuleInfo, issues: MutableCollection<Issue>): Package? =
-        if (dependency.isProject) null else parsePackage(dependency.packageFile, yarn::getRemotePackageDetails)
+    override fun identifierFor(dependency: YarnListNode): Identifier =
+        Identifier(
+            type = "NPM",
+            namespace = dependency.moduleName.substringBefore("/", ""),
+            name = dependency.moduleName.substringAfter("/"),
+            version = dependency.moduleVersion
+        )
+
+    override fun dependenciesFor(dependency: YarnListNode): List<YarnListNode> =
+        dependency.children.orEmpty().filter { it.name in packageJsonForModuleId }
+
+    override fun linkageFor(dependency: YarnListNode): PackageLinkage = PackageLinkage.DYNAMIC
+
+    override fun createPackage(dependency: YarnListNode, issues: MutableCollection<Issue>): Package? {
+        val packageJson = packageJsonForModuleId[dependency.name] ?: return null
+
+        return parsePackage(packageJson, yarn::getRemotePackageDetails)
+    }
 }
