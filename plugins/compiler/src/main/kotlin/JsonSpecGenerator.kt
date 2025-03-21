@@ -63,7 +63,7 @@ class JsonSpecGenerator(private val codeGenerator: CodeGenerator) {
                 }
             }
 
-            put("configClass", pluginSpec.configClass?.typeName.toString())
+            put("configClass", pluginSpec.configClass?.typeName?.toString())
             put("factoryClass", pluginSpec.factory.qualifiedName)
         }
 
