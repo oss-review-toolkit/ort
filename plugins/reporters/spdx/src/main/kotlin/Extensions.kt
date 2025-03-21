@@ -439,5 +439,4 @@ private fun Provenance.matches(sourceCodeOrigin: SourceCodeOrigin): Boolean =
     when (sourceCodeOrigin) {
         SourceCodeOrigin.VCS -> this is RepositoryProvenance
         SourceCodeOrigin.ARTIFACT -> this is ArtifactProvenance
-        else -> false
     }
