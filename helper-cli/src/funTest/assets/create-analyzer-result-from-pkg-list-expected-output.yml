@@ -57,8 +57,11 @@ analyzer:
     packages:
     - id: "NPM::example-dependency-one:1.0.0"
       purl: "pkg:npm/example-dependency-one@1.0.0"
-      declared_licenses: []
-      declared_licenses_processed: {}
+      declared_licenses:
+      - "Apache-2.0 OR LGPL-2.0-only"
+      - "MIT"
+      declared_licenses_processed:
+        spdx_expression: "(Apache-2.0 OR LGPL-2.0-only) AND MIT"
       description: ""
       homepage_url: ""
       binary_artifact:
