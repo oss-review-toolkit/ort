@@ -117,7 +117,6 @@ graalvmNative {
 
             buildArgs.addAll(
                 initializeAtBuildTime,
-                "--report-unsupported-elements-at-runtime",
                 "--parallelism=8",
                 "-J-Xmx16g"
             )
