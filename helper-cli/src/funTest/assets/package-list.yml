@@ -14,6 +14,9 @@ dependencies:
       path: "vcs-path/dependency-one"
     sourceArtifact:
       url: "https://example.org/example-dependency-one.zip"
+    declaredLicenses:
+      - "MIT"
+      - "Apache-2.0 OR LGPL-2.0-only"
     isExcluded: true
     isDynamicallyLinked: true
   - id: "NPM::example-dependency-two:2.0.0"

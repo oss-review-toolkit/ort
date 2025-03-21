@@ -150,6 +150,7 @@ private data class Dependency(
     val purl: String? = null,
     val vcs: Vcs? = null,
     val sourceArtifact: SourceArtifact? = null,
+    val declaredLicenses: Set<String> = emptySet(),
     val isExcluded: Boolean = false,
     val isDynamicallyLinked: Boolean = false,
     val labels: Map<String, String> = emptyMap()
@@ -198,7 +199,7 @@ private fun Dependency.toPackage(): Package {
         purl = purl ?: id.toPurl(),
         sourceArtifact = sourceArtifact?.let { RemoteArtifact(url = it.url, it.hash ?: Hash.NONE) }.orEmpty(),
         vcs = vcsInfo,
-        declaredLicenses = emptySet(),
+        declaredLicenses = declaredLicenses,
         description = "",
         homepageUrl = "",
         binaryArtifact = RemoteArtifact.EMPTY,
