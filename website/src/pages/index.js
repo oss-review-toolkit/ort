@@ -31,7 +31,13 @@ function HomepageHeader() {
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
-        <h1 className="hero__title">{siteConfig.title}</h1>
+        <p className='text--center'>
+          <img
+              src='img/ort.png'
+              alt='ORT Logo'
+              className={styles.heroLogo}
+          />
+        </p>
         <p className="hero__subtitle">
           {siteConfig.tagline}
           <br/>
