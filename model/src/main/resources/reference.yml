@@ -117,10 +117,13 @@ ort:
           disableRegistryCertificateVerification: false
 
       Conan:
-        # Holds a name of the lockfile. Required if allowDynamicVersions = false.
-        # The lockfile should be located in the same directory as the conanfile.py or conanfile.txt.
         options:
+          # Holds a name of the lockfile. Required if allowDynamicVersions = false.
+          # The lockfile should be located in the same directory as the conanfile.py or conanfile.txt.
           lockfileName: "lockfile.lock"
+
+          # If true, the Conan package manager with call a command called "conan2" instead of "conan".
+          useConan2: true
 
   advisor:
     # A flag to control whether excluded scopes and paths should be skipped when giving the advice.

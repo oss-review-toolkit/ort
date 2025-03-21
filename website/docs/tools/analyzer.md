@@ -19,7 +19,7 @@ Currently, the following package managers (grouped by the programming language t
 
 * C / C++
   * [Bazel](https://bazel.build/) (limitations: see [open tasks](https://github.com/oss-review-toolkit/ort/issues/264))
-  * [Conan 1.x](https://conan.io/)
+  * [Conan 1.x and 2.x](https://conan.io/)
   * Also see: [SPDX documents](#spdx-as-fallback-package-manager)
 * Dart / Flutter
   * [Pub](https://pub.dev/)
