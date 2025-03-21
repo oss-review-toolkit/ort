@@ -205,23 +205,21 @@ private enum class Scope(val descriptor: String) {
     DEV_DEPENDENCIES("devDependencies")
 }
 
-private fun ModuleInfo.getAllPackageNodeModuleIds(): Set<String> {
-    val queue = Scope.entries.flatMapTo(LinkedList()) { getScopeDependencies(it) }
-    val result = mutableSetOf<String>()
+private fun ModuleInfo.getAllPackageNodeModuleIds(): Set<String> =
+    buildSet {
+        val queue = Scope.entries.flatMapTo(LinkedList()) { getScopeDependencies(it) }
 
-    while (queue.isNotEmpty()) {
-        val info = queue.removeFirst()
+        while (queue.isNotEmpty()) {
+            val info = queue.removeFirst()
 
-        @Suppress("ComplexCondition")
-        if (!info.isProject && info.isInstalled && !info.name.isNullOrBlank() && !info.version.isNullOrBlank()) {
-            result += "${info.name}@${info.version}"
+            @Suppress("ComplexCondition")
+            if (!info.isProject && info.isInstalled && !info.name.isNullOrBlank() && !info.version.isNullOrBlank()) {
+                add("${info.name}@${info.version}")
+            }
+
+            Scope.entries.flatMapTo(queue) { info.getScopeDependencies(it) }
         }
-
-        Scope.entries.flatMapTo(queue) { info.getScopeDependencies(it) }
     }
-
-    return result
-}
 
 private fun ModuleInfo.getScopeDependencies(scope: Scope) =
     when (scope) {
