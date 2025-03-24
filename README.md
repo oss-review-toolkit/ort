@@ -124,7 +124,7 @@ Depending on how ORT was installed, it can be run in the following ways:
 * If the Docker image was built, use
 
   ```shell
-  docker run ort --help
+  docker run ghcr.io/oss-review-toolkit/ort --help
   ```
 
   You can find further hints for using ORT with Docker in the [documentation](./website/docs/guides/docker.md).
