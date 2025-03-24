@@ -51,14 +51,14 @@ internal class ConanV1Handler(private val conan: Conan) : ConanVersionHandler {
         val jsonFile = createOrtTempDir().resolve("info.json")
         if (lockfileName != null) {
             conan.verifyLockfileBelongsToProject(workingDir, lockfileName)
-            ConanCommand.run(
+            conan.command.run(
                 workingDir,
                 "info", definitionFile.name,
                 "-l", lockfileName,
                 "--json", jsonFile.absolutePath
             ).requireSuccess()
         } else {
-            ConanCommand.run(
+            conan.command.run(
                 workingDir,
                 "info",
                 definitionFile.name,
@@ -92,7 +92,7 @@ internal class ConanV1Handler(private val conan: Conan) : ConanVersionHandler {
 
     override fun listRemotes(): List<Pair<String, String>> {
         val remoteList = runCatching {
-            ConanCommand.run("remote", "list", "--raw").requireSuccess()
+            conan.command.run("remote", "list", "--raw").requireSuccess()
         }.getOrElse {
             logger.warn { "Failed to list remotes." }
             return emptyList()
@@ -116,7 +116,7 @@ internal class ConanV1Handler(private val conan: Conan) : ConanVersionHandler {
     }
 
     override fun runInspectCommand(workingDir: File, pkgName: String, jsonFile: File) {
-        ConanCommand.run(workingDir, "inspect", pkgName, "--json", jsonFile.absolutePath).requireSuccess()
+        conan.command.run(workingDir, "inspect", pkgName, "--json", jsonFile.absolutePath).requireSuccess()
     }
 
     /**

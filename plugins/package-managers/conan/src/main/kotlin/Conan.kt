@@ -52,6 +52,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.masked
@@ -65,8 +66,8 @@ import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
 
-internal object ConanCommand : CommandLineTool {
-    override fun command(workingDir: File?) = "conan"
+internal class ConanCommand(private val useConan2: Boolean = false) : CommandLineTool {
+    override fun command(workingDir: File?) = if (useConan2) "conan2" else "conan"
 
     override fun transformVersion(output: String) =
         // Conan could report version strings like:
@@ -84,7 +85,15 @@ data class ConanConfig(
      * The name of the lockfile, which is used for analysis if allowDynamicVersions is set to false. The lockfile should
      * be located in the analysis root. Currently only one lockfile is supported per Conan project.
      */
-    val lockfileName: String?
+    val lockfileName: String?,
+
+    /**
+     * If true, the Conan package manager will call a command called "conan2" instead of "conan". This is required to
+     * be able to support both Conan major versions in a given environment e.g., the ORT Docker image or a local
+     * development environment.
+     */
+    @OrtPluginOption(defaultValue = "false")
+    val useConan2: Boolean
 )
 
 /**
@@ -113,10 +122,12 @@ class Conan(
         internal const val SCOPE_NAME_DEV_DEPENDENCIES = "build_requires"
     }
 
+    internal val command by lazy { ConanCommand(config.useConan2) }
+
     override val globsForDefinitionFiles = listOf("conanfile*.txt", "conanfile*.py")
 
     private val handler by lazy {
-        if (ConanCommand.getVersion().startsWith("1.")) {
+        if (command.getVersion().startsWith("1.")) {
             ConanV1Handler(this)
         } else {
             ConanV2Handler(this)
@@ -140,7 +151,7 @@ class Conan(
         analysisRoot: File,
         definitionFiles: List<File>,
         analyzerConfig: AnalyzerConfiguration
-    ) = ConanCommand.checkVersion()
+    ) = command.checkVersion()
 
     /**
      * Primary method for resolving dependencies from [definitionFile].
@@ -219,7 +230,7 @@ class Conan(
     private fun configureRemoteAuthentication(conanConfig: File?) {
         // Install configuration from a local directory if available.
         conanConfig?.let {
-            ConanCommand.run("config", "install", it.absolutePath).requireSuccess()
+            command.run("config", "install", it.absolutePath).requireSuccess()
         }
 
         val remotes = handler.listRemotes()
@@ -237,7 +248,7 @@ class Conan(
                 if (auth != null) {
                     // Configure Conan's authentication based on ORT's authentication for the remote.
                     runCatching {
-                        ConanCommand.run(
+                        command.run(
                             "user",
                             "-r", remoteName,
                             "-p", String(auth.password).masked(),

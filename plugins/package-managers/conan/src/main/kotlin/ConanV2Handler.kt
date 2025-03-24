@@ -53,13 +53,13 @@ internal class ConanV2Handler(private val conan: Conan) : ConanVersionHandler {
 
         // Create a default build profile.
         if (!getConanHome().resolve("profiles/default").isFile) {
-            ConanCommand.run(workingDir, "profile", "detect")
+            conan.command.run(workingDir, "profile", "detect")
         }
 
         val jsonFile = createOrtTempDir().resolve("info.json")
         if (lockfileName != null) {
             conan.verifyLockfileBelongsToProject(workingDir, lockfileName)
-            ConanCommand.run(
+            conan.command.run(
                 workingDir,
                 "graph",
                 "info",
@@ -73,7 +73,7 @@ internal class ConanV2Handler(private val conan: Conan) : ConanVersionHandler {
                 definitionFile.name
             ).requireSuccess()
         } else {
-            ConanCommand.run(
+            conan.command.run(
                 workingDir,
                 "graph",
                 "info",
@@ -111,7 +111,7 @@ internal class ConanV2Handler(private val conan: Conan) : ConanVersionHandler {
     override fun listRemotes(): List<Pair<String, String>> {
         val remoteList = runCatching {
             // List configured remotes in JSON format.
-            ConanCommand.run("remote", "list", "-f", "json").requireSuccess()
+            conan.command.run("remote", "list", "-f", "json").requireSuccess()
         }.getOrElse {
             logger.warn { "Failed to list remotes." }
             return emptyList()
@@ -134,7 +134,7 @@ internal class ConanV2Handler(private val conan: Conan) : ConanVersionHandler {
             pkgName
         } else {
             // For Conan 2, "conan inspect" need the path of the reference. See https://github.com/conan-io/conan/issues/12532.
-            ConanCommand.run(
+            conan.command.run(
                 workingDir,
                 "cache",
                 "path",
@@ -142,7 +142,7 @@ internal class ConanV2Handler(private val conan: Conan) : ConanVersionHandler {
             ).requireSuccess().stdout.trim()
         }
 
-        ConanCommand.run(
+        conan.command.run(
             workingDir,
             "inspect",
             path,
