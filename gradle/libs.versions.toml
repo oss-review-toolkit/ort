@@ -65,7 +65,7 @@ scanoss = "0.10.1"
 semver4j = "5.6.0"
 slf4j = "2.0.17"
 springCore = "6.2.5"
-svnkit = "1.10.11"
+svnkit = "1.10.12"
 sw360Client = "17.0.1-m2"
 wiremock = "3.12.1"
 xmlutil = "0.90.3"
@@ -183,7 +183,7 @@ scanoss = { module = "com.scanoss:scanoss", version.ref = "scanoss" }
 semver4j = { module = "org.semver4j:semver4j", version.ref = "semver4j" }
 slf4j = { module = "org.slf4j:slf4j-api ", version.ref = "slf4j" }
 springCore = { module = "org.springframework:spring-core", version.ref = "springCore" }
-svnkit = { module = "org.tmatesoft.svnkit:svnkit", version.ref = "svnkit" }
+svnkit = { module = "com.tmatesoft.svnkit:svnkit", version.ref = "svnkit" }
 sw360Client = { module = "org.eclipse.sw360:client", version.ref = "sw360Client" }
 wiremock = { module = "org.wiremock:wiremock", version.ref = "wiremock" }
 xz = { module = "org.tukaani:xz", version.ref = "xz" }
