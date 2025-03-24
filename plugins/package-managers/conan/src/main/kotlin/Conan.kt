@@ -73,7 +73,7 @@ internal object ConanCommand : CommandLineTool {
         // Conan version 1.18.0
         output.removePrefix("Conan version ")
 
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=1.44.0 <2.0")
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=1.44.0 <3.0")
 
     override fun run(vararg args: CharSequence, workingDir: File?, environment: Map<String, String>) =
         super.run(args = args, workingDir, environment + ("CONAN_NON_INTERACTIVE" to "1"))
@@ -115,7 +115,13 @@ class Conan(
 
     override val globsForDefinitionFiles = listOf("conanfile*.txt", "conanfile*.py")
 
-    private val handler = ConanV1Handler(this)
+    private val handler by lazy {
+        if (ConanCommand.getVersion().startsWith("1.")) {
+            ConanV1Handler(this)
+        } else {
+            ConanV2Handler(this)
+        }
+    }
 
     // This is where Conan caches downloaded packages [1]. Note that the package cache is not concurrent, and its
     // layout does not support packages from different remotes that are named (and versioned) the same.
@@ -296,8 +302,21 @@ class Conan(
     internal fun parseAuthors(pkgInfo: PackageInfo): Set<String> =
         parseAuthorString(pkgInfo.author).mapNotNullTo(mutableSetOf()) { it.name }
 
-    internal fun readConanData(name: String, version: String, conanStorageDir: File): ConanData {
-        val conanDataFile = handler.getConanDataFile(name, version, conanStorageDir)
+    internal fun readConanData(
+        name: String,
+        version: String,
+        conanStorageDir: File,
+        recipeFolder: String? = null
+    ): ConanData {
+        val conanDataFile = handler.getConanDataFile(name, version, conanStorageDir, recipeFolder)
+        if (conanDataFile == null) {
+            logger.error {
+                "This function cannot be called on the first package info, i.e. the conanfile itself."
+            }
+
+            return ConanData(null, null, false)
+        }
+
         val root = Yaml.default.parseToYamlNode(conanDataFile.readText()).yamlMap
 
         val patchesForVersion = root.get<YamlMap>("patches")?.get<YamlList>(version)
