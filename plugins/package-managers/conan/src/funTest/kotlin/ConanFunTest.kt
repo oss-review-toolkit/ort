@@ -30,9 +30,8 @@ import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
 
 /**
- * This test class performs tests with both Conan 1 and Conan 2.
- * TODO: In the current state, both Conan version 2 cannot be run at the same time, because the package manager only
- *  uses one "conan" command.
+ * This test class performs tests with both Conan 1 and Conan 2. For it to be successful, it needs both a "conan"
+ * command for Conan 1 and a "conan2" command for Conan 2 in the PATH environment variable (as in ORT Docker image).
  *
  * A word of caution about Conan 2 tests: If there is no lockfile, when Conan resolves the dependencies it read its
  * cache and relies on the package name, ignoring the version. This means, for instance, that if a test reported
@@ -79,7 +78,8 @@ class ConanFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/conan-txt/conanfile.txt")
         val expectedResultFile = getAssetFile("projects/synthetic/conan2-expected-output-txt.yml")
 
-        val result = ConanFactory.create().resolveSingleProject(definitionFile, allowDynamicVersions = true)
+        val result = ConanFactory.create(useConan2 = true)
+            .resolveSingleProject(definitionFile, allowDynamicVersions = true)
 
         patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -89,7 +89,8 @@ class ConanFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/conan-py/conanfile.py")
         val expectedResultFile = getAssetFile("projects/synthetic/conan2-expected-output-py.yml")
 
-        val result = ConanFactory.create().resolveSingleProject(definitionFile, allowDynamicVersions = true)
+        val result = ConanFactory.create(useConan2 = true)
+            .resolveSingleProject(definitionFile, allowDynamicVersions = true)
 
         patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -101,7 +102,7 @@ class ConanFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/conan-py-lockfile/conanfile.py")
         val expectedResultFile = getAssetFile("projects/synthetic/conan-expected-output-py-lockfile.yml")
 
-        val result = ConanFactory.create(lockfileName = "lockfile_conan2.lock")
+        val result = ConanFactory.create(lockfileName = "lockfile_conan2.lock", useConan2 = true)
             .resolveSingleProject(definitionFile)
 
         patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
