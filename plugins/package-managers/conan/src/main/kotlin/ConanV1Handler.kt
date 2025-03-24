@@ -68,7 +68,7 @@ internal class ConanV1Handler(private val conan: Conan) : ConanVersionHandler {
             ).requireSuccess()
         }
 
-        val pkgInfos = parsePackageInfos(jsonFile).also { jsonFile.parentFile.safeDeleteRecursively() }
+        val pkgInfos = parsePackageInfosV1(jsonFile).also { jsonFile.parentFile.safeDeleteRecursively() }
 
         val packageList = removeProjectPackage(pkgInfos, definitionFile.name)
         val packages = parsePackages(packageList, workingDir)
@@ -122,7 +122,7 @@ internal class ConanV1Handler(private val conan: Conan) : ConanVersionHandler {
     /**
      * Return the map of packages and their identifiers which are contained in [pkgInfos].
      */
-    private fun parsePackages(pkgInfos: List<PackageInfo>, workingDir: File): Map<String, Package> =
+    private fun parsePackages(pkgInfos: List<PackageInfoV1>, workingDir: File): Map<String, Package> =
         pkgInfos.associate { pkgInfo ->
             val pkg = parsePackage(pkgInfo, workingDir)
             "${pkg.id.name}:${pkg.id.version}" to pkg
@@ -131,7 +131,7 @@ internal class ConanV1Handler(private val conan: Conan) : ConanVersionHandler {
     /**
      * Return the [Package] parsed from the given [pkgInfo].
      */
-    private fun parsePackage(pkgInfo: PackageInfo, workingDir: File): Package {
+    private fun parsePackage(pkgInfo: PackageInfoV1, workingDir: File): Package {
         val homepageUrl = pkgInfo.homepage.orEmpty()
 
         val id = parsePackageId(pkgInfo, workingDir)
@@ -153,7 +153,7 @@ internal class ConanV1Handler(private val conan: Conan) : ConanVersionHandler {
     /**
      * Return the [Identifier] for the package contained in [pkgInfo].
      */
-    private fun parsePackageId(pkgInfo: PackageInfo, workingDir: File) =
+    private fun parsePackageId(pkgInfo: PackageInfoV1, workingDir: File) =
         Identifier(
             type = "Conan",
             namespace = "",
@@ -170,7 +170,7 @@ internal class ConanV1Handler(private val conan: Conan) : ConanVersionHandler {
      * TODO: The format of `conan info` output for a conanfile.txt file may be such that we can get project metadata
      *       from the `requires` field. Need to investigate whether this is a sure thing before implementing.
      */
-    private fun generateProjectPackage(pkgInfo: PackageInfo, definitionFile: File, workingDir: File): Package {
+    private fun generateProjectPackage(pkgInfo: PackageInfoV1, definitionFile: File, workingDir: File): Package {
         fun inspectPyFile(field: String) =
             definitionFile.name.takeIf { it == "conanfile.py" }?.let { conan.inspectField(it, workingDir, field) }
 
@@ -195,7 +195,7 @@ internal class ConanV1Handler(private val conan: Conan) : ConanVersionHandler {
      * Return the dependency tree for the given [direct scope dependencies][requires].
      */
     private fun parseDependencyTree(
-        pkgInfos: List<PackageInfo>,
+        pkgInfos: List<PackageInfoV1>,
         requires: List<String>,
         workingDir: File
     ): Set<PackageReference> =
@@ -217,13 +217,13 @@ internal class ConanV1Handler(private val conan: Conan) : ConanVersionHandler {
 /**
  * Return the full list of packages, excluding the project level information.
  */
-private fun removeProjectPackage(pkgInfos: List<PackageInfo>, definitionFileName: String): List<PackageInfo> =
+private fun removeProjectPackage(pkgInfos: List<PackageInfoV1>, definitionFileName: String): List<PackageInfoV1> =
     pkgInfos.minusElement(findProjectPackageInfo(pkgInfos, definitionFileName))
 
 /**
  * Find the [PackageInfo] that represents the project defined in the definition file.
  */
-private fun findProjectPackageInfo(pkgInfos: List<PackageInfo>, definitionFileName: String): PackageInfo =
+private fun findProjectPackageInfo(pkgInfos: List<PackageInfoV1>, definitionFileName: String): PackageInfoV1 =
     pkgInfos.first {
         // Use "in" because conanfile.py's reference string often includes other data.
         definitionFileName in it.reference.orEmpty()
