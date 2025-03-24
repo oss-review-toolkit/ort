@@ -23,6 +23,8 @@ import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.UnknownProvenance
@@ -31,8 +33,10 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 
 /**
- * A configuration for a specific package and provenance. It allows to set up [PathExclude]s and
- * [LicenseFindingCuration]s, similar to how it is done via the [RepositoryConfiguration] for projects.
+ * A classed used in the [OrtConfiguration] to configure [PathExclude]s and [LicenseFindingCuration]s for a specific
+ * [Package]'s [Identifier] (and [Provenance]).
+ * Note that [PathExclude]s and [LicenseFindingCuration]s for [Project]s are configured by a [RepositoryConfiguration]'s
+ * [excludes][RepositoryConfiguration.excludes] and [curations][RepositoryConfiguration.curations] properties instead.
  */
 data class PackageConfiguration(
     /**
