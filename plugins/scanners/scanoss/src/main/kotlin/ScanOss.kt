@@ -32,7 +32,6 @@ import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.scanner.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScannerMatcher
-import org.ossreviewtoolkit.scanner.ScannerMatcherConfig
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 
 @OrtPlugin(
@@ -57,17 +56,7 @@ class ScanOss(
 
     override val configuration = ""
 
-    override val matcher by lazy {
-        ScannerMatcher.create(
-            details,
-            ScannerMatcherConfig(
-                config.regScannerName,
-                config.minVersion,
-                config.maxVersion,
-                configuration
-            )
-        )
-    }
+    override val matcher: ScannerMatcher? = null
 
     override val readFromStorage = config.readFromStorage
 
