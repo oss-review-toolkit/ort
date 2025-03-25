@@ -28,7 +28,6 @@ import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.should
 
 import io.mockk.spyk
-import io.mockk.verify
 
 import java.io.File
 
@@ -76,11 +75,6 @@ class ScanOssScannerDirectoryTest : StringSpec({
             TEST_DIRECTORY_TO_SCAN,
             ScanContext(labels = emptyMap(), packageType = PackageType.PACKAGE)
         )
-
-        verify(exactly = 1) {
-            scanner.createWfpForFile(TEST_DIRECTORY_TO_SCAN.resolve("ArchiveUtils.kt"))
-            scanner.createWfpForFile(TEST_DIRECTORY_TO_SCAN.resolve("ScannerFactory.kt"))
-        }
 
         with(summary) {
             licenseFindings should containExactlyInAnyOrder(

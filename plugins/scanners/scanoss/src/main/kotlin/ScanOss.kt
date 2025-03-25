@@ -19,15 +19,12 @@
 
 package org.ossreviewtoolkit.plugins.scanners.scanoss
 
-import com.scanoss.Winnowing
-import com.scanoss.rest.ScanApi
+import com.scanoss.Scanner
 import com.scanoss.utils.JsonUtils
 import com.scanoss.utils.PackageDetails
 
 import java.io.File
 import java.time.Instant
-
-import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
@@ -37,7 +34,6 @@ import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScannerMatcher
 import org.ossreviewtoolkit.scanner.ScannerMatcherConfig
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
-import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 
 @OrtPlugin(
     id = "SCANOSS",
@@ -49,11 +45,10 @@ class ScanOss(
     override val descriptor: PluginDescriptor = ScanOssFactory.descriptor,
     config: ScanOssConfig
 ) : PathScannerWrapper {
-    private val service = ScanApi.builder()
+    private val scanossBuilder = Scanner.builder()
         // As there is only a single endpoint, the SCANOSS API client expects the path to be part of the API URL.
         .url(config.apiUrl.removeSuffix("/") + "/scan/direct")
         .apiKey(config.apiKey.value)
-        .build()
 
     override val version: String by lazy {
         // TODO: Find out the best / cheapest way to query the SCANOSS server for its version.
@@ -81,30 +76,16 @@ class ScanOss(
     override fun scanPath(path: File, context: ScanContext): ScanSummary {
         val startTime = Instant.now()
 
-        val wfpString = buildString {
-            path.walk()
-                .onEnter { it.name !in VCS_DIRECTORIES }
-                .filterNot { it.isDirectory }
-                .forEach {
-                    logger.info { "Computing fingerprint for file ${it.absolutePath}..." }
-                    append(createWfpForFile(it))
-                }
+        // Build the scanner at function level in case any path-specific settings or filters are needed later.
+        val scanoss = scanossBuilder.build()
+
+        val rawResults = when {
+            path.isFile -> listOf(scanoss.scanFile(path.toString()))
+            else -> scanoss.scanFolder(path.toString())
         }
 
-        val result = service.scan(
-            wfpString,
-            context.labels["scanOssContext"],
-            context.labels["scanOssId"]?.toIntOrNull() ?: Thread.currentThread().threadId().toInt()
-        )
-
-        // Replace the anonymized UUIDs by their file paths.
-        val results = JsonUtils.toScanFileResultsFromObject(JsonUtils.toJsonObject(result))
-
+        val results = JsonUtils.toScanFileResults(rawResults)
         val endTime = Instant.now()
         return generateSummary(startTime, endTime, results)
-    }
-
-    internal fun createWfpForFile(file: File): String {
-        return Winnowing.builder().build().wfpForFile(file.path, file.path)
     }
 }
