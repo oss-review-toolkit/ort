@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.model.config
 
+import com.sksamuel.hoplite.ConfigException
+
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
@@ -487,7 +489,7 @@ class OrtConfigurationTest : WordSpec({
                 """.trimIndent()
             )
 
-            shouldThrow<IllegalArgumentException> {
+            shouldThrow<ConfigException> {
                 OrtConfiguration.load(file = configFile)
             }
         }
@@ -496,7 +498,7 @@ class OrtConfigurationTest : WordSpec({
             val file = File("anotherNonExistingConfig.conf")
             val args = mapOf("ort.scanner.storages.new" to "test")
 
-            shouldThrow<IllegalArgumentException> {
+            shouldThrow<ConfigException> {
                 OrtConfiguration.load(file = file, args = args)
             }
         }

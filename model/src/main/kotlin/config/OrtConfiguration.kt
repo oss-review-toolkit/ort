@@ -19,10 +19,14 @@
 
 package org.ossreviewtoolkit.model.config
 
+import com.sksamuel.hoplite.ConfigException
+import com.sksamuel.hoplite.ConfigFailure
 import com.sksamuel.hoplite.ConfigLoaderBuilder
+import com.sksamuel.hoplite.Constants
 import com.sksamuel.hoplite.PropertySource
 import com.sksamuel.hoplite.addEnvironmentSource
 import com.sksamuel.hoplite.fp.getOrElse
+import com.sksamuel.hoplite.indent
 import com.sksamuel.hoplite.resolver.context.ContextResolverMode
 
 import java.io.File
@@ -178,8 +182,12 @@ data class OrtConfiguration(
 
             val configResult = loader.loadConfig<OrtConfiguration>(prefix = "ort")
             val config = configResult.getOrElse { failure ->
-                require(sources.isEmpty()) {
-                    "Failed to load ORT configuration: ${failure.description()}"
+                val isFailureDueToEmptyConfig = failure is ConfigFailure.UndefinedTree
+                    || (failure is ConfigFailure.MissingConfigValue && sources.isEmpty())
+
+                if (!isFailureDueToEmptyConfig) {
+                    val message = "Failed to load ORT configuration:\n${failure.description().indent(Constants.indent)}"
+                    throw ConfigException(message)
                 }
 
                 OrtConfiguration()
