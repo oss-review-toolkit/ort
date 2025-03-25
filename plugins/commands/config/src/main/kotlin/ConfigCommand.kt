@@ -30,7 +30,6 @@ import com.github.ajalt.clikt.parameters.types.file
 import com.github.ajalt.mordant.rendering.Theme
 
 import org.ossreviewtoolkit.model.config.OrtConfiguration
-import org.ossreviewtoolkit.model.config.OrtConfigurationWrapper
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
@@ -68,12 +67,12 @@ class ConfigCommand(descriptor: PluginDescriptor = ConfigCommandFactory.descript
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
 
-    private val mapper = YAMLMapper().apply {
-        registerKotlinModule()
-    }
+    private val configWriter = YAMLMapper()
+        .registerKotlinModule()
+        .writerFor(OrtConfiguration::class.java)
+        .withRootName("ort")
 
-    private fun OrtConfiguration.renderYaml() =
-        mapper.writerWithDefaultPrettyPrinter().writeValueAsString(OrtConfigurationWrapper(this)).removePrefix("---\n")
+    private fun OrtConfiguration.renderYaml() = configWriter.writeValueAsString(this).removePrefix("---\n")
 
     override fun run() {
         if (showDefault) {
