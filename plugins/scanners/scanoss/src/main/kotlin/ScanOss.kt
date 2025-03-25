@@ -20,14 +20,12 @@
 package org.ossreviewtoolkit.plugins.scanners.scanoss
 
 import com.scanoss.Winnowing
-import com.scanoss.dto.ScanFileResult
 import com.scanoss.rest.ScanApi
 import com.scanoss.utils.JsonUtils
 import com.scanoss.utils.PackageDetails
 
 import java.io.File
 import java.time.Instant
-import java.util.UUID
 
 import org.apache.logging.log4j.kotlin.logger
 
@@ -80,16 +78,6 @@ class ScanOss(
 
     override val writeToStorage = config.writeToStorage
 
-    /**
-     * The name of the file corresponding to the fingerprints can be sent to SCANOSS for more precise matches.
-     * However, for anonymity, a unique identifier should be generated and used instead. This property holds the
-     * mapping between the file paths and the unique identifiers. When receiving the response, the UUID will be
-     * replaced by the actual file path.
-     *
-     * TODO: This behavior should be driven by a configuration parameter enabled by default.
-     */
-    private val fileNamesAnonymizationMapping = mutableMapOf<UUID, String>()
-
     override fun scanPath(path: File, context: ScanContext): ScanSummary {
         val startTime = Instant.now()
 
@@ -110,27 +98,13 @@ class ScanOss(
         )
 
         // Replace the anonymized UUIDs by their file paths.
-        val results = JsonUtils.toScanFileResultsFromObject(JsonUtils.toJsonObject(result)).map {
-            val uuid = UUID.fromString(it.filePath)
-
-            val fileName = fileNamesAnonymizationMapping[uuid] ?: throw IllegalArgumentException(
-                "The ${descriptor.id} server returned UUID '$uuid' which is not present in the mapping."
-            )
-
-            ScanFileResult(fileName, it.fileDetails)
-        }
+        val results = JsonUtils.toScanFileResultsFromObject(JsonUtils.toJsonObject(result))
 
         val endTime = Instant.now()
         return generateSummary(startTime, endTime, results)
     }
 
-    internal fun generateRandomUUID() = UUID.randomUUID()
-
     internal fun createWfpForFile(file: File): String {
-        generateRandomUUID().let { uuid ->
-            // TODO: Let's keep the original file extension to give SCANOSS some hint about the mime type.
-            fileNamesAnonymizationMapping[uuid] = file.path
-            return Winnowing.builder().build().wfpForFile(file.path, uuid.toString())
-        }
+        return Winnowing.builder().build().wfpForFile(file.path, file.path)
     }
 }
