@@ -67,6 +67,7 @@ slf4j = "2.0.17"
 springCore = "6.2.5"
 svnkit = "1.10.12"
 sw360Client = "17.0.1-m2"
+wagonHttp = "3.5.3"
 wiremock = "3.12.1"
 xmlutil = "0.90.3"
 xz = "1.10"
@@ -185,6 +186,7 @@ slf4j = { module = "org.slf4j:slf4j-api ", version.ref = "slf4j" }
 springCore = { module = "org.springframework:spring-core", version.ref = "springCore" }
 svnkit = { module = "com.tmatesoft.svnkit:svnkit", version.ref = "svnkit" }
 sw360Client = { module = "org.eclipse.sw360:client", version.ref = "sw360Client" }
+wagon-http = { module = "org.apache.maven.wagon:wagon-http", version.ref = "wagonHttp" }
 wiremock = { module = "org.wiremock:wiremock", version.ref = "wiremock" }
 xz = { module = "org.tukaani:xz", version.ref = "xz" }
 
