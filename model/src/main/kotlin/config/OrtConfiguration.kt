@@ -189,11 +189,3 @@ data class OrtConfiguration(
         }
     }
 }
-
-/**
- * A wrapper class to hold an [OrtConfiguration]. This class is needed to correctly map the _ort_ prefix in
- * configuration files when they are processed by the underlying configuration library.
- */
-data class OrtConfigurationWrapper(
-    val ort: OrtConfiguration
-)
