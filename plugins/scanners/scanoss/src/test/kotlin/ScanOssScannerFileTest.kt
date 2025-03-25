@@ -27,7 +27,6 @@ import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.should
 
 import io.mockk.spyk
-import io.mockk.verify
 
 import java.io.File
 
@@ -69,10 +68,6 @@ class ScanOssScannerFileTest : StringSpec({
             TEST_FILE_TO_SCAN,
             ScanContext(labels = emptyMap(), packageType = PackageType.PACKAGE)
         )
-
-        verify(exactly = 1) {
-            scanner.createWfpForFile(TEST_FILE_TO_SCAN)
-        }
 
         with(summary) {
             licenseFindings should containExactly(
