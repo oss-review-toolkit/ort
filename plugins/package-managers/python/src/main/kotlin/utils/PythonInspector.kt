@@ -91,7 +91,14 @@ internal object PythonInspector : CommandLineTool {
 
         return try {
             run(workingDir, *commandLineOptions.toTypedArray()).requireSuccess()
-            outputFile.inputStream().use { json.decodeFromStream(it) }
+            val binaryResult = outputFile.inputStream().use { json.decodeFromStream<Result>(it) }
+
+            // TODO: Avoid this terrible hack to run once more with `--prefer-source` to work around
+            //       https://github.com/aboutcode-org/python-inspector/issues/229.
+            run(workingDir, *(commandLineOptions + "--prefer-source").toTypedArray()).requireSuccess()
+            val sourceResult = outputFile.inputStream().use { json.decodeFromStream<Result>(it) }
+
+            binaryResult.copy(packages = binaryResult.packages + sourceResult.packages)
         } finally {
             outputFile.parentFile.safeDeleteRecursively()
         }

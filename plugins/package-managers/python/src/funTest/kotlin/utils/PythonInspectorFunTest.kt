@@ -47,7 +47,7 @@ class PythonInspectorFunTest : StringSpec({
 
         result.projects should haveSize(2)
         result.resolvedDependenciesGraph should haveSize(1)
-        result.packages should haveSize(11)
+        result.packages should haveSize(12)
     }
 
     "python-inspector can be run without setup.py file analysis" {
@@ -68,6 +68,6 @@ class PythonInspectorFunTest : StringSpec({
 
         result.projects should haveSize(1)
         result.resolvedDependenciesGraph should haveSize(1)
-        result.packages should haveSize(3)
+        result.packages should haveSize(4)
     }
 })
