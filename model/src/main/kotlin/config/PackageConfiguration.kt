@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 
 /**
- * A classed used in the [OrtConfiguration] to configure [PathExclude]s and [LicenseFindingCuration]s for a specific
+ * A class used in the [OrtConfiguration] to configure [PathExclude]s and [LicenseFindingCuration]s for a specific
  * [Package]'s [Identifier] (and [Provenance]).
  * Note that [PathExclude]s and [LicenseFindingCuration]s for [Project]s are configured by a [RepositoryConfiguration]'s
  * [excludes][RepositoryConfiguration.excludes] and [curations][RepositoryConfiguration.curations] properties instead.
