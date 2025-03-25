@@ -26,12 +26,10 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.should
 
-import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
 
 import java.io.File
-import java.util.UUID
 
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.PackageType
@@ -67,13 +65,6 @@ class ScanOssScannerFileTest : StringSpec({
     }
 
     "The scanner should scan a single file" {
-        // Manipulate the UUID generation to have the same IDs as in the response.
-        every {
-            scanner.generateRandomUUID()
-        } answers {
-            UUID.fromString("bf5401e9-03b3-4c91-906c-cadb90487b8c")
-        }
-
         val summary = scanner.scanPath(
             TEST_FILE_TO_SCAN,
             ScanContext(labels = emptyMap(), packageType = PackageType.PACKAGE)

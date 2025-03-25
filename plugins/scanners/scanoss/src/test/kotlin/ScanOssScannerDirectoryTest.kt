@@ -27,12 +27,10 @@ import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.should
 
-import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
 
 import java.io.File
-import java.util.UUID
 
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.PackageType
@@ -74,15 +72,6 @@ class ScanOssScannerDirectoryTest : StringSpec({
     }
 
     "The scanner should scan a directory" {
-        // Manipulate the UUID generation to have the same IDs as in the response.
-        every {
-            scanner.generateRandomUUID()
-        } answers {
-            UUID.fromString("5530105e-0752-4750-9c07-4e4604b879a5")
-        } andThenAnswer {
-            UUID.fromString("c198b884-f6cf-496f-95eb-0e7968dd2ec6")
-        }
-
         val summary = scanner.scanPath(
             TEST_DIRECTORY_TO_SCAN,
             ScanContext(labels = emptyMap(), packageType = PackageType.PACKAGE)
