@@ -190,6 +190,8 @@ data class OrtConfiguration(
                     throw ConfigException(message)
                 }
 
+                logger.info { "All property sources were empty, falling back to the default configuration." }
+
                 OrtConfiguration()
             }
 
