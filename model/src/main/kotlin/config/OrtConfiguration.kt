@@ -168,7 +168,7 @@ data class OrtConfiguration(
                     PropertySource.map(it)
                 },
                 file?.takeIf { it.isFile }?.let {
-                    logger.info { "Using ORT configuration file '$it'." }
+                    logger.info { "Using ORT configuration file '${it.absolutePath}'." }
 
                     PropertySource.file(it)
                 }
