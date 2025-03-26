@@ -320,7 +320,7 @@ class Conan(
         recipeFolder: String? = null
     ): ConanData {
         val conanDataFile = handler.getConanDataFile(name, version, conanStorageDir, recipeFolder)
-            ?: return ConanData(null, null, false)
+            ?: return ConanData.EMPTY
 
         val root = Yaml.default.parseToYamlNode(conanDataFile.readText()).yamlMap
 
@@ -345,4 +345,8 @@ internal data class ConanData(
     val url: String?,
     val sha256: String?,
     val hasPatches: Boolean
-)
+) {
+    companion object {
+        val EMPTY = ConanData(url = null, sha256 = null, hasPatches = false)
+    }
+}
