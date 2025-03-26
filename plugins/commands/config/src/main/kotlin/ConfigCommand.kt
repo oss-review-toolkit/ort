@@ -90,7 +90,8 @@ class ConfigCommand(descriptor: PluginDescriptor = ConfigCommandFactory.descript
         if (showReference) {
             echo("The reference configuration is:")
             echo()
-            echo(javaClass.getResource("/$ORT_REFERENCE_CONFIG_FILENAME").readText())
+            val referenceConfigUrl = checkNotNull(javaClass.getResource("/$ORT_REFERENCE_CONFIG_FILENAME"))
+            echo(referenceConfigUrl.readText())
         }
 
         checkSyntax?.run {
