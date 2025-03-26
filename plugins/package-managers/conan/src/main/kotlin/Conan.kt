@@ -45,6 +45,7 @@ import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.HashAlgorithm
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
@@ -313,21 +314,24 @@ class Conan(
     internal fun parseAuthors(pkgInfo: PackageInfo): Set<String> =
         parseAuthorString(pkgInfo.author).mapNotNullTo(mutableSetOf()) { it.name }
 
-    internal fun readConanData(
-        name: String,
-        version: String,
-        conanStorageDir: File,
-        recipeFolder: String? = null
-    ): ConanData {
-        val conanDataFile = handler.getConanDataFile(name, version, conanStorageDir, recipeFolder)
+    internal fun readConanData(id: Identifier, conanStorageDir: File, recipeFolder: String? = null): ConanData {
+        val conanDataFile = handler.getConanDataFile(id.name, id.version, conanStorageDir, recipeFolder)
             ?: return ConanData.EMPTY
+
+        if (!conanDataFile.isFile) {
+            logger.warn {
+                "'${id.toCoordinates()}' does not provide a conandata.yml file. Some metadata might be missing."
+            }
+
+            return ConanData.EMPTY
+        }
 
         val root = Yaml.default.parseToYamlNode(conanDataFile.readText()).yamlMap
 
-        val patchesForVersion = root.get<YamlMap>("patches")?.get<YamlList>(version)
+        val patchesForVersion = root.get<YamlMap>("patches")?.get<YamlList>(id.version)
         val hasPatches = !patchesForVersion?.items.isNullOrEmpty()
 
-        val sourceForVersion = root.get<YamlMap>("sources")?.get<YamlMap>(version)
+        val sourceForVersion = root.get<YamlMap>("sources")?.get<YamlMap>(id.version)
         val sha256 = sourceForVersion?.get<YamlScalar>("sha256")?.content
 
         val url = sourceForVersion?.get<YamlNode>("url")?.let {
