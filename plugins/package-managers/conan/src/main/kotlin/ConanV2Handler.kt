@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.conan.Conan.Companion.DUMMY_
 import org.ossreviewtoolkit.plugins.packagemanagers.conan.Conan.Companion.SCOPE_NAME_DEPENDENCIES
 import org.ossreviewtoolkit.plugins.packagemanagers.conan.Conan.Companion.SCOPE_NAME_DEV_DEPENDENCIES
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.alsoIfNull
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 
@@ -106,7 +107,11 @@ internal class ConanV2Handler(private val conan: Conan) : ConanVersionHandler {
     }
 
     override fun getConanDataFile(name: String, version: String, conanStorageDir: File, recipeFolder: String?): File? =
-        recipeFolder?.let { File(it).resolve("conandata.yml") }
+        recipeFolder?.let {
+            File(it).resolve("conandata.yml")
+        }.alsoIfNull {
+            logger.error { "This function cannot be called on the first package info, i.e. the conanfile itself." }
+        }
 
     override fun listRemotes(): List<Pair<String, String>> {
         val remoteList = runCatching {

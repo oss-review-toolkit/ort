@@ -320,13 +320,7 @@ class Conan(
         recipeFolder: String? = null
     ): ConanData {
         val conanDataFile = handler.getConanDataFile(name, version, conanStorageDir, recipeFolder)
-        if (conanDataFile == null) {
-            logger.error {
-                "This function cannot be called on the first package info, i.e. the conanfile itself."
-            }
-
-            return ConanData(null, null, false)
-        }
+            ?: return ConanData(null, null, false)
 
         val root = Yaml.default.parseToYamlNode(conanDataFile.readText()).yamlMap
 
