@@ -1,17 +1,9 @@
 package main
 
 import (
-    "context"
-
-    "go.mongodb.org/mongo-driver/mongo"
-    "go.mongodb.org/mongo-driver/mongo/options"
+	"github.com/klauspost/shutdown2"
 )
 
-
 func main() {
-    clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
-    _, err := mongo.Connect(context.TODO(), clientOptions)
-    print(err)
+	shutdown.OnSignal(0, os.Interrupt, syscall.SIGTERM)
 }
-
-
