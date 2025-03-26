@@ -99,6 +99,10 @@ data class Environment(
         val ORT_USER_AGENT = "$ORT_NAME/$ORT_VERSION"
 
         private val RELEVANT_VARIABLES = listOf(
+            // ORT variables.
+            ORT_DATA_DIR_ENV_NAME,
+            ORT_CONFIG_DIR_ENV_NAME,
+            ORT_TOOLS_DIR_ENV_NAME,
             // Windows variables.
             "USERPROFILE",
             "OS",
