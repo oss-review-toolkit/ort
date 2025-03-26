@@ -57,12 +57,9 @@ import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.mebibytes
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.ort.Environment
-import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_DIR_ENV_NAME
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
-import org.ossreviewtoolkit.utils.ort.ORT_DATA_DIR_ENV_NAME
 import org.ossreviewtoolkit.utils.ort.ORT_NAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
-import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 import org.ossreviewtoolkit.utils.ort.printStackTrace
 
 import org.slf4j.LoggerFactory
@@ -207,11 +204,7 @@ class OrtMain : CliktCommand(ORT_NAME) {
             row {
                 val content = mutableListOf("Environment variables:")
 
-                listOf(
-                    ORT_CONFIG_DIR_ENV_NAME to ortConfigDirectory.path,
-                    ORT_DATA_DIR_ENV_NAME to ortDataDirectory.path,
-                    *env.variables.toList().toTypedArray()
-                ).mapTo(content) { (key, value) ->
+                env.variables.mapTo(content) { (key, value) ->
                     val safeValue = value.replaceCredentialsInUri(MaskedString.DEFAULT_MASK)
                     "${Theme.Default.info(key)} = ${Theme.Default.warning(safeValue)}"
                 }
