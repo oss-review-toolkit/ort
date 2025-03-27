@@ -82,6 +82,8 @@ object GitCommand : CommandLineTool {
         }.orEmpty()
 }
 
+private val SHA1_REGEX = Regex("^[0-9a-fA-F]{40}$")
+
 /**
  * This class provides functionality for interacting with Git repositories, utilizing either
  * [JGit][org.eclipse.jgit.api.Git] or the Git CLI for executing operations.
@@ -218,16 +220,22 @@ class Git(
 
             // See https://git-scm.com/docs/gitrevisions#_specifying_revisions for how Git resolves ambiguous
             // names. In particular, tag names have higher precedence than branch names.
-            runCatching {
-                fetch.setRefSpecs(revision).call()
-            }.recoverCatching {
-                // Note that in contrast to branches / heads, Git does not namespace tags per remote.
-                val tagRefSpec = "+${Constants.R_TAGS}$revision:${Constants.R_TAGS}$revision"
-                fetch.setRefSpecs(tagRefSpec).call()
-            }.recoverCatching {
-                val branchRefSpec = "+${Constants.R_HEADS}$revision:${Constants.R_REMOTES}origin/$revision"
-                fetch.setRefSpecs(branchRefSpec).call()
-            }.getOrThrow()
+            val refSpec = if (SHA1_REGEX.matches(revision)) {
+                revision
+            } else {
+                val refs = git.lsRemote().call()
+                refs.find { it.name == "${Constants.R_TAGS}$revision" }?.let {
+                    "+${Constants.R_TAGS}$revision:${Constants.R_TAGS}$revision"
+                } ?: refs.find { it.name == "${Constants.R_HEADS}$revision" }?.let {
+                    "+${Constants.R_HEADS}$revision:${Constants.R_REMOTES}origin/$revision"
+                }
+            }
+
+            requireNotNull(refSpec) { "No ref spec found for revision '$revision'." }
+
+            fetch.setRefSpecs(refSpec).call().also {
+                logger.info { "Done fetching ref spec $refSpec." }
+            }
         }.recoverCatching {
             it.showStackTrace()
 
