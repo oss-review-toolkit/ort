@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.model.licenses
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.Matcher
 import io.kotest.matchers.be
@@ -68,6 +69,7 @@ import org.ossreviewtoolkit.utils.test.createDefault
 import org.ossreviewtoolkit.utils.test.transformingCollectionEmptyMatcher
 import org.ossreviewtoolkit.utils.test.transformingCollectionMatcher
 
+@Suppress("LargeClass")
 class LicenseInfoResolverTest : WordSpec({
     val pkgId = Identifier("Gradle:org.ossreviewtoolkit:ort:1.0.0")
     val vcsInfo = VcsInfo(
@@ -689,6 +691,44 @@ class LicenseInfoResolverTest : WordSpec({
                     )
                 )
             )
+        }
+
+        "throw an exception if license file is a binary file" {
+            val licenseInfos = listOf(
+                createLicenseInfo(
+                    id = pkgId,
+                    detectedLicenses = listOf(
+                        Findings(
+                            provenance = provenance,
+                            licenses = mapOf(
+                                "Apache-2.0" to listOf(
+                                    TextLocation("LICENSE-BIN", 1)
+                                )
+                            ).toFindingsSet(),
+                            copyrights = setOf(
+                                CopyrightFinding("Copyright 2020 Holder", TextLocation("LICENSE-BIN", 1))
+                            ),
+                            licenseFindingCurations = emptyList(),
+                            pathExcludes = emptyList(),
+                            relativeFindingsPath = ""
+                        )
+                    )
+                )
+            )
+
+            val archiveDir = File("src/test/assets/archive-bin")
+            val archiver = FileArchiver(
+                patterns = LicenseFilePatterns.DEFAULT.licenseFilenames,
+                storage = FileProvenanceFileStorage(
+                    LocalFileStorage(archiveDir),
+                    FileArchiverConfiguration.ARCHIVE_FILENAME
+                )
+            )
+            val resolver = createResolver(licenseInfos, archiver = archiver)
+
+            shouldThrow<IllegalArgumentException> {
+                resolver.resolveLicenseFiles(pkgId)
+            }
         }
     }
 })
