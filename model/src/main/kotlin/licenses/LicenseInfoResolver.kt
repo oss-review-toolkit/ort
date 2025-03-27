@@ -19,7 +19,10 @@
 
 package org.ossreviewtoolkit.model.licenses
 
+import java.io.File
 import java.util.concurrent.ConcurrentHashMap
+
+import org.apache.tika.Tika
 
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.Identifier
@@ -53,6 +56,7 @@ class LicenseInfoResolver(
         licenseFilePatterns = licenseFilePatterns.copy(otherLicenseFilenames = emptySet())
     )
     private val findingsMatcher = FindingsMatcher(PathLicenseMatcher(licenseFilePatterns))
+    private val tika = Tika()
 
     /**
      * Get the [ResolvedLicenseInfo] for the project or package identified by [id].
@@ -263,18 +267,22 @@ class LicenseInfoResolver(
                 directories = listOf(directory)
             ).getValue(directory)
 
-            licenseFiles += rootLicenseFiles.map { relativePath ->
-                ResolvedLicenseFile(
+            rootLicenseFiles.forEach { relativePath ->
+                val file = archiveDir.resolve(relativePath)
+                require(file.isValidTextFile()) { "File $relativePath is not a valid text file." }
+                licenseFiles += ResolvedLicenseFile(
                     provenance = provenance,
                     licenseInfo.filter(provenance, relativePath),
                     relativePath,
-                    archiveDir.resolve(relativePath)
+                    file
                 )
             }
         }
 
         return ResolvedLicenseFileInfo(id, licenseFiles)
     }
+
+    internal fun File.isValidTextFile() = tika.detect(this).contains("text/", ignoreCase = true)
 
     private fun resolveCopyrightFromAuthors(authors: Set<String>): ResolvedLicenseLocation =
         ResolvedLicenseLocation(
