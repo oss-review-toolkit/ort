@@ -43,6 +43,8 @@ dependencies {
     implementation(libs.postgres)
     implementation(libs.semver4j)
 
+    implementation(libs.tika)
+
     testFixturesImplementation(projects.utils.testUtils)
 
     testImplementation(libs.jsonSchemaValidator)
