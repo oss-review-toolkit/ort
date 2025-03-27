@@ -1,0 +1,146 @@
+---
+project:
+  id: "GoMod::my-module:<REPLACE_REVISION>"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "main"
+    dependencies:
+    - id: "Go::github.com/gliderlabs/ssh:0.3.8"
+      linkage: "PROJECT_STATIC"
+      dependencies:
+      - id: "Go::github.com/anmitsu/go-shlex:0.0.0-20200514113438-38f4b401e2be"
+        linkage: "PROJECT_STATIC"
+      - id: "Go::golang.org/x/crypto:0.31.0"
+        linkage: "PROJECT_STATIC"
+  - name: "vendor"
+    dependencies:
+    - id: "Go::github.com/gliderlabs/ssh:0.3.8"
+      linkage: "PROJECT_STATIC"
+      dependencies:
+      - id: "Go::github.com/anmitsu/go-shlex:0.0.0-20200514113438-38f4b401e2be"
+        linkage: "PROJECT_STATIC"
+      - id: "Go::golang.org/x/crypto:0.31.0"
+        linkage: "PROJECT_STATIC"
+        dependencies:
+        - id: "Go::golang.org/x/sys:0.28.0"
+          linkage: "PROJECT_STATIC"
+      - id: "Go::golang.org/x/sys:0.28.0"
+        linkage: "PROJECT_STATIC"
+packages:
+- id: "Go::github.com/anmitsu/go-shlex:0.0.0-20200514113438-38f4b401e2be"
+  purl: "pkg:golang/github.com/anmitsu/go-shlex@0.0.0-20200514113438-38f4b401e2be"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/anmitsu/go-shlex"
+    revision: "38f4b401e2be5955e3e00b843d96e3c406f5094d"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/anmitsu/go-shlex.git"
+    revision: "38f4b401e2be5955e3e00b843d96e3c406f5094d"
+    path: ""
+- id: "Go::github.com/gliderlabs/ssh:0.3.8"
+  purl: "pkg:golang/github.com/gliderlabs/ssh@0.3.8"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/gliderlabs/ssh"
+    revision: "a8ecd3ed244fb77c863c0cf30ccdcca44436974a"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/gliderlabs/ssh.git"
+    revision: "a8ecd3ed244fb77c863c0cf30ccdcca44436974a"
+    path: ""
+- id: "Go::golang.org/x/crypto:0.31.0"
+  purl: "pkg:golang/golang.org/x/crypto@0.31.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://go.googlesource.com/crypto"
+    revision: "b4f1988a35dee11ec3e05d6bf3e90b695fbd8909"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://go.googlesource.com/crypto"
+    revision: "b4f1988a35dee11ec3e05d6bf3e90b695fbd8909"
+    path: ""
+- id: "Go::golang.org/x/sys:0.28.0"
+  purl: "pkg:golang/golang.org/x/sys@0.28.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://go.googlesource.com/sys"
+    revision: "fe16172d1123f5350a8c5585395465de6866de4c"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://go.googlesource.com/sys"
+    revision: "fe16172d1123f5350a8c5585395465de6866de4c"
+    path: ""
