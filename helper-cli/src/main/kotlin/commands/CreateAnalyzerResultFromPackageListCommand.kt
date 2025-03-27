@@ -58,6 +58,7 @@ import org.ossreviewtoolkit.utils.config.setPackageCurations
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 internal class CreateAnalyzerResultFromPackageListCommand : OrtHelperCommand(
     help = "A command which turns a package list file into an analyzer result."
@@ -151,6 +152,7 @@ private data class Dependency(
     val vcs: Vcs? = null,
     val sourceArtifact: SourceArtifact? = null,
     val declaredLicenses: Set<String> = emptySet(),
+    val concludedLicense: SpdxExpression? = null,
     val isExcluded: Boolean = false,
     val isDynamicallyLinked: Boolean = false,
     val labels: Map<String, String> = emptyMap()
@@ -200,6 +202,7 @@ private fun Dependency.toPackage(): Package {
         sourceArtifact = sourceArtifact?.let { RemoteArtifact(url = it.url, it.hash ?: Hash.NONE) }.orEmpty(),
         vcs = vcsInfo,
         declaredLicenses = declaredLicenses,
+        concludedLicense = concludedLicense,
         description = "",
         homepageUrl = "",
         binaryArtifact = RemoteArtifact.EMPTY,

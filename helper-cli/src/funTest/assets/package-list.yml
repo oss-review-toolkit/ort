@@ -28,6 +28,7 @@ dependencies:
       path: "vcs-path/dependency-two"
     sourceArtifact:
       url: "https://example.org/example-dependency-two.zip"
+    concludedLicense: "MIT-Festival"
     isExcluded: false
     isDynamicallyLinked: false
     labels:

@@ -88,6 +88,7 @@ analyzer:
       purl: "pkg:github/example-org/example-dependency-two@v2.0.0"
       declared_licenses: []
       declared_licenses_processed: {}
+      concluded_license: "MIT-Festival"
       description: ""
       homepage_url: ""
       binary_artifact:
