@@ -116,9 +116,12 @@ class GoModFunTest : StringSpec({
         )
     }
 
-    "Project with 'go' as dependency along with transitive dependencies" {
-        val definitionFile = testDir.resolve("go-as-dep-with-transitive-deps/go.mod")
-        val expectedResultFile = testDir.resolve("go-as-dep-with-transitive-deps-expected-output.yml")
+    "Project with a dependency which does not have a 'go.mod' file" {
+        // TODO: This test illustrates a bug in the dependency tree construction. If a package does not have a 'go.mod'
+        // file, then the dependencies of that package are accidentally omit, see
+        // https://github.com/oss-review-toolkit/ort/issues/10099.
+        val definitionFile = testDir.resolve("dep-without-go-mod-file/go.mod")
+        val expectedResultFile = testDir.resolve("dep-without-go-mod-file-expected-output.yml")
 
         val result = GoModFactory.create().resolveSingleProject(definitionFile)
 
