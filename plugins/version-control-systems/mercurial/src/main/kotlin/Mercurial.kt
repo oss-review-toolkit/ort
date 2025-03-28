@@ -47,6 +47,9 @@ internal object MercurialCommand : CommandLineTool {
         }.orEmpty()
 }
 
+internal fun MercurialWorkingTree.runHg(vararg args: String) =
+    MercurialCommand.run(*args, workingDir = workingDir).requireSuccess()
+
 @OrtPlugin(
     displayName = "Mercurial",
     description = "A VCS implementation to interact with Mercurial repositories.",
@@ -103,15 +106,17 @@ class Mercurial(override val descriptor: PluginDescriptor = MercurialFactory.des
 
     override fun updateWorkingTree(workingTree: WorkingTree, revision: String, path: String, recursive: Boolean) =
         runCatching {
+            check(workingTree is MercurialWorkingTree)
+
             // To safe network bandwidth, only pull exactly the revision we want. Do not use "-u" to update the
             // working tree just yet, as Mercurial would only update if new changesets were pulled. But that might
             // not be the case if the requested revision is already available locally.
-            MercurialCommand.run(workingTree.getRootPath(), "pull", "-r", revision).requireSuccess()
+            workingTree.runHg("pull", "-r", revision)
 
             // TODO: Implement updating of subrepositories.
 
             // Explicitly update the working tree to the desired revision.
-            MercurialCommand.run(workingTree.getRootPath(), "update", revision).isSuccess
+            workingTree.runHg("update", revision).isSuccess
         }.map {
             revision
         }
