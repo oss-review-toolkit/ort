@@ -97,6 +97,7 @@ class DefaultWorkingTreeCache : WorkingTreeCache {
                                 "${getRevision()} ..."
                         }
 
+                        close()
                         getRootPath().safeDeleteRecursively()
                     }
                 }

@@ -25,6 +25,8 @@ import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsType
 
 internal class MercurialWorkingTree(workingDir: File, vcsType: VcsType) : WorkingTree(workingDir, vcsType) {
+    override fun close() {}
+
     override fun isValid(): Boolean {
         if (!workingDir.isDirectory) return false
 

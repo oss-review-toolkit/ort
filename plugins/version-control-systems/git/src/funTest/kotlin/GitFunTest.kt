@@ -60,6 +60,10 @@ class GitFunTest : WordSpec({
         workingTree = git.initWorkingTree(repoDir, vcsInfo)
     }
 
+    afterEach {
+        workingTree.close()
+    }
+
     "updateWorkingTree" should {
         "update the working tree to the correct revision" {
             branches.values.forEach { revision ->

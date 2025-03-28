@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.utils.ort.filterVersionNames
  * A class representing a local VCS working tree. The passed [workingDir] does not necessarily need to be the
  * root directory of the tree. The root directory can be determined by calling [getRootPath].
  */
-abstract class WorkingTree(val workingDir: File, val vcsType: VcsType) {
+abstract class WorkingTree(val workingDir: File, val vcsType: VcsType) : AutoCloseable {
     /**
      * Conveniently return all VCS information about how this working tree was created, so it could be easily
      * recreated from that information. However, note that the returned path just contains the relative path of

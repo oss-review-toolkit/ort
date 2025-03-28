@@ -52,11 +52,13 @@ private fun findGitOrSubmoduleDir(workingDirOrFile: File): Repository {
 }
 
 internal open class GitWorkingTree(workingDir: File, vcsType: VcsType) : WorkingTree(workingDir, vcsType) {
-    fun <T> useRepo(block: Repository.() -> T): T = findGitOrSubmoduleDir(workingDir).use(block)
+    internal val repo = findGitOrSubmoduleDir(workingDir)
 
-    override fun isValid(): Boolean = useRepo { objectDatabase?.exists() == true }
+    override fun close() = repo.close()
 
-    override fun isShallow(): Boolean = useRepo { directory?.resolve("shallow")?.isFile == true }
+    override fun isValid(): Boolean = repo.objectDatabase?.exists() == true
+
+    override fun isShallow(): Boolean = repo.directory?.resolve("shallow")?.isFile == true
 
     private fun listSubmodulePaths(repo: Repository): List<String> {
         fun listSubmodules(parent: String, repo: Repository, paths: MutableList<String>) {
@@ -87,60 +89,52 @@ internal open class GitWorkingTree(workingDir: File, vcsType: VcsType) : Working
     }
 
     override fun getNested(): Map<String, VcsInfo> =
-        useRepo {
-            listSubmodulePaths(this).associateWith { path ->
-                GitWorkingTree(workTree.resolve(path), vcsType).getInfo()
-            }
+        listSubmodulePaths(repo).associateWith { path ->
+            GitWorkingTree(repo.workTree.resolve(path), vcsType).getInfo()
         }
 
     override fun getRemoteUrl(): String =
-        useRepo {
-            runCatching {
-                val remotes = JGit(this).use { it.remoteList().call() }
-                val remoteForCurrentBranch = BranchConfig(config, branch).remote
+        runCatching {
+            val remotes = JGit(repo).use { it.remoteList().call() }
+            val remoteForCurrentBranch = BranchConfig(repo.config, repo.branch).remote
 
-                val remote = if (remotes.size <= 1 || remoteForCurrentBranch == null) {
-                    remotes.find { it.name == "origin" } ?: remotes.firstOrNull()
-                } else {
-                    remotes.find { remote ->
-                        remote.name == remoteForCurrentBranch
-                    }
+            val remote = if (remotes.size <= 1 || remoteForCurrentBranch == null) {
+                remotes.find { it.name == "origin" } ?: remotes.firstOrNull()
+            } else {
+                remotes.find { remote ->
+                    remote.name == remoteForCurrentBranch
                 }
-
-                val firstRemote = remote?.urIs?.firstOrNull()
-                when {
-                    firstRemote == null -> ""
-                    firstRemote.isRemote -> firstRemote.toString()
-                    else -> File(firstRemote.path).invariantSeparatorsPath
-                }
-            }.getOrElse {
-                throw IOException("Unable to get the remote URL.", it)
             }
+
+            val firstRemote = remote?.urIs?.firstOrNull()
+            when {
+                firstRemote == null -> ""
+                firstRemote.isRemote -> firstRemote.toString()
+                else -> File(firstRemote.path).invariantSeparatorsPath
+            }
+        }.getOrElse {
+            throw IOException("Unable to get the remote URL.", it)
         }
 
-    override fun getRevision(): String = useRepo { exactRef(Constants.HEAD)?.objectId?.name().orEmpty() }
+    override fun getRevision(): String = repo.exactRef(Constants.HEAD)?.objectId?.name().orEmpty()
 
-    override fun getRootPath(): File = useRepo { workTree }
+    override fun getRootPath(): File = repo.workTree
 
     override fun listRemoteBranches(): List<String> =
-        useRepo {
-            runCatching {
-                LsRemoteCommand(this).setHeads(true).call().map { branch ->
-                    branch.name.removePrefix("refs/heads/")
-                }
-            }.getOrElse { e ->
-                throw IOException("Unable to list the remote branches.", e)
+        runCatching {
+            LsRemoteCommand(repo).setHeads(true).call().map { branch ->
+                branch.name.removePrefix("refs/heads/")
             }
+        }.getOrElse { e ->
+            throw IOException("Unable to list the remote branches.", e)
         }
 
     override fun listRemoteTags(): List<String> =
-        useRepo {
-            runCatching {
-                LsRemoteCommand(this).setTags(true).call().map { tag ->
-                    tag.name.removePrefix("refs/tags/")
-                }
-            }.getOrElse { e ->
-                throw IOException("Unable to list the remote tags.", e)
+        runCatching {
+            LsRemoteCommand(repo).setTags(true).call().map { tag ->
+                tag.name.removePrefix("refs/tags/")
             }
+        }.getOrElse { e ->
+            throw IOException("Unable to list the remote tags.", e)
         }
 }

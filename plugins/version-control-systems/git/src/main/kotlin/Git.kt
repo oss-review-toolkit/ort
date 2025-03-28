@@ -189,30 +189,26 @@ class Git(
         revision: String,
         path: String,
         recursive: Boolean
-    ): Result<String> =
-        (workingTree as GitWorkingTree).useRepo {
-            JGit(this).use { git ->
-                logger.info { "Updating working tree from ${workingTree.getRemoteUrl()}." }
+    ): Result<String> {
+        logger.info { "Updating working tree from ${workingTree.getRemoteUrl()}." }
 
-                updateWorkingTreeWithoutSubmodules(workingTree, git, revision).mapCatching {
-                    // In case this throws the exception gets encapsulated as a failure.
-                    if (recursive) updateSubmodules(workingTree)
+        return updateWorkingTreeWithoutSubmodules(workingTree as GitWorkingTree, revision).mapCatching {
+            // In case this throws the exception gets encapsulated as a failure.
+            if (recursive) updateSubmodules(workingTree)
 
-                    revision
-                }
-            }
+            revision
         }
+    }
 
     /**
      * Update the [workingTree] using the [git] instance to a specific [revision] without updating any submodules. The
      * configured [historyDepth][GitConfig.historyDepth] is respected.
      */
-    private fun updateWorkingTreeWithoutSubmodules(
-        workingTree: GitWorkingTree,
-        git: JGit,
-        revision: String
-    ): Result<String> =
-        runCatching {
+    private fun updateWorkingTreeWithoutSubmodules(workingTree: GitWorkingTree, revision: String): Result<String> {
+        // When constructed this way, the caller is responsible for closing the repository.
+        val git = JGit(workingTree.repo)
+
+        return runCatching {
             logger.info { "Trying to fetch only revision '$revision' with depth limited to ${config.historyDepth}." }
 
             val fetch = git.fetch().setDepth(config.historyDepth)
@@ -299,6 +295,7 @@ class Git(
 
             revision
         }
+    }
 
     /**
      * Initialize and / or update the submodules in [workingTree], limiting the commit history to the configured

@@ -46,34 +46,34 @@ class VersionControlSystemTest : WordSpec({
     val absProjDir = relProjDir.absoluteFile
 
     "For an absolute working directory, getPathToRoot()" should {
-        val absVcsDir = VersionControlSystem.forDirectory(absProjDir)!!
+        VersionControlSystem.forDirectory(absProjDir).shouldNotBeNull().use { absVcsDir ->
+            "work if given absolute paths" {
+                absVcsDir.getPathToRoot(vcsRoot) shouldBe ""
+                absVcsDir.getPathToRoot(vcsRoot.resolve("downloader/src")) shouldBe "downloader/src"
+                absVcsDir.getPathToRoot(absProjDir.resolve("kotlin")) shouldBe "downloader/src/test/kotlin"
+            }
 
-        "work if given absolute paths" {
-            absVcsDir.getPathToRoot(vcsRoot) shouldBe ""
-            absVcsDir.getPathToRoot(vcsRoot.resolve("downloader/src")) shouldBe "downloader/src"
-            absVcsDir.getPathToRoot(absProjDir.resolve("kotlin")) shouldBe "downloader/src/test/kotlin"
-        }
-
-        "work if given relative paths" {
-            absVcsDir.getPathToRoot(File(".")) shouldBe "downloader"
-            absVcsDir.getPathToRoot(File("..")) shouldBe ""
-            absVcsDir.getPathToRoot(File("src/test/kotlin")) shouldBe "downloader/src/test/kotlin"
+            "work if given relative paths" {
+                absVcsDir.getPathToRoot(File(".")) shouldBe "downloader"
+                absVcsDir.getPathToRoot(File("..")) shouldBe ""
+                absVcsDir.getPathToRoot(File("src/test/kotlin")) shouldBe "downloader/src/test/kotlin"
+            }
         }
     }
 
     "For a relative working directory, getPathToRoot()" should {
-        val relVcsDir = VersionControlSystem.forDirectory(relProjDir)!!
+        VersionControlSystem.forDirectory(relProjDir).shouldNotBeNull().use { relVcsDir ->
+            "work if given absolute paths" {
+                relVcsDir.getPathToRoot(vcsRoot) shouldBe ""
+                relVcsDir.getPathToRoot(vcsRoot.resolve("downloader/src")) shouldBe "downloader/src"
+                relVcsDir.getPathToRoot(absProjDir.resolve("kotlin")) shouldBe "downloader/src/test/kotlin"
+            }
 
-        "work if given absolute paths" {
-            relVcsDir.getPathToRoot(vcsRoot) shouldBe ""
-            relVcsDir.getPathToRoot(vcsRoot.resolve("downloader/src")) shouldBe "downloader/src"
-            relVcsDir.getPathToRoot(absProjDir.resolve("kotlin")) shouldBe "downloader/src/test/kotlin"
-        }
-
-        "work if given relative paths" {
-            relVcsDir.getPathToRoot(relProjDir) shouldBe "downloader/src/test"
-            relVcsDir.getPathToRoot(File("..")) shouldBe ""
-            relVcsDir.getPathToRoot(File("src/test/kotlin")) shouldBe "downloader/src/test/kotlin"
+            "work if given relative paths" {
+                relVcsDir.getPathToRoot(relProjDir) shouldBe "downloader/src/test"
+                relVcsDir.getPathToRoot(File("..")) shouldBe ""
+                relVcsDir.getPathToRoot(File("src/test/kotlin")) shouldBe "downloader/src/test/kotlin"
+            }
         }
     }
 

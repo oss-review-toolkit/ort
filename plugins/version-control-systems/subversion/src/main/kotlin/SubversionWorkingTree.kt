@@ -39,6 +39,8 @@ internal class SubversionWorkingTree(
 ) : WorkingTree(workingDir, vcsType) {
     private val directoryNamespaces = listOf("branches", "tags", "trunk", "wiki")
 
+    override fun close() {}
+
     override fun isValid(): Boolean {
         if (!workingDir.isDirectory) {
             return false
