@@ -208,7 +208,7 @@ class Git(
      * configured [historyDepth][GitConfig.historyDepth] is respected.
      */
     private fun updateWorkingTreeWithoutSubmodules(
-        workingTree: WorkingTree,
+        workingTree: GitWorkingTree,
         git: JGit,
         revision: String
     ): Result<String> =
@@ -306,7 +306,7 @@ class Git(
      * [historyDepth][GitConfig.historyDepth]. If [updateNestedSubmodules][GitConfig.updateNestedSubmodules] is true,
      * submodules are initialized / updated recursively.
      */
-    private fun updateSubmodules(workingTree: WorkingTree) {
+    private fun updateSubmodules(workingTree: GitWorkingTree) {
         if (!workingTree.getRootPath().resolve(".gitmodules").isFile) return
 
         val recursive = "--recursive".takeIf { config.updateNestedSubmodules }
