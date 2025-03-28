@@ -34,15 +34,14 @@ internal class MercurialWorkingTree(workingDir: File, vcsType: VcsType) : Workin
 
     override fun isShallow() = false
 
-    override fun getRemoteUrl() = MercurialCommand.run(workingDir, "paths", "default").requireSuccess().stdout.trimEnd()
+    override fun getRemoteUrl() = runHg("paths", "default").stdout.trimEnd()
 
-    override fun getRevision() =
-        MercurialCommand.run(workingDir, "--debug", "id", "-i").requireSuccess().stdout.trimEnd()
+    override fun getRevision() = runHg("--debug", "id", "-i").stdout.trimEnd()
 
-    override fun getRootPath() = File(MercurialCommand.run(workingDir, "root").requireSuccess().stdout.trimEnd())
+    override fun getRootPath() = File(runHg("root").stdout.trimEnd())
 
     override fun listRemoteBranches(): List<String> {
-        val branches = MercurialCommand.run(workingDir, "branches").requireSuccess().stdout.trimEnd()
+        val branches = runHg("branches").stdout.trimEnd()
         return branches.lines().map {
             it.substringBefore(' ')
         }.sorted()
@@ -51,8 +50,8 @@ internal class MercurialWorkingTree(workingDir: File, vcsType: VcsType) : Workin
     override fun listRemoteTags(): List<String> {
         // Mercurial does not have the concept of global remote tags. Its "regular tags" are defined per
         // branch as part of the committed ".hgtags" file. See https://stackoverflow.com/a/2059189/1127485.
-        MercurialCommand.run(workingDir, "pull", "-r", "default").requireSuccess()
-        val tags = MercurialCommand.run(workingDir, "cat", "-r", "default", ".hgtags").requireSuccess().stdout.trimEnd()
+        runHg("pull", "-r", "default")
+        val tags = runHg("cat", "-r", "default", ".hgtags").stdout.trimEnd()
         return tags.lines().map {
             it.substringAfterLast(' ')
         }.sorted()
