@@ -24,6 +24,7 @@ import java.io.IOException
 
 import org.apache.logging.log4j.kotlin.logger
 
+import org.eclipse.jgit.api.Git as JGit
 import org.eclipse.jgit.api.LsRemoteCommand
 import org.eclipse.jgit.lib.BranchConfig
 import org.eclipse.jgit.lib.Constants
@@ -95,7 +96,7 @@ internal open class GitWorkingTree(workingDir: File, vcsType: VcsType) : Working
     override fun getRemoteUrl(): String =
         useRepo {
             runCatching {
-                val remotes = org.eclipse.jgit.api.Git(this).use { it.remoteList().call() }
+                val remotes = JGit(this).use { it.remoteList().call() }
                 val remoteForCurrentBranch = BranchConfig(config, branch).remote
 
                 val remote = if (remotes.size <= 1 || remoteForCurrentBranch == null) {
