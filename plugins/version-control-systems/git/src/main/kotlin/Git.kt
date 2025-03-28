@@ -28,7 +28,6 @@ import java.security.PublicKey
 import org.apache.logging.log4j.kotlin.logger
 
 import org.eclipse.jgit.api.Git as JGit
-import org.eclipse.jgit.api.LsRemoteCommand
 import org.eclipse.jgit.api.errors.GitAPIException
 import org.eclipse.jgit.errors.UnsupportedCredentialItem
 import org.eclipse.jgit.lib.Constants
@@ -150,7 +149,7 @@ class Git(
 
     override fun isApplicableUrlInternal(vcsUrl: String): Boolean =
         runCatching {
-            LsRemoteCommand(null).setRemote(vcsUrl).call().isNotEmpty()
+            JGit.lsRemoteRepository().setRemote(vcsUrl).call().isNotEmpty()
         }.onFailure {
             logger.debug { "Failed to check whether $type is applicable for $vcsUrl: ${it.collectMessages()}" }
         }.isSuccess
