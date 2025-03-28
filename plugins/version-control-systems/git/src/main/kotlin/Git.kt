@@ -270,7 +270,7 @@ class Git(
         }.mapCatching { fetchResult ->
             // TODO: Migrate this to JGit once sparse checkout (https://bugs.eclipse.org/bugs/show_bug.cgi?id=383772) is
             //       implemented. Also see the "reset" call below.
-            GitCommand.run("checkout", revision, workingDir = workingTree.getRootPath()).requireSuccess()
+            workingTree.runGit("checkout", revision)
 
             // In case of a non-fixed revision (branch or tag) reset the working tree to ensure that the previously
             // fetched changes are applied.
@@ -294,8 +294,7 @@ class Git(
                     "Requested revision '$revision' not found in refs advertised by the server."
                 }
 
-                GitCommand.run("reset", "--hard", resolvedRevision, workingDir = workingTree.getRootPath())
-                    .requireSuccess()
+                workingTree.runGit("reset", "--hard", resolvedRevision)
             }
 
             revision
