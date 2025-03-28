@@ -91,7 +91,7 @@ class DefaultWorkingTreeCache : WorkingTreeCache {
 
             workingTreeMutexes.forEach { (key, workingTreeMutex) ->
                 workingTreeMutex.withLock {
-                    workingTrees[key]?.run {
+                    workingTrees[key]?.apply {
                         logger.debug {
                             "Deleting cached working tree at '${getRootPath()}' for ${getRemoteUrl()} and revision " +
                                 "${getRevision()} ..."
