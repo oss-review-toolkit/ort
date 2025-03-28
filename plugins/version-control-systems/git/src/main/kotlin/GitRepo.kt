@@ -30,6 +30,7 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 import org.apache.logging.log4j.kotlin.logger
 
+import org.eclipse.jgit.api.Git as JGit
 import org.eclipse.jgit.lib.SymbolicRef
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -103,7 +104,7 @@ class GitRepo(
     override fun getVersion() = GitRepoCommand.getVersion()
 
     override fun getDefaultBranchName(url: String): String {
-        val refs = org.eclipse.jgit.api.Git.lsRemoteRepository().setRemote(url).callAsMap()
+        val refs = JGit.lsRemoteRepository().setRemote(url).callAsMap()
         return (refs["HEAD"] as? SymbolicRef)?.target?.name?.removePrefix("refs/heads/") ?: "master"
     }
 

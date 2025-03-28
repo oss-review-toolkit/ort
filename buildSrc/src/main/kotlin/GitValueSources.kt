@@ -19,7 +19,7 @@
 
 import java.io.File
 
-import org.eclipse.jgit.api.Git
+import org.eclipse.jgit.api.Git as JGit
 import org.eclipse.jgit.lib.Constants
 import org.eclipse.jgit.revwalk.RevWalk
 import org.eclipse.jgit.treewalk.TreeWalk
@@ -37,7 +37,7 @@ abstract class GitFilesValueSource : ValueSource<List<File>, GitParameters> {
         val filePaths = mutableListOf<File>()
         val workingDir = parameters.workingDir.get().asFile
 
-        Git.open(workingDir).use { git ->
+        JGit.open(workingDir).use { git ->
             TreeWalk(git.repository).use { treeWalk ->
                 val headCommit = RevWalk(git.repository).use {
                     val head = git.repository.resolve(Constants.HEAD)
