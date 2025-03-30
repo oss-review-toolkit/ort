@@ -28,7 +28,7 @@ jobs:
       - name: Build Executable
         run: ./gradlew -P cliAnalyzerOnly=true --no-configuration-cache :cli:nativeCompile
       - name: Compress Executable
-        uses: crazy-max/ghaction-upx@de21b8cbed76979407eeb6e41aa5e270afc3225c # v3
+        uses: crazy-max/ghaction-upx@db8cc9515a4a7ea1b312cb82fbeae6d716daf777 # v3
         with:
           files: cli/build/native/nativeCompile/ort
       - name: Upload Executable
