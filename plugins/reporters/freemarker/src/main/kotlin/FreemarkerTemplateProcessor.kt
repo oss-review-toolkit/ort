@@ -397,6 +397,12 @@ class FreemarkerTemplateProcessor(
         fun getPackage(id: Identifier): Package =
             input.ortResult.getPackage(id)?.metadata
                 ?: Package.EMPTY.also { logger.warn { "Could not resolve package '${id.toCoordinates()}'." } }
+
+        /**
+         * Return an [Identifier] constructed from the given [identifier] string.
+         */
+        @Suppress("UNUSED") // This function is used in the templates.
+        fun identifierFromString(identifier: String) = Identifier(identifier)
     }
 }
 
