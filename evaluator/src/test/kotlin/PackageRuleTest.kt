@@ -23,23 +23,29 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.CuratedPackage
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
+import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.licenses.ResolvedLicense
 import org.ossreviewtoolkit.model.licenses.ResolvedOriginalExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression.Strictness
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
+import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 class PackageRuleTest : WordSpec() {
-    private val ruleSet = ruleSet(ortResult)
+    private fun createPackageRule(pkg: Package): PackageRule {
+        val ruleSet = ruleSet(ortResult.addPackage(pkg))
 
-    private fun createPackageRule(pkg: Package) =
-        PackageRule(
+        return PackageRule(
             ruleSet = ruleSet,
             name = "test",
             pkg = CuratedPackage(pkg),
             resolvedLicenseInfo = ruleSet.licenseInfoResolver.resolveLicenseInfo(pkg.id)
         )
+    }
 
     private fun PackageRule.createLicenseRule(license: SpdxSingleLicenseExpression, licenseSource: LicenseSource) =
         LicenseRule(
@@ -95,6 +101,32 @@ class PackageRuleTest : WordSpec() {
                 val matcher = rule.hasLicense()
 
                 matcher.matches() shouldBe false
+            }
+        }
+
+        "hasConcludedLicense()" should {
+            "return true if the concluded license is a license expression" {
+                val rule = createPackageRule(packageWithConcludedLicense("MIT"))
+
+                rule.hasConcludedLicense().matches() shouldBe true
+            }
+
+            "return true if the concluded license is ${SpdxConstants.NONE}" {
+                val rule = createPackageRule(packageWithConcludedLicense(SpdxConstants.NONE))
+
+                rule.hasConcludedLicense().matches() shouldBe true
+            }
+
+            "return false if the concluded license is ${SpdxConstants.NOASSERTION}" {
+                val rule = createPackageRule(packageWithConcludedLicense(SpdxConstants.NOASSERTION))
+
+                rule.hasConcludedLicense().matches() shouldBe false
+            }
+
+            "return false if the concluded license is null" {
+                val rule = createPackageRule(packageWithConcludedLicense(null))
+
+                rule.hasConcludedLicense().matches() shouldBe false
             }
         }
 
@@ -242,4 +274,23 @@ class PackageRuleTest : WordSpec() {
             }
         }
     }
+}
+
+private fun packageWithConcludedLicense(license: String?): Package =
+    Package.EMPTY.copy(
+        id = Identifier("Maven:some:package:0.0.1"),
+        concludedLicense = license?.toSpdx(Strictness.ALLOW_ANY)
+    )
+
+private fun OrtResult.addPackage(pkg: Package): OrtResult {
+    val analyzerResult = analyzer?.result ?: return this
+    if (pkg in analyzerResult.packages) return this
+
+    return copy(
+        analyzer = analyzer!!.copy(
+            result = analyzerResult.copy(
+                packages = analyzerResult.packages + pkg
+            )
+        )
+    )
 }
