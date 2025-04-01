@@ -34,6 +34,7 @@ import org.ossreviewtoolkit.model.vulnerabilities.Cvss3Rating
 import org.ossreviewtoolkit.model.vulnerabilities.Cvss4Rating
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
 import org.ossreviewtoolkit.model.vulnerabilities.VulnerabilityReference
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseReferenceExpression
 
@@ -132,6 +133,19 @@ open class PackageRule(
             override val description = "hasLicense()"
 
             override fun matches() = resolvedLicenseInfo.licenses.any { it.license.isPresent() }
+        }
+
+    /**
+     * A [RuleMatcher] that checks if the [package][pkg] has any concluded license.
+     */
+    fun hasConcludedLicense() =
+        object : RuleMatcher {
+            override val description = "hasConcludedLicense()"
+
+            override fun matches(): Boolean {
+                val concludedLicense = resolvedLicenseInfo.licenseInfo.concludedLicenseInfo.concludedLicense
+                return concludedLicense != null && concludedLicense.toString() != SpdxConstants.NOASSERTION
+            }
         }
 
     /**
