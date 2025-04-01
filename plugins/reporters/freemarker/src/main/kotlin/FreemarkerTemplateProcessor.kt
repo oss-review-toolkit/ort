@@ -161,6 +161,12 @@ class FreemarkerTemplateProcessor(
         val excluded: Boolean by lazy { input.ortResult.isExcluded(id) }
 
         /**
+         * The labels for the package.
+         */
+        @Suppress("UNUSED") // This function is used in the templates.
+        val labels: Map<String, String> by lazy { input.ortResult.getPackage(id)?.metadata?.labels.orEmpty() }
+
+        /**
          * The resolved license information for the package.
          */
         val license: ResolvedLicenseInfo by lazy {
