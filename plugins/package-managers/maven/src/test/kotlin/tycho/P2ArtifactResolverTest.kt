@@ -102,7 +102,7 @@ class P2ArtifactResolverTest : WordSpec({
         "return a correct RemoteArtifact" {
             val repositoryContent = P2RepositoryContent(
                 REPOSITORY_URL,
-                mapOf(TEST_ARTIFACT_KEY to TEST_HASH),
+                mapOf(P2Identifier(TEST_ARTIFACT_KEY) to TEST_HASH),
                 emptySet()
             )
 
@@ -130,8 +130,8 @@ class P2ArtifactResolverTest : WordSpec({
             val repositoryContent = P2RepositoryContent(
                 REPOSITORY_URL,
                 mapOf(
-                    TEST_ARTIFACT_KEY to otherHash,
-                    "$TEST_ARTIFACT_ID.source:$TEST_ARTIFACT_VERSION" to TEST_HASH
+                    P2Identifier(TEST_ARTIFACT_KEY) to otherHash,
+                    P2Identifier("$TEST_ARTIFACT_ID.source:$TEST_ARTIFACT_VERSION") to TEST_HASH
                 ),
                 emptySet()
             )
