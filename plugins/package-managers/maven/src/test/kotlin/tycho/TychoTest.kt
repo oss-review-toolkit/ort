@@ -26,13 +26,10 @@ import io.kotest.engine.spec.tempdir
 import io.kotest.engine.spec.tempfile
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
-import io.kotest.matchers.collections.contain
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
-import io.kotest.matchers.comparables.shouldBeGreaterThan
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNot
 import io.kotest.matchers.string.shouldContain
 
 import io.mockk.every
@@ -62,8 +59,6 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
-import org.ossreviewtoolkit.model.config.PathExclude
-import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.PackageResolverFun
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.utils.identifier
@@ -285,96 +280,6 @@ class TychoTest : WordSpec({
 
             val rootResults = results.single { it.project.id.name == "root" }
             rootResults.issues shouldContainExactlyInAnyOrder issues
-        }
-
-        "exclude projects from the build according to path excludes" {
-            val analysisRoot = tempdir()
-            val tychoRoot = analysisRoot.createSubModule("tycho-root")
-            tychoRoot.createSubModule("tycho-sub1")
-            tychoRoot.createSubModule("tycho-sub2")
-            tychoRoot.createSubModule("tycho-excluded-sub1")
-            val module = tychoRoot.createSubModule("tycho-excluded-sub2")
-            module.createSubModule("tycho-excluded-sub2-sub")
-            val rootProject = createMavenProject("root", tychoRoot.pom)
-
-            val excludes = Excludes(
-                paths = listOf(
-                    PathExclude("tycho-root/tycho-excluded-sub1", PathExcludeReason.EXAMPLE_OF),
-                    PathExclude("tycho-root/tycho-excluded-sub2/**", PathExcludeReason.TEST_OF),
-                    PathExclude("other-root/**", PathExcludeReason.EXAMPLE_OF)
-                )
-            )
-            val analyzerConfig = AnalyzerConfiguration(skipExcluded = true)
-
-            val tycho = spyk(Tycho())
-            val cli = injectCliMock(tycho, listOf(rootProject).toJson(), listOf(rootProject))
-
-            tycho.resolveDependencies(analysisRoot, tychoRoot.pom, excludes, analyzerConfig, emptyMap())
-
-            val slotArgs = slot<Array<String>>()
-            verify {
-                cli.doMain(capture(slotArgs), any(), any(), any())
-            }
-
-            with(slotArgs.captured) {
-                val indexPl = indexOf("-pl")
-                indexPl shouldBeGreaterThan -1
-                val excludedProjects = get(indexPl + 1).split(",")
-                excludedProjects shouldContainExactlyInAnyOrder listOf(
-                    "!tycho-excluded-sub1",
-                    "!tycho-excluded-sub2",
-                    "!tycho-excluded-sub2/tycho-excluded-sub2-sub"
-                )
-            }
-        }
-
-        "not add a -pl option if no projects are excluded" {
-            val analysisRoot = tempdir()
-            val tychoRoot = analysisRoot.createSubModule("tycho-root")
-            tychoRoot.createSubModule("tycho-sub1")
-            tychoRoot.createSubModule("tycho-sub2")
-            val rootProject = createMavenProject("root", tychoRoot.pom)
-
-            val excludes = Excludes(paths = listOf(PathExclude("other-root/**", PathExcludeReason.EXAMPLE_OF)))
-            val analyzerConfig = AnalyzerConfiguration(skipExcluded = true)
-
-            val tycho = spyk(Tycho())
-            val cli = injectCliMock(tycho, listOf(rootProject).toJson(), listOf(rootProject))
-
-            tycho.resolveDependencies(analysisRoot, tychoRoot.pom, excludes, analyzerConfig, emptyMap())
-
-            val slotArgs = slot<Array<String>>()
-            verify {
-                cli.doMain(capture(slotArgs), any(), any(), any())
-            }
-
-            slotArgs.captured.toList() shouldNot contain("-pl")
-        }
-
-        "not exclude projects if skipExcluded is false" {
-            val analysisRoot = tempdir()
-            val tychoRoot = analysisRoot.createSubModule("tycho-root")
-            tychoRoot.createSubModule("tycho-sub1")
-            tychoRoot.createSubModule("tycho-sub2")
-            tychoRoot.createSubModule("tycho-excluded-sub1")
-            val rootProject = createMavenProject("root", tychoRoot.pom)
-
-            val excludes = Excludes(
-                paths = listOf(PathExclude("tycho-root/tycho-excluded-sub1", PathExcludeReason.EXAMPLE_OF))
-            )
-            val analyzerConfig = AnalyzerConfiguration()
-
-            val tycho = spyk(Tycho())
-            val cli = injectCliMock(tycho, listOf(rootProject).toJson(), listOf(rootProject))
-
-            tycho.resolveDependencies(analysisRoot, tychoRoot.pom, excludes, analyzerConfig, emptyMap())
-
-            val slotArgs = slot<Array<String>>()
-            verify {
-                cli.doMain(capture(slotArgs), any(), any(), any())
-            }
-
-            slotArgs.captured.toList() shouldNot contain("-pl")
         }
     }
 
@@ -675,22 +580,6 @@ private fun injectCliMock(
 
     return cli
 }
-
-/**
- * Return a reference to the Maven pom file in this folder.
- */
-private val File.pom: File
-    get() = resolve("pom.xml")
-
-/**
- * Create a sub folder with the given [name] and a pom file to simulate a Maven module. Return the created folder
- * for the module.
- */
-private fun File.createSubModule(name: String): File =
-    resolve(name).apply {
-        mkdirs()
-        pom.also { it.writeText("pom-$name") }
-    }
 
 /** The test artifact used by many tests. */
 private val testArtifact = DefaultArtifact(TEST_GROUP_ID, TEST_ARTIFACT_ID, "jar", TEST_VERSION)

@@ -20,11 +20,8 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.maven.tycho
 
 import java.io.File
-import java.nio.file.Path
 import java.util.concurrent.atomic.AtomicReference
 import java.util.jar.Manifest
-
-import kotlin.io.path.invariantSeparatorsPathString
 
 import org.apache.logging.log4j.kotlin.logger
 import org.apache.maven.AbstractMavenLifecycleParticipant
@@ -116,13 +113,7 @@ class Tycho(override val descriptor: PluginDescriptor = TychoFactory.Companion.d
 
         val repositoryHelper = LocalRepositoryHelper()
         val collector = TychoProjectsCollector()
-        val (exitCode, buildLog) = runBuild(
-            analysisRoot,
-            collector,
-            definitionFile.parentFile,
-            excludes,
-            analyzerConfig.skipExcluded
-        )
+        val (exitCode, buildLog) = runBuild(collector, definitionFile.parentFile)
 
         val resolver = P2ArtifactResolver.create(definitionFile.parentFile, collector.mavenProjects.values)
 
@@ -198,13 +189,7 @@ class Tycho(override val descriptor: PluginDescriptor = TychoFactory.Companion.d
      * Run a Maven build on the Tycho project in [projectRoot] utilizing the given [collector]. Return a pair with the
      * exit code of the Maven project and a [File] that contains the output generated during the build.
      */
-    private fun runBuild(
-        analysisRoot: File,
-        collector: TychoProjectsCollector,
-        projectRoot: File,
-        excludes: Excludes,
-        skipExcluded: Boolean
-    ): Pair<Int, File> {
+    private fun runBuild(collector: TychoProjectsCollector, projectRoot: File): Pair<Int, File> {
         // The Maven CLI seems to change the context class loader. This has side effects on ORT's plugin mechanism.
         // To prevent this, store the class loader and restore it at the end of this function.
         val tccl = Thread.currentThread().contextClassLoader
@@ -219,7 +204,7 @@ class Tycho(override val descriptor: PluginDescriptor = TychoFactory.Companion.d
             System.setProperty(MavenCli.MULTIMODULE_PROJECT_DIRECTORY, projectRoot.absolutePath)
 
             val exitCode = cli.doMain(
-                generateMavenOptions(analysisRoot, projectRoot, buildLog, excludes, skipExcluded),
+                generateMavenOptions(buildLog),
                 projectRoot.path,
                 null,
                 null
@@ -291,16 +276,9 @@ class Tycho(override val descriptor: PluginDescriptor = TychoFactory.Companion.d
     }
 
     /**
-     * Generate the command line options to be passed to the Maven CLI for the given [analysisRoot] and [root] folders
-     * and the [dependencyTreeFile].
+     * Generate the command line options to be passed to the Maven CLI for the given [dependencyTreeFile].
      */
-    private fun generateMavenOptions(
-        analysisRoot: File,
-        root: File,
-        dependencyTreeFile: File,
-        excludes: Excludes,
-        skipExcluded: Boolean
-    ): Array<String> =
+    private fun generateMavenOptions(dependencyTreeFile: File): Array<String> =
         buildList {
             // The "package" goal is required; otherwise the Tycho extension is not activated.
             add("package")
@@ -309,33 +287,7 @@ class Tycho(override val descriptor: PluginDescriptor = TychoFactory.Companion.d
             add("-DoutputFile=${dependencyTreeFile.absolutePath}")
             add("-DappendOutput=true")
             add("-Dverbose=true")
-
-            generateModuleExcludes(analysisRoot, root, excludes, skipExcluded)?.takeUnless { it.isEmpty() }
-                ?.let { excludedModules ->
-                    add("-pl")
-                    add(excludedModules)
-                }
         }.toTypedArray()
-
-    /**
-     * Generate a list of submodules to be excluded for the Maven build with the given [rootProject] folder based on
-     * the configured exclusions. The resulting string (if any) is used as the value of Maven's `-pl` option.
-     */
-    private fun generateModuleExcludes(
-        analysisRoot: File,
-        rootProject: File,
-        excludes: Excludes,
-        skipExcluded: Boolean
-    ): String? {
-        if (!skipExcluded) return null
-
-        val analysisRootPath = analysisRoot.toPath()
-        val rootProjectPath = rootProject.toPath()
-        return rootProject.walk().filter { it.name == "pom.xml" }
-            .map { it.toPath().parent }
-            .filter { excludes.isPathExcluded(analysisRootPath.relativeSubPath(it)) }
-            .joinToString(",") { "!${rootProjectPath.relativeSubPath(it)}" }
-    }
 }
 
 /**
@@ -349,11 +301,6 @@ private const val DEPENDENCY_PLUGIN_VERSION = "3.8.1"
 /** The goal to invoke the Maven Dependency Plugin to generate a dependency tree. */
 private const val DEPENDENCY_TREE_GOAL =
     "org.apache.maven.plugins:maven-dependency-plugin:$DEPENDENCY_PLUGIN_VERSION:tree"
-
-/**
- * Return the relative path of [other] to this [Path].
- */
-private fun Path.relativeSubPath(other: Path): String = relativize(other).invariantSeparatorsPathString
 
 /**
  * A special exception class to indicate that a Tycho build failed completely.
