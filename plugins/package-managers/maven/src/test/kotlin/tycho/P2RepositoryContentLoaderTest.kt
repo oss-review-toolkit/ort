@@ -77,11 +77,11 @@ class P2RepositoryContentLoaderTest : WordSpec({
                 .shouldBeSuccess { content ->
                     content.baseUrl shouldBe server.repositoryUrl()
                     content.artifacts shouldHaveSize 2
-                    content.artifacts["org.apache.commons.io:2.8.0.v20210415-0900"] shouldBe Hash(
+                    content.artifacts[P2Identifier("org.apache.commons.io:2.8.0.v20210415-0900")] shouldBe Hash(
                         "a58e34c958bcf1704e744dee3793484164ba591e82a32b67fc87414426327e85",
                         HashAlgorithm.SHA256
                     )
-                    content.artifacts["org.apache.commons.codec:1.14.0.v20200818-1422"] shouldBe Hash(
+                    content.artifacts[P2Identifier("org.apache.commons.codec:1.14.0.v20200818-1422")] shouldBe Hash(
                         "5e8271297be763139bc1189b54166424",
                         HashAlgorithm.MD5
                     )
@@ -103,11 +103,11 @@ class P2RepositoryContentLoaderTest : WordSpec({
                 .shouldBeSuccess { content ->
                     content.baseUrl shouldBe server.repositoryUrl()
                     content.artifacts shouldHaveSize 2
-                    content.artifacts["org.apache.commons.io:2.8.0.v20210415-0900"] shouldBe Hash(
+                    content.artifacts[P2Identifier("org.apache.commons.io:2.8.0.v20210415-0900")] shouldBe Hash(
                         "a58e34c958bcf1704e744dee3793484164ba591e82a32b67fc87414426327e85",
                         HashAlgorithm.SHA256
                     )
-                    content.artifacts["org.apache.commons.codec:1.14.0.v20200818-1422"] shouldBe Hash(
+                    content.artifacts[P2Identifier("org.apache.commons.codec:1.14.0.v20200818-1422")] shouldBe Hash(
                         "5e8271297be763139bc1189b54166424",
                         HashAlgorithm.MD5
                     )
@@ -229,9 +229,13 @@ class P2RepositoryContentLoaderTest : WordSpec({
             issues should beEmpty()
 
             contents.flatMap { it.artifacts.keys } shouldContainExactlyInAnyOrder listOf(
-                "org.apache.commons.io:2.8.0.v20210415-0900",
-                "org.apache.commons.codec:1.14.0.v20200818-1422",
-                "org.apache.commons.logging.source:1.2.0.v20180409-1502"
+                P2Identifier("org.apache.commons.io:2.8.0.v20210415-0900"),
+                P2Identifier("org.apache.commons.codec:1.14.0.v20200818-1422"),
+                P2Identifier("org.apache.commons.logging.source:1.2.0.v20180409-1502"),
+                P2Identifier(
+                    bundleId = "org.eclipse.orbit.releng.recipes.feature.aggregation.source:1.0.0.v20211212-1642",
+                    classifier = "org.eclipse.update.feature"
+                )
             )
         }
 
@@ -263,9 +267,13 @@ class P2RepositoryContentLoaderTest : WordSpec({
             )
 
             contents.flatMap { it.artifacts.keys } shouldContainExactlyInAnyOrder listOf(
-                "org.apache.commons.io:2.8.0.v20210415-0900",
-                "org.apache.commons.codec:1.14.0.v20200818-1422",
-                "org.apache.commons.logging.source:1.2.0.v20180409-1502"
+                P2Identifier("org.apache.commons.io:2.8.0.v20210415-0900"),
+                P2Identifier("org.apache.commons.codec:1.14.0.v20200818-1422"),
+                P2Identifier("org.apache.commons.logging.source:1.2.0.v20180409-1502"),
+                P2Identifier(
+                    bundleId = "org.eclipse.orbit.releng.recipes.feature.aggregation.source:1.0.0.v20211212-1642",
+                    classifier = "org.eclipse.update.feature"
+                )
             )
         }
 
@@ -290,7 +298,11 @@ class P2RepositoryContentLoaderTest : WordSpec({
             )
 
             contents.flatMap { it.artifacts.keys } shouldContainExactlyInAnyOrder listOf(
-                "org.apache.commons.logging.source:1.2.0.v20180409-1502"
+                P2Identifier("org.apache.commons.logging.source:1.2.0.v20180409-1502"),
+                P2Identifier(
+                    bundleId = "org.eclipse.orbit.releng.recipes.feature.aggregation.source:1.0.0.v20211212-1642",
+                    classifier = "org.eclipse.update.feature"
+                )
             )
 
             issues.shouldBeSingleton { issue ->
@@ -315,7 +327,11 @@ class P2RepositoryContentLoaderTest : WordSpec({
             )
 
             contents.flatMap { it.artifacts.keys } shouldContainExactlyInAnyOrder listOf(
-                "org.apache.commons.logging.source:1.2.0.v20180409-1502"
+                P2Identifier("org.apache.commons.logging.source:1.2.0.v20180409-1502"),
+                P2Identifier(
+                    bundleId = "org.eclipse.orbit.releng.recipes.feature.aggregation.source:1.0.0.v20211212-1642",
+                    classifier = "org.eclipse.update.feature"
+                )
             )
 
             issues.shouldBeSingleton { issue ->
@@ -362,9 +378,14 @@ class P2RepositoryContentLoaderTest : WordSpec({
             issues should beEmpty()
 
             contents.flatMap { it.artifacts.keys } shouldContainExactlyInAnyOrder listOf(
-                "org.apache.commons.io:2.8.0.v20210415-0900",
-                "org.apache.commons.codec:1.14.0.v20200818-1422",
-                "org.apache.commons.logging.source:1.2.0.v20180409-1502"
+
+                P2Identifier("org.apache.commons.io:2.8.0.v20210415-0900"),
+                P2Identifier("org.apache.commons.codec:1.14.0.v20200818-1422"),
+                P2Identifier("org.apache.commons.logging.source:1.2.0.v20180409-1502"),
+                P2Identifier(
+                    bundleId = "org.eclipse.orbit.releng.recipes.feature.aggregation.source:1.0.0.v20211212-1642",
+                    classifier = "org.eclipse.update.feature"
+                )
             )
         }
     }

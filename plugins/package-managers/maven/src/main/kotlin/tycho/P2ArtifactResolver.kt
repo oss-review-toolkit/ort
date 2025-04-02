@@ -63,8 +63,8 @@ internal class P2ArtifactResolver private constructor(
             val artifactHashes = mutableMapOf<String, Hash>()
             contents.forEach { content ->
                 content.artifacts.entries.forEach { (artifactId, hash) ->
-                    artifactRepositories[artifactId] = content.baseUrl
-                    artifactHashes[artifactId] = hash
+                    artifactRepositories[artifactId.bundleId] = content.baseUrl
+                    artifactHashes[artifactId.bundleId] = hash
                 }
             }
 
