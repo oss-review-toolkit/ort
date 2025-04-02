@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.packagemanagers.maven.tycho
 import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
+import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
 
@@ -155,6 +156,86 @@ class P2ArtifactResolverTest : WordSpec({
             val resolver = createResolver(emptyList(), issues)
 
             resolver.resolverIssues shouldContainExactlyInAnyOrder issues
+        }
+    }
+
+    "isFeature()" should {
+        "return false if the artifact cannot be resolved" {
+            val resolver = createResolver(emptyList())
+
+            val isFeature = resolver.isFeature(testArtifact)
+
+            isFeature shouldBe false
+        }
+
+        "return true for an artifact having only the feature classifier" {
+            val repositoryContent = P2RepositoryContent(
+                REPOSITORY_URL,
+                mapOf(P2Identifier(TEST_ARTIFACT_KEY, "org.eclipse.update.feature") to TEST_HASH),
+                emptySet()
+            )
+
+            val resolver = createResolver(listOf(repositoryContent))
+            val isFeature = resolver.isFeature(testArtifact)
+
+            isFeature shouldBe true
+        }
+
+        "return false for an artifact with a different classifier" {
+            val repositoryContent = P2RepositoryContent(
+                REPOSITORY_URL,
+                mapOf(P2Identifier(TEST_ARTIFACT_KEY) to TEST_HASH),
+                emptySet()
+            )
+
+            val resolver = createResolver(listOf(repositoryContent))
+            val isFeature = resolver.isFeature(testArtifact)
+
+            isFeature shouldBe false
+        }
+
+        "return false for an artifact that includes a feature classifier, but has no matching group ID" {
+            val repositoryContent1 = P2RepositoryContent(
+                REPOSITORY_URL,
+                mapOf(P2Identifier(TEST_ARTIFACT_KEY) to TEST_HASH),
+                emptySet()
+            )
+            val repositoryContent2 = P2RepositoryContent(
+                "${REPOSITORY_URL}_other",
+                mapOf(P2Identifier(TEST_ARTIFACT_KEY, "org.eclipse.update.feature") to TEST_HASH),
+                emptySet()
+            )
+
+            val resolver = createResolver(listOf(repositoryContent1, repositoryContent2))
+            val isFeature = resolver.isFeature(testArtifact)
+
+            isFeature shouldBe false
+        }
+
+        "return true for an artifact that includes a feature classifier and has a matching group ID" {
+            val repositoryContent1 = P2RepositoryContent(
+                REPOSITORY_URL,
+                mapOf(P2Identifier(TEST_ARTIFACT_KEY) to TEST_HASH),
+                emptySet()
+            )
+            val repositoryContent2 = P2RepositoryContent(
+                "${REPOSITORY_URL}_other",
+                mapOf(P2Identifier(TEST_ARTIFACT_KEY, "org.eclipse.update.feature") to TEST_HASH),
+                emptySet()
+            )
+            val featureGroupIds = listOf(
+                "p2.eclipse.feature",
+                "feature.eclipse.p2",
+                "some.feature.group"
+            )
+            val resolver = createResolver(listOf(repositoryContent1, repositoryContent2))
+
+            featureGroupIds.forAll { groupId ->
+                val featureArtifact = DefaultArtifact(groupId, TEST_ARTIFACT_ID, "jar", TEST_ARTIFACT_VERSION)
+                val isFeature = resolver.isFeature(featureArtifact)
+
+                isFeature shouldBe true
+            }
         }
     }
 })
