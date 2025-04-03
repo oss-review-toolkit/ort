@@ -121,6 +121,7 @@ class Conan(
 
         internal const val SCOPE_NAME_DEPENDENCIES = "requires"
         internal const val SCOPE_NAME_DEV_DEPENDENCIES = "build_requires"
+        internal const val SCOPE_NAME_TEST_DEPENDENCIES = "test_requires"
     }
 
     internal val command by lazy { ConanCommand(config.useConan2) }
@@ -197,6 +198,7 @@ class Conan(
             val handlerResults = handler.process(definitionFile, config.lockfileName)
 
             val result = with(handlerResults) {
+                val scopes = setOfNotNull(dependenciesScope, devDependenciesScope, testDependenciesScope)
                 ProjectAnalyzerResult(
                     project = Project(
                         id = projectPackage.id,
@@ -210,7 +212,7 @@ class Conan(
                             projectPackage.homepageUrl
                         ),
                         homepageUrl = projectPackage.homepageUrl,
-                        scopeDependencies = setOf(dependenciesScope, devDependenciesScope)
+                        scopeDependencies = scopes
                     ),
                     packages = packages.values.toSet()
                 )

@@ -86,6 +86,7 @@ internal data class PackageInfoV2(
     val label: String,
     val requires: List<String> = emptyList(),
     val buildRequires: List<String> = emptyList(),
+    val testRequires: List<String> = emptyList(),
     val recipeFolder: String? = null,
     val description: String? = null,
     // The next two properties can be null for the first package, i.e. the conanfile itself. To simplify the processing
@@ -115,6 +116,9 @@ private data class PackageInfoV2Raw(
                 }.map { dep2 -> dep2.ref },
                 buildRequires = it.dependencies.values.filter { dep ->
                     dep.build && dep.direct
+                }.map { dep2 -> dep2.ref },
+                testRequires = it.dependencies.values.filter { dep ->
+                    dep.test && dep.direct
                 }.map { dep2 -> dep2.ref },
                 recipeFolder = it.recipeFolder,
                 description = it.description,
@@ -166,6 +170,7 @@ internal data class DependencyReference(
     val libs: Boolean = false,
     val ref: String,
     val run: Boolean = false,
+    val test: Boolean = false,
     val visible: Boolean = false
 )
 
