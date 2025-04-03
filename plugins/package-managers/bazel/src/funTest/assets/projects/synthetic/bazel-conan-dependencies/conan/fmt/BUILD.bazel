@@ -1,0 +1,53 @@
+# Components precompiled libs
+cc_import(
+    name = "fmt_precompiled",
+    static_library = "lib/libfmt.a",
+)
+
+# Root package precompiled libs
+
+# Components libraries declaration
+cc_library(
+    name = "fmt-_fmt",
+    hdrs = glob([
+        "include/**",
+    ]),
+    includes = [
+        "include",
+    ],
+    linkopts = [
+        "-lm",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        # do not sort
+        ":fmt_precompiled",
+    ],
+)
+
+# Package library declaration
+cc_library(
+    name = "fmt",
+    hdrs = glob([
+        "include/**",
+    ]),
+    includes = [
+        "include",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        # do not sort
+        ":fmt-_fmt",
+    ],
+)
+
+# Filegroup library declaration
+filegroup(
+    name = "fmt_binaries",
+    srcs = glob([
+        "bin/**",
+    ],
+    allow_empty = True
+    ),
+    visibility = ["//visibility:public"],
+)

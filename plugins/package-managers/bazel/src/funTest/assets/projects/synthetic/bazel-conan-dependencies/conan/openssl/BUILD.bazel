@@ -1,0 +1,83 @@
+# Components precompiled libs
+cc_import(
+    name = "crypto_precompiled",
+    static_library = "lib/libcrypto.a",
+)
+
+cc_import(
+    name = "ssl_precompiled",
+    static_library = "lib/libssl.a",
+)
+
+# Root package precompiled libs
+
+# Components libraries declaration
+cc_library(
+    name = "openssl-crypto",
+    hdrs = glob([
+        "include/**",
+    ]),
+    includes = [
+        "include",
+    ],
+    linkopts = [
+        "-ldl",
+        "-lrt",
+        "-lpthread",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        # do not sort
+        ":crypto_precompiled",
+        "@zlib//:zlib",
+    ],
+)
+
+cc_library(
+    name = "openssl-ssl",
+    hdrs = glob([
+        "include/**",
+    ]),
+    includes = [
+        "include",
+    ],
+    linkopts = [
+        "-ldl",
+        "-lpthread",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        # do not sort
+        ":ssl_precompiled",
+        ":openssl-crypto",
+    ],
+)
+
+# Package library declaration
+cc_library(
+    name = "openssl",
+    hdrs = glob([
+        "include/**",
+    ]),
+    includes = [
+        "include",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        # do not sort
+        ":openssl-crypto",
+        ":openssl-ssl",
+        "@zlib//:zlib",
+    ],
+)
+
+# Filegroup library declaration
+filegroup(
+    name = "openssl_binaries",
+    srcs = glob([
+        "bin/**",
+    ],
+    allow_empty = True
+    ),
+    visibility = ["//visibility:public"],
+)

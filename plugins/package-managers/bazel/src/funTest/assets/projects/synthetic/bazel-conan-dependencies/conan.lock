@@ -1,0 +1,27 @@
+{
+    "version": "0.5",
+    "requires": [
+        "zlib/1.3.1#b8bc2603263cf7eccbd6e17e66b0ed76%1733936244.862",
+        "openssl/3.4.1#85da54eb530cab53de0cc0ee9065d066%1741868597.788",
+        "libcurl/7.85.0#d671ff2c55730f4b068bb66853c35bfc%1717082897.939",
+        "gtest/1.16.0#4fd8d9d80636ea9504de6a0ec1ab8686%1743410803.513",
+        "gtest/1.12.1#37dde1d89b3b54f5640d858c9d1c2e42%1743410810.666",
+        "fmt/10.1.1#bdeb86a2fc0fe23f1a77e3e1c316cb3d%1720016030.547"
+    ],
+    "build_requires": [
+        "zlib/1.3.1#b8bc2603263cf7eccbd6e17e66b0ed76%1733936244.862",
+        "pkgconf/2.1.0#27f44583701117b571307cf5b5fe5605%1701537936.436",
+        "ninja/1.12.1#fd583651bf0c6a901943495d49878803%1724079877.609",
+        "meson/1.2.2#21b73818ba96d9eea465b310b5bbc993%1726730120.212",
+        "m4/1.4.19#b38ced39a01e31fef5435bc634461fd2%1700758725.451",
+        "libxslt/1.1.34#060c3fc06569e6a515464d08f19bfa1b%1727257439.295",
+        "libxml2/2.11.6#57b131d1dae9eb9691e51783cf2eb06b%1726875223.307",
+        "libtool/2.4.7#45fdbe12c85fa29eab741e4eff5c6ed4%1738594983.774",
+        "libiconv/1.17#1ae2f60ab5d08de1643a22a81b360c59%1737639926.448",
+        "gnu-config/cci.20210814#dc430d754f465e8c74463019672fb97b%1701248168.479",
+        "automake/1.16.5#058bda3e21c36c9aa8425daf3c1faf50%1688481772.751",
+        "autoconf/2.71#f9307992909d7fb3df459340f1932809%1711983104.648"
+    ],
+    "python_requires": [],
+    "config_requires": []
+}
