@@ -1,0 +1,34 @@
+# Components precompiled libs
+# Root package precompiled libs
+cc_import(
+    name = "z_precompiled",
+    static_library = "lib/libz.a",
+)
+
+# Components libraries declaration
+# Package library declaration
+cc_library(
+    name = "zlib",
+    hdrs = glob([
+        "include/**",
+    ]),
+    includes = [
+        "include",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        # do not sort
+        ":z_precompiled",
+    ],
+)
+
+# Filegroup library declaration
+filegroup(
+    name = "zlib_binaries",
+    srcs = glob([
+        "bin/**",
+    ],
+    allow_empty = True
+    ),
+    visibility = ["//visibility:public"],
+)
