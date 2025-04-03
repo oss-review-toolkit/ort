@@ -93,7 +93,13 @@ data class BazelConfig(
      * Use Conan2 when fetching Conan packages, otherwise use Conan 1.
      */
     @OrtPluginOption(defaultValue = "false")
-    val useConan2: Boolean
+    val useConan2: Boolean,
+
+    /**
+     * Only scan Bazel dependencies and skip reporting Conan packages in the dependency tree.
+     */
+    @OrtPluginOption(defaultValue = "false")
+    val bazelDependenciesOnly: Boolean
 )
 
 internal object BazelCommand : CommandLineTool {
@@ -172,56 +178,58 @@ class Bazel(
         val conanExtension = mainModule.extensionUsages.firstOrNull { "conan_deps_module_extension.bzl" in it.key }
         val conanPackages = mutableSetOf<Package>()
 
-        conanExtension?.let { extension ->
-            val conanProjectReferences = mutableSetOf<PackageReference>()
-            val conanProjectWithDependencies = mutableSetOf<PackageReference>()
-            val conanProjectWithTestDependencies = mutableSetOf<PackageReference>()
-            val conanAnalyzerResults = resolveConanDependencies(
-                projectDir,
-                analysisRoot,
-                excludes,
-                analyzerConfig,
-                labels
-            )
+        if (!config.bazelDependenciesOnly) {
+            conanExtension?.let { extension ->
+                val conanProjectReferences = mutableSetOf<PackageReference>()
+                val conanProjectWithDependencies = mutableSetOf<PackageReference>()
+                val conanProjectWithTestDependencies = mutableSetOf<PackageReference>()
+                val conanAnalyzerResults = resolveConanDependencies(
+                    projectDir,
+                    analysisRoot,
+                    excludes,
+                    analyzerConfig,
+                    labels
+                )
 
-            conanAnalyzerResults.forEach { conanAnalyzerResult ->
-                val projectReference = conanAnalyzerResult.project.toPackage().toReference()
-                conanProjectReferences += projectReference
+                conanAnalyzerResults.forEach { conanAnalyzerResult ->
+                    val projectReference = conanAnalyzerResult.project.toPackage().toReference()
+                    conanProjectReferences += projectReference
 
-                val dependenciesPerScopes = conanAnalyzerResult.project.scopes.associateBy({ it.name }) {
-                    // Only include the packages reported by Bazel.
-                    it.dependencies.filter { dep -> dep.id.name in extension.usedRepos }.toSet()
+                    val dependenciesPerScopes = conanAnalyzerResult.project.scopes.associateBy({ it.name }) {
+                        // Only include the packages reported by Bazel.
+                        it.dependencies.filter { dep -> dep.id.name in extension.usedRepos }.toSet()
+                    }
+
+                    conanProjectWithDependencies += projectReference.copy(
+                        dependencies = dependenciesPerScopes["requires"].orEmpty()
+                    )
+                    conanProjectWithTestDependencies += projectReference.copy(
+                        dependencies = dependenciesPerScopes["test_requires"].orEmpty()
+                    )
+                    conanPackages += conanAnalyzerResult.packages.filter { pkg ->
+                        (conanProjectWithDependencies + conanProjectWithTestDependencies).flatMap {
+                            it.dependencies
+                        }.any { it.id == pkg.id }
+                    }
                 }
 
-                conanProjectWithDependencies += projectReference.copy(
-                    dependencies = dependenciesPerScopes["requires"].orEmpty()
+                scopes = scopes.map {
+                    if (it.name == "main") {
+                        it.copy(dependencies = it.dependencies + conanProjectReferences)
+                    } else {
+                        it
+                    }
+                }.toSet()
+
+                scopes += Scope(
+                    name = CONAN_REQUIRES_SCOPE_NAME,
+                    dependencies = conanProjectWithDependencies
                 )
-                conanProjectWithTestDependencies += projectReference.copy(
-                    dependencies = dependenciesPerScopes["test_requires"].orEmpty()
+                scopes += Scope(
+                    name = CONAN_BUILD_TEST_SCOPE_NAME,
+                    dependencies = conanProjectWithTestDependencies
                 )
-                conanPackages += conanAnalyzerResult.packages.filter { pkg ->
-                    (conanProjectWithDependencies + conanProjectWithTestDependencies).flatMap {
-                        it.dependencies
-                    }.any { it.id == pkg.id }
-                }
             }
-
-            scopes = scopes.map {
-                if (it.name == "main") {
-                    it.copy(dependencies = it.dependencies + conanProjectReferences)
-                } else {
-                    it
-                }
-            }.toSet()
-
-            scopes += Scope(
-                name = CONAN_REQUIRES_SCOPE_NAME,
-                dependencies = conanProjectWithDependencies
-            )
-            scopes += Scope(
-                name = CONAN_BUILD_TEST_SCOPE_NAME,
-                dependencies = conanProjectWithTestDependencies
-            )
         }
 
         // If no lockfile is present, getDependencyGraph() runs "bazel mod graph", which creates a "MODULE.bazel.lock"
