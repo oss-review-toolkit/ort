@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.plugins.packagemanagers.conan.Conan.Companion.DUMMY_COMPILER_SETTINGS
 import org.ossreviewtoolkit.plugins.packagemanagers.conan.Conan.Companion.SCOPE_NAME_DEPENDENCIES
 import org.ossreviewtoolkit.plugins.packagemanagers.conan.Conan.Companion.SCOPE_NAME_DEV_DEPENDENCIES
+import org.ossreviewtoolkit.plugins.packagemanagers.conan.Conan.Companion.SCOPE_NAME_TEST_DEPENDENCIES
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.alsoIfNull
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
@@ -102,8 +103,15 @@ internal class ConanV2Handler(private val conan: Conan) : ConanVersionHandler {
             name = SCOPE_NAME_DEV_DEPENDENCIES,
             dependencies = parseDependencyTree(pkgInfosV2, projectInfo.buildRequires, workingDir)
         )
+        val testDependencies = parseDependencyTree(pkgInfosV2, projectInfo.testRequires, workingDir)
+        val testDependenciesScope = testDependencies.takeUnless { it.isEmpty() }?.let {
+            Scope(
+                name = SCOPE_NAME_TEST_DEPENDENCIES,
+                dependencies = parseDependencyTree(pkgInfosV2, projectInfo.testRequires, workingDir)
+            )
+        }
 
-        return HandlerResults(packages, projectPackage, dependenciesScope, devDependenciesScope)
+        return HandlerResults(packages, projectPackage, dependenciesScope, devDependenciesScope, testDependenciesScope)
     }
 
     override fun getConanDataFile(name: String, version: String, conanStorageDir: File, recipeFolder: String?): File? =
