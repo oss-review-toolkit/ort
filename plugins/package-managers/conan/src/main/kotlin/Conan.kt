@@ -56,6 +56,7 @@ import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.utils.common.alsoIfNull
 import org.ossreviewtoolkit.utils.common.masked
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.stashDirectories
@@ -148,6 +149,20 @@ class Conan(
     private val pkgInspectResults = mutableMapOf<String, JsonObject>()
 
     private fun hasLockfile(file: String) = File(file).isFile
+
+    /**
+     * If a Bazel project uses some Conan packages, the corresponding Conan files should not be picked up by the Conan
+     * package manager. Therefore, the Conan file is checked to NOT contain the BazelDeps and BazelToolchain generators.
+     */
+    override fun mapDefinitionFiles(analysisRoot: File, definitionFiles: List<File>): List<File> =
+        definitionFiles.mapNotNull { file ->
+            file.takeUnless {
+                val content = it.readText()
+                "BazelDeps" in content || "BazelToolchain" in content
+            }.alsoIfNull {
+                logger.info { "Ignoring definition file '$file' as it is used from Bazel." }
+            }
+        }
 
     override fun beforeResolution(
         analysisRoot: File,
