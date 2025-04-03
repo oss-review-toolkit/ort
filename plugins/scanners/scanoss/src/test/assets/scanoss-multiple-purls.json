@@ -1,0 +1,60 @@
+{
+  "hung_task.c": [
+    {
+      "component": "proton_bluecross",
+      "file": "kernel/hung_task.c",
+      "file_hash": "581734935cfbe570d280a1265aaa2a6b",
+      "file_url": "https://api.scanoss.com/file_contents/581734935cfbe570d280a1265aaa2a6b",
+      "id": "snippet",
+      "latest": "17",
+      "licenses": [
+        {
+          "checklist_url": "https://www.osadl.org/fileadmin/checklists/unreflicenses/GPL-2.0-only.txt",
+          "copyleft": "yes",
+          "incompatible_with": "Apache-1.0, Apache-1.1, Apache-2.0, BSD-4-Clause, BSD-4-Clause-UC, BSD-4.3TAHOE, ECL-2.0, FTL, IJG, LicenseRef-scancode-bsla-no-advert, Minpack, OpenSSL, PHP-3.01, Python-2.0, zlib-acknowledgement, XFree86-1.1",
+          "name": "GPL-2.0-only",
+          "osadl_updated": "2025-02-10T14:26:00+0000",
+          "patent_hints": "yes",
+          "source": "scancode",
+          "url": "https://spdx.org/licenses/GPL-2.0-only.html"
+        },
+        {
+          "name": "GPL-2.0-only WITH Linux-syscall-note",
+          "source": "scancode",
+          "url": "https://spdx.org/licenses/GPL-2.0-only WITH Linux-syscall-note.html"
+        },
+        {
+          "checklist_url": "https://www.osadl.org/fileadmin/checklists/unreflicenses/GPL-2.0-only.txt",
+          "copyleft": "yes",
+          "incompatible_with": "Apache-1.0, Apache-1.1, Apache-2.0, BSD-4-Clause, BSD-4-Clause-UC, BSD-4.3TAHOE, ECL-2.0, FTL, IJG, LicenseRef-scancode-bsla-no-advert, Minpack, OpenSSL, PHP-3.01, Python-2.0, zlib-acknowledgement, XFree86-1.1",
+          "name": "GPL-2.0-only",
+          "osadl_updated": "2025-02-10T14:26:00+0000",
+          "patent_hints": "yes",
+          "source": "scancode",
+          "url": "https://spdx.org/licenses/GPL-2.0-only.html"
+        }
+      ],
+      "lines": "12-150,540-561",
+      "matched": "35%",
+      "oss_lines": "10-148,86-107",
+      "purl": [
+        "pkg:github/kdrag0n/proton_bluecross",
+        "pkg:github/fake/fake_repository"
+      ],
+      "release_date": "2019-02-21",
+      "server": {
+        "kb_version": {
+          "daily": "25.03.27",
+          "monthly": "25.03"
+        },
+        "version": "5.4.10"
+      },
+      "source_hash": "45dd1e50621a8a32f88fbe0251a470ab",
+      "status": "pending",
+      "url": "https://github.com/kdrag0n/proton_bluecross",
+      "url_hash": "a9c1c67f0930dc42dbd40c29e565bcdd",
+      "vendor": "kdrag0n",
+      "version": "15"
+    }
+  ]
+}
