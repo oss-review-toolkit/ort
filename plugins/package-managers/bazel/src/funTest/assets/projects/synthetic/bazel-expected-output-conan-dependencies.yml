@@ -1,0 +1,171 @@
+---
+project:
+  id: "Bazel::plugins/package-managers/bazel/src/funTest/assets/projects/synthetic/bazel-conan-dependencies/MODULE.bazel:"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "conan_requires"
+    dependencies:
+    - id: "Conan::conanfile.txt:"
+      dependencies:
+      - id: "Conan::fmt:10.1.1"
+  - name: "conan_test_requires"
+    dependencies:
+    - id: "Conan::conanfile.txt:"
+      dependencies:
+      - id: "Conan::gtest:1.16.0"
+  - name: "dev"
+    dependencies: []
+  - name: "main"
+    dependencies:
+    - id: "Bazel::glog:0.5.0"
+      linkage: "STATIC"
+      dependencies:
+      - id: "Bazel::gflags:2.2.2"
+        linkage: "STATIC"
+    - id: "Conan::conanfile.txt:"
+packages:
+- id: "Bazel::gflags:2.2.2"
+  purl: "pkg:bazel/gflags@2.2.2"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://gflags.github.io/gflags/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/gflags/gflags/archive/refs/tags/v2.2.2.tar.gz"
+    hash:
+      value: "34af2f15cf7367513b352bdcd2493ab14ce43692d2dcd9dfc499492966c64dcf"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/gflags/gflags"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/gflags/gflags.git"
+    revision: ""
+    path: ""
+- id: "Bazel::glog:0.5.0"
+  purl: "pkg:bazel/glog@0.5.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/google/glog"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/google/glog/archive/refs/tags/v0.5.0.tar.gz"
+    hash:
+      value: "eede71f28371bf39aa69b45de23b329d37214016e2055269b3b5e7cfd40b59f5"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/google/glog"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/google/glog.git"
+    revision: ""
+    path: ""
+- id: "Conan::conanfile.txt:"
+  purl: "pkg:conan/conanfile.txt"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+- id: "Conan::fmt:10.1.1"
+  purl: "pkg:conan/fmt@10.1.1"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A safe and fast alternative to printf and IOStreams."
+  homepage_url: "https://github.com/fmtlib/fmt"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/fmtlib/fmt/releases/download/10.1.1/fmt-10.1.1.zip"
+    hash:
+      value: "b84e58a310c9b50196cda48d5678d5fa0849bca19e5fdba6b684f0ee93ed9d1b"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/fmtlib/fmt.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/fmtlib/fmt.git"
+    revision: ""
+    path: ""
+- id: "Conan::gtest:1.16.0"
+  purl: "pkg:conan/gtest@1.16.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
