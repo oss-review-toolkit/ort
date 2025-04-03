@@ -22,8 +22,10 @@ package org.ossreviewtoolkit.plugins.packagemanagers.bazel
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.should
 
+import org.ossreviewtoolkit.analyzer.create
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.toYaml
+import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
@@ -101,6 +103,17 @@ class BazelFunTest : StringSpec({
 
         val result = BazelFactory.create().resolveSingleProject(definitionFile)
 
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
+
+    "Dependencies are detected correctly if the Bazel project has Conan dependencies" {
+        val definitionFile = getAssetFile("projects/synthetic/bazel-conan-dependencies/MODULE.bazel")
+        val expectedResultFile = getAssetFile(
+            // Only "fmt" should be in the dependency tree since it is the only used Conan package.
+            "projects/synthetic/bazel-expected-output-conan-dependencies.yml"
+        )
+
+        val result = create("Bazel", PluginConfig(mapOf("useConan2" to "true"))).resolveSingleProject(definitionFile)
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 })

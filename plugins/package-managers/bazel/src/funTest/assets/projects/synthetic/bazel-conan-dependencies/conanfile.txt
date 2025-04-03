@@ -1,0 +1,16 @@
+[requires]
+fmt/10.1.1
+libcurl/7.85.0
+
+[tool_requires]
+libxslt/1.1.34
+
+[test_requires]
+gtest/1.16.0
+
+[generators]
+BazelDeps
+BazelToolchain
+
+[layout]
+bazel_layout

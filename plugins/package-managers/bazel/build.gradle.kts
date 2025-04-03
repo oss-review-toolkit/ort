@@ -50,4 +50,5 @@ dependencies {
     testImplementation(libs.mockk)
 
     funTestImplementation(testFixtures(projects.analyzer))
+    funTestImplementation(projects.plugins.packageManagers.conanPackageManager)
 }

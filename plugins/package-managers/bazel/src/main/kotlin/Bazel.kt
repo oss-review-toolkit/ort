@@ -28,6 +28,8 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerFactory
+import org.ossreviewtoolkit.analyzer.determineEnabledPackageManagers
+import org.ossreviewtoolkit.analyzer.withResolvedScopes
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.ArchiveOverride
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.ArchiveSourceInfo
 import org.ossreviewtoolkit.clients.bazelmoduleregistry.BazelModuleRegistryService
@@ -59,6 +61,8 @@ import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
+import org.ossreviewtoolkit.plugins.api.OrtPluginOption
+import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.ProcessCapture
@@ -74,6 +78,22 @@ import org.semver4j.RangesListFactory
 private const val BAZEL_FALLBACK_VERSION = "7.0.1"
 private const val LOCKFILE_NAME = "MODULE.bazel.lock"
 private const val BUILDOZER_MISSING_VALUE = "(missing)"
+private const val CONAN_REQUIRES_SCOPE_NAME = "conan_requires"
+private const val CONAN_BUILD_TEST_SCOPE_NAME = "conan_test_requires"
+
+data class BazelConfig(
+    /**
+     * The default name of the lockfile for the Conan package manager.
+     */
+    @OrtPluginOption(defaultValue = "conan.lock")
+    val conanLockfileName: String,
+
+    /**
+     * Use Conan2 when fetching Conan packages, otherwise use Conan 1.
+     */
+    @OrtPluginOption(defaultValue = "false")
+    val useConan2: Boolean
+)
 
 internal object BazelCommand : CommandLineTool {
     override fun command(workingDir: File?) = "bazel"
@@ -104,12 +124,24 @@ internal object BuildozerCommand : CommandLineTool {
         output.lineSequence().first().trim().removePrefix("buildozer version: ")
 }
 
+/**
+ * This package manager does not only resolve Bazel dependency tree, it has also the ability to resolve Conan
+ * dependencies and integrate them in the aforementioned tree. The Conan dependencies are created by the Conan package
+ * manager and are filtered according to the list of Conan dependencies reported by Bazel.
+ * Consequently, the Conan dependency in Bazel is not reported as a project, even if its definition file lies alongside
+ * Bazel's ones. It iś rather reported as a package.
+ * Please note that the conan project must use the `BazelDeps` and the `BazelToolchain` generators and must support
+ * Conan 2.x.
+ */
 @OrtPlugin(
     displayName = "Bazel",
     description = "The Bazel package manager.",
     factory = PackageManagerFactory::class
 )
-class Bazel(override val descriptor: PluginDescriptor = BazelFactory.descriptor) : PackageManager("Bazel") {
+class Bazel(
+    override val descriptor: PluginDescriptor = BazelFactory.descriptor,
+    private val config: BazelConfig
+) : PackageManager("Bazel") {
     override val globsForDefinitionFiles = listOf("MODULE", "MODULE.bazel")
 
     /**
@@ -139,7 +171,28 @@ class Bazel(override val descriptor: PluginDescriptor = BazelFactory.descriptor)
         val moduleMetadata = Parser(definitionFile.readText()).parse()
         val depDirectives = moduleMetadata.dependencies.associateBy { "${it.name}@${it.version}" }
         val archiveOverrides = getArchiveOverrides(projectDir)
-        val scopes = getDependencyGraph(projectDir, depDirectives, archiveOverrides)
+        val (mainModule, scopes) = getDependencyGraph(
+            projectDir,
+            depDirectives,
+            archiveOverrides
+        )
+
+        val conanExtension = mainModule.extensionUsages.find { "conan_deps_module_extension.bzl" in it.key }
+        val conanPackages = conanExtension?.let { extension ->
+            val conanAnalyzerResults = resolveConanDependencies(
+                projectDir,
+                analysisRoot,
+                excludes,
+                analyzerConfig,
+                labels
+            )
+
+            processConanDependencies(
+                extension,
+                scopes,
+                conanAnalyzerResults
+            )
+        }.orEmpty()
 
         // If no lockfile is present, getDependencyGraph() runs "bazel mod graph", which creates a "MODULE.bazel.lock"
         // file as a side effect. That file contains the URL of the Bazel module registry that was used for dependency
@@ -172,7 +225,7 @@ class Bazel(override val descriptor: PluginDescriptor = BazelFactory.descriptor)
                     homepageUrl = "",
                     scopeDependencies = scopes
                 ),
-                packages = packages,
+                packages = packages + conanPackages,
                 issues = issues
             )
         )
@@ -296,7 +349,11 @@ class Bazel(override val descriptor: PluginDescriptor = BazelFactory.descriptor)
         archiveOverrides: Map<String, ArchiveOverride>,
         projectVcs: VcsInfo
     ): Set<Package> {
-        val ids = scopes.collectDependencies()
+        // Some packages can exist both in the Bazel central registry and in Conan, for instance "fmt". Therefore, the
+        // scopes are filtered to ignore the Conan scope. Additionally, all the Conan packages are generated by
+        // processConanDependencies() and should not be created here.
+        val ids = scopes.filterNot { it.name == CONAN_REQUIRES_SCOPE_NAME }
+            .collectDependencies().filterNot { it.type == "Conan" && it.version.isEmpty() }
 
         // Fortunately, two partitions can be done in a row since it can safely be assumed that a package cannot have
         // both a local path override and an archive override.
@@ -389,7 +446,7 @@ class Bazel(override val descriptor: PluginDescriptor = BazelFactory.descriptor)
         projectDir: File,
         depDirectives: Map<String, BazelDepDirective>,
         archiveOverrides: Map<String, ArchiveOverride>
-    ): Set<Scope> {
+    ): Pair<BazelModule, MutableSet<Scope>> {
         val process = BazelCommand.run(
             "mod",
             "graph",
@@ -397,6 +454,7 @@ class Bazel(override val descriptor: PluginDescriptor = BazelFactory.descriptor)
             "json",
             "--disk_cache=",
             "--lockfile_mode=update",
+            "--extension_info=all",
             workingDir = projectDir
         ).requireSuccess()
 
@@ -416,7 +474,7 @@ class Bazel(override val descriptor: PluginDescriptor = BazelFactory.descriptor)
             depDirectives[it.key]?.devDependency != true
         }
 
-        return setOf(
+        return mainModule to mutableSetOf(
             Scope(
                 name = "main",
                 dependencies = mainDeps.mapTo(mutableSetOf()) { it.toPackageReference(archiveOverrides) }
@@ -462,6 +520,116 @@ class Bazel(override val descriptor: PluginDescriptor = BazelFactory.descriptor)
 
             is ArchiveSourceInfo -> null
         }
+
+    /**
+     * Process the Conan dependencies [conanAnalyzerResults] returned by `resolveConanDependencies`, based on the
+     * [extension] information returned by 'bazel mod graph'. The newly created scopes are added to [scopes] and the
+     * Conan packages are returned.
+     */
+    private fun processConanDependencies(
+        extension: BazelExtension,
+        scopes: MutableSet<Scope>,
+        conanAnalyzerResults: List<ProjectAnalyzerResult>
+    ): MutableSet<Package> {
+        val conanPackages = mutableSetOf<Package>()
+        val conanProjectReferences = mutableSetOf<PackageReference>()
+        val conanProjectWithDependencies = mutableSetOf<PackageReference>()
+        val conanProjectWithTestDependencies = mutableSetOf<PackageReference>()
+
+        conanPackages += conanAnalyzerResults.map { it.project.toPackage() }
+
+        conanAnalyzerResults.forEach { conanAnalyzerResult ->
+            val projectReference = conanAnalyzerResult.project.toPackage().toReference()
+            conanProjectReferences += projectReference
+
+            val dependenciesPerScopes = conanAnalyzerResult.project.scopes.associate {
+                // Only include the packages reported by Bazel.
+                it.name to it.dependencies.filterTo(mutableSetOf()) { dep -> dep.id.name in extension.usedRepos }
+            }
+
+            conanProjectWithDependencies += projectReference.copy(
+                dependencies = dependenciesPerScopes["requires"].orEmpty()
+            )
+            conanProjectWithTestDependencies += projectReference.copy(
+                dependencies = dependenciesPerScopes["test_requires"].orEmpty()
+            )
+            conanPackages += conanAnalyzerResult.packages.filter { pkg ->
+                (conanProjectWithDependencies + conanProjectWithTestDependencies).flatMap {
+                    it.dependencies
+                }.any { it.id == pkg.id }
+            }
+        }
+
+        scopes.mapTo(mutableSetOf()) {
+            if (it.name == "main") {
+                it.copy(dependencies = it.dependencies + conanProjectReferences)
+            } else {
+                it
+            }
+        }.also {
+            scopes.clear()
+            scopes.addAll(it)
+        }
+
+        scopes += Scope(
+            name = CONAN_REQUIRES_SCOPE_NAME,
+            dependencies = conanProjectWithDependencies
+        )
+        scopes += Scope(
+            name = CONAN_BUILD_TEST_SCOPE_NAME,
+            dependencies = conanProjectWithTestDependencies
+        )
+
+        return conanPackages
+    }
+
+    /**
+     * Check if the Bazel project in [projectDir] has some Conan dependencies. If it does, load them from a Conan
+     * definition file in [projectDir].
+     */
+    private fun resolveConanDependencies(
+        projectDir: File,
+        analysisRoot: File,
+        excludes: Excludes,
+        analyzerConfig: AnalyzerConfiguration,
+        labels: Map<String, String>
+    ): List<ProjectAnalyzerResult> {
+        val conanFactory = analyzerConfig.getConanFactory()
+        if (conanFactory == null) {
+            logger.info { "Not fetching Conan dependencies since Conan package manager is not enabled." }
+            return emptyList()
+        }
+
+        val conanConfig = PluginConfig(
+            mapOf(
+                "lockfileName" to config.conanLockfileName,
+                "useConan2" to config.useConan2.toString()
+            )
+        )
+        val conan = conanFactory.create(conanConfig)
+
+        val conanDefinitionFile = conan.matchersForDefinitionFiles.mapNotNull { glob ->
+            val filesMatchingGlob = projectDir.walk().maxDepth(1).filter { glob.matches(it.toPath()) }
+            filesMatchingGlob.toList().takeUnless { it.isEmpty() }
+        }.flatten().firstOrNull()
+
+        if (conanDefinitionFile == null) {
+            return emptyList()
+        }
+
+        return conan.resolveDependencies(
+            analysisRoot,
+            listOf(conanDefinitionFile),
+            excludes,
+            analyzerConfig,
+            labels
+        ).run {
+            projectResults.getValue(conanDefinitionFile).map { result ->
+                val project = result.project.withResolvedScopes(dependencyGraph)
+                result.copy(project = project, packages = result.packages)
+            }
+        }
+    }
 }
 
 private fun String.expandRepositoryUrl(): String = withoutPrefix("github:")?.let { "https://github.com/$it" } ?: this
@@ -494,3 +662,6 @@ private fun ModuleSourceInfo.toRemoteArtifact(): RemoteArtifact? =
             null
         }
     }
+
+private fun AnalyzerConfiguration.getConanFactory() =
+    determineEnabledPackageManagers().find { it.descriptor.id.startsWith("Conan") }

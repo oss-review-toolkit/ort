@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.packagemanagers.bazel
 
 import java.io.File
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
@@ -58,14 +59,25 @@ internal data class Lockfile(
 internal fun parseLockfile(lockfile: File) = json.decodeFromString<Lockfile>(lockfile.readText())
 
 /**
- * The data model for the output of "bazel mod graph --output json".
+ * The data model for the output of "bazel mod graph --output json --extension_info=usages".
  */
 @Serializable
 internal data class BazelModule(
     val key: String,
     val name: String? = null,
     val version: String? = null,
-    val dependencies: List<BazelModule> = emptyList()
+    val dependencies: List<BazelModule> = emptyList(),
+    val extensionUsages: List<BazelExtension> = emptyList()
+)
+
+@Serializable
+internal data class BazelExtension(
+    val key: String,
+    val unexpanded: Boolean,
+    @SerialName("used_repos")
+    val usedRepos: List<String> = emptyList(),
+    @SerialName("unused_repos")
+    val unusedRepos: List<String> = emptyList()
 )
 
 internal fun String.parseBazelModule() = json.decodeFromString<BazelModule>(this)
