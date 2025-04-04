@@ -32,7 +32,7 @@ import org.apache.logging.log4j.kotlin.logger
  * A caching authenticator that chains other authenticators. For proxy authentication, the [OrtProxySelector] is
  * required to also be installed.
  */
-class OrtAuthenticator(private val original: Authenticator? = null) : Authenticator() {
+open class OrtAuthenticator(private val original: Authenticator? = null) : Authenticator() {
     companion object {
         /**
          * Install this authenticator as the global default.
@@ -72,7 +72,7 @@ class OrtAuthenticator(private val original: Authenticator? = null) : Authentica
     // credentials in a netrc-style file, and finally look for generic credentials passed as environment variables.
     // If none of these can provide credentials, fall back to the original authenticator, if any. This allows tools
     // that use ORT programmatically to provide a custom authenticator.
-    private val delegateAuthenticators = listOfNotNull(
+    protected open val delegateAuthenticators = listOfNotNull(
         UserInfoAuthenticator(),
         NetRcAuthenticator(),
         EnvVarAuthenticator(),
