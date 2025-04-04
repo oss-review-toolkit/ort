@@ -39,7 +39,12 @@ dependencies {
     implementation(projects.utils.ortUtils)
 
     implementation(libs.jgit)
-    implementation(libs.jgit.ssh.apache)
+
+    implementation(libs.jgit.ssh.apache) {
+        exclude(group = "org.apache.sshd", module = "sshd-sftp")
+            .because("it is not required for cloning via SSH and causes issues with GraalVM native images")
+    }
+
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.xml)
 
