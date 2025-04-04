@@ -244,7 +244,12 @@ private fun PinV2.toId(): Identifier =
     Identifier(
         type = PACKAGE_TYPE,
         namespace = "",
-        name = getCanonicalName(location),
+        // For SPM registry dependencies the `location` field is blank, so use the `identity` field instead.
+        name = if (kind == PinV2.Kind.REGISTRY) {
+            identity
+        } else {
+            getCanonicalName(location)
+        },
         version = state?.run {
             when {
                 !version.isNullOrBlank() -> version
