@@ -122,12 +122,6 @@ class Conan(
     private val config: ConanConfig
 ) : PackageManager("Conan") {
     companion object {
-        internal val DUMMY_COMPILER_SETTINGS = arrayOf(
-            "-s", "compiler=gcc",
-            "-s", "compiler.libcxx=libstdc++",
-            "-s", "compiler.version=11.1"
-        )
-
         internal const val SCOPE_NAME_DEPENDENCIES = "requires"
         internal const val SCOPE_NAME_DEV_DEPENDENCIES = "build_requires"
         internal const val SCOPE_NAME_TEST_DEPENDENCIES = "test_requires"
