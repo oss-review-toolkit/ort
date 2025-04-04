@@ -128,7 +128,7 @@ class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
         return listResult.findModulesFor(workingDir).mapTo(mutableSetOf()) { File(it.path) }
     }
 
-    private fun listModules(workingDir: File, scope: Scope): List<ModuleInfo> {
+    private fun listModules(workingDir: File, scope: Scope): Sequence<ModuleInfo> {
         val scopeOption = when (scope) {
             Scope.DEPENDENCIES -> "--prod"
             Scope.DEV_DEPENDENCIES -> "--dev"
@@ -137,7 +137,7 @@ class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
         val json = PnpmCommand.run(workingDir, "list", "--json", "--recursive", "--depth", "Infinity", scopeOption)
             .requireSuccess().stdout
 
-        return parsePnpmList(json).flatten().toList()
+        return parsePnpmList(json).flatten()
     }
 
     private fun installDependencies(workingDir: File) =
