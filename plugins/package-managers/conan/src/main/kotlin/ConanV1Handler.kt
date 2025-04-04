@@ -30,7 +30,6 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.plugins.packagemanagers.conan.Conan.Companion.DUMMY_COMPILER_SETTINGS
 import org.ossreviewtoolkit.plugins.packagemanagers.conan.Conan.Companion.SCOPE_NAME_DEPENDENCIES
 import org.ossreviewtoolkit.plugins.packagemanagers.conan.Conan.Companion.SCOPE_NAME_DEV_DEPENDENCIES
 import org.ossreviewtoolkit.utils.common.Os
@@ -63,8 +62,7 @@ internal class ConanV1Handler(private val conan: Conan) : ConanVersionHandler {
                 "info",
                 definitionFile.name,
                 "--json",
-                jsonFile.absolutePath,
-                *DUMMY_COMPILER_SETTINGS
+                jsonFile.absolutePath
             ).requireSuccess()
         }
 
