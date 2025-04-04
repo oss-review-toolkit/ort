@@ -47,7 +47,7 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 internal class ConanV2Handler(private val conan: Conan) : ConanVersionHandler {
     override fun getConanHome(): File = Os.userHomeDirectory.resolve(".conan2")
 
-    override fun getConanStoragePath(): File = getConanHome().resolve("data/p")
+    override fun getConanStoragePath(): File = getConanHome().resolve("p")
 
     override fun process(definitionFile: File, lockfileName: String?): HandlerResults {
         val workingDir = definitionFile.parentFile
