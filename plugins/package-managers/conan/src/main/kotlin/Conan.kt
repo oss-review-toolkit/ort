@@ -79,7 +79,7 @@ internal class ConanCommand(private val useConan2: Boolean = false) : CommandLin
     override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=1.44.0 <3.0")
 
     override fun run(vararg args: CharSequence, workingDir: File?, environment: Map<String, String>) =
-        super.run(args = args, workingDir, environment + ("CONAN_NON_INTERACTIVE" to "1"))
+        super.run(args = args, workingDir, environment + mapOf("CONAN_NON_INTERACTIVE" to "1", "CONAN_SERIES" to "1"))
 }
 
 data class ConanConfig(

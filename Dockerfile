@@ -136,7 +136,7 @@ ARG PYTHON_VERSION
 ARG PYENV_GIT_TAG
 
 ENV PYENV_ROOT=/opt/python
-ENV PATH=$PATH:$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PYENV_ROOT/conan2/bin
+ENV PATH=$PATH:$PYENV_ROOT/shims:$PYENV_ROOT/bin
 RUN curl -kSs https://pyenv.run | bash \
     && pyenv install -v $PYTHON_VERSION \
     && pyenv global $PYTHON_VERSION
@@ -170,18 +170,26 @@ RUN pip install --no-cache-dir -U \
     wheel \
     && pip install --no-cache-dir -U \
     Mercurial \
-    conan=="$CONAN_VERSION" \
     pipenv=="$PYTHON_PIPENV_VERSION" \
     poetry=="$PYTHON_POETRY_VERSION" \
     poetry-plugin-export=="$PYTHON_POETRY_PLUGIN_EXPORT_VERSION" \
     python-inspector=="$PYTHON_INSPECTOR_VERSION" \
     setuptools=="$PYTHON_SETUPTOOLS_VERSION"
-RUN mkdir /tmp/conan2 && cd /tmp/conan2 \
-    && wget https://github.com/conan-io/conan/releases/download/$CONAN2_VERSION/conan-$CONAN2_VERSION-linux-x86_64.tgz \
-    && tar -xvf conan-$CONAN2_VERSION-linux-x86_64.tgz\
-    # Rename the Conan 2 executable to "conan2" to be able to call both Conan version from the package manager.
-    && mkdir $PYENV_ROOT/conan2 && mv /tmp/conan2/bin $PYENV_ROOT/conan2/ \
-    && mv $PYENV_ROOT/conan2/bin/conan $PYENV_ROOT/conan2/bin/conan2
+
+# Create conan environments
+COPY scripts/setup_conan.sh ${PYENV_ROOT}/bin/conan
+RUN eval "$(pyenv init - bash)"  \
+    && eval "$(pyenv virtualenv-init -)" \
+    && pyenv virtualenv conan \
+    && pyenv activate conan \
+    && pip install conan==${CONAN_VERSION} \
+    && pyenv deactivate \
+    && pyenv virtualenv conan2 \
+    && pyenv activate conan2 \
+    && pip install conan==${CONAN2_VERSION} \
+    && pyenv deactivate \
+    && sudo chmod +x ${PYENV_ROOT}/bin/conan
+
 
 FROM scratch AS python
 COPY --from=pythonbuild /opt/python /opt/python
@@ -484,7 +492,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 
 # Python
 ENV PYENV_ROOT=/opt/python
-ENV PATH=$PATH:$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PYENV_ROOT/conan2/bin
+ENV PATH=$PATH:$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PYENV_ROOT/plugins/pyenv-virtualenv/shims
 COPY --from=python --chown=$USER:$USER $PYENV_ROOT $PYENV_ROOT
 
 # NodeJS
