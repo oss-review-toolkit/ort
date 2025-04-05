@@ -65,7 +65,6 @@ graalvmNative {
             val initializeAtBuildTime = listOf(
                 "ch.qos.logback",
                 "ch.qos.logback.classic.Logger",
-                "com.github.ajalt.mordant.internal.nativeimage.NativeImagePosixMppImpls",
                 "org.apache.sshd.common.file.root.RootedFileSystemProvider"
             ).joinToString(separator = ",", prefix = "--initialize-at-build-time=")
 
