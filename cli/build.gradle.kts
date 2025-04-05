@@ -25,7 +25,7 @@ plugins {
 }
 
 configurations.dependencyScope("pluginClasspath")
-configurations["runtimeClasspath"].extendsFrom(configurations["pluginClasspath"])
+configurations["runtimeOnly"].extendsFrom(configurations["pluginClasspath"])
 
 application {
     applicationName = "ort"

@@ -63,62 +63,30 @@ graalvmNative {
             imageName = provider { application.applicationName }
 
             val initializeAtBuildTime = listOf(
-                "ch.qos.logback.classic.Level",
+                "ch.qos.logback",
                 "ch.qos.logback.classic.Logger",
-                "ch.qos.logback.classic.LoggerContext",
-                "ch.qos.logback.classic.PatternLayout",
-                "ch.qos.logback.classic.encoder.PatternLayoutEncoder",
-                "ch.qos.logback.classic.joran.JoranConfigurator",
-                "ch.qos.logback.classic.model.ConfigurationModel",
-                "ch.qos.logback.classic.model.LoggerModel",
-                "ch.qos.logback.classic.model.RootLoggerModel",
-                "ch.qos.logback.classic.model.processor.LoggerModelHandler",
-                "ch.qos.logback.classic.model.processor.RootLoggerModelHandler",
-                "ch.qos.logback.classic.pattern.DateConverter",
-                "ch.qos.logback.classic.pattern.LevelConverter",
-                "ch.qos.logback.classic.pattern.LineSeparatorConverter",
-                "ch.qos.logback.classic.pattern.LoggerConverter",
-                "ch.qos.logback.classic.pattern.MessageConverter",
-                "ch.qos.logback.classic.pattern.NamedConverter\$CacheMissCalculator",
-                "ch.qos.logback.classic.pattern.NamedConverter\$NameCache",
-                "ch.qos.logback.classic.pattern.ThreadConverter",
-                "ch.qos.logback.classic.pattern.ThrowableProxyConverter",
-                "ch.qos.logback.classic.spi.LoggerContextVO",
-                "ch.qos.logback.classic.spi.TurboFilterList",
-                "ch.qos.logback.classic.util.ContextInitializer",
-                "ch.qos.logback.classic.util.ContextInitializer\$1",
-                "ch.qos.logback.classic.util.LogbackMDCAdapter",
-                "ch.qos.logback.core.BasicStatusManager",
-                "ch.qos.logback.core.ConsoleAppender",
-                "ch.qos.logback.core.helpers.CyclicBuffer",
-                "ch.qos.logback.core.joran.spi.ConfigurationWatchList",
-                "ch.qos.logback.core.joran.spi.ConsoleTarget\$1",
-                "ch.qos.logback.core.model.AppenderModel",
-                "ch.qos.logback.core.model.AppenderRefModel",
-                "ch.qos.logback.core.model.ImplicitModel",
-                "ch.qos.logback.core.model.processor.AppenderModelHandler",
-                "ch.qos.logback.core.model.processor.AppenderRefModelHandler",
-                "ch.qos.logback.core.model.processor.DefaultProcessor",
-                "ch.qos.logback.core.model.processor.ImplicitModelHandler",
-                "ch.qos.logback.core.pattern.FormatInfo",
-                "ch.qos.logback.core.pattern.LiteralConverter",
-                "ch.qos.logback.core.pattern.parser.Parser",
-                "ch.qos.logback.core.spi.AppenderAttachableImpl",
-                "ch.qos.logback.core.spi.ContextAwareImpl",
-                "ch.qos.logback.core.spi.FilterAttachableImpl",
-                "ch.qos.logback.core.spi.LogbackLock",
-                "ch.qos.logback.core.status.InfoStatus",
-                "ch.qos.logback.core.util.COWArrayList",
-                "ch.qos.logback.core.util.CachingDateFormatter",
-                "ch.qos.logback.core.util.CachingDateFormatter\$CacheTuple",
-                "com.github.ajalt.mordant.internal.nativeimage.NativeImagePosixMppImpls",
-                "org.apache.sshd.common.file.root.RootedFileSystemProvider"
+                "org.apache.sshd.common.file.root.RootedFileSystemProvider",
+                "org.xml.sax.helpers"
             ).joinToString(separator = ",", prefix = "--initialize-at-build-time=")
 
             buildArgs.addAll(
                 initializeAtBuildTime,
                 "--parallelism=8",
-                "-J-Xmx16g"
+                "-J-Xmx16g",
+                "-Os"
+            )
+
+            excludeConfig.putAll(
+                mapOf(
+                    // JLine is shaded into kotlin-compiler-embeddable, rendering the configuration invalid. See
+                    // https://youtrack.jetbrains.com/issue/KT-68829.
+                    "org.jetbrains.kotlin:kotlin-compiler-embeddable:${libs.plugin.kotlin.get().version}" to
+                        listOf("^/META-INF/native-image/org.jline/.*"),
+                    // The contained "reflect-config.json" does not match the code of the AWS flavor of the Apache HTTP
+                    // client.
+                    "software.amazon.awssdk:apache-client:2.31.11" to
+                        listOf("^/META-INF/native-image/software.amazon.awssdk/apache-client/.*")
+                )
             )
         }
     }
