@@ -63,7 +63,7 @@ internal class Lexer(private val input: String) {
 
     private fun isMultilineString(): Boolean = peek() == '"' && peek(1) == '"' && peek(2) == '"'
 
-    private fun tokenizeString(): Token {
+    private fun tokenizeString(): Token =
         if (isMultilineString()) {
             advance(3) // Skip opening """.
             val start = pos
@@ -74,7 +74,7 @@ internal class Lexer(private val input: String) {
 
             val str = input.substring(start, pos)
             advance(3) // Skip closing """.
-            return Token(TokenType.STRING, str)
+            Token(TokenType.STRING, str)
         } else {
             advance()
             val start = pos
@@ -84,9 +84,8 @@ internal class Lexer(private val input: String) {
 
             val str = input.substring(start, pos)
             advance() // Skip closing quote.
-            return Token(TokenType.STRING, str)
+            Token(TokenType.STRING, str)
         }
-    }
 
     private fun tokenizeIdentifier(): Token {
         val start = pos
