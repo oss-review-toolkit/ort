@@ -26,10 +26,15 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
+import kotlin.time.Duration.Companion.milliseconds
+
+import kotlinx.coroutines.delay
+
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.plugins.api.PluginConfig
+import org.ossreviewtoolkit.utils.common.Os
 
 private val branches = mapOf(
     "main" to "6f09f276c4426c387c6663f54bbd45aea8d81dac",
@@ -58,6 +63,11 @@ class GitFunTest : WordSpec({
     beforeEach {
         repoDir = tempdir()
         workingTree = git.initWorkingTree(repoDir, vcsInfo)
+    }
+
+    afterEach {
+        // This delay is required to successfully let Kotest delete the temporary directories on Windows.
+        if (Os.isWindows) delay(100.milliseconds)
     }
 
     "updateWorkingTree" should {
