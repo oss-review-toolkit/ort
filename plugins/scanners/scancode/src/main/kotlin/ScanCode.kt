@@ -47,8 +47,17 @@ import org.semver4j.RangesListFactory
 import org.semver4j.Semver
 
 object ScanCodeCommand : CommandLineTool {
-    override fun command(workingDir: File?) =
-        listOfNotNull(workingDir, if (Os.isWindows) "scancode.bat" else "scancode").joinToString(File.separator)
+    override fun command(workingDir: File?): String {
+        val executable = if (Os.isWindows) {
+            // Installing ScanCode as a developer from the distribution archive provides a "scancode.bat", while
+            // installing as a user via pip provides a "scancode.exe".
+            Os.getPathFromEnvironment("scancode.bat")?.name ?: "scancode.exe"
+        } else {
+            "scancode"
+        }
+
+        return listOfNotNull(workingDir, executable).joinToString(File.separator)
+    }
 
     override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=30.0.0")
 
