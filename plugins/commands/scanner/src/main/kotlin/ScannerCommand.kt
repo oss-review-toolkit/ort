@@ -149,14 +149,14 @@ class ScannerCommand(descriptor: PluginDescriptor = ScannerCommandFactory.descri
 
         val ortResult = runScanners(scanners, projectScanners ?: scanners, ortConfig).mergeLabels(labels)
 
-        outputDir.safeMkdirs()
-        writeOrtResult(ortResult, outputFiles, terminal)
-
         val scannerRun = ortResult.scanner
         if (scannerRun == null) {
             echo(Theme.Default.danger("No scanner run was created."))
             throw ProgramResult(1)
         }
+
+        outputDir.safeMkdirs()
+        writeOrtResult(ortResult, outputFiles, terminal)
 
         val duration = with(scannerRun) { Duration.between(startTime, endTime).toKotlinDuration() }
         echo("The scan took $duration.")
