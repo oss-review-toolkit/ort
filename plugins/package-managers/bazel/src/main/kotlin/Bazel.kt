@@ -474,7 +474,7 @@ private fun ModuleMetadata.toVcsInfo() =
         path = ""
     )
 
-private fun ModuleSourceInfo.toRemoteArtifact(): RemoteArtifact? {
+private fun ModuleSourceInfo.toRemoteArtifact(): RemoteArtifact? =
     when (this) {
         is ArchiveSourceInfo -> {
             val (algo, b64digest) = integrity.split('-', limit = 2)
@@ -485,13 +485,12 @@ private fun ModuleSourceInfo.toRemoteArtifact(): RemoteArtifact? {
                 algorithm = HashAlgorithm.fromString(algo)
             )
 
-            return RemoteArtifact(url = url.toString(), hash = hash)
+            RemoteArtifact(url = url.toString(), hash = hash)
         }
 
         is GitRepositorySourceInfo, is LocalRepositorySourceInfo -> {
             // In case of a Git repository or a local path repository, no source artifact is available and the
             // repository information will be used by the `vcs` and 'vcs_processed' properties.
-            return null
+            null
         }
     }
-}
