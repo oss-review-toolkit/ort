@@ -115,11 +115,9 @@ enum class VcsHost(
                 var revision = ""
                 var path = ""
 
-                if (pathIterator.nextOrNull()?.toString() == "src") {
-                    if (pathIterator.hasNext()) {
-                        revision = pathIterator.next().toString()
-                        path = projectUrl.path.substringAfter(revision).trimStart('/').removeSuffix(".git")
-                    }
+                if (pathIterator.nextOrNull()?.toString() == "src" && pathIterator.hasNext()) {
+                    revision = pathIterator.next().toString()
+                    path = projectUrl.path.substringAfter(revision).trimStart('/').removeSuffix(".git")
                 }
 
                 VcsInfo(VcsType.GIT, baseUrl, revision, path = path)
