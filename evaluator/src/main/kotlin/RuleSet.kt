@@ -161,5 +161,5 @@ fun ruleSet(
     projectSourceResolver: SourceTreeResolver = SourceTreeResolver.forRemoteRepository(
         ortResult.repository.vcsProcessed
     ),
-    configure: RuleSet.() -> Unit = { }
+    configure: RuleSet.() -> Unit = {}
 ) = RuleSet(ortResult, licenseInfoResolver, resolutionProvider, projectSourceResolver).apply(configure)
