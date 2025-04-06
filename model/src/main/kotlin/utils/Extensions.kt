@@ -53,7 +53,7 @@ fun ProvenanceResolutionResult.getKnownProvenancesWithoutVcsPath(): Map<String, 
         when (packageProvenance) {
             is RepositoryProvenance -> put("", packageProvenance.clearVcsPath().alignRevisions())
             is ArtifactProvenance -> put("", packageProvenance)
-            else -> { }
+            else -> {}
         }
 
         subRepositories.mapValuesTo(this) { (_, vcsInfo) ->

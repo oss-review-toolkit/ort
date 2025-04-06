@@ -164,6 +164,6 @@ private fun SpdxExpression.getLicenseRefExceptions(result: MutableSet<String>) {
             result.add(exception)
         }
 
-        else -> { }
+        else -> {}
     }
 }
