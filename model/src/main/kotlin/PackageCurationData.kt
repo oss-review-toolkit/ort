@@ -192,7 +192,7 @@ data class PackageCurationData(
             vcs = vcs?.merge(other.vcs ?: vcs) ?: other.vcs,
             isMetadataOnly = isMetadataOnly ?: other.isMetadataOnly,
             isModified = isModified ?: other.isModified,
-            declaredLicenseMapping = declaredLicenseMapping.zip(other.declaredLicenseMapping) { value, otherValue ->
+            declaredLicenseMapping = declaredLicenseMapping.zip(other.declaredLicenseMapping) { value, _ ->
                 value
             },
             sourceCodeOrigins = sourceCodeOrigins ?: other.sourceCodeOrigins,
