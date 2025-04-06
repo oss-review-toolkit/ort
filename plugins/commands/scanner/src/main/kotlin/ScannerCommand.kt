@@ -67,6 +67,7 @@ import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.provenance.DefaultNestedProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.DefaultPackageProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.DefaultProvenanceDownloader
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.ORT_FAILURE_STATUS_CODE
@@ -147,9 +148,13 @@ class ScannerCommand(descriptor: PluginDescriptor = ScannerCommandFactory.descri
 
         validateOutputFiles(outputFiles)
 
-        val ortResult = runScanners(scanners, projectScanners ?: scanners, ortConfig).mergeLabels(labels)
+        val ortResult = runCatching {
+            runScanners(scanners, projectScanners ?: scanners, ortConfig).mergeLabels(labels)
+        }.onFailure {
+            echo(Theme.Default.danger(it.collectMessages()))
+        }.getOrNull()
 
-        val scannerRun = ortResult.scanner
+        val scannerRun = ortResult?.scanner
         if (scannerRun == null) {
             echo(Theme.Default.danger("No scanner run was created."))
             throw ProgramResult(1)

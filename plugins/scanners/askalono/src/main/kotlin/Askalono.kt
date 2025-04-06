@@ -117,7 +117,13 @@ class Askalono(
         )
     }
 
-    override val version by lazy { AskalonoCommand.getVersion() }
+    override val version by lazy {
+        require(AskalonoCommand.isInPath()) {
+            "The '${AskalonoCommand.command()}' command is not available in the PATH environment."
+        }
+
+        AskalonoCommand.getVersion()
+    }
 
     override val readFromStorage = config.readFromStorage
     override val writeToStorage = config.writeToStorage
