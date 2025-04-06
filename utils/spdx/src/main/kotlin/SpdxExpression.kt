@@ -361,15 +361,12 @@ class SpdxCompoundExpression(
         }
     }
 
-    override fun isSubExpression(subExpression: SpdxExpression?): Boolean {
-        if (subExpression == null) return false
-
-        if (operator == SpdxOperator.AND) {
-            if (children.any { it.isSubExpression(subExpression) }) return true
+    override fun isSubExpression(subExpression: SpdxExpression?): Boolean =
+        when {
+            subExpression == null -> false
+            operator == SpdxOperator.AND && children.any { it.isSubExpression(subExpression) } -> true
+            else -> validChoices().containsAll(subExpression.validChoices())
         }
-
-        return validChoices().containsAll(subExpression.validChoices())
-    }
 
     override fun equals(other: Any?): Boolean {
         if (other !is SpdxExpression) return false
