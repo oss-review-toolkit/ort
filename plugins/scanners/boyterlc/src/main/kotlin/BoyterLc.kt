@@ -123,7 +123,13 @@ class BoyterLc(
         )
     }
 
-    override val version by lazy { BoyterLcCommand.getVersion() }
+    override val version by lazy {
+        require(BoyterLcCommand.isInPath()) {
+            "The '${BoyterLcCommand.command()}' command is not available in the PATH environment."
+        }
+
+        BoyterLcCommand.getVersion()
+    }
 
     override val readFromStorage = config.readFromStorage
     override val writeToStorage = config.writeToStorage

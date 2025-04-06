@@ -124,7 +124,13 @@ class Licensee(
         )
     }
 
-    override val version by lazy { LicenseeCommand.getVersion() }
+    override val version by lazy {
+        require(LicenseeCommand.isInPath()) {
+            "The '${LicenseeCommand.command()}' command is not available in the PATH environment."
+        }
+
+        LicenseeCommand.getVersion()
+    }
 
     override val readFromStorage = config.readFromStorage
     override val writeToStorage = config.writeToStorage

@@ -118,7 +118,13 @@ class ScanCode(
         )
     }
 
-    override val version by lazy { ScanCodeCommand.getVersion() }
+    override val version by lazy {
+        require(ScanCodeCommand.isInPath()) {
+            "The '${ScanCodeCommand.command()}' command is not available in the PATH environment."
+        }
+
+        ScanCodeCommand.getVersion()
+    }
 
     override val readFromStorage = config.readFromStorage
     override val writeToStorage = config.writeToStorage
