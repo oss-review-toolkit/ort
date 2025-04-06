@@ -20,9 +20,12 @@
 package org.ossreviewtoolkit.scanner.provenance
 
 import java.io.File
+import java.nio.file.Path
 import java.nio.file.StandardCopyOption
 
+import kotlin.io.path.OnErrorResult
 import kotlin.io.path.copyToRecursively
+import kotlin.io.path.extension
 import kotlin.io.path.moveTo
 
 import org.ossreviewtoolkit.downloader.DownloadException
@@ -113,8 +116,12 @@ class DefaultProvenanceDownloader(
             }
 
             // We need to make a copy of the working tree, because it could be used by another coroutine after this
-            // call has finished.
-            root.toPath().copyToRecursively(downloadDir.toPath(), followLinks = false, overwrite = true)
+            // call has finished. Tolerate if copying lockfiles fails.
+            val onError = { source: Path, _: Path, _: Exception ->
+                if (source.extension == "lock") OnErrorResult.SKIP_SUBTREE else OnErrorResult.TERMINATE
+            }
+
+            root.toPath().copyToRecursively(downloadDir.toPath(), onError, followLinks = false, overwrite = true)
         }
     }
 }
