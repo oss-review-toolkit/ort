@@ -39,13 +39,12 @@ class MercurialWorkingTreeFunTest : StringSpec({
 
     beforeSpec {
         val zipFile = getAssetFile("lz4revlog-2018-01-03-hg.zip")
-        println("Extracting '$zipFile' to '$zipContentDir'...")
         zipFile.unpack(zipContentDir)
     }
 
     "Detected Mercurial version is not empty" {
         val version = hg.getVersion()
-        println("Mercurial version $version detected.")
+
         version shouldNot beEmpty()
     }
 

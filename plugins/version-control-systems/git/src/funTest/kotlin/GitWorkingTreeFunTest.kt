@@ -46,7 +46,6 @@ class GitWorkingTreeFunTest : StringSpec({
     lateinit var workingTree: WorkingTree
 
     beforeSpec {
-        println("Cloning ${vcsInfo.url} to '$repoDir'...")
         workingTree = git.initWorkingTree(repoDir, vcsInfo)
         git.updateWorkingTree(workingTree, "main")
     }
