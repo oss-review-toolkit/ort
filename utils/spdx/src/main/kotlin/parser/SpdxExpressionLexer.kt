@@ -94,7 +94,7 @@ class SpdxExpressionLexer(input: Sequence<Char>) {
                 }
             }
 
-            cur?.let { throw SpdxExpressionLexerException(it, position) }
+            throw SpdxExpressionLexerException(cur, position)
         }
 
         return null
