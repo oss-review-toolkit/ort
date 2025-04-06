@@ -40,14 +40,11 @@ class SubversionWorkingTreeFunTest : StringSpec({
 
     beforeSpec {
         val zipFile = getAssetFile("docutils-2018-01-03-svn-trunk.zip")
-        print("Extracting '$zipFile' to '$zipContentDir'... ")
         zipFile.unpack(zipContentDir)
-        println("done.")
     }
 
     "Detected Subversion version is not empty" {
         val version = svn.getVersion()
-        println("Subversion version $version detected.")
 
         version shouldNot beEmpty()
     }

@@ -69,7 +69,7 @@ class GitTest : WordSpec({
     "Git" should {
         "be able to get the version" {
             val version = git.getVersion()
-            println("Git version $version detected.")
+
             version shouldNot beEmpty()
         }
 

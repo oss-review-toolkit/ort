@@ -42,8 +42,6 @@ class GradleFunTest : StringSpec() {
     private val isJava9OrAbove = Environment.JAVA_VERSION.split('.').first().toInt() >= 9
 
     private fun installGradleWrapper(version: String) {
-        println("Installing Gradle wrapper version $version.")
-
         val (gradle, wrapper) = if (Os.isWindows) {
             Pair("gradle.bat", projectDir.resolve("gradlew.bat"))
         } else {
