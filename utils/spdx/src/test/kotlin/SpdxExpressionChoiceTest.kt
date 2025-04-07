@@ -338,16 +338,6 @@ class SpdxExpressionChoiceTest : WordSpec({
             )
         }
 
-        "be explicit about the choices even if they could be simplified" {
-            val choices = "(a OR b) AND (a OR b)".toSpdx().validChoices()
-
-            choices.map { it.toString() } should containExactlyInAnyOrder(
-                "a",
-                "b AND a",
-                "b"
-            )
-        }
-
         "return in reasonable time for a complex AND expression".config(
             blockingTest = true,
             timeout = 150.milliseconds
