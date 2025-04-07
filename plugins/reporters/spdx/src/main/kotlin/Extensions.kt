@@ -36,20 +36,17 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.licenses.Findings
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
-import org.ossreviewtoolkit.model.utils.PathLicenseMatcher
 import org.ossreviewtoolkit.model.utils.prependedPath
 import org.ossreviewtoolkit.reporter.LicenseTextProvider
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
-import org.ossreviewtoolkit.utils.spdx.andOrNull
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 import org.ossreviewtoolkit.utils.spdx.nullOrBlankToSpdxNoassertionOrNone
 import org.ossreviewtoolkit.utils.spdx.toSpdxId
@@ -157,27 +154,6 @@ internal fun Package.toSpdxPackage(
         .applyChoices(ortResult.getPackageLicenseChoices(id))
         .applyChoices(ortResult.getRepositoryLicenseChoices())
 
-    val declaredPackageLicenses = resolvedLicenseExpressions.filter(LicenseView.ONLY_DECLARED)
-
-    val matcher = PathLicenseMatcher(LicenseFilePatterns.getInstance())
-    val licensePaths = resolvedLicenseExpressions.flatMap { licenseInfo ->
-        licenseInfo.locations.map { it.location.path }
-    }
-
-    val packageRootPath = vcsProcessed.path.takeIf { type == SpdxPackageType.VCS_PACKAGE }.orEmpty()
-    val applicableLicensePaths = matcher.getApplicableLicenseFilesForDirectories(licensePaths, listOf(packageRootPath))
-    val applicableLicenseFiles = applicableLicensePaths[packageRootPath].orEmpty()
-
-    val detectedPackageLicenses = resolvedLicenseExpressions.filterTo(mutableSetOf()) { licenseInfo ->
-        licenseInfo.locations.any {
-            it.location.path in applicableLicenseFiles
-        }
-    }
-
-    val packageLicenseExpressions = (declaredPackageLicenses.licenses + detectedPackageLicenses)
-        .flatMap { it.originalExpressions }
-        .map { it.expression }
-
     return SpdxPackage(
         spdxId = id.toSpdxId(type),
         checksums = when (type) {
@@ -204,8 +180,7 @@ internal fun Package.toSpdxPackage(
             SpdxPackageType.PROJECT -> concludedLicense.nullOrBlankToSpdxNoassertionOrNone()
             else -> concludedLicense.nullOrBlankToSpdxNoassertionOrNone()
         },
-        licenseDeclared = packageLicenseExpressions
-            .andOrNull()
+        licenseDeclared = resolvedLicenseExpressions.mainLicense()
             ?.simplify()
             ?.sorted()
             ?.nullOrBlankToSpdxNoassertionOrNone()
