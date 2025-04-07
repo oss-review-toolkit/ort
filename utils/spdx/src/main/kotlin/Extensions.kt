@@ -39,6 +39,19 @@ fun SpdxExpression?.nullOrBlankToSpdxNoassertionOrNone(): String =
     }
 
 /**
+ * Combine this collection of [SpdxExpression]s into one using the [operator], or return null if the collection is
+ * empty.
+ */
+fun Collection<SpdxExpression>.toExpression(operator: SpdxOperator = SpdxOperator.AND): SpdxExpression? =
+    distinct().run {
+        when (size) {
+            0 -> null
+            1 -> first()
+            else -> SpdxCompoundExpression(operator, this)
+        }
+    }
+
+/**
  * Create an [SpdxLicenseIdExpression] from this [SpdxLicense].
  */
 fun SpdxLicense.toExpression(): SpdxLicenseIdExpression {
