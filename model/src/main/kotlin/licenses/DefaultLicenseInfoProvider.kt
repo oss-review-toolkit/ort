@@ -77,21 +77,19 @@ class DefaultLicenseInfoProvider(val ortResult: OrtResult) : LicenseInfoProvider
         )
 
     private fun createDetectedLicenseInfo(id: Identifier): DetectedLicenseInfo {
-        val findings = mutableListOf<Findings>()
-
-        ortResult.getScanResultsForId(id).map {
+        val findings = ortResult.getScanResultsForId(id).map {
             // If a VCS path curation has been applied after the scanning stage, it is possible to apply that
             // curation without re-scanning in case the new VCS path is a subdirectory of the scanned VCS path.
             // So, filter by VCS path to enable the user to see the effect on the detected license with a shorter
             // turn around time / without re-scanning.
             it.filterByVcsPath(ortResult.getPackage(id)?.metadata?.vcsProcessed?.path.orEmpty())
-        }.forEach { (provenance, _, summary, _) ->
-            val config = getConfiguration(id, provenance)
+        }.map {
+            val config = getConfiguration(id, it.provenance)
 
-            findings += Findings(
-                provenance = provenance,
-                licenses = summary.licenseFindings,
-                copyrights = summary.copyrightFindings,
+            Findings(
+                provenance = it.provenance,
+                licenses = it.summary.licenseFindings,
+                copyrights = it.summary.copyrightFindings,
                 licenseFindingCurations = config.licenseFindingCurations,
                 pathExcludes = config.pathExcludes,
                 relativeFindingsPath = config.relativeFindingsPath
