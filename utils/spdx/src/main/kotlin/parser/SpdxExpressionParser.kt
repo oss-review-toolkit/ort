@@ -20,12 +20,12 @@
 package org.ossreviewtoolkit.utils.spdx.parser
 
 import org.ossreviewtoolkit.utils.common.nextOrNull
-import org.ossreviewtoolkit.utils.spdx.SpdxCompoundExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseReferenceExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseWithExceptionExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxOperator
+import org.ossreviewtoolkit.utils.spdx.toExpression
 
 /**
  * A parser for SPDX expressions. It consumes a sequence of [Token]s and produces an [SpdxExpression].
@@ -102,10 +102,7 @@ class SpdxExpressionParser(
             children.add(parseAndExpression())
         }
 
-        return when {
-            children.size > 1 -> SpdxCompoundExpression(SpdxOperator.OR, children)
-            else -> children.first()
-        }
+        return checkNotNull(children.toExpression(SpdxOperator.OR))
     }
 
     /**
@@ -119,10 +116,7 @@ class SpdxExpressionParser(
             children.add(parsePrimary())
         }
 
-        return when {
-            children.size > 1 -> SpdxCompoundExpression(SpdxOperator.AND, children)
-            else -> children.first()
-        }
+        return checkNotNull(children.toExpression(SpdxOperator.AND))
     }
 
     /**
