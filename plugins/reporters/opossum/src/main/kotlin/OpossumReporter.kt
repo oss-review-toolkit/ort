@@ -47,7 +47,7 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.packZip
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
-import org.ossreviewtoolkit.utils.spdx.andOrNull
+import org.ossreviewtoolkit.utils.spdx.toExpression
 
 private const val ISSUE_PRIORITY = 900
 
@@ -356,7 +356,7 @@ class OpossumReporter(
                     val license = licenseFindings
                         .filter { it.location.path == pathFromFinding }
                         .map { it.license }
-                        .andOrNull()
+                        .toExpression()
 
                     val pathSignal = OpossumSignal.create(
                         source,

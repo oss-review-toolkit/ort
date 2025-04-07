@@ -292,7 +292,7 @@ class SpdxCompoundExpression(
             return children.sortedBy { it.toString() }
         }
 
-        return getSortedChildrenWithSameOperator(this).concat(operator)
+        return checkNotNull(getSortedChildrenWithSameOperator(this).toExpression(operator))
     }
 
     override fun validate(strictness: Strictness) {
@@ -632,42 +632,3 @@ data class SpdxLicenseReferenceExpression(
 
     override fun getLicenseUrl(): String? = null
 }
-
-/**
- * Shortcut for [concat]([SpdxOperator.AND]).
- */
-fun Collection<SpdxExpression>.and(): SpdxExpression = concat(SpdxOperator.AND)
-
-/**
- * Shortcut for [concatOrNull]([SpdxOperator.AND]).
- */
-fun Collection<SpdxExpression>.andOrNull(): SpdxExpression? = concatOrNull(SpdxOperator.AND)
-
-/**
- * Shortcut for [concat]([SpdxOperator.OR]).
- */
-fun Collection<SpdxExpression>.or(): SpdxExpression = concat(SpdxOperator.OR)
-
-/**
- * Shortcut for [concatOrNull]([SpdxOperator.OR]).
- */
-fun Collection<SpdxExpression>.orOrNull(): SpdxExpression? = concatOrNull(SpdxOperator.OR)
-
-/**
- * Return an n-ary compound expression if this collection contains multiple expression, or the single expression in
- * case this collection contains just a single element. Throws if the collection is empty.
- */
-fun Collection<SpdxExpression>.concat(operator: SpdxOperator): SpdxExpression {
-    require(isNotEmpty()) {
-        "Cannot create a concatenated SPDX expression from an empty collection."
-    }
-
-    val distinctExpressions = distinct()
-    return distinctExpressions.singleOrNull() ?: SpdxCompoundExpression(operator, distinctExpressions)
-}
-
-/**
- * Return null if this collection is empty or else the result of [concat].
- */
-fun Collection<SpdxExpression>.concatOrNull(operator: SpdxOperator): SpdxExpression? =
-    takeIf { it.isNotEmpty() }?.concat(operator)
