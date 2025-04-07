@@ -23,13 +23,17 @@ import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
+import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.model.utils.PathLicenseMatcher
 import org.ossreviewtoolkit.utils.ort.CopyrightStatementsProcessor
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseChoice
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.spdx.andOrNull
+import org.ossreviewtoolkit.utils.spdx.toExpression
 
 /**
  * Resolved license information about a package (or project).
@@ -72,6 +76,40 @@ data class ResolvedLicenseInfo(
         licenses.flatMapTo(mutableSetOf()) { resolvedLicense ->
             resolvedLicense.originalExpressions.map { it.expression }
         }.andOrNull()
+
+    /**
+     * Return the main license of a package (or project) as an [SpdxExpression], or null if there is no main license.
+     * The main license is the conjunction of the declared license of the package (or project) and the licenses detected
+     * in any of the configured [LicenseFilePatterns] matched against the root path of the package (or project).
+     */
+    fun mainLicense(): SpdxExpression? {
+        val matcher = PathLicenseMatcher(LicenseFilePatterns.getInstance())
+        val licensePaths = flatMap { resolvedLicense ->
+            resolvedLicense.locations.map { it.location.path }
+        }
+
+        val detectedLicenses = filterTo(mutableSetOf()) { resolvedLicense ->
+            resolvedLicense.locations.any {
+                val rootPath = (it.provenance as? RepositoryProvenance)?.vcsInfo?.path.orEmpty()
+
+                val applicableLicensePaths = matcher.getApplicableLicenseFilesForDirectories(
+                    licensePaths,
+                    listOf(rootPath)
+                )
+
+                val applicableLicenseFiles = applicableLicensePaths[rootPath].orEmpty()
+
+                it.location.path in applicableLicenseFiles
+            }
+        }
+
+        val declaredLicenses = filter(LicenseView.ONLY_DECLARED)
+        val mainLicenses = (detectedLicenses + declaredLicenses.licenses)
+            .flatMap { it.originalExpressions }
+            .map { it.expression }
+
+        return mainLicenses.toExpression()
+    }
 
     /**
      * Return the effective [SpdxExpression] of this [ResolvedLicenseInfo] based on their [licenses] filtered by the
