@@ -32,7 +32,6 @@ import org.ossreviewtoolkit.utils.ort.CopyrightStatementsProcessor
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseChoice
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
-import org.ossreviewtoolkit.utils.spdx.andOrNull
 import org.ossreviewtoolkit.utils.spdx.toExpression
 
 /**
@@ -75,7 +74,7 @@ data class ResolvedLicenseInfo(
     fun toCompoundExpression(): SpdxExpression? =
         licenses.flatMapTo(mutableSetOf()) { resolvedLicense ->
             resolvedLicense.originalExpressions.map { it.expression }
-        }.andOrNull()
+        }.toExpression()
 
     /**
      * Return the main license of a package (or project) as an [SpdxExpression], or null if there is no main license.
