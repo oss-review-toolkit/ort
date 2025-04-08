@@ -153,6 +153,8 @@ class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
         packageDetailsCache[packageName]?.let { return it }
 
         return runCatching {
+            // Note that pnpm does not actually implement the "info" subcommand itself, but just forwards to npm, see
+            // https://github.com/pnpm/pnpm/issues/5935.
             val process = PnpmCommand.run("info", "--json", packageName).requireSuccess()
 
             parsePackageJson(process.stdout)
