@@ -355,7 +355,6 @@ class SpdxExpressionChoiceTest : WordSpec({
             val expression = listOf(
                 "Apache-1.1",
                 "Apache-2.0",
-                "Apache-2.0",
                 "Artistic-1.0-Perl",
                 "Artistic-2.0",
                 "BSD-2-Clause",
