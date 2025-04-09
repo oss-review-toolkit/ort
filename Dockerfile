@@ -167,8 +167,8 @@ RUN scancode-license-data --path /opt/scancode-license-data \
 
 RUN pip install --no-cache-dir -U \
     pip=="$PIP_VERSION" \
-    wheel \
     && pip install --no-cache-dir -U \
+    wheel \
     Mercurial \
     conan=="$CONAN_VERSION" \
     pipenv=="$PYTHON_PIPENV_VERSION" \
