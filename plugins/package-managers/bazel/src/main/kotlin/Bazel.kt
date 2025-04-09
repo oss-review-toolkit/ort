@@ -92,7 +92,13 @@ data class BazelConfig(
      * Use Conan2 when fetching Conan packages, otherwise use Conan 1.
      */
     @OrtPluginOption(defaultValue = "false")
-    val useConan2: Boolean
+    val useConan2: Boolean,
+
+    /**
+     * Only scan Bazel dependencies and skip reporting Conan packages in the dependency tree.
+     */
+    @OrtPluginOption(defaultValue = "false")
+    val bazelDependenciesOnly: Boolean
 )
 
 internal object BazelCommand : CommandLineTool {
@@ -178,21 +184,25 @@ class Bazel(
         )
 
         val conanExtension = mainModule.extensionUsages.find { "conan_deps_module_extension.bzl" in it.key }
-        val conanPackages = conanExtension?.let { extension ->
-            val conanAnalyzerResults = resolveConanDependencies(
-                projectDir,
-                analysisRoot,
-                excludes,
-                analyzerConfig,
-                labels
-            )
+        val conanPackages = if (!config.bazelDependenciesOnly) {
+            conanExtension?.let { extension ->
+                val conanAnalyzerResults = resolveConanDependencies(
+                    projectDir,
+                    analysisRoot,
+                    excludes,
+                    analyzerConfig,
+                    labels
+                )
 
-            processConanDependencies(
-                extension,
-                scopes,
-                conanAnalyzerResults
-            )
-        }.orEmpty()
+                processConanDependencies(
+                    extension,
+                    scopes,
+                    conanAnalyzerResults
+                )
+            }.orEmpty()
+        } else {
+            emptySet()
+        }
 
         // If no lockfile is present, getDependencyGraph() runs "bazel mod graph", which creates a "MODULE.bazel.lock"
         // file as a side effect. That file contains the URL of the Bazel module registry that was used for dependency

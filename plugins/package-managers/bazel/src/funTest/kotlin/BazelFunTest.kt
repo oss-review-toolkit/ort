@@ -116,4 +116,22 @@ class BazelFunTest : StringSpec({
         val result = create("Bazel", PluginConfig(mapOf("useConan2" to "true"))).resolveSingleProject(definitionFile)
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
+
+    "Dependencies are detected if the Bazel project has Conan dependencies but only Bazel dependencies are requested" {
+        val definitionFile = getAssetFile("projects/synthetic/bazel-conan-dependencies/MODULE.bazel")
+        val expectedResultFile = getAssetFile(
+            "projects/synthetic/bazel-expected-output-conan-dependencies-disabled.yml"
+        )
+
+        val result = create(
+            "Bazel",
+            PluginConfig(
+                mapOf(
+                    "useConan2" to "true",
+                    "bazelDependenciesOnly" to "true"
+                )
+            )
+        ).resolveSingleProject(definitionFile)
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
 })
