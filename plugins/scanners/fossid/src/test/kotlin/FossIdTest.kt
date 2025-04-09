@@ -163,7 +163,7 @@ class FossIdTest : WordSpec({
             fossId.scan(createPackage(createIdentifier(index = 1), vcsInfo))
 
             coVerify {
-                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision)
+                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, "")
                 service.downloadFromGit(USER, API_KEY, scanCode)
                 service.checkDownloadStatus(USER, API_KEY, scanCode)
             }
@@ -196,7 +196,7 @@ class FossIdTest : WordSpec({
             fossId.scan(createPackage(createIdentifier(index = 1), vcsInfo))
 
             coVerify {
-                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision)
+                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, "")
                 service.downloadFromGit(USER, API_KEY, scanCode)
                 service.checkDownloadStatus(USER, API_KEY, scanCode)
                 service.downloadFromGit(USER, API_KEY, scanCode)
@@ -427,7 +427,7 @@ class FossIdTest : WordSpec({
                 .expectCreateScan(projectCode, scanCode, vcsInfo, "")
                 .expectDownload(scanCode)
                 .mockFiles(scanCode)
-            coEvery { service.createProject(USER, API_KEY, projectCode, projectCode) } returns
+            coEvery { service.createProject(USER, API_KEY, projectCode, projectCode, "Created by ORT") } returns
                 MapResponseBody(status = 1, data = mapOf())
 
             val fossId = createFossId(config)
@@ -435,7 +435,7 @@ class FossIdTest : WordSpec({
             fossId.scan(createPackage(createIdentifier(index = 1), vcsInfo))
 
             coVerify {
-                service.createProject(USER, API_KEY, projectCode, projectCode)
+                service.createProject(USER, API_KEY, projectCode, projectCode, "Created by ORT")
             }
         }
 
@@ -930,7 +930,7 @@ class FossIdTest : WordSpec({
             fossId.scan(createPackage(createIdentifier(index = 1), vcsInfo))
 
             coVerify {
-                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision)
+                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, "")
                 service.downloadFromGit(USER, API_KEY, scanCode)
                 service.checkDownloadStatus(USER, API_KEY, scanCode)
             }
@@ -975,7 +975,7 @@ class FossIdTest : WordSpec({
             )
 
             coVerify {
-                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision)
+                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, "")
                 service.downloadFromGit(USER, API_KEY, scanCode)
                 service.checkDownloadStatus(USER, API_KEY, scanCode)
                 service.createIgnoreRule(

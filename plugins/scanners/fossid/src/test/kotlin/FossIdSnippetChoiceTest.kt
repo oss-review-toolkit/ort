@@ -287,11 +287,22 @@ class FossIdSnippetChoiceTest : WordSpec({
                     path = FILE_1,
                     componentName = "fakepackage1",
                     componentVersion = "1.0.0",
-                    isDirectory = false
+                    isDirectory = false,
+                    preserveExistingIdentifications = true
                 )
+
                 val payload = OrtCommentPayload(mapOf("MIT" to listOf(choiceLocation)), 1, 0)
                 val comment = jsonMapper.writeValueAsString(OrtComment(payload))
-                service.addFileComment(USER, API_KEY, scanCode, FILE_1, comment)
+
+                service.addFileComment(
+                    user = USER,
+                    apiKey = API_KEY,
+                    scanCode = scanCode,
+                    path = FILE_1,
+                    comment = comment,
+                    isImportant = false,
+                    includeInReport = false
+                )
             }
 
             summary.issues.forAtLeastOne {
@@ -971,13 +982,20 @@ fun FossIdServiceWithVersion.mockFiles(
  * Prepare this service mock to expect a mark as identified call for the given [scanCode] and [path].
  */
 fun FossIdServiceWithVersion.expectMarkAsIdentified(scanCode: String, path: String): FossIdServiceWithVersion {
-    coEvery { markAsIdentified(USER, API_KEY, scanCode, path, any()) } returns
-        EntityResponseBody(status = 1)
     coEvery {
-        addComponentIdentification(USER, API_KEY, scanCode, path, any(), any(), false)
+        markAsIdentified(USER, API_KEY, scanCode, path, any())
     } returns EntityResponseBody(status = 1)
-    coEvery { addFileComment(USER, API_KEY, scanCode, path, any()) } returns
-        EntityResponseBody(status = 1)
+
+    coEvery {
+        addComponentIdentification(
+            USER, API_KEY, scanCode, path, any(), any(), any(), preserveExistingIdentifications = true
+        )
+    } returns EntityResponseBody(status = 1)
+
+    coEvery {
+        addFileComment(USER, API_KEY, scanCode, path, any(), isImportant = false, includeInReport = false)
+    } returns EntityResponseBody(status = 1)
+
     return this
 }
 
