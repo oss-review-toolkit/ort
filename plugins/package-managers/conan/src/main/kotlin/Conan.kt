@@ -56,6 +56,7 @@ import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.alsoIfNull
 import org.ossreviewtoolkit.utils.common.masked
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
@@ -69,7 +70,7 @@ import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
 
 internal class ConanCommand(private val useConan2: Boolean = false) : CommandLineTool {
-    override fun command(workingDir: File?) = if (useConan2) "conan2" else "conan"
+    override fun command(workingDir: File?) = "conan"
 
     override fun transformVersion(output: String) =
         // Conan could report version strings like:
@@ -78,8 +79,15 @@ internal class ConanCommand(private val useConan2: Boolean = false) : CommandLin
 
     override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=1.44.0 <3.0")
 
-    override fun run(vararg args: CharSequence, workingDir: File?, environment: Map<String, String>) =
-        super.run(args = args, workingDir, environment + mapOf("CONAN_NON_INTERACTIVE" to "1", "CONAN_SERIES" to "1"))
+    override fun run(vararg args: CharSequence, workingDir: File?, environment: Map<String, String>): ProcessCapture =
+        super.run(
+            args = args,
+            workingDir,
+            environment + mapOf(
+                "CONAN_NON_INTERACTIVE" to "1",
+                "CONAN_MAJOR_VERSION" to if (useConan2) "2" else "1"
+            )
+        )
 }
 
 data class ConanConfig(
