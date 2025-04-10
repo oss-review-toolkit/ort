@@ -23,6 +23,9 @@ import io.kotest.assertions.async.shouldTimeout
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.comparables.shouldBeGreaterThanOrEqualTo
+import io.kotest.matchers.comparables.shouldBeLessThanOrEqualTo
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 
@@ -101,11 +104,11 @@ class FossIdTest : WordSpec({
         "return a comparable version" {
             val fossId = createFossId(createConfig())
 
-            val currentVersion = checkNotNull(Semver.coerce(fossId.version))
-            val minVersion = checkNotNull(Semver.coerce("2020.2"))
-            (currentVersion >= minVersion) shouldBe true
-            val minVersion2 = checkNotNull(Semver.coerce("2023.3"))
-            (currentVersion <= minVersion2) shouldBe true
+            val currentVersion = Semver.coerce(fossId.version).shouldNotBeNull()
+            val minVersion = Semver.coerce("2020.2").shouldNotBeNull()
+            currentVersion shouldBeGreaterThanOrEqualTo minVersion
+            val minVersion2 = Semver.coerce("2023.3").shouldNotBeNull()
+            currentVersion shouldBeLessThanOrEqualTo minVersion2
         }
     }
 
