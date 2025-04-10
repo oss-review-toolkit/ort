@@ -222,6 +222,8 @@ class Conan(
                 config.lockfileName?.let { hasLockfile(workingDir.resolve(it).path) } == true
             }
 
+            handler.createConanProfileIfNeeded()
+
             val handlerResults = handler.process(definitionFile, config.lockfileName)
 
             val result = with(handlerResults) {

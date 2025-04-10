@@ -36,6 +36,11 @@ internal interface ConanVersionHandler {
     fun getConanHome(): File
 
     /**
+     * Create a default ORT Conan profile if it does not exist yet. This profile will contain the complication flags.
+     */
+    fun createConanProfileIfNeeded()
+
+    /**
      * Get the Conan storage path, i.e. the location where Conan caches downloaded packages.
      */
     fun getConanStoragePath(): File

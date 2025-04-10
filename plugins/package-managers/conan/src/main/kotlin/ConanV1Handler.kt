@@ -44,6 +44,12 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 internal class ConanV1Handler(private val conan: Conan) : ConanVersionHandler {
     override fun getConanHome(): File = Os.userHomeDirectory.resolve(".conan")
 
+    override fun createConanProfileIfNeeded() {
+        if (!getConanHome().resolve("profiles/ort-default").isFile) {
+            conan.command.run("profile", "new", "ort-default", "--detect").requireSuccess()
+        }
+    }
+
     override fun getConanStoragePath(): File = getConanHome().resolve("data")
 
     override fun process(definitionFile: File, lockfileName: String?): HandlerResults {
@@ -64,7 +70,9 @@ internal class ConanV1Handler(private val conan: Conan) : ConanVersionHandler {
                 definitionFile.name,
                 "--json",
                 jsonFile.absolutePath,
-                *DUMMY_COMPILER_SETTINGS
+                *DUMMY_COMPILER_SETTINGS,
+                "--profile",
+                "ort-default"
             ).requireSuccess()
         }
 
