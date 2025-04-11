@@ -79,9 +79,14 @@ fun PackageManager.collateMultipleProjects(
     excludedScopes: Collection<String> = emptySet(),
     allowDynamicVersions: Boolean = false
 ): AnalyzerResult {
-    val excludes = Excludes(scopes = excludedScopes.map { ScopeExclude(it, ScopeExcludeReason.TEST_DEPENDENCY_OF) })
     val analyzerConfig = AnalyzerConfiguration(allowDynamicVersions = allowDynamicVersions)
+
+    beforeResolution(USER_DIR, definitionFiles.asList(), analyzerConfig)
+
+    val excludes = Excludes(scopes = excludedScopes.map { ScopeExclude(it, ScopeExcludeReason.TEST_DEPENDENCY_OF) })
     val managerResult = resolveDependencies(USER_DIR, definitionFiles.asList(), excludes, analyzerConfig, emptyMap())
+
+    afterResolution(USER_DIR, definitionFiles.asList())
 
     val builder = AnalyzerResultBuilder()
     managerResult.dependencyGraph?.also {
