@@ -200,9 +200,9 @@ packages:
   description: "Safely add untrusted strings to HTML/XML markup."
   homepage_url: ""
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/22/35/137da042dfb4720b638d2937c38a9c2df83fe32d20e8c8f3185dbfef05f7/MarkupSafe-3.0.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+    url: "https://files.pythonhosted.org/packages/bd/6e/61ebf08d8940553afff20d1fb1ba7294b6f8d279df9fd0c0db911b4bbcfd/MarkupSafe-3.0.2-cp310-cp310-musllinux_1_2_x86_64.whl"
     hash:
-      value: "bbcb445fa71794da8f178f0f6d66789a28d7319071af7a496d4d507ed566270d"
+      value: "b424c77b206d63d500bcb69fa55ed8d0e6a3774056bdc4839fc9298a7edca171"
       algorithm: "SHA-256"
   source_artifact:
     url: "https://files.pythonhosted.org/packages/b2/97/5d42485e71dfc078108a86d6de8fa46db44a1a9295e89c5d6d4a06e23a62/markupsafe-3.0.2.tar.gz"
