@@ -32,7 +32,6 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.plugins.packagemanagers.conan.Conan.Companion.DUMMY_COMPILER_SETTINGS
 import org.ossreviewtoolkit.plugins.packagemanagers.conan.Conan.Companion.SCOPE_NAME_DEPENDENCIES
 import org.ossreviewtoolkit.plugins.packagemanagers.conan.Conan.Companion.SCOPE_NAME_DEV_DEPENDENCIES
 import org.ossreviewtoolkit.utils.common.Os
@@ -47,15 +46,16 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 internal class ConanV2Handler(private val conan: Conan) : ConanVersionHandler {
     override fun getConanHome(): File = Os.userHomeDirectory.resolve(".conan2")
 
+    override fun createConanProfileIfNeeded() {
+        if (!getConanHome().resolve("profiles/ort-default").isFile) {
+            conan.command.run("profile", "detect", "--name", "ort-default").requireSuccess()
+        }
+    }
+
     override fun getConanStoragePath(): File = getConanHome().resolve("p")
 
     override fun process(definitionFile: File, lockfileName: String?): HandlerResults {
         val workingDir = definitionFile.parentFile
-
-        // Create a default build profile.
-        if (!getConanHome().resolve("profiles/default").isFile) {
-            conan.command.run(workingDir, "profile", "detect")
-        }
 
         val jsonFile = createOrtTempDir().resolve("info.json")
         if (lockfileName != null) {
@@ -70,7 +70,6 @@ internal class ConanV2Handler(private val conan: Conan) : ConanVersionHandler {
                 lockfileName,
                 "--out-file",
                 jsonFile.absolutePath,
-                *DUMMY_COMPILER_SETTINGS,
                 definitionFile.name
             ).requireSuccess()
         } else {
@@ -82,8 +81,9 @@ internal class ConanV2Handler(private val conan: Conan) : ConanVersionHandler {
                 "json",
                 "--out-file",
                 jsonFile.absolutePath,
-                *DUMMY_COMPILER_SETTINGS,
-                definitionFile.name
+                definitionFile.name,
+                "--profile",
+                "ort-default"
             ).requireSuccess()
         }
 
