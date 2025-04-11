@@ -84,7 +84,7 @@ graalvmNative {
                         listOf("^/META-INF/native-image/org.jline/.*"),
                     // The contained "reflect-config.json" does not match the code of the AWS flavor of the Apache HTTP
                     // client.
-                    "software.amazon.awssdk:apache-client:2.31.20" to
+                    "software.amazon.awssdk:apache-client:2.31.21" to
                         listOf("^/META-INF/native-image/software.amazon.awssdk/apache-client/.*")
                 )
             )
