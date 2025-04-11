@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseWithExceptionExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxOperator
 import org.ossreviewtoolkit.utils.spdx.SpdxSimpleExpression
+import org.ossreviewtoolkit.utils.spdx.toExpression
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 /**
@@ -322,11 +323,7 @@ fun associateLicensesWithExceptions(license: SpdxExpression): SpdxExpression {
 
                 handledExceptions += validLicenseExceptionCombinations.map { it.exception }
 
-                when (validLicenseExceptionCombinations.size) {
-                    0 -> childLicense
-                    1 -> validLicenseExceptionCombinations.first()
-                    else -> SpdxCompoundExpression(SpdxOperator.AND, validLicenseExceptionCombinations)
-                }
+                validLicenseExceptionCombinations.toExpression() ?: childLicense
             }
 
             else -> childLicense
@@ -341,11 +338,5 @@ fun associateLicensesWithExceptions(license: SpdxExpression): SpdxExpression {
     }
 
     // Recreate the compound AND-expression from the associated licenses.
-    check(associatedLicenses.isNotEmpty())
-
-    return if (associatedLicenses.size == 1) {
-        associatedLicenses.first()
-    } else {
-        SpdxCompoundExpression(SpdxOperator.AND, associatedLicenses)
-    }
+    return checkNotNull(associatedLicenses.toExpression())
 }

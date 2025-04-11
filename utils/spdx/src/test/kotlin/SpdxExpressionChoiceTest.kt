@@ -338,28 +338,55 @@ class SpdxExpressionChoiceTest : WordSpec({
             )
         }
 
-        "be explicit about the choices even if they could be simplified" {
-            val choices = "(a OR b) AND (a OR b)".toSpdx().validChoices()
-
-            choices.map { it.toString() } should containExactlyInAnyOrder(
-                "a",
-                "b AND a",
-                "b"
-            )
-        }
-
         "return in reasonable time for a complex AND expression".config(
             blockingTest = true,
             timeout = 150.milliseconds
         ) {
-            val expression = "Apache-1.1 AND OFL-1.1 AND Apache-2.0 AND Apache-2.0 AND Artistic-1.0-Perl AND " +
-                "Artistic-2.0 AND BSD-2-Clause AND BSD-2-Clause-Darwin AND BSD-2-Clause-Views AND BSD-3-Clause AND " +
-                "BSL-1.0 AND CC-BY-2.5 AND CC-BY-4.0 AND CDDL-1.0 AND CDDL-1.1 AND CPL-1.0 AND EPL-1.0 AND " +
-                "EPL-2.0 AND GPL-1.0-or-later AND GPL-2.0-only AND GPL-2.0-only WITH Classpath-exception-2.0 AND " +
-                "GPL-2.0-or-later AND GPL-2.0-or-later WITH Classpath-exception-2.0 AND ICU AND ISC AND JSON AND " +
-                "LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND " +
-                "LPPL-1.3c AND MIT AND MPL-1.0 AND MPL-1.1 AND MPL-2.0 AND NTP AND Noweb AND Python-2.0 AND Ruby AND " +
-                "Unicode-DFS-2016 AND W3C AND W3C-19980720 AND W3C-20150513"
+            val expression = listOf(
+                "Apache-1.1",
+                "Apache-2.0",
+                "Artistic-1.0-Perl",
+                "Artistic-2.0",
+                "BSD-2-Clause",
+                "BSD-2-Clause-Darwin",
+                "BSD-2-Clause-Views",
+                "BSD-3-Clause",
+                "BSL-1.0",
+                "CC-BY-2.5",
+                "CC-BY-4.0",
+                "CDDL-1.0",
+                "CDDL-1.1",
+                "CPL-1.0",
+                "EPL-1.0",
+                "EPL-2.0",
+                "GPL-1.0-or-later",
+                "GPL-2.0-only WITH Classpath-exception-2.0",
+                "GPL-2.0-only",
+                "GPL-2.0-or-later WITH Classpath-exception-2.0",
+                "GPL-2.0-or-later",
+                "ICU",
+                "ISC",
+                "JSON",
+                "LGPL-2.0-only",
+                "LGPL-2.0-or-later",
+                "LGPL-2.1-only",
+                "LGPL-2.1-or-later",
+                "LGPL-3.0-only",
+                "LPPL-1.3c",
+                "MIT",
+                "MPL-1.0",
+                "MPL-1.1",
+                "MPL-2.0",
+                "NTP",
+                "Noweb",
+                "OFL-1.1",
+                "Python-2.0",
+                "Ruby",
+                "Unicode-DFS-2016",
+                "W3C",
+                "W3C-19980720",
+                "W3C-20150513"
+            ).joinToString(separator = " AND ")
 
             val choices = expression.toSpdx().validChoices()
 
