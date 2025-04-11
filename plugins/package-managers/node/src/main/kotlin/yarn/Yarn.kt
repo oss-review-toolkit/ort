@@ -68,12 +68,6 @@ import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
 
-private val yarnInfoCache = DiskCache(
-    directory = ortDataDirectory.resolve("cache/analyzer/yarn/info"),
-    maxCacheSizeInBytes = 100.mebibytes,
-    maxCacheEntryAgeInSeconds = 7.days.inWholeSeconds
-)
-
 /** Name of the scope with the regular dependencies. */
 private const val DEPENDENCIES_SCOPE = "dependencies"
 
@@ -102,6 +96,7 @@ open class Yarn(override val descriptor: PluginDescriptor = YarnFactory.descript
     override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE)
 
     private lateinit var stash: DirectoryStash
+    private var yarnInfoCache: DiskCache? = null
 
     /** Cache for submodules identified by its moduleDir absolutePath */
     private val submodulesCache = ConcurrentHashMap<String, Set<File>>()
@@ -135,12 +130,21 @@ open class Yarn(override val descriptor: PluginDescriptor = YarnFactory.descript
     ) {
         YarnCommand.checkVersion()
 
+        yarnInfoCache = DiskCache(
+            directory = ortDataDirectory.resolve("cache/analyzer/yarn/info"),
+            maxCacheSizeInBytes = 100.mebibytes,
+            maxCacheEntryAgeInSeconds = 7.days.inWholeSeconds
+        )
+
         val directories = definitionFiles.mapTo(mutableSetOf()) { it.resolveSibling("node_modules") }
         stash = DirectoryStash(directories)
     }
 
     override fun afterResolution(analysisRoot: File, definitionFiles: List<File>) {
         stash.close()
+
+        yarnInfoCache?.close()
+        yarnInfoCache = null
     }
 
     override fun resolveDependencies(
@@ -355,12 +359,12 @@ open class Yarn(override val descriptor: PluginDescriptor = YarnFactory.descript
     }
 
     internal fun getRemotePackageDetails(packageName: String): PackageJson? {
-        yarnInfoCache.read(packageName)?.also { return parsePackageJson(it) }
+        yarnInfoCache?.read(packageName)?.also { return parsePackageJson(it) }
 
         val process = YarnCommand.run("info", "--json", packageName).requireSuccess()
 
         return parseYarnInfo(process.stdout, process.stderr)?.also {
-            yarnInfoCache.write(packageName, Json.encodeToString(it))
+            yarnInfoCache?.write(packageName, Json.encodeToString(it))
         }
     }
 }
