@@ -1,0 +1,5 @@
+bazel_dep(name = "glog", version = "0.5.0", repo_name = "com_github_google_glog")
+
+load_conan_dependencies = use_extension("//conan:conan_deps_module_extension.bzl", "conan_extension")
+use_repo(load_conan_dependencies, "fmt")
+use_repo(load_conan_dependencies, "gtest")
