@@ -194,7 +194,7 @@ internal fun Bom.addVulnerabilities(advisorVulnerabilities: Map<Identifier, List
                         else -> Method.fromString(reference.scoringSystem) ?: Method.OTHER
                     }
 
-                    // Skip scores whose serialized value causes problems with validation, see
+                    // Skip EPSS scores whose serialized value causes problems with validation, see
                     // https://github.com/oss-review-toolkit/ort/issues/9556.
                     if (method == Method.OTHER && "E" in "$score") {
                         logger.warn {
