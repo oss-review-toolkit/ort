@@ -53,8 +53,11 @@ fun PackageManager.resolveSingleProject(
     val analyzerConfig = AnalyzerConfiguration(allowDynamicVersions = allowDynamicVersions)
 
     beforeResolution(USER_DIR, definitionFiles, analyzerConfig)
+
     val excludes = Excludes(scopes = excludedScopes.map { ScopeExclude(it, ScopeExcludeReason.TEST_DEPENDENCY_OF) })
     val managerResult = resolveDependencies(USER_DIR, definitionFiles, excludes, analyzerConfig, emptyMap())
+
+    afterResolution(USER_DIR, definitionFiles)
 
     val resultList = managerResult.projectResults[definitionFile]
     resultList.shouldNotBeNull()
@@ -63,8 +66,6 @@ fun PackageManager.resolveSingleProject(
     val result = resultList.single().let {
         if (resolveScopes) managerResult.resolveScopes(it) else it
     }
-
-    afterResolution(USER_DIR, definitionFiles)
 
     return result
 }
