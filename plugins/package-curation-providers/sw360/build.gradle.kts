@@ -29,7 +29,7 @@ dependencies {
 
     implementation(libs.sw360Client) {
         constraints {
-            implementation("commons-io:commons-io:2.18.0")
+            implementation("commons-io:commons-io:2.19.0")
                 .because("commons-io 2.11.0 is vulnerable by CVE-2024-47554")
         }
     }
