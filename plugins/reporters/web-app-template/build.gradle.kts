@@ -36,13 +36,13 @@ import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnSetupTask
 // https://github.com/JetBrains/kotlin/blob/2.1.20/libraries/tools/kotlin-gradle-plugin/src/common/kotlin/org/jetbrains/kotlin/gradle/targets/js/yarn/YarnPlugin.kt#L159-L163
 YarnPlugin.apply(project)
 
-rootProject.plugins.withType<NodeJsPlugin> {
+rootProject.plugins.withType<NodeJsPlugin>().configureEach {
     rootProject.the<NodeJsEnvSpec>().version = "22.13.0"
 }
 
 val kotlinNodeJsSetup by rootProject.tasks.existing(NodeJsSetupTask::class)
 
-rootProject.plugins.withType<YarnPlugin> {
+rootProject.plugins.withType<YarnPlugin>().configureEach {
     rootProject.the<YarnRootEnvSpec>().version = "1.22.22"
 }
 
