@@ -55,12 +55,12 @@ class ScannerMatcherTest : WordSpec({
         }
 
         "parse versions in a lenient way" {
-            val options = ScannerMatcherConfig(
+            val config = ScannerMatcherConfig(
                 minVersion = "1",
                 maxVersion = "3.7"
             )
 
-            val matcher = ScannerMatcher.create(testDetails, options)
+            val matcher = ScannerMatcher.create(testDetails, config)
 
             matcher.minVersion.version shouldBe "1.0.0"
             matcher.maxVersion.version shouldBe "3.7.0"
