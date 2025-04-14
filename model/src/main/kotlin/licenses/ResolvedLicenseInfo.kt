@@ -127,7 +127,7 @@ data class ResolvedLicenseInfo(
         return if (choices.isEmpty()) {
             resolvedLicenses
         } else {
-            resolvedLicenses?.applyChoices(choices)?.validChoices()?.reduceOrNull(SpdxExpression::or)
+            resolvedLicenses?.applyChoices(choices)?.validChoices()?.toExpression(SpdxOperator.OR)
         }
     }
 
