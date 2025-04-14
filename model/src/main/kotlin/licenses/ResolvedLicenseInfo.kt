@@ -68,10 +68,10 @@ data class ResolvedLicenseInfo(
     operator fun get(license: SpdxSingleLicenseExpression): ResolvedLicense? = find { it.license == license }
 
     /**
-     * Map all original resolved license expressions to a single compound expression with top-level AND-operators, or
-     * return null if there are no licenses.
+     * Map all original resolved license expressions to a single expression with top-level AND-operators, or return null
+     * if there are no licenses.
      */
-    fun toCompoundExpression(): SpdxExpression? =
+    fun toExpression(): SpdxExpression? =
         licenses.flatMapTo(mutableSetOf()) { resolvedLicense ->
             resolvedLicense.originalExpressions.map { it.expression }
         }.toExpression()
@@ -119,7 +119,7 @@ data class ResolvedLicenseInfo(
     fun effectiveLicense(licenseView: LicenseView, vararg licenseChoices: List<SpdxLicenseChoice>): SpdxExpression? {
         val resolvedLicenseInfo = filter(licenseView, filterSources = true)
 
-        val resolvedLicenses = resolvedLicenseInfo.toCompoundExpression()
+        val resolvedLicenses = resolvedLicenseInfo.toExpression()
 
         val choices = licenseChoices.asList().flatten()
 
