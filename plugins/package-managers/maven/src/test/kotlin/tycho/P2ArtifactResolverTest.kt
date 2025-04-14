@@ -30,8 +30,6 @@ import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
 
-import java.io.File
-
 import org.apache.maven.artifact.repository.MavenArtifactRepository
 import org.apache.maven.project.MavenProject
 
@@ -63,8 +61,12 @@ class P2ArtifactResolverTest : WordSpec({
             val project3 = createMavenProject(listOf(createRepository("default", "https://repo1.maven.org/maven2/")))
             val project4 = createMavenProject(listOf(createRepository("p2", repositoryUrl3)))
 
+            val targetHandler = mockk<TargetHandler> {
+                every { repositoryUrls } returns emptySet()
+            }
+
             val repositories = P2ArtifactResolver.collectP2Repositories(
-                tempdir(),
+                targetHandler,
                 listOf(project1, project2, project3, project4)
             )
 
@@ -72,23 +74,19 @@ class P2ArtifactResolverTest : WordSpec({
         }
 
         "collect P2 repositories from target files" {
-            val root = tempdir()
-            val targetFile1 = File("src/test/assets/tycho.target")
-            val targetFile2 = File("src/test/assets/tycho.other.target")
-            val module1 = root.resolve("module1").also { it.mkdirs() }
-            val module2 = root.resolve("module2").also { it.mkdirs() }
-            val subModule = module2.resolve("subModule.target").also { it.mkdirs() }
-            targetFile1.copyTo(module1.resolve("tycho.target"))
-            targetFile2.copyTo(subModule.resolve("tycho.other.target"))
-
-            val repositories = P2ArtifactResolver.collectP2Repositories(root, emptyList())
-
-            repositories shouldContainExactlyInAnyOrder listOf(
+            val targetRepositories = setOf(
                 "https://p2.example.com/repo/download.eclipse.org/modeling/tmf/xtext/updates/releases/2.37.0/",
                 "https://p2.example.org/repo/download.eclipse.org/modeling/emft/mwe/updates/releases/2.20.0/",
                 "https://p2.example.com/repository/download.eclipse.org/releases/2024-12",
                 "https://p2.other.example.com/repo/other/test/"
             )
+            val targetHandler = mockk<TargetHandler> {
+                every { repositoryUrls } returns targetRepositories
+            }
+
+            val repositories = P2ArtifactResolver.collectP2Repositories(targetHandler, emptyList())
+
+            repositories shouldContainExactlyInAnyOrder targetRepositories
         }
     }
 
@@ -220,5 +218,7 @@ private fun TestConfiguration.createResolver(
         P2RepositoryContentLoader.loadAllRepositoryContents(setOf(repositoryUrl))
     } returns (contents to issues)
 
-    return P2ArtifactResolver.create(tempdir(), listOf(createMavenProject(listOf(repository))))
+    val targetHandler = TargetHandler.create(tempdir())
+
+    return P2ArtifactResolver.create(targetHandler, listOf(createMavenProject(listOf(repository))))
 }

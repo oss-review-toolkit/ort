@@ -234,6 +234,10 @@ class TychoTest : WordSpec({
             val subProject = createMavenProject("sub")
             val projectsList = listOf(rootProject, subProject)
 
+            mockkObject(TargetHandler)
+            val targetHandler = mockk<TargetHandler>()
+            every { TargetHandler.create(definitionFile.parentFile) } returns targetHandler
+
             val tycho = spyk(Tycho())
             injectCliMock(tycho, projectsList.toJson(), projectsList)
 
@@ -247,7 +251,7 @@ class TychoTest : WordSpec({
 
             val slotProjects = slot<Collection<MavenProject>>()
             verify {
-                P2ArtifactResolver.create(definitionFile.parentFile, capture(slotProjects))
+                P2ArtifactResolver.create(targetHandler, capture(slotProjects))
             }
 
             slotProjects.captured shouldContainExactlyInAnyOrder projectsList
