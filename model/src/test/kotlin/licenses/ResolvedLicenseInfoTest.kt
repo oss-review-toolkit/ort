@@ -156,7 +156,7 @@ class ResolvedLicenseInfoTest : WordSpec({
         }
     }
 
-    "applyChoices(licenseChoices)" should {
+    "applyChoices()" should {
         "apply license choices on all licenses" {
             val choices = listOf(
                 SpdxLicenseChoice("$APACHE OR $MIT".toSpdx(), MIT.toSpdx()),
