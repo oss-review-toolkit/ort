@@ -28,25 +28,29 @@ import org.xml.sax.Attributes
 import org.xml.sax.helpers.DefaultHandler
 
 /**
- * Type alias for a function that can process XML start element elements. The function is passed the current state
- * and the attributes of the element. It returns the updated state. Note that the XML documents that need to be
- * parsed in this context store all their information in attributes; there is no element content. Therefore, it is
- * sufficient to react only on start element events.
+ * Type alias for a function that can process XML elements. The function is passed the current processing state,
+ * the attributes (as a [Map]), and the body content of the element. It returns the updated state.
  */
-internal typealias ElementStartFun<S> = (S, Attributes) -> S
+internal typealias ElementFun<S> = (S, Map<String, String>, String) -> S
 
 /**
  * A handler class for parsing XML documents that allows to register special functions for specific elements.
  * An instance maintains a state of type [S] that is updated while processing the encountered elements.
- * The class is tailored to the specific requirements of the XML documents used by Tycho. It expects that all relevant
- * information is available in the attributes of XML elements.
+ * The class is tailored to the specific requirements of the XML documents used by Tycho; therefore, some
+ * simplifications are made in the implementation.
  */
 internal class ElementHandler<S : Any>(initialState: S) : DefaultHandler() {
     /** Stores the element start functions registered at this handler. Key is the element name. */
-    private val elementStartFunctions = mutableMapOf<String, ElementStartFun<S>>()
+    private val elementFunctions = mutableMapOf<String, ElementFun<S>>()
 
     /** Stores the current state during XML processing. */
     private var currentState: S = initialState
+
+    /** A stack for storing the attributes of the currently open elements. */
+    private val attributesStack = ArrayDeque<Map<String, String>>()
+
+    /** Stores the content of the body of the current XML element. */
+    private val bodyContent = StringBuilder()
 
     /**
      * Return the resulting state after processing the XML document.
@@ -57,15 +61,27 @@ internal class ElementHandler<S : Any>(initialState: S) : DefaultHandler() {
     /**
      * Register the given [startFunction] for the element with the given [name].
      */
-    fun handleElement(name: String, startFunction: ElementStartFun<S>): ElementHandler<S> {
-        elementStartFunctions[name] = startFunction
+    fun handleElement(name: String, startFunction: ElementFun<S>): ElementHandler<S> {
+        elementFunctions[name] = startFunction
         return this
     }
 
     override fun startElement(uri: String?, localName: String?, qName: String?, attributes: Attributes) {
-        elementStartFunctions[qName]?.also { f ->
-            currentState = f(currentState, attributes)
+        attributesStack.addFirst(attributes.toMap())
+    }
+
+    override fun endElement(uri: String?, localName: String?, qName: String?) {
+        val attributes = attributesStack.removeFirst()
+        elementFunctions[qName]?.also { f ->
+            currentState = f(currentState, attributes, bodyContent.toString())
         }
+
+        bodyContent.clear()
+    }
+
+    override fun characters(ch: CharArray, start: Int, length: Int) {
+        val str = String(ch, start, length).trim()
+        bodyContent.append(str)
     }
 }
 
@@ -87,3 +103,14 @@ internal fun <S : Any> parseXml(stream: InputStream, handler: ElementHandler<S>)
  */
 internal fun <S : Any> parseXml(file: File, handler: ElementHandler<S>): S =
     file.inputStream().use { stream -> parseXml(stream, handler) }
+
+/**
+ * Convert this [Attributes] object to a [Map]. This seems to be necessary to access the values later than on
+ * processing of the start element handler.
+ */
+private fun Attributes.toMap(): Map<String, String> =
+    buildMap {
+        repeat(length) {
+            put(getQName(it), getValue(it))
+        }
+    }
