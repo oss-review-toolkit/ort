@@ -82,7 +82,7 @@ abstract class AbstractPackageBasedScanStorageFunTest(vararg listeners: TestList
     private val scannerDetails2 = ScannerDetails("name 2", "2.0.0", "config 2")
     private val scannerDetailsCompatibleVersion1 = ScannerDetails("name 1", "1.0.1", "config 1")
     private val scannerDetailsCompatibleVersion2 = ScannerDetails("name 1", "1.0.1-alpha.1", "config 1")
-    private val scannerDetailsIncompatibleVersion = ScannerDetails("name 1", "1.1.0", "config 1")
+    private val scannerDetailsIncompatibleVersion = ScannerDetails("name 1", "2.0.0", "config 1")
 
     private val scannerMatcherForDetails1 = ScannerMatcher.create(scannerDetails1)
 
@@ -238,7 +238,7 @@ abstract class AbstractPackageBasedScanStorageFunTest(vararg listeners: TestList
                     ScanResult(provenanceWithSourceArtifact, scannerDetailsCompatibleVersion2, scanSummaryWithFiles)
                 val scanResultIncompatible =
                     ScanResult(provenanceWithSourceArtifact, scannerDetailsIncompatibleVersion, scanSummaryWithFiles)
-                val matcher = scannerMatcherForDetails1.copy(maxVersion = Semver("1.5.0"))
+                val matcher = scannerMatcherForDetails1.copy(maxVersion = Semver("2.0.1"))
 
                 storage.add(id, scanResult).shouldBeSuccess()
                 storage.add(id, scanResultCompatible1).shouldBeSuccess()
