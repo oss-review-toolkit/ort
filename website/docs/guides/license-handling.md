@@ -23,6 +23,10 @@ For cases that might be ambiguous in general but are valid in the specific conte
 Detected licenses are those licenses that are detected via an ORT *scanner* implementation by looking at the contents of all source code files belonging to a package, in particular at the contents of license files or copyright headers in source code files.
 Detected licenses complement the picture created by declared license by revealing envelope cases where the declared and detected licenses do not match.
 
+### Main License
+
+The main license is a convenience construct that combines the declared license(s) with those detected license(s) whose findings stem from the `licenseFilePatterns` configured in `config.yml`.
+
 ### Concluded license
 
 The concluded license is manually created via a [curation](../configuration/package-curations.md).
