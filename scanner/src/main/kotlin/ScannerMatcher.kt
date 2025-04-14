@@ -70,7 +70,7 @@ data class ScannerMatcher(
         fun create(details: ScannerDetails, config: ScannerMatcherConfig = ScannerMatcherConfig.EMPTY): ScannerMatcher {
             val scannerVersion = checkNotNull(Semver.coerce(details.version))
             val minVersion = Semver.coerce(config.minVersion) ?: scannerVersion
-            val maxVersion = Semver.coerce(config.maxVersion) ?: minVersion.nextMinor()
+            val maxVersion = Semver.coerce(config.maxVersion) ?: minVersion.nextMajor()
             val name = config.regScannerName ?: details.name
             val configuration = config.configuration ?: details.configuration
 

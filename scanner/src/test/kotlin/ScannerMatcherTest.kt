@@ -148,7 +148,7 @@ class ScannerMatcherTest : WordSpec({
 
 private const val SCANNER_NAME = "ScannerMatcherTest"
 private const val SCANNER_VERSION = "3.2.1-rc2"
-private const val SCANNER_DEFAULT_MAX_VERSION = "3.3.0"
+private const val SCANNER_DEFAULT_MAX_VERSION = "4.0.0"
 private const val SCANNER_CONFIGURATION = "--command-line-option"
 
 /** Test details to match against. */
