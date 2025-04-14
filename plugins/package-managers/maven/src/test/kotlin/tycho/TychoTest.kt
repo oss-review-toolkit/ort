@@ -41,14 +41,18 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 
 import java.io.File
+import java.io.IOException
 import java.util.jar.Manifest
 
 import org.apache.maven.cli.MavenCli
 import org.apache.maven.execution.MavenSession
 import org.apache.maven.project.MavenProject
 
+import org.eclipse.aether.artifact.Artifact
 import org.eclipse.aether.artifact.DefaultArtifact
+import org.eclipse.aether.graph.DefaultDependencyNode
 import org.eclipse.aether.graph.DependencyNode
+import org.eclipse.aether.repository.RemoteRepository
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
@@ -121,7 +125,7 @@ class TychoTest : WordSpec({
                 every { packages() } returns setOf(pkg1, pkg2)
             }
 
-            every { tycho.createGraphBuilder(any(), any(), any(), any()) } returns graphBuilder
+            every { tycho.createGraphBuilder(any(), any(), any(), any(), any()) } returns graphBuilder
 
             val results = tycho.resolveDependencies(
                 tempdir(),
@@ -296,7 +300,7 @@ class TychoTest : WordSpec({
                 pkg
             }
 
-            val resolver = tychoPackageResolverFun(delegate, mockk(), mockk())
+            val resolver = tychoPackageResolverFun(delegate, mockk(), mockk(), mockk())
 
             resolver(dependency) shouldBe pkg
         }
@@ -362,6 +366,35 @@ class TychoTest : WordSpec({
                 authors shouldContainExactlyInAnyOrder listOf(bundleProperties["Bundle-Vendor"])
                 homepageUrl shouldBe "https://example.com/package"
             }
+        }
+
+        "handle Tycho identifiers that need to be mapped to Maven dependencies" {
+            val originalArtifact = mockk<Artifact>()
+            val mappedArtifact = mockk<Artifact>()
+            val repo1 = mockk<RemoteRepository>()
+            val repo2 = mockk<RemoteRepository>()
+            val dependency = DefaultDependencyNode(originalArtifact).apply {
+                repositories = listOf(repo1, repo2)
+            }
+
+            val pkg = mockk<Package>()
+            val delegate: PackageResolverFun = { node ->
+                if (node == dependency) {
+                    throw IOException("Test exception: Unresolvable dependency.")
+                }
+
+                node.artifact shouldBe mappedArtifact
+                node.repositories shouldContainExactlyInAnyOrder listOf(repo1, repo2)
+                pkg
+            }
+
+            val targetHandler = mockk<TargetHandler> {
+                every { mapToMavenDependency(originalArtifact) } returns mappedArtifact
+            }
+
+            val resolver = tychoPackageResolverFun(delegate, mockk(), mockk(), targetHandler)
+
+            resolver(dependency) shouldBe pkg
         }
     }
 
@@ -607,9 +640,12 @@ private val resolveException = RuntimeException("Test exception: Could not resol
 private fun createResolverFunWithRepositoryHelper(block: LocalRepositoryHelper.() -> Unit): PackageResolverFun {
     val helper = mockk<LocalRepositoryHelper>(block = block)
     val resolver = createResolverMock()
+    val targetHandler = mockk<TargetHandler> {
+        every { mapToMavenDependency(any()) } returns null
+    }
 
     val delegateResolverFun: PackageResolverFun = { throw resolveException }
-    return tychoPackageResolverFun(delegateResolverFun, helper, resolver)
+    return tychoPackageResolverFun(delegateResolverFun, helper, resolver, targetHandler)
 }
 
 /**

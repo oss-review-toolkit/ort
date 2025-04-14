@@ -34,6 +34,7 @@ import org.codehaus.plexus.PlexusContainer
 import org.codehaus.plexus.classworlds.ClassWorld
 
 import org.eclipse.aether.artifact.Artifact
+import org.eclipse.aether.graph.DefaultDependencyNode
 import org.eclipse.aether.graph.DependencyNode
 
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -119,7 +120,13 @@ class Tycho(override val descriptor: PluginDescriptor = TychoFactory.Companion.d
         val resolver = P2ArtifactResolver.create(targetHandler, collector.mavenProjects.values)
 
         val resolvedProjects = createMavenSupport(collector).use { mavenSupport ->
-            graphBuilder = createGraphBuilder(mavenSupport, collector.mavenProjects, resolver, repositoryHelper)
+            graphBuilder = createGraphBuilder(
+                mavenSupport,
+                collector.mavenProjects,
+                resolver,
+                targetHandler,
+                repositoryHelper
+            )
 
             buildLog.inputStream().use { stream ->
                 parseDependencyTree(stream, collector.mavenProjects.values).map { projectNode ->
@@ -172,16 +179,22 @@ class Tycho(override val descriptor: PluginDescriptor = TychoFactory.Companion.d
 
     /**
      * Create the [DependencyGraphBuilder] for constructing the dependency graph of the analyzed Tycho project using
-     * the given [mavenSupport], the encountered [mavenProjects], and the given [resolver] and [repositoryHelper].
+     * the given [mavenSupport], the encountered [mavenProjects], and the given [resolver], [targetHandler], and
+     * [repositoryHelper].
      */
     internal fun createGraphBuilder(
         mavenSupport: MavenSupport,
         mavenProjects: Map<String, MavenProject>,
         resolver: P2ArtifactResolver,
+        targetHandler: TargetHandler,
         repositoryHelper: LocalRepositoryHelper
     ): DependencyGraphBuilder<DependencyNode> {
-        val resolverFun =
-            tychoPackageResolverFun(mavenSupport.defaultPackageResolverFun(), repositoryHelper, resolver)
+        val resolverFun = tychoPackageResolverFun(
+            mavenSupport.defaultPackageResolverFun(),
+            repositoryHelper,
+            resolver,
+            targetHandler
+        )
         val dependencyHandler = MavenDependencyHandler(descriptor.displayName, projectType, mavenProjects, resolverFun)
         return DependencyGraphBuilder(dependencyHandler)
     }
@@ -344,17 +357,27 @@ internal class TychoProjectsCollector : AbstractMavenLifecycleParticipant() {
  * it tries to obtain metadata from the OSGi manifest of the bundle. This approach is partly inspired by
  * https://github.com/OpenNTF/p2-layout-provider. Additional metadata for creating [RemoteArtifact] objects is
  * obtained from the given [resolver].
+ * There is another option that the artifact is a regular Maven artifact, but referenced by Tycho with an alternative
+ * identifier because it is part of a Tycho target platform. This can be checked with the help of the given
+ * [targetHandler]. In this case, a resolve operation for the original Maven artifact is attempted.
  */
 internal fun tychoPackageResolverFun(
     delegate: PackageResolverFun,
     repositoryHelper: LocalRepositoryHelper,
-    resolver: P2ArtifactResolver
+    resolver: P2ArtifactResolver,
+    targetHandler: TargetHandler
 ): PackageResolverFun =
     { dependency ->
         runCatching {
             delegate(dependency)
         }.recoverCatching { exception ->
-            createPackageFromLocalArtifact(dependency.artifact, repositoryHelper, resolver)
+            targetHandler.mapToMavenDependency(dependency.artifact)?.let { artifact ->
+                val mappedDependency = DefaultDependencyNode(artifact).apply {
+                    repositories = dependency.repositories
+                }
+
+                delegate(mappedDependency)
+            } ?: createPackageFromLocalArtifact(dependency.artifact, repositoryHelper, resolver)
                 ?: throw exception
         }.getOrThrow()
     }
