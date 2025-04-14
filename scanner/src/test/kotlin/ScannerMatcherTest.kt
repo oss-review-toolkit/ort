@@ -34,7 +34,7 @@ class ScannerMatcherTest : WordSpec({
 
             matcher.regScannerName shouldBe SCANNER_NAME
             matcher.minVersion.version shouldBe SCANNER_VERSION
-            matcher.maxVersion shouldBe Semver(SCANNER_VERSION).nextMinor()
+            matcher.maxVersion.version shouldBe SCANNER_DEFAULT_MAX_VERSION
             matcher.configuration shouldBe SCANNER_CONFIGURATION
         }
 
@@ -148,6 +148,7 @@ class ScannerMatcherTest : WordSpec({
 
 private const val SCANNER_NAME = "ScannerMatcherTest"
 private const val SCANNER_VERSION = "3.2.1-rc2"
+private const val SCANNER_DEFAULT_MAX_VERSION = "3.3.0"
 private const val SCANNER_CONFIGURATION = "--command-line-option"
 
 /** Test details to match against. */
