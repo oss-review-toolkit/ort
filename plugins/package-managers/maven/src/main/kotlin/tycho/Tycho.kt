@@ -115,7 +115,8 @@ class Tycho(override val descriptor: PluginDescriptor = TychoFactory.Companion.d
         val collector = TychoProjectsCollector()
         val (exitCode, buildLog) = runBuild(collector, definitionFile.parentFile)
 
-        val resolver = P2ArtifactResolver.create(definitionFile.parentFile, collector.mavenProjects.values)
+        val targetHandler = TargetHandler.create(definitionFile.parentFile)
+        val resolver = P2ArtifactResolver.create(targetHandler, collector.mavenProjects.values)
 
         val resolvedProjects = createMavenSupport(collector).use { mavenSupport ->
             graphBuilder = createGraphBuilder(mavenSupport, collector.mavenProjects, resolver, repositoryHelper)

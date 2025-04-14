@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.maven.tycho
 
-import java.io.File
-
 import org.apache.maven.project.MavenProject
 
 import org.eclipse.aether.artifact.Artifact
@@ -53,11 +51,11 @@ internal class P2ArtifactResolver private constructor(
         private const val P2_REPOSITORY_LAYOUT = "p2"
 
         /**
-         * Create an instance of [P2ArtifactResolver] and initialize it with repositories defined in a target file in
-         * the given [projectRoot] or in the given [projects].
+         * Create an instance of [P2ArtifactResolver] and initialize it with information from the given [targetHandler]
+         * and the given [projects] that were found during the build.
          */
-        fun create(projectRoot: File, projects: Collection<MavenProject>): P2ArtifactResolver {
-            val repositoryUrls = collectP2Repositories(projectRoot, projects)
+        fun create(targetHandler: TargetHandler, projects: Collection<MavenProject>): P2ArtifactResolver {
+            val repositoryUrls = collectP2Repositories(targetHandler, projects)
 
             val (contents, issues) = P2RepositoryContentLoader.loadAllRepositoryContents(repositoryUrls)
 
@@ -74,13 +72,14 @@ internal class P2ArtifactResolver private constructor(
         }
 
         /**
-         * Find all P2 repositories defined for the current Tycho build based on the given [root folder][projectRoot]
+         * Find all P2 repositories defined for the current Tycho build based on the given [targetHandler]
          * and the list of encountered [projects]. This function is able to detect P2 repositories defined directly in
          * a project POM or in a Tycho target file.
-         * See https://wiki.eclipse.org/Tycho/Target_Platform/.
          */
-        internal fun collectP2Repositories(projectRoot: File, projects: Collection<MavenProject>): Set<String> =
-            collectP2RepositoriesFromProjects(projects) + collectP2RepositoriesFromTargetFiles(projectRoot)
+        internal fun collectP2Repositories(
+            targetHandler: TargetHandler,
+            projects: Collection<MavenProject>
+        ): Set<String> = collectP2RepositoriesFromProjects(projects) + targetHandler.repositoryUrls
 
         /**
          * Collect all P2 repositories referenced from one of the given [projects].
@@ -89,31 +88,6 @@ internal class P2ArtifactResolver private constructor(
             projects.flatMapTo(mutableSetOf()) { project ->
                 project.remoteArtifactRepositories.filter { it.layout.id == P2_REPOSITORY_LAYOUT }.map { it.url }
             }
-
-        /**
-         * Collect all P2 repositories defined in a Tycho target file found under the given [projectRoot].
-         */
-        private fun collectP2RepositoriesFromTargetFiles(projectRoot: File): Set<String> {
-            // TODO: There may be a better way to locate target files by inspecting the projects found in the build.
-            val targetFiles = projectRoot.walkTopDown().filter {
-                it.name.endsWith(".target") && it.isFile
-            }.toList()
-
-            return targetFiles.flatMapTo(mutableSetOf(), ::parseTargetFile)
-        }
-
-        /**
-         * Parse the given [targetFile] and extract the repository URLs referenced in it.
-         */
-        private fun parseTargetFile(targetFile: File): Set<String> {
-            val handler = ElementHandler(ParseTargetFileState())
-                .handleElement("repository") { state, attributes ->
-                    state.repositoryUrls += attributes.getValue("location")
-                    state
-                }
-
-            return parseXml(targetFile, handler).repositoryUrls
-        }
 
         /**
          * Generate the URL of the OSGi [artifact] in the repository with the given [repositoryUrl].
@@ -150,11 +124,3 @@ internal class P2ArtifactResolver private constructor(
      */
     fun getSourceArtifactFor(artifact: Artifact): RemoteArtifact = getBinaryArtifactFor(mapToSourceArtifact(artifact))
 }
-
-/**
- * A data class to store the state during parsing of a target file.
- */
-private data class ParseTargetFileState(
-    /** The [Set] with the URLs of repositories that have been found so far. */
-    val repositoryUrls: MutableSet<String> = mutableSetOf()
-)
