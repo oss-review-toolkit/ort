@@ -47,6 +47,13 @@ import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 @DelicateCoroutinesApi
 class ResolvedLicenseInfoTest : WordSpec({
+    "mainLicense()" should {
+        "return declared and detected licenses, but no concluded license" {
+            RESOLVED_LICENSE_INFO.mainLicense() shouldBe
+                "($APACHE OR $MIT) AND ($MIT OR $GPL) AND ($BSD OR $GPL)".toSpdx()
+        }
+    }
+
     "effectiveLicense()" should {
         "apply choices for LicenseView.ALL on all resolved licenses" {
             // All: (Apache-2.0 WITH LLVM-exception OR MIT) AND (MIT OR GPL-2.0-only) AND (0BSD OR GPL-2.0-only)
