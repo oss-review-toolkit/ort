@@ -44,14 +44,14 @@ data class ScannerMatcher(
     val regScannerName: String,
 
     /**
-     * Criterion to match for the minimum scanner version. Results are accepted if they are produced from scanners
-     * with at least this version.
+     * Criterion to match the scanner version, including this minimum version. Results are accepted if they are produced
+     * by scanners with a version greater than or equal to this version.
      */
     val minVersion: Semver,
 
     /**
-     * Criterion to match for the maximum scanner version. Results are accepted if they are produced from scanners
-     * with a version lower than this one. (This bound of the version range is excluding.)
+     * Criterion to match the scanner version, excluding this maximum version. Results are accepted if they are produced
+     * by scanners with a version less than this version.
      */
     val maxVersion: Semver,
 
