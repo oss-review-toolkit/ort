@@ -193,7 +193,15 @@ private val RESOLVED_LICENSE_INFO: ResolvedLicenseInfo by lazy {
                 ResolvedOriginalExpression("$APACHE OR $MIT".toSpdx(), LicenseSource.DECLARED),
                 ResolvedOriginalExpression("$MIT OR $GPL".toSpdx(), LicenseSource.DETECTED)
             ),
-            locations = emptySet()
+            locations = setOf(
+                ResolvedLicenseLocation(
+                    provenance = UnknownProvenance,
+                    location = TextLocation("LICENSE", TextLocation.UNKNOWN_LINE),
+                    appliedCuration = null,
+                    matchingPathExcludes = emptyList(),
+                    copyrights = emptySet()
+                )
+            )
         ),
         ResolvedLicense(
             license = GPL.toSpdx() as SpdxSingleLicenseExpression,
@@ -202,7 +210,15 @@ private val RESOLVED_LICENSE_INFO: ResolvedLicenseInfo by lazy {
                 ResolvedOriginalExpression("$MIT OR $GPL".toSpdx(), LicenseSource.DETECTED),
                 ResolvedOriginalExpression("$BSD OR $GPL".toSpdx(), LicenseSource.CONCLUDED)
             ),
-            locations = emptySet()
+            locations = setOf(
+                ResolvedLicenseLocation(
+                    provenance = UnknownProvenance,
+                    location = TextLocation("LICENCE", TextLocation.UNKNOWN_LINE),
+                    appliedCuration = null,
+                    matchingPathExcludes = emptyList(),
+                    copyrights = emptySet()
+                )
+            )
         ),
         ResolvedLicense(
             license = BSD.toSpdx() as SpdxSingleLicenseExpression,
