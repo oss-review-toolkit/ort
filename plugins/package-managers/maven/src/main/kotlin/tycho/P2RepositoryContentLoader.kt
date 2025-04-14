@@ -135,14 +135,14 @@ internal class P2RepositoryContentLoader : AutoCloseable {
          */
         private fun parseArtifactsFile(file: File): Map<String, Hash> {
             val handler = ElementHandler(ParseArtifactsState())
-                .handleElement("artifact") { state, attributes ->
+                .handleElement("artifact") { state, attributes, _ ->
                     state.withCurrentArtifactId(
                         bundleIdentifier(
                             attributes.getValue("id"),
                             attributes.getValue("version")
                         ).takeIf { attributes.getValue("classifier") == "osgi.bundle" }
                     )
-                }.handleElement("property") { state, attributes ->
+                }.handleElement("property") { state, attributes, _ ->
                     state.withProperty(attributes.getValue("name"), attributes.getValue("value"))
                 }
 
@@ -161,7 +161,7 @@ internal class P2RepositoryContentLoader : AutoCloseable {
             logger.info { "Parsing composite artifacts information for repository '$baseUrl'." }
 
             val handler = ElementHandler(ParseCompositeArtifactsState(URI.create("$baseUrl/compositeArtifacts.xml")))
-                .handleElement("child") { state, attributes ->
+                .handleElement("child") { state, attributes, _ ->
                     state.withChildRepository(attributes.getValue("location"))
                 }
 
@@ -289,26 +289,30 @@ internal data class P2RepositoryContent(
  * repository.
  */
 private data class ParseArtifactsState(
-    /** The ID of the artifact whose properties are currently processed. */
-    val currentArtifactId: String? = null,
+    /** The properties of the current artifact. */
+    val currentProperties: MutableMap<String, String> = mutableMapOf(),
 
     /** A [Map] with the aggregated properties of all encountered artifacts. */
-    val properties: MutableMap<String, MutableMap<String, String>> = mutableMapOf()
+    val properties: MutableMap<String, Map<String, String>> = mutableMapOf()
 ) {
     /**
      * Return an updated [ParseArtifactsState] instance that has the given [artifactId] set as current artifact.
      */
-    fun withCurrentArtifactId(artifactId: String?) = copy(currentArtifactId = artifactId)
+    fun withCurrentArtifactId(artifactId: String?): ParseArtifactsState {
+        artifactId?.also { id ->
+            properties[id] = HashMap(currentProperties)
+        }
+
+        currentProperties.clear()
+        return this
+    }
 
     /**
      * Return an updated [ParseArtifactsState] instance that stores the property defined by the given [key] and [value]
      * for the current artifact.
      */
     fun withProperty(key: String, value: String): ParseArtifactsState {
-        if (currentArtifactId == null) return this
-
-        val artifactProperties = properties.getOrPut(currentArtifactId) { mutableMapOf() }
-        artifactProperties[key] = value
+        currentProperties[key] = value
 
         return this
     }
