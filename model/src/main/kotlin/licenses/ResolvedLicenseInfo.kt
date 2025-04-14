@@ -31,6 +31,7 @@ import org.ossreviewtoolkit.model.utils.PathLicenseMatcher
 import org.ossreviewtoolkit.utils.ort.CopyrightStatementsProcessor
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseChoice
+import org.ossreviewtoolkit.utils.spdx.SpdxOperator
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.spdx.toExpression
 
@@ -68,13 +69,13 @@ data class ResolvedLicenseInfo(
     operator fun get(license: SpdxSingleLicenseExpression): ResolvedLicense? = find { it.license == license }
 
     /**
-     * Map all original resolved license expressions to a single expression with top-level AND-operators, or return null
+     * Map all original resolved license expressions to a single expression with top-level [operator]s, or return null
      * if there are no licenses.
      */
-    fun toExpression(): SpdxExpression? =
+    fun toExpression(operator: SpdxOperator = SpdxOperator.AND): SpdxExpression? =
         licenses.flatMapTo(mutableSetOf()) { resolvedLicense ->
             resolvedLicense.originalExpressions.map { it.expression }
-        }.toExpression()
+        }.toExpression(operator)
 
     /**
      * Return the main license of a package (or project) as an [SpdxExpression], or null if there is no main license.
