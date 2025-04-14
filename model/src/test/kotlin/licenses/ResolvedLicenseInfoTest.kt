@@ -145,13 +145,13 @@ class ResolvedLicenseInfoTest : WordSpec({
         }
     }
 
-    "toCompoundExpression()" should {
+    "toExpression()" should {
         "execute in reasonable time for large license info with several OR operators".config(
             blockingTest = true,
             timeout = 2.seconds
         ) {
             runCancellable {
-                COMPUTATION_HEAVY_RESOLVED_LICENSE_INFO.toCompoundExpression()
+                COMPUTATION_HEAVY_RESOLVED_LICENSE_INFO.toExpression()
             }
         }
     }
