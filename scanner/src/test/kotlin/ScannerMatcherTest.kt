@@ -72,7 +72,7 @@ class ScannerMatcherTest : WordSpec({
             matchingCriteria.matches(testDetails) shouldBe true
         }
 
-        "detect a different name" {
+        "reject a different name" {
             val matcher = matchingCriteria.copy(regScannerName = testDetails.name + "_other")
 
             matcher.matches(testDetails) shouldBe false
@@ -84,7 +84,7 @@ class ScannerMatcherTest : WordSpec({
             matcher.matches(testDetails) shouldBe true
         }
 
-        "detect a scanner version that is too old" {
+        "reject a scanner version that is too old" {
             val matcher = matchingCriteria.copy(
                 minVersion = matchingCriteria.maxVersion,
                 maxVersion = Semver("4.0.0")
@@ -93,7 +93,7 @@ class ScannerMatcherTest : WordSpec({
             matcher.matches(testDetails) shouldBe false
         }
 
-        "detect a scanner version that is too new" {
+        "reject a scanner version that is too new" {
             val matcher = matchingCriteria.copy(
                 minVersion = Semver("1.0.0"),
                 maxVersion = Semver(testDetails.version)
@@ -102,7 +102,7 @@ class ScannerMatcherTest : WordSpec({
             matcher.matches(testDetails) shouldBe false
         }
 
-        "detect a scanner configuration that does not match" {
+        "reject a scanner configuration that does not match" {
             val matcher = matchingCriteria.copy(configuration = "${testDetails.configuration}_other")
 
             matcher.matches(testDetails) shouldBe false
