@@ -93,10 +93,15 @@ class DependencyGraphNavigator(
         matcher: DependencyMatcher
     ): Set<Identifier> {
         val dependencies = mutableSetOf<Identifier>()
+        val visited = mutableSetOf<DependencyGraphNode>()
 
         fun traverse(node: DependencyNode) {
+            val cursor = node as DependencyRefCursor
+            if (cursor.current in visited) return
+            visited += cursor.current
+
             if (node.id == packageId) {
-                node.visitDependencies { collectDependencies(it, maxDepth, matcher, dependencies) }
+                node.visitDependencies { collectDependencies(it, maxDepth, matcher, dependencies, visited) }
             }
 
             // This continues to visit dependencies even after a matching node has been found as there could be multiple
@@ -241,10 +246,10 @@ private fun collectDependencies(
 
     nodes.forEach { node ->
         val cursor = node as DependencyRefCursor
+        if (matcher(node)) ids += node.id
+
         if (cursor.current !in visited) {
             visited += cursor.current
-            if (matcher(node)) ids += node.id
-
             node.visitDependencies { collectDependencies(it, maxDepth - 1, matcher, ids, visited) }
         }
     }
