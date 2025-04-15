@@ -22,8 +22,8 @@ package org.ossreviewtoolkit.plugins.packagemanagers.maven
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.should
 
-import org.ossreviewtoolkit.analyzer.collateMultipleProjects
-import org.ossreviewtoolkit.analyzer.withResolvedScopes
+import org.ossreviewtoolkit.analyzer.analyze
+import org.ossreviewtoolkit.analyzer.getAnalyzerResult
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.plugins.packagemanagers.maven.tycho.TychoFactory
 import org.ossreviewtoolkit.utils.test.getAssetFile
@@ -35,7 +35,7 @@ class TychoFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/tycho/pom.xml")
         val expectedResultFile = getAssetFile("projects/synthetic/tycho-expected-output.yml")
 
-        val result = TychoFactory.create().collateMultipleProjects(definitionFile).withResolvedScopes()
+        val result = analyze(definitionFile.parentFile, packageManagers = setOf(TychoFactory())).getAnalyzerResult()
 
         patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -44,8 +44,12 @@ class TychoFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/tycho/pom.xml")
         val expectedResultFile = getAssetFile("projects/synthetic/tycho-expected-output-scope-excludes.yml")
 
-        val result = TychoFactory.create()
-            .collateMultipleProjects(definitionFile, excludedScopes = setOf("test.*")).withResolvedScopes()
+        val result = analyze(
+            definitionFile.parentFile,
+            packageManagers = setOf(TychoFactory()),
+            excludedScopes = setOf("test.*"),
+            skipExcluded = true
+        ).getAnalyzerResult()
 
         patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -54,7 +58,7 @@ class TychoFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/tycho-feature/pom.xml")
         val expectedResultFile = getAssetFile("projects/synthetic/tycho-expected-output-feature.yml")
 
-        val result = TychoFactory.create().collateMultipleProjects(definitionFile).withResolvedScopes()
+        val result = analyze(definitionFile.parentFile, packageManagers = setOf(TychoFactory())).getAnalyzerResult()
 
         patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
     }

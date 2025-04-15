@@ -22,9 +22,9 @@ package org.ossreviewtoolkit.plugins.packagemanagers.node.yarn2
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.should
 
-import org.ossreviewtoolkit.analyzer.collateMultipleProjects
+import org.ossreviewtoolkit.analyzer.analyze
+import org.ossreviewtoolkit.analyzer.getAnalyzerResult
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
-import org.ossreviewtoolkit.analyzer.withResolvedScopes
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
@@ -55,7 +55,7 @@ class Yarn2FunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/yarn2/workspaces/package.json")
         val expectedResultFile = getAssetFile("projects/synthetic/yarn2/workspaces-expected-output.yml")
 
-        val result = Yarn2Factory.create().collateMultipleProjects(definitionFile).withResolvedScopes()
+        val result = analyze(definitionFile.parentFile, packageManagers = setOf(Yarn2Factory())).getAnalyzerResult()
 
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
