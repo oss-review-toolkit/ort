@@ -1,804 +1,769 @@
 ---
-repository:
+projects:
+- id: "PNPM::pnpm-app-example:1.1.4"
+  definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/app/package.json"
+  authors:
+  - "DavidWells"
+  declared_licenses:
+  - "ISC"
+  declared_licenses_processed:
+    spdx_expression: "ISC"
   vcs:
-    type: "Git"
-    url: "<REPLACE_URL>"
-    revision: "<REPLACE_REVISION>"
-    path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces"
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
   vcs_processed:
     type: "Git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
-    path: "<REPLACE_PATH>"
-  config: {}
-analyzer:
-  start_time: "1970-01-01T00:00:00Z"
-  end_time: "1970-01-01T00:00:00Z"
-  environment:
-    ort_version: "HEAD"
-    build_jdk: "<REPLACE_JDK>"
-    java_version: "<REPLACE_JAVA>"
-    os: "<REPLACE_OS>"
-    processors: "<REPLACE_PROCESSORS>"
-    max_memory: "<REPLACE_MAX_MEMORY>"
-    variables: {}
-    tool_versions: {}
-  config:
-    allow_dynamic_versions: false
-    enabled_package_managers:
-    - "PNPM"
-    skip_excluded: false
-  result:
-    projects:
-    - id: "PNPM::pnpm-app-example:1.1.4"
-      definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/app/package.json"
-      authors:
-      - "DavidWells"
-      declared_licenses:
-      - "ISC"
-      declared_licenses_processed:
-        spdx_expression: "ISC"
-      vcs:
-        type: ""
-        url: ""
-        revision: ""
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "<REPLACE_URL_PROCESSED>"
-        revision: "<REPLACE_REVISION>"
-        path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/app"
-      homepage_url: ""
-      scopes:
-      - name: "dependencies"
-        dependencies:
-        - id: "PNPM::testing-pnpm-package-a:1.0.2"
-          linkage: "PROJECT_DYNAMIC"
-          dependencies:
-          - id: "NPM::chalk:5.0.1"
-          - id: "NPM::is-even:1.0.0"
-            dependencies:
-            - id: "NPM::is-odd:0.1.2"
-              dependencies:
-              - id: "NPM::is-number:3.0.0"
-                dependencies:
-                - id: "NPM::kind-of:3.2.2"
-                  dependencies:
-                  - id: "NPM::is-buffer:1.1.6"
-          - id: "NPM::sax:1.2.4"
-    - id: "PNPM::pnpm-workspaces:1.0.1"
-      definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/package.json"
-      authors:
-      - "Marcel Bochtler"
-      declared_licenses:
-      - "MIT"
-      declared_licenses_processed:
-        spdx_expression: "MIT"
-      vcs:
-        type: ""
-        url: ""
-        revision: ""
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "<REPLACE_URL_PROCESSED>"
-        revision: "<REPLACE_REVISION>"
-        path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces"
-      description: "PNPM workspaces test"
-      homepage_url: ""
-      scopes:
-      - name: "dependencies"
-        dependencies:
-        - id: "NPM::json-stable-stringify:1.0.1"
-          dependencies:
-          - id: "NPM::jsonify:0.0.0"
-        - id: "PNPM::pnpm-workspaces:1.0.1"
-          linkage: "PROJECT_DYNAMIC"
-          dependencies:
-          - id: "NPM::json-stable-stringify:1.0.1"
-            dependencies:
-            - id: "NPM::jsonify:0.0.0"
-          - id: "PNPM::pnpm-workspaces:1.0.1"
-            linkage: "PROJECT_DYNAMIC"
+    path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/app"
+  homepage_url: ""
+  scopes:
+  - name: "dependencies"
+    dependencies:
     - id: "PNPM::testing-pnpm-package-a:1.0.2"
-      definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/packages/package-a/package.json"
-      authors:
-      - "Marcel Bochtler"
-      declared_licenses:
-      - "ISC"
-      declared_licenses_processed:
-        spdx_expression: "ISC"
-      vcs:
-        type: ""
-        url: ""
-        revision: ""
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "<REPLACE_URL_PROCESSED>"
-        revision: "<REPLACE_REVISION>"
-        path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/packages/package-a"
-      homepage_url: ""
-      scopes:
-      - name: "dependencies"
+      linkage: "PROJECT_DYNAMIC"
+      dependencies:
+      - id: "NPM::chalk:5.0.1"
+      - id: "NPM::is-even:1.0.0"
         dependencies:
-        - id: "NPM::chalk:5.0.1"
-        - id: "NPM::is-even:1.0.0"
+        - id: "NPM::is-odd:0.1.2"
           dependencies:
-          - id: "NPM::is-odd:0.1.2"
+          - id: "NPM::is-number:3.0.0"
             dependencies:
-            - id: "NPM::is-number:3.0.0"
+            - id: "NPM::kind-of:3.2.2"
               dependencies:
-              - id: "NPM::kind-of:3.2.2"
-                dependencies:
-                - id: "NPM::is-buffer:1.1.6"
-        - id: "NPM::sax:1.2.4"
-      - name: "devDependencies"
-        dependencies:
-        - id: "NPM::require-uncached:2.0.0"
-          dependencies:
-          - id: "NPM::caller-path:0.1.0"
-            dependencies:
-            - id: "NPM::callsites:0.2.0"
-          - id: "NPM::resolve-from:1.0.1"
-    - id: "PNPM::testing-pnpm-package-b:1.0.2"
-      definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/packages/package-b/package.json"
-      authors:
-      - "Marcel Bochtler"
-      declared_licenses:
-      - "ISC"
-      declared_licenses_processed:
-        spdx_expression: "ISC"
-      vcs:
-        type: ""
-        url: ""
-        revision: ""
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "<REPLACE_URL_PROCESSED>"
-        revision: "<REPLACE_REVISION>"
-        path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/packages/package-b"
-      homepage_url: ""
-      scopes:
-      - name: "dependencies"
-        dependencies:
-        - id: "NPM::chalk:4.0.0"
-          dependencies:
-          - id: "NPM::ansi-styles:4.3.0"
-            dependencies:
-            - id: "NPM::color-convert:2.0.1"
-              dependencies:
-              - id: "NPM::color-name:1.1.4"
-          - id: "NPM::supports-color:7.2.0"
-            dependencies:
-            - id: "NPM::has-flag:4.0.0"
-    - id: "PNPM::testing-pnpm-package-c:1.0.0"
-      definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/non-workspace/package-c/package.json"
-      authors:
-      - "Marcel Bochtler"
-      declared_licenses:
-      - "ISC"
-      declared_licenses_processed:
-        spdx_expression: "ISC"
-      vcs:
-        type: ""
-        url: ""
-        revision: ""
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "<REPLACE_URL_PROCESSED>"
-        revision: "<REPLACE_REVISION>"
-        path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/non-workspace/package-c"
-      homepage_url: ""
-      scopes:
-      - name: "dependencies"
-        dependencies:
-        - id: "NPM::long:5.2.0"
-    packages:
-    - id: "NPM::ansi-styles:4.3.0"
-      purl: "pkg:npm/ansi-styles@4.3.0"
-      authors:
-      - "Sindre Sorhus"
-      declared_licenses:
-      - "MIT"
-      declared_licenses_processed:
-        spdx_expression: "MIT"
-      description: "ANSI escape codes for styling strings in the terminal"
-      homepage_url: "https://github.com/chalk/ansi-styles#readme"
-      binary_artifact:
-        url: ""
-        hash:
-          value: ""
-          algorithm: ""
-      source_artifact:
-        url: "https://registry.npmjs.org/ansi-styles/-/ansi-styles-4.3.0.tgz"
-        hash:
-          value: "edd803628ae71c04c85ae7a0906edad34b648937"
-          algorithm: "SHA-1"
-      vcs:
-        type: "Git"
-        url: "https://github.com/chalk/ansi-styles.git"
-        revision: "2d02d5bd070f733179007f0904eb5fb41090395a"
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "https://github.com/chalk/ansi-styles.git"
-        revision: "2d02d5bd070f733179007f0904eb5fb41090395a"
-        path: ""
-    - id: "NPM::caller-path:0.1.0"
-      purl: "pkg:npm/caller-path@0.1.0"
-      authors:
-      - "Sindre Sorhus"
-      declared_licenses:
-      - "MIT"
-      declared_licenses_processed:
-        spdx_expression: "MIT"
-      description: "Get the path of the caller module"
-      homepage_url: "https://github.com/sindresorhus/caller-path"
-      binary_artifact:
-        url: ""
-        hash:
-          value: ""
-          algorithm: ""
-      source_artifact:
-        url: "https://registry.npmjs.org/caller-path/-/caller-path-0.1.0.tgz"
-        hash:
-          value: "94085ef63581ecd3daa92444a8fe94e82577751f"
-          algorithm: "SHA-1"
-      vcs:
-        type: "Git"
-        url: "https://github.com/sindresorhus/caller-path.git"
-        revision: ""
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "https://github.com/sindresorhus/caller-path.git"
-        revision: ""
-        path: ""
-    - id: "NPM::callsites:0.2.0"
-      purl: "pkg:npm/callsites@0.2.0"
-      authors:
-      - "Sindre Sorhus"
-      declared_licenses:
-      - "MIT"
-      declared_licenses_processed:
-        spdx_expression: "MIT"
-      description: "Get callsites from the V8 stack trace API"
-      homepage_url: "https://github.com/sindresorhus/callsites"
-      binary_artifact:
-        url: ""
-        hash:
-          value: ""
-          algorithm: ""
-      source_artifact:
-        url: "https://registry.npmjs.org/callsites/-/callsites-0.2.0.tgz"
-        hash:
-          value: "afab96262910a7f33c19a5775825c69f34e350ca"
-          algorithm: "SHA-1"
-      vcs:
-        type: "Git"
-        url: "https://github.com/sindresorhus/callsites.git"
-        revision: ""
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "https://github.com/sindresorhus/callsites.git"
-        revision: ""
-        path: ""
-    - id: "NPM::chalk:4.0.0"
-      purl: "pkg:npm/chalk@4.0.0"
-      declared_licenses:
-      - "MIT"
-      declared_licenses_processed:
-        spdx_expression: "MIT"
-      description: "Terminal string styling done right"
-      homepage_url: "https://github.com/chalk/chalk#readme"
-      binary_artifact:
-        url: ""
-        hash:
-          value: ""
-          algorithm: ""
-      source_artifact:
-        url: "https://registry.npmjs.org/chalk/-/chalk-4.0.0.tgz"
-        hash:
-          value: "6e98081ed2d17faab615eb52ac66ec1fe6209e72"
-          algorithm: "SHA-1"
-      vcs:
-        type: "Git"
-        url: "https://github.com/chalk/chalk.git"
-        revision: "31fa94208034cb7581a81b06045ff2cf51057b40"
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "https://github.com/chalk/chalk.git"
-        revision: "31fa94208034cb7581a81b06045ff2cf51057b40"
-        path: ""
-    - id: "NPM::chalk:5.0.1"
-      purl: "pkg:npm/chalk@5.0.1"
-      declared_licenses:
-      - "MIT"
-      declared_licenses_processed:
-        spdx_expression: "MIT"
-      description: "Terminal string styling done right"
-      homepage_url: "https://github.com/chalk/chalk#readme"
-      binary_artifact:
-        url: ""
-        hash:
-          value: ""
-          algorithm: ""
-      source_artifact:
-        url: "https://registry.npmjs.org/chalk/-/chalk-5.0.1.tgz"
-        hash:
-          value: "ca57d71e82bb534a296df63bbacc4a1c22b2a4b6"
-          algorithm: "SHA-1"
-      vcs:
-        type: "Git"
-        url: "https://github.com/chalk/chalk.git"
-        revision: "bccde97f8a1bb125d4fe99e8fd355182101ff4f2"
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "https://github.com/chalk/chalk.git"
-        revision: "bccde97f8a1bb125d4fe99e8fd355182101ff4f2"
-        path: ""
-    - id: "NPM::color-convert:2.0.1"
-      purl: "pkg:npm/color-convert@2.0.1"
-      authors:
-      - "Heather Arthur"
-      declared_licenses:
-      - "MIT"
-      declared_licenses_processed:
-        spdx_expression: "MIT"
-      description: "Plain color conversion functions"
-      homepage_url: "https://github.com/Qix-/color-convert#readme"
-      binary_artifact:
-        url: ""
-        hash:
-          value: ""
-          algorithm: ""
-      source_artifact:
-        url: "https://registry.npmjs.org/color-convert/-/color-convert-2.0.1.tgz"
-        hash:
-          value: "72d3a68d598c9bdb3af2ad1e84f21d896abd4de3"
-          algorithm: "SHA-1"
-      vcs:
-        type: "Git"
-        url: "https://github.com/Qix-/color-convert.git"
-        revision: "e1cb7846258e1d7aa25873814684d4fbbbca53ed"
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "https://github.com/Qix-/color-convert.git"
-        revision: "e1cb7846258e1d7aa25873814684d4fbbbca53ed"
-        path: ""
-    - id: "NPM::color-name:1.1.4"
-      purl: "pkg:npm/color-name@1.1.4"
-      authors:
-      - "DY"
-      declared_licenses:
-      - "MIT"
-      declared_licenses_processed:
-        spdx_expression: "MIT"
-      description: "A list of color names and its values"
-      homepage_url: "https://github.com/colorjs/color-name"
-      binary_artifact:
-        url: ""
-        hash:
-          value: ""
-          algorithm: ""
-      source_artifact:
-        url: "https://registry.npmjs.org/color-name/-/color-name-1.1.4.tgz"
-        hash:
-          value: "c2a09a87acbde69543de6f63fa3995c826c536a2"
-          algorithm: "SHA-1"
-      vcs:
-        type: "Git"
-        url: "git@github.com:colorjs/color-name.git"
-        revision: "4536ce5944f56659a2dfb2198eaf81b5ad5f2ad9"
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "ssh://git@github.com/colorjs/color-name.git"
-        revision: "4536ce5944f56659a2dfb2198eaf81b5ad5f2ad9"
-        path: ""
-    - id: "NPM::has-flag:4.0.0"
-      purl: "pkg:npm/has-flag@4.0.0"
-      authors:
-      - "Sindre Sorhus"
-      declared_licenses:
-      - "MIT"
-      declared_licenses_processed:
-        spdx_expression: "MIT"
-      description: "Check if argv has a specific flag"
-      homepage_url: "https://github.com/sindresorhus/has-flag#readme"
-      binary_artifact:
-        url: ""
-        hash:
-          value: ""
-          algorithm: ""
-      source_artifact:
-        url: "https://registry.npmjs.org/has-flag/-/has-flag-4.0.0.tgz"
-        hash:
-          value: "944771fd9c81c81265c4d6941860da06bb59479b"
-          algorithm: "SHA-1"
-      vcs:
-        type: "Git"
-        url: "https://github.com/sindresorhus/has-flag.git"
-        revision: "474aa39afca7333d356c022fc5be4d31732bbba3"
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "https://github.com/sindresorhus/has-flag.git"
-        revision: "474aa39afca7333d356c022fc5be4d31732bbba3"
-        path: ""
-    - id: "NPM::is-buffer:1.1.6"
-      purl: "pkg:npm/is-buffer@1.1.6"
-      authors:
-      - "Feross Aboukhadijeh"
-      declared_licenses:
-      - "MIT"
-      declared_licenses_processed:
-        spdx_expression: "MIT"
-      description: "Determine if an object is a Buffer"
-      homepage_url: "https://github.com/feross/is-buffer#readme"
-      binary_artifact:
-        url: ""
-        hash:
-          value: ""
-          algorithm: ""
-      source_artifact:
-        url: "https://registry.npmjs.org/is-buffer/-/is-buffer-1.1.6.tgz"
-        hash:
-          value: "efaa2ea9daa0d7ab2ea13a97b2b8ad51fefbe8be"
-          algorithm: "SHA-1"
-      vcs:
-        type: "Git"
-        url: "git://github.com/feross/is-buffer.git"
-        revision: "1e84e7ee31cf6b660b12500f3111a05501da387f"
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "https://github.com/feross/is-buffer.git"
-        revision: "1e84e7ee31cf6b660b12500f3111a05501da387f"
-        path: ""
-    - id: "NPM::is-even:1.0.0"
-      purl: "pkg:npm/is-even@1.0.0"
-      authors:
-      - "Jon Schlinkert"
-      declared_licenses:
-      - "MIT"
-      declared_licenses_processed:
-        spdx_expression: "MIT"
-      description: "Return true if the given number is even."
-      homepage_url: "https://github.com/jonschlinkert/is-even"
-      binary_artifact:
-        url: ""
-        hash:
-          value: ""
-          algorithm: ""
-      source_artifact:
-        url: "https://registry.npmjs.org/is-even/-/is-even-1.0.0.tgz"
-        hash:
-          value: "76b5055fbad8d294a86b6a949015e1c97b717c06"
-          algorithm: "SHA-1"
-      vcs:
-        type: "Git"
-        url: "https://github.com/jonschlinkert/is-even.git"
-        revision: "e87c060bb1c3f5353cd49c45afbe98d1a6c22b89"
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "https://github.com/jonschlinkert/is-even.git"
-        revision: "e87c060bb1c3f5353cd49c45afbe98d1a6c22b89"
-        path: ""
-    - id: "NPM::is-number:3.0.0"
-      purl: "pkg:npm/is-number@3.0.0"
-      authors:
-      - "Jon Schlinkert"
-      declared_licenses:
-      - "MIT"
-      declared_licenses_processed:
-        spdx_expression: "MIT"
-      description: "Returns true if the value is a number. comprehensive tests."
-      homepage_url: "https://github.com/jonschlinkert/is-number"
-      binary_artifact:
-        url: ""
-        hash:
-          value: ""
-          algorithm: ""
-      source_artifact:
-        url: "https://registry.npmjs.org/is-number/-/is-number-3.0.0.tgz"
-        hash:
-          value: "24fd6201a4782cf50561c810276afc7d12d71195"
-          algorithm: "SHA-1"
-      vcs:
-        type: "Git"
-        url: "https://github.com/jonschlinkert/is-number.git"
-        revision: "af885e2e890b9ef0875edd2b117305119ee5bdc5"
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "https://github.com/jonschlinkert/is-number.git"
-        revision: "af885e2e890b9ef0875edd2b117305119ee5bdc5"
-        path: ""
-    - id: "NPM::is-odd:0.1.2"
-      purl: "pkg:npm/is-odd@0.1.2"
-      authors:
-      - "Jon Schlinkert"
-      declared_licenses:
-      - "MIT"
-      declared_licenses_processed:
-        spdx_expression: "MIT"
-      description: "Returns true if the given number is odd."
-      homepage_url: "https://github.com/jonschlinkert/is-odd"
-      binary_artifact:
-        url: ""
-        hash:
-          value: ""
-          algorithm: ""
-      source_artifact:
-        url: "https://registry.npmjs.org/is-odd/-/is-odd-0.1.2.tgz"
-        hash:
-          value: "bc573b5ce371ef2aad6e6f49799b72bef13978a7"
-          algorithm: "SHA-1"
-      vcs:
-        type: "Git"
-        url: "https://github.com/jonschlinkert/is-odd.git"
-        revision: "59270f5a05b03bdeb0b06c95d922deb59ae31923"
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "https://github.com/jonschlinkert/is-odd.git"
-        revision: "59270f5a05b03bdeb0b06c95d922deb59ae31923"
-        path: ""
+              - id: "NPM::is-buffer:1.1.6"
+      - id: "NPM::sax:1.2.4"
+- id: "PNPM::pnpm-workspaces:1.0.1"
+  definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/package.json"
+  authors:
+  - "Marcel Bochtler"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces"
+  description: "PNPM workspaces test"
+  homepage_url: ""
+  scopes:
+  - name: "dependencies"
+    dependencies:
     - id: "NPM::json-stable-stringify:1.0.1"
-      purl: "pkg:npm/json-stable-stringify@1.0.1"
-      authors:
-      - "James Halliday"
-      declared_licenses:
-      - "MIT"
-      declared_licenses_processed:
-        spdx_expression: "MIT"
-      description: "deterministic JSON.stringify() with custom sorting to get deterministic\
-        \ hashes from stringified results"
-      homepage_url: "https://github.com/substack/json-stable-stringify"
-      binary_artifact:
-        url: ""
-        hash:
-          value: ""
-          algorithm: ""
-      source_artifact:
-        url: "https://registry.npmjs.org/json-stable-stringify/-/json-stable-stringify-1.0.1.tgz"
-        hash:
-          value: "9a759d39c5f2ff503fd5300646ed445f88c4f9af"
-          algorithm: "SHA-1"
-      vcs:
-        type: "Git"
-        url: "git://github.com/substack/json-stable-stringify.git"
-        revision: "4a3ac9cc006a91e64901f8ebe78d23bf9fc9fbd0"
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "https://github.com/substack/json-stable-stringify.git"
-        revision: "4a3ac9cc006a91e64901f8ebe78d23bf9fc9fbd0"
-        path: ""
-    - id: "NPM::jsonify:0.0.0"
-      purl: "pkg:npm/jsonify@0.0.0"
-      authors:
-      - "Douglas Crockford"
-      declared_licenses:
-      - "Public Domain"
-      declared_licenses_processed:
-        spdx_expression: "LicenseRef-scancode-public-domain-disclaimer"
-        mapped:
-          Public Domain: "LicenseRef-scancode-public-domain-disclaimer"
-      description: "JSON without touching any globals"
-      homepage_url: "https://github.com/ljharb/jsonify#readme"
-      binary_artifact:
-        url: ""
-        hash:
-          value: ""
-          algorithm: ""
-      source_artifact:
-        url: "https://registry.npmjs.org/jsonify/-/jsonify-0.0.0.tgz"
-        hash:
-          value: "2c74b6ee41d93ca51b7b5aaee8f503631d252a73"
-          algorithm: "SHA-1"
-      vcs:
-        type: "Git"
-        url: "http://github.com/substack/jsonify.git"
-        revision: ""
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "https://github.com/substack/jsonify.git"
-        revision: ""
-        path: ""
-    - id: "NPM::kind-of:3.2.2"
-      purl: "pkg:npm/kind-of@3.2.2"
-      authors:
-      - "Jon Schlinkert"
-      declared_licenses:
-      - "MIT"
-      declared_licenses_processed:
-        spdx_expression: "MIT"
-      description: "Get the native type of a value."
-      homepage_url: "https://github.com/jonschlinkert/kind-of"
-      binary_artifact:
-        url: ""
-        hash:
-          value: ""
-          algorithm: ""
-      source_artifact:
-        url: "https://registry.npmjs.org/kind-of/-/kind-of-3.2.2.tgz"
-        hash:
-          value: "31ea21a734bab9bbb0f32466d893aea51e4a3c64"
-          algorithm: "SHA-1"
-      vcs:
-        type: "Git"
-        url: "https://github.com/jonschlinkert/kind-of.git"
-        revision: "0ffe67cf12f5396047c1bacf04232b7deeb24063"
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "https://github.com/jonschlinkert/kind-of.git"
-        revision: "0ffe67cf12f5396047c1bacf04232b7deeb24063"
-        path: ""
-    - id: "NPM::long:5.2.0"
-      purl: "pkg:npm/long@5.2.0"
-      authors:
-      - "Daniel Wirtz"
-      declared_licenses:
-      - "Apache-2.0"
-      declared_licenses_processed:
-        spdx_expression: "Apache-2.0"
-      description: "A Long class for representing a 64-bit two's-complement integer\
-        \ value."
-      homepage_url: "https://github.com/dcodeIO/long.js#readme"
-      binary_artifact:
-        url: ""
-        hash:
-          value: ""
-          algorithm: ""
-      source_artifact:
-        url: "https://registry.npmjs.org/long/-/long-5.2.0.tgz"
-        hash:
-          value: "2696dadf4b4da2ce3f6f6b89186085d94d52fd61"
-          algorithm: "SHA-1"
-      vcs:
-        type: "Git"
-        url: "https://github.com/dcodeIO/long.js.git"
-        revision: "088e44e5e3343ef967698565678384fa474b003b"
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "https://github.com/dcodeIO/long.js.git"
-        revision: "088e44e5e3343ef967698565678384fa474b003b"
-        path: ""
-    - id: "NPM::require-uncached:2.0.0"
-      purl: "pkg:npm/require-uncached@2.0.0"
-      authors:
-      - "Sindre Sorhus"
-      declared_licenses:
-      - "MIT"
-      declared_licenses_processed:
-        spdx_expression: "MIT"
-      description: "Require a module bypassing the cache"
-      homepage_url: "https://github.com/sindresorhus/require-uncached#readme"
-      binary_artifact:
-        url: ""
-        hash:
-          value: ""
-          algorithm: ""
-      source_artifact:
-        url: "https://registry.npmjs.org/require-uncached/-/require-uncached-2.0.0.tgz"
-        hash:
-          value: "ad54186d77fecf07b63d82f8dd7aad448863b06d"
-          algorithm: "SHA-1"
-      vcs:
-        type: "Git"
-        url: "https://github.com/sindresorhus/require-uncached.git"
-        revision: "c56e296e0028357629ea27c61c591c67e818db5f"
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "https://github.com/sindresorhus/require-uncached.git"
-        revision: "c56e296e0028357629ea27c61c591c67e818db5f"
-        path: ""
-    - id: "NPM::resolve-from:1.0.1"
-      purl: "pkg:npm/resolve-from@1.0.1"
-      authors:
-      - "Sindre Sorhus"
-      declared_licenses:
-      - "MIT"
-      declared_licenses_processed:
-        spdx_expression: "MIT"
-      description: "Resolve the path of a module like require.resolve() but from a\
-        \ given path"
-      homepage_url: "https://github.com/sindresorhus/resolve-from"
-      binary_artifact:
-        url: ""
-        hash:
-          value: ""
-          algorithm: ""
-      source_artifact:
-        url: "https://registry.npmjs.org/resolve-from/-/resolve-from-1.0.1.tgz"
-        hash:
-          value: "26cbfe935d1aeeeabb29bc3fe5aeb01e93d44226"
-          algorithm: "SHA-1"
-      vcs:
-        type: "Git"
-        url: "https://github.com/sindresorhus/resolve-from.git"
-        revision: "bae2cf1d66c616ad2eb27e0fe85a10ff0f2dfc92"
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "https://github.com/sindresorhus/resolve-from.git"
-        revision: "bae2cf1d66c616ad2eb27e0fe85a10ff0f2dfc92"
-        path: ""
+      dependencies:
+      - id: "NPM::jsonify:0.0.0"
+    - id: "PNPM::pnpm-workspaces:1.0.1"
+      linkage: "PROJECT_DYNAMIC"
+      dependencies:
+      - id: "NPM::json-stable-stringify:1.0.1"
+        dependencies:
+        - id: "NPM::jsonify:0.0.0"
+      - id: "PNPM::pnpm-workspaces:1.0.1"
+        linkage: "PROJECT_DYNAMIC"
+- id: "PNPM::testing-pnpm-package-a:1.0.2"
+  definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/packages/package-a/package.json"
+  authors:
+  - "Marcel Bochtler"
+  declared_licenses:
+  - "ISC"
+  declared_licenses_processed:
+    spdx_expression: "ISC"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/packages/package-a"
+  homepage_url: ""
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "NPM::chalk:5.0.1"
+    - id: "NPM::is-even:1.0.0"
+      dependencies:
+      - id: "NPM::is-odd:0.1.2"
+        dependencies:
+        - id: "NPM::is-number:3.0.0"
+          dependencies:
+          - id: "NPM::kind-of:3.2.2"
+            dependencies:
+            - id: "NPM::is-buffer:1.1.6"
     - id: "NPM::sax:1.2.4"
-      purl: "pkg:npm/sax@1.2.4"
-      authors:
-      - "Isaac Z. Schlueter"
-      declared_licenses:
-      - "ISC"
-      declared_licenses_processed:
-        spdx_expression: "ISC"
-      description: "An evented streaming XML parser in JavaScript"
-      homepage_url: "https://github.com/isaacs/sax-js#readme"
-      binary_artifact:
-        url: ""
-        hash:
-          value: ""
-          algorithm: ""
-      source_artifact:
-        url: "https://registry.npmjs.org/sax/-/sax-1.2.4.tgz"
-        hash:
-          value: "2816234e2378bddc4e5354fab5caa895df7100d9"
-          algorithm: "SHA-1"
-      vcs:
-        type: "Git"
-        url: "git://github.com/isaacs/sax-js.git"
-        revision: "5aee2163d55cff24b817bbf550bac44841f9df45"
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "https://github.com/isaacs/sax-js.git"
-        revision: "5aee2163d55cff24b817bbf550bac44841f9df45"
-        path: ""
-    - id: "NPM::supports-color:7.2.0"
-      purl: "pkg:npm/supports-color@7.2.0"
-      authors:
-      - "Sindre Sorhus"
-      declared_licenses:
-      - "MIT"
-      declared_licenses_processed:
-        spdx_expression: "MIT"
-      description: "Detect whether a terminal supports color"
-      homepage_url: "https://github.com/chalk/supports-color#readme"
-      binary_artifact:
-        url: ""
-        hash:
-          value: ""
-          algorithm: ""
-      source_artifact:
-        url: "https://registry.npmjs.org/supports-color/-/supports-color-7.2.0.tgz"
-        hash:
-          value: "1b7dcdcb32b8138801b3e478ba6a51caa89648da"
-          algorithm: "SHA-1"
-      vcs:
-        type: "Git"
-        url: "https://github.com/chalk/supports-color.git"
-        revision: "c5edf46896d1fc1826cb1183a60d61eecb65d749"
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "https://github.com/chalk/supports-color.git"
-        revision: "c5edf46896d1fc1826cb1183a60d61eecb65d749"
-        path: ""
-scanner: null
-advisor: null
-evaluator: null
-resolved_configuration: {}
+  - name: "devDependencies"
+    dependencies:
+    - id: "NPM::require-uncached:2.0.0"
+      dependencies:
+      - id: "NPM::caller-path:0.1.0"
+        dependencies:
+        - id: "NPM::callsites:0.2.0"
+      - id: "NPM::resolve-from:1.0.1"
+- id: "PNPM::testing-pnpm-package-b:1.0.2"
+  definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/packages/package-b/package.json"
+  authors:
+  - "Marcel Bochtler"
+  declared_licenses:
+  - "ISC"
+  declared_licenses_processed:
+    spdx_expression: "ISC"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/packages/package-b"
+  homepage_url: ""
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "NPM::chalk:4.0.0"
+      dependencies:
+      - id: "NPM::ansi-styles:4.3.0"
+        dependencies:
+        - id: "NPM::color-convert:2.0.1"
+          dependencies:
+          - id: "NPM::color-name:1.1.4"
+      - id: "NPM::supports-color:7.2.0"
+        dependencies:
+        - id: "NPM::has-flag:4.0.0"
+- id: "PNPM::testing-pnpm-package-c:1.0.0"
+  definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/non-workspace/package-c/package.json"
+  authors:
+  - "Marcel Bochtler"
+  declared_licenses:
+  - "ISC"
+  declared_licenses_processed:
+    spdx_expression: "ISC"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm/workspaces/src/non-workspace/package-c"
+  homepage_url: ""
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "NPM::long:5.2.0"
+packages:
+- id: "NPM::ansi-styles:4.3.0"
+  purl: "pkg:npm/ansi-styles@4.3.0"
+  authors:
+  - "Sindre Sorhus"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "ANSI escape codes for styling strings in the terminal"
+  homepage_url: "https://github.com/chalk/ansi-styles#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/ansi-styles/-/ansi-styles-4.3.0.tgz"
+    hash:
+      value: "edd803628ae71c04c85ae7a0906edad34b648937"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/chalk/ansi-styles.git"
+    revision: "2d02d5bd070f733179007f0904eb5fb41090395a"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/chalk/ansi-styles.git"
+    revision: "2d02d5bd070f733179007f0904eb5fb41090395a"
+    path: ""
+- id: "NPM::caller-path:0.1.0"
+  purl: "pkg:npm/caller-path@0.1.0"
+  authors:
+  - "Sindre Sorhus"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Get the path of the caller module"
+  homepage_url: "https://github.com/sindresorhus/caller-path"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/caller-path/-/caller-path-0.1.0.tgz"
+    hash:
+      value: "94085ef63581ecd3daa92444a8fe94e82577751f"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/sindresorhus/caller-path.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/sindresorhus/caller-path.git"
+    revision: ""
+    path: ""
+- id: "NPM::callsites:0.2.0"
+  purl: "pkg:npm/callsites@0.2.0"
+  authors:
+  - "Sindre Sorhus"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Get callsites from the V8 stack trace API"
+  homepage_url: "https://github.com/sindresorhus/callsites"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/callsites/-/callsites-0.2.0.tgz"
+    hash:
+      value: "afab96262910a7f33c19a5775825c69f34e350ca"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/sindresorhus/callsites.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/sindresorhus/callsites.git"
+    revision: ""
+    path: ""
+- id: "NPM::chalk:4.0.0"
+  purl: "pkg:npm/chalk@4.0.0"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Terminal string styling done right"
+  homepage_url: "https://github.com/chalk/chalk#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/chalk/-/chalk-4.0.0.tgz"
+    hash:
+      value: "6e98081ed2d17faab615eb52ac66ec1fe6209e72"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/chalk/chalk.git"
+    revision: "31fa94208034cb7581a81b06045ff2cf51057b40"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/chalk/chalk.git"
+    revision: "31fa94208034cb7581a81b06045ff2cf51057b40"
+    path: ""
+- id: "NPM::chalk:5.0.1"
+  purl: "pkg:npm/chalk@5.0.1"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Terminal string styling done right"
+  homepage_url: "https://github.com/chalk/chalk#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/chalk/-/chalk-5.0.1.tgz"
+    hash:
+      value: "ca57d71e82bb534a296df63bbacc4a1c22b2a4b6"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/chalk/chalk.git"
+    revision: "bccde97f8a1bb125d4fe99e8fd355182101ff4f2"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/chalk/chalk.git"
+    revision: "bccde97f8a1bb125d4fe99e8fd355182101ff4f2"
+    path: ""
+- id: "NPM::color-convert:2.0.1"
+  purl: "pkg:npm/color-convert@2.0.1"
+  authors:
+  - "Heather Arthur"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Plain color conversion functions"
+  homepage_url: "https://github.com/Qix-/color-convert#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/color-convert/-/color-convert-2.0.1.tgz"
+    hash:
+      value: "72d3a68d598c9bdb3af2ad1e84f21d896abd4de3"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/Qix-/color-convert.git"
+    revision: "e1cb7846258e1d7aa25873814684d4fbbbca53ed"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/Qix-/color-convert.git"
+    revision: "e1cb7846258e1d7aa25873814684d4fbbbca53ed"
+    path: ""
+- id: "NPM::color-name:1.1.4"
+  purl: "pkg:npm/color-name@1.1.4"
+  authors:
+  - "DY"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A list of color names and its values"
+  homepage_url: "https://github.com/colorjs/color-name"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/color-name/-/color-name-1.1.4.tgz"
+    hash:
+      value: "c2a09a87acbde69543de6f63fa3995c826c536a2"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git@github.com:colorjs/color-name.git"
+    revision: "4536ce5944f56659a2dfb2198eaf81b5ad5f2ad9"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "ssh://git@github.com/colorjs/color-name.git"
+    revision: "4536ce5944f56659a2dfb2198eaf81b5ad5f2ad9"
+    path: ""
+- id: "NPM::has-flag:4.0.0"
+  purl: "pkg:npm/has-flag@4.0.0"
+  authors:
+  - "Sindre Sorhus"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Check if argv has a specific flag"
+  homepage_url: "https://github.com/sindresorhus/has-flag#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/has-flag/-/has-flag-4.0.0.tgz"
+    hash:
+      value: "944771fd9c81c81265c4d6941860da06bb59479b"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/sindresorhus/has-flag.git"
+    revision: "474aa39afca7333d356c022fc5be4d31732bbba3"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/sindresorhus/has-flag.git"
+    revision: "474aa39afca7333d356c022fc5be4d31732bbba3"
+    path: ""
+- id: "NPM::is-buffer:1.1.6"
+  purl: "pkg:npm/is-buffer@1.1.6"
+  authors:
+  - "Feross Aboukhadijeh"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Determine if an object is a Buffer"
+  homepage_url: "https://github.com/feross/is-buffer#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/is-buffer/-/is-buffer-1.1.6.tgz"
+    hash:
+      value: "efaa2ea9daa0d7ab2ea13a97b2b8ad51fefbe8be"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/feross/is-buffer.git"
+    revision: "1e84e7ee31cf6b660b12500f3111a05501da387f"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/feross/is-buffer.git"
+    revision: "1e84e7ee31cf6b660b12500f3111a05501da387f"
+    path: ""
+- id: "NPM::is-even:1.0.0"
+  purl: "pkg:npm/is-even@1.0.0"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Return true if the given number is even."
+  homepage_url: "https://github.com/jonschlinkert/is-even"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/is-even/-/is-even-1.0.0.tgz"
+    hash:
+      value: "76b5055fbad8d294a86b6a949015e1c97b717c06"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/is-even.git"
+    revision: "e87c060bb1c3f5353cd49c45afbe98d1a6c22b89"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/is-even.git"
+    revision: "e87c060bb1c3f5353cd49c45afbe98d1a6c22b89"
+    path: ""
+- id: "NPM::is-number:3.0.0"
+  purl: "pkg:npm/is-number@3.0.0"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Returns true if the value is a number. comprehensive tests."
+  homepage_url: "https://github.com/jonschlinkert/is-number"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/is-number/-/is-number-3.0.0.tgz"
+    hash:
+      value: "24fd6201a4782cf50561c810276afc7d12d71195"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/is-number.git"
+    revision: "af885e2e890b9ef0875edd2b117305119ee5bdc5"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/is-number.git"
+    revision: "af885e2e890b9ef0875edd2b117305119ee5bdc5"
+    path: ""
+- id: "NPM::is-odd:0.1.2"
+  purl: "pkg:npm/is-odd@0.1.2"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Returns true if the given number is odd."
+  homepage_url: "https://github.com/jonschlinkert/is-odd"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/is-odd/-/is-odd-0.1.2.tgz"
+    hash:
+      value: "bc573b5ce371ef2aad6e6f49799b72bef13978a7"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/is-odd.git"
+    revision: "59270f5a05b03bdeb0b06c95d922deb59ae31923"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/is-odd.git"
+    revision: "59270f5a05b03bdeb0b06c95d922deb59ae31923"
+    path: ""
+- id: "NPM::json-stable-stringify:1.0.1"
+  purl: "pkg:npm/json-stable-stringify@1.0.1"
+  authors:
+  - "James Halliday"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "deterministic JSON.stringify() with custom sorting to get deterministic\
+    \ hashes from stringified results"
+  homepage_url: "https://github.com/substack/json-stable-stringify"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/json-stable-stringify/-/json-stable-stringify-1.0.1.tgz"
+    hash:
+      value: "9a759d39c5f2ff503fd5300646ed445f88c4f9af"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/substack/json-stable-stringify.git"
+    revision: "4a3ac9cc006a91e64901f8ebe78d23bf9fc9fbd0"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/substack/json-stable-stringify.git"
+    revision: "4a3ac9cc006a91e64901f8ebe78d23bf9fc9fbd0"
+    path: ""
+- id: "NPM::jsonify:0.0.0"
+  purl: "pkg:npm/jsonify@0.0.0"
+  authors:
+  - "Douglas Crockford"
+  declared_licenses:
+  - "Public Domain"
+  declared_licenses_processed:
+    spdx_expression: "LicenseRef-scancode-public-domain-disclaimer"
+    mapped:
+      Public Domain: "LicenseRef-scancode-public-domain-disclaimer"
+  description: "JSON without touching any globals"
+  homepage_url: "https://github.com/ljharb/jsonify#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/jsonify/-/jsonify-0.0.0.tgz"
+    hash:
+      value: "2c74b6ee41d93ca51b7b5aaee8f503631d252a73"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "http://github.com/substack/jsonify.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/substack/jsonify.git"
+    revision: ""
+    path: ""
+- id: "NPM::kind-of:3.2.2"
+  purl: "pkg:npm/kind-of@3.2.2"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Get the native type of a value."
+  homepage_url: "https://github.com/jonschlinkert/kind-of"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/kind-of/-/kind-of-3.2.2.tgz"
+    hash:
+      value: "31ea21a734bab9bbb0f32466d893aea51e4a3c64"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/kind-of.git"
+    revision: "0ffe67cf12f5396047c1bacf04232b7deeb24063"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/kind-of.git"
+    revision: "0ffe67cf12f5396047c1bacf04232b7deeb24063"
+    path: ""
+- id: "NPM::long:5.2.0"
+  purl: "pkg:npm/long@5.2.0"
+  authors:
+  - "Daniel Wirtz"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: "A Long class for representing a 64-bit two's-complement integer value."
+  homepage_url: "https://github.com/dcodeIO/long.js#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/long/-/long-5.2.0.tgz"
+    hash:
+      value: "2696dadf4b4da2ce3f6f6b89186085d94d52fd61"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dcodeIO/long.js.git"
+    revision: "088e44e5e3343ef967698565678384fa474b003b"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dcodeIO/long.js.git"
+    revision: "088e44e5e3343ef967698565678384fa474b003b"
+    path: ""
+- id: "NPM::require-uncached:2.0.0"
+  purl: "pkg:npm/require-uncached@2.0.0"
+  authors:
+  - "Sindre Sorhus"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Require a module bypassing the cache"
+  homepage_url: "https://github.com/sindresorhus/require-uncached#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/require-uncached/-/require-uncached-2.0.0.tgz"
+    hash:
+      value: "ad54186d77fecf07b63d82f8dd7aad448863b06d"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/sindresorhus/require-uncached.git"
+    revision: "c56e296e0028357629ea27c61c591c67e818db5f"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/sindresorhus/require-uncached.git"
+    revision: "c56e296e0028357629ea27c61c591c67e818db5f"
+    path: ""
+- id: "NPM::resolve-from:1.0.1"
+  purl: "pkg:npm/resolve-from@1.0.1"
+  authors:
+  - "Sindre Sorhus"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Resolve the path of a module like require.resolve() but from a given\
+    \ path"
+  homepage_url: "https://github.com/sindresorhus/resolve-from"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/resolve-from/-/resolve-from-1.0.1.tgz"
+    hash:
+      value: "26cbfe935d1aeeeabb29bc3fe5aeb01e93d44226"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/sindresorhus/resolve-from.git"
+    revision: "bae2cf1d66c616ad2eb27e0fe85a10ff0f2dfc92"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/sindresorhus/resolve-from.git"
+    revision: "bae2cf1d66c616ad2eb27e0fe85a10ff0f2dfc92"
+    path: ""
+- id: "NPM::sax:1.2.4"
+  purl: "pkg:npm/sax@1.2.4"
+  authors:
+  - "Isaac Z. Schlueter"
+  declared_licenses:
+  - "ISC"
+  declared_licenses_processed:
+    spdx_expression: "ISC"
+  description: "An evented streaming XML parser in JavaScript"
+  homepage_url: "https://github.com/isaacs/sax-js#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/sax/-/sax-1.2.4.tgz"
+    hash:
+      value: "2816234e2378bddc4e5354fab5caa895df7100d9"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/isaacs/sax-js.git"
+    revision: "5aee2163d55cff24b817bbf550bac44841f9df45"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/isaacs/sax-js.git"
+    revision: "5aee2163d55cff24b817bbf550bac44841f9df45"
+    path: ""
+- id: "NPM::supports-color:7.2.0"
+  purl: "pkg:npm/supports-color@7.2.0"
+  authors:
+  - "Sindre Sorhus"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Detect whether a terminal supports color"
+  homepage_url: "https://github.com/chalk/supports-color#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/supports-color/-/supports-color-7.2.0.tgz"
+    hash:
+      value: "1b7dcdcb32b8138801b3e478ba6a51caa89648da"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/chalk/supports-color.git"
+    revision: "c5edf46896d1fc1826cb1183a60d61eecb65d749"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/chalk/supports-color.git"
+    revision: "c5edf46896d1fc1826cb1183a60d61eecb65d749"
+    path: ""
