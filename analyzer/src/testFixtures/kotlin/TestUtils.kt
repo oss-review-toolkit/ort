@@ -163,5 +163,7 @@ fun analyze(
     return analyzer.analyze(managedFiles).withResolvedScopes()
 }
 
+fun OrtResult.getAnalyzerResult(): AnalyzerResult = checkNotNull(analyzer).result
+
 fun create(managerName: String, pluginConfig: PluginConfig) =
     PackageManagerFactory.ALL.getValue(managerName).create(pluginConfig)

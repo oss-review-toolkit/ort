@@ -24,6 +24,7 @@ import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.analyzer.analyze
 import org.ossreviewtoolkit.analyzer.collateMultipleProjects
+import org.ossreviewtoolkit.analyzer.getAnalyzerResult
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.analyzer.withResolvedScopes
 import org.ossreviewtoolkit.model.toYaml
@@ -66,7 +67,7 @@ class PnpmFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/pnpm/workspaces/packages.json")
         val expectedResultFile = getAssetFile("projects/synthetic/pnpm/workspaces-expected-output.yml")
 
-        val result = analyze(definitionFile.parentFile, packageManagers = setOf(PnpmFactory()))
+        val result = analyze(definitionFile.parentFile, packageManagers = setOf(PnpmFactory())).getAnalyzerResult()
 
         patchActualResult(result.toYaml(), patchStartAndEndTime = true) should
             matchExpectedResult(expectedResultFile, definitionFile)
