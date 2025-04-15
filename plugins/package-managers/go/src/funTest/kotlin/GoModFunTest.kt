@@ -24,9 +24,9 @@ import io.kotest.matchers.should
 
 import java.io.File
 
-import org.ossreviewtoolkit.analyzer.collateMultipleProjects
+import org.ossreviewtoolkit.analyzer.analyze
+import org.ossreviewtoolkit.analyzer.getAnalyzerResult
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
-import org.ossreviewtoolkit.analyzer.withResolvedScopes
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
@@ -99,14 +99,15 @@ class GoModFunTest : StringSpec({
     }
 
     "Project dependencies with a (relative) local module dependency are detected correctly" {
-        val definitionFileApp = testDir.resolve("submodules/app/go.mod")
-        val definitionFileUtils = testDir.resolve("submodules/utils/go.mod")
+        val projectDir = testDir.resolve("submodules")
+        val definitionFileApp = projectDir.resolve("app/go.mod")
+        val definitionFileUtils = projectDir.resolve("utils/go.mod")
         val expectedResultFile = testDir.resolve("submodules-expected-output.yml")
         val expectedDefinitionFilePathUtils = getDefinitionFilePath(definitionFileUtils)
 
-        val result = GoModFactory.create().collateMultipleProjects(definitionFileApp, definitionFileUtils)
+        val result = analyze(projectDir, packageManagers = setOf(GoModFactory())).getAnalyzerResult()
 
-        result.withResolvedScopes().toYaml() should matchExpectedResult(
+        result.toYaml() should matchExpectedResult(
             expectedResultFile,
             definitionFileApp,
             custom = mapOf(
