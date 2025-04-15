@@ -38,6 +38,7 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.plugins.api.PluginConfig
@@ -149,16 +150,28 @@ fun ProjectAnalyzerResult.withInvariantIssues() =
 fun analyze(
     projectDir: File,
     allowDynamicVersions: Boolean = false,
+    excludedScopes: Collection<String> = emptySet(),
+    skipExcluded: Boolean = false,
     packageManagers: Collection<PackageManagerFactory> = PackageManagerFactory.ALL.values,
     packageManagerConfiguration: Map<String, PackageManagerConfiguration>? = null
 ): OrtResult {
     val config = AnalyzerConfiguration(
         allowDynamicVersions,
         enabledPackageManagers = packageManagers.map { it.descriptor.id },
-        packageManagers = packageManagerConfiguration
+        packageManagers = packageManagerConfiguration,
+        skipExcluded = skipExcluded
     )
+
+    val repositoryConfig = RepositoryConfiguration(
+        excludes = Excludes(
+            scopes = excludedScopes.map {
+                ScopeExclude(it, ScopeExcludeReason.TEST_DEPENDENCY_OF)
+            }
+        )
+    )
+
     val analyzer = Analyzer(config)
-    val managedFiles = analyzer.findManagedFiles(projectDir, packageManagers)
+    val managedFiles = analyzer.findManagedFiles(projectDir, packageManagers, repositoryConfig)
 
     return analyzer.analyze(managedFiles).withResolvedScopes()
 }
