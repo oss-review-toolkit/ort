@@ -161,7 +161,7 @@ internal class DownloadResultsFromPostgresCommand : OrtHelperCommand(
 
 private class OrtResultStorage(private val storageDir: File) {
     fun getIds(): Set<Int> {
-        val ids = storageDir.listFiles { file, _ -> file.isDirectory }.mapNotNull { file -> file.name.toIntOrNull() }
+        val ids = storageDir.walk().maxDepth(1).filter { it.isDirectory }.mapNotNull { file -> file.name.toIntOrNull() }
 
         return ids.filterTo(mutableSetOf()) { hasFile(it) }
     }
