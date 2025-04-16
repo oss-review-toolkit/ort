@@ -28,7 +28,6 @@ import java.nio.file.Files
 import java.nio.file.LinkOption
 import java.nio.file.attribute.BasicFileAttributes
 import java.util.EnumSet
-import java.util.Locale
 import java.util.SortedMap
 
 import kotlin.io.path.deleteRecursively
@@ -342,7 +341,7 @@ private val nonSpaceRegex = Regex("\\S+")
 /**
  * Return this string lower-cased except for the first character which is upper-cased.
  */
-fun String.titlecase() = lowercase().uppercaseFirstChar()
+fun String.titlecase() = lowercase().replaceFirstChar { it.titlecase() }
 
 /**
  * Return a [Result] that indicates whether the conversion of this [String] to a [URI] was successful.
@@ -361,12 +360,6 @@ fun <R> String.toUri(transform: (URI) -> R) = toUri().mapCatching(transform)
  */
 fun String.unquote(trimWhitespace: Boolean = true) =
     trim { (trimWhitespace && it.isWhitespace()) || it == '\'' || it == '"' }
-
-/**
- * Return this string with the first character upper-cased.
- */
-fun String.uppercaseFirstChar() =
-    replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
 
 /**
  * If this string starts with [prefix], return the string without the prefix, otherwise return [missingPrefixValue].

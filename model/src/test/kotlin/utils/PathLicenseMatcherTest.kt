@@ -25,7 +25,7 @@ import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.utils.common.uppercaseFirstChar
+import org.ossreviewtoolkit.utils.common.titlecase
 
 private val COMMONLY_USED_LICENSE_FILE_NAMES = listOf(
     "copying",
@@ -106,7 +106,7 @@ class PathLicenseMatcherTest : WordSpec({
         }
 
         "match commonly used license file paths in capital-case" {
-            COMMONLY_USED_LICENSE_FILE_NAMES.map { it.uppercaseFirstChar() }.forAll {
+            COMMONLY_USED_LICENSE_FILE_NAMES.map { it.titlecase() }.forAll {
                 PathLicenseMatcher().getApplicableLicenseFindingsForDirectories(
                     licenseFindings = licenseFindings(it),
                     directories = listOf("")
