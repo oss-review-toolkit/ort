@@ -314,8 +314,8 @@ class Conan(
     internal fun parseAuthors(pkgInfo: PackageInfo): Set<String> =
         parseAuthorString(pkgInfo.author).mapNotNullTo(mutableSetOf()) { it.name }
 
-    internal fun readConanData(id: Identifier, conanStorageDir: File, recipeFolder: String? = null): ConanData {
-        val conanDataFile = handler.getConanDataFile(id.name, id.version, conanStorageDir, recipeFolder)
+    internal fun readConanData(id: Identifier, user: String, channel: String, conanStorageDir: File, recipeFolder: String? = null): ConanData {
+        val conanDataFile = handler.getConanDataFile(id.name, id.version, user, channel, conanStorageDir, recipeFolder)
             ?: return ConanData.EMPTY
 
         if (!conanDataFile.isFile) {

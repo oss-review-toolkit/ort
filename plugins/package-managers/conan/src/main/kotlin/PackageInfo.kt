@@ -72,7 +72,9 @@ internal data class PackageInfoV1(
     val homepage: String? = null,
     val displayName: String,
     val requires: List<String> = emptyList(),
-    val buildRequires: List<String> = emptyList()
+    val buildRequires: List<String> = emptyList(),
+    val user: String? = "_",
+    val channel: String? = "_",
 ) : PackageInfo
 
 @Serializable
@@ -88,6 +90,8 @@ internal data class PackageInfoV2(
     val buildRequires: List<String> = emptyList(),
     val recipeFolder: String? = null,
     val description: String? = null,
+    val user: String? = "_",
+    val channel: String? = "_",
     // The next two properties can be null for the first package, i.e. the conanfile itself. To simplify the processing
     // by the package manager, they are exposed as non-nullable properties.
     val name: String,
@@ -119,6 +123,8 @@ private data class PackageInfoV2Raw(
                 recipeFolder = it.recipeFolder,
                 description = it.description,
                 name = it.name.orEmpty(),
+                user = it.user,
+                channel = it.channel,
                 version = it.version.orEmpty(),
                 binaryRemote = it.binaryRemote,
                 packageType = it.packageType
@@ -146,6 +152,8 @@ internal data class PackageV2(
     val description: String?,
     val name: String?,
     val version: String?,
+    val user: String?,
+    val channel: String?,
     val dependencies: Map<String, DependencyReference>,
     val binaryRemote: String? = null,
     val packageType: PackageType

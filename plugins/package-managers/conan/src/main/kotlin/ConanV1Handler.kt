@@ -87,13 +87,13 @@ internal class ConanV1Handler(private val conan: Conan) : ConanVersionHandler {
         return HandlerResults(packages, projectPackage, dependenciesScope, devDependenciesScope)
     }
 
-    override fun getConanDataFile(name: String, version: String, conanStorageDir: File, recipeFolder: String?) =
-        conanStorageDir.resolve("$name/$version/_/_/export/conandata.yml")
+    override fun getConanDataFile(name: String, version: String, user: String, channel: String, conanStorageDir: File, recipeFolder: String?) =
+        conanStorageDir.resolve("$name/$version/$user/$channel/export/conandata.yml")
 
     override fun listRemotes(): List<Pair<String, String>> {
         val remoteList = runCatching {
             conan.command.run("remote", "list", "--raw").requireSuccess()
-        }.getOrElse {
+        }.getOrElse {   
             logger.warn { "Failed to list remotes." }
             return emptyList()
         }
@@ -156,7 +156,7 @@ internal class ConanV1Handler(private val conan: Conan) : ConanVersionHandler {
     private fun parsePackageId(pkgInfo: PackageInfoV1, workingDir: File) =
         Identifier(
             type = "Conan",
-            namespace = "",
+            namespace = "", 
             name = conan.inspectField(pkgInfo.displayName, workingDir, "name").orEmpty(),
             version = conan.inspectField(pkgInfo.displayName, workingDir, "version").orEmpty()
         )

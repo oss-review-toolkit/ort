@@ -106,7 +106,7 @@ internal class ConanV2Handler(private val conan: Conan) : ConanVersionHandler {
         return HandlerResults(packages, projectPackage, dependenciesScope, devDependenciesScope)
     }
 
-    override fun getConanDataFile(name: String, version: String, conanStorageDir: File, recipeFolder: String?): File? =
+    override fun getConanDataFile(name: String, version: String, user: String, channel: String, conanStorageDir: File, recipeFolder: String?): File? =
         recipeFolder?.let {
             File(it).resolve("conandata.yml")
         }.alsoIfNull {

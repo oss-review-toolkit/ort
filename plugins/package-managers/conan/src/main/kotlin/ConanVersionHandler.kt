@@ -50,7 +50,7 @@ internal interface ConanVersionHandler {
      * Get the Conan data file for a package with the given [name] and [version] from the [conanStorageDir]. This file
      * can also be resolved against a specific [recipeFolder] in case of Conan 2.
      */
-    fun getConanDataFile(name: String, version: String, conanStorageDir: File, recipeFolder: String? = null): File?
+    fun getConanDataFile(name: String, version: String, user: String = "_", channel: String = "_", conanStorageDir: File, recipeFolder: String? = null): File?
 
     /**
      * List configured remotes.
