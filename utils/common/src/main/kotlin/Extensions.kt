@@ -21,9 +21,6 @@
 
 package org.ossreviewtoolkit.utils.common
 
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.util.ClassUtil
-
 import java.io.File
 import java.io.IOException
 import java.net.URI
@@ -209,29 +206,6 @@ inline val Int.gibibytes get(): Long = mebibytes * 1024L
  * Return the next value in the iteration, or null if there is no next value.
  */
 fun <T> Iterator<T>.nextOrNull() = if (hasNext()) next() else null
-
-/*
- * Convenience function for [JsonNode] that returns an empty iterator if [JsonNode.fieldNames] is called on a null
- * object, or the field names otherwise.
- */
-fun JsonNode?.fieldNamesOrEmpty(): Iterator<String> = this?.fieldNames() ?: ClassUtil.emptyIterator()
-
-/*
- * Convenience function for [JsonNode] that returns an empty iterator if [JsonNode.fields] is called on a null object,
- * or the fields otherwise.
- */
-fun JsonNode?.fieldsOrEmpty(): Iterator<Map.Entry<String, JsonNode>> = this?.fields() ?: ClassUtil.emptyIterator()
-
-/**
- * Return true if and only if this [JsonNode]
- */
-fun JsonNode.isNotEmpty(): Boolean = !isEmpty
-
-/**
- * Convenience function for [JsonNode] that returns an empty string if [JsonNode.textValue] is called on a null object,
- * or the text value is null.
- */
-fun JsonNode?.textValueOrEmpty(): String = this?.textValue().orEmpty()
 
 /**
  * Merge two maps by iterating over the combined key set of both maps and calling [operation] with any conflicting
