@@ -56,8 +56,8 @@ internal class PubCacheReader(flutterHome: File? = null) {
 
         // Search the directory tree for the file.
         return artifactRootDir.walk()
-            .onEnter { !it.isSymbolicLink() }
-            .find { !it.isSymbolicLink() && it.isFile && it.name == filename }
+            .onEnter { !it.isSymbolicLink }
+            .find { !it.isSymbolicLink && it.isFile && it.name == filename }
     }
 
     fun findProjectRoot(packageInfo: PackageInfo, workingDir: File): File? {

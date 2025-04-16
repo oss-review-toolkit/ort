@@ -222,7 +222,7 @@ private fun getNonDeduplicatedModuleInfosForId(moduleInfos: Collection<YarnListN
 private fun getModuleDirs(moduleDir: File): Set<File> =
     moduleDir.resolve("node_modules").walk().filter {
         it.isFile && it.name == NodePackageManagerType.DEFINITION_FILE
-    }.mapTo(mutableSetOf()) { it.parentFile.realFile().absoluteFile }
+    }.mapTo(mutableSetOf()) { it.parentFile.realFile.absoluteFile }
 
 private fun PackageJson.getDependenciesForScope(scope: Scope): Set<String> =
     when (scope) {

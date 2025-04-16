@@ -41,7 +41,7 @@ internal class PnpmDependencyHandler(
     private val workspaceModuleDirs = mutableSetOf<File>()
     private val packageJsonCache = mutableMapOf<File, PackageJson>()
 
-    private fun Dependency.isProject(): Boolean = isInstalled && workingDir.realFile() in workspaceModuleDirs
+    private fun Dependency.isProject(): Boolean = isInstalled && workingDir.realFile in workspaceModuleDirs
 
     fun setWorkspaceModuleDirs(dirs: Collection<File>) {
         workspaceModuleDirs.apply {
@@ -75,7 +75,7 @@ internal class PnpmDependencyHandler(
         }
 
     private fun readPackageJson(packageJsonFile: File): PackageJson =
-        packageJsonCache.getOrPut(packageJsonFile.realFile()) { parsePackageJson(packageJsonFile) }
+        packageJsonCache.getOrPut(packageJsonFile.realFile) { parsePackageJson(packageJsonFile) }
 }
 
 private val Dependency.workingDir: File get() = File(path)

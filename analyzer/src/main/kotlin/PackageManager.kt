@@ -110,7 +110,7 @@ abstract class PackageManager(val projectType: String) : Plugin {
                         false
                     }
 
-                    dir.isSymbolicLink() -> {
+                    dir.isSymbolicLink -> {
                         logger.info { "Not following symbolic link to directory '$dir'." }
                         false
                     }
