@@ -51,7 +51,6 @@ import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.isValidUri
-import org.ossreviewtoolkit.utils.common.joinNonBlank
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.common.titlecase
 import org.ossreviewtoolkit.utils.ort.Environment
@@ -742,6 +741,9 @@ private fun ResolvedLicenseLocation.permalink(id: Identifier): String? {
 private val PathExclude.description: String get() = joinNonBlank(reason.toString(), comment)
 
 private val ScopeExclude.description: String get() = joinNonBlank(reason.toString(), comment)
+
+private fun joinNonBlank(vararg strings: String, separator: String = " - ") =
+    strings.filter { it.isNotBlank() }.joinToString(separator)
 
 private fun IssueTable.title(): String =
     "${type.name.titlecase()} Issue Summary ($errorCount errors, $warningCount warnings, $hintCount hints to resolve)"

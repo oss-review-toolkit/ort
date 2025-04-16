@@ -108,12 +108,6 @@ fun getCommonParentFile(files: Collection<File>): File =
     }
 
 /**
- * Return the concatenated [strings] separated by [separator] whereas blank strings are omitted.
- */
-fun joinNonBlank(vararg strings: String, separator: String = " - ") =
-    strings.filter { it.isNotBlank() }.joinToString(separator)
-
-/**
  * Temporarily set the specified system [properties] while executing [block]. Afterwards, previously set properties have
  * their original values restored and previously unset properties are cleared.
  */
