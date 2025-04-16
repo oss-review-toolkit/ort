@@ -4,19 +4,39 @@
 
 "@here/harp-fetch@^0.11.0":
   version "0.11.0"
-  resolved "https://registry.npmjs.org/@here/harp-fetch/-/harp-fetch-0.11.0.tgz"
+  resolved "https://registry.yarnpkg.com/@here/harp-fetch/-/harp-fetch-0.11.0.tgz#8d0e0bdb523c7c4f306f676aac65aa6bcb95da1c"
   integrity sha512-Yp+3VQdDR9r66MRJ4zSSu6XemnkAz9ahz2e+RRWhdoM4OHih8zvmVbSH1H4WDCW0qkZM2W8z8c66jKPCJoHAPw==
   dependencies:
     node-fetch "^2.2.0"
 
 "@here/harp-fetch@^0.3.6":
   version "0.3.6"
-  resolved "https://registry.npmjs.org/@here/harp-fetch/-/harp-fetch-0.3.6.tgz"
+  resolved "https://registry.yarnpkg.com/@here/harp-fetch/-/harp-fetch-0.3.6.tgz#703fc8b034f6e0d621cc2c3ded96c6f904723742"
   integrity sha512-KtpnHQXymwfwvYWVqXh5ZV16SXLW7n8hQb1wZYDbcm+5OX/LzYWmwEzEKzxluaNxbo2vt/hM/jeqDlSEGMDelA==
   dependencies:
     node-fetch "^2.2.0"
 
 node-fetch@^2.2.0:
-  version "2.6.0"
-  resolved "https://registry.npmjs.org/node-fetch/-/node-fetch-2.6.0.tgz"
-  integrity sha512-8dG4H5ujfvFiqDmVu9fQ5bOHUC15JMjMY/Zumv26oOvvVJjM67KF8koCWIabKQ1GJIa9r2mMZscBq/TbdOcmNA==
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.7.0.tgz#d0f0fa6e3e2dc1d27efcd8ad99d550bda94d187d"
+  integrity sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==
+  dependencies:
+    whatwg-url "^5.0.0"
+
+tr46@~0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/tr46/-/tr46-0.0.3.tgz#8184fd347dac9cdc185992f3a6622e14b9d9ab6a"
+  integrity sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==
+
+webidl-conversions@^3.0.0:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-3.0.1.tgz#24534275e2a7bc6be7bc86611cc16ae0a5654871"
+  integrity sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==
+
+whatwg-url@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/whatwg-url/-/whatwg-url-5.0.0.tgz#966454e8765462e37644d3626f6742ce8b70965d"
+  integrity sha512-saE57nupxk6v3HY35+jzBwYa0rKSy0XR8JSxZPwgLr7ys0IBzhGviA1/TUGJLmSVqs8pb9AnvICXEuOHLprYTw==
+  dependencies:
+    tr46 "~0.0.3"
+    webidl-conversions "^3.0.0"
