@@ -82,15 +82,9 @@ fun getCommonParentFile(files: Collection<File>): File =
 val File.formatSizeInMib: String get() = "${length().bytesToMib().format()} MiB"
 
 /**
- * If the SHELL environment variable is set, return the absolute file with a leading "~" expanded to the current user's
- * home directory, otherwise return just the absolute file.
- */
-fun File.expandTilde(): File = File(path.expandTilde()).absoluteFile
-
-/**
  * Return true if and only if this file is a symbolic link.
  */
-fun File.isSymbolicLink(): Boolean =
+val File.isSymbolicLink: Boolean get() =
     runCatching {
         // Note that we cannot use exists() to check beforehand whether a symbolic link exists to avoid a
         // NoSuchFileException to be thrown as it returns "false" e.g. for dangling Windows junctions.
@@ -103,7 +97,13 @@ fun File.isSymbolicLink(): Boolean =
  * Resolve the file to the real underlying file. In contrast to Java's [File.getCanonicalFile], this also works to
  * resolve symbolic links on Windows.
  */
-fun File.realFile(): File = toPath().toRealPath().toFile()
+val File.realFile: File get() = toPath().toRealPath().toFile()
+
+/**
+ * If the SHELL environment variable is set, return the absolute file with a leading "~" expanded to the current user's
+ * home directory, otherwise return just the absolute file.
+ */
+fun File.expandTilde(): File = File(path.expandTilde()).absoluteFile
 
 /**
  * Delete a directory recursively without following symbolic links (Unix) or junctions (Windows). If a [baseDirectory]
@@ -114,7 +114,7 @@ fun File.safeDeleteRecursively(baseDirectory: File? = null) {
     if (Os.isWindows) {
         // Note that Kotlin's `Path.deleteRecursively()` extension function cannot delete files on Windows that have the
         // read-only attribute set, so fall back to manually making them writable.
-        walkBottomUp().onEnter { !it.isSymbolicLink() }.forEach { it.setWritable(true) }
+        walkBottomUp().onEnter { !it.isSymbolicLink }.forEach { it.setWritable(true) }
     }
 
     // Note that Kotlin's `File.deleteRecursively()` extension function cannot delete files on Linux with unmappable

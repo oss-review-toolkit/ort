@@ -125,8 +125,8 @@ class GitRepo(
                 override fun getInfo(): VcsInfo {
                     val manifestWrapper = getRootPath().resolve(".repo/manifest.xml")
 
-                    val manifestFile = if (manifestWrapper.isSymbolicLink()) {
-                        manifestWrapper.realFile()
+                    val manifestFile = if (manifestWrapper.isSymbolicLink) {
+                        manifestWrapper.realFile
                     } else {
                         // As of repo 2.4, the active manifest is a real file with an include directive instead of a
                         // symbolic link, see https://gerrit-review.googlesource.com/c/git-repo/+/256313.

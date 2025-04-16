@@ -55,8 +55,8 @@ internal typealias RepositoryLicenseFindingCurations = Map<String, List<LicenseF
 internal fun findFilesRecursive(directory: File): List<String> {
     require(directory.isDirectory)
     return directory.walk()
-        .onEnter { !it.isSymbolicLink() }
-        .filter { !it.isSymbolicLink() && it.isFile }
+        .onEnter { !it.isSymbolicLink }
+        .filter { !it.isSymbolicLink && it.isFile }
         .mapTo(mutableListOf()) { it.relativeTo(directory).path }
 }
 

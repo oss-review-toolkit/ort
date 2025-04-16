@@ -44,7 +44,7 @@ internal class NpmDependencyHandler(
         val type = if (dependency.isProject) projectType else "NPM"
         val (namespace, name) = splitNamespaceAndName(dependency.name.orEmpty())
         val version = if (dependency.isProject) {
-            val packageJson = packageJsonCache.getOrPut(dependency.packageJsonFile.realFile()) {
+            val packageJson = packageJsonCache.getOrPut(dependency.packageJsonFile.realFile) {
                 parsePackageJson(dependency.packageJsonFile)
             }
 

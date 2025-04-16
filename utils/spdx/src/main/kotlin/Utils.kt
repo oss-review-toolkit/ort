@@ -44,7 +44,7 @@ internal val yamlMapper = YAMLMapper().registerKotlinModule()
  * ScanCode binary.
  */
 val scanCodeLicenseTextDir by lazy {
-    val scanCodeExeDir = Os.getPathFromEnvironment("scancode")?.realFile()?.parentFile
+    val scanCodeExeDir = Os.getPathFromEnvironment("scancode")?.realFile?.parentFile
 
     val pythonBinDir = listOf("bin", "Scripts")
     val scanCodeBaseDir = scanCodeExeDir?.takeUnless { it.name in pythonBinDir } ?: scanCodeExeDir?.parentFile
@@ -91,8 +91,8 @@ fun calculatePackageVerificationCode(files: Sequence<File>, excludes: Sequence<S
 @JvmName("calculatePackageVerificationCodeForDirectory")
 fun calculatePackageVerificationCode(directory: File): String {
     val allFiles = directory.walk()
-        .onEnter { !it.isSymbolicLink() && it.name !in VCS_DIRECTORIES }
-        .filter { !it.isSymbolicLink() && it.isFile }
+        .onEnter { !it.isSymbolicLink && it.name !in VCS_DIRECTORIES }
+        .filter { !it.isSymbolicLink && it.isFile }
 
     // Filter twice instead of using "partition" as the latter does not return sequences.
     val spdxFiles = allFiles.filter { it.extension == "spdx" }

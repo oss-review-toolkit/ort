@@ -111,7 +111,7 @@ class ExtensionsTest : WordSpec({
         }
     }
 
-    "File.isSymbolicLink()" should {
+    "File.isSymbolicLink" should {
         val tempDir = tempdir()
         val file = tempDir.resolve("file").apply { createNewFile() }
         val directory = tempDir.resolve("directory").safeMkdirs()
@@ -119,18 +119,18 @@ class ExtensionsTest : WordSpec({
         "return 'false' for non-existent files" {
             tempDir.resolve("non-existent").let { nonExistent ->
                 nonExistent shouldNot exist()
-                nonExistent.isSymbolicLink() shouldBe false
+                nonExistent.isSymbolicLink shouldBe false
             }
         }
 
         "return 'false' for files" {
             file shouldBe aFile()
-            file.isSymbolicLink() shouldBe false
+            file.isSymbolicLink shouldBe false
         }
 
         "return 'false' for directories" {
             directory.isDirectory shouldBe true
-            directory.isSymbolicLink() shouldBe false
+            directory.isSymbolicLink shouldBe false
         }
 
         "return 'false' for hard links on Windows".config(enabled = Os.isWindows) {
@@ -138,7 +138,7 @@ class ExtensionsTest : WordSpec({
 
             tempDir.resolve("hardlink").let { hardlink ->
                 hardlink shouldBe aFile()
-                hardlink.isSymbolicLink() shouldBe false
+                hardlink.isSymbolicLink shouldBe false
             }
         }
 
@@ -147,7 +147,7 @@ class ExtensionsTest : WordSpec({
 
             tempDir.resolve("junction").let { junction ->
                 junction.isDirectory shouldBe true
-                junction.isSymbolicLink() shouldBe true
+                junction.isSymbolicLink shouldBe true
             }
         }
 
@@ -156,7 +156,7 @@ class ExtensionsTest : WordSpec({
 
             tempDir.resolve("symlink-to-file").let { symlinkToFile ->
                 symlinkToFile shouldBe aFile()
-                symlinkToFile.isSymbolicLink() shouldBe true
+                symlinkToFile.isSymbolicLink shouldBe true
             }
         }
 
@@ -165,7 +165,7 @@ class ExtensionsTest : WordSpec({
 
             tempDir.resolve("symlink-to-directory").let { symlinkToDirectory ->
                 symlinkToDirectory.isDirectory shouldBe true
-                symlinkToDirectory.isSymbolicLink() shouldBe true
+                symlinkToDirectory.isSymbolicLink shouldBe true
             }
         }
     }

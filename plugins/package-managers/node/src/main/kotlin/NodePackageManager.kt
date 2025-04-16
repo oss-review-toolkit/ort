@@ -60,7 +60,7 @@ abstract class NodePackageManager(val managerType: NodePackageManagerType) : Pac
             .mapNotNullTo(mutableSetOf()) { it.name }
         val description = packageJson.description.orEmpty()
         val homepageUrl = packageJson.homepage.orEmpty()
-        val projectDir = packageJsonFile.parentFile.realFile()
+        val projectDir = packageJsonFile.parentFile.realFile
         val vcsFromPackage = parseVcsInfo(packageJson)
 
         return Project(
@@ -70,7 +70,7 @@ abstract class NodePackageManager(val managerType: NodePackageManagerType) : Pac
                 name = projectName,
                 version = version
             ),
-            definitionFilePath = VersionControlSystem.getPathInfo(packageJsonFile.realFile()).path,
+            definitionFilePath = VersionControlSystem.getPathInfo(packageJsonFile.realFile).path,
             authors = authors,
             declaredLicenses = declaredLicenses,
             vcs = vcsFromPackage,
