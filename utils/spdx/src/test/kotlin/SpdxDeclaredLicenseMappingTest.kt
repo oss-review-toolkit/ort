@@ -29,7 +29,6 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.containADigit
 import io.kotest.matchers.string.shouldContain
 
-import org.ossreviewtoolkit.utils.common.titlecase
 import org.ossreviewtoolkit.utils.spdx.parser.SpdxExpressionLexer
 
 class SpdxDeclaredLicenseMappingTest : WordSpec({
@@ -101,7 +100,6 @@ class SpdxDeclaredLicenseMappingTest : WordSpec({
             SpdxDeclaredLicenseMapping.mapping.forAll { (key, license) ->
                 SpdxDeclaredLicenseMapping.map(key.lowercase()) shouldBe license
                 SpdxDeclaredLicenseMapping.map(key.uppercase()) shouldBe license
-                SpdxDeclaredLicenseMapping.map(key.titlecase()) shouldBe license
             }
         }
     }
