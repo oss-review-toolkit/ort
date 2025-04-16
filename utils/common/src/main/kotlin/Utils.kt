@@ -50,12 +50,6 @@ fun calculateHash(file: File, digest: MessageDigest = MessageDigest.getInstance(
     file.inputStream().use { calculateHash(it, digest) }
 
 /**
- * Calculate the [digest] on the data from the given [string].
- */
-fun calculateHash(string: String, digest: MessageDigest = MessageDigest.getInstance("SHA-1")): ByteArray =
-    string.byteInputStream().use { calculateHash(it, digest) }
-
-/**
  * Calculate the [digest] on the data from the given [inputStream]. The caller is responsible for closing the stream.
  */
 fun calculateHash(inputStream: InputStream, digest: MessageDigest = MessageDigest.getInstance("SHA-1")): ByteArray {
