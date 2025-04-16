@@ -69,7 +69,7 @@ class OrtPackageNaming(config: Config) : Rule(config) {
             "detekt-rules" -> ".detekt"
             "fossid-webapp" -> ".fossid"
             "github-graphql" -> ".github"
-            "helper-cli" -> ".helper"
+            "cli-helper" -> ".helper"
             else -> ".${projectDir.replace("-", "")}"
         }
 

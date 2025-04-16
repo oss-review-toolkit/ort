@@ -80,7 +80,7 @@ If a package manager is not list listed there, support for it is integrated dire
 Head over to the [releases](https://github.com/oss-review-toolkit/ort/releases) page.
 From the "Assets" section of your chosen release, download the distribution archive of the desired type.
 Typically that is `.zip` for Windows and `.tgz` otherwise; but the contents of the archives are the same.
-The `ort-*` archives contain the [ORT main](./cli/) distribution, while the `orth-*` archives contain the [ORT helper](./helper-cli/) distribution.
+The `ort-*` archives contain the [ORT main](./cli/) distribution, while the `orth-*` archives contain the [ORT helper](./cli-helper/) distribution.
 Unpack the archive to an installation directory.
 The scripts to run ORT are located at `bin/ort` and `bin\ort.bat`, or `bin/orth` and `bin\orth.bat`, respectively.
 

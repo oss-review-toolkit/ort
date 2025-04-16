@@ -4355,9 +4355,9 @@ gunit
 gunit-maven-plugin
 gunit/src
 gunit/src/main
-helper-cli
-helper-cli/src
-helper-cli/src/main
+cli-helper
+cli-helper/src
+cli-helper/src/main
 hk2
 hk2-api
 hk2-api/src
