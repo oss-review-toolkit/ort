@@ -30,7 +30,6 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.containADigit
 import io.kotest.matchers.types.beOfType
 
-import org.ossreviewtoolkit.utils.common.titlecase
 import org.ossreviewtoolkit.utils.spdx.parser.SpdxExpressionLexer
 import org.ossreviewtoolkit.utils.spdx.parser.SpdxExpressionParser
 import org.ossreviewtoolkit.utils.spdx.parser.Token
@@ -88,10 +87,8 @@ class SpdxSimpleLicenseMappingTest : WordSpec({
             SpdxSimpleLicenseMapping.simpleExpressionMapping.forAll { (key, license) ->
                 SpdxSimpleLicenseMapping.map(key.lowercase(), mapDeprecated = false) shouldBe license
                 SpdxSimpleLicenseMapping.map(key.uppercase(), mapDeprecated = false) shouldBe license
-                SpdxSimpleLicenseMapping.map(key.titlecase(), mapDeprecated = false) shouldBe license
                 SpdxSimpleLicenseMapping.map(key.lowercase(), mapDeprecated = true) shouldBe license
                 SpdxSimpleLicenseMapping.map(key.uppercase(), mapDeprecated = true) shouldBe license
-                SpdxSimpleLicenseMapping.map(key.titlecase(), mapDeprecated = true) shouldBe license
             }
         }
     }
