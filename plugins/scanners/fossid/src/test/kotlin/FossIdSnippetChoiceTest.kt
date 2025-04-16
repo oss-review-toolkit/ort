@@ -36,6 +36,7 @@ import io.mockk.unmockkObject
 import org.ossreviewtoolkit.clients.fossid.EntityResponseBody
 import org.ossreviewtoolkit.clients.fossid.FossIdRestService
 import org.ossreviewtoolkit.clients.fossid.FossIdServiceWithVersion
+import org.ossreviewtoolkit.clients.fossid.PolymorphicData
 import org.ossreviewtoolkit.clients.fossid.PolymorphicList
 import org.ossreviewtoolkit.clients.fossid.PolymorphicResponseBody
 import org.ossreviewtoolkit.clients.fossid.addComponentIdentification
@@ -971,7 +972,7 @@ fun FossIdServiceWithVersion.mockFiles(
     if (matchedLines.isNotEmpty()) {
         coEvery { listMatchedLines(USER, API_KEY, scanCode, any(), any()) } answers {
             val lines = matchedLines[arg(5)]
-            EntityResponseBody(status = 1, data = lines)
+            EntityResponseBody(status = 1, data = PolymorphicData(lines))
         }
     }
 

@@ -45,6 +45,7 @@ import kotlinx.coroutines.runInterruptible
 import org.ossreviewtoolkit.clients.fossid.EntityResponseBody
 import org.ossreviewtoolkit.clients.fossid.FossIdRestService
 import org.ossreviewtoolkit.clients.fossid.MapResponseBody
+import org.ossreviewtoolkit.clients.fossid.PolymorphicData
 import org.ossreviewtoolkit.clients.fossid.checkDownloadStatus
 import org.ossreviewtoolkit.clients.fossid.createIgnoreRule
 import org.ossreviewtoolkit.clients.fossid.createProject
@@ -193,7 +194,7 @@ class FossIdTest : WordSpec({
             coEvery { service.downloadFromGit(USER, API_KEY, scanCode) } returns
                 EntityResponseBody(status = 1)
             coEvery { service.checkDownloadStatus(USER, API_KEY, scanCode) } returns
-                EntityResponseBody(status = 1, data = DownloadStatus.FAILED)
+                EntityResponseBody(status = 1, data = PolymorphicData(DownloadStatus.FAILED))
 
             val fossId = createFossId(config)
             fossId.scan(createPackage(createIdentifier(index = 1), vcsInfo))
