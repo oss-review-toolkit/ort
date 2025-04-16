@@ -162,7 +162,7 @@ A configuration file, usually stored in the project's repository, for license fi
 #### [Package configuration file / directory](../configuration/package-configurations.md)
 
 A single file or a directory with multiple files containing configurations to set provenance-specific path excludes and license finding curations for dependency packages to address issues found within a scan result.
-`helper-cli`'s [`package-config create` command](https://github.com/oss-review-toolkit/ort/blob/main/helper-cli/src/main/kotlin/commands/packageconfig/CreateCommand.kt) can be used to populate a directory with template package configuration files.
+`cli-helper`'s [`package-config create` command](https://github.com/oss-review-toolkit/ort/blob/main/cli-helper/src/main/kotlin/commands/packageconfig/CreateCommand.kt) can be used to populate a directory with template package configuration files.
 
 | Format      | Scope                | Default location                          |
 |-------------|----------------------|-------------------------------------------|

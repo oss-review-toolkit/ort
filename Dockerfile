@@ -457,12 +457,12 @@ RUN --mount=type=cache,target=/var/tmp/gradle \
     && ./gradlew --no-daemon --stacktrace \
     -Pversion=$ORT_VERSION \
     :cli:installDist \
-    :helper-cli:startScripts \
+    :cli-helper:startScripts \
     && mkdir /opt/ort \
     && cp -a $HOME/src/ort/cli/build/install/ort /opt/ \
     && cp -a $HOME/src/ort/scripts/*.sh /opt/ort/bin/ \
-    && cp -a $HOME/src/ort/helper-cli/build/scripts/orth /opt/ort/bin/ \
-    && cp -a $HOME/src/ort/helper-cli/build/libs/helper-cli-*.jar /opt/ort/lib/
+    && cp -a $HOME/src/ort/cli-helper/build/scripts/orth /opt/ort/bin/ \
+    && cp -a $HOME/src/ort/cli-helper/build/libs/cli-helper-*.jar /opt/ort/lib/
 
 FROM scratch AS ortbin
 COPY --from=ortbuild /opt/ort /opt/ort
