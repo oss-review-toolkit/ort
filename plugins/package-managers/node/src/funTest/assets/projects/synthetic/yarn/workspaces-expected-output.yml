@@ -75,6 +75,17 @@ projects:
           dependencies:
           - id: "NPM::tr46:0.0.3"
           - id: "NPM::webidl-conversions:3.0.1"
+    - id: "Yarn::pkg2:1.0.0"
+      linkage: "PROJECT_DYNAMIC"
+      dependencies:
+      - id: "NPM:@here:harp-fetch:0.3.6"
+        dependencies:
+        - id: "NPM::node-fetch:2.7.0"
+          dependencies:
+          - id: "NPM::whatwg-url:5.0.0"
+            dependencies:
+            - id: "NPM::tr46:0.0.3"
+            - id: "NPM::webidl-conversions:3.0.1"
 packages:
 - id: "NPM::node-fetch:2.7.0"
   purl: "pkg:npm/node-fetch@2.7.0"

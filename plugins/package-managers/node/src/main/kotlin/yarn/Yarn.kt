@@ -125,7 +125,7 @@ open class Yarn(override val descriptor: PluginDescriptor = YarnFactory.descript
             dir.walk().maxDepth(1).filter {
                 it.isDirectory && it.isSymbolicLink() && it != dir
             }
-        }
+        }.mapTo(mutableSetOf()) { it.realFile() }
     }
 
     override fun beforeResolution(
