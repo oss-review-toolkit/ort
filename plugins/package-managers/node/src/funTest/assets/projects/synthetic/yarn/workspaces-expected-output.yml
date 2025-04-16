@@ -22,7 +22,12 @@ projects:
     dependencies:
     - id: "NPM:@here:harp-fetch:0.3.6"
       dependencies:
-      - id: "NPM::node-fetch:2.6.0"
+      - id: "NPM::node-fetch:2.7.0"
+        dependencies:
+        - id: "NPM::whatwg-url:5.0.0"
+          dependencies:
+          - id: "NPM::tr46:0.0.3"
+          - id: "NPM::webidl-conversions:3.0.1"
 - id: "Yarn::workspace:1.0.0"
   definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/yarn/workspaces/package.json"
   declared_licenses:
@@ -64,10 +69,15 @@ projects:
     dependencies:
     - id: "NPM:@here:harp-fetch:0.11.0"
       dependencies:
-      - id: "NPM::node-fetch:2.6.0"
+      - id: "NPM::node-fetch:2.7.0"
+        dependencies:
+        - id: "NPM::whatwg-url:5.0.0"
+          dependencies:
+          - id: "NPM::tr46:0.0.3"
+          - id: "NPM::webidl-conversions:3.0.1"
 packages:
-- id: "NPM::node-fetch:2.6.0"
-  purl: "pkg:npm/node-fetch@2.6.0"
+- id: "NPM::node-fetch:2.7.0"
+  purl: "pkg:npm/node-fetch@2.7.0"
   authors:
   - "David Frank"
   declared_licenses:
@@ -82,19 +92,111 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/node-fetch/-/node-fetch-2.6.0.tgz"
+    url: "https://registry.npmjs.org/node-fetch/-/node-fetch-2.7.0.tgz"
     hash:
-      value: "e633456386d4aa55863f676a7ab0daa8fdecb0fd"
+      value: "d0f0fa6e3e2dc1d27efcd8ad99d550bda94d187d"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "https://github.com/bitinn/node-fetch.git"
-    revision: "95286f52bb866283bc69521a04efe1de37b26a33"
+    revision: "9b9d45881e5ca68757077726b3c0ecf8fdca1f29"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/bitinn/node-fetch.git"
-    revision: "95286f52bb866283bc69521a04efe1de37b26a33"
+    revision: "9b9d45881e5ca68757077726b3c0ecf8fdca1f29"
+    path: ""
+- id: "NPM::tr46:0.0.3"
+  purl: "pkg:npm/tr46@0.0.3"
+  authors:
+  - "Sebastian Mayr"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "An implementation of the Unicode TR46 spec"
+  homepage_url: "https://github.com/Sebmaster/tr46.js#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/tr46/-/tr46-0.0.3.tgz"
+    hash:
+      value: "8184fd347dac9cdc185992f3a6622e14b9d9ab6a"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/Sebmaster/tr46.js.git"
+    revision: "a8009f9ce80ff5dbe71dd71e203afe4e4c878d28"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/Sebmaster/tr46.js.git"
+    revision: "a8009f9ce80ff5dbe71dd71e203afe4e4c878d28"
+    path: ""
+- id: "NPM::webidl-conversions:3.0.1"
+  purl: "pkg:npm/webidl-conversions@3.0.1"
+  authors:
+  - "Domenic Denicola"
+  declared_licenses:
+  - "BSD-2-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-2-Clause"
+  description: "Implements the WebIDL algorithms for converting to and from JavaScript\
+    \ values"
+  homepage_url: "https://github.com/jsdom/webidl-conversions#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/webidl-conversions/-/webidl-conversions-3.0.1.tgz"
+    hash:
+      value: "24534275e2a7bc6be7bc86611cc16ae0a5654871"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jsdom/webidl-conversions.git"
+    revision: "e21056f891736db755cfe0d72e4ce083a9034ace"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jsdom/webidl-conversions.git"
+    revision: "e21056f891736db755cfe0d72e4ce083a9034ace"
+    path: ""
+- id: "NPM::whatwg-url:5.0.0"
+  purl: "pkg:npm/whatwg-url@5.0.0"
+  authors:
+  - "Sebastian Mayr"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "An implementation of the WHATWG URL Standard's URL API and parsing\
+    \ machinery"
+  homepage_url: "https://github.com/jsdom/whatwg-url#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/whatwg-url/-/whatwg-url-5.0.0.tgz"
+    hash:
+      value: "966454e8765462e37644d3626f6742ce8b70965d"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/jsdom/whatwg-url.git"
+    revision: "d34854a7af6ed1204f55d7da7761497bad350a7b"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jsdom/whatwg-url.git"
+    revision: "d34854a7af6ed1204f55d7da7761497bad350a7b"
     path: ""
 - id: "NPM:@here:harp-fetch:0.3.6"
   purl: "pkg:npm/%40here/harp-fetch@0.3.6"
