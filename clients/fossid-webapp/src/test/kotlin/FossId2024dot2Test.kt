@@ -77,7 +77,7 @@ class FossId2024dot2Test : StringSpec({
         service.getProject("", "", PROJECT_CODE_2024) shouldNotBeNull {
             checkResponse("get project")
 
-            data.shouldNotBeNull().isArchived shouldBe false
+            data?.value.shouldNotBeNull().isArchived shouldBe false
         }
     }
 })

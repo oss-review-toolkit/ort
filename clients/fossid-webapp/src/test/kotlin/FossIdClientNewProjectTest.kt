@@ -107,7 +107,7 @@ class FossIdClientNewProjectTest : StringSpec({
     "Download status can be queried" {
         service.checkDownloadStatus("", "", SCAN_CODE) shouldNotBeNull {
             checkResponse("check download status")
-            data shouldBe DownloadStatus.FINISHED
+            data?.value shouldBe DownloadStatus.FINISHED
         }
     }
 

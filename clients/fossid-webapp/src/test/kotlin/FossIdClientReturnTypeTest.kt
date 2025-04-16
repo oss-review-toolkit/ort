@@ -74,7 +74,7 @@ class FossIdClientReturnTypeTest : StringSpec({
     "Single scan can be queried" {
         service.getScan("", "", SCAN_CODE_2) shouldNotBeNull {
             checkResponse("get scan")
-            data.shouldBeTypeOf<Scan>()
+            data?.value.shouldBeTypeOf<Scan>()
         }
     }
 
@@ -88,7 +88,7 @@ class FossIdClientReturnTypeTest : StringSpec({
     "Scans for project can be listed when there is exactly one" {
         service.listScansForProject("", "", PROJECT_CODE_3) shouldNotBeNull {
             checkResponse("list scans")
-            data shouldNotBeNull {
+            data.shouldNotBeNull {
                 size shouldBe 1
                 first().shouldBeTypeOf<Scan>()
             }
@@ -167,7 +167,7 @@ class FossIdClientReturnTypeTest : StringSpec({
             119
         ) shouldNotBeNull {
             checkResponse("list matched lines")
-            data shouldNotBeNull {
+            data?.value shouldNotBeNull {
                 localFile shouldNot beEmpty()
                 mirrorFile shouldNot beEmpty()
             }
@@ -318,6 +318,13 @@ class FossIdClientReturnTypeTest : StringSpec({
             "TestORT"
         ) shouldNotBeNull {
             checkResponse("add file comment")
+        }
+    }
+
+    "An error response can be parsed" {
+        service.getProject("", "", "semver4j_2_20201203_090342") shouldNotBeNull {
+            error shouldBe "Classes.FossID.user_not_found_or_api_key_is_not_correct"
+            message shouldBe "User is not found or API key is incorrect"
         }
     }
 })

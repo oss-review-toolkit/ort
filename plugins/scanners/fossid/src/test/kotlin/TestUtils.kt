@@ -30,6 +30,7 @@ import org.ossreviewtoolkit.clients.fossid.EntityResponseBody
 import org.ossreviewtoolkit.clients.fossid.FossIdRestService
 import org.ossreviewtoolkit.clients.fossid.FossIdServiceWithVersion
 import org.ossreviewtoolkit.clients.fossid.MapResponseBody
+import org.ossreviewtoolkit.clients.fossid.PolymorphicData
 import org.ossreviewtoolkit.clients.fossid.PolymorphicInt
 import org.ossreviewtoolkit.clients.fossid.PolymorphicList
 import org.ossreviewtoolkit.clients.fossid.PolymorphicResponseBody
@@ -466,7 +467,7 @@ internal fun FossIdServiceWithVersion.expectProjectRequest(
     error: String? = null
 ): FossIdServiceWithVersion {
     coEvery { getProject(USER, API_KEY, projectCode) } returns
-        EntityResponseBody(status = status, error = error, data = mockk())
+        EntityResponseBody(status = status, error = error, data = PolymorphicData(mockk()))
     return this
 }
 
@@ -531,7 +532,7 @@ internal fun FossIdServiceWithVersion.expectDownload(scanCode: String): FossIdSe
     coEvery { downloadFromGit(USER, API_KEY, scanCode) } returns
         EntityResponseBody(status = 1)
     coEvery { checkDownloadStatus(USER, API_KEY, scanCode) } returns
-        EntityResponseBody(status = 1, data = DownloadStatus.FINISHED)
+        EntityResponseBody(status = 1, data = PolymorphicData(DownloadStatus.FINISHED))
     return this
 }
 
@@ -597,7 +598,7 @@ internal fun FossIdServiceWithVersion.mockFiles(
         PolymorphicResponseBody(status = 1, data = PolymorphicList(snippets))
     if (matchedLinesFlag) {
         coEvery { listMatchedLines(USER, API_KEY, scanCode, any(), any()) } returns
-            EntityResponseBody(status = 1, data = matchedLines)
+            EntityResponseBody(status = 1, data = PolymorphicData(matchedLines))
     }
 
     return this

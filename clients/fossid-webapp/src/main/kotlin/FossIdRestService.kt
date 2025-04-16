@@ -79,6 +79,7 @@ interface FossIdRestService {
             addModule(
                 kotlinModule().addDeserializer(PolymorphicList::class.java, PolymorphicListDeserializer())
                     .addDeserializer(PolymorphicInt::class.java, PolymorphicIntDeserializer())
+                    .addDeserializer(PolymorphicData::class.java, PolymorphicDataDeserializer())
             )
         }
 
@@ -128,6 +129,43 @@ interface FossIdRestService {
                 // Extract the type from the property, i.e. the T in PolymorphicList.data<T>
                 val type = property?.member?.type?.bindings?.getBoundType(0)
                 return PolymorphicListDeserializer(type)
+            }
+        }
+
+        /**
+         * A custom JSON deserializer implementation to deal with inconsistencies in error responses sent by FossID
+         * for requests returning a single value. If such a request fails, the response from FossID contains an
+         * empty array for the value, which cannot be handled by the default deserialization.
+         */
+        private class PolymorphicDataDeserializer(val boundType: JavaType? = null) :
+            StdDeserializer<PolymorphicData<Any>>(PolymorphicData::class.java), ContextualDeserializer {
+            override fun deserialize(p: JsonParser, ctxt: DeserializationContext): PolymorphicData<Any> {
+                requireNotNull(boundType) {
+                    "The PolymorphicDataDeserializer needs a type to deserialize values!"
+                }
+
+                return when (p.currentToken) {
+                    JsonToken.START_ARRAY -> {
+                        val arrayType = JSON_MAPPER.typeFactory.constructArrayType(boundType)
+                        val array = JSON_MAPPER.readValue<Array<Any>>(p, arrayType)
+                        PolymorphicData(array.firstOrNull())
+                    }
+
+                    JsonToken.START_OBJECT -> {
+                        val data = JSON_MAPPER.readValue<Any>(p, boundType)
+                        PolymorphicData(data)
+                    }
+
+                    else -> {
+                        val delegate = ctxt.findNonContextualValueDeserializer(boundType)
+                        PolymorphicData(delegate.deserialize(p, ctxt))
+                    }
+                }
+            }
+
+            override fun createContextual(ctxt: DeserializationContext?, property: BeanProperty?): JsonDeserializer<*> {
+                val type = property?.member?.type?.bindings?.getBoundType(0)
+                return PolymorphicDataDeserializer(type)
             }
         }
 
@@ -223,10 +261,10 @@ interface FossIdRestService {
     }
 
     @POST("api.php")
-    suspend fun getProject(@Body body: PostRequestBody): EntityResponseBody<Project>
+    suspend fun getProject(@Body body: PostRequestBody): PolymorphicDataResponseBody<Project>
 
     @POST("api.php")
-    suspend fun getScan(@Body body: PostRequestBody): EntityResponseBody<Scan>
+    suspend fun getScan(@Body body: PostRequestBody): PolymorphicDataResponseBody<Scan>
 
     @POST("api.php")
     suspend fun listScansForProject(@Body body: PostRequestBody): PolymorphicResponseBody<Scan>
@@ -248,7 +286,7 @@ interface FossIdRestService {
     suspend fun downloadFromGit(@Body body: PostRequestBody): EntityResponseBody<Nothing>
 
     @POST("api.php")
-    suspend fun checkDownloadStatus(@Body body: PostRequestBody): EntityResponseBody<DownloadStatus>
+    suspend fun checkDownloadStatus(@Body body: PostRequestBody): PolymorphicDataResponseBody<DownloadStatus>
 
     @POST("api.php")
     suspend fun checkScanStatus(@Body body: PostRequestBody): EntityResponseBody<ScanDescription>
@@ -264,7 +302,7 @@ interface FossIdRestService {
 
     @POST("api.php")
     @Headers("$READ_TIMEOUT_HEADER:${5 * 60 * 1000}")
-    suspend fun listMatchedLines(@Body body: PostRequestBody): EntityResponseBody<MatchedLines>
+    suspend fun listMatchedLines(@Body body: PostRequestBody): PolymorphicDataResponseBody<MatchedLines>
 
     @POST("api.php")
     @Headers("$READ_TIMEOUT_HEADER:${60 * 1000}")
