@@ -32,9 +32,9 @@ import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
 
 class SbtFunTest : StringSpec({
-    "Dependencies of the external 'sbt-multi-project-example' multi-project should be detected correctly" {
-        val definitionFile = getAssetFile("projects/external/sbt-multi-project-example/build.sbt")
-        val expectedResultFile = getAssetFile("projects/external/sbt-multi-project-example-expected-output.yml")
+    "Dependencies of the external 'multi-project' should be detected correctly" {
+        val definitionFile = getAssetFile("projects/external/multi-project/build.sbt")
+        val expectedResultFile = getAssetFile("projects/external/multi-project-expected-output.yml")
         val expectedResult = matchExpectedResult(expectedResultFile, definitionFile)
 
         // Clean any previously generated POM files / target directories.
@@ -52,8 +52,8 @@ class SbtFunTest : StringSpec({
     }
 
     "Dependencies of the synthetic 'http4s-template' project should be detected correctly" {
-        val definitionFile = getAssetFile("projects/synthetic/sbt-http4s-template/build.sbt")
-        val expectedResultFile = getAssetFile("projects/synthetic/sbt-http4s-template-expected-output.yml")
+        val definitionFile = getAssetFile("projects/synthetic/http4s-template/build.sbt")
+        val expectedResultFile = getAssetFile("projects/synthetic/http4s-template-expected-output.yml")
         val expectedResult = matchExpectedResult(expectedResultFile, definitionFile)
 
         // Clean any previously generated POM files / target directories.

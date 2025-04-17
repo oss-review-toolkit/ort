@@ -10,5 +10,5 @@ ignores:
   - "**/node_modules/**"
   - "**/projects/external/**"
   - "**/multi-kotlin-project/**"
-  - "**/sbt-http4s-template/**"
+  - "**/http4s-template/**"
   - "**/stack-yesodweb-simple/**"

@@ -11,7 +11,7 @@
 	url = https://github.com/advancedtelematic/quickcheck-state-machine.git
 	ignore = untracked
 [submodule "sbt-multi-project-example"]
-	path = plugins/package-managers/sbt/src/funTest/assets/projects/external/sbt-multi-project-example
+	path = plugins/package-managers/sbt/src/funTest/assets/projects/external/multi-project
 	url = https://github.com/oss-review-toolkit/sbt-multi-project-example.git
 	ignore = untracked
 [submodule "dart-http"]
