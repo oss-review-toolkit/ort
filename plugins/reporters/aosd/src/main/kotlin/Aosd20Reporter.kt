@@ -38,7 +38,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 
 @OrtPlugin(
     id = "AOSD2.0",
-    displayName = "Audi Open Source Diagnostics 2.0 Reporter",
+    displayName = "Audi Open Source Diagnostics 2.0",
     description = "A reporter for the Audi Open Source Diagnostics (AOSD) 2.0 format.",
     factory = ReporterFactory::class
 )

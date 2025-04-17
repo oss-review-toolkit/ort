@@ -49,7 +49,7 @@ data class DirPackageConfigurationProviderConfig(
 )
 
 @OrtPlugin(
-    displayName = "Default Dir Package Configuration Provider",
+    displayName = "Default Directory",
     description = "A package configuration provider that loads package curations from the default directory.",
     factory = PackageConfigurationProviderFactory::class
 )
@@ -66,7 +66,7 @@ class DefaultDirPackageConfigurationProvider(descriptor: PluginDescriptor) : Dir
  * Supports all file formats specified in [FileFormat].
  */
 @OrtPlugin(
-    displayName = "Dir Package Configuration Provider",
+    displayName = "Directory",
     description = "Provides package configurations from a directory.",
     factory = PackageConfigurationProviderFactory::class
 )

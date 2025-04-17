@@ -38,7 +38,7 @@ import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 
 @OrtPlugin(
-    displayName = "plugins command",
+    displayName = "plugins",
     description = "Print information about the installed ORT plugins.",
     factory = OrtCommandFactory::class
 )

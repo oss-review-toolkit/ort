@@ -89,7 +89,7 @@ data class SpdxDocumentReporterConfig(
  * as a future extension of this [SpdxDocumentReporter] or as a separate [Reporter].
  */
 @OrtPlugin(
-    displayName = "SPDX Document Reporter",
+    displayName = "SPDX",
     description = "Creates software bills of materials (SBOM) in the SPDX format.",
     factory = ReporterFactory::class
 )
