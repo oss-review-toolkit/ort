@@ -39,7 +39,7 @@ import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.ort.ORT_REFERENCE_CONFIG_FILENAME
 
 @OrtPlugin(
-    displayName = "config command",
+    displayName = "config",
     description = "Show different ORT configurations.",
     factory = OrtCommandFactory::class
 )

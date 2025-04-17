@@ -99,7 +99,7 @@ data class Sw360PackageCurationProviderConfig(
  */
 @OrtPlugin(
     id = "SW360",
-    displayName = "SW360 Package Curation Provider",
+    displayName = "SW360",
     description = "Provides package metadata from the configured SW360 instance using the REST API.",
     factory = PackageCurationProviderFactory::class
 )

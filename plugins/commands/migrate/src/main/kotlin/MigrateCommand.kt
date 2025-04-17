@@ -44,7 +44,7 @@ import org.ossreviewtoolkit.utils.common.getCommonParentFile
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 
 @OrtPlugin(
-    displayName = "migrate command",
+    displayName = "migrate",
     description = "Assist with migrating ORT configuration to newer ORT versions.",
     factory = OrtCommandFactory::class
 )

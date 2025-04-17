@@ -57,7 +57,7 @@ import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 
 @OrtPlugin(
-    displayName = "upload-result-to-sw360 command",
+    displayName = "upload-result-to-sw360",
     description = "Upload an ORT result to SW360.",
     factory = OrtCommandFactory::class
 )

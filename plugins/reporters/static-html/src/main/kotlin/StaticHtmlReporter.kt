@@ -66,7 +66,7 @@ private const val RULE_VIOLATION_TABLE_ID = "rule-violation-summary"
 @Suppress("LargeClass", "TooManyFunctions")
 @OrtPlugin(
     id = "StaticHTML",
-    displayName = "Static HTML Reporter",
+    displayName = "Static HTML",
     description = "Generates a static HTML report.",
     factory = ReporterFactory::class
 )

@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
 
 @OrtPlugin(
-    displayName = "FossID Snippet Reporter",
+    displayName = "FossID Snippet",
     description = "Generates a detailed report of the FossID snippet findings.",
     factory = ReporterFactory::class
 )

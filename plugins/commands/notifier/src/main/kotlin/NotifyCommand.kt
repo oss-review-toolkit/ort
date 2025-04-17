@@ -43,7 +43,7 @@ import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
 @OrtPlugin(
-    displayName = "notify command",
+    displayName = "notify",
     description = "Create notifications based on an ORT result.",
     factory = OrtCommandFactory::class
 )

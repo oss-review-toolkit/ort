@@ -82,7 +82,7 @@ data class OpossumReporterConfig(
  * A [Reporter] that generates an [OpossumInput].
  */
 @OrtPlugin(
-    displayName = "Opossum Reporter",
+    displayName = "Opossum",
     description = "Generates a report in the Opossum format.",
     factory = ReporterFactory::class
 )
