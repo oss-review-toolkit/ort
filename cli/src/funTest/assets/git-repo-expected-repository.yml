@@ -1,0 +1,43 @@
+---
+vcs:
+  type: "GitRepo"
+  url: "https://github.com/oss-review-toolkit/ort-test-data-git-repo?manifest=manifest.xml"
+  revision: "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
+  path: ""
+vcs_processed:
+  type: "GitRepo"
+  url: "https://github.com/oss-review-toolkit/ort-test-data-git-repo.git?manifest=manifest.xml"
+  revision: "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
+  path: ""
+nested_repositories:
+  spdx-tools:
+    type: "Git"
+    url: "https://github.com/spdx/tools"
+    revision: "e179fae47590eccedc46186ea0ce20cbade5fda7"
+    path: ""
+  submodules:
+    type: "Git"
+    url: "https://github.com/oss-review-toolkit/ort-test-data-git-submodules"
+    revision: "fcea94bab5835172e826afddb9f6427274c983b9"
+    path: ""
+  submodules/commons-text:
+    type: "Git"
+    url: "https://github.com/apache/commons-text.git"
+    revision: "7643b12421100d29fd2b78053e77bcb04a251b2e"
+    path: ""
+  submodules/test-data-npm:
+    type: "Git"
+    url: "https://github.com/oss-review-toolkit/ort-test-data-npm.git"
+    revision: "ad0367b7b9920144a47b8d30cc0c84cea102b821"
+    path: ""
+  submodules/test-data-npm/isarray:
+    type: "Git"
+    url: "https://github.com/juliangruber/isarray.git"
+    revision: "63ea4ca0a0d6b0574d6a470ebd26880c3026db4a"
+    path: ""
+  submodules/test-data-npm/long.js:
+    type: "Git"
+    url: "https://github.com/dcodeIO/long.js.git"
+    revision: "941c5c62471168b5d18153755c2a7b38d2560e58"
+    path: ""
+config: {}

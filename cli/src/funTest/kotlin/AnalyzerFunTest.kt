@@ -22,30 +22,29 @@ package org.ossreviewtoolkit.cli
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.concurrent.shouldCompleteWithin
-import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
 
 import java.util.concurrent.TimeUnit
 
 import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.analyzer.analyze
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.model.toYaml
+import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.plugins.packagemanagers.gradle.GradleFactory
 import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.GitRepoFactory
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.matchExpectedResult
-import org.ossreviewtoolkit.utils.test.patchActualResult
 
 class AnalyzerFunTest : WordSpec({
     "An analysis" should {
-        "correctly report VcsInfo for git-repo projects" {
-            val expectedResultFile = getAssetFile("git-repo-expected-output.yml")
+        "correctly report repositories git-repo for projects" {
+            val expectedRepository = getAssetFile("git-repo-expected-repository.yml").readValue<Repository>()
             val pkg = Package.EMPTY.copy(
                 vcsProcessed = VcsInfo(
                     type = VcsType.GIT_REPO,
@@ -57,9 +56,9 @@ class AnalyzerFunTest : WordSpec({
                 GitRepoFactory().create(PluginConfig.EMPTY).download(pkg, it)
             }
 
-            val result = analyze(outputDir, packageManagers = emptySet()).toYaml()
+            val repository = analyze(outputDir, packageManagers = emptySet()).repository
 
-            patchActualResult(result, patchStartAndEndTime = true) should matchExpectedResult(expectedResultFile)
+            repository shouldBe expectedRepository
         }
     }
 
