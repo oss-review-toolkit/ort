@@ -23,6 +23,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.analyzer.analyze
+import org.ossreviewtoolkit.analyzer.getAnalyzerResult
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.GitCommand
@@ -39,15 +40,15 @@ class SbtFunTest : StringSpec({
         // Clean any previously generated POM files / target directories.
         GitCommand.run(definitionFile.parentFile, "clean", "-fd").requireSuccess()
 
-        val ortResult = analyze(
+        val result = analyze(
             definitionFile.parentFile,
             packageManagers = setOf(SbtFactory()),
             packageManagerConfiguration = mapOf(
                 "SBT" to PackageManagerConfiguration(options = mapOf("javaVersion" to "11"))
             )
-        )
+        ).getAnalyzerResult()
 
-        patchActualResult(ortResult.toYaml(), patchStartAndEndTime = true) shouldBe expectedResult
+        result.toYaml() shouldBe expectedResult
     }
 
     "Dependencies of the synthetic 'http4s-template' project should be detected correctly" {
@@ -58,14 +59,14 @@ class SbtFunTest : StringSpec({
         // Clean any previously generated POM files / target directories.
         GitCommand.run(definitionFile.parentFile, "clean", "-fd").requireSuccess()
 
-        val ortResult = analyze(
+        val result = analyze(
             definitionFile.parentFile,
             packageManagers = setOf(SbtFactory()),
             packageManagerConfiguration = mapOf(
                 "SBT" to PackageManagerConfiguration(options = mapOf("javaVersion" to "11"))
             )
-        )
+        ).getAnalyzerResult()
 
-        patchActualResult(ortResult.toYaml(), patchStartAndEndTime = true) shouldBe expectedResult
+        patchActualResult(result.toYaml()) shouldBe expectedResult
     }
 })
