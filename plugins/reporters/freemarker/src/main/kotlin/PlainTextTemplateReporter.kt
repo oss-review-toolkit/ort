@@ -60,7 +60,7 @@ data class PlainTextTemplateReporterConfig(
  * [1]: https://freemarker.apache.org
  */
 @OrtPlugin(
-    displayName = "Plain Text Template Reporter",
+    displayName = "Plain Text Template",
     description = "Generates plain text files using Apache Freemarker templates.",
     factory = ReporterFactory::class
 )

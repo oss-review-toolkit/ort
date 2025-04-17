@@ -76,7 +76,7 @@ import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
 @OrtPlugin(
     id = "scan",
-    displayName = "scan command",
+    displayName = "scan",
     description = "Run external license / copyright scanners.",
     factory = OrtCommandFactory::class
 )

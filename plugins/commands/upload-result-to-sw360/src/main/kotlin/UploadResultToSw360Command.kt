@@ -58,7 +58,7 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 
 @OrtPlugin(
     id = "upload-result-to-sw360",
-    displayName = "upload-result-to-sw360 command",
+    displayName = "upload-result-to-sw360",
     description = "Upload an ORT result to SW360.",
     factory = OrtCommandFactory::class
 )

@@ -86,7 +86,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxConstants.LICENSE_REF_PREFIX
 
 @OrtPlugin(
     id = "report",
-    displayName = "report command",
+    displayName = "report",
     description = "Present Analyzer, Scanner and Evaluator results in various formats.",
     factory = OrtCommandFactory::class
 )

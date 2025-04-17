@@ -53,7 +53,7 @@ import org.ossreviewtoolkit.utils.ort.Environment
 
 @OrtPlugin(
     id = "compare",
-    displayName = "compare command",
+    displayName = "compare",
     description = "Compare two ORT results with various methods.",
     factory = OrtCommandFactory::class
 )
