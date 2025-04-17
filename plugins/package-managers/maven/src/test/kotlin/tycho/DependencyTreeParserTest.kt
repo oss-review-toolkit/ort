@@ -35,6 +35,7 @@ import java.io.InputStream
 
 import org.apache.maven.project.MavenProject
 
+import org.eclipse.aether.artifact.Artifact
 import org.eclipse.aether.graph.DependencyNode
 import org.eclipse.aether.repository.RemoteRepository
 
@@ -191,7 +192,8 @@ class DependencyTreeParserTest : WordSpec({
 
             val projectDependencies = parseDependencyTree(
                 inputStreamFor(projectNode),
-                listOf(createProject("ort"))
+                listOf(createProject("ort")),
+                dummyFeatureFun
             ).toList()
 
             projectDependencies.shouldBeSingleton {
@@ -239,7 +241,8 @@ class DependencyTreeParserTest : WordSpec({
 
             val projectDependencies = parseDependencyTree(
                 inputStreamFor(projectNode1, projectNode2),
-                listOf(createProject("module1"), createProject("module2", "eclipse-plugin"))
+                listOf(createProject("module1"), createProject("module2", "eclipse-plugin")),
+                dummyFeatureFun
             ).toList()
 
             projectDependencies shouldHaveSize 2
@@ -284,7 +287,8 @@ class DependencyTreeParserTest : WordSpec({
 
             val dependencies = parseDependencyTree(
                 inputStreamFor(projectNode),
-                listOf(project)
+                listOf(project),
+                dummyFeatureFun
             ).single()
 
             dependencies.children.forAll { node ->
@@ -332,7 +336,8 @@ class DependencyTreeParserTest : WordSpec({
 
             val projectDependencies = parseDependencyTree(
                 inputStreamFor(projectNode1, projectNode2),
-                listOf(createProject("module1"))
+                listOf(createProject("module1")),
+                dummyFeatureFun
             ).toList()
 
             projectDependencies.shouldBeSingleton {
@@ -378,7 +383,8 @@ class DependencyTreeParserTest : WordSpec({
 
             val projectDependencies = parseDependencyTree(
                 inputStreamFor(projectNode),
-                listOf(createProject("module"))
+                listOf(createProject("module")),
+                dummyFeatureFun
             ).toList()
 
             projectDependencies.shouldBeSingleton { node ->
@@ -419,13 +425,65 @@ class DependencyTreeParserTest : WordSpec({
 
             val projectDependencies = parseDependencyTree(
                 inputStreamFor(projectNode),
-                listOf(createProject("module"))
+                listOf(createProject("module")),
+                dummyFeatureFun
             ).toList()
 
             projectDependencies.shouldBeSingleton { node ->
                 node.children.map { it.artifact.artifactId } shouldContainExactlyInAnyOrder listOf(
                     "commons-configuration2",
                     "org.objectweb.asm.source"
+                )
+            }
+        }
+
+        "remove features from the dependency tree" {
+            val projectNode = DependencyTreeMojoNode(
+                "org.ossreviewtoolkit",
+                "module",
+                "1.2.3-SNAPSHOT",
+                "pom",
+                "",
+                "",
+                listOf(
+                    DependencyTreeMojoNode(
+                        "org.apache.commons",
+                        "commons-configuration2",
+                        "2.11.0",
+                        "jar",
+                        "compile",
+                        ""
+                    ),
+                    DependencyTreeMojoNode(
+                        "p2.eclipse.plugin",
+                        "org.objectweb.asm",
+                        "9.1.0",
+                        "jar",
+                        "compile",
+                        ""
+                    ),
+                    DependencyTreeMojoNode(
+                        "p2.eclipse.feature",
+                        "org.objectweb.asm.feature",
+                        "9.1.0",
+                        "jar",
+                        "compile",
+                        ""
+                    )
+                )
+            )
+
+            val projectDependencies = parseDependencyTree(
+                inputStreamFor(projectNode),
+                listOf(createProject("module"))
+            ) {
+                it.groupId == "p2.eclipse.feature"
+            }.toList()
+
+            projectDependencies.shouldBeSingleton { node ->
+                node.children.map { it.artifact.artifactId } shouldContainExactlyInAnyOrder listOf(
+                    "commons-configuration2",
+                    "org.objectweb.asm"
                 )
             }
         }
@@ -472,3 +530,9 @@ private fun createProject(name: String, packaging: String = "pom"): MavenProject
         version = "1.2.3-SNAPSHOT"
         this.packaging = packaging
     }
+
+/**
+ * A function that can be used as feature filter function if this functionality is not relevant for a test. It always
+ * returns *false*.
+ */
+private val dummyFeatureFun: (Artifact) -> Boolean = { false }

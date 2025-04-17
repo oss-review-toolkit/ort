@@ -129,7 +129,7 @@ class Tycho(override val descriptor: PluginDescriptor = TychoFactory.Companion.d
             )
 
             buildLog.inputStream().use { stream ->
-                parseDependencyTree(stream, collector.mavenProjects.values).map { projectNode ->
+                parseDependencyTree(stream, collector.mavenProjects.values, resolver::isFeature).map { projectNode ->
                     val project = collector.mavenProjects.getValue(projectNode.artifact.identifier())
                     processProjectDependencies(graphBuilder, project, projectNode.children, excludes)
                     project

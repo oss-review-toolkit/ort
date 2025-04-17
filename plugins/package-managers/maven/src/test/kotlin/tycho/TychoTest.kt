@@ -273,6 +273,7 @@ class TychoTest : WordSpec({
             )
             val resolver = mockk<P2ArtifactResolver> {
                 every { resolverIssues } returns issues
+                every { isFeature(any()) } returns false
             }
 
             val tycho = spyk(Tycho())
@@ -288,6 +289,11 @@ class TychoTest : WordSpec({
 
             val rootResults = results.single { it.project.id.name == "root" }
             rootResults.issues shouldContainExactlyInAnyOrder issues
+
+            verify(atLeast = 1) {
+                // Make sure that the resolver is used for the feature check function.
+                resolver.isFeature(any())
+            }
         }
     }
 

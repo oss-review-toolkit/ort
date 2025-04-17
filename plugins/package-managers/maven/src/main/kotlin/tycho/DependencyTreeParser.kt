@@ -27,6 +27,7 @@ import kotlinx.serialization.json.decodeToSequence
 
 import org.apache.maven.project.MavenProject
 
+import org.eclipse.aether.artifact.Artifact
 import org.eclipse.aether.artifact.DefaultArtifact
 import org.eclipse.aether.graph.DefaultDependencyNode
 import org.eclipse.aether.graph.Dependency
@@ -59,30 +60,38 @@ internal data class DependencyTreeMojoNode(
 /**
  * Parse the file with the aggregated output of the Maven Dependency Plugin from the given [inputStream] to a sequence
  * of [DependencyNode]s for all the projects encountered during the build. Use the given [projects] that were
- * encountered during the build to enrich the dependencies with further information.
+ * encountered during the build to enrich the dependencies with further information. Use the given [featureFun] to
+ * filter out dependency nodes that represent Tycho features.
  */
 internal fun parseDependencyTree(
     inputStream: InputStream,
-    projects: Collection<MavenProject>
+    projects: Collection<MavenProject>,
+    featureFun: (Artifact) -> Boolean
 ): Sequence<DependencyNode> {
     val projectsById = projects.associateBy(MavenProject::getId)
 
     return JSON.decodeToSequence<DependencyTreeMojoNode>(inputStream)
         .mapNotNull { node ->
             projectsById[node.projectId]?.let { project ->
-                node.toDependencyNode(project.remoteProjectRepositories.orEmpty())
+                node.toDependencyNode(project.remoteProjectRepositories.orEmpty(), featureFun)
             }
         }
 }
 
 /**
  * Convert this [DependencyTreeMojoNode] and all its children to a [DependencyNode]. Set the given [repositories] for
- * all created [DependencyNode]s.
+ * all created [DependencyNode]s. Use the given [featureFun] to filter out dependency nodes that represent Tycho
+ * features. Result is *null* if this node should not be included in the dependency tree.
  */
-private fun DependencyTreeMojoNode.toDependencyNode(repositories: List<RemoteRepository>): DependencyNode {
+private fun DependencyTreeMojoNode.toDependencyNode(
+    repositories: List<RemoteRepository>,
+    featureFun: (Artifact) -> Boolean
+): DependencyNode? {
     val artifact = DefaultArtifact(groupId, artifactId, classifier, type, version)
+    if (featureFun(artifact)) return null
+
     val dependency = Dependency(artifact, scope)
-    val childNodes = children.filterSourceBundles().map { it.toDependencyNode(repositories) }
+    val childNodes = children.filterSourceBundles().mapNotNull { it.toDependencyNode(repositories, featureFun) }
 
     return DefaultDependencyNode(dependency).apply {
         children = childNodes
