@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.utils.common
+package org.ossreviewtoolkit.utils.ort
 
 import com.fasterxml.jackson.databind.util.StdConverter
 
