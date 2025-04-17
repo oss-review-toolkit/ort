@@ -143,7 +143,7 @@ data class Yarn2Config(
 )
 
 /**
- * The [Yarn 2+](https://v2.yarnpkg.com/) package manager for JavaScript.
+ * The [Yarn 2+ package manager](https://v2.yarnpkg.com/).
  */
 @OrtPlugin(
     displayName = "Yarn 2+",
