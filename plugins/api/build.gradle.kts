@@ -24,4 +24,6 @@ plugins {
 
 dependencies {
     api(projects.utils.commonUtils)
+
+    api(libs.jackson.annotations)
 }
