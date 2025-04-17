@@ -6,5 +6,9 @@
             <repository location="https://p2.other.example.com/repo/other/test/"/>
             <unit id="org.apache.commons.lang" version="0.0.0"/>
         </location>
+
+        <location includeDependencyDepth="infinite" includeDependencyScopes="compile" includeSource="true" label="maven.libraries.with.transitives" missingManifest="generate" type="Maven">
+            <feature id="some.feature" label="some.feature" version="1.0.0.qualifier"/>
+        </location>
     </locations>
 </target>
