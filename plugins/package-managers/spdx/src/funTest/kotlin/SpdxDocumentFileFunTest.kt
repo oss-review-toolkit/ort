@@ -31,6 +31,7 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.analyzer.analyze
+import org.ossreviewtoolkit.analyzer.getAnalyzerResult
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.analyzer.withResolvedScopes
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -207,11 +208,9 @@ class SpdxDocumentFileFunTest : WordSpec({
                 "projects/synthetic/spdx-project-xyz-expected-output-subproject-conan.yml"
             )
 
-            val ortResult = analyze(definitionFile.parentFile, allowDynamicVersions = true)
+            val result = analyze(definitionFile.parentFile, allowDynamicVersions = true).getAnalyzerResult()
 
-            ortResult.analyzer shouldNotBeNull {
-                result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
-            }
+            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "handle cycles in dependencies gracefully" {
