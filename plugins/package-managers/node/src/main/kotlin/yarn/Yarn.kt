@@ -70,7 +70,7 @@ internal object YarnCommand : CommandLineTool {
 }
 
 /**
- * The [Yarn](https://classic.yarnpkg.com/) package manager for JavaScript.
+ * The [Yarn package manager](https://classic.yarnpkg.com/).
  */
 @OrtPlugin(
     displayName = "Yarn",

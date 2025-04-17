@@ -73,7 +73,7 @@ data class NpmConfig(
 )
 
 /**
- * The [Node package manager](https://www.npmjs.com/) for JavaScript.
+ * The [Node package manager](https://www.npmjs.com/).
  */
 @OrtPlugin(
     id = "NPM",

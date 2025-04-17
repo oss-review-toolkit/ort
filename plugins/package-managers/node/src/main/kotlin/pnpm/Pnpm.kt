@@ -49,7 +49,7 @@ internal object PnpmCommand : CommandLineTool {
 }
 
 /**
- * The [fast, disk space efficient package manager](https://pnpm.io/).
+ * The [PNPM package manager](https://pnpm.io/).
  */
 @OrtPlugin(
     id = "PNPM",
