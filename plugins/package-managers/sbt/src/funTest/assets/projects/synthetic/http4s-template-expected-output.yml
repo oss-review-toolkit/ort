@@ -1,7 +1,7 @@
 ---
 projects:
 - id: "SBT:com.example:http4s-template_2.13:0.0.1-SNAPSHOT"
-  definition_file_path: "plugins/package-managers/sbt/src/funTest/assets/projects/synthetic/sbt-http4s-template/target-scala-2.13-http4s-template_2.13-0.0.1-SNAPSHOT.pom"
+  definition_file_path: "plugins/package-managers/sbt/src/funTest/assets/projects/synthetic/http4s-template/target-scala-2.13-http4s-template_2.13-0.0.1-SNAPSHOT.pom"
   authors:
   - "com.example"
   declared_licenses: []
@@ -15,7 +15,7 @@ projects:
     type: "Git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
-    path: "plugins/package-managers/sbt/src/funTest/assets/projects/synthetic/sbt-http4s-template"
+    path: "plugins/package-managers/sbt/src/funTest/assets/projects/synthetic/http4s-template"
   homepage_url: ""
   scopes:
   - name: "compile"
