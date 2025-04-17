@@ -41,6 +41,9 @@ internal class TargetHandler(
     /** A set with the URLs of the P2 repositories defined in the target files. */
     val repositoryUrls: Set<String>,
 
+    /** A set listing the IDs of features that have been declared in the target files. */
+    val featureIds: Set<String>,
+
     /** A map storing the declared Maven dependencies with the coordinates used by Tycho. */
     private val mavenDependencies: Map<String, Artifact>
 ) {
@@ -52,10 +55,11 @@ internal class TargetHandler(
         fun create(projectRoot: File): TargetHandler {
             val states = collectTargetFiles(projectRoot)
             val repositoryIds = states.flatMapTo(mutableSetOf(), ParseTargetFileState::repositoryUrls)
+            val featureIds = states.flatMapTo(mutableSetOf(), ParseTargetFileState::featureIds)
             val mavenDependencies = states.flatMap(ParseTargetFileState::mavenDependencies)
                 .associateBy(::tychoId)
 
-            return TargetHandler(repositoryIds, mavenDependencies)
+            return TargetHandler(repositoryIds, featureIds, mavenDependencies)
         }
 
         /**
@@ -91,6 +95,8 @@ internal class TargetHandler(
                     state.addDependencyAttribute("version", body)
                 }.handleElement("dependency") { state, _, _ ->
                     state.storeMavenDependency()
+                }.handleElement("feature") { state, attributes, _ ->
+                    state.addFeature(attributes.getValue("id"))
                 }
 
             return parseXml(targetFile, handler)
@@ -131,13 +137,24 @@ private data class ParseTargetFileState(
     val mavenDependencies: MutableList<Artifact> = mutableListOf(),
 
     /** Stores the attributes of a currently processed dependency. */
-    val dependencyAttributes: MutableMap<String, String> = mutableMapOf()
+    val dependencyAttributes: MutableMap<String, String> = mutableMapOf(),
+
+    /** Stores the IDs of features declared in the target file. */
+    val featureIds: MutableSet<String> = mutableSetOf()
 ) {
     /**
      * Update this state by adding an attribute with the given [name] and [value] for a currently processed dependency.
      */
     fun addDependencyAttribute(name: String, value: String): ParseTargetFileState {
         dependencyAttributes[name] = value
+        return this
+    }
+
+    /**
+     * Update this state by adding the [featureId] of a feature that have been found while parsing the target file.
+     */
+    fun addFeature(featureId: String): ParseTargetFileState {
+        featureIds += featureId
         return this
     }
 

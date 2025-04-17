@@ -73,6 +73,24 @@ class TargetHandlerTest : WordSpec({
             }
         }
     }
+
+    "featureIds" should {
+        "be empty if no target files are found" {
+            val projectRoot = tempdir()
+            val targetHandler = TargetHandler.create(projectRoot)
+
+            targetHandler.featureIds should beEmpty()
+        }
+
+        "collect feature IDs from target files" {
+            val targetHandler = createTargetHandlerWithTargetFiles()
+
+            targetHandler.featureIds shouldContainExactlyInAnyOrder listOf(
+                "maven.libraries.with.transitives",
+                "some.feature"
+            )
+        }
+    }
 })
 
 /**

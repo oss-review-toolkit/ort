@@ -237,6 +237,25 @@ class P2ArtifactResolverTest : WordSpec({
                 isFeature shouldBe true
             }
         }
+
+        "return false for an artifact that includes 'feature' in its group ID, but not as a component" {
+            val repositoryContent1 = P2RepositoryContent(
+                REPOSITORY_URL,
+                mapOf(P2Identifier(TEST_ARTIFACT_KEY) to TEST_HASH),
+                emptySet()
+            )
+            val repositoryContent2 = P2RepositoryContent(
+                "${REPOSITORY_URL}_other",
+                mapOf(P2Identifier(TEST_ARTIFACT_KEY, "org.eclipse.update.feature") to TEST_HASH),
+                emptySet()
+            )
+            val artifact = DefaultArtifact("my.crazy-features.group", TEST_ARTIFACT_ID, "jar", TEST_ARTIFACT_VERSION)
+
+            val resolver = createResolver(listOf(repositoryContent1, repositoryContent2))
+            val isFeature = resolver.isFeature(artifact)
+
+            isFeature shouldBe false
+        }
     }
 })
 
