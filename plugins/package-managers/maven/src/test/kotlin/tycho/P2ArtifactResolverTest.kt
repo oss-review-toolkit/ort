@@ -256,6 +256,19 @@ class P2ArtifactResolverTest : WordSpec({
 
             isFeature shouldBe false
         }
+
+        "return true for an artifact referencing a feature declared in a target file" {
+            val targetHandler = TargetHandler(
+                featureIds = setOf(TEST_ARTIFACT_ID),
+                repositoryUrls = emptySet(),
+                mavenDependencies = emptyMap()
+            )
+
+            val resolver = createResolver(emptyList(), targetHandler = targetHandler)
+            val isFeature = resolver.isFeature(testArtifact)
+
+            isFeature shouldBe true
+        }
     }
 })
 
@@ -304,11 +317,13 @@ private fun createMavenProject(repositories: List<MavenArtifactRepository>): Mav
     }
 
 /**
- * Create a [P2ArtifactResolver] object that is initialized with the given [contents] and [issues].
+ * Create a [P2ArtifactResolver] object that is initialized with the given [contents] and [issues]. Optionally,
+ * a [targetHandler] can be provided; otherwise, a dummy instance is created.
  */
 private fun TestConfiguration.createResolver(
     contents: List<P2RepositoryContent>,
-    issues: List<Issue> = emptyList()
+    issues: List<Issue> = emptyList(),
+    targetHandler: TargetHandler? = null
 ): P2ArtifactResolver {
     val repositoryUrl = "https://p2.example1.com/repo"
     val repository = createRepository("p2", repositoryUrl)
@@ -318,7 +333,7 @@ private fun TestConfiguration.createResolver(
         P2RepositoryContentLoader.loadAllRepositoryContents(setOf(repositoryUrl))
     } returns (contents to issues)
 
-    val targetHandler = TargetHandler.create(tempdir())
+    val handler = targetHandler ?: TargetHandler.create(tempdir())
 
-    return P2ArtifactResolver.create(targetHandler, listOf(createMavenProject(listOf(repository))))
+    return P2ArtifactResolver.create(handler, listOf(createMavenProject(listOf(repository))))
 }

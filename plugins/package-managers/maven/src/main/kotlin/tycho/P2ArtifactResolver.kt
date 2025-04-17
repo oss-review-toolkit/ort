@@ -47,7 +47,10 @@ internal class P2ArtifactResolver private constructor(
     private val artifactHashes: Map<String, Hash>,
 
     /** A map for storing the classifiers assigned to an artifact. */
-    private val artifactClassifiers: Map<String, Set<String>>
+    private val artifactClassifiers: Map<String, Set<String>>,
+
+    /** A set with the IDs of features that have been declared in the target files. */
+    private val targetFeatures: Set<String>
 ) {
     companion object {
         /** The ID of the layout for P2 repositories. */
@@ -80,7 +83,13 @@ internal class P2ArtifactResolver private constructor(
                 }
             }
 
-            return P2ArtifactResolver(issues, artifactRepositories, artifactHashes, artifactClassifiers)
+            return P2ArtifactResolver(
+                issues,
+                artifactRepositories,
+                artifactHashes,
+                artifactClassifiers,
+                targetHandler.featureIds
+            )
         }
 
         /**
@@ -155,7 +164,12 @@ internal class P2ArtifactResolver private constructor(
      * (plugin) artifact with the same bundle ID as the feature artifact. In this case, the group ID used by Tycho
      * is used to determine whether the artifact refers to the feature or the bundle.
      */
-    fun isFeature(artifact: Artifact): Boolean {
+    fun isFeature(artifact: Artifact): Boolean = artifact.artifactId in targetFeatures || hasFeatureClassifier(artifact)
+
+    /**
+     * Check whether the given [artifact] represents a Tycho feature based on the classifiers assigned to it.
+     */
+    private fun hasFeatureClassifier(artifact: Artifact): Boolean {
         val classifiers = artifactClassifiers[artifactKey(artifact)].orEmpty()
         return FEATURE_CLASSIFIER in classifiers && (classifiers.size == 1 || isFeatureGroupId(artifact.groupId))
     }
