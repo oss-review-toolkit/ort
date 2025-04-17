@@ -19,11 +19,13 @@
 
 package org.ossreviewtoolkit.cli
 
+import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.concurrent.shouldCompleteWithin
 import io.kotest.matchers.shouldBe
 
+import java.io.File
 import java.util.concurrent.TimeUnit
 
 import org.ossreviewtoolkit.analyzer.Analyzer
@@ -45,18 +47,9 @@ class AnalyzerFunTest : WordSpec({
     "An analysis" should {
         "correctly report repositories git-repo for projects" {
             val expectedRepository = getAssetFile("git-repo-expected-repository.yml").readValue<Repository>()
-            val pkg = Package.EMPTY.copy(
-                vcsProcessed = VcsInfo(
-                    type = VcsType.GIT_REPO,
-                    url = "https://github.com/oss-review-toolkit/ort-test-data-git-repo?manifest=manifest.xml",
-                    revision = "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
-                )
-            )
-            val outputDir = tempdir().also {
-                GitRepoFactory().create(PluginConfig.EMPTY).download(pkg, it)
-            }
+            val projectDir = createGitRepoProject()
 
-            val repository = analyze(outputDir, packageManagers = emptySet()).repository
+            val repository = analyze(projectDir, packageManagers = emptySet()).repository
 
             repository shouldBe expectedRepository
         }
@@ -85,3 +78,17 @@ class AnalyzerFunTest : WordSpec({
         }
     }
 })
+
+private fun TestConfiguration.createGitRepoProject(): File {
+    val pkg = Package.EMPTY.copy(
+        vcsProcessed = VcsInfo(
+            type = VcsType.GIT_REPO,
+            url = "https://github.com/oss-review-toolkit/ort-test-data-git-repo?manifest=manifest.xml",
+            revision = "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
+        )
+    )
+
+    return tempdir().also {
+        GitRepoFactory().create(PluginConfig.EMPTY).download(pkg, it)
+    }
+}
