@@ -25,8 +25,8 @@ import com.fasterxml.jackson.databind.util.StdConverter
 import java.util.SortedSet
 
 import org.ossreviewtoolkit.scanner.FileList.FileEntry
-import org.ossreviewtoolkit.utils.common.StringSortedSetConverter
 import org.ossreviewtoolkit.utils.common.getDuplicates
+import org.ossreviewtoolkit.utils.ort.StringSortedSetConverter
 
 /**
  * The model to store a file list for a resolved provenance.

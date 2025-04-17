@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.VulnerabilityResolution
 import org.ossreviewtoolkit.model.vulnerabilities.Vulnerability
-import org.ossreviewtoolkit.utils.common.StringSortedSetConverter
+import org.ossreviewtoolkit.utils.ort.StringSortedSetConverter
 
 /**
  * A class containing statistics for an [OrtResult].
