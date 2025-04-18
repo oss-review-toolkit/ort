@@ -200,5 +200,8 @@ class PluginSpecFactory {
 }
 
 internal fun derivePluginId(pluginClassName: String, pluginParentClassName: String): String {
-    return pluginClassName.removeSuffix(pluginParentClassName.removePrefix("Ort"))
+    val pluginTypeName = pluginClassName.removeSuffix(pluginParentClassName.removePrefix("Ort"))
+    return pluginTypeName.replace(LOWER_UPPER_REGEX) { "${it.groupValues[1]}-${it.groupValues[2]}" }.lowercase()
 }
+
+private val LOWER_UPPER_REGEX = Regex("([a-z])([A-Z])")

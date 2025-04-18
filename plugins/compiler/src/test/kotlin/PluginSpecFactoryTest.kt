@@ -25,15 +25,19 @@ import org.ossreviewtoolkit.plugins.compiler.derivePluginId
 class PluginSpecFactoryTest : WordSpec({
     "derivePluginId" should {
         "return the plugin ID for a parent class that is not a suffix" {
-            derivePluginId("Bazel", "PackageManager") shouldBe "Bazel"
+            derivePluginId("Bazel", "PackageManager") shouldBe "bazel"
         }
 
         "return the plugin ID for a parent class that is a suffix" {
-            derivePluginId("WebAppReporter", "Reporter") shouldBe "WebApp"
+            derivePluginId("WebAppReporter", "Reporter") shouldBe "web-app"
         }
 
         "return the plugin ID for a parent class with an 'Ort' prefix" {
-            derivePluginId("AdviseCommand", "OrtCommand") shouldBe "Advise"
+            derivePluginId("AdviseCommand", "OrtCommand") shouldBe "advise"
+        }
+
+        "return the plugin ID for a camel-case plugin class name" {
+            derivePluginId("UploadResultToPostgresCommand", "OrtCommand") shouldBe "upload-result-to-postgres"
         }
     }
 })
