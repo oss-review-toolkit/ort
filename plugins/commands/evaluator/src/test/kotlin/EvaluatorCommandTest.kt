@@ -39,7 +39,7 @@ class EvaluatorCommandTest : StringSpec({
         val args = "--check-syntax".split(' ')
 
         ortConfigDirectory.resolve(ORT_EVALUATOR_RULES_FILENAME) shouldNot exist()
-        EvaluatorCommand().test(args, envvars = mapOf(ORT_CONFIG_DIR_ENV_NAME to tempdir().path)).statusCode shouldBe 1
+        EvaluateCommand().test(args, envvars = mapOf(ORT_CONFIG_DIR_ENV_NAME to tempdir().path)).statusCode shouldBe 1
     }
 
     "If a rules resource is specified, the default rules file should not be required" {
@@ -47,7 +47,7 @@ class EvaluatorCommandTest : StringSpec({
 
         ortConfigDirectory.resolve(ORT_EVALUATOR_RULES_FILENAME) shouldNot exist()
         shouldNotThrow<FileNotFoundException> {
-            EvaluatorCommand().test(args, envvars = mapOf(ORT_CONFIG_DIR_ENV_NAME to tempdir().path))
+            EvaluateCommand().test(args, envvars = mapOf(ORT_CONFIG_DIR_ENV_NAME to tempdir().path))
         }
     }
 })

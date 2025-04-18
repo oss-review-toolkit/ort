@@ -48,7 +48,7 @@ import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
     description = "Create notifications based on an ORT result.",
     factory = OrtCommandFactory::class
 )
-class NotifierCommand(descriptor: PluginDescriptor = NotifierCommandFactory.descriptor) : OrtCommand(descriptor) {
+class NotifyCommand(descriptor: PluginDescriptor = NotifyCommandFactory.descriptor) : OrtCommand(descriptor) {
     private val ortFile by option(
         "--ort-file", "-i",
         help = "The ORT result file to read as input."
