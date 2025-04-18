@@ -28,6 +28,10 @@ class PluginSpecFactoryTest : WordSpec({
             derivePluginId("BlackDuck", "AdviceProvider") shouldBe "BlackDuck"
         }
 
+        "return the plugin ID for commands" {
+            derivePluginId("AdviseCommand", "OrtCommand") shouldBe "Advise"
+        }
+
         "return the plugin ID for package-configuration-providers" {
             derivePluginId("DirPackageConfigurationProvider", "PackageConfigurationProvider") shouldBe "Dir"
         }

@@ -202,4 +202,4 @@ class PluginSpecFactory {
 }
 
 internal fun derivePluginId(pluginClassName: String, pluginBaseClassName: String): String =
-    pluginClassName.removeSuffix(pluginBaseClassName)
+    pluginClassName.removeSuffix(pluginBaseClassName.removePrefix("Ort"))
