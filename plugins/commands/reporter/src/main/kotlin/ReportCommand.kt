@@ -85,7 +85,7 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants.LICENSE_REF_PREFIX
 
 @OrtPlugin(
-    displayName = "report",
+    displayName = "Report",
     description = "Present Analyzer, Scanner and Evaluator results in various formats.",
     factory = OrtCommandFactory::class
 )
