@@ -60,10 +60,8 @@ class PluginSpecFactory {
         }
 
         val pluginOptions = configClass?.getPluginOptions().orEmpty()
-
         val pluginId = ortPlugin.id.ifEmpty {
-            val pluginTypeName = pluginParentClass.simpleName.asString().removePrefix("Ort")
-            pluginClass.simpleName.asString().removeSuffix(pluginTypeName)
+            derivePluginId(pluginClass.simpleName.asString(), pluginParentClass.simpleName.asString())
         }
 
         return PluginSpec(
@@ -199,4 +197,8 @@ class PluginSpecFactory {
                 append(">")
             }
         }
+}
+
+internal fun derivePluginId(pluginClassName: String, pluginParentClassName: String): String {
+    return pluginClassName.removeSuffix(pluginParentClassName.removePrefix("Ort"))
 }
