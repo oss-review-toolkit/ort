@@ -37,7 +37,6 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.spdx.nullOrBlankToSpdxNoassertionOrNone
 
 @OrtPlugin(
-    id = "AOSD2.1",
     displayName = "Audi Open Source Diagnostics 2.1",
     description = "A reporter for the Audi Open Source Diagnostics (AOSD) 2.1 format.",
     factory = ReporterFactory::class

@@ -49,7 +49,6 @@ import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
  * An advice provider that obtains vulnerability information from Open Source Vulnerabilities (https://osv.dev/).
  */
 @OrtPlugin(
-    id = "OSV",
     displayName = "OSV",
     description = "An advisor that retrieves vulnerability information from the Open Source Vulnerabilities database.",
     factory = AdviceProviderFactory::class

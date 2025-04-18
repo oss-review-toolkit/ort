@@ -46,7 +46,6 @@ private const val PACKAGE_CONFIGURATIONS_DIR = "package-configurations"
  * [ort-config repository](https://github.com/oss-review-toolkit/ort-config).
  */
 @OrtPlugin(
-    id = "ORTConfig",
     displayName = "ORT Config Repository",
     description = "A package configuration provider that loads package configurations from the ort-config repository.",
     factory = PackageConfigurationProviderFactory::class

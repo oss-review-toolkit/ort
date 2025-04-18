@@ -74,7 +74,6 @@ data class FossIdReporterConfig(
 )
 
 @OrtPlugin(
-    id = "FossID",
     displayName = "FossID",
     description = "Export reports from FossID.",
     factory = ReporterFactory::class

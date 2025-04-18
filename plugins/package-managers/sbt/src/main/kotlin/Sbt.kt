@@ -79,7 +79,6 @@ data class SbtConfig(
  * The [SBT](https://www.scala-sbt.org/) package manager for Scala.
  */
 @OrtPlugin(
-    id = "SBT",
     displayName = "SBT",
     description = "The SBT package manager for Scala.",
     factory = PackageManagerFactory::class

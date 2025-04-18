@@ -42,7 +42,6 @@ import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 
 @OrtPlugin(
-    id = "SCANOSS",
     displayName = "SCANOSS",
     description = "A wrapper for the SCANOSS snippet scanner.",
     factory = ScannerWrapperFactory::class
