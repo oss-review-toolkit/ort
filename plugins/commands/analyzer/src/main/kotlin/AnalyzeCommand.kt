@@ -66,7 +66,7 @@ import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
 @OrtPlugin(
-    displayName = "analyze",
+    displayName = "Analyze",
     description = "Determine dependencies of a software project.",
     factory = OrtCommandFactory::class
 )
