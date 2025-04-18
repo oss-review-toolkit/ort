@@ -62,7 +62,8 @@ class PluginSpecFactory {
         val pluginOptions = configClass?.getPluginOptions().orEmpty()
 
         val pluginId = ortPlugin.id.ifEmpty {
-            pluginClass.simpleName.asString().removeSuffix(pluginParentClass.simpleName.asString())
+            val pluginTypeName = pluginParentClass.simpleName.asString().removePrefix("Ort")
+            pluginClass.simpleName.asString().removeSuffix(pluginTypeName)
         }
 
         return PluginSpec(

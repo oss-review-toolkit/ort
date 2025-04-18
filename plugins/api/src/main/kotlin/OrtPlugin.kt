@@ -33,7 +33,7 @@ import kotlin.reflect.KClass
 annotation class OrtPlugin(
     /**
      * The id of the plugin. Must be unique among all plugins for the same extension point. If empty, the id is derived
-     * from the class name by removing the plugin's parent class name as a suffix.
+     * from the class name by removing the plugin's parent class name (with any "Ort" prefix stripped) as a suffix.
      */
     val id: String = "",
 
