@@ -90,7 +90,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxConstants.LICENSE_REF_PREFIX
     description = "Present Analyzer, Scanner and Evaluator results in various formats.",
     factory = OrtCommandFactory::class
 )
-class ReporterCommand(descriptor: PluginDescriptor = ReporterCommandFactory.descriptor) : OrtCommand(descriptor) {
+class ReportCommand(descriptor: PluginDescriptor = ReportCommandFactory.descriptor) : OrtCommand(descriptor) {
     private val ortFile by option(
         "--ort-file", "-i",
         help = "The ORT result file to use."
