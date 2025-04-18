@@ -90,7 +90,7 @@ import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
     description = "Evaluate ORT result files against policy rules.",
     factory = OrtCommandFactory::class
 )
-class EvaluatorCommand(descriptor: PluginDescriptor = EvaluatorCommandFactory.descriptor) : OrtCommand(descriptor) {
+class EvaluateCommand(descriptor: PluginDescriptor = EvaluateCommandFactory.descriptor) : OrtCommand(descriptor) {
     private val ortFile by option(
         "--ort-file", "-i",
         help = "The ORT result file to read as input."
