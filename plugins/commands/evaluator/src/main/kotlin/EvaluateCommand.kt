@@ -86,7 +86,7 @@ import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
 @OrtPlugin(
     id = "evaluate",
-    displayName = "evaluate",
+    displayName = "Evaluate",
     description = "Evaluate ORT result files against policy rules.",
     factory = OrtCommandFactory::class
 )
