@@ -29,6 +29,8 @@ import org.apache.commons.compress.compressors.xz.XZCompressorInputStream
 import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream
 import org.apache.logging.log4j.kotlin.logger
 
+import org.ossreviewtoolkit.utils.common.collectMessages
+
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider
 import software.amazon.awssdk.core.sync.RequestBody
@@ -95,7 +97,7 @@ class S3FileStorage(
 
         return runCatching { s3Client.headObject(request) }.onFailure { exception ->
             if (exception !is NoSuchKeyException) {
-                logger.warn { "Unable to retrieve status for S3 key $path. Error: ${exception.message}" }
+                logger.warn { "Unable to read '$path' from S3 bucket '$bucketName': ${exception.collectMessages()}" }
             }
         }.isSuccess
     }
@@ -134,7 +136,9 @@ class S3FileStorage(
         runCatching {
             s3Client.putObject(request, body)
         }.onFailure { exception ->
-            if (exception is S3Exception) logger.warn { "Can not write '$path' to S3 bucket '$bucketName'." }
+            if (exception is S3Exception) {
+                logger.warn { "Can not write '$path' to S3 bucket '$bucketName': ${exception.collectMessages()}" }
+            }
         }
     }
 
