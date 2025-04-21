@@ -68,25 +68,26 @@ class S3FileStorage(
     private val secretAccessKey: String? = null
 ) : FileStorage {
     private val s3Client: S3Client by lazy {
-        val provider = if (accessKeyId != null && secretAccessKey != null) {
-            StaticCredentialsProvider.create(AwsBasicCredentials.create(accessKeyId, secretAccessKey))
-        } else {
-            null
-        }
-
-        if (awsRegion != null && provider != null) {
-            S3Client.builder()
-                .region(Region.of(awsRegion))
-                .credentialsProvider(provider)
-                .endpointOverride(if (customEndpoint != null) URI(customEndpoint) else null)
-                .build()
-        } else {
+        S3Client.builder().apply {
             if (awsRegion != null) {
-                S3Client.builder().region(Region.of(awsRegion)).build()
-            } else {
-                S3Client.create()
+                region(Region.of(awsRegion))
             }
-        }
+
+            if (accessKeyId != null && secretAccessKey != null) {
+                credentialsProvider(
+                    StaticCredentialsProvider.create(
+                        AwsBasicCredentials.create(
+                            accessKeyId,
+                            secretAccessKey
+                        )
+                    )
+                )
+            }
+
+            if (customEndpoint != null) {
+                endpointOverride(URI(customEndpoint))
+            }
+        }.build()
     }
 
     override fun exists(path: String): Boolean {
