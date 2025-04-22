@@ -1,112 +1,78 @@
 ---
-repository:
+projects:
+- id: "Bazel::plugins/package-managers/bazel/src/funTest/assets/projects/synthetic/bazel-local-registry2/MODULE.bazel:"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  declared_licenses: []
+  declared_licenses_processed: {}
   vcs:
     type: "Git"
-    url: "<REPLACE_URL>"
+    url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
-    path: "plugins/package-managers/bazel/src/funTest/assets/projects/synthetic/bazel-local-registry2"
+    path: "<REPLACE_PATH>"
   vcs_processed:
     type: "Git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
-    path: "plugins/package-managers/bazel/src/funTest/assets/projects/synthetic/bazel-local-registry2"
-  config: {}
-analyzer:
-  start_time: "1970-01-01T00:00:00Z"
-  end_time: "1970-01-01T00:00:00Z"
-  environment:
-    ort_version: "HEAD"
-    build_jdk: "<REPLACE_JDK>"
-    java_version: "<REPLACE_JAVA>"
-    os: "<REPLACE_OS>"
-    processors: "<REPLACE_PROCESSORS>"
-    max_memory: "<REPLACE_MAX_MEMORY>"
-    variables: {}
-    tool_versions: {}
-  config:
-    allow_dynamic_versions: false
-    enabled_package_managers:
-    - "Bazel"
-    skip_excluded: false
-  result:
-    projects:
-    - id: "Bazel::plugins/package-managers/bazel/src/funTest/assets/projects/synthetic/bazel-local-registry2/MODULE.bazel:"
-      definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
-      declared_licenses: []
-      declared_licenses_processed: {}
-      vcs:
-        type: "Git"
-        url: "<REPLACE_URL_PROCESSED>"
-        revision: "<REPLACE_REVISION>"
-        path: "<REPLACE_PATH>"
-      vcs_processed:
-        type: "Git"
-        url: "<REPLACE_URL_PROCESSED>"
-        revision: "<REPLACE_REVISION>"
-        path: "<REPLACE_PATH>"
-      homepage_url: ""
-      scopes:
-      - name: "main"
-        dependencies:
-        - id: "Bazel::module_a:0.0.1"
-          linkage: "STATIC"
-          dependencies:
-          - id: "Bazel::module_b:0.0.1"
-            linkage: "STATIC"
-    packages:
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "main"
+    dependencies:
     - id: "Bazel::module_a:0.0.1"
-      purl: "pkg:bazel/module_a@0.0.1"
-      declared_licenses: []
-      declared_licenses_processed: {}
-      description: ""
-      homepage_url: ""
-      binary_artifact:
-        url: ""
-        hash:
-          value: ""
-          algorithm: ""
-      source_artifact:
-        url: "https://example.com/module_a-0.0.1.zip"
-        hash:
-          value: "562c4be7507dc6fb4997ecd648bf935d84efe17b54715fa5cfbddac05279f668"
-          algorithm: "SHA-256"
-      vcs:
-        type: "Git"
-        url: ""
-        revision: ""
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: ""
-        revision: ""
-        path: ""
-    - id: "Bazel::module_b:0.0.1"
-      purl: "pkg:bazel/module_b@0.0.1"
-      declared_licenses: []
-      declared_licenses_processed: {}
-      description: ""
-      homepage_url: ""
-      binary_artifact:
-        url: ""
-        hash:
-          value: ""
-          algorithm: ""
-      source_artifact:
-        url: "https://example.com/module_b-0.0.1.zip"
-        hash:
-          value: "562c4be7507dc6fb4997ecd648bf935d84efe17b54715fa5cfbddac05279f668"
-          algorithm: "SHA-256"
-      vcs:
-        type: "Git"
-        url: ""
-        revision: ""
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: ""
-        revision: ""
-        path: ""
-scanner: null
-advisor: null
-evaluator: null
-resolved_configuration: {}
+      linkage: "STATIC"
+      dependencies:
+      - id: "Bazel::module_b:0.0.1"
+        linkage: "STATIC"
+packages:
+- id: "Bazel::module_a:0.0.1"
+  purl: "pkg:bazel/module_a@0.0.1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://example.com/module_a-0.0.1.zip"
+    hash:
+      value: "562c4be7507dc6fb4997ecd648bf935d84efe17b54715fa5cfbddac05279f668"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: ""
+    revision: ""
+    path: ""
+- id: "Bazel::module_b:0.0.1"
+  purl: "pkg:bazel/module_b@0.0.1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://example.com/module_b-0.0.1.zip"
+    hash:
+      value: "562c4be7507dc6fb4997ecd648bf935d84efe17b54715fa5cfbddac05279f668"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: ""
+    revision: ""
+    path: ""
