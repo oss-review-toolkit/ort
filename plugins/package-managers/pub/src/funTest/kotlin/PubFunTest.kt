@@ -22,11 +22,11 @@ package org.ossreviewtoolkit.plugins.packagemanagers.pub
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.string.haveSubstring
 
 import org.ossreviewtoolkit.analyzer.analyze
+import org.ossreviewtoolkit.analyzer.getAnalyzerResult
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.Hash
@@ -67,11 +67,9 @@ class PubFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/multi-module/pubspec.yaml")
             val expectedResultFile = getAssetFile("projects/synthetic/pub-expected-output-multi-module.yml")
 
-            val ortResult = analyze(definitionFile.parentFile)
+            val result = analyze(definitionFile.parentFile).getAnalyzerResult()
 
-            ortResult.analyzer shouldNotBeNull {
-                result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
-            }
+            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "resolve dependencies for a project with Flutter, Android and Cocoapods" {
@@ -82,17 +80,15 @@ class PubFunTest : WordSpec({
                 "projects/synthetic/pub-expected-output-with-flutter-android-and-cocoapods.yml"
             )
 
-            val ortResult = analyze(
+            val result = analyze(
                 definitionFile.parentFile,
                 packageManagerConfiguration = mapOf(
                     "GradleInspector" to PackageManagerConfiguration(options = mapOf("javaVersion" to "17"))
                 )
-            )
+            ).getAnalyzerResult()
 
-            ortResult.analyzer shouldNotBeNull {
-                result.patchPackages().reduceToPubProjects().toYaml() should
-                    matchExpectedResult(expectedResultFile, definitionFile)
-            }
+            result.patchPackages().reduceToPubProjects().toYaml() should
+                matchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "show an error if no lockfile is present" {
