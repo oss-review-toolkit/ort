@@ -21,6 +21,11 @@ package org.ossreviewtoolkit.plugins.packagemanagers.node.yarn
 
 import java.io.File
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.withContext
+
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
@@ -30,6 +35,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackage
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
+import org.ossreviewtoolkit.utils.ort.runBlocking
 
 internal class YarnDependencyHandler(private val yarn: Yarn) : DependencyHandler<YarnListNode> {
     private val packageJsonForModuleId = mutableMapOf<String, PackageJson>()
@@ -53,6 +59,9 @@ internal class YarnDependencyHandler(private val yarn: Yarn) : DependencyHandler
             packageJsonForModuleId[packageJson.moduleId] = packageJson
             moduleDirForModuleId[packageJson.moduleId] = moduleDir
         }
+
+        // Warm-up the cache to speed-up processing.
+        requestAllPackageDetails()
     }
 
     override fun identifierFor(dependency: YarnListNode): Identifier =
@@ -76,6 +85,20 @@ internal class YarnDependencyHandler(private val yarn: Yarn) : DependencyHandler
     }
 
     private fun YarnListNode.isProject(): Boolean = moduleDirForModuleId[name] in projectDirs
+
+    private fun requestAllPackageDetails() {
+        val moduleIds = packageJsonForModuleId.keys.filterTo(mutableSetOf()) { moduleId ->
+            moduleDirForModuleId[moduleId] !in projectDirs
+        }
+
+        runBlocking {
+            withContext(Dispatchers.IO.limitedParallelism(20)) {
+                moduleIds.map { moduleId ->
+                    async { yarn.getRemotePackageDetails(moduleId) }
+                }.awaitAll()
+            }
+        }
+    }
 }
 
 private val PackageJson.moduleId: String get() =
