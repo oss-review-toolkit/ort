@@ -23,8 +23,6 @@ import java.io.File
 import java.lang.invoke.MethodHandles
 import java.util.LinkedList
 
-import kotlin.time.Duration.Companion.days
-
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
@@ -47,21 +45,12 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.DirectoryStash
-import org.ossreviewtoolkit.utils.common.DiskCache
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.alsoIfNull
-import org.ossreviewtoolkit.utils.common.mebibytes
 import org.ossreviewtoolkit.utils.common.realFile
-import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
-
-private val yarnInfoCache = DiskCache(
-    directory = ortDataDirectory.resolve("cache/analyzer/yarn/info"),
-    maxCacheSizeInBytes = 100.mebibytes,
-    maxCacheEntryAgeInSeconds = 7.days.inWholeSeconds
-)
 
 internal object YarnCommand : CommandLineTool {
     override fun command(workingDir: File?) = if (Os.isWindows) "yarn.cmd" else "yarn"
@@ -83,6 +72,7 @@ class Yarn(override val descriptor: PluginDescriptor = YarnFactory.descriptor) :
 
     private lateinit var stash: DirectoryStash
 
+    private val yarnInfoCache = mutableMapOf<String, PackageJson>()
     private val handler = YarnDependencyHandler(this)
     override val graphBuilder = DependencyGraphBuilder(handler)
 
@@ -185,12 +175,12 @@ class Yarn(override val descriptor: PluginDescriptor = YarnFactory.descriptor) :
     }
 
     internal fun getRemotePackageDetails(packageName: String): PackageJson? {
-        yarnInfoCache.read(packageName)?.let { return parsePackageJson(it) }
+        yarnInfoCache[packageName]?.let { return it }
 
         val process = YarnCommand.run("info", "--json", packageName)
 
         return parseYarnInfo(process.stdout, process.stderr)?.also {
-            yarnInfoCache.write(packageName, Json.encodeToString(it))
+            yarnInfoCache[packageName] = it
         }
     }
 }
