@@ -175,7 +175,7 @@ class Yarn(override val descriptor: PluginDescriptor = YarnFactory.descriptor) :
     }
 
     internal fun getRemotePackageDetails(packageName: String): PackageJson? {
-        yarnInfoCache[packageName]?.let { return it }
+        yarnInfoCache[packageName]?.also { return it }
 
         val process = YarnCommand.run("info", "--json", packageName)
 

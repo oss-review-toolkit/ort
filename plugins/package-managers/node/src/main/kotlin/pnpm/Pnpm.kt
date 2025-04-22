@@ -150,7 +150,7 @@ class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
         ).requireSuccess()
 
     internal fun getRemotePackageDetails(packageName: String): PackageJson? {
-        pnpmInfoCache[packageName]?.let { return it }
+        pnpmInfoCache[packageName]?.also { return it }
 
         return runCatching {
             // Note that pnpm does not actually implement the "info" subcommand itself, but just forwards to npm, see
