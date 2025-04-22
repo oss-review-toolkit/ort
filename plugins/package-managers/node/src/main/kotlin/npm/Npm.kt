@@ -88,7 +88,7 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
 
     private lateinit var stash: DirectoryStash
 
-    private val npmViewCache = mutableMapOf<String, PackageJson>()
+    private val npmInfoCache = mutableMapOf<String, PackageJson>()
     private val handler = NpmDependencyHandler(projectType, this::getRemotePackageDetails)
 
     override val graphBuilder by lazy { DependencyGraphBuilder(handler) }
@@ -160,7 +160,7 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
     }
 
     internal fun getRemotePackageDetails(packageName: String): PackageJson? {
-        npmViewCache[packageName]?.let { return it }
+        npmInfoCache[packageName]?.let { return it }
 
         return runCatching {
             val process = NpmCommand.run("info", "--json", packageName).requireSuccess()
@@ -169,7 +169,7 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
         }.onFailure { e ->
             logger.warn { "Error getting details for $packageName: ${e.message.orEmpty()}" }
         }.onSuccess {
-            npmViewCache[packageName] = it
+            npmInfoCache[packageName] = it
         }.getOrNull()
     }
 

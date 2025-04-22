@@ -63,7 +63,7 @@ class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
 
     private lateinit var stash: DirectoryStash
 
-    private val packageDetailsCache = mutableMapOf<String, PackageJson>()
+    private val pnpmInfoCache = mutableMapOf<String, PackageJson>()
     private val handler = PnpmDependencyHandler(projectType, this::getRemotePackageDetails)
 
     override val graphBuilder by lazy { DependencyGraphBuilder(handler) }
@@ -150,7 +150,7 @@ class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
         ).requireSuccess()
 
     internal fun getRemotePackageDetails(packageName: String): PackageJson? {
-        packageDetailsCache[packageName]?.let { return it }
+        pnpmInfoCache[packageName]?.let { return it }
 
         return runCatching {
             // Note that pnpm does not actually implement the "info" subcommand itself, but just forwards to npm, see
@@ -161,7 +161,7 @@ class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
         }.onFailure { e ->
             logger.warn { "Error getting details for $packageName: ${e.message.orEmpty()}" }
         }.onSuccess {
-            packageDetailsCache[packageName] = it
+            pnpmInfoCache[packageName] = it
         }.getOrNull()
     }
 }
