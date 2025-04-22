@@ -23,6 +23,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.analyzer.analyze
+import org.ossreviewtoolkit.analyzer.getAnalyzerResult
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
@@ -33,7 +34,7 @@ class BazelDetectionTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/bazel-local-registry2/MODULE.bazel")
         val expectedResultFile = getAssetFile("projects/synthetic/bazel-expected-output-local-registry2.yml")
 
-        val result = analyze(definitionFile.parentFile, packageManagers = listOf(BazelFactory()))
+        val result = analyze(definitionFile.parentFile, packageManagers = listOf(BazelFactory())).getAnalyzerResult()
 
         patchActualResult(result.toYaml(), patchStartAndEndTime = true) should matchExpectedResult(
             expectedResultFile,
