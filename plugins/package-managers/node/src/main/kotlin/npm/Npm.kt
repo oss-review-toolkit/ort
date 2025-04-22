@@ -160,7 +160,7 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
     }
 
     internal fun getRemotePackageDetails(packageName: String): PackageJson? {
-        npmInfoCache[packageName]?.let { return it }
+        npmInfoCache[packageName]?.also { return it }
 
         return runCatching {
             val process = NpmCommand.run("info", "--json", packageName).requireSuccess()
