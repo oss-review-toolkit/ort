@@ -23,7 +23,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.shouldBeSingleton
-import io.kotest.matchers.collections.shouldContainAll
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.longs.beInRange
 import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.should
@@ -65,12 +65,17 @@ class PdfTemplateReporterFunTest : StringSpec({
     }
 
     "Advisor reports are generated if the result contains an advisor section" {
+        val outputDir = tempdir()
         val reportFileResults = PdfTemplateReporterFactory.create().generateReport(
             ReporterInput(ORT_RESULT_WITH_VULNERABILITIES),
-            tempdir()
+            outputDir
         )
 
-        val reportFileNames = reportFileResults.mapNotNull { it.getOrNull()?.name }
-        reportFileNames.shouldContainAll("AsciiDoc_vulnerability_report.pdf", "AsciiDoc_defect_report.pdf")
+        val reportFiles = reportFileResults.map { it.shouldBeSuccess() }
+        reportFiles.shouldContainExactlyInAnyOrder(
+            outputDir.resolve("AsciiDoc_defect_report.pdf"),
+            outputDir.resolve("AsciiDoc_disclosure_document.pdf"),
+            outputDir.resolve("AsciiDoc_vulnerability_report.pdf")
+        )
     }
 })
