@@ -19,10 +19,8 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.bundler
 
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
-import java.io.PrintStream
 import java.net.HttpURLConnection
 
 import kotlin.time.measureTime
@@ -84,33 +82,25 @@ private const val BUNDLER_GEM_NAME = "bundler"
 internal const val BUNDLER_LOCKFILE_NAME = "Gemfile.lock"
 
 private fun runScriptCode(code: String, workingDir: File? = null): String {
-    val bytes = ByteArrayOutputStream()
-
-    with(ScriptingContainer(LocalContextScope.THREADSAFE)) {
-        output = PrintStream(bytes, /* autoFlush = */ true, "UTF-8")
+    val output = with(ScriptingContainer(LocalContextScope.THREADSAFE)) {
         if (workingDir != null) currentDirectory = workingDir.path
-        runScriptlet(code)
+        runScriptlet(code).toString()
     }
 
-    val stdout = bytes.toString()
-    if (stdout.isEmpty()) throw IOException("Failed to run script code '$code'.")
+    if (output.isEmpty()) throw IOException("Failed to run script code '$code'.")
 
-    return stdout
+    return output
 }
 
 private fun runScriptResource(resource: String, workingDir: File? = null): String {
-    val bytes = ByteArrayOutputStream()
-
-    with(ScriptingContainer(LocalContextScope.THREADSAFE)) {
-        output = PrintStream(bytes, /* autoFlush = */ true, "UTF-8")
+    val output = with(ScriptingContainer(LocalContextScope.THREADSAFE)) {
         if (workingDir != null) currentDirectory = workingDir.path
-        runScriptlet(PathType.CLASSPATH, resource)
+        runScriptlet(PathType.CLASSPATH, resource).toString()
     }
 
-    val stdout = bytes.toString()
-    if (stdout.isEmpty()) throw IOException("Failed to run script resource '$resource'.")
+    if (output.isEmpty()) throw IOException("Failed to run script resource '$resource'.")
 
-    return stdout
+    return output
 }
 
 internal fun parseBundlerVersionFromLockfile(lockfile: File): String? {
