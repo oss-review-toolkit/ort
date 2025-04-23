@@ -110,10 +110,8 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
 
     internal val yarn2Command = Yarn2Command(config.corepackOverride)
 
-    // The issues that have been found when resolving the dependencies.
     private val issues = mutableListOf<Issue>()
 
-    // A builder to build the dependency graph of the project.
     override val graphBuilder = DependencyGraphBuilder(Yarn2DependencyHandler())
 
     override fun beforeResolution(
@@ -241,8 +239,7 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
         excludes: Excludes
     ): Map<Identifier, Project> {
         val allDependencies = mutableMapOf<YarnDependencyType, MutableMap<Identifier, List<Identifier>>>()
-        // Create packages for all modules found in the workspace and add them to the graph builder. They are reused
-        // when they are referenced by scope dependencies.
+
         packageInfos.forEach { info ->
             val dependencyMapping = parsePackage(info, definitionFile, packagesHeaders, packagesDetails)
             dependencyMapping.forEach {
