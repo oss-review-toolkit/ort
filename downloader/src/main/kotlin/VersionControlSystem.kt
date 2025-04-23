@@ -167,7 +167,7 @@ abstract class VersionControlSystem : Plugin {
     abstract val type: VcsType
 
     /**
-     *  The [priority] defines the order in which VCS implementaions are to be used. A higher value means a higher
+     *  The [priority] defines the order in which VCS implementations are to be used. A higher value means a higher
      *  priority.
      */
     abstract val priority: Int
