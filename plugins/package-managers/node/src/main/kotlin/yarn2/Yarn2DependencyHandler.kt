@@ -25,9 +25,6 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 
-/**
- * A specialized [DependencyHandler] implementation for Yarn 2+.
- */
 internal class Yarn2DependencyHandler : DependencyHandler<YarnModuleInfo> {
     override fun identifierFor(dependency: YarnModuleInfo): Identifier = dependency.id
 
