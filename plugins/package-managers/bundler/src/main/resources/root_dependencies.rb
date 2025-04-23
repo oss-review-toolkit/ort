@@ -26,10 +26,10 @@ require 'yaml'
 
 groups = {}
 
-Bundler.load.current_dependencies.each do |dep|
-    dep.groups.each do |group|
+Bundler.load.current_dependencies.each { |dep|
+    dep.groups.each { |group|
         (groups[group.to_s] ||= []) << dep.name
-    end
-end
+    }
+}
 
 puts(groups.to_yaml)
