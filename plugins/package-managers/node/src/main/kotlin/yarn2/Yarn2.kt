@@ -35,7 +35,6 @@ import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
@@ -45,7 +44,6 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
-import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.OrtPluginOption
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
@@ -540,20 +538,6 @@ internal data class YarnModuleInfo(
     /** A set with information about the modules this module depends on. */
     val dependencies: Set<YarnModuleInfo>
 )
-
-/**
- * A specialized [DependencyHandler] implementation for Yarn 2+.
- */
-private class Yarn2DependencyHandler : DependencyHandler<YarnModuleInfo> {
-    override fun identifierFor(dependency: YarnModuleInfo): Identifier = dependency.id
-
-    override fun dependenciesFor(dependency: YarnModuleInfo): List<YarnModuleInfo> = dependency.dependencies.toList()
-
-    override fun linkageFor(dependency: YarnModuleInfo): PackageLinkage =
-        if (dependency.pkg == null) PackageLinkage.PROJECT_DYNAMIC else PackageLinkage.DYNAMIC
-
-    override fun createPackage(dependency: YarnModuleInfo, issues: MutableCollection<Issue>): Package? = dependency.pkg
-}
 
 /**
  * The header of a NPM package, coming from a Yarn 2+ locator raw version string.
