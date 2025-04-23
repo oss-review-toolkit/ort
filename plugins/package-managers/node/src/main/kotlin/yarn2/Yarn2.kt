@@ -152,8 +152,8 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
     private fun getPackageInfos(workingDir: File): List<PackageInfo> {
         val process = yarn2Command.run(
             "info",
-            "-A",
-            "-R",
+            "--all",
+            "--recursive",
             "--manifest",
             "--json",
             workingDir = workingDir,
