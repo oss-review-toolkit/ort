@@ -19,8 +19,11 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.bundler
 
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
+import java.io.OutputStream
+import java.io.PrintStream
 import java.net.HttpURLConnection
 
 import kotlin.time.measureTime
@@ -29,9 +32,9 @@ import kotlinx.serialization.decodeFromString
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.jruby.embed.LocalContextScope
-import org.jruby.embed.PathType
-import org.jruby.embed.ScriptingContainer
+import org.graalvm.polyglot.Context
+import org.graalvm.polyglot.Engine
+import org.graalvm.polyglot.Source
 
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerFactory
@@ -64,12 +67,12 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 /**
  * The path to the helper script resource that resolves a `Gemfile`'s top-level dependencies with group information.
  */
-private const val ROOT_DEPENDENCIES_SCRIPT = "root_dependencies.rb"
+private const val ROOT_DEPENDENCIES_SCRIPT = "/root_dependencies.rb"
 
 /**
  * The path to the helper script resource that resolves a `Gemfile`'s dependencies.
  */
-private const val RESOLVE_DEPENDENCIES_SCRIPT = "resolve_dependencies.rb"
+private const val RESOLVE_DEPENDENCIES_SCRIPT = "/resolve_dependencies.rb"
 
 /**
  * The name of the Bundler Gem.
@@ -81,26 +84,63 @@ private const val BUNDLER_GEM_NAME = "bundler"
  */
 internal const val BUNDLER_LOCKFILE_NAME = "Gemfile.lock"
 
-private fun runScriptCode(code: String, workingDir: File? = null): String {
-    val output = with(ScriptingContainer(LocalContextScope.THREADSAFE)) {
-        if (workingDir != null) currentDirectory = workingDir.path
-        runScriptlet(code).toString()
+private fun runScriptCode(sourceCode: String, vararg args: String): String {
+    val bytes = ByteArrayOutputStream()
+
+    PrintStream(bytes, /* autoFlush = */ false, "UTF-8").use { stream ->
+        val engine = Engine.newBuilder("ruby")
+            //.logHandler(OutputStream.nullOutputStream())
+            .option("engine.WarnInterpreterOnly", "false")
+            .build()
+
+        val context = Context.newBuilder("ruby")
+            .arguments("ruby", args)
+            .engine(engine)
+            .allowAllAccess(true)
+            // Work around https://github.com/truffleruby/truffleruby/issues/3958.
+            .option("ruby.single-threaded", "false")
+            .out(stream)
+            .build()
+
+        context.use { it.eval("ruby", sourceCode) }
     }
 
-    if (output.isEmpty()) throw IOException("Failed to run script code '$code'.")
+    val stdout = bytes.toString()
+    if (stdout.isEmpty()) throw IOException("Failed to run script code '$sourceCode'.")
 
-    return output
+    return stdout
 }
 
-private fun runScriptResource(resource: String, workingDir: File? = null): String {
-    val output = with(ScriptingContainer(LocalContextScope.THREADSAFE)) {
-        if (workingDir != null) currentDirectory = workingDir.path
-        runScriptlet(PathType.CLASSPATH, resource).toString()
+private fun runScriptResource(resourceName: String, vararg args: String): String {
+    val resource = checkNotNull(object {}.javaClass.getResource(resourceName)) {
+        "Resource '$resourceName' not found."
     }
 
-    if (output.isEmpty()) throw IOException("Failed to run script resource '$resource'.")
+    val source = Source.newBuilder("ruby", resource).build()
+    val bytes = ByteArrayOutputStream()
 
-    return output
+    PrintStream(bytes, /* autoFlush = */ false, "UTF-8").use { stream ->
+        val engine = Engine.newBuilder("ruby")
+            //.logHandler(OutputStream.nullOutputStream())
+            .option("engine.WarnInterpreterOnly", "false")
+            .build()
+
+        val context = Context.newBuilder("ruby")
+            .arguments("ruby", args)
+            .engine(engine)
+            .allowAllAccess(true)
+            // Work around https://github.com/truffleruby/truffleruby/issues/3958.
+            .option("ruby.single-threaded", "false")
+            .out(stream)
+            .build()
+
+        context.use { it.eval(source) }
+    }
+
+    val stdout = bytes.toString()
+    if (stdout.isEmpty()) throw IOException("Failed to run script resource '$resourceName'.")
+
+    return stdout
 }
 
 internal fun parseBundlerVersionFromLockfile(lockfile: File): String? {
@@ -196,11 +236,11 @@ class Bundler(
         val scopes = mutableSetOf<Scope>()
         val issues = mutableListOf<Issue>()
 
-        val gemsInfo = resolveGemsInfo(workingDir)
+        val gemsInfo = resolveGemsInfo(definitionFile)
 
         return with(parseProject(analysisRoot, definitionFile, gemsInfo)) {
             val projectId = Identifier(projectType, "", name, version)
-            val groupedDeps = getDependencyGroups(workingDir)
+            val groupedDeps = getDependencyGroups(definitionFile)
 
             groupedDeps.forEach { (groupName, dependencyList) ->
                 parseScope(workingDir, projectId, groupName, dependencyList, scopes, gemsInfo, issues)
@@ -295,11 +335,11 @@ class Bundler(
         }
     }
 
-    private fun getDependencyGroups(workingDir: File): Map<String, List<String>> =
-        YAML.decodeFromString(runScriptResource(ROOT_DEPENDENCIES_SCRIPT, workingDir))
+    private fun getDependencyGroups(definitionFile: File): Map<String, List<String>> =
+        YAML.decodeFromString(runScriptResource(ROOT_DEPENDENCIES_SCRIPT, definitionFile.absolutePath))
 
-    private fun resolveGemsInfo(workingDir: File): MutableMap<String, GemInfo> {
-        val stdout = runScriptResource(RESOLVE_DEPENDENCIES_SCRIPT, workingDir)
+    private fun resolveGemsInfo(definitionFile: File): MutableMap<String, GemInfo> {
+        val stdout = runScriptResource(RESOLVE_DEPENDENCIES_SCRIPT, definitionFile.absolutePath)
 
         // The metadata produced by the "resolve_dependencies.rb" script separates specs for packages with the "\0"
         // character as delimiter.

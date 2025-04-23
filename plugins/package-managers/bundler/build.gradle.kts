@@ -34,7 +34,8 @@ dependencies {
     implementation(projects.utils.ortUtils)
     implementation(projects.utils.spdxUtils)
 
-    implementation(libs.jruby)
+    implementation(libs.graalvm.polyglot)
+    implementation(libs.graalvm.polyglot.ruby)
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.yaml)
 

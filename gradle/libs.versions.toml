@@ -25,6 +25,7 @@ diskLruCache = "2.0.2"
 exposed = "0.61.0"
 flexmark = "0.64.8"
 freemarker = "2.3.34"
+graalvmPolyglot = "25.0.0"
 greenmail = "2.1.6"
 gson = "2.13.2"
 hikari = "7.0.2"
@@ -34,7 +35,6 @@ jakartaMail = "2.0.2"
 jerseyCommon = "3.1.11"
 jgit = "7.4.0.202509020913-r"
 jiraRestClient = "7.0.1"
-jruby = "9.4.14.0"
 jslt = "0.1.14"
 jsonSchemaValidator = "1.5.9"
 kaml = "0.97.0"
@@ -110,6 +110,8 @@ exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "e
 exposed-json = { module = "org.jetbrains.exposed:exposed-json", version.ref = "exposed" }
 flexmark = { module = "com.vladsch.flexmark:flexmark", version.ref = "flexmark" }
 freemarker = { module = "org.freemarker:freemarker", version.ref = "freemarker" }
+graalvm-polyglot = { module = "org.graalvm.polyglot:polyglot", version.ref = "graalvmPolyglot" }
+graalvm-polyglot-ruby = { module = "org.graalvm.polyglot:ruby", version.ref = "graalvmPolyglot" }
 greenmail = { module = "com.icegreen:greenmail", version.ref = "greenmail" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 hikari = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }
@@ -123,7 +125,6 @@ jgit-ssh-apache = { module = "org.eclipse.jgit:org.eclipse.jgit.ssh.apache", ver
 jgit-ssh-apache-agent = { module = "org.eclipse.jgit:org.eclipse.jgit.ssh.apache.agent", version.ref = "jgit" }
 jiraRestClient-api = { module = "com.atlassian.jira:jira-rest-java-client-api", version.ref = "jiraRestClient" }
 jiraRestClient-app = { module = "com.atlassian.jira:jira-rest-java-client-app", version.ref = "jiraRestClient" }
-jruby = { module = "org.jruby:jruby", version.ref = "jruby" }
 jslt = { module = "com.schibsted.spt.data:jslt", version.ref = "jslt" }
 jsonSchemaValidator = { module = "com.networknt:json-schema-validator", version.ref = "jsonSchemaValidator" }
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }

@@ -87,10 +87,6 @@ dependencies {
         implementation("org.jetbrains.kotlin:kotlin-reflect:${libs.versions.kotlinPlugin.get()}") {
             because("All transitive versions of Kotlin reflect need to match ORT's version of Kotlin.")
         }
-
-        implementation(libs.jruby) {
-            because("JRuby used by Bundler directly and by AsciidoctorJ transitively must match.")
-        }
     }
 }
 
