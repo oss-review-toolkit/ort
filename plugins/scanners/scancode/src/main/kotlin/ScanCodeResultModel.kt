@@ -54,7 +54,7 @@ data class HeaderEntry(
         val inputPath = when (val input = options.getValue("input")) {
             is JsonPrimitive -> input.content
             is JsonArray -> input.first().jsonPrimitive.content
-            else -> throw SerializationException("Unknown input elememt type.")
+            else -> throw SerializationException("Unknown input element type.")
         }
 
         return File(inputPath)
