@@ -60,8 +60,8 @@ internal fun parsePackageJson(element: JsonElement): PackageJson {
 }
 
 /**
- * Transform the root element of a 'package.json' by reducing various representations of the 'license' and 'licenses'
- * property to a single JSON array of strings. See also See https://docs.npmjs.com/files/package.json#license.
+ * Transform the root element of a 'package.json' by reducing various representations of the 'license', 'licenses' and
+ * 'repository' property to a single JSON array of strings. See also https://docs.npmjs.com/files/package.json#license.
  *
  * Note: This function can be turned as-is into a JsonTransformingSerializer once this works with annotations on the
  * class.
