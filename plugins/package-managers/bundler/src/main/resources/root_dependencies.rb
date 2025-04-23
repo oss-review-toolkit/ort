@@ -24,6 +24,9 @@
 require 'bundler'
 require 'yaml'
 
+# When running with TruffleRuby, this works around https://github.com/truffleruby/truffleruby/issues/3840.
+ENV["BUNDLE_GEMFILE"] = ARGV[0]
+
 groups = {}
 
 Bundler.load.current_dependencies.each { |dep|

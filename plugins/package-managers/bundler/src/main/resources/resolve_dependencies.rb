@@ -29,6 +29,9 @@
 require 'bundler'
 require 'yaml'
 
+# When running with TruffleRuby, this works around https://github.com/truffleruby/truffleruby/issues/3840.
+ENV["BUNDLE_GEMFILE"] = ARGV[0]
+
 # Resolve dependencies independently of the Ruby interpreter.
 Bundler.settings.set_global(:force_ruby_platform, true)
 

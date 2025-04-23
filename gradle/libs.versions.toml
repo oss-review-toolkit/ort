@@ -24,6 +24,7 @@ diffUtils = "4.16"
 exposed = "0.61.0"
 flexmark = "0.64.8"
 freemarker = "2.3.34"
+graalvmPolyglot = "25.0.1"
 greenmail = "2.1.8"
 gson = "2.13.2"
 hikari = "7.0.2"
@@ -33,7 +34,6 @@ jakartaMail = "2.0.2"
 jerseyCommon = "4.0.0"
 jgit = "7.5.0.202512021534-r"
 jiraRestClient = "7.0.1"
-jruby = "9.4.14.0"
 jslt = "0.1.14"
 jsonSchemaValidator = "1.5.9"
 kaml = "0.104.0"
@@ -65,6 +65,7 @@ slf4j = "2.0.17"
 springCore = "7.0.2"
 svnkit = "1.10.13"
 tika = "3.2.3"
+truffleruby = "33.0.0"
 wagonHttp = "3.5.3"
 wiremock = "3.13.2"
 xmlutil = "0.91.3"
@@ -108,6 +109,7 @@ exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "e
 exposed-json = { module = "org.jetbrains.exposed:exposed-json", version.ref = "exposed" }
 flexmark = { module = "com.vladsch.flexmark:flexmark", version.ref = "flexmark" }
 freemarker = { module = "org.freemarker:freemarker", version.ref = "freemarker" }
+graalvm-polyglot = { module = "org.graalvm.polyglot:polyglot", version.ref = "graalvmPolyglot" }
 greenmail = { module = "com.icegreen:greenmail", version.ref = "greenmail" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 hikari = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }
@@ -121,7 +123,6 @@ jgit-ssh-apache = { module = "org.eclipse.jgit:org.eclipse.jgit.ssh.apache", ver
 jgit-ssh-apache-agent = { module = "org.eclipse.jgit:org.eclipse.jgit.ssh.apache.agent", version.ref = "jgit" }
 jiraRestClient-api = { module = "com.atlassian.jira:jira-rest-java-client-api", version.ref = "jiraRestClient" }
 jiraRestClient-app = { module = "com.atlassian.jira:jira-rest-java-client-app", version.ref = "jiraRestClient" }
-jruby = { module = "org.jruby:jruby", version.ref = "jruby" }
 jslt = { module = "com.schibsted.spt.data:jslt", version.ref = "jslt" }
 jsonSchemaValidator = { module = "com.networknt:json-schema-validator", version.ref = "jsonSchemaValidator" }
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
@@ -179,6 +180,7 @@ slf4j = { module = "org.slf4j:slf4j-api ", version.ref = "slf4j" }
 springCore = { module = "org.springframework:spring-core", version.ref = "springCore" }
 svnkit = { module = "com.tmatesoft.svnkit:svnkit", version.ref = "svnkit" }
 tika = { module = "org.apache.tika:tika-core", version.ref = "tika" }
+truffleruby = { module = "dev.truffleruby:truffleruby", version.ref = "truffleruby" }
 wagon-http = { module = "org.apache.maven.wagon:wagon-http", version.ref = "wagonHttp" }
 wiremock = { module = "org.wiremock:wiremock", version.ref = "wiremock" }
 xz = { module = "org.tukaani:xz", version.ref = "xz" }

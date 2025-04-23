@@ -27,9 +27,10 @@ import kotlinx.serialization.decodeFromString
 
 import org.apache.logging.log4j.kotlin.logger
 
-import org.jruby.embed.LocalContextScope
-import org.jruby.embed.PathType
-import org.jruby.embed.ScriptingContainer
+import org.graalvm.polyglot.Context
+import org.graalvm.polyglot.Engine
+import org.graalvm.polyglot.Source
+import org.graalvm.polyglot.Value
 
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerFactory
@@ -49,7 +50,6 @@ import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.AlphaNumericComparator
-import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.HttpDownloadError
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
@@ -58,10 +58,10 @@ import org.ossreviewtoolkit.utils.ort.okHttpClient
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 /** The name of the helper script resource that resolves a `Gemfile`'s top-level dependencies with group information. */
-private const val ROOT_DEPENDENCIES_SCRIPT_RESOURCE_NAME = "root_dependencies.rb"
+private const val ROOT_DEPENDENCIES_SCRIPT_RESOURCE_NAME = "/root_dependencies.rb"
 
 /** The name of the helper script resource that resolves a `Gemfile`'s dependencies. */
-private const val RESOLVE_DEPENDENCIES_SCRIPT_RESOURCE_NAME = "resolve_dependencies.rb"
+private const val RESOLVE_DEPENDENCIES_SCRIPT_RESOURCE_NAME = "/resolve_dependencies.rb"
 
 /** The name of the Bundler Gem. */
 private const val BUNDLER_GEM_NAME = "bundler"
@@ -69,24 +69,45 @@ private const val BUNDLER_GEM_NAME = "bundler"
 /** The name of the file where Bundler stores locked down dependency information. */
 internal const val BUNDLER_LOCKFILE_NAME = "Gemfile.lock"
 
-private fun runScriptCode(sourceCode: String, workingDir: File? = null): Any? {
-    val output = with(ScriptingContainer(LocalContextScope.THREADSAFE)) {
-        if (workingDir != null) currentDirectory = workingDir.path
-        environment["BUNDLE_PATH"] = "${Os.userHomeDirectory}/.bundle"
-        runScriptlet(sourceCode)
-    }
+/** A constant for the (only) polyglot language permitted by this plugin. */
+private const val PERMITTED_LANGUAGE = "ruby"
 
-    return output
+/** An engine instance with customized options. */
+private val engine by lazy {
+    Engine.newBuilder(PERMITTED_LANGUAGE)
+        //.logHandler(OutputStream.nullOutputStream())
+        .option("engine.WarnInterpreterOnly", "false")
+        .build()
 }
 
-private fun runScriptResource(resourceName: String, workingDir: File? = null): Any? {
-    val output = with(ScriptingContainer(LocalContextScope.THREADSAFE)) {
-        if (workingDir != null) currentDirectory = workingDir.path
-        environment["BUNDLE_PATH"] = "${Os.userHomeDirectory}/.bundle"
-        runScriptlet(PathType.CLASSPATH, resourceName)
+private fun runScriptCode(sourceCode: String, vararg args: String): Value =
+    runScriptSource(Source.newBuilder(PERMITTED_LANGUAGE, sourceCode, /* name = */ null).build(), *args)
+
+private fun runScriptResource(resourceName: String, vararg args: String): Value {
+    val resource = checkNotNull(object {}.javaClass.getResource(resourceName)) {
+        "Resource '$resourceName' not found."
     }
 
-    return output
+    return runScriptSource(Source.newBuilder(PERMITTED_LANGUAGE, resource).build(), *args)
+}
+
+private fun runScriptSource(source: Source, vararg args: String): Value {
+    //val output = with(ScriptingContainer(LocalContextScope.THREADSAFE)) {
+    //    if (workingDir != null) currentDirectory = workingDir.path
+    //    environment["BUNDLE_PATH"] = "${Os.userHomeDirectory}/.bundle"
+    //    runScriptlet(sourceCode)
+    //}
+    //
+    //return output
+
+    val context = Context.newBuilder(PERMITTED_LANGUAGE)
+        .engine(engine)
+        .allowAllAccess(true)
+        .arguments(PERMITTED_LANGUAGE, args)
+        .build()
+
+    //TODO: Close context.
+    return context.let { it.eval(source) }
 }
 
 internal fun parseBundlerVersionFromLockfile(lockfile: File): String? {
@@ -150,7 +171,7 @@ class Bundler(
                     cmd.handle_options ["--no-document", "--user-install", "$BUNDLER_GEM_NAME:$bundlerVersion"]
                     cmd.execute
                 """.trimIndent()
-                val result = runScriptCode(code) as Long
+                val result = runScriptCode(code).asLong()
                 check(result == 0L) { "Installing the '$BUNDLER_GEM_NAME' Gem failed with error code $result." }
             }.onSuccess {
                 logger.info { "Installing Bundler version $bundlerVersion completed successfully." }
@@ -161,7 +182,7 @@ class Bundler(
 
         runCatching {
             val code = "Gem::Specification.find_by_name('$BUNDLER_GEM_NAME').version.to_s"
-            val result = runScriptCode(code) as String
+            val result = runScriptCode(code).asString()
             result.trim()
         }.onSuccess { installedBundlerVersion ->
             logger.info { "Using the '$BUNDLER_GEM_NAME' Gem in version $installedBundlerVersion." }
@@ -186,11 +207,11 @@ class Bundler(
         val scopes = mutableSetOf<Scope>()
         val issues = mutableListOf<Issue>()
 
-        val gemsInfo = resolveGemsInfo(workingDir)
+        val gemsInfo = resolveGemsInfo(definitionFile)
 
         return with(parseProject(analysisRoot, definitionFile, gemsInfo)) {
             val projectId = Identifier(projectType, "", name, version)
-            val groupedDeps = getDependencyGroups(workingDir)
+            val groupedDeps = getDependencyGroups(definitionFile)
 
             groupedDeps.forEach { (groupName, dependencyList) ->
                 parseScope(workingDir, projectId, groupName, dependencyList, scopes, gemsInfo, issues)
@@ -286,11 +307,12 @@ class Bundler(
     }
 
     @Suppress("UNCHECKED_CAST")
-    private fun getDependencyGroups(workingDir: File): Map<String, List<String>> =
-        runScriptResource(ROOT_DEPENDENCIES_SCRIPT_RESOURCE_NAME, workingDir) as Map<String, List<String>>
+    private fun getDependencyGroups(definitionFile: File): Map<String, List<String>> =
+        runScriptResource(ROOT_DEPENDENCIES_SCRIPT_RESOURCE_NAME, definitionFile.absolutePath)
+            .`as`(Map::class.java) as Map<String, List<String>>
 
-    private fun resolveGemsInfo(workingDir: File): MutableMap<String, GemInfo> {
-        val specs = runScriptResource(RESOLVE_DEPENDENCIES_SCRIPT_RESOURCE_NAME, workingDir).toString()
+    private fun resolveGemsInfo(definitionFile: File): MutableMap<String, GemInfo> {
+        val specs = runScriptResource(RESOLVE_DEPENDENCIES_SCRIPT_RESOURCE_NAME, definitionFile.absolutePath).asString()
 
         // The metadata produced by the "resolve_dependencies.rb" script separates specs for packages with the "\0"
         // character as delimiter.
