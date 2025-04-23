@@ -105,11 +105,8 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
     NodePackageManager(NodePackageManagerType.YARN2) {
     override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE)
 
-    // All the packages parsed by this package manager, mapped by their ids.
-    private val allPackages = mutableMapOf<Identifier, Package>()
-
-    // All the projects parsed by this package manager, mapped by their ids.
-    private val allProjects = mutableMapOf<Identifier, Project>()
+    private val packageForId = mutableMapOf<Identifier, Package>()
+    private val projectForId = mutableMapOf<Identifier, Project>()
 
     internal val yarn2Command = Yarn2Command(config.corepackOverride)
 
@@ -256,11 +253,11 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
 
         allDependencies.filterNot { excludes.isScopeExcluded(it.key.type) }
             .forEach { (dependencyType, allScopedDependencies) ->
-                allProjects.values.forEach { project ->
+                projectForId.values.forEach { project ->
                     val dependencies = allScopedDependencies[project.id]
                     val dependenciesInfo = dependencies?.mapNotNullTo(mutableSetOf()) { dependency ->
                         if ("Yarn2" in dependency.type) {
-                            val projectAsDependency = allProjects.entries.find { entry ->
+                            val projectAsDependency = projectForId.entries.find { entry ->
                                 entry.key.type == "Yarn2" && entry.key.name == dependency.name &&
                                     entry.key.namespace == dependency.namespace
                             }
@@ -277,7 +274,7 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
                                 )
                             }
                         } else {
-                            val packageDependency = allPackages[dependency]
+                            val packageDependency = packageForId[dependency]
                             if (packageDependency == null) {
                                 logger.warn { "Could not find package for dependency $dependency." }
                                 null
@@ -302,7 +299,7 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
                 }
             }
 
-        return allProjects
+        return projectForId
     }
 
     /**
@@ -311,7 +308,7 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
      * Additional data necessary for constructing the instances is read from [packagesHeaders] which should be the
      * package representations as a triple : rawName/type/locator, mapped by package id. Other additional data is read
      * from [packagesDetails] which should be the package details extracted from `yarn npm view`, mapped by id.
-     * The objects constructed by this function are put either in [allPackages] or in [allProjects].
+     * The objects constructed by this function are put either in [packageForId] or in [projectForId].
      * The list of dependencies of the constructed object is returned.
      */
     private fun parsePackage(
@@ -342,7 +339,7 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
                 .mapNotNullTo(mutableSetOf()) { it.name }
 
             val id = Identifier("Yarn2", namespace, name, version)
-            allProjects += id to Project(
+            projectForId += id to Project(
                 id = id.copy(type = projectType),
                 definitionFilePath = VersionControlSystem.getPathInfo(projectFile).path,
                 declaredLicenses = declaredLicenses,
@@ -401,7 +398,7 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
                 "Generated package info for '${id.toCoordinates()}' has no version."
             }
 
-            allPackages += id to pkg
+            packageForId += id to pkg
             id
         }
 
@@ -438,7 +435,7 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
                 return@mapNotNull null
             }
 
-            val dependencyPkg = allPackages[dependencyId]
+            val dependencyPkg = packageForId[dependencyId]
             if (dependencyPkg == null) {
                 logger.warn { "Could not find package for sub dependency '$dependencyId' of package '$id'." }
                 null
