@@ -62,7 +62,7 @@ internal fun Bom.addDependencies(
     visited: MutableSet<String> = mutableSetOf()
 ) {
     // Return early if dependencies for this parent have already been recorded. Note that this disregards the case where
-    // dependencies of a parent differ depending e.g. on the project scope due to version conflict resultion. That is
+    // dependencies of a parent differ depending e.g. on the project scope due to version conflict resolution. That is
     // because CycloneDX itself only records dependency information globally at the BOM level, and does not support
     // different dependencies for a given parent depending on context.
     if (parentRef in visited) return
@@ -96,7 +96,7 @@ internal fun Bom.addExternalReference(type: ExternalReference.Type, url: String,
 }
 
 /**
- * Add the given [ORT package][pkg] to this [Bom] by converting it to a CycloneDX [Component] using the metdata from
+ * Add the given [ORT package][pkg] to this [Bom] by converting it to a CycloneDX [Component] using the metadata from
  * [input]. The [dependencyType] is added as an [ExtensibleType] to indicate "direct" vs "transitive" dependencies.
  */
 internal fun Bom.addComponent(input: ReporterInput, pkg: Package, dependencyType: String) {
