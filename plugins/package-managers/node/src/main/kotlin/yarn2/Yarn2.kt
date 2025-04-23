@@ -122,6 +122,34 @@ internal class Yarn2Command(private val enableCorepack: Boolean?) : CommandLineT
     override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=2.0.0")
 
     private fun isCorepackEnabled(workingDir: File): Boolean = enableCorepack ?: isCorepackEnabledInManifest(workingDir)
+
+    private fun getYarnExecutable(workingDir: File): File {
+        val yarnrcFile = workingDir.resolve(YARN2_RESOURCE_FILE)
+        val yarnConfig = Yaml.default.parseToYamlNode(yarnrcFile.readText()).yamlMap
+        val yarnPath = yarnConfig.get<YamlScalar>("yarnPath")?.content
+
+        require(!yarnPath.isNullOrEmpty()) { "No Yarn 2+ executable could be found in '$YARN2_RESOURCE_FILE'." }
+
+        val yarnExecutable = workingDir.resolve(yarnPath)
+
+        // TODO: This is a security risk to blindly run code coming from a repository other than ORT's. ORT
+        //       should download the Yarn2 binary from the official repository and run it.
+        require(yarnExecutable.isFile) {
+            "The Yarn 2+ program '${yarnExecutable.name}' does not exist."
+        }
+
+        if (!yarnExecutable.canExecute()) {
+            logger.warn {
+                "The Yarn 2+ program '${yarnExecutable.name}' should be executable. Changing its rights."
+            }
+
+            require(yarnExecutable.setExecutable(true)) {
+                "Cannot set the Yarn 2+ program to be executable."
+            }
+        }
+
+        return yarnExecutable
+    }
 }
 
 data class Yarn2Config(
@@ -652,34 +680,6 @@ private fun PackageJson.getScopeDependencies(type: YarnDependencyType) =
         YarnDependencyType.DEPENDENCIES -> dependencies
         YarnDependencyType.DEV_DEPENDENCIES -> devDependencies
     }
-
-private fun Yarn2Command.getYarnExecutable(workingDir: File): File {
-    val yarnrcFile = workingDir.resolve(YARN2_RESOURCE_FILE)
-    val yarnConfig = Yaml.default.parseToYamlNode(yarnrcFile.readText()).yamlMap
-    val yarnPath = yarnConfig.get<YamlScalar>("yarnPath")?.content
-
-    require(!yarnPath.isNullOrEmpty()) { "No Yarn 2+ executable could be found in '$YARN2_RESOURCE_FILE'." }
-
-    val yarnExecutable = workingDir.resolve(yarnPath)
-
-    // TODO: This is a security risk to blindly run code coming from a repository other than ORT's. ORT
-    //       should download the Yarn2 binary from the official repository and run it.
-    require(yarnExecutable.isFile) {
-        "The Yarn 2+ program '${yarnExecutable.name}' does not exist."
-    }
-
-    if (!yarnExecutable.canExecute()) {
-        logger.warn {
-            "The Yarn 2+ program '${yarnExecutable.name}' should be executable. Changing its rights."
-        }
-
-        require(yarnExecutable.setExecutable(true)) {
-            "Cannot set the Yarn 2+ program to be executable."
-        }
-    }
-
-    return yarnExecutable
-}
 
 /**
  * Check whether Corepack is enabled based on the `package.json` file in [workingDir]. If no such file is found
