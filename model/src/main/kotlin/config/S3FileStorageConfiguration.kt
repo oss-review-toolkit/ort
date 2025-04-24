@@ -38,6 +38,9 @@ data class S3FileStorageConfiguration(
     /** Custom endpoint to perform AWS API Requests */
     val customEndpoint: String? = null,
 
+    /** Whether to enable path style access or not. Required for many non-AWS S3 providers. Defaults to false. */
+    val pathStyleAccess: Boolean = false,
+
     /** The AWS secret for the access key. */
     val secretAccessKey: String? = null
 )

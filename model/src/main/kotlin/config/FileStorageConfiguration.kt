@@ -60,7 +60,7 @@ data class FileStorageConfiguration(
         if (storage is S3FileStorageConfiguration) {
             return S3FileStorage(
                 storage.accessKeyId, storage.awsRegion, storage.bucketName, storage.compression,
-                storage.customEndpoint, storage.secretAccessKey
+                storage.customEndpoint, storage.pathStyleAccess, storage.secretAccessKey
             )
         }
 

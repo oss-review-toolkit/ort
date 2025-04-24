@@ -309,6 +309,7 @@ ort:
             bucketName: "ort-scan-results"
             compression: false
             customEndpoint: "http://localhost:4567"
+            pathStyleAccess: false # Required for some non-AWS S3 providers that do not support DNS style access.
             secretAccessKey: "secret"
 
       clearlyDefined:

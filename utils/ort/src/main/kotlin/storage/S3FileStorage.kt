@@ -64,6 +64,9 @@ class S3FileStorage(
     /** Custom endpoint to perform AWS API Requests */
     private val customEndpoint: String? = null,
 
+    /** Whether to enable path style access or not. Required for many non-AWS S3 providers. Defaults to false. */
+    private val pathStyleAccess: Boolean = false,
+
     /** The AWS secret for the access key. */
     private val secretAccessKey: String? = null
 ) : FileStorage {
@@ -86,6 +89,9 @@ class S3FileStorage(
 
             if (customEndpoint != null) {
                 endpointOverride(URI(customEndpoint))
+                serviceConfiguration {
+                    it.pathStyleAccessEnabled(pathStyleAccess)
+                }
             }
         }.build()
     }
