@@ -68,7 +68,7 @@ springCore = "6.2.6"
 svnkit = "1.10.12"
 sw360Client = "17.0.1-m2"
 wagonHttp = "3.5.3"
-wiremock = "3.12.1"
+wiremock = "3.13.0"
 xmlutil = "0.91.0"
 xz = "1.10"
 
