@@ -19,7 +19,11 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.node
 
+import org.ossreviewtoolkit.model.config.Excludes
+
 internal enum class Scope(val descriptor: String) {
     DEPENDENCIES("dependencies"),
-    DEV_DEPENDENCIES("devDependencies")
+    DEV_DEPENDENCIES("devDependencies");
+
+    fun isExcluded(excludes: Excludes): Boolean = excludes.isScopeExcluded(descriptor)
 }

@@ -97,7 +97,7 @@ class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
         val workspaceModuleDirs = getWorkspaceModuleDirs(workingDir)
         handler.setWorkspaceModuleDirs(workspaceModuleDirs)
 
-        val scopes = Scope.entries.filterNot { scope -> excludes.isScopeExcluded(scope.descriptor) }
+        val scopes = Scope.entries.filterNot { scope -> scope.isExcluded(excludes) }
         val moduleInfosForScope = scopes.associateWith { scope -> listModules(workingDir, scope) }
 
         return workspaceModuleDirs.map { projectDir ->
