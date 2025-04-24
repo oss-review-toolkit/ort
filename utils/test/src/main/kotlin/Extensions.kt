@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.utils.test
 
+import io.kotest.core.TestConfiguration
+
 import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.utils.FileArchiver
@@ -33,3 +35,5 @@ fun FileArchiver.Companion.createDefault() =
             FileArchiverConfiguration.ARCHIVE_FILENAME
         )
     )
+
+fun TestConfiguration.readResource(name: String) = checkNotNull(javaClass.getResource(name)).readText()
