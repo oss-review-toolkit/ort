@@ -34,6 +34,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.Scope
+import org.ossreviewtoolkit.plugins.packagemanagers.node.getNames
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.DirectoryStash
@@ -104,17 +105,13 @@ class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
             val packageJsonFile = projectDir.resolve(NodePackageManagerType.DEFINITION_FILE)
             val project = parseProject(packageJsonFile, analysisRoot)
 
-            val scopeNames = scopes.mapTo(mutableSetOf()) { scope ->
-                val scopeName = scope.descriptor
+            scopes.forEach { scope ->
                 val moduleInfo = moduleInfosForScope.getValue(scope).single { it.path == projectDir.absolutePath }
-
-                graphBuilder.addDependencies(project.id, scopeName, moduleInfo.getScopeDependencies(scope))
-
-                scopeName
+                graphBuilder.addDependencies(project.id, scope.descriptor, moduleInfo.getScopeDependencies(scope))
             }
 
             ProjectAnalyzerResult(
-                project = project.copy(scopeNames = scopeNames),
+                project = project.copy(scopeNames = scopes.getNames()),
                 packages = emptySet(),
                 issues = emptyList()
             )

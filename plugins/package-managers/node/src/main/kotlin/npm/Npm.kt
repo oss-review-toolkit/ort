@@ -44,6 +44,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.Scope
+import org.ossreviewtoolkit.plugins.packagemanagers.node.getNames
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.DirectoryStash
@@ -137,16 +138,12 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
         // Warm-up the cache to speed-up processing.
         requestAllPackageDetails(projectModuleInfo, scopes)
 
-        val scopeNames = scopes.mapTo(mutableSetOf()) { scope ->
-            val scopeName = scope.descriptor
-
-            graphBuilder.addDependencies(project.id, scopeName, projectModuleInfo.getScopeDependencies(scope))
-
-            scopeName
+        scopes.forEach { scope ->
+            graphBuilder.addDependencies(project.id, scope.descriptor, projectModuleInfo.getScopeDependencies(scope))
         }
 
         return ProjectAnalyzerResult(
-            project = project.copy(scopeNames = scopeNames),
+            project = project.copy(scopeNames = scopes.getNames()),
             packages = emptySet(),
             issues = issues
         ).let { listOf(it) }
