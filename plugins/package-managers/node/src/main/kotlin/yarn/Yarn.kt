@@ -43,6 +43,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.Scope
+import org.ossreviewtoolkit.plugins.packagemanagers.node.getDependenciesForScope
 import org.ossreviewtoolkit.plugins.packagemanagers.node.getNames
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.utils.common.CommandLineTool
@@ -208,12 +209,6 @@ private fun getModuleDirs(moduleDir: File): Set<File> =
     moduleDir.resolve("node_modules").walk().filter {
         it.isFile && it.name == NodePackageManagerType.DEFINITION_FILE
     }.mapTo(mutableSetOf()) { it.parentFile.realFile }
-
-private fun PackageJson.getDependenciesForScope(scope: Scope): Set<String> =
-    when (scope) {
-        Scope.DEPENDENCIES -> dependencies.keys + optionalDependencies.keys
-        Scope.DEV_DEPENDENCIES -> devDependencies.keys
-    }
 
 internal val YarnListNode.moduleName: String get() = name.substringBeforeLast("@")
 
