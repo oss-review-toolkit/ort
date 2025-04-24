@@ -137,7 +137,7 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
         requestAllPackageDetails(projectModuleInfo)
 
         val scopeNames = Scope.entries
-            .filterNot { excludes.isScopeExcluded(it.descriptor) }
+            .filterNot { scope -> scope.isExcluded(excludes) }
             .mapTo(mutableSetOf()) { scope ->
                 val scopeName = scope.descriptor
 
