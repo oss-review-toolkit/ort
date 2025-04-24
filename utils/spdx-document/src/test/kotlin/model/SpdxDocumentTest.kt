@@ -27,9 +27,8 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.string.shouldContain
 
-import java.io.File
-
 import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper
+import org.ossreviewtoolkit.utils.test.readResource
 
 /**
  * This test uses the following test assets copied from the SPDX 2.2.2 specification examples.
@@ -41,19 +40,17 @@ import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper
  * specification and impossible to implement.
  */
 class SpdxDocumentTest : WordSpec({
-    val spdxExamplesDir = File("src/test/assets/spdx-spec-examples").absoluteFile
-
     "The official YAML example from the SPDX specification version 2.2" should {
         "be deserializable" {
-            val yaml = spdxExamplesDir.resolve("SPDXYAMLExample-2.2.spdx.yaml")
+            val yaml = readResource("/spdx-spec-examples/SPDXYAMLExample-2.2.spdx.yaml")
 
-            SpdxModelMapper.read<SpdxDocument>(yaml)
+            SpdxModelMapper.fromYaml<SpdxDocument>(yaml)
         }
     }
 
     "The official YAML example without ranges from the SPDX specification version 2.2" should {
         "have idempotent (de)-serialization" {
-            val yaml = spdxExamplesDir.resolve("SPDXYAMLExample-2.2-no-ranges.spdx.yaml").readText()
+            val yaml = readResource("/spdx-spec-examples/SPDXYAMLExample-2.2-no-ranges.spdx.yaml")
 
             val reSerializedYaml = SpdxModelMapper.fromYaml<SpdxDocument>(yaml).let {
                 SpdxModelMapper.toYaml(it)
@@ -65,15 +62,15 @@ class SpdxDocumentTest : WordSpec({
 
     "The official JSON example from the SPDX specification version 2.2" should {
         "be deserializable" {
-            val json = spdxExamplesDir.resolve("SPDXJSONExample-v2.2.spdx.json")
+            val json = readResource("/spdx-spec-examples/SPDXJSONExample-v2.2.spdx.json")
 
-            SpdxModelMapper.read<SpdxDocument>(json)
+            SpdxModelMapper.fromJson<SpdxDocument>(json)
         }
     }
 
     "The official JSON example without ranges from the SPDX specification version 2.2" should {
         "have idempotent (de-)serialization" {
-            val json = spdxExamplesDir.resolve("SPDXJSONExample-v2.2-no-ranges.spdx.json").readText()
+            val json = readResource("/spdx-spec-examples/SPDXJSONExample-v2.2-no-ranges.spdx.json")
 
             val reSerializedJson = SpdxModelMapper.fromJson<SpdxDocument>(json).let {
                 SpdxModelMapper.toJson(it)
@@ -85,12 +82,12 @@ class SpdxDocumentTest : WordSpec({
 
     "Parsing an SPDX document" should {
         "fail if no relationship of type DESCRIBES or documentDescribes is contained" {
-            val yaml = spdxExamplesDir.resolve(
-                "SPDXYAMLExample-2.2-no-relationship-describes-or-document-describes.spdx.yaml"
+            val yaml = readResource(
+                "/spdx-spec-examples/SPDXYAMLExample-2.2-no-relationship-describes-or-document-describes.spdx.yaml"
             )
 
             val exception = shouldThrow<ValueInstantiationException> {
-                SpdxModelMapper.read<SpdxDocument>(yaml)
+                SpdxModelMapper.fromYaml<SpdxDocument>(yaml)
             }
 
             exception.message shouldContain "The document must either have at least one relationship of type " +

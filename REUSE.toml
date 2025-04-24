@@ -191,6 +191,6 @@ SPDX-FileCopyrightText = "2010-2020 Linux Foundation and its Contributors"
 SPDX-License-Identifier = "CC0-1.0"
 
 [[annotations]]
-path = "utils/spdx/src/test/assets/spdx-spec-examples/**"
+path = "utils/spdx/src/test/resources/spdx-spec-examples/**"
 SPDX-FileCopyrightText = "2010-2020 Linux Foundation and its Contributors"
 SPDX-License-Identifier = "CC-BY-3.0"

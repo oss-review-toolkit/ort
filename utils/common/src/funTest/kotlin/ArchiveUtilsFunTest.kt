@@ -40,24 +40,13 @@ import kotlinx.coroutines.withContext
 
 import org.apache.commons.compress.archivers.ArchiveEntry
 
-import org.ossreviewtoolkit.utils.test.getAssetFile
+import org.ossreviewtoolkit.utils.test.readResource
 
 class ArchiveUtilsFunTest : WordSpec() {
     private lateinit var outputDir: File
 
     override suspend fun beforeEach(testCase: TestCase) {
         outputDir = tempdir(testCase.name.testName.replace(' ', '-'))
-    }
-
-    /**
-     * Copy the test archive with the given [sourceName] under an unknown file extension to a temporary folder.
-     * This is used to test whether archives with unknown file extensions can be unpacked.
-     */
-    private fun copyTestArchive(sourceName: String): File {
-        val sourcePath = getAssetFile(sourceName)
-        val targetPath = tempdir().resolve("unknown.dat")
-
-        return sourcePath.copyTo(targetPath)
     }
 
     init {
@@ -67,7 +56,7 @@ class ArchiveUtilsFunTest : WordSpec() {
 
             "${type.name} archives" should {
                 "unpack" {
-                    val archive = getAssetFile("test$extension")
+                    val archive = extractResource("/test$extension", tempfile(suffix = extension))
 
                     archive.unpack(outputDir)
 
@@ -81,7 +70,7 @@ class ArchiveUtilsFunTest : WordSpec() {
                 }
 
                 "unpack with a filter" {
-                    val archive = getAssetFile("test$extension")
+                    val archive = extractResource("/test$extension", tempfile(suffix = extension))
 
                     archive.unpack(outputDir, filter = A_FILTER)
 
@@ -97,7 +86,7 @@ class ArchiveUtilsFunTest : WordSpec() {
         "DEB archives" should {
             "unpack" {
                 val tempDir = tempdir()
-                val archiveDeb = getAssetFile("testpkg.deb")
+                val archiveDeb = extractResource("/testpkg.deb", tempfile(suffix = ".deb"))
                 val archiveUdepTemp = tempDir.resolve("testpkg.udeb")
                 val archiveUdep = archiveDeb.copyTo(archiveUdepTemp)
 
@@ -109,7 +98,7 @@ class ArchiveUtilsFunTest : WordSpec() {
 
                     val extractedControlFile = outputDir.resolve("control/control")
                     extractedControlFile shouldBe aFile()
-                    val expectedControl = getAssetFile("control-expected.txt").readText()
+                    val expectedControl = readResource("/control-expected.txt")
                     extractedControlFile.readText() shouldBe expectedControl
 
                     DEB_NESTED_ARCHIVES.forEach { tarFileName ->
@@ -120,7 +109,7 @@ class ArchiveUtilsFunTest : WordSpec() {
             }
 
             "unpack with a filter" {
-                val archive = getAssetFile("testpkg.deb")
+                val archive = extractResource("/testpkg.deb", tempfile(suffix = ".deb"))
 
                 archive.unpack(outputDir) { it.name.endsWith("test") }
 
@@ -142,7 +131,7 @@ class ArchiveUtilsFunTest : WordSpec() {
             }
 
             "support overriding the archive type" {
-                val archive = getAssetFile("test.wrong.zip")
+                val archive = extractResource("/test.wrong.zip", tempfile(suffix = ".zip"))
 
                 archive.unpack(outputDir, forceArchiveType = ArchiveType.TAR_GZIP)
 
@@ -162,7 +151,7 @@ class ArchiveUtilsFunTest : WordSpec() {
                 val extension = type.extensions.first()
 
                 "unpack $type archives" {
-                    val archive = copyTestArchive("test$extension")
+                    val archive = extractResource("/test$extension", tempfile())
 
                     archive.unpackTryAllTypes(outputDir)
 
@@ -177,7 +166,7 @@ class ArchiveUtilsFunTest : WordSpec() {
             }
 
             "unpack DEB archives" {
-                val archive = copyTestArchive("testpkg.deb")
+                val archive = extractResource("/testpkg.deb", tempfile())
 
                 archive.unpackTryAllTypes(outputDir)
 
@@ -186,7 +175,7 @@ class ArchiveUtilsFunTest : WordSpec() {
 
                 val extractedControlFile = outputDir.resolve("control/control")
                 extractedControlFile shouldBe aFile()
-                val expectedControl = getAssetFile("control-expected.txt").readText()
+                val expectedControl = readResource("/control-expected.txt")
                 extractedControlFile.readText() shouldBe expectedControl
 
                 DEB_NESTED_ARCHIVES.forEach { tarFileName ->
@@ -196,7 +185,7 @@ class ArchiveUtilsFunTest : WordSpec() {
             }
 
             "unpack with a filter" {
-                val archive = copyTestArchive("test.7z")
+                val archive = extractResource("/test.7z", tempfile())
 
                 archive.unpackTryAllTypes(outputDir, filter = A_FILTER)
 
