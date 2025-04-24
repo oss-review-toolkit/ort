@@ -29,3 +29,9 @@ internal enum class Scope(val descriptor: String) {
 }
 
 internal fun Collection<Scope>.getNames(): Set<String> = mapTo(mutableSetOf()) { it.descriptor }
+
+internal fun PackageJson.getDependenciesForScope(scope: Scope): Set<String> =
+    when (scope) {
+        Scope.DEPENDENCIES -> dependencies.keys + optionalDependencies.keys
+        Scope.DEV_DEPENDENCIES -> devDependencies.keys
+    }
