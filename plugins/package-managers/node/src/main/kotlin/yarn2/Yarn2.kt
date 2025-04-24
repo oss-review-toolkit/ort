@@ -50,7 +50,10 @@ import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
+import org.ossreviewtoolkit.plugins.packagemanagers.node.Scope
 import org.ossreviewtoolkit.plugins.packagemanagers.node.fixDownloadUrl
+import org.ossreviewtoolkit.plugins.packagemanagers.node.getDependenciesForScope
+import org.ossreviewtoolkit.plugins.packagemanagers.node.getNames
 import org.ossreviewtoolkit.plugins.packagemanagers.node.mapLicenses
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJsons
@@ -68,12 +71,6 @@ private val EXTRACT_FROM_LOCATOR_PATTERN = Regex("(.+)@(\\w+):(.+)")
  * The amount of package details to query at once with `yarn npm info`.
  */
 private const val YARN_NPM_INFO_CHUNK_SIZE = 1000
-
-// The various Yarn dependency types supported by this package manager.
-private enum class YarnDependencyType(val type: String) {
-    DEPENDENCIES("dependencies"),
-    DEV_DEPENDENCIES("devDependencies")
-}
 
 data class Yarn2Config(
     /**
@@ -138,7 +135,7 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
         )
 
         val allProjects = parseAllPackages(packageInfos, definitionFile, packageHeaders, packageDetails, excludes)
-        val scopeNames = YarnDependencyType.entries.mapTo(mutableSetOf()) { it.type }
+        val scopeNames = Scope.entries.getNames()
 
         return allProjects.values.map { project ->
             ProjectAnalyzerResult(project.copy(scopeNames = scopeNames), emptySet(), issues)
@@ -238,7 +235,7 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
         packagesDetails: Map<String, AdditionalData>,
         excludes: Excludes
     ): Map<Identifier, Project> {
-        val allDependencies = mutableMapOf<YarnDependencyType, MutableMap<Identifier, List<Identifier>>>()
+        val allDependencies = mutableMapOf<Scope, MutableMap<Identifier, List<Identifier>>>()
 
         packageInfos.forEach { info ->
             val dependencyMapping = parsePackage(info, definitionFile, packagesHeaders, packagesDetails)
@@ -248,8 +245,8 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
             }
         }
 
-        allDependencies.filterNot { excludes.isScopeExcluded(it.key.type) }
-            .forEach { (dependencyType, allScopedDependencies) ->
+        allDependencies.filterNot { (scope, _) -> scope.isExcluded(excludes) }
+            .forEach { (scope, allScopedDependencies) ->
                 projectForId.values.forEach { project ->
                     val dependencies = allScopedDependencies[project.id]
                     val dependenciesInfo = dependencies?.mapNotNullTo(mutableSetOf()) { dependency ->
@@ -281,7 +278,7 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
                                 // available), the dependencies of a package are always searched in the 'Dependencies'
                                 // scope, instead of the scope of this package.
                                 @Suppress("UnsafeCallOnNullableType")
-                                val dependenciesInDependenciesScope = allDependencies[YarnDependencyType.DEPENDENCIES]!!
+                                val dependenciesInDependenciesScope = allDependencies[Scope.DEPENDENCIES]!!
 
                                 YarnModuleInfo(
                                     packageDependency.id,
@@ -292,7 +289,7 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
                         }
                     }.orEmpty()
 
-                    graphBuilder.addDependencies(project.id, dependencyType.type, dependenciesInfo)
+                    graphBuilder.addDependencies(project.id, scope.descriptor, dependenciesInfo)
                 }
             }
 
@@ -313,7 +310,7 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
         definitionFile: File,
         packagesHeaders: Map<String, PackageHeader>,
         packagesDetails: Map<String, AdditionalData>
-    ): Map<YarnDependencyType, Pair<Identifier, List<Identifier>>> {
+    ): Map<Scope, Pair<Identifier, List<Identifier>>> {
         val value = packageInfo.value
         val header = packagesHeaders[value]
         if (header == null) {
@@ -401,17 +398,16 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
 
         val dependencies = processDependencies(packageInfo.children.dependencies)
 
-        val dependencyToType = listDependenciesByType(definitionFile)
+        val dependencyToScope = listDependenciesByScope(definitionFile)
 
         // Sort all dependencies per scope. Notice that the logic is somehow lenient: If a dependency is not found
         // in this scope, it falls back in the 'dependencies' scope. This is due to the fact that the detection of
         // dependencies per scope is limited, because it relies on package.json parsing and only the project ones
         // are available.
 
-        return YarnDependencyType.entries.associateWith { dependencyType ->
+        return Scope.entries.associateWith { scope ->
             id to dependencies.filter {
-                dependencyToType[it.name] == dependencyType
-                    || (it.name !in dependencyToType && dependencyType == YarnDependencyType.DEPENDENCIES)
+                dependencyToScope[it.name] == scope || (it.name !in dependencyToScope && scope == Scope.DEPENDENCIES)
             }
         }
     }
@@ -578,25 +574,19 @@ private fun String.cleanVersionString(): String =
         // E.g. typescript@patch:typescript@npm%3A4.0.2#~builtin<compat/typescript>::version=4.0.2&hash=ddd1e8
         .replace(":", "%3A")
 
-private fun PackageJson.getScopeDependencies(type: YarnDependencyType) =
-    when (type) {
-        YarnDependencyType.DEPENDENCIES -> dependencies
-        YarnDependencyType.DEV_DEPENDENCIES -> devDependencies
-    }
-
 /**
  * Parse the [definitionFile] (package.json) to find the scope of a dependency. Unfortunately, `yarn info -A -R`
  * does not deliver this information.
  * Return the dependencies present in the file mapped to their scope.
  * See also https://classic.yarnpkg.com/en/docs/dependency-types (documentation for Yarn 1).
  */
-private fun listDependenciesByType(definitionFile: File): Map<String, YarnDependencyType> {
+private fun listDependenciesByScope(definitionFile: File): Map<String, Scope> {
     val packageJson = parsePackageJson(definitionFile)
-    val result = mutableMapOf<String, YarnDependencyType>()
+    val result = mutableMapOf<String, Scope>()
 
-    YarnDependencyType.entries.forEach { dependencyType ->
-        packageJson.getScopeDependencies(dependencyType).keys.forEach {
-            result += it to dependencyType
+    Scope.entries.forEach { scope ->
+        packageJson.getDependenciesForScope(scope).forEach {
+            result += it to scope
         }
     }
 
