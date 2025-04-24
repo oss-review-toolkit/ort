@@ -51,6 +51,7 @@ import org.ossreviewtoolkit.plugins.api.OrtPlugin
 import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.extractResource
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.unquote
@@ -116,21 +117,6 @@ class GradleInspector(
     private val initScriptFile by lazy { extractInitScript() }
 
     private fun extractInitScript(): File {
-        fun extractResource(name: String, target: File) =
-            target.apply {
-                val resource = checkNotNull(GradleInspector::class.java.getResource(name)) {
-                    "Resource '$name' not found."
-                }
-
-                logger.debug { "Extracting resource '${resource.path.substringAfterLast('/')}' to '$target'..." }
-
-                resource.openStream().use { inputStream ->
-                    outputStream().use { outputStream ->
-                        inputStream.copyTo(outputStream)
-                    }
-                }
-            }
-
         val toolsDir = ortToolsDirectory.resolve(descriptor.id).apply { safeMkdirs() }
         val pluginJar = extractResource("/gradle-plugin.jar", toolsDir.resolve("gradle-plugin.jar"))
 

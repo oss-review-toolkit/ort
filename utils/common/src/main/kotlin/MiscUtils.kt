@@ -19,6 +19,24 @@
 
 package org.ossreviewtoolkit.utils.common
 
+import java.io.File
+
+/**
+ * Extract the resource with the specified [name] to the given [target] file and return it.
+ */
+fun extractResource(name: String, target: File) =
+    target.apply {
+        val resource = checkNotNull(object {}.javaClass.getResource(name)) {
+            "Resource '$name' not found."
+        }
+
+        resource.openStream().use { inputStream ->
+            outputStream().use { outputStream ->
+                inputStream.copyTo(outputStream)
+            }
+        }
+    }
+
 /**
  * Temporarily set the specified system [properties] while executing [block]. Afterwards, previously set properties have
  * their original values restored and previously unset properties are cleared.
