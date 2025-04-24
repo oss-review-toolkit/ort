@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.plugins.api.PluginDescriptor
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
+import org.ossreviewtoolkit.plugins.packagemanagers.node.Scope
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.DirectoryStash
@@ -164,11 +165,6 @@ class Pnpm(override val descriptor: PluginDescriptor = PnpmFactory.descriptor) :
             pnpmInfoCache[packageName] = it
         }.getOrNull()
     }
-}
-
-private enum class Scope(val descriptor: String) {
-    DEPENDENCIES("dependencies"),
-    DEV_DEPENDENCIES("devDependencies")
 }
 
 private fun ModuleInfo.getScopeDependencies(scope: Scope) =
