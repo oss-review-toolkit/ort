@@ -25,15 +25,14 @@ import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-import java.io.File
-
 import org.ossreviewtoolkit.model.toYaml
+import org.ossreviewtoolkit.utils.test.readResource
 
 class CopyrightStatementsProcessorTest : WordSpec({
     "process" should {
         "return a result with items merged by owner and prefix, sorted by owner and year" {
-            val statements = File("src/test/assets/copyright-statements.txt").readLines()
-            val expectedResult = File("src/test/assets/copyright-statements-expected-output.yml").readText()
+            val statements = readResource("/copyright-statements.txt").lines()
+            val expectedResult = readResource("/copyright-statements-expected-output.yml")
 
             val result = CopyrightStatementsProcessor.process(statements.shuffled()).toYaml()
 
