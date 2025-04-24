@@ -132,19 +132,18 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
 
         val project = parseProject(definitionFile, analysisRoot)
         val projectModuleInfo = listModules(workingDir, issues).undoDeduplication()
+        val scopes = Scope.entries.filterNotTo(mutableSetOf()) { scope -> scope.isExcluded(excludes) }
 
         // Warm-up the cache to speed-up processing.
-        requestAllPackageDetails(projectModuleInfo)
+        requestAllPackageDetails(projectModuleInfo, scopes)
 
-        val scopeNames = Scope.entries
-            .filterNot { scope -> scope.isExcluded(excludes) }
-            .mapTo(mutableSetOf()) { scope ->
-                val scopeName = scope.descriptor
+        val scopeNames = scopes.mapTo(mutableSetOf()) { scope ->
+            val scopeName = scope.descriptor
 
-                graphBuilder.addDependencies(project.id, scopeName, projectModuleInfo.getScopeDependencies(scope))
+            graphBuilder.addDependencies(project.id, scopeName, projectModuleInfo.getScopeDependencies(scope))
 
-                scopeName
-            }
+            scopeName
+        }
 
         return ProjectAnalyzerResult(
             project = project.copy(scopeNames = scopeNames),
@@ -190,10 +189,10 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
         return process.extractNpmIssues()
     }
 
-    private fun requestAllPackageDetails(projectModuleInfo: ModuleInfo) {
+    private fun requestAllPackageDetails(projectModuleInfo: ModuleInfo, scopes: Set<Scope>) {
         runBlocking {
             withContext(Dispatchers.IO.limitedParallelism(20)) {
-                projectModuleInfo.getAllPackageNodeModuleIds().map { packageName ->
+                projectModuleInfo.getAllPackageNodeModuleIds(scopes).map { packageName ->
                     async { getRemotePackageDetails(packageName) }
                 }.awaitAll()
             }
@@ -201,9 +200,9 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
     }
 }
 
-private fun ModuleInfo.getAllPackageNodeModuleIds(): Set<String> =
+private fun ModuleInfo.getAllPackageNodeModuleIds(scopes: Set<Scope>): Set<String> =
     buildSet {
-        val queue = Scope.entries.flatMapTo(LinkedList()) { getScopeDependencies(it) }
+        val queue = scopes.flatMapTo(LinkedList()) { getScopeDependencies(it) }
 
         while (queue.isNotEmpty()) {
             val info = queue.removeFirst()
@@ -213,7 +212,7 @@ private fun ModuleInfo.getAllPackageNodeModuleIds(): Set<String> =
                 add("${info.name}@${info.version}")
             }
 
-            Scope.entries.flatMapTo(queue) { info.getScopeDependencies(it) }
+            scopes.flatMapTo(queue) { info.getScopeDependencies(it) }
         }
     }
 
