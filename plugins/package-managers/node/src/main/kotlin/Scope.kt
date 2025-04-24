@@ -27,3 +27,5 @@ internal enum class Scope(val descriptor: String) {
 
     fun isExcluded(excludes: Excludes): Boolean = excludes.isScopeExcluded(descriptor)
 }
+
+internal fun Collection<Scope>.getNames(): Set<String> = mapTo(mutableSetOf()) { it.descriptor }

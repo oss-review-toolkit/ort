@@ -43,6 +43,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManager
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.Scope
+import org.ossreviewtoolkit.plugins.packagemanagers.node.getNames
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.DirectoryStash
@@ -105,7 +106,8 @@ class Yarn(override val descriptor: PluginDescriptor = YarnFactory.descriptor) :
         val workspaceModuleDirs = getWorkspaceModuleDirs(workingDir)
         handler.setContext(workingDir, getModuleDirs(workingDir), workspaceModuleDirs)
 
-        val moduleInfosForScope = Scope.entries.associateWith { scope ->
+        val scopes = Scope.entries
+        val moduleInfosForScope = scopes.associateWith { scope ->
             listModules(workingDir, scope).resolveVersions().undoDeduplication()
         }
 
@@ -114,8 +116,7 @@ class Yarn(override val descriptor: PluginDescriptor = YarnFactory.descriptor) :
             val packageJson = parsePackageJson(packageJsonFile)
             val project = parseProject(packageJsonFile, analysisRoot)
 
-            val scopeNames = Scope.entries.mapTo(mutableSetOf()) { scope ->
-                val scopeName = scope.descriptor
+            scopes.forEach { scope ->
                 val moduleInfos = if (projectDir == workingDir.absoluteFile) {
                     moduleInfosForScope.getValue(scope)
                 } else {
@@ -124,13 +125,11 @@ class Yarn(override val descriptor: PluginDescriptor = YarnFactory.descriptor) :
 
                 val dependencies = moduleInfos.filter { it.moduleName in packageJson.getDependenciesForScope(scope) }
 
-                graphBuilder.addDependencies(project.id, scopeName, dependencies)
-
-                scopeName
+                graphBuilder.addDependencies(project.id, scope.descriptor, dependencies)
             }
 
             ProjectAnalyzerResult(
-                project = project.copy(scopeNames = scopeNames),
+                project = project.copy(scopeNames = scopes.getNames()),
                 packages = emptySet(),
                 issues = emptyList()
             )
