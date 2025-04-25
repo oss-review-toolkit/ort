@@ -43,6 +43,8 @@ object CopyrightableFiles {
         "resources/licenserefs/",
         "test/assets/",
         "funTest/assets/",
+        "test/resources/",
+        "funTest/resources/",
         "website/babel.config.js",
         "website/docusaurus.config.js",
         "website/docs/configuration/_category_.yml",
