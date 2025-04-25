@@ -107,7 +107,7 @@ class Yarn(override val descriptor: PluginDescriptor = YarnFactory.descriptor) :
         val workspaceModuleDirs = getWorkspaceModuleDirs(workingDir)
         handler.setContext(workingDir, getModuleDirs(workingDir), workspaceModuleDirs)
 
-        val scopes = Scope.entries
+        val scopes = Scope.entries.filterNot { scope -> scope.isExcluded(excludes) }
         val moduleInfosForScope = scopes.associateWith { scope ->
             listModules(workingDir, scope).resolveVersions().undoDeduplication()
         }

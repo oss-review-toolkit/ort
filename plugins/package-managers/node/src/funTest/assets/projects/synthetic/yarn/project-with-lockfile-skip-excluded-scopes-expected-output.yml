@@ -1,0 +1,909 @@
+---
+project:
+  id: "Yarn::yarn-package-with-lockfile:1.0.0"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  authors:
+  - "The Author"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  vcs:
+    type: "Git"
+    url: "https://github.com/oss-review-toolkit/ort.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  description: "Yarn test project with yarn.lock."
+  homepage_url: ""
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "NPM::cheerio:1.0.0-rc.1"
+      dependencies:
+      - id: "NPM::css-select:1.2.0"
+        dependencies:
+        - id: "NPM::boolbase:1.0.0"
+        - id: "NPM::css-what:2.1.3"
+        - id: "NPM::domutils:1.5.1"
+          dependencies:
+          - id: "NPM::dom-serializer:0.2.2"
+            dependencies:
+            - id: "NPM::domelementtype:2.3.0"
+            - id: "NPM::entities:2.2.0"
+          - id: "NPM::domelementtype:1.3.1"
+        - id: "NPM::nth-check:1.0.2"
+          dependencies:
+          - id: "NPM::boolbase:1.0.0"
+      - id: "NPM::dom-serializer:0.1.1"
+        dependencies:
+        - id: "NPM::domelementtype:1.3.1"
+        - id: "NPM::entities:1.1.2"
+      - id: "NPM::entities:1.1.2"
+      - id: "NPM::htmlparser2:3.10.1"
+        dependencies:
+        - id: "NPM::domelementtype:1.3.1"
+        - id: "NPM::domhandler:2.4.2"
+          dependencies:
+          - id: "NPM::domelementtype:1.3.1"
+        - id: "NPM::domutils:1.7.0"
+          dependencies:
+          - id: "NPM::dom-serializer:0.2.2"
+            dependencies:
+            - id: "NPM::domelementtype:2.3.0"
+            - id: "NPM::entities:2.2.0"
+          - id: "NPM::domelementtype:1.3.1"
+        - id: "NPM::entities:1.1.2"
+        - id: "NPM::inherits:2.0.4"
+        - id: "NPM::readable-stream:3.6.2"
+          dependencies:
+          - id: "NPM::inherits:2.0.4"
+          - id: "NPM::string_decoder:1.3.0"
+            dependencies:
+            - id: "NPM::safe-buffer:5.2.1"
+          - id: "NPM::util-deprecate:1.0.2"
+      - id: "NPM::lodash:4.17.21"
+      - id: "NPM::parse5:3.0.3"
+        dependencies:
+        - id: "NPM:@types:node:22.9.0"
+          dependencies:
+          - id: "NPM::undici-types:6.19.8"
+    - id: "NPM::long:3.2.0"
+    - id: "NPM::promise:7.3.1"
+      dependencies:
+      - id: "NPM::asap:2.0.6"
+    - id: "NPM::web-animations-js:2.3.2"
+packages:
+- id: "NPM::asap:2.0.6"
+  purl: "pkg:npm/asap@2.0.6"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "High-priority task queue for Node.js and browsers"
+  homepage_url: "https://github.com/kriskowal/asap#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/asap/-/asap-2.0.6.tgz"
+    hash:
+      value: "e50347611d7e690943208bbdafebcbc2fb866d46"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/kriskowal/asap.git"
+    revision: "3e3d99381444379bb0483cb9216caa39ac67bebb"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/kriskowal/asap.git"
+    revision: "3e3d99381444379bb0483cb9216caa39ac67bebb"
+    path: ""
+- id: "NPM::boolbase:1.0.0"
+  purl: "pkg:npm/boolbase@1.0.0"
+  authors:
+  - "Felix Boehm"
+  declared_licenses:
+  - "ISC"
+  declared_licenses_processed:
+    spdx_expression: "ISC"
+  description: "two functions: One that returns true, one that returns false"
+  homepage_url: "https://github.com/fb55/boolbase"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/boolbase/-/boolbase-1.0.0.tgz"
+    hash:
+      value: "68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/fb55/boolbase"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/fb55/boolbase.git"
+    revision: ""
+    path: ""
+- id: "NPM::cheerio:1.0.0-rc.1"
+  purl: "pkg:npm/cheerio@1.0.0-rc.1"
+  authors:
+  - "Matt Mueller"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Tiny, fast, and elegant implementation of core jQuery designed specifically\
+    \ for the server"
+  homepage_url: "https://github.com/cheeriojs/cheerio#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/cheerio/-/cheerio-1.0.0-rc.1.tgz"
+    hash:
+      value: "2af37339eab713ef6b72cde98cefa672b87641fe"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/cheeriojs/cheerio.git"
+    revision: "f21ffef971826d1ba64ccbdf96adbc44964d30c5"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/cheeriojs/cheerio.git"
+    revision: "f21ffef971826d1ba64ccbdf96adbc44964d30c5"
+    path: ""
+- id: "NPM::css-select:1.2.0"
+  purl: "pkg:npm/css-select@1.2.0"
+  authors:
+  - "Felix Boehm"
+  declared_licenses:
+  - "BSD-like"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD-like: "BSD-3-Clause"
+  description: "a CSS selector compiler/engine"
+  homepage_url: "https://github.com/fb55/css-select#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/css-select/-/css-select-1.2.0.tgz"
+    hash:
+      value: "2b3a110539c5355f1cd8d314623e870b121ec858"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/fb55/css-select.git"
+    revision: "09c405d8296bd97a660256604d8cdfb23fca47b6"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/fb55/css-select.git"
+    revision: "09c405d8296bd97a660256604d8cdfb23fca47b6"
+    path: ""
+- id: "NPM::css-what:2.1.3"
+  purl: "pkg:npm/css-what@2.1.3"
+  authors:
+  - "Felix Böhm"
+  declared_licenses:
+  - "BSD-2-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-2-Clause"
+  description: "a CSS selector parser"
+  homepage_url: "https://github.com/fb55/css-what#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/css-what/-/css-what-2.1.3.tgz"
+    hash:
+      value: "a6d7604573365fe74686c3f311c56513d88285f2"
+      algorithm: "SHA-1"
+  vcs:
+    type: ""
+    url: "https://github.com/fb55/css-what"
+    revision: "2db00ca221922c5b5131d798614aa043f2f6f80e"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/fb55/css-what.git"
+    revision: "2db00ca221922c5b5131d798614aa043f2f6f80e"
+    path: ""
+- id: "NPM::dom-serializer:0.1.1"
+  purl: "pkg:npm/dom-serializer@0.1.1"
+  authors:
+  - "Felix Boehm"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "render dom nodes to string"
+  homepage_url: "https://github.com/cheeriojs/dom-renderer#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/dom-serializer/-/dom-serializer-0.1.1.tgz"
+    hash:
+      value: "1ec4059e284babed36eec2941d4a970a189ce7c0"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/cheeriojs/dom-renderer.git"
+    revision: "1b9eb87c621a184b97467b03600b50d08e5a5086"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/cheeriojs/dom-renderer.git"
+    revision: "1b9eb87c621a184b97467b03600b50d08e5a5086"
+    path: ""
+- id: "NPM::dom-serializer:0.2.2"
+  purl: "pkg:npm/dom-serializer@0.2.2"
+  authors:
+  - "Felix Boehm"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "render dom nodes to string"
+  homepage_url: "https://github.com/cheeriojs/dom-renderer#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/dom-serializer/-/dom-serializer-0.2.2.tgz"
+    hash:
+      value: "1afb81f533717175d478655debc5e332d9f9bb51"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/cheeriojs/dom-renderer.git"
+    revision: "1451bf260586d612314820be41b2b89528f01155"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/cheeriojs/dom-renderer.git"
+    revision: "1451bf260586d612314820be41b2b89528f01155"
+    path: ""
+- id: "NPM::domelementtype:1.3.1"
+  purl: "pkg:npm/domelementtype@1.3.1"
+  authors:
+  - "Felix Boehm"
+  declared_licenses:
+  - "BSD-2-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-2-Clause"
+  description: "all the types of nodes in htmlparser2's dom"
+  homepage_url: "https://github.com/fb55/domelementtype#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/domelementtype/-/domelementtype-1.3.1.tgz"
+    hash:
+      value: "d048c44b37b0d10a7f2a3d5fee3f4333d790481f"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/fb55/domelementtype.git"
+    revision: "19b2491101a4de3679b59db8eb7fdd9aa0fbc60b"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/fb55/domelementtype.git"
+    revision: "19b2491101a4de3679b59db8eb7fdd9aa0fbc60b"
+    path: ""
+- id: "NPM::domelementtype:2.3.0"
+  purl: "pkg:npm/domelementtype@2.3.0"
+  authors:
+  - "Felix Boehm"
+  declared_licenses:
+  - "BSD-2-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-2-Clause"
+  description: "all the types of nodes in htmlparser2's dom"
+  homepage_url: "https://github.com/fb55/domelementtype#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/domelementtype/-/domelementtype-2.3.0.tgz"
+    hash:
+      value: "5c45e8e869952626331d7aab326d01daf65d589d"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/fb55/domelementtype.git"
+    revision: "687e8625885a3656d44c41e7640c86925417d91f"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/fb55/domelementtype.git"
+    revision: "687e8625885a3656d44c41e7640c86925417d91f"
+    path: ""
+- id: "NPM::domhandler:2.4.2"
+  purl: "pkg:npm/domhandler@2.4.2"
+  authors:
+  - "Felix Boehm"
+  declared_licenses:
+  - "BSD-2-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-2-Clause"
+  description: "handler for htmlparser2 that turns pages into a dom"
+  homepage_url: "https://github.com/fb55/DomHandler#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/domhandler/-/domhandler-2.4.2.tgz"
+    hash:
+      value: "8805097e933d65e85546f726d60f5eb88b44f803"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/fb55/DomHandler.git"
+    revision: "045bd8d634dca30192fbd23fee0c530adc9c6f52"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/fb55/DomHandler.git"
+    revision: "045bd8d634dca30192fbd23fee0c530adc9c6f52"
+    path: ""
+- id: "NPM::domutils:1.5.1"
+  purl: "pkg:npm/domutils@1.5.1"
+  authors:
+  - "Felix Boehm"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "utilities for working with htmlparser2's dom"
+  homepage_url: "https://github.com/FB55/domutils"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/domutils/-/domutils-1.5.1.tgz"
+    hash:
+      value: "dcd8488a26f563d61079e48c9f7b7e32373682cf"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/FB55/domutils.git"
+    revision: "7d4bd16cd36ffce62362ef91616806ea27e30d95"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/FB55/domutils.git"
+    revision: "7d4bd16cd36ffce62362ef91616806ea27e30d95"
+    path: ""
+- id: "NPM::domutils:1.7.0"
+  purl: "pkg:npm/domutils@1.7.0"
+  authors:
+  - "Felix Boehm"
+  declared_licenses:
+  - "BSD-2-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-2-Clause"
+  description: "utilities for working with htmlparser2's dom"
+  homepage_url: "https://github.com/FB55/domutils#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/domutils/-/domutils-1.7.0.tgz"
+    hash:
+      value: "56ea341e834e06e6748af7a1cb25da67ea9f8c2a"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/FB55/domutils.git"
+    revision: "34f193ca17d11a98d9310b1965efe5f73d32d79f"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/FB55/domutils.git"
+    revision: "34f193ca17d11a98d9310b1965efe5f73d32d79f"
+    path: ""
+- id: "NPM::entities:1.1.2"
+  purl: "pkg:npm/entities@1.1.2"
+  authors:
+  - "Felix Boehm"
+  declared_licenses:
+  - "BSD-2-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-2-Clause"
+  description: "Encode & decode XML/HTML entities with ease"
+  homepage_url: "https://github.com/fb55/entities#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/entities/-/entities-1.1.2.tgz"
+    hash:
+      value: "bdfa735299664dfafd34529ed4f8522a275fea56"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/fb55/entities.git"
+    revision: "54a5717d85d886c4aafa2ac5ff83d8d3d730337c"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/fb55/entities.git"
+    revision: "54a5717d85d886c4aafa2ac5ff83d8d3d730337c"
+    path: ""
+- id: "NPM::entities:2.2.0"
+  purl: "pkg:npm/entities@2.2.0"
+  authors:
+  - "Felix Boehm"
+  declared_licenses:
+  - "BSD-2-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-2-Clause"
+  description: "Encode & decode XML and HTML entities with ease"
+  homepage_url: "https://github.com/fb55/entities#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/entities/-/entities-2.2.0.tgz"
+    hash:
+      value: "098dc90ebb83d8dffa089d55256b351d34c4da55"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/fb55/entities.git"
+    revision: "c60851e3c75869d8bfd00325d99fd3e644c504ba"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/fb55/entities.git"
+    revision: "c60851e3c75869d8bfd00325d99fd3e644c504ba"
+    path: ""
+- id: "NPM::htmlparser2:3.10.1"
+  purl: "pkg:npm/htmlparser2@3.10.1"
+  authors:
+  - "Felix Boehm"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Fast & forgiving HTML/XML/RSS parser"
+  homepage_url: "https://github.com/fb55/htmlparser2#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/htmlparser2/-/htmlparser2-3.10.1.tgz"
+    hash:
+      value: "bd679dc3f59897b6a34bb10749c855bb53a9392f"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/fb55/htmlparser2.git"
+    revision: "537bf2aeb56910d84d2c5aedb839dec678188a43"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/fb55/htmlparser2.git"
+    revision: "537bf2aeb56910d84d2c5aedb839dec678188a43"
+    path: ""
+- id: "NPM::inherits:2.0.4"
+  purl: "pkg:npm/inherits@2.0.4"
+  declared_licenses:
+  - "ISC"
+  declared_licenses_processed:
+    spdx_expression: "ISC"
+  description: "Browser-friendly inheritance fully compatible with standard node.js\
+    \ inherits()"
+  homepage_url: "https://github.com/isaacs/inherits#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/inherits/-/inherits-2.0.4.tgz"
+    hash:
+      value: "0fa2c64f932917c3433a0ded55363aae37416b7c"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/isaacs/inherits"
+    revision: "9a2c29400c6d491e0b7beefe0c32efa3b462545d"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/isaacs/inherits.git"
+    revision: "9a2c29400c6d491e0b7beefe0c32efa3b462545d"
+    path: ""
+- id: "NPM::lodash:4.17.21"
+  purl: "pkg:npm/lodash@4.17.21"
+  authors:
+  - "John-David Dalton"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Lodash modular utilities."
+  homepage_url: "https://lodash.com/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
+    hash:
+      value: "679591c564c3bffaae8454cf0b3df370c3d6911c"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/lodash/lodash.git"
+    revision: "c6e281b878b315c7a10d90f9c2af4cdb112d9625"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/lodash/lodash.git"
+    revision: "c6e281b878b315c7a10d90f9c2af4cdb112d9625"
+    path: ""
+- id: "NPM::long:3.2.0"
+  purl: "pkg:npm/long@3.2.0"
+  authors:
+  - "Daniel Wirtz"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: "A Long class for representing a 64-bit two's-complement integer value."
+  homepage_url: "https://github.com/dcodeIO/long.js#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/long/-/long-3.2.0.tgz"
+    hash:
+      value: "d821b7138ca1cb581c172990ef14db200b5c474b"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/dcodeIO/long.js.git"
+    revision: "8cdc1f74ced4f771aa844f1cbc565b1d4c4451b8"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dcodeIO/long.js.git"
+    revision: "8cdc1f74ced4f771aa844f1cbc565b1d4c4451b8"
+    path: ""
+- id: "NPM::nth-check:1.0.2"
+  purl: "pkg:npm/nth-check@1.0.2"
+  authors:
+  - "Felix Boehm"
+  declared_licenses:
+  - "BSD-2-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-2-Clause"
+  description: "performant nth-check parser & compiler"
+  homepage_url: "https://github.com/fb55/nth-check"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/nth-check/-/nth-check-1.0.2.tgz"
+    hash:
+      value: "b2bd295c37e3dd58a3bf0700376663ba4d9cf05c"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/fb55/nth-check"
+    revision: "03a02587bbd126fafc3d2331ffef6ea5cb2f9b66"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/fb55/nth-check.git"
+    revision: "03a02587bbd126fafc3d2331ffef6ea5cb2f9b66"
+    path: ""
+- id: "NPM::parse5:3.0.3"
+  purl: "pkg:npm/parse5@3.0.3"
+  authors:
+  - "Ivan Nikulin"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "HTML parsing/serialization toolset for Node.js. WHATWG HTML Living\
+    \ Standard (aka HTML5)-compliant."
+  homepage_url: "https://github.com/inikulin/parse5"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/parse5/-/parse5-3.0.3.tgz"
+    hash:
+      value: "042f792ffdd36851551cf4e9e066b3874ab45b5c"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/inikulin/parse5.git"
+    revision: "723d782abee65aaab9c50f92e73ac2029ae853df"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/inikulin/parse5.git"
+    revision: "723d782abee65aaab9c50f92e73ac2029ae853df"
+    path: ""
+- id: "NPM::promise:7.3.1"
+  purl: "pkg:npm/promise@7.3.1"
+  authors:
+  - "ForbesLindesay"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Bare bones Promises/A+ implementation"
+  homepage_url: "https://github.com/then/promise#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/promise/-/promise-7.3.1.tgz"
+    hash:
+      value: "064b72602b18f90f29192b8b1bc418ffd1ebd3bf"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/then/promise.git"
+    revision: "cebfa6049cc08843f428c6fc92dde918f8687e6d"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/then/promise.git"
+    revision: "cebfa6049cc08843f428c6fc92dde918f8687e6d"
+    path: ""
+- id: "NPM::readable-stream:3.6.2"
+  purl: "pkg:npm/readable-stream@3.6.2"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Streams3, a user-land copy of the stream library from Node.js"
+  homepage_url: "https://github.com/nodejs/readable-stream#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/readable-stream/-/readable-stream-3.6.2.tgz"
+    hash:
+      value: "56a9b36ea965c00c5a93ef31eb111a0f11056967"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/nodejs/readable-stream"
+    revision: "6c32003bd8607da54f8ca1b096c4411778b060bc"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/nodejs/readable-stream.git"
+    revision: "6c32003bd8607da54f8ca1b096c4411778b060bc"
+    path: ""
+- id: "NPM::safe-buffer:5.2.1"
+  purl: "pkg:npm/safe-buffer@5.2.1"
+  authors:
+  - "Feross Aboukhadijeh"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Safer Node.js Buffer API"
+  homepage_url: "https://github.com/feross/safe-buffer"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.2.1.tgz"
+    hash:
+      value: "1eaf9fa9bdb1fdd4ec75f58f9cdb4e6b7827eec6"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/feross/safe-buffer.git"
+    revision: "89d3d5b4abd6308c6008499520373d204ada694b"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/feross/safe-buffer.git"
+    revision: "89d3d5b4abd6308c6008499520373d204ada694b"
+    path: ""
+- id: "NPM::string_decoder:1.3.0"
+  purl: "pkg:npm/string_decoder@1.3.0"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "The string_decoder module from Node core"
+  homepage_url: "https://github.com/nodejs/string_decoder"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/string_decoder/-/string_decoder-1.3.0.tgz"
+    hash:
+      value: "42f114594a46cf1a8e30b0a84f56c78c3edac21e"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/nodejs/string_decoder.git"
+    revision: "60db81e031c126112039157ba9437484b1329dff"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/nodejs/string_decoder.git"
+    revision: "60db81e031c126112039157ba9437484b1329dff"
+    path: ""
+- id: "NPM::undici-types:6.19.8"
+  purl: "pkg:npm/undici-types@6.19.8"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A stand-alone types package for Undici"
+  homepage_url: "https://undici.nodejs.org"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/undici-types/-/undici-types-6.19.8.tgz"
+    hash:
+      value: "35111c9d1437ab83a7cdc0abae2f26d88eda0a02"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/nodejs/undici.git"
+    revision: "3d3ce0695c8c3f9a8f3c8af90dd42d0569d3f0bb"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/nodejs/undici.git"
+    revision: "3d3ce0695c8c3f9a8f3c8af90dd42d0569d3f0bb"
+    path: ""
+- id: "NPM::util-deprecate:1.0.2"
+  purl: "pkg:npm/util-deprecate@1.0.2"
+  authors:
+  - "Nathan Rajlich"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "The Node.js `util.deprecate()` function with browser support"
+  homepage_url: "https://github.com/TooTallNate/util-deprecate"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz"
+    hash:
+      value: "450d4dc9fa70de732762fbd2d4a28981419a0ccf"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/TooTallNate/util-deprecate.git"
+    revision: "475fb6857cd23fafff20c1be846c1350abf8e6d4"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/TooTallNate/util-deprecate.git"
+    revision: "475fb6857cd23fafff20c1be846c1350abf8e6d4"
+    path: ""
+- id: "NPM::web-animations-js:2.3.2"
+  purl: "pkg:npm/web-animations-js@2.3.2"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: "JavaScript implementation of the Web Animations API"
+  homepage_url: "https://github.com/web-animations"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/web-animations-js/-/web-animations-js-2.3.2.tgz"
+    hash:
+      value: "a51963a359c543f97b47c7d4bc2d811f9fc9e153"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/web-animations/web-animations-js.git"
+    revision: "64d83730282fdbce733460d44be52c132d6c04e9"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/web-animations/web-animations-js.git"
+    revision: "64d83730282fdbce733460d44be52c132d6c04e9"
+    path: ""
+- id: "NPM:@types:node:22.9.0"
+  purl: "pkg:npm/%40types/node@22.9.0"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "TypeScript definitions for node"
+  homepage_url: "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/node"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/@types/node/-/node-22.9.0.tgz"
+    hash:
+      value: "b7f16e5c3384788542c72dc3d561a7ceae2c0365"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
+    revision: ""
+    path: "types/node"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
+    revision: ""
+    path: "types/node"
