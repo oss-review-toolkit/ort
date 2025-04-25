@@ -114,7 +114,7 @@ class ProvenanceTest : WordSpec({
             json.fromJson<KnownProvenance>() shouldBe provenance
         }
 
-        "be serializable and deserializable as ArtifactProvenance" {
+        "be serializable and deserializable as RepositoryProvenance" {
             json.fromJson<RepositoryProvenance>() shouldBe provenance
         }
     }
