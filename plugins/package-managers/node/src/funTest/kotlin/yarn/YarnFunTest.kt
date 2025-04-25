@@ -39,6 +39,18 @@ class YarnFunTest : StringSpec({
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
+    "Resolve dependencies for a project with lockfile with excluded scopes correctly" {
+        val definitionFile = getAssetFile("projects/synthetic/yarn/project-with-lockfile/package.json")
+        val expectedResultFile = getAssetFile(
+            "projects/synthetic/yarn/project-with-lockfile-skip-excluded-scopes-expected-output.yml"
+        )
+
+        val result = YarnFactory.create()
+            .resolveSingleProject(definitionFile, excludedScopes = setOf("devDependencies"), resolveScopes = true)
+
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+    }
+
     "Resolve dependencies for a project depending on Babel correctly" {
         val definitionFile = getAssetFile("projects/synthetic/yarn/babel/package.json")
         val expectedResultFile = getAssetFile("projects/synthetic/yarn/babel-expected-output.yml")
