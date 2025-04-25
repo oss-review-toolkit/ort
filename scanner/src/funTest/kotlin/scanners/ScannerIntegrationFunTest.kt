@@ -55,7 +55,7 @@ import org.ossreviewtoolkit.scanner.provenance.DummyNestedProvenanceStorage
 import org.ossreviewtoolkit.scanner.provenance.DummyProvenanceStorage
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
-import org.ossreviewtoolkit.utils.test.getAssetFile
+import org.ossreviewtoolkit.utils.test.getResource
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
 
@@ -65,39 +65,39 @@ class ScannerIntegrationFunTest : WordSpec({
         val ortResult = createScanner().scan(analyzerResult, skipExcluded = false, emptyMap())
 
         "return the expected ORT result" {
-            val expectedResultFile = getAssetFile("scanner-integration-all-pkgs-expected-ort-result.yml")
+            val expectedResultUrl = getResource("/scanner-integration-all-pkgs-expected-ort-result.yml")
 
             patchActualResult(ortResult.toYaml(), patchStartAndEndTime = true) should
-                matchExpectedResult(expectedResultFile)
+                matchExpectedResult(expectedResultUrl)
         }
 
         "return the expected (merged) scan results" {
-            val expectedResultFile = getAssetFile("scanner-integration-expected-scan-results.yml")
+            val expectedResultUrl = getResource("/scanner-integration-expected-scan-results.yml")
 
             val scanResults = ortResult.getScanResults().toSortedMap()
 
             patchActualResult(scanResults.toYaml(), patchStartAndEndTime = true) should
-                matchExpectedResult(expectedResultFile)
+                matchExpectedResult(expectedResultUrl)
         }
 
         "return the expected (merged) file lists" {
-            val expectedResultFile = getAssetFile("scanner-integration-expected-file-lists.yml")
+            val expectedResultUrl = getResource("/scanner-integration-expected-file-lists.yml")
 
             val fileLists = ortResult.getFileLists().toSortedMap()
 
-            fileLists.toYaml() should matchExpectedResult(expectedResultFile)
+            fileLists.toYaml() should matchExpectedResult(expectedResultUrl)
         }
     }
 
     "Scanning a subset of the packages corresponding to a single VCS" should {
         "return the expected ORT result" {
             val analyzerResult = createAnalyzerResult(pkg1, pkg3)
-            val expectedResultFile = getAssetFile("scanner-integration-subset-pkgs-expected-ort-result.yml")
+            val expectedResultUrl = getResource("/scanner-integration-subset-pkgs-expected-ort-result.yml")
 
             val ortResult = createScanner().scan(analyzerResult, skipExcluded = false, emptyMap())
 
             patchActualResult(ortResult.toYaml(), patchStartAndEndTime = true) should
-                matchExpectedResult(expectedResultFile)
+                matchExpectedResult(expectedResultUrl)
         }
     }
 })
