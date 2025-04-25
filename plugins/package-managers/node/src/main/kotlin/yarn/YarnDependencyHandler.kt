@@ -84,7 +84,9 @@ internal class YarnDependencyHandler(private val yarn: Yarn) : DependencyHandler
         return parsePackage(packageJson, yarn::getRemotePackageDetails)
     }
 
-    private fun YarnListNode.isProject(): Boolean = moduleDirForModuleId[name] in projectDirs
+    private fun YarnListNode.isProject(): Boolean = isProject(name)
+
+    private fun isProject(moduleId: String) = moduleDirForModuleId[moduleId] in projectDirs
 
     private fun requestAllPackageDetails() {
         val moduleIds = packageJsonForModuleId.keys.filterTo(mutableSetOf()) { moduleId ->
