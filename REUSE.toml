@@ -56,6 +56,16 @@ SPDX-FileCopyrightText = "2017 The ORT Project Authors (see <https://github.com/
 SPDX-License-Identifier = "Apache-2.0"
 
 [[annotations]]
+path = "**/src/funTest/resources/**"
+SPDX-FileCopyrightText = "2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = "**/src/test/resources/**"
+SPDX-FileCopyrightText = "2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
 path = "ci/**"
 SPDX-FileCopyrightText = "2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)"
 SPDX-License-Identifier = "Apache-2.0"
