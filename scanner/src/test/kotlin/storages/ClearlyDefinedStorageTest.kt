@@ -29,6 +29,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.post
 import com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
+import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldHaveSize
@@ -40,7 +41,6 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 import io.kotest.matchers.string.shouldContain
 
-import java.io.File
 import java.net.ServerSocket
 import java.time.Duration
 
@@ -61,12 +61,12 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.ClearlyDefinedStorageConfiguration
 import org.ossreviewtoolkit.scanner.ScanStorageException
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.test.readResource
 
 class ClearlyDefinedStorageTest : WordSpec({
     val server = WireMockServer(
         WireMockConfiguration.options()
             .dynamicPort()
-            .usingFilesUnderDirectory(TEST_FILES_ROOT)
     )
 
     beforeSpec {
@@ -277,12 +277,6 @@ private const val VERSION = "0.1.8"
 private const val COMMIT = "02b7f3d06fcbbedb44563aaa88ab62db3669946e"
 private const val SCANCODE_VERSION = "30.1.0"
 
-private const val TEST_FILES_ROOT = "src/test/assets"
-private const val TEST_FILES_DIRECTORY = "clearly-defined"
-
-/** The name of the file with the test response from ClearlyDefined. */
-private const val RESPONSE_FILE = "scancode-$SCANCODE_VERSION.json"
-
 /** The ClearlyDefined coordinates referencing the test package. */
 private val COORDINATES = Coordinates(ComponentType.MAVEN, Provider.MAVEN_CENTRAL, NAMESPACE, NAME, VERSION)
 
@@ -307,9 +301,6 @@ private val TEST_PACKAGE =
         sourceArtifact = RemoteArtifact.EMPTY,
         vcs = VcsInfo.EMPTY
     )
-
-/** The template for a ClearlyDefined definitions request. */
-private val DEFINITIONS_TEMPLATE = readDefinitionsTemplate()
 
 /** The template variable with the coordinates of the package that is requested. */
 private const val PACKAGE_VARIABLE = "<<package>>"
@@ -356,7 +347,7 @@ private fun stubHarvestToolResponse(server: WireMockServer, coordinates: Coordin
             .withQueryParam("form", equalTo("raw"))
             .willReturn(
                 aResponse().withStatus(200)
-                    .withBodyFile("$TEST_FILES_DIRECTORY/$RESPONSE_FILE")
+                    .withBodyFile("clearly-defined/scancode-$SCANCODE_VERSION.json")
             )
     )
 }
@@ -364,15 +355,16 @@ private fun stubHarvestToolResponse(server: WireMockServer, coordinates: Coordin
 /**
  * Stub a request for the definition's endpoint for the given [coordinates] on the [server] server.
  */
-private fun stubDefinitions(server: WireMockServer, coordinates: Coordinates = COORDINATES) {
+private fun TestConfiguration.stubDefinitions(server: WireMockServer, coordinates: Coordinates = COORDINATES) {
     val coordinatesList = listOf(coordinates)
     val expectedBody = ClearlyDefinedService.JSON.encodeToString(coordinatesList)
+    val actualBody = readResource("/cd_definitions.json").replace(PACKAGE_VARIABLE, coordinates.toString())
     server.stubFor(
         post(urlPathEqualTo("/definitions"))
             .withRequestBody(equalToJson(expectedBody))
             .willReturn(
                 aResponse().withStatus(200)
-                    .withBody(DEFINITIONS_TEMPLATE.replace(PACKAGE_VARIABLE, coordinates.toString()))
+                    .withBody(actualBody)
             )
     )
 }
@@ -391,12 +383,4 @@ private fun Result<List<ScanResult>>.shouldBeValid(block: (ScanResult.() -> Unit
 
         if (block != null) scanResult.block()
     }
-}
-
-/**
- * Read the template for a ClearlyDefines definitions request from the test file.
- */
-private fun readDefinitionsTemplate(): String {
-    val templateFile = File("$TEST_FILES_ROOT/cd_definitions.json")
-    return templateFile.readText()
 }
