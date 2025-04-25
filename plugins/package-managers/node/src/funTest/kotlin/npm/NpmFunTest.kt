@@ -133,7 +133,7 @@ class NpmFunTest : StringSpec({
     "Resolve Babel dependencies correctly" {
         val definitionFile = getAssetFile("projects/synthetic/npm/babel/package.json")
         val expectedResultFile = getAssetFile("projects/synthetic/npm/babel-expected-output.yml")
-        val expectedResult = patchExpectedResult(expectedResultFile, definitionFile)
+        val expectedResult = patchExpectedResult(expectedResultFile.readText(), definitionFile)
             .fromYaml<ProjectAnalyzerResult>()
 
         val result = NpmFactory.create().resolveSingleProject(definitionFile, resolveScopes = true)
@@ -144,7 +144,7 @@ class NpmFunTest : StringSpec({
     "Resolve dependencies with URLs as versions correctly" {
         val definitionFile = getAssetFile("projects/synthetic/npm/version-urls/package.json")
         val expectedResultFile = getAssetFile("projects/synthetic/npm/version-urls-expected-output.yml")
-        val expectedResult = patchExpectedResult(expectedResultFile, definitionFile)
+        val expectedResult = patchExpectedResult(expectedResultFile.readText(), definitionFile)
             .fromYaml<ProjectAnalyzerResult>()
 
         val result = NpmFactory.create()

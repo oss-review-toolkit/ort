@@ -37,7 +37,7 @@ class HtmlTemplateReporterFunTest : StringSpec({
             .single().getOrThrow().readText()
 
         reportContent.patchAsciiDocTemplateResult() shouldBe patchExpectedResult(
-            expectedResultFile,
+            expectedResultFile.readText(),
             custom = mapOf("<REPLACE_ASCIIDOCTOR_VERSION>" to reporter.asciidoctor.asciidoctorVersion())
         )
     }

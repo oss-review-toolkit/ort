@@ -61,7 +61,7 @@ fun matchExpectedResult(
     custom: Map<String, String> = emptyMap(),
     contextSize: Int = 7
 ): Matcher<String> {
-    val expected = patchExpectedResult(expectedResultFile, definitionFile, custom)
+    val expected = patchExpectedResult(expectedResultFile.readText(), definitionFile, custom)
 
     val multiLineDiff = System.getProperty("kotest.assertions.multi-line-diff")
     if (multiLineDiff != "unified") return equalityMatcher(expected)
