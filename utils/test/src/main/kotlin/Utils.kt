@@ -80,12 +80,12 @@ fun getAssetAsString(path: String): String = getAssetFile(path).readText()
 fun getAssetFile(path: String): File = File("src/funTest/assets", path).absoluteFile
 
 /**
- * Return a string representation of the [expectedResultFile] contents that has placeholders replaced. If a
- * [definitionFile] is provided, values that can be derived from it, like the VCS revision, are also replaced.
- * Additionally, [custom] regex replacements with substitutions can be specified.
+ * Return a string representation of the [expectedResult] contents that has placeholders replaced. If a [definitionFile]
+ * is provided, values that can be derived from it, like the VCS revision, are also replaced. Additionally, [custom]
+ * regex replacements with substitutions can be specified.
  */
 fun patchExpectedResult(
-    expectedResultFile: File,
+    expectedResult: String,
     definitionFile: File? = null,
     custom: Map<String, String> = emptyMap()
 ): String {
@@ -115,7 +115,7 @@ fun patchExpectedResult(
         putAll(custom)
     }
 
-    return replacements.entries.fold(expectedResultFile.readText()) { text, (pattern, replacement) ->
+    return replacements.entries.fold(expectedResult) { text, (pattern, replacement) ->
         text.replace(pattern.toRegex(), replacement)
     }
 }
@@ -145,7 +145,7 @@ fun patchActualResult(
 
 fun readOrtResult(file: String) = readOrtResult(File(file))
 
-fun readOrtResult(file: File) = file.mapper().readValue<OrtResult>(patchExpectedResult(file))
+fun readOrtResult(file: File) = file.mapper().readValue<OrtResult>(patchExpectedResult(file.readText()))
 
 /**
  * Create a [ScannerRun] with the given [pkgScanResults].

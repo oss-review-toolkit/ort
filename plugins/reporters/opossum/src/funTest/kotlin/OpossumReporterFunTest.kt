@@ -51,7 +51,7 @@ class OpossumReporterFunTest : WordSpec({
             val actualResult = outputDir.resolve("input.json").readText()
             val patchedActualResult = patchActualResult(actualResult, custom = replacements)
             patchedActualResult shouldEqualSpecifiedJsonIgnoringOrder patchExpectedResult(
-                expectedFile,
+                expectedFile.readText(),
                 custom = replacements
             )
         }
