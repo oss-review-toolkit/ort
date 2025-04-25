@@ -112,6 +112,11 @@ class Yarn(override val descriptor: PluginDescriptor = YarnFactory.descriptor) :
             listModules(workingDir, scope).resolveVersions().undoDeduplication()
         }
 
+        // Warm-up the cache to speed-up processing.
+        getAllModuleIds(moduleInfosForScope.values.flatten()).let { moduleIds ->
+            handler.requestAllPackageDetails(moduleIds)
+        }
+
         return workspaceModuleDirs.map { projectDir ->
             val packageJsonFile = projectDir.resolve(NodePackageManagerType.DEFINITION_FILE)
             val packageJson = parsePackageJson(packageJsonFile)
@@ -283,3 +288,17 @@ private fun extractDataNodes(output: String, type: String): Set<JsonElement> =
                 .mapNotNullTo(mutableSetOf()) { it["data"] }
         }
     }.getOrDefault(emptySet())
+
+private fun getAllModuleIds(moduleInfos: Collection<YarnListNode>): Set<String> {
+    val queue = LinkedList(moduleInfos)
+    val result = mutableSetOf<String>()
+
+    while (queue.isNotEmpty()) {
+        val moduleInfo = queue.removeFirst()
+
+        result += moduleInfo.name
+        queue += moduleInfo.children.orEmpty()
+    }
+
+    return result
+}
