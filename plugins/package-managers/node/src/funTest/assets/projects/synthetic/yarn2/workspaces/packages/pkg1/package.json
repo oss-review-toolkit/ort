@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "license": "Apache-2.0",
   "dependencies": {
-    "@here/harp-fetch": "^0.11.0"
+    "@here/harp-fetch": "^0.11.0",
+    "pkg2": "^1.0.0"
   }
 }

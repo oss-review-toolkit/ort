@@ -28,6 +28,7 @@ __metadata:
   resolution: "@scope1/pkg1@workspace:packages/pkg1"
   dependencies:
     "@here/harp-fetch": ^0.11.0
+    pkg2: ^1.0.0
   languageName: unknown
   linkType: soft
 
@@ -38,7 +39,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pkg2@workspace:packages/pkg2":
+"pkg2@^1.0.0, pkg2@workspace:packages/pkg2":
   version: 0.0.0-use.local
   resolution: "pkg2@workspace:packages/pkg2"
   dependencies:
