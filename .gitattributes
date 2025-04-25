@@ -11,6 +11,8 @@ gradlew	text eol=lf
 # Use Unix line endings for expected test results for consistency across platforms.
 **/src/*/assets/**/*expected*.txt		text eol=lf
 **/src/*/assets/**/*expected*.yml		text eol=lf
+**/src/*/resources/**/*expected*.txt		text eol=lf
+**/src/*/resources/**/*expected*.yml		text eol=lf
 
 # Use Unix line endings for scan results which are misused for also testing the calculation of the SPDX package verification code.
 scanner/src/test/assets/*.json				text eol=lf
