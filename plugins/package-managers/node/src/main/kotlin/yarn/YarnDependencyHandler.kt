@@ -59,9 +59,6 @@ internal class YarnDependencyHandler(private val yarn: Yarn) : DependencyHandler
             packageJsonForModuleId[packageJson.moduleId] = packageJson
             moduleDirForModuleId[packageJson.moduleId] = moduleDir
         }
-
-        // Warm-up the cache to speed-up processing.
-        requestAllPackageDetails()
     }
 
     override fun identifierFor(dependency: YarnListNode): Identifier =
@@ -88,14 +85,12 @@ internal class YarnDependencyHandler(private val yarn: Yarn) : DependencyHandler
 
     private fun isProject(moduleId: String) = moduleDirForModuleId[moduleId] in projectDirs
 
-    private fun requestAllPackageDetails() {
-        val moduleIds = packageJsonForModuleId.keys.filterTo(mutableSetOf()) { moduleId ->
-            moduleDirForModuleId[moduleId] !in projectDirs
-        }
-
+    fun requestAllPackageDetails(moduleIds: Set<String>) {
         runBlocking {
             withContext(Dispatchers.IO.limitedParallelism(20)) {
-                moduleIds.map { moduleId ->
+                moduleIds.filterNot { moduleId ->
+                    isProject(moduleId)
+                }.map { moduleId ->
                     async { yarn.getRemotePackageDetails(moduleId) }
                 }.awaitAll()
             }
