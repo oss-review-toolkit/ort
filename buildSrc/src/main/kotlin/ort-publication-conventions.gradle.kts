@@ -22,11 +22,12 @@ plugins {
     id("com.vanniktech.maven.publish")
 }
 
-mavenPublishing {
-    fun getGroupId(parent: Project?): String =
-        parent?.let { "${getGroupId(it.parent)}.${it.name.replace("-", "")}" }.orEmpty()
+fun getGroupId(parent: Project?): String =
+    parent?.let { "${getGroupId(it.parent)}.${it.name.replace("-", "")}" }.orEmpty()
 
-    coordinates(groupId = "org${getGroupId(parent)}")
+group = "org${getGroupId(parent)}"
+
+mavenPublishing {
     publishToMavenCentral()
 
     pom {
