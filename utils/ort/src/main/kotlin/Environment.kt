@@ -74,7 +74,7 @@ data class Environment(
         /**
          * The version of the OSS Review Toolkit as a string.
          */
-        val ORT_VERSION by lazy { this::class.java.`package`.implementationVersion ?: "IDE-SNAPSHOT" }
+        val ORT_VERSION = BuildConfig.ORT_VERSION
 
         /**
          * The version of Java used to build ORT.
