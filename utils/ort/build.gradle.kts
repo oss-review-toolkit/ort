@@ -20,6 +20,15 @@
 plugins {
     // Apply precompiled plugins.
     id("ort-library-conventions")
+
+    // Apply third-party plugins.
+    alias(libs.plugins.buildConfig)
+}
+
+buildConfig {
+    packageName = "$group.${projectDir.name}"
+
+    buildConfigField("ORT_VERSION", provider { project.version.toString() })
 }
 
 dependencies {
