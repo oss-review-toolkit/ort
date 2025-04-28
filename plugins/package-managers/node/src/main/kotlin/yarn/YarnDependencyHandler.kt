@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
+import org.ossreviewtoolkit.plugins.packagemanagers.node.moduleId
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackage
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.utils.ort.runBlocking
@@ -97,12 +98,3 @@ internal class YarnDependencyHandler(private val yarn: Yarn) : DependencyHandler
         }
     }
 }
-
-private val PackageJson.moduleId: String get() =
-    buildString {
-        append(name.orEmpty())
-        if (!version.isNullOrBlank()) {
-            append("@")
-            append(version)
-        }
-    }

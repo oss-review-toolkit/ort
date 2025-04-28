@@ -233,3 +233,12 @@ internal fun splitNamespaceAndName(rawName: String): Pair<String, String> {
     val namespace = rawName.removeSuffix(name).removeSuffix("/")
     return Pair(namespace, name)
 }
+
+internal val PackageJson.moduleId: String get() =
+    buildString {
+        append(name.orEmpty())
+        if (!version.isNullOrBlank()) {
+            append("@")
+            append(version)
+        }
+    }
