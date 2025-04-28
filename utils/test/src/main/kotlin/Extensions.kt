@@ -36,4 +36,6 @@ fun FileArchiver.Companion.createDefault() =
         )
     )
 
-fun TestConfiguration.readResource(name: String) = checkNotNull(javaClass.getResource(name)).readText()
+fun TestConfiguration.getResource(name: String) = checkNotNull(javaClass.getResource(name))
+
+fun TestConfiguration.readResource(name: String) = getResource(name).readText()
