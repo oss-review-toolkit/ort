@@ -130,7 +130,7 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
 
         val packageInfos = getPackageInfos(workingDir)
         val packageHeaders = parsePackageHeaders(packageInfos)
-        val packageDetails = queryPackageDetails(
+        val packageDetails = getRemotePackageDetails(
             workingDir,
             moduleIds = packageHeaders.values.filterNot { it.isProject }.mapTo(mutableSetOf()) { it.moduleId }
         ).associate {
@@ -191,7 +191,7 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
      * NPM does a request per package. However, if a solution to batch these requests arise, the code is ready for it.
      * From the response to `npm file`, package details are extracted and returned.
      */
-    private fun queryPackageDetails(workingDir: File, moduleIds: Set<String>): Set<PackageJson> {
+    private fun getRemotePackageDetails(workingDir: File, moduleIds: Set<String>): Set<PackageJson> {
         logger.info { "Fetching packages details..." }
 
         val chunks = moduleIds.chunked(YARN_NPM_INFO_CHUNK_SIZE)
