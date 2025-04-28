@@ -191,11 +191,9 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
      * NPM does a request per package. However, if a solution to batch these requests arise, the code is ready for it.
      * From the response to `npm file`, package details are extracted and returned.
      */
-    private fun getRemotePackageDetails(workingDir: File, moduleIds: Set<String>): Set<PackageJson> {
-        val chunks = moduleIds.chunked(YARN_NPM_INFO_CHUNK_SIZE)
-
-        return runBlocking(Dispatchers.IO.limitedParallelism(20)) {
-            chunks.map { chunk ->
+    private fun getRemotePackageDetails(workingDir: File, moduleIds: Set<String>): Set<PackageJson> =
+        runBlocking(Dispatchers.IO.limitedParallelism(20)) {
+            moduleIds.chunked(YARN_NPM_INFO_CHUNK_SIZE).map { chunk ->
                 async {
                     val process = yarn2Command.run(
                         "npm",
@@ -212,7 +210,6 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
                 }
             }.awaitAll().flatten().toSet()
         }
-    }
 
     /**
      * Parse all packages defined in [iterator], which should come from a NDJSON file. [packagesHeaders] should be
