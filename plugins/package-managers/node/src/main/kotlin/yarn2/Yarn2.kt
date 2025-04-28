@@ -55,6 +55,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.fixDownloadUrl
 import org.ossreviewtoolkit.plugins.packagemanagers.node.getDependenciesForScope
 import org.ossreviewtoolkit.plugins.packagemanagers.node.getNames
 import org.ossreviewtoolkit.plugins.packagemanagers.node.mapLicenses
+import org.ossreviewtoolkit.plugins.packagemanagers.node.moduleId
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJsons
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parseVcsInfo
@@ -132,7 +133,9 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
         val packageDetails = queryPackageDetails(
             workingDir,
             moduleIds = packageHeaders.values.filterNot { it.isProject }.mapTo(mutableSetOf()) { it.moduleId }
-        )
+        ).associate {
+            it.moduleId to processAdditionalPackageInfo(it)
+        }
 
         val allProjects = parseAllPackages(packageInfos, definitionFile, packageHeaders, packageDetails, excludes)
         val scopeNames = Scope.entries.getNames()
@@ -188,7 +191,7 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
      * NPM does a request per package. However, if a solution to batch these requests arise, the code is ready for it.
      * From the response to `npm file`, package details are extracted and returned.
      */
-    private fun queryPackageDetails(workingDir: File, moduleIds: Set<String>): Map<String, AdditionalData> {
+    private fun queryPackageDetails(workingDir: File, moduleIds: Set<String>): Set<PackageJson> {
         logger.info { "Fetching packages details..." }
 
         val chunks = moduleIds.chunked(YARN_NPM_INFO_CHUNK_SIZE)
@@ -209,15 +212,9 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
                             .orEmpty()
                     ).requireSuccess()
 
-                    val packageJsons = parsePackageJsons(process.stdout)
-
-                    logger.info { "Chunk #$index packages details have been fetched." }
-
-                    packageJsons.map { packageJson ->
-                        processAdditionalPackageInfo(packageJson)
-                    }
+                    parsePackageJsons(process.stdout)
                 }
-            }.awaitAll().flatten().associateBy { "${it.name}@${it.version}" }
+            }.awaitAll().flatten().toSet()
         }
     }
 
