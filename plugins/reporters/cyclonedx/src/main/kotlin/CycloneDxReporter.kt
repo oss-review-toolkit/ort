@@ -46,8 +46,8 @@ import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.alsoIfNull
-import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.ORT_FULL_NAME
+import org.ossreviewtoolkit.utils.ort.ORT_VERSION
 
 internal const val DEFAULT_SCHEMA_VERSION_NAME = "1.6" // Version.VERSION_16.versionString
 internal val DEFAULT_SCHEMA_VERSION = Version.entries.single { it.versionString == DEFAULT_SCHEMA_VERSION_NAME }
@@ -137,7 +137,7 @@ class CycloneDxReporter(
                     Component().apply {
                         type = Component.Type.APPLICATION
                         name = ORT_FULL_NAME
-                        version = Environment.ORT_VERSION
+                        version = ORT_VERSION
                     }
                 )
             }

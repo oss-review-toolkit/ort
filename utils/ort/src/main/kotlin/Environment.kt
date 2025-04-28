@@ -72,11 +72,6 @@ data class Environment(
 ) {
     companion object {
         /**
-         * The version of the OSS Review Toolkit as a string.
-         */
-        val ORT_VERSION = BuildConfig.ORT_VERSION
-
-        /**
          * The version of Java used to build ORT.
          */
         val BUILD_JDK: String by lazy {
@@ -92,11 +87,6 @@ data class Environment(
          * The version of Java used to run ORT.
          */
         val JAVA_VERSION: String by lazy { System.getProperty("java.version") }
-
-        /**
-         * A string that is supposed to be used as the User Agent when using ORT as an HTTP client.
-         */
-        val ORT_USER_AGENT = "$ORT_NAME/$ORT_VERSION"
 
         private val RELEVANT_VARIABLES = listOf(
             // ORT variables.

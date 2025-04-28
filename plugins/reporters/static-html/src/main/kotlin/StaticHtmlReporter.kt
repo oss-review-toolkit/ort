@@ -53,8 +53,8 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.isValidUri
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.common.titlecase
-import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.ORT_FULL_NAME
+import org.ossreviewtoolkit.utils.ort.ORT_VERSION
 import org.ossreviewtoolkit.utils.spdx.SpdxCompoundExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
@@ -138,7 +138,7 @@ class StaticHtmlReporter(override val descriptor: PluginDescriptor = StaticHtmlR
                             +ORT_FULL_NAME
                         }
 
-                        +", version ${Environment.ORT_VERSION} on ${Instant.now()}."
+                        +", version $ORT_VERSION on ${Instant.now()}."
                     }
 
                     h2 { +"Project" }

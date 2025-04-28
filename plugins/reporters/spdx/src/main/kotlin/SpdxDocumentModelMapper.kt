@@ -29,8 +29,8 @@ import org.ossreviewtoolkit.model.SourceCodeOrigin.ARTIFACT
 import org.ossreviewtoolkit.model.SourceCodeOrigin.VCS
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.reporter.LicenseTextProvider
-import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.ORT_NAME
+import org.ossreviewtoolkit.utils.ort.ORT_VERSION
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxCreationInfo
@@ -169,7 +169,7 @@ internal object SpdxDocumentModelMapper {
         val creators = listOfNotNull(
             params.creationInfoPerson.takeUnless { it.isEmpty() }?.let { "${SpdxConstants.PERSON} $it" },
             params.creationInfoOrganization.takeUnless { it.isEmpty() }?.let { "${SpdxConstants.ORGANIZATION} $it" },
-            "${SpdxConstants.TOOL} $ORT_NAME-${Environment.ORT_VERSION}"
+            "${SpdxConstants.TOOL} $ORT_NAME-$ORT_VERSION"
         )
 
         return SpdxDocument(
