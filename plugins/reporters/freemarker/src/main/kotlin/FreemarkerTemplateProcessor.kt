@@ -224,13 +224,12 @@ class FreemarkerTemplateProcessor(
         }
 
         /**
-         * Return only those [licenses] that are classified under the given [category], or that are not categorized at
-         * all.
+         * Return only those [licenses] that are classified under the given [category].
          */
         @Suppress("UNUSED") // This function is used in the templates.
         fun filterForCategory(licenses: Collection<ResolvedLicense>, category: String): List<ResolvedLicense> =
             licenses.filter { resolvedLicense ->
-                input.licenseClassifications[resolvedLicense.license]?.contains(category) != false
+                input.licenseClassifications[resolvedLicense.license]?.contains(category) ?: false
             }
 
         /**

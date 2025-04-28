@@ -58,8 +58,12 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.LicenseChoices
+import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.PackageLicenseChoice
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.licenses.LicenseCategorization
+import org.ossreviewtoolkit.model.licenses.LicenseCategory
+import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.licenses.ResolvedLicense
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
@@ -583,6 +587,85 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
             val helper = FreemarkerTemplateProcessor.TemplateHelper(input)
 
             helper.getPackage(id) shouldBe Package.EMPTY
+        }
+    }
+
+    "filterForCategory" should {
+        "correctly filters licenses for the given categories" {
+            val licenseInCatA = ResolvedLicense(
+                license = SpdxSingleLicenseExpression.parse("Apache-2.0"),
+                originalDeclaredLicenses = setOf("Apache-2.0"),
+                originalExpressions = setOf(
+                    ResolvedOriginalExpression(
+                        SpdxSingleLicenseExpression.parse("Apache-2.0"),
+                        LicenseSource.DECLARED
+                    )
+                ),
+                locations = emptySet()
+            )
+
+            val licenseInCatB = ResolvedLicense(
+                license = SpdxSingleLicenseExpression.parse("MIT"),
+                originalDeclaredLicenses = setOf("MIT"),
+                originalExpressions = setOf(
+                    ResolvedOriginalExpression(
+                        SpdxSingleLicenseExpression.parse("MIT"),
+                        LicenseSource.DECLARED
+                    )
+                ),
+                locations = emptySet()
+            )
+
+            val uncategorizedLicense = ResolvedLicense(
+                license = SpdxSingleLicenseExpression.parse("BSD-3-Clause"),
+                originalDeclaredLicenses = setOf("BSD-3-Clause"),
+                originalExpressions = setOf(
+                    ResolvedOriginalExpression(
+                        SpdxSingleLicenseExpression.parse("BSD-3-Clause"),
+                        LicenseSource.DECLARED
+                    )
+                ),
+                locations = emptySet()
+            )
+
+            val allLicenses = listOf(licenseInCatA, licenseInCatB, uncategorizedLicense)
+
+            val licenseClassifications = LicenseClassifications(
+                categories = listOf(LicenseCategory("categoryA"), LicenseCategory("categoryB")),
+                categorizations = listOf(
+                    LicenseCategorization(
+                        id = SpdxSingleLicenseExpression.parse("Apache-2.0"),
+                        categories = setOf("categoryA")
+                    ),
+                    LicenseCategorization(
+                        id = SpdxSingleLicenseExpression.parse("MIT"),
+                        categories = setOf("categoryB")
+                    )
+                )
+            )
+
+            val helper = FreemarkerTemplateProcessor.TemplateHelper(
+                ReporterInput(
+                    ortResult = OrtResult.EMPTY,
+                    ortConfig = OrtConfiguration(),
+                    licenseClassifications = licenseClassifications
+                )
+            )
+
+            val categoryA = helper.filterForCategory(allLicenses, "categoryA")
+            categoryA shouldContainExactlyInAnyOrder listOf(licenseInCatA)
+
+            val categoryB = helper.filterForCategory(allLicenses, "categoryB")
+            categoryB shouldContainExactlyInAnyOrder listOf(licenseInCatB)
+
+            val nonExistentCategory = helper.filterForCategory(allLicenses, "nonExistent")
+            nonExistentCategory shouldBe emptyList()
+
+            val emptyListResult = helper.filterForCategory(emptyList(), "categoryA")
+            emptyListResult shouldBe emptyList()
+
+            val uncategorizedResult = helper.filterForCategory(listOf(uncategorizedLicense), "categoryA")
+            uncategorizedResult shouldContainExactlyInAnyOrder listOf()
         }
     }
 })
