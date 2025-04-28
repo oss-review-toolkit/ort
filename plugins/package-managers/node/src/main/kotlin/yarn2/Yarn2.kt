@@ -192,15 +192,11 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
      * From the response to `npm file`, package details are extracted and returned.
      */
     private fun getRemotePackageDetails(workingDir: File, moduleIds: Set<String>): Set<PackageJson> {
-        logger.info { "Fetching packages details..." }
-
         val chunks = moduleIds.chunked(YARN_NPM_INFO_CHUNK_SIZE)
 
         return runBlocking(Dispatchers.IO.limitedParallelism(20)) {
-            chunks.mapIndexed { index, chunk ->
+            chunks.map { chunk ->
                 async {
-                    logger.info { "Fetching packages details chunk #$index." }
-
                     val process = yarn2Command.run(
                         "npm",
                         "info",
