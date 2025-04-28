@@ -24,6 +24,7 @@ import java.io.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.withContext
 
 import org.apache.logging.log4j.kotlin.logger
 
@@ -55,6 +56,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.fixDownloadUrl
 import org.ossreviewtoolkit.plugins.packagemanagers.node.getDependenciesForScope
 import org.ossreviewtoolkit.plugins.packagemanagers.node.getNames
 import org.ossreviewtoolkit.plugins.packagemanagers.node.mapLicenses
+import org.ossreviewtoolkit.plugins.packagemanagers.node.moduleId
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJsons
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parseVcsInfo
@@ -66,11 +68,6 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
  * The pattern to extract rawName, type and version from a Yarn 2+ locator e.g. @babel/preset-env@npm:7.11.0.
  */
 private val EXTRACT_FROM_LOCATOR_PATTERN = Regex("(.+)@(\\w+):(.+)")
-
-/**
- * The amount of package details to query at once with `yarn npm info`.
- */
-private const val YARN_NPM_INFO_CHUNK_SIZE = 1000
 
 data class Yarn2Config(
     /**
@@ -102,6 +99,7 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
     NodePackageManager(NodePackageManagerType.YARN2) {
     override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE)
 
+    private val yarnInfoCache = mutableMapOf<String, PackageJson>()
     private val packageForId = mutableMapOf<Identifier, Package>()
     private val projectForId = mutableMapOf<Identifier, Project>()
 
@@ -129,11 +127,12 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
 
         val packageInfos = getPackageInfos(workingDir)
         val packageHeaders = parsePackageHeaders(packageInfos)
-        val packageDetails = queryPackageDetails(
+
+        val packageDetails = getRemotePackageDetails(
             workingDir,
-            moduleIds = packageHeaders.values.filterNot { it.isProject }.mapTo(mutableSetOf()) { it.moduleId }
-        ).mapValues { (_, packageJson) ->
-            processAdditionalPackageInfo(packageJson)
+            packageNames = packageHeaders.values.filterNot { it.isProject }.mapTo(mutableSetOf()) { it.moduleId }
+        ).associate {
+            it.moduleId to processAdditionalPackageInfo(it)
         }
 
         val allProjects = parseAllPackages(packageInfos, definitionFile, packageHeaders, packageDetails, excludes)
@@ -184,36 +183,31 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
         }.toMap()
     }
 
-    /**
-     * Query the details for the given NPM [moduleIds].
-     * The packages are separated in chunks and queried with `npm file` in [workingDir]. Unfortunately, under the hood,
-     * NPM does a request per package. However, if a solution to batch these requests arise, the code is ready for it.
-     * From the response to `npm file`, package details are extracted and returned.
-     */
-    private fun queryPackageDetails(workingDir: File, moduleIds: Set<String>): Map<String, PackageJson> {
-        logger.info { "Fetching packages details..." }
+    private fun getRemotePackageDetails(workingDir: File, packageNames: Set<String>): Set<PackageJson> =
+        runBlocking {
+            withContext(Dispatchers.IO.limitedParallelism(20)) {
+                packageNames.map { packageName ->
+                    async { getRemotePackageDetails(workingDir, packageName) }
+                }.awaitAll().filterNotNull().toSet()
+            }
+        }
 
-        val chunks = moduleIds.chunked(YARN_NPM_INFO_CHUNK_SIZE)
+    private fun getRemotePackageDetails(workingDir: File, packageName: String): PackageJson? {
+        yarnInfoCache[packageName]?.also { return it }
 
-        return runBlocking(Dispatchers.IO.limitedParallelism(20)) {
-            chunks.mapIndexed { index, chunk ->
-                async {
-                    logger.info { "Fetching packages details chunk #$index." }
+        val process = yarn2Command.run(
+            "npm",
+            "info",
+            "--json",
+            packageName,
+            workingDir = workingDir,
+            environment = mapOf("NODE_TLS_REJECT_UNAUTHORIZED" to "0")
+                .takeIf { config.disableRegistryCertificateVerification }
+                .orEmpty()
+        ).requireSuccess()
 
-                    val process = yarn2Command.run(
-                        "npm",
-                        "info",
-                        "--json",
-                        *chunk.toTypedArray(),
-                        workingDir = workingDir,
-                        environment = mapOf("NODE_TLS_REJECT_UNAUTHORIZED" to "0")
-                            .takeIf { config.disableRegistryCertificateVerification }
-                            .orEmpty()
-                    ).requireSuccess()
-
-                    parsePackageJsons(process.stdout)
-                }
-            }.awaitAll().flatten().associateBy { "${it.name}@${it.version}" }
+        return parsePackageJsons(process.stdout).firstOrNull()?.also {
+            yarnInfoCache[packageName] = it
         }
     }
 
