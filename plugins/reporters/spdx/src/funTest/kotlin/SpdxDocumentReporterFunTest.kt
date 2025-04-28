@@ -57,7 +57,7 @@ import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
-import org.ossreviewtoolkit.utils.ort.Environment
+import org.ossreviewtoolkit.utils.ort.ORT_VERSION
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper.FileFormat
@@ -165,7 +165,7 @@ private fun TestConfiguration.generateReport(
 private fun SpdxDocument.getCustomReplacements() =
     mapOf(
         "<REPLACE_LICENSE_LIST_VERSION>" to SpdxLicense.LICENSE_LIST_VERSION.split('.').take(2).joinToString("."),
-        "<REPLACE_ORT_VERSION>" to Environment.ORT_VERSION,
+        "<REPLACE_ORT_VERSION>" to ORT_VERSION,
         "<REPLACE_CREATION_DATE_AND_TIME>" to creationInfo.created.toString(),
         "<REPLACE_DOCUMENT_NAMESPACE>" to documentNamespace
     )

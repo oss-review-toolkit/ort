@@ -30,6 +30,16 @@ const val ORT_NAME = "ort"
 const val ORT_FULL_NAME = "OSS Review Toolkit"
 
 /**
+ * The version of the OSS Review Toolkit as a string.
+ */
+const val ORT_VERSION = BuildConfig.ORT_VERSION
+
+/**
+ * A string that is supposed to be used as the User Agent when using ORT as an HTTP client.
+ */
+const val ORT_USER_AGENT = "$ORT_NAME/$ORT_VERSION"
+
+/**
  * The name of the environment variable to customize the ORT config directory.
  */
 const val ORT_CONFIG_DIR_ENV_NAME = "ORT_CONFIG_DIR"

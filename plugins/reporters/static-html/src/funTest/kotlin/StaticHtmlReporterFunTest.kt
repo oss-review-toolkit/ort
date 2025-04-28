@@ -29,7 +29,7 @@ import javax.xml.transform.TransformerFactory
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.ort.Environment
+import org.ossreviewtoolkit.utils.ort.ORT_VERSION
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.readOrtResult
@@ -58,7 +58,7 @@ class StaticHtmlReporterFunTest : WordSpec({
 
             val expectedReport = matchExpectedResult(
                 getAssetFile("static-html-reporter-test-expected-output.html"),
-                custom = mapOf("<REPLACE_ORT_VERSION>" to Environment.ORT_VERSION)
+                custom = mapOf("<REPLACE_ORT_VERSION>" to ORT_VERSION)
             )
 
             actualReport shouldBe expectedReport
