@@ -29,6 +29,7 @@ import io.kotest.matchers.equalityMatcher
 import io.kotest.matchers.neverNullMatcher
 
 import java.io.File
+import java.net.URL
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.OrtResult
@@ -49,6 +50,26 @@ fun <T, U> transformingCollectionMatcher(
  */
 fun <T, U> transformingCollectionEmptyMatcher(transform: (T) -> Collection<U>): Matcher<T?> =
     neverNullMatcher { value -> beEmpty<U>().test(transform(value)) }
+
+/**
+ * A matcher for comparing to expected result files, in particular serialized [ProjectAnalyzerResult]s and [OrtResult]s,
+ * that displays a unified diff with the given [contextSize] if the results do not match. If the Kotest system property
+ * named "kotest.assertions.multi-line-diff" is set to "simple", this just falls back to [equalityMatcher].
+ */
+fun matchExpectedResult(
+    expectedResultUrl: URL,
+    definitionFile: File? = null,
+    custom: Map<String, String> = emptyMap(),
+    contextSize: Int = 7
+): Matcher<String> =
+    when (val protocol = expectedResultUrl.protocol) {
+        "file" -> {
+            val expectedResultFile = File(expectedResultUrl.path)
+            matchExpectedResult(expectedResultFile, definitionFile, custom, contextSize)
+        }
+
+        else -> throw NotImplementedError("Unsupported protocol '$protocol' for URL $expectedResultUrl.")
+    }
 
 /**
  * A matcher for comparing to expected result files, in particular serialized [ProjectAnalyzerResult]s and [OrtResult]s,
