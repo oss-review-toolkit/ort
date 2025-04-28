@@ -185,12 +185,6 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
         }.toMap()
     }
 
-    /**
-     * Query the details for the given NPM [moduleIds].
-     * The packages are separated in chunks and queried with `npm file` in [workingDir]. Unfortunately, under the hood,
-     * NPM does a request per package. However, if a solution to batch these requests arise, the code is ready for it.
-     * From the response to `npm file`, package details are extracted and returned.
-     */
     private fun getRemotePackageDetails(workingDir: File, moduleIds: Set<String>): Set<PackageJson> =
         runBlocking(Dispatchers.IO.limitedParallelism(20)) {
             moduleIds.chunked(YARN_NPM_INFO_CHUNK_SIZE).map { chunk ->
@@ -199,7 +193,7 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
                         "npm",
                         "info",
                         "--json",
-                        *chunk.toTypedArray(),
+                        *chunk.toTypedArray(), // Not all Yarn Berry versions execute the `npm info` calls in parallel.
                         workingDir = workingDir,
                         environment = mapOf("NODE_TLS_REJECT_UNAUTHORIZED" to "0")
                             .takeIf { config.disableRegistryCertificateVerification }
