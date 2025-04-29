@@ -37,16 +37,17 @@ import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.ProviderPluginConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.toYaml
+import org.ossreviewtoolkit.utils.common.extractResource
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
-import org.ossreviewtoolkit.utils.test.getAssetFile
+import org.ossreviewtoolkit.utils.test.readResourceValue
 
 class CreateAnalyzerResultFromPackageListCommandFunTest : WordSpec({
     "The command" should {
         "generate the expected analyzer result file" {
-            val inputFile = getAssetFile("package-list.yml")
-            val outputFile = tempdir().resolve("analyzer-result.yml")
-            val expectedOutputFile = getAssetFile("create-analyzer-result-from-pkg-list-expected-output.yml")
+            val workingDir = tempdir()
+            val inputFile = extractResource("/package-list.yml", workingDir.resolve("package-list.yml"))
+            val outputFile = workingDir.resolve("analyzer-result.yml")
             val ortConfigFile = createOrtConfig()
 
             HelperMain().test(
@@ -60,7 +61,8 @@ class CreateAnalyzerResultFromPackageListCommandFunTest : WordSpec({
             )
 
             outputFile.readValue<OrtResult>().patchAnalyzerResult() shouldBe
-                expectedOutputFile.readValue<OrtResult>().patchAnalyzerResult()
+                readResourceValue<OrtResult>("/create-analyzer-result-from-pkg-list-expected-output.yml")
+                    .patchAnalyzerResult()
         }
     }
 })

@@ -19,18 +19,18 @@
 
 package org.ossreviewtoolkit.helper.utils
 
+import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-import java.io.File
-
 import org.ossreviewtoolkit.helper.utils.PathExcludeGenerator.createExcludePatterns
 import org.ossreviewtoolkit.helper.utils.PathExcludeGenerator.generateDirectoryExcludes
 import org.ossreviewtoolkit.helper.utils.PathExcludeGenerator.generateFileExcludes
 import org.ossreviewtoolkit.helper.utils.PathExcludeGenerator.generatePathExcludes
+import org.ossreviewtoolkit.utils.test.readResource
 
 class PathExcludeGeneratorTest : WordSpec({
     "generateDirectoryExcludes()" should {
@@ -65,8 +65,8 @@ class PathExcludeGeneratorTest : WordSpec({
         }
 
         "exclude the expected directories for a large data set" {
-            val files = getAssetFile("directory-paths.txt").readLines().map { "$it/file.ext" }
-            val expectedPatterns = getAssetFile("expected-directory-exclude-patterns.txt").readText()
+            val files = readPathExcludes("directory-paths.txt").lines().map { "$it/file.ext" }
+            val expectedPatterns = readPathExcludes("expected-directory-exclude-patterns.txt")
 
             val patterns = generateDirectoryExcludes(*files.toTypedArray())
 
@@ -76,8 +76,8 @@ class PathExcludeGeneratorTest : WordSpec({
 
     "generateFileExcludes()" should {
         "exclude the expected files for a large data set" {
-            val files = getAssetFile("file-paths.txt").readLines()
-            val expectedPatterns = getAssetFile("expected-file-exclude-patterns.txt").readText()
+            val files = readPathExcludes("file-paths.txt").lines()
+            val expectedPatterns = readPathExcludes("expected-file-exclude-patterns.txt")
 
             val patterns = generateFileExcludes(files).map { it.pattern }
 
@@ -99,8 +99,8 @@ class PathExcludeGeneratorTest : WordSpec({
 
     "generatePathExcludes()" should {
         "return the expected patterns for a large data set" {
-            val files = getAssetFile("file-paths.txt").readLines()
-            val expectedPatterns = getAssetFile("expected-exclude-patterns.txt").readText()
+            val files = readPathExcludes("file-paths.txt").lines()
+            val expectedPatterns = readPathExcludes("expected-exclude-patterns.txt")
 
             val patterns = generatePathExcludes(files).map { it.pattern }
 
@@ -179,4 +179,4 @@ class PathExcludeGeneratorTest : WordSpec({
     }
 })
 
-private fun getAssetFile(path: String) = File("src/test/assets/path-exclude-gen", path)
+private fun TestConfiguration.readPathExcludes(path: String) = readResource("/path-exclude-gen/$path")
