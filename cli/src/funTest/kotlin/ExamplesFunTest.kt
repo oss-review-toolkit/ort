@@ -65,7 +65,7 @@ import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CURATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.spdx.toSpdx
-import org.ossreviewtoolkit.utils.test.getAssetFile
+import org.ossreviewtoolkit.utils.test.readResourceValue
 
 class ExamplesFunTest : StringSpec({
     val examplesDir = File("../examples")
@@ -138,9 +138,8 @@ class ExamplesFunTest : StringSpec({
     }
 
     "The rules script can be run" {
-        val resultFile = getAssetFile("semver4j-ort-result.yml")
+        val ortResult = readResourceValue<OrtResult>("/semver4j-ort-result.yml")
         val licenseFile = File("../examples/license-classifications.yml")
-        val ortResult = resultFile.readValue<OrtResult>()
         val evaluator = Evaluator(
             ortResult = ortResult,
             licenseClassifications = licenseFile.readValue()
