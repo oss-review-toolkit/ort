@@ -36,7 +36,7 @@ private val JSON = Json { ignoreUnknownKeys = true }
 
 internal fun parseWorkspaceInfo(json: String): Map<String, WorkspaceInfo> {
     val items = json.byteInputStream().use { inputStream ->
-        Json.decodeToSequence<JsonObject>(inputStream)
+        JSON.decodeToSequence<JsonObject>(inputStream)
     }
 
     val logNode = items.firstOrNull {
