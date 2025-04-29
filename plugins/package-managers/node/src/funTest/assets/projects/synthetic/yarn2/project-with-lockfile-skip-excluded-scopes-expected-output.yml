@@ -97,7 +97,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/kriskowal/asap.git"
+    url: "https://github.com/kriskowal/asap.git"
     revision: "3e3d99381444379bb0483cb9216caa39ac67bebb"
     path: ""
   vcs_processed:
@@ -220,7 +220,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: ""
-    url: "git+https://github.com/fb55/css-what.git"
+    url: "https://github.com/fb55/css-what"
     revision: "2db00ca221922c5b5131d798614aa043f2f6f80e"
     path: ""
   vcs_processed:
@@ -547,7 +547,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git://github.com/isaacs/inherits.git"
+    url: "git://github.com/isaacs/inherits"
     revision: "9a2c29400c6d491e0b7beefe0c32efa3b462545d"
     path: ""
   vcs_processed:
@@ -577,7 +577,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/lodash/lodash.git"
+    url: "https://github.com/lodash/lodash.git"
     revision: "c6e281b878b315c7a10d90f9c2af4cdb112d9625"
     path: ""
   vcs_processed:
@@ -607,7 +607,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/dcodeIO/long.js.git"
+    url: "https://github.com/dcodeIO/long.js.git"
     revision: "8cdc1f74ced4f771aa844f1cbc565b1d4c4451b8"
     path: ""
   vcs_processed:
@@ -637,7 +637,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/fb55/nth-check.git"
+    url: "https://github.com/fb55/nth-check"
     revision: "03a02587bbd126fafc3d2331ffef6ea5cb2f9b66"
     path: ""
   vcs_processed:
@@ -698,7 +698,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/then/promise.git"
+    url: "https://github.com/then/promise.git"
     revision: "cebfa6049cc08843f428c6fc92dde918f8687e6d"
     path: ""
   vcs_processed:
@@ -726,7 +726,7 @@ packages:
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git://github.com/nodejs/readable-stream.git"
+    url: "git://github.com/nodejs/readable-stream"
     revision: "6c32003bd8607da54f8ca1b096c4411778b060bc"
     path: ""
   vcs_processed:
