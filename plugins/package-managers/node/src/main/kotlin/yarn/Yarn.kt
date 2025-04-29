@@ -44,13 +44,13 @@ import org.ossreviewtoolkit.plugins.packagemanagers.node.NodePackageManagerType
 import org.ossreviewtoolkit.plugins.packagemanagers.node.PackageJson
 import org.ossreviewtoolkit.plugins.packagemanagers.node.Scope
 import org.ossreviewtoolkit.plugins.packagemanagers.node.getDependenciesForScope
+import org.ossreviewtoolkit.plugins.packagemanagers.node.getInstalledModulesDirs
 import org.ossreviewtoolkit.plugins.packagemanagers.node.getNames
 import org.ossreviewtoolkit.plugins.packagemanagers.node.parsePackageJson
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.DirectoryStash
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.alsoIfNull
-import org.ossreviewtoolkit.utils.common.realFile
 
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
@@ -209,11 +209,6 @@ private fun getNonDeduplicatedModuleInfosForId(moduleInfos: Collection<YarnListN
 
     return result
 }
-
-private fun getInstalledModulesDirs(moduleDir: File): Set<File> =
-    moduleDir.resolve("node_modules").walk().filter {
-        it.isFile && it.name == NodePackageManagerType.DEFINITION_FILE
-    }.mapTo(mutableSetOf()) { it.parentFile.realFile }
 
 internal val YarnListNode.moduleName: String get() = name.substringBeforeLast("@")
 
