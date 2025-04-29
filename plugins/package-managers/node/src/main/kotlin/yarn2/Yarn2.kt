@@ -103,6 +103,7 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
     NodePackageManager(NodePackageManagerType.YARN2) {
     override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE)
 
+    private val yarnInfoCache = mutableMapOf<String, PackageJson>()
     private val packageForId = mutableMapOf<Identifier, Package>()
     private val projectForId = mutableMapOf<Identifier, Project>()
 
@@ -185,9 +186,13 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
         }.toMap()
     }
 
-    private fun getRemotePackageDetails(workingDir: File, moduleIds: Set<String>): Set<PackageJson> =
-        runBlocking(Dispatchers.IO.limitedParallelism(20)) {
-            moduleIds.chunked(YARN_NPM_INFO_CHUNK_SIZE).map { chunk ->
+    private fun getRemotePackageDetails(workingDir: File, moduleIds: Set<String>): Set<PackageJson> {
+        val cachedResults = moduleIds.mapNotNull { moduleId ->
+            yarnInfoCache[moduleId]?.let { moduleId to it }
+        }.toMap()
+
+        val retrievedResults = runBlocking(Dispatchers.IO.limitedParallelism(20)) {
+            (moduleIds - cachedResults.keys).chunked(YARN_NPM_INFO_CHUNK_SIZE).map { chunk ->
                 async {
                     val process = yarn2Command.run(
                         "npm",
@@ -204,6 +209,14 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
                 }
             }.awaitAll().flatten().toSet()
         }
+
+        retrievedResults.associateByTo(yarnInfoCache) { it.moduleId }
+
+        return buildSet {
+            addAll(cachedResults.values)
+            addAll(retrievedResults)
+        }
+    }
 
     /**
      * Parse all packages defined in [iterator], which should come from a NDJSON file. [packagesHeaders] should be
