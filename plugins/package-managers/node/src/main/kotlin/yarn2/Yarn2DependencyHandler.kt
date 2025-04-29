@@ -76,9 +76,7 @@ internal class Yarn2DependencyHandler(private val yarn2: Yarn2) : DependencyHand
         val moduleId = dependency.moduleId
         val packageJson = packageJsonForModuleId[moduleId]?.takeUnless { dependency.isProject } ?: return null
 
-        return parsePackage(
-            packageJson
-        ) { packageName: String ->
+        return parsePackage(packageJson) { packageName ->
             yarn2.getRemotePackageDetails(workingDir, setOf(packageName)).single()
         }
     }
