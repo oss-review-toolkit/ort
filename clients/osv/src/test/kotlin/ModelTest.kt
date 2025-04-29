@@ -38,4 +38,4 @@ class ModelTest : StringSpec({
 })
 
 private fun getVulnerabilityExamplesJson(): List<String> =
-    (1..7).map { i -> File("src/test/assets/vulnerability/examples/$i.json").readText() }
+    (1..7).map { i -> File("src/test/assets/vulnerability-example-$i.json").readText() }
