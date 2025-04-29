@@ -37,16 +37,15 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.plugins.packagemanagers.gradle.GradleFactory
 import org.ossreviewtoolkit.plugins.versioncontrolsystems.git.GitRepoFactory
-import org.ossreviewtoolkit.utils.test.getAssetFile
+import org.ossreviewtoolkit.utils.test.readResourceValue
 
 class AnalyzerFunTest : WordSpec({
     "An analysis" should {
         "correctly report repositories git-repo for projects" {
-            val expectedRepository = getAssetFile("git-repo-expected-repository.yml").readValue<Repository>()
+            val expectedRepository = readResourceValue<Repository>("/git-repo-expected-repository.yml")
             val projectDir = createGitRepoProject()
 
             val repository = analyze(projectDir, packageManagers = emptySet()).repository
