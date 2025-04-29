@@ -30,6 +30,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.utils.common.realFile
 import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 
@@ -242,3 +243,11 @@ internal val PackageJson.moduleId: String get() =
             append(version)
         }
     }
+
+/**
+ * Return the directories of all modules which have been installed in the 'node_modules' dir within [moduleDir].
+ */
+internal fun getInstalledModulesDirs(moduleDir: File): Set<File> =
+    moduleDir.resolve("node_modules").walk().filter {
+        it.isFile && it.name == NodePackageManagerType.DEFINITION_FILE
+    }.mapTo(mutableSetOf()) { it.parentFile.realFile }
