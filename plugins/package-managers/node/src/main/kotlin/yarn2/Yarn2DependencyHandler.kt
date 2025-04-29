@@ -56,15 +56,13 @@ internal class Yarn2DependencyHandler(private val yarn2: Yarn2) : DependencyHand
         }
     }
 
-    override fun identifierFor(dependency: PackageInfo): Identifier {
-        val moduleName = dependency.value.substringBeforeLast("@")
-        return Identifier(
+    override fun identifierFor(dependency: PackageInfo): Identifier =
+        Identifier(
             type = if (dependency.isProject) yarn2.projectType else "NPM",
-            namespace = moduleName.substringBefore("/", ""),
-            name = moduleName.substringAfter("/"),
+            namespace = dependency.moduleName.substringBefore("/", ""),
+            name = dependency.moduleName.substringAfter("/"),
             version = dependency.children.version
         )
-    }
 
     override fun dependenciesFor(dependency: PackageInfo): List<PackageInfo> =
         dependency.children.dependencies.map { packageInfoForLocator.getValue(it.locator) }
