@@ -54,7 +54,7 @@ class FossIdClientReturnTypeTest : StringSpec({
     val server = WireMockServer(
         WireMockConfiguration.options()
             .dynamicPort()
-            .usingFilesUnderDirectory("src/test/assets/return-type")
+            .usingFilesUnderClasspath("return-type")
     )
     lateinit var service: FossIdRestService
 
