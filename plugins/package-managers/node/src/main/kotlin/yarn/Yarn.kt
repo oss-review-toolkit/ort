@@ -105,7 +105,7 @@ class Yarn(override val descriptor: PluginDescriptor = YarnFactory.descriptor) :
         installDependencies(workingDir)
 
         val workspaceModuleDirs = getWorkspaceModuleDirs(workingDir)
-        handler.setContext(workingDir, getModuleDirs(workingDir), workspaceModuleDirs)
+        handler.setContext(workingDir, getInstalledModulesDirs(workingDir), workspaceModuleDirs)
 
         val scopes = Scope.entries.filterNot { scope -> scope.isExcluded(excludes) }
         val moduleInfosForScope = scopes.associateWith { scope ->
@@ -210,7 +210,7 @@ private fun getNonDeduplicatedModuleInfosForId(moduleInfos: Collection<YarnListN
     return result
 }
 
-private fun getModuleDirs(moduleDir: File): Set<File> =
+private fun getInstalledModulesDirs(moduleDir: File): Set<File> =
     moduleDir.resolve("node_modules").walk().filter {
         it.isFile && it.name == NodePackageManagerType.DEFINITION_FILE
     }.mapTo(mutableSetOf()) { it.parentFile.realFile }
