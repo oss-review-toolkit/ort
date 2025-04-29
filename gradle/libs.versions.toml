@@ -12,7 +12,6 @@ kotlinPlugin = "2.1.20"
 ksp = "2.1.20-2.0.0"
 mavenPublishPlugin = "0.31.0"
 reproducibleBuildsPlugin = "1.0"
-versionsPlugin = "0.52.0"
 
 aeSecurity = "0.136.0"
 asciidoctorj = "3.0.0"
@@ -80,7 +79,6 @@ gitSemver = { id = "com.github.jmongard.git-semver-plugin", version.ref = "gitSe
 ideaExt = { id = "org.jetbrains.gradle.plugin.idea-ext", version.ref = "ideaExtPlugin" }
 jakartaMigration = { id = "com.netflix.nebula.jakartaee-migration", version.ref = "jakartaMigrationPlugin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinPlugin" }
-versions = { id = "com.github.ben-manes.versions", version.ref = "versionsPlugin" }
 
 [libraries]
 # These are Maven coordinates for Gradle plugins, which are required for use in precompiled plugin scripts.

@@ -17,8 +17,6 @@
  * License-Filename: LICENSE
  */
 
-import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
-
 import org.eclipse.jgit.ignore.FastIgnoreRule
 
 import org.jetbrains.gradle.ext.Gradle
@@ -29,7 +27,6 @@ plugins {
     // Apply third-party plugins.
     alias(libs.plugins.gitSemver)
     alias(libs.plugins.ideaExt)
-    alias(libs.plugins.versions)
 }
 
 semver {
@@ -70,21 +67,6 @@ extensions.findByName("develocity")?.withGroovyBuilder {
     getProperty("buildScan")?.withGroovyBuilder {
         setProperty("termsOfUseUrl", "https://gradle.com/terms-of-service")
         setProperty("termsOfUseAgree", "yes")
-    }
-}
-
-tasks.named<DependencyUpdatesTask>("dependencyUpdates") {
-    gradleReleaseChannel = "current"
-    outputFormatter = "json"
-
-    val nonFinalQualifiers = listOf(
-        "alpha", "b", "beta", "cr", "dev", "ea", "eap", "m", "milestone", "pr", "preview", "rc", "\\d{14}"
-    ).joinToString("|", "(", ")")
-
-    val nonFinalQualifiersRegex = Regex(".*[.-]$nonFinalQualifiers[.\\d-+]*", RegexOption.IGNORE_CASE)
-
-    rejectVersionIf {
-        candidate.version.matches(nonFinalQualifiersRegex)
     }
 }
 
