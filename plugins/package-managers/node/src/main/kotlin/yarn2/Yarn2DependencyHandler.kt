@@ -71,8 +71,8 @@ internal class Yarn2DependencyHandler(private val yarn2: Yarn2) : DependencyHand
         if (dependency.isProject) PackageLinkage.PROJECT_DYNAMIC else PackageLinkage.DYNAMIC
 
     override fun createPackage(dependency: PackageInfo, issues: MutableCollection<Issue>): Package? {
-        val moduleId = dependency.moduleId
-        val packageJson = packageJsonForModuleId[moduleId]?.takeUnless { dependency.isProject } ?: return null
+        val packageJson = packageJsonForModuleId[dependency.moduleId]?.takeUnless { dependency.isProject }
+            ?: return null
 
         return parsePackage(packageJson) { packageName ->
             yarn2.getRemotePackageDetails(workingDir, setOf(packageName)).single()
