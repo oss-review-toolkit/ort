@@ -33,7 +33,7 @@ import java.time.Instant
 
 import kotlinx.serialization.json.JsonObject
 
-import org.ossreviewtoolkit.utils.test.getAssetAsString
+import org.ossreviewtoolkit.utils.test.readResource
 
 private val VULNERABILITY_FOR_PACKAGE_BY_COMMIT_REQUEST = VulnerabilitiesForPackageRequest(
     commit = "6879efc2c1596d11a6a6ad296f80063b558d5e0f"
@@ -71,7 +71,7 @@ private fun Vulnerability.patch() = patchIgnorableFields().normalizeUrls()
 class OsvServiceWrapperFunTest : WordSpec({
     "getVulnerabilitiesForPackage()" should {
         val expectedVulnerability = OsvService.JSON.decodeFromString<Vulnerability>(
-            getAssetAsString("vulnerabilities-for-package-expected-vulnerability.json")
+            readResource("/vulnerabilities-for-package-expected-vulnerability.json")
         )
 
         "return the expected vulnerability when queried by commit" {
@@ -126,7 +126,7 @@ class OsvServiceWrapperFunTest : WordSpec({
 
     "getVulnerabilityForId()" should {
         "return the expected vulnerability for the given ID" {
-            val expectedResult = getAssetAsString("vulnerability-by-id-expected-result.json")
+            val expectedResult = readResource("/vulnerability-by-id-expected-result.json")
 
             val result = OsvServiceWrapper().getVulnerabilityForId("GHSA-xvch-5gv4-984h")
 

@@ -20,10 +20,11 @@
 package org.ossreviewtoolkit.clients.osv
 
 import io.kotest.assertions.json.shouldEqualJson
+import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.inspectors.forAll
 
-import java.io.File
+import org.ossreviewtoolkit.utils.test.readResource
 
 class ModelTest : StringSpec({
     "Deserializing and serializing any vulnerability is idempotent for all official examples" {
@@ -37,5 +38,5 @@ class ModelTest : StringSpec({
     }
 })
 
-private fun getVulnerabilityExamplesJson(): List<String> =
-    (1..7).map { i -> File("src/test/assets/vulnerability-example-$i.json").readText() }
+private fun TestConfiguration.getVulnerabilityExamplesJson(): List<String> =
+    (1..7).map { i -> readResource("/vulnerability-example-$i.json") }

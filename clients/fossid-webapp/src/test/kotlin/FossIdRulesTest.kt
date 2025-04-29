@@ -41,7 +41,7 @@ class FossIdRulesTest : StringSpec({
     val server = WireMockServer(
         WireMockConfiguration.options()
             .dynamicPort()
-            .usingFilesUnderDirectory("src/test/assets/rules")
+            .usingFilesUnderClasspath("rules")
     )
     lateinit var service: FossIdServiceWithVersion
 
