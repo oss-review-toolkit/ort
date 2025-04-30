@@ -407,6 +407,11 @@ class PackageCurationTest : WordSpec({
                 packageCurationForVersion("[1.0.0,2.0.0]").isApplicable(identifierForVersion("2.0.1.0")) shouldBe false
             }
         }
+
+        "work for versions with leading zeros after the dot" {
+            packageCurationForVersion("[1.02,2.0[").isApplicable(identifierForVersion("1.08")) shouldBe true
+            packageCurationForVersion("[1.02,2.0[").isApplicable(identifierForVersion("1.01")) shouldBe false
+        }
     }
 })
 
