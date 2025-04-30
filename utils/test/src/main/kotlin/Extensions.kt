@@ -19,8 +19,11 @@
 
 package org.ossreviewtoolkit.utils.test
 
+import com.fasterxml.jackson.module.kotlin.readValue
+
 import io.kotest.core.TestConfiguration
 
+import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.utils.FileArchiver
@@ -39,3 +42,6 @@ fun FileArchiver.Companion.createDefault() =
 fun TestConfiguration.getResource(name: String) = checkNotNull(javaClass.getResource(name))
 
 fun TestConfiguration.readResource(name: String) = getResource(name).readText()
+
+inline fun <reified T : Any> TestConfiguration.readResourceValue(name: String): T =
+    FileFormat.forExtension(name.substringAfterLast('.')).mapper.readValue<T>(getResource(name))
