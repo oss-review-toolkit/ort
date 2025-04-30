@@ -41,8 +41,7 @@ abstract class NodePackageManager(val managerType: NodePackageManagerType) : Pac
 
         val packageJson = parsePackageJson(packageJsonFile)
 
-        val rawName = packageJson.name.orEmpty()
-        val (namespace, name) = splitNamespaceAndName(rawName)
+        val (namespace, name) = splitNamespaceAndName(packageJson.name.orEmpty())
 
         val projectName = name.ifBlank {
             getFallbackProjectName(analysisRoot, packageJsonFile).also {
