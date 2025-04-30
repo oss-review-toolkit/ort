@@ -50,10 +50,6 @@ abstract class NodePackageManager(val managerType: NodePackageManagerType) : Pac
         }
 
         val version = packageJson.version.orEmpty()
-        if (version.isBlank()) {
-            logger.warn { "'$packageJsonFile' does not define a version." }
-        }
-
         val declaredLicenses = packageJson.licenses.mapLicenses()
         val authors = packageJson.authors.flatMap { parseAuthorString(it.name) }
             .mapNotNullTo(mutableSetOf()) { it.name }
