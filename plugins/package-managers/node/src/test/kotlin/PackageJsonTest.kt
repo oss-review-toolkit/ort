@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.packagemanagers.node
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.maps.beEmpty
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -72,6 +73,20 @@ class PackageJsonTest : WordSpec({
                 Author(name = "Jane Doe", email = "jane.doe@example.com"),
                 Author(name = "John Doe")
             )
+        }
+
+        "deserialize dependencies from an empty array node" {
+            val json = """
+            {
+              "dependencies": [],
+              "devDependencies": [],
+              "optionalDependencies": []
+            }
+            """.trimIndent()
+
+            val packageJson = parsePackageJson(json)
+
+            packageJson.dependencies should beEmpty()
         }
 
         "deserialize the repository from an empty node" {

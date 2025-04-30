@@ -80,6 +80,11 @@ private fun transformPackageJson(element: JsonElement): JsonElement {
     // Readd licenses as plain primitives.
     content["licenses"] = JsonArray(licenses.map { JsonPrimitive(it) })
 
+    // Remove invalid "*dependencies" nodes which are empty array nodes instead of objects.
+    listOf("dependencies", "devDependencies", "optionalDependencies")
+        .filter { (content[it] as? JsonArray)?.isEmpty() == true }
+        .forEach { content.remove(it) }
+
     (content["repository"] as? JsonObject)?.also {
         // A repository object node without a `url` does not make sense. However, some packages use 'repository: {}'
         // to describe the absence of a repository, see https://github.com/oss-review-toolkit/ort/issues/9378.
