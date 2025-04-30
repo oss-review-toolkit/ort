@@ -56,7 +56,7 @@ abstract class NodePackageManager(val managerType: NodePackageManagerType) : Pac
         val description = packageJson.description.orEmpty()
         val homepageUrl = packageJson.homepage.orEmpty()
         val projectDir = packageJsonFile.parentFile.realFile
-        val vcsFromPackage = parseVcsInfo(packageJson)
+        val vcs = parseVcsInfo(packageJson)
 
         return Project(
             id = Identifier(
@@ -68,8 +68,8 @@ abstract class NodePackageManager(val managerType: NodePackageManagerType) : Pac
             definitionFilePath = VersionControlSystem.getPathInfo(packageJsonFile.realFile).path,
             authors = authors,
             declaredLicenses = declaredLicenses,
-            vcs = vcsFromPackage,
-            vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, homepageUrl),
+            vcs = vcs,
+            vcsProcessed = processProjectVcs(projectDir, vcs, homepageUrl),
             description = description,
             homepageUrl = homepageUrl
         )
