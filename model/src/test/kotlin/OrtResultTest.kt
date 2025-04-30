@@ -264,7 +264,7 @@ class OrtResultTest : WordSpec({
                         excludes = Excludes(
                             paths = listOf(
                                 PathExclude(
-                                    pattern = "test/**",
+                                    pattern = "path/**",
                                     reason = PathExcludeReason.TEST_OF
                                 )
                             )
@@ -306,7 +306,7 @@ class OrtResultTest : WordSpec({
                                     Issue(
                                         message = "Included issue",
                                         source = "ScanCode",
-                                        affectedPath = "test/assets/asset.json"
+                                        affectedPath = "path/that/is/affected"
                                     )
                                 )
                             )
