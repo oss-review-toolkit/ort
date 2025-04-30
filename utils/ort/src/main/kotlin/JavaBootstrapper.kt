@@ -105,7 +105,7 @@ object JavaBootstrapper {
             Match.ANY
         )
 
-        val pkg = pkgs.sortedBy { it.id }.find { it.distributionName == distributionName }
+        val pkg = pkgs.sortedBy { it.id }.find { it.distribution?.name == distributionName }
             ?: return Result.failure(
                 IllegalArgumentException(
                     "No JDK package for distribution '$distributionName' in version '$version' found for bootstrapping."
