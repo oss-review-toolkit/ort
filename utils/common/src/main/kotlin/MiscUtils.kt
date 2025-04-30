@@ -30,6 +30,8 @@ fun extractResource(name: String, target: File) =
             "Resource '$name' not found."
         }
 
+        parentFile.safeMkdirs()
+
         resource.openStream().use { inputStream ->
             outputStream().use { outputStream ->
                 inputStream.copyTo(outputStream)
