@@ -49,13 +49,6 @@ abstract class NodePackageManager(val managerType: NodePackageManagerType) : Pac
             }
         }
 
-        val version = packageJson.version.orEmpty()
-        val declaredLicenses = packageJson.licenses.mapLicenses()
-        val authors = packageJson.authors.flatMap { parseAuthorString(it.name) }
-            .mapNotNullTo(mutableSetOf()) { it.name }
-        val description = packageJson.description.orEmpty()
-        val homepageUrl = packageJson.homepage.orEmpty()
-        val projectDir = packageJsonFile.parentFile.realFile
         val vcs = parseVcsInfo(packageJson)
 
         return Project(
@@ -63,15 +56,19 @@ abstract class NodePackageManager(val managerType: NodePackageManagerType) : Pac
                 type = projectType,
                 namespace = namespace,
                 name = projectName,
-                version = version
+                version = packageJson.version.orEmpty()
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(packageJsonFile.realFile).path,
-            authors = authors,
-            declaredLicenses = declaredLicenses,
+            authors = packageJson.authors.flatMap {
+                parseAuthorString(it.name)
+            }.mapNotNullTo(mutableSetOf()) {
+                it.name
+            },
+            declaredLicenses = packageJson.licenses.mapLicenses(),
             vcs = vcs,
-            vcsProcessed = processProjectVcs(projectDir, vcs, homepageUrl),
-            description = description,
-            homepageUrl = homepageUrl
+            vcsProcessed = processProjectVcs(packageJsonFile.parentFile.realFile, vcs, packageJson.homepage.orEmpty()),
+            description = packageJson.description.orEmpty(),
+            homepageUrl = packageJson.homepage.orEmpty()
         )
     }
 
