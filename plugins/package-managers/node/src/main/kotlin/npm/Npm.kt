@@ -325,7 +325,7 @@ internal fun List<String>.groupLines(vararg markers: String): List<String> {
     }
 }
 
-internal fun ProcessCapture.extractNpmIssues(): List<Issue> {
+private fun ProcessCapture.extractNpmIssues(): List<Issue> {
     val lines = stderr.lines()
     val issues = mutableListOf<Issue>()
 
