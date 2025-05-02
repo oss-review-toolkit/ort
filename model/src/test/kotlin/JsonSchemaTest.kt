@@ -91,7 +91,7 @@ class JsonSchemaTest : StringSpec({
 
     "The example package configuration file validates successfully" {
         val packageConfigurationSchema = File("../integrations/schemas/package-configuration-schema.json").toURI()
-        val packageConfiguration = File("src/test/assets/$ORT_PACKAGE_CONFIGURATION_FILENAME").toJsonNode()
+        val packageConfiguration = File("../examples/$ORT_PACKAGE_CONFIGURATION_FILENAME").toJsonNode()
 
         val errors = schemaV7.getSchema(packageConfigurationSchema).validate(packageConfiguration)
 
