@@ -22,6 +22,7 @@
 package org.ossreviewtoolkit.plugins.reporters.aosd
 
 import java.io.File
+import java.net.URL
 
 import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.SerialName
@@ -198,4 +199,4 @@ private val JSON = Json.Default
 
 internal fun File.writeReport(model: AOSD20): File = apply { outputStream().use { JSON.encodeToStream(model, it) } }
 
-internal fun File.readAosd20Report(): AOSD20 = inputStream().use { JSON.decodeFromStream<AOSD20>(it) }
+internal fun URL.readAosd20Report(): AOSD20 = openStream().use { JSON.decodeFromStream<AOSD20>(it) }

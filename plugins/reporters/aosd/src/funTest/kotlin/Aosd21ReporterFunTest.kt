@@ -36,23 +36,23 @@ import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.test.getAssetFile
+import org.ossreviewtoolkit.utils.test.getResource
+import org.ossreviewtoolkit.utils.test.readResource
 
 class Aosd21ReporterFunTest : WordSpec({
     "The example JSON report" should {
         "be valid according to the schema" {
-            val schemaFile = getAssetFile("aosd21/AOSD2.1_Importscheme_V2.1.0.json")
-            val schema = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7).getSchema(schemaFile.toURI())
+            val schemaResource = getResource("/aosd21/AOSD2.1_Importscheme_V2.1.0.json")
+            val schema = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7).getSchema(schemaResource.toURI())
 
-            val exampleFile = getAssetFile("aosd21/AOSD2.1_Example_Json_Import_File_V2.1.0.json")
-            val errors = schema.validate(exampleFile.readText(), InputFormat.JSON)
+            val example = readResource("/aosd21/AOSD2.1_Example_Json_Import_File_V2.1.0.json")
+            val errors = schema.validate(example, InputFormat.JSON)
 
             errors should beEmpty()
         }
 
         "deserialize correctly" {
-            val aosdFile = getAssetFile("aosd21/AOSD2.1_Example_Json_Import_File_V2.1.0.json")
-            val aosd = aosdFile.readAosd21Report()
+            val aosd = getResource("/aosd21/AOSD2.1_Example_Json_Import_File_V2.1.0.json").readAosd21Report()
 
             with(aosd) {
                 schemaVersion shouldBe "2.1.0"
@@ -69,8 +69,8 @@ class Aosd21ReporterFunTest : WordSpec({
         val reportFiles = Aosd21Reporter().generateReport(ReporterInput(ORT_RESULT), outputDir)
 
         "be valid according to the schema" {
-            val schemaFile = getAssetFile("aosd21/AOSD2.1_Importscheme_V2.1.0.json")
-            val schema = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7).getSchema(schemaFile.toURI())
+            val schemaResource = getResource("/aosd21/AOSD2.1_Importscheme_V2.1.0.json")
+            val schema = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7).getSchema(schemaResource.toURI())
 
             reportFiles.forAll {
                 it shouldBeSuccess { reportFile ->
@@ -86,15 +86,15 @@ class Aosd21ReporterFunTest : WordSpec({
             assertSoftly {
                 with(reportFiles[0]) {
                     this shouldBeSuccess { actualFile ->
-                        val expectedFile = getAssetFile("aosd21/aosd.NPM-%40ort-project-with-findings-1.0.json")
-                        actualFile.readText() shouldEqualJson expectedFile.readText()
+                        val expectedResult = readResource("/aosd21/aosd.NPM-%40ort-project-with-findings-1.0.json")
+                        actualFile.readText() shouldEqualJson expectedResult
                     }
                 }
 
                 with(reportFiles[1]) {
                     this shouldBeSuccess { actualFile ->
-                        val expectedFile = getAssetFile("aosd21/aosd.NPM-%40ort-project-without-findings-1.0.json")
-                        actualFile.readText() shouldEqualJson expectedFile.readText()
+                        val expectedResult = readResource("/aosd21/aosd.NPM-%40ort-project-without-findings-1.0.json")
+                        actualFile.readText() shouldEqualJson expectedResult
                     }
                 }
             }

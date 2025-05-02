@@ -23,13 +23,10 @@ import io.kotest.assertions.assertSoftly
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-import java.io.File
-
-import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.utils.test.readResourceValue
 
 class PurlUtilsTest : StringSpec({
-    val testDataFile = File("src/test/assets/test-suite-data.json")
-    val testData = testDataFile.readValue<List<TestSuiteData>>()
+    val testData = readResourceValue<List<TestSuiteData>>("/test-suite-data.json")
     val testCases = testData.filterNot { it.isInvalid }.also { testCases ->
         // Perform some sanity checks on the test data itself.
         check(testCases.none { it.namespace?.isEmpty() == true })

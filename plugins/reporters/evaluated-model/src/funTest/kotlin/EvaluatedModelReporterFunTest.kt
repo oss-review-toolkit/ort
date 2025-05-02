@@ -26,8 +26,8 @@ import io.kotest.matchers.shouldBe
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
-import org.ossreviewtoolkit.utils.test.getAssetAsString
 import org.ossreviewtoolkit.utils.test.readOrtResult
+import org.ossreviewtoolkit.utils.test.readResource
 
 class EvaluatedModelReporterFunTest : WordSpec({
     fun EvaluatedModelReporter.generateReport(ortResult: OrtResult) =
@@ -41,15 +41,15 @@ class EvaluatedModelReporterFunTest : WordSpec({
 
     "EvaluatedModelReporter" should {
         "create the expected JSON output" {
-            val expectedResult = getAssetAsString("evaluated-model-reporter-test-expected-output.json")
-            val ortResult = readOrtResult("src/funTest/assets/reporter-test-input.yml")
+            val expectedResult = readResource("/evaluated-model-reporter-test-expected-output.json")
+            val ortResult = readOrtResult("/reporter-test-input.yml")
 
             EvaluatedModelReporterFactory.create().generateReport(ortResult) shouldBe expectedResult
         }
 
         "create the expected YAML output" {
-            val expectedResult = getAssetAsString("evaluated-model-reporter-test-expected-output.yml")
-            val ortResult = readOrtResult("src/funTest/assets/reporter-test-input.yml")
+            val expectedResult = readResource("/evaluated-model-reporter-test-expected-output.yml")
+            val ortResult = readOrtResult("/reporter-test-input.yml")
 
             EvaluatedModelReporterFactory.create(
                 outputFileFormats = listOf("yml")
@@ -57,8 +57,8 @@ class EvaluatedModelReporterFunTest : WordSpec({
         }
 
         "create the expected YAML output with dependency tree de-duplication enabled" {
-            val expectedResult = getAssetAsString("evaluated-model-reporter-test-deduplicate-expected-output.yml")
-            val ortResult = readOrtResult("src/funTest/assets/reporter-test-input.yml")
+            val expectedResult = readResource("/evaluated-model-reporter-test-deduplicate-expected-output.yml")
+            val ortResult = readOrtResult("/reporter-test-input.yml")
 
             EvaluatedModelReporterFactory.create(
                 outputFileFormats = listOf("yml"),

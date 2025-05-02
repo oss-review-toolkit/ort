@@ -24,6 +24,7 @@ package org.ossreviewtoolkit.plugins.reporters.aosd
 import io.ks3.standard.sortedSetSerializer
 
 import java.io.File
+import java.net.URL
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
@@ -201,4 +202,4 @@ private object SortedComponentSetSerializer : KSerializer<Set<AOSD21.Component>>
 
 internal fun File.writeReport(model: AOSD21): File = apply { outputStream().use { JSON.encodeToStream(model, it) } }
 
-internal fun File.readAosd21Report(): AOSD21 = inputStream().use { JSON.decodeFromStream<AOSD21>(it) }
+internal fun URL.readAosd21Report(): AOSD21 = openStream().use { JSON.decodeFromStream<AOSD21>(it) }

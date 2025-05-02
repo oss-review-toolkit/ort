@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.model.licenses
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.Matcher
 import io.kotest.matchers.be
 import io.kotest.matchers.collections.beEmpty
@@ -32,8 +33,6 @@ import io.kotest.matchers.neverNullMatcher
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-
-import java.io.File
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.CopyrightFinding
@@ -58,6 +57,7 @@ import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.model.declaredLicenses
 import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.model.utils.FileProvenanceFileStorage
+import org.ossreviewtoolkit.utils.common.extractResource
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
@@ -657,7 +657,8 @@ class LicenseInfoResolverTest : WordSpec({
                 )
             )
 
-            val archiveDir = File("src/test/assets/archive")
+            val archiveDir = tempdir().resolve("archive")
+            extractResource("/archive.zip", archiveDir.resolve("88dce74b694866af2a5e380206b119f5e38aad5f/archive.zip"))
             val archiver = FileArchiver(
                 patterns = LicenseFilePatterns.DEFAULT.licenseFilenames,
                 storage = FileProvenanceFileStorage(

@@ -26,12 +26,7 @@ import io.kotest.matchers.shouldBe
 
 import io.mockk.mockk
 
-import java.io.File
-
-private fun readAnalyzerResult(analyzerResultFilename: String): Project =
-    File("src/test/assets")
-        .resolve(analyzerResultFilename)
-        .readValue<ProjectAnalyzerResult>().project
+import org.ossreviewtoolkit.utils.test.readResourceValue
 
 private const val MANAGER = "MyManager"
 
@@ -51,7 +46,7 @@ class ProjectTest : WordSpec({
 
     "scopes" should {
         "be initialized from scope dependencies" {
-            val project = readAnalyzerResult("maven-expected-output-app.yml")
+            val project = readResourceValue<ProjectAnalyzerResult>("/maven-expected-output-app.yml").project
 
             project.scopes shouldBe project.scopeDependencies
         }
