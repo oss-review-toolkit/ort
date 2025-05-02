@@ -92,19 +92,6 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
         analyzerConfig: AnalyzerConfiguration
     ) = definitionFiles.forEach { yarn2Command.checkVersion(it.parentFile) }
 
-    private fun getWorkspaceModuleDirs(workingDir: File): Set<File> {
-        val process = yarn2Command.run(
-            workingDir,
-            "workspaces",
-            "list",
-            "--json"
-        ).requireSuccess()
-
-        return parseWorkspaceInfo(process.stdout).mapTo(mutableSetOf()) {
-            workingDir.resolve(it.location).realFile
-        }
-    }
-
     override fun resolveDependencies(
         analysisRoot: File,
         definitionFile: File,
@@ -164,6 +151,19 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
         ).requireSuccess()
 
         return parsePackageInfos(process.stdout)
+    }
+
+    private fun getWorkspaceModuleDirs(workingDir: File): Set<File> {
+        val process = yarn2Command.run(
+            workingDir,
+            "workspaces",
+            "list",
+            "--json"
+        ).requireSuccess()
+
+        return parseWorkspaceInfo(process.stdout).mapTo(mutableSetOf()) {
+            workingDir.resolve(it.location).realFile
+        }
     }
 
     internal fun getRemotePackageDetails(workingDir: File, moduleIds: Set<String>): Set<PackageJson> {
