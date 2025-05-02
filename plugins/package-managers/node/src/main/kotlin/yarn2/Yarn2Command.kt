@@ -40,7 +40,7 @@ import org.semver4j.RangesListFactory
  */
 private const val YARN2_RESOURCE_FILE = ".yarnrc.yml"
 
-internal class Yarn2Command(private val enableCorepack: Boolean?) : CommandLineTool {
+internal class Yarn2Command(private val corepackEnabled: Boolean?) : CommandLineTool {
     @Suppress("Unused") // The no-arg constructor is required by the requirements command.
     constructor() : this(null)
 
@@ -70,7 +70,8 @@ internal class Yarn2Command(private val enableCorepack: Boolean?) : CommandLineT
 
     override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=2.0.0")
 
-    private fun isCorepackEnabled(workingDir: File): Boolean = enableCorepack ?: isCorepackEnabledInManifest(workingDir)
+    private fun isCorepackEnabled(workingDir: File): Boolean =
+        corepackEnabled ?: isCorepackEnabledInManifest(workingDir)
 
     private fun getYarnExecutable(workingDir: File): File {
         val yarnrcFile = workingDir.resolve(YARN2_RESOURCE_FILE)
