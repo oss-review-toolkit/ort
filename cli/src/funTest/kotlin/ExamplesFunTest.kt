@@ -51,6 +51,7 @@ import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.NotifierConfiguration
+import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.config.SendMailConfiguration
@@ -61,6 +62,7 @@ import org.ossreviewtoolkit.plugins.api.PluginConfig
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.ReporterFactory
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CONFIGURATION_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CURATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
@@ -101,6 +103,12 @@ class ExamplesFunTest : StringSpec({
     "The package curations file can be deserialized" {
         shouldNotThrow<IOException> {
             takeExampleFile(ORT_PACKAGE_CURATIONS_FILENAME).readValue<List<PackageCuration>>()
+        }
+    }
+
+    "The package configuration file can be deserialized" {
+        shouldNotThrow<IOException> {
+            takeExampleFile(ORT_PACKAGE_CONFIGURATION_FILENAME).readValue<PackageConfiguration>()
         }
     }
 
