@@ -75,7 +75,7 @@ class Yarn2Test : WordSpec({
         "return the default executable name if Corepack is enabled based on the configuration option" {
             val workingDir = tempdir()
 
-            val yarn = Yarn2Factory.create(corepackOverride = true)
+            val yarn = Yarn2Factory.create(corepackEnabled = true)
             val command = yarn.yarn2Command.command(workingDir)
 
             command shouldBe "yarn"
@@ -94,7 +94,7 @@ class Yarn2Test : WordSpec({
             val workingDir = tempdir()
             writePackageJson(workingDir, "yarn@4.0.0")
 
-            checkExecutableFromYarnRc(workingDir, corepackOverride = false)
+            checkExecutableFromYarnRc(workingDir, corepackEnabled = false)
         }
     }
 })
@@ -103,7 +103,7 @@ class Yarn2Test : WordSpec({
  * Check whether an executable defined in a `.yarnrc.yml` file is used when invoked with the given [workingDir]
  * and [config]. This should be the case when Corepack is not enabled.
  */
-private fun checkExecutableFromYarnRc(workingDir: File, corepackOverride: Boolean? = null) {
+private fun checkExecutableFromYarnRc(workingDir: File, corepackEnabled: Boolean? = null) {
     val executable = "yarn-wrapper.js"
 
     workingDir.resolve(".yarnrc.yml").writeText("yarnPath: $executable")
@@ -112,7 +112,7 @@ private fun checkExecutableFromYarnRc(workingDir: File, corepackOverride: Boolea
         writeText("#!/usr/bin/env node\nconsole.log('yarn')")
     }
 
-    val yarn = Yarn2Factory.create(corepackOverride = corepackOverride)
+    val yarn = Yarn2Factory.create(corepackEnabled = corepackEnabled)
     val command = yarn.yarn2Command.command(workingDir)
 
     if (Os.isWindows) {

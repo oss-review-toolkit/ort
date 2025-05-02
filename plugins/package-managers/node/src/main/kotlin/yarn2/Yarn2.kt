@@ -67,7 +67,7 @@ data class Yarn2Config(
      * auto-detection can be disabled, and the enabled status of Corepack can be explicitly specified. This is useful to
      * force a specific behavior in some environments.
      */
-    val corepackOverride: Boolean?
+    val corepackEnabled: Boolean?
 )
 
 /**
@@ -82,7 +82,7 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
     NodePackageManager(NodePackageManagerType.YARN2) {
     override val globsForDefinitionFiles = listOf(NodePackageManagerType.DEFINITION_FILE)
     private val yarnInfoCache = mutableMapOf<String, PackageJson>()
-    internal val yarn2Command = Yarn2Command(config.corepackOverride)
+    internal val yarn2Command = Yarn2Command(config.corepackEnabled)
     private val handler = Yarn2DependencyHandler(this)
     override val graphBuilder = DependencyGraphBuilder(handler)
 
