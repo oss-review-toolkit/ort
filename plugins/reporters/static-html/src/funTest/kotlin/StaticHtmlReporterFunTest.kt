@@ -30,8 +30,8 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.ort.ORT_VERSION
-import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.matchExpectedResult
+import org.ossreviewtoolkit.utils.test.getAssetAsString
+import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.readOrtResult
 
 private val HOW_TO_FIX_TEXT_PROVIDER = HowToFixTextProvider {
@@ -56,8 +56,8 @@ class StaticHtmlReporterFunTest : WordSpec({
             val ortResult = readOrtResult("src/funTest/assets/reporter-test-input.yml")
             val actualReport = generateReport(ortResult).replaceFirst(timeStampPattern, "<REPLACE_TIMESTAMP>")
 
-            val expectedReport = matchExpectedResult(
-                getAssetFile("static-html-reporter-test-expected-output.html"),
+            val expectedReport = patchExpectedResult(
+                getAssetAsString("static-html-reporter-test-expected-output.html"),
                 custom = mapOf("<REPLACE_ORT_VERSION>" to ORT_VERSION)
             )
 
