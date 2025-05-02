@@ -35,23 +35,23 @@ import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.test.getAssetFile
+import org.ossreviewtoolkit.utils.test.getResource
+import org.ossreviewtoolkit.utils.test.readResource
 
 class Aosd20ReporterFunTest : WordSpec({
     "The example JSON report" should {
         "be valid according to the schema" {
-            val schemaFile = getAssetFile("aosd20/aosd.schema.json")
-            val schema = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7).getSchema(schemaFile.toURI())
+            val schemaResource = getResource("/aosd20/aosd.schema.json")
+            val schema = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7).getSchema(schemaResource.toURI())
 
-            val exampleFile = getAssetFile("aosd20/aosd.example.json")
-            val errors = schema.validate(exampleFile.readText(), InputFormat.JSON)
+            val example = readResource("/aosd20/aosd.example.json")
+            val errors = schema.validate(example, InputFormat.JSON)
 
             errors should beEmpty()
         }
 
         "deserialize correctly" {
-            val aosdFile = getAssetFile("aosd20/aosd.example.json")
-            val aosd = aosdFile.readAosd20Report()
+            val aosd = getResource("/aosd20/aosd.example.json").readAosd20Report()
 
             with(aosd) {
                 directDependencies shouldHaveSize 1
@@ -65,8 +65,8 @@ class Aosd20ReporterFunTest : WordSpec({
         val reportFiles = Aosd20Reporter().generateReport(ReporterInput(ORT_RESULT), outputDir)
 
         "be valid according to the schema" {
-            val schemaFile = getAssetFile("aosd20/aosd.schema.json")
-            val schema = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7).getSchema(schemaFile.toURI())
+            val schemaResource = getResource("/aosd20/aosd.schema.json")
+            val schema = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7).getSchema(schemaResource.toURI())
 
             reportFiles.forAll {
                 it shouldBeSuccess { reportFile ->
@@ -82,15 +82,15 @@ class Aosd20ReporterFunTest : WordSpec({
             assertSoftly {
                 with(reportFiles[0]) {
                     this shouldBeSuccess { actualFile ->
-                        val expectedFile = getAssetFile("aosd20/aosd.NPM-%40ort-project-with-findings-1.0.json")
-                        actualFile.readText() shouldEqualJson expectedFile.readText()
+                        val expectedResult = readResource("/aosd20/aosd.NPM-%40ort-project-with-findings-1.0.json")
+                        actualFile.readText() shouldEqualJson expectedResult
                     }
                 }
 
                 with(reportFiles[1]) {
                     this shouldBeSuccess { actualFile ->
-                        val expectedFile = getAssetFile("aosd20/aosd.NPM-%40ort-project-without-findings-1.0.json")
-                        actualFile.readText() shouldEqualJson expectedFile.readText()
+                        val expectedResult = readResource("/aosd20/aosd.NPM-%40ort-project-without-findings-1.0.json")
+                        actualFile.readText() shouldEqualJson expectedResult
                     }
                 }
             }

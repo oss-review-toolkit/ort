@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.model
 
+import com.networknt.schema.InputFormat
 import com.networknt.schema.JsonSchemaFactory
 import com.networknt.schema.SpecVersion
 import com.networknt.schema.serialization.JsonNodeReader
@@ -30,12 +31,15 @@ import io.kotest.matchers.should
 
 import java.io.File
 
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.ort.ORT_LICENSE_CLASSIFICATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CONFIGURATION_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CURATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_REFERENCE_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
+import org.ossreviewtoolkit.utils.test.readResource
+import org.ossreviewtoolkit.utils.test.readResourceValue
 
 class JsonSchemaTest : StringSpec({
     "ORT's own repository configuration file validates successfully" {
@@ -61,21 +65,23 @@ class JsonSchemaTest : StringSpec({
     }
 
     "Analyzer configuration within a repository configuration validates successfully" {
-        val repositoryConfiguration = File("src/test/assets/analyzer-repository-configuration.ort.yml").toJsonNode()
-        val analyzerConfiguration = repositoryConfiguration.get("analyzer")
+        val analyzerConfiguration = readResourceValue<RepositoryConfiguration>(
+            "/analyzer-repository-configuration.ort.yml"
+        ).analyzer
 
-        val errors = schemaV7.getSchema(repositoryConfigurationAnalyzerConfiguration).validate(analyzerConfiguration)
+        val errors = schemaV7.getSchema(repositoryConfigurationAnalyzerConfiguration)
+            .validate(analyzerConfiguration.toYaml(), InputFormat.YAML)
 
         errors should beEmpty()
     }
 
     "Package manager configuration within a repository configuration validates successfully" {
-        val repositoryConfiguration =
-            File("src/test/assets/package-manager-repository-configuration.ort.yml").toJsonNode()
-        val packageManagerConfiguration = repositoryConfiguration.get("analyzer").get("package_managers")
+        val packageManagerConfiguration = readResourceValue<RepositoryConfiguration>(
+            "/package-manager-repository-configuration.ort.yml"
+        ).analyzer?.packageManagers
 
-        val errors =
-            schemaV7.getSchema(repositoryConfigurationPackageManagerConfiguration).validate(packageManagerConfiguration)
+        val errors = schemaV7.getSchema(repositoryConfigurationPackageManagerConfiguration)
+            .validate(packageManagerConfiguration.toYaml(), InputFormat.YAML)
 
         errors should beEmpty()
     }
@@ -126,10 +132,10 @@ class JsonSchemaTest : StringSpec({
     }
 
     "Snippet choices validate successfully" {
-        val repositoryConfiguration =
-            File("src/test/assets/snippet-choices-repository-configuration.ort.yml").toJsonNode()
+        val repositoryConfiguration = readResource("/snippet-choices-repository-configuration.ort.yml")
 
-        val errors = schemaV7.getSchema(repositoryConfigurationSchema).validate(repositoryConfiguration)
+        val errors = schemaV7.getSchema(repositoryConfigurationSchema)
+            .validate(repositoryConfiguration, InputFormat.YAML)
 
         errors should beEmpty()
     }

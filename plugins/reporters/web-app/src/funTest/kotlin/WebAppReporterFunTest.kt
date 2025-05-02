@@ -27,13 +27,12 @@ import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.readOrtResult
 
 class WebAppReporterFunTest : WordSpec({
     "WebAppReporter" should {
         "successfully export to a web application" {
-            val ortResult = readOrtResult(getAssetFile("scan-result-for-synthetic-gradle-lib.yml"))
+            val ortResult = readOrtResult("/scan-result-for-synthetic-gradle-lib.yml")
             val outputDir = tempdir()
 
             val reportFileResults = WebAppReporterFactory.create()

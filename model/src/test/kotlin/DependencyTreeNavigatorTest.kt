@@ -24,8 +24,8 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 class DependencyTreeNavigatorTest : AbstractDependencyNavigatorTest() {
-    override val resultFileName = "src/test/assets/sbt-multi-project-example-expected-output.yml"
-    override val resultWithIssuesFileName = "src/test/assets/result-with-issues-scopes.yml"
+    override val resultFileName = "/sbt-multi-project-example-expected-output.yml"
+    override val resultWithIssuesFileName = "/result-with-issues-scopes.yml"
 
     init {
         "getShortestPaths" should {

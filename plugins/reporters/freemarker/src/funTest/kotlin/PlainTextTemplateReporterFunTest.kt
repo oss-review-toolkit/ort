@@ -35,14 +35,14 @@ import org.ossreviewtoolkit.model.licenses.LicenseCategory
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.utils.common.extractResource
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
-import org.ossreviewtoolkit.utils.test.getAssetAsString
-import org.ossreviewtoolkit.utils.test.getAssetFile
+import org.ossreviewtoolkit.utils.test.readResource
 
 class PlainTextTemplateReporterFunTest : WordSpec({
     "The notice default template" should {
         "generate the correct license notes" {
-            val expectedText = getAssetAsString("plain-text-template-reporter-expected-results")
+            val expectedText = readResource("/plain-text-template-reporter-expected-results")
 
             val report = generateReport(ORT_RESULT)
 
@@ -50,8 +50,10 @@ class PlainTextTemplateReporterFunTest : WordSpec({
         }
 
         "generate the correct license notes with archived license files" {
-            val expectedText = getAssetAsString("plain-text-template-reporter-expected-results-with-license-files")
-            val archiveDir = getAssetFile("archive")
+            val expectedText = readResource("/plain-text-template-reporter-expected-results-with-license-files")
+            val archiveDir = tempdir().resolve("archive")
+            extractResource("/archive2.zip", archiveDir.resolve("195e41f4a5cea6fb5ff309e452d03c11b4ea6511/archive.zip"))
+            extractResource("/archive2.zip", archiveDir.resolve("32b1dee054b06e5037b30ca94e2ff06a6d12f6b9/archive.zip"))
             val config = OrtConfiguration(
                 scanner = ScannerConfiguration(
                     archive = FileArchiverConfiguration(
@@ -73,7 +75,7 @@ class PlainTextTemplateReporterFunTest : WordSpec({
 
     "The notice summary template" should {
         "generate the correct license notes" {
-            val expectedText = getAssetAsString("plain-text-template-reporter-expected-results-summary")
+            val expectedText = readResource("/plain-text-template-reporter-expected-results-summary")
 
             val report = generateReport(
                 ORT_RESULT,

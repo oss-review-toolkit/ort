@@ -32,8 +32,6 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldNot
 import io.kotest.matchers.types.beTheSameInstanceAs
 
-import java.io.File
-
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.DependencyGraphNode
 import org.ossreviewtoolkit.model.Identifier
@@ -47,13 +45,12 @@ import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
-import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.utils.test.readResourceValue
 
 class DependencyGraphConverterTest : WordSpec({
     "convertToDependencyGraphs" should {
         "return the same result if no conversion is required" {
-            val resultFile = File("../model/src/test/assets/analyzer-result-with-dependency-graph.yml")
-            val ortResult = resultFile.readValue<OrtResult>()
+            val ortResult = readResourceValue<OrtResult>("/analyzer-result-with-dependency-graph.yml")
             val analyzerResult = ortResult.analyzer?.result
 
             analyzerResult shouldNotBeNull {
@@ -78,8 +75,7 @@ class DependencyGraphConverterTest : WordSpec({
         }
 
         "correctly exclude scopes if there are projects using a dependency graph" {
-            val resultFile = File("../model/src/test/assets/analyzer-result-with-dependency-graph.yml")
-            val ortResult = resultFile.readValue<OrtResult>()
+            val ortResult = readResourceValue<OrtResult>("/analyzer-result-with-dependency-graph.yml")
             val graphAnalyzerResult = ortResult.analyzer?.result!!
 
             val project = createProject("Go", index = 1)

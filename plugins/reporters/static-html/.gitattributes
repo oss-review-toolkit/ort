@@ -1,2 +1,2 @@
 # Use Unix line endings for expected test results for consistency across platforms.
-src/funTest/assets/*-expected-*	text eol=lf
+src/funTest/resources/*-expected-*	text eol=lf

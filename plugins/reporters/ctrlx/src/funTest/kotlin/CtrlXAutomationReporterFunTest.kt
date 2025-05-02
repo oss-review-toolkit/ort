@@ -55,12 +55,12 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.spdx.toSpdx
-import org.ossreviewtoolkit.utils.test.getAssetFile
+import org.ossreviewtoolkit.utils.test.getResource
 
 class CtrlXAutomationReporterFunTest : StringSpec({
     "The official sample file can be deserialized" {
-        val fossInfoFile = getAssetFile("sample.fossinfo.json")
-        val fossInfo = fossInfoFile.inputStream().use { CtrlXAutomationReporter.JSON.decodeFromStream<FossInfo>(it) }
+        val fossInfoResource = getResource("/sample.fossinfo.json")
+        val fossInfo = fossInfoResource.openStream().use { CtrlXAutomationReporter.JSON.decodeFromStream<FossInfo>(it) }
 
         fossInfo.components shouldNotBeNull {
             this should haveSize(8)

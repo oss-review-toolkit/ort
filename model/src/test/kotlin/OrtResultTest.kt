@@ -47,7 +47,7 @@ import org.ossreviewtoolkit.utils.test.readOrtResult
 class OrtResultTest : WordSpec({
     "getDependencies()" should {
         "be able to get all direct dependencies of a package" {
-            val ortResult = readOrtResult("src/test/assets/sbt-multi-project-example-expected-output.yml")
+            val ortResult = readOrtResult("/sbt-multi-project-example-expected-output.yml")
             val id = Identifier("Maven:com.typesafe.akka:akka-stream_2.12:2.5.6")
 
             val dependencies = ortResult.getDependencies(id, 1).map { it.toCoordinates() }
@@ -61,7 +61,7 @@ class OrtResultTest : WordSpec({
     }
 
     "getProjectsAndPackages()" should {
-        val ortResult = readOrtResult("src/test/assets/gradle-all-dependencies-expected-result.yml")
+        val ortResult = readOrtResult("/gradle-all-dependencies-expected-result.yml")
         val subProjectId = Identifier("Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0")
 
         "be able to get all ids including sub-projects" {
@@ -323,13 +323,13 @@ class OrtResultTest : WordSpec({
 
     "dependencyNavigator" should {
         "return a navigator for the dependency tree" {
-            val ortResult = readOrtResult("src/test/assets/sbt-multi-project-example-expected-output.yml")
+            val ortResult = readOrtResult("/sbt-multi-project-example-expected-output.yml")
 
             ortResult.dependencyNavigator shouldBe DependencyTreeNavigator
         }
 
         "return a navigator for the dependency graph" {
-            val ortResult = readOrtResult("src/test/assets/sbt-multi-project-example-graph.yml")
+            val ortResult = readOrtResult("/sbt-multi-project-example-graph.yml")
 
             ortResult.dependencyNavigator should beInstanceOf<DependencyGraphNavigator>()
         }

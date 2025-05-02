@@ -27,12 +27,12 @@ import java.time.LocalDate
 
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.test.getAssetAsString
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.readResource
 
 class DocBookTemplateReporterFunTest : StringSpec({
     "DocBook report is created from default template" {
-        val expectedResult = getAssetAsString("docbook-template-reporter-expected-result.xml")
+        val expectedResult = readResource("/docbook-template-reporter-expected-result.xml")
 
         val reportContent = DocBookTemplateReporterFactory.create()
             .generateReport(ReporterInput(ORT_RESULT), tempdir())

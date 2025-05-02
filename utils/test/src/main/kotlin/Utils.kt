@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.utils.test
 
-import com.fasterxml.jackson.module.kotlin.readValue
-
 import java.io.File
 import java.time.Instant
 
@@ -33,7 +31,6 @@ import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.KnownProvenance
-import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.ProvenanceResolutionResult
 import org.ossreviewtoolkit.model.RemoteArtifact
@@ -41,7 +38,6 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
-import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.model.utils.alignRevisions
 import org.ossreviewtoolkit.model.utils.clearVcsPath
 import org.ossreviewtoolkit.model.utils.toPurl
@@ -142,10 +138,6 @@ fun patchActualResult(
         .replace(TIMESTAMP_REGEX) { "${it.groupValues[1]}: \"${Instant.EPOCH}\"" }
         .replaceIf(patchStartAndEndTime, START_AND_END_TIME_REGEX) { "${it.groupValues[1]}: \"${Instant.EPOCH}\"" }
 }
-
-fun readOrtResult(file: String) = readOrtResult(File(file))
-
-fun readOrtResult(file: File) = file.mapper().readValue<OrtResult>(patchExpectedResult(file.readText()))
 
 /**
  * Create a [ScannerRun] with the given [pkgScanResults].

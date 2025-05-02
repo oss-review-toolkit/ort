@@ -29,11 +29,11 @@ import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.test.getAssetAsString
+import org.ossreviewtoolkit.utils.test.readResource
 
 class TrustSourceReporterFunTest : StringSpec({
     "The expected report should be generated" {
-        val expectedReport = getAssetAsString("expected-report.json")
+        val expectedReport = readResource("/expected-report.json")
 
         val reportFiles = TrustSourceReporter().generateReport(ReporterInput(ORT_RESULT), tempdir())
 

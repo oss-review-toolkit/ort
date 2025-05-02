@@ -55,7 +55,6 @@ import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
-import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.ort.ORT_VERSION
@@ -65,9 +64,10 @@ import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper.FileFormat
 import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper.fromJson
 import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper.fromYaml
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxDocument
-import org.ossreviewtoolkit.utils.test.getAssetAsString
-import org.ossreviewtoolkit.utils.test.getAssetFile
+import org.ossreviewtoolkit.utils.test.getResource
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.readOrtResult
+import org.ossreviewtoolkit.utils.test.readResource
 import org.ossreviewtoolkit.utils.test.scannerRunOf
 
 class SpdxDocumentReporterFunTest : WordSpec({
@@ -78,7 +78,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
                 .builder(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7))
                 .jsonNodeReader(nodeReader)
                 .build()
-                .getSchema(getAssetFile("spdx-schema.json").toURI())
+                .getSchema(getResource("/spdx-schema.json").toURI())
 
             val jsonSpdxDocument = generateReport(ortResult, FileFormat.JSON)
             val errors = schema.validate(FileFormat.JSON.mapper.readTree(jsonSpdxDocument))
@@ -87,7 +87,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
         }
 
         "create the expected document" {
-            val expectedResult = getAssetAsString("spdx-document-reporter-expected-output.spdx.json")
+            val expectedResult = readResource("/spdx-document-reporter-expected-output.spdx.json")
 
             val jsonSpdxDocument = generateReport(ortResult, FileFormat.JSON)
 
@@ -112,7 +112,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
 
     "Reporting to YAML" should {
         "create the expected document for a synthetic ORT result" {
-            val expectedResult = getAssetAsString("spdx-document-reporter-expected-output.spdx.yml")
+            val expectedResult = readResource("/spdx-document-reporter-expected-output.spdx.yml")
 
             val yamlSpdxDocument = generateReport(ortResult, FileFormat.YAML)
 
@@ -123,9 +123,8 @@ class SpdxDocumentReporterFunTest : WordSpec({
         }
 
         "create the expected document for the ORT result of a Go project" {
-            val ortResultFile = getAssetFile("disclosure-cli-analyzer-and-scanner-result.yml")
-            val ortResultForGoProject = ortResultFile.readValue<OrtResult>()
-            val expectedResult = getAssetAsString("disclosure-cli-expected-output.spdx.yml")
+            val ortResultForGoProject = readOrtResult("/disclosure-cli-analyzer-and-scanner-result.yml")
+            val expectedResult = readResource("/disclosure-cli-expected-output.spdx.yml")
 
             val yamlSpdxDocument = generateReport(ortResultForGoProject, FileFormat.YAML)
 

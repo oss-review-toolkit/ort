@@ -27,12 +27,12 @@ import java.time.LocalDate
 
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.test.getAssetAsString
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.readResource
 
 class ManPageTemplateReporterFunTest : StringSpec({
     "ManPage report is created from default template" {
-        val expectedResult = getAssetAsString("manpage-template-reporter-expected-result.1")
+        val expectedResult = readResource("/manpage-template-reporter-expected-result.1")
         val reporter = ManPageTemplateReporterFactory.create()
 
         val reportContent = reporter.generateReport(ReporterInput(ORT_RESULT), tempdir())
