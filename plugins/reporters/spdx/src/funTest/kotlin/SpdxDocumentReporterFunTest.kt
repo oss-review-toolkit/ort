@@ -28,6 +28,7 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
@@ -64,8 +65,9 @@ import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper.FileFormat
 import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper.fromJson
 import org.ossreviewtoolkit.utils.spdxdocument.SpdxModelMapper.fromYaml
 import org.ossreviewtoolkit.utils.spdxdocument.model.SpdxDocument
+import org.ossreviewtoolkit.utils.test.getAssetAsString
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.matchExpectedResult
+import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.scannerRunOf
 
 class SpdxDocumentReporterFunTest : WordSpec({
@@ -85,12 +87,12 @@ class SpdxDocumentReporterFunTest : WordSpec({
         }
 
         "create the expected document" {
-            val expectedResultFile = getAssetFile("spdx-document-reporter-expected-output.spdx.json")
+            val expectedResult = getAssetAsString("spdx-document-reporter-expected-output.spdx.json")
 
             val jsonSpdxDocument = generateReport(ortResult, FileFormat.JSON)
 
-            jsonSpdxDocument should matchExpectedResult(
-                expectedResultFile,
+            jsonSpdxDocument shouldBe patchExpectedResult(
+                expectedResult,
                 custom = fromJson<SpdxDocument>(jsonSpdxDocument).getCustomReplacements()
             )
         }
@@ -110,12 +112,12 @@ class SpdxDocumentReporterFunTest : WordSpec({
 
     "Reporting to YAML" should {
         "create the expected document for a synthetic ORT result" {
-            val expectedResultFile = getAssetFile("spdx-document-reporter-expected-output.spdx.yml")
+            val expectedResult = getAssetAsString("spdx-document-reporter-expected-output.spdx.yml")
 
             val yamlSpdxDocument = generateReport(ortResult, FileFormat.YAML)
 
-            yamlSpdxDocument should matchExpectedResult(
-                expectedResultFile,
+            yamlSpdxDocument shouldBe patchExpectedResult(
+                expectedResult,
                 custom = fromYaml<SpdxDocument>(yamlSpdxDocument).getCustomReplacements()
             )
         }
@@ -123,12 +125,12 @@ class SpdxDocumentReporterFunTest : WordSpec({
         "create the expected document for the ORT result of a Go project" {
             val ortResultFile = getAssetFile("disclosure-cli-analyzer-and-scanner-result.yml")
             val ortResultForGoProject = ortResultFile.readValue<OrtResult>()
-            val expectedResultFile = getAssetFile("disclosure-cli-expected-output.spdx.yml")
+            val expectedResult = getAssetAsString("disclosure-cli-expected-output.spdx.yml")
 
             val yamlSpdxDocument = generateReport(ortResultForGoProject, FileFormat.YAML)
 
-            yamlSpdxDocument should matchExpectedResult(
-                expectedResultFile,
+            yamlSpdxDocument shouldBe patchExpectedResult(
+                expectedResult,
                 custom = fromYaml<SpdxDocument>(yamlSpdxDocument).getCustomReplacements()
             )
         }
