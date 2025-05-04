@@ -100,6 +100,8 @@ class Npm(override val descriptor: PluginDescriptor = NpmFactory.descriptor, pri
         definitionFiles: List<File>,
         analyzerConfig: AnalyzerConfiguration
     ) {
+        super.beforeResolution(analysisRoot, definitionFiles, analyzerConfig)
+
         NpmCommand.checkVersion()
 
         val directories = definitionFiles.mapTo(mutableSetOf()) { it.resolveSibling("node_modules") }
