@@ -68,42 +68,54 @@ internal class NodePackageManagerDetection(private val definitionFiles: Collecti
         }.keys
 
     /**
+     * Return whether the given [manager] is applicable for then given [definitionFile], or return null if unknown.
+     */
+    fun isApplicable(manager: NodePackageManagerType, definitionFile: File): Boolean? {
+        val projectDir = definitionFile.parentFile
+
+        // Try to clearly determine the package manager from files specific to it.
+        val managersFromFiles = projectDirManagers[projectDir].orEmpty()
+        when {
+            manager !in managersFromFiles -> return false
+            managersFromFiles.size == 1 -> {
+                logger.info { "Detected '$definitionFile' to be the root of a(n) $manager project." }
+                return true
+            }
+        }
+
+        // There is ambiguity when only looking at the files, so also look at any workspaces to clearly determine
+        // the package manager.
+        val managersFromWorkspaces = getWorkspaceRoots(projectDir).mapNotNull {
+            projectDirManagers[it]
+        }.flatten()
+
+        if (managersFromWorkspaces.isNotEmpty()) {
+            logger.info {
+                "Skipping '$definitionFile' as it is part of a workspace implicitly handled by $managersFromWorkspaces."
+            }
+
+            return false
+        }
+
+        return null
+    }
+
+    /**
      * Return those [definitionFiles] that define root projects for the given [manager].
      */
     fun filterApplicable(manager: NodePackageManagerType): List<File> =
         definitionFiles.filter { file ->
             val projectDir = file.parentFile
-
-            // Try to clearly determine the package manager from files specific to it.
             val managersFromFiles = projectDirManagers[projectDir].orEmpty()
-            when {
-                manager !in managersFromFiles -> return@filter false
-                managersFromFiles.size == 1 -> {
-                    logger.info { "Detected '$file' to be the root of a(n) $manager project." }
-                    return@filter true
-                }
-            }
 
-            // There is ambiguity when only looking at the files, so also look at any workspaces to clearly determine
-            // the package manager.
-            val managersFromWorkspaces = getWorkspaceRoots(projectDir).mapNotNull {
-                projectDirManagers[it]
-            }.flatten()
-
-            if (managersFromWorkspaces.isNotEmpty()) {
-                logger.info {
-                    "Skipping '$file' as it is part of a workspace implicitly handled by $managersFromWorkspaces."
+            isApplicable(manager, file) ?: run {
+                // Looking at the workspaces did not bring any clarity, so assume the package manager is NPM.
+                logger.warn {
+                    "Any of $managersFromFiles could be the package manager for '$file'. Assuming it is an NPM project."
                 }
 
-                return@filter false
+                manager == NodePackageManagerType.NPM
             }
-
-            // Looking at the workspaces did not bring any clarity, so assume the package manager is NPM.
-            logger.warn {
-                "Any of $managersFromFiles could be the package manager for '$file'. Assuming it is an NPM project."
-            }
-
-            manager == NodePackageManagerType.NPM
         }
 }
 
