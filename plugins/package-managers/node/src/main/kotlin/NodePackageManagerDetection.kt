@@ -112,13 +112,13 @@ internal class NodePackageManagerDetection(private val definitionFiles: Collecti
             val projectDir = file.parentFile
             val managersFromFiles = projectDirManagers[projectDir].orEmpty()
 
-            isApplicable(manager, file) ?: run {
-                logger.warn {
-                    "Any of $managersFromFiles could be the package manager for '$file'. " +
-                        "Assuming it is a(n) $fallbackType project."
+            isApplicable(manager, file) ?: (manager == fallbackType).also {
+                if (it) {
+                    logger.warn {
+                        "Any of $managersFromFiles could be the package manager for '$file'. " +
+                            "Assuming it is a(n) $fallbackType project."
+                    }
                 }
-
-                manager == fallbackType
             }
         }
 }
