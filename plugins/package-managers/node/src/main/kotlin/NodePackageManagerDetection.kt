@@ -101,20 +101,24 @@ internal class NodePackageManagerDetection(private val definitionFiles: Collecti
     }
 
     /**
-     * Return those [definitionFiles] that define root projects for the given [manager].
+     * Return those [definitionFiles] that define root projects for the given [manager], or that are managed by
+     * [fallbackType] as a fallback.
      */
-    fun filterApplicable(manager: NodePackageManagerType): List<File> =
+    fun filterApplicable(
+        manager: NodePackageManagerType,
+        fallbackType: NodePackageManagerType = NodePackageManagerType.NPM
+    ): List<File> =
         definitionFiles.filter { file ->
             val projectDir = file.parentFile
             val managersFromFiles = projectDirManagers[projectDir].orEmpty()
 
             isApplicable(manager, file) ?: run {
-                // Looking at the workspaces did not bring any clarity, so assume the package manager is NPM.
                 logger.warn {
-                    "Any of $managersFromFiles could be the package manager for '$file'. Assuming it is an NPM project."
+                    "Any of $managersFromFiles could be the package manager for '$file'. " +
+                        "Assuming it is a(n) $fallbackType project."
                 }
 
-                manager == NodePackageManagerType.NPM
+                manager == fallbackType
             }
         }
 }
