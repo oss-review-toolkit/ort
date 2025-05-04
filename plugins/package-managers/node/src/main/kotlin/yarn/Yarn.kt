@@ -84,6 +84,8 @@ class Yarn(override val descriptor: PluginDescriptor = YarnFactory.descriptor) :
         definitionFiles: List<File>,
         analyzerConfig: AnalyzerConfiguration
     ) {
+        super.beforeResolution(analysisRoot, definitionFiles, analyzerConfig)
+
         YarnCommand.checkVersion()
 
         val directories = definitionFiles.mapTo(mutableSetOf()) { it.resolveSibling("node_modules") }

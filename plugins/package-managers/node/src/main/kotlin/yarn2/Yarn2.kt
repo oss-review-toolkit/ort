@@ -90,7 +90,13 @@ class Yarn2(override val descriptor: PluginDescriptor = Yarn2Factory.descriptor,
         analysisRoot: File,
         definitionFiles: List<File>,
         analyzerConfig: AnalyzerConfiguration
-    ) = definitionFiles.forEach { yarn2Command.checkVersion(it.parentFile) }
+    ) {
+        super.beforeResolution(analysisRoot, definitionFiles, analyzerConfig)
+
+        definitionFiles.forEach {
+            yarn2Command.checkVersion(it.parentFile)
+        }
+    }
 
     override fun resolveDependencies(
         analysisRoot: File,

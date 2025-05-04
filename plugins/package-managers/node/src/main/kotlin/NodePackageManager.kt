@@ -25,6 +25,7 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
+import org.ossreviewtoolkit.analyzer.determineEnabledPackageManagers
 import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
@@ -77,7 +78,17 @@ abstract class NodePackageManager(val managerType: NodePackageManagerType) : Pac
         analysisRoot: File,
         definitionFiles: List<File>,
         analyzerConfig: AnalyzerConfiguration
-    ) = NodePackageManagerDetection(definitionFiles).filterApplicable(managerType)
+    ): List<File> {
+        val enabledIds = analyzerConfig.determineEnabledPackageManagers().map { it.descriptor.id.uppercase() }
+
+        // Only keep those types for which a package manager is enabled.
+        val enabledTypes = NodePackageManagerType.entries.filter { it.name in enabledIds }
+
+        // Assume the first type to be the best candidate for the fallback.
+        val fallbackType = enabledTypes.first()
+
+        return NodePackageManagerDetection(definitionFiles).filterApplicable(managerType, fallbackType)
+    }
 
     override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =
         PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
