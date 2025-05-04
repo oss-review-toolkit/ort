@@ -100,7 +100,7 @@ class TychoTest : WordSpec({
             )
 
             val tycho = Tycho()
-            val mappedDefinitionFiles = tycho.mapDefinitionFiles(tempdir(), definitionFiles)
+            val mappedDefinitionFiles = tycho.mapDefinitionFiles(tempdir(), definitionFiles, AnalyzerConfiguration())
 
             mappedDefinitionFiles should containExactlyInAnyOrder(tychoDefinitionFile1, tychoDefinitionFile2)
         }

@@ -100,8 +100,11 @@ class Tycho(override val descriptor: PluginDescriptor = TychoFactory.Companion.d
      */
     private lateinit var graphBuilder: DependencyGraphBuilder<DependencyNode>
 
-    override fun mapDefinitionFiles(analysisRoot: File, definitionFiles: List<File>): List<File> =
-        definitionFiles.filter(::isTychoProject)
+    override fun mapDefinitionFiles(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        analyzerConfig: AnalyzerConfiguration
+    ): List<File> = definitionFiles.filter(::isTychoProject)
 
     override fun resolveDependencies(
         analysisRoot: File,

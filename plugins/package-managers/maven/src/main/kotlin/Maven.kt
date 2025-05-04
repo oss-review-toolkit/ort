@@ -86,7 +86,11 @@ class Maven(override val descriptor: PluginDescriptor = MavenFactory.descriptor,
      * Map the given [definitionFiles] to a list of files that should be processed. This implementation filters out
      * projects that require the Tycho build extension.
      */
-    override fun mapDefinitionFiles(analysisRoot: File, definitionFiles: List<File>): List<File> {
+    override fun mapDefinitionFiles(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        analyzerConfig: AnalyzerConfiguration
+    ): List<File> {
         val tychoRoots = definitionFiles.filter(::isTychoProject).map { it.parentFile }
 
         // All pom files under a Tycho project will be handled by Tycho and therefore need to be excluded.

@@ -31,6 +31,7 @@ import java.io.File
 
 import org.ossreviewtoolkit.analyzer.resolveSingleProject
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
@@ -44,7 +45,8 @@ class ComposerFunTest : StringSpec({
                 "projectA/vendor/dependency1/composer.json",
                 "projectB/composer.json",
                 "projectB/vendor/dependency2/composer.json"
-            ).map { File(it) }
+            ).map { File(it) },
+            AnalyzerConfiguration()
         )
 
         projectFiles.map { it.path } should containExactly(

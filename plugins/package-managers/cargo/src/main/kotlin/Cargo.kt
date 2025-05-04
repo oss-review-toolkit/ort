@@ -123,7 +123,11 @@ class Cargo(override val descriptor: PluginDescriptor = CargoFactory.descriptor)
         }
     }
 
-    override fun mapDefinitionFiles(analysisRoot: File, definitionFiles: List<File>): List<File> {
+    override fun mapDefinitionFiles(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        analyzerConfig: AnalyzerConfiguration
+    ): List<File> {
         fun File.isVirtualWorkspace(): Boolean {
             var foundWorkspace = false
             var foundPackage = false

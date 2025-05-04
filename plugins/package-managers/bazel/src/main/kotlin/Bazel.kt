@@ -155,7 +155,11 @@ class Bazel(
      * source.json file and under a directory with a metadata.json file. This simple metric avoids parsing the .bazelrc
      * in the top directory of the project to find out if a MODULE.bazel file is part of a local registry or not.
      */
-    override fun mapDefinitionFiles(analysisRoot: File, definitionFiles: List<File>): List<File> =
+    override fun mapDefinitionFiles(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        analyzerConfig: AnalyzerConfiguration
+    ): List<File> =
         definitionFiles.mapNotNull { file ->
             file.takeUnless {
                 it.resolveSibling(SOURCE_JSON).isFile && it.parentFile.resolveSibling(METADATA_JSON).isFile

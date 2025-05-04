@@ -230,7 +230,11 @@ abstract class PackageManager(val projectType: String) : Plugin {
     /**
      * Optional mapping of found [definitionFiles] before dependency resolution.
      */
-    open fun mapDefinitionFiles(analysisRoot: File, definitionFiles: List<File>): List<File> = definitionFiles
+    open fun mapDefinitionFiles(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        analyzerConfig: AnalyzerConfiguration
+    ): List<File> = definitionFiles
 
     /**
      * Return if this package manager must run before or after certain other package managers. This can manually be

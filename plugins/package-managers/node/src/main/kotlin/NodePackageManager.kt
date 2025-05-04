@@ -30,6 +30,7 @@ import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.utils.common.realFile
 
@@ -72,8 +73,11 @@ abstract class NodePackageManager(val managerType: NodePackageManagerType) : Pac
         )
     }
 
-    override fun mapDefinitionFiles(analysisRoot: File, definitionFiles: List<File>) =
-        NodePackageManagerDetection(definitionFiles).filterApplicable(managerType)
+    override fun mapDefinitionFiles(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        analyzerConfig: AnalyzerConfiguration
+    ) = NodePackageManagerDetection(definitionFiles).filterApplicable(managerType)
 
     override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =
         PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
