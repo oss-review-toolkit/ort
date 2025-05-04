@@ -99,7 +99,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
                 config.excludes(repositoryConfiguration)
             )
         }.mapNotNull { (manager, files) ->
-            val mappedFiles = manager.mapDefinitionFiles(absoluteProjectPath, files)
+            val mappedFiles = manager.mapDefinitionFiles(absoluteProjectPath, files, config)
             Pair(manager, mappedFiles).takeIf { mappedFiles.isNotEmpty() }
         }.toMap(mutableMapOf())
 

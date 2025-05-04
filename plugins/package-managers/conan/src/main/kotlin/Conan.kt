@@ -154,7 +154,11 @@ class Conan(
      * If a Bazel project uses some Conan packages, the corresponding Conan files should not be picked up by the Conan
      * package manager. Therefore, the Conan file is checked to NOT contain the BazelDeps and BazelToolchain generators.
      */
-    override fun mapDefinitionFiles(analysisRoot: File, definitionFiles: List<File>): List<File> =
+    override fun mapDefinitionFiles(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        analyzerConfig: AnalyzerConfiguration
+    ): List<File> =
         definitionFiles.mapNotNull { file ->
             file.takeUnless {
                 val content = it.readText()

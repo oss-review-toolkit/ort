@@ -88,7 +88,11 @@ class Sbt(override val descriptor: PluginDescriptor = SbtFactory.descriptor, pri
     PackageManager("SBT") {
     override val globsForDefinitionFiles = listOf("build.sbt", "build.scala")
 
-    override fun mapDefinitionFiles(analysisRoot: File, definitionFiles: List<File>): List<File> {
+    override fun mapDefinitionFiles(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        analyzerConfig: AnalyzerConfiguration
+    ): List<File> {
         // Some SBT projects do not have a build file in their root, but they still require "sbt" to be run from the
         // project's root directory. In order to determine the root directory, use the common prefix of all
         // definition file paths.

@@ -231,7 +231,8 @@ class SpdxDocumentFileFunTest : WordSpec({
 
             val definitionFiles = listOf(projectFile, packageFile)
 
-            val result = SpdxDocumentFileFactory.create().mapDefinitionFiles(USER_DIR, definitionFiles)
+            val result = SpdxDocumentFileFactory.create()
+                .mapDefinitionFiles(USER_DIR, definitionFiles, AnalyzerConfiguration())
 
             result should containExactly(projectFile)
         }
@@ -242,7 +243,8 @@ class SpdxDocumentFileFunTest : WordSpec({
 
             val definitionFiles = listOf(packageFileCurl, packageFileZlib)
 
-            val result = SpdxDocumentFileFactory.create().mapDefinitionFiles(USER_DIR, definitionFiles)
+            val result = SpdxDocumentFileFactory.create()
+                .mapDefinitionFiles(USER_DIR, definitionFiles, AnalyzerConfiguration())
 
             result should containExactly(definitionFiles)
         }

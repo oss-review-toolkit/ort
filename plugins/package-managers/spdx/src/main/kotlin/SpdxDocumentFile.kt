@@ -489,7 +489,11 @@ class SpdxDocumentFile(override val descriptor: PluginDescriptor = SpdxDocumentF
             )
         }
 
-    override fun mapDefinitionFiles(analysisRoot: File, definitionFiles: List<File>): List<File> =
+    override fun mapDefinitionFiles(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        analyzerConfig: AnalyzerConfiguration
+    ): List<File> =
         definitionFiles.associateWith {
             spdxDocumentCache.load(it).getOrNull()
         }.filter { (_, spdxDocument) ->

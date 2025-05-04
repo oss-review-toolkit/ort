@@ -95,7 +95,11 @@ internal object GoCommand : CommandLineTool {
 class GoMod(override val descriptor: PluginDescriptor = GoModFactory.descriptor) : PackageManager("GoMod") {
     override val globsForDefinitionFiles = listOf("go.mod")
 
-    override fun mapDefinitionFiles(analysisRoot: File, definitionFiles: List<File>): List<File> =
+    override fun mapDefinitionFiles(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        analyzerConfig: AnalyzerConfiguration
+    ): List<File> =
         definitionFiles.filterNot { definitionFile ->
             "vendor" in definitionFile
                 .parentFile

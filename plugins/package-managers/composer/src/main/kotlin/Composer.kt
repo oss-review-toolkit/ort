@@ -107,7 +107,11 @@ class Composer(override val descriptor: PluginDescriptor = ComposerFactory.descr
         ComposerCommand.checkVersion()
     }
 
-    override fun mapDefinitionFiles(analysisRoot: File, definitionFiles: List<File>): List<File> {
+    override fun mapDefinitionFiles(
+        analysisRoot: File,
+        definitionFiles: List<File>,
+        analyzerConfig: AnalyzerConfiguration
+    ): List<File> {
         val projectFiles = definitionFiles.toMutableList()
 
         // Ignore definition files from vendor directories that reside next to other definition files, to avoid the
